@@ -9,35 +9,16 @@
 // Press the 'Grip' button on the controller to activate the beam
 // Released the 'Grip' button on the controller to deactivate the beam
 //
-// Events Emitted:
-//
-// ControllerPointerIn - is emitted when the pointer collides with an object
-// ControllerPointerOut - is emitted when the pointer stops colliding with an object
-// PointerDestinationSet - is emmited when the pointer is deactivated
-//
-// Event Payload:
-//
-// controllerIndex - The index of the controller the pointer is attached to
-// distance - The distance from the collided object the controller is
-// target - The Transform of the object the pointer has collided with
-// tipPosition - The world position of the beam tip
+// This script is an implementation of the SteamVR_WorldPointer so emits certain
+// events from the SimplePointer along with the correct payload.
 //
 //====================================================================================
 
 using UnityEngine;
 using System.Collections;
 
-public struct ControllerPointerEventArgs
+public class SteamVR_SimplePointer : SteamVR_WorldPointer
 {
-    public uint controllerIndex;
-    public float distance;
-    public Transform target;
-    public Vector3 tipPosition;
-}
-
-public delegate void ControllerPointerEventHandler(object sender, ControllerPointerEventArgs e);
-
-public class SteamVR_SimplePointer : MonoBehaviour {
     public enum AxisType
     {
         XAxis,
@@ -53,10 +34,6 @@ public class SteamVR_SimplePointer : MonoBehaviour {
     private GameObject pointerHolder;
     private GameObject pointer;
     private GameObject pointerTip;
-
-    public event ControllerPointerEventHandler ControllerPointerIn;
-    public event ControllerPointerEventHandler ControllerPointerOut;
-    public event ControllerPointerEventHandler PointerDestinationSet;
 
     private Vector3 pointerTipScale = new Vector3(0.05f, 0.05f, 0.05f);
 
@@ -78,24 +55,6 @@ public class SteamVR_SimplePointer : MonoBehaviour {
         GetComponent<SteamVR_ControllerEvents>().GripUnclicked += new ControllerClickedEventHandler(DisablePointerBeam);
 
         InitPointer();
-    }
-
-    public virtual void OnPointerIn(ControllerPointerEventArgs e)
-    {
-        if (ControllerPointerIn != null)
-            ControllerPointerIn(this, e);
-    }
-
-    public virtual void OnPointerOut(ControllerPointerEventArgs e)
-    {
-        if (ControllerPointerOut != null)
-            ControllerPointerOut(this, e);
-    }
-
-    public virtual void OnPointerDestinationSet(ControllerPointerEventArgs e)
-    {
-        if (PointerDestinationSet != null)
-            PointerDestinationSet(this, e);
     }
 
     void InitPointer()
@@ -154,9 +113,9 @@ public class SteamVR_SimplePointer : MonoBehaviour {
         pointerTip.gameObject.SetActive(tipState);
     }
 
-    ControllerPointerEventArgs SetPointerEvent(float distance, Transform target)
+    WorldPointerEventArgs SetPointerEvent(float distance, Transform target)
     {
-        ControllerPointerEventArgs e;
+        WorldPointerEventArgs e;
         e.controllerIndex = controllerIndex;
         e.distance = distance;
         e.target = target;
@@ -173,7 +132,7 @@ public class SteamVR_SimplePointer : MonoBehaviour {
         {
             if (pointerContactTarget != null)
             {
-                OnPointerOut(SetPointerEvent(pointerContactDistance, pointerContactTarget));
+                OnWorldPointerOut(SetPointerEvent(pointerContactDistance, pointerContactTarget));
             }
 
             pointerContactDistance = 0f;
@@ -185,8 +144,8 @@ public class SteamVR_SimplePointer : MonoBehaviour {
         {
             pointerContactDistance = collidedWith.distance;
             pointerContactTarget = collidedWith.transform;
-                        
-            OnPointerIn(SetPointerEvent(pointerContactDistance, pointerContactTarget));
+
+            OnWorldPointerIn(SetPointerEvent(pointerContactDistance, pointerContactTarget));
         }
 
         //adjust beam length if something is blocking it
@@ -207,7 +166,7 @@ public class SteamVR_SimplePointer : MonoBehaviour {
     void DisablePointerBeam(object sender, ControllerClickedEventArgs e)
     {
         controllerIndex = e.controllerIndex;
-        OnPointerDestinationSet(SetPointerEvent(pointerContactDistance, pointerContactTarget));
+        OnWorldPointerDestinationSet(SetPointerEvent(pointerContactDistance, pointerContactTarget));
         TogglePointer(false);
     }
 

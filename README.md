@@ -127,25 +127,46 @@ The facing axis can also be set to match the direction the
 emit out of the controller at the wrong angle, so this setting can be
 adjusted to ensure the beam always projects forward.
 
-The simple pointer also emits three events, an event when the beam
-collides with another game object (with a collider that isn't ignoring
-the raycast layers), an event when the beam stops colliding with
-the game object and an event when the beam is deactivated to determine
-the last destination position of the beam (useful for selecting and
-teleporting).
-
-A payload is emitted with the event containing:
-
-  * ControllerIndex - The index of the controller emitting the beam
-  * Distance - The distance the target is from the controller
-  * Target - The game object that the beam is colliding with
-  * TipPosition - The world position of the beam pointer tip
+The Simple Pointer object extends the `SteamVR_WorldPointer` abstract
+class and therefore emits the same events and payload.
 
 An example of the `SteamVR_SimplePointer` script can be viewed in
 the scene `Resources/Examples/003_Controller_SimplePointer` and
 code examples of how the events are utilised and listened to can be
 viewed in the script
 `Resources/Examples/Scripts/SteamVR_ControllerPointerEvents_ListenerExample.cs`
+
+#### Class Interfaces
+
+To allow for reusablity and object consistency, a collection of
+abstract classes are provided as interfaces which can be used to extend
+onto a concrete class providing consistent functionality across many
+different scripts without needing to duplicate code.
+
+The current abstract class interfaces are available:
+
+##### SteamVR_WorldPointer
+
+This abstract class provides any game pointer the ability to know the
+the state of the implemented pointer and emit an event to other scripts
+in the game world.
+
+The WorldPointer class emits three events:
+
+  * WorldPointerIn: an event when the pointer collides with another
+  game object.
+  * WorldPointerOut: an event when the pointer stops colliding with
+  the game object.
+  * WorldPointerDestinationSet: an event when the pointer is no longer
+  active in the scene to determine the last destination position of
+  the pointer end (useful for selecting and teleporting).
+
+A payload is emitted with the event containing:
+
+  * ControllerIndex - The index of the controller emitting the beam
+  * Distance - The distance the target is from the controller
+  * Target - The game object that the pointer is colliding with
+  * TipPosition - The world position of the end of the pointer
 
 ### Examples
 

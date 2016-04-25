@@ -13,9 +13,9 @@ public class SteamVR_ControllerPointerEvents_ListenerExample : MonoBehaviour {
         }
 
         //Setup controller event listeners
-        GetComponent<SteamVR_SimplePointer>().ControllerPointerIn += new ControllerPointerEventHandler(DoPointerIn);
-        GetComponent<SteamVR_SimplePointer>().ControllerPointerOut += new ControllerPointerEventHandler(DoPointerOut);
-        GetComponent<SteamVR_SimplePointer>().PointerDestinationSet += new ControllerPointerEventHandler(DoPointerDestinationSet);
+        GetComponent<SteamVR_SimplePointer>().WorldPointerIn += new WorldPointerEventHandler(DoPointerIn);
+        GetComponent<SteamVR_SimplePointer>().WorldPointerOut += new WorldPointerEventHandler(DoPointerOut);
+        GetComponent<SteamVR_SimplePointer>().WorldPointerDestinationSet += new WorldPointerEventHandler(DoPointerDestinationSet);
     }
 
     void DebugLogger(uint index, string action, Transform target, float distance, Vector3 tipPosition)
@@ -23,17 +23,17 @@ public class SteamVR_ControllerPointerEvents_ListenerExample : MonoBehaviour {
         Debug.Log("Controller on index '" + index + "' is " + action + " at a distance of " + distance + " on object named " + target.name + " - the pointer tip position is/was: " +tipPosition);
     }
 
-    void DoPointerIn(object sender, ControllerPointerEventArgs e)
+    void DoPointerIn(object sender, WorldPointerEventArgs e)
     {
         DebugLogger(e.controllerIndex, "POINTER IN", e.target, e.distance, e.tipPosition);
     }
 
-    void DoPointerOut(object sender, ControllerPointerEventArgs e)
+    void DoPointerOut(object sender, WorldPointerEventArgs e)
     {
         DebugLogger(e.controllerIndex, "POINTER OUT", e.target, e.distance, e.tipPosition);
     }
 
-    void DoPointerDestinationSet(object sender, ControllerPointerEventArgs e)
+    void DoPointerDestinationSet(object sender, WorldPointerEventArgs e)
     {
         DebugLogger(e.controllerIndex, "POINTER DESTINATION", e.target, e.distance, e.tipPosition);
     }
