@@ -136,6 +136,31 @@ code examples of how the events are utilised and listened to can be
 viewed in the script
 `Resources/Examples/Scripts/SteamVR_ControllerPointerEvents_ListenerExample.cs`
 
+#### Basic Teleporter (SteamVR_BasicTeleport)
+
+The basic teleporter updates the `[CameraRig]` x/z position in the
+game world to the position of a World Pointer's tip location which is
+set via the `WorldPointerDestinationSet` event. The y position is never
+altered so the basic teleporter cannot be used to move up and down
+game objects as it only allows for travel across a flat plane.
+
+The Basic Teleport script is attached to the `[CameraRig]` prefab and
+requires an implementation of the WorldPointer script to be attached
+to another game object (e.g. SteamVR_SimplePointer attached to
+the Controller object).
+
+The fade blink speed can be changed on the basic Teleport script to
+provide a customised teleport experience. Setting the speed to 0 will
+mean no fade blink effect is present. The fade is achieved via the
+`SteamVR_Fade.cs` script in the SteamVR Unity Plugin scripts.
+
+An example of the `SteamVR_BasicTeleport` script can be viewed in the
+scene `Resources/Examples/004_CameraRig_BasicTeleport`. The scene uses
+the `SteamVR_SimplePointer` script on the Controllers to initiate a
+laser pointer with the Controller `Grip` button and when the laser
+pointer is deactivated (release the `Grip`) then the player is
+teleported to the location of the laser pointer tip.
+
 #### Class Interfaces
 
 To allow for reusablity and object consistency, a collection of
@@ -189,7 +214,11 @@ The current examples are:
   be pointed at with the laser beam from the controller activated by
   the `Grip` button. The pointer events are also displayed in the
   console window.
-
+  * 004_CameraRig_BasicTeleport: a scene with basic objects that can
+  be traversed using the controller laser beam to point at an object
+  in the game world where the player is to be teleported to by
+  pressing the controller `Grip` button. When the `Grip` button is
+  released, the player is teleported to the laser beam end location.
 
 ## Contributing
 
