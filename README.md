@@ -161,6 +161,57 @@ laser pointer with the Controller `Grip` button and when the laser
 pointer is deactivated (release the `Grip`) then the player is
 teleported to the location of the laser pointer tip.
 
+#### Interactable Object (SteamVR_InteractableObject)
+
+The Interactable Object script is attached to any game object that is
+required to be interacted with (e.g. via the controllers).
+
+It currently has states to determine if the object can be grabbed
+and whether the object is currently grabbed.
+
+It also allows for a highlight colour to change the object to when
+the controller touches it (it resets the colour on untouch).
+
+The basis of this script is to provide a simple mechanism for
+identifying objects in the game world that can be grabbed but it is
+expected that this script is the base to be inherited into a script
+with richer functionality.
+
+An example of the `SteamVR_InteractableObject` can be viewed in the
+scene `Resoures/Examples/005_Controller_BasicObjectGrabbing`. The scene
+also uses the `SteamVR_ObjectGrab` script on the controllers to show
+how an interactable object can be grabbed and snapped to the controller
+and thrown around the game world.
+
+#### Grabbable Object (SteamVR_ObjectGrab)
+
+The Object Grab script is attached to a Controller object within the
+`[CameraRig]` prefab and the Controller object also requires the
+`SteamVR_ControllerEvents` script to be attached as it uses this for
+listening to the controller button events for grabbing and releasing
+interactable game objects.
+
+An object can be grabbed if the Controller touches a game object which
+contains the `SteamVR_InteractableObject` script and has the flag
+`isGrabbable` set to `true`. If a valid interactable object is touched
+then pressing the Controller `Trigger` will grab the object and snap it
+to the Controller tip (by default, although it's possible to pass in a
+different rigidbody on the controller model to override this).
+
+When the Controller `Trigger` is released, the interactable game object
+will be propelled in the direction and at the velocity the controller
+was at, which can simulate object throwing.
+
+The interactable objects require a collider to activate the trigger and
+a rigidbody to pick them up and move them around the game world.
+
+An example of the `SteamVR_ObjectGrab` can be viewed in the scene
+`Resources/Examples/005_Controller/BasicObjectGrabbing`. The scene
+demonstrates the grabbing of objects that have the
+`SteamVR_InteractableObject` script added to them and also shows the
+ability to highlight interactable objects when they are touched by
+the controllers.
+
 #### Class Interfaces
 
 To allow for reusablity and object consistency, a collection of
@@ -219,6 +270,12 @@ The current examples are:
   in the game world where the player is to be teleported to by
   pressing the controller `Grip` button. When the `Grip` button is
   released, the player is teleported to the laser beam end location.
+  * 005_Controller_BasicObjectGrabbing: a scene with a selection of
+  objects that can be grabbed by touching them with the controller and
+  pressing the `Trigger` button down. Releasing the trigger button
+  will propel the object in the direction and velocity of the grabbing
+  controller. The scene also demonstrates simple highlighting of
+  objects when the controller touches them.
 
 ## Contributing
 
