@@ -13,12 +13,14 @@
 //
 // ControllerPointerIn - is emitted when the pointer collides with an object
 // ControllerPointerOut - is emitted when the pointer stops colliding with an object
+// PointerDestinationSet - is emmited when the pointer is deactivated
 //
 // Event Payload:
 //
 // controllerIndex - The index of the controller the pointer is attached to
 // distance - The distance from the collided object the controller is
 // target - The Transform of the object the pointer has collided with
+// tipPosition - The world position of the beam tip
 //
 //====================================================================================
 
@@ -30,6 +32,7 @@ public struct ControllerPointerEventArgs
     public uint controllerIndex;
     public float distance;
     public Transform target;
+    public Vector3 tipPosition;
 }
 
 public delegate void ControllerPointerEventHandler(object sender, ControllerPointerEventArgs e);
@@ -53,6 +56,7 @@ public class SteamVR_SimplePointer : MonoBehaviour {
 
     public event ControllerPointerEventHandler ControllerPointerIn;
     public event ControllerPointerEventHandler ControllerPointerOut;
+    public event ControllerPointerEventHandler PointerDestinationSet;
 
     private Vector3 pointerTipScale = new Vector3(0.05f, 0.05f, 0.05f);
 
@@ -86,6 +90,12 @@ public class SteamVR_SimplePointer : MonoBehaviour {
     {
         if (ControllerPointerOut != null)
             ControllerPointerOut(this, e);
+    }
+
+    public virtual void OnPointerDestinationSet(ControllerPointerEventArgs e)
+    {
+        if (PointerDestinationSet != null)
+            PointerDestinationSet(this, e);
     }
 
     void InitPointer()
@@ -135,8 +145,6 @@ public class SteamVR_SimplePointer : MonoBehaviour {
             pointer.transform.localPosition = new Vector3(0f, 0f, beamPosition);
             pointerTip.transform.localPosition = new Vector3(0f, 0f, setLength - (pointerTip.transform.localScale.z / 2));
         }
-
-        //TeleportLocation = pointerTip.transform.position;
     }
 
     void TogglePointer(bool state)
@@ -152,6 +160,7 @@ public class SteamVR_SimplePointer : MonoBehaviour {
         e.controllerIndex = controllerIndex;
         e.distance = distance;
         e.target = target;
+        e.tipPosition = pointerTip.transform.position;
         return e;
     }
 
@@ -198,6 +207,7 @@ public class SteamVR_SimplePointer : MonoBehaviour {
     void DisablePointerBeam(object sender, ControllerClickedEventArgs e)
     {
         controllerIndex = e.controllerIndex;
+        OnPointerDestinationSet(SetPointerEvent(pointerContactDistance, pointerContactTarget));
         TogglePointer(false);
     }
 

@@ -127,16 +127,19 @@ The facing axis can also be set to match the direction the
 emit out of the controller at the wrong angle, so this setting can be
 adjusted to ensure the beam always projects forward.
 
-The simple pointer also emits two events, an event when the beam
+The simple pointer also emits three events, an event when the beam
 collides with another game object (with a collider that isn't ignoring
-the raycast layers) and an event when the beam stops colliding with
-the game object.
+the raycast layers), an event when the beam stops colliding with
+the game object and an event when the beam is deactivated to determine
+the last destination position of the beam (useful for selecting and
+teleporting).
 
 A payload is emitted with the event containing:
 
   * ControllerIndex - The index of the controller emitting the beam
   * Distance - The distance the target is from the controller
   * Target - The game object that the beam is colliding with
+  * TipPosition - The world position of the beam pointer tip
 
 An example of the `SteamVR_SimplePointer` script can be viewed in
 the scene `Resources/Examples/003_Controller_SimplePointer` and
