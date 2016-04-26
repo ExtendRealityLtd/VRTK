@@ -4,14 +4,17 @@ A collection of useful scripts and prefabs for building SteamVR titles
 in Unity 5
 
   > #### Note:
-  > This is very early alpha and does not offer much functionality at present.
-  > I'm very open to suggestions, ideas and bug finding/fixing
+  > This is very early alpha and does not offer much functionality at
+  > present. I'm open to suggestions, ideas and bug finding/fixing.
+  > Also, expect builds to break older versions as things are changing
+  > fast at this stage, it will settle down when the project reaches
+  > a beta stage.
 
 ## Quick Start
 
   * Clone this repository `git clone https://github.com/thestonefox/SteamVR_Unity_Toolkit.git`
   * Open the `SteamVR_Unity_Toolkit` within Unity3d
-  * Browse the `Resources/Examples` scenes for example usage of the scripts
+  * Browse the `Examples` scenes for example usage of the scripts
 
 ## Summary
 
@@ -34,11 +37,18 @@ VR within Unity3d.
 
 ## What's In The Box
 
-This toolkit is split into three main sections:
+This toolkit project is split into two main sections:
 
-  * Prefabs - `Resources/Prefabs`
-  * Scripts - `Resources/Scripts`
-  * Examples - `Resources/Examples`
+  * SteamVR_Unity_Toolkit - `SteamVR_Unity_Toolkit/`
+    * Prefabs - `SteamVR_Unity_Toolkit/Prefabs/`
+    * Scripts - `SteamVR_Unity_Toolkit/Scripts/`
+    * Required Includes - `SteamVR_Unity_Toolkit/Required Includes/`
+  * Examples - `Examples/`
+
+The `SteamVR_Unity_Toolkit` directory is where all of the relevant
+files are kept and this directory can be simply copied over to an
+existing project. The `Examples` directory contains useful scenes
+showing the `SteamVR_Unity_Toolkit` in action.
 
 ### Prefabs
 
@@ -48,7 +58,7 @@ and it has been taken directly from the SteamVR Unity plugin example:
 children on the controller (which seem to be missing from the default
 prefab in the SteamVR plugin `Prefabs/[CameraRig].prefab`.
 
-The `Resources/Prefabs/[CameraRig]` can be dropped into any scene to
+The `SteamVR_Unity_Toolkit/Prefabs/[CameraRig]` can be dropped into any scene to
 provide instant access to a VR game camera via the VR headset and
 tracking of the VR controllers including model representations.
 
@@ -92,9 +102,9 @@ When a controller event is emitted, it is sent with a payload containing:
   * TouchpadAxis - A Vector2 of the position the touchpad is touched at
 
 An example of the `SteamVR_ControllerEvents` script can be viewed in
-the scene `Resources/Examples/002_Controller_Events` and code examples
+the scene `Examples/002_Controller_Events` and code examples
 of how the events are utilised and listened to can be viewed in the
-script `Resources/Examples/Scripts/SteamVR_ControllerEvents_ListenerExample.cs`
+script `Examples/Scripts/SteamVR_ControllerEvents_ListenerExample.cs`
 
 #### Simple Laser Pointer (SteamVR_SimplePointer)
 
@@ -131,10 +141,10 @@ The Simple Pointer object extends the `SteamVR_WorldPointer` abstract
 class and therefore emits the same events and payload.
 
 An example of the `SteamVR_SimplePointer` script can be viewed in
-the scene `Resources/Examples/003_Controller_SimplePointer` and
+the scene `Examples/003_Controller_SimplePointer` and
 code examples of how the events are utilised and listened to can be
 viewed in the script
-`Resources/Examples/Scripts/SteamVR_ControllerPointerEvents_ListenerExample.cs`
+`Examples/Scripts/SteamVR_ControllerPointerEvents_ListenerExample.cs`
 
 #### Basic Teleporter (SteamVR_BasicTeleport)
 
@@ -155,7 +165,7 @@ mean no fade blink effect is present. The fade is achieved via the
 `SteamVR_Fade.cs` script in the SteamVR Unity Plugin scripts.
 
 An example of the `SteamVR_BasicTeleport` script can be viewed in the
-scene `Resources/Examples/004_CameraRig_BasicTeleport`. The scene uses
+scene `Examples/004_CameraRig_BasicTeleport`. The scene uses
 the `SteamVR_SimplePointer` script on the Controllers to initiate a
 laser pointer with the Controller `Grip` button and when the laser
 pointer is deactivated (release the `Grip`) then the player is
@@ -206,7 +216,7 @@ The interactable objects require a collider to activate the trigger and
 a rigidbody to pick them up and move them around the game world.
 
 An example of the `SteamVR_ObjectGrab` can be viewed in the scene
-`Resources/Examples/005_Controller/BasicObjectGrabbing`. The scene
+`Examples/005_Controller/BasicObjectGrabbing`. The scene
 demonstrates the grabbing of objects that have the
 `SteamVR_InteractableObject` script added to them and also shows the
 ability to highlight interactable objects when they are touched by
