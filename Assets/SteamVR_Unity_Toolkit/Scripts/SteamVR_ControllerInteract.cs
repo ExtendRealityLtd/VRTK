@@ -27,6 +27,8 @@ public delegate void ControllerInteractEventHandler(object sender, ControllerInt
 
 public class SteamVR_ControllerInteract : MonoBehaviour {
     public Rigidbody controllerAttachPoint = null;
+    public bool hideControllerOnTouch = false;
+    public bool hideControllerOnGrab = false;
     public Color globalTouchHighlightColor = Color.clear;
 
     public event ControllerInteractEventHandler ControllerTouchInteractableObject;
@@ -39,6 +41,7 @@ public class SteamVR_ControllerInteract : MonoBehaviour {
     private GameObject grabbedObject = null;
 
     private SteamVR_TrackedObject trackedController;
+    private bool controllerVisible = true;
 
     public virtual void OnControllerTouchInteractableObject(ControllerInteractEventArgs e)
     {
@@ -100,6 +103,15 @@ public class SteamVR_ControllerInteract : MonoBehaviour {
         GetComponent<SteamVR_ControllerEvents>().AliasInteractOff += new ControllerClickedEventHandler(DoStopInteractObject);
     }
 
+    void ToggleControllerModel(bool on)
+    {
+        foreach(MeshRenderer renderer in this.GetComponentsInChildren<MeshRenderer>())
+        {
+            renderer.enabled = on;
+        }
+        controllerVisible = on;
+    }
+
     void SnapObjectToGrabToController(GameObject obj)
     {
         obj.transform.position = controllerAttachPoint.transform.position;
@@ -136,15 +148,16 @@ public class SteamVR_ControllerInteract : MonoBehaviour {
 
     void GrabInteractedObject()
     {
-        if (controllerAttachJoint == null && grabbedObject == null)
+        if (controllerAttachJoint == null && grabbedObject == null && IsObjectGrabbable(touchedObject))
         {            
             grabbedObject = touchedObject;
-
             OnControllerGrabInteractableObject(SetControllerInteractEvent(grabbedObject));
-
             grabbedObject.GetComponent<SteamVR_InteractableObject>().Grabbed(this.gameObject);
-
             SnapObjectToGrabToController(grabbedObject);
+            if (hideControllerOnGrab)
+            {
+                ToggleControllerModel(false);
+            }
         }
     }
 
@@ -153,12 +166,15 @@ public class SteamVR_ControllerInteract : MonoBehaviour {
         if (grabbedObject != null && controllerAttachJoint != null)
         {
             OnControllerUngrabInteractableObject(SetControllerInteractEvent(grabbedObject));
-
             grabbedObject.GetComponent<SteamVR_InteractableObject>().Ungrabbed(this.gameObject);
-
             grabbedObject = null;
+
             Rigidbody releasedObjectRigidBody = ReleaseGrabbedObjectFromController();
             ThrowReleasedObject(releasedObjectRigidBody, controllerIndex);
+            if (hideControllerOnGrab)
+            {
+                ToggleControllerModel(true);
+            }
         }
     }
 
@@ -175,19 +191,27 @@ public class SteamVR_ControllerInteract : MonoBehaviour {
         UngrabInteractedObject(e.controllerIndex);
     }
 
+    bool IsObjectInteractable(GameObject obj)
+    {
+        return (obj.GetComponent<SteamVR_InteractableObject>());
+    }
+
     bool IsObjectGrabbable(GameObject obj)
     {
-        //The object must have the SteamVR_InteractableObject script attached to it
-        return (obj.GetComponent<SteamVR_InteractableObject>() && obj.GetComponent<SteamVR_InteractableObject>().isGrabbable);
+        return (IsObjectInteractable(obj) && obj.GetComponent<SteamVR_InteractableObject>().isGrabbable);
     }
 
     void OnTriggerStay(Collider collider)
     {
-        if (grabbedObject == null && IsObjectGrabbable(collider.gameObject))
+        if (touchedObject == null && IsObjectInteractable(collider.gameObject))
         {            
             touchedObject = collider.gameObject;
             OnControllerTouchInteractableObject(SetControllerInteractEvent(touchedObject));
             touchedObject.GetComponent<SteamVR_InteractableObject>().ToggleHighlight(true, globalTouchHighlightColor);
+            if (controllerVisible && hideControllerOnTouch)
+            {
+                ToggleControllerModel(false);
+            }
         }
     }
 
@@ -199,5 +223,9 @@ public class SteamVR_ControllerInteract : MonoBehaviour {
             collider.GetComponent<SteamVR_InteractableObject>().ToggleHighlight(false);
         }
         touchedObject = null;
+        if (hideControllerOnTouch)
+        {
+            ToggleControllerModel(true);
+        }
     }
 }

@@ -246,11 +246,16 @@ controller was at, which can simulate object throwing.
 The interactable objects require a collider to activate the trigger and
 a rigidbody to pick them up and move them around the game world.
 
-It is also possible to set a default Touch Highlight Colour on the
+It is possible to set a default Touch Highlight Colour on the
 Controller, so any interactable object that is set to Highlight On
 Touch and doesn't have a local highlight colour will be highlighted
 with this global colour. It's also possible to have a different global
 touch colour per controller.
+
+The controller model can be hidden upon an interaction with an object,
+ticking the `Hide Controller On Touch` or `Hide Controller On Grab`
+parameter on the script will ensure the controller model is hidden
+when the interactable object is being touched or grabbed.
 
 There are also a number of events emitted by the Controller Interaction
 script:
