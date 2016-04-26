@@ -16,10 +16,12 @@ public class SteamVR_BasicTeleport : MonoBehaviour {
     public float blinkTransitionSpeed = 0.6f;
 
     private int listenerInitTries = 5;
+    private Transform eyeCamera;
 
     void Start()
     {
         InitPointerListeners();
+        eyeCamera = this.GetComponentInChildren<SteamVR_GameView>().GetComponent<Transform>();
     }
 
     void InitPointerListeners()
@@ -51,6 +53,6 @@ public class SteamVR_BasicTeleport : MonoBehaviour {
     {
         SteamVR_Fade.Start(Color.black, 0);
         SteamVR_Fade.Start(Color.clear, blinkTransitionSpeed);
-        this.transform.position = new Vector3(e.tipPosition.x, this.transform.position.y, e.tipPosition.z);
+        this.transform.position = new Vector3(e.tipPosition.x - eyeCamera.localPosition.x, this.transform.position.y, e.tipPosition.z - eyeCamera.localPosition.z);
     }
 }
