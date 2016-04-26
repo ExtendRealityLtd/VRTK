@@ -189,17 +189,17 @@ with richer functionality.
 
 An example of the `SteamVR_InteractableObject` can be viewed in the
 scene `Resoures/Examples/005_Controller_BasicObjectGrabbing`. The scene
-also uses the `SteamVR_ObjectGrab` script on the controllers to show
-how an interactable object can be grabbed and snapped to the controller
-and thrown around the game world.
+also uses the `SteamVR_ControllerInteract` script on the controllers to
+show how an interactable object can be grabbed and snapped to the
+controller and thrown around the game world.
 
-#### Grabbable Object (SteamVR_ObjectGrab)
+#### Controller Interation With Objects (SteamVR_ControllerInteract)
 
-The Object Grab script is attached to a Controller object within the
-`[CameraRig]` prefab and the Controller object also requires the
-`SteamVR_ControllerEvents` script to be attached as it uses this for
-listening to the controller button events for grabbing and releasing
-interactable game objects.
+The Controller Interact script is attached to a Controller object
+within the `[CameraRig]` prefab and the Controller object also
+requires the `SteamVR_ControllerEvents` script to be attached as it
+uses this for listening to the controller button events for grabbing
+and releasing interactable game objects.
 
 An object can be grabbed if the Controller touches a game object which
 contains the `SteamVR_InteractableObject` script and has the flag
@@ -215,8 +215,8 @@ was at, which can simulate object throwing.
 The interactable objects require a collider to activate the trigger and
 a rigidbody to pick them up and move them around the game world.
 
-An example of the `SteamVR_ObjectGrab` can be viewed in the scene
-`Examples/005_Controller/BasicObjectGrabbing`. The scene
+An example of the `SteamVR_ControllerInteract` can be viewed in the
+scene `Examples/005_Controller/BasicObjectGrabbing`. The scene
 demonstrates the grabbing of objects that have the
 `SteamVR_InteractableObject` script added to them and also shows the
 ability to highlight interactable objects when they are touched by

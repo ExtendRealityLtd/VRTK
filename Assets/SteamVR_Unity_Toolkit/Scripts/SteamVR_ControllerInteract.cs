@@ -1,6 +1,6 @@
 ﻿//====================================================================================
 //
-// Purpose: Provide basic ability to pick up interactable objects in the game world
+// Purpose: Provide ability to interact with interactable objects in the game world
 //
 // This script must be attached to a Controller within the [CameraRig] Prefab
 //
@@ -17,7 +17,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class SteamVR_ObjectGrab : MonoBehaviour {
+public class SteamVR_ControllerInteract : MonoBehaviour {
     public Rigidbody controllerAttachPoint = null;  
 
     private FixedJoint controllerAttachJoint;
@@ -35,7 +35,7 @@ public class SteamVR_ObjectGrab : MonoBehaviour {
     void Start () {
         if (GetComponent<SteamVR_ControllerEvents>() == null)
         {
-            Debug.LogError("SteamVR_ObjectGrab is required to be attached to a SteamVR Controller that has the SteamVR_ControllerEvents script attached to it");
+            Debug.LogError("SteamVR_ControllerInteract is required to be attached to a SteamVR Controller that has the SteamVR_ControllerEvents script attached to it");
             return;
         }
 
