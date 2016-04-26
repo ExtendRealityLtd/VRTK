@@ -194,6 +194,34 @@ laser pointer with the Controller `Grip` button and when the laser
 pointer is deactivated (release the `Grip`) then the player is
 teleported to the location of the laser pointer tip.
 
+#### Height Adjustable Teleporter (SteamVR_HeightAdjustTeleport)
+
+The height adjust teleporter extends the basic teleporter and allows
+for the y position of the `[CameraRig]` to be altered based on whether
+the teleport location is on top of another object.
+
+Like the basic teleporter the Height Adjust Teleport script is attached
+to the `[CameraRig]` prefab and requires a World Pointer to be
+available.
+
+There is an additional script parameter of `Play Space Falling` and
+when this is checked it means if the player steps off an object into
+a part of their play area that is not on the object then they are
+automatically teleported down to the nearest floor.
+
+This also works in the opposite way that if the player's headset is
+above an object then the player is teleported automatically on top of
+that object, which is useful for simulating climbing stairs without
+needing to use the pointer beam location.
+
+If this option is turned off then the player can hover in mid air at
+the same y position of the object they are standing on.
+
+An example of the `SteamVR_HeightAdjustTeleport` script can be viewed
+in the scene `Examples/007_CameraRig_HeightAdjustTeleport`. The scene
+has a collection of varying height objects that the player can either
+walk up and down or use the laser pointer to climb on top of them.
+
 #### Interactable Object (SteamVR_InteractableObject)
 
 The Interactable Object script is attached to any game object that is
@@ -363,6 +391,15 @@ The current examples are:
   object that is set to `usable` and when the door is used by pressing
   the controller `Trigger` button, the door swings open (or closes if
   it's already open)
+  * 007_CameraRig_HeightAdjustTeleport: a scene with a selection of
+  varying height objects that can be traversed using the controller
+  laser beam to point at an object and if the laser beam is pointing
+  on top of the object then the player is teleported to the top of the
+  object. Also, it shows that if the player steps into a part of the
+  play area that is not on the object then the player will fall to
+  the nearest object. This also enables the player to climb objects
+  just by standing over them as the floor detection is done from the
+  position of the headset.
 
 ## Contributing
 

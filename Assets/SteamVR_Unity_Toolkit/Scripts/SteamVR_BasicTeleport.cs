@@ -15,10 +15,11 @@ using System.Collections;
 public class SteamVR_BasicTeleport : MonoBehaviour {
     public float blinkTransitionSpeed = 0.6f;
 
-    private int listenerInitTries = 5;
-    private Transform eyeCamera;
+    protected int listenerInitTries = 5;
+    protected Transform eyeCamera;
+    protected Vector3 newPosition = Vector3.zero;
 
-    void Start()
+    protected virtual void Start()
     {
         InitPointerListeners();
         eyeCamera = this.GetComponentInChildren<SteamVR_GameView>().GetComponent<Transform>();
@@ -49,10 +50,19 @@ public class SteamVR_BasicTeleport : MonoBehaviour {
         }
     }
 
-    void DoTeleport(object sender, WorldPointerEventArgs e)
+    protected virtual void DoTeleport(object sender, WorldPointerEventArgs e)
     {
-        SteamVR_Fade.Start(Color.black, 0);
-        SteamVR_Fade.Start(Color.clear, blinkTransitionSpeed);
-        this.transform.position = new Vector3(e.tipPosition.x - eyeCamera.localPosition.x, this.transform.position.y, e.tipPosition.z - eyeCamera.localPosition.z);
+        if (e.target)
+        {
+            SteamVR_Fade.Start(Color.black, 0);
+            SteamVR_Fade.Start(Color.clear, blinkTransitionSpeed);
+
+            this.transform.position = GetNewPosition(e.tipPosition, e.target);
+        }
+    }
+
+    protected virtual Vector3 GetNewPosition(Vector3 tipPosition, Transform target)
+    {
+        return new Vector3(tipPosition.x - eyeCamera.localPosition.x, this.transform.position.y, tipPosition.z - eyeCamera.localPosition.z);
     }
 }
