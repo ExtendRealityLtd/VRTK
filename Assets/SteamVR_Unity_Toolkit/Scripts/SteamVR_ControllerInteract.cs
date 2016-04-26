@@ -29,16 +29,20 @@ public class SteamVR_ControllerInteract : MonoBehaviour {
     public Rigidbody controllerAttachPoint = null;
     public bool hideControllerOnTouch = false;
     public bool hideControllerOnGrab = false;
+    public bool hideControllerOnUse = false;
     public Color globalTouchHighlightColor = Color.clear;
 
     public event ControllerInteractEventHandler ControllerTouchInteractableObject;
     public event ControllerInteractEventHandler ControllerUntouchInteractableObject;
     public event ControllerInteractEventHandler ControllerGrabInteractableObject;
     public event ControllerInteractEventHandler ControllerUngrabInteractableObject;
+    public event ControllerInteractEventHandler ControllerUseInteractableObject;
+    public event ControllerInteractEventHandler ControllerUnuseInteractableObject;
 
     private FixedJoint controllerAttachJoint;
     private GameObject touchedObject = null;
     private GameObject grabbedObject = null;
+    private GameObject usingObject = null;
 
     private SteamVR_TrackedObject trackedController;
     private bool controllerVisible = true;
@@ -65,6 +69,18 @@ public class SteamVR_ControllerInteract : MonoBehaviour {
     {
         if (ControllerUngrabInteractableObject != null)
             ControllerUngrabInteractableObject(this, e);
+    }
+
+    public virtual void OnControllerUseInteractableObject(ControllerInteractEventArgs e)
+    {
+        if (ControllerUseInteractableObject != null)
+            ControllerUseInteractableObject(this, e);
+    }
+
+    public virtual void OnControllerUnuseInteractableObject(ControllerInteractEventArgs e)
+    {
+        if (ControllerUnuseInteractableObject != null)
+            ControllerUnuseInteractableObject(this, e);
     }
 
     ControllerInteractEventArgs SetControllerInteractEvent(GameObject target)
@@ -112,6 +128,21 @@ public class SteamVR_ControllerInteract : MonoBehaviour {
         controllerVisible = on;
     }
 
+    bool IsObjectInteractable(GameObject obj)
+    {
+        return (obj.GetComponent<SteamVR_InteractableObject>());
+    }
+
+    bool IsObjectGrabbable(GameObject obj)
+    {
+        return (IsObjectInteractable(obj) && obj.GetComponent<SteamVR_InteractableObject>().isGrabbable);
+    }
+
+    bool IsObjectUsable(GameObject obj)
+    {
+        return (IsObjectInteractable(obj) && obj.GetComponent<SteamVR_InteractableObject>().isUsable);
+    }
+
     void SnapObjectToGrabToController(GameObject obj)
     {
         obj.transform.position = controllerAttachPoint.transform.position;
@@ -149,15 +180,16 @@ public class SteamVR_ControllerInteract : MonoBehaviour {
     void GrabInteractedObject()
     {
         if (controllerAttachJoint == null && grabbedObject == null && IsObjectGrabbable(touchedObject))
-        {            
+        {
             grabbedObject = touchedObject;
             OnControllerGrabInteractableObject(SetControllerInteractEvent(grabbedObject));
-            grabbedObject.GetComponent<SteamVR_InteractableObject>().Grabbed(this.gameObject);
-            SnapObjectToGrabToController(grabbedObject);
+            grabbedObject.GetComponent<SteamVR_InteractableObject>().Grabbed(this.gameObject);            
             if (hideControllerOnGrab)
             {
                 ToggleControllerModel(false);
             }
+
+            SnapObjectToGrabToController(grabbedObject);
         }
     }
 
@@ -167,7 +199,6 @@ public class SteamVR_ControllerInteract : MonoBehaviour {
         {
             OnControllerUngrabInteractableObject(SetControllerInteractEvent(grabbedObject));
             grabbedObject.GetComponent<SteamVR_InteractableObject>().Ungrabbed(this.gameObject);
-            grabbedObject = null;
 
             Rigidbody releasedObjectRigidBody = ReleaseGrabbedObjectFromController();
             ThrowReleasedObject(releasedObjectRigidBody, controllerIndex);
@@ -175,30 +206,50 @@ public class SteamVR_ControllerInteract : MonoBehaviour {
             {
                 ToggleControllerModel(true);
             }
+            grabbedObject = null;
+        }
+    }
+
+    void UseInteractedObject()
+    {
+        if (usingObject == null && IsObjectUsable(touchedObject)) {
+            usingObject = touchedObject;
+            OnControllerUseInteractableObject(SetControllerInteractEvent(usingObject));
+            usingObject.GetComponent<SteamVR_InteractableObject>().StartUsing(this.gameObject);
+            if (hideControllerOnUse)
+            {
+                ToggleControllerModel(false);
+            }
+        }
+    }
+
+    void UnuseInteractedObject()
+    {
+        if (usingObject != null)
+        {
+            OnControllerUnuseInteractableObject(SetControllerInteractEvent(usingObject));
+            usingObject.GetComponent<SteamVR_InteractableObject>().StopUsing(this.gameObject);
+            if (hideControllerOnUse)
+            {
+                ToggleControllerModel(true);
+            }
+            usingObject = null;
         }
     }
 
     void DoInteractObject(object sender, ControllerClickedEventArgs e)
     {
-        if (touchedObject != null)
+        if (touchedObject != null && IsObjectInteractable(touchedObject) )
         {
             GrabInteractedObject();
+            UseInteractedObject();
         }
     }
 
     void DoStopInteractObject(object sender, ControllerClickedEventArgs e)
     {
         UngrabInteractedObject(e.controllerIndex);
-    }
-
-    bool IsObjectInteractable(GameObject obj)
-    {
-        return (obj.GetComponent<SteamVR_InteractableObject>());
-    }
-
-    bool IsObjectGrabbable(GameObject obj)
-    {
-        return (IsObjectInteractable(obj) && obj.GetComponent<SteamVR_InteractableObject>().isGrabbable);
+        UnuseInteractedObject();
     }
 
     void OnTriggerStay(Collider collider)
