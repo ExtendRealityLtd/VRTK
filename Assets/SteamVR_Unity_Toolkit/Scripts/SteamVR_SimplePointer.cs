@@ -6,8 +6,8 @@
 //
 // The SteamVR_ControllerEvents script must also be attached to the Controller
 //
-// Press the 'Grip' button on the controller to activate the beam
-// Released the 'Grip' button on the controller to deactivate the beam
+// Press the default 'Grip' button on the controller to activate the beam
+// Released the default 'Grip' button on the controller to deactivate the beam
 //
 // This script is an implementation of the SteamVR_WorldPointer so emits certain
 // events from the SimplePointer along with the correct payload.
@@ -51,8 +51,8 @@ public class SteamVR_SimplePointer : SteamVR_WorldPointer
         }
 
         //Setup controller event listeners
-        GetComponent<SteamVR_ControllerEvents>().GripClicked += new ControllerClickedEventHandler(EnablePointerBeam);
-        GetComponent<SteamVR_ControllerEvents>().GripUnclicked += new ControllerClickedEventHandler(DisablePointerBeam);
+        GetComponent<SteamVR_ControllerEvents>().AliasPointerOn += new ControllerClickedEventHandler(EnablePointerBeam);
+        GetComponent<SteamVR_ControllerEvents>().AliasPointerOff += new ControllerClickedEventHandler(DisablePointerBeam);
 
         InitPointer();
     }

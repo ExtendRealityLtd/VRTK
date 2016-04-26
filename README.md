@@ -21,7 +21,7 @@ in Unity 5
 This toolkit provides many common VR functionality within Unity3d such
 as (but not limited to):
 
-  * Controller button events
+  * Controller button events with common aliases
   * Controller world pointers (e.g. laser pointers)
   * Player teleportation
   * Grabbing/holding objects using the controllers
@@ -101,6 +101,27 @@ When a controller event is emitted, it is sent with a payload containing:
   * ControllerIndex - The index of the controller that was used
   * TouchpadAxis - A Vector2 of the position the touchpad is touched at
 
+There are also common action aliases that are emitted when controller
+buttons are pressed. These action aliases can be mapped to a
+preferred controller button. The aliases are:
+
+  * Toggle Pointer - Common action of turning a laser pointer on/off
+  * Toggle Interact - Common action of grabbing or using game objects
+  * Toggle Menu - Common action of bringing up an in-game menu
+
+Each of the above aliases can have the preferred controller button
+mapped to their usage by selecting it from the drop down on the script
+parameters window.
+
+When the set button is pressed it will emit the actual button event as
+well as an additional event that the alias is "On". When the set button
+is released it will emit the actual button event as well as an
+additional event that the alias button is "Off".
+
+Listening for these alias events rather than the actual button events
+means it's easier to customise the controller buttons to the actions
+they should perform.
+
 An example of the `SteamVR_ControllerEvents` script can be viewed in
 the scene `Examples/002_Controller_Events` and code examples
 of how the events are utilised and listened to can be viewed in the
@@ -114,9 +135,11 @@ within a scene and it can also determine the object it is pointing at
 and the distance the object is from the controller the beam is being
 emitted from.
 
-The laser beam is activated by pressing the `Grip` on the controller.
-This can be changed by updating the script to listen to a different
-controller button event.
+The laser beam is activated by default by pressing the `Grip` on the
+controller. The event it is listening for is the `AliasPointer` events
+so the pointer toggle button can be set by changing the
+`Pointer Toggle` button on the `SteamVR_ControllerEvents` script
+parameters.
 
 The Simple Pointer script is attached to a Controller object within the
 `[CameraRig]` prefab and the Controller object also requires the
@@ -203,14 +226,19 @@ and releasing interactable game objects.
 
 An object can be grabbed if the Controller touches a game object which
 contains the `SteamVR_InteractableObject` script and has the flag
-`isGrabbable` set to `true`. If a valid interactable object is touched
-then pressing the Controller `Trigger` will grab the object and snap it
-to the Controller tip (by default, although it's possible to pass in a
-different rigidbody on the controller model to override this).
+`isGrabbable` set to `true`.
 
-When the Controller `Trigger` is released, the interactable game object
-will be propelled in the direction and at the velocity the controller
-was at, which can simulate object throwing.
+A valid interactable object is grabbable when it is touched by the
+controller and by default pressing the `Trigger` on the controller will
+grab the object and snap it to the Controller attach point (default is
+the controller tip). The event it is listening for is the
+`AliasInteract` events so the interact toggle button can be set by
+changing the `Interact Toggle` button on the `SteamVR_ControllerEvents`
+script parameters.
+
+When the Controller Interact button is released, the interactable game
+object will be propelled in the direction and at the velocity the
+controller was at, which can simulate object throwing.
 
 The interactable objects require a collider to activate the trigger and
 a rigidbody to pick them up and move them around the game world.

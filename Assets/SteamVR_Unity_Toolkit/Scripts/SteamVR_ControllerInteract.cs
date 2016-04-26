@@ -9,8 +9,8 @@
 // For an object to be grabbale it must contain the SteamVR_InteractableObject script
 // and have the isGrabbable flag set to true.
 //
-// Press the 'Trigger' button on the controller to grab the object
-// Released the 'Trigger' button on the controller to release the object
+// Press the default 'Trigger' button on the controller to grab the object
+// Released the default 'Trigger' button on the controller to release the object
 //
 //====================================================================================
 
@@ -51,8 +51,8 @@ public class SteamVR_ControllerInteract : MonoBehaviour {
         collider.center = new Vector3(0f, -0.035f, -0.055f);
         collider.isTrigger = true;
 
-        GetComponent<SteamVR_ControllerEvents>().TriggerClicked += new ControllerClickedEventHandler(DoGrabObject);
-        GetComponent<SteamVR_ControllerEvents>().TriggerUnclicked += new ControllerClickedEventHandler(DoReleaseObject);
+        GetComponent<SteamVR_ControllerEvents>().AliasInteractOn += new ControllerClickedEventHandler(DoGrabObject);
+        GetComponent<SteamVR_ControllerEvents>().AliasInteractOff += new ControllerClickedEventHandler(DoReleaseObject);
     }
 
     void SnapObjectToGrabToController(GameObject obj)
