@@ -24,6 +24,13 @@ public class SteamVR_ObjectGrab : MonoBehaviour {
     private GameObject objectToGrab = null;
     private GameObject grabbedObject = null;
 
+    private SteamVR_TrackedObject trackedController;
+
+    void Awake()
+    {
+        trackedController = GetComponent<SteamVR_TrackedObject>();
+    }
+
     // Use this for initialization
     void Start () {
         if (GetComponent<SteamVR_ControllerEvents>() == null)
@@ -67,9 +74,18 @@ public class SteamVR_ObjectGrab : MonoBehaviour {
 
     void ThrowReleasedObject(Rigidbody rb, uint controllerIndex)
     {
+        var origin = trackedController.origin ? trackedController.origin : trackedController.transform.parent;
         var device = SteamVR_Controller.Input((int)controllerIndex);
-        rb.velocity = device.velocity;
-        rb.angularVelocity = device.angularVelocity;
+        if (origin != null)
+        {
+            rb.velocity = origin.TransformVector(device.velocity);
+            rb.angularVelocity = origin.TransformVector(device.angularVelocity);
+        }
+        else
+        {
+            rb.velocity = device.velocity;
+            rb.angularVelocity = device.angularVelocity;
+        }
         rb.maxAngularVelocity = rb.angularVelocity.magnitude;
     }
 
