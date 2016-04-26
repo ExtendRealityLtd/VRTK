@@ -57,11 +57,6 @@ public class SteamVR_ControllerEvents : MonoBehaviour {
     private SteamVR_TrackedObject trackedController;
     private SteamVR_Controller.Device device;
 
-    void Awake()
-    {
-        trackedController = GetComponent<SteamVR_TrackedObject>();        
-    }
-
     public virtual void OnTriggerClicked(ControllerClickedEventArgs e)
     {
         if (TriggerClicked != null)
@@ -165,6 +160,11 @@ public class SteamVR_ControllerEvents : MonoBehaviour {
         e.controllerIndex = controllerIndex;
         e.touchpadAxis = device.GetAxis();
         return e;
+    }
+
+    void Awake()
+    {
+        trackedController = GetComponent<SteamVR_TrackedObject>();
     }
 
     void EmitAlias(ButtonAlias type, bool touchDown, ref bool buttonBool)

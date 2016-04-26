@@ -16,10 +16,50 @@ public class SteamVR_InteractableObject : MonoBehaviour
 {
     public bool isGrabbable = true;
     public bool highlightOnTouch = true;
-    public Color touchHighlightColor;
+    public Color touchHighlightColor = Color.clear;
 
     private bool isGrabbed = false;
     private Color[] originalObjectColours;
+
+    public bool IsGrabbed()
+    {
+        return isGrabbed;
+    }
+
+    public virtual void Grabbed(GameObject grabbingObject)
+    {
+        isGrabbed = true;
+    }
+
+    public virtual void Ungrabbed(GameObject previousGrabbingObject)
+    {
+        isGrabbed = false;
+    }
+
+    public virtual void ToggleHighlight(bool toggle)
+    {
+        ToggleHighlight(toggle, Color.clear);
+    }
+
+    public virtual void ToggleHighlight(bool toggle, Color globalHighlightColor)
+    {
+        if (highlightOnTouch)
+        {
+            if (toggle)
+            {
+                Color color = (touchHighlightColor != Color.clear ? touchHighlightColor : globalHighlightColor);
+                if (color != Color.clear)
+                {
+                    var colorArray = BuildHighlightColorArray(color);
+                    ChangeColor(colorArray);
+                }
+            }
+            else
+            {
+                ChangeColor(originalObjectColours);
+            }
+        }
+    }
 
     void Start()
     {
@@ -66,36 +106,6 @@ public class SteamVR_InteractableObject : MonoBehaviour
         {
             renderer.material.color = colors[i];
             i++;
-        }
-    }
-
-    public bool IsGrabbed()
-    {
-        return isGrabbed;
-    }
-
-    public void OnGrab(GameObject grabbingObject)
-    {
-        isGrabbed = true;
-    }
-
-    public void OnUngrab(GameObject previousGrabbingObject)
-    {
-        isGrabbed = false;
-    }
-
-    public void ToggleHighlight(bool toggle)
-    {
-        if(highlightOnTouch)
-        {
-            if (toggle)
-            {
-                var colorArray = BuildHighlightColorArray(touchHighlightColor);
-                ChangeColor(colorArray);
-            } else
-            {
-                ChangeColor(originalObjectColours);
-            }
         }
     }
 }

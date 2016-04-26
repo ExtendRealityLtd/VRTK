@@ -17,21 +17,66 @@
 using UnityEngine;
 using System.Collections;
 
+public struct ControllerInteractEventArgs
+{
+    public uint controllerIndex;
+    public GameObject target;
+}
+
+public delegate void ControllerInteractEventHandler(object sender, ControllerInteractEventArgs e);
+
 public class SteamVR_ControllerInteract : MonoBehaviour {
-    public Rigidbody controllerAttachPoint = null;  
+    public Rigidbody controllerAttachPoint = null;
+    public Color globalTouchHighlightColor = Color.clear;
+
+    public event ControllerInteractEventHandler ControllerTouchInteractableObject;
+    public event ControllerInteractEventHandler ControllerUntouchInteractableObject;
+    public event ControllerInteractEventHandler ControllerGrabInteractableObject;
+    public event ControllerInteractEventHandler ControllerUngrabInteractableObject;
 
     private FixedJoint controllerAttachJoint;
-    private GameObject objectToGrab = null;
+    private GameObject touchedObject = null;
     private GameObject grabbedObject = null;
 
     private SteamVR_TrackedObject trackedController;
+
+    public virtual void OnControllerTouchInteractableObject(ControllerInteractEventArgs e)
+    {
+        if (ControllerTouchInteractableObject != null)
+            ControllerTouchInteractableObject(this, e);
+    }
+
+    public virtual void OnControllerUntouchInteractableObject(ControllerInteractEventArgs e)
+    {
+        if (ControllerUntouchInteractableObject != null)
+            ControllerUntouchInteractableObject(this, e);
+    }
+
+    public virtual void OnControllerGrabInteractableObject(ControllerInteractEventArgs e)
+    {
+        if (ControllerGrabInteractableObject != null)
+            ControllerGrabInteractableObject(this, e);
+    }
+
+    public virtual void OnControllerUngrabInteractableObject(ControllerInteractEventArgs e)
+    {
+        if (ControllerUngrabInteractableObject != null)
+            ControllerUngrabInteractableObject(this, e);
+    }
+
+    ControllerInteractEventArgs SetControllerInteractEvent(GameObject target)
+    {
+        ControllerInteractEventArgs e;
+        e.controllerIndex = (uint)trackedController.index;
+        e.target = target;
+        return e;
+    }
 
     void Awake()
     {
         trackedController = GetComponent<SteamVR_TrackedObject>();
     }
 
-    // Use this for initialization
     void Start () {
         if (GetComponent<SteamVR_ControllerEvents>() == null)
         {
@@ -51,8 +96,8 @@ public class SteamVR_ControllerInteract : MonoBehaviour {
         collider.center = new Vector3(0f, -0.035f, -0.055f);
         collider.isTrigger = true;
 
-        GetComponent<SteamVR_ControllerEvents>().AliasInteractOn += new ControllerClickedEventHandler(DoGrabObject);
-        GetComponent<SteamVR_ControllerEvents>().AliasInteractOff += new ControllerClickedEventHandler(DoReleaseObject);
+        GetComponent<SteamVR_ControllerEvents>().AliasInteractOn += new ControllerClickedEventHandler(DoInteractObject);
+        GetComponent<SteamVR_ControllerEvents>().AliasInteractOff += new ControllerClickedEventHandler(DoStopInteractObject);
     }
 
     void SnapObjectToGrabToController(GameObject obj)
@@ -89,36 +134,60 @@ public class SteamVR_ControllerInteract : MonoBehaviour {
         rb.maxAngularVelocity = rb.angularVelocity.magnitude;
     }
 
-    void DoGrabObject(object sender, ControllerClickedEventArgs e)
+    void GrabInteractedObject()
     {
-        if (objectToGrab != null && grabbedObject == null)
-        {
-            if (controllerAttachJoint == null)
-            {
-                grabbedObject = objectToGrab;
-                grabbedObject.GetComponent<SteamVR_InteractableObject>().OnGrab(gameObject);
-                SnapObjectToGrabToController(grabbedObject);
-            }
+        if (controllerAttachJoint == null && grabbedObject == null)
+        {            
+            grabbedObject = touchedObject;
+
+            OnControllerGrabInteractableObject(SetControllerInteractEvent(grabbedObject));
+
+            grabbedObject.GetComponent<SteamVR_InteractableObject>().Grabbed(this.gameObject);
+
+            SnapObjectToGrabToController(grabbedObject);
         }
     }
 
-    void DoReleaseObject(object sender, ControllerClickedEventArgs e)
+    void UngrabInteractedObject(uint controllerIndex)
     {
         if (grabbedObject != null && controllerAttachJoint != null)
         {
-            grabbedObject.GetComponent<SteamVR_InteractableObject>().OnUngrab(gameObject);
+            OnControllerUngrabInteractableObject(SetControllerInteractEvent(grabbedObject));
+
+            grabbedObject.GetComponent<SteamVR_InteractableObject>().Ungrabbed(this.gameObject);
+
             grabbedObject = null;
             Rigidbody releasedObjectRigidBody = ReleaseGrabbedObjectFromController();
-            ThrowReleasedObject(releasedObjectRigidBody, e.controllerIndex);
+            ThrowReleasedObject(releasedObjectRigidBody, controllerIndex);
         }
+    }
+
+    void DoInteractObject(object sender, ControllerClickedEventArgs e)
+    {
+        if (touchedObject != null)
+        {
+            GrabInteractedObject();
+        }
+    }
+
+    void DoStopInteractObject(object sender, ControllerClickedEventArgs e)
+    {
+        UngrabInteractedObject(e.controllerIndex);
+    }
+
+    bool IsObjectGrabbable(GameObject obj)
+    {
+        //The object must have the SteamVR_InteractableObject script attached to it
+        return (obj.GetComponent<SteamVR_InteractableObject>() && obj.GetComponent<SteamVR_InteractableObject>().isGrabbable);
     }
 
     void OnTriggerStay(Collider collider)
     {
-        if (collider.GetComponent<SteamVR_InteractableObject>() && collider.GetComponent<SteamVR_InteractableObject>().isGrabbable && grabbedObject == null)
+        if (grabbedObject == null && IsObjectGrabbable(collider.gameObject))
         {            
-            collider.GetComponent<SteamVR_InteractableObject>().ToggleHighlight(true);
-            objectToGrab = collider.gameObject;
+            touchedObject = collider.gameObject;
+            OnControllerTouchInteractableObject(SetControllerInteractEvent(touchedObject));
+            touchedObject.GetComponent<SteamVR_InteractableObject>().ToggleHighlight(true, globalTouchHighlightColor);
         }
     }
 
@@ -126,8 +195,9 @@ public class SteamVR_ControllerInteract : MonoBehaviour {
     {
         if (collider.GetComponent<SteamVR_InteractableObject>())
         {
+            OnControllerUntouchInteractableObject(SetControllerInteractEvent(collider.gameObject));
             collider.GetComponent<SteamVR_InteractableObject>().ToggleHighlight(false);
         }
-        objectToGrab = null;
+        touchedObject = null;
     }
 }

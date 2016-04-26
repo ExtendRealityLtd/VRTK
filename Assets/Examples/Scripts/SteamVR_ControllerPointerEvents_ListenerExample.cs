@@ -6,7 +6,7 @@ public class SteamVR_ControllerPointerEvents_ListenerExample : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
-        if (GetComponent<SteamVR_ControllerEvents>() == null)
+        if (GetComponent<SteamVR_SimplePointer>() == null)
         {
             Debug.LogError("SteamVR_ControllerPointerEvents_ListenerExample is required to be attached to a SteamVR Controller that has the SteamVR_SimplePointer script attached to it");
             return;

@@ -203,7 +203,10 @@ It currently has states to determine if the object can be grabbed
 and whether the object is currently grabbed.
 
 It also allows for a highlight colour to change the object to when
-the controller touches it (it resets the colour on untouch).
+the controller touches it (it resets the colour on untouch). This
+colour can be set to a different colour on each object or a default
+colour can be set on the `ControllerInteract` script. However, the
+local colour on the interactable object will always take precendence.
 
 The basis of this script is to provide a simple mechanism for
 identifying objects in the game world that can be grabbed but it is
@@ -243,6 +246,24 @@ controller was at, which can simulate object throwing.
 The interactable objects require a collider to activate the trigger and
 a rigidbody to pick them up and move them around the game world.
 
+It is also possible to set a default Touch Highlight Colour on the
+Controller, so any interactable object that is set to Highlight On
+Touch and doesn't have a local highlight colour will be highlighted
+with this global colour. It's also possible to have a different global
+touch colour per controller.
+
+There are also a number of events emitted by the Controller Interaction
+script:
+
+  * Touching/Untouching an interactable object will emit an event
+  * Grabbing/Ungrabbing an interactable object will emit an event
+
+The Controller Interaction events are emitted with this payload:
+
+  * ControllerIndex: The index of the controller doing the interaction
+  * Target: The GameObject of the interactable object that is being
+  interacted with by the controller
+
 An example of the `SteamVR_ControllerInteract` can be viewed in the
 scene `Examples/005_Controller/BasicObjectGrabbing`. The scene
 demonstrates the grabbing of objects that have the
@@ -279,7 +300,7 @@ A payload is emitted with the event containing:
 
   * ControllerIndex - The index of the controller emitting the beam
   * Distance - The distance the target is from the controller
-  * Target - The game object that the pointer is colliding with
+  * Target - The Transform of the object that the pointer is touching
   * TipPosition - The world position of the end of the pointer
 
 ### Examples
@@ -313,7 +334,8 @@ The current examples are:
   pressing the `Trigger` button down. Releasing the trigger button
   will propel the object in the direction and velocity of the grabbing
   controller. The scene also demonstrates simple highlighting of
-  objects when the controller touches them.
+  objects when the controller touches them. The interaction events are
+  also displayed in the console window.
 
 ## Contributing
 
