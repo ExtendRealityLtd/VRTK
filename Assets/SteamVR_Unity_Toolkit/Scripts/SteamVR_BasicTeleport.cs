@@ -22,7 +22,7 @@ public class SteamVR_BasicTeleport : MonoBehaviour {
     protected virtual void Start()
     {
         InitPointerListeners();
-        eyeCamera = this.GetComponentInChildren<SteamVR_GameView>().GetComponent<Transform>();
+        eyeCamera = GameObject.FindObjectOfType<SteamVR_Camera>().GetComponent<Transform>();
     }
 
     void InitPointerListeners()
