@@ -395,6 +395,11 @@ a door object to open and close it. It also has a cube on the floor
 that can be grabbed to show how interactable objects can be usable
 or grabbable.
 
+Another example can be viewed in the scene
+`Examples/008_Controller_UsingAGrabbedObject` which shows that objects
+can be grabbed with one button and used with another (e.g. firing a
+gun).
+
 #### Class Interfaces
 
 To allow for reusablity and object consistency, a collection of
@@ -479,6 +484,12 @@ The current examples are:
   the nearest object. This also enables the player to climb objects
   just by standing over them as the floor detection is done from the
   position of the headset.
+
+  * **008_Controller_UsingAGrabbedObject:** A scene with interactable
+  objects that can be grabbed (pressing the `Grip` controller button)
+  and then used (pressing the `Trigger` controller button). There is
+  a gun on a table that can be picked up and fired, or a strange box
+  that when picked up and used the top spins.
 
 ## Contributing
 
