@@ -257,7 +257,7 @@ scripts on the controllers to show how an interactable object can be
 grabbed and snapped to the controller and thrown around the game world.
 
 Another example can be viewed in the scene
-`Examples/006_ControllerInteract_UsingADoor`.
+`Examples/006_Controller_UsingADoor`.
 
 #### Touching Interactable Objects (SteamVR_InteractTouch)
 
@@ -390,7 +390,7 @@ The event payload that is emitted is:
   interacted with by the controller
 
 An example can be viewed in the scene
-`Examples/006_ControllerInteract_UsingADoor`. Which simulates using
+`Examples/006_Controller_UsingADoor`. Which simulates using
 a door object to open and close it. It also has a cube on the floor
 that can be grabbed to show how interactable objects can be usable
 or grabbable.
@@ -470,7 +470,7 @@ The current examples are:
   objects when the controller touches them. The interaction events are
   also displayed in the console window.
 
-  * **006_ControllerInteract_UsingADoor:** A scene with a door interactable
+  * **006_Controller_UsingADoor:** A scene with a door interactable
   object that is set to `usable` and when the door is used by pressing
   the controller `Trigger` button, the door swings open (or closes if
   it's already open)
