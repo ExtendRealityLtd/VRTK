@@ -96,18 +96,23 @@ it makes a clicking sound.
 The Controller Events script deals with both touchpad touch and click
 events separately.
 
-When a controller event is emitted, it is sent with a payload containing:
+The event payload that is emitted is:
 
-  * ControllerIndex - The index of the controller that was used
-  * TouchpadAxis - A Vector2 of the position the touchpad is touched at
+  * **ControllerIndex:** The index of the controller that was used
+
+  * **TouchpadAxis:** A Vector2 of the position the touchpad is touched at
 
 There are also common action aliases that are emitted when controller
 buttons are pressed. These action aliases can be mapped to a
 preferred controller button. The aliases are:
 
-  * Toggle Pointer - Common action of turning a laser pointer on/off
-  * Toggle Interact - Common action of grabbing or using game objects
-  * Toggle Menu - Common action of bringing up an in-game menu
+  * **Toggle Pointer:** Common action of turning a laser pointer on/off
+
+  * **Toggle Grab:** Common action of grabbing game objects
+
+  * **Toggle Use:** Common action of using game objects
+
+  * **Toggle Menu:** Common action of bringing up an in-game menu
 
 Each of the above aliases can have the preferred controller button
 mapped to their usage by selecting it from the drop down on the script
@@ -147,18 +152,25 @@ The Simple Pointer script is attached to a Controller object within the
 listening to the controller button events for enabling and disabling
 the beam.
 
-The colour of the beam can be determined by a setting on the script
-and is independent for each controller meaning different controllers
-can have different coloured beams.
+The following script parameters are available:
 
-The thickness and length of the beam can also be set on the script as
-well as the ability to toggle the sphere beam tip that is displayed
-at the end of the beam (to represent a cursor).
+  * **Pointer Color:** The colour of the beam can be determined by a setting
+  on the script and is independent for each controller meaning different
+  controllers can have different coloured beams.
 
-The facing axis can also be set to match the direction the
-`[CameraRig`] Prefab is facing as if it is rotated then the beam will
-emit out of the controller at the wrong angle, so this setting can be
-adjusted to ensure the beam always projects forward.
+  * **Pointer Thickness:** The thickness and length of the beam can also be
+  set on the script as well as the ability to toggle the sphere beam tip
+  that is displayed at the end of the beam (to represent a cursor).
+
+  * **Pointer Length:** The distance the beam will project before stopping.
+  
+  * **Show Pointer Tip:** Toggle whether the cursor is show on the end of the
+  pointer beam.
+
+  * **Pointer Facing Axis:** The facing axis can also be set to match the
+  direction the `[CameraRig`] Prefab is facing as if it is rotated then
+  the beam will emit out of the controller at the wrong angle, so this
+  setting can be adjusted to ensure the beam always projects forward.
 
 The Simple Pointer object extends the `SteamVR_WorldPointer` abstract
 class and therefore emits the same events and payload.
@@ -182,10 +194,13 @@ requires an implementation of the WorldPointer script to be attached
 to another game object (e.g. SteamVR_SimplePointer attached to
 the Controller object).
 
-The fade blink speed can be changed on the basic Teleport script to
-provide a customised teleport experience. Setting the speed to 0 will
-mean no fade blink effect is present. The fade is achieved via the
-`SteamVR_Fade.cs` script in the SteamVR Unity Plugin scripts.
+The following script parameters are available:
+
+  * **Blink Transition Speed**: The fade blink speed can be changed on
+  the basic teleport script to provide a customised teleport experience.
+  Setting the speed to 0 will mean no fade blink effect is present.
+  The fade is achieved via the `SteamVR_Fade.cs` script in the
+  SteamVR Unity Plugin scripts.
 
 An example of the `SteamVR_BasicTeleport` script can be viewed in the
 scene `Examples/004_CameraRig_BasicTeleport`. The scene uses
@@ -204,17 +219,19 @@ Like the basic teleporter the Height Adjust Teleport script is attached
 to the `[CameraRig]` prefab and requires a World Pointer to be
 available.
 
-There is an additional script parameter of `Play Space Falling` and
-when this is checked it means if the player steps off an object into
-a part of their play area that is not on the object then they are
-automatically teleported down to the nearest floor.
+The following script parameters are available:
 
-This also works in the opposite way that if the player's headset is
-above an object then the player is teleported automatically on top of
-that object, which is useful for simulating climbing stairs without
-needing to use the pointer beam location.
+  * **Blink Transition Speed**: The fade blink speed on teleport
+  
+  * **Play Space Falling:** Checks if the player steps off an object
+  into a part of their play area that is not on the object then they are
+  automatically teleported down to the nearest floor.
 
-If this option is turned off then the player can hover in mid air at
+The `Play Space Falling` option also works in the opposite way that if
+the player's headset is above an object then the player is teleported
+automatically on top of that object, which is useful for simulating
+climbing stairs without needing to use the pointer beam location. If this
+option is turned off then the player can hover in mid air at
 the same y position of the object they are standing on.
 
 An example of the `SteamVR_HeightAdjustTeleport` script can be viewed
@@ -227,18 +244,18 @@ walk up and down or use the laser pointer to climb on top of them.
 The Interactable Object script is attached to any game object that is
 required to be interacted with (e.g. via the controllers).
 
-It currently has states to determine if the object:
+The following script parameters are available:
 
-  * Can be grabbed
-  * Is currently being grabbed
-  * Can be used
-  * Is currently being used
+  * **Is Grabbable:** Determines if the object can be grabbed
 
-It also allows for a highlight colour to change the object to when
-the controller touches it (it resets the colour on untouch). This
-colour can be set to a different colour on each object or a default
-colour can be set on the `ControllerInteract` script. However, the
-local colour on the interactable object will always take precendence.
+  * **Is Usable:** Determines if the object can be used
+
+  * **Highlight On Touch:** The object will only highlight when a
+  controller touches it if this is checked.
+
+  * **Touch Highligt Color:** The colour to highlight the object
+  when it is touched. This colour will override any globally set
+  color (for instance on the `SteamVR_InteractTouch` script).
 
 The basis of this script is to provide a simple mechanism for
 identifying objects in the game world that can be grabbed or used
@@ -261,23 +278,26 @@ The Interact Touch script is attached to a Controller object within the
 
 The following script parameters are available:
 
-  * Hide Controller On Touch: hides the controller model when a valid
+  * **Hide Controller On Touch**: Hides the controller model when a valid
   touch occurs
-  * Global Touch Highlight Color: if the interactable object can be
+
+  * **Global Touch Highlight Color:** If the interactable object can be
   highlighted when it's touched but no local colour is set then this
   global colour is used.
 
 The following events are emitted:
 
-  * ControllerTouchInteractableObject: emitted when a valid object is
+  * **ControllerTouchInteractableObject:** Emitted when a valid object is
   touched
-  * ControllerUntouchInteractableObject: emitted when a valid object
+
+  * **ControllerUntouchInteractableObject:** Emitted when a valid object
   is no longer being touched
 
 The event payload that is emitted is:
 
-  * ControllerIndex: The index of the controller doing the interaction
-  * Target: The GameObject of the interactable object that is being
+  * **ControllerIndex:** The index of the controller doing the interaction
+
+  * **Target:** The GameObject of the interactable object that is being
   interacted with by the controller
 
 An example of the `SteamVR_InteractTouch` can be viewed in the
@@ -320,22 +340,25 @@ a rigidbody to pick them up and move them around the game world.
 
 The following script parameters are available:
 
-  * Hide Controller On Grab: hides the controller model when a valid
+  * **Hide Controller On Grab:** Hides the controller model when a valid
   grab occurs
-  * Controller Attach Point: the rigidbody point on the controller
+
+  * **Controller Attach Point:** The rigidbody point on the controller
   model to snap the grabbed object to (defaults to the tip)
 
 The following events are emitted:
 
-  * ControllerGrabInteractableObject: emitted when a valid object is
+  * **ControllerGrabInteractableObject:** Emitted when a valid object is
   grabbed
-  * ControllerUngrabInteractableObject: emitted when a valid object
+
+  * **ControllerUngrabInteractableObject:** Emitted when a valid object
   is released from being grabbed
 
 The event payload that is emitted is:
 
-  * ControllerIndex: The index of the controller doing the interaction
-  * Target: The GameObject of the interactable object that is being
+  * **ControllerIndex:** The index of the controller doing the interaction
+
+  * **Target:** The GameObject of the interactable object that is being
   interacted with by the controller
 
 An example of the `SteamVR_InteractGrab` can be viewed in the
@@ -368,20 +391,22 @@ If a valid interactable object is usable then pressing the set
 
 The following script parameters are available:
 
-  * Hide Controller On Use: hides the controller model when a valid
+  * **Hide Controller On Use:** Hides the controller model when a valid
   use action starts
 
 The following events are emitted:
 
-  * ControllerUseInteractableObject: emitted when a valid object starts
+  * **ControllerUseInteractableObject:** Emitted when a valid object starts
   being used
-  * ControllerUnuseInteractableObject: emitted when a valid object
+
+  * **ControllerUnuseInteractableObject:** Emitted when a valid object
   stops being used
 
 The event payload that is emitted is:
 
-  * ControllerIndex: The index of the controller doing the interaction
-  * Target: The GameObject of the interactable object that is being
+  * **ControllerIndex:** The index of the controller doing the interaction
+
+  * **Target:** The GameObject of the interactable object that is being
   interacted with by the controller
 
 An example can be viewed in the scene
@@ -405,22 +430,27 @@ This abstract class provides any game pointer the ability to know the
 the state of the implemented pointer and emit an event to other scripts
 in the game world.
 
-The WorldPointer class emits three events:
+The following events are emitted:
 
-  * WorldPointerIn: an event when the pointer collides with another
+  * **WorldPointerIn:** When the pointer collides with another
   game object.
-  * WorldPointerOut: an event when the pointer stops colliding with
+
+  * **WorldPointerOut:** When the pointer stops colliding with
   the game object.
-  * WorldPointerDestinationSet: an event when the pointer is no longer
+
+  * **WorldPointerDestinationSet:** When the pointer is no longer
   active in the scene to determine the last destination position of
   the pointer end (useful for selecting and teleporting).
 
-A payload is emitted with the event containing:
+The event payload that is emitted is:
 
-  * ControllerIndex - The index of the controller emitting the beam
-  * Distance - The distance the target is from the controller
-  * Target - The Transform of the object that the pointer is touching
-  * TipPosition - The world position of the end of the pointer
+  * **ControllerIndex:** The index of the controller emitting the beam
+
+  * **Distance:** The distance the target is from the controller
+
+  * **Target:** The Transform of the object that the pointer is touching
+
+  * **TipPosition:** The world position of the end of the pointer
 
 ### Examples
 
@@ -435,31 +465,37 @@ example scripts are not required for real world usage.
 
 The current examples are:
 
-  * 001_CameraRig_VR_PlayArea: a simple scene showing the `[CameraRig]`
+  * **001_CameraRig_VR_PlayArea:** A simple scene showing the `[CameraRig]`
   prefab usage
-  * 002_Controller_Events: a simple scene displaying the events from
+
+  * **002_Controller_Events:** A simple scene displaying the events from
   the controller in the console window
-  * 003_Controller_SimplePointer: a scene with basic objects that can
+
+  * **003_Controller_SimplePointer:** A scene with basic objects that can
   be pointed at with the laser beam from the controller activated by
   the `Grip` button. The pointer events are also displayed in the
   console window.
-  * 004_CameraRig_BasicTeleport: a scene with basic objects that can
+
+  * **004_CameraRig_BasicTeleport:** A scene with basic objects that can
   be traversed using the controller laser beam to point at an object
   in the game world where the player is to be teleported to by
   pressing the controller `Grip` button. When the `Grip` button is
   released, the player is teleported to the laser beam end location.
-  * 005_Controller_BasicObjectGrabbing: a scene with a selection of
+
+  * **005_Controller_BasicObjectGrabbing:** A scene with a selection of
   objects that can be grabbed by touching them with the controller and
   pressing the `Trigger` button down. Releasing the trigger button
   will propel the object in the direction and velocity of the grabbing
   controller. The scene also demonstrates simple highlighting of
   objects when the controller touches them. The interaction events are
   also displayed in the console window.
-  * 006_ControllerInteract_UsingADoor: a scene with a door interactable
+
+  * **006_ControllerInteract_UsingADoor:** A scene with a door interactable
   object that is set to `usable` and when the door is used by pressing
   the controller `Trigger` button, the door swings open (or closes if
   it's already open)
-  * 007_CameraRig_HeightAdjustTeleport: a scene with a selection of
+
+  * **007_CameraRig_HeightAdjustTeleport:** A scene with a selection of
   varying height objects that can be traversed using the controller
   laser beam to point at an object and if the laser beam is pointing
   on top of the object then the player is teleported to the top of the
