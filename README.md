@@ -99,7 +99,6 @@ events separately.
 The event payload that is emitted is:
 
   * **ControllerIndex:** The index of the controller that was used
-
   * **TouchpadAxis:** A Vector2 of the position the touchpad is touched at
 
 There are also common action aliases that are emitted when controller
@@ -107,11 +106,8 @@ buttons are pressed. These action aliases can be mapped to a
 preferred controller button. The aliases are:
 
   * **Toggle Pointer:** Common action of turning a laser pointer on/off
-
   * **Toggle Grab:** Common action of grabbing game objects
-
   * **Toggle Use:** Common action of using game objects
-
   * **Toggle Menu:** Common action of bringing up an in-game menu
 
 Each of the above aliases can have the preferred controller button
@@ -157,16 +153,12 @@ The following script parameters are available:
   * **Pointer Color:** The colour of the beam can be determined by a setting
   on the script and is independent for each controller meaning different
   controllers can have different coloured beams.
-
   * **Pointer Thickness:** The thickness and length of the beam can also be
   set on the script as well as the ability to toggle the sphere beam tip
   that is displayed at the end of the beam (to represent a cursor).
-
   * **Pointer Length:** The distance the beam will project before stopping.
-  
   * **Show Pointer Tip:** Toggle whether the cursor is show on the end of the
   pointer beam.
-
   * **Pointer Facing Axis:** The facing axis can also be set to match the
   direction the `[CameraRig`] Prefab is facing as if it is rotated then
   the beam will emit out of the controller at the wrong angle, so this
@@ -222,7 +214,6 @@ available.
 The following script parameters are available:
 
   * **Blink Transition Speed**: The fade blink speed on teleport
-  
   * **Play Space Falling:** Checks if the player steps off an object
   into a part of their play area that is not on the object then they are
   automatically teleported down to the nearest floor.
@@ -247,12 +238,9 @@ required to be interacted with (e.g. via the controllers).
 The following script parameters are available:
 
   * **Is Grabbable:** Determines if the object can be grabbed
-
   * **Is Usable:** Determines if the object can be used
-
   * **Highlight On Touch:** The object will only highlight when a
   controller touches it if this is checked.
-
   * **Touch Highligt Color:** The colour to highlight the object
   when it is touched. This colour will override any globally set
   color (for instance on the `SteamVR_InteractTouch` script).
@@ -280,7 +268,6 @@ The following script parameters are available:
 
   * **Hide Controller On Touch**: Hides the controller model when a valid
   touch occurs
-
   * **Global Touch Highlight Color:** If the interactable object can be
   highlighted when it's touched but no local colour is set then this
   global colour is used.
@@ -289,14 +276,12 @@ The following events are emitted:
 
   * **ControllerTouchInteractableObject:** Emitted when a valid object is
   touched
-
   * **ControllerUntouchInteractableObject:** Emitted when a valid object
   is no longer being touched
 
 The event payload that is emitted is:
 
   * **ControllerIndex:** The index of the controller doing the interaction
-
   * **Target:** The GameObject of the interactable object that is being
   interacted with by the controller
 
@@ -342,7 +327,6 @@ The following script parameters are available:
 
   * **Hide Controller On Grab:** Hides the controller model when a valid
   grab occurs
-
   * **Controller Attach Point:** The rigidbody point on the controller
   model to snap the grabbed object to (defaults to the tip)
 
@@ -350,14 +334,12 @@ The following events are emitted:
 
   * **ControllerGrabInteractableObject:** Emitted when a valid object is
   grabbed
-
   * **ControllerUngrabInteractableObject:** Emitted when a valid object
   is released from being grabbed
 
 The event payload that is emitted is:
 
   * **ControllerIndex:** The index of the controller doing the interaction
-
   * **Target:** The GameObject of the interactable object that is being
   interacted with by the controller
 
@@ -398,14 +380,12 @@ The following events are emitted:
 
   * **ControllerUseInteractableObject:** Emitted when a valid object starts
   being used
-
   * **ControllerUnuseInteractableObject:** Emitted when a valid object
   stops being used
 
 The event payload that is emitted is:
 
   * **ControllerIndex:** The index of the controller doing the interaction
-
   * **Target:** The GameObject of the interactable object that is being
   interacted with by the controller
 
@@ -434,10 +414,8 @@ The following events are emitted:
 
   * **WorldPointerIn:** When the pointer collides with another
   game object.
-
   * **WorldPointerOut:** When the pointer stops colliding with
   the game object.
-
   * **WorldPointerDestinationSet:** When the pointer is no longer
   active in the scene to determine the last destination position of
   the pointer end (useful for selecting and teleporting).
@@ -445,11 +423,8 @@ The following events are emitted:
 The event payload that is emitted is:
 
   * **ControllerIndex:** The index of the controller emitting the beam
-
   * **Distance:** The distance the target is from the controller
-
   * **Target:** The Transform of the object that the pointer is touching
-
   * **TipPosition:** The world position of the end of the pointer
 
 ### Examples
