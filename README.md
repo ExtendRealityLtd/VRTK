@@ -247,37 +247,70 @@ script with richer functionality.
 
 An example of the `SteamVR_InteractableObject` can be viewed in the
 scene `Examples/005_Controller_BasicObjectGrabbing`. The scene
-also uses the `SteamVR_ControllerInteract` script on the controllers to
-show how an interactable object can be grabbed and snapped to the
-controller and thrown around the game world.
+also uses the `SteamVR_InteractTouch` and `SteamVR_InteractGrab`
+scripts on the controllers to show how an interactable object can be
+grabbed and snapped to the controller and thrown around the game world.
 
 Another example can be viewed in the scene
 `Examples/006_ControllerInteract_UsingADoor`.
 
-#### Controller Interation With Objects (SteamVR_ControllerInteract)
+#### Touching Interactable Objects (SteamVR_InteractTouch)
 
-The Controller Interact script is attached to a Controller object
-within the `[CameraRig]` prefab and the Controller object also
+The Interact Touch script is attached to a Controller object within the
+`[CameraRig]` prefab.
+
+The following script parameters are available:
+
+  * Hide Controller On Touch: hides the controller model when a valid
+  touch occurs
+  * Global Touch Highlight Color: if the interactable object can be
+  highlighted when it's touched but no local colour is set then this
+  global colour is used.
+
+The following events are emitted:
+
+  * ControllerTouchInteractableObject: emitted when a valid object is
+  touched
+  * ControllerUntouchInteractableObject: emitted when a valid object
+  is no longer being touched
+
+The event payload that is emitted is:
+
+  * ControllerIndex: The index of the controller doing the interaction
+  * Target: The GameObject of the interactable object that is being
+  interacted with by the controller
+
+An example of the `SteamVR_InteractTouch` can be viewed in the
+scene `Examples/005_Controller/BasicObjectGrabbing`. The scene
+demonstrates the highlighting of objects that have the
+`SteamVR_InteractableObject` script added to them to show the
+ability to highlight interactable objects when they are touched by
+the controllers.
+
+#### Grabbing Interactable Objects (SteamVR_InteractGrab)
+
+The Interact Grab script is attached to a Controller object
+within the `[CameraRig]` prefab and the Controller object
 requires the `SteamVR_ControllerEvents` script to be attached as it
 uses this for listening to the controller button events for grabbing
-and releasing interactable game objects.
+and releasing interactable game objects. It listens for the
+`AliasGrabOn` and `AliasGrabOff` events to determine when an object
+should be grabbed and should be released.
+
+The Controller object also requires the `SteamVR_InteractTouch` script
+to be attached to it as this is used to determine when an interactable
+object is being touched. Only valid touched objects can be grabbed.
 
 An object can be grabbed if the Controller touches a game object which
 contains the `SteamVR_InteractableObject` script and has the flag
 `isGrabbable` set to `true`.
 
-An object can also be used if the Controller touches an interactable
-object with the flag `isUsable` set to `true`.
+If a valid interactable object is grabbable then pressing the set
+`Grab` button on the Controller (default is `Trigger`) will grab and
+snap the object to the controller and will not release it until the
+`Grab` button is released.
 
-A valid interactable object is grabbable/usable when it is touched by
-the controller and by default pressing the `Trigger` on the controller
-will grab the object and snap it to the Controller attach point (default
-is the controller tip). The event it is listening for is the
-`AliasInteract` events so the interact toggle button can be set by
-changing the `Interact Toggle` button on the `SteamVR_ControllerEvents`
-script parameters.
-
-When the Controller Interact button is released, if the interactable
+When the Controller `Grab` button is released, if the interactable
 game object is grabbable then it will be propelled in the direction
 and at the velocity the controller was at, which can simulate object
 throwing.
@@ -285,38 +318,73 @@ throwing.
 The interactable objects require a collider to activate the trigger and
 a rigidbody to pick them up and move them around the game world.
 
-It is possible to set a default Touch Highlight Colour on the
-Controller, so any interactable object that is set to Highlight On
-Touch and doesn't have a local highlight colour will be highlighted
-with this global colour. It's also possible to have a different global
-touch colour per controller.
+The following script parameters are available:
 
-The controller model can be hidden upon an interaction with an object,
-ticking one of the `Hide Controller On <action>` parameters on the
-script will ensure the controller model is hidden when the interactable
-object is being touched, grabbed or used.
+  * Hide Controller On Grab: hides the controller model when a valid
+  grab occurs
+  * Controller Attach Point: the rigidbody point on the controller
+  model to snap the grabbed object to (defaults to the tip)
 
-There are also a number of events emitted by the Controller Interaction
-script:
+The following events are emitted:
 
-  * Touching/Untouching an interactable object will emit an event
-  * Grabbing/Ungrabbing an interactable object will emit an event
-  * Start Using/Stop Using an interactable object will emit an event
+  * ControllerGrabInteractableObject: emitted when a valid object is
+  grabbed
+  * ControllerUngrabInteractableObject: emitted when a valid object
+  is released from being grabbed
 
-The Controller Interaction events are emitted with this payload:
+The event payload that is emitted is:
 
   * ControllerIndex: The index of the controller doing the interaction
   * Target: The GameObject of the interactable object that is being
   interacted with by the controller
 
-An example of the `SteamVR_ControllerInteract` can be viewed in the
+An example of the `SteamVR_InteractGrab` can be viewed in the
 scene `Examples/005_Controller/BasicObjectGrabbing`. The scene
-demonstrates the grabbing of objects that have the
-`SteamVR_InteractableObject` script added to them and also shows the
-ability to highlight interactable objects when they are touched by
-the controllers.
+demonstrates the grabbing of interactable objects that have the
+`SteamVR_InteractableObject` script attached to them. The objects
+can be picked up and thrown around.
 
-Another example can be viewed in the scene
+#### Using Interactable Objects (SteamVR_InteractUse)
+
+The Interact Use script is attached to a Controller object
+within the `[CameraRig]` prefab and the Controller object
+requires the `SteamVR_ControllerEvents` script to be attached as it
+uses this for listening to the controller button events for using
+and stop using interactable game objects. It listens for the
+`AliasUseOn` and `AliasUseOff` events to determine when an object
+should be used and should stop using.
+
+The Controller object also requires the `SteamVR_InteractTouch` script
+to be attached to it as this is used to determine when an interactable
+object is being touched. Only valid touched objects can be used.
+
+An object can be used if the Controller touches a game object which
+contains the `SteamVR_InteractableObject` script and has the flag
+`isUsable` set to `true`.
+
+If a valid interactable object is usable then pressing the set
+`Use` button on the Controller (default is `Trigger`) will call the
+`StartUsing` method on the touched interactable object.
+
+The following script parameters are available:
+
+  * Hide Controller On Use: hides the controller model when a valid
+  use action starts
+
+The following events are emitted:
+
+  * ControllerUseInteractableObject: emitted when a valid object starts
+  being used
+  * ControllerUnuseInteractableObject: emitted when a valid object
+  stops being used
+
+The event payload that is emitted is:
+
+  * ControllerIndex: The index of the controller doing the interaction
+  * Target: The GameObject of the interactable object that is being
+  interacted with by the controller
+
+An example can be viewed in the scene
 `Examples/006_ControllerInteract_UsingADoor`. Which simulates using
 a door object to open and close it. It also has a cube on the floor
 that can be grabbed to show how interactable objects can be usable

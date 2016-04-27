@@ -33,8 +33,23 @@ public class SteamVR_TrackedObject : MonoBehaviour
 	public EIndex index;
 	public Transform origin; // if not set, relative to parent
     public bool isValid = false;
+    bool controllerVisible = true;
 
-	private void OnNewPoses(params object[] args)
+    public bool IsControllerVisible()
+    {
+        return controllerVisible;
+    }
+
+    public void ToggleControllerModel(bool on)
+    {
+        foreach (MeshRenderer renderer in this.GetComponentsInChildren<MeshRenderer>())
+        {
+            renderer.enabled = on;
+        }
+        controllerVisible = on;
+    }
+
+    private void OnNewPoses(params object[] args)
 	{
 		if (index == EIndex.None)
 			return;

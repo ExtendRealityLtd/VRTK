@@ -20,7 +20,8 @@ public class SteamVR_ControllerEvents : MonoBehaviour {
     }
 
     public ButtonAlias pointerToggleButton = ButtonAlias.Grip;
-    public ButtonAlias interactToggleButton = ButtonAlias.Trigger;
+    public ButtonAlias grabToggleButton = ButtonAlias.Trigger;
+    public ButtonAlias useToggleButton = ButtonAlias.Trigger;
     public ButtonAlias menuToggleButton = ButtonAlias.Application_Menu;
 
     public bool triggerPressed = false;
@@ -47,8 +48,11 @@ public class SteamVR_ControllerEvents : MonoBehaviour {
     public event ControllerClickedEventHandler AliasPointerOn;
     public event ControllerClickedEventHandler AliasPointerOff;
 
-    public event ControllerClickedEventHandler AliasInteractOn;
-    public event ControllerClickedEventHandler AliasInteractOff;
+    public event ControllerClickedEventHandler AliasGrabOn;
+    public event ControllerClickedEventHandler AliasGrabOff;
+
+    public event ControllerClickedEventHandler AliasUseOn;
+    public event ControllerClickedEventHandler AliasUseOff;
 
     public event ControllerClickedEventHandler AliasMenuOn;
     public event ControllerClickedEventHandler AliasMenuOff;
@@ -129,16 +133,28 @@ public class SteamVR_ControllerEvents : MonoBehaviour {
             AliasPointerOff(this, e);
     }
 
-    public virtual void OnAliasInteractOn(ControllerClickedEventArgs e)
+    public virtual void OnAliasGrabOn(ControllerClickedEventArgs e)
     {
-        if (AliasInteractOn != null)
-            AliasInteractOn(this, e);
+        if (AliasGrabOn != null)
+            AliasGrabOn(this, e);
     }
 
-    public virtual void OnAliasInteractOff(ControllerClickedEventArgs e)
+    public virtual void OnAliasGrabOff(ControllerClickedEventArgs e)
     {
-        if (AliasInteractOff != null)
-            AliasInteractOff(this, e);
+        if (AliasGrabOff != null)
+            AliasGrabOff(this, e);
+    }
+
+    public virtual void OnAliasUseOn(ControllerClickedEventArgs e)
+    {
+        if (AliasUseOn != null)
+            AliasUseOn(this, e);
+    }
+
+    public virtual void OnAliasUseOff(ControllerClickedEventArgs e)
+    {
+        if (AliasUseOff != null)
+            AliasUseOff(this, e);
     }
 
     public virtual void OnAliasMenuOn(ControllerClickedEventArgs e)
@@ -180,15 +196,27 @@ public class SteamVR_ControllerEvents : MonoBehaviour {
             }
         }
 
-        if (interactToggleButton == type)
+        if (grabToggleButton == type)
         {
             if (touchDown)
             {
-                OnAliasInteractOn(SetButtonEvent(ref buttonBool, true));
+                OnAliasGrabOn(SetButtonEvent(ref buttonBool, true));
             }
             else
             {
-                OnAliasInteractOff(SetButtonEvent(ref buttonBool, false));
+                OnAliasGrabOff(SetButtonEvent(ref buttonBool, false));
+            }
+        }
+
+        if (useToggleButton == type)
+        {
+            if (touchDown)
+            {
+                OnAliasUseOn(SetButtonEvent(ref buttonBool, true));
+            }
+            else
+            {
+                OnAliasUseOff(SetButtonEvent(ref buttonBool, false));
             }
         }
 
