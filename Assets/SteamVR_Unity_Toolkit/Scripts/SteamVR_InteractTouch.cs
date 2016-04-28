@@ -1,4 +1,12 @@
-﻿using UnityEngine;
+﻿//====================================================================================
+//
+// Purpose: Provide basic touch detection of controller to interactable objects
+//
+// This script must be attached to a Controller within the [CameraRig] Prefab
+//
+//====================================================================================
+
+using UnityEngine;
 using System.Collections;
 
 public struct ObjectInteractEventArgs

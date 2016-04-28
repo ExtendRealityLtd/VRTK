@@ -25,16 +25,16 @@ public class SteamVR_ControllerPointerEvents_ListenerExample : MonoBehaviour {
 
     void DoPointerIn(object sender, WorldPointerEventArgs e)
     {
-        DebugLogger(e.controllerIndex, "POINTER IN", e.target, e.distance, e.tipPosition);
+        DebugLogger(e.controllerIndex, "POINTER IN", e.target, e.distance, e.destinationPosition);
     }
 
     void DoPointerOut(object sender, WorldPointerEventArgs e)
     {
-        DebugLogger(e.controllerIndex, "POINTER OUT", e.target, e.distance, e.tipPosition);
+        DebugLogger(e.controllerIndex, "POINTER OUT", e.target, e.distance, e.destinationPosition);
     }
 
     void DoPointerDestinationSet(object sender, WorldPointerEventArgs e)
     {
-        DebugLogger(e.controllerIndex, "POINTER DESTINATION", e.target, e.distance, e.tipPosition);
+        DebugLogger(e.controllerIndex, "POINTER DESTINATION", e.target, e.distance, e.destinationPosition);
     }
 }

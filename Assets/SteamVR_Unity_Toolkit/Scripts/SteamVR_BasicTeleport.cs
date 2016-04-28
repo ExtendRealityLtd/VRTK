@@ -57,7 +57,7 @@ public class SteamVR_BasicTeleport : MonoBehaviour {
             SteamVR_Fade.Start(Color.black, 0);
             SteamVR_Fade.Start(Color.clear, blinkTransitionSpeed);
 
-            this.transform.position = GetNewPosition(e.tipPosition, e.target);
+            this.transform.position = GetNewPosition(e.destinationPosition, e.target);
         }
     }
 
