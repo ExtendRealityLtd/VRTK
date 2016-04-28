@@ -9,8 +9,8 @@ public class SteamVR_BezierPointer : SteamVR_WorldPointer
         ZAxis
     }
 
-    public Color validTargetColor;
-    public Color invalidTargetColor;
+    public Color validTargetColor = new Color(0f, 0.5f, 0f, 0.5f);
+    public Color invalidTargetColor = new Color(0.8f, 0f, 0f, 0.5f);
     public float pointerLength = 10f;
     public int pointerDensity = 10;
     public bool showPointerCursor = true;
