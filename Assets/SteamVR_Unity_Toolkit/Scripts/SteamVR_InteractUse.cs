@@ -1,4 +1,18 @@
-﻿using UnityEngine;
+﻿//====================================================================================
+//
+// Purpose: Provide ability to use an interactable object when it is being touched
+//
+// This script must be attached to a Controller within the [CameraRig] Prefab
+//
+// The SteamVR_ControllerEvents and SteamVR_InteractTouch scripts must also be
+// attached to the Controller
+//
+// Press the default 'Trigger' button on the controller to use an object
+// Released the default 'Trigger' button on the controller to stop using an object
+//
+//====================================================================================
+
+using UnityEngine;
 using System.Collections;
 
 public class SteamVR_InteractUse : MonoBehaviour

@@ -113,16 +113,6 @@ public class SteamVR_SimplePointer : SteamVR_WorldPointer
         pointerTip.gameObject.SetActive(tipState);
     }
 
-    WorldPointerEventArgs SetPointerEvent(float distance, Transform target)
-    {
-        WorldPointerEventArgs e;
-        e.controllerIndex = controllerIndex;
-        e.distance = distance;
-        e.target = target;
-        e.tipPosition = pointerTip.transform.position;
-        return e;
-    }
-
     float GetPointerBeamLength(bool hasRayHit, RaycastHit collidedWith)
     {
         float actualLength = pointerLength;
@@ -132,7 +122,7 @@ public class SteamVR_SimplePointer : SteamVR_WorldPointer
         {
             if (pointerContactTarget != null)
             {
-                OnWorldPointerOut(SetPointerEvent(pointerContactDistance, pointerContactTarget));
+                OnWorldPointerOut(SetPointerEvent(controllerIndex, pointerContactDistance, pointerContactTarget, pointerTip.transform.position));
             }
 
             pointerContactDistance = 0f;
@@ -145,7 +135,7 @@ public class SteamVR_SimplePointer : SteamVR_WorldPointer
             pointerContactDistance = collidedWith.distance;
             pointerContactTarget = collidedWith.transform;
 
-            OnWorldPointerIn(SetPointerEvent(pointerContactDistance, pointerContactTarget));
+            OnWorldPointerIn(SetPointerEvent(controllerIndex, pointerContactDistance, pointerContactTarget, pointerTip.transform.position));
         }
 
         //adjust beam length if something is blocking it
@@ -154,7 +144,7 @@ public class SteamVR_SimplePointer : SteamVR_WorldPointer
             actualLength = pointerContactDistance;
         }
 
-        return actualLength; ;
+        return actualLength;
     }
 
     void EnablePointerBeam(object sender, ControllerClickedEventArgs e)
@@ -166,7 +156,7 @@ public class SteamVR_SimplePointer : SteamVR_WorldPointer
     void DisablePointerBeam(object sender, ControllerClickedEventArgs e)
     {
         controllerIndex = e.controllerIndex;
-        OnWorldPointerDestinationSet(SetPointerEvent(pointerContactDistance, pointerContactTarget));
+        OnWorldPointerDestinationSet(SetPointerEvent(controllerIndex, pointerContactDistance, pointerContactTarget, pointerTip.transform.position));
         TogglePointer(false);
     }
 

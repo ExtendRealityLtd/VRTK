@@ -26,7 +26,7 @@ public struct WorldPointerEventArgs
     public uint controllerIndex;
     public float distance;
     public Transform target;
-    public Vector3 tipPosition;
+    public Vector3 destinationPosition;
 }
 
 public delegate void WorldPointerEventHandler(object sender, WorldPointerEventArgs e);
@@ -53,5 +53,15 @@ public abstract class SteamVR_WorldPointer : MonoBehaviour {
     {
         if (WorldPointerDestinationSet != null)
             WorldPointerDestinationSet(this, e);
+    }
+
+    protected WorldPointerEventArgs SetPointerEvent(uint controllerIndex, float distance, Transform target, Vector3 position)
+    {
+        WorldPointerEventArgs e;
+        e.controllerIndex = controllerIndex;
+        e.distance = distance;
+        e.target = target;
+        e.destinationPosition = position;
+        return e;
     }
 }

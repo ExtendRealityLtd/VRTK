@@ -130,7 +130,7 @@ script `Examples/Scripts/SteamVR_ControllerEvents_ListenerExample.cs`
 
 #### Simple Laser Pointer (SteamVR_SimplePointer)
 
-The simple pointer emits a coloured beam from the end of the controller
+The Simple Pointer emits a coloured beam from the end of the controller
 to simulate a laser beam. It can be useful for pointing to objects
 within a scene and it can also determine the object it is pointing at
 and the distance the object is from the controller the beam is being
@@ -172,6 +172,67 @@ the scene `Examples/003_Controller_SimplePointer` and
 code examples of how the events are utilised and listened to can be
 viewed in the script
 `Examples/Scripts/SteamVR_ControllerPointerEvents_ListenerExample.cs`
+
+#### Bezier Curve Laser Pointer (SteamVR_BezierPointer)
+
+The Bezier Pointer emits a curved line (made out of spheres) from the
+end of the controller to a point on a ground surface (at any height).
+It is more useful than the Simple Laser Pointer for traversing objects
+of various heights as the end point can be curved on top of objects
+that are not visible to the player.
+
+The laser beam is activated by default by pressing the `Grip` on the
+controller. The event it is listening for is the `AliasPointer` events
+so the pointer toggle button can be set by changing the
+`Pointer Toggle` button on the `SteamVR_ControllerEvents` script
+parameters.
+
+The Bezier Pointer script is attached to a Controller object within the
+`[CameraRig]` prefab and the Controller object also requires the
+`SteamVR_ControllerEvents` script to be attached as it uses this for
+listening to the controller button events for enabling and disabling
+the beam.
+
+The following script parameters are available:
+
+  * **Valid Target Color:** The colour of the beam and floor cursor are
+  displayed using this colour when the beam end location is a valid
+  floor such as a valid game object (e.g. not dead space). The colour
+  uses the `Legacy Shaders/Transparent/Defuse` shader so translucent
+  colours can be used for a better effect.
+  * **Invalid Target Color:** The colour of the beam and floor cursor
+  are displayed using this colour when the beam end location is not
+  valid (i.e. the downward beam has not hit an object that can be
+  teleported to).
+  * **Pointer Length:** The length of the projected forward pointer
+  beam, this is basically the distance able to point from the
+  controller potiion.
+  * **Pointer Density:** The number of spheres to render in the beam
+  bezier curve. A high number here will most likely have a negative
+  impact of game performance due to large number of rendered objects.
+  * **Show Pointer Cursor:** A cursor is displayed on the ground at
+  the location the beam ends at, it is useful to see what height the
+  beam end location is, however it can be turned off by toggling this.
+  * **Pointer Cursor Radius:** The size of the ground pointer cursor,
+  This number also affects the size of the spheres in the bezier curve
+  beam. The larger the raduis, the larger the spheres will be.
+  * **Pointer Facing Axis:** The facing axis can also be set to match the
+  direction the `[CameraRig`] Prefab is facing as if it is rotated then
+  the beam will emit out of the controller at the wrong angle, so this
+  setting can be adjusted to ensure the beam always projects forward.
+
+The Bezier Pointer object extends the `SteamVR_WorldPointer` abstract
+class and therefore emits the same events and payload.
+
+An example of the `SteamVR_BezierPointer` script can be viewed in
+the scene `Examples/009_Controller_BezierPointer` which is used in
+conjunction with the Height Adjust Teleporter shows how it is
+possible to traverse different height objects using the curved
+pointer without needing to see the top of the object.
+
+The bezier curve generation code is in another script located at
+`SteamVR_Unity_Toolkit/Scripts/Helper/CurveGenerator.cs` and was
+heavily inspired by the tutorial and code from [Catlike Coding](http://catlikecoding.com/unity/tutorials/curves-and-splines/)
 
 #### Basic Teleporter (SteamVR_BasicTeleport)
 
@@ -490,6 +551,12 @@ The current examples are:
   and then used (pressing the `Trigger` controller button). There is
   a gun on a table that can be picked up and fired, or a strange box
   that when picked up and used the top spins.
+
+  * **009_Controller_BezierPointer:** A scene with a selection of
+  varying height objects that can be traversed using the controller
+  however, rather than just pointing a straight beam, the beam is
+  curved (over a bezier curve) which allows climbing on top of items
+  that the player cannot visibly see.
 
 ## Contributing
 
