@@ -15,6 +15,8 @@ public class SteamVR_ControllerEvents_ListenerExample : MonoBehaviour {
         GetComponent<SteamVR_ControllerEvents>().TriggerClicked += new ControllerClickedEventHandler(DoTriggerClicked);
         GetComponent<SteamVR_ControllerEvents>().TriggerUnclicked += new ControllerClickedEventHandler(DoTriggerUnclicked);
 
+        GetComponent<SteamVR_ControllerEvents>().TriggerAxisChanged += new ControllerClickedEventHandler(DoTriggerAxisChanged);
+
         GetComponent<SteamVR_ControllerEvents>().ApplicationMenuClicked += new ControllerClickedEventHandler(DoApplicationMenuClicked);
         GetComponent<SteamVR_ControllerEvents>().ApplicationMenuUnclicked += new ControllerClickedEventHandler(DoApplicationMenuUnclicked);
 
@@ -26,60 +28,72 @@ public class SteamVR_ControllerEvents_ListenerExample : MonoBehaviour {
 
         GetComponent<SteamVR_ControllerEvents>().TouchpadTouched += new ControllerClickedEventHandler(DoTouchpadTouched);
         GetComponent<SteamVR_ControllerEvents>().TouchpadUntouched += new ControllerClickedEventHandler(DoTouchpadUntouched);
+
+        GetComponent<SteamVR_ControllerEvents>().TouchpadAxisChanged += new ControllerClickedEventHandler(DoTouchpadAxisChanged);
     }
 
-    void DebugLogger(uint index, string button, string action, Vector2 touchpadAxis)
+    void DebugLogger(uint index, string button, string action, float buttonPressure, Vector2 touchpadAxis)
     {
-        Debug.Log("Controller on index '" + index + "' " + button + " has been " + action + " / trackpad axis at: " + touchpadAxis);
+        Debug.Log("Controller on index '" + index + "' " + button + " has been " + action + " with a pressure of " + buttonPressure + " / trackpad axis at: " + touchpadAxis);
     }
 
     void DoTriggerClicked(object sender, ControllerClickedEventArgs e)
     {
-        DebugLogger(e.controllerIndex, "TRIGGER", "pressed down", e.touchpadAxis);
+        DebugLogger(e.controllerIndex, "TRIGGER", "pressed down", e.buttonPressure, e.touchpadAxis);
     }
 
     void DoTriggerUnclicked(object sender, ControllerClickedEventArgs e)
     {
-        DebugLogger(e.controllerIndex, "TRIGGER", "released", e.touchpadAxis);
+        DebugLogger(e.controllerIndex, "TRIGGER", "released", e.buttonPressure, e.touchpadAxis);
+    }
+
+    void DoTriggerAxisChanged(object sender, ControllerClickedEventArgs e)
+    {
+        DebugLogger(e.controllerIndex, "TRIGGER", "axis changed", e.buttonPressure, e.touchpadAxis);
     }
 
     void DoApplicationMenuClicked(object sender, ControllerClickedEventArgs e)
     {
-        DebugLogger(e.controllerIndex, "APPLICATION MENU", "pressed down", e.touchpadAxis);
+        DebugLogger(e.controllerIndex, "APPLICATION MENU", "pressed down", e.buttonPressure, e.touchpadAxis);
     }
 
     void DoApplicationMenuUnclicked(object sender, ControllerClickedEventArgs e)
     {
-        DebugLogger(e.controllerIndex, "APPLICATION MENU", "released", e.touchpadAxis);
+        DebugLogger(e.controllerIndex, "APPLICATION MENU", "released", e.buttonPressure, e.touchpadAxis);
     }
 
     void DoGripClicked(object sender, ControllerClickedEventArgs e)
     {
-        DebugLogger(e.controllerIndex, "GRIP", "pressed down", e.touchpadAxis);
+        DebugLogger(e.controllerIndex, "GRIP", "pressed down", e.buttonPressure, e.touchpadAxis);
     }
 
     void DoGripUnclicked(object sender, ControllerClickedEventArgs e)
     {
-        DebugLogger(e.controllerIndex, "GRIP", "released", e.touchpadAxis);
+        DebugLogger(e.controllerIndex, "GRIP", "released", e.buttonPressure, e.touchpadAxis);
     }
 
     void DoTouchpadClicked(object sender, ControllerClickedEventArgs e)
     {
-        DebugLogger(e.controllerIndex, "TOUCHPAD", "pressed down", e.touchpadAxis);
+        DebugLogger(e.controllerIndex, "TOUCHPAD", "pressed down", e.buttonPressure, e.touchpadAxis);
     }
 
     void DoTouchpadUnclicked(object sender, ControllerClickedEventArgs e)
     {
-        DebugLogger(e.controllerIndex, "TOUCHPAD", "released", e.touchpadAxis);
+        DebugLogger(e.controllerIndex, "TOUCHPAD", "released", e.buttonPressure, e.touchpadAxis);
     }
 
     void DoTouchpadTouched(object sender, ControllerClickedEventArgs e)
     {
-        DebugLogger(e.controllerIndex, "TOUCHPAD", "touched", e.touchpadAxis);
+        DebugLogger(e.controllerIndex, "TOUCHPAD", "touched", e.buttonPressure, e.touchpadAxis);
     }
 
     void DoTouchpadUntouched(object sender, ControllerClickedEventArgs e)
     {
-        DebugLogger(e.controllerIndex, "TOUCHPAD", "untouched", e.touchpadAxis);
+        DebugLogger(e.controllerIndex, "TOUCHPAD", "untouched", e.buttonPressure, e.touchpadAxis);
+    }
+
+    void DoTouchpadAxisChanged(object sender, ControllerClickedEventArgs e)
+    {
+        DebugLogger(e.controllerIndex, "TOUCHPAD", "axis changed", e.buttonPressure, e.touchpadAxis);
     }
 }

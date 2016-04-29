@@ -4,6 +4,7 @@ using System.Collections;
 public struct ControllerClickedEventArgs
 {
     public uint controllerIndex;
+    public float buttonPressure;
     public Vector2 touchpadAxis;
 }
 
@@ -24,14 +25,20 @@ public class SteamVR_ControllerEvents : MonoBehaviour {
     public ButtonAlias useToggleButton = ButtonAlias.Trigger;
     public ButtonAlias menuToggleButton = ButtonAlias.Application_Menu;
 
+    public int axisFidelity = 1;
+
     public bool triggerPressed = false;
+    public bool triggerAxisChanged = false;
     public bool applicationMenuPressed = false;
     public bool touchpadPressed = false;
     public bool touchpadTouched = false;
+    public bool touchpadAxisChanged = false;
     public bool gripPressed = false;
 
     public event ControllerClickedEventHandler TriggerClicked;
     public event ControllerClickedEventHandler TriggerUnclicked;
+
+    public event ControllerClickedEventHandler TriggerAxisChanged;
 
     public event ControllerClickedEventHandler ApplicationMenuClicked;
     public event ControllerClickedEventHandler ApplicationMenuUnclicked;
@@ -44,6 +51,8 @@ public class SteamVR_ControllerEvents : MonoBehaviour {
 
     public event ControllerClickedEventHandler TouchpadTouched;
     public event ControllerClickedEventHandler TouchpadUntouched;
+
+    public event ControllerClickedEventHandler TouchpadAxisChanged;
 
     public event ControllerClickedEventHandler AliasPointerOn;
     public event ControllerClickedEventHandler AliasPointerOff;
@@ -61,6 +70,9 @@ public class SteamVR_ControllerEvents : MonoBehaviour {
     private SteamVR_TrackedObject trackedController;
     private SteamVR_Controller.Device device;
 
+    private Vector2 touchpadAxis = Vector2.zero;
+    private Vector2 triggerAxis = Vector2.zero;
+
     public virtual void OnTriggerClicked(ControllerClickedEventArgs e)
     {
         if (TriggerClicked != null)
@@ -71,6 +83,12 @@ public class SteamVR_ControllerEvents : MonoBehaviour {
     {
         if (TriggerUnclicked != null)
             TriggerUnclicked(this, e);
+    }
+
+    public virtual void OnTriggerAxisChanged(ControllerClickedEventArgs e)
+    {
+        if (TriggerAxisChanged != null)
+            TriggerAxisChanged(this, e);
     }
 
     public virtual void OnApplicationMenuClicked(ControllerClickedEventArgs e)
@@ -121,6 +139,12 @@ public class SteamVR_ControllerEvents : MonoBehaviour {
             TouchpadUntouched(this, e);
     }
 
+    public virtual void OnTouchpadAxisChanged(ControllerClickedEventArgs e)
+    {
+        if (TouchpadAxisChanged != null)
+            TouchpadAxisChanged(this, e);
+    }
+
     public virtual void OnAliasPointerOn(ControllerClickedEventArgs e)
     {
         if (AliasPointerOn != null)
@@ -169,11 +193,12 @@ public class SteamVR_ControllerEvents : MonoBehaviour {
             AliasMenuOff(this, e);
     }
 
-    ControllerClickedEventArgs SetButtonEvent(ref bool buttonBool, bool value)
+    ControllerClickedEventArgs SetButtonEvent(ref bool buttonBool, bool value, float buttonPressure)
     {
         buttonBool = value;
         ControllerClickedEventArgs e;
         e.controllerIndex = controllerIndex;
+        e.buttonPressure = buttonPressure;
         e.touchpadAxis = device.GetAxis();
         return e;
     }
@@ -183,16 +208,16 @@ public class SteamVR_ControllerEvents : MonoBehaviour {
         trackedController = GetComponent<SteamVR_TrackedObject>();
     }
 
-    void EmitAlias(ButtonAlias type, bool touchDown, ref bool buttonBool)
+    void EmitAlias(ButtonAlias type, bool touchDown, float buttonPressure, ref bool buttonBool)
     {
         if (pointerToggleButton == type)
         {
             if (touchDown)
             {
-                OnAliasPointerOn(SetButtonEvent(ref buttonBool, true));
+                OnAliasPointerOn(SetButtonEvent(ref buttonBool, true, buttonPressure));
             } else
             {
-                OnAliasPointerOff(SetButtonEvent(ref buttonBool, false));
+                OnAliasPointerOff(SetButtonEvent(ref buttonBool, false, buttonPressure));
             }
         }
 
@@ -200,11 +225,11 @@ public class SteamVR_ControllerEvents : MonoBehaviour {
         {
             if (touchDown)
             {
-                OnAliasGrabOn(SetButtonEvent(ref buttonBool, true));
+                OnAliasGrabOn(SetButtonEvent(ref buttonBool, true, buttonPressure));
             }
             else
             {
-                OnAliasGrabOff(SetButtonEvent(ref buttonBool, false));
+                OnAliasGrabOff(SetButtonEvent(ref buttonBool, false, buttonPressure));
             }
         }
 
@@ -212,11 +237,11 @@ public class SteamVR_ControllerEvents : MonoBehaviour {
         {
             if (touchDown)
             {
-                OnAliasUseOn(SetButtonEvent(ref buttonBool, true));
+                OnAliasUseOn(SetButtonEvent(ref buttonBool, true, buttonPressure));
             }
             else
             {
-                OnAliasUseOff(SetButtonEvent(ref buttonBool, false));
+                OnAliasUseOff(SetButtonEvent(ref buttonBool, false, buttonPressure));
             }
         }
 
@@ -224,13 +249,19 @@ public class SteamVR_ControllerEvents : MonoBehaviour {
         {
             if (touchDown)
             {
-                OnAliasMenuOn(SetButtonEvent(ref buttonBool, true));
+                OnAliasMenuOn(SetButtonEvent(ref buttonBool, true, buttonPressure));
             }
             else
             {
-                OnAliasMenuOff(SetButtonEvent(ref buttonBool, false));
+                OnAliasMenuOff(SetButtonEvent(ref buttonBool, false, buttonPressure));
             }
         }
+    }
+
+    bool Vector2ShallowEquals(Vector2 vectorA, Vector2 vectorB)
+    {
+        return (vectorA.x.ToString("F" + axisFidelity) == vectorB.x.ToString("F" + axisFidelity) &&
+                vectorA.y.ToString("F" + axisFidelity) == vectorB.y.ToString("F" + axisFidelity));
     }
 
     void Update()
@@ -238,64 +269,88 @@ public class SteamVR_ControllerEvents : MonoBehaviour {
         controllerIndex = (uint)trackedController.index;
         device = SteamVR_Controller.Input((int)controllerIndex);
 
-        //Trigger
-        if(device.GetTouchDown(SteamVR_Controller.ButtonMask.Trigger))
+        Vector2 currentTriggerAxis = device.GetAxis(Valve.VR.EVRButtonId.k_EButton_SteamVR_Trigger);
+        Vector2 currentTouchpadAxis = device.GetAxis();
+
+        if (Vector2ShallowEquals(triggerAxis, currentTriggerAxis))
         {
-            OnTriggerClicked(SetButtonEvent(ref triggerPressed, true));
-            EmitAlias(ButtonAlias.Trigger, true, ref triggerPressed);
+            triggerAxisChanged = false;
+        } else
+        {
+            OnTriggerAxisChanged(SetButtonEvent(ref triggerPressed, true, currentTriggerAxis.x));
+            triggerAxisChanged = true;
+        }
+
+        if(Vector2ShallowEquals(touchpadAxis, currentTouchpadAxis))
+        {
+            touchpadAxisChanged = false;
+        } else
+        {
+            OnTouchpadAxisChanged(SetButtonEvent(ref touchpadTouched, true, 1f));
+            touchpadAxisChanged = true;
+        }
+
+        touchpadAxis = new Vector2(currentTouchpadAxis.x, currentTouchpadAxis.y);
+        triggerAxis = new Vector2(currentTriggerAxis.x, currentTriggerAxis.y);
+
+        //Trigger
+        if (device.GetTouchDown(SteamVR_Controller.ButtonMask.Trigger))
+        {
+            OnTriggerClicked(SetButtonEvent(ref triggerPressed, true, currentTriggerAxis.x));
+            EmitAlias(ButtonAlias.Trigger, true, currentTriggerAxis.x, ref triggerPressed);
         } else if (device.GetTouchUp(SteamVR_Controller.ButtonMask.Trigger))
         {
-            OnTriggerUnclicked(SetButtonEvent(ref triggerPressed, false));
-            EmitAlias(ButtonAlias.Trigger, false, ref triggerPressed);
+            OnTriggerUnclicked(SetButtonEvent(ref triggerPressed, false, 0f));
+            EmitAlias(ButtonAlias.Trigger, false, 0f, ref triggerPressed);
         }
 
         //ApplicationMenu
         if (device.GetTouchDown(SteamVR_Controller.ButtonMask.ApplicationMenu))
         {
-            OnApplicationMenuClicked(SetButtonEvent(ref applicationMenuPressed, true));
-            EmitAlias(ButtonAlias.Application_Menu, true, ref applicationMenuPressed);
+            OnApplicationMenuClicked(SetButtonEvent(ref applicationMenuPressed, true, 1f));
+            EmitAlias(ButtonAlias.Application_Menu, true, 1f, ref applicationMenuPressed);
         }
         else if (device.GetTouchUp(SteamVR_Controller.ButtonMask.ApplicationMenu))
         {
 
-            OnApplicationMenuUnclicked(SetButtonEvent(ref applicationMenuPressed, false));
-            EmitAlias(ButtonAlias.Application_Menu, false, ref applicationMenuPressed);
+            OnApplicationMenuUnclicked(SetButtonEvent(ref applicationMenuPressed, false, 0f));
+            EmitAlias(ButtonAlias.Application_Menu, false, 0f, ref applicationMenuPressed);
         }
 
         //Grip
         if (device.GetTouchDown(SteamVR_Controller.ButtonMask.Grip))
         {
-            OnGripClicked(SetButtonEvent(ref gripPressed, true));
-            EmitAlias(ButtonAlias.Grip, true, ref gripPressed);
+            OnGripClicked(SetButtonEvent(ref gripPressed, true, 1f));
+            EmitAlias(ButtonAlias.Grip, true, 1f, ref gripPressed);
         }
         else if (device.GetTouchUp(SteamVR_Controller.ButtonMask.Grip))
         {
-            OnGripUnclicked(SetButtonEvent(ref gripPressed, false));
-            EmitAlias(ButtonAlias.Grip, false, ref gripPressed);
+            OnGripUnclicked(SetButtonEvent(ref gripPressed, false, 0f));
+            EmitAlias(ButtonAlias.Grip, false, 0f, ref gripPressed);
         }
 
         //Touchpad Clicked
         if (device.GetPressDown(SteamVR_Controller.ButtonMask.Touchpad))
         {
-            OnTouchpadClicked(SetButtonEvent(ref touchpadPressed, true));
-            EmitAlias(ButtonAlias.Touchpad_Press, true, ref touchpadPressed);
+            OnTouchpadClicked(SetButtonEvent(ref touchpadPressed, true, 1f));
+            EmitAlias(ButtonAlias.Touchpad_Press, true, 1f, ref touchpadPressed);
         }
         else if (device.GetPressUp(SteamVR_Controller.ButtonMask.Touchpad))
         {
-            OnTouchpadUnclicked(SetButtonEvent(ref touchpadPressed, false));
-            EmitAlias(ButtonAlias.Touchpad_Press, false, ref touchpadPressed);
+            OnTouchpadUnclicked(SetButtonEvent(ref touchpadPressed, false, 0f));
+            EmitAlias(ButtonAlias.Touchpad_Press, false, 0f, ref touchpadPressed);
         }
 
         //Touchpad Touched
         if (device.GetTouchDown(SteamVR_Controller.ButtonMask.Touchpad))
         {
-            OnTouchpadTouched(SetButtonEvent(ref touchpadTouched, true));
-            EmitAlias(ButtonAlias.Touchpad_Touch, true, ref touchpadTouched);
+            OnTouchpadTouched(SetButtonEvent(ref touchpadTouched, true, 1f));
+            EmitAlias(ButtonAlias.Touchpad_Touch, true, 1f, ref touchpadTouched);
         }
         else if (device.GetTouchUp(SteamVR_Controller.ButtonMask.Touchpad))
         {
-            OnTouchpadUntouched(SetButtonEvent(ref touchpadTouched, false));
-            EmitAlias(ButtonAlias.Touchpad_Touch, false, ref touchpadTouched);
+            OnTouchpadUntouched(SetButtonEvent(ref touchpadTouched, false, 0f));
+            EmitAlias(ButtonAlias.Touchpad_Touch, false, 0f, ref touchpadTouched);
         }
     }
 }

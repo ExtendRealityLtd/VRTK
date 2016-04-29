@@ -96,10 +96,40 @@ it makes a clicking sound.
 The Controller Events script deals with both touchpad touch and click
 events separately.
 
-The event payload that is emitted is:
+There are two button axis on the controller:
 
-  * **ControllerIndex:** The index of the controller that was used
-  * **TouchpadAxis:** A Vector2 of the position the touchpad is touched at
+  * Touchpad touch position, which has an x and y value depending
+  on where the touchpad is currently being touched.
+  * Trigger button, which has an x value depending on how much the
+  trigger button is being depressed.
+
+There are two additional events emitted when either the Touchpad axis
+or the Trigger axis change their value which can be used to determine
+the change in either of the axis for finer control such as using
+the Touchpad to move a character, or knowing the pressure that the
+trigger is being pressed.
+
+The Touchpad Axis is reported via the `TouchpadAxis` payload variable
+which is updated on any Controller Event.
+
+The Trigger Axis is reported via the `buttonPressure` payload variable
+which is updated on any Controller Event. Any other button press will
+report a button pressure of 1 or 0 as all other buttons are digital
+(they are either clicked or not clicked) but because the Trigger is
+analog it will report a varying button pressure.
+
+The amount of fidelity in the changes on the axis can be
+determined by the `axisFidelity` parameter on the script, which is
+defaulted to 1. Any number higher than 2 will probably give too
+sensitive results.
+
+The event payload that is emitted contains:
+
+  * **controllerIndex:** The index of the controller that was used.
+  * **buttonPressure:** A float between 0f and 1f of the amount of.
+  pressure being applied to the button pressed.
+  * **touchpadAxis:** A Vector2 of the position the touchpad is
+  touched at.
 
 There are also common action aliases that are emitted when controller
 buttons are pressed. These action aliases can be mapped to a
@@ -381,10 +411,10 @@ The following events are emitted:
   * **ControllerUntouchInteractableObject:** Emitted when a valid object
   is no longer being touched
 
-The event payload that is emitted is:
+The event payload that is emitted contains:
 
-  * **ControllerIndex:** The index of the controller doing the interaction
-  * **Target:** The GameObject of the interactable object that is being
+  * **controllerIndex:** The index of the controller doing the interaction
+  * **target:** The GameObject of the interactable object that is being
   interacted with by the controller
 
 An example of the `SteamVR_InteractTouch` can be viewed in the
@@ -439,10 +469,10 @@ The following events are emitted:
   * **ControllerUngrabInteractableObject:** Emitted when a valid object
   is released from being grabbed
 
-The event payload that is emitted is:
+The event payload that is emitted contains:
 
-  * **ControllerIndex:** The index of the controller doing the interaction
-  * **Target:** The GameObject of the interactable object that is being
+  * **controllerIndex:** The index of the controller doing the interaction
+  * **target:** The GameObject of the interactable object that is being
   interacted with by the controller
 
 An example of the `SteamVR_InteractGrab` can be viewed in the
@@ -485,10 +515,10 @@ The following events are emitted:
   * **ControllerUnuseInteractableObject:** Emitted when a valid object
   stops being used
 
-The event payload that is emitted is:
+The event payload that is emitted contains:
 
-  * **ControllerIndex:** The index of the controller doing the interaction
-  * **Target:** The GameObject of the interactable object that is being
+  * **controllerIndex:** The index of the controller doing the interaction
+  * **target:** The GameObject of the interactable object that is being
   interacted with by the controller
 
 An example can be viewed in the scene
@@ -527,12 +557,12 @@ The following events are emitted:
   active in the scene to determine the last destination position of
   the pointer end (useful for selecting and teleporting).
 
-The event payload that is emitted is:
+The event payload that is emitted contains:
 
-  * **ControllerIndex:** The index of the controller emitting the beam
-  * **Distance:** The distance the target is from the controller
-  * **Target:** The Transform of the object that the pointer is touching
-  * **TipPosition:** The world position of the end of the pointer
+  * **controllerIndex:** The index of the controller emitting the beam
+  * **distance:** The distance the target is from the controller
+  * **target:** The Transform of the object that the pointer is touching
+  * **tipPosition:** The world position of the end of the pointer
 
 ### Examples
 
