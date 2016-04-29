@@ -19,9 +19,15 @@ public class SteamVR_InteractableObject : MonoBehaviour
     public bool highlightOnTouch = false;
     public Color touchHighlightColor = Color.clear;
 
+    private bool isTouched = false;
     private bool isGrabbed = false;
     private bool isUsing = false;
     private Color[] originalObjectColours = null;
+
+    public bool IsTouched()
+    {
+        return isTouched;
+    }
 
     public bool IsGrabbed()
     {
@@ -31,6 +37,16 @@ public class SteamVR_InteractableObject : MonoBehaviour
     public bool IsUsing()
     {
         return isUsing;
+    }
+
+    public virtual void StartTouching(GameObject touchingObject)
+    {
+        isTouched = true;
+    }
+
+    public virtual void StopTouching(GameObject previousTouchingObject)
+    {
+        isTouched = false;
     }
 
     public virtual void Grabbed(GameObject grabbingObject)

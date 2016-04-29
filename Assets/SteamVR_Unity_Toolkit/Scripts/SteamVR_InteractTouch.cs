@@ -79,6 +79,7 @@ public class SteamVR_InteractTouch : MonoBehaviour {
             touchedObject = collider.gameObject;
             OnControllerTouchInteractableObject(SetControllerInteractEvent(touchedObject));
             touchedObject.GetComponent<SteamVR_InteractableObject>().ToggleHighlight(true, globalTouchHighlightColor);
+            touchedObject.GetComponent<SteamVR_InteractableObject>().StartTouching(this.gameObject);
             if (trackedController.IsControllerVisible() && hideControllerOnTouch)
             {
                 trackedController.ToggleControllerModel(false);
@@ -92,6 +93,7 @@ public class SteamVR_InteractTouch : MonoBehaviour {
         {
             OnControllerUntouchInteractableObject(SetControllerInteractEvent(collider.gameObject));
             collider.GetComponent<SteamVR_InteractableObject>().ToggleHighlight(false);
+            collider.GetComponent<SteamVR_InteractableObject>().StopTouching(this.gameObject);
         }
         touchedObject = null;
         if (hideControllerOnTouch)
