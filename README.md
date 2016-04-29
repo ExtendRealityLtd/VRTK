@@ -238,9 +238,9 @@ heavily inspired by the tutorial and code from [Catlike Coding](http://catlikeco
 
 The basic teleporter updates the `[CameraRig]` x/z position in the
 game world to the position of a World Pointer's tip location which is
-set via the `WorldPointerDestinationSet` event. The y position is never
-altered so the basic teleporter cannot be used to move up and down
-game objects as it only allows for travel across a flat plane.
+set via the `WorldPointerDestinationSet` event. The y position can not
+be set to a new object top unless the new position is on a terrain
+object in which the Y is always locked to the floor of the terrain.
 
 The Basic Teleport script is attached to the `[CameraRig]` prefab and
 requires an implementation of the WorldPointer script to be attached
@@ -290,6 +290,10 @@ An example of the `SteamVR_HeightAdjustTeleport` script can be viewed
 in the scene `Examples/007_CameraRig_HeightAdjustTeleport`. The scene
 has a collection of varying height objects that the player can either
 walk up and down or use the laser pointer to climb on top of them.
+
+Another example can be viewed in the scene
+`Examples/010_CameraRig_TerrainTeleporting` which shows how the
+teleportation of a player can also traverse terrain colliders.
 
 #### Interactable Object (SteamVR_InteractableObject)
 
@@ -557,6 +561,12 @@ The current examples are:
   however, rather than just pointing a straight beam, the beam is
   curved (over a bezier curve) which allows climbing on top of items
   that the player cannot visibly see.
+
+  * **010_CameraRig_TerrainTeleporting:** A scene with a terrain
+  object and a selection of varying height 3d objects that can be
+  traversed using the controller laser beam pointer. It shows how the
+  Height Adjust Teleporter can be used to climb up and down game
+  objects as well as traversing terrains as well.
 
 ## Contributing
 

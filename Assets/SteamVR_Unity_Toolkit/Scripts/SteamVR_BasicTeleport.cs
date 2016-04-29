@@ -17,7 +17,6 @@ public class SteamVR_BasicTeleport : MonoBehaviour {
 
     protected int listenerInitTries = 5;
     protected Transform eyeCamera;
-    protected Vector3 newPosition = Vector3.zero;
 
     protected virtual void Start()
     {
@@ -50,19 +49,38 @@ public class SteamVR_BasicTeleport : MonoBehaviour {
         }
     }
 
+    protected virtual void Blink()
+    {
+        SteamVR_Fade.Start(Color.black, 0);
+        SteamVR_Fade.Start(Color.clear, blinkTransitionSpeed);
+    }
+
     protected virtual void DoTeleport(object sender, WorldPointerEventArgs e)
     {
         if (e.target)
         {
-            SteamVR_Fade.Start(Color.black, 0);
-            SteamVR_Fade.Start(Color.clear, blinkTransitionSpeed);
-
-            this.transform.position = GetNewPosition(e.destinationPosition, e.target);
+            Blink();
+            Vector3 newPosition = GetNewPosition(e.destinationPosition, e.target);
+            SetNewPosition(newPosition, e.target);
         }
+    }
+
+    protected virtual void SetNewPosition(Vector3 position, Transform target)
+    {
+        this.transform.position = CheckTerrainCollision(position, target);
     }
 
     protected virtual Vector3 GetNewPosition(Vector3 tipPosition, Transform target)
     {
         return new Vector3(tipPosition.x - eyeCamera.localPosition.x, this.transform.position.y, tipPosition.z - eyeCamera.localPosition.z);
+    }
+
+    protected Vector3 CheckTerrainCollision(Vector3 position, Transform target)
+    {
+        if(target.GetComponent<Terrain>())
+        {
+            position.y = Terrain.activeTerrain.SampleHeight(position);
+        }
+        return position;
     }
 }

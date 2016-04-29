@@ -43,10 +43,11 @@ public class SteamVR_HeightAdjustTeleport : SteamVR_BasicTeleport {
 
             if (withBlink)
             {
-                SteamVR_Fade.Start(Color.black, 0);
-                SteamVR_Fade.Start(Color.clear, blinkTransitionSpeed);
+                Blink();
             }
-            this.transform.position = new Vector3(this.transform.position.x, floorY, this.transform.position.z);            
+
+            Vector3 newPosition = new Vector3(this.transform.position.x, floorY, this.transform.position.z);
+            SetNewPosition(newPosition, currentFloor.transform);
         }
     }
 
