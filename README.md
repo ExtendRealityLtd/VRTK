@@ -238,9 +238,9 @@ heavily inspired by the tutorial and code from [Catlike Coding](http://catlikeco
 
 The basic teleporter updates the `[CameraRig]` x/z position in the
 game world to the position of a World Pointer's tip location which is
-set via the `WorldPointerDestinationSet` event. The y position can not
-be set to a new object top unless the new position is on a terrain
-object in which the Y is always locked to the floor of the terrain.
+set via the `WorldPointerDestinationSet` event. The y position is never
+altered so the basic teleporter cannot be used to move up and down
+game objects as it only allows for travel across a flat plane.
 
 The Basic Teleport script is attached to the `[CameraRig]` prefab and
 requires an implementation of the WorldPointer script to be attached
@@ -249,11 +249,16 @@ the Controller object).
 
 The following script parameters are available:
 
-  * **Blink Transition Speed**: The fade blink speed can be changed on
+  * **Blink Transition Speed:** The fade blink speed can be changed on
   the basic teleport script to provide a customised teleport experience.
   Setting the speed to 0 will mean no fade blink effect is present.
   The fade is achieved via the `SteamVR_Fade.cs` script in the
   SteamVR Unity Plugin scripts.
+  * **Headset Position Compensation:** If this is checked then the
+  teleported location will be the position of the headset within the
+  play area. If it is unchecked then the teleported location will
+  always be the centre of the play area even if the headset position
+  is not in the centre of the play area.
 
 An example of the `SteamVR_BasicTeleport` script can be viewed in the
 scene `Examples/004_CameraRig_BasicTeleport`. The scene uses
@@ -274,7 +279,12 @@ available.
 
 The following script parameters are available:
 
-  * **Blink Transition Speed**: The fade blink speed on teleport
+  * **Blink Transition Speed:** The fade blink speed on teleport
+  * **Headset Position Compensation:** If this is checked then the
+  teleported location will be the position of the headset within the
+  play area. If it is unchecked then the teleported location will
+  always be the centre of the play area even if the headset position
+  is not in the centre of the play area.
   * **Play Space Falling:** Checks if the player steps off an object
   into a part of their play area that is not on the object then they are
   automatically teleported down to the nearest floor.

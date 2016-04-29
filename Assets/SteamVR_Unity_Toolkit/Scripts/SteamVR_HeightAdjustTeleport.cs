@@ -17,7 +17,27 @@ public class SteamVR_HeightAdjustTeleport : SteamVR_BasicTeleport {
 
     GameObject currentFloor = null;
 
-    float GetTeleportY(Transform target, Vector3 tipPosition)
+    protected override void Start()
+    {
+        base.Start();
+        adjustYForTerrain = true;
+    }
+
+    protected override void DoTeleport(object sender, WorldPointerEventArgs e)
+    {
+        base.DoTeleport(sender, e);
+        DropToNearestFloor(false);
+    }
+
+    protected override Vector3 GetNewPosition(Vector3 tipPosition, Transform target)
+    {
+        Vector3 basePosition = base.GetNewPosition(tipPosition, target);
+        basePosition.y = GetTeleportY(target, tipPosition);
+        return basePosition;
+    }
+
+
+    private float GetTeleportY(Transform target, Vector3 tipPosition)
     {
         float newY = this.transform.position.y;
         //Check to see if the tip is on top of an object
@@ -29,7 +49,7 @@ public class SteamVR_HeightAdjustTeleport : SteamVR_BasicTeleport {
         return newY;
     }
 
-    void DropToNearestFloor(bool withBlink)
+    private void DropToNearestFloor(bool withBlink)
     {
         //send a ray down to find the closest object to stand on
         Ray ray = new Ray(eyeCamera.transform.position, -transform.up);
@@ -51,18 +71,7 @@ public class SteamVR_HeightAdjustTeleport : SteamVR_BasicTeleport {
         }
     }
 
-    protected override void DoTeleport(object sender, WorldPointerEventArgs e)
-    {
-        base.DoTeleport(sender, e);
-        DropToNearestFloor(false);
-    }
-
-    protected override Vector3 GetNewPosition(Vector3 tipPosition, Transform target)
-    {
-        return new Vector3(tipPosition.x - eyeCamera.localPosition.x, GetTeleportY(target, tipPosition), tipPosition.z - eyeCamera.localPosition.z);
-    }
-
-    void Update()
+    private void Update()
     {
         if (playSpaceFalling)
         {

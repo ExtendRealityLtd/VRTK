@@ -14,39 +14,17 @@ using System.Collections;
 
 public class SteamVR_BasicTeleport : MonoBehaviour {
     public float blinkTransitionSpeed = 0.6f;
+    public bool headsetPositionCompensation = true;
 
     protected int listenerInitTries = 5;
     protected Transform eyeCamera;
+    protected bool adjustYForTerrain = false;
 
     protected virtual void Start()
     {
+        adjustYForTerrain = false;
         InitPointerListeners();
         eyeCamera = GameObject.FindObjectOfType<SteamVR_Camera>().GetComponent<Transform>();
-    }
-
-    void InitPointerListeners()
-    {
-        SteamVR_WorldPointer[] worldPointers = GameObject.FindObjectsOfType<SteamVR_WorldPointer>();
-
-        // If the WorldPointer Object isn't initialised yet then retry in a quarter of a second
-        // Because the Controller is a child of the CameraRig (and the WorldPointer is usually attached
-        // to the Controller) then it is likely the WorldPointer object isn't available at start.
-        if (worldPointers.Length == 0)
-        {
-            if (listenerInitTries > 0)
-            {
-                Invoke("InitPointerListeners", 0.25f);
-            } else
-            {
-                Debug.LogError("A GameObject must exist with a SteamVR_WorldPointer script attached to it");
-                return;
-            }
-        }
-
-        foreach (SteamVR_WorldPointer worldPointer in worldPointers)
-        {
-            worldPointer.WorldPointerDestinationSet += new WorldPointerEventHandler(DoTeleport);
-        }
     }
 
     protected virtual void Blink()
@@ -72,15 +50,45 @@ public class SteamVR_BasicTeleport : MonoBehaviour {
 
     protected virtual Vector3 GetNewPosition(Vector3 tipPosition, Transform target)
     {
-        return new Vector3(tipPosition.x - eyeCamera.localPosition.x, this.transform.position.y, tipPosition.z - eyeCamera.localPosition.z);
+        float newX = (headsetPositionCompensation ? (tipPosition.x - (eyeCamera.position.x - this.transform.position.x)) : tipPosition.x);
+        float newY = this.transform.position.y;
+        float newZ = (headsetPositionCompensation ? (tipPosition.z - (eyeCamera.position.z - this.transform.position.z)) : tipPosition.z);
+
+        return new Vector3(newX, newY, newZ);
     }
 
     protected Vector3 CheckTerrainCollision(Vector3 position, Transform target)
     {
-        if(target.GetComponent<Terrain>())
+        if(adjustYForTerrain && target.GetComponent<Terrain>())
         {
             position.y = Terrain.activeTerrain.SampleHeight(position);
         }
         return position;
+    }
+
+    private void InitPointerListeners()
+    {
+        SteamVR_WorldPointer[] worldPointers = GameObject.FindObjectsOfType<SteamVR_WorldPointer>();
+
+        // If the WorldPointer Object isn't initialised yet then retry in a quarter of a second
+        // Because the Controller is a child of the CameraRig (and the WorldPointer is usually attached
+        // to the Controller) then it is likely the WorldPointer object isn't available at start.
+        if (worldPointers.Length == 0)
+        {
+            if (listenerInitTries > 0)
+            {
+                Invoke("InitPointerListeners", 0.25f);
+            }
+            else
+            {
+                Debug.LogError("A GameObject must exist with a SteamVR_WorldPointer script attached to it");
+                return;
+            }
+        }
+
+        foreach (SteamVR_WorldPointer worldPointer in worldPointers)
+        {
+            worldPointer.WorldPointerDestinationSet += new WorldPointerEventHandler(DoTeleport);
+        }
     }
 }
