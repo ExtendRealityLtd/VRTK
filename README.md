@@ -305,6 +305,33 @@ Another example can be viewed in the scene
 `Examples/010_CameraRig_TerrainTeleporting` which shows how the
 teleportation of a player can also traverse terrain colliders.
 
+#### Fading On Headset Collision (SteamVR_HeadsetCollisionFade)
+
+The purpose of the Headset Collision Fade is to detect when the user's
+VR headset collides with another game object and fades the screen to
+a solid colour. This is to deal with a player putting their head into
+a game object and seeing the inside of the object clipping, which is
+an undesired effect.
+
+The reasoning behind this is if the player puts their head where it
+shouldn't be, then fading to a colour (e.g. black) will make the
+player realise they've done something wrong and they'll probably
+naturally step backwards.
+
+The Headset Collision Fade script is attached to the `Camera (head)`
+object within the `[CameraRig]` prefab.
+
+The following script parameters are available:
+
+  * **Blink Transition Speed:** The fade blink speed on collision.
+  * **Fade Color:** The colour to fade the headset to on collision.
+
+An example of the `SteamVR_HeadsetCollisionFade` script can be
+viewed in the scene `Examples/011_Camera_HeadSetCollisionFading`.
+The scene has collidable walls around the play area and if the player
+puts their head into any of the walls then the headset will fade to
+black.
+
 #### Interactable Object (SteamVR_InteractableObject)
 
 The Interactable Object script is attached to any game object that is
@@ -577,6 +604,11 @@ The current examples are:
   traversed using the controller laser beam pointer. It shows how the
   Height Adjust Teleporter can be used to climb up and down game
   objects as well as traversing terrains as well.
+
+  * **011_Camera_HeadSetCollisionFading:** A scene with three walls
+  around the play area and if the player puts their head into any
+  of the collidable walls then the headset fades to black to prevent
+  seeing unwanted object clipping artifacts.
 
 ## Contributing
 
