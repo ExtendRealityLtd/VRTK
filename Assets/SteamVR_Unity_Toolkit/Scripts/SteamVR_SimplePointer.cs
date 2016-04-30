@@ -9,8 +9,7 @@
 // Press the default 'Grip' button on the controller to activate the beam
 // Released the default 'Grip' button on the controller to deactivate the beam
 //
-// This script is an implementation of the SteamVR_WorldPointer so emits certain
-// events from the SimplePointer along with the correct payload.
+// This script is an implementation of the SteamVR_WorldPointer.
 //
 //====================================================================================
 
@@ -19,75 +18,72 @@ using System.Collections;
 
 public class SteamVR_SimplePointer : SteamVR_WorldPointer
 {
-    public enum AxisType
-    {
-        XAxis,
-        ZAxis
-    }
-
-    public Color pointerColor;
     public float pointerThickness = 0.002f;    
     public float pointerLength = 100f;
     public bool showPointerTip = true;
-    public AxisType pointerFacingAxis = AxisType.ZAxis;
 
     private GameObject pointerHolder;
     private GameObject pointer;
     private GameObject pointerTip;
-
     private Vector3 pointerTipScale = new Vector3(0.05f, 0.05f, 0.05f);
 
-    private float pointerContactDistance = 0f;
-    private Transform pointerContactTarget = null;
-
-    private uint controllerIndex;
-
     // Use this for initialization
-    void Start () {
-        if (GetComponent<SteamVR_ControllerEvents>() == null)
-        {
-            Debug.LogError("SteamVR_SimplePointer is required to be attached to a SteamVR Controller that has the SteamVR_ControllerEvents script attached to it");
-            return;
-        }
-
-        //Setup controller event listeners
-        GetComponent<SteamVR_ControllerEvents>().AliasPointerOn += new ControllerClickedEventHandler(EnablePointerBeam);
-        GetComponent<SteamVR_ControllerEvents>().AliasPointerOff += new ControllerClickedEventHandler(DisablePointerBeam);
-
+    protected override void Start () {
+        base.Start();
         InitPointer();
     }
 
-    void InitPointer()
+    protected override void InitPointer()
     {
-        Material newMaterial = new Material(Shader.Find("Unlit/Color"));
-        newMaterial.SetColor("_Color", pointerColor);
-
-        pointerHolder = new GameObject();
+        pointerHolder = new GameObject("PlayerObject_WorldPointer_SimplePointer_Holder");
         pointerHolder.transform.parent = this.transform;
         pointerHolder.transform.localPosition = Vector3.zero;
 
         pointer = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        pointer.transform.name = "PlayerObject_WorldPointer_SimplePointer_Pointer";
         pointer.transform.parent = pointerHolder.transform;
-        pointer.GetComponent<MeshRenderer>().material = newMaterial;
 
         pointer.GetComponent<BoxCollider>().isTrigger = true;
         pointer.AddComponent<Rigidbody>().isKinematic = true;
         pointer.layer = 2;
 
         pointerTip = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        pointerTip.transform.name = "PlayerObject_WorldPointer_SimplePointer_PointerTip";
         pointerTip.transform.parent = pointerHolder.transform;
-        pointerTip.GetComponent<MeshRenderer>().material = newMaterial;
         pointerTip.transform.localScale = pointerTipScale;
 
         pointerTip.GetComponent<SphereCollider>().isTrigger = true;
         pointerTip.AddComponent<Rigidbody>().isKinematic = true;
         pointerTip.layer = 2;
 
+        base.InitPointer();
+
         SetPointerTransform(pointerLength, pointerThickness);
         TogglePointer(false);
     }
 
-    void SetPointerTransform(float setLength, float setThicknes)
+    protected override void SetPointerMaterial()
+    {
+        base.SetPointerMaterial();
+        pointer.GetComponent<MeshRenderer>().material = pointerMaterial;
+        pointerTip.GetComponent<MeshRenderer>().material = pointerMaterial;
+    }
+
+    protected override void TogglePointer(bool state)
+    {
+        base.TogglePointer(state);
+        pointer.gameObject.SetActive(state);
+        bool tipState = (showPointerTip ? state : false);
+        pointerTip.gameObject.SetActive(tipState);
+    }
+
+    protected override void DisablePointerBeam(object sender, ControllerClickedEventArgs e)
+    {
+        base.PointerSet();
+        base.DisablePointerBeam(sender, e);
+    }
+
+    private void SetPointerTransform(float setLength, float setThicknes)
     {
         //if the additional decimal isn't added then the beam position glitches
         float beamPosition = setLength / (2 + 0.00001f);
@@ -104,16 +100,11 @@ public class SteamVR_SimplePointer : SteamVR_WorldPointer
             pointer.transform.localPosition = new Vector3(0f, 0f, beamPosition);
             pointerTip.transform.localPosition = new Vector3(0f, 0f, setLength - (pointerTip.transform.localScale.z / 2));
         }
+
+        base.SetPlayAreaCursorTransform(pointerTip.transform.position);
     }
 
-    void TogglePointer(bool state)
-    {
-        pointer.gameObject.SetActive(state);
-        bool tipState = (showPointerTip ? state : false);
-        pointerTip.gameObject.SetActive(tipState);
-    }
-
-    float GetPointerBeamLength(bool hasRayHit, RaycastHit collidedWith)
+    private float GetPointerBeamLength(bool hasRayHit, RaycastHit collidedWith)
     {
         float actualLength = pointerLength;
 
@@ -122,11 +113,14 @@ public class SteamVR_SimplePointer : SteamVR_WorldPointer
         {
             if (pointerContactTarget != null)
             {
-                OnWorldPointerOut(SetPointerEvent(controllerIndex, pointerContactDistance, pointerContactTarget, pointerTip.transform.position));
+                base.PointerOut();
             }
 
             pointerContactDistance = 0f;
             pointerContactTarget = null;
+            destinationPosition = Vector3.zero;
+
+            UpdatePointerMaterial(pointerMissColor);
         }
 
         //check if beam has hit a new target
@@ -134,8 +128,11 @@ public class SteamVR_SimplePointer : SteamVR_WorldPointer
         {
             pointerContactDistance = collidedWith.distance;
             pointerContactTarget = collidedWith.transform;
+            destinationPosition = pointerTip.transform.position;
 
-            OnWorldPointerIn(SetPointerEvent(controllerIndex, pointerContactDistance, pointerContactTarget, pointerTip.transform.position));
+            UpdatePointerMaterial(pointerHitColor);
+
+            base.PointerIn();
         }
 
         //adjust beam length if something is blocking it
@@ -147,21 +144,8 @@ public class SteamVR_SimplePointer : SteamVR_WorldPointer
         return actualLength;
     }
 
-    void EnablePointerBeam(object sender, ControllerClickedEventArgs e)
-    {
-        controllerIndex = e.controllerIndex;
-        TogglePointer(true);
-    }
-
-    void DisablePointerBeam(object sender, ControllerClickedEventArgs e)
-    {
-        controllerIndex = e.controllerIndex;
-        OnWorldPointerDestinationSet(SetPointerEvent(controllerIndex, pointerContactDistance, pointerContactTarget, pointerTip.transform.position));
-        TogglePointer(false);
-    }
-
     // Update is called once per frame
-    void Update () {
+    private void Update () {
         if (pointer.gameObject.activeSelf)
         {
             Ray pointerRaycast = new Ray(transform.position, transform.forward);

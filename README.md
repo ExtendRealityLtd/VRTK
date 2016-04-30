@@ -58,9 +58,10 @@ and it has been taken directly from the SteamVR Unity plugin example:
 children on the controller (which seem to be missing from the default
 prefab in the SteamVR plugin `Prefabs/[CameraRig].prefab`.
 
-The `SteamVR_Unity_Toolkit/Prefabs/[CameraRig]` can be dropped into any scene to
-provide instant access to a VR game camera via the VR headset and
-tracking of the VR controllers including model representations.
+The `SteamVR_Unity_Toolkit/Prefabs/[CameraRig]` can be dropped into
+any scene to provide instant access to a VR game camera via the VR
+headset and tracking of the VR controllers including model
+representations.
 
 ### Scripts
 
@@ -180,19 +181,33 @@ the beam.
 
 The following script parameters are available:
 
-  * **Pointer Color:** The colour of the beam can be determined by a setting
-  on the script and is independent for each controller meaning different
-  controllers can have different coloured beams.
-  * **Pointer Thickness:** The thickness and length of the beam can also be
-  set on the script as well as the ability to toggle the sphere beam tip
-  that is displayed at the end of the beam (to represent a cursor).
-  * **Pointer Length:** The distance the beam will project before stopping.
-  * **Show Pointer Tip:** Toggle whether the cursor is show on the end of the
-  pointer beam.
-  * **Pointer Facing Axis:** The facing axis can also be set to match the
-  direction the `[CameraRig`] Prefab is facing as if it is rotated then
-  the beam will emit out of the controller at the wrong angle, so this
-  setting can be adjusted to ensure the beam always projects forward.
+  * **Pointer Hit Color:** The colour of the beam when it is colliding
+  with a valid target. It can be set to a different colour for each
+  controller.
+  * **Pointer Miss Color:** The colour of the beam when it is not
+  hitting a valid target. It can be set to a different colour for each
+  controller.
+  * **Show Play Area Cursor:** If this is enabled then the play area
+  boundaries are displayed at the tip of the pointer beam in the
+  current pointer colour.
+  * **Handle Play Area Cursor Collisions:** If this is ticked then if
+  the play area cursor is colliding with any other object then the
+  pointer colour will change to the `Pointer Miss Color` and the
+  `WorldPointerDestinationSet` event will not be triggered, which will
+  prevent teleporting into areas where the play area will collide.
+  * **Pointer Facing Axis:** The facing axis can also be set to match
+  the direction the `[CameraRig`] Prefab is facing as if it is rotated
+  then the beam will emit out of the controller at the wrong angle, so
+  this setting can be adjusted to ensure the beam always projects
+  forward.
+  * **Pointer Thickness:** The thickness and length of the beam can
+  also be set on the script as well as the ability to toggle the sphere
+  beam tip that is displayed at the end of the beam (to represent a
+  cursor).
+  * **Pointer Length:** The distance the beam will project before
+  stopping.
+  * **Show Pointer Tip:** Toggle whether the cursor is shown on the end
+  of the pointer beam.
 
 The Simple Pointer object extends the `SteamVR_WorldPointer` abstract
 class and therefore emits the same events and payload.
@@ -225,15 +240,25 @@ the beam.
 
 The following script parameters are available:
 
-  * **Valid Target Color:** The colour of the beam and floor cursor are
-  displayed using this colour when the beam end location is a valid
-  floor such as a valid game object (e.g. not dead space). The colour
-  uses the `Legacy Shaders/Transparent/Defuse` shader so translucent
-  colours can be used for a better effect.
-  * **Invalid Target Color:** The colour of the beam and floor cursor
-  are displayed using this colour when the beam end location is not
-  valid (i.e. the downward beam has not hit an object that can be
-  teleported to).
+  * **Pointer Hit Color:** The colour of the beam when it is colliding
+  with a valid target. It can be set to a different colour for each
+  controller.
+  * **Pointer Miss Color:** The colour of the beam when it is not
+  hitting a valid target. It can be set to a different colour for each
+  controller.
+  * **Show Play Area Cursor:** If this is enabled then the play area
+  boundaries are displayed at the tip of the pointer beam in the
+  current pointer colour.
+  * **Handle Play Area Cursor Collisions:** If this is ticked then if
+  the play area cursor is colliding with any other object then the
+  pointer colour will change to the `Pointer Miss Color` and the
+  `WorldPointerDestinationSet` event will not be triggered, which will
+  prevent teleporting into areas where the play area will collide.
+  * **Pointer Facing Axis:** The facing axis can also be set to match
+  the direction the `[CameraRig`] Prefab is facing as if it is rotated
+  then the beam will emit out of the controller at the wrong angle, so
+  this setting can be adjusted to ensure the beam always projects
+  forward.
   * **Pointer Length:** The length of the projected forward pointer
   beam, this is basically the distance able to point from the
   controller potiion.
@@ -259,6 +284,13 @@ the scene `Examples/009_Controller_BezierPointer` which is used in
 conjunction with the Height Adjust Teleporter shows how it is
 possible to traverse different height objects using the curved
 pointer without needing to see the top of the object.
+
+Another example can be viewed in the scene
+`Examples/012_Controller_PointerWithAreaCollision` that shows how
+a Bezier Pointer with the Play Area Cursor and Collision Detection
+enabled can be used to traverse a game area but not allow teleporting
+into areas where the walls or other objects would fall into the play
+area space enabling the player to enter walls.
 
 The bezier curve generation code is in another script located at
 `SteamVR_Unity_Toolkit/Scripts/Helper/CurveGenerator.cs` and was
@@ -532,20 +564,54 @@ Another example can be viewed in the scene
 can be grabbed with one button and used with another (e.g. firing a
 gun).
 
-#### Class Interfaces
+#### Abstract Classes
 
 To allow for reusablity and object consistency, a collection of
-abstract classes are provided as interfaces which can be used to extend
-onto a concrete class providing consistent functionality across many
+abstract classes are provided which can be used to extend into a
+concrete class providing consistent functionality across many
 different scripts without needing to duplicate code.
 
-The current abstract class interfaces are available:
+The current abstract classes are available:
 
 ##### SteamVR_WorldPointer
 
 This abstract class provides any game pointer the ability to know the
 the state of the implemented pointer and emit an event to other scripts
 in the game world.
+
+The World Pointer also provides a play area cursor to be displayed for
+all cursors that utilise this class. The play area cursor is a
+representation of the current calibrated play area space and is useful
+for visualising the potential new play area space in the game world
+prior to teleporting. It can also handle collisions with objects on the
+new play area space and prevent teleporting if there are any collisions
+with objects at the potential new destination.
+
+The play area collider does not work well with terrains as they are
+uneven and cause collisions regularly so it is recommended that
+handling play area collisions is not enabled when using terrains.
+
+The following script parameters are available:
+
+  * **Pointer Hit Color:** The colour of the beam when it is colliding
+  with a valid target. It can be set to a different colour for each
+  controller.
+  * **Pointer Miss Color:** The colour of the beam when it is not
+  hitting a valid target. It can be set to a different colour for each
+  controller.
+  * **Show Play Area Cursor:** If this is enabled then the play area
+  boundaries are displayed at the tip of the pointer beam in the
+  current pointer colour.
+  * **Handle Play Area Cursor Collisions:** If this is ticked then if
+  the play area cursor is colliding with any other object then the
+  pointer colour will change to the `Pointer Miss Color` and the
+  `WorldPointerDestinationSet` event will not be triggered, which will
+  prevent teleporting into areas where the play area will collide.
+  * **Pointer Facing Axis:** The facing axis can also be set to match
+  the direction the `[CameraRig`] Prefab is facing as if it is rotated
+  then the beam will emit out of the controller at the wrong angle, so
+  this setting can be adjusted to ensure the beam always projects
+  forward.
 
 The following events are emitted:
 
@@ -639,6 +705,14 @@ The current examples are:
   around the play area and if the player puts their head into any
   of the collidable walls then the headset fades to black to prevent
   seeing unwanted object clipping artifacts.
+
+  * **012_Controller_PointerWithAreaCollision:** A scene which
+  demonstrates how to use a controller pointer to traverse a world
+  but where the beam shows the projected play area space and if
+  the space collides with any objects then the teleportation
+  action is disabled. This means it's possible to create a level
+  with areas where the user cannot teleport to because they would
+  allow the player to clip into objects.
 
 ## Contributing
 
