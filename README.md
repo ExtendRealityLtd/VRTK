@@ -644,21 +644,25 @@ example scripts are not required for real world usage.
 The current examples are:
 
   * **001_CameraRig_VR_PlayArea:** A simple scene showing the `[CameraRig]`
-  prefab usage
+  prefab usage.
+   * [View Example Tour on Youtube](https://www.youtube.com/watch?v=hr5OoSCksnY)
 
   * **002_Controller_Events:** A simple scene displaying the events from
-  the controller in the console window
+  the controller in the console window.
+   * [View Example Tour on Youtube](https://www.youtube.com/watch?v=B-YtXomrBBI)
 
   * **003_Controller_SimplePointer:** A scene with basic objects that can
   be pointed at with the laser beam from the controller activated by
   the `Grip` button. The pointer events are also displayed in the
   console window.
+   * [View Example Tour on Youtube](https://www.youtube.com/watch?v=2DqFTfbf22c)
 
   * **004_CameraRig_BasicTeleport:** A scene with basic objects that can
   be traversed using the controller laser beam to point at an object
   in the game world where the player is to be teleported to by
   pressing the controller `Grip` button. When the `Grip` button is
   released, the player is teleported to the laser beam end location.
+   * [View Example Tour on Youtube](https://www.youtube.com/watch?v=dbbNPPX-R6E)
 
   * **005_Controller_BasicObjectGrabbing:** A scene with a selection of
   objects that can be grabbed by touching them with the controller and
@@ -667,11 +671,13 @@ The current examples are:
   controller. The scene also demonstrates simple highlighting of
   objects when the controller touches them. The interaction events are
   also displayed in the console window.
+   * [View Example Tour on Youtube](https://www.youtube.com/watch?v=FjwN8AJx0rY)
 
   * **006_Controller_UsingADoor:** A scene with a door interactable
   object that is set to `usable` and when the door is used by pressing
   the controller `Trigger` button, the door swings open (or closes if
-  it's already open)
+  it's already open).
+   * [View Example Tour on Youtube](https://www.youtube.com/watch?v=lxDjkmILzpY)
 
   * **007_CameraRig_HeightAdjustTeleport:** A scene with a selection of
   varying height objects that can be traversed using the controller
@@ -682,18 +688,21 @@ The current examples are:
   the nearest object. This also enables the player to climb objects
   just by standing over them as the floor detection is done from the
   position of the headset.
+   * [View Example Tour on Youtube](https://www.youtube.com/watch?v=4WJ9AyDABJo)
 
   * **008_Controller_UsingAGrabbedObject:** A scene with interactable
   objects that can be grabbed (pressing the `Grip` controller button)
   and then used (pressing the `Trigger` controller button). There is
   a gun on a table that can be picked up and fired, or a strange box
   that when picked up and used the top spins.
+   * [View Example Tour on Youtube](https://www.youtube.com/watch?v=mhVx7kfLSe8)
 
   * **009_Controller_BezierPointer:** A scene with a selection of
   varying height objects that can be traversed using the controller
   however, rather than just pointing a straight beam, the beam is
   curved (over a bezier curve) which allows climbing on top of items
   that the player cannot visibly see.
+   * [View Example Tour on Youtube](https://www.youtube.com/watch?v=oOZV4bxdw5o)
 
   * **010_CameraRig_TerrainTeleporting:** A scene with a terrain
   object and a selection of varying height 3d objects that can be
