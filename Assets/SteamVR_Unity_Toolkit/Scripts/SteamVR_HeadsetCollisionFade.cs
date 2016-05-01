@@ -6,6 +6,7 @@ public class SteamVR_HeadsetCollisionFade : MonoBehaviour {
     public Color fadeColor = Color.black;
 
     void Start () {
+        this.name = "PlayerObject_" + this.name;
         BoxCollider collider = this.gameObject.AddComponent<BoxCollider>();
         collider.isTrigger = true;
         collider.size = new Vector3(0.1f, 0.1f, 0.1f);
@@ -17,11 +18,17 @@ public class SteamVR_HeadsetCollisionFade : MonoBehaviour {
 
     void OnTriggerStay(Collider collider)
     {
-        SteamVR_Fade.Start(fadeColor, blinkTransitionSpeed);
+        if (!collider.name.Contains("PlayerObject_"))
+        {
+            SteamVR_Fade.Start(fadeColor, blinkTransitionSpeed);
+        }
     }
 
     void OnTriggerExit(Collider collider)
     {
-        SteamVR_Fade.Start(Color.clear, blinkTransitionSpeed);
+        if (!collider.name.Contains("PlayerObject_"))
+        {
+            SteamVR_Fade.Start(Color.clear, blinkTransitionSpeed);
+        }
     }
 }
