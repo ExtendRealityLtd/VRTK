@@ -69,12 +69,12 @@ public class SteamVR_InteractUse : MonoBehaviour
 
     private bool IsObjectHoldOnUse(GameObject obj)
     {
-        return (obj.GetComponent<SteamVR_InteractableObject>() && obj.GetComponent<SteamVR_InteractableObject>().holdButtonToUse);
+        return (obj && obj.GetComponent<SteamVR_InteractableObject>() && obj.GetComponent<SteamVR_InteractableObject>().holdButtonToUse);
     }
 
     private int GetObjectUsingState(GameObject obj)
     {
-        if (obj.GetComponent<SteamVR_InteractableObject>())
+        if (obj && obj.GetComponent<SteamVR_InteractableObject>())
         {
             return obj.GetComponent<SteamVR_InteractableObject>().UsingState;
         }
@@ -83,7 +83,7 @@ public class SteamVR_InteractUse : MonoBehaviour
 
     private void SetObjectUsingState(GameObject obj, int value)
     {
-        if (obj.GetComponent<SteamVR_InteractableObject>())
+        if (obj && obj.GetComponent<SteamVR_InteractableObject>())
         {
             obj.GetComponent<SteamVR_InteractableObject>().UsingState = value;
         }

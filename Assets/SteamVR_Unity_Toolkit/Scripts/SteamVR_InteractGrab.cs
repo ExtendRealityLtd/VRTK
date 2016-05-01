@@ -80,7 +80,7 @@ public class SteamVR_InteractGrab : MonoBehaviour
 
     private bool IsObjectHoldOnGrab(GameObject obj)
     {
-        return (obj.GetComponent<SteamVR_InteractableObject>() && obj.GetComponent<SteamVR_InteractableObject>().holdButtonToGrab);
+        return (obj && obj.GetComponent<SteamVR_InteractableObject>() && obj.GetComponent<SteamVR_InteractableObject>().holdButtonToGrab);
     }
 
     private void SnapObjectToGrabToController(GameObject obj)

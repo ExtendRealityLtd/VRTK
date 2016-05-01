@@ -55,7 +55,7 @@ public class SteamVR_InteractTouch : MonoBehaviour {
 
     public bool IsObjectInteractable(GameObject obj)
     {
-        return (obj.GetComponent<SteamVR_InteractableObject>());
+        return (obj && obj.GetComponent<SteamVR_InteractableObject>());
     }
 
     void Awake()
