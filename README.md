@@ -404,7 +404,7 @@ The following script parameters are available:
   * **Is Grabbable:** Determines if the object can be grabbed
   * **Hold Button To Grab:** If this is checked then the grab button
   on the controller needs to be continually held down to keep grabbing.
-  If this is unchecked the the grab button toggles the grab action with
+  If this is unchecked the grab button toggles the grab action with
   one button press to grab and another to release.
   * **Is Usable:** Determines if the object can be used
   * **Hold Button To Use:** If this is checked then the use button
@@ -416,6 +416,13 @@ The following script parameters are available:
   * **Touch Highligt Color:** The colour to highlight the object
   when it is touched. This colour will override any globally set
   color (for instance on the `SteamVR_InteractTouch` script).
+  * **Snap To Rotation:** If this Vector3 is not set to Vector3.zero
+  then when the object is grabbed, the object will be snapped to
+  this rotation to the base rotation of the controller. This enables
+  objects to be snapped to a specific orientation on grab rather than
+  just grabbing the object at the rotation the object is currently in.
+  This is useful for picking up guns or swords where the relative
+  rotation to the controller is important is immersion.
 
 The basis of this script is to provide a simple mechanism for
 identifying objects in the game world that can be grabbed or used
@@ -434,7 +441,6 @@ shows mutltiple objects that can be grabbed by holding the buttons
 or grabbed by toggling the button click and also has objects that
 can have their Using state toggled to show how mutliple items can be
 turned on at the same time.
-
 
 #### Touching Interactable Objects (SteamVR_InteractTouch)
 
@@ -744,6 +750,15 @@ The current examples are:
   to start using and press again to stop using. This allows multiple
   objects to be put into their Using state at the same time as also
   demonstrated in this example scene.
+
+  * **014_Controller_SnappingObjectsOnGrab:** A scene with a selection
+  of objects that can be grabbed and upon grabbing them they snap
+  to a specific rotation on the controller. For instance, the gun
+  object is always snapped into a rotation where it looks as if the
+  controller is holding a gun correctly regardless of position and
+  rotation of the gun object before it is picked up. The controller
+  models are turned off on grab as this creates the desired effect as
+  sometimes the object may clip the controller model and look bad.
 
 ## Contributing
 

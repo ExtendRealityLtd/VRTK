@@ -85,6 +85,16 @@ public class SteamVR_InteractGrab : MonoBehaviour
 
     private void SnapObjectToGrabToController(GameObject obj)
     {
+        //Stop collisions for a moment whilst sorting out position to prevent clipping issues
+        obj.GetComponent<SteamVR_InteractableObject>().PauseCollisions(0.2f);
+
+        Vector3 snapToRotation = obj.GetComponent<SteamVR_InteractableObject>().snapToRotation;
+        if (snapToRotation != Vector3.zero)
+        {
+            // Identity Controller Rotation
+            this.transform.eulerAngles = new Vector3(0f, 270f, 0f);
+            obj.transform.eulerAngles = snapToRotation;
+        }
         obj.transform.position = controllerAttachPoint.transform.position;
         controllerAttachJoint = obj.AddComponent<FixedJoint>();
         controllerAttachJoint.connectedBody = controllerAttachPoint;

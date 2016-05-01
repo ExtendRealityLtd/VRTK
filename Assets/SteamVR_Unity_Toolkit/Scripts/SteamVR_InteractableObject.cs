@@ -20,6 +20,7 @@ public class SteamVR_InteractableObject : MonoBehaviour
     public bool holdButtonToUse = true;
     public bool highlightOnTouch = false;
     public Color touchHighlightColor = Color.clear;
+    public Vector3 snapToRotation = Vector3.zero;
 
     private bool isTouched = false;
     private bool isGrabbed = false;
@@ -108,9 +109,34 @@ public class SteamVR_InteractableObject : MonoBehaviour
         set{ usingState = value;  }
     }
 
+    public void PauseCollisions(float pauseTime)
+    {
+        if (this.GetComponent<Rigidbody>())
+        {
+            this.GetComponent<Rigidbody>().detectCollisions = false;
+        }
+        foreach(Rigidbody rb in this.GetComponentsInChildren<Rigidbody>())
+        {
+            rb.detectCollisions = false;
+        }
+        Invoke("UnpauseCollisions", pauseTime);
+    }
+
     protected virtual void Start()
     {
         originalObjectColours = StoreOriginalColors();
+    }
+
+    private void UnpauseCollisions()
+    {
+        if (this.GetComponent<Rigidbody>())
+        {
+            this.GetComponent<Rigidbody>().detectCollisions = true;
+        }
+        foreach (Rigidbody rb in this.GetComponentsInChildren<Rigidbody>())
+        {
+            rb.detectCollisions = true;
+        }
     }
 
     private Renderer[] GetRendererArray()
