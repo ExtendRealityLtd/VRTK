@@ -17,7 +17,7 @@ using System.Collections;
 
 public class SteamVR_InteractUse : MonoBehaviour
 {
-    public bool hideControllerOnUse = false;    
+    public bool hideControllerOnUse = false;
 
     public event ObjectInteractEventHandler ControllerUseInteractableObject;
     public event ObjectInteractEventHandler ControllerUnuseInteractableObject;
@@ -38,7 +38,7 @@ public class SteamVR_InteractUse : MonoBehaviour
             ControllerUnuseInteractableObject(this, e);
     }
 
-    void Awake()
+    private void Awake()
     {
         if (GetComponent<SteamVR_InteractTouch>() == null)
         {
@@ -50,7 +50,7 @@ public class SteamVR_InteractUse : MonoBehaviour
         trackedController = GetComponent<SteamVR_TrackedObject>();
     }
 
-    void Start()
+    private void Start()
     {
         if (GetComponent<SteamVR_ControllerEvents>() == null)
         {
@@ -62,16 +62,38 @@ public class SteamVR_InteractUse : MonoBehaviour
         GetComponent<SteamVR_ControllerEvents>().AliasUseOff += new ControllerClickedEventHandler(DoStopUseObject);
     }
 
-    bool IsObjectUsable(GameObject obj)
+    private bool IsObjectUsable(GameObject obj)
     {
         return (interactTouch.IsObjectInteractable(obj) && obj.GetComponent<SteamVR_InteractableObject>().isUsable);
     }
 
-    void UseInteractedObject()
+    private bool IsObjectHoldOnUse(GameObject obj)
     {
-        if (usingObject == null && IsObjectUsable(interactTouch.GetTouchedObject()))
+        return (obj.GetComponent<SteamVR_InteractableObject>() && obj.GetComponent<SteamVR_InteractableObject>().holdButtonToUse);
+    }
+
+    private int GetObjectUsingState(GameObject obj)
+    {
+        if (obj.GetComponent<SteamVR_InteractableObject>())
         {
-            usingObject = interactTouch.GetTouchedObject();
+            return obj.GetComponent<SteamVR_InteractableObject>().UsingState;
+        }
+        return 0;
+    }
+
+    private void SetObjectUsingState(GameObject obj, int value)
+    {
+        if (obj.GetComponent<SteamVR_InteractableObject>())
+        {
+            obj.GetComponent<SteamVR_InteractableObject>().UsingState = value;
+        }
+    }
+
+    private void UseInteractedObject(GameObject touchedObject)
+    {
+        if ((usingObject == null || usingObject != touchedObject) && IsObjectUsable(touchedObject))
+        {
+            usingObject = touchedObject;
             OnControllerUseInteractableObject(interactTouch.SetControllerInteractEvent(usingObject));
             usingObject.GetComponent<SteamVR_InteractableObject>().StartUsing(this.gameObject);
             if (hideControllerOnUse)
@@ -81,7 +103,7 @@ public class SteamVR_InteractUse : MonoBehaviour
         }
     }
 
-    void UnuseInteractedObject()
+    private void UnuseInteractedObject()
     {
         if (usingObject != null)
         {
@@ -95,16 +117,25 @@ public class SteamVR_InteractUse : MonoBehaviour
         }
     }
 
-    void DoStartUseObject(object sender, ControllerClickedEventArgs e)
+    private void DoStartUseObject(object sender, ControllerClickedEventArgs e)
     {
-        if (interactTouch.GetTouchedObject() != null && interactTouch.IsObjectInteractable(interactTouch.GetTouchedObject()))
+        GameObject touchedObject = interactTouch.GetTouchedObject();
+        if (touchedObject != null && interactTouch.IsObjectInteractable(touchedObject))
         {
-            UseInteractedObject();
+            UseInteractedObject(touchedObject);
+            if (!IsObjectHoldOnUse(usingObject))
+            {
+                SetObjectUsingState(usingObject, GetObjectUsingState(usingObject) + 1);
+            }
         }
     }
 
-    void DoStopUseObject(object sender, ControllerClickedEventArgs e)
+    private void DoStopUseObject(object sender, ControllerClickedEventArgs e)
     {
-        UnuseInteractedObject();
+        if (IsObjectHoldOnUse(usingObject) || GetObjectUsingState(usingObject) >= 2)
+        {
+            SetObjectUsingState(usingObject, 0);
+            UnuseInteractedObject();
+        }
     }
 }

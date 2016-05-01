@@ -402,7 +402,15 @@ required to be interacted with (e.g. via the controllers).
 The following script parameters are available:
 
   * **Is Grabbable:** Determines if the object can be grabbed
+  * **Hold Button To Grab:** If this is checked then the grab button
+  on the controller needs to be continually held down to keep grabbing.
+  If this is unchecked the the grab button toggles the grab action with
+  one button press to grab and another to release.
   * **Is Usable:** Determines if the object can be used
+  * **Hold Button To Use:** If this is checked then the use button
+  on the controller needs to be continually held down to keep using.
+  If this is unchecked the the use button toggles the use action with
+  one button press to start using and another to stop using.
   * **Highlight On Touch:** The object will only highlight when a
   controller touches it if this is checked.
   * **Touch Highligt Color:** The colour to highlight the object
@@ -421,7 +429,12 @@ scripts on the controllers to show how an interactable object can be
 grabbed and snapped to the controller and thrown around the game world.
 
 Another example can be viewed in the scene
-`Examples/006_Controller_UsingADoor`.
+`Examples/013_Controller_UsingAndGrabbingMultipleObjects`. The scene
+shows mutltiple objects that can be grabbed by holding the buttons
+or grabbed by toggling the button click and also has objects that
+can have their Using state toggled to show how mutliple items can be
+turned on at the same time.
+
 
 #### Touching Interactable Objects (SteamVR_InteractTouch)
 
@@ -722,6 +735,15 @@ The current examples are:
   action is disabled. This means it's possible to create a level
   with areas where the user cannot teleport to because they would
   allow the player to clip into objects.
+
+  * **013_Controller_UsingAndGrabbingMultipleObjects:** A scene which
+  demonstrates how interactable objects can be grabbed by holding down
+  the grab button continuously or by pressing the grab button once to
+  pick up and once again to release. The scene also shows that the use
+  button can have a hold down to keep using or a press use button once
+  to start using and press again to stop using. This allows multiple
+  objects to be put into their Using state at the same time as also
+  demonstrated in this example scene.
 
 ## Contributing
 

@@ -29,6 +29,8 @@ public class SteamVR_InteractGrab : MonoBehaviour
     SteamVR_InteractTouch interactTouch;
     SteamVR_TrackedObject trackedController;
 
+    private int grabEnabledState = 0;
+
     public virtual void OnControllerGrabInteractableObject(ObjectInteractEventArgs e)
     {
         if (ControllerGrabInteractableObject != null)
@@ -41,7 +43,7 @@ public class SteamVR_InteractGrab : MonoBehaviour
             ControllerUngrabInteractableObject(this, e);
     }
 
-    void Awake()
+    private void Awake()
     {
         if (GetComponent<SteamVR_InteractTouch>() == null)
         {
@@ -53,7 +55,7 @@ public class SteamVR_InteractGrab : MonoBehaviour
         trackedController = GetComponent<SteamVR_TrackedObject>();
     }
 
-    void Start()
+    private void Start()
     {
         //If no attach point has been specified then just use the tip of the controller
         if (controllerAttachPoint == null)
@@ -71,19 +73,24 @@ public class SteamVR_InteractGrab : MonoBehaviour
         GetComponent<SteamVR_ControllerEvents>().AliasGrabOff += new ControllerClickedEventHandler(DoReleaseObject);
     }
 
-    bool IsObjectGrabbable(GameObject obj)
+    private bool IsObjectGrabbable(GameObject obj)
     {
         return (interactTouch.IsObjectInteractable(obj) && obj.GetComponent<SteamVR_InteractableObject>().isGrabbable);
     }
 
-    void SnapObjectToGrabToController(GameObject obj)
+    private bool IsObjectHoldOnGrab(GameObject obj)
+    {
+        return (obj.GetComponent<SteamVR_InteractableObject>() && obj.GetComponent<SteamVR_InteractableObject>().holdButtonToGrab);
+    }
+
+    private void SnapObjectToGrabToController(GameObject obj)
     {
         obj.transform.position = controllerAttachPoint.transform.position;
         controllerAttachJoint = obj.AddComponent<FixedJoint>();
         controllerAttachJoint.connectedBody = controllerAttachPoint;
     }
 
-    Rigidbody ReleaseGrabbedObjectFromController()
+    private Rigidbody ReleaseGrabbedObjectFromController()
     {
         var jointGameObject = controllerAttachJoint.gameObject;
         var rigidbody = jointGameObject.GetComponent<Rigidbody>();
@@ -93,7 +100,7 @@ public class SteamVR_InteractGrab : MonoBehaviour
         return rigidbody;
     }
 
-    void ThrowReleasedObject(Rigidbody rb, uint controllerIndex)
+    private void ThrowReleasedObject(Rigidbody rb, uint controllerIndex)
     {
         var origin = trackedController.origin ? trackedController.origin : trackedController.transform.parent;
         var device = SteamVR_Controller.Input((int)controllerIndex);
@@ -110,7 +117,7 @@ public class SteamVR_InteractGrab : MonoBehaviour
         rb.maxAngularVelocity = rb.angularVelocity.magnitude;
     }
 
-    void GrabInteractedObject()
+    private void GrabInteractedObject()
     {
         if (controllerAttachJoint == null && grabbedObject == null && IsObjectGrabbable(interactTouch.GetTouchedObject()))
         {
@@ -126,7 +133,7 @@ public class SteamVR_InteractGrab : MonoBehaviour
         }
     }
 
-    void UngrabInteractedObject(uint controllerIndex)
+    private void UngrabInteractedObject(uint controllerIndex)
     {
         if (grabbedObject != null && controllerAttachJoint != null)
         {
@@ -143,16 +150,24 @@ public class SteamVR_InteractGrab : MonoBehaviour
         }
     }
 
-    void DoGrabObject(object sender, ControllerClickedEventArgs e)
+    private void DoGrabObject(object sender, ControllerClickedEventArgs e)
     {
         if (interactTouch.GetTouchedObject() != null && interactTouch.IsObjectInteractable(interactTouch.GetTouchedObject()))
         {
             GrabInteractedObject();
+            if(!IsObjectHoldOnGrab(interactTouch.GetTouchedObject()))
+            {
+                grabEnabledState++;
+            }
         }
     }
 
-    void DoReleaseObject(object sender, ControllerClickedEventArgs e)
+    private void DoReleaseObject(object sender, ControllerClickedEventArgs e)
     {
-        UngrabInteractedObject(e.controllerIndex);
+        if (IsObjectHoldOnGrab(grabbedObject) || grabEnabledState >= 2)
+        {
+            UngrabInteractedObject(e.controllerIndex);
+            grabEnabledState = 0;
+        }
     }
 }

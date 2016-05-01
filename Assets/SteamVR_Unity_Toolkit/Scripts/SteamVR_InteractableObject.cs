@@ -15,13 +15,16 @@ using System.Collections;
 public class SteamVR_InteractableObject : MonoBehaviour
 {
     public bool isGrabbable = false;
+    public bool holdButtonToGrab = true;
     public bool isUsable = false;
+    public bool holdButtonToUse = true;
     public bool highlightOnTouch = false;
     public Color touchHighlightColor = Color.clear;
 
     private bool isTouched = false;
     private bool isGrabbed = false;
     private bool isUsing = false;
+    private int usingState = 0;
     private Color[] originalObjectColours = null;
 
     public bool IsTouched()
@@ -99,17 +102,23 @@ public class SteamVR_InteractableObject : MonoBehaviour
         }
     }
 
+    public int UsingState
+    {
+        get { return usingState; }
+        set{ usingState = value;  }
+    }
+
     protected virtual void Start()
     {
         originalObjectColours = StoreOriginalColors();
     }
 
-    Renderer[] GetRendererArray()
+    private Renderer[] GetRendererArray()
     {
         return (GetComponents<Renderer>().Length > 0 ? GetComponents<Renderer>() : GetComponentsInChildren<Renderer>());
     }
 
-    Color[] StoreOriginalColors()
+    private Color[] StoreOriginalColors()
     {
         Renderer[] rendererArray = GetRendererArray();
         int length = rendererArray.Length;
@@ -123,7 +132,7 @@ public class SteamVR_InteractableObject : MonoBehaviour
         return colors;
     }
 
-    Color[] BuildHighlightColorArray(Color color)
+    private Color[] BuildHighlightColorArray(Color color)
     {
         Renderer[] rendererArray = GetRendererArray();
         int length = rendererArray.Length;
@@ -136,7 +145,7 @@ public class SteamVR_InteractableObject : MonoBehaviour
         return colors;
     }
 
-    void ChangeColor(Color[] colors)
+    private void ChangeColor(Color[] colors)
     {
         Renderer[] rendererArray = GetRendererArray();
         int i = 0;
