@@ -73,6 +73,15 @@ public class SteamVR_ControllerEvents : MonoBehaviour {
     private Vector2 touchpadAxis = Vector2.zero;
     private Vector2 triggerAxis = Vector2.zero;
 
+    private ushort hapticPulseStrength;
+    private int hapticPulseCountdown;
+
+    public void TriggerHapticPulse(int duration, ushort strength)
+    {
+        hapticPulseCountdown = duration;
+        hapticPulseStrength = strength;
+    }
+
     public virtual void OnTriggerClicked(ControllerClickedEventArgs e)
     {
         if (TriggerClicked != null)
@@ -268,6 +277,12 @@ public class SteamVR_ControllerEvents : MonoBehaviour {
     {
         controllerIndex = (uint)trackedController.index;
         device = SteamVR_Controller.Input((int)controllerIndex);
+
+        if (hapticPulseCountdown > 0)
+        {
+            device.TriggerHapticPulse(hapticPulseStrength);
+            hapticPulseCountdown -= 1;
+        }
 
         Vector2 currentTriggerAxis = device.GetAxis(Valve.VR.EVRButtonId.k_EButton_SteamVR_Trigger);
         Vector2 currentTouchpadAxis = device.GetAxis();
