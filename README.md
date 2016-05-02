@@ -760,6 +760,14 @@ The current examples are:
   models are turned off on grab as this creates the desired effect as
   sometimes the object may clip the controller model and look bad.
 
+  * **015_Controller_TouchpadAxisControl:** A scene with an R/C car
+  that is controlled by using the Controller Touchpad. Moving a finger
+  up and down on the Touchpad will cause the car to drive forward or
+  backward. Moving a finger to the left or right of the Touchpad will
+  cause the car to turn in that direction. Pressing the Trigger will
+  cause the car to jump, this utilises the Trigger axis and the more
+  the trigger is depressed, the higher the car will jump.
+
 ## Contributing
 
 I'd love this to be a community effort, but as I'm just getting
