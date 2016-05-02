@@ -14,12 +14,20 @@ using System.Collections;
 
 public class SteamVR_InteractableObject : MonoBehaviour
 {
+    public enum GrabType
+    {
+        Simple_Snap,
+        Rotation_Snap,
+        Precision_Snap
+    }
+
     public bool isGrabbable = false;
     public bool holdButtonToGrab = true;
     public bool isUsable = false;
     public bool holdButtonToUse = true;
     public bool highlightOnTouch = false;
     public Color touchHighlightColor = Color.clear;
+    public GrabType grabSnapType = GrabType.Simple_Snap;
     public Vector3 snapToRotation = Vector3.zero;
 
     private bool isTouched = false;

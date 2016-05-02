@@ -416,13 +416,19 @@ The following script parameters are available:
   * **Touch Highligt Color:** The colour to highlight the object
   when it is touched. This colour will override any globally set
   color (for instance on the `SteamVR_InteractTouch` script).
-  * **Snap To Rotation:** If this Vector3 is not set to Vector3.zero
-  then when the object is grabbed, the object will be snapped to
-  this rotation to the base rotation of the controller. This enables
-  objects to be snapped to a specific orientation on grab rather than
-  just grabbing the object at the rotation the object is currently in.
+  * **Grab Snap Type:** This sets the snap type of the object when
+  it is grabbed.
+   * `Simple_Snap` snaps the grabbed object's central position to the
+   controller attach point (default is controller tip).
+   * `Rotation_Snap` snaps the grabbed object to a specific rotation
+   which is provided as a Vector3 in the `Snap To Rotation` parameter.
+   * `Precision_Snap` does not snap the object's position to the
+   controller and picks the object up at the point the controller is
+   touching the object (like a real life hand picking something up).
+  * **Snap To Rotation:** A Vector3 of EulerAngles that determines the
+  rotation of the object in relation to the controller on snap.
   This is useful for picking up guns or swords where the relative
-  rotation to the controller is important is immersion.
+  rotation to the controller is important for ease of use.
 
 The basis of this script is to provide a simple mechanism for
 identifying objects in the game world that can be grabbed or used
@@ -531,6 +537,15 @@ scene `Examples/005_Controller/BasicObjectGrabbing`. The scene
 demonstrates the grabbing of interactable objects that have the
 `SteamVR_InteractableObject` script attached to them. The objects
 can be picked up and thrown around.
+
+More complex examples can be viewed in the scene
+`Examples/013_Controller_UsingAndGrabbingMultipleObjects` which
+demonstrates that each controller can grab and use objects
+independently and objects can also be toggled to their use state
+simultaneously. The scene
+`Examples/014_Controller_SnappingObjectsOnGrab` demonstrates
+the different mechanisms for snapping a grabbed object to the
+controller.
 
 #### Using Interactable Objects (SteamVR_InteractUse)
 
@@ -752,13 +767,16 @@ The current examples are:
   demonstrated in this example scene.
 
   * **014_Controller_SnappingObjectsOnGrab:** A scene with a selection
-  of objects that can be grabbed and upon grabbing them they snap
-  to a specific rotation on the controller. For instance, the gun
-  object is always snapped into a rotation where it looks as if the
-  controller is holding a gun correctly regardless of position and
-  rotation of the gun object before it is picked up. The controller
-  models are turned off on grab as this creates the desired effect as
-  sometimes the object may clip the controller model and look bad.
+  of objects that demonstrate the different snap to controller
+  mechanics. The two green guns, green lightsaber and sword all
+  utilise the `Rotation Snap` which orientates the object into a
+  specific given rotation to ensure the object feels like it's been
+  held naturally in the hand. The red gun utilises the `Simple Snap`
+  which does not affect the object's rotation but positions the centre
+  of the object to the snap point on the controller. The red/green gun
+  utilises the `Precision Snap` which does not affect the rotation or
+  position of the grabbed object and picks the object up at the point
+  that the controller snap point is touching the object.
 
   * **015_Controller_TouchpadAxisControl:** A scene with an R/C car
   that is controlled by using the Controller Touchpad. Moving a finger
