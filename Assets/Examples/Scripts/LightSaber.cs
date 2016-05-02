@@ -33,6 +33,7 @@ public class LightSaber : SteamVR_InteractableObject
     private void SetBeamSize()
     {
         blade.transform.localScale = new Vector3(1f, currentBeamSize, 1f);
+        beamActive = (currentBeamSize >= beamLimits.y ? true : false);
     }
 
     private void Update()
