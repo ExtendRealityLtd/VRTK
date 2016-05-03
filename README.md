@@ -743,11 +743,13 @@ The current examples are:
   traversed using the controller laser beam pointer. It shows how the
   Height Adjust Teleporter can be used to climb up and down game
   objects as well as traversing terrains as well.
+   * [View Example Tour on Youtube](https://www.youtube.com/watch?v=CzKohhSjXNY)
 
   * **011_Camera_HeadSetCollisionFading:** A scene with three walls
   around the play area and if the player puts their head into any
   of the collidable walls then the headset fades to black to prevent
   seeing unwanted object clipping artifacts.
+   * [View Example Tour on Youtube](https://www.youtube.com/watch?v=r0RZci0tZOI)
 
   * **012_Controller_PointerWithAreaCollision:** A scene which
   demonstrates how to use a controller pointer to traverse a world
@@ -756,6 +758,7 @@ The current examples are:
   action is disabled. This means it's possible to create a level
   with areas where the user cannot teleport to because they would
   allow the player to clip into objects.
+   * [View Example Tour on Youtube](https://www.youtube.com/watch?v=OwACH7nhW1Q)
 
   * **013_Controller_UsingAndGrabbingMultipleObjects:** A scene which
   demonstrates how interactable objects can be grabbed by holding down
@@ -765,6 +768,7 @@ The current examples are:
   to start using and press again to stop using. This allows multiple
   objects to be put into their Using state at the same time as also
   demonstrated in this example scene.
+   * [View Example Tour on Youtube](https://www.youtube.com/watch?v=6ySXa569UOw)
 
   * **014_Controller_SnappingObjectsOnGrab:** A scene with a selection
   of objects that demonstrate the different snap to controller
@@ -777,6 +781,7 @@ The current examples are:
   utilises the `Precision Snap` which does not affect the rotation or
   position of the grabbed object and picks the object up at the point
   that the controller snap point is touching the object.
+   * [View Example Tour on Youtube](https://www.youtube.com/watch?v=zLBlef1ikLE)
 
   * **015_Controller_TouchpadAxisControl:** A scene with an R/C car
   that is controlled by using the Controller Touchpad. Moving a finger
@@ -785,6 +790,7 @@ The current examples are:
   cause the car to turn in that direction. Pressing the Trigger will
   cause the car to jump, this utilises the Trigger axis and the more
   the trigger is depressed, the higher the car will jump.
+   * [View Example Tour on Youtube](https://www.youtube.com/watch?v=4J8abeLzH58)
 
 ## Contributing
 
