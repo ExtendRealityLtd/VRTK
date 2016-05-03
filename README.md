@@ -16,6 +16,11 @@ in Unity 5
   * Open the `SteamVR_Unity_Toolkit` within Unity3d
   * Browse the `Examples` scenes for example usage of the scripts
 
+## FAQ/Troubleshooting
+
+  * Pointer beams/teleporting no longer works after a project build and running from that build:
+    * [View answer video on Youtube](https://www.youtube.com/watch?v=IsmYoLTmX4c)
+
 ## Summary
 
 This toolkit provides many common VR functionality within Unity3d such
