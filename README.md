@@ -81,7 +81,7 @@ The current available scripts are:
 #### Controller Actions (SteamVR_ControllerActions)
 
 The Controller Actions script provides helper methods to deal with
-common controller actions. The following methods are available:
+common controller actions. The following public methods are available:
 
   * **IsControllerVisible():** returns true is the controller model
   is visible, returns false if it is not visible.
@@ -89,6 +89,16 @@ common controller actions. The following methods are available:
   controller model to the given boolean state. If true is passed
   then the controller model is displayed, if false is passed then
   the controller model is hidden.
+  * **TriggerHapticPulse(int duration, ushort strength):**
+  initiates the controller to begin vibrating for the given tick
+  duration provided in the first parameter at a vibration intensity
+  given as the strength parameter. The max strength that can be
+  provided is 3999, any number higher than that will be capped.
+
+An example of the `SteamVR_ControllerActions` script can be viewed in
+the scene `Examples/016_Controller_HapticRumble` which demonstrates
+the ability to hide a controller model and make the controller
+vibrate for a given length of time at a given intensity.
 
 #### Controller Events (SteamVR_ControllerEvents)
 
@@ -811,6 +821,12 @@ The current examples are:
   cause the car to jump, this utilises the Trigger axis and the more
   the trigger is depressed, the higher the car will jump.
    * [View Example Tour on Youtube](https://www.youtube.com/watch?v=4J8abeLzH58)
+
+  * **016_Controller_HapticRumble:** A scene with a collection of
+  breakable boxes and a sword. The sword can be picked up and swung
+  at the boxes. The controller rumbles at an appropriate vibration
+  depending on how hard the sword hits the box. The box also breaks
+  apart if it is hit hard enough by the sword.
 
 ## Contributing
 
