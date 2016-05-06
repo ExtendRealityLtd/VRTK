@@ -28,6 +28,7 @@ public class SteamVR_InteractGrab : MonoBehaviour
 
     SteamVR_InteractTouch interactTouch;
     SteamVR_TrackedObject trackedController;
+    SteamVR_ControllerActions controllerActions;
 
     private int grabEnabledState = 0;
 
@@ -53,6 +54,7 @@ public class SteamVR_InteractGrab : MonoBehaviour
 
         interactTouch = GetComponent<SteamVR_InteractTouch>();
         trackedController = GetComponent<SteamVR_TrackedObject>();
+        controllerActions = GetComponent<SteamVR_ControllerActions>();
     }
 
     private void Start()
@@ -142,7 +144,7 @@ public class SteamVR_InteractGrab : MonoBehaviour
             grabbedObject.GetComponent<SteamVR_InteractableObject>().Grabbed(this.gameObject);
             if (hideControllerOnGrab)
             {
-                trackedController.ToggleControllerModel(false);
+                controllerActions.ToggleControllerModel(false);
             }
 
             SnapObjectToGrabToController(grabbedObject);
@@ -160,7 +162,7 @@ public class SteamVR_InteractGrab : MonoBehaviour
             ThrowReleasedObject(releasedObjectRigidBody, controllerIndex);
             if (hideControllerOnGrab)
             {
-                trackedController.ToggleControllerModel(true);
+                controllerActions.ToggleControllerModel(true);
             }
             grabbedObject = null;
         }

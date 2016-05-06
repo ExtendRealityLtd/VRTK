@@ -1,7 +1,10 @@
 # SteamVR Unity Toolkit
 
 A collection of useful scripts and prefabs for building SteamVR titles
-in Unity 5
+in Unity 5.
+
+**This Toolkit requires the [SteamVR Plugin](https://www.assetstore.unity3d.com/en/#!/content/32647)
+from the Unity Asset Store to be imported into your Unity project.**
 
   > #### Note:
   > This is very early alpha and does not offer much functionality at
@@ -14,6 +17,7 @@ in Unity 5
 
   * Clone this repository `git clone https://github.com/thestonefox/SteamVR_Unity_Toolkit.git`
   * Open the `SteamVR_Unity_Toolkit` within Unity3d
+  * Import the [SteamVR Plugin](https://www.assetstore.unity3d.com/en/#!/content/32647) from the Unity Asset Store
   * Browse the `Examples` scenes for example usage of the scripts
 
 ## FAQ/Troubleshooting
@@ -33,7 +37,7 @@ as (but not limited to):
   * Interacting with objects using the controllers
 
 The toolkit is heavily inspired and based upon the
-[SteamVR plugin for Unity3d v1.0.8](https://github.com/ValveSoftware/openvr/tree/master/unity_package/Assets/SteamVR).
+[SteamVR plugin for Unity3d](https://github.com/ValveSoftware/openvr/tree/master/unity_package/Assets/SteamVR).
 
 The reason this toolkit exists is because I found the SteamVR plugin
 to contain confusing to use or broken code and I decided to build a
@@ -47,7 +51,6 @@ This toolkit project is split into two main sections:
   * SteamVR_Unity_Toolkit - `SteamVR_Unity_Toolkit/`
     * Prefabs - `SteamVR_Unity_Toolkit/Prefabs/`
     * Scripts - `SteamVR_Unity_Toolkit/Scripts/`
-    * Required Includes - `SteamVR_Unity_Toolkit/Required Includes/`
   * Examples - `Examples/`
 
 The `SteamVR_Unity_Toolkit` directory is where all of the relevant
@@ -75,9 +78,21 @@ functionality to Unity.
 
 The current available scripts are:
 
+#### Controller Actions (SteamVR_ControllerActions)
+
+The Controller Actions script provides helper methods to deal with
+common controller actions. The following methods are available:
+
+  * **IsControllerVisible():** returns true is the controller model
+  is visible, returns false if it is not visible.
+  * **ToggleControllerModel(bool on):** sets the visibility of the
+  controller model to the given boolean state. If true is passed
+  then the controller model is displayed, if false is passed then
+  the controller model is hidden.
+
 #### Controller Events (SteamVR_ControllerEvents)
 
-The controller events script is attached to a Controller object within
+The Controller Events script is attached to a Controller object within
 the `[CameraRig]` prefab and provides event listeners for every button
 press on the controller (excluding the System Menu button as this
 cannot be overriden and is always used by Steam).
