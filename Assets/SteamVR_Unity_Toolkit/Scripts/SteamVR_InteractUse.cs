@@ -25,6 +25,7 @@ public class SteamVR_InteractUse : MonoBehaviour
     GameObject usingObject = null;
     SteamVR_InteractTouch interactTouch;
     SteamVR_TrackedObject trackedController;
+    SteamVR_ControllerActions controllerActions;
 
     public virtual void OnControllerUseInteractableObject(ObjectInteractEventArgs e)
     {
@@ -48,6 +49,7 @@ public class SteamVR_InteractUse : MonoBehaviour
 
         interactTouch = GetComponent<SteamVR_InteractTouch>();
         trackedController = GetComponent<SteamVR_TrackedObject>();
+        controllerActions = GetComponent<SteamVR_ControllerActions>();
     }
 
     private void Start()
@@ -98,7 +100,7 @@ public class SteamVR_InteractUse : MonoBehaviour
             usingObject.GetComponent<SteamVR_InteractableObject>().StartUsing(this.gameObject);
             if (hideControllerOnUse)
             {
-                trackedController.ToggleControllerModel(false);
+                controllerActions.ToggleControllerModel(false);
             }
         }
     }
@@ -111,7 +113,7 @@ public class SteamVR_InteractUse : MonoBehaviour
             usingObject.GetComponent<SteamVR_InteractableObject>().StopUsing(this.gameObject);
             if (hideControllerOnUse)
             {
-                trackedController.ToggleControllerModel(true);
+                controllerActions.ToggleControllerModel(true);
             }
             usingObject = null;
         }
