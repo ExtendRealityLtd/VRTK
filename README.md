@@ -60,16 +60,62 @@ showing the `SteamVR_Unity_Toolkit` in action.
 
 ### Prefabs
 
-At present there is only one Prefab included which is the `[CameraRig]`
-and it has been taken directly from the SteamVR Unity plugin example:
-`Extras/SteamVR_TestThrow` scene as it includes the relevant `Model`
-children on the controller (which seem to be missing from the default
-prefab in the SteamVR plugin `Prefabs/[CameraRig].prefab`.
+The available Prefabs are:
+
+  * [CameraRig]
+  * FramesPerSecondCanvas
+
+#### [CameraRig]
+
+The `[CameraRig]` has been taken directly from the SteamVR Unity
+plugin example: `Extras/SteamVR_TestThrow` scene as it includes the
+relevant `Model` children on the controller (which seem to be missing
+from the default prefab in the SteamVR plugin
+`Prefabs/[CameraRig].prefab`.
 
 The `SteamVR_Unity_Toolkit/Prefabs/[CameraRig]` can be dropped into
 any scene to provide instant access to a VR game camera via the VR
 headset and tracking of the VR controllers including model
 representations.
+
+#### FramesPerSecondCanvas
+
+This canvas adds a frames per second text element to the headset.
+To use the prefab it must be placed into the scene then the headset
+camera needs attaching to the canvas:
+
+  * Select `FramesPerSecondCanvas` object from the scene objects
+  * Find the `Canvas` component
+  * Set the `Render Camera` parameter to `Camera (eye)` which can be
+  found in the `[CameraRig]` prefab.
+
+There are a number of parameters that can be set on the Prefab.
+Expanding the `FramesPerSecondCanvas` object in the hierarchy view
+shows the child `FramesPerSecondText` obejct and clicking on that
+reveals additional paramters which can be set via the
+`FramesPerSecondViewer` script (which can be found in
+`SteamVR_Unity_Toolkit/Scripts/Helper/FramesPerSecondViewer`)
+
+The following script parameters are available:
+
+  * **Display FPS:** Toggles whether the FPS text is visible.
+  * **Target FPS:** The frames per second deemed acceptable that
+  is used as the benchmark to change the FPS text colour.
+  * **Font Size:** The size of the font the FPS is displayed in.
+  * **Position:** The position of the FPS text within the headset view.
+  * **Good Color:** The colour of the FPS text when the frames per
+  second are within reasonable limits of the Target FPS.
+  * **Warn Color:** The colour of the FPS text when the frames per
+  second are falling short of reasonable limits of the Target FPS.
+  * **Bad Color:** The colour of the FPS text when the frames per
+  second are at an unreasonable level of the Target FPS.
+
+An example of the `FramesPerSecondCanvas` Prefab can be viewed in
+the scene `018_CameraRig_FramesPerSecondCounter` which displays the
+frames per second in the centre of the headset view. Pressing the
+trigger generates a new sphere and pressing the touchpad generates
+ten new spheres. Eventually when lots of spheres are present the FPS
+will drop and demonstrate the prefab.
 
 ### Scripts
 
@@ -827,6 +873,12 @@ The current examples are:
   at the boxes. The controller rumbles at an appropriate vibration
   depending on how hard the sword hits the box. The box also breaks
   apart if it is hit hard enough by the sword.
+
+  * **018_CameraRig_FramesPerSecondCounter:** A scene which displays
+  the frames per second in the centre of the headset view. Pressing
+  the trigger generates a new sphere and pressing the touchpad
+  generates ten new spheres. Eventually when lots of spheres are
+  present the FPS will drop and demonstrate the prefab.
 
 ## Contributing
 
