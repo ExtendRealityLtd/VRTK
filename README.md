@@ -489,6 +489,16 @@ The following script parameters are available:
   one button press to start using and another to stop using.
   * **Highlight On Touch:** The object will only highlight when a
   controller touches it if this is checked.
+  * **Pointer Activates Use Action:** If this is checked then when
+  a World Pointer beam (projected from the controller) hits the
+  interactable object, if the object has `Hold Button To Use` unchecked
+  then whilst the pointer is over the object it will run it's `Using`
+  method. If `Hold Button To Use` is unchecked then the `Using` method
+  will be run when the pointer is deactivated. The world pointer will
+  not throw the `Destination Set` event if it is affecting an
+  interactable object with this setting checked as this prevents
+  unwanted teleporting from happening when using an object with a
+  pointer.
   * **Touch Highligt Color:** The colour to highlight the object
   when it is touched. This colour will override any globally set
   color (for instance on the `SteamVR_InteractTouch` script).
@@ -731,7 +741,9 @@ The following events are emitted:
   the game object.
   * **WorldPointerDestinationSet:** When the pointer is no longer
   active in the scene to determine the last destination position of
-  the pointer end (useful for selecting and teleporting).
+  the pointer end (useful for selecting and teleporting). This event
+  is not emitted if the pointer is colliding with an interactable
+  object that has the `Pointer Activates Use Action` set to true.
 
 The event payload that is emitted contains:
 
@@ -879,6 +891,16 @@ The current examples are:
   the trigger generates a new sphere and pressing the touchpad
   generates ten new spheres. Eventually when lots of spheres are
   present the FPS will drop and demonstrate the prefab.
+
+  * **019_Controller_InteractingWithPointer:** A scene which shows how
+  the controller pointer beam can be used to toggle the use actions on
+  interactable objects. Pressing the touchpad activates the beam and
+  aiming it at objects will toggle their use state. It also
+  demonstrates how a game menu could be created by using interactable
+  objects snapped to a game object can trigger actions. Pressing the
+  Application Menu button displays a cube connected to the controller
+  which has menu options. Pointing the beam with the other controller
+  at the cube will select the menu options accordingly.
 
 ## Contributing
 

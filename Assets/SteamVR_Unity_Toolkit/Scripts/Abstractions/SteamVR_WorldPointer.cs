@@ -175,17 +175,56 @@ public abstract class SteamVR_WorldPointer : MonoBehaviour {
 
     protected virtual void PointerIn()
     {
+        if (!pointerContactTarget)
+        {
+            return;
+        }
+
         OnWorldPointerIn(SetPointerEvent(controllerIndex, pointerContactDistance, pointerContactTarget, destinationPosition));
+
+        SteamVR_InteractableObject interactableObject = pointerContactTarget.GetComponent<SteamVR_InteractableObject>();
+        if (interactableObject && interactableObject.pointerActivatesUseAction && interactableObject.holdButtonToUse)
+        {
+            interactableObject.StartUsing(this.gameObject);
+        }
     }
 
     protected virtual void PointerOut()
     {
+        if (!pointerContactTarget)
+        {
+            return;
+        }
+
         OnWorldPointerOut(SetPointerEvent(controllerIndex, pointerContactDistance, pointerContactTarget, destinationPosition));
+
+        SteamVR_InteractableObject interactableObject = pointerContactTarget.GetComponent<SteamVR_InteractableObject>();
+        if (interactableObject && interactableObject.pointerActivatesUseAction && interactableObject.holdButtonToUse)
+        {
+            interactableObject.StopUsing(this.gameObject);
+        }
     }
 
     protected virtual void PointerSet()
     {
-        if (!playAreaCursorCollided)
+        if (!pointerContactTarget)
+        {
+            return;
+        }
+
+        SteamVR_InteractableObject interactableObject = pointerContactTarget.GetComponent<SteamVR_InteractableObject>();
+        if (interactableObject && interactableObject.pointerActivatesUseAction)
+        {
+            if (interactableObject.IsUsing())
+            {
+                interactableObject.StopUsing(this.gameObject);
+            } else if (!interactableObject.holdButtonToUse)
+            {
+                interactableObject.StartUsing(this.gameObject);
+            }
+        }
+
+        if (!playAreaCursorCollided && (interactableObject == null || !interactableObject.pointerActivatesUseAction))
         {
             OnWorldPointerDestinationSet(SetPointerEvent(controllerIndex, pointerContactDistance, pointerContactTarget, destinationPosition));
         }
