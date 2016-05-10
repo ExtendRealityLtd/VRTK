@@ -76,8 +76,6 @@ public class SteamVR_BezierPointer : SteamVR_WorldPointer
         controllerIndex = e.controllerIndex;
         if (pointerContactTarget != null)
         {
-            float destinationY = pointerContactTarget.transform.position.y + (pointerContactTarget.transform.localScale.y / 2) + 0.05f;
-            destinationPosition = new Vector3(destinationPosition.x, destinationY, destinationPosition.z);
             base.PointerSet();
         }
         TogglePointer(false);

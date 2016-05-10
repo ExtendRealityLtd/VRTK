@@ -443,6 +443,10 @@ Another example can be viewed in the scene
 `Examples/010_CameraRig_TerrainTeleporting` which shows how the
 teleportation of a player can also traverse terrain colliders.
 
+Another example can be viewed in the scene
+`Examples/020_CameraRig_MeshTeleporting` which shows how the
+teleportation of a player can also traverse mesh colliders.
+
 #### Fading On Headset Collision (SteamVR_HeadsetCollisionFade)
 
 The purpose of the Headset Collision Fade is to detect when the user's
@@ -901,6 +905,10 @@ The current examples are:
   Application Menu button displays a cube connected to the controller
   which has menu options. Pointing the beam with the other controller
   at the cube will select the menu options accordingly.
+
+  * **020_CameraRig_MeshTeleporting:** A scene with an object with a
+  mesh collider to demonstrate how the Height Adjust Teleporter can be
+  used to climb up and down onbjects with a mesh collider.
 
 ## Contributing
 

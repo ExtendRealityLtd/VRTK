@@ -41,9 +41,9 @@ public class SteamVR_HeightAdjustTeleport : SteamVR_BasicTeleport {
     {
         float newY = this.transform.position.y;
         //Check to see if the tip is on top of an object
-        if (target && tipPosition.y > (target.position.y + (target.localScale.y / 2)))
+        if (target && (tipPosition.y + 0.5f) > (target.position.y + (target.localScale.y / 2)))
         {
-            newY = (target.position.y + (target.localScale.y / 2));
+            newY = tipPosition.y;
         }
 
         return newY;
@@ -59,7 +59,7 @@ public class SteamVR_HeightAdjustTeleport : SteamVR_BasicTeleport {
         if (rayHit && currentFloor != rayCollidedWith.transform.gameObject)
         {
             currentFloor = rayCollidedWith.transform.gameObject;
-            float floorY = (currentFloor.transform.position.y + (currentFloor.transform.localScale.y / 2));
+            float floorY = eyeCamera.transform.position.y - rayCollidedWith.distance;
 
             if (withBlink)
             {
