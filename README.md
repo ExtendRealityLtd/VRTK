@@ -22,8 +22,12 @@ from the Unity Asset Store to be imported into your Unity project.**
 
 ## FAQ/Troubleshooting
 
+  * How to create a new project using this toolkit along with the SteamVR Unity Plugin:
+    * [View answer video on Youtube](https://www.youtube.com/watch?v=oFkgTZ4LXEo)
   * Pointer beams/teleporting no longer works after a project build and running from that build:
     * [View answer video on Youtube](https://www.youtube.com/watch?v=IsmYoLTmX4c)
+  * Pointer beam goes in wrong direction, doesn't project from front of the controller:
+    * [View answer video on Youtube](https://www.youtube.com/watch?v=WptCSrSBOZo)
 
 ## Summary
 
@@ -889,12 +893,14 @@ The current examples are:
   at the boxes. The controller rumbles at an appropriate vibration
   depending on how hard the sword hits the box. The box also breaks
   apart if it is hit hard enough by the sword.
+   * [View Example Tour on Youtube](https://www.youtube.com/watch?v=ErSxZlZh6fc)
 
   * **018_CameraRig_FramesPerSecondCounter:** A scene which displays
   the frames per second in the centre of the headset view. Pressing
   the trigger generates a new sphere and pressing the touchpad
   generates ten new spheres. Eventually when lots of spheres are
   present the FPS will drop and demonstrate the prefab.
+   * [View Example Tour on Youtube](https://www.youtube.com/watch?v=hMLvp8O6v-E)
 
   * **019_Controller_InteractingWithPointer:** A scene which shows how
   the controller pointer beam can be used to toggle the use actions on
@@ -905,10 +911,12 @@ The current examples are:
   Application Menu button displays a cube connected to the controller
   which has menu options. Pointing the beam with the other controller
   at the cube will select the menu options accordingly.
+   * [View Example Tour on Youtube](https://www.youtube.com/watch?v=NhmGAbj5Hvo)
 
   * **020_CameraRig_MeshTeleporting:** A scene with an object with a
   mesh collider to demonstrate how the Height Adjust Teleporter can be
   used to climb up and down onbjects with a mesh collider.
+   * [View Example Tour on Youtube](https://www.youtube.com/watch?v=6M1PZ8EjQTo)
 
 ## Contributing
 
