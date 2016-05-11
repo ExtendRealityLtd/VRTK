@@ -58,7 +58,7 @@ public class SteamVR_InteractGrab : MonoBehaviour
     }
 
     // this was being called in Start, but that would crash if SimplePointers Start had not been called yet.  Just get when needed
-    private void GetAttachPoint()
+    private Rigidbody GetAttachPoint()
     {
         //If no attach point has been specified then just use the tip of the controller
         if (controllerAttachPoint == null)
