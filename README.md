@@ -17,7 +17,7 @@ from the Unity Asset Store to be imported into your Unity project.**
 
   * Clone this repository `git clone https://github.com/thestonefox/SteamVR_Unity_Toolkit.git`
   * Open the `SteamVR_Unity_Toolkit` within Unity3d
-  * Import the [SteamVR Plugin](https://www.assetstore.unity3d.com/en/#!/content/32647) from the Unity Asset Store
+  * Import the [SteamVR Plugin] from the Unity Asset Store
   * Browse the `Examples` scenes for example usage of the scripts
 
 ## FAQ/Troubleshooting
@@ -37,7 +37,7 @@ as (but not limited to):
   * Interacting with objects using the controllers
 
 The toolkit is heavily inspired and based upon the
-[SteamVR plugin for Unity3d](https://github.com/ValveSoftware/openvr/tree/master/unity_package/Assets/SteamVR).
+[SteamVR Plugin for Unity3d Github Repo].
 
 The reason this toolkit exists is because I found the SteamVR plugin
 to contain confusing to use or broken code and I decided to build a
@@ -62,8 +62,8 @@ showing the `SteamVR_Unity_Toolkit` in action.
 
 The available Prefabs are:
 
-  * [CameraRig]
-  * FramesPerSecondCanvas
+  * `[CameraRig]`
+  * `FramesPerSecondCanvas`
 
 #### [CameraRig]
 
@@ -370,7 +370,7 @@ area space enabling the player to enter walls.
 
 The bezier curve generation code is in another script located at
 `SteamVR_Unity_Toolkit/Scripts/Helper/CurveGenerator.cs` and was
-heavily inspired by the tutorial and code from [Catlike Coding](http://catlikecoding.com/unity/tutorials/curves-and-splines/)
+heavily inspired by the tutorial and code from [Catlike Coding].
 
 #### Basic Teleporter (SteamVR_BasicTeleport)
 
@@ -912,14 +912,27 @@ The current examples are:
 
 ## Contributing
 
-I'd love this to be a community effort, but as I'm just getting
-started on this, it may be best to leave pull requests for now on
-new features until I get my head around how this is going to
-progress. I'm happy for bug fix pull requests though :)
+I would love to get contributions from you! Follow the instructions
+below on how to make pull requests. For the full contribution
+guidelines see the [Contribution Document].
 
-Also, if you find any issues or have any suggestions then please
-raise an issue on GitHub and I'll take a look when I can.
+## Pull requests
+
+  1. [Fork] the project, clone your fork, and configure the remotes.
+  2. Create a new topic branch (from `master`) to contain your feature,
+  chore, or fix.
+  3. Commit your changes in logical units.
+  4. Make sure all the example scenes are still working.
+  5. Push your topic branch up to your fork.
+  6. [Open a Pull Request] with a clear title and description.
 
 ## License
 
 Code released under the MIT license.
+
+[SteamVR Plugin]: https://www.assetstore.unity3d.com/en/#!/content/32647
+[SteamVR Plugin for Unity3d Github Repo]: https://github.com/ValveSoftware/openvr/tree/master/unity_package/Assets/SteamVR
+[Catlike Coding]: http://catlikecoding.com/unity/tutorials/curves-and-splines/
+[Contribution Document]: https://github.com/thestonefox/SteamVR_Unity_Toolkit/blob/master/CONTRIBUTING.md
+[Fork]: http://help.github.com/fork-a-repo/
+[Open a Pull Request]: https://help.github.com/articles/using-pull-requests/
