@@ -3,7 +3,7 @@
 A collection of useful scripts and prefabs for building SteamVR titles
 in Unity 5.
 
-**This Toolkit requires the [SteamVR Plugin](https://www.assetstore.unity3d.com/en/#!/content/32647)
+**This Toolkit requires the [SteamVR Plugin]
 from the Unity Asset Store to be imported into your Unity project.**
 
   > #### Note:
