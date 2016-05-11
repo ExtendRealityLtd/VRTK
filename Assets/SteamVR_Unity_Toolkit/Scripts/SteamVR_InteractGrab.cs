@@ -63,7 +63,17 @@ public class SteamVR_InteractGrab : MonoBehaviour
         //If no attach point has been specified then just use the tip of the controller
         if (controllerAttachPoint == null)
         {
-            controllerAttachPoint = transform.GetChild(0).Find("tip").GetChild(0).GetComponent<Rigidbody>();
+            Transform child = transform.GetChild(0).Find("tip").GetChild(0);
+
+            controllerAttachPoint = child.GetComponent<Rigidbody>();
+
+            if (controllerAttachPoint == null)
+            {
+                controllerAttachPoint = child.gameObject.AddComponent<Rigidbody>();
+
+                controllerAttachPoint.isKinematic = true;
+                controllerAttachPoint.useGravity = true;
+            }
         }
 
         return controllerAttachPoint;
