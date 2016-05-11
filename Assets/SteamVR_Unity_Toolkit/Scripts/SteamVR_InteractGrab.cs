@@ -23,6 +23,8 @@ public class SteamVR_InteractGrab : MonoBehaviour
     public event ObjectInteractEventHandler ControllerGrabInteractableObject;
     public event ObjectInteractEventHandler ControllerUngrabInteractableObject;
 
+    public float throwMultiplier = 1.0f;  // set this higher to give the throw some juice
+
     FixedJoint controllerAttachJoint;
     GameObject grabbedObject = null;
 
@@ -140,12 +142,12 @@ public class SteamVR_InteractGrab : MonoBehaviour
         var device = SteamVR_Controller.Input((int)controllerIndex);
         if (origin != null)
         {
-            rb.velocity = origin.TransformVector(device.velocity);
+            rb.velocity = origin.TransformVector(device.velocity) * throwMultiplier;
             rb.angularVelocity = origin.TransformVector(device.angularVelocity);
         }
         else
         {
-            rb.velocity = device.velocity;
+            rb.velocity = device.velocity * throwMultiplier;
             rb.angularVelocity = device.angularVelocity;
         }
         rb.maxAngularVelocity = rb.angularVelocity.magnitude;
