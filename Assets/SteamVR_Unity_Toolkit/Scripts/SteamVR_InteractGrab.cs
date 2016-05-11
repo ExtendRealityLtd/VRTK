@@ -23,6 +23,8 @@ public class SteamVR_InteractGrab : MonoBehaviour
     public event ObjectInteractEventHandler ControllerGrabInteractableObject;
     public event ObjectInteractEventHandler ControllerUngrabInteractableObject;
 
+    public float throwMultiplier = 1.0f;  // set this higher to give the throw some juice
+
     FixedJoint controllerAttachJoint;
     GameObject grabbedObject = null;
 
@@ -57,14 +59,30 @@ public class SteamVR_InteractGrab : MonoBehaviour
         controllerActions = GetComponent<SteamVR_ControllerActions>();
     }
 
-    private void Start()
+    // this was being called in Start, but that would crash if SimplePointers Start had not been called yet.  Just get when needed
+    private Rigidbody GetAttachPoint()
     {
         //If no attach point has been specified then just use the tip of the controller
         if (controllerAttachPoint == null)
         {
-            controllerAttachPoint = transform.GetChild(0).Find("tip").GetChild(0).GetComponent<Rigidbody>();
+            Transform child = transform.GetChild(0).Find("tip").GetChild(0);
+
+            controllerAttachPoint = child.GetComponent<Rigidbody>();
+
+            if (controllerAttachPoint == null)
+            {
+                controllerAttachPoint = child.gameObject.AddComponent<Rigidbody>();
+
+                controllerAttachPoint.isKinematic = true;
+                controllerAttachPoint.useGravity = true;
+            }
         }
 
+        return controllerAttachPoint;
+    }
+
+    private void Start()
+    {
         if (GetComponent<SteamVR_ControllerEvents>() == null)
         {
             Debug.LogError("SteamVR_InteractGrab is required to be attached to a SteamVR Controller that has the SteamVR_ControllerEvents script attached to it");
@@ -101,11 +119,11 @@ public class SteamVR_InteractGrab : MonoBehaviour
 
         if (grabType != SteamVR_InteractableObject.GrabType.Precision_Snap)
         {
-            obj.transform.position = controllerAttachPoint.transform.position;
+            obj.transform.position = GetAttachPoint().transform.position;
         }
 
         controllerAttachJoint = obj.AddComponent<FixedJoint>();
-        controllerAttachJoint.connectedBody = controllerAttachPoint;
+        controllerAttachJoint.connectedBody = GetAttachPoint();
     }
 
     private Rigidbody ReleaseGrabbedObjectFromController()
@@ -124,12 +142,12 @@ public class SteamVR_InteractGrab : MonoBehaviour
         var device = SteamVR_Controller.Input((int)controllerIndex);
         if (origin != null)
         {
-            rb.velocity = origin.TransformVector(device.velocity);
+            rb.velocity = origin.TransformVector(device.velocity) * throwMultiplier;
             rb.angularVelocity = origin.TransformVector(device.angularVelocity);
         }
         else
         {
-            rb.velocity = device.velocity;
+            rb.velocity = device.velocity * throwMultiplier;
             rb.angularVelocity = device.angularVelocity;
         }
         rb.maxAngularVelocity = rb.angularVelocity.magnitude;
@@ -173,7 +191,7 @@ public class SteamVR_InteractGrab : MonoBehaviour
         if (interactTouch.GetTouchedObject() != null && interactTouch.IsObjectInteractable(interactTouch.GetTouchedObject()))
         {
             GrabInteractedObject();
-            if(!IsObjectHoldOnGrab(interactTouch.GetTouchedObject()))
+            if (!IsObjectHoldOnGrab(interactTouch.GetTouchedObject()))
             {
                 grabEnabledState++;
             }
