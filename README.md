@@ -918,6 +918,18 @@ The current examples are:
   used to climb up and down onbjects with a mesh collider.
    * [View Example Tour on Youtube](https://www.youtube.com/watch?v=6M1PZ8EjQTo)
 
+  * **021_Controller_GrabbingObjectsWithJoints:** A scene with a
+  collection of Interactable Objects that are attached to other
+  objects with joints. The example shows that when an
+  Interactable Object that has a joint is grabbed, the controller
+  has a `Spring Joint` connected to it rather than a `Fixed Joint` to
+  allow for relatively controlling the Interactable Object. The scene
+  demonstrates this with a box with a lid on a `Hinge Joint` that can
+  be opened by grabbing the handle, a door with a `Hinge Joint` that
+  can be opened and closed by grabbing the door or handle and finally a
+  drawer with a `Configurable Joint` that allows the drawer to be
+  grabbed and it slides open.
+
 ## Contributing
 
 I would love to get contributions from you! Follow the instructions

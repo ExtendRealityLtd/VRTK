@@ -23,7 +23,7 @@ public class SteamVR_InteractGrab : MonoBehaviour
     public event ObjectInteractEventHandler ControllerGrabInteractableObject;
     public event ObjectInteractEventHandler ControllerUngrabInteractableObject;
 
-    FixedJoint controllerAttachJoint;
+    Joint controllerAttachJoint;
     GameObject grabbedObject = null;
 
     SteamVR_InteractTouch interactTouch;
@@ -104,7 +104,17 @@ public class SteamVR_InteractGrab : MonoBehaviour
             obj.transform.position = controllerAttachPoint.transform.position;
         }
 
-        controllerAttachJoint = obj.AddComponent<FixedJoint>();
+        if (obj.GetComponent<Joint>())
+        {
+            SpringJoint tempSpringJoint = obj.AddComponent<SpringJoint>();
+            tempSpringJoint.spring = 500;
+            tempSpringJoint.damper = 50;
+            controllerAttachJoint = tempSpringJoint;
+        } else
+        {
+            controllerAttachJoint = obj.AddComponent<FixedJoint>();
+        }
+
         controllerAttachJoint.connectedBody = controllerAttachPoint;
     }
 
@@ -164,6 +174,7 @@ public class SteamVR_InteractGrab : MonoBehaviour
             {
                 controllerActions.ToggleControllerModel(true);
             }
+            grabbedObject.GetComponent<SteamVR_InteractableObject>().ToggleHighlight(false);
             grabbedObject = null;
         }
     }

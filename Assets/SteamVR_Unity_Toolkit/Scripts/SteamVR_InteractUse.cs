@@ -115,6 +115,7 @@ public class SteamVR_InteractUse : MonoBehaviour
             {
                 controllerActions.ToggleControllerModel(true);
             }
+            usingObject.GetComponent<SteamVR_InteractableObject>().ToggleHighlight(false);
             usingObject = null;
         }
     }
