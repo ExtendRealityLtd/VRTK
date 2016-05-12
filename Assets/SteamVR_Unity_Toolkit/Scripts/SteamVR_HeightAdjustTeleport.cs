@@ -14,6 +14,7 @@ using System.Collections;
 
 public class SteamVR_HeightAdjustTeleport : SteamVR_BasicTeleport {
     public bool playSpaceFalling = true;
+    private float currentRayDownY = 0f;
 
     GameObject currentFloor = null;
 
@@ -55,13 +56,20 @@ public class SteamVR_HeightAdjustTeleport : SteamVR_BasicTeleport {
         Ray ray = new Ray(eyeCamera.transform.position, -transform.up);
         RaycastHit rayCollidedWith;
         bool rayHit = Physics.Raycast(ray, out rayCollidedWith);
+        float floorY = eyeCamera.transform.position.y - rayCollidedWith.distance;
 
-        if (rayHit && currentFloor != rayCollidedWith.transform.gameObject)
+        if (rayHit &&
+            (
+                (rayCollidedWith.transform.GetComponent<MeshCollider>() && floorY != currentRayDownY)
+            ||
+                (currentFloor != rayCollidedWith.transform.gameObject)
+            )
+            )
         {
             currentFloor = rayCollidedWith.transform.gameObject;
-            float floorY = eyeCamera.transform.position.y - rayCollidedWith.distance;
+            currentRayDownY = floorY;
 
-            if (withBlink)
+            if (withBlink && !rayCollidedWith.transform.GetComponent<MeshCollider>())
             {
                 Blink();
             }
