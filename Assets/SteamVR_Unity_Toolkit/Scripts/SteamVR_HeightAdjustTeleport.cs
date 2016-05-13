@@ -27,7 +27,10 @@ public class SteamVR_HeightAdjustTeleport : SteamVR_BasicTeleport {
     protected override void DoTeleport(object sender, WorldPointerEventArgs e)
     {
         base.DoTeleport(sender, e);
-        DropToNearestFloor(false);
+        if (e.enableTeleport)
+        {
+            DropToNearestFloor(false);
+        }
     }
 
     protected override Vector3 GetNewPosition(Vector3 tipPosition, Transform target)

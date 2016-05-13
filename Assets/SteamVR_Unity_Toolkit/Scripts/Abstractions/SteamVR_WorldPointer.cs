@@ -27,6 +27,7 @@ public struct WorldPointerEventArgs
     public float distance;
     public Transform target;
     public Vector3 destinationPosition;
+    public bool enableTeleport;
 }
 
 public delegate void WorldPointerEventHandler(object sender, WorldPointerEventArgs e);
@@ -61,6 +62,7 @@ public abstract class SteamVR_WorldPointer : MonoBehaviour {
     public Color pointerMissColor = new Color(0.8f, 0f, 0f, 1f);
     public bool showPlayAreaCursor = false;
     public bool handlePlayAreaCursorCollisions = false;
+    public bool enableTeleport = true;
 
     protected Vector3 destinationPosition;
     protected float pointerContactDistance = 0f;
@@ -117,6 +119,7 @@ public abstract class SteamVR_WorldPointer : MonoBehaviour {
         e.distance = distance;
         e.target = target;
         e.destinationPosition = position;
+        e.enableTeleport = enableTeleport;
         return e;
     }
 

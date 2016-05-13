@@ -275,6 +275,11 @@ The following script parameters are available:
   pointer colour will change to the `Pointer Miss Color` and the
   `WorldPointerDestinationSet` event will not be triggered, which will
   prevent teleporting into areas where the play area will collide.
+  * **Enable Teleport:** If this is checked then the teleport flag is
+  set to true in the Destination Set event so teleport scripts will
+  know whether to action the new destination. This allows controller
+  beams to be enabled on a controller but never trigger a teleport
+  (if this option is unchecked).
   * **Pointer Thickness:** The thickness and length of the beam can
   also be set on the script as well as the ability to toggle the sphere
   beam tip that is displayed at the end of the beam (to represent a
@@ -329,6 +334,11 @@ The following script parameters are available:
   pointer colour will change to the `Pointer Miss Color` and the
   `WorldPointerDestinationSet` event will not be triggered, which will
   prevent teleporting into areas where the play area will collide.
+  * **Enable Teleport:** If this is checked then the teleport flag is
+  set to true in the Destination Set event so teleport scripts will
+  know whether to action the new destination. This allows controller
+  beams to be enabled on a controller but never trigger a teleport
+  (if this option is unchecked).
   * **Pointer Length:** The length of the projected forward pointer
   beam, this is basically the distance able to point from the
   controller potiion.
@@ -735,6 +745,11 @@ The following script parameters are available:
   pointer colour will change to the `Pointer Miss Color` and the
   `WorldPointerDestinationSet` event will not be triggered, which will
   prevent teleporting into areas where the play area will collide.
+  * **Enable Teleport:** If this is checked then the teleport flag is
+  set to true in the Destination Set event so teleport scripts will
+  know whether to action the new destination. This allows controller
+  beams to be enabled on a controller but never trigger a teleport
+  (if this option is unchecked).
 
 The following events are emitted:
 
@@ -754,6 +769,7 @@ The event payload that is emitted contains:
   * **distance:** The distance the target is from the controller
   * **target:** The Transform of the object that the pointer is touching
   * **tipPosition:** The world position of the end of the pointer
+  * **enableTeleport:** Whether the controller should trigger teleport
 
 ### Examples
 

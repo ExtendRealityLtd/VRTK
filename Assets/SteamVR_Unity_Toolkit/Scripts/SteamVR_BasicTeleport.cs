@@ -35,7 +35,7 @@ public class SteamVR_BasicTeleport : MonoBehaviour {
 
     protected virtual void DoTeleport(object sender, WorldPointerEventArgs e)
     {
-        if (e.target)
+        if (e.target && e.enableTeleport)
         {
             Blink();
             Vector3 newPosition = GetNewPosition(e.destinationPosition, e.target);
