@@ -11,6 +11,7 @@
 
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class SteamVR_InteractableObject : MonoBehaviour
 {
@@ -30,12 +31,16 @@ public class SteamVR_InteractableObject : MonoBehaviour
     public Color touchHighlightColor = Color.clear;
     public GrabType grabSnapType = GrabType.Simple_Snap;
     public Vector3 snapToRotation = Vector3.zero;
+    public float detachThreshold = 500f;
+    public float jointDamper = 100f;
 
     private bool isTouched = false;
     private bool isGrabbed = false;
     private bool isUsing = false;
     private int usingState = 0;
     private Color[] originalObjectColours = null;
+
+    private Dictionary<string, GameObject> grabbingObjects = new Dictionary<string, GameObject>();
 
     public bool IsTouched()
     {
@@ -64,11 +69,13 @@ public class SteamVR_InteractableObject : MonoBehaviour
 
     public virtual void Grabbed(GameObject grabbingObject)
     {
+        grabbingObjects.Add(grabbingObject.name, grabbingObject);
         isGrabbed = true;
     }
 
     public virtual void Ungrabbed(GameObject previousGrabbingObject)
     {
+        grabbingObjects.Remove(previousGrabbingObject.name);
         isGrabbed = false;
     }
 
@@ -188,6 +195,22 @@ public class SteamVR_InteractableObject : MonoBehaviour
         {
             renderer.material.color = colors[i];
             i++;
+        }
+    }
+
+    private void OnJointBreak(float force)
+    {
+        List<string> grabbersAffected = new List<string>();
+        foreach(var entry in grabbingObjects)
+        {
+            if (entry.Value.GetComponent<SteamVR_InteractGrab>()) {
+                grabbersAffected.Add(entry.Key);
+            }
+        }
+
+        foreach(var entry in grabbersAffected)
+        {
+            grabbingObjects[entry].GetComponent<SteamVR_InteractGrab>().ForceRelease();
         }
     }
 }

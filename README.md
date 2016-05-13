@@ -523,6 +523,16 @@ The following script parameters are available:
   rotation of the object in relation to the controller on snap.
   This is useful for picking up guns or swords where the relative
   rotation to the controller is important for ease of use.
+  * **Detatch Threshold:** The force amount when to detatch the
+  object from the grabbed controller. If the controller tries to
+  exert a force higher than this threshold on the object (from pulling
+  it through another object or pushing it into another object) then
+  the joint holding the object to the grabbing controller will break
+  and the object will no longer be grabbed.
+  * **Joint Damper:** The amount to damper the spring effect when a
+  grabbing controller grabs the object if it already has a joint
+  attached. A higher number here will reduce the oscillation effect
+  when moving jointed Interactable Objects.
 
 The basis of this script is to provide a simple mechanism for
 identifying objects in the game world that can be grabbed or used
