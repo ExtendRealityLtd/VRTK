@@ -88,19 +88,10 @@ public class SteamVR_SimplePointer : SteamVR_WorldPointer
         //if the additional decimal isn't added then the beam position glitches
         float beamPosition = setLength / (2 + 0.00001f);
 
-        if (pointerFacingAxis == AxisType.XAxis)
-        {
-            pointer.transform.localScale = new Vector3(setLength, setThicknes, setThicknes);
-            pointer.transform.localPosition = new Vector3(beamPosition, 0f, 0f);
-            pointerTip.transform.localPosition = new Vector3(setLength - (pointerTip.transform.localScale.x / 2), 0f, 0f);
-        }
-        else
-        {
-            pointer.transform.localScale = new Vector3(setThicknes, setThicknes, setLength);
-            pointer.transform.localPosition = new Vector3(0f, 0f, beamPosition);
-            pointerTip.transform.localPosition = new Vector3(0f, 0f, setLength - (pointerTip.transform.localScale.z / 2));
-        }
-
+        pointer.transform.localScale = new Vector3(setThicknes, setThicknes, setLength);
+        pointer.transform.localPosition = new Vector3(0f, 0f, beamPosition);
+        pointerTip.transform.localPosition = new Vector3(0f, 0f, setLength - (pointerTip.transform.localScale.z / 2));
+        pointerHolder.transform.localRotation = Quaternion.identity;
         base.SetPlayAreaCursorTransform(pointerTip.transform.position);
     }
 

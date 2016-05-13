@@ -141,18 +141,10 @@ public class SteamVR_BezierPointer : SteamVR_WorldPointer
         //if the additional decimal isn't added then the beam position glitches
         float beamPosition = setLength / (2 + 0.00001f);
 
-        if (pointerFacingAxis == AxisType.XAxis)
-        {
-            projectedBeamForward.transform.localScale = new Vector3(setLength, setThicknes, setThicknes);
-            projectedBeamForward.transform.localPosition = new Vector3(beamPosition, 0f, 0f);
-            projectedBeamJoint.transform.localPosition = new Vector3(setLength - (projectedBeamJoint.transform.localScale.x / 2), 0f, 0f);
-        }
-        else
-        {
-            projectedBeamForward.transform.localScale = new Vector3(setThicknes, setThicknes, setLength);
-            projectedBeamForward.transform.localPosition = new Vector3(0f, 0f, beamPosition);
-            projectedBeamJoint.transform.localPosition = new Vector3(0f, 0f, setLength - (projectedBeamJoint.transform.localScale.z / 2));
-        }        
+        projectedBeamForward.transform.localScale = new Vector3(setThicknes, setThicknes, setLength);
+        projectedBeamForward.transform.localPosition = new Vector3(0f, 0f, beamPosition);
+        projectedBeamJoint.transform.localPosition = new Vector3(0f, 0f, setLength - (projectedBeamJoint.transform.localScale.z / 2));
+        projectedBeamContainer.transform.localRotation = Quaternion.identity;
     }
 
     private void ProjectDownBeam()

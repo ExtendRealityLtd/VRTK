@@ -57,17 +57,10 @@ public class SteamVR_PlayAreaCollider : MonoBehaviour
 }
 
 public abstract class SteamVR_WorldPointer : MonoBehaviour {
-    public enum AxisType
-    {
-        XAxis,
-        ZAxis
-    }
-
     public Color pointerHitColor = new Color(0f, 0.5f, 0f, 1f);
     public Color pointerMissColor = new Color(0.8f, 0f, 0f, 1f);
     public bool showPlayAreaCursor = false;
     public bool handlePlayAreaCursorCollisions = false;
-    public AxisType pointerFacingAxis = AxisType.ZAxis;
 
     protected Vector3 destinationPosition;
     protected float pointerContactDistance = 0f;

@@ -275,11 +275,6 @@ The following script parameters are available:
   pointer colour will change to the `Pointer Miss Color` and the
   `WorldPointerDestinationSet` event will not be triggered, which will
   prevent teleporting into areas where the play area will collide.
-  * **Pointer Facing Axis:** The facing axis can also be set to match
-  the direction the `[CameraRig`] Prefab is facing as if it is rotated
-  then the beam will emit out of the controller at the wrong angle, so
-  this setting can be adjusted to ensure the beam always projects
-  forward.
   * **Pointer Thickness:** The thickness and length of the beam can
   also be set on the script as well as the ability to toggle the sphere
   beam tip that is displayed at the end of the beam (to represent a
@@ -334,11 +329,6 @@ The following script parameters are available:
   pointer colour will change to the `Pointer Miss Color` and the
   `WorldPointerDestinationSet` event will not be triggered, which will
   prevent teleporting into areas where the play area will collide.
-  * **Pointer Facing Axis:** The facing axis can also be set to match
-  the direction the `[CameraRig`] Prefab is facing as if it is rotated
-  then the beam will emit out of the controller at the wrong angle, so
-  this setting can be adjusted to ensure the beam always projects
-  forward.
   * **Pointer Length:** The length of the projected forward pointer
   beam, this is basically the distance able to point from the
   controller potiion.
@@ -351,10 +341,6 @@ The following script parameters are available:
   * **Pointer Cursor Radius:** The size of the ground pointer cursor,
   This number also affects the size of the spheres in the bezier curve
   beam. The larger the raduis, the larger the spheres will be.
-  * **Pointer Facing Axis:** The facing axis can also be set to match the
-  direction the `[CameraRig`] Prefab is facing as if it is rotated then
-  the beam will emit out of the controller at the wrong angle, so this
-  setting can be adjusted to ensure the beam always projects forward.
 
 The Bezier Pointer object extends the `SteamVR_WorldPointer` abstract
 class and therefore emits the same events and payload.
@@ -749,11 +735,6 @@ The following script parameters are available:
   pointer colour will change to the `Pointer Miss Color` and the
   `WorldPointerDestinationSet` event will not be triggered, which will
   prevent teleporting into areas where the play area will collide.
-  * **Pointer Facing Axis:** The facing axis can also be set to match
-  the direction the `[CameraRig`] Prefab is facing as if it is rotated
-  then the beam will emit out of the controller at the wrong angle, so
-  this setting can be adjusted to ensure the beam always projects
-  forward.
 
 The following events are emitted:
 
