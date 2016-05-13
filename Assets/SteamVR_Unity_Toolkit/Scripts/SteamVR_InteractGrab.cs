@@ -180,6 +180,7 @@ public class SteamVR_InteractGrab : MonoBehaviour
             }
 
             SnapObjectToGrabToController(grabbedObject);
+            grabbedObject.GetComponent<SteamVR_InteractableObject>().ToggleHighlight(false);
         }
     }
 

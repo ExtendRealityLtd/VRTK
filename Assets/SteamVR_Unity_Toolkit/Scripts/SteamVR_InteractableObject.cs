@@ -94,9 +94,9 @@ public class SteamVR_InteractableObject : MonoBehaviour
 
     public virtual void ToggleHighlight(bool toggle, Color globalHighlightColor)
     {
-        if (highlightOnTouch && !IsGrabbed() && !isUsing)
+        if (highlightOnTouch)
         {
-            if (toggle)
+            if (toggle && !IsGrabbed() && !isUsing)
             {
                 Color color = (touchHighlightColor != Color.clear ? touchHighlightColor : globalHighlightColor);
                 if (color != Color.clear)
