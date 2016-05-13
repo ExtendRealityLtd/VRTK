@@ -533,6 +533,10 @@ The following script parameters are available:
   grabbing controller grabs the object if it already has a joint
   attached. A higher number here will reduce the oscillation effect
   when moving jointed Interactable Objects.
+  * **Pause Collisions On Grab:** If this is checked then collisions
+  with the Interactable Object are temporarily disabled whilst the
+  object snaps to the controller. This is useful if a game object may
+  get stuck inside another object when it is being grabbed.
 
 The basis of this script is to provide a simple mechanism for
 identifying objects in the game world that can be grabbed or used

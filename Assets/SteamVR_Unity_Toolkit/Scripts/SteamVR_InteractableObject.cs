@@ -33,6 +33,7 @@ public class SteamVR_InteractableObject : MonoBehaviour
     public Vector3 snapToRotation = Vector3.zero;
     public float detachThreshold = 500f;
     public float jointDamper = 100f;
+    public bool pauseCollisionsOnGrab = true;
 
     private bool isTouched = false;
     private bool isGrabbed = false;
@@ -127,15 +128,18 @@ public class SteamVR_InteractableObject : MonoBehaviour
 
     public void PauseCollisions(float pauseTime)
     {
-        if (this.GetComponent<Rigidbody>())
+        if (pauseCollisionsOnGrab)
         {
-            this.GetComponent<Rigidbody>().detectCollisions = false;
+            if (this.GetComponent<Rigidbody>())
+            {
+                this.GetComponent<Rigidbody>().detectCollisions = false;
+            }
+            foreach (Rigidbody rb in this.GetComponentsInChildren<Rigidbody>())
+            {
+                rb.detectCollisions = false;
+            }
+            Invoke("UnpauseCollisions", pauseTime);
         }
-        foreach(Rigidbody rb in this.GetComponentsInChildren<Rigidbody>())
-        {
-            rb.detectCollisions = false;
-        }
-        Invoke("UnpauseCollisions", pauseTime);
     }
 
     protected virtual void Start()
