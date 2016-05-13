@@ -36,7 +36,6 @@ public class SteamVR_InteractableObject : MonoBehaviour
     public bool pauseCollisionsOnGrab = true;
 
     private bool isTouched = false;
-    private bool isGrabbed = false;
     private bool isUsing = false;
     private int usingState = 0;
     private Color[] originalObjectColours = null;
@@ -50,7 +49,7 @@ public class SteamVR_InteractableObject : MonoBehaviour
 
     public bool IsGrabbed()
     {
-        return isGrabbed;
+        return (grabbingObjects.Count > 0);
     }
 
     public bool IsUsing()
@@ -71,13 +70,11 @@ public class SteamVR_InteractableObject : MonoBehaviour
     public virtual void Grabbed(GameObject grabbingObject)
     {
         grabbingObjects.Add(grabbingObject.name, grabbingObject);
-        isGrabbed = true;
     }
 
     public virtual void Ungrabbed(GameObject previousGrabbingObject)
     {
         grabbingObjects.Remove(previousGrabbingObject.name);
-        isGrabbed = false;
     }
 
     public virtual void StartUsing(GameObject usingObject)
@@ -97,7 +94,7 @@ public class SteamVR_InteractableObject : MonoBehaviour
 
     public virtual void ToggleHighlight(bool toggle, Color globalHighlightColor)
     {
-        if (highlightOnTouch && !isGrabbed && !isUsing)
+        if (highlightOnTouch && !IsGrabbed() && !isUsing)
         {
             if (toggle)
             {

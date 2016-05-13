@@ -53,6 +53,21 @@ public class SteamVR_HeightAdjustTeleport : SteamVR_BasicTeleport {
         return newY;
     }
 
+    private bool CurrentFloorChanged(RaycastHit collidedObj)
+    {
+        return (currentFloor != collidedObj.transform.gameObject);
+    }
+
+    private bool MeshYChanged(RaycastHit collidedObj, float floorY)
+    {
+        return (collidedObj.transform.GetComponent<MeshCollider>() && floorY != currentRayDownY);
+    }
+
+    private bool FloorIsGrabbedObject(RaycastHit collidedObj)
+    {
+        return (collidedObj.transform.GetComponent<SteamVR_InteractableObject>() && collidedObj.transform.GetComponent<SteamVR_InteractableObject>().IsGrabbed());
+    }
+
     private void DropToNearestFloor(bool withBlink)
     {
         //send a ray down to find the closest object to stand on
@@ -61,13 +76,7 @@ public class SteamVR_HeightAdjustTeleport : SteamVR_BasicTeleport {
         bool rayHit = Physics.Raycast(ray, out rayCollidedWith);
         float floorY = eyeCamera.transform.position.y - rayCollidedWith.distance;
 
-        if (rayHit &&
-            (
-                (rayCollidedWith.transform.GetComponent<MeshCollider>() && floorY != currentRayDownY)
-            ||
-                (currentFloor != rayCollidedWith.transform.gameObject)
-            )
-            )
+        if (rayHit && ! FloorIsGrabbedObject(rayCollidedWith) && ( MeshYChanged(rayCollidedWith, floorY) || CurrentFloorChanged(rayCollidedWith) ) )
         {
             currentFloor = rayCollidedWith.transform.gameObject;
             currentRayDownY = floorY;
