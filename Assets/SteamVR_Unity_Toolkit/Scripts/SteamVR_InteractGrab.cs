@@ -104,17 +104,27 @@ public class SteamVR_InteractGrab : MonoBehaviour
             obj.transform.position = controllerAttachPoint.transform.position;
         }
 
-        if (obj.GetComponent<Joint>())
+        CreateJoint(obj);
+    }
+
+    private bool JointOnController(GameObject obj)
+    {
+        return (obj.GetComponent<Joint>() && obj.GetComponent<Joint>().connectedBody && obj.GetComponent<Joint>().connectedBody.gameObject.GetComponentInParent<SteamVR_InteractTouch>());
+    }
+
+    private void CreateJoint(GameObject obj)
+    {
+        if (obj.GetComponent<Joint>() && ! JointOnController(obj))
         {
             SpringJoint tempSpringJoint = obj.AddComponent<SpringJoint>();
             tempSpringJoint.spring = 500;
             tempSpringJoint.damper = 50;
             controllerAttachJoint = tempSpringJoint;
-        } else
+        }
+        else
         {
             controllerAttachJoint = obj.AddComponent<FixedJoint>();
         }
-
         controllerAttachJoint.connectedBody = controllerAttachPoint;
     }
 
