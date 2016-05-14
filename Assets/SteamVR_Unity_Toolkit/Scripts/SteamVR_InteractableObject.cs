@@ -15,32 +15,52 @@ using System.Collections.Generic;
 
 public class SteamVR_InteractableObject : MonoBehaviour
 {
-    public enum GrabType
+    public enum GrabSnapType
     {
         Simple_Snap,
         Rotation_Snap,
         Precision_Snap
     }
 
+    public enum GrabAttatchType
+    {
+        Fixed_Joint,
+        Spring_Joint,
+        Track_Object
+    }
+
+    [Header("Touch Interactions", order = 1)]
+    public bool highlightOnTouch = false;
+    public Color touchHighlightColor = Color.clear;
+
+    [Header("Grab Interactions", order = 2)]
     public bool isGrabbable = false;
     public bool holdButtonToGrab = true;
+    public bool pauseCollisionsOnGrab = true;
+    public GrabSnapType grabSnapType = GrabSnapType.Simple_Snap;
+    public Vector3 snapToRotation = Vector3.zero;
+
+    [Header("Grab Mechanics", order = 3)]
+    public GrabAttatchType grabAttatchMechanic = GrabAttatchType.Fixed_Joint;
+    public float detatchThreshold = 500f;
+    public float springJointStrength = 500f;
+    public float springJointDamper = 50f;
+
+    [Header("Use Interactions", order = 4)]
     public bool isUsable = false;
     public bool holdButtonToUse = true;
-    public bool highlightOnTouch = false;
     public bool pointerActivatesUseAction = false;
-    public Color touchHighlightColor = Color.clear;
-    public GrabType grabSnapType = GrabType.Simple_Snap;
-    public Vector3 snapToRotation = Vector3.zero;
-    public float detachThreshold = 500f;
-    public float jointDamper = 100f;
-    public bool pauseCollisionsOnGrab = true;
+
+    protected Rigidbody rb;
+    protected GameObject grabbingObject = null;
 
     private bool isTouched = false;
     private bool isUsing = false;
     private int usingState = 0;
     private Color[] originalObjectColours = null;
 
-    private Dictionary<string, GameObject> grabbingObjects = new Dictionary<string, GameObject>();
+    private Transform trackPoint;
+    private bool customTrackPoint = false;
 
     public bool IsTouched()
     {
@@ -49,7 +69,7 @@ public class SteamVR_InteractableObject : MonoBehaviour
 
     public bool IsGrabbed()
     {
-        return (grabbingObjects.Count > 0);
+        return (grabbingObject != null);
     }
 
     public bool IsUsing()
@@ -67,14 +87,18 @@ public class SteamVR_InteractableObject : MonoBehaviour
         isTouched = false;
     }
 
-    public virtual void Grabbed(GameObject grabbingObject)
+    public virtual void Grabbed(GameObject currentGrabbingObject)
     {
-        grabbingObjects.Add(grabbingObject.name, grabbingObject);
+        ForceReleaseGrab();
+        RemoveTrackPoint();
+        grabbingObject = currentGrabbingObject;
+        SetTrackPoint(grabbingObject);
     }
 
     public virtual void Ungrabbed(GameObject previousGrabbingObject)
     {
-        grabbingObjects.Remove(previousGrabbingObject.name);
+        RemoveTrackPoint();
+        grabbingObject = null;
     }
 
     public virtual void StartUsing(GameObject usingObject)
@@ -139,9 +163,48 @@ public class SteamVR_InteractableObject : MonoBehaviour
         }
     }
 
+    public bool AttatchIsTrackObject()
+    {
+        return (grabAttatchMechanic == GrabAttatchType.Track_Object);
+    }
+
+    protected virtual void Awake()
+    {
+        rb = this.GetComponent<Rigidbody>();
+    }
+
     protected virtual void Start()
     {
         originalObjectColours = StoreOriginalColors();
+    }
+
+    protected virtual void Update()
+    {
+        if (grabAttatchMechanic == GrabAttatchType.Track_Object)
+        {
+            CheckBreakDistance();
+        }
+    }
+
+    protected virtual void FixedUpdate()
+    {
+        if (grabAttatchMechanic == GrabAttatchType.Track_Object)
+        {
+            FixedUpdateTrackedObject();
+        }
+    }
+
+    protected virtual void OnJointBreak(float force)
+    {
+        ForceReleaseGrab();
+    }
+
+    private void ForceReleaseGrab()
+    {
+        if (grabbingObject)
+        {
+            grabbingObject.GetComponent<SteamVR_InteractGrab>().ForceRelease();
+        }
     }
 
     private void UnpauseCollisions()
@@ -205,19 +268,77 @@ public class SteamVR_InteractableObject : MonoBehaviour
         }
     }
 
-    private void OnJointBreak(float force)
+    private void CheckBreakDistance()
     {
-        List<string> grabbersAffected = new List<string>();
-        foreach(var entry in grabbingObjects)
+        if(trackPoint)
         {
-            if (entry.Value.GetComponent<SteamVR_InteractGrab>()) {
-                grabbersAffected.Add(entry.Key);
+            float distance = Vector3.Distance(trackPoint.position, this.transform.position);
+            if (distance > (detatchThreshold / 1000))
+            {
+                ForceReleaseGrab();
             }
         }
+    }
 
-        foreach(var entry in grabbersAffected)
+    private void SetTrackPoint(GameObject point)
+    {
+        Transform controllerPoint = point.transform;
+
+        if (point.GetComponent<SteamVR_InteractGrab>() && point.GetComponent<SteamVR_InteractGrab>().controllerAttachPoint)
         {
-            grabbingObjects[entry].GetComponent<SteamVR_InteractGrab>().ForceRelease();
+            controllerPoint = point.GetComponent<SteamVR_InteractGrab>().controllerAttachPoint.transform;
+        }
+
+        if (grabAttatchMechanic == GrabAttatchType.Track_Object && grabSnapType == GrabSnapType.Precision_Snap)
+        {
+            trackPoint = new GameObject(string.Format("TrackObject_PrecisionSnap_AttatchPoint", this.gameObject.name)).transform;
+            trackPoint.parent = point.transform;
+            trackPoint.position = this.transform.position;
+            trackPoint.rotation = this.transform.rotation;
+            customTrackPoint = true;
+        } else
+        {
+            trackPoint = controllerPoint;
+            customTrackPoint = false;
+        }
+    }
+
+    private void RemoveTrackPoint()
+    {
+        if (customTrackPoint && trackPoint)
+        {
+            Destroy(trackPoint.gameObject);
+        }
+        else
+        {
+            trackPoint = null;
+        }
+    }
+
+    private void FixedUpdateTrackedObject()
+    {
+        if (trackPoint)
+        {
+            float rotationMultiplier = 20f;
+            float positionMultiplier = 3000f;
+            float maxDistanceDelta = 10f;
+
+            Quaternion rotationDelta = trackPoint.rotation * Quaternion.Inverse(this.transform.rotation);
+            Vector3 positionDelta = (trackPoint.position - this.transform.position);
+
+            float angle;
+            Vector3 axis;
+            rotationDelta.ToAngleAxis(out angle, out axis);
+            angle = (angle > 180 ? angle -= 360 : angle);
+
+            if (angle != 0)
+            {
+                Vector3 AngularTarget = (Time.fixedDeltaTime * angle * axis) * rotationMultiplier;
+                rb.angularVelocity = Vector3.MoveTowards(rb.angularVelocity, AngularTarget, maxDistanceDelta);
+            }
+
+            Vector3 VelocityTarget = positionDelta * positionMultiplier * Time.fixedDeltaTime;
+            rb.velocity = Vector3.MoveTowards(rb.velocity, VelocityTarget, maxDistanceDelta);
         }
     }
 }

@@ -484,31 +484,23 @@ required to be interacted with (e.g. via the controllers).
 
 The following script parameters are available:
 
+######Touch Interactions
+  * **Highlight On Touch:** The object will only highlight when a
+  controller touches it if this is checked.
+  * **Touch Highligt Color:** The colour to highlight the object
+  when it is touched. This colour will override any globally set
+  color (for instance on the `SteamVR_InteractTouch` script).
+
+######Grab Interactions
   * **Is Grabbable:** Determines if the object can be grabbed
   * **Hold Button To Grab:** If this is checked then the grab button
   on the controller needs to be continually held down to keep grabbing.
   If this is unchecked the grab button toggles the grab action with
   one button press to grab and another to release.
-  * **Is Usable:** Determines if the object can be used
-  * **Hold Button To Use:** If this is checked then the use button
-  on the controller needs to be continually held down to keep using.
-  If this is unchecked the the use button toggles the use action with
-  one button press to start using and another to stop using.
-  * **Highlight On Touch:** The object will only highlight when a
-  controller touches it if this is checked.
-  * **Pointer Activates Use Action:** If this is checked then when
-  a World Pointer beam (projected from the controller) hits the
-  interactable object, if the object has `Hold Button To Use` unchecked
-  then whilst the pointer is over the object it will run it's `Using`
-  method. If `Hold Button To Use` is unchecked then the `Using` method
-  will be run when the pointer is deactivated. The world pointer will
-  not throw the `Destination Set` event if it is affecting an
-  interactable object with this setting checked as this prevents
-  unwanted teleporting from happening when using an object with a
-  pointer.
-  * **Touch Highligt Color:** The colour to highlight the object
-  when it is touched. This colour will override any globally set
-  color (for instance on the `SteamVR_InteractTouch` script).
+  * **Pause Collisions On Grab:** If this is checked then collisions
+  with the Interactable Object are temporarily disabled whilst the
+  object snaps to the controller. This is useful if a game object may
+  get stuck inside another object when it is being grabbed.
   * **Grab Snap Type:** This sets the snap type of the object when
   it is grabbed.
    * `Simple_Snap` snaps the grabbed object's central position to the
@@ -522,20 +514,56 @@ The following script parameters are available:
   rotation of the object in relation to the controller on snap.
   This is useful for picking up guns or swords where the relative
   rotation to the controller is important for ease of use.
+
+######Grab Mechanics
+  * **Grab Attach Type:** This determines how the grabbed item will
+  be attached to the controller when it is grabbed.
+   * `Fixed Joint` attaches the object to the controller with a fixed
+   joint meaning it tracks the position and rotation of the controller
+   with perfect 1:1 tracking.
+   * `Spring Joint` attaches the object to the controller with a
+   spring joint meaing there is some flexibility between the item
+   and the controller force moving the item. This works well when
+   attempting to pull an item rather than snap the item directly to
+   the controller. It creates the illusion that the item has
+   resistence to move it.
+   * `Track Object` doesn't attach the object to the controller via
+   a joint, instead it ensures the object tracks the direction of the
+   controller, which works well for items that are on hinged joints.
   * **Detatch Threshold:** The force amount when to detatch the
   object from the grabbed controller. If the controller tries to
   exert a force higher than this threshold on the object (from pulling
   it through another object or pushing it into another object) then
   the joint holding the object to the grabbing controller will break
-  and the object will no longer be grabbed.
-  * **Joint Damper:** The amount to damper the spring effect when a
-  grabbing controller grabs the object if it already has a joint
-  attached. A higher number here will reduce the oscillation effect
-  when moving jointed Interactable Objects.
-  * **Pause Collisions On Grab:** If this is checked then collisions
-  with the Interactable Object are temporarily disabled whilst the
-  object snaps to the controller. This is useful if a game object may
-  get stuck inside another object when it is being grabbed.
+  and the object will no longer be grabbed. This also works with
+  Tracked Object grabbing but determines how far the controller is
+  from the object before breaking the grab.
+  * **Spring Joint Strength:** The strength of the spring holding the
+  object to the controller. A low number will mean the spring is very
+  loose and the object will require more force to move it, a high
+  number will mean a tight spring meaning less force is required to
+  move it.
+  * **Spring Joint Damper:** The amount to damper the spring effect
+  when using a Spring Joint grab mechanic. A higher number here will
+  reduce the oscillation effect when moving jointed Interactable
+  Objects.
+
+######Use Interactions
+  * **Is Usable:** Determines if the object can be used
+  * **Hold Button To Use:** If this is checked then the use button
+  on the controller needs to be continually held down to keep using.
+  If this is unchecked the the use button toggles the use action with
+  one button press to start using and another to stop using.
+  * **Pointer Activates Use Action:** If this is checked then when
+  a World Pointer beam (projected from the controller) hits the
+  interactable object, if the object has `Hold Button To Use` unchecked
+  then whilst the pointer is over the object it will run it's `Using`
+  method. If `Hold Button To Use` is unchecked then the `Using` method
+  will be run when the pointer is deactivated. The world pointer will
+  not throw the `Destination Set` event if it is affecting an
+  interactable object with this setting checked as this prevents
+  unwanted teleporting from happening when using an object with a
+  pointer.
 
 The basis of this script is to provide a simple mechanism for
 identifying objects in the game world that can be grabbed or used
@@ -934,15 +962,15 @@ The current examples are:
 
   * **021_Controller_GrabbingObjectsWithJoints:** A scene with a
   collection of Interactable Objects that are attached to other
-  objects with joints. The example shows that when an
-  Interactable Object that has a joint is grabbed, the controller
-  has a `Spring Joint` connected to it rather than a `Fixed Joint` to
-  allow for relatively controlling the Interactable Object. The scene
-  demonstrates this with a box with a lid on a `Hinge Joint` that can
-  be opened by grabbing the handle, a door with a `Hinge Joint` that
-  can be opened and closed by grabbing the door or handle and finally a
-  drawer with a `Configurable Joint` that allows the drawer to be
-  grabbed and it slides open.
+  objects with joints. The example shows that Interactable Objects
+  can have different attach mechanics to determine the best way of
+  connecting the object to the controller. Fixed Joint works well for
+  holding objects like cubes as they track perfectly to the controller
+  whereas a Spring Joint works well on the drawer to give it a natural
+  slide when operating. Finally, the Track Object works well on the
+  door to give a natural control over the swing of the door. There is
+  also a Character Joint object that can be manipulated into different
+  shapes by pulling each of the relevant sections.
 
 ## Contributing
 
