@@ -26,8 +26,6 @@ from the Unity Asset Store to be imported into your Unity project.**
     * [View answer video on Youtube](https://www.youtube.com/watch?v=oFkgTZ4LXEo)
   * Pointer beams/teleporting no longer works after a project build and running from that build:
     * [View answer video on Youtube](https://www.youtube.com/watch?v=IsmYoLTmX4c)
-  * Pointer beam goes in wrong direction, doesn't project from front of the controller:
-    * [View answer video on Youtube](https://www.youtube.com/watch?v=WptCSrSBOZo)
 
 ## Summary
 
