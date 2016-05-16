@@ -458,8 +458,13 @@ shouldn't be, then fading to a colour (e.g. black) will make the
 player realise they've done something wrong and they'll probably
 naturally step backwards.
 
-The Headset Collision Fade script is attached to the `Camera (head)`
-object within the `[CameraRig]` prefab.
+If using `Unity 5.3` or older then the Headset Collision Fade 
+script is attached to the `Camera (head)` object within the 
+`[CameraRig]` prefab.
+
+If using `Unity 5.4` or newer then the Headset Collision Fade 
+script is attached to the `Camera (eye)` object within the 
+`[CameraRig]->Camera (head)` prefab.
 
 The following script parameters are available:
 
