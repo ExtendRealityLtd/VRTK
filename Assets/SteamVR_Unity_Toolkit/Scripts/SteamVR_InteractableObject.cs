@@ -170,7 +170,10 @@ public class SteamVR_InteractableObject : MonoBehaviour
         for (int i = 0; i < length; i++)
         {
             var renderer = rendererArray[i];
-            colors[i] = renderer.material.color;
+            if (renderer.material.HasProperty("_Color"))
+            {
+                colors[i] = renderer.material.color;
+            }
         }
         return colors;
     }
@@ -194,7 +197,10 @@ public class SteamVR_InteractableObject : MonoBehaviour
         int i = 0;
         foreach (Renderer renderer in rendererArray)
         {
-            renderer.material.color = colors[i];
+            if (renderer.material.HasProperty("_Color"))
+            {
+                renderer.material.color = colors[i];
+            }
             i++;
         }
     }
