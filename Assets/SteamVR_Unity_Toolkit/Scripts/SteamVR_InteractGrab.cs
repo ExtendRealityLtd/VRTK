@@ -64,6 +64,10 @@ public class SteamVR_InteractGrab : MonoBehaviour
 
     private void Start()
     {
+        if( SteamVR.enabled == false ) {
+            this.enabled = false;
+            return;
+        }
         //If no attach point has been specified then just use the tip of the controller
         if (controllerAttachPoint == null)
         {

@@ -61,6 +61,10 @@ public class SteamVR_InteractTouch : MonoBehaviour {
 
     void Awake()
     {
+        if( SteamVR.enabled == false ) {
+            this.enabled = false;
+            return;
+        }
         trackedController = GetComponent<SteamVR_TrackedObject>();
         controllerActions = GetComponent<SteamVR_ControllerActions>();
     }
