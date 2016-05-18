@@ -36,7 +36,7 @@ public class LightSaber : SteamVR_InteractableObject
         beamActive = (currentBeamSize >= beamLimits.y ? true : false);
     }
 
-    private void Update()
+    protected override void Update()
     {
         currentBeamSize = Mathf.Clamp(blade.transform.localScale.y + (beamExtendSpeed * Time.deltaTime), beamLimits.x, beamLimits.y);
         SetBeamSize();

@@ -3,7 +3,6 @@ using System.Collections;
 
 public class Sword : SteamVR_InteractableObject {
     SteamVR_ControllerActions controllerActions;
-    Rigidbody rb;
     float impactMagnifier = 100f;
     float collisionForce = 0f;
 
@@ -18,9 +17,9 @@ public class Sword : SteamVR_InteractableObject {
         controllerActions = grabbingObject.GetComponent<SteamVR_ControllerActions>();
     }
 
-    private void Awake()
+    protected override void Awake()
     {
-        rb = this.GetComponent<Rigidbody>();
+        base.Awake();
         rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
     }
 

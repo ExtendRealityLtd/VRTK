@@ -74,9 +74,9 @@ public class SteamVR_InteractTouch : MonoBehaviour {
         }
 
         //Create trigger box collider for controller
-        BoxCollider collider = this.gameObject.AddComponent<BoxCollider>();
-        collider.size = new Vector3(0.1f, 0.08f, 0.2f);
-        collider.center = new Vector3(0f, -0.035f, -0.055f);
+        SphereCollider collider = this.gameObject.AddComponent<SphereCollider>();
+        collider.radius = 0.05f;
+        collider.center = new Vector3(0f, -0.035f, -0.01f);
         collider.isTrigger = true;
     }
 

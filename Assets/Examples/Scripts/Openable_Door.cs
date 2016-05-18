@@ -39,7 +39,7 @@ public class Openable_Door : SteamVR_InteractableObject {
         side = ((rotated == false && interacterPosition.z > transform.position.z) || (rotated == true && interacterPosition.x > transform.position.x) ? -1 : 1);
     }
 
-    void Update () {        
+    protected override void Update () {
         if (open)
         {
             transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(openRotation), Time.deltaTime * smooth);
