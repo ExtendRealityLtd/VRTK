@@ -283,6 +283,7 @@ public abstract class SteamVR_WorldPointer : MonoBehaviour {
         playAreaCursor.name = "PlayerObject_WorldPointer_PlayAreaCursor";
         playAreaCursor.transform.parent = null;
         playAreaCursor.transform.localScale = new Vector3(width, height, length);
+        playAreaCursor.SetActive(false);
 
         playAreaCursor.GetComponent<MeshRenderer>().enabled = false;
 

@@ -50,8 +50,10 @@ public class SteamVR_BezierPointer : SteamVR_WorldPointer
 
         Destroy(pointerCursor.GetComponent<CapsuleCollider>());
         pointerCursor.layer = 2;
+        pointerCursor.SetActive(false);
 
         GameObject global = new GameObject("PlayerObject_WorldPointer_BezierPointer_CurvedBeamContainer");
+        global.SetActive(false);
         curvedBeam = global.gameObject.AddComponent<CurveGenerator>();
         curvedBeam.transform.parent = null;
         curvedBeam.Create(pointerDensity, pointerCursorRaduis);
