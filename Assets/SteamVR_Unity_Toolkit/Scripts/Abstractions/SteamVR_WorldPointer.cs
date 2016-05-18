@@ -61,6 +61,7 @@ public abstract class SteamVR_WorldPointer : MonoBehaviour {
     public Color pointerHitColor = new Color(0f, 0.5f, 0f, 1f);
     public Color pointerMissColor = new Color(0.8f, 0f, 0f, 1f);
     public bool showPlayAreaCursor = false;
+    public Vector2 playAreaCursorDimensions = Vector2.zero;
     public bool handlePlayAreaCursorCollisions = false;
     public bool enableTeleport = true;
 
@@ -272,11 +273,35 @@ public abstract class SteamVR_WorldPointer : MonoBehaviour {
 
     private void InitPlayAreaCursor()
     {
-        int btmRight = 4;
-        int topLeft = 6;
+        int btmRightInner = 0;
+        int btmLeftInner = 1;
+        int topLeftInner = 2;
+        int topRightInner = 3;
 
-        float width = playArea.vertices[btmRight].x - playArea.vertices[topLeft].x;
-        float length = playArea.vertices[topLeft].z - playArea.vertices[btmRight].z;
+        int btmRightOuter = 4;
+        int btmLeftOuter = 5;
+        int topLeftOuter = 6;
+        int topRightOuter = 7;
+
+        Vector3[] cursorDrawVertices = playArea.vertices;
+
+        if (playAreaCursorDimensions != Vector2.zero)
+        {
+            float customAreaPadding = playArea.borderThickness;
+
+            cursorDrawVertices[btmRightOuter] = new Vector3(playAreaCursorDimensions.x / 2, 0f, (playAreaCursorDimensions.y / 2) * -1);
+            cursorDrawVertices[btmLeftOuter] = new Vector3((playAreaCursorDimensions.x / 2) * -1, 0f, (playAreaCursorDimensions.y / 2) * -1);
+            cursorDrawVertices[topLeftOuter] = new Vector3((playAreaCursorDimensions.x / 2) * -1, 0f, playAreaCursorDimensions.y / 2);
+            cursorDrawVertices[topRightOuter] = new Vector3(playAreaCursorDimensions.x / 2, 0f, playAreaCursorDimensions.y / 2);
+
+            cursorDrawVertices[btmRightInner] = cursorDrawVertices[btmRightOuter] + new Vector3(-customAreaPadding, 0f, customAreaPadding);
+            cursorDrawVertices[btmLeftInner] = cursorDrawVertices[btmLeftOuter] + new Vector3(customAreaPadding, 0f, customAreaPadding);
+            cursorDrawVertices[topLeftInner] = cursorDrawVertices[topLeftOuter] + new Vector3(customAreaPadding, 0f, -customAreaPadding);
+            cursorDrawVertices[topRightInner] = cursorDrawVertices[topRightOuter] + new Vector3(-customAreaPadding, 0f, -customAreaPadding);
+        }
+
+        float width = cursorDrawVertices[btmRightOuter].x - cursorDrawVertices[topLeftOuter].x;
+        float length = cursorDrawVertices[topLeftOuter].z - cursorDrawVertices[btmRightOuter].z;
         float height = 0.01f;
 
         playAreaCursor = GameObject.CreatePrimitive(PrimitiveType.Cube);
@@ -300,9 +325,9 @@ public abstract class SteamVR_WorldPointer : MonoBehaviour {
         float playAreaBoundaryZ = playArea.transform.localScale.z / 2;
         float heightOffset = 0f;
 
-        DrawPlayAreaCursorBoundary(0, playArea.vertices[5].x, playArea.vertices[4].x, playArea.vertices[0].z, playArea.vertices[4].z, height, new Vector3(0f, heightOffset, playAreaBoundaryZ));
-        DrawPlayAreaCursorBoundary(1, playArea.vertices[5].x, playArea.vertices[1].x, playArea.vertices[6].z, playArea.vertices[5].z, height, new Vector3(playAreaBoundaryX, heightOffset, 0f));
-        DrawPlayAreaCursorBoundary(2, playArea.vertices[5].x, playArea.vertices[4].x, playArea.vertices[0].z, playArea.vertices[4].z, height, new Vector3(0f, heightOffset, -playAreaBoundaryZ));
-        DrawPlayAreaCursorBoundary(3, playArea.vertices[5].x, playArea.vertices[1].x, playArea.vertices[6].z, playArea.vertices[5].z, height, new Vector3(-playAreaBoundaryX, heightOffset, 0f));
+        DrawPlayAreaCursorBoundary(0, cursorDrawVertices[btmLeftOuter].x, cursorDrawVertices[btmRightOuter].x, cursorDrawVertices[btmRightInner].z, cursorDrawVertices[btmRightOuter].z, height, new Vector3(0f, heightOffset, playAreaBoundaryZ));
+        DrawPlayAreaCursorBoundary(1, cursorDrawVertices[btmLeftOuter].x, cursorDrawVertices[btmLeftInner].x, cursorDrawVertices[topLeftOuter].z, cursorDrawVertices[btmLeftOuter].z, height, new Vector3(playAreaBoundaryX, heightOffset, 0f));
+        DrawPlayAreaCursorBoundary(2, cursorDrawVertices[btmLeftOuter].x, cursorDrawVertices[btmRightOuter].x, cursorDrawVertices[btmRightInner].z, cursorDrawVertices[btmRightOuter].z, height, new Vector3(0f, heightOffset, -playAreaBoundaryZ));
+        DrawPlayAreaCursorBoundary(3, cursorDrawVertices[btmLeftOuter].x, cursorDrawVertices[btmLeftInner].x, cursorDrawVertices[topLeftOuter].z, cursorDrawVertices[btmLeftOuter].z, height, new Vector3(-playAreaBoundaryX, heightOffset, 0f));
     }
 }

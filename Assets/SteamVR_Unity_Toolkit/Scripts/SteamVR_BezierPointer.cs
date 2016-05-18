@@ -21,7 +21,7 @@ public class SteamVR_BezierPointer : SteamVR_WorldPointer
     public float pointerLength = 10f;
     public int pointerDensity = 10;
     public bool showPointerCursor = true;
-    public float pointerCursorRaduis = 0.5f;
+    public float pointerCursorRadius = 0.5f;
 
     private Transform projectedBeamContainer;
     private Transform projectedBeamForward;
@@ -46,7 +46,7 @@ public class SteamVR_BezierPointer : SteamVR_WorldPointer
         pointerCursor.name = string.Format("[{0}]PlayerObject_WorldPointer_BezierPointer_PointerCursor", this.gameObject.name);
         pointerCursor.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
         pointerCursor.GetComponent<MeshRenderer>().receiveShadows = false;
-        pointerCursor.transform.localScale = new Vector3(pointerCursorRaduis, 0.02f, pointerCursorRaduis);
+        pointerCursor.transform.localScale = new Vector3(pointerCursorRadius, 0.02f, pointerCursorRadius);
 
         Destroy(pointerCursor.GetComponent<CapsuleCollider>());
         pointerCursor.layer = 2;
@@ -56,7 +56,7 @@ public class SteamVR_BezierPointer : SteamVR_WorldPointer
         global.SetActive(false);
         curvedBeam = global.gameObject.AddComponent<CurveGenerator>();
         curvedBeam.transform.parent = null;
-        curvedBeam.Create(pointerDensity, pointerCursorRaduis);
+        curvedBeam.Create(pointerDensity, pointerCursorRadius);
         base.InitPointer();
     }
 

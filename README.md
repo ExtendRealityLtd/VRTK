@@ -268,6 +268,9 @@ The following script parameters are available:
   * **Show Play Area Cursor:** If this is enabled then the play area
   boundaries are displayed at the tip of the pointer beam in the
   current pointer colour.
+  * **Play Area Cursor Dimensions:** Determines the size of the play
+  area cursor and collider. If the values are left as zero then the
+  Play Area Cursor will be sized to the calibrated Play Area space.
   * **Handle Play Area Cursor Collisions:** If this is ticked then if
   the play area cursor is colliding with any other object then the
   pointer colour will change to the `Pointer Miss Color` and the
@@ -327,6 +330,9 @@ The following script parameters are available:
   * **Show Play Area Cursor:** If this is enabled then the play area
   boundaries are displayed at the tip of the pointer beam in the
   current pointer colour.
+  * **Play Area Cursor Dimensions:** Determines the size of the play
+  area cursor and collider. If the values are left as zero then the
+  Play Area Cursor will be sized to the calibrated Play Area space.
   * **Handle Play Area Cursor Collisions:** If this is ticked then if
   the play area cursor is colliding with any other object then the
   pointer colour will change to the `Pointer Miss Color` and the
@@ -771,6 +777,9 @@ The following script parameters are available:
   * **Show Play Area Cursor:** If this is enabled then the play area
   boundaries are displayed at the tip of the pointer beam in the
   current pointer colour.
+  * **Play Area Cursor Dimensions:** Determines the size of the play
+  area cursor and collider. If the values are left as zero then the
+  Play Area Cursor will be sized to the calibrated Play Area space.
   * **Handle Play Area Cursor Collisions:** If this is ticked then if
   the play area cursor is colliding with any other object then the
   pointer colour will change to the `Pointer Miss Color` and the
