@@ -291,7 +291,7 @@ public class SteamVR_InteractableObject : MonoBehaviour
 
         if (grabAttatchMechanic == GrabAttatchType.Track_Object && grabSnapType == GrabSnapType.Precision_Snap)
         {
-            trackPoint = new GameObject(string.Format("TrackObject_PrecisionSnap_AttatchPoint", this.gameObject.name)).transform;
+            trackPoint = new GameObject(string.Format("[{0}]TrackObject_PrecisionSnap_AttatchPoint", this.gameObject.name)).transform;
             trackPoint.parent = point.transform;
             trackPoint.position = this.transform.position;
             trackPoint.rotation = this.transform.rotation;

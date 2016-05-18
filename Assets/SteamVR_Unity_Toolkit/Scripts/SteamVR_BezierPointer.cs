@@ -43,7 +43,7 @@ public class SteamVR_BezierPointer : SteamVR_WorldPointer
     protected override void InitPointer()
     {
         pointerCursor = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-        pointerCursor.name = "PlayerObject_WorldPointer_BezierPointer_PointerCursor";
+        pointerCursor.name = string.Format("[{0}]PlayerObject_WorldPointer_BezierPointer_PointerCursor", this.gameObject.name);
         pointerCursor.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
         pointerCursor.GetComponent<MeshRenderer>().receiveShadows = false;
         pointerCursor.transform.localScale = new Vector3(pointerCursorRaduis, 0.02f, pointerCursorRaduis);
@@ -52,7 +52,7 @@ public class SteamVR_BezierPointer : SteamVR_WorldPointer
         pointerCursor.layer = 2;
         pointerCursor.SetActive(false);
 
-        GameObject global = new GameObject("PlayerObject_WorldPointer_BezierPointer_CurvedBeamContainer");
+        GameObject global = new GameObject(string.Format("[{0}]PlayerObject_WorldPointer_BezierPointer_CurvedBeamContainer", this.gameObject.name));
         global.SetActive(false);
         curvedBeam = global.gameObject.AddComponent<CurveGenerator>();
         curvedBeam.transform.parent = null;
@@ -94,18 +94,18 @@ public class SteamVR_BezierPointer : SteamVR_WorldPointer
 
     private void InitProjectedBeams()
     {
-        projectedBeamContainer = new GameObject("PlayerObject_WorldPointer_BezierPointer_ProjectedBeamContainer").transform;
+        projectedBeamContainer = new GameObject(string.Format("[{0}]PlayerObject_WorldPointer_BezierPointer_ProjectedBeamContainer", this.gameObject.name)).transform;
         projectedBeamContainer.transform.parent = this.transform;
         projectedBeamContainer.transform.localPosition = Vector3.zero;
 
-        projectedBeamForward = new GameObject("PlayerObject_WorldPointer_BezierPointer_ProjectedBeamForward").transform;
+        projectedBeamForward = new GameObject(string.Format("[{0}]PlayerObject_WorldPointer_BezierPointer_ProjectedBeamForward", this.gameObject.name)).transform;
         projectedBeamForward.transform.parent = projectedBeamContainer.transform;
 
-        projectedBeamJoint = new GameObject("PlayerObject_WorldPointer_BezierPointer_ProjectedBeamJoint").transform;
+        projectedBeamJoint = new GameObject(string.Format("[{0}]PlayerObject_WorldPointer_BezierPointer_ProjectedBeamJoint", this.gameObject.name)).transform;
         projectedBeamJoint.transform.parent = projectedBeamContainer.transform;
         projectedBeamJoint.transform.localScale = new Vector3(0.01f, 0.01f, 0.01f);
 
-        projectedBeamDown = new GameObject("PlayerObject_WorldPointer_BezierPointer_ProjectedBeamDown").transform;
+        projectedBeamDown = new GameObject(string.Format("[{0}]PlayerObject_WorldPointer_BezierPointer_ProjectedBeamDown", this.gameObject.name)).transform;
     }
 
     private float GetForwardBeamLength()

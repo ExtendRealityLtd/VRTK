@@ -254,7 +254,7 @@ public abstract class SteamVR_WorldPointer : MonoBehaviour {
     {
 
         GameObject playAreaCursorBoundary = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        playAreaCursorBoundary.name = "PlayerObject_WorldPointer_PlayAreaCursorBoundary_" + index;
+        playAreaCursorBoundary.name = string.Format("[{0}]PlayerObject_WorldPointer_PlayAreaCursorBoundary_" + index, this.gameObject.name);
 
         float width = (right - left) / 1.065f;
         float length = (top - bottom) / 1.08f;
@@ -280,7 +280,7 @@ public abstract class SteamVR_WorldPointer : MonoBehaviour {
         float height = 0.01f;
 
         playAreaCursor = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        playAreaCursor.name = "PlayerObject_WorldPointer_PlayAreaCursor";
+        playAreaCursor.name = string.Format("[{0}]PlayerObject_WorldPointer_PlayAreaCursor", this.gameObject.name);
         playAreaCursor.transform.parent = null;
         playAreaCursor.transform.localScale = new Vector3(width, height, length);
         playAreaCursor.SetActive(false);

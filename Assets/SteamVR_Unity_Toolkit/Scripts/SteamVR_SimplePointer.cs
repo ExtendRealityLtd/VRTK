@@ -35,12 +35,12 @@ public class SteamVR_SimplePointer : SteamVR_WorldPointer
 
     protected override void InitPointer()
     {
-        pointerHolder = new GameObject("PlayerObject_WorldPointer_SimplePointer_Holder");
+        pointerHolder = new GameObject(string.Format("[{0}]PlayerObject_WorldPointer_SimplePointer_Holder", this.gameObject.name));
         pointerHolder.transform.parent = this.transform;
         pointerHolder.transform.localPosition = Vector3.zero;
 
         pointer = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        pointer.transform.name = "PlayerObject_WorldPointer_SimplePointer_Pointer";
+        pointer.transform.name = string.Format("[{0}]PlayerObject_WorldPointer_SimplePointer_Pointer", this.gameObject.name);
         pointer.transform.parent = pointerHolder.transform;
 
         pointer.GetComponent<BoxCollider>().isTrigger = true;
@@ -48,7 +48,7 @@ public class SteamVR_SimplePointer : SteamVR_WorldPointer
         pointer.layer = 2;
 
         pointerTip = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-        pointerTip.transform.name = "PlayerObject_WorldPointer_SimplePointer_PointerTip";
+        pointerTip.transform.name = string.Format("[{0}]PlayerObject_WorldPointer_SimplePointer_PointerTip", this.gameObject.name);
         pointerTip.transform.parent = pointerHolder.transform;
         pointerTip.transform.localScale = pointerTipScale;
 
