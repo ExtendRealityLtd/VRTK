@@ -3,6 +3,14 @@
 A collection of useful scripts and prefabs for building SteamVR titles
 in Unity 5.
 
+---
+
+To all those lovely people who want to give donations, instead of donating, consider supporting me by buying my latest game on Steam - `Holodaze` for HTC Vive. At least this way, I make a bit of money and you get something to play!
+
+[View Holodaze on the Steam Store](http://store.steampowered.com/app/475520)
+
+---
+
 **This Toolkit requires the [SteamVR Plugin]
 from the Unity Asset Store to be imported into your Unity project.**
 
