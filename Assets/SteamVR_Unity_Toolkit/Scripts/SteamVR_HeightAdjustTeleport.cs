@@ -40,7 +40,6 @@ public class SteamVR_HeightAdjustTeleport : SteamVR_BasicTeleport {
         return basePosition;
     }
 
-
     private float GetTeleportY(Transform target, Vector3 tipPosition)
     {
         float newY = this.transform.position.y;
@@ -83,7 +82,7 @@ public class SteamVR_HeightAdjustTeleport : SteamVR_BasicTeleport {
 
             if (withBlink && !rayCollidedWith.transform.GetComponent<MeshCollider>())
             {
-                Blink();
+                Blink(blinkTransitionSpeed);
             }
 
             Vector3 newPosition = new Vector3(this.transform.position.x, floorY, this.transform.position.z);

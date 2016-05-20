@@ -14,11 +14,18 @@ using System.Collections;
 
 public class SteamVR_BasicTeleport : MonoBehaviour {
     public float blinkTransitionSpeed = 0.6f;
+    [Range(0f,32f)]
+    public float distanceBlinkDelay = 0f;
     public bool headsetPositionCompensation = true;
 
     protected int listenerInitTries = 5;
     protected Transform eyeCamera;
     protected bool adjustYForTerrain = false;
+
+    private float blinkPause = 0f;
+    private float fadeInTime = 0f;
+    private float maxBlinkTransitionSpeed = 1.5f;
+    private float maxBlinkDistance = 33f;
 
     protected virtual void Start()
     {
@@ -27,18 +34,20 @@ public class SteamVR_BasicTeleport : MonoBehaviour {
         eyeCamera = GameObject.FindObjectOfType<SteamVR_Camera>().GetComponent<Transform>();
     }
 
-    protected virtual void Blink()
+    protected virtual void Blink(float transitionSpeed)
     {
+        fadeInTime = transitionSpeed;
         SteamVR_Fade.Start(Color.black, 0);
-        SteamVR_Fade.Start(Color.clear, blinkTransitionSpeed);
+        Invoke("ReleaseBlink", blinkPause);
     }
 
     protected virtual void DoTeleport(object sender, WorldPointerEventArgs e)
     {
         if (e.target && e.enableTeleport)
         {
-            Blink();
             Vector3 newPosition = GetNewPosition(e.destinationPosition, e.target);
+            CalculateBlinkDelay(blinkTransitionSpeed, newPosition);
+            Blink(blinkTransitionSpeed);
             SetNewPosition(newPosition, e.target);
         }
     }
@@ -66,6 +75,23 @@ public class SteamVR_BasicTeleport : MonoBehaviour {
         return position;
     }
 
+    private void CalculateBlinkDelay(float blinkSpeed, Vector3 newPosition)
+    {
+        blinkPause = 0f;
+        if (distanceBlinkDelay > 0f)
+        {
+            float distance = Vector3.Distance(this.transform.position, newPosition);
+            blinkPause = Mathf.Clamp((distance * blinkTransitionSpeed) / (maxBlinkDistance - distanceBlinkDelay), 0, maxBlinkTransitionSpeed);
+            blinkPause = (blinkSpeed <= 0.25 ? 0f : blinkPause);
+        }
+    }
+
+    private void ReleaseBlink()
+    {
+        SteamVR_Fade.Start(Color.clear, fadeInTime);
+        fadeInTime = 0f;
+    }
+
     private void InitPointerListeners()
     {
         SteamVR_WorldPointer[] worldPointers = GameObject.FindObjectsOfType<SteamVR_WorldPointer>();
@@ -77,6 +103,7 @@ public class SteamVR_BasicTeleport : MonoBehaviour {
         {
             if (listenerInitTries > 0)
             {
+                listenerInitTries--;
                 Invoke("InitPointerListeners", 0.25f);
             }
             else
