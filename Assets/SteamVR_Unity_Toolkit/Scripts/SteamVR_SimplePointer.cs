@@ -71,6 +71,8 @@ public class SteamVR_SimplePointer : SteamVR_WorldPointer
 
     protected override void TogglePointer(bool state)
     {
+        state = (beamAlwaysOn ? true : state);
+
         base.TogglePointer(state);
         pointer.gameObject.SetActive(state);
         bool tipState = (showPointerTip ? state : false);

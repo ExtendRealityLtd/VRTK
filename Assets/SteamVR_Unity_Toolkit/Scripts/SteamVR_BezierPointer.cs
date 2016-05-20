@@ -68,6 +68,8 @@ public class SteamVR_BezierPointer : SteamVR_WorldPointer
 
     protected override void TogglePointer(bool state)
     {
+        state = (beamAlwaysOn ? true : state);
+
         projectedBeamForward.gameObject.SetActive(state);
         projectedBeamJoint.gameObject.SetActive(state);
         projectedBeamDown.gameObject.SetActive(state);
@@ -84,8 +86,11 @@ public class SteamVR_BezierPointer : SteamVR_WorldPointer
         TogglePointerCursor(false);
         curvedBeam.TogglePoints(false);
     }
+
     private void TogglePointerCursor(bool state)
     {
+        state = (beamAlwaysOn ? true : state);
+
         bool pointerCursorState = (showPointerCursor && state ? showPointerCursor : false);
         bool playAreaCursorState = (showPlayAreaCursor && state ? showPlayAreaCursor : false);
         pointerCursor.gameObject.SetActive(pointerCursorState);

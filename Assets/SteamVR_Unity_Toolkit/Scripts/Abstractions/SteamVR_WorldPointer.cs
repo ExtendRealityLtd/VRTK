@@ -64,6 +64,7 @@ public abstract class SteamVR_WorldPointer : MonoBehaviour {
     public Vector2 playAreaCursorDimensions = Vector2.zero;
     public bool handlePlayAreaCursorCollisions = false;
     public bool enableTeleport = true;
+    public bool beamAlwaysOn = false;
 
     protected Vector3 destinationPosition;
     protected float pointerContactDistance = 0f;

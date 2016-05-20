@@ -289,6 +289,9 @@ The following script parameters are available:
   know whether to action the new destination. This allows controller
   beams to be enabled on a controller but never trigger a teleport
   (if this option is unchecked).
+  * **Beam Always On:** If this is checked the the pointer beam is
+  always visible but the Destination Set event is still only emitted
+  when the assigned button is pressed.
   * **Pointer Thickness:** The thickness and length of the beam can
   also be set on the script as well as the ability to toggle the sphere
   beam tip that is displayed at the end of the beam (to represent a
@@ -351,6 +354,9 @@ The following script parameters are available:
   know whether to action the new destination. This allows controller
   beams to be enabled on a controller but never trigger a teleport
   (if this option is unchecked).
+  * **Beam Always On:** If this is checked the the pointer beam is
+  always visible but the Destination Set event is still only emitted
+  when the assigned button is pressed.
   * **Pointer Length:** The length of the projected forward pointer
   beam, this is basically the distance able to point from the
   controller potiion.
@@ -798,6 +804,9 @@ The following script parameters are available:
   know whether to action the new destination. This allows controller
   beams to be enabled on a controller but never trigger a teleport
   (if this option is unchecked).
+  * **Beam Always On:** If this is checked the the pointer beam is
+  always visible but the Destination Set event is still only emitted
+  when the assigned button is pressed.
 
 The following events are emitted:
 
