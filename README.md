@@ -292,6 +292,9 @@ The following script parameters are available:
   * **Beam Always On:** If this is checked the the pointer beam is
   always visible but the Destination Set event is still only emitted
   when the assigned button is pressed.
+  * **Activate Delay:** The time in seconds (based on a 60 frame per
+  second update tick) to delay the pointer beam being able to be
+  active again. Useful for preventing constant beams for teleporting.
   * **Pointer Thickness:** The thickness and length of the beam can
   also be set on the script as well as the ability to toggle the sphere
   beam tip that is displayed at the end of the beam (to represent a
@@ -357,6 +360,9 @@ The following script parameters are available:
   * **Beam Always On:** If this is checked the the pointer beam is
   always visible but the Destination Set event is still only emitted
   when the assigned button is pressed.
+  * **Activate Delay:** The time in seconds (based on a 60 frame per
+  second update tick) to delay the pointer beam being able to be
+  active again. Useful for preventing constant beams for teleporting.
   * **Pointer Length:** The length of the projected forward pointer
   beam, this is basically the distance able to point from the
   controller potiion.
@@ -880,6 +886,9 @@ The following script parameters are available:
   * **Beam Always On:** If this is checked the the pointer beam is
   always visible but the Destination Set event is still only emitted
   when the assigned button is pressed.
+  * **Activate Delay:** The time in seconds (based on a 60 frame per
+  second update tick) to delay the pointer beam being able to be
+  active again. Useful for preventing constant beams for teleporting.
 
 The following events are emitted:
 

@@ -40,6 +40,18 @@ public class SteamVR_BezierPointer : SteamVR_WorldPointer
         TogglePointer(false);
     }
 
+    protected override void Update()
+    {
+        base.Update();
+        if (projectedBeamForward.gameObject.activeSelf)
+        {
+            ProjectForwardBeam();
+            ProjectDownBeam();
+            DisplayCurvedBeam();
+            SetPointerCursor();
+        }
+    }
+
     protected override void InitPointer()
     {
         pointerCursor = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
@@ -77,12 +89,8 @@ public class SteamVR_BezierPointer : SteamVR_WorldPointer
 
     protected override void DisablePointerBeam(object sender, ControllerClickedEventArgs e)
     {
-        controllerIndex = e.controllerIndex;
-        if (pointerContactTarget != null)
-        {
-            base.PointerSet();
-        }
-        TogglePointer(false);
+        base.PointerSet();
+        base.DisablePointerBeam(sender, e);
         TogglePointerCursor(false);
         curvedBeam.TogglePoints(false);
     }
@@ -209,16 +217,5 @@ public class SteamVR_BezierPointer : SteamVR_WorldPointer
         };
         curvedBeam.SetPoints(beamPoints, pointerMaterial);
         curvedBeam.TogglePoints(true);
-    }
-
-    private void Update()
-    {
-        if (projectedBeamForward.gameObject.activeSelf)
-        {            
-            ProjectForwardBeam();
-            ProjectDownBeam();
-            DisplayCurvedBeam();
-            SetPointerCursor();
-        }
     }
 }

@@ -65,6 +65,7 @@ public abstract class SteamVR_WorldPointer : MonoBehaviour {
     public bool handlePlayAreaCursorCollisions = false;
     public bool enableTeleport = true;
     public bool beamAlwaysOn = false;
+    public float activateDelay = 0f;
 
     protected Vector3 destinationPosition;
     protected float pointerContactDistance = 0f;
@@ -78,6 +79,9 @@ public abstract class SteamVR_WorldPointer : MonoBehaviour {
     private GameObject playAreaCursor;
     private GameObject[] playAreaCursorBoundaries;
     private bool isActive;
+
+    private float activateDelayTimer = 0f;
+    private float updatesPerSecond = 60f;
 
     public event WorldPointerEventHandler WorldPointerIn;
     public event WorldPointerEventHandler WorldPointerOut;
@@ -114,6 +118,11 @@ public abstract class SteamVR_WorldPointer : MonoBehaviour {
         return isActive;
     }
 
+    public virtual bool CanActivate()
+    {
+        return (activateDelayTimer <= 0);
+    }
+
     protected WorldPointerEventArgs SetPointerEvent(uint controllerIndex, float distance, Transform target, Vector3 position)
     {
         WorldPointerEventArgs e;
@@ -146,6 +155,14 @@ public abstract class SteamVR_WorldPointer : MonoBehaviour {
         pointerMaterial.color = pointerMissColor;
     }
 
+    protected virtual void Update()
+    {
+        if (activateDelayTimer > 0)
+        {
+            activateDelayTimer--;
+        }
+    }
+
     protected virtual void InitPointer()
     {
         InitPlayAreaCursor();
@@ -158,17 +175,24 @@ public abstract class SteamVR_WorldPointer : MonoBehaviour {
 
     protected virtual void EnablePointerBeam(object sender, ControllerClickedEventArgs e)
     {
-        setPlayAreaCursorCollision(false);
-        controllerIndex = e.controllerIndex;
-        TogglePointer(true);
-        isActive = true;
+        if (!isActive && activateDelayTimer <= 0)
+        {
+            setPlayAreaCursorCollision(false);
+            controllerIndex = e.controllerIndex;
+            TogglePointer(true);
+            isActive = true;
+        }
     }
 
     protected virtual void DisablePointerBeam(object sender, ControllerClickedEventArgs e)
     {
-        controllerIndex = e.controllerIndex;
-        TogglePointer(false);
-        isActive = false;
+        if (isActive && activateDelayTimer <= 0)
+        {
+            activateDelayTimer = activateDelay * updatesPerSecond;
+            controllerIndex = e.controllerIndex;
+            TogglePointer(false);
+            isActive = false;
+        }
     }
 
     protected virtual void PointerIn()
@@ -205,7 +229,7 @@ public abstract class SteamVR_WorldPointer : MonoBehaviour {
 
     protected virtual void PointerSet()
     {
-        if (!pointerContactTarget)
+        if (!isActive || !pointerContactTarget)
         {
             return;
         }

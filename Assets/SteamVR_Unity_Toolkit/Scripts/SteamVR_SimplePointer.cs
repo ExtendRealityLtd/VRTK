@@ -33,6 +33,19 @@ public class SteamVR_SimplePointer : SteamVR_WorldPointer
         InitPointer();
     }
 
+    protected override void Update()
+    {
+        base.Update();
+        if (pointer.gameObject.activeSelf)
+        {
+            Ray pointerRaycast = new Ray(transform.position, transform.forward);
+            RaycastHit pointerCollidedWith;
+            bool rayHit = Physics.Raycast(pointerRaycast, out pointerCollidedWith);
+            float pointerBeamLength = GetPointerBeamLength(rayHit, pointerCollidedWith);
+            SetPointerTransform(pointerBeamLength, pointerThickness);
+        }
+    }
+
     protected override void InitPointer()
     {
         pointerHolder = new GameObject(string.Format("[{0}]PlayerObject_WorldPointer_SimplePointer_Holder", this.gameObject.name));
@@ -135,17 +148,5 @@ public class SteamVR_SimplePointer : SteamVR_WorldPointer
         }
 
         return actualLength;
-    }
-
-    // Update is called once per frame
-    private void Update () {
-        if (pointer.gameObject.activeSelf)
-        {
-            Ray pointerRaycast = new Ray(transform.position, transform.forward);
-            RaycastHit pointerCollidedWith;
-            bool rayHit = Physics.Raycast(pointerRaycast, out pointerCollidedWith);
-            float pointerBeamLength = GetPointerBeamLength(rayHit, pointerCollidedWith);
-            SetPointerTransform(pointerBeamLength, pointerThickness);
-        }
     }
 }
