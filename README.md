@@ -507,11 +507,68 @@ The following script parameters are available:
   * **Blink Transition Speed:** The fade blink speed on collision.
   * **Fade Color:** The colour to fade the headset to on collision.
 
+The following events are emitted:
+
+  * **HeadsetCollisionDetect:** Emitted when the user's headset
+  collides with another game object.
+
+The event payload that is emitted contains:
+
+  * **collider:** The Collider of the game object the headset has
+  collided with.
+  * **currentTransform:** The current Transform of the object that
+  the Headset Collision Fade script is attatched to (Camera).
+
 An example of the `SteamVR_HeadsetCollisionFade` script can be
 viewed in the scene `Examples/011_Camera_HeadSetCollisionFading`.
 The scene has collidable walls around the play area and if the player
 puts their head into any of the walls then the headset will fade to
 black.
+
+#### Touchpad Movement (SteamVR_TouchpadWalking)
+
+The ability to move the play area around the game world by sliding a
+finger over the touchpad is achieved using this script. The
+Touchpad Walking script is applied to the `[CameraRig]` prefab and
+adds a rigidbody and a box collider to the user's position to
+prevent them from walking through other collidable game objects.
+
+If the Headset Collision Fade script has been applied to the Camera
+prefab, then if a user attempts to collide with an object then their
+position is reset to the last good known position. This can happen
+if the user is moving through a section where they need to crouch
+and then they stand up and collide with the ceiling. Rather than
+allow a user to do this and cause collision resolution issues it is
+better to just move them back to a valid location. This does break
+immersion but the user is doing something that isn't natural.
+
+The following script parameters are available:
+
+  * **Max Walk Speed:** The maximum speed the play area will be moved
+  when the touchpad is being touched at the extremes of the axis. If
+  a lower part of the touchpad axis is touched (nearer the centre)
+  then the walk speed is slower.
+  * **Deceleration:** The speed in which the play area slows down to
+  a complete stop when the user is no longer touching the touchpad.
+  This deceleration effect can ease any motion sickness that may be
+  suffered.
+  * **Headset Y Offset:** The box collider which is created for the
+  user is set at a height from the user's headset position. If the
+  collider is required to be lower to allow for room between the
+  play area collider and the headset then this offset value will
+  shorten the height of the generated box collider.
+  * **Ignore Grabbed Collisions:** If this is checked then any items
+  that are grabbed with the controller will not collide with the
+  box collider and rigid body on the play area. This is very useful
+  if the user is required to grab and wield objects because if the
+  collider was active they would bounce off the play area collider.
+
+An example of the `SteamVR_TouchpadWalking` script can be viewed in
+the scene `Examples/017_CameraRig_TouchpadWalking`. The scene has
+a collection of walls and slopes that can be traversed by the user
+with the touchpad. There is also an area that can only be traversed
+if the user is crouching. Standing up in this crouched area will
+cause the user to appear back at their last good known position.
 
 #### Interactable Object (SteamVR_InteractableObject)
 
@@ -978,6 +1035,18 @@ The current examples are:
   depending on how hard the sword hits the box. The box also breaks
   apart if it is hit hard enough by the sword.
    * [View Example Tour on Youtube](https://www.youtube.com/watch?v=ErSxZlZh6fc)
+
+  * **017_CameraRig_TouchpadWalking:** A scene which demonstrates how
+  to move around the game world using the touchpad by sliding a finger
+  forward and backwards to move in that direction. Sliding a finger
+  left and right across the touchpad strafes in that direction. The
+  rotation is done via the player in game physically rotating their
+  body in the place space and whichever way the headset is looking
+  will be the way the player walks forward. Crouching is also possible
+  as demonstrated in this scene and in conjunction with the 
+  Headset Collision Fade script it can detect unwanted collisions
+  (e.g. if the player stands up whilst walking as crouched) and reset
+  their position to the last good known position.
 
   * **018_CameraRig_FramesPerSecondCounter:** A scene which displays
   the frames per second in the centre of the headset view. Pressing
