@@ -113,7 +113,7 @@ public class SteamVR_InteractGrab : MonoBehaviour
 
         if (grabType != SteamVR_InteractableObject.GrabSnapType.Precision_Snap)
         {
-            obj.transform.position = controllerAttachPoint.transform.position;
+            obj.transform.position = controllerAttachPoint.transform.position + obj.GetComponent<SteamVR_InteractableObject>().snapToPosition;
         }
 
         CreateJoint(obj);

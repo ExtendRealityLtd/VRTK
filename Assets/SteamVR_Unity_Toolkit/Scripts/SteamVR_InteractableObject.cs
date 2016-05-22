@@ -39,6 +39,7 @@ public class SteamVR_InteractableObject : MonoBehaviour
     public bool pauseCollisionsOnGrab = true;
     public GrabSnapType grabSnapType = GrabSnapType.Simple_Snap;
     public Vector3 snapToRotation = Vector3.zero;
+    public Vector3 snapToPosition = Vector3.zero;
 
     [Header("Grab Mechanics", order = 3)]
     public GrabAttatchType grabAttatchMechanic = GrabAttatchType.Fixed_Joint;
