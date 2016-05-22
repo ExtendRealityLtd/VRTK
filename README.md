@@ -1098,6 +1098,12 @@ The current examples are:
   also a Character Joint object that can be manipulated into different
   shapes by pulling each of the relevant sections.
 
+  * **022_Controller_CustomBezierPointer:** A scene that demonstrates
+  how the Bezier Pointer can have complex objects passed to it to
+  generate the tracer beam and the cursor of the pointer. In the
+  scene, particle objects with rotations are used to demonstrate a
+  different look to the bezier pointer beam.
+
 ## Contributing
 
 I would love to get contributions from you! Follow the instructions
