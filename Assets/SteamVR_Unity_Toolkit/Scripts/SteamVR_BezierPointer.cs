@@ -22,6 +22,8 @@ public class SteamVR_BezierPointer : SteamVR_WorldPointer
     public int pointerDensity = 10;
     public bool showPointerCursor = true;
     public float pointerCursorRadius = 0.5f;
+    public GameObject customPointerTracer;
+    public GameObject customPointerCursor;
 
     private Transform projectedBeamContainer;
     private Transform projectedBeamForward;
@@ -54,13 +56,9 @@ public class SteamVR_BezierPointer : SteamVR_WorldPointer
 
     protected override void InitPointer()
     {
-        pointerCursor = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-        pointerCursor.name = string.Format("[{0}]PlayerObject_WorldPointer_BezierPointer_PointerCursor", this.gameObject.name);
-        pointerCursor.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
-        pointerCursor.GetComponent<MeshRenderer>().receiveShadows = false;
-        pointerCursor.transform.localScale = new Vector3(pointerCursorRadius, 0.02f, pointerCursorRadius);
+        pointerCursor = (customPointerCursor ? Instantiate(customPointerCursor) : CreateCursor());
 
-        Destroy(pointerCursor.GetComponent<CapsuleCollider>());
+        pointerCursor.name = string.Format("[{0}]PlayerObject_WorldPointer_BezierPointer_PointerCursor", this.gameObject.name);
         pointerCursor.layer = 2;
         pointerCursor.SetActive(false);
 
@@ -68,13 +66,42 @@ public class SteamVR_BezierPointer : SteamVR_WorldPointer
         global.SetActive(false);
         curvedBeam = global.gameObject.AddComponent<CurveGenerator>();
         curvedBeam.transform.parent = null;
-        curvedBeam.Create(pointerDensity, pointerCursorRadius);
+        curvedBeam.Create(pointerDensity, pointerCursorRadius, customPointerTracer, this.transform);
         base.InitPointer();
+    }
+
+    private GameObject CreateCursor()
+    {
+        GameObject cursor = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+        cursor.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+        cursor.GetComponent<MeshRenderer>().receiveShadows = false;
+        cursor.transform.localScale = new Vector3(pointerCursorRadius, 0.02f, pointerCursorRadius);
+        Destroy(cursor.GetComponent<CapsuleCollider>());
+        return cursor;
     }
 
     protected override void SetPointerMaterial()
     {
-        pointerCursor.GetComponent<MeshRenderer>().material = pointerMaterial;
+        if (pointerCursor.GetComponent<MeshRenderer>())
+        {
+            pointerCursor.GetComponent<MeshRenderer>().material = pointerMaterial;
+        }
+
+        foreach(MeshRenderer mr in pointerCursor.GetComponentsInChildren<MeshRenderer>())
+        {
+            mr.material = pointerMaterial;
+        }
+
+        if (pointerCursor.GetComponent<SkinnedMeshRenderer>())
+        {
+            pointerCursor.GetComponent<SkinnedMeshRenderer>().material = pointerMaterial;
+        }
+
+        foreach (SkinnedMeshRenderer mr in pointerCursor.GetComponentsInChildren<SkinnedMeshRenderer>())
+        {
+            mr.material = pointerMaterial;
+        }
+
         base.SetPointerMaterial();
     }
 

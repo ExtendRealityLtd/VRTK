@@ -315,11 +315,11 @@ viewed in the script
 
 #### Bezier Curve Laser Pointer (SteamVR_BezierPointer)
 
-The Bezier Pointer emits a curved line (made out of spheres) from the
-end of the controller to a point on a ground surface (at any height).
-It is more useful than the Simple Laser Pointer for traversing objects
-of various heights as the end point can be curved on top of objects
-that are not visible to the player.
+The Bezier Pointer emits a curved line (made out of game objects) from
+the end of the controller to a point on a ground surface (at any
+height). It is more useful than the Simple Laser Pointer for
+traversing objects of various heights as the end point can be curved
+on top of objects that are not visible to the player.
 
 The laser beam is activated by default by pressing the `Grip` on the
 controller. The event it is listening for is the `AliasPointer` events
@@ -366,15 +366,21 @@ The following script parameters are available:
   * **Pointer Length:** The length of the projected forward pointer
   beam, this is basically the distance able to point from the
   controller potiion.
-  * **Pointer Density:** The number of spheres to render in the beam
+  * **Pointer Density:** The number of items to render in the beam
   bezier curve. A high number here will most likely have a negative
   impact of game performance due to large number of rendered objects.
   * **Show Pointer Cursor:** A cursor is displayed on the ground at
   the location the beam ends at, it is useful to see what height the
   beam end location is, however it can be turned off by toggling this.
   * **Pointer Cursor Radius:** The size of the ground pointer cursor,
-  This number also affects the size of the spheres in the bezier curve
-  beam. The larger the raduis, the larger the spheres will be.
+  This number also affects the size of the objects in the bezier curve
+  beam. The larger the raduis, the larger the objects will be.
+  * **Custom Pointer Tracer:** A custom Game Object can be applied
+  here to use instead of the default sphere for the beam tracer. The
+  custom Game Object will match the rotation of the controller.
+  * **Custom Pointer Cursor:** A custom Game Object can be applied
+  here to use instead of the default flat cylinder for the pointer
+  cursor.
 
 The Bezier Pointer object extends the `SteamVR_WorldPointer` abstract
 class and therefore emits the same events and payload.
