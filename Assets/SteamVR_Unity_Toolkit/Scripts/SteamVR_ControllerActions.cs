@@ -22,6 +22,11 @@ public class SteamVR_ControllerActions : MonoBehaviour {
         {
             renderer.enabled = on;
         }
+
+        foreach (SkinnedMeshRenderer renderer in this.GetComponentsInChildren<SkinnedMeshRenderer>())
+        {
+            renderer.enabled = on;
+        }
         controllerVisible = on;
     }
 
