@@ -143,6 +143,12 @@ public class SteamVR_TouchpadWalking : MonoBehaviour {
         {
             speed = 0;
         }
+
+        float deadzone = 0.1f;
+        if (speed < deadzone && speed > -deadzone)
+        {
+            speed = 0;
+        }
     }
 
     private void Move()
@@ -156,7 +162,7 @@ public class SteamVR_TouchpadWalking : MonoBehaviour {
 
     private void UpdateCollider()
     {
-        float playAreaHeightAdjustment = 0.01f;
+        float playAreaHeightAdjustment = 0.009f;
         float newBCYSize = (headset.transform.position.y - headsetYOffset) - this.transform.position.y;
         float newBCYCenter = (newBCYSize != 0 ? (newBCYSize / 2) + playAreaHeightAdjustment: 0);
 
