@@ -1068,6 +1068,7 @@ The current examples are:
   Headset Collision Fade script it can detect unwanted collisions
   (e.g. if the player stands up whilst walking as crouched) and reset
   their position to the last good known position.
+   * [View Example Tour on Youtube](https://www.youtube.com/watch?v=I7eWQPFZ_KE)
 
   * **018_CameraRig_FramesPerSecondCounter:** A scene which displays
   the frames per second in the centre of the headset view. Pressing
@@ -1103,12 +1104,14 @@ The current examples are:
   door to give a natural control over the swing of the door. There is
   also a Character Joint object that can be manipulated into different
   shapes by pulling each of the relevant sections.
+   * [View Example Tour on Youtube](https://www.youtube.com/watch?v=TwYMkYl6X3k)
 
   * **022_Controller_CustomBezierPointer:** A scene that demonstrates
   how the Bezier Pointer can have complex objects passed to it to
   generate the tracer beam and the cursor of the pointer. In the
   scene, particle objects with rotations are used to demonstrate a
   different look to the bezier pointer beam.
+   * [View Example Tour on Youtube](https://www.youtube.com/watch?v=5EAFOQJrqMY)
 
 ## Contributing
 
