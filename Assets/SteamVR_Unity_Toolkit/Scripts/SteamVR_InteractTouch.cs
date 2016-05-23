@@ -20,6 +20,7 @@ public delegate void ObjectInteractEventHandler(object sender, ObjectInteractEve
 public class SteamVR_InteractTouch : MonoBehaviour {
 
     public bool hideControllerOnTouch = false;
+    public float hideControllerDelay = 0f;
     public Color globalTouchHighlightColor = Color.clear;
 
     public event ObjectInteractEventHandler ControllerTouchInteractableObject;
@@ -59,13 +60,13 @@ public class SteamVR_InteractTouch : MonoBehaviour {
         return (obj && obj.GetComponent<SteamVR_InteractableObject>());
     }
 
-    void Awake()
+    private void Awake()
     {
         trackedController = GetComponent<SteamVR_TrackedObject>();
         controllerActions = GetComponent<SteamVR_ControllerActions>();
     }
 
-    void Start()
+    private void Start()
     {
         if (GetComponent<SteamVR_ControllerActions>() == null)
         {
@@ -80,7 +81,7 @@ public class SteamVR_InteractTouch : MonoBehaviour {
         collider.isTrigger = true;
     }
 
-    void OnTriggerStay(Collider collider)
+    private void OnTriggerStay(Collider collider)
     {
         if (touchedObject == null && IsObjectInteractable(collider.gameObject))
         {
@@ -90,12 +91,12 @@ public class SteamVR_InteractTouch : MonoBehaviour {
             touchedObject.GetComponent<SteamVR_InteractableObject>().StartTouching(this.gameObject);
             if (controllerActions.IsControllerVisible() && hideControllerOnTouch)
             {
-                controllerActions.ToggleControllerModel(false);
+                Invoke("HideController", hideControllerDelay);
             }
         }
     }
 
-    void OnTriggerExit(Collider collider)
+    private void OnTriggerExit(Collider collider)
     {
         if (IsObjectInteractable(collider.gameObject))
         {
@@ -107,6 +108,14 @@ public class SteamVR_InteractTouch : MonoBehaviour {
         if (hideControllerOnTouch)
         {
             controllerActions.ToggleControllerModel(true);
+        }
+    }
+
+    private void HideController()
+    {
+        if (touchedObject != null)
+        {
+            controllerActions.ToggleControllerModel(false);
         }
     }
 }

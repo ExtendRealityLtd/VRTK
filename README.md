@@ -695,8 +695,10 @@ The Interact Touch script is attached to a Controller object within the
 
 The following script parameters are available:
 
-  * **Hide Controller On Touch**: Hides the controller model when a valid
-  touch occurs
+  * **Hide Controller On Touch**: Hides the controller model when a
+  valid touch occurs
+  * **Hide Controller Delay:** The amount of seconds to wait before
+  hiding the controller on touch.
   * **Global Touch Highlight Color:** If the interactable object can be
   highlighted when it's touched but no local colour is set then this
   global colour is used.
@@ -756,6 +758,8 @@ The following script parameters are available:
 
   * **Hide Controller On Grab:** Hides the controller model when a valid
   grab occurs
+  * **Hide Controller Delay:** The amount of seconds to wait before
+  hiding the controller on grab.
   * **Controller Attach Point:** The rigidbody point on the controller
   model to snap the grabbed object to (defaults to the tip)
 
@@ -813,6 +817,8 @@ The following script parameters are available:
 
   * **Hide Controller On Use:** Hides the controller model when a valid
   use action starts
+  * **Hide Controller Delay:** The amount of seconds to wait before
+  hiding the controller on use.
 
 The following events are emitted:
 

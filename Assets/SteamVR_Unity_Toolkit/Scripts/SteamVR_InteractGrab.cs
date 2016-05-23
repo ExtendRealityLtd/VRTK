@@ -19,6 +19,7 @@ public class SteamVR_InteractGrab : MonoBehaviour
 {
     public Rigidbody controllerAttachPoint = null;
     public bool hideControllerOnGrab = false;
+    public float hideControllerDelay = 0f;
 
     public event ObjectInteractEventHandler ControllerGrabInteractableObject;
     public event ObjectInteractEventHandler ControllerUngrabInteractableObject;
@@ -196,6 +197,14 @@ public class SteamVR_InteractGrab : MonoBehaviour
             grabbedObject.GetComponent<SteamVR_InteractableObject>().ToggleHighlight(false);
         }
         if (hideControllerOnGrab)
+        {
+            Invoke("HideController", hideControllerDelay);
+        }
+    }
+
+    private void HideController()
+    {
+        if(grabbedObject != null)
         {
             controllerActions.ToggleControllerModel(false);
         }
