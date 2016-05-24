@@ -26,7 +26,8 @@ public class SteamVR_InteractableObject : MonoBehaviour
     {
         Fixed_Joint,
         Spring_Joint,
-        Track_Object
+        Track_Object,
+        Parent_Object
     }
 
     [Header("Touch Interactions", order = 1)]
@@ -88,8 +89,18 @@ public class SteamVR_InteractableObject : MonoBehaviour
         isTouched = false;
     }
 
+    //Added 5/24/2016 - Blueteak
+    public delegate void Grab(GameObject obj);
+    public Grab OnGrab;
+    //End addition
+
     public virtual void Grabbed(GameObject currentGrabbingObject)
     {
+        //Added 5/24/2016 - Blueteak
+        if(OnGrab != null)
+            OnGrab(currentGrabbingObject);
+        //End addition
+
         ForceReleaseGrab();
         RemoveTrackPoint();
         grabbingObject = currentGrabbingObject;

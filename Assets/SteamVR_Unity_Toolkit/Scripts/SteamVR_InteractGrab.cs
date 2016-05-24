@@ -31,6 +31,12 @@ public class SteamVR_InteractGrab : MonoBehaviour
     SteamVR_TrackedObject trackedController;
     SteamVR_ControllerActions controllerActions;
 
+    //Added 5/24/2016 - Blueteak
+    public bool hasObject()
+    {
+        return grabbedObject != null;
+    }
+
     private int grabEnabledState = 0;
 
     public virtual void OnControllerGrabInteractableObject(ObjectInteractEventArgs e)
@@ -116,9 +122,24 @@ public class SteamVR_InteractGrab : MonoBehaviour
         {
             obj.transform.position = controllerAttachPoint.transform.position + obj.GetComponent<SteamVR_InteractableObject>().snapToPosition;
         }
-
-        CreateJoint(obj);
+        //Modified 5/24/16 - Blueteak
+        if (obj.GetComponent<SteamVR_InteractableObject>().grabAttatchMechanic != SteamVR_InteractableObject.GrabAttatchType.Parent_Object)
+            CreateJoint(obj);
+        else
+            ParentObject(obj);
+        //End modification
     }
+
+    //Added 5/24/16 - Blueteak
+    Transform lastParent;
+    private void ParentObject(GameObject obj)
+    {
+        //lastParent = obj.transform.parent;
+        obj.transform.SetParent(transform);
+        obj.GetComponent<Rigidbody>().isKinematic = true;
+        //Physics.IgnoreCollision(obj.GetComponent<Collider>(), GetComponent<Collider>());
+    }
+    //End addition
 
     private void CreateJoint(GameObject obj)
     {
@@ -140,18 +161,32 @@ public class SteamVR_InteractGrab : MonoBehaviour
 
     private Rigidbody ReleaseGrabbedObjectFromController(bool withThrow)
     {
-        var jointGameObject = controllerAttachJoint.gameObject;
-        var rigidbody = jointGameObject.GetComponent<Rigidbody>();
-        if (withThrow)
+        //Modified 5/24/2016 - Blueteak
+        if (controllerAttachJoint != null)
         {
-            Object.DestroyImmediate(controllerAttachJoint);
-        } else
-        {
-            Object.Destroy(controllerAttachJoint);
-        }
-        controllerAttachJoint = null;
+            var jointGameObject = controllerAttachJoint.gameObject;
+            var rigidbody = jointGameObject.GetComponent<Rigidbody>();
+            if (withThrow)
+            {
+                Object.DestroyImmediate(controllerAttachJoint);
+            }
+            else
+            {
+                Object.Destroy(controllerAttachJoint);
+            }
+            controllerAttachJoint = null;
 
-        return rigidbody;
+            return rigidbody;
+        }
+        else
+        {
+            var rigidbody = grabbedObject.GetComponent<Rigidbody>();
+            grabbedObject.transform.SetParent(lastParent);
+            rigidbody.isKinematic = false;
+            return rigidbody;
+        }
+        //End modification
+       
     }
 
     private void ThrowReleasedObject(Rigidbody rb, uint controllerIndex)
@@ -171,7 +206,8 @@ public class SteamVR_InteractGrab : MonoBehaviour
         rb.maxAngularVelocity = rb.angularVelocity.magnitude;
     }
 
-    private void GrabInteractedObject()
+    //Modified 5/24/2016 - Blueteak
+    public void GrabInteractedObject()
     {
         if (controllerAttachJoint == null && grabbedObject == null && IsObjectGrabbable(interactTouch.GetTouchedObject()))
         {
@@ -206,13 +242,13 @@ public class SteamVR_InteractGrab : MonoBehaviour
     {
         if(grabbedObject != null)
         {
-            controllerActions.ToggleControllerModel(false);
+            controllerActions.ToggleControllerModel(false, grabbedObject);
         }
     }
 
     private void UngrabInteractedObject(uint controllerIndex, bool withThrow)
     {
-        if (grabbedObject != null && controllerAttachJoint != null)
+        if (grabbedObject != null) //Modified 5/24/2016 - Blueteak
         {
             Rigidbody releasedObjectRigidBody = ReleaseGrabbedObjectFromController(withThrow);
             if (withThrow)
