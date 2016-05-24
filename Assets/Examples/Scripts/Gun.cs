@@ -17,14 +17,15 @@ public class Gun : SteamVR_InteractableObject
     {
         base.Start();
         bullet = this.transform.Find("Bullet").gameObject;
+        bullet.SetActive(false);
     }
 
     void FireBullet()
     {
-        GameObject bulletClone = Instantiate(bullet, bullet.transform.position, Quaternion.identity) as GameObject;
+        GameObject bulletClone = Instantiate(bullet, bullet.transform.position, bullet.transform.rotation) as GameObject;
         bulletClone.SetActive(true);
         Rigidbody rb = bulletClone.GetComponent<Rigidbody>();
-        rb.AddRelativeForce(-transform.forward * bulletSpeed);
+        rb.AddForce(-bullet.transform.forward * bulletSpeed);
         Destroy(bulletClone, bulletLife);
     }
 }
