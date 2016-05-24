@@ -375,6 +375,9 @@ The following script parameters are available:
   * **Pointer Cursor Radius:** The size of the ground pointer cursor,
   This number also affects the size of the objects in the bezier curve
   beam. The larger the raduis, the larger the objects will be.
+  * **Beam Curve Offset:** The amount of height offset to apply to the
+  projected beam to generate a smoother curve even when the beam is
+  pointing straight.
   * **Custom Pointer Tracer:** A custom Game Object can be applied
   here to use instead of the default sphere for the beam tracer. The
   custom Game Object will match the rotation of the controller.

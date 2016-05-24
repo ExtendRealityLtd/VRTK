@@ -56,44 +56,34 @@ public static class Bezier
 
 public class CurveGenerator : MonoBehaviour
 {
-    enum BezierControlPointMode
+    private enum BezierControlPointMode
     {
         Free,
         Aligned,
         Mirrored
     }
 
-    Vector3[] points;
-    GameObject[] items;
-    BezierControlPointMode[] modes;
-    bool loop;
-    int frequency;
-    Transform trackTransform;
+    private Vector3[] points;
+    private GameObject[] items;
+    private BezierControlPointMode[] modes;
+    private bool loop;
+    private int frequency;
+    private bool customTracer;
 
-    public void Create(int setFrequency, float radius, GameObject tracer, Transform track)
+    public void Create(int setFrequency, float radius, GameObject tracer)
     {
         float circleSize = radius / 8;
-        trackTransform = track;
 
         frequency = setFrequency;
         items = new GameObject[frequency];
         for (int f = 0; f < items.Length; f++)
         {
+            customTracer = true;
             items[f] = (tracer ? Instantiate(tracer) : CreateSphere());
             items[f].transform.parent = this.transform;
             items[f].layer = 2;
             items[f].transform.localScale = new Vector3(circleSize, circleSize, circleSize);
         }
-    }
-
-    private GameObject CreateSphere()
-    {
-        GameObject item = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-        Destroy(item.GetComponent<SphereCollider>());
-        item.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
-        item.GetComponent<MeshRenderer>().receiveShadows = false;
-
-        return item;
     }
 
     public void SetPoints(Vector3[] controlPoints, Material material)
@@ -110,6 +100,17 @@ public class CurveGenerator : MonoBehaviour
     public void TogglePoints(bool state)
     {
         this.gameObject.SetActive(state);
+    }
+
+    private GameObject CreateSphere()
+    {
+        customTracer = false;
+        GameObject item = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        Destroy(item.GetComponent<SphereCollider>());
+        item.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+        item.GetComponent<MeshRenderer>().receiveShadows = false;
+
+        return item;
     }
 
     private bool Loop
@@ -270,13 +271,23 @@ public class CurveGenerator : MonoBehaviour
 
         for (int f = 0; f < frequency; f++)
         {
-
+            if (customTracer && (f == 0 || f == (frequency - 1)))
+            {
+                items[f].SetActive(false);
+                continue;
+            }
             setMeshMaterial(items[f], material);
             setSkinnedMeshMaterial(items[f], material);
 
             Vector3 position = this.GetPoint(f * stepSize);
             items[f].transform.position = position;
-            items[f].transform.rotation = trackTransform.rotation;
+
+            Vector3 nextPosition = this.GetPoint((f + 1) * stepSize);
+            Vector3 lookPosition = (nextPosition - position).normalized;
+            if (lookPosition != Vector3.zero)
+            {
+                items[f].transform.rotation = Quaternion.LookRotation(lookPosition);
+            }
         }
     }
 

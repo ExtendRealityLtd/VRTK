@@ -22,6 +22,7 @@ public class SteamVR_BezierPointer : SteamVR_WorldPointer
     public int pointerDensity = 10;
     public bool showPointerCursor = true;
     public float pointerCursorRadius = 0.5f;
+    public float beamCurveOffset = 1f;
     public GameObject customPointerTracer;
     public GameObject customPointerCursor;
 
@@ -66,16 +67,17 @@ public class SteamVR_BezierPointer : SteamVR_WorldPointer
         global.SetActive(false);
         curvedBeam = global.gameObject.AddComponent<CurveGenerator>();
         curvedBeam.transform.parent = null;
-        curvedBeam.Create(pointerDensity, pointerCursorRadius, customPointerTracer, this.transform);
+        curvedBeam.Create(pointerDensity, pointerCursorRadius, customPointerTracer);
         base.InitPointer();
     }
 
     private GameObject CreateCursor()
     {
+        float cursorYOffset = 0.02f;
         GameObject cursor = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
         cursor.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
         cursor.GetComponent<MeshRenderer>().receiveShadows = false;
-        cursor.transform.localScale = new Vector3(pointerCursorRadius, 0.02f, pointerCursorRadius);
+        cursor.transform.localScale = new Vector3(pointerCursorRadius, cursorYOffset, pointerCursorRadius);
         Destroy(cursor.GetComponent<CapsuleCollider>());
         return cursor;
     }
@@ -238,7 +240,7 @@ public class SteamVR_BezierPointer : SteamVR_WorldPointer
         Vector3[] beamPoints = new Vector3[]
         {
             this.transform.position,
-            projectedBeamJoint.transform.position + new Vector3(0f, 1f, 0f),
+            projectedBeamJoint.transform.position + new Vector3(0f, beamCurveOffset, 0f),
             projectedBeamDown.transform.position,
             projectedBeamDown.transform.position,
         };
