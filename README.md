@@ -3,6 +3,14 @@
 A collection of useful scripts and prefabs for building SteamVR titles
 in Unity 5.
 
+---
+
+To all those lovely people who want to give donations, instead of donating, consider supporting me by buying my latest game on Steam - `Holodaze` for HTC Vive. At least this way, I make a bit of money and you get something to play!
+
+[View Holodaze on the Steam Store](http://store.steampowered.com/app/475520)
+
+---
+
 **This Toolkit requires the [SteamVR Plugin]
 from the Unity Asset Store to be imported into your Unity project.**
 
@@ -268,6 +276,9 @@ The following script parameters are available:
   * **Show Play Area Cursor:** If this is enabled then the play area
   boundaries are displayed at the tip of the pointer beam in the
   current pointer colour.
+  * **Play Area Cursor Dimensions:** Determines the size of the play
+  area cursor and collider. If the values are left as zero then the
+  Play Area Cursor will be sized to the calibrated Play Area space.
   * **Handle Play Area Cursor Collisions:** If this is ticked then if
   the play area cursor is colliding with any other object then the
   pointer colour will change to the `Pointer Miss Color` and the
@@ -278,6 +289,12 @@ The following script parameters are available:
   know whether to action the new destination. This allows controller
   beams to be enabled on a controller but never trigger a teleport
   (if this option is unchecked).
+  * **Beam Always On:** If this is checked the the pointer beam is
+  always visible but the Destination Set event is still only emitted
+  when the assigned button is pressed.
+  * **Activate Delay:** The time in seconds (based on a 60 frame per
+  second update tick) to delay the pointer beam being able to be
+  active again. Useful for preventing constant beams for teleporting.
   * **Pointer Thickness:** The thickness and length of the beam can
   also be set on the script as well as the ability to toggle the sphere
   beam tip that is displayed at the end of the beam (to represent a
@@ -298,11 +315,11 @@ viewed in the script
 
 #### Bezier Curve Laser Pointer (SteamVR_BezierPointer)
 
-The Bezier Pointer emits a curved line (made out of spheres) from the
-end of the controller to a point on a ground surface (at any height).
-It is more useful than the Simple Laser Pointer for traversing objects
-of various heights as the end point can be curved on top of objects
-that are not visible to the player.
+The Bezier Pointer emits a curved line (made out of game objects) from
+the end of the controller to a point on a ground surface (at any
+height). It is more useful than the Simple Laser Pointer for
+traversing objects of various heights as the end point can be curved
+on top of objects that are not visible to the player.
 
 The laser beam is activated by default by pressing the `Grip` on the
 controller. The event it is listening for is the `AliasPointer` events
@@ -327,6 +344,9 @@ The following script parameters are available:
   * **Show Play Area Cursor:** If this is enabled then the play area
   boundaries are displayed at the tip of the pointer beam in the
   current pointer colour.
+  * **Play Area Cursor Dimensions:** Determines the size of the play
+  area cursor and collider. If the values are left as zero then the
+  Play Area Cursor will be sized to the calibrated Play Area space.
   * **Handle Play Area Cursor Collisions:** If this is ticked then if
   the play area cursor is colliding with any other object then the
   pointer colour will change to the `Pointer Miss Color` and the
@@ -337,18 +357,33 @@ The following script parameters are available:
   know whether to action the new destination. This allows controller
   beams to be enabled on a controller but never trigger a teleport
   (if this option is unchecked).
+  * **Beam Always On:** If this is checked the the pointer beam is
+  always visible but the Destination Set event is still only emitted
+  when the assigned button is pressed.
+  * **Activate Delay:** The time in seconds (based on a 60 frame per
+  second update tick) to delay the pointer beam being able to be
+  active again. Useful for preventing constant beams for teleporting.
   * **Pointer Length:** The length of the projected forward pointer
   beam, this is basically the distance able to point from the
   controller potiion.
-  * **Pointer Density:** The number of spheres to render in the beam
+  * **Pointer Density:** The number of items to render in the beam
   bezier curve. A high number here will most likely have a negative
   impact of game performance due to large number of rendered objects.
   * **Show Pointer Cursor:** A cursor is displayed on the ground at
   the location the beam ends at, it is useful to see what height the
   beam end location is, however it can be turned off by toggling this.
   * **Pointer Cursor Radius:** The size of the ground pointer cursor,
-  This number also affects the size of the spheres in the bezier curve
-  beam. The larger the raduis, the larger the spheres will be.
+  This number also affects the size of the objects in the bezier curve
+  beam. The larger the raduis, the larger the objects will be.
+  * **Beam Curve Offset:** The amount of height offset to apply to the
+  projected beam to generate a smoother curve even when the beam is
+  pointing straight.
+  * **Custom Pointer Tracer:** A custom Game Object can be applied
+  here to use instead of the default sphere for the beam tracer. The
+  custom Game Object will match the rotation of the controller.
+  * **Custom Pointer Cursor:** A custom Game Object can be applied
+  here to use instead of the default flat cylinder for the pointer
+  cursor.
 
 The Bezier Pointer object extends the `SteamVR_WorldPointer` abstract
 class and therefore emits the same events and payload.
@@ -390,6 +425,14 @@ The following script parameters are available:
   Setting the speed to 0 will mean no fade blink effect is present.
   The fade is achieved via the `SteamVR_Fade.cs` script in the
   SteamVR Unity Plugin scripts.
+  * **Distance Blink Delay:** A range between 0 and 32 that determines
+  how long the blink transition will stay blacked out depending on the
+  distance being teleported. A value of 0 will not delay the teleport
+  blink effect over any distance, a value of 32 will delay the
+  teleport blink fade in even when the distance teleported is very
+  close to the original position. This can be used to simulate time
+  taking longer to pass the further a user teleports. A value of 16
+  provides a decent basis to simulate this to the user.
   * **Headset Position Compensation:** If this is checked then the
   teleported location will be the position of the headset within the
   play area. If it is unchecked then the teleported location will
@@ -415,7 +458,15 @@ available.
 
 The following script parameters are available:
 
-  * **Blink Transition Speed:** The fade blink speed on teleport
+  * **Blink Transition Speed:** The fade blink speed on teleport.
+  * **Distance Blink Delay:** A range between 0 and 32 that determines
+  how long the blink transition will stay blacked out depending on the
+  distance being teleported. A value of 0 will not delay the teleport
+  blink effect over any distance, a value of 32 will delay the
+  teleport blink fade in even when the distance teleported is very
+  close to the original position. This can be used to simulate time
+  taking longer to pass the further a user teleports. A value of 16
+  provides a decent basis to simulate this to the user.
   * **Headset Position Compensation:** If this is checked then the
   teleported location will be the position of the headset within the
   play area. If it is unchecked then the teleported location will
@@ -471,11 +522,68 @@ The following script parameters are available:
   * **Blink Transition Speed:** The fade blink speed on collision.
   * **Fade Color:** The colour to fade the headset to on collision.
 
+The following events are emitted:
+
+  * **HeadsetCollisionDetect:** Emitted when the user's headset
+  collides with another game object.
+
+The event payload that is emitted contains:
+
+  * **collider:** The Collider of the game object the headset has
+  collided with.
+  * **currentTransform:** The current Transform of the object that
+  the Headset Collision Fade script is attatched to (Camera).
+
 An example of the `SteamVR_HeadsetCollisionFade` script can be
 viewed in the scene `Examples/011_Camera_HeadSetCollisionFading`.
 The scene has collidable walls around the play area and if the player
 puts their head into any of the walls then the headset will fade to
 black.
+
+#### Touchpad Movement (SteamVR_TouchpadWalking)
+
+The ability to move the play area around the game world by sliding a
+finger over the touchpad is achieved using this script. The
+Touchpad Walking script is applied to the `[CameraRig]` prefab and
+adds a rigidbody and a box collider to the user's position to
+prevent them from walking through other collidable game objects.
+
+If the Headset Collision Fade script has been applied to the Camera
+prefab, then if a user attempts to collide with an object then their
+position is reset to the last good known position. This can happen
+if the user is moving through a section where they need to crouch
+and then they stand up and collide with the ceiling. Rather than
+allow a user to do this and cause collision resolution issues it is
+better to just move them back to a valid location. This does break
+immersion but the user is doing something that isn't natural.
+
+The following script parameters are available:
+
+  * **Max Walk Speed:** The maximum speed the play area will be moved
+  when the touchpad is being touched at the extremes of the axis. If
+  a lower part of the touchpad axis is touched (nearer the centre)
+  then the walk speed is slower.
+  * **Deceleration:** The speed in which the play area slows down to
+  a complete stop when the user is no longer touching the touchpad.
+  This deceleration effect can ease any motion sickness that may be
+  suffered.
+  * **Headset Y Offset:** The box collider which is created for the
+  user is set at a height from the user's headset position. If the
+  collider is required to be lower to allow for room between the
+  play area collider and the headset then this offset value will
+  shorten the height of the generated box collider.
+  * **Ignore Grabbed Collisions:** If this is checked then any items
+  that are grabbed with the controller will not collide with the
+  box collider and rigid body on the play area. This is very useful
+  if the user is required to grab and wield objects because if the
+  collider was active they would bounce off the play area collider.
+
+An example of the `SteamVR_TouchpadWalking` script can be viewed in
+the scene `Examples/017_CameraRig_TouchpadWalking`. The scene has
+a collection of walls and slopes that can be traversed by the user
+with the touchpad. There is also an area that can only be traversed
+if the user is crouching. Standing up in this crouched area will
+cause the user to appear back at their last good known position.
 
 #### Interactable Object (SteamVR_InteractableObject)
 
@@ -484,31 +592,23 @@ required to be interacted with (e.g. via the controllers).
 
 The following script parameters are available:
 
+######Touch Interactions
+  * **Highlight On Touch:** The object will only highlight when a
+  controller touches it if this is checked.
+  * **Touch Highligt Color:** The colour to highlight the object
+  when it is touched. This colour will override any globally set
+  color (for instance on the `SteamVR_InteractTouch` script).
+
+######Grab Interactions
   * **Is Grabbable:** Determines if the object can be grabbed
   * **Hold Button To Grab:** If this is checked then the grab button
   on the controller needs to be continually held down to keep grabbing.
   If this is unchecked the grab button toggles the grab action with
   one button press to grab and another to release.
-  * **Is Usable:** Determines if the object can be used
-  * **Hold Button To Use:** If this is checked then the use button
-  on the controller needs to be continually held down to keep using.
-  If this is unchecked the the use button toggles the use action with
-  one button press to start using and another to stop using.
-  * **Highlight On Touch:** The object will only highlight when a
-  controller touches it if this is checked.
-  * **Pointer Activates Use Action:** If this is checked then when
-  a World Pointer beam (projected from the controller) hits the
-  interactable object, if the object has `Hold Button To Use` unchecked
-  then whilst the pointer is over the object it will run it's `Using`
-  method. If `Hold Button To Use` is unchecked then the `Using` method
-  will be run when the pointer is deactivated. The world pointer will
-  not throw the `Destination Set` event if it is affecting an
-  interactable object with this setting checked as this prevents
-  unwanted teleporting from happening when using an object with a
-  pointer.
-  * **Touch Highligt Color:** The colour to highlight the object
-  when it is touched. This colour will override any globally set
-  color (for instance on the `SteamVR_InteractTouch` script).
+  * **Pause Collisions On Grab:** If this is checked then collisions
+  with the Interactable Object are temporarily disabled whilst the
+  object snaps to the controller. This is useful if a game object may
+  get stuck inside another object when it is being grabbed.
   * **Grab Snap Type:** This sets the snap type of the object when
   it is grabbed.
    * `Simple_Snap` snaps the grabbed object's central position to the
@@ -522,20 +622,56 @@ The following script parameters are available:
   rotation of the object in relation to the controller on snap.
   This is useful for picking up guns or swords where the relative
   rotation to the controller is important for ease of use.
+
+######Grab Mechanics
+  * **Grab Attach Type:** This determines how the grabbed item will
+  be attached to the controller when it is grabbed.
+   * `Fixed Joint` attaches the object to the controller with a fixed
+   joint meaning it tracks the position and rotation of the controller
+   with perfect 1:1 tracking.
+   * `Spring Joint` attaches the object to the controller with a
+   spring joint meaing there is some flexibility between the item
+   and the controller force moving the item. This works well when
+   attempting to pull an item rather than snap the item directly to
+   the controller. It creates the illusion that the item has
+   resistence to move it.
+   * `Track Object` doesn't attach the object to the controller via
+   a joint, instead it ensures the object tracks the direction of the
+   controller, which works well for items that are on hinged joints.
   * **Detatch Threshold:** The force amount when to detatch the
   object from the grabbed controller. If the controller tries to
   exert a force higher than this threshold on the object (from pulling
   it through another object or pushing it into another object) then
   the joint holding the object to the grabbing controller will break
-  and the object will no longer be grabbed.
-  * **Joint Damper:** The amount to damper the spring effect when a
-  grabbing controller grabs the object if it already has a joint
-  attached. A higher number here will reduce the oscillation effect
-  when moving jointed Interactable Objects.
-  * **Pause Collisions On Grab:** If this is checked then collisions
-  with the Interactable Object are temporarily disabled whilst the
-  object snaps to the controller. This is useful if a game object may
-  get stuck inside another object when it is being grabbed.
+  and the object will no longer be grabbed. This also works with
+  Tracked Object grabbing but determines how far the controller is
+  from the object before breaking the grab.
+  * **Spring Joint Strength:** The strength of the spring holding the
+  object to the controller. A low number will mean the spring is very
+  loose and the object will require more force to move it, a high
+  number will mean a tight spring meaning less force is required to
+  move it.
+  * **Spring Joint Damper:** The amount to damper the spring effect
+  when using a Spring Joint grab mechanic. A higher number here will
+  reduce the oscillation effect when moving jointed Interactable
+  Objects.
+
+######Use Interactions
+  * **Is Usable:** Determines if the object can be used
+  * **Hold Button To Use:** If this is checked then the use button
+  on the controller needs to be continually held down to keep using.
+  If this is unchecked the the use button toggles the use action with
+  one button press to start using and another to stop using.
+  * **Pointer Activates Use Action:** If this is checked then when
+  a World Pointer beam (projected from the controller) hits the
+  interactable object, if the object has `Hold Button To Use` unchecked
+  then whilst the pointer is over the object it will run it's `Using`
+  method. If `Hold Button To Use` is unchecked then the `Using` method
+  will be run when the pointer is deactivated. The world pointer will
+  not throw the `Destination Set` event if it is affecting an
+  interactable object with this setting checked as this prevents
+  unwanted teleporting from happening when using an object with a
+  pointer.
 
 The basis of this script is to provide a simple mechanism for
 identifying objects in the game world that can be grabbed or used
@@ -562,8 +698,10 @@ The Interact Touch script is attached to a Controller object within the
 
 The following script parameters are available:
 
-  * **Hide Controller On Touch**: Hides the controller model when a valid
-  touch occurs
+  * **Hide Controller On Touch**: Hides the controller model when a
+  valid touch occurs
+  * **Hide Controller Delay:** The amount of seconds to wait before
+  hiding the controller on touch.
   * **Global Touch Highlight Color:** If the interactable object can be
   highlighted when it's touched but no local colour is set then this
   global colour is used.
@@ -623,6 +761,8 @@ The following script parameters are available:
 
   * **Hide Controller On Grab:** Hides the controller model when a valid
   grab occurs
+  * **Hide Controller Delay:** The amount of seconds to wait before
+  hiding the controller on grab.
   * **Controller Attach Point:** The rigidbody point on the controller
   model to snap the grabbed object to (defaults to the tip)
 
@@ -680,6 +820,8 @@ The following script parameters are available:
 
   * **Hide Controller On Use:** Hides the controller model when a valid
   use action starts
+  * **Hide Controller Delay:** The amount of seconds to wait before
+  hiding the controller on use.
 
 The following events are emitted:
 
@@ -743,6 +885,9 @@ The following script parameters are available:
   * **Show Play Area Cursor:** If this is enabled then the play area
   boundaries are displayed at the tip of the pointer beam in the
   current pointer colour.
+  * **Play Area Cursor Dimensions:** Determines the size of the play
+  area cursor and collider. If the values are left as zero then the
+  Play Area Cursor will be sized to the calibrated Play Area space.
   * **Handle Play Area Cursor Collisions:** If this is ticked then if
   the play area cursor is colliding with any other object then the
   pointer colour will change to the `Pointer Miss Color` and the
@@ -753,6 +898,12 @@ The following script parameters are available:
   know whether to action the new destination. This allows controller
   beams to be enabled on a controller but never trigger a teleport
   (if this option is unchecked).
+  * **Beam Always On:** If this is checked the the pointer beam is
+  always visible but the Destination Set event is still only emitted
+  when the assigned button is pressed.
+  * **Activate Delay:** The time in seconds (based on a 60 frame per
+  second update tick) to delay the pointer beam being able to be
+  active again. Useful for preventing constant beams for teleporting.
 
 The following events are emitted:
 
@@ -909,6 +1060,19 @@ The current examples are:
   apart if it is hit hard enough by the sword.
    * [View Example Tour on Youtube](https://www.youtube.com/watch?v=ErSxZlZh6fc)
 
+  * **017_CameraRig_TouchpadWalking:** A scene which demonstrates how
+  to move around the game world using the touchpad by sliding a finger
+  forward and backwards to move in that direction. Sliding a finger
+  left and right across the touchpad strafes in that direction. The
+  rotation is done via the player in game physically rotating their
+  body in the place space and whichever way the headset is looking
+  will be the way the player walks forward. Crouching is also possible
+  as demonstrated in this scene and in conjunction with the 
+  Headset Collision Fade script it can detect unwanted collisions
+  (e.g. if the player stands up whilst walking as crouched) and reset
+  their position to the last good known position.
+   * [View Example Tour on Youtube](https://www.youtube.com/watch?v=I7eWQPFZ_KE)
+
   * **018_CameraRig_FramesPerSecondCounter:** A scene which displays
   the frames per second in the centre of the headset view. Pressing
   the trigger generates a new sphere and pressing the touchpad
@@ -934,15 +1098,23 @@ The current examples are:
 
   * **021_Controller_GrabbingObjectsWithJoints:** A scene with a
   collection of Interactable Objects that are attached to other
-  objects with joints. The example shows that when an
-  Interactable Object that has a joint is grabbed, the controller
-  has a `Spring Joint` connected to it rather than a `Fixed Joint` to
-  allow for relatively controlling the Interactable Object. The scene
-  demonstrates this with a box with a lid on a `Hinge Joint` that can
-  be opened by grabbing the handle, a door with a `Hinge Joint` that
-  can be opened and closed by grabbing the door or handle and finally a
-  drawer with a `Configurable Joint` that allows the drawer to be
-  grabbed and it slides open.
+  objects with joints. The example shows that Interactable Objects
+  can have different attach mechanics to determine the best way of
+  connecting the object to the controller. Fixed Joint works well for
+  holding objects like cubes as they track perfectly to the controller
+  whereas a Spring Joint works well on the drawer to give it a natural
+  slide when operating. Finally, the Track Object works well on the
+  door to give a natural control over the swing of the door. There is
+  also a Character Joint object that can be manipulated into different
+  shapes by pulling each of the relevant sections.
+   * [View Example Tour on Youtube](https://www.youtube.com/watch?v=TwYMkYl6X3k)
+
+  * **022_Controller_CustomBezierPointer:** A scene that demonstrates
+  how the Bezier Pointer can have complex objects passed to it to
+  generate the tracer beam and the cursor of the pointer. In the
+  scene, particle objects with rotations are used to demonstrate a
+  different look to the bezier pointer beam.
+   * [View Example Tour on Youtube](https://www.youtube.com/watch?v=5EAFOQJrqMY)
 
 ## Contributing
 

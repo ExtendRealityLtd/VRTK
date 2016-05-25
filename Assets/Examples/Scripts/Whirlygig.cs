@@ -25,7 +25,7 @@ public class Whirlygig : SteamVR_InteractableObject
     }
 
     // Update is called once per frame
-    void Update () {
+    protected override void Update () {
         rotator.transform.Rotate(new Vector3(spinSpeed * Time.deltaTime, 0f, 0f));
 	}
 }

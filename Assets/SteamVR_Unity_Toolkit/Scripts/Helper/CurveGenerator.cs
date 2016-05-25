@@ -56,33 +56,31 @@ public static class Bezier
 
 public class CurveGenerator : MonoBehaviour
 {
-    enum BezierControlPointMode
+    private enum BezierControlPointMode
     {
         Free,
         Aligned,
         Mirrored
     }
 
-    Vector3[] points;
-    GameObject[] items;
-    BezierControlPointMode[] modes;
-    bool loop;
-    int frequency;
+    private Vector3[] points;
+    private GameObject[] items;
+    private BezierControlPointMode[] modes;
+    private bool loop;
+    private int frequency;
+    private bool customTracer;
 
-    public void Create(int setFrequency, float radius)
+    public void Create(int setFrequency, float radius, GameObject tracer)
     {
-        frequency = setFrequency;
         float circleSize = radius / 8;
 
+        frequency = setFrequency;
         items = new GameObject[frequency];
         for (int f = 0; f < items.Length; f++)
         {
-            items[f] = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            Destroy(items[f].GetComponent<SphereCollider>());
-
+            customTracer = true;
+            items[f] = (tracer ? Instantiate(tracer) : CreateSphere());
             items[f].transform.parent = this.transform;
-            items[f].GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
-            items[f].GetComponent<MeshRenderer>().receiveShadows = false;
             items[f].layer = 2;
             items[f].transform.localScale = new Vector3(circleSize, circleSize, circleSize);
         }
@@ -104,7 +102,18 @@ public class CurveGenerator : MonoBehaviour
         this.gameObject.SetActive(state);
     }
 
-    bool Loop
+    private GameObject CreateSphere()
+    {
+        customTracer = false;
+        GameObject item = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        Destroy(item.GetComponent<SphereCollider>());
+        item.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+        item.GetComponent<MeshRenderer>().receiveShadows = false;
+
+        return item;
+    }
+
+    private bool Loop
     {
         get
         {
@@ -121,7 +130,7 @@ public class CurveGenerator : MonoBehaviour
         }
     }
 
-    int ControlPointCount
+    private int ControlPointCount
     {
         get
         {
@@ -129,12 +138,12 @@ public class CurveGenerator : MonoBehaviour
         }
     }
 
-    Vector3 GetControlPoint(int index)
+    private Vector3 GetControlPoint(int index)
     {
         return points[index];
     }
 
-    void SetControlPoint(int index, Vector3 point)
+    private void SetControlPoint(int index, Vector3 point)
     {
         if (index % 3 == 0)
         {
@@ -175,7 +184,7 @@ public class CurveGenerator : MonoBehaviour
         EnforceMode(index);
     }
 
-    void EnforceMode(int index)
+    private void EnforceMode(int index)
     {
         int modeIndex = (index + 1) / 3;
         BezierControlPointMode mode = modes[modeIndex];
@@ -222,7 +231,7 @@ public class CurveGenerator : MonoBehaviour
         points[enforcedIndex] = middle + enforcedTangent;
     }
 
-    int CurveCount
+    private int CurveCount
     {
         get
         {
@@ -230,7 +239,7 @@ public class CurveGenerator : MonoBehaviour
         }
     }
 
-    Vector3 GetPoint(float t)
+    private Vector3 GetPoint(float t)
     {
         int i;
         if (t >= 1f)
@@ -248,7 +257,7 @@ public class CurveGenerator : MonoBehaviour
         return transform.TransformPoint(Bezier.GetPoint(points[i], points[i + 1], points[i + 2], points[i + 3], t));
     }
 
-    void SetObjects(Material material)
+    private void SetObjects(Material material)
     {
         float stepSize = frequency * 1;
         if (this.Loop || stepSize == 1)
@@ -262,12 +271,49 @@ public class CurveGenerator : MonoBehaviour
 
         for (int f = 0; f < frequency; f++)
         {
-            if (items[f].GetComponent<MeshRenderer>())
+            if (customTracer && (f == 0 || f == (frequency - 1)))
             {
-                items[f].GetComponent<MeshRenderer>().material = material;
+                items[f].SetActive(false);
+                continue;
             }
-                Vector3 position = this.GetPoint(f * stepSize);
+            setMeshMaterial(items[f], material);
+            setSkinnedMeshMaterial(items[f], material);
+
+            Vector3 position = this.GetPoint(f * stepSize);
             items[f].transform.position = position;
+
+            Vector3 nextPosition = this.GetPoint((f + 1) * stepSize);
+            Vector3 lookPosition = (nextPosition - position).normalized;
+            if (lookPosition != Vector3.zero)
+            {
+                items[f].transform.rotation = Quaternion.LookRotation(lookPosition);
+            }
+        }
+    }
+
+    private void setMeshMaterial(GameObject item, Material material)
+    {
+        if (item.GetComponent<MeshRenderer>())
+        {
+            item.GetComponent<MeshRenderer>().material = material;
+        }
+
+        foreach (MeshRenderer mr in item.GetComponentsInChildren<MeshRenderer>())
+        {
+            mr.material = material;
+        }
+    }
+
+    private void setSkinnedMeshMaterial(GameObject item, Material material)
+    {
+        if (item.GetComponent<SkinnedMeshRenderer>())
+        {
+            item.GetComponent<SkinnedMeshRenderer>().material = material;
+        }
+
+        foreach (SkinnedMeshRenderer mr in item.GetComponentsInChildren<SkinnedMeshRenderer>())
+        {
+            mr.material = material;
         }
     }
 }

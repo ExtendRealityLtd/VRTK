@@ -20,6 +20,7 @@ public delegate void ObjectInteractEventHandler(object sender, ObjectInteractEve
 public class SteamVR_InteractTouch : MonoBehaviour {
 
     public bool hideControllerOnTouch = false;
+    public float hideControllerDelay = 0f;
     public Color globalTouchHighlightColor = Color.clear;
 
     public event ObjectInteractEventHandler ControllerTouchInteractableObject;
@@ -59,7 +60,7 @@ public class SteamVR_InteractTouch : MonoBehaviour {
         return (obj && obj.GetComponent<SteamVR_InteractableObject>());
     }
 
-    void Awake()
+    private void Awake()
     {
         if( SteamVR.enabled == false ) {
             this.enabled = false;
@@ -69,7 +70,7 @@ public class SteamVR_InteractTouch : MonoBehaviour {
         controllerActions = GetComponent<SteamVR_ControllerActions>();
     }
 
-    void Start()
+    private void Start()
     {
         if (GetComponent<SteamVR_ControllerActions>() == null)
         {
@@ -78,13 +79,13 @@ public class SteamVR_InteractTouch : MonoBehaviour {
         }
 
         //Create trigger box collider for controller
-        BoxCollider collider = this.gameObject.AddComponent<BoxCollider>();
-        collider.size = new Vector3(0.1f, 0.08f, 0.2f);
-        collider.center = new Vector3(0f, -0.035f, -0.055f);
+        SphereCollider collider = this.gameObject.AddComponent<SphereCollider>();
+        collider.radius = 0.05f;
+        collider.center = new Vector3(0f, -0.035f, -0.01f);
         collider.isTrigger = true;
     }
 
-    void OnTriggerStay(Collider collider)
+    private void OnTriggerStay(Collider collider)
     {
         if (touchedObject == null && IsObjectInteractable(collider.gameObject))
         {
@@ -94,12 +95,12 @@ public class SteamVR_InteractTouch : MonoBehaviour {
             touchedObject.GetComponent<SteamVR_InteractableObject>().StartTouching(this.gameObject);
             if (controllerActions.IsControllerVisible() && hideControllerOnTouch)
             {
-                controllerActions.ToggleControllerModel(false);
+                Invoke("HideController", hideControllerDelay);
             }
         }
     }
 
-    void OnTriggerExit(Collider collider)
+    private void OnTriggerExit(Collider collider)
     {
         if (IsObjectInteractable(collider.gameObject))
         {
@@ -111,6 +112,14 @@ public class SteamVR_InteractTouch : MonoBehaviour {
         if (hideControllerOnTouch)
         {
             controllerActions.ToggleControllerModel(true);
+        }
+    }
+
+    private void HideController()
+    {
+        if (touchedObject != null)
+        {
+            controllerActions.ToggleControllerModel(false);
         }
     }
 }

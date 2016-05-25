@@ -21,7 +21,10 @@ public class SteamVR_BezierPointer : SteamVR_WorldPointer
     public float pointerLength = 10f;
     public int pointerDensity = 10;
     public bool showPointerCursor = true;
-    public float pointerCursorRaduis = 0.5f;
+    public float pointerCursorRadius = 0.5f;
+    public float beamCurveOffset = 1f;
+    public GameObject customPointerTracer;
+    public GameObject customPointerCursor;
 
     private Transform projectedBeamContainer;
     private Transform projectedBeamForward;
@@ -40,32 +43,74 @@ public class SteamVR_BezierPointer : SteamVR_WorldPointer
         TogglePointer(false);
     }
 
+    protected override void Update()
+    {
+        base.Update();
+        if (projectedBeamForward.gameObject.activeSelf)
+        {
+            ProjectForwardBeam();
+            ProjectDownBeam();
+            DisplayCurvedBeam();
+            SetPointerCursor();
+        }
+    }
+
     protected override void InitPointer()
     {
-        pointerCursor = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-        pointerCursor.name = "PlayerObject_WorldPointer_BezierPointer_PointerCursor";
-        pointerCursor.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
-        pointerCursor.GetComponent<MeshRenderer>().receiveShadows = false;
-        pointerCursor.transform.localScale = new Vector3(pointerCursorRaduis, 0.02f, pointerCursorRaduis);
+        pointerCursor = (customPointerCursor ? Instantiate(customPointerCursor) : CreateCursor());
 
-        Destroy(pointerCursor.GetComponent<CapsuleCollider>());
+        pointerCursor.name = string.Format("[{0}]PlayerObject_WorldPointer_BezierPointer_PointerCursor", this.gameObject.name);
         pointerCursor.layer = 2;
+        pointerCursor.SetActive(false);
 
-        GameObject global = new GameObject("PlayerObject_WorldPointer_BezierPointer_CurvedBeamContainer");
+        GameObject global = new GameObject(string.Format("[{0}]PlayerObject_WorldPointer_BezierPointer_CurvedBeamContainer", this.gameObject.name));
+        global.SetActive(false);
         curvedBeam = global.gameObject.AddComponent<CurveGenerator>();
         curvedBeam.transform.parent = null;
-        curvedBeam.Create(pointerDensity, pointerCursorRaduis);
+        curvedBeam.Create(pointerDensity, pointerCursorRadius, customPointerTracer);
         base.InitPointer();
+    }
+
+    private GameObject CreateCursor()
+    {
+        float cursorYOffset = 0.02f;
+        GameObject cursor = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+        cursor.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+        cursor.GetComponent<MeshRenderer>().receiveShadows = false;
+        cursor.transform.localScale = new Vector3(pointerCursorRadius, cursorYOffset, pointerCursorRadius);
+        Destroy(cursor.GetComponent<CapsuleCollider>());
+        return cursor;
     }
 
     protected override void SetPointerMaterial()
     {
-        pointerCursor.GetComponent<MeshRenderer>().material = pointerMaterial;
+        if (pointerCursor.GetComponent<MeshRenderer>())
+        {
+            pointerCursor.GetComponent<MeshRenderer>().material = pointerMaterial;
+        }
+
+        foreach(MeshRenderer mr in pointerCursor.GetComponentsInChildren<MeshRenderer>())
+        {
+            mr.material = pointerMaterial;
+        }
+
+        if (pointerCursor.GetComponent<SkinnedMeshRenderer>())
+        {
+            pointerCursor.GetComponent<SkinnedMeshRenderer>().material = pointerMaterial;
+        }
+
+        foreach (SkinnedMeshRenderer mr in pointerCursor.GetComponentsInChildren<SkinnedMeshRenderer>())
+        {
+            mr.material = pointerMaterial;
+        }
+
         base.SetPointerMaterial();
     }
 
     protected override void TogglePointer(bool state)
     {
+        state = (beamAlwaysOn ? true : state);
+
         projectedBeamForward.gameObject.SetActive(state);
         projectedBeamJoint.gameObject.SetActive(state);
         projectedBeamDown.gameObject.SetActive(state);
@@ -73,17 +118,16 @@ public class SteamVR_BezierPointer : SteamVR_WorldPointer
 
     protected override void DisablePointerBeam(object sender, ControllerClickedEventArgs e)
     {
-        controllerIndex = e.controllerIndex;
-        if (pointerContactTarget != null)
-        {
-            base.PointerSet();
-        }
-        TogglePointer(false);
+        base.PointerSet();
+        base.DisablePointerBeam(sender, e);
         TogglePointerCursor(false);
         curvedBeam.TogglePoints(false);
     }
+
     private void TogglePointerCursor(bool state)
     {
+        state = (beamAlwaysOn ? true : state);
+
         bool pointerCursorState = (showPointerCursor && state ? showPointerCursor : false);
         bool playAreaCursorState = (showPlayAreaCursor && state ? showPlayAreaCursor : false);
         pointerCursor.gameObject.SetActive(pointerCursorState);
@@ -92,18 +136,18 @@ public class SteamVR_BezierPointer : SteamVR_WorldPointer
 
     private void InitProjectedBeams()
     {
-        projectedBeamContainer = new GameObject("PlayerObject_WorldPointer_BezierPointer_ProjectedBeamContainer").transform;
+        projectedBeamContainer = new GameObject(string.Format("[{0}]PlayerObject_WorldPointer_BezierPointer_ProjectedBeamContainer", this.gameObject.name)).transform;
         projectedBeamContainer.transform.parent = this.transform;
         projectedBeamContainer.transform.localPosition = Vector3.zero;
 
-        projectedBeamForward = new GameObject("PlayerObject_WorldPointer_BezierPointer_ProjectedBeamForward").transform;
+        projectedBeamForward = new GameObject(string.Format("[{0}]PlayerObject_WorldPointer_BezierPointer_ProjectedBeamForward", this.gameObject.name)).transform;
         projectedBeamForward.transform.parent = projectedBeamContainer.transform;
 
-        projectedBeamJoint = new GameObject("PlayerObject_WorldPointer_BezierPointer_ProjectedBeamJoint").transform;
+        projectedBeamJoint = new GameObject(string.Format("[{0}]PlayerObject_WorldPointer_BezierPointer_ProjectedBeamJoint", this.gameObject.name)).transform;
         projectedBeamJoint.transform.parent = projectedBeamContainer.transform;
         projectedBeamJoint.transform.localScale = new Vector3(0.01f, 0.01f, 0.01f);
 
-        projectedBeamDown = new GameObject("PlayerObject_WorldPointer_BezierPointer_ProjectedBeamDown").transform;
+        projectedBeamDown = new GameObject(string.Format("[{0}]PlayerObject_WorldPointer_BezierPointer_ProjectedBeamDown", this.gameObject.name)).transform;
     }
 
     private float GetForwardBeamLength()
@@ -196,22 +240,11 @@ public class SteamVR_BezierPointer : SteamVR_WorldPointer
         Vector3[] beamPoints = new Vector3[]
         {
             this.transform.position,
-            projectedBeamJoint.transform.position + new Vector3(0f, 1f, 0f),
+            projectedBeamJoint.transform.position + new Vector3(0f, beamCurveOffset, 0f),
             projectedBeamDown.transform.position,
             projectedBeamDown.transform.position,
         };
         curvedBeam.SetPoints(beamPoints, pointerMaterial);
         curvedBeam.TogglePoints(true);
-    }
-
-    private void Update()
-    {
-        if (projectedBeamForward.gameObject.activeSelf)
-        {            
-            ProjectForwardBeam();
-            ProjectDownBeam();
-            DisplayCurvedBeam();
-            SetPointerCursor();
-        }
     }
 }

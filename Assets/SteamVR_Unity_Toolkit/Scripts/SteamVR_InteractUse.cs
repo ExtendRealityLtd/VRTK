@@ -18,6 +18,7 @@ using System.Collections;
 public class SteamVR_InteractUse : MonoBehaviour
 {
     public bool hideControllerOnUse = false;
+    public float hideControllerDelay = 0f;
 
     public event ObjectInteractEventHandler ControllerUseInteractableObject;
     public event ObjectInteractEventHandler ControllerUnuseInteractableObject;
@@ -100,9 +101,17 @@ public class SteamVR_InteractUse : MonoBehaviour
             usingObject.GetComponent<SteamVR_InteractableObject>().StartUsing(this.gameObject);
             if (hideControllerOnUse)
             {
-                controllerActions.ToggleControllerModel(false);
+                Invoke("HideController", hideControllerDelay);
             }
             usingObject.GetComponent<SteamVR_InteractableObject>().ToggleHighlight(false);
+        }
+    }
+
+    private void HideController()
+    {
+        if(usingObject != null)
+        {
+            controllerActions.ToggleControllerModel(false);
         }
     }
 

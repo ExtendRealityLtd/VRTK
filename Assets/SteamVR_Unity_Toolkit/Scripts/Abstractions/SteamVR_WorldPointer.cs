@@ -61,8 +61,11 @@ public abstract class SteamVR_WorldPointer : MonoBehaviour {
     public Color pointerHitColor = new Color(0f, 0.5f, 0f, 1f);
     public Color pointerMissColor = new Color(0.8f, 0f, 0f, 1f);
     public bool showPlayAreaCursor = false;
+    public Vector2 playAreaCursorDimensions = Vector2.zero;
     public bool handlePlayAreaCursorCollisions = false;
     public bool enableTeleport = true;
+    public bool beamAlwaysOn = false;
+    public float activateDelay = 0f;
 
     protected Vector3 destinationPosition;
     protected float pointerContactDistance = 0f;
@@ -76,6 +79,9 @@ public abstract class SteamVR_WorldPointer : MonoBehaviour {
     private GameObject playAreaCursor;
     private GameObject[] playAreaCursorBoundaries;
     private bool isActive;
+
+    private float activateDelayTimer = 0f;
+    private float updatesPerSecond = 60f;
 
     public event WorldPointerEventHandler WorldPointerIn;
     public event WorldPointerEventHandler WorldPointerOut;
@@ -112,6 +118,11 @@ public abstract class SteamVR_WorldPointer : MonoBehaviour {
         return isActive;
     }
 
+    public virtual bool CanActivate()
+    {
+        return (activateDelayTimer <= 0);
+    }
+
     protected WorldPointerEventArgs SetPointerEvent(uint controllerIndex, float distance, Transform target, Vector3 position)
     {
         WorldPointerEventArgs e;
@@ -144,6 +155,14 @@ public abstract class SteamVR_WorldPointer : MonoBehaviour {
         pointerMaterial.color = pointerMissColor;
     }
 
+    protected virtual void Update()
+    {
+        if (activateDelayTimer > 0)
+        {
+            activateDelayTimer--;
+        }
+    }
+
     protected virtual void InitPointer()
     {
         InitPlayAreaCursor();
@@ -156,17 +175,24 @@ public abstract class SteamVR_WorldPointer : MonoBehaviour {
 
     protected virtual void EnablePointerBeam(object sender, ControllerClickedEventArgs e)
     {
-        setPlayAreaCursorCollision(false);
-        controllerIndex = e.controllerIndex;
-        TogglePointer(true);
-        isActive = true;
+        if (!isActive && activateDelayTimer <= 0)
+        {
+            setPlayAreaCursorCollision(false);
+            controllerIndex = e.controllerIndex;
+            TogglePointer(true);
+            isActive = true;
+        }
     }
 
     protected virtual void DisablePointerBeam(object sender, ControllerClickedEventArgs e)
     {
-        controllerIndex = e.controllerIndex;
-        TogglePointer(false);
-        isActive = false;
+        if (isActive && activateDelayTimer <= 0)
+        {
+            activateDelayTimer = activateDelay * updatesPerSecond;
+            controllerIndex = e.controllerIndex;
+            TogglePointer(false);
+            isActive = false;
+        }
     }
 
     protected virtual void PointerIn()
@@ -203,7 +229,7 @@ public abstract class SteamVR_WorldPointer : MonoBehaviour {
 
     protected virtual void PointerSet()
     {
-        if (!pointerContactTarget)
+        if (!isActive || !pointerContactTarget)
         {
             return;
         }
@@ -254,7 +280,7 @@ public abstract class SteamVR_WorldPointer : MonoBehaviour {
     {
 
         GameObject playAreaCursorBoundary = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        playAreaCursorBoundary.name = "PlayerObject_WorldPointer_PlayAreaCursorBoundary_" + index;
+        playAreaCursorBoundary.name = string.Format("[{0}]PlayerObject_WorldPointer_PlayAreaCursorBoundary_" + index, this.gameObject.name);
 
         float width = (right - left) / 1.065f;
         float length = (top - bottom) / 1.08f;
@@ -272,17 +298,42 @@ public abstract class SteamVR_WorldPointer : MonoBehaviour {
 
     private void InitPlayAreaCursor()
     {
-        int btmRight = 4;
-        int topLeft = 6;
+        int btmRightInner = 0;
+        int btmLeftInner = 1;
+        int topLeftInner = 2;
+        int topRightInner = 3;
 
-        float width = playArea.vertices[btmRight].x - playArea.vertices[topLeft].x;
-        float length = playArea.vertices[topLeft].z - playArea.vertices[btmRight].z;
+        int btmRightOuter = 4;
+        int btmLeftOuter = 5;
+        int topLeftOuter = 6;
+        int topRightOuter = 7;
+
+        Vector3[] cursorDrawVertices = playArea.vertices;
+
+        if (playAreaCursorDimensions != Vector2.zero)
+        {
+            float customAreaPadding = playArea.borderThickness;
+
+            cursorDrawVertices[btmRightOuter] = new Vector3(playAreaCursorDimensions.x / 2, 0f, (playAreaCursorDimensions.y / 2) * -1);
+            cursorDrawVertices[btmLeftOuter] = new Vector3((playAreaCursorDimensions.x / 2) * -1, 0f, (playAreaCursorDimensions.y / 2) * -1);
+            cursorDrawVertices[topLeftOuter] = new Vector3((playAreaCursorDimensions.x / 2) * -1, 0f, playAreaCursorDimensions.y / 2);
+            cursorDrawVertices[topRightOuter] = new Vector3(playAreaCursorDimensions.x / 2, 0f, playAreaCursorDimensions.y / 2);
+
+            cursorDrawVertices[btmRightInner] = cursorDrawVertices[btmRightOuter] + new Vector3(-customAreaPadding, 0f, customAreaPadding);
+            cursorDrawVertices[btmLeftInner] = cursorDrawVertices[btmLeftOuter] + new Vector3(customAreaPadding, 0f, customAreaPadding);
+            cursorDrawVertices[topLeftInner] = cursorDrawVertices[topLeftOuter] + new Vector3(customAreaPadding, 0f, -customAreaPadding);
+            cursorDrawVertices[topRightInner] = cursorDrawVertices[topRightOuter] + new Vector3(-customAreaPadding, 0f, -customAreaPadding);
+        }
+
+        float width = cursorDrawVertices[btmRightOuter].x - cursorDrawVertices[topLeftOuter].x;
+        float length = cursorDrawVertices[topLeftOuter].z - cursorDrawVertices[btmRightOuter].z;
         float height = 0.01f;
 
         playAreaCursor = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        playAreaCursor.name = "PlayerObject_WorldPointer_PlayAreaCursor";
+        playAreaCursor.name = string.Format("[{0}]PlayerObject_WorldPointer_PlayAreaCursor", this.gameObject.name);
         playAreaCursor.transform.parent = null;
         playAreaCursor.transform.localScale = new Vector3(width, height, length);
+        playAreaCursor.SetActive(false);
 
         playAreaCursor.GetComponent<MeshRenderer>().enabled = false;
 
@@ -299,9 +350,9 @@ public abstract class SteamVR_WorldPointer : MonoBehaviour {
         float playAreaBoundaryZ = playArea.transform.localScale.z / 2;
         float heightOffset = 0f;
 
-        DrawPlayAreaCursorBoundary(0, playArea.vertices[5].x, playArea.vertices[4].x, playArea.vertices[0].z, playArea.vertices[4].z, height, new Vector3(0f, heightOffset, playAreaBoundaryZ));
-        DrawPlayAreaCursorBoundary(1, playArea.vertices[5].x, playArea.vertices[1].x, playArea.vertices[6].z, playArea.vertices[5].z, height, new Vector3(playAreaBoundaryX, heightOffset, 0f));
-        DrawPlayAreaCursorBoundary(2, playArea.vertices[5].x, playArea.vertices[4].x, playArea.vertices[0].z, playArea.vertices[4].z, height, new Vector3(0f, heightOffset, -playAreaBoundaryZ));
-        DrawPlayAreaCursorBoundary(3, playArea.vertices[5].x, playArea.vertices[1].x, playArea.vertices[6].z, playArea.vertices[5].z, height, new Vector3(-playAreaBoundaryX, heightOffset, 0f));
+        DrawPlayAreaCursorBoundary(0, cursorDrawVertices[btmLeftOuter].x, cursorDrawVertices[btmRightOuter].x, cursorDrawVertices[btmRightInner].z, cursorDrawVertices[btmRightOuter].z, height, new Vector3(0f, heightOffset, playAreaBoundaryZ));
+        DrawPlayAreaCursorBoundary(1, cursorDrawVertices[btmLeftOuter].x, cursorDrawVertices[btmLeftInner].x, cursorDrawVertices[topLeftOuter].z, cursorDrawVertices[btmLeftOuter].z, height, new Vector3(playAreaBoundaryX, heightOffset, 0f));
+        DrawPlayAreaCursorBoundary(2, cursorDrawVertices[btmLeftOuter].x, cursorDrawVertices[btmRightOuter].x, cursorDrawVertices[btmRightInner].z, cursorDrawVertices[btmRightOuter].z, height, new Vector3(0f, heightOffset, -playAreaBoundaryZ));
+        DrawPlayAreaCursorBoundary(3, cursorDrawVertices[btmLeftOuter].x, cursorDrawVertices[btmLeftInner].x, cursorDrawVertices[topLeftOuter].z, cursorDrawVertices[btmLeftOuter].z, height, new Vector3(-playAreaBoundaryX, heightOffset, 0f));
     }
 }
