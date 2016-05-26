@@ -640,6 +640,9 @@ The following script parameters are available:
    * `Track Object` doesn't attach the object to the controller via
    a joint, instead it ensures the object tracks the direction of the
    controller, which works well for items that are on hinged joints.
+   * `Child Of Controller` simply makes the object a child of the
+   controller grabbing so it naturally tracks the position of the
+   controller motion.
   * **Detatch Threshold:** The force amount when to detatch the
   object from the grabbed controller. If the controller tries to
   exert a force higher than this threshold on the object (from pulling

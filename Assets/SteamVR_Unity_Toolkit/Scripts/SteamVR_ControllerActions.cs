@@ -16,16 +16,22 @@ public class SteamVR_ControllerActions : MonoBehaviour {
         return controllerVisible;
     }
 
-    public void ToggleControllerModel(bool on)
+    public void ToggleControllerModel(bool on, GameObject grabbedChildObject)
     {
         foreach (MeshRenderer renderer in this.GetComponentsInChildren<MeshRenderer>())
         {
-            renderer.enabled = on;
+            if (renderer.gameObject != grabbedChildObject && !renderer.transform.IsChildOf(grabbedChildObject.transform))
+            {
+                renderer.enabled = on;
+            }
         }
 
         foreach (SkinnedMeshRenderer renderer in this.GetComponentsInChildren<SkinnedMeshRenderer>())
         {
-            renderer.enabled = on;
+            if (renderer.gameObject != grabbedChildObject && !renderer.transform.IsChildOf(grabbedChildObject.transform))
+            {
+                renderer.enabled = on;
+            }
         }
         controllerVisible = on;
     }

@@ -26,7 +26,8 @@ public class SteamVR_InteractableObject : MonoBehaviour
     {
         Fixed_Joint,
         Spring_Joint,
-        Track_Object
+        Track_Object,
+        Child_Of_Controller
     }
 
     [Header("Touch Interactions", order = 1)]
