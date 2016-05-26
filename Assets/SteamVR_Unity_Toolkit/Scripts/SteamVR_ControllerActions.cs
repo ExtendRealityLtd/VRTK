@@ -20,7 +20,7 @@ public class SteamVR_ControllerActions : MonoBehaviour {
     {
         foreach (MeshRenderer renderer in this.GetComponentsInChildren<MeshRenderer>())
         {
-            if (renderer.gameObject != grabbedChildObject && !renderer.transform.IsChildOf(grabbedChildObject.transform))
+            if (renderer.gameObject != grabbedChildObject && (grabbedChildObject == null || !renderer.transform.IsChildOf(grabbedChildObject.transform)))
             {
                 renderer.enabled = on;
             }
@@ -28,7 +28,7 @@ public class SteamVR_ControllerActions : MonoBehaviour {
 
         foreach (SkinnedMeshRenderer renderer in this.GetComponentsInChildren<SkinnedMeshRenderer>())
         {
-            if (renderer.gameObject != grabbedChildObject && !renderer.transform.IsChildOf(grabbedChildObject.transform))
+            if (renderer.gameObject != grabbedChildObject && (grabbedChildObject == null || !renderer.transform.IsChildOf(grabbedChildObject.transform)))
             {
                 renderer.enabled = on;
             }

@@ -54,7 +54,7 @@ public class SteamVR_InteractGrab : MonoBehaviour
 
     public void ForceRelease()
     {
-        if (grabbedObject.GetComponent<SteamVR_InteractableObject>().AttatchIsTrackObject())
+        if (grabbedObject && grabbedObject.GetComponent<SteamVR_InteractableObject>() && grabbedObject.GetComponent<SteamVR_InteractableObject>().AttatchIsTrackObject())
         {
             UngrabTrackedObject();
         }
@@ -299,8 +299,8 @@ public class SteamVR_InteractGrab : MonoBehaviour
             {
                 ThrowReleasedObject(releasedObjectRigidBody, controllerIndex);
             }
-            InitUngrabbedObject();
         }
+        InitUngrabbedObject();
     }
 
     private void UngrabTrackedObject()
@@ -314,14 +314,17 @@ public class SteamVR_InteractGrab : MonoBehaviour
     private void InitUngrabbedObject()
     {
         OnControllerUngrabInteractableObject(interactTouch.SetControllerInteractEvent(grabbedObject));
-        grabbedObject.GetComponent<SteamVR_InteractableObject>().Ungrabbed(this.gameObject);
+        if (grabbedObject != null)
+        {
+            grabbedObject.GetComponent<SteamVR_InteractableObject>().Ungrabbed(this.gameObject);
+            grabbedObject.GetComponent<SteamVR_InteractableObject>().ToggleHighlight(false);
+        }
 
         if (hideControllerOnGrab)
         {
             controllerActions.ToggleControllerModel(true, grabbedObject);
         }
 
-        grabbedObject.GetComponent<SteamVR_InteractableObject>().ToggleHighlight(false);
         grabbedObject = null;
     }
 

@@ -1153,6 +1153,16 @@ The current examples are:
   different look to the bezier pointer beam.
    * [View Example Tour on Youtube](https://www.youtube.com/watch?v=5EAFOQJrqMY)
 
+  * **023_Controller_ChildOfControllerOnGrab:** A scene that
+  demonstrates the grab mechanic where the object being grabbed
+  becomes a child of the controller doing the grabbing. This works
+  well for objects that need absolute tracking of the controller and do
+  not want to be disjointed under any circumstances. The object becomes
+  an extension of the controller. The scene demonstrates this with a 
+  bow and arrow example, where the bow can be picked up and tracked to
+  the controller, whilst the other controller is responsible for
+  picking up arrows to fire in the bow.
+
 ## Contributing
 
 I would love to get contributions from you! Follow the instructions
