@@ -20,18 +20,20 @@ public class SteamVR_InteractGrab : MonoBehaviour
     public Rigidbody controllerAttachPoint = null;
     public bool hideControllerOnGrab = false;
     public float hideControllerDelay = 0f;
+    public float grabPrecognition = 0f;
 
     public event ObjectInteractEventHandler ControllerGrabInteractableObject;
     public event ObjectInteractEventHandler ControllerUngrabInteractableObject;
 
-    Joint controllerAttachJoint;
-    GameObject grabbedObject = null;
+    private Joint controllerAttachJoint;
+    private GameObject grabbedObject = null;
 
-    SteamVR_InteractTouch interactTouch;
-    SteamVR_TrackedObject trackedController;
-    SteamVR_ControllerActions controllerActions;
+    private SteamVR_InteractTouch interactTouch;
+    private SteamVR_TrackedObject trackedController;
+    private SteamVR_ControllerActions controllerActions;
 
     private int grabEnabledState = 0;
+    private float grabPrecognitionTimer = 0f;
 
     public virtual void OnControllerGrabInteractableObject(ObjectInteractEventArgs e)
     {
@@ -192,6 +194,7 @@ public class SteamVR_InteractGrab : MonoBehaviour
         grabbedObject = interactTouch.GetTouchedObject();
         OnControllerGrabInteractableObject(interactTouch.SetControllerInteractEvent(grabbedObject));
         grabbedObject.GetComponent<SteamVR_InteractableObject>().Grabbed(this.gameObject);
+        grabbedObject.GetComponent<SteamVR_InteractableObject>().ZeroVelocity();
         if (grabbedObject)
         {
             grabbedObject.GetComponent<SteamVR_InteractableObject>().ToggleHighlight(false);
@@ -257,26 +260,30 @@ public class SteamVR_InteractGrab : MonoBehaviour
         return (obj != null && interactTouch.IsObjectInteractable(obj));
     }
 
-    private void DoGrabObject(object sender, ControllerClickedEventArgs e)
+    private void AttemptGrabObject()
     {
         if (IsValidGrab())
         {
             if (interactTouch.GetTouchedObject().GetComponent<SteamVR_InteractableObject>().AttatchIsTrackObject())
             {
                 GrabTrackedObject();
-            } else
+            }
+            else
             {
                 GrabInteractedObject();
             }
-            
-            if(!IsObjectHoldOnGrab(interactTouch.GetTouchedObject()))
+
+            if (!IsObjectHoldOnGrab(interactTouch.GetTouchedObject()))
             {
                 grabEnabledState++;
             }
+        } else
+        {
+            grabPrecognitionTimer = grabPrecognition;
         }
     }
 
-    private void DoReleaseObject(object sender, ControllerClickedEventArgs e)
+    private void AttemptReleaseObject(uint controllerIndex)
     {
         if (IsObjectHoldOnGrab(grabbedObject) || grabEnabledState >= 2)
         {
@@ -286,7 +293,29 @@ public class SteamVR_InteractGrab : MonoBehaviour
             }
             else
             {
-                ReleaseObject(e.controllerIndex, true);
+                ReleaseObject(controllerIndex, true);
+            }
+        }
+    }
+
+    private void DoGrabObject(object sender, ControllerClickedEventArgs e)
+    {
+        AttemptGrabObject();
+    }
+
+    private void DoReleaseObject(object sender, ControllerClickedEventArgs e)
+    {
+        AttemptReleaseObject(e.controllerIndex);
+    }
+
+    private void Update()
+    {
+        if(grabPrecognitionTimer > 0)
+        {
+            grabPrecognitionTimer--;
+            if(IsValidGrab())
+            {
+                AttemptGrabObject();
             }
         }
     }

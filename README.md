@@ -759,12 +759,20 @@ a rigidbody to pick them up and move them around the game world.
 
 The following script parameters are available:
 
-  * **Hide Controller On Grab:** Hides the controller model when a valid
-  grab occurs
-  * **Hide Controller Delay:** The amount of seconds to wait before
-  hiding the controller on grab.
   * **Controller Attach Point:** The rigidbody point on the controller
   model to snap the grabbed object to (defaults to the tip)
+  * **Hide Controller On Grab:** Hides the controller model when a
+  valid grab occurs
+  * **Hide Controller Delay:** The amount of seconds to wait before
+  hiding the controller on grab.
+  * **Grab Precognition:** An amount of time between when the grab
+  button is pressed to when the controller is touching something to
+  grab it. For example, if an object is falling at a fast rate, then
+  it is very hard to press the grab button in time to catch the object
+  due to human reaction times. A higher number here will mean the
+  grab button can be pressed before the controller touches the object
+  and when the collision takes place, if the grab button is still being
+  held down then the grab action will be successful.
 
 The following events are emitted:
 

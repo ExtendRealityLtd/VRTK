@@ -169,6 +169,15 @@ public class SteamVR_InteractableObject : MonoBehaviour
         return (grabAttatchMechanic == GrabAttatchType.Track_Object);
     }
 
+    public void ZeroVelocity()
+    {
+        if (this.GetComponent<Rigidbody>())
+        {
+            this.GetComponent<Rigidbody>().velocity = Vector3.zero;
+            this.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+        }
+    }
+
     protected virtual void Awake()
     {
         rb = this.GetComponent<Rigidbody>();
