@@ -678,6 +678,26 @@ The following script parameters are available:
   unwanted teleporting from happening when using an object with a
   pointer.
 
+The following events are emitted:
+
+  * **InteractableObjectTouched:** Emitted when another object touches
+  the current object.
+  * **InteractableObjectUntouched:** Emitted when the other object
+  stops touching the current object.
+  * **InteractableObjectGrabbed:** Emitted when another object grabs
+  the current object (e.g. a controller).
+  * **InteractableObjectUngrabbed:** Emitted when the other object
+  stops grabbing the current object.
+  * **InteractableObjectUsed:** Emitted when another object uses
+  the current object (e.g. a controller).
+  * **InteractableObjectUnused:** Emitted when the other object
+  stops using the current object.
+
+The event payload that is emitted contains:
+
+  * **interactingObject:** The object that is initiating the
+  interaction (e.g. a controller)
+
 The basis of this script is to provide a simple mechanism for
 identifying objects in the game world that can be grabbed or used
 but it is expected that this script is the base to be inherited into a
