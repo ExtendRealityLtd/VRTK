@@ -30,6 +30,13 @@ public class SteamVR_HeadsetCollisionFade : MonoBehaviour {
     }
 
     protected void Start () {
+        //Make sure that there is a SteamVR_Fade script available.
+        SteamVR_Fade fadeScript = gameObject.GetComponentInChildren<SteamVR_Fade>();
+        if (fadeScript == null)
+        {
+            Debug.LogWarning("This 'SteamVR_HeadsetCollisionFade' script needs a SteamVR_Fade script on the camera eye.");
+        }
+
         this.name = "PlayerObject_" + this.name;
         BoxCollider collider = this.gameObject.AddComponent<BoxCollider>();
         collider.isTrigger = true;
