@@ -773,6 +773,10 @@ The following script parameters are available:
   grab button can be pressed before the controller touches the object
   and when the collision takes place, if the grab button is still being
   held down then the grab action will be successful.
+  * **Create Rigid Body When Not Touching:** If this is checked and the
+  controller is not touching an Interactable Object when the grab
+  button is pressed then a rigid body is added to the controller to
+  allow the controller to push other rigid body objects around.
 
 The following events are emitted:
 
