@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using Valve.VR;
 
 public class SteamVR_TouchpadWalking : MonoBehaviour {
     public float maxWalkSpeed = 3f;
@@ -9,7 +11,7 @@ public class SteamVR_TouchpadWalking : MonoBehaviour {
 
     private float movementSpeed = 0f;
     private float strafeSpeed = 0f;
-    private int listenerInitTries = 5;
+    private int listenerInitTries = 0;
 
     private Transform headset;
     private Vector2 touchAxis;
@@ -24,12 +26,22 @@ public class SteamVR_TouchpadWalking : MonoBehaviour {
     private float crouchMargin = 0.5f;
     private float lastPlayAreaY = 0f;
 
+    private float retryListenersDelay = 0.25f;
+    private float retryListenerMultiplier = 1.2f;
+    private int listenerInitMax = 5;
+    private List<int> connectedControllers;
+    private List<int> foundControllerEvents;
+
     private void Start () {
         this.name = "PlayerObject_" + this.name;
+        listenerInitTries = listenerInitMax;
+        connectedControllers = new List<int>();
+        foundControllerEvents = new List<int>();
         lastGoodPositionSet = false;
         headset = GetHeadset();
         CreateCollider();
-        InitListeners();
+        InitHeadsetListeners();
+        SteamVR_Utils.Event.Listen("device_connected", OnDeviceConnected);
     }
 
     private Transform GetHeadset()
@@ -40,36 +52,47 @@ public class SteamVR_TouchpadWalking : MonoBehaviour {
         return GameObject.FindObjectOfType<SteamVR_GameView>().GetComponent<Transform>();
     }
 
-    private void InitListeners()
+    private void InitControllerListeners()
     {
         SteamVR_ControllerEvents[] controllers = GameObject.FindObjectsOfType<SteamVR_ControllerEvents>();
-        if (controllers.Length == 0)
+        if (controllers.Length != connectedControllers.Count)
         {
             if (listenerInitTries > 0)
             {
                 listenerInitTries--;
-                Invoke("InitListeners", 0.25f);
             }
             else
             {
-                Debug.LogError("A GameObject must exist with a SteamVR_ControllerEvents script attached to it");
-                return;
+                retryListenersDelay = retryListenersDelay * retryListenerMultiplier;
+                listenerInitTries = listenerInitMax;
+                Debug.LogWarning("Waiting for controllers to initialise, retrying in " + retryListenersDelay);
             }
+            Invoke("InitControllerListeners", retryListenersDelay);
         }
-
-        foreach (SteamVR_ControllerEvents controller in controllers)
+        else
         {
-            controller.TouchpadAxisChanged += new ControllerClickedEventHandler(DoTouchpadAxisChanged);
-            controller.TouchpadUntouched += new ControllerClickedEventHandler(DoTouchpadUntouched);
-
-            if (ignoreGrabbedCollisions && controller.GetComponent<SteamVR_InteractGrab>())
+            foreach (SteamVR_ControllerEvents controller in controllers)
             {
-                SteamVR_InteractGrab grabbingController = controller.GetComponent<SteamVR_InteractGrab>();
-                grabbingController.ControllerGrabInteractableObject += new ObjectInteractEventHandler(OnGrabObject);
-                grabbingController.ControllerUngrabInteractableObject += new ObjectInteractEventHandler(OnUngrabObject);
+                int controllerEventControllerIndex = (int)controller.GetControllerIndex();
+                if (!foundControllerEvents.Contains(controllerEventControllerIndex))
+                {
+                    controller.TouchpadAxisChanged += new ControllerClickedEventHandler(DoTouchpadAxisChanged);
+                    controller.TouchpadUntouched += new ControllerClickedEventHandler(DoTouchpadUntouched);
+
+                    if (ignoreGrabbedCollisions && controller.GetComponent<SteamVR_InteractGrab>())
+                    {
+                        SteamVR_InteractGrab grabbingController = controller.GetComponent<SteamVR_InteractGrab>();
+                        grabbingController.ControllerGrabInteractableObject += new ObjectInteractEventHandler(OnGrabObject);
+                        grabbingController.ControllerUngrabInteractableObject += new ObjectInteractEventHandler(OnUngrabObject);
+                    }
+                    foundControllerEvents.Add(controllerEventControllerIndex);
+                }
             }
         }
+    }
 
+    private void InitHeadsetListeners()
+    {
         if (headset.GetComponent<SteamVR_HeadsetCollisionFade>())
         {
             headset.GetComponent<SteamVR_HeadsetCollisionFade>().HeadsetCollisionDetect += new HeadsetCollisionEventHandler(OnHeadsetCollision);
@@ -204,5 +227,27 @@ public class SteamVR_TouchpadWalking : MonoBehaviour {
         CalculateSpeed(ref movementSpeed, touchAxis.y);
         CalculateSpeed(ref strafeSpeed, touchAxis.x);
         Move();
+    }
+
+    private void OnDeviceConnected(params object[] args)
+    {
+        if (IsController((uint)(int)args[0]))
+        {
+            if ((bool)args[1])
+            {
+                connectedControllers.Add((int)args[0]);
+            }
+            else
+            {
+                connectedControllers.Remove((int)args[0]);
+            }
+            Invoke("InitControllerListeners", 0.5f);
+        }
+    }
+
+    private bool IsController(uint index)
+    {
+        var system = OpenVR.System;
+        return (system != null && system.GetTrackedDeviceClass(index) == ETrackedDeviceClass.Controller);
     }
 }

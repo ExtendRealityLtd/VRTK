@@ -78,6 +78,11 @@ public class SteamVR_ControllerEvents : MonoBehaviour {
     private Vector2 touchpadAxis = Vector2.zero;
     private Vector2 triggerAxis = Vector2.zero;
 
+    public virtual uint GetControllerIndex()
+    {
+        return controllerIndex;
+    }
+
     public virtual void OnTriggerClicked(ControllerClickedEventArgs e)
     {
         if (TriggerClicked != null)
@@ -211,6 +216,12 @@ public class SteamVR_ControllerEvents : MonoBehaviour {
     void Awake()
     {
         trackedController = GetComponent<SteamVR_TrackedObject>();
+    }
+
+    void Start()
+    {
+        controllerIndex = (uint)trackedController.index;
+        device = SteamVR_Controller.Input((int)controllerIndex);
     }
 
     void EmitAlias(ButtonAlias type, bool touchDown, float buttonPressure, ref bool buttonBool)
