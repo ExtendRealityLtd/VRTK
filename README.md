@@ -20,6 +20,8 @@ from the Unity Asset Store to be imported into your Unity project.**
   > Also, expect builds to break older versions as things are changing
   > fast at this stage, it will settle down when the project reaches
   > a beta stage.
+  
+There is a [public Trello board available here](https://trello.com/b/sU0vRWUz/steamvr-unity-toolkit) to view what is currently being worked on and to vote on planned features.
 
 ## Quick Start
 
