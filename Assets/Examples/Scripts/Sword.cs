@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Sword : SteamVR_InteractableObject {
     SteamVR_ControllerActions controllerActions;
-    float impactMagnifier = 100f;
+    float impactMagnifier = 200f;
     float collisionForce = 0f;
 
     public float CollisionForce()
