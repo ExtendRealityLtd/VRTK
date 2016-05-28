@@ -13,6 +13,14 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
+
+public struct InteractableObjectEventArgs
+{
+    public GameObject interactingObject;
+}
+
+public delegate void InteractableObjectEventHandler(object sender, InteractableObjectEventArgs e);
+
 public class SteamVR_InteractableObject : MonoBehaviour
 {
     public enum GrabSnapType
@@ -26,7 +34,8 @@ public class SteamVR_InteractableObject : MonoBehaviour
     {
         Fixed_Joint,
         Spring_Joint,
-        Track_Object
+        Track_Object,
+        Child_Of_Controller
     }
 
     [Header("Touch Interactions", order = 1)]
@@ -52,6 +61,13 @@ public class SteamVR_InteractableObject : MonoBehaviour
     public bool holdButtonToUse = true;
     public bool pointerActivatesUseAction = false;
 
+    public event InteractableObjectEventHandler InteractableObjectTouched;
+    public event InteractableObjectEventHandler InteractableObjectUntouched;
+    public event InteractableObjectEventHandler InteractableObjectGrabbed;
+    public event InteractableObjectEventHandler InteractableObjectUngrabbed;
+    public event InteractableObjectEventHandler InteractableObjectUsed;
+    public event InteractableObjectEventHandler InteractableObjectUnused;
+
     protected Rigidbody rb;
     protected GameObject grabbingObject = null;
 
@@ -62,6 +78,49 @@ public class SteamVR_InteractableObject : MonoBehaviour
 
     private Transform trackPoint;
     private bool customTrackPoint = false;
+
+    public virtual void OnInteractableObjectTouched(InteractableObjectEventArgs e)
+    {
+        if (InteractableObjectTouched != null)
+            InteractableObjectTouched(this, e);
+    }
+
+    public virtual void OnInteractableObjectUntouched(InteractableObjectEventArgs e)
+    {
+        if (InteractableObjectUntouched != null)
+            InteractableObjectUntouched(this, e);
+    }
+
+    public virtual void OnInteractableObjectGrabbed(InteractableObjectEventArgs e)
+    {
+        if (InteractableObjectGrabbed != null)
+            InteractableObjectGrabbed(this, e);
+    }
+
+    public virtual void OnInteractableObjectUngrabbed(InteractableObjectEventArgs e)
+    {
+        if (InteractableObjectUngrabbed != null)
+            InteractableObjectUngrabbed(this, e);
+    }
+
+    public virtual void OnInteractableObjectUsed(InteractableObjectEventArgs e)
+    {
+        if (InteractableObjectUsed != null)
+            InteractableObjectUsed(this, e);
+    }
+
+    public virtual void OnInteractableObjectUnused(InteractableObjectEventArgs e)
+    {
+        if (InteractableObjectUnused != null)
+            InteractableObjectUnused(this, e);
+    }
+
+    public InteractableObjectEventArgs SetInteractableObjectEvent(GameObject interactingObject)
+    {
+        InteractableObjectEventArgs e;
+        e.interactingObject = interactingObject;
+        return e;
+    }
 
     public bool IsTouched()
     {
@@ -80,16 +139,19 @@ public class SteamVR_InteractableObject : MonoBehaviour
 
     public virtual void StartTouching(GameObject touchingObject)
     {
+        OnInteractableObjectTouched(SetInteractableObjectEvent(touchingObject));
         isTouched = true;
     }
 
     public virtual void StopTouching(GameObject previousTouchingObject)
     {
+        OnInteractableObjectUntouched(SetInteractableObjectEvent(previousTouchingObject));
         isTouched = false;
     }
 
     public virtual void Grabbed(GameObject currentGrabbingObject)
     {
+        OnInteractableObjectGrabbed(SetInteractableObjectEvent(currentGrabbingObject));
         ForceReleaseGrab();
         RemoveTrackPoint();
         grabbingObject = currentGrabbingObject;
@@ -98,17 +160,20 @@ public class SteamVR_InteractableObject : MonoBehaviour
 
     public virtual void Ungrabbed(GameObject previousGrabbingObject)
     {
+        OnInteractableObjectUngrabbed(SetInteractableObjectEvent(previousGrabbingObject));
         RemoveTrackPoint();
         grabbingObject = null;
     }
 
     public virtual void StartUsing(GameObject usingObject)
     {
+        OnInteractableObjectUsed(SetInteractableObjectEvent(usingObject));
         isUsing = true;
     }
 
     public virtual void StopUsing(GameObject previousUsingObject)
     {
+        OnInteractableObjectUnused(SetInteractableObjectEvent(previousUsingObject));
         isUsing = false;
     }
 

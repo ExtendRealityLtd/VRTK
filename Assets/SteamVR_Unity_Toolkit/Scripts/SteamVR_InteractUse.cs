@@ -40,6 +40,11 @@ public class SteamVR_InteractUse : MonoBehaviour
             ControllerUnuseInteractableObject(this, e);
     }
 
+    public GameObject GetUsingObject()
+    {
+        return usingObject;
+    }
+
     private void Awake()
     {
         if (GetComponent<SteamVR_InteractTouch>() == null)
@@ -111,7 +116,7 @@ public class SteamVR_InteractUse : MonoBehaviour
     {
         if(usingObject != null)
         {
-            controllerActions.ToggleControllerModel(false);
+            controllerActions.ToggleControllerModel(false, usingObject);
         }
     }
 
@@ -123,7 +128,7 @@ public class SteamVR_InteractUse : MonoBehaviour
             usingObject.GetComponent<SteamVR_InteractableObject>().StopUsing(this.gameObject);
             if (hideControllerOnUse)
             {
-                controllerActions.ToggleControllerModel(true);
+                controllerActions.ToggleControllerModel(true, usingObject);
             }
             usingObject.GetComponent<SteamVR_InteractableObject>().ToggleHighlight(false);
             usingObject = null;

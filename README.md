@@ -640,6 +640,9 @@ The following script parameters are available:
    * `Track Object` doesn't attach the object to the controller via
    a joint, instead it ensures the object tracks the direction of the
    controller, which works well for items that are on hinged joints.
+   * `Child Of Controller` simply makes the object a child of the
+   controller grabbing so it naturally tracks the position of the
+   controller motion.
   * **Detatch Threshold:** The force amount when to detatch the
   object from the grabbed controller. If the controller tries to
   exert a force higher than this threshold on the object (from pulling
@@ -674,6 +677,26 @@ The following script parameters are available:
   interactable object with this setting checked as this prevents
   unwanted teleporting from happening when using an object with a
   pointer.
+
+The following events are emitted:
+
+  * **InteractableObjectTouched:** Emitted when another object touches
+  the current object.
+  * **InteractableObjectUntouched:** Emitted when the other object
+  stops touching the current object.
+  * **InteractableObjectGrabbed:** Emitted when another object grabs
+  the current object (e.g. a controller).
+  * **InteractableObjectUngrabbed:** Emitted when the other object
+  stops grabbing the current object.
+  * **InteractableObjectUsed:** Emitted when another object uses
+  the current object (e.g. a controller).
+  * **InteractableObjectUnused:** Emitted when the other object
+  stops using the current object.
+
+The event payload that is emitted contains:
+
+  * **interactingObject:** The object that is initiating the
+  interaction (e.g. a controller)
 
 The basis of this script is to provide a simple mechanism for
 identifying objects in the game world that can be grabbed or used
@@ -1129,6 +1152,16 @@ The current examples are:
   scene, particle objects with rotations are used to demonstrate a
   different look to the bezier pointer beam.
    * [View Example Tour on Youtube](https://www.youtube.com/watch?v=5EAFOQJrqMY)
+
+  * **023_Controller_ChildOfControllerOnGrab:** A scene that
+  demonstrates the grab mechanic where the object being grabbed
+  becomes a child of the controller doing the grabbing. This works
+  well for objects that need absolute tracking of the controller and do
+  not want to be disjointed under any circumstances. The object becomes
+  an extension of the controller. The scene demonstrates this with a 
+  bow and arrow example, where the bow can be picked up and tracked to
+  the controller, whilst the other controller is responsible for
+  picking up arrows to fire in the bow.
 
 ## Contributing
 
