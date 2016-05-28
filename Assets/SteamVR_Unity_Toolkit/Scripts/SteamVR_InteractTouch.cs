@@ -50,6 +50,11 @@ public class SteamVR_InteractTouch : MonoBehaviour {
         return e;
     }
 
+    public void ForceTouch(GameObject obj)
+    {
+        OnTriggerStay(obj.GetComponent<Collider>());
+    }
+
     public GameObject GetTouchedObject()
     {
         return touchedObject;
@@ -57,7 +62,8 @@ public class SteamVR_InteractTouch : MonoBehaviour {
 
     public bool IsObjectInteractable(GameObject obj)
     {
-        return (obj && obj.GetComponent<SteamVR_InteractableObject>());
+        //Modified 5/24/2016
+        return (obj && (obj.GetComponent<SteamVR_InteractableObject>() || obj.GetComponentInParent<SteamVR_InteractableObject>()));
     }
 
     private void Awake()
@@ -85,7 +91,15 @@ public class SteamVR_InteractTouch : MonoBehaviour {
     {
         if (touchedObject == null && IsObjectInteractable(collider.gameObject))
         {
-            touchedObject = collider.gameObject;
+            //Modified 5/24/2016 - Blueteak
+            if(collider.gameObject.GetComponent<SteamVR_InteractableObject>() != null)
+            {
+                touchedObject = collider.gameObject;
+            }
+            else
+            {
+                touchedObject = collider.gameObject.GetComponentInParent<SteamVR_InteractableObject>().gameObject;
+            }
             OnControllerTouchInteractableObject(SetControllerInteractEvent(touchedObject));
             touchedObject.GetComponent<SteamVR_InteractableObject>().ToggleHighlight(true, globalTouchHighlightColor);
             touchedObject.GetComponent<SteamVR_InteractableObject>().StartTouching(this.gameObject);
@@ -100,9 +114,20 @@ public class SteamVR_InteractTouch : MonoBehaviour {
     {
         if (IsObjectInteractable(collider.gameObject))
         {
-            OnControllerUntouchInteractableObject(SetControllerInteractEvent(collider.gameObject));
-            collider.GetComponent<SteamVR_InteractableObject>().ToggleHighlight(false);
-            collider.GetComponent<SteamVR_InteractableObject>().StopTouching(this.gameObject);
+            //Modified 5/24/2016 - Blueteak
+            if (collider.gameObject.GetComponent<SteamVR_InteractableObject>() != null)
+            {
+                OnControllerUntouchInteractableObject(SetControllerInteractEvent(collider.gameObject));
+                collider.GetComponent<SteamVR_InteractableObject>().ToggleHighlight(false);
+                collider.GetComponent<SteamVR_InteractableObject>().StopTouching(this.gameObject);
+            }
+            else
+            {
+                var obj = collider.gameObject.GetComponentInParent<SteamVR_InteractableObject>().gameObject;
+                OnControllerUntouchInteractableObject(SetControllerInteractEvent(obj.gameObject));
+                obj.GetComponent<SteamVR_InteractableObject>().ToggleHighlight(false);
+                obj.GetComponent<SteamVR_InteractableObject>().StopTouching(this.gameObject);
+            }
         }
         touchedObject = null;
         if (hideControllerOnTouch)

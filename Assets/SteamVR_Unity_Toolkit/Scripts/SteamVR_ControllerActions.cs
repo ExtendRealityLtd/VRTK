@@ -30,6 +30,23 @@ public class SteamVR_ControllerActions : MonoBehaviour {
         controllerVisible = on;
     }
 
+    //Added 5/24/2016 - Blueteak
+    public void ToggleControllerModel(bool on, GameObject held)
+    {
+        foreach (MeshRenderer renderer in this.GetComponentsInChildren<MeshRenderer>())
+        {
+            if(renderer.gameObject != held && !renderer.transform.IsChildOf(held.transform))
+                renderer.enabled = on;
+        }
+
+        foreach (SkinnedMeshRenderer renderer in this.GetComponentsInChildren<SkinnedMeshRenderer>())
+        {
+            if (!renderer.gameObject == held && !renderer.transform.IsChildOf(held.transform))
+                renderer.enabled = on;
+        }
+        controllerVisible = on;
+    }
+
     public void TriggerHapticPulse(int duration, ushort strength)
     {
         hapticPulseCountdown = duration;

@@ -28,12 +28,14 @@ public class SteamVR_ControllerEvents : MonoBehaviour {
     public int axisFidelity = 1;
 
     public bool triggerPressed = false;
+    public bool triggerDown = false; //Seems to work more reliably than triggerPressed? Added 5/24/2016 - Blueteak
     public bool triggerAxisChanged = false;
     public bool applicationMenuPressed = false;
     public bool touchpadPressed = false;
     public bool touchpadTouched = false;
     public bool touchpadAxisChanged = false;
     public bool gripPressed = false;
+
 
     public event ControllerClickedEventHandler TriggerClicked;
     public event ControllerClickedEventHandler TriggerUnclicked;
@@ -75,12 +77,14 @@ public class SteamVR_ControllerEvents : MonoBehaviour {
 
     public virtual void OnTriggerClicked(ControllerClickedEventArgs e)
     {
+        triggerDown = true; //Added 5/24/2016 - Blueteak
         if (TriggerClicked != null)
             TriggerClicked(this, e);
     }
 
     public virtual void OnTriggerUnclicked(ControllerClickedEventArgs e)
     {
+        triggerDown = false; //Added 5/24/2016 - Blueteak
         if (TriggerUnclicked != null)
             TriggerUnclicked(this, e);
     }
