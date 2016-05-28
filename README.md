@@ -440,6 +440,11 @@ The following script parameters are available:
   play area. If it is unchecked then the teleported location will
   always be the centre of the play area even if the headset position
   is not in the centre of the play area.
+  * **Ignore Target With Tag Or Class:** A string that specifies an
+  object Tag or the name of a Script attached to an obejct and
+  notifies the teleporter that the destination is to be ignored so
+  the user cannot teleport to that location. It also ensure the
+  pointer colour is set to the miss colour.
 
 An example of the `SteamVR_BasicTeleport` script can be viewed in the
 scene `Examples/004_CameraRig_BasicTeleport`. The scene uses
@@ -474,6 +479,11 @@ The following script parameters are available:
   play area. If it is unchecked then the teleported location will
   always be the centre of the play area even if the headset position
   is not in the centre of the play area.
+  * **Ignore Target With Tag Or Class:** A string that specifies an
+  object Tag or the name of a Script attached to an obejct and
+  notifies the teleporter that the destination is to be ignored so
+  the user cannot teleport to that location. It also ensure the
+  pointer colour is set to the miss colour.
   * **Play Space Falling:** Checks if the player steps off an object
   into a part of their play area that is not on the object then they are
   automatically teleported down to the nearest floor.
@@ -1162,6 +1172,15 @@ The current examples are:
   bow and arrow example, where the bow can be picked up and tracked to
   the controller, whilst the other controller is responsible for
   picking up arrows to fire in the bow.
+
+  * **024_CameraRig_ExcludeTeleportLocation:** A scene that shows how
+  to exclude certain objects from being teleportable by either applying
+  a named Tag to the object or by applying a Script of a certain name.
+  In the scene, the yellow objects are excluded from teleport locations
+  by having an `ExcludeTeleport` tag set on them and the black objects
+  are excluded by having a script called `ExcludeTeleport` attached to
+  them. The `ExcludeTeleport` script has no methods and is just used
+  as a placeholder.
 
 ## Contributing
 

@@ -19,6 +19,7 @@ public class SteamVR_BasicTeleport : MonoBehaviour {
     [Range(0f,32f)]
     public float distanceBlinkDelay = 0f;
     public bool headsetPositionCompensation = true;
+    public string ignoreTargetWithTagOrClass;
 
     protected int listenerInitTries = 0;
     protected Transform eyeCamera;
@@ -51,9 +52,14 @@ public class SteamVR_BasicTeleport : MonoBehaviour {
         Invoke("ReleaseBlink", blinkPause);
     }
 
+    protected virtual bool ValidLocation(Transform target)
+    {
+        return (target && target.tag != ignoreTargetWithTagOrClass && target.GetComponent(ignoreTargetWithTagOrClass) == null);
+    }
+
     protected virtual void DoTeleport(object sender, WorldPointerEventArgs e)
     {
-        if (e.target && e.enableTeleport)
+        if (ValidLocation(e.target) && e.enableTeleport)
         {
             Vector3 newPosition = GetNewPosition(e.destinationPosition, e.target);
             CalculateBlinkDelay(blinkTransitionSpeed, newPosition);
@@ -130,6 +136,7 @@ public class SteamVR_BasicTeleport : MonoBehaviour {
                 if (! foundWorldPointers.Contains(worldPointerControllerIndex))
                 {
                     worldPointer.WorldPointerDestinationSet += new WorldPointerEventHandler(DoTeleport);
+                    worldPointer.SetMissTarget(ignoreTargetWithTagOrClass);
                     foundWorldPointers.Add(worldPointerControllerIndex);
                 }
             }

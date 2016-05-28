@@ -75,7 +75,7 @@ public class SteamVR_HeightAdjustTeleport : SteamVR_BasicTeleport {
         bool rayHit = Physics.Raycast(ray, out rayCollidedWith);
         float floorY = eyeCamera.transform.position.y - rayCollidedWith.distance;
 
-        if (rayHit && ! FloorIsGrabbedObject(rayCollidedWith) && ( MeshYChanged(rayCollidedWith, floorY) || CurrentFloorChanged(rayCollidedWith) ) )
+        if (rayHit && ValidLocation(rayCollidedWith.transform) && !FloorIsGrabbedObject(rayCollidedWith) && ( MeshYChanged(rayCollidedWith, floorY) || CurrentFloorChanged(rayCollidedWith) ) )
         {
             currentFloor = rayCollidedWith.transform.gameObject;
             currentRayDownY = floorY;

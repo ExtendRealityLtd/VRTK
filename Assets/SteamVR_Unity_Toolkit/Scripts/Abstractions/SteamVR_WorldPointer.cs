@@ -67,6 +67,8 @@ public abstract class SteamVR_WorldPointer : MonoBehaviour {
     public bool beamAlwaysOn = false;
     public float activateDelay = 0f;
 
+    private string missTargetWithTagOrClass;
+
     protected Vector3 destinationPosition;
     protected float pointerContactDistance = 0f;
     protected Transform pointerContactTarget = null;
@@ -121,6 +123,11 @@ public abstract class SteamVR_WorldPointer : MonoBehaviour {
     public virtual bool CanActivate()
     {
         return (activateDelayTimer <= 0);
+    }
+
+    public virtual void SetMissTarget(string name)
+    {
+        missTargetWithTagOrClass = name;
     }
 
     protected WorldPointerEventArgs SetPointerEvent(uint controllerIndex, float distance, Transform target, Vector3 position)
@@ -268,12 +275,17 @@ public abstract class SteamVR_WorldPointer : MonoBehaviour {
 
     protected void UpdatePointerMaterial(Color color)
     {
-        if (playAreaCursorCollided)
+        if (playAreaCursorCollided || !ValidDestination(pointerContactTarget))
         {
             color = pointerMissColor;
         }
         pointerMaterial.color = color;
         SetPointerMaterial();
+    }
+
+    protected virtual bool ValidDestination(Transform target)
+    {
+        return (target && target.tag != missTargetWithTagOrClass && target.GetComponent(missTargetWithTagOrClass) == null);
     }
 
     private void DrawPlayAreaCursorBoundary(int index, float left, float right, float top, float bottom, float thickness, Vector3 localPosition)
