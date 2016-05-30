@@ -3,13 +3,11 @@ using System.Collections;
 
 public class VRTK_ControllerActions : MonoBehaviour {
     private bool controllerVisible = true;
-    private ushort hapticPulseStrength;
-    private int hapticPulseCountdown;
+    private float hapticPulseCountdown;
 
     private uint controllerIndex;
     private SteamVR_TrackedObject trackedController;
     private SteamVR_Controller.Device device;
-    private ushort maxHapticVibration = 3999;
 
     public bool IsControllerVisible()
     {
@@ -36,10 +34,8 @@ public class VRTK_ControllerActions : MonoBehaviour {
         controllerVisible = on;
     }
 
-    public void TriggerHapticPulse(int duration, ushort strength)
     {
-        hapticPulseCountdown = duration;
-        hapticPulseStrength = (strength <= maxHapticVibration ? strength : maxHapticVibration);
+        hapticPulseCountdown = durationMilliseconds;
     }
 
     private void Awake()
@@ -54,8 +50,9 @@ public class VRTK_ControllerActions : MonoBehaviour {
 
         if (hapticPulseCountdown > 0)
         {
-            device.TriggerHapticPulse(hapticPulseStrength);
-            hapticPulseCountdown -= 1;
+            // 1000 microseconds = 1 millisecond
+            device.TriggerHapticPulse(1000);
+            hapticPulseCountdown -= Time.deltaTime * 1000;
         }
     }
 }
