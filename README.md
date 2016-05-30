@@ -544,7 +544,7 @@ The event payload that is emitted contains:
   * **collider:** The Collider of the game object the headset has
   collided with.
   * **currentTransform:** The current Transform of the object that
-  the Headset Collision Fade script is attatched to (Camera).
+  the Headset Collision Fade script is attached to (Camera).
 
 An example of the `VRTK_HeadsetCollisionFade` script can be
 viewed in the scene `Examples/011_Camera_HeadSetCollisionFading`.
@@ -674,7 +674,7 @@ The following script parameters are available:
    * `Child Of Controller` simply makes the object a child of the
    controller grabbing so it naturally tracks the position of the
    controller motion.
-  * **Detatch Threshold:** The force amount when to detatch the
+  * **Detach Threshold:** The force amount when to detach the
   object from the grabbed controller. If the controller tries to
   exert a force higher than this threshold on the object (from pulling
   it through another object or pushing it into another object) then
