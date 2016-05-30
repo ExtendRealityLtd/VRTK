@@ -29,7 +29,7 @@ public class VRTK_PlayerPresence : MonoBehaviour {
         this.name = "PlayerObject_" + this.name;
         trackedControllerIndices = new List<uint>();
         lastGoodPositionSet = false;
-        headset = InitHeadset();
+        headset = DeviceFinder.HeadsetTransform();
         CreateCollider();
         InitHeadsetListeners();
         SteamVR_Utils.Event.Listen("device_connected", OnDeviceConnected);
@@ -41,14 +41,6 @@ public class VRTK_PlayerPresence : MonoBehaviour {
         {
             headset.GetComponent<VRTK_HeadsetCollisionFade>().HeadsetCollisionDetect += new HeadsetCollisionEventHandler(OnHeadsetCollision);
         }
-    }
-
-    private Transform InitHeadset()
-    {
-#if (UNITY_5_4_OR_NEWER)
-        return GameObject.FindObjectOfType<SteamVR_Camera>().GetComponent<Transform>();
-#endif
-        return GameObject.FindObjectOfType<SteamVR_GameView>().GetComponent<Transform>();
     }
 
     private void OnGrabObject(object sender, ObjectInteractEventArgs e)

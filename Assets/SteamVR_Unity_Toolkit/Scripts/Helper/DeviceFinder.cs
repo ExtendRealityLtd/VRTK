@@ -28,4 +28,12 @@ public class DeviceFinder : MonoBehaviour {
         }
         return null;
     }
+
+    public static Transform HeadsetTransform()
+    {
+#if (UNITY_5_4_OR_NEWER)
+        return GameObject.FindObjectOfType<SteamVR_Camera>().GetComponent<Transform>();
+#endif
+        return GameObject.FindObjectOfType<SteamVR_GameView>().GetComponent<Transform>();
+    }
 }
