@@ -69,24 +69,27 @@ public class SteamVR_HeightAdjustTeleport : SteamVR_BasicTeleport {
 
     private void DropToNearestFloor(bool withBlink)
     {
-        //send a ray down to find the closest object to stand on
-        Ray ray = new Ray(eyeCamera.transform.position, -transform.up);
-        RaycastHit rayCollidedWith;
-        bool rayHit = Physics.Raycast(ray, out rayCollidedWith);
-        float floorY = eyeCamera.transform.position.y - rayCollidedWith.distance;
-
-        if (rayHit && ValidLocation(rayCollidedWith.transform) && !FloorIsGrabbedObject(rayCollidedWith) && ( MeshYChanged(rayCollidedWith, floorY) || CurrentFloorChanged(rayCollidedWith) ) )
+        if (eyeCamera.transform.position.y > this.transform.position.y)
         {
-            currentFloor = rayCollidedWith.transform.gameObject;
-            currentRayDownY = floorY;
+            //send a ray down to find the closest object to stand on
+            Ray ray = new Ray(eyeCamera.transform.position, -transform.up);
+            RaycastHit rayCollidedWith;
+            bool rayHit = Physics.Raycast(ray, out rayCollidedWith);
+            float floorY = eyeCamera.transform.position.y - rayCollidedWith.distance;
 
-            if (withBlink && !rayCollidedWith.transform.GetComponent<MeshCollider>())
+            if (rayHit && ValidLocation(rayCollidedWith.transform) && !FloorIsGrabbedObject(rayCollidedWith) && (MeshYChanged(rayCollidedWith, floorY) || CurrentFloorChanged(rayCollidedWith)))
             {
-                Blink(blinkTransitionSpeed);
-            }
+                currentFloor = rayCollidedWith.transform.gameObject;
+                currentRayDownY = floorY;
 
-            Vector3 newPosition = new Vector3(this.transform.position.x, floorY, this.transform.position.z);
-            SetNewPosition(newPosition, currentFloor.transform);
+                if (withBlink && !rayCollidedWith.transform.GetComponent<MeshCollider>())
+                {
+                    Blink(blinkTransitionSpeed);
+                }
+
+                Vector3 newPosition = new Vector3(this.transform.position.x, floorY, this.transform.position.z);
+                SetNewPosition(newPosition, currentFloor.transform);
+            }
         }
     }
 
