@@ -11,8 +11,7 @@ public class VRTK_TouchpadWalking : MonoBehaviour {
     private float strafeSpeed = 0f;
 
     private VRTK_PlayerPresence playerPresence;
-    private SteamVR_TrackedObject trackedController;
-    private List<uint> trackedControllerIndices;
+    private List<SteamVR_TrackedObject> trackedControllers;
 
     private void Awake()
     {
@@ -28,7 +27,7 @@ public class VRTK_TouchpadWalking : MonoBehaviour {
 
     private void Start () {
         this.name = "PlayerObject_" + this.name;
-        trackedControllerIndices = new List<uint>();
+        trackedControllers = new List<SteamVR_TrackedObject>();
         SteamVR_Utils.Event.Listen("device_connected", OnDeviceConnected);
     }
 
@@ -99,7 +98,7 @@ public class VRTK_TouchpadWalking : MonoBehaviour {
 
     IEnumerator InitListeners(uint trackedControllerIndex, bool trackedControllerConnectedState)
     {
-        trackedController = DeviceFinder.ControllerByIndex(trackedControllerIndex);
+        var trackedController = DeviceFinder.ControllerByIndex(trackedControllerIndex);
         var tries = 0f;
         while (!trackedController && tries < DeviceFinder.initTries)
         {
@@ -113,11 +112,11 @@ public class VRTK_TouchpadWalking : MonoBehaviour {
             var controllerEvent = trackedController.GetComponent<VRTK_ControllerEvents>();
             if (controllerEvent)
             {
-                if (trackedControllerConnectedState && !trackedControllerIndices.Contains(trackedControllerIndex))
+                if (trackedControllerConnectedState && !trackedControllers.Contains(trackedController))
                 {
                     controllerEvent.TouchpadAxisChanged += new ControllerClickedEventHandler(DoTouchpadAxisChanged);
                     controllerEvent.TouchpadUntouched += new ControllerClickedEventHandler(DoTouchpadUntouched);
-                    trackedControllerIndices.Add(trackedControllerIndex);
+                    trackedControllers.Add(trackedController);
                 }
             }
         }

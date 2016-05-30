@@ -16,8 +16,7 @@ public class VRTK_PlayerPresence : MonoBehaviour {
     private float crouchMargin = 0.5f;
     private float lastPlayAreaY = 0f;
 
-    private SteamVR_TrackedObject trackedController;
-    private List<uint> trackedControllerIndices;
+    private List<SteamVR_TrackedObject> trackedControllers;
 
     public Transform GetHeadset()
     {
@@ -27,7 +26,7 @@ public class VRTK_PlayerPresence : MonoBehaviour {
     private void Start()
     {
         this.name = "PlayerObject_" + this.name;
-        trackedControllerIndices = new List<uint>();
+        trackedControllers = new List<SteamVR_TrackedObject>();
         lastGoodPositionSet = false;
         headset = DeviceFinder.HeadsetTransform();
         CreateCollider();
@@ -124,7 +123,7 @@ public class VRTK_PlayerPresence : MonoBehaviour {
 
     IEnumerator InitListeners(uint trackedControllerIndex, bool trackedControllerConnectedState)
     {
-        trackedController = DeviceFinder.ControllerByIndex(trackedControllerIndex);
+        var trackedController = DeviceFinder.ControllerByIndex(trackedControllerIndex);
         var tries = 0f;
         while (!trackedController && tries < DeviceFinder.initTries)
         {
@@ -138,11 +137,11 @@ public class VRTK_PlayerPresence : MonoBehaviour {
             var grabbingController = trackedController.GetComponent<VRTK_InteractGrab>();
             if(grabbingController && ignoreGrabbedCollisions)
             {
-                if (trackedControllerConnectedState && !trackedControllerIndices.Contains(trackedControllerIndex))
+                if (trackedControllerConnectedState && !trackedControllers.Contains(trackedController))
                 {
                     grabbingController.ControllerGrabInteractableObject += new ObjectInteractEventHandler(OnGrabObject);
                     grabbingController.ControllerUngrabInteractableObject += new ObjectInteractEventHandler(OnUngrabObject);
-                    trackedControllerIndices.Add(trackedControllerIndex);
+                    trackedControllers.Add(trackedController);
                 }
             }
         }

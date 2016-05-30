@@ -29,13 +29,12 @@ public class VRTK_BasicTeleport : MonoBehaviour {
     private float maxBlinkTransitionSpeed = 1.5f;
     private float maxBlinkDistance = 33f;
 
-    private SteamVR_TrackedObject trackedController;
-    private List<uint> trackedControllerIndices;
+    private List<SteamVR_TrackedObject> trackedControllers;
 
     protected virtual void Start()
     {
         this.name = "PlayerObject_" + this.name;
-        trackedControllerIndices = new List<uint>();
+        trackedControllers = new List<SteamVR_TrackedObject>();
         adjustYForTerrain = false;
         eyeCamera = GameObject.FindObjectOfType<SteamVR_Camera>().GetComponent<Transform>();
         SteamVR_Utils.Event.Listen("device_connected", OnDeviceConnected);
@@ -111,7 +110,7 @@ public class VRTK_BasicTeleport : MonoBehaviour {
 
     IEnumerator InitListeners(uint trackedControllerIndex, bool trackedControllerConnectedState)
     {
-        trackedController = DeviceFinder.ControllerByIndex(trackedControllerIndex);
+        var trackedController = DeviceFinder.ControllerByIndex(trackedControllerIndex);
         var tries = 0f;
         while (!trackedController && tries < DeviceFinder.initTries)
         {
@@ -125,11 +124,11 @@ public class VRTK_BasicTeleport : MonoBehaviour {
             var worldPointer = trackedController.GetComponent<VRTK_WorldPointer>();
             if (worldPointer)
             {
-                if (trackedControllerConnectedState && !trackedControllerIndices.Contains(trackedControllerIndex))
+                if (trackedControllerConnectedState && !trackedControllers.Contains(trackedController))
                 {
                     worldPointer.WorldPointerDestinationSet += new WorldPointerEventHandler(DoTeleport);
                     worldPointer.SetMissTarget(ignoreTargetWithTagOrClass);
-                    trackedControllerIndices.Add(trackedControllerIndex);
+                    trackedControllers.Add(trackedController);
                 }
             }
         }
