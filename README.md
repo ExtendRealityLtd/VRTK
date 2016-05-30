@@ -552,6 +552,37 @@ The scene has collidable walls around the play area and if the player
 puts their head into any of the walls then the headset will fade to
 black.
 
+#### Player Presence (SteamVR_PlayerPresence)
+
+The concept that the VR user has a physical in game presence which is
+accomplished by adding a collider and a rigidbody at the position the
+user is standing within their play area. This physical collider and
+rigidbody will prevent the user from ever being able to walk through
+walls or intersect other collidable objects. The height of the collider
+is determined by the height the user has the headset at, so if the
+user crouches then the collider shrinks with them, meaning it's
+possible to crouch and crawl under low ceilings.
+
+The following script parameters are available:
+
+  * **Headset Y Offset:** The box collider which is created for the
+  user is set at a height from the user's headset position. If the
+  collider is required to be lower to allow for room between the
+  play area collider and the headset then this offset value will
+  shorten the height of the generated box collider.
+  * **Ignore Grabbed Collisions:** If this is checked then any items
+  that are grabbed with the controller will not collide with the
+  box collider and rigid body on the play area. This is very useful
+  if the user is required to grab and wield objects because if the
+  collider was active they would bounce off the play area collider.
+
+An example of the `SteamVR_PlayerPresence` script can be viewed in
+the scene `Examples/017_CameraRig_TouchpadWalking`. The scene has
+a collection of walls and slopes that can be traversed by the user
+with the touchpad but the user cannot pass through the objects as
+they are collidable and the rigidbody physics won't allow the
+intersection to occur.
+
 #### Touchpad Movement (SteamVR_TouchpadWalking)
 
 The ability to move the play area around the game world by sliding a
@@ -579,16 +610,6 @@ The following script parameters are available:
   a complete stop when the user is no longer touching the touchpad.
   This deceleration effect can ease any motion sickness that may be
   suffered.
-  * **Headset Y Offset:** The box collider which is created for the
-  user is set at a height from the user's headset position. If the
-  collider is required to be lower to allow for room between the
-  play area collider and the headset then this offset value will
-  shorten the height of the generated box collider.
-  * **Ignore Grabbed Collisions:** If this is checked then any items
-  that are grabbed with the controller will not collide with the
-  box collider and rigid body on the play area. This is very useful
-  if the user is required to grab and wield objects because if the
-  collider was active they would bounce off the play area collider.
 
 An example of the `SteamVR_TouchpadWalking` script can be viewed in
 the scene `Examples/017_CameraRig_TouchpadWalking`. The scene has

@@ -78,11 +78,6 @@ public class SteamVR_ControllerEvents : MonoBehaviour {
     private Vector2 touchpadAxis = Vector2.zero;
     private Vector2 triggerAxis = Vector2.zero;
 
-    public virtual uint GetControllerIndex()
-    {
-        return controllerIndex;
-    }
-
     public virtual void OnTriggerClicked(ControllerClickedEventArgs e)
     {
         if (TriggerClicked != null)

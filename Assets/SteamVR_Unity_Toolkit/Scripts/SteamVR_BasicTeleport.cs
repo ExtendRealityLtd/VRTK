@@ -12,7 +12,6 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using Valve.VR;
 
 public class SteamVR_BasicTeleport : MonoBehaviour {
     public float blinkTransitionSpeed = 0.6f;
@@ -29,17 +28,14 @@ public class SteamVR_BasicTeleport : MonoBehaviour {
     private float fadeInTime = 0f;
     private float maxBlinkTransitionSpeed = 1.5f;
     private float maxBlinkDistance = 33f;
-    private float retryListenersDelay = 0.25f;
-    private float retryListenerMultiplier = 1.2f;
-    private int listenerInitMax = 5;
-    private List<int> connectedControllers;
-    private List<int> foundWorldPointers;
+
+    private SteamVR_TrackedObject trackedController;
+    private List<uint> trackedControllerIndices;
 
     protected virtual void Start()
     {
-        listenerInitTries = listenerInitMax;
-        connectedControllers = new List<int>();
-        foundWorldPointers = new List<int>();
+        this.name = "PlayerObject_" + this.name;
+        trackedControllerIndices = new List<uint>();
         adjustYForTerrain = false;
         eyeCamera = GameObject.FindObjectOfType<SteamVR_Camera>().GetComponent<Transform>();
         SteamVR_Utils.Event.Listen("device_connected", OnDeviceConnected);
@@ -108,59 +104,34 @@ public class SteamVR_BasicTeleport : MonoBehaviour {
         fadeInTime = 0f;
     }
 
-    private void InitPointerListeners()
+    private void OnDeviceConnected(params object[] args)
     {
-        SteamVR_WorldPointer[] worldPointers = GameObject.FindObjectsOfType<SteamVR_WorldPointer>();
+        StartCoroutine(InitListeners((uint)(int)args[0], (bool)args[1]));
+    }
 
-        // If the WorldPointer Object isn't initialised yet then retry in a quarter of a second
-        // Because the Controller is a child of the CameraRig (and the WorldPointer is usually attached
-        // to the Controller) then it is likely the WorldPointer object isn't available at start.
-        if (worldPointers.Length != connectedControllers.Count)
+    IEnumerator InitListeners(uint trackedControllerIndex, bool trackedControllerConnectedState)
+    {
+        trackedController = DeviceFinder.ControllerByIndex(trackedControllerIndex);
+        var tries = 0f;
+        while (!trackedController && tries < DeviceFinder.initTries)
         {
-            if (listenerInitTries > 0)
-            {
-                listenerInitTries--;
-            }
-            else
-            {
-                retryListenersDelay = retryListenersDelay * retryListenerMultiplier;
-                listenerInitTries = listenerInitMax;
-                Debug.LogWarning("Waiting for controllers to initialise, retrying in " + retryListenersDelay);
-            }
-            Invoke("InitPointerListeners", retryListenersDelay);
-        } else
+            tries += Time.deltaTime;
+            trackedController = DeviceFinder.ControllerByIndex(trackedControllerIndex);
+            yield return null;
+        }
+
+        if (trackedController)
         {
-            foreach (SteamVR_WorldPointer worldPointer in worldPointers)
+            var worldPointer = trackedController.GetComponent<SteamVR_WorldPointer>();
+            if (worldPointer)
             {
-                int worldPointerControllerIndex = (int)worldPointer.gameObject.GetComponent<SteamVR_ControllerEvents>().GetControllerIndex();
-                if (! foundWorldPointers.Contains(worldPointerControllerIndex))
+                if (trackedControllerConnectedState && !trackedControllerIndices.Contains(trackedControllerIndex))
                 {
                     worldPointer.WorldPointerDestinationSet += new WorldPointerEventHandler(DoTeleport);
                     worldPointer.SetMissTarget(ignoreTargetWithTagOrClass);
-                    foundWorldPointers.Add(worldPointerControllerIndex);
+                    trackedControllerIndices.Add(trackedControllerIndex);
                 }
             }
         }
-    }
-
-    private void OnDeviceConnected(params object[] args)
-    {
-        if (IsController((uint)(int)args[0])) {
-            if ((bool)args[1])
-            {
-                connectedControllers.Add((int)args[0]);
-            }
-            else
-            {
-                connectedControllers.Remove((int)args[0]);
-            }
-            Invoke("InitPointerListeners", 0.5f);
-        }
-    }
-
-    private bool IsController(uint index)
-    {
-        var system = OpenVR.System;
-        return (system != null && system.GetTrackedDeviceClass(index) == ETrackedDeviceClass.Controller);
     }
 }
