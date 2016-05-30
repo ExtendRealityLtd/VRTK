@@ -32,7 +32,7 @@ public struct WorldPointerEventArgs
 
 public delegate void WorldPointerEventHandler(object sender, WorldPointerEventArgs e);
 
-public class SteamVR_PlayAreaCollider : MonoBehaviour
+public class VRTK_PlayAreaCollider : MonoBehaviour
 {
     private GameObject parent;
 
@@ -43,21 +43,21 @@ public class SteamVR_PlayAreaCollider : MonoBehaviour
 
     void OnTriggerStay(Collider collider)
     {
-        if (parent.GetComponent<SteamVR_WorldPointer>().IsActive() && !collider.name.Contains("PlayerObject_"))
+        if (parent.GetComponent<VRTK_WorldPointer>().IsActive() && !collider.name.Contains("PlayerObject_"))
         {
-            parent.GetComponent<SteamVR_WorldPointer>().setPlayAreaCursorCollision(true);
+            parent.GetComponent<VRTK_WorldPointer>().setPlayAreaCursorCollision(true);
         }
     }
 
     void OnTriggerExit(Collider collider)
     {
         if (! collider.name.Contains("PlayerObject_")) {
-            parent.GetComponent<SteamVR_WorldPointer>().setPlayAreaCursorCollision(false);
+            parent.GetComponent<VRTK_WorldPointer>().setPlayAreaCursorCollision(false);
         }
     }
 }
 
-public abstract class SteamVR_WorldPointer : MonoBehaviour {
+public abstract class VRTK_WorldPointer : MonoBehaviour {
     public Color pointerHitColor = new Color(0f, 0.5f, 0f, 1f);
     public Color pointerMissColor = new Color(0.8f, 0f, 0f, 1f);
     public bool showPlayAreaCursor = false;
@@ -66,6 +66,8 @@ public abstract class SteamVR_WorldPointer : MonoBehaviour {
     public bool enableTeleport = true;
     public bool beamAlwaysOn = false;
     public float activateDelay = 0f;
+
+    private string missTargetWithTagOrClass;
 
     protected Vector3 destinationPosition;
     protected float pointerContactDistance = 0f;
@@ -123,6 +125,11 @@ public abstract class SteamVR_WorldPointer : MonoBehaviour {
         return (activateDelayTimer <= 0);
     }
 
+    public virtual void SetMissTarget(string name)
+    {
+        missTargetWithTagOrClass = name;
+    }
+
     protected WorldPointerEventArgs SetPointerEvent(uint controllerIndex, float distance, Transform target, Vector3 position)
     {
         WorldPointerEventArgs e;
@@ -136,17 +143,17 @@ public abstract class SteamVR_WorldPointer : MonoBehaviour {
 
     protected virtual void Start()
     {
-        if (GetComponent<SteamVR_ControllerEvents>() == null)
+        if (GetComponent<VRTK_ControllerEvents>() == null)
         {
-            Debug.LogError("SteamVR_WorldPointer is required to be attached to a SteamVR Controller that has the SteamVR_ControllerEvents script attached to it");
+            Debug.LogError("VRTK_WorldPointer is required to be attached to a SteamVR Controller that has the VRTK_ControllerEvents script attached to it");
             return;
         }
 
         this.name = "PlayerObject_" + this.name;
 
         //Setup controller event listeners
-        GetComponent<SteamVR_ControllerEvents>().AliasPointerOn += new ControllerClickedEventHandler(EnablePointerBeam);
-        GetComponent<SteamVR_ControllerEvents>().AliasPointerOff += new ControllerClickedEventHandler(DisablePointerBeam);
+        GetComponent<VRTK_ControllerEvents>().AliasPointerOn += new ControllerClickedEventHandler(EnablePointerBeam);
+        GetComponent<VRTK_ControllerEvents>().AliasPointerOff += new ControllerClickedEventHandler(DisablePointerBeam);
 
         playArea = GameObject.FindObjectOfType<SteamVR_PlayArea>();
         playAreaCursorBoundaries = new GameObject[4];
@@ -204,7 +211,7 @@ public abstract class SteamVR_WorldPointer : MonoBehaviour {
 
         OnWorldPointerIn(SetPointerEvent(controllerIndex, pointerContactDistance, pointerContactTarget, destinationPosition));
 
-        SteamVR_InteractableObject interactableObject = pointerContactTarget.GetComponent<SteamVR_InteractableObject>();
+        VRTK_InteractableObject interactableObject = pointerContactTarget.GetComponent<VRTK_InteractableObject>();
         if (interactableObject && interactableObject.pointerActivatesUseAction && interactableObject.holdButtonToUse)
         {
             interactableObject.StartUsing(this.gameObject);
@@ -220,7 +227,7 @@ public abstract class SteamVR_WorldPointer : MonoBehaviour {
 
         OnWorldPointerOut(SetPointerEvent(controllerIndex, pointerContactDistance, pointerContactTarget, destinationPosition));
 
-        SteamVR_InteractableObject interactableObject = pointerContactTarget.GetComponent<SteamVR_InteractableObject>();
+        VRTK_InteractableObject interactableObject = pointerContactTarget.GetComponent<VRTK_InteractableObject>();
         if (interactableObject && interactableObject.pointerActivatesUseAction && interactableObject.holdButtonToUse)
         {
             interactableObject.StopUsing(this.gameObject);
@@ -234,7 +241,7 @@ public abstract class SteamVR_WorldPointer : MonoBehaviour {
             return;
         }
 
-        SteamVR_InteractableObject interactableObject = pointerContactTarget.GetComponent<SteamVR_InteractableObject>();
+        VRTK_InteractableObject interactableObject = pointerContactTarget.GetComponent<VRTK_InteractableObject>();
         if (interactableObject && interactableObject.pointerActivatesUseAction)
         {
             if (interactableObject.IsUsing())
@@ -268,12 +275,17 @@ public abstract class SteamVR_WorldPointer : MonoBehaviour {
 
     protected void UpdatePointerMaterial(Color color)
     {
-        if (playAreaCursorCollided)
+        if (playAreaCursorCollided || !ValidDestination(pointerContactTarget))
         {
             color = pointerMissColor;
         }
         pointerMaterial.color = color;
         SetPointerMaterial();
+    }
+
+    protected virtual bool ValidDestination(Transform target)
+    {
+        return (target && target.tag != missTargetWithTagOrClass && target.GetComponent(missTargetWithTagOrClass) == null);
     }
 
     private void DrawPlayAreaCursorBoundary(int index, float left, float right, float top, float bottom, float thickness, Vector3 localPosition)
@@ -342,7 +354,7 @@ public abstract class SteamVR_WorldPointer : MonoBehaviour {
         playAreaCursorCollider.center = new Vector3(0f, 65f, 0f);
         playAreaCursorCollider.size = new Vector3(1f, 100f, 1f);
         playAreaCursor.AddComponent<Rigidbody>().isKinematic = true;
-        SteamVR_PlayAreaCollider playAreaCursorScript = playAreaCursor.AddComponent<SteamVR_PlayAreaCollider>();
+        VRTK_PlayAreaCollider playAreaCursorScript = playAreaCursor.AddComponent<VRTK_PlayAreaCollider>();
         playAreaCursorScript.SetParent(this.gameObject);
         playAreaCursor.layer = 2;
 

@@ -13,8 +13,8 @@ public class Controller_Menu : MonoBehaviour {
 
     void Start()
     {        
-        GetComponent<SteamVR_ControllerEvents>().AliasMenuOn += new ControllerClickedEventHandler(DoMenuOn);
-        GetComponent<SteamVR_ControllerEvents>().AliasMenuOff += new ControllerClickedEventHandler(DoMenuOff);
+        GetComponent<VRTK_ControllerEvents>().AliasMenuOn += new ControllerClickedEventHandler(DoMenuOn);
+        GetComponent<VRTK_ControllerEvents>().AliasMenuOff += new ControllerClickedEventHandler(DoMenuOff);
         menuInit = false;
         menuActive = false;
     }

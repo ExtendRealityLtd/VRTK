@@ -4,7 +4,7 @@
 //
 // This script must be attached to the [CameraRig] Prefab
 //
-// A GameObject must have the SteamVR_WorldPointer attached to it to listen for the
+// A GameObject must have the VRTK_WorldPointer attached to it to listen for the
 // updated world position to teleport to.
 //
 //====================================================================================
@@ -12,7 +12,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class SteamVR_HeightAdjustTeleport : SteamVR_BasicTeleport {
+public class VRTK_HeightAdjustTeleport : VRTK_BasicTeleport {
     public bool playSpaceFalling = true;
     private float currentRayDownY = 0f;
 
@@ -64,29 +64,32 @@ public class SteamVR_HeightAdjustTeleport : SteamVR_BasicTeleport {
 
     private bool FloorIsGrabbedObject(RaycastHit collidedObj)
     {
-        return (collidedObj.transform.GetComponent<SteamVR_InteractableObject>() && collidedObj.transform.GetComponent<SteamVR_InteractableObject>().IsGrabbed());
+        return (collidedObj.transform.GetComponent<VRTK_InteractableObject>() && collidedObj.transform.GetComponent<VRTK_InteractableObject>().IsGrabbed());
     }
 
     private void DropToNearestFloor(bool withBlink)
     {
-        //send a ray down to find the closest object to stand on
-        Ray ray = new Ray(eyeCamera.transform.position, -transform.up);
-        RaycastHit rayCollidedWith;
-        bool rayHit = Physics.Raycast(ray, out rayCollidedWith);
-        float floorY = eyeCamera.transform.position.y - rayCollidedWith.distance;
-
-        if (rayHit && ! FloorIsGrabbedObject(rayCollidedWith) && ( MeshYChanged(rayCollidedWith, floorY) || CurrentFloorChanged(rayCollidedWith) ) )
+        if (eyeCamera.transform.position.y > this.transform.position.y)
         {
-            currentFloor = rayCollidedWith.transform.gameObject;
-            currentRayDownY = floorY;
+            //send a ray down to find the closest object to stand on
+            Ray ray = new Ray(eyeCamera.transform.position, -transform.up);
+            RaycastHit rayCollidedWith;
+            bool rayHit = Physics.Raycast(ray, out rayCollidedWith);
+            float floorY = eyeCamera.transform.position.y - rayCollidedWith.distance;
 
-            if (withBlink && !rayCollidedWith.transform.GetComponent<MeshCollider>())
+            if (rayHit && ValidLocation(rayCollidedWith.transform) && !FloorIsGrabbedObject(rayCollidedWith) && (MeshYChanged(rayCollidedWith, floorY) || CurrentFloorChanged(rayCollidedWith)))
             {
-                Blink(blinkTransitionSpeed);
-            }
+                currentFloor = rayCollidedWith.transform.gameObject;
+                currentRayDownY = floorY;
 
-            Vector3 newPosition = new Vector3(this.transform.position.x, floorY, this.transform.position.z);
-            SetNewPosition(newPosition, currentFloor.transform);
+                if (withBlink && !rayCollidedWith.transform.GetComponent<MeshCollider>())
+                {
+                    Blink(blinkTransitionSpeed);
+                }
+
+                Vector3 newPosition = new Vector3(this.transform.position.x, floorY, this.transform.position.z);
+                SetNewPosition(newPosition, currentFloor.transform);
+            }
         }
     }
 

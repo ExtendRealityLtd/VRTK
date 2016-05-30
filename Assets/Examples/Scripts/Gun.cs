@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Gun : SteamVR_InteractableObject
+public class Gun : VRTK_InteractableObject
 {
     GameObject bullet;
     float bulletSpeed = 1000f;

@@ -20,6 +20,8 @@ from the Unity Asset Store to be imported into your Unity project.**
   > Also, expect builds to break older versions as things are changing
   > fast at this stage, it will settle down when the project reaches
   > a beta stage.
+  
+There is a [public Trello board available here](https://trello.com/b/sU0vRWUz/steamvr-unity-toolkit) to view what is currently being worked on and to vote on planned features.
 
 ## Quick Start
 
@@ -134,7 +136,7 @@ functionality to Unity.
 
 The current available scripts are:
 
-#### Controller Actions (SteamVR_ControllerActions)
+#### Controller Actions (VRTK_ControllerActions)
 
 The Controller Actions script provides helper methods to deal with
 common controller actions. The following public methods are available:
@@ -151,12 +153,12 @@ common controller actions. The following public methods are available:
   given as the strength parameter. The max strength that can be
   provided is 3999, any number higher than that will be capped.
 
-An example of the `SteamVR_ControllerActions` script can be viewed in
+An example of the `VRTK_ControllerActions` script can be viewed in
 the scene `Examples/016_Controller_HapticRumble` which demonstrates
 the ability to hide a controller model and make the controller
 vibrate for a given length of time at a given intensity.
 
-#### Controller Events (SteamVR_ControllerEvents)
+#### Controller Events (VRTK_ControllerEvents)
 
 The Controller Events script is attached to a Controller object within
 the `[CameraRig]` prefab and provides event listeners for every button
@@ -240,12 +242,12 @@ Listening for these alias events rather than the actual button events
 means it's easier to customise the controller buttons to the actions
 they should perform.
 
-An example of the `SteamVR_ControllerEvents` script can be viewed in
+An example of the `VRTK_ControllerEvents` script can be viewed in
 the scene `Examples/002_Controller_Events` and code examples
 of how the events are utilised and listened to can be viewed in the
-script `Examples/Scripts/SteamVR_ControllerEvents_ListenerExample.cs`
+script `Examples/Scripts/VRTK_ControllerEvents_ListenerExample.cs`
 
-#### Simple Laser Pointer (SteamVR_SimplePointer)
+#### Simple Laser Pointer (VRTK_SimplePointer)
 
 The Simple Pointer emits a coloured beam from the end of the controller
 to simulate a laser beam. It can be useful for pointing to objects
@@ -256,12 +258,12 @@ emitted from.
 The laser beam is activated by default by pressing the `Grip` on the
 controller. The event it is listening for is the `AliasPointer` events
 so the pointer toggle button can be set by changing the
-`Pointer Toggle` button on the `SteamVR_ControllerEvents` script
+`Pointer Toggle` button on the `VRTK_ControllerEvents` script
 parameters.
 
 The Simple Pointer script is attached to a Controller object within the
 `[CameraRig]` prefab and the Controller object also requires the
-`SteamVR_ControllerEvents` script to be attached as it uses this for
+`VRTK_ControllerEvents` script to be attached as it uses this for
 listening to the controller button events for enabling and disabling
 the beam.
 
@@ -304,16 +306,16 @@ The following script parameters are available:
   * **Show Pointer Tip:** Toggle whether the cursor is shown on the end
   of the pointer beam.
 
-The Simple Pointer object extends the `SteamVR_WorldPointer` abstract
+The Simple Pointer object extends the `VRTK_WorldPointer` abstract
 class and therefore emits the same events and payload.
 
-An example of the `SteamVR_SimplePointer` script can be viewed in
+An example of the `VRTK_SimplePointer` script can be viewed in
 the scene `Examples/003_Controller_SimplePointer` and
 code examples of how the events are utilised and listened to can be
 viewed in the script
-`Examples/Scripts/SteamVR_ControllerPointerEvents_ListenerExample.cs`
+`Examples/Scripts/VRTK_ControllerPointerEvents_ListenerExample.cs`
 
-#### Bezier Curve Laser Pointer (SteamVR_BezierPointer)
+#### Bezier Curve Laser Pointer (VRTK_BezierPointer)
 
 The Bezier Pointer emits a curved line (made out of game objects) from
 the end of the controller to a point on a ground surface (at any
@@ -324,12 +326,12 @@ on top of objects that are not visible to the player.
 The laser beam is activated by default by pressing the `Grip` on the
 controller. The event it is listening for is the `AliasPointer` events
 so the pointer toggle button can be set by changing the
-`Pointer Toggle` button on the `SteamVR_ControllerEvents` script
+`Pointer Toggle` button on the `VRTK_ControllerEvents` script
 parameters.
 
 The Bezier Pointer script is attached to a Controller object within the
 `[CameraRig]` prefab and the Controller object also requires the
-`SteamVR_ControllerEvents` script to be attached as it uses this for
+`VRTK_ControllerEvents` script to be attached as it uses this for
 listening to the controller button events for enabling and disabling
 the beam.
 
@@ -385,10 +387,10 @@ The following script parameters are available:
   here to use instead of the default flat cylinder for the pointer
   cursor.
 
-The Bezier Pointer object extends the `SteamVR_WorldPointer` abstract
+The Bezier Pointer object extends the `VRTK_WorldPointer` abstract
 class and therefore emits the same events and payload.
 
-An example of the `SteamVR_BezierPointer` script can be viewed in
+An example of the `VRTK_BezierPointer` script can be viewed in
 the scene `Examples/009_Controller_BezierPointer` which is used in
 conjunction with the Height Adjust Teleporter shows how it is
 possible to traverse different height objects using the curved
@@ -405,7 +407,7 @@ The bezier curve generation code is in another script located at
 `SteamVR_Unity_Toolkit/Scripts/Helper/CurveGenerator.cs` and was
 heavily inspired by the tutorial and code from [Catlike Coding].
 
-#### Basic Teleporter (SteamVR_BasicTeleport)
+#### Basic Teleporter (VRTK_BasicTeleport)
 
 The basic teleporter updates the `[CameraRig]` x/z position in the
 game world to the position of a World Pointer's tip location which is
@@ -415,7 +417,7 @@ game objects as it only allows for travel across a flat plane.
 
 The Basic Teleport script is attached to the `[CameraRig]` prefab and
 requires an implementation of the WorldPointer script to be attached
-to another game object (e.g. SteamVR_SimplePointer attached to
+to another game object (e.g. VRTK_SimplePointer attached to
 the Controller object).
 
 The following script parameters are available:
@@ -438,15 +440,20 @@ The following script parameters are available:
   play area. If it is unchecked then the teleported location will
   always be the centre of the play area even if the headset position
   is not in the centre of the play area.
+  * **Ignore Target With Tag Or Class:** A string that specifies an
+  object Tag or the name of a Script attached to an obejct and
+  notifies the teleporter that the destination is to be ignored so
+  the user cannot teleport to that location. It also ensure the
+  pointer colour is set to the miss colour.
 
-An example of the `SteamVR_BasicTeleport` script can be viewed in the
+An example of the `VRTK_BasicTeleport` script can be viewed in the
 scene `Examples/004_CameraRig_BasicTeleport`. The scene uses
-the `SteamVR_SimplePointer` script on the Controllers to initiate a
+the `VRTK_SimplePointer` script on the Controllers to initiate a
 laser pointer with the Controller `Grip` button and when the laser
 pointer is deactivated (release the `Grip`) then the player is
 teleported to the location of the laser pointer tip.
 
-#### Height Adjustable Teleporter (SteamVR_HeightAdjustTeleport)
+#### Height Adjustable Teleporter (VRTK_HeightAdjustTeleport)
 
 The height adjust teleporter extends the basic teleporter and allows
 for the y position of the `[CameraRig]` to be altered based on whether
@@ -472,6 +479,11 @@ The following script parameters are available:
   play area. If it is unchecked then the teleported location will
   always be the centre of the play area even if the headset position
   is not in the centre of the play area.
+  * **Ignore Target With Tag Or Class:** A string that specifies an
+  object Tag or the name of a Script attached to an obejct and
+  notifies the teleporter that the destination is to be ignored so
+  the user cannot teleport to that location. It also ensure the
+  pointer colour is set to the miss colour.
   * **Play Space Falling:** Checks if the player steps off an object
   into a part of their play area that is not on the object then they are
   automatically teleported down to the nearest floor.
@@ -483,7 +495,7 @@ climbing stairs without needing to use the pointer beam location. If this
 option is turned off then the player can hover in mid air at
 the same y position of the object they are standing on.
 
-An example of the `SteamVR_HeightAdjustTeleport` script can be viewed
+An example of the `VRTK_HeightAdjustTeleport` script can be viewed
 in the scene `Examples/007_CameraRig_HeightAdjustTeleport`. The scene
 has a collection of varying height objects that the player can either
 walk up and down or use the laser pointer to climb on top of them.
@@ -496,7 +508,7 @@ Another example can be viewed in the scene
 `Examples/020_CameraRig_MeshTeleporting` which shows how the
 teleportation of a player can also traverse mesh colliders.
 
-#### Fading On Headset Collision (SteamVR_HeadsetCollisionFade)
+#### Fading On Headset Collision (VRTK_HeadsetCollisionFade)
 
 The purpose of the Headset Collision Fade is to detect when the user's
 VR headset collides with another game object and fades the screen to
@@ -534,13 +546,44 @@ The event payload that is emitted contains:
   * **currentTransform:** The current Transform of the object that
   the Headset Collision Fade script is attatched to (Camera).
 
-An example of the `SteamVR_HeadsetCollisionFade` script can be
+An example of the `VRTK_HeadsetCollisionFade` script can be
 viewed in the scene `Examples/011_Camera_HeadSetCollisionFading`.
 The scene has collidable walls around the play area and if the player
 puts their head into any of the walls then the headset will fade to
 black.
 
-#### Touchpad Movement (SteamVR_TouchpadWalking)
+#### Player Presence (VRTK_PlayerPresence)
+
+The concept that the VR user has a physical in game presence which is
+accomplished by adding a collider and a rigidbody at the position the
+user is standing within their play area. This physical collider and
+rigidbody will prevent the user from ever being able to walk through
+walls or intersect other collidable objects. The height of the collider
+is determined by the height the user has the headset at, so if the
+user crouches then the collider shrinks with them, meaning it's
+possible to crouch and crawl under low ceilings.
+
+The following script parameters are available:
+
+  * **Headset Y Offset:** The box collider which is created for the
+  user is set at a height from the user's headset position. If the
+  collider is required to be lower to allow for room between the
+  play area collider and the headset then this offset value will
+  shorten the height of the generated box collider.
+  * **Ignore Grabbed Collisions:** If this is checked then any items
+  that are grabbed with the controller will not collide with the
+  box collider and rigid body on the play area. This is very useful
+  if the user is required to grab and wield objects because if the
+  collider was active they would bounce off the play area collider.
+
+An example of the `VRTK_PlayerPresence` script can be viewed in
+the scene `Examples/017_CameraRig_TouchpadWalking`. The scene has
+a collection of walls and slopes that can be traversed by the user
+with the touchpad but the user cannot pass through the objects as
+they are collidable and the rigidbody physics won't allow the
+intersection to occur.
+
+#### Touchpad Movement (VRTK_TouchpadWalking)
 
 The ability to move the play area around the game world by sliding a
 finger over the touchpad is achieved using this script. The
@@ -567,25 +610,15 @@ The following script parameters are available:
   a complete stop when the user is no longer touching the touchpad.
   This deceleration effect can ease any motion sickness that may be
   suffered.
-  * **Headset Y Offset:** The box collider which is created for the
-  user is set at a height from the user's headset position. If the
-  collider is required to be lower to allow for room between the
-  play area collider and the headset then this offset value will
-  shorten the height of the generated box collider.
-  * **Ignore Grabbed Collisions:** If this is checked then any items
-  that are grabbed with the controller will not collide with the
-  box collider and rigid body on the play area. This is very useful
-  if the user is required to grab and wield objects because if the
-  collider was active they would bounce off the play area collider.
 
-An example of the `SteamVR_TouchpadWalking` script can be viewed in
+An example of the `VRTK_TouchpadWalking` script can be viewed in
 the scene `Examples/017_CameraRig_TouchpadWalking`. The scene has
 a collection of walls and slopes that can be traversed by the user
 with the touchpad. There is also an area that can only be traversed
 if the user is crouching. Standing up in this crouched area will
 cause the user to appear back at their last good known position.
 
-#### Interactable Object (SteamVR_InteractableObject)
+#### Interactable Object (VRTK_InteractableObject)
 
 The Interactable Object script is attached to any game object that is
 required to be interacted with (e.g. via the controllers).
@@ -597,7 +630,7 @@ The following script parameters are available:
   controller touches it if this is checked.
   * **Touch Highligt Color:** The colour to highlight the object
   when it is touched. This colour will override any globally set
-  color (for instance on the `SteamVR_InteractTouch` script).
+  color (for instance on the `VRTK_InteractTouch` script).
 
 ######Grab Interactions
   * **Is Grabbable:** Determines if the object can be grabbed
@@ -638,6 +671,9 @@ The following script parameters are available:
    * `Track Object` doesn't attach the object to the controller via
    a joint, instead it ensures the object tracks the direction of the
    controller, which works well for items that are on hinged joints.
+   * `Child Of Controller` simply makes the object a child of the
+   controller grabbing so it naturally tracks the position of the
+   controller motion.
   * **Detatch Threshold:** The force amount when to detatch the
   object from the grabbed controller. If the controller tries to
   exert a force higher than this threshold on the object (from pulling
@@ -673,14 +709,34 @@ The following script parameters are available:
   unwanted teleporting from happening when using an object with a
   pointer.
 
+The following events are emitted:
+
+  * **InteractableObjectTouched:** Emitted when another object touches
+  the current object.
+  * **InteractableObjectUntouched:** Emitted when the other object
+  stops touching the current object.
+  * **InteractableObjectGrabbed:** Emitted when another object grabs
+  the current object (e.g. a controller).
+  * **InteractableObjectUngrabbed:** Emitted when the other object
+  stops grabbing the current object.
+  * **InteractableObjectUsed:** Emitted when another object uses
+  the current object (e.g. a controller).
+  * **InteractableObjectUnused:** Emitted when the other object
+  stops using the current object.
+
+The event payload that is emitted contains:
+
+  * **interactingObject:** The object that is initiating the
+  interaction (e.g. a controller)
+
 The basis of this script is to provide a simple mechanism for
 identifying objects in the game world that can be grabbed or used
 but it is expected that this script is the base to be inherited into a
 script with richer functionality.
 
-An example of the `SteamVR_InteractableObject` can be viewed in the
+An example of the `VRTK_InteractableObject` can be viewed in the
 scene `Examples/005_Controller_BasicObjectGrabbing`. The scene
-also uses the `SteamVR_InteractTouch` and `SteamVR_InteractGrab`
+also uses the `VRTK_InteractTouch` and `VRTK_InteractGrab`
 scripts on the controllers to show how an interactable object can be
 grabbed and snapped to the controller and thrown around the game world.
 
@@ -691,7 +747,7 @@ or grabbed by toggling the button click and also has objects that
 can have their Using state toggled to show how mutliple items can be
 turned on at the same time.
 
-#### Touching Interactable Objects (SteamVR_InteractTouch)
+#### Touching Interactable Objects (VRTK_InteractTouch)
 
 The Interact Touch script is attached to a Controller object within the
 `[CameraRig]` prefab.
@@ -719,29 +775,29 @@ The event payload that is emitted contains:
   * **target:** The GameObject of the interactable object that is being
   interacted with by the controller
 
-An example of the `SteamVR_InteractTouch` can be viewed in the
+An example of the `VRTK_InteractTouch` can be viewed in the
 scene `Examples/005_Controller/BasicObjectGrabbing`. The scene
 demonstrates the highlighting of objects that have the
-`SteamVR_InteractableObject` script added to them to show the
+`VRTK_InteractableObject` script added to them to show the
 ability to highlight interactable objects when they are touched by
 the controllers.
 
-#### Grabbing Interactable Objects (SteamVR_InteractGrab)
+#### Grabbing Interactable Objects (VRTK_InteractGrab)
 
 The Interact Grab script is attached to a Controller object
 within the `[CameraRig]` prefab and the Controller object
-requires the `SteamVR_ControllerEvents` script to be attached as it
+requires the `VRTK_ControllerEvents` script to be attached as it
 uses this for listening to the controller button events for grabbing
 and releasing interactable game objects. It listens for the
 `AliasGrabOn` and `AliasGrabOff` events to determine when an object
 should be grabbed and should be released.
 
-The Controller object also requires the `SteamVR_InteractTouch` script
+The Controller object also requires the `VRTK_InteractTouch` script
 to be attached to it as this is used to determine when an interactable
 object is being touched. Only valid touched objects can be grabbed.
 
 An object can be grabbed if the Controller touches a game object which
-contains the `SteamVR_InteractableObject` script and has the flag
+contains the `VRTK_InteractableObject` script and has the flag
 `isGrabbable` set to `true`.
 
 If a valid interactable object is grabbable then pressing the set
@@ -759,12 +815,24 @@ a rigidbody to pick them up and move them around the game world.
 
 The following script parameters are available:
 
-  * **Hide Controller On Grab:** Hides the controller model when a valid
-  grab occurs
-  * **Hide Controller Delay:** The amount of seconds to wait before
-  hiding the controller on grab.
   * **Controller Attach Point:** The rigidbody point on the controller
   model to snap the grabbed object to (defaults to the tip)
+  * **Hide Controller On Grab:** Hides the controller model when a
+  valid grab occurs
+  * **Hide Controller Delay:** The amount of seconds to wait before
+  hiding the controller on grab.
+  * **Grab Precognition:** An amount of time between when the grab
+  button is pressed to when the controller is touching something to
+  grab it. For example, if an object is falling at a fast rate, then
+  it is very hard to press the grab button in time to catch the object
+  due to human reaction times. A higher number here will mean the
+  grab button can be pressed before the controller touches the object
+  and when the collision takes place, if the grab button is still being
+  held down then the grab action will be successful.
+  * **Create Rigid Body When Not Touching:** If this is checked and the
+  controller is not touching an Interactable Object when the grab
+  button is pressed then a rigid body is added to the controller to
+  allow the controller to push other rigid body objects around.
 
 The following events are emitted:
 
@@ -779,10 +847,10 @@ The event payload that is emitted contains:
   * **target:** The GameObject of the interactable object that is being
   interacted with by the controller
 
-An example of the `SteamVR_InteractGrab` can be viewed in the
+An example of the `VRTK_InteractGrab` can be viewed in the
 scene `Examples/005_Controller/BasicObjectGrabbing`. The scene
 demonstrates the grabbing of interactable objects that have the
-`SteamVR_InteractableObject` script attached to them. The objects
+`VRTK_InteractableObject` script attached to them. The objects
 can be picked up and thrown around.
 
 More complex examples can be viewed in the scene
@@ -794,22 +862,22 @@ simultaneously. The scene
 the different mechanisms for snapping a grabbed object to the
 controller.
 
-#### Using Interactable Objects (SteamVR_InteractUse)
+#### Using Interactable Objects (VRTK_InteractUse)
 
 The Interact Use script is attached to a Controller object
 within the `[CameraRig]` prefab and the Controller object
-requires the `SteamVR_ControllerEvents` script to be attached as it
+requires the `VRTK_ControllerEvents` script to be attached as it
 uses this for listening to the controller button events for using
 and stop using interactable game objects. It listens for the
 `AliasUseOn` and `AliasUseOff` events to determine when an object
 should be used and should stop using.
 
-The Controller object also requires the `SteamVR_InteractTouch` script
+The Controller object also requires the `VRTK_InteractTouch` script
 to be attached to it as this is used to determine when an interactable
 object is being touched. Only valid touched objects can be used.
 
 An object can be used if the Controller touches a game object which
-contains the `SteamVR_InteractableObject` script and has the flag
+contains the `VRTK_InteractableObject` script and has the flag
 `isUsable` set to `true`.
 
 If a valid interactable object is usable then pressing the set
@@ -856,7 +924,7 @@ different scripts without needing to duplicate code.
 
 The current abstract classes are available:
 
-##### SteamVR_WorldPointer
+##### VRTK_WorldPointer
 
 This abstract class provides any game pointer the ability to know the
 the state of the implemented pointer and emit an event to other scripts
@@ -1115,6 +1183,25 @@ The current examples are:
   scene, particle objects with rotations are used to demonstrate a
   different look to the bezier pointer beam.
    * [View Example Tour on Youtube](https://www.youtube.com/watch?v=5EAFOQJrqMY)
+
+  * **023_Controller_ChildOfControllerOnGrab:** A scene that
+  demonstrates the grab mechanic where the object being grabbed
+  becomes a child of the controller doing the grabbing. This works
+  well for objects that need absolute tracking of the controller and do
+  not want to be disjointed under any circumstances. The object becomes
+  an extension of the controller. The scene demonstrates this with a 
+  bow and arrow example, where the bow can be picked up and tracked to
+  the controller, whilst the other controller is responsible for
+  picking up arrows to fire in the bow.
+
+  * **024_CameraRig_ExcludeTeleportLocation:** A scene that shows how
+  to exclude certain objects from being teleportable by either applying
+  a named Tag to the object or by applying a Script of a certain name.
+  In the scene, the yellow objects are excluded from teleport locations
+  by having an `ExcludeTeleport` tag set on them and the black objects
+  are excluded by having a script called `ExcludeTeleport` attached to
+  them. The `ExcludeTeleport` script has no methods and is just used
+  as a placeholder.
 
 ## Contributing
 

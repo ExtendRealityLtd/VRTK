@@ -4,7 +4,7 @@
 //
 // This script must be attached to the [CameraRig] Prefab
 //
-// A GameObject must have the SteamVR_WorldPointer attached to it to listen for the
+// A GameObject must have the VRTK_WorldPointer attached to it to listen for the
 // updated world position to teleport to.
 //
 //====================================================================================
@@ -12,13 +12,13 @@
 using UnityEngine;
 using System.Collections;
 
-public class SteamVR_BasicTeleport : MonoBehaviour {
+public class VRTK_BasicTeleport : MonoBehaviour {
     public float blinkTransitionSpeed = 0.6f;
     [Range(0f,32f)]
     public float distanceBlinkDelay = 0f;
     public bool headsetPositionCompensation = true;
+    public string ignoreTargetWithTagOrClass;
 
-    protected int listenerInitTries = 5;
     protected Transform eyeCamera;
     protected bool adjustYForTerrain = false;
 
@@ -29,9 +29,13 @@ public class SteamVR_BasicTeleport : MonoBehaviour {
 
     protected virtual void Start()
     {
+        this.name = "PlayerObject_" + this.name;
         adjustYForTerrain = false;
-        InitPointerListeners();
         eyeCamera = GameObject.FindObjectOfType<SteamVR_Camera>().GetComponent<Transform>();
+
+        var controllerManager = GameObject.FindObjectOfType<SteamVR_ControllerManager>();
+        InitControllerListeners(controllerManager.left);
+        InitControllerListeners(controllerManager.right);
     }
 
     protected virtual void Blink(float transitionSpeed)
@@ -41,9 +45,14 @@ public class SteamVR_BasicTeleport : MonoBehaviour {
         Invoke("ReleaseBlink", blinkPause);
     }
 
+    protected virtual bool ValidLocation(Transform target)
+    {
+        return (target && target.tag != ignoreTargetWithTagOrClass && target.GetComponent(ignoreTargetWithTagOrClass) == null);
+    }
+
     protected virtual void DoTeleport(object sender, WorldPointerEventArgs e)
     {
-        if (e.target && e.enableTeleport)
+        if (ValidLocation(e.target) && e.enableTeleport)
         {
             Vector3 newPosition = GetNewPosition(e.destinationPosition, e.target);
             CalculateBlinkDelay(blinkTransitionSpeed, newPosition);
@@ -92,30 +101,16 @@ public class SteamVR_BasicTeleport : MonoBehaviour {
         fadeInTime = 0f;
     }
 
-    private void InitPointerListeners()
+    private void InitControllerListeners(GameObject controller)
     {
-        SteamVR_WorldPointer[] worldPointers = GameObject.FindObjectsOfType<SteamVR_WorldPointer>();
-
-        // If the WorldPointer Object isn't initialised yet then retry in a quarter of a second
-        // Because the Controller is a child of the CameraRig (and the WorldPointer is usually attached
-        // to the Controller) then it is likely the WorldPointer object isn't available at start.
-        if (worldPointers.Length == 0)
+        if (controller)
         {
-            if (listenerInitTries > 0)
+            var worldPointer = controller.GetComponent<VRTK_WorldPointer>();
+            if (worldPointer)
             {
-                listenerInitTries--;
-                Invoke("InitPointerListeners", 0.25f);
+                worldPointer.WorldPointerDestinationSet += new WorldPointerEventHandler(DoTeleport);
+                worldPointer.SetMissTarget(ignoreTargetWithTagOrClass);
             }
-            else
-            {
-                Debug.LogError("A GameObject must exist with a SteamVR_WorldPointer script attached to it");
-                return;
-            }
-        }
-
-        foreach (SteamVR_WorldPointer worldPointer in worldPointers)
-        {
-            worldPointer.WorldPointerDestinationSet += new WorldPointerEventHandler(DoTeleport);
         }
     }
 }

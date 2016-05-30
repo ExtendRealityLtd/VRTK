@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Openable_Door : SteamVR_InteractableObject {
+public class Openable_Door : VRTK_InteractableObject
+{
     public bool flipped = false;
     public bool rotated = false;
     float sideFlip = -1;

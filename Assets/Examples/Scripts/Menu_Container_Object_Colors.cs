@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Menu_Container_Object_Colors : SteamVR_InteractableObject
+public class Menu_Container_Object_Colors : VRTK_InteractableObject
 {
     private Color selectedColor;
 

@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Lamp : SteamVR_InteractableObject {
+public class Lamp : VRTK_InteractableObject
+{
     public override void Grabbed(GameObject grabbingObject)
     {
         base.Grabbed(grabbingObject);

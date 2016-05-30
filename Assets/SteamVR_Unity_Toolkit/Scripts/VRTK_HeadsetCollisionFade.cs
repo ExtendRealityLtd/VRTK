@@ -9,7 +9,7 @@ public struct HeadsetCollisionEventArgs
 
 public delegate void HeadsetCollisionEventHandler(object sender, HeadsetCollisionEventArgs e);
 
-public class SteamVR_HeadsetCollisionFade : MonoBehaviour {
+public class VRTK_HeadsetCollisionFade : MonoBehaviour {
     public float blinkTransitionSpeed = 0.1f;
     public Color fadeColor = Color.black;
 
@@ -30,6 +30,11 @@ public class SteamVR_HeadsetCollisionFade : MonoBehaviour {
     }
 
     protected void Start () {
+        if (gameObject.GetComponentInChildren<SteamVR_Fade>() == null)
+        {
+            Debug.LogWarning("This 'VRTK_HeadsetCollisionFade' script needs a SteamVR_Fade script on the camera eye.");
+        }
+
         this.name = "PlayerObject_" + this.name;
         BoxCollider collider = this.gameObject.AddComponent<BoxCollider>();
         collider.isTrigger = true;

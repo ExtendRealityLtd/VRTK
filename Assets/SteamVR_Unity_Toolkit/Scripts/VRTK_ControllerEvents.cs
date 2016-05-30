@@ -10,7 +10,7 @@ public struct ControllerClickedEventArgs
 
 public delegate void ControllerClickedEventHandler(object sender, ControllerClickedEventArgs e);
 
-public class SteamVR_ControllerEvents : MonoBehaviour {
+public class VRTK_ControllerEvents : MonoBehaviour {
     public enum ButtonAlias
     {
         Trigger,
@@ -34,6 +34,11 @@ public class SteamVR_ControllerEvents : MonoBehaviour {
     public bool touchpadTouched = false;
     public bool touchpadAxisChanged = false;
     public bool gripPressed = false;
+
+    public bool pointerPressed = false;
+    public bool grabPressed = false;
+    public bool usePressed = false;
+    public bool menuPressed = false;
 
     public event ControllerClickedEventHandler TriggerClicked;
     public event ControllerClickedEventHandler TriggerUnclicked;
@@ -208,15 +213,23 @@ public class SteamVR_ControllerEvents : MonoBehaviour {
         trackedController = GetComponent<SteamVR_TrackedObject>();
     }
 
+    void Start()
+    {
+        controllerIndex = (uint)trackedController.index;
+        device = SteamVR_Controller.Input((int)controllerIndex);
+    }
+
     void EmitAlias(ButtonAlias type, bool touchDown, float buttonPressure, ref bool buttonBool)
     {
         if (pointerToggleButton == type)
         {
             if (touchDown)
             {
+                pointerPressed = true;
                 OnAliasPointerOn(SetButtonEvent(ref buttonBool, true, buttonPressure));
             } else
             {
+                pointerPressed = false;
                 OnAliasPointerOff(SetButtonEvent(ref buttonBool, false, buttonPressure));
             }
         }
@@ -225,10 +238,12 @@ public class SteamVR_ControllerEvents : MonoBehaviour {
         {
             if (touchDown)
             {
+                grabPressed = true;
                 OnAliasGrabOn(SetButtonEvent(ref buttonBool, true, buttonPressure));
             }
             else
             {
+                grabPressed = false;
                 OnAliasGrabOff(SetButtonEvent(ref buttonBool, false, buttonPressure));
             }
         }
@@ -237,10 +252,12 @@ public class SteamVR_ControllerEvents : MonoBehaviour {
         {
             if (touchDown)
             {
+                usePressed = true;
                 OnAliasUseOn(SetButtonEvent(ref buttonBool, true, buttonPressure));
             }
             else
             {
+                usePressed = false;
                 OnAliasUseOff(SetButtonEvent(ref buttonBool, false, buttonPressure));
             }
         }
@@ -249,10 +266,12 @@ public class SteamVR_ControllerEvents : MonoBehaviour {
         {
             if (touchDown)
             {
+                menuPressed = true;
                 OnAliasMenuOn(SetButtonEvent(ref buttonBool, true, buttonPressure));
             }
             else
             {
+                menuPressed = false;
                 OnAliasMenuOff(SetButtonEvent(ref buttonBool, false, buttonPressure));
             }
         }
@@ -277,8 +296,7 @@ public class SteamVR_ControllerEvents : MonoBehaviour {
             triggerAxisChanged = false;
         } else
         {
-            OnTriggerAxisChanged(SetButtonEvent(ref triggerPressed, true, currentTriggerAxis.x));
-            triggerAxisChanged = true;
+            OnTriggerAxisChanged(SetButtonEvent(ref triggerAxisChanged, true, currentTriggerAxis.x));
         }
 
         if(Vector2ShallowEquals(touchpadAxis, currentTouchpadAxis))

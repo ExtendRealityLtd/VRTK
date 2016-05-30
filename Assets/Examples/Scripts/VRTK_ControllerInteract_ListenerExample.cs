@@ -1,22 +1,22 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class SteamVR_ControllerInteract_ListenerExample : MonoBehaviour {
+public class VRTK_ControllerInteract_ListenerExample : MonoBehaviour {
 
     // Use this for initialization
     void Start()
     {
-        if (GetComponent<SteamVR_InteractTouch>() == null || GetComponent<SteamVR_InteractGrab>() == null)
+        if (GetComponent<VRTK_InteractTouch>() == null || GetComponent<VRTK_InteractGrab>() == null)
         {
-            Debug.LogError("SteamVR_ControllerInteracts_ListenerExample is required to be attached to a SteamVR Controller that has the SteamVR_InteractTouch and SteamVR_InteractGrab script attached to it");
+            Debug.LogError("VRTK_ControllerInteracts_ListenerExample is required to be attached to a SteamVR Controller that has the VRTK_InteractTouch and VRTK_InteractGrab script attached to it");
             return;
         }
 
         //Setup controller event listeners
-        GetComponent<SteamVR_InteractTouch>().ControllerTouchInteractableObject += new ObjectInteractEventHandler(DoInteractTouch);
-        GetComponent<SteamVR_InteractTouch>().ControllerUntouchInteractableObject += new ObjectInteractEventHandler(DoInteractUntouch);
-        GetComponent<SteamVR_InteractGrab>().ControllerGrabInteractableObject += new ObjectInteractEventHandler(DoInteractGrab);
-        GetComponent<SteamVR_InteractGrab>().ControllerUngrabInteractableObject += new ObjectInteractEventHandler(DoInteractUngrab);
+        GetComponent<VRTK_InteractTouch>().ControllerTouchInteractableObject += new ObjectInteractEventHandler(DoInteractTouch);
+        GetComponent<VRTK_InteractTouch>().ControllerUntouchInteractableObject += new ObjectInteractEventHandler(DoInteractUntouch);
+        GetComponent<VRTK_InteractGrab>().ControllerGrabInteractableObject += new ObjectInteractEventHandler(DoInteractGrab);
+        GetComponent<VRTK_InteractGrab>().ControllerUngrabInteractableObject += new ObjectInteractEventHandler(DoInteractUngrab);
     }
 
     void DebugLogger(uint index, string action, GameObject target)
