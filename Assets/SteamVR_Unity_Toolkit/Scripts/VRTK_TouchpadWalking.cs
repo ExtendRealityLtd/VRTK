@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
 
 public class VRTK_TouchpadWalking : MonoBehaviour {
     public float maxWalkSpeed = 3f;
@@ -11,7 +10,6 @@ public class VRTK_TouchpadWalking : MonoBehaviour {
     private float strafeSpeed = 0f;
 
     private VRTK_PlayerPresence playerPresence;
-    private List<SteamVR_TrackedObject> trackedControllers;
 
     private void Awake()
     {
@@ -27,8 +25,10 @@ public class VRTK_TouchpadWalking : MonoBehaviour {
 
     private void Start () {
         this.name = "PlayerObject_" + this.name;
-        trackedControllers = new List<SteamVR_TrackedObject>();
-        SteamVR_Utils.Event.Listen("device_connected", OnDeviceConnected);
+
+        var controllerManager = GameObject.FindObjectOfType<SteamVR_ControllerManager>();
+        InitControllerListeners(controllerManager.left);
+        InitControllerListeners(controllerManager.right);
     }
 
     private void DoTouchpadAxisChanged(object sender, ControllerClickedEventArgs e)
@@ -91,33 +91,15 @@ public class VRTK_TouchpadWalking : MonoBehaviour {
         Move();
     }
 
-    private void OnDeviceConnected(params object[] args)
+    private void InitControllerListeners(GameObject controller)
     {
-        StartCoroutine(InitListeners((uint)(int)args[0], (bool)args[1]));
-    }
-
-    IEnumerator InitListeners(uint trackedControllerIndex, bool trackedControllerConnectedState)
-    {
-        var trackedController = DeviceFinder.ControllerByIndex(trackedControllerIndex);
-        var tries = 0f;
-        while (!trackedController && tries < DeviceFinder.initTries)
+        if (controller)
         {
-            tries+= Time.deltaTime;
-            trackedController = DeviceFinder.ControllerByIndex(trackedControllerIndex);
-            yield return null;
-        }
-
-        if (trackedController)
-        {
-            var controllerEvent = trackedController.GetComponent<VRTK_ControllerEvents>();
+            var controllerEvent = controller.GetComponent<VRTK_ControllerEvents>();
             if (controllerEvent)
             {
-                if (trackedControllerConnectedState && !trackedControllers.Contains(trackedController))
-                {
-                    controllerEvent.TouchpadAxisChanged += new ControllerClickedEventHandler(DoTouchpadAxisChanged);
-                    controllerEvent.TouchpadUntouched += new ControllerClickedEventHandler(DoTouchpadUntouched);
-                    trackedControllers.Add(trackedController);
-                }
+                controllerEvent.TouchpadAxisChanged += new ControllerClickedEventHandler(DoTouchpadAxisChanged);
+                controllerEvent.TouchpadUntouched += new ControllerClickedEventHandler(DoTouchpadUntouched);
             }
         }
     }

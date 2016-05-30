@@ -11,7 +11,6 @@
 
 using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
 
 public class VRTK_BasicTeleport : MonoBehaviour {
     public float blinkTransitionSpeed = 0.6f;
@@ -20,7 +19,6 @@ public class VRTK_BasicTeleport : MonoBehaviour {
     public bool headsetPositionCompensation = true;
     public string ignoreTargetWithTagOrClass;
 
-    protected int listenerInitTries = 0;
     protected Transform eyeCamera;
     protected bool adjustYForTerrain = false;
 
@@ -29,15 +27,15 @@ public class VRTK_BasicTeleport : MonoBehaviour {
     private float maxBlinkTransitionSpeed = 1.5f;
     private float maxBlinkDistance = 33f;
 
-    private List<SteamVR_TrackedObject> trackedControllers;
-
     protected virtual void Start()
     {
         this.name = "PlayerObject_" + this.name;
-        trackedControllers = new List<SteamVR_TrackedObject>();
         adjustYForTerrain = false;
         eyeCamera = GameObject.FindObjectOfType<SteamVR_Camera>().GetComponent<Transform>();
-        SteamVR_Utils.Event.Listen("device_connected", OnDeviceConnected);
+
+        var controllerManager = GameObject.FindObjectOfType<SteamVR_ControllerManager>();
+        InitControllerListeners(controllerManager.left);
+        InitControllerListeners(controllerManager.right);
     }
 
     protected virtual void Blink(float transitionSpeed)
@@ -103,33 +101,15 @@ public class VRTK_BasicTeleport : MonoBehaviour {
         fadeInTime = 0f;
     }
 
-    private void OnDeviceConnected(params object[] args)
+    private void InitControllerListeners(GameObject controller)
     {
-        StartCoroutine(InitListeners((uint)(int)args[0], (bool)args[1]));
-    }
-
-    IEnumerator InitListeners(uint trackedControllerIndex, bool trackedControllerConnectedState)
-    {
-        var trackedController = DeviceFinder.ControllerByIndex(trackedControllerIndex);
-        var tries = 0f;
-        while (!trackedController && tries < DeviceFinder.initTries)
+        if (controller)
         {
-            tries += Time.deltaTime;
-            trackedController = DeviceFinder.ControllerByIndex(trackedControllerIndex);
-            yield return null;
-        }
-
-        if (trackedController)
-        {
-            var worldPointer = trackedController.GetComponent<VRTK_WorldPointer>();
+            var worldPointer = controller.GetComponent<VRTK_WorldPointer>();
             if (worldPointer)
             {
-                if (trackedControllerConnectedState && !trackedControllers.Contains(trackedController))
-                {
-                    worldPointer.WorldPointerDestinationSet += new WorldPointerEventHandler(DoTeleport);
-                    worldPointer.SetMissTarget(ignoreTargetWithTagOrClass);
-                    trackedControllers.Add(trackedController);
-                }
+                worldPointer.WorldPointerDestinationSet += new WorldPointerEventHandler(DoTeleport);
+                worldPointer.SetMissTarget(ignoreTargetWithTagOrClass);
             }
         }
     }

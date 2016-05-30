@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
 
 public class VRTK_PlayerPresence : MonoBehaviour {
     public float headsetYOffset = 0.2f;
@@ -16,8 +15,6 @@ public class VRTK_PlayerPresence : MonoBehaviour {
     private float crouchMargin = 0.5f;
     private float lastPlayAreaY = 0f;
 
-    private List<SteamVR_TrackedObject> trackedControllers;
-
     public Transform GetHeadset()
     {
         return headset;
@@ -26,12 +23,14 @@ public class VRTK_PlayerPresence : MonoBehaviour {
     private void Start()
     {
         this.name = "PlayerObject_" + this.name;
-        trackedControllers = new List<SteamVR_TrackedObject>();
         lastGoodPositionSet = false;
         headset = DeviceFinder.HeadsetTransform();
         CreateCollider();
         InitHeadsetListeners();
-        SteamVR_Utils.Event.Listen("device_connected", OnDeviceConnected);
+
+        var controllerManager = GameObject.FindObjectOfType<SteamVR_ControllerManager>();
+        InitControllerListeners(controllerManager.left);
+        InitControllerListeners(controllerManager.right);
     }
 
     private void InitHeadsetListeners()
@@ -116,33 +115,15 @@ public class VRTK_PlayerPresence : MonoBehaviour {
         UpdateCollider();
     }
 
-    private void OnDeviceConnected(params object[] args)
+    private void InitControllerListeners(GameObject controller)
     {
-        StartCoroutine(InitListeners((uint)(int)args[0], (bool)args[1]));
-    }
-
-    IEnumerator InitListeners(uint trackedControllerIndex, bool trackedControllerConnectedState)
-    {
-        var trackedController = DeviceFinder.ControllerByIndex(trackedControllerIndex);
-        var tries = 0f;
-        while (!trackedController && tries < DeviceFinder.initTries)
+        if (controller)
         {
-            tries += Time.deltaTime;
-            trackedController = DeviceFinder.ControllerByIndex(trackedControllerIndex);
-            yield return null;
-        }
-
-        if (trackedController)
-        {
-            var grabbingController = trackedController.GetComponent<VRTK_InteractGrab>();
-            if(grabbingController && ignoreGrabbedCollisions)
+            var grabbingController = controller.GetComponent<VRTK_InteractGrab>();
+            if (grabbingController && ignoreGrabbedCollisions)
             {
-                if (trackedControllerConnectedState && !trackedControllers.Contains(trackedController))
-                {
-                    grabbingController.ControllerGrabInteractableObject += new ObjectInteractEventHandler(OnGrabObject);
-                    grabbingController.ControllerUngrabInteractableObject += new ObjectInteractEventHandler(OnUngrabObject);
-                    trackedControllers.Add(trackedController);
-                }
+                grabbingController.ControllerGrabInteractableObject += new ObjectInteractEventHandler(OnGrabObject);
+                grabbingController.ControllerUngrabInteractableObject += new ObjectInteractEventHandler(OnUngrabObject);
             }
         }
     }
