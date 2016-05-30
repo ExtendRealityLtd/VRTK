@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Whirlygig : SteamVR_InteractableObject
+public class Whirlygig : VRTK_InteractableObject
 {
     float spinSpeed = 0f;
     Transform rotator;

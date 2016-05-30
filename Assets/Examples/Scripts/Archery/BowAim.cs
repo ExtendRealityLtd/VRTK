@@ -10,14 +10,14 @@ public class BowAim : MonoBehaviour {
     private GameObject currentArrow;
     private BowHandle handle;
 
-    private SteamVR_InteractableObject interact;
+    private VRTK_InteractableObject interact;
 
     private SteamVR_ControllerManager controllers;
-    private SteamVR_ControllerEvents holdControl;
-    private SteamVR_ControllerEvents stringControl;
+    private VRTK_ControllerEvents holdControl;
+    private VRTK_ControllerEvents stringControl;
 
-    private SteamVR_ControllerActions stringActions;
-    private SteamVR_ControllerActions holdActions;
+    private VRTK_ControllerActions stringActions;
+    private VRTK_ControllerActions holdActions;
 
     private Quaternion releaseRotation;
     private Quaternion baseRotation;
@@ -26,7 +26,7 @@ public class BowAim : MonoBehaviour {
     private float currentPull;
     private float previousPull;
 
-    public SteamVR_ControllerEvents GetPullHand()
+    public VRTK_ControllerEvents GetPullHand()
     {
         return stringControl;
     }
@@ -51,7 +51,7 @@ public class BowAim : MonoBehaviour {
         bowAnimation = GetComponent<BowAnimation>();
         handle = GetComponentInChildren<BowHandle>();
         controllers = FindObjectOfType<SteamVR_ControllerManager>();
-        interact = GetComponent<SteamVR_InteractableObject>();
+        interact = GetComponent<VRTK_InteractableObject>();
         interact.InteractableObjectGrabbed += new InteractableObjectEventHandler(DoObjectGrab);
     }
 
@@ -59,19 +59,19 @@ public class BowAim : MonoBehaviour {
     {
         if (e.interactingObject == controllers.left)
         {
-            holdControl = controllers.left.GetComponent<SteamVR_ControllerEvents>();
-            stringControl = controllers.right.GetComponent<SteamVR_ControllerEvents>();
+            holdControl = controllers.left.GetComponent<VRTK_ControllerEvents>();
+            stringControl = controllers.right.GetComponent<VRTK_ControllerEvents>();
 
-            holdActions = controllers.left.GetComponent<SteamVR_ControllerActions>();
-            stringActions= controllers.right.GetComponent<SteamVR_ControllerActions>();
+            holdActions = controllers.left.GetComponent<VRTK_ControllerActions>();
+            stringActions= controllers.right.GetComponent<VRTK_ControllerActions>();
         }
         else
         {
-            stringControl = controllers.left.GetComponent<SteamVR_ControllerEvents>();
-            holdControl = controllers.right.GetComponent<SteamVR_ControllerEvents>();
+            stringControl = controllers.left.GetComponent<VRTK_ControllerEvents>();
+            holdControl = controllers.right.GetComponent<VRTK_ControllerEvents>();
 
-            stringActions = controllers.left.GetComponent<SteamVR_ControllerActions>();
-            holdActions = controllers.right.GetComponent<SteamVR_ControllerActions>();
+            stringActions = controllers.left.GetComponent<VRTK_ControllerActions>();
+            holdActions = controllers.right.GetComponent<VRTK_ControllerActions>();
         }
         StartCoroutine("GetBaseRotation");
     }
@@ -141,9 +141,9 @@ public class BowAim : MonoBehaviour {
 
     private void ReleaseArrow()
     {
-        if (stringControl.gameObject.GetComponent<SteamVR_InteractGrab>())
+        if (stringControl.gameObject.GetComponent<VRTK_InteractGrab>())
         {
-            stringControl.gameObject.GetComponent<SteamVR_InteractGrab>().ForceRelease();
+            stringControl.gameObject.GetComponent<VRTK_InteractGrab>().ForceRelease();
         }
     }
 

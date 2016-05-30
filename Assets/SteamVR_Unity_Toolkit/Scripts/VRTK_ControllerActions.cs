@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class SteamVR_ControllerActions : MonoBehaviour {
+public class VRTK_ControllerActions : MonoBehaviour {
     private bool controllerVisible = true;
     private ushort hapticPulseStrength;
     private int hapticPulseCountdown;

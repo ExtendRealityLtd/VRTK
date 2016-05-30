@@ -10,7 +10,7 @@ public struct ControllerClickedEventArgs
 
 public delegate void ControllerClickedEventHandler(object sender, ControllerClickedEventArgs e);
 
-public class SteamVR_ControllerEvents : MonoBehaviour {
+public class VRTK_ControllerEvents : MonoBehaviour {
     public enum ButtonAlias
     {
         Trigger,

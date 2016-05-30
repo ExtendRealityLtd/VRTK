@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class LightSaber : SteamVR_InteractableObject
+public class LightSaber : VRTK_InteractableObject
 {
     private bool beamActive = false;
     private Vector2 beamLimits = new Vector2(0f, 1.2f);

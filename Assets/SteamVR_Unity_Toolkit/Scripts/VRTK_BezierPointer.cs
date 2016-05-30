@@ -4,19 +4,19 @@
 //
 // This script must be attached to a Controller within the [CameraRig] Prefab
 //
-// The SteamVR_ControllerEvents script must also be attached to the Controller
+// The VRTK_ControllerEvents script must also be attached to the Controller
 //
 // Press the default 'Grip' button on the controller to activate the beam
 // Released the default 'Grip' button on the controller to deactivate the beam
 //
-// This script is an implementation of the SteamVR_WorldPointer.
+// This script is an implementation of the VRTK_WorldPointer.
 //
 //====================================================================================
 
 using UnityEngine;
 using System.Collections;
 
-public class SteamVR_BezierPointer : SteamVR_WorldPointer
+public class VRTK_BezierPointer : VRTK_WorldPointer
 {
     public float pointerLength = 10f;
     public int pointerDensity = 10;

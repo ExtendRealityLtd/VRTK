@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Menu_Color_Changer : SteamVR_InteractableObject {
+public class Menu_Color_Changer : VRTK_InteractableObject
+{
     public Color newMenuColor = Color.black;
 
     protected override void Start()

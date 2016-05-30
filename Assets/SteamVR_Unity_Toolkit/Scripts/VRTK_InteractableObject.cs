@@ -21,7 +21,7 @@ public struct InteractableObjectEventArgs
 
 public delegate void InteractableObjectEventHandler(object sender, InteractableObjectEventArgs e);
 
-public class SteamVR_InteractableObject : MonoBehaviour
+public class VRTK_InteractableObject : MonoBehaviour
 {
     public enum GrabSnapType
     {
@@ -199,7 +199,7 @@ public class SteamVR_InteractableObject : MonoBehaviour
             {
                 if(originalObjectColours == null)
                 {
-                    Debug.LogError("SteamVR_InteractableObject has not had the Start() method called, if you are inheriting this class then call base.Start() in your Start() method. [Error raised on line 78 of SteamVR_InteractableObject.cs]");
+                    Debug.LogError("VRTK_InteractableObject has not had the Start() method called, if you are inheriting this class then call base.Start() in your Start() method.");
                     return;
                 }
                 ChangeColor(originalObjectColours);
@@ -278,7 +278,7 @@ public class SteamVR_InteractableObject : MonoBehaviour
     {
         if (grabbingObject)
         {
-            grabbingObject.GetComponent<SteamVR_InteractGrab>().ForceRelease();
+            grabbingObject.GetComponent<VRTK_InteractGrab>().ForceRelease();
         }
     }
 
@@ -359,9 +359,9 @@ public class SteamVR_InteractableObject : MonoBehaviour
     {
         Transform controllerPoint = point.transform;
 
-        if (point.GetComponent<SteamVR_InteractGrab>() && point.GetComponent<SteamVR_InteractGrab>().controllerAttachPoint)
+        if (point.GetComponent<VRTK_InteractGrab>() && point.GetComponent<VRTK_InteractGrab>().controllerAttachPoint)
         {
-            controllerPoint = point.GetComponent<SteamVR_InteractGrab>().controllerAttachPoint.transform;
+            controllerPoint = point.GetComponent<VRTK_InteractGrab>().controllerAttachPoint.transform;
         }
 
         if (grabAttatchMechanic == GrabAttatchType.Track_Object && grabSnapType == GrabSnapType.Precision_Snap)

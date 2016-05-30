@@ -4,7 +4,7 @@
 //
 // This script must be attached to a Controller within the [CameraRig] Prefab
 //
-// The SteamVR_ControllerEvents and SteamVR_InteractTouch scripts must also be
+// The VRTK_ControllerEvents and VRTK_InteractTouch scripts must also be
 // attached to the Controller
 //
 // Press the default 'Trigger' button on the controller to use an object
@@ -15,7 +15,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class SteamVR_InteractUse : MonoBehaviour
+public class VRTK_InteractUse : MonoBehaviour
 {
     public bool hideControllerOnUse = false;
     public float hideControllerDelay = 0f;
@@ -24,9 +24,9 @@ public class SteamVR_InteractUse : MonoBehaviour
     public event ObjectInteractEventHandler ControllerUnuseInteractableObject;
 
     GameObject usingObject = null;
-    SteamVR_InteractTouch interactTouch;
     SteamVR_TrackedObject trackedController;
-    SteamVR_ControllerActions controllerActions;
+    VRTK_InteractTouch interactTouch;
+    VRTK_ControllerActions controllerActions;
 
     public virtual void OnControllerUseInteractableObject(ObjectInteractEventArgs e)
     {
@@ -47,53 +47,53 @@ public class SteamVR_InteractUse : MonoBehaviour
 
     private void Awake()
     {
-        if (GetComponent<SteamVR_InteractTouch>() == null)
+        if (GetComponent<VRTK_InteractTouch>() == null)
         {
-            Debug.LogError("SteamVR_InteractUse is required to be attached to a SteamVR Controller that has the SteamVR_InteractTouch script attached to it");
+            Debug.LogError("VRTK_InteractUse is required to be attached to a SteamVR Controller that has the VRTK_InteractTouch script attached to it");
             return;
         }
 
-        interactTouch = GetComponent<SteamVR_InteractTouch>();
+        interactTouch = GetComponent<VRTK_InteractTouch>();
         trackedController = GetComponent<SteamVR_TrackedObject>();
-        controllerActions = GetComponent<SteamVR_ControllerActions>();
+        controllerActions = GetComponent<VRTK_ControllerActions>();
     }
 
     private void Start()
     {
-        if (GetComponent<SteamVR_ControllerEvents>() == null)
+        if (GetComponent<VRTK_ControllerEvents>() == null)
         {
-            Debug.LogError("SteamVR_InteractUse is required to be attached to a SteamVR Controller that has the SteamVR_ControllerEvents script attached to it");
+            Debug.LogError("VRTK_InteractUse is required to be attached to a SteamVR Controller that has the VRTK_ControllerEvents script attached to it");
             return;
         }
 
-        GetComponent<SteamVR_ControllerEvents>().AliasUseOn += new ControllerClickedEventHandler(DoStartUseObject);
-        GetComponent<SteamVR_ControllerEvents>().AliasUseOff += new ControllerClickedEventHandler(DoStopUseObject);
+        GetComponent<VRTK_ControllerEvents>().AliasUseOn += new ControllerClickedEventHandler(DoStartUseObject);
+        GetComponent<VRTK_ControllerEvents>().AliasUseOff += new ControllerClickedEventHandler(DoStopUseObject);
     }
 
     private bool IsObjectUsable(GameObject obj)
     {
-        return (interactTouch.IsObjectInteractable(obj) && obj.GetComponent<SteamVR_InteractableObject>().isUsable);
+        return (interactTouch.IsObjectInteractable(obj) && obj.GetComponent<VRTK_InteractableObject>().isUsable);
     }
 
     private bool IsObjectHoldOnUse(GameObject obj)
     {
-        return (obj && obj.GetComponent<SteamVR_InteractableObject>() && obj.GetComponent<SteamVR_InteractableObject>().holdButtonToUse);
+        return (obj && obj.GetComponent<VRTK_InteractableObject>() && obj.GetComponent<VRTK_InteractableObject>().holdButtonToUse);
     }
 
     private int GetObjectUsingState(GameObject obj)
     {
-        if (obj && obj.GetComponent<SteamVR_InteractableObject>())
+        if (obj && obj.GetComponent<VRTK_InteractableObject>())
         {
-            return obj.GetComponent<SteamVR_InteractableObject>().UsingState;
+            return obj.GetComponent<VRTK_InteractableObject>().UsingState;
         }
         return 0;
     }
 
     private void SetObjectUsingState(GameObject obj, int value)
     {
-        if (obj && obj.GetComponent<SteamVR_InteractableObject>())
+        if (obj && obj.GetComponent<VRTK_InteractableObject>())
         {
-            obj.GetComponent<SteamVR_InteractableObject>().UsingState = value;
+            obj.GetComponent<VRTK_InteractableObject>().UsingState = value;
         }
     }
 
@@ -103,12 +103,12 @@ public class SteamVR_InteractUse : MonoBehaviour
         {
             usingObject = touchedObject;
             OnControllerUseInteractableObject(interactTouch.SetControllerInteractEvent(usingObject));
-            usingObject.GetComponent<SteamVR_InteractableObject>().StartUsing(this.gameObject);
+            usingObject.GetComponent<VRTK_InteractableObject>().StartUsing(this.gameObject);
             if (hideControllerOnUse)
             {
                 Invoke("HideController", hideControllerDelay);
             }
-            usingObject.GetComponent<SteamVR_InteractableObject>().ToggleHighlight(false);
+            usingObject.GetComponent<VRTK_InteractableObject>().ToggleHighlight(false);
         }
     }
 
@@ -125,12 +125,12 @@ public class SteamVR_InteractUse : MonoBehaviour
         if (usingObject != null)
         {
             OnControllerUnuseInteractableObject(interactTouch.SetControllerInteractEvent(usingObject));
-            usingObject.GetComponent<SteamVR_InteractableObject>().StopUsing(this.gameObject);
+            usingObject.GetComponent<VRTK_InteractableObject>().StopUsing(this.gameObject);
             if (hideControllerOnUse)
             {
                 controllerActions.ToggleControllerModel(true, usingObject);
             }
-            usingObject.GetComponent<SteamVR_InteractableObject>().ToggleHighlight(false);
+            usingObject.GetComponent<VRTK_InteractableObject>().ToggleHighlight(false);
             usingObject = null;
         }
     }

@@ -3,12 +3,12 @@ using System.Collections;
 
 public class ArrowNotch : MonoBehaviour {
     private GameObject arrow;
-    private SteamVR_InteractableObject obj;
+    private VRTK_InteractableObject obj;
 
     private void Start()
     {
         arrow = this.transform.FindChild("Arrow").gameObject;
-        obj = this.GetComponent<SteamVR_InteractableObject>();
+        obj = this.GetComponent<VRTK_InteractableObject>();
     }
 
     private void OnTriggerEnter(Collider collider)

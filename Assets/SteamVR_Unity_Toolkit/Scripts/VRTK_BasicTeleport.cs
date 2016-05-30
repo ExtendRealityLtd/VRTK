@@ -4,7 +4,7 @@
 //
 // This script must be attached to the [CameraRig] Prefab
 //
-// A GameObject must have the SteamVR_WorldPointer attached to it to listen for the
+// A GameObject must have the VRTK_WorldPointer attached to it to listen for the
 // updated world position to teleport to.
 //
 //====================================================================================
@@ -13,7 +13,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class SteamVR_BasicTeleport : MonoBehaviour {
+public class VRTK_BasicTeleport : MonoBehaviour {
     public float blinkTransitionSpeed = 0.6f;
     [Range(0f,32f)]
     public float distanceBlinkDelay = 0f;
@@ -122,7 +122,7 @@ public class SteamVR_BasicTeleport : MonoBehaviour {
 
         if (trackedController)
         {
-            var worldPointer = trackedController.GetComponent<SteamVR_WorldPointer>();
+            var worldPointer = trackedController.GetComponent<VRTK_WorldPointer>();
             if (worldPointer)
             {
                 if (trackedControllerConnectedState && !trackedControllerIndices.Contains(trackedControllerIndex))

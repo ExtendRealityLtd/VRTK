@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class SteamVR_TouchpadWalking : MonoBehaviour {
+public class VRTK_TouchpadWalking : MonoBehaviour {
     public float maxWalkSpeed = 3f;
     public float deceleration = 0.1f;
 
@@ -10,19 +10,19 @@ public class SteamVR_TouchpadWalking : MonoBehaviour {
     private float movementSpeed = 0f;
     private float strafeSpeed = 0f;
 
-    private SteamVR_PlayerPresence playerPresence;
+    private VRTK_PlayerPresence playerPresence;
     private SteamVR_TrackedObject trackedController;
     private List<uint> trackedControllerIndices;
 
     private void Awake()
     {
-        if (this.GetComponent<SteamVR_PlayerPresence>())
+        if (this.GetComponent<VRTK_PlayerPresence>())
         {
-            playerPresence = this.GetComponent<SteamVR_PlayerPresence>();
+            playerPresence = this.GetComponent<VRTK_PlayerPresence>();
         }
         else
         {
-            Debug.LogError("The SteamVR_TouchpadWalking script requires the SteamVR_PlayerPresence script to be attached to the [CameraRig]");
+            Debug.LogError("The VRTK_TouchpadWalking script requires the VRTK_PlayerPresence script to be attached to the [CameraRig]");
         }
     }
 
@@ -110,7 +110,7 @@ public class SteamVR_TouchpadWalking : MonoBehaviour {
 
         if (trackedController)
         {
-            var controllerEvent = trackedController.GetComponent<SteamVR_ControllerEvents>();
+            var controllerEvent = trackedController.GetComponent<VRTK_ControllerEvents>();
             if (controllerEvent)
             {
                 if (trackedControllerConnectedState && !trackedControllerIndices.Contains(trackedControllerIndex))

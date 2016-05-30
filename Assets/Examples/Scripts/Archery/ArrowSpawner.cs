@@ -17,12 +17,12 @@ public class ArrowSpawner : MonoBehaviour {
 
     private void OnTriggerStay(Collider collider)
     {
-        SteamVR_InteractGrab grabbingController = collider.gameObject.GetComponent<SteamVR_InteractGrab>();
+        VRTK_InteractGrab grabbingController = collider.gameObject.GetComponent<VRTK_InteractGrab>();
         if (CanGrab(grabbingController) && NoArrowNotched(grabbingController.gameObject) && spawnDelayTimer <= 0f)
         {
             GameObject newArrow = Instantiate(arrowPrefab);
             newArrow.name = "ArrowClone";
-            grabbingController.gameObject.GetComponent<SteamVR_InteractTouch>().ForceTouch(newArrow);
+            grabbingController.gameObject.GetComponent<VRTK_InteractTouch>().ForceTouch(newArrow);
             grabbingController.AttemptGrab();
             spawnDelayTimer = spawnDelay;
         }
@@ -33,9 +33,9 @@ public class ArrowSpawner : MonoBehaviour {
         }
     }
 
-    private bool CanGrab(SteamVR_InteractGrab grabbingController)
+    private bool CanGrab(VRTK_InteractGrab grabbingController)
     {
-        return (grabbingController && grabbingController.GetGrabbedObject() == null && grabbingController.gameObject.GetComponent<SteamVR_ControllerEvents>().grabPressed);
+        return (grabbingController && grabbingController.GetGrabbedObject() == null && grabbingController.gameObject.GetComponent<VRTK_ControllerEvents>().grabPressed);
     }
 
     private bool NoArrowNotched(GameObject controller)

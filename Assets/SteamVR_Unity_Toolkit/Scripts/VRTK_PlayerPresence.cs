@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class SteamVR_PlayerPresence : MonoBehaviour {
+public class VRTK_PlayerPresence : MonoBehaviour {
     public float headsetYOffset = 0.2f;
     public bool ignoreGrabbedCollisions = true;
 
@@ -37,9 +37,9 @@ public class SteamVR_PlayerPresence : MonoBehaviour {
 
     private void InitHeadsetListeners()
     {
-        if (headset.GetComponent<SteamVR_HeadsetCollisionFade>())
+        if (headset.GetComponent<VRTK_HeadsetCollisionFade>())
         {
-            headset.GetComponent<SteamVR_HeadsetCollisionFade>().HeadsetCollisionDetect += new HeadsetCollisionEventHandler(OnHeadsetCollision);
+            headset.GetComponent<VRTK_HeadsetCollisionFade>().HeadsetCollisionDetect += new HeadsetCollisionEventHandler(OnHeadsetCollision);
         }
     }
 
@@ -58,7 +58,7 @@ public class SteamVR_PlayerPresence : MonoBehaviour {
 
     private void OnUngrabObject(object sender, ObjectInteractEventArgs e)
     {
-        if (e.target.GetComponent<SteamVR_InteractableObject>() && !e.target.GetComponent<SteamVR_InteractableObject>().IsGrabbed())
+        if (e.target.GetComponent<VRTK_InteractableObject>() && !e.target.GetComponent<VRTK_InteractableObject>().IsGrabbed())
         {
             Physics.IgnoreCollision(this.GetComponent<Collider>(), e.target.GetComponent<Collider>(), false);
         }
@@ -143,7 +143,7 @@ public class SteamVR_PlayerPresence : MonoBehaviour {
 
         if (trackedController)
         {
-            var grabbingController = trackedController.GetComponent<SteamVR_InteractGrab>();
+            var grabbingController = trackedController.GetComponent<VRTK_InteractGrab>();
             if(grabbingController && ignoreGrabbedCollisions)
             {
                 if (trackedControllerConnectedState && !trackedControllerIndices.Contains(trackedControllerIndex))

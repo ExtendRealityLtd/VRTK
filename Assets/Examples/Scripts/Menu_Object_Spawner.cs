@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Menu_Object_Spawner : SteamVR_InteractableObject
+public class Menu_Object_Spawner : VRTK_InteractableObject
 {
     public enum PrimitiveTypes
     {

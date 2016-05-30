@@ -1,21 +1,21 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class SteamVR_ControllerPointerEvents_ListenerExample : MonoBehaviour {
+public class VRTK_ControllerPointerEvents_ListenerExample : MonoBehaviour {
 
     // Use this for initialization
     void Start()
     {
-        if (GetComponent<SteamVR_SimplePointer>() == null)
+        if (GetComponent<VRTK_SimplePointer>() == null)
         {
-            Debug.LogError("SteamVR_ControllerPointerEvents_ListenerExample is required to be attached to a SteamVR Controller that has the SteamVR_SimplePointer script attached to it");
+            Debug.LogError("VRTK_ControllerPointerEvents_ListenerExample is required to be attached to a SteamVR Controller that has the VRTK_SimplePointer script attached to it");
             return;
         }
 
         //Setup controller event listeners
-        GetComponent<SteamVR_SimplePointer>().WorldPointerIn += new WorldPointerEventHandler(DoPointerIn);
-        GetComponent<SteamVR_SimplePointer>().WorldPointerOut += new WorldPointerEventHandler(DoPointerOut);
-        GetComponent<SteamVR_SimplePointer>().WorldPointerDestinationSet += new WorldPointerEventHandler(DoPointerDestinationSet);
+        GetComponent<VRTK_SimplePointer>().WorldPointerIn += new WorldPointerEventHandler(DoPointerIn);
+        GetComponent<VRTK_SimplePointer>().WorldPointerOut += new WorldPointerEventHandler(DoPointerOut);
+        GetComponent<VRTK_SimplePointer>().WorldPointerDestinationSet += new WorldPointerEventHandler(DoPointerDestinationSet);
     }
 
     void DebugLogger(uint index, string action, Transform target, float distance, Vector3 tipPosition)

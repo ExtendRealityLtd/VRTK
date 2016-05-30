@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Sword : SteamVR_InteractableObject {
-    SteamVR_ControllerActions controllerActions;
+public class Sword : VRTK_InteractableObject
+{
+    VRTK_ControllerActions controllerActions;
     float impactMagnifier = 200f;
     float collisionForce = 0f;
 
@@ -14,7 +15,7 @@ public class Sword : SteamVR_InteractableObject {
     public override void Grabbed(GameObject grabbingObject)
     {
         base.Grabbed(grabbingObject);
-        controllerActions = grabbingObject.GetComponent<SteamVR_ControllerActions>();
+        controllerActions = grabbingObject.GetComponent<VRTK_ControllerActions>();
     }
 
     protected override void Awake()

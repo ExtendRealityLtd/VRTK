@@ -4,7 +4,7 @@
 //
 // This script must be attached to a Controller within the [CameraRig] Prefab
 //
-// The SteamVR_ControllerEvents and SteamVR_InteractTouch scripts must also be
+// The VRTK_ControllerEvents and VRTK_InteractTouch scripts must also be
 // attached to the Controller
 //
 // Press the default 'Trigger' button on the controller to grab an object
@@ -15,7 +15,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class SteamVR_InteractGrab : MonoBehaviour
+public class VRTK_InteractGrab : MonoBehaviour
 {
     public Rigidbody controllerAttachPoint = null;
     public bool hideControllerOnGrab = false;
@@ -30,9 +30,9 @@ public class SteamVR_InteractGrab : MonoBehaviour
     private Joint controllerAttachJoint;
     private GameObject grabbedObject = null;
 
-    private SteamVR_InteractTouch interactTouch;
     private SteamVR_TrackedObject trackedController;
-    private SteamVR_ControllerActions controllerActions;
+    private VRTK_InteractTouch interactTouch;
+    private VRTK_ControllerActions controllerActions;
 
     private int grabEnabledState = 0;
     private float grabPrecognitionTimer = 0f;
@@ -54,7 +54,7 @@ public class SteamVR_InteractGrab : MonoBehaviour
 
     public void ForceRelease()
     {
-        if (grabbedObject && grabbedObject.GetComponent<SteamVR_InteractableObject>() && grabbedObject.GetComponent<SteamVR_InteractableObject>().AttatchIsTrackObject())
+        if (grabbedObject && grabbedObject.GetComponent<VRTK_InteractableObject>() && grabbedObject.GetComponent<VRTK_InteractableObject>().AttatchIsTrackObject())
         {
             UngrabTrackedObject();
         }
@@ -76,15 +76,15 @@ public class SteamVR_InteractGrab : MonoBehaviour
 
     private void Awake()
     {
-        if (GetComponent<SteamVR_InteractTouch>() == null)
+        if (GetComponent<VRTK_InteractTouch>() == null)
         {
-            Debug.LogError("SteamVR_InteractGrab is required to be attached to a SteamVR Controller that has the SteamVR_InteractTouch script attached to it");
+            Debug.LogError("VRTK_InteractGrab is required to be attached to a SteamVR Controller that has the VRTK_InteractTouch script attached to it");
             return;
         }
 
-        interactTouch = GetComponent<SteamVR_InteractTouch>();
+        interactTouch = GetComponent<VRTK_InteractTouch>();
         trackedController = GetComponent<SteamVR_TrackedObject>();
-        controllerActions = GetComponent<SteamVR_ControllerActions>();
+        controllerActions = GetComponent<VRTK_ControllerActions>();
     }
 
     private void Start()
@@ -95,14 +95,14 @@ public class SteamVR_InteractGrab : MonoBehaviour
             controllerAttachPoint = transform.GetChild(0).Find("tip").GetChild(0).GetComponent<Rigidbody>();
         }
 
-        if (GetComponent<SteamVR_ControllerEvents>() == null)
+        if (GetComponent<VRTK_ControllerEvents>() == null)
         {
-            Debug.LogError("SteamVR_InteractGrab is required to be attached to a SteamVR Controller that has the SteamVR_ControllerEvents script attached to it");
+            Debug.LogError("VRTK_InteractGrab is required to be attached to a SteamVR Controller that has the VRTK_ControllerEvents script attached to it");
             return;
         }
 
-        GetComponent<SteamVR_ControllerEvents>().AliasGrabOn += new ControllerClickedEventHandler(DoGrabObject);
-        GetComponent<SteamVR_ControllerEvents>().AliasGrabOff += new ControllerClickedEventHandler(DoReleaseObject);
+        GetComponent<VRTK_ControllerEvents>().AliasGrabOn += new ControllerClickedEventHandler(DoGrabObject);
+        GetComponent<VRTK_ControllerEvents>().AliasGrabOff += new ControllerClickedEventHandler(DoReleaseObject);
 
         CreateRigidBodyPoint();
     }
@@ -135,34 +135,34 @@ public class SteamVR_InteractGrab : MonoBehaviour
 
     private bool IsObjectGrabbable(GameObject obj)
     {
-        return (interactTouch.IsObjectInteractable(obj) && obj.GetComponent<SteamVR_InteractableObject>().isGrabbable);
+        return (interactTouch.IsObjectInteractable(obj) && obj.GetComponent<VRTK_InteractableObject>().isGrabbable);
     }
 
     private bool IsObjectHoldOnGrab(GameObject obj)
     {
-        return (obj && obj.GetComponent<SteamVR_InteractableObject>() && obj.GetComponent<SteamVR_InteractableObject>().holdButtonToGrab);
+        return (obj && obj.GetComponent<VRTK_InteractableObject>() && obj.GetComponent<VRTK_InteractableObject>().holdButtonToGrab);
     }
 
     private void SnapObjectToGrabToController(GameObject obj)
     {
         //Pause collisions (if allowed on object) for a moment whilst sorting out position to prevent clipping issues
-        obj.GetComponent<SteamVR_InteractableObject>().PauseCollisions(0.2f);
+        obj.GetComponent<VRTK_InteractableObject>().PauseCollisions(0.2f);
 
-        SteamVR_InteractableObject.GrabSnapType grabType = obj.GetComponent<SteamVR_InteractableObject>().grabSnapType;
+        VRTK_InteractableObject.GrabSnapType grabType = obj.GetComponent<VRTK_InteractableObject>().grabSnapType;
 
-        if (grabType == SteamVR_InteractableObject.GrabSnapType.Rotation_Snap)
+        if (grabType == VRTK_InteractableObject.GrabSnapType.Rotation_Snap)
         {
             // Identity Controller Rotation
             this.transform.eulerAngles = new Vector3(0f, 270f, 0f);
-            obj.transform.eulerAngles = obj.GetComponent<SteamVR_InteractableObject>().snapToRotation;
+            obj.transform.eulerAngles = obj.GetComponent<VRTK_InteractableObject>().snapToRotation;
         }
 
-        if (grabType != SteamVR_InteractableObject.GrabSnapType.Precision_Snap)
+        if (grabType != VRTK_InteractableObject.GrabSnapType.Precision_Snap)
         {
-            obj.transform.position = controllerAttachPoint.transform.position + obj.GetComponent<SteamVR_InteractableObject>().snapToPosition;
+            obj.transform.position = controllerAttachPoint.transform.position + obj.GetComponent<VRTK_InteractableObject>().snapToPosition;
         }
 
-        if (obj.GetComponent<SteamVR_InteractableObject>().grabAttatchMechanic == SteamVR_InteractableObject.GrabAttatchType.Child_Of_Controller)
+        if (obj.GetComponent<VRTK_InteractableObject>().grabAttatchMechanic == VRTK_InteractableObject.GrabAttatchType.Child_Of_Controller)
         {
             SetControllerAsParent(obj);
         } else
@@ -182,18 +182,18 @@ public class SteamVR_InteractGrab : MonoBehaviour
 
     private void CreateJoint(GameObject obj)
     {
-        if (obj.GetComponent<SteamVR_InteractableObject>().grabAttatchMechanic == SteamVR_InteractableObject.GrabAttatchType.Fixed_Joint)
+        if (obj.GetComponent<VRTK_InteractableObject>().grabAttatchMechanic == VRTK_InteractableObject.GrabAttatchType.Fixed_Joint)
         {
             controllerAttachJoint = obj.AddComponent<FixedJoint>();
         }
-        else if (obj.GetComponent<SteamVR_InteractableObject>().grabAttatchMechanic == SteamVR_InteractableObject.GrabAttatchType.Spring_Joint)
+        else if (obj.GetComponent<VRTK_InteractableObject>().grabAttatchMechanic == VRTK_InteractableObject.GrabAttatchType.Spring_Joint)
         {
             SpringJoint tempSpringJoint = obj.AddComponent<SpringJoint>();
-            tempSpringJoint.spring = obj.GetComponent<SteamVR_InteractableObject>().springJointStrength;
-            tempSpringJoint.damper = obj.GetComponent<SteamVR_InteractableObject>().springJointDamper;
+            tempSpringJoint.spring = obj.GetComponent<VRTK_InteractableObject>().springJointStrength;
+            tempSpringJoint.damper = obj.GetComponent<VRTK_InteractableObject>().springJointDamper;
             controllerAttachJoint = tempSpringJoint;
         }
-        controllerAttachJoint.breakForce = obj.GetComponent<SteamVR_InteractableObject>().detatchThreshold;
+        controllerAttachJoint.breakForce = obj.GetComponent<VRTK_InteractableObject>().detatchThreshold;
         controllerAttachJoint.connectedBody = controllerAttachPoint;
     }
 
@@ -270,11 +270,11 @@ public class SteamVR_InteractGrab : MonoBehaviour
     {
         grabbedObject = interactTouch.GetTouchedObject();
         OnControllerGrabInteractableObject(interactTouch.SetControllerInteractEvent(grabbedObject));
-        grabbedObject.GetComponent<SteamVR_InteractableObject>().Grabbed(this.gameObject);
-        grabbedObject.GetComponent<SteamVR_InteractableObject>().ZeroVelocity();
+        grabbedObject.GetComponent<VRTK_InteractableObject>().Grabbed(this.gameObject);
+        grabbedObject.GetComponent<VRTK_InteractableObject>().ZeroVelocity();
         if (grabbedObject)
         {
-            grabbedObject.GetComponent<SteamVR_InteractableObject>().ToggleHighlight(false);
+            grabbedObject.GetComponent<VRTK_InteractableObject>().ToggleHighlight(false);
         }
         if (hideControllerOnGrab)
         {
@@ -316,8 +316,8 @@ public class SteamVR_InteractGrab : MonoBehaviour
         OnControllerUngrabInteractableObject(interactTouch.SetControllerInteractEvent(grabbedObject));
         if (grabbedObject != null)
         {
-            grabbedObject.GetComponent<SteamVR_InteractableObject>().Ungrabbed(this.gameObject);
-            grabbedObject.GetComponent<SteamVR_InteractableObject>().ToggleHighlight(false);
+            grabbedObject.GetComponent<VRTK_InteractableObject>().Ungrabbed(this.gameObject);
+            grabbedObject.GetComponent<VRTK_InteractableObject>().ToggleHighlight(false);
         }
 
         if (hideControllerOnGrab)
@@ -344,7 +344,7 @@ public class SteamVR_InteractGrab : MonoBehaviour
     {
         if (IsValidGrab())
         {
-            if (interactTouch.GetTouchedObject().GetComponent<SteamVR_InteractableObject>().AttatchIsTrackObject())
+            if (interactTouch.GetTouchedObject().GetComponent<VRTK_InteractableObject>().AttatchIsTrackObject())
             {
                 GrabTrackedObject();
             }
@@ -368,7 +368,7 @@ public class SteamVR_InteractGrab : MonoBehaviour
     {
         if (IsObjectHoldOnGrab(grabbedObject) || grabEnabledState >= 2)
         {
-            if (grabbedObject.GetComponent<SteamVR_InteractableObject>().AttatchIsTrackObject())
+            if (grabbedObject.GetComponent<VRTK_InteractableObject>().AttatchIsTrackObject())
             {
                 UngrabTrackedObject();
             }

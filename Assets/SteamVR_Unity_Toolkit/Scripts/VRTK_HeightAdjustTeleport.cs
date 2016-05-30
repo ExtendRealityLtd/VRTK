@@ -4,7 +4,7 @@
 //
 // This script must be attached to the [CameraRig] Prefab
 //
-// A GameObject must have the SteamVR_WorldPointer attached to it to listen for the
+// A GameObject must have the VRTK_WorldPointer attached to it to listen for the
 // updated world position to teleport to.
 //
 //====================================================================================
@@ -12,7 +12,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class SteamVR_HeightAdjustTeleport : SteamVR_BasicTeleport {
+public class VRTK_HeightAdjustTeleport : VRTK_BasicTeleport {
     public bool playSpaceFalling = true;
     private float currentRayDownY = 0f;
 
@@ -64,7 +64,7 @@ public class SteamVR_HeightAdjustTeleport : SteamVR_BasicTeleport {
 
     private bool FloorIsGrabbedObject(RaycastHit collidedObj)
     {
-        return (collidedObj.transform.GetComponent<SteamVR_InteractableObject>() && collidedObj.transform.GetComponent<SteamVR_InteractableObject>().IsGrabbed());
+        return (collidedObj.transform.GetComponent<VRTK_InteractableObject>() && collidedObj.transform.GetComponent<VRTK_InteractableObject>().IsGrabbed());
     }
 
     private void DropToNearestFloor(bool withBlink)
