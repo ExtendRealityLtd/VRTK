@@ -1193,6 +1193,7 @@ The current examples are:
   bow and arrow example, where the bow can be picked up and tracked to
   the controller, whilst the other controller is responsible for
   picking up arrows to fire in the bow.
+   * [View Example Tour on Youtube](https://www.youtube.com/watch?v=gvKYcXrbzc4)
 
   * **024_CameraRig_ExcludeTeleportLocation:** A scene that shows how
   to exclude certain objects from being teleportable by either applying
@@ -1202,6 +1203,7 @@ The current examples are:
   are excluded by having a script called `ExcludeTeleport` attached to
   them. The `ExcludeTeleport` script has no methods and is just used
   as a placeholder.
+   * [View Example Tour on Youtube](https://www.youtube.com/watch?v=hCZEaXpeoIY)
 
 ## Contributing
 
