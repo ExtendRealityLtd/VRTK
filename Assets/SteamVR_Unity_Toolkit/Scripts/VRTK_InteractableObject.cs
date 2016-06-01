@@ -30,7 +30,7 @@ public class VRTK_InteractableObject : MonoBehaviour
         Precision_Snap
     }
 
-    public enum GrabAttatchType
+    public enum GrabAttachType
     {
         Fixed_Joint,
         Spring_Joint,
@@ -51,8 +51,8 @@ public class VRTK_InteractableObject : MonoBehaviour
     public Vector3 snapToPosition = Vector3.zero;
 
     [Header("Grab Mechanics", order = 3)]
-    public GrabAttatchType grabAttatchMechanic = GrabAttatchType.Fixed_Joint;
-    public float detatchThreshold = 500f;
+    public GrabAttachType grabAttachMechanic = GrabAttachType.Fixed_Joint;
+    public float detachThreshold = 500f;
     public float springJointStrength = 500f;
     public float springJointDamper = 50f;
 
@@ -229,9 +229,9 @@ public class VRTK_InteractableObject : MonoBehaviour
         }
     }
 
-    public bool AttatchIsTrackObject()
+    public bool AttachIsTrackObject()
     {
-        return (grabAttatchMechanic == GrabAttatchType.Track_Object);
+        return (grabAttachMechanic == GrabAttachType.Track_Object);
     }
 
     public void ZeroVelocity()
@@ -255,7 +255,7 @@ public class VRTK_InteractableObject : MonoBehaviour
 
     protected virtual void Update()
     {
-        if (grabAttatchMechanic == GrabAttatchType.Track_Object)
+        if (grabAttachMechanic == GrabAttachType.Track_Object)
         {
             CheckBreakDistance();
         }
@@ -263,7 +263,7 @@ public class VRTK_InteractableObject : MonoBehaviour
 
     protected virtual void FixedUpdate()
     {
-        if (grabAttatchMechanic == GrabAttatchType.Track_Object)
+        if (grabAttachMechanic == GrabAttachType.Track_Object)
         {
             FixedUpdateTrackedObject();
         }
@@ -348,7 +348,7 @@ public class VRTK_InteractableObject : MonoBehaviour
         if(trackPoint)
         {
             float distance = Vector3.Distance(trackPoint.position, this.transform.position);
-            if (distance > (detatchThreshold / 1000))
+            if (distance > (detachThreshold / 1000))
             {
                 ForceReleaseGrab();
             }
@@ -364,9 +364,9 @@ public class VRTK_InteractableObject : MonoBehaviour
             controllerPoint = point.GetComponent<VRTK_InteractGrab>().controllerAttachPoint.transform;
         }
 
-        if (grabAttatchMechanic == GrabAttatchType.Track_Object && grabSnapType == GrabSnapType.Precision_Snap)
+        if (grabAttachMechanic == GrabAttachType.Track_Object && grabSnapType == GrabSnapType.Precision_Snap)
         {
-            trackPoint = new GameObject(string.Format("[{0}]TrackObject_PrecisionSnap_AttatchPoint", this.gameObject.name)).transform;
+            trackPoint = new GameObject(string.Format("[{0}]TrackObject_PrecisionSnap_AttachPoint", this.gameObject.name)).transform;
             trackPoint.parent = point.transform;
             trackPoint.position = this.transform.position;
             trackPoint.rotation = this.transform.rotation;

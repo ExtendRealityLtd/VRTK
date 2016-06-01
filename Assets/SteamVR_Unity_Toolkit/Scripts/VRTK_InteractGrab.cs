@@ -54,7 +54,7 @@ public class VRTK_InteractGrab : MonoBehaviour
 
     public void ForceRelease()
     {
-        if (grabbedObject && grabbedObject.GetComponent<VRTK_InteractableObject>() && grabbedObject.GetComponent<VRTK_InteractableObject>().AttatchIsTrackObject())
+        if (grabbedObject && grabbedObject.GetComponent<VRTK_InteractableObject>() && grabbedObject.GetComponent<VRTK_InteractableObject>().AttachIsTrackObject())
         {
             UngrabTrackedObject();
         }
@@ -162,7 +162,7 @@ public class VRTK_InteractGrab : MonoBehaviour
             obj.transform.position = controllerAttachPoint.transform.position + obj.GetComponent<VRTK_InteractableObject>().snapToPosition;
         }
 
-        if (obj.GetComponent<VRTK_InteractableObject>().grabAttatchMechanic == VRTK_InteractableObject.GrabAttatchType.Child_Of_Controller)
+        if (obj.GetComponent<VRTK_InteractableObject>().grabAttachMechanic == VRTK_InteractableObject.GrabAttachType.Child_Of_Controller)
         {
             SetControllerAsParent(obj);
         } else
@@ -182,18 +182,18 @@ public class VRTK_InteractGrab : MonoBehaviour
 
     private void CreateJoint(GameObject obj)
     {
-        if (obj.GetComponent<VRTK_InteractableObject>().grabAttatchMechanic == VRTK_InteractableObject.GrabAttatchType.Fixed_Joint)
+        if (obj.GetComponent<VRTK_InteractableObject>().grabAttachMechanic == VRTK_InteractableObject.GrabAttachType.Fixed_Joint)
         {
             controllerAttachJoint = obj.AddComponent<FixedJoint>();
         }
-        else if (obj.GetComponent<VRTK_InteractableObject>().grabAttatchMechanic == VRTK_InteractableObject.GrabAttatchType.Spring_Joint)
+        else if (obj.GetComponent<VRTK_InteractableObject>().grabAttachMechanic == VRTK_InteractableObject.GrabAttachType.Spring_Joint)
         {
             SpringJoint tempSpringJoint = obj.AddComponent<SpringJoint>();
             tempSpringJoint.spring = obj.GetComponent<VRTK_InteractableObject>().springJointStrength;
             tempSpringJoint.damper = obj.GetComponent<VRTK_InteractableObject>().springJointDamper;
             controllerAttachJoint = tempSpringJoint;
         }
-        controllerAttachJoint.breakForce = obj.GetComponent<VRTK_InteractableObject>().detatchThreshold;
+        controllerAttachJoint.breakForce = obj.GetComponent<VRTK_InteractableObject>().detachThreshold;
         controllerAttachJoint.connectedBody = controllerAttachPoint;
     }
 
@@ -201,14 +201,14 @@ public class VRTK_InteractGrab : MonoBehaviour
     {
         if (controllerAttachJoint != null)
         {
-            return ReleaseAttatchedObjectFromController(withThrow);
+            return ReleaseAttachedObjectFromController(withThrow);
         } else
         {
             return ReleaseParentedObjectFromController();
         }
     }
 
-    private Rigidbody ReleaseAttatchedObjectFromController(bool withThrow)
+    private Rigidbody ReleaseAttachedObjectFromController(bool withThrow)
     {
         var jointGameObject = controllerAttachJoint.gameObject;
         var rigidbody = jointGameObject.GetComponent<Rigidbody>();
@@ -344,7 +344,7 @@ public class VRTK_InteractGrab : MonoBehaviour
     {
         if (IsValidGrab())
         {
-            if (interactTouch.GetTouchedObject().GetComponent<VRTK_InteractableObject>().AttatchIsTrackObject())
+            if (interactTouch.GetTouchedObject().GetComponent<VRTK_InteractableObject>().AttachIsTrackObject())
             {
                 GrabTrackedObject();
             }
@@ -368,7 +368,7 @@ public class VRTK_InteractGrab : MonoBehaviour
     {
         if (IsObjectHoldOnGrab(grabbedObject) || grabEnabledState >= 2)
         {
-            if (grabbedObject.GetComponent<VRTK_InteractableObject>().AttatchIsTrackObject())
+            if (grabbedObject.GetComponent<VRTK_InteractableObject>().AttachIsTrackObject())
             {
                 UngrabTrackedObject();
             }
