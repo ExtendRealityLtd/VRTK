@@ -7,16 +7,26 @@ public class VRTK_RoomExtender : MonoBehaviour
     public float movementMultiplicator = 1.0F;
     public float headZoneRadius = 0.25F;
     public Transform debugTransform;
+    public Transform movementTransform;
 
-    protected Transform eyeCamera;
     protected Transform cameraRig;
     protected Vector3 headCirclePosition;
 
     void Start()
     {
-        eyeCamera = GameObject.FindObjectOfType<SteamVR_Camera>().GetComponent<Transform>();
+       if(movementTransform == null)
+        {
+            //TODO: Fix for unity 5.3
+            if (GameObject.FindObjectOfType<SteamVR_Camera>().GetComponent<Transform>() == null)
+            {
+                Debug.LogWarning("This 'VRTK_RoomExtender' script needs a movementTransform to work. The default 'SteamVR_Camera' was not found.");
+            }else
+            {
+                movementTransform = GameObject.FindObjectOfType<SteamVR_Camera>().GetComponent<Transform>();
+            }
+        }
         cameraRig = GameObject.FindObjectOfType<SteamVR_PlayArea>().gameObject.transform;
-        headCirclePosition = eyeCamera.localPosition;
+        headCirclePosition = movementTransform.localPosition;
         if (debugTransform)
         {
             debugTransform.localScale = new Vector3(headZoneRadius * 2, 0.01F, headZoneRadius * 2);
@@ -33,7 +43,7 @@ public class VRTK_RoomExtender : MonoBehaviour
 
     void moveHeadCircle()
     {
-        var movement = new Vector3(eyeCamera.localPosition.x - headCirclePosition.x, 0, eyeCamera.localPosition.z - headCirclePosition.z);
+        var movement = new Vector3(movementTransform.localPosition.x - headCirclePosition.x, 0, movementTransform.localPosition.z - headCirclePosition.z);
         if (movement.magnitude > headZoneRadius)
         {
             var deltaMovement = movement.normalized * (movement.magnitude - headZoneRadius);
