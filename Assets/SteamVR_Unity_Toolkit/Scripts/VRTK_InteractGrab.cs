@@ -89,6 +89,12 @@ public class VRTK_InteractGrab : MonoBehaviour
 
     private void Start()
     {
+        // Disable me if SteamVR isn't running
+        if( SteamVR.active == false ) {
+            this.enabled = false;
+            return;
+        }
+
         //If no attach point has been specified then just use the tip of the controller
         if (controllerAttachPoint == null)
         {
