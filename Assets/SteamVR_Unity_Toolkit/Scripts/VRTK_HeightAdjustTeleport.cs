@@ -69,7 +69,7 @@ public class VRTK_HeightAdjustTeleport : VRTK_BasicTeleport {
 
     private void DropToNearestFloor(bool withBlink)
     {
-        if (eyeCamera.transform.position.y > this.transform.position.y)
+        if (enableTeleport && eyeCamera.transform.position.y > this.transform.position.y)
         {
             //send a ray down to find the closest object to stand on
             Ray ray = new Ray(eyeCamera.transform.position, -transform.up);

@@ -521,6 +521,9 @@ shouldn't be, then fading to a colour (e.g. black) will make the
 player realise they've done something wrong and they'll probably
 naturally step backwards.
 
+If the headset is colliding then the teleport action is also disabled
+to prevent cheating by clipping through walls.
+
 If using `Unity 5.3` or older then the Headset Collision Fade 
 script is attached to the `Camera (head)` object within the 
 `[CameraRig]` prefab.
@@ -538,6 +541,8 @@ The following events are emitted:
 
   * **HeadsetCollisionDetect:** Emitted when the user's headset
   collides with another game object.
+  * **HeadsetCollisionEnded:** Emitted when the user's headset
+  stops colliding with a game object.
 
 The event payload that is emitted contains:
 

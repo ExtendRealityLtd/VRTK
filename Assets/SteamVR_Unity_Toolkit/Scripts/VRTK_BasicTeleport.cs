@@ -21,6 +21,7 @@ public class VRTK_BasicTeleport : MonoBehaviour {
 
     protected Transform eyeCamera;
     protected bool adjustYForTerrain = false;
+    protected bool enableTeleport = true;
 
     private float blinkPause = 0f;
     private float fadeInTime = 0f;
@@ -36,6 +37,9 @@ public class VRTK_BasicTeleport : MonoBehaviour {
         var controllerManager = GameObject.FindObjectOfType<SteamVR_ControllerManager>();
         InitControllerListeners(controllerManager.left);
         InitControllerListeners(controllerManager.right);
+        InitHeadsetCollisionListener();
+
+        enableTeleport = true;
     }
 
     protected virtual void Blink(float transitionSpeed)
@@ -52,7 +56,7 @@ public class VRTK_BasicTeleport : MonoBehaviour {
 
     protected virtual void DoTeleport(object sender, WorldPointerEventArgs e)
     {
-        if (ValidLocation(e.target) && e.enableTeleport)
+        if (enableTeleport && ValidLocation(e.target) && e.enableTeleport)
         {
             Vector3 newPosition = GetNewPosition(e.destinationPosition, e.target);
             CalculateBlinkDelay(blinkTransitionSpeed, newPosition);
@@ -112,5 +116,25 @@ public class VRTK_BasicTeleport : MonoBehaviour {
                 worldPointer.SetMissTarget(ignoreTargetWithTagOrClass);
             }
         }
+    }
+
+    private void InitHeadsetCollisionListener()
+    {
+        var headset = GameObject.FindObjectOfType<VRTK_HeadsetCollisionFade>();
+        if (headset)
+        {
+            headset.HeadsetCollisionDetect += new HeadsetCollisionEventHandler(DisableTeleport);
+            headset.HeadsetCollisionEnded += new HeadsetCollisionEventHandler(EnableTeleport);
+        }
+    }
+
+    private void DisableTeleport(object sender, HeadsetCollisionEventArgs e)
+    {
+        enableTeleport = false;
+    }
+
+    private void EnableTeleport(object sender, HeadsetCollisionEventArgs e)
+    {
+        enableTeleport = true;
     }
 }
