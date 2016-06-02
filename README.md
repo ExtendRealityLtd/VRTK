@@ -32,10 +32,10 @@ features.
 
   * How to create a new project using this toolkit along with the
   SteamVR Unity Plugin:
-    * [View answer video on Youtube](https://www.youtube.com/watch?v=oFkgTZ4LXEo)
+   * [View answer video on Youtube](https://www.youtube.com/watch?v=oFkgTZ4LXEo)
   * Pointer beams/teleporting no longer works after a project build
   and running from that build:
-    * [View answer video on Youtube](https://www.youtube.com/watch?v=IsmYoLTmX4c)
+   * [View answer video on Youtube](https://www.youtube.com/watch?v=IsmYoLTmX4c)
 
 ## Summary
 
