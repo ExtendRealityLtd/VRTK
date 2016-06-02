@@ -14,11 +14,18 @@ public class VRTK_HeadsetCollisionFade : MonoBehaviour {
     public Color fadeColor = Color.black;
 
     public event HeadsetCollisionEventHandler HeadsetCollisionDetect;
+    public event HeadsetCollisionEventHandler HeadsetCollisionEnded;
 
     public virtual void OnHeadsetCollisionDetect(HeadsetCollisionEventArgs e)
     {
         if (HeadsetCollisionDetect != null)
             HeadsetCollisionDetect(this, e);
+    }
+
+    public virtual void OnHeadsetCollisionEnded(HeadsetCollisionEventArgs e)
+    {
+        if (HeadsetCollisionEnded != null)
+            HeadsetCollisionEnded(this, e);
     }
 
     protected HeadsetCollisionEventArgs SetHeadsetCollisionEvent(Collider collider, Transform currentTransform)
@@ -58,6 +65,7 @@ public class VRTK_HeadsetCollisionFade : MonoBehaviour {
     {
         if (!collider.name.Contains("PlayerObject_"))
         {
+            OnHeadsetCollisionEnded(SetHeadsetCollisionEvent(collider, this.transform));
             SteamVR_Fade.Start(Color.clear, blinkTransitionSpeed);
         }
     }

@@ -5,6 +5,9 @@ public class BowAim : MonoBehaviour {
     public float powerMultiplier;
     public float pullMultiplier;
     public float pullOffset;
+    public float maxPullDistance = 1.1f;
+    public int bowVibration = 250;
+    public int stringVibration = 350;
 
     private BowAnimation bowAnimation;
     private GameObject currentArrow;
@@ -160,13 +163,13 @@ public class BowAim : MonoBehaviour {
 
     private void PullString()
     {
-        currentPull = Mathf.Clamp((Vector3.Distance(holdControl.transform.position, stringControl.transform.position)-pullOffset) * pullMultiplier, 0, 3f);
+        currentPull = Mathf.Clamp((Vector3.Distance(holdControl.transform.position, stringControl.transform.position)-pullOffset) * pullMultiplier, 0, maxPullDistance);
         bowAnimation.SetFrame(currentPull);
 
         if (!currentPull.ToString("F2").Equals(previousPull.ToString("F2")))
         {
-            holdActions.TriggerHapticPulse(1, 250);
-            stringActions.TriggerHapticPulse(1, 150);
+            holdActions.TriggerHapticPulse(1, (ushort)bowVibration);
+            stringActions.TriggerHapticPulse(1, (ushort)stringVibration);
         }
         previousPull = currentPull;
     }

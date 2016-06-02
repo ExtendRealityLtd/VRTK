@@ -15,7 +15,7 @@ public class ArrowNotch : MonoBehaviour {
     {
         var handle = collider.GetComponentInParent<BowHandle>();
 
-        if (handle != null && handle.aim.IsHeld() && obj.IsGrabbed())
+        if (handle != null && obj != null && handle.aim.IsHeld() && obj.IsGrabbed())
         {
             handle.nockSide = collider.transform;
             arrow.transform.parent = handle.arrowNockingPoint;
