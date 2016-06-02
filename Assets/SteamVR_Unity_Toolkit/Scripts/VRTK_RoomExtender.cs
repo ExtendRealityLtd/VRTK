@@ -16,7 +16,7 @@ public class VRTK_RoomExtender : MonoBehaviour
     {
        if(movementTransform == null)
         {
-            //TODO: Fix for unity 5.3
+#if UNITY_5_4_OR_NEWER
             if (GameObject.FindObjectOfType<SteamVR_Camera>().GetComponent<Transform>() == null)
             {
                 Debug.LogWarning("This 'VRTK_RoomExtender' script needs a movementTransform to work. The default 'SteamVR_Camera' was not found.");
@@ -24,9 +24,12 @@ public class VRTK_RoomExtender : MonoBehaviour
             {
                 movementTransform = GameObject.FindObjectOfType<SteamVR_Camera>().GetComponent<Transform>();
             }
+#else
+            Debug.LogWarning("This 'VRTK_RoomExtender' script needs a movementTransform to work.);
+#endif
         }
         cameraRig = GameObject.FindObjectOfType<SteamVR_PlayArea>().gameObject.transform;
-        headCirclePosition = movementTransform.localPosition;
+        headCirclePosition = new Vector3(movementTransform.localPosition.x, 0, movementTransform.localPosition.z);
         if (debugTransform)
         {
             debugTransform.localScale = new Vector3(headZoneRadius * 2, 0.01F, headZoneRadius * 2);
