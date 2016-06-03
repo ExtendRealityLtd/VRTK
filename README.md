@@ -658,6 +658,10 @@ The following script parameters are available:
    * `Precision_Snap` does not snap the object's position to the
    controller and picks the object up at the point the controller is
    touching the object (like a real life hand picking something up).
+   * `Handle_Snap` allows for an empty GameObject as a child of the
+   interactable object to be used as the reference snap point. On grab,
+   this empty GameObject rotation and position is used to orientate
+   the grabbed interactable object to the controller.
   * **Snap To Rotation:** A Vector3 of EulerAngles that determines the
   rotation of the object in relation to the controller on snap.
   This is useful for picking up guns or swords where the relative
