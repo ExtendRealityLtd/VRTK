@@ -162,6 +162,16 @@ public class VRTK_InteractGrab : MonoBehaviour
             obj.transform.position = controllerAttachPoint.transform.position + obj.GetComponent<VRTK_InteractableObject>().snapToPosition;
         }
 
+        if (grabType == VRTK_InteractableObject.GrabSnapType.Handle_Snap && obj.GetComponent<VRTK_InteractableObject>().snapHandle != null)
+        {
+            // Identity Controller Rotation
+            this.transform.eulerAngles = new Vector3(0f, 270f, 0f);
+            obj.transform.eulerAngles = obj.GetComponent<VRTK_InteractableObject>().snapHandle.transform.localEulerAngles;
+
+            Vector3 snapHandleDelta = obj.GetComponent<VRTK_InteractableObject>().snapHandle.transform.position - obj.transform.position;
+            obj.transform.position = controllerAttachPoint.transform.position - snapHandleDelta;
+        }
+
         if (obj.GetComponent<VRTK_InteractableObject>().grabAttachMechanic == VRTK_InteractableObject.GrabAttachType.Child_Of_Controller)
         {
             SetControllerAsParent(obj);

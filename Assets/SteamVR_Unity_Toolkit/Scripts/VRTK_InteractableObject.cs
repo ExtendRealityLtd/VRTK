@@ -27,7 +27,8 @@ public class VRTK_InteractableObject : MonoBehaviour
     {
         Simple_Snap,
         Rotation_Snap,
-        Precision_Snap
+        Precision_Snap,
+        Handle_Snap
     }
 
     public enum GrabAttachType
@@ -49,6 +50,7 @@ public class VRTK_InteractableObject : MonoBehaviour
     public GrabSnapType grabSnapType = GrabSnapType.Simple_Snap;
     public Vector3 snapToRotation = Vector3.zero;
     public Vector3 snapToPosition = Vector3.zero;
+    public Transform snapHandle;
 
     [Header("Grab Mechanics", order = 3)]
     public GrabAttachType grabAttachMechanic = GrabAttachType.Fixed_Joint;
