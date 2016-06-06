@@ -666,6 +666,12 @@ The following script parameters are available:
   rotation of the object in relation to the controller on snap.
   This is useful for picking up guns or swords where the relative
   rotation to the controller is important for ease of use.
+  * **Snap To Position:** A Vector3 that determines the position of
+  the object in relation to the controller on snap.
+  * **Snap Handle:** A Transform provided as an empty game object which
+  must be the child of the item being grabbed and serves as an
+  orientation point to rotate and position the grabbed item in relation
+  to the grabbing controller.
 
 ######Grab Mechanics
   * **Grab Attach Type:** This determines how the grabbed item will
@@ -1113,10 +1119,13 @@ The current examples are:
 
   * **014_Controller_SnappingObjectsOnGrab:** A scene with a selection
   of objects that demonstrate the different snap to controller
-  mechanics. The two green guns, green lightsaber and sword all
-  utilise the `Rotation Snap` which orientates the object into a
-  specific given rotation to ensure the object feels like it's been
-  held naturally in the hand. The red gun utilises the `Simple Snap`
+  mechanics. The two green guns and sword utilise the `Rotation Snap`
+  which orientates the object into a specific given rotation to ensure
+  the object feels like it's been held naturally in the hand. The green
+  lightsaber utilises the `Handle Snap` which uses an empty game object
+  as a child of the interactable object as the orientation point at
+  grab, so the rotation and position of the object matches that of the
+  given `Snap Handle`. The red gun utilises the `Simple Snap`
   which does not affect the object's rotation but positions the centre
   of the object to the snap point on the controller. The red/green gun
   utilises the `Precision Snap` which does not affect the rotation or
