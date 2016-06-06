@@ -124,6 +124,7 @@ public class VRTK_InteractGrab : MonoBehaviour
         rb.useGravity = false;
         rb.mass = 100f;
         rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
+        rb.constraints = RigidbodyConstraints.FreezeAll;
         ToggleRigidBody(false);
     }
 
