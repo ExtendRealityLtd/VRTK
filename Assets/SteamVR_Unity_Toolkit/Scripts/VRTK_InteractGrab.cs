@@ -92,7 +92,12 @@ public class VRTK_InteractGrab : MonoBehaviour
         //If no attach point has been specified then just use the tip of the controller
         if (controllerAttachPoint == null)
         {
-            controllerAttachPoint = transform.GetChild(0).Find("tip").GetChild(0).GetComponent<Rigidbody>();
+            var attachObject = transform.Find("Model/tip/attach");
+
+            if (attachObject != null)
+            {
+                controllerAttachPoint = attachObject.GetComponent<Rigidbody>();
+            }
         }
 
         if (GetComponent<VRTK_ControllerEvents>() == null)
@@ -104,7 +109,10 @@ public class VRTK_InteractGrab : MonoBehaviour
         GetComponent<VRTK_ControllerEvents>().AliasGrabOn += new ControllerClickedEventHandler(DoGrabObject);
         GetComponent<VRTK_ControllerEvents>().AliasGrabOff += new ControllerClickedEventHandler(DoReleaseObject);
 
-        CreateRigidBodyPoint();
+        if (controllerAttachPoint != null)
+        {
+            CreateRigidBodyPoint();
+        }
     }
 
     private void CreateRigidBodyPoint()
@@ -402,13 +410,45 @@ public class VRTK_InteractGrab : MonoBehaviour
 
     private void Update()
     {
+        if (controllerAttachPoint == null)
+        {
+            SetupControllerAttachPoint();
+        }
+
+        if (controllerRigidBody == null)
+        {
+            return;   
+        }
+
         controllerRigidBody.transform.localPosition = controllerRigidBodyPosition;
         if (grabPrecognitionTimer > 0)
         {
             grabPrecognitionTimer--;
-            if(IsValidGrab())
+            if (IsValidGrab())
             {
                 AttemptGrabObject();
+            }
+        }
+    }
+
+    private void SetupControllerAttachPoint()
+    {
+        var child = transform.Find("Model/tip/attach");
+        if (child != null)
+        {
+            var rigidBody = child.GetComponent<Rigidbody>();
+            if (rigidBody == null)
+            {
+                rigidBody = child.gameObject.AddComponent<Rigidbody>();
+            }
+
+
+            if (rigidBody != null)
+            {
+                rigidBody.isKinematic = true;
+
+                controllerAttachPoint = rigidBody;
+                this.CreateRigidBodyPoint();
             }
         }
     }
