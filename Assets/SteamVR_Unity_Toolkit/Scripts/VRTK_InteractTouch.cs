@@ -26,9 +26,10 @@ public class VRTK_InteractTouch : MonoBehaviour {
     public event ObjectInteractEventHandler ControllerTouchInteractableObject;
     public event ObjectInteractEventHandler ControllerUntouchInteractableObject;
 
-    GameObject touchedObject = null;    
-    SteamVR_TrackedObject trackedController;
-    VRTK_ControllerActions controllerActions;
+    private GameObject touchedObject = null;
+    private SteamVR_TrackedObject trackedController;
+    private VRTK_ControllerActions controllerActions;
+    private GameObject controllerRigidBody;
 
     public virtual void OnControllerTouchInteractableObject(ObjectInteractEventArgs e)
     {
@@ -68,6 +69,14 @@ public class VRTK_InteractTouch : MonoBehaviour {
         return (obj && (obj.GetComponent<VRTK_InteractableObject>() || obj.GetComponentInParent<VRTK_InteractableObject>()));
     }
 
+    public void ToggleControllerRigidBody(bool state)
+    {
+        if (controllerRigidBody && controllerRigidBody.GetComponent<Rigidbody>())
+        {
+            controllerRigidBody.GetComponent<Rigidbody>().detectCollisions = state;
+        }
+    }
+
     private void Awake()
     {
         trackedController = GetComponent<SteamVR_TrackedObject>();
@@ -82,11 +91,8 @@ public class VRTK_InteractTouch : MonoBehaviour {
             return;
         }
 
-        //Create trigger box collider for controller
-        SphereCollider collider = this.gameObject.AddComponent<SphereCollider>();
-        collider.radius = 0.06f;
-        collider.center = new Vector3(0f, -0.04f, 0f);
-        collider.isTrigger = true;
+        CreateTouchCollider(this.gameObject);
+        CreateControllerRigidBody();
     }
 
     private void OnTriggerStay(Collider collider)
@@ -138,11 +144,49 @@ public class VRTK_InteractTouch : MonoBehaviour {
         touchedObject = null;
     }
 
+    private void CreateTouchCollider(GameObject obj)
+    {
+        SphereCollider collider = obj.AddComponent<SphereCollider>();
+        collider.radius = 0.06f;
+        collider.center = new Vector3(0f, -0.04f, 0f);
+        collider.isTrigger = true;
+    }
+
+    private void CreateBoxCollider(GameObject obj, Vector3 center, Vector3 size)
+    {
+        BoxCollider bc = obj.AddComponent<BoxCollider>();
+        bc.size = size;
+        bc.center = center;
+    }
+
     private void HideController()
     {
         if (touchedObject != null)
         {
             controllerActions.ToggleControllerModel(false, touchedObject);
         }
+    }
+
+    private void CreateControllerRigidBody()
+    {
+        controllerRigidBody = new GameObject(string.Format("[{0}]_RigidBody_Holder", this.gameObject.name));
+        controllerRigidBody.transform.parent = this.transform;
+
+        CreateBoxCollider(controllerRigidBody, new Vector3(0f, -0.01f, -0.098f), new Vector3(0.04f, 0.025f, 0.15f));
+        CreateBoxCollider(controllerRigidBody, new Vector3(0f, -0.009f, -0.002f), new Vector3(0.05f, 0.025f, 0.04f));
+        CreateBoxCollider(controllerRigidBody, new Vector3(0f, -0.024f, 0.01f), new Vector3(0.07f, 0.02f, 0.02f));
+        CreateBoxCollider(controllerRigidBody, new Vector3(0f, -0.045f, 0.022f), new Vector3(0.07f, 0.02f, 0.022f));
+        CreateBoxCollider(controllerRigidBody, new Vector3(0f, -0.0625f, 0.03f), new Vector3(0.065f, 0.015f, 0.025f));
+        CreateBoxCollider(controllerRigidBody, new Vector3(0.045f, -0.035f, 0.005f), new Vector3(0.02f, 0.025f, 0.025f));
+        CreateBoxCollider(controllerRigidBody, new Vector3(-0.045f, -0.035f, 0.005f), new Vector3(0.02f, 0.025f, 0.025f));
+        Rigidbody rb = controllerRigidBody.AddComponent<Rigidbody>();
+
+        controllerRigidBody.transform.localPosition = Vector3.zero;
+
+        rb.useGravity = false;
+        rb.mass = 100f;
+        rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
+        rb.constraints = RigidbodyConstraints.FreezeAll;
+        ToggleControllerRigidBody(false);
     }
 }
