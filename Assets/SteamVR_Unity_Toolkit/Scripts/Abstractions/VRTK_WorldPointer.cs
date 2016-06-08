@@ -34,7 +34,6 @@ public abstract class VRTK_WorldPointer : VRTK_DestinationMarker
     private bool isActive;
 
     private float activateDelayTimer = 0f;
-    private float updatesPerSecond = 60f;
 
     public virtual void setPlayAreaCursorCollision(bool state)
     {
@@ -81,7 +80,7 @@ public abstract class VRTK_WorldPointer : VRTK_DestinationMarker
     {
         if (activateDelayTimer > 0)
         {
-            activateDelayTimer--;
+            activateDelayTimer-= Time.deltaTime;
         }
 
         if (playAreaCursor.activeSelf)
@@ -115,7 +114,7 @@ public abstract class VRTK_WorldPointer : VRTK_DestinationMarker
     {
         if (isActive && activateDelayTimer <= 0)
         {
-            activateDelayTimer = activateDelay * updatesPerSecond;
+            activateDelayTimer = activateDelay;
             controllerIndex = e.controllerIndex;
             TogglePointer(false);
             isActive = false;
