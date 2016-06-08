@@ -1,13 +1,45 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class VRTK_TouchpadWalking : MonoBehaviour {
+public class VRTK_TouchpadWalking : MonoBehaviour
+{
+    [SerializeField]
+    private bool leftController = true;
+    public bool LeftController
+    {
+        get { return leftController; }
+        set
+        {
+            leftController = value;
+            SetControllerListeners(controllerManager.left);
+        }
+    }
+
+    [SerializeField]
+    private bool rightController = true;
+    public bool RightController
+    {
+        get { return rightController; }
+        set
+        {
+            rightController = value;
+            SetControllerListeners(controllerManager.right);
+        }
+    }
+
     public float maxWalkSpeed = 3f;
     public float deceleration = 0.1f;
 
+    private SteamVR_ControllerManager controllerManager;
     private Vector2 touchAxis;
     private float movementSpeed = 0f;
     private float strafeSpeed = 0f;
+
+    private bool leftSubscribed;
+    private bool rightSubscribed;
+
+    private ControllerClickedEventHandler touchpadAxisChanged;
+    private ControllerClickedEventHandler touchpadUntouched;
 
     private VRTK_PlayerPresence playerPresence;
 
@@ -21,14 +53,21 @@ public class VRTK_TouchpadWalking : MonoBehaviour {
         {
             Debug.LogError("The VRTK_TouchpadWalking script requires the VRTK_PlayerPresence script to be attached to the [CameraRig]");
         }
+
+        touchpadAxisChanged = new ControllerClickedEventHandler(DoTouchpadAxisChanged);
+        touchpadUntouched = new ControllerClickedEventHandler(DoTouchpadUntouched);
+
+        controllerManager = this.GetComponent<SteamVR_ControllerManager>();
     }
 
-    private void Start () {
+    private void Start ()
+    {
         this.name = "PlayerObject_" + this.name;
 
         var controllerManager = GameObject.FindObjectOfType<SteamVR_ControllerManager>();
-        InitControllerListeners(controllerManager.left);
-        InitControllerListeners(controllerManager.right);
+
+        SetControllerListeners(controllerManager.left);
+        SetControllerListeners(controllerManager.right);
     }
 
     private void DoTouchpadAxisChanged(object sender, ControllerClickedEventArgs e)
@@ -91,16 +130,33 @@ public class VRTK_TouchpadWalking : MonoBehaviour {
         Move();
     }
 
-    private void InitControllerListeners(GameObject controller)
+    private void SetControllerListeners(GameObject controller)
     {
-        if (controller)
+        if (controller && controller == controllerManager.left)
         {
-            var controllerEvent = controller.GetComponent<VRTK_ControllerEvents>();
-            if (controllerEvent)
-            {
-                controllerEvent.TouchpadAxisChanged += new ControllerClickedEventHandler(DoTouchpadAxisChanged);
-                controllerEvent.TouchpadUntouched += new ControllerClickedEventHandler(DoTouchpadUntouched);
-            }
+            ToggleControllerListeners(controller, leftController, ref leftSubscribed);
+        }
+        else if (controller && controller == controllerManager.right)
+        {
+            ToggleControllerListeners(controller, rightController, ref rightSubscribed);
+        }
+    }
+
+    private void ToggleControllerListeners(GameObject controller, bool toggle, ref bool subscribed)
+    {
+        var controllerEvent = controller.GetComponent<VRTK_ControllerEvents>();
+        if (controllerEvent && toggle && !subscribed)
+        {
+            controllerEvent.TouchpadAxisChanged += touchpadAxisChanged;
+            controllerEvent.TouchpadUntouched += touchpadUntouched;
+            subscribed = true;
+        }
+        else if (controllerEvent && !toggle && subscribed)
+        {
+            controllerEvent.TouchpadAxisChanged -= touchpadAxisChanged;
+            controllerEvent.TouchpadUntouched -= touchpadUntouched;
+            touchAxis = Vector2.zero;
+            subscribed = false;
         }
     }
 }

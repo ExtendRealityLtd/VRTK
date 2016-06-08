@@ -602,6 +602,12 @@ immersion but the user is doing something that isn't natural.
 
 The following script parameters are available:
 
+  * **Left Controller:** If this is checked then the left controller
+  touchpad will be enabled to move the play area. It can also be
+  toggled at runtime.
+  * **Right Controller:** If this is checked then the right controller
+  touchpad will be enabled to move the play area. It can also be
+  toggled at runtime.
   * **Max Walk Speed:** The maximum speed the play area will be moved
   when the touchpad is being touched at the extremes of the axis. If
   a lower part of the touchpad axis is touched (nearer the centre)
