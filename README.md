@@ -1285,6 +1285,12 @@ The current examples are:
   object. The scene auto grabs two swords to each of the controllers
   and it's not possible to drop either of the swords.
 
+  * **027_CameraRig_TeleportByModelVillage:** A scene that demonstrates
+  how to teleport to different locations without needing a world
+  pointer and using the Destination Events abstract class on objects
+  that represent a mini map of the game world. Touching and using an
+  object on the map teleports the user to the specified location.
+
 ## Contributing
 
 I would love to get contributions from you! Follow the instructions
