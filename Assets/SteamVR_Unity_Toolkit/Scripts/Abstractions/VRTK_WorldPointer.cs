@@ -3,71 +3,20 @@
 // Purpose: Provide abstraction into projecting a raycast into the game world.
 // As this is an abstract class, it should never be used on it's own.
 //
-// Events Emitted:
-//
-// WorldPointerIn - is emitted when the pointer collides with an object
-// WorldPointerOut - is emitted when the pointer stops colliding with an object
-// WorldPointerDestinationSet - is emmited when the pointer is deactivated
-//
-// Event Payload:
-//
-// controllerIndex - The index of the controller the pointer is attached to
-// distance - The distance from the collided object the controller is
-// target - The Transform of the object the pointer has collided with
-// tipPosition - The world position of the beam tip
-//
 //====================================================================================
 
 using UnityEngine;
 using System.Collections;
 
-public struct WorldPointerEventArgs
+public abstract class VRTK_WorldPointer : VRTK_DestinationMarker
 {
-    public uint controllerIndex;
-    public float distance;
-    public Transform target;
-    public Vector3 destinationPosition;
-    public bool enableTeleport;
-}
-
-public delegate void WorldPointerEventHandler(object sender, WorldPointerEventArgs e);
-
-public class VRTK_PlayAreaCollider : MonoBehaviour
-{
-    private GameObject parent;
-
-    public void SetParent(GameObject setParent)
-    {
-        parent = setParent;
-    }
-
-    void OnTriggerStay(Collider collider)
-    {
-        if (parent.GetComponent<VRTK_WorldPointer>().IsActive() && !collider.name.Contains("PlayerObject_"))
-        {
-            parent.GetComponent<VRTK_WorldPointer>().setPlayAreaCursorCollision(true);
-        }
-    }
-
-    void OnTriggerExit(Collider collider)
-    {
-        if (! collider.name.Contains("PlayerObject_")) {
-            parent.GetComponent<VRTK_WorldPointer>().setPlayAreaCursorCollision(false);
-        }
-    }
-}
-
-public abstract class VRTK_WorldPointer : MonoBehaviour {
     public Color pointerHitColor = new Color(0f, 0.5f, 0f, 1f);
     public Color pointerMissColor = new Color(0.8f, 0f, 0f, 1f);
     public bool showPlayAreaCursor = false;
     public Vector2 playAreaCursorDimensions = Vector2.zero;
     public bool handlePlayAreaCursorCollisions = false;
-    public bool enableTeleport = true;
     public bool beamAlwaysOn = false;
     public float activateDelay = 0f;
-
-    private string missTargetWithTagOrClass;
 
     protected Vector3 destinationPosition;
     protected float pointerContactDistance = 0f;
@@ -85,28 +34,6 @@ public abstract class VRTK_WorldPointer : MonoBehaviour {
     private float activateDelayTimer = 0f;
     private float updatesPerSecond = 60f;
 
-    public event WorldPointerEventHandler WorldPointerIn;
-    public event WorldPointerEventHandler WorldPointerOut;
-    public event WorldPointerEventHandler WorldPointerDestinationSet;
-
-    public virtual void OnWorldPointerIn(WorldPointerEventArgs e)
-    {
-        if (WorldPointerIn != null)
-            WorldPointerIn(this, e);
-    }
-
-    public virtual void OnWorldPointerOut(WorldPointerEventArgs e)
-    {
-        if (WorldPointerOut != null)
-            WorldPointerOut(this, e);
-    }
-
-    public virtual void OnWorldPointerDestinationSet(WorldPointerEventArgs e)
-    {
-        if (WorldPointerDestinationSet != null)
-            WorldPointerDestinationSet(this, e);
-    }
-
     public virtual void setPlayAreaCursorCollision(bool state)
     {
         if (handlePlayAreaCursorCollisions)
@@ -123,22 +50,6 @@ public abstract class VRTK_WorldPointer : MonoBehaviour {
     public virtual bool CanActivate()
     {
         return (activateDelayTimer <= 0);
-    }
-
-    public virtual void SetMissTarget(string name)
-    {
-        missTargetWithTagOrClass = name;
-    }
-
-    protected WorldPointerEventArgs SetPointerEvent(uint controllerIndex, float distance, Transform target, Vector3 position)
-    {
-        WorldPointerEventArgs e;
-        e.controllerIndex = controllerIndex;
-        e.distance = distance;
-        e.target = target;
-        e.destinationPosition = position;
-        e.enableTeleport = enableTeleport;
-        return e;
     }
 
     protected virtual void Start()
@@ -209,7 +120,7 @@ public abstract class VRTK_WorldPointer : MonoBehaviour {
             return;
         }
 
-        OnWorldPointerIn(SetPointerEvent(controllerIndex, pointerContactDistance, pointerContactTarget, destinationPosition));
+        OnDestinationMarkerEnter(SeDestinationMarkerEvent(pointerContactDistance, pointerContactTarget, destinationPosition, controllerIndex));
 
         VRTK_InteractableObject interactableObject = pointerContactTarget.GetComponent<VRTK_InteractableObject>();
         if (interactableObject && interactableObject.pointerActivatesUseAction && interactableObject.holdButtonToUse)
@@ -225,7 +136,7 @@ public abstract class VRTK_WorldPointer : MonoBehaviour {
             return;
         }
 
-        OnWorldPointerOut(SetPointerEvent(controllerIndex, pointerContactDistance, pointerContactTarget, destinationPosition));
+        OnDestinationMarkerExit(SeDestinationMarkerEvent(pointerContactDistance, pointerContactTarget, destinationPosition, controllerIndex));
 
         VRTK_InteractableObject interactableObject = pointerContactTarget.GetComponent<VRTK_InteractableObject>();
         if (interactableObject && interactableObject.pointerActivatesUseAction && interactableObject.holdButtonToUse)
@@ -255,7 +166,7 @@ public abstract class VRTK_WorldPointer : MonoBehaviour {
 
         if (!playAreaCursorCollided && (interactableObject == null || !interactableObject.pointerActivatesUseAction))
         {
-            OnWorldPointerDestinationSet(SetPointerEvent(controllerIndex, pointerContactDistance, pointerContactTarget, destinationPosition));
+            OnDestinationMarkerSet(SeDestinationMarkerEvent(pointerContactDistance, pointerContactTarget, destinationPosition, controllerIndex));
         }
     }
 
@@ -285,12 +196,11 @@ public abstract class VRTK_WorldPointer : MonoBehaviour {
 
     protected virtual bool ValidDestination(Transform target)
     {
-        return (target && target.tag != missTargetWithTagOrClass && target.GetComponent(missTargetWithTagOrClass) == null);
+        return (target && target.tag != invalidTargetWithTagOrClass && target.GetComponent(invalidTargetWithTagOrClass) == null);
     }
 
     private void DrawPlayAreaCursorBoundary(int index, float left, float right, float top, float bottom, float thickness, Vector3 localPosition)
     {
-
         GameObject playAreaCursorBoundary = GameObject.CreatePrimitive(PrimitiveType.Cube);
         playAreaCursorBoundary.name = string.Format("[{0}]PlayerObject_WorldPointer_PlayAreaCursorBoundary_" + index, this.gameObject.name);
 
@@ -366,5 +276,31 @@ public abstract class VRTK_WorldPointer : MonoBehaviour {
         DrawPlayAreaCursorBoundary(1, cursorDrawVertices[btmLeftOuter].x, cursorDrawVertices[btmLeftInner].x, cursorDrawVertices[topLeftOuter].z, cursorDrawVertices[btmLeftOuter].z, height, new Vector3(playAreaBoundaryX, heightOffset, 0f));
         DrawPlayAreaCursorBoundary(2, cursorDrawVertices[btmLeftOuter].x, cursorDrawVertices[btmRightOuter].x, cursorDrawVertices[btmRightInner].z, cursorDrawVertices[btmRightOuter].z, height, new Vector3(0f, heightOffset, -playAreaBoundaryZ));
         DrawPlayAreaCursorBoundary(3, cursorDrawVertices[btmLeftOuter].x, cursorDrawVertices[btmLeftInner].x, cursorDrawVertices[topLeftOuter].z, cursorDrawVertices[btmLeftOuter].z, height, new Vector3(-playAreaBoundaryX, heightOffset, 0f));
+    }
+}
+
+public class VRTK_PlayAreaCollider : MonoBehaviour
+{
+    private GameObject parent;
+
+    public void SetParent(GameObject setParent)
+    {
+        parent = setParent;
+    }
+
+    void OnTriggerStay(Collider collider)
+    {
+        if (parent.GetComponent<VRTK_WorldPointer>().IsActive() && !collider.name.Contains("PlayerObject_"))
+        {
+            parent.GetComponent<VRTK_WorldPointer>().setPlayAreaCursorCollision(true);
+        }
+    }
+
+    void OnTriggerExit(Collider collider)
+    {
+        if (!collider.name.Contains("PlayerObject_"))
+        {
+            parent.GetComponent<VRTK_WorldPointer>().setPlayAreaCursorCollision(false);
+        }
     }
 }

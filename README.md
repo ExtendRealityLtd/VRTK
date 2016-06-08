@@ -261,6 +261,11 @@ the beam.
 
 The following script parameters are available:
 
+  * **Enable Teleport:** If this is checked then the teleport flag is
+  set to true in the Destination Set event so teleport scripts will
+  know whether to action the new destination. This allows controller
+  beams to be enabled on a controller but never trigger a teleport
+  (if this option is unchecked).
   * **Pointer Hit Color:** The colour of the beam when it is colliding
   with a valid target. It can be set to a different colour for each
   controller.
@@ -278,11 +283,6 @@ The following script parameters are available:
   pointer colour will change to the `Pointer Miss Color` and the
   `WorldPointerDestinationSet` event will not be triggered, which will
   prevent teleporting into areas where the play area will collide.
-  * **Enable Teleport:** If this is checked then the teleport flag is
-  set to true in the Destination Set event so teleport scripts will
-  know whether to action the new destination. This allows controller
-  beams to be enabled on a controller but never trigger a teleport
-  (if this option is unchecked).
   * **Beam Always On:** If this is checked the the pointer beam is
   always visible but the Destination Set event is still only emitted
   when the assigned button is pressed.
@@ -329,6 +329,11 @@ the beam.
 
 The following script parameters are available:
 
+  * **Enable Teleport:** If this is checked then the teleport flag is
+  set to true in the Destination Set event so teleport scripts will
+  know whether to action the new destination. This allows controller
+  beams to be enabled on a controller but never trigger a teleport
+  (if this option is unchecked).
   * **Pointer Hit Color:** The colour of the beam when it is colliding
   with a valid target. It can be set to a different colour for each
   controller.
@@ -346,11 +351,6 @@ The following script parameters are available:
   pointer colour will change to the `Pointer Miss Color` and the
   `WorldPointerDestinationSet` event will not be triggered, which will
   prevent teleporting into areas where the play area will collide.
-  * **Enable Teleport:** If this is checked then the teleport flag is
-  set to true in the Destination Set event so teleport scripts will
-  know whether to action the new destination. This allows controller
-  beams to be enabled on a controller but never trigger a teleport
-  (if this option is unchecked).
   * **Beam Always On:** If this is checked the the pointer beam is
   always visible but the Destination Set event is still only emitted
   when the assigned button is pressed.
@@ -977,11 +977,49 @@ different scripts without needing to duplicate code.
 
 The current abstract classes are available:
 
+##### VRTK_DestinationMarker
+
+This abstract class provides the ability to emit events of destination
+markers within the game world. It can be useful for tagging locations
+for specific purposes such as teleporting.
+
+It is utilised by the `VRTK_WorldPointer` for dealing with pointer
+events when the pointer cursor touches areas within the game world.
+
+The following script parameters are available:
+
+  * **Enable Teleport:** If this is checked then the teleport flag is
+  set to true in the Destination Set event so teleport scripts will
+  know whether to action the new destination.
+
+The following events are emitted:
+
+  * **DestinationMarkerEnter:** When a collision with another game
+  object has occured.
+  * **DestinationMarkerExit:** When the collision with the other
+  game object finishes.
+  * **DestinationMarkerSet:** When the destination marker is
+  active in the scene to determine the last destination position
+  (useful for selecting and teleporting).
+
+The event payload that is emitted contains:
+
+  * **distance:** The distance between the origin and the collided
+  destination.
+  * **target:** The Transform of the collided destination object.
+  * **destinationPosition:** The world position of the destination
+  marker.
+  * **enableTeleport:** Whether the destination set event should
+  trigger teleport
+  * **controllerIndex:** The optional index of the controller emitting
+  the beam
+
 ##### VRTK_WorldPointer
 
 This abstract class provides any game pointer the ability to know the
-the state of the implemented pointer and emit an event to other scripts
-in the game world.
+the state of the implemented pointer. It extends the
+`VRTK_DestinationMarker` to allow for destination events to be emitted
+when the pointer cursor collides with objects.
 
 The World Pointer also provides a play area cursor to be displayed for
 all cursors that utilise this class. The play area cursor is a
@@ -997,6 +1035,11 @@ handling play area collisions is not enabled when using terrains.
 
 The following script parameters are available:
 
+  * **Enable Teleport:** If this is checked then the teleport flag is
+  set to true in the Destination Set event so teleport scripts will
+  know whether to action the new destination. This allows controller
+  beams to be enabled on a controller but never trigger a teleport
+  (if this option is unchecked).
   * **Pointer Hit Color:** The colour of the beam when it is colliding
   with a valid target. It can be set to a different colour for each
   controller.
@@ -1014,37 +1057,12 @@ The following script parameters are available:
   pointer colour will change to the `Pointer Miss Color` and the
   `WorldPointerDestinationSet` event will not be triggered, which will
   prevent teleporting into areas where the play area will collide.
-  * **Enable Teleport:** If this is checked then the teleport flag is
-  set to true in the Destination Set event so teleport scripts will
-  know whether to action the new destination. This allows controller
-  beams to be enabled on a controller but never trigger a teleport
-  (if this option is unchecked).
   * **Beam Always On:** If this is checked the the pointer beam is
   always visible but the Destination Set event is still only emitted
   when the assigned button is pressed.
   * **Activate Delay:** The time in seconds (based on a 60 frame per
   second update tick) to delay the pointer beam being able to be
   active again. Useful for preventing constant beams for teleporting.
-
-The following events are emitted:
-
-  * **WorldPointerIn:** When the pointer collides with another
-  game object.
-  * **WorldPointerOut:** When the pointer stops colliding with
-  the game object.
-  * **WorldPointerDestinationSet:** When the pointer is no longer
-  active in the scene to determine the last destination position of
-  the pointer end (useful for selecting and teleporting). This event
-  is not emitted if the pointer is colliding with an interactable
-  object that has the `Pointer Activates Use Action` set to true.
-
-The event payload that is emitted contains:
-
-  * **controllerIndex:** The index of the controller emitting the beam
-  * **distance:** The distance the target is from the controller
-  * **target:** The Transform of the object that the pointer is touching
-  * **tipPosition:** The world position of the end of the pointer
-  * **enableTeleport:** Whether the controller should trigger teleport
 
 ### Examples
 

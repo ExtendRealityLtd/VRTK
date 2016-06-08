@@ -28,6 +28,19 @@ public class VRTK_BasicTeleport : MonoBehaviour {
     private float maxBlinkTransitionSpeed = 1.5f;
     private float maxBlinkDistance = 33f;
 
+    public void InitDestinationSetListener(GameObject markerMaker)
+    {
+        if (markerMaker)
+        {
+            var worldMarker = markerMaker.GetComponent<VRTK_DestinationMarker>();
+            if (worldMarker)
+            {
+                worldMarker.DestinationMarkerSet += new DestinationMarkerEventHandler(DoTeleport);
+                worldMarker.SetInvalidTarget(ignoreTargetWithTagOrClass);
+            }
+        }
+    }
+
     protected virtual void Start()
     {
         this.name = "PlayerObject_" + this.name;
@@ -35,8 +48,8 @@ public class VRTK_BasicTeleport : MonoBehaviour {
         eyeCamera = GameObject.FindObjectOfType<SteamVR_Camera>().GetComponent<Transform>();
 
         var controllerManager = GameObject.FindObjectOfType<SteamVR_ControllerManager>();
-        InitControllerListeners(controllerManager.left);
-        InitControllerListeners(controllerManager.right);
+        InitDestinationSetListener(controllerManager.left);
+        InitDestinationSetListener(controllerManager.right);
         InitHeadsetCollisionListener();
 
         enableTeleport = true;
@@ -54,7 +67,7 @@ public class VRTK_BasicTeleport : MonoBehaviour {
         return (target && target.tag != ignoreTargetWithTagOrClass && target.GetComponent(ignoreTargetWithTagOrClass) == null);
     }
 
-    protected virtual void DoTeleport(object sender, WorldPointerEventArgs e)
+    protected virtual void DoTeleport(object sender, DestinationMarkerEventArgs e)
     {
         if (enableTeleport && ValidLocation(e.target) && e.enableTeleport)
         {
@@ -103,19 +116,6 @@ public class VRTK_BasicTeleport : MonoBehaviour {
     {
         SteamVR_Fade.Start(Color.clear, fadeInTime);
         fadeInTime = 0f;
-    }
-
-    private void InitControllerListeners(GameObject controller)
-    {
-        if (controller)
-        {
-            var worldPointer = controller.GetComponent<VRTK_WorldPointer>();
-            if (worldPointer)
-            {
-                worldPointer.WorldPointerDestinationSet += new WorldPointerEventHandler(DoTeleport);
-                worldPointer.SetMissTarget(ignoreTargetWithTagOrClass);
-            }
-        }
     }
 
     private void InitHeadsetCollisionListener()

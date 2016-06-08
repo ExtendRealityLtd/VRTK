@@ -13,9 +13,9 @@ public class VRTK_ControllerPointerEvents_ListenerExample : MonoBehaviour {
         }
 
         //Setup controller event listeners
-        GetComponent<VRTK_SimplePointer>().WorldPointerIn += new WorldPointerEventHandler(DoPointerIn);
-        GetComponent<VRTK_SimplePointer>().WorldPointerOut += new WorldPointerEventHandler(DoPointerOut);
-        GetComponent<VRTK_SimplePointer>().WorldPointerDestinationSet += new WorldPointerEventHandler(DoPointerDestinationSet);
+        GetComponent<VRTK_SimplePointer>().DestinationMarkerEnter += new DestinationMarkerEventHandler(DoPointerIn);
+        GetComponent<VRTK_SimplePointer>().DestinationMarkerExit += new DestinationMarkerEventHandler(DoPointerOut);
+        GetComponent<VRTK_SimplePointer>().DestinationMarkerSet += new DestinationMarkerEventHandler(DoPointerDestinationSet);
     }
 
     void DebugLogger(uint index, string action, Transform target, float distance, Vector3 tipPosition)
@@ -24,17 +24,17 @@ public class VRTK_ControllerPointerEvents_ListenerExample : MonoBehaviour {
         Debug.Log("Controller on index '" + index + "' is " + action + " at a distance of " + distance + " on object named " + targetName + " - the pointer tip position is/was: " +tipPosition);
     }
 
-    void DoPointerIn(object sender, WorldPointerEventArgs e)
+    void DoPointerIn(object sender, DestinationMarkerEventArgs e)
     {
         DebugLogger(e.controllerIndex, "POINTER IN", e.target, e.distance, e.destinationPosition);
     }
 
-    void DoPointerOut(object sender, WorldPointerEventArgs e)
+    void DoPointerOut(object sender, DestinationMarkerEventArgs e)
     {
         DebugLogger(e.controllerIndex, "POINTER OUT", e.target, e.distance, e.destinationPosition);
     }
 
-    void DoPointerDestinationSet(object sender, WorldPointerEventArgs e)
+    void DoPointerDestinationSet(object sender, DestinationMarkerEventArgs e)
     {
         DebugLogger(e.controllerIndex, "POINTER DESTINATION", e.target, e.distance, e.destinationPosition);
     }

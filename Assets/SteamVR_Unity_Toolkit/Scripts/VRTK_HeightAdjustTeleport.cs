@@ -24,7 +24,7 @@ public class VRTK_HeightAdjustTeleport : VRTK_BasicTeleport {
         adjustYForTerrain = true;
     }
 
-    protected override void DoTeleport(object sender, WorldPointerEventArgs e)
+    protected override void DoTeleport(object sender, DestinationMarkerEventArgs e)
     {
         base.DoTeleport(sender, e);
         if (e.enableTeleport)
