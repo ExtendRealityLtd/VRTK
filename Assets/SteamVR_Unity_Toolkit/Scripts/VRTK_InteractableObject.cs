@@ -58,6 +58,7 @@ public class VRTK_InteractableObject : MonoBehaviour
     public float detachThreshold = 500f;
     public float springJointStrength = 500f;
     public float springJointDamper = 50f;
+    public float throwMultiplier = 1f;
 
     [Header("Use Interactions", order = 4)]
     public bool isUsable = false;

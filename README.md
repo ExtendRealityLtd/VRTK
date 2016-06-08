@@ -708,6 +708,11 @@ The following script parameters are available:
   when using a Spring Joint grab mechanic. A higher number here will
   reduce the oscillation effect when moving jointed Interactable
   Objects.
+  * **Throw Multiplier:** An amount to multiply the velocity of the
+  given object when it is thrown. This can also be used in
+  conjunction with the Interact Grab Throw Multiplier to have
+  certain objects be thrown even further than normal (or thrown
+  a shorter distance if a number below 1 is entered).
 
 ######Use Interactions
   * **Is Usable:** Determines if the object can be used
@@ -846,6 +851,9 @@ The following script parameters are available:
   grab button can be pressed before the controller touches the object
   and when the collision takes place, if the grab button is still being
   held down then the grab action will be successful.
+  * **Throw Multiplier:** An amount to multiply the velocity of any
+  objects being thrown. This can be useful when scaling up the
+  CameraRig to simulate being able to throw items further.
   * **Create Rigid Body When Not Touching:** If this is checked and the
   controller is not touching an Interactable Object when the grab
   button is pressed then a rigid body is added to the controller to

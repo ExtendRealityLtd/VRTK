@@ -21,6 +21,7 @@ public class VRTK_InteractGrab : MonoBehaviour
     public bool hideControllerOnGrab = false;
     public float hideControllerDelay = 0f;
     public float grabPrecognition = 0f;
+    public float throwMultiplier = 1f;
     public bool createRigidBodyWhenNotTouching = false;
 
     public event ObjectInteractEventHandler ControllerGrabInteractableObject;
@@ -213,18 +214,18 @@ public class VRTK_InteractGrab : MonoBehaviour
         return rigidbody;
     }
 
-    private void ThrowReleasedObject(Rigidbody rb, uint controllerIndex)
+    private void ThrowReleasedObject(Rigidbody rb, uint controllerIndex, float objectThrowMultiplier)
     {
         var origin = trackedController.origin ? trackedController.origin : trackedController.transform.parent;
         var device = SteamVR_Controller.Input((int)controllerIndex);
         if (origin != null)
         {
-            rb.velocity = origin.TransformDirection(device.velocity);
+            rb.velocity = origin.TransformDirection(device.velocity) * (throwMultiplier * objectThrowMultiplier);
             rb.angularVelocity = origin.TransformDirection(device.angularVelocity);
         }
         else
         {
-            rb.velocity = device.velocity;
+            rb.velocity = device.velocity * (throwMultiplier * objectThrowMultiplier);
             rb.angularVelocity = device.angularVelocity;
         }
         rb.maxAngularVelocity = rb.angularVelocity.magnitude;
@@ -277,7 +278,7 @@ public class VRTK_InteractGrab : MonoBehaviour
             Rigidbody releasedObjectRigidBody = ReleaseGrabbedObjectFromController(withThrow);
             if (withThrow)
             {
-                ThrowReleasedObject(releasedObjectRigidBody, controllerIndex);
+                ThrowReleasedObject(releasedObjectRigidBody, controllerIndex, grabbedObject.GetComponent<VRTK_InteractableObject>().throwMultiplier);
             }
         }
         InitUngrabbedObject();
