@@ -219,8 +219,8 @@ public class VRTK_InteractGrab : MonoBehaviour
         var device = SteamVR_Controller.Input((int)controllerIndex);
         if (origin != null)
         {
-            rb.velocity = origin.TransformVector(device.velocity);
-            rb.angularVelocity = origin.TransformVector(device.angularVelocity);
+            rb.velocity = origin.TransformDirection(device.velocity);
+            rb.angularVelocity = origin.TransformDirection(device.angularVelocity);
         }
         else
         {
