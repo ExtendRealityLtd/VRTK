@@ -29,6 +29,8 @@ public abstract class VRTK_WorldPointer : VRTK_DestinationMarker
     private SteamVR_PlayArea playArea;
     private GameObject playAreaCursor;
     private GameObject[] playAreaCursorBoundaries;
+    private BoxCollider playAreaCursorCollider;
+    private Transform headset;
     private bool isActive;
 
     private float activateDelayTimer = 0f;
@@ -66,6 +68,8 @@ public abstract class VRTK_WorldPointer : VRTK_DestinationMarker
         GetComponent<VRTK_ControllerEvents>().AliasPointerOn += new ControllerClickedEventHandler(EnablePointerBeam);
         GetComponent<VRTK_ControllerEvents>().AliasPointerOff += new ControllerClickedEventHandler(DisablePointerBeam);
 
+        headset = DeviceFinder.HeadsetTransform();
+
         playArea = GameObject.FindObjectOfType<SteamVR_PlayArea>();
         playAreaCursorBoundaries = new GameObject[4];
 
@@ -78,6 +82,11 @@ public abstract class VRTK_WorldPointer : VRTK_DestinationMarker
         if (activateDelayTimer > 0)
         {
             activateDelayTimer--;
+        }
+
+        if (playAreaCursor.activeSelf)
+        {
+            UpdateCollider();
         }
     }
 
@@ -259,11 +268,10 @@ public abstract class VRTK_WorldPointer : VRTK_DestinationMarker
 
         playAreaCursor.GetComponent<MeshRenderer>().enabled = false;
 
-        BoxCollider playAreaCursorCollider = playAreaCursor.GetComponent<BoxCollider>();
-        playAreaCursorCollider.isTrigger = true;
-        playAreaCursorCollider.center = new Vector3(0f, 65f, 0f);
-        playAreaCursorCollider.size = new Vector3(1f, 100f, 1f);
+        CreateCursorCollider(playAreaCursor);
+
         playAreaCursor.AddComponent<Rigidbody>().isKinematic = true;
+
         VRTK_PlayAreaCollider playAreaCursorScript = playAreaCursor.AddComponent<VRTK_PlayAreaCollider>();
         playAreaCursorScript.SetParent(this.gameObject);
         playAreaCursor.layer = 2;
@@ -276,6 +284,24 @@ public abstract class VRTK_WorldPointer : VRTK_DestinationMarker
         DrawPlayAreaCursorBoundary(1, cursorDrawVertices[btmLeftOuter].x, cursorDrawVertices[btmLeftInner].x, cursorDrawVertices[topLeftOuter].z, cursorDrawVertices[btmLeftOuter].z, height, new Vector3(playAreaBoundaryX, heightOffset, 0f));
         DrawPlayAreaCursorBoundary(2, cursorDrawVertices[btmLeftOuter].x, cursorDrawVertices[btmRightOuter].x, cursorDrawVertices[btmRightInner].z, cursorDrawVertices[btmRightOuter].z, height, new Vector3(0f, heightOffset, -playAreaBoundaryZ));
         DrawPlayAreaCursorBoundary(3, cursorDrawVertices[btmLeftOuter].x, cursorDrawVertices[btmLeftInner].x, cursorDrawVertices[topLeftOuter].z, cursorDrawVertices[btmLeftOuter].z, height, new Vector3(-playAreaBoundaryX, heightOffset, 0f));
+    }
+
+    private void CreateCursorCollider(GameObject cursor)
+    {
+        playAreaCursorCollider = cursor.GetComponent<BoxCollider>();
+        playAreaCursorCollider.isTrigger = true;
+        playAreaCursorCollider.center = new Vector3(0f, 65f, 0f);
+        playAreaCursorCollider.size = new Vector3(1f, 1f, 1f);
+    }
+
+    private void UpdateCollider()
+    {
+        var playAreaHeightAdjustment = 1f;
+        var newBCYSize = (headset.transform.position.y - playArea.transform.position.y) * 100f;
+        var newBCYCenter = (newBCYSize != 0 ? (newBCYSize / 2) + playAreaHeightAdjustment : 0);
+
+        playAreaCursorCollider.size = new Vector3(playAreaCursorCollider.size.x, newBCYSize, playAreaCursorCollider.size.z);
+        playAreaCursorCollider.center = new Vector3(playAreaCursorCollider.center.x, newBCYCenter, playAreaCursorCollider.center.z);
     }
 }
 
