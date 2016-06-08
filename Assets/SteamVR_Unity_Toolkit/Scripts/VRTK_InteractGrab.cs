@@ -64,7 +64,7 @@ public class VRTK_InteractGrab : MonoBehaviour
 
     public void AttemptGrab()
     {
-        GrabInteractedObject();
+        AttemptGrabObject();
     }
 
     public GameObject GetGrabbedObject()
@@ -349,7 +349,7 @@ public class VRTK_InteractGrab : MonoBehaviour
 
     private bool CanRelease()
     {
-        return grabbedObject.GetComponent<VRTK_InteractableObject>().isDroppable;
+        return (grabbedObject && grabbedObject.GetComponent<VRTK_InteractableObject>().isDroppable);
     }
 
     private void AttemptReleaseObject(uint controllerIndex)

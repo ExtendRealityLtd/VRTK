@@ -56,6 +56,9 @@ public class VRTK_InteractTouch : MonoBehaviour {
         if (obj.GetComponent<Collider>())
         {
             OnTriggerStay(obj.GetComponent<Collider>());
+        } else if (obj.GetComponentInChildren<Collider>())
+        {
+            OnTriggerStay(obj.GetComponentInChildren<Collider>());
         }
     }
 

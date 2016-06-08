@@ -932,6 +932,34 @@ Another example can be viewed in the scene
 which shows that objects can be grabbed with one button and used with
 another (e.g. firing a gun).
 
+#### Auto Grabbing Interactable Objects (VRTK_ObjectAutoGrab)
+
+It is possible to automatically grab an Interactable Object to a
+specific controller by applying the Object Auto Grab script to
+the controller that the object should be grabbed by default.
+
+The Object Auto Grab script is attached to a Controller object
+within the `[CameraRig]` prefab and the Controller object
+requires the `VRTK_InteractGrab` script to be attached.
+
+The following script parameters are available:
+
+  * **Object To Grab:** A game object (either within the scene or a
+  prefab) that will be grabbed by the controller on game start.
+  * **Clone Grabbed Object:** If this is checked then the Object To
+  Grab will be cloned into a new object and attached to the controller
+  leaving the existing object in the scene. This is required if the
+  same object is to be grabbed to both controllers as a single object
+  cannot be grabbed by different controllers at the same time. It is
+  also required to clone a grabbed object if it is a prefab as it
+  needs to exist within the scene to be grabbed.
+
+An example can be viewed in the scene
+`SteamVR_Unity_Toolkit/Examples/026_Controller_ForceHoldObject`. Which
+automatically grabs a sword to each controller and also prevents the
+swords from being dropped so they are permanently attached to the
+user's controllers.
+
 #### Abstract Classes (Abstractions/)
 
 To allow for reusablity and object consistency, a collection of
@@ -1225,6 +1253,11 @@ The current examples are:
   them. The `ExcludeTeleport` script has no methods and is just used
   as a placeholder.
    * [View Example Tour on Youtube](https://www.youtube.com/watch?v=hCZEaXpeoIY)
+
+  * **026_Controller_ForceHoldObject:** A scene that shows how to grab
+  an object on game start and prevent the user from dropping that
+  object. The scene auto grabs two swords to each of the controllers
+  and it's not possible to drop either of the swords.
 
 ## Contributing
 
