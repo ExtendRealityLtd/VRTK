@@ -634,6 +634,13 @@ The following script parameters are available:
 
 ######Grab Interactions
   * **Is Grabbable:** Determines if the object can be grabbed
+  * **Is Droppable:** Determines if the object can be dropped by the
+  controller grab button being used. If this is unchecked then it's
+  not possible to drop the item once it's picked up using the
+  controller button. It is still possible for the item to be dropped
+  if the Grab Attach Mechanic is a joint and too much force is applied
+  to the object and the joint is broken. To prevent this it's better
+  to use the Child Of Controller mechanic.
   * **Hold Button To Grab:** If this is checked then the grab button
   on the controller needs to be continually held down to keep grabbing.
   If this is unchecked the grab button toggles the grab action with

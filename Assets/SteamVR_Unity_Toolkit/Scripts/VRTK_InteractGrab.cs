@@ -347,9 +347,14 @@ public class VRTK_InteractGrab : MonoBehaviour
         }
     }
 
+    private bool CanRelease()
+    {
+        return grabbedObject.GetComponent<VRTK_InteractableObject>().isDroppable;
+    }
+
     private void AttemptReleaseObject(uint controllerIndex)
     {
-        if (IsObjectHoldOnGrab(grabbedObject) || grabEnabledState >= 2)
+        if (CanRelease() && (IsObjectHoldOnGrab(grabbedObject) || grabEnabledState >= 2))
         {
             if (grabbedObject.GetComponent<VRTK_InteractableObject>().AttachIsTrackObject())
             {

@@ -45,6 +45,7 @@ public class VRTK_InteractableObject : MonoBehaviour
 
     [Header("Grab Interactions", order = 2)]
     public bool isGrabbable = false;
+    public bool isDroppable = true;
     public bool holdButtonToGrab = true;
     public bool pauseCollisionsOnGrab = true;
     public GrabSnapType grabSnapType = GrabSnapType.Simple_Snap;
