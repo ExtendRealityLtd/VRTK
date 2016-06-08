@@ -1,4 +1,4 @@
-# SteamVR Unity Toolkit - [![Slack](https://vrtk-slack-invite.herokuapp.com/badge.svg)](https://vrtk-slack-invite.herokuapp.com) [![Subreddit](https://img.shields.io/badge/subreddit-discussions-red.svg?style=flat-square)](https://reddit.com)
+# SteamVR Unity Toolkit - [![Slack](https://vrtk-slack-invite.herokuapp.com/badge.svg)](https://vrtk-slack-invite.herokuapp.com) [![Subreddit](https://img.shields.io/badge/subreddit-discussions-red.svg?style=flat-square)](https://reddit.com) [![Trello](https://img.shields.io/badge/trello-work%20board-blue.svg?style=flat-square)](https://trello.com/b/sU0vRWUz/steamvr-unity-toolkit)
 
 A collection of useful scripts and prefabs for building SteamVR titles
 in Unity 5.
@@ -16,10 +16,6 @@ money and you get something to play!
 
 **This Toolkit requires the [SteamVR Plugin]
 from the Unity Asset Store to be imported into your Unity project.**
-
-There is a [public Trello board available here](https://trello.com/b/sU0vRWUz/steamvr-unity-toolkit)
-to view what is currently being worked on and to vote on planned
-features.
 
 ## Quick Start
 
