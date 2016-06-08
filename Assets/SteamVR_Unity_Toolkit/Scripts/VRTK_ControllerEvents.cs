@@ -6,6 +6,7 @@ public struct ControllerClickedEventArgs
     public uint controllerIndex;
     public float buttonPressure;
     public Vector2 touchpadAxis;
+    public float touchpadAngle;
 }
 
 public delegate void ControllerClickedEventHandler(object sender, ControllerClickedEventArgs e);
@@ -205,6 +206,14 @@ public class VRTK_ControllerEvents : MonoBehaviour {
         e.controllerIndex = controllerIndex;
         e.buttonPressure = buttonPressure;
         e.touchpadAxis = device.GetAxis();
+
+        float angle = Mathf.Atan2( e.touchpadAxis.y, e.touchpadAxis.x ) * Mathf.Rad2Deg;
+        angle = 90.0f - angle;
+        if( angle < 0 )
+            angle += 360.0f;
+
+        e.touchpadAngle = angle;
+
         return e;
     }
 

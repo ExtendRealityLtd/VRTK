@@ -1,27 +1,18 @@
-# SteamVR Unity Toolkit
+# SteamVR Unity Toolkit - [![Slack](https://vrtk-slack-invite.herokuapp.com/badge.svg)](https://vrtk-slack-invite.herokuapp.com) [![Subreddit](https://img.shields.io/badge/subreddit-discussions-red.svg?style=flat-square)](https://reddit.com) [![Trello](https://img.shields.io/badge/trello-work%20board-blue.svg?style=flat-square)](https://trello.com/b/sU0vRWUz/steamvr-unity-toolkit)
 
 A collection of useful scripts and prefabs for building SteamVR titles
 in Unity 5.
 
----
-
-To all those lovely people who want to give donations, instead of donating, consider supporting me by buying my latest game on Steam - `Holodaze` for HTC Vive. At least this way, I make a bit of money and you get something to play!
-
-[View Holodaze on the Steam Store](http://store.steampowered.com/app/475520)
-
----
-
 **This Toolkit requires the [SteamVR Plugin]
 from the Unity Asset Store to be imported into your Unity project.**
 
-  > #### Note:
-  > This is very early alpha and does not offer much functionality at
-  > present. I'm open to suggestions, ideas and bug finding/fixing.
-  > Also, expect builds to break older versions as things are changing
-  > fast at this stage, it will settle down when the project reaches
-  > a beta stage.
-  
-There is a [public Trello board available here](https://trello.com/b/sU0vRWUz/steamvr-unity-toolkit) to view what is currently being worked on and to vote on planned features.
+  > _To all those lovely people who want to give donations, instead of_
+  > _donating, consider supporting me by buying my latest game on_
+  > _Steam - `Holodaze` for HTC Vive. At least this way, I make a bit of_
+  > _money and you get something to play!_
+  > 
+  > **[Buy Holodaze from the Steam Store](http://store.steampowered.com/app/475520)**
+
 
 ## Quick Start
 
@@ -32,10 +23,12 @@ There is a [public Trello board available here](https://trello.com/b/sU0vRWUz/st
 
 ## FAQ/Troubleshooting
 
-  * How to create a new project using this toolkit along with the SteamVR Unity Plugin:
-    * [View answer video on Youtube](https://www.youtube.com/watch?v=oFkgTZ4LXEo)
-  * Pointer beams/teleporting no longer works after a project build and running from that build:
-    * [View answer video on Youtube](https://www.youtube.com/watch?v=IsmYoLTmX4c)
+  * How to create a new project using this toolkit along with the
+  SteamVR Unity Plugin:
+   * [View answer video on Youtube](https://www.youtube.com/watch?v=oFkgTZ4LXEo)
+  * Pointer beams/teleporting no longer works after a project build
+  and running from that build:
+   * [View answer video on Youtube](https://www.youtube.com/watch?v=IsmYoLTmX4c)
 
 ## Summary
 
@@ -58,12 +51,11 @@ VR within Unity3d.
 
 ## What's In The Box
 
-This toolkit project is split into two main sections:
+This toolkit project is split into three main sections:
 
-  * SteamVR_Unity_Toolkit - `SteamVR_Unity_Toolkit/`
-    * Prefabs - `SteamVR_Unity_Toolkit/Prefabs/`
-    * Scripts - `SteamVR_Unity_Toolkit/Scripts/`
-  * Examples - `Examples/`
+  * Prefabs - `SteamVR_Unity_Toolkit/Prefabs/`
+  * Scripts - `SteamVR_Unity_Toolkit/Scripts/`
+  * Examples - `SteamVR_Unity_Toolkit/Examples/`
 
 The `SteamVR_Unity_Toolkit` directory is where all of the relevant
 files are kept and this directory can be simply copied over to an
@@ -80,10 +72,10 @@ The available Prefabs are:
 #### [CameraRig]
 
 The `[CameraRig]` has been taken directly from the SteamVR Unity
-plugin example: `Extras/SteamVR_TestThrow` scene as it includes the
-relevant `Model` children on the controller (which seem to be missing
-from the default prefab in the SteamVR plugin
-`Prefabs/[CameraRig].prefab`.
+plugin example: `SteamVR/Extras/SteamVR_TestThrow` scene as it includes
+the relevant `Model` children on the controller (which seem to b
+missing from the default prefab in the SteamVR plugin
+`SteamVR/Prefabs/[CameraRig].prefab`.
 
 The `SteamVR_Unity_Toolkit/Prefabs/[CameraRig]` can be dropped into
 any scene to provide instant access to a VR game camera via the VR
@@ -123,11 +115,11 @@ The following script parameters are available:
   second are at an unreasonable level of the Target FPS.
 
 An example of the `FramesPerSecondCanvas` Prefab can be viewed in
-the scene `018_CameraRig_FramesPerSecondCounter` which displays the
-frames per second in the centre of the headset view. Pressing the
-trigger generates a new sphere and pressing the touchpad generates
-ten new spheres. Eventually when lots of spheres are present the FPS
-will drop and demonstrate the prefab.
+the scene `SteamVR_Unity_Toolkit/Examples/018_CameraRig_FramesPerSecondCounter`
+which displays the frames per second in the centre of the headset view.
+Pressing the trigger generates a new sphere and pressing the touchpad
+generates ten new spheres. Eventually when lots of spheres are present
+the FPS will drop and demonstrate the prefab.
 
 ### Scripts
 
@@ -154,9 +146,9 @@ common controller actions. The following public methods are available:
   provided is 3999, any number higher than that will be capped.
 
 An example of the `VRTK_ControllerActions` script can be viewed in
-the scene `Examples/016_Controller_HapticRumble` which demonstrates
-the ability to hide a controller model and make the controller
-vibrate for a given length of time at a given intensity.
+the scene `SteamVR_Unity_Toolkit/Examples/016_Controller_HapticRumble`
+which demonstrates the ability to hide a controller model and make
+the controller vibrate for a given length of time at a given intensity.
 
 #### Controller Events (VRTK_ControllerEvents)
 
@@ -243,9 +235,9 @@ means it's easier to customise the controller buttons to the actions
 they should perform.
 
 An example of the `VRTK_ControllerEvents` script can be viewed in
-the scene `Examples/002_Controller_Events` and code examples
+the scene `SteamVR_Unity_Toolkit/Examples/002_Controller_Events` and code examples
 of how the events are utilised and listened to can be viewed in the
-script `Examples/Scripts/VRTK_ControllerEvents_ListenerExample.cs`
+script `SteamVR_Unity_Toolkit/Examples/Resources/Scripts/VRTK_ControllerEvents_ListenerExample.cs`
 
 #### Simple Laser Pointer (VRTK_SimplePointer)
 
@@ -310,10 +302,10 @@ The Simple Pointer object extends the `VRTK_WorldPointer` abstract
 class and therefore emits the same events and payload.
 
 An example of the `VRTK_SimplePointer` script can be viewed in
-the scene `Examples/003_Controller_SimplePointer` and
+the scene `SteamVR_Unity_Toolkit/Examples/003_Controller_SimplePointer` and
 code examples of how the events are utilised and listened to can be
 viewed in the script
-`Examples/Scripts/VRTK_ControllerPointerEvents_ListenerExample.cs`
+`SteamVR_Unity_Toolkit/Examples/Resources/Scripts/VRTK_ControllerPointerEvents_ListenerExample.cs`
 
 #### Bezier Curve Laser Pointer (VRTK_BezierPointer)
 
@@ -391,17 +383,17 @@ The Bezier Pointer object extends the `VRTK_WorldPointer` abstract
 class and therefore emits the same events and payload.
 
 An example of the `VRTK_BezierPointer` script can be viewed in
-the scene `Examples/009_Controller_BezierPointer` which is used in
-conjunction with the Height Adjust Teleporter shows how it is
-possible to traverse different height objects using the curved
-pointer without needing to see the top of the object.
+the scene `SteamVR_Unity_Toolkit/Examples/009_Controller_BezierPointer`
+which is used in conjunction with the Height Adjust Teleporter shows
+how it is possible to traverse different height objects using the
+curved pointer without needing to see the top of the object.
 
 Another example can be viewed in the scene
-`Examples/012_Controller_PointerWithAreaCollision` that shows how
-a Bezier Pointer with the Play Area Cursor and Collision Detection
-enabled can be used to traverse a game area but not allow teleporting
-into areas where the walls or other objects would fall into the play
-area space enabling the player to enter walls.
+`SteamVR_Unity_Toolkit/Examples/012_Controller_PointerWithAreaCollision`
+that shows how a Bezier Pointer with the Play Area Cursor and Collision
+Detection enabled can be used to traverse a game area but not allow
+teleporting into areas where the walls or other objects would fall into
+the play area space enabling the player to enter walls.
 
 The bezier curve generation code is in another script located at
 `SteamVR_Unity_Toolkit/Scripts/Helper/CurveGenerator.cs` and was
@@ -447,11 +439,11 @@ The following script parameters are available:
   pointer colour is set to the miss colour.
 
 An example of the `VRTK_BasicTeleport` script can be viewed in the
-scene `Examples/004_CameraRig_BasicTeleport`. The scene uses
-the `VRTK_SimplePointer` script on the Controllers to initiate a
-laser pointer with the Controller `Grip` button and when the laser
-pointer is deactivated (release the `Grip`) then the player is
-teleported to the location of the laser pointer tip.
+scene `SteamVR_Unity_Toolkit/Examples/004_CameraRig_BasicTeleport`.
+The scene uses the `VRTK_SimplePointer` script on the Controllers to
+initiate a laser pointer with the Controller `Grip` button and when
+the laser pointer is deactivated (release the `Grip`) then the player
+is teleported to the location of the laser pointer tip.
 
 #### Height Adjustable Teleporter (VRTK_HeightAdjustTeleport)
 
@@ -496,17 +488,20 @@ option is turned off then the player can hover in mid air at
 the same y position of the object they are standing on.
 
 An example of the `VRTK_HeightAdjustTeleport` script can be viewed
-in the scene `Examples/007_CameraRig_HeightAdjustTeleport`. The scene
-has a collection of varying height objects that the player can either
-walk up and down or use the laser pointer to climb on top of them.
+in the scene `SteamVR_Unity_Toolkit/Examples/007_CameraRig_HeightAdjustTeleport`.
+The scene has a collection of varying height objects that the player
+can either walk up and down or use the laser pointer to climb on top
+of them.
 
 Another example can be viewed in the scene
-`Examples/010_CameraRig_TerrainTeleporting` which shows how the
-teleportation of a player can also traverse terrain colliders.
+`SteamVR_Unity_Toolkit/Examples/010_CameraRig_TerrainTeleporting`
+which shows how the teleportation of a player can also traverse
+terrain colliders.
 
 Another example can be viewed in the scene
-`Examples/020_CameraRig_MeshTeleporting` which shows how the
-teleportation of a player can also traverse mesh colliders.
+`SteamVR_Unity_Toolkit/Examples/020_CameraRig_MeshTeleporting`
+which shows how the teleportation of a player can also traverse
+mesh colliders.
 
 #### Fading On Headset Collision (VRTK_HeadsetCollisionFade)
 
@@ -520,6 +515,9 @@ The reasoning behind this is if the player puts their head where it
 shouldn't be, then fading to a colour (e.g. black) will make the
 player realise they've done something wrong and they'll probably
 naturally step backwards.
+
+If the headset is colliding then the teleport action is also disabled
+to prevent cheating by clipping through walls.
 
 If using `Unity 5.3` or older then the Headset Collision Fade 
 script is attached to the `Camera (head)` object within the 
@@ -538,6 +536,8 @@ The following events are emitted:
 
   * **HeadsetCollisionDetect:** Emitted when the user's headset
   collides with another game object.
+  * **HeadsetCollisionEnded:** Emitted when the user's headset
+  stops colliding with a game object.
 
 The event payload that is emitted contains:
 
@@ -547,7 +547,7 @@ The event payload that is emitted contains:
   the Headset Collision Fade script is attached to (Camera).
 
 An example of the `VRTK_HeadsetCollisionFade` script can be
-viewed in the scene `Examples/011_Camera_HeadSetCollisionFading`.
+viewed in the scene `SteamVR_Unity_Toolkit/Examples/011_Camera_HeadSetCollisionFading`.
 The scene has collidable walls around the play area and if the player
 puts their head into any of the walls then the headset will fade to
 black.
@@ -577,10 +577,10 @@ The following script parameters are available:
   collider was active they would bounce off the play area collider.
 
 An example of the `VRTK_PlayerPresence` script can be viewed in
-the scene `Examples/017_CameraRig_TouchpadWalking`. The scene has
-a collection of walls and slopes that can be traversed by the user
-with the touchpad but the user cannot pass through the objects as
-they are collidable and the rigidbody physics won't allow the
+the scene `SteamVR_Unity_Toolkit/Examples/017_CameraRig_TouchpadWalking`.
+The scene has a collection of walls and slopes that can be traversed by
+the user with the touchpad but the user cannot pass through the objects
+as they are collidable and the rigidbody physics won't allow the
 intersection to occur.
 
 #### Touchpad Movement (VRTK_TouchpadWalking)
@@ -612,11 +612,11 @@ The following script parameters are available:
   suffered.
 
 An example of the `VRTK_TouchpadWalking` script can be viewed in
-the scene `Examples/017_CameraRig_TouchpadWalking`. The scene has
-a collection of walls and slopes that can be traversed by the user
-with the touchpad. There is also an area that can only be traversed
-if the user is crouching. Standing up in this crouched area will
-cause the user to appear back at their last good known position.
+the scene `SteamVR_Unity_Toolkit/Examples/017_CameraRig_TouchpadWalking`.
+The scene has a collection of walls and slopes that can be traversed by
+the user with the touchpad. There is also an area that can only be
+traversed if the user is crouching. Standing up in this crouched area
+will cause the user to appear back at their last good known position.
 
 #### Interactable Object (VRTK_InteractableObject)
 
@@ -634,6 +634,13 @@ The following script parameters are available:
 
 ######Grab Interactions
   * **Is Grabbable:** Determines if the object can be grabbed
+  * **Is Droppable:** Determines if the object can be dropped by the
+  controller grab button being used. If this is unchecked then it's
+  not possible to drop the item once it's picked up using the
+  controller button. It is still possible for the item to be dropped
+  if the Grab Attach Mechanic is a joint and too much force is applied
+  to the object and the joint is broken. To prevent this it's better
+  to use the Child Of Controller mechanic.
   * **Hold Button To Grab:** If this is checked then the grab button
   on the controller needs to be continually held down to keep grabbing.
   If this is unchecked the grab button toggles the grab action with
@@ -651,10 +658,20 @@ The following script parameters are available:
    * `Precision_Snap` does not snap the object's position to the
    controller and picks the object up at the point the controller is
    touching the object (like a real life hand picking something up).
+   * `Handle_Snap` allows for an empty GameObject as a child of the
+   interactable object to be used as the reference snap point. On grab,
+   this empty GameObject rotation and position is used to orientate
+   the grabbed interactable object to the controller.
   * **Snap To Rotation:** A Vector3 of EulerAngles that determines the
   rotation of the object in relation to the controller on snap.
   This is useful for picking up guns or swords where the relative
   rotation to the controller is important for ease of use.
+  * **Snap To Position:** A Vector3 that determines the position of
+  the object in relation to the controller on snap.
+  * **Snap Handle:** A Transform provided as an empty game object which
+  must be the child of the item being grabbed and serves as an
+  orientation point to rotate and position the grabbed item in relation
+  to the grabbing controller.
 
 ######Grab Mechanics
   * **Grab Attach Type:** This determines how the grabbed item will
@@ -691,6 +708,11 @@ The following script parameters are available:
   when using a Spring Joint grab mechanic. A higher number here will
   reduce the oscillation effect when moving jointed Interactable
   Objects.
+  * **Throw Multiplier:** An amount to multiply the velocity of the
+  given object when it is thrown. This can also be used in
+  conjunction with the Interact Grab Throw Multiplier to have
+  certain objects be thrown even further than normal (or thrown
+  a shorter distance if a number below 1 is entered).
 
 ######Use Interactions
   * **Is Usable:** Determines if the object can be used
@@ -735,17 +757,17 @@ but it is expected that this script is the base to be inherited into a
 script with richer functionality.
 
 An example of the `VRTK_InteractableObject` can be viewed in the
-scene `Examples/005_Controller_BasicObjectGrabbing`. The scene
-also uses the `VRTK_InteractTouch` and `VRTK_InteractGrab`
+scene `SteamVR_Unity_Toolkit/Examples/005_Controller_BasicObjectGrabbing`.
+The scene also uses the `VRTK_InteractTouch` and `VRTK_InteractGrab`
 scripts on the controllers to show how an interactable object can be
 grabbed and snapped to the controller and thrown around the game world.
 
 Another example can be viewed in the scene
-`Examples/013_Controller_UsingAndGrabbingMultipleObjects`. The scene
-shows mutltiple objects that can be grabbed by holding the buttons
-or grabbed by toggling the button click and also has objects that
-can have their Using state toggled to show how mutliple items can be
-turned on at the same time.
+`SteamVR_Unity_Toolkit/Examples/013_Controller_UsingAndGrabbingMultipleObjects`.
+The scene shows mutltiple objects that can be grabbed by holding the
+buttons or grabbed by toggling the button click and also has objects
+that can have their Using state toggled to show how mutliple items can
+be turned on at the same time.
 
 #### Touching Interactable Objects (VRTK_InteractTouch)
 
@@ -776,11 +798,11 @@ The event payload that is emitted contains:
   interacted with by the controller
 
 An example of the `VRTK_InteractTouch` can be viewed in the
-scene `Examples/005_Controller/BasicObjectGrabbing`. The scene
-demonstrates the highlighting of objects that have the
-`VRTK_InteractableObject` script added to them to show the
-ability to highlight interactable objects when they are touched by
-the controllers.
+scene `SteamVR_Unity_Toolkit/Examples/005_Controller/BasicObjectGrabbing`.
+The scene demonstrates the highlighting of objects that have the
+`VRTK_InteractableObject` script added to them to show the ability to
+highlight interactable objects when they are touched by the
+controllers.
 
 #### Grabbing Interactable Objects (VRTK_InteractGrab)
 
@@ -829,6 +851,9 @@ The following script parameters are available:
   grab button can be pressed before the controller touches the object
   and when the collision takes place, if the grab button is still being
   held down then the grab action will be successful.
+  * **Throw Multiplier:** An amount to multiply the velocity of any
+  objects being thrown. This can be useful when scaling up the
+  CameraRig to simulate being able to throw items further.
   * **Create Rigid Body When Not Touching:** If this is checked and the
   controller is not touching an Interactable Object when the grab
   button is pressed then a rigid body is added to the controller to
@@ -848,19 +873,19 @@ The event payload that is emitted contains:
   interacted with by the controller
 
 An example of the `VRTK_InteractGrab` can be viewed in the
-scene `Examples/005_Controller/BasicObjectGrabbing`. The scene
-demonstrates the grabbing of interactable objects that have the
-`VRTK_InteractableObject` script attached to them. The objects
-can be picked up and thrown around.
+scene `SteamVR_Unity_Toolkit/Examples/005_Controller/BasicObjectGrabbing`.
+The scene demonstrates the grabbing of interactable objects that have
+the `VRTK_InteractableObject` script attached to them. The objects can
+be picked up and thrown around.
 
 More complex examples can be viewed in the scene
-`Examples/013_Controller_UsingAndGrabbingMultipleObjects` which
-demonstrates that each controller can grab and use objects
+`SteamVR_Unity_Toolkit/Examples/013_Controller_UsingAndGrabbingMultipleObjects`
+which demonstrates that each controller can grab and use objects
 independently and objects can also be toggled to their use state
 simultaneously. The scene
-`Examples/014_Controller_SnappingObjectsOnGrab` demonstrates
-the different mechanisms for snapping a grabbed object to the
-controller.
+`SteamVR_Unity_Toolkit/Examples/014_Controller_SnappingObjectsOnGrab`
+demonstrates the different mechanisms for snapping a grabbed object to
+the controller.
 
 #### Using Interactable Objects (VRTK_InteractUse)
 
@@ -905,17 +930,45 @@ The event payload that is emitted contains:
   interacted with by the controller
 
 An example can be viewed in the scene
-`Examples/006_Controller_UsingADoor`. Which simulates using
-a door object to open and close it. It also has a cube on the floor
-that can be grabbed to show how interactable objects can be usable
-or grabbable.
+`SteamVR_Unity_Toolkit/Examples/006_Controller_UsingADoor`. Which
+simulates using a door object to open and close it. It also has a cube
+on the floor that can be grabbed to show how interactable objects can
+be usable or grabbable.
 
 Another example can be viewed in the scene
-`Examples/008_Controller_UsingAGrabbedObject` which shows that objects
-can be grabbed with one button and used with another (e.g. firing a
-gun).
+`SteamVR_Unity_Toolkit/Examples/008_Controller_UsingAGrabbedObject`
+which shows that objects can be grabbed with one button and used with
+another (e.g. firing a gun).
 
-#### Abstract Classes
+#### Auto Grabbing Interactable Objects (VRTK_ObjectAutoGrab)
+
+It is possible to automatically grab an Interactable Object to a
+specific controller by applying the Object Auto Grab script to
+the controller that the object should be grabbed by default.
+
+The Object Auto Grab script is attached to a Controller object
+within the `[CameraRig]` prefab and the Controller object
+requires the `VRTK_InteractGrab` script to be attached.
+
+The following script parameters are available:
+
+  * **Object To Grab:** A game object (either within the scene or a
+  prefab) that will be grabbed by the controller on game start.
+  * **Clone Grabbed Object:** If this is checked then the Object To
+  Grab will be cloned into a new object and attached to the controller
+  leaving the existing object in the scene. This is required if the
+  same object is to be grabbed to both controllers as a single object
+  cannot be grabbed by different controllers at the same time. It is
+  also required to clone a grabbed object if it is a prefab as it
+  needs to exist within the scene to be grabbed.
+
+An example can be viewed in the scene
+`SteamVR_Unity_Toolkit/Examples/026_Controller_ForceHoldObject`. Which
+automatically grabs a sword to each controller and also prevents the
+swords from being dropped so they are permanently attached to the
+user's controllers.
+
+#### Abstract Classes (Abstractions/)
 
 To allow for reusablity and object consistency, a collection of
 abstract classes are provided which can be used to extend into a
@@ -999,10 +1052,11 @@ This directory contains Unity3d scenes that demonstrate the scripts
 and prefabs being used in the game world to create desired
 functionality.
 
-There is also a `/Scripts` directory within the `/Examples` directory
-that contains helper scripts utilised by the example scenes to
-highlight certain functionality (such as event listeners). These
-example scripts are not required for real world usage.
+There is also a `/Resources/Scripts` directory within the
+`SteamVR_Unity_Toolkit/Examples` directory that contains helper scripts
+utilised by the example scenes to highlight certain functionality
+(such as event listeners). These example scripts are not required for
+real world usage.
 
 The current examples are:
 
@@ -1101,10 +1155,13 @@ The current examples are:
 
   * **014_Controller_SnappingObjectsOnGrab:** A scene with a selection
   of objects that demonstrate the different snap to controller
-  mechanics. The two green guns, green lightsaber and sword all
-  utilise the `Rotation Snap` which orientates the object into a
-  specific given rotation to ensure the object feels like it's been
-  held naturally in the hand. The red gun utilises the `Simple Snap`
+  mechanics. The two green guns and sword utilise the `Rotation Snap`
+  which orientates the object into a specific given rotation to ensure
+  the object feels like it's been held naturally in the hand. The green
+  lightsaber utilises the `Handle Snap` which uses an empty game object
+  as a child of the interactable object as the orientation point at
+  grab, so the rotation and position of the object matches that of the
+  given `Snap Handle`. The red gun utilises the `Simple Snap`
   which does not affect the object's rotation but positions the centre
   of the object to the snap point on the controller. The red/green gun
   utilises the `Precision Snap` which does not affect the rotation or
@@ -1204,6 +1261,11 @@ The current examples are:
   them. The `ExcludeTeleport` script has no methods and is just used
   as a placeholder.
    * [View Example Tour on Youtube](https://www.youtube.com/watch?v=hCZEaXpeoIY)
+
+  * **026_Controller_ForceHoldObject:** A scene that shows how to grab
+  an object on game start and prevent the user from dropping that
+  object. The scene auto grabs two swords to each of the controllers
+  and it's not possible to drop either of the swords.
 
 ## Contributing
 

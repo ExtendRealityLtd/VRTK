@@ -21,12 +21,12 @@ public class VRTK_InteractGrab : MonoBehaviour
     public bool hideControllerOnGrab = false;
     public float hideControllerDelay = 0f;
     public float grabPrecognition = 0f;
+    public float throwMultiplier = 1f;
     public bool createRigidBodyWhenNotTouching = false;
 
     public event ObjectInteractEventHandler ControllerGrabInteractableObject;
     public event ObjectInteractEventHandler ControllerUngrabInteractableObject;
 
-    private GameObject controllerRigidBody;
     private Joint controllerAttachJoint;
     private GameObject grabbedObject = null;
 
@@ -37,7 +37,6 @@ public class VRTK_InteractGrab : MonoBehaviour
     private int grabEnabledState = 0;
     private float grabPrecognitionTimer = 0f;
 
-    private Vector3 controllerRigidBodyPosition = new Vector3(0f, -0.04f, 0f);
     private Transform lastParentController;
 
     public virtual void OnControllerGrabInteractableObject(ObjectInteractEventArgs e)
@@ -66,7 +65,7 @@ public class VRTK_InteractGrab : MonoBehaviour
 
     public void AttemptGrab()
     {
-        GrabInteractedObject();
+        AttemptGrabObject();
     }
 
     public GameObject GetGrabbedObject()
@@ -109,34 +108,6 @@ public class VRTK_InteractGrab : MonoBehaviour
 
         GetComponent<VRTK_ControllerEvents>().AliasGrabOn += new ControllerClickedEventHandler(DoGrabObject);
         GetComponent<VRTK_ControllerEvents>().AliasGrabOff += new ControllerClickedEventHandler(DoReleaseObject);
-
-        CreateRigidBodyPoint();
-    }
-
-    private void CreateRigidBodyPoint()
-    {
-        controllerRigidBody = new GameObject(string.Format("[{0}]_RigidBody_Holder", this.gameObject.name));
-        controllerRigidBody.transform.parent = this.transform;
-
-        SphereCollider sc = controllerRigidBody.AddComponent<SphereCollider>();
-        Rigidbody rb = controllerRigidBody.AddComponent<Rigidbody>();
-
-        sc.radius = 0.35f;
-        sc.center = new Vector3(0f, 0f, 0f);
-
-        controllerRigidBody.transform.localPosition = controllerRigidBodyPosition;
-        controllerRigidBody.transform.localScale = new Vector3(0.15f, 0.15f, 0.15f);
-
-        rb.useGravity = false;
-        rb.mass = 100f;
-        rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
-        ToggleRigidBody(false);
-    }
-
-    private void ToggleRigidBody(bool state)
-    {
-        state = (!createRigidBodyWhenNotTouching ? false : state);
-        controllerRigidBody.GetComponent<Rigidbody>().detectCollisions = state;
     }
 
     private bool IsObjectGrabbable(GameObject obj)
@@ -166,6 +137,16 @@ public class VRTK_InteractGrab : MonoBehaviour
         if (grabType != VRTK_InteractableObject.GrabSnapType.Precision_Snap)
         {
             obj.transform.position = controllerAttachPoint.transform.position + obj.GetComponent<VRTK_InteractableObject>().snapToPosition;
+        }
+
+        if (grabType == VRTK_InteractableObject.GrabSnapType.Handle_Snap && obj.GetComponent<VRTK_InteractableObject>().snapHandle != null)
+        {
+            // Identity Controller Rotation
+            this.transform.eulerAngles = new Vector3(0f, 270f, 0f);
+            obj.transform.eulerAngles = obj.GetComponent<VRTK_InteractableObject>().snapHandle.transform.localEulerAngles;
+
+            Vector3 snapHandleDelta = obj.GetComponent<VRTK_InteractableObject>().snapHandle.transform.position - obj.transform.position;
+            obj.transform.position = controllerAttachPoint.transform.position - snapHandleDelta;
         }
 
         if (obj.GetComponent<VRTK_InteractableObject>().grabAttachMechanic == VRTK_InteractableObject.GrabAttachType.Child_Of_Controller)
@@ -239,18 +220,18 @@ public class VRTK_InteractGrab : MonoBehaviour
         return rigidbody;
     }
 
-    private void ThrowReleasedObject(Rigidbody rb, uint controllerIndex)
+    private void ThrowReleasedObject(Rigidbody rb, uint controllerIndex, float objectThrowMultiplier)
     {
         var origin = trackedController.origin ? trackedController.origin : trackedController.transform.parent;
         var device = SteamVR_Controller.Input((int)controllerIndex);
         if (origin != null)
         {
-            rb.velocity = origin.TransformVector(device.velocity);
-            rb.angularVelocity = origin.TransformVector(device.angularVelocity);
+            rb.velocity = origin.TransformDirection(device.velocity) * (throwMultiplier * objectThrowMultiplier);
+            rb.angularVelocity = origin.TransformDirection(device.angularVelocity);
         }
         else
         {
-            rb.velocity = device.velocity;
+            rb.velocity = device.velocity * (throwMultiplier * objectThrowMultiplier);
             rb.angularVelocity = device.angularVelocity;
         }
         rb.maxAngularVelocity = rb.angularVelocity.magnitude;
@@ -303,7 +284,7 @@ public class VRTK_InteractGrab : MonoBehaviour
             Rigidbody releasedObjectRigidBody = ReleaseGrabbedObjectFromController(withThrow);
             if (withThrow)
             {
-                ThrowReleasedObject(releasedObjectRigidBody, controllerIndex);
+                ThrowReleasedObject(releasedObjectRigidBody, controllerIndex, grabbedObject.GetComponent<VRTK_InteractableObject>().throwMultiplier);
             }
         }
         InitUngrabbedObject();
@@ -366,13 +347,21 @@ public class VRTK_InteractGrab : MonoBehaviour
         } else
         {
             grabPrecognitionTimer = grabPrecognition;
-            ToggleRigidBody(true);
+            if (createRigidBodyWhenNotTouching)
+            {
+                interactTouch.ToggleControllerRigidBody(true);
+            }
         }
+    }
+
+    private bool CanRelease()
+    {
+        return (grabbedObject && grabbedObject.GetComponent<VRTK_InteractableObject>().isDroppable);
     }
 
     private void AttemptReleaseObject(uint controllerIndex)
     {
-        if (IsObjectHoldOnGrab(grabbedObject) || grabEnabledState >= 2)
+        if (CanRelease() && (IsObjectHoldOnGrab(grabbedObject) || grabEnabledState >= 2))
         {
             if (grabbedObject.GetComponent<VRTK_InteractableObject>().AttachIsTrackObject())
             {
@@ -383,7 +372,7 @@ public class VRTK_InteractGrab : MonoBehaviour
                 ReleaseObject(controllerIndex, true);
             }
         }
-        ToggleRigidBody(false);
+        interactTouch.ToggleControllerRigidBody(false);
     }
 
     private void DoGrabObject(object sender, ControllerClickedEventArgs e)
@@ -398,7 +387,6 @@ public class VRTK_InteractGrab : MonoBehaviour
 
     private void Update()
     {
-        controllerRigidBody.transform.localPosition = controllerRigidBodyPosition;
         if (grabPrecognitionTimer > 0)
         {
             grabPrecognitionTimer--;

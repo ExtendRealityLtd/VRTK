@@ -27,7 +27,8 @@ public class VRTK_InteractableObject : MonoBehaviour
     {
         Simple_Snap,
         Rotation_Snap,
-        Precision_Snap
+        Precision_Snap,
+        Handle_Snap
     }
 
     public enum GrabAttachType
@@ -44,17 +45,20 @@ public class VRTK_InteractableObject : MonoBehaviour
 
     [Header("Grab Interactions", order = 2)]
     public bool isGrabbable = false;
+    public bool isDroppable = true;
     public bool holdButtonToGrab = true;
     public bool pauseCollisionsOnGrab = true;
     public GrabSnapType grabSnapType = GrabSnapType.Simple_Snap;
     public Vector3 snapToRotation = Vector3.zero;
     public Vector3 snapToPosition = Vector3.zero;
+    public Transform snapHandle;
 
     [Header("Grab Mechanics", order = 3)]
     public GrabAttachType grabAttachMechanic = GrabAttachType.Fixed_Joint;
     public float detachThreshold = 500f;
     public float springJointStrength = 500f;
     public float springJointDamper = 50f;
+    public float throwMultiplier = 1f;
 
     [Header("Use Interactions", order = 4)]
     public bool isUsable = false;
@@ -74,7 +78,7 @@ public class VRTK_InteractableObject : MonoBehaviour
     private bool isTouched = false;
     private bool isUsing = false;
     private int usingState = 0;
-    private Color[] originalObjectColours = null;
+    private Dictionary<string, Color> originalObjectColours;
 
     private Transform trackPoint;
     private bool customTrackPoint = false;
@@ -299,47 +303,40 @@ public class VRTK_InteractableObject : MonoBehaviour
         return (GetComponents<Renderer>().Length > 0 ? GetComponents<Renderer>() : GetComponentsInChildren<Renderer>());
     }
 
-    private Color[] StoreOriginalColors()
+    private Dictionary<string, Color> StoreOriginalColors()
     {
-        Renderer[] rendererArray = GetRendererArray();
-        int length = rendererArray.Length;
-        Color[] colors = new Color[length];
-
-        for (int i = 0; i < length; i++)
+        Dictionary<string, Color> colors = new Dictionary<string, Color>();
+        foreach (Renderer renderer in GetRendererArray())
         {
-            var renderer = rendererArray[i];
             if (renderer.material.HasProperty("_Color"))
             {
-                colors[i] = renderer.material.color;
+                colors[renderer.gameObject.name] = renderer.material.color;
             }
         }
         return colors;
     }
 
-    private Color[] BuildHighlightColorArray(Color color)
+    private Dictionary<string, Color> BuildHighlightColorArray(Color color)
     {
-        Renderer[] rendererArray = GetRendererArray();
-        int length = rendererArray.Length;
-        Color[] colors = new Color[length];
-
-        for (int i = 0; i < length; i++)
+        Dictionary<string, Color> colors = new Dictionary<string, Color>();
+        foreach (Renderer renderer in GetRendererArray())
         {
-            colors[i] = color;
+            if (renderer.material.HasProperty("_Color"))
+            {
+                colors[renderer.gameObject.name] = color;
+            }
         }
         return colors;
     }
 
-    private void ChangeColor(Color[] colors)
+    private void ChangeColor(Dictionary<string, Color> colors)
     {
-        Renderer[] rendererArray = GetRendererArray();
-        int i = 0;
-        foreach (Renderer renderer in rendererArray)
+        foreach (Renderer renderer in GetRendererArray())
         {
-            if (renderer.material.HasProperty("_Color"))
+            if (renderer.material.HasProperty("_Color") && colors.ContainsKey(renderer.gameObject.name))
             {
-                renderer.material.color = colors[i];
+                renderer.material.color = colors[renderer.gameObject.name];
             }
-            i++;
         }
     }
 

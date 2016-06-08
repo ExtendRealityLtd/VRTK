@@ -11,7 +11,7 @@ public class Breakable_Cube : MonoBehaviour {
 
     void OnCollisionEnter(Collision collision)
     {
-        if((collision.collider.name == "Sword" && collision.collider.GetComponent<Sword>().CollisionForce() > breakForce) || collision.collider.name.Contains("Arrow"))
+        if((collision.collider.name.Contains("Sword") && collision.collider.GetComponent<Sword>().CollisionForce() > breakForce) || collision.collider.name.Contains("Arrow"))
         {
             ExplodeCube();
         }
