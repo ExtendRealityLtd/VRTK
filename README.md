@@ -1,25 +1,18 @@
-# SteamVR Unity Toolkit
+# SteamVR Unity Toolkit - [![Slack](https://vrtk-slack-invite.herokuapp.com/badge.svg)](https://vrtk-slack-invite.herokuapp.com) [![Subreddit](https://img.shields.io/badge/subreddit-discussions-red.svg?style=flat-square)](https://reddit.com) [![Trello](https://img.shields.io/badge/trello-work%20board-blue.svg?style=flat-square)](https://trello.com/b/sU0vRWUz/steamvr-unity-toolkit)
 
 A collection of useful scripts and prefabs for building SteamVR titles
 in Unity 5.
 
----
-
-To all those lovely people who want to give donations, instead of
-donating, consider supporting me by buying my latest game on
-Steam - `Holodaze` for HTC Vive. At least this way, I make a bit of
-money and you get something to play!
-
-[View Holodaze on the Steam Store](http://store.steampowered.com/app/475520)
-
----
-
 **This Toolkit requires the [SteamVR Plugin]
 from the Unity Asset Store to be imported into your Unity project.**
 
-There is a [public Trello board available here](https://trello.com/b/sU0vRWUz/steamvr-unity-toolkit)
-to view what is currently being worked on and to vote on planned
-features.
+  > _To all those lovely people who want to give donations, instead of_
+  > _donating, consider supporting me by buying my latest game on_
+  > _Steam - `Holodaze` for HTC Vive. At least this way, I make a bit of_
+  > _money and you get something to play!_
+  > 
+  > **[Buy Holodaze from the Steam Store](http://store.steampowered.com/app/475520)**
+
 
 ## Quick Start
 
@@ -268,6 +261,11 @@ the beam.
 
 The following script parameters are available:
 
+  * **Enable Teleport:** If this is checked then the teleport flag is
+  set to true in the Destination Set event so teleport scripts will
+  know whether to action the new destination. This allows controller
+  beams to be enabled on a controller but never trigger a teleport
+  (if this option is unchecked).
   * **Pointer Hit Color:** The colour of the beam when it is colliding
   with a valid target. It can be set to a different colour for each
   controller.
@@ -285,11 +283,6 @@ The following script parameters are available:
   pointer colour will change to the `Pointer Miss Color` and the
   `WorldPointerDestinationSet` event will not be triggered, which will
   prevent teleporting into areas where the play area will collide.
-  * **Enable Teleport:** If this is checked then the teleport flag is
-  set to true in the Destination Set event so teleport scripts will
-  know whether to action the new destination. This allows controller
-  beams to be enabled on a controller but never trigger a teleport
-  (if this option is unchecked).
   * **Beam Always On:** If this is checked the the pointer beam is
   always visible but the Destination Set event is still only emitted
   when the assigned button is pressed.
@@ -336,6 +329,11 @@ the beam.
 
 The following script parameters are available:
 
+  * **Enable Teleport:** If this is checked then the teleport flag is
+  set to true in the Destination Set event so teleport scripts will
+  know whether to action the new destination. This allows controller
+  beams to be enabled on a controller but never trigger a teleport
+  (if this option is unchecked).
   * **Pointer Hit Color:** The colour of the beam when it is colliding
   with a valid target. It can be set to a different colour for each
   controller.
@@ -353,11 +351,6 @@ The following script parameters are available:
   pointer colour will change to the `Pointer Miss Color` and the
   `WorldPointerDestinationSet` event will not be triggered, which will
   prevent teleporting into areas where the play area will collide.
-  * **Enable Teleport:** If this is checked then the teleport flag is
-  set to true in the Destination Set event so teleport scripts will
-  know whether to action the new destination. This allows controller
-  beams to be enabled on a controller but never trigger a teleport
-  (if this option is unchecked).
   * **Beam Always On:** If this is checked the the pointer beam is
   always visible but the Destination Set event is still only emitted
   when the assigned button is pressed.
@@ -641,6 +634,13 @@ The following script parameters are available:
 
 ######Grab Interactions
   * **Is Grabbable:** Determines if the object can be grabbed
+  * **Is Droppable:** Determines if the object can be dropped by the
+  controller grab button being used. If this is unchecked then it's
+  not possible to drop the item once it's picked up using the
+  controller button. It is still possible for the item to be dropped
+  if the Grab Attach Mechanic is a joint and too much force is applied
+  to the object and the joint is broken. To prevent this it's better
+  to use the Child Of Controller mechanic.
   * **Hold Button To Grab:** If this is checked then the grab button
   on the controller needs to be continually held down to keep grabbing.
   If this is unchecked the grab button toggles the grab action with
@@ -658,10 +658,20 @@ The following script parameters are available:
    * `Precision_Snap` does not snap the object's position to the
    controller and picks the object up at the point the controller is
    touching the object (like a real life hand picking something up).
+   * `Handle_Snap` allows for an empty GameObject as a child of the
+   interactable object to be used as the reference snap point. On grab,
+   this empty GameObject rotation and position is used to orientate
+   the grabbed interactable object to the controller.
   * **Snap To Rotation:** A Vector3 of EulerAngles that determines the
   rotation of the object in relation to the controller on snap.
   This is useful for picking up guns or swords where the relative
   rotation to the controller is important for ease of use.
+  * **Snap To Position:** A Vector3 that determines the position of
+  the object in relation to the controller on snap.
+  * **Snap Handle:** A Transform provided as an empty game object which
+  must be the child of the item being grabbed and serves as an
+  orientation point to rotate and position the grabbed item in relation
+  to the grabbing controller.
 
 ######Grab Mechanics
   * **Grab Attach Type:** This determines how the grabbed item will
@@ -698,6 +708,11 @@ The following script parameters are available:
   when using a Spring Joint grab mechanic. A higher number here will
   reduce the oscillation effect when moving jointed Interactable
   Objects.
+  * **Throw Multiplier:** An amount to multiply the velocity of the
+  given object when it is thrown. This can also be used in
+  conjunction with the Interact Grab Throw Multiplier to have
+  certain objects be thrown even further than normal (or thrown
+  a shorter distance if a number below 1 is entered).
 
 ######Use Interactions
   * **Is Usable:** Determines if the object can be used
@@ -836,6 +851,9 @@ The following script parameters are available:
   grab button can be pressed before the controller touches the object
   and when the collision takes place, if the grab button is still being
   held down then the grab action will be successful.
+  * **Throw Multiplier:** An amount to multiply the velocity of any
+  objects being thrown. This can be useful when scaling up the
+  CameraRig to simulate being able to throw items further.
   * **Create Rigid Body When Not Touching:** If this is checked and the
   controller is not touching an Interactable Object when the grab
   button is pressed then a rigid body is added to the controller to
@@ -922,6 +940,34 @@ Another example can be viewed in the scene
 which shows that objects can be grabbed with one button and used with
 another (e.g. firing a gun).
 
+#### Auto Grabbing Interactable Objects (VRTK_ObjectAutoGrab)
+
+It is possible to automatically grab an Interactable Object to a
+specific controller by applying the Object Auto Grab script to
+the controller that the object should be grabbed by default.
+
+The Object Auto Grab script is attached to a Controller object
+within the `[CameraRig]` prefab and the Controller object
+requires the `VRTK_InteractGrab` script to be attached.
+
+The following script parameters are available:
+
+  * **Object To Grab:** A game object (either within the scene or a
+  prefab) that will be grabbed by the controller on game start.
+  * **Clone Grabbed Object:** If this is checked then the Object To
+  Grab will be cloned into a new object and attached to the controller
+  leaving the existing object in the scene. This is required if the
+  same object is to be grabbed to both controllers as a single object
+  cannot be grabbed by different controllers at the same time. It is
+  also required to clone a grabbed object if it is a prefab as it
+  needs to exist within the scene to be grabbed.
+
+An example can be viewed in the scene
+`SteamVR_Unity_Toolkit/Examples/026_Controller_ForceHoldObject`. Which
+automatically grabs a sword to each controller and also prevents the
+swords from being dropped so they are permanently attached to the
+user's controllers.
+
 #### Abstract Classes (Abstractions/)
 
 To allow for reusablity and object consistency, a collection of
@@ -931,11 +977,49 @@ different scripts without needing to duplicate code.
 
 The current abstract classes are available:
 
+##### VRTK_DestinationMarker
+
+This abstract class provides the ability to emit events of destination
+markers within the game world. It can be useful for tagging locations
+for specific purposes such as teleporting.
+
+It is utilised by the `VRTK_WorldPointer` for dealing with pointer
+events when the pointer cursor touches areas within the game world.
+
+The following script parameters are available:
+
+  * **Enable Teleport:** If this is checked then the teleport flag is
+  set to true in the Destination Set event so teleport scripts will
+  know whether to action the new destination.
+
+The following events are emitted:
+
+  * **DestinationMarkerEnter:** When a collision with another game
+  object has occured.
+  * **DestinationMarkerExit:** When the collision with the other
+  game object finishes.
+  * **DestinationMarkerSet:** When the destination marker is
+  active in the scene to determine the last destination position
+  (useful for selecting and teleporting).
+
+The event payload that is emitted contains:
+
+  * **distance:** The distance between the origin and the collided
+  destination.
+  * **target:** The Transform of the collided destination object.
+  * **destinationPosition:** The world position of the destination
+  marker.
+  * **enableTeleport:** Whether the destination set event should
+  trigger teleport
+  * **controllerIndex:** The optional index of the controller emitting
+  the beam
+
 ##### VRTK_WorldPointer
 
 This abstract class provides any game pointer the ability to know the
-the state of the implemented pointer and emit an event to other scripts
-in the game world.
+the state of the implemented pointer. It extends the
+`VRTK_DestinationMarker` to allow for destination events to be emitted
+when the pointer cursor collides with objects.
 
 The World Pointer also provides a play area cursor to be displayed for
 all cursors that utilise this class. The play area cursor is a
@@ -951,6 +1035,11 @@ handling play area collisions is not enabled when using terrains.
 
 The following script parameters are available:
 
+  * **Enable Teleport:** If this is checked then the teleport flag is
+  set to true in the Destination Set event so teleport scripts will
+  know whether to action the new destination. This allows controller
+  beams to be enabled on a controller but never trigger a teleport
+  (if this option is unchecked).
   * **Pointer Hit Color:** The colour of the beam when it is colliding
   with a valid target. It can be set to a different colour for each
   controller.
@@ -968,37 +1057,12 @@ The following script parameters are available:
   pointer colour will change to the `Pointer Miss Color` and the
   `WorldPointerDestinationSet` event will not be triggered, which will
   prevent teleporting into areas where the play area will collide.
-  * **Enable Teleport:** If this is checked then the teleport flag is
-  set to true in the Destination Set event so teleport scripts will
-  know whether to action the new destination. This allows controller
-  beams to be enabled on a controller but never trigger a teleport
-  (if this option is unchecked).
   * **Beam Always On:** If this is checked the the pointer beam is
   always visible but the Destination Set event is still only emitted
   when the assigned button is pressed.
   * **Activate Delay:** The time in seconds (based on a 60 frame per
   second update tick) to delay the pointer beam being able to be
   active again. Useful for preventing constant beams for teleporting.
-
-The following events are emitted:
-
-  * **WorldPointerIn:** When the pointer collides with another
-  game object.
-  * **WorldPointerOut:** When the pointer stops colliding with
-  the game object.
-  * **WorldPointerDestinationSet:** When the pointer is no longer
-  active in the scene to determine the last destination position of
-  the pointer end (useful for selecting and teleporting). This event
-  is not emitted if the pointer is colliding with an interactable
-  object that has the `Pointer Activates Use Action` set to true.
-
-The event payload that is emitted contains:
-
-  * **controllerIndex:** The index of the controller emitting the beam
-  * **distance:** The distance the target is from the controller
-  * **target:** The Transform of the object that the pointer is touching
-  * **tipPosition:** The world position of the end of the pointer
-  * **enableTeleport:** Whether the controller should trigger teleport
 
 ### Examples
 
@@ -1109,10 +1173,13 @@ The current examples are:
 
   * **014_Controller_SnappingObjectsOnGrab:** A scene with a selection
   of objects that demonstrate the different snap to controller
-  mechanics. The two green guns, green lightsaber and sword all
-  utilise the `Rotation Snap` which orientates the object into a
-  specific given rotation to ensure the object feels like it's been
-  held naturally in the hand. The red gun utilises the `Simple Snap`
+  mechanics. The two green guns and sword utilise the `Rotation Snap`
+  which orientates the object into a specific given rotation to ensure
+  the object feels like it's been held naturally in the hand. The green
+  lightsaber utilises the `Handle Snap` which uses an empty game object
+  as a child of the interactable object as the orientation point at
+  grab, so the rotation and position of the object matches that of the
+  given `Snap Handle`. The red gun utilises the `Simple Snap`
   which does not affect the object's rotation but positions the centre
   of the object to the snap point on the controller. The red/green gun
   utilises the `Precision Snap` which does not affect the rotation or
@@ -1212,6 +1279,17 @@ The current examples are:
   them. The `ExcludeTeleport` script has no methods and is just used
   as a placeholder.
    * [View Example Tour on Youtube](https://www.youtube.com/watch?v=hCZEaXpeoIY)
+
+  * **026_Controller_ForceHoldObject:** A scene that shows how to grab
+  an object on game start and prevent the user from dropping that
+  object. The scene auto grabs two swords to each of the controllers
+  and it's not possible to drop either of the swords.
+
+  * **027_CameraRig_TeleportByModelVillage:** A scene that demonstrates
+  how to teleport to different locations without needing a world
+  pointer and using the Destination Events abstract class on objects
+  that represent a mini map of the game world. Touching and using an
+  object on the map teleports the user to the specified location.
 
 ## Contributing
 
