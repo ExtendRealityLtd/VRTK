@@ -1,4 +1,4 @@
-# SteamVR Unity Toolkit
+# SteamVR Unity Toolkit - [![Slack](https://vrtk-slack-invite.herokuapp.com/badge.svg)](https://vrtk-slack-invite.herokuapp.com) [![Subreddit](https://img.shields.io/badge/subreddit-discussions-red.svg?style=flat-square)](https://reddit.com)
 
 A collection of useful scripts and prefabs for building SteamVR titles
 in Unity 5.
