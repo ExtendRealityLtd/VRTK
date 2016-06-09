@@ -12,55 +12,58 @@
 // So all credit to Peter Koch for his work. Twitter: @peterept
 //
 //====================================================================================
+namespace VRTK
+{
+    using UnityEngine;
+    using UnityEngine.UI;
 
-using UnityEngine;
-using UnityEngine.UI;
-
-public class FramsPerSecondViewer : MonoBehaviour {
-    public bool displayFPS = true;
-    public int targetFPS = 90;
-    public int fontSize = 32;
-    public Vector3 position = Vector3.zero;
-    public Color goodColor = Color.green;
-    public Color warnColor = Color.yellow;
-    public Color badColor = Color.red;
-
-    private const float updateInterval = 0.5f;
-    private int framesCount;
-    private float framesTime;
-    private Text text;
-
-    void Start()
+    public class FramsPerSecondViewer : MonoBehaviour
     {
-        text = this.GetComponent<Text>();
-        text.fontSize = fontSize;
-        text.transform.localPosition = position;
-    }
+        public bool displayFPS = true;
+        public int targetFPS = 90;
+        public int fontSize = 32;
+        public Vector3 position = Vector3.zero;
+        public Color goodColor = Color.green;
+        public Color warnColor = Color.yellow;
+        public Color badColor = Color.red;
 
-    void Update()
-    {
-        framesCount++;
-        framesTime += Time.unscaledDeltaTime;
+        private const float updateInterval = 0.5f;
+        private int framesCount;
+        private float framesTime;
+        private Text text;
 
-        if (framesTime > updateInterval)
+        void Start()
         {
-            if (text != null)
+            text = this.GetComponent<Text>();
+            text.fontSize = fontSize;
+            text.transform.localPosition = position;
+        }
+
+        void Update()
+        {
+            framesCount++;
+            framesTime += Time.unscaledDeltaTime;
+
+            if (framesTime > updateInterval)
             {
-                if (displayFPS)
+                if (text != null)
                 {
-                    float fps = framesCount / framesTime;
-                    text.text = System.String.Format("{0:F2} FPS", fps);
-                    text.color = (fps > (targetFPS - 5) ? goodColor :
-                                 (fps > (targetFPS - 30) ? warnColor :
-                                  badColor));
+                    if (displayFPS)
+                    {
+                        float fps = framesCount / framesTime;
+                        text.text = System.String.Format("{0:F2} FPS", fps);
+                        text.color = (fps > (targetFPS - 5) ? goodColor :
+                                     (fps > (targetFPS - 30) ? warnColor :
+                                      badColor));
+                    }
+                    else
+                    {
+                        text.text = "";
+                    }
                 }
-                else
-                {
-                    text.text = "";
-                }
+                framesCount = 0;
+                framesTime = 0;
             }
-            framesCount = 0;
-            framesTime = 0;
         }
     }
 }

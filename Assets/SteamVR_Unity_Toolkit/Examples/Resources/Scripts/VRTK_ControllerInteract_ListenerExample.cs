@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using VRTK;
 
 public class VRTK_ControllerInteract_ListenerExample : MonoBehaviour {
 

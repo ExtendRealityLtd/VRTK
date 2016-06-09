@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using VRTK;
 
 public class LightSaber : VRTK_InteractableObject
 {
@@ -9,11 +10,17 @@ public class LightSaber : VRTK_InteractableObject
     private float beamExtendSpeed = 0;
 
     private GameObject blade;
+    private Color activeColor;
+    private Color targetColor;
+    private Color[] bladePhaseColors;
 
     public override void StartUsing(GameObject usingObject)
     {
         base.StartUsing(usingObject);
         beamExtendSpeed = 5f;
+        bladePhaseColors = new Color[2] { Color.blue, Color.cyan };
+        activeColor = bladePhaseColors[0];
+        targetColor = bladePhaseColors[1];
     }
 
     public override void StopUsing(GameObject usingObject)
@@ -30,15 +37,32 @@ public class LightSaber : VRTK_InteractableObject
         SetBeamSize();
     }
 
+    protected override void Update()
+    {
+        currentBeamSize = Mathf.Clamp(blade.transform.localScale.y + (beamExtendSpeed * Time.deltaTime), beamLimits.x, beamLimits.y);
+        SetBeamSize();
+        PulseBeam();
+    }
+
     private void SetBeamSize()
     {
         blade.transform.localScale = new Vector3(1f, currentBeamSize, 1f);
         beamActive = (currentBeamSize >= beamLimits.y ? true : false);
     }
 
-    protected override void Update()
+    private void PulseBeam()
     {
-        currentBeamSize = Mathf.Clamp(blade.transform.localScale.y + (beamExtendSpeed * Time.deltaTime), beamLimits.x, beamLimits.y);
-        SetBeamSize();
+        if (beamActive)
+        {
+            Color bladeColor = Color.Lerp(activeColor, targetColor, Mathf.PingPong(Time.time, 1));
+            blade.transform.FindChild("Beam").GetComponent<MeshRenderer>().material.color = bladeColor;
+
+            if (bladeColor == targetColor)
+            {
+                var previouslyActiveColor = activeColor;
+                activeColor = targetColor;
+                targetColor = previouslyActiveColor;
+            }
+        }
     }
 }

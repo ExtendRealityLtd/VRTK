@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using VRTK;
 
 public class Sphere_Spawner : MonoBehaviour {
     private GameObject spawnMe;
@@ -12,18 +13,18 @@ public class Sphere_Spawner : MonoBehaviour {
             return;
         }
 
-        GetComponent<VRTK_ControllerEvents>().TriggerClicked += new ControllerClickedEventHandler(DoTriggerClicked);
-        GetComponent<VRTK_ControllerEvents>().TouchpadClicked += new ControllerClickedEventHandler(DoTouchpadClicked);
+        GetComponent<VRTK_ControllerEvents>().TriggerPressed += new ControllerInteractionEventHandler(DoTriggerPressed);
+        GetComponent<VRTK_ControllerEvents>().TouchpadPressed += new ControllerInteractionEventHandler(DoTouchpadPressed);
         spawnMe = GameObject.Find("SpawnMe");
         position = spawnMe.transform.position;
     }
 
-    void DoTriggerClicked(object sender, ControllerClickedEventArgs e)
+    void DoTriggerPressed(object sender, ControllerInteractionEventArgs e)
     {
         Instantiate(spawnMe, position, Quaternion.identity);
     }
 
-    void DoTouchpadClicked(object sender, ControllerClickedEventArgs e)
+    void DoTouchpadPressed(object sender, ControllerInteractionEventArgs e)
     {
         for (int i = 0; i < 20; i++)
         {
