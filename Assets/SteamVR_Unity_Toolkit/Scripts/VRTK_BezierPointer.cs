@@ -117,7 +117,7 @@ namespace VRTK
             projectedBeamDown.gameObject.SetActive(state);
         }
 
-        protected override void DisablePointerBeam(object sender, ControllerClickedEventArgs e)
+        protected override void DisablePointerBeam(object sender, ControllerInteractionEventArgs e)
         {
             base.PointerSet();
             base.DisablePointerBeam(sender, e);

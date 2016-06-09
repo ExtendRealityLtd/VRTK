@@ -13,88 +13,88 @@ public class VRTK_ControllerEvents_ListenerExample : MonoBehaviour {
         }
         
         //Setup controller event listeners
-        GetComponent<VRTK_ControllerEvents>().TriggerClicked += new ControllerClickedEventHandler(DoTriggerClicked);
-        GetComponent<VRTK_ControllerEvents>().TriggerUnclicked += new ControllerClickedEventHandler(DoTriggerUnclicked);
+        GetComponent<VRTK_ControllerEvents>().TriggerPressed += new ControllerInteractionEventHandler(DoTriggerPressed);
+        GetComponent<VRTK_ControllerEvents>().TriggerReleased += new ControllerInteractionEventHandler(DoTriggerReleased);
 
-        GetComponent<VRTK_ControllerEvents>().TriggerAxisChanged += new ControllerClickedEventHandler(DoTriggerAxisChanged);
+        GetComponent<VRTK_ControllerEvents>().TriggerAxisChanged += new ControllerInteractionEventHandler(DoTriggerAxisChanged);
 
-        GetComponent<VRTK_ControllerEvents>().ApplicationMenuClicked += new ControllerClickedEventHandler(DoApplicationMenuClicked);
-        GetComponent<VRTK_ControllerEvents>().ApplicationMenuUnclicked += new ControllerClickedEventHandler(DoApplicationMenuUnclicked);
+        GetComponent<VRTK_ControllerEvents>().ApplicationMenuPressed += new ControllerInteractionEventHandler(DoApplicationMenuPressed);
+        GetComponent<VRTK_ControllerEvents>().ApplicationMenuReleased += new ControllerInteractionEventHandler(DoApplicationMenuReleased);
 
-        GetComponent<VRTK_ControllerEvents>().GripClicked += new ControllerClickedEventHandler(DoGripClicked);
-        GetComponent<VRTK_ControllerEvents>().GripUnclicked += new ControllerClickedEventHandler(DoGripUnclicked);
+        GetComponent<VRTK_ControllerEvents>().GripPressed += new ControllerInteractionEventHandler(DoGripPressed);
+        GetComponent<VRTK_ControllerEvents>().GripReleased += new ControllerInteractionEventHandler(DoGripReleased);
 
-        GetComponent<VRTK_ControllerEvents>().TouchpadClicked += new ControllerClickedEventHandler(DoTouchpadClicked);
-        GetComponent<VRTK_ControllerEvents>().TouchpadUnclicked += new ControllerClickedEventHandler(DoTouchpadUnclicked);
+        GetComponent<VRTK_ControllerEvents>().TouchpadPressed += new ControllerInteractionEventHandler(DoTouchpadPressed);
+        GetComponent<VRTK_ControllerEvents>().TouchpadReleased += new ControllerInteractionEventHandler(DoTouchpadReleased);
 
-        GetComponent<VRTK_ControllerEvents>().TouchpadTouched += new ControllerClickedEventHandler(DoTouchpadTouched);
-        GetComponent<VRTK_ControllerEvents>().TouchpadUntouched += new ControllerClickedEventHandler(DoTouchpadUntouched);
+        GetComponent<VRTK_ControllerEvents>().TouchpadTouchStart += new ControllerInteractionEventHandler(DoTouchpadTouchStart);
+        GetComponent<VRTK_ControllerEvents>().TouchpadTouchEnd += new ControllerInteractionEventHandler(DoTouchpadTouchEnd);
 
-        GetComponent<VRTK_ControllerEvents>().TouchpadAxisChanged += new ControllerClickedEventHandler(DoTouchpadAxisChanged);
+        GetComponent<VRTK_ControllerEvents>().TouchpadAxisChanged += new ControllerInteractionEventHandler(DoTouchpadAxisChanged);
     }
 
-    void DebugLogger(uint index, string button, string action, ControllerClickedEventArgs e)
+    void DebugLogger(uint index, string button, string action, ControllerInteractionEventArgs e)
     {
         Debug.Log("Controller on index '" + index + "' " + button + " has been " + action 
                 + " with a pressure of " + e.buttonPressure + " / trackpad axis at: " + e.touchpadAxis + " (" + e.touchpadAngle + " degrees)");
     }
 
-    void DoTriggerClicked(object sender, ControllerClickedEventArgs e)
+    void DoTriggerPressed(object sender, ControllerInteractionEventArgs e)
     {
         DebugLogger(e.controllerIndex, "TRIGGER", "pressed down", e);
     }
 
-    void DoTriggerUnclicked(object sender, ControllerClickedEventArgs e)
+    void DoTriggerReleased(object sender, ControllerInteractionEventArgs e)
     {
         DebugLogger(e.controllerIndex, "TRIGGER", "released", e);
     }
 
-    void DoTriggerAxisChanged(object sender, ControllerClickedEventArgs e)
+    void DoTriggerAxisChanged(object sender, ControllerInteractionEventArgs e)
     {
         DebugLogger(e.controllerIndex, "TRIGGER", "axis changed", e);
     }
 
-    void DoApplicationMenuClicked(object sender, ControllerClickedEventArgs e)
+    void DoApplicationMenuPressed(object sender, ControllerInteractionEventArgs e)
     {
         DebugLogger(e.controllerIndex, "APPLICATION MENU", "pressed down", e);
     }
 
-    void DoApplicationMenuUnclicked(object sender, ControllerClickedEventArgs e)
+    void DoApplicationMenuReleased(object sender, ControllerInteractionEventArgs e)
     {
         DebugLogger(e.controllerIndex, "APPLICATION MENU", "released", e);
     }
 
-    void DoGripClicked(object sender, ControllerClickedEventArgs e)
+    void DoGripPressed(object sender, ControllerInteractionEventArgs e)
     {
         DebugLogger(e.controllerIndex, "GRIP", "pressed down", e);
     }
 
-    void DoGripUnclicked(object sender, ControllerClickedEventArgs e)
+    void DoGripReleased(object sender, ControllerInteractionEventArgs e)
     {
         DebugLogger(e.controllerIndex, "GRIP", "released", e);
     }
 
-    void DoTouchpadClicked(object sender, ControllerClickedEventArgs e)
+    void DoTouchpadPressed(object sender, ControllerInteractionEventArgs e)
     {
         DebugLogger(e.controllerIndex, "TOUCHPAD", "pressed down", e);
     }
 
-    void DoTouchpadUnclicked(object sender, ControllerClickedEventArgs e)
+    void DoTouchpadReleased(object sender, ControllerInteractionEventArgs e)
     {
         DebugLogger(e.controllerIndex, "TOUCHPAD", "released", e);
     }
 
-    void DoTouchpadTouched(object sender, ControllerClickedEventArgs e)
+    void DoTouchpadTouchStart(object sender, ControllerInteractionEventArgs e)
     {
         DebugLogger(e.controllerIndex, "TOUCHPAD", "touched", e);
     }
 
-    void DoTouchpadUntouched(object sender, ControllerClickedEventArgs e)
+    void DoTouchpadTouchEnd(object sender, ControllerInteractionEventArgs e)
     {
         DebugLogger(e.controllerIndex, "TOUCHPAD", "untouched", e);
     }
 
-    void DoTouchpadAxisChanged(object sender, ControllerClickedEventArgs e)
+    void DoTouchpadAxisChanged(object sender, ControllerInteractionEventArgs e)
     {
         DebugLogger(e.controllerIndex, "TOUCHPAD", "axis changed", e);
     }

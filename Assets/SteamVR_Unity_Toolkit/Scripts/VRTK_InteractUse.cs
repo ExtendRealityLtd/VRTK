@@ -65,8 +65,8 @@ namespace VRTK
                 return;
             }
 
-            GetComponent<VRTK_ControllerEvents>().AliasUseOn += new ControllerClickedEventHandler(DoStartUseObject);
-            GetComponent<VRTK_ControllerEvents>().AliasUseOff += new ControllerClickedEventHandler(DoStopUseObject);
+            GetComponent<VRTK_ControllerEvents>().AliasUseOn += new ControllerInteractionEventHandler(DoStartUseObject);
+            GetComponent<VRTK_ControllerEvents>().AliasUseOff += new ControllerInteractionEventHandler(DoStopUseObject);
         }
 
         private bool IsObjectUsable(GameObject obj)
@@ -134,7 +134,7 @@ namespace VRTK
             }
         }
 
-        private void DoStartUseObject(object sender, ControllerClickedEventArgs e)
+        private void DoStartUseObject(object sender, ControllerInteractionEventArgs e)
         {
             GameObject touchedObject = interactTouch.GetTouchedObject();
             if (touchedObject != null && interactTouch.IsObjectInteractable(touchedObject))
@@ -147,7 +147,7 @@ namespace VRTK
             }
         }
 
-        private void DoStopUseObject(object sender, ControllerClickedEventArgs e)
+        private void DoStopUseObject(object sender, ControllerInteractionEventArgs e)
         {
             if (IsObjectHoldOnUse(usingObject) || GetObjectUsingState(usingObject) >= 2)
             {

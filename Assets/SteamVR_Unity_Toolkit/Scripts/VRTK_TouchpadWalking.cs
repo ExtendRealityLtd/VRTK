@@ -40,8 +40,8 @@
         private bool leftSubscribed;
         private bool rightSubscribed;
 
-        private ControllerClickedEventHandler touchpadAxisChanged;
-        private ControllerClickedEventHandler touchpadUntouched;
+        private ControllerInteractionEventHandler touchpadAxisChanged;
+        private ControllerInteractionEventHandler touchpadUntouched;
 
         private VRTK_PlayerPresence playerPresence;
 
@@ -56,8 +56,8 @@
                 Debug.LogError("The VRTK_TouchpadWalking script requires the VRTK_PlayerPresence script to be attached to the [CameraRig]");
             }
 
-            touchpadAxisChanged = new ControllerClickedEventHandler(DoTouchpadAxisChanged);
-            touchpadUntouched = new ControllerClickedEventHandler(DoTouchpadUntouched);
+            touchpadAxisChanged = new ControllerInteractionEventHandler(DoTouchpadAxisChanged);
+            touchpadUntouched = new ControllerInteractionEventHandler(DoTouchpadTouchEnd);
 
             controllerManager = this.GetComponent<SteamVR_ControllerManager>();
         }
@@ -72,12 +72,12 @@
             SetControllerListeners(controllerManager.right);
         }
 
-        private void DoTouchpadAxisChanged(object sender, ControllerClickedEventArgs e)
+        private void DoTouchpadAxisChanged(object sender, ControllerInteractionEventArgs e)
         {
             touchAxis = e.touchpadAxis;
         }
 
-        private void DoTouchpadUntouched(object sender, ControllerClickedEventArgs e)
+        private void DoTouchpadTouchEnd(object sender, ControllerInteractionEventArgs e)
         {
             touchAxis = Vector2.zero;
         }
@@ -150,13 +150,13 @@
             if (controllerEvent && toggle && !subscribed)
             {
                 controllerEvent.TouchpadAxisChanged += touchpadAxisChanged;
-                controllerEvent.TouchpadUntouched += touchpadUntouched;
+                controllerEvent.TouchpadTouchEnd += touchpadUntouched;
                 subscribed = true;
             }
             else if (controllerEvent && !toggle && subscribed)
             {
                 controllerEvent.TouchpadAxisChanged -= touchpadAxisChanged;
-                controllerEvent.TouchpadUntouched -= touchpadUntouched;
+                controllerEvent.TouchpadTouchEnd -= touchpadUntouched;
                 touchAxis = Vector2.zero;
                 subscribed = false;
             }

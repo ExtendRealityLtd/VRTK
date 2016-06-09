@@ -9,36 +9,36 @@ public class RC_Car_Controller : MonoBehaviour {
     void Start()
     {
         rcCarScript = rcCar.GetComponent<RC_Car>();
-        GetComponent<VRTK_ControllerEvents>().TriggerAxisChanged += new ControllerClickedEventHandler(DoTriggerAxisChanged);
-        GetComponent<VRTK_ControllerEvents>().TouchpadAxisChanged += new ControllerClickedEventHandler(DoTouchpadAxisChanged);
+        GetComponent<VRTK_ControllerEvents>().TriggerAxisChanged += new ControllerInteractionEventHandler(DoTriggerAxisChanged);
+        GetComponent<VRTK_ControllerEvents>().TouchpadAxisChanged += new ControllerInteractionEventHandler(DoTouchpadAxisChanged);
 
-        GetComponent<VRTK_ControllerEvents>().TriggerUnclicked += new ControllerClickedEventHandler(DoTriggerUnclicked);
-        GetComponent<VRTK_ControllerEvents>().TouchpadUntouched += new ControllerClickedEventHandler(DoTouchpadUntouched);
+        GetComponent<VRTK_ControllerEvents>().TriggerReleased += new ControllerInteractionEventHandler(DoTriggerReleased);
+        GetComponent<VRTK_ControllerEvents>().TouchpadTouchEnd += new ControllerInteractionEventHandler(DoTouchpadTouchEnd);
 
-        GetComponent<VRTK_ControllerEvents>().ApplicationMenuClicked += new ControllerClickedEventHandler(DoApplicationMenuClicked);
+        GetComponent<VRTK_ControllerEvents>().ApplicationMenuPressed += new ControllerInteractionEventHandler(DoApplicationMenuPressed);
     }
 
-    void DoTouchpadAxisChanged(object sender, ControllerClickedEventArgs e)
+    void DoTouchpadAxisChanged(object sender, ControllerInteractionEventArgs e)
     {
         rcCarScript.SetTouchAxis(e.touchpadAxis);
     }
 
-    void DoTriggerAxisChanged(object sender, ControllerClickedEventArgs e)
+    void DoTriggerAxisChanged(object sender, ControllerInteractionEventArgs e)
     {
         rcCarScript.SetTriggerAxis(e.buttonPressure);
     }
 
-    void DoTouchpadUntouched(object sender, ControllerClickedEventArgs e)
+    void DoTouchpadTouchEnd(object sender, ControllerInteractionEventArgs e)
     {
         rcCarScript.SetTouchAxis(Vector2.zero);
     }
 
-    void DoTriggerUnclicked(object sender, ControllerClickedEventArgs e)
+    void DoTriggerReleased(object sender, ControllerInteractionEventArgs e)
     {
         rcCarScript.SetTriggerAxis(0f);
     }
 
-    void DoApplicationMenuClicked(object sender, ControllerClickedEventArgs e)
+    void DoApplicationMenuPressed(object sender, ControllerInteractionEventArgs e)
     {
         rcCarScript.Reset();
     }

@@ -94,7 +94,7 @@ namespace VRTK
             pointerTip.gameObject.SetActive(tipState);
         }
 
-        protected override void DisablePointerBeam(object sender, ControllerClickedEventArgs e)
+        protected override void DisablePointerBeam(object sender, ControllerInteractionEventArgs e)
         {
             base.PointerSet();
             base.DisablePointerBeam(sender, e);

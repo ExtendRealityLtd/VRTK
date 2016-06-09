@@ -99,8 +99,8 @@ namespace VRTK
                 return;
             }
 
-            GetComponent<VRTK_ControllerEvents>().AliasGrabOn += new ControllerClickedEventHandler(DoGrabObject);
-            GetComponent<VRTK_ControllerEvents>().AliasGrabOff += new ControllerClickedEventHandler(DoReleaseObject);
+            GetComponent<VRTK_ControllerEvents>().AliasGrabOn += new ControllerInteractionEventHandler(DoGrabObject);
+            GetComponent<VRTK_ControllerEvents>().AliasGrabOff += new ControllerInteractionEventHandler(DoReleaseObject);
         }
 
         private bool IsObjectGrabbable(GameObject obj)
@@ -372,12 +372,12 @@ namespace VRTK
             interactTouch.ToggleControllerRigidBody(false);
         }
 
-        private void DoGrabObject(object sender, ControllerClickedEventArgs e)
+        private void DoGrabObject(object sender, ControllerInteractionEventArgs e)
         {
             AttemptGrabObject();
         }
 
-        private void DoReleaseObject(object sender, ControllerClickedEventArgs e)
+        private void DoReleaseObject(object sender, ControllerInteractionEventArgs e)
         {
             AttemptReleaseObject(e.controllerIndex);
         }

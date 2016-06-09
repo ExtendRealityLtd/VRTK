@@ -65,8 +65,8 @@ namespace VRTK
             this.name = "PlayerObject_" + this.name;
 
             //Setup controller event listeners
-            GetComponent<VRTK_ControllerEvents>().AliasPointerOn += new ControllerClickedEventHandler(EnablePointerBeam);
-            GetComponent<VRTK_ControllerEvents>().AliasPointerOff += new ControllerClickedEventHandler(DisablePointerBeam);
+            GetComponent<VRTK_ControllerEvents>().AliasPointerOn += new ControllerInteractionEventHandler(EnablePointerBeam);
+            GetComponent<VRTK_ControllerEvents>().AliasPointerOff += new ControllerInteractionEventHandler(DisablePointerBeam);
 
             headset = DeviceFinder.HeadsetTransform();
 
@@ -100,7 +100,7 @@ namespace VRTK
             playAreaCursor.transform.position = destination;
         }
 
-        protected virtual void EnablePointerBeam(object sender, ControllerClickedEventArgs e)
+        protected virtual void EnablePointerBeam(object sender, ControllerInteractionEventArgs e)
         {
             if (!isActive && activateDelayTimer <= 0)
             {
@@ -111,7 +111,7 @@ namespace VRTK
             }
         }
 
-        protected virtual void DisablePointerBeam(object sender, ControllerClickedEventArgs e)
+        protected virtual void DisablePointerBeam(object sender, ControllerInteractionEventArgs e)
         {
             if (isActive && activateDelayTimer <= 0)
             {
