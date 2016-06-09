@@ -18,62 +18,64 @@
 // controllerIndex - The optional index of the controller the pointer is attached to
 //
 //====================================================================================
-
-using UnityEngine;
-using System.Collections;
-
-public struct DestinationMarkerEventArgs
+namespace VRTK
 {
-    public float distance;
-    public Transform target;
-    public Vector3 destinationPosition;
-    public bool enableTeleport;
-    public uint controllerIndex;
-}
+    using UnityEngine;
+    using System.Collections;
 
-public delegate void DestinationMarkerEventHandler(object sender, DestinationMarkerEventArgs e);
-
-public abstract class VRTK_DestinationMarker : MonoBehaviour
-{
-    public bool enableTeleport = true;
-
-    public event DestinationMarkerEventHandler DestinationMarkerEnter;
-    public event DestinationMarkerEventHandler DestinationMarkerExit;
-    public event DestinationMarkerEventHandler DestinationMarkerSet;
-
-    protected string invalidTargetWithTagOrClass;
-
-    public virtual void OnDestinationMarkerEnter(DestinationMarkerEventArgs e)
+    public struct DestinationMarkerEventArgs
     {
-        if (DestinationMarkerEnter != null)
-            DestinationMarkerEnter(this, e);
+        public float distance;
+        public Transform target;
+        public Vector3 destinationPosition;
+        public bool enableTeleport;
+        public uint controllerIndex;
     }
 
-    public virtual void OnDestinationMarkerExit(DestinationMarkerEventArgs e)
-    {
-        if (DestinationMarkerExit != null)
-            DestinationMarkerExit(this, e);
-    }
+    public delegate void DestinationMarkerEventHandler(object sender, DestinationMarkerEventArgs e);
 
-    public virtual void OnDestinationMarkerSet(DestinationMarkerEventArgs e)
+    public abstract class VRTK_DestinationMarker : MonoBehaviour
     {
-        if (DestinationMarkerSet != null)
-            DestinationMarkerSet(this, e);
-    }
+        public bool enableTeleport = true;
 
-    public virtual void SetInvalidTarget(string name)
-    {
-        invalidTargetWithTagOrClass = name;
-    }
+        public event DestinationMarkerEventHandler DestinationMarkerEnter;
+        public event DestinationMarkerEventHandler DestinationMarkerExit;
+        public event DestinationMarkerEventHandler DestinationMarkerSet;
 
-    protected DestinationMarkerEventArgs SeDestinationMarkerEvent(float distance, Transform target, Vector3 position, uint controllerIndex)
-    {
-        DestinationMarkerEventArgs e;
-        e.controllerIndex = controllerIndex;
-        e.distance = distance;
-        e.target = target;
-        e.destinationPosition = position;
-        e.enableTeleport = enableTeleport;
-        return e;
+        protected string invalidTargetWithTagOrClass;
+
+        public virtual void OnDestinationMarkerEnter(DestinationMarkerEventArgs e)
+        {
+            if (DestinationMarkerEnter != null)
+                DestinationMarkerEnter(this, e);
+        }
+
+        public virtual void OnDestinationMarkerExit(DestinationMarkerEventArgs e)
+        {
+            if (DestinationMarkerExit != null)
+                DestinationMarkerExit(this, e);
+        }
+
+        public virtual void OnDestinationMarkerSet(DestinationMarkerEventArgs e)
+        {
+            if (DestinationMarkerSet != null)
+                DestinationMarkerSet(this, e);
+        }
+
+        public virtual void SetInvalidTarget(string name)
+        {
+            invalidTargetWithTagOrClass = name;
+        }
+
+        protected DestinationMarkerEventArgs SeDestinationMarkerEvent(float distance, Transform target, Vector3 position, uint controllerIndex)
+        {
+            DestinationMarkerEventArgs e;
+            e.controllerIndex = controllerIndex;
+            e.distance = distance;
+            e.target = target;
+            e.destinationPosition = position;
+            e.enableTeleport = enableTeleport;
+            return e;
+        }
     }
 }

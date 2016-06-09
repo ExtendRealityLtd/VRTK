@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using VRTK;
 
 public class BowAim : MonoBehaviour {
     public float powerMultiplier;

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using VRTK;
 
 public class Sphere_Spawner : MonoBehaviour {
     private GameObject spawnMe;

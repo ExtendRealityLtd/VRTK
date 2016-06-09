@@ -11,149 +11,151 @@
 // Released the default 'Trigger' button on the controller to stop using an object
 //
 //====================================================================================
-
-using UnityEngine;
-using System.Collections;
-
-public class VRTK_InteractUse : MonoBehaviour
+namespace VRTK
 {
-    public bool hideControllerOnUse = false;
-    public float hideControllerDelay = 0f;
+    using UnityEngine;
+    using System.Collections;
 
-    public event ObjectInteractEventHandler ControllerUseInteractableObject;
-    public event ObjectInteractEventHandler ControllerUnuseInteractableObject;
-
-    GameObject usingObject = null;
-    SteamVR_TrackedObject trackedController;
-    VRTK_InteractTouch interactTouch;
-    VRTK_ControllerActions controllerActions;
-
-    public virtual void OnControllerUseInteractableObject(ObjectInteractEventArgs e)
+    public class VRTK_InteractUse : MonoBehaviour
     {
-        if (ControllerUseInteractableObject != null)
-            ControllerUseInteractableObject(this, e);
-    }
+        public bool hideControllerOnUse = false;
+        public float hideControllerDelay = 0f;
 
-    public virtual void OnControllerUnuseInteractableObject(ObjectInteractEventArgs e)
-    {
-        if (ControllerUnuseInteractableObject != null)
-            ControllerUnuseInteractableObject(this, e);
-    }
+        public event ObjectInteractEventHandler ControllerUseInteractableObject;
+        public event ObjectInteractEventHandler ControllerUnuseInteractableObject;
 
-    public GameObject GetUsingObject()
-    {
-        return usingObject;
-    }
+        GameObject usingObject = null;
+        SteamVR_TrackedObject trackedController;
+        VRTK_InteractTouch interactTouch;
+        VRTK_ControllerActions controllerActions;
 
-    private void Awake()
-    {
-        if (GetComponent<VRTK_InteractTouch>() == null)
+        public virtual void OnControllerUseInteractableObject(ObjectInteractEventArgs e)
         {
-            Debug.LogError("VRTK_InteractUse is required to be attached to a SteamVR Controller that has the VRTK_InteractTouch script attached to it");
-            return;
+            if (ControllerUseInteractableObject != null)
+                ControllerUseInteractableObject(this, e);
         }
 
-        interactTouch = GetComponent<VRTK_InteractTouch>();
-        trackedController = GetComponent<SteamVR_TrackedObject>();
-        controllerActions = GetComponent<VRTK_ControllerActions>();
-    }
-
-    private void Start()
-    {
-        if (GetComponent<VRTK_ControllerEvents>() == null)
+        public virtual void OnControllerUnuseInteractableObject(ObjectInteractEventArgs e)
         {
-            Debug.LogError("VRTK_InteractUse is required to be attached to a SteamVR Controller that has the VRTK_ControllerEvents script attached to it");
-            return;
+            if (ControllerUnuseInteractableObject != null)
+                ControllerUnuseInteractableObject(this, e);
         }
 
-        GetComponent<VRTK_ControllerEvents>().AliasUseOn += new ControllerClickedEventHandler(DoStartUseObject);
-        GetComponent<VRTK_ControllerEvents>().AliasUseOff += new ControllerClickedEventHandler(DoStopUseObject);
-    }
-
-    private bool IsObjectUsable(GameObject obj)
-    {
-        return (interactTouch.IsObjectInteractable(obj) && obj.GetComponent<VRTK_InteractableObject>().isUsable);
-    }
-
-    private bool IsObjectHoldOnUse(GameObject obj)
-    {
-        return (obj && obj.GetComponent<VRTK_InteractableObject>() && obj.GetComponent<VRTK_InteractableObject>().holdButtonToUse);
-    }
-
-    private int GetObjectUsingState(GameObject obj)
-    {
-        if (obj && obj.GetComponent<VRTK_InteractableObject>())
+        public GameObject GetUsingObject()
         {
-            return obj.GetComponent<VRTK_InteractableObject>().UsingState;
+            return usingObject;
         }
-        return 0;
-    }
 
-    private void SetObjectUsingState(GameObject obj, int value)
-    {
-        if (obj && obj.GetComponent<VRTK_InteractableObject>())
+        private void Awake()
         {
-            obj.GetComponent<VRTK_InteractableObject>().UsingState = value;
-        }
-    }
-
-    private void UseInteractedObject(GameObject touchedObject)
-    {
-        if ((usingObject == null || usingObject != touchedObject) && IsObjectUsable(touchedObject))
-        {
-            usingObject = touchedObject;
-            OnControllerUseInteractableObject(interactTouch.SetControllerInteractEvent(usingObject));
-            usingObject.GetComponent<VRTK_InteractableObject>().StartUsing(this.gameObject);
-            if (hideControllerOnUse)
+            if (GetComponent<VRTK_InteractTouch>() == null)
             {
-                Invoke("HideController", hideControllerDelay);
+                Debug.LogError("VRTK_InteractUse is required to be attached to a SteamVR Controller that has the VRTK_InteractTouch script attached to it");
+                return;
             }
-            usingObject.GetComponent<VRTK_InteractableObject>().ToggleHighlight(false);
-        }
-    }
 
-    private void HideController()
-    {
-        if(usingObject != null)
-        {
-            controllerActions.ToggleControllerModel(false, usingObject);
+            interactTouch = GetComponent<VRTK_InteractTouch>();
+            trackedController = GetComponent<SteamVR_TrackedObject>();
+            controllerActions = GetComponent<VRTK_ControllerActions>();
         }
-    }
 
-    private void UnuseInteractedObject()
-    {
-        if (usingObject != null)
+        private void Start()
         {
-            OnControllerUnuseInteractableObject(interactTouch.SetControllerInteractEvent(usingObject));
-            usingObject.GetComponent<VRTK_InteractableObject>().StopUsing(this.gameObject);
-            if (hideControllerOnUse)
+            if (GetComponent<VRTK_ControllerEvents>() == null)
             {
-                controllerActions.ToggleControllerModel(true, usingObject);
+                Debug.LogError("VRTK_InteractUse is required to be attached to a SteamVR Controller that has the VRTK_ControllerEvents script attached to it");
+                return;
             }
-            usingObject.GetComponent<VRTK_InteractableObject>().ToggleHighlight(false);
-            usingObject = null;
-        }
-    }
 
-    private void DoStartUseObject(object sender, ControllerClickedEventArgs e)
-    {
-        GameObject touchedObject = interactTouch.GetTouchedObject();
-        if (touchedObject != null && interactTouch.IsObjectInteractable(touchedObject))
+            GetComponent<VRTK_ControllerEvents>().AliasUseOn += new ControllerClickedEventHandler(DoStartUseObject);
+            GetComponent<VRTK_ControllerEvents>().AliasUseOff += new ControllerClickedEventHandler(DoStopUseObject);
+        }
+
+        private bool IsObjectUsable(GameObject obj)
         {
-            UseInteractedObject(touchedObject);
-            if (!IsObjectHoldOnUse(usingObject))
+            return (interactTouch.IsObjectInteractable(obj) && obj.GetComponent<VRTK_InteractableObject>().isUsable);
+        }
+
+        private bool IsObjectHoldOnUse(GameObject obj)
+        {
+            return (obj && obj.GetComponent<VRTK_InteractableObject>() && obj.GetComponent<VRTK_InteractableObject>().holdButtonToUse);
+        }
+
+        private int GetObjectUsingState(GameObject obj)
+        {
+            if (obj && obj.GetComponent<VRTK_InteractableObject>())
             {
-                SetObjectUsingState(usingObject, GetObjectUsingState(usingObject) + 1);
+                return obj.GetComponent<VRTK_InteractableObject>().UsingState;
+            }
+            return 0;
+        }
+
+        private void SetObjectUsingState(GameObject obj, int value)
+        {
+            if (obj && obj.GetComponent<VRTK_InteractableObject>())
+            {
+                obj.GetComponent<VRTK_InteractableObject>().UsingState = value;
             }
         }
-    }
 
-    private void DoStopUseObject(object sender, ControllerClickedEventArgs e)
-    {
-        if (IsObjectHoldOnUse(usingObject) || GetObjectUsingState(usingObject) >= 2)
+        private void UseInteractedObject(GameObject touchedObject)
         {
-            SetObjectUsingState(usingObject, 0);
-            UnuseInteractedObject();
+            if ((usingObject == null || usingObject != touchedObject) && IsObjectUsable(touchedObject))
+            {
+                usingObject = touchedObject;
+                OnControllerUseInteractableObject(interactTouch.SetControllerInteractEvent(usingObject));
+                usingObject.GetComponent<VRTK_InteractableObject>().StartUsing(this.gameObject);
+                if (hideControllerOnUse)
+                {
+                    Invoke("HideController", hideControllerDelay);
+                }
+                usingObject.GetComponent<VRTK_InteractableObject>().ToggleHighlight(false);
+            }
+        }
+
+        private void HideController()
+        {
+            if (usingObject != null)
+            {
+                controllerActions.ToggleControllerModel(false, usingObject);
+            }
+        }
+
+        private void UnuseInteractedObject()
+        {
+            if (usingObject != null)
+            {
+                OnControllerUnuseInteractableObject(interactTouch.SetControllerInteractEvent(usingObject));
+                usingObject.GetComponent<VRTK_InteractableObject>().StopUsing(this.gameObject);
+                if (hideControllerOnUse)
+                {
+                    controllerActions.ToggleControllerModel(true, usingObject);
+                }
+                usingObject.GetComponent<VRTK_InteractableObject>().ToggleHighlight(false);
+                usingObject = null;
+            }
+        }
+
+        private void DoStartUseObject(object sender, ControllerClickedEventArgs e)
+        {
+            GameObject touchedObject = interactTouch.GetTouchedObject();
+            if (touchedObject != null && interactTouch.IsObjectInteractable(touchedObject))
+            {
+                UseInteractedObject(touchedObject);
+                if (!IsObjectHoldOnUse(usingObject))
+                {
+                    SetObjectUsingState(usingObject, GetObjectUsingState(usingObject) + 1);
+                }
+            }
+        }
+
+        private void DoStopUseObject(object sender, ControllerClickedEventArgs e)
+        {
+            if (IsObjectHoldOnUse(usingObject) || GetObjectUsingState(usingObject) >= 2)
+            {
+                SetObjectUsingState(usingObject, 0);
+                UnuseInteractedObject();
+            }
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using VRTK;
 
 public class ModelVillage_TeleportLocation : VRTK_DestinationMarker
 {
