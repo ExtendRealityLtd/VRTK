@@ -6,8 +6,6 @@ public class Controller_Menu : MonoBehaviour {
     public GameObject menuObject;
 
     private GameObject clonedMenuObject;
-    private Vector3 originalPosition;
-    private Quaternion originalRotation;
 
     private bool menuInit = false;
     private bool menuActive = false;

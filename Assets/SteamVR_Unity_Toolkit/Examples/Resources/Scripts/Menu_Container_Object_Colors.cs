@@ -4,8 +4,6 @@ using VRTK;
 
 public class Menu_Container_Object_Colors : VRTK_InteractableObject
 {
-    private Color selectedColor;
-
     protected override void Start()
     {
         base.Start();

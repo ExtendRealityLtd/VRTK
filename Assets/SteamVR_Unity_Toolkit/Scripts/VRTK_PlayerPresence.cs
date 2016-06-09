@@ -11,7 +11,6 @@
         private Transform headset;
         private Rigidbody rb;
         private BoxCollider bc;
-        private GameObject floorTouching;
         private Vector3 lastGoodPosition;
         private bool lastGoodPositionSet = false;
         private float highestHeadsetY = 0f;

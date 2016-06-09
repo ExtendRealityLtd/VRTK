@@ -25,7 +25,6 @@ namespace VRTK
         public event ObjectInteractEventHandler ControllerUnuseInteractableObject;
 
         GameObject usingObject = null;
-        SteamVR_TrackedObject trackedController;
         VRTK_InteractTouch interactTouch;
         VRTK_ControllerActions controllerActions;
 
@@ -55,7 +54,6 @@ namespace VRTK
             }
 
             interactTouch = GetComponent<VRTK_InteractTouch>();
-            trackedController = GetComponent<SteamVR_TrackedObject>();
             controllerActions = GetComponent<VRTK_ControllerActions>();
         }
 
