@@ -211,6 +211,9 @@ The event payload that is emitted contains:
   pressure being applied to the button pressed.
   * **touchpadAxis:** A Vector2 of the position the touchpad is
   touched at.
+  * **touchpadAngle:** A float that shows the rotational position
+  the touchpad is being touched at, 0 being top, 180 being bottom
+  and all other angles accordingly.
 
 There are also common action aliases that are emitted when controller
 buttons are pressed. These action aliases can be mapped to a
