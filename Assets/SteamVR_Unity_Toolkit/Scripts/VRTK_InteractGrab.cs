@@ -37,6 +37,7 @@ namespace VRTK
 
         private int grabEnabledState = 0;
         private float grabPrecognitionTimer = 0f;
+        private Transform lastParent;
         private bool wasKinematic;
 
         public virtual void OnControllerGrabInteractableObject(ObjectInteractEventArgs e)
@@ -155,6 +156,7 @@ namespace VRTK
 
         private void SetControllerAsParent(GameObject obj)
         {
+            lastParent = obj.transform.parent;
             obj.transform.parent = this.transform;
 
             Rigidbody rb = obj.GetComponent<Rigidbody>();
@@ -213,7 +215,7 @@ namespace VRTK
 
         private Rigidbody ReleaseParentedObjectFromController()
         {
-            grabbedObject.transform.parent = null;
+            grabbedObject.transform.parent = lastParent;
 
             var rb = grabbedObject.GetComponent<Rigidbody>();
             if (rb) {
