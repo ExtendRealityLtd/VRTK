@@ -627,6 +627,20 @@ the user with the touchpad. There is also an area that can only be
 traversed if the user is crouching. Standing up in this crouched area
 will cause the user to appear back at their last good known position.
 
+##### VRTK_RoomExtender
+
+This script allows the playArea to move with the player.
+The CameraRig is only moved when at the edge of a defined circle. Aims to create a virtually bigger play area.
+I have added a demo scene to test the script (028_CameraRig_RoomExtender).
+
+To use this add this script to the CameraRig.
+
+The following script parameters are available:
+
+  * **Additional Movement Multiplier:** This is the factor by which movement at the edge of the circle is amplified. 0 is no movement of the CameraRig. Higher values simulate a bigger play area but may be to uncomfortable.
+  * **Head Zone Radius:** This is the size of the circle in which the playArea is not moved and everything is normal. If it is to low it becomes uncomfortable when crouching.
+  * **Debug Transform:** This transform visualises the circle around the player where the CameraRig is not moved. In the demo scene this is a cylinder at floor level. Remember to turn of collisions.
+
 #### Interactable Object (VRTK_InteractableObject)
 
 The Interactable Object script is attached to any game object that is
