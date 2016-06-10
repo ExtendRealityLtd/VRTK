@@ -654,10 +654,10 @@ The following script parameters are available:
   on the controller needs to be continually held down to keep grabbing.
   If this is unchecked the grab button toggles the grab action with
   one button press to grab and another to release.
-  * **Pause Collisions On Grab:** If this is checked then collisions
-  with the Interactable Object are temporarily disabled whilst the
-  object snaps to the controller. This is useful if a game object may
-  get stuck inside another object when it is being grabbed.
+  * **On Grab Collision Delay:** The amount of time to delay collisions
+  affecting the object when it is first grabbed. This is useful if a
+  game object may get stuck inside another object when it is being
+  grabbed.
   * **Grab Snap Type:** This sets the snap type of the object when
   it is grabbed.
    * `Simple_Snap` snaps the grabbed object's central position to the

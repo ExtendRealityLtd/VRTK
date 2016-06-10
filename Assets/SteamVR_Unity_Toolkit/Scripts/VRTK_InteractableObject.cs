@@ -48,7 +48,7 @@ namespace VRTK
         public bool isGrabbable = false;
         public bool isDroppable = true;
         public bool holdButtonToGrab = true;
-        public bool pauseCollisionsOnGrab = true;
+        public float onGrabCollisionDelay = 0f;
         public GrabSnapType grabSnapType = GrabSnapType.Simple_Snap;
         public Vector3 snapToRotation = Vector3.zero;
         public Vector3 snapToPosition = Vector3.zero;
@@ -218,9 +218,9 @@ namespace VRTK
             set { usingState = value; }
         }
 
-        public void PauseCollisions(float pauseTime)
+        public void PauseCollisions()
         {
-            if (pauseCollisionsOnGrab)
+            if (onGrabCollisionDelay > 0f)
             {
                 if (this.GetComponent<Rigidbody>())
                 {
@@ -230,7 +230,7 @@ namespace VRTK
                 {
                     rb.detectCollisions = false;
                 }
-                Invoke("UnpauseCollisions", pauseTime);
+                Invoke("UnpauseCollisions", onGrabCollisionDelay);
             }
         }
 

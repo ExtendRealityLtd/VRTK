@@ -116,7 +116,7 @@ namespace VRTK
         private void SnapObjectToGrabToController(GameObject obj)
         {
             //Pause collisions (if allowed on object) for a moment whilst sorting out position to prevent clipping issues
-            obj.GetComponent<VRTK_InteractableObject>().PauseCollisions(0.2f);
+            obj.GetComponent<VRTK_InteractableObject>().PauseCollisions();
 
             VRTK_InteractableObject.GrabSnapType grabType = obj.GetComponent<VRTK_InteractableObject>().grabSnapType;
 
