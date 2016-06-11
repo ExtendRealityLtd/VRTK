@@ -162,6 +162,7 @@ namespace VRTK
             Rigidbody rb = obj.GetComponent<Rigidbody>();
             if (rb)
             {
+                // Save kinematic state.
                 wasKinematic = rb.isKinematic;
                 rb.isKinematic = true;
             }
@@ -169,6 +170,14 @@ namespace VRTK
 
         private void CreateJoint(GameObject obj)
         {
+            // Save kinematic state.
+            Rigidbody rb = obj.GetComponent<Rigidbody>();
+            if (rb)
+            {
+                wasKinematic = rb.isKinematic;
+                rb.isKinematic = false;
+            }
+
             if (obj.GetComponent<VRTK_InteractableObject>().grabAttachMechanic == VRTK_InteractableObject.GrabAttachType.Fixed_Joint)
             {
                 controllerAttachJoint = obj.AddComponent<FixedJoint>();
@@ -186,14 +195,20 @@ namespace VRTK
 
         private Rigidbody ReleaseGrabbedObjectFromController(bool withThrow)
         {
+            Rigidbody rb;
+
             if (controllerAttachJoint != null)
             {
-                return ReleaseAttachedObjectFromController(withThrow);
+                rb = ReleaseAttachedObjectFromController(withThrow);
             }
             else
             {
-                return ReleaseParentedObjectFromController();
+                rb = ReleaseParentedObjectFromController();
             }
+
+            // Restore kinematic state
+            rb.isKinematic = wasKinematic;
+            return rb;
         }
 
         private Rigidbody ReleaseAttachedObjectFromController(bool withThrow)
@@ -216,12 +231,7 @@ namespace VRTK
         private Rigidbody ReleaseParentedObjectFromController()
         {
             grabbedObject.transform.parent = lastParent;
-
-            var rb = grabbedObject.GetComponent<Rigidbody>();
-            if (rb) {
-                rb.isKinematic = wasKinematic;
-            }
-            return rb;
+            return grabbedObject.GetComponent<Rigidbody>();
         }
 
         private void ThrowReleasedObject(Rigidbody rb, uint controllerIndex, float objectThrowMultiplier)
