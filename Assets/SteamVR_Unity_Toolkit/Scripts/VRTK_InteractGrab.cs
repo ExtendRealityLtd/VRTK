@@ -210,8 +210,6 @@ namespace VRTK
         private Rigidbody ReleaseParentedObjectFromController()
         {
             var rigidbody = grabbedObject.GetComponent<Rigidbody>();
-            grabbedObject.transform.parent = null;
-            rigidbody.isKinematic = false;
             return rigidbody;
         }
 
@@ -252,12 +250,17 @@ namespace VRTK
         private void InitGrabbedObject()
         {
             grabbedObject = interactTouch.GetTouchedObject();
-            OnControllerGrabInteractableObject(interactTouch.SetControllerInteractEvent(grabbedObject));
-            grabbedObject.GetComponent<VRTK_InteractableObject>().Grabbed(this.gameObject);
-            grabbedObject.GetComponent<VRTK_InteractableObject>().ZeroVelocity();
             if (grabbedObject)
             {
-                grabbedObject.GetComponent<VRTK_InteractableObject>().ToggleHighlight(false);
+                var grabbedObjectScript = grabbedObject.GetComponent<VRTK_InteractableObject>();
+
+                OnControllerGrabInteractableObject(interactTouch.SetControllerInteractEvent(grabbedObject));
+
+                grabbedObjectScript.SaveCurrentState();
+                grabbedObjectScript.Grabbed(this.gameObject);
+                grabbedObjectScript.ZeroVelocity();
+
+                grabbedObjectScript.ToggleHighlight(false);
             }
             if (hideControllerOnGrab)
             {
