@@ -163,6 +163,9 @@ namespace VRTK
 
         private void CreateJoint(GameObject obj)
         {
+            Rigidbody rb = obj.GetComponent<Rigidbody>();
+            if (rb) { rb.isKinematic = false; }
+
             if (obj.GetComponent<VRTK_InteractableObject>().grabAttachMechanic == VRTK_InteractableObject.GrabAttachType.Fixed_Joint)
             {
                 controllerAttachJoint = obj.AddComponent<FixedJoint>();
