@@ -254,6 +254,13 @@ namespace VRTK
         protected virtual void Awake()
         {
             rb = this.GetComponent<Rigidbody>();
+
+            // If there is no rigid body, add one and set it to 'kinematic'.
+            if (!rb)
+            {
+                rb = gameObject.AddComponent<Rigidbody>();
+                rb.isKinematic = true;
+            }
         }
 
         protected virtual void Start()
