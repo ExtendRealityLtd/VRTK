@@ -43,16 +43,18 @@ namespace VRTK
         [Header("Touch Interactions", order = 1)]
         public bool highlightOnTouch = false;
         public Color touchHighlightColor = Color.clear;
+        public Vector2 rumbleOnTouch = Vector2.zero;
 
         [Header("Grab Interactions", order = 2)]
         public bool isGrabbable = false;
         public bool isDroppable = true;
         public bool holdButtonToGrab = true;
-        public bool pauseCollisionsOnGrab = true;
+        public float onGrabCollisionDelay = 0f;
         public GrabSnapType grabSnapType = GrabSnapType.Simple_Snap;
         public Vector3 snapToRotation = Vector3.zero;
         public Vector3 snapToPosition = Vector3.zero;
         public Transform snapHandle;
+        public Vector2 rumbleOnGrab = Vector2.zero;
 
         [Header("Grab Mechanics", order = 3)]
         public GrabAttachType grabAttachMechanic = GrabAttachType.Fixed_Joint;
@@ -65,6 +67,7 @@ namespace VRTK
         public bool isUsable = false;
         public bool holdButtonToUse = true;
         public bool pointerActivatesUseAction = false;
+        public Vector2 rumbleOnUse = Vector2.zero;
 
         public event InteractableObjectEventHandler InteractableObjectTouched;
         public event InteractableObjectEventHandler InteractableObjectUntouched;
@@ -218,9 +221,9 @@ namespace VRTK
             set { usingState = value; }
         }
 
-        public void PauseCollisions(float pauseTime)
+        public void PauseCollisions()
         {
-            if (pauseCollisionsOnGrab)
+            if (onGrabCollisionDelay > 0f)
             {
                 if (this.GetComponent<Rigidbody>())
                 {
@@ -230,7 +233,7 @@ namespace VRTK
                 {
                     rb.detectCollisions = false;
                 }
-                Invoke("UnpauseCollisions", pauseTime);
+                Invoke("UnpauseCollisions", onGrabCollisionDelay);
             }
         }
 

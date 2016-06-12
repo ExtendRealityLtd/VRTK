@@ -108,6 +108,12 @@ namespace VRTK
                     Invoke("HideController", hideControllerDelay);
                 }
                 usingObject.GetComponent<VRTK_InteractableObject>().ToggleHighlight(false);
+
+                var rumbleAmount = usingObject.GetComponent<VRTK_InteractableObject>().rumbleOnUse;
+                if (!rumbleAmount.Equals(Vector2.zero))
+                {
+                    controllerActions.TriggerHapticPulse((int)rumbleAmount.x, (ushort)rumbleAmount.y);
+                }
             }
         }
 

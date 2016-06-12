@@ -118,7 +118,7 @@ namespace VRTK
         private void SnapObjectToGrabToController(GameObject obj)
         {
             //Pause collisions (if allowed on object) for a moment whilst sorting out position to prevent clipping issues
-            obj.GetComponent<VRTK_InteractableObject>().PauseCollisions(0.2f);
+            obj.GetComponent<VRTK_InteractableObject>().PauseCollisions();
 
             VRTK_InteractableObject.GrabSnapType grabType = obj.GetComponent<VRTK_InteractableObject>().grabSnapType;
 
@@ -358,6 +358,15 @@ namespace VRTK
                 if (!IsObjectHoldOnGrab(interactTouch.GetTouchedObject()))
                 {
                     grabEnabledState++;
+                }
+
+                if (grabbedObject)
+                {
+                    var rumbleAmount = grabbedObject.GetComponent<VRTK_InteractableObject>().rumbleOnGrab;
+                    if (!rumbleAmount.Equals(Vector2.zero))
+                    {
+                        controllerActions.TriggerHapticPulse((int)rumbleAmount.x, (ushort)rumbleAmount.y);
+                    }
                 }
             }
             else

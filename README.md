@@ -640,6 +640,10 @@ The following script parameters are available:
   * **Touch Highligt Color:** The colour to highlight the object
   when it is touched. This colour will override any globally set
   color (for instance on the `VRTK_InteractTouch` script).
+  * **Rumble On Touch:** The haptic feedback on the controller can
+  be triggered upon touching the object, the `x` denotes the length
+  of time, the `y` denotes the strength of the pulse. (x and y will
+  be replaced in the future with a custom editor)
 
 ######Grab Interactions
   * **Is Grabbable:** Determines if the object can be grabbed
@@ -654,10 +658,10 @@ The following script parameters are available:
   on the controller needs to be continually held down to keep grabbing.
   If this is unchecked the grab button toggles the grab action with
   one button press to grab and another to release.
-  * **Pause Collisions On Grab:** If this is checked then collisions
-  with the Interactable Object are temporarily disabled whilst the
-  object snaps to the controller. This is useful if a game object may
-  get stuck inside another object when it is being grabbed.
+  * **On Grab Collision Delay:** The amount of time to delay collisions
+  affecting the object when it is first grabbed. This is useful if a
+  game object may get stuck inside another object when it is being
+  grabbed.
   * **Grab Snap Type:** This sets the snap type of the object when
   it is grabbed.
    * `Simple_Snap` snaps the grabbed object's central position to the
@@ -681,6 +685,10 @@ The following script parameters are available:
   must be the child of the item being grabbed and serves as an
   orientation point to rotate and position the grabbed item in relation
   to the grabbing controller.
+  * **Rumble On Grab:** The haptic feedback on the controller can
+  be triggered upon grabbing the object, the `x` denotes the length
+  of time, the `y` denotes the strength of the pulse. (x and y will
+  be replaced in the future with a custom editor)
 
 ######Grab Mechanics
   * **Grab Attach Type:** This determines how the grabbed item will
@@ -739,6 +747,10 @@ The following script parameters are available:
   interactable object with this setting checked as this prevents
   unwanted teleporting from happening when using an object with a
   pointer.
+  * **Rumble On Use:** The haptic feedback on the controller can
+  be triggered upon using the object, the `x` denotes the length
+  of time, the `y` denotes the strength of the pulse. (x and y will
+  be replaced in the future with a custom editor)
 
 The following events are emitted:
 
