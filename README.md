@@ -1,5 +1,11 @@
 # SteamVR Unity Toolkit - [![Slack](https://vrtk-slack-invite.herokuapp.com/badge.svg)](https://vrtk-slack-invite.herokuapp.com) [![Subreddit](https://img.shields.io/badge/subreddit-discussions-red.svg?style=flat-square)](https://www.reddit.com/r/SteamVRUnityToolkit/) [![Trello](https://img.shields.io/badge/trello-work%20board-blue.svg?style=flat-square)](https://trello.com/b/sU0vRWUz/steamvr-unity-toolkit)
 
+  > ##ANNOUNCEMENT
+  > My HTC Vive decided to stop working, just get a black screen on the HMD.
+  > Anyway, HTC have arranged for it to be collected to RMA it and repair it
+  > but this means I'm now without a HTC Vive so development will pause until
+  > it is returned and is working again. Sorry for any inconvenience.
+
 A collection of useful scripts and prefabs for building SteamVR titles
 in Unity 5.
 
