@@ -269,6 +269,11 @@ namespace VRTK
             rb.isKinematic = state;
         }
 
+        public GameObject GetGrabbingObject()
+        {
+            return grabbingObject;
+        }
+
         protected virtual void Awake()
         {
             rb = this.GetComponent<Rigidbody>();
