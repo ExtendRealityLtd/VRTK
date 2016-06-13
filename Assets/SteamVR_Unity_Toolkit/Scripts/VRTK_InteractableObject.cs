@@ -87,6 +87,9 @@ namespace VRTK
         private Transform trackPoint;
         private bool customTrackPoint = false;
 
+        private Transform previousParent;
+        private bool previousKinematicState;
+
         public virtual void OnInteractableObjectTouched(InteractableObjectEventArgs e)
         {
             if (InteractableObjectTouched != null)
@@ -171,6 +174,7 @@ namespace VRTK
             OnInteractableObjectUngrabbed(SetInteractableObjectEvent(previousGrabbingObject));
             RemoveTrackPoint();
             grabbingObject = null;
+            LoadPreviousState();
         }
 
         public virtual void StartUsing(GameObject usingObject)
@@ -251,6 +255,20 @@ namespace VRTK
             }
         }
 
+        public void SaveCurrentState()
+        {
+            if (grabbingObject == null)
+            {
+                previousParent = this.transform.parent;
+                previousKinematicState = rb.isKinematic;
+            }
+        }
+
+        public void ToggleKinematic(bool state)
+        {
+            rb.isKinematic = state;
+        }
+
         protected virtual void Awake()
         {
             rb = this.GetComponent<Rigidbody>();
@@ -280,6 +298,12 @@ namespace VRTK
         protected virtual void OnJointBreak(float force)
         {
             ForceReleaseGrab();
+        }
+
+        protected virtual void LoadPreviousState()
+        {
+            this.transform.parent = previousParent;
+            rb.isKinematic = previousKinematicState;
         }
 
         private void ForceReleaseGrab()
