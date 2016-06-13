@@ -36,12 +36,12 @@ namespace VRTK
         private float maxBlinkTransitionSpeed = 1.5f;
         private float maxBlinkDistance = 33f;
 
-        private void OnTeleporting(DestinationMarkerEventArgs e) {
+        protected void OnTeleporting(DestinationMarkerEventArgs e) {
             if (Teleporting != null)
                 Teleporting(this, e);
         }
 
-        private void OnTeleported(DestinationMarkerEventArgs e) {
+        protected void OnTeleported(DestinationMarkerEventArgs e) {
             if (Teleported != null)
                 Teleported(this, e);
         }
