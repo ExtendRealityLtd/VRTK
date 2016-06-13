@@ -97,9 +97,9 @@ namespace VRTK
                         enableTeleport = true,
                         target = currentFloor.transform
                     };
-                    OnTeleporting(teleportArgs);
+                    OnTeleporting(gameObject, teleportArgs);
                     SetNewPosition(newPosition, currentFloor.transform);
-                    OnTeleported(teleportArgs);
+                    OnTeleported(gameObject, teleportArgs);
                 }
             }
         }
