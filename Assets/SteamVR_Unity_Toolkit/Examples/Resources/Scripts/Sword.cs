@@ -29,7 +29,11 @@ public class Sword : VRTK_InteractableObject
     {
         if (controllerActions && IsGrabbed())
         {
+#if UNITY_5_3_OR_NEWER
             collisionForce = collision.impulse.magnitude * impactMagnifier;
+#else
+            collisionForce = collision.relativeVelocity.magnitude*impactMagnifier;
+#endif
             controllerActions.TriggerHapticPulse(40, (ushort)collisionForce);
         }
     }
