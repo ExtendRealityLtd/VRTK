@@ -90,7 +90,16 @@ namespace VRTK
                     }
 
                     Vector3 newPosition = new Vector3(this.transform.position.x, floorY, this.transform.position.z);
+                    var teleportArgs = new DestinationMarkerEventArgs
+                    {
+                        destinationPosition = newPosition,
+                        distance = rayCollidedWith.distance,
+                        enableTeleport = true,
+                        target = currentFloor.transform
+                    };
+                    OnTeleporting(gameObject, teleportArgs);
                     SetNewPosition(newPosition, currentFloor.transform);
+                    OnTeleported(gameObject, teleportArgs);
                 }
             }
         }
