@@ -304,28 +304,6 @@
             Vector2 currentTriggerAxis = device.GetAxis(Valve.VR.EVRButtonId.k_EButton_SteamVR_Trigger);
             Vector2 currentTouchpadAxis = device.GetAxis();
 
-            if (Vector2ShallowEquals(triggerAxis, currentTriggerAxis))
-            {
-                triggerAxisChanged = false;
-            }
-            else
-            {
-                OnTriggerAxisChanged(SetButtonEvent(ref triggerAxisChanged, true, currentTriggerAxis.x));
-            }
-
-            if (Vector2ShallowEquals(touchpadAxis, currentTouchpadAxis))
-            {
-                touchpadAxisChanged = false;
-            }
-            else
-            {
-                OnTouchpadAxisChanged(SetButtonEvent(ref touchpadTouched, true, 1f));
-                touchpadAxisChanged = true;
-            }
-
-            touchpadAxis = new Vector2(currentTouchpadAxis.x, currentTouchpadAxis.y);
-            triggerAxis = new Vector2(currentTriggerAxis.x, currentTriggerAxis.y);
-
             //Trigger
             if (device.GetTouchDown(SteamVR_Controller.ButtonMask.Trigger))
             {
@@ -336,6 +314,17 @@
             {
                 OnTriggerReleased(SetButtonEvent(ref triggerPressed, false, 0f));
                 EmitAlias(ButtonAlias.Trigger, false, 0f, ref triggerPressed);
+            }
+            else
+            {
+                if (Vector2ShallowEquals(triggerAxis, currentTriggerAxis))
+                {
+                    triggerAxisChanged = false;
+                }
+                else
+                {
+                    OnTriggerAxisChanged(SetButtonEvent(ref triggerAxisChanged, true, currentTriggerAxis.x));
+                }
             }
 
             //ApplicationMenu
@@ -386,6 +375,21 @@
                 OnTouchpadTouchEnd(SetButtonEvent(ref touchpadTouched, false, 0f));
                 EmitAlias(ButtonAlias.Touchpad_Touch, false, 0f, ref touchpadTouched);
             }
+            else
+            {
+                if (Vector2ShallowEquals(touchpadAxis, currentTouchpadAxis))
+                {
+                    touchpadAxisChanged = false;
+                }
+                else {
+                    OnTouchpadAxisChanged(SetButtonEvent(ref touchpadTouched, true, 1f));
+                    touchpadAxisChanged = true;
+                }
+            }
+
+            // Save current touch and trigger settings to detect next change.
+            touchpadAxis = new Vector2(currentTouchpadAxis.x, currentTouchpadAxis.y);
+            triggerAxis = new Vector2(currentTriggerAxis.x, currentTriggerAxis.y);
         }
     }
 }
