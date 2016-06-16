@@ -26,7 +26,7 @@ namespace VRTK
             adjustYForTerrain = true;
         }
 
-        protected override void DoTeleport(object sender, DestinationMarkerEventArgs e)
+        public override void DoTeleport(object sender, DestinationMarkerEventArgs e)
         {
             base.DoTeleport(sender, e);
             if (e.enableTeleport)
@@ -44,7 +44,7 @@ namespace VRTK
 
         private float GetTeleportY(Transform target, Vector3 tipPosition)
         {
-            float newY = this.transform.position.y;
+            float newY = reference.position.y;
             //Check to see if the tip is on top of an object
             if (target && (tipPosition.y + 0.5f) > (target.position.y + (target.localScale.y / 2)))
             {
@@ -71,7 +71,7 @@ namespace VRTK
 
         private void DropToNearestFloor(bool withBlink)
         {
-            if (enableTeleport && eyeCamera.transform.position.y > this.transform.position.y)
+            if (enableTeleport && eyeCamera.transform.position.y > reference.position.y)
             {
                 //send a ray down to find the closest object to stand on
                 Ray ray = new Ray(eyeCamera.transform.position, -transform.up);
@@ -89,7 +89,7 @@ namespace VRTK
                         Blink(blinkTransitionSpeed);
                     }
 
-                    Vector3 newPosition = new Vector3(this.transform.position.x, floorY, this.transform.position.z);
+                    Vector3 newPosition = new Vector3(reference.position.x, floorY, reference.position.z);
                     var teleportArgs = new DestinationMarkerEventArgs
                     {
                         destinationPosition = newPosition,

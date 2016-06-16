@@ -86,14 +86,31 @@ namespace VRTK
             controllerActions = GetComponent<VRTK_ControllerActions>();
         }
 
-        private void Start()
+        // this was being called in Start, but that would crash if SimplePointers Start had not been called yet.  Just get when needed
+        private Rigidbody GetAttachPoint()
         {
             //If no attach point has been specified then just use the tip of the controller
             if (controllerAttachPoint == null)
             {
-                controllerAttachPoint = transform.GetChild(0).Find("tip").GetChild(0).GetComponent<Rigidbody>();
+                // HHH   controllerAttachPoint = transform.GetChild(0).Find("tip").GetChild(0).GetComponent<Rigidbody>();
+                Transform child = transform.GetChild(0).Find("tip").GetChild(0);
+
+                controllerAttachPoint = child.GetComponent<Rigidbody>();
+
+                if (controllerAttachPoint == null)
+                {
+                    controllerAttachPoint = child.gameObject.AddComponent<Rigidbody>();
+
+                    controllerAttachPoint.isKinematic = true;
+                    controllerAttachPoint.useGravity = true;
+                }
             }
 
+            return controllerAttachPoint;
+        }
+
+        private void Start()
+        {
             if (GetComponent<VRTK_ControllerEvents>() == null)
             {
                 Debug.LogError("VRTK_InteractGrab is required to be attached to a SteamVR Controller that has the VRTK_ControllerEvents script attached to it");
@@ -132,7 +149,7 @@ namespace VRTK
 
             if (grabType != VRTK_InteractableObject.GrabSnapType.Precision_Snap)
             {
-                obj.transform.position = controllerAttachPoint.transform.position + objectScript.snapToPosition;
+                obj.transform.position = GetAttachPoint().transform.position + objectScript.snapToPosition;
             }
 
             if (grabType == VRTK_InteractableObject.GrabSnapType.Handle_Snap && objectScript.snapHandle != null)
@@ -142,7 +159,7 @@ namespace VRTK
                 obj.transform.eulerAngles = objectScript.snapHandle.transform.localEulerAngles;
 
                 Vector3 snapHandleDelta = objectScript.snapHandle.transform.position - obj.transform.position;
-                obj.transform.position = controllerAttachPoint.transform.position - snapHandleDelta;
+                obj.transform.position = GetAttachPoint().transform.position - snapHandleDelta;
             }
 
             if (objectScript.grabAttachMechanic == VRTK_InteractableObject.GrabAttachType.Child_Of_Controller)
@@ -171,7 +188,7 @@ namespace VRTK
                 controllerAttachJoint = tempSpringJoint;
             }
             controllerAttachJoint.breakForce = objectScript.detachThreshold;
-            controllerAttachJoint.connectedBody = controllerAttachPoint;
+            controllerAttachJoint.connectedBody = GetAttachPoint();
         }
 
         private Rigidbody ReleaseGrabbedObjectFromController(bool withThrow)
