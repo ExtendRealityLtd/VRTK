@@ -19,6 +19,7 @@ There are, however, a few guidelines that we need contributors to follow, so tha
   * Only target release branches if you are certain your fix must be on that branch
   * Name branches with the type of issue you are fixing; `feat`, `chore`, `docs`
   * Please avoid working directly on the master branch
+* Make sure you set the `Asset Serialization` mode in `Unity->Edit->Project Settings->Editor` to `Force Text`
 * Make commits of logical units
 * Make sure your commit messages are in the proper format
 
