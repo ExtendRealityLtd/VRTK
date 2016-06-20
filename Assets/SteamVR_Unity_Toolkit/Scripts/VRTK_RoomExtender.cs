@@ -3,6 +3,7 @@ using System.Collections;
 
 public class VRTK_RoomExtender : MonoBehaviour
 {
+    public bool additionalMovementEnabled = true;
 	public float additionalMovementMultiplier = 1.0f;
 	public float headZoneRadius = 0.25f;
 	public Transform debugTransform;
@@ -40,7 +41,10 @@ public class VRTK_RoomExtender : MonoBehaviour
 		if (movement.magnitude > headZoneRadius) {
 			var deltaMovement = movement.normalized * (movement.magnitude - headZoneRadius);
 			headCirclePosition += deltaMovement;
-			cameraRig.localPosition += deltaMovement * additionalMovementMultiplier;
+            if (additionalMovementEnabled)
+            {
+			    cameraRig.localPosition += deltaMovement * additionalMovementMultiplier;
+            }
 		}
 	}
 }
