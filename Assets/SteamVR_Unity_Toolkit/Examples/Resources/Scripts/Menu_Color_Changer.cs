@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using VRTK;
 
 public class Menu_Color_Changer : VRTK_InteractableObject
 {

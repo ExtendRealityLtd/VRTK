@@ -30,3 +30,4 @@ sysinfo.txt
 # System files
 .DS_Store
 *.swp
+StyleCop*

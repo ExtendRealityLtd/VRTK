@@ -1,72 +1,77 @@
-﻿using UnityEngine;
-using System.Collections;
-
-public struct HeadsetCollisionEventArgs
+﻿namespace VRTK
 {
-    public Collider collider;
-    public Transform currentTransform;
-}
+    using UnityEngine;
+    using System.Collections;
 
-public delegate void HeadsetCollisionEventHandler(object sender, HeadsetCollisionEventArgs e);
-
-public class VRTK_HeadsetCollisionFade : MonoBehaviour {
-    public float blinkTransitionSpeed = 0.1f;
-    public Color fadeColor = Color.black;
-
-    public event HeadsetCollisionEventHandler HeadsetCollisionDetect;
-    public event HeadsetCollisionEventHandler HeadsetCollisionEnded;
-
-    public virtual void OnHeadsetCollisionDetect(HeadsetCollisionEventArgs e)
+    public struct HeadsetCollisionEventArgs
     {
-        if (HeadsetCollisionDetect != null)
-            HeadsetCollisionDetect(this, e);
+        public Collider collider;
+        public Transform currentTransform;
     }
 
-    public virtual void OnHeadsetCollisionEnded(HeadsetCollisionEventArgs e)
-    {
-        if (HeadsetCollisionEnded != null)
-            HeadsetCollisionEnded(this, e);
-    }
+    public delegate void HeadsetCollisionEventHandler(object sender, HeadsetCollisionEventArgs e);
 
-    protected HeadsetCollisionEventArgs SetHeadsetCollisionEvent(Collider collider, Transform currentTransform)
+    public class VRTK_HeadsetCollisionFade : MonoBehaviour
     {
-        HeadsetCollisionEventArgs e;
-        e.collider = collider;
-        e.currentTransform = currentTransform;
-        return e;
-    }
+        public float blinkTransitionSpeed = 0.1f;
+        public Color fadeColor = Color.black;
 
-    protected void Start () {
-        if (gameObject.GetComponentInChildren<SteamVR_Fade>() == null)
+        public event HeadsetCollisionEventHandler HeadsetCollisionDetect;
+        public event HeadsetCollisionEventHandler HeadsetCollisionEnded;
+
+        public virtual void OnHeadsetCollisionDetect(HeadsetCollisionEventArgs e)
         {
-            Debug.LogWarning("This 'VRTK_HeadsetCollisionFade' script needs a SteamVR_Fade script on the camera eye.");
+            if (HeadsetCollisionDetect != null)
+                HeadsetCollisionDetect(this, e);
         }
 
-        this.name = "PlayerObject_" + this.name;
-        BoxCollider collider = this.gameObject.AddComponent<BoxCollider>();
-        collider.isTrigger = true;
-        collider.size = new Vector3(0.1f, 0.1f, 0.1f);
-        
-        Rigidbody rb = this.gameObject.AddComponent<Rigidbody>();
-        rb.isKinematic = true;
-        rb.useGravity = false;
-	}
-
-    protected void OnTriggerStay(Collider collider)
-    {
-        if (!collider.name.Contains("PlayerObject_"))
+        public virtual void OnHeadsetCollisionEnded(HeadsetCollisionEventArgs e)
         {
-            OnHeadsetCollisionDetect(SetHeadsetCollisionEvent(collider, this.transform));
-            SteamVR_Fade.Start(fadeColor, blinkTransitionSpeed);
+            if (HeadsetCollisionEnded != null)
+                HeadsetCollisionEnded(this, e);
         }
-    }
 
-    protected void OnTriggerExit(Collider collider)
-    {
-        if (!collider.name.Contains("PlayerObject_"))
+        protected HeadsetCollisionEventArgs SetHeadsetCollisionEvent(Collider collider, Transform currentTransform)
         {
-            OnHeadsetCollisionEnded(SetHeadsetCollisionEvent(collider, this.transform));
-            SteamVR_Fade.Start(Color.clear, blinkTransitionSpeed);
+            HeadsetCollisionEventArgs e;
+            e.collider = collider;
+            e.currentTransform = currentTransform;
+            return e;
+        }
+
+        protected void Start()
+        {
+            if (gameObject.GetComponentInChildren<SteamVR_Fade>() == null)
+            {
+                Debug.LogWarning("This 'VRTK_HeadsetCollisionFade' script needs a SteamVR_Fade script on the camera eye.");
+            }
+
+            this.name = "PlayerObject_" + this.name;
+            BoxCollider collider = this.gameObject.AddComponent<BoxCollider>();
+            collider.isTrigger = true;
+            collider.size = new Vector3(0.1f, 0.1f, 0.1f);
+
+            Rigidbody rb = this.gameObject.AddComponent<Rigidbody>();
+            rb.isKinematic = true;
+            rb.useGravity = false;
+        }
+
+        protected void OnTriggerStay(Collider collider)
+        {
+            if (!collider.name.Contains("PlayerObject_"))
+            {
+                OnHeadsetCollisionDetect(SetHeadsetCollisionEvent(collider, this.transform));
+                SteamVR_Fade.Start(fadeColor, blinkTransitionSpeed);
+            }
+        }
+
+        protected void OnTriggerExit(Collider collider)
+        {
+            if (!collider.name.Contains("PlayerObject_"))
+            {
+                OnHeadsetCollisionEnded(SetHeadsetCollisionEvent(collider, this.transform));
+                SteamVR_Fade.Start(Color.clear, blinkTransitionSpeed);
+            }
         }
     }
 }

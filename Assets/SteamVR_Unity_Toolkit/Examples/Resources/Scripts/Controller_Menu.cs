@@ -1,20 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
+using VRTK;
 
 public class Controller_Menu : MonoBehaviour {
     public GameObject menuObject;
 
     private GameObject clonedMenuObject;
-    private Vector3 originalPosition;
-    private Quaternion originalRotation;
 
     private bool menuInit = false;
     private bool menuActive = false;
 
     void Start()
     {        
-        GetComponent<VRTK_ControllerEvents>().AliasMenuOn += new ControllerClickedEventHandler(DoMenuOn);
-        GetComponent<VRTK_ControllerEvents>().AliasMenuOff += new ControllerClickedEventHandler(DoMenuOff);
+        GetComponent<VRTK_ControllerEvents>().AliasMenuOn += new ControllerInteractionEventHandler(DoMenuOn);
+        GetComponent<VRTK_ControllerEvents>().AliasMenuOff += new ControllerInteractionEventHandler(DoMenuOff);
         menuInit = false;
         menuActive = false;
     }
@@ -26,7 +25,7 @@ public class Controller_Menu : MonoBehaviour {
         menuInit = true;
     }
 
-    void DoMenuOn(object sender, ControllerClickedEventArgs e)
+    void DoMenuOn(object sender, ControllerInteractionEventArgs e)
     {
         if (!menuInit)
         {
@@ -36,7 +35,7 @@ public class Controller_Menu : MonoBehaviour {
         menuActive = true;
     }
 
-    void DoMenuOff(object sender, ControllerClickedEventArgs e)
+    void DoMenuOff(object sender, ControllerInteractionEventArgs e)
     {
         clonedMenuObject.SetActive(false);
         menuActive = false;

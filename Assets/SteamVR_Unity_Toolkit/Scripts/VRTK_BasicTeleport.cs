@@ -9,132 +9,153 @@
 //
 //====================================================================================
 
-using UnityEngine;
-using System.Collections;
+namespace VRTK
+{
+    using UnityEngine;
+    using System.Collections;
 
-public class VRTK_BasicTeleport : MonoBehaviour {
-    public float blinkTransitionSpeed = 0.6f;
-    [Range(0f,32f)]
-    public float distanceBlinkDelay = 0f;
-    public bool headsetPositionCompensation = true;
-    public string ignoreTargetWithTagOrClass;
+    public delegate void TeleportEventHandler(object sender, DestinationMarkerEventArgs e);
 
-    protected Transform eyeCamera;
-    protected bool adjustYForTerrain = false;
-    protected bool enableTeleport = true;
-
-    private float blinkPause = 0f;
-    private float fadeInTime = 0f;
-    private float maxBlinkTransitionSpeed = 1.5f;
-    private float maxBlinkDistance = 33f;
-
-    protected virtual void Start()
+    public class VRTK_BasicTeleport : MonoBehaviour
     {
-        this.name = "PlayerObject_" + this.name;
-        adjustYForTerrain = false;
-        eyeCamera = GameObject.FindObjectOfType<SteamVR_Camera>().GetComponent<Transform>();
+        public float blinkTransitionSpeed = 0.6f;
+        [Range(0f, 32f)]
+        public float distanceBlinkDelay = 0f;
+        public bool headsetPositionCompensation = true;
+        public string ignoreTargetWithTagOrClass;
 
-        var controllerManager = GameObject.FindObjectOfType<SteamVR_ControllerManager>();
-        InitControllerListeners(controllerManager.left);
-        InitControllerListeners(controllerManager.right);
-        InitHeadsetCollisionListener();
+        public event TeleportEventHandler Teleporting;
+        public event TeleportEventHandler Teleported;
 
-        enableTeleport = true;
-    }
+        protected Transform eyeCamera;
+        protected bool adjustYForTerrain = false;
+        protected bool enableTeleport = true;
 
-    protected virtual void Blink(float transitionSpeed)
-    {
-        fadeInTime = transitionSpeed;
-        SteamVR_Fade.Start(Color.black, 0);
-        Invoke("ReleaseBlink", blinkPause);
-    }
+        private float blinkPause = 0f;
+        private float fadeInTime = 0f;
+        private float maxBlinkTransitionSpeed = 1.5f;
+        private float maxBlinkDistance = 33f;
 
-    protected virtual bool ValidLocation(Transform target)
-    {
-        return (target && target.tag != ignoreTargetWithTagOrClass && target.GetComponent(ignoreTargetWithTagOrClass) == null);
-    }
-
-    protected virtual void DoTeleport(object sender, WorldPointerEventArgs e)
-    {
-        if (enableTeleport && ValidLocation(e.target) && e.enableTeleport)
-        {
-            Vector3 newPosition = GetNewPosition(e.destinationPosition, e.target);
-            CalculateBlinkDelay(blinkTransitionSpeed, newPosition);
-            Blink(blinkTransitionSpeed);
-            SetNewPosition(newPosition, e.target);
+        protected void OnTeleporting(object sender, DestinationMarkerEventArgs e) {
+            if (Teleporting != null)
+                Teleporting(this, e);
         }
-    }
 
-    protected virtual void SetNewPosition(Vector3 position, Transform target)
-    {
-        this.transform.position = CheckTerrainCollision(position, target);
-    }
-
-    protected virtual Vector3 GetNewPosition(Vector3 tipPosition, Transform target)
-    {
-        float newX = (headsetPositionCompensation ? (tipPosition.x - (eyeCamera.position.x - this.transform.position.x)) : tipPosition.x);
-        float newY = this.transform.position.y;
-        float newZ = (headsetPositionCompensation ? (tipPosition.z - (eyeCamera.position.z - this.transform.position.z)) : tipPosition.z);
-
-        return new Vector3(newX, newY, newZ);
-    }
-
-    protected Vector3 CheckTerrainCollision(Vector3 position, Transform target)
-    {
-        if(adjustYForTerrain && target.GetComponent<Terrain>())
-        {
-            position.y = Terrain.activeTerrain.SampleHeight(position);
+        protected void OnTeleported(object sender, DestinationMarkerEventArgs e) {
+            if (Teleported != null)
+                Teleported(this, e);
         }
-        return position;
-    }
 
-    private void CalculateBlinkDelay(float blinkSpeed, Vector3 newPosition)
-    {
-        blinkPause = 0f;
-        if (distanceBlinkDelay > 0f)
+        public void InitDestinationSetListener(GameObject markerMaker)
         {
-            float distance = Vector3.Distance(this.transform.position, newPosition);
-            blinkPause = Mathf.Clamp((distance * blinkTransitionSpeed) / (maxBlinkDistance - distanceBlinkDelay), 0, maxBlinkTransitionSpeed);
-            blinkPause = (blinkSpeed <= 0.25 ? 0f : blinkPause);
-        }
-    }
-
-    private void ReleaseBlink()
-    {
-        SteamVR_Fade.Start(Color.clear, fadeInTime);
-        fadeInTime = 0f;
-    }
-
-    private void InitControllerListeners(GameObject controller)
-    {
-        if (controller)
-        {
-            var worldPointer = controller.GetComponent<VRTK_WorldPointer>();
-            if (worldPointer)
+            if (markerMaker)
             {
-                worldPointer.WorldPointerDestinationSet += new WorldPointerEventHandler(DoTeleport);
-                worldPointer.SetMissTarget(ignoreTargetWithTagOrClass);
+                var worldMarker = markerMaker.GetComponent<VRTK_DestinationMarker>();
+                if (worldMarker)
+                {
+                    worldMarker.DestinationMarkerSet += new DestinationMarkerEventHandler(DoTeleport);
+                    worldMarker.SetInvalidTarget(ignoreTargetWithTagOrClass);
+                }
             }
         }
-    }
 
-    private void InitHeadsetCollisionListener()
-    {
-        var headset = GameObject.FindObjectOfType<VRTK_HeadsetCollisionFade>();
-        if (headset)
+        protected virtual void Start()
         {
-            headset.HeadsetCollisionDetect += new HeadsetCollisionEventHandler(DisableTeleport);
-            headset.HeadsetCollisionEnded += new HeadsetCollisionEventHandler(EnableTeleport);
+            this.name = "PlayerObject_" + this.name;
+            adjustYForTerrain = false;
+            eyeCamera = GameObject.FindObjectOfType<SteamVR_Camera>().GetComponent<Transform>();
+
+            var controllerManager = GameObject.FindObjectOfType<SteamVR_ControllerManager>();
+            InitDestinationSetListener(controllerManager.left);
+            InitDestinationSetListener(controllerManager.right);
+            InitHeadsetCollisionListener();
+
+            enableTeleport = true;
         }
-    }
 
-    private void DisableTeleport(object sender, HeadsetCollisionEventArgs e)
-    {
-        enableTeleport = false;
-    }
+        protected virtual void Blink(float transitionSpeed)
+        {
+            fadeInTime = transitionSpeed;
+            SteamVR_Fade.Start(Color.black, 0);
+            Invoke("ReleaseBlink", blinkPause);
+        }
 
-    private void EnableTeleport(object sender, HeadsetCollisionEventArgs e)
-    {
-        enableTeleport = true;
+        protected virtual bool ValidLocation(Transform target)
+        {
+            return (target && target.tag != ignoreTargetWithTagOrClass && target.GetComponent(ignoreTargetWithTagOrClass) == null);
+        }
+
+        protected virtual void DoTeleport(object sender, DestinationMarkerEventArgs e)
+        {
+            if (enableTeleport && ValidLocation(e.target) && e.enableTeleport)
+            {
+                OnTeleporting(sender, e);
+                Vector3 newPosition = GetNewPosition(e.destinationPosition, e.target);
+                CalculateBlinkDelay(blinkTransitionSpeed, newPosition);
+                Blink(blinkTransitionSpeed);
+                SetNewPosition(newPosition, e.target);
+                OnTeleported(sender, e);
+            }
+        }
+
+        protected virtual void SetNewPosition(Vector3 position, Transform target)
+        {
+            this.transform.position = CheckTerrainCollision(position, target);
+        }
+
+        protected virtual Vector3 GetNewPosition(Vector3 tipPosition, Transform target)
+        {
+            float newX = (headsetPositionCompensation ? (tipPosition.x - (eyeCamera.position.x - this.transform.position.x)) : tipPosition.x);
+            float newY = this.transform.position.y;
+            float newZ = (headsetPositionCompensation ? (tipPosition.z - (eyeCamera.position.z - this.transform.position.z)) : tipPosition.z);
+
+            return new Vector3(newX, newY, newZ);
+        }
+
+        protected Vector3 CheckTerrainCollision(Vector3 position, Transform target)
+        {
+            if (adjustYForTerrain && target.GetComponent<Terrain>())
+            {
+                position.y = Terrain.activeTerrain.SampleHeight(position);
+            }
+            return position;
+        }
+
+        private void CalculateBlinkDelay(float blinkSpeed, Vector3 newPosition)
+        {
+            blinkPause = 0f;
+            if (distanceBlinkDelay > 0f)
+            {
+                float distance = Vector3.Distance(this.transform.position, newPosition);
+                blinkPause = Mathf.Clamp((distance * blinkTransitionSpeed) / (maxBlinkDistance - distanceBlinkDelay), 0, maxBlinkTransitionSpeed);
+                blinkPause = (blinkSpeed <= 0.25 ? 0f : blinkPause);
+            }
+        }
+
+        private void ReleaseBlink()
+        {
+            SteamVR_Fade.Start(Color.clear, fadeInTime);
+            fadeInTime = 0f;
+        }
+
+        private void InitHeadsetCollisionListener()
+        {
+            var headset = GameObject.FindObjectOfType<VRTK_HeadsetCollisionFade>();
+            if (headset)
+            {
+                headset.HeadsetCollisionDetect += new HeadsetCollisionEventHandler(DisableTeleport);
+                headset.HeadsetCollisionEnded += new HeadsetCollisionEventHandler(EnableTeleport);
+            }
+        }
+
+        private void DisableTeleport(object sender, HeadsetCollisionEventArgs e)
+        {
+            enableTeleport = false;
+        }
+
+        private void EnableTeleport(object sender, HeadsetCollisionEventArgs e)
+        {
+            enableTeleport = true;
+        }
     }
 }

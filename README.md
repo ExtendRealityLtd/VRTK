@@ -1,4 +1,10 @@
-# SteamVR Unity Toolkit - [![Slack](https://vrtk-slack-invite.herokuapp.com/badge.svg)](https://vrtk-slack-invite.herokuapp.com) [![Subreddit](https://img.shields.io/badge/subreddit-discussions-red.svg?style=flat-square)](https://reddit.com) [![Trello](https://img.shields.io/badge/trello-work%20board-blue.svg?style=flat-square)](https://trello.com/b/sU0vRWUz/steamvr-unity-toolkit)
+# SteamVR Unity Toolkit - [![Slack](https://vrtk-slack-invite.herokuapp.com/badge.svg)](https://vrtk-slack-invite.herokuapp.com) [![Subreddit](https://img.shields.io/badge/subreddit-discussions-red.svg?style=flat-square)](https://www.reddit.com/r/SteamVRUnityToolkit/) [![Trello](https://img.shields.io/badge/trello-work%20board-blue.svg?style=flat-square)](https://trello.com/b/sU0vRWUz/steamvr-unity-toolkit)
+
+  > ##ANNOUNCEMENT
+  > My HTC Vive decided to stop working, just get a black screen on the HMD.
+  > Anyway, HTC have arranged for it to be collected to RMA it and repair it
+  > but this means I'm now without a HTC Vive so development will pause until
+  > it is returned and is working again. Sorry for any inconvenience.
 
 A collection of useful scripts and prefabs for building SteamVR titles
 in Unity 5.
@@ -211,6 +217,9 @@ The event payload that is emitted contains:
   pressure being applied to the button pressed.
   * **touchpadAxis:** A Vector2 of the position the touchpad is
   touched at.
+  * **touchpadAngle:** A float that shows the rotational position
+  the touchpad is being touched at, 0 being top, 180 being bottom
+  and all other angles accordingly.
 
 There are also common action aliases that are emitted when controller
 buttons are pressed. These action aliases can be mapped to a
@@ -261,6 +270,11 @@ the beam.
 
 The following script parameters are available:
 
+  * **Enable Teleport:** If this is checked then the teleport flag is
+  set to true in the Destination Set event so teleport scripts will
+  know whether to action the new destination. This allows controller
+  beams to be enabled on a controller but never trigger a teleport
+  (if this option is unchecked).
   * **Pointer Hit Color:** The colour of the beam when it is colliding
   with a valid target. It can be set to a different colour for each
   controller.
@@ -278,17 +292,12 @@ The following script parameters are available:
   pointer colour will change to the `Pointer Miss Color` and the
   `WorldPointerDestinationSet` event will not be triggered, which will
   prevent teleporting into areas where the play area will collide.
-  * **Enable Teleport:** If this is checked then the teleport flag is
-  set to true in the Destination Set event so teleport scripts will
-  know whether to action the new destination. This allows controller
-  beams to be enabled on a controller but never trigger a teleport
-  (if this option is unchecked).
   * **Beam Always On:** If this is checked the the pointer beam is
   always visible but the Destination Set event is still only emitted
   when the assigned button is pressed.
-  * **Activate Delay:** The time in seconds (based on a 60 frame per
-  second update tick) to delay the pointer beam being able to be
-  active again. Useful for preventing constant beams for teleporting.
+  * **Activate Delay:** The time in seconds to delay the pointer beam
+  being able to be active again. Useful for preventing constant
+  teleportation.
   * **Pointer Thickness:** The thickness and length of the beam can
   also be set on the script as well as the ability to toggle the sphere
   beam tip that is displayed at the end of the beam (to represent a
@@ -329,6 +338,11 @@ the beam.
 
 The following script parameters are available:
 
+  * **Enable Teleport:** If this is checked then the teleport flag is
+  set to true in the Destination Set event so teleport scripts will
+  know whether to action the new destination. This allows controller
+  beams to be enabled on a controller but never trigger a teleport
+  (if this option is unchecked).
   * **Pointer Hit Color:** The colour of the beam when it is colliding
   with a valid target. It can be set to a different colour for each
   controller.
@@ -346,17 +360,12 @@ The following script parameters are available:
   pointer colour will change to the `Pointer Miss Color` and the
   `WorldPointerDestinationSet` event will not be triggered, which will
   prevent teleporting into areas where the play area will collide.
-  * **Enable Teleport:** If this is checked then the teleport flag is
-  set to true in the Destination Set event so teleport scripts will
-  know whether to action the new destination. This allows controller
-  beams to be enabled on a controller but never trigger a teleport
-  (if this option is unchecked).
   * **Beam Always On:** If this is checked the the pointer beam is
   always visible but the Destination Set event is still only emitted
   when the assigned button is pressed.
-  * **Activate Delay:** The time in seconds (based on a 60 frame per
-  second update tick) to delay the pointer beam being able to be
-  active again. Useful for preventing constant beams for teleporting.
+  * **Activate Delay:** The time in seconds to delay the pointer beam
+  being able to be active again. Useful for preventing constant
+  teleportation.
   * **Pointer Length:** The length of the projected forward pointer
   beam, this is basically the distance able to point from the
   controller potiion.
@@ -602,6 +611,12 @@ immersion but the user is doing something that isn't natural.
 
 The following script parameters are available:
 
+  * **Left Controller:** If this is checked then the left controller
+  touchpad will be enabled to move the play area. It can also be
+  toggled at runtime.
+  * **Right Controller:** If this is checked then the right controller
+  touchpad will be enabled to move the play area. It can also be
+  toggled at runtime.
   * **Max Walk Speed:** The maximum speed the play area will be moved
   when the touchpad is being touched at the extremes of the axis. If
   a lower part of the touchpad axis is touched (nearer the centre)
@@ -618,6 +633,20 @@ the user with the touchpad. There is also an area that can only be
 traversed if the user is crouching. Standing up in this crouched area
 will cause the user to appear back at their last good known position.
 
+##### VRTK_RoomExtender
+
+This script allows the playArea to move with the player.
+The CameraRig is only moved when at the edge of a defined circle. Aims to create a virtually bigger play area.
+I have added a demo scene to test the script (028_CameraRig_RoomExtender).
+
+To use this add this script to the CameraRig.
+
+The following script parameters are available:
+
+  * **Additional Movement Multiplier:** This is the factor by which movement at the edge of the circle is amplified. 0 is no movement of the CameraRig. Higher values simulate a bigger play area but may be to uncomfortable.
+  * **Head Zone Radius:** This is the size of the circle in which the playArea is not moved and everything is normal. If it is to low it becomes uncomfortable when crouching.
+  * **Debug Transform:** This transform visualises the circle around the player where the CameraRig is not moved. In the demo scene this is a cylinder at floor level. Remember to turn of collisions.
+
 #### Interactable Object (VRTK_InteractableObject)
 
 The Interactable Object script is attached to any game object that is
@@ -631,6 +660,10 @@ The following script parameters are available:
   * **Touch Highligt Color:** The colour to highlight the object
   when it is touched. This colour will override any globally set
   color (for instance on the `VRTK_InteractTouch` script).
+  * **Rumble On Touch:** The haptic feedback on the controller can
+  be triggered upon touching the object, the `x` denotes the length
+  of time, the `y` denotes the strength of the pulse. (x and y will
+  be replaced in the future with a custom editor)
 
 ######Grab Interactions
   * **Is Grabbable:** Determines if the object can be grabbed
@@ -645,10 +678,10 @@ The following script parameters are available:
   on the controller needs to be continually held down to keep grabbing.
   If this is unchecked the grab button toggles the grab action with
   one button press to grab and another to release.
-  * **Pause Collisions On Grab:** If this is checked then collisions
-  with the Interactable Object are temporarily disabled whilst the
-  object snaps to the controller. This is useful if a game object may
-  get stuck inside another object when it is being grabbed.
+  * **On Grab Collision Delay:** The amount of time to delay collisions
+  affecting the object when it is first grabbed. This is useful if a
+  game object may get stuck inside another object when it is being
+  grabbed.
   * **Grab Snap Type:** This sets the snap type of the object when
   it is grabbed.
    * `Simple_Snap` snaps the grabbed object's central position to the
@@ -672,6 +705,10 @@ The following script parameters are available:
   must be the child of the item being grabbed and serves as an
   orientation point to rotate and position the grabbed item in relation
   to the grabbing controller.
+  * **Rumble On Grab:** The haptic feedback on the controller can
+  be triggered upon grabbing the object, the `x` denotes the length
+  of time, the `y` denotes the strength of the pulse. (x and y will
+  be replaced in the future with a custom editor)
 
 ######Grab Mechanics
   * **Grab Attach Type:** This determines how the grabbed item will
@@ -730,6 +767,10 @@ The following script parameters are available:
   interactable object with this setting checked as this prevents
   unwanted teleporting from happening when using an object with a
   pointer.
+  * **Rumble On Use:** The haptic feedback on the controller can
+  be triggered upon using the object, the `x` denotes the length
+  of time, the `y` denotes the strength of the pulse. (x and y will
+  be replaced in the future with a custom editor)
 
 The following events are emitted:
 
@@ -977,11 +1018,49 @@ different scripts without needing to duplicate code.
 
 The current abstract classes are available:
 
+##### VRTK_DestinationMarker
+
+This abstract class provides the ability to emit events of destination
+markers within the game world. It can be useful for tagging locations
+for specific purposes such as teleporting.
+
+It is utilised by the `VRTK_WorldPointer` for dealing with pointer
+events when the pointer cursor touches areas within the game world.
+
+The following script parameters are available:
+
+  * **Enable Teleport:** If this is checked then the teleport flag is
+  set to true in the Destination Set event so teleport scripts will
+  know whether to action the new destination.
+
+The following events are emitted:
+
+  * **DestinationMarkerEnter:** When a collision with another game
+  object has occured.
+  * **DestinationMarkerExit:** When the collision with the other
+  game object finishes.
+  * **DestinationMarkerSet:** When the destination marker is
+  active in the scene to determine the last destination position
+  (useful for selecting and teleporting).
+
+The event payload that is emitted contains:
+
+  * **distance:** The distance between the origin and the collided
+  destination.
+  * **target:** The Transform of the collided destination object.
+  * **destinationPosition:** The world position of the destination
+  marker.
+  * **enableTeleport:** Whether the destination set event should
+  trigger teleport
+  * **controllerIndex:** The optional index of the controller emitting
+  the beam
+
 ##### VRTK_WorldPointer
 
 This abstract class provides any game pointer the ability to know the
-the state of the implemented pointer and emit an event to other scripts
-in the game world.
+the state of the implemented pointer. It extends the
+`VRTK_DestinationMarker` to allow for destination events to be emitted
+when the pointer cursor collides with objects.
 
 The World Pointer also provides a play area cursor to be displayed for
 all cursors that utilise this class. The play area cursor is a
@@ -997,6 +1076,11 @@ handling play area collisions is not enabled when using terrains.
 
 The following script parameters are available:
 
+  * **Enable Teleport:** If this is checked then the teleport flag is
+  set to true in the Destination Set event so teleport scripts will
+  know whether to action the new destination. This allows controller
+  beams to be enabled on a controller but never trigger a teleport
+  (if this option is unchecked).
   * **Pointer Hit Color:** The colour of the beam when it is colliding
   with a valid target. It can be set to a different colour for each
   controller.
@@ -1014,37 +1098,12 @@ The following script parameters are available:
   pointer colour will change to the `Pointer Miss Color` and the
   `WorldPointerDestinationSet` event will not be triggered, which will
   prevent teleporting into areas where the play area will collide.
-  * **Enable Teleport:** If this is checked then the teleport flag is
-  set to true in the Destination Set event so teleport scripts will
-  know whether to action the new destination. This allows controller
-  beams to be enabled on a controller but never trigger a teleport
-  (if this option is unchecked).
   * **Beam Always On:** If this is checked the the pointer beam is
   always visible but the Destination Set event is still only emitted
   when the assigned button is pressed.
-  * **Activate Delay:** The time in seconds (based on a 60 frame per
-  second update tick) to delay the pointer beam being able to be
-  active again. Useful for preventing constant beams for teleporting.
-
-The following events are emitted:
-
-  * **WorldPointerIn:** When the pointer collides with another
-  game object.
-  * **WorldPointerOut:** When the pointer stops colliding with
-  the game object.
-  * **WorldPointerDestinationSet:** When the pointer is no longer
-  active in the scene to determine the last destination position of
-  the pointer end (useful for selecting and teleporting). This event
-  is not emitted if the pointer is colliding with an interactable
-  object that has the `Pointer Activates Use Action` set to true.
-
-The event payload that is emitted contains:
-
-  * **controllerIndex:** The index of the controller emitting the beam
-  * **distance:** The distance the target is from the controller
-  * **target:** The Transform of the object that the pointer is touching
-  * **tipPosition:** The world position of the end of the pointer
-  * **enableTeleport:** Whether the controller should trigger teleport
+  * **Activate Delay:** The time in seconds to delay the pointer beam
+  being able to be active again. Useful for preventing constant
+  teleportation.
 
 ### Examples
 
@@ -1266,6 +1325,12 @@ The current examples are:
   an object on game start and prevent the user from dropping that
   object. The scene auto grabs two swords to each of the controllers
   and it's not possible to drop either of the swords.
+
+  * **027_CameraRig_TeleportByModelVillage:** A scene that demonstrates
+  how to teleport to different locations without needing a world
+  pointer and using the Destination Events abstract class on objects
+  that represent a mini map of the game world. Touching and using an
+  object on the map teleports the user to the specified location.
 
 ## Contributing
 

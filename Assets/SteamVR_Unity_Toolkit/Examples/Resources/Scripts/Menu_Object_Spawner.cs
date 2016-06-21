@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using VRTK;
 
 public class Menu_Object_Spawner : VRTK_InteractableObject
 {

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using VRTK;
 
 public class ArrowSpawner : MonoBehaviour {
     public GameObject arrowPrefab;
