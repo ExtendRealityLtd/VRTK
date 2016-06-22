@@ -169,8 +169,8 @@ public class BowAim : MonoBehaviour {
 
         if (!currentPull.ToString("F2").Equals(previousPull.ToString("F2")))
         {
-            holdActions.TriggerHapticPulse(1, (ushort)bowVibration);
-            stringActions.TriggerHapticPulse(1, (ushort)stringVibration);
+            holdActions.TriggerHapticPulse((ushort)bowVibration);
+            stringActions.TriggerHapticPulse((ushort)stringVibration);
         }
         previousPull = currentPull;
     }
