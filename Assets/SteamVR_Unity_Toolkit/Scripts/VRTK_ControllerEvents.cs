@@ -82,6 +82,9 @@
         private Vector2 touchpadAxis = Vector2.zero;
         private Vector2 triggerAxis = Vector2.zero;
 
+        private Vector3 controllerVelocity = Vector3.zero;
+        private Vector3 controllerAngularVelocity = Vector3.zero;
+
         public virtual void OnTriggerPressed(ControllerInteractionEventArgs e)
         {
             if (TriggerPressed != null)
@@ -202,7 +205,19 @@
                 AliasMenuOff(this, e);
         }
 
-        ControllerInteractionEventArgs SetButtonEvent(ref bool buttonBool, bool value, float buttonPressure)
+        public Vector3 GetVelocity()
+        {
+            SetVelocity();
+            return controllerVelocity;
+        }
+
+        public Vector3 GetAngularVelocity()
+        {
+            SetVelocity();
+            return controllerAngularVelocity;
+        }
+
+        private ControllerInteractionEventArgs SetButtonEvent(ref bool buttonBool, bool value, float buttonPressure)
         {
             buttonBool = value;
             ControllerInteractionEventArgs e;
@@ -220,18 +235,18 @@
             return e;
         }
 
-        void Awake()
+        private void Awake()
         {
             trackedController = GetComponent<SteamVR_TrackedObject>();
         }
 
-        void Start()
+        private void Start()
         {
             controllerIndex = (uint)trackedController.index;
             device = SteamVR_Controller.Input((int)controllerIndex);
         }
 
-        void EmitAlias(ButtonAlias type, bool touchDown, float buttonPressure, ref bool buttonBool)
+        private void EmitAlias(ButtonAlias type, bool touchDown, float buttonPressure, ref bool buttonBool)
         {
             if (pointerToggleButton == type)
             {
@@ -290,13 +305,13 @@
             }
         }
 
-        bool Vector2ShallowEquals(Vector2 vectorA, Vector2 vectorB)
+        private bool Vector2ShallowEquals(Vector2 vectorA, Vector2 vectorB)
         {
             return (vectorA.x.ToString("F" + axisFidelity) == vectorB.x.ToString("F" + axisFidelity) &&
                     vectorA.y.ToString("F" + axisFidelity) == vectorB.y.ToString("F" + axisFidelity));
         }
 
-        void Update()
+        private void Update()
         {
             controllerIndex = (uint)trackedController.index;
             device = SteamVR_Controller.Input((int)controllerIndex);
@@ -390,6 +405,21 @@
             // Save current touch and trigger settings to detect next change.
             touchpadAxis = new Vector2(currentTouchpadAxis.x, currentTouchpadAxis.y);
             triggerAxis = new Vector2(currentTriggerAxis.x, currentTriggerAxis.y);
+        }
+
+        private void SetVelocity()
+        {
+            var origin = trackedController.origin ? trackedController.origin : trackedController.transform.parent;
+            if (origin != null)
+            {
+                controllerVelocity = origin.TransformDirection(device.velocity);
+                controllerAngularVelocity = origin.TransformDirection(device.angularVelocity);
+            }
+            else
+            {
+                controllerVelocity = device.velocity;
+                controllerAngularVelocity = device.angularVelocity;
+            }
         }
     }
 }
