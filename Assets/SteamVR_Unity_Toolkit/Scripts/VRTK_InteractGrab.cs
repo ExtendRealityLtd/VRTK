@@ -235,7 +235,10 @@ namespace VRTK
             if (controllerAttachJoint == null && grabbedObject == null && IsObjectGrabbable(interactTouch.GetTouchedObject()))
             {
                 InitGrabbedObject();
-                SnapObjectToGrabToController(grabbedObject);
+                if(grabbedObject)
+                {
+                    SnapObjectToGrabToController(grabbedObject);
+                }
             }
         }
 
@@ -253,6 +256,12 @@ namespace VRTK
             if (grabbedObject)
             {
                 var grabbedObjectScript = grabbedObject.GetComponent<VRTK_InteractableObject>();
+
+                if (!grabbedObjectScript.IsValidInteractableController(this.gameObject, grabbedObjectScript.allowedGrabControllers))
+                {
+                    grabbedObject = null;
+                    return;
+                }
 
                 OnControllerGrabInteractableObject(interactTouch.SetControllerInteractEvent(grabbedObject));
 

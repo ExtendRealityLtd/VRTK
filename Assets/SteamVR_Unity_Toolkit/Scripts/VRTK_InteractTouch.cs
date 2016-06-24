@@ -115,16 +115,24 @@ namespace VRTK
                     touchedObject = collider.gameObject.GetComponentInParent<VRTK_InteractableObject>().gameObject;
                 }
 
+                var touchedObjectScript = touchedObject.GetComponent<VRTK_InteractableObject>();
+
+                if(! touchedObjectScript.IsValidInteractableController(this.gameObject, touchedObjectScript.allowedTouchControllers))
+                {
+                    touchedObject = null;
+                    return;
+                }
+
                 OnControllerTouchInteractableObject(SetControllerInteractEvent(touchedObject));
-                touchedObject.GetComponent<VRTK_InteractableObject>().ToggleHighlight(true, globalTouchHighlightColor);
-                touchedObject.GetComponent<VRTK_InteractableObject>().StartTouching(this.gameObject);
+                touchedObjectScript.ToggleHighlight(true, globalTouchHighlightColor);
+                touchedObjectScript.StartTouching(this.gameObject);
 
                 if (controllerActions.IsControllerVisible() && hideControllerOnTouch)
                 {
                     Invoke("HideController", hideControllerDelay);
                 }
 
-                var rumbleAmount = touchedObject.GetComponent<VRTK_InteractableObject>().rumbleOnTouch;
+                var rumbleAmount = touchedObjectScript.rumbleOnTouch;
                 if (!rumbleAmount.Equals(Vector2.zero))
                 {
                     controllerActions.TriggerHapticPulse((ushort)rumbleAmount.y, (int)rumbleAmount.x, 0.05f);
@@ -134,6 +142,11 @@ namespace VRTK
 
         private void OnTriggerExit(Collider collider)
         {
+            if (touchedObject == null)
+            {
+                return;
+            }
+
             if (IsObjectInteractable(collider.gameObject))
             {
                 GameObject untouched;

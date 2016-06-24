@@ -659,6 +659,12 @@ The following script parameters are available:
   be triggered upon touching the object, the `x` denotes the length
   of time, the `y` denotes the strength of the pulse. (x and y will
   be replaced in the future with a custom editor)
+  * **Allowed Touch Controllers:** Determines which controller can
+  initiate a touch action. The options available are:
+   * `Both` means both controllers will register a touch
+   * `Left_Only` means only the left controller will register a touch
+   * `Right_Only` means only the right controller will register a touch
+
 
 ######Grab Interactions
   * **Is Grabbable:** Determines if the object can be grabbed
@@ -704,6 +710,11 @@ The following script parameters are available:
   be triggered upon grabbing the object, the `x` denotes the length
   of time, the `y` denotes the strength of the pulse. (x and y will
   be replaced in the future with a custom editor)
+  * **Allowed Grab Controllers:** Determines which controller can
+  initiate a grab action. The options available are:
+   * `Both` means both controllers are allowed to grab
+   * `Left_Only` means only the left controller is allowed to grab
+   * `Right_Only` means only the right controller is allowed to grab
 
 ######Grab Mechanics
   * **Grab Attach Type:** This determines how the grabbed item will
@@ -766,6 +777,11 @@ The following script parameters are available:
   be triggered upon using the object, the `x` denotes the length
   of time, the `y` denotes the strength of the pulse. (x and y will
   be replaced in the future with a custom editor)
+  * **Allowed Use Controllers:** Determines which controller can
+  initiate a use action. The options available are:
+   * `Both` means both controllers are allowed to use
+   * `Left_Only` means only the left controller is allowed to use
+   * `Right_Only` means only the right controller is allowed to use
 
 The following events are emitted:
 

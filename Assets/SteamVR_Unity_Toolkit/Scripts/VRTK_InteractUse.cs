@@ -101,15 +101,25 @@ namespace VRTK
             if ((usingObject == null || usingObject != touchedObject) && IsObjectUsable(touchedObject))
             {
                 usingObject = touchedObject;
+                var usingObjectScript = usingObject.GetComponent<VRTK_InteractableObject>();
+
+                if (!usingObjectScript.IsValidInteractableController(this.gameObject, usingObjectScript.allowedUseControllers))
+                {
+                    usingObject = null;
+                    return;
+                }
+
                 OnControllerUseInteractableObject(interactTouch.SetControllerInteractEvent(usingObject));
-                usingObject.GetComponent<VRTK_InteractableObject>().StartUsing(this.gameObject);
+                usingObjectScript.StartUsing(this.gameObject);
+
                 if (hideControllerOnUse)
                 {
                     Invoke("HideController", hideControllerDelay);
                 }
-                usingObject.GetComponent<VRTK_InteractableObject>().ToggleHighlight(false);
 
-                var rumbleAmount = usingObject.GetComponent<VRTK_InteractableObject>().rumbleOnUse;
+                usingObjectScript.ToggleHighlight(false);
+
+                var rumbleAmount = usingObjectScript.rumbleOnUse;
                 if (!rumbleAmount.Equals(Vector2.zero))
                 {
                     controllerActions.TriggerHapticPulse((ushort)rumbleAmount.y, (int)rumbleAmount.x, 0.05f);
@@ -146,7 +156,7 @@ namespace VRTK
             if (touchedObject != null && interactTouch.IsObjectInteractable(touchedObject))
             {
                 UseInteractedObject(touchedObject);
-                if (!IsObjectHoldOnUse(usingObject))
+                if (usingObject && !IsObjectHoldOnUse(usingObject))
                 {
                     SetObjectUsingState(usingObject, GetObjectUsingState(usingObject) + 1);
                 }
