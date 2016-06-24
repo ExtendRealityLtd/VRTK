@@ -637,15 +637,22 @@ will cause the user to appear back at their last good known position.
 
 This script allows the playArea to move with the player.
 The CameraRig is only moved when at the edge of a defined circle. Aims to create a virtually bigger play area.
-I have added a demo scene to test the script (028_CameraRig_RoomExtender).
-
 To use this add this script to the CameraRig.
 
 The following script parameters are available:
 
+  * **Additional Movement Enabled:** This is the a public variable to enable the additional movement. This can be used in other scripts to toggle the CameraRig movement.
+  * **Additional Movement Enabled On Button Press:** This configures the controls of the RoomExtender. If this is true you have to press the touchpad to enable it. If this is false you can disable it with pressing the touchpad.
   * **Additional Movement Multiplier:** This is the factor by which movement at the edge of the circle is amplified. 0 is no movement of the CameraRig. Higher values simulate a bigger play area but may be to uncomfortable.
   * **Head Zone Radius:** This is the size of the circle in which the playArea is not moved and everything is normal. If it is to low it becomes uncomfortable when crouching.
   * **Debug Transform:** This transform visualises the circle around the player where the CameraRig is not moved. In the demo scene this is a cylinder at floor level. Remember to turn of collisions.
+
+There is an additional script `VRTK_RoomExtender_PlayAreaGizmo` which can be attachted to the CameraRig to visualize the extended playArea.
+
+I have added a demo scene to test the script (028_CameraRig_RoomExtender):
+In the example scene the RoomExtender script is controlled by a VRTK_RoomExtender_Controller Example script located at both controllers.
+To use the RoomExtender you have to press the touchpad.
+The Additional Movement Multiplier is changed based on the touch distance to the center of the touchpad.
 
 #### Interactable Object (VRTK_InteractableObject)
 
