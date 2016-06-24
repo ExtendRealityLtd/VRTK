@@ -7,7 +7,6 @@
     {
         private bool controllerVisible = true;
         private ushort hapticPulseStrength;
-        private int hapticPulseCountdown;
 
         private uint controllerIndex;
         private SteamVR_TrackedObject trackedController;
@@ -39,10 +38,16 @@
             controllerVisible = on;
         }
 
-        public void TriggerHapticPulse(int duration, ushort strength)
+        public void TriggerHapticPulse(ushort strength)
         {
-            hapticPulseCountdown = duration;
             hapticPulseStrength = (strength <= maxHapticVibration ? strength : maxHapticVibration);
+            device.TriggerHapticPulse(hapticPulseStrength);
+        }
+
+        public void TriggerHapticPulse(ushort strength, float duration, float pulseInterval)
+        {
+            hapticPulseStrength = (strength <= maxHapticVibration ? strength : maxHapticVibration);
+            StartCoroutine(Pulse(duration, hapticPulseStrength, pulseInterval));
         }
 
         private void Awake()
@@ -54,11 +59,20 @@
         {
             controllerIndex = (uint)trackedController.index;
             device = SteamVR_Controller.Input((int)controllerIndex);
+        }
 
-            if (hapticPulseCountdown > 0)
+        private IEnumerator Pulse(float duration, int hapticPulseStrength, float pulseInterval)
+        {
+            if (pulseInterval <= 0)
             {
-                device.TriggerHapticPulse(hapticPulseStrength);
-                hapticPulseCountdown -= 1;
+                yield break;
+            }
+
+            while (duration > 0)
+            {
+                device.TriggerHapticPulse((ushort)hapticPulseStrength);
+                yield return new WaitForSeconds(pulseInterval);
+                duration -= pulseInterval;
             }
         }
     }

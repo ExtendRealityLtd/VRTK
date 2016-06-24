@@ -127,7 +127,7 @@ namespace VRTK
                 var rumbleAmount = touchedObject.GetComponent<VRTK_InteractableObject>().rumbleOnTouch;
                 if (!rumbleAmount.Equals(Vector2.zero))
                 {
-                    controllerActions.TriggerHapticPulse((int)rumbleAmount.x, (ushort)rumbleAmount.y);
+                    controllerActions.TriggerHapticPulse((ushort)rumbleAmount.y, (int)rumbleAmount.x, 0.05f);
                 }
             }
         }
