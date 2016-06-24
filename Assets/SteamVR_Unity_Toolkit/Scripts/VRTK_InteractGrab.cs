@@ -168,7 +168,7 @@ namespace VRTK
                 SpringJoint tempSpringJoint = obj.AddComponent<SpringJoint>();
                 tempSpringJoint.spring = objectScript.springJointStrength;
                 tempSpringJoint.damper = objectScript.springJointDamper;
-                if(objectScript.grabAttachMechanic == VRTK_InteractableObject.GrabSnapType.Precision_Snap)
+                if(objectScript.grabSnapType == VRTK_InteractableObject.GrabSnapType.Precision_Snap)
                 {
                     tempSpringJoint.anchor = obj.transform.InverseTransformPoint(controllerAttachPoint.position);
                 }
