@@ -1,5 +1,4 @@
 ﻿namespace VRTK {
-    using System;
     using UnityEngine;
 
     public class VRTK_Slider : VRTK_Control {
@@ -13,6 +12,7 @@
         public float max = 100f;
         public float stepSize = 0.1f;
 
+        public bool detectMinMax = true;
         public Vector3 minPoint;
         public Vector3 maxPoint;
 
@@ -34,6 +34,10 @@
             if (direction == Direction.autodetect) {
                 finalDirection = detectDirection();
                 if (finalDirection == Direction.autodetect) return false;
+            } else if (detectMinMax) {
+                if (!doDetectMinMax(finalDirection)) {
+                    return false;
+                }
             } else {
                 // convert local positions of min/max to world coordinates
                 Vector3 curPos = transform.localPosition;
@@ -109,60 +113,90 @@
             float lengthY = (hitUp.collider != null && hitDown.collider != null) ? hitUp.distance + hitDown.distance : float.MaxValue;
             float lengthZ = (hitForward.collider != null && hitBack.collider != null) ? hitForward.distance + hitBack.distance : float.MaxValue;
 
-            float extents = 0;
             if (lengthX < lengthY & lengthX < lengthZ) {
                 if (lengthY < lengthZ) {
                     direction = Direction.y;
-                    minPoint = hitUp.point;
-                    maxPoint = hitDown.point;
-                    extents = bounds.extents.y;
                 } else if (lengthZ < lengthY) {
                     direction = Direction.z;
-                    minPoint = hitBack.point;
-                    maxPoint = hitForward.point;
-                    extents = bounds.extents.z;
+                } else { // onset
+                    direction = Direction.x;
                 }
             }
             if (lengthY < lengthX & lengthY < lengthZ) {
                 if (lengthX < lengthZ) {
                     direction = Direction.x;
-                    minPoint = hitLeft.point;
-                    maxPoint = hitRight.point;
-                    extents = bounds.extents.x;
                 } else if (lengthZ < lengthX) {
                     direction = Direction.z;
-                    minPoint = hitBack.point;
-                    maxPoint = hitForward.point;
-                    extents = bounds.extents.z;
+                } else { // onset
+                    direction = Direction.y;
                 }
             }
             if (lengthZ < lengthX & lengthZ < lengthY) {
                 if (lengthX < lengthY) {
                     direction = Direction.x;
-                    minPoint = hitLeft.point;
-                    maxPoint = hitRight.point;
-                    extents = bounds.extents.x;
                 } else if (lengthY < lengthX) {
                     direction = Direction.y;
-                    minPoint = hitUp.point;
-                    maxPoint = hitDown.point;
-                    extents = bounds.extents.y;
+                } else { // onset
+                    direction = Direction.z;
                 }
             }
 
             if (direction != Direction.autodetect) {
-                // subtract width of slider to reach all values
-                minPoint = minPoint + (maxPoint - minPoint).normalized * extents;
-                maxPoint = maxPoint - (maxPoint - minPoint).normalized * extents;
-
-                finalMinPoint = minPoint;
-                finalMaxPoint = maxPoint;
+                if (!doDetectMinMax(direction)) {
+                    direction = Direction.autodetect;
+                }
             } else {
                 finalMinPoint = transform.position;
                 finalMaxPoint = transform.position;
             }
 
             return direction;
+        }
+
+        private bool doDetectMinMax(Direction direction) {
+            Bounds bounds = Utilities.getBounds(transform);
+            Vector3 v1 = Vector3.zero;
+            Vector3 v2 = Vector3.zero;
+            float extents = 0;
+
+            switch (direction) {
+                case Direction.x:
+                    v1 = Vector3.left;
+                    v2 = Vector3.right;
+                    extents = bounds.extents.x;
+                    break;
+                case Direction.y:
+                    v1 = Vector3.down;
+                    v2 = Vector3.up;
+                    extents = bounds.extents.y;
+                    break;
+                case Direction.z:
+                    v1 = Vector3.forward;
+                    v2 = Vector3.back;
+                    extents = bounds.extents.z;
+                    break;
+            }
+
+            RaycastHit hit1;
+            RaycastHit hit2;
+            Physics.Raycast(bounds.center, v1, out hit1, extents * MAX_AUTODETECT_SLIDER_LENGTH, Physics.DefaultRaycastLayers, QueryTriggerInteraction.UseGlobal);
+            Physics.Raycast(bounds.center, v2, out hit2, extents * MAX_AUTODETECT_SLIDER_LENGTH, Physics.DefaultRaycastLayers, QueryTriggerInteraction.UseGlobal);
+
+            if (hit1.collider && hit2.collider) {
+                finalMinPoint = hit1.point;
+                finalMaxPoint = hit2.point;
+
+                // subtract width of slider to reach all values
+                finalMinPoint = finalMinPoint + (finalMaxPoint - finalMinPoint).normalized * extents;
+                finalMaxPoint = finalMaxPoint - (finalMaxPoint - finalMinPoint).normalized * extents;
+
+                return true;
+            } else {
+                finalMinPoint = transform.position;
+                finalMaxPoint = transform.position;
+            }
+
+            return false;
         }
 
         protected override void handleUpdate() {
@@ -173,26 +207,26 @@
         }
 
         private void ensureSliderInRange() {
-            switch (direction) {
+            switch (finalDirection) {
                 case Direction.x:
-                    if (transform.localPosition.x > maxPoint.x) {
-                        transform.localPosition = maxPoint;
-                    } else if (transform.localPosition.x < minPoint.x) {
-                        transform.localPosition = minPoint;
+                    if (transform.position.x > finalMaxPoint.x) {
+                        transform.position = finalMaxPoint;
+                    } else if (transform.position.x < finalMinPoint.x) {
+                        transform.position = finalMinPoint;
                     }
                     break;
                 case Direction.y:
-                    if (transform.localPosition.y > maxPoint.y) {
-                        transform.localPosition = maxPoint;
-                    } else if (transform.localPosition.y < minPoint.y) {
-                        transform.localPosition = minPoint;
+                    if (transform.position.y > finalMaxPoint.y) {
+                        transform.position = finalMaxPoint;
+                    } else if (transform.position.y < finalMinPoint.y) {
+                        transform.position = finalMinPoint;
                     }
                     break;
                 case Direction.z:
-                    if (transform.localPosition.z > maxPoint.z) {
-                        transform.localPosition = maxPoint;
-                    } else if (transform.localPosition.z < minPoint.z) {
-                        transform.localPosition = minPoint;
+                    if (transform.position.z > finalMaxPoint.z) {
+                        transform.position = finalMaxPoint;
+                    } else if (transform.position.z < finalMinPoint.z) {
+                        transform.position = finalMinPoint;
                     }
                     break;
             }
