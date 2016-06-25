@@ -28,6 +28,7 @@ namespace VRTK
         protected bool playAreaCursorCollided = false;
 
         private SteamVR_PlayArea playArea;
+        private SteamVR_Camera hmdCamera;
         private GameObject playAreaCursor;
         private GameObject[] playAreaCursorBoundaries;
         private BoxCollider playAreaCursorCollider;
@@ -97,7 +98,12 @@ namespace VRTK
 
         protected virtual void SetPlayAreaCursorTransform(Vector3 destination)
         {
-            playAreaCursor.transform.position = destination;
+            playArea = GameObject.FindObjectOfType<SteamVR_PlayArea>();
+            hmdCamera = GameObject.FindObjectOfType<SteamVR_Camera>();
+            Vector3 roomPos = new Vector3(playArea.transform.position.x, 0, playArea.transform.position.z);
+            Vector3 hmdPos = new Vector3(hmdCamera.transform.position.x, 0, hmdCamera.transform.position.z);
+            Vector3 offset = roomPos - hmdPos;
+            playAreaCursor.transform.position = destination + offset;
         }
 
         protected virtual void EnablePointerBeam(object sender, ControllerInteractionEventArgs e)
