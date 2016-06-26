@@ -535,6 +535,9 @@ The following script parameters are available:
 
   * **Blink Transition Speed:** The fade blink speed on collision.
   * **Fade Color:** The colour to fade the headset to on collision.
+  * **Ignore Target With Tag Or Class:** A string that specifies an
+  object Tag or the name of a Script attached to an obejct and
+  will prevent the object from fading the headset view on collision.
 
 The following events are emitted:
 
