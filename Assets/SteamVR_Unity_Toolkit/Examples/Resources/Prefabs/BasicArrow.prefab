@@ -446,7 +446,7 @@ MonoBehaviour:
   holdButtonToGrab: 1
   onGrabCollisionDelay: 0
   grabSnapType: 1
-  snapToRotation: {x: 0, y: -90, z: 0}
+  snapToRotation: {x: 0, y: 0, z: 0}
   snapToPosition: {x: 0, y: 0, z: 0}
   snapHandle: {fileID: 0}
   rumbleOnGrab: {x: 0, y: 0}
