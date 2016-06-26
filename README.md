@@ -579,6 +579,13 @@ The following script parameters are available:
   box collider and rigid body on the play area. This is very useful
   if the user is required to grab and wield objects because if the
   collider was active they would bounce off the play area collider.
+  * **Reset Position On Collision:** If this is checked then if the
+  Headset Collision Fade script is present and a headset collision
+  occurs, the Camera Rig is moved back to the last good known
+  standing position. This deals with any collision issues if a user
+  stands up whilst moving through a crouched area as instead of them
+  being able to clip into objects they are transported back to a
+  position where they are able to stand.
 
 An example of the `VRTK_PlayerPresence` script can be viewed in
 the scene `SteamVR_Unity_Toolkit/Examples/017_CameraRig_TouchpadWalking`.
