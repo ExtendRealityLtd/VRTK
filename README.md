@@ -69,6 +69,8 @@ The available Prefabs are:
 
   * `[CameraRig]`
   * `FramesPerSecondCanvas`
+  * `ObjectTooltip`
+  * `ControllerTooltips`
 
 #### [CameraRig]
 
@@ -121,6 +123,87 @@ which displays the frames per second in the centre of the headset view.
 Pressing the trigger generates a new sphere and pressing the touchpad
 generates ten new spheres. Eventually when lots of spheres are present
 the FPS will drop and demonstrate the prefab.
+
+#### ObjectTooltip
+
+This adds a UI element into the World Space that can be used to provide
+additional information about an object by providing a piece of text
+with a line drawn to a destination point.
+
+There are a number of parameters that can be set on the Prefab which
+are provided by the `SteamVR_Unity_Toolkit/Scripts/VRTK_ObjectTooltip`
+script which is applied to the prefab.
+
+The following script parameters are available:
+
+  * **Display Text:** The text that is displayed on the tooltip.
+  * **Font Size:** The size of the text that is displayed.
+  * **Container Size:** The size of the tooltip container where
+  `x = width` and `y = height`.
+  * **Draw Line From:** An optional transform of where to start
+  drawing the line from. If one is not provided the the centre of
+  the tooltip is used for the initial line position.
+  * **Draw Line To:** A transform of another object in the scene that
+  a line will be drawn from the tooltip to, this helps denote what
+  the tooltip is in relation to. If no transform is provided and the
+  tooltip is a child of another object, then the parent object's
+  transform will be used as this destination position.
+  * **Line Width:** The width of the line drawn between the tooltip
+  and the destination transform.
+  * **Font Color:** The colour to use for the text on the tooltip.
+  * **Container Color:** The colour to use for the background
+  container of the tooltip.
+  * **Line Color:** The colour to use for the line drawn between
+  the tooltip and the destination transform.
+
+An example of the `ObjectTooltip` Prefab can be viewed in the scene
+`SteamVR_Unity_Toolkit/Examples/029_Controller_Tooltips` which displays
+two cubes that have an object tooltip added to them along with
+tooltips that have been added to the controllers.
+
+#### ControllerTooltips
+
+This adds a collection of Object Tooltips to the Controller that give
+information on what the main controller buttons may do. To add the
+prefab, it just needs to be added as a child of the relevant
+controller e.g. `[CameraRig]/Controller (right)` would add the
+controller tooltips to the right controller.
+
+There are a number of parameters that can be set on the Prefab which
+are provided by the `SteamVR_Unity_Toolkit/Scripts/VRTK_ControllerTooltips`
+script which is applied to the prefab.
+
+The following script parameters are available:
+
+  * **Trigger Text:** The text to display for the trigger button
+  action.
+  * **Grip Text:** The text to display for the grip button action.
+  * **Touchpad Text:** The text to display for the touchpad action.
+  * **App Menu Text:** The text to display for the application menu
+  button action.
+  * **Tip Background Color:** The colour to use for the tooltip
+  background container.
+  * **Tip Text Color:** The colour to use for the text within the
+  tooltip.
+  * **Tip Line Color:** The colour to use for the line between the
+  tooltip and the relevant controller button.
+  * **Trigger:** The transform for the position of the trigger button
+  on the controller (this is usually found in `Model/trigger/attach`.
+  * **Grip:** The transform for the position of the grip button
+  on the controller (this is usually found in `Model/lgrip/attach`.
+  * **Touchpad:** The transform for the position of the touchpad button
+  on the controller (this is usually found in `Model/trackpad/attach`.
+  * **App Menu:** The transform for the position of the app menu button
+  on the controller (this is usually found in `Model/button/attach`.
+
+If the transforms for the buttons are not provided, then the script
+will attempt to find the attach transforms on the default controller
+model in the `[CameraRig]` prefab provided by this toolkit.
+
+An example of the `ControllerTooltips` Prefab can be viewed in the
+scene `SteamVR_Unity_Toolkit/Examples/029_Controller_Tooltips` which
+displays two cubes that have an object tooltip added to them along with
+tooltips that have been added to the controllers.
 
 ### Scripts
 
@@ -1461,6 +1544,10 @@ The current examples are:
   pointer and using the Destination Events abstract class on objects
   that represent a mini map of the game world. Touching and using an
   object on the map teleports the user to the specified location.
+
+  * **029_Controller_Tooltips:** A scene that demonstrates adding
+  tooltips to game objects and to the controllers using the prefabs
+  `ObjectTooltip` and `ControllerTooltips`.
 
 ## Contributing
 
