@@ -7,6 +7,13 @@
 
     public class DeviceFinder : MonoBehaviour
     {
+        public enum ControllerHand
+        {
+            None,
+            Left,
+            Right
+        }
+
         //Seconds to keep trying to initialise
         public static float initTries = 15f;
 
@@ -30,6 +37,36 @@
                 }
             }
             return null;
+        }
+
+        public static ControllerHand GetControllerHandType(string hand)
+        {
+            switch(hand.ToLower())
+            {
+                case "left":
+                    return ControllerHand.Left;
+                case "right":
+                    return ControllerHand.Right;
+                default:
+                    return ControllerHand.None;
+            }
+        }
+
+        public static bool IsControllerOfHand(GameObject checkController, ControllerHand hand)
+        {
+            var controllerManager = GameObject.FindObjectOfType<SteamVR_ControllerManager>();
+
+            if (hand == ControllerHand.Left && controllerManager && controllerManager.left == checkController)
+            {
+                return true;
+            }
+
+            if (hand == ControllerHand.Right && controllerManager && controllerManager.right == checkController)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         public static Transform HeadsetTransform()

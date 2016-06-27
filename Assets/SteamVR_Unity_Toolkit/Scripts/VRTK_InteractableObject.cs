@@ -40,10 +40,18 @@ namespace VRTK
             Child_Of_Controller
         }
 
+        public enum AllowedController
+        {
+            Both,
+            Left_Only,
+            Right_Only
+        }
+
         [Header("Touch Interactions", order = 1)]
         public bool highlightOnTouch = false;
         public Color touchHighlightColor = Color.clear;
         public Vector2 rumbleOnTouch = Vector2.zero;
+        public AllowedController allowedTouchControllers = AllowedController.Both;
 
         [Header("Grab Interactions", order = 2)]
         public bool isGrabbable = false;
@@ -55,6 +63,7 @@ namespace VRTK
         public Vector3 snapToPosition = Vector3.zero;
         public Transform snapHandle;
         public Vector2 rumbleOnGrab = Vector2.zero;
+        public AllowedController allowedGrabControllers = AllowedController.Both;
 
         [Header("Grab Mechanics", order = 3)]
         public GrabAttachType grabAttachMechanic = GrabAttachType.Fixed_Joint;
@@ -68,6 +77,7 @@ namespace VRTK
         public bool holdButtonToUse = true;
         public bool pointerActivatesUseAction = false;
         public Vector2 rumbleOnUse = Vector2.zero;
+        public AllowedController allowedUseControllers = AllowedController.Both;
 
         public event InteractableObjectEventHandler InteractableObjectTouched;
         public event InteractableObjectEventHandler InteractableObjectUntouched;
@@ -272,6 +282,17 @@ namespace VRTK
         public GameObject GetGrabbingObject()
         {
             return grabbingObject;
+        }
+
+        public bool IsValidInteractableController(GameObject actualController, AllowedController controllerCheck)
+        {
+            if (controllerCheck == AllowedController.Both)
+            {
+                return true;
+            }
+
+            var controllerHand = DeviceFinder.GetControllerHandType(controllerCheck.ToString().Replace("_Only", ""));
+            return (DeviceFinder.IsControllerOfHand(actualController, controllerHand));
         }
 
         protected virtual void Awake()
