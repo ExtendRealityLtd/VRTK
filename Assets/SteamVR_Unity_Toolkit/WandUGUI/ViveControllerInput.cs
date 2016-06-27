@@ -15,6 +15,12 @@ public class ViveControllerInput : BaseInputModule
 
     [Space(10)]
 
+    [Header("Set SteamVR Controllers from CameraRig")]
+    public SteamVR_ControllerManager ControllerManager;
+    public SteamVR_TrackedObject[] Controllers;
+
+    [Space(10)]
+
     [Header(" [Runtime variables]")]
     [Tooltip("Indicates whether or not the gui was hit by any controller this frame")]
     public bool GuiHit;
@@ -36,12 +42,37 @@ public class ViveControllerInput : BaseInputModule
     [Tooltip("Generated non rendering camera (used for raycasting ui)")]
     public Camera ControllerCamera;
 
-    private SteamVR_ControllerManager ControllerManager;
-    private SteamVR_TrackedObject[] Controllers;
     private SteamVR_Controller.Device[] ControllerDevices;
+
+    public static bool isRoomScaleVR() {
+        // handle the camera, if we are in SteamVR
+        if (SteamVR.active) {
+            // should we disable the character controller?
+            var chaperone = Valve.VR.OpenVR.Chaperone;
+            if (chaperone != null) {
+                // should we use room-scale values?
+                float sizeX = 0f, sizeZ = 0f;
+                chaperone.GetPlayAreaSize(ref sizeX, ref sizeZ);
+                return (sizeX > 1f || sizeZ > 1f);
+            }
+        }
+        return false;
+    }
 
     protected override void Start()
     {
+        if( isRoomScaleVR() == false ) {
+            // not in room scale mode, disable all the things
+            base.eventSystem.enabled = false;
+            this.enabled = false;
+            return;
+        } else {
+            // replace event system with mine
+            EventSystem.current.enabled = false;
+            EventSystem.current = base.eventSystem;
+            EventSystem.current.enabled = true;
+        }
+
         base.Start();
 
         if (Initialized == false)
@@ -51,9 +82,11 @@ public class ViveControllerInput : BaseInputModule
             ControllerCamera = new GameObject("Controller UI Camera").AddComponent<Camera>();
             ControllerCamera.clearFlags = CameraClearFlags.Nothing; //CameraClearFlags.Depth;
             ControllerCamera.cullingMask = 0; // 1 << LayerMask.NameToLayer("UI"); 
+            ControllerCamera.stereoTargetEye = StereoTargetEyeMask.None;
 
-            ControllerManager = GameObject.FindObjectOfType<SteamVR_ControllerManager>();
-            Controllers = new SteamVR_TrackedObject[] { ControllerManager.left.GetComponent<SteamVR_TrackedObject>(), ControllerManager.right.GetComponent<SteamVR_TrackedObject>() };
+            // set via editor
+            //ControllerManager = GameObject.FindObjectOfType<SteamVR_ControllerManager>();
+            //Controllers = new SteamVR_TrackedObject[] { ControllerManager.left.GetComponent<SteamVR_TrackedObject>(), ControllerManager.right.GetComponent<SteamVR_TrackedObject>() };
             ControllerDevices = new SteamVR_Controller.Device[Controllers.Length];
             Cursors = new RectTransform[Controllers.Length];
 
@@ -73,11 +106,11 @@ public class ViveControllerInput : BaseInputModule
                 image.sprite = CursorSprite;
                 image.material = CursorMaterial;
 
-
                 if (CursorSprite == null)
                     Debug.LogError("Set CursorSprite on " + this.gameObject.name + " to the sprite you want to use as your cursor.", this.gameObject);
 
                 Cursors[index] = cursor.GetComponent<RectTransform>();
+                Cursors[index].localScale = Vector3.one * NormalCursorScale;
             }
 
             CurrentPoint = new GameObject[Cursors.Length];
