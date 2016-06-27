@@ -692,6 +692,10 @@ The following script parameters are available:
   if the Grab Attach Mechanic is a joint and too much force is applied
   to the object and the joint is broken. To prevent this it's better
   to use the Child Of Controller mechanic.
+  * **Is Swappable:** Determines if the object can be swapped between
+  controllers when it is picked up. If it is unchecked then the
+  object must be dropped before it can be picked up by the other
+  controller.
   * **Hold Button To Grab:** If this is checked then the grab button
   on the controller needs to be continually held down to keep grabbing.
   If this is unchecked the grab button toggles the grab action with

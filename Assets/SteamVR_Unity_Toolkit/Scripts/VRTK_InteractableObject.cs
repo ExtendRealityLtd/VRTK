@@ -56,6 +56,7 @@ namespace VRTK
         [Header("Grab Interactions", order = 2)]
         public bool isGrabbable = false;
         public bool isDroppable = true;
+        public bool isSwappable = true;
         public bool holdButtonToGrab = true;
         public float onGrabCollisionDelay = 0f;
         public GrabSnapType grabSnapType = GrabSnapType.Simple_Snap;
@@ -99,6 +100,7 @@ namespace VRTK
 
         private Transform previousParent;
         private bool previousKinematicState;
+        private bool previousIsGrabbable;
 
         public virtual void OnInteractableObjectTouched(InteractableObjectEventArgs e)
         {
@@ -177,6 +179,11 @@ namespace VRTK
             RemoveTrackPoint();
             grabbingObject = currentGrabbingObject;
             SetTrackPoint(grabbingObject);
+            if (! isSwappable)
+            {
+                previousIsGrabbable = isGrabbable;
+                isGrabbable = false;
+            }
         }
 
         public virtual void Ungrabbed(GameObject previousGrabbingObject)
@@ -337,6 +344,10 @@ namespace VRTK
         {
             this.transform.parent = previousParent;
             rb.isKinematic = previousKinematicState;
+            if (! isSwappable)
+            {
+                isGrabbable = previousIsGrabbable;
+            }
         }
 
         private void ForceReleaseGrab()
