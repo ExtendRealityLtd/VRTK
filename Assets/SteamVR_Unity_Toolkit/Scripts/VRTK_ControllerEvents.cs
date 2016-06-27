@@ -217,6 +217,16 @@
             return controllerAngularVelocity;
         }
 
+        public Vector2 GetTouchpadAxis()
+        {
+            return touchpadAxis;
+        }
+
+        public float GetTouchpadAxisAngle()
+        {
+            return CalculateTouchpadAxisAngle(touchpadAxis);
+        }
+
         private ControllerInteractionEventArgs SetButtonEvent(ref bool buttonBool, bool value, float buttonPressure)
         {
             buttonBool = value;
@@ -224,13 +234,7 @@
             e.controllerIndex = controllerIndex;
             e.buttonPressure = buttonPressure;
             e.touchpadAxis = device.GetAxis();
-
-            float angle = Mathf.Atan2(e.touchpadAxis.y, e.touchpadAxis.x) * Mathf.Rad2Deg;
-            angle = 90.0f - angle;
-            if (angle < 0)
-                angle += 360.0f;
-
-            e.touchpadAngle = angle;
+            e.touchpadAngle = CalculateTouchpadAxisAngle(e.touchpadAxis);
 
             return e;
         }
@@ -244,6 +248,17 @@
         {
             controllerIndex = (uint)trackedController.index;
             device = SteamVR_Controller.Input((int)controllerIndex);
+        }
+
+        private float CalculateTouchpadAxisAngle(Vector2 axis)
+        {
+            float angle = Mathf.Atan2(axis.y, axis.x) * Mathf.Rad2Deg;
+            angle = 90.0f - angle;
+            if (angle < 0)
+            {
+                angle += 360.0f;
+            }
+            return angle;
         }
 
         private void EmitAlias(ButtonAlias type, bool touchDown, float buttonPressure, ref bool buttonBool)
