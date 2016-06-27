@@ -1549,6 +1549,12 @@ The current examples are:
   that represent a mini map of the game world. Touching and using an
   object on the map teleports the user to the specified location.
 
+  * **028_CameraRig_RoomExtender:** A scene that demonstates the
+  concept of extending the physical room scale space by multiplying
+  the physical steps taken in the chaperone bounds. A higher multiplier
+  will mean the user can walk further in the play area and the
+  walk multipler can be toggled by a button press.
+
   * **029_Controller_Tooltips:** A scene that demonstrates adding
   tooltips to game objects and to the controllers using the prefabs
   `ObjectTooltip` and `ControllerTooltips`.
