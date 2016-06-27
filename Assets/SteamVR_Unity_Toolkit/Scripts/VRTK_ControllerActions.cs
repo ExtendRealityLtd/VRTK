@@ -52,6 +52,10 @@
 
         private void Awake()
         {
+            if (SteamVR.enabled == false) {
+	        this.enabled = false;
+		return;
+            }
             trackedController = GetComponent<SteamVR_TrackedObject>();
         }
 

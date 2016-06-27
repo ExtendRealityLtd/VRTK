@@ -89,6 +89,10 @@ namespace VRTK
         private void Start()
         {
             //If no attach point has been specified then just use the tip of the controller
+		if( SteamVR.active == false ) {
+		    this.enabled = false;
+		    return;
+		}
             if (controllerAttachPoint == null)
             {
                 controllerAttachPoint = transform.GetChild(0).Find("tip").GetChild(0).GetComponent<Rigidbody>();
