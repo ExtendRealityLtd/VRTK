@@ -97,7 +97,10 @@ namespace VRTK
 
         protected virtual void SetPlayAreaCursorTransform(Vector3 destination)
         {
-            playAreaCursor.transform.position = destination;
+            Vector3 playAreaPos = new Vector3(playArea.transform.position.x, 0, playArea.transform.position.z);
+            Vector3 headsetPos = new Vector3(headset.position.x, 0, headset.position.z);
+            Vector3 offset = playAreaPos - headsetPos;
+            playAreaCursor.transform.position = destination + offset;
         }
 
         protected virtual void EnablePointerBeam(object sender, ControllerInteractionEventArgs e)
