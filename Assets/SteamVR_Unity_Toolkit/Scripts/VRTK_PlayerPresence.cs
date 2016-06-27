@@ -7,6 +7,7 @@
     {
         public float headsetYOffset = 0.2f;
         public bool ignoreGrabbedCollisions = true;
+        public bool resetPositionOnCollision = true;
 
         private Transform headset;
         private Rigidbody rb;
@@ -58,7 +59,7 @@
 
         private void OnHeadsetCollision(object sender, HeadsetCollisionEventArgs e)
         {
-            if (lastGoodPositionSet)
+            if (resetPositionOnCollision && lastGoodPositionSet)
             {
                 SteamVR_Fade.Start(Color.black, 0f);
                 this.transform.position = lastGoodPosition;

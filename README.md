@@ -1,11 +1,5 @@
 # SteamVR Unity Toolkit - [![Slack](https://vrtk-slack-invite.herokuapp.com/badge.svg)](https://vrtk-slack-invite.herokuapp.com) [![Subreddit](https://img.shields.io/badge/subreddit-discussions-red.svg?style=flat-square)](https://www.reddit.com/r/SteamVRUnityToolkit/) [![Trello](https://img.shields.io/badge/trello-work%20board-blue.svg?style=flat-square)](https://trello.com/b/sU0vRWUz/steamvr-unity-toolkit)
 
-  > ##ANNOUNCEMENT
-  > My HTC Vive decided to stop working, just get a black screen on the HMD.
-  > Anyway, HTC have arranged for it to be collected to RMA it and repair it
-  > but this means I'm now without a HTC Vive so development will pause until
-  > it is returned and is working again. Sorry for any inconvenience.
-
 A collection of useful scripts and prefabs for building SteamVR titles
 in Unity 5.
 
@@ -31,10 +25,10 @@ from the Unity Asset Store to be imported into your Unity project.**
 
   * How to create a new project using this toolkit along with the
   SteamVR Unity Plugin:
-   * [View answer video on Youtube](https://www.youtube.com/watch?v=oFkgTZ4LXEo)
+   * [View answer video on YouTube](https://www.youtube.com/watch?v=oFkgTZ4LXEo)
   * Pointer beams/teleporting no longer works after a project build
   and running from that build:
-   * [View answer video on Youtube](https://www.youtube.com/watch?v=IsmYoLTmX4c)
+   * [View answer video on YouTube](https://www.youtube.com/watch?v=IsmYoLTmX4c)
 
 ## Summary
 
@@ -46,6 +40,7 @@ as (but not limited to):
   * Player teleportation
   * Grabbing/holding objects using the controllers
   * Interacting with objects using the controllers
+  * Transforming game objects into interactive UI elements
 
 The toolkit is heavily inspired and based upon the
 [SteamVR Plugin for Unity3d Github Repo].
@@ -540,6 +535,9 @@ The following script parameters are available:
 
   * **Blink Transition Speed:** The fade blink speed on collision.
   * **Fade Color:** The colour to fade the headset to on collision.
+  * **Ignore Target With Tag Or Class:** A string that specifies an
+  object Tag or the name of a Script attached to an obejct and
+  will prevent the object from fading the headset view on collision.
 
 The following events are emitted:
 
@@ -584,6 +582,13 @@ The following script parameters are available:
   box collider and rigid body on the play area. This is very useful
   if the user is required to grab and wield objects because if the
   collider was active they would bounce off the play area collider.
+  * **Reset Position On Collision:** If this is checked then if the
+  Headset Collision Fade script is present and a headset collision
+  occurs, the Camera Rig is moved back to the last good known
+  standing position. This deals with any collision issues if a user
+  stands up whilst moving through a crouched area as instead of them
+  being able to clip into objects they are transported back to a
+  position where they are able to stand.
 
 An example of the `VRTK_PlayerPresence` script can be viewed in
 the scene `SteamVR_Unity_Toolkit/Examples/017_CameraRig_TouchpadWalking`.
@@ -637,15 +642,22 @@ will cause the user to appear back at their last good known position.
 
 This script allows the playArea to move with the player.
 The CameraRig is only moved when at the edge of a defined circle. Aims to create a virtually bigger play area.
-I have added a demo scene to test the script (028_CameraRig_RoomExtender).
-
 To use this add this script to the CameraRig.
 
 The following script parameters are available:
 
+  * **Additional Movement Enabled:** This is the a public variable to enable the additional movement. This can be used in other scripts to toggle the CameraRig movement.
+  * **Additional Movement Enabled On Button Press:** This configures the controls of the RoomExtender. If this is true you have to press the touchpad to enable it. If this is false you can disable it with pressing the touchpad.
   * **Additional Movement Multiplier:** This is the factor by which movement at the edge of the circle is amplified. 0 is no movement of the CameraRig. Higher values simulate a bigger play area but may be to uncomfortable.
   * **Head Zone Radius:** This is the size of the circle in which the playArea is not moved and everything is normal. If it is to low it becomes uncomfortable when crouching.
   * **Debug Transform:** This transform visualises the circle around the player where the CameraRig is not moved. In the demo scene this is a cylinder at floor level. Remember to turn of collisions.
+
+There is an additional script `VRTK_RoomExtender_PlayAreaGizmo` which can be attachted to the CameraRig to visualize the extended playArea.
+
+I have added a demo scene to test the script (028_CameraRig_RoomExtender):
+In the example scene the RoomExtender script is controlled by a VRTK_RoomExtender_Controller Example script located at both controllers.
+To use the RoomExtender you have to press the touchpad.
+The Additional Movement Multiplier is changed based on the touch distance to the center of the touchpad.
 
 #### Interactable Object (VRTK_InteractableObject)
 
@@ -1009,6 +1021,104 @@ automatically grabs a sword to each controller and also prevents the
 swords from being dropped so they are permanently attached to the
 user's controllers.
 
+#### UI Controls (Controls/)
+
+In order to interact with the world beyond grabbing and throwing, controls
+can be used to mimic real-life objects. 
+
+A number of controls are available which partially support 
+auto-configuration. So can a slider for example detect its min and max 
+points or a button the distance until a push event should be triggered. 
+In the scene gizmos will be drawn that show the current settings. A 
+yellow gizmo signals a valid configuration. A red one shows that
+you should either change the position of the object or switch to manual
+configuration mode.
+
+All controls implement the abstract base class VRTK_Control and therefore
+have some common functionality. This currently is the event `OnValueChanged`.
+Individual controls might emit additional events.
+
+The controller should have the VRTK_Interact_Grab script attached with 
+`Create Rigid Body` activated.
+
+The following UI controls are available:
+
+##### VRTK_Button
+
+Attaching the script to a game object will allow you to interact with it
+as if it were a push button. The direction into which the button should
+be pushable can be freely set. Since this is physics-based there needs to 
+be empty space in the push direction so that the button can move.
+
+The script will instantiate the required Rigidbody and ConstantForce 
+components automatically in case they do not exist yet. 
+
+The following script parameters are available:
+
+  * **Direction:** The axis on which the button should move. All other axis
+  will be frozen.
+  * **Activation Distance:** The local distance the button needs to be pushed
+  until a push event is triggered.
+  * **Button Strength:** The amount of force needed to push the button down
+  as well as the speed with which it will go back into its original position. 
+
+The following events are emitted:
+
+  * **OnPushed:** When the button is successfully pushed.
+
+##### VRTK_Slider
+
+Attaching the script to a game object will allow you to interact with it
+as if it were a horizontal or vertical slider. The direction can be freely 
+set and auto-detection is supported.
+
+The script will instantiate the required Rigidbody and Interactable 
+components automatically in case they do not exist yet. 
+
+The following script parameters are available:
+
+  * **Direction:** The axis on which the slider should move. All other axis
+  will be frozen.
+  * **Min:** The minimum value of the slider.
+  * **Max:** The maximum value of the slider.
+  * **Step Size:** The increments in which slider values can change. The 
+  slider supports snapping.
+
+##### VRTK_Knob
+
+Attaching the script to a game object will allow you to interact with it
+as if it were a radial knob. The direction can be freely set.
+
+The script will instantiate the required Rigidbody and Interactable 
+components automatically in case they do not exist yet. 
+
+The following script parameters are available:
+
+  * **Direction:** The axis on which the knob should rotate. All other 
+  axis will be frozen.
+  * **Min:** The minimum value of the knob.
+  * **Max:** The maximum value of the knob.
+  * **Step Size:** The increments in which knob values can change. 
+
+##### VRTK_Lever
+
+Attaching the script to a game object will allow you to interact with it
+as if it were a lever. The direction can be freely set.
+
+The script will instantiate the required Rigidbody, Interactable and
+HingeJoing components automatically in case they do not exist yet. The
+joint is very tricky to setup automatically though and will only work
+in straight forward cases. If you experience issues create the 
+HingeJoint component yourself and configure it as needed.
+
+The following script parameters are available:
+
+  * **Direction:** The axis on which the lever  should rotate. All 
+  other axis will be frozen.
+  * **Min:** The minimum value of the lever.
+  * **Max:** The maximum value of the lever.
+  * **Step Size:** The increments in which lever values can change. 
+
 #### Abstract Classes (Abstractions/)
 
 To allow for reusablity and object consistency, a collection of
@@ -1121,24 +1231,24 @@ The current examples are:
 
   * **001_CameraRig_VR_PlayArea:** A simple scene showing the `[CameraRig]`
   prefab usage.
-   * [View Example Tour on Youtube](https://www.youtube.com/watch?v=hr5OoSCksnY)
+   * [View Example Tour on YouTube](https://www.youtube.com/watch?v=hr5OoSCksnY)
 
   * **002_Controller_Events:** A simple scene displaying the events from
   the controller in the console window.
-   * [View Example Tour on Youtube](https://www.youtube.com/watch?v=B-YtXomrBBI)
+   * [View Example Tour on YouTube](https://www.youtube.com/watch?v=B-YtXomrBBI)
 
   * **003_Controller_SimplePointer:** A scene with basic objects that can
   be pointed at with the laser beam from the controller activated by
   the `Grip` button. The pointer events are also displayed in the
   console window.
-   * [View Example Tour on Youtube](https://www.youtube.com/watch?v=2DqFTfbf22c)
+   * [View Example Tour on YouTube](https://www.youtube.com/watch?v=2DqFTfbf22c)
 
   * **004_CameraRig_BasicTeleport:** A scene with basic objects that can
   be traversed using the controller laser beam to point at an object
   in the game world where the player is to be teleported to by
   pressing the controller `Grip` button. When the `Grip` button is
   released, the player is teleported to the laser beam end location.
-   * [View Example Tour on Youtube](https://www.youtube.com/watch?v=dbbNPPX-R6E)
+   * [View Example Tour on YouTube](https://www.youtube.com/watch?v=dbbNPPX-R6E)
 
   * **005_Controller_BasicObjectGrabbing:** A scene with a selection of
   objects that can be grabbed by touching them with the controller and
@@ -1147,13 +1257,13 @@ The current examples are:
   controller. The scene also demonstrates simple highlighting of
   objects when the controller touches them. The interaction events are
   also displayed in the console window.
-   * [View Example Tour on Youtube](https://www.youtube.com/watch?v=FjwN8AJx0rY)
+   * [View Example Tour on YouTube](https://www.youtube.com/watch?v=FjwN8AJx0rY)
 
   * **006_Controller_UsingADoor:** A scene with a door interactable
   object that is set to `usable` and when the door is used by pressing
   the controller `Trigger` button, the door swings open (or closes if
   it's already open).
-   * [View Example Tour on Youtube](https://www.youtube.com/watch?v=lxDjkmILzpY)
+   * [View Example Tour on YouTube](https://www.youtube.com/watch?v=lxDjkmILzpY)
 
   * **007_CameraRig_HeightAdjustTeleport:** A scene with a selection of
   varying height objects that can be traversed using the controller
@@ -1164,34 +1274,34 @@ The current examples are:
   the nearest object. This also enables the player to climb objects
   just by standing over them as the floor detection is done from the
   position of the headset.
-   * [View Example Tour on Youtube](https://www.youtube.com/watch?v=4WJ9AyDABJo)
+   * [View Example Tour on YouTube](https://www.youtube.com/watch?v=4WJ9AyDABJo)
 
   * **008_Controller_UsingAGrabbedObject:** A scene with interactable
   objects that can be grabbed (pressing the `Grip` controller button)
   and then used (pressing the `Trigger` controller button). There is
   a gun on a table that can be picked up and fired, or a strange box
   that when picked up and used the top spins.
-   * [View Example Tour on Youtube](https://www.youtube.com/watch?v=mhVx7kfLSe8)
+   * [View Example Tour on YouTube](https://www.youtube.com/watch?v=mhVx7kfLSe8)
 
   * **009_Controller_BezierPointer:** A scene with a selection of
   varying height objects that can be traversed using the controller
   however, rather than just pointing a straight beam, the beam is
   curved (over a bezier curve) which allows climbing on top of items
   that the player cannot visibly see.
-   * [View Example Tour on Youtube](https://www.youtube.com/watch?v=oOZV4bxdw5o)
+   * [View Example Tour on YouTube](https://www.youtube.com/watch?v=oOZV4bxdw5o)
 
   * **010_CameraRig_TerrainTeleporting:** A scene with a terrain
   object and a selection of varying height 3d objects that can be
   traversed using the controller laser beam pointer. It shows how the
   Height Adjust Teleporter can be used to climb up and down game
   objects as well as traversing terrains as well.
-   * [View Example Tour on Youtube](https://www.youtube.com/watch?v=CzKohhSjXNY)
+   * [View Example Tour on YouTube](https://www.youtube.com/watch?v=CzKohhSjXNY)
 
   * **011_Camera_HeadSetCollisionFading:** A scene with three walls
   around the play area and if the player puts their head into any
   of the collidable walls then the headset fades to black to prevent
   seeing unwanted object clipping artifacts.
-   * [View Example Tour on Youtube](https://www.youtube.com/watch?v=r0RZci0tZOI)
+   * [View Example Tour on YouTube](https://www.youtube.com/watch?v=r0RZci0tZOI)
 
   * **012_Controller_PointerWithAreaCollision:** A scene which
   demonstrates how to use a controller pointer to traverse a world
@@ -1200,7 +1310,7 @@ The current examples are:
   action is disabled. This means it's possible to create a level
   with areas where the user cannot teleport to because they would
   allow the player to clip into objects.
-   * [View Example Tour on Youtube](https://www.youtube.com/watch?v=OwACH7nhW1Q)
+   * [View Example Tour on YouTube](https://www.youtube.com/watch?v=OwACH7nhW1Q)
 
   * **013_Controller_UsingAndGrabbingMultipleObjects:** A scene which
   demonstrates how interactable objects can be grabbed by holding down
@@ -1210,7 +1320,7 @@ The current examples are:
   to start using and press again to stop using. This allows multiple
   objects to be put into their Using state at the same time as also
   demonstrated in this example scene.
-   * [View Example Tour on Youtube](https://www.youtube.com/watch?v=6ySXa569UOw)
+   * [View Example Tour on YouTube](https://www.youtube.com/watch?v=6ySXa569UOw)
 
   * **014_Controller_SnappingObjectsOnGrab:** A scene with a selection
   of objects that demonstrate the different snap to controller
@@ -1226,7 +1336,7 @@ The current examples are:
   utilises the `Precision Snap` which does not affect the rotation or
   position of the grabbed object and picks the object up at the point
   that the controller snap point is touching the object.
-   * [View Example Tour on Youtube](https://www.youtube.com/watch?v=zLBlef1ikLE)
+   * [View Example Tour on YouTube](https://www.youtube.com/watch?v=zLBlef1ikLE)
 
   * **015_Controller_TouchpadAxisControl:** A scene with an R/C car
   that is controlled by using the Controller Touchpad. Moving a finger
@@ -1235,14 +1345,14 @@ The current examples are:
   cause the car to turn in that direction. Pressing the Trigger will
   cause the car to jump, this utilises the Trigger axis and the more
   the trigger is depressed, the higher the car will jump.
-   * [View Example Tour on Youtube](https://www.youtube.com/watch?v=4J8abeLzH58)
+   * [View Example Tour on YouTube](https://www.youtube.com/watch?v=4J8abeLzH58)
 
   * **016_Controller_HapticRumble:** A scene with a collection of
   breakable boxes and a sword. The sword can be picked up and swung
   at the boxes. The controller rumbles at an appropriate vibration
   depending on how hard the sword hits the box. The box also breaks
   apart if it is hit hard enough by the sword.
-   * [View Example Tour on Youtube](https://www.youtube.com/watch?v=ErSxZlZh6fc)
+   * [View Example Tour on YouTube](https://www.youtube.com/watch?v=ErSxZlZh6fc)
 
   * **017_CameraRig_TouchpadWalking:** A scene which demonstrates how
   to move around the game world using the touchpad by sliding a finger
@@ -1255,14 +1365,14 @@ The current examples are:
   Headset Collision Fade script it can detect unwanted collisions
   (e.g. if the player stands up whilst walking as crouched) and reset
   their position to the last good known position.
-   * [View Example Tour on Youtube](https://www.youtube.com/watch?v=I7eWQPFZ_KE)
+   * [View Example Tour on YouTube](https://www.youtube.com/watch?v=I7eWQPFZ_KE)
 
   * **018_CameraRig_FramesPerSecondCounter:** A scene which displays
   the frames per second in the centre of the headset view. Pressing
   the trigger generates a new sphere and pressing the touchpad
   generates ten new spheres. Eventually when lots of spheres are
   present the FPS will drop and demonstrate the prefab.
-   * [View Example Tour on Youtube](https://www.youtube.com/watch?v=hMLvp8O6v-E)
+   * [View Example Tour on YouTube](https://www.youtube.com/watch?v=hMLvp8O6v-E)
 
   * **019_Controller_InteractingWithPointer:** A scene which shows how
   the controller pointer beam can be used to toggle the use actions on
@@ -1273,12 +1383,12 @@ The current examples are:
   Application Menu button displays a cube connected to the controller
   which has menu options. Pointing the beam with the other controller
   at the cube will select the menu options accordingly.
-   * [View Example Tour on Youtube](https://www.youtube.com/watch?v=NhmGAbj5Hvo)
+   * [View Example Tour on YouTube](https://www.youtube.com/watch?v=NhmGAbj5Hvo)
 
   * **020_CameraRig_MeshTeleporting:** A scene with an object with a
   mesh collider to demonstrate how the Height Adjust Teleporter can be
   used to climb up and down onbjects with a mesh collider.
-   * [View Example Tour on Youtube](https://www.youtube.com/watch?v=6M1PZ8EjQTo)
+   * [View Example Tour on YouTube](https://www.youtube.com/watch?v=6M1PZ8EjQTo)
 
   * **021_Controller_GrabbingObjectsWithJoints:** A scene with a
   collection of Interactable Objects that are attached to other
@@ -1291,14 +1401,14 @@ The current examples are:
   door to give a natural control over the swing of the door. There is
   also a Character Joint object that can be manipulated into different
   shapes by pulling each of the relevant sections.
-   * [View Example Tour on Youtube](https://www.youtube.com/watch?v=TwYMkYl6X3k)
+   * [View Example Tour on YouTube](https://www.youtube.com/watch?v=TwYMkYl6X3k)
 
   * **022_Controller_CustomBezierPointer:** A scene that demonstrates
   how the Bezier Pointer can have complex objects passed to it to
   generate the tracer beam and the cursor of the pointer. In the
   scene, particle objects with rotations are used to demonstrate a
   different look to the bezier pointer beam.
-   * [View Example Tour on Youtube](https://www.youtube.com/watch?v=5EAFOQJrqMY)
+   * [View Example Tour on YouTube](https://www.youtube.com/watch?v=5EAFOQJrqMY)
 
   * **023_Controller_ChildOfControllerOnGrab:** A scene that
   demonstrates the grab mechanic where the object being grabbed
@@ -1309,7 +1419,7 @@ The current examples are:
   bow and arrow example, where the bow can be picked up and tracked to
   the controller, whilst the other controller is responsible for
   picking up arrows to fire in the bow.
-   * [View Example Tour on Youtube](https://www.youtube.com/watch?v=gvKYcXrbzc4)
+   * [View Example Tour on YouTube](https://www.youtube.com/watch?v=gvKYcXrbzc4)
 
   * **024_CameraRig_ExcludeTeleportLocation:** A scene that shows how
   to exclude certain objects from being teleportable by either applying
@@ -1319,7 +1429,11 @@ The current examples are:
   are excluded by having a script called `ExcludeTeleport` attached to
   them. The `ExcludeTeleport` script has no methods and is just used
   as a placeholder.
-   * [View Example Tour on Youtube](https://www.youtube.com/watch?v=hCZEaXpeoIY)
+   * [View Example Tour on YouTube](https://www.youtube.com/watch?v=hCZEaXpeoIY)
+
+  * **025_Controls_Overview:** A scene that showcases the existing 
+  interactive controls, different ways how they can be set up and how
+  to react to events sent by them.
 
   * **026_Controller_ForceHoldObject:** A scene that shows how to grab
   an object on game start and prevent the user from dropping that

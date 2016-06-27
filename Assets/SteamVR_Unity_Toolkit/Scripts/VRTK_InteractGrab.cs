@@ -120,18 +120,16 @@ namespace VRTK
 
         private void SnapObjectToGrabToController(GameObject obj)
         {
-            //Pause collisions (if allowed on object) for a moment whilst sorting out position to prevent clipping issues
             var objectScript = obj.GetComponent<VRTK_InteractableObject>();
 
+            //Pause collisions (if allowed on object) for a moment whilst sorting out position to prevent clipping issues
             objectScript.PauseCollisions();
 
             VRTK_InteractableObject.GrabSnapType grabType = objectScript.grabSnapType;
 
             if (grabType == VRTK_InteractableObject.GrabSnapType.Rotation_Snap)
             {
-                // Identity Controller Rotation
-                this.transform.eulerAngles = new Vector3(0f, 270f, 0f);
-                obj.transform.eulerAngles = objectScript.snapToRotation;
+                obj.transform.rotation = this.transform.rotation * Quaternion.Euler(objectScript.snapToRotation);
             }
 
             if (grabType != VRTK_InteractableObject.GrabSnapType.Precision_Snap)
@@ -141,9 +139,7 @@ namespace VRTK
 
             if (grabType == VRTK_InteractableObject.GrabSnapType.Handle_Snap && objectScript.snapHandle != null)
             {
-                // Identity Controller Rotation
-                this.transform.eulerAngles = new Vector3(0f, 270f, 0f);
-                obj.transform.eulerAngles = objectScript.snapHandle.transform.localEulerAngles;
+                obj.transform.rotation = this.transform.rotation * Quaternion.Euler(objectScript.snapHandle.transform.localEulerAngles);
 
                 Vector3 snapHandleDelta = objectScript.snapHandle.transform.position - obj.transform.position;
                 obj.transform.position = controllerAttachPoint.transform.position - snapHandleDelta;
@@ -172,6 +168,10 @@ namespace VRTK
                 SpringJoint tempSpringJoint = obj.AddComponent<SpringJoint>();
                 tempSpringJoint.spring = objectScript.springJointStrength;
                 tempSpringJoint.damper = objectScript.springJointDamper;
+                if(objectScript.grabSnapType == VRTK_InteractableObject.GrabSnapType.Precision_Snap)
+                {
+                    tempSpringJoint.anchor = obj.transform.InverseTransformPoint(controllerAttachPoint.position);
+                }
                 controllerAttachJoint = tempSpringJoint;
             }
             controllerAttachJoint.breakForce = objectScript.detachThreshold;
@@ -355,7 +355,7 @@ namespace VRTK
                     var rumbleAmount = grabbedObject.GetComponent<VRTK_InteractableObject>().rumbleOnGrab;
                     if (!rumbleAmount.Equals(Vector2.zero))
                     {
-                        controllerActions.TriggerHapticPulse((int)rumbleAmount.x, (ushort)rumbleAmount.y);
+                        controllerActions.TriggerHapticPulse((ushort)rumbleAmount.y, (int)rumbleAmount.x, 0.05f);
                     }
                 }
             }
