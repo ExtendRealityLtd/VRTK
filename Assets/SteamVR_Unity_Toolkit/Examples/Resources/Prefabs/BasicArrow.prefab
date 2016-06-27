@@ -49,6 +49,21 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &137704
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 429606}
+  m_Layer: 0
+  m_Name: SnapPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &166096
 GameObject:
   m_ObjectHideFlags: 1
@@ -147,6 +162,19 @@ Transform:
   - {fileID: 480496}
   m_Father: {fileID: 487352}
   m_RootOrder: 0
+--- !u!4 &429606
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 137704}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Children: []
+  m_Father: {fileID: 487352}
+  m_RootOrder: 1
 --- !u!4 &433838
 Transform:
   m_ObjectHideFlags: 1
@@ -209,12 +237,13 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 182108}
-  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071067}
-  m_LocalPosition: {x: -1.612, y: 1.1713, z: -0.687}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 419046}
+  - {fileID: 429606}
   m_Father: {fileID: 0}
   m_RootOrder: 0
 --- !u!23 &2320038
@@ -441,24 +470,26 @@ MonoBehaviour:
   highlightOnTouch: 0
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
+  allowedTouchControllers: 0
   isGrabbable: 1
   isDroppable: 1
+  isSwappable: 1
   holdButtonToGrab: 1
-  onGrabCollisionDelay: 0
-  grabSnapType: 1
-  snapToRotation: {x: 0, y: 0, z: 0}
-  snapToPosition: {x: 0, y: 0, z: 0}
-  snapHandle: {fileID: 0}
   rumbleOnGrab: {x: 0, y: 0}
+  allowedGrabControllers: 0
+  grabSnapType: 2
+  snapHandle: {fileID: 429606}
   grabAttachMechanic: 3
   detachThreshold: 500
   springJointStrength: 500
   springJointDamper: 50
   throwMultiplier: 1
+  onGrabCollisionDelay: 0
   isUsable: 0
   holdButtonToUse: 0
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
+  allowedUseControllers: 0
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

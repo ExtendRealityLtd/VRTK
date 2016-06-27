@@ -123,22 +123,15 @@ namespace VRTK
 
             VRTK_InteractableObject.GrabSnapType grabType = objectScript.grabSnapType;
 
-            if (grabType == VRTK_InteractableObject.GrabSnapType.Rotation_Snap)
+            if (grabType == VRTK_InteractableObject.GrabSnapType.Simple_Snap)
             {
-                obj.transform.rotation = this.transform.rotation * Quaternion.Euler(objectScript.snapToRotation);
-            }
-
-            if (grabType != VRTK_InteractableObject.GrabSnapType.Precision_Snap)
-            {
-                obj.transform.position = controllerAttachPoint.transform.position + objectScript.snapToPosition;
+                obj.transform.position = controllerAttachPoint.transform.position;
             }
 
             if (grabType == VRTK_InteractableObject.GrabSnapType.Handle_Snap && objectScript.snapHandle != null)
             {
                 obj.transform.rotation = this.transform.rotation * Quaternion.Euler(objectScript.snapHandle.transform.localEulerAngles);
-
-                Vector3 snapHandleDelta = objectScript.snapHandle.transform.position - obj.transform.position;
-                obj.transform.position = controllerAttachPoint.transform.position - snapHandleDelta;
+                obj.transform.position = controllerAttachPoint.transform.position - (objectScript.snapHandle.transform.position - obj.transform.position);
             }
 
             if (objectScript.grabAttachMechanic == VRTK_InteractableObject.GrabAttachType.Child_Of_Controller)

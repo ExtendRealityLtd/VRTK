@@ -783,33 +783,6 @@ The following script parameters are available:
   on the controller needs to be continually held down to keep grabbing.
   If this is unchecked the grab button toggles the grab action with
   one button press to grab and another to release.
-  * **On Grab Collision Delay:** The amount of time to delay collisions
-  affecting the object when it is first grabbed. This is useful if a
-  game object may get stuck inside another object when it is being
-  grabbed.
-  * **Grab Snap Type:** This sets the snap type of the object when
-  it is grabbed.
-   * `Simple_Snap` snaps the grabbed object's central position to the
-   controller attach point (default is controller tip).
-   * `Rotation_Snap` snaps the grabbed object to a specific rotation
-   which is provided as a Vector3 in the `Snap To Rotation` parameter.
-   * `Precision_Snap` does not snap the object's position to the
-   controller and picks the object up at the point the controller is
-   touching the object (like a real life hand picking something up).
-   * `Handle_Snap` allows for an empty GameObject as a child of the
-   interactable object to be used as the reference snap point. On grab,
-   this empty GameObject rotation and position is used to orientate
-   the grabbed interactable object to the controller.
-  * **Snap To Rotation:** A Vector3 of EulerAngles that determines the
-  rotation of the object in relation to the controller on snap.
-  This is useful for picking up guns or swords where the relative
-  rotation to the controller is important for ease of use.
-  * **Snap To Position:** A Vector3 that determines the position of
-  the object in relation to the controller on snap.
-  * **Snap Handle:** A Transform provided as an empty game object which
-  must be the child of the item being grabbed and serves as an
-  orientation point to rotate and position the grabbed item in relation
-  to the grabbing controller.
   * **Rumble On Grab:** The haptic feedback on the controller can
   be triggered upon grabbing the object, the `x` denotes the length
   of time, the `y` denotes the strength of the pulse. (x and y will
@@ -821,6 +794,21 @@ The following script parameters are available:
    * `Right_Only` means only the right controller is allowed to grab
 
 ######Grab Mechanics
+  * **Grab Snap Type:** This sets the snap type of the object when
+  it is grabbed.
+   * `Simple_Snap` snaps the grabbed object's central position to the
+   controller attach point (default is controller tip).
+   * `Precision_Snap` does not snap the object's position to the
+   controller and picks the object up at the point the controller is
+   touching the object (like a real life hand picking something up).
+   * `Handle_Snap` allows for an empty GameObject as a child of the
+   interactable object to be used as the reference snap point. On grab,
+   this empty GameObject rotation and position is used to orientate
+   the grabbed interactable object to the controller.
+  * **Snap Handle:** A Transform provided as an empty game object which
+  must be the child of the item being grabbed and serves as an
+  orientation point to rotate and position the grabbed item in relation
+  to the grabbing controller.
   * **Grab Attach Type:** This determines how the grabbed item will
   be attached to the controller when it is grabbed.
    * `Fixed Joint` attaches the object to the controller with a fixed
@@ -860,6 +848,10 @@ The following script parameters are available:
   conjunction with the Interact Grab Throw Multiplier to have
   certain objects be thrown even further than normal (or thrown
   a shorter distance if a number below 1 is entered).
+  * **On Grab Collision Delay:** The amount of time to delay collisions
+  affecting the object when it is first grabbed. This is useful if a
+  game object may get stuck inside another object when it is being
+  grabbed.
 
 ######Use Interactions
   * **Is Usable:** Determines if the object can be used
