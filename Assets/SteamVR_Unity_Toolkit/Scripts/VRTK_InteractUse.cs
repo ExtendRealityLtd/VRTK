@@ -150,9 +150,23 @@ namespace VRTK
             }
         }
 
+        private GameObject GetFromGrab()
+        {
+            if (this.GetComponent<VRTK_InteractGrab>())
+            {
+                return this.GetComponent<VRTK_InteractGrab>().GetGrabbedObject();
+            }
+            return null;
+        }
+
         private void DoStartUseObject(object sender, ControllerInteractionEventArgs e)
         {
             GameObject touchedObject = interactTouch.GetTouchedObject();
+            if(touchedObject == null)
+            {
+                touchedObject = GetFromGrab();
+            }
+
             if (touchedObject != null && interactTouch.IsObjectInteractable(touchedObject))
             {
                 UseInteractedObject(touchedObject);
