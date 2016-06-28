@@ -22,6 +22,7 @@ namespace VRTK
         public float pointerThickness = 0.002f;
         public float pointerLength = 100f;
         public bool showPointerTip = true;
+        public LayerMask layersToIgnore = Physics.IgnoreRaycastLayer;
 
         private GameObject pointerHolder;
         private GameObject pointer;
@@ -42,7 +43,7 @@ namespace VRTK
             {
                 Ray pointerRaycast = new Ray(transform.position, transform.forward);
                 RaycastHit pointerCollidedWith;
-                bool rayHit = Physics.Raycast(pointerRaycast, out pointerCollidedWith);
+                bool rayHit = Physics.Raycast(pointerRaycast, out pointerCollidedWith, pointerLength, ~layersToIgnore);
                 float pointerBeamLength = GetPointerBeamLength(rayHit, pointerCollidedWith);
                 SetPointerTransform(pointerBeamLength, pointerThickness);
             }
