@@ -24,13 +24,6 @@ namespace VRTK
 
     public class VRTK_InteractableObject : MonoBehaviour
     {
-        public enum GrabSnapType
-        {
-            Simple_Snap,
-            Precision_Snap,
-            Handle_Snap
-        }
-
         public enum GrabAttachType
         {
             Fixed_Joint,
@@ -59,10 +52,11 @@ namespace VRTK
         public bool holdButtonToGrab = true;
         public Vector2 rumbleOnGrab = Vector2.zero;
         public AllowedController allowedGrabControllers = AllowedController.Both;
+        public bool precisionSnap;
+        public Transform rightSnapHandle;
+        public Transform leftSnapHandle;
 
         [Header("Grab Mechanics", order = 3)]
-        public GrabSnapType grabSnapType = GrabSnapType.Simple_Snap;
-        public Transform snapHandle;
         public GrabAttachType grabAttachMechanic = GrabAttachType.Fixed_Joint;
         public float detachThreshold = 500f;
         public float springJointStrength = 500f;
@@ -430,7 +424,7 @@ namespace VRTK
                 controllerPoint = point.GetComponent<VRTK_InteractGrab>().controllerAttachPoint.transform;
             }
 
-            if (grabAttachMechanic == GrabAttachType.Track_Object && grabSnapType == GrabSnapType.Precision_Snap)
+            if (grabAttachMechanic == GrabAttachType.Track_Object && precisionSnap)
             {
                 trackPoint = new GameObject(string.Format("[{0}]TrackObject_PrecisionSnap_AttachPoint", this.gameObject.name)).transform;
                 trackPoint.parent = point.transform;

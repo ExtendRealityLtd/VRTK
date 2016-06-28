@@ -792,23 +792,25 @@ The following script parameters are available:
    * `Both` means both controllers are allowed to grab
    * `Left_Only` means only the left controller is allowed to grab
    * `Right_Only` means only the right controller is allowed to grab
+  * **Precision_Snap:** If this is checked then when the controller
+  grabs the object, it will grab it with precision and pick it up
+  at the particular point on the object the controller is touching.
+  * **Right Snap Handle:** A Transform provided as an empty game object
+  which must be the child of the item being grabbed and serves as an
+  orientation point to rotate and position the grabbed item in relation
+  to the right handed controller. If no Right Snap Handle is provided
+  but a Left Snap Handle is provided, then the Left Snap Handle will
+  be used in place. If no Snap Handle is provided then the object will
+  be grabbed at it's central point.
+  * **Left Snap Handle:** A Transform provided as an empty game object
+  which must be the child of the item being grabbed and serves as an
+  orientation point to rotate and position the grabbed item in relation
+  to the left handed controller. If no Left Snap Handle is provided
+  but a Right Snap Handle is provided, then the Right Snap Handle will
+  be used in place. If no Snap Handle is provided then the object will
+  be grabbed at it's central point.
 
 ######Grab Mechanics
-  * **Grab Snap Type:** This sets the snap type of the object when
-  it is grabbed.
-   * `Simple_Snap` snaps the grabbed object's central position to the
-   controller attach point (default is controller tip).
-   * `Precision_Snap` does not snap the object's position to the
-   controller and picks the object up at the point the controller is
-   touching the object (like a real life hand picking something up).
-   * `Handle_Snap` allows for an empty GameObject as a child of the
-   interactable object to be used as the reference snap point. On grab,
-   this empty GameObject rotation and position is used to orientate
-   the grabbed interactable object to the controller.
-  * **Snap Handle:** A Transform provided as an empty game object which
-  must be the child of the item being grabbed and serves as an
-  orientation point to rotate and position the grabbed item in relation
-  to the grabbing controller.
   * **Grab Attach Type:** This determines how the grabbed item will
   be attached to the controller when it is grabbed.
    * `Fixed Joint` attaches the object to the controller with a fixed
@@ -1419,18 +1421,17 @@ The current examples are:
 
   * **014_Controller_SnappingObjectsOnGrab:** A scene with a selection
   of objects that demonstrate the different snap to controller
-  mechanics. The two green guns and sword utilise the `Rotation Snap`
-  which orientates the object into a specific given rotation to ensure
-  the object feels like it's been held naturally in the hand. The green
-  lightsaber utilises the `Handle Snap` which uses an empty game object
-  as a child of the interactable object as the orientation point at
-  grab, so the rotation and position of the object matches that of the
-  given `Snap Handle`. The red gun utilises the `Simple Snap`
-  which does not affect the object's rotation but positions the centre
-  of the object to the snap point on the controller. The red/green gun
-  utilises the `Precision Snap` which does not affect the rotation or
-  position of the grabbed object and picks the object up at the point
-  that the controller snap point is touching the object.
+  mechanics. The two green guns, light saber and sword utilise a
+  Snap Handle which uses an empty game object as a child of the
+  interactable object as the orientation point at grab, so the rotation
+  and position of the object matches that of the given `Snap Handle`.
+  The red gun utilises a basic snap where no precision is required and
+  no Snap Handles are provided which does not affect the object's
+  rotation but positions the centre of the object to the snap point on
+  the controller. The red/green gun utilises the `Precision Snap` which
+  does not affect the rotation or position of the grabbed object and
+  picks the object up at the point that the controller snap point is
+  touching the object.
    * [View Example Tour on YouTube](https://www.youtube.com/watch?v=zLBlef1ikLE)
 
   * **015_Controller_TouchpadAxisControl:** A scene with an R/C car

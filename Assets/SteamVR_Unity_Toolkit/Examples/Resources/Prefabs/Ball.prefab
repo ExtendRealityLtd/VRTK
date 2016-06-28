@@ -95,24 +95,27 @@ MonoBehaviour:
   highlightOnTouch: 1
   touchHighlightColor: {r: 0.10218424, g: 0.9264706, b: 0.9264706, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
+  allowedTouchControllers: 0
   isGrabbable: 1
   isDroppable: 1
+  isSwappable: 1
   holdButtonToGrab: 1
-  onGrabCollisionDelay: 0
-  grabSnapType: 0
-  snapToRotation: {x: 0, y: 0, z: 0}
-  snapToPosition: {x: 0, y: 0, z: 0}
-  snapHandle: {fileID: 0}
   rumbleOnGrab: {x: 0, y: 0}
+  allowedGrabControllers: 0
+  precisionSnap: 1
+  rightSnapHandle: {fileID: 0}
+  leftSnapHandle: {fileID: 0}
   grabAttachMechanic: 0
   detachThreshold: 500
   springJointStrength: 500
   springJointDamper: 50
   throwMultiplier: 1
+  onGrabCollisionDelay: 0
   isUsable: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
+  allowedUseControllers: 0
 --- !u!135 &13549726
 SphereCollider:
   m_ObjectHideFlags: 1

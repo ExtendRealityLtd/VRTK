@@ -477,8 +477,9 @@ MonoBehaviour:
   holdButtonToGrab: 1
   rumbleOnGrab: {x: 0, y: 0}
   allowedGrabControllers: 0
-  grabSnapType: 2
-  snapHandle: {fileID: 429606}
+  precisionSnap: 0
+  rightSnapHandle: {fileID: 429606}
+  leftSnapHandle: {fileID: 0}
   grabAttachMechanic: 3
   detachThreshold: 500
   springJointStrength: 500
