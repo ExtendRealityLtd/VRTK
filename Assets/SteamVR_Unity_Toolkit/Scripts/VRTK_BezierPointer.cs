@@ -26,6 +26,7 @@ namespace VRTK
         public float beamCurveOffset = 1f;
         public GameObject customPointerTracer;
         public GameObject customPointerCursor;
+        public LayerMask layersToIgnore = Physics.IgnoreRaycastLayer;
 
         private Transform projectedBeamContainer;
         private Transform projectedBeamForward;
@@ -156,7 +157,7 @@ namespace VRTK
             float actualLength = pointerLength;
             Ray pointerRaycast = new Ray(transform.position, transform.forward);
             RaycastHit collidedWith;
-            bool hasRayHit = Physics.Raycast(pointerRaycast, out collidedWith);
+            bool hasRayHit = Physics.Raycast(pointerRaycast, out collidedWith, pointerLength, ~layersToIgnore);
 
             //reset if beam not hitting or hitting new target
             if (!hasRayHit || (pointerContactTarget && pointerContactTarget != collidedWith.transform))
@@ -198,7 +199,7 @@ namespace VRTK
 
             Ray projectedBeamDownRaycast = new Ray(projectedBeamDown.transform.position, Vector3.down);
             RaycastHit collidedWith;
-            bool downRayHit = Physics.Raycast(projectedBeamDownRaycast, out collidedWith);
+            bool downRayHit = Physics.Raycast(projectedBeamDownRaycast, out collidedWith, pointerLength, ~layersToIgnore);
 
             if (!downRayHit || (pointerContactTarget && pointerContactTarget != collidedWith.transform))
             {
