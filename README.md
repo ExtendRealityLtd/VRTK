@@ -1230,7 +1230,7 @@ automatically grabs a sword to each controller and also prevents the
 swords from being dropped so they are permanently attached to the
 user's controllers.
 
-#### 3D UI Controls (Controls/)
+#### 3D UI Controls (Controls/3D)
 
 In order to interact with the world beyond grabbing and throwing, controls
 can be used to mimic real-life objects.
@@ -1256,8 +1256,9 @@ The following UI controls are available:
 
 Attaching the script to a game object will allow you to interact with it
 as if it were a push button. The direction into which the button should
-be pushable can be freely set. Since this is physics-based there needs to
-be empty space in the push direction so that the button can move.
+be pushable can be freely set and auto-detection is supported. Since this 
+is physics-based there needs to be empty space in the push direction so 
+that the button can move.
 
 The script will instantiate the required Rigidbody and ConstantForce
 components automatically in case they do not exist yet.
@@ -1275,23 +1276,24 @@ The following events are emitted:
 
   * **OnPushed:** When the button is successfully pushed.
 
-##### VRTK_Slider
+##### VRTK_Chest
 
-Attaching the script to a game object will allow you to interact with it
-as if it were a horizontal or vertical slider. The direction can be freely
-set and auto-detection is supported.
+Transforms a game object into a chest with a lid. The direction can be either
+x or z and can also be auto-detected with very high reliability.
 
-The script will instantiate the required Rigidbody and Interactable
-components automatically in case they do not exist yet.
+The script will instantiate the required Rigidbody, Interactable and
+HingeJoing components automatically in case they do not exist yet. It will
+expect three distinct game objects: a body, a lid and a handle. These should
+be independent and not children of each other.
 
 The following script parameters are available:
 
-  * **Direction:** The axis on which the slider should move. All other axis
-  will be frozen.
-  * **Min:** The minimum value of the slider.
-  * **Max:** The maximum value of the slider.
-  * **Step Size:** The increments in which slider values can change. The
-  slider supports snapping.
+  * **Direction:** The axis on which the chest should open. All
+  other axis will be frozen.
+  * **Max:** The maximum opening angle of the chest.
+  * **Lid:** The game object for the lid.
+  * **Body:** The game object for the body.
+  * **Handle:** The game object for the handle. 
 
 ##### VRTK_Knob
 
@@ -1322,11 +1324,29 @@ HingeJoint component yourself and configure it as needed.
 
 The following script parameters are available:
 
-  * **Direction:** The axis on which the lever  should rotate. All
+  * **Direction:** The axis on which the lever should rotate. All
   other axis will be frozen.
   * **Min:** The minimum value of the lever.
   * **Max:** The maximum value of the lever.
   * **Step Size:** The increments in which lever values can change.
+
+##### VRTK_Slider
+
+Attaching the script to a game object will allow you to interact with it
+as if it were a horizontal or vertical slider. The direction can be freely
+set and auto-detection is supported.
+
+The script will instantiate the required Rigidbody and Interactable
+components automatically in case they do not exist yet.
+
+The following script parameters are available:
+
+  * **Direction:** The axis on which the slider should move. All other axis
+  will be frozen.
+  * **Min:** The minimum value of the slider.
+  * **Max:** The maximum value of the slider.
+  * **Step Size:** The increments in which slider values can change. The
+  slider supports snapping.
 
 #### 2D UI Controls (Controls/2D)
 

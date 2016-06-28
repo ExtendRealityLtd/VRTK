@@ -30,6 +30,7 @@
         public override void OnDrawGizmos()
         {
             base.OnDrawGizmos();
+
             // axis and min/max
             Vector3 center = (direction == Direction.autodetect) ? bounds.center : transform.position;
             Gizmos.DrawLine(center, finalMinPoint);
@@ -132,7 +133,7 @@
         private Direction DetectDirection()
         {
             Direction direction = Direction.autodetect;
-            Bounds bounds = Utilities.getBounds(transform);
+            Bounds bounds = Utilities.GetBounds(transform);
 
             // shoot rays from the center of the slider, this means the center should be inside the frame to work properly
             RaycastHit hitForward;
@@ -217,34 +218,30 @@
 
         private bool DoDetectMinMax(Direction direction)
         {
-            Bounds bounds = Utilities.getBounds(transform);
-            Vector3 v1 = Vector3.zero;
-            Vector3 v2 = Vector3.zero;
+            Bounds bounds = Utilities.GetBounds(transform);
+            Vector3 v = Vector3.zero;
             float extents = 0;
 
             switch (direction)
             {
                 case Direction.x:
-                    v1 = Vector3.left;
-                    v2 = Vector3.right;
+                    v = Vector3.left;
                     extents = bounds.extents.x;
                     break;
                 case Direction.y:
-                    v1 = Vector3.down;
-                    v2 = Vector3.up;
+                    v = Vector3.down;
                     extents = bounds.extents.y;
                     break;
                 case Direction.z:
-                    v1 = Vector3.forward;
-                    v2 = Vector3.back;
+                    v = Vector3.forward;
                     extents = bounds.extents.z;
                     break;
             }
 
             RaycastHit hit1;
             RaycastHit hit2;
-            Physics.Raycast(bounds.center, v1, out hit1, extents * MAX_AUTODETECT_SLIDER_LENGTH, Physics.DefaultRaycastLayers, QueryTriggerInteraction.UseGlobal);
-            Physics.Raycast(bounds.center, v2, out hit2, extents * MAX_AUTODETECT_SLIDER_LENGTH, Physics.DefaultRaycastLayers, QueryTriggerInteraction.UseGlobal);
+            Physics.Raycast(bounds.center, v, out hit1, extents * MAX_AUTODETECT_SLIDER_LENGTH, Physics.DefaultRaycastLayers, QueryTriggerInteraction.UseGlobal);
+            Physics.Raycast(bounds.center, v * -1, out hit2, extents * MAX_AUTODETECT_SLIDER_LENGTH, Physics.DefaultRaycastLayers, QueryTriggerInteraction.UseGlobal);
 
             if (hit1.collider && hit2.collider)
             {
@@ -305,7 +302,7 @@
 
         private float CalculateValue()
         {
-            Vector3 center = (direction == Direction.autodetect) ? Utilities.getBounds(transform).center : transform.position;
+            Vector3 center = (direction == Direction.autodetect) ? Utilities.GetBounds(transform).center : transform.position;
             float dist1 = Vector3.Distance(finalMinPoint, center);
             float dist2 = Vector3.Distance(center, finalMaxPoint);
 

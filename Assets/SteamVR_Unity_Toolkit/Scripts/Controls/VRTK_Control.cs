@@ -6,7 +6,7 @@
     public abstract class VRTK_Control : MonoBehaviour
     {
         private static Color COLOR_OK = Color.yellow;
-        private static Color COLOR_ERROR = Color.red;
+        private static Color COLOR_ERROR = new Color(1, 0, 0, 0.9f);
 
         public delegate void ValueChange(float value);
         public event ValueChange OnValueChanged;
@@ -58,7 +58,7 @@
 
         public virtual void OnDrawGizmos()
         {
-            bounds = Utilities.getBounds(transform);
+            bounds = Utilities.GetBounds(transform);
             Gizmos.color = (setupSuccessful) ? COLOR_OK : COLOR_ERROR;
 
             if (setupSuccessful)
@@ -67,7 +67,7 @@
             }
             else
             {
-                Gizmos.DrawCube(bounds.center, bounds.extents * 2);
+                Gizmos.DrawCube(bounds.center, bounds.extents * 2.01f); // draw slightly bigger to eliminate flickering
             }
         }
     }
