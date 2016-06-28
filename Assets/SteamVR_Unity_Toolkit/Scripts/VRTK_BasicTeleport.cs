@@ -36,38 +36,34 @@ namespace VRTK
         private float maxBlinkTransitionSpeed = 1.5f;
         private float maxBlinkDistance = 33f;
 
-        protected void OnTeleporting(object sender, DestinationMarkerEventArgs e) {
+        protected Transform reference
+        {
+            get
+            {
+                var top = SteamVR_Render.Top();
+                return (top != null) ? top.origin : null;
+            }
+        }
+
+        protected void OnTeleporting(object sender, DestinationMarkerEventArgs e)
+        {
             if (Teleporting != null)
                 Teleporting(this, e);
         }
 
-        protected void OnTeleported(object sender, DestinationMarkerEventArgs e) {
+        protected void OnTeleported(object sender, DestinationMarkerEventArgs e)
+        {
             if (Teleported != null)
                 Teleported(this, e);
-        }
-
-        public void InitDestinationSetListener(GameObject markerMaker)
-        {
-            if (markerMaker)
-            {
-                var worldMarker = markerMaker.GetComponent<VRTK_DestinationMarker>();
-                if (worldMarker)
-                {
-                    worldMarker.DestinationMarkerSet += new DestinationMarkerEventHandler(DoTeleport);
-                    worldMarker.SetInvalidTarget(ignoreTargetWithTagOrClass);
-                }
-            }
         }
 
         protected virtual void Start()
         {
             this.name = "PlayerObject_" + this.name;
             adjustYForTerrain = false;
-            eyeCamera = GameObject.FindObjectOfType<SteamVR_Camera>().GetComponent<Transform>();
 
-            var controllerManager = GameObject.FindObjectOfType<SteamVR_ControllerManager>();
-            InitDestinationSetListener(controllerManager.left);
-            InitDestinationSetListener(controllerManager.right);
+            eyeCamera = SteamVR_Render.Top().GetComponent<Transform>();
+
             InitHeadsetCollisionListener();
 
             enableTeleport = true;
@@ -85,7 +81,7 @@ namespace VRTK
             return (target && target.tag != ignoreTargetWithTagOrClass && target.GetComponent(ignoreTargetWithTagOrClass) == null);
         }
 
-        protected virtual void DoTeleport(object sender, DestinationMarkerEventArgs e)
+        public virtual void DoTeleport(object sender, DestinationMarkerEventArgs e)
         {
             if (enableTeleport && ValidLocation(e.target) && e.enableTeleport)
             {
@@ -100,14 +96,14 @@ namespace VRTK
 
         protected virtual void SetNewPosition(Vector3 position, Transform target)
         {
-            this.transform.position = CheckTerrainCollision(position, target);
+            reference.position = CheckTerrainCollision(position, target);
         }
 
         protected virtual Vector3 GetNewPosition(Vector3 tipPosition, Transform target)
         {
-            float newX = (headsetPositionCompensation ? (tipPosition.x - (eyeCamera.position.x - this.transform.position.x)) : tipPosition.x);
-            float newY = this.transform.position.y;
-            float newZ = (headsetPositionCompensation ? (tipPosition.z - (eyeCamera.position.z - this.transform.position.z)) : tipPosition.z);
+            float newX = (headsetPositionCompensation ? (tipPosition.x - (eyeCamera.position.x - reference.position.x)) : tipPosition.x);
+            float newY = reference.position.y;
+            float newZ = (headsetPositionCompensation ? (tipPosition.z - (eyeCamera.position.z - reference.position.z)) : tipPosition.z);
 
             return new Vector3(newX, newY, newZ);
         }
@@ -126,7 +122,7 @@ namespace VRTK
             blinkPause = 0f;
             if (distanceBlinkDelay > 0f)
             {
-                float distance = Vector3.Distance(this.transform.position, newPosition);
+                float distance = Vector3.Distance(reference.position, newPosition);
                 blinkPause = Mathf.Clamp((distance * blinkTransitionSpeed) / (maxBlinkDistance - distanceBlinkDelay), 0, maxBlinkTransitionSpeed);
                 blinkPause = (blinkSpeed <= 0.25 ? 0f : blinkPause);
             }
