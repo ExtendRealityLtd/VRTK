@@ -10,7 +10,7 @@ from the Unity Asset Store to be imported into your Unity project.**
   > _donating, consider supporting me by buying my latest game on_
   > _Steam - `Holodaze` for HTC Vive. At least this way, I make a bit of_
   > _money and you get something to play!_
-  > 
+  >
   > **[Buy Holodaze from the Steam Store](http://store.steampowered.com/app/475520)**
 
 
@@ -71,6 +71,7 @@ The available Prefabs are:
   * `FramesPerSecondCanvas`
   * `ObjectTooltip`
   * `ControllerTooltips`
+  * `RadialMenu`
 
 #### [CameraRig]
 
@@ -204,6 +205,35 @@ An example of the `ControllerTooltips` Prefab can be viewed in the
 scene `SteamVR_Unity_Toolkit/Examples/029_Controller_Tooltips` which
 displays two cubes that have an object tooltip added to them along with
 tooltips that have been added to the controllers.
+
+#### RadialMenu
+
+This adds a UI element into the world space that can be dropped into a Controller object and used to create and use Radial Menus from the touchpad.
+
+There are a number of parameters that can be set on the Prefab which
+are provided by the `SteamVR_Unity_Toolkit/Scripts/Controls/2D/RadialMenu/RadialMenu.cs`
+script which is applied to the `Panel` child of the prefab.
+
+The following script parameters are available:
+
+ * **Buttons:** Array of Buttons where you define the interactive buttons you want to be displayed as part of the radial menu. Each Button has the following properties:
+   * **ButtonIcon:** Icon to use inside the button arc (should be circular).
+   * **OnClick():** Methods to invoke when the button is clicked.
+   * **OnHold():** Methods to invoke each frame while the button is held down.
+ * **Button Prefab:** The base for each button in the menu, by default set to a dynamic circle arc that will fill up a portion of the menu.
+ * **Button Thickness:** Percentage of the menu the buttons should fill, 1.0 is a pie slice, 0.1 is a thin ring.
+ * **Button Color:** The background color of the buttons, default is white.
+ * **Offset Distance:** The distance the buttons should move away from the center. This creates space between the individual buttons.
+ * **Offset Rotation:** The additional rotation of the Radial Menu.
+ * **Rotate Icons:** Whether button icons should rotate according to their arc or be vertical compared to the controller.
+ * **Icon Margin:** The margin in pixels that the icon should keep within the button.
+ * **Hide On Release:** Whether the buttons should be visible when not in use.
+ * **Menu Buttons:** The actual GameObjects that make up the radial menu.
+ * **Regenerate Buttons:** Button to force regeneration of the radial menu in the editor.
+
+If the RadialMenu is placed inside a controller, it will automatically find a `VRTK_ControllerEvents` in its parent to use at the input. However, a `VRTK_ControllerEvents` can be defined explicitly by setting the `Events` parameter of the `Radial Menu Controller` script also attached to the prefab.
+
+An example of the `RadialMenu` Prefab can be viewed in the scene `SteamVR_Unity_Toolkit/Examples/030_Radial_Touchpad_Menu`, which displays a radial menu for each controller. The left controller uses the `Hide On Release` variable, so it will only be visible if the left touchpad is being touched.
 
 ### Scripts
 
@@ -608,12 +638,12 @@ naturally step backwards.
 If the headset is colliding then the teleport action is also disabled
 to prevent cheating by clipping through walls.
 
-If using `Unity 5.3` or older then the Headset Collision Fade 
-script is attached to the `Camera (head)` object within the 
+If using `Unity 5.3` or older then the Headset Collision Fade
+script is attached to the `Camera (head)` object within the
 `[CameraRig]` prefab.
 
-If using `Unity 5.4` or newer then the Headset Collision Fade 
-script is attached to the `Camera (eye)` object within the 
+If using `Unity 5.4` or newer then the Headset Collision Fade
+script is attached to the `Camera (eye)` object within the
 `[CameraRig]->Camera (head)` prefab.
 
 The following script parameters are available:
@@ -755,7 +785,7 @@ can be attachted to the CameraRig to visualize the extended playArea.
 
 An example of the `VRTK_RoomExtender` script can be viewed in the scene
 `SteamVR_Unity_Toolkit/Examples/028_CameraRig_RoomExtender`.
-In the example scene the RoomExtender script is controlled by a 
+In the example scene the RoomExtender script is controlled by a
 VRTK_RoomExtender_Controller Example script located at both controllers.
 Pressing the `Touchpad` on the controller activates the Room Extender.
 The Additional Movement Multiplier is changed based on the touch
@@ -1137,15 +1167,15 @@ automatically grabs a sword to each controller and also prevents the
 swords from being dropped so they are permanently attached to the
 user's controllers.
 
-#### UI Controls (Controls/)
+#### 3D UI Controls (Controls/)
 
 In order to interact with the world beyond grabbing and throwing, controls
-can be used to mimic real-life objects. 
+can be used to mimic real-life objects.
 
-A number of controls are available which partially support 
-auto-configuration. So can a slider for example detect its min and max 
-points or a button the distance until a push event should be triggered. 
-In the scene gizmos will be drawn that show the current settings. A 
+A number of controls are available which partially support
+auto-configuration. So can a slider for example detect its min and max
+points or a button the distance until a push event should be triggered.
+In the scene gizmos will be drawn that show the current settings. A
 yellow gizmo signals a valid configuration. A red one shows that
 you should either change the position of the object or switch to manual
 configuration mode.
@@ -1154,7 +1184,7 @@ All controls implement the abstract base class VRTK_Control and therefore
 have some common functionality. This currently is the event `OnValueChanged`.
 Individual controls might emit additional events.
 
-The controller should have the VRTK_Interact_Grab script attached with 
+The controller should have the VRTK_Interact_Grab script attached with
 `Create Rigid Body` activated.
 
 The following UI controls are available:
@@ -1163,11 +1193,11 @@ The following UI controls are available:
 
 Attaching the script to a game object will allow you to interact with it
 as if it were a push button. The direction into which the button should
-be pushable can be freely set. Since this is physics-based there needs to 
+be pushable can be freely set. Since this is physics-based there needs to
 be empty space in the push direction so that the button can move.
 
-The script will instantiate the required Rigidbody and ConstantForce 
-components automatically in case they do not exist yet. 
+The script will instantiate the required Rigidbody and ConstantForce
+components automatically in case they do not exist yet.
 
 The following script parameters are available:
 
@@ -1176,7 +1206,7 @@ The following script parameters are available:
   * **Activation Distance:** The local distance the button needs to be pushed
   until a push event is triggered.
   * **Button Strength:** The amount of force needed to push the button down
-  as well as the speed with which it will go back into its original position. 
+  as well as the speed with which it will go back into its original position.
 
 The following events are emitted:
 
@@ -1185,11 +1215,11 @@ The following events are emitted:
 ##### VRTK_Slider
 
 Attaching the script to a game object will allow you to interact with it
-as if it were a horizontal or vertical slider. The direction can be freely 
+as if it were a horizontal or vertical slider. The direction can be freely
 set and auto-detection is supported.
 
-The script will instantiate the required Rigidbody and Interactable 
-components automatically in case they do not exist yet. 
+The script will instantiate the required Rigidbody and Interactable
+components automatically in case they do not exist yet.
 
 The following script parameters are available:
 
@@ -1197,7 +1227,7 @@ The following script parameters are available:
   will be frozen.
   * **Min:** The minimum value of the slider.
   * **Max:** The maximum value of the slider.
-  * **Step Size:** The increments in which slider values can change. The 
+  * **Step Size:** The increments in which slider values can change. The
   slider supports snapping.
 
 ##### VRTK_Knob
@@ -1205,16 +1235,16 @@ The following script parameters are available:
 Attaching the script to a game object will allow you to interact with it
 as if it were a radial knob. The direction can be freely set.
 
-The script will instantiate the required Rigidbody and Interactable 
-components automatically in case they do not exist yet. 
+The script will instantiate the required Rigidbody and Interactable
+components automatically in case they do not exist yet.
 
 The following script parameters are available:
 
-  * **Direction:** The axis on which the knob should rotate. All other 
+  * **Direction:** The axis on which the knob should rotate. All other
   axis will be frozen.
   * **Min:** The minimum value of the knob.
   * **Max:** The maximum value of the knob.
-  * **Step Size:** The increments in which knob values can change. 
+  * **Step Size:** The increments in which knob values can change.
 
 ##### VRTK_Lever
 
@@ -1224,16 +1254,36 @@ as if it were a lever. The direction can be freely set.
 The script will instantiate the required Rigidbody, Interactable and
 HingeJoing components automatically in case they do not exist yet. The
 joint is very tricky to setup automatically though and will only work
-in straight forward cases. If you experience issues create the 
+in straight forward cases. If you experience issues create the
 HingeJoint component yourself and configure it as needed.
 
 The following script parameters are available:
 
-  * **Direction:** The axis on which the lever  should rotate. All 
+  * **Direction:** The axis on which the lever  should rotate. All
   other axis will be frozen.
   * **Min:** The minimum value of the lever.
   * **Max:** The maximum value of the lever.
-  * **Step Size:** The increments in which lever values can change. 
+  * **Step Size:** The increments in which lever values can change.
+
+#### 2D UI Controls (Controls/2D)
+
+##### RadialMenu
+
+Attaching the script to a GameObject will allow you to create a dynamic Radial Menu with any number of buttons. The variables are documented in the prefabs section of this README, but a number of public methods are available for use. Interacting with buttons programmatically uses the angle of the desired button (0/360 being the top, 180 being the bottom).
+
+  * **RegenerateButtons():** Forces the regeneration of the UI buttons.
+  * **HoverButton(float menuAngle):** Calls the `Interact()` method with an event type of hover and an angle of menuAngle. This initiates the `pointerEnterHandler` action.
+  * **ClickButton(float menuAngle):** Calls the `Interact()` method with an event type of click and an angle of menuAngle. This initiates the `pointerDownHandler` action.
+  * **UnClickButton(float menuAngle):** Calls the `Interact()` method with an event type of stopClick and an angle of menuAngle. This initiates the `pointerUpHandler` action.
+  * **StopTouching():** Calls the `Interact()` method on the last touched button and clears the currently touched button ID. This initiates the `pointerExitHandler` action.
+  * **ShowMenu():** Tweens the Radial Menu to a scale of 1
+  * **HideMenu(bool force):** Tweens the RadialMenu to a scale of 0. If `force` is `false`, then it will only hide the menu if the `HideOnRelease` variable is `true`.
+
+##### RadialMenuController
+
+Attaching the script to a GameObject will add a RadialMenu component if it does not already exist If it is attached to a child of a controller, it will automatically find the required `VRTK_ControllerEvents` component in its parent. Otherwise one must be defined explicitly in the inspector.
+
+This component will listen for controller touchpad events and call the relevant `RadialMenu` methods.
 
 #### Abstract Classes (Abstractions/)
 
@@ -1476,7 +1526,7 @@ The current examples are:
   rotation is done via the user in game physically rotating their
   body in the place space and whichever way the headset is looking
   will be the way the user walks forward. Crouching is also possible
-  as demonstrated in this scene and in conjunction with the 
+  as demonstrated in this scene and in conjunction with the
   Headset Collision Fade script it can detect unwanted collisions
   (e.g. if the user stands up whilst walking as crouched) and reset
   their position to the last good known position.
@@ -1530,7 +1580,7 @@ The current examples are:
   becomes a child of the controller doing the grabbing. This works
   well for objects that need absolute tracking of the controller and do
   not want to be disjointed under any circumstances. The object becomes
-  an extension of the controller. The scene demonstrates this with a 
+  an extension of the controller. The scene demonstrates this with a
   bow and arrow example, where the bow can be picked up and tracked to
   the controller, whilst the other controller is responsible for
   picking up arrows to fire in the bow.
@@ -1546,7 +1596,7 @@ The current examples are:
   as a placeholder.
    * [View Example Tour on YouTube](https://www.youtube.com/watch?v=hCZEaXpeoIY)
 
-  * **025_Controls_Overview:** A scene that showcases the existing 
+  * **025_Controls_Overview:** A scene that showcases the existing
   interactive controls, different ways how they can be set up and how
   to react to events sent by them.
 
@@ -1570,6 +1620,8 @@ The current examples are:
   * **029_Controller_Tooltips:** A scene that demonstrates adding
   tooltips to game objects and to the controllers using the prefabs
   `ObjectTooltip` and `ControllerTooltips`.
+
+  * **030_Radial_Touchpad_Menu:** A scene that demonstrates adding dynamic radial menus to controllers using the prefab `RadialMenu`.
 
 ## Contributing
 
