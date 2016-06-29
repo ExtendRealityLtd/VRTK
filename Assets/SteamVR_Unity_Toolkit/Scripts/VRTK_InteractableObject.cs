@@ -79,10 +79,10 @@ namespace VRTK
         public event InteractableObjectEventHandler InteractableObjectUnused;
 
         protected Rigidbody rb;
+        protected GameObject touchingObject = null;
         protected GameObject grabbingObject = null;
+        protected GameObject usingObject = null;
 
-        private bool isTouched = false;
-        private bool isUsing = false;
         private int usingState = 0;
         private Dictionary<string, Color> originalObjectColours;
 
@@ -138,7 +138,7 @@ namespace VRTK
 
         public bool IsTouched()
         {
-            return isTouched;
+            return (touchingObject != null);
         }
 
         public bool IsGrabbed()
@@ -148,19 +148,19 @@ namespace VRTK
 
         public bool IsUsing()
         {
-            return isUsing;
+            return (usingObject != null);
         }
 
-        public virtual void StartTouching(GameObject touchingObject)
+        public virtual void StartTouching(GameObject currentTouchingObject)
         {
-            OnInteractableObjectTouched(SetInteractableObjectEvent(touchingObject));
-            isTouched = true;
+            OnInteractableObjectTouched(SetInteractableObjectEvent(currentTouchingObject));
+            touchingObject = currentTouchingObject;
         }
 
         public virtual void StopTouching(GameObject previousTouchingObject)
         {
             OnInteractableObjectUntouched(SetInteractableObjectEvent(previousTouchingObject));
-            isTouched = false;
+            touchingObject = null;
         }
 
         public virtual void Grabbed(GameObject currentGrabbingObject)
@@ -185,16 +185,16 @@ namespace VRTK
             LoadPreviousState();
         }
 
-        public virtual void StartUsing(GameObject usingObject)
+        public virtual void StartUsing(GameObject currentUsingObject)
         {
-            OnInteractableObjectUsed(SetInteractableObjectEvent(usingObject));
-            isUsing = true;
+            OnInteractableObjectUsed(SetInteractableObjectEvent(currentUsingObject));
+            usingObject = currentUsingObject;
         }
 
         public virtual void StopUsing(GameObject previousUsingObject)
         {
             OnInteractableObjectUnused(SetInteractableObjectEvent(previousUsingObject));
-            isUsing = false;
+            usingObject = null;
         }
 
         public virtual void ToggleHighlight(bool toggle)
@@ -206,7 +206,7 @@ namespace VRTK
         {
             if (highlightOnTouch)
             {
-                if (toggle && !IsGrabbed() && !isUsing)
+                if (toggle && !IsGrabbed() && !IsUsing())
                 {
                     Color color = (touchHighlightColor != Color.clear ? touchHighlightColor : globalHighlightColor);
                     if (color != Color.clear)
@@ -293,6 +293,24 @@ namespace VRTK
             return (DeviceFinder.IsControllerOfHand(actualController, controllerHand));
         }
 
+        public void ForceStopInteracting()
+        {
+            if (touchingObject != null)
+            {
+                touchingObject.GetComponent<VRTK_InteractTouch>().ForceStopTouching();
+            }
+
+            if (grabbingObject != null)
+            {
+                grabbingObject.GetComponent<VRTK_InteractGrab>().ForceRelease();
+            }
+
+            if (usingObject != null)
+            {
+                usingObject.GetComponent<VRTK_InteractUse>().ForceStopUsing();
+            }
+        }
+
         protected virtual void Awake()
         {
             rb = this.GetComponent<Rigidbody>();
@@ -312,6 +330,11 @@ namespace VRTK
 
         protected virtual void Update()
         {
+            if(! this.gameObject.activeInHierarchy)
+            {
+                ForceStopInteracting();
+            }
+
             if (grabAttachMechanic == GrabAttachType.Track_Object)
             {
                 CheckBreakDistance();
@@ -324,6 +347,11 @@ namespace VRTK
             {
                 FixedUpdateTrackedObject();
             }
+        }
+
+        protected virtual void OnDisable()
+        {
+            ForceStopInteracting();
         }
 
         protected virtual void OnJointBreak(float force)
