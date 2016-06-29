@@ -226,7 +226,7 @@ namespace VRTK
             rb.maxAngularVelocity = rb.angularVelocity.magnitude;
         }
 
-        private void GrabInteractedObject()
+        private bool GrabInteractedObject()
         {
             if (controllerAttachJoint == null && grabbedObject == null && IsObjectGrabbable(interactTouch.GetTouchedObject()))
             {
@@ -234,16 +234,20 @@ namespace VRTK
                 if(grabbedObject)
                 {
                     SnapObjectToGrabToController(grabbedObject);
+                    return true;
                 }
             }
+            return false;
         }
 
-        private void GrabTrackedObject()
+        private bool GrabTrackedObject()
         {
             if (grabbedObject == null && IsObjectGrabbable(interactTouch.GetTouchedObject()))
             {
                 InitGrabbedObject();
+                return true;
             }
+            return false;
         }
 
         private void InitGrabbedObject()
@@ -331,31 +335,42 @@ namespace VRTK
             grabEnabledState = 0;
         }
 
-        private bool IsValidGrab()
+        private GameObject GetGrabbableObject()
         {
             GameObject obj = interactTouch.GetTouchedObject();
-            return (obj != null && interactTouch.IsObjectInteractable(obj));
+            if (obj != null && interactTouch.IsObjectInteractable(obj))
+            {
+                return obj;
+            }
+            return grabbedObject;
+        }
+
+        private void IncrementGrabState()
+        {
+            if (!IsObjectHoldOnGrab(interactTouch.GetTouchedObject()))
+            {
+                grabEnabledState++;
+            }
         }
 
         private void AttemptGrabObject()
         {
-            if (IsValidGrab())
+            var objectToGrab = GetGrabbableObject();
+            if (objectToGrab != null)
             {
-                if (interactTouch.GetTouchedObject().GetComponent<VRTK_InteractableObject>().AttachIsTrackObject())
+                IncrementGrabState();
+                var initialGrabAttempt = false;
+
+                if (objectToGrab.GetComponent<VRTK_InteractableObject>().AttachIsTrackObject())
                 {
-                    GrabTrackedObject();
+                    initialGrabAttempt = GrabTrackedObject();
                 }
                 else
                 {
-                    GrabInteractedObject();
+                    initialGrabAttempt = GrabInteractedObject();
                 }
 
-                if (!IsObjectHoldOnGrab(interactTouch.GetTouchedObject()))
-                {
-                    grabEnabledState++;
-                }
-
-                if (grabbedObject)
+                if (grabbedObject && initialGrabAttempt)
                 {
                     var rumbleAmount = grabbedObject.GetComponent<VRTK_InteractableObject>().rumbleOnGrab;
                     if (!rumbleAmount.Equals(Vector2.zero))
@@ -410,7 +425,7 @@ namespace VRTK
             if (grabPrecognitionTimer > 0)
             {
                 grabPrecognitionTimer--;
-                if (IsValidGrab())
+                if (GetGrabbableObject() != null)
                 {
                     AttemptGrabObject();
                 }

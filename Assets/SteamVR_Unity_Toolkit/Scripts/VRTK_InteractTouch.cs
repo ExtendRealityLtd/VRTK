@@ -21,7 +21,6 @@ namespace VRTK
     [RequireComponent(typeof(VRTK_ControllerActions))]
     public class VRTK_InteractTouch : MonoBehaviour
     {
-
         public bool hideControllerOnTouch = false;
         public float hideControllerDelay = 0f;
         public Color globalTouchHighlightColor = Color.clear;
@@ -102,6 +101,11 @@ namespace VRTK
             CreateControllerRigidBody();
         }
 
+        private void OnTriggerEnter(Collider collider)
+        {
+            OnTriggerStay(collider);
+        }
+
         private void OnTriggerStay(Collider collider)
         {
             if (touchedObject == null && IsObjectInteractable(collider.gameObject))
@@ -140,35 +144,42 @@ namespace VRTK
             }
         }
 
+        private bool IsColliderChildOfTouchedObject(GameObject collider)
+        {
+            if (touchedObject != null && collider.GetComponentInParent<VRTK_InteractableObject>() && collider.GetComponentInParent<VRTK_InteractableObject>().gameObject == touchedObject)
+            {
+                return true;
+            }
+            return false;
+        }
+
         private void OnTriggerExit(Collider collider)
         {
-            if (touchedObject == null)
+            if(touchedObject != null && (touchedObject == collider.gameObject || IsColliderChildOfTouchedObject(collider.gameObject)))
             {
-                return;
-            }
-
-            if (IsObjectInteractable(collider.gameObject))
-            {
-                GameObject untouched;
-                if (collider.gameObject.GetComponent<VRTK_InteractableObject>())
+                if (IsObjectInteractable(collider.gameObject))
                 {
-                    untouched = collider.gameObject;
+                    GameObject untouched;
+                    if (collider.gameObject.GetComponent<VRTK_InteractableObject>())
+                    {
+                        untouched = collider.gameObject;
+                    }
+                    else
+                    {
+                        untouched = collider.gameObject.GetComponentInParent<VRTK_InteractableObject>().gameObject;
+                    }
+
+                    OnControllerUntouchInteractableObject(SetControllerInteractEvent(untouched.gameObject));
+                    untouched.GetComponent<VRTK_InteractableObject>().ToggleHighlight(false);
+                    untouched.GetComponent<VRTK_InteractableObject>().StopTouching(this.gameObject);
                 }
-                else
+
+                if (hideControllerOnTouch)
                 {
-                    untouched = collider.gameObject.GetComponentInParent<VRTK_InteractableObject>().gameObject;
+                    controllerActions.ToggleControllerModel(true, touchedObject);
                 }
-
-                OnControllerUntouchInteractableObject(SetControllerInteractEvent(untouched.gameObject));
-                untouched.GetComponent<VRTK_InteractableObject>().ToggleHighlight(false);
-                untouched.GetComponent<VRTK_InteractableObject>().StopTouching(this.gameObject);
+                touchedObject = null;
             }
-
-            if (hideControllerOnTouch)
-            {
-                controllerActions.ToggleControllerModel(true, touchedObject);
-            }
-            touchedObject = null;
         }
 
         private void CreateTouchCollider(GameObject obj)
