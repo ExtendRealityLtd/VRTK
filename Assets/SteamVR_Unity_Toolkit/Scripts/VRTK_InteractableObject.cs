@@ -24,14 +24,6 @@ namespace VRTK
 
     public class VRTK_InteractableObject : MonoBehaviour
     {
-        public enum GrabSnapType
-        {
-            Simple_Snap,
-            Rotation_Snap,
-            Precision_Snap,
-            Handle_Snap
-        }
-
         public enum GrabAttachType
         {
             Fixed_Joint,
@@ -58,13 +50,11 @@ namespace VRTK
         public bool isDroppable = true;
         public bool isSwappable = true;
         public bool holdButtonToGrab = true;
-        public float onGrabCollisionDelay = 0f;
-        public GrabSnapType grabSnapType = GrabSnapType.Simple_Snap;
-        public Vector3 snapToRotation = Vector3.zero;
-        public Vector3 snapToPosition = Vector3.zero;
-        public Transform snapHandle;
         public Vector2 rumbleOnGrab = Vector2.zero;
         public AllowedController allowedGrabControllers = AllowedController.Both;
+        public bool precisionSnap;
+        public Transform rightSnapHandle;
+        public Transform leftSnapHandle;
 
         [Header("Grab Mechanics", order = 3)]
         public GrabAttachType grabAttachMechanic = GrabAttachType.Fixed_Joint;
@@ -72,6 +62,7 @@ namespace VRTK
         public float springJointStrength = 500f;
         public float springJointDamper = 50f;
         public float throwMultiplier = 1f;
+        public float onGrabCollisionDelay = 0f;
 
         [Header("Use Interactions", order = 4)]
         public bool isUsable = false;
@@ -433,7 +424,7 @@ namespace VRTK
                 controllerPoint = point.GetComponent<VRTK_InteractGrab>().controllerAttachPoint.transform;
             }
 
-            if (grabAttachMechanic == GrabAttachType.Track_Object && grabSnapType == GrabSnapType.Precision_Snap)
+            if (grabAttachMechanic == GrabAttachType.Track_Object && precisionSnap)
             {
                 trackPoint = new GameObject(string.Format("[{0}]TrackObject_PrecisionSnap_AttachPoint", this.gameObject.name)).transform;
                 trackPoint.parent = point.transform;

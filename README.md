@@ -785,33 +785,6 @@ The following script parameters are available:
   on the controller needs to be continually held down to keep grabbing.
   If this is unchecked the grab button toggles the grab action with
   one button press to grab and another to release.
-  * **On Grab Collision Delay:** The amount of time to delay collisions
-  affecting the object when it is first grabbed. This is useful if a
-  game object may get stuck inside another object when it is being
-  grabbed.
-  * **Grab Snap Type:** This sets the snap type of the object when
-  it is grabbed.
-   * `Simple_Snap` snaps the grabbed object's central position to the
-   controller attach point (default is controller tip).
-   * `Rotation_Snap` snaps the grabbed object to a specific rotation
-   which is provided as a Vector3 in the `Snap To Rotation` parameter.
-   * `Precision_Snap` does not snap the object's position to the
-   controller and picks the object up at the point the controller is
-   touching the object (like a real life hand picking something up).
-   * `Handle_Snap` allows for an empty GameObject as a child of the
-   interactable object to be used as the reference snap point. On grab,
-   this empty GameObject rotation and position is used to orientate
-   the grabbed interactable object to the controller.
-  * **Snap To Rotation:** A Vector3 of EulerAngles that determines the
-  rotation of the object in relation to the controller on snap.
-  This is useful for picking up guns or swords where the relative
-  rotation to the controller is important for ease of use.
-  * **Snap To Position:** A Vector3 that determines the position of
-  the object in relation to the controller on snap.
-  * **Snap Handle:** A Transform provided as an empty game object which
-  must be the child of the item being grabbed and serves as an
-  orientation point to rotate and position the grabbed item in relation
-  to the grabbing controller.
   * **Rumble On Grab:** The haptic feedback on the controller can
   be triggered upon grabbing the object, the `x` denotes the length
   of time, the `y` denotes the strength of the pulse. (x and y will
@@ -821,6 +794,23 @@ The following script parameters are available:
    * `Both` means both controllers are allowed to grab
    * `Left_Only` means only the left controller is allowed to grab
    * `Right_Only` means only the right controller is allowed to grab
+  * **Precision_Snap:** If this is checked then when the controller
+  grabs the object, it will grab it with precision and pick it up
+  at the particular point on the object the controller is touching.
+  * **Right Snap Handle:** A Transform provided as an empty game object
+  which must be the child of the item being grabbed and serves as an
+  orientation point to rotate and position the grabbed item in relation
+  to the right handed controller. If no Right Snap Handle is provided
+  but a Left Snap Handle is provided, then the Left Snap Handle will
+  be used in place. If no Snap Handle is provided then the object will
+  be grabbed at it's central point.
+  * **Left Snap Handle:** A Transform provided as an empty game object
+  which must be the child of the item being grabbed and serves as an
+  orientation point to rotate and position the grabbed item in relation
+  to the left handed controller. If no Left Snap Handle is provided
+  but a Right Snap Handle is provided, then the Right Snap Handle will
+  be used in place. If no Snap Handle is provided then the object will
+  be grabbed at it's central point.
 
 ######Grab Mechanics
   * **Grab Attach Type:** This determines how the grabbed item will
@@ -862,6 +852,10 @@ The following script parameters are available:
   conjunction with the Interact Grab Throw Multiplier to have
   certain objects be thrown even further than normal (or thrown
   a shorter distance if a number below 1 is entered).
+  * **On Grab Collision Delay:** The amount of time to delay collisions
+  affecting the object when it is first grabbed. This is useful if a
+  game object may get stuck inside another object when it is being
+  grabbed.
 
 ######Use Interactions
   * **Is Usable:** Determines if the object can be used
@@ -1429,18 +1423,17 @@ The current examples are:
 
   * **014_Controller_SnappingObjectsOnGrab:** A scene with a selection
   of objects that demonstrate the different snap to controller
-  mechanics. The two green guns and sword utilise the `Rotation Snap`
-  which orientates the object into a specific given rotation to ensure
-  the object feels like it's been held naturally in the hand. The green
-  lightsaber utilises the `Handle Snap` which uses an empty game object
-  as a child of the interactable object as the orientation point at
-  grab, so the rotation and position of the object matches that of the
-  given `Snap Handle`. The red gun utilises the `Simple Snap`
-  which does not affect the object's rotation but positions the centre
-  of the object to the snap point on the controller. The red/green gun
-  utilises the `Precision Snap` which does not affect the rotation or
-  position of the grabbed object and picks the object up at the point
-  that the controller snap point is touching the object.
+  mechanics. The two green guns, light saber and sword utilise a
+  Snap Handle which uses an empty game object as a child of the
+  interactable object as the orientation point at grab, so the rotation
+  and position of the object matches that of the given `Snap Handle`.
+  The red gun utilises a basic snap where no precision is required and
+  no Snap Handles are provided which does not affect the object's
+  rotation but positions the centre of the object to the snap point on
+  the controller. The red/green gun utilises the `Precision Snap` which
+  does not affect the rotation or position of the grabbed object and
+  picks the object up at the point that the controller snap point is
+  touching the object.
    * [View Example Tour on YouTube](https://www.youtube.com/watch?v=zLBlef1ikLE)
 
   * **015_Controller_TouchpadAxisControl:** A scene with an R/C car

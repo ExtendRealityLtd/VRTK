@@ -114,6 +114,47 @@ namespace VRTK
             return (obj && obj.GetComponent<VRTK_InteractableObject>() && obj.GetComponent<VRTK_InteractableObject>().holdButtonToGrab);
         }
 
+        private Transform GetSnapHandle(VRTK_InteractableObject objectScript)
+        {
+            if (objectScript.rightSnapHandle == null && objectScript.leftSnapHandle != null)
+            {
+                objectScript.rightSnapHandle = objectScript.leftSnapHandle;
+            }
+
+            if (objectScript.leftSnapHandle == null && objectScript.rightSnapHandle != null)
+            {
+                objectScript.leftSnapHandle = objectScript.rightSnapHandle;
+            }
+
+            if (DeviceFinder.IsControllerOfHand(this.gameObject, DeviceFinder.ControllerHand.Right))
+            {
+                return objectScript.rightSnapHandle;
+            }
+
+            if (DeviceFinder.IsControllerOfHand(this.gameObject, DeviceFinder.ControllerHand.Left))
+            {
+                return objectScript.leftSnapHandle;
+            }
+
+            return null;
+        }
+
+        private void SetSnappedObjectPosition(GameObject obj)
+        {
+            var objectScript = obj.GetComponent<VRTK_InteractableObject>();
+
+            if (objectScript.rightSnapHandle == null && objectScript.leftSnapHandle == null)
+            {
+                obj.transform.position = controllerAttachPoint.transform.position;
+            }
+            else
+            {
+                var snapHandle = GetSnapHandle(objectScript);
+                obj.transform.rotation = this.transform.rotation * Quaternion.Euler(snapHandle.transform.localEulerAngles);
+                obj.transform.position = controllerAttachPoint.transform.position - (snapHandle.transform.position - obj.transform.position);
+            }
+        }
+
         private void SnapObjectToGrabToController(GameObject obj)
         {
             var objectScript = obj.GetComponent<VRTK_InteractableObject>();
@@ -121,24 +162,9 @@ namespace VRTK
             //Pause collisions (if allowed on object) for a moment whilst sorting out position to prevent clipping issues
             objectScript.PauseCollisions();
 
-            VRTK_InteractableObject.GrabSnapType grabType = objectScript.grabSnapType;
-
-            if (grabType == VRTK_InteractableObject.GrabSnapType.Rotation_Snap)
+            if(! objectScript.precisionSnap)
             {
-                obj.transform.rotation = this.transform.rotation * Quaternion.Euler(objectScript.snapToRotation);
-            }
-
-            if (grabType != VRTK_InteractableObject.GrabSnapType.Precision_Snap)
-            {
-                obj.transform.position = controllerAttachPoint.transform.position + objectScript.snapToPosition;
-            }
-
-            if (grabType == VRTK_InteractableObject.GrabSnapType.Handle_Snap && objectScript.snapHandle != null)
-            {
-                obj.transform.rotation = this.transform.rotation * Quaternion.Euler(objectScript.snapHandle.transform.localEulerAngles);
-
-                Vector3 snapHandleDelta = objectScript.snapHandle.transform.position - obj.transform.position;
-                obj.transform.position = controllerAttachPoint.transform.position - snapHandleDelta;
+                SetSnappedObjectPosition(obj);
             }
 
             if (objectScript.grabAttachMechanic == VRTK_InteractableObject.GrabAttachType.Child_Of_Controller)
@@ -164,7 +190,7 @@ namespace VRTK
                 SpringJoint tempSpringJoint = obj.AddComponent<SpringJoint>();
                 tempSpringJoint.spring = objectScript.springJointStrength;
                 tempSpringJoint.damper = objectScript.springJointDamper;
-                if(objectScript.grabSnapType == VRTK_InteractableObject.GrabSnapType.Precision_Snap)
+                if(objectScript.precisionSnap)
                 {
                     tempSpringJoint.anchor = obj.transform.InverseTransformPoint(controllerAttachPoint.position);
                 }
