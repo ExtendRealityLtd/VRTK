@@ -86,6 +86,7 @@ namespace VRTK
         private int usingState = 0;
         private Dictionary<string, Color> originalObjectColours;
 
+        private Transform grabbedSnapHandle;
         private Transform trackPoint;
         private bool customTrackPoint = false;
 
@@ -181,6 +182,7 @@ namespace VRTK
         {
             OnInteractableObjectUngrabbed(SetInteractableObjectEvent(previousGrabbingObject));
             RemoveTrackPoint();
+            grabbedSnapHandle = null;
             grabbingObject = null;
             LoadPreviousState();
         }
@@ -309,6 +311,11 @@ namespace VRTK
             {
                 usingObject.GetComponent<VRTK_InteractUse>().ForceStopUsing();
             }
+	}
+
+        public void SetGrabbedSnapHandle(Transform handle)
+        {
+            grabbedSnapHandle = handle;
         }
 
         protected virtual void Awake()
@@ -321,6 +328,7 @@ namespace VRTK
                 rb = gameObject.AddComponent<Rigidbody>();
                 rb.isKinematic = true;
             }
+            rb.maxAngularVelocity = float.MaxValue;
         }
 
         protected virtual void Start()
@@ -483,26 +491,36 @@ namespace VRTK
         {
             if (trackPoint)
             {
-                float rotationMultiplier = 20f;
-                float positionMultiplier = 3000f;
                 float maxDistanceDelta = 10f;
 
-                Quaternion rotationDelta = trackPoint.rotation * Quaternion.Inverse(this.transform.rotation);
-                Vector3 positionDelta = (trackPoint.position - this.transform.position);
+                Quaternion rotationDelta;
+                Vector3 positionDelta;
 
                 float angle;
                 Vector3 axis;
+
+                if(grabbedSnapHandle != null)
+                {
+                    rotationDelta = trackPoint.rotation * Quaternion.Inverse(grabbedSnapHandle.rotation);
+                    positionDelta = trackPoint.position - grabbedSnapHandle.position;
+                } else
+                {
+                    rotationDelta = trackPoint.rotation * Quaternion.Inverse(this.transform.rotation);
+                    positionDelta = trackPoint.position - this.transform.position;
+                }
+
                 rotationDelta.ToAngleAxis(out angle, out axis);
+
                 angle = (angle > 180 ? angle -= 360 : angle);
 
                 if (angle != 0)
                 {
-                    Vector3 AngularTarget = (Time.fixedDeltaTime * angle * axis) * rotationMultiplier;
-                    rb.angularVelocity = Vector3.MoveTowards(rb.angularVelocity, AngularTarget, maxDistanceDelta);
+                    Vector3 angularTarget = angle * axis;
+                    rb.angularVelocity = Vector3.MoveTowards(rb.angularVelocity, angularTarget, maxDistanceDelta);
                 }
 
-                Vector3 VelocityTarget = positionDelta * positionMultiplier * Time.fixedDeltaTime;
-                rb.velocity = Vector3.MoveTowards(rb.velocity, VelocityTarget, maxDistanceDelta);
+                Vector3 velocityTarget = positionDelta / Time.fixedDeltaTime;
+                rb.velocity = Vector3.MoveTowards(rb.velocity, velocityTarget, maxDistanceDelta);
             }
         }
     }
