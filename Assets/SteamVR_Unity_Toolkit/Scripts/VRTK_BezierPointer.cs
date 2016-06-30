@@ -65,7 +65,7 @@ namespace VRTK
             pointerCursor.layer = 2;
             pointerCursor.SetActive(false);
 
-            GameObject global = new GameObject(string.Format("[{0}]PlayerObject_WorldPointer_BezierPointer_CurvedBeamContainer", this.gameObject.name));
+            var global = new GameObject(string.Format("[{0}]PlayerObject_WorldPointer_BezierPointer_CurvedBeamContainer", this.gameObject.name));
             global.SetActive(false);
             curvedBeam = global.gameObject.AddComponent<CurveGenerator>();
             curvedBeam.transform.parent = null;
@@ -75,8 +75,8 @@ namespace VRTK
 
         private GameObject CreateCursor()
         {
-            float cursorYOffset = 0.02f;
-            GameObject cursor = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+            var cursorYOffset = 0.02f;
+            var cursor = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
             cursor.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
             cursor.GetComponent<MeshRenderer>().receiveShadows = false;
             cursor.transform.localScale = new Vector3(pointerCursorRadius, cursorYOffset, pointerCursorRadius);
@@ -86,22 +86,12 @@ namespace VRTK
 
         protected override void SetPointerMaterial()
         {
-            if (pointerCursor.GetComponent<MeshRenderer>())
+            if (pointerCursor.GetComponent<Renderer>())
             {
-                pointerCursor.GetComponent<MeshRenderer>().material = pointerMaterial;
+                pointerCursor.GetComponent<Renderer>().material = pointerMaterial;
             }
 
-            foreach (MeshRenderer mr in pointerCursor.GetComponentsInChildren<MeshRenderer>())
-            {
-                mr.material = pointerMaterial;
-            }
-
-            if (pointerCursor.GetComponent<SkinnedMeshRenderer>())
-            {
-                pointerCursor.GetComponent<SkinnedMeshRenderer>().material = pointerMaterial;
-            }
-
-            foreach (SkinnedMeshRenderer mr in pointerCursor.GetComponentsInChildren<SkinnedMeshRenderer>())
+            foreach (Renderer mr in pointerCursor.GetComponentsInChildren<Renderer>())
             {
                 mr.material = pointerMaterial;
             }
@@ -111,7 +101,7 @@ namespace VRTK
 
         protected override void TogglePointer(bool state)
         {
-            state = (beamAlwaysOn ? true : state);
+            state = (pointerVisibility == pointerVisibilityStates.Always_On ? true : state);
 
             projectedBeamForward.gameObject.SetActive(state);
             projectedBeamJoint.gameObject.SetActive(state);
@@ -128,10 +118,8 @@ namespace VRTK
 
         private void TogglePointerCursor(bool state)
         {
-            state = (beamAlwaysOn ? true : state);
-
-            bool pointerCursorState = (showPointerCursor && state ? showPointerCursor : false);
-            bool playAreaCursorState = (showPlayAreaCursor && state ? showPlayAreaCursor : false);
+            var pointerCursorState = (showPointerCursor && state ? showPointerCursor : false);
+            var playAreaCursorState = (showPlayAreaCursor && state ? showPlayAreaCursor : false);
             pointerCursor.gameObject.SetActive(pointerCursorState);
             base.TogglePointer(playAreaCursorState);
         }
@@ -154,10 +142,10 @@ namespace VRTK
 
         private float GetForwardBeamLength()
         {
-            float actualLength = pointerLength;
+            var actualLength = pointerLength;
             Ray pointerRaycast = new Ray(transform.position, transform.forward);
             RaycastHit collidedWith;
-            bool hasRayHit = Physics.Raycast(pointerRaycast, out collidedWith, pointerLength, ~layersToIgnore);
+            var hasRayHit = Physics.Raycast(pointerRaycast, out collidedWith, pointerLength, ~layersToIgnore);
 
             //reset if beam not hitting or hitting new target
             if (!hasRayHit || (pointerContactTarget && pointerContactTarget != collidedWith.transform))
@@ -182,10 +170,10 @@ namespace VRTK
 
         private void ProjectForwardBeam()
         {
-            float setThicknes = 0.01f;
-            float setLength = GetForwardBeamLength();
+            var setThicknes = 0.01f;
+            var setLength = GetForwardBeamLength();
             //if the additional decimal isn't added then the beam position glitches
-            float beamPosition = setLength / (2 + 0.00001f);
+            var beamPosition = setLength / (2 + 0.00001f);
 
             projectedBeamForward.transform.localScale = new Vector3(setThicknes, setThicknes, setLength);
             projectedBeamForward.transform.localPosition = new Vector3(0f, 0f, beamPosition);
@@ -199,7 +187,7 @@ namespace VRTK
 
             Ray projectedBeamDownRaycast = new Ray(projectedBeamDown.transform.position, Vector3.down);
             RaycastHit collidedWith;
-            bool downRayHit = Physics.Raycast(projectedBeamDownRaycast, out collidedWith, pointerLength, ~layersToIgnore);
+            var downRayHit = Physics.Raycast(projectedBeamDownRaycast, out collidedWith, pointerLength, ~layersToIgnore);
 
             if (!downRayHit || (pointerContactTarget && pointerContactTarget != collidedWith.transform))
             {
@@ -242,13 +230,17 @@ namespace VRTK
         {
             Vector3[] beamPoints = new Vector3[]
             {
-            this.transform.position,
-            projectedBeamJoint.transform.position + new Vector3(0f, beamCurveOffset, 0f),
-            projectedBeamDown.transform.position,
-            projectedBeamDown.transform.position,
+                this.transform.position,
+                projectedBeamJoint.transform.position + new Vector3(0f, beamCurveOffset, 0f),
+                projectedBeamDown.transform.position,
+                projectedBeamDown.transform.position,
             };
+
             curvedBeam.SetPoints(beamPoints, pointerMaterial);
-            curvedBeam.TogglePoints(true);
+            if (pointerVisibility != pointerVisibilityStates.Always_Off)
+            {
+                curvedBeam.TogglePoints(true);
+            }
         }
     }
 }

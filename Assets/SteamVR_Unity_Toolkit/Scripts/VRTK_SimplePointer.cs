@@ -43,8 +43,8 @@ namespace VRTK
             {
                 Ray pointerRaycast = new Ray(transform.position, transform.forward);
                 RaycastHit pointerCollidedWith;
-                bool rayHit = Physics.Raycast(pointerRaycast, out pointerCollidedWith, pointerLength, ~layersToIgnore);
-                float pointerBeamLength = GetPointerBeamLength(rayHit, pointerCollidedWith);
+                var rayHit = Physics.Raycast(pointerRaycast, out pointerCollidedWith, pointerLength, ~layersToIgnore);
+                var pointerBeamLength = GetPointerBeamLength(rayHit, pointerCollidedWith);
                 SetPointerTransform(pointerBeamLength, pointerThickness);
             }
         }
@@ -81,18 +81,23 @@ namespace VRTK
         protected override void SetPointerMaterial()
         {
             base.SetPointerMaterial();
-            pointer.GetComponent<MeshRenderer>().material = pointerMaterial;
-            pointerTip.GetComponent<MeshRenderer>().material = pointerMaterial;
+            pointer.GetComponent<Renderer>().material = pointerMaterial;
+            pointerTip.GetComponent<Renderer>().material = pointerMaterial;
         }
 
         protected override void TogglePointer(bool state)
         {
-            state = (beamAlwaysOn ? true : state);
-
+            state = (pointerVisibility == pointerVisibilityStates.Always_On ? true : state);
             base.TogglePointer(state);
             pointer.gameObject.SetActive(state);
-            bool tipState = (showPointerTip ? state : false);
+
+            var tipState = (showPointerTip ? state : false);
             pointerTip.gameObject.SetActive(tipState);
+
+            if (pointer.GetComponent<Renderer>() && pointerVisibility == pointerVisibilityStates.Always_Off)
+            {
+                pointer.GetComponent<Renderer>().enabled = false;
+            }
         }
 
         protected override void DisablePointerBeam(object sender, ControllerInteractionEventArgs e)
@@ -104,7 +109,7 @@ namespace VRTK
         private void SetPointerTransform(float setLength, float setThicknes)
         {
             //if the additional decimal isn't added then the beam position glitches
-            float beamPosition = setLength / (2 + 0.00001f);
+            var beamPosition = setLength / (2 + 0.00001f);
 
             pointer.transform.localScale = new Vector3(setThicknes, setThicknes, setLength);
             pointer.transform.localPosition = new Vector3(0f, 0f, beamPosition);
@@ -115,7 +120,7 @@ namespace VRTK
 
         private float GetPointerBeamLength(bool hasRayHit, RaycastHit collidedWith)
         {
-            float actualLength = pointerLength;
+            var actualLength = pointerLength;
 
             //reset if beam not hitting or hitting new target
             if (!hasRayHit || (pointerContactTarget && pointerContactTarget != collidedWith.transform))

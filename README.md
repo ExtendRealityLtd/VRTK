@@ -370,11 +370,14 @@ events so the pointer toggle button can be set by changing the
 `Pointer Toggle` button on the `VRTK_ControllerEvents` script
 parameters.
 
-The Simple Pointer script is attached to a Controller object within the
-`[CameraRig]` prefab and the Controller object also requires the
-`VRTK_ControllerEvents` script to be attached as it uses this for
+The Simple Pointer script can be attached to a Controller object
+within the `[CameraRig]` prefab and the Controller object also requires
+the `VRTK_ControllerEvents` script to be attached as it uses this for
 listening to the controller button events for enabling and disabling
-the beam.
+the beam. It is also possible to attach the Simple Pointer script to
+another object (like the `[CameraRig]/Camera (head)`) to enable other
+objects to project the beam. The controller parameter must be entered
+with the desired controller to toggle the beam if this is the case.
 
 The following script parameters are available:
 
@@ -383,6 +386,10 @@ The following script parameters are available:
   know whether to action the new destination. This allows controller
   beams to be enabled on a controller but never trigger a teleport
   (if this option is unchecked).
+  * **Controller:** The controller that will be used to toggle the
+  pointer. If the script is being applied onto a controller then this
+  parameter can be left blank as it will be auto populated by the
+  controller the script is on at runtime.
   * **Pointer Hit Color:** The colour of the beam when it is colliding
   with a valid target. It can be set to a different colour for each
   controller.
@@ -400,9 +407,16 @@ The following script parameters are available:
   pointer colour will change to the `Pointer Miss Color` and the
   `WorldPointerDestinationSet` event will not be triggered, which will
   prevent teleporting into areas where the play area will collide.
-  * **Beam Always On:** If this is checked the the pointer beam is
-  always visible but the Destination Set event is still only emitted
-  when the assigned button is pressed.
+  * **Pointer Visibility:** Determines when the pointer beam should be
+  displayed:
+   * `On_When_Active` only shows the pointer beam when the Pointer
+   button on the controller is pressed.
+   * `Always On` ensures the pointer beam is always visible but
+   pressing the Pointer button on the controller initiates the
+   destination set event.
+   * `Always Off` ensures the pointer beam is never visible but the
+   destination point is still set and pressing the Pointer button
+   on the controller still initiates the destination set event.
   * **Activate Delay:** The time in seconds to delay the pointer beam
   being able to be active again. Useful for preventing constant
   teleportation.
@@ -439,11 +453,14 @@ events so the pointer toggle button can be set by changing the
 `Pointer Toggle` button on the `VRTK_ControllerEvents` script
 parameters.
 
-The Bezier Pointer script is attached to a Controller object within the
-`[CameraRig]` prefab and the Controller object also requires the
-`VRTK_ControllerEvents` script to be attached as it uses this for
+The Bezier Pointer script can be attached to a Controller object
+within the `[CameraRig]` prefab and the Controller object also requires
+the `VRTK_ControllerEvents` script to be attached as it uses this for
 listening to the controller button events for enabling and disabling
-the beam.
+the beam. It is also possible to attach the Bezier Pointer script to
+another object (like the `[CameraRig]/Camera (head)`) to enable other
+objects to project the beam. The controller parameter must be entered
+with the desired controller to toggle the beam if this is the case.
 
 The following script parameters are available:
 
@@ -452,6 +469,10 @@ The following script parameters are available:
   know whether to action the new destination. This allows controller
   beams to be enabled on a controller but never trigger a teleport
   (if this option is unchecked).
+  * **Controller:** The controller that will be used to toggle the
+  pointer. If the script is being applied onto a controller then this
+  parameter can be left blank as it will be auto populated by the
+  controller the script is on at runtime.
   * **Pointer Hit Color:** The colour of the beam when it is colliding
   with a valid target. It can be set to a different colour for each
   controller.
@@ -469,9 +490,16 @@ The following script parameters are available:
   pointer colour will change to the `Pointer Miss Color` and the
   `WorldPointerDestinationSet` event will not be triggered, which will
   prevent teleporting into areas where the play area will collide.
-  * **Beam Always On:** If this is checked the the pointer beam is
-  always visible but the Destination Set event is still only emitted
-  when the assigned button is pressed.
+  * **Pointer Visibility:** Determines when the pointer beam should be
+  displayed:
+   * `On_When_Active` only shows the pointer beam when the Pointer
+   button on the controller is pressed.
+   * `Always On` ensures the pointer beam is always visible but
+   pressing the Pointer button on the controller initiates the
+   destination set event.
+   * `Always Off` ensures the pointer beam is never visible but the
+   destination point is still set and pressing the Pointer button
+   on the controller still initiates the destination set event.
   * **Activate Delay:** The time in seconds to delay the pointer beam
   being able to be active again. Useful for preventing constant
   teleportation.
@@ -1357,6 +1385,10 @@ The following script parameters are available:
   know whether to action the new destination. This allows controller
   beams to be enabled on a controller but never trigger a teleport
   (if this option is unchecked).
+  * **Controller:** The controller that will be used to toggle the
+  pointer. If the script is being applied onto a controller then this
+  parameter can be left blank as it will be auto populated by the
+  controller the script is on at runtime.
   * **Pointer Hit Color:** The colour of the beam when it is colliding
   with a valid target. It can be set to a different colour for each
   controller.
@@ -1374,9 +1406,16 @@ The following script parameters are available:
   pointer colour will change to the `Pointer Miss Color` and the
   `WorldPointerDestinationSet` event will not be triggered, which will
   prevent teleporting into areas where the play area will collide.
-  * **Beam Always On:** If this is checked the the pointer beam is
-  always visible but the Destination Set event is still only emitted
-  when the assigned button is pressed.
+  * **Pointer Visibility:** Determines when the pointer beam should be
+  displayed:
+   * `On_When_Active` only shows the pointer beam when the Pointer
+   button on the controller is pressed.
+   * `Always On` ensures the pointer beam is always visible but
+   pressing the Pointer button on the controller initiates the
+   destination set event.
+   * `Always Off` ensures the pointer beam is never visible but the
+   destination point is still set and pressing the Pointer button
+   on the controller still initiates the destination set event.
   * **Activate Delay:** The time in seconds to delay the pointer beam
   being able to be active again. Useful for preventing constant
   teleportation.
@@ -1621,7 +1660,16 @@ The current examples are:
   tooltips to game objects and to the controllers using the prefabs
   `ObjectTooltip` and `ControllerTooltips`.
 
-  * **030_Radial_Touchpad_Menu:** A scene that demonstrates adding dynamic radial menus to controllers using the prefab `RadialMenu`.
+  * **030_Radial_Touchpad_Menu:** A scene that demonstrates adding
+  dynamic radial menus to controllers using the prefab `RadialMenu`.
+
+  * **031_CameraRig_HeadsetGazePointer:** A scene thqt demonstrates
+  the ability to attach a pointer to the headset to allow for
+  a gaze pointer for teleporting or other interactions supported
+  by the World Pointers. The `Touchpad` on the right controller
+  activates the gaze beam, where as the `Touchpad` on the left
+  controller activates a beam projected from a drone in the sky as
+  the World Pointers can be attached to any object.
 
 ## Contributing
 
