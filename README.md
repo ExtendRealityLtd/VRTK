@@ -334,9 +334,9 @@ within a scene and it can also determine the object it is pointing at
 and the distance the object is from the controller the beam is being
 emitted from.
 
-The laser beam is activated by default by pressing the `Grip` on the
-controller. The event it is listening for is the `AliasPointer` events
-so the pointer toggle button can be set by changing the
+The laser beam is activated by default by pressing the `Touchpad` on
+the controller. The event it is listening for is the `AliasPointer`
+events so the pointer toggle button can be set by changing the
 `Pointer Toggle` button on the `VRTK_ControllerEvents` script
 parameters.
 
@@ -401,11 +401,11 @@ The Bezier Pointer emits a curved line (made out of game objects) from
 the end of the controller to a point on a ground surface (at any
 height). It is more useful than the Simple Laser Pointer for
 traversing objects of various heights as the end point can be curved
-on top of objects that are not visible to the player.
+on top of objects that are not visible to the user.
 
-The laser beam is activated by default by pressing the `Grip` on the
-controller. The event it is listening for is the `AliasPointer` events
-so the pointer toggle button can be set by changing the
+The laser beam is activated by default by pressing the `Touchpad` on
+the controller. The event it is listening for is the `AliasPointer`
+events so the pointer toggle button can be set by changing the
 `Pointer Toggle` button on the `VRTK_ControllerEvents` script
 parameters.
 
@@ -482,7 +482,7 @@ Another example can be viewed in the scene
 that shows how a Bezier Pointer with the Play Area Cursor and Collision
 Detection enabled can be used to traverse a game area but not allow
 teleporting into areas where the walls or other objects would fall into
-the play area space enabling the player to enter walls.
+the play area space enabling the user to enter walls.
 
 The bezier curve generation code is in another script located at
 `SteamVR_Unity_Toolkit/Scripts/Helper/CurveGenerator.cs` and was
@@ -530,9 +530,9 @@ The following script parameters are available:
 An example of the `VRTK_BasicTeleport` script can be viewed in the
 scene `SteamVR_Unity_Toolkit/Examples/004_CameraRig_BasicTeleport`.
 The scene uses the `VRTK_SimplePointer` script on the Controllers to
-initiate a laser pointer with the Controller `Grip` button and when
-the laser pointer is deactivated (release the `Grip`) then the player
-is teleported to the location of the laser pointer tip.
+initiate a laser pointer by pressing the `Touchpad` on the controller
+and when the laser pointer is deactivated (release the `Touchpad`)
+then the user is teleported to the location of the laser pointer tip.
 
 #### Height Adjustable Teleporter (VRTK_HeightAdjustTeleport)
 
@@ -565,44 +565,44 @@ The following script parameters are available:
   notifies the teleporter that the destination is to be ignored so
   the user cannot teleport to that location. It also ensure the
   pointer colour is set to the miss colour.
-  * **Play Space Falling:** Checks if the player steps off an object
+  * **Play Space Falling:** Checks if the user steps off an object
   into a part of their play area that is not on the object then they are
   automatically teleported down to the nearest floor.
 
 The `Play Space Falling` option also works in the opposite way that if
-the player's headset is above an object then the player is teleported
+the user's headset is above an object then the user is teleported
 automatically on top of that object, which is useful for simulating
 climbing stairs without needing to use the pointer beam location. If this
-option is turned off then the player can hover in mid air at
+option is turned off then the user can hover in mid air at
 the same y position of the object they are standing on.
 
 An example of the `VRTK_HeightAdjustTeleport` script can be viewed
 in the scene `SteamVR_Unity_Toolkit/Examples/007_CameraRig_HeightAdjustTeleport`.
-The scene has a collection of varying height objects that the player
+The scene has a collection of varying height objects that the user
 can either walk up and down or use the laser pointer to climb on top
 of them.
 
 Another example can be viewed in the scene
 `SteamVR_Unity_Toolkit/Examples/010_CameraRig_TerrainTeleporting`
-which shows how the teleportation of a player can also traverse
+which shows how the teleportation of a user can also traverse
 terrain colliders.
 
 Another example can be viewed in the scene
 `SteamVR_Unity_Toolkit/Examples/020_CameraRig_MeshTeleporting`
-which shows how the teleportation of a player can also traverse
+which shows how the teleportation of a user can also traverse
 mesh colliders.
 
 #### Fading On Headset Collision (VRTK_HeadsetCollisionFade)
 
 The purpose of the Headset Collision Fade is to detect when the user's
 VR headset collides with another game object and fades the screen to
-a solid colour. This is to deal with a player putting their head into
+a solid colour. This is to deal with a user putting their head into
 a game object and seeing the inside of the object clipping, which is
 an undesired effect.
 
-The reasoning behind this is if the player puts their head where it
+The reasoning behind this is if the user puts their head where it
 shouldn't be, then fading to a colour (e.g. black) will make the
-player realise they've done something wrong and they'll probably
+user realise they've done something wrong and they'll probably
 naturally step backwards.
 
 If the headset is colliding then the teleport action is also disabled
@@ -640,7 +640,7 @@ The event payload that is emitted contains:
 
 An example of the `VRTK_HeadsetCollisionFade` script can be
 viewed in the scene `SteamVR_Unity_Toolkit/Examples/011_Camera_HeadSetCollisionFading`.
-The scene has collidable walls around the play area and if the player
+The scene has collidable walls around the play area and if the user
 puts their head into any of the walls then the headset will fade to
 black.
 
@@ -725,24 +725,41 @@ will cause the user to appear back at their last good known position.
 
 ##### VRTK_RoomExtender
 
-This script allows the playArea to move with the player.
-The CameraRig is only moved when at the edge of a defined circle. Aims to create a virtually bigger play area.
-To use this add this script to the CameraRig.
+This script allows the playArea to move with the user.
+The CameraRig is only moved when at the edge of a defined circle.
+Aims to create a virtually bigger play area. To use this add this
+script to the CameraRig.
 
 The following script parameters are available:
 
-  * **Additional Movement Enabled:** This is the a public variable to enable the additional movement. This can be used in other scripts to toggle the CameraRig movement.
-  * **Additional Movement Enabled On Button Press:** This configures the controls of the RoomExtender. If this is true you have to press the touchpad to enable it. If this is false you can disable it with pressing the touchpad.
-  * **Additional Movement Multiplier:** This is the factor by which movement at the edge of the circle is amplified. 0 is no movement of the CameraRig. Higher values simulate a bigger play area but may be to uncomfortable.
-  * **Head Zone Radius:** This is the size of the circle in which the playArea is not moved and everything is normal. If it is to low it becomes uncomfortable when crouching.
-  * **Debug Transform:** This transform visualises the circle around the player where the CameraRig is not moved. In the demo scene this is a cylinder at floor level. Remember to turn of collisions.
+  * **Additional Movement Enabled:** This is the a public variable to
+  enable the additional movement. This can be used in other scripts to
+  toggle the CameraRig movement.
+  * **Additional Movement Enabled On Button Press:** This configures
+  the controls of the RoomExtender. If this is true you have to press
+  the touchpad to enable it. If this is false you can disable it with
+  pressing the touchpad.
+  * **Additional Movement Multiplier:** This is the factor by which
+  movement at the edge of the circle is amplified. 0 is no movement of
+  the CameraRig. Higher values simulate a bigger play area but may be
+  to uncomfortable.
+  * **Head Zone Radius:** This is the size of the circle in which the
+  playArea is not moved and everything is normal. If it is to low it
+  becomes uncomfortable when crouching.
+  * **Debug Transform:** This transform visualises the circle around
+  the user where the CameraRig is not moved. In the demo scene this is
+  a cylinder at floor level. Remember to turn of collisions.
 
-There is an additional script `VRTK_RoomExtender_PlayAreaGizmo` which can be attachted to the CameraRig to visualize the extended playArea.
+There is an additional script `VRTK_RoomExtender_PlayAreaGizmo` which
+can be attachted to the CameraRig to visualize the extended playArea.
 
-I have added a demo scene to test the script (028_CameraRig_RoomExtender):
-In the example scene the RoomExtender script is controlled by a VRTK_RoomExtender_Controller Example script located at both controllers.
-To use the RoomExtender you have to press the touchpad.
-The Additional Movement Multiplier is changed based on the touch distance to the center of the touchpad.
+An example of the `VRTK_RoomExtender` script can be viewed in the scene
+`SteamVR_Unity_Toolkit/Examples/028_CameraRig_RoomExtender`.
+In the example scene the RoomExtender script is controlled by a 
+VRTK_RoomExtender_Controller Example script located at both controllers.
+Pressing the `Touchpad` on the controller activates the Room Extender.
+The Additional Movement Multiplier is changed based on the touch
+distance to the center of the touchpad.
 
 #### Interactable Object (VRTK_InteractableObject)
 
@@ -1338,15 +1355,15 @@ The current examples are:
 
   * **003_Controller_SimplePointer:** A scene with basic objects that can
   be pointed at with the laser beam from the controller activated by
-  the `Grip` button. The pointer events are also displayed in the
+  pressing the `Touchpad`. The pointer events are also displayed in the
   console window.
    * [View Example Tour on YouTube](https://www.youtube.com/watch?v=2DqFTfbf22c)
 
   * **004_CameraRig_BasicTeleport:** A scene with basic objects that can
   be traversed using the controller laser beam to point at an object
-  in the game world where the player is to be teleported to by
-  pressing the controller `Grip` button. When the `Grip` button is
-  released, the player is teleported to the laser beam end location.
+  in the game world where the user is to be teleported to by
+  pressing `Touchpad` on the controller. When the `Touchpad` is
+  released, the user is teleported to the laser beam end location.
    * [View Example Tour on YouTube](https://www.youtube.com/watch?v=dbbNPPX-R6E)
 
   * **005_Controller_BasicObjectGrabbing:** A scene with a selection of
@@ -1367,10 +1384,10 @@ The current examples are:
   * **007_CameraRig_HeightAdjustTeleport:** A scene with a selection of
   varying height objects that can be traversed using the controller
   laser beam to point at an object and if the laser beam is pointing
-  on top of the object then the player is teleported to the top of the
-  object. Also, it shows that if the player steps into a part of the
-  play area that is not on the object then the player will fall to
-  the nearest object. This also enables the player to climb objects
+  on top of the object then the user is teleported to the top of the
+  object. Also, it shows that if the user steps into a part of the
+  play area that is not on the object then the user will fall to
+  the nearest object. This also enables the user to climb objects
   just by standing over them as the floor detection is done from the
   position of the headset.
    * [View Example Tour on YouTube](https://www.youtube.com/watch?v=4WJ9AyDABJo)
@@ -1386,7 +1403,7 @@ The current examples are:
   varying height objects that can be traversed using the controller
   however, rather than just pointing a straight beam, the beam is
   curved (over a bezier curve) which allows climbing on top of items
-  that the player cannot visibly see.
+  that the user cannot visibly see.
    * [View Example Tour on YouTube](https://www.youtube.com/watch?v=oOZV4bxdw5o)
 
   * **010_CameraRig_TerrainTeleporting:** A scene with a terrain
@@ -1397,7 +1414,7 @@ The current examples are:
    * [View Example Tour on YouTube](https://www.youtube.com/watch?v=CzKohhSjXNY)
 
   * **011_Camera_HeadSetCollisionFading:** A scene with three walls
-  around the play area and if the player puts their head into any
+  around the play area and if the user puts their head into any
   of the collidable walls then the headset fades to black to prevent
   seeing unwanted object clipping artifacts.
    * [View Example Tour on YouTube](https://www.youtube.com/watch?v=r0RZci0tZOI)
@@ -1408,7 +1425,7 @@ The current examples are:
   the space collides with any objects then the teleportation
   action is disabled. This means it's possible to create a level
   with areas where the user cannot teleport to because they would
-  allow the player to clip into objects.
+  allow the user to clip into objects.
    * [View Example Tour on YouTube](https://www.youtube.com/watch?v=OwACH7nhW1Q)
 
   * **013_Controller_UsingAndGrabbingMultipleObjects:** A scene which
@@ -1439,8 +1456,8 @@ The current examples are:
   * **015_Controller_TouchpadAxisControl:** A scene with an R/C car
   that is controlled by using the Controller Touchpad. Moving a finger
   up and down on the Touchpad will cause the car to drive forward or
-  backward. Moving a finger to the left or right of the Touchpad will
-  cause the car to turn in that direction. Pressing the Trigger will
+  backward. Moving a finger to the left or right of the `Touchpad` will
+  cause the car to turn in that direction. Pressing the `Trigger` will
   cause the car to jump, this utilises the Trigger axis and the more
   the trigger is depressed, the higher the car will jump.
    * [View Example Tour on YouTube](https://www.youtube.com/watch?v=4J8abeLzH58)
@@ -1456,12 +1473,12 @@ The current examples are:
   to move around the game world using the touchpad by sliding a finger
   forward and backwards to move in that direction. Sliding a finger
   left and right across the touchpad strafes in that direction. The
-  rotation is done via the player in game physically rotating their
+  rotation is done via the user in game physically rotating their
   body in the place space and whichever way the headset is looking
-  will be the way the player walks forward. Crouching is also possible
+  will be the way the user walks forward. Crouching is also possible
   as demonstrated in this scene and in conjunction with the 
   Headset Collision Fade script it can detect unwanted collisions
-  (e.g. if the player stands up whilst walking as crouched) and reset
+  (e.g. if the user stands up whilst walking as crouched) and reset
   their position to the last good known position.
    * [View Example Tour on YouTube](https://www.youtube.com/watch?v=I7eWQPFZ_KE)
 

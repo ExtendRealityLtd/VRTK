@@ -145,24 +145,27 @@ MonoBehaviour:
   highlightOnTouch: 1
   touchHighlightColor: {r: 1, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
+  allowedTouchControllers: 0
   isGrabbable: 0
   isDroppable: 1
+  isSwappable: 1
   holdButtonToGrab: 1
-  onGrabCollisionDelay: 0
-  grabSnapType: 0
-  snapToRotation: {x: 0, y: 0, z: 0}
-  snapToPosition: {x: 0, y: 0, z: 0}
-  snapHandle: {fileID: 0}
   rumbleOnGrab: {x: 0, y: 0}
+  allowedGrabControllers: 0
+  precisionSnap: 0
+  rightSnapHandle: {fileID: 0}
+  leftSnapHandle: {fileID: 0}
   grabAttachMechanic: 0
   detachThreshold: 500
   springJointStrength: 500
   springJointDamper: 50
   throwMultiplier: 1
+  onGrabCollisionDelay: 0
   isUsable: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
+  allowedUseControllers: 0
 --- !u!114 &48637172
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -714,6 +717,134 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 173048066}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!43 &219496012
+Mesh:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: 
+  serializedVersion: 8
+  m_SubMeshes:
+  - serializedVersion: 2
+    firstByte: 0
+    indexCount: 24
+    topology: 0
+    firstVertex: 0
+    vertexCount: 8
+    localAABB:
+      m_Center: {x: 0, y: 0.01, z: 0}
+      m_Extent: {x: 1.2499999, y: 0, z: 0.9000001}
+  m_Shapes:
+    vertices: []
+    shapes: []
+    channels: []
+    fullWeights: []
+  m_BindPose: []
+  m_BoneNameHashes: 
+  m_RootBoneNameHash: 0
+  m_MeshCompression: 0
+  m_IsReadable: 1
+  m_KeepVertices: 1
+  m_KeepIndices: 1
+  m_IndexBuffer: 000001000400010005000400010002000500020006000500020003000600030007000600030000000700000004000700
+  m_Skin: []
+  m_VertexData:
+    m_CurrentChannels: 13
+    m_VertexCount: 8
+    m_Channels:
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 3
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 12
+      format: 0
+      dimension: 4
+    - stream: 0
+      offset: 28
+      format: 0
+      dimension: 2
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    m_DataSize: 288
+    _typelessdata: cccc8c3f0ad7233c020040bf000000000000803f0000803f0000803f0000000000000000cccc8cbf0ad7233c020040bf000000000000803f0000803f0000803f0000803f00000000cccc8cbf0ad7233c0200403f000000000000803f0000803f0000803f0000000000000000cccc8c3f0ad7233c0200403f000000000000803f0000803f0000803f0000803f00000000ffff9f3f0ad7233c686666bf000000000000803f0000803f00000000000000000000803fffff9fbf0ad7233c686666bf000000000000803f0000803f000000000000803f0000803fffff9fbf0ad7233c6866663f000000000000803f0000803f00000000000000000000803fffff9f3f0ad7233c6866663f000000000000803f0000803f000000000000803f0000803f
+  m_CompressedMesh:
+    m_Vertices:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_UV:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Normals:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Tangents:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Weights:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_NormalSigns:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_TangentSigns:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_FloatColors:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_BoneIndices:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Triangles:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_UVInfo: 0
+  m_LocalAABB:
+    m_Center: {x: 0, y: 0.01, z: 0}
+    m_Extent: {x: 1.2499999, y: 0, z: 0.9000001}
+  m_MeshUsageFlags: 0
+  m_BakedConvexCollisionMesh: 
+  m_BakedTriangleCollisionMesh: 
+  m_MeshOptimized: 0
 --- !u!1 &225972147
 GameObject:
   m_ObjectHideFlags: 0
@@ -973,8 +1104,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eba3cd5456cd79e49948f5ceb58544b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pointerToggleButton: 1
-  grabToggleButton: 0
+  pointerToggleButton: 3
+  grabToggleButton: 1
   useToggleButton: 0
   menuToggleButton: 4
   axisFidelity: 1
@@ -1326,24 +1457,27 @@ MonoBehaviour:
   highlightOnTouch: 1
   touchHighlightColor: {r: 0.034482718, g: 1, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
+  allowedTouchControllers: 0
   isGrabbable: 0
   isDroppable: 1
+  isSwappable: 1
   holdButtonToGrab: 1
-  onGrabCollisionDelay: 0
-  grabSnapType: 0
-  snapToRotation: {x: 0, y: 0, z: 0}
-  snapToPosition: {x: 0, y: 0, z: 0}
-  snapHandle: {fileID: 0}
   rumbleOnGrab: {x: 0, y: 0}
+  allowedGrabControllers: 0
+  precisionSnap: 0
+  rightSnapHandle: {fileID: 0}
+  leftSnapHandle: {fileID: 0}
   grabAttachMechanic: 0
   detachThreshold: 500
   springJointStrength: 500
   springJointDamper: 50
   throwMultiplier: 1
+  onGrabCollisionDelay: 0
   isUsable: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
+  allowedUseControllers: 0
 --- !u!114 &360860277
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1479,134 +1613,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 369973184}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!43 &403857766
-Mesh:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_Name: 
-  serializedVersion: 8
-  m_SubMeshes:
-  - serializedVersion: 2
-    firstByte: 0
-    indexCount: 24
-    topology: 0
-    firstVertex: 0
-    vertexCount: 8
-    localAABB:
-      m_Center: {x: 0, y: 0.01, z: 0}
-      m_Extent: {x: 1.55, y: 0, z: 0.95000005}
-  m_Shapes:
-    vertices: []
-    shapes: []
-    channels: []
-    fullWeights: []
-  m_BindPose: []
-  m_BoneNameHashes: 
-  m_RootBoneNameHash: 0
-  m_MeshCompression: 0
-  m_IsReadable: 1
-  m_KeepVertices: 1
-  m_KeepIndices: 1
-  m_IndexBuffer: 000001000400010005000400010002000500020006000500020003000600030007000600030000000700000004000700
-  m_Skin: []
-  m_VertexData:
-    m_CurrentChannels: 13
-    m_VertexCount: 8
-    m_Channels:
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 3
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 12
-      format: 0
-      dimension: 4
-    - stream: 0
-      offset: 28
-      format: 0
-      dimension: 2
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    m_DataSize: 288
-    _typelessdata: 3333b33f0ad7233ccecc4cbf000000000000803f0000803f0000803f00000000000000003333b3bf0ad7233ccecc4cbf000000000000803f0000803f0000803f0000803f000000003333b3bf0ad7233ccecc4c3f000000000000803f0000803f0000803f00000000000000003333b33f0ad7233ccecc4c3f000000000000803f0000803f0000803f0000803f000000006666c63f0ad7233c343373bf000000000000803f0000803f00000000000000000000803f6666c6bf0ad7233c343373bf000000000000803f0000803f000000000000803f0000803f6666c6bf0ad7233c3433733f000000000000803f0000803f00000000000000000000803f6666c63f0ad7233c3433733f000000000000803f0000803f000000000000803f0000803f
-  m_CompressedMesh:
-    m_Vertices:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_UV:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Normals:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Tangents:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Weights:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_NormalSigns:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_TangentSigns:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_FloatColors:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_BoneIndices:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Triangles:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_UVInfo: 0
-  m_LocalAABB:
-    m_Center: {x: 0, y: 0.01, z: 0}
-    m_Extent: {x: 1.55, y: 0, z: 0.95000005}
-  m_MeshUsageFlags: 0
-  m_BakedConvexCollisionMesh: 
-  m_BakedTriangleCollisionMesh: 
-  m_MeshOptimized: 0
 --- !u!1 &414617574
 GameObject:
   m_ObjectHideFlags: 0
@@ -2395,7 +2401,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 446384, guid: 1bb80779de0d85b4bba906974dbaa477, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 0.381
       objectReference: {fileID: 0}
     - target: {fileID: 446384, guid: 1bb80779de0d85b4bba906974dbaa477, type: 2}
       propertyPath: m_LocalPosition.y
@@ -2423,12 +2429,12 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 446384, guid: 1bb80779de0d85b4bba906974dbaa477, type: 2}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3376060, guid: 1bb80779de0d85b4bba906974dbaa477, type: 2}
       propertyPath: m_Mesh
       value: 
-      objectReference: {fileID: 403857766}
+      objectReference: {fileID: 219496012}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 1bb80779de0d85b4bba906974dbaa477, type: 2}
   m_IsPrefabParent: 0
@@ -3050,24 +3056,27 @@ MonoBehaviour:
   highlightOnTouch: 1
   touchHighlightColor: {r: 1, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
+  allowedTouchControllers: 0
   isGrabbable: 0
   isDroppable: 1
+  isSwappable: 1
   holdButtonToGrab: 1
-  onGrabCollisionDelay: 0
-  grabSnapType: 0
-  snapToRotation: {x: 0, y: 0, z: 0}
-  snapToPosition: {x: 0, y: 0, z: 0}
-  snapHandle: {fileID: 0}
   rumbleOnGrab: {x: 0, y: 0}
+  allowedGrabControllers: 0
+  precisionSnap: 0
+  rightSnapHandle: {fileID: 0}
+  leftSnapHandle: {fileID: 0}
   grabAttachMechanic: 0
   detachThreshold: 500
   springJointStrength: 500
   springJointDamper: 50
   throwMultiplier: 1
+  onGrabCollisionDelay: 0
   isUsable: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
+  allowedUseControllers: 0
 --- !u!1 &958773291
 GameObject:
   m_ObjectHideFlags: 0
@@ -3826,24 +3835,27 @@ MonoBehaviour:
   highlightOnTouch: 1
   touchHighlightColor: {r: 1, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
+  allowedTouchControllers: 0
   isGrabbable: 1
   isDroppable: 1
+  isSwappable: 1
   holdButtonToGrab: 1
-  onGrabCollisionDelay: 0
-  grabSnapType: 0
-  snapToRotation: {x: 0, y: 0, z: 0}
-  snapToPosition: {x: 0, y: 0, z: 0}
-  snapHandle: {fileID: 0}
   rumbleOnGrab: {x: 0, y: 0}
+  allowedGrabControllers: 0
+  precisionSnap: 0
+  rightSnapHandle: {fileID: 0}
+  leftSnapHandle: {fileID: 0}
   grabAttachMechanic: 0
   detachThreshold: 500
   springJointStrength: 500
   springJointDamper: 50
   throwMultiplier: 1
+  onGrabCollisionDelay: 0
   isUsable: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
+  allowedUseControllers: 0
 --- !u!114 &1232002164
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4017,24 +4029,27 @@ MonoBehaviour:
   highlightOnTouch: 1
   touchHighlightColor: {r: 0.034482718, g: 1, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
+  allowedTouchControllers: 0
   isGrabbable: 0
   isDroppable: 1
+  isSwappable: 1
   holdButtonToGrab: 1
-  onGrabCollisionDelay: 0
-  grabSnapType: 0
-  snapToRotation: {x: 0, y: 0, z: 0}
-  snapToPosition: {x: 0, y: 0, z: 0}
-  snapHandle: {fileID: 0}
   rumbleOnGrab: {x: 0, y: 0}
+  allowedGrabControllers: 0
+  precisionSnap: 0
+  rightSnapHandle: {fileID: 0}
+  leftSnapHandle: {fileID: 0}
   grabAttachMechanic: 0
   detachThreshold: 500
   springJointStrength: 500
   springJointDamper: 50
   throwMultiplier: 1
+  onGrabCollisionDelay: 0
   isUsable: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
+  allowedUseControllers: 0
 --- !u!114 &1284457236
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4231,24 +4246,27 @@ MonoBehaviour:
   highlightOnTouch: 1
   touchHighlightColor: {r: 0.034482718, g: 1, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
+  allowedTouchControllers: 0
   isGrabbable: 0
   isDroppable: 1
+  isSwappable: 1
   holdButtonToGrab: 1
-  onGrabCollisionDelay: 0
-  grabSnapType: 0
-  snapToRotation: {x: 0, y: 0, z: 0}
-  snapToPosition: {x: 0, y: 0, z: 0}
-  snapHandle: {fileID: 0}
   rumbleOnGrab: {x: 0, y: 0}
+  allowedGrabControllers: 0
+  precisionSnap: 0
+  rightSnapHandle: {fileID: 0}
+  leftSnapHandle: {fileID: 0}
   grabAttachMechanic: 0
   detachThreshold: 500
   springJointStrength: 500
   springJointDamper: 50
   throwMultiplier: 1
+  onGrabCollisionDelay: 0
   isUsable: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
+  allowedUseControllers: 0
 --- !u!114 &1340120693
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4694,24 +4712,27 @@ MonoBehaviour:
   highlightOnTouch: 1
   touchHighlightColor: {r: 0.034482718, g: 1, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
+  allowedTouchControllers: 0
   isGrabbable: 0
   isDroppable: 1
+  isSwappable: 1
   holdButtonToGrab: 1
-  onGrabCollisionDelay: 0
-  grabSnapType: 0
-  snapToRotation: {x: 0, y: 0, z: 0}
-  snapToPosition: {x: 0, y: 0, z: 0}
-  snapHandle: {fileID: 0}
   rumbleOnGrab: {x: 0, y: 0}
+  allowedGrabControllers: 0
+  precisionSnap: 0
+  rightSnapHandle: {fileID: 0}
+  leftSnapHandle: {fileID: 0}
   grabAttachMechanic: 0
   detachThreshold: 500
   springJointStrength: 500
   springJointDamper: 50
   throwMultiplier: 1
+  onGrabCollisionDelay: 0
   isUsable: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
+  allowedUseControllers: 0
 --- !u!114 &1573640476
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5080,24 +5101,27 @@ MonoBehaviour:
   highlightOnTouch: 1
   touchHighlightColor: {r: 0.034482718, g: 1, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
+  allowedTouchControllers: 0
   isGrabbable: 0
   isDroppable: 1
+  isSwappable: 1
   holdButtonToGrab: 1
-  onGrabCollisionDelay: 0
-  grabSnapType: 0
-  snapToRotation: {x: 0, y: 0, z: 0}
-  snapToPosition: {x: 0, y: 0, z: 0}
-  snapHandle: {fileID: 0}
   rumbleOnGrab: {x: 0, y: 0}
+  allowedGrabControllers: 0
+  precisionSnap: 0
+  rightSnapHandle: {fileID: 0}
+  leftSnapHandle: {fileID: 0}
   grabAttachMechanic: 0
   detachThreshold: 500
   springJointStrength: 500
   springJointDamper: 50
   throwMultiplier: 1
+  onGrabCollisionDelay: 0
   isUsable: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
+  allowedUseControllers: 0
 --- !u!114 &1746049559
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5214,8 +5238,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eba3cd5456cd79e49948f5ceb58544b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pointerToggleButton: 1
-  grabToggleButton: 0
+  pointerToggleButton: 3
+  grabToggleButton: 1
   useToggleButton: 0
   menuToggleButton: 4
   axisFidelity: 1
