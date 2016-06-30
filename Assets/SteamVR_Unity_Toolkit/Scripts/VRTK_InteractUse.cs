@@ -45,6 +45,14 @@ namespace VRTK
             return usingObject;
         }
 
+        public void ForceStopUsing()
+        {
+            if(usingObject != null)
+            {
+                StopUsing();
+            }
+        }
+
         private void Awake()
         {
             if (GetComponent<VRTK_InteractTouch>() == null)
@@ -159,6 +167,12 @@ namespace VRTK
             return null;
         }
 
+        private void StopUsing()
+        {
+            SetObjectUsingState(usingObject, 0);
+            UnuseInteractedObject();
+        }
+
         private void DoStartUseObject(object sender, ControllerInteractionEventArgs e)
         {
             GameObject touchedObject = interactTouch.GetTouchedObject();
@@ -181,8 +195,7 @@ namespace VRTK
         {
             if (IsObjectHoldOnUse(usingObject) || GetObjectUsingState(usingObject) >= 2)
             {
-                SetObjectUsingState(usingObject, 0);
-                UnuseInteractedObject();
+                StopUsing();
             }
         }
     }

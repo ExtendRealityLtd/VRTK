@@ -79,13 +79,14 @@ namespace VRTK
         public event InteractableObjectEventHandler InteractableObjectUnused;
 
         protected Rigidbody rb;
+        protected GameObject touchingObject = null;
         protected GameObject grabbingObject = null;
+        protected GameObject usingObject = null;
 
-        private bool isTouched = false;
-        private bool isUsing = false;
         private int usingState = 0;
         private Dictionary<string, Color> originalObjectColours;
 
+        private Transform grabbedSnapHandle;
         private Transform trackPoint;
         private bool customTrackPoint = false;
 
@@ -138,7 +139,7 @@ namespace VRTK
 
         public bool IsTouched()
         {
-            return isTouched;
+            return (touchingObject != null);
         }
 
         public bool IsGrabbed()
@@ -148,19 +149,19 @@ namespace VRTK
 
         public bool IsUsing()
         {
-            return isUsing;
+            return (usingObject != null);
         }
 
-        public virtual void StartTouching(GameObject touchingObject)
+        public virtual void StartTouching(GameObject currentTouchingObject)
         {
-            OnInteractableObjectTouched(SetInteractableObjectEvent(touchingObject));
-            isTouched = true;
+            OnInteractableObjectTouched(SetInteractableObjectEvent(currentTouchingObject));
+            touchingObject = currentTouchingObject;
         }
 
         public virtual void StopTouching(GameObject previousTouchingObject)
         {
             OnInteractableObjectUntouched(SetInteractableObjectEvent(previousTouchingObject));
-            isTouched = false;
+            touchingObject = null;
         }
 
         public virtual void Grabbed(GameObject currentGrabbingObject)
@@ -181,20 +182,21 @@ namespace VRTK
         {
             OnInteractableObjectUngrabbed(SetInteractableObjectEvent(previousGrabbingObject));
             RemoveTrackPoint();
+            grabbedSnapHandle = null;
             grabbingObject = null;
             LoadPreviousState();
         }
 
-        public virtual void StartUsing(GameObject usingObject)
+        public virtual void StartUsing(GameObject currentUsingObject)
         {
-            OnInteractableObjectUsed(SetInteractableObjectEvent(usingObject));
-            isUsing = true;
+            OnInteractableObjectUsed(SetInteractableObjectEvent(currentUsingObject));
+            usingObject = currentUsingObject;
         }
 
         public virtual void StopUsing(GameObject previousUsingObject)
         {
             OnInteractableObjectUnused(SetInteractableObjectEvent(previousUsingObject));
-            isUsing = false;
+            usingObject = null;
         }
 
         public virtual void ToggleHighlight(bool toggle)
@@ -206,7 +208,7 @@ namespace VRTK
         {
             if (highlightOnTouch)
             {
-                if (toggle && !IsGrabbed() && !isUsing)
+                if (toggle && !IsGrabbed() && !IsUsing())
                 {
                     Color color = (touchHighlightColor != Color.clear ? touchHighlightColor : globalHighlightColor);
                     if (color != Color.clear)
@@ -293,6 +295,29 @@ namespace VRTK
             return (DeviceFinder.IsControllerOfHand(actualController, controllerHand));
         }
 
+        public void ForceStopInteracting()
+        {
+            if (touchingObject != null)
+            {
+                touchingObject.GetComponent<VRTK_InteractTouch>().ForceStopTouching();
+            }
+
+            if (grabbingObject != null)
+            {
+                grabbingObject.GetComponent<VRTK_InteractGrab>().ForceRelease();
+            }
+
+            if (usingObject != null)
+            {
+                usingObject.GetComponent<VRTK_InteractUse>().ForceStopUsing();
+            }
+	}
+
+        public void SetGrabbedSnapHandle(Transform handle)
+        {
+            grabbedSnapHandle = handle;
+        }
+
         protected virtual void Awake()
         {
             rb = this.GetComponent<Rigidbody>();
@@ -303,6 +328,7 @@ namespace VRTK
                 rb = gameObject.AddComponent<Rigidbody>();
                 rb.isKinematic = true;
             }
+            rb.maxAngularVelocity = float.MaxValue;
         }
 
         protected virtual void Start()
@@ -312,6 +338,11 @@ namespace VRTK
 
         protected virtual void Update()
         {
+            if(! this.gameObject.activeInHierarchy)
+            {
+                ForceStopInteracting();
+            }
+
             if (grabAttachMechanic == GrabAttachType.Track_Object)
             {
                 CheckBreakDistance();
@@ -324,6 +355,11 @@ namespace VRTK
             {
                 FixedUpdateTrackedObject();
             }
+        }
+
+        protected virtual void OnDisable()
+        {
+            ForceStopInteracting();
         }
 
         protected virtual void OnJointBreak(float force)
@@ -455,26 +491,36 @@ namespace VRTK
         {
             if (trackPoint)
             {
-                float rotationMultiplier = 20f;
-                float positionMultiplier = 3000f;
                 float maxDistanceDelta = 10f;
 
-                Quaternion rotationDelta = trackPoint.rotation * Quaternion.Inverse(this.transform.rotation);
-                Vector3 positionDelta = (trackPoint.position - this.transform.position);
+                Quaternion rotationDelta;
+                Vector3 positionDelta;
 
                 float angle;
                 Vector3 axis;
+
+                if(grabbedSnapHandle != null)
+                {
+                    rotationDelta = trackPoint.rotation * Quaternion.Inverse(grabbedSnapHandle.rotation);
+                    positionDelta = trackPoint.position - grabbedSnapHandle.position;
+                } else
+                {
+                    rotationDelta = trackPoint.rotation * Quaternion.Inverse(this.transform.rotation);
+                    positionDelta = trackPoint.position - this.transform.position;
+                }
+
                 rotationDelta.ToAngleAxis(out angle, out axis);
+
                 angle = (angle > 180 ? angle -= 360 : angle);
 
                 if (angle != 0)
                 {
-                    Vector3 AngularTarget = (Time.fixedDeltaTime * angle * axis) * rotationMultiplier;
-                    rb.angularVelocity = Vector3.MoveTowards(rb.angularVelocity, AngularTarget, maxDistanceDelta);
+                    Vector3 angularTarget = angle * axis;
+                    rb.angularVelocity = Vector3.MoveTowards(rb.angularVelocity, angularTarget, maxDistanceDelta);
                 }
 
-                Vector3 VelocityTarget = positionDelta * positionMultiplier * Time.fixedDeltaTime;
-                rb.velocity = Vector3.MoveTowards(rb.velocity, VelocityTarget, maxDistanceDelta);
+                Vector3 velocityTarget = positionDelta / Time.fixedDeltaTime;
+                rb.velocity = Vector3.MoveTowards(rb.velocity, velocityTarget, maxDistanceDelta);
             }
         }
     }
