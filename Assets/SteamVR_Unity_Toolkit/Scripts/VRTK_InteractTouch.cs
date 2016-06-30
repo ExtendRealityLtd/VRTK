@@ -29,6 +29,8 @@ namespace VRTK
         public event ObjectInteractEventHandler ControllerUntouchInteractableObject;
 
         private GameObject touchedObject = null;
+        private GameObject lastTouchedObject = null;
+
         private SteamVR_TrackedObject trackedController;
         private VRTK_ControllerActions controllerActions;
         private GameObject controllerRigidBody;
@@ -111,11 +113,19 @@ namespace VRTK
 
         private void OnTriggerEnter(Collider collider)
         {
-            OnTriggerStay(collider);
+            if(IsObjectInteractable(collider.gameObject) && (touchedObject == null || !touchedObject.GetComponent<VRTK_InteractableObject>().IsGrabbed()))
+            {
+                lastTouchedObject = collider.gameObject;
+            }
         }
 
         private void OnTriggerStay(Collider collider)
         {
+            if(touchedObject != null && touchedObject != lastTouchedObject && !touchedObject.GetComponent<VRTK_InteractableObject>().IsGrabbed())
+            {
+                ForceStopTouching();
+            }
+
             if (touchedObject == null && IsObjectInteractable(collider.gameObject))
             {
                 if (collider.gameObject.GetComponent<VRTK_InteractableObject>())
