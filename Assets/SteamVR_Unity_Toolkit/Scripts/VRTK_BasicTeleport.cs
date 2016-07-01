@@ -65,9 +65,7 @@ namespace VRTK
             adjustYForTerrain = false;
             eyeCamera = GameObject.FindObjectOfType<SteamVR_Camera>().GetComponent<Transform>();
 
-            var controllerManager = GameObject.FindObjectOfType<SteamVR_ControllerManager>();
-            InitDestinationSetListener(controllerManager.left);
-            InitDestinationSetListener(controllerManager.right);
+            InitDestinationMarkerListeners();
             InitHeadsetCollisionListener();
 
             enableTeleport = true;
@@ -136,6 +134,21 @@ namespace VRTK
         {
             SteamVR_Fade.Start(Color.clear, fadeInTime);
             fadeInTime = 0f;
+        }
+
+        private void InitDestinationMarkerListeners()
+        {
+            var controllerManager = GameObject.FindObjectOfType<SteamVR_ControllerManager>();
+            InitDestinationSetListener(controllerManager.left);
+            InitDestinationSetListener(controllerManager.right);
+
+            foreach (var destinationMarker in GameObject.FindObjectsOfType<VRTK_DestinationMarker>())
+            {
+                if (destinationMarker.gameObject != controllerManager.left && destinationMarker.gameObject != controllerManager.right)
+                {
+                    InitDestinationSetListener(destinationMarker.gameObject);
+                }
+            }
         }
 
         private void InitHeadsetCollisionListener()

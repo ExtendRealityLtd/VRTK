@@ -11,12 +11,21 @@ namespace VRTK
 
     public abstract class VRTK_WorldPointer : VRTK_DestinationMarker
     {
+        public enum pointerVisibilityStates
+        {
+            On_When_Active,
+            Always_On,
+            Always_Off
+        }
+
+        public VRTK_ControllerEvents controller = null;
         public Color pointerHitColor = new Color(0f, 0.5f, 0f, 1f);
         public Color pointerMissColor = new Color(0.8f, 0f, 0f, 1f);
         public bool showPlayAreaCursor = false;
         public Vector2 playAreaCursorDimensions = Vector2.zero;
         public bool handlePlayAreaCursorCollisions = false;
-        public bool beamAlwaysOn = false;
+        public pointerVisibilityStates pointerVisibility = pointerVisibilityStates.On_When_Active;
+
         public float activateDelay = 0f;
 
         protected Vector3 destinationPosition;
@@ -56,17 +65,23 @@ namespace VRTK
 
         protected virtual void Start()
         {
-            if (GetComponent<VRTK_ControllerEvents>() == null)
+
+            if (controller == null)
             {
-                Debug.LogError("VRTK_WorldPointer is required to be attached to a SteamVR Controller that has the VRTK_ControllerEvents script attached to it");
+                controller = this.GetComponent<VRTK_ControllerEvents>();
+            }
+
+            if (controller == null)
+            {
+                Debug.LogError("VRTK_WorldPointer requires a SteamVR Controller that has the VRTK_ControllerEvents script attached to it");
                 return;
             }
 
             this.name = "PlayerObject_" + this.name;
 
             //Setup controller event listeners
-            GetComponent<VRTK_ControllerEvents>().AliasPointerOn += new ControllerInteractionEventHandler(EnablePointerBeam);
-            GetComponent<VRTK_ControllerEvents>().AliasPointerOff += new ControllerInteractionEventHandler(DisablePointerBeam);
+            controller.AliasPointerOn += new ControllerInteractionEventHandler(EnablePointerBeam);
+            controller.AliasPointerOff += new ControllerInteractionEventHandler(DisablePointerBeam);
 
             headset = DeviceFinder.HeadsetTransform();
 
@@ -97,9 +112,9 @@ namespace VRTK
 
         protected virtual void SetPlayAreaCursorTransform(Vector3 destination)
         {
-            Vector3 playAreaPos = new Vector3(playArea.transform.position.x, 0, playArea.transform.position.z);
-            Vector3 headsetPos = new Vector3(headset.position.x, 0, headset.position.z);
-            Vector3 offset = playAreaPos - headsetPos;
+            var playAreaPos = new Vector3(playArea.transform.position.x, 0, playArea.transform.position.z);
+            var headsetPos = new Vector3(headset.position.x, 0, headset.position.z);
+            var offset = playAreaPos - headsetPos;
             playAreaCursor.transform.position = destination + offset;
         }
 
@@ -134,7 +149,7 @@ namespace VRTK
 
             OnDestinationMarkerEnter(SeDestinationMarkerEvent(pointerContactDistance, pointerContactTarget, destinationPosition, controllerIndex));
 
-            VRTK_InteractableObject interactableObject = pointerContactTarget.GetComponent<VRTK_InteractableObject>();
+            var interactableObject = pointerContactTarget.GetComponent<VRTK_InteractableObject>();
             if (interactableObject && interactableObject.pointerActivatesUseAction && interactableObject.holdButtonToUse)
             {
                 interactableObject.StartUsing(this.gameObject);
@@ -150,7 +165,7 @@ namespace VRTK
 
             OnDestinationMarkerExit(SeDestinationMarkerEvent(pointerContactDistance, pointerContactTarget, destinationPosition, controllerIndex));
 
-            VRTK_InteractableObject interactableObject = pointerContactTarget.GetComponent<VRTK_InteractableObject>();
+            var interactableObject = pointerContactTarget.GetComponent<VRTK_InteractableObject>();
             if (interactableObject && interactableObject.pointerActivatesUseAction && interactableObject.holdButtonToUse)
             {
                 interactableObject.StopUsing(this.gameObject);
@@ -164,7 +179,7 @@ namespace VRTK
                 return;
             }
 
-            VRTK_InteractableObject interactableObject = pointerContactTarget.GetComponent<VRTK_InteractableObject>();
+            var interactableObject = pointerContactTarget.GetComponent<VRTK_InteractableObject>();
             if (interactableObject && interactableObject.pointerActivatesUseAction)
             {
                 if (interactableObject.IsUsing())
@@ -185,7 +200,7 @@ namespace VRTK
 
         protected virtual void TogglePointer(bool state)
         {
-            bool playAreaState = (showPlayAreaCursor ? state : false);
+            var playAreaState = (showPlayAreaCursor ? state : false);
             playAreaCursor.gameObject.SetActive(playAreaState);
         }
 
@@ -193,7 +208,7 @@ namespace VRTK
         {
             foreach (GameObject playAreaCursorBoundary in playAreaCursorBoundaries)
             {
-                playAreaCursorBoundary.GetComponent<MeshRenderer>().material = pointerMaterial;
+                playAreaCursorBoundary.GetComponent<Renderer>().material = pointerMaterial;
             }
         }
 
@@ -214,12 +229,12 @@ namespace VRTK
 
         private void DrawPlayAreaCursorBoundary(int index, float left, float right, float top, float bottom, float thickness, Vector3 localPosition)
         {
-            GameObject playAreaCursorBoundary = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            var playAreaCursorBoundary = GameObject.CreatePrimitive(PrimitiveType.Cube);
             playAreaCursorBoundary.name = string.Format("[{0}]PlayerObject_WorldPointer_PlayAreaCursorBoundary_" + index, this.gameObject.name);
 
-            float width = (right - left) / 1.065f;
-            float length = (top - bottom) / 1.08f;
-            float height = thickness;
+            var width = (right - left) / 1.065f;
+            var length = (top - bottom) / 1.08f;
+            var height = thickness;
 
             playAreaCursorBoundary.transform.localScale = new Vector3(width, height, length);
             Destroy(playAreaCursorBoundary.GetComponent<BoxCollider>());
@@ -233,21 +248,21 @@ namespace VRTK
 
         private void InitPlayAreaCursor()
         {
-            int btmRightInner = 0;
-            int btmLeftInner = 1;
-            int topLeftInner = 2;
-            int topRightInner = 3;
+            var btmRightInner = 0;
+            var btmLeftInner = 1;
+            var topLeftInner = 2;
+            var topRightInner = 3;
 
-            int btmRightOuter = 4;
-            int btmLeftOuter = 5;
-            int topLeftOuter = 6;
-            int topRightOuter = 7;
+            var btmRightOuter = 4;
+            var btmLeftOuter = 5;
+            var topLeftOuter = 6;
+            var topRightOuter = 7;
 
             Vector3[] cursorDrawVertices = playArea.vertices;
 
             if (playAreaCursorDimensions != Vector2.zero)
             {
-                float customAreaPadding = playArea.borderThickness;
+                var customAreaPadding = playArea.borderThickness;
 
                 cursorDrawVertices[btmRightOuter] = new Vector3(playAreaCursorDimensions.x / 2, 0f, (playAreaCursorDimensions.y / 2) * -1);
                 cursorDrawVertices[btmLeftOuter] = new Vector3((playAreaCursorDimensions.x / 2) * -1, 0f, (playAreaCursorDimensions.y / 2) * -1);
@@ -260,9 +275,9 @@ namespace VRTK
                 cursorDrawVertices[topRightInner] = cursorDrawVertices[topRightOuter] + new Vector3(-customAreaPadding, 0f, -customAreaPadding);
             }
 
-            float width = cursorDrawVertices[btmRightOuter].x - cursorDrawVertices[topLeftOuter].x;
-            float length = cursorDrawVertices[topLeftOuter].z - cursorDrawVertices[btmRightOuter].z;
-            float height = 0.01f;
+            var width = cursorDrawVertices[btmRightOuter].x - cursorDrawVertices[topLeftOuter].x;
+            var length = cursorDrawVertices[topLeftOuter].z - cursorDrawVertices[btmRightOuter].z;
+            var height = 0.01f;
 
             playAreaCursor = GameObject.CreatePrimitive(PrimitiveType.Cube);
             playAreaCursor.name = string.Format("[{0}]PlayerObject_WorldPointer_PlayAreaCursor", this.gameObject.name);
@@ -270,19 +285,19 @@ namespace VRTK
             playAreaCursor.transform.localScale = new Vector3(width, height, length);
             playAreaCursor.SetActive(false);
 
-            playAreaCursor.GetComponent<MeshRenderer>().enabled = false;
+            playAreaCursor.GetComponent<Renderer>().enabled = false;
 
             CreateCursorCollider(playAreaCursor);
 
             playAreaCursor.AddComponent<Rigidbody>().isKinematic = true;
 
-            VRTK_PlayAreaCollider playAreaCursorScript = playAreaCursor.AddComponent<VRTK_PlayAreaCollider>();
+            var playAreaCursorScript = playAreaCursor.AddComponent<VRTK_PlayAreaCollider>();
             playAreaCursorScript.SetParent(this.gameObject);
             playAreaCursor.layer = 2;
 
-            float playAreaBoundaryX = playArea.transform.localScale.x / 2;
-            float playAreaBoundaryZ = playArea.transform.localScale.z / 2;
-            float heightOffset = 0f;
+            var playAreaBoundaryX = playArea.transform.localScale.x / 2;
+            var playAreaBoundaryZ = playArea.transform.localScale.z / 2;
+            var heightOffset = 0f;
 
             DrawPlayAreaCursorBoundary(0, cursorDrawVertices[btmLeftOuter].x, cursorDrawVertices[btmRightOuter].x, cursorDrawVertices[btmRightInner].z, cursorDrawVertices[btmRightOuter].z, height, new Vector3(0f, heightOffset, playAreaBoundaryZ));
             DrawPlayAreaCursorBoundary(1, cursorDrawVertices[btmLeftOuter].x, cursorDrawVertices[btmLeftInner].x, cursorDrawVertices[topLeftOuter].z, cursorDrawVertices[btmLeftOuter].z, height, new Vector3(playAreaBoundaryX, heightOffset, 0f));
@@ -318,7 +333,7 @@ namespace VRTK
             parent = setParent;
         }
 
-        void OnTriggerStay(Collider collider)
+        private void OnTriggerStay(Collider collider)
         {
             if (parent.GetComponent<VRTK_WorldPointer>().IsActive() && !collider.name.Contains("PlayerObject_"))
             {
@@ -326,7 +341,7 @@ namespace VRTK
             }
         }
 
-        void OnTriggerExit(Collider collider)
+        private void OnTriggerExit(Collider collider)
         {
             if (!collider.name.Contains("PlayerObject_"))
             {
