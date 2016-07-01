@@ -244,17 +244,6 @@ MonoBehaviour:
   grabPressed: 0
   usePressed: 0
   menuPressed: 0
---- !u!114 &188249538
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 188249536}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 10fd7e64649c1aa47876a4f252f68f06, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &188249539
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -532,17 +521,6 @@ MonoBehaviour:
   grabPressed: 0
   usePressed: 0
   menuPressed: 0
---- !u!114 &540946616
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 540946614}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 10fd7e64649c1aa47876a4f252f68f06, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &540946617
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -976,7 +954,7 @@ Prefab:
     - target: {fileID: 3376060, guid: 1bb80779de0d85b4bba906974dbaa477, type: 2}
       propertyPath: m_Mesh
       value: 
-      objectReference: {fileID: 1198930736}
+      objectReference: {fileID: 1224226728}
     - target: {fileID: 11405672, guid: 1bb80779de0d85b4bba906974dbaa477, type: 2}
       propertyPath: createComponents
       value: 1
@@ -1220,7 +1198,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
---- !u!43 &1198930736
+--- !u!43 &1224226728
 Mesh:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
