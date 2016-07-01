@@ -24,7 +24,7 @@ namespace VRTK
         public bool hideControllerOnTouch = false;
         public float hideControllerDelay = 0f;
         public Color globalTouchHighlightColor = Color.clear;
-        public GameObject customRigidbodyCollider;
+        public GameObject customRigidbodyObject;
 
         public event ObjectInteractEventHandler ControllerTouchInteractableObject;
         public event ObjectInteractEventHandler ControllerUntouchInteractableObject;
@@ -236,9 +236,9 @@ namespace VRTK
 
         private void CreateControllerRigidBody()
         {
-            if (customRigidbodyCollider != null)
+            if (customRigidbodyObject != null)
             {
-                controllerRigidBodyObject = customRigidbodyCollider;
+                controllerRigidBodyObject = customRigidbodyObject;
             } else
             {
                 controllerRigidBodyObject = new GameObject();
