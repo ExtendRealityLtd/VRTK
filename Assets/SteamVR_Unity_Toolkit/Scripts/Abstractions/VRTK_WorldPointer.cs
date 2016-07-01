@@ -42,6 +42,7 @@ namespace VRTK
         private BoxCollider playAreaCursorCollider;
         private Transform headset;
         private bool isActive;
+        private bool eventsRegistered = false;
 
         private float activateDelayTimer = 0f;
 
@@ -82,6 +83,7 @@ namespace VRTK
             //Setup controller event listeners
             controller.AliasPointerOn += new ControllerInteractionEventHandler(EnablePointerBeam);
             controller.AliasPointerOff += new ControllerInteractionEventHandler(DisablePointerBeam);
+            eventsRegistered = true;
 
             headset = DeviceFinder.HeadsetTransform();
 
@@ -102,6 +104,20 @@ namespace VRTK
             if (playAreaCursor.activeSelf)
             {
                 UpdateCollider();
+            }
+        }
+
+        protected virtual void OnDestroy()
+        {
+            if (eventsRegistered)
+            {
+                controller.AliasPointerOn -= EnablePointerBeam;
+                controller.AliasPointerOff -= DisablePointerBeam;
+            }
+
+            if (playAreaCursor != null)
+            {
+                Destroy(playAreaCursor);
             }
         }
 

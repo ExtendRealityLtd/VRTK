@@ -28,12 +28,13 @@ namespace VRTK
         public GameObject customPointerCursor;
         public LayerMask layersToIgnore = Physics.IgnoreRaycastLayer;
 
-        private Transform projectedBeamContainer;
-        private Transform projectedBeamForward;
-        private Transform projectedBeamJoint;
-        private Transform projectedBeamDown;
+        private GameObject projectedBeamContainer;
+        private GameObject projectedBeamForward;
+        private GameObject projectedBeamJoint;
+        private GameObject projectedBeamDown;
 
         private GameObject pointerCursor;
+        private GameObject curvedBeamContainer;
         private CurveGenerator curvedBeam;
 
         // Use this for initialization
@@ -65,23 +66,12 @@ namespace VRTK
             pointerCursor.layer = 2;
             pointerCursor.SetActive(false);
 
-            var global = new GameObject(string.Format("[{0}]PlayerObject_WorldPointer_BezierPointer_CurvedBeamContainer", this.gameObject.name));
-            global.SetActive(false);
-            curvedBeam = global.gameObject.AddComponent<CurveGenerator>();
+            curvedBeamContainer = new GameObject(string.Format("[{0}]PlayerObject_WorldPointer_BezierPointer_CurvedBeamContainer", this.gameObject.name));
+            curvedBeamContainer.SetActive(false);
+            curvedBeam = curvedBeamContainer.gameObject.AddComponent<CurveGenerator>();
             curvedBeam.transform.parent = null;
             curvedBeam.Create(pointerDensity, pointerCursorRadius, customPointerTracer);
             base.InitPointer();
-        }
-
-        private GameObject CreateCursor()
-        {
-            var cursorYOffset = 0.02f;
-            var cursor = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-            cursor.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
-            cursor.GetComponent<MeshRenderer>().receiveShadows = false;
-            cursor.transform.localScale = new Vector3(pointerCursorRadius, cursorYOffset, pointerCursorRadius);
-            Destroy(cursor.GetComponent<CapsuleCollider>());
-            return cursor;
         }
 
         protected override void SetPointerMaterial()
@@ -105,7 +95,7 @@ namespace VRTK
 
             projectedBeamForward.gameObject.SetActive(state);
             projectedBeamJoint.gameObject.SetActive(state);
-            projectedBeamDown.gameObject.SetActive(state);
+            projectedBeamDown.SetActive(state);
         }
 
         protected override void DisablePointerBeam(object sender, ControllerInteractionEventArgs e)
@@ -114,6 +104,42 @@ namespace VRTK
             base.DisablePointerBeam(sender, e);
             TogglePointerCursor(false);
             curvedBeam.TogglePoints(false);
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            if (projectedBeamDown != null)
+            {
+                Destroy(projectedBeamDown);
+            }
+            if (pointerCursor != null)
+            {
+                Destroy(pointerCursor);
+            }
+            if (curvedBeam != null)
+            {
+                Destroy(curvedBeam);
+            }
+            if (projectedBeamContainer != null)
+            {
+                Destroy(projectedBeamContainer);
+            }
+            if (curvedBeamContainer != null)
+            {
+                Destroy(curvedBeamContainer);
+            }
+        }
+
+        private GameObject CreateCursor()
+        {
+            var cursorYOffset = 0.02f;
+            var cursor = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+            cursor.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+            cursor.GetComponent<MeshRenderer>().receiveShadows = false;
+            cursor.transform.localScale = new Vector3(pointerCursorRadius, cursorYOffset, pointerCursorRadius);
+            Destroy(cursor.GetComponent<CapsuleCollider>());
+            return cursor;
         }
 
         private void TogglePointerCursor(bool state)
@@ -126,18 +152,18 @@ namespace VRTK
 
         private void InitProjectedBeams()
         {
-            projectedBeamContainer = new GameObject(string.Format("[{0}]PlayerObject_WorldPointer_BezierPointer_ProjectedBeamContainer", this.gameObject.name)).transform;
+            projectedBeamContainer = new GameObject(string.Format("[{0}]PlayerObject_WorldPointer_BezierPointer_ProjectedBeamContainer", this.gameObject.name));
             projectedBeamContainer.transform.parent = this.transform;
             projectedBeamContainer.transform.localPosition = Vector3.zero;
 
-            projectedBeamForward = new GameObject(string.Format("[{0}]PlayerObject_WorldPointer_BezierPointer_ProjectedBeamForward", this.gameObject.name)).transform;
+            projectedBeamForward = new GameObject(string.Format("[{0}]PlayerObject_WorldPointer_BezierPointer_ProjectedBeamForward", this.gameObject.name));
             projectedBeamForward.transform.parent = projectedBeamContainer.transform;
 
-            projectedBeamJoint = new GameObject(string.Format("[{0}]PlayerObject_WorldPointer_BezierPointer_ProjectedBeamJoint", this.gameObject.name)).transform;
+            projectedBeamJoint = new GameObject(string.Format("[{0}]PlayerObject_WorldPointer_BezierPointer_ProjectedBeamJoint", this.gameObject.name));
             projectedBeamJoint.transform.parent = projectedBeamContainer.transform;
             projectedBeamJoint.transform.localScale = new Vector3(0.01f, 0.01f, 0.01f);
 
-            projectedBeamDown = new GameObject(string.Format("[{0}]PlayerObject_WorldPointer_BezierPointer_ProjectedBeamDown", this.gameObject.name)).transform;
+            projectedBeamDown = new GameObject(string.Format("[{0}]PlayerObject_WorldPointer_BezierPointer_ProjectedBeamDown", this.gameObject.name));
         }
 
         private float GetForwardBeamLength()

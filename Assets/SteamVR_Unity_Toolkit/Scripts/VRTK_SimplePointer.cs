@@ -78,6 +78,15 @@ namespace VRTK
             TogglePointer(false);
         }
 
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            if (pointerHolder != null)
+            {
+                Destroy(pointerHolder);
+            }
+        }
+
         protected override void SetPointerMaterial()
         {
             base.SetPointerMaterial();
