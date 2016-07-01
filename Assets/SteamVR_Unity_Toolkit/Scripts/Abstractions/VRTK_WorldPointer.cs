@@ -120,7 +120,7 @@ namespace VRTK
 
         protected virtual void EnablePointerBeam(object sender, ControllerInteractionEventArgs e)
         {
-            if (!isActive && activateDelayTimer <= 0)
+            if (this.enabled && !isActive && activateDelayTimer <= 0)
             {
                 setPlayAreaCursorCollision(false);
                 controllerIndex = e.controllerIndex;
@@ -142,7 +142,7 @@ namespace VRTK
 
         protected virtual void PointerIn()
         {
-            if (!pointerContactTarget)
+            if (!this.enabled || !pointerContactTarget)
             {
                 return;
             }
@@ -158,7 +158,7 @@ namespace VRTK
 
         protected virtual void PointerOut()
         {
-            if (!pointerContactTarget)
+            if (!this.enabled || !pointerContactTarget)
             {
                 return;
             }
@@ -174,7 +174,7 @@ namespace VRTK
 
         protected virtual void PointerSet()
         {
-            if (!isActive || !pointerContactTarget)
+            if (!this.enabled || !isActive || !pointerContactTarget)
             {
                 return;
             }
