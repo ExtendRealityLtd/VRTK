@@ -50,8 +50,7 @@ namespace VRTK
         {
             if (markerMaker)
             {
-                var worldMarker = markerMaker.GetComponent<VRTK_DestinationMarker>();
-                if (worldMarker)
+                foreach(var worldMarker in markerMaker.GetComponents<VRTK_DestinationMarker>())
                 {
                     worldMarker.DestinationMarkerSet += new DestinationMarkerEventHandler(DoTeleport);
                     worldMarker.SetInvalidTarget(ignoreTargetWithTagOrClass);
