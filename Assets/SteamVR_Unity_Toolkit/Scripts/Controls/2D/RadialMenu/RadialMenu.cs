@@ -25,7 +25,6 @@ public class RadialMenu : MonoBehaviour {
     //Has to be public to keep state from editor -> play mode?
     public List<GameObject> menuButtons;
 
-    float currentTouchAngle;
     int currentHover = -1;
     int currentPress = -1;
     #endregion
@@ -64,7 +63,7 @@ public class RadialMenu : MonoBehaviour {
         //Get button ID from angle
         float buttonAngle = 360f / Buttons.Count; //Each button is an arc with this angle
         angle = mod((angle + offsetRotation), 360); //Offset the touch coordinate with our offset
-        currentTouchAngle = angle; //Keep track of our angle for outside use if we want it later
+
         int buttonID = (int)mod(((angle + (buttonAngle / 2f)) / buttonAngle), Buttons.Count); //Convert angle into ButtonID (This is the magic)
         var pointer = new PointerEventData(EventSystem.current); //Create a new EventSystem (UI) Event
 

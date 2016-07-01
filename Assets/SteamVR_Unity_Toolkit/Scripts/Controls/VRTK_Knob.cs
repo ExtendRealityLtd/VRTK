@@ -16,8 +16,6 @@
         private Direction finalDirection;
         private Quaternion initialRotation;
         private Vector3 initialLocalRotation;
-        private Vector3 finalMinPoint;
-        private Vector3 finalMaxPoint;
         private Rigidbody rb;
         private VRTK_InteractableObject io;
 
@@ -106,7 +104,6 @@
             float lengthNegZ = (hitForward.collider != null) ? hitForward.distance : float.MaxValue;
 
             // TODO: not yet the right decision strategy, works only partially
-            Vector3 hitPoint = Vector3.zero;
             if (Utilities.isLowest(lengthX, new float[] { lengthY, lengthZ, lengthNegX, lengthNegY, lengthNegZ })) {
                 direction = Direction.z;
             } else if (Utilities.isLowest(lengthY, new float[] { lengthX, lengthZ, lengthNegX, lengthNegY, lengthNegZ })) {

@@ -55,13 +55,13 @@ public class UICircle : Graphic
         return vbo;
     }
 
+    [System.Obsolete("Use OnPopulateMesh(VertexHelper vh) instead.")]
     protected override void OnPopulateMesh(Mesh toFill)
     {
         float outer = -rectTransform.pivot.x * rectTransform.rect.width;
         float inner = -rectTransform.pivot.x * rectTransform.rect.width + this.thickness;
         toFill.Clear();
         var vbo = new VertexHelper(toFill);
-        UIVertex vert = UIVertex.simpleVert;
         Vector2 prevX = Vector2.zero;
         Vector2 prevY = Vector2.zero;
         Vector2 uv0 = new Vector2(0, 0);
@@ -80,8 +80,6 @@ public class UICircle : Graphic
             float rad = Mathf.Deg2Rad * (i * degrees);
             float c = Mathf.Cos(rad);
             float s = Mathf.Sin(rad);
-            float x = outer * c;
-            float y = inner * c;
             uv0 = new Vector2(0, 1);
             uv1 = new Vector2(1, 1);
             uv2 = new Vector2(1, 0);
