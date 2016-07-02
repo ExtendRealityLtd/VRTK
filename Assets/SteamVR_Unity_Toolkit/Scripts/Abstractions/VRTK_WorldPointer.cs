@@ -240,7 +240,17 @@ namespace VRTK
 
         protected virtual bool ValidDestination(Transform target)
         {
-            return (target && target.tag != invalidTargetWithTagOrClass && target.GetComponent(invalidTargetWithTagOrClass) == null);
+            bool validNavMeshLocation = false;
+            if (target)
+            {
+                NavMeshHit hit;
+                validNavMeshLocation = NavMesh.SamplePosition(target.position, out hit, 1.0f, NavMesh.AllAreas);
+            }
+            if(!checkNavMesh)
+            {
+                validNavMeshLocation = true;
+            }
+            return (validNavMeshLocation && target && target.tag != invalidTargetWithTagOrClass && target.GetComponent(invalidTargetWithTagOrClass) == null);
         }
 
         private void DrawPlayAreaCursorBoundary(int index, float left, float right, float top, float bottom, float thickness, Vector3 localPosition)

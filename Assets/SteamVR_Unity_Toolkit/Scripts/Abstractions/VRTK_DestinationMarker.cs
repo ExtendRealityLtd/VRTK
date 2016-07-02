@@ -43,6 +43,7 @@ namespace VRTK
         public event DestinationMarkerEventHandler DestinationMarkerSet;
 
         protected string invalidTargetWithTagOrClass;
+        protected bool checkNavMesh;
 
         public virtual void OnDestinationMarkerEnter(DestinationMarkerEventArgs e)
         {
@@ -65,6 +66,11 @@ namespace VRTK
         public virtual void SetInvalidTarget(string name)
         {
             invalidTargetWithTagOrClass = name;
+        }
+
+        public virtual void SetNavMeshCheck(bool state)
+        {
+            checkNavMesh = state;
         }
 
         protected DestinationMarkerEventArgs SeDestinationMarkerEvent(float distance, Transform target, Vector3 position, uint controllerIndex)
