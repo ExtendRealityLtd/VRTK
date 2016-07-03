@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Follow : MonoBehaviour {
+public class Follow : MonoBehaviour
+{
     public bool followPosition;
     public bool followRotation;
     public Transform target;

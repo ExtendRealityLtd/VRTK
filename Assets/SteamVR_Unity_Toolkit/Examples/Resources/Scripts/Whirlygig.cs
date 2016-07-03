@@ -25,8 +25,8 @@ public class Whirlygig : VRTK_InteractableObject
         rotator = this.transform.Find("Capsule");
     }
 
-    // Update is called once per frame
-    protected override void Update () {
+    protected override void Update()
+    {
         rotator.transform.Rotate(new Vector3(spinSpeed * Time.deltaTime, 0f, 0f));
-	}
+    }
 }

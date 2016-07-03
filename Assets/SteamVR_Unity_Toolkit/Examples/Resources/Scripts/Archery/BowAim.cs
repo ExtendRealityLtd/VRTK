@@ -2,7 +2,8 @@
 using System.Collections;
 using VRTK;
 
-public class BowAim : MonoBehaviour {
+public class BowAim : MonoBehaviour
+{
     public float powerMultiplier;
     public float pullMultiplier;
     public float pullOffset;
@@ -67,7 +68,7 @@ public class BowAim : MonoBehaviour {
             stringControl = controllers.right.GetComponent<VRTK_ControllerEvents>();
 
             holdActions = controllers.left.GetComponent<VRTK_ControllerActions>();
-            stringActions= controllers.right.GetComponent<VRTK_ControllerActions>();
+            stringActions = controllers.right.GetComponent<VRTK_ControllerActions>();
         }
         else
         {
@@ -164,7 +165,7 @@ public class BowAim : MonoBehaviour {
 
     private void PullString()
     {
-        currentPull = Mathf.Clamp((Vector3.Distance(holdControl.transform.position, stringControl.transform.position)-pullOffset) * pullMultiplier, 0, maxPullDistance);
+        currentPull = Mathf.Clamp((Vector3.Distance(holdControl.transform.position, stringControl.transform.position) - pullOffset) * pullMultiplier, 0, maxPullDistance);
         bowAnimation.SetFrame(currentPull);
 
         if (!currentPull.ToString("F2").Equals(previousPull.ToString("F2")))

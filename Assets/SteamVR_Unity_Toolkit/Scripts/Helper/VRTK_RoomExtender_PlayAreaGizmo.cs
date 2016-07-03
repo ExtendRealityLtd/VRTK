@@ -16,47 +16,9 @@ public class VRTK_RoomExtender_PlayAreaGizmo : MonoBehaviour
 	private HmdQuad_t steamVrBounds;
 	private SteamVR_PlayArea.Size lastSize;
 
-	void OnEnable()
-	{
-		steamVR_PlayArea = GameObject.FindObjectOfType<SteamVR_PlayArea>();
-		vrtk_RoomExtender = GameObject.FindObjectOfType<VRTK_RoomExtender>();
-		if (steamVR_PlayArea == null || vrtk_RoomExtender == null)
-		{
-			Debug.LogWarning("Could not find 'SteamVR_PlayArea' or 'VRTK_RoomExtender'. Please check if they are attached to the 'CameraRig'");
-			return;
-		}
-		bool success = SteamVR_PlayArea.GetBounds(steamVR_PlayArea.size, ref steamVrBounds);
-		if (success)
-		{
-			lastSize = steamVR_PlayArea.size;
-			BuildMesh();
-		}
-		else
-		{
-			Debug.LogWarning("Could not get the Calibrated Play Area bounds. This script 'RoomExtender_PlayArea' tries to get the size when SteamVR is running.");
-		}
-	}
-
-	void Start()
-	{
-		if (vertices == null || vertices.Length == 0)
-		{
-			bool success = SteamVR_PlayArea.GetBounds(steamVR_PlayArea.size, ref steamVrBounds);
-			if (success)
-			{
-				lastSize = steamVR_PlayArea.size;
-				BuildMesh();
-			}
-			else
-			{
-				Debug.LogWarning("Could not get the chaperon size. This may happen if you use the calibrated size.");
-			}
-		}
-	}
-
 	public void GetBounds(ref HmdQuad_t pRect)
 	{
-		checkAndUpdateBounds();
+		CheckAndUpdateBounds();
 		if (steamVR_PlayArea.size == SteamVR_PlayArea.Size.Calibrated)
 		{
 			pRect.vCorners0.v2 = steamVrBounds.vCorners0.v2 + (steamVrBounds.vCorners0.v2 + vrtk_RoomExtender.headZoneRadius) * vrtk_RoomExtender.additionalMovementMultiplier;
@@ -93,7 +55,45 @@ public class VRTK_RoomExtender_PlayAreaGizmo : MonoBehaviour
 		pRect.vCorners3.v2 = pRect.vCorners3.v2 < steamVrBounds.vCorners3.v2 ? steamVrBounds.vCorners3.v2 : pRect.vCorners3.v2;
 	}
 
-	private void BuildMesh()
+    private void OnEnable()
+    {
+        steamVR_PlayArea = GameObject.FindObjectOfType<SteamVR_PlayArea>();
+        vrtk_RoomExtender = GameObject.FindObjectOfType<VRTK_RoomExtender>();
+        if (steamVR_PlayArea == null || vrtk_RoomExtender == null)
+        {
+            Debug.LogWarning("Could not find 'SteamVR_PlayArea' or 'VRTK_RoomExtender'. Please check if they are attached to the 'CameraRig'");
+            return;
+        }
+        bool success = SteamVR_PlayArea.GetBounds(steamVR_PlayArea.size, ref steamVrBounds);
+        if (success)
+        {
+            lastSize = steamVR_PlayArea.size;
+            BuildMesh();
+        }
+        else
+        {
+            Debug.LogWarning("Could not get the Calibrated Play Area bounds. This script 'RoomExtender_PlayArea' tries to get the size when SteamVR is running.");
+        }
+    }
+
+    private void Start()
+    {
+        if (vertices == null || vertices.Length == 0)
+        {
+            bool success = SteamVR_PlayArea.GetBounds(steamVR_PlayArea.size, ref steamVrBounds);
+            if (success)
+            {
+                lastSize = steamVR_PlayArea.size;
+                BuildMesh();
+            }
+            else
+            {
+                Debug.LogWarning("Could not get the chaperon size. This may happen if you use the calibrated size.");
+            }
+        }
+    }
+
+    private void BuildMesh()
 	{
 		var rect = new HmdQuad_t();
 		GetBounds(ref rect);
@@ -112,22 +112,28 @@ public class VRTK_RoomExtender_PlayAreaGizmo : MonoBehaviour
 		}
 	}
 
-	void OnDrawGizmos()
+    private void OnDrawGizmos()
 	{
 		if (!drawWireframeWhenSelectedOnly)
-			DrawWireframe();
+        {
+            DrawWireframe();
+        }
 	}
 
 	void OnDrawGizmosSelected()
 	{
 		if (drawWireframeWhenSelectedOnly)
-			DrawWireframe();
+        {
+            DrawWireframe();
+        }
 	}
 
 	private void DrawWireframe()
 	{
 		if (vertices == null || vertices.Length == 0)
-			return;
+        {
+            return;
+        }
 		BuildMesh();
 		var offset = transform.TransformVector(Vector3.up * wireframeHeight);
 		Gizmos.color = color;
@@ -144,7 +150,7 @@ public class VRTK_RoomExtender_PlayAreaGizmo : MonoBehaviour
 		}
 	}
 
-	private void checkAndUpdateBounds()
+	private void CheckAndUpdateBounds()
 	{
 		if (lastSize != steamVR_PlayArea.size)
 		{

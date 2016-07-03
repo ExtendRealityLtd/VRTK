@@ -369,7 +369,10 @@ namespace VRTK
 
         protected virtual void LoadPreviousState()
         {
-            this.transform.parent = previousParent;
+            if (previousParent)
+            {
+                this.transform.parent = previousParent;
+            }
             rb.isKinematic = previousKinematicState;
             if (! isSwappable)
             {

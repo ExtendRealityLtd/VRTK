@@ -4,15 +4,18 @@ namespace VRTK
     using System.Collections;
 
     // Radial Menu input from Vive Controller
-    [RequireComponent (typeof(RadialMenu))]
-    public class RadialMenuController : MonoBehaviour {
-
-        RadialMenu menu;
+    [RequireComponent(typeof(RadialMenu))]
+    public class RadialMenuController : MonoBehaviour
+    {
         public VRTK_ControllerEvents events;
 
-        void Start () {
+        private RadialMenu menu;
+        private float currentAngle; //Keep track of angle for when we click
+
+        void Start()
+        {
             menu = GetComponent<RadialMenu>();
-            if(events == null)
+            if (events == null)
             {
                 events = GetComponentInParent<VRTK_ControllerEvents>();
             }
@@ -30,31 +33,29 @@ namespace VRTK
             }
         }
 
-        float currentAngle; //Keep track of angle for when we click
-
-        void DoTouchpadClicked(object sender, ControllerInteractionEventArgs e)
+        private void DoTouchpadClicked(object sender, ControllerInteractionEventArgs e)
         {
             menu.ClickButton(currentAngle);
         }
 
-        void DoTouchpadUnclicked(object sender, ControllerInteractionEventArgs e)
+        private void DoTouchpadUnclicked(object sender, ControllerInteractionEventArgs e)
         {
             menu.UnClickButton(currentAngle);
         }
 
-        void DoTouchpadTouched(object sender, ControllerInteractionEventArgs e)
+        private void DoTouchpadTouched(object sender, ControllerInteractionEventArgs e)
         {
             menu.ShowMenu();
         }
 
-        void DoTouchpadUntouched(object sender, ControllerInteractionEventArgs e)
+        private void DoTouchpadUntouched(object sender, ControllerInteractionEventArgs e)
         {
             menu.StopTouching();
             menu.HideMenu(false);
         }
 
         //Touchpad finger moved position
-        void DoTouchpadAxisChanged(object sender, ControllerInteractionEventArgs e)
+        private void DoTouchpadAxisChanged(object sender, ControllerInteractionEventArgs e)
         {
             //Convert Touchpad Vector2 to Angle (0 to 360)
             float angle = Mathf.Atan2(e.touchpadAxis.y, e.touchpadAxis.x) * Mathf.Rad2Deg;
@@ -62,11 +63,10 @@ namespace VRTK
             if (angle < 0)
             {
                 angle += 360.0f;
-            }    
+            }
             currentAngle = 360 - angle;
 
             menu.HoverButton(currentAngle);
         }
-
     }
 }

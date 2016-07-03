@@ -1,15 +1,18 @@
 ﻿using UnityEngine;
 using VRTK;
 
-public class ControlReactor : MonoBehaviour {
+public class ControlReactor : MonoBehaviour
+{
     public TextMesh go;
 
-    void Start() {
-        GetComponent<VRTK_Control>().OnValueChanged += handleChange;
+    private void Start()
+    {
+        GetComponent<VRTK_Control>().OnValueChanged += HandleChange;
         go.text = GetComponent<VRTK_Control>().getValue().ToString();
     }
 
-    private void handleChange(float value) {
+    private void HandleChange(float value)
+    {
         go.text = value.ToString();
     }
 }

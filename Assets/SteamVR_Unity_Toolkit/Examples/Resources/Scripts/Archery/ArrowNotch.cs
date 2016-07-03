@@ -2,7 +2,8 @@
 using System.Collections;
 using VRTK;
 
-public class ArrowNotch : MonoBehaviour {
+public class ArrowNotch : MonoBehaviour
+{
     private GameObject arrow;
     private VRTK_InteractableObject obj;
 

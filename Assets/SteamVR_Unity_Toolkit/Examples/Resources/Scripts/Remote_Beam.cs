@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Remote_Beam : MonoBehaviour {
+public class Remote_Beam : MonoBehaviour
+{
     private Vector2 touchAxis;
     private float rotationSpeed = 180f;
     private float currentYaw;

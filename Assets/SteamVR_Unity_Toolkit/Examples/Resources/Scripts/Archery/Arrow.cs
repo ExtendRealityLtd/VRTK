@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Arrow : MonoBehaviour {
+public class Arrow : MonoBehaviour
+{
     public float maxArrowLife = 10f;
     [HideInInspector]
     public bool inFlight = false;
@@ -55,7 +56,7 @@ public class Arrow : MonoBehaviour {
     {
         if (!collided)
         {
-           transform.LookAt(transform.position + rigidBody.velocity);
+            transform.LookAt(transform.position + rigidBody.velocity);
         }
     }
 

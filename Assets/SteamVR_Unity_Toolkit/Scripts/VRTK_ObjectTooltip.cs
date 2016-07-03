@@ -25,7 +25,7 @@
             SetText("UITextFront");
             SetText("UITextReverse");
             SetLine();
-            if(drawLineTo == null && this.transform.parent != null)
+            if (drawLineTo == null && this.transform.parent != null)
             {
                 drawLineTo = this.transform.parent;
             }

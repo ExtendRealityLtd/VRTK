@@ -32,14 +32,14 @@ namespace VRTK
         private float framesTime;
         private Text text;
 
-        void Start()
+        private void Start()
         {
             text = this.GetComponent<Text>();
             text.fontSize = fontSize;
             text.transform.localPosition = position;
         }
 
-        void Update()
+        private void Update()
         {
             framesCount++;
             framesTime += Time.unscaledDeltaTime;

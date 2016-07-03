@@ -1,60 +1,74 @@
-﻿namespace VRTK {
+﻿namespace VRTK
+{
     using UnityEngine;
 
     [ExecuteInEditMode]
-    public abstract class VRTK_Control : MonoBehaviour {
+    public abstract class VRTK_Control : MonoBehaviour
+    {
         private static Color COLOR_OK = Color.yellow;
         private static Color COLOR_ERROR = Color.red;
 
         public delegate void ValueChange(float value);
         public event ValueChange OnValueChanged;
 
-        abstract protected void initRequiredComponents();
-        abstract protected bool detectSetup();
-        abstract protected void handleUpdate();
+        abstract protected void InitRequiredComponents();
+        abstract protected bool DetectSetup();
+        abstract protected void HandleUpdate();
 
         protected Bounds bounds;
         protected float value;
 
         protected bool setupSuccessful = true;
 
-        public float getValue() {
+        public float getValue()
+        {
             return value;
         }
 
-        public virtual void Start() {
-            if (Application.isPlaying) {
-                initRequiredComponents();
+        public virtual void Start()
+        {
+            if (Application.isPlaying)
+            {
+                InitRequiredComponents();
             }
-            setupSuccessful = detectSetup();
+            setupSuccessful = DetectSetup();
         }
 
-        public virtual void Update() {
-            if (!Application.isPlaying) {
-                setupSuccessful = detectSetup();
-            } else if (setupSuccessful) {
+        public virtual void Update()
+        {
+            if (!Application.isPlaying)
+            {
+                setupSuccessful = DetectSetup();
+            }
+            else if (setupSuccessful)
+            {
                 float oldValue = value;
-                handleUpdate();
+                HandleUpdate();
 
                 // trigger events
-                if (value != oldValue) {
-                    if (OnValueChanged != null) {
+                if (value != oldValue)
+                {
+                    if (OnValueChanged != null)
+                    {
                         OnValueChanged(getValue());
                     }
                 }
             }
         }
 
-        public virtual void OnDrawGizmos() {
+        public virtual void OnDrawGizmos()
+        {
             bounds = Utilities.getBounds(transform);
             Gizmos.color = (setupSuccessful) ? COLOR_OK : COLOR_ERROR;
 
-            if (setupSuccessful) {
+            if (setupSuccessful)
+            {
                 Gizmos.DrawWireCube(bounds.center, bounds.extents * 2);
-            } else {
+            }
+            else
+            {
                 Gizmos.DrawCube(bounds.center, bounds.extents * 2);
             }
         }
-
     }
 }

@@ -208,32 +208,56 @@ tooltips that have been added to the controllers.
 
 #### RadialMenu
 
-This adds a UI element into the world space that can be dropped into a Controller object and used to create and use Radial Menus from the touchpad.
+This adds a UI element into the world space that can be dropped into a
+Controller object and used to create and use Radial Menus from the
+touchpad.
 
 There are a number of parameters that can be set on the Prefab which
-are provided by the `SteamVR_Unity_Toolkit/Scripts/Controls/2D/RadialMenu/RadialMenu.cs`
+are provided by the
+`SteamVR_Unity_Toolkit/Scripts/Controls/2D/RadialMenu/RadialMenu.cs`
 script which is applied to the `Panel` child of the prefab.
 
 The following script parameters are available:
 
- * **Buttons:** Array of Buttons where you define the interactive buttons you want to be displayed as part of the radial menu. Each Button has the following properties:
-   * **ButtonIcon:** Icon to use inside the button arc (should be circular).
+  * **Buttons:** Array of Buttons where you define the interactive
+  buttons you want to be displayed as part of the radial menu. Each
+  Button has the following properties:
+   * **ButtonIcon:** Icon to use inside the button arc (should be
+   circular).
    * **OnClick():** Methods to invoke when the button is clicked.
-   * **OnHold():** Methods to invoke each frame while the button is held down.
- * **Button Prefab:** The base for each button in the menu, by default set to a dynamic circle arc that will fill up a portion of the menu.
- * **Button Thickness:** Percentage of the menu the buttons should fill, 1.0 is a pie slice, 0.1 is a thin ring.
- * **Button Color:** The background color of the buttons, default is white.
- * **Offset Distance:** The distance the buttons should move away from the center. This creates space between the individual buttons.
- * **Offset Rotation:** The additional rotation of the Radial Menu.
- * **Rotate Icons:** Whether button icons should rotate according to their arc or be vertical compared to the controller.
- * **Icon Margin:** The margin in pixels that the icon should keep within the button.
- * **Hide On Release:** Whether the buttons should be visible when not in use.
- * **Menu Buttons:** The actual GameObjects that make up the radial menu.
- * **Regenerate Buttons:** Button to force regeneration of the radial menu in the editor.
+   * **OnHold():** Methods to invoke each frame while the button is
+   held down.
+  * **Button Prefab:** The base for each button in the menu, by default
+  set to a dynamic circle arc that will fill up a portion of the menu.
+  * **Button Thickness:** Percentage of the menu the buttons should
+  fill, 1.0 is a pie slice, 0.1 is a thin ring.
+  * **Button Color:** The background color of the buttons, default is
+  white.
+  * **Offset Distance:** The distance the buttons should move away from
+  the center. This creates space between the individual buttons.
+  * **Offset Rotation:** The additional rotation of the Radial Menu.
+  * **Rotate Icons:** Whether button icons should rotate according to
+  their arc or be vertical compared to the controller.
+  * **Icon Margin:** The margin in pixels that the icon should keep
+  within the button.
+  * **Hide On Release:** Whether the buttons should be visible when not
+  in use.
+  * **Menu Buttons:** The actual GameObjects that make up the radial
+  menu.
+  * **Regenerate Buttons:** Button to force regeneration of the radial
+  menu in the editor.
 
-If the RadialMenu is placed inside a controller, it will automatically find a `VRTK_ControllerEvents` in its parent to use at the input. However, a `VRTK_ControllerEvents` can be defined explicitly by setting the `Events` parameter of the `Radial Menu Controller` script also attached to the prefab.
+If the RadialMenu is placed inside a controller, it will automatically
+find a `VRTK_ControllerEvents` in its parent to use at the input.
+However, a `VRTK_ControllerEvents` can be defined explicitly by setting
+the `Events` parameter of the `Radial Menu Controller` script also
+attached to the prefab.
 
-An example of the `RadialMenu` Prefab can be viewed in the scene `SteamVR_Unity_Toolkit/Examples/030_Radial_Touchpad_Menu`, which displays a radial menu for each controller. The left controller uses the `Hide On Release` variable, so it will only be visible if the left touchpad is being touched.
+An example of the `RadialMenu` Prefab can be viewed in the scene
+`SteamVR_Unity_Toolkit/Examples/030_Radial_Touchpad_Menu`, which
+displays a radial menu for each controller. The left controller uses
+the `Hide On Release` variable, so it will only be visible if the
+left touchpad is being touched.
 
 ### Scripts
 
@@ -1303,21 +1327,41 @@ The following script parameters are available:
 
 ##### RadialMenu
 
-Attaching the script to a GameObject will allow you to create a dynamic Radial Menu with any number of buttons. The variables are documented in the prefabs section of this README, but a number of public methods are available for use. Interacting with buttons programmatically uses the angle of the desired button (0/360 being the top, 180 being the bottom).
+Attaching the script to a GameObject will allow you to create a dynamic
+Radial Menu with any number of buttons. The variables are documented in
+the prefabs section of this README, but a number of public methods are
+available for use. Interacting with buttons programmatically uses
+the angle of the desired button (0/360 being the top, 180 being
+the bottom).
 
   * **RegenerateButtons():** Forces the regeneration of the UI buttons.
-  * **HoverButton(float menuAngle):** Calls the `Interact()` method with an event type of hover and an angle of menuAngle. This initiates the `pointerEnterHandler` action.
-  * **ClickButton(float menuAngle):** Calls the `Interact()` method with an event type of click and an angle of menuAngle. This initiates the `pointerDownHandler` action.
-  * **UnClickButton(float menuAngle):** Calls the `Interact()` method with an event type of stopClick and an angle of menuAngle. This initiates the `pointerUpHandler` action.
-  * **StopTouching():** Calls the `Interact()` method on the last touched button and clears the currently touched button ID. This initiates the `pointerExitHandler` action.
+  * **HoverButton(float menuAngle):** Calls the `Interact()` method
+  with an event type of hover and an angle of menuAngle. This initiates
+  the `pointerEnterHandler` action.
+  * **ClickButton(float menuAngle):** Calls the `Interact()` method
+  with an event type of click and an angle of menuAngle. This initiates
+  the `pointerDownHandler` action.
+  * **UnClickButton(float menuAngle):** Calls the `Interact()` method
+  with an event type of stopClick and an angle of menuAngle. This
+  initiates the `pointerUpHandler` action.
+  * **StopTouching():** Calls the `Interact()` method on the last
+  touched button and clears the currently touched button ID. This
+  initiates the `pointerExitHandler` action.
   * **ShowMenu():** Tweens the Radial Menu to a scale of 1
-  * **HideMenu(bool force):** Tweens the RadialMenu to a scale of 0. If `force` is `false`, then it will only hide the menu if the `HideOnRelease` variable is `true`.
+  * **HideMenu(bool force):** Tweens the RadialMenu to a scale of 0.
+  If `force` is `false`, then it will only hide the menu if the
+  `HideOnRelease` variable is `true`.
 
 ##### RadialMenuController
 
-Attaching the script to a GameObject will add a RadialMenu component if it does not already exist If it is attached to a child of a controller, it will automatically find the required `VRTK_ControllerEvents` component in its parent. Otherwise one must be defined explicitly in the inspector.
+Attaching the script to a GameObject will add a RadialMenu component if
+it does not already exist If it is attached to a child of a controller,
+it will automatically find the required `VRTK_ControllerEvents`
+component in its parent. Otherwise one must be defined explicitly in
+the inspector.
 
-This component will listen for controller touchpad events and call the relevant `RadialMenu` methods.
+This component will listen for controller touchpad events and call the
+relevant `RadialMenu` methods.
 
 #### Abstract Classes (Abstractions/)
 

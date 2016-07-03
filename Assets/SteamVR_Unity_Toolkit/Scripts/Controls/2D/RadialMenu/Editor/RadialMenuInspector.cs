@@ -10,7 +10,7 @@ public class RadialMenuInspector : Editor
         DrawDefaultInspector();
 
         RadialMenu rMenu = (RadialMenu)target;
-        if(GUILayout.Button("Regenerate Buttons"))
+        if (GUILayout.Button("Regenerate Buttons"))
         {
             rMenu.RegenerateButtons();
         }

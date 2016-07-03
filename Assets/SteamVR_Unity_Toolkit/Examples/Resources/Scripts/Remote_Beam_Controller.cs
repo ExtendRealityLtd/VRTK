@@ -2,11 +2,12 @@
 using System.Collections;
 using VRTK;
 
-public class Remote_Beam_Controller : MonoBehaviour {
+public class Remote_Beam_Controller : MonoBehaviour
+{
     public GameObject remoteBeam;
     private Remote_Beam remoteBeamScript;
 
-    void Start()
+    private void Start()
     {
         remoteBeamScript = remoteBeam.GetComponent<Remote_Beam>();
 
@@ -14,12 +15,12 @@ public class Remote_Beam_Controller : MonoBehaviour {
         GetComponent<VRTK_ControllerEvents>().TouchpadTouchEnd += new ControllerInteractionEventHandler(DoTouchpadTouchEnd);
     }
 
-    void DoTouchpadAxisChanged(object sender, ControllerInteractionEventArgs e)
+    private void DoTouchpadAxisChanged(object sender, ControllerInteractionEventArgs e)
     {
         remoteBeamScript.SetTouchAxis(e.touchpadAxis);
     }
 
-    void DoTouchpadTouchEnd(object sender, ControllerInteractionEventArgs e)
+    private void DoTouchpadTouchEnd(object sender, ControllerInteractionEventArgs e)
     {
         remoteBeamScript.SetTouchAxis(Vector2.zero);
     }

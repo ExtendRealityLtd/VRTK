@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class RC_Car : MonoBehaviour {
+public class RC_Car : MonoBehaviour
+{
     public float maxAcceleration = 3f;
     public float jumpPower = 10f;
 
@@ -38,7 +39,8 @@ public class RC_Car : MonoBehaviour {
         defaultRotation = this.transform.rotation;
     }
 
-    private void FixedUpdate () {
+    private void FixedUpdate()
+    {
         if (isJumping)
         {
             touchAxis.x = 0f;
@@ -47,7 +49,7 @@ public class RC_Car : MonoBehaviour {
         Move();
         Turn();
         Jump();
-	}
+    }
 
     private void CalculateSpeed()
     {
@@ -55,7 +57,8 @@ public class RC_Car : MonoBehaviour {
         {
             movementSpeed += (acceleration * touchAxis.y);
             movementSpeed = Mathf.Clamp(movementSpeed, -maxAcceleration, maxAcceleration);
-        } else
+        }
+        else
         {
             Decelerate();
         }
@@ -66,10 +69,12 @@ public class RC_Car : MonoBehaviour {
         if (movementSpeed > 0)
         {
             movementSpeed -= Mathf.Lerp(acceleration, maxAcceleration, 0f);
-        } else if(movementSpeed < 0)
+        }
+        else if (movementSpeed < 0)
         {
             movementSpeed += Mathf.Lerp(acceleration, -maxAcceleration, 0f);
-        } else
+        }
+        else
         {
             movementSpeed = 0;
         }
@@ -91,7 +96,7 @@ public class RC_Car : MonoBehaviour {
     private void Jump()
     {
         if (!isJumping && triggerAxis > 0)
-        {            
+        {
             float jumpHeight = (triggerAxis * jumpPower);
             rb.AddRelativeForce(Vector3.up * jumpHeight);
             triggerAxis = 0f;
@@ -107,5 +112,4 @@ public class RC_Car : MonoBehaviour {
     {
         isJumping = true;
     }
-
 }
