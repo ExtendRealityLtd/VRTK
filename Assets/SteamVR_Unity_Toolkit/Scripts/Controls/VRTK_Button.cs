@@ -1,8 +1,11 @@
-﻿namespace VRTK {
+﻿namespace VRTK
+{
     using UnityEngine;
 
-    public class VRTK_Button : VRTK_Control {
-        public enum Direction {
+    public class VRTK_Button : VRTK_Control
+    {
+        public enum Direction
+        {
             autodetect, x, y, z, negX, negY, negZ
         }
 
@@ -13,7 +16,7 @@
         public delegate void PushAction();
         public event PushAction OnPushed;
 
-        private float MAX_AUTODETECT_ACTIVATION_LENGTH = 3; // full hight of button
+        private static float MAX_AUTODETECT_ACTIVATION_LENGTH = 3; // full hight of button
 
         private Direction finalDirection;
         private Vector3 initialPosition;
@@ -23,34 +26,49 @@
         private Rigidbody rb;
         private ConstantForce cf;
 
-        protected override void initRequiredComponents() {
+        public override void OnDrawGizmos()
+        {
+            base.OnDrawGizmos();
+
+            // visualize activation distance
+            Gizmos.DrawLine(bounds.center, activationPoint);
+        }
+
+        protected override void InitRequiredComponents()
+        {
             initialPosition = transform.position;
             initialLocalPosition = transform.localPosition;
 
             rb = GetComponent<Rigidbody>();
-            if (rb == null) {
+            if (rb == null)
+            {
                 rb = gameObject.AddComponent<Rigidbody>();
             }
             rb.isKinematic = false;
             rb.useGravity = false;
 
             cf = GetComponent<ConstantForce>();
-            if (cf == null) {
+            if (cf == null)
+            {
                 cf = gameObject.AddComponent<ConstantForce>();
             }
             cf.enabled = false;
         }
 
-        protected override bool detectSetup() {
-            finalDirection = (direction == Direction.autodetect) ? detectDirection() : direction;
-            if (finalDirection == Direction.autodetect) {
+        protected override bool DetectSetup()
+        {
+            finalDirection = (direction == Direction.autodetect) ? DetectDirection() : direction;
+            if (finalDirection == Direction.autodetect)
+            {
                 activationPoint = transform.position;
                 return false;
             }
 
-            if (rb) {
+            if (rb)
+            {
                 rb.constraints = RigidbodyConstraints.FreezeAll;
-                switch (finalDirection) {
+                switch (finalDirection)
+                {
                     case Direction.x:
                     case Direction.negX:
                         rb.constraints -= RigidbodyConstraints.FreezePositionX;
@@ -63,19 +81,50 @@
                     case Direction.negZ:
                         rb.constraints -= RigidbodyConstraints.FreezePositionZ;
                         break;
-
                 }
             }
 
-            if (cf) {
-                cf.force = getForceVector();
+            if (cf)
+            {
+                cf.force = GetForceVector();
             }
-            activationPoint = calculateActivationPoint();
+            activationPoint = CalculateActivationPoint();
 
             return true;
         }
 
-        private Direction detectDirection() {
+        protected override void HandleUpdate()
+        {
+            // ensure button does not move beyond original position
+            if (!IsValidPosition())
+            {
+                transform.localPosition = initialLocalPosition;
+            }
+
+            // trigger events
+            float oldState = value;
+            if (ReachedActivationDistance())
+            {
+                if (oldState == 0)
+                {
+                    value = 1;
+                    if (OnPushed != null)
+                    {
+                        OnPushed();
+                    }
+                }
+            }
+            else
+            {
+                value = 0;
+            }
+
+            // activate pushback
+            cf.enabled = !transform.localPosition.Equals(initialLocalPosition);
+        }
+
+        private Direction DetectDirection()
+        {
             Direction direction = Direction.autodetect;
             Bounds bounds = Utilities.getBounds(transform);
 
@@ -103,27 +152,38 @@
 
             float extents = 0;
             Vector3 hitPoint = Vector3.zero;
-            if (Utilities.isLowest(lengthX, new float[] { lengthY, lengthZ, lengthNegX, lengthNegY, lengthNegZ })) {
+            if (Utilities.IsLowest(lengthX, new float[] { lengthY, lengthZ, lengthNegX, lengthNegY, lengthNegZ }))
+            {
                 direction = Direction.negX;
                 hitPoint = hitRight.point;
                 extents = bounds.extents.x;
-            } else if (Utilities.isLowest(lengthY, new float[] { lengthX, lengthZ, lengthNegX, lengthNegY, lengthNegZ })) {
+            }
+            else if (Utilities.IsLowest(lengthY, new float[] { lengthX, lengthZ, lengthNegX, lengthNegY, lengthNegZ }))
+            {
                 direction = Direction.y;
                 hitPoint = hitDown.point;
                 extents = bounds.extents.y;
-            } else if (Utilities.isLowest(lengthZ, new float[] { lengthX, lengthY, lengthNegX, lengthNegY, lengthNegZ })) {
+            }
+            else if (Utilities.IsLowest(lengthZ, new float[] { lengthX, lengthY, lengthNegX, lengthNegY, lengthNegZ }))
+            {
                 direction = Direction.z;
                 hitPoint = hitBack.point;
                 extents = bounds.extents.z;
-            } else if (Utilities.isLowest(lengthNegX, new float[] { lengthX, lengthY, lengthZ, lengthNegY, lengthNegZ })) {
+            }
+            else if (Utilities.IsLowest(lengthNegX, new float[] { lengthX, lengthY, lengthZ, lengthNegY, lengthNegZ }))
+            {
                 direction = Direction.x;
                 hitPoint = hitLeft.point;
                 extents = bounds.extents.x;
-            } else if (Utilities.isLowest(lengthNegY, new float[] { lengthX, lengthY, lengthZ, lengthNegX, lengthNegZ })) {
+            }
+            else if (Utilities.IsLowest(lengthNegY, new float[] { lengthX, lengthY, lengthZ, lengthNegX, lengthNegZ }))
+            {
                 direction = Direction.negY;
                 hitPoint = hitUp.point;
                 extents = bounds.extents.y;
-            } else if (Utilities.isLowest(lengthNegZ, new float[] { lengthX, lengthY, lengthZ, lengthNegX, lengthNegY })) {
+            }
+            else if (Utilities.IsLowest(lengthNegZ, new float[] { lengthX, lengthY, lengthZ, lengthNegX, lengthNegY }))
+            {
                 direction = Direction.negZ;
                 hitPoint = hitForward.point;
                 extents = bounds.extents.z;
@@ -132,7 +192,8 @@
             // determin activation distance
             activationDistance = (Vector3.Distance(hitPoint, bounds.center) - extents) * 0.95f;
 
-            if (direction == Direction.autodetect || activationDistance < 0) {
+            if (direction == Direction.autodetect || activationDistance < 0)
+            {
                 // auto-detection was not possible or colliding with object already
                 direction = Direction.autodetect;
                 activationDistance = 0;
@@ -141,11 +202,13 @@
             return direction;
         }
 
-        private Vector3 calculateActivationPoint() {
+        private Vector3 CalculateActivationPoint()
+        {
             Bounds bounds = Utilities.getBounds(transform);
 
             float extents = 0;
-            switch (finalDirection) {
+            switch (finalDirection)
+            {
                 case Direction.x:
                 case Direction.negX:
                     extents = bounds.extents.x;
@@ -163,43 +226,26 @@
             }
 
             // subtract width of button
-            return bounds.center + -getForceVector().normalized * (extents + activationDistance);
+            return bounds.center + -GetForceVector().normalized * (extents + activationDistance);
         }
 
-        protected override void handleUpdate() {
-            // ensure button does not move beyond original position
-            if (!isValidPosition()) {
-                transform.localPosition = initialLocalPosition;
-            }
-
-            // trigger events
-            float oldState = value;
-            if (reachedActivationDistance()) {
-                if (oldState == 0) {
-                    value = 1;
-                    if (OnPushed != null) {
-                        OnPushed();
-                    }
-                }
-            } else {
-                value = 0;
-            }
-
-            // activate pushback
-            cf.enabled = !transform.localPosition.Equals(initialLocalPosition);
-        }
-
-        private bool reachedActivationDistance() {
-            if (direction == Direction.autodetect) {
+        private bool ReachedActivationDistance()
+        {
+            if (direction == Direction.autodetect)
+            {
                 // distance is in world coordinates in that case, not local
                 return Vector3.Distance(transform.position, initialPosition) >= activationDistance;
-            } else {
+            }
+            else
+            {
                 return Vector3.Distance(transform.localPosition, initialLocalPosition) >= activationDistance;
             }
         }
 
-        private bool isValidPosition() {
-            switch (finalDirection) {
+        private bool IsValidPosition()
+        {
+            switch (finalDirection)
+            {
                 case Direction.x:
                     return transform.localPosition.x <= initialLocalPosition.x;
                 case Direction.y:
@@ -217,8 +263,10 @@
             }
         }
 
-        private Vector3 getForceVector() {
-            switch (finalDirection) {
+        private Vector3 GetForceVector()
+        {
+            switch (finalDirection)
+            {
                 case Direction.x:
                     return new Vector3(buttonStrength, 0, 0);
                 case Direction.y:
@@ -234,13 +282,6 @@
                 default:
                     return new Vector3(0, 0, 0);
             }
-        }
-
-        public override void OnDrawGizmos() {
-            base.OnDrawGizmos();
-
-            // visualize activation distance
-            Gizmos.DrawLine(bounds.center, activationPoint);
         }
     }
 }

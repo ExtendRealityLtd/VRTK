@@ -30,15 +30,13 @@ public class UICircle : Graphic
         set
         {
             if (m_Texture == value)
-            return;
+            {
+                return;
+            }
             m_Texture = value;
             SetVerticesDirty();
             SetMaterialDirty();
         }
-    }
-    void Update()
-    {
-        this.thickness = (int)Mathf.Clamp(this.thickness, 0, rectTransform.rect.width / 2);
     }
 
     protected UIVertex[] SetVbo(Vector2[] vertices, Vector2[] uvs)
@@ -75,7 +73,7 @@ public class UICircle : Graphic
         float f = (this.fillPercent / 100f);
         float degrees = 360f / segments;
         int fa = (int)((segments + 1) * f);
-        for (int i = -1 -(fa/2); i < fa/2 + 1; i++)
+        for (int i = -1 - (fa / 2); i < fa / 2 + 1; i++)
         {
             float rad = Mathf.Deg2Rad * (i * degrees);
             float c = Mathf.Cos(rad);
@@ -104,5 +102,10 @@ public class UICircle : Graphic
         {
             vbo.FillMesh(toFill);
         }
+    }
+
+    private void Update()
+    {
+        this.thickness = (int)Mathf.Clamp(this.thickness, 0, rectTransform.rect.width / 2);
     }
 }

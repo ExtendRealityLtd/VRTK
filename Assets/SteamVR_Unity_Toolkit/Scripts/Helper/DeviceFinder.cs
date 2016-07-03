@@ -14,9 +14,6 @@
             Right
         }
 
-        //Seconds to keep trying to initialise
-        public static float initTries = 15f;
-
         public static SteamVR_TrackedObject ControllerByIndex(uint index)
         {
             var system = OpenVR.System;

@@ -113,7 +113,7 @@ namespace VRTK
 
         private void OnTriggerEnter(Collider collider)
         {
-            if(IsObjectInteractable(collider.gameObject) && (touchedObject == null || !touchedObject.GetComponent<VRTK_InteractableObject>().IsGrabbed()))
+            if (IsObjectInteractable(collider.gameObject) && (touchedObject == null || !touchedObject.GetComponent<VRTK_InteractableObject>().IsGrabbed()))
             {
                 lastTouchedObject = collider.gameObject;
             }
@@ -121,7 +121,7 @@ namespace VRTK
 
         private void OnTriggerStay(Collider collider)
         {
-            if(touchedObject != null && touchedObject != lastTouchedObject && !touchedObject.GetComponent<VRTK_InteractableObject>().IsGrabbed())
+            if (touchedObject != null && touchedObject != lastTouchedObject && !touchedObject.GetComponent<VRTK_InteractableObject>().IsGrabbed())
             {
                 ForceStopTouching();
             }
@@ -139,7 +139,7 @@ namespace VRTK
 
                 var touchedObjectScript = touchedObject.GetComponent<VRTK_InteractableObject>();
 
-                if(! touchedObjectScript.IsValidInteractableController(this.gameObject, touchedObjectScript.allowedTouchControllers))
+                if (!touchedObjectScript.IsValidInteractableController(this.gameObject, touchedObjectScript.allowedTouchControllers))
                 {
                     touchedObject = null;
                     return;

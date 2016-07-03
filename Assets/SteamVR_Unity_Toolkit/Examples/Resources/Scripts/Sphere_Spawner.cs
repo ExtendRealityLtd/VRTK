@@ -2,11 +2,13 @@
 using System.Collections;
 using VRTK;
 
-public class Sphere_Spawner : MonoBehaviour {
+public class Sphere_Spawner : MonoBehaviour
+{
     private GameObject spawnMe;
     private Vector3 position;
 
-	void Start () {
+    private void Start()
+    {
         if (GetComponent<VRTK_ControllerEvents>() == null)
         {
             Debug.LogError("VRTK_ControllerEvents_ListenerExample is required to be attached to a SteamVR Controller that has the VRTK_ControllerEvents script attached to it");
@@ -19,12 +21,12 @@ public class Sphere_Spawner : MonoBehaviour {
         position = spawnMe.transform.position;
     }
 
-    void DoTriggerPressed(object sender, ControllerInteractionEventArgs e)
+    private void DoTriggerPressed(object sender, ControllerInteractionEventArgs e)
     {
         Instantiate(spawnMe, position, Quaternion.identity);
     }
 
-    void DoTouchpadPressed(object sender, ControllerInteractionEventArgs e)
+    private void DoTouchpadPressed(object sender, ControllerInteractionEventArgs e)
     {
         for (int i = 0; i < 20; i++)
         {

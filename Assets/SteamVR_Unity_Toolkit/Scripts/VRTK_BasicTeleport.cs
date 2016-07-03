@@ -37,21 +37,11 @@ namespace VRTK
         private float maxBlinkTransitionSpeed = 1.5f;
         private float maxBlinkDistance = 33f;
 
-        protected void OnTeleporting(object sender, DestinationMarkerEventArgs e) {
-            if (Teleporting != null)
-                Teleporting(this, e);
-        }
-
-        protected void OnTeleported(object sender, DestinationMarkerEventArgs e) {
-            if (Teleported != null)
-                Teleported(this, e);
-        }
-
         public void InitDestinationSetListener(GameObject markerMaker)
         {
             if (markerMaker)
             {
-                foreach(var worldMarker in markerMaker.GetComponents<VRTK_DestinationMarker>())
+                foreach (var worldMarker in markerMaker.GetComponents<VRTK_DestinationMarker>())
                 {
                     worldMarker.DestinationMarkerSet += new DestinationMarkerEventHandler(DoTeleport);
                     worldMarker.SetInvalidTarget(ignoreTargetWithTagOrClass);
@@ -70,6 +60,18 @@ namespace VRTK
             InitHeadsetCollisionListener();
 
             enableTeleport = true;
+        }
+
+        protected void OnTeleporting(object sender, DestinationMarkerEventArgs e)
+        {
+            if (Teleporting != null)
+                Teleporting(this, e);
+        }
+
+        protected void OnTeleported(object sender, DestinationMarkerEventArgs e)
+        {
+            if (Teleported != null)
+                Teleported(this, e);
         }
 
         protected virtual void Blink(float transitionSpeed)

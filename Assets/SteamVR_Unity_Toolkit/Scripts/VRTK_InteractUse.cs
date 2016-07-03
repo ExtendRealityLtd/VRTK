@@ -47,7 +47,7 @@ namespace VRTK
 
         public void ForceStopUsing()
         {
-            if(usingObject != null)
+            if (usingObject != null)
             {
                 StopUsing();
             }
@@ -176,7 +176,7 @@ namespace VRTK
         private void DoStartUseObject(object sender, ControllerInteractionEventArgs e)
         {
             GameObject touchedObject = interactTouch.GetTouchedObject();
-            if(touchedObject == null)
+            if (touchedObject == null)
             {
                 touchedObject = GetFromGrab();
             }

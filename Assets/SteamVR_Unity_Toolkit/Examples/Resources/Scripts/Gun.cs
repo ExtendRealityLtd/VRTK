@@ -4,9 +4,9 @@ using VRTK;
 
 public class Gun : VRTK_InteractableObject
 {
-    GameObject bullet;
-    float bulletSpeed = 1000f;
-    float bulletLife = 5f;
+    private GameObject bullet;
+    private float bulletSpeed = 1000f;
+    private float bulletLife = 5f;
 
     public override void StartUsing(GameObject usingObject)
     {
@@ -21,7 +21,7 @@ public class Gun : VRTK_InteractableObject
         bullet.SetActive(false);
     }
 
-    void FireBullet()
+    private void FireBullet()
     {
         GameObject bulletClone = Instantiate(bullet, bullet.transform.position, bullet.transform.rotation) as GameObject;
         bulletClone.SetActive(true);

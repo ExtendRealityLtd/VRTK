@@ -2,7 +2,8 @@
 using System.Collections;
 using VRTK;
 
-public class ArrowSpawner : MonoBehaviour {
+public class ArrowSpawner : MonoBehaviour
+{
     public GameObject arrowPrefab;
     public float spawnDelay = 1f;
 
@@ -45,7 +46,7 @@ public class ArrowSpawner : MonoBehaviour {
         {
             bow = controllers.right.GetComponentInChildren<BowAim>();
         }
-        else if(controller == controllers.right)
+        else if (controller == controllers.right)
         {
             bow = controllers.left.GetComponentInChildren<BowAim>();
         }

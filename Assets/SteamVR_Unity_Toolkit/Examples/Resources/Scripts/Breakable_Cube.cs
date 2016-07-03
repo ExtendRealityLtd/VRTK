@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Breakable_Cube : MonoBehaviour {
+public class Breakable_Cube : MonoBehaviour
+{
     private float breakForce = 150f;
 
     private void Start()
@@ -13,7 +14,7 @@ public class Breakable_Cube : MonoBehaviour {
     {
         var collisionForce = GetCollisionForce(collision);
 
-        if(collisionForce > 0)
+        if (collisionForce > 0)
         {
             ExplodeCube(collisionForce);
         }
