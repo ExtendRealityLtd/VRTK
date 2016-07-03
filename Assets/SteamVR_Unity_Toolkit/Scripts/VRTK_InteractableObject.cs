@@ -171,7 +171,7 @@ namespace VRTK
             RemoveTrackPoint();
             grabbingObject = currentGrabbingObject;
             SetTrackPoint(grabbingObject);
-            if (! isSwappable)
+            if (!isSwappable)
             {
                 previousIsGrabbable = isGrabbable;
                 isGrabbable = false;
@@ -311,7 +311,7 @@ namespace VRTK
             {
                 usingObject.GetComponent<VRTK_InteractUse>().ForceStopUsing();
             }
-	}
+        }
 
         public void SetGrabbedSnapHandle(Transform handle)
         {
@@ -338,7 +338,7 @@ namespace VRTK
 
         protected virtual void Update()
         {
-            if(! this.gameObject.activeInHierarchy)
+            if (!this.gameObject.activeInHierarchy)
             {
                 ForceStopInteracting();
             }
@@ -369,12 +369,12 @@ namespace VRTK
 
         protected virtual void LoadPreviousState()
         {
-            if (previousParent)
+            if (this.gameObject.activeInHierarchy)
             {
                 this.transform.parent = previousParent;
             }
             rb.isKinematic = previousKinematicState;
-            if (! isSwappable)
+            if (!isSwappable)
             {
                 isGrabbable = previousIsGrabbable;
             }
@@ -502,11 +502,12 @@ namespace VRTK
                 float angle;
                 Vector3 axis;
 
-                if(grabbedSnapHandle != null)
+                if (grabbedSnapHandle != null)
                 {
                     rotationDelta = trackPoint.rotation * Quaternion.Inverse(grabbedSnapHandle.rotation);
                     positionDelta = trackPoint.position - grabbedSnapHandle.position;
-                } else
+                }
+                else
                 {
                     rotationDelta = trackPoint.rotation * Quaternion.Inverse(this.transform.rotation);
                     positionDelta = trackPoint.position - this.transform.position;
