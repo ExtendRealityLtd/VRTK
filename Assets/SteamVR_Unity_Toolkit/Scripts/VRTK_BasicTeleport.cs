@@ -23,6 +23,7 @@ namespace VRTK
         public float distanceBlinkDelay = 0f;
         public bool headsetPositionCompensation = true;
         public string ignoreTargetWithTagOrClass;
+        public bool limitToNavMesh = true;
 
         public event TeleportEventHandler Teleporting;
         public event TeleportEventHandler Teleported;
@@ -54,6 +55,7 @@ namespace VRTK
                 {
                     worldMarker.DestinationMarkerSet += new DestinationMarkerEventHandler(DoTeleport);
                     worldMarker.SetInvalidTarget(ignoreTargetWithTagOrClass);
+                    worldMarker.SetNavMeshCheck(limitToNavMesh);
                 }
             }
         }
@@ -79,7 +81,17 @@ namespace VRTK
 
         protected virtual bool ValidLocation(Transform target)
         {
-            return (target && target.tag != ignoreTargetWithTagOrClass && target.GetComponent(ignoreTargetWithTagOrClass) == null);
+            bool validNavMeshLocation = false;
+            if (target)
+            {
+                NavMeshHit hit;
+                validNavMeshLocation = NavMesh.SamplePosition(target.position, out hit, 1.0f, NavMesh.AllAreas);
+            }
+            if (!limitToNavMesh)
+            {
+                validNavMeshLocation = true;
+            }
+            return (validNavMeshLocation && target && target.tag != ignoreTargetWithTagOrClass && target.GetComponent(ignoreTargetWithTagOrClass) == null);
         }
 
         protected virtual void DoTeleport(object sender, DestinationMarkerEventArgs e)

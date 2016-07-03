@@ -584,6 +584,9 @@ The following script parameters are available:
   notifies the teleporter that the destination is to be ignored so
   the user cannot teleport to that location. It also ensure the
   pointer colour is set to the miss colour.
+  * **Limit To Nav Mesh:** If this is checked then teleporting will
+  be limited to the bounds of a baked NavMesh. If the pointer
+  destination is outside the NavMesh then it will be ignored.
 
 An example of the `VRTK_BasicTeleport` script can be viewed in the
 scene `SteamVR_Unity_Toolkit/Examples/004_CameraRig_BasicTeleport`.
@@ -623,6 +626,9 @@ The following script parameters are available:
   notifies the teleporter that the destination is to be ignored so
   the user cannot teleport to that location. It also ensure the
   pointer colour is set to the miss colour.
+  * **Limit To Nav Mesh:** If this is checked then teleporting will
+  be limited to the bounds of a baked NavMesh. If the pointer
+  destination is outside the NavMesh then it will be ignored.
   * **Play Space Falling:** Checks if the user steps off an object
   into a part of their play area that is not on the object then they are
   automatically teleported down to the nearest floor.
@@ -1663,13 +1669,17 @@ The current examples are:
   * **030_Radial_Touchpad_Menu:** A scene that demonstrates adding
   dynamic radial menus to controllers using the prefab `RadialMenu`.
 
-  * **031_CameraRig_HeadsetGazePointer:** A scene thqt demonstrates
+  * **031_CameraRig_HeadsetGazePointer:** A scene that demonstrates
   the ability to attach a pointer to the headset to allow for
   a gaze pointer for teleporting or other interactions supported
   by the World Pointers. The `Touchpad` on the right controller
   activates the gaze beam, where as the `Touchpad` on the left
   controller activates a beam projected from a drone in the sky as
   the World Pointers can be attached to any object.
+
+  * **033_CameraRig_TeleportingInNavMesh:** A scene that demonstrates
+  how a baked NavMesh can be used to define the regions that a user
+  is allowed to teleport into.
 
 ## Contributing
 
