@@ -23,7 +23,7 @@ namespace VRTK
         public float distanceBlinkDelay = 0f;
         public bool headsetPositionCompensation = true;
         public string ignoreTargetWithTagOrClass;
-        public bool limitToNavMesh = true;
+        public bool limitToNavMesh = false;
 
         public event TeleportEventHandler Teleporting;
         public event TeleportEventHandler Teleported;

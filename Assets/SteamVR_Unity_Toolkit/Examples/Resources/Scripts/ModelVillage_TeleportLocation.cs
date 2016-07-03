@@ -6,11 +6,6 @@ public class ModelVillage_TeleportLocation : VRTK_DestinationMarker
 {
     public Transform destination;
 
-    private void Start()
-    {
-        GameObject.FindObjectOfType<VRTK_BasicTeleport>().InitDestinationSetListener(this.gameObject);
-    }
-	
     private void OnTriggerStay(Collider collider)
     {
         var controller = collider.GetComponent<VRTK_ControllerEvents>();
