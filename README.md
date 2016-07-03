@@ -1040,6 +1040,11 @@ The following script parameters are available:
   * **Global Touch Highlight Color:** If the interactable object can be
   highlighted when it's touched but no local colour is set then this
   global colour is used.
+  * **Custom Rigidbody Object:** If a custom rigidbody and collider for
+  the rigidbody are required, then a gameobject containing a rigidbody
+  and collider can be passed into this parameter. If this is empty then
+  the rigidbody and collider will be auto generated at runtime to match
+  the HTC Vive default controller.
 
 The following events are emitted:
 
@@ -1720,6 +1725,12 @@ The current examples are:
   activates the gaze beam, where as the `Touchpad` on the left
   controller activates a beam projected from a drone in the sky as
   the World Pointers can be attached to any object.
+
+  * **032_Controller_CustomControllerModel:** A scene that demonstrates
+  how to use custom models for the controllers instead of the default
+  HTC Vive controllers. It uses two simple hands in place of the
+  default controllers and shows simple state changes based on whether
+  the grab button or use button are being pressed.
 
   * **033_CameraRig_TeleportingInNavMesh:** A scene that demonstrates
   how a baked NavMesh can be used to define the regions that a user
