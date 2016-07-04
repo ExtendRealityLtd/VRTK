@@ -63,7 +63,7 @@ namespace VRTK
 
             pointer.GetComponent<BoxCollider>().isTrigger = true;
             pointer.AddComponent<Rigidbody>().isKinematic = true;
-            pointer.layer = 2;
+            pointer.layer = LayerMask.NameToLayer("Ignore Raycast");
 
             pointerTip = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             pointerTip.transform.name = string.Format("[{0}]WorldPointer_SimplePointer_PointerTip", this.gameObject.name);
@@ -73,7 +73,7 @@ namespace VRTK
 
             pointerTip.GetComponent<SphereCollider>().isTrigger = true;
             pointerTip.AddComponent<Rigidbody>().isKinematic = true;
-            pointerTip.layer = 2;
+            pointerTip.layer = LayerMask.NameToLayer("Ignore Raycast");
 
             base.InitPointer();
 

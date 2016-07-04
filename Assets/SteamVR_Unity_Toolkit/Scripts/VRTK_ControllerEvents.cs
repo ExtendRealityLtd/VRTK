@@ -24,8 +24,8 @@
             Application_Menu
         }
 
-        public ButtonAlias pointerToggleButton = ButtonAlias.Grip;
-        public ButtonAlias grabToggleButton = ButtonAlias.Trigger;
+        public ButtonAlias pointerToggleButton = ButtonAlias.Touchpad_Press;
+        public ButtonAlias grabToggleButton = ButtonAlias.Grip;
         public ButtonAlias useToggleButton = ButtonAlias.Trigger;
         public ButtonAlias menuToggleButton = ButtonAlias.Application_Menu;
 
@@ -242,6 +242,7 @@
         private void Awake()
         {
             trackedController = GetComponent<SteamVR_TrackedObject>();
+            this.gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
         }
 
         private void Start()

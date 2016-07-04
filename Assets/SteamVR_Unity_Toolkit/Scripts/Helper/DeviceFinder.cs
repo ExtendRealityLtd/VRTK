@@ -74,5 +74,10 @@
             return GameObject.FindObjectOfType<SteamVR_GameView>().GetComponent<Transform>();
 #endif
         }
+
+        public static Transform HeadsetCamera()
+        {
+            return GameObject.FindObjectOfType<SteamVR_Camera>().GetComponent<Transform>();
+        }
     }
 }

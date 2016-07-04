@@ -50,5 +50,15 @@
                 playerObject.objectType = objType;
             }
         }
+
+        public static Transform AddCameraFade()
+        {
+            var camera = DeviceFinder.HeadsetCamera();
+            if (camera && !camera.gameObject.GetComponent<SteamVR_Fade>())
+            {
+                camera.gameObject.AddComponent<SteamVR_Fade>();
+            }
+            return camera;
+        }
     }
 }

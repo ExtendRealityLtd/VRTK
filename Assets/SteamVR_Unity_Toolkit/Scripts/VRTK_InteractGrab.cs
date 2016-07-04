@@ -88,12 +88,6 @@ namespace VRTK
 
         private void Start()
         {
-            //If no attach point has been specified then just use the tip of the controller
-            if (controllerAttachPoint == null)
-            {
-                controllerAttachPoint = transform.GetChild(0).Find("tip").GetChild(0).GetComponent<Rigidbody>();
-            }
-
             if (GetComponent<VRTK_ControllerEvents>() == null)
             {
                 Debug.LogError("VRTK_InteractGrab is required to be attached to a SteamVR Controller that has the VRTK_ControllerEvents script attached to it");
@@ -102,6 +96,29 @@ namespace VRTK
 
             GetComponent<VRTK_ControllerEvents>().AliasGrabOn += new ControllerInteractionEventHandler(DoGrabObject);
             GetComponent<VRTK_ControllerEvents>().AliasGrabOff += new ControllerInteractionEventHandler(DoReleaseObject);
+
+            SetControllerAttachPoint();
+        }
+
+        private void SetControllerAttachPoint()
+        {
+            //If no attach point has been specified then just use the tip of the controller
+            if (controllerAttachPoint == null)
+            {
+                //attempt to find the attach point on the controller
+                var defaultAttachPoint = transform.Find("Model/tip/attach");
+                if (defaultAttachPoint != null)
+                {
+                    controllerAttachPoint = defaultAttachPoint.GetComponent<Rigidbody>();
+
+                    if (controllerAttachPoint == null)
+                    {
+                        var autoGenRB = defaultAttachPoint.gameObject.AddComponent<Rigidbody>();
+                        autoGenRB.isKinematic = true;
+                        controllerAttachPoint = autoGenRB;
+                    }
+                }
+            }
         }
 
         private bool IsObjectGrabbable(GameObject obj)
@@ -455,6 +472,11 @@ namespace VRTK
 
         private void Update()
         {
+            if(controllerAttachPoint == null)
+            {
+                SetControllerAttachPoint();
+            }
+
             if (grabPrecognitionTimer > 0)
             {
                 grabPrecognitionTimer--;

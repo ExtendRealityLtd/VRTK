@@ -67,24 +67,10 @@ showing the `SteamVR_Unity_Toolkit` in action.
 
 The available Prefabs are:
 
-  * `[CameraRig]`
   * `FramesPerSecondCanvas`
   * `ObjectTooltip`
   * `ControllerTooltips`
   * `RadialMenu`
-
-#### [CameraRig]
-
-The `[CameraRig]` has been taken directly from the SteamVR Unity
-plugin example: `SteamVR/Extras/SteamVR_TestThrow` scene as it includes
-the relevant `Model` children on the controller (which seem to b
-missing from the default prefab in the SteamVR plugin
-`SteamVR/Prefabs/[CameraRig].prefab`.
-
-The `SteamVR_Unity_Toolkit/Prefabs/[CameraRig]` can be dropped into
-any scene to provide instant access to a VR game camera via the VR
-headset and tracking of the VR controllers including model
-representations.
 
 #### FramesPerSecondCanvas
 
@@ -199,7 +185,7 @@ The following script parameters are available:
 
 If the transforms for the buttons are not provided, then the script
 will attempt to find the attach transforms on the default controller
-model in the `[CameraRig]` prefab provided by this toolkit.
+model in the `[CameraRig]` prefab.
 
 An example of the `ControllerTooltips` Prefab can be viewed in the
 scene `SteamVR_Unity_Toolkit/Examples/029_Controller_Tooltips` which
@@ -814,32 +800,33 @@ will cause the user to appear back at their last good known position.
 ##### VRTK_RoomExtender
 
 This script allows the playArea to move with the user.
-The CameraRig is only moved when at the edge of a defined circle.
+The `[CameraRig]` is only moved when at the edge of a defined circle.
 Aims to create a virtually bigger play area. To use this add this
-script to the CameraRig.
+script to the `[CameraRig`] prefab.
 
 The following script parameters are available:
 
   * **Additional Movement Enabled:** This is the a public variable to
   enable the additional movement. This can be used in other scripts to
-  toggle the CameraRig movement.
+  toggle the `[CameraRig]` movement.
   * **Additional Movement Enabled On Button Press:** This configures
   the controls of the RoomExtender. If this is true you have to press
   the touchpad to enable it. If this is false you can disable it with
   pressing the touchpad.
   * **Additional Movement Multiplier:** This is the factor by which
   movement at the edge of the circle is amplified. 0 is no movement of
-  the CameraRig. Higher values simulate a bigger play area but may be
-  to uncomfortable.
+  the `[CameraRig]`. Higher values simulate a bigger play area but may
+  be too uncomfortable.
   * **Head Zone Radius:** This is the size of the circle in which the
   playArea is not moved and everything is normal. If it is to low it
   becomes uncomfortable when crouching.
   * **Debug Transform:** This transform visualises the circle around
-  the user where the CameraRig is not moved. In the demo scene this is
-  a cylinder at floor level. Remember to turn of collisions.
+  the user where the `[CameraRig]` is not moved. In the demo scene this
+  is a cylinder at floor level. Remember to turn of collisions.
 
 There is an additional script `VRTK_RoomExtender_PlayAreaGizmo` which
-can be attachted to the CameraRig to visualize the extended playArea.
+can be attachted to the `[CameraRig`] to visualize the extended
+playArea.
 
 An example of the `VRTK_RoomExtender` script can be viewed in the scene
 `SteamVR_Unity_Toolkit/Examples/028_CameraRig_RoomExtender`.
@@ -1115,7 +1102,7 @@ The following script parameters are available:
   held down then the grab action will be successful.
   * **Throw Multiplier:** An amount to multiply the velocity of any
   objects being thrown. This can be useful when scaling up the
-  CameraRig to simulate being able to throw items further.
+  `[CameraRig]` to simulate being able to throw items further.
   * **Create Rigid Body When Not Touching:** If this is checked and the
   controller is not touching an Interactable Object when the grab
   button is pressed then a rigid body is added to the controller to

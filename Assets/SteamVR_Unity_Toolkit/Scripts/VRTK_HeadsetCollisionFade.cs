@@ -42,6 +42,7 @@
 
         protected void Start()
         {
+            Utilities.AddCameraFade();
             if (gameObject.GetComponentInChildren<SteamVR_Fade>() == null)
             {
                 Debug.LogWarning("This 'VRTK_HeadsetCollisionFade' script needs a SteamVR_Fade script on the camera eye.");

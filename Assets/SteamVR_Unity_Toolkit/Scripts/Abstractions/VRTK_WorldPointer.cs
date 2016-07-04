@@ -66,7 +66,6 @@ namespace VRTK
 
         protected virtual void Start()
         {
-
             if (controller == null)
             {
                 controller = this.GetComponent<VRTK_ControllerEvents>();
@@ -265,7 +264,7 @@ namespace VRTK
 
             playAreaCursorBoundary.transform.localScale = new Vector3(width, height, length);
             Destroy(playAreaCursorBoundary.GetComponent<BoxCollider>());
-            playAreaCursorBoundary.layer = 2;
+            playAreaCursorBoundary.layer = LayerMask.NameToLayer("Ignore Raycast");
 
             playAreaCursorBoundary.transform.parent = playAreaCursor.transform;
             playAreaCursorBoundary.transform.localPosition = localPosition;
@@ -321,7 +320,7 @@ namespace VRTK
 
             var playAreaCursorScript = playAreaCursor.AddComponent<VRTK_PlayAreaCollider>();
             playAreaCursorScript.SetParent(this.gameObject);
-            playAreaCursor.layer = 2;
+            playAreaCursor.layer = LayerMask.NameToLayer("Ignore Raycast");
 
             var playAreaBoundaryX = playArea.transform.localScale.x / 2;
             var playAreaBoundaryZ = playArea.transform.localScale.z / 2;
