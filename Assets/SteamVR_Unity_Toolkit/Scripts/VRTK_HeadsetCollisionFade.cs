@@ -47,7 +47,8 @@
                 Debug.LogWarning("This 'VRTK_HeadsetCollisionFade' script needs a SteamVR_Fade script on the camera eye.");
             }
 
-            this.name = "PlayerObject_" + this.name;
+            Utilities.SetPlayerObject(this.gameObject, VRTK_PlayerObject.ObjectTypes.Headset);
+
             BoxCollider collider = this.gameObject.AddComponent<BoxCollider>();
             collider.isTrigger = true;
             collider.size = new Vector3(0.1f, 0.1f, 0.1f);
@@ -64,7 +65,7 @@
 
         protected void OnTriggerStay(Collider collider)
         {
-            if (!collider.name.Contains("PlayerObject_") && ValidTarget(collider.transform))
+            if (!collider.GetComponent<VRTK_PlayerObject>() && ValidTarget(collider.transform))
             {
                 OnHeadsetCollisionDetect(SetHeadsetCollisionEvent(collider, this.transform));
                 SteamVR_Fade.Start(fadeColor, blinkTransitionSpeed);
@@ -73,7 +74,7 @@
 
         protected void OnTriggerExit(Collider collider)
         {
-            if (!collider.name.Contains("PlayerObject_"))
+            if (!collider.GetComponent<VRTK_PlayerObject>())
             {
                 OnHeadsetCollisionEnded(SetHeadsetCollisionEvent(collider, this.transform));
                 SteamVR_Fade.Start(Color.clear, blinkTransitionSpeed);

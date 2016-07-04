@@ -78,7 +78,7 @@ namespace VRTK
                 return;
             }
 
-            this.name = "PlayerObject_" + this.name;
+            Utilities.SetPlayerObject(this.gameObject, VRTK_PlayerObject.ObjectTypes.Controller);
 
             //Setup controller event listeners
             controller.AliasPointerOn += new ControllerInteractionEventHandler(EnablePointerBeam);
@@ -256,7 +256,8 @@ namespace VRTK
         private void DrawPlayAreaCursorBoundary(int index, float left, float right, float top, float bottom, float thickness, Vector3 localPosition)
         {
             var playAreaCursorBoundary = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            playAreaCursorBoundary.name = string.Format("[{0}]PlayerObject_WorldPointer_PlayAreaCursorBoundary_" + index, this.gameObject.name);
+            playAreaCursorBoundary.name = string.Format("[{0}]WorldPointer_PlayAreaCursorBoundary_" + index, this.gameObject.name);
+            Utilities.SetPlayerObject(playAreaCursorBoundary, VRTK_PlayerObject.ObjectTypes.Pointer);
 
             var width = (right - left) / 1.065f;
             var length = (top - bottom) / 1.08f;
@@ -306,7 +307,8 @@ namespace VRTK
             var height = 0.01f;
 
             playAreaCursor = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            playAreaCursor.name = string.Format("[{0}]PlayerObject_WorldPointer_PlayAreaCursor", this.gameObject.name);
+            playAreaCursor.name = string.Format("[{0}]WorldPointer_PlayAreaCursor", this.gameObject.name);
+            Utilities.SetPlayerObject(playAreaCursor, VRTK_PlayerObject.ObjectTypes.Pointer);
             playAreaCursor.transform.parent = null;
             playAreaCursor.transform.localScale = new Vector3(width, height, length);
             playAreaCursor.SetActive(false);
@@ -361,7 +363,7 @@ namespace VRTK
 
         private void OnTriggerStay(Collider collider)
         {
-            if (parent.GetComponent<VRTK_WorldPointer>().IsActive() && !collider.name.Contains("PlayerObject_"))
+            if (parent.GetComponent<VRTK_WorldPointer>().IsActive() && !collider.GetComponent<VRTK_PlayerObject>())
             {
                 parent.GetComponent<VRTK_WorldPointer>().setPlayAreaCursorCollision(true);
             }
@@ -369,7 +371,7 @@ namespace VRTK
 
         private void OnTriggerExit(Collider collider)
         {
-            if (!collider.name.Contains("PlayerObject_"))
+            if (!collider.GetComponent<VRTK_PlayerObject>())
             {
                 parent.GetComponent<VRTK_WorldPointer>().setPlayAreaCursorCollision(false);
             }

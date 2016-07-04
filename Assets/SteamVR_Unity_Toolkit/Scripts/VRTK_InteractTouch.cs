@@ -108,6 +108,8 @@ namespace VRTK
                 return;
             }
 
+            Utilities.SetPlayerObject(this.gameObject, VRTK_PlayerObject.ObjectTypes.Controller);
+
             CreateTouchCollider(this.gameObject);
             CreateControllerRigidBody();
         }
