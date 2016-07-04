@@ -52,7 +52,8 @@ namespace VRTK
 
         protected virtual void Start()
         {
-            this.name = "PlayerObject_" + this.name;
+            Utilities.SetPlayerObject(this.gameObject, VRTK_PlayerObject.ObjectTypes.CameraRig);
+
             adjustYForTerrain = false;
             eyeCamera = GameObject.FindObjectOfType<SteamVR_Camera>().GetComponent<Transform>();
 

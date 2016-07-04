@@ -25,7 +25,8 @@
 
         private void Start()
         {
-            this.name = "PlayerObject_" + this.name;
+            Utilities.SetPlayerObject(this.gameObject, VRTK_PlayerObject.ObjectTypes.CameraRig);
+
             lastGoodPositionSet = false;
             headset = DeviceFinder.HeadsetTransform();
             CreateCollider();

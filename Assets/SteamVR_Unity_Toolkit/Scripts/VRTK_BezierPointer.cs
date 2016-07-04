@@ -62,11 +62,13 @@ namespace VRTK
         {
             pointerCursor = (customPointerCursor ? Instantiate(customPointerCursor) : CreateCursor());
 
-            pointerCursor.name = string.Format("[{0}]PlayerObject_WorldPointer_BezierPointer_PointerCursor", this.gameObject.name);
+            pointerCursor.name = string.Format("[{0}]WorldPointer_BezierPointer_PointerCursor", this.gameObject.name);
+            Utilities.SetPlayerObject(pointerCursor, VRTK_PlayerObject.ObjectTypes.Pointer);
             pointerCursor.layer = 2;
             pointerCursor.SetActive(false);
 
-            curvedBeamContainer = new GameObject(string.Format("[{0}]PlayerObject_WorldPointer_BezierPointer_CurvedBeamContainer", this.gameObject.name));
+            curvedBeamContainer = new GameObject(string.Format("[{0}]WorldPointer_BezierPointer_CurvedBeamContainer", this.gameObject.name));
+            Utilities.SetPlayerObject(curvedBeamContainer, VRTK_PlayerObject.ObjectTypes.Pointer);
             curvedBeamContainer.SetActive(false);
             curvedBeam = curvedBeamContainer.gameObject.AddComponent<CurveGenerator>();
             curvedBeam.transform.parent = null;
@@ -152,18 +154,22 @@ namespace VRTK
 
         private void InitProjectedBeams()
         {
-            projectedBeamContainer = new GameObject(string.Format("[{0}]PlayerObject_WorldPointer_BezierPointer_ProjectedBeamContainer", this.gameObject.name));
+            projectedBeamContainer = new GameObject(string.Format("[{0}]WorldPointer_BezierPointer_ProjectedBeamContainer", this.gameObject.name));
+            Utilities.SetPlayerObject(projectedBeamContainer, VRTK_PlayerObject.ObjectTypes.Pointer);
             projectedBeamContainer.transform.parent = this.transform;
             projectedBeamContainer.transform.localPosition = Vector3.zero;
 
-            projectedBeamForward = new GameObject(string.Format("[{0}]PlayerObject_WorldPointer_BezierPointer_ProjectedBeamForward", this.gameObject.name));
+            projectedBeamForward = new GameObject(string.Format("[{0}]WorldPointer_BezierPointer_ProjectedBeamForward", this.gameObject.name));
+            Utilities.SetPlayerObject(projectedBeamForward, VRTK_PlayerObject.ObjectTypes.Pointer);
             projectedBeamForward.transform.parent = projectedBeamContainer.transform;
 
-            projectedBeamJoint = new GameObject(string.Format("[{0}]PlayerObject_WorldPointer_BezierPointer_ProjectedBeamJoint", this.gameObject.name));
+            projectedBeamJoint = new GameObject(string.Format("[{0}]WorldPointer_BezierPointer_ProjectedBeamJoint", this.gameObject.name));
+            Utilities.SetPlayerObject(projectedBeamJoint, VRTK_PlayerObject.ObjectTypes.Pointer);
             projectedBeamJoint.transform.parent = projectedBeamContainer.transform;
             projectedBeamJoint.transform.localScale = new Vector3(0.01f, 0.01f, 0.01f);
 
-            projectedBeamDown = new GameObject(string.Format("[{0}]PlayerObject_WorldPointer_BezierPointer_ProjectedBeamDown", this.gameObject.name));
+            projectedBeamDown = new GameObject(string.Format("[{0}]WorldPointer_BezierPointer_ProjectedBeamDown", this.gameObject.name));
+            Utilities.SetPlayerObject(projectedBeamDown, VRTK_PlayerObject.ObjectTypes.Pointer);
         }
 
         private float GetForwardBeamLength()
