@@ -556,6 +556,37 @@ The bezier curve generation code is in another script located at
 `SteamVR_Unity_Toolkit/Scripts/Helper/CurveGenerator.cs` and was
 heavily inspired by the tutorial and code from [Catlike Coding].
 
+#### Unity UI Pointer (VRTK_UIPointer)
+
+The UI Pointer provides a mechanism for interacting with Unity UI
+elements on a world canvas. The UI Pointer can be attached to any game
+object the same way in which a World Pointer can be and the UI Pointer
+also requires a controller to initiate the pointer activation and
+pointer click states.
+
+The simplest way to use the UI Pointer is to attach the script to a
+game controller within the `[CameraRig]` along with a Simple Pointer
+as this provides visual feedback as to where the UI ray is pointing.
+
+The UI pointer is activated via the `Pointer` alias on the
+`Controller Events` and the UI pointer click state is triggered via
+the `Use` alias on the `Controller Events` to make things consistent
+with the standard World Pointers.
+
+The following script parameters are available:
+
+  * **Controller:** The controller that will be used to toggle the
+  pointer. If the script is being applied onto a controller then this
+  parameter can be left blank as it will be auto populated by the
+  controller the script is on at runtime.
+
+An example of the `VRTK_UIPointer` script can be viewed in the
+scene `SteamVR_Unity_Toolkit/Examples/034_Controls_InteractingWithUnityUI`.
+The scene uses the `VRTK_UIPointer` script on the right Controller to
+allow for the interaction with Unity UI elements using a Simple Pointer
+beam. The left Controller controls a Simple Pointer on the headset to
+demonstrate gaze interaction with Unity UI elements.
+
 #### Basic Teleporter (VRTK_BasicTeleport)
 
 The basic teleporter updates the `[CameraRig]` x/z position in the
@@ -1742,6 +1773,13 @@ The current examples are:
   * **033_CameraRig_TeleportingInNavMesh:** A scene that demonstrates
   how a baked NavMesh can be used to define the regions that a user
   is allowed to teleport into.
+
+  * **034_Controls_InteractingWithUnityUI:** A scene that demonstrates
+  how to interact with Unity UI elements. The scene uses the
+  `VRTK_UIPointer` script on the right Controller to allow for the
+  interaction with Unity UI elements using a Simple Pointer beam. The
+  left Controller controls a Simple Pointer on the headset to
+  demonstrate gaze interaction with Unity UI elements.
 
 ## Contributing
 
