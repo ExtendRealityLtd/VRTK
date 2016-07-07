@@ -304,11 +304,13 @@ namespace VRTK
 
             if (grabbingObject != null)
             {
+                grabbingObject.GetComponent<VRTK_InteractTouch>().ForceStopTouching();
                 grabbingObject.GetComponent<VRTK_InteractGrab>().ForceRelease();
             }
 
             if (usingObject != null)
             {
+                usingObject.GetComponent<VRTK_InteractTouch>().ForceStopTouching();
                 usingObject.GetComponent<VRTK_InteractUse>().ForceStopUsing();
             }
         }
