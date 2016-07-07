@@ -55,7 +55,7 @@ namespace VRTK
             Utilities.SetPlayerObject(this.gameObject, VRTK_PlayerObject.ObjectTypes.CameraRig);
 
             adjustYForTerrain = false;
-            eyeCamera = GameObject.FindObjectOfType<SteamVR_Camera>().GetComponent<Transform>();
+            eyeCamera = Utilities.AddCameraFade();
 
             InitDestinationMarkerListeners();
             InitHeadsetCollisionListener();
@@ -84,6 +84,12 @@ namespace VRTK
 
         protected virtual bool ValidLocation(Transform target)
         {
+            //If the target is one of the player objects then it's never a valid location
+            if(target.GetComponent<VRTK_PlayerObject>())
+            {
+                return false;
+            }
+
             bool validNavMeshLocation = false;
             if (target)
             {
@@ -94,6 +100,7 @@ namespace VRTK
             {
                 validNavMeshLocation = true;
             }
+
             return (validNavMeshLocation && target && target.tag != ignoreTargetWithTagOrClass && target.GetComponent(ignoreTargetWithTagOrClass) == null);
         }
 

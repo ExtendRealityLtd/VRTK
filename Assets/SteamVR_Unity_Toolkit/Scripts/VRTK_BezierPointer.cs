@@ -64,7 +64,7 @@ namespace VRTK
 
             pointerCursor.name = string.Format("[{0}]WorldPointer_BezierPointer_PointerCursor", this.gameObject.name);
             Utilities.SetPlayerObject(pointerCursor, VRTK_PlayerObject.ObjectTypes.Pointer);
-            pointerCursor.layer = 2;
+            pointerCursor.layer = LayerMask.NameToLayer("Ignore Raycast");
             pointerCursor.SetActive(false);
 
             curvedBeamContainer = new GameObject(string.Format("[{0}]WorldPointer_BezierPointer_CurvedBeamContainer", this.gameObject.name));

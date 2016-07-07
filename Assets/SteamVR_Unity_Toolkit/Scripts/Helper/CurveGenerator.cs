@@ -82,7 +82,7 @@ namespace VRTK
                 customTracer = true;
                 items[f] = (tracer ? Instantiate(tracer) : CreateSphere());
                 items[f].transform.parent = this.transform;
-                items[f].layer = 2;
+                items[f].layer = LayerMask.NameToLayer("Ignore Raycast");
                 items[f].transform.localScale = new Vector3(circleSize, circleSize, circleSize);
             }
         }
