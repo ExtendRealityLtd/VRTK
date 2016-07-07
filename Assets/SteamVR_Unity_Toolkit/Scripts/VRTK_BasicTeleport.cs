@@ -46,6 +46,7 @@ namespace VRTK
                     worldMarker.DestinationMarkerSet += new DestinationMarkerEventHandler(DoTeleport);
                     worldMarker.SetInvalidTarget(ignoreTargetWithTagOrClass);
                     worldMarker.SetNavMeshCheck(limitToNavMesh);
+                    worldMarker.SetHeadsetPositionCompensation(headsetPositionCompensation);
                 }
             }
         }

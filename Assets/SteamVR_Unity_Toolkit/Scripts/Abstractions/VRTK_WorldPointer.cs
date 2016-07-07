@@ -127,9 +127,13 @@ namespace VRTK
 
         protected virtual void SetPlayAreaCursorTransform(Vector3 destination)
         {
-            var playAreaPos = new Vector3(playArea.transform.position.x, 0, playArea.transform.position.z);
-            var headsetPos = new Vector3(headset.position.x, 0, headset.position.z);
-            var offset = playAreaPos - headsetPos;
+            var offset = Vector3.zero;
+            if(headsetPositionCompensation)
+            {
+                var playAreaPos = new Vector3(playArea.transform.position.x, 0, playArea.transform.position.z);
+                var headsetPos = new Vector3(headset.position.x, 0, headset.position.z);
+                offset = playAreaPos - headsetPos;
+            }
             playAreaCursor.transform.position = destination + offset;
         }
 
