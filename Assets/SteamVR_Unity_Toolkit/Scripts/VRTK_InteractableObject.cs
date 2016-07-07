@@ -104,54 +104,54 @@ namespace VRTK
         {
             if (InteractableObjectTouched != null)
             {
-				OnTouch.Invoke(gameObject, e.interactingObject);
                 InteractableObjectTouched(this, e);
             }
+			OnTouch.Invoke(gameObject, e.interactingObject);
         }
 
         public virtual void OnInteractableObjectUntouched(InteractableObjectEventArgs e)
         {
             if (InteractableObjectUntouched != null)
 			{
-				OnEndTouch.Invoke(gameObject, e.interactingObject);
                 InteractableObjectUntouched(this, e);
             }
+			OnEndTouch.Invoke(gameObject, e.interactingObject);
         }
 
         public virtual void OnInteractableObjectGrabbed(InteractableObjectEventArgs e)
         {
             if (InteractableObjectGrabbed != null)
 			{
-				OnGrab.Invoke(gameObject, e.interactingObject);
                 InteractableObjectGrabbed(this, e);
             }
+			OnGrab.Invoke(gameObject, e.interactingObject);
         }
 
         public virtual void OnInteractableObjectUngrabbed(InteractableObjectEventArgs e)
         {
             if (InteractableObjectUngrabbed != null)
 			{
-				OnReleaseGrab.Invoke(gameObject, e.interactingObject);
                 InteractableObjectUngrabbed(this, e);
             }
+			OnReleaseGrab.Invoke(gameObject, e.interactingObject);
         }
 
         public virtual void OnInteractableObjectUsed(InteractableObjectEventArgs e)
         {
             if (InteractableObjectUsed != null)
 			{
-				OnUse.Invoke(gameObject, e.interactingObject);
                 InteractableObjectUsed(this, e);
             }
+			OnUse.Invoke(gameObject, e.interactingObject);
         }
 
         public virtual void OnInteractableObjectUnused(InteractableObjectEventArgs e)
         {
             if (InteractableObjectUnused != null)
 			{
-				OnEndUse.Invoke(gameObject, e.interactingObject);
                 InteractableObjectUnused(this, e);
             }
+			OnEndUse.Invoke(gameObject, e.interactingObject);
         }
 
         public InteractableObjectEventArgs SetInteractableObjectEvent(GameObject interactingObject)

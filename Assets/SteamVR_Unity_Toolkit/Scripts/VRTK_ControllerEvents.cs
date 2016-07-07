@@ -92,34 +92,36 @@
         {
             if (TriggerPressed != null)
             {
-            	Events.OnTriggerPress.Invoke(gameObject);
 				TriggerPressed(this, e);
             }
-                
+			Events.OnTriggerPress.Invoke(gameObject);
         }
 
         public virtual void OnTriggerReleased(ControllerInteractionEventArgs e)
         {
             if (TriggerReleased != null)
-			{
-            	Events.OnTriggerReleased.Invoke(gameObject);
+			{           	
                 TriggerReleased(this, e);
             }
+			Events.OnTriggerReleased.Invoke(gameObject);
         }
 
         public virtual void OnTriggerAxisChanged(ControllerInteractionEventArgs e)
         {
             if (TriggerAxisChanged != null)
-                TriggerAxisChanged(this, e);
+            {
+				TriggerAxisChanged(this, e);
+            } 
         }
 
         public virtual void OnApplicationMenuPressed(ControllerInteractionEventArgs e)
         {
             if (ApplicationMenuPressed != null)
 			{
-            	Events.OnMenuPress.Invoke(gameObject);
+            	
                 ApplicationMenuPressed(this, e);
             }
+			Events.OnMenuPress.Invoke(gameObject);
         }
 
         public virtual void OnApplicationMenuReleased(ControllerInteractionEventArgs e)
@@ -131,64 +133,64 @@
         public virtual void OnGripPressed(ControllerInteractionEventArgs e)
         {
             if (GripPressed != null)
-			{
-            	Events.OnGripPress.Invoke(gameObject);
+			{            	
                 GripPressed(this, e);
             }
+			Events.OnGripPress.Invoke(gameObject);
         }
 
         public virtual void OnGripReleased(ControllerInteractionEventArgs e)
         {
             if (GripReleased != null)
-			{
-            	Events.OnGripRelease.Invoke(gameObject);
+			{           	
                 GripReleased(this, e);
             }
+			Events.OnGripRelease.Invoke(gameObject);
         }
 
         public virtual void OnTouchpadPressed(ControllerInteractionEventArgs e)
         {
             if (TouchpadPressed != null)
-			{
-            	Events.OnTouchpadPress.Invoke(gameObject);
+			{            	
                 TouchpadPressed(this, e);
             }
+			Events.OnTouchpadPress.Invoke(gameObject);
         }
 
         public virtual void OnTouchpadReleased(ControllerInteractionEventArgs e)
         {
             if (TouchpadReleased != null)
-			{
-            	Events.OnTouchpadReleasePress.Invoke(gameObject);
+			{           	
                 TouchpadReleased(this, e);
             }
+			Events.OnTouchpadReleasePress.Invoke(gameObject);
         }
 
         public virtual void OnTouchpadTouchStart(ControllerInteractionEventArgs e)
         {
             if (TouchpadTouchStart != null)
-			{
-            	Events.OnTouchpadTouch.Invoke(gameObject);
+			{          	
                 TouchpadTouchStart(this, e);
             }
+			Events.OnTouchpadTouch.Invoke(gameObject);
         }
 
         public virtual void OnTouchpadTouchEnd(ControllerInteractionEventArgs e)
         {
             if (TouchpadTouchEnd != null)
-			{
-            	Events.OnTouchpadReleaseTouch.Invoke(gameObject);
+			{            	
                 TouchpadTouchEnd(this, e);
             }
+			Events.OnTouchpadReleaseTouch.Invoke(gameObject);
         }
 
         public virtual void OnTouchpadAxisChanged(ControllerInteractionEventArgs e)
         {
             if (TouchpadAxisChanged != null)
-			{
-            	Events.OnTouchpadDrag.Invoke(e.touchpadAxis);
+			{          	
                 TouchpadAxisChanged(this, e);
             }
+			Events.OnTouchpadDrag.Invoke(e.touchpadAxis);
         }
 
         public virtual void OnAliasPointerOn(ControllerInteractionEventArgs e)
