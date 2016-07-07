@@ -16,7 +16,7 @@
         public delegate void PushAction();
         public event PushAction OnPushed;
 
-        private static float MAX_AUTODETECT_ACTIVATION_LENGTH = 3; // full hight of button
+        private static float MAX_AUTODETECT_ACTIVATION_LENGTH = 4; // full hight of button
 
         private Direction finalDirection;
         private Vector3 initialPosition;
@@ -126,7 +126,7 @@
         private Direction DetectDirection()
         {
             Direction direction = Direction.autodetect;
-            Bounds bounds = Utilities.getBounds(transform);
+            Bounds bounds = Utilities.GetBounds(transform);
 
             // shoot rays from the center of the button to learn about surroundings
             RaycastHit hitForward;
@@ -204,29 +204,40 @@
 
         private Vector3 CalculateActivationPoint()
         {
-            Bounds bounds = Utilities.getBounds(transform);
+            Bounds bounds = Utilities.GetBounds(transform, transform);
 
+            Vector3 buttonDirection = Vector3.zero;
             float extents = 0;
             switch (finalDirection)
             {
                 case Direction.x:
-                case Direction.negX:
+                    buttonDirection = transform.right * -1;
                     extents = bounds.extents.x;
                     break;
-
+                case Direction.negX:
+                    buttonDirection = transform.right;
+                    extents = bounds.extents.x;
+                    break;
                 case Direction.y:
-                case Direction.negY:
+                    buttonDirection = transform.up * -1;
                     extents = bounds.extents.y;
                     break;
-
+                case Direction.negY:
+                    buttonDirection = transform.up;
+                    extents = bounds.extents.y;
+                    break;
                 case Direction.z:
+                    buttonDirection = transform.forward * -1;
+                    extents = bounds.extents.z;
+                    break;
                 case Direction.negZ:
+                    buttonDirection = transform.forward;
                     extents = bounds.extents.z;
                     break;
             }
 
             // subtract width of button
-            return bounds.center + -GetForceVector().normalized * (extents + activationDistance);
+            return bounds.center + buttonDirection * (extents + activationDistance);
         }
 
         private bool ReachedActivationDistance()

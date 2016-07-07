@@ -90,7 +90,7 @@
         private Direction DetectDirection()
         {
             Direction direction = Direction.x;
-            Bounds bounds = Utilities.getBounds(transform);
+            Bounds bounds = Utilities.GetBounds(transform);
 
             // shoot rays in all directions to learn about surroundings
             RaycastHit hitForward;

@@ -1,6 +1,5 @@
 ﻿namespace VRTK
 {
-    using System;
     using UnityEngine;
 
     public class VRTK_Lever : VRTK_Control
