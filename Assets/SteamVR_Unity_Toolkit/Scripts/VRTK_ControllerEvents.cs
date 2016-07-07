@@ -95,7 +95,6 @@
             	Events.OnTriggerPress.Invoke(gameObject);
 				TriggerPressed(this, e);
             }
-                
         }
 
         public virtual void OnTriggerReleased(ControllerInteractionEventArgs e)
