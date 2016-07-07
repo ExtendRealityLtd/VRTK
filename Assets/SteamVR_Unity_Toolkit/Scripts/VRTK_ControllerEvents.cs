@@ -474,19 +474,27 @@
     }
 
 	[System.Serializable]
+	public class VRTK_GEvent : UnityEvent<GameObject>{}
+
+	[System.Serializable]
+	public class VRTK_VEvent : UnityEvent<Vector2>{}
+
+	[System.Serializable]
 	public class VRTK_ControllerUnityEvents
 	{
-		public UnityEvent<GameObject> OnTriggerPress;
-		public UnityEvent<GameObject> OnTriggerReleased;
-		public UnityEvent<GameObject> OnMenuPress;
-		public UnityEvent<GameObject> OnTouchpadPress;
-		public UnityEvent<GameObject> OnTouchpadReleasePress;
-		public UnityEvent<GameObject> OnTouchpadTouch;
-		public UnityEvent<GameObject> OnTouchpadReleaseTouch;
-		public UnityEvent<Vector2> OnTouchpadDrag;
-		public UnityEvent<GameObject> OnGripPress;
-		public UnityEvent<GameObject> OnGripRelease;
+		public VRTK_GEvent OnTriggerPress;
+		public VRTK_GEvent OnTriggerReleased;
+		public VRTK_GEvent OnMenuPress;
+		public VRTK_GEvent OnTouchpadPress;
+		public VRTK_GEvent OnTouchpadReleasePress;
+		public VRTK_GEvent OnTouchpadTouch;
+		public VRTK_GEvent OnTouchpadReleaseTouch;
+		public VRTK_VEvent OnTouchpadDrag;
+		public VRTK_GEvent OnGripPress;
+		public VRTK_GEvent OnGripRelease;
 	}
+
+
 }
 
 

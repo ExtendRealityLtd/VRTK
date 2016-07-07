@@ -44,8 +44,8 @@ namespace VRTK
         public Color touchHighlightColor = Color.clear;
         public Vector2 rumbleOnTouch = Vector2.zero;
         public AllowedController allowedTouchControllers = AllowedController.Both;
-		public UnityEvent<VRTK_InteractionUnityEvent> OnTouch;
-		public UnityEvent<VRTK_InteractionUnityEvent> OnEndTouch;
+		public VRTK_IEvent OnTouch;
+		public VRTK_IEvent OnEndTouch;
 
         [Header("Grab Interactions", order = 2)]
         public bool isGrabbable = false;
@@ -57,8 +57,8 @@ namespace VRTK
         public bool precisionSnap;
         public Transform rightSnapHandle;
         public Transform leftSnapHandle;
-		public UnityEvent<VRTK_InteractionUnityEvent> OnGrab;
-		public UnityEvent<VRTK_InteractionUnityEvent> OnReleaseGrab;
+		public VRTK_IEvent OnGrab;
+		public VRTK_IEvent OnReleaseGrab;
 
         [Header("Grab Mechanics", order = 3)]
         public GrabAttachType grabAttachMechanic = GrabAttachType.Fixed_Joint;
@@ -74,8 +74,8 @@ namespace VRTK
         public bool pointerActivatesUseAction = false;
         public Vector2 rumbleOnUse = Vector2.zero;
         public AllowedController allowedUseControllers = AllowedController.Both;
-		public UnityEvent<VRTK_InteractionUnityEvent> OnUse;
-		public UnityEvent<VRTK_InteractionUnityEvent> OnEndUse;
+		public VRTK_IEvent OnUse;
+		public VRTK_IEvent OnEndUse;
 
         public event InteractableObjectEventHandler InteractableObjectTouched;
         public event InteractableObjectEventHandler InteractableObjectUntouched;
@@ -104,7 +104,7 @@ namespace VRTK
         {
             if (InteractableObjectTouched != null)
             {
-            	OnTouch.Invoke(new VRTK_InteractionUnityEvent(gameObject, e.interactingObject));
+				OnTouch.Invoke(gameObject, e.interactingObject);
                 InteractableObjectTouched(this, e);
             }
         }
@@ -113,7 +113,7 @@ namespace VRTK
         {
             if (InteractableObjectUntouched != null)
 			{
-            	OnEndTouch.Invoke(new VRTK_InteractionUnityEvent(gameObject, e.interactingObject));
+				OnEndTouch.Invoke(gameObject, e.interactingObject);
                 InteractableObjectUntouched(this, e);
             }
         }
@@ -122,7 +122,7 @@ namespace VRTK
         {
             if (InteractableObjectGrabbed != null)
 			{
-            	OnGrab.Invoke(new VRTK_InteractionUnityEvent(gameObject, e.interactingObject));
+				OnGrab.Invoke(gameObject, e.interactingObject);
                 InteractableObjectGrabbed(this, e);
             }
         }
@@ -131,7 +131,7 @@ namespace VRTK
         {
             if (InteractableObjectUngrabbed != null)
 			{
-            	OnReleaseGrab.Invoke(new VRTK_InteractionUnityEvent(gameObject, e.interactingObject));
+				OnReleaseGrab.Invoke(gameObject, e.interactingObject);
                 InteractableObjectUngrabbed(this, e);
             }
         }
@@ -140,7 +140,7 @@ namespace VRTK
         {
             if (InteractableObjectUsed != null)
 			{
-            	OnUse.Invoke(new VRTK_InteractionUnityEvent(gameObject, e.interactingObject));
+				OnUse.Invoke(gameObject, e.interactingObject);
                 InteractableObjectUsed(this, e);
             }
         }
@@ -149,7 +149,7 @@ namespace VRTK
         {
             if (InteractableObjectUnused != null)
 			{
-            	OnEndUse.Invoke(new VRTK_InteractionUnityEvent(gameObject, e.interactingObject));
+				OnEndUse.Invoke(gameObject, e.interactingObject);
                 InteractableObjectUnused(this, e);
             }
         }
@@ -553,16 +553,7 @@ namespace VRTK
         }
     }
 
-    [System.Serializable]
-    public class VRTK_InteractionUnityEvent
-    {
-    	public GameObject InteractedObject;
-    	public GameObject InteractingObject;
+	[System.Serializable]
+	public class VRTK_IEvent : UnityEvent<GameObject, GameObject>{}
 
-		public VRTK_InteractionUnityEvent(GameObject interacted, GameObject interacting)
-		{
-			InteractedObject = interacted;
-			InteractingObject = interacting;
-		}
-    }
 }
