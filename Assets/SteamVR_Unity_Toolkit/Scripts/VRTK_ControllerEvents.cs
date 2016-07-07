@@ -2,6 +2,7 @@
 {
     using UnityEngine;
     using System.Collections;
+	using UnityEngine.Events;
 
     public struct ControllerInteractionEventArgs
     {
@@ -30,6 +31,8 @@
         public ButtonAlias menuToggleButton = ButtonAlias.Application_Menu;
 
         public int axisFidelity = 1;
+
+		public VRTK_ControllerUnityEvents Events;
 
         public bool triggerPressed = false;
         public bool triggerAxisChanged = false;
@@ -88,13 +91,20 @@
         public virtual void OnTriggerPressed(ControllerInteractionEventArgs e)
         {
             if (TriggerPressed != null)
-                TriggerPressed(this, e);
+            {
+            	Events.OnTriggerPress.Invoke(gameObject);
+				TriggerPressed(this, e);
+            }
+                
         }
 
         public virtual void OnTriggerReleased(ControllerInteractionEventArgs e)
         {
             if (TriggerReleased != null)
+			{
+            	Events.OnTriggerReleased.Invoke(gameObject);
                 TriggerReleased(this, e);
+            }
         }
 
         public virtual void OnTriggerAxisChanged(ControllerInteractionEventArgs e)
@@ -106,7 +116,10 @@
         public virtual void OnApplicationMenuPressed(ControllerInteractionEventArgs e)
         {
             if (ApplicationMenuPressed != null)
+			{
+            	Events.OnMenuPress.Invoke(gameObject);
                 ApplicationMenuPressed(this, e);
+            }
         }
 
         public virtual void OnApplicationMenuReleased(ControllerInteractionEventArgs e)
@@ -118,43 +131,64 @@
         public virtual void OnGripPressed(ControllerInteractionEventArgs e)
         {
             if (GripPressed != null)
+			{
+            	Events.OnGripPress.Invoke(gameObject);
                 GripPressed(this, e);
+            }
         }
 
         public virtual void OnGripReleased(ControllerInteractionEventArgs e)
         {
             if (GripReleased != null)
+			{
+            	Events.OnGripRelease.Invoke(gameObject);
                 GripReleased(this, e);
+            }
         }
 
         public virtual void OnTouchpadPressed(ControllerInteractionEventArgs e)
         {
             if (TouchpadPressed != null)
+			{
+            	Events.OnTouchpadPress.Invoke(gameObject);
                 TouchpadPressed(this, e);
+            }
         }
 
         public virtual void OnTouchpadReleased(ControllerInteractionEventArgs e)
         {
             if (TouchpadReleased != null)
+			{
+            	Events.OnTouchpadReleasePress.Invoke(gameObject);
                 TouchpadReleased(this, e);
+            }
         }
 
         public virtual void OnTouchpadTouchStart(ControllerInteractionEventArgs e)
         {
             if (TouchpadTouchStart != null)
+			{
+            	Events.OnTouchpadTouch.Invoke(gameObject);
                 TouchpadTouchStart(this, e);
+            }
         }
 
         public virtual void OnTouchpadTouchEnd(ControllerInteractionEventArgs e)
         {
             if (TouchpadTouchEnd != null)
+			{
+            	Events.OnTouchpadReleaseTouch.Invoke(gameObject);
                 TouchpadTouchEnd(this, e);
+            }
         }
 
         public virtual void OnTouchpadAxisChanged(ControllerInteractionEventArgs e)
         {
             if (TouchpadAxisChanged != null)
+			{
+            	Events.OnTouchpadDrag.Invoke(e.touchpadAxis);
                 TouchpadAxisChanged(this, e);
+            }
         }
 
         public virtual void OnAliasPointerOn(ControllerInteractionEventArgs e)
@@ -438,4 +472,21 @@
             }
         }
     }
+
+	[System.Serializable]
+	public class VRTK_ControllerUnityEvents
+	{
+		public UnityEvent<GameObject> OnTriggerPress;
+		public UnityEvent<GameObject> OnTriggerReleased;
+		public UnityEvent<GameObject> OnMenuPress;
+		public UnityEvent<GameObject> OnTouchpadPress;
+		public UnityEvent<GameObject> OnTouchpadReleasePress;
+		public UnityEvent<GameObject> OnTouchpadTouch;
+		public UnityEvent<GameObject> OnTouchpadReleaseTouch;
+		public UnityEvent<Vector2> OnTouchpadDrag;
+		public UnityEvent<GameObject> OnGripPress;
+		public UnityEvent<GameObject> OnGripRelease;
+	}
 }
+
+

@@ -13,7 +13,7 @@ namespace VRTK
     using UnityEngine;
     using System.Collections;
     using System.Collections.Generic;
-
+    using UnityEngine.Events;
 
     public struct InteractableObjectEventArgs
     {
@@ -44,6 +44,8 @@ namespace VRTK
         public Color touchHighlightColor = Color.clear;
         public Vector2 rumbleOnTouch = Vector2.zero;
         public AllowedController allowedTouchControllers = AllowedController.Both;
+		public UnityEvent<VRTK_InteractionUnityEvent> OnTouch;
+		public UnityEvent<VRTK_InteractionUnityEvent> OnEndTouch;
 
         [Header("Grab Interactions", order = 2)]
         public bool isGrabbable = false;
@@ -55,6 +57,8 @@ namespace VRTK
         public bool precisionSnap;
         public Transform rightSnapHandle;
         public Transform leftSnapHandle;
+		public UnityEvent<VRTK_InteractionUnityEvent> OnGrab;
+		public UnityEvent<VRTK_InteractionUnityEvent> OnReleaseGrab;
 
         [Header("Grab Mechanics", order = 3)]
         public GrabAttachType grabAttachMechanic = GrabAttachType.Fixed_Joint;
@@ -70,6 +74,8 @@ namespace VRTK
         public bool pointerActivatesUseAction = false;
         public Vector2 rumbleOnUse = Vector2.zero;
         public AllowedController allowedUseControllers = AllowedController.Both;
+		public UnityEvent<VRTK_InteractionUnityEvent> OnUse;
+		public UnityEvent<VRTK_InteractionUnityEvent> OnEndUse;
 
         public event InteractableObjectEventHandler InteractableObjectTouched;
         public event InteractableObjectEventHandler InteractableObjectUntouched;
@@ -97,37 +103,55 @@ namespace VRTK
         public virtual void OnInteractableObjectTouched(InteractableObjectEventArgs e)
         {
             if (InteractableObjectTouched != null)
+            {
+            	OnTouch.Invoke(new VRTK_InteractionUnityEvent(gameObject, e.interactingObject));
                 InteractableObjectTouched(this, e);
+            }
         }
 
         public virtual void OnInteractableObjectUntouched(InteractableObjectEventArgs e)
         {
             if (InteractableObjectUntouched != null)
+			{
+            	OnEndTouch.Invoke(new VRTK_InteractionUnityEvent(gameObject, e.interactingObject));
                 InteractableObjectUntouched(this, e);
+            }
         }
 
         public virtual void OnInteractableObjectGrabbed(InteractableObjectEventArgs e)
         {
             if (InteractableObjectGrabbed != null)
+			{
+            	OnGrab.Invoke(new VRTK_InteractionUnityEvent(gameObject, e.interactingObject));
                 InteractableObjectGrabbed(this, e);
+            }
         }
 
         public virtual void OnInteractableObjectUngrabbed(InteractableObjectEventArgs e)
         {
             if (InteractableObjectUngrabbed != null)
+			{
+            	OnReleaseGrab.Invoke(new VRTK_InteractionUnityEvent(gameObject, e.interactingObject));
                 InteractableObjectUngrabbed(this, e);
+            }
         }
 
         public virtual void OnInteractableObjectUsed(InteractableObjectEventArgs e)
         {
             if (InteractableObjectUsed != null)
+			{
+            	OnUse.Invoke(new VRTK_InteractionUnityEvent(gameObject, e.interactingObject));
                 InteractableObjectUsed(this, e);
+            }
         }
 
         public virtual void OnInteractableObjectUnused(InteractableObjectEventArgs e)
         {
             if (InteractableObjectUnused != null)
+			{
+            	OnEndUse.Invoke(new VRTK_InteractionUnityEvent(gameObject, e.interactingObject));
                 InteractableObjectUnused(this, e);
+            }
         }
 
         public InteractableObjectEventArgs SetInteractableObjectEvent(GameObject interactingObject)
@@ -527,5 +551,18 @@ namespace VRTK
                 rb.velocity = Vector3.MoveTowards(rb.velocity, velocityTarget, maxDistanceDelta);
             }
         }
+    }
+
+    [System.Serializable]
+    public class VRTK_InteractionUnityEvent
+    {
+    	public GameObject InteractedObject;
+    	public GameObject InteractingObject;
+
+		public VRTK_InteractionUnityEvent(GameObject interacted, GameObject interacting)
+		{
+			InteractedObject = interacted;
+			InteractingObject = interacting;
+		}
     }
 }
