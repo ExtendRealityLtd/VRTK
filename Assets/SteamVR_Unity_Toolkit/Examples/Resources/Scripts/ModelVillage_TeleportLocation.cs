@@ -12,7 +12,7 @@ public class ModelVillage_TeleportLocation : VRTK_DestinationMarker
         if (controller && controller.usePressed)
         {
             var distance = Vector3.Distance(this.transform.position, destination.position);
-            OnDestinationMarkerSet(SeDestinationMarkerEvent(distance, destination, destination.position, (uint)controller.GetComponent<SteamVR_TrackedObject>().index));
+            OnDestinationMarkerSet(SetDestinationMarkerEvent(distance, destination, destination.position, (uint)controller.GetComponent<SteamVR_TrackedObject>().index));
         }
     }
 }

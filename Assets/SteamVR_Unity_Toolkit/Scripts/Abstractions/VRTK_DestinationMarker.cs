@@ -79,7 +79,7 @@ namespace VRTK
             headsetPositionCompensation = state;
         }
 
-        protected DestinationMarkerEventArgs SeDestinationMarkerEvent(float distance, Transform target, Vector3 position, uint controllerIndex)
+        protected DestinationMarkerEventArgs SetDestinationMarkerEvent(float distance, Transform target, Vector3 position, uint controllerIndex)
         {
             DestinationMarkerEventArgs e;
             e.controllerIndex = controllerIndex;

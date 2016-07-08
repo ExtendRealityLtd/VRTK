@@ -172,7 +172,7 @@ namespace VRTK
                 return;
             }
 
-            OnDestinationMarkerEnter(SeDestinationMarkerEvent(pointerContactDistance, pointerContactTarget, destinationPosition, controllerIndex));
+            OnDestinationMarkerEnter(SetDestinationMarkerEvent(pointerContactDistance, pointerContactTarget, destinationPosition, controllerIndex));
 
             var interactableObject = pointerContactTarget.GetComponent<VRTK_InteractableObject>();
             if (interactableObject && interactableObject.pointerActivatesUseAction && interactableObject.holdButtonToUse)
@@ -188,7 +188,7 @@ namespace VRTK
                 return;
             }
 
-            OnDestinationMarkerExit(SeDestinationMarkerEvent(pointerContactDistance, pointerContactTarget, destinationPosition, controllerIndex));
+            OnDestinationMarkerExit(SetDestinationMarkerEvent(pointerContactDistance, pointerContactTarget, destinationPosition, controllerIndex));
 
             var interactableObject = pointerContactTarget.GetComponent<VRTK_InteractableObject>();
             if (interactableObject && interactableObject.pointerActivatesUseAction && interactableObject.holdButtonToUse)
@@ -219,7 +219,7 @@ namespace VRTK
 
             if (!playAreaCursorCollided && (interactableObject == null || !interactableObject.pointerActivatesUseAction))
             {
-                OnDestinationMarkerSet(SeDestinationMarkerEvent(pointerContactDistance, pointerContactTarget, destinationPosition, controllerIndex));
+                OnDestinationMarkerSet(SetDestinationMarkerEvent(pointerContactDistance, pointerContactTarget, destinationPosition, controllerIndex));
             }
         }
 
