@@ -400,6 +400,9 @@ The following script parameters are available:
   pointer. If the script is being applied onto a controller then this
   parameter can be left blank as it will be auto populated by the
   controller the script is on at runtime.
+  * **Pointer Material:** The material to use on the rendered version
+  of the pointer. If no material is selected then the default
+  `WorldPointer` material will be used.
   * **Pointer Hit Color:** The colour of the beam when it is colliding
   with a valid target. It can be set to a different colour for each
   controller.
@@ -483,6 +486,9 @@ The following script parameters are available:
   pointer. If the script is being applied onto a controller then this
   parameter can be left blank as it will be auto populated by the
   controller the script is on at runtime.
+  * **Pointer Material:** The material to use on the rendered version
+  of the pointer. If no material is selected then the default
+  `WorldPointer` material will be used.
   * **Pointer Hit Color:** The colour of the beam when it is colliding
   with a valid target. It can be set to a different colour for each
   controller.
@@ -1482,6 +1488,9 @@ The following script parameters are available:
   pointer. If the script is being applied onto a controller then this
   parameter can be left blank as it will be auto populated by the
   controller the script is on at runtime.
+  * **Pointer Material:** The material to use on the rendered version
+  of the pointer. If no material is selected then the default
+  `WorldPointer` material will be used.
   * **Pointer Hit Color:** The colour of the beam when it is colliding
   with a valid target. It can be set to a different colour for each
   controller.
