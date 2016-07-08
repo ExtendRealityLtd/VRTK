@@ -38,6 +38,35 @@
             controllerVisible = on;
         }
 
+        public void SetControllerOpacity(float alpha)
+        {
+            alpha = Mathf.Clamp(alpha, 0f, 1f);
+            foreach (var renderer in this.gameObject.GetComponentsInChildren<Renderer>())
+            {
+                if(alpha < 1f)
+                {
+                    renderer.material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
+                    renderer.material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+                    renderer.material.SetInt("_ZWrite", 0);
+                    renderer.material.DisableKeyword("_ALPHATEST_ON");
+                    renderer.material.DisableKeyword("_ALPHABLEND_ON");
+                    renderer.material.EnableKeyword("_ALPHAPREMULTIPLY_ON");
+                    renderer.material.renderQueue = 3000;
+                } else
+                {
+                    renderer.material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
+                    renderer.material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.Zero);
+                    renderer.material.SetInt("_ZWrite", 1);
+                    renderer.material.DisableKeyword("_ALPHATEST_ON");
+                    renderer.material.DisableKeyword("_ALPHABLEND_ON");
+                    renderer.material.DisableKeyword("_ALPHAPREMULTIPLY_ON");
+                    renderer.material.renderQueue = -1;
+                }
+
+                renderer.material.color = new Color(renderer.material.color.r, renderer.material.color.g, renderer.material.color.b, alpha);
+            }
+        }
+
         public void TriggerHapticPulse(ushort strength)
         {
             hapticPulseStrength = (strength <= maxHapticVibration ? strength : maxHapticVibration);
