@@ -240,7 +240,7 @@ the `Events` parameter of the `Radial Menu Controller` script also
 attached to the prefab.
 
 An example of the `RadialMenu` Prefab can be viewed in the scene
-`SteamVR_Unity_Toolkit/Examples/030_Radial_Touchpad_Menu`, which
+`SteamVR_Unity_Toolkit/Examples/030_Controls_RadialTouchpadMenu`, which
 displays a radial menu for each controller. The left controller uses
 the `Hide On Release` variable, so it will only be visible if the
 left touchpad is being touched.
@@ -1762,7 +1762,7 @@ The current examples are:
   tooltips to game objects and to the controllers using the prefabs
   `ObjectTooltip` and `ControllerTooltips`.
 
-  * **030_Radial_Touchpad_Menu:** A scene that demonstrates adding
+  * **030_Controls_RadialTouchpadMenu:** A scene that demonstrates adding
   dynamic radial menus to controllers using the prefab `RadialMenu`.
 
   * **031_CameraRig_HeadsetGazePointer:** A scene that demonstrates
