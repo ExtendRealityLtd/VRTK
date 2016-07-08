@@ -27,10 +27,7 @@
 
         public void ShowTips(bool state)
         {
-            foreach (var tooltip in this.GetComponentsInChildren<VRTK_ObjectTooltip>())
-            {
-                tooltip.gameObject.SetActive(state);
-            }
+            this.gameObject.SetActive(state);
         }
 
         private void Start()
@@ -40,6 +37,29 @@
             touchpadInitialised = false;
             appMenuInitialised = false;
             InitialiseTips();
+
+            var controllerGlance = GameObject.FindObjectOfType<VRTK_HeadsetControllerGlance>();
+            if (controllerGlance)
+            {
+                controllerGlance.ControllerGlanceEnter += new ControllerGlanceEventHandler(ShowTooltips);
+                controllerGlance.ControllerGlanceExit += new ControllerGlanceEventHandler(HideTooltips);
+            }
+        }
+
+        private void ShowTooltips(object sender, ControllerGlanceEventArgs e)
+        {
+            if (e.controller == this.transform.parent.gameObject)
+            {
+                ShowTips(true);
+            }
+        }
+
+        private void HideTooltips(object sender, ControllerGlanceEventArgs e)
+        {
+            if (e.controller == this.transform.parent.gameObject)
+            {
+                ShowTips(false);
+            }
         }
 
         private void InitialiseTips()
@@ -94,6 +114,7 @@
 
                 tooltip.Reset();
             }
+            ShowTips(false);
         }
 
         private bool TipsInitialised()
