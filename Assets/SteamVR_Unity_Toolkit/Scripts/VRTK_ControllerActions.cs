@@ -2,6 +2,7 @@
 {
     using UnityEngine;
     using System.Collections;
+    using System.Collections.Generic;
 
     public class VRTK_ControllerActions : MonoBehaviour
     {
@@ -13,18 +14,20 @@
         private SteamVR_Controller.Device device;
         private ushort maxHapticVibration = 3999;
 
+        private Dictionary<GameObject, Material> storedMaterials;
+
         public bool IsControllerVisible()
         {
             return controllerVisible;
         }
 
-        public void ToggleControllerModel(bool on, GameObject grabbedChildObject)
+        public void ToggleControllerModel(bool state, GameObject grabbedChildObject)
         {
             foreach (MeshRenderer renderer in this.GetComponentsInChildren<MeshRenderer>())
             {
                 if (renderer.gameObject != grabbedChildObject && (grabbedChildObject == null || !renderer.transform.IsChildOf(grabbedChildObject.transform)))
                 {
-                    renderer.enabled = on;
+                    renderer.enabled = state;
                 }
             }
 
@@ -32,10 +35,10 @@
             {
                 if (renderer.gameObject != grabbedChildObject && (grabbedChildObject == null || !renderer.transform.IsChildOf(grabbedChildObject.transform)))
                 {
-                    renderer.enabled = on;
+                    renderer.enabled = state;
                 }
             }
-            controllerVisible = on;
+            controllerVisible = state;
         }
 
         public void SetControllerOpacity(float alpha)
@@ -43,7 +46,7 @@
             alpha = Mathf.Clamp(alpha, 0f, 1f);
             foreach (var renderer in this.gameObject.GetComponentsInChildren<Renderer>())
             {
-                if(alpha < 1f)
+                if (alpha < 1f)
                 {
                     renderer.material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
                     renderer.material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
@@ -52,7 +55,8 @@
                     renderer.material.DisableKeyword("_ALPHABLEND_ON");
                     renderer.material.EnableKeyword("_ALPHAPREMULTIPLY_ON");
                     renderer.material.renderQueue = 3000;
-                } else
+                }
+                else
                 {
                     renderer.material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
                     renderer.material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.Zero);
@@ -67,6 +71,73 @@
             }
         }
 
+        public void HighlightControllerElement(GameObject element, Color? highlight, float fadeDuration = 0f)
+        {
+            var renderer = element.GetComponent<Renderer>();
+            if (renderer && renderer.material)
+            {
+                storedMaterials.Add(element, new Material(renderer.material));
+                renderer.material.SetTexture("_MainTex", new Texture());
+                StartCoroutine(CycleColor(renderer.material, new Color(renderer.material.color.r, renderer.material.color.g, renderer.material.color.b), highlight ?? Color.white, fadeDuration));
+            }
+        }
+
+        public void UnhighlightControllerElement(GameObject element)
+        {
+            var renderer = element.GetComponent<Renderer>();
+            if (renderer && renderer.material)
+            {
+                renderer.material = new Material(storedMaterials[element]);
+                storedMaterials.Remove(element);
+            }
+        }
+
+        public void ToggleHighlightControllerElement(bool state, GameObject element, Color? highlight = null, float duration = 0f)
+        {
+            if (element)
+            {
+                if (state)
+                {
+                    HighlightControllerElement(element.gameObject, highlight ?? Color.white, duration);
+                }
+                else
+                {
+                    UnhighlightControllerElement(element.gameObject);
+                }
+            }
+        }
+
+        public void ToggleHighlightTrigger(bool state, Color? highlight = null, float duration = 0f)
+        {
+            ToggleHighlightAlias(state, "Model/trigger", highlight, duration);
+        }
+
+        public void ToggleHighlightGrip(bool state, Color? highlight = null, float duration = 0f)
+        {
+            ToggleHighlightAlias(state, "Model/lgrip", highlight, duration);
+            ToggleHighlightAlias(state, "Model/rgrip", highlight, duration);
+        }
+
+        public void ToggleHighlightTouchpad(bool state, Color? highlight = null, float duration = 0f)
+        {
+            ToggleHighlightAlias(state, "Model/trackpad", highlight, duration);
+        }
+
+        public void ToggleHighlightApplicationMenu(bool state, Color? highlight = null, float duration = 0f)
+        {
+            ToggleHighlightAlias(state, "Model/button", highlight, duration);
+        }
+
+        public void ToggleHighlightController(bool state, Color? highlight = null, float duration = 0f)
+        {
+            ToggleHighlightTrigger(state, highlight, duration);
+            ToggleHighlightGrip(state, highlight, duration);
+            ToggleHighlightTouchpad(state, highlight, duration);
+            ToggleHighlightApplicationMenu(state, highlight, duration);
+            ToggleHighlightAlias(state, "Model/sys_button", highlight, duration);
+            ToggleHighlightAlias(state, "Model/body", highlight, duration);
+        }
+
         public void TriggerHapticPulse(ushort strength)
         {
             hapticPulseStrength = (strength <= maxHapticVibration ? strength : maxHapticVibration);
@@ -76,13 +147,14 @@
         public void TriggerHapticPulse(ushort strength, float duration, float pulseInterval)
         {
             hapticPulseStrength = (strength <= maxHapticVibration ? strength : maxHapticVibration);
-            StartCoroutine(Pulse(duration, hapticPulseStrength, pulseInterval));
+            StartCoroutine(HapticPulse(duration, hapticPulseStrength, pulseInterval));
         }
 
         private void Awake()
         {
             trackedController = GetComponent<SteamVR_TrackedObject>();
             this.gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
+            storedMaterials = new Dictionary<GameObject, Material>();
         }
 
         private void Update()
@@ -91,7 +163,7 @@
             device = SteamVR_Controller.Input((int)controllerIndex);
         }
 
-        private IEnumerator Pulse(float duration, int hapticPulseStrength, float pulseInterval)
+        private IEnumerator HapticPulse(float duration, int hapticPulseStrength, float pulseInterval)
         {
             if (pulseInterval <= 0)
             {
@@ -103,6 +175,26 @@
                 device.TriggerHapticPulse((ushort)hapticPulseStrength);
                 yield return new WaitForSeconds(pulseInterval);
                 duration -= pulseInterval;
+            }
+        }
+
+        private IEnumerator CycleColor(Material material, Color startColor, Color endColor, float duration)
+        {
+            var elapsedTime = 0f;
+            while (elapsedTime <= duration)
+            {
+                elapsedTime += Time.deltaTime;
+                material.color = Color.Lerp(startColor, endColor, (elapsedTime / duration));
+                yield return null;
+            }
+        }
+
+        private void ToggleHighlightAlias(bool state, string transformPath, Color? highlight, float duration = 0f)
+        {
+            var element = transform.Find(transformPath);
+            if (element)
+            {
+                ToggleHighlightControllerElement(state, element.gameObject, highlight, duration);
             }
         }
     }
