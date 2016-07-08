@@ -1,20 +1,26 @@
 ﻿namespace VRTK
 {
     using UnityEngine;
+    using UnityEngine.Events;
 
     public class VRTK_Button : VRTK_Control
     {
+        [System.Serializable]
+        public class ButtonEvents
+        {
+            public UnityEvent OnPush;
+        }
+
         public enum Direction
         {
             autodetect, x, y, z, negX, negY, negZ
         }
 
+        public ButtonEvents events;
+
         public Direction direction = Direction.autodetect;
         public float activationDistance = 1.0f;
         public float buttonStrength = 5.0f;
-
-        public delegate void PushAction();
-        public event PushAction OnPushed;
 
         private static float MAX_AUTODETECT_ACTIVATION_LENGTH = 4; // full hight of button
 
@@ -164,10 +170,7 @@
                 if (oldState == 0)
                 {
                     value = 1;
-                    if (OnPushed != null)
-                    {
-                        OnPushed();
-                    }
+                    events.OnPush.Invoke();
                 }
             }
             else
