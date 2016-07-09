@@ -47,7 +47,15 @@
 
         private void OnGrabObject(object sender, ObjectInteractEventArgs e)
         {
-            Physics.IgnoreCollision(this.GetComponent<Collider>(), e.target.GetComponent<Collider>(), true);
+            if(e.target.GetComponent<Collider>())
+            {
+                Physics.IgnoreCollision(this.GetComponent<Collider>(), e.target.GetComponent<Collider>(), true);
+            }
+
+            foreach(var childCollider in e.target.GetComponentsInChildren<Collider>())
+            {
+                Physics.IgnoreCollision(this.GetComponent<Collider>(), childCollider, true);
+            }
         }
 
         private void OnUngrabObject(object sender, ObjectInteractEventArgs e)

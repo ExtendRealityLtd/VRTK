@@ -3,6 +3,7 @@
     using UnityEngine;
     using System.Collections;
 
+    [RequireComponent(typeof(VRTK_PlayerPresence))]
     public class VRTK_TouchpadWalking : MonoBehaviour
     {
         [SerializeField]
