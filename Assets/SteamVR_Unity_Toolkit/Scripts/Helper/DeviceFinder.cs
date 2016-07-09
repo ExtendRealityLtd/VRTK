@@ -79,5 +79,10 @@
         {
             return GameObject.FindObjectOfType<SteamVR_Camera>().GetComponent<Transform>();
         }
+
+        public static SteamVR_ControllerManager ControllerManager()
+        {
+            return GameObject.FindObjectOfType<SteamVR_ControllerManager>();
+        }
     }
 }
