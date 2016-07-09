@@ -76,7 +76,10 @@
             var renderer = element.GetComponent<Renderer>();
             if (renderer && renderer.material)
             {
-                storedMaterials.Add(element, new Material(renderer.material));
+                if (!storedMaterials.ContainsKey(element))
+                {
+                    storedMaterials.Add(element, new Material(renderer.material));
+                }
                 renderer.material.SetTexture("_MainTex", new Texture());
                 StartCoroutine(CycleColor(renderer.material, new Color(renderer.material.color.r, renderer.material.color.g, renderer.material.color.b), highlight ?? Color.white, fadeDuration));
             }
@@ -87,8 +90,11 @@
             var renderer = element.GetComponent<Renderer>();
             if (renderer && renderer.material)
             {
-                renderer.material = new Material(storedMaterials[element]);
-                storedMaterials.Remove(element);
+                if (storedMaterials.ContainsKey(element))
+                {
+                    renderer.material = new Material(storedMaterials[element]);
+                    storedMaterials.Remove(element);
+                }
             }
         }
 

@@ -49,7 +49,7 @@
             }
         }
 
-        private void Start()
+        private void Awake()
         {
             triggerInitialised = false;
             gripInitialised = false;
