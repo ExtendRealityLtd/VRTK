@@ -227,6 +227,11 @@
             return CalculateTouchpadAxisAngle(touchpadAxis);
         }
 
+        public bool AnyButtonPressed()
+        {
+            return (triggerPressed || gripPressed || touchpadPressed || applicationMenuPressed);
+        }
+
         private ControllerInteractionEventArgs SetButtonEvent(ref bool buttonBool, bool value, float buttonPressure)
         {
             buttonBool = value;
