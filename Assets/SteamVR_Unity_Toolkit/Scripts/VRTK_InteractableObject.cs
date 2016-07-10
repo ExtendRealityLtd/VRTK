@@ -13,7 +13,7 @@ namespace VRTK
     using UnityEngine;
     using System.Collections;
     using System.Collections.Generic;
-
+    using UnityEngine.Events;
 
     public struct InteractableObjectEventArgs
     {
@@ -44,6 +44,8 @@ namespace VRTK
         public Color touchHighlightColor = Color.clear;
         public Vector2 rumbleOnTouch = Vector2.zero;
         public AllowedController allowedTouchControllers = AllowedController.Both;
+		public VRTK_IEvent OnTouch;
+		public VRTK_IEvent OnEndTouch;
 
         [Header("Grab Interactions", order = 2)]
         public bool isGrabbable = false;
@@ -55,6 +57,8 @@ namespace VRTK
         public bool precisionSnap;
         public Transform rightSnapHandle;
         public Transform leftSnapHandle;
+		public VRTK_IEvent OnGrab;
+		public VRTK_IEvent OnReleaseGrab;
 
         [Header("Grab Mechanics", order = 3)]
         public GrabAttachType grabAttachMechanic = GrabAttachType.Fixed_Joint;
@@ -70,6 +74,8 @@ namespace VRTK
         public bool pointerActivatesUseAction = false;
         public Vector2 rumbleOnUse = Vector2.zero;
         public AllowedController allowedUseControllers = AllowedController.Both;
+		public VRTK_IEvent OnUse;
+		public VRTK_IEvent OnEndUse;
 
         public event InteractableObjectEventHandler InteractableObjectTouched;
         public event InteractableObjectEventHandler InteractableObjectUntouched;
@@ -97,37 +103,55 @@ namespace VRTK
         public virtual void OnInteractableObjectTouched(InteractableObjectEventArgs e)
         {
             if (InteractableObjectTouched != null)
+            {
                 InteractableObjectTouched(this, e);
+            }
+			OnTouch.Invoke(gameObject, e.interactingObject);
         }
 
         public virtual void OnInteractableObjectUntouched(InteractableObjectEventArgs e)
         {
             if (InteractableObjectUntouched != null)
+			{
                 InteractableObjectUntouched(this, e);
+            }
+			OnEndTouch.Invoke(gameObject, e.interactingObject);
         }
 
         public virtual void OnInteractableObjectGrabbed(InteractableObjectEventArgs e)
         {
             if (InteractableObjectGrabbed != null)
+			{
                 InteractableObjectGrabbed(this, e);
+            }
+			OnGrab.Invoke(gameObject, e.interactingObject);
         }
 
         public virtual void OnInteractableObjectUngrabbed(InteractableObjectEventArgs e)
         {
             if (InteractableObjectUngrabbed != null)
+			{
                 InteractableObjectUngrabbed(this, e);
+            }
+			OnReleaseGrab.Invoke(gameObject, e.interactingObject);
         }
 
         public virtual void OnInteractableObjectUsed(InteractableObjectEventArgs e)
         {
             if (InteractableObjectUsed != null)
+			{
                 InteractableObjectUsed(this, e);
+            }
+			OnUse.Invoke(gameObject, e.interactingObject);
         }
 
         public virtual void OnInteractableObjectUnused(InteractableObjectEventArgs e)
         {
             if (InteractableObjectUnused != null)
+			{
                 InteractableObjectUnused(this, e);
+            }
+			OnEndUse.Invoke(gameObject, e.interactingObject);
         }
 
         public InteractableObjectEventArgs SetInteractableObjectEvent(GameObject interactingObject)
@@ -530,4 +554,8 @@ namespace VRTK
             }
         }
     }
+
+	[System.Serializable]
+	public class VRTK_IEvent : UnityEvent<GameObject, GameObject>{}
+
 }

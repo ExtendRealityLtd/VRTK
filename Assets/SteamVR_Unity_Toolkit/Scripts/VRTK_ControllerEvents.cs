@@ -2,6 +2,7 @@
 {
     using UnityEngine;
     using System.Collections;
+	using UnityEngine.Events;
 
     public struct ControllerInteractionEventArgs
     {
@@ -30,6 +31,8 @@
         public ButtonAlias menuToggleButton = ButtonAlias.Application_Menu;
 
         public int axisFidelity = 1;
+
+		public VRTK_ControllerUnityEvents Events;
 
         public bool triggerPressed = false;
         public bool triggerAxisChanged = false;
@@ -88,25 +91,37 @@
         public virtual void OnTriggerPressed(ControllerInteractionEventArgs e)
         {
             if (TriggerPressed != null)
-                TriggerPressed(this, e);
+            {
+				TriggerPressed(this, e);
+            }
+			Events.OnTriggerPress.Invoke(gameObject);
         }
 
         public virtual void OnTriggerReleased(ControllerInteractionEventArgs e)
         {
             if (TriggerReleased != null)
+			{           	
                 TriggerReleased(this, e);
+            }
+			Events.OnTriggerReleased.Invoke(gameObject);
         }
 
         public virtual void OnTriggerAxisChanged(ControllerInteractionEventArgs e)
         {
             if (TriggerAxisChanged != null)
-                TriggerAxisChanged(this, e);
+            {
+				TriggerAxisChanged(this, e);
+            } 
         }
 
         public virtual void OnApplicationMenuPressed(ControllerInteractionEventArgs e)
         {
             if (ApplicationMenuPressed != null)
+			{
+            	
                 ApplicationMenuPressed(this, e);
+            }
+			Events.OnMenuPress.Invoke(gameObject);
         }
 
         public virtual void OnApplicationMenuReleased(ControllerInteractionEventArgs e)
@@ -118,43 +133,64 @@
         public virtual void OnGripPressed(ControllerInteractionEventArgs e)
         {
             if (GripPressed != null)
+			{            	
                 GripPressed(this, e);
+            }
+			Events.OnGripPress.Invoke(gameObject);
         }
 
         public virtual void OnGripReleased(ControllerInteractionEventArgs e)
         {
             if (GripReleased != null)
+			{           	
                 GripReleased(this, e);
+            }
+			Events.OnGripRelease.Invoke(gameObject);
         }
 
         public virtual void OnTouchpadPressed(ControllerInteractionEventArgs e)
         {
             if (TouchpadPressed != null)
+			{            	
                 TouchpadPressed(this, e);
+            }
+			Events.OnTouchpadPress.Invoke(gameObject);
         }
 
         public virtual void OnTouchpadReleased(ControllerInteractionEventArgs e)
         {
             if (TouchpadReleased != null)
+			{           	
                 TouchpadReleased(this, e);
+            }
+			Events.OnTouchpadReleasePress.Invoke(gameObject);
         }
 
         public virtual void OnTouchpadTouchStart(ControllerInteractionEventArgs e)
         {
             if (TouchpadTouchStart != null)
+			{          	
                 TouchpadTouchStart(this, e);
+            }
+			Events.OnTouchpadTouch.Invoke(gameObject);
         }
 
         public virtual void OnTouchpadTouchEnd(ControllerInteractionEventArgs e)
         {
             if (TouchpadTouchEnd != null)
+			{            	
                 TouchpadTouchEnd(this, e);
+            }
+			Events.OnTouchpadReleaseTouch.Invoke(gameObject);
         }
 
         public virtual void OnTouchpadAxisChanged(ControllerInteractionEventArgs e)
         {
             if (TouchpadAxisChanged != null)
+			{          	
                 TouchpadAxisChanged(this, e);
+            }
+			Events.OnTouchpadDrag.Invoke(e.touchpadAxis);
         }
 
         public virtual void OnAliasPointerOn(ControllerInteractionEventArgs e)
@@ -443,4 +479,29 @@
             }
         }
     }
+
+	[System.Serializable]
+	public class VRTK_GEvent : UnityEvent<GameObject>{}
+
+	[System.Serializable]
+	public class VRTK_VEvent : UnityEvent<Vector2>{}
+
+	[System.Serializable]
+	public class VRTK_ControllerUnityEvents
+	{
+		public VRTK_GEvent OnTriggerPress;
+		public VRTK_GEvent OnTriggerReleased;
+		public VRTK_GEvent OnMenuPress;
+		public VRTK_GEvent OnTouchpadPress;
+		public VRTK_GEvent OnTouchpadReleasePress;
+		public VRTK_GEvent OnTouchpadTouch;
+		public VRTK_GEvent OnTouchpadReleaseTouch;
+		public VRTK_VEvent OnTouchpadDrag;
+		public VRTK_GEvent OnGripPress;
+		public VRTK_GEvent OnGripRelease;
+	}
+
+
 }
+
+
