@@ -219,7 +219,8 @@ namespace VRTK
 
             Ray projectedBeamDownRaycast = new Ray(projectedBeamDown.transform.position, Vector3.down);
             RaycastHit collidedWith;
-            var downRayHit = Physics.Raycast(projectedBeamDownRaycast, out collidedWith, pointerLength, ~layersToIgnore);
+
+            var downRayHit = Physics.Raycast(projectedBeamDownRaycast, out collidedWith, float.PositiveInfinity, ~layersToIgnore);
 
             if (!downRayHit || (pointerContactTarget && pointerContactTarget != collidedWith.transform))
             {
