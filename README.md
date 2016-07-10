@@ -1306,7 +1306,7 @@ Transforms a game object into a chest with a lid. The direction can be either
 x or z and can also be auto-detected with very high reliability.
 
 The script will instantiate the required Rigidbody, Interactable and
-HingeJoing components automatically in case they do not exist yet. It will
+HingeJoint components automatically in case they do not exist yet. It will
 expect three distinct game objects: a body, a lid and a handle. These should
 be independent and not children of each other.
 
@@ -1318,6 +1318,33 @@ The following script parameters are available:
   * **Lid:** The game object for the lid.
   * **Body:** The game object for the body.
   * **Handle:** The game object for the handle. 
+
+##### VRTK_Drawer
+
+Transforms a game object into a drawer. The direction can be either
+x or z and can also be auto-detected with very high reliability.
+
+The script will instantiate the required Rigidbody, Interactable and
+Joint components automatically in case they do not exist yet. It will
+expect two distinct game objects: a body and a handle. These should
+be independent and not children of each other. The distance to which the
+drawer can be pulled out will automatically set depending on the length
+of it.
+
+It is possible to supply a third game object which is the root of the 
+contents inside the drawer. When this is specified the 
+VRTK_InteractableObject components will be automatically deactivated
+in case the drawer is closed or not yet far enough open. This eliminates
+the issue that a user could grab an object inside a drawer although it
+is closed.
+
+The following script parameters are available:
+
+  * **Direction:** The axis on which the chest should open. All
+  other axis will be frozen.
+  * **Body:** The game object for the body.
+  * **Handle:** The game object for the handle. 
+  * **Content:** The parent game object for the drawer content elements. 
 
 ##### VRTK_Knob
 
