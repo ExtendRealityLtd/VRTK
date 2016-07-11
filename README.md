@@ -263,6 +263,33 @@ common controller actions. The following public methods are available:
   controller model to the given boolean state. If true is passed
   then the controller model is displayed, if false is passed then
   the controller model is hidden.
+  * **SetControllerOpacity(float alpha):** changes the transparency
+  of the controller model to the given alpha.
+  * **HighlightControllerElement(GameObject element, Color? highlight, float fadeDuration = 0f):**
+  initiates a change in material colour to the `highlight` colour
+  on given `element`. It will lerp to the new colour if a
+  `fadeDuration` is provided.
+  * **UnhighlightControllerElement(GameObject element):** reverts the
+  given controller `element` back to it's original material state.
+  * **ToggleHighlightControllerElement(bool state, GameObject element, Color? highlight = null, float duration = 0f):**
+  a helper method which calls `HighlightControllerElement` if the given
+  `state` is true and calls `UnhighlightControllerElement` if the given
+  `state` is false.
+  * **ToggleHighlightTrigger(bool state, Color? highlight = null, float duration = 0f):**
+  a helper method to toggle the default HTC Vive controller trigger
+  button to the given `highlight` colour over the given `duration`.
+  * **ToggleHighlightGrip(bool state, Color? highlight = null, float duration = 0f):**
+  a helper method to toggle the default HTC Vive controller grip
+  button to the given `highlight` colour over the given `duration`.
+  * **ToggleHighlightTouchpad(bool state, Color? highlight = null, float duration = 0f):**
+  a helper method to toggle the default HTC Vive controller touchpad
+  button to the given `highlight` colour over the given `duration`.
+  * **ToggleHighlightApplicationMenu(bool state, Color? highlight = null, float duration = 0f):**
+  a helper method to toggle the default HTC Vive controller app menu
+  button to the given `highlight` colour over the given `duration`.
+  * **ToggleHighlightController(bool state, Color? highlight = null, float duration = 0f):**
+  a helper method to toggle the entire controller model to the given
+  `highlight` colour over the given `duration`.
   * **TriggerHapticPulse(int duration, ushort strength):**
   initiates the controller to begin vibrating for the given tick
   duration provided in the first parameter at a vibration intensity
@@ -273,6 +300,12 @@ An example of the `VRTK_ControllerActions` script can be viewed in
 the scene `SteamVR_Unity_Toolkit/Examples/016_Controller_HapticRumble`
 which demonstrates the ability to hide a controller model and make
 the controller vibrate for a given length of time at a given intensity.
+
+Another example can be viewed in the scene
+`SteamVR_Unity_Toolkit/Examples/035_Controller_OpacityAndHighlighting`
+which demonstrates the ability to change the opacity of a controller
+model and to highlight specific elements of a controller such as the
+buttons or even the entire controller model.
 
 #### Controller Events (VRTK_ControllerEvents)
 
@@ -1816,6 +1849,11 @@ The current examples are:
   interaction with Unity UI elements using a Simple Pointer beam. The
   left Controller controls a Simple Pointer on the headset to
   demonstrate gaze interaction with Unity UI elements.
+
+  * **035_Controller_OpacityAndHighlighting:** A scene that
+  demonstrates how to change the opacity of the controller and how
+  to highlight elements of the controller such as the buttons or even
+  the entire controller model.
 
 ## Contributing
 
