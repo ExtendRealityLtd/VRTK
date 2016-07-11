@@ -136,7 +136,8 @@ namespace VRTK
         {
             if (adjustYForTerrain && target.GetComponent<Terrain>())
             {
-                position.y = Terrain.activeTerrain.SampleHeight(position);
+                var terrainHeight = Terrain.activeTerrain.SampleHeight(position);
+                position.y = (terrainHeight > position.y ? position.y : terrainHeight);
             }
             return position;
         }
