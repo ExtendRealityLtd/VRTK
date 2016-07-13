@@ -22,6 +22,7 @@ namespace VRTK
         public float pointerThickness = 0.002f;
         public float pointerLength = 100f;
         public bool showPointerTip = true;
+        public GameObject customPointerCursor;
         public LayerMask layersToIgnore = Physics.IgnoreRaycastLayer;
 
         private GameObject pointerHolder;
@@ -65,13 +66,20 @@ namespace VRTK
             pointer.AddComponent<Rigidbody>().isKinematic = true;
             pointer.layer = LayerMask.NameToLayer("Ignore Raycast");
 
-            pointerTip = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            if(customPointerCursor == null)
+            {
+                pointerTip = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                pointerTip.transform.localScale = pointerTipScale;
+            } else
+            {
+                pointerTip = Instantiate(customPointerCursor);
+            }
+
             pointerTip.transform.name = string.Format("[{0}]WorldPointer_SimplePointer_PointerTip", this.gameObject.name);
             Utilities.SetPlayerObject(pointerTip, VRTK_PlayerObject.ObjectTypes.Pointer);
             pointerTip.transform.parent = pointerHolder.transform;
-            pointerTip.transform.localScale = pointerTipScale;
 
-            pointerTip.GetComponent<SphereCollider>().isTrigger = true;
+            pointerTip.GetComponent<Collider>().isTrigger = true;
             pointerTip.AddComponent<Rigidbody>().isKinematic = true;
             pointerTip.layer = LayerMask.NameToLayer("Ignore Raycast");
 

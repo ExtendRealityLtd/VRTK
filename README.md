@@ -474,6 +474,8 @@ The following script parameters are available:
   stopping.
   * **Show Pointer Tip:** Toggle whether the cursor is shown on the end
   of the pointer beam.
+  * **Custom Pointer Cursor:** A custom Game Object can be applied
+  here to use instead of the default sphere for the pointer cursor.
   * **Layers To Ignore:** The layers to ignore when raycasting.
 
 The Simple Pointer object extends the `VRTK_WorldPointer` abstract
