@@ -49,6 +49,23 @@
             }
         }
 
+        public static ControllerHand GetControllerHand(GameObject controller)
+        {
+            var controllerManager = GameObject.FindObjectOfType<SteamVR_ControllerManager>();
+
+            if (controllerManager && controller == controllerManager.left)
+            {
+                return ControllerHand.Left;
+            }
+
+            if (controllerManager && controller == controllerManager.right)
+            {
+                return ControllerHand.Right;
+            }
+
+            return ControllerHand.None;
+        }
+
         public static bool IsControllerOfHand(GameObject checkController, ControllerHand hand)
         {
             var controllerManager = GameObject.FindObjectOfType<SteamVR_ControllerManager>();
