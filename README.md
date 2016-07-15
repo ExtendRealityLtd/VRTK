@@ -187,6 +187,9 @@ If the transforms for the buttons are not provided, then the script
 will attempt to find the attach transforms on the default controller
 model in the `[CameraRig]` prefab.
 
+If no text is provided for one of the elements then the tooltip for
+that element will be set to disabled.
+
 An example of the `ControllerTooltips` Prefab can be viewed in the
 scene `SteamVR_Unity_Toolkit/Examples/029_Controller_Tooltips` which
 displays two cubes that have an object tooltip added to them along with

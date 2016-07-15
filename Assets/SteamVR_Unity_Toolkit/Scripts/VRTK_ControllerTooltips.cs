@@ -116,6 +116,11 @@
                 tooltip.lineColor = tipLineColor;
 
                 tooltip.Reset();
+
+                if(tipText.Trim().Length == 0)
+                {
+                    tooltip.gameObject.SetActive(false);
+                }
             }
         }
 
