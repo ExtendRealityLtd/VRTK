@@ -25,6 +25,7 @@
         }
 
         public ButtonAlias pointerToggleButton = ButtonAlias.Touchpad_Press;
+        public ButtonAlias pointerSetButton = ButtonAlias.Touchpad_Press;
         public ButtonAlias grabToggleButton = ButtonAlias.Grip;
         public ButtonAlias useToggleButton = ButtonAlias.Trigger;
         public ButtonAlias menuToggleButton = ButtonAlias.Application_Menu;
@@ -65,6 +66,7 @@
 
         public event ControllerInteractionEventHandler AliasPointerOn;
         public event ControllerInteractionEventHandler AliasPointerOff;
+        public event ControllerInteractionEventHandler AliasPointerSet;
 
         public event ControllerInteractionEventHandler AliasGrabOn;
         public event ControllerInteractionEventHandler AliasGrabOff;
@@ -167,6 +169,12 @@
         {
             if (AliasPointerOff != null)
                 AliasPointerOff(this, e);
+        }
+
+        public virtual void OnAliasPointerSet(ControllerInteractionEventArgs e)
+        {
+            if (AliasPointerSet != null)
+                AliasPointerSet(this, e);
         }
 
         public virtual void OnAliasGrabOn(ControllerInteractionEventArgs e)
@@ -280,6 +288,14 @@
                 {
                     pointerPressed = false;
                     OnAliasPointerOff(SetButtonEvent(ref buttonBool, false, buttonPressure));
+                }
+            }
+
+            if (pointerSetButton == type)
+            {
+                if (! touchDown)
+                {
+                    OnAliasPointerSet(SetButtonEvent(ref buttonBool, true, buttonPressure));
                 }
             }
 

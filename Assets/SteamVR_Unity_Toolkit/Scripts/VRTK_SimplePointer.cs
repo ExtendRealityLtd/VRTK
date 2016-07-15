@@ -120,12 +120,6 @@ namespace VRTK
             }
         }
 
-        protected override void DisablePointerBeam(object sender, ControllerInteractionEventArgs e)
-        {
-            base.PointerSet();
-            base.DisablePointerBeam(sender, e);
-        }
-
         private void SetPointerTransform(float setLength, float setThicknes)
         {
             //if the additional decimal isn't added then the beam position glitches

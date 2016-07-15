@@ -380,6 +380,8 @@ buttons are pressed. These action aliases can be mapped to a
 preferred controller button. The aliases are:
 
   * **Toggle Pointer:** Common action of turning a laser pointer on/off
+  * **Pointer Set:** Common action of setting a destination marker from
+  the cursor position of the pointer
   * **Toggle Grab:** Common action of grabbing game objects
   * **Toggle Use:** Common action of using game objects
   * **Toggle Menu:** Common action of bringing up an in-game menu
@@ -388,10 +390,11 @@ Each of the above aliases can have the preferred controller button
 mapped to their usage by selecting it from the drop down on the script
 parameters window.
 
-When the set button is pressed it will emit the actual button event as
-well as an additional event that the alias is "On". When the set button
-is released it will emit the actual button event as well as an
-additional event that the alias button is "Off".
+When the relevant button is pressed it will emit the actual button
+event as well as an additional event that the alias is `On`. When
+the set button is released it will emit the actual button event as
+well as an additional event that the alias button is `Off`. The
+`Pointer Set` alias is only triggered when the button is released.
 
 Listening for these alias events rather than the actual button events
 means it's easier to customise the controller buttons to the actions
@@ -684,7 +687,8 @@ scene `SteamVR_Unity_Toolkit/Examples/004_CameraRig_BasicTeleport`.
 The scene uses the `VRTK_SimplePointer` script on the Controllers to
 initiate a laser pointer by pressing the `Touchpad` on the controller
 and when the laser pointer is deactivated (release the `Touchpad`)
-then the user is teleported to the location of the laser pointer tip.
+then the user is teleported to the location of the laser pointer tip
+as this is where the pointer destination marker position is set to.
 
 #### Height Adjustable Teleporter (VRTK_HeightAdjustTeleport)
 
