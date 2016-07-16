@@ -106,7 +106,7 @@ namespace VRTK
                 activateDelayTimer -= Time.deltaTime;
             }
 
-            if (playAreaCursor.activeSelf)
+            if (playAreaCursor && playAreaCursor.activeSelf)
             {
                 UpdateCollider();
             }
