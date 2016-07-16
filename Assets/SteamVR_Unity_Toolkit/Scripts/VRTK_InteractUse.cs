@@ -16,6 +16,7 @@ namespace VRTK
     using UnityEngine;
     using System.Collections;
 
+    [RequireComponent(typeof(VRTK_InteractTouch)), RequireComponent(typeof(VRTK_ControllerEvents))]
     public class VRTK_InteractUse : MonoBehaviour
     {
         public bool hideControllerOnUse = false;
