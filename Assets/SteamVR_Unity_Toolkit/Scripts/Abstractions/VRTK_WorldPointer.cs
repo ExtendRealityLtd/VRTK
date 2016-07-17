@@ -25,6 +25,7 @@ namespace VRTK
         public bool showPlayAreaCursor = false;
         public Vector2 playAreaCursorDimensions = Vector2.zero;
         public bool handlePlayAreaCursorCollisions = false;
+        public string ignoreTargetWithTagOrClass;
         public pointerVisibilityStates pointerVisibility = pointerVisibilityStates.On_When_Active;
 
         public float activateDelay = 0f;
@@ -134,7 +135,7 @@ namespace VRTK
         protected virtual void SetPlayAreaCursorTransform(Vector3 destination)
         {
             var offset = Vector3.zero;
-            if(headsetPositionCompensation)
+            if (headsetPositionCompensation)
             {
                 var playAreaPos = new Vector3(playArea.transform.position.x, 0, playArea.transform.position.z);
                 var headsetPos = new Vector3(headset.position.x, 0, headset.position.z);
@@ -255,7 +256,7 @@ namespace VRTK
                 NavMeshHit hit;
                 validNavMeshLocation = NavMesh.SamplePosition(target.position, out hit, 1.0f, NavMesh.AllAreas);
             }
-            if(!checkNavMesh)
+            if (!checkNavMesh)
             {
                 validNavMeshLocation = true;
             }
@@ -330,6 +331,7 @@ namespace VRTK
 
             var playAreaCursorScript = playAreaCursor.AddComponent<VRTK_PlayAreaCollider>();
             playAreaCursorScript.SetParent(this.gameObject);
+            playAreaCursorScript.SetIgnoreTarget(ignoreTargetWithTagOrClass);
             playAreaCursor.layer = LayerMask.NameToLayer("Ignore Raycast");
 
             var playAreaBoundaryX = playArea.transform.localScale.x / 2;
@@ -364,15 +366,26 @@ namespace VRTK
     public class VRTK_PlayAreaCollider : MonoBehaviour
     {
         private GameObject parent;
+        private string ignoreTargetWithTagOrClass;
 
         public void SetParent(GameObject setParent)
         {
             parent = setParent;
         }
 
+        public void SetIgnoreTarget(string ignore)
+        {
+            ignoreTargetWithTagOrClass = ignore;
+        }
+
+        private bool ValidTarget(Collider collider)
+        {
+            return (!collider.GetComponent<VRTK_PlayerObject>() & collider.tag != ignoreTargetWithTagOrClass && collider.GetComponent(ignoreTargetWithTagOrClass) == null);
+        }
+
         private void OnTriggerStay(Collider collider)
         {
-            if (parent.GetComponent<VRTK_WorldPointer>().IsActive() && !collider.GetComponent<VRTK_PlayerObject>())
+            if (parent.GetComponent<VRTK_WorldPointer>().IsActive() && ValidTarget(collider))
             {
                 parent.GetComponent<VRTK_WorldPointer>().setPlayAreaCursorCollision(true);
             }
@@ -380,7 +393,7 @@ namespace VRTK
 
         private void OnTriggerExit(Collider collider)
         {
-            if (!collider.GetComponent<VRTK_PlayerObject>())
+            if (ValidTarget(collider))
             {
                 parent.GetComponent<VRTK_WorldPointer>().setPlayAreaCursorCollision(false);
             }

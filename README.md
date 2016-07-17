@@ -456,6 +456,9 @@ The following script parameters are available:
   pointer colour will change to the `Pointer Miss Color` and the
   `WorldPointerDestinationSet` event will not be triggered, which will
   prevent teleporting into areas where the play area will collide.
+  * **Ignore Target With Tag Or Class:** A string that specifies an
+  object Tag or the name of a Script attached to an obejct and
+  notifies the play area cursor to ignore collisions with the object.
   * **Pointer Visibility:** Determines when the pointer beam should be
   displayed:
    * `On_When_Active` only shows the pointer beam when the Pointer
@@ -544,6 +547,9 @@ The following script parameters are available:
   pointer colour will change to the `Pointer Miss Color` and the
   `WorldPointerDestinationSet` event will not be triggered, which will
   prevent teleporting into areas where the play area will collide.
+  * **Ignore Target With Tag Or Class:** A string that specifies an
+  object Tag or the name of a Script attached to an obejct and
+  notifies the play area cursor to ignore collisions with the object.
   * **Pointer Visibility:** Determines when the pointer beam should be
   displayed:
    * `On_When_Active` only shows the pointer beam when the Pointer
@@ -1573,6 +1579,9 @@ The following script parameters are available:
   pointer colour will change to the `Pointer Miss Color` and the
   `WorldPointerDestinationSet` event will not be triggered, which will
   prevent teleporting into areas where the play area will collide.
+  * **Ignore Target With Tag Or Class:** A string that specifies an
+  object Tag or the name of a Script attached to an obejct and
+  notifies the play area cursor to ignore collisions with the object.
   * **Pointer Visibility:** Determines when the pointer beam should be
   displayed:
    * `On_When_Active` only shows the pointer beam when the Pointer
