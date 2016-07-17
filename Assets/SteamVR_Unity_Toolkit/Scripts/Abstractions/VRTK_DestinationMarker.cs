@@ -22,6 +22,7 @@ namespace VRTK
 {
     using UnityEngine;
     using System.Collections;
+    using System.Collections.Generic;
 
     public struct DestinationMarkerEventArgs
     {
@@ -42,7 +43,8 @@ namespace VRTK
         public event DestinationMarkerEventHandler DestinationMarkerExit;
         public event DestinationMarkerEventHandler DestinationMarkerSet;
 
-        protected string invalidTargetWithTagOrClass;
+        protected List<string> ignoreTargetWithTags;
+        protected List<string> ignoreTargetWithComponents;
         protected bool checkNavMesh;
         protected bool headsetPositionCompensation;
 
@@ -64,9 +66,10 @@ namespace VRTK
                 DestinationMarkerSet(this, e);
         }
 
-        public virtual void SetInvalidTarget(string name)
+        public virtual void SetInvalidTargets(List<string> ignoreTagsList, List<string> ignoreComponents)
         {
-            invalidTargetWithTagOrClass = name;
+            ignoreTargetWithTags = ignoreTagsList;
+            ignoreTargetWithComponents = ignoreComponents;
         }
 
         public virtual void SetNavMeshCheck(bool state)
