@@ -102,7 +102,6 @@ namespace VRTK
 
         protected override void DisablePointerBeam(object sender, ControllerInteractionEventArgs e)
         {
-            base.PointerSet();
             base.DisablePointerBeam(sender, e);
             TogglePointerCursor(false);
             curvedBeam.TogglePoints(false);
