@@ -1004,6 +1004,10 @@ The following script parameters are available:
    * `Track Object` doesn't attach the object to the controller via
    a joint, instead it ensures the object tracks the direction of the
    controller, which works well for items that are on hinged joints.
+   * `Rotator Track` also tracks the object but instead of the object
+   tracking the direction of the controller, a force is applied to
+   the object to cause it to rotate. This is ideal for hinged joints
+   on items such as wheels or doors.
    * `Child Of Controller` simply makes the object a child of the
    controller grabbing so it naturally tracks the position of the
    controller motion.
@@ -1781,7 +1785,7 @@ The current examples are:
   connecting the object to the controller. Fixed Joint works well for
   holding objects like cubes as they track perfectly to the controller
   whereas a Spring Joint works well on the drawer to give it a natural
-  slide when operating. Finally, the Track Object works well on the
+  slide when operating. Finally, the Rotator Track works well on the
   door to give a natural control over the swing of the door. There is
   also a Character Joint object that can be manipulated into different
   shapes by pulling each of the relevant sections.
