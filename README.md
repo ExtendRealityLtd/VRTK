@@ -664,11 +664,15 @@ The following script parameters are available:
   play area. If it is unchecked then the teleported location will
   always be the centre of the play area even if the headset position
   is not in the centre of the play area.
-  * **Ignore Target With Tag Or Class:** A string that specifies an
-  object Tag or the name of a Script attached to an obejct and
-  notifies the teleporter that the destination is to be ignored so
-  the user cannot teleport to that location. It also ensure the
-  pointer colour is set to the miss colour.
+  * **Ignore Target With Tags:** A list of strings specifying any
+  object Tags that should be treated as invalid as teleportation 
+  destinations, so the user cannot teleport to that location.
+  It also ensures the pointer colour is set to the miss colour.
+  * **Ignore Target With Components:** A list of strings specifying the
+  name of any Script that when found on an object should be treated as 
+  an invalid teleportation destination, preventing the user from 
+  teleporting to that location. It also ensures the pointer colour is 
+  set to the miss colour.
   * **Limit To Nav Mesh:** If this is checked then teleporting will
   be limited to the bounds of a baked NavMesh. If the pointer
   destination is outside the NavMesh then it will be ignored.
@@ -706,11 +710,15 @@ The following script parameters are available:
   play area. If it is unchecked then the teleported location will
   always be the centre of the play area even if the headset position
   is not in the centre of the play area.
-  * **Ignore Target With Tag Or Class:** A string that specifies an
-  object Tag or the name of a Script attached to an obejct and
-  notifies the teleporter that the destination is to be ignored so
-  the user cannot teleport to that location. It also ensure the
-  pointer colour is set to the miss colour.
+  * **Ignore Target With Tags:** A list of strings specifying any
+  object Tags that should be treated as invalid as teleportation 
+  destinations, so the user cannot teleport to that location.
+  It also ensures the pointer colour is set to the miss colour.
+  * **Ignore Target With Components:** A list of strings specifying the
+  name of any Script that when found on an object should be treated as 
+  an invalid teleportation destination, preventing the user from 
+  teleporting to that location. It also ensures the pointer colour is 
+  set to the miss colour.
   * **Limit To Nav Mesh:** If this is checked then teleporting will
   be limited to the bounds of a baked NavMesh. If the pointer
   destination is outside the NavMesh then it will be ignored.
