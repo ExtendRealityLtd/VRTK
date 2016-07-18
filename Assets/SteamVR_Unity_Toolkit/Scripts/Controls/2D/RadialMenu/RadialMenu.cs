@@ -76,7 +76,7 @@ public class RadialMenu : MonoBehaviour
         if (evt == ButtonEvent.click) //Click button if click, and keep track of current press
         {
             ExecuteEvents.Execute(menuButtons[buttonID], pointer, ExecuteEvents.pointerDownHandler);
-            currentPress = 1;
+            currentPress = buttonID;
             Buttons[buttonID].Click();
         }
         else if (evt == ButtonEvent.unclick) //Clear press id to stop invoking OnHold method
