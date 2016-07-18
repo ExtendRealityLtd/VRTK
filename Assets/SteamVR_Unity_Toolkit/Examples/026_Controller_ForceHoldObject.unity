@@ -4104,6 +4104,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pointerToggleButton: 3
+  pointerSetButton: 3
   grabToggleButton: 1
   useToggleButton: 0
   menuToggleButton: 4
@@ -4200,6 +4201,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pointerToggleButton: 3
+  pointerSetButton: 3
   grabToggleButton: 1
   useToggleButton: 0
   menuToggleButton: 4
@@ -10063,7 +10065,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 2061086901}
   leftSnapHandle: {fileID: 0}
-  grabAttachMechanic: 3
+  grabAttachMechanic: 4
   detachThreshold: 500
   springJointStrength: 500
   springJointDamper: 50
