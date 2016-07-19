@@ -115,7 +115,7 @@
 
         private void Click(VRTK_UIPointer pointer, List<RaycastResult> results)
         {
-            pointer.pointerEventData.eligibleForClick = pointer.controller.usePressed;
+            pointer.pointerEventData.eligibleForClick = pointer.controller.uiClickPressed;
 
             if (pointer.pointerEventData.pointerPress)
             {
@@ -152,7 +152,7 @@
 
         private void Drag(VRTK_UIPointer pointer, List<RaycastResult> results)
         {
-            pointer.pointerEventData.dragging = pointer.controller.usePressed && pointer.pointerEventData.delta != Vector2.zero;
+            pointer.pointerEventData.dragging = pointer.controller.uiClickPressed && pointer.pointerEventData.delta != Vector2.zero;
 
             if (pointer.pointerEventData.pointerDrag)
             {

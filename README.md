@@ -384,6 +384,7 @@ preferred controller button. The aliases are:
   the cursor position of the pointer
   * **Toggle Grab:** Common action of grabbing game objects
   * **Toggle Use:** Common action of using game objects
+  * **UI Click:** Common action of clicking a UI element
   * **Toggle Menu:** Common action of bringing up an in-game menu
 
 Each of the above aliases can have the preferred controller button
@@ -623,8 +624,7 @@ as this provides visual feedback as to where the UI ray is pointing.
 
 The UI pointer is activated via the `Pointer` alias on the
 `Controller Events` and the UI pointer click state is triggered via
-the `Use` alias on the `Controller Events` to make things consistent
-with the standard World Pointers.
+the `UI Click` alias on the `Controller Events`.
 
 The following script parameters are available:
 
