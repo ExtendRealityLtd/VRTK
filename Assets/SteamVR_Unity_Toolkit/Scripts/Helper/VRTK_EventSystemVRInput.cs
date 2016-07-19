@@ -70,7 +70,7 @@
         {
             foreach (var hoveredObject in pointer.pointerEventData.hovered)
             {
-                if (pointer.pointerEventData.pointerEnter && CheckTransformTree(hoveredObject.transform, pointer.pointerEventData.pointerEnter.transform))
+                if (pointer.pointerEventData.pointerEnter && hoveredObject && CheckTransformTree(hoveredObject.transform, pointer.pointerEventData.pointerEnter.transform))
                 {
                     return true;
                 }
@@ -85,6 +85,7 @@
                 if (NoValidCollision(pointer, results))
                 {
                     ExecuteEvents.ExecuteHierarchy(pointer.pointerEventData.pointerEnter, pointer.pointerEventData, ExecuteEvents.pointerExitHandler);
+                    pointer.pointerEventData.hovered.Remove(pointer.pointerEventData.pointerEnter);
                     pointer.pointerEventData.pointerEnter = null;
                 }
             }
@@ -105,6 +106,7 @@
 
                         pointer.pointerEventData.pointerCurrentRaycast = result;
                         pointer.pointerEventData.pointerEnter = target;
+                        pointer.pointerEventData.hovered.Add(pointer.pointerEventData.pointerEnter);
                         break;
                     }
                 }
