@@ -28,6 +28,7 @@
         public ButtonAlias pointerSetButton = ButtonAlias.Touchpad_Press;
         public ButtonAlias grabToggleButton = ButtonAlias.Grip;
         public ButtonAlias useToggleButton = ButtonAlias.Trigger;
+        public ButtonAlias uiClickButton = ButtonAlias.Trigger;
         public ButtonAlias menuToggleButton = ButtonAlias.Application_Menu;
 
         public int axisFidelity = 1;
@@ -43,6 +44,7 @@
         public bool pointerPressed = false;
         public bool grabPressed = false;
         public bool usePressed = false;
+        public bool uiClickPressed = false;
         public bool menuPressed = false;
 
         public event ControllerInteractionEventHandler TriggerPressed;
@@ -76,6 +78,9 @@
 
         public event ControllerInteractionEventHandler AliasMenuOn;
         public event ControllerInteractionEventHandler AliasMenuOff;
+
+        public event ControllerInteractionEventHandler AliasUIClickOn;
+        public event ControllerInteractionEventHandler AliasUIClickOff;
 
         private uint controllerIndex;
         private SteamVR_TrackedObject trackedController;
@@ -201,6 +206,18 @@
                 AliasUseOff(this, e);
         }
 
+        public virtual void OnAliasUIClickOn(ControllerInteractionEventArgs e)
+        {
+            if (AliasUIClickOn != null)
+                AliasUIClickOn(this, e);
+        }
+
+        public virtual void OnAliasUIClickOff(ControllerInteractionEventArgs e)
+        {
+            if (AliasUIClickOff != null)
+                AliasUIClickOff(this, e);
+        }
+
         public virtual void OnAliasMenuOn(ControllerInteractionEventArgs e)
         {
             if (AliasMenuOn != null)
@@ -324,6 +341,20 @@
                 {
                     usePressed = false;
                     OnAliasUseOff(SetButtonEvent(ref buttonBool, false, buttonPressure));
+                }
+            }
+
+            if (uiClickButton == type)
+            {
+                if (touchDown)
+                {
+                    uiClickPressed = true;
+                    OnAliasUIClickOn(SetButtonEvent(ref buttonBool, true, buttonPressure));
+                }
+                else
+                {
+                    uiClickPressed = false;
+                    OnAliasUIClickOff(SetButtonEvent(ref buttonBool, false, buttonPressure));
                 }
             }
 

@@ -37,11 +37,10 @@
             m_RaycastResults.Clear();
             var ray = new Ray(eventData.pointerCurrentRaycast.worldPosition, eventData.pointerCurrentRaycast.worldNormal);
             Raycast(canvas, eventCamera, ray, m_RaycastResults);
-            eventData.hovered.Clear();
-            SetNearestRaycast(eventData, resultAppendList);
+            SetNearestRaycast(ref eventData, resultAppendList);
         }
 
-        private void SetNearestRaycast(PointerEventData eventData, List<RaycastResult> resultAppendList)
+        private void SetNearestRaycast(ref PointerEventData eventData, List<RaycastResult> resultAppendList)
         {
             RaycastResult? nearestRaycast = null;
             for (var index = 0; index < m_RaycastResults.Count; index++)
@@ -61,7 +60,6 @@
                     nearestRaycast = castResult;
                 }
                 resultAppendList.Add(castResult);
-                eventData.hovered.Add(castResult.gameObject);
             }
 
             if (nearestRaycast.HasValue)
