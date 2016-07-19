@@ -162,9 +162,8 @@ namespace VRTK
 
         protected virtual void DisablePointerBeam(object sender, ControllerInteractionEventArgs e)
         {
-            if (isActive && activateDelayTimer <= 0)
+            if (isActive)
             {
-                activateDelayTimer = activateDelay;
                 controllerIndex = e.controllerIndex;
                 TogglePointer(false);
                 isActive = false;
@@ -173,7 +172,11 @@ namespace VRTK
 
         protected virtual void SetPointerDestination(object sender, ControllerInteractionEventArgs e)
         {
-            PointerSet();
+            if (activateDelayTimer <= 0)
+            {
+                activateDelayTimer = activateDelay;
+                PointerSet();
+            }
         }
 
         protected virtual void PointerIn()
