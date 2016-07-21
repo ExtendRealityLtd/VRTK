@@ -46,6 +46,8 @@ namespace VRTK
 
         private float activateDelayTimer = 0f;
 
+        private VRTK_InteractableObject interactableObject = null;
+
         public virtual void setPlayAreaCursorCollision(bool state)
         {
             if (handlePlayAreaCursorCollisions)
@@ -179,7 +181,7 @@ namespace VRTK
 
             OnDestinationMarkerEnter(SetDestinationMarkerEvent(pointerContactDistance, pointerContactTarget, destinationPosition, controllerIndex));
 
-            var interactableObject = pointerContactTarget.GetComponent<VRTK_InteractableObject>();
+            interactableObject = pointerContactTarget.GetComponent<VRTK_InteractableObject>();
             if (interactableObject && interactableObject.pointerActivatesUseAction && interactableObject.holdButtonToUse)
             {
                 interactableObject.StartUsing(gameObject);
@@ -195,7 +197,6 @@ namespace VRTK
 
             OnDestinationMarkerExit(SetDestinationMarkerEvent(pointerContactDistance, pointerContactTarget, destinationPosition, controllerIndex));
 
-            var interactableObject = pointerContactTarget.GetComponent<VRTK_InteractableObject>();
             if (interactableObject && interactableObject.pointerActivatesUseAction && interactableObject.holdButtonToUse)
             {
                 interactableObject.StopUsing(gameObject);
@@ -239,6 +240,10 @@ namespace VRTK
         {
             var playAreaState = (showPlayAreaCursor ? state : false);
             playAreaCursor.gameObject.SetActive(playAreaState);
+            if (!state && interactableObject && interactableObject.pointerActivatesUseAction && interactableObject.holdButtonToUse && interactableObject.IsUsing())
+            {
+                interactableObject.StopUsing(this.gameObject);
+            }
         }
 
         protected virtual void SetPointerMaterial()
