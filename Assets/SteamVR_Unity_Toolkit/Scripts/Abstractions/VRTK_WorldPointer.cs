@@ -172,7 +172,11 @@ namespace VRTK
 
         protected virtual void SetPointerDestination(object sender, ControllerInteractionEventArgs e)
         {
-            PointerSet();
+            if (activateDelayTimer <= 0)
+            {
+                activateDelayTimer = activateDelay;
+                PointerSet();
+            }
         }
 
         protected virtual void PointerIn()
