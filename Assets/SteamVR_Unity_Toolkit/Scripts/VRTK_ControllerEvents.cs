@@ -312,7 +312,7 @@
             {
                 if (! touchDown)
                 {
-                    OnAliasPointerSet(SetButtonEvent(ref buttonBool, true, buttonPressure));
+                    OnAliasPointerSet(SetButtonEvent(ref buttonBool, false, buttonPressure));
                 }
             }
 
