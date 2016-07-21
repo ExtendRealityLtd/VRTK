@@ -1384,10 +1384,47 @@ The following script parameters are available:
 
   * **Direction:** The axis on which the chest should open. All
   other axis will be frozen.
-  * **Max:** The maximum opening angle of the chest.
+  * **Max Angle:** The maximum opening angle of the chest.
   * **Lid:** The game object for the lid.
   * **Body:** The game object for the body.
   * **Handle:** The game object for the handle. 
+
+##### VRTK_Door
+
+Transforms a game object into a door with an optional handle attached to an 
+optional frame. The direction can be freely set and also very reliably
+auto-detected.
+
+There are situations when it can be very hard to automatically calculate the
+correct axis and anchor values for the hinge joint. If you encounter such a 
+situation simply add the hinge joint manually and set these two values. All 
+the rest will still be handled by the script.
+
+The script will instantiate the required Rigidbodies, Interactable and
+HingeJoint components automatically in case they do not exist yet. Gizmos
+will indicate the direction.
+
+The following script parameters are available:
+
+  * **Direction:** The axis on which the door should open. 
+  * **Max Angle:** The maximum opening angle of the door.
+  * **Open Inward:** Can the door be pulled to open.
+  * **Open Outward:** Can the door be pushed to open.
+  * **Snapping:** Keeps the door closed with a slight force. This way the door
+  will not gradually open due to some minor physics effect. Does only work if
+  either inward or outward is selected, not both.
+  * **Door:** The game object for the door. Can also be an empty parent or left
+  empty if the script is put onto the actual door mesh. If no colliders exist 
+  yet a collider will tried to be automatically attached to all children that 
+  expose renderers.
+  * **Handles:** The game object for the handles. Can also be an empty parent
+  or left empty. If empty the door can only be moved using the rigidbody mode
+  of the controller. If no collider exists yet a compound collider made up of 
+  all children will try to be calculated but this will fail if the door is 
+  rotated. In that case a manual collider will need to be assigned.
+  * **Frame:** The game object for the frame to which the door is attached.
+  Should only be set if the frame will move as well to ensure that the door 
+  moves along with the frame.
 
 ##### VRTK_Drawer
 
