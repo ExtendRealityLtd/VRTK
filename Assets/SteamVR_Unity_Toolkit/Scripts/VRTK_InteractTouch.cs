@@ -141,12 +141,15 @@ namespace VRTK
         {
             if (touchedObject != null && touchedObject != lastTouchedObject && !touchedObject.GetComponent<VRTK_InteractableObject>().IsGrabbed())
             {
+                CancelInvoke("ResetTriggerRumble");
+                ResetTriggerRumble();
                 ForceStopTouching();
             }
 
             if (touchedObject == null && IsObjectInteractable(collider.gameObject))
             {
                 touchedObject = GetColliderInteractableObject(collider);
+                lastTouchedObject = touchedObject;
 
                 var touchedObjectScript = touchedObject.GetComponent<VRTK_InteractableObject>();
 
