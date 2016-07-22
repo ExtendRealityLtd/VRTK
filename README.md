@@ -12,7 +12,16 @@ from the Unity Asset Store to be imported into your Unity project.**
   > _money and you get something to play!_
   >
   > **[Buy Holodaze from the Steam Store](http://store.steampowered.com/app/475520)**
+  
+## Games, Apps and Experiences that use this Toolkit
 
+ * Games
+  * QuiVR | [Steam Store Page](http://store.steampowered.com/app/489380/)
+  * Left-Hand Path | [Steam Store Page](http://store.steampowered.com/app/488760/)
+  * Holodaze | [Steam Store Page](http://store.steampowered.com/app/475520/)
+  * ViveSpray | [Steam Store Page](http://store.steampowered.com/app/494830/)
+  * VeeR Pong | [Steam Store Page](http://store.steampowered.com/app/494850)
+  * Emergence Fractal Universe | [Steam Store Page](http://store.steampowered.com/app/500470)
 
 ## Quick Start
 
