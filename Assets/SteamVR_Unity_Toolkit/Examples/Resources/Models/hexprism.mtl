@@ -1,0 +1,22 @@
+# 
+# Wavefront OBJ file
+# 2016 Giovanni Paolo Vigano'
+# for SteamVR Unity Toolkit
+# https://github.com/thestonefox/SteamVR_Unity_Toolkit
+# 
+
+newmtl Default
+Ka 0.117647 0.117647 0.117647
+Kd 0.752941 0.752941 0.752941
+Ks 0.752941 0.752941 0.752941
+illum 2
+Ns 8
+map_Kd 
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
