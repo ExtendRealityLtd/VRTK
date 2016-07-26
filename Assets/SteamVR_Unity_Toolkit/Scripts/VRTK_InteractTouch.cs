@@ -115,11 +115,25 @@ namespace VRTK
             triggerRumble = false;
         }
 
+        private GameObject GetColliderInteractableObject(Collider collider)
+        {
+            GameObject found = null;
+            if (collider.gameObject.GetComponent<VRTK_InteractableObject>())
+            {
+                found = collider.gameObject;
+            }
+            else
+            {
+                found = collider.gameObject.GetComponentInParent<VRTK_InteractableObject>().gameObject;
+            }
+            return found;
+        }
+
         private void OnTriggerEnter(Collider collider)
         {
             if (IsObjectInteractable(collider.gameObject) && (touchedObject == null || !touchedObject.GetComponent<VRTK_InteractableObject>().IsGrabbed()))
             {
-                lastTouchedObject = collider.gameObject;
+                lastTouchedObject = GetColliderInteractableObject(collider);
             }
         }
 
@@ -127,19 +141,15 @@ namespace VRTK
         {
             if (touchedObject != null && touchedObject != lastTouchedObject && !touchedObject.GetComponent<VRTK_InteractableObject>().IsGrabbed())
             {
+                CancelInvoke("ResetTriggerRumble");
+                ResetTriggerRumble();
                 ForceStopTouching();
             }
 
             if (touchedObject == null && IsObjectInteractable(collider.gameObject))
             {
-                if (collider.gameObject.GetComponent<VRTK_InteractableObject>())
-                {
-                    touchedObject = collider.gameObject;
-                }
-                else
-                {
-                    touchedObject = collider.gameObject.GetComponentInParent<VRTK_InteractableObject>().gameObject;
-                }
+                touchedObject = GetColliderInteractableObject(collider);
+                lastTouchedObject = touchedObject;
 
                 var touchedObjectScript = touchedObject.GetComponent<VRTK_InteractableObject>();
 
