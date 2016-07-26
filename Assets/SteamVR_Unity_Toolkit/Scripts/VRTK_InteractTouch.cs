@@ -76,7 +76,23 @@ namespace VRTK
 
         public bool IsObjectInteractable(GameObject obj)
         {
-            return (obj && (obj.GetComponent<VRTK_InteractableObject>() || obj.GetComponentInParent<VRTK_InteractableObject>()));
+            if (obj)
+            {
+                VRTK_InteractableObject io = obj.GetComponent<VRTK_InteractableObject>();
+                if (io)
+                {
+                    return io.enabled;
+                }
+                else
+                {
+                    io = obj.GetComponentInParent<VRTK_InteractableObject>();
+                    if (io)
+                    {
+                        return io.enabled;
+                    }
+                }
+            }
+            return false;
         }
 
         public void ToggleControllerRigidBody(bool state)
@@ -229,7 +245,7 @@ namespace VRTK
         private void CreateTouchCollider(GameObject obj)
         {
             var collider = this.GetComponent<Collider>();
-            if(collider == null)
+            if (collider == null)
             {
                 var genCollider = obj.AddComponent<SphereCollider>();
                 genCollider.radius = 0.06f;
@@ -259,7 +275,8 @@ namespace VRTK
             if (customRigidbodyObject != null)
             {
                 controllerRigidBodyObject = customRigidbodyObject;
-            } else
+            }
+            else
             {
                 controllerRigidBodyObject = new GameObject();
                 CreateBoxCollider(controllerRigidBodyObject, new Vector3(0f, -0.01f, -0.098f), new Vector3(0.04f, 0.025f, 0.15f));
