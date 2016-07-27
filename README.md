@@ -25,6 +25,10 @@ from the Unity Asset Store to be imported into your Unity project.**
   * Ocarina of Vive | [Itch.io Store Page](https://tomcat94.itch.io/ocarina-of-vive-shooting-gallery)
   * Danc<R | [Itch.io Store Page](https://tomcat94.itch.io/dancr-alpha)
   * Tower Island: Explore, Discover and Disassemble | [Steam Store Page](http://store.steampowered.com/app/487740/)
+  * Virtual Warfighter | [Game website](http://virtual-warfighter.com/)
+  * VR Regatta | [Steam Store Page](http://store.steampowered.com/app/468240/)
+  * Car Car Crash Hands | [Steam Store Page](http://store.steampowered.com/app/472720)
+  * MegaPolice | [Youtube Trailer](https://www.youtube.com/watch?v=d6hCgfMxldY)
 
 ## Quick Start
 
