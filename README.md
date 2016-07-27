@@ -22,6 +22,9 @@ from the Unity Asset Store to be imported into your Unity project.**
   * ViveSpray | [Steam Store Page](http://store.steampowered.com/app/494830/)
   * VeeR Pong | [Steam Store Page](http://store.steampowered.com/app/494850)
   * Emergence Fractal Universe | [Steam Store Page](http://store.steampowered.com/app/500470)
+  * Ocarina of Vive | [Itch.io Store Page](https://tomcat94.itch.io/ocarina-of-vive-shooting-gallery)
+  * Danc<R | [Itch.io Store Page](https://tomcat94.itch.io/dancr-alpha)
+  * Tower Island: Explore, Discover and Disassemble | [Steam Store Page](http://store.steampowered.com/app/487740/)
 
 ## Quick Start
 
