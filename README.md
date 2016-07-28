@@ -29,6 +29,8 @@ from the Unity Asset Store to be imported into your Unity project.**
   * VR Regatta | [Steam Store Page](http://store.steampowered.com/app/468240/)
   * Car Car Crash Hands | [Steam Store Page](http://store.steampowered.com/app/472720)
   * MegaPolice | [Youtube Trailer](https://www.youtube.com/watch?v=d6hCgfMxldY)
+  * The Crystal Nebula | [Steam Store Page](http://store.steampowered.com/app/505660)
+  * Drone Training VR | [Youtube Trailer](https://www.youtube.com/watch?v=A5MFT2JsySc)
 
 ## Quick Start
 
