@@ -9,8 +9,11 @@ namespace VRTK
     using UnityEngine;
     using System.Collections;
 
+    public delegate void PointerToogleEventHandler(object sender, ControllerInteractionEventArgs e);
+
     public abstract class VRTK_WorldPointer : VRTK_DestinationMarker
-    {
+    {       
+
         public enum pointerVisibilityStates
         {
             On_When_Active,
@@ -30,6 +33,11 @@ namespace VRTK
 
         public float activateDelay = 0f;
 
+        
+        public event PointerToogleEventHandler OnPointerOn;
+        public event PointerToogleEventHandler OnPointerOff;
+
+
         protected Vector3 destinationPosition;
         protected float pointerContactDistance = 0f;
         protected Transform pointerContactTarget = null;
@@ -47,6 +55,8 @@ namespace VRTK
         private bool eventsRegistered = false;
 
         private float activateDelayTimer = 0f;
+
+        private bool wasScriptInitialized = false;
 
         public virtual void setPlayAreaCursorCollision(bool state)
         {
@@ -101,6 +111,8 @@ namespace VRTK
 
             pointerMaterial = new Material(tmpMaterial);
             pointerMaterial.color = pointerMissColor;
+
+            wasScriptInitialized = true;
         }
 
         protected virtual void Update()
@@ -131,6 +143,24 @@ namespace VRTK
             }
         }
 
+        protected virtual void OnEnable()
+        {
+            if(wasScriptInitialized && pointerVisibility == pointerVisibilityStates.Always_On)
+            {
+                TogglePointer(true);
+                isActive = true;
+            }
+        }
+
+        protected virtual void OnDisable()
+        {
+            if (wasScriptInitialized && isActive)
+            {
+                TogglePointer(false);
+                isActive = false;
+            }
+        }
+
         protected virtual void InitPointer()
         {
             InitPlayAreaCursor();
@@ -157,6 +187,9 @@ namespace VRTK
                 TogglePointer(true);
                 isActive = true;
                 destinationSetActive = true;
+
+                if (OnPointerOn != null)
+                    OnPointerOn(sender,e);
             }
         }
 
@@ -167,6 +200,8 @@ namespace VRTK
                 controllerIndex = e.controllerIndex;
                 TogglePointer(false);
                 isActive = false;
+                if (OnPointerOff != null)
+                    OnPointerOff(sender, e);
             }
         }
 
