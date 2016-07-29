@@ -13,7 +13,7 @@ namespace VRTK
 {
     using UnityEngine;
     using System.Collections;
-
+    using System.Collections.Generic;
     public delegate void TeleportEventHandler(object sender, DestinationMarkerEventArgs e);
 
     public class VRTK_BasicTeleport : MonoBehaviour
@@ -22,7 +22,8 @@ namespace VRTK
         [Range(0f, 32f)]
         public float distanceBlinkDelay = 0f;
         public bool headsetPositionCompensation = true;
-        public string ignoreTargetWithTagOrClass;
+        public List<string> ignoreTargetWithTags;
+        public List<string> ignoreTargetWithComponents;
         public bool limitToNavMesh = false;
 
         public event TeleportEventHandler Teleporting;
@@ -44,7 +45,7 @@ namespace VRTK
                 foreach (var worldMarker in markerMaker.GetComponents<VRTK_DestinationMarker>())
                 {
                     worldMarker.DestinationMarkerSet += new DestinationMarkerEventHandler(DoTeleport);
-                    worldMarker.SetInvalidTarget(ignoreTargetWithTagOrClass);
+                    worldMarker.SetInvalidTargets(ignoreTargetWithTags, ignoreTargetWithComponents);
                     worldMarker.SetNavMeshCheck(limitToNavMesh);
                     worldMarker.SetHeadsetPositionCompensation(headsetPositionCompensation);
                 }
@@ -86,7 +87,7 @@ namespace VRTK
         protected virtual bool ValidLocation(Transform target)
         {
             //If the target is one of the player objects or a UI Canvas then it's never a valid location
-            if(target.GetComponent<VRTK_PlayerObject>() || target.GetComponent<VRTK_UIGraphicRaycaster>())
+            if (target.GetComponent<VRTK_PlayerObject>() || target.GetComponent<VRTK_UIGraphicRaycaster>())
             {
                 return false;
             }
@@ -102,7 +103,12 @@ namespace VRTK
                 validNavMeshLocation = true;
             }
 
-            return (validNavMeshLocation && target && target.tag != ignoreTargetWithTagOrClass && target.GetComponent(ignoreTargetWithTagOrClass) == null);
+            var validTagOrComponent = VRTK_WorldPointer.IsValidTagOrComponentDestination(
+                target,
+                ignoreTargetWithTags,
+                ignoreTargetWithComponents);
+
+            return (validNavMeshLocation && validTagOrComponent);
         }
 
         protected virtual void DoTeleport(object sender, DestinationMarkerEventArgs e)

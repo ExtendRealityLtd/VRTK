@@ -7,7 +7,9 @@
 namespace VRTK
 {
     using UnityEngine;
+    using System;
     using System.Collections;
+    using System.Collections.Generic;
 
     public abstract class VRTK_WorldPointer : VRTK_DestinationMarker
     {
@@ -110,7 +112,7 @@ namespace VRTK
                 activateDelayTimer -= Time.deltaTime;
             }
 
-            if (playAreaCursor && playAreaCursor.activeSelf)
+            if (playAreaCursor.activeSelf)
             {
                 UpdateCollider();
             }
@@ -264,6 +266,48 @@ namespace VRTK
             SetPointerMaterial();
         }
 
+        /// <summary>
+        /// Determines if a teleport location is valid given a list of names (eg tags or component names) 
+        /// and an appropriate lookup function (eg Transform.CompareTag).
+        /// </summary>
+        /// <param name="invalidTagsOrComponentNames"></param>
+        /// <param name="function"></param>
+        /// <returns>true is the teleport destination is valid</returns>
+        public static bool IsDestinationStringValid(List<string> invalidTagsOrComponentNames, Func<string, bool> function)
+        {
+            var isValid = true;
+            foreach (var tag in invalidTagsOrComponentNames)
+            {
+                if (function(tag))
+                {
+                    isValid = false;
+                    break;
+                }
+            }
+            return isValid;
+        }
+
+        /// <summary>
+        /// Checks that the given transform is a valid teleport location based on the disallowed tags and 
+        /// component types provided. A null target is also implicitly considered an invalid teleportation target.
+        /// </summary>
+        /// <param name="target"></param>
+        /// <param name="invalidTags"></param>
+        /// <param name="invalidComponentNames"></param>
+        /// <returns>true if teleportation to this target is allowed</returns>
+        public static bool IsValidTagOrComponentDestination(Transform target, List<string> invalidTags, List<string> invalidComponentNames)
+        {
+            bool validTag = false;
+            bool validComponent = false;
+            if (target != null)
+            {
+                validTag = IsDestinationStringValid(invalidTags, target.CompareTag);
+                validComponent = IsDestinationStringValid(invalidComponentNames, x => target.GetComponent(x) != null);
+            }
+
+            return (validTag && validComponent);
+        }
+
         protected virtual bool ValidDestination(Transform target)
         {
             bool validNavMeshLocation = false;
@@ -276,7 +320,10 @@ namespace VRTK
             {
                 validNavMeshLocation = true;
             }
-            return (validNavMeshLocation && target && target.tag != invalidTargetWithTagOrClass && target.GetComponent(invalidTargetWithTagOrClass) == null);
+
+            var validTagOrComponent = IsValidTagOrComponentDestination(target, ignoreTargetWithTags, ignoreTargetWithComponents);
+
+            return (validNavMeshLocation && validTagOrComponent);
         }
 
         private void DrawPlayAreaCursorBoundary(int index, float left, float right, float top, float bottom, float thickness, Vector3 localPosition)
