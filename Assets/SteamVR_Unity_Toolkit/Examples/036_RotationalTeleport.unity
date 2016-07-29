@@ -683,7 +683,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 420908, guid: 4d293c8e162f3874b982baadd71153d2, type: 2}
       propertyPath: m_RootOrder
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3380982, guid: 4d293c8e162f3874b982baadd71153d2, type: 2}
       propertyPath: m_Mesh
@@ -802,7 +802,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 335626791}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 973d0232676907341b2023cc66792590, type: 3}
+  m_Script: {fileID: 11500000, guid: bf6b4c696af89284ca86639a7db5f85b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   blinkTransitionSpeed: 0.6
@@ -1696,7 +1696,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
 --- !u!1 &1214114803
 GameObject:
   m_ObjectHideFlags: 0
@@ -2666,4 +2666,4 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
