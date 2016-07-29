@@ -1391,15 +1391,21 @@ The following script parameters are available:
 
 ##### VRTK_Drawer
 
-Transforms a game object into a drawer. The direction can be either
-x or z and can also be auto-detected with very high reliability.
+Transforms a game object into a drawer. The direction can be freely set
+and also auto-detected with very high reliability.
 
 The script will instantiate the required Rigidbody, Interactable and
-Joint components automatically in case they do not exist yet. It will
-expect two distinct game objects: a body and a handle. These should
+Joint components automatically in case they do not exist yet. There are 
+situations when it can be very hard to automatically calculate the
+correct axis for the joint. If you encounter such a situation simply add 
+the configurable joint manually and set the axis. All the rest will still 
+be handled by the script.
+
+It will expect two distinct game objects: a body and a handle. These should
 be independent and not children of each other. The distance to which the
 drawer can be pulled out will automatically set depending on the length
-of it.
+of it. If no body is specified the current object is assumed to be the
+body.
 
 It is possible to supply a third game object which is the root of the 
 contents inside the drawer. When this is specified the 
@@ -1415,6 +1421,9 @@ The following script parameters are available:
   * **Body:** The game object for the body.
   * **Handle:** The game object for the handle. 
   * **Content:** The parent game object for the drawer content elements. 
+  * **Hide Content:** Makes the content invisible while the drawer is closed.
+  * **Snapping:** Keeps the drawer closed with a slight force. This way the 
+  drawer will not gradually open due to some minor physics effect.
 
 ##### VRTK_Knob
 
