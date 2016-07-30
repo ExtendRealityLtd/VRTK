@@ -1,15 +1,24 @@
 ﻿namespace VRTK
 {
     using UnityEngine;
+    using UnityEngine.Events;
 
     [ExecuteInEditMode]
     public abstract class VRTK_Control : MonoBehaviour
     {
+        [System.Serializable]
+        public class ValueChangedEvent : UnityEvent<float> { }
+
+        [System.Serializable]
+        public class DefaultControlEvents
+        {
+            public ValueChangedEvent OnValueChanged;
+        }
+
         private static Color COLOR_OK = Color.yellow;
         private static Color COLOR_ERROR = new Color(1, 0, 0, 0.9f);
 
-        public delegate void ValueChange(float value);
-        public event ValueChange OnValueChanged;
+        public DefaultControlEvents defaultEvents;
 
         abstract protected void InitRequiredComponents();
         abstract protected bool DetectSetup();
@@ -48,10 +57,7 @@
                 // trigger events
                 if (value != oldValue)
                 {
-                    if (OnValueChanged != null)
-                    {
-                        OnValueChanged(getValue());
-                    }
+                    defaultEvents.OnValueChanged.Invoke(getValue());
                 }
             }
         }
