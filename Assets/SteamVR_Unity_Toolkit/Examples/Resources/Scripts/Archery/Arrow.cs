@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class Arrow : MonoBehaviour
 {
@@ -41,15 +40,15 @@ public class Arrow : MonoBehaviour
 
     private void Start()
     {
-        rigidBody = this.GetComponent<Rigidbody>();
+        rigidBody = GetComponent<Rigidbody>();
         SetOrigns();
     }
 
     private void SetOrigns()
     {
-        originalPosition = this.transform.localPosition;
-        originalRotation = this.transform.localRotation;
-        originalScale = this.transform.localScale;
+        originalPosition = transform.localPosition;
+        originalRotation = transform.localRotation;
+        originalScale = transform.localScale;
     }
 
     private void FixedUpdate()
@@ -75,26 +74,26 @@ public class Arrow : MonoBehaviour
         arrowHolder.SetActive(true);
 
         //make the arrow a child of the holder again
-        this.transform.parent = arrowHolder.transform;
+        transform.parent = arrowHolder.transform;
 
         //reset the state of the rigidbodies and colliders
-        this.GetComponent<Rigidbody>().isKinematic = true;
-        this.GetComponent<Collider>().enabled = false;
+        GetComponent<Rigidbody>().isKinematic = true;
+        GetComponent<Collider>().enabled = false;
         arrowHolder.GetComponent<Rigidbody>().isKinematic = false;
     }
 
     private void ResetTransform()
     {
-        arrowHolder.transform.position = this.transform.position;
-        arrowHolder.transform.rotation = this.transform.rotation;
-        this.transform.localPosition = originalPosition;
-        this.transform.localRotation = originalRotation;
-        this.transform.localScale = originalScale;
+        arrowHolder.transform.position = transform.position;
+        arrowHolder.transform.rotation = transform.rotation;
+        transform.localPosition = originalPosition;
+        transform.localRotation = originalRotation;
+        transform.localScale = originalScale;
     }
 
     private void DestroyArrow(float time)
     {
         Destroy(arrowHolder, time);
-        Destroy(this.gameObject, time);
+        Destroy(gameObject, time);
     }
 }

@@ -1,22 +1,23 @@
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections.Generic;
 [ExecuteInEditMode]
 public class UICircle : Graphic
 {
-    [SerializeField]
-    Texture m_Texture;
     [Range(0, 100)]
     public int fillPercent;
     public bool fill = true;
     public int thickness = 5;
     [Range(0, 360)]
     public int segments = 360;
+
+    [SerializeField]
+    private Texture m_Texture;
+
     public override Texture mainTexture
     {
         get
         {
-            return m_Texture == null ? s_WhiteTexture : m_Texture;
+            return (m_Texture == null ? s_WhiteTexture : m_Texture);
         }
     }
 
@@ -57,7 +58,7 @@ public class UICircle : Graphic
     protected override void OnPopulateMesh(Mesh toFill)
     {
         float outer = -rectTransform.pivot.x * rectTransform.rect.width;
-        float inner = -rectTransform.pivot.x * rectTransform.rect.width + this.thickness;
+        float inner = -rectTransform.pivot.x * rectTransform.rect.width + thickness;
         toFill.Clear();
         var vbo = new VertexHelper(toFill);
         Vector2 prevX = Vector2.zero;
@@ -70,7 +71,7 @@ public class UICircle : Graphic
         Vector2 pos1;
         Vector2 pos2;
         Vector2 pos3;
-        float f = (this.fillPercent / 100f);
+        float f = (fillPercent / 100f);
         float degrees = 360f / segments;
         int fa = (int)((segments + 1) * f);
         for (int i = -1 - (fa / 2); i < fa / 2 + 1; i++)
@@ -106,6 +107,6 @@ public class UICircle : Graphic
 
     private void Update()
     {
-        this.thickness = (int)Mathf.Clamp(this.thickness, 0, rectTransform.rect.width / 2);
+        thickness = (int)Mathf.Clamp(thickness, 0, rectTransform.rect.width / 2);
     }
 }

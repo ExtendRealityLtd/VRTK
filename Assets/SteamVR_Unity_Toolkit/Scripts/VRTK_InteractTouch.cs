@@ -8,7 +8,6 @@
 namespace VRTK
 {
     using UnityEngine;
-    using System.Collections;
 
     public struct ObjectInteractEventArgs
     {
@@ -40,13 +39,17 @@ namespace VRTK
         public virtual void OnControllerTouchInteractableObject(ObjectInteractEventArgs e)
         {
             if (ControllerTouchInteractableObject != null)
+            {
                 ControllerTouchInteractableObject(this, e);
+            }
         }
 
         public virtual void OnControllerUntouchInteractableObject(ObjectInteractEventArgs e)
         {
             if (ControllerUntouchInteractableObject != null)
+            {
                 ControllerUntouchInteractableObject(this, e);
+            }
         }
 
         public ObjectInteractEventArgs SetControllerInteractEvent(GameObject target)
@@ -125,8 +128,8 @@ namespace VRTK
                 return;
             }
 
-            Utilities.SetPlayerObject(this.gameObject, VRTK_PlayerObject.ObjectTypes.Controller);
-            CreateTouchCollider(this.gameObject);
+            Utilities.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.Controller);
+            CreateTouchCollider(gameObject);
             CreateControllerRigidBody();
             triggerRumble = false;
         }
@@ -169,7 +172,7 @@ namespace VRTK
 
                 var touchedObjectScript = touchedObject.GetComponent<VRTK_InteractableObject>();
 
-                if (!touchedObjectScript.IsValidInteractableController(this.gameObject, touchedObjectScript.allowedTouchControllers))
+                if (!touchedObjectScript.IsValidInteractableController(gameObject, touchedObjectScript.allowedTouchControllers))
                 {
                     touchedObject = null;
                     return;
@@ -177,7 +180,7 @@ namespace VRTK
 
                 OnControllerTouchInteractableObject(SetControllerInteractEvent(touchedObject));
                 touchedObjectScript.ToggleHighlight(true, globalTouchHighlightColor);
-                touchedObjectScript.StartTouching(this.gameObject);
+                touchedObjectScript.StartTouching(gameObject);
 
                 if (controllerActions.IsControllerVisible() && hideControllerOnTouch)
                 {
@@ -232,7 +235,7 @@ namespace VRTK
 
                 OnControllerUntouchInteractableObject(SetControllerInteractEvent(untouched.gameObject));
                 untouched.GetComponent<VRTK_InteractableObject>().ToggleHighlight(false);
-                untouched.GetComponent<VRTK_InteractableObject>().StopTouching(this.gameObject);
+                untouched.GetComponent<VRTK_InteractableObject>().StopTouching(gameObject);
             }
 
             if (hideControllerOnTouch)
@@ -244,7 +247,7 @@ namespace VRTK
 
         private void CreateTouchCollider(GameObject obj)
         {
-            var collider = this.GetComponent<Collider>();
+            var collider = GetComponent<Collider>();
             if (collider == null)
             {
                 var genCollider = obj.AddComponent<SphereCollider>();
@@ -293,8 +296,8 @@ namespace VRTK
 
             var controllerRB = controllerRigidBodyObject.GetComponent<Rigidbody>();
 
-            controllerRigidBodyObject.name = string.Format("[{0}]_RigidBody_Holder", this.gameObject.name);
-            controllerRigidBodyObject.transform.parent = this.transform;
+            controllerRigidBodyObject.name = string.Format("[{0}]_RigidBody_Holder", gameObject.name);
+            controllerRigidBodyObject.transform.parent = transform;
             controllerRigidBodyObject.transform.localPosition = Vector3.zero;
 
             controllerRB.useGravity = false;

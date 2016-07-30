@@ -21,7 +21,6 @@
 namespace VRTK
 {
     using UnityEngine;
-    using System.Collections;
 
     public struct DestinationMarkerEventArgs
     {
@@ -49,19 +48,25 @@ namespace VRTK
         public virtual void OnDestinationMarkerEnter(DestinationMarkerEventArgs e)
         {
             if (DestinationMarkerEnter != null)
+            {
                 DestinationMarkerEnter(this, e);
+            }
         }
 
         public virtual void OnDestinationMarkerExit(DestinationMarkerEventArgs e)
         {
             if (DestinationMarkerExit != null)
+            {
                 DestinationMarkerExit(this, e);
+            }
         }
 
         public virtual void OnDestinationMarkerSet(DestinationMarkerEventArgs e)
         {
             if (DestinationMarkerSet != null)
+            {
                 DestinationMarkerSet(this, e);
+            }
         }
 
         public virtual void SetInvalidTarget(string name)

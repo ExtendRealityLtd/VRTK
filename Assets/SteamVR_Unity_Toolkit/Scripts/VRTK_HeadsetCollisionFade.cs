@@ -1,7 +1,6 @@
 ﻿namespace VRTK
 {
     using UnityEngine;
-    using System.Collections;
 
     public struct HeadsetCollisionEventArgs
     {
@@ -23,13 +22,17 @@
         public virtual void OnHeadsetCollisionDetect(HeadsetCollisionEventArgs e)
         {
             if (HeadsetCollisionDetect != null)
+            {
                 HeadsetCollisionDetect(this, e);
+            }
         }
 
         public virtual void OnHeadsetCollisionEnded(HeadsetCollisionEventArgs e)
         {
             if (HeadsetCollisionEnded != null)
+            {
                 HeadsetCollisionEnded(this, e);
+            }
         }
 
         protected HeadsetCollisionEventArgs SetHeadsetCollisionEvent(Collider collider, Transform currentTransform)
@@ -48,13 +51,13 @@
                 Debug.LogWarning("This 'VRTK_HeadsetCollisionFade' script needs a SteamVR_Fade script on the camera eye.");
             }
 
-            Utilities.SetPlayerObject(this.gameObject, VRTK_PlayerObject.ObjectTypes.Headset);
+            Utilities.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.Headset);
 
-            BoxCollider collider = this.gameObject.AddComponent<BoxCollider>();
+            BoxCollider collider = gameObject.AddComponent<BoxCollider>();
             collider.isTrigger = true;
             collider.size = new Vector3(0.1f, 0.1f, 0.1f);
 
-            Rigidbody rb = this.gameObject.AddComponent<Rigidbody>();
+            Rigidbody rb = gameObject.AddComponent<Rigidbody>();
             rb.isKinematic = true;
             rb.useGravity = false;
         }
@@ -68,7 +71,7 @@
         {
             if (!collider.GetComponent<VRTK_PlayerObject>() && ValidTarget(collider.transform))
             {
-                OnHeadsetCollisionDetect(SetHeadsetCollisionEvent(collider, this.transform));
+                OnHeadsetCollisionDetect(SetHeadsetCollisionEvent(collider, transform));
                 SteamVR_Fade.Start(fadeColor, blinkTransitionSpeed);
             }
         }
@@ -77,7 +80,7 @@
         {
             if (!collider.GetComponent<VRTK_PlayerObject>())
             {
-                OnHeadsetCollisionEnded(SetHeadsetCollisionEvent(collider, this.transform));
+                OnHeadsetCollisionEnded(SetHeadsetCollisionEvent(collider, transform));
                 SteamVR_Fade.Start(Color.clear, blinkTransitionSpeed);
             }
         }

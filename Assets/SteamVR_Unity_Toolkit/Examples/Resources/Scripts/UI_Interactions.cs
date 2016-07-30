@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 using UnityEngine.UI;
 using VRTK;
 
@@ -27,7 +26,7 @@ public class UI_Interactions : MonoBehaviour
 
     public void CreateCanvas()
     {
-        var canvasCount = GameObject.FindObjectsOfType<Canvas>().Length;
+        var canvasCount = FindObjectsOfType<Canvas>().Length;
         var newCanvasGO = new GameObject("TempCanvas");
         newCanvasGO.layer = 5;
         var canvas = newCanvasGO.AddComponent<Canvas>();

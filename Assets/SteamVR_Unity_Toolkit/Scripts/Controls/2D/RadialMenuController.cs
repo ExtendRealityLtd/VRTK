@@ -1,7 +1,6 @@
 namespace VRTK
 {
     using UnityEngine;
-    using System.Collections;
 
     // Radial Menu input from Vive Controller
     [RequireComponent(typeof(RadialMenu))]

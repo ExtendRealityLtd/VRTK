@@ -34,7 +34,7 @@ namespace VRTK
 
         private void Start()
         {
-            text = this.GetComponent<Text>();
+            text = GetComponent<Text>();
             text.fontSize = fontSize;
             text.transform.localPosition = position;
         }
@@ -51,7 +51,7 @@ namespace VRTK
                     if (displayFPS)
                     {
                         float fps = framesCount / framesTime;
-                        text.text = System.String.Format("{0:F2} FPS", fps);
+                        text.text = string.Format("{0:F2} FPS", fps);
                         text.color = (fps > (targetFPS - 5) ? goodColor :
                                      (fps > (targetFPS - 30) ? warnColor :
                                       badColor));

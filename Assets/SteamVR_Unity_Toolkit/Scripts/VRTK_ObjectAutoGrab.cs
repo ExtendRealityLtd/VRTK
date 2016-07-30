@@ -1,7 +1,6 @@
 ﻿namespace VRTK
 {
     using UnityEngine;
-    using System.Collections;
 
     public class VRTK_ObjectAutoGrab : MonoBehaviour
     {
@@ -14,7 +13,7 @@
 
         private void Start()
         {
-            controller = this.GetComponent<VRTK_InteractGrab>();
+            controller = GetComponent<VRTK_InteractGrab>();
             initGrab = false;
             initGrabCooldown = 0.5f;
 
