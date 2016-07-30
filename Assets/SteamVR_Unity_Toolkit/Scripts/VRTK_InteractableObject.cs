@@ -93,6 +93,7 @@ namespace VRTK
         private Transform previousParent;
         private bool previousKinematicState;
         private bool previousIsGrabbable;
+        private bool forcedDropped;
 
         public virtual void OnInteractableObjectTouched(InteractableObjectEventArgs e)
         {
@@ -309,21 +310,24 @@ namespace VRTK
 
         public void ForceStopInteracting()
         {
-            if (touchingObject != null)
+            if (touchingObject != null && touchingObject.activeInHierarchy)
             {
                 touchingObject.GetComponent<VRTK_InteractTouch>().ForceStopTouching();
+                forcedDropped = true;
             }
 
-            if (grabbingObject != null)
+            if (grabbingObject != null && grabbingObject.activeInHierarchy)
             {
                 grabbingObject.GetComponent<VRTK_InteractTouch>().ForceStopTouching();
                 grabbingObject.GetComponent<VRTK_InteractGrab>().ForceRelease();
+                forcedDropped = true;
             }
 
-            if (usingObject != null)
+            if (usingObject != null && usingObject.activeInHierarchy)
             {
                 usingObject.GetComponent<VRTK_InteractTouch>().ForceStopTouching();
                 usingObject.GetComponent<VRTK_InteractUse>().ForceStopUsing();
+                forcedDropped = true;
             }
         }
 
@@ -351,6 +355,7 @@ namespace VRTK
                 rb.isKinematic = true;
             }
             rb.maxAngularVelocity = float.MaxValue;
+            forcedDropped = false;
         }
 
         protected virtual void Start()
@@ -393,6 +398,14 @@ namespace VRTK
             ForceStopInteracting();
         }
 
+        protected virtual void OnEnable()
+        {
+            if(forcedDropped)
+            {
+                LoadPreviousState();
+            }
+        }
+
         protected virtual void OnJointBreak(float force)
         {
             ForceReleaseGrab();
@@ -403,6 +416,7 @@ namespace VRTK
             if (gameObject.activeInHierarchy)
             {
                 transform.parent = previousParent;
+                forcedDropped = false;
             }
             rb.isKinematic = previousKinematicState;
             if (!isSwappable)
