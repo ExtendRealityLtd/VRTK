@@ -89,6 +89,7 @@ The available Prefabs are:
   * `ObjectTooltip`
   * `ControllerTooltips`
   * `RadialMenu`
+  * `ConsoleViewerCanvas`
 
 #### FramesPerSecondCanvas
 
@@ -265,6 +266,30 @@ An example of the `RadialMenu` Prefab can be viewed in the scene
 displays a radial menu for each controller. The left controller uses
 the `Hide On Release` variable, so it will only be visible if the
 left touchpad is being touched.
+
+#### ConsoleViewerCanvas
+
+This canvas adds the unity console log to a world game object. To use
+the prefab, it simply needs to be placed into the scene and it will
+be visible in world space. It's also possible to child it to other
+objects such as the controller so it can track where the user is.
+
+It's also recommended to use the Simple Pointer and UI Pointer on a
+controller to interact with the Console Viewer Canvas as it has a
+scrollable text area, a button to clear the log and a checkbox to
+toggle whether the log messages are collapsed.
+
+The following script parameters are available:
+
+  * **Font Size:** The size of the font the log text is displayed in.
+  * **Info Message:** The colour of the text for an info log message.
+  * **Assert Message:** The colour of the text for an assertion
+  log message.
+  * **Warning Message:** The colour of the text for a warning log
+  message.
+  * **Error Message:** The colour of the text for an error log message.
+  * **Exception Message:** The colour of the text for an exception log
+  message.
 
 ### Scripts
 
