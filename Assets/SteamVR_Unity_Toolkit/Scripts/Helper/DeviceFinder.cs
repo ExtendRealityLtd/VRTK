@@ -1,8 +1,6 @@
 ﻿namespace VRTK
 {
     using UnityEngine;
-    using System.Collections;
-    using System.Collections.Generic;
     using Valve.VR;
 
     public class DeviceFinder : MonoBehaviour
@@ -26,7 +24,7 @@
 
         public static SteamVR_TrackedObject TrackedObjectByIndex(uint controllerIndex)
         {
-            foreach (SteamVR_TrackedObject trackedObject in GameObject.FindObjectsOfType<SteamVR_TrackedObject>())
+            foreach (SteamVR_TrackedObject trackedObject in FindObjectsOfType<SteamVR_TrackedObject>())
             {
                 if ((uint)trackedObject.index == controllerIndex)
                 {
@@ -51,7 +49,7 @@
 
         public static ControllerHand GetControllerHand(GameObject controller)
         {
-            var controllerManager = GameObject.FindObjectOfType<SteamVR_ControllerManager>();
+            var controllerManager = FindObjectOfType<SteamVR_ControllerManager>();
 
             if (controllerManager && controller == controllerManager.left)
             {
@@ -68,7 +66,7 @@
 
         public static bool IsControllerOfHand(GameObject checkController, ControllerHand hand)
         {
-            var controllerManager = GameObject.FindObjectOfType<SteamVR_ControllerManager>();
+            var controllerManager = FindObjectOfType<SteamVR_ControllerManager>();
 
             if (hand == ControllerHand.Left && controllerManager && controllerManager.left == checkController)
             {
@@ -86,15 +84,15 @@
         public static Transform HeadsetTransform()
         {
 #if (UNITY_5_4_OR_NEWER)
-            return GameObject.FindObjectOfType<SteamVR_Camera>().GetComponent<Transform>();
+            return FindObjectOfType<SteamVR_Camera>().GetComponent<Transform>();
 #else
-            return GameObject.FindObjectOfType<SteamVR_GameView>().GetComponent<Transform>();
+            return FindObjectOfType<SteamVR_GameView>().GetComponent<Transform>();
 #endif
         }
 
         public static Transform HeadsetCamera()
         {
-            return GameObject.FindObjectOfType<SteamVR_Camera>().GetComponent<Transform>();
+            return FindObjectOfType<SteamVR_Camera>().GetComponent<Transform>();
         }
     }
 }

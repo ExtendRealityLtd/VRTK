@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class Breakable_Cube : MonoBehaviour
 {
@@ -7,7 +6,7 @@ public class Breakable_Cube : MonoBehaviour
 
     private void Start()
     {
-        this.GetComponent<Rigidbody>().collisionDetectionMode = CollisionDetectionMode.Continuous;
+        GetComponent<Rigidbody>().collisionDetectionMode = CollisionDetectionMode.Continuous;
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -37,12 +36,12 @@ public class Breakable_Cube : MonoBehaviour
 
     private void ExplodeCube(float force)
     {
-        foreach (Transform face in this.GetComponentsInChildren<Transform>())
+        foreach (Transform face in GetComponentsInChildren<Transform>())
         {
-            if (face.transform.name == this.transform.name) continue;
+            if (face.transform.name == transform.name) continue;
             ExplodeFace(face, force);
         }
-        Destroy(this.gameObject, 10f);
+        Destroy(gameObject, 10f);
     }
 
     private void ExplodeFace(Transform face, float force)

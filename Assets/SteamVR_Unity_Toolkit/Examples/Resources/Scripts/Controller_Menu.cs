@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 using VRTK;
 
 public class Controller_Menu : MonoBehaviour
@@ -21,7 +20,7 @@ public class Controller_Menu : MonoBehaviour
 
     private void InitMenu()
     {
-        clonedMenuObject = Instantiate(menuObject, this.transform.position, Quaternion.identity) as GameObject;
+        clonedMenuObject = Instantiate(menuObject, transform.position, Quaternion.identity) as GameObject;
         clonedMenuObject.SetActive(true);
         menuInit = true;
     }
@@ -46,8 +45,8 @@ public class Controller_Menu : MonoBehaviour
     {
         if (menuActive)
         {
-            clonedMenuObject.transform.rotation = this.transform.rotation;
-            clonedMenuObject.transform.position = this.transform.position;
+            clonedMenuObject.transform.rotation = transform.rotation;
+            clonedMenuObject.transform.position = transform.position;
         }
     }
 }

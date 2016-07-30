@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 using VRTK;
 
 public class Gun : VRTK_InteractableObject
@@ -17,7 +16,7 @@ public class Gun : VRTK_InteractableObject
     protected override void Start()
     {
         base.Start();
-        bullet = this.transform.Find("Bullet").gameObject;
+        bullet = transform.Find("Bullet").gameObject;
         bullet.SetActive(false);
     }
 

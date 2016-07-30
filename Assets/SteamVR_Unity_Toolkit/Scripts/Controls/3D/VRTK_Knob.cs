@@ -71,7 +71,6 @@
                 case Direction.z:
                     rb.constraints -= RigidbodyConstraints.FreezeRotationZ;
                     break;
-
             }
         }
 

@@ -37,14 +37,17 @@
         {
             foreach (float o in others)
             {
-                if (o <= value) return false;
+                if (o <= value)
+                {
+                    return false;
+                }
             }
             return true;
         }
 
         public static void SetPlayerObject(GameObject obj, VRTK.VRTK_PlayerObject.ObjectTypes objType)
         {
-            if(!obj.GetComponent<VRTK_PlayerObject>())
+            if (!obj.GetComponent<VRTK_PlayerObject>())
             {
                 var playerObject = obj.AddComponent<VRTK_PlayerObject>();
                 playerObject.objectType = objType;

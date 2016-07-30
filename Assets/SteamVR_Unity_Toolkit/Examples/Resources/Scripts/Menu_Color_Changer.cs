@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 using VRTK;
 
 public class Menu_Color_Changer : VRTK_InteractableObject
@@ -9,13 +8,13 @@ public class Menu_Color_Changer : VRTK_InteractableObject
     public override void StartUsing(GameObject usingObject)
     {
         base.StartUsing(usingObject);
-        this.transform.parent.gameObject.GetComponent<Menu_Container_Object_Colors>().SetSelectedColor(newMenuColor);
+        transform.parent.gameObject.GetComponent<Menu_Container_Object_Colors>().SetSelectedColor(newMenuColor);
         ResetMenuItems();
     }
 
     protected override void Start()
     {
-        this.gameObject.GetComponent<MeshRenderer>().material.color = newMenuColor;
+        gameObject.GetComponent<MeshRenderer>().material.color = newMenuColor;
     }
 
     private void ResetMenuItems()

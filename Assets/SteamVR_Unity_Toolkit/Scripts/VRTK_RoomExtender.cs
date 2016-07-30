@@ -1,5 +1,4 @@
 using UnityEngine;
-using System.Collections;
 
 public class VRTK_RoomExtender : MonoBehaviour
 {
@@ -40,13 +39,11 @@ public class VRTK_RoomExtender : MonoBehaviour
                 Debug.LogWarning("This 'VRTK_RoomExtender' script needs a movementTransform to work.The default 'SteamVR_Camera' or 'SteamVR_GameView' was not found.");
             }
         }
-        cameraRig = GameObject.FindObjectOfType<SteamVR_PlayArea>().gameObject.transform;
-        //headCirclePosition = new Vector3(movementTransform.localPosition.x, 0, movementTransform.localPosition.z);
+        cameraRig = FindObjectOfType<SteamVR_PlayArea>().gameObject.transform;
         additionalMovementEnabled = !additionalMovementEnabledOnButtonPress;
         if (debugTransform)
         {
             debugTransform.localScale = new Vector3(headZoneRadius * 2, 0.01f, headZoneRadius * 2);
-            //debugTransform.localPosition = headCirclePosition;
         }
         MoveHeadCircleNonLinearDrift();
         lastPosition = movementTransform.localPosition;

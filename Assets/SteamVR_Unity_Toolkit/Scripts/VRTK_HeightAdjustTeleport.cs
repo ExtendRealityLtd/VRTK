@@ -11,14 +11,13 @@
 namespace VRTK
 {
     using UnityEngine;
-    using System.Collections;
 
     public class VRTK_HeightAdjustTeleport : VRTK_BasicTeleport
     {
         public bool playSpaceFalling = true;
-        private float currentRayDownY = 0f;
 
-        GameObject currentFloor = null;
+        private float currentRayDownY = 0f;
+        private GameObject currentFloor = null;
 
         protected override void Start()
         {
@@ -44,7 +43,7 @@ namespace VRTK
 
         private float GetTeleportY(Transform target, Vector3 tipPosition)
         {
-            var newY = this.transform.position.y;
+            var newY = transform.position.y;
             var heightOffset = 0.1f;
             //Check to see if the tip is on top of an object
             var rayStartPositionOffset = Vector3.up * heightOffset;
@@ -74,7 +73,7 @@ namespace VRTK
 
         private void DropToNearestFloor(bool withBlink)
         {
-            if (enableTeleport && eyeCamera.transform.position.y > this.transform.position.y)
+            if (enableTeleport && eyeCamera.transform.position.y > transform.position.y)
             {
                 //send a ray down to find the closest object to stand on
                 Ray ray = new Ray(eyeCamera.transform.position, -transform.up);
@@ -92,7 +91,7 @@ namespace VRTK
                         Blink(blinkTransitionSpeed);
                     }
 
-                    Vector3 newPosition = new Vector3(this.transform.position.x, floorY, this.transform.position.z);
+                    Vector3 newPosition = new Vector3(transform.position.x, floorY, transform.position.z);
                     var teleportArgs = new DestinationMarkerEventArgs
                     {
                         destinationPosition = newPosition,
