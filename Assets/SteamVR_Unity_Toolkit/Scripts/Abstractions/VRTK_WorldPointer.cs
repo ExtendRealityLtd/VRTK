@@ -65,7 +65,7 @@ namespace VRTK
             return (activateDelayTimer <= 0);
         }
 
-        protected virtual void Start()
+        protected virtual void Awake()
         {
             if (controller == null)
             {
@@ -80,17 +80,16 @@ namespace VRTK
 
             Utilities.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.Controller);
 
-            //Setup controller event listeners
+            headset = DeviceFinder.HeadsetTransform();
+            playArea = FindObjectOfType<SteamVR_PlayArea>();
+            playAreaCursorBoundaries = new GameObject[4];
+        }
+
+        protected virtual void OnEnable()
+        {
             controller.AliasPointerOn += new ControllerInteractionEventHandler(EnablePointerBeam);
             controller.AliasPointerOff += new ControllerInteractionEventHandler(DisablePointerBeam);
             controller.AliasPointerSet += new ControllerInteractionEventHandler(SetPointerDestination);
-
-            eventsRegistered = true;
-
-            headset = DeviceFinder.HeadsetTransform();
-
-            playArea = FindObjectOfType<SteamVR_PlayArea>();
-            playAreaCursorBoundaries = new GameObject[4];
 
             var tmpMaterial = Resources.Load("WorldPointer") as Material;
             if (pointerMaterial != null)
@@ -100,6 +99,18 @@ namespace VRTK
 
             pointerMaterial = new Material(tmpMaterial);
             pointerMaterial.color = pointerMissColor;
+        }
+
+        protected virtual void OnDisable()
+        {
+            controller.AliasPointerOn -= new ControllerInteractionEventHandler(EnablePointerBeam);
+            controller.AliasPointerOff -= new ControllerInteractionEventHandler(DisablePointerBeam);
+            controller.AliasPointerSet -= new ControllerInteractionEventHandler(SetPointerDestination);
+
+            if (playAreaCursor != null)
+            {
+                Destroy(playAreaCursor);
+            }
         }
 
         protected virtual void Update()
@@ -112,21 +123,6 @@ namespace VRTK
             if (playAreaCursor && playAreaCursor.activeSelf)
             {
                 UpdateCollider();
-            }
-        }
-
-        protected virtual void OnDestroy()
-        {
-            if (eventsRegistered)
-            {
-                controller.AliasPointerOn -= EnablePointerBeam;
-                controller.AliasPointerOff -= DisablePointerBeam;
-                controller.AliasPointerSet -= SetPointerDestination;
-            }
-
-            if (playAreaCursor != null)
-            {
-                Destroy(playAreaCursor);
             }
         }
 

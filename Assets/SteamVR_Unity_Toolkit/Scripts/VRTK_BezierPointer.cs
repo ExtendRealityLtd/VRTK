@@ -36,13 +36,37 @@ namespace VRTK
         private GameObject curvedBeamContainer;
         private CurveGenerator curvedBeam;
 
-        // Use this for initialization
-        protected override void Start()
+        protected override void OnEnable()
         {
-            base.Start();
+            base.OnEnable();
             InitProjectedBeams();
             InitPointer();
             TogglePointer(false);
+        }
+
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+            if (projectedBeamDown != null)
+            {
+                Destroy(projectedBeamDown);
+            }
+            if (pointerCursor != null)
+            {
+                Destroy(pointerCursor);
+            }
+            if (curvedBeam != null)
+            {
+                Destroy(curvedBeam);
+            }
+            if (projectedBeamContainer != null)
+            {
+                Destroy(projectedBeamContainer);
+            }
+            if (curvedBeamContainer != null)
+            {
+                Destroy(curvedBeamContainer);
+            }
         }
 
         protected override void Update()
@@ -104,31 +128,6 @@ namespace VRTK
             base.DisablePointerBeam(sender, e);
             TogglePointerCursor(false);
             curvedBeam.TogglePoints(false);
-        }
-
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
-            if (projectedBeamDown != null)
-            {
-                Destroy(projectedBeamDown);
-            }
-            if (pointerCursor != null)
-            {
-                Destroy(pointerCursor);
-            }
-            if (curvedBeam != null)
-            {
-                Destroy(curvedBeam);
-            }
-            if (projectedBeamContainer != null)
-            {
-                Destroy(projectedBeamContainer);
-            }
-            if (curvedBeamContainer != null)
-            {
-                Destroy(curvedBeamContainer);
-            }
         }
 
         private GameObject CreateCursor()
