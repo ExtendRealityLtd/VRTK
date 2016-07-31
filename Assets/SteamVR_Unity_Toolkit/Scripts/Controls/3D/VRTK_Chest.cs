@@ -33,6 +33,10 @@
         public override void OnDrawGizmos()
         {
             base.OnDrawGizmos();
+            if (!enabled || !setupSuccessful)
+            {
+                return;
+            }
 
             // show opening direction
             Bounds handleBounds = Utilities.GetBounds(handle.transform, handle.transform);

@@ -40,7 +40,7 @@
         public override void OnDrawGizmos()
         {
             base.OnDrawGizmos();
-            if (!setupSuccessful)
+            if (!enabled || !setupSuccessful)
             {
                 return;
             }
@@ -291,26 +291,6 @@
         private GameObject getHandle()
         {
             return (handle) ? handle : gameObject;
-        }
-
-        private Vector3 getThirdDirection(Vector3 axis1, Vector3 axis2)
-        {
-            bool xTaken = axis1.x != 0 || axis2.x != 0;
-            bool yTaken = axis1.y != 0 || axis2.y != 0;
-            bool zTaken = axis1.z != 0 || axis2.z != 0;
-
-            if (xTaken && yTaken)
-            {
-                return Vector3.forward;
-            }
-            else if (xTaken && zTaken)
-            {
-                return Vector3.up;
-            }
-            else
-            {
-                return Vector3.right;
-            }
         }
     }
 }

@@ -30,6 +30,10 @@
         public override void OnDrawGizmos()
         {
             base.OnDrawGizmos();
+            if (!enabled || !setupSuccessful)
+            {
+                return;
+            }
 
             // axis and min/max
             Vector3 center = (direction == Direction.autodetect) ? bounds.center : transform.position;
