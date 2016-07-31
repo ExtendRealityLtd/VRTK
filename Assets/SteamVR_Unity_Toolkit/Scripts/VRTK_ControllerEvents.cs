@@ -297,6 +297,11 @@
             return CalculateTouchpadAxisAngle(touchpadAxis);
         }
 
+        public float GetTriggerAxis()
+        {
+            return triggerAxis.x;
+        }
+
         public bool AnyButtonPressed()
         {
             return (triggerPressed || gripPressed || touchpadPressed || applicationMenuPressed);
