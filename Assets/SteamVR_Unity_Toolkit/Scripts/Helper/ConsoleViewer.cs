@@ -21,7 +21,6 @@ public class ConsoleViewer : MonoBehaviour
     }
 
     private Dictionary<LogType, Color> logTypeColors;
-    private List<Log> logs = new List<Log>();
     private ScrollRect scrollWindow;
     private RectTransform consoleRect;
     private Text consoleOutput;
