@@ -36,6 +36,7 @@ namespace VRTK
         protected PlayerPhysicsEventArgs SetPlayerPhysicsEvent()
         {
             PlayerPhysicsEventArgs e;
+
             return e;
         }
 
