@@ -5,7 +5,6 @@ namespace VRTK
 
     public struct PlayerPhysicsEventArgs
     {
-        public float fallDistance;
     }
 
     public delegate void PlayerPhysicsEventHandler(object sender, PlayerPhysicsEventArgs e);
@@ -34,10 +33,9 @@ namespace VRTK
                 PhysicsFallEnded(this, e);
         }
 
-        protected PlayerPhysicsEventArgs SetPlayerPhysicsEvent(float fallDistance)
+        protected PlayerPhysicsEventArgs SetPlayerPhysicsEvent()
         {
             PlayerPhysicsEventArgs e;
-            e.fallDistance = fallDistance;
             return e;
         }
 
@@ -77,7 +75,7 @@ namespace VRTK
         {
             if (!isFalling)
             {
-                OnPhysicsFallStarted(SetPlayerPhysicsEvent(0));
+                OnPhysicsFallStarted(SetPlayerPhysicsEvent());
 
                 isFalling = true;
                 rb.isKinematic = false;
@@ -88,7 +86,7 @@ namespace VRTK
 
         public void StopPhysicsFall()
         {
-            OnPhysicsFallEnded(SetPlayerPhysicsEvent(0));
+            OnPhysicsFallEnded(SetPlayerPhysicsEvent());
 
             isFalling = false;
             rb.isKinematic = true;
