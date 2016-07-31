@@ -106,7 +106,7 @@ namespace VRTK
             }
         }
 
-        private void Update()
+        protected virtual void Update()
         {
             if (playSpaceFalling)
             {

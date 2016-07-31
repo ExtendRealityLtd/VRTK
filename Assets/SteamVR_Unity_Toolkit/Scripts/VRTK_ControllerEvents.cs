@@ -275,6 +275,11 @@
             }
         }
 
+        public uint GetControllerIndex()
+        {
+            return controllerIndex;
+        }
+
         public Vector3 GetVelocity()
         {
             SetVelocity();
