@@ -11,25 +11,38 @@ namespace VRTK
         private RadialMenu menu;
         private float currentAngle; //Keep track of angle for when we click
 
-        void Start()
+        private void Awake()
         {
             menu = GetComponent<RadialMenu>();
             if (events == null)
             {
                 events = GetComponentInParent<VRTK_ControllerEvents>();
             }
+        }
+
+        private void OnEnable()
+        {
             if (events == null)
             {
                 Debug.LogError("The radial menu must be a child of the controller or be set in the inspector!");
             }
             else
-            {   //Start listening for controller events
+            {
                 events.TouchpadPressed += new ControllerInteractionEventHandler(DoTouchpadClicked);
                 events.TouchpadReleased += new ControllerInteractionEventHandler(DoTouchpadUnclicked);
                 events.TouchpadTouchStart += new ControllerInteractionEventHandler(DoTouchpadTouched);
                 events.TouchpadTouchEnd += new ControllerInteractionEventHandler(DoTouchpadUntouched);
                 events.TouchpadAxisChanged += new ControllerInteractionEventHandler(DoTouchpadAxisChanged);
             }
+        }
+
+        private void OnDisable()
+        {
+            events.TouchpadPressed -= new ControllerInteractionEventHandler(DoTouchpadClicked);
+            events.TouchpadReleased -= new ControllerInteractionEventHandler(DoTouchpadUnclicked);
+            events.TouchpadTouchStart -= new ControllerInteractionEventHandler(DoTouchpadTouched);
+            events.TouchpadTouchEnd -= new ControllerInteractionEventHandler(DoTouchpadUntouched);
+            events.TouchpadAxisChanged -= new ControllerInteractionEventHandler(DoTouchpadAxisChanged);
         }
 
         private void DoTouchpadClicked(object sender, ControllerInteractionEventArgs e)
