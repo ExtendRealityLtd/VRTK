@@ -281,7 +281,10 @@ namespace VRTK
             }
             else
             {
-                controllerRigidBodyObject = new GameObject();
+                controllerRigidBodyObject = new GameObject(string.Format("[{0}]_RigidBody_Holder", gameObject.name));
+                controllerRigidBodyObject.transform.parent = transform;
+                controllerRigidBodyObject.transform.localPosition = Vector3.zero;
+
                 CreateBoxCollider(controllerRigidBodyObject, new Vector3(0f, -0.01f, -0.098f), new Vector3(0.04f, 0.025f, 0.15f));
                 CreateBoxCollider(controllerRigidBodyObject, new Vector3(0f, -0.009f, -0.002f), new Vector3(0.05f, 0.025f, 0.04f));
                 CreateBoxCollider(controllerRigidBodyObject, new Vector3(0f, -0.024f, 0.01f), new Vector3(0.07f, 0.02f, 0.02f));
@@ -295,10 +298,6 @@ namespace VRTK
             }
 
             var controllerRB = controllerRigidBodyObject.GetComponent<Rigidbody>();
-
-            controllerRigidBodyObject.name = string.Format("[{0}]_RigidBody_Holder", gameObject.name);
-            controllerRigidBodyObject.transform.parent = transform;
-            controllerRigidBodyObject.transform.localPosition = Vector3.zero;
 
             controllerRB.useGravity = false;
             controllerRB.isKinematic = false;
