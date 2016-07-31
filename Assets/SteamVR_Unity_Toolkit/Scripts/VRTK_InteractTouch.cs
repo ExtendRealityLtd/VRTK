@@ -28,6 +28,8 @@ namespace VRTK
         public event ObjectInteractEventHandler ControllerTouchInteractableObject;
         public event ObjectInteractEventHandler ControllerUntouchInteractableObject;
 
+        public bool triggerOnStaticObjects = false;	// allows interaction with non-rigidBody interactableObjects (climb)
+
         private GameObject touchedObject = null;
         private GameObject lastTouchedObject = null;
 
@@ -130,6 +132,7 @@ namespace VRTK
 
             Utilities.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.Controller);
             CreateTouchCollider(gameObject);
+            CreateTouchRigidBody(gameObject);
             CreateControllerRigidBody();
             triggerRumble = false;
         }
@@ -263,6 +266,20 @@ namespace VRTK
             BoxCollider bc = obj.AddComponent<BoxCollider>();
             bc.size = size;
             bc.center = center;
+        }
+
+        private void CreateTouchRigidBody(GameObject obj)
+        {
+            // Need a Rigidbody to interact with static objects
+            if (triggerOnStaticObjects)
+            {
+                Rigidbody rb = obj.GetComponent<Rigidbody>();
+                if (rb==null)
+                    rb = obj.AddComponent<Rigidbody>();
+
+                rb.isKinematic = true;
+                rb.useGravity = false;
+            }
         }
 
         private void HideController()
