@@ -65,6 +65,19 @@ namespace VRTK
             return (activateDelayTimer <= 0);
         }
 
+        public virtual void ToggleBeam(bool state)
+        {
+            var index = DeviceFinder.GetControllerIndex(gameObject);
+            if (state)
+            {
+                TurnOnBeam(index);
+            }
+            else
+            {
+                TurnOffBeam(index);
+            }
+        }
+
         protected virtual void Awake()
         {
             if (controller == null)
@@ -145,24 +158,12 @@ namespace VRTK
 
         protected virtual void EnablePointerBeam(object sender, ControllerInteractionEventArgs e)
         {
-            if (enabled && !isActive && activateDelayTimer <= 0)
-            {
-                setPlayAreaCursorCollision(false);
-                controllerIndex = e.controllerIndex;
-                TogglePointer(true);
-                isActive = true;
-                destinationSetActive = true;
-            }
+            TurnOnBeam(e.controllerIndex);
         }
 
         protected virtual void DisablePointerBeam(object sender, ControllerInteractionEventArgs e)
         {
-            if (isActive)
-            {
-                controllerIndex = e.controllerIndex;
-                TogglePointer(false);
-                isActive = false;
-            }
+            TurnOffBeam(e.controllerIndex);
         }
 
         protected virtual void SetPointerDestination(object sender, ControllerInteractionEventArgs e)
@@ -272,6 +273,28 @@ namespace VRTK
                 validNavMeshLocation = true;
             }
             return (validNavMeshLocation && target && target.tag != invalidTargetWithTagOrClass && target.GetComponent(invalidTargetWithTagOrClass) == null);
+        }
+
+        private void TurnOnBeam(uint index)
+        {
+            if (enabled && !isActive && activateDelayTimer <= 0)
+            {
+                setPlayAreaCursorCollision(false);
+                controllerIndex = index;
+                TogglePointer(true);
+                isActive = true;
+                destinationSetActive = true;
+            }
+        }
+
+        private void TurnOffBeam(uint index)
+        {
+            if (enabled && isActive)
+            {
+                controllerIndex = index;
+                TogglePointer(false);
+                isActive = false;
+            }
         }
 
         private void DrawPlayAreaCursorBoundary(int index, float left, float right, float top, float bottom, float thickness, Vector3 localPosition)
