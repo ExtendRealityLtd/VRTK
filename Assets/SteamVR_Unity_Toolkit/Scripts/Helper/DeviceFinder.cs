@@ -22,6 +22,16 @@
             return null;
         }
 
+        public static uint GetControllerIndex(GameObject controller)
+        {
+            var obj = controller.GetComponent<SteamVR_TrackedObject>();
+            if (obj)
+            {
+                return (uint)obj.index;
+            }
+            return 0;
+        }
+
         public static SteamVR_TrackedObject TrackedObjectByIndex(uint controllerIndex)
         {
             foreach (SteamVR_TrackedObject trackedObject in FindObjectsOfType<SteamVR_TrackedObject>())

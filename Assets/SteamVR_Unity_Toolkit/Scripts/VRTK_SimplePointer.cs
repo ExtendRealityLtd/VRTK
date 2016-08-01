@@ -29,11 +29,19 @@ namespace VRTK
         private GameObject pointerTip;
         private Vector3 pointerTipScale = new Vector3(0.05f, 0.05f, 0.05f);
 
-        // Use this for initialization
-        protected override void Start()
+        protected override void OnEnable()
         {
-            base.Start();
+            base.OnEnable();
             InitPointer();
+        }
+
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+            if (pointerHolder != null)
+            {
+                Destroy(pointerHolder);
+            }
         }
 
         protected override void Update()
@@ -87,15 +95,6 @@ namespace VRTK
 
             SetPointerTransform(pointerLength, pointerThickness);
             TogglePointer(false);
-        }
-
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
-            if (pointerHolder != null)
-            {
-                Destroy(pointerHolder);
-            }
         }
 
         protected override void SetPointerMaterial()
