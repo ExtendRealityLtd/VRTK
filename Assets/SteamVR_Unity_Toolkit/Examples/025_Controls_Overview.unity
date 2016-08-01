@@ -128,11 +128,147 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2cadbd5e873ef214b958081ac103fdff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultEvents:
+    OnValueChanged:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
   direction: 0
-  maxAngle: 160
   lid: {fileID: 88356432}
   body: {fileID: 1316366091}
   handle: {fileID: 1269755667}
+  content: {fileID: 0}
+  hideContent: 1
+  maxAngle: 160
+--- !u!43 &6953593
+Mesh:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: 
+  serializedVersion: 8
+  m_SubMeshes:
+  - serializedVersion: 2
+    firstByte: 0
+    indexCount: 24
+    topology: 0
+    firstVertex: 0
+    vertexCount: 8
+    localAABB:
+      m_Center: {x: 0, y: 0.01, z: 0}
+      m_Extent: {x: 1.65, y: 0, z: 0.9000001}
+  m_Shapes:
+    vertices: []
+    shapes: []
+    channels: []
+    fullWeights: []
+  m_BindPose: []
+  m_BoneNameHashes: 
+  m_RootBoneNameHash: 0
+  m_MeshCompression: 0
+  m_IsReadable: 1
+  m_KeepVertices: 1
+  m_KeepIndices: 1
+  m_IndexBuffer: 000001000400010005000400010002000500020006000500020003000600030007000600030000000700000004000700
+  m_Skin: []
+  m_VertexData:
+    m_CurrentChannels: 13
+    m_VertexCount: 8
+    m_Channels:
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 3
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 12
+      format: 0
+      dimension: 4
+    - stream: 0
+      offset: 28
+      format: 0
+      dimension: 2
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    m_DataSize: 288
+    _typelessdata: 0000c03f0ad7233c010040bf000000000000803f0000803f0000803f00000000000000000000c0bf0ad7233c010040bf000000000000803f0000803f0000803f0000803f000000000000c0bf0ad7233c0100403f000000000000803f0000803f0000803f00000000000000000000c03f0ad7233c0100403f000000000000803f0000803f0000803f0000803f000000003333d33f0ad7233c686666bf000000000000803f0000803f00000000000000000000803f3333d3bf0ad7233c686666bf000000000000803f0000803f000000000000803f0000803f3333d3bf0ad7233c6866663f000000000000803f0000803f00000000000000000000803f3333d33f0ad7233c6866663f000000000000803f0000803f000000000000803f0000803f
+  m_CompressedMesh:
+    m_Vertices:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_UV:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Normals:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Tangents:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Weights:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_NormalSigns:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_TangentSigns:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_FloatColors:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_BoneIndices:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Triangles:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_UVInfo: 0
+  m_LocalAABB:
+    m_Center: {x: 0, y: 0.01, z: 0}
+    m_Extent: {x: 1.65, y: 0, z: 0.9000001}
+  m_MeshUsageFlags: 0
+  m_BakedConvexCollisionMesh: 
+  m_BakedTriangleCollisionMesh: 
+  m_MeshOptimized: 0
 --- !u!1 &39470025
 GameObject:
   m_ObjectHideFlags: 0
@@ -377,6 +513,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd7ee1818514f3b4296422c2df5fbe8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultEvents:
+    OnValueChanged:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
   direction: 1
   min: 1
   max: 10
@@ -582,6 +724,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd7ee1818514f3b4296422c2df5fbe8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultEvents:
+    OnValueChanged:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
   direction: 0
   min: 0
   max: 100
@@ -3605,11 +3753,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2cadbd5e873ef214b958081ac103fdff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultEvents:
+    OnValueChanged:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
   direction: 0
-  maxAngle: 160
   lid: {fileID: 1655260105}
   body: {fileID: 957849495}
   handle: {fileID: 1495571453}
+  content: {fileID: 0}
+  hideContent: 1
+  maxAngle: 160
 --- !u!4 &337137244
 Transform:
   m_ObjectHideFlags: 0
@@ -3653,14 +3809,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de0c455dd96dc6d42a39ffe84e76282b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultEvents:
+    OnValueChanged:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
   direction: 0
+  door: {fileID: 433076924}
+  handles: {fileID: 1723976829}
+  frame: {fileID: 0}
+  content: {fileID: 0}
+  hideContent: 1
   maxAngle: 110
   openInward: 0
   openOutward: 1
   snapping: 1
-  door: {fileID: 433076924}
-  handles: {fileID: 1723976829}
-  frame: {fileID: 0}
 --- !u!4 &338366545
 Transform:
   m_ObjectHideFlags: 0
@@ -4213,6 +4377,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd828872d92c3a94090d23b7b719f1e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultEvents:
+    OnValueChanged:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  events:
+    OnPush:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
   direction: 0
   activationDistance: 0.031024741
   buttonStrength: 5
@@ -4718,11 +4894,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2cadbd5e873ef214b958081ac103fdff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultEvents:
+    OnValueChanged:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
   direction: 0
-  maxAngle: 160
   lid: {fileID: 1198275049}
   body: {fileID: 1004531196}
   handle: {fileID: 136390085}
+  content: {fileID: 0}
+  hideContent: 1
+  maxAngle: 160
 --- !u!114 &423450762
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4951,6 +5135,50 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 451237932}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &453045629
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 453045630}
+  - 114: {fileID: 453045631}
+  m_Layer: 0
+  m_Name: Content
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &453045630
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 453045629}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Children:
+  - {fileID: 2111933692}
+  m_Father: {fileID: 1574929628}
+  m_RootOrder: 3
+--- !u!114 &453045631
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 453045629}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a77975dad5cf9384e9388513a2e3ab74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  control: {fileID: 1574929627}
+  inside: {fileID: 1588813355}
+  outside: {fileID: 1886053591}
 --- !u!1 &455225189
 GameObject:
   m_ObjectHideFlags: 0
@@ -5011,11 +5239,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2cadbd5e873ef214b958081ac103fdff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultEvents:
+    OnValueChanged:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
   direction: 0
-  maxAngle: 160
   lid: {fileID: 793700859}
   body: {fileID: 549199849}
   handle: {fileID: 776786559}
+  content: {fileID: 0}
+  hideContent: 1
+  maxAngle: 160
 --- !u!4 &457882136
 Transform:
   m_ObjectHideFlags: 0
@@ -6148,6 +6384,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01b86803f9669aa40be161b11ec9272e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultEvents:
+    OnValueChanged:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
   direction: 1
   min: 0
   max: 100
@@ -7436,6 +7678,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd828872d92c3a94090d23b7b719f1e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultEvents:
+    OnValueChanged:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  events:
+    OnPush:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
   direction: 0
   activationDistance: 0.046147197
   buttonStrength: 5
@@ -9002,7 +9256,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 795386922}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.952, y: 1.2793722, z: -0.761}
+  m_LocalPosition: {x: 0.952, y: 1.2793722, z: -1.008}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
@@ -9307,6 +9561,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 814376659}
+  - 114: {fileID: 814376660}
   m_Layer: 0
   m_Name: DrawerContents
   m_TagString: Untagged
@@ -9330,6 +9585,20 @@ Transform:
   - {fileID: 630186606}
   m_Father: {fileID: 1579286539}
   m_RootOrder: 1
+--- !u!114 &814376660
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 814376658}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a77975dad5cf9384e9388513a2e3ab74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  control: {fileID: 1432281524}
+  inside: {fileID: 1358027779}
+  outside: {fileID: 1886053591}
 --- !u!1 &829530009
 GameObject:
   m_ObjectHideFlags: 0
@@ -10490,6 +10759,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd7ee1818514f3b4296422c2df5fbe8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultEvents:
+    OnValueChanged:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
   direction: 0
   min: 1
   max: 5
@@ -11112,6 +11387,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd828872d92c3a94090d23b7b719f1e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultEvents:
+    OnValueChanged:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  events:
+    OnPush:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
   direction: 1
   activationDistance: 0.1
   buttonStrength: 5
@@ -11664,11 +11951,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2cadbd5e873ef214b958081ac103fdff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultEvents:
+    OnValueChanged:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
   direction: 0
-  maxAngle: 160
   lid: {fileID: 1536700038}
   body: {fileID: 773366195}
   handle: {fileID: 2067650703}
+  content: {fileID: 0}
+  hideContent: 1
+  maxAngle: 160
 --- !u!4 &1063839497
 Transform:
   m_ObjectHideFlags: 0
@@ -11727,14 +12022,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de0c455dd96dc6d42a39ffe84e76282b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultEvents:
+    OnValueChanged:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
   direction: 3
+  door: {fileID: 0}
+  handles: {fileID: 0}
+  frame: {fileID: 0}
+  content: {fileID: 0}
+  hideContent: 1
   maxAngle: 110
   openInward: 1
   openOutward: 1
   snapping: 1
-  door: {fileID: 0}
-  handles: {fileID: 0}
-  frame: {fileID: 0}
 --- !u!23 &1067194361
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -11857,6 +12160,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01b86803f9669aa40be161b11ec9272e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultEvents:
+    OnValueChanged:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
   direction: 2
   min: 0
   max: 100
@@ -12069,11 +12378,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2cadbd5e873ef214b958081ac103fdff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultEvents:
+    OnValueChanged:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
   direction: 1
-  maxAngle: 160
   lid: {fileID: 48941951}
   body: {fileID: 251300955}
   handle: {fileID: 812621658}
+  content: {fileID: 0}
+  hideContent: 1
+  maxAngle: 160
 --- !u!4 &1097269208
 Transform:
   m_ObjectHideFlags: 0
@@ -12379,14 +12696,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de0c455dd96dc6d42a39ffe84e76282b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultEvents:
+    OnValueChanged:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
   direction: 0
+  door: {fileID: 469879064}
+  handles: {fileID: 236596579}
+  frame: {fileID: 0}
+  content: {fileID: 1323988947}
+  hideContent: 1
   maxAngle: 110
   openInward: 0
   openOutward: 1
   snapping: 1
-  door: {fileID: 469879064}
-  handles: {fileID: 236596579}
-  frame: {fileID: 0}
 --- !u!4 &1115677709
 Transform:
   m_ObjectHideFlags: 0
@@ -12402,6 +12727,7 @@ Transform:
   - {fileID: 1200978668}
   - {fileID: 236596581}
   - {fileID: 1426182960}
+  - {fileID: 1323988948}
   m_Father: {fileID: 0}
   m_RootOrder: 12
 --- !u!114 &1115677710
@@ -12822,134 +13148,6 @@ Transform:
   - {fileID: 1086639914}
   m_Father: {fileID: 1684800802}
   m_RootOrder: 0
---- !u!43 &1162186853
-Mesh:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_Name: 
-  serializedVersion: 8
-  m_SubMeshes:
-  - serializedVersion: 2
-    firstByte: 0
-    indexCount: 24
-    topology: 0
-    firstVertex: 0
-    vertexCount: 8
-    localAABB:
-      m_Center: {x: 0, y: 0.01, z: 0}
-      m_Extent: {x: 1.65, y: 0, z: 0.9000001}
-  m_Shapes:
-    vertices: []
-    shapes: []
-    channels: []
-    fullWeights: []
-  m_BindPose: []
-  m_BoneNameHashes: 
-  m_RootBoneNameHash: 0
-  m_MeshCompression: 0
-  m_IsReadable: 1
-  m_KeepVertices: 1
-  m_KeepIndices: 1
-  m_IndexBuffer: 000001000400010005000400010002000500020006000500020003000600030007000600030000000700000004000700
-  m_Skin: []
-  m_VertexData:
-    m_CurrentChannels: 13
-    m_VertexCount: 8
-    m_Channels:
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 3
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 12
-      format: 0
-      dimension: 4
-    - stream: 0
-      offset: 28
-      format: 0
-      dimension: 2
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    m_DataSize: 288
-    _typelessdata: 0000c03f0ad7233c010040bf000000000000803f0000803f0000803f00000000000000000000c0bf0ad7233c010040bf000000000000803f0000803f0000803f0000803f000000000000c0bf0ad7233c0100403f000000000000803f0000803f0000803f00000000000000000000c03f0ad7233c0100403f000000000000803f0000803f0000803f0000803f000000003333d33f0ad7233c686666bf000000000000803f0000803f00000000000000000000803f3333d3bf0ad7233c686666bf000000000000803f0000803f000000000000803f0000803f3333d3bf0ad7233c6866663f000000000000803f0000803f00000000000000000000803f3333d33f0ad7233c6866663f000000000000803f0000803f000000000000803f0000803f
-  m_CompressedMesh:
-    m_Vertices:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_UV:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Normals:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Tangents:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Weights:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_NormalSigns:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_TangentSigns:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_FloatColors:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_BoneIndices:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Triangles:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_UVInfo: 0
-  m_LocalAABB:
-    m_Center: {x: 0, y: 0.01, z: 0}
-    m_Extent: {x: 1.65, y: 0, z: 0.9000001}
-  m_MeshUsageFlags: 0
-  m_BakedConvexCollisionMesh: 
-  m_BakedTriangleCollisionMesh: 
-  m_MeshOptimized: 0
 --- !u!1 &1173581217
 GameObject:
   m_ObjectHideFlags: 0
@@ -13455,6 +13653,8 @@ Transform:
   - {fileID: 1439572036}
   - {fileID: 1794631404}
   - {fileID: 2137374484}
+  - {fileID: 1771652279}
+  - {fileID: 1212154329}
   m_Father: {fileID: 1115677709}
   m_RootOrder: 1
 --- !u!1 &1207567906
@@ -13532,6 +13732,69 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1207567906}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1212154328
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1212154329}
+  - 33: {fileID: 1212154331}
+  - 23: {fileID: 1212154330}
+  m_Layer: 0
+  m_Name: Side
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1212154329
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1212154328}
+  m_LocalRotation: {x: 0, y: -0.70710665, z: 0, w: 0.70710695}
+  m_LocalPosition: {x: -0.88, y: -0.016158074, z: 0.478}
+  m_LocalScale: {x: 0.06463252, y: 1.2926503, z: 0.9200255}
+  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
+  m_Children: []
+  m_Father: {fileID: 1200978668}
+  m_RootOrder: 4
+--- !u!23 &1212154330
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1212154328}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_Materials:
+  - {fileID: 2100000, guid: 2be9fb9bcea91e7419d90800fabf8e0d, type: 2}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 1
+  m_ReflectionProbeUsage: 1
+  m_ProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 1
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+--- !u!33 &1212154331
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1212154328}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &1218128880
 GameObject:
@@ -13853,6 +14116,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd7ee1818514f3b4296422c2df5fbe8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultEvents:
+    OnValueChanged:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
   direction: 1
   min: 1
   max: 5
@@ -13905,6 +14174,10 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1232002159}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &1244583003 stripped
+Transform:
+  m_PrefabParentObject: {fileID: 460582, guid: cd4ff35fbdd2e344f9f46c1da44572da, type: 2}
+  m_PrefabInternal: {fileID: 1356735698}
 --- !u!1 &1249537960
 GameObject:
   m_ObjectHideFlags: 0
@@ -14164,11 +14437,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2cadbd5e873ef214b958081ac103fdff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultEvents:
+    OnValueChanged:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
   direction: 2
-  maxAngle: 160
   lid: {fileID: 1733974794}
   body: {fileID: 865374237}
   handle: {fileID: 241994293}
+  content: {fileID: 0}
+  hideContent: 1
+  maxAngle: 160
 --- !u!4 &1266052417
 Transform:
   m_ObjectHideFlags: 0
@@ -14379,14 +14660,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de0c455dd96dc6d42a39ffe84e76282b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultEvents:
+    OnValueChanged:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
   direction: 2
+  door: {fileID: 0}
+  handles: {fileID: 0}
+  frame: {fileID: 0}
+  content: {fileID: 0}
+  hideContent: 1
   maxAngle: 110
   openInward: 1
   openOutward: 1
   snapping: 1
-  door: {fileID: 0}
-  handles: {fileID: 0}
-  frame: {fileID: 0}
 --- !u!23 &1276602020
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -15094,6 +15383,50 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1318428758}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1323988947
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1323988948}
+  - 114: {fileID: 1323988949}
+  m_Layer: 0
+  m_Name: Content
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1323988948
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1323988947}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Children:
+  - {fileID: 1244583003}
+  m_Father: {fileID: 1115677709}
+  m_RootOrder: 4
+--- !u!114 &1323988949
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1323988947}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a77975dad5cf9384e9388513a2e3ab74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  control: {fileID: 1115677708}
+  inside: {fileID: 1200978668}
+  outside: {fileID: 1886053591}
 --- !u!1 &1333450679
 GameObject:
   m_ObjectHideFlags: 0
@@ -15475,6 +15808,60 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1355285940}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1001 &1356735698
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 1323988948}
+    m_Modifications:
+    - target: {fileID: 460582, guid: cd4ff35fbdd2e344f9f46c1da44572da, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0.60055226
+      objectReference: {fileID: 0}
+    - target: {fileID: 460582, guid: cd4ff35fbdd2e344f9f46c1da44572da, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: -0.15657635
+      objectReference: {fileID: 0}
+    - target: {fileID: 460582, guid: cd4ff35fbdd2e344f9f46c1da44572da, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0.7429065
+      objectReference: {fileID: 0}
+    - target: {fileID: 460582, guid: cd4ff35fbdd2e344f9f46c1da44572da, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 460582, guid: cd4ff35fbdd2e344f9f46c1da44572da, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 460582, guid: cd4ff35fbdd2e344f9f46c1da44572da, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 460582, guid: cd4ff35fbdd2e344f9f46c1da44572da, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 460582, guid: cd4ff35fbdd2e344f9f46c1da44572da, type: 2}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 460582, guid: cd4ff35fbdd2e344f9f46c1da44572da, type: 2}
+      propertyPath: m_LocalScale.x
+      value: 0.57772917
+      objectReference: {fileID: 0}
+    - target: {fileID: 460582, guid: cd4ff35fbdd2e344f9f46c1da44572da, type: 2}
+      propertyPath: m_LocalScale.y
+      value: 0.5777291
+      objectReference: {fileID: 0}
+    - target: {fileID: 460582, guid: cd4ff35fbdd2e344f9f46c1da44572da, type: 2}
+      propertyPath: m_LocalScale.z
+      value: 0.5777291
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: cd4ff35fbdd2e344f9f46c1da44572da, type: 2}
+  m_IsPrefabParent: 0
 --- !u!1 &1358027778
 GameObject:
   m_ObjectHideFlags: 0
@@ -16318,6 +16705,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd828872d92c3a94090d23b7b719f1e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultEvents:
+    OnValueChanged:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  events:
+    OnPush:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
   direction: 0
   activationDistance: 0.035290033
   buttonStrength: 5
@@ -16574,6 +16973,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d5264f69557f7c46ae368ee023d5b1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultEvents:
+    OnValueChanged:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
   direction: 0
   body: {fileID: 1358027778}
   handle: {fileID: 1783395876}
@@ -17914,11 +18319,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2cadbd5e873ef214b958081ac103fdff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultEvents:
+    OnValueChanged:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
   direction: 0
-  maxAngle: 160
   lid: {fileID: 1299706961}
   body: {fileID: 240563735}
   handle: {fileID: 1369360963}
+  content: {fileID: 0}
+  hideContent: 1
+  maxAngle: 160
 --- !u!4 &1534586375
 Transform:
   m_ObjectHideFlags: 0
@@ -18224,11 +18637,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2cadbd5e873ef214b958081ac103fdff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultEvents:
+    OnValueChanged:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
   direction: 0
-  maxAngle: 160
   lid: {fileID: 582109180}
   body: {fileID: 1588813354}
   handle: {fileID: 2121046199}
+  content: {fileID: 453045629}
+  hideContent: 1
+  maxAngle: 160
 --- !u!4 &1574929628
 Transform:
   m_ObjectHideFlags: 0
@@ -18243,6 +18664,7 @@ Transform:
   - {fileID: 1588813355}
   - {fileID: 582109181}
   - {fileID: 2121046203}
+  - {fileID: 453045630}
   m_Father: {fileID: 0}
   m_RootOrder: 6
 --- !u!114 &1574929629
@@ -18350,6 +18772,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd828872d92c3a94090d23b7b719f1e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultEvents:
+    OnValueChanged:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  events:
+    OnPush:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
   direction: 6
   activationDistance: 0.08
   buttonStrength: 5
@@ -20307,10 +20741,79 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2473c1519b730d346b724d18267dc7fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultEvents:
+    OnValueChanged:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
   direction: 1
   min: 100
   max: 0
   stepSize: 5
+--- !u!1 &1771652278
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1771652279}
+  - 33: {fileID: 1771652281}
+  - 23: {fileID: 1771652280}
+  m_Layer: 0
+  m_Name: Side
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1771652279
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1771652278}
+  m_LocalRotation: {x: 0, y: -0.70710665, z: 0, w: 0.70710695}
+  m_LocalPosition: {x: -0.88, y: -0.016158074, z: -0.184}
+  m_LocalScale: {x: 0.06463252, y: 1.2926503, z: 0.9200255}
+  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
+  m_Children: []
+  m_Father: {fileID: 1200978668}
+  m_RootOrder: 3
+--- !u!23 &1771652280
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1771652278}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_Materials:
+  - {fileID: 2100000, guid: 2be9fb9bcea91e7419d90800fabf8e0d, type: 2}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 1
+  m_ReflectionProbeUsage: 1
+  m_ProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 1
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+--- !u!33 &1771652281
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1771652278}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &1782252064
 GameObject:
   m_ObjectHideFlags: 0
@@ -21023,14 +21526,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de0c455dd96dc6d42a39ffe84e76282b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultEvents:
+    OnValueChanged:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
   direction: 3
+  door: {fileID: 730950275}
+  handles: {fileID: 0}
+  frame: {fileID: 245234964}
+  content: {fileID: 0}
+  hideContent: 1
   maxAngle: 110
   openInward: 1
   openOutward: 1
   snapping: 1
-  door: {fileID: 730950275}
-  handles: {fileID: 0}
-  frame: {fileID: 245234964}
 --- !u!1 &1825839661
 GameObject:
   m_ObjectHideFlags: 0
@@ -21198,11 +21709,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2cadbd5e873ef214b958081ac103fdff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultEvents:
+    OnValueChanged:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
   direction: 0
-  maxAngle: 160
   lid: {fileID: 561422149}
   body: {fileID: 1682875442}
   handle: {fileID: 64707179}
+  content: {fileID: 0}
+  hideContent: 1
+  maxAngle: 160
 --- !u!4 &1836136300
 Transform:
   m_ObjectHideFlags: 0
@@ -21793,6 +22312,34 @@ Transform:
   m_Children: []
   m_Father: {fileID: 795386923}
   m_RootOrder: 1
+--- !u!1 &1886053590
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1886053591}
+  m_Layer: 0
+  m_Name: Outside
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1886053591
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1886053590}
+  m_LocalRotation: {x: 0, y: 0.9999995, z: 0, w: -0.0010106863}
+  m_LocalPosition: {x: 1.157757, y: 0.95709336, z: 0.5943602}
+  m_LocalScale: {x: 0.038439646, y: 0.038439658, z: 0.03843963}
+  m_LocalEulerAnglesHint: {x: 0, y: -179.8842, z: 0}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 18
 --- !u!1 &1889958037
 GameObject:
   m_ObjectHideFlags: 0
@@ -22204,6 +22751,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2473c1519b730d346b724d18267dc7fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultEvents:
+    OnValueChanged:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
   direction: 2
   min: 1
   max: 7
@@ -22320,14 +22873,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de0c455dd96dc6d42a39ffe84e76282b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultEvents:
+    OnValueChanged:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
   direction: 3
+  door: {fileID: 245234964}
+  handles: {fileID: 829530009}
+  frame: {fileID: 0}
+  content: {fileID: 0}
+  hideContent: 1
   maxAngle: 110
   openInward: 1
   openOutward: 1
   snapping: 0
-  door: {fileID: 245234964}
-  handles: {fileID: 829530009}
-  frame: {fileID: 0}
 --- !u!4 &1921001537
 Transform:
   m_ObjectHideFlags: 0
@@ -22439,6 +23000,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd828872d92c3a94090d23b7b719f1e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultEvents:
+    OnValueChanged:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  events:
+    OnPush:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
   direction: 0
   activationDistance: 0.03607156
   buttonStrength: 5
@@ -22533,6 +23106,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d5264f69557f7c46ae368ee023d5b1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultEvents:
+    OnValueChanged:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
   direction: 0
   body: {fileID: 962525669}
   handle: {fileID: 862512961}
@@ -23061,6 +23640,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d5264f69557f7c46ae368ee023d5b1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultEvents:
+    OnValueChanged:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
   direction: 0
   body: {fileID: 388702892}
   handle: {fileID: 1413734214}
@@ -23458,7 +24043,7 @@ Prefab:
     - target: {fileID: 3380982, guid: 4d293c8e162f3874b982baadd71153d2, type: 2}
       propertyPath: m_Mesh
       value: 
-      objectReference: {fileID: 1162186853}
+      objectReference: {fileID: 6953593}
     - target: {fileID: 11489174, guid: 4d293c8e162f3874b982baadd71153d2, type: 2}
       propertyPath: drawInGame
       value: 1
@@ -23973,6 +24558,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d5264f69557f7c46ae368ee023d5b1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultEvents:
+    OnValueChanged:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
   direction: 0
   body: {fileID: 149084987}
   handle: {fileID: 1897828306}
@@ -24370,6 +24961,134 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2108384230}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &2111933691
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 2111933692}
+  - 33: {fileID: 2111933697}
+  - 65: {fileID: 2111933696}
+  - 23: {fileID: 2111933695}
+  - 54: {fileID: 2111933694}
+  - 114: {fileID: 2111933693}
+  m_Layer: 0
+  m_Name: Cube (6)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2111933692
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2111933691}
+  m_LocalRotation: {x: 0, y: 0.759124, z: 0, w: 0.65094614}
+  m_LocalPosition: {x: -0.007229041, y: 0.03318727, z: 0.04648992}
+  m_LocalScale: {x: 0.038439613, y: 0.038439658, z: 0.0384396}
+  m_LocalEulerAnglesHint: {x: 0, y: 98.7741, z: 0}
+  m_Children: []
+  m_Father: {fileID: 453045630}
+  m_RootOrder: 0
+--- !u!114 &2111933693
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2111933691}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3abaf4521bf2344ea21ed3020b98eb2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  highlightOnTouch: 1
+  touchHighlightColor: {r: 0.9862069, g: 1, b: 0, a: 0}
+  rumbleOnTouch: {x: 0, y: 0}
+  allowedTouchControllers: 0
+  isGrabbable: 1
+  isDroppable: 1
+  isSwappable: 1
+  holdButtonToGrab: 1
+  rumbleOnGrab: {x: 0, y: 0}
+  allowedGrabControllers: 0
+  precisionSnap: 1
+  rightSnapHandle: {fileID: 0}
+  leftSnapHandle: {fileID: 0}
+  grabAttachMechanic: 0
+  detachThreshold: 500
+  springJointStrength: 500
+  springJointDamper: 50
+  throwMultiplier: 1
+  onGrabCollisionDelay: 0
+  isUsable: 0
+  holdButtonToUse: 0
+  pointerActivatesUseAction: 0
+  rumbleOnUse: {x: 0, y: 0}
+  allowedUseControllers: 0
+--- !u!54 &2111933694
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2111933691}
+  serializedVersion: 2
+  m_Mass: 0.1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!23 &2111933695
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2111933691}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_Materials:
+  - {fileID: 2100000, guid: 33af27359b49eda48829e2c0bf1e12b8, type: 2}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 1
+  m_ReflectionProbeUsage: 1
+  m_ProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 1
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+--- !u!65 &2111933696
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2111933691}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!33 &2111933697
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2111933691}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &2121046199
 GameObject:

@@ -4,17 +4,16 @@
 
     public class VRTK_Chest : VRTK_Control
     {
-        public enum Direction
-        {
-            autodetect, x, z // no support for y at this point in time
-        }
-
         public Direction direction = Direction.autodetect;
-        public float maxAngle = 160f;
 
         public GameObject lid;
         public GameObject body;
         public GameObject handle;
+        [Tooltip("An optional game object that is the parent of the content inside the chest. If set all interactables will become managed so that they only react if the lid is wide enough open.")]
+        public GameObject content;
+        [Tooltip("Will make the content invisible if the chest is closed. This way players cannot peak into it by moving the camera.")]
+        public bool hideContent = true;
+        public float maxAngle = 160f;
 
         private float minAngle = 0f;
         private float stepSize = 1f;
@@ -47,6 +46,9 @@
                 case Direction.x:
                     point += transform.right.normalized * (length / 2f) * subDirection;
                     break;
+                case Direction.y:
+                    point += transform.up.normalized * (length / 2f) * subDirection;
+                    break;
                 case Direction.z:
                     point += transform.forward.normalized * (length / 2f) * subDirection;
                     break;
@@ -61,6 +63,8 @@
             InitBody();
             InitLid();
             InitHandle();
+
+            SetContent(content, hideContent);
         }
 
         protected override bool DetectSetup()
@@ -83,6 +87,9 @@
             {
                 case Direction.x:
                     subDirection = (handleBounds.center.x > lidBounds.center.x) ? -1 : 1;
+                    break;
+                case Direction.y:
+                    subDirection = (handleBounds.center.y > lidBounds.center.y) ? -1 : 1;
                     break;
                 case Direction.z:
                     subDirection = (handleBounds.center.z > lidBounds.center.z) ? -1 : 1;
@@ -108,6 +115,20 @@
                     case Direction.x:
                         lidHj.anchor = new Vector3(subDirection * lidBounds.extents.x, 0, 0);
                         lidHj.axis = new Vector3(0, 0, 1);
+                        if (subDirection > 0)
+                        {
+                            limits.min = -maxAngle;
+                            limits.max = minAngle;
+                        }
+                        else
+                        {
+                            limits.min = minAngle;
+                            limits.max = maxAngle;
+                        }
+                        break;
+                    case Direction.y:
+                        lidHj.anchor = new Vector3(0, subDirection * lidBounds.extents.y, 0);
+                        lidHj.axis = new Vector3(0, 1, 0);
                         if (subDirection > 0)
                         {
                             limits.min = -maxAngle;

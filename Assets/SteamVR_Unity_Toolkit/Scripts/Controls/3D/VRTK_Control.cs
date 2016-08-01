@@ -6,6 +6,11 @@
     [ExecuteInEditMode]
     public abstract class VRTK_Control : MonoBehaviour
     {
+        public enum Direction
+        {
+            autodetect, x, y, z
+        }
+
         [System.Serializable]
         public class ValueChangedEvent : UnityEvent<float> { }
 
@@ -17,6 +22,7 @@
 
         private static Color COLOR_OK = Color.yellow;
         private static Color COLOR_ERROR = new Color(1, 0, 0, 0.9f);
+        private static float MIN_OPENING_DISTANCE = 20f; // percentage how far open something needs to be in order to activate it
 
         public DefaultControlEvents defaultEvents;
 
@@ -26,8 +32,10 @@
 
         protected Bounds bounds;
         protected float value;
-
         protected bool setupSuccessful = true;
+
+        private GameObject controlContent;
+        private bool hideControlContent = false;
 
         public float getValue()
         {
@@ -40,7 +48,13 @@
             {
                 InitRequiredComponents();
             }
+
             setupSuccessful = DetectSetup();
+
+            if (Application.isPlaying)
+            {
+                HandleInteractables();
+            }
         }
 
         public virtual void Update()
@@ -57,6 +71,7 @@
                 // trigger events
                 if (value != oldValue)
                 {
+                    HandleInteractables();
                     defaultEvents.OnValueChanged.Invoke(getValue());
                 }
             }
@@ -102,5 +117,36 @@
             }
 
         }
+
+        public void SetContent(GameObject content, bool hideContent)
+        {
+            controlContent = content;
+            hideControlContent = hideContent;
+        }
+
+        public GameObject GetContent()
+        {
+            return controlContent;
+        }
+
+        private void HandleInteractables()
+        {
+            if (controlContent == null)
+            {
+                return;
+            }
+
+            if (hideControlContent)
+            {
+                controlContent.SetActive(value > 0);
+            }
+
+            // do not cache objects since otherwise they would still be made inactive once taken out of the content
+            foreach (VRTK_InteractableObject io in controlContent.GetComponentsInChildren<VRTK_InteractableObject>(true))
+            {
+                io.enabled = value > MIN_OPENING_DISTANCE;
+            }
+        }
+
     }
 }

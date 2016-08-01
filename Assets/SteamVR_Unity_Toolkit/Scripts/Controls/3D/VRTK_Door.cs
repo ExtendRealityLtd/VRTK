@@ -4,16 +4,7 @@
 
     public class VRTK_Door : VRTK_Control
     {
-        public enum Direction
-        {
-            autodetect, x, y, z
-        }
-
         public Direction direction = Direction.autodetect;
-        public float maxAngle = 120f;
-        public bool openInward = false;
-        public bool openOutward = true;
-        public bool snapping = true;
 
         [Tooltip("An optional game object that will be used as the door. Otherwise the current object will be used.")]
         public GameObject door;
@@ -21,6 +12,14 @@
         public GameObject handles;
         [Tooltip("An optional game object that the door is connected to. This should be specified if the connected object will move as well.")]
         public GameObject frame;
+        [Tooltip("An optional game object that is the parent of the content behind the door. If set all interactables will become managed so that they only react if the door is wide enough open.")]
+        public GameObject content;
+        [Tooltip("Will make the content invisible if the door is closed. This way players cannot peak into it by moving the camera.")]
+        public bool hideContent = true;
+        public float maxAngle = 120f;
+        public bool openInward = false;
+        public bool openOutward = true;
+        public bool snapping = true;
 
         private float stepSize = 1f;
 
@@ -134,6 +133,8 @@
             InitFrame();
             InitDoor();
             InitHandle();
+
+            SetContent(content, hideContent);
         }
 
         protected override bool DetectSetup()
@@ -244,7 +245,6 @@
         protected override void HandleUpdate()
         {
             value = CalculateValue();
-
             doorCf.enabled = snapping && (openOutward ^ openInward) && Mathf.Abs(value) < 2f; // snapping only works for single direction doors so far
         }
 

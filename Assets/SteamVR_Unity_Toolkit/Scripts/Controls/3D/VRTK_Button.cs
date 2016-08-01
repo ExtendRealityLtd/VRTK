@@ -11,20 +11,20 @@
             public UnityEvent OnPush;
         }
 
-        public enum Direction
+        public enum ButtonDirection
         {
             autodetect, x, y, z, negX, negY, negZ
         }
 
         public ButtonEvents events;
 
-        public Direction direction = Direction.autodetect;
+        public ButtonDirection direction = ButtonDirection.autodetect;
         public float activationDistance = 1.0f;
         public float buttonStrength = 5.0f;
 
         private static float MAX_AUTODETECT_ACTIVATION_LENGTH = 4; // full hight of button
 
-        private Direction finalDirection;
+        private ButtonDirection finalDirection;
         private Vector3 initialPosition;
         private Vector3 activationPoint;
 
@@ -70,13 +70,13 @@
 
         protected override bool DetectSetup()
         {
-            finalDirection = (direction == Direction.autodetect) ? DetectDirection() : direction;
-            if (finalDirection == Direction.autodetect)
+            finalDirection = (direction == ButtonDirection.autodetect) ? DetectDirection() : direction;
+            if (finalDirection == ButtonDirection.autodetect)
             {
                 activationPoint = transform.position;
                 return false;
             }
-            if (direction != Direction.autodetect)
+            if (direction != ButtonDirection.autodetect)
             {
                 activationPoint = CalculateActivationPoint();
             }
@@ -110,8 +110,8 @@
 
                 switch (finalDirection)
                 {
-                    case Direction.x:
-                    case Direction.negX:
+                    case ButtonDirection.x:
+                    case ButtonDirection.negX:
                         if (Mathf.RoundToInt(Mathf.Abs(transform.right.x)) == 1)
                         {
                             cj.xMotion = ConfigurableJointMotion.Limited;
@@ -125,8 +125,8 @@
                             cj.zMotion = ConfigurableJointMotion.Limited;
                         }
                         break;
-                    case Direction.y:
-                    case Direction.negY:
+                    case ButtonDirection.y:
+                    case ButtonDirection.negY:
                         if (Mathf.RoundToInt(Mathf.Abs(transform.right.y)) == 1)
                         {
                             cj.xMotion = ConfigurableJointMotion.Limited;
@@ -140,8 +140,8 @@
                             cj.zMotion = ConfigurableJointMotion.Limited;
                         }
                         break;
-                    case Direction.z:
-                    case Direction.negZ:
+                    case ButtonDirection.z:
+                    case ButtonDirection.negZ:
                         if (Mathf.RoundToInt(Mathf.Abs(transform.right.z)) == 1)
                         {
                             cj.xMotion = ConfigurableJointMotion.Limited;
@@ -179,9 +179,9 @@
             }
         }
 
-        private Direction DetectDirection()
+        private ButtonDirection DetectDirection()
         {
-            Direction direction = Direction.autodetect;
+            ButtonDirection direction = ButtonDirection.autodetect;
             Bounds bounds = Utilities.GetBounds(transform);
 
             // shoot rays from the center of the button to learn about surroundings
@@ -210,37 +210,37 @@
             Vector3 hitPoint = Vector3.zero;
             if (Utilities.IsLowest(lengthX, new float[] { lengthY, lengthZ, lengthNegX, lengthNegY, lengthNegZ }))
             {
-                direction = Direction.negX;
+                direction = ButtonDirection.negX;
                 hitPoint = hitRight.point;
                 extents = bounds.extents.x;
             }
             else if (Utilities.IsLowest(lengthY, new float[] { lengthX, lengthZ, lengthNegX, lengthNegY, lengthNegZ }))
             {
-                direction = Direction.y;
+                direction = ButtonDirection.y;
                 hitPoint = hitDown.point;
                 extents = bounds.extents.y;
             }
             else if (Utilities.IsLowest(lengthZ, new float[] { lengthX, lengthY, lengthNegX, lengthNegY, lengthNegZ }))
             {
-                direction = Direction.z;
+                direction = ButtonDirection.z;
                 hitPoint = hitBack.point;
                 extents = bounds.extents.z;
             }
             else if (Utilities.IsLowest(lengthNegX, new float[] { lengthX, lengthY, lengthZ, lengthNegY, lengthNegZ }))
             {
-                direction = Direction.x;
+                direction = ButtonDirection.x;
                 hitPoint = hitLeft.point;
                 extents = bounds.extents.x;
             }
             else if (Utilities.IsLowest(lengthNegY, new float[] { lengthX, lengthY, lengthZ, lengthNegX, lengthNegZ }))
             {
-                direction = Direction.negY;
+                direction = ButtonDirection.negY;
                 hitPoint = hitUp.point;
                 extents = bounds.extents.y;
             }
             else if (Utilities.IsLowest(lengthNegZ, new float[] { lengthX, lengthY, lengthZ, lengthNegX, lengthNegY }))
             {
-                direction = Direction.negZ;
+                direction = ButtonDirection.negZ;
                 hitPoint = hitForward.point;
                 extents = bounds.extents.z;
             }
@@ -248,10 +248,10 @@
             // determin activation distance
             activationDistance = (Vector3.Distance(hitPoint, bounds.center) - extents) * 0.95f;
 
-            if (direction == Direction.autodetect || activationDistance < 0.001f)
+            if (direction == ButtonDirection.autodetect || activationDistance < 0.001f)
             {
                 // auto-detection was not possible or colliding with object already
-                direction = Direction.autodetect;
+                direction = ButtonDirection.autodetect;
                 activationDistance = 0;
             }
             else
@@ -271,8 +271,8 @@
             float extents = 0;
             switch (direction)
             {
-                case Direction.x:
-                case Direction.negX:
+                case ButtonDirection.x:
+                case ButtonDirection.negX:
                     if (Mathf.RoundToInt(Mathf.Abs(transform.right.x)) == 1)
                     {
                         buttonDirection = transform.right;
@@ -288,10 +288,10 @@
                         buttonDirection = transform.forward;
                         extents = bounds.extents.z;
                     }
-                    buttonDirection *= (direction == Direction.x) ? -1 : 1;
+                    buttonDirection *= (direction == ButtonDirection.x) ? -1 : 1;
                     break;
-                case Direction.y:
-                case Direction.negY:
+                case ButtonDirection.y:
+                case ButtonDirection.negY:
                     if (Mathf.RoundToInt(Mathf.Abs(transform.right.y)) == 1)
                     {
                         buttonDirection = transform.right;
@@ -307,10 +307,10 @@
                         buttonDirection = transform.forward;
                         extents = bounds.extents.z;
                     }
-                    buttonDirection *= (direction == Direction.y) ? -1 : 1;
+                    buttonDirection *= (direction == ButtonDirection.y) ? -1 : 1;
                     break;
-                case Direction.z:
-                case Direction.negZ:
+                case ButtonDirection.z:
+                case ButtonDirection.negZ:
                     if (Mathf.RoundToInt(Mathf.Abs(transform.right.z)) == 1)
                     {
                         buttonDirection = transform.right;
@@ -326,7 +326,7 @@
                         buttonDirection = transform.forward;
                         extents = bounds.extents.z;
                     }
-                    buttonDirection *= (direction == Direction.z) ? -1 : 1;
+                    buttonDirection *= (direction == ButtonDirection.z) ? -1 : 1;
                     break;
             }
 
@@ -341,23 +341,7 @@
 
         private Vector3 GetForceVector()
         {
-            switch (finalDirection)
-            {
-                case Direction.x:
-                    return new Vector3(buttonStrength, 0, 0);
-                case Direction.y:
-                    return new Vector3(0, buttonStrength, 0);
-                case Direction.z:
-                    return new Vector3(0, 0, buttonStrength);
-                case Direction.negX:
-                    return new Vector3(-buttonStrength, 0, 0);
-                case Direction.negY:
-                    return new Vector3(0, -buttonStrength, 0);
-                case Direction.negZ:
-                    return new Vector3(0, 0, -buttonStrength);
-                default:
-                    return new Vector3(0, 0, 0);
-            }
+            return -(activationPoint - Utilities.GetBounds(transform).center).normalized * buttonStrength;
         }
     }
 }
