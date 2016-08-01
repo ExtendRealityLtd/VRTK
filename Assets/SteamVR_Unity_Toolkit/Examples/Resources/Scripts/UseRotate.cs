@@ -34,7 +34,10 @@ public class UseRotate : VRTK_InteractableObject
     protected override void Start()
     {
         base.Start();
-        if (rotatingObject == null) rotatingObject = this.transform;
+        if (rotatingObject == null)
+        {
+            rotatingObject = this.transform;
+        }
         spinSpeed = idleSpinSpeed;
     }
 
