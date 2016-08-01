@@ -32,6 +32,26 @@
             return 0;
         }
 
+        /// <summary>
+        /// Returns the GameObject which of the left or right hand.
+        /// </summary>
+        /// <param name="hand">VRTK_DeviceFinder.ControllerHand.Left or .Right</param>
+        /// <returns></returns>
+        public static GameObject GetControllerGameObject(ControllerHand hand)
+        {
+            var controllerManager = GameObject.FindObjectOfType<SteamVR_ControllerManager>();
+
+            switch (hand)
+            {
+                case ControllerHand.Left:
+                    return controllerManager.left;
+                case ControllerHand.Right:
+                    return controllerManager.right;
+                default:
+                    return null;
+            }
+        }
+
         public static SteamVR_TrackedObject TrackedObjectByIndex(uint controllerIndex)
         {
             foreach (SteamVR_TrackedObject trackedObject in FindObjectsOfType<SteamVR_TrackedObject>())

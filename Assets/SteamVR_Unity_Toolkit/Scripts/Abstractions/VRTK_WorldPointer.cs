@@ -8,6 +8,8 @@ namespace VRTK
 {
     using UnityEngine;
 
+    public delegate void PointerToogleEventHandler(object sender);
+
     public abstract class VRTK_WorldPointer : VRTK_DestinationMarker
     {
         public enum pointerVisibilityStates
@@ -16,6 +18,9 @@ namespace VRTK
             Always_On,
             Always_Off
         }
+
+        public event PointerToogleEventHandler OnPointerOn;
+        public event PointerToogleEventHandler OnPointerOff;
 
         public VRTK_ControllerEvents controller = null;
         public Material pointerMaterial;
@@ -121,6 +126,7 @@ namespace VRTK
 
             if (playAreaCursor != null)
             {
+                ToggleBeam(false);
                 Destroy(playAreaCursor);
             }
         }
@@ -283,6 +289,11 @@ namespace VRTK
                 TogglePointer(true);
                 isActive = true;
                 destinationSetActive = true;
+
+                if (OnPointerOn != null)
+				{
+                    OnPointerOn(this);
+				}
             }
         }
 
@@ -293,8 +304,14 @@ namespace VRTK
                 controllerIndex = index;
                 TogglePointer(false);
                 isActive = false;
+
+                if (OnPointerOff != null)
+				{
+                    OnPointerOff(this);
+				}
             }
         }
+        
 
         private void DrawPlayAreaCursorBoundary(int index, float left, float right, float top, float bottom, float thickness, Vector3 localPosition)
         {
