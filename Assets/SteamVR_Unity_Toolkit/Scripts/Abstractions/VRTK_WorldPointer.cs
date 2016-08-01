@@ -66,7 +66,7 @@ namespace VRTK
 
         public virtual void ToggleBeam(bool state)
         {
-            var index = DeviceFinder.GetControllerIndex(gameObject);
+            var index = VRTK_DeviceFinder.GetControllerIndex(gameObject);
             if (state)
             {
                 TurnOnBeam(index);
@@ -92,7 +92,7 @@ namespace VRTK
 
             Utilities.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.Controller);
 
-            headset = DeviceFinder.HeadsetTransform();
+            headset = VRTK_DeviceFinder.HeadsetTransform();
             playArea = FindObjectOfType<SteamVR_PlayArea>();
             playAreaCursorBoundaries = new GameObject[4];
         }

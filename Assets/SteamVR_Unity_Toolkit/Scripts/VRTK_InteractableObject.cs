@@ -304,8 +304,8 @@ namespace VRTK
                 return true;
             }
 
-            var controllerHand = DeviceFinder.GetControllerHandType(controllerCheck.ToString().Replace("_Only", ""));
-            return (DeviceFinder.IsControllerOfHand(actualController, controllerHand));
+            var controllerHand = VRTK_DeviceFinder.GetControllerHandType(controllerCheck.ToString().Replace("_Only", ""));
+            return (VRTK_DeviceFinder.IsControllerOfHand(actualController, controllerHand));
         }
 
         public void ForceStopInteracting()

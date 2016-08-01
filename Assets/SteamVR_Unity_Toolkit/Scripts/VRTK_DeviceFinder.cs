@@ -3,7 +3,7 @@
     using UnityEngine;
     using Valve.VR;
 
-    public class DeviceFinder : MonoBehaviour
+    public class VRTK_DeviceFinder : MonoBehaviour
     {
         public enum ControllerHand
         {
