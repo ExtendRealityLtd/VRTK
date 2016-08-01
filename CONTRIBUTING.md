@@ -81,15 +81,13 @@ e.g.
 
 ## Documentation
 
-If a new feature is being added then the `README.md` should also be
-updated to contain information about the relevant elements such as:
+If a new feature is being added then the `DOCUMENTATION.md` should
+also be updated to contain information about the relevant elements
+such as:
 
   * New general purpose prefabs added.
   * New general purpose scripts.
   * New example scenes showcasing the feature.
-
-The `README.md` lines should not exceed 72 characters unless the line
-cannot be split (such in the case of a long markdown link or url).
 
 ## Commit Messages
 

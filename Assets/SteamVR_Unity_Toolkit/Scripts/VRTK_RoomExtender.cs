@@ -30,9 +30,9 @@ public class VRTK_RoomExtender : MonoBehaviour
     {
         if (movementTransform == null)
         {
-            if (VRTK.DeviceFinder.HeadsetTransform() != null)
+            if (VRTK.VRTK_DeviceFinder.HeadsetTransform() != null)
             {
-                movementTransform = VRTK.DeviceFinder.HeadsetTransform();
+                movementTransform = VRTK.VRTK_DeviceFinder.HeadsetTransform();
             }
             else
             {

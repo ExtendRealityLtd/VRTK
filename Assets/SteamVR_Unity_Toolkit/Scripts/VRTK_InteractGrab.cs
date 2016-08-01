@@ -146,12 +146,12 @@ namespace VRTK
                 objectScript.leftSnapHandle = objectScript.rightSnapHandle;
             }
 
-            if (DeviceFinder.IsControllerOfHand(gameObject, DeviceFinder.ControllerHand.Right))
+            if (VRTK_DeviceFinder.IsControllerOfHand(gameObject, VRTK_DeviceFinder.ControllerHand.Right))
             {
                 return objectScript.rightSnapHandle;
             }
 
-            if (DeviceFinder.IsControllerOfHand(gameObject, DeviceFinder.ControllerHand.Left))
+            if (VRTK_DeviceFinder.IsControllerOfHand(gameObject, VRTK_DeviceFinder.ControllerHand.Left))
             {
                 return objectScript.leftSnapHandle;
             }

@@ -92,7 +92,7 @@
 
         public static Transform AddCameraFade()
         {
-            var camera = DeviceFinder.HeadsetCamera();
+            var camera = VRTK_DeviceFinder.HeadsetCamera();
             if (camera && !camera.gameObject.GetComponent<SteamVR_Fade>())
             {
                 camera.gameObject.AddComponent<SteamVR_Fade>();

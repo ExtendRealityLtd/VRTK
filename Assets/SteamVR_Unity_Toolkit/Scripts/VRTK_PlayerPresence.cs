@@ -27,7 +27,7 @@
             Utilities.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.CameraRig);
 
             lastGoodPositionSet = false;
-            headset = DeviceFinder.HeadsetTransform();
+            headset = VRTK_DeviceFinder.HeadsetTransform();
             CreateCollider();
             InitHeadsetListeners();
 
