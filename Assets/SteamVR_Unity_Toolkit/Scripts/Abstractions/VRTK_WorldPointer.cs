@@ -43,7 +43,6 @@ namespace VRTK
         private Transform headset;
         private bool isActive;
         private bool destinationSetActive;
-        private bool eventsRegistered = false;
 
         private float activateDelayTimer = 0f;
 
