@@ -1,0 +1,8 @@
+; Used by the 'EditorConfig' VS plugin
+; See http://editorconfig.org
+
+; Use tabs preference set to 2 spaces per tab.
+[*.cs]
+indent_style = space
+indent_size = 4
+charset = utf-8-bom
