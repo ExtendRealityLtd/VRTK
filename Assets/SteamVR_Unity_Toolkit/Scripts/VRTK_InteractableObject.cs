@@ -28,7 +28,8 @@ namespace VRTK
             Spring_Joint,
             Track_Object,
             Rotator_Track,
-            Child_Of_Controller
+            Child_Of_Controller,
+            Climbable
         }
 
         public enum AllowedController
@@ -311,6 +312,16 @@ namespace VRTK
             return (grabAttachMechanic == GrabAttachType.Track_Object || grabAttachMechanic == GrabAttachType.Rotator_Track);
         }
 
+        public bool AttachIsClimbObject()
+        {
+            return (grabAttachMechanic == GrabAttachType.Climbable);
+        }
+
+        public bool AttachIsStaticObject()
+        {
+            return AttachIsClimbObject(); // only one at the moment
+        }
+
         public void ZeroVelocity()
         {
             if (GetComponent<Rigidbody>())
@@ -325,13 +336,20 @@ namespace VRTK
             if (grabbingObject == null)
             {
                 previousParent = transform.parent;
-                previousKinematicState = rb.isKinematic;
+
+                if (rb)
+                {
+                    previousKinematicState = rb.isKinematic;
+                }
             }
         }
 
         public void ToggleKinematic(bool state)
         {
-            rb.isKinematic = state;
+            if (rb)
+            {
+                rb.isKinematic = state;
+            }
         }
 
         public GameObject GetGrabbingObject()
@@ -390,13 +408,16 @@ namespace VRTK
         {
             rb = GetComponent<Rigidbody>();
 
-            // If there is no rigid body, add one and set it to 'kinematic'.
-            if (!rb)
+            if (!AttachIsStaticObject())
             {
-                rb = gameObject.AddComponent<Rigidbody>();
-                rb.isKinematic = true;
+                // If there is no rigid body, add one and set it to 'kinematic'.
+                if (!rb)
+                {
+                    rb = gameObject.AddComponent<Rigidbody>();
+                    rb.isKinematic = true;
+                }
+                rb.maxAngularVelocity = float.MaxValue;
             }
-            rb.maxAngularVelocity = float.MaxValue;
             forcedDropped = false;
         }
 
@@ -460,7 +481,10 @@ namespace VRTK
                 transform.parent = previousParent;
                 forcedDropped = false;
             }
-            rb.isKinematic = previousKinematicState;
+            if (rb)
+            {
+                rb.isKinematic = previousKinematicState;
+            }
             if (!isSwappable)
             {
                 isGrabbable = previousIsGrabbable;
