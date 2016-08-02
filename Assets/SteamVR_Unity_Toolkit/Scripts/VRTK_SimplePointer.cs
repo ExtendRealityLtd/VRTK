@@ -29,6 +29,9 @@ namespace VRTK
         private GameObject pointerTip;
         private Vector3 pointerTipScale = new Vector3(0.05f, 0.05f, 0.05f);
 
+        // material of customPointerCursor (if defined)
+        private Material customPointerMaterial;
+
         protected override void OnEnable()
         {
             base.OnEnable();
@@ -80,7 +83,16 @@ namespace VRTK
             }
             else
             {
+                Renderer renderer = customPointerCursor.GetComponentInChildren<MeshRenderer>();
+                if (renderer)
+                {
+                    customPointerMaterial = Material.Instantiate(renderer.sharedMaterial);
+                }
                 pointerTip = Instantiate(customPointerCursor);
+                foreach (Renderer mr in pointerTip.GetComponentsInChildren<Renderer>())
+                {
+                    mr.material = customPointerMaterial;
+                }
             }
 
             pointerTip.transform.name = string.Format("[{0}]WorldPointer_SimplePointer_PointerTip", gameObject.name);
@@ -101,7 +113,14 @@ namespace VRTK
         {
             base.SetPointerMaterial();
             pointer.GetComponent<Renderer>().material = pointerMaterial;
-            pointerTip.GetComponent<Renderer>().material = pointerMaterial;
+            if (customPointerMaterial != null)
+            {
+                customPointerMaterial.color = pointerMaterial.color;
+            }
+            else
+            {
+                pointerTip.GetComponent<Renderer>().material = pointerMaterial;
+            }
         }
 
         protected override void TogglePointer(bool state)

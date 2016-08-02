@@ -68,8 +68,9 @@ namespace VRTK
         private bool loop;
         private int frequency;
         private bool customTracer;
+        private bool rescalePointerTracer;
 
-        public void Create(int setFrequency, float radius, GameObject tracer)
+        public void Create(int setFrequency, float radius, GameObject tracer, bool rescaleTracer=false)
         {
             float circleSize = radius / 8;
 
@@ -83,6 +84,8 @@ namespace VRTK
                 items[f].layer = LayerMask.NameToLayer("Ignore Raycast");
                 items[f].transform.localScale = new Vector3(circleSize, circleSize, circleSize);
             }
+
+            rescalePointerTracer = rescaleTracer;
         }
 
         public void SetPoints(Vector3[] controlPoints, Material material)
@@ -93,7 +96,6 @@ namespace VRTK
                 BezierControlPointMode.Free,
                 BezierControlPointMode.Free
             };
-
             SetObjects(material);
         }
 
@@ -271,7 +273,7 @@ namespace VRTK
 
             for (int f = 0; f < frequency; f++)
             {
-                if (customTracer && (f == 0 || f == (frequency - 1)))
+                if (customTracer && (f == (frequency - 1)))
                 {
                     items[f].SetActive(false);
                     continue;
@@ -283,10 +285,19 @@ namespace VRTK
                 items[f].transform.position = position;
 
                 Vector3 nextPosition = GetPoint((f + 1) * stepSize);
-                Vector3 lookPosition = (nextPosition - position).normalized;
+                Vector3 offset = nextPosition - position;
+                Vector3 lookPosition = offset.normalized;
                 if (lookPosition != Vector3.zero)
                 {
                     items[f].transform.rotation = Quaternion.LookRotation(lookPosition);
+
+                    // rescale the custom tracer according to the length of the beam
+                    if (rescalePointerTracer)
+                    {
+                        Vector3 scl = items[f].transform.localScale;
+                        scl.z = offset.magnitude/2f; // (assuming a center-based scaling)
+                        items[f].transform.localScale = scl;
+                    }
                 }
             }
         }
