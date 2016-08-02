@@ -240,7 +240,7 @@ namespace VRTK
         {
             var playAreaState = (showPlayAreaCursor ? state : false);
             playAreaCursor.gameObject.SetActive(playAreaState);
-            if (!state && interactableObject && interactableObject.pointerActivatesUseAction && interactableObject.holdButtonToUse)
+            if (!state && interactableObject && interactableObject.pointerActivatesUseAction && interactableObject.holdButtonToUse && interactableObject.IsUsing())
             {
                 interactableObject.StopUsing(this.gameObject);
             }
