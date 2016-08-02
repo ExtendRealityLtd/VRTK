@@ -57,6 +57,14 @@ namespace VRTK
             }
         }
 
+        public void ForceResetUsing()
+        {
+            if (usingObject != null)
+            {
+                UnuseInteractedObject(false);
+            }
+        }
+
         private void Awake()
         {
             if (GetComponent<VRTK_InteractTouch>() == null)
@@ -147,17 +155,23 @@ namespace VRTK
             }
         }
 
-        private void UnuseInteractedObject()
+        private void UnuseInteractedObject(bool completeStop)
         {
             if (usingObject != null)
             {
                 OnControllerUnuseInteractableObject(interactTouch.SetControllerInteractEvent(usingObject));
-                usingObject.GetComponent<VRTK_InteractableObject>().StopUsing(gameObject);
+                if (completeStop)
+                {
+                    usingObject.GetComponent<VRTK_InteractableObject>().StopUsing(gameObject);
+                }
                 if (hideControllerOnUse)
                 {
                     controllerActions.ToggleControllerModel(true, usingObject);
                 }
-                usingObject.GetComponent<VRTK_InteractableObject>().ToggleHighlight(false);
+                if (completeStop)
+                {
+                    usingObject.GetComponent<VRTK_InteractableObject>().ToggleHighlight(false);
+                }
                 usingObject = null;
             }
         }
@@ -174,7 +188,7 @@ namespace VRTK
         private void StopUsing()
         {
             SetObjectUsingState(usingObject, 0);
-            UnuseInteractedObject();
+            UnuseInteractedObject(true);
         }
 
         private void DoStartUseObject(object sender, ControllerInteractionEventArgs e)
