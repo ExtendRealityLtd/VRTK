@@ -48,7 +48,7 @@ public class RadialMenu : MonoBehaviour
         //Keep track of pressed button and constantly invoke Hold event
         if (currentPress != -1)
         {
-            buttons[currentPress].Press();
+            buttons[currentPress].OnHold.Invoke();
         }
     }
 
@@ -71,12 +71,13 @@ public class RadialMenu : MonoBehaviour
         {
             ExecuteEvents.Execute(menuButtons[currentHover], pointer, ExecuteEvents.pointerUpHandler);
             ExecuteEvents.Execute(menuButtons[currentHover], pointer, ExecuteEvents.pointerExitHandler);
+            buttons[currentHover].OnHoverExit.Invoke();
         }
         if (evt == ButtonEvent.click) //Click button if click, and keep track of current press
         {
             ExecuteEvents.Execute(menuButtons[buttonID], pointer, ExecuteEvents.pointerDownHandler);
             currentPress = buttonID;
-            buttons[buttonID].Click();
+            buttons[buttonID].OnClick.Invoke();
         }
         else if (evt == ButtonEvent.unclick) //Clear press id to stop invoking OnHold method
         {
@@ -86,6 +87,7 @@ public class RadialMenu : MonoBehaviour
         else if (evt == ButtonEvent.hoverOn && currentHover != buttonID) // Show hover UI event (darken button etc)
         {
             ExecuteEvents.Execute(menuButtons[buttonID], pointer, ExecuteEvents.pointerEnterHandler);
+            buttons[buttonID].OnHoverEnter.Invoke();
         }
         currentHover = buttonID; //Set current hover ID, need this to un-hover if selected button changes
     }
@@ -127,6 +129,7 @@ public class RadialMenu : MonoBehaviour
         {
             var pointer = new PointerEventData(EventSystem.current);
             ExecuteEvents.Execute(menuButtons[currentHover], pointer, ExecuteEvents.pointerExitHandler);
+            buttons[currentHover].OnHoverExit.Invoke();
             currentHover = -1;
         }
     }
@@ -295,18 +298,11 @@ public class RadialMenu : MonoBehaviour
 public class RadialMenuButton
 {
     public Sprite ButtonIcon;
+
     public UnityEvent OnClick;
     public UnityEvent OnHold;
-
-    public void Press()
-    {
-        OnHold.Invoke();
-    }
-
-    public void Click()
-    {
-        OnClick.Invoke();
-    }
+    public UnityEvent OnHoverEnter;
+    public UnityEvent OnHoverExit;
 }
 
 public enum ButtonEvent
