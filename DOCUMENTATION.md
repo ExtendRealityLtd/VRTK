@@ -183,6 +183,7 @@ This directory contains all of the toolkit scripts that add VR functionality to 
  * [VRTK_InteractGrab](#grabbing-interactable-objects-vrtk_interactgrab)
  * [VRTK_InteractUse](#using-interactable-objects-vrtk_interactuse)
  * [VRTK_ObjectAutoGrab](#auto-grabbing-interactable-objects-vrtk_objectautograb)
+ * [VRTK_Simulator](#simulator-vrtk_simulator)
 
 ---
 
@@ -1471,6 +1472,23 @@ The Object Auto Grab script is attached to a Controller object within the `[Came
 ### Example
 
 `SteamVR_Unity_Toolkit/Examples/026_Controller_ForceHoldObject` shows how to automatically grab a sword to each controller and also prevents the swords from being dropped so they are permanently attached to the user's controllers.
+
+---
+
+## Testing Without Using The Headset (VRTK_Simulator)
+
+### Overview
+
+To test a scene it is often necessary to use the headset to move to a location. This increases turn-around times and can become cumbersome. The simulator allows navigating through the scene using the keyboard instead, without the need to put on the headset. One can then move around (also through walls) while looking at the monitor and still use the controllers to interact.
+
+The Simulator script is attached to the `[CameraRig]` prefab. Supported movements are: forward, backward, strafe left, strafe right, turn left, turn right, up, down.
+
+### Inspector Parameters
+
+  * **Keys:** Per default the keys on the left-hand side of the keyboard are used (WASD). They can be individually set as needed. The reset key brings the camera to its initial location.
+  * **Only In Editor:** Typically the simulator should be turned off when not testing anymore. This option will do this automatically when outside the editor.
+  * **Step Size:** Depending on the scale of the world the step size can be defined to increase or decrease movement speed.
+  * **Cam Start:** It can be very handy to start at a certain location instead of having to walk/teleport there first. A good workflow can be to use the keys to navigate in the scene one time, then copy the transform of the `[CameraRig]`, stop the scene and paste the values to an empty game object that is then assigned here. To start at the original position again it is enough to deactivate the game object.
 
 ---
 
