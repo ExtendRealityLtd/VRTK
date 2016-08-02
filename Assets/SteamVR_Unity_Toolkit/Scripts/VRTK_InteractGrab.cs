@@ -303,6 +303,19 @@ namespace VRTK
             return false;
         }
 
+        private bool GrabClimbObject()
+        {
+            if (grabbedObject == null && IsObjectGrabbable(interactTouch.GetTouchedObject()))
+            {
+                InitGrabbedObject();
+                if (grabbedObject)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         private void InitGrabbedObject()
         {
             grabbedObject = interactTouch.GetTouchedObject();
@@ -365,6 +378,14 @@ namespace VRTK
             }
         }
 
+        private void UngrabClimbObject()
+        {
+            if (grabbedObject != null)
+            {
+                InitUngrabbedObject();
+            }
+        }
+
         private void InitUngrabbedObject()
         {
             OnControllerUngrabInteractableObject(interactTouch.SetControllerInteractEvent(grabbedObject));
@@ -418,6 +439,10 @@ namespace VRTK
                 {
                     initialGrabAttempt = GrabTrackedObject();
                 }
+                else if (objectToGrab.GetComponent<VRTK_InteractableObject>().AttachIsClimbObject())
+                {
+                    initialGrabAttempt = GrabClimbObject();
+                }
                 else
                 {
                     initialGrabAttempt = GrabInteractedObject();
@@ -454,6 +479,10 @@ namespace VRTK
                 if (grabbedObject.GetComponent<VRTK_InteractableObject>().AttachIsTrackObject())
                 {
                     UngrabTrackedObject();
+                }
+                else if (grabbedObject.GetComponent<VRTK_InteractableObject>().AttachIsClimbObject())
+                {
+                    UngrabClimbObject();
                 }
                 else
                 {
