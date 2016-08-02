@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/thestonefox/SteamVR_Unity_Toolkit.png?label=ready&title=Ready)](https://waffle.io/thestonefox/SteamVR_Unity_Toolkit)
 # SteamVR Unity Toolkit - [![Slack](https://vrtk-slack-invite.herokuapp.com/badge.svg)](https://vrtk-slack-invite.herokuapp.com) [![Subreddit](https://img.shields.io/badge/subreddit-discussions-red.svg?style=flat-square)](https://www.reddit.com/r/SteamVRUnityToolkit/) [![Trello](https://img.shields.io/badge/trello-work%20board-blue.svg?style=flat-square)](https://trello.com/b/sU0vRWUz/steamvr-unity-toolkit)
 
 A collection of useful scripts and prefabs for building SteamVR titles
