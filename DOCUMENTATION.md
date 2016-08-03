@@ -683,12 +683,16 @@ The Bezier Pointer script can be attached to a Controller object within the `[Ca
   * **Custom Pointer Tracer:** A custom Game Object can be applied here to use instead of the default sphere for the beam tracer. The custom Game Object will match the rotation of the controller.
   * **Custom Pointer Cursor:** A custom Game Object can be applied here to use instead of the default flat cylinder for the pointer cursor.
   * **Layers To Ignore:** The layers to ignore when raycasting.
-
+  * **Valid Teleport Location Object:** A custom Game Object can be applied here to appear only if the teleport is allowed (its material will not be changed ).
+  * **Rescale Pointer Tracer:** Rescale each pointer tracer element according to the length of the Bezier curve.
+  
 ### Example
 
 `SteamVR_Unity_Toolkit/Examples/009_Controller_BezierPointer` is used in conjunction with the Height Adjust Teleporter shows how it is possible to traverse different height objects using the curved pointer without needing to see the top of the object.
 
 `SteamVR_Unity_Toolkit/Examples/012_Controller_PointerWithAreaCollision` shows how a Bezier Pointer with the Play Area Cursor and Collision Detection enabled can be used to traverse a game area but not allow teleporting into areas where the walls or other objects would fall into the play area space enabling the user to enter walls.
+
+`SteamVR_Unity_Toolkit/Examples/036_Controller_CustomCompoundPointer' shows how to display an object (a teleport beam) only if the teleport location is valid, and can create an animated trail along the tracer curve.
 
 ---
 
@@ -2029,5 +2033,9 @@ A scene that demonstrates how to interact with Unity UI elements. The scene uses
 ### 035_Controller_OpacityAndHighlighting
 
 A scene that demonstrates how to change the opacity of the controller and how to highlight elements of the controller such as the buttons or even the entire controller model.
+
+### 036_Controller_CustomCompoundPointer
+
+A scene that demonstrates how the Bezier Pointer can display an object (teleport beam) only if the teleport location is valid, and can create an animated trail along the tracer curve. This scene provides a textured environment for testing the teleport, some active "plasma" spheres on the wall that can be activated with the pointer and another sphere that can be also grabbed and launched around.
 
 [Catlike Coding]: http://catlikecoding.com/unity/tutorials/curves-and-splines/
