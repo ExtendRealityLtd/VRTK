@@ -1446,7 +1446,18 @@ The GetUsingObject method returns the current object being used by the controlle
   * Returns
    * _none_
 
-The ForceStopUsing method will force the controller to stop using the currently touched object.
+The ForceStopUsing method will force the controller to stop using the currently touched object and will also stop the object's using action.
+
+#### ForceResetUsing/0
+
+  > `public void ForceResetUsing()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The ForceResetUsing will force the controller to stop using the currently touched object but the object will continue with it's existing using action.
 
 ### Example
 
