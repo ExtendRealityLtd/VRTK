@@ -27,6 +27,11 @@ namespace VRTK
         public GameObject customPointerCursor;
         public LayerMask layersToIgnore = Physics.IgnoreRaycastLayer;
 
+        [Tooltip("Optional object that appears\nwhen the teleport is allowed")]
+        public GameObject validTeleportLocationObject = null;
+        [Tooltip("Adapt tracer instances to the curve length")]
+        public bool rescalePointerTracer = false;
+
         private GameObject projectedBeamContainer;
         private GameObject projectedBeamForward;
         private GameObject projectedBeamJoint;
@@ -36,8 +41,14 @@ namespace VRTK
         private GameObject curvedBeamContainer;
         private CurveGenerator curvedBeam;
 
+        private GameObject validTeleportLocationInstance = null;
+        // materials of customPointerCursor and teleportBeam (if defined)
+        private Material customPointerMaterial;
+        private Material beamTraceMaterial;
+
         protected override void OnEnable()
         {
+
             base.OnEnable();
             InitProjectedBeams();
             InitPointer();
@@ -83,8 +94,39 @@ namespace VRTK
 
         protected override void InitPointer()
         {
-            pointerCursor = (customPointerCursor ? Instantiate(customPointerCursor) : CreateCursor());
-
+            if (customPointerTracer != null)
+            {
+                var renderer = customPointerTracer.GetComponentInChildren<MeshRenderer>();
+                if (renderer)
+                {
+                    beamTraceMaterial = Material.Instantiate(renderer.sharedMaterial);
+                }
+            }
+            if (customPointerCursor)
+            {
+                Renderer renderer = customPointerCursor.GetComponentInChildren<MeshRenderer>();
+                if (renderer != null)
+                {
+                    customPointerMaterial = Material.Instantiate(renderer.sharedMaterial);
+                }
+                pointerCursor = GameObject.Instantiate(customPointerCursor);
+                foreach (Renderer mr in pointerCursor.GetComponentsInChildren<Renderer>())
+                {
+                    mr.material = customPointerMaterial;
+                }
+                if (validTeleportLocationObject != null)
+                {
+                    validTeleportLocationInstance = Instantiate(validTeleportLocationObject);
+                    validTeleportLocationInstance.name = string.Format("[{0}]WorldPointer_BezierPointer_TeleportBeam", gameObject.name);
+                    validTeleportLocationInstance.transform.parent = pointerCursor.transform;
+                    validTeleportLocationInstance.layer = LayerMask.NameToLayer("Ignore Raycast");
+                    validTeleportLocationInstance.SetActive(false);
+                }
+            }
+            else
+            {
+                pointerCursor = CreateCursor();
+            }
             pointerCursor.name = string.Format("[{0}]WorldPointer_BezierPointer_PointerCursor", gameObject.name);
             Utilities.SetPlayerObject(pointerCursor, VRTK_PlayerObject.ObjectTypes.Pointer);
             pointerCursor.layer = LayerMask.NameToLayer("Ignore Raycast");
@@ -95,22 +137,37 @@ namespace VRTK
             curvedBeamContainer.SetActive(false);
             curvedBeam = curvedBeamContainer.gameObject.AddComponent<CurveGenerator>();
             curvedBeam.transform.parent = null;
-            curvedBeam.Create(pointerDensity, pointerCursorRadius, customPointerTracer);
+            curvedBeam.Create(pointerDensity, pointerCursorRadius, customPointerTracer, rescalePointerTracer);
             base.InitPointer();
         }
 
         protected override void SetPointerMaterial()
         {
-            if (pointerCursor.GetComponent<Renderer>())
+            if (customPointerMaterial != null)
             {
-                pointerCursor.GetComponent<Renderer>().material = pointerMaterial;
+                customPointerMaterial.color = pointerMaterial.color;
+            }
+            if (beamTraceMaterial != null)
+            {
+                beamTraceMaterial.color = pointerMaterial.color;
+                if (beamTraceMaterial.HasProperty("_EmissionColor"))
+                {
+                    beamTraceMaterial.SetColor("_EmissionColor", pointerMaterial.color);
+                }
             }
 
-            foreach (Renderer mr in pointerCursor.GetComponentsInChildren<Renderer>())
+            if (customPointerCursor == null)
             {
-                mr.material = pointerMaterial;
-            }
+                if (pointerCursor.GetComponent<Renderer>())
+                {
+                    pointerCursor.GetComponent<Renderer>().material = pointerMaterial;
+                }
 
+                foreach (Renderer mr in pointerCursor.GetComponentsInChildren<Renderer>())
+                {
+                    mr.material = pointerMaterial;
+                }
+            }
             base.SetPointerMaterial();
         }
 
@@ -206,7 +263,7 @@ namespace VRTK
 
             projectedBeamForward.transform.localScale = new Vector3(setThicknes, setThicknes, setLength);
             projectedBeamForward.transform.localPosition = new Vector3(0f, 0f, beamPosition);
-            projectedBeamJoint.transform.localPosition = new Vector3(0f, 0f, setLength - (projectedBeamJoint.transform.localScale.z / 2));
+            projectedBeamJoint.transform.localPosition = new Vector3(0f, 0f, setLength - (projectedBeamJoint.transform.localScale.z / 2.0f));
             projectedBeamContainer.transform.localRotation = Quaternion.identity;
         }
 
@@ -248,6 +305,10 @@ namespace VRTK
                 pointerCursor.transform.position = projectedBeamDown.transform.position;
                 base.SetPlayAreaCursorTransform(pointerCursor.transform.position);
                 UpdatePointerMaterial(pointerHitColor);
+                if (validTeleportLocationInstance != null)
+                {
+                    validTeleportLocationInstance.SetActive(ValidDestination(pointerContactTarget));
+                }
             }
             else
             {
@@ -265,8 +326,7 @@ namespace VRTK
                 projectedBeamDown.transform.position,
                 projectedBeamDown.transform.position,
             };
-
-            curvedBeam.SetPoints(beamPoints, pointerMaterial);
+            curvedBeam.SetPoints(beamPoints, beamTraceMaterial ?? pointerMaterial);
             if (pointerVisibility != pointerVisibilityStates.Always_Off)
             {
                 curvedBeam.TogglePoints(true);
