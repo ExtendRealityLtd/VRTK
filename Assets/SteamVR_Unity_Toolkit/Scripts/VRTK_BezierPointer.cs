@@ -33,6 +33,8 @@ namespace VRTK
         private GameObject projectedBeamDown;
 
         private GameObject pointerCursor;
+        [Tooltip("Check this if you would like to keep the custom pointer cursor material.")]
+        public bool keepCustomPointerMaterial = false;
         private GameObject curvedBeamContainer;
         private CurveGenerator curvedBeam;
 
@@ -101,6 +103,13 @@ namespace VRTK
 
         protected override void SetPointerMaterial()
         {
+            base.SetPointerMaterial();
+
+            if (keepCustomPointerMaterial)
+            {
+                return;
+            }
+
             if (pointerCursor.GetComponent<Renderer>())
             {
                 pointerCursor.GetComponent<Renderer>().material = pointerMaterial;
@@ -109,9 +118,7 @@ namespace VRTK
             foreach (Renderer mr in pointerCursor.GetComponentsInChildren<Renderer>())
             {
                 mr.material = pointerMaterial;
-            }
-
-            base.SetPointerMaterial();
+            }            
         }
 
         protected override void TogglePointer(bool state)

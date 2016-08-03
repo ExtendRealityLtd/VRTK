@@ -22,6 +22,8 @@ namespace VRTK
         public float pointerLength = 100f;
         public bool showPointerTip = true;
         public GameObject customPointerCursor;
+        [Tooltip("Check this if you would like to keep the custom pointer cursor material.")]
+        public bool keepCustomPointerMaterial = false;
         public LayerMask layersToIgnore = Physics.IgnoreRaycastLayer;
 
         private GameObject pointerHolder;
@@ -81,6 +83,7 @@ namespace VRTK
             else
             {
                 pointerTip = Instantiate(customPointerCursor);
+                pointerTip.transform.localPosition = Vector3.zero;
             }
 
             pointerTip.transform.name = string.Format("[{0}]WorldPointer_SimplePointer_PointerTip", gameObject.name);
@@ -101,7 +104,15 @@ namespace VRTK
         {
             base.SetPointerMaterial();
             pointer.GetComponent<Renderer>().material = pointerMaterial;
-            pointerTip.GetComponent<Renderer>().material = pointerMaterial;
+
+            if (keepCustomPointerMaterial)
+            {
+                return;
+            }
+
+            Renderer tipRenderer = pointerTip.GetComponent<Renderer>();
+            if (tipRenderer) // Fix for cases which the root doesn't have a renderer, only the children
+                tipRenderer.material = pointerMaterial;
         }
 
         protected override void TogglePointer(bool state)
@@ -113,9 +124,15 @@ namespace VRTK
             var tipState = (showPointerTip ? state : false);
             pointerTip.gameObject.SetActive(tipState);
 
-            if (pointer.GetComponent<Renderer>() && pointerVisibility == pointerVisibilityStates.Always_Off)
+            Renderer pointerRenderer = pointer.GetComponent<Renderer>(); // We just one to use GetComponent only once
+
+            if (pointerRenderer && pointerVisibility == pointerVisibilityStates.Always_Off)
             {
-                pointer.GetComponent<Renderer>().enabled = false;
+                pointerRenderer.enabled = false;
+            }
+            else if (!pointerRenderer.enabled && pointerVisibility != pointerVisibilityStates.Always_Off)
+            {
+                pointerRenderer.enabled = true;
             }
         }
 
@@ -126,8 +143,21 @@ namespace VRTK
 
             pointer.transform.localScale = new Vector3(setThicknes, setThicknes, setLength);
             pointer.transform.localPosition = new Vector3(0f, 0f, beamPosition);
-            pointerTip.transform.localPosition = new Vector3(0f, 0f, setLength - (pointerTip.transform.localScale.z / 2));
+
+            if (customPointerCursor == null)
+            {
+                pointerTip.transform.localPosition = new Vector3(0f, 0f, setLength - (pointerTip.transform.localScale.z / 2));
+            }
+            else
+            {
+                pointerTip.transform.localPosition = new Vector3(0f, 0f, setLength); // with a custom Pointer, the correct position should be set in the prefab itself
+            }
+
             pointerHolder.transform.localRotation = Quaternion.identity;
+
+            if (customPointerCursor != null)
+                pointerTip.transform.rotation = customPointerCursor.transform.rotation; 
+
             base.SetPlayAreaCursorTransform(pointerTip.transform.position);
         }
 
@@ -159,7 +189,11 @@ namespace VRTK
 
                 UpdatePointerMaterial(pointerHitColor);
 
-                base.PointerIn();
+                PointerIn();
+            }
+            else
+            {
+                pointerTip.SetActive(false); // Pointer tip is disabled if it's not hiting anything
             }
 
             //adjust beam length if something is blocking it
@@ -169,6 +203,22 @@ namespace VRTK
             }
 
             return actualLength;
+        }
+
+        protected override void PointerIn()
+        {
+            base.PointerIn();
+
+            if (showPointerTip)
+                pointerTip.SetActive(true); // Turns the pointer tip again when the beam hits something
+        }
+
+        public Vector3 GetPointedDirection()
+        {
+            if (pointer != null)
+                return pointer.transform.forward;
+            else
+                return Vector3.zero;
         }
     }
 }
