@@ -116,6 +116,8 @@ This adds a UI element into the world space that can be dropped into a Controlle
 
 If the RadialMenu is placed inside a controller, it will automatically find a `VRTK_ControllerEvents` in its parent to use at the input. However, a `VRTK_ControllerEvents` can be defined explicitly by setting the `Events` parameter of the `Radial Menu Controller` script also attached to the prefab.
 
+The RadialMenu can also be placed inside a `VRTK_InteractableObject` for the RadialMenu to be anchored to a world object instead of the controller. The `Events Manager` parameter will automatically be set if the RadialMenu is a child of an InteractableObject, but it can also be set manually in the inspector. Additionally, for the RadialMenu to be anchored in the world, the `RadialMenuController` script in the prefab must be replaced with `VRTK_IndependentRadialMenuController`. See the script information for further details on making the RadialMenu independent of the controllers.
+
 There are a number of parameters that can be set on the Prefab which are provided by the `SteamVR_Unity_Toolkit/Scripts/Controls/2D/RadialMenu/RadialMenu.cs` script which is applied to the `Panel` child of the prefab.
 
 ### Inspector Parameters
@@ -134,13 +136,33 @@ There are a number of parameters that can be set on the Prefab which are provide
   * **Rotate Icons:** Whether button icons should rotate according to their arc or be vertical compared to the controller.
   * **Icon Margin:** The margin in pixels that the icon should keep within the button.
   * **Hide On Release:** Whether the buttons should be visible when not in use.
+  * **Execute On Unclick:** Whether the button action should happen when the button is released, as opposed to happening immediately when the button is pressed.
+  * **Base Haptic Strength:** The base strength of the haptic pulses when the selected button is changed, or a button is pressed. Set to zero to disable.
   * **Menu Buttons:** The actual GameObjects that make up the radial menu.
   * **Regenerate Buttons:** Button to force regeneration of the radial menu in the editor.
 
 ### Example
 
-`SteamVR_Unity_Toolkit/Examples/030_Controls_RadialTouchpadMenu` displays a radial menu for each controller. The left controller uses the `Hide On Release` variable, so it will only be visible if the left touchpad is being touched.
+`SteamVR_Unity_Toolkit/Examples/030_Controls_RadialTouchpadMenu` displays a radial menu for each controller. The left controller uses the `Hide On Release` variable, so it will only be visible if the left touchpad is being touched. It also uses the `Execute On Unclick` variable to delay execution until the touchpad button is unclicked. The example scene also contains a demonstration of anchoring the RadialMenu to an interactable cube instead of a controller.
 
+### VRTK_IndependentRadialMenuController
+This script inherited from `RadialMenuController` and therefore can be used instead of `RadialMenuController` to allow the RadialMenu to be anchored to any object, not just a controller. The RadialMenu will show when a controller is near the object and the buttons can be clicked with the `Use Alias` button. The menu also automatically rotates towards the user.
+To convert the default `RadialMenu` prefab to be independent of the controllers:
+  * Make the `RadialMenu` a child of an object other than a controller.
+  * Position and scale the menu by adjusting the transform of the `RadialMenu` empty.
+  * Replace `RadialMenuController` with `VRTK_IndependentRadialMenuController`.
+  * Ensure the parent object has the `VRTK_InteractableObject` script.
+  * Verify that `Is Usable` and `Hold Button to Use` are both checked.
+  * Attach `VRTK_InteractTouch` and `VRTK_InteractUse` scripts to the controllers.
+  
+### VRTK_IndependentRadialMenuController - Inspector Parameters
+  * **Events Manager:** If the RadialMenu is the child of an object with VRTK_InteractableObject attached, this will be automatically obtained. It can also be manually set.
+  * **Add Menu Collider:** Whether or not the script should dynamically add a SphereCollider to surround the menu.
+  * **Collider Radius Multiplier:** This times the size of the RadialMenu is the size of the collider.
+  * **Hide After Execution:** If true, after a button is clicked, the RadialMenu will hide.
+  * **Offset Radius Multiplier:** How far away from the object the menu should be placed, relative to the size of the RadialMenu.
+  * **Rotate Towards:** The object the RadialMenu should face towards. If left empty, it will automatically try to find the Camera (eye) object within the SteamVR CameraRig.
+  
 ---
 
 ## ConsoleViewerCanvas
@@ -2012,7 +2034,7 @@ A scene that demonstrates adding tooltips to game objects and to the controllers
 
 ### 030_Controls_RadialTouchpadMenu
 
-A scene that demonstrates adding dynamic radial menus to controllers using the prefab `RadialMenu`.
+A scene that demonstrates adding dynamic radial menus to controllers and other objects using the prefab `RadialMenu`.
 
 ### 031_CameraRig_HeadsetGazePointer
 
