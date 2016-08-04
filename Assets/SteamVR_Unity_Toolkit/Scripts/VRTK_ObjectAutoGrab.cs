@@ -8,14 +8,10 @@
         public bool cloneGrabbedObject;
 
         private VRTK_InteractGrab controller;
-        private float initGrabCooldown;
-        private bool initGrab;
 
         private void Start()
         {
             controller = GetComponent<VRTK_InteractGrab>();
-            initGrab = false;
-            initGrabCooldown = 0.5f;
 
             if (!controller)
             {
@@ -26,6 +22,7 @@
             {
                 Debug.LogError("The objectToGrab Game Object must have the VRTK_InteractableObject script applied to it.");
             }
+            Invoke("InitAutoGrab", 0.5f);
         }
 
         private void InitAutoGrab()
@@ -37,20 +34,6 @@
             }
             controller.GetComponent<VRTK_InteractTouch>().ForceTouch(grabbableObject);
             controller.AttemptGrab();
-        }
-
-        private void Update()
-        {
-            //Give the SteamVR controllers a bit of time to initialise before grabbing
-            if (initGrabCooldown <= 0 && !initGrab)
-            {
-                initGrab = true;
-                InitAutoGrab();
-            }
-            else
-            {
-                initGrabCooldown -= Time.deltaTime;
-            }
         }
     }
 }

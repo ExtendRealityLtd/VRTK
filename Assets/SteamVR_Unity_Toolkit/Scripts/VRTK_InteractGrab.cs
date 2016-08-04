@@ -434,7 +434,7 @@ namespace VRTK
             }
             else
             {
-                grabPrecognitionTimer = grabPrecognition;
+                grabPrecognitionTimer = Time.time + grabPrecognition;
                 if (createRigidBodyWhenNotTouching)
                 {
                     interactTouch.ToggleControllerRigidBody(true);
@@ -480,15 +480,14 @@ namespace VRTK
                 SetControllerAttachPoint();
             }
 
-            if (grabPrecognitionTimer > 0)
+            if (grabPrecognitionTimer >= Time.time)
             {
-                grabPrecognitionTimer--;
                 if (GetGrabbableObject() != null)
                 {
                     AttemptGrabObject();
                     if (GetGrabbedObject() != null)
                     {
-                        grabPrecognitionTimer = 0;
+                        grabPrecognitionTimer = 0f;
                     }
                 }
             }

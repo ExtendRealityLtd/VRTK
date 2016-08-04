@@ -63,7 +63,7 @@ namespace VRTK
 
         public virtual bool CanActivate()
         {
-            return (activateDelayTimer <= 0);
+            return (Time.time >= activateDelayTimer);
         }
 
         public virtual void ToggleBeam(bool state)
@@ -129,11 +129,6 @@ namespace VRTK
 
         protected virtual void Update()
         {
-            if (activateDelayTimer > 0)
-            {
-                activateDelayTimer -= Time.deltaTime;
-            }
-
             if (playAreaCursor && playAreaCursor.activeSelf)
             {
                 UpdateCollider();
@@ -205,12 +200,12 @@ namespace VRTK
 
         protected virtual void PointerSet()
         {
-            if (!enabled || !destinationSetActive || !pointerContactTarget || activateDelayTimer > 0)
+            if (!enabled || !destinationSetActive || !pointerContactTarget || !CanActivate())
             {
                 return;
             }
 
-            activateDelayTimer = activateDelay;
+            activateDelayTimer = Time.time + activateDelay;
 
             var interactableObject = pointerContactTarget.GetComponent<VRTK_InteractableObject>();
             if (interactableObject && interactableObject.pointerActivatesUseAction)
@@ -281,7 +276,7 @@ namespace VRTK
 
         private void TurnOnBeam(uint index)
         {
-            if (enabled && !isActive && activateDelayTimer <= 0)
+            if (enabled && !isActive && CanActivate())
             {
                 setPlayAreaCursorCollision(false);
                 controllerIndex = index;

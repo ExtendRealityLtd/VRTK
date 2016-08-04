@@ -19,18 +19,13 @@ public class ArrowSpawner : MonoBehaviour
     private void OnTriggerStay(Collider collider)
     {
         VRTK_InteractGrab grabbingController = collider.gameObject.GetComponent<VRTK_InteractGrab>();
-        if (CanGrab(grabbingController) && NoArrowNotched(grabbingController.gameObject) && spawnDelayTimer <= 0f)
+        if (CanGrab(grabbingController) && NoArrowNotched(grabbingController.gameObject) && Time.time >= spawnDelayTimer)
         {
             GameObject newArrow = Instantiate(arrowPrefab);
             newArrow.name = "ArrowClone";
             grabbingController.gameObject.GetComponent<VRTK_InteractTouch>().ForceTouch(newArrow);
             grabbingController.AttemptGrab();
-            spawnDelayTimer = spawnDelay;
-        }
-
-        if (spawnDelayTimer > 0)
-        {
-            spawnDelayTimer -= Time.deltaTime;
+            spawnDelayTimer = Time.time + spawnDelay;
         }
     }
 
