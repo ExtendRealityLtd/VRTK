@@ -38,11 +38,19 @@ namespace VRTK
             Right_Only
         }
 
+        public enum ControllerHideMode
+        {
+            Default,
+            OverrideHide,
+            OverrideDontHide,
+        }
+
         [Header("Touch Interactions", order = 1)]
         public bool highlightOnTouch = false;
         public Color touchHighlightColor = Color.clear;
         public Vector2 rumbleOnTouch = Vector2.zero;
         public AllowedController allowedTouchControllers = AllowedController.Both;
+        public ControllerHideMode hideControllerOnTouch = ControllerHideMode.Default;
 
         [Header("Grab Interactions", order = 2)]
         public bool isGrabbable = false;
@@ -54,6 +62,7 @@ namespace VRTK
         public bool precisionSnap;
         public Transform rightSnapHandle;
         public Transform leftSnapHandle;
+        public ControllerHideMode hideControllerOnGrab = ControllerHideMode.Default;
 
         [Header("Grab Mechanics", order = 3)]
         public GrabAttachType grabAttachMechanic = GrabAttachType.Fixed_Joint;
@@ -65,10 +74,12 @@ namespace VRTK
 
         [Header("Use Interactions", order = 4)]
         public bool isUsable = false;
+        public bool useOnlyIfGrabbed = false;
         public bool holdButtonToUse = true;
         public bool pointerActivatesUseAction = false;
         public Vector2 rumbleOnUse = Vector2.zero;
         public AllowedController allowedUseControllers = AllowedController.Both;
+        public ControllerHideMode hideControllerOnUse = ControllerHideMode.Default;
 
         public event InteractableObjectEventHandler InteractableObjectTouched;
         public event InteractableObjectEventHandler InteractableObjectUntouched;
@@ -94,6 +105,19 @@ namespace VRTK
         private bool previousKinematicState;
         private bool previousIsGrabbable;
         private bool forcedDropped;
+
+        public bool CheckHideMode(bool defaultMode, ControllerHideMode overrideMode)
+        {
+            switch (overrideMode)
+            {
+                case VRTK_InteractableObject.ControllerHideMode.OverrideDontHide:
+                    return false;
+                case VRTK_InteractableObject.ControllerHideMode.OverrideHide:
+                    return true;
+            }
+            // default: do not change
+            return defaultMode;
+        }
 
         public virtual void OnInteractableObjectTouched(InteractableObjectEventArgs e)
         {
