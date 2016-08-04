@@ -1545,6 +1545,10 @@ The following UI controls are available:
   * [VRTK_Lever](#vrtk_lever)
   * [VRTK_Slider](#vrtk_slider)
 
+The following UI convenience scripts are available:
+
+  * [VRTK_ContentHandler](#vrtk_contenthandler)
+
 ---
 
 ## VRTK_Button
@@ -1563,7 +1567,7 @@ The script will instantiate the required Rigidbody and ConstantForce components 
 
 ### Class Events
 
-  * `OnPushed` - Emitted when the button is successfully pushed.
+  * `OnPush` - Emitted when the button is successfully pushed.
   
 ### Example
 
@@ -1575,17 +1579,19 @@ The script will instantiate the required Rigidbody and ConstantForce components 
 
 ### Overview
 
-Transforms a game object into a chest with a lid. The direction can be either x or z and can also be auto-detected with very high reliability.
+Transforms a game object into a chest with a lid. The direction can be auto-detected with very high reliability or set manually.
 
 The script will instantiate the required Rigidbody, Interactable and HingeJoint components automatically in case they do not exist yet. It will expect three distinct game objects: a body, a lid and a handle. These should be independent and not children of each other.
 
 ### Inspector Parameters
 
   * **Direction:** The axis on which the chest should open. All other axis will be frozen.
-  * **Max Angle:** The maximum opening angle of the chest.
   * **Lid:** The game object for the lid.
   * **Body:** The game object for the body.
   * **Handle:** The game object for the handle.
+  * **Content:** The parent game object for the chest content elements. 
+  * **Hide Content:** Makes the content invisible while the chest is closed.
+  * **Max Angle:** The maximum opening angle of the chest.
 
 ### Example
 
@@ -1606,13 +1612,15 @@ The script will instantiate the required Rigidbodies, Interactable and HingeJoin
 ### Inspector Parameters
 
   * **Direction:** The axis on which the door should open. 
+  * **Door:** The game object for the door. Can also be an empty parent or left empty if the script is put onto the actual door mesh. If no colliders exist yet a collider will tried to be automatically attached to all children that expose renderers.
+  * **Handles:** The game object for the handles. Can also be an empty parent or left empty. If empty the door can only be moved using the rigidbody mode of the controller. If no collider exists yet a compound collider made up of all children will try to be calculated but this will fail if the door is rotated. In that case a manual collider will need to be assigned.
+  * **Frame:** The game object for the frame to which the door is attached. Should only be set if the frame will move as well to ensure that the door moves along with the frame.
+  * **Content:** The parent game object for the door content elements. 
+  * **Hide Content:** Makes the content invisible while the door is closed.
   * **Max Angle:** The maximum opening angle of the door.
   * **Open Inward:** Can the door be pulled to open.
   * **Open Outward:** Can the door be pushed to open.
   * **Snapping:** Keeps the door closed with a slight force. This way the door will not gradually open due to some minor physics effect. Does only work if either inward or outward is selected, not both.
-  * **Door:** The game object for the door. Can also be an empty parent or left empty if the script is put onto the actual door mesh. If no colliders exist yet a collider will tried to be automatically attached to all children that expose renderers.
-  * **Handles:** The game object for the handles. Can also be an empty parent or left empty. If empty the door can only be moved using the rigidbody mode of the controller. If no collider exists yet a compound collider made up of all children will try to be calculated but this will fail if the door is rotated. In that case a manual collider will need to be assigned.
-  * **Frame:** The game object for the frame to which the door is attached. Should only be set if the frame will move as well to ensure that the door moves along with the frame.
 
 ### Example
 
@@ -1703,6 +1711,26 @@ The script will instantiate the required Rigidbody and Interactable components a
   * **Min:** The minimum value of the slider.
   * **Max:** The maximum value of the slider.
   * **Step Size:** The increments in which slider values can change. The slider supports snapping.
+  
+### Example
+
+`SteamVR_Unity_Toolkit/Examples/025_Controls_Overview` has a selection of sliders at various angles with different step values to demonstrate their usage.
+
+---
+
+## VRTK_ContentHandler
+
+### Overview
+
+Manages objects defined as content. When taking out an object from a drawer and closing the drawer this object would otherwise disappear even if outside the drawer.
+
+The script will use the boundaries of the control to determine if it is in or out and reparent the object as necessary. It can be put onto individual objects or the parent of multiple objects. Using the latter way all interactable objects under that parent will become managed by the script.
+
+### Inspector Parameters
+
+  * **Control:** The 3D control responsible for the content.
+  * **Inside:** The transform containing the meshes or colliders that define the inside of the control.
+  * **Outside:** Any transform that will act as the parent while the object is not inside the control.
   
 ### Example
 

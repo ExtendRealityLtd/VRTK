@@ -4,19 +4,19 @@
 
     public class VRTK_Knob : VRTK_Control
     {
-        public enum Direction
+        public enum KnobDirection
         {
             x, y, z // TODO: autodetect not yet done, it's a bit more difficult to get it right
         }
 
-        public Direction direction = Direction.x;
+        public KnobDirection direction = KnobDirection.x;
         public float min = 0f;
         public float max = 100f;
         public float stepSize = 1f;
 
         private static float MAX_AUTODETECT_KNOB_WIDTH = 3; // multiple of the knob width
 
-        private Direction finalDirection;
+        private KnobDirection finalDirection;
         private Quaternion initialRotation;
         private Vector3 initialLocalRotation;
         private Rigidbody rb;
@@ -55,20 +55,20 @@
             rb.angularDrag = 10; // otherwise knob will continue to move too far on its own
         }
 
-        private void SetConstraints(Direction direction)
+        private void SetConstraints(KnobDirection direction)
         {
             if (!rb) return;
 
             rb.constraints = RigidbodyConstraints.FreezeAll;
             switch (direction)
             {
-                case Direction.x:
+                case KnobDirection.x:
                     rb.constraints -= RigidbodyConstraints.FreezeRotationX;
                     break;
-                case Direction.y:
+                case KnobDirection.y:
                     rb.constraints -= RigidbodyConstraints.FreezeRotationY;
                     break;
-                case Direction.z:
+                case KnobDirection.z:
                     rb.constraints -= RigidbodyConstraints.FreezeRotationZ;
                     break;
             }
@@ -86,9 +86,9 @@
             io.grabAttachMechanic = VRTK_InteractableObject.GrabAttachType.Track_Object;
         }
 
-        private Direction DetectDirection()
+        private KnobDirection DetectDirection()
         {
-            Direction direction = Direction.x;
+            KnobDirection direction = KnobDirection.x;
             Bounds bounds = Utilities.GetBounds(transform);
 
             // shoot rays in all directions to learn about surroundings
@@ -116,27 +116,27 @@
             // TODO: not yet the right decision strategy, works only partially
             if (Utilities.IsLowest(lengthX, new float[] { lengthY, lengthZ, lengthNegX, lengthNegY, lengthNegZ }))
             {
-                direction = Direction.z;
+                direction = KnobDirection.z;
             }
             else if (Utilities.IsLowest(lengthY, new float[] { lengthX, lengthZ, lengthNegX, lengthNegY, lengthNegZ }))
             {
-                direction = Direction.y;
+                direction = KnobDirection.y;
             }
             else if (Utilities.IsLowest(lengthZ, new float[] { lengthX, lengthY, lengthNegX, lengthNegY, lengthNegZ }))
             {
-                direction = Direction.x;
+                direction = KnobDirection.x;
             }
             else if (Utilities.IsLowest(lengthNegX, new float[] { lengthX, lengthY, lengthZ, lengthNegY, lengthNegZ }))
             {
-                direction = Direction.z;
+                direction = KnobDirection.z;
             }
             else if (Utilities.IsLowest(lengthNegY, new float[] { lengthX, lengthY, lengthZ, lengthNegX, lengthNegZ }))
             {
-                direction = Direction.y;
+                direction = KnobDirection.y;
             }
             else if (Utilities.IsLowest(lengthNegZ, new float[] { lengthX, lengthY, lengthZ, lengthNegX, lengthNegY }))
             {
-                direction = Direction.x;
+                direction = KnobDirection.x;
             }
 
             return direction;
@@ -147,13 +147,13 @@
             float angle = 0;
             switch (finalDirection)
             {
-                case Direction.x:
+                case KnobDirection.x:
                     angle = transform.localRotation.eulerAngles.x - initialLocalRotation.x;
                     break;
-                case Direction.y:
+                case KnobDirection.y:
                     angle = transform.localRotation.eulerAngles.y - initialLocalRotation.y;
                     break;
-                case Direction.z:
+                case KnobDirection.z:
                     angle = transform.localRotation.eulerAngles.z - initialLocalRotation.z;
                     break;
             }

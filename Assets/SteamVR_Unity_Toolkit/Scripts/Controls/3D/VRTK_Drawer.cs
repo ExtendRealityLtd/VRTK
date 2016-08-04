@@ -4,11 +4,6 @@
 
     public class VRTK_Drawer : VRTK_Control
     {
-        public enum Direction
-        {
-            autodetect, x, y, z
-        }
-
         public Direction direction = Direction.autodetect;
 
         public GameObject body;
@@ -18,8 +13,6 @@
         [Tooltip("Will make the content invisible if the drawer is closed. This way players cannot peak into it by moving the camera.")]
         public bool hideContent = true;
         public bool snapping = false;
-
-        private static float MIN_OPENING_DISTANCE = 20f; // percentage open
 
         private Rigidbody rb;
         private Rigidbody handleRb;
@@ -34,8 +27,6 @@
         private Vector3 initialPosition;
         private bool cjCreated = false;
         private bool cfCreated = false;
-
-        private VRTK_InteractableObject[] contentIOs;
 
         public override void OnDrawGizmos()
         {
@@ -73,10 +64,7 @@
             InitBody();
             InitHandle();
 
-            if (content)
-            {
-                contentIOs = content.GetComponentsInChildren<VRTK_InteractableObject>();
-            }
+            SetContent(content, hideContent);
         }
 
         protected override bool DetectSetup()
@@ -161,26 +149,7 @@
         protected override void HandleUpdate()
         {
             value = CalculateValue();
-
-            if (contentIOs != null)
-            {
-                HandleInteractables();
-            }
-
             cf.enabled = snapping && Mathf.Abs(value) < 2f;
-        }
-
-        private void HandleInteractables()
-        {
-            if (hideContent)
-            {
-                content.SetActive(value > 0);
-            }
-
-            foreach (VRTK_InteractableObject io in contentIOs)
-            {
-                io.enabled = value > MIN_OPENING_DISTANCE;
-            }
         }
 
         private void InitBody()

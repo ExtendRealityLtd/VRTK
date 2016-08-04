@@ -4,11 +4,6 @@
 
     public class VRTK_Slider : VRTK_Control
     {
-        public enum Direction
-        {
-            autodetect, x, y, z
-        }
-
         public Direction direction = Direction.autodetect;
 
         public float min = 0f;
