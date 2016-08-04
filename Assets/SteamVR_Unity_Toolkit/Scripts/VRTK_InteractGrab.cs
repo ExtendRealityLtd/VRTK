@@ -486,6 +486,10 @@ namespace VRTK
                 if (GetGrabbableObject() != null)
                 {
                     AttemptGrabObject();
+                    if (GetGrabbedObject() != null)
+                    {
+                        grabPrecognitionTimer = 0;
+                    }
                 }
             }
         }
