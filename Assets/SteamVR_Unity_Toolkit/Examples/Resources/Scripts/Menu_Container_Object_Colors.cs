@@ -15,5 +15,6 @@ public class Menu_Container_Object_Colors : VRTK_InteractableObject
     {
         base.Start();
         SetSelectedColor(Color.red);
+        SaveCurrentState();
     }
 }
