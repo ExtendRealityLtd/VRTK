@@ -35,7 +35,7 @@
             }
         }
 
-        protected HeadsetCollisionEventArgs SetHeadsetCollisionEvent(Collider collider, Transform currentTransform)
+        private HeadsetCollisionEventArgs SetHeadsetCollisionEvent(Collider collider, Transform currentTransform)
         {
             HeadsetCollisionEventArgs e;
             e.collider = collider;
@@ -43,7 +43,7 @@
             return e;
         }
 
-        protected void Start()
+        private void Start()
         {
             Utilities.AddCameraFade();
             if (gameObject.GetComponentInChildren<SteamVR_Fade>() == null)
@@ -62,12 +62,12 @@
             rb.useGravity = false;
         }
 
-        protected virtual bool ValidTarget(Transform target)
+        private bool ValidTarget(Transform target)
         {
             return (target && target.tag != ignoreTargetWithTagOrClass && target.GetComponent(ignoreTargetWithTagOrClass) == null);
         }
 
-        protected void OnTriggerStay(Collider collider)
+        private void OnTriggerStay(Collider collider)
         {
             if (!collider.GetComponent<VRTK_PlayerObject>() && ValidTarget(collider.transform))
             {
@@ -76,7 +76,7 @@
             }
         }
 
-        protected void OnTriggerExit(Collider collider)
+        private void OnTriggerExit(Collider collider)
         {
             if (!collider.GetComponent<VRTK_PlayerObject>())
             {
