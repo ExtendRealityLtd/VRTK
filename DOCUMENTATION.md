@@ -1763,7 +1763,7 @@ The script will use the boundaries of the control to determine if it is in or ou
   
 ### Example
 
-`SteamVR_Unity_Toolkit/Examples/025_Controls_Overview` has a selection of sliders at various angles with different step values to demonstrate their usage.
+`SteamVR_Unity_Toolkit/Examples/025_Controls_Overview` has a drawer with a collection of items that adhere to this concept.
 
 ---
 
