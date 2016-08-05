@@ -15,6 +15,7 @@ namespace VRTK
     public class VRTK_HeightAdjustTeleport : VRTK_BasicTeleport
     {
         public bool playSpaceFalling = true;
+        public float blinkYThreshold = 0.1f;
 
         private float currentRayDownY = 0f;
         private GameObject currentFloor = null;
@@ -61,11 +62,6 @@ namespace VRTK
             return (currentFloor != collidedObj.transform.gameObject);
         }
 
-        private bool MeshYChanged(RaycastHit collidedObj, float floorY)
-        {
-            return (collidedObj.transform.GetComponent<MeshCollider>() && floorY != currentRayDownY);
-        }
-
         private bool FloorIsGrabbedObject(RaycastHit collidedObj)
         {
             return (collidedObj.transform.GetComponent<VRTK_InteractableObject>() && collidedObj.transform.GetComponent<VRTK_InteractableObject>().IsGrabbed());
@@ -81,15 +77,17 @@ namespace VRTK
                 bool rayHit = Physics.Raycast(ray, out rayCollidedWith);
                 float floorY = eyeCamera.transform.position.y - rayCollidedWith.distance;
 
-                if (rayHit && ValidLocation(rayCollidedWith.transform) && !FloorIsGrabbedObject(rayCollidedWith) && (MeshYChanged(rayCollidedWith, floorY) || CurrentFloorChanged(rayCollidedWith)))
+                if (rayHit && ValidLocation(rayCollidedWith.transform) && !FloorIsGrabbedObject(rayCollidedWith))
                 {
+                    var floorDelta = currentRayDownY - floorY;
                     currentFloor = rayCollidedWith.transform.gameObject;
-                    currentRayDownY = floorY;
 
-                    if (withBlink && !rayCollidedWith.transform.GetComponent<MeshCollider>())
+                    if (withBlink && (floorDelta > blinkYThreshold || floorDelta < -blinkYThreshold))
                     {
                         Blink(blinkTransitionSpeed);
                     }
+
+                    currentRayDownY = floorY;
 
                     Vector3 newPosition = new Vector3(transform.position.x, floorY, transform.position.z);
                     var teleportArgs = new DestinationMarkerEventArgs
