@@ -100,11 +100,12 @@ guidelines see the [Contribution Document].
 
 ## License
 
-Code released under the MIT license.
+Code released under the [MIT License].
 
 [SteamVR Plugin]: https://www.assetstore.unity3d.com/en/#!/content/32647
 [SteamVR Plugin for Unity3d Github Repo]: https://github.com/ValveSoftware/openvr/tree/master/unity_package/Assets/SteamVR
 [Catlike Coding]: http://catlikecoding.com/unity/tutorials/curves-and-splines/
+[MIT License]: https://github.com/thestonefox/SteamVR_Unity_Toolkit/blob/master/LICENSE
 [Contribution Document]: https://github.com/thestonefox/SteamVR_Unity_Toolkit/blob/master/CONTRIBUTING.md
 [DOCUMENTATION.md]: https://github.com/thestonefox/SteamVR_Unity_Toolkit/blob/master/DOCUMENTATION.md
 [Fork]: http://help.github.com/fork-a-repo/
