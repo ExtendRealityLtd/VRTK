@@ -94,7 +94,7 @@ namespace VRTK
         protected GameObject usingObject = null;
 
         private int usingState = 0;
-        private Dictionary<string, Color> originalObjectColours;
+        private Dictionary<string, Color[]> originalObjectColours;
 
         private Transform grabbedSnapHandle;
         private Transform trackPoint;
@@ -442,7 +442,7 @@ namespace VRTK
 
         protected virtual void OnEnable()
         {
-            if(forcedDropped)
+            if (forcedDropped)
             {
                 LoadPreviousState();
             }
@@ -492,39 +492,59 @@ namespace VRTK
             return (GetComponents<Renderer>().Length > 0 ? GetComponents<Renderer>() : GetComponentsInChildren<Renderer>());
         }
 
-        private Dictionary<string, Color> StoreOriginalColors()
+        private Dictionary<string, Color[]> StoreOriginalColors()
         {
-            Dictionary<string, Color> colors = new Dictionary<string, Color>();
+            var colors = new Dictionary<string, Color[]>();
             foreach (Renderer renderer in GetRendererArray())
             {
-                if (renderer.material.HasProperty("_Color"))
+                colors[renderer.gameObject.name] = new Color[renderer.materials.Length];
+
+                for (int i = 0; i < renderer.materials.Length; i++)
                 {
-                    colors[renderer.gameObject.name] = renderer.material.color;
+                    var material = renderer.materials[i];
+                    if (material.HasProperty("_Color"))
+                    {
+                        colors[renderer.gameObject.name][i] = material.color;
+                    }
                 }
             }
             return colors;
         }
 
-        private Dictionary<string, Color> BuildHighlightColorArray(Color color)
+        private Dictionary<string, Color[]> BuildHighlightColorArray(Color color)
         {
-            Dictionary<string, Color> colors = new Dictionary<string, Color>();
+            var colors = new Dictionary<string, Color[]>();
             foreach (Renderer renderer in GetRendererArray())
             {
-                if (renderer.material.HasProperty("_Color"))
+                colors[renderer.gameObject.name] = new Color[renderer.materials.Length];
+                for (int i = 0; i < renderer.materials.Length; i++)
                 {
-                    colors[renderer.gameObject.name] = color;
+                    var material = renderer.materials[i];
+                    if (material.HasProperty("_Color"))
+                    {
+                        colors[renderer.gameObject.name][i] = color;
+                    }
                 }
             }
             return colors;
         }
 
-        private void ChangeColor(Dictionary<string, Color> colors)
+        private void ChangeColor(Dictionary<string, Color[]> colors)
         {
             foreach (Renderer renderer in GetRendererArray())
             {
-                if (renderer.material.HasProperty("_Color") && colors.ContainsKey(renderer.gameObject.name))
+                if (!colors.ContainsKey(renderer.gameObject.name))
                 {
-                    renderer.material.color = colors[renderer.gameObject.name];
+                    continue;
+                }
+
+                for (int i = 0; i < renderer.materials.Length; i++)
+                {
+                    var material = renderer.materials[i];
+                    if (material.HasProperty("_Color"))
+                    {
+                        material.color = colors[renderer.gameObject.name][i];
+                    }
                 }
             }
         }
