@@ -480,7 +480,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 429606}
   leftSnapHandle: {fileID: 0}
-  grabAttachMechanic: 3
+  grabAttachMechanic: 4
   detachThreshold: 500
   springJointStrength: 500
   springJointDamper: 50

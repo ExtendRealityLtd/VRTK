@@ -1,10 +1,18 @@
 ﻿namespace VRTK
 {
     using UnityEngine;
-    using System.Collections;
 
     public class VRTK_ControllerTooltips : MonoBehaviour
     {
+        public enum TooltipButtons
+        {
+            TriggerTooltip,
+            GripTooltip,
+            TouchpadTooltip,
+            AppMenuTooltip,
+            None
+        }
+
         public string triggerText;
         public string gripText;
         public string touchpadText;
@@ -24,27 +32,42 @@
         private bool touchpadInitialised = false;
         private bool appMenuInitialised = false;
 
+        private GameObject[] buttonTooltips;
 
-        public void ShowTips(bool state)
+        public void ShowTips(bool state, TooltipButtons element = TooltipButtons.None)
         {
-            foreach (var tooltip in this.GetComponentsInChildren<VRTK_ObjectTooltip>())
+            if (element == TooltipButtons.None)
             {
-                tooltip.gameObject.SetActive(state);
+                for (int i = 0; i < buttonTooltips.Length; i++)
+                {
+                    buttonTooltips[i].SetActive(state);
+                }
+            }
+            else
+            {
+                buttonTooltips[(int)element].SetActive(state);
             }
         }
 
-        private void Start()
+        private void Awake()
         {
             triggerInitialised = false;
             gripInitialised = false;
             touchpadInitialised = false;
             appMenuInitialised = false;
             InitialiseTips();
+            buttonTooltips = new GameObject[4]
+            {
+                transform.FindChild(TooltipButtons.TriggerTooltip.ToString()).gameObject,
+                transform.FindChild(TooltipButtons.GripTooltip.ToString()).gameObject,
+                transform.FindChild(TooltipButtons.TouchpadTooltip.ToString()).gameObject,
+                transform.FindChild(TooltipButtons.AppMenuTooltip.ToString()).gameObject,
+            };
         }
 
         private void InitialiseTips()
         {
-            foreach (var tooltip in this.GetComponentsInChildren<VRTK_ObjectTooltip>())
+            foreach (var tooltip in GetComponentsInChildren<VRTK_ObjectTooltip>())
             {
                 var tipText = "";
                 Transform tipTransform = null;
@@ -93,6 +116,11 @@
                 tooltip.lineColor = tipLineColor;
 
                 tooltip.Reset();
+
+                if (tipText.Trim().Length == 0)
+                {
+                    tooltip.gameObject.SetActive(false);
+                }
             }
         }
 
@@ -110,7 +138,7 @@
             }
             else
             {
-                returnTransform = this.transform.parent.FindChild("Model/" + findTransform + "/attach");
+                returnTransform = transform.parent.FindChild("Model/" + findTransform + "/attach");
             }
 
             return returnTransform;

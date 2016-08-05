@@ -4,12 +4,12 @@
 
     public class VRTK_Lever : VRTK_Control
     {
-        public enum Direction
+        public enum LeverDirection
         {
             x, y, z
         }
 
-        public Direction direction = Direction.y;
+        public LeverDirection direction = LeverDirection.y;
         public float min = 0f;
         public float max = 100f;
         public float stepSize = 1f;
@@ -73,15 +73,15 @@
                 // this involves quite some guesswork. It is very hard to find general purpose settings but we can try. The user can still create the hingejoint himself.
                 switch (direction)
                 {
-                    case Direction.x:
+                    case LeverDirection.x:
                         hj.axis = new Vector3(0, 1, 0);
                         limits.min = -130;
                         break;
-                    case Direction.y:
+                    case LeverDirection.y:
                         hj.axis = new Vector3(0, 0, 1);
                         limits.min = -130;
                         break;
-                    case Direction.z:
+                    case LeverDirection.z:
                         hj.axis = new Vector3(1, 0, 0);
                         limits.min = -130;
                         break;

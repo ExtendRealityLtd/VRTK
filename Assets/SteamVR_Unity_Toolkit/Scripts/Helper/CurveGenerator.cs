@@ -10,8 +10,6 @@
 namespace VRTK
 {
     using UnityEngine;
-    using System.Collections;
-    using System;
 
     public static class Bezier
     {
@@ -70,8 +68,9 @@ namespace VRTK
         private bool loop;
         private int frequency;
         private bool customTracer;
+        private bool rescalePointerTracer;
 
-        public void Create(int setFrequency, float radius, GameObject tracer)
+        public void Create(int setFrequency, float radius, GameObject tracer, bool rescaleTracer=false)
         {
             float circleSize = radius / 8;
 
@@ -81,26 +80,28 @@ namespace VRTK
             {
                 customTracer = true;
                 items[f] = (tracer ? Instantiate(tracer) : CreateSphere());
-                items[f].transform.parent = this.transform;
+                items[f].transform.parent = transform;
                 items[f].layer = LayerMask.NameToLayer("Ignore Raycast");
                 items[f].transform.localScale = new Vector3(circleSize, circleSize, circleSize);
             }
+
+            rescalePointerTracer = rescaleTracer;
         }
 
         public void SetPoints(Vector3[] controlPoints, Material material)
         {
             points = controlPoints;
-            modes = new BezierControlPointMode[] {
-            BezierControlPointMode.Free,
-            BezierControlPointMode.Free
-        };
-
+            modes = new BezierControlPointMode[]
+            {
+                BezierControlPointMode.Free,
+                BezierControlPointMode.Free
+            };
             SetObjects(material);
         }
 
         public void TogglePoints(bool state)
         {
-            this.gameObject.SetActive(state);
+            gameObject.SetActive(state);
         }
 
         private GameObject CreateSphere()
@@ -261,7 +262,7 @@ namespace VRTK
         private void SetObjects(Material material)
         {
             float stepSize = frequency * 1;
-            if (this.Loop || stepSize == 1)
+            if (Loop || stepSize == 1)
             {
                 stepSize = 1f / stepSize;
             }
@@ -272,7 +273,7 @@ namespace VRTK
 
             for (int f = 0; f < frequency; f++)
             {
-                if (customTracer && (f == 0 || f == (frequency - 1)))
+                if (customTracer && (f == (frequency - 1)))
                 {
                     items[f].SetActive(false);
                     continue;
@@ -280,14 +281,23 @@ namespace VRTK
                 setMeshMaterial(items[f], material);
                 setSkinnedMeshMaterial(items[f], material);
 
-                Vector3 position = this.GetPoint(f * stepSize);
+                Vector3 position = GetPoint(f * stepSize);
                 items[f].transform.position = position;
 
-                Vector3 nextPosition = this.GetPoint((f + 1) * stepSize);
-                Vector3 lookPosition = (nextPosition - position).normalized;
+                Vector3 nextPosition = GetPoint((f + 1) * stepSize);
+                Vector3 offset = nextPosition - position;
+                Vector3 lookPosition = offset.normalized;
                 if (lookPosition != Vector3.zero)
                 {
                     items[f].transform.rotation = Quaternion.LookRotation(lookPosition);
+
+                    // rescale the custom tracer according to the length of the beam
+                    if (rescalePointerTracer)
+                    {
+                        Vector3 scl = items[f].transform.localScale;
+                        scl.z = offset.magnitude/2f; // (assuming a center-based scaling)
+                        items[f].transform.localScale = scl;
+                    }
                 }
             }
         }

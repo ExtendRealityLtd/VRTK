@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class RC_Car : MonoBehaviour
 {
@@ -28,15 +27,15 @@ public class RC_Car : MonoBehaviour
 
     public void Reset()
     {
-        this.transform.position = defaultPosition;
-        this.transform.rotation = defaultRotation;
+        transform.position = defaultPosition;
+        transform.rotation = defaultRotation;
     }
 
     private void Awake()
     {
-        rb = this.GetComponent<Rigidbody>();
-        defaultPosition = this.transform.position;
-        defaultRotation = this.transform.rotation;
+        rb = GetComponent<Rigidbody>();
+        defaultPosition = transform.position;
+        defaultRotation = transform.rotation;
     }
 
     private void FixedUpdate()

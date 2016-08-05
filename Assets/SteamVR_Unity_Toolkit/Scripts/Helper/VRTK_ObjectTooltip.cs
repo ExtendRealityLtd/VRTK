@@ -1,7 +1,6 @@
 ﻿namespace VRTK
 {
     using UnityEngine;
-    using System.Collections;
     using UnityEngine.UI;
 
     public class VRTK_ObjectTooltip : MonoBehaviour
@@ -25,9 +24,9 @@
             SetText("UITextFront");
             SetText("UITextReverse");
             SetLine();
-            if (drawLineTo == null && this.transform.parent != null)
+            if (drawLineTo == null && transform.parent != null)
             {
-                drawLineTo = this.transform.parent;
+                drawLineTo = transform.parent;
             }
         }
 
@@ -38,31 +37,31 @@
 
         private void SetContainer()
         {
-            this.transform.FindChild("TooltipCanvas").GetComponent<RectTransform>().sizeDelta = containerSize;
-            var tmpContainer = this.transform.FindChild("TooltipCanvas/UIContainer");
+            transform.FindChild("TooltipCanvas").GetComponent<RectTransform>().sizeDelta = containerSize;
+            var tmpContainer = transform.FindChild("TooltipCanvas/UIContainer");
             tmpContainer.GetComponent<RectTransform>().sizeDelta = containerSize;
             tmpContainer.GetComponent<Image>().color = containerColor;
         }
 
         private void SetText(string name)
         {
-            var tmpText = this.transform.FindChild("TooltipCanvas/" + name).GetComponent<Text>();
-            tmpText.material = new Material(Shader.Find("UI/Overlay"));
-            tmpText.text = displayText;
+            var tmpText = transform.FindChild("TooltipCanvas/" + name).GetComponent<Text>();
+            tmpText.material = Resources.Load("UIText") as Material;
+            tmpText.text = displayText.Replace("\\n", "\n");
             tmpText.color = fontColor;
             tmpText.fontSize = fontSize;
         }
 
         private void SetLine()
         {
-            line = this.transform.FindChild("Line").GetComponent<LineRenderer>();
-            line.material = new Material(Shader.Find("Unlit/Color"));
+            line = transform.FindChild("Line").GetComponent<LineRenderer>();
+            line.material = Resources.Load("TooltipLine") as Material;
             line.material.color = lineColor;
             line.SetColors(lineColor, lineColor);
             line.SetWidth(lineWidth, lineWidth);
             if (drawLineFrom == null)
             {
-                drawLineFrom = this.transform;
+                drawLineFrom = transform;
             }
         }
 

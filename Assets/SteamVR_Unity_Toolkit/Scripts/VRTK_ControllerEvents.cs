@@ -1,7 +1,6 @@
 ﻿namespace VRTK
 {
     using UnityEngine;
-    using System.Collections;
 
     public struct ControllerInteractionEventArgs
     {
@@ -25,8 +24,10 @@
         }
 
         public ButtonAlias pointerToggleButton = ButtonAlias.Touchpad_Press;
+        public ButtonAlias pointerSetButton = ButtonAlias.Touchpad_Press;
         public ButtonAlias grabToggleButton = ButtonAlias.Grip;
         public ButtonAlias useToggleButton = ButtonAlias.Trigger;
+        public ButtonAlias uiClickButton = ButtonAlias.Trigger;
         public ButtonAlias menuToggleButton = ButtonAlias.Application_Menu;
 
         public int axisFidelity = 1;
@@ -42,6 +43,7 @@
         public bool pointerPressed = false;
         public bool grabPressed = false;
         public bool usePressed = false;
+        public bool uiClickPressed = false;
         public bool menuPressed = false;
 
         public event ControllerInteractionEventHandler TriggerPressed;
@@ -65,6 +67,7 @@
 
         public event ControllerInteractionEventHandler AliasPointerOn;
         public event ControllerInteractionEventHandler AliasPointerOff;
+        public event ControllerInteractionEventHandler AliasPointerSet;
 
         public event ControllerInteractionEventHandler AliasGrabOn;
         public event ControllerInteractionEventHandler AliasGrabOff;
@@ -74,6 +77,9 @@
 
         public event ControllerInteractionEventHandler AliasMenuOn;
         public event ControllerInteractionEventHandler AliasMenuOff;
+
+        public event ControllerInteractionEventHandler AliasUIClickOn;
+        public event ControllerInteractionEventHandler AliasUIClickOff;
 
         private uint controllerIndex;
         private SteamVR_TrackedObject trackedController;
@@ -88,121 +94,185 @@
         public virtual void OnTriggerPressed(ControllerInteractionEventArgs e)
         {
             if (TriggerPressed != null)
+            {
                 TriggerPressed(this, e);
+            }
         }
 
         public virtual void OnTriggerReleased(ControllerInteractionEventArgs e)
         {
             if (TriggerReleased != null)
+            {
                 TriggerReleased(this, e);
+            }
         }
 
         public virtual void OnTriggerAxisChanged(ControllerInteractionEventArgs e)
         {
             if (TriggerAxisChanged != null)
+            {
                 TriggerAxisChanged(this, e);
+            }
         }
 
         public virtual void OnApplicationMenuPressed(ControllerInteractionEventArgs e)
         {
             if (ApplicationMenuPressed != null)
+            {
                 ApplicationMenuPressed(this, e);
+            }
         }
 
         public virtual void OnApplicationMenuReleased(ControllerInteractionEventArgs e)
         {
             if (ApplicationMenuReleased != null)
+            {
                 ApplicationMenuReleased(this, e);
+            }
         }
 
         public virtual void OnGripPressed(ControllerInteractionEventArgs e)
         {
             if (GripPressed != null)
+            {
                 GripPressed(this, e);
+            }
         }
 
         public virtual void OnGripReleased(ControllerInteractionEventArgs e)
         {
             if (GripReleased != null)
+            {
                 GripReleased(this, e);
+            }
         }
 
         public virtual void OnTouchpadPressed(ControllerInteractionEventArgs e)
         {
             if (TouchpadPressed != null)
+            {
                 TouchpadPressed(this, e);
+            }
         }
 
         public virtual void OnTouchpadReleased(ControllerInteractionEventArgs e)
         {
             if (TouchpadReleased != null)
+            {
                 TouchpadReleased(this, e);
+            }
         }
 
         public virtual void OnTouchpadTouchStart(ControllerInteractionEventArgs e)
         {
             if (TouchpadTouchStart != null)
+            {
                 TouchpadTouchStart(this, e);
+            }
         }
 
         public virtual void OnTouchpadTouchEnd(ControllerInteractionEventArgs e)
         {
             if (TouchpadTouchEnd != null)
+            {
                 TouchpadTouchEnd(this, e);
+            }
         }
 
         public virtual void OnTouchpadAxisChanged(ControllerInteractionEventArgs e)
         {
             if (TouchpadAxisChanged != null)
+            {
                 TouchpadAxisChanged(this, e);
+            }
         }
 
         public virtual void OnAliasPointerOn(ControllerInteractionEventArgs e)
         {
             if (AliasPointerOn != null)
+            {
                 AliasPointerOn(this, e);
+            }
         }
 
         public virtual void OnAliasPointerOff(ControllerInteractionEventArgs e)
         {
             if (AliasPointerOff != null)
+            {
                 AliasPointerOff(this, e);
+            }
+        }
+
+        public virtual void OnAliasPointerSet(ControllerInteractionEventArgs e)
+        {
+            if (AliasPointerSet != null)
+            {
+                AliasPointerSet(this, e);
+            }
         }
 
         public virtual void OnAliasGrabOn(ControllerInteractionEventArgs e)
         {
             if (AliasGrabOn != null)
+            {
                 AliasGrabOn(this, e);
+            }
         }
 
         public virtual void OnAliasGrabOff(ControllerInteractionEventArgs e)
         {
             if (AliasGrabOff != null)
+            {
                 AliasGrabOff(this, e);
+            }
         }
 
         public virtual void OnAliasUseOn(ControllerInteractionEventArgs e)
         {
             if (AliasUseOn != null)
+            {
                 AliasUseOn(this, e);
+            }
         }
 
         public virtual void OnAliasUseOff(ControllerInteractionEventArgs e)
         {
             if (AliasUseOff != null)
+            {
                 AliasUseOff(this, e);
+            }
+        }
+
+        public virtual void OnAliasUIClickOn(ControllerInteractionEventArgs e)
+        {
+            if (AliasUIClickOn != null)
+            {
+                AliasUIClickOn(this, e);
+            }
+        }
+
+        public virtual void OnAliasUIClickOff(ControllerInteractionEventArgs e)
+        {
+            if (AliasUIClickOff != null)
+            {
+                AliasUIClickOff(this, e);
+            }
         }
 
         public virtual void OnAliasMenuOn(ControllerInteractionEventArgs e)
         {
             if (AliasMenuOn != null)
+            {
                 AliasMenuOn(this, e);
+            }
         }
 
         public virtual void OnAliasMenuOff(ControllerInteractionEventArgs e)
         {
             if (AliasMenuOff != null)
+            {
                 AliasMenuOff(this, e);
+            }
         }
 
         public Vector3 GetVelocity()
@@ -227,6 +297,16 @@
             return CalculateTouchpadAxisAngle(touchpadAxis);
         }
 
+        public float GetTriggerAxis()
+        {
+            return triggerAxis.x;
+        }
+
+        public bool AnyButtonPressed()
+        {
+            return (triggerPressed || gripPressed || touchpadPressed || applicationMenuPressed);
+        }
+
         private ControllerInteractionEventArgs SetButtonEvent(ref bool buttonBool, bool value, float buttonPressure)
         {
             buttonBool = value;
@@ -242,7 +322,7 @@
         private void Awake()
         {
             trackedController = GetComponent<SteamVR_TrackedObject>();
-            this.gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
+            gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
         }
 
         private void Start()
@@ -278,6 +358,14 @@
                 }
             }
 
+            if (pointerSetButton == type)
+            {
+                if (!touchDown)
+                {
+                    OnAliasPointerSet(SetButtonEvent(ref buttonBool, false, buttonPressure));
+                }
+            }
+
             if (grabToggleButton == type)
             {
                 if (touchDown)
@@ -303,6 +391,20 @@
                 {
                     usePressed = false;
                     OnAliasUseOff(SetButtonEvent(ref buttonBool, false, buttonPressure));
+                }
+            }
+
+            if (uiClickButton == type)
+            {
+                if (touchDown)
+                {
+                    uiClickPressed = true;
+                    OnAliasUIClickOn(SetButtonEvent(ref buttonBool, true, buttonPressure));
+                }
+                else
+                {
+                    uiClickPressed = false;
+                    OnAliasUIClickOff(SetButtonEvent(ref buttonBool, false, buttonPressure));
                 }
             }
 
@@ -412,7 +514,8 @@
                 {
                     touchpadAxisChanged = false;
                 }
-                else {
+                else
+                {
                     OnTouchpadAxisChanged(SetButtonEvent(ref touchpadTouched, true, 1f));
                     touchpadAxisChanged = true;
                 }

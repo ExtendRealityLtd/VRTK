@@ -15,13 +15,13 @@
 namespace VRTK
 {
     using UnityEngine;
-    using System.Collections;
 
     public class VRTK_SimplePointer : VRTK_WorldPointer
     {
         public float pointerThickness = 0.002f;
         public float pointerLength = 100f;
         public bool showPointerTip = true;
+        public GameObject customPointerCursor;
         public LayerMask layersToIgnore = Physics.IgnoreRaycastLayer;
 
         private GameObject pointerHolder;
@@ -29,11 +29,22 @@ namespace VRTK
         private GameObject pointerTip;
         private Vector3 pointerTipScale = new Vector3(0.05f, 0.05f, 0.05f);
 
-        // Use this for initialization
-        protected override void Start()
+        // material of customPointerCursor (if defined)
+        private Material customPointerMaterial;
+
+        protected override void OnEnable()
         {
-            base.Start();
+            base.OnEnable();
             InitPointer();
+        }
+
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+            if (pointerHolder != null)
+            {
+                Destroy(pointerHolder);
+            }
         }
 
         protected override void Update()
@@ -51,13 +62,13 @@ namespace VRTK
 
         protected override void InitPointer()
         {
-            pointerHolder = new GameObject(string.Format("[{0}]WorldPointer_SimplePointer_Holder", this.gameObject.name));
+            pointerHolder = new GameObject(string.Format("[{0}]WorldPointer_SimplePointer_Holder", gameObject.name));
             Utilities.SetPlayerObject(pointerHolder, VRTK_PlayerObject.ObjectTypes.Pointer);
-            pointerHolder.transform.parent = this.transform;
+            pointerHolder.transform.parent = transform;
             pointerHolder.transform.localPosition = Vector3.zero;
 
             pointer = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            pointer.transform.name = string.Format("[{0}]WorldPointer_SimplePointer_Pointer", this.gameObject.name);
+            pointer.transform.name = string.Format("[{0}]WorldPointer_SimplePointer_Pointer", gameObject.name);
             Utilities.SetPlayerObject(pointer, VRTK_PlayerObject.ObjectTypes.Pointer);
             pointer.transform.parent = pointerHolder.transform;
 
@@ -65,13 +76,30 @@ namespace VRTK
             pointer.AddComponent<Rigidbody>().isKinematic = true;
             pointer.layer = LayerMask.NameToLayer("Ignore Raycast");
 
-            pointerTip = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            pointerTip.transform.name = string.Format("[{0}]WorldPointer_SimplePointer_PointerTip", this.gameObject.name);
+            if (customPointerCursor == null)
+            {
+                pointerTip = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                pointerTip.transform.localScale = pointerTipScale;
+            }
+            else
+            {
+                Renderer renderer = customPointerCursor.GetComponentInChildren<MeshRenderer>();
+                if (renderer)
+                {
+                    customPointerMaterial = Material.Instantiate(renderer.sharedMaterial);
+                }
+                pointerTip = Instantiate(customPointerCursor);
+                foreach (Renderer mr in pointerTip.GetComponentsInChildren<Renderer>())
+                {
+                    mr.material = customPointerMaterial;
+                }
+            }
+
+            pointerTip.transform.name = string.Format("[{0}]WorldPointer_SimplePointer_PointerTip", gameObject.name);
             Utilities.SetPlayerObject(pointerTip, VRTK_PlayerObject.ObjectTypes.Pointer);
             pointerTip.transform.parent = pointerHolder.transform;
-            pointerTip.transform.localScale = pointerTipScale;
 
-            pointerTip.GetComponent<SphereCollider>().isTrigger = true;
+            pointerTip.GetComponent<Collider>().isTrigger = true;
             pointerTip.AddComponent<Rigidbody>().isKinematic = true;
             pointerTip.layer = LayerMask.NameToLayer("Ignore Raycast");
 
@@ -81,20 +109,18 @@ namespace VRTK
             TogglePointer(false);
         }
 
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
-            if (pointerHolder != null)
-            {
-                Destroy(pointerHolder);
-            }
-        }
-
         protected override void SetPointerMaterial()
         {
             base.SetPointerMaterial();
             pointer.GetComponent<Renderer>().material = pointerMaterial;
-            pointerTip.GetComponent<Renderer>().material = pointerMaterial;
+            if (customPointerMaterial != null)
+            {
+                customPointerMaterial.color = pointerMaterial.color;
+            }
+            else
+            {
+                pointerTip.GetComponent<Renderer>().material = pointerMaterial;
+            }
         }
 
         protected override void TogglePointer(bool state)
@@ -110,12 +136,6 @@ namespace VRTK
             {
                 pointer.GetComponent<Renderer>().enabled = false;
             }
-        }
-
-        protected override void DisablePointerBeam(object sender, ControllerInteractionEventArgs e)
-        {
-            base.PointerSet();
-            base.DisablePointerBeam(sender, e);
         }
 
         private void SetPointerTransform(float setLength, float setThicknes)

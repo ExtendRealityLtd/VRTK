@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 using VRTK;
 
 public class Sword : VRTK_InteractableObject
