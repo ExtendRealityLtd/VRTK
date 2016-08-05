@@ -429,6 +429,52 @@
                     vectorA.y.ToString("F" + axisFidelity) == vectorB.y.ToString("F" + axisFidelity));
         }
 
+        private void OnDisable()
+        {
+            if (triggerPressed)
+            {
+                OnTriggerReleased(SetButtonEvent(ref triggerPressed, false, 0f));
+                EmitAlias(ButtonAlias.Trigger, false, 0f, ref triggerPressed);
+            }
+
+            if (applicationMenuPressed)
+            {
+                OnApplicationMenuReleased(SetButtonEvent(ref applicationMenuPressed, false, 0f));
+                EmitAlias(ButtonAlias.Application_Menu, false, 0f, ref applicationMenuPressed);
+            }
+
+            if (gripPressed)
+            {
+                OnGripReleased(SetButtonEvent(ref gripPressed, false, 0f));
+                EmitAlias(ButtonAlias.Grip, false, 0f, ref gripPressed);
+            }
+
+            if (touchpadPressed)
+            {
+                OnTouchpadReleased(SetButtonEvent(ref touchpadPressed, false, 0f));
+                EmitAlias(ButtonAlias.Touchpad_Press, false, 0f, ref touchpadPressed);
+            }
+
+            if (touchpadTouched)
+            {
+                OnTouchpadTouchEnd(SetButtonEvent(ref touchpadTouched, false, 0f));
+                EmitAlias(ButtonAlias.Touchpad_Touch, false, 0f, ref touchpadTouched);
+            }
+
+            triggerAxisChanged = false;
+            touchpadAxisChanged = false;
+
+            controllerIndex = (uint)trackedController.index;
+            device = SteamVR_Controller.Input((int)controllerIndex);
+
+            Vector2 currentTriggerAxis = device.GetAxis(Valve.VR.EVRButtonId.k_EButton_SteamVR_Trigger);
+            Vector2 currentTouchpadAxis = device.GetAxis();
+
+            // Save current touch and trigger settings to detect next change.
+            touchpadAxis = new Vector2(currentTouchpadAxis.x, currentTouchpadAxis.y);
+            triggerAxis = new Vector2(currentTriggerAxis.x, currentTriggerAxis.y);
+        }
+
         private void Update()
         {
             controllerIndex = (uint)trackedController.index;
