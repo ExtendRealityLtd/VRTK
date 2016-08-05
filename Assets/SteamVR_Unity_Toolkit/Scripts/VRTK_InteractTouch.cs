@@ -30,6 +30,7 @@ namespace VRTK
 
         private GameObject touchedObject = null;
         private GameObject lastTouchedObject = null;
+        private bool updatedHideControllerOnTouch = false;
 
         private SteamVR_TrackedObject trackedController;
         private VRTK_ControllerActions controllerActions;
@@ -178,11 +179,12 @@ namespace VRTK
                     return;
                 }
 
+                updatedHideControllerOnTouch = touchedObjectScript.CheckHideMode(hideControllerOnTouch, touchedObjectScript.hideControllerOnTouch);
                 OnControllerTouchInteractableObject(SetControllerInteractEvent(touchedObject));
                 touchedObjectScript.ToggleHighlight(true, globalTouchHighlightColor);
                 touchedObjectScript.StartTouching(gameObject);
 
-                if (controllerActions.IsControllerVisible() && hideControllerOnTouch)
+                if (controllerActions.IsControllerVisible() && updatedHideControllerOnTouch)
                 {
                     Invoke("HideController", hideControllerDelay);
                 }
@@ -238,7 +240,7 @@ namespace VRTK
                 untouched.GetComponent<VRTK_InteractableObject>().StopTouching(gameObject);
             }
 
-            if (hideControllerOnTouch)
+            if (updatedHideControllerOnTouch)
             {
                 controllerActions.ToggleControllerModel(true, touchedObject);
             }

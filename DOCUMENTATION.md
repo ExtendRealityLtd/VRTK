@@ -963,6 +963,10 @@ The basis of this script is to provide a simple mechanism for identifying object
    * `Both` means both controllers will register a touch.
    * `Left_Only` means only the left controller will register a touch.
    * `Right_Only` means only the right controller will register a touch.
+  * **Hide Controller On Touch:** Optionally override the controller setting (hide when touched):
+   * `Default` means using controller settings.
+   * `Override Hide` means hiding the controller when touched, overriding controller settings.
+   * `Override Dont Hide` means *not* hiding the controller when touched, overriding controller settings.
 
 #### Grab Interactions
   * **Is Grabbable:** Determines if the object can be grabbed.
@@ -977,6 +981,10 @@ The basis of this script is to provide a simple mechanism for identifying object
   * **Precision_Snap:** If this is checked then when the controller grabs the object, it will grab it with precision and pick it up at the particular point on the object the controller is touching.
   * **Right Snap Handle:** A Transform provided as an empty game object which must be the child of the item being grabbed and serves as an orientation point to rotate and position the grabbed item in relation to the right handed controller. If no Right Snap Handle is provided but a Left Snap Handle is provided, then the Left Snap Handle will be used in place. If no Snap Handle is provided then the object will be grabbed at it's central point.
   * **Left Snap Handle:** A Transform provided as an empty game object which must be the child of the item being grabbed and serves as an orientation point to rotate and position the grabbed item in relation to the left handed controller. If no Left Snap Handle is provided but a Right Snap Handle is provided, then the Right Snap Handle will be used in place. If no Snap Handle is provided then the object will be grabbed at it's central point.
+  * **Hide Controller On Grab:** Optionally override the controller setting (hide when grabbed):
+   * `Default` means using controller settings.
+   * `Override Hide` means hiding the controller when grabbed, overriding controller settings.
+   * `Override Dont Hide` means *not* hiding the controller when grabbed, overriding controller settings.
 
 #### Grab Mechanics
   * **Grab Attach Type:** This determines how the grabbed item will be attached to the controller when it is grabbed.
@@ -993,6 +1001,7 @@ The basis of this script is to provide a simple mechanism for identifying object
 
 #### Use Interactions
   * **Is Usable:** Determines if the object can be used.
+  * **Use Only If Grabbed:** If this is checked the object can be used only if it was grabbed before.
   * **Hold Button To Use:** If this is checked then the use button on the controller needs to be continually held down to keep using. If this is unchecked the the use button toggles the use action with one button press to start using and another to stop using.
   * **Pointer Activates Use Action:** If this is checked then when a World Pointer beam (projected from the controller) hits the interactable object, if the object has `Hold Button To Use` unchecked then whilst the pointer is over the object it will run it's `Using` method. If `Hold Button To Use` is unchecked then the `Using` method will be run when the pointer is deactivated. The world pointer will not throw the `Destination Set` event if it is affecting an interactable object with this setting checked as this prevents unwanted teleporting from happening when using an object with a pointer.
   * **Rumble On Use:** The haptic feedback on the controller can be triggered upon using the object, the `x` denotes the length of time, the `y` denotes the strength of the pulse. (x and y will be replaced in the future with a custom editor).
@@ -1000,6 +1009,10 @@ The basis of this script is to provide a simple mechanism for identifying object
    * `Both` means both controllers are allowed to use.
    * `Left_Only` means only the left controller is allowed to use.
    * `Right_Only` means only the right controller is allowed to use.
+  * **Hide Controller On Use:** Optionally override the controller setting (hide when used):
+   * `Default` means using controller settings.
+   * `Override Hide` means hiding the controller when using, overriding controller settings.
+   * `Override Dont Hide` means *not* hiding the controller when using, overriding controller settings.
 
 ### Class Events
 
@@ -1015,6 +1028,22 @@ The basis of this script is to provide a simple mechanism for identifying object
   * `GameObject interactingObject` - The object that is initiating the interaction (e.g. a controller)
 
 ### Class Methods
+
+#### CheckHideMode/2
+
+  > `public bool CheckHideMode(bool defaultMode, ControllerHideMode overrideMode)`
+
+  * Parameters
+   * `bool defaultMode` - The default setting of the controller (true=hide, false="don't hide").
+   * `ControllerHideMode overrideMode` - The override setting of the object.
+     * `Default` means using controller settings (returns `overrideMode`).
+     * `OverrideHide` means hiding the controller anyway (even if `defaultMode`is `true`).
+     * `OverrideDontHide` means *not* hiding the controller anyway (even if `defaultMode`is `false`).
+  * Returns
+   * `bool` - Returns `true` if the combination of `defaultMode` and `overrideMode` lead to "hide controller".
+
+The CheckHideMode method is a simple service method used only by some scripts (e.g. InteractTouch InteractGrab InteractUse) to calculate the "hide controller" condition according to the default controller settings and the interactive object override method.
+
 
 #### IsTouched/0
 

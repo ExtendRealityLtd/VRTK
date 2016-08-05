@@ -30,6 +30,7 @@ namespace VRTK
 
         private Joint controllerAttachJoint;
         private GameObject grabbedObject = null;
+        private bool updatedHideControllerOnGrab = false;
 
         private SteamVR_TrackedObject trackedController;
         private VRTK_InteractTouch interactTouch;
@@ -328,9 +329,10 @@ namespace VRTK
                 {
                     grabbedObjectScript.ToggleKinematic(true);
                 }
+                updatedHideControllerOnGrab = grabbedObjectScript.CheckHideMode(hideControllerOnGrab, grabbedObjectScript.hideControllerOnGrab );
             }
 
-            if (hideControllerOnGrab)
+            if (updatedHideControllerOnGrab)
             {
                 Invoke("HideController", hideControllerDelay);
             }
@@ -374,7 +376,7 @@ namespace VRTK
                 grabbedObject.GetComponent<VRTK_InteractableObject>().ToggleHighlight(false);
             }
 
-            if (hideControllerOnGrab)
+            if (updatedHideControllerOnGrab)
             {
                 controllerActions.ToggleControllerModel(true, grabbedObject);
             }
