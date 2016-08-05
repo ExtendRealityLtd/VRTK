@@ -6,13 +6,6 @@ in Unity 5.
 **This Toolkit requires the [SteamVR Plugin]
 from the Unity Asset Store to be imported into your Unity project.**
 
-  > _To all those lovely people who want to give donations, instead of_
-  > _donating, consider supporting me by buying my latest game on_
-  > _Steam - `Holodaze` for HTC Vive. At least this way, I make a bit of_
-  > _money and you get something to play!_
-  >
-  > **[Buy Holodaze from the Steam Store](http://store.steampowered.com/app/475520)**
-  
 ## Games, Apps and Experiences that use this Toolkit
 
  * Games
