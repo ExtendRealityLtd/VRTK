@@ -1,6 +1,7 @@
 ﻿namespace VRTK
 {
     using UnityEngine;
+    using System.Collections;
 
     public class VRTK_ObjectAutoGrab : MonoBehaviour
     {
@@ -9,7 +10,7 @@
 
         private VRTK_InteractGrab controller;
 
-        private void Start()
+        private IEnumerator Start()
         {
             controller = GetComponent<VRTK_InteractGrab>();
 
@@ -22,11 +23,12 @@
             {
                 Debug.LogError("The objectToGrab Game Object must have the VRTK_InteractableObject script applied to it.");
             }
-            Invoke("InitAutoGrab", 0.5f);
-        }
 
-        private void InitAutoGrab()
-        {
+            while (controller.controllerAttachPoint == null)
+            {
+                yield return true;
+            }
+
             var grabbableObject = objectToGrab;
             if (cloneGrabbedObject)
             {
