@@ -7,6 +7,7 @@
     public class VRTK_UIPointer : MonoBehaviour
     {
         public VRTK_ControllerEvents controller;
+        public string ignoreCanvasWithTagOrClass;
 
         [HideInInspector]
         public PointerEventData pointerEventData;
@@ -36,9 +37,9 @@
             return eventSystemInput;
         }
 
-        public static void SetWorldCanvas(Canvas canvas)
+        public void SetWorldCanvas(Canvas canvas)
         {
-            if (canvas.renderMode != RenderMode.WorldSpace)
+            if (canvas.renderMode != RenderMode.WorldSpace || canvas.CompareTag(ignoreCanvasWithTagOrClass) || canvas.GetComponent(ignoreCanvasWithTagOrClass) != null)
             {
                 return;
             }

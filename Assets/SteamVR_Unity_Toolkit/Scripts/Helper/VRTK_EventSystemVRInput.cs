@@ -78,10 +78,21 @@
             return false;
         }
 
+        private bool ShouldIgnoreElement(GameObject obj, string ignoreCanvasWithTagOrClass)
+        {
+            var canvas = obj.GetComponentInParent<Canvas>();
+            return (canvas && (canvas.CompareTag(ignoreCanvasWithTagOrClass) || canvas.GetComponent(ignoreCanvasWithTagOrClass) != null));
+        }
+
         private void Hover(VRTK_UIPointer pointer, List<RaycastResult> results)
         {
             if (pointer.pointerEventData.pointerEnter)
             {
+                if (ShouldIgnoreElement(pointer.pointerEventData.pointerEnter, pointer.ignoreCanvasWithTagOrClass))
+                {
+                    return;
+                }
+
                 if (NoValidCollision(pointer, results))
                 {
                     ExecuteEvents.ExecuteHierarchy(pointer.pointerEventData.pointerEnter, pointer.pointerEventData, ExecuteEvents.pointerExitHandler);
@@ -93,6 +104,11 @@
             {
                 foreach (var result in results)
                 {
+                    if (ShouldIgnoreElement(result.gameObject, pointer.ignoreCanvasWithTagOrClass))
+                    {
+                        continue;
+                    }
+
                     var target = ExecuteEvents.ExecuteHierarchy(result.gameObject, pointer.pointerEventData, ExecuteEvents.pointerEnterHandler);
                     if (target != null)
                     {
@@ -119,6 +135,11 @@
 
             if (pointer.pointerEventData.pointerPress)
             {
+                if (ShouldIgnoreElement(pointer.pointerEventData.pointerPress, pointer.ignoreCanvasWithTagOrClass))
+                {
+                    return;
+                }
+
                 if (pointer.pointerEventData.eligibleForClick)
                 {
                     if (!IsHovering(pointer))
@@ -138,6 +159,11 @@
             {
                 foreach (var result in results)
                 {
+                    if (ShouldIgnoreElement(result.gameObject, pointer.ignoreCanvasWithTagOrClass))
+                    {
+                        continue;
+                    }
+
                     var target = ExecuteEvents.ExecuteHierarchy(result.gameObject, pointer.pointerEventData, ExecuteEvents.pointerDownHandler);
                     if (target != null)
                     {
@@ -156,6 +182,11 @@
 
             if (pointer.pointerEventData.pointerDrag)
             {
+                if (ShouldIgnoreElement(pointer.pointerEventData.pointerDrag, pointer.ignoreCanvasWithTagOrClass))
+                {
+                    return;
+                }
+
                 if (pointer.pointerEventData.dragging)
                 {
                     if (IsHovering(pointer))
@@ -178,6 +209,11 @@
             {
                 foreach (var result in results)
                 {
+                    if (ShouldIgnoreElement(result.gameObject, pointer.ignoreCanvasWithTagOrClass))
+                    {
+                        continue;
+                    }
+
                     ExecuteEvents.ExecuteHierarchy(result.gameObject, pointer.pointerEventData, ExecuteEvents.initializePotentialDrag);
                     ExecuteEvents.ExecuteHierarchy(result.gameObject, pointer.pointerEventData, ExecuteEvents.beginDragHandler);
                     var target = ExecuteEvents.ExecuteHierarchy(result.gameObject, pointer.pointerEventData, ExecuteEvents.dragHandler);

@@ -154,7 +154,7 @@ To convert the default `RadialMenu` prefab to be independent of the controllers:
   * Ensure the parent object has the `VRTK_InteractableObject` script.
   * Verify that `Is Usable` and `Hold Button to Use` are both checked.
   * Attach `VRTK_InteractTouch` and `VRTK_InteractUse` scripts to the controllers.
-  
+
 ### VRTK_IndependentRadialMenuController - Inspector Parameters
   * **Events Manager:** If the RadialMenu is the child of an object with VRTK_InteractableObject attached, this will be automatically obtained. It can also be manually set.
   * **Add Menu Collider:** Whether or not the script should dynamically add a SphereCollider to surround the menu.
@@ -162,7 +162,7 @@ To convert the default `RadialMenu` prefab to be independent of the controllers:
   * **Hide After Execution:** If true, after a button is clicked, the RadialMenu will hide.
   * **Offset Radius Multiplier:** How far away from the object the menu should be placed, relative to the size of the RadialMenu.
   * **Rotate Towards:** The object the RadialMenu should face towards. If left empty, it will automatically try to find the Camera (eye) object within the SteamVR CameraRig.
-  
+
 ---
 
 ## ConsoleViewerCanvas
@@ -663,14 +663,14 @@ The Simple Pointer script can be attached to a Controller object within the `[Ca
   * **Layers To Ignore:** The layers to ignore when raycasting.
 
 ### Example
-  
+
 `SteamVR_Unity_Toolkit/Examples/003_Controller_SimplePointer` shows the simple pointer in action and code examples of how the events are utilised and listened to can be viewed in the script `SteamVR_Unity_Toolkit/Examples/Resources/Scripts/VRTK_ControllerPointerEvents_ListenerExample.cs`
 
 ---
 
 ## Bezier Pointer (VRTK_BezierPointer)
   > extends [VRTK_WorldPointer](#vrtk_worldpointer)
-  
+
 ### Overview
 
 The Bezier Pointer emits a curved line (made out of game objects) from the end of the controller to a point on a ground surface (at any height). It is more useful than the Simple Laser Pointer for traversing objects of various heights as the end point can be curved on top of objects that are not visible to the user.
@@ -707,7 +707,7 @@ The Bezier Pointer script can be attached to a Controller object within the `[Ca
   * **Layers To Ignore:** The layers to ignore when raycasting.
   * **Valid Teleport Location Object:** A custom Game Object can be applied here to appear only if the teleport is allowed (its material will not be changed ).
   * **Rescale Pointer Tracer:** Rescale each pointer tracer element according to the length of the Bezier curve.
-  
+
 ### Example
 
 `SteamVR_Unity_Toolkit/Examples/009_Controller_BezierPointer` is used in conjunction with the Height Adjust Teleporter shows how it is possible to traverse different height objects using the curved pointer without needing to see the top of the object.
@@ -724,6 +724,8 @@ The Bezier Pointer script can be attached to a Controller object within the `[Ca
 
 The UI Pointer provides a mechanism for interacting with Unity UI elements on a world canvas. The UI Pointer can be attached to any game object the same way in which a World Pointer can be and the UI Pointer also requires a controller to initiate the pointer activation and pointer click states.
 
+It's possible to prevent a world canvas from being interactable with a UI Pointer by setting a tag or applying a class to the canvas and then entering the tag or class name for the UI Pointer to ignore on the UI Pointer inspector parameters.
+
 The simplest way to use the UI Pointer is to attach the script to a game controller within the `[CameraRig]` along with a Simple Pointer as this provides visual feedback as to where the UI ray is pointing.
 
 The UI pointer is activated via the `Pointer` alias on the `Controller Events` and the UI pointer click state is triggered via the `UI Click` alias on the `Controller Events`.
@@ -732,12 +734,14 @@ The UI pointer is activated via the `Pointer` alias on the `Controller Events` a
 
   * **Controller:** The controller that will be used to toggle the pointer. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.
 
+  * **Ignore Canvas With Tag Or Class:** A string that specifies a canvas Tag or the name of a Script attached to a canvas and denotes that any world canvases that contain this tag or script will be ignored by the UI Pointer.
+
 ### Class Methods
 
 #### SetEventSystem/1
 
   > `public static VRTK_EventSystemVRInput SetEventSystem(EventSystem eventSystem)`
-  
+
   * Parameters
    * `EventSystem eventSystem` - The global Unity event system to be used by the UI pointers.
   * Returns
@@ -748,16 +752,16 @@ The SetEventSystem method is used to set up the global Unity event system for th
 #### SetWorldCanvas/1
 
   > `public static void SetWorldCanvas(Canvas canvas)`
-  
+
   * Parameters
    * `Canvas canvas` - The canvas object to initialse for use with the UI pointers. Must be of type `WorldSpace`.
   * Returns
    * _none_
-   
+
 The SetWorldCanvas method is used to initialise a `WorldSpace` canvas for use with the UI Pointer. This method is called automatically on start for all editor created canvases but would need to be manually called if a canvas was generated at runtime.
 
-### Example 
-  
+### Example
+
 `SteamVR_Unity_Toolkit/Examples/034_Controls_InteractingWithUnityUI` uses the `VRTK_UIPointer` script on the right Controller to allow for the interaction with Unity UI elements using a Simple Pointer beam. The left Controller controls a Simple Pointer on the headset to demonstrate gaze interaction with Unity UI elements.
 
 ---
@@ -777,16 +781,16 @@ The Basic Teleport script is attached to the `[CameraRig]` prefab and requires a
   * **Headset Position Compensation:** If this is checked then the teleported location will be the position of the headset within the play area. If it is unchecked then the teleported location will always be the centre of the play area even if the headset position is not in the centre of the play area.
   * **Ignore Target With Tag Or Class:** A string that specifies an object Tag or the name of a Script attached to an obejct and notifies the teleporter that the destination is to be ignored so the user cannot teleport to that location. It also ensure the pointer colour is set to the miss colour.
   * **Limit To Nav Mesh:** If this is checked then teleporting will be limited to the bounds of a baked NavMesh. If the pointer destination is outside the NavMesh then it will be ignored.
-  
+
 ### Class Events
 
   * `Teleporting` - Emitted when the teleport process has begun.
   * `Teleported` - Emitted when the teleport process has successfully completed.
-  
+
 #### Event Payload
 
   > The event payload is reused from the [VRTK_DestinationMarker Event Payload](#vrtk_destinationmarker)
-  
+
 ### Class Methods
 
 #### InitDestinationSetListener/1
@@ -800,8 +804,8 @@ The Basic Teleport script is attached to the `[CameraRig]` prefab and requires a
 
 The InitDestinationSetListener method is used to register the teleport script to listen to events from the given game object that is used to generate destination markers. Any destination set event emitted by a registered game object will initiate the teleport to the given destination location.
 
-### Example  
-  
+### Example
+
 `SteamVR_Unity_Toolkit/Examples/004_CameraRig_BasicTeleport` uses the `VRTK_SimplePointer` script on the Controllers to initiate a laser pointer by pressing the `Touchpad` on the controller and when the laser pointer is deactivated (release the `Touchpad`) then the user is teleported to the location of the laser pointer tip as this is where the pointer destination marker position is set to.
 
 ---
@@ -825,7 +829,7 @@ Like the basic teleporter the Height Adjust Teleport script is attached to the `
   * **Play Space Falling:** Checks if the user steps off an object into a part of their play area that is not on the object then they are automatically teleported down to the nearest floor. The `Play Space Falling` option also works in the opposite way that if the user's headset is above an object then the user is teleported automatically on top of that object, which is useful for simulating climbing stairs without needing to use the pointer beam location. If this option is turned off then the user can hover in mid air at the same y position of the object they are standing on.
 
 ### Example
-  
+
 `SteamVR_Unity_Toolkit/Examples/007_CameraRig_HeightAdjustTeleport` has a collection of varying height objects that the user can either walk up and down or use the laser pointer to climb on top of them.
 
 `SteamVR_Unity_Toolkit/Examples/010_CameraRig_TerrainTeleporting` shows how the teleportation of a user can also traverse terrain colliders.
@@ -915,7 +919,7 @@ If the Headset Collision Fade script has been applied to the Camera prefab, then
   * **Deceleration:** The speed in which the play area slows down to a complete stop when the user is no longer touching the touchpad. This deceleration effect can ease any motion sickness that may be suffered.
 
 ### Example
-  
+
 `SteamVR_Unity_Toolkit/Examples/017_CameraRig_TouchpadWalking` has a collection of walls and slopes that can be traversed by the user with the touchpad. There is also an area that can only be traversed if the user is crouching. Standing up in this crouched area will cause the user to appear back at their last good known position.
 
 ---
@@ -940,7 +944,7 @@ There is an additional script `VRTK_RoomExtender_PlayAreaGizmo` which can be att
   * **Debug Transform:** This transform visualises the circle around the user where the `[CameraRig]` is not moved. In the demo scene this is a cylinder at floor level. Remember to turn of collisions.
 
 ### Example
-  
+
 `SteamVR_Unity_Toolkit/Examples/028_CameraRig_RoomExtender` shows how the RoomExtender script is controlled by a VRTK_RoomExtender_Controller Example script located at both controllers. Pressing the `Touchpad` on the controller activates the Room Extender. The Additional Movement Multiplier is changed based on the touch distance to the center of the touchpad.
 
 ---
@@ -1043,7 +1047,6 @@ The basis of this script is to provide a simple mechanism for identifying object
    * `bool` - Returns `true` if the combination of `defaultMode` and `overrideMode` lead to "hide controller".
 
 The CheckHideMode method is a simple service method used only by some scripts (e.g. InteractTouch InteractGrab InteractUse) to calculate the "hide controller" condition according to the default controller settings and the interactive object override method.
-
 
 #### IsTouched/0
 
@@ -1277,9 +1280,9 @@ The SetGrabbedSnapHandle method is used to set the snap handle of the object at 
    * _none_
 
 The RegisterTeleporters method is used to find all objects that have a teleporter script and register the object on the `OnTeleported` event. This is used internally by the object for keeping Tracked objects positions updated after teleporting.
-  
+
 ### Example
-  
+
 `SteamVR_Unity_Toolkit/Examples/005_Controller_BasicObjectGrabbing` uses the `VRTK_InteractTouch` and `VRTK_InteractGrab` scripts on the controllers to show how an interactable object can be grabbed and snapped to the controller and thrown around the game world.
 
 `SteamVR_Unity_Toolkit/Examples/013_Controller_UsingAndGrabbingMultipleObjects` shows mutltiple objects that can be grabbed by holding the buttons or grabbed by toggling the button click and also has objects that can have their Using state toggled to show how mutliple items can be turned on at the same time.
@@ -1406,7 +1409,7 @@ The interactable objects require a collider to activate the trigger and a rigidb
 
   * `uint controllerIndex` - The index of the controller doing the interaction.
   * `GameObject target` - The GameObject of the interactable object that is being interacted with by the controller.
-  
+
 ### Class Methods
 
 #### ForceRelease/0
@@ -1597,7 +1600,7 @@ The script will instantiate the required Rigidbody and ConstantForce components 
 ### Class Events
 
   * `OnPush` - Emitted when the button is successfully pushed.
-  
+
 ### Example
 
 `SteamVR_Unity_Toolkit/Examples/025_Controls_Overview` shows a collection of pressable buttons that are interacted with by activating the rigidbody on the controller by pressing the grab button without grabbing an object.
@@ -1625,8 +1628,8 @@ The script will instantiate the required Rigidbody, Interactable and HingeJoint 
 ### Example
 
 `SteamVR_Unity_Toolkit/Examples/025_Controls_Overview` shows a chest that can be open and closed, it also displays the current opening angle of the chest.
-  
----  
+
+---
 
 ## VRTK_Door
 
@@ -1740,7 +1743,7 @@ The script will instantiate the required Rigidbody and Interactable components a
   * **Min:** The minimum value of the slider.
   * **Max:** The maximum value of the slider.
   * **Step Size:** The increments in which slider values can change. The slider supports snapping.
-  
+
 ### Example
 
 `SteamVR_Unity_Toolkit/Examples/025_Controls_Overview` has a selection of sliders at various angles with different step values to demonstrate their usage.
@@ -1760,7 +1763,7 @@ The script will use the boundaries of the control to determine if it is in or ou
   * **Control:** The 3D control responsible for the content.
   * **Inside:** The transform containing the meshes or colliders that define the inside of the control.
   * **Outside:** Any transform that will act as the parent while the object is not inside the control.
-  
+
 ### Example
 
 `SteamVR_Unity_Toolkit/Examples/025_Controls_Overview` has a drawer with a collection of items that adhere to this concept.
@@ -1803,7 +1806,7 @@ It is utilised by the `VRTK_WorldPointer` for dealing with pointer events when t
   * `Vector3 destinationPosition` - The world position of the destination marker.
   * `bool enableTeleport` - Whether the destination set event should trigger teleport.
   * `uint controllerIndex` The optional index of the controller emitting the beam.
-  
+
 ### Class Methods
 
 #### SetInvalidTarget/1
@@ -1915,7 +1918,7 @@ The CanActivate method checks to see if the pointer can be activated as long as 
 
 The ToggleBeam method allows the pointer beam to be toggled on or off via code at runtime. If true is passed as the state then the beam is activated, if false then the beam is deactivated.
 
---- 
+---
 
 # Examples
 
