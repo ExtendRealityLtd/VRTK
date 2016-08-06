@@ -381,13 +381,13 @@ namespace VRTK
                 controllerActions.ToggleControllerModel(true, grabbedObject);
             }
 
+            grabEnabledState = 0;
             grabbedObject = null;
         }
 
         private void ReleaseObject(uint controllerIndex, bool withThrow)
         {
             UngrabInteractedObject(controllerIndex, withThrow);
-            grabEnabledState = 0;
         }
 
         private GameObject GetGrabbableObject()
