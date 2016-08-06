@@ -465,14 +465,17 @@
             touchpadAxisChanged = false;
 
             controllerIndex = (uint)trackedController.index;
-            device = SteamVR_Controller.Input((int)controllerIndex);
+            if (controllerIndex < uint.MaxValue)
+            {
+                device = SteamVR_Controller.Input((int)controllerIndex);
 
-            Vector2 currentTriggerAxis = device.GetAxis(Valve.VR.EVRButtonId.k_EButton_SteamVR_Trigger);
-            Vector2 currentTouchpadAxis = device.GetAxis();
+                Vector2 currentTriggerAxis = device.GetAxis(Valve.VR.EVRButtonId.k_EButton_SteamVR_Trigger);
+                Vector2 currentTouchpadAxis = device.GetAxis();
 
-            // Save current touch and trigger settings to detect next change.
-            touchpadAxis = new Vector2(currentTouchpadAxis.x, currentTouchpadAxis.y);
-            triggerAxis = new Vector2(currentTriggerAxis.x, currentTriggerAxis.y);
+                // Save current touch and trigger settings to detect next change.
+                touchpadAxis = new Vector2(currentTouchpadAxis.x, currentTouchpadAxis.y);
+                triggerAxis = new Vector2(currentTriggerAxis.x, currentTriggerAxis.y);
+            }
         }
 
         private void Update()
