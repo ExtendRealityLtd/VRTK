@@ -26,7 +26,7 @@ namespace VRTK
         public bool handlePlayAreaCursorCollisions = false;
         public string ignoreTargetWithTagOrClass;
         public pointerVisibilityStates pointerVisibility = pointerVisibilityStates.On_When_Active;
-
+        public bool holdButtonToActivate = true;
         public float activateDelay = 0f;
 
         protected Vector3 destinationPosition;
@@ -45,6 +45,7 @@ namespace VRTK
         private bool destinationSetActive;
 
         private float activateDelayTimer = 0f;
+        private int beamEnabledState = 0;
 
         private VRTK_InteractableObject interactableObject = null;
 
@@ -203,7 +204,7 @@ namespace VRTK
 
         protected virtual void PointerSet()
         {
-            if (!enabled || !destinationSetActive || !pointerContactTarget || !CanActivate())
+            if (!enabled || !destinationSetActive || !pointerContactTarget || !CanActivate() || (!holdButtonToActivate && beamEnabledState != 0))
             {
                 return;
             }
@@ -279,6 +280,7 @@ namespace VRTK
 
         private void TurnOnBeam(uint index)
         {
+            beamEnabledState++;
             if (enabled && !isActive && CanActivate())
             {
                 setPlayAreaCursorCollision(false);
@@ -291,11 +293,12 @@ namespace VRTK
 
         private void TurnOffBeam(uint index)
         {
-            if (enabled && isActive)
+            if (enabled && isActive && (holdButtonToActivate || (!holdButtonToActivate && beamEnabledState >= 2)))
             {
                 controllerIndex = index;
                 TogglePointer(false);
                 isActive = false;
+                beamEnabledState = 0;
             }
         }
 

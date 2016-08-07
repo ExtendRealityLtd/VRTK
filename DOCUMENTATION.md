@@ -656,6 +656,7 @@ The Simple Pointer script can be attached to a Controller object within the `[Ca
    * `On_When_Active` only shows the pointer beam when the Pointer button on the controller is pressed.
    * `Always On` ensures the pointer beam is always visible but pressing the Pointer button on the controller initiates the destination set event.
    * `Always Off` ensures the pointer beam is never visible but the destination point is still set and pressing the Pointer button on the controller still initiates the destination set event.
+  * **Hold Button To Activate:** If this is checked then the pointer beam will be activated on first press of the pointer alias button and will stay active until the pointer alias button is pressed again. The destination set event is emitted when the beam is deactivated on the second button press.
   * **Activate Delay:** The time in seconds to delay the pointer beam being able to be active again. Useful for preventing constant teleportation.
   * **Pointer Thickness:** The thickness and length of the beam can also be set on the script as well as the ability to toggle the sphere beam tip that is displayed at the end of the beam (to represent a cursor).
   * **Pointer Length:** The distance the beam will project before stopping.
@@ -697,6 +698,7 @@ The Bezier Pointer script can be attached to a Controller object within the `[Ca
    * `On_When_Active` only shows the pointer beam when the Pointer button on the controller is pressed.
    * `Always On` ensures the pointer beam is always visible but pressing the Pointer button on the controller initiates the destination set event.
    * `Always Off` ensures the pointer beam is never visible but the destination point is still set and pressing the Pointer button on the controller still initiates the destination set event.
+  * **Hold Button To Activate:** If this is checked then the pointer beam will be activated on first press of the pointer alias button and will stay active until the pointer alias button is pressed again. The destination set event is emitted when the beam is deactivated on the second button press.
   * **Activate Delay:** The time in seconds to delay the pointer beam being able to be active again. Useful for preventing constant teleportation.
   * **Pointer Length:** The length of the projected forward pointer beam, this is basically the distance able to point from the controller potiion.
   * **Pointer Density:** The number of items to render in the beam bezier curve. A high number here will most likely have a negative impact of game performance due to large number of rendered objects.
@@ -1978,6 +1980,7 @@ The play area collider does not work well with terrains as they are uneven and c
    * `On_When_Active` only shows the pointer beam when the Pointer button on the controller is pressed.
    * `Always On` ensures the pointer beam is always visible but pressing the Pointer button on the controller initiates the destination set event.
    * `Always Off` ensures the pointer beam is never visible but the destination point is still set and pressing the Pointer button on the controller still initiates the destination set event.
+  * **Hold Button To Activate:** If this is checked then the pointer beam will be activated on first press of the pointer alias button and will stay active until the pointer alias button is pressed again. The destination set event is emitted when the beam is deactivated on the second button press.
   * **Activate Delay:** The time in seconds to delay the pointer beam being able to be active again. Useful for preventing constant teleportation.
 
 ### Class Methods
