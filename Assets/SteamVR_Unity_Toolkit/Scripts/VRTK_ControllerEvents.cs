@@ -328,7 +328,10 @@
         private void Start()
         {
             controllerIndex = (uint)trackedController.index;
-            device = SteamVR_Controller.Input((int)controllerIndex);
+            if(controllerIndex < uint.MaxValue)
+            {
+                device = SteamVR_Controller.Input((int)controllerIndex);
+            }
         }
 
         private float CalculateTouchpadAxisAngle(Vector2 axis)
@@ -481,7 +484,16 @@
         private void Update()
         {
             controllerIndex = (uint)trackedController.index;
-            device = SteamVR_Controller.Input((int)controllerIndex);
+            //Only continue if the controller index has been set to a sensible number
+            //SteamVR seems to put the index to the uint max value if it can't find the controller
+            if(controllerIndex < uint.MaxValue)
+            {
+                device = SteamVR_Controller.Input((int)controllerIndex);
+            }
+            else
+            {
+                return;
+            }
 
             Vector2 currentTriggerAxis = device.GetAxis(Valve.VR.EVRButtonId.k_EButton_SteamVR_Trigger);
             Vector2 currentTouchpadAxis = device.GetAxis();
