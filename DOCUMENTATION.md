@@ -122,7 +122,7 @@ There are a number of parameters that can be set on the Prefab which are provide
 
 ### Inspector Parameters
 
-  * **Buttons:** Array of Buttons where you define the interactive buttons you want to be displayed as part of the radial menu. Each Button has the following properties:
+  * **Buttons:** Array of Buttons that define the interactive buttons required to be displayed as part of the radial menu. Each Button has the following properties:
    * **ButtonIcon:** Icon to use inside the button arc (should be circular).
    * **OnClick():** Methods to invoke when the button is clicked.
    * **OnHold():** Methods to invoke each frame while the button is held down.
@@ -996,7 +996,7 @@ There is an additional script `VRTK_RoomExtender_PlayAreaGizmo` which can be att
    * **Nonlinear:**  Moves the head with a non linear drift movement.
    * **LinearDirect:** Moves the headset in a direct linear movement.
   * **Additional Movement Enabled:** This is the a public variable to enable the additional movement. This can be used in other scripts to toggle the `[CameraRig]` movement.
-  * **Additional Movement Enabled On Button Press:** This configures the controls of the RoomExtender. If this is true you have to press the touchpad to enable it. If this is false you can disable it with pressing the touchpad.
+  * **Additional Movement Enabled On Button Press:** This configures the controls of the RoomExtender. If this is true then the touchpad needs to be pressed to enable it. If this is false then it is disabled by pressing the touchpad.
   * **Additional Movement Multiplier:** This is the factor by which movement at the edge of the circle is amplified. 0 is no movement of the `[CameraRig]`. Higher values simulate a bigger play area but may be too uncomfortable.
   * **Head Zone Radius:** This is the size of the circle in which the playArea is not moved and everything is normal. If it is to low it becomes uncomfortable when crouching.
   * **Debug Transform:** This transform visualises the circle around the user where the `[CameraRig]` is not moved. In the demo scene this is a cylinder at floor level. Remember to turn of collisions.
@@ -1652,18 +1652,18 @@ This class allows player movement based on grabbing of `VRTK_InteractableObject`
 ### Inspector Parameters
 
   * **usePlayerScale:** Will scale movement up and down based on the player transform's scale.
-  * **Use Gravity:** Will allow physics based falling when you letting go of objects above ground.
+  * **Use Gravity:** Will allow physics based falling when the user lets go of objects above ground.
 
 ### Class Events
 
   * `PlayerClimbStarted` - Emitted when player climbing has started.
   * `PlayerClimbEnded` - Emitted when player climbing has ended.
-  
+
 #### Event Payload
 
   * `uint controllerIndex` - The index of the controller doing the interaction.
   * `GameObject target` - The GameObject of the interactable object that is being interacted with by the controller.
-  
+
 ### Example
 
 `SteamVR_Unity_Toolkit/Examples/037_ClimbingFalling` shows how to set up a scene with player climbing. There are many different examples showing how the same system can be used in unique ways.
@@ -1696,7 +1696,7 @@ The following UI convenience scripts are available:
 
 ### Overview
 
-Attaching the script to a game object will allow you to interact with it as if it were a push button. The direction into which the button should be pushable can be freely set and auto-detection is supported. Since this is physics-based there needs to be empty space in the push direction so that the button can move.
+Attaching the script to a game object will allow the user to interact with it as if it were a push button. The direction into which the button should be pushable can be freely set and auto-detection is supported. Since this is physics-based there needs to be empty space in the push direction so that the button can move.
 
 The script will instantiate the required Rigidbody and ConstantForce components automatically in case they do not exist yet.
 
@@ -1746,13 +1746,13 @@ The script will instantiate the required Rigidbody, Interactable and HingeJoint 
 
 Transforms a game object into a door with an optional handle attached to an  optional frame. The direction can be freely set and also very reliably auto-detected.
 
-There are situations when it can be very hard to automatically calculate the correct axis and anchor values for the hinge joint. If you encounter such a situation simply add the hinge joint manually and set these two values. All  the rest will still be handled by the script.
+There are situations when it can be very hard to automatically calculate the correct axis and anchor values for the hinge joint. If this situation is encountered then simply add the hinge joint manually and set these two values. All the rest will still be handled by the script.
 
 The script will instantiate the required Rigidbodies, Interactable and HingeJoint components automatically in case they do not exist yet. Gizmos will indicate the direction.
 
 ### Inspector Parameters
 
-  * **Direction:** The axis on which the door should open. 
+  * **Direction:** The axis on which the door should open.
   * **Door:** The game object for the door. Can also be an empty parent or left empty if the script is put onto the actual door mesh. If no colliders exist yet a collider will tried to be automatically attached to all children that expose renderers.
   * **Handles:** The game object for the handles. Can also be an empty parent or left empty. If empty the door can only be moved using the rigidbody mode of the controller. If no collider exists yet a compound collider made up of all children will try to be calculated but this will fail if the door is rotated. In that case a manual collider will need to be assigned.
   * **Frame:** The game object for the frame to which the door is attached. Should only be set if the frame will move as well to ensure that the door moves along with the frame.
@@ -1775,7 +1775,7 @@ The script will instantiate the required Rigidbodies, Interactable and HingeJoin
 
 Transforms a game object into a drawer. The direction can be freely set and also auto-detected with very high reliability.
 
-The script will instantiate the required Rigidbody, Interactable and Joint components automatically in case they do not exist yet. There are situations when it can be very hard to automatically calculate the correct axis for the joint. If you encounter such a situation simply add the configurable joint manually and set the axis. All the rest will still be handled by the script.
+The script will instantiate the required Rigidbody, Interactable and Joint components automatically in case they do not exist yet. There are situations when it can be very hard to automatically calculate the correct axis for the joint. If this situation is encountered simply add the configurable joint manually and set the axis. All the rest will still be handled by the script.
 
 It will expect two distinct game objects: a body and a handle. These should be independent and not children of each other. The distance to which the drawer can be pulled out will automatically set depending on the length of it. If no body is specified the current object is assumed to be the body.
 
@@ -1800,7 +1800,7 @@ It is possible to supply a third game object which is the root of the contents i
 
 ### Overview
 
-Attaching the script to a game object will allow you to interact with it as if it were a radial knob. The direction can be freely set.
+Attaching the script to a game object will allow the user to interact with it as if it were a radial knob. The direction can be freely set.
 
 The script will instantiate the required Rigidbody and Interactable components automatically in case they do not exist yet.
 
@@ -1821,9 +1821,9 @@ The script will instantiate the required Rigidbody and Interactable components a
 
 ### Overview
 
-Attaching the script to a game object will allow you to interact with it as if it were a lever. The direction can be freely set.
+Attaching the script to a game object will allow the user to interact with it as if it were a lever. The direction can be freely set.
 
-The script will instantiate the required Rigidbody, Interactable and HingeJoing components automatically in case they do not exist yet. The joint is very tricky to setup automatically though and will only work in straight forward cases. If you experience issues create the HingeJoint component yourself and configure it as needed.
+The script will instantiate the required Rigidbody, Interactable and HingeJoing components automatically in case they do not exist yet. The joint is very tricky to setup automatically though and will only work in straight forward cases. If there are any issues, then create the HingeJoint component manually and configure it as needed.
 
 ### Inspector Parameters
 
@@ -1842,7 +1842,7 @@ The script will instantiate the required Rigidbody, Interactable and HingeJoing 
 
 ### Overview
 
-Attaching the script to a game object will allow you to interact with it as if it were a horizontal or vertical slider. The direction can be freely set and auto-detection is supported.
+Attaching the script to a game object will allow the user to interact with it as if it were a horizontal or vertical slider. The direction can be freely set and auto-detection is supported.
 
 The script will instantiate the required Rigidbody and Interactable components automatically in case they do not exist yet.
 
