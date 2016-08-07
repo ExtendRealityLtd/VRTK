@@ -15,14 +15,43 @@ namespace VRTK
     public class VRTK_HeightAdjustTeleport : VRTK_BasicTeleport
     {
         public bool playSpaceFalling = true;
+        public bool useGravity = true;
+        public float gravityFallHeight = 1.0f;
+        public float blinkYThreshold = 0.1f;
 
         private float currentRayDownY = 0f;
         private GameObject currentFloor = null;
+        private bool originalPlaySpaceFalling;
+        private bool isClimbing = false;
+
+        private VRTK_PlayerPresence playerPresence;
 
         protected override void Start()
         {
             base.Start();
             adjustYForTerrain = true;
+
+            originalPlaySpaceFalling = playSpaceFalling;
+
+            // Listen for climb events 
+            var climbComponent = GetComponent<VRTK_PlayerClimb>();
+            if (climbComponent)
+            {
+                climbComponent.PlayerClimbStarted += new PlayerClimbEventHandler(OnClimbStarted);
+                climbComponent.PlayerClimbEnded += new PlayerClimbEventHandler(OnClimbEnded);
+            }
+
+            // Required Component: VRTK_PlayerPresence
+            playerPresence = GetComponent<VRTK_PlayerPresence>();
+            if (useGravity)
+            {
+                if (!playerPresence)
+                {
+                    playerPresence = gameObject.AddComponent<VRTK_PlayerPresence>();
+                }
+                
+                playerPresence.SetFallingPhysicsOnlyParams(true);
+            }
         }
 
         protected override void DoTeleport(object sender, DestinationMarkerEventArgs e)
@@ -30,10 +59,21 @@ namespace VRTK
             base.DoTeleport(sender, e);
             if (e.enableTeleport)
             {
-                DropToNearestFloor(false);
+                DropToNearestFloor(false, false);
             }
         }
 
+        protected void OnClimbStarted(object sender, PlayerClimbEventArgs e)
+        {
+            isClimbing = true;
+            playSpaceFalling = false;
+        }
+
+        protected void OnClimbEnded(object sender, PlayerClimbEventArgs e)
+        {
+            isClimbing = false;
+        }
+        
         protected override Vector3 GetNewPosition(Vector3 tipPosition, Transform target)
         {
             Vector3 basePosition = base.GetNewPosition(tipPosition, target);
@@ -61,17 +101,12 @@ namespace VRTK
             return (currentFloor != collidedObj.transform.gameObject);
         }
 
-        private bool MeshYChanged(RaycastHit collidedObj, float floorY)
-        {
-            return (collidedObj.transform.GetComponent<MeshCollider>() && floorY != currentRayDownY);
-        }
-
         private bool FloorIsGrabbedObject(RaycastHit collidedObj)
         {
             return (collidedObj.transform.GetComponent<VRTK_InteractableObject>() && collidedObj.transform.GetComponent<VRTK_InteractableObject>().IsGrabbed());
         }
 
-        private void DropToNearestFloor(bool withBlink)
+        private void DropToNearestFloor(bool withBlink, bool useGravityFall)
         {
             if (enableTeleport && eyeCamera.transform.position.y > transform.position.y)
             {
@@ -81,36 +116,61 @@ namespace VRTK
                 bool rayHit = Physics.Raycast(ray, out rayCollidedWith);
                 float floorY = eyeCamera.transform.position.y - rayCollidedWith.distance;
 
-                if (rayHit && ValidLocation(rayCollidedWith.transform) && !FloorIsGrabbedObject(rayCollidedWith) && (MeshYChanged(rayCollidedWith, floorY) || CurrentFloorChanged(rayCollidedWith)))
+                if (rayHit && ValidLocation(rayCollidedWith.transform) && !FloorIsGrabbedObject(rayCollidedWith))
                 {
+                    var floorDelta = currentRayDownY - floorY;
                     currentFloor = rayCollidedWith.transform.gameObject;
                     currentRayDownY = floorY;
 
-                    if (withBlink && !rayCollidedWith.transform.GetComponent<MeshCollider>())
+                    float fallDistance = transform.position.y - floorY;
+                    bool shouldDoGravityFall = useGravityFall && (playerPresence.IsFalling() || fallDistance > gravityFallHeight);
+
+                    if (withBlink && !shouldDoGravityFall && (floorDelta > blinkYThreshold || floorDelta < -blinkYThreshold))
                     {
                         Blink(blinkTransitionSpeed);
                     }
 
-                    Vector3 newPosition = new Vector3(transform.position.x, floorY, transform.position.z);
-                    var teleportArgs = new DestinationMarkerEventArgs
+                    if (shouldDoGravityFall)
                     {
-                        destinationPosition = newPosition,
-                        distance = rayCollidedWith.distance,
-                        enableTeleport = true,
-                        target = currentFloor.transform
-                    };
-                    OnTeleporting(gameObject, teleportArgs);
-                    SetNewPosition(newPosition, currentFloor.transform);
-                    OnTeleported(gameObject, teleportArgs);
+                        playerPresence.StartPhysicsFall(Vector3.zero);
+                    }
+                    else // teleport fall
+                    {
+                        Vector3 newPosition = new Vector3(transform.position.x, floorY, transform.position.z);
+                        var teleportArgs = new DestinationMarkerEventArgs
+                        {
+                            destinationPosition = newPosition,
+                            distance = rayCollidedWith.distance,
+                            enableTeleport = true,
+                            target = currentFloor.transform
+                        };
+                        OnTeleporting(gameObject, teleportArgs);
+                        SetNewPosition(newPosition, currentFloor.transform);
+                        OnTeleported(gameObject, teleportArgs);
+                    }
                 }
             }
         }
 
+        private bool IsExternalSystemManipulatingPlaySpace()
+        {
+            return playerPresence.IsFalling() || isClimbing;
+        }
+
         private void Update()
         {
+            if (useGravity)
+            {
+                // if we aren't climbing or falling we can go back to height adjusted falling
+                if (!IsExternalSystemManipulatingPlaySpace())
+                {
+                    playSpaceFalling = originalPlaySpaceFalling;
+                }
+            }
+
             if (playSpaceFalling)
             {
-                DropToNearestFloor(true);
+                DropToNearestFloor(true, useGravity);
             }
         }
     }

@@ -206,6 +206,7 @@ This directory contains all of the toolkit scripts that add VR functionality to 
  * [VRTK_InteractUse](#using-interactable-objects-vrtk_interactuse)
  * [VRTK_ObjectAutoGrab](#auto-grabbing-interactable-objects-vrtk_objectautograb)
  * [VRTK_Simulator](#simulator-vrtk_simulator)
+ * [VRTK_PlayerClimb](#player-climb-vrtk_playerclimb)
 
 ---
 
@@ -823,6 +824,9 @@ Like the basic teleporter the Height Adjust Teleport script is attached to the `
   * **Ignore Target With Tag Or Class:** A string that specifies an object Tag or the name of a Script attached to an obejct and notifies the teleporter that the destination is to be ignored so the user cannot teleport to that location. It also ensure the pointer colour is set to the miss colour.
   * **Limit To Nav Mesh:** If this is checked then teleporting will be limited to the bounds of a baked NavMesh. If the pointer destination is outside the NavMesh then it will be ignored.
   * **Play Space Falling:** Checks if the user steps off an object into a part of their play area that is not on the object then they are automatically teleported down to the nearest floor. The `Play Space Falling` option also works in the opposite way that if the user's headset is above an object then the user is teleported automatically on top of that object, which is useful for simulating climbing stairs without needing to use the pointer beam location. If this option is turned off then the user can hover in mid air at the same y position of the object they are standing on.
+  * **Use Gravity**: allows for gravity based falling when the distance is greater than `Gravity Fall Height`.
+  * **Gravity Fall Height**: Fall distance needed before gravity based falling can be triggered.
+  * **Blink Y Threshold:** The `y` distance between the floor and the headset that must change before the fade transition is initiated. If the new user location is at a higher distance than the threshold then the headset blink transition will activate on teleport. If the new user location is within the threshold then no blink transition will happen, which is useful for walking up slopes, meshes and terrains where constant blinking would be annoying.
 
 ### Example
   
@@ -879,9 +883,41 @@ The concept that the VR user has a physical in game presence which is accomplish
   * **Headset Y Offset:** The box collider which is created for the user is set at a height from the user's headset position. If the collider is required to be lower to allow for room between the play area collider and the headset then this offset value will shorten the height of the generated box collider.
   * **Ignore Grabbed Collisions:** If this is checked then any items that are grabbed with the controller will not collide with the box collider and rigid body on the play area. This is very useful if the user is required to grab and wield objects because if the collider was active they would bounce off the play area collider.
   * **Reset Position On Collision:** If this is checked then if the Headset Collision Fade script is present and a headset collision occurs, the Camera Rig is moved back to the last good known standing position. This deals with any collision issues if a user stands up whilst moving through a crouched area as instead of them being able to clip into objects they are transported back to a position where they are able to stand.
+  * **Falling Physics Only**: Only use physics when an explicit falling state is set.
 
+### Class Events
+
+  * `PresenceFallStarted` - Emitted when a gravity based fall has started
+  * `PresenceFallEnded` - Emitted when a gravity based fall has ended
+  
+#### Event Payload
+
+  * `float fallDistance` - The total height the player has dropped from a gravity based fall.
+  
 ### Class Methods
 
+#### SetFallingPhysicsOnlyParams/1
+
+  > `public void SetFallingPhysicsOnlyParams(bool falling)`
+
+  * Parameters
+   * `bool falling` - Toggle the physics falling on or off.
+  * Returns
+   * _none_
+
+The SetFallingPhysicsOnlyParams method will toggle the `fallingPhysicsOnly` class state as well as enable or disable physics if needed.
+
+#### IsFalling/0
+
+  > `public bool IsFalling()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `bool` - Returns if the player is in a physics falling state or not.
+   
+The IsFalling method will return if the class is using physics based falling and is currently in a falling state.
+   
 #### GetHeadset/0
 
   > `public Transform GetHeadset()`
@@ -892,7 +928,29 @@ The concept that the VR user has a physical in game presence which is accomplish
    * `Transform` - The transform for the object representing the VR headset.
 
 The GetHeadset method returns the transform of the object representing the VR headset in the game world.
-  
+
+#### StartPhysicsFall/1
+
+  > `public void StartPhysicsFall(Vector3 velocity)`
+
+  * Parameters
+   * `Vector3 velocity` - The starting velocity to use at the start of a fall.
+  * Returns
+   * _none_
+
+The StartPhysicsFall method initializes the physics based fall state, enable physics and send out the `PresenceFallStarted` event. 
+
+#### StopPhysicsFall/0
+
+  > `public void StopPhysicsFall()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The StopPhysicsFall method ends the physics based fall state, disables physics and send out the `PresenceFallEnded` event.
+
 ### Example
   
 `SteamVR_Unity_Toolkit/Examples/017_CameraRig_TouchpadWalking` has a collection of walls and slopes that can be traversed by the user with the touchpad but the user cannot pass through the objects as they are collidable and the rigidbody physics won't allow the intersection to occur.
@@ -993,6 +1051,7 @@ The basis of this script is to provide a simple mechanism for identifying object
    * `Track Object` doesn't attach the object to the controller via a joint, instead it ensures the object tracks the direction of the controller, which works well for items that are on hinged joints.
    * `Rotator Track` also tracks the object but instead of the object tracking the direction of the controller, a force is applied to the object to cause it to rotate. This is ideal for hinged joints on items such as wheels or doors.
    * `Child Of Controller` simply makes the object a child of the controller grabbing so it naturally tracks the position of the controller motion.
+   * `Climbable` non-rigid body interactable object used to allow player climbing.
   * **Detach Threshold:** The force amount when to detach the object from the grabbed controller. If the controller tries to exert a force higher than this threshold on the object (from pulling it through another object or pushing it into another object) then the joint holding the object to the grabbing controller will break and the object will no longer be grabbed. This also works with Tracked Object grabbing but determines how far the controller is from the object before breaking the grab.
   * **Spring Joint Strength:** The strength of the spring holding the object to the controller. A low number will mean the spring is very loose and the object will require more force to move it, a high number will mean a tight spring meaning less force is required to move it.
   * **Spring Joint Damper:** The amount to damper the spring effect when using a Spring Joint grab mechanic. A higher number here will reduce the oscillation effect when moving jointed Interactable Objects.
@@ -1189,6 +1248,28 @@ The PauseCollisions method temporarily pauses all collisions on the object at gr
 
 The AttachIsTrackObject method is used to determine if the object is using one of the track grab attach mechanics.
 
+#### AttachIsClimbObject/0
+
+  > `public bool AttachIsClimbObject()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `bool` - Is true if the grab attach mechanic is `Climbable`.
+
+The AttachIsClimbObject method is used to determine if the object is using the `Climbable` grab attach mechanics.
+
+#### AttachIsStaticObject/0
+
+  > `public bool AttachIsStaticObject()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `bool` - Is true if the grab attach mechanic is one of the static types like `Climbable`.
+
+The AttachIsStaticObject method is used to determine if the object is using one of the static grab attach types.
+
 #### ZeroVelocity/0
 
   > `public void ZeroVelocity()`
@@ -1298,6 +1379,7 @@ The Interact Touch script is attached to a Controller object within the `[Camera
   * **Hide Controller Delay:** The amount of seconds to wait before hiding the controller on touch.
   * **Global Touch Highlight Color:** If the interactable object can be highlighted when it's touched but no local colour is set then this global colour is used.
   * **Custom Rigidbody Object:** If a custom rigidbody and collider for the rigidbody are required, then a gameobject containing a rigidbody and collider can be passed into this parameter. If this is empty then the rigidbody and collider will be auto generated at runtime to match the HTC Vive default controller.
+  * **Trigger On Static Objects:** Allows triggering on non-rigidbody interactable objects (e.g. Climbable)
 
 ### Class Events
 
@@ -1555,6 +1637,33 @@ The Simulator script is attached to the `[CameraRig]` prefab. Supported movement
   * **Only In Editor:** Typically the simulator should be turned off when not testing anymore. This option will do this automatically when outside the editor.
   * **Step Size:** Depending on the scale of the world the step size can be defined to increase or decrease movement speed.
   * **Cam Start:** It can be very handy to start at a certain location instead of having to walk/teleport there first. A good workflow can be to use the keys to navigate in the scene one time, then copy the transform of the `[CameraRig]`, stop the scene and paste the values to an empty game object that is then assigned here. To start at the original position again it is enough to deactivate the game object.
+
+---
+
+## Player Climb (VRTK_PlayerClimb)
+
+### Overview
+
+This class allows player movement based on grabbing of `VRTK_InteractableObject` objects that are tagged as `Climbable`. It should be attached to the `[CameraRig]` object. Because it works by grabbing, each controller should have a `VRTK_InteractGrab` and `VRTK_InteractTouch` component attached. You also have to set the `VRTK_InteractTouch` `Trigger On Static Objects` parameter to true as climbable objects do not use a rigid body for trigger detection.
+
+### Inspector Parameters
+
+  * **usePlayerScale:** Will scale movement up and down based on the player transform's scale.
+  * **Use Gravity:** Will allow physics based falling when you letting go of objects above ground.
+
+### Class Events
+
+  * `PlayerClimbStarted` - Emitted when player climbing has started.
+  * `PlayerClimbEnded` - Emitted when player climbing has ended.
+  
+#### Event Payload
+
+  * `uint controllerIndex` - The index of the controller doing the interaction.
+  * `GameObject target` - The GameObject of the interactable object that is being interacted with by the controller.
+  
+### Example
+
+`SteamVR_Unity_Toolkit/Examples/037_ClimbingFalling` shows how to set up a scene with player climbing. There are many different examples showing how the same system can be used in unique ways.
 
 ---
 
@@ -2116,5 +2225,15 @@ A scene that demonstrates how to change the opacity of the controller and how to
 ### 036_Controller_CustomCompoundPointer
 
 A scene that demonstrates how the Bezier Pointer can display an object (teleport beam) only if the teleport location is valid, and can create an animated trail along the tracer curve. This scene provides a textured environment for testing the teleport, some active "plasma" spheres on the wall that can be activated with the pointer and another sphere that can be also grabbed and launched around.
+
+### 037_CameraRig_ClimbingFalling
+
+A scene that demonstrates how to set up the climbing mechanism with different activities to try it with.
+
+A `VRTK_PlayerClimb` object is needed on the `[CameraRig]`. `VRTK_HeightAdjustTeleport` is also added to the `[CameraRig]` to allow movement, but also to allow walking off edges with `UseGravity` enabled.
+
+Each controller's `VRTK_InteractTouch` component has `TriggerOnStaticObjects` enabled.
+
+Various objects with a `VRTK_InteractableObject` component are scattered throughout the level. They all have the `GrabAttachMechanic` set to `Climbable`.
 
 [Catlike Coding]: http://catlikecoding.com/unity/tutorials/curves-and-splines/
