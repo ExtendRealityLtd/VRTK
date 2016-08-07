@@ -4,6 +4,8 @@ using VRTK;
 
 public class UI_Interactions : MonoBehaviour
 {
+    private const int EXISTING_CANVAS_COUNT = 4;
+
     public void Button_Red()
     {
         Debug.Log("Red Button Clicked");
@@ -26,7 +28,7 @@ public class UI_Interactions : MonoBehaviour
 
     public void CreateCanvas()
     {
-        var canvasCount = FindObjectsOfType<Canvas>().Length;
+        var canvasCount = FindObjectsOfType<Canvas>().Length - EXISTING_CANVAS_COUNT;
         var newCanvasGO = new GameObject("TempCanvas");
         newCanvasGO.layer = 5;
         var canvas = newCanvasGO.AddComponent<Canvas>();
@@ -73,6 +75,6 @@ public class UI_Interactions : MonoBehaviour
         txt.color = Color.black;
         txt.font = Resources.GetBuiltinResource(typeof(Font), "Arial.ttf") as Font;
 
-        VRTK_UIPointer.SetWorldCanvas(canvas);
+        FindObjectOfType<VRTK_UIPointer>().SetWorldCanvas(canvas);
     }
 }
