@@ -8,11 +8,11 @@ public class ControlReactor : MonoBehaviour
     private void Start()
     {
         GetComponent<VRTK_Control>().defaultEvents.OnValueChanged.AddListener(HandleChange);
-        go.text = GetComponent<VRTK_Control>().getValue().ToString();
+        HandleChange(GetComponent<VRTK_Control>().GetValue(), GetComponent<VRTK_Control>().GetNormalizedValue());
     }
 
-    private void HandleChange(float value)
+    private void HandleChange(float value, float normalizedValue)
     {
-        go.text = value.ToString();
+        go.text = value.ToString() + "(" + normalizedValue.ToString() + "%)";
     }
 }

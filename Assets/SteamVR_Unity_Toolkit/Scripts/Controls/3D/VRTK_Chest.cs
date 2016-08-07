@@ -29,7 +29,7 @@
         private float subDirection = 1; // positive or negative can be determined automatically since handle dictates that
         private bool lidHjCreated;
 
-        public override void OnDrawGizmos()
+        protected override void OnDrawGizmos()
         {
             base.OnDrawGizmos();
             if (!enabled || !setupSuccessful)
@@ -159,6 +159,11 @@
             }
 
             return true;
+        }
+
+        protected override ControlValueRange RegisterValueRange()
+        {
+            return new ControlValueRange() { controlMin = lidHj.limits.min, controlMax = lidHj.limits.max };
         }
 
         protected override void HandleUpdate()

@@ -38,6 +38,11 @@
             return true;
         }
 
+        protected override ControlValueRange RegisterValueRange()
+        {
+            return new ControlValueRange() { controlMin = min, controlMax = max };
+        }
+
         protected override void HandleUpdate()
         {
             value = CalculateValue();

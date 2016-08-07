@@ -141,134 +141,6 @@ MonoBehaviour:
   content: {fileID: 0}
   hideContent: 1
   maxAngle: 160
---- !u!43 &6953593
-Mesh:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_Name: 
-  serializedVersion: 8
-  m_SubMeshes:
-  - serializedVersion: 2
-    firstByte: 0
-    indexCount: 24
-    topology: 0
-    firstVertex: 0
-    vertexCount: 8
-    localAABB:
-      m_Center: {x: 0, y: 0.01, z: 0}
-      m_Extent: {x: 1.65, y: 0, z: 0.9000001}
-  m_Shapes:
-    vertices: []
-    shapes: []
-    channels: []
-    fullWeights: []
-  m_BindPose: []
-  m_BoneNameHashes: 
-  m_RootBoneNameHash: 0
-  m_MeshCompression: 0
-  m_IsReadable: 1
-  m_KeepVertices: 1
-  m_KeepIndices: 1
-  m_IndexBuffer: 000001000400010005000400010002000500020006000500020003000600030007000600030000000700000004000700
-  m_Skin: []
-  m_VertexData:
-    m_CurrentChannels: 13
-    m_VertexCount: 8
-    m_Channels:
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 3
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 12
-      format: 0
-      dimension: 4
-    - stream: 0
-      offset: 28
-      format: 0
-      dimension: 2
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    m_DataSize: 288
-    _typelessdata: 0000c03f0ad7233c010040bf000000000000803f0000803f0000803f00000000000000000000c0bf0ad7233c010040bf000000000000803f0000803f0000803f0000803f000000000000c0bf0ad7233c0100403f000000000000803f0000803f0000803f00000000000000000000c03f0ad7233c0100403f000000000000803f0000803f0000803f0000803f000000003333d33f0ad7233c686666bf000000000000803f0000803f00000000000000000000803f3333d3bf0ad7233c686666bf000000000000803f0000803f000000000000803f0000803f3333d3bf0ad7233c6866663f000000000000803f0000803f00000000000000000000803f3333d33f0ad7233c6866663f000000000000803f0000803f000000000000803f0000803f
-  m_CompressedMesh:
-    m_Vertices:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_UV:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Normals:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Tangents:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Weights:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_NormalSigns:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_TangentSigns:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_FloatColors:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_BoneIndices:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Triangles:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_UVInfo: 0
-  m_LocalAABB:
-    m_Center: {x: 0, y: 0.01, z: 0}
-    m_Extent: {x: 1.65, y: 0, z: 0.9000001}
-  m_MeshUsageFlags: 0
-  m_BakedConvexCollisionMesh: 
-  m_BakedTriangleCollisionMesh: 
-  m_MeshOptimized: 0
 --- !u!1 &39470025
 GameObject:
   m_ObjectHideFlags: 0
@@ -482,6 +354,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 1, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 0
   isDroppable: 1
   isSwappable: 1
@@ -491,6 +364,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 0
   detachThreshold: 500
   springJointStrength: 500
@@ -498,10 +372,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!114 &48637172
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -994,6 +870,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0.9862069, g: 1, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -1003,6 +880,7 @@ MonoBehaviour:
   precisionSnap: 1
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 0
   detachThreshold: 500
   springJointStrength: 500
@@ -1010,10 +888,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 0
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!54 &80646939
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1366,7 +1246,7 @@ Transform:
   - {fileID: 1355285941}
   - {fileID: 1436270169}
   m_Father: {fileID: 861792205}
-  m_RootOrder: 7
+  m_RootOrder: 5
 --- !u!1 &136390085
 GameObject:
   m_ObjectHideFlags: 0
@@ -2208,6 +2088,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0.9862069, g: 1, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -2217,6 +2098,7 @@ MonoBehaviour:
   precisionSnap: 1
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 0
   detachThreshold: 500
   springJointStrength: 500
@@ -2224,10 +2106,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 0
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!54 &226280889
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2495,7 +2379,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 237196254}
   m_LocalRotation: {x: 0, y: -0.70716435, z: 0, w: 0.7070492}
-  m_LocalPosition: {x: 0.57511103, y: 0.3828572, z: -0.08367367}
+  m_LocalPosition: {x: 0.58, y: 0.3828572, z: -0.041}
   m_LocalScale: {x: 0.016021002, y: 0.028194565, z: 0.19736195}
   m_LocalEulerAnglesHint: {x: 0, y: -90.0093, z: 0}
   m_Children: []
@@ -2508,7 +2392,7 @@ TextMesh:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 237196254}
-  m_Text: Hello World
+  m_Text: n/a
   m_OffsetZ: 0
   m_CharacterSize: 1
   m_LineSpacing: 1
@@ -2714,8 +2598,6 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 245234967}
-  - 54: {fileID: 245234966}
-  - 59: {fileID: 245234965}
   m_Layer: 0
   m_Name: Door
   m_TagString: Untagged
@@ -2723,53 +2605,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!59 &245234965
-HingeJoint:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 245234964}
-  m_ConnectedBody: {fileID: 0}
-  m_Anchor: {x: 0, y: 0.945, z: 0}
-  m_Axis: {x: 0, y: 0, z: 1}
-  m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.06682497, y: 1.7429522, z: -0.7550002}
-  m_UseSpring: 0
-  m_Spring:
-    spring: 0
-    damper: 0
-    targetPosition: 0
-  m_UseMotor: 0
-  m_Motor:
-    targetVelocity: 0
-    force: 0
-    freeSpin: 0
-  m_UseLimits: 0
-  m_Limits:
-    min: 0
-    max: 0
-    bounciness: 0
-    bounceMinVelocity: 0.2
-    contactDistance: 0
-  m_BreakForce: Infinity
-  m_BreakTorque: Infinity
-  m_EnableCollision: 0
-  m_EnablePreprocessing: 1
---- !u!54 &245234966
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 245234964}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 1
 --- !u!4 &245234967
 Transform:
   m_ObjectHideFlags: 0
@@ -3570,6 +3405,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0.9862069, g: 1, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -3579,6 +3415,7 @@ MonoBehaviour:
   precisionSnap: 1
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 0
   detachThreshold: 500
   springJointStrength: 500
@@ -3586,10 +3423,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 0
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!54 &318632998
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -3782,6 +3621,116 @@ Transform:
   - {fileID: 1495571457}
   m_Father: {fileID: 795386923}
   m_RootOrder: 7
+--- !u!1 &337570959
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 337570960}
+  - 33: {fileID: 337570965}
+  - 65: {fileID: 337570964}
+  - 23: {fileID: 337570963}
+  - 95: {fileID: 337570962}
+  - 54: {fileID: 337570961}
+  m_Layer: 0
+  m_Name: MovingPanel2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &337570960
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 337570959}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.12800002, y: 0.0697217, z: -0.147}
+  m_LocalScale: {x: 0.023182273, y: 0.22138526, z: 0.23293917}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Children: []
+  m_Father: {fileID: 861792205}
+  m_RootOrder: 10
+--- !u!54 &337570961
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 337570959}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!95 &337570962
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 337570959}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: e5bb6a3130268d84394c2e803b296645, type: 2}
+  m_CullingMode: 2
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+--- !u!23 &337570963
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 337570959}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_Materials:
+  - {fileID: 2100000, guid: fa756b232992781448908e45ad28eece, type: 2}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 1
+  m_ReflectionProbeUsage: 1
+  m_ProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 1
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+--- !u!65 &337570964
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 337570959}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!33 &337570965
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 337570959}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &338366543
 GameObject:
   m_ObjectHideFlags: 0
@@ -3848,7 +3797,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 340763020}
   - 33: {fileID: 340763023}
-  - 135: {fileID: 340763022}
   - 23: {fileID: 340763021}
   m_Layer: 0
   m_Name: WallAnchor (1)
@@ -3868,8 +3816,8 @@ Transform:
   m_LocalScale: {x: 0.46724233, y: 0.06674891, z: 0.058930412}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
-  - {fileID: 564304739}
   - {fileID: 1825839662}
+  - {fileID: 564304739}
   m_Father: {fileID: 790567672}
   m_RootOrder: 1
 --- !u!23 &340763021
@@ -3898,18 +3846,6 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
---- !u!135 &340763022
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 340763019}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!33 &340763023
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -4293,7 +4229,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 386808177}
   - 33: {fileID: 386808183}
-  - 65: {fileID: 386808182}
   - 23: {fileID: 386808181}
   - 114: {fileID: 386808180}
   - 114: {fileID: 386808179}
@@ -4317,7 +4252,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 861792205}
-  m_RootOrder: 6
+  m_RootOrder: 4
 --- !u!114 &386808178
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4346,6 +4281,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0.034482718, g: 1, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 0
   isDroppable: 1
   isSwappable: 1
@@ -4355,6 +4291,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 0
   detachThreshold: 500
   springJointStrength: 500
@@ -4362,10 +4299,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!114 &386808180
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4389,6 +4328,7 @@ MonoBehaviour:
         m_Calls: []
       m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
+  connectedTo: {fileID: 0}
   direction: 0
   activationDistance: 0.031024741
   buttonStrength: 5
@@ -4418,18 +4358,6 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
---- !u!65 &386808182
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 386808176}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!33 &386808183
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -4622,6 +4550,34 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 409921313}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &411139423
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 411139424}
+  m_Layer: 0
+  m_Name: DebugCamStart
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &411139424
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 411139423}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.3992093, y: 0.5, z: 1.1355377}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 19
 --- !u!1 &414617574
 GameObject:
   m_ObjectHideFlags: 0
@@ -5457,7 +5413,7 @@ TextMesh:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 469341789}
-  m_Text: Hello World
+  m_Text: n/a
   m_OffsetZ: 0
   m_CharacterSize: 1
   m_LineSpacing: 1
@@ -5873,7 +5829,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 496930647}
   - 33: {fileID: 496930646}
-  - 135: {fileID: 496930645}
   - 23: {fileID: 496930644}
   m_Layer: 0
   m_Name: WallAnchor
@@ -5908,18 +5863,6 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
---- !u!135 &496930645
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 496930643}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!33 &496930646
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -6094,6 +6037,34 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 508057931}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &510698014 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 146900, guid: 4d293c8e162f3874b982baadd71153d2, type: 2}
+  m_PrefabInternal: {fileID: 2032240552}
+--- !u!114 &510698020
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 510698014}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5761c48d9dd95c41b36acc5584d7803, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  keys:
+    forward: 119
+    backward: 115
+    strafeLeft: 97
+    strafeRight: 100
+    left: 113
+    right: 101
+    up: 121
+    down: 99
+    reset: 120
+  onlyInEditor: 1
+  stepSize: 0.05
+  camStart: {fileID: 411139424}
 --- !u!1 &518559196
 GameObject:
   m_ObjectHideFlags: 0
@@ -6337,7 +6308,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 564304739}
   - 33: {fileID: 564304744}
-  - 65: {fileID: 564304743}
   - 23: {fileID: 564304742}
   - 114: {fileID: 564304741}
   - 114: {fileID: 564304740}
@@ -6354,13 +6324,13 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 564304738}
-  m_LocalRotation: {x: 0, y: 0, z: -0.18291983, w: 0.98312783}
-  m_LocalPosition: {x: 0.89354056, y: 1.5488864, z: 0}
-  m_LocalScale: {x: 0.2343458, y: 2.960529, z: 0.19776654}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -21.0798}
+  m_LocalRotation: {x: -0.3096785, y: -0.9508414, z: 0.00000027477648, w: -0.00000077488}
+  m_LocalPosition: {x: 1.1899997, y: 1.3400006, z: -0}
+  m_LocalScale: {x: 0.2343457, y: 2.9605298, z: 0.19776656}
+  m_LocalEulerAnglesHint: {x: 0.0001, y: 179.9999, z: -323.9203}
   m_Children: []
   m_Father: {fileID: 340763020}
-  m_RootOrder: 0
+  m_RootOrder: 1
 --- !u!114 &564304740
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6390,10 +6360,9 @@ MonoBehaviour:
         m_Calls: []
       m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
-  direction: 1
-  min: 0
-  max: 100
-  stepSize: 5
+  direction: 2
+  minAngle: 0
+  maxAngle: 120
 --- !u!23 &564304742
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -6420,18 +6389,6 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
---- !u!65 &564304743
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 564304738}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!33 &564304744
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -7073,6 +7030,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0.9862069, g: 1, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -7082,6 +7040,7 @@ MonoBehaviour:
   precisionSnap: 1
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 0
   detachThreshold: 500
   springJointStrength: 500
@@ -7089,10 +7048,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 0
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!54 &630186608
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -7429,6 +7390,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0.9862069, g: 1, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -7438,6 +7400,7 @@ MonoBehaviour:
   precisionSnap: 1
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 0
   detachThreshold: 500
   springJointStrength: 500
@@ -7445,10 +7408,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 0
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!54 &643236390
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -7594,7 +7559,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 670552607}
   - 33: {fileID: 670552613}
-  - 65: {fileID: 670552612}
   - 23: {fileID: 670552611}
   - 114: {fileID: 670552610}
   - 114: {fileID: 670552609}
@@ -7618,7 +7582,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 90}
   m_Children: []
   m_Father: {fileID: 861792205}
-  m_RootOrder: 2
+  m_RootOrder: 1
 --- !u!114 &670552608
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7647,6 +7611,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0.034482718, g: 1, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 0
   isDroppable: 1
   isSwappable: 1
@@ -7656,6 +7621,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 0
   detachThreshold: 500
   springJointStrength: 500
@@ -7663,10 +7629,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!114 &670552610
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7690,6 +7658,7 @@ MonoBehaviour:
         m_Calls: []
       m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
+  connectedTo: {fileID: 0}
   direction: 0
   activationDistance: 0.046147197
   buttonStrength: 5
@@ -7719,18 +7688,6 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
---- !u!65 &670552612
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 670552606}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!33 &670552613
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -8139,7 +8096,7 @@ TextMesh:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 716608073}
-  m_Text: Hello World
+  m_Text: n/a
   m_OffsetZ: 0
   m_CharacterSize: 1
   m_LineSpacing: 1
@@ -8431,7 +8388,7 @@ TextMesh:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 737734288}
-  m_Text: Hello World
+  m_Text: n/a
   m_OffsetZ: 0
   m_CharacterSize: 1
   m_LineSpacing: 1
@@ -8546,6 +8503,151 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 742620896}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &752776151
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 752776152}
+  - 33: {fileID: 752776157}
+  - 23: {fileID: 752776156}
+  - 114: {fileID: 752776155}
+  - 114: {fileID: 752776154}
+  - 114: {fileID: 752776153}
+  m_Layer: 0
+  m_Name: ButtonWall2AutoSetup
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &752776152
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 752776151}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.07459998, y: 0.07700002, z: -0.143}
+  m_LocalScale: {x: 0.029705092, y: 0.098105855, z: 0.0958524}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Children: []
+  m_Father: {fileID: 861792205}
+  m_RootOrder: 11
+--- !u!114 &752776153
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 752776151}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 350434d2d64bcbd489e0ec0b05f6fcc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  go: {fileID: 123458, guid: cd4ff35fbdd2e344f9f46c1da44572da, type: 2}
+  dispenseLocation: {fileID: 691668004}
+--- !u!114 &752776154
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 752776151}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3abaf4521bf2344ea21ed3020b98eb2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  highlightOnTouch: 1
+  touchHighlightColor: {r: 0.034482718, g: 1, b: 0, a: 0}
+  rumbleOnTouch: {x: 0, y: 0}
+  allowedTouchControllers: 0
+  hideControllerOnTouch: 0
+  isGrabbable: 0
+  isDroppable: 1
+  isSwappable: 1
+  holdButtonToGrab: 1
+  rumbleOnGrab: {x: 0, y: 0}
+  allowedGrabControllers: 0
+  precisionSnap: 0
+  rightSnapHandle: {fileID: 0}
+  leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
+  grabAttachMechanic: 0
+  detachThreshold: 500
+  springJointStrength: 500
+  springJointDamper: 50
+  throwMultiplier: 1
+  onGrabCollisionDelay: 0
+  isUsable: 0
+  useOnlyIfGrabbed: 0
+  holdButtonToUse: 1
+  pointerActivatesUseAction: 0
+  rumbleOnUse: {x: 0, y: 0}
+  allowedUseControllers: 0
+  hideControllerOnUse: 0
+--- !u!114 &752776155
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 752776151}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd828872d92c3a94090d23b7b719f1e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultEvents:
+    OnValueChanged:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  events:
+    OnPush:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+  connectedTo: {fileID: 337570959}
+  direction: 0
+  activationDistance: 0.025608616
+  buttonStrength: 5
+--- !u!23 &752776156
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 752776151}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_Materials:
+  - {fileID: 2100000, guid: b43e5571a9fe23946bf3070cdfceb1b0, type: 2}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 1
+  m_ReflectionProbeUsage: 1
+  m_ProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 1
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+--- !u!33 &752776157
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 752776151}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &753655393
 GameObject:
@@ -8671,6 +8773,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0.9862069, g: 1, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -8680,6 +8783,7 @@ MonoBehaviour:
   precisionSnap: 1
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 0
   detachThreshold: 500
   springJointStrength: 500
@@ -8687,10 +8791,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 0
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!54 &758710436
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -8864,7 +8970,7 @@ TextMesh:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 762470828}
-  m_Text: Hello World
+  m_Text: n/a
   m_OffsetZ: 0
   m_CharacterSize: 1
   m_LineSpacing: 1
@@ -9321,6 +9427,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0.9862069, g: 1, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -9330,6 +9437,7 @@ MonoBehaviour:
   precisionSnap: 1
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 0
   detachThreshold: 500
   springJointStrength: 500
@@ -9337,10 +9445,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 0
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!54 &801254836
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -9822,16 +9932,19 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 989800202}
-  - {fileID: 951483493}
   - {fileID: 670552607}
   - {fileID: 1578491620}
-  - {fileID: 1413909002}
   - {fileID: 1931883182}
   - {fileID: 386808177}
   - {fileID: 125528463}
+  - {fileID: 951483493}
   - {fileID: 1111980837}
+  - {fileID: 1955316052}
+  - {fileID: 1413909002}
+  - {fileID: 337570960}
+  - {fileID: 752776152}
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 10
 --- !u!1 &862512961
 GameObject:
   m_ObjectHideFlags: 0
@@ -10159,6 +10272,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0.9862069, g: 1, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -10168,6 +10282,7 @@ MonoBehaviour:
   precisionSnap: 1
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 0
   detachThreshold: 500
   springJointStrength: 500
@@ -10175,10 +10290,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 0
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!54 &878348682
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -10832,6 +10949,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 1, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 0
   isDroppable: 1
   isSwappable: 1
@@ -10841,6 +10959,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 0
   detachThreshold: 500
   springJointStrength: 500
@@ -10848,10 +10967,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!1 &951483492
 GameObject:
   m_ObjectHideFlags: 0
@@ -10883,7 +11004,7 @@ Transform:
   - {fileID: 91285373}
   - {fileID: 1694904088}
   m_Father: {fileID: 861792205}
-  m_RootOrder: 1
+  m_RootOrder: 6
 --- !u!1 &957849495
 GameObject:
   m_ObjectHideFlags: 0
@@ -10954,7 +11075,7 @@ TextMesh:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 958773291}
-  m_Text: Hello World
+  m_Text: n/a
   m_OffsetZ: 0
   m_CharacterSize: 1
   m_LineSpacing: 1
@@ -11399,6 +11520,7 @@ MonoBehaviour:
         m_Calls: []
       m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
+  connectedTo: {fileID: 0}
   direction: 1
   activationDistance: 0.1
   buttonStrength: 5
@@ -12080,7 +12202,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 1068412304}
   - 33: {fileID: 1068412303}
-  - 65: {fileID: 1068412302}
   - 23: {fileID: 1068412301}
   - 114: {fileID: 1068412305}
   - 114: {fileID: 1068412306}
@@ -12117,18 +12238,6 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
---- !u!65 &1068412302
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1068412300}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!33 &1068412303
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -12142,10 +12251,10 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1068412300}
-  m_LocalRotation: {x: 0.3766585, y: -0.3763896, z: -0.59830904, w: 0.59873676}
-  m_LocalPosition: {x: 0.809, y: -0.03, z: 1.277}
+  m_LocalRotation: {x: -0.37665823, y: 0.37638897, z: 0.598309, w: -0.59873724}
+  m_LocalPosition: {x: 0.8089997, y: -0.0299999, z: 1.277}
   m_LocalScale: {x: 0.2343458, y: 2.960529, z: 0.19776654}
-  m_LocalEulerAnglesHint: {x: 0.0369, y: -64.3471, z: -89.9823}
+  m_LocalEulerAnglesHint: {x: 0.0369, y: -424.347, z: -89.9823}
   m_Children: []
   m_Father: {fileID: 496930647}
   m_RootOrder: 0
@@ -12166,10 +12275,9 @@ MonoBehaviour:
         m_Calls: []
       m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
-  direction: 2
-  min: 0
-  max: 100
-  stepSize: 5
+  direction: 0
+  minAngle: -130
+  maxAngle: 0
 --- !u!114 &1068412306
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12590,7 +12698,7 @@ Transform:
   - {fileID: 1207567907}
   - {fileID: 1617217079}
   m_Father: {fileID: 861792205}
-  m_RootOrder: 8
+  m_RootOrder: 7
 --- !u!1 &1113662392
 GameObject:
   m_ObjectHideFlags: 0
@@ -12615,7 +12723,7 @@ TextMesh:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1113662392}
-  m_Text: Hello World
+  m_Text: n/a
   m_OffsetZ: 0
   m_CharacterSize: 1
   m_LineSpacing: 1
@@ -13039,6 +13147,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0.9862069, g: 1, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -13048,6 +13157,7 @@ MonoBehaviour:
   precisionSnap: 1
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 0
   detachThreshold: 500
   springJointStrength: 500
@@ -13055,10 +13165,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 0
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!54 &1138379887
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -14085,6 +14197,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 1, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -14094,6 +14207,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 0
   detachThreshold: 500
   springJointStrength: 500
@@ -14101,10 +14215,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!114 &1232002164
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15692,7 +15808,7 @@ TextMesh:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1351700351}
-  m_Text: Hello World
+  m_Text: n/a
   m_OffsetZ: 0
   m_CharacterSize: 1
   m_LineSpacing: 1
@@ -16331,7 +16447,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1381598499}
   m_LocalRotation: {x: 0, y: -0.70716554, z: 0, w: 0.7070481}
-  m_LocalPosition: {x: 0.28, y: 1.36, z: -1.41}
+  m_LocalPosition: {x: 0.28, y: 1.36, z: -0.27}
   m_LocalScale: {x: 0.42239776, y: 0.4223974, z: 0.42239776}
   m_LocalEulerAnglesHint: {x: 0, y: -90.0095, z: 0}
   m_Children: []
@@ -16344,7 +16460,7 @@ TextMesh:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1381598499}
-  m_Text: Hello World
+  m_Text: n/a
   m_OffsetZ: 0
   m_CharacterSize: 1
   m_LineSpacing: 1
@@ -16621,13 +16737,14 @@ GameObject:
   m_Component:
   - 4: {fileID: 1413909002}
   - 33: {fileID: 1413909008}
-  - 65: {fileID: 1413909007}
   - 23: {fileID: 1413909006}
   - 114: {fileID: 1413909005}
   - 114: {fileID: 1413909004}
   - 114: {fileID: 1413909003}
+  - 54: {fileID: 1413909010}
+  - 153: {fileID: 1413909007}
   m_Layer: 0
-  m_Name: ButtonWall
+  m_Name: ButtonWallManualSetup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16640,12 +16757,12 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1413909001}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.092, y: 0.091, z: 0.18560424}
-  m_LocalScale: {x: 0.02970509, y: 0.098105855, z: 0.09585239}
+  m_LocalPosition: {x: -0.0746, y: 0.077, z: 0.199}
+  m_LocalScale: {x: 0.029705092, y: 0.098105855, z: 0.0958524}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 861792205}
-  m_RootOrder: 4
+  m_RootOrder: 9
 --- !u!114 &1413909003
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16674,6 +16791,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0.034482718, g: 1, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 0
   isDroppable: 1
   isSwappable: 1
@@ -16683,6 +16801,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 0
   detachThreshold: 500
   springJointStrength: 500
@@ -16690,10 +16809,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!114 &1413909005
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16717,8 +16838,9 @@ MonoBehaviour:
         m_Calls: []
       m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
+  connectedTo: {fileID: 0}
   direction: 0
-  activationDistance: 0.035290033
+  activationDistance: 0.025608616
   buttonStrength: 5
 --- !u!23 &1413909006
 MeshRenderer:
@@ -16746,18 +16868,98 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
---- !u!65 &1413909007
-BoxCollider:
+--- !u!153 &1413909007
+ConfigurableJoint:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1413909001}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
+  m_ConnectedBody: {fileID: 1955316053}
+  m_Anchor: {x: 0, y: 0.5, z: 0}
+  m_Axis: {x: 1, y: 0, z: 0}
+  m_AutoConfigureConnectedAnchor: 1
+  m_ConnectedAnchor: {x: 2.303486, y: 0.2544491, z: 0.017171836}
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_SecondaryAxis: {x: 0, y: 1, z: 0}
+  m_XMotion: 2
+  m_YMotion: 2
+  m_ZMotion: 2
+  m_AngularXMotion: 2
+  m_AngularYMotion: 2
+  m_AngularZMotion: 2
+  m_LinearLimitSpring:
+    spring: 0
+    damper: 0
+  m_LinearLimit:
+    limit: 0
+    bounciness: 0
+    contactDistance: 0
+  m_AngularXLimitSpring:
+    spring: 0
+    damper: 0
+  m_LowAngularXLimit:
+    limit: 0
+    bounciness: 0
+    contactDistance: 0
+  m_HighAngularXLimit:
+    limit: 0
+    bounciness: 0
+    contactDistance: 0
+  m_AngularYZLimitSpring:
+    spring: 0
+    damper: 0
+  m_AngularYLimit:
+    limit: 0
+    bounciness: 0
+    contactDistance: 0
+  m_AngularZLimit:
+    limit: 0
+    bounciness: 0
+    contactDistance: 0
+  m_TargetPosition: {x: 0, y: 0, z: 0}
+  m_TargetVelocity: {x: 0, y: 0, z: 0}
+  m_XDrive:
+    serializedVersion: 3
+    positionSpring: 0
+    positionDamper: 0
+    maximumForce: 3.4028233e+38
+  m_YDrive:
+    serializedVersion: 3
+    positionSpring: 0
+    positionDamper: 0
+    maximumForce: 3.4028233e+38
+  m_ZDrive:
+    serializedVersion: 3
+    positionSpring: 0
+    positionDamper: 0
+    maximumForce: 3.4028233e+38
+  m_TargetRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_TargetAngularVelocity: {x: 0, y: 0, z: 0}
+  m_RotationDriveMode: 0
+  m_AngularXDrive:
+    serializedVersion: 3
+    positionSpring: 0
+    positionDamper: 0
+    maximumForce: 3.4028233e+38
+  m_AngularYZDrive:
+    serializedVersion: 3
+    positionSpring: 0
+    positionDamper: 0
+    maximumForce: 3.4028233e+38
+  m_SlerpDrive:
+    serializedVersion: 3
+    positionSpring: 0
+    positionDamper: 0
+    maximumForce: 3.4028233e+38
+  m_ProjectionMode: 0
+  m_ProjectionDistance: 0.1
+  m_ProjectionAngle: 180
+  m_ConfiguredInWorldSpace: 0
+  m_SwapBodies: 0
+  m_BreakForce: Infinity
+  m_BreakTorque: Infinity
+  m_EnableCollision: 0
+  m_EnablePreprocessing: 1
 --- !u!33 &1413909008
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -16765,6 +16967,21 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1413909001}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!54 &1413909010
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1413909001}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &1418623281
 GameObject:
   m_ObjectHideFlags: 0
@@ -16865,7 +17082,7 @@ TextMesh:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1426182957}
-  m_Text: Hello World
+  m_Text: n/a
   m_OffsetZ: 0
   m_CharacterSize: 1
   m_LineSpacing: 1
@@ -17387,6 +17604,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0.9862069, g: 1, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -17396,6 +17614,7 @@ MonoBehaviour:
   precisionSnap: 1
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 0
   detachThreshold: 500
   springJointStrength: 500
@@ -17403,10 +17622,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 0
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!54 &1473594646
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -18688,7 +18909,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 1578491620}
   - 33: {fileID: 1578491626}
-  - 65: {fileID: 1578491625}
   - 23: {fileID: 1578491624}
   - 114: {fileID: 1578491623}
   - 114: {fileID: 1578491622}
@@ -18712,7 +18932,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 861792205}
-  m_RootOrder: 3
+  m_RootOrder: 2
 --- !u!114 &1578491621
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18741,6 +18961,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0.034482718, g: 1, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 0
   isDroppable: 1
   isSwappable: 1
@@ -18750,6 +18971,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 0
   detachThreshold: 500
   springJointStrength: 500
@@ -18757,10 +18979,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!114 &1578491623
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18784,6 +19008,7 @@ MonoBehaviour:
         m_Calls: []
       m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
+  connectedTo: {fileID: 0}
   direction: 6
   activationDistance: 0.08
   buttonStrength: 5
@@ -18813,18 +19038,6 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
---- !u!65 &1578491625
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1578491619}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!33 &1578491626
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -19770,6 +19983,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0.9862069, g: 1, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -19779,6 +19993,7 @@ MonoBehaviour:
   precisionSnap: 1
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 0
   detachThreshold: 500
   springJointStrength: 500
@@ -19786,10 +20001,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 0
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!54 &1662784855
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -21571,7 +21788,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: -90.0095, z: 0}
   m_Children: []
   m_Father: {fileID: 340763020}
-  m_RootOrder: 1
+  m_RootOrder: 0
 --- !u!102 &1825839663
 TextMesh:
   serializedVersion: 3
@@ -21579,7 +21796,7 @@ TextMesh:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1825839661}
-  m_Text: Hello World
+  m_Text: n/a
   m_OffsetZ: 0
   m_CharacterSize: 1
   m_LineSpacing: 1
@@ -21914,7 +22131,7 @@ TextMesh:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1846351369}
-  m_Text: Hello World
+  m_Text: n/a
   m_OffsetZ: 0
   m_CharacterSize: 1
   m_LineSpacing: 1
@@ -22054,7 +22271,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1853485433}
   m_LocalRotation: {x: 0, y: -0.707165, z: 0, w: 0.7070486}
-  m_LocalPosition: {x: 0.141, y: 0.157, z: -0.124}
+  m_LocalPosition: {x: 0.141, y: 0.157, z: -0.051}
   m_LocalScale: {x: 0.039472435, y: 0.039472394, z: 0.03947244}
   m_LocalEulerAnglesHint: {x: 0, y: -90.0094, z: 0}
   m_Children: []
@@ -22067,7 +22284,7 @@ TextMesh:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1853485433}
-  m_Text: Hello World
+  m_Text: n/a
   m_OffsetZ: 0
   m_CharacterSize: 1
   m_LineSpacing: 1
@@ -22155,6 +22372,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0.9862069, g: 1, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -22164,6 +22382,7 @@ MonoBehaviour:
   precisionSnap: 1
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 0
   detachThreshold: 500
   springJointStrength: 500
@@ -22171,10 +22390,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 0
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!54 &1879024479
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -22259,7 +22480,7 @@ TextMesh:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1879134095}
-  m_Text: Hello World
+  m_Text: n/a
   m_OffsetZ: 0
   m_CharacterSize: 1
   m_LineSpacing: 1
@@ -22916,7 +23137,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 1931883182}
   - 33: {fileID: 1931883188}
-  - 65: {fileID: 1931883187}
   - 23: {fileID: 1931883186}
   - 114: {fileID: 1931883185}
   - 114: {fileID: 1931883184}
@@ -22940,7 +23160,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 861792205}
-  m_RootOrder: 5
+  m_RootOrder: 3
 --- !u!114 &1931883183
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22969,6 +23189,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0.034482718, g: 1, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 0
   isDroppable: 1
   isSwappable: 1
@@ -22978,6 +23199,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 0
   detachThreshold: 500
   springJointStrength: 500
@@ -22985,10 +23207,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!114 &1931883185
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23012,6 +23236,7 @@ MonoBehaviour:
         m_Calls: []
       m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
+  connectedTo: {fileID: 0}
   direction: 0
   activationDistance: 0.03607156
   buttonStrength: 5
@@ -23041,18 +23266,6 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
---- !u!65 &1931883187
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1931883181}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!33 &1931883188
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -23325,6 +23538,116 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1950786935}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1955316047
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1955316052}
+  - 33: {fileID: 1955316051}
+  - 65: {fileID: 1955316050}
+  - 23: {fileID: 1955316049}
+  - 95: {fileID: 1955316048}
+  - 54: {fileID: 1955316053}
+  m_Layer: 0
+  m_Name: MovingPanel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!95 &1955316048
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1955316047}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: b52aac5e20b422c4798c346848601627, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+--- !u!23 &1955316049
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1955316047}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_Materials:
+  - {fileID: 2100000, guid: fa756b232992781448908e45ad28eece, type: 2}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 1
+  m_ReflectionProbeUsage: 1
+  m_ProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 1
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+--- !u!65 &1955316050
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1955316047}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!33 &1955316051
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1955316047}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &1955316052
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1955316047}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.12800002, y: 0.0697217, z: 0.19500001}
+  m_LocalScale: {x: 0.023182273, y: 0.22138526, z: 0.23293917}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Children: []
+  m_Father: {fileID: 861792205}
+  m_RootOrder: 8
+--- !u!54 &1955316053
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1955316047}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &1955895404
 GameObject:
   m_ObjectHideFlags: 0
@@ -23840,7 +24163,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2010280297}
   m_LocalRotation: {x: 0, y: -0.00008288026, z: 0, w: 1}
-  m_LocalPosition: {x: 0.46731564, y: -0.10753715, z: 1.4444542}
+  m_LocalPosition: {x: 0.524, y: -0.10753715, z: 1.444}
   m_LocalScale: {x: 0.039472416, y: 0.03947239, z: 0.039472416}
   m_LocalEulerAnglesHint: {x: 0, y: -0.0095999995, z: 0}
   m_Children: []
@@ -23853,7 +24176,7 @@ TextMesh:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2010280297}
-  m_Text: Hello World
+  m_Text: n/a
   m_OffsetZ: 0
   m_CharacterSize: 1
   m_LineSpacing: 1
@@ -24038,12 +24361,12 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 420908, guid: 4d293c8e162f3874b982baadd71153d2, type: 2}
       propertyPath: m_RootOrder
-      value: 11
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 3380982, guid: 4d293c8e162f3874b982baadd71153d2, type: 2}
       propertyPath: m_Mesh
       value: 
-      objectReference: {fileID: 6953593}
+      objectReference: {fileID: 2104481717}
     - target: {fileID: 11489174, guid: 4d293c8e162f3874b982baadd71153d2, type: 2}
       propertyPath: drawInGame
       value: 1
@@ -24159,6 +24482,7 @@ MonoBehaviour:
   hideControllerDelay: 0
   globalTouchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   customRigidbodyObject: {fileID: 0}
+  triggerOnStaticObjects: 0
 --- !u!114 &2032240557
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24232,6 +24556,7 @@ MonoBehaviour:
   hideControllerDelay: 0
   globalTouchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   customRigidbodyObject: {fileID: 0}
+  triggerOnStaticObjects: 0
 --- !u!114 &2032240561
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24310,7 +24635,7 @@ TextMesh:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2033147761}
-  m_Text: Hello World
+  m_Text: n/a
   m_OffsetZ: 0
   m_CharacterSize: 1
   m_LineSpacing: 1
@@ -24886,6 +25211,134 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2103946830}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!43 &2104481717
+Mesh:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: 
+  serializedVersion: 8
+  m_SubMeshes:
+  - serializedVersion: 2
+    firstByte: 0
+    indexCount: 24
+    topology: 0
+    firstVertex: 0
+    vertexCount: 8
+    localAABB:
+      m_Center: {x: 0, y: 0.01, z: 0}
+      m_Extent: {x: 1.65, y: 0, z: 0.9000001}
+  m_Shapes:
+    vertices: []
+    shapes: []
+    channels: []
+    fullWeights: []
+  m_BindPose: []
+  m_BoneNameHashes: 
+  m_RootBoneNameHash: 0
+  m_MeshCompression: 0
+  m_IsReadable: 1
+  m_KeepVertices: 1
+  m_KeepIndices: 1
+  m_IndexBuffer: 000001000400010005000400010002000500020006000500020003000600030007000600030000000700000004000700
+  m_Skin: []
+  m_VertexData:
+    m_CurrentChannels: 13
+    m_VertexCount: 8
+    m_Channels:
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 3
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 12
+      format: 0
+      dimension: 4
+    - stream: 0
+      offset: 28
+      format: 0
+      dimension: 2
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    m_DataSize: 288
+    _typelessdata: 0000c03f0ad7233c010040bf000000000000803f0000803f0000803f00000000000000000000c0bf0ad7233c010040bf000000000000803f0000803f0000803f0000803f000000000000c0bf0ad7233c0100403f000000000000803f0000803f0000803f00000000000000000000c03f0ad7233c0100403f000000000000803f0000803f0000803f0000803f000000003333d33f0ad7233c686666bf000000000000803f0000803f00000000000000000000803f3333d3bf0ad7233c686666bf000000000000803f0000803f000000000000803f0000803f3333d3bf0ad7233c6866663f000000000000803f0000803f00000000000000000000803f3333d33f0ad7233c6866663f000000000000803f0000803f000000000000803f0000803f
+  m_CompressedMesh:
+    m_Vertices:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_UV:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Normals:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Tangents:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Weights:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_NormalSigns:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_TangentSigns:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_FloatColors:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_BoneIndices:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Triangles:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_UVInfo: 0
+  m_LocalAABB:
+    m_Center: {x: 0, y: 0.01, z: 0}
+    m_Extent: {x: 1.65, y: 0, z: 0.9000001}
+  m_MeshUsageFlags: 0
+  m_BakedConvexCollisionMesh: 
+  m_BakedTriangleCollisionMesh: 
+  m_MeshOptimized: 0
 --- !u!1 &2108384230
 GameObject:
   m_ObjectHideFlags: 0
@@ -25010,6 +25463,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0.9862069, g: 1, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -25019,6 +25473,7 @@ MonoBehaviour:
   precisionSnap: 1
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 0
   detachThreshold: 500
   springJointStrength: 500
@@ -25026,10 +25481,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 0
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!54 &2111933694
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -1676,6 +1676,10 @@ In order to interact with the world beyond grabbing and throwing, controls can b
 
 A number of controls are available which partially support auto-configuration. So can a slider for example detect its min and max points or a button the distance until a push event should be triggered. In the editor gizmos will be drawn that show the current settings. A yellow gizmo signals a valid configuration. A red one shows that the position of the object should change or switch to manual configuration mode.
 
+All 3D controls extend the following abstract class which provides common methods and events:
+
+  * [VRTK_Control](#vrtk_control)
+
 The following UI controls are available:
 
   * [VRTK_Button](#vrtk_button)
@@ -1692,7 +1696,72 @@ The following UI convenience scripts are available:
 
 ---
 
+## VRTK_Control
+
+### Overview
+
+All 3D controls extend the `VRTK_Control` abstract class which provides a default set of methods and events that all of the subsequent controls expose.
+
+### Class Events
+
+  * `OnValueChanged` - Emitted when the control is interacted with.
+  
+#### Event Payload
+
+  * `float value` - The current value in the context of the control extending this abstract class.
+  * `float value` - The normalized value in the range between 0 and 100 of the control extending this abstract class.
+  
+### Class Methods
+
+#### GetValue/0
+
+  > `public float GetValue()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `float` - The current value of the control.
+
+The GetValue method returns the current value/position/setting of the control depending on the control that is extending this abstract class.
+
+#### GetNormalizedValue/0
+
+  > `public float GetNormalizedValue()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `float` - The current normalized value of the control.
+
+The GetNormalizedValue method returns the current value mapped onto a range between 0 and 100.
+
+#### SetContent/2
+
+  > ` public void SetContent(GameObject content, bool hideContent)`
+
+  * Parameters
+   * `GameObject content` - The content to be considered within the control.
+   * `bool hideContent` - When true the content will be hidden in addition to being non-interactable in case the control is fully closed.
+  * Returns
+   * _none_
+
+The SetContent method sets the given game object as the content of the control. This will then disable and optionally hide the content when a control is obscuring its view to prevent interacting with content within a control.
+
+#### GetContent/0
+
+  > ` public GameObject GetContent()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `GameObject` - The currently stored content for the control.
+
+The GetContent method returns the current game object of the control's content.
+
+---
+
 ## VRTK_Button
+  > extends [VRTK_Control](#vrtk_control)
 
 ### Overview
 
@@ -1702,6 +1771,7 @@ The script will instantiate the required Rigidbody and ConstantForce components 
 
 ### Inspector Parameters
 
+  * **Connected To:** An optional game object to which the button will be connected. If the game object moves the button will follow along.
   * **Direction:** The axis on which the button should move. All other axis will be frozen.
   * **Activation Distance:** The local distance the button needs to be pushed until a push event is triggered.
   * **Button Strength:** The amount of force needed to push the button down as well as the speed with which it will go back into its original position.
@@ -1717,6 +1787,7 @@ The script will instantiate the required Rigidbody and ConstantForce components 
 ---
 
 ## VRTK_Chest
+  > extends [VRTK_Control](#vrtk_control)
 
 ### Overview
 
@@ -1741,6 +1812,7 @@ The script will instantiate the required Rigidbody, Interactable and HingeJoint 
 ---
 
 ## VRTK_Door
+  > extends [VRTK_Control](#vrtk_control)
 
 ### Overview
 
@@ -1770,6 +1842,7 @@ The script will instantiate the required Rigidbodies, Interactable and HingeJoin
 ---
 
 ## VRTK_Drawer
+  > extends [VRTK_Control](#vrtk_control)
 
 ### Overview
 
@@ -1797,6 +1870,7 @@ It is possible to supply a third game object which is the root of the contents i
 ---
 
 ## VRTK_Knob
+  > extends [VRTK_Control](#vrtk_control)
 
 ### Overview
 
@@ -1818,6 +1892,7 @@ The script will instantiate the required Rigidbody and Interactable components a
 ---
 
 ## VRTK_Lever
+  > extends [VRTK_Control](#vrtk_control)
 
 ### Overview
 
@@ -1828,17 +1903,18 @@ The script will instantiate the required Rigidbody, Interactable and HingeJoing 
 ### Inspector Parameters
 
   * **Direction:** The axis on which the lever should rotate. All other axis will be frozen.
-  * **Min:** The minimum value of the lever.
-  * **Max:** The maximum value of the lever.
+  * **Min Angle:** The minimum angle of the lever counted from its initial position.
+  * **Max Angle:** The maximum angle of the lever counted from its initial position.
   * **Step Size:** The increments in which lever values can change.
 
 ### Example
 
-`SteamVR_Unity_Toolkit/Examples/025_Controls_Overview` has a couple of levers that can be grabbed and moved. One level is horizontal and the other is vertical.
+`SteamVR_Unity_Toolkit/Examples/025_Controls_Overview` has a couple of levers that can be grabbed and moved. One lever is horizontal and the other is vertical.
 
 ---
 
 ## VRTK_Slider
+  > extends [VRTK_Control](#vrtk_control)
 
 ### Overview
 

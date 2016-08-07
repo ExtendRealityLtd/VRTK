@@ -10,46 +10,33 @@
         }
 
         public LeverDirection direction = LeverDirection.y;
-        public float min = 0f;
-        public float max = 100f;
-        public float stepSize = 1f;
+        public float minAngle = 0f;
+        public float maxAngle = 130f;
+
+        private float stepSize = 1f;
 
         private Rigidbody rb;
         private VRTK_InteractableObject io;
         private HingeJoint hj;
+        private bool hjCreated = false;
 
         protected override void InitRequiredComponents()
         {
-            InitRigidBody();
-            InitInteractable();
-            InitJoint();
-        }
+            if (GetComponentInChildren<Collider>() == null)
+            {
+                Utilities.CreateColliders(gameObject);
+            }
 
-        protected override bool DetectSetup()
-        {
-            return true;
-        }
-
-        protected override void HandleUpdate()
-        {
-            value = CalculateValue();
-            SnapToValue(value);
-        }
-
-        private void InitRigidBody()
-        {
             rb = GetComponent<Rigidbody>();
             if (rb == null)
             {
                 rb = gameObject.AddComponent<Rigidbody>();
+                rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
+                rb.angularDrag = 30; // otherwise lever will continue to move too far on its own
             }
             rb.isKinematic = false;
             rb.useGravity = false;
-            rb.angularDrag = 30; // otherwise lever will continue to move too far on its own
-        }
 
-        private void InitInteractable()
-        {
             io = GetComponent<VRTK_InteractableObject>();
             if (io == null)
             {
@@ -58,46 +45,68 @@
             io.isGrabbable = true;
             io.precisionSnap = true;
             io.grabAttachMechanic = VRTK_InteractableObject.GrabAttachType.Track_Object;
-        }
 
-        private void InitJoint()
-        {
             hj = GetComponent<HingeJoint>();
             if (hj == null)
             {
                 hj = gameObject.AddComponent<HingeJoint>();
-                hj.useLimits = true;
-                hj.anchor = new Vector3(0, -0.5f, 0);
-                JointLimits limits = hj.limits;
+                hjCreated = true;
+            }
+        }
 
-                // this involves quite some guesswork. It is very hard to find general purpose settings but we can try. The user can still create the hingejoint himself.
+        protected override bool DetectSetup()
+        {
+            if (hjCreated)
+            {
+                Bounds bounds = Utilities.GetBounds(transform, transform);
                 switch (direction)
                 {
                     case LeverDirection.x:
-                        hj.axis = new Vector3(0, 1, 0);
-                        limits.min = -130;
+                        hj.anchor = (bounds.extents.y > bounds.extents.z) ? new Vector3(0, bounds.extents.y / transform.lossyScale.y, 0) : new Vector3(0, 0, bounds.extents.z / transform.lossyScale.z);
                         break;
                     case LeverDirection.y:
-                        hj.axis = new Vector3(0, 0, 1);
-                        limits.min = -130;
+                        hj.axis = new Vector3(0, 1, 0);
+                        hj.anchor = (bounds.extents.x > bounds.extents.z) ? new Vector3(bounds.extents.x / transform.lossyScale.x, 0, 0) : new Vector3(0, 0, bounds.extents.z / transform.lossyScale.z);
                         break;
                     case LeverDirection.z:
-                        hj.axis = new Vector3(1, 0, 0);
-                        limits.min = -130;
+                        hj.axis = new Vector3(0, 0, 1);
+                        hj.anchor = (bounds.extents.y > bounds.extents.x) ? new Vector3(0, bounds.extents.y / transform.lossyScale.y, 0) : new Vector3(bounds.extents.x / transform.lossyScale.x, 0);
                         break;
                 }
+                hj.anchor *= -1; // subdirection detection not yet implemented
+            }
+
+            if (hj)
+            {
+                hj.useLimits = true;
+                JointLimits limits = hj.limits;
+                limits.min = minAngle;
+                limits.max = maxAngle;
                 hj.limits = limits;
             }
+
+            return true;
+        }
+
+        protected override ControlValueRange RegisterValueRange()
+        {
+            return new ControlValueRange() { controlMin = minAngle, controlMax = maxAngle };
+        }
+
+        protected override void HandleUpdate()
+        {
+            value = CalculateValue();
+            SnapToValue(value);
         }
 
         private float CalculateValue()
         {
-            return Mathf.Round((min + Mathf.Clamp01(Mathf.Abs(hj.angle / (hj.limits.max - hj.limits.min))) * (max - min)) / stepSize) * stepSize;
+            return Mathf.Round((hj.angle) / stepSize) * stepSize;
         }
 
         private void SnapToValue(float value)
         {
-            float angle = ((value - min) / (max - min)) * (hj.limits.max - hj.limits.min);
+            float angle = ((value - minAngle) / (maxAngle - minAngle)) * (hj.limits.max - hj.limits.min);
 
             // TODO: there is no direct setter, one recommendation by Unity staff is to "abuse" min/max which seems the most reliable but not working so far
             JointLimits oldLimits = hj.limits;
