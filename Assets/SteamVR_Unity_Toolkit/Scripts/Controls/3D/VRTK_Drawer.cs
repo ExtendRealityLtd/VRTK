@@ -140,7 +140,7 @@
             }
             if (cfCreated)
             {
-                cf.force = getThirdDirection(cj.axis, cj.secondaryAxis) * subDirection * -50f;
+                cf.force = getThirdDirection(cj.axis, cj.secondaryAxis) * subDirection * -10f;
             }
 
             return true;
