@@ -2185,17 +2185,25 @@ A scene that shows how to exclude certain objects from being teleportable by eit
 
 A scene that showcases the existing interactive controls, different ways how they can be set up and how to react to events sent by them.
 
+  > [View Example Tour on YouTube](https://www.youtube.com/watch?v=Mz_ItYxwcJk)
+
 ### 026_Controller_ForceHoldObject
 
 A scene that shows how to grab an object on game start and prevent the user from dropping that object. The scene auto grabs two swords to each of the controllers and it's not possible to drop either of the swords.
+
+  > [View Example Tour on YouTube](https://www.youtube.com/watch?v=YcQpjCP5xtE)
 
 ### 027_CameraRig_TeleportByModelVillage
 
 A scene that demonstrates how to teleport to different locations without needing a world pointer and using the Destination Events abstract class on objects that represent a mini map of the game world. Touching and using an object on the map teleports the user to the specified location.
 
+  > [View Example Tour on YouTube](https://www.youtube.com/watch?v=jN_pYRirahg)
+
 ### 028_CameraRig_RoomExtender
 
 A scene that demonstates the concept of extending the physical room scale space by multiplying the physical steps taken in the chaperone bounds. A higher multiplier will mean the user can walk further in the play area and the walk multiplier can be toggled by a button press.
+
+  > [View Example Tour on YouTube](https://www.youtube.com/watch?v=qcBr6VWrRmo)
 
 ### 029_Controller_Tooltips
 
