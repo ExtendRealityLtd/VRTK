@@ -29,6 +29,10 @@
 
         private VRTK_PlayerPresence playerPresence;
         private bool lastGravitySetting;
+        private VRTK_HeadsetCollisionFade collisionFade;
+        private SteamVR_ControllerManager controllerManager;
+
+        private GameObject climbingObject;
 
         private void OnPlayerClimbStarted(PlayerClimbEventArgs e)
         {
@@ -54,19 +58,8 @@
             return e;
         }
 
-        private void Start()
+        private void Awake()
         {
-            var controllerManager = FindObjectOfType<SteamVR_ControllerManager>();
-            InitControllerListeners(controllerManager.left);
-            InitControllerListeners(controllerManager.right);
-
-            // Listen for teleport events 
-            VRTK_BasicTeleport teleportComponent = GetComponent<VRTK_BasicTeleport>();
-            if (teleportComponent)
-            {
-                teleportComponent.Teleporting += new TeleportEventHandler(OnTeleport);
-            }
-
             // Required Component: VRTK_PlayerPresence
             playerPresence = GetComponent<VRTK_PlayerPresence>();
             if (useGravity)
@@ -75,19 +68,68 @@
                 {
                     playerPresence = gameObject.AddComponent<VRTK_PlayerPresence>();
                 }
-                
+
                 playerPresence.SetFallingPhysicsOnlyParams(true);
             }
 
-            // Required Component: VRTK_HeadsetCollisionFade
+            controllerManager = FindObjectOfType<SteamVR_ControllerManager>();
             var headCamera = VRTK_DeviceFinder.HeadsetTransform();
-            var collisionFade = headCamera.GetComponent<VRTK_HeadsetCollisionFade>();
+            collisionFade = headCamera.GetComponent<VRTK_HeadsetCollisionFade>();
             if (collisionFade == null)
             {
                 collisionFade = headCamera.gameObject.AddComponent<VRTK_HeadsetCollisionFade>();
             }
-            collisionFade.HeadsetCollisionDetect += new HeadsetCollisionEventHandler(OnHeadsetCollisionDetected);
-            collisionFade.HeadsetCollisionEnded += new HeadsetCollisionEventHandler(OnHeadsetCollisionEnded);
+        }
+
+        private void OnEnable()
+        {
+            InitListeners(true);
+        }
+
+        private void OnDisable()
+        {
+            Ungrab(false, 0, climbingObject);
+            InitListeners(false);
+        }
+
+        private void InitListeners(bool state)
+        {
+            InitControllerListeners(controllerManager.left, state);
+            InitControllerListeners(controllerManager.right, state);
+
+            InitTeleportListener(state);
+            InitCollisionFadeListener(state);
+        }
+
+        private void InitTeleportListener(bool state)
+        {
+            // Listen for teleport events 
+            VRTK_BasicTeleport teleportComponent = GetComponent<VRTK_BasicTeleport>();
+            if (teleportComponent)
+            {
+                if (state)
+                {
+                    teleportComponent.Teleporting += new TeleportEventHandler(OnTeleport);
+                }
+                else
+                {
+                    teleportComponent.Teleporting -= new TeleportEventHandler(OnTeleport);
+                }
+            }
+        }
+
+        private void InitCollisionFadeListener(bool state)
+        {
+            if (state)
+            {
+                collisionFade.HeadsetCollisionDetect += new HeadsetCollisionEventHandler(OnHeadsetCollisionDetected);
+                collisionFade.HeadsetCollisionEnded += new HeadsetCollisionEventHandler(OnHeadsetCollisionEnded);
+            }
+            else
+            {
+                collisionFade.HeadsetCollisionDetect -= new HeadsetCollisionEventHandler(OnHeadsetCollisionDetected);
+                collisionFade.HeadsetCollisionEnded -= new HeadsetCollisionEventHandler(OnHeadsetCollisionEnded);
+            }
         }
 
         private Vector3 GetPosition(Transform objTransform)
@@ -104,12 +146,13 @@
         {
             if (IsClimbableObject(e.target))
             {
+                climbingObject = e.target;
                 if (useGravity)
                 {
                     playerPresence.StopPhysicsFall();
                 }
 
-                OnPlayerClimbStarted(SetPlayerClimbEvent(e.controllerIndex, e.target));
+                OnPlayerClimbStarted(SetPlayerClimbEvent(e.controllerIndex, climbingObject));
                 isClimbing = true;
                 controllerTransform = ((VRTK_InteractGrab)sender).transform;
                 startControllerPosition = GetPosition(controllerTransform);
@@ -121,7 +164,7 @@
         {
             var controller = ((VRTK_InteractGrab)sender).gameObject;
 
-            if (IsClimbableObject(e.target) && IsActiveClimbingController(controller))
+            if (e.target && IsClimbableObject(e.target) && IsActiveClimbingController(controller))
             {
                 Ungrab(true, e.controllerIndex, e.target);
             }
@@ -158,6 +201,7 @@
                 var device = VRTK_DeviceFinder.ControllerByIndex(controllerIndex);
                 playerPresence.StartPhysicsFall(-device.GetComponent<VRTK_ControllerEvents>().GetVelocity());
             }
+            climbingObject = null;
         }
 
         private bool IsActiveClimbingController(GameObject controller)
@@ -185,15 +229,23 @@
         }
 
 
-        private void InitControllerListeners(GameObject controller)
+        private void InitControllerListeners(GameObject controller, bool state)
         {
             if (controller)
             {
                 var grabbingController = controller.GetComponent<VRTK_InteractGrab>();
                 if (grabbingController)
                 {
-                    grabbingController.ControllerGrabInteractableObject += new ObjectInteractEventHandler(OnGrabObject);
-                    grabbingController.ControllerUngrabInteractableObject += new ObjectInteractEventHandler(OnUngrabObject);
+                    if (state)
+                    {
+                        grabbingController.ControllerGrabInteractableObject += new ObjectInteractEventHandler(OnGrabObject);
+                        grabbingController.ControllerUngrabInteractableObject += new ObjectInteractEventHandler(OnUngrabObject);
+                    }
+                    else
+                    {
+                        grabbingController.ControllerGrabInteractableObject -= new ObjectInteractEventHandler(OnGrabObject);
+                        grabbingController.ControllerUngrabInteractableObject -= new ObjectInteractEventHandler(OnUngrabObject);
+                    }
                 }
             }
         }

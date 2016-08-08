@@ -120,6 +120,12 @@ namespace VRTK
         {
             trackedController = GetComponent<SteamVR_TrackedObject>();
             controllerActions = GetComponent<VRTK_ControllerActions>();
+            Utilities.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.Controller);
+        }
+
+        private void OnDisable()
+        {
+            ForceStopTouching();
         }
 
         private void Start()
@@ -130,7 +136,6 @@ namespace VRTK
                 return;
             }
 
-            Utilities.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.Controller);
             CreateTouchCollider(gameObject);
             CreateTouchRigidBody(gameObject);
             CreateControllerRigidBody();
@@ -161,6 +166,11 @@ namespace VRTK
 
         private void OnTriggerStay(Collider collider)
         {
+            if (!enabled)
+            {
+                return;
+            }
+
             if (touchedObject != null && touchedObject != lastTouchedObject && !touchedObject.GetComponent<VRTK_InteractableObject>().IsGrabbed())
             {
                 CancelInvoke("ResetTriggerRumble");
@@ -275,7 +285,7 @@ namespace VRTK
             if (triggerOnStaticObjects)
             {
                 Rigidbody rb = obj.GetComponent<Rigidbody>();
-                if (rb==null)
+                if (rb == null)
                 {
                     rb = obj.AddComponent<Rigidbody>();
                 }

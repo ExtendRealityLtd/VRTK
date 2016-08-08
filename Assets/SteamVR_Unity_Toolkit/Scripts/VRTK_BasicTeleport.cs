@@ -35,32 +35,48 @@ namespace VRTK
         private float fadeInTime = 0f;
         private float maxBlinkTransitionSpeed = 1.5f;
         private float maxBlinkDistance = 33f;
+        private SteamVR_ControllerManager controllerManager;
 
-        public void InitDestinationSetListener(GameObject markerMaker)
+        public void InitDestinationSetListener(GameObject markerMaker, bool register)
         {
             if (markerMaker)
             {
                 foreach (var worldMarker in markerMaker.GetComponents<VRTK_DestinationMarker>())
                 {
-                    worldMarker.DestinationMarkerSet += new DestinationMarkerEventHandler(DoTeleport);
-                    worldMarker.SetInvalidTarget(ignoreTargetWithTagOrClass);
-                    worldMarker.SetNavMeshCheck(limitToNavMesh);
-                    worldMarker.SetHeadsetPositionCompensation(headsetPositionCompensation);
+                    if (register)
+                    {
+                        worldMarker.DestinationMarkerSet += new DestinationMarkerEventHandler(DoTeleport);
+                        worldMarker.SetInvalidTarget(ignoreTargetWithTagOrClass);
+                        worldMarker.SetNavMeshCheck(limitToNavMesh);
+                        worldMarker.SetHeadsetPositionCompensation(headsetPositionCompensation);
+                    }
+                    else
+                    {
+                        worldMarker.DestinationMarkerSet -= new DestinationMarkerEventHandler(DoTeleport);
+                    }
                 }
             }
         }
 
-        protected virtual void Start()
+        protected virtual void Awake()
         {
             Utilities.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.CameraRig);
-
-            adjustYForTerrain = false;
             eyeCamera = Utilities.AddCameraFade();
+            controllerManager = FindObjectOfType<SteamVR_ControllerManager>();
+        }
 
-            InitDestinationMarkerListeners();
-            InitHeadsetCollisionListener();
-
+        protected virtual void OnEnable()
+        {
+            adjustYForTerrain = false;
             enableTeleport = true;
+            InitDestinationMarkerListeners(true);
+            InitHeadsetCollisionListener(true);
+        }
+
+        protected virtual void OnDisable()
+        {
+            InitDestinationMarkerListeners(false);
+            InitHeadsetCollisionListener(false);
         }
 
         protected void OnTeleporting(object sender, DestinationMarkerEventArgs e)
@@ -162,28 +178,38 @@ namespace VRTK
             fadeInTime = 0f;
         }
 
-        private void InitDestinationMarkerListeners()
+        private void InitDestinationMarkerListeners(bool state)
         {
-            var controllerManager = FindObjectOfType<SteamVR_ControllerManager>();
-            InitDestinationSetListener(controllerManager.left);
-            InitDestinationSetListener(controllerManager.right);
+            if (controllerManager)
+            {
+                InitDestinationSetListener(controllerManager.left, state);
+                InitDestinationSetListener(controllerManager.right, state);
+            }
 
             foreach (var destinationMarker in FindObjectsOfType<VRTK_DestinationMarker>())
             {
                 if (destinationMarker.gameObject != controllerManager.left && destinationMarker.gameObject != controllerManager.right)
                 {
-                    InitDestinationSetListener(destinationMarker.gameObject);
+                    InitDestinationSetListener(destinationMarker.gameObject, state);
                 }
             }
         }
 
-        private void InitHeadsetCollisionListener()
+        private void InitHeadsetCollisionListener(bool state)
         {
             var headset = FindObjectOfType<VRTK_HeadsetCollisionFade>();
             if (headset)
             {
-                headset.HeadsetCollisionDetect += new HeadsetCollisionEventHandler(DisableTeleport);
-                headset.HeadsetCollisionEnded += new HeadsetCollisionEventHandler(EnableTeleport);
+                if (state)
+                {
+                    headset.HeadsetCollisionDetect += new HeadsetCollisionEventHandler(DisableTeleport);
+                    headset.HeadsetCollisionEnded += new HeadsetCollisionEventHandler(EnableTeleport);
+                }
+                else
+                {
+                    headset.HeadsetCollisionDetect -= new HeadsetCollisionEventHandler(DisableTeleport);
+                    headset.HeadsetCollisionEnded -= new HeadsetCollisionEventHandler(EnableTeleport);
+                }
             }
         }
 

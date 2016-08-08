@@ -23,6 +23,11 @@
 
         public void ToggleControllerModel(bool state, GameObject grabbedChildObject)
         {
+            if (!enabled)
+            {
+                return;
+            }
+
             foreach (MeshRenderer renderer in GetComponentsInChildren<MeshRenderer>())
             {
                 if (renderer.gameObject != grabbedChildObject && (grabbedChildObject == null || !renderer.transform.IsChildOf(grabbedChildObject.transform)))
@@ -43,6 +48,11 @@
 
         public void SetControllerOpacity(float alpha)
         {
+            if (!enabled)
+            {
+                return;
+            }
+
             alpha = Mathf.Clamp(alpha, 0f, 1f);
             foreach (var renderer in gameObject.GetComponentsInChildren<Renderer>())
             {
@@ -73,6 +83,11 @@
 
         public void HighlightControllerElement(GameObject element, Color? highlight, float fadeDuration = 0f)
         {
+            if (!enabled)
+            {
+                return;
+            }
+
             var renderer = element.GetComponent<Renderer>();
             if (renderer && renderer.material)
             {
@@ -87,6 +102,11 @@
 
         public void UnhighlightControllerElement(GameObject element)
         {
+            if (!enabled)
+            {
+                return;
+            }
+
             var renderer = element.GetComponent<Renderer>();
             if (renderer && renderer.material)
             {
@@ -146,12 +166,22 @@
 
         public void TriggerHapticPulse(ushort strength)
         {
+            if (!enabled)
+            {
+                return;
+            }
+
             hapticPulseStrength = (strength <= maxHapticVibration ? strength : maxHapticVibration);
             device.TriggerHapticPulse(hapticPulseStrength);
         }
 
         public void TriggerHapticPulse(ushort strength, float duration, float pulseInterval)
         {
+            if (!enabled)
+            {
+                return;
+            }
+
             hapticPulseStrength = (strength <= maxHapticVibration ? strength : maxHapticVibration);
             StartCoroutine(HapticPulse(duration, hapticPulseStrength, pulseInterval));
         }
