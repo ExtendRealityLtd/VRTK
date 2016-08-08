@@ -334,6 +334,12 @@
             }
         }
 
+        private void OnDisable()
+        {
+            pointerPressed = false;
+            uiClickPressed = false;
+        }
+
         private float CalculateTouchpadAxisAngle(Vector2 axis)
         {
             float angle = Mathf.Atan2(axis.y, axis.x) * Mathf.Rad2Deg;
