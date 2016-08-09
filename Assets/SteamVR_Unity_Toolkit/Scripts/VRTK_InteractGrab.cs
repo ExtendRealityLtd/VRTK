@@ -297,6 +297,8 @@ namespace VRTK
                 if (grabbedObject)
                 {
                     var objectScript = grabbedObject.GetComponent<VRTK_InteractableObject>();
+                    //Pause collisions (if allowed on object) for a moment whilst sorting out position to prevent clipping issues
+                    objectScript.PauseCollisions();
                     objectScript.SetGrabbedSnapHandle(GetSnapHandle(objectScript));
                     return true;
                 }
