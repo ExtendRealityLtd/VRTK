@@ -12,7 +12,6 @@
 namespace VRTK
 {
     using UnityEngine;
-    using System.Collections;
 
     public delegate void TeleportEventHandler(object sender, DestinationMarkerEventArgs e);
 
@@ -53,7 +52,7 @@ namespace VRTK
 
         protected virtual void Start()
         {
-            Utilities.SetPlayerObject(this.gameObject, VRTK_PlayerObject.ObjectTypes.CameraRig);
+            Utilities.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.CameraRig);
 
             adjustYForTerrain = false;
             eyeCamera = Utilities.AddCameraFade();
@@ -67,13 +66,17 @@ namespace VRTK
         protected void OnTeleporting(object sender, DestinationMarkerEventArgs e)
         {
             if (Teleporting != null)
+            {
                 Teleporting(this, e);
+            }
         }
 
         protected void OnTeleported(object sender, DestinationMarkerEventArgs e)
         {
             if (Teleported != null)
+            {
                 Teleported(this, e);
+            }
         }
 
         protected virtual void Blink(float transitionSpeed)
@@ -86,7 +89,7 @@ namespace VRTK
         protected virtual bool ValidLocation(Transform target)
         {
             //If the target is one of the player objects or a UI Canvas then it's never a valid location
-            if(target.GetComponent<VRTK_PlayerObject>() || target.GetComponent<VRTK_UIGraphicRaycaster>())
+            if (target.GetComponent<VRTK_PlayerObject>() || target.GetComponent<VRTK_UIGraphicRaycaster>())
             {
                 return false;
             }
@@ -120,14 +123,14 @@ namespace VRTK
 
         protected virtual void SetNewPosition(Vector3 position, Transform target)
         {
-            this.transform.position = CheckTerrainCollision(position, target);
+            transform.position = CheckTerrainCollision(position, target);
         }
 
         protected virtual Vector3 GetNewPosition(Vector3 tipPosition, Transform target)
         {
-            float newX = (headsetPositionCompensation ? (tipPosition.x - (eyeCamera.position.x - this.transform.position.x)) : tipPosition.x);
-            float newY = this.transform.position.y;
-            float newZ = (headsetPositionCompensation ? (tipPosition.z - (eyeCamera.position.z - this.transform.position.z)) : tipPosition.z);
+            float newX = (headsetPositionCompensation ? (tipPosition.x - (eyeCamera.position.x - transform.position.x)) : tipPosition.x);
+            float newY = transform.position.y;
+            float newZ = (headsetPositionCompensation ? (tipPosition.z - (eyeCamera.position.z - transform.position.z)) : tipPosition.z);
 
             return new Vector3(newX, newY, newZ);
         }
@@ -147,7 +150,7 @@ namespace VRTK
             blinkPause = 0f;
             if (distanceBlinkDelay > 0f)
             {
-                float distance = Vector3.Distance(this.transform.position, newPosition);
+                float distance = Vector3.Distance(transform.position, newPosition);
                 blinkPause = Mathf.Clamp((distance * blinkTransitionSpeed) / (maxBlinkDistance - distanceBlinkDelay), 0, maxBlinkTransitionSpeed);
                 blinkPause = (blinkSpeed <= 0.25 ? 0f : blinkPause);
             }
@@ -161,11 +164,11 @@ namespace VRTK
 
         private void InitDestinationMarkerListeners()
         {
-            var controllerManager = GameObject.FindObjectOfType<SteamVR_ControllerManager>();
+            var controllerManager = FindObjectOfType<SteamVR_ControllerManager>();
             InitDestinationSetListener(controllerManager.left);
             InitDestinationSetListener(controllerManager.right);
 
-            foreach (var destinationMarker in GameObject.FindObjectsOfType<VRTK_DestinationMarker>())
+            foreach (var destinationMarker in FindObjectsOfType<VRTK_DestinationMarker>())
             {
                 if (destinationMarker.gameObject != controllerManager.left && destinationMarker.gameObject != controllerManager.right)
                 {
@@ -176,7 +179,7 @@ namespace VRTK
 
         private void InitHeadsetCollisionListener()
         {
-            var headset = GameObject.FindObjectOfType<VRTK_HeadsetCollisionFade>();
+            var headset = FindObjectOfType<VRTK_HeadsetCollisionFade>();
             if (headset)
             {
                 headset.HeadsetCollisionDetect += new HeadsetCollisionEventHandler(DisableTeleport);

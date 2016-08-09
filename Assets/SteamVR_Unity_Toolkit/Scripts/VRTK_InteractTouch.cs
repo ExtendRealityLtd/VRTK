@@ -8,7 +8,6 @@
 namespace VRTK
 {
     using UnityEngine;
-    using System.Collections;
 
     public struct ObjectInteractEventArgs
     {
@@ -25,12 +24,14 @@ namespace VRTK
         public float hideControllerDelay = 0f;
         public Color globalTouchHighlightColor = Color.clear;
         public GameObject customRigidbodyObject;
+        public bool triggerOnStaticObjects = false;
 
         public event ObjectInteractEventHandler ControllerTouchInteractableObject;
         public event ObjectInteractEventHandler ControllerUntouchInteractableObject;
 
         private GameObject touchedObject = null;
         private GameObject lastTouchedObject = null;
+        private bool updatedHideControllerOnTouch = false;
 
         private SteamVR_TrackedObject trackedController;
         private VRTK_ControllerActions controllerActions;
@@ -40,13 +41,17 @@ namespace VRTK
         public virtual void OnControllerTouchInteractableObject(ObjectInteractEventArgs e)
         {
             if (ControllerTouchInteractableObject != null)
+            {
                 ControllerTouchInteractableObject(this, e);
+            }
         }
 
         public virtual void OnControllerUntouchInteractableObject(ObjectInteractEventArgs e)
         {
             if (ControllerUntouchInteractableObject != null)
+            {
                 ControllerUntouchInteractableObject(this, e);
+            }
         }
 
         public ObjectInteractEventArgs SetControllerInteractEvent(GameObject target)
@@ -125,8 +130,9 @@ namespace VRTK
                 return;
             }
 
-            Utilities.SetPlayerObject(this.gameObject, VRTK_PlayerObject.ObjectTypes.Controller);
-            CreateTouchCollider(this.gameObject);
+            Utilities.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.Controller);
+            CreateTouchCollider(gameObject);
+            CreateTouchRigidBody(gameObject);
             CreateControllerRigidBody();
             triggerRumble = false;
         }
@@ -169,17 +175,18 @@ namespace VRTK
 
                 var touchedObjectScript = touchedObject.GetComponent<VRTK_InteractableObject>();
 
-                if (!touchedObjectScript.IsValidInteractableController(this.gameObject, touchedObjectScript.allowedTouchControllers))
+                if (!touchedObjectScript.IsValidInteractableController(gameObject, touchedObjectScript.allowedTouchControllers))
                 {
                     touchedObject = null;
                     return;
                 }
 
+                updatedHideControllerOnTouch = touchedObjectScript.CheckHideMode(hideControllerOnTouch, touchedObjectScript.hideControllerOnTouch);
                 OnControllerTouchInteractableObject(SetControllerInteractEvent(touchedObject));
                 touchedObjectScript.ToggleHighlight(true, globalTouchHighlightColor);
-                touchedObjectScript.StartTouching(this.gameObject);
+                touchedObjectScript.StartTouching(gameObject);
 
-                if (controllerActions.IsControllerVisible() && hideControllerOnTouch)
+                if (controllerActions.IsControllerVisible() && updatedHideControllerOnTouch)
                 {
                     Invoke("HideController", hideControllerDelay);
                 }
@@ -232,10 +239,10 @@ namespace VRTK
 
                 OnControllerUntouchInteractableObject(SetControllerInteractEvent(untouched.gameObject));
                 untouched.GetComponent<VRTK_InteractableObject>().ToggleHighlight(false);
-                untouched.GetComponent<VRTK_InteractableObject>().StopTouching(this.gameObject);
+                untouched.GetComponent<VRTK_InteractableObject>().StopTouching(gameObject);
             }
 
-            if (hideControllerOnTouch)
+            if (updatedHideControllerOnTouch)
             {
                 controllerActions.ToggleControllerModel(true, touchedObject);
             }
@@ -244,7 +251,7 @@ namespace VRTK
 
         private void CreateTouchCollider(GameObject obj)
         {
-            var collider = this.GetComponent<Collider>();
+            var collider = GetComponent<Collider>();
             if (collider == null)
             {
                 var genCollider = obj.AddComponent<SphereCollider>();
@@ -260,6 +267,22 @@ namespace VRTK
             BoxCollider bc = obj.AddComponent<BoxCollider>();
             bc.size = size;
             bc.center = center;
+        }
+
+        private void CreateTouchRigidBody(GameObject obj)
+        {
+            // Need a Rigidbody to interact with static objects
+            if (triggerOnStaticObjects)
+            {
+                Rigidbody rb = obj.GetComponent<Rigidbody>();
+                if (rb==null)
+                {
+                    rb = obj.AddComponent<Rigidbody>();
+                }
+
+                rb.isKinematic = true;
+                rb.useGravity = false;
+            }
         }
 
         private void HideController()
@@ -278,7 +301,10 @@ namespace VRTK
             }
             else
             {
-                controllerRigidBodyObject = new GameObject();
+                controllerRigidBodyObject = new GameObject(string.Format("[{0}]_RigidBody_Holder", gameObject.name));
+                controllerRigidBodyObject.transform.parent = transform;
+                controllerRigidBodyObject.transform.localPosition = Vector3.zero;
+
                 CreateBoxCollider(controllerRigidBodyObject, new Vector3(0f, -0.01f, -0.098f), new Vector3(0.04f, 0.025f, 0.15f));
                 CreateBoxCollider(controllerRigidBodyObject, new Vector3(0f, -0.009f, -0.002f), new Vector3(0.05f, 0.025f, 0.04f));
                 CreateBoxCollider(controllerRigidBodyObject, new Vector3(0f, -0.024f, 0.01f), new Vector3(0.07f, 0.02f, 0.02f));
@@ -292,10 +318,6 @@ namespace VRTK
             }
 
             var controllerRB = controllerRigidBodyObject.GetComponent<Rigidbody>();
-
-            controllerRigidBodyObject.name = string.Format("[{0}]_RigidBody_Holder", this.gameObject.name);
-            controllerRigidBodyObject.transform.parent = this.transform;
-            controllerRigidBodyObject.transform.localPosition = Vector3.zero;
 
             controllerRB.useGravity = false;
             controllerRB.isKinematic = false;

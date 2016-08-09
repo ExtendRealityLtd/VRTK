@@ -25,6 +25,6 @@ public class UI_Keyboard : MonoBehaviour {
 
     private void Start()
     {
-        input = this.GetComponentInChildren<InputField>();
+        input = GetComponentInChildren<InputField>();
     }
 }

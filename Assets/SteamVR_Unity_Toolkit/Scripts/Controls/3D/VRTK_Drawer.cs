@@ -4,11 +4,6 @@
 
     public class VRTK_Drawer : VRTK_Control
     {
-        public enum Direction
-        {
-            autodetect, x, y, z
-        }
-
         public Direction direction = Direction.autodetect;
 
         public GameObject body;
@@ -18,8 +13,6 @@
         [Tooltip("Will make the content invisible if the drawer is closed. This way players cannot peak into it by moving the camera.")]
         public bool hideContent = true;
         public bool snapping = false;
-
-        private static float MIN_OPENING_DISTANCE = 20f; // percentage open
 
         private Rigidbody rb;
         private Rigidbody handleRb;
@@ -35,12 +28,10 @@
         private bool cjCreated = false;
         private bool cfCreated = false;
 
-        private VRTK_InteractableObject[] contentIOs;
-
         public override void OnDrawGizmos()
         {
             base.OnDrawGizmos();
-            if (!setupSuccessful)
+            if (!enabled || !setupSuccessful)
             {
                 return;
             }
@@ -73,10 +64,7 @@
             InitBody();
             InitHandle();
 
-            if (content)
-            {
-                contentIOs = content.GetComponentsInChildren<VRTK_InteractableObject>();
-            }
+            SetContent(content, hideContent);
         }
 
         protected override bool DetectSetup()
@@ -152,7 +140,7 @@
             }
             if (cfCreated)
             {
-                cf.force = getThirdDirection(cj.axis, cj.secondaryAxis) * subDirection * -50f;
+                cf.force = getThirdDirection(cj.axis, cj.secondaryAxis) * subDirection * -10f;
             }
 
             return true;
@@ -161,26 +149,7 @@
         protected override void HandleUpdate()
         {
             value = CalculateValue();
-
-            if (contentIOs != null)
-            {
-                HandleInteractables();
-            }
-
             cf.enabled = snapping && Mathf.Abs(value) < 2f;
-        }
-
-        private void HandleInteractables()
-        {
-            if (hideContent)
-            {
-                content.SetActive(value > 0);
-            }
-
-            foreach (VRTK_InteractableObject io in contentIOs)
-            {
-                io.enabled = value > MIN_OPENING_DISTANCE;
-            }
         }
 
         private void InitBody()
@@ -291,26 +260,6 @@
         private GameObject getHandle()
         {
             return (handle) ? handle : gameObject;
-        }
-
-        private Vector3 getThirdDirection(Vector3 axis1, Vector3 axis2)
-        {
-            bool xTaken = axis1.x != 0 || axis2.x != 0;
-            bool yTaken = axis1.y != 0 || axis2.y != 0;
-            bool zTaken = axis1.z != 0 || axis2.z != 0;
-
-            if (xTaken && yTaken)
-            {
-                return Vector3.forward;
-            }
-            else if (xTaken && zTaken)
-            {
-                return Vector3.up;
-            }
-            else
-            {
-                return Vector3.right;
-            }
         }
     }
 }

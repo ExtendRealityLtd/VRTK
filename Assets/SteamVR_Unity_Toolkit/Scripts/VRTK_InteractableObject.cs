@@ -11,9 +11,7 @@
 namespace VRTK
 {
     using UnityEngine;
-    using System.Collections;
     using System.Collections.Generic;
-
 
     public struct InteractableObjectEventArgs
     {
@@ -30,7 +28,8 @@ namespace VRTK
             Spring_Joint,
             Track_Object,
             Rotator_Track,
-            Child_Of_Controller
+            Child_Of_Controller,
+            Climbable
         }
 
         public enum AllowedController
@@ -40,11 +39,19 @@ namespace VRTK
             Right_Only
         }
 
+        public enum ControllerHideMode
+        {
+            Default,
+            OverrideHide,
+            OverrideDontHide,
+        }
+
         [Header("Touch Interactions", order = 1)]
         public bool highlightOnTouch = false;
         public Color touchHighlightColor = Color.clear;
         public Vector2 rumbleOnTouch = Vector2.zero;
         public AllowedController allowedTouchControllers = AllowedController.Both;
+        public ControllerHideMode hideControllerOnTouch = ControllerHideMode.Default;
 
         [Header("Grab Interactions", order = 2)]
         public bool isGrabbable = false;
@@ -56,6 +63,7 @@ namespace VRTK
         public bool precisionSnap;
         public Transform rightSnapHandle;
         public Transform leftSnapHandle;
+        public ControllerHideMode hideControllerOnGrab = ControllerHideMode.Default;
 
         [Header("Grab Mechanics", order = 3)]
         public GrabAttachType grabAttachMechanic = GrabAttachType.Fixed_Joint;
@@ -67,10 +75,12 @@ namespace VRTK
 
         [Header("Use Interactions", order = 4)]
         public bool isUsable = false;
+        public bool useOnlyIfGrabbed = false;
         public bool holdButtonToUse = true;
         public bool pointerActivatesUseAction = false;
         public Vector2 rumbleOnUse = Vector2.zero;
         public AllowedController allowedUseControllers = AllowedController.Both;
+        public ControllerHideMode hideControllerOnUse = ControllerHideMode.Default;
 
         public event InteractableObjectEventHandler InteractableObjectTouched;
         public event InteractableObjectEventHandler InteractableObjectUntouched;
@@ -85,7 +95,7 @@ namespace VRTK
         protected GameObject usingObject = null;
 
         private int usingState = 0;
-        private Dictionary<string, Color> originalObjectColours;
+        private Dictionary<string, Color[]> originalObjectColours;
 
         private Transform grabbedSnapHandle;
         private Transform trackPoint;
@@ -95,41 +105,67 @@ namespace VRTK
         private Transform previousParent;
         private bool previousKinematicState;
         private bool previousIsGrabbable;
+        private bool forcedDropped;
+
+        public bool CheckHideMode(bool defaultMode, ControllerHideMode overrideMode)
+        {
+            switch (overrideMode)
+            {
+                case VRTK_InteractableObject.ControllerHideMode.OverrideDontHide:
+                    return false;
+                case VRTK_InteractableObject.ControllerHideMode.OverrideHide:
+                    return true;
+            }
+            // default: do not change
+            return defaultMode;
+        }
 
         public virtual void OnInteractableObjectTouched(InteractableObjectEventArgs e)
         {
             if (InteractableObjectTouched != null)
+            {
                 InteractableObjectTouched(this, e);
+            }
         }
 
         public virtual void OnInteractableObjectUntouched(InteractableObjectEventArgs e)
         {
             if (InteractableObjectUntouched != null)
+            {
                 InteractableObjectUntouched(this, e);
+            }
         }
 
         public virtual void OnInteractableObjectGrabbed(InteractableObjectEventArgs e)
         {
             if (InteractableObjectGrabbed != null)
+            {
                 InteractableObjectGrabbed(this, e);
+            }
         }
 
         public virtual void OnInteractableObjectUngrabbed(InteractableObjectEventArgs e)
         {
             if (InteractableObjectUngrabbed != null)
+            {
                 InteractableObjectUngrabbed(this, e);
+            }
         }
 
         public virtual void OnInteractableObjectUsed(InteractableObjectEventArgs e)
         {
             if (InteractableObjectUsed != null)
+            {
                 InteractableObjectUsed(this, e);
+            }
         }
 
         public virtual void OnInteractableObjectUnused(InteractableObjectEventArgs e)
         {
             if (InteractableObjectUnused != null)
+            {
                 InteractableObjectUnused(this, e);
+            }
         }
 
         public InteractableObjectEventArgs SetInteractableObjectEvent(GameObject interactingObject)
@@ -164,6 +200,7 @@ namespace VRTK
         {
             OnInteractableObjectUntouched(SetInteractableObjectEvent(previousTouchingObject));
             touchingObject = null;
+            StopUsingOnControllerChange(previousTouchingObject);
         }
 
         public virtual void Grabbed(GameObject currentGrabbingObject)
@@ -187,6 +224,23 @@ namespace VRTK
             grabbedSnapHandle = null;
             grabbingObject = null;
             LoadPreviousState();
+            StopUsingOnControllerChange(previousGrabbingObject);
+        }
+
+        private void StopUsingOnControllerChange(GameObject previousController)
+        {
+            var usingObject = previousController.GetComponent<VRTK_InteractUse>();
+            if (usingObject)
+            {
+                if (holdButtonToUse)
+                {
+                    usingObject.ForceStopUsing();
+                }
+                else
+                {
+                    usingObject.ForceResetUsing();
+                }
+            }
         }
 
         public virtual void StartUsing(GameObject currentUsingObject)
@@ -241,11 +295,11 @@ namespace VRTK
         {
             if (onGrabCollisionDelay > 0f)
             {
-                if (this.GetComponent<Rigidbody>())
+                if (GetComponent<Rigidbody>())
                 {
-                    this.GetComponent<Rigidbody>().detectCollisions = false;
+                    GetComponent<Rigidbody>().detectCollisions = false;
                 }
-                foreach (Rigidbody rb in this.GetComponentsInChildren<Rigidbody>())
+                foreach (Rigidbody rb in GetComponentsInChildren<Rigidbody>())
                 {
                     rb.detectCollisions = false;
                 }
@@ -258,12 +312,22 @@ namespace VRTK
             return (grabAttachMechanic == GrabAttachType.Track_Object || grabAttachMechanic == GrabAttachType.Rotator_Track);
         }
 
+        public bool AttachIsClimbObject()
+        {
+            return (grabAttachMechanic == GrabAttachType.Climbable);
+        }
+
+        public bool AttachIsStaticObject()
+        {
+            return AttachIsClimbObject(); // only one at the moment
+        }
+
         public void ZeroVelocity()
         {
-            if (this.GetComponent<Rigidbody>())
+            if (GetComponent<Rigidbody>())
             {
-                this.GetComponent<Rigidbody>().velocity = Vector3.zero;
-                this.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+                GetComponent<Rigidbody>().velocity = Vector3.zero;
+                GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
             }
         }
 
@@ -271,14 +335,21 @@ namespace VRTK
         {
             if (grabbingObject == null)
             {
-                previousParent = this.transform.parent;
-                previousKinematicState = rb.isKinematic;
+                previousParent = transform.parent;
+
+                if (rb)
+                {
+                    previousKinematicState = rb.isKinematic;
+                }
             }
         }
 
         public void ToggleKinematic(bool state)
         {
-            rb.isKinematic = state;
+            if (rb)
+            {
+                rb.isKinematic = state;
+            }
         }
 
         public GameObject GetGrabbingObject()
@@ -293,27 +364,30 @@ namespace VRTK
                 return true;
             }
 
-            var controllerHand = DeviceFinder.GetControllerHandType(controllerCheck.ToString().Replace("_Only", ""));
-            return (DeviceFinder.IsControllerOfHand(actualController, controllerHand));
+            var controllerHand = VRTK_DeviceFinder.GetControllerHandType(controllerCheck.ToString().Replace("_Only", ""));
+            return (VRTK_DeviceFinder.IsControllerOfHand(actualController, controllerHand));
         }
 
         public void ForceStopInteracting()
         {
-            if (touchingObject != null)
+            if (touchingObject != null && touchingObject.activeInHierarchy)
             {
                 touchingObject.GetComponent<VRTK_InteractTouch>().ForceStopTouching();
+                forcedDropped = true;
             }
 
-            if (grabbingObject != null)
+            if (grabbingObject != null && grabbingObject.activeInHierarchy)
             {
                 grabbingObject.GetComponent<VRTK_InteractTouch>().ForceStopTouching();
                 grabbingObject.GetComponent<VRTK_InteractGrab>().ForceRelease();
+                forcedDropped = true;
             }
 
-            if (usingObject != null)
+            if (usingObject != null && usingObject.activeInHierarchy)
             {
                 usingObject.GetComponent<VRTK_InteractTouch>().ForceStopTouching();
                 usingObject.GetComponent<VRTK_InteractUse>().ForceStopUsing();
+                forcedDropped = true;
             }
         }
 
@@ -324,7 +398,7 @@ namespace VRTK
 
         public void RegisterTeleporters()
         {
-            foreach (var teleporter in GameObject.FindObjectsOfType<VRTK_BasicTeleport>())
+            foreach (var teleporter in FindObjectsOfType<VRTK_BasicTeleport>())
             {
                 teleporter.Teleported += new TeleportEventHandler(OnTeleported);
             }
@@ -332,15 +406,19 @@ namespace VRTK
 
         protected virtual void Awake()
         {
-            rb = this.GetComponent<Rigidbody>();
+            rb = GetComponent<Rigidbody>();
 
-            // If there is no rigid body, add one and set it to 'kinematic'.
-            if (!rb)
+            if (!AttachIsStaticObject())
             {
-                rb = gameObject.AddComponent<Rigidbody>();
-                rb.isKinematic = true;
+                // If there is no rigid body, add one and set it to 'kinematic'.
+                if (!rb)
+                {
+                    rb = gameObject.AddComponent<Rigidbody>();
+                    rb.isKinematic = true;
+                }
+                rb.maxAngularVelocity = float.MaxValue;
             }
-            rb.maxAngularVelocity = float.MaxValue;
+            forcedDropped = false;
         }
 
         protected virtual void Start()
@@ -351,7 +429,7 @@ namespace VRTK
 
         protected virtual void Update()
         {
-            if (!this.gameObject.activeInHierarchy)
+            if (!gameObject.activeInHierarchy)
             {
                 ForceStopInteracting();
             }
@@ -383,6 +461,14 @@ namespace VRTK
             ForceStopInteracting();
         }
 
+        protected virtual void OnEnable()
+        {
+            if (forcedDropped)
+            {
+                LoadPreviousState();
+            }
+        }
+
         protected virtual void OnJointBreak(float force)
         {
             ForceReleaseGrab();
@@ -390,11 +476,15 @@ namespace VRTK
 
         protected virtual void LoadPreviousState()
         {
-            if (this.gameObject.activeInHierarchy)
+            if (gameObject.activeInHierarchy)
             {
-                this.transform.parent = previousParent;
+                transform.parent = previousParent;
+                forcedDropped = false;
             }
-            rb.isKinematic = previousKinematicState;
+            if (rb)
+            {
+                rb.isKinematic = previousKinematicState;
+            }
             if (!isSwappable)
             {
                 isGrabbable = previousIsGrabbable;
@@ -411,11 +501,11 @@ namespace VRTK
 
         private void UnpauseCollisions()
         {
-            if (this.GetComponent<Rigidbody>())
+            if (GetComponent<Rigidbody>())
             {
-                this.GetComponent<Rigidbody>().detectCollisions = true;
+                GetComponent<Rigidbody>().detectCollisions = true;
             }
-            foreach (Rigidbody rb in this.GetComponentsInChildren<Rigidbody>())
+            foreach (Rigidbody rb in GetComponentsInChildren<Rigidbody>())
             {
                 rb.detectCollisions = true;
             }
@@ -426,39 +516,59 @@ namespace VRTK
             return (GetComponents<Renderer>().Length > 0 ? GetComponents<Renderer>() : GetComponentsInChildren<Renderer>());
         }
 
-        private Dictionary<string, Color> StoreOriginalColors()
+        private Dictionary<string, Color[]> StoreOriginalColors()
         {
-            Dictionary<string, Color> colors = new Dictionary<string, Color>();
+            var colors = new Dictionary<string, Color[]>();
             foreach (Renderer renderer in GetRendererArray())
             {
-                if (renderer.material.HasProperty("_Color"))
+                colors[renderer.gameObject.name] = new Color[renderer.materials.Length];
+
+                for (int i = 0; i < renderer.materials.Length; i++)
                 {
-                    colors[renderer.gameObject.name] = renderer.material.color;
+                    var material = renderer.materials[i];
+                    if (material.HasProperty("_Color"))
+                    {
+                        colors[renderer.gameObject.name][i] = material.color;
+                    }
                 }
             }
             return colors;
         }
 
-        private Dictionary<string, Color> BuildHighlightColorArray(Color color)
+        private Dictionary<string, Color[]> BuildHighlightColorArray(Color color)
         {
-            Dictionary<string, Color> colors = new Dictionary<string, Color>();
+            var colors = new Dictionary<string, Color[]>();
             foreach (Renderer renderer in GetRendererArray())
             {
-                if (renderer.material.HasProperty("_Color"))
+                colors[renderer.gameObject.name] = new Color[renderer.materials.Length];
+                for (int i = 0; i < renderer.materials.Length; i++)
                 {
-                    colors[renderer.gameObject.name] = color;
+                    var material = renderer.materials[i];
+                    if (material.HasProperty("_Color"))
+                    {
+                        colors[renderer.gameObject.name][i] = color;
+                    }
                 }
             }
             return colors;
         }
 
-        private void ChangeColor(Dictionary<string, Color> colors)
+        private void ChangeColor(Dictionary<string, Color[]> colors)
         {
             foreach (Renderer renderer in GetRendererArray())
             {
-                if (renderer.material.HasProperty("_Color") && colors.ContainsKey(renderer.gameObject.name))
+                if (!colors.ContainsKey(renderer.gameObject.name))
                 {
-                    renderer.material.color = colors[renderer.gameObject.name];
+                    continue;
+                }
+
+                for (int i = 0; i < renderer.materials.Length; i++)
+                {
+                    var material = renderer.materials[i];
+                    if (material.HasProperty("_Color"))
+                    {
+                        material.color = colors[renderer.gameObject.name][i];
+                    }
                 }
             }
         }
@@ -467,7 +577,7 @@ namespace VRTK
         {
             if (trackPoint)
             {
-                float distance = Vector3.Distance(trackPoint.position, this.transform.position);
+                float distance = Vector3.Distance(trackPoint.position, transform.position);
                 if (distance > (detachThreshold / 1000))
                 {
                     ForceReleaseGrab();
@@ -487,14 +597,15 @@ namespace VRTK
 
             if (AttachIsTrackObject() && precisionSnap)
             {
-                trackPoint = new GameObject(string.Format("[{0}]TrackObject_PrecisionSnap_AttachPoint", this.gameObject.name)).transform;
+                trackPoint = new GameObject(string.Format("[{0}]TrackObject_PrecisionSnap_AttachPoint", gameObject.name)).transform;
                 trackPoint.parent = point.transform;
                 customTrackPoint = true;
-                if(grabAttachMechanic == GrabAttachType.Track_Object)
+                if (grabAttachMechanic == GrabAttachType.Track_Object)
                 {
-                    trackPoint.position = this.transform.position;
-                    trackPoint.rotation = this.transform.rotation;
-                } else
+                    trackPoint.position = transform.position;
+                    trackPoint.rotation = transform.rotation;
+                }
+                else
                 {
                     trackPoint.position = controllerPoint.position;
                     trackPoint.rotation = controllerPoint.rotation;
@@ -507,7 +618,7 @@ namespace VRTK
             }
 
             originalControllerAttachPoint = new GameObject(string.Format("[{0}]Original_Controller_AttachPoint", grabbingObject.name)).transform;
-            originalControllerAttachPoint.parent = this.transform;
+            originalControllerAttachPoint.parent = transform;
             originalControllerAttachPoint.position = trackPoint.position;
             originalControllerAttachPoint.rotation = trackPoint.rotation;
         }
@@ -551,8 +662,8 @@ namespace VRTK
             }
             else
             {
-                rotationDelta = trackPoint.rotation * Quaternion.Inverse(this.transform.rotation);
-                positionDelta = trackPoint.position - this.transform.position;
+                rotationDelta = trackPoint.rotation * Quaternion.Inverse(transform.rotation);
+                positionDelta = trackPoint.position - transform.position;
             }
 
             rotationDelta.ToAngleAxis(out angle, out axis);
@@ -573,7 +684,7 @@ namespace VRTK
         {
             if (AttachIsTrackObject() && trackPoint)
             {
-                this.transform.position = grabbingObject.transform.position;
+                transform.position = grabbingObject.transform.position;
             }
         }
     }

@@ -57,9 +57,9 @@ name should be prefixed with `VRTK_`.
 Parameters should be defined at the top of the class before any methods
 are defined.
 
-It is acceptable to have two classes defined in the same file as long
-as the second defined class is only used by the other class defined in
-the same file.
+It is acceptable to have multiple classes defined in the same file as
+long as the subsequent defined classes are only used by the main class
+defined in the same file.
 
 Where possible, the structure of the code should also flow with the
 accessibility level of the method or parameters. So all `public`
@@ -70,17 +70,24 @@ defined last.
 Blocks of code such as conditional statements and loops must always
 contain the block of code in braces `{ }` even if it is just one line.
 
+Any method or variable references should have the most simplified name
+as possible, which means no additional references should be added where
+it's not necessary.
+
+e.g.
+
+  * `this.transform.rotation` is simplfied to `transform.rotation`
+  * `GameObject.FindObjectsOfType` is simplified to `FindObjectsOfType`
+
 ## Documentation
 
-If a new feature is being added then the `README.md` should also be
-updated to contain information about the relevant elements such as:
+If a new feature is being added then the `DOCUMENTATION.md` should
+also be updated to contain information about the relevant elements
+such as:
 
   * New general purpose prefabs added.
   * New general purpose scripts.
   * New example scenes showcasing the feature.
-
-The `README.md` lines should not exceed 72 characters unless the line
-cannot be split (such in the case of a long markdown link or url).
 
 ## Commit Messages
 

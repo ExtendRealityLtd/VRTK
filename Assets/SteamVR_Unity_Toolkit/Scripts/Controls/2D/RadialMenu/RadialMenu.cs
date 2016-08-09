@@ -5,12 +5,13 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
+public delegate void HapticPulseEventHandler(ushort strength);
+
 [ExecuteInEditMode] //Lets us set up buttons from inspector option
 public class RadialMenu : MonoBehaviour
 {
-
     #region Variables
-    public List<RadialMenuButton> Buttons;
+    public List<RadialMenuButton> buttons;
     public GameObject buttonPrefab;
     [Range(0f, 1f)]
     public float buttonThickness = 0.5f;
@@ -21,7 +22,12 @@ public class RadialMenu : MonoBehaviour
     public bool rotateIcons;
     public float iconMargin;
     public bool isShown;
-    public bool HideOnRelease;
+    public bool hideOnRelease;
+    public bool executeOnUnclick;
+    [Range(0, 1599)]
+    public ushort baseHapticStrength;
+
+    public event HapticPulseEventHandler FireHapticPulse;
 
     //Has to be public to keep state from editor -> play mode?
     public List<GameObject> menuButtons;
@@ -32,7 +38,7 @@ public class RadialMenu : MonoBehaviour
 
     #region Unity Methods
 
-    private void Start()
+    private void Awake()
     {
         if (Application.isPlaying)
         {
@@ -49,7 +55,7 @@ public class RadialMenu : MonoBehaviour
         //Keep track of pressed button and constantly invoke Hold event
         if (currentPress != -1)
         {
-            Buttons[currentPress].Press();
+            buttons[currentPress].OnHold.Invoke();
         }
     }
 
@@ -61,10 +67,10 @@ public class RadialMenu : MonoBehaviour
     private void InteractButton(float angle, ButtonEvent evt) //Can't pass ExecuteEvents as parameter? Unity gives error
     {
         //Get button ID from angle
-        float buttonAngle = 360f / Buttons.Count; //Each button is an arc with this angle
+        float buttonAngle = 360f / buttons.Count; //Each button is an arc with this angle
         angle = mod((angle + offsetRotation), 360); //Offset the touch coordinate with our offset
 
-        int buttonID = (int)mod(((angle + (buttonAngle / 2f)) / buttonAngle), Buttons.Count); //Convert angle into ButtonID (This is the magic)
+        int buttonID = (int)mod(((angle + (buttonAngle / 2f)) / buttonAngle), buttons.Count); //Convert angle into ButtonID (This is the magic)
         var pointer = new PointerEventData(EventSystem.current); //Create a new EventSystem (UI) Event
 
         //If we changed buttons while moving, un-hover and un-click the last button we were on
@@ -72,21 +78,39 @@ public class RadialMenu : MonoBehaviour
         {
             ExecuteEvents.Execute(menuButtons[currentHover], pointer, ExecuteEvents.pointerUpHandler);
             ExecuteEvents.Execute(menuButtons[currentHover], pointer, ExecuteEvents.pointerExitHandler);
+            buttons[currentHover].OnHoverExit.Invoke();
+            if (executeOnUnclick && currentPress != -1)
+            {
+                ExecuteEvents.Execute(menuButtons[buttonID], pointer, ExecuteEvents.pointerDownHandler);
+                AttempHapticPulse ((ushort)(baseHapticStrength * 1.666f));
+            }
         }
-        if (evt == ButtonEvent.click) //Click button if click, and keep track of current press
+        if (evt == ButtonEvent.click) //Click button if click, and keep track of current press (executes button action)
         {
             ExecuteEvents.Execute(menuButtons[buttonID], pointer, ExecuteEvents.pointerDownHandler);
             currentPress = buttonID;
-            Buttons[buttonID].Click();
+            if (!executeOnUnclick)
+            {
+                buttons[buttonID].OnClick.Invoke ();
+                AttempHapticPulse ((ushort)(baseHapticStrength * 2.5f));
+            }
         }
-        else if (evt == ButtonEvent.unclick) //Clear press id to stop invoking OnHold method
+        else if (evt == ButtonEvent.unclick) //Clear press id to stop invoking OnHold method (hide menu)
         {
             ExecuteEvents.Execute(menuButtons[buttonID], pointer, ExecuteEvents.pointerUpHandler);
             currentPress = -1;
+
+            if (executeOnUnclick)
+            {
+                AttempHapticPulse ((ushort)(baseHapticStrength * 2.5f));
+                buttons[buttonID].OnClick.Invoke ();
+            }
         }
-        else if (evt == ButtonEvent.hoverOn && currentHover != buttonID) // Show hover UI event (darken button etc)
+        else if (evt == ButtonEvent.hoverOn && currentHover != buttonID) // Show hover UI event (darken button etc). Show menu
         {
             ExecuteEvents.Execute(menuButtons[buttonID], pointer, ExecuteEvents.pointerEnterHandler);
+            buttons[buttonID].OnHoverEnter.Invoke();
+            AttempHapticPulse (baseHapticStrength);
         }
         currentHover = buttonID; //Set current hover ID, need this to un-hover if selected button changes
     }
@@ -128,6 +152,7 @@ public class RadialMenu : MonoBehaviour
         {
             var pointer = new PointerEventData(EventSystem.current);
             ExecuteEvents.Execute(menuButtons[currentHover], pointer, ExecuteEvents.pointerExitHandler);
+            buttons[currentHover].OnHoverExit.Invoke();
             currentHover = -1;
         }
     }
@@ -147,16 +172,16 @@ public class RadialMenu : MonoBehaviour
 
     public RadialMenuButton GetButton(int id)
     {
-        if (id < Buttons.Count)
+        if (id < buttons.Count)
         {
-            return Buttons[id];
+            return buttons[id];
         }
         return null;
     }
 
     public void HideMenu(bool force)
     {
-        if (isShown && (HideOnRelease || force))
+        if (isShown && (hideOnRelease || force))
         {
             isShown = false;
             StopCoroutine("TweenMenuScale");
@@ -185,6 +210,14 @@ public class RadialMenu : MonoBehaviour
         StopCoroutine("TweenMenuScale");
     }
 
+    private void AttempHapticPulse(ushort strength)
+    {
+        if (strength > 0 && FireHapticPulse != null)
+        {
+            FireHapticPulse (strength);
+        }
+    }
+
     #endregion
 
     #region Generation
@@ -193,10 +226,10 @@ public class RadialMenu : MonoBehaviour
     public void RegenerateButtons()
     {
         RemoveAllButtons();
-        for (int i = 0; i < Buttons.Count; i++)
+        for (int i = 0; i < buttons.Count; i++)
         {
             // Initial placement/instantiation
-            GameObject newButton = (GameObject)Instantiate(buttonPrefab);
+            GameObject newButton = Instantiate(buttonPrefab);
             newButton.transform.SetParent(transform);
             newButton.transform.localScale = Vector3.one;
             newButton.GetComponent<RectTransform>().offsetMax = Vector2.zero;
@@ -210,14 +243,14 @@ public class RadialMenu : MonoBehaviour
             }
             else
             {
-                circle.thickness = (int)(buttonThickness * ((float)GetComponent<RectTransform>().rect.width / 2f));
+                circle.thickness = (int)(buttonThickness * (GetComponent<RectTransform>().rect.width / 2f));
             }
-            int fillPerc = (int)(100f / Buttons.Count);
+            int fillPerc = (int)(100f / buttons.Count);
             circle.fillPercent = fillPerc;
             circle.color = buttonColor;
 
             //Final placement/rotation
-            float angle = ((360 / Buttons.Count) * i) + offsetRotation;
+            float angle = ((360 / buttons.Count) * i) + offsetRotation;
             newButton.transform.localEulerAngles = new Vector3(0, 0, angle);
             newButton.layer = 4; //UI Layer
             newButton.transform.localPosition = Vector3.zero;
@@ -230,13 +263,13 @@ public class RadialMenu : MonoBehaviour
 
             //Place and populate Button Icon
             GameObject buttonIcon = newButton.GetComponentInChildren<RadialButtonIcon>().gameObject;
-            if (Buttons[i].ButtonIcon == null)
+            if (buttons[i].ButtonIcon == null)
             {
                 buttonIcon.SetActive(false);
             }
             else
             {
-                buttonIcon.GetComponent<Image>().sprite = Buttons[i].ButtonIcon;
+                buttonIcon.GetComponent<Image>().sprite = buttons[i].ButtonIcon;
                 buttonIcon.transform.localPosition = new Vector2(-1 * ((newButton.GetComponent<RectTransform>().rect.width / 2f) - (circle.thickness / 2f)), 0);
                 //Min icon size from thickness and arc
                 float scale1 = Mathf.Abs(circle.thickness);
@@ -263,7 +296,7 @@ public class RadialMenu : MonoBehaviour
 
     public void AddButton(RadialMenuButton newButton)
     {
-        Buttons.Add(newButton);
+        buttons.Add(newButton);
         RegenerateButtons();
     }
 
@@ -296,18 +329,11 @@ public class RadialMenu : MonoBehaviour
 public class RadialMenuButton
 {
     public Sprite ButtonIcon;
+
     public UnityEvent OnClick;
     public UnityEvent OnHold;
-
-    public void Press()
-    {
-        OnHold.Invoke();
-    }
-
-    public void Click()
-    {
-        OnClick.Invoke();
-    }
+    public UnityEvent OnHoverEnter;
+    public UnityEvent OnHoverExit;
 }
 
 public enum ButtonEvent

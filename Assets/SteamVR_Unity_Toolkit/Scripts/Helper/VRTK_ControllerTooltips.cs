@@ -1,7 +1,6 @@
 ﻿namespace VRTK
 {
     using UnityEngine;
-    using System.Collections;
 
     public class VRTK_ControllerTooltips : MonoBehaviour
     {
@@ -39,11 +38,12 @@
         {
             if (element == TooltipButtons.None)
             {
-                for(int i = 0; i < buttonTooltips.Length; i++)
+                for (int i = 0; i < buttonTooltips.Length; i++)
                 {
                     buttonTooltips[i].SetActive(state);
                 }
-            } else
+            }
+            else
             {
                 buttonTooltips[(int)element].SetActive(state);
             }
@@ -58,16 +58,16 @@
             InitialiseTips();
             buttonTooltips = new GameObject[4]
             {
-                this.transform.FindChild(TooltipButtons.TriggerTooltip.ToString()).gameObject,
-                this.transform.FindChild(TooltipButtons.GripTooltip.ToString()).gameObject,
-                this.transform.FindChild(TooltipButtons.TouchpadTooltip.ToString()).gameObject,
-                this.transform.FindChild(TooltipButtons.AppMenuTooltip.ToString()).gameObject,
+                transform.FindChild(TooltipButtons.TriggerTooltip.ToString()).gameObject,
+                transform.FindChild(TooltipButtons.GripTooltip.ToString()).gameObject,
+                transform.FindChild(TooltipButtons.TouchpadTooltip.ToString()).gameObject,
+                transform.FindChild(TooltipButtons.AppMenuTooltip.ToString()).gameObject,
             };
         }
 
         private void InitialiseTips()
         {
-            foreach (var tooltip in this.GetComponentsInChildren<VRTK_ObjectTooltip>())
+            foreach (var tooltip in GetComponentsInChildren<VRTK_ObjectTooltip>())
             {
                 var tipText = "";
                 Transform tipTransform = null;
@@ -117,7 +117,7 @@
 
                 tooltip.Reset();
 
-                if(tipText.Trim().Length == 0)
+                if (tipText.Trim().Length == 0)
                 {
                     tooltip.gameObject.SetActive(false);
                 }
@@ -138,7 +138,7 @@
             }
             else
             {
-                returnTransform = this.transform.parent.FindChild("Model/" + findTransform + "/attach");
+                returnTransform = transform.parent.FindChild("Model/" + findTransform + "/attach");
             }
 
             return returnTransform;

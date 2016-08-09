@@ -8,7 +8,7 @@ public class ButtonReactor : MonoBehaviour
 
     private void Start()
     {
-        GetComponent<VRTK_Button>().OnPushed += handlePush;
+        GetComponent<VRTK_Button>().events.OnPush.AddListener(handlePush);
     }
 
     private void handlePush()

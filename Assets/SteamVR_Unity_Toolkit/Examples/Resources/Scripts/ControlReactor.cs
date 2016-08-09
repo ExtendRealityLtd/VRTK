@@ -7,7 +7,7 @@ public class ControlReactor : MonoBehaviour
 
     private void Start()
     {
-        GetComponent<VRTK_Control>().OnValueChanged += HandleChange;
+        GetComponent<VRTK_Control>().defaultEvents.OnValueChanged.AddListener(HandleChange);
         go.text = GetComponent<VRTK_Control>().getValue().ToString();
     }
 
