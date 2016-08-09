@@ -1370,6 +1370,8 @@ The RegisterTeleporters method is used to find all objects that have a teleporte
 
 `SteamVR_Unity_Toolkit/Examples/013_Controller_UsingAndGrabbingMultipleObjects` shows mutltiple objects that can be grabbed by holding the buttons or grabbed by toggling the button click and also has objects that can have their Using state toggled to show how mutliple items can be turned on at the same time.
 
+`SteamVR_Unity_Toolkit/Examples/038_Controller_LightsaberTraining` designed as a simple game, it shows how a script can be derived from VRTK_InteractableObject to add animations and sound effects.
+
 ---
 
 ## Touching Interactable Objects (VRTK_InteractTouch)
@@ -2243,5 +2245,12 @@ A scene that demonstrates how the Bezier Pointer can display an object (teleport
 ### 037_CameraRig_ClimbingFalling
 
 A scene that demonstrates how to set up the climbing mechanism with different activities to try it with. A `VRTK_PlayerClimb` object is needed on the `[CameraRig]`. `VRTK_HeightAdjustTeleport` is also added to the `[CameraRig]` to allow movement, but also to allow walking off edges with `UseGravity` enabled. Each controller's `VRTK_InteractTouch` component has `TriggerOnStaticObjects` enabled. Various objects with a `VRTK_InteractableObject` component are scattered throughout the level. They all have the `GrabAttachMechanic` set to `Climbable`.
+
+### 038_Controller_LightsaberTraining
+
+This example, designed as a simple game, shows how a script (**`AnimatedInteractableObject`**, `Examples/Resources/Scripts/LightSaberTraining/AnimatedInteractableObject.cs`) can be derived from `VRTK_InteractableObject` to add animations and sound effects. There are two lightsabers on a table that can be grabbed (press grip button once) and used (trigger button) to block laser shots (prefab in `Examples/Resources/Prefabs/LaserShot.prefab`) coming from a flying robot "training remote" driven by a script (`Examples/Resources/Scripts/LightsaberTraining/TrainingRemote.cs`).
+When hit by the lightsaber the robot falls down for few seconds, then it restart to flying and shooting the user.
+If a lightsaber is dropped into the water it is teleported on the table (`Examples/Resources/Scripts/LightsaberTraining/Teleporter.cs`).
+This scene uses the customized Bezier Pointer of the example `036_Controller_CustomCompoundPointer` to let the user teleport around using a controller when not using the lightsaber. A feature is added to `AnimatedInteractableObject` to disable the pointer only when the lightsaber is in use.
 
 [Catlike Coding]: http://catlikecoding.com/unity/tutorials/curves-and-splines/
