@@ -182,9 +182,6 @@ namespace VRTK
         {
             var objectScript = obj.GetComponent<VRTK_InteractableObject>();
 
-            //Pause collisions (if allowed on object) for a moment whilst sorting out position to prevent clipping issues
-            objectScript.PauseCollisions();
-
             if (!objectScript.precisionSnap)
             {
                 SetSnappedObjectPosition(obj);
@@ -337,6 +334,9 @@ namespace VRTK
                 grabbedObjectScript.ZeroVelocity();
                 grabbedObjectScript.ToggleHighlight(false);
                 grabbedObjectScript.ToggleKinematic(false);
+
+                //Pause collisions (if allowed on object) for a moment whilst sorting out position to prevent clipping issues
+                grabbedObjectScript.PauseCollisions();
 
                 if (grabbedObjectScript.grabAttachMechanic == VRTK_InteractableObject.GrabAttachType.Child_Of_Controller)
                 {
