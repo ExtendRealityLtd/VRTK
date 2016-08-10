@@ -18,6 +18,8 @@
 
         public ButtonEvents events;
 
+        [Tooltip("An optional game object that when it moves also moves the button.")]
+        public GameObject connectedTo;
         public ButtonDirection direction = ButtonDirection.autodetect;
         public float activationDistance = 1.0f;
         public float buttonStrength = 5.0f;
@@ -25,14 +27,16 @@
         private static float MAX_AUTODETECT_ACTIVATION_LENGTH = 4; // full hight of button
 
         private ButtonDirection finalDirection;
-        private Vector3 initialPosition;
-        private Vector3 activationPoint;
+        private Vector3 restingPosition;
+        private Vector3 jointDelta;
+        private Vector3 activationDir;
 
         private Rigidbody rb;
         private ConfigurableJoint cj;
         private ConstantForce cf;
+        private int forceCount = 0;
 
-        public override void OnDrawGizmos()
+        protected override void OnDrawGizmos()
         {
             base.OnDrawGizmos();
             if (!enabled || !setupSuccessful)
@@ -41,12 +45,12 @@
             }
 
             // visualize activation distance
-            Gizmos.DrawLine(bounds.center, activationPoint);
+            Gizmos.DrawLine(bounds.center, bounds.center + activationDir);
         }
 
         protected override void InitRequiredComponents()
         {
-            initialPosition = transform.position;
+            restingPosition = transform.position;
 
             if (!GetComponent<Collider>())
             {
@@ -66,6 +70,16 @@
             {
                 cf = gameObject.AddComponent<ConstantForce>();
             }
+
+            if (connectedTo)
+            {
+                Rigidbody rb2 = connectedTo.GetComponent<Rigidbody>();
+                if (rb2 == null)
+                {
+                    rb2 = connectedTo.AddComponent<Rigidbody>();
+                }
+                rb2.useGravity = false;
+            }
         }
 
         protected override bool DetectSetup()
@@ -73,12 +87,12 @@
             finalDirection = (direction == ButtonDirection.autodetect) ? DetectDirection() : direction;
             if (finalDirection == ButtonDirection.autodetect)
             {
-                activationPoint = transform.position;
+                activationDir = Vector3.zero;
                 return false;
             }
             if (direction != ButtonDirection.autodetect)
             {
-                activationPoint = CalculateActivationPoint();
+                activationDir = CalculateActivationDir();
             }
 
             if (cf)
@@ -89,12 +103,35 @@
             if (Application.isPlaying)
             {
                 cj = GetComponent<ConfigurableJoint>();
-                if (cj == null)
-                {
-                    // since limit applies to both directions object needs to be moved halfway to activation before adding joint
-                    transform.position = transform.position + (activationPoint - transform.position).normalized * activationDistance * 0.5f;
 
-                    cj = gameObject.AddComponent<ConfigurableJoint>();
+                bool recreate = false;
+                Rigidbody oldBody = null;
+                Vector3 oldAnchor = Vector3.zero;
+                Vector3 oldAxis = Vector3.zero;
+
+                if (cj)
+                {
+                    // save old values, needs to be recreated
+                    oldBody = cj.connectedBody;
+                    oldAnchor = cj.anchor;
+                    oldAxis = cj.axis;
+                    DestroyImmediate(cj);
+                    recreate = true;
+                }
+
+                // since limit applies to both directions object needs to be moved halfway to activation before adding joint
+                transform.position = transform.position + activationDir.normalized * activationDistance * 0.5f;
+                cj = gameObject.AddComponent<ConfigurableJoint>();
+
+                if (recreate)
+                {
+                    cj.connectedBody = oldBody;
+                    cj.anchor = oldAnchor;
+                    cj.axis = oldAxis;
+                }
+                if (connectedTo)
+                {
+                    cj.connectedBody = connectedTo.GetComponent<Rigidbody>();
                 }
 
                 SoftJointLimit sjl = new SoftJointLimit();
@@ -156,9 +193,15 @@
                         }
                         break;
                 }
+                jointDelta = transform.localPosition - cj.connectedAnchor;
             }
 
             return true;
+        }
+
+        protected override ControlValueRange RegisterValueRange()
+        {
+            return new ControlValueRange() { controlMin = 0, controlMax = 1 };
         }
 
         protected override void HandleUpdate()
@@ -176,6 +219,15 @@
             else
             {
                 value = 0;
+            }
+        }
+
+        private void FixedUpdate()
+        {
+            // update reference position if no force is acting on the button to support scenarios where the button is moved at runtime with a connected body
+            if (forceCount == 0 && cj.connectedBody)
+            {
+                restingPosition = transform.position;
             }
         }
 
@@ -256,13 +308,13 @@
             }
             else
             {
-                activationPoint = hitPoint;
+                activationDir = hitPoint - bounds.center;
             }
 
             return direction;
         }
 
-        private Vector3 CalculateActivationPoint()
+        private Vector3 CalculateActivationDir()
         {
             Bounds bounds = Utilities.GetBounds(transform, transform);
             Bounds bounds2 = Utilities.GetBounds(transform);
@@ -331,17 +383,28 @@
             }
 
             // subtract width of button
-            return bounds2.center + buttonDirection * (extents + activationDistance);
+            return buttonDirection * (extents + activationDistance);
         }
 
         private bool ReachedActivationDistance()
         {
-            return Vector3.Distance(transform.position, initialPosition) >= activationDistance;
+            return Vector3.Distance(transform.position, restingPosition) >= activationDistance;
         }
 
         private Vector3 GetForceVector()
         {
-            return -(activationPoint - Utilities.GetBounds(transform).center).normalized * buttonStrength;
+            return -activationDir.normalized * buttonStrength;
+        }
+
+        private void OnCollisionExit(Collision collision)
+        {
+            // TODO: this will not always be triggered for some reason, we probably need some "healing"
+            forceCount -= 1;
+        }
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            forceCount += 1;
         }
     }
 }

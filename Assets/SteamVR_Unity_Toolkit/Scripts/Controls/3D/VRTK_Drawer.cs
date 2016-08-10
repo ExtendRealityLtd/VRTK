@@ -28,7 +28,7 @@
         private bool cjCreated = false;
         private bool cfCreated = false;
 
-        public override void OnDrawGizmos()
+        protected override void OnDrawGizmos()
         {
             base.OnDrawGizmos();
             if (!enabled || !setupSuccessful)
@@ -144,6 +144,11 @@
             }
 
             return true;
+        }
+
+        protected override ControlValueRange RegisterValueRange()
+        {
+            return new ControlValueRange() { controlMin = 0, controlMax = 100 };
         }
 
         protected override void HandleUpdate()

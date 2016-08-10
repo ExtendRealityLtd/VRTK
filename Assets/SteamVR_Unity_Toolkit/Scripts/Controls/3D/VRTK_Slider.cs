@@ -22,7 +22,7 @@
         private Rigidbody rb;
         private VRTK_InteractableObject io;
 
-        public override void OnDrawGizmos()
+        protected override void OnDrawGizmos()
         {
             base.OnDrawGizmos();
             if (!enabled || !setupSuccessful)
@@ -73,6 +73,11 @@
             SetConstraints(finalDirection);
 
             return true;
+        }
+
+        protected override ControlValueRange RegisterValueRange()
+        {
+            return new ControlValueRange() { controlMin = min, controlMax = max };
         }
 
         protected override void HandleUpdate()

@@ -21,6 +21,7 @@
         public bool openOutward = true;
         public bool snapping = true;
 
+        private static float DOOR_ANGULAR_DRAG = 10;
         private float stepSize = 1f;
 
         private Rigidbody handleRb;
@@ -37,7 +38,7 @@
         private bool doorHjCreated = false;
         private bool doorCfCreated = false;
 
-        public override void OnDrawGizmos()
+        protected override void OnDrawGizmos()
         {
             base.OnDrawGizmos();
             if (!enabled || !setupSuccessful)
@@ -209,7 +210,21 @@
 
             if (doorHjCreated)
             {
-                doorHj.anchor = secondaryDirection * subDirection * 0.5f;
+                float extents = 0;
+                if (secondaryDirection == Vector3.right)
+                {
+                    extents = doorBounds.extents.x / door.transform.lossyScale.x;
+                }
+                else if (secondaryDirection == Vector3.up)
+                {
+                    extents = doorBounds.extents.y / door.transform.lossyScale.y;
+                }
+                else
+                {
+                    extents = doorBounds.extents.z / door.transform.lossyScale.z;
+                }
+
+                doorHj.anchor = secondaryDirection * subDirection * extents;
                 switch (finalDirection)
                 {
                     case Direction.x:
@@ -240,6 +255,11 @@
             }
 
             return true;
+        }
+
+        protected override ControlValueRange RegisterValueRange()
+        {
+            return new ControlValueRange() { controlMin = doorHj.limits.min, controlMax = doorHj.limits.max };
         }
 
         protected override void HandleUpdate()
@@ -283,6 +303,7 @@
             {
                 frameRb = frame.AddComponent<Rigidbody>();
                 frameRb.isKinematic = true; // otherwise frame moves/falls over when door is moved or fully open
+                frameRb.angularDrag = DOOR_ANGULAR_DRAG; // in case this is a nested door
             }
         }
 
@@ -294,9 +315,10 @@
             if (doorRb == null)
             {
                 doorRb = getDoor().AddComponent<Rigidbody>();
-                doorRb.angularDrag = 10;
-                doorRb.collisionDetectionMode = CollisionDetectionMode.Continuous; // otherwise door will not react to fast moving controller
+                doorRb.angularDrag = DOOR_ANGULAR_DRAG;
             }
+            doorRb.collisionDetectionMode = CollisionDetectionMode.Continuous; // otherwise door will not react to fast moving controller
+            doorRb.isKinematic = false; // in case nested door as already created this
 
             doorHj = getDoor().GetComponent<HingeJoint>();
             if (doorHj == null)
