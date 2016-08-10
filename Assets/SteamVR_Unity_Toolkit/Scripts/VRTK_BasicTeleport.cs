@@ -22,7 +22,8 @@ namespace VRTK
         public float distanceBlinkDelay = 0f;
         public bool headsetPositionCompensation = true;
         public string ignoreTargetWithTagOrClass;
-        public bool limitToNavMesh = false;
+        [Tooltip("The max distance the nav mesh edge can be from the teleport destination to be considered valid.\n[0 = ignore nav mesh limits]")]
+        public float navMeshLimitDistance = 0f;
 
         public event TeleportEventHandler Teleporting;
         public event TeleportEventHandler Teleported;
@@ -47,7 +48,7 @@ namespace VRTK
                     {
                         worldMarker.DestinationMarkerSet += new DestinationMarkerEventHandler(DoTeleport);
                         worldMarker.SetInvalidTarget(ignoreTargetWithTagOrClass);
-                        worldMarker.SetNavMeshCheck(limitToNavMesh);
+                        worldMarker.SetNavMeshCheckDistance(navMeshLimitDistance);
                         worldMarker.SetHeadsetPositionCompensation(headsetPositionCompensation);
                     }
                     else
@@ -102,7 +103,7 @@ namespace VRTK
             Invoke("ReleaseBlink", blinkPause);
         }
 
-        protected virtual bool ValidLocation(Transform target)
+        protected virtual bool ValidLocation(Transform target, Vector3 destinationPosition)
         {
             //If the target is one of the player objects or a UI Canvas then it's never a valid location
             if (target.GetComponent<VRTK_PlayerObject>() || target.GetComponent<VRTK_UIGraphicRaycaster>())
@@ -114,9 +115,9 @@ namespace VRTK
             if (target)
             {
                 NavMeshHit hit;
-                validNavMeshLocation = NavMesh.SamplePosition(target.position, out hit, 1.0f, NavMesh.AllAreas);
+                validNavMeshLocation = NavMesh.SamplePosition(destinationPosition, out hit, 0.1f, NavMesh.AllAreas);
             }
-            if (!limitToNavMesh)
+            if (navMeshLimitDistance == 0f)
             {
                 validNavMeshLocation = true;
             }
@@ -126,7 +127,7 @@ namespace VRTK
 
         protected virtual void DoTeleport(object sender, DestinationMarkerEventArgs e)
         {
-            if (enableTeleport && ValidLocation(e.target) && e.enableTeleport)
+            if (enableTeleport && ValidLocation(e.target, e.destinationPosition) && e.enableTeleport)
             {
                 OnTeleporting(sender, e);
                 Vector3 newPosition = GetNewPosition(e.destinationPosition, e.target);

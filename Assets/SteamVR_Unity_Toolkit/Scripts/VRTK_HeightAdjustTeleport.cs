@@ -137,7 +137,7 @@ namespace VRTK
                 bool rayHit = Physics.Raycast(ray, out rayCollidedWith);
                 float floorY = eyeCamera.transform.position.y - rayCollidedWith.distance;
 
-                if (rayHit && ValidLocation(rayCollidedWith.transform) && !FloorIsGrabbedObject(rayCollidedWith))
+                if (rayHit && ValidLocation(rayCollidedWith.transform, rayCollidedWith.point) && !FloorIsGrabbedObject(rayCollidedWith))
                 {
                     var floorDelta = currentRayDownY - floorY;
                     currentFloor = rayCollidedWith.transform.gameObject;

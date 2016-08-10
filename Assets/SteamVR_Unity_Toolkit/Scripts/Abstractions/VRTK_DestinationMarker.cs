@@ -42,7 +42,7 @@ namespace VRTK
         public event DestinationMarkerEventHandler DestinationMarkerSet;
 
         protected string invalidTargetWithTagOrClass;
-        protected bool checkNavMesh;
+        protected float navMeshCheckDistance;
         protected bool headsetPositionCompensation;
 
         public virtual void OnDestinationMarkerEnter(DestinationMarkerEventArgs e)
@@ -74,9 +74,9 @@ namespace VRTK
             invalidTargetWithTagOrClass = name;
         }
 
-        public virtual void SetNavMeshCheck(bool state)
+        public virtual void SetNavMeshCheckDistance(float distance)
         {
-            checkNavMesh = state;
+            navMeshCheckDistance = distance;
         }
 
         public virtual void SetHeadsetPositionCompensation(bool state)

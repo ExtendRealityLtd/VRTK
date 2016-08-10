@@ -783,7 +783,7 @@ The Basic Teleport script is attached to the `[CameraRig]` prefab and requires a
   * **Distance Blink Delay:** A range between 0 and 32 that determines how long the blink transition will stay blacked out depending on the distance being teleported. A value of 0 will not delay the teleport blink effect over any distance, a value of 32 will delay the teleport blink fade in even when the distance teleported is very close to the original position. This can be used to simulate time taking longer to pass the further a user teleports. A value of 16 provides a decent basis to simulate this to the user.
   * **Headset Position Compensation:** If this is checked then the teleported location will be the position of the headset within the play area. If it is unchecked then the teleported location will always be the centre of the play area even if the headset position is not in the centre of the play area.
   * **Ignore Target With Tag Or Class:** A string that specifies an object Tag or the name of a Script attached to an obejct and notifies the teleporter that the destination is to be ignored so the user cannot teleport to that location. It also ensure the pointer colour is set to the miss colour.
-  * **Limit To Nav Mesh:** If this is checked then teleporting will be limited to the bounds of a baked NavMesh. If the pointer destination is outside the NavMesh then it will be ignored.
+  * **Nav Mesh Limit Distance:** The max distance the nav mesh edge can be from the teleport destination to be considered valid. If a value of `0` is given then the nav mesh restriction will be ignored..
 
 ### Class Events
 
@@ -828,7 +828,7 @@ Like the basic teleporter the Height Adjust Teleport script is attached to the `
   * **Distance Blink Delay:** A range between 0 and 32 that determines how long the blink transition will stay blacked out depending on the distance being teleported. A value of 0 will not delay the teleport blink effect over any distance, a value of 32 will delay the teleport blink fade in even when the distance teleported is very close to the original position. This can be used to simulate time taking longer to pass the further a user teleports. A value of 16 provides a decent basis to simulate this to the user.
   * **Headset Position Compensation:** If this is checked then the teleported location will be the position of the headset within the play area. If it is unchecked then the teleported location will always be the centre of the play area even if the headset position is not in the centre of the play area.
   * **Ignore Target With Tag Or Class:** A string that specifies an object Tag or the name of a Script attached to an obejct and notifies the teleporter that the destination is to be ignored so the user cannot teleport to that location. It also ensure the pointer colour is set to the miss colour.
-  * **Limit To Nav Mesh:** If this is checked then teleporting will be limited to the bounds of a baked NavMesh. If the pointer destination is outside the NavMesh then it will be ignored.
+  * **Nav Mesh Limit Distance:** The max distance the nav mesh edge can be from the teleport destination to be considered valid. If a value of `0` is given then the nav mesh restriction will be ignored..
   * **Play Space Falling:** Checks if the user steps off an object into a part of their play area that is not on the object then they are automatically teleported down to the nearest floor. The `Play Space Falling` option also works in the opposite way that if the user's headset is above an object then the user is teleported automatically on top of that object, which is useful for simulating climbing stairs without needing to use the pointer beam location. If this option is turned off then the user can hover in mid air at the same y position of the object they are standing on.
   * **Use Gravity**: allows for gravity based falling when the distance is greater than `Gravity Fall Height`.
   * **Gravity Fall Height**: Fall distance needed before gravity based falling can be triggered.
@@ -1931,16 +1931,16 @@ It is utilised by the `VRTK_WorldPointer` for dealing with pointer events when t
 
 The SetInvalidTarget method is used to set objects that contain the given tag or class matching the name as invalid destination targets.
 
-#### SetNavMeshCheck/1
+#### SetNavMeshCheckDistance/1
 
-  > `public virtual void SetNavMeshCheck(bool state)`
+  > `public virtual void SetNavMeshCheckDistance(float distance)`
 
   * Parameters
-   * `bool state` - The state of whether a nav mesh should be checked for valid destination targets.
+   * `float distance` - The max distance the nav mesh can be from the sample point to be valid..
   * Returns
    * _none_
 
-The SetNavMeshCheck method sets the destination marker to include or ignore nav meshes when setting a destination marker. If `true` then the destination marker can only be set if the destination position is a point within a valid nav mesh.
+The SetNavMeshCheckDistance method sets the max distance the destination marker position can be from the edge of a nav mesh to be considered a valid destination.
 
 #### SetHeadsetPositionCompensation/1
 
