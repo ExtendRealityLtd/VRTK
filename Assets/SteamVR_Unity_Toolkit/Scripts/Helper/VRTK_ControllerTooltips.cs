@@ -36,42 +36,44 @@
         private bool gripInitialised = false;
         private bool touchpadInitialised = false;
         private bool appMenuInitialised = false;
+		private bool allTooltipsSeen = false;
 
         private GameObject[] buttonTooltips;
 
 		private VRTK_ControllerActions controlActions; 
 
-        public void ShowTips(bool state, TooltipButtons element = TooltipButtons.None)
-        {
-            if (element == TooltipButtons.None)
-            {
-                for (int i = 0; i < buttonTooltips.Length; i++)
-                {
-                    buttonTooltips[i].SetActive(state);
-                }
-            }
-            else
-            {
-                buttonTooltips[(int)element].SetActive(state);
-            }
-        }
+		public void ShowTips(bool state, TooltipButtons element = TooltipButtons.None)
+		{
+			if (element == TooltipButtons.None)
+			{
+				for (int i = 0; i < buttonTooltips.Length; i++)
+				{
+					buttonTooltips[i].SetActive(state);
+				}
+			}
+			else
+			{
+				buttonTooltips[(int)element].SetActive(state);
+			}
+		}
 
-        private void Awake()
-        {
-            triggerInitialised = false;
-            gripInitialised = false;
-            touchpadInitialised = false;
-            appMenuInitialised = false;
+		private void Awake()
+		{
+			triggerInitialised = false;
+			gripInitialised = false;
+			touchpadInitialised = false;
+			appMenuInitialised = false;
 			controlActions = gameObject.GetComponentInParent<VRTK_ControllerActions> ();
-            InitialiseTips();
-            buttonTooltips = new GameObject[4]
-            {
-                transform.FindChild(TooltipButtons.TriggerTooltip.ToString()).gameObject,
-                transform.FindChild(TooltipButtons.GripTooltip.ToString()).gameObject,
-                transform.FindChild(TooltipButtons.TouchpadTooltip.ToString()).gameObject,
-                transform.FindChild(TooltipButtons.AppMenuTooltip.ToString()).gameObject,
-            };
-        }
+			InitialiseTips();
+			buttonTooltips = new GameObject[4]
+			{
+				transform.FindChild(TooltipButtons.TriggerTooltip.ToString()).gameObject,
+				transform.FindChild(TooltipButtons.GripTooltip.ToString()).gameObject,
+				transform.FindChild(TooltipButtons.TouchpadTooltip.ToString()).gameObject,
+				transform.FindChild(TooltipButtons.AppMenuTooltip.ToString()).gameObject,
+			};
+		}
+
 
 		private void Start()
 		{
@@ -79,96 +81,101 @@
 				StartCoroutine ("NotificationRumble");
 		}
 
-        private void InitialiseTips()
-        {
-            foreach (var tooltip in GetComponentsInChildren<VRTK_ObjectTooltip>())
-            {
-                var tipText = "";
-                Transform tipTransform = null;
+		private void InitialiseTips()
+		{
+			foreach (var tooltip in GetComponentsInChildren<VRTK_ObjectTooltip>())
+			{
+				var tipText = "";
+				Transform tipTransform = null;
 
-                switch (tooltip.name.Replace("Tooltip", "").ToLower())
-                {
-                    case "trigger":
-                        tipText = triggerText;
-                        tipTransform = GetTransform(trigger, "trigger");
-                        if (tipTransform != null)
-                        {
-                            triggerInitialised = true;
-                        }
-                        break;
-                    case "grip":
-                        tipText = gripText;
-                        tipTransform = GetTransform(grip, "lgrip"); ;
-                        if (tipTransform != null)
-                        {
-                            gripInitialised = true;
-                        }
-                        break;
-                    case "touchpad":
-                        tipText = touchpadText;
-                        tipTransform = GetTransform(touchpad, "trackpad"); ;
-                        if (tipTransform != null)
-                        {
-                            touchpadInitialised = true;
-                        }
-                        break;
-                    case "appmenu":
-                        tipText = appMenuText;
-                        tipTransform = GetTransform(appMenu, "button"); ;
-                        if (tipTransform != null)
-                        {
-                            appMenuInitialised = true;
-                        }
-                        break;
-                }
+				switch (tooltip.name.Replace("Tooltip", "").ToLower())
+				{
+				case "trigger":
+					tipText = triggerText;
+					tipTransform = GetTransform(trigger, "trigger");
+					if (tipTransform != null)
+					{
+						triggerInitialised = true;
+					}
+					break;
+				case "grip":
+					tipText = gripText;
+					tipTransform = GetTransform(grip, "lgrip"); ;
+					if (tipTransform != null)
+					{
+						gripInitialised = true;
+					}
+					break;
+				case "touchpad":
+					tipText = touchpadText;
+					tipTransform = GetTransform(touchpad, "trackpad"); ;
+					if (tipTransform != null)
+					{
+						touchpadInitialised = true;
+					}
+					break;
+				case "appmenu":
+					tipText = appMenuText;
+					tipTransform = GetTransform(appMenu, "button"); ;
+					if (tipTransform != null)
+					{
+						appMenuInitialised = true;
+					}
+					break;
+				}
 
-                tooltip.displayText = tipText;
-                tooltip.drawLineTo = tipTransform;
+				tooltip.displayText = tipText;
+				tooltip.drawLineTo = tipTransform;
 
-                tooltip.containerColor = tipBackgroundColor;
-                tooltip.fontColor = tipTextColor;
-                tooltip.lineColor = tipLineColor;
+				tooltip.containerColor = tipBackgroundColor;
+				tooltip.fontColor = tipTextColor;
+				tooltip.lineColor = tipLineColor;
 
-                tooltip.Reset();
+				tooltip.Reset();
 
-                if (tipText.Trim().Length == 0)
-                {
-                    tooltip.gameObject.SetActive(false);
-                }
-            }
-        }
+				if (tipText.Trim().Length == 0)
+				{
+					tooltip.gameObject.SetActive(false);
+				}
+			}
+		}
 
-        private bool TipsInitialised()
-        {
-            return (triggerInitialised && gripInitialised && touchpadInitialised && appMenuInitialised);
-        }
+		private bool TipsInitialised()
+		{
+			return (triggerInitialised && gripInitialised && touchpadInitialised && appMenuInitialised);
+		}
 
-        private Transform GetTransform(Transform setTransform, string findTransform)
-        {
-            Transform returnTransform = null;
-            if (setTransform)
-            {
-                returnTransform = setTransform;
-            }
-            else
-            {
-                returnTransform = transform.parent.FindChild("Model/" + findTransform + "/attach");
-            }
+		private Transform GetTransform(Transform setTransform, string findTransform)
+		{
+			Transform returnTransform = null;
+			if (setTransform)
+			{
+				returnTransform = setTransform;
+			}
+			else
+			{
+				returnTransform = transform.parent.FindChild("Model/" + findTransform + "/attach");
+			}
 
-            return returnTransform;
-        }
+			return returnTransform;
+		}
 
-        private void Update()
-        {
-            if (!TipsInitialised())
-            {
-                InitialiseTips();
-            }
-        }
+		private void Update()
+		{
+			if (!TipsInitialised())
+			{
+				InitialiseTips();
+			}
+
+			if (!allTooltipsSeen && !notificationRumble.Equals (Vector2.zero)) 
+			{
+				allTooltipsSeen = GetAllActiveTipsVisible();
+			}
+		}
 
 		private IEnumerator NotificationRumble()
 		{
-			while (!GetAllActiveTipsVisible()) 
+			while (!allTooltipsSeen) 
 			{
 				controlActions.TriggerHapticPulse ((ushort)notificationRumble.x, notificationRumble.y, notificationPulseRate);
 
