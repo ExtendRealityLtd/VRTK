@@ -1,6 +1,7 @@
 ﻿namespace VRTK
 {
     using UnityEngine;
+	using System.Collections;
 
     public class VRTK_ControllerTooltips : MonoBehaviour
     {
@@ -22,6 +23,10 @@
         public Color tipTextColor = Color.white;
         public Color tipLineColor = Color.black;
 
+		public Vector2 notificationRumble = Vector2.zero;
+		public float notificationPulseRate = 0.05f;
+		public float notificationInterval = 3.0f;
+
         public Transform trigger;
         public Transform grip;
         public Transform touchpad;
@@ -33,6 +38,8 @@
         private bool appMenuInitialised = false;
 
         private GameObject[] buttonTooltips;
+
+		private VRTK_ControllerActions controlActions; 
 
         public void ShowTips(bool state, TooltipButtons element = TooltipButtons.None)
         {
@@ -55,6 +62,7 @@
             gripInitialised = false;
             touchpadInitialised = false;
             appMenuInitialised = false;
+			controlActions = gameObject.GetComponentInParent<VRTK_ControllerActions> ();
             InitialiseTips();
             buttonTooltips = new GameObject[4]
             {
@@ -64,6 +72,12 @@
                 transform.FindChild(TooltipButtons.AppMenuTooltip.ToString()).gameObject,
             };
         }
+
+		private void Start()
+		{
+			if (!notificationRumble.Equals (Vector2.zero))
+				StartCoroutine ("NotificationRumble");
+		}
 
         private void InitialiseTips()
         {
@@ -151,5 +165,28 @@
                 InitialiseTips();
             }
         }
+
+		private IEnumerator NotificationRumble()
+		{
+			while (!GetAllActiveTipsVisible()) 
+			{
+				controlActions.TriggerHapticPulse ((ushort)notificationRumble.x, notificationRumble.y, notificationPulseRate);
+
+				yield return new WaitForSeconds (notificationRumble.y + notificationInterval);
+			}
+		}
+
+		private bool GetAllActiveTipsVisible()
+		{
+			foreach (var tooltip in GetComponentsInChildren<LineRenderer>()) 
+			{
+				if(tooltip.enabled)
+				{
+					if (!tooltip.isVisible)
+						return false;
+				}
+			}
+			return true;
+		}
     }
 }
