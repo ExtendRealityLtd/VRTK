@@ -26,20 +26,9 @@ namespace VRTK
 
         private VRTK_PlayerPresence playerPresence;
 
-        protected override void Start()
+        protected override void Awake()
         {
-            base.Start();
-            adjustYForTerrain = true;
-
-            originalPlaySpaceFalling = playSpaceFalling;
-
-            // Listen for climb events 
-            var climbComponent = GetComponent<VRTK_PlayerClimb>();
-            if (climbComponent)
-            {
-                climbComponent.PlayerClimbStarted += new PlayerClimbEventHandler(OnClimbStarted);
-                climbComponent.PlayerClimbEnded += new PlayerClimbEventHandler(OnClimbEnded);
-            }
+            base.Awake();
 
             // Required Component: VRTK_PlayerPresence
             playerPresence = GetComponent<VRTK_PlayerPresence>();
@@ -49,9 +38,22 @@ namespace VRTK
                 {
                     playerPresence = gameObject.AddComponent<VRTK_PlayerPresence>();
                 }
-                
                 playerPresence.SetFallingPhysicsOnlyParams(true);
             }
+        }
+
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            adjustYForTerrain = true;
+            originalPlaySpaceFalling = playSpaceFalling;
+            InitClimbEvents(true);
+        }
+
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+            InitClimbEvents(false);
         }
 
         protected override void DoTeleport(object sender, DestinationMarkerEventArgs e)
@@ -73,12 +75,31 @@ namespace VRTK
         {
             isClimbing = false;
         }
-        
+
         protected override Vector3 GetNewPosition(Vector3 tipPosition, Transform target)
         {
             Vector3 basePosition = base.GetNewPosition(tipPosition, target);
             basePosition.y = GetTeleportY(target, tipPosition);
             return basePosition;
+        }
+
+        private void InitClimbEvents(bool state)
+        {
+            // Listen for climb events 
+            var climbComponent = GetComponent<VRTK_PlayerClimb>();
+            if (climbComponent)
+            {
+                if (state)
+                {
+                    climbComponent.PlayerClimbStarted += new PlayerClimbEventHandler(OnClimbStarted);
+                    climbComponent.PlayerClimbEnded += new PlayerClimbEventHandler(OnClimbEnded);
+                }
+                else
+                {
+                    climbComponent.PlayerClimbStarted -= new PlayerClimbEventHandler(OnClimbStarted);
+                    climbComponent.PlayerClimbEnded -= new PlayerClimbEventHandler(OnClimbEnded);
+                }
+            }
         }
 
         private float GetTeleportY(Transform target, Vector3 tipPosition)

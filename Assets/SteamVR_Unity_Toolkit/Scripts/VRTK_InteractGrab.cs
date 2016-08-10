@@ -90,7 +90,7 @@ namespace VRTK
             controllerActions = GetComponent<VRTK_ControllerActions>();
         }
 
-        private void Start()
+        private void OnEnable()
         {
             if (GetComponent<VRTK_ControllerEvents>() == null)
             {
@@ -102,6 +102,13 @@ namespace VRTK
             GetComponent<VRTK_ControllerEvents>().AliasGrabOff += new ControllerInteractionEventHandler(DoReleaseObject);
 
             SetControllerAttachPoint();
+        }
+
+        private void OnDisable()
+        {
+            ForceRelease();
+            GetComponent<VRTK_ControllerEvents>().AliasGrabOn -= new ControllerInteractionEventHandler(DoGrabObject);
+            GetComponent<VRTK_ControllerEvents>().AliasGrabOff -= new ControllerInteractionEventHandler(DoReleaseObject);
         }
 
         private void SetControllerAttachPoint()

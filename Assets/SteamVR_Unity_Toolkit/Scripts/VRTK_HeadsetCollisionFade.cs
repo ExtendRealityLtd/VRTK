@@ -69,7 +69,7 @@
 
         private void OnTriggerStay(Collider collider)
         {
-            if (!collider.GetComponent<VRTK_PlayerObject>() && ValidTarget(collider.transform))
+            if (enabled && !collider.GetComponent<VRTK_PlayerObject>() && ValidTarget(collider.transform))
             {
                 OnHeadsetCollisionDetect(SetHeadsetCollisionEvent(collider, transform));
                 SteamVR_Fade.Start(fadeColor, blinkTransitionSpeed);

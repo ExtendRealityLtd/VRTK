@@ -25,21 +25,33 @@ public class VRTK_ControllerInteract_ListenerExample : MonoBehaviour
 
     private void DoInteractTouch(object sender, ObjectInteractEventArgs e)
     {
-        DebugLogger(e.controllerIndex, "TOUCHING", e.target);
+        if(e.target)
+        {
+            DebugLogger(e.controllerIndex, "TOUCHING", e.target);
+        }
     }
 
     private void DoInteractUntouch(object sender, ObjectInteractEventArgs e)
     {
-        DebugLogger(e.controllerIndex, "NO LONGER TOUCHING", e.target);
+        if (e.target)
+        {
+            DebugLogger(e.controllerIndex, "NO LONGER TOUCHING", e.target);
+        }
     }
 
     private void DoInteractGrab(object sender, ObjectInteractEventArgs e)
     {
-        DebugLogger(e.controllerIndex, "GRABBING", e.target);
+        if (e.target)
+        {
+            DebugLogger(e.controllerIndex, "GRABBING", e.target);
+        }
     }
 
     private void DoInteractUngrab(object sender, ObjectInteractEventArgs e)
     {
-        DebugLogger(e.controllerIndex, "NO LONGER GRABBING", e.target);
+        if (e.target)
+        {
+            DebugLogger(e.controllerIndex, "NO LONGER GRABBING", e.target);
+        }
     }
 }

@@ -18,7 +18,7 @@
         {
             foreach (var pointer in pointers)
             {
-                if (pointer.gameObject.activeInHierarchy)
+                if (pointer.gameObject.activeInHierarchy && pointer.enabled)
                 {
                     List<RaycastResult> results = new List<RaycastResult>();
                     if (pointer.controller.pointerPressed)

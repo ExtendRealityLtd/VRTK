@@ -424,7 +424,6 @@ namespace VRTK
         protected virtual void Start()
         {
             originalObjectColours = StoreOriginalColors();
-            RegisterTeleporters();
         }
 
         protected virtual void Update()
@@ -456,17 +455,22 @@ namespace VRTK
             }
         }
 
-        protected virtual void OnDisable()
-        {
-            ForceStopInteracting();
-        }
-
         protected virtual void OnEnable()
         {
+            RegisterTeleporters();
             if (forcedDropped)
             {
                 LoadPreviousState();
             }
+        }
+
+        protected virtual void OnDisable()
+        {
+            foreach (var teleporter in FindObjectsOfType<VRTK_BasicTeleport>())
+            {
+                teleporter.Teleported -= new TeleportEventHandler(OnTeleported);
+            }
+            ForceStopInteracting();
         }
 
         protected virtual void OnJointBreak(float force)

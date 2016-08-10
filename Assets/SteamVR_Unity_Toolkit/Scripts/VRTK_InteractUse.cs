@@ -78,7 +78,7 @@ namespace VRTK
             controllerActions = GetComponent<VRTK_ControllerActions>();
         }
 
-        private void Start()
+        private void OnEnable()
         {
             if (GetComponent<VRTK_ControllerEvents>() == null)
             {
@@ -88,6 +88,13 @@ namespace VRTK
 
             GetComponent<VRTK_ControllerEvents>().AliasUseOn += new ControllerInteractionEventHandler(DoStartUseObject);
             GetComponent<VRTK_ControllerEvents>().AliasUseOff += new ControllerInteractionEventHandler(DoStopUseObject);
+        }
+
+        private void OnDisable()
+        {
+            ForceStopUsing();
+            GetComponent<VRTK_ControllerEvents>().AliasUseOn -= new ControllerInteractionEventHandler(DoStartUseObject);
+            GetComponent<VRTK_ControllerEvents>().AliasUseOff -= new ControllerInteractionEventHandler(DoStopUseObject);
         }
 
         private bool IsObjectUsable(GameObject obj)
