@@ -1021,7 +1021,7 @@ The basis of this script is to provide a simple mechanism for identifying object
 
 #### Touch Interactions
   * **Highlight On Touch:** The object will only highlight when a controller touches it if this is checked.
-  * **Touch Highligt Color:** The colour to highlight the object when it is touched. This colour will override any globally set color (for instance on the `VRTK_InteractTouch` script).
+  * **Touch Highlight Color:** The colour to highlight the object when it is touched. This colour will override any globally set color (for instance on the `VRTK_InteractTouch` script).
   * **Rumble On Touch:** The haptic feedback on the controller can be triggered upon touching the object, the `x` denotes the length of time, the `y` denotes the strength of the pulse. (x and y will be replaced in the future with a custom editor)
   * **Allowed Touch Controllers:** Determines which controller can initiate a touch action. The options available are:
    * `Both` means both controllers will register a touch.
