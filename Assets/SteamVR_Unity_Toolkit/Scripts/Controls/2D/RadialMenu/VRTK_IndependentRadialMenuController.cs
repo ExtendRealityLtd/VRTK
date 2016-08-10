@@ -253,14 +253,17 @@
                 {
                     bool should = true;
                     Collider[] colliders = eventsManager.GetComponents<Collider>();
-                    SphereCollider controllerCollider = e.interactingObject.GetComponent<SphereCollider>();
-                    foreach (Collider collider in colliders)
+                    Collider[] controllerColliders = e.interactingObject.GetComponent<VRTK_InteractTouch>().ControllerColliders();
+                    foreach (var collider in colliders)
                     {
                         if (collider != menuCollider)
                         {
-                            if (controllerCollider.bounds.Intersects(collider.bounds))
+                            foreach(var controllerCollider in controllerColliders)
                             {
-                                should = false;
+                                if (controllerCollider.bounds.Intersects(collider.bounds))
+                                {
+                                    should = false;
+                                }
                             }
                         }
                     }

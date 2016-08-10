@@ -1452,8 +1452,19 @@ The ToggleControllerRigidBody method toggles the controller's rigidbody's abilit
    * _none_
 
 The ForceStopTouching method will stop the controller from touching an object even if the controller is physically touching the object still.
-  
-### Example  
+
+#### ControllerColliders/0
+
+  > `public Collider[] ControllerColliders()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `Collider[]` - An array of colliders that are associated with the controller.
+
+The ControllerColliders method retrieves all of the associated colliders on the controller.
+
+### Example
 
 `SteamVR_Unity_Toolkit/Examples/005_Controller/BasicObjectGrabbing` demonstrates the highlighting of objects that have the `VRTK_InteractableObject` script added to them to show the ability to highlight interactable objects when they are touched by the controllers.
 
@@ -1649,12 +1660,13 @@ The Simulator script is attached to the `[CameraRig]` prefab. Supported movement
 
 ### Overview
 
-This class allows player movement based on grabbing of `VRTK_InteractableObject` objects that are tagged as `Climbable`. It should be attached to the `[CameraRig]` object. Because it works by grabbing, each controller should have a `VRTK_InteractGrab` and `VRTK_InteractTouch` component attached. You also have to set the `VRTK_InteractTouch` `Trigger On Static Objects` parameter to true as climbable objects do not use a rigid body for trigger detection.
+This class allows player movement based on grabbing of `VRTK_InteractableObject` objects that are tagged as `Climbable`. It should be attached to the `[CameraRig]` object. Because it works by grabbing, each controller should have a `VRTK_InteractGrab` and `VRTK_InteractTouch` component attached. The `VRTK_InteractTouch` `Trigger On Static Objects` parameter must also be set to true as climbable objects do not use a rigid body for trigger detection.
 
 ### Inspector Parameters
 
-  * **usePlayerScale:** Will scale movement up and down based on the player transform's scale.
+  * **Use Player Scale:** Will scale movement up and down based on the player transform's scale.
   * **Use Gravity:** Will allow physics based falling when the user lets go of objects above ground.
+  * **Safe Zone Teleport Offset:** An additional amount to move the player away from a wall if an ungrab teleport happens due to camera/object collisions
 
 ### Class Events
 
