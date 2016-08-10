@@ -316,7 +316,7 @@ namespace VRTK
                 UpdatePointerMaterial(pointerHitColor);
                 if (validTeleportLocationInstance != null)
                 {
-                    validTeleportLocationInstance.SetActive(ValidDestination(pointerContactTarget));
+                    validTeleportLocationInstance.SetActive(ValidDestination(pointerContactTarget, destinationPosition));
                 }
             }
             else
