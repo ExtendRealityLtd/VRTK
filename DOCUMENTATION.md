@@ -1452,8 +1452,19 @@ The ToggleControllerRigidBody method toggles the controller's rigidbody's abilit
    * _none_
 
 The ForceStopTouching method will stop the controller from touching an object even if the controller is physically touching the object still.
-  
-### Example  
+
+#### ControllerColliders/0
+
+  > `public Collider[] ControllerColliders()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `Collider[]` - An array of colliders that are associated with the controller.
+
+The ControllerColliders method retrieves all of the associated colliders on the controller.
+
+### Example
 
 `SteamVR_Unity_Toolkit/Examples/005_Controller/BasicObjectGrabbing` demonstrates the highlighting of objects that have the `VRTK_InteractableObject` script added to them to show the ability to highlight interactable objects when they are touched by the controllers.
 

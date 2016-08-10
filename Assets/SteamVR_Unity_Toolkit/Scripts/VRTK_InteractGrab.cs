@@ -180,7 +180,7 @@ namespace VRTK
                 var snapHandle = GetSnapHandle(objectScript);
                 objectScript.SetGrabbedSnapHandle(snapHandle);
 
-                obj.transform.rotation = transform.rotation * Quaternion.Euler(snapHandle.transform.localEulerAngles);
+                obj.transform.rotation = controllerAttachPoint.transform.rotation * Quaternion.Euler(snapHandle.transform.localEulerAngles);
                 obj.transform.position = controllerAttachPoint.transform.position - (snapHandle.transform.position - obj.transform.position);
             }
         }
@@ -196,7 +196,7 @@ namespace VRTK
 
             if (objectScript.grabAttachMechanic == VRTK_InteractableObject.GrabAttachType.Child_Of_Controller)
             {
-                obj.transform.parent = transform;
+                obj.transform.parent = controllerAttachPoint.transform;
             }
             else
             {
