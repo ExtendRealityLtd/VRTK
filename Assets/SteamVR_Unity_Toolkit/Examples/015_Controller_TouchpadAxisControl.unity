@@ -641,12 +641,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eba3cd5456cd79e49948f5ceb58544b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pointerToggleButton: 3
-  grabToggleButton: 1
-  useToggleButton: 0
-  menuToggleButton: 4
+  pointerToggleButton: 6
+  pointerSetButton: 6
+  grabToggleButton: 4
+  useToggleButton: 3
+  uiClickButton: 3
+  menuToggleButton: 7
   axisFidelity: 1
   triggerPressed: 0
+  triggerTouched: 0
+  triggerHairlinePressed: 0
+  triggerClicked: 0
   triggerAxisChanged: 0
   applicationMenuPressed: 0
   touchpadPressed: 0
@@ -656,6 +661,7 @@ MonoBehaviour:
   pointerPressed: 0
   grabPressed: 0
   usePressed: 0
+  uiClickPressed: 0
   menuPressed: 0
 --- !u!114 &517992370
 MonoBehaviour:
@@ -680,12 +686,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eba3cd5456cd79e49948f5ceb58544b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pointerToggleButton: 3
-  grabToggleButton: 1
-  useToggleButton: 0
-  menuToggleButton: 4
+  pointerToggleButton: 6
+  pointerSetButton: 6
+  grabToggleButton: 4
+  useToggleButton: 3
+  uiClickButton: 3
+  menuToggleButton: 7
   axisFidelity: 1
   triggerPressed: 0
+  triggerTouched: 0
+  triggerHairlinePressed: 0
+  triggerClicked: 0
   triggerAxisChanged: 0
   applicationMenuPressed: 0
   touchpadPressed: 0
@@ -695,6 +706,7 @@ MonoBehaviour:
   pointerPressed: 0
   grabPressed: 0
   usePressed: 0
+  uiClickPressed: 0
   menuPressed: 0
 --- !u!1 &556565326
 GameObject:

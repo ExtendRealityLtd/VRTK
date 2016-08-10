@@ -1915,14 +1915,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eba3cd5456cd79e49948f5ceb58544b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pointerToggleButton: 3
-  pointerSetButton: 3
-  grabToggleButton: 1
-  useToggleButton: 0
-  uiClickButton: 0
-  menuToggleButton: 4
+  pointerToggleButton: 6
+  pointerSetButton: 6
+  grabToggleButton: 4
+  useToggleButton: 3
+  uiClickButton: 3
+  menuToggleButton: 7
   axisFidelity: 1
   triggerPressed: 0
+  triggerTouched: 0
+  triggerHairlinePressed: 0
+  triggerClicked: 0
   triggerAxisChanged: 0
   applicationMenuPressed: 0
   touchpadPressed: 0
@@ -2002,14 +2005,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eba3cd5456cd79e49948f5ceb58544b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pointerToggleButton: 3
-  pointerSetButton: 3
-  grabToggleButton: 1
-  useToggleButton: 0
-  uiClickButton: 0
-  menuToggleButton: 4
+  pointerToggleButton: 6
+  pointerSetButton: 6
+  grabToggleButton: 4
+  useToggleButton: 3
+  uiClickButton: 3
+  menuToggleButton: 7
   axisFidelity: 1
   triggerPressed: 0
+  triggerTouched: 0
+  triggerHairlinePressed: 0
+  triggerClicked: 0
   triggerAxisChanged: 0
   applicationMenuPressed: 0
   touchpadPressed: 0

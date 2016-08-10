@@ -2423,13 +2423,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eba3cd5456cd79e49948f5ceb58544b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pointerToggleButton: 3
-  pointerSetButton: 3
-  grabToggleButton: 1
-  useToggleButton: 0
-  menuToggleButton: 4
+  pointerToggleButton: 6
+  pointerSetButton: 6
+  grabToggleButton: 4
+  useToggleButton: 3
+  uiClickButton: 3
+  menuToggleButton: 7
   axisFidelity: 1
   triggerPressed: 0
+  triggerTouched: 0
+  triggerHairlinePressed: 0
+  triggerClicked: 0
   triggerAxisChanged: 0
   applicationMenuPressed: 0
   touchpadPressed: 0
@@ -2439,6 +2443,7 @@ MonoBehaviour:
   pointerPressed: 0
   grabPressed: 0
   usePressed: 0
+  uiClickPressed: 0
   menuPressed: 0
 --- !u!114 &1225613116
 MonoBehaviour:
@@ -2466,6 +2471,7 @@ MonoBehaviour:
   hideControllerDelay: 0
   globalTouchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   customRigidbodyObject: {fileID: 0}
+  triggerOnStaticObjects: 0
 --- !u!114 &1225613118
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2507,13 +2513,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eba3cd5456cd79e49948f5ceb58544b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pointerToggleButton: 3
-  pointerSetButton: 3
-  grabToggleButton: 1
-  useToggleButton: 0
-  menuToggleButton: 4
+  pointerToggleButton: 6
+  pointerSetButton: 6
+  grabToggleButton: 4
+  useToggleButton: 3
+  uiClickButton: 3
+  menuToggleButton: 7
   axisFidelity: 1
   triggerPressed: 0
+  triggerTouched: 0
+  triggerHairlinePressed: 0
+  triggerClicked: 0
   triggerAxisChanged: 0
   applicationMenuPressed: 0
   touchpadPressed: 0
@@ -2523,6 +2533,7 @@ MonoBehaviour:
   pointerPressed: 0
   grabPressed: 0
   usePressed: 0
+  uiClickPressed: 0
   menuPressed: 0
 --- !u!114 &1225613121
 MonoBehaviour:
@@ -2550,6 +2561,7 @@ MonoBehaviour:
   hideControllerDelay: 0
   globalTouchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   customRigidbodyObject: {fileID: 0}
+  triggerOnStaticObjects: 0
 --- !u!114 &1225613123
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2799,6 +2811,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -2808,6 +2821,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 1805510856}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 4
   detachThreshold: 500
   springJointStrength: 500
@@ -2815,10 +2829,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 0
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!54 &1334892810
 Rigidbody:
   m_ObjectHideFlags: 0

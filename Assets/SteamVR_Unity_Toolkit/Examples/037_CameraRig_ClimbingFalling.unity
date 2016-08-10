@@ -193,6 +193,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -202,6 +203,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -209,10 +211,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &22349922
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -305,6 +309,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 1, g: 0.87241375, b: 0.45588237, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -314,6 +319,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -321,10 +327,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &23582925
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -496,6 +504,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -505,6 +514,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -512,10 +522,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &36853476
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -609,6 +621,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -618,6 +631,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -625,10 +639,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &43272385
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -755,7 +771,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 81186593}
-  m_LocalRotation: {x: -0.13039498, y: -0.7205761, z: -0.6680776, w: 0.13205935}
+  m_LocalRotation: {x: -0.13039497, y: -0.72057605, z: -0.6680775, w: 0.13205934}
   m_LocalPosition: {x: 16.99, y: 0.56, z: -1.15}
   m_LocalScale: {x: 0.20000015, y: 0.73330235, z: 0.20000017}
   m_LocalEulerAnglesHint: {x: -85.743095, y: -167.48149, z: 8.8867}
@@ -958,6 +974,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -967,6 +984,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -974,10 +992,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &88335198
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1137,6 +1157,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -1146,6 +1167,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -1153,10 +1175,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &111530455
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1326,6 +1350,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -1335,6 +1360,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -1342,10 +1368,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &173231246
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1636,6 +1664,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -1645,6 +1674,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -1652,10 +1682,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &190381771
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1735,6 +1767,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -1744,6 +1777,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -1751,10 +1785,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &203939569
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1923,6 +1959,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 1, g: 0.87241375, b: 0.45588237, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -1932,6 +1969,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -1939,10 +1977,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &229174535
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -2187,6 +2227,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 1, g: 0.87241375, b: 0.45588237, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -2196,6 +2237,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -2203,10 +2245,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &294918497
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -2312,6 +2356,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -2321,6 +2366,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -2328,10 +2374,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &301830906
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -2411,6 +2459,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 1, g: 0.87241375, b: 0.45588237, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -2420,6 +2469,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -2427,10 +2477,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &339274730
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -2712,6 +2764,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -2721,6 +2774,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -2728,10 +2782,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &372246704
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -2901,6 +2957,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -2910,6 +2967,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -2917,10 +2975,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &415293907
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -3063,6 +3123,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -3072,6 +3133,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -3079,10 +3141,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &449315068
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -3163,6 +3227,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -3172,6 +3237,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -3179,10 +3245,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &450637875
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -3504,6 +3572,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -3513,6 +3582,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -3520,10 +3590,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &473830976
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -3660,10 +3732,11 @@ MonoBehaviour:
   distanceBlinkDelay: 0
   headsetPositionCompensation: 1
   ignoreTargetWithTagOrClass: VRTK_InteractableObject
-  limitToNavMesh: 0
+  navMeshLimitDistance: 0
   playSpaceFalling: 1
   useGravity: 1
   gravityFallHeight: 1
+  blinkYThreshold: 0.1
 --- !u!1 &491901271 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 159396, guid: 4d293c8e162f3874b982baadd71153d2, type: 2}
@@ -3700,14 +3773,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eba3cd5456cd79e49948f5ceb58544b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pointerToggleButton: 3
-  pointerSetButton: 3
-  grabToggleButton: 1
-  useToggleButton: 0
-  uiClickButton: 0
-  menuToggleButton: 4
+  pointerToggleButton: 6
+  pointerSetButton: 6
+  grabToggleButton: 4
+  useToggleButton: 3
+  uiClickButton: 3
+  menuToggleButton: 7
   axisFidelity: 1
   triggerPressed: 0
+  triggerTouched: 0
+  triggerHairlinePressed: 0
+  triggerClicked: 0
   triggerAxisChanged: 0
   applicationMenuPressed: 0
   touchpadPressed: 0
@@ -3774,14 +3850,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eba3cd5456cd79e49948f5ceb58544b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pointerToggleButton: 3
-  pointerSetButton: 3
-  grabToggleButton: 1
-  useToggleButton: 0
-  uiClickButton: 0
-  menuToggleButton: 4
+  pointerToggleButton: 6
+  pointerSetButton: 6
+  grabToggleButton: 4
+  useToggleButton: 3
+  uiClickButton: 3
+  menuToggleButton: 7
   axisFidelity: 1
   triggerPressed: 0
+  triggerTouched: 0
+  triggerHairlinePressed: 0
+  triggerClicked: 0
   triggerAxisChanged: 0
   applicationMenuPressed: 0
   touchpadPressed: 0
@@ -3841,6 +3920,7 @@ MonoBehaviour:
   handlePlayAreaCursorCollisions: 0
   ignoreTargetWithTagOrClass: 
   pointerVisibility: 0
+  holdButtonToActivate: 1
   activateDelay: 0
   pointerLength: 10
   pointerDensity: 10
@@ -3852,6 +3932,8 @@ MonoBehaviour:
   layersToIgnore:
     serializedVersion: 2
     m_Bits: 4
+  validTeleportLocationObject: {fileID: 0}
+  rescalePointerTracer: 0
 --- !u!114 &491901291
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3873,6 +3955,7 @@ MonoBehaviour:
   handlePlayAreaCursorCollisions: 0
   ignoreTargetWithTagOrClass: 
   pointerVisibility: 0
+  holdButtonToActivate: 1
   activateDelay: 0
   pointerLength: 10
   pointerDensity: 10
@@ -3884,6 +3967,8 @@ MonoBehaviour:
   layersToIgnore:
     serializedVersion: 2
     m_Bits: 4
+  validTeleportLocationObject: {fileID: 0}
+  rescalePointerTracer: 0
 --- !u!1 &525690568
 GameObject:
   m_ObjectHideFlags: 0
@@ -4007,6 +4092,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -4016,6 +4102,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -4023,10 +4110,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &526253357
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -4587,6 +4676,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -4596,6 +4686,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -4603,10 +4694,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &633978868
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -4699,6 +4792,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -4708,6 +4802,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -4715,10 +4810,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &686387057
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -4812,6 +4909,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -4821,6 +4919,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -4828,10 +4927,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &688040792
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -5046,6 +5147,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 1, g: 0.87241375, b: 0.45588237, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -5055,6 +5157,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -5062,10 +5165,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &723325748
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -5234,6 +5339,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 1, g: 0.87241375, b: 0.45588237, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -5243,6 +5349,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -5250,10 +5357,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &739518964
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -5586,6 +5695,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -5595,6 +5705,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -5602,10 +5713,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &846207955
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -5685,6 +5798,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -5694,6 +5808,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -5701,10 +5816,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &855540480
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -5797,6 +5914,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -5806,6 +5924,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -5813,10 +5932,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &883911897
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -5985,6 +6106,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -5994,6 +6116,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -6001,10 +6124,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &895534970
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -6155,6 +6280,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -6164,6 +6290,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -6171,10 +6298,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &930587311
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -6280,6 +6409,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -6289,6 +6419,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -6296,10 +6427,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &942772179
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -6392,6 +6525,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -6401,6 +6535,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -6408,10 +6543,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &946220535
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -6717,6 +6854,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -6726,6 +6864,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -6733,10 +6872,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &965723036
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -6842,6 +6983,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -6851,6 +6993,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -6858,10 +7001,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &973724738
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -7015,6 +7160,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -7024,6 +7170,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -7031,10 +7178,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &1002880805
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -7248,6 +7397,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 1, g: 0.87241375, b: 0.45588237, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -7257,6 +7407,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -7264,10 +7415,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &1019696421
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -7434,6 +7587,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -7443,6 +7597,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -7450,10 +7605,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &1040694169
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -7588,6 +7745,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -7597,6 +7755,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -7604,10 +7763,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &1048683698
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -7700,6 +7861,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 1, g: 0.87241375, b: 0.45588237, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -7709,6 +7871,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -7716,10 +7879,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &1075814470
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -7812,6 +7977,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -7821,6 +7987,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -7828,10 +7995,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &1080050344
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -8210,6 +8379,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 1, g: 0.87241375, b: 0.45588237, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -8219,6 +8389,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -8226,10 +8397,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &1117833008
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -8322,6 +8495,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 1, g: 0.87241375, b: 0.45588237, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -8331,6 +8505,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -8338,10 +8513,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &1138727087
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -8505,6 +8682,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -8514,6 +8692,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -8521,10 +8700,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &1182543820
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -8605,6 +8786,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -8614,6 +8796,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -8621,10 +8804,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &1183806297
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -8730,6 +8915,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -8739,6 +8925,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -8746,10 +8933,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &1185614300
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -8843,6 +9032,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -8852,6 +9042,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -8859,10 +9050,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &1186028986
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -9058,6 +9251,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -9067,6 +9261,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -9074,10 +9269,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &1207604168
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -9233,6 +9430,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -9242,6 +9440,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -9249,10 +9448,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &1234229025
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -9554,6 +9755,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -9563,6 +9765,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -9570,10 +9773,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &1270762161
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -9795,6 +10000,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -9804,6 +10010,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -9811,10 +10018,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &1304172370
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -9920,6 +10129,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -9929,6 +10139,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -9936,10 +10147,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &1308948527
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -10032,6 +10245,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -10041,6 +10255,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -10048,10 +10263,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &1309028075
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -10144,6 +10361,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -10153,6 +10371,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -10160,10 +10379,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &1313247602
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -10257,6 +10478,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -10266,6 +10488,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -10273,10 +10496,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &1340036287
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -10520,6 +10745,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -10529,6 +10755,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -10536,10 +10763,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &1369299034
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -10632,6 +10861,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -10641,6 +10871,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -10648,10 +10879,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &1423915801
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -10745,6 +10978,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -10754,6 +10988,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -10761,10 +10996,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &1435345618
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -10953,6 +11190,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -10962,6 +11200,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -10969,10 +11208,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &1512964438
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -11065,6 +11306,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -11074,6 +11316,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -11081,10 +11324,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &1513591195
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -11164,6 +11409,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -11173,6 +11419,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -11180,10 +11427,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &1531318826
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -11289,6 +11538,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -11298,6 +11548,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -11305,10 +11556,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &1550704423
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -11513,6 +11766,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -11522,6 +11776,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -11529,10 +11784,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &1579160958
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -11625,6 +11882,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -11634,6 +11892,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -11641,10 +11900,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &1587789930
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -12096,6 +12357,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 1, g: 0.87241375, b: 0.45588237, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -12105,6 +12367,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -12112,10 +12375,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &1676782681
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -12297,6 +12562,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -12306,6 +12572,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -12313,10 +12580,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &1708630552
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -12409,6 +12678,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -12418,6 +12688,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -12425,10 +12696,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &1719188468
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -12658,6 +12931,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -12667,6 +12941,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -12674,10 +12949,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &1772134319
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -12829,6 +13106,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -12838,6 +13116,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -12845,10 +13124,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &1816127662
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -12941,6 +13222,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -12950,6 +13232,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -12957,10 +13240,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &1851051966
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -13130,6 +13415,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -13139,6 +13425,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -13146,10 +13433,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &1858914820
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -13242,6 +13531,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -13251,6 +13541,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -13258,10 +13549,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &1862460663
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -13385,6 +13678,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -13394,6 +13688,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -13401,10 +13696,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &1887688690
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -13497,6 +13794,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -13506,6 +13804,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -13513,10 +13812,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &1897752684
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -13724,6 +14025,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -13733,6 +14035,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -13740,10 +14043,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &1902164841
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -13997,6 +14302,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -14006,6 +14312,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -14013,10 +14320,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &1967233911
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -14097,6 +14406,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -14106,6 +14416,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -14113,10 +14424,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &1972956530
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -14239,6 +14552,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 1, g: 0.87241375, b: 0.45588237, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -14248,6 +14562,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -14255,10 +14570,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &1997774684
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -14364,6 +14681,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -14373,6 +14691,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -14380,10 +14699,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &2010883410
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -14464,6 +14785,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -14473,6 +14795,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -14480,10 +14803,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &2011202847
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -14727,6 +15052,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 1, g: 0.87241375, b: 0.45588237, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -14736,6 +15062,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -14743,10 +15070,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &2059760629
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -14989,6 +15318,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -14998,6 +15328,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -15005,10 +15336,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &2093465456
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -15329,6 +15662,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -15338,6 +15672,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -15345,10 +15680,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &2120344686
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -15442,6 +15779,7 @@ MonoBehaviour:
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
+  hideControllerOnTouch: 0
   isGrabbable: 1
   isDroppable: 1
   isSwappable: 1
@@ -15451,6 +15789,7 @@ MonoBehaviour:
   precisionSnap: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  hideControllerOnGrab: 0
   grabAttachMechanic: 5
   detachThreshold: 500
   springJointStrength: 500
@@ -15458,10 +15797,12 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   isUsable: 0
+  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 0
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
+  hideControllerOnUse: 0
 --- !u!23 &2121838771
 MeshRenderer:
   m_ObjectHideFlags: 0
