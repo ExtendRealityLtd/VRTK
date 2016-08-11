@@ -4,6 +4,15 @@
     using UnityEngine.UI;
     using UnityEngine.EventSystems;
 
+    public struct UIPointerEventArgs
+    {
+        public uint controllerIndex;
+        public GameObject currentTarget;
+        public GameObject previousTarget;
+    }
+
+    public delegate void UIPointerEventHandler(object sender, UIPointerEventArgs e);
+
     public class VRTK_UIPointer : MonoBehaviour
     {
         public enum ActivationMethods
@@ -18,12 +27,42 @@
 
         [HideInInspector]
         public PointerEventData pointerEventData;
+        [HideInInspector]
+        public GameObject hoveringElement;
+
+        public event UIPointerEventHandler UIPointerElementEnter;
+        public event UIPointerEventHandler UIPointerElementExit;
 
         private bool pointerClicked = false;
         private bool beamEnabledState = false;
         private bool lastPointerPressState = false;
 
-        public static VRTK_EventSystemVRInput SetEventSystem(EventSystem eventSystem)
+        public virtual void OnUIPointerElementEnter(UIPointerEventArgs e)
+        {
+            if (UIPointerElementEnter != null)
+            {
+                UIPointerElementEnter(this, e);
+            }
+        }
+
+        public virtual void OnUIPointerElementExit(UIPointerEventArgs e)
+        {
+            if (UIPointerElementExit != null)
+            {
+                UIPointerElementExit(this, e);
+            }
+        }
+
+        public UIPointerEventArgs SetUIPointerEvent(GameObject currentTarget, GameObject lastTarget = null)
+        {
+            UIPointerEventArgs e;
+            e.controllerIndex = VRTK_DeviceFinder.GetControllerIndex(controller.gameObject);
+            e.currentTarget = currentTarget;
+            e.previousTarget = lastTarget;
+            return e;
+        }
+
+        public VRTK_EventSystemVRInput SetEventSystem(EventSystem eventSystem)
         {
             if (!eventSystem)
             {

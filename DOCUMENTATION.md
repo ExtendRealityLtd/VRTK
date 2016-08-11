@@ -762,11 +762,22 @@ The UI pointer is activated via the `Pointer` alias on the `Controller Events` a
    * `Toggle_Button` activates the UI Pointer on the first click of the Pointer button on the controller and it stays active until the Pointer button is clicked again.
    * `Always_On` the UI Pointer is always active regardless of whether the Pointer button on the controller is pressed or not.
 
+### Class Events
+
+  * `UIPointerElementEnter` - Emitted when the UI Pointer is colliding with a valid UI element.
+  * `UIPointerElementExit` - Emitted when the UI Pointer is no longer colliding with any valid UI elements.
+
+#### Event Payload
+
+  * `uint controllerIndex` - The index of the controller that was used.
+  * `GameObject currentTarget` - The current UI element that the pointer is colliding with.
+  * `GameObject previousTarget` - The previous UI element that the pointer was colliding with.
+
 ### Class Methods
 
 #### SetEventSystem/1
 
-  > `public static VRTK_EventSystemVRInput SetEventSystem(EventSystem eventSystem)`
+  > `public VRTK_EventSystemVRInput SetEventSystem(EventSystem eventSystem)`
 
   * Parameters
    * `EventSystem eventSystem` - The global Unity event system to be used by the UI pointers.
@@ -777,7 +788,7 @@ The SetEventSystem method is used to set up the global Unity event system for th
 
 #### SetWorldCanvas/1
 
-  > `public static void SetWorldCanvas(Canvas canvas)`
+  > `public void SetWorldCanvas(Canvas canvas)`
 
   * Parameters
    * `Canvas canvas` - The canvas object to initialse for use with the UI pointers. Must be of type `WorldSpace`.
