@@ -895,8 +895,11 @@ MonoBehaviour:
   distanceBlinkDelay: 0
   headsetPositionCompensation: 1
   ignoreTargetWithTagOrClass: 
-  limitToNavMesh: 0
+  navMeshLimitDistance: 0
   playSpaceFalling: 1
+  useGravity: 0
+  gravityFallHeight: 1
+  blinkYThreshold: 0.1
 --- !u!114 &470380173
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -908,12 +911,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eba3cd5456cd79e49948f5ceb58544b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pointerToggleButton: 3
-  grabToggleButton: 1
-  useToggleButton: 0
-  menuToggleButton: 4
+  pointerToggleButton: 6
+  pointerSetButton: 6
+  grabToggleButton: 4
+  useToggleButton: 3
+  uiClickButton: 3
+  menuToggleButton: 7
   axisFidelity: 1
   triggerPressed: 0
+  triggerTouched: 0
+  triggerHairlinePressed: 0
+  triggerClicked: 0
   triggerAxisChanged: 0
   applicationMenuPressed: 0
   touchpadPressed: 0
@@ -923,6 +931,7 @@ MonoBehaviour:
   pointerPressed: 0
   grabPressed: 0
   usePressed: 0
+  uiClickPressed: 0
   menuPressed: 0
 --- !u!114 &470380174
 MonoBehaviour:
@@ -947,12 +956,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eba3cd5456cd79e49948f5ceb58544b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pointerToggleButton: 3
-  grabToggleButton: 1
-  useToggleButton: 0
-  menuToggleButton: 4
+  pointerToggleButton: 6
+  pointerSetButton: 6
+  grabToggleButton: 4
+  useToggleButton: 3
+  uiClickButton: 3
+  menuToggleButton: 7
   axisFidelity: 1
   triggerPressed: 0
+  triggerTouched: 0
+  triggerHairlinePressed: 0
+  triggerClicked: 0
   triggerAxisChanged: 0
   applicationMenuPressed: 0
   touchpadPressed: 0
@@ -962,6 +976,7 @@ MonoBehaviour:
   pointerPressed: 0
   grabPressed: 0
   usePressed: 0
+  uiClickPressed: 0
   menuPressed: 0
 --- !u!114 &470380176
 MonoBehaviour:
@@ -976,12 +991,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enableTeleport: 1
   controller: {fileID: 470380173}
+  pointerMaterial: {fileID: 0}
   pointerHitColor: {r: 0, g: 0.5, b: 0, a: 1}
   pointerMissColor: {r: 0.8, g: 0, b: 0, a: 1}
   showPlayAreaCursor: 1
   playAreaCursorDimensions: {x: 0, y: 0}
   handlePlayAreaCursorCollisions: 0
+  ignoreTargetWithTagOrClass: 
   pointerVisibility: 2
+  holdButtonToActivate: 1
   activateDelay: 0
   pointerLength: 7
   pointerDensity: 1
@@ -993,6 +1011,8 @@ MonoBehaviour:
   layersToIgnore:
     serializedVersion: 2
     m_Bits: 4
+  validTeleportLocationObject: {fileID: 0}
+  rescalePointerTracer: 0
 --- !u!1 &515507800
 GameObject:
   m_ObjectHideFlags: 0
@@ -2066,16 +2086,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enableTeleport: 1
   controller: {fileID: 470380175}
+  pointerMaterial: {fileID: 0}
   pointerHitColor: {r: 0, g: 0.5, b: 0, a: 1}
   pointerMissColor: {r: 0.8, g: 0, b: 0, a: 1}
   showPlayAreaCursor: 0
   playAreaCursorDimensions: {x: 0, y: 0}
   handlePlayAreaCursorCollisions: 0
+  ignoreTargetWithTagOrClass: 
   pointerVisibility: 0
+  holdButtonToActivate: 1
   activateDelay: 0
   pointerThickness: 0.05
   pointerLength: 100
   showPointerTip: 0
+  customPointerCursor: {fileID: 0}
   layersToIgnore:
     serializedVersion: 2
     m_Bits: 4

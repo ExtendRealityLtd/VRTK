@@ -234,7 +234,10 @@ The script also has a public boolean pressed state for the buttons to allow the 
 
 ### Class Variables
 
-  * `public bool triggerPressed` - This will be true if the trigger is held down.
+  * `public bool triggerPressed` - This will be true if the trigger is squeezed about half way in.
+  * `public bool triggerTouched` - This will be true if the trigger is squeezed a small amount.
+  * `public bool triggerHairlinePressed` - This will be true if the trigger is squeezed a small amount more from any previous squeeze on the trigger.
+  * `public bool triggerClicked` - This will be true if the trigger is squeezed all the way until it clicks.
   * `public bool triggerAxisChanged` - This will be true if the trigger has been squeezed more or less.
   * `public bool applicationMenuPressed` - This will be true if the application menu is held down.
   * `public bool touchpadPressed` - This will be true if the touchpad is held down.
@@ -249,8 +252,14 @@ The script also has a public boolean pressed state for the buttons to allow the 
 
 ### Class Events
 
-  * `TriggerPressed` - Emitted when the trigger is pressed.
-  * `TriggerReleased` - Emitted when the trigger is released.
+  * `TriggerPressed` - Emitted when the trigger is squeezed about half way in.
+  * `TriggerReleased` - Emitted when the trigger is released under half way.
+  * `TriggerTouchStart` - Emitted when the trigger is squeezed a small amount.
+  * `TriggerTouchEnd` - Emitted when the trigger is no longer being squeezed at all.
+  * `TriggerHairlineStart` - Emitted when the trigger is squeezed past the current hairline threshold.
+  * `TriggerHairlineEnd` - Emitted when the trigger is released past the current hairline threshold.
+  * `TriggerClicked` - Emitted when the trigger is squeezed all the way until it clicks.
+  * `TriggerUnclicked` - Emitted when the trigger is no longer being held all the way down.
   * `TriggerAxisChanged` - Emitted when the amount of squeeze on the trigger changes.
   * `ApplicationMenuPressed` - Emitted when the application menu button is pressed.
   * `ApplicationMenuReleased` - Emitted when the application menu button is released.
@@ -336,6 +345,17 @@ The GetTouchpadAxisAngle method returns the angle of where the touchpad is curre
    * `float` - A float representing the amount of squeeze that is being applied to the trigger. `0f` to `1f`.
 
 The GetTriggerAxis method returns a float that represents how much the trigger is being squeezed. This can be useful for using the trigger axis to perform high fidelity tasks or only activating the trigger press once it has exceeded a given press threshold.
+
+#### GetHairTriggerDelta/0
+
+  > `public float GetHairTriggerDelta()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `float` - A float representing the difference in the trigger pressure from the hairline threshold start to current position.
+
+The GetHairTriggerDelta method returns a float representing the difference in how much the trigger is being pressed in relation to the hairline threshold start.
 
 #### AnyButtonPressed/0
 
@@ -1480,7 +1500,7 @@ The Controller object also requires the `VRTK_InteractTouch` script to be attach
 
 An object can be grabbed if the Controller touches a game object which contains the `VRTK_InteractableObject` script and has the flag `isGrabbable` set to `true`.
 
-If a valid interactable object is grabbable then pressing the set `Grab` button on the Controller (default is `Trigger`) will grab and snap the object to the controller and will not release it until the `Grab` button is released.
+If a valid interactable object is grabbable then pressing the set `Grab` button on the Controller (default is `Grip`) will grab and snap the object to the controller and will not release it until the `Grab` button is released.
 
 When the Controller `Grab` button is released, if the interactable game object is grabbable then it will be propelled in the direction and at the velocity the controller was at, which can simulate object throwing.
 
@@ -2153,7 +2173,7 @@ A scene with basic objects that can be traversed using the controller laser beam
 
 ### 005_Controller_BasicObjectGrabbing
 
-A scene with a selection of objects that can be grabbed by touching them with the controller and pressing the `Trigger` button down. Releasing the trigger button will propel the object in the direction and velocity of the grabbing controller. The scene also demonstrates simple highlighting of objects when the controller touches them. The interaction events are also displayed in the console window.
+A scene with a selection of objects that can be grabbed by touching them with the controller and pressing the `Grip` button down. Releasing the grip button will propel the object in the direction and velocity of the grabbing controller. The scene also demonstrates simple highlighting of objects when the controller touches them. The interaction events are also displayed in the console window.
 
   > [View Example Tour on YouTube](https://www.youtube.com/watch?v=FjwN8AJx0rY)
 

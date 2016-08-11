@@ -15,6 +15,15 @@ public class VRTK_ControllerEvents_ListenerExample : MonoBehaviour
         GetComponent<VRTK_ControllerEvents>().TriggerPressed += new ControllerInteractionEventHandler(DoTriggerPressed);
         GetComponent<VRTK_ControllerEvents>().TriggerReleased += new ControllerInteractionEventHandler(DoTriggerReleased);
 
+        GetComponent<VRTK_ControllerEvents>().TriggerTouchStart += new ControllerInteractionEventHandler(DoTriggerTouchStart);
+        GetComponent<VRTK_ControllerEvents>().TriggerTouchEnd += new ControllerInteractionEventHandler(DoTriggerTouchEnd);
+
+        GetComponent<VRTK_ControllerEvents>().TriggerHairlineStart += new ControllerInteractionEventHandler(DoTriggerHairlineStart);
+        GetComponent<VRTK_ControllerEvents>().TriggerHairlineEnd += new ControllerInteractionEventHandler(DoTriggerHairlineEnd);
+
+        GetComponent<VRTK_ControllerEvents>().TriggerClicked += new ControllerInteractionEventHandler(DoTriggerClicked);
+        GetComponent<VRTK_ControllerEvents>().TriggerUnclicked += new ControllerInteractionEventHandler(DoTriggerUnclicked);
+
         GetComponent<VRTK_ControllerEvents>().TriggerAxisChanged += new ControllerInteractionEventHandler(DoTriggerAxisChanged);
 
         GetComponent<VRTK_ControllerEvents>().ApplicationMenuPressed += new ControllerInteractionEventHandler(DoApplicationMenuPressed);
@@ -40,12 +49,42 @@ public class VRTK_ControllerEvents_ListenerExample : MonoBehaviour
 
     private void DoTriggerPressed(object sender, ControllerInteractionEventArgs e)
     {
-        DebugLogger(e.controllerIndex, "TRIGGER", "pressed down", e);
+        DebugLogger(e.controllerIndex, "TRIGGER", "pressed", e);
     }
 
     private void DoTriggerReleased(object sender, ControllerInteractionEventArgs e)
     {
         DebugLogger(e.controllerIndex, "TRIGGER", "released", e);
+    }
+
+    private void DoTriggerTouchStart(object sender, ControllerInteractionEventArgs e)
+    {
+        DebugLogger(e.controllerIndex, "TRIGGER", "touched", e);
+    }
+
+    private void DoTriggerTouchEnd(object sender, ControllerInteractionEventArgs e)
+    {
+        DebugLogger(e.controllerIndex, "TRIGGER", "untouched", e);
+    }
+
+    private void DoTriggerHairlineStart(object sender, ControllerInteractionEventArgs e)
+    {
+        DebugLogger(e.controllerIndex, "TRIGGER", "hairline start", e);
+    }
+
+    private void DoTriggerHairlineEnd(object sender, ControllerInteractionEventArgs e)
+    {
+        DebugLogger(e.controllerIndex, "TRIGGER", "hairline end", e);
+    }
+
+    private void DoTriggerClicked(object sender, ControllerInteractionEventArgs e)
+    {
+        DebugLogger(e.controllerIndex, "TRIGGER", "clicked", e);
+    }
+
+    private void DoTriggerUnclicked(object sender, ControllerInteractionEventArgs e)
+    {
+        DebugLogger(e.controllerIndex, "TRIGGER", "unclicked", e);
     }
 
     private void DoTriggerAxisChanged(object sender, ControllerInteractionEventArgs e)

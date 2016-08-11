@@ -253,6 +253,7 @@ MonoBehaviour:
   hideControllerDelay: 0
   globalTouchHighlightColor: {r: 0.74509805, g: 0.9411765, b: 1, a: 1}
   customRigidbodyObject: {fileID: 0}
+  triggerOnStaticObjects: 0
 --- !u!114 &45710402
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -318,6 +319,7 @@ MonoBehaviour:
   handlePlayAreaCursorCollisions: 0
   ignoreTargetWithTagOrClass: ExcludeTeleport
   pointerVisibility: 0
+  holdButtonToActivate: 1
   activateDelay: 0.5
   pointerLength: 10
   pointerDensity: 30
@@ -344,14 +346,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eba3cd5456cd79e49948f5ceb58544b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pointerToggleButton: 2
-  pointerSetButton: 3
-  grabToggleButton: 1
-  useToggleButton: 0
-  uiClickButton: 0
-  menuToggleButton: 4
+  pointerToggleButton: 6
+  pointerSetButton: 6
+  grabToggleButton: 4
+  useToggleButton: 3
+  uiClickButton: 3
+  menuToggleButton: 7
   axisFidelity: 1
   triggerPressed: 0
+  triggerTouched: 0
+  triggerHairlinePressed: 0
+  triggerClicked: 0
   triggerAxisChanged: 0
   applicationMenuPressed: 0
   touchpadPressed: 0
@@ -2880,6 +2885,7 @@ MonoBehaviour:
   hideControllerDelay: 0
   globalTouchHighlightColor: {r: 0, g: 1, b: 1, a: 0}
   customRigidbodyObject: {fileID: 0}
+  triggerOnStaticObjects: 0
 --- !u!114 &1037927600
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2930,6 +2936,9 @@ MonoBehaviour:
   menuToggleButton: 4
   axisFidelity: 1
   triggerPressed: 0
+  triggerTouched: 0
+  triggerHairlinePressed: 0
+  triggerClicked: 0
   triggerAxisChanged: 0
   applicationMenuPressed: 0
   touchpadPressed: 0
@@ -2963,6 +2972,7 @@ MonoBehaviour:
   handlePlayAreaCursorCollisions: 0
   ignoreTargetWithTagOrClass: 
   pointerVisibility: 0
+  holdButtonToActivate: 1
   activateDelay: 0
   pointerThickness: 0.002
   pointerLength: 100
@@ -2983,14 +2993,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eba3cd5456cd79e49948f5ceb58544b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pointerToggleButton: 2
-  pointerSetButton: 3
-  grabToggleButton: 1
-  useToggleButton: 0
-  uiClickButton: 0
-  menuToggleButton: 4
+  pointerToggleButton: 6
+  pointerSetButton: 6
+  grabToggleButton: 4
+  useToggleButton: 3
+  uiClickButton: 3
+  menuToggleButton: 7
   axisFidelity: 1
   triggerPressed: 0
+  triggerTouched: 0
+  triggerHairlinePressed: 0
+  triggerClicked: 0
   triggerAxisChanged: 0
   applicationMenuPressed: 0
   touchpadPressed: 0
@@ -4228,8 +4241,11 @@ MonoBehaviour:
   distanceBlinkDelay: 0
   headsetPositionCompensation: 1
   ignoreTargetWithTagOrClass: ExcludeTeleport
-  limitToNavMesh: 0
+  navMeshLimitDistance: 0
   playSpaceFalling: 0
+  useGravity: 0
+  gravityFallHeight: 1
+  blinkYThreshold: 0.1
 --- !u!114 &1665097738
 MonoBehaviour:
   m_ObjectHideFlags: 0
