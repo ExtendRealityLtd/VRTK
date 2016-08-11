@@ -6,9 +6,15 @@
 
     public class VRTK_UIPointer : MonoBehaviour
     {
+        public enum ActivationMethods
+        {
+            Hold_Button,
+            Toggle_Button,
+            Always_On
+        }
         public VRTK_ControllerEvents controller;
         public string ignoreCanvasWithTagOrClass;
-        public bool holdButtonToActivate = true;
+        public ActivationMethods activationMode = ActivationMethods.Hold_Button;
 
         [HideInInspector]
         public PointerEventData pointerEventData;
@@ -82,7 +88,11 @@
 
         public bool PointerActive()
         {
-            if (holdButtonToActivate)
+            if(activationMode == ActivationMethods.Always_On)
+            {
+                return true;
+            }
+            else if (activationMode == ActivationMethods.Hold_Button)
             {
                 return controller.pointerPressed;
             }
