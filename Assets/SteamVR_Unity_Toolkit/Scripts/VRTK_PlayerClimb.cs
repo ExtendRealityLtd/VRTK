@@ -18,7 +18,9 @@
 
         public bool usePlayerScale = true;
         public bool useGravity = true;
+        public float safeZoneTeleportOffset = 0.4f;
 
+        private Transform headCamera;
         private Transform controllerTransform;
         private Vector3 startControllerPosition;
         private Vector3 startPosition;
@@ -73,7 +75,7 @@
             }
 
             controllerManager = FindObjectOfType<SteamVR_ControllerManager>();
-            var headCamera = VRTK_DeviceFinder.HeadsetTransform();
+            headCamera = VRTK_DeviceFinder.HeadsetTransform();
             collisionFade = headCamera.GetComponent<VRTK_HeadsetCollisionFade>();
             if (collisionFade == null)
             {
@@ -193,13 +195,30 @@
             // Move to the last safe spot
             if (headsetColliding)
             {
-                transform.position = lastGoodHeadsetPosition;
+                Vector3 headsetPosition = headCamera.transform.position;
+
+                Vector3 moveVector = lastGoodHeadsetPosition-headsetPosition;
+                Vector3 moveDirection = moveVector.normalized;
+                Vector3 moveOffset = moveDirection * safeZoneTeleportOffset;
+
+                transform.position += moveVector + moveOffset;
             }
 
             if (useGravity && carryMomentum)
             {
+                Vector3 velocity = Vector3.zero;
                 var device = VRTK_DeviceFinder.ControllerByIndex(controllerIndex);
-                playerPresence.StartPhysicsFall(-device.GetComponent<VRTK_ControllerEvents>().GetVelocity());
+
+                if (device)
+                {
+                    velocity = -device.GetComponent<VRTK_ControllerEvents>().GetVelocity();
+                    if (usePlayerScale)
+                    {
+                        velocity = Vector3.Scale(velocity, transform.localScale);
+                    }
+                }
+
+                playerPresence.StartPhysicsFall(velocity);
             }
             climbingObject = null;
         }
@@ -224,7 +243,7 @@
 
             if (!headsetColliding)
             {
-                lastGoodHeadsetPosition = transform.position;
+                lastGoodHeadsetPosition = headCamera.transform.position;
             }
         }
 
