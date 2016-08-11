@@ -8,9 +8,14 @@
     {
         public VRTK_ControllerEvents controller;
         public string ignoreCanvasWithTagOrClass;
+        public bool holdButtonToActivate = true;
 
         [HideInInspector]
         public PointerEventData pointerEventData;
+
+        private bool pointerClicked = false;
+        private bool beamEnabledState = false;
+        private bool lastPointerPressState = false;
 
         public static VRTK_EventSystemVRInput SetEventSystem(EventSystem eventSystem)
         {
@@ -75,6 +80,30 @@
             }
         }
 
+        public bool PointerActive()
+        {
+            if (holdButtonToActivate)
+            {
+                return controller.pointerPressed;
+            }
+            else
+            {
+                pointerClicked = false;
+                if (controller.pointerPressed && !lastPointerPressState)
+                {
+                    pointerClicked = true;
+                }
+                lastPointerPressState = controller.pointerPressed;
+
+                if(pointerClicked)
+                {
+                    beamEnabledState = !beamEnabledState;
+                }
+
+                return beamEnabledState;
+            }
+        }
+
         private void Start()
         {
             if (controller == null)
@@ -83,6 +112,9 @@
             }
             ConfigureEventSystem();
             ConfigureWorldCanvases();
+            pointerClicked = false;
+            lastPointerPressState = false;
+            beamEnabledState = false;
         }
 
         private void ConfigureEventSystem()

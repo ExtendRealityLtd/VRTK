@@ -21,7 +21,7 @@
                 if (pointer.gameObject.activeInHierarchy && pointer.enabled)
                 {
                     List<RaycastResult> results = new List<RaycastResult>();
-                    if (pointer.controller.pointerPressed)
+                    if (pointer.PointerActive())
                     {
                         results = CheckRaycasts(pointer);
                     }

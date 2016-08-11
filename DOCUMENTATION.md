@@ -756,8 +756,8 @@ The UI pointer is activated via the `Pointer` alias on the `Controller Events` a
 ### Inspector Parameters
 
   * **Controller:** The controller that will be used to toggle the pointer. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.
-
   * **Ignore Canvas With Tag Or Class:** A string that specifies a canvas Tag or the name of a Script attached to a canvas and denotes that any world canvases that contain this tag or script will be ignored by the UI Pointer.
+  * **Hold Button To Activate:** If this is checked then the ui pointer beam will be activated on first press of the pointer alias button and will stay active until the pointer alias button is pressed again.
 
 ### Class Methods
 
@@ -782,6 +782,17 @@ The SetEventSystem method is used to set up the global Unity event system for th
    * _none_
 
 The SetWorldCanvas method is used to initialise a `WorldSpace` canvas for use with the UI Pointer. This method is called automatically on start for all editor created canvases but would need to be manually called if a canvas was generated at runtime.
+
+#### PointerActive/0
+
+  > `public bool PointerActive()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `bool` - Returns true if the ui pointer should be currently active.
+
+The PointerActive method determines if the ui pointer beam should be active based on whether the pointer alias is being held and whether the Hold Button To Use parameter is checked.
 
 ### Example
 
