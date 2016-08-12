@@ -46,6 +46,13 @@ namespace VRTK
             OverrideDontHide,
         }
 
+        public enum PointerDisableMode
+        {
+            DontDisable,
+            OnGrab,
+            OnUse,
+        }
+
         [Header("Touch Interactions", order = 1)]
         public bool highlightOnTouch = false;
         public Color touchHighlightColor = Color.clear;
@@ -82,6 +89,9 @@ namespace VRTK
         public AllowedController allowedUseControllers = AllowedController.Both;
         public ControllerHideMode hideControllerOnUse = ControllerHideMode.Default;
 
+        [Tooltip("Disable the controller pointer on grab or on use")]
+        public PointerDisableMode pointerDisableMode = PointerDisableMode.DontDisable;
+
         public event InteractableObjectEventHandler InteractableObjectTouched;
         public event InteractableObjectEventHandler InteractableObjectUntouched;
         public event InteractableObjectEventHandler InteractableObjectGrabbed;
@@ -106,6 +116,9 @@ namespace VRTK
         private bool previousKinematicState;
         private bool previousIsGrabbable;
         private bool forcedDropped;
+
+        // Store the state of the pointer before changing it
+        private bool controllerHadPointerEnabled = false;
 
         public bool CheckHideMode(bool defaultMode, ControllerHideMode overrideMode)
         {
@@ -215,6 +228,16 @@ namespace VRTK
                 previousIsGrabbable = isGrabbable;
                 isGrabbable = false;
             }
+            if (pointerDisableMode==PointerDisableMode.OnGrab && grabbingObject != null)
+            {
+                // disable teleport (save its state to restore it when ungrabbed)
+                VRTK_WorldPointer worldPointer = grabbingObject.GetComponent<VRTK_WorldPointer>();
+                if (worldPointer != null && worldPointer.enabled)
+                {
+                    controllerHadPointerEnabled = true;
+                    worldPointer.enabled = false;
+                }
+            }
         }
 
         public virtual void Ungrabbed(GameObject previousGrabbingObject)
@@ -225,6 +248,13 @@ namespace VRTK
             grabbingObject = null;
             LoadPreviousState();
             StopUsingOnControllerChange(previousGrabbingObject);
+            // restore teleport if it was enabled
+            bool enablePointer = controllerHadPointerEnabled && (pointerDisableMode == PointerDisableMode.OnGrab) || (pointerDisableMode == PointerDisableMode.OnUse && useOnlyIfGrabbed);
+            if (enablePointer && previousGrabbingObject != null)
+            {
+                VRTK.VRTK_WorldPointer worldPointer = previousGrabbingObject.GetComponent<VRTK.VRTK_WorldPointer>();
+                if (worldPointer != null) worldPointer.enabled = true;
+            }
         }
 
         private void StopUsingOnControllerChange(GameObject previousController)
@@ -247,10 +277,30 @@ namespace VRTK
         {
             OnInteractableObjectUsed(SetInteractableObjectEvent(currentUsingObject));
             usingObject = currentUsingObject;
+            if (pointerDisableMode == PointerDisableMode.OnUse && grabbingObject != null)
+            {
+                // disable teleport (save its state to restore it when ungrabbed)
+                VRTK_WorldPointer worldPointer = grabbingObject.GetComponent<VRTK_WorldPointer>();
+                if (worldPointer != null && worldPointer.enabled)
+                {
+                    controllerHadPointerEnabled = true;
+                    worldPointer.enabled = false;
+                }
+            }
         }
 
         public virtual void StopUsing(GameObject previousUsingObject)
         {
+            bool enablePointer = controllerHadPointerEnabled && (pointerDisableMode == PointerDisableMode.OnUse);
+            if (enablePointer && grabbingObject != null)
+            {
+                // restore teleport if it was enabled
+                VRTK_WorldPointer worldPointer = grabbingObject.GetComponent<VRTK_WorldPointer>();
+                if (worldPointer != null)
+                {
+                    worldPointer.enabled = true;
+                }
+            }
             OnInteractableObjectUnused(SetInteractableObjectEvent(previousUsingObject));
             usingObject = null;
         }

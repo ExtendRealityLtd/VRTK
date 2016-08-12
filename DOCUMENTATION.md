@@ -1123,6 +1123,10 @@ The basis of this script is to provide a simple mechanism for identifying object
    * `Default` means using controller settings.
    * `Override Hide` means hiding the controller when using, overriding controller settings.
    * `Override Dont Hide` means *not* hiding the controller when using, overriding controller settings.
+  * **Pointer Disable Mode:** Optionally disable the controller pointer on grab or on use:
+   * `Dont Disable` means not disabling the pointer.
+   * `On Grab` means disabling the pointer when grabbed.
+   * `On Use` means disabling the pointer when using.
 
 ### Class Events
 
