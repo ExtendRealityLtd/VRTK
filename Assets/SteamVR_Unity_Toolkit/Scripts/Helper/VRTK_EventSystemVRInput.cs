@@ -120,11 +120,27 @@
                             selectable.navigation = noNavigation;
                         }
 
+                        pointer.OnUIPointerElementEnter(pointer.SetUIPointerEvent(target, pointer.hoveringElement));
+                        pointer.hoveringElement = target;
                         pointer.pointerEventData.pointerCurrentRaycast = result;
                         pointer.pointerEventData.pointerEnter = target;
                         pointer.pointerEventData.hovered.Add(pointer.pointerEventData.pointerEnter);
                         break;
                     }
+                    else
+                    {
+                        if (result.gameObject != pointer.hoveringElement)
+                        {
+                            pointer.OnUIPointerElementEnter(pointer.SetUIPointerEvent(result.gameObject, pointer.hoveringElement));
+                        }
+                        pointer.hoveringElement = result.gameObject;
+                    }
+                }
+
+                if (pointer.hoveringElement && results.Count == 0)
+                {
+                    pointer.OnUIPointerElementExit(pointer.SetUIPointerEvent(null, pointer.hoveringElement));
+                    pointer.hoveringElement = null;
                 }
             }
         }

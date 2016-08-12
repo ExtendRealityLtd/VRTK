@@ -757,13 +757,27 @@ The UI pointer is activated via the `Pointer` alias on the `Controller Events` a
 
   * **Controller:** The controller that will be used to toggle the pointer. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.
   * **Ignore Canvas With Tag Or Class:** A string that specifies a canvas Tag or the name of a Script attached to a canvas and denotes that any world canvases that contain this tag or script will be ignored by the UI Pointer.
-  * **Hold Button To Activate:** If this is checked then the ui pointer beam will be activated on first press of the pointer alias button and will stay active until the pointer alias button is pressed again.
+  * **Activation Mode:** Determines when the UI pointer should be active:
+   * `Hold_Button` only activates the UI Pointer when the Pointer button on the controller is pressed and held down.
+   * `Toggle_Button` activates the UI Pointer on the first click of the Pointer button on the controller and it stays active until the Pointer button is clicked again.
+   * `Always_On` the UI Pointer is always active regardless of whether the Pointer button on the controller is pressed or not.
+
+### Class Events
+
+  * `UIPointerElementEnter` - Emitted when the UI Pointer is colliding with a valid UI element.
+  * `UIPointerElementExit` - Emitted when the UI Pointer is no longer colliding with any valid UI elements.
+
+#### Event Payload
+
+  * `uint controllerIndex` - The index of the controller that was used.
+  * `GameObject currentTarget` - The current UI element that the pointer is colliding with.
+  * `GameObject previousTarget` - The previous UI element that the pointer was colliding with.
 
 ### Class Methods
 
 #### SetEventSystem/1
 
-  > `public static VRTK_EventSystemVRInput SetEventSystem(EventSystem eventSystem)`
+  > `public VRTK_EventSystemVRInput SetEventSystem(EventSystem eventSystem)`
 
   * Parameters
    * `EventSystem eventSystem` - The global Unity event system to be used by the UI pointers.
@@ -774,7 +788,7 @@ The SetEventSystem method is used to set up the global Unity event system for th
 
 #### SetWorldCanvas/1
 
-  > `public static void SetWorldCanvas(Canvas canvas)`
+  > `public void SetWorldCanvas(Canvas canvas)`
 
   * Parameters
    * `Canvas canvas` - The canvas object to initialse for use with the UI pointers. Must be of type `WorldSpace`.
