@@ -1691,12 +1691,13 @@ The Simulator script is attached to the `[CameraRig]` prefab. Supported movement
 
 ### Overview
 
-This class allows player movement based on grabbing of `VRTK_InteractableObject` objects that are tagged as `Climbable`. It should be attached to the `[CameraRig]` object. Because it works by grabbing, each controller should have a `VRTK_InteractGrab` and `VRTK_InteractTouch` component attached. You also have to set the `VRTK_InteractTouch` `Trigger On Static Objects` parameter to true as climbable objects do not use a rigid body for trigger detection.
+This class allows player movement based on grabbing of `VRTK_InteractableObject` objects that are tagged as `Climbable`. It should be attached to the `[CameraRig]` object. Because it works by grabbing, each controller should have a `VRTK_InteractGrab` and `VRTK_InteractTouch` component attached. The `VRTK_InteractTouch` `Trigger On Static Objects` parameter must also be set to true as climbable objects do not use a rigid body for trigger detection.
 
 ### Inspector Parameters
 
-  * **usePlayerScale:** Will scale movement up and down based on the player transform's scale.
+  * **Use Player Scale:** Will scale movement up and down based on the player transform's scale.
   * **Use Gravity:** Will allow physics based falling when the user lets go of objects above ground.
+  * **Safe Zone Teleport Offset:** An additional amount to move the player away from a wall if an ungrab teleport happens due to camera/object collisions.
 
 ### Class Events
 
