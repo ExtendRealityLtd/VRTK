@@ -23,7 +23,8 @@
             Grip,
             Touchpad_Touch,
             Touchpad_Press,
-            Application_Menu
+            Application_Menu,
+            Undefined
         }
 
         public ButtonAlias pointerToggleButton = ButtonAlias.Touchpad_Press;
