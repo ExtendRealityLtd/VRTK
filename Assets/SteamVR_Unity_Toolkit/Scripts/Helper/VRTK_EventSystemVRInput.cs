@@ -82,7 +82,7 @@
         private bool ShouldIgnoreElement(GameObject obj, string ignoreCanvasWithTagOrClass)
         {
             var canvas = obj.GetComponentInParent<Canvas>();
-            return (canvas && (canvas.CompareTag(ignoreCanvasWithTagOrClass) || canvas.GetComponent(ignoreCanvasWithTagOrClass) != null));
+            return (canvas && (canvas.gameObject.tag == ignoreCanvasWithTagOrClass || canvas.GetComponent(ignoreCanvasWithTagOrClass) != null));
         }
 
         private void Hover(VRTK_UIPointer pointer, List<RaycastResult> results)

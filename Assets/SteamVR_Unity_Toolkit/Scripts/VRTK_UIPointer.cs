@@ -91,7 +91,7 @@
 
         public void SetWorldCanvas(Canvas canvas)
         {
-            if (canvas.renderMode != RenderMode.WorldSpace || canvas.CompareTag(ignoreCanvasWithTagOrClass) || canvas.GetComponent(ignoreCanvasWithTagOrClass) != null)
+            if (canvas.renderMode != RenderMode.WorldSpace || canvas.gameObject.tag == ignoreCanvasWithTagOrClass || canvas.GetComponent(ignoreCanvasWithTagOrClass) != null)
             {
                 return;
             }
