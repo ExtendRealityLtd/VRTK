@@ -517,6 +517,11 @@
 
         private void OnDisable()
         {
+            Invoke("DisableEvents", 0.1f);
+        }
+
+        private void DisableEvents()
+        {
             if (triggerPressed)
             {
                 OnTriggerReleased(SetButtonEvent(ref triggerPressed, false, 0f));
