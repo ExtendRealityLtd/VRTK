@@ -29,6 +29,8 @@
         public PointerEventData pointerEventData;
         [HideInInspector]
         public GameObject hoveringElement;
+        [HideInInspector]
+        public SteamVR_RenderModel controllerRenderModel;
 
         public event UIPointerEventHandler UIPointerElementEnter;
         public event UIPointerEventHandler UIPointerElementExit;
@@ -164,6 +166,7 @@
             pointerClicked = false;
             lastPointerPressState = false;
             beamEnabledState = false;
+            controllerRenderModel = (controller.GetComponent<SteamVR_RenderModel>() ? controller.GetComponent<SteamVR_RenderModel>() : controller.GetComponentInChildren<SteamVR_RenderModel>());
         }
 
         private void ConfigureEventSystem()

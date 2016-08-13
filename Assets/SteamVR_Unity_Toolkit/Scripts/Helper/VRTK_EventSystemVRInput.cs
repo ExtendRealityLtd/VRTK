@@ -29,6 +29,7 @@
                     Hover(pointer, results);
                     Click(pointer, results);
                     Drag(pointer, results);
+                    Scroll(pointer, results);
                 }
             }
         }
@@ -239,6 +240,28 @@
                         break;
                     }
                 }
+            }
+        }
+
+        private void Scroll(VRTK_UIPointer pointer, List<RaycastResult> results)
+        {
+            pointer.pointerEventData.scrollDelta = pointer.controller.GetTouchpadAxis();
+            var scrollWheelVisible = false;
+            foreach (RaycastResult result in results)
+            {
+                if (pointer.pointerEventData.scrollDelta != Vector2.zero)
+                {
+                    var target = ExecuteEvents.ExecuteHierarchy(result.gameObject, pointer.pointerEventData, ExecuteEvents.scrollHandler);
+                    if(target)
+                    {
+                        scrollWheelVisible = true;
+                    }
+                }
+            }
+
+            if(pointer.controllerRenderModel)
+            {
+                pointer.controllerRenderModel.controllerModeState.bScrollWheelVisible = scrollWheelVisible;
             }
         }
     }
