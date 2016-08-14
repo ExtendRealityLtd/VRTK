@@ -39,6 +39,7 @@ namespace VRTK
         private bool customRigidBody;
         private bool customColliderCollection;
         private Rigidbody touchRigidBody;
+        private Object defaultColliderPrefab;
 
         public virtual void OnControllerTouchInteractableObject(ObjectInteractEventArgs e)
         {
@@ -139,6 +140,7 @@ namespace VRTK
             Utilities.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.Controller);
             customRigidBody = false;
             customColliderCollection = false;
+            defaultColliderPrefab = Resources.Load("ControllerColliders/HTCVive");
         }
 
         private void OnEnable()
@@ -290,14 +292,15 @@ namespace VRTK
 
         private void CreateTouchCollider()
         {
-            controllerCollisionDetector = customRigidbodyObject;
-            customColliderCollection = true;
             if (customRigidbodyObject == null)
             {
-                var colliderGO = Instantiate(Resources.Load("ControllerColliders/HTCVive") as GameObject, transform.position, transform.rotation) as GameObject;
-                colliderGO.transform.SetParent(transform);
-                colliderGO.name = "ControllerColliders";
-                controllerCollisionDetector = colliderGO;
+                controllerCollisionDetector = Instantiate(defaultColliderPrefab, transform.position, transform.rotation) as GameObject;
+                controllerCollisionDetector.transform.SetParent(transform);
+                controllerCollisionDetector.name = "ControllerColliders";
+                customColliderCollection = false;
+            } else
+            {
+                controllerCollisionDetector = Instantiate(customRigidbodyObject, transform.position, transform.rotation) as GameObject;
                 customColliderCollection = true;
             }
         }
