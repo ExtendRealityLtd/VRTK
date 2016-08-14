@@ -141,15 +141,15 @@
 
         private void InitHeadsetListeners(bool state)
         {
-            if (headset.GetComponent<VRTK_HeadsetCollisionFade>())
+            if (headset.GetComponent<VRTK_HeadsetCollisionFadeBase>())
             {
                 if (state)
                 {
-                    headset.GetComponent<VRTK_HeadsetCollisionFade>().HeadsetCollisionDetect += new HeadsetCollisionEventHandler(OnHeadsetCollision);
+                    headset.GetComponent<VRTK_HeadsetCollisionFadeBase>().HeadsetCollisionDetect += new HeadsetCollisionEventHandler(OnHeadsetCollision);
                 }
                 else
                 {
-                    headset.GetComponent<VRTK_HeadsetCollisionFade>().HeadsetCollisionDetect -= new HeadsetCollisionEventHandler(OnHeadsetCollision);
+                    headset.GetComponent<VRTK_HeadsetCollisionFadeBase>().HeadsetCollisionDetect -= new HeadsetCollisionEventHandler(OnHeadsetCollision);
                 }
             }
         }
