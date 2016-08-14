@@ -24,7 +24,6 @@ namespace VRTK
         public float hideControllerDelay = 0f;
         public Color globalTouchHighlightColor = Color.clear;
         public GameObject customRigidbodyObject;
-        public bool triggerOnStaticObjects = false;
 
         public event ObjectInteractEventHandler ControllerTouchInteractableObject;
         public event ObjectInteractEventHandler ControllerUntouchInteractableObject;
