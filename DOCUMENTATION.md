@@ -1429,7 +1429,6 @@ The Interact Touch script is attached to a Controller object within the `[Camera
   * **Hide Controller Delay:** The amount of seconds to wait before hiding the controller on touch.
   * **Global Touch Highlight Color:** If the interactable object can be highlighted when it's touched but no local colour is set then this global colour is used.
   * **Custom Rigidbody Object:** If a custom rigidbody and collider for the rigidbody are required, then a gameobject containing a rigidbody and collider can be passed into this parameter. If this is empty then the rigidbody and collider will be auto generated at runtime to match the HTC Vive default controller.
-  * **Trigger On Static Objects:** Allows triggering on non-rigidbody interactable objects (e.g. Climbable)
 
 ### Class Events
 
@@ -1705,7 +1704,7 @@ The Simulator script is attached to the `[CameraRig]` prefab. Supported movement
 
 ### Overview
 
-This class allows player movement based on grabbing of `VRTK_InteractableObject` objects that are tagged as `Climbable`. It should be attached to the `[CameraRig]` object. Because it works by grabbing, each controller should have a `VRTK_InteractGrab` and `VRTK_InteractTouch` component attached. The `VRTK_InteractTouch` `Trigger On Static Objects` parameter must also be set to true as climbable objects do not use a rigid body for trigger detection.
+This class allows player movement based on grabbing of `VRTK_InteractableObject` objects that are tagged as `Climbable`. It should be attached to the `[CameraRig]` object. Because it works by grabbing, each controller should have a `VRTK_InteractGrab` and `VRTK_InteractTouch` component attached.
 
 ### Inspector Parameters
 
@@ -2375,6 +2374,6 @@ A scene that demonstrates how the Bezier Pointer can display an object (teleport
 
 ### 037_CameraRig_ClimbingFalling
 
-A scene that demonstrates how to set up the climbing mechanism with different activities to try it with. A `VRTK_PlayerClimb` object is needed on the `[CameraRig]`. `VRTK_HeightAdjustTeleport` is also added to the `[CameraRig]` to allow movement, but also to allow walking off edges with `UseGravity` enabled. Each controller's `VRTK_InteractTouch` component has `TriggerOnStaticObjects` enabled. Various objects with a `VRTK_InteractableObject` component are scattered throughout the level. They all have the `GrabAttachMechanic` set to `Climbable`.
+A scene that demonstrates how to set up the climbing mechanism with different activities to try it with. A `VRTK_PlayerClimb` object is needed on the `[CameraRig]`. `VRTK_HeightAdjustTeleport` is also added to the `[CameraRig]` to allow movement, but also to allow walking off edges with `UseGravity` enabled. Various objects with a `VRTK_InteractableObject` component are scattered throughout the level. They all have the `GrabAttachMechanic` set to `Climbable`.
 
 [Catlike Coding]: http://catlikecoding.com/unity/tutorials/curves-and-splines/
