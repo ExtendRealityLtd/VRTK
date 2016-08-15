@@ -36,7 +36,6 @@ namespace VRTK
         private VRTK_ControllerActions controllerActions;
         private GameObject controllerCollisionDetector;
         private bool triggerRumble;
-        private bool destroyRigidBodyOnDisable;
         private bool destroyColliderOnDisable;
         private Rigidbody touchRigidBody;
         private Object defaultColliderPrefab;
@@ -138,7 +137,6 @@ namespace VRTK
             trackedController = GetComponent<SteamVR_TrackedObject>();
             controllerActions = GetComponent<VRTK_ControllerActions>();
             Utilities.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.Controller);
-            destroyRigidBodyOnDisable = false;
             destroyColliderOnDisable = false;
             defaultColliderPrefab = Resources.Load("ControllerColliders/HTCVive");
         }
@@ -154,7 +152,6 @@ namespace VRTK
         {
             ForceStopTouching();
             DestroyTouchCollider();
-            DestroyTouchRigidBody();
         }
 
         private GameObject GetColliderInteractableObject(Collider collider)
@@ -282,14 +279,6 @@ namespace VRTK
             }
         }
 
-        private void DestroyTouchRigidBody()
-        {
-            if (destroyRigidBodyOnDisable)
-            {
-                Destroy(touchRigidBody);
-            }
-        }
-
         private bool CustomRigidBodyIsChild()
         {
             foreach (var childTransform in GetComponentsInChildren<Transform>())
@@ -330,7 +319,6 @@ namespace VRTK
         private void CreateTouchRigidBody()
         {
             touchRigidBody = gameObject.GetComponent<Rigidbody>();
-            destroyRigidBodyOnDisable = false;
             if (touchRigidBody == null)
             {
                 touchRigidBody = gameObject.AddComponent<Rigidbody>();
@@ -338,7 +326,6 @@ namespace VRTK
                 touchRigidBody.useGravity = false;
                 touchRigidBody.constraints = RigidbodyConstraints.FreezeAll;
                 touchRigidBody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
-                destroyRigidBodyOnDisable = true;
             }
         }
 
