@@ -276,7 +276,7 @@ namespace VRTK
 
         private void DestroyTouchCollider()
         {
-            if(!customColliderCollection)
+            if (!customColliderCollection)
             {
                 Destroy(controllerCollisionDetector);
             }
@@ -284,7 +284,7 @@ namespace VRTK
 
         private void DestroyTouchRigidBody()
         {
-            if(!customRigidBody)
+            if (!customRigidBody)
             {
                 Destroy(touchRigidBody);
             }
@@ -298,7 +298,8 @@ namespace VRTK
                 controllerCollisionDetector.transform.SetParent(transform);
                 controllerCollisionDetector.name = "ControllerColliders";
                 customColliderCollection = false;
-            } else
+            }
+            else
             {
                 controllerCollisionDetector = Instantiate(customRigidbodyObject, transform.position, transform.rotation) as GameObject;
                 customColliderCollection = true;
@@ -314,6 +315,7 @@ namespace VRTK
                 touchRigidBody = gameObject.AddComponent<Rigidbody>();
                 touchRigidBody.isKinematic = true;
                 touchRigidBody.useGravity = false;
+                touchRigidBody.constraints = RigidbodyConstraints.FreezeAll;
                 touchRigidBody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
                 customRigidBody = false;
             }
