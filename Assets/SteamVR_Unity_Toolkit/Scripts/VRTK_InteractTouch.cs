@@ -36,8 +36,8 @@ namespace VRTK
         private VRTK_ControllerActions controllerActions;
         private GameObject controllerCollisionDetector;
         private bool triggerRumble;
-        private bool customRigidBody;
-        private bool customColliderCollection;
+        private bool destroyRigidBodyOnDisable;
+        private bool destroyColliderOnDisable;
         private Rigidbody touchRigidBody;
         private Object defaultColliderPrefab;
 
@@ -138,8 +138,8 @@ namespace VRTK
             trackedController = GetComponent<SteamVR_TrackedObject>();
             controllerActions = GetComponent<VRTK_ControllerActions>();
             Utilities.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.Controller);
-            customRigidBody = false;
-            customColliderCollection = false;
+            destroyRigidBodyOnDisable = false;
+            destroyColliderOnDisable = false;
             defaultColliderPrefab = Resources.Load("ControllerColliders/HTCVive");
         }
 
@@ -276,7 +276,7 @@ namespace VRTK
 
         private void DestroyTouchCollider()
         {
-            if (!customColliderCollection)
+            if (destroyColliderOnDisable)
             {
                 Destroy(controllerCollisionDetector);
             }
@@ -284,10 +284,22 @@ namespace VRTK
 
         private void DestroyTouchRigidBody()
         {
-            if (!customRigidBody)
+            if (destroyRigidBodyOnDisable)
             {
                 Destroy(touchRigidBody);
             }
+        }
+
+        private bool CustomRigidBodyIsChild()
+        {
+            foreach (var childTransform in GetComponentsInChildren<Transform>())
+            {
+                if (childTransform == customRigidbodyObject.transform)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         private void CreateTouchCollider()
@@ -297,19 +309,28 @@ namespace VRTK
                 controllerCollisionDetector = Instantiate(defaultColliderPrefab, transform.position, transform.rotation) as GameObject;
                 controllerCollisionDetector.transform.SetParent(transform);
                 controllerCollisionDetector.name = "ControllerColliders";
-                customColliderCollection = false;
+                destroyColliderOnDisable = true;
             }
             else
             {
-                controllerCollisionDetector = Instantiate(customRigidbodyObject, transform.position, transform.rotation) as GameObject;
-                customColliderCollection = true;
+                if (CustomRigidBodyIsChild())
+                {
+                    controllerCollisionDetector = customRigidbodyObject;
+                    destroyColliderOnDisable = false;
+                }
+                else
+                {
+                    controllerCollisionDetector = Instantiate(customRigidbodyObject, transform.position, transform.rotation) as GameObject;
+                    controllerCollisionDetector.transform.SetParent(transform);
+                    destroyColliderOnDisable = true;
+                }
             }
         }
 
         private void CreateTouchRigidBody()
         {
             touchRigidBody = gameObject.GetComponent<Rigidbody>();
-            customRigidBody = true;
+            destroyRigidBodyOnDisable = false;
             if (touchRigidBody == null)
             {
                 touchRigidBody = gameObject.AddComponent<Rigidbody>();
@@ -317,7 +338,7 @@ namespace VRTK
                 touchRigidBody.useGravity = false;
                 touchRigidBody.constraints = RigidbodyConstraints.FreezeAll;
                 touchRigidBody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
-                customRigidBody = false;
+                destroyRigidBodyOnDisable = true;
             }
         }
 
