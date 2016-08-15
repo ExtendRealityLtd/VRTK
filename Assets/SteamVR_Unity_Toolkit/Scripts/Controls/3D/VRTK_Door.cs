@@ -213,15 +213,15 @@
                 float extents = 0;
                 if (secondaryDirection == Vector3.right)
                 {
-                    extents = doorBounds.extents.x / door.transform.lossyScale.x;
+                    extents = doorBounds.extents.x / getDoor().transform.lossyScale.x;
                 }
                 else if (secondaryDirection == Vector3.up)
                 {
-                    extents = doorBounds.extents.y / door.transform.lossyScale.y;
+                    extents = doorBounds.extents.y / getDoor().transform.lossyScale.y;
                 }
                 else
                 {
-                    extents = doorBounds.extents.z / door.transform.lossyScale.z;
+                    extents = doorBounds.extents.z / getDoor().transform.lossyScale.z;
                 }
 
                 doorHj.anchor = secondaryDirection * subDirection * extents;
