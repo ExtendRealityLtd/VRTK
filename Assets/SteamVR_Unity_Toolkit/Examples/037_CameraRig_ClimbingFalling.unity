@@ -37,7 +37,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18053684, g: 0.2260189, b: 0.30718893, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -788,7 +788,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 81186593}
-  m_LocalRotation: {x: -0.13039498, y: -0.7205761, z: -0.6680776, w: 0.13205935}
+  m_LocalRotation: {x: -0.13039497, y: -0.72057605, z: -0.6680775, w: 0.13205934}
   m_LocalPosition: {x: 16.99, y: 0.56, z: -1.15}
   m_LocalScale: {x: 0.20000015, y: 0.73330235, z: 0.20000017}
   m_LocalEulerAnglesHint: {x: -85.743095, y: -167.48149, z: 8.8867}
@@ -3894,7 +3894,6 @@ MonoBehaviour:
   hideControllerDelay: 0
   globalTouchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   customRigidbodyObject: {fileID: 0}
-  triggerOnStaticObjects: 1
 --- !u!114 &491901276
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3971,7 +3970,6 @@ MonoBehaviour:
   hideControllerDelay: 0
   globalTouchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   customRigidbodyObject: {fileID: 0}
-  triggerOnStaticObjects: 1
 --- !u!114 &491901280
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9538,6 +9536,46 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1569371614}
   m_RootOrder: 2
+--- !u!1 &1229587011
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1229587013}
+  - 114: {fileID: 1229587012}
+  m_Layer: 0
+  m_Name: '##Scene Changer##'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1229587012
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1229587011}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c63141da60241d14394f8f3b547531f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &1229587013
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1229587011}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -2.2067165, y: -13.440919, z: -42.125965}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 15
 --- !u!1 &1230357551
 GameObject:
   m_ObjectHideFlags: 0
