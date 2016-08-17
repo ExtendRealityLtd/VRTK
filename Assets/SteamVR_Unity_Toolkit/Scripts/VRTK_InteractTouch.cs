@@ -119,6 +119,11 @@ namespace VRTK
             }
         }
 
+        public bool IsRigidBodyActive()
+        {
+            return !touchRigidBody.isKinematic;
+        }
+
         public void ForceStopTouching()
         {
             if (touchedObject != null)
