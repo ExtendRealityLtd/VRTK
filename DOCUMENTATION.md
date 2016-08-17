@@ -1495,7 +1495,7 @@ The ToggleControllerRigidBody method toggles the controller's rigidbody's abilit
   * Returns
    * `bool` - Is true if the rigidbody on the controller is currently active and able to affect other scene rigidbodies.
 
-The IsRigidBodyActive method toggle
+The IsRigidBodyActive method checks to see if the rigidbody on the controller object is active and can affect other rigidbodies in the scene.
 
 #### ForceStopTouching/0
 
