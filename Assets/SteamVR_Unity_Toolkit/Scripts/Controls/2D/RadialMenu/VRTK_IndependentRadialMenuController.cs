@@ -36,6 +36,7 @@
             if (newEventsManager == null)
             {
                 Debug.LogError("The radial menu must be a child of an interactable object or be set in the inspector!");
+                return;
             }
             else if (newEventsManager != eventsManager) // Changed managers
             {

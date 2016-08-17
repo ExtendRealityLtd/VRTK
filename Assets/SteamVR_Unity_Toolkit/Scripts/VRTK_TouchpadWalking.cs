@@ -54,6 +54,7 @@
             else
             {
                 Debug.LogError("The VRTK_TouchpadWalking script requires the VRTK_PlayerPresence script to be attached to the [CameraRig]");
+                return;
             }
 
             touchpadAxisChanged = new ControllerInteractionEventHandler(DoTouchpadAxisChanged);

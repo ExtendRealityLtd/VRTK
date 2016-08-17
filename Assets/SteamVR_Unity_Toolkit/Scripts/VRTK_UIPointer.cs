@@ -69,6 +69,7 @@
             if (!eventSystem)
             {
                 Debug.LogError("A VRTK_UIPointer requires an EventSystem");
+                return null;
             }
 
             //disable existing standalone input module
