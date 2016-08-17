@@ -1464,7 +1464,7 @@ The ForceTouch method will attempt to force the controller to touch the given ga
 
 The GetTouchedObject method returns the current object being touched by the controller.
 
-#### IsObjectInteractable
+#### IsObjectInteractable/1
 
   > `public bool IsObjectInteractable(GameObject obj)`
 
@@ -1485,6 +1485,17 @@ The IsObjectInteractable method is used to check if a given game object is of ty
    * _none_
 
 The ToggleControllerRigidBody method toggles the controller's rigidbody's ability to detect collisions. If it is true then the controller rigidbody will collide with other collidable game objects.
+
+#### IsRigidBodyActive/0
+
+  > `public bool IsRigidBodyActive()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `bool` - Is true if the rigidbody on the controller is currently active and able to affect other scene rigidbodies.
+
+The IsRigidBodyActive method toggle
 
 #### ForceStopTouching/0
 

@@ -35,6 +35,7 @@ namespace VRTK
         private SteamVR_TrackedObject trackedController;
         private VRTK_InteractTouch interactTouch;
         private VRTK_ControllerActions controllerActions;
+        private VRTK_ControllerEvents controllerEvents;
 
         private int grabEnabledState = 0;
         private float grabPrecognitionTimer = 0f;
@@ -88,6 +89,7 @@ namespace VRTK
             interactTouch = GetComponent<VRTK_InteractTouch>();
             trackedController = GetComponent<SteamVR_TrackedObject>();
             controllerActions = GetComponent<VRTK_ControllerActions>();
+            controllerEvents = GetComponent<VRTK_ControllerEvents>();
         }
 
         private void OnEnable()
@@ -349,7 +351,7 @@ namespace VRTK
                 {
                     grabbedObjectScript.ToggleKinematic(true);
                 }
-                updatedHideControllerOnGrab = grabbedObjectScript.CheckHideMode(hideControllerOnGrab, grabbedObjectScript.hideControllerOnGrab );
+                updatedHideControllerOnGrab = grabbedObjectScript.CheckHideMode(hideControllerOnGrab, grabbedObjectScript.hideControllerOnGrab);
             }
 
             if (updatedHideControllerOnGrab)
@@ -469,10 +471,6 @@ namespace VRTK
             else
             {
                 grabPrecognitionTimer = Time.time + grabPrecognition;
-                if (createRigidBodyWhenNotTouching)
-                {
-                    interactTouch.ToggleControllerRigidBody(true);
-                }
             }
         }
 
@@ -498,7 +496,6 @@ namespace VRTK
                     ReleaseObject(controllerIndex, true);
                 }
             }
-            interactTouch.ToggleControllerRigidBody(false);
         }
 
         private void DoGrabObject(object sender, ControllerInteractionEventArgs e)
@@ -516,6 +513,14 @@ namespace VRTK
             if (controllerAttachPoint == null)
             {
                 SetControllerAttachPoint();
+            }
+
+            if (createRigidBodyWhenNotTouching && grabbedObject == null)
+            {
+                if (interactTouch.IsRigidBodyActive() != controllerEvents.grabPressed)
+                {
+                    interactTouch.ToggleControllerRigidBody(controllerEvents.grabPressed);
+                }
             }
 
             if (grabPrecognitionTimer >= Time.time)
