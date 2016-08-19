@@ -11,7 +11,7 @@ public class BowAim : MonoBehaviour
     public int bowVibration = 250;
     public int stringVibration = 350;
 
-    private BowAnimation bowAnimation;
+    private IBowAnimation bowAnimation;
     private GameObject currentArrow;
     private BowHandle handle;
 
@@ -53,7 +53,7 @@ public class BowAim : MonoBehaviour
 
     private void Start()
     {
-        bowAnimation = GetComponent<BowAnimation>();
+        bowAnimation = GetComponent<IBowAnimation>();
         handle = GetComponentInChildren<BowHandle>();
         controllers = FindObjectOfType<SteamVR_ControllerManager>();
         interact = GetComponent<VRTK_InteractableObject>();
@@ -126,7 +126,7 @@ public class BowAim : MonoBehaviour
 
     private void Release()
     {
-        bowAnimation.SetFrame(0);
+        bowAnimation.SetDraw(0);
         currentArrow.transform.SetParent(null);
         Collider[] arrowCols = currentArrow.GetComponentsInChildren<Collider>();
         Collider[] BowCols = GetComponentsInChildren<Collider>();
@@ -169,7 +169,7 @@ public class BowAim : MonoBehaviour
     private void PullString()
     {
         currentPull = Mathf.Clamp((Vector3.Distance(holdControl.transform.position, stringControl.transform.position) - pullOffset) * pullMultiplier, 0, maxPullDistance);
-        bowAnimation.SetFrame(currentPull);
+        bowAnimation.SetDraw(currentPull);
 
         if (!currentPull.ToString("F2").Equals(previousPull.ToString("F2")))
         {
