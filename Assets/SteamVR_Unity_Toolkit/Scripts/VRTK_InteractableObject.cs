@@ -11,6 +11,7 @@
 namespace VRTK
 {
     using UnityEngine;
+    using System.Collections;
     using System.Collections.Generic;
 
     public struct InteractableObjectEventArgs
@@ -200,7 +201,10 @@ namespace VRTK
         {
             OnInteractableObjectUntouched(SetInteractableObjectEvent(previousTouchingObject));
             touchingObject = null;
-            StopUsingOnControllerChange(previousTouchingObject);
+            if(gameObject.activeInHierarchy)
+            {
+                StartCoroutine(StopUsingOnControllerChange(previousTouchingObject));
+            }
         }
 
         public virtual void Grabbed(GameObject currentGrabbingObject)
@@ -224,22 +228,9 @@ namespace VRTK
             grabbedSnapHandle = null;
             grabbingObject = null;
             LoadPreviousState();
-            StopUsingOnControllerChange(previousGrabbingObject);
-        }
-
-        private void StopUsingOnControllerChange(GameObject previousController)
-        {
-            var usingObject = previousController.GetComponent<VRTK_InteractUse>();
-            if (usingObject)
+            if (gameObject.activeInHierarchy)
             {
-                if (holdButtonToUse)
-                {
-                    usingObject.ForceStopUsing();
-                }
-                else
-                {
-                    usingObject.ForceResetUsing();
-                }
+                StartCoroutine(StopUsingOnControllerChange(previousGrabbingObject));
             }
         }
 
@@ -370,24 +361,9 @@ namespace VRTK
 
         public void ForceStopInteracting()
         {
-            if (touchingObject != null && touchingObject.activeInHierarchy)
+            if (gameObject.activeInHierarchy)
             {
-                touchingObject.GetComponent<VRTK_InteractTouch>().ForceStopTouching();
-                forcedDropped = true;
-            }
-
-            if (grabbingObject != null && grabbingObject.activeInHierarchy)
-            {
-                grabbingObject.GetComponent<VRTK_InteractTouch>().ForceStopTouching();
-                grabbingObject.GetComponent<VRTK_InteractGrab>().ForceRelease();
-                forcedDropped = true;
-            }
-
-            if (usingObject != null && usingObject.activeInHierarchy)
-            {
-                usingObject.GetComponent<VRTK_InteractTouch>().ForceStopTouching();
-                usingObject.GetComponent<VRTK_InteractUse>().ForceStopUsing();
-                forcedDropped = true;
+                StartCoroutine(ForceStopInteractingAtEndOfFrame());
             }
         }
 
@@ -689,6 +665,47 @@ namespace VRTK
             if (AttachIsTrackObject() && trackPoint)
             {
                 transform.position = grabbingObject.transform.position;
+            }
+        }
+
+        private IEnumerator StopUsingOnControllerChange(GameObject previousController)
+        {
+            yield return new WaitForEndOfFrame();
+            var usingObject = previousController.GetComponent<VRTK_InteractUse>();
+            if (usingObject)
+            {
+                if (holdButtonToUse)
+                {
+                    usingObject.ForceStopUsing();
+                }
+                else
+                {
+                    usingObject.ForceResetUsing();
+                }
+            }
+        }
+
+        private IEnumerator ForceStopInteractingAtEndOfFrame()
+        {
+            yield return new WaitForEndOfFrame();
+            if (touchingObject != null && touchingObject.activeInHierarchy)
+            {
+                touchingObject.GetComponent<VRTK_InteractTouch>().ForceStopTouching();
+                forcedDropped = true;
+            }
+
+            if (grabbingObject != null && grabbingObject.activeInHierarchy)
+            {
+                grabbingObject.GetComponent<VRTK_InteractTouch>().ForceStopTouching();
+                grabbingObject.GetComponent<VRTK_InteractGrab>().ForceRelease();
+                forcedDropped = true;
+            }
+
+            if (usingObject != null && usingObject.activeInHierarchy)
+            {
+                usingObject.GetComponent<VRTK_InteractTouch>().ForceStopTouching();
+                usingObject.GetComponent<VRTK_InteractUse>().ForceStopUsing();
+                forcedDropped = true;
             }
         }
     }
