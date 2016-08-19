@@ -77,7 +77,10 @@
                     renderer.material.renderQueue = -1;
                 }
 
-                renderer.material.color = new Color(renderer.material.color.r, renderer.material.color.g, renderer.material.color.b, alpha);
+                if (renderer.material.HasProperty("_Color"))
+                {
+                    renderer.material.color = new Color(renderer.material.color.r, renderer.material.color.g, renderer.material.color.b, alpha);
+                }
             }
         }
 
@@ -96,7 +99,10 @@
                     storedMaterials.Add(element, new Material(renderer.material));
                 }
                 renderer.material.SetTexture("_MainTex", new Texture());
-                StartCoroutine(CycleColor(renderer.material, new Color(renderer.material.color.r, renderer.material.color.g, renderer.material.color.b), highlight ?? Color.white, fadeDuration));
+                if (renderer.material.HasProperty("_Color"))
+                {
+                    StartCoroutine(CycleColor(renderer.material, new Color(renderer.material.color.r, renderer.material.color.g, renderer.material.color.b), highlight ?? Color.white, fadeDuration));
+                }
             }
         }
 
@@ -220,7 +226,10 @@
             while (elapsedTime <= duration)
             {
                 elapsedTime += Time.deltaTime;
-                material.color = Color.Lerp(startColor, endColor, (elapsedTime / duration));
+                if (material.HasProperty("_Color"))
+                {
+                    material.color = Color.Lerp(startColor, endColor, (elapsedTime / duration));
+                }
                 yield return null;
             }
         }
