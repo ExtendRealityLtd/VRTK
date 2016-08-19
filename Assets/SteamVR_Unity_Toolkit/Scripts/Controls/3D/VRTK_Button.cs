@@ -28,7 +28,6 @@
 
         private ButtonDirection finalDirection;
         private Vector3 restingPosition;
-        private Vector3 jointDelta;
         private Vector3 activationDir;
 
         private Rigidbody rb;
@@ -193,7 +192,6 @@
                         }
                         break;
                 }
-                jointDelta = transform.localPosition - cj.connectedAnchor;
             }
 
             return true;
@@ -317,7 +315,6 @@
         private Vector3 CalculateActivationDir()
         {
             Bounds bounds = Utilities.GetBounds(transform, transform);
-            Bounds bounds2 = Utilities.GetBounds(transform);
 
             Vector3 buttonDirection = Vector3.zero;
             float extents = 0;
