@@ -13,19 +13,22 @@ public class UISceneChanger : MonoBehaviour {
     public GameObject SceneCanvas;
     public float OffSet;
     public GameObject ControllerRight;
-    public bool HadSimplePointer;
-    public bool HadBenzer;
-    public bool HadUIPointer;
+
+    private bool HadSimplePointer;
+    private bool HadBenzer;
+    private bool HadUIPointer;
     private Vector3 OffSetVector;
 
     private void Awake()
     {
-        var manager = FindObjectOfType<SteamVR_ControllerManager>();
+        SteamVR_ControllerManager manager = FindObjectOfType<SteamVR_ControllerManager>();
         controller = manager.right.GetComponent<SteamVR_TrackedObject>();
         DynamicGI.UpdateEnvironment();
+
         Rig = GameObject.FindObjectOfType<SteamVR_PlayArea>().gameObject;
         Head = GameObject.FindObjectOfType<SteamVR_Camera>().gameObject;
         SceneCanvas = gameObject.transform.GetChild(0).gameObject;
+
         SteamVR_ControllerManager Manager = Rig.GetComponent<SteamVR_ControllerManager>();
         ControllerRight = Manager.right;
         SceneCanvas.SetActive(false);
@@ -77,14 +80,6 @@ public class UISceneChanger : MonoBehaviour {
         gameObject.transform.localPosition = new Vector3(0, 0, OffSet);
         gameObject.transform.parent = null;
         gameObject.transform.LookAt(VRTK_DeviceFinder.HeadsetCamera().gameObject.transform);
-        
-        //gameObject.transform.position = Head.transform.position;
-        //gameObject.transform.position = Vector3.Scale(gameObject.transform.position, OffSetVector);
-
-        //gameObject.transform.rotation = Head.transform.rotation;
-        //gameObject.transform.position = new Vector3(Head.transform.position.x * OffSet, 
-        //    gameObject.transform.position.y,
-        //    Head.transform.position.z);
     }
 
     public void SetControllerPointer()
