@@ -10,19 +10,6 @@
         public float touchpadAngle;
     }
 
-    public enum ButtonAlias
-    {
-        Trigger_Hairline,
-        Trigger_Touch,
-        Trigger_Press,
-        Trigger_Click,
-        Grip,
-        Touchpad_Touch,
-        Touchpad_Press,
-        Application_Menu,
-        Undefined
-    }
-
     public delegate void ControllerInteractionEventHandler(object sender, ControllerInteractionEventArgs e);
 
     public class VRTK_ControllerEvents : MonoBehaviour
