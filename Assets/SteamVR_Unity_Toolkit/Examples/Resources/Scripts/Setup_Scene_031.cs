@@ -13,10 +13,9 @@ public class Setup_Scene_031 : MonoBehaviour
             var headset = VRTK_DeviceFinder.HeadsetTransform();
             if (!headset.GetComponent<VRTK_BezierPointer>())
             {
-                var controllerManager = FindObjectOfType<SteamVR_ControllerManager>();
                 var pointer = headset.gameObject.AddComponent<VRTK_BezierPointer>();
 
-                pointer.controller = controllerManager.right.GetComponent<VRTK_ControllerEvents>();
+                pointer.controller = VRTK_SDK_Bridge.GetControllerRightHand().GetComponent<VRTK_ControllerEvents>();
                 pointer.showPlayAreaCursor = true;
                 pointer.pointerVisibility = VRTK_WorldPointer.pointerVisibilityStates.Always_Off;
                 pointer.pointerLength = 7f;

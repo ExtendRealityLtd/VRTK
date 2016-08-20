@@ -261,7 +261,7 @@
 
             if(pointer.controllerRenderModel)
             {
-                pointer.controllerRenderModel.controllerModeState.bScrollWheelVisible = scrollWheelVisible;
+                VRTK_SDK_Bridge.SetControllerRenderModelWheel(pointer.controllerRenderModel, scrollWheelVisible);
             }
         }
     }

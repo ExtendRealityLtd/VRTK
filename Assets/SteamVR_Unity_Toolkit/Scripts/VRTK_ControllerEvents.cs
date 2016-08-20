@@ -113,8 +113,6 @@
         public event ControllerInteractionEventHandler AliasUIClickOff;
 
         private uint controllerIndex;
-        private SteamVR_TrackedObject trackedController;
-        private SteamVR_Controller.Device device;
 
         private Vector2 touchpadAxis = Vector2.zero;
         private Vector2 triggerAxis = Vector2.zero;
@@ -398,24 +396,19 @@
             ControllerInteractionEventArgs e;
             e.controllerIndex = controllerIndex;
             e.buttonPressure = buttonPressure;
-            e.touchpadAxis = device.GetAxis();
+            e.touchpadAxis = VRTK_SDK_Bridge.GetTouchpadAxisOnIndex(controllerIndex);
             e.touchpadAngle = CalculateTouchpadAxisAngle(e.touchpadAxis);
             return e;
         }
 
         private void Awake()
         {
-            trackedController = GetComponent<SteamVR_TrackedObject>();
             gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
         }
 
         private void Start()
         {
-            controllerIndex = (uint)trackedController.index;
-            if (controllerIndex < uint.MaxValue)
-            {
-                device = SteamVR_Controller.Input((int)controllerIndex);
-            }
+            controllerIndex = VRTK_DeviceFinder.GetControllerIndex(gameObject);
         }
 
         private float CalculateTouchpadAxisAngle(Vector2 axis)
@@ -574,67 +567,62 @@
             triggerAxisChanged = false;
             touchpadAxisChanged = false;
 
-            controllerIndex = (uint)trackedController.index;
+            controllerIndex = VRTK_DeviceFinder.GetControllerIndex(gameObject);
             if (controllerIndex < uint.MaxValue)
             {
-                device = SteamVR_Controller.Input((int)controllerIndex);
-
-                Vector2 currentTriggerAxis = device.GetAxis(Valve.VR.EVRButtonId.k_EButton_SteamVR_Trigger);
-                Vector2 currentTouchpadAxis = device.GetAxis();
+                Vector2 currentTriggerAxis = VRTK_SDK_Bridge.GetTriggerAxisOnIndex(controllerIndex);
+                Vector2 currentTouchpadAxis = VRTK_SDK_Bridge.GetTouchpadAxisOnIndex(controllerIndex);
 
                 // Save current touch and trigger settings to detect next change.
                 touchpadAxis = new Vector2(currentTouchpadAxis.x, currentTouchpadAxis.y);
                 triggerAxis = new Vector2(currentTriggerAxis.x, currentTriggerAxis.y);
-                hairTriggerDelta = device.hairTriggerDelta;
+                hairTriggerDelta = VRTK_SDK_Bridge.GetTriggerHairlineDeltaOnIndex(controllerIndex);
             }
         }
 
         private void Update()
         {
-            controllerIndex = (uint)trackedController.index;
+            controllerIndex = VRTK_DeviceFinder.GetControllerIndex(gameObject);
             //Only continue if the controller index has been set to a sensible number
-            //SteamVR seems to put the index to the uint max value if it can't find the controller
             if (controllerIndex >= uint.MaxValue)
             {
                 return;
             }
 
-            device = SteamVR_Controller.Input((int)controllerIndex);
-
-            Vector2 currentTriggerAxis = device.GetAxis(Valve.VR.EVRButtonId.k_EButton_SteamVR_Trigger);
-            Vector2 currentTouchpadAxis = device.GetAxis();
+            Vector2 currentTriggerAxis = VRTK_SDK_Bridge.GetTriggerAxisOnIndex(controllerIndex);
+            Vector2 currentTouchpadAxis = VRTK_SDK_Bridge.GetTouchpadAxisOnIndex(controllerIndex);
 
             //Trigger Pressed
-            if (device.GetPressDown(SteamVR_Controller.ButtonMask.Trigger))
+            if (VRTK_SDK_Bridge.IsTriggerPressedDownOnIndex(controllerIndex))
             {
                 OnTriggerPressed(SetButtonEvent(ref triggerPressed, true, currentTriggerAxis.x));
                 EmitAlias(ButtonAlias.Trigger_Press, true, currentTriggerAxis.x, ref triggerPressed);
             }
-            else if (device.GetPressUp(SteamVR_Controller.ButtonMask.Trigger))
+            else if (VRTK_SDK_Bridge.IsTriggerPressedUpOnIndex(controllerIndex))
             {
                 OnTriggerReleased(SetButtonEvent(ref triggerPressed, false, 0f));
                 EmitAlias(ButtonAlias.Trigger_Press, false, 0f, ref triggerPressed);
             }
 
             //Trigger Touched
-            if (device.GetTouchDown(SteamVR_Controller.ButtonMask.Trigger))
+            if (VRTK_SDK_Bridge.IsTriggerTouchedDownOnIndex(controllerIndex))
             {
                 OnTriggerTouchStart(SetButtonEvent(ref triggerTouched, true, currentTriggerAxis.x));
                 EmitAlias(ButtonAlias.Trigger_Touch, true, currentTriggerAxis.x, ref triggerTouched);
             }
-            else if (device.GetTouchUp(SteamVR_Controller.ButtonMask.Trigger))
+            else if (VRTK_SDK_Bridge.IsTriggerTouchedUpOnIndex(controllerIndex))
             {
                 OnTriggerTouchEnd(SetButtonEvent(ref triggerTouched, false, 0f));
                 EmitAlias(ButtonAlias.Trigger_Touch, false, 0f, ref triggerTouched);
             }
 
             //Trigger Hairline
-            if (device.GetHairTriggerDown())
+            if (VRTK_SDK_Bridge.IsHairTriggerDownOnIndex(controllerIndex))
             {
                 OnTriggerHairlineStart(SetButtonEvent(ref triggerHairlinePressed, true, currentTriggerAxis.x));
                 EmitAlias(ButtonAlias.Trigger_Hairline, true, currentTriggerAxis.x, ref triggerHairlinePressed);
             }
-            else if (device.GetHairTriggerUp())
+            else if (VRTK_SDK_Bridge.IsHairTriggerUpOnIndex(controllerIndex))
             {
                 OnTriggerHairlineEnd(SetButtonEvent(ref triggerHairlinePressed, false, 0f));
                 EmitAlias(ButtonAlias.Trigger_Hairline, false, 0f, ref triggerHairlinePressed);
@@ -663,12 +651,12 @@
             }
 
             //ApplicationMenu
-            if (device.GetPressDown(SteamVR_Controller.ButtonMask.ApplicationMenu))
+            if (VRTK_SDK_Bridge.IsApplicationMenuPressedDownOnIndex(controllerIndex))
             {
                 OnApplicationMenuPressed(SetButtonEvent(ref applicationMenuPressed, true, 1f));
                 EmitAlias(ButtonAlias.Application_Menu, true, 1f, ref applicationMenuPressed);
             }
-            else if (device.GetPressUp(SteamVR_Controller.ButtonMask.ApplicationMenu))
+            else if (VRTK_SDK_Bridge.IsApplicationMenuPressedUpOnIndex(controllerIndex))
             {
 
                 OnApplicationMenuReleased(SetButtonEvent(ref applicationMenuPressed, false, 0f));
@@ -676,36 +664,36 @@
             }
 
             //Grip
-            if (device.GetPressDown(SteamVR_Controller.ButtonMask.Grip))
+            if (VRTK_SDK_Bridge.IsGripPressedDownOnIndex(controllerIndex))
             {
                 OnGripPressed(SetButtonEvent(ref gripPressed, true, 1f));
                 EmitAlias(ButtonAlias.Grip, true, 1f, ref gripPressed);
             }
-            else if (device.GetPressUp(SteamVR_Controller.ButtonMask.Grip))
+            else if (VRTK_SDK_Bridge.IsGripPressedUpOnIndex(controllerIndex))
             {
                 OnGripReleased(SetButtonEvent(ref gripPressed, false, 0f));
                 EmitAlias(ButtonAlias.Grip, false, 0f, ref gripPressed);
             }
 
             //Touchpad Pressed
-            if (device.GetPressDown(SteamVR_Controller.ButtonMask.Touchpad))
+            if (VRTK_SDK_Bridge.IsTouchpadPressedDownOnIndex(controllerIndex))
             {
                 OnTouchpadPressed(SetButtonEvent(ref touchpadPressed, true, 1f));
                 EmitAlias(ButtonAlias.Touchpad_Press, true, 1f, ref touchpadPressed);
             }
-            else if (device.GetPressUp(SteamVR_Controller.ButtonMask.Touchpad))
+            else if (VRTK_SDK_Bridge.IsTouchpadPressedUpOnIndex(controllerIndex))
             {
                 OnTouchpadReleased(SetButtonEvent(ref touchpadPressed, false, 0f));
                 EmitAlias(ButtonAlias.Touchpad_Press, false, 0f, ref touchpadPressed);
             }
 
             //Touchpad Touched
-            if (device.GetTouchDown(SteamVR_Controller.ButtonMask.Touchpad))
+            if (VRTK_SDK_Bridge.IsTouchpadTouchedDownOnIndex(controllerIndex))
             {
                 OnTouchpadTouchStart(SetButtonEvent(ref touchpadTouched, true, 1f));
                 EmitAlias(ButtonAlias.Touchpad_Touch, true, 1f, ref touchpadTouched);
             }
-            else if (device.GetTouchUp(SteamVR_Controller.ButtonMask.Touchpad))
+            else if (VRTK_SDK_Bridge.IsTouchpadTouchedUpOnIndex(controllerIndex))
             {
                 OnTouchpadTouchEnd(SetButtonEvent(ref touchpadTouched, false, 0f));
                 EmitAlias(ButtonAlias.Touchpad_Touch, false, 0f, ref touchpadTouched);
@@ -724,21 +712,24 @@
             // Save current touch and trigger settings to detect next change.
             touchpadAxis = new Vector2(currentTouchpadAxis.x, currentTouchpadAxis.y);
             triggerAxis = new Vector2(currentTriggerAxis.x, currentTriggerAxis.y);
-            hairTriggerDelta = device.hairTriggerDelta;
+            hairTriggerDelta = VRTK_SDK_Bridge.GetTriggerHairlineDeltaOnIndex(controllerIndex);
         }
 
         private void SetVelocity()
         {
-            var origin = trackedController.origin ? trackedController.origin : trackedController.transform.parent;
+            var origin = VRTK_DeviceFinder.TrackedObjectOrigin(gameObject);
+            var velocity = VRTK_SDK_Bridge.GetVelocityOnIndex(controllerIndex);
+            var angularVelocity = VRTK_SDK_Bridge.GetAngularVelocityOnIndex(controllerIndex);
+
             if (origin != null)
             {
-                controllerVelocity = origin.TransformDirection(device.velocity);
-                controllerAngularVelocity = origin.TransformDirection(device.angularVelocity);
+                controllerVelocity = origin.TransformDirection(velocity);
+                controllerAngularVelocity = origin.TransformDirection(angularVelocity);
             }
             else
             {
-                controllerVelocity = device.velocity;
-                controllerAngularVelocity = device.angularVelocity;
+                controllerVelocity = velocity;
+                controllerAngularVelocity = angularVelocity;
             }
         }
     }

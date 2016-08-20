@@ -10,7 +10,7 @@ public class Sphere_Spawner : MonoBehaviour
     {
         if (GetComponent<VRTK_ControllerEvents>() == null)
         {
-            Debug.LogError("VRTK_ControllerEvents_ListenerExample is required to be attached to a SteamVR Controller that has the VRTK_ControllerEvents script attached to it");
+            Debug.LogError("VRTK_ControllerEvents_ListenerExample is required to be attached to a Controller that has the VRTK_ControllerEvents script attached to it");
             return;
         }
 

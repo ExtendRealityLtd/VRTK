@@ -13,7 +13,7 @@
             set
             {
                 leftController = value;
-                SetControllerListeners(controllerManager.left);
+                SetControllerListeners(controllerLeftHand);
             }
         }
 
@@ -25,14 +25,16 @@
             set
             {
                 rightController = value;
-                SetControllerListeners(controllerManager.right);
+                SetControllerListeners(controllerRightHand);
             }
         }
 
         public float maxWalkSpeed = 3f;
         public float deceleration = 0.1f;
 
-        private SteamVR_ControllerManager controllerManager;
+        private GameObject controllerLeftHand;
+        private GameObject controllerRightHand;
+
         private Vector2 touchAxis;
         private float movementSpeed = 0f;
         private float strafeSpeed = 0f;
@@ -53,24 +55,23 @@
             }
             else
             {
-                Debug.LogError("The VRTK_TouchpadWalking script requires the VRTK_PlayerPresence script to be attached to the [CameraRig]");
+                Debug.LogError("The VRTK_TouchpadWalking script requires the VRTK_PlayerPresence script to be attached to the CameraRig");
                 return;
             }
 
             touchpadAxisChanged = new ControllerInteractionEventHandler(DoTouchpadAxisChanged);
             touchpadUntouched = new ControllerInteractionEventHandler(DoTouchpadTouchEnd);
 
-            controllerManager = GetComponent<SteamVR_ControllerManager>();
+            controllerLeftHand = VRTK_SDK_Bridge.GetControllerLeftHand();
+            controllerRightHand = VRTK_SDK_Bridge.GetControllerRightHand();
         }
 
         private void Start()
         {
             Utilities.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.CameraRig);
 
-            var controllerManager = FindObjectOfType<SteamVR_ControllerManager>();
-
-            SetControllerListeners(controllerManager.left);
-            SetControllerListeners(controllerManager.right);
+            SetControllerListeners(controllerLeftHand);
+            SetControllerListeners(controllerRightHand);
         }
 
         private void DoTouchpadAxisChanged(object sender, ControllerInteractionEventArgs e)
@@ -135,11 +136,11 @@
 
         private void SetControllerListeners(GameObject controller)
         {
-            if (controller && controller == controllerManager.left)
+            if (controller && VRTK_SDK_Bridge.IsControllerLeftHand(controller))
             {
                 ToggleControllerListeners(controller, leftController, ref leftSubscribed);
             }
-            else if (controller && controller == controllerManager.right)
+            else if (controller && VRTK_SDK_Bridge.IsControllerRightHand(controller))
             {
                 ToggleControllerListeners(controller, rightController, ref rightSubscribed);
             }

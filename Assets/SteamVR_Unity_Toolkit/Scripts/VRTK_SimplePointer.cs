@@ -2,7 +2,7 @@
 //
 // Purpose: Provide basic laser pointer to VR Controller
 //
-// This script must be attached to a Controller within the [CameraRig] Prefab
+// This script must be attached to a Controller within the CameraRig Prefab
 //
 // The VRTK_ControllerEvents script must also be attached to the Controller
 //

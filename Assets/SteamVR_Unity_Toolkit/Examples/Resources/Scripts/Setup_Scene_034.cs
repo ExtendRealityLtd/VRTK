@@ -11,8 +11,7 @@ public class Setup_Scene_034 : MonoBehaviour
         if (!initalised)
         {
             var headset = VRTK_DeviceFinder.HeadsetTransform();
-            var controllerManager = FindObjectOfType<SteamVR_ControllerManager>();
-            var controllerEvents = controllerManager.left.GetComponent<VRTK_ControllerEvents>();
+            var controllerEvents = VRTK_SDK_Bridge.GetControllerLeftHand().GetComponent<VRTK_ControllerEvents>();
 
             if (!headset.GetComponent<VRTK_SimplePointer>())
             {

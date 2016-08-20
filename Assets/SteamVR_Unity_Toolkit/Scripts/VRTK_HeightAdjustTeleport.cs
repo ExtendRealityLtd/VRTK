@@ -1,8 +1,8 @@
 ﻿//====================================================================================
 //
-// Purpose: Provide basic teleportation of VR CameraRig
+// Purpose: Provide height adjustable teleportation of VR CameraRig
 //
-// This script must be attached to the [CameraRig] Prefab
+// This script must be attached to the CameraRig
 //
 // A GameObject must have the VRTK_WorldPointer attached to it to listen for the
 // updated world position to teleport to.

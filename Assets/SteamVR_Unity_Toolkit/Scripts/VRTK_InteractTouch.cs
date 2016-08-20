@@ -2,7 +2,7 @@
 //
 // Purpose: Provide basic touch detection of controller to interactable objects
 //
-// This script must be attached to a Controller within the [CameraRig] Prefab
+// This script must be attached to a Controller
 //
 //====================================================================================
 namespace VRTK
@@ -32,7 +32,6 @@ namespace VRTK
         private GameObject lastTouchedObject = null;
         private bool updatedHideControllerOnTouch = false;
 
-        private SteamVR_TrackedObject trackedController;
         private VRTK_ControllerActions controllerActions;
         private GameObject controllerCollisionDetector;
         private bool triggerRumble;
@@ -59,7 +58,7 @@ namespace VRTK
         public ObjectInteractEventArgs SetControllerInteractEvent(GameObject target)
         {
             ObjectInteractEventArgs e;
-            e.controllerIndex = (uint)trackedController.index;
+            e.controllerIndex = VRTK_DeviceFinder.GetControllerIndex(gameObject);
             e.target = target;
             return e;
         }
@@ -139,7 +138,6 @@ namespace VRTK
 
         private void Awake()
         {
-            trackedController = GetComponent<SteamVR_TrackedObject>();
             controllerActions = GetComponent<VRTK_ControllerActions>();
             Utilities.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.Controller);
             destroyColliderOnDisable = false;

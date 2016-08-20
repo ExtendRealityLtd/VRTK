@@ -36,7 +36,7 @@ namespace VRTK
 
         protected bool playAreaCursorCollided = false;
 
-        private SteamVR_PlayArea playArea;
+        private Transform playArea;
         private GameObject playAreaCursor;
         private GameObject[] playAreaCursorBoundaries;
         private BoxCollider playAreaCursorCollider;
@@ -89,14 +89,14 @@ namespace VRTK
 
             if (controller == null)
             {
-                Debug.LogError("VRTK_WorldPointer requires a SteamVR Controller that has the VRTK_ControllerEvents script attached to it");
+                Debug.LogError("VRTK_WorldPointer requires a Controller that has the VRTK_ControllerEvents script attached to it");
                 return;
             }
 
             Utilities.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.Controller);
 
             headset = VRTK_DeviceFinder.HeadsetTransform();
-            playArea = FindObjectOfType<SteamVR_PlayArea>();
+            playArea = VRTK_DeviceFinder.PlayAreaTransform();
             playAreaCursorBoundaries = new GameObject[4];
         }
 
@@ -347,11 +347,11 @@ namespace VRTK
             var topLeftOuter = 6;
             var topRightOuter = 7;
 
-            Vector3[] cursorDrawVertices = playArea.vertices;
+            Vector3[] cursorDrawVertices = VRTK_SDK_Bridge.GetPlayAreaVertices(playArea.gameObject);
 
             if (playAreaCursorDimensions != Vector2.zero)
             {
-                var customAreaPadding = playArea.borderThickness;
+                var customAreaPadding = VRTK_SDK_Bridge.GetPlayAreaBorderThickness(playArea.gameObject);
 
                 cursorDrawVertices[btmRightOuter] = new Vector3(playAreaCursorDimensions.x / 2, 0f, (playAreaCursorDimensions.y / 2) * -1);
                 cursorDrawVertices[btmLeftOuter] = new Vector3((playAreaCursorDimensions.x / 2) * -1, 0f, (playAreaCursorDimensions.y / 2) * -1);

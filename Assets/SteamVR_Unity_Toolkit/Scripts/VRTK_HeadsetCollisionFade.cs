@@ -46,9 +46,9 @@
         private void Start()
         {
             Utilities.AddCameraFade();
-            if (gameObject.GetComponentInChildren<SteamVR_Fade>() == null)
+            if (!VRTK_SDK_Bridge.HasHeadsetFade(gameObject))
             {
-                Debug.LogWarning("This 'VRTK_HeadsetCollisionFade' script needs a SteamVR_Fade script on the camera eye.");
+                Debug.LogWarning("This 'VRTK_HeadsetCollisionFade' script needs a compatible fade script on the camera eye.");
             }
 
             Utilities.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.Headset);
@@ -72,7 +72,7 @@
             if (enabled && !collider.GetComponent<VRTK_PlayerObject>() && ValidTarget(collider.transform))
             {
                 OnHeadsetCollisionDetect(SetHeadsetCollisionEvent(collider, transform));
-                SteamVR_Fade.Start(fadeColor, blinkTransitionSpeed);
+                VRTK_SDK_Bridge.HeadsetFade(fadeColor, blinkTransitionSpeed);
             }
         }
 
@@ -81,7 +81,7 @@
             if (!collider.GetComponent<VRTK_PlayerObject>())
             {
                 OnHeadsetCollisionEnded(SetHeadsetCollisionEvent(collider, transform));
-                SteamVR_Fade.Start(Color.clear, blinkTransitionSpeed);
+                VRTK_SDK_Bridge.HeadsetFade(Color.clear, blinkTransitionSpeed);
             }
         }
     }

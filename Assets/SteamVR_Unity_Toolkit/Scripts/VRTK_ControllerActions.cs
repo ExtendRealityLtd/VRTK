@@ -10,8 +10,6 @@
         private ushort hapticPulseStrength;
 
         private uint controllerIndex;
-        private SteamVR_TrackedObject trackedController;
-        private SteamVR_Controller.Device device;
         private ushort maxHapticVibration = 3999;
 
         private Dictionary<GameObject, Material> storedMaterials;
@@ -178,7 +176,7 @@
             }
 
             hapticPulseStrength = (strength <= maxHapticVibration ? strength : maxHapticVibration);
-            device.TriggerHapticPulse(hapticPulseStrength);
+            VRTK_SDK_Bridge.HapticPulseOnIndex(controllerIndex, hapticPulseStrength);
         }
 
         public void TriggerHapticPulse(ushort strength, float duration, float pulseInterval)
@@ -194,18 +192,16 @@
 
         private void Awake()
         {
-            trackedController = GetComponent<SteamVR_TrackedObject>();
             gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
             storedMaterials = new Dictionary<GameObject, Material>();
         }
 
         private void Update()
         {
-            controllerIndex = (uint)trackedController.index;
-            device = SteamVR_Controller.Input((int)controllerIndex);
+            controllerIndex = VRTK_DeviceFinder.GetControllerIndex(gameObject);
         }
 
-        private IEnumerator HapticPulse(float duration, int hapticPulseStrength, float pulseInterval)
+        private IEnumerator HapticPulse(float duration, ushort hapticPulseStrength, float pulseInterval)
         {
             if (pulseInterval <= 0)
             {
@@ -214,7 +210,7 @@
 
             while (duration > 0)
             {
-                device.TriggerHapticPulse((ushort)hapticPulseStrength);
+                VRTK_SDK_Bridge.HapticPulseOnIndex(controllerIndex, hapticPulseStrength);
                 yield return new WaitForSeconds(pulseInterval);
                 duration -= pulseInterval;
             }

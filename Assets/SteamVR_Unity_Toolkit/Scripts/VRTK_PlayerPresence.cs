@@ -29,7 +29,6 @@
         private float lastPlayAreaY = 0f;
 
         private float fallStartHeight = 0.0f;
-        private SteamVR_ControllerManager controllerManager;
 
         private bool isFalling = false;
         private bool customRigidBody = false;
@@ -115,7 +114,6 @@
         private void Awake()
         {
             Utilities.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.CameraRig);
-            controllerManager = FindObjectOfType<SteamVR_ControllerManager>();
             customRigidBody = false;
             customCollider = false;
         }
@@ -127,16 +125,16 @@
             headset = VRTK_DeviceFinder.HeadsetTransform();
             InitHeadsetListeners(true);
 
-            InitControllerListeners(controllerManager.left, true);
-            InitControllerListeners(controllerManager.right, true);
+            InitControllerListeners(VRTK_SDK_Bridge.GetControllerLeftHand(), true);
+            InitControllerListeners(VRTK_SDK_Bridge.GetControllerRightHand(), true);
         }
 
         private void OnDisable()
         {
             DestroyCollider();
             InitHeadsetListeners(false);
-            InitControllerListeners(controllerManager.left, false);
-            InitControllerListeners(controllerManager.right, false);
+            InitControllerListeners(VRTK_SDK_Bridge.GetControllerLeftHand(), false);
+            InitControllerListeners(VRTK_SDK_Bridge.GetControllerRightHand(), false);
         }
 
         private void InitHeadsetListeners(bool state)
@@ -179,7 +177,7 @@
         {
             if (resetPositionOnCollision && lastGoodPositionSet)
             {
-                SteamVR_Fade.Start(Color.black, 0f);
+                VRTK_SDK_Bridge.HeadsetFade(Color.black, 0f);
                 transform.position = lastGoodPosition;
             }
         }

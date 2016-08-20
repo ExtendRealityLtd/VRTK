@@ -2,7 +2,7 @@
 //
 // Purpose: Provide ability to grab an interactable object when it is being touched
 //
-// This script must be attached to a Controller within the [CameraRig] Prefab
+// This script must be attached to a Controller
 //
 // The VRTK_ControllerEvents and VRTK_InteractTouch scripts must also be
 // attached to the Controller
@@ -32,7 +32,6 @@ namespace VRTK
         private GameObject grabbedObject = null;
         private bool updatedHideControllerOnGrab = false;
 
-        private SteamVR_TrackedObject trackedController;
         private VRTK_InteractTouch interactTouch;
         private VRTK_ControllerActions controllerActions;
         private VRTK_ControllerEvents controllerEvents;
@@ -64,7 +63,7 @@ namespace VRTK
             }
             else
             {
-                ReleaseObject((uint)trackedController.index, false);
+                ReleaseObject(false);
             }
         }
 
@@ -82,12 +81,11 @@ namespace VRTK
         {
             if (GetComponent<VRTK_InteractTouch>() == null)
             {
-                Debug.LogError("VRTK_InteractGrab is required to be attached to a SteamVR Controller that has the VRTK_InteractTouch script attached to it");
+                Debug.LogError("VRTK_InteractGrab is required to be attached to a Controller that has the VRTK_InteractTouch script attached to it");
                 return;
             }
 
             interactTouch = GetComponent<VRTK_InteractTouch>();
-            trackedController = GetComponent<SteamVR_TrackedObject>();
             controllerActions = GetComponent<VRTK_ControllerActions>();
             controllerEvents = GetComponent<VRTK_ControllerEvents>();
         }
@@ -96,7 +94,7 @@ namespace VRTK
         {
             if (GetComponent<VRTK_ControllerEvents>() == null)
             {
-                Debug.LogError("VRTK_InteractGrab is required to be attached to a SteamVR Controller that has the VRTK_ControllerEvents script attached to it");
+                Debug.LogError("VRTK_InteractGrab is required to be attached to a Controller that has the VRTK_ControllerEvents script attached to it");
                 return;
             }
 
@@ -264,19 +262,22 @@ namespace VRTK
             return rigidbody;
         }
 
-        private void ThrowReleasedObject(Rigidbody rb, uint controllerIndex, float objectThrowMultiplier)
+        private void ThrowReleasedObject(Rigidbody rb, float objectThrowMultiplier)
         {
-            var origin = trackedController.origin ? trackedController.origin : trackedController.transform.parent;
-            var device = SteamVR_Controller.Input((int)controllerIndex);
+            var origin = VRTK_DeviceFinder.TrackedObjectOrigin(gameObject);
+
+            var velocity = controllerEvents.GetVelocity();
+            var angularVelocity = controllerEvents.GetAngularVelocity();
+
             if (origin != null)
             {
-                rb.velocity = origin.TransformDirection(device.velocity) * (throwMultiplier * objectThrowMultiplier);
-                rb.angularVelocity = origin.TransformDirection(device.angularVelocity);
+                rb.velocity = origin.TransformDirection(velocity) * (throwMultiplier * objectThrowMultiplier);
+                rb.angularVelocity = origin.TransformDirection(angularVelocity);
             }
             else
             {
-                rb.velocity = device.velocity * (throwMultiplier * objectThrowMultiplier);
-                rb.angularVelocity = device.angularVelocity;
+                rb.velocity = velocity * (throwMultiplier * objectThrowMultiplier);
+                rb.angularVelocity = angularVelocity;
             }
             rb.maxAngularVelocity = rb.angularVelocity.magnitude;
         }
@@ -368,14 +369,14 @@ namespace VRTK
             }
         }
 
-        private void UngrabInteractedObject(uint controllerIndex, bool withThrow)
+        private void UngrabInteractedObject(bool withThrow)
         {
             if (grabbedObject != null)
             {
                 Rigidbody releasedObjectRigidBody = ReleaseGrabbedObjectFromController(withThrow);
                 if (withThrow)
                 {
-                    ThrowReleasedObject(releasedObjectRigidBody, controllerIndex, grabbedObject.GetComponent<VRTK_InteractableObject>().throwMultiplier);
+                    ThrowReleasedObject(releasedObjectRigidBody, grabbedObject.GetComponent<VRTK_InteractableObject>().throwMultiplier);
                 }
             }
             InitUngrabbedObject();
@@ -415,9 +416,9 @@ namespace VRTK
             grabbedObject = null;
         }
 
-        private void ReleaseObject(uint controllerIndex, bool withThrow)
+        private void ReleaseObject(bool withThrow)
         {
-            UngrabInteractedObject(controllerIndex, withThrow);
+            UngrabInteractedObject(withThrow);
         }
 
         private GameObject GetGrabbableObject()
@@ -479,7 +480,7 @@ namespace VRTK
             return (grabbedObject && grabbedObject.GetComponent<VRTK_InteractableObject>().isDroppable);
         }
 
-        private void AttemptReleaseObject(uint controllerIndex)
+        private void AttemptReleaseObject()
         {
             if (CanRelease() && (IsObjectHoldOnGrab(grabbedObject) || grabEnabledState >= 2))
             {
@@ -493,7 +494,7 @@ namespace VRTK
                 }
                 else
                 {
-                    ReleaseObject(controllerIndex, true);
+                    ReleaseObject(true);
                 }
             }
         }
@@ -505,7 +506,7 @@ namespace VRTK
 
         private void DoReleaseObject(object sender, ControllerInteractionEventArgs e)
         {
-            AttemptReleaseObject(e.controllerIndex);
+            AttemptReleaseObject();
         }
 
         private void Update()

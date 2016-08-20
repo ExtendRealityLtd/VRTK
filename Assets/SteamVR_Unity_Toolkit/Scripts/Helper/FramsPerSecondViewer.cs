@@ -2,10 +2,6 @@
 //
 // Purpose: Provide GUI view of the current frames per second in the game
 //
-// This script must be attached to a Text element within a Canvas that has the
-// Render Mode set to "Screen Space - Camera" and the Render Camera set to the
-// [CameraRig]-> Camera (head) -> Camera (eye) object with a plane distance of 0.1.
-//
 // This script is pretty much a copy and paste from the script at:
 // http://talesfromtherift.com/vr-fps-counter/
 //

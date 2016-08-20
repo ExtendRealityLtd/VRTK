@@ -17,7 +17,6 @@ public class BowAim : MonoBehaviour
 
     private VRTK_InteractableObject interact;
 
-    private SteamVR_ControllerManager controllers;
     private VRTK_ControllerEvents holdControl;
     private VRTK_ControllerEvents stringControl;
 
@@ -55,28 +54,27 @@ public class BowAim : MonoBehaviour
     {
         bowAnimation = GetComponent<BowAnimation>();
         handle = GetComponentInChildren<BowHandle>();
-        controllers = FindObjectOfType<SteamVR_ControllerManager>();
         interact = GetComponent<VRTK_InteractableObject>();
         interact.InteractableObjectGrabbed += new InteractableObjectEventHandler(DoObjectGrab);
     }
 
     private void DoObjectGrab(object sender, InteractableObjectEventArgs e)
     {
-        if (e.interactingObject == controllers.left)
+        if (VRTK_SDK_Bridge.IsControllerLeftHand(e.interactingObject))
         {
-            holdControl = controllers.left.GetComponent<VRTK_ControllerEvents>();
-            stringControl = controllers.right.GetComponent<VRTK_ControllerEvents>();
+            holdControl = VRTK_SDK_Bridge.GetControllerLeftHand().GetComponent<VRTK_ControllerEvents>();
+            stringControl = VRTK_SDK_Bridge.GetControllerRightHand().GetComponent<VRTK_ControllerEvents>();
 
-            holdActions = controllers.left.GetComponent<VRTK_ControllerActions>();
-            stringActions = controllers.right.GetComponent<VRTK_ControllerActions>();
+            holdActions = VRTK_SDK_Bridge.GetControllerLeftHand().GetComponent<VRTK_ControllerActions>();
+            stringActions = VRTK_SDK_Bridge.GetControllerRightHand().GetComponent<VRTK_ControllerActions>();
         }
         else
         {
-            stringControl = controllers.left.GetComponent<VRTK_ControllerEvents>();
-            holdControl = controllers.right.GetComponent<VRTK_ControllerEvents>();
+            stringControl = VRTK_SDK_Bridge.GetControllerLeftHand().GetComponent<VRTK_ControllerEvents>();
+            holdControl = VRTK_SDK_Bridge.GetControllerRightHand().GetComponent<VRTK_ControllerEvents>();
 
-            stringActions = controllers.left.GetComponent<VRTK_ControllerActions>();
-            holdActions = controllers.right.GetComponent<VRTK_ControllerActions>();
+            stringActions = VRTK_SDK_Bridge.GetControllerLeftHand().GetComponent<VRTK_ControllerActions>();
+            holdActions = VRTK_SDK_Bridge.GetControllerRightHand().GetComponent<VRTK_ControllerActions>();
         }
         StartCoroutine("GetBaseRotation");
     }

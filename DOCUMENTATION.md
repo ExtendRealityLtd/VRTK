@@ -559,16 +559,16 @@ The Device Finder offers a collection of static methods that can be called to fi
 
 ### Class Methods
 
-#### ControllerByIndex/1
+#### TrackedIndexIsController/1
 
-  > `public static SteamVR_TrackedObject ControllerByIndex(uint index)`
+  > `public static bool TrackedIndexIsController(uint index)`
 
   * Parameters
-   * `uint index` - The index of the tracked object to find. Must be of type `ETrackedDeviceClass.Controller`.
+   * `uint index` - The index of the tracked object to find.
   * Returns
-   * `SteamVR_TrackedObject` - The object that matches the given index.
+   * `bool` - Returns true if the given index is a tracked object of type controller.
 
-The ControllerByIndex method is used to find a SteamVR_TrackedObject by it's generated index. This is useful for finding controllers when only the index is known.
+The TrackedIndexIsController method is used to determine if a given tracked object index belongs to a tracked controller.
 
 #### GetControllerIndex/1
 
@@ -583,14 +583,25 @@ The GetControllerIndex method is used to find the index of a given controller ob
 
 #### TrackedObjectByIndex/1
 
-  > `public static SteamVR_TrackedObject TrackedObjectByIndex(uint controllerIndex)`
+  > `public static GameObject TrackedObjectByIndex(uint index)`
 
   * Parameters
    * `uint index` - The index of the tracked object to find.
   * Returns
-   * `SteamVR_TrackedObject` - The object that matches the given index.
+   * `GameObject` - The tracked object that matches the given index.
 
-The TrackedObjectByIndex method is used to find a SteamVR_TrackedObject by it's generated index. This method will loop over all SteamVR_TrackedObjects in the scene until the relevant index is found so it is less efficient than using `ControllerByIndex/1` to find a controller, but is useful for finding other tracked objects.
+The TrackedObjectByIndex method is used to find the GameObject of a tracked object by it's generated index.
+
+#### TrackedObjectOrigin/1
+
+  > `public static Transform TrackedObjectOrigin(GameObject controller)`
+
+  * Parameters
+   * `GameObject obj` - The GameObject to get the origin for.
+  * Returns
+   * `Transform` - The transform of the tracked object's origin or if an origin is not set then the transform parent.
+
+The TrackedObjectOrigin method is used to find the tracked object's origin.
 
 #### GetControllerHandType/1
 
@@ -647,6 +658,17 @@ The HeadsetTransform method is used to retrieve the transform for the VR Headset
    * `Transform` - The transform of the VR Camera component.
 
 The HeadsetCamera method is used to retrieve the transform for the VR Camera in the scene.
+
+#### PlayAreaTransform/0
+
+  > `public static Transform PlayAreaTransform()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `Transform` - The transform of the VR Play Area component.
+
+The PlayAreaTransform method is used to retrieve the transform for the play area in the scene.
 
 ---
 

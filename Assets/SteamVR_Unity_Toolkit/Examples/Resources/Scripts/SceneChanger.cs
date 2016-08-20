@@ -1,15 +1,14 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
+using VRTK;
 
 public class SceneChanger : MonoBehaviour
 {
-    private SteamVR_TrackedObject controller;
     private bool canPress;
+    private uint controllerIndex;
 
     private void Awake()
     {
-        var manager = FindObjectOfType<SteamVR_ControllerManager>();
-        controller = manager.right.GetComponent<SteamVR_TrackedObject>();
         canPress = false;
         Invoke("ResetPress", 1f);
         DynamicGI.UpdateEnvironment();
@@ -17,14 +16,11 @@ public class SceneChanger : MonoBehaviour
 
     private bool ForwardPressed()
     {
-        var controllerIndex = (uint)controller.index;
         if (controllerIndex >= uint.MaxValue)
         {
             return false;
         }
-
-        var device = SteamVR_Controller.Input((int)controllerIndex);
-        if (canPress && device.GetPress(SteamVR_Controller.ButtonMask.Trigger) && device.GetPress(SteamVR_Controller.ButtonMask.Grip) && device.GetPress(SteamVR_Controller.ButtonMask.Touchpad))
+        if (canPress && VRTK_SDK_Bridge.IsTriggerPressedOnIndex(controllerIndex) && VRTK_SDK_Bridge.IsGripPressedOnIndex(controllerIndex) && VRTK_SDK_Bridge.IsTouchpadPressedOnIndex(controllerIndex))
         {
             return true;
         }
@@ -33,14 +29,12 @@ public class SceneChanger : MonoBehaviour
 
     private bool BackPressed()
     {
-        var controllerIndex = (uint)controller.index;
         if (controllerIndex >= uint.MaxValue)
         {
             return false;
         }
 
-        var device = SteamVR_Controller.Input((int)controllerIndex);
-        if (canPress && device.GetPress(SteamVR_Controller.ButtonMask.Trigger) && device.GetPress(SteamVR_Controller.ButtonMask.Grip) && device.GetPress(SteamVR_Controller.ButtonMask.ApplicationMenu))
+        if (canPress && VRTK_SDK_Bridge.IsTriggerPressedOnIndex(controllerIndex) && VRTK_SDK_Bridge.IsGripPressedOnIndex(controllerIndex) && VRTK_SDK_Bridge.IsApplicationMenuPressedOnIndex(controllerIndex))
         {
             return true;
         }
@@ -54,6 +48,8 @@ public class SceneChanger : MonoBehaviour
 
     private void Update()
     {
+        var rightHand = VRTK_SDK_Bridge.GetControllerRightHand();
+        controllerIndex = VRTK_DeviceFinder.GetControllerIndex(rightHand);
         if (ForwardPressed() || Input.GetKeyUp(KeyCode.Space))
         {
             var nextSceneIndex = SceneManager.GetActiveScene().buildIndex + 1;

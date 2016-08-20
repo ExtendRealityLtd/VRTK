@@ -7,7 +7,7 @@ public class VRTK_ControllerInteract_ListenerExample : MonoBehaviour
     {
         if (GetComponent<VRTK_InteractTouch>() == null || GetComponent<VRTK_InteractGrab>() == null)
         {
-            Debug.LogError("VRTK_ControllerInteracts_ListenerExample is required to be attached to a SteamVR Controller that has the VRTK_InteractTouch and VRTK_InteractGrab script attached to it");
+            Debug.LogError("VRTK_ControllerInteracts_ListenerExample is required to be attached to a Controller that has the VRTK_InteractTouch and VRTK_InteractGrab script attached to it");
             return;
         }
 

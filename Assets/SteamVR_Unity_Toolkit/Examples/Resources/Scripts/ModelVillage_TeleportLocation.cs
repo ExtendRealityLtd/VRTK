@@ -14,7 +14,8 @@ public class ModelVillage_TeleportLocation : VRTK_DestinationMarker
             if (lastUsePressedState == true && !controller.usePressed)
             {
                 var distance = Vector3.Distance(transform.position, destination.position);
-                OnDestinationMarkerSet(SetDestinationMarkerEvent(distance, destination, destination.position, (uint)controller.GetComponent<SteamVR_TrackedObject>().index));
+                var controllerIndex = VRTK_DeviceFinder.GetControllerIndex(controller.gameObject);
+                OnDestinationMarkerSet(SetDestinationMarkerEvent(distance, destination, destination.position, controllerIndex));
             }
             lastUsePressedState = controller.usePressed;
         }

@@ -41,7 +41,7 @@ namespace VRTK
                 events.TouchpadTouchEnd += new ControllerInteractionEventHandler(DoTouchpadUntouched);
                 events.TouchpadAxisChanged += new ControllerInteractionEventHandler(DoTouchpadAxisChanged);
 
-                menu.FireHapticPulse += new HapticPulseEventHandler (AttemptHapticPulse);
+                menu.FireHapticPulse += new HapticPulseEventHandler(AttemptHapticPulse);
             }
         }
 
@@ -53,7 +53,7 @@ namespace VRTK
             events.TouchpadTouchEnd -= new ControllerInteractionEventHandler(DoTouchpadUntouched);
             events.TouchpadAxisChanged -= new ControllerInteractionEventHandler(DoTouchpadAxisChanged);
 
-            menu.FireHapticPulse -= new HapticPulseEventHandler (AttemptHapticPulse);
+            menu.FireHapticPulse -= new HapticPulseEventHandler(AttemptHapticPulse);
         }
 
         protected void DoClickButton(object sender = null) // The optional argument reduces the need for middleman functions in subclasses whose events likely pass object sender
@@ -85,11 +85,12 @@ namespace VRTK
             menu.HoverButton(currentAngle);
         }
 
-        protected virtual void AttemptHapticPulse (ushort strength)
+        protected virtual void AttemptHapticPulse(ushort strength)
         {
-            if (GetComponentInParent<SteamVR_TrackedObject> () != null)
+            var controllerActions = GetComponentInParent<VRTK_ControllerActions>();
+            if (controllerActions)
             {
-                SteamVR_Controller.Input ((int)GetComponentInParent<SteamVR_TrackedObject> ().index).TriggerHapticPulse (strength);
+                controllerActions.TriggerHapticPulse(strength);
             }
         }
 

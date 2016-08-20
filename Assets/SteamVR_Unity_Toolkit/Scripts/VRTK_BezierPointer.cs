@@ -2,7 +2,7 @@
 //
 // Purpose: Provide curved laser pointer at the ground to VR Controller
 //
-// This script must be attached to a Controller within the [CameraRig] Prefab
+// This script must be attached to a Controller
 //
 // The VRTK_ControllerEvents script must also be attached to the Controller
 //

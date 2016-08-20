@@ -7,12 +7,10 @@ public class ArrowSpawner : MonoBehaviour
     public float spawnDelay = 1f;
 
     private float spawnDelayTimer = 0f;
-    private SteamVR_ControllerManager controllers;
     private BowAim bow;
 
     private void Start()
     {
-        controllers = FindObjectOfType<SteamVR_ControllerManager>();
         spawnDelayTimer = 0f;
     }
 
@@ -36,15 +34,14 @@ public class ArrowSpawner : MonoBehaviour
 
     private bool NoArrowNotched(GameObject controller)
     {
-        if (controller == controllers.left)
+        if (VRTK_SDK_Bridge.IsControllerLeftHand(controller))
         {
-            bow = controllers.right.GetComponentInChildren<BowAim>();
+            bow = VRTK_SDK_Bridge.GetControllerRightHand().GetComponentInChildren<BowAim>();
         }
-        else if (controller == controllers.right)
+        else if (VRTK_SDK_Bridge.IsControllerRightHand(controller))
         {
-            bow = controllers.left.GetComponentInChildren<BowAim>();
+            bow = VRTK_SDK_Bridge.GetControllerLeftHand().GetComponentInChildren<BowAim>();
         }
-
         return (bow == null || !bow.HasArrow());
     }
 }

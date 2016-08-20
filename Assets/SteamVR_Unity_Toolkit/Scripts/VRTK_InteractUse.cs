@@ -2,7 +2,7 @@
 //
 // Purpose: Provide ability to use an interactable object when it is being touched
 //
-// This script must be attached to a Controller within the [CameraRig] Prefab
+// This script must be attached to a Controller
 //
 // The VRTK_ControllerEvents and VRTK_InteractTouch scripts must also be
 // attached to the Controller
@@ -70,7 +70,7 @@ namespace VRTK
         {
             if (GetComponent<VRTK_InteractTouch>() == null)
             {
-                Debug.LogError("VRTK_InteractUse is required to be attached to a SteamVR Controller that has the VRTK_InteractTouch script attached to it");
+                Debug.LogError("VRTK_InteractUse is required to be attached to a Controller that has the VRTK_InteractTouch script attached to it");
                 return;
             }
 
@@ -82,7 +82,7 @@ namespace VRTK
         {
             if (GetComponent<VRTK_ControllerEvents>() == null)
             {
-                Debug.LogError("VRTK_InteractUse is required to be attached to a SteamVR Controller that has the VRTK_ControllerEvents script attached to it");
+                Debug.LogError("VRTK_InteractUse is required to be attached to a Controller that has the VRTK_ControllerEvents script attached to it");
                 return;
             }
 

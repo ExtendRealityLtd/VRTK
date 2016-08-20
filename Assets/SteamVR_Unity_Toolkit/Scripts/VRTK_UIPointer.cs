@@ -30,7 +30,7 @@
         [HideInInspector]
         public GameObject hoveringElement;
         [HideInInspector]
-        public SteamVR_RenderModel controllerRenderModel;
+        public GameObject controllerRenderModel;
 
         public event UIPointerEventHandler UIPointerElementEnter;
         public event UIPointerEventHandler UIPointerElementExit;
@@ -167,7 +167,7 @@
             pointerClicked = false;
             lastPointerPressState = false;
             beamEnabledState = false;
-            controllerRenderModel = (controller.GetComponent<SteamVR_RenderModel>() ? controller.GetComponent<SteamVR_RenderModel>() : controller.GetComponentInChildren<SteamVR_RenderModel>());
+            controllerRenderModel = VRTK_SDK_Bridge.GetControllerRenderModel(controller.gameObject);
         }
 
         private void ConfigureEventSystem()
@@ -176,7 +176,7 @@
             var eventSystemInput = SetEventSystem(eventSystem);
 
             pointerEventData = new PointerEventData(eventSystem);
-            pointerEventData.pointerId = (int)controller.gameObject.GetComponent<SteamVR_TrackedObject>().index + 1000;
+            pointerEventData.pointerId = (int)VRTK_SDK_Bridge.GetIndexOfTrackedObject(controller.gameObject) + 1000;
             eventSystemInput.pointers.Add(this);
         }
 

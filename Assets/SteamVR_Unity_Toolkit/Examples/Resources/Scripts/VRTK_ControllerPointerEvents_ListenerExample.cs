@@ -7,7 +7,7 @@ public class VRTK_ControllerPointerEvents_ListenerExample : MonoBehaviour
     {
         if (GetComponent<VRTK_SimplePointer>() == null)
         {
-            Debug.LogError("VRTK_ControllerPointerEvents_ListenerExample is required to be attached to a SteamVR Controller that has the VRTK_SimplePointer script attached to it");
+            Debug.LogError("VRTK_ControllerPointerEvents_ListenerExample is required to be attached to a Controller that has the VRTK_SimplePointer script attached to it");
             return;
         }
 

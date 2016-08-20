@@ -30,9 +30,7 @@
         private bool isClimbing = false;
 
         private VRTK_PlayerPresence playerPresence;
-        private bool lastGravitySetting;
         private VRTK_HeadsetCollisionFade collisionFade;
-        private SteamVR_ControllerManager controllerManager;
 
         private GameObject climbingObject;
 
@@ -74,7 +72,6 @@
                 playerPresence.SetFallingPhysicsOnlyParams(true);
             }
 
-            controllerManager = FindObjectOfType<SteamVR_ControllerManager>();
             headCamera = VRTK_DeviceFinder.HeadsetTransform();
             collisionFade = headCamera.GetComponent<VRTK_HeadsetCollisionFade>();
             if (collisionFade == null)
@@ -96,8 +93,8 @@
 
         private void InitListeners(bool state)
         {
-            InitControllerListeners(controllerManager.left, state);
-            InitControllerListeners(controllerManager.right, state);
+            InitControllerListeners(VRTK_SDK_Bridge.GetControllerLeftHand(), state);
+            InitControllerListeners(VRTK_SDK_Bridge.GetControllerRightHand(), state);
 
             InitTeleportListener(state);
             InitCollisionFadeListener(state);
@@ -207,7 +204,7 @@
             if (useGravity && carryMomentum)
             {
                 Vector3 velocity = Vector3.zero;
-                var device = VRTK_DeviceFinder.ControllerByIndex(controllerIndex);
+                var device = VRTK_DeviceFinder.TrackedObjectByIndex(controllerIndex);
 
                 if (device)
                 {
