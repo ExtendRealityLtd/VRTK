@@ -16,38 +16,69 @@
     {
         public enum ButtonAlias
         {
-            Trigger,
+            Trigger_Hairline,
+            Trigger_Touch,
+            Trigger_Press,
+            Trigger_Click,
             Grip,
             Touchpad_Touch,
             Touchpad_Press,
-            Application_Menu
+            Application_Menu,
+            Undefined
         }
 
         public ButtonAlias pointerToggleButton = ButtonAlias.Touchpad_Press;
         public ButtonAlias pointerSetButton = ButtonAlias.Touchpad_Press;
         public ButtonAlias grabToggleButton = ButtonAlias.Grip;
-        public ButtonAlias useToggleButton = ButtonAlias.Trigger;
-        public ButtonAlias uiClickButton = ButtonAlias.Trigger;
+        public ButtonAlias useToggleButton = ButtonAlias.Trigger_Click;
+        public ButtonAlias uiClickButton = ButtonAlias.Trigger_Click;
         public ButtonAlias menuToggleButton = ButtonAlias.Application_Menu;
 
         public int axisFidelity = 1;
 
+        [HideInInspector]
         public bool triggerPressed = false;
+        [HideInInspector]
+        public bool triggerTouched = false;
+        [HideInInspector]
+        public bool triggerHairlinePressed = false;
+        [HideInInspector]
+        public bool triggerClicked = false;
+        [HideInInspector]
         public bool triggerAxisChanged = false;
+        [HideInInspector]
         public bool applicationMenuPressed = false;
+        [HideInInspector]
         public bool touchpadPressed = false;
+        [HideInInspector]
         public bool touchpadTouched = false;
+        [HideInInspector]
         public bool touchpadAxisChanged = false;
+        [HideInInspector]
         public bool gripPressed = false;
 
+        [HideInInspector]
         public bool pointerPressed = false;
+        [HideInInspector]
         public bool grabPressed = false;
+        [HideInInspector]
         public bool usePressed = false;
+        [HideInInspector]
         public bool uiClickPressed = false;
+        [HideInInspector]
         public bool menuPressed = false;
 
         public event ControllerInteractionEventHandler TriggerPressed;
         public event ControllerInteractionEventHandler TriggerReleased;
+
+        public event ControllerInteractionEventHandler TriggerTouchStart;
+        public event ControllerInteractionEventHandler TriggerTouchEnd;
+
+        public event ControllerInteractionEventHandler TriggerHairlineStart;
+        public event ControllerInteractionEventHandler TriggerHairlineEnd;
+
+        public event ControllerInteractionEventHandler TriggerClicked;
+        public event ControllerInteractionEventHandler TriggerUnclicked;
 
         public event ControllerInteractionEventHandler TriggerAxisChanged;
 
@@ -87,6 +118,7 @@
 
         private Vector2 touchpadAxis = Vector2.zero;
         private Vector2 triggerAxis = Vector2.zero;
+        private float hairTriggerDelta;
 
         private Vector3 controllerVelocity = Vector3.zero;
         private Vector3 controllerAngularVelocity = Vector3.zero;
@@ -104,6 +136,54 @@
             if (TriggerReleased != null)
             {
                 TriggerReleased(this, e);
+            }
+        }
+
+        public virtual void OnTriggerTouchStart(ControllerInteractionEventArgs e)
+        {
+            if (TriggerTouchStart != null)
+            {
+                TriggerTouchStart(this, e);
+            }
+        }
+
+        public virtual void OnTriggerTouchEnd(ControllerInteractionEventArgs e)
+        {
+            if (TriggerTouchEnd != null)
+            {
+                TriggerTouchEnd(this, e);
+            }
+        }
+
+        public virtual void OnTriggerHairlineStart(ControllerInteractionEventArgs e)
+        {
+            if (TriggerHairlineStart != null)
+            {
+                TriggerHairlineStart(this, e);
+            }
+        }
+
+        public virtual void OnTriggerHairlineEnd(ControllerInteractionEventArgs e)
+        {
+            if (TriggerHairlineEnd != null)
+            {
+                TriggerHairlineEnd(this, e);
+            }
+        }
+
+        public virtual void OnTriggerClicked(ControllerInteractionEventArgs e)
+        {
+            if (TriggerClicked != null)
+            {
+                TriggerClicked(this, e);
+            }
+        }
+
+        public virtual void OnTriggerUnclicked(ControllerInteractionEventArgs e)
+        {
+            if (TriggerUnclicked != null)
+            {
+                TriggerUnclicked(this, e);
             }
         }
 
@@ -302,9 +382,14 @@
             return triggerAxis.x;
         }
 
+        public float GetHairTriggerDelta()
+        {
+            return hairTriggerDelta;
+        }
+
         public bool AnyButtonPressed()
         {
-            return (triggerPressed || gripPressed || touchpadPressed || applicationMenuPressed);
+            return (triggerClicked || triggerHairlinePressed || triggerTouched || triggerPressed || gripPressed || touchpadPressed || applicationMenuPressed);
         }
 
         private ControllerInteractionEventArgs SetButtonEvent(ref bool buttonBool, bool value, float buttonPressure)
@@ -315,7 +400,6 @@
             e.buttonPressure = buttonPressure;
             e.touchpadAxis = device.GetAxis();
             e.touchpadAngle = CalculateTouchpadAxisAngle(e.touchpadAxis);
-
             return e;
         }
 
@@ -328,7 +412,10 @@
         private void Start()
         {
             controllerIndex = (uint)trackedController.index;
-            device = SteamVR_Controller.Input((int)controllerIndex);
+            if (controllerIndex < uint.MaxValue)
+            {
+                device = SteamVR_Controller.Input((int)controllerIndex);
+            }
         }
 
         private float CalculateTouchpadAxisAngle(Vector2 axis)
@@ -429,44 +516,159 @@
                     vectorA.y.ToString("F" + axisFidelity) == vectorB.y.ToString("F" + axisFidelity));
         }
 
+        private void OnDisable()
+        {
+            Invoke("DisableEvents", 0.1f);
+        }
+
+        private void DisableEvents()
+        {
+            if (triggerPressed)
+            {
+                OnTriggerReleased(SetButtonEvent(ref triggerPressed, false, 0f));
+                EmitAlias(ButtonAlias.Trigger_Press, false, 0f, ref triggerPressed);
+            }
+
+            if (triggerTouched)
+            {
+                OnTriggerTouchEnd(SetButtonEvent(ref triggerTouched, false, 0f));
+                EmitAlias(ButtonAlias.Trigger_Touch, false, 0f, ref triggerTouched);
+            }
+
+            if (triggerHairlinePressed)
+            {
+                OnTriggerHairlineEnd(SetButtonEvent(ref triggerHairlinePressed, false, 0f));
+                EmitAlias(ButtonAlias.Trigger_Hairline, false, 0f, ref triggerHairlinePressed);
+            }
+
+            if (triggerClicked)
+            {
+                OnTriggerUnclicked(SetButtonEvent(ref triggerClicked, false, 0f));
+                EmitAlias(ButtonAlias.Trigger_Click, false, 0f, ref triggerClicked);
+            }
+
+            if (applicationMenuPressed)
+            {
+                OnApplicationMenuReleased(SetButtonEvent(ref applicationMenuPressed, false, 0f));
+                EmitAlias(ButtonAlias.Application_Menu, false, 0f, ref applicationMenuPressed);
+            }
+
+            if (gripPressed)
+            {
+                OnGripReleased(SetButtonEvent(ref gripPressed, false, 0f));
+                EmitAlias(ButtonAlias.Grip, false, 0f, ref gripPressed);
+            }
+
+            if (touchpadPressed)
+            {
+                OnTouchpadReleased(SetButtonEvent(ref touchpadPressed, false, 0f));
+                EmitAlias(ButtonAlias.Touchpad_Press, false, 0f, ref touchpadPressed);
+            }
+
+            if (touchpadTouched)
+            {
+                OnTouchpadTouchEnd(SetButtonEvent(ref touchpadTouched, false, 0f));
+                EmitAlias(ButtonAlias.Touchpad_Touch, false, 0f, ref touchpadTouched);
+            }
+
+            triggerAxisChanged = false;
+            touchpadAxisChanged = false;
+
+            controllerIndex = (uint)trackedController.index;
+            if (controllerIndex < uint.MaxValue)
+            {
+                device = SteamVR_Controller.Input((int)controllerIndex);
+
+                Vector2 currentTriggerAxis = device.GetAxis(Valve.VR.EVRButtonId.k_EButton_SteamVR_Trigger);
+                Vector2 currentTouchpadAxis = device.GetAxis();
+
+                // Save current touch and trigger settings to detect next change.
+                touchpadAxis = new Vector2(currentTouchpadAxis.x, currentTouchpadAxis.y);
+                triggerAxis = new Vector2(currentTriggerAxis.x, currentTriggerAxis.y);
+                hairTriggerDelta = device.hairTriggerDelta;
+            }
+        }
+
         private void Update()
         {
             controllerIndex = (uint)trackedController.index;
+            //Only continue if the controller index has been set to a sensible number
+            //SteamVR seems to put the index to the uint max value if it can't find the controller
+            if (controllerIndex >= uint.MaxValue)
+            {
+                return;
+            }
+
             device = SteamVR_Controller.Input((int)controllerIndex);
 
             Vector2 currentTriggerAxis = device.GetAxis(Valve.VR.EVRButtonId.k_EButton_SteamVR_Trigger);
             Vector2 currentTouchpadAxis = device.GetAxis();
 
-            //Trigger
-            if (device.GetTouchDown(SteamVR_Controller.ButtonMask.Trigger))
+            //Trigger Pressed
+            if (device.GetPressDown(SteamVR_Controller.ButtonMask.Trigger))
             {
                 OnTriggerPressed(SetButtonEvent(ref triggerPressed, true, currentTriggerAxis.x));
-                EmitAlias(ButtonAlias.Trigger, true, currentTriggerAxis.x, ref triggerPressed);
+                EmitAlias(ButtonAlias.Trigger_Press, true, currentTriggerAxis.x, ref triggerPressed);
+            }
+            else if (device.GetPressUp(SteamVR_Controller.ButtonMask.Trigger))
+            {
+                OnTriggerReleased(SetButtonEvent(ref triggerPressed, false, 0f));
+                EmitAlias(ButtonAlias.Trigger_Press, false, 0f, ref triggerPressed);
+            }
+
+            //Trigger Touched
+            if (device.GetTouchDown(SteamVR_Controller.ButtonMask.Trigger))
+            {
+                OnTriggerTouchStart(SetButtonEvent(ref triggerTouched, true, currentTriggerAxis.x));
+                EmitAlias(ButtonAlias.Trigger_Touch, true, currentTriggerAxis.x, ref triggerTouched);
             }
             else if (device.GetTouchUp(SteamVR_Controller.ButtonMask.Trigger))
             {
-                OnTriggerReleased(SetButtonEvent(ref triggerPressed, false, 0f));
-                EmitAlias(ButtonAlias.Trigger, false, 0f, ref triggerPressed);
+                OnTriggerTouchEnd(SetButtonEvent(ref triggerTouched, false, 0f));
+                EmitAlias(ButtonAlias.Trigger_Touch, false, 0f, ref triggerTouched);
+            }
+
+            //Trigger Hairline
+            if (device.GetHairTriggerDown())
+            {
+                OnTriggerHairlineStart(SetButtonEvent(ref triggerHairlinePressed, true, currentTriggerAxis.x));
+                EmitAlias(ButtonAlias.Trigger_Hairline, true, currentTriggerAxis.x, ref triggerHairlinePressed);
+            }
+            else if (device.GetHairTriggerUp())
+            {
+                OnTriggerHairlineEnd(SetButtonEvent(ref triggerHairlinePressed, false, 0f));
+                EmitAlias(ButtonAlias.Trigger_Hairline, false, 0f, ref triggerHairlinePressed);
+            }
+
+            //Trigger Clicked
+            if (!triggerClicked && currentTriggerAxis.x == 1f)
+            {
+                OnTriggerClicked(SetButtonEvent(ref triggerClicked, true, currentTriggerAxis.x));
+                EmitAlias(ButtonAlias.Trigger_Click, true, currentTriggerAxis.x, ref triggerClicked);
+            }
+            else if (triggerClicked && currentTriggerAxis.x < 1f)
+            {
+                OnTriggerUnclicked(SetButtonEvent(ref triggerClicked, false, 0f));
+                EmitAlias(ButtonAlias.Trigger_Click, false, 0f, ref triggerClicked);
+            }
+
+            //Trigger Axis
+            if (Vector2ShallowEquals(triggerAxis, currentTriggerAxis))
+            {
+                triggerAxisChanged = false;
             }
             else
             {
-                if (Vector2ShallowEquals(triggerAxis, currentTriggerAxis))
-                {
-                    triggerAxisChanged = false;
-                }
-                else
-                {
-                    OnTriggerAxisChanged(SetButtonEvent(ref triggerAxisChanged, true, currentTriggerAxis.x));
-                }
+                OnTriggerAxisChanged(SetButtonEvent(ref triggerAxisChanged, true, currentTriggerAxis.x));
             }
 
             //ApplicationMenu
-            if (device.GetTouchDown(SteamVR_Controller.ButtonMask.ApplicationMenu))
+            if (device.GetPressDown(SteamVR_Controller.ButtonMask.ApplicationMenu))
             {
                 OnApplicationMenuPressed(SetButtonEvent(ref applicationMenuPressed, true, 1f));
                 EmitAlias(ButtonAlias.Application_Menu, true, 1f, ref applicationMenuPressed);
             }
-            else if (device.GetTouchUp(SteamVR_Controller.ButtonMask.ApplicationMenu))
+            else if (device.GetPressUp(SteamVR_Controller.ButtonMask.ApplicationMenu))
             {
 
                 OnApplicationMenuReleased(SetButtonEvent(ref applicationMenuPressed, false, 0f));
@@ -474,12 +676,12 @@
             }
 
             //Grip
-            if (device.GetTouchDown(SteamVR_Controller.ButtonMask.Grip))
+            if (device.GetPressDown(SteamVR_Controller.ButtonMask.Grip))
             {
                 OnGripPressed(SetButtonEvent(ref gripPressed, true, 1f));
                 EmitAlias(ButtonAlias.Grip, true, 1f, ref gripPressed);
             }
-            else if (device.GetTouchUp(SteamVR_Controller.ButtonMask.Grip))
+            else if (device.GetPressUp(SteamVR_Controller.ButtonMask.Grip))
             {
                 OnGripReleased(SetButtonEvent(ref gripPressed, false, 0f));
                 EmitAlias(ButtonAlias.Grip, false, 0f, ref gripPressed);
@@ -508,22 +710,21 @@
                 OnTouchpadTouchEnd(SetButtonEvent(ref touchpadTouched, false, 0f));
                 EmitAlias(ButtonAlias.Touchpad_Touch, false, 0f, ref touchpadTouched);
             }
+
+            if (Vector2ShallowEquals(touchpadAxis, currentTouchpadAxis))
+            {
+                touchpadAxisChanged = false;
+            }
             else
             {
-                if (Vector2ShallowEquals(touchpadAxis, currentTouchpadAxis))
-                {
-                    touchpadAxisChanged = false;
-                }
-                else
-                {
-                    OnTouchpadAxisChanged(SetButtonEvent(ref touchpadTouched, true, 1f));
-                    touchpadAxisChanged = true;
-                }
+                OnTouchpadAxisChanged(SetButtonEvent(ref touchpadTouched, true, 1f));
+                touchpadAxisChanged = true;
             }
 
             // Save current touch and trigger settings to detect next change.
             touchpadAxis = new Vector2(currentTouchpadAxis.x, currentTouchpadAxis.y);
             triggerAxis = new Vector2(currentTriggerAxis.x, currentTriggerAxis.y);
+            hairTriggerDelta = device.hairTriggerDelta;
         }
 
         private void SetVelocity()

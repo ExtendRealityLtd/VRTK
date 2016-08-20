@@ -4,4 +4,78 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/SteamVR_Unity_Toolkit/Examples/001_CameraRig_VR_PlayArea.unity
+  - enabled: 1
+    path: Assets/SteamVR_Unity_Toolkit/Examples/002_Controller_Events.unity
+  - enabled: 1
+    path: Assets/SteamVR_Unity_Toolkit/Examples/003_Controller_SimplePointer.unity
+  - enabled: 1
+    path: Assets/SteamVR_Unity_Toolkit/Examples/004_CameraRig_BasicTeleport.unity
+  - enabled: 1
+    path: Assets/SteamVR_Unity_Toolkit/Examples/005_Controller_BasicObjectGrabbing.unity
+  - enabled: 1
+    path: Assets/SteamVR_Unity_Toolkit/Examples/006_Controller_UsingADoor.unity
+  - enabled: 1
+    path: Assets/SteamVR_Unity_Toolkit/Examples/007_CameraRig_HeightAdjustTeleport.unity
+  - enabled: 1
+    path: Assets/SteamVR_Unity_Toolkit/Examples/008_Controller_UsingAGrabbedObject.unity
+  - enabled: 1
+    path: Assets/SteamVR_Unity_Toolkit/Examples/009_Controller_BezierPointer.unity
+  - enabled: 1
+    path: Assets/SteamVR_Unity_Toolkit/Examples/010_CameraRig_TerrainTeleporting.unity
+  - enabled: 1
+    path: Assets/SteamVR_Unity_Toolkit/Examples/011_Camera_HeadSetCollisionFading.unity
+  - enabled: 1
+    path: Assets/SteamVR_Unity_Toolkit/Examples/012_Controller_PointerWithAreaCollision.unity
+  - enabled: 1
+    path: Assets/SteamVR_Unity_Toolkit/Examples/013_Controller_UsingAndGrabbingMultipleObjects.unity
+  - enabled: 1
+    path: Assets/SteamVR_Unity_Toolkit/Examples/014_Controller_SnappingObjectsOnGrab.unity
+  - enabled: 1
+    path: Assets/SteamVR_Unity_Toolkit/Examples/015_Controller_TouchpadAxisControl.unity
+  - enabled: 1
+    path: Assets/SteamVR_Unity_Toolkit/Examples/016_Controller_HapticRumble.unity
+  - enabled: 1
+    path: Assets/SteamVR_Unity_Toolkit/Examples/017_CameraRig_TouchpadWalking.unity
+  - enabled: 1
+    path: Assets/SteamVR_Unity_Toolkit/Examples/018_CameraRig_FramesPerSecondCounter.unity
+  - enabled: 1
+    path: Assets/SteamVR_Unity_Toolkit/Examples/019_Controller_InteractingWithPointer.unity
+  - enabled: 1
+    path: Assets/SteamVR_Unity_Toolkit/Examples/020_CameraRig_MeshTeleporting.unity
+  - enabled: 1
+    path: Assets/SteamVR_Unity_Toolkit/Examples/021_Controller_GrabbingObjectsWithJoints.unity
+  - enabled: 1
+    path: Assets/SteamVR_Unity_Toolkit/Examples/022_Controller_CustomBezierPointer.unity
+  - enabled: 1
+    path: Assets/SteamVR_Unity_Toolkit/Examples/023_Controller_ChildOfControllerOnGrab.unity
+  - enabled: 1
+    path: Assets/SteamVR_Unity_Toolkit/Examples/024_CameraRig_ExcludeTeleportLocations.unity
+  - enabled: 1
+    path: Assets/SteamVR_Unity_Toolkit/Examples/025_Controls_Overview.unity
+  - enabled: 1
+    path: Assets/SteamVR_Unity_Toolkit/Examples/026_Controller_ForceHoldObject.unity
+  - enabled: 1
+    path: Assets/SteamVR_Unity_Toolkit/Examples/027_CameraRig_TeleportByModelVillage.unity
+  - enabled: 1
+    path: Assets/SteamVR_Unity_Toolkit/Examples/028_CameraRig_RoomExtender.unity
+  - enabled: 1
+    path: Assets/SteamVR_Unity_Toolkit/Examples/029_Controller_Tooltips.unity
+  - enabled: 1
+    path: Assets/SteamVR_Unity_Toolkit/Examples/030_Controls_RadialTouchpadMenu.unity
+  - enabled: 1
+    path: Assets/SteamVR_Unity_Toolkit/Examples/031_CameraRig_HeadsetGazePointer.unity
+  - enabled: 1
+    path: Assets/SteamVR_Unity_Toolkit/Examples/032_Controller_CustomControllerModel.unity
+  - enabled: 1
+    path: Assets/SteamVR_Unity_Toolkit/Examples/033_CameraRig_TeleportingInNavMesh.unity
+  - enabled: 1
+    path: Assets/SteamVR_Unity_Toolkit/Examples/034_Controls_InteractingWithUnityUI.unity
+  - enabled: 1
+    path: Assets/SteamVR_Unity_Toolkit/Examples/035_Controller_OpacityAndHighlighting.unity
+  - enabled: 1
+    path: Assets/SteamVR_Unity_Toolkit/Examples/036_Controller_CustomCompoundPointer.unity
+  - enabled: 1
+    path: Assets/SteamVR_Unity_Toolkit/Examples/037_CameraRig_ClimbingFalling.unity

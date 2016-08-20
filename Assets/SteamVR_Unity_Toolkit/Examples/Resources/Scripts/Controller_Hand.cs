@@ -26,15 +26,16 @@ public class Controller_Hand : MonoBehaviour
         GetComponentInParent<VRTK_ControllerEvents>().AliasUseOn += new ControllerInteractionEventHandler(DoUseOn);
         GetComponentInParent<VRTK_ControllerEvents>().AliasUseOff += new ControllerInteractionEventHandler(DoUseOff);
 
-        pointerFinger = transform.Find("Container/PointerFingerContainer");
-        gripFingers = transform.Find("Container/GripFingerContainer");
+        var handContainer = "ModelPieces";
+        pointerFinger = transform.Find(handContainer + "/PointerFingerContainer");
+        gripFingers = transform.Find(handContainer + "/GripFingerContainer");
 
         if (hand == Hands.Left)
         {
             InversePosition(pointerFinger);
             InversePosition(gripFingers);
-            InversePosition(transform.Find("Container/Palm"));
-            InversePosition(transform.Find("Container/Thumb"));
+            InversePosition(transform.Find(handContainer + "/Palm"));
+            InversePosition(transform.Find(handContainer + "/Thumb"));
         }
 
         originalPointerRotation = pointerFinger.localEulerAngles.y;

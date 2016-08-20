@@ -26,7 +26,7 @@ namespace VRTK
         public bool handlePlayAreaCursorCollisions = false;
         public string ignoreTargetWithTagOrClass;
         public pointerVisibilityStates pointerVisibility = pointerVisibilityStates.On_When_Active;
-
+        public bool holdButtonToActivate = true;
         public float activateDelay = 0f;
 
         protected Vector3 destinationPosition;
@@ -45,6 +45,7 @@ namespace VRTK
         private bool destinationSetActive;
 
         private float activateDelayTimer = 0f;
+        private int beamEnabledState = 0;
 
         private VRTK_InteractableObject interactableObject = null;
 
@@ -117,6 +118,12 @@ namespace VRTK
 
         protected virtual void OnDisable()
         {
+            DisableBeam();
+            destinationSetActive = false;
+            pointerContactDistance = 0f;
+            pointerContactTarget = null;
+            destinationPosition = Vector3.zero;
+
             controller.AliasPointerOn -= new ControllerInteractionEventHandler(EnablePointerBeam);
             controller.AliasPointerOff -= new ControllerInteractionEventHandler(DisablePointerBeam);
             controller.AliasPointerSet -= new ControllerInteractionEventHandler(SetPointerDestination);
@@ -177,7 +184,9 @@ namespace VRTK
             OnDestinationMarkerEnter(SetDestinationMarkerEvent(pointerContactDistance, pointerContactTarget, destinationPosition, controllerIndex));
 
             interactableObject = pointerContactTarget.GetComponent<VRTK_InteractableObject>();
-            if (interactableObject && interactableObject.pointerActivatesUseAction && interactableObject.holdButtonToUse)
+            bool cannotUseBecauseNotGrabbed = (interactableObject && interactableObject.useOnlyIfGrabbed && !interactableObject.IsGrabbed());
+
+            if (interactableObject && interactableObject.pointerActivatesUseAction && interactableObject.holdButtonToUse && !cannotUseBecauseNotGrabbed)
             {
                 interactableObject.StartUsing(gameObject);
             }
@@ -200,7 +209,7 @@ namespace VRTK
 
         protected virtual void PointerSet()
         {
-            if (!enabled || !destinationSetActive || !pointerContactTarget || !CanActivate())
+            if (!enabled || !destinationSetActive || !pointerContactTarget || !CanActivate() || (!holdButtonToActivate && beamEnabledState != 0))
             {
                 return;
             }
@@ -234,7 +243,10 @@ namespace VRTK
         protected virtual void TogglePointer(bool state)
         {
             var playAreaState = (showPlayAreaCursor ? state : false);
-            playAreaCursor.gameObject.SetActive(playAreaState);
+            if (playAreaCursor)
+            {
+                playAreaCursor.gameObject.SetActive(playAreaState);
+            }
             if (!state && interactableObject && interactableObject.pointerActivatesUseAction && interactableObject.holdButtonToUse && interactableObject.IsUsing())
             {
                 interactableObject.StopUsing(this.gameObject);
@@ -251,7 +263,7 @@ namespace VRTK
 
         protected void UpdatePointerMaterial(Color color)
         {
-            if (playAreaCursorCollided || !ValidDestination(pointerContactTarget))
+            if (playAreaCursorCollided || !ValidDestination(pointerContactTarget, destinationPosition))
             {
                 color = pointerMissColor;
             }
@@ -259,15 +271,15 @@ namespace VRTK
             SetPointerMaterial();
         }
 
-        protected virtual bool ValidDestination(Transform target)
+        protected virtual bool ValidDestination(Transform target, Vector3 destinationPosition)
         {
             bool validNavMeshLocation = false;
             if (target)
             {
                 NavMeshHit hit;
-                validNavMeshLocation = NavMesh.SamplePosition(target.position, out hit, 1.0f, NavMesh.AllAreas);
+                validNavMeshLocation = NavMesh.SamplePosition(destinationPosition, out hit, 0.1f, NavMesh.AllAreas);
             }
-            if (!checkNavMesh)
+            if (navMeshCheckDistance == 0f)
             {
                 validNavMeshLocation = true;
             }
@@ -276,6 +288,7 @@ namespace VRTK
 
         private void TurnOnBeam(uint index)
         {
+            beamEnabledState++;
             if (enabled && !isActive && CanActivate())
             {
                 setPlayAreaCursorCollision(false);
@@ -288,12 +301,18 @@ namespace VRTK
 
         private void TurnOffBeam(uint index)
         {
-            if (enabled && isActive)
+            if (enabled && isActive && (holdButtonToActivate || (!holdButtonToActivate && beamEnabledState >= 2)))
             {
                 controllerIndex = index;
-                TogglePointer(false);
-                isActive = false;
+                DisableBeam();
             }
+        }
+
+        private void DisableBeam()
+        {
+            TogglePointer(false);
+            isActive = false;
+            beamEnabledState = 0;
         }
 
         private void DrawPlayAreaCursorBoundary(int index, float left, float right, float top, float bottom, float thickness, Vector3 localPosition)

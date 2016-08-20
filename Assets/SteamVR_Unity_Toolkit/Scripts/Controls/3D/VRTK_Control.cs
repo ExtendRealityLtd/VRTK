@@ -12,12 +12,19 @@
         }
 
         [System.Serializable]
-        public class ValueChangedEvent : UnityEvent<float> { }
+        public class ValueChangedEvent : UnityEvent<float, float> { }
 
         [System.Serializable]
         public class DefaultControlEvents
         {
             public ValueChangedEvent OnValueChanged;
+        }
+
+        // to be registered by each control to support value normalization
+        public struct ControlValueRange
+        {
+            public float controlMin;
+            public float controlMax;
         }
 
         private static Color COLOR_OK = Color.yellow;
@@ -28,21 +35,44 @@
 
         abstract protected void InitRequiredComponents();
         abstract protected bool DetectSetup();
+        abstract protected ControlValueRange RegisterValueRange();
         abstract protected void HandleUpdate();
 
         protected Bounds bounds;
-        protected float value;
         protected bool setupSuccessful = true;
+
+        protected float value;
+        private ControlValueRange cvr;
 
         private GameObject controlContent;
         private bool hideControlContent = false;
 
-        public float getValue()
+        public float GetValue()
         {
             return value;
         }
 
-        public virtual void Start()
+        /// <summary>
+        /// Returns the current value mapped onto a range between 0% and 100%.
+        /// </summary>
+        /// <returns>Normalized Value</returns>
+        public float GetNormalizedValue()
+        {
+            return Mathf.Abs(Mathf.Round((value - cvr.controlMin) / (cvr.controlMax - cvr.controlMin) * 100));
+        }
+
+        public void SetContent(GameObject content, bool hideContent)
+        {
+            controlContent = content;
+            hideControlContent = hideContent;
+        }
+
+        public GameObject GetContent()
+        {
+            return controlContent;
+        }
+
+        protected virtual void Awake()
         {
             if (Application.isPlaying)
             {
@@ -53,11 +83,12 @@
 
             if (Application.isPlaying)
             {
+                cvr = RegisterValueRange();
                 HandleInteractables();
             }
         }
 
-        public virtual void Update()
+        protected virtual void Update()
         {
             if (!Application.isPlaying)
             {
@@ -72,12 +103,12 @@
                 if (value != oldValue)
                 {
                     HandleInteractables();
-                    defaultEvents.OnValueChanged.Invoke(getValue());
+                    defaultEvents.OnValueChanged.Invoke(GetValue(), GetNormalizedValue());
                 }
             }
         }
 
-        public virtual void OnDrawGizmos()
+        protected virtual void OnDrawGizmos()
         {
             if (!enabled)
             {
@@ -116,17 +147,6 @@
                 return Vector3.right;
             }
 
-        }
-
-        public void SetContent(GameObject content, bool hideContent)
-        {
-            controlContent = content;
-            hideControlContent = hideContent;
-        }
-
-        public GameObject GetContent()
-        {
-            return controlContent;
         }
 
         private void HandleInteractables()

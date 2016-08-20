@@ -28,7 +28,7 @@
         private bool cjCreated = false;
         private bool cfCreated = false;
 
-        public override void OnDrawGizmos()
+        protected override void OnDrawGizmos()
         {
             base.OnDrawGizmos();
             if (!enabled || !setupSuccessful)
@@ -140,10 +140,15 @@
             }
             if (cfCreated)
             {
-                cf.force = getThirdDirection(cj.axis, cj.secondaryAxis) * subDirection * -50f;
+                cf.force = getThirdDirection(cj.axis, cj.secondaryAxis) * subDirection * -10f;
             }
 
             return true;
+        }
+
+        protected override ControlValueRange RegisterValueRange()
+        {
+            return new ControlValueRange() { controlMin = 0, controlMax = 100 };
         }
 
         protected override void HandleUpdate()

@@ -175,9 +175,18 @@ namespace VRTK
         {
             state = (pointerVisibility == pointerVisibilityStates.Always_On ? true : state);
 
-            projectedBeamForward.gameObject.SetActive(state);
-            projectedBeamJoint.gameObject.SetActive(state);
-            projectedBeamDown.SetActive(state);
+            if(projectedBeamForward)
+            {
+                projectedBeamForward.gameObject.SetActive(state);
+            }
+            if (projectedBeamJoint)
+            {
+                projectedBeamJoint.gameObject.SetActive(state);
+            }
+            if (projectedBeamDown)
+            {
+                projectedBeamDown.SetActive(state);
+            }
         }
 
         protected override void DisablePointerBeam(object sender, ControllerInteractionEventArgs e)
@@ -307,7 +316,7 @@ namespace VRTK
                 UpdatePointerMaterial(pointerHitColor);
                 if (validTeleportLocationInstance != null)
                 {
-                    validTeleportLocationInstance.SetActive(ValidDestination(pointerContactTarget));
+                    validTeleportLocationInstance.SetActive(ValidDestination(pointerContactTarget, destinationPosition));
                 }
             }
             else

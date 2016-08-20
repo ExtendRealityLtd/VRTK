@@ -18,7 +18,7 @@ public class ArrowSpawner : MonoBehaviour
 
     private void OnTriggerStay(Collider collider)
     {
-        VRTK_InteractGrab grabbingController = collider.gameObject.GetComponent<VRTK_InteractGrab>();
+        VRTK_InteractGrab grabbingController = (collider.gameObject.GetComponent<VRTK_InteractGrab>() ? collider.gameObject.GetComponent<VRTK_InteractGrab>() : collider.gameObject.GetComponentInParent<VRTK_InteractGrab>());
         if (CanGrab(grabbingController) && NoArrowNotched(grabbingController.gameObject) && Time.time >= spawnDelayTimer)
         {
             GameObject newArrow = Instantiate(arrowPrefab);

@@ -1,4 +1,4 @@
-# SteamVR Unity Toolkit - [![Slack](https://vrtk-slack-invite.herokuapp.com/badge.svg)](https://vrtk-slack-invite.herokuapp.com) [![Subreddit](https://img.shields.io/badge/subreddit-discussions-red.svg?style=flat-square)](https://www.reddit.com/r/SteamVRUnityToolkit/) [![Waffle](https://img.shields.io/badge/waffle-tracker-blue.svg?style=flat-square)](http://waffle.io/thestonefox/SteamVR_Unity_Toolkit)
+# SteamVR Unity Toolkit - [![Slack](https://vrtk-slack-invite.herokuapp.com/badge.svg)](http://invite.vrtk.io) [![Subreddit](https://img.shields.io/badge/subreddit-discussions-red.svg?style=flat-square)](https://www.reddit.com/r/SteamVRUnityToolkit/) [![Waffle](https://img.shields.io/badge/waffle-tracker-blue.svg?style=flat-square)](http://tracker.vrtk.io)
 
 A collection of useful scripts and prefabs for building SteamVR titles
 in Unity 5.
@@ -6,13 +6,6 @@ in Unity 5.
 **This Toolkit requires the [SteamVR Plugin]
 from the Unity Asset Store to be imported into your Unity project.**
 
-  > _To all those lovely people who want to give donations, instead of_
-  > _donating, consider supporting me by buying my latest game on_
-  > _Steam - `Holodaze` for HTC Vive. At least this way, I make a bit of_
-  > _money and you get something to play!_
-  >
-  > **[Buy Holodaze from the Steam Store](http://store.steampowered.com/app/475520)**
-  
 ## Games, Apps and Experiences that use this Toolkit
 
  * Games
@@ -31,6 +24,13 @@ from the Unity Asset Store to be imported into your Unity project.**
   * MegaPolice | [Youtube Trailer](https://www.youtube.com/watch?v=d6hCgfMxldY)
   * The Crystal Nebula | [Steam Store Page](http://store.steampowered.com/app/505660)
   * Drone Training VR | [Youtube Trailer](https://www.youtube.com/watch?v=A5MFT2JsySc)
+  * Cogs and Cowboys | [Steam Store Page](http://store.steampowered.com/app/510410)
+  * Frantic Freighter | [Steam Store Page](http://store.steampowered.com/app/503150)
+  * Redswood VR | [Steam Store Page](http://store.steampowered.com/app/499760)
+  * Wrath Of The Fire God | [Steam Store Page](http://store.steampowered.com/app/511370)
+  * Coinvault | [Itch.io Store Page](https://ldvr.itch.io/ldvrs-coinvault-for-the-vive)
+  * VR Explosive Kitten Toss | [Itch.io Store Page](https://ldvr.itch.io/ldvrs-kitten-toss)
+  * Zika VR | [Itch.io Store Page](https://ldvr.itch.io/ldvr-presents-zika-vr)
 
 ## Quick Start
 
@@ -87,7 +87,7 @@ The documentation for the project can be found within this
 repository in [DOCUMENTATION.md] which includes the up to date
 documentation for this GitHub repository. Alternatively, the
 stable versions of the documentation can be viewed online at
-[https://steamvr-unity-toolkit.readme.io/](https://steamvr-unity-toolkit.readme.io/).
+[http://docs.vrtk.io](http://docs.vrtk.io).
 
 ## Contributing
 
@@ -107,11 +107,12 @@ guidelines see the [Contribution Document].
 
 ## License
 
-Code released under the MIT license.
+Code released under the [MIT License].
 
 [SteamVR Plugin]: https://www.assetstore.unity3d.com/en/#!/content/32647
 [SteamVR Plugin for Unity3d Github Repo]: https://github.com/ValveSoftware/openvr/tree/master/unity_package/Assets/SteamVR
 [Catlike Coding]: http://catlikecoding.com/unity/tutorials/curves-and-splines/
+[MIT License]: https://github.com/thestonefox/SteamVR_Unity_Toolkit/blob/master/LICENSE
 [Contribution Document]: https://github.com/thestonefox/SteamVR_Unity_Toolkit/blob/master/CONTRIBUTING.md
 [DOCUMENTATION.md]: https://github.com/thestonefox/SteamVR_Unity_Toolkit/blob/master/DOCUMENTATION.md
 [Fork]: http://help.github.com/fork-a-repo/

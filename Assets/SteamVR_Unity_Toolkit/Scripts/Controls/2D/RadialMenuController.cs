@@ -31,6 +31,7 @@ namespace VRTK
             if (events == null)
             {
                 Debug.LogError("The radial menu must be a child of the controller or be set in the inspector!");
+                return;
             }
             else
             {

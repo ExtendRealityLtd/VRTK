@@ -109,7 +109,10 @@ public class BowAim : MonoBehaviour
                 fired = false;
                 fireOffset = Time.time;
             }
-            transform.localRotation = Quaternion.Lerp(releaseRotation, baseRotation, (Time.time - fireOffset) * 8);
+            if (!releaseRotation.Equals(baseRotation))
+            {
+                transform.localRotation = Quaternion.Lerp(releaseRotation, baseRotation, (Time.time - fireOffset) * 8);
+            }
         }
 
         if (!IsHeld())

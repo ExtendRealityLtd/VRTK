@@ -24,9 +24,10 @@ namespace VRTK
         public event ObjectInteractEventHandler ControllerUseInteractableObject;
         public event ObjectInteractEventHandler ControllerUnuseInteractableObject;
 
-        GameObject usingObject = null;
-        VRTK_InteractTouch interactTouch;
-        VRTK_ControllerActions controllerActions;
+        private GameObject usingObject = null;
+        private VRTK_InteractTouch interactTouch;
+        private VRTK_ControllerActions controllerActions;
+        private bool updatedHideControllerOnUse = false;
 
         public virtual void OnControllerUseInteractableObject(ObjectInteractEventArgs e)
         {
@@ -77,7 +78,7 @@ namespace VRTK
             controllerActions = GetComponent<VRTK_ControllerActions>();
         }
 
-        private void Start()
+        private void OnEnable()
         {
             if (GetComponent<VRTK_ControllerEvents>() == null)
             {
@@ -87,6 +88,13 @@ namespace VRTK
 
             GetComponent<VRTK_ControllerEvents>().AliasUseOn += new ControllerInteractionEventHandler(DoStartUseObject);
             GetComponent<VRTK_ControllerEvents>().AliasUseOff += new ControllerInteractionEventHandler(DoStopUseObject);
+        }
+
+        private void OnDisable()
+        {
+            ForceStopUsing();
+            GetComponent<VRTK_ControllerEvents>().AliasUseOn -= new ControllerInteractionEventHandler(DoStartUseObject);
+            GetComponent<VRTK_ControllerEvents>().AliasUseOff -= new ControllerInteractionEventHandler(DoStopUseObject);
         }
 
         private bool IsObjectUsable(GameObject obj)
@@ -129,10 +137,11 @@ namespace VRTK
                     return;
                 }
 
+                updatedHideControllerOnUse = usingObjectScript.CheckHideMode(hideControllerOnUse, usingObjectScript.hideControllerOnUse);
                 OnControllerUseInteractableObject(interactTouch.SetControllerInteractEvent(usingObject));
                 usingObjectScript.StartUsing(gameObject);
 
-                if (hideControllerOnUse)
+                if (updatedHideControllerOnUse)
                 {
                     Invoke("HideController", hideControllerDelay);
                 }
@@ -164,7 +173,7 @@ namespace VRTK
                 {
                     usingObject.GetComponent<VRTK_InteractableObject>().StopUsing(gameObject);
                 }
-                if (hideControllerOnUse)
+                if (updatedHideControllerOnUse)
                 {
                     controllerActions.ToggleControllerModel(true, usingObject);
                 }
@@ -201,6 +210,13 @@ namespace VRTK
 
             if (touchedObject != null && interactTouch.IsObjectInteractable(touchedObject))
             {
+                var interactableObjectScript = touchedObject.GetComponent<VRTK_InteractableObject>();
+
+                if (interactableObjectScript.useOnlyIfGrabbed && !interactableObjectScript.IsGrabbed())
+                {
+                    return;
+                }
+
                 UseInteractedObject(touchedObject);
                 if (usingObject && !IsObjectHoldOnUse(usingObject))
                 {
