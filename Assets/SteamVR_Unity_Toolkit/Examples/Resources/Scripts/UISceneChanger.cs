@@ -25,9 +25,9 @@ public class UISceneChanger : MonoBehaviour {
         controller = manager.right.GetComponent<SteamVR_TrackedObject>();
         DynamicGI.UpdateEnvironment();
 
-        Rig = GameObject.FindObjectOfType<SteamVR_PlayArea>().gameObject;
-        Head = GameObject.FindObjectOfType<SteamVR_Camera>().gameObject;
-        SceneCanvas = gameObject.transform.GetChild(0).gameObject;
+        Rig = FindObjectOfType<SteamVR_PlayArea>().gameObject;
+        Head = FindObjectOfType<SteamVR_Camera>().gameObject;
+        SceneCanvas = transform.GetChild(0).gameObject;
 
         SteamVR_ControllerManager Manager = Rig.GetComponent<SteamVR_ControllerManager>();
         ControllerRight = Manager.right;
@@ -76,10 +76,10 @@ public class UISceneChanger : MonoBehaviour {
 
     public void SetTransformToRig()
     {
-        gameObject.transform.SetParent(Head.transform);
-        gameObject.transform.localPosition = new Vector3(0, 0, OffSet);
-        gameObject.transform.parent = null;
-        gameObject.transform.LookAt(VRTK_DeviceFinder.HeadsetCamera().gameObject.transform);
+        transform.SetParent(Head.transform);
+        transform.localPosition = new Vector3(0, 0, OffSet);
+        transform.parent = null;
+        transform.LookAt(VRTK_DeviceFinder.HeadsetCamera().gameObject.transform);
     }
 
     public void SetControllerPointer()
