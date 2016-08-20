@@ -55,6 +55,7 @@ namespace VRTK
         public ControllerHideMode hideControllerOnTouch = ControllerHideMode.Default;
 
         [Header("Grab Interactions", order = 2)]
+        public ButtonAlias GrabButton = ButtonAlias.Undefined;
         public bool isGrabbable = false;
         public bool isDroppable = true;
         public bool isSwappable = true;
@@ -75,6 +76,7 @@ namespace VRTK
         public float onGrabCollisionDelay = 0f;
 
         [Header("Use Interactions", order = 4)]
+        public ButtonAlias UseButton = ButtonAlias.Undefined;
         public bool isUsable = false;
         public bool useOnlyIfGrabbed = false;
         public bool holdButtonToUse = true;

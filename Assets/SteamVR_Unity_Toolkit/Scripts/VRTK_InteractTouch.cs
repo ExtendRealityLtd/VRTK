@@ -34,12 +34,13 @@ namespace VRTK
 
         private SteamVR_TrackedObject trackedController;
         private VRTK_ControllerActions controllerActions;
+        private VRTK_ControllerEvents events;
         private GameObject controllerCollisionDetector;
         private bool triggerRumble;
         private bool destroyColliderOnDisable;
         private Rigidbody touchRigidBody;
         private Object defaultColliderPrefab;
-
+        
         public virtual void OnControllerTouchInteractableObject(ObjectInteractEventArgs e)
         {
             if (ControllerTouchInteractableObject != null)
@@ -141,6 +142,7 @@ namespace VRTK
         {
             trackedController = GetComponent<SteamVR_TrackedObject>();
             controllerActions = GetComponent<VRTK_ControllerActions>();
+            events = GetComponent<VRTK_ControllerEvents>();
             Utilities.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.Controller);
             destroyColliderOnDisable = false;
             defaultColliderPrefab = Resources.Load("ControllerColliders/HTCVive");
@@ -206,6 +208,17 @@ namespace VRTK
                 {
                     touchedObject = null;
                     return;
+                }
+                else if (touchedObjectScript != null)
+                {
+                    if (events.grabToggleButton != touchedObjectScript.GrabButton && touchedObjectScript.GrabButton != ButtonAlias.Undefined)
+                        events.grabToggleButton = touchedObjectScript.GrabButton;
+                    else if (touchedObjectScript.GrabButton == ButtonAlias.Undefined)
+                        events.grabToggleButton = events.GgrabToggleButton;
+                    if (events.useToggleButton != touchedObjectScript.UseButton && touchedObjectScript.UseButton != ButtonAlias.Undefined)
+                        events.useToggleButton = touchedObjectScript.UseButton;
+                    else if (touchedObjectScript.UseButton == ButtonAlias.Undefined)
+                        events.useToggleButton = events.GuseToggleButton;
                 }
 
                 updatedHideControllerOnTouch = touchedObjectScript.CheckHideMode(hideControllerOnTouch, touchedObjectScript.hideControllerOnTouch);

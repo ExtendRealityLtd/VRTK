@@ -10,29 +10,43 @@
         public float touchpadAngle;
     }
 
+    public enum ButtonAlias
+    {
+        Trigger_Hairline,
+        Trigger_Touch,
+        Trigger_Press,
+        Trigger_Click,
+        Grip,
+        Touchpad_Touch,
+        Touchpad_Press,
+        Application_Menu,
+        Undefined
+    }
+
     public delegate void ControllerInteractionEventHandler(object sender, ControllerInteractionEventArgs e);
 
     public class VRTK_ControllerEvents : MonoBehaviour
     {
-        public enum ButtonAlias
-        {
-            Trigger_Hairline,
-            Trigger_Touch,
-            Trigger_Press,
-            Trigger_Click,
-            Grip,
-            Touchpad_Touch,
-            Touchpad_Press,
-            Application_Menu,
-            Undefined
-        }
 
+        [HideInInspector]
         public ButtonAlias pointerToggleButton = ButtonAlias.Touchpad_Press;
+        [HideInInspector]
         public ButtonAlias pointerSetButton = ButtonAlias.Touchpad_Press;
+        [HideInInspector]
         public ButtonAlias grabToggleButton = ButtonAlias.Grip;
+        [HideInInspector]
         public ButtonAlias useToggleButton = ButtonAlias.Trigger_Click;
+        [HideInInspector]
         public ButtonAlias uiClickButton = ButtonAlias.Trigger_Click;
+        [HideInInspector]
         public ButtonAlias menuToggleButton = ButtonAlias.Application_Menu;
+
+        public ButtonAlias GpointerToggleButton = ButtonAlias.Touchpad_Press;
+        public ButtonAlias GpointerSetButton = ButtonAlias.Touchpad_Press;
+        public ButtonAlias GgrabToggleButton = ButtonAlias.Grip;
+        public ButtonAlias GuseToggleButton = ButtonAlias.Trigger_Click;
+        public ButtonAlias GuiClickButton = ButtonAlias.Trigger_Click;
+        public ButtonAlias GmenuToggleButton = ButtonAlias.Application_Menu;
 
         public int axisFidelity = 1;
 
