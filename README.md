@@ -27,6 +27,10 @@ from the Unity Asset Store to be imported into your Unity project.**
   * Cogs and Cowboys | [Steam Store Page](http://store.steampowered.com/app/510410)
   * Frantic Freighter | [Steam Store Page](http://store.steampowered.com/app/503150)
   * Redswood VR | [Steam Store Page](http://store.steampowered.com/app/499760)
+  * Wrath Of The Fire God | [Steam Store Page](http://store.steampowered.com/app/511370)
+  * Coinvault | [Itch.io Store Page](https://ldvr.itch.io/ldvrs-coinvault-for-the-vive)
+  * VR Explosive Kitten Toss | [Itch.io Store Page](https://ldvr.itch.io/ldvrs-kitten-toss)
+  * Zika VR | [Itch.io Store Page](https://ldvr.itch.io/ldvr-presents-zika-vr)
 
 ## Quick Start
 
