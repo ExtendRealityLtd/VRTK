@@ -231,6 +231,7 @@ The script also has a public boolean pressed state for the buttons to allow the 
   * **UI Click Button:** The button to use for the action of clicking a UI element.
   * **Menu Toggle Button:** The button to use for the action of bringing up an in-game menu.
   * **Axis Fidelity:** The amount of fidelity in the changes on the axis, which is defaulted to 1. Any number higher than 2 will probably give too sensitive results.
+  * **Trigger Click Threshold:** The level on the trigger axis to reach before a click is registered.
 
 ### Class Variables
 
