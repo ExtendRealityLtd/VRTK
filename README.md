@@ -31,6 +31,7 @@ from the Unity Asset Store to be imported into your Unity project.**
   * Coinvault | [Itch.io Store Page](https://ldvr.itch.io/ldvrs-coinvault-for-the-vive)
   * VR Explosive Kitten Toss | [Itch.io Store Page](https://ldvr.itch.io/ldvrs-kitten-toss)
   * Zika VR | [Itch.io Store Page](https://ldvr.itch.io/ldvr-presents-zika-vr)
+  * Domino VR | [Steam Store Page](http://store.steampowered.com/app/508680)
 
 ## Quick Start
 
