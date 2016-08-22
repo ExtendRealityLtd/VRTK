@@ -1,10 +1,13 @@
-# SteamVR Unity Toolkit - [![Slack](https://vrtk-slack-invite.herokuapp.com/badge.svg)](http://invite.vrtk.io) [![Subreddit](https://img.shields.io/badge/subreddit-discussions-red.svg?style=flat-square)](https://www.reddit.com/r/SteamVRUnityToolkit/) [![Waffle](https://img.shields.io/badge/waffle-tracker-blue.svg?style=flat-square)](http://tracker.vrtk.io)
+# VR Toolkit (VRTK) - [![Slack](https://vrtk-slack-invite.herokuapp.com/badge.svg)](http://invite.vrtk.io) [![Waffle](https://img.shields.io/badge/waffle-tracker-blue.svg?style=flat-square)](http://tracker.vrtk.io)
 
-A collection of useful scripts and prefabs for building SteamVR titles
-in Unity 5.
+A collection of useful scripts and prefabs for building VR titles in
+Unity 5.
 
-**This Toolkit requires the [SteamVR Plugin]
-from the Unity Asset Store to be imported into your Unity project.**
+**This Toolkit requires a compatible VR SDK to be imported into your
+Unity Project**
+
+  * Compatible SDKs
+   * [SteamVR Plugin]
 
 ## Games, Apps and Experiences that use this Toolkit
 
@@ -33,21 +36,12 @@ from the Unity Asset Store to be imported into your Unity project.**
   * Zika VR | [Itch.io Store Page](https://ldvr.itch.io/ldvr-presents-zika-vr)
   * Domino VR | [Steam Store Page](http://store.steampowered.com/app/508680)
 
-## Quick Start
+## Quick Start for SteamVR
 
   * Clone this repository `git clone https://github.com/thestonefox/SteamVR_Unity_Toolkit.git`
-  * Open the `SteamVR_Unity_Toolkit` within Unity3d
+  * Open `SteamVR_Unity_Toolkit` within Unity3d
   * Import the [SteamVR Plugin] from the Unity Asset Store
   * Browse the `Examples` scenes for example usage of the scripts
-
-## FAQ/Troubleshooting
-
-  * How to create a new project using this toolkit along with the
-  SteamVR Unity Plugin:
-   * [View answer video on YouTube](https://www.youtube.com/watch?v=oFkgTZ4LXEo)
-  * Pointer beams/teleporting no longer works after a project build
-  and running from that build:
-   * [View answer video on YouTube](https://www.youtube.com/watch?v=IsmYoLTmX4c)
 
 ## Summary
 
@@ -56,31 +50,25 @@ as (but not limited to):
 
   * Controller button events with common aliases
   * Controller world pointers (e.g. laser pointers)
-  * Player teleportation
+  * Player Locomotion
   * Grabbing/holding objects using the controllers
   * Interacting with objects using the controllers
   * Transforming game objects into interactive UI elements
 
-The toolkit is heavily inspired and based upon the
-[SteamVR Plugin for Unity3d Github Repo].
-
-The reason this toolkit exists is because I found the SteamVR plugin
-to contain confusing to use or broken code and I decided to build a
-collection of scripts/assets that I would find useful when building for
-VR within Unity3d.
+The toolkit is heavily inspired by the [SteamVR Plugin for Unity3d Github Repo].
 
 ## What's In The Box
 
 This toolkit project is split into three main sections:
 
-  * Prefabs - `SteamVR_Unity_Toolkit/Prefabs/`
-  * Scripts - `SteamVR_Unity_Toolkit/Scripts/`
-  * Examples - `SteamVR_Unity_Toolkit/Examples/`
+  * Prefabs - `VRTK/Prefabs/`
+  * Scripts - `VRTK/Scripts/`
+  * Examples - `VRTK/Examples/`
 
-The `SteamVR_Unity_Toolkit` directory is where all of the relevant
-files are kept and this directory can be simply copied over to an
-existing project. The `Examples` directory contains useful scenes
-showing the `SteamVR_Unity_Toolkit` in action.
+The `VRTK` directory is where all of the relevant files are kept
+and this directory can be simply copied over to an existing project.
+The `Examples` directory contains useful scenes showing the VR Toolkit
+in action.
 
 ## Documentation
 
