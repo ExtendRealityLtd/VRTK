@@ -31,7 +31,7 @@
 
         private VRTK_PlayerPresence playerPresence;
         private bool lastGravitySetting;
-        private VRTK_HeadsetCollisionFade collisionFade;
+        private VRTK_HeadsetCollisionFadeBase collisionFade;
         private SteamVR_ControllerManager controllerManager;
 
         private GameObject climbingObject;

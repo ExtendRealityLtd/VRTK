@@ -903,9 +903,14 @@ If the headset is colliding then the teleport action is also disabled to prevent
   > * If using `Unity 5.3` or older then the Headset Collision Fade script is attached to the `Camera (head)` object within the `[CameraRig]` prefab.
   > * If using `Unity 5.4` or newer then the Headset Collision Fade script is attached to the `Camera (eye)` object within the `[CameraRig]->Camera (head)` prefab.
 
+### Extending
+
+A base class (VRTK_HeadsetCollisionFadeBase) is provided that takes care of the actual fading and event dispatching. Different methods may be implemented to define when the collision starts and ends, just call OnHeadsetCollisionDetect and OnHeadsetCollisionEnded when applicable. Classes that want to listen to the events should look for the base class instead of the specific implementation used so they are interchangeable.
+  
 ### Inspector Parameters
 
-  * **Blink Transition Speed:** The fade blink speed on collision.
+  * **Blink Transition Speed Enter:** The fade blink speed on collision enter.
+  * **Blink Transition Speed Enter:** The fade blink speed on collision exit.
   * **Fade Color:** The colour to fade the headset to on collision.
   * **Ignore Target With Tag Or Class:** A string that specifies an object Tag or the name of a Script attached to an obejct and will prevent the object from fading the headset view on collision.
 
