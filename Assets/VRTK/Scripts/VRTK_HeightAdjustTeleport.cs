@@ -23,6 +23,7 @@ namespace VRTK
         private GameObject currentFloor = null;
         private bool originalPlaySpaceFalling;
         private bool isClimbing = false;
+        private float previousFloorY;
 
         private VRTK_PlayerPresence playerPresence;
 
@@ -151,25 +152,29 @@ namespace VRTK
                         Blink(blinkTransitionSpeed);
                     }
 
-                    if (shouldDoGravityFall)
+                    if (floorY != previousFloorY)
                     {
-                        playerPresence.StartPhysicsFall(Vector3.zero);
-                    }
-                    else // teleport fall
-                    {
-                        Vector3 newPosition = new Vector3(transform.position.x, floorY, transform.position.z);
-                        var teleportArgs = new DestinationMarkerEventArgs
+                        if (shouldDoGravityFall)
                         {
-                            destinationPosition = newPosition,
-                            distance = rayCollidedWith.distance,
-                            enableTeleport = true,
-                            target = currentFloor.transform
-                        };
-                        OnTeleporting(gameObject, teleportArgs);
-                        SetNewPosition(newPosition, currentFloor.transform);
-                        OnTeleported(gameObject, teleportArgs);
+                            playerPresence.StartPhysicsFall(Vector3.zero);
+                        }
+                        else // teleport fall
+                        {
+                            Vector3 newPosition = new Vector3(transform.position.x, floorY, transform.position.z);
+                            var teleportArgs = new DestinationMarkerEventArgs
+                            {
+                                destinationPosition = newPosition,
+                                distance = rayCollidedWith.distance,
+                                enableTeleport = true,
+                                target = currentFloor.transform
+                            };
+                            OnTeleporting(gameObject, teleportArgs);
+                            SetNewPosition(newPosition, currentFloor.transform);
+                            OnTeleported(gameObject, teleportArgs);
+                        }
                     }
                 }
+                previousFloorY = floorY;
             }
         }
 
