@@ -109,6 +109,7 @@ namespace VRTK
         private bool previousKinematicState;
         private bool previousIsGrabbable;
         private bool forcedDropped;
+        private bool forceDisabled;
 
         public bool CheckHideMode(bool defaultMode, ControllerHideMode overrideMode)
         {
@@ -203,7 +204,7 @@ namespace VRTK
         {
             OnInteractableObjectUntouched(SetInteractableObjectEvent(previousTouchingObject));
             touchingObject = null;
-            if(gameObject.activeInHierarchy)
+            if (gameObject.activeInHierarchy)
             {
                 StartCoroutine(StopUsingOnControllerChange(previousTouchingObject));
             }
@@ -365,7 +366,14 @@ namespace VRTK
         {
             if (gameObject.activeInHierarchy)
             {
+                forceDisabled = false;
                 StartCoroutine(ForceStopInteractingAtEndOfFrame());
+            }
+
+            if (!gameObject.activeInHierarchy && forceDisabled)
+            {
+                ForceStopAllInteractions();
+                forceDisabled = false;
             }
         }
 
@@ -406,11 +414,6 @@ namespace VRTK
 
         protected virtual void Update()
         {
-            if (!gameObject.activeInHierarchy)
-            {
-                ForceStopInteracting();
-            }
-
             if (AttachIsTrackObject())
             {
                 CheckBreakDistance();
@@ -436,6 +439,7 @@ namespace VRTK
         protected virtual void OnEnable()
         {
             RegisterTeleporters();
+            forceDisabled = false;
             if (forcedDropped)
             {
                 LoadPreviousState();
@@ -448,6 +452,7 @@ namespace VRTK
             {
                 teleporter.Teleported -= new TeleportEventHandler(OnTeleported);
             }
+            forceDisabled = true;
             ForceStopInteracting();
         }
 
@@ -690,20 +695,25 @@ namespace VRTK
         private IEnumerator ForceStopInteractingAtEndOfFrame()
         {
             yield return new WaitForEndOfFrame();
-            if (touchingObject != null && touchingObject.activeInHierarchy)
+            ForceStopAllInteractions();
+        }
+
+        private void ForceStopAllInteractions()
+        {
+            if (touchingObject != null && (touchingObject.activeInHierarchy || forceDisabled))
             {
                 touchingObject.GetComponent<VRTK_InteractTouch>().ForceStopTouching();
                 forcedDropped = true;
             }
 
-            if (grabbingObject != null && grabbingObject.activeInHierarchy)
+            if (grabbingObject != null && (grabbingObject.activeInHierarchy || forceDisabled))
             {
                 grabbingObject.GetComponent<VRTK_InteractTouch>().ForceStopTouching();
                 grabbingObject.GetComponent<VRTK_InteractGrab>().ForceRelease();
                 forcedDropped = true;
             }
 
-            if (usingObject != null && usingObject.activeInHierarchy)
+            if (usingObject != null && (usingObject.activeInHierarchy || forceDisabled))
             {
                 usingObject.GetComponent<VRTK_InteractTouch>().ForceStopTouching();
                 usingObject.GetComponent<VRTK_InteractUse>().ForceStopUsing();
