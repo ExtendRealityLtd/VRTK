@@ -59,6 +59,7 @@ namespace VRTK
         public bool isDroppable = true;
         public bool isSwappable = true;
         public bool holdButtonToGrab = true;
+        public VRTK_ControllerEvents.ButtonAlias grabOverrideButton = VRTK_ControllerEvents.ButtonAlias.Undefined;
         public Vector2 rumbleOnGrab = Vector2.zero;
         public AllowedController allowedGrabControllers = AllowedController.Both;
         public bool precisionSnap;
@@ -78,6 +79,7 @@ namespace VRTK
         public bool isUsable = false;
         public bool useOnlyIfGrabbed = false;
         public bool holdButtonToUse = true;
+        public VRTK_ControllerEvents.ButtonAlias useOverrideButton = VRTK_ControllerEvents.ButtonAlias.Undefined;
         public bool pointerActivatesUseAction = false;
         public Vector2 rumbleOnUse = Vector2.zero;
         public AllowedController allowedUseControllers = AllowedController.Both;

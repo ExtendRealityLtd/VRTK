@@ -32,12 +32,15 @@ namespace VRTK
         private GameObject lastTouchedObject = null;
         private bool updatedHideControllerOnTouch = false;
 
+        private VRTK_ControllerEvents controllerEvents;
         private VRTK_ControllerActions controllerActions;
         private GameObject controllerCollisionDetector;
         private bool triggerRumble;
         private bool destroyColliderOnDisable;
         private Rigidbody touchRigidBody;
         private Object defaultColliderPrefab;
+        private VRTK_ControllerEvents.ButtonAlias originalGrabAlias;
+        private VRTK_ControllerEvents.ButtonAlias originalUseAlias;
 
         public virtual void OnControllerTouchInteractableObject(ObjectInteractEventArgs e)
         {
@@ -138,6 +141,7 @@ namespace VRTK
 
         private void Awake()
         {
+            controllerEvents = GetComponent<VRTK_ControllerEvents>();
             controllerActions = GetComponent<VRTK_ControllerActions>();
             Utilities.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.Controller);
             destroyColliderOnDisable = false;
@@ -149,6 +153,8 @@ namespace VRTK
             triggerRumble = false;
             CreateTouchCollider();
             CreateTouchRigidBody();
+            originalGrabAlias = VRTK_ControllerEvents.ButtonAlias.Undefined;
+            originalUseAlias = VRTK_ControllerEvents.ButtonAlias.Undefined;
         }
 
         private void OnDisable()
@@ -186,7 +192,7 @@ namespace VRTK
                 return;
             }
 
-            if (touchedObject != null && touchedObject != lastTouchedObject && !touchedObject.GetComponent<VRTK_InteractableObject>().IsGrabbed())
+            if (touchedObject != null && touchedObject != lastTouchedObject && touchedObject != collider.gameObject && !touchedObject.GetComponent<VRTK_InteractableObject>().IsGrabbed())
             {
                 CancelInvoke("ResetTriggerRumble");
                 ResetTriggerRumble();
@@ -206,6 +212,8 @@ namespace VRTK
                     return;
                 }
 
+                CheckButtonOverrides(touchedObjectScript);
+
                 updatedHideControllerOnTouch = touchedObjectScript.CheckHideMode(hideControllerOnTouch, touchedObjectScript.hideControllerOnTouch);
                 OnControllerTouchInteractableObject(SetControllerInteractEvent(touchedObject));
                 touchedObjectScript.ToggleHighlight(true, globalTouchHighlightColor);
@@ -223,6 +231,35 @@ namespace VRTK
                     controllerActions.TriggerHapticPulse((ushort)rumbleAmount.y, rumbleAmount.x, 0.05f);
                     Invoke("ResetTriggerRumble", rumbleAmount.x);
                 }
+            }
+        }
+
+        private void CheckButtonOverrides(VRTK_InteractableObject touchedObjectScript)
+        {
+            if (touchedObjectScript.grabOverrideButton != VRTK_ControllerEvents.ButtonAlias.Undefined)
+            {
+                originalGrabAlias = controllerEvents.grabToggleButton;
+                controllerEvents.grabToggleButton = touchedObjectScript.grabOverrideButton;
+            }
+
+            if (touchedObjectScript.useOverrideButton != VRTK_ControllerEvents.ButtonAlias.Undefined)
+            {
+                originalUseAlias = controllerEvents.useToggleButton;
+                controllerEvents.useToggleButton = touchedObjectScript.useOverrideButton;
+            }
+        }
+
+        private void ResetButtonOverrides()
+        {
+            if(originalGrabAlias != VRTK_ControllerEvents.ButtonAlias.Undefined)
+            {
+                controllerEvents.grabToggleButton = originalGrabAlias;
+                originalGrabAlias = VRTK_ControllerEvents.ButtonAlias.Undefined;
+            }
+            if (originalUseAlias != VRTK_ControllerEvents.ButtonAlias.Undefined)
+            {
+                controllerEvents.useToggleButton = originalUseAlias;
+                originalUseAlias = VRTK_ControllerEvents.ButtonAlias.Undefined;
             }
         }
 
@@ -252,6 +289,7 @@ namespace VRTK
         {
             if (IsObjectInteractable(obj))
             {
+                ResetButtonOverrides();
                 GameObject untouched;
                 if (obj.GetComponent<VRTK_InteractableObject>())
                 {
