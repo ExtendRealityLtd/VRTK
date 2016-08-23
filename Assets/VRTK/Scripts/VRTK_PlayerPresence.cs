@@ -66,7 +66,7 @@
 
                 isFalling = true;
                 EnablePhysics();
-                if(rb)
+                if (rb)
                 {
                     rb.velocity = velocity + new Vector3(0.0f, -0.001f, 0.0f);
                 }
@@ -154,22 +154,27 @@
 
         private void OnGrabObject(object sender, ObjectInteractEventArgs e)
         {
-            if (e.target.GetComponent<Collider>())
+            if(e.target)
             {
-                Physics.IgnoreCollision(GetComponent<Collider>(), e.target.GetComponent<Collider>(), true);
-            }
-
-            foreach (var childCollider in e.target.GetComponentsInChildren<Collider>())
-            {
-                Physics.IgnoreCollision(GetComponent<Collider>(), childCollider, true);
+                IgnoreCollisions(e.target.GetComponents<Collider>(), true);
+                IgnoreCollisions(e.target.GetComponentsInChildren<Collider>(), true);
             }
         }
 
         private void OnUngrabObject(object sender, ObjectInteractEventArgs e)
         {
-            if (e.target && e.target.GetComponent<VRTK_InteractableObject>() && !e.target.GetComponent<VRTK_InteractableObject>().IsGrabbed())
+            if (e.target && e.target.GetComponent<VRTK_InteractableObject>())
             {
-                Physics.IgnoreCollision(GetComponent<Collider>(), e.target.GetComponent<Collider>(), false);
+                IgnoreCollisions(e.target.GetComponents<Collider>(), false);
+                IgnoreCollisions(e.target.GetComponentsInChildren<Collider>(), false);
+            }
+        }
+
+        private void IgnoreCollisions(Collider[] colliders, bool state)
+        {
+            foreach (var controllerCollider in colliders)
+            {
+                Physics.IgnoreCollision(GetComponent<Collider>(), controllerCollider, state);
             }
         }
 
@@ -252,7 +257,7 @@
             var newBCYSize = (headset.transform.position.y - headsetYOffset) - transform.position.y;
             var newBCYCenter = (newBCYSize != 0 ? (newBCYSize / 2) + playAreaHeightAdjustment : 0);
 
-            if(bc)
+            if (bc)
             {
                 bc.size = new Vector3(bc.size.x, newBCYSize, bc.size.z);
                 bc.center = new Vector3(headset.localPosition.x, newBCYCenter, headset.localPosition.z);
@@ -303,6 +308,9 @@
         {
             if (controller)
             {
+                IgnoreCollisions(controller.GetComponents<Collider>(), true);
+                IgnoreCollisions(controller.GetComponentsInChildren<Collider>(), true);
+
                 var grabbingController = controller.GetComponent<VRTK_InteractGrab>();
                 if (grabbingController && ignoreGrabbedCollisions)
                 {
