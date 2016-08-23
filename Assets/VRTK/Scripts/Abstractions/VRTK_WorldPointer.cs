@@ -182,14 +182,7 @@ namespace VRTK
             }
 
             OnDestinationMarkerEnter(SetDestinationMarkerEvent(pointerContactDistance, pointerContactTarget, destinationPosition, controllerIndex));
-
-            interactableObject = pointerContactTarget.GetComponent<VRTK_InteractableObject>();
-            bool cannotUseBecauseNotGrabbed = (interactableObject && interactableObject.useOnlyIfGrabbed && !interactableObject.IsGrabbed());
-
-            if (interactableObject && interactableObject.pointerActivatesUseAction && interactableObject.holdButtonToUse && !cannotUseBecauseNotGrabbed)
-            {
-                interactableObject.StartUsing(gameObject);
-            }
+            StartUseAction(pointerContactTarget);
         }
 
         protected virtual void PointerOut()
@@ -200,11 +193,7 @@ namespace VRTK
             }
 
             OnDestinationMarkerExit(SetDestinationMarkerEvent(pointerContactDistance, pointerContactTarget, destinationPosition, controllerIndex));
-
-            if (interactableObject && interactableObject.pointerActivatesUseAction && interactableObject.holdButtonToUse)
-            {
-                interactableObject.StopUsing(gameObject);
-            }
+            StopUseAction();
         }
 
         protected virtual void PointerSet()
@@ -216,20 +205,20 @@ namespace VRTK
 
             activateDelayTimer = Time.time + activateDelay;
 
-            var interactableObject = pointerContactTarget.GetComponent<VRTK_InteractableObject>();
-            if (interactableObject && interactableObject.pointerActivatesUseAction)
+            var setInteractableObject = pointerContactTarget.GetComponent<VRTK_InteractableObject>();
+            if (PointerActivatesUseAction(setInteractableObject))
             {
-                if (interactableObject.IsUsing())
+                if (setInteractableObject.IsUsing())
                 {
-                    interactableObject.StopUsing(gameObject);
+                    setInteractableObject.StopUsing(gameObject);
                 }
-                else if (!interactableObject.holdButtonToUse)
+                else if (!setInteractableObject.holdButtonToUse)
                 {
-                    interactableObject.StartUsing(gameObject);
+                    setInteractableObject.StartUsing(gameObject);
                 }
             }
 
-            if (!playAreaCursorCollided && (interactableObject == null || !interactableObject.pointerActivatesUseAction))
+            if (!playAreaCursorCollided && !PointerActivatesUseAction(interactableObject))
             {
                 OnDestinationMarkerSet(SetDestinationMarkerEvent(pointerContactDistance, pointerContactTarget, destinationPosition, controllerIndex));
             }
@@ -247,9 +236,9 @@ namespace VRTK
             {
                 playAreaCursor.gameObject.SetActive(playAreaState);
             }
-            if (!state && interactableObject && interactableObject.pointerActivatesUseAction && interactableObject.holdButtonToUse && interactableObject.IsUsing())
+            if (!state && PointerActivatesUseAction(interactableObject) && interactableObject.holdButtonToUse && interactableObject.IsUsing())
             {
-                interactableObject.StopUsing(this.gameObject);
+                interactableObject.StopUsing(gameObject);
             }
         }
 
@@ -284,6 +273,30 @@ namespace VRTK
                 validNavMeshLocation = true;
             }
             return (validNavMeshLocation && target && target.tag != invalidTargetWithTagOrClass && target.GetComponent(invalidTargetWithTagOrClass) == null);
+        }
+
+        private bool PointerActivatesUseAction(VRTK_InteractableObject io)
+        {
+            return (io && io.pointerActivatesUseAction && io.IsValidInteractableController(controller.gameObject, io.allowedUseControllers));
+        }
+
+        private void StartUseAction(Transform target)
+        {
+            interactableObject = target.GetComponent<VRTK_InteractableObject>();
+            bool cannotUseBecauseNotGrabbed = (interactableObject && interactableObject.useOnlyIfGrabbed && !interactableObject.IsGrabbed());
+
+            if (PointerActivatesUseAction(interactableObject) && interactableObject.holdButtonToUse && !cannotUseBecauseNotGrabbed)
+            {
+                interactableObject.StartUsing(gameObject);
+            }
+        }
+
+        private void StopUseAction()
+        {
+            if (PointerActivatesUseAction(interactableObject) && interactableObject.holdButtonToUse)
+            {
+                interactableObject.StopUsing(gameObject);
+            }
         }
 
         private void TurnOnBeam(uint index)
