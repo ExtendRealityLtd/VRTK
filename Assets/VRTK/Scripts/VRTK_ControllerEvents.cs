@@ -35,6 +35,7 @@
         public ButtonAlias menuToggleButton = ButtonAlias.Application_Menu;
 
         public int axisFidelity = 1;
+        public float triggerClickThreshold = 1f;
 
         [HideInInspector]
         public bool triggerPressed = false;
@@ -629,12 +630,12 @@
             }
 
             //Trigger Clicked
-            if (!triggerClicked && currentTriggerAxis.x == 1f)
+            if (!triggerClicked && currentTriggerAxis.x >= triggerClickThreshold)
             {
                 OnTriggerClicked(SetButtonEvent(ref triggerClicked, true, currentTriggerAxis.x));
                 EmitAlias(ButtonAlias.Trigger_Click, true, currentTriggerAxis.x, ref triggerClicked);
             }
-            else if (triggerClicked && currentTriggerAxis.x < 1f)
+            else if (triggerClicked && currentTriggerAxis.x < triggerClickThreshold)
             {
                 OnTriggerUnclicked(SetButtonEvent(ref triggerClicked, false, 0f));
                 EmitAlias(ButtonAlias.Trigger_Click, false, 0f, ref triggerClicked);
