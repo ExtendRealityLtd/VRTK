@@ -9,8 +9,15 @@
         public bool cloneGrabbedObject;
 
         private VRTK_InteractGrab controller;
+        private VRTK_InteractableObject grabbableObject;
+        private VRTK_InteractableObject previousClonedObject;
 
-        private IEnumerator Start()
+        private void OnEnable()
+        {
+            StartCoroutine(AutoGrab());
+        }
+
+        private IEnumerator AutoGrab()
         {
             controller = GetComponent<VRTK_InteractGrab>();
             if (!controller)
@@ -30,14 +37,32 @@
                 yield return true;
             }
 
-            VRTK_InteractableObject grabbableObject = objectToGrab;
+            grabbableObject = objectToGrab;
             if (cloneGrabbedObject)
             {
-                grabbableObject = Instantiate(objectToGrab);
+                if (previousClonedObject == null)
+                {
+                    grabbableObject = Instantiate(objectToGrab);
+                    previousClonedObject = grabbableObject;
+                }
+                else
+                {
+                    grabbableObject = previousClonedObject;
+                }
             }
-            controller.GetComponent<VRTK_InteractTouch>().ForceStopTouching();
-            controller.GetComponent<VRTK_InteractTouch>().ForceTouch(grabbableObject.gameObject);
-            controller.AttemptGrab();
+
+            if (grabbableObject.isGrabbable && !grabbableObject.IsGrabbed())
+            {
+                if (grabbableObject.AttachIsKinematicObject())
+                {
+                    grabbableObject.ToggleKinematic(true);
+                }
+
+                grabbableObject.transform.position = transform.position;
+                controller.GetComponent<VRTK_InteractTouch>().ForceStopTouching();
+                controller.GetComponent<VRTK_InteractTouch>().ForceTouch(grabbableObject.gameObject);
+                controller.AttemptGrab();
+            }
         }
     }
 }

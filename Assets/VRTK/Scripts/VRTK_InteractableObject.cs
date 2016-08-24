@@ -312,6 +312,11 @@ namespace VRTK
             return (grabAttachMechanic == GrabAttachType.Climbable);
         }
 
+        public bool AttachIsKinematicObject()
+        {
+            return (grabAttachMechanic == GrabAttachType.Child_Of_Controller);
+        }
+
         public bool AttachIsStaticObject()
         {
             return AttachIsClimbObject(); // only one at the moment
