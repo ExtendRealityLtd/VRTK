@@ -131,6 +131,7 @@
             }
             io.isGrabbable = true;
             io.precisionSnap = true;
+            io.stayGrabbedOnTeleport = false;
             io.grabAttachMechanic = VRTK_InteractableObject.GrabAttachType.Track_Object;
         }
 

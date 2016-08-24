@@ -66,6 +66,7 @@ namespace VRTK
         public Transform rightSnapHandle;
         public Transform leftSnapHandle;
         public ControllerHideMode hideControllerOnGrab = ControllerHideMode.Default;
+        public bool stayGrabbedOnTeleport = true;
 
         [Header("Grab Mechanics", order = 3)]
         public GrabAttachType grabAttachMechanic = GrabAttachType.Fixed_Joint;
@@ -386,6 +387,7 @@ namespace VRTK
         {
             foreach (var teleporter in FindObjectsOfType<VRTK_BasicTeleport>())
             {
+                teleporter.Teleporting += new TeleportEventHandler(OnTeleporting);
                 teleporter.Teleported += new TeleportEventHandler(OnTeleported);
             }
         }
@@ -450,6 +452,7 @@ namespace VRTK
         {
             foreach (var teleporter in FindObjectsOfType<VRTK_BasicTeleport>())
             {
+                teleporter.Teleporting -= new TeleportEventHandler(OnTeleporting);
                 teleporter.Teleported -= new TeleportEventHandler(OnTeleported);
             }
             forceDisabled = true;
@@ -667,9 +670,18 @@ namespace VRTK
             rb.velocity = Vector3.MoveTowards(rb.velocity, velocityTarget, maxDistanceDelta);
         }
 
+        private void OnTeleporting(object sender, DestinationMarkerEventArgs e)
+        {
+            if (!stayGrabbedOnTeleport)
+            {
+                ZeroVelocity();
+                ForceStopAllInteractions();
+            }
+        }
+
         private void OnTeleported(object sender, DestinationMarkerEventArgs e)
         {
-            if (AttachIsTrackObject() && trackPoint)
+            if (stayGrabbedOnTeleport && AttachIsTrackObject() && trackPoint)
             {
                 transform.position = grabbingObject.transform.position;
             }

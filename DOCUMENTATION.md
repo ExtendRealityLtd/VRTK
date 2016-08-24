@@ -1118,7 +1118,8 @@ The basis of this script is to provide a simple mechanism for identifying object
    * `Default` means using controller settings.
    * `Override Hide` means hiding the controller when grabbed, overriding controller settings.
    * `Override Dont Hide` means *not* hiding the controller when grabbed, overriding controller settings.
-
+  * **Stay Grabbed On Teleport:** If this is checked then the object will stay grabbed to the controller when a teleport occurs. If it is unchecked then the object will be released when a teleport occurs.
+  
 #### Grab Mechanics
   * **Grab Attach Type:** This determines how the grabbed item will be attached to the controller when it is grabbed.
    * `Fixed Joint` attaches the object to the controller with a fixed joint meaning it tracks the position and rotation of the controller with perfect 1:1 tracking.
