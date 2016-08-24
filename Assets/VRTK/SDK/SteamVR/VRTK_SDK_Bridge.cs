@@ -5,6 +5,11 @@
 
     public class VRTK_SDK_Bridge : MonoBehaviour
     {
+        private static SteamVR_ControllerManager cachedControllerManager;
+        private static Transform cachedHeadset;
+        private static Transform cachedHeadsetCamera;
+        private static Transform cachedPlayArea;
+
         public static GameObject GetTrackedObjectByIndex(uint index)
         {
             foreach (SteamVR_TrackedObject trackedObject in FindObjectsOfType<SteamVR_TrackedObject>())
@@ -49,7 +54,7 @@
 
         public static GameObject GetControllerLeftHand()
         {
-            var controllerManager = FindObjectOfType<SteamVR_ControllerManager>();
+            var controllerManager = GetControllerManager();
             if (controllerManager)
             {
                 return controllerManager.left;
@@ -59,7 +64,7 @@
 
         public static GameObject GetControllerRightHand()
         {
-            var controllerManager = FindObjectOfType<SteamVR_ControllerManager>();
+            var controllerManager = GetControllerManager();
             if (controllerManager)
             {
                 return controllerManager.right;
@@ -69,7 +74,7 @@
 
         public static bool IsControllerLeftHand(GameObject controller)
         {
-            var controllerManager = FindObjectOfType<SteamVR_ControllerManager>();
+            var controllerManager = GetControllerManager();
             if (controllerManager && controller == controllerManager.left)
             {
                 return true;
@@ -79,7 +84,7 @@
 
         public static bool IsControllerRightHand(GameObject controller)
         {
-            var controllerManager = FindObjectOfType<SteamVR_ControllerManager>();
+            var controllerManager = GetControllerManager();
             if (controllerManager && controller == controllerManager.right)
             {
                 return true;
@@ -98,12 +103,20 @@
 
         public static Transform GetHeadsetCamera()
         {
-            return FindObjectOfType<SteamVR_Camera>().GetComponent<Transform>();
+            if (cachedHeadsetCamera == null)
+            {
+                cachedHeadsetCamera = FindObjectOfType<SteamVR_Camera>().GetComponent<Transform>();
+            }
+            return cachedHeadsetCamera;
         }
 
         public static Transform GetPlayArea()
         {
-            return FindObjectOfType<SteamVR_PlayArea>().gameObject.transform;
+            if (cachedPlayArea == null)
+            {
+                cachedPlayArea = FindObjectOfType<SteamVR_PlayArea>().gameObject.transform;
+            }
+            return cachedPlayArea;
         }
 
         public static Vector3[] GetPlayAreaVertices(GameObject playArea)
@@ -374,6 +387,15 @@
         public static bool IsApplicationMenuTouchedUpOnIndex(uint index)
         {
             return IsButtonPressed(index, ButtonPressTypes.TouchUp, SteamVR_Controller.ButtonMask.ApplicationMenu);
+        }
+
+        private static SteamVR_ControllerManager GetControllerManager()
+        {
+            if (cachedControllerManager == null)
+            {
+                cachedControllerManager = FindObjectOfType<SteamVR_ControllerManager>();
+            }
+            return cachedControllerManager;
         }
 
         private enum ButtonPressTypes
