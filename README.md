@@ -35,6 +35,7 @@ Unity Project**
   * VR Explosive Kitten Toss | [Itch.io Store Page](https://ldvr.itch.io/ldvrs-kitten-toss)
   * Zika VR | [Itch.io Store Page](https://ldvr.itch.io/ldvr-presents-zika-vr)
   * Domino VR | [Steam Store Page](http://store.steampowered.com/app/508680)
+  * One Of The Last | [Game website](http://oneofthelast.com/)
 
 ## Quick Start for SteamVR
 
