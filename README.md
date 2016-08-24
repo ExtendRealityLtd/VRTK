@@ -1,4 +1,4 @@
-# VR Toolkit (VRTK) - [![Slack](https://vrtk-slack-invite.herokuapp.com/badge.svg)](http://invite.vrtk.io) [![Waffle](https://img.shields.io/badge/waffle-tracker-blue.svg?style=flat-square)](http://tracker.vrtk.io)
+# [VRTK] VR Toolkit - [![Slack](https://vrtk-slack-invite.herokuapp.com/badge.svg)](http://invite.vrtk.io) [![Waffle](https://img.shields.io/badge/waffle-tracker-blue.svg?style=flat-square)](http://tracker.vrtk.io)
 
 A collection of useful scripts and prefabs for building VR titles in
 Unity 5.
