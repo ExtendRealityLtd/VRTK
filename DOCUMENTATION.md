@@ -963,11 +963,11 @@ The concept that the VR user has a physical in game presence which is accomplish
 
   * `PresenceFallStarted` - Emitted when a gravity based fall has started
   * `PresenceFallEnded` - Emitted when a gravity based fall has ended
-  
+
 #### Event Payload
 
   * `float fallDistance` - The total height the player has dropped from a gravity based fall.
-  
+
 ### Class Methods
 
 #### SetFallingPhysicsOnlyParams/1
@@ -989,9 +989,9 @@ The SetFallingPhysicsOnlyParams method will toggle the `fallingPhysicsOnly` clas
    * _none_
   * Returns
    * `bool` - Returns if the player is in a physics falling state or not.
-   
+
 The IsFalling method will return if the class is using physics based falling and is currently in a falling state.
-   
+
 #### GetHeadset/0
 
   > `public Transform GetHeadset()`
@@ -1012,7 +1012,7 @@ The GetHeadset method returns the transform of the object representing the VR he
   * Returns
    * _none_
 
-The StartPhysicsFall method initializes the physics based fall state, enable physics and send out the `PresenceFallStarted` event. 
+The StartPhysicsFall method initializes the physics based fall state, enable physics and send out the `PresenceFallStarted` event.
 
 #### StopPhysicsFall/0
 
@@ -1026,7 +1026,7 @@ The StartPhysicsFall method initializes the physics based fall state, enable phy
 The StopPhysicsFall method ends the physics based fall state, disables physics and send out the `PresenceFallEnded` event.
 
 ### Example
-  
+
 `VRTK/Examples/017_CameraRig_TouchpadWalking` has a collection of walls and slopes that can be traversed by the user with the touchpad but the user cannot pass through the objects as they are collidable and the rigidbody physics won't allow the intersection to occur.
 
 ---
@@ -1088,9 +1088,8 @@ The basis of this script is to provide a simple mechanism for identifying object
 ### Inspector Parameters
 
 #### Touch Interactions
-  * **Highlight On Touch:** The object will only highlight when a controller touches it if this is checked.
-  * **Touch Highlight Color:** The colour to highlight the object when it is touched. This colour will override any globally set color (for instance on the `VRTK_InteractTouch` script).
-  * **Rumble On Touch:** The haptic feedback on the controller can be triggered upon touching the object, the `x` denotes the length of time, the `y` denotes the strength of the pulse. (x and y will be replaced in the future with a custom editor)
+  * **Highlight On Touch:** The object will only highlight when a controller touches it if this is checked. When checked the color can be set for the object when it is touched. This color will override any globally set color (for instance on the `VRTK_InteractTouch` script).
+  * **Rumble On Touch:** The haptic feedback on the controller can be triggered upon touching the object, the `Strength` denotes the strength of the pulse, the `Duration` denotes the length of time.
   * **Allowed Touch Controllers:** Determines which controller can initiate a touch action. The options available are:
    * `Both` means both controllers will register a touch.
    * `Left_Only` means only the left controller will register a touch.
@@ -1106,12 +1105,12 @@ The basis of this script is to provide a simple mechanism for identifying object
   * **Is Swappable:** Determines if the object can be swapped between controllers when it is picked up. If it is unchecked then the object must be dropped before it can be picked up by the other controller.
   * **Hold Button To Grab:** If this is checked then the grab button on the controller needs to be continually held down to keep grabbing. If this is unchecked the grab button toggles the grab action with one button press to grab and another to release.
   * **Grab Override Button:** If this is set to `Undefined` then the global grab alias button will grab the object, setting it to any other button will ensure the override button is used to grab this specific interactable object.
-  * **Rumble On Grab:** The haptic feedback on the controller can be triggered upon grabbing the object, the `x` denotes the length of time, the `y` denotes the strength of the pulse. (x and y will be replaced in the future with a custom editor).
+  * **Rumble On Grab:** The haptic feedback on the controller can be triggered upon grabbing the object, the `Strength` denotes the strength of the pulse, the `Duration` denotes the length of time.
   * **Allowed Grab Controllers:** Determines which controller can initiate a grab action. The options available are:
    * `Both` means both controllers are allowed to grab.
    * `Left_Only` means only the left controller is allowed to grab.
    * `Right_Only` means only the right controller is allowed to grab.
-  * **Precision_Snap:** If this is checked then when the controller grabs the object, it will grab it with precision and pick it up at the particular point on the object the controller is touching.
+  * **Precision_Snap:** If this is checked then when the controller grabs the object, it will grab it with precision and pick it up at the particular point on the object the controller is touching. If this is checked, `Right Snap Handle` and `Left Snap Handle` will be hidden since they will be ignored.
   * **Right Snap Handle:** A Transform provided as an empty game object which must be the child of the item being grabbed and serves as an orientation point to rotate and position the grabbed item in relation to the right handed controller. If no Right Snap Handle is provided but a Left Snap Handle is provided, then the Left Snap Handle will be used in place. If no Snap Handle is provided then the object will be grabbed at it's central point.
   * **Left Snap Handle:** A Transform provided as an empty game object which must be the child of the item being grabbed and serves as an orientation point to rotate and position the grabbed item in relation to the left handed controller. If no Left Snap Handle is provided but a Right Snap Handle is provided, then the Right Snap Handle will be used in place. If no Snap Handle is provided then the object will be grabbed at it's central point.
   * **Hide Controller On Grab:** Optionally override the controller setting (hide when grabbed):
@@ -1119,7 +1118,7 @@ The basis of this script is to provide a simple mechanism for identifying object
    * `Override Hide` means hiding the controller when grabbed, overriding controller settings.
    * `Override Dont Hide` means *not* hiding the controller when grabbed, overriding controller settings.
   * **Stay Grabbed On Teleport:** If this is checked then the object will stay grabbed to the controller when a teleport occurs. If it is unchecked then the object will be released when a teleport occurs.
-  
+
 #### Grab Mechanics
   * **Grab Attach Type:** This determines how the grabbed item will be attached to the controller when it is grabbed.
    * `Fixed Joint` attaches the object to the controller with a fixed joint meaning it tracks the position and rotation of the controller with perfect 1:1 tracking.
@@ -1128,9 +1127,9 @@ The basis of this script is to provide a simple mechanism for identifying object
    * `Rotator Track` also tracks the object but instead of the object tracking the direction of the controller, a force is applied to the object to cause it to rotate. This is ideal for hinged joints on items such as wheels or doors.
    * `Child Of Controller` simply makes the object a child of the controller grabbing so it naturally tracks the position of the controller motion.
    * `Climbable` non-rigid body interactable object used to allow player climbing.
-  * **Detach Threshold:** The force amount when to detach the object from the grabbed controller. If the controller tries to exert a force higher than this threshold on the object (from pulling it through another object or pushing it into another object) then the joint holding the object to the grabbing controller will break and the object will no longer be grabbed. This also works with Tracked Object grabbing but determines how far the controller is from the object before breaking the grab.
-  * **Spring Joint Strength:** The strength of the spring holding the object to the controller. A low number will mean the spring is very loose and the object will require more force to move it, a high number will mean a tight spring meaning less force is required to move it.
-  * **Spring Joint Damper:** The amount to damper the spring effect when using a Spring Joint grab mechanic. A higher number here will reduce the oscillation effect when moving jointed Interactable Objects.
+  * **Detach Threshold:** Used with `Fixed Joint`, `Spring Joint`, `Track Object`, and `Rotator Track` grab mechanics. The force amount when to detach the object from the grabbed controller. If the controller tries to exert a force higher than this threshold on the object (from pulling it through another object or pushing it into another object) then the joint holding the object to the grabbing controller will break and the object will no longer be grabbed. This also works with Tracked Object grabbing but determines how far the controller is from the object before breaking the grab.
+  * **Spring Joint Strength:** Used with `Spring Joint` grab mechanic. with The strength of the spring holding the object to the controller. A low number will mean the spring is very loose and the object will require more force to move it, a high number will mean a tight spring meaning less force is required to move it.
+  * **Spring Joint Damper:** Used with `Spring Joint` grab mechanic. The amount to damper the spring effect when using a Spring Joint grab mechanic. A higher number here will reduce the oscillation effect when moving jointed Interactable Objects.
   * **Throw Multiplier:** An amount to multiply the velocity of the given object when it is thrown. This can also be used in conjunction with the Interact Grab Throw Multiplier to have certain objects be thrown even further than normal (or thrown a shorter distance if a number below 1 is entered).
   * **On Grab Collision Delay:** The amount of time to delay collisions affecting the object when it is first grabbed. This is useful if a game object may get stuck inside another object when it is being grabbed.
 
@@ -1140,7 +1139,7 @@ The basis of this script is to provide a simple mechanism for identifying object
   * **Hold Button To Use:** If this is checked then the use button on the controller needs to be continually held down to keep using. If this is unchecked the the use button toggles the use action with one button press to start using and another to stop using.
   * **Use Override Button:** If this is set to `Undefined` then the global use alias button will use the object, setting it to any other button will ensure the override button is used to use this specific interactable object.
   * **Pointer Activates Use Action:** If this is checked then when a World Pointer beam (projected from the controller) hits the interactable object, if the object has `Hold Button To Use` unchecked then whilst the pointer is over the object it will run it's `Using` method. If `Hold Button To Use` is unchecked then the `Using` method will be run when the pointer is deactivated. The world pointer will not throw the `Destination Set` event if it is affecting an interactable object with this setting checked as this prevents unwanted teleporting from happening when using an object with a pointer.
-  * **Rumble On Use:** The haptic feedback on the controller can be triggered upon using the object, the `x` denotes the length of time, the `y` denotes the strength of the pulse. (x and y will be replaced in the future with a custom editor).
+  * **Rumble On Use:** The haptic feedback on the controller can be triggered upon using the object, the `Strength` denotes the strength of the pulse, the `Duration` denotes the length of time.
   * **Allowed Use Controllers:** Determines which controller can initiate a use action. The options available are:
    * `Both` means both controllers are allowed to use.
    * `Left_Only` means only the left controller is allowed to use.
@@ -1622,7 +1621,7 @@ The AttemptGrab method will attempt to grab the currently touched object without
 The GetGrabbedObject method returns the current object being grabbed by the controller.
 
 ### Example
-  
+
 `VRTK/Examples/005_Controller/BasicObjectGrabbing` demonstrates the grabbing of interactable objects that have the `VRTK_InteractableObject` script attached to them. The objects can be picked up and thrown around.
 
 `VRTK/Examples/013_Controller_UsingAndGrabbingMultipleObjects` demonstrates that each controller can grab and use objects independently and objects can also be toggled to their use state simultaneously.
@@ -1657,7 +1656,7 @@ If a valid interactable object is usable then pressing the set `Use` button on t
 
   * `uint controllerIndex` - The index of the controller doing the interaction
   * `GameObject target` - The GameObject of the interactable object that is being interacted with by the controller
-  
+
 ### Class Methods
 
 #### GetUsingObject/0
@@ -1800,12 +1799,12 @@ All 3D controls extend the `VRTK_Control` abstract class which provides a defaul
 ### Class Events
 
   * `OnValueChanged` - Emitted when the control is interacted with.
-  
+
 #### Event Payload
 
   * `float value` - The current value in the context of the control extending this abstract class.
   * `float value` - The normalized value in the range between 0 and 100 of the control extending this abstract class.
-  
+
 ### Class Methods
 
 #### GetValue/0
@@ -1896,7 +1895,7 @@ The script will instantiate the required Rigidbody, Interactable and HingeJoint 
   * **Lid:** The game object for the lid.
   * **Body:** The game object for the body.
   * **Handle:** The game object for the handle.
-  * **Content:** The parent game object for the chest content elements. 
+  * **Content:** The parent game object for the chest content elements.
   * **Hide Content:** Makes the content invisible while the chest is closed.
   * **Max Angle:** The maximum opening angle of the chest.
 
@@ -1923,7 +1922,7 @@ The script will instantiate the required Rigidbodies, Interactable and HingeJoin
   * **Door:** The game object for the door. Can also be an empty parent or left empty if the script is put onto the actual door mesh. If no colliders exist yet a collider will tried to be automatically attached to all children that expose renderers.
   * **Handles:** The game object for the handles. Can also be an empty parent or left empty. If empty the door can only be moved using the rigidbody mode of the controller. If no collider exists yet a compound collider made up of all children will try to be calculated but this will fail if the door is rotated. In that case a manual collider will need to be assigned.
   * **Frame:** The game object for the frame to which the door is attached. Should only be set if the frame will move as well to ensure that the door moves along with the frame.
-  * **Content:** The parent game object for the door content elements. 
+  * **Content:** The parent game object for the door content elements.
   * **Hide Content:** Makes the content invisible while the door is closed.
   * **Max Angle:** The maximum opening angle of the door.
   * **Open Inward:** Can the door be pulled to open.
@@ -1953,8 +1952,8 @@ It is possible to supply a third game object which is the root of the contents i
 
   * **Direction:** The axis on which the chest should open. All other axis will be frozen.
   * **Body:** The game object for the body.
-  * **Handle:** The game object for the handle. 
-  * **Content:** The parent game object for the drawer content elements. 
+  * **Handle:** The game object for the handle.
+  * **Content:** The parent game object for the drawer content elements.
   * **Hide Content:** Makes the content invisible while the drawer is closed.
   * **Snapping:** Keeps the drawer closed with a slight force. This way the drawer will not gradually open due to some minor physics effect.
 
