@@ -388,7 +388,7 @@
 
         public bool AnyButtonPressed()
         {
-            return (triggerClicked || triggerHairlinePressed || triggerTouched || triggerPressed || gripPressed || touchpadPressed || applicationMenuPressed);
+            return (triggerPressed || gripPressed || touchpadPressed || applicationMenuPressed);
         }
 
         private ControllerInteractionEventArgs SetButtonEvent(ref bool buttonBool, bool value, float buttonPressure)

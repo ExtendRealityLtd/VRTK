@@ -11,6 +11,7 @@
 
         private uint controllerIndex;
         private ushort maxHapticVibration = 3999;
+        private bool controllerHighlighted = false;
 
         private Dictionary<GameObject, Material> storedMaterials;
 
@@ -139,27 +140,44 @@
 
         public void ToggleHighlightTrigger(bool state, Color? highlight = null, float duration = 0f)
         {
+            if(!state && controllerHighlighted)
+            {
+                return;
+            }
             ToggleHighlightAlias(state, "Model/trigger", highlight, duration);
         }
 
         public void ToggleHighlightGrip(bool state, Color? highlight = null, float duration = 0f)
         {
+            if (!state && controllerHighlighted)
+            {
+                return;
+            }
             ToggleHighlightAlias(state, "Model/lgrip", highlight, duration);
             ToggleHighlightAlias(state, "Model/rgrip", highlight, duration);
         }
 
         public void ToggleHighlightTouchpad(bool state, Color? highlight = null, float duration = 0f)
         {
+            if (!state && controllerHighlighted)
+            {
+                return;
+            }
             ToggleHighlightAlias(state, "Model/trackpad", highlight, duration);
         }
 
         public void ToggleHighlightApplicationMenu(bool state, Color? highlight = null, float duration = 0f)
         {
+            if (!state && controllerHighlighted)
+            {
+                return;
+            }
             ToggleHighlightAlias(state, "Model/button", highlight, duration);
         }
 
         public void ToggleHighlightController(bool state, Color? highlight = null, float duration = 0f)
         {
+            controllerHighlighted = state;
             ToggleHighlightTrigger(state, highlight, duration);
             ToggleHighlightGrip(state, highlight, duration);
             ToggleHighlightTouchpad(state, highlight, duration);
