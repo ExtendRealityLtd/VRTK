@@ -32,7 +32,7 @@ This canvas adds a frames per second text element to the headset. To use the pre
   * Find the `Canvas` component
   * Set the `Render Camera` parameter to `Camera (eye)` which can be found in the `[CameraRig]` prefab.
 
-There are a number of parameters that can be set on the Prefab. Expanding the `FramesPerSecondCanvas` object in the hierarchy view shows the child `FramesPerSecondText` obejct and clicking on that reveals additional paramters which can be set via the `FramesPerSecondViewer` script (which can be found in `VRTK/Scripts/Helper/FramesPerSecondViewer`)
+There are a number of parameters that can be set on the Prefab. Expanding the `FramesPerSecondCanvas` object in the hierarchy view shows the child `FramesPerSecondText` object and clicking on that reveals additional parameters which can be set via the `FramesPerSecondViewer` script (which can be found in `VRTK/Scripts/Helper/FramesPerSecondViewer`)
 
 ### Inspector Parameters
 
@@ -63,7 +63,7 @@ There are a number of parameters that can be set on the Prefab which are provide
   * **Display Text:** The text that is displayed on the tooltip.
   * **Font Size:** The size of the text that is displayed.
   * **Container Size:** The size of the tooltip container where `x = width` and `y = height`.
-  * **Draw Line From:** An optional transform of where to start drawing the line from. If one is not provided the the centre of the tooltip is used for the initial line position.
+  * **Draw Line From:** An optional transform of where to start drawing the line from. If one is not provided the centre of the tooltip is used for the initial line position.
   * **Draw Line To:** A transform of another object in the scene that a line will be drawn from the tooltip to, this helps denote what the tooltip is in relation to. If no transform is provided and the tooltip is a child of another object, then the parent object's transform will be used as this destination position.
   * **Line Width:** The width of the line drawn between the tooltip and the destination transform.
   * **Font Color:** The colour to use for the text on the tooltip.
@@ -130,8 +130,8 @@ There are a number of parameters that can be set on the Prefab which are provide
    * **OnHoverExit():** Methods to invoke when button leaves the hovered state.
   * **Button Prefab:** The base for each button in the menu, by default set to a dynamic circle arc that will fill up a portion of the menu.
   * **Button Thickness:** Percentage of the menu the buttons should fill, 1.0 is a pie slice, 0.1 is a thin ring.
-  * **Button Color:** The background color of the buttons, default is white.
-  * **Offset Distance:** The distance the buttons should move away from the center. This creates space between the individual buttons.
+  * **Button Color:** The background colour of the buttons, default is white.
+  * **Offset Distance:** The distance the buttons should move away from the centre. This creates space between the individual buttons.
   * **Offset Rotation:** The additional rotation of the Radial Menu.
   * **Rotate Icons:** Whether button icons should rotate according to their arc or be vertical compared to the controller.
   * **Icon Margin:** The margin in pixels that the icon should keep within the button.
@@ -216,7 +216,7 @@ This directory contains all of the toolkit scripts that add VR functionality to 
 
 The Controller Events script deals with events that the game controller is sending out.
 
-The Controller Events script is attached to a Controller object within the `[CameraRig]` prefab and provides event listeners for every button press on the controller (excluding the System Menu button as this cannot be overriden and is always used by Steam).
+The Controller Events script is attached to a Controller object within the `[CameraRig]` prefab and provides event listeners for every button press on the controller (excluding the System Menu button as this cannot be overridden and is always used by Steam).
 
 When a controller button is pressed, the script emits an event to denote that the button has been pressed which allows other scripts to listen for this event without needing to implement any controller logic. When a controller button is released, the script also emits an event denoting that the button has been released.
 
@@ -312,7 +312,7 @@ The GetVelocity method is useful for getting the current velocity of the physica
   * Returns
    * `Vector3` - A 3 dimensional vector containing the current real world physical controller angular (rotational) velocity.
 
-The GetAngularVelocity method is useful for getting the current rotational velocity of the phyiscal game controller. This can be useful for determining which way the controller is being rotated and at what speed the rotation is occuring.
+The GetAngularVelocity method is useful for getting the current rotational velocity of the physical game controller. This can be useful for determining which way the controller is being rotated and at what speed the rotation is occurring.
 
 #### GetTouchpadAxis/0
 
@@ -399,7 +399,7 @@ The IsControllerVisible method returns true if the controller is currently visib
   > `public void ToggleControllerModel(bool state, GameObject grabbedChildObject)`
 
   * Parameters
-   * `bool state` - The visibility state to toggle the controller to, `true` will make the controller visibile - `false` will hide the controller model.
+   * `bool state` - The visibility state to toggle the controller to, `true` will make the controller visible - `false` will hide the controller model.
    * `GameObject grabbedChildObject` - If an object is being held by the controller then this can be passed through to prevent hiding the grabbed game object as well.
   * Returns
    * _none_
@@ -428,7 +428,7 @@ The SetControllerOpacity method allows the opacity of the controller model to be
   * Returns
    * _none_
 
-The HighlightControllerElement method allows for an element of the controller to have it's colour changed to simulate a highlighting effect of that element on the controller. It's useful for being able to draw a user's attention to a specific button on the controller.
+The HighlightControllerElement method allows for an element of the controller to have its colour changed to simulate a highlighting effect of that element on the controller. It's useful for being able to draw a user's attention to a specific button on the controller.
 
 #### UnhighlightControllerElement/1
 
@@ -439,7 +439,7 @@ The HighlightControllerElement method allows for an element of the controller to
   * Returns
    * _none_
 
-The UnhighlightControllerElement method is the inverse of the HighlightControllerElement method and resets the controller element to it's original colour.
+The UnhighlightControllerElement method is the inverse of the HighlightControllerElement method and resets the controller element to its original colour.
 
 #### ToggleHighlightControllerElement/4
 
@@ -453,7 +453,7 @@ The UnhighlightControllerElement method is the inverse of the HighlightControlle
   * Returns
    * _none_
 
-The ToggleHighlightControllerElement method is a shortcut method that makes it easier to highlight and unhighlight a controller element in a single method rather than using the HighlightControllerElement and UnhighlightControllerElement methods seperately.
+The ToggleHighlightControllerElement method is a shortcut method that makes it easier to highlight and unhighlight a controller element in a single method rather than using the HighlightControllerElement and UnhighlightControllerElement methods separately.
 
 #### ToggleHighlightTrigger/3
 
@@ -591,7 +591,7 @@ The GetControllerIndex method is used to find the index of a given controller ob
   * Returns
    * `GameObject` - The tracked object that matches the given index.
 
-The TrackedObjectByIndex method is used to find the GameObject of a tracked object by it's generated index.
+The TrackedObjectByIndex method is used to find the GameObject of a tracked object by its generated index.
 
 #### TrackedObjectOrigin/1
 
@@ -694,7 +694,7 @@ The Simple Pointer script can be attached to a Controller object within the `[Ca
   * **Show Play Area Cursor:** If this is enabled then the play area boundaries are displayed at the tip of the pointer beam in the current pointer colour.
   * **Play Area Cursor Dimensions:** Determines the size of the play area cursor and collider. If the values are left as zero then the Play Area Cursor will be sized to the calibrated Play Area space.
   * **Handle Play Area Cursor Collisions:** If this is ticked then if the play area cursor is colliding with any other object then the pointer colour will change to the `Pointer Miss Color` and the `WorldPointerDestinationSet` event will not be triggered, which will prevent teleporting into areas where the play area will collide.
-  * **Ignore Target With Tag Or Class:** A string that specifies an object Tag or the name of a Script attached to an obejct and notifies the play area cursor to ignore collisions with the object.
+  * **Ignore Target With Tag Or Class:** A string that specifies an object Tag or the name of a Script attached to an object and notifies the play area cursor to ignore collisions with the object.
   * **Pointer Visibility:** Determines when the pointer beam should be displayed:
    * `On_When_Active` only shows the pointer beam when the Pointer button on the controller is pressed.
    * `Always On` ensures the pointer beam is always visible but pressing the Pointer button on the controller initiates the destination set event.
@@ -743,10 +743,10 @@ The Bezier Pointer script can be attached to a Controller object within the `[Ca
    * `Always Off` ensures the pointer beam is never visible but the destination point is still set and pressing the Pointer button on the controller still initiates the destination set event.
   * **Hold Button To Activate:** If this is checked then the pointer beam will be activated on first press of the pointer alias button and will stay active until the pointer alias button is pressed again. The destination set event is emitted when the beam is deactivated on the second button press.
   * **Activate Delay:** The time in seconds to delay the pointer beam being able to be active again. Useful for preventing constant teleportation.
-  * **Pointer Length:** The length of the projected forward pointer beam, this is basically the distance able to point from the controller potiion.
+  * **Pointer Length:** The length of the projected forward pointer beam, this is basically the distance able to point from the controller position.
   * **Pointer Density:** The number of items to render in the beam bezier curve. A high number here will most likely have a negative impact of game performance due to large number of rendered objects.
   * **Show Pointer Cursor:** A cursor is displayed on the ground at the location the beam ends at, it is useful to see what height the beam end location is, however it can be turned off by toggling this.
-  * **Pointer Cursor Radius:** The size of the ground pointer cursor. This number also affects the size of the objects in the bezier curve beam. The larger the raduis, the larger the objects will be.
+  * **Pointer Cursor Radius:** The size of the ground pointer cursor. This number also affects the size of the objects in the bezier curve beam. The larger the radius, the larger the objects will be.
   * **Beam Curve Offset:** The amount of height offset to apply to the projected beam to generate a smoother curve even when the beam is pointing straight.
   * **Custom Pointer Tracer:** A custom Game Object can be applied here to use instead of the default sphere for the beam tracer. The custom Game Object will match the rotation of the controller.
   * **Custom Pointer Cursor:** A custom Game Object can be applied here to use instead of the default flat cylinder for the pointer cursor.
@@ -814,7 +814,7 @@ The SetEventSystem method is used to set up the global Unity event system for th
   > `public void SetWorldCanvas(Canvas canvas)`
 
   * Parameters
-   * `Canvas canvas` - The canvas object to initialse for use with the UI pointers. Must be of type `WorldSpace`.
+   * `Canvas canvas` - The canvas object to initialise for use with the UI pointers. Must be of type `WorldSpace`.
   * Returns
    * _none_
 
@@ -850,7 +850,7 @@ The Basic Teleport script is attached to the `[CameraRig]` prefab and requires a
   * **Blink Transition Speed:** The fade blink speed can be changed on the basic teleport script to provide a customised teleport experience. Setting the speed to 0 will mean no fade blink effect is present.
   * **Distance Blink Delay:** A range between 0 and 32 that determines how long the blink transition will stay blacked out depending on the distance being teleported. A value of 0 will not delay the teleport blink effect over any distance, a value of 32 will delay the teleport blink fade in even when the distance teleported is very close to the original position. This can be used to simulate time taking longer to pass the further a user teleports. A value of 16 provides a decent basis to simulate this to the user.
   * **Headset Position Compensation:** If this is checked then the teleported location will be the position of the headset within the play area. If it is unchecked then the teleported location will always be the centre of the play area even if the headset position is not in the centre of the play area.
-  * **Ignore Target With Tag Or Class:** A string that specifies an object Tag or the name of a Script attached to an obejct and notifies the teleporter that the destination is to be ignored so the user cannot teleport to that location. It also ensure the pointer colour is set to the miss colour.
+  * **Ignore Target With Tag Or Class:** A string that specifies an object Tag or the name of a Script attached to an object and notifies the teleporter that the destination is to be ignored so the user cannot teleport to that location. It also ensure the pointer colour is set to the miss colour.
   * **Nav Mesh Limit Distance:** The max distance the nav mesh edge can be from the teleport destination to be considered valid. If a value of `0` is given then the nav mesh restriction will be ignored..
 
 ### Class Events
@@ -895,9 +895,9 @@ Like the basic teleporter the Height Adjust Teleport script is attached to the `
   * **Blink Transition Speed:** The fade blink speed on teleport.
   * **Distance Blink Delay:** A range between 0 and 32 that determines how long the blink transition will stay blacked out depending on the distance being teleported. A value of 0 will not delay the teleport blink effect over any distance, a value of 32 will delay the teleport blink fade in even when the distance teleported is very close to the original position. This can be used to simulate time taking longer to pass the further a user teleports. A value of 16 provides a decent basis to simulate this to the user.
   * **Headset Position Compensation:** If this is checked then the teleported location will be the position of the headset within the play area. If it is unchecked then the teleported location will always be the centre of the play area even if the headset position is not in the centre of the play area.
-  * **Ignore Target With Tag Or Class:** A string that specifies an object Tag or the name of a Script attached to an obejct and notifies the teleporter that the destination is to be ignored so the user cannot teleport to that location. It also ensure the pointer colour is set to the miss colour.
+  * **Ignore Target With Tag Or Class:** A string that specifies an object Tag or the name of a Script attached to an object and notifies the teleporter that the destination is to be ignored so the user cannot teleport to that location. It also ensure the pointer colour is set to the miss colour.
   * **Nav Mesh Limit Distance:** The max distance the nav mesh edge can be from the teleport destination to be considered valid. If a value of `0` is given then the nav mesh restriction will be ignored..
-  * **Play Space Falling:** Checks if the user steps off an object into a part of their play area that is not on the object then they are automatically teleported down to the nearest floor. The `Play Space Falling` option also works in the opposite way that if the user's headset is above an object then the user is teleported automatically on top of that object, which is useful for simulating climbing stairs without needing to use the pointer beam location. If this option is turned off then the user can hover in mid air at the same y position of the object they are standing on.
+  * **Play Space Falling:** Checks if the user steps off an object into a part of their play area that is not on the object then they are automatically teleported down to the nearest floor. The `Play Space Falling` option also works in the opposite way that if the user's headset is above an object then the user is teleported automatically on top of that object, which is useful for simulating climbing stairs without needing to use the pointer beam location. If this option is turned off then the user can hover in mid-air at the same y position of the object they are standing on.
   * **Use Gravity**: allows for gravity based falling when the distance is greater than `Gravity Fall Height`.
   * **Gravity Fall Height**: Fall distance needed before gravity based falling can be triggered.
   * **Blink Y Threshold:** The `y` distance between the floor and the headset that must change before the fade transition is initiated. If the new user location is at a higher distance than the threshold then the headset blink transition will activate on teleport. If the new user location is within the threshold then no blink transition will happen, which is useful for walking up slopes, meshes and terrains where constant blinking would be annoying.
@@ -930,12 +930,12 @@ If the headset is colliding then the teleport action is also disabled to prevent
 
   * **Blink Transition Speed:** The fade blink speed on collision.
   * **Fade Color:** The colour to fade the headset to on collision.
-  * **Ignore Target With Tag Or Class:** A string that specifies an object Tag or the name of a Script attached to an obejct and will prevent the object from fading the headset view on collision.
+  * **Ignore Target With Tag Or Class:** A string that specifies an object Tag or the name of a Script attached to an object and will prevent the object from fading the headset view on collision.
 
 ### Class Events
 
   * `HeadsetCollisionDetect` - Emitted when the user's headset collides with another game object.
-  * `HeadsetCollisionEnded` -  Emitted when the user's headset stops colliding with a game object.
+  * `HeadsetCollisionEnded` - Emitted when the user's headset stops colliding with a game object.
 
 #### Event Payload
 
@@ -1058,12 +1058,12 @@ If the Headset Collision Fade script has been applied to the Camera prefab, then
 
 This script allows the playArea to move with the user. The `[CameraRig]` is only moved when at the edge of a defined circle. Aims to create a virtually bigger play area. To use this add this script to the `[CameraRig`] prefab.
 
-There is an additional script `VRTK_RoomExtender_PlayAreaGizmo` which can be attachted to the `[CameraRig`] to visualize the extended playArea within the Editor.
+There is an additional script `VRTK_RoomExtender_PlayAreaGizmo` which can be attached to the `[CameraRig`] to visualize the extended playArea within the Editor.
 
 ### Inspector Parameters
 
   * **Movement Function:** This determines the type of movement used by the extender and can be one of the following options:
-   * **Nonlinear:**  Moves the head with a non linear drift movement.
+   * **Nonlinear:**  Moves the head with a non-linear drift movement.
    * **LinearDirect:** Moves the headset in a direct linear movement.
   * **Additional Movement Enabled:** This is the a public variable to enable the additional movement. This can be used in other scripts to toggle the `[CameraRig]` movement.
   * **Additional Movement Enabled On Button Press:** This configures the controls of the RoomExtender. If this is true then the touchpad needs to be pressed to enable it. If this is false then it is disabled by pressing the touchpad.
@@ -1073,7 +1073,7 @@ There is an additional script `VRTK_RoomExtender_PlayAreaGizmo` which can be att
 
 ### Example
 
-`VRTK/Examples/028_CameraRig_RoomExtender` shows how the RoomExtender script is controlled by a VRTK_RoomExtender_Controller Example script located at both controllers. Pressing the `Touchpad` on the controller activates the Room Extender. The Additional Movement Multiplier is changed based on the touch distance to the center of the touchpad.
+`VRTK/Examples/028_CameraRig_RoomExtender` shows how the RoomExtender script is controlled by a VRTK_RoomExtender_Controller Example script located at both controllers. Pressing the `Touchpad` on the controller activates the Room Extender. The Additional Movement Multiplier is changed based on the touch distance to the centre of the touchpad.
 
 ---
 
@@ -1089,7 +1089,7 @@ The basis of this script is to provide a simple mechanism for identifying object
 
 #### Touch Interactions
   * **Highlight On Touch:** The object will only highlight when a controller touches it if this is checked.
-  * **Touch Highlight Color:** The colour to highlight the object when it is touched. This colour will override any globally set color (for instance on the `VRTK_InteractTouch` script).
+  * **Touch Highlight Color:** The colour to highlight the object when it is touched. This colour will override any globally set colour (for instance on the `VRTK_InteractTouch` script).
   * **Rumble On Touch:** The haptic feedback on the controller can be triggered upon touching the object, the `x` denotes the length of time, the `y` denotes the strength of the pulse. (x and y will be replaced in the future with a custom editor)
   * **Allowed Touch Controllers:** Determines which controller can initiate a touch action. The options available are:
    * `Both` means both controllers will register a touch.
@@ -1112,8 +1112,8 @@ The basis of this script is to provide a simple mechanism for identifying object
    * `Left_Only` means only the left controller is allowed to grab.
    * `Right_Only` means only the right controller is allowed to grab.
   * **Precision_Snap:** If this is checked then when the controller grabs the object, it will grab it with precision and pick it up at the particular point on the object the controller is touching.
-  * **Right Snap Handle:** A Transform provided as an empty game object which must be the child of the item being grabbed and serves as an orientation point to rotate and position the grabbed item in relation to the right handed controller. If no Right Snap Handle is provided but a Left Snap Handle is provided, then the Left Snap Handle will be used in place. If no Snap Handle is provided then the object will be grabbed at it's central point.
-  * **Left Snap Handle:** A Transform provided as an empty game object which must be the child of the item being grabbed and serves as an orientation point to rotate and position the grabbed item in relation to the left handed controller. If no Left Snap Handle is provided but a Right Snap Handle is provided, then the Right Snap Handle will be used in place. If no Snap Handle is provided then the object will be grabbed at it's central point.
+  * **Right Snap Handle:** A Transform provided as an empty game object which must be the child of the item being grabbed and serves as an orientation point to rotate and position the grabbed item in relation to the right handed controller. If no Right Snap Handle is provided but a Left Snap Handle is provided, then the Left Snap Handle will be used in place. If no Snap Handle is provided then the object will be grabbed at its central point.
+  * **Left Snap Handle:** A Transform provided as an empty game object which must be the child of the item being grabbed and serves as an orientation point to rotate and position the grabbed item in relation to the left handed controller. If no Left Snap Handle is provided but a Right Snap Handle is provided, then the Right Snap Handle will be used in place. If no Snap Handle is provided then the object will be grabbed at its central point.
   * **Hide Controller On Grab:** Optionally override the controller setting (hide when grabbed):
    * `Default` means using controller settings.
    * `Override Hide` means hiding the controller when grabbed, overriding controller settings.
@@ -1123,7 +1123,7 @@ The basis of this script is to provide a simple mechanism for identifying object
 #### Grab Mechanics
   * **Grab Attach Type:** This determines how the grabbed item will be attached to the controller when it is grabbed.
    * `Fixed Joint` attaches the object to the controller with a fixed joint meaning it tracks the position and rotation of the controller with perfect 1:1 tracking.
-   * `Spring Joint` attaches the object to the controller with a spring joint meaing there is some flexibility between the item and the controller force moving the item. This works well when attempting to pull an item rather than snap the item directly to the controller. It creates the illusion that the item has resistence to move it.
+   * `Spring Joint` attaches the object to the controller with a spring joint meaning there is some flexibility between the item and the controller force moving the item. This works well when attempting to pull an item rather than snap the item directly to the controller. It creates the illusion that the item has resistance to move it.
    * `Track Object` doesn't attach the object to the controller via a joint, instead it ensures the object tracks the direction of the controller, which works well for items that are on hinged joints.
    * `Rotator Track` also tracks the object but instead of the object tracking the direction of the controller, a force is applied to the object to cause it to rotate. This is ideal for hinged joints on items such as wheels or doors.
    * `Child Of Controller` simply makes the object a child of the controller grabbing so it naturally tracks the position of the controller motion.
@@ -1335,6 +1335,17 @@ The AttachIsTrackObject method is used to determine if the object is using one o
 
 The AttachIsClimbObject method is used to determine if the object is using the `Climbable` grab attach mechanics.
 
+#### AttachIsKinematicObject/0
+
+  > `public bool AttachIsKinematicObject()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `bool` - Is true if the grab attach mechanic sets the object to a kinematic state on grab.
+
+The AttachIsKinematicObject method is used to determine if the object has kinematics turned on at the point of grab.
+
 #### AttachIsStaticObject/0
 
   > `public bool AttachIsStaticObject()`
@@ -1439,7 +1450,7 @@ The RegisterTeleporters method is used to find all objects that have a teleporte
 
 `VRTK/Examples/005_Controller_BasicObjectGrabbing` uses the `VRTK_InteractTouch` and `VRTK_InteractGrab` scripts on the controllers to show how an interactable object can be grabbed and snapped to the controller and thrown around the game world.
 
-`VRTK/Examples/013_Controller_UsingAndGrabbingMultipleObjects` shows mutltiple objects that can be grabbed by holding the buttons or grabbed by toggling the button click and also has objects that can have their Using state toggled to show how mutliple items can be turned on at the same time.
+`VRTK/Examples/013_Controller_UsingAndGrabbingMultipleObjects` shows multiple objects that can be grabbed by holding the buttons or grabbed by toggling the button click and also has objects that can have their Using state toggled to show how multiple items can be turned on at the same time.
 
 ---
 
@@ -1458,7 +1469,7 @@ The Interact Touch script is attached to a Controller object within the `[Camera
 
 ### Class Events
 
-  * `ControllerTouchInteractableObject` -  Emitted when a valid object is touched
+  * `ControllerTouchInteractableObject` - Emitted when a valid object is touched
   * `ControllerUntouchInteractableObject` - Emitted when a valid object is no longer being touched
 
 #### Event Payload
@@ -1911,7 +1922,7 @@ The script will instantiate the required Rigidbody, Interactable and HingeJoint 
 
 ### Overview
 
-Transforms a game object into a door with an optional handle attached to an  optional frame. The direction can be freely set and also very reliably auto-detected.
+Transforms a game object into a door with an optional handle attached to an optional frame. The direction can be freely set and also very reliably auto-detected.
 
 There are situations when it can be very hard to automatically calculate the correct axis and anchor values for the hinge joint. If this situation is encountered then simply add the hinge joint manually and set these two values. All the rest will still be handled by the script.
 
@@ -1932,7 +1943,7 @@ The script will instantiate the required Rigidbodies, Interactable and HingeJoin
 
 ### Example
 
-`VRTK/Examples/025_Controls_Overview` shows a selection of door types, from a normal door and trapdoor, to a door with a catflap in the middle.
+`VRTK/Examples/025_Controls_Overview` shows a selection of door types, from a normal door and trapdoor, to a door with a cat-flap in the middle.
 
 ---
 
@@ -2036,7 +2047,7 @@ The script will instantiate the required Rigidbody and Interactable components a
 
 Manages objects defined as content. When taking out an object from a drawer and closing the drawer this object would otherwise disappear even if outside the drawer.
 
-The script will use the boundaries of the control to determine if it is in or out and reparent the object as necessary. It can be put onto individual objects or the parent of multiple objects. Using the latter way all interactable objects under that parent will become managed by the script.
+The script will use the boundaries of the control to determine if it is in or out and re-parent the object as necessary. It can be put onto individual objects or the parent of multiple objects. Using the latter way all interactable objects under that parent will become managed by the script.
 
 ### Inspector Parameters
 
@@ -2128,7 +2139,7 @@ The SetHeadsetPositionCompensation method determines whether the offset position
 
 ### Overview
 
-This abstract class provides any game pointer the ability to know the the state of the implemented pointer. It extends the `VRTK_DestinationMarker` to allow for destination events to be emitted when the pointer cursor collides with objects.
+This abstract class provides any game pointer the ability to know the state of the implemented pointer. It extends the `VRTK_DestinationMarker` to allow for destination events to be emitted when the pointer cursor collides with objects.
 
 The World Pointer also provides a play area cursor to be displayed for all cursors that utilise this class. The play area cursor is a representation of the current calibrated play area space and is useful for visualising the potential new play area space in the game world prior to teleporting. It can also handle collisions with objects on the new play area space and prevent teleporting if there are any collisions with objects at the potential new destination.
 
@@ -2271,7 +2282,7 @@ A scene with a terrain object and a selection of varying height 3d objects that 
 
 ### 011_Camera_HeadSetCollisionFading
 
-A scene with three walls around the play area and if the user puts their head into any of the collidable walls then the headset fades to black to prevent seeing unwanted object clipping artifacts.
+A scene with three walls around the play area and if the user puts their head into any of the collidable walls then the headset fades to black to prevent seeing unwanted object clipping artefacts.
 
   > [View Example Tour on YouTube](https://www.youtube.com/watch?v=r0RZci0tZOI)
 
@@ -2325,7 +2336,7 @@ A scene which shows how the controller pointer beam can be used to toggle the us
 
 ### 020_CameraRig_MeshTeleporting
 
-A scene with an object with a mesh collider to demonstrate how the Height Adjust Teleporter can be used to climb up and down onbjects with a mesh collider.
+A scene with an object with a mesh collider to demonstrate how the Height Adjust Teleporter can be used to climb up and down objects with a mesh collider.
 
   > [View Example Tour on YouTube](https://www.youtube.com/watch?v=6M1PZ8EjQTo)
 
@@ -2373,7 +2384,7 @@ A scene that demonstrates how to teleport to different locations without needing
 
 ### 028_CameraRig_RoomExtender
 
-A scene that demonstates the concept of extending the physical room scale space by multiplying the physical steps taken in the chaperone bounds. A higher multiplier will mean the user can walk further in the play area and the walk multiplier can be toggled by a button press.
+A scene that demonstrates the concept of extending the physical room scale space by multiplying the physical steps taken in the chaperone bounds. A higher multiplier will mean the user can walk further in the play area and the walk multiplier can be toggled by a button press.
 
   > [View Example Tour on YouTube](https://www.youtube.com/watch?v=qcBr6VWrRmo)
 
@@ -2387,7 +2398,7 @@ A scene that demonstrates adding dynamic radial menus to controllers and other o
 
 ### 031_CameraRig_HeadsetGazePointer
 
-A scene that demonstrates the ability to attach a pointer to the headset to allow for a gaze pointer for teleporting or other interactions supported by the World Pointers. The `Touchpad` on the right controller activates the gaze beam, where as the `Touchpad` on the left controller activates a beam projected from a drone in the sky as the World Pointers can be attached to any object.
+A scene that demonstrates the ability to attach a pointer to the headset to allow for a gaze pointer for teleporting or other interactions supported by the World Pointers. The `Touchpad` on the right controller activates the gaze beam, whereas the `Touchpad` on the left controller activates a beam projected from a drone in the sky as the World Pointers can be attached to any object.
 
 ### 032_Controller_CustomControllerModel
 
