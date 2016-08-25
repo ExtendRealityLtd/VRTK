@@ -322,6 +322,11 @@ namespace VRTK
             return AttachIsClimbObject(); // only one at the moment
         }
 
+        public bool AttachIsUnthrowableObject()
+        {
+            return (grabAttachMechanic == GrabAttachType.Rotator_Track);
+        }
+
         public void ZeroVelocity()
         {
             if (GetComponent<Rigidbody>())

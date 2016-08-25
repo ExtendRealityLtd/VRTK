@@ -1357,6 +1357,17 @@ The AttachIsKinematicObject method is used to determine if the object has kinema
 
 The AttachIsStaticObject method is used to determine if the object is using one of the static grab attach types.
 
+#### AttachIsUnthrowableObject/0
+
+  > `public bool AttachIsUnthrowableObject()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `bool` - Is true if the grab attach mechanic is of a type that shouldn't be considered thrown when released.
+
+The AttachIsUnthrowableObject method is used to determine if the object is using one of the grab types that should not be thrown when released.
+
 #### ZeroVelocity/0
 
   > `public void ZeroVelocity()`
