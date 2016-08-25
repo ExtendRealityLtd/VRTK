@@ -508,7 +508,14 @@ namespace VRTK
 
         private Renderer[] GetRendererArray()
         {
-            return (GetComponents<Renderer>().Length > 0 ? GetComponents<Renderer>() : GetComponentsInChildren<Renderer>());
+            var main = GetComponents<Renderer>();
+            var children = GetComponentsInChildren<Renderer>();
+
+            var allRenderers = new Renderer[main.Length + children.Length];
+            main.CopyTo(allRenderers, 0);
+            children.CopyTo(allRenderers, main.Length);
+
+            return allRenderers;
         }
 
         private Dictionary<string, Color[]> StoreOriginalColors()
