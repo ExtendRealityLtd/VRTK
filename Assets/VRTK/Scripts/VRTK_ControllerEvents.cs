@@ -718,20 +718,8 @@
 
         private void SetVelocity()
         {
-            var origin = VRTK_DeviceFinder.TrackedObjectOrigin(gameObject);
-            var velocity = VRTK_SDK_Bridge.GetVelocityOnIndex(controllerIndex);
-            var angularVelocity = VRTK_SDK_Bridge.GetAngularVelocityOnIndex(controllerIndex);
-
-            if (origin != null)
-            {
-                controllerVelocity = origin.TransformDirection(velocity);
-                controllerAngularVelocity = origin.TransformDirection(angularVelocity);
-            }
-            else
-            {
-                controllerVelocity = velocity;
-                controllerAngularVelocity = angularVelocity;
-            }
+            controllerVelocity = VRTK_SDK_Bridge.GetVelocityOnIndex(controllerIndex); ;
+            controllerAngularVelocity = VRTK_SDK_Bridge.GetAngularVelocityOnIndex(controllerIndex); ;
         }
     }
 }
