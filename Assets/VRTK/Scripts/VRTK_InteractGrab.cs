@@ -57,7 +57,7 @@ namespace VRTK
 
         public void ForceRelease()
         {
-            if (grabbedObject != null && grabbedObject.GetComponent<VRTK_InteractableObject>() && grabbedObject.GetComponent<VRTK_InteractableObject>().AttachIsTrackObject())
+            if (grabbedObject != null && grabbedObject.GetComponent<VRTK_InteractableObject>() && grabbedObject.GetComponent<VRTK_InteractableObject>().AttachIsUnthrowableObject())
             {
                 UngrabTrackedObject();
             }
@@ -484,7 +484,7 @@ namespace VRTK
         {
             if (CanRelease() && (IsObjectHoldOnGrab(grabbedObject) || grabEnabledState >= 2))
             {
-                if (grabbedObject.GetComponent<VRTK_InteractableObject>().AttachIsTrackObject())
+                if (grabbedObject.GetComponent<VRTK_InteractableObject>().AttachIsUnthrowableObject())
                 {
                     UngrabTrackedObject();
                 }
