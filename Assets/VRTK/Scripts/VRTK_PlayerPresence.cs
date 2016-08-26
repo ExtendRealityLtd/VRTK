@@ -1,6 +1,7 @@
 ﻿namespace VRTK
 {
     using UnityEngine;
+    using System.Collections;
 
     public struct PlayerPresenceEventArgs
     {
@@ -123,7 +124,7 @@
             CreateCollider();
             lastGoodPositionSet = false;
             headset = VRTK_DeviceFinder.HeadsetTransform();
-            InitHeadsetListeners(true);
+            StartCoroutine(WaitForHeadsetCollision(true));
 
             InitControllerListeners(VRTK_SDK_Bridge.GetControllerLeftHand(), true);
             InitControllerListeners(VRTK_SDK_Bridge.GetControllerRightHand(), true);
@@ -137,17 +138,25 @@
             InitControllerListeners(VRTK_SDK_Bridge.GetControllerRightHand(), false);
         }
 
+        private IEnumerator WaitForHeadsetCollision(bool state)
+        {
+            yield return new WaitForEndOfFrame();
+
+            InitHeadsetListeners(state);
+        }
+
         private void InitHeadsetListeners(bool state)
         {
-            if (headset.GetComponent<VRTK_HeadsetCollisionFade>())
+            var headsetCollision = headset.GetComponent<VRTK_HeadsetCollision>();
+            if (headsetCollision)
             {
                 if (state)
                 {
-                    headset.GetComponent<VRTK_HeadsetCollisionFade>().HeadsetCollisionDetect += new HeadsetCollisionEventHandler(OnHeadsetCollision);
+                    headsetCollision.HeadsetCollisionDetect += new HeadsetCollisionEventHandler(OnHeadsetCollision);
                 }
                 else
                 {
-                    headset.GetComponent<VRTK_HeadsetCollisionFade>().HeadsetCollisionDetect -= new HeadsetCollisionEventHandler(OnHeadsetCollision);
+                    headsetCollision.HeadsetCollisionDetect -= new HeadsetCollisionEventHandler(OnHeadsetCollision);
                 }
             }
         }
@@ -182,7 +191,6 @@
         {
             if (resetPositionOnCollision && lastGoodPositionSet)
             {
-                VRTK_SDK_Bridge.HeadsetFade(Color.black, 0f);
                 transform.position = lastGoodPosition;
             }
         }

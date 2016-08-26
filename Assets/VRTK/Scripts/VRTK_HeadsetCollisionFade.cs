@@ -2,87 +2,43 @@
 {
     using UnityEngine;
 
-    public struct HeadsetCollisionEventArgs
-    {
-        public Collider collider;
-        public Transform currentTransform;
-    }
-
-    public delegate void HeadsetCollisionEventHandler(object sender, HeadsetCollisionEventArgs e);
-
     public class VRTK_HeadsetCollisionFade : MonoBehaviour
     {
         public float blinkTransitionSpeed = 0.1f;
         public Color fadeColor = Color.black;
         public string ignoreTargetWithTagOrClass;
 
-        public event HeadsetCollisionEventHandler HeadsetCollisionDetect;
-        public event HeadsetCollisionEventHandler HeadsetCollisionEnded;
+        private VRTK_HeadsetCollision headsetCollision;
+        private VRTK_HeadsetFade headsetFade;
 
-        public virtual void OnHeadsetCollisionDetect(HeadsetCollisionEventArgs e)
+        private void OnEnable()
         {
-            if (HeadsetCollisionDetect != null)
-            {
-                HeadsetCollisionDetect(this, e);
-            }
+            headsetCollision = gameObject.AddComponent<VRTK_HeadsetCollision>();
+            headsetCollision.ignoreTargetWithTagOrClass = ignoreTargetWithTagOrClass;
+
+            headsetFade = gameObject.AddComponent<VRTK_HeadsetFade>();
+
+            headsetCollision.HeadsetCollisionDetect += new HeadsetCollisionEventHandler(OnHeadsetCollisionDetect);
+            headsetCollision.HeadsetCollisionEnded += new HeadsetCollisionEventHandler(OnHeadsetCollisionEnded);
         }
 
-        public virtual void OnHeadsetCollisionEnded(HeadsetCollisionEventArgs e)
+        private void OnHeadsetCollisionDetect(object sender, HeadsetCollisionEventArgs e)
         {
-            if (HeadsetCollisionEnded != null)
-            {
-                HeadsetCollisionEnded(this, e);
-            }
+            headsetFade.Fade(fadeColor, blinkTransitionSpeed);
         }
 
-        private HeadsetCollisionEventArgs SetHeadsetCollisionEvent(Collider collider, Transform currentTransform)
+        private void OnHeadsetCollisionEnded(object sender, HeadsetCollisionEventArgs e)
         {
-            HeadsetCollisionEventArgs e;
-            e.collider = collider;
-            e.currentTransform = currentTransform;
-            return e;
+            headsetFade.Unfade(blinkTransitionSpeed);
         }
 
-        private void Start()
+        private void OnDisable()
         {
-            Utilities.AddCameraFade();
-            if (!VRTK_SDK_Bridge.HasHeadsetFade(gameObject))
-            {
-                Debug.LogWarning("This 'VRTK_HeadsetCollisionFade' script needs a compatible fade script on the camera eye.");
-            }
+            headsetCollision.HeadsetCollisionDetect -= new HeadsetCollisionEventHandler(OnHeadsetCollisionDetect);
+            headsetCollision.HeadsetCollisionEnded -= new HeadsetCollisionEventHandler(OnHeadsetCollisionEnded);
 
-            Utilities.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.Headset);
-
-            BoxCollider collider = gameObject.AddComponent<BoxCollider>();
-            collider.isTrigger = true;
-            collider.size = new Vector3(0.1f, 0.1f, 0.1f);
-
-            Rigidbody rb = gameObject.AddComponent<Rigidbody>();
-            rb.isKinematic = true;
-            rb.useGravity = false;
-        }
-
-        private bool ValidTarget(Transform target)
-        {
-            return (target && target.tag != ignoreTargetWithTagOrClass && target.GetComponent(ignoreTargetWithTagOrClass) == null);
-        }
-
-        private void OnTriggerStay(Collider collider)
-        {
-            if (enabled && !collider.GetComponent<VRTK_PlayerObject>() && ValidTarget(collider.transform))
-            {
-                OnHeadsetCollisionDetect(SetHeadsetCollisionEvent(collider, transform));
-                VRTK_SDK_Bridge.HeadsetFade(fadeColor, blinkTransitionSpeed);
-            }
-        }
-
-        private void OnTriggerExit(Collider collider)
-        {
-            if (!collider.GetComponent<VRTK_PlayerObject>())
-            {
-                OnHeadsetCollisionEnded(SetHeadsetCollisionEvent(collider, transform));
-                VRTK_SDK_Bridge.HeadsetFade(Color.clear, blinkTransitionSpeed);
-            }
+            Destroy(headsetCollision);
+            Destroy(headsetFade);
         }
     }
 }

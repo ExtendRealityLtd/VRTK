@@ -196,6 +196,8 @@ This directory contains all of the toolkit scripts that add VR functionality to 
  * [VRTK_UIPointer](#unity-ui-pointer-vrtk_uipointer)
  * [VRTK_BasicTeleport](#basic-teleporter-vrtk_basicteleport)
  * [VRTK_HeightAdjustTeleport](#height-adjustable-teleporter-vrtk_heightadjustteleport)
+ * [VRTK_HeadsetCollision](#headset-collision-vrtk_headsetcollision)
+ * [VRTK_HeadsetFade](#headset-fade-vrtk_headsetfade)
  * [VRTK_HeadsetCollisionFade](#headset-collision-fade-vrtk_headsetcollisionfade)
  * [VRTK_PlayerPresence](#player-presence-vrtk_playerpresence)
  * [VRTK_TouchpadWalking](#touchpad-movement-vrtk_touchpadwalking)
@@ -912,25 +914,21 @@ Like the basic teleporter the Height Adjust Teleport script is attached to the `
 
 ---
 
-## Headset Collision Fade (VRTK_HeadsetCollisionFade)
+## Headset Collision (VRTK_HeadsetCollision)
 
 ### Overview
 
-The purpose of the Headset Collision Fade is to detect when the user's VR headset collides with another game object and fades the screen to a solid colour. This is to deal with a user putting their head into a game object and seeing the inside of the object clipping, which is an undesired effect.
-
-The reasoning behind this is if the user puts their head where it shouldn't be, then fading to a colour (e.g. black) will make the user realise they've done something wrong and they'll probably naturally step backwards.
+The purpose of the Headset Collision is to detect when the user's VR headset collides with another game object.
 
 If the headset is colliding then the teleport action is also disabled to prevent cheating by clipping through walls.
 
   > **Unity Version Information**
-  > * If using `Unity 5.3` or older then the Headset Collision Fade script is attached to the `Camera (head)` object within the `[CameraRig]` prefab.
-  > * If using `Unity 5.4` or newer then the Headset Collision Fade script is attached to the `Camera (eye)` object within the `[CameraRig]->Camera (head)` prefab.
+  > * If using `Unity 5.3` or older then the Headset Collision script is attached to the `Camera (head)` object within the `[CameraRig]` prefab.
+  > * If using `Unity 5.4` or newer then the Headset Collision script is attached to the `Camera (eye)` object within the `[CameraRig]->Camera (head)` prefab.
 
 ### Inspector Parameters
 
-  * **Blink Transition Speed:** The fade blink speed on collision.
-  * **Fade Color:** The colour to fade the headset to on collision.
-  * **Ignore Target With Tag Or Class:** A string that specifies an object Tag or the name of a Script attached to an object and will prevent the object from fading the headset view on collision.
+  * **Ignore Target With Tag Or Class:** A string that specifies an object Tag or the name of a Script attached to an object and will be ignored on headset collision.
 
 ### Class Events
 
@@ -941,6 +939,120 @@ If the headset is colliding then the teleport action is also disabled to prevent
 
   * `Collider collider` - The Collider of the game object the headset has collided with.
   * `Transform currentTransform` - The current Transform of the object that the Headset Collision Fade script is attached to (Camera).
+
+### Class Methods
+
+#### IsColliding/0
+
+  > `public virtual bool IsColliding()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `bool` Returns true if the headset is currently colliding with a valid game object.
+
+The IsColliding method is used to determine if the headset is currently colliding with a valid game object and returns true if it is and false if it is not colliding with anything or an invalid game object.
+
+### Example
+
+`VRTK/Examples/011_Camera_HeadSetCollisionFading` has collidable walls around the play area and if the user puts their head into any of the walls then the headset will fade to black.
+
+---
+
+## Headset Fade (VRTK_HeadsetFade)
+
+### Overview
+
+The purpose of the Headset Fade is to change the colour of the headset view to a specified colour over a given duration and to also unfade it back to being transparent. The `Fade` and `Unfade` methods can only be called via another script and this Headset Fade script does not do anything on initialisation to fade or unfade the headset view.
+
+  > **Unity Version Information**
+  > * If using `Unity 5.3` or older then the Headset Fade script is attached to the `Camera (head)` object within the `[CameraRig]` prefab.
+  > * If using `Unity 5.4` or newer then the Headset Fade script is attached to the `Camera (eye)` object within the `[CameraRig]->Camera (head)` prefab.
+
+### Class Events
+
+  * `HeadsetFadeStart` - Emitted when the user's headset begins to fade to a given colour.
+  * `HeadsetFadeComplete` - Emitted when the user's headset has completed the fade and is now fully at the given colour.
+  * `HeadsetUnfadeStart` - Emitted when the user's headset begins to unfade back to a transparent colour.
+  * `HeadsetUnfadeComplete` - Emitted when the user's headset has completed unfading and is now fully transparent again.
+
+#### Event Payload
+
+  * `float timeTillComplete` - A float that is the duration for the fade/unfade process has remaining.
+  * `Transform currentTransform` - The current Transform of the object that the Headset Fade script is attached to (Camera).
+
+### Class Methods
+
+#### IsFaded/0
+
+  > `public virtual bool IsFaded()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `bool` Returns true if the headset is currently fading or faded.
+
+The IsFaded method returns true if the headset is currently fading or has completely faded and returns false if it is completely unfaded.
+
+#### IsTransitioning/0
+
+  > `public virtual bool IsTransitioning()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `bool` Returns true if the headset is currently in the process of fading or unfading.
+
+The IsTransitioning method returns true if the headset is currently fading or unfading and returns false if it is completely faded or unfaded.
+
+#### Fade/2
+
+  > `public virtual void Fade(Color color, float duration)`
+
+  * Parameters
+   * `Color color` - The colour to fade the headset view to.
+   * `float duration` - The time in seconds to take to complete the fade transition.
+  * Returns
+   * _none_
+
+The Fade method initiates a change in the colour of the headset view to the given colour over a given duration.
+
+#### Unfade/1
+
+  > `public virtual void Unfade(float duration)`
+
+  * Parameters
+   * `float duration` - The time in seconds to take to complete the unfade transition.
+  * Returns
+   * _none_
+
+The Unfade method initiates the headset to change colour back to a transparent colour over a given duration.
+
+### Example
+
+`VRTK/Examples/011_Camera_HeadSetCollisionFading` has collidable walls around the play area and if the user puts their head into any of the walls then the headset will fade to black.
+
+---
+
+## Headset Collision Fade (VRTK_HeadsetCollisionFade)
+
+### Overview
+
+The purpose of the Headset Collision Fade is to detect when the user's VR headset collides with another game object and fades the screen to a solid colour. This is to deal with a user putting their head into a game object and seeing the inside of the object clipping, which is an undesired effect. The reasoning behind this is if the user puts their head where it shouldn't be, then fading to a colour (e.g. black) will make the user realise they've done something wrong and they'll probably naturally step backwards.
+
+The Headset Collision Fade uses a composition of the Headset Collision and Headset Fade scripts to derrive the desired behaviour.
+
+  > **Unity Version Information**
+  > * If using `Unity 5.3` or older then the Headset Collision Fade script is attached to the `Camera (head)` object within the `[CameraRig]` prefab.
+  > * If using `Unity 5.4` or newer then the Headset Collision Fade script is attached to the `Camera (eye)` object within the `[CameraRig]->Camera (head)` prefab.
+
+### Inspector Parameters
+
+  * **Blink Transition Speed:** The fade blink speed on collision.
+  * **Fade Color:** The colour to fade the headset to on collision.
+  * **Ignore Target With Tag Or Class:** A string that specifies an object Tag or the name of a Script attached to an object and will prevent the object from fading the headset view on collision.
+  
+### Example
 
 `VRTK/Examples/011_Camera_HeadSetCollisionFading` has collidable walls around the play area and if the user puts their head into any of the walls then the headset will fade to black.
 
