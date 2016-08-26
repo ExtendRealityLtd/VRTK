@@ -30,7 +30,8 @@
         private bool isClimbing = false;
 
         private VRTK_PlayerPresence playerPresence;
-        private VRTK_HeadsetCollisionFade collisionFade;
+        private VRTK_HeadsetCollision headsetCollision;
+        private VRTK_HeadsetFade headsetFade;
 
         private GameObject climbingObject;
 
@@ -73,10 +74,16 @@
             }
 
             headCamera = VRTK_DeviceFinder.HeadsetTransform();
-            collisionFade = headCamera.GetComponent<VRTK_HeadsetCollisionFade>();
-            if (collisionFade == null)
+            headsetCollision = headCamera.GetComponent<VRTK_HeadsetCollision>();
+            if (headsetCollision == null)
             {
-                collisionFade = headCamera.gameObject.AddComponent<VRTK_HeadsetCollisionFade>();
+                headsetCollision = headCamera.gameObject.AddComponent<VRTK_HeadsetCollision>();
+            }
+
+            headsetFade = headCamera.GetComponent<VRTK_HeadsetFade>();
+            if (headsetFade == null)
+            {
+                headsetFade = headCamera.gameObject.AddComponent<VRTK_HeadsetFade>();
             }
         }
 
@@ -121,13 +128,13 @@
         {
             if (state)
             {
-                collisionFade.HeadsetCollisionDetect += new HeadsetCollisionEventHandler(OnHeadsetCollisionDetected);
-                collisionFade.HeadsetCollisionEnded += new HeadsetCollisionEventHandler(OnHeadsetCollisionEnded);
+                headsetCollision.HeadsetCollisionDetect += new HeadsetCollisionEventHandler(OnHeadsetCollisionDetected);
+                headsetCollision.HeadsetCollisionEnded += new HeadsetCollisionEventHandler(OnHeadsetCollisionEnded);
             }
             else
             {
-                collisionFade.HeadsetCollisionDetect -= new HeadsetCollisionEventHandler(OnHeadsetCollisionDetected);
-                collisionFade.HeadsetCollisionEnded -= new HeadsetCollisionEventHandler(OnHeadsetCollisionEnded);
+                headsetCollision.HeadsetCollisionDetect -= new HeadsetCollisionEventHandler(OnHeadsetCollisionDetected);
+                headsetCollision.HeadsetCollisionEnded -= new HeadsetCollisionEventHandler(OnHeadsetCollisionEnded);
             }
         }
 
@@ -176,11 +183,13 @@
 
         private void OnHeadsetCollisionDetected(object sender, HeadsetCollisionEventArgs e)
         {
+            headsetFade.Fade(Color.black, 0.1f);
             headsetColliding = true;
         }
 
         private void OnHeadsetCollisionEnded(object sender, HeadsetCollisionEventArgs e)
         {
+            headsetFade.Unfade(0.1f);
             headsetColliding = false;
         }
 

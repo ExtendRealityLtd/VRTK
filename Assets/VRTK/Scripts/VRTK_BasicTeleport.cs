@@ -195,7 +195,7 @@ namespace VRTK
 
         private void InitHeadsetCollisionListener(bool state)
         {
-            var headset = FindObjectOfType<VRTK_HeadsetCollisionFade>();
+            var headset = FindObjectOfType<VRTK_HeadsetCollision>();
             if (headset)
             {
                 if (state)
