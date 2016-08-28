@@ -12,6 +12,7 @@ public class VRTK_InteractableObjectEditor : Editor
 
     public override void OnInspectorGUI()
     {
+        serializedObject.Update();
         VRTK_InteractableObject targ = (VRTK_InteractableObject)target;
         GUILayout.Space(10);
         GUIStyle guiStyle = EditorStyles.foldout;
@@ -33,10 +34,10 @@ public class VRTK_InteractableObjectEditor : Editor
             GUILayout.BeginHorizontal();
             EditorGUILayout.PrefixLabel("Rumble on Touch:");
             EditorGUI.indentLevel--;
-            GUILayout.Label("Strength");
-            float x = EditorGUILayout.FloatField(targ.rumbleOnTouch.x);
-            GUILayout.Label("Duration");
-            float y = EditorGUILayout.FloatField(targ.rumbleOnTouch.y);
+            GUILayout.Label("Strength", GUILayout.MinWidth(49f));
+            float x = EditorGUILayout.FloatField(targ.rumbleOnTouch.x, GUILayout.MinWidth(10f));
+            GUILayout.Label("Duration", GUILayout.MinWidth(50f));
+            float y = EditorGUILayout.FloatField(targ.rumbleOnTouch.y, GUILayout.MinWidth(10f));
             targ.rumbleOnTouch = new Vector2(y, x);
             EditorGUI.indentLevel++;
             GUILayout.EndHorizontal();
@@ -70,10 +71,10 @@ public class VRTK_InteractableObjectEditor : Editor
                 GUILayout.BeginHorizontal();
                 EditorGUILayout.PrefixLabel("Rumble on Grab:");
                 EditorGUI.indentLevel--;
-                GUILayout.Label("Strength");
-                float x = EditorGUILayout.FloatField(targ.rumbleOnGrab.x);
-                GUILayout.Label("Duration");
-                float y = EditorGUILayout.FloatField(targ.rumbleOnGrab.y);
+                GUILayout.Label("Strength", GUILayout.MinWidth(49f));
+                float x = EditorGUILayout.FloatField(targ.rumbleOnGrab.x, GUILayout.MinWidth(10f));
+                GUILayout.Label("Duration", GUILayout.MinWidth(50f));
+                float y = EditorGUILayout.FloatField(targ.rumbleOnGrab.y, GUILayout.MinWidth(10f));
                 targ.rumbleOnGrab = new Vector2(y, x);
                 EditorGUI.indentLevel++;
                 GUILayout.EndHorizontal();
@@ -126,13 +127,13 @@ public class VRTK_InteractableObjectEditor : Editor
                 targ.pointerActivatesUseAction = EditorGUILayout.Toggle("Pointer Activates Use Action: ", targ.pointerActivatesUseAction);
 
                 GUILayout.BeginHorizontal();
-                EditorGUILayout.PrefixLabel("Rumble on Grab:");
+                EditorGUILayout.PrefixLabel("Rumble on Use:");
                 EditorGUI.indentLevel--;
-                GUILayout.Label("Strength");
-                float x = EditorGUILayout.FloatField(targ.rumbleOnGrab.x);
-                GUILayout.Label("Duration");
-                float y = EditorGUILayout.FloatField(targ.rumbleOnGrab.y);
-                targ.rumbleOnGrab = new Vector2(y, x);
+                GUILayout.Label("Strength", GUILayout.MinWidth(49f));
+                float x = EditorGUILayout.FloatField(targ.rumbleOnUse.x, GUILayout.MinWidth(10f));
+                GUILayout.Label("Duration", GUILayout.MinWidth(50f));
+                float y = EditorGUILayout.FloatField(targ.rumbleOnUse.y, GUILayout.MinWidth(10f));
+                targ.rumbleOnUse = new Vector2(y, x);
                 EditorGUI.indentLevel++;
                 GUILayout.EndHorizontal();
 
@@ -160,6 +161,6 @@ public class VRTK_InteractableObjectEditor : Editor
                     "isGrabbable","hideControllerOnTouch","allowedTouchControllers","rumbleOnTouch","touchHighlightColor","highlightOnTouch", "isUsable"});
             }
         }
-
+        serializedObject.ApplyModifiedProperties();
     }
 }
