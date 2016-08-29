@@ -166,7 +166,7 @@ namespace VRTK
             var materials = _renderer.materials;
             foreach (Material material in materials)
             {
-                if (material.name == "Custom/OutlineBumpedDiffuse (Instance)")
+                if (material.name == "OutlineHighlighter (Instance)")
                 { 
                     material.SetColor("_OutlineColor", color);
                 }
