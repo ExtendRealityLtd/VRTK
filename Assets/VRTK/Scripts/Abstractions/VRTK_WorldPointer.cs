@@ -36,6 +36,13 @@ namespace VRTK
 
         protected bool playAreaCursorCollided = false;
 
+        protected int _navMeshLayerMask = -1;
+        public int NavMeshLayerMask
+        {
+            get { return _navMeshLayerMask; }
+            set { _navMeshLayerMask = value; }
+        }
+
         private Transform playArea;
         private GameObject playAreaCursor;
         private GameObject[] playAreaCursorBoundaries;
@@ -263,15 +270,19 @@ namespace VRTK
         protected virtual bool ValidDestination(Transform target, Vector3 destinationPosition)
         {
             bool validNavMeshLocation = false;
-            if (target)
-            {
-                NavMeshHit hit;
-                validNavMeshLocation = NavMesh.SamplePosition(destinationPosition, out hit, 0.1f, NavMesh.AllAreas);
-            }
             if (navMeshCheckDistance == 0f)
             {
                 validNavMeshLocation = true;
             }
+            else
+            {
+                if (target)
+                {
+                    NavMeshHit hit;
+                    validNavMeshLocation = NavMesh.SamplePosition(destinationPosition, out hit, navMeshCheckDistance, NavMeshLayerMask);
+                }
+            }
+
             return (validNavMeshLocation && target && target.tag != invalidTargetWithTagOrClass && target.GetComponent(invalidTargetWithTagOrClass) == null);
         }
 
