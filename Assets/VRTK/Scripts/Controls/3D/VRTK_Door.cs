@@ -4,6 +4,7 @@
 
     public class VRTK_Door : VRTK_Control
     {
+        [Tooltip("The axis on which the door will swing (in local space).")]
         public Direction direction = Direction.autodetect;
 
         [Tooltip("An optional game object that will be used as the door. Otherwise the current object will be used.")]
@@ -47,74 +48,70 @@
             }
 
             // show opening direction
-            Bounds bounds;
-            float length;
+            Bounds handleBounds = new Bounds();
+            Bounds doorBounds = Utilities.GetBounds(getDoor().transform, getDoor().transform);
+            float length = 0.5f;
             if (handles)
             {
-                bounds = Utilities.GetBounds(handles.transform, handles.transform);
-                length = 5f;
-            }
-            else
-            {
-                bounds = Utilities.GetBounds(getDoor().transform, getDoor().transform);
-                length = 1f;
+                handleBounds = Utilities.GetBounds(handles.transform, handles.transform);
             }
             Vector3 dir = Vector3.zero;
             Vector3 dir2 = Vector3.zero;
+            Vector3 thirdDirection = getThirdDirection(Direction2Axis(finalDirection), secondaryDirection);
             bool invertGizmos = false;
 
             switch (finalDirection)
             {
                 case Direction.x:
-                    if (secondaryDirection == Vector3.up)
-                    {
-                        dir = transform.forward.normalized;
-                        dir2 = transform.up.normalized;
-                        length *= bounds.extents.y;
-                        invertGizmos = true;
-                    }
-                    else
+                    if (thirdDirection == Vector3.up)
                     {
                         dir = transform.up.normalized;
                         dir2 = transform.forward.normalized;
-                        length *= bounds.extents.z;
+                        length *= doorBounds.extents.z;
+                    }
+                    else
+                    {
+                        dir = transform.forward.normalized;
+                        dir2 = transform.up.normalized;
+                        length *= doorBounds.extents.y;
+                        invertGizmos = true;
                     }
                     break;
                 case Direction.y:
-                    if (secondaryDirection == Vector3.right)
-                    {
-                        dir = transform.forward.normalized;
-                        dir2 = transform.right.normalized;
-                        length *= bounds.extents.x;
-                    }
-                    else
+                    if (thirdDirection == Vector3.right)
                     {
                         dir = transform.right.normalized;
                         dir2 = transform.forward.normalized;
-                        length *= bounds.extents.z;
+                        length *= doorBounds.extents.z;
                         invertGizmos = true;
-                    }
-                    break;
-                case Direction.z:
-                    if (secondaryDirection == Vector3.up)
-                    {
-                        dir = transform.right.normalized;
-                        dir2 = transform.up.normalized;
-                        length *= bounds.extents.y;
                     }
                     else
                     {
+                        dir = transform.forward.normalized;
+                        dir2 = transform.right.normalized;
+                        length *= doorBounds.extents.x;
+                    }
+                    break;
+                case Direction.z:
+                    if (thirdDirection == Vector3.up)
+                    {
                         dir = transform.up.normalized;
                         dir2 = transform.right.normalized;
-                        length *= bounds.extents.z;
+                        length *= doorBounds.extents.x;
                         invertGizmos = true;
+                    }
+                    else
+                    {
+                        dir = transform.right.normalized;
+                        dir2 = transform.up.normalized;
+                        length *= doorBounds.extents.y;
                     }
                     break;
             }
 
             if ((!invertGizmos && openInward) || (invertGizmos && openOutward))
             {
-                Vector3 p1 = bounds.center;
+                Vector3 p1 = (handles) ? handleBounds.center : doorBounds.center;
                 Vector3 p1end = p1 + dir2 * length * subDirection - dir * (length / 2f) * subDirection;
                 Gizmos.DrawLine(p1, p1end);
                 Gizmos.DrawSphere(p1end, length / 8f);
@@ -122,7 +119,7 @@
 
             if ((!invertGizmos && openOutward) || (invertGizmos && openInward))
             {
-                Vector3 p2 = bounds.center;
+                Vector3 p2 = (handles) ? handleBounds.center : doorBounds.center;
                 Vector3 p2end = p2 + dir2 * length * subDirection + dir * (length / 2f) * subDirection;
                 Gizmos.DrawLine(p2, p2end);
                 Gizmos.DrawSphere(p2end, length / 8f);
@@ -140,72 +137,108 @@
 
         protected override bool DetectSetup()
         {
+            // detect axis
+            doorHj = getDoor().GetComponent<HingeJoint>();
+            if (doorHj && !doorHjCreated)
+            {
+                direction = Direction.autodetect;
+            }
             finalDirection = (direction == Direction.autodetect) ? DetectDirection() : direction;
             if (finalDirection == Direction.autodetect)
             {
                 return false;
             }
-
-            Bounds doorBounds = Utilities.GetBounds(getDoor().transform, transform);
-            if (handles)
+            if (doorHj && !doorHjCreated)
             {
-                // determin sub-direction depending on handle location
-                Bounds handleBounds = Utilities.GetBounds(handles.transform, transform);
-                switch (finalDirection)
+                // if there is a hinge joint already it overrides axis selection
+                direction = finalDirection;
+            }
+
+            // detect opening direction
+            Bounds doorBounds = Utilities.GetBounds(getDoor().transform, transform);
+            if (doorHj == null || doorHjCreated)
+            {
+                if (handles)
                 {
-                    case Direction.x:
-                        if ((handleBounds.center.z + handleBounds.extents.z) > (doorBounds.center.z + doorBounds.extents.z) || (handleBounds.center.z - handleBounds.extents.z) < (doorBounds.center.z - doorBounds.extents.z))
-                        {
-                            subDirection = (handleBounds.center.y > doorBounds.center.y) ? -1 : 1;
-                            secondaryDirection = Vector3.up;
-                        }
-                        else
-                        {
-                            subDirection = (handleBounds.center.z > doorBounds.center.z) ? -1 : 1;
-                            secondaryDirection = Vector3.forward;
-                        }
-                        break;
-                    case Direction.y:
-                        if ((handleBounds.center.z + handleBounds.extents.z) > (doorBounds.center.z + doorBounds.extents.z) || (handleBounds.center.z - handleBounds.extents.z) < (doorBounds.center.z - doorBounds.extents.z))
-                        {
-                            subDirection = (handleBounds.center.x > doorBounds.center.x) ? -1 : 1;
-                            secondaryDirection = Vector3.right;
-                        }
-                        else
-                        {
-                            subDirection = (handleBounds.center.z > doorBounds.center.z) ? -1 : 1;
-                            secondaryDirection = Vector3.forward;
-                        }
-                        break;
-                    case Direction.z:
-                        if ((handleBounds.center.x + handleBounds.extents.x) > (doorBounds.center.x + doorBounds.extents.x) || (handleBounds.center.x - handleBounds.extents.x) < (doorBounds.center.x - doorBounds.extents.x))
-                        {
-                            subDirection = (handleBounds.center.y > doorBounds.center.y) ? -1 : 1;
-                            secondaryDirection = Vector3.up;
-                        }
-                        else
-                        {
-                            subDirection = (handleBounds.center.x > doorBounds.center.x) ? -1 : 1;
-                            secondaryDirection = Vector3.right;
-                        }
-                        break;
+                    // determin sub-direction depending on handle location
+                    Bounds handleBounds = Utilities.GetBounds(handles.transform, transform);
+                    switch (finalDirection)
+                    {
+                        case Direction.x:
+                            if ((handleBounds.center.z + handleBounds.extents.z) > (doorBounds.center.z + doorBounds.extents.z) || (handleBounds.center.z - handleBounds.extents.z) < (doorBounds.center.z - doorBounds.extents.z))
+                            {
+                                subDirection = (handleBounds.center.y > doorBounds.center.y) ? -1 : 1;
+                                secondaryDirection = Vector3.up;
+                            }
+                            else
+                            {
+                                subDirection = (handleBounds.center.z > doorBounds.center.z) ? -1 : 1;
+                                secondaryDirection = Vector3.forward;
+                            }
+                            break;
+                        case Direction.y:
+                            if ((handleBounds.center.z + handleBounds.extents.z) > (doorBounds.center.z + doorBounds.extents.z) || (handleBounds.center.z - handleBounds.extents.z) < (doorBounds.center.z - doorBounds.extents.z))
+                            {
+                                subDirection = (handleBounds.center.x > doorBounds.center.x) ? -1 : 1;
+                                secondaryDirection = Vector3.right;
+                            }
+                            else
+                            {
+                                subDirection = (handleBounds.center.z > doorBounds.center.z) ? -1 : 1;
+                                secondaryDirection = Vector3.forward;
+                            }
+                            break;
+                        case Direction.z:
+                            if ((handleBounds.center.x + handleBounds.extents.x) > (doorBounds.center.x + doorBounds.extents.x) || (handleBounds.center.x - handleBounds.extents.x) < (doorBounds.center.x - doorBounds.extents.x))
+                            {
+                                subDirection = (handleBounds.center.y > doorBounds.center.y) ? -1 : 1;
+                                secondaryDirection = Vector3.up;
+                            }
+                            else
+                            {
+                                subDirection = (handleBounds.center.x > doorBounds.center.x) ? -1 : 1;
+                                secondaryDirection = Vector3.right;
+                            }
+                            break;
+                    }
+                }
+                else
+                {
+                    switch (finalDirection)
+                    {
+                        case Direction.x:
+                            secondaryDirection = (doorBounds.extents.y > doorBounds.extents.z) ? Vector3.up : Vector3.forward;
+                            break;
+                        case Direction.y:
+                            secondaryDirection = (doorBounds.extents.x > doorBounds.extents.z) ? Vector3.right : Vector3.forward;
+                            break;
+                        case Direction.z:
+                            secondaryDirection = (doorBounds.extents.y > doorBounds.extents.x) ? Vector3.up : Vector3.right;
+                            break;
+                    }
+                    // TODO: derive how to detect -1
+                    subDirection = 1;
                 }
             }
             else
             {
-                switch (finalDirection)
+                // calculate directions from existing anchor
+                Vector3 dir = doorBounds.center - doorHj.connectedAnchor;
+                if (dir.x != 0)
                 {
-                    case Direction.x:
-                        secondaryDirection = (doorBounds.extents.y > doorBounds.extents.z) ? Vector3.up : Vector3.forward;
-                        break;
-                    case Direction.y:
-                        secondaryDirection = (doorBounds.extents.x > doorBounds.extents.z) ? Vector3.right : Vector3.forward;
-                        break;
-                    case Direction.z:
-                        secondaryDirection = (doorBounds.extents.y > doorBounds.extents.x) ? Vector3.up : Vector3.right;
-                        break;
+                    secondaryDirection = Vector3.right;
+                    subDirection = dir.x <= 0 ? 1 : -1;
                 }
-                subDirection = 1;
+                else if (dir.y != 0)
+                {
+                    secondaryDirection = Vector3.up;
+                    subDirection = dir.y <= 0 ? 1 : -1;
+                }
+                else if (dir.z != 0)
+                {
+                    secondaryDirection = Vector3.forward;
+                    subDirection = dir.z <= 0 ? 1 : -1;
+                }
             }
 
             if (doorHjCreated)
@@ -225,18 +258,7 @@
                 }
 
                 doorHj.anchor = secondaryDirection * subDirection * extents;
-                switch (finalDirection)
-                {
-                    case Direction.x:
-                        doorHj.axis = new Vector3(1, 0, 0);
-                        break;
-                    case Direction.y:
-                        doorHj.axis = new Vector3(0, 1, 0);
-                        break;
-                    case Direction.z:
-                        doorHj.axis = new Vector3(0, 0, 1);
-                        break;
-                }
+                doorHj.axis = Direction2Axis(finalDirection);
             }
             if (doorHj)
             {
@@ -268,23 +290,62 @@
             doorCf.enabled = snapping && (openOutward ^ openInward) && Mathf.Abs(value) < 2f; // snapping only works for single direction doors so far
         }
 
+        private Vector3 Direction2Axis(Direction direction)
+        {
+            Vector3 axis = Vector3.zero;
+
+            switch (direction)
+            {
+                case Direction.x:
+                    axis = new Vector3(1, 0, 0);
+                    break;
+                case Direction.y:
+                    axis = new Vector3(0, 1, 0);
+                    break;
+                case Direction.z:
+                    axis = new Vector3(0, 0, 1);
+                    break;
+            }
+
+            return axis;
+        }
+
         private Direction DetectDirection()
         {
             Direction direction = Direction.autodetect;
 
-            if (handles)
+            if (doorHj && !doorHjCreated)
             {
-                Bounds handleBounds = Utilities.GetBounds(handles.transform, transform);
-                Bounds doorBounds = Utilities.GetBounds(getDoor().transform, transform, handles.transform);
-
-                // handles determine direction, there are actually two directions possible depending on handle position, we'll just detect one of them for now, preference is y
-                if ((handleBounds.center.y + handleBounds.extents.y) > (doorBounds.center.y + doorBounds.extents.y) || (handleBounds.center.y - handleBounds.extents.y) < (doorBounds.center.y - doorBounds.extents.y))
+                // use direction of hinge joint
+                if (doorHj.axis == Vector3.right)
                 {
                     direction = Direction.x;
                 }
-                else
+                else if (doorHj.axis == Vector3.up)
                 {
                     direction = Direction.y;
+                }
+                else if (doorHj.axis == Vector3.forward)
+                {
+                    direction = Direction.z;
+                }
+            }
+            else
+            {
+                if (handles)
+                {
+                    Bounds handleBounds = Utilities.GetBounds(handles.transform, transform);
+                    Bounds doorBounds = Utilities.GetBounds(getDoor().transform, transform, handles.transform);
+
+                    // handles determine direction, there are actually two directions possible depending on handle position, we'll just detect one of them for now, preference is y
+                    if ((handleBounds.center.y + handleBounds.extents.y) > (doorBounds.center.y + doorBounds.extents.y) || (handleBounds.center.y - handleBounds.extents.y) < (doorBounds.center.y - doorBounds.extents.y))
+                    {
+                        direction = Direction.x;
+                    }
+                    else
+                    {
+                        direction = Direction.y;
+                    }
                 }
             }
 
