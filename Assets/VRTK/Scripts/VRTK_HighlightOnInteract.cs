@@ -167,10 +167,14 @@ namespace VRTK
             foreach (Material material in materials)
             {
 <<<<<<< HEAD
+<<<<<<< HEAD
                 if (material.name == "OutlineHighlighter (Instance)")
 =======
                 if (material.name == "Custom/OutlineBumpedDiffuse (Instance)")
 >>>>>>> b323b4f... feat(Interaction): Added script to highlight objects on touch and grab IKEA-style
+=======
+                if (material.name == "OutlineHighlighter (Instance)")
+>>>>>>> 4a7efc606a4d2e5541ba7b0306ee545fec8cd3aa
                 { 
                     material.SetColor("_OutlineColor", color);
                 }
@@ -178,7 +182,11 @@ namespace VRTK
         }
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
 }
 =======
 }
 >>>>>>> b323b4f... feat(Interaction): Added script to highlight objects on touch and grab IKEA-style
+=======
+}
+>>>>>>> 4a7efc606a4d2e5541ba7b0306ee545fec8cd3aa
