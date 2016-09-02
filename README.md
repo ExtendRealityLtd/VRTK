@@ -36,6 +36,7 @@ Unity Project**
   * Zika VR | [Itch.io Store Page](https://ldvr.itch.io/ldvr-presents-zika-vr)
   * Domino VR | [Steam Store Page](http://store.steampowered.com/app/508680)
   * One Of The Last | [Game website](http://oneofthelast.com/)
+  * The Days After | [Game website](http://www.fivefingerstudios.com/thedaysafter)
 
 ## Quick Start for SteamVR
 
