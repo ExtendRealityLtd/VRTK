@@ -27,6 +27,7 @@ namespace VRTK
         public float distance;
         public Transform target;
         public Vector3 destinationPosition;
+        public Vector3 destinationHitNormal;
         public bool enableTeleport;
         public uint controllerIndex;
     }
@@ -84,13 +85,14 @@ namespace VRTK
             headsetPositionCompensation = state;
         }
 
-        protected DestinationMarkerEventArgs SetDestinationMarkerEvent(float distance, Transform target, Vector3 position, uint controllerIndex)
+        protected DestinationMarkerEventArgs SetDestinationMarkerEvent(float distance, Transform target, Vector3 position, Vector3 positionHitNormal, uint controllerIndex)
         {
             DestinationMarkerEventArgs e;
             e.controllerIndex = controllerIndex;
             e.distance = distance;
             e.target = target;
             e.destinationPosition = position;
+            e.destinationHitNormal = positionHitNormal;
             e.enableTeleport = enableTeleport;
             return e;
         }
