@@ -1,4 +1,4 @@
-﻿//====================================================================================
+//====================================================================================
 //
 // Purpose: Provide basic laser pointer to VR Controller
 //
@@ -165,6 +165,7 @@ namespace VRTK
                 pointerContactDistance = 0f;
                 pointerContactTarget = null;
                 destinationPosition = Vector3.zero;
+                destinationHitNormal = Vector3.zero;
 
                 UpdatePointerMaterial(pointerMissColor);
             }
@@ -175,6 +176,7 @@ namespace VRTK
                 pointerContactDistance = collidedWith.distance;
                 pointerContactTarget = collidedWith.transform;
                 destinationPosition = pointerTip.transform.position;
+                destinationHitNormal = collidedWith.normal;
 
                 UpdatePointerMaterial(pointerHitColor);
 

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using VRTK;
 
 public class ModelVillage_TeleportLocation : VRTK_DestinationMarker
@@ -15,7 +15,7 @@ public class ModelVillage_TeleportLocation : VRTK_DestinationMarker
             {
                 var distance = Vector3.Distance(transform.position, destination.position);
                 var controllerIndex = VRTK_DeviceFinder.GetControllerIndex(controller.gameObject);
-                OnDestinationMarkerSet(SetDestinationMarkerEvent(distance, destination, destination.position, controllerIndex));
+                OnDestinationMarkerSet(SetDestinationMarkerEvent(distance, destination, destination.position, Vector3.zero, controllerIndex));
             }
             lastUsePressedState = controller.usePressed;
         }

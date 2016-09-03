@@ -30,6 +30,7 @@ namespace VRTK
         public float activateDelay = 0f;
 
         protected Vector3 destinationPosition;
+        protected Vector3 destinationHitNormal = Vector3.zero;
         protected float pointerContactDistance = 0f;
         protected Transform pointerContactTarget = null;
         protected uint controllerIndex;
@@ -181,7 +182,7 @@ namespace VRTK
                 return;
             }
 
-            OnDestinationMarkerEnter(SetDestinationMarkerEvent(pointerContactDistance, pointerContactTarget, destinationPosition, controllerIndex));
+            OnDestinationMarkerEnter(SetDestinationMarkerEvent(pointerContactDistance, pointerContactTarget, destinationPosition, destinationHitNormal, controllerIndex));
             StartUseAction(pointerContactTarget);
         }
 
@@ -192,7 +193,7 @@ namespace VRTK
                 return;
             }
 
-            OnDestinationMarkerExit(SetDestinationMarkerEvent(pointerContactDistance, pointerContactTarget, destinationPosition, controllerIndex));
+            OnDestinationMarkerExit(SetDestinationMarkerEvent(pointerContactDistance, pointerContactTarget, destinationPosition, destinationHitNormal, controllerIndex));
             StopUseAction();
         }
 
@@ -220,7 +221,7 @@ namespace VRTK
 
             if (!playAreaCursorCollided && !PointerActivatesUseAction(interactableObject))
             {
-                OnDestinationMarkerSet(SetDestinationMarkerEvent(pointerContactDistance, pointerContactTarget, destinationPosition, controllerIndex));
+                OnDestinationMarkerSet(SetDestinationMarkerEvent(pointerContactDistance, pointerContactTarget, destinationPosition, destinationHitNormal, controllerIndex));
             }
 
             if (!isActive)
