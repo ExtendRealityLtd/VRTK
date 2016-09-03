@@ -84,6 +84,16 @@ namespace VRTK
             headsetPositionCompensation = state;
         }
 
+        protected virtual void OnEnable()
+        {
+            VRTK_ObjectCache.registeredDestinationMarkers.Add(this);
+        }
+
+        protected virtual void OnDisable()
+        {
+            VRTK_ObjectCache.registeredDestinationMarkers.Remove(this);
+        }
+
         protected DestinationMarkerEventArgs SetDestinationMarkerEvent(float distance, Transform target, Vector3 position, uint controllerIndex)
         {
             DestinationMarkerEventArgs e;

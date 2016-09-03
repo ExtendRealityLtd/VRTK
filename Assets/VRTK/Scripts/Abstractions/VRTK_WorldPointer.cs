@@ -100,8 +100,9 @@ namespace VRTK
             playAreaCursorBoundaries = new GameObject[4];
         }
 
-        protected virtual void OnEnable()
+        protected override void OnEnable()
         {
+            base.OnEnable();
             controller.AliasPointerOn += new ControllerInteractionEventHandler(EnablePointerBeam);
             controller.AliasPointerOff += new ControllerInteractionEventHandler(DisablePointerBeam);
             controller.AliasPointerSet += new ControllerInteractionEventHandler(SetPointerDestination);
@@ -116,8 +117,9 @@ namespace VRTK
             pointerMaterial.color = pointerMissColor;
         }
 
-        protected virtual void OnDisable()
+        protected override void OnDisable()
         {
+            base.OnDisable();
             DisableBeam();
             destinationSetActive = false;
             pointerContactDistance = 0f;

@@ -395,11 +395,7 @@ namespace VRTK
 
         public void RegisterTeleporters()
         {
-            foreach (var teleporter in FindObjectsOfType<VRTK_BasicTeleport>())
-            {
-                teleporter.Teleporting += new TeleportEventHandler(OnTeleporting);
-                teleporter.Teleported += new TeleportEventHandler(OnTeleported);
-            }
+            StartCoroutine(RegisterTeleportersAtEndOfFrame());
         }
 
         protected virtual void Awake()
@@ -460,7 +456,7 @@ namespace VRTK
 
         protected virtual void OnDisable()
         {
-            foreach (var teleporter in FindObjectsOfType<VRTK_BasicTeleport>())
+            foreach (var teleporter in VRTK_ObjectCache.registeredTeleporters)
             {
                 teleporter.Teleporting -= new TeleportEventHandler(OnTeleporting);
                 teleporter.Teleported -= new TeleportEventHandler(OnTeleported);
@@ -701,6 +697,16 @@ namespace VRTK
             if (stayGrabbedOnTeleport && AttachIsTrackObject() && trackPoint)
             {
                 transform.position = grabbingObject.transform.position;
+            }
+        }
+
+        private IEnumerator RegisterTeleportersAtEndOfFrame()
+        {
+            yield return new WaitForEndOfFrame();
+            foreach (var teleporter in VRTK_ObjectCache.registeredTeleporters)
+            {
+                teleporter.Teleporting += new TeleportEventHandler(OnTeleporting);
+                teleporter.Teleported += new TeleportEventHandler(OnTeleported);
             }
         }
 

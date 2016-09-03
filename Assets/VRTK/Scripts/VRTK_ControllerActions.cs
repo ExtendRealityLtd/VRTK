@@ -12,8 +12,8 @@
         private uint controllerIndex;
         private ushort maxHapticVibration = 3999;
         private bool controllerHighlighted = false;
-
         private Dictionary<GameObject, Material> storedMaterials;
+        private Dictionary<string, Transform> cachedElements;
 
         public bool IsControllerVisible()
         {
@@ -140,7 +140,7 @@
 
         public void ToggleHighlightTrigger(bool state, Color? highlight = null, float duration = 0f)
         {
-            if(!state && controllerHighlighted)
+            if (!state && controllerHighlighted)
             {
                 return;
             }
@@ -212,6 +212,7 @@
         {
             gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
             storedMaterials = new Dictionary<GameObject, Material>();
+            cachedElements = new Dictionary<string, Transform>();
         }
 
         private void Update()
@@ -248,9 +249,18 @@
             }
         }
 
+        private Transform GetElementTransform(string path)
+        {
+            if (!cachedElements.ContainsKey(path))
+            {
+                cachedElements[path] = transform.Find(path);
+            }
+            return cachedElements[path];
+        }
+
         private void ToggleHighlightAlias(bool state, string transformPath, Color? highlight, float duration = 0f)
         {
-            var element = transform.Find(transformPath);
+            var element = GetElementTransform(transformPath);
             if (element)
             {
                 ToggleHighlightControllerElement(state, element.gameObject, highlight, duration);
