@@ -20,7 +20,6 @@
 
         private Canvas m_Canvas;
         private Vector2 lastKnownPosition;
-        private const float UI_CONTROL_OFFSET = 0.5f;
 
         [NonSerialized]
         private List<VRGraphic> m_RaycastResults = new List<VRGraphic>();
@@ -124,7 +123,7 @@
                     continue;
                 }
 
-                if ((distance - UI_CONTROL_OFFSET) > hitDistance)
+                if (distance > hitDistance)
                 {
                     continue;
                 }
