@@ -42,6 +42,7 @@
 
         private void OnEnable()
         {
+            VRTK_ObjectCache.registeredHeadsetCollider = this;
             headsetColliding = false;
             Utilities.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.Headset);
 
@@ -56,6 +57,7 @@
 
         private void OnDisable()
         {
+            VRTK_ObjectCache.registeredHeadsetCollider = null;
             headsetColliding = false;
             Destroy(gameObject.GetComponent<BoxCollider>());
             Destroy(gameObject.GetComponent<Rigidbody>());

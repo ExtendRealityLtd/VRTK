@@ -12,6 +12,7 @@
 namespace VRTK
 {
     using UnityEngine;
+    using System.Collections;
 
     public delegate void TeleportEventHandler(object sender, DestinationMarkerEventArgs e);
 
@@ -68,14 +69,15 @@ namespace VRTK
         {
             adjustYForTerrain = false;
             enableTeleport = true;
-            InitDestinationMarkerListeners(true);
-            InitHeadsetCollisionListener(true);
+            StartCoroutine(InitListenersAtEndOfFrame());
+            VRTK_ObjectCache.registeredTeleporters.Add(this);
         }
 
         protected virtual void OnDisable()
         {
             InitDestinationMarkerListeners(false);
             InitHeadsetCollisionListener(false);
+            VRTK_ObjectCache.registeredTeleporters.Remove(this);
         }
 
         protected void OnTeleporting(object sender, DestinationMarkerEventArgs e)
@@ -177,14 +179,20 @@ namespace VRTK
             fadeInTime = 0f;
         }
 
+        private IEnumerator InitListenersAtEndOfFrame()
+        {
+            yield return new WaitForEndOfFrame();
+            InitDestinationMarkerListeners(true);
+            InitHeadsetCollisionListener(true);
+        }
+
         private void InitDestinationMarkerListeners(bool state)
         {
             var leftHand = VRTK_SDK_Bridge.GetControllerLeftHand();
             var rightHand = VRTK_SDK_Bridge.GetControllerRightHand();
             InitDestinationSetListener(leftHand, state);
             InitDestinationSetListener(rightHand, state);
-
-            foreach (var destinationMarker in FindObjectsOfType<VRTK_DestinationMarker>())
+            foreach (var destinationMarker in VRTK_ObjectCache.registeredDestinationMarkers)
             {
                 if (destinationMarker.gameObject != leftHand && destinationMarker.gameObject != rightHand)
                 {
@@ -195,7 +203,7 @@ namespace VRTK
 
         private void InitHeadsetCollisionListener(bool state)
         {
-            var headset = FindObjectOfType<VRTK_HeadsetCollision>();
+            var headset = VRTK_ObjectCache.registeredHeadsetCollider;
             if (headset)
             {
                 if (state)
