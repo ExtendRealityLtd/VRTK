@@ -264,6 +264,11 @@ namespace VRTK
                     Color color = (touchHighlightColor != Color.clear ? touchHighlightColor : globalHighlightColor);
                     if (color != Color.clear)
                     {
+                        if (originalObjectColours == null)
+                        {
+                            originalObjectColours = StoreOriginalColors();
+                        }
+
                         var colorArray = BuildHighlightColorArray(color);
                         ChangeColor(colorArray);
                     }
@@ -417,7 +422,10 @@ namespace VRTK
 
         protected virtual void Start()
         {
-            originalObjectColours = StoreOriginalColors();
+            if (highlightOnTouch)
+            {
+                originalObjectColours = StoreOriginalColors();
+            }
         }
 
         protected virtual void Update()
