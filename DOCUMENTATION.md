@@ -209,6 +209,7 @@ This directory contains all of the toolkit scripts that add VR functionality to 
  * [VRTK_ObjectAutoGrab](#auto-grabbing-interactable-objects-vrtk_objectautograb)
  * [VRTK_Simulator](#simulator-vrtk_simulator)
  * [VRTK_PlayerClimb](#player-climb-vrtk_playerclimb)
+ * [VRTK_DashTeleport](#dash-teleporter-vrtk_dashteleport)
 
 ---
 
@@ -2007,6 +2008,53 @@ Adding the `VRTK_PlayerClimb_UnityEvents` component to `VRTK_PlayerClimb` object
 
 ---
 
+## Dash Teleporter (VRTK_DashTeleport)
+  > extends [VRTK_HeightAdjustTeleport](#height-adjustable-teleporter-vrtk_heightadjustteleport)
+
+### Overview
+
+The dash teleporter extends the height adjust teleporter and allows to have the `[CameraRig]` dashing to a new teleport location. 
+
+Like the basic teleporter and the height adjustable teleporter the Dash Teleport script is attached to the `[CameraRig]` prefab and requires a World Pointer to be available.
+
+The basic principle is to dash for a very short amount of time, to avoid sim sickness. The default value is 100 miliseconds. This value is fixed for all normal and longer distances. When the distances get very short the minimum speed is clamped to 50 mps, so the dash time becomes even shorter.
+This idea is taken from Realities' "ludicrous speed".
+The minimum distance for the fixed time dash is determined by the minSpeed and normalLerpTime values, if you want to always lerp with a fixed mps speed instead, set the normalLerpTime to a high value. Right before the teleport a capsule is cast towards the target and registers all colliders blocking the way. These obstacles are then broadcast in an event so that for example their gameobjects or renderers can be turned off while the dash is in progress.
+
+### Inspector Parameters
+
+  * **Blink Transition Speed:** The fade blink speed on teleport. Probably should best be set to a value of 0 for dashing so that no blink occurs.
+  * **Distance Blink Delay:** A range between 0 and 32 that determines how long the blink transition will stay blacked out depending on the distance being teleported. A value of 0 will not delay the teleport blink effect over any distance, a value of 32 will delay the teleport blink fade in even when the distance teleported is very close to the original position. This can be used to simulate time taking longer to pass the further a user teleports. A value of 16 provides a decent basis to simulate this to the user.
+  * **Headset Position Compensation:** If this is checked then the teleported location will be the position of the headset within the play area. If it is unchecked then the teleported location will always be the centre of the play area even if the headset position is not in the centre of the play area.
+  * **Ignore Target With Tag Or Class:** A string that specifies an object Tag or the name of a Script attached to an obejct and notifies the teleporter that the destination is to be ignored so the user cannot teleport to that location. It also ensure the pointer colour is set to the miss colour.
+  * **Limit To Nav Mesh:** If this is checked then teleporting will be limited to the bounds of a baked NavMesh. If the pointer destination is outside the NavMesh then it will be ignored.
+  * **Play Space Falling:** Checks if the user steps off an object into a part of their play area that is not on the object then they are automatically teleported down to the nearest floor. The `Play Space Falling` option also works in the opposite way that if the user's headset is above an object then the user is teleported automatically on top of that object, which is useful for simulating climbing stairs without needing to use the pointer beam location. If this option is turned off then the user can hover in mid air at the same y position of the object they are standing on.
+  * **Use Gravity**: allows for gravity based falling when the distance is greater than `Gravity Fall Height`.
+  * **Gravity Fall Height**: Fall distance needed before gravity based falling can be triggered.
+  * **Blink Y Threshold:** The `y` distance between the floor and the headset that must change before the fade transition is initiated. If the new user location is at a higher distance than the threshold then the headset blink transition will activate on teleport. If the new user location is within the threshold then no blink transition will happen, which is useful for walking up slopes, meshes and terrains where constant blinking would be annoying.
+  * **Normal Lerp Time:** The fixed time it takes to dash to a new position.
+  * **Min Speed Mps:** The minimum speed for dashing in meters per second.
+  * **Capsule Top Offset:** The Offset of the CapsuleCast above the camera.
+  * **Capsule Bottom Offset:** The Offset of the CapsuleCast below the camera.
+  * **Capsule Radius:** The radius of the CapsuleCast.
+
+### Class Events
+
+  * **OnWillDashThruObjects:** Emitted when the CapsuleCast towards 
+  the target has found that obstacles are in the way.
+  * **OnDashedThruObjects:** Emitted when obstacles have been crossed 
+  and the dash has ended.
+
+#### Event Payload
+
+  * **allHits:** An array of the RaycastHits generated by the CapsuleCast.
+
+### Example
+
+`SteamVR_Unity_Toolkit/Examples/038_CameraRig_DashTeleport` shows how to turn off the mesh renderers of objects that are in the way during the dash.
+
+---
+
 # 3D Controls (Controls/3D)
 
 In order to interact with the world beyond grabbing and throwing, controls can be used to mimic real-life objects.
@@ -2665,3 +2713,7 @@ A scene that demonstrates how the Bezier Pointer can display an object (teleport
 A scene that demonstrates how to set up the climbing mechanism with different activities to try it with. A `VRTK_PlayerClimb` object is needed on the `[CameraRig]`. `VRTK_HeightAdjustTeleport` is also added to the `[CameraRig]` to allow movement, but also to allow walking off edges with `UseGravity` enabled. Various objects with a `VRTK_InteractableObject` component are scattered throughout the level. They all have the `GrabAttachMechanic` set to `Climbable`.
 
 [Catlike Coding]: http://catlikecoding.com/unity/tutorials/curves-and-splines/
+
+### 038_CameraRig_CameraRig_DashTeleport
+
+A Scene that shows the teleporting behaviour and also demonstrates a way to use the broadcasted RaycastHit array. In the example obstacles in the way of the dash turn off their mesh renderers while the dash is in progress.
