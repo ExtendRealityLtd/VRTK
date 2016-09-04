@@ -11,34 +11,35 @@ Unity Project**
 
 ## Games, Apps and Experiences that use this Toolkit
 
- * Games
-  * QuiVR | [Steam Store Page](http://store.steampowered.com/app/489380/)
-  * Left-Hand Path | [Steam Store Page](http://store.steampowered.com/app/488760/)
-  * Holodaze | [Steam Store Page](http://store.steampowered.com/app/475520/)
-  * ViveSpray | [Steam Store Page](http://store.steampowered.com/app/494830/)
-  * VeeR Pong | [Steam Store Page](http://store.steampowered.com/app/494850)
-  * Emergence Fractal Universe | [Steam Store Page](http://store.steampowered.com/app/500470)
-  * Ocarina of Vive | [Itch.io Store Page](https://tomcat94.itch.io/ocarina-of-vive-shooting-gallery)
-  * Danc<R | [Itch.io Store Page](https://tomcat94.itch.io/dancr-alpha)
-  * Tower Island: Explore, Discover and Disassemble | [Steam Store Page](http://store.steampowered.com/app/487740/)
-  * Virtual Warfighter | [Game website](http://virtual-warfighter.com/)
-  * VR Regatta | [Steam Store Page](http://store.steampowered.com/app/468240/)
-  * Car Car Crash Hands | [Steam Store Page](http://store.steampowered.com/app/472720)
-  * MegaPolice | [Youtube Trailer](https://www.youtube.com/watch?v=d6hCgfMxldY)
-  * The Crystal Nebula | [Steam Store Page](http://store.steampowered.com/app/505660)
-  * Drone Training VR | [Youtube Trailer](https://www.youtube.com/watch?v=A5MFT2JsySc)
-  * Cogs and Cowboys | [Steam Store Page](http://store.steampowered.com/app/510410)
-  * Frantic Freighter | [Steam Store Page](http://store.steampowered.com/app/503150)
-  * Redswood VR | [Steam Store Page](http://store.steampowered.com/app/499760)
-  * Wrath Of The Fire God | [Steam Store Page](http://store.steampowered.com/app/511370)
-  * Coinvault | [Itch.io Store Page](https://ldvr.itch.io/ldvrs-coinvault-for-the-vive)
-  * VR Explosive Kitten Toss | [Itch.io Store Page](https://ldvr.itch.io/ldvrs-kitten-toss)
-  * Zika VR | [Itch.io Store Page](https://ldvr.itch.io/ldvr-presents-zika-vr)
-  * Domino VR | [Steam Store Page](http://store.steampowered.com/app/508680)
-  * One Of The Last | [Game website](http://oneofthelast.com/)
-  * The Days After | [Game website](http://www.fivefingerstudios.com/thedaysafter)
-  * Quantized | [Steam Greenlight Page](https://steamcommunity.com/sharedfiles/filedetails/?id=195344075)
-  * Caketomino | [Steam Store Page](http://store.steampowered.com/app/517770)
+| Game | Link |
+|-------------------------------------------------|-------------------------------------------------------------------------------------------|
+| QuiVR | [Steam Store Page](http://store.steampowered.com/app/489380/) |
+| Left-Hand Path | [Steam Store Page](http://store.steampowered.com/app/488760/) |
+| Holodaze | [Steam Store Page](http://store.steampowered.com/app/475520/) |
+| ViveSpray | [Steam Store Page](http://store.steampowered.com/app/494830/) |
+| VeeR Pong | [Steam Store Page](http://store.steampowered.com/app/494850) |
+| Emergence Fractal Universe | [Steam Store Page](http://store.steampowered.com/app/500470) |
+| Ocarina of Vive | [Itch.io Store Page](https://tomcat94.itch.io/ocarina-of-vive-shooting-gallery) |
+| Danc<R | [Itch.io Store Page](https://tomcat94.itch.io/dancr-alpha) |
+| Tower Island: Explore, Discover and Disassemble | [Steam Store Page](http://store.steampowered.com/app/487740/) |
+| Virtual Warfighter | [Game website](http://virtual-warfighter.com/) |
+| VR Regatta | [Steam Store Page](http://store.steampowered.com/app/468240/) |
+| Car Car Crash Hands | [Steam Store Page](http://store.steampowered.com/app/472720) |
+| MegaPolice | [Youtube Trailer](https://www.youtube.com/watch?v=d6hCgfMxldY) |
+| The Crystal Nebula | [Steam Store Page](http://store.steampowered.com/app/505660) |
+| Drone Training VR | [Youtube Trailer](https://www.youtube.com/watch?v=A5MFT2JsySc) |
+| Cogs and Cowboys | [Steam Store Page](http://store.steampowered.com/app/510410) |
+| Frantic Freighter | [Steam Store Page](http://store.steampowered.com/app/503150) |
+| Redswood VR | [Steam Store Page](http://store.steampowered.com/app/499760) |
+| Wrath Of The Fire God | [Steam Store Page](http://store.steampowered.com/app/511370) |
+| Coinvault | [Itch.io Store Page](https://ldvr.itch.io/ldvrs-coinvault-for-the-vive) |
+| VR Explosive Kitten Toss | [Itch.io Store Page](https://ldvr.itch.io/ldvrs-kitten-toss) |
+| Zika VR | [Itch.io Store Page](https://ldvr.itch.io/ldvr-presents-zika-vr) |
+| Domino VR | [Steam Store Page](http://store.steampowered.com/app/508680) |
+| One Of The Last | [Game website](http://oneofthelast.com/) |
+| The Days After | [Game website](http://www.fivefingerstudios.com/thedaysafter) |
+| Quantized | [Steam Greenlight Page](https://steamcommunity.com/sharedfiles/filedetails/?id=195344075) |
+| Caketomino | [Steam Store Page](http://store.steampowered.com/app/517770) |
 
 ## Quick Start for SteamVR
 
