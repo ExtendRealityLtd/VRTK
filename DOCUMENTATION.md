@@ -285,6 +285,40 @@ The script also has a public boolean pressed state for the buttons to allow the 
   * `AliasUIClickOn` - Emitted when the UI click alias button is pressed.
   * `AliasUIClickOff` - Emitted when the UI click alias button is released.
 
+### Unity Events
+
+Adding the `VRTK_ControllerEvents_UnityEvents` component to `VRTK_ControllerEvents` object allows access to `UnityEvents` that will react identically to the Class Events.
+
+  * `OnTriggerPressed` - Emits the TriggerPressed class event.
+  * `OnTriggerReleased` - Emits the TriggerReleased class event.
+  * `OnTriggerTouchStart` - Emits the TriggerTouchStart class event.
+  * `OnTriggerTouchEnd` - Emits the TriggerTouchEnd class event.
+  * `OnTriggerHairlineStart` - Emits the TriggerHairlineStart class event.
+  * `OnTriggerHairlineEnd` - Emits the TriggerHairlineEnd class event.
+  * `OnTriggerClicked` - Emits the TriggerClicked class event.
+  * `OnTriggerUnclicked` - Emits the TriggerUnclicked class event.
+  * `OnTriggerAxisChanged` - Emits the TriggerAxisChanged class event.
+  * `OnApplicationMenuPressed` - Emits the ApplicationMenuPressed class event.
+  * `OnApplicationMenuReleased` - Emits the ApplicationMenuReleased class event.
+  * `OnGripPressed` - Emits the GripPressed class event.
+  * `OnGripReleased` - Emits the GripReleased class event.
+  * `OnTouchpadPressed` - Emits the TouchpadPressed class event.
+  * `OnTouchpadReleased` - Emits the TouchpadReleased class event.
+  * `OnTouchpadTouchStart` - Emits the TouchpadTouchStart class event.
+  * `OnTouchpadTouchEnd` - Emits the TouchpadTouchEnd class event.
+  * `OnTouchpadAxisChanged` - Emits the TouchpadAxisChanged class event.
+  * `OnAliasPointerOn` - Emits the AliasPointerOn class event.
+  * `OnAliasPointerOff` - Emits the AliasPointerOff class event.
+  * `OnAliasPointerSet` - Emits the AliasPointerSet class event.
+  * `OnAliasGrabOn` - Emits the AliasGrabOn class event.
+  * `OnAliasGrabOff` - Emits the AliasGrabOff class event.
+  * `OnAliasUseOn` - Emits the AliasUseOn class event.
+  * `OnAliasUseOff` - Emits the AliasUseOff class event.
+  * `OnAliasMenuOn` - Emits the AliasMenuOn class event.
+  * `OnAliasMenuOff` - Emits the AliasMenuOff class event.
+  * `OnAliasUIClickOn` - Emits the AliasUIClickOn class event.
+  * `OnAliasUIClickOff` - Emits the AliasUIClickOff class event.
+
 #### Event Payload
 
   * `uint controllerIndex` - The index of the controller that was used.
@@ -792,6 +826,13 @@ The UI pointer is activated via the `Pointer` alias on the `Controller Events` a
   * `UIPointerElementEnter` - Emitted when the UI Pointer is colliding with a valid UI element.
   * `UIPointerElementExit` - Emitted when the UI Pointer is no longer colliding with any valid UI elements.
 
+### Unity Events
+
+Adding the `VRTK_UIPointer_UnityEvents` component to `VRTK_UIPointer` object allows access to `UnityEvents` that will react identically to the Class Events.
+
+  * `OnUIPointerElementEnter` - Emits the UIPointerElementEnter class event.
+  * `OnUIPointerElementExit` - Emits the UIPointerElementExit class event.
+
 #### Event Payload
 
   * `uint controllerIndex` - The index of the controller that was used.
@@ -859,6 +900,13 @@ The Basic Teleport script is attached to the `[CameraRig]` prefab and requires a
 
   * `Teleporting` - Emitted when the teleport process has begun.
   * `Teleported` - Emitted when the teleport process has successfully completed.
+
+### Unity Events
+
+Adding the `VRTK_BasicTeleport_UnityEvents` component to `VRTK_BasicTeleport` object allows access to `UnityEvents` that will react identically to the Class Events.
+
+  * `OnTeleporting` - Emits the Teleporting class event.
+  * `OnTeleported` - Emits the Teleported class event.
 
 #### Event Payload
 
@@ -935,6 +983,13 @@ If the headset is colliding then the teleport action is also disabled to prevent
   * `HeadsetCollisionDetect` - Emitted when the user's headset collides with another game object.
   * `HeadsetCollisionEnded` - Emitted when the user's headset stops colliding with a game object.
 
+### Unity Events
+
+Adding the `VRTK_HeadsetCollision_UnityEvents` component to `VRTK_HeadsetCollision` object allows access to `UnityEvents` that will react identically to the Class Events.
+
+  * `OnHeadsetCollisionDetect` - Emits the HeadsetCollisionDetect class event.
+  * `OnHeadsetCollisionEnded` - Emits the HeadsetCollisionEnded class event.
+
 #### Event Payload
 
   * `Collider collider` - The Collider of the game object the headset has collided with.
@@ -975,6 +1030,15 @@ The purpose of the Headset Fade is to change the colour of the headset view to a
   * `HeadsetFadeComplete` - Emitted when the user's headset has completed the fade and is now fully at the given colour.
   * `HeadsetUnfadeStart` - Emitted when the user's headset begins to unfade back to a transparent colour.
   * `HeadsetUnfadeComplete` - Emitted when the user's headset has completed unfading and is now fully transparent again.
+
+### Unity Events
+
+Adding the `VRTK_HeadsetFade_UnityEvents` component to `VRTK_HeadsetFade` object allows access to `UnityEvents` that will react identically to the Class Events.
+
+  * `OnHeadsetFadeStart` - Emits the HeadsetFadeStart class event.
+  * `OnHeadsetFadeComplete` - Emits the HeadsetFadeComplete class event.
+  * `OnHeadsetUnfadeStart` - Emits the HeadsetUnfadeStart class event.
+  * `OnHeadsetUnfadeComplete` - Emits the HeadsetUnfadeComplete class event.
 
 #### Event Payload
 
@@ -1075,6 +1139,13 @@ The concept that the VR user has a physical in game presence which is accomplish
 
   * `PresenceFallStarted` - Emitted when a gravity based fall has started
   * `PresenceFallEnded` - Emitted when a gravity based fall has ended
+
+### Unity Events
+
+Adding the `VRTK_PlayerPresence_UnityEvents` component to `VRTK_PlayerPresence` object allows access to `UnityEvents` that will react identically to the Class Events.
+
+  * `OnPresenceFallStarted` - Emits the PresenceFallStarted class event.
+  * `OnPresenceFallEnded` - Emits the PresenceFallEnded class event.
 
 #### Event Payload
 
@@ -1271,14 +1342,14 @@ The basis of this script is to provide a simple mechanism for identifying object
 
 ### Unity Events
 
-Adding the `VRTK_InteractableObject_UnityEvents` component to an Interactable Object allows access to `UnityEvents` that will react identically to the Class Events.
+Adding the `VRTK_InteractableObject_UnityEvents` component to `VRTK_InteractableObject` object allows access to `UnityEvents` that will react identically to the Class Events.
 
-  * `OnTouch` - Emitted when another object touches the current object.
-  * `OnUntouch` - Emitted when the other object stops touching the current object.
-  * `OnGrab` - Emitted when another object grabs the current object (e.g. a controller).
-  * `OnUngrab` - Emitted when the other object stops grabbing the current object.
-  * `OnUse` - Emitted when another object uses the current object (e.g. a controller).
-  * `OnUnuse` - Emitted when the other object stops using the current object.
+  * `OnTouch` - Emits the InteractableObjectTouched class event.
+  * `OnUntouch` - Emits the InteractableObjectUntouched class event.
+  * `OnGrab` - Emits the InteractableObjectGrabbed class event.
+  * `OnUngrab` - Emits the InteractableObjectUngrabbed class event.
+  * `OnUse` - Emits the InteractableObjectUsed class event.
+  * `OnUnuse` - Emits the InteractableObjectUnused class event.
 
 #### Event Payload
 
@@ -1604,6 +1675,13 @@ The Interact Touch script is attached to a Controller object within the `[Camera
   * `ControllerTouchInteractableObject` - Emitted when a valid object is touched
   * `ControllerUntouchInteractableObject` - Emitted when a valid object is no longer being touched
 
+### Unity Events
+
+Adding the `VRTK_InteractTouch_UnityEvents` component to `VRTK_InteractTouch` object allows access to `UnityEvents` that will react identically to the Class Events.
+
+  * `OnControllerTouchInteractableObject` - Emits the ControllerTouchInteractableObject class event.
+  * `OnControllerUntouchInteractableObject` - Emits the ControllerUntouchInteractableObject class event.
+
 #### Event Payload
 
   * `uint controllerIndex` -  The index of the controller doing the interaction
@@ -1724,6 +1802,13 @@ The interactable objects require a collider to activate the trigger and a rigidb
   * `ControllerGrabInteractableObject` - Emitted when a valid object is grabbed.
   * `ControllerUngrabInteractableObject` - Emitted when a valid object is released from being grabbed.
 
+### Unity Events
+
+Adding the `VRTK_InteractGrab_UnityEvents` component to `VRTK_InteractGrab` object allows access to `UnityEvents` that will react identically to the Class Events.
+
+  * `OnControllerGrabInteractableObject` - Emits the ControllerGrabInteractableObject class event.
+  * `OnControllerUngrabInteractableObject` - Emits the ControllerUngrabInteractableObject class event.
+
 #### Event Payload
 
   * `uint controllerIndex` - The index of the controller doing the interaction.
@@ -1795,6 +1880,13 @@ If a valid interactable object is usable then pressing the set `Use` button on t
 
   * `ControllerUseInteractableObject` - Emitted when a valid object starts being used.
   * `ControllerUnuseInteractableObject` - Emitted when a valid object stops being used.
+
+### Unity Events
+
+Adding the `VRTK_InteractUse_UnityEvents` component to `VRTK_InteractUse` object allows access to `UnityEvents` that will react identically to the Class Events.
+
+  * `OnControllerUseInteractableObject` - Emits the ControllerUseInteractableObject class event.
+  * `OnControllerUnuseInteractableObject` - Emits the ControllerUnuseInteractableObject class event.
 
 #### Event Payload
 
@@ -1896,6 +1988,13 @@ This class allows player movement based on grabbing of `VRTK_InteractableObject`
 
   * `PlayerClimbStarted` - Emitted when player climbing has started.
   * `PlayerClimbEnded` - Emitted when player climbing has ended.
+
+### Unity Events
+
+Adding the `VRTK_PlayerClimb_UnityEvents` component to `VRTK_PlayerClimb` object allows access to `UnityEvents` that will react identically to the Class Events.
+
+  * `OnPlayerClimbStarted` - Emits the PlayerClimbStarted class event.
+  * `OnPlayerClimbEnded` - Emits the PlayerClimbEnded class event.
 
 #### Event Payload
 
@@ -2222,6 +2321,14 @@ It is utilised by the `VRTK_WorldPointer` for dealing with pointer events when t
   * `DestinationMarkerExit` - Emitted when the collision with the other game object finishes.
   * `DestinationMarkerSet` - Emitted when the destination marker is active in the scene to determine the last destination position (useful for selecting and teleporting).
 
+### Unity Events
+
+Adding the `VRTK_DestinationMarker_UnityEvents` component to `VRTK_DestinationMarker` object allows access to `UnityEvents` that will react identically to the Class Events.
+
+  * `OnDestinationMarkerEnter` - Emits the DestinationMarkerEnter class event.
+  * `OnDestinationMarkerExit` - Emits the DestinationMarkerExit class event.
+  * `OnDestinationMarkerSet` - Emits the DestinationMarkerSet class event.
+
 #### Event Payload
 
   * `float distance` - The distance between the origin and the collided destination.
@@ -2268,6 +2375,7 @@ The SetHeadsetPositionCompensation method determines whether the offset position
 ---
 
 ## VRTK_WorldPointer
+  > extends [VRTK_DestinationMarker](#vrtk_destinationmarker)
 
 ### Overview
 
