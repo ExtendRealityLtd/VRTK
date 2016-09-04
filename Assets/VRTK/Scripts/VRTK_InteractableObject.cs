@@ -532,14 +532,15 @@ namespace VRTK
             var colors = new Dictionary<string, Color[]>();
             foreach (Renderer renderer in GetRendererArray())
             {
-                colors[renderer.gameObject.name] = new Color[renderer.materials.Length];
+                var objectReference = renderer.gameObject.GetInstanceID().ToString();
+                colors[objectReference] = new Color[renderer.materials.Length];
 
                 for (int i = 0; i < renderer.materials.Length; i++)
                 {
                     var material = renderer.materials[i];
                     if (material.HasProperty("_Color"))
                     {
-                        colors[renderer.gameObject.name][i] = material.color;
+                        colors[objectReference][i] = material.color;
                     }
                 }
             }
@@ -551,13 +552,14 @@ namespace VRTK
             var colors = new Dictionary<string, Color[]>();
             foreach (Renderer renderer in GetRendererArray())
             {
-                colors[renderer.gameObject.name] = new Color[renderer.materials.Length];
+                var objectReference = renderer.gameObject.GetInstanceID().ToString();
+                colors[objectReference] = new Color[renderer.materials.Length];
                 for (int i = 0; i < renderer.materials.Length; i++)
                 {
                     var material = renderer.materials[i];
                     if (material.HasProperty("_Color"))
                     {
-                        colors[renderer.gameObject.name][i] = color;
+                        colors[objectReference][i] = color;
                     }
                 }
             }
@@ -568,7 +570,8 @@ namespace VRTK
         {
             foreach (Renderer renderer in GetRendererArray())
             {
-                if (!colors.ContainsKey(renderer.gameObject.name))
+                var objectReference = renderer.gameObject.GetInstanceID().ToString();
+                if (!colors.ContainsKey(objectReference))
                 {
                     continue;
                 }
@@ -578,7 +581,7 @@ namespace VRTK
                     var material = renderer.materials[i];
                     if (material.HasProperty("_Color"))
                     {
-                        material.color = colors[renderer.gameObject.name][i];
+                        material.color = colors[objectReference][i];
                     }
                 }
             }
