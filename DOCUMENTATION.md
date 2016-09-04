@@ -209,7 +209,7 @@ This directory contains all of the toolkit scripts that add VR functionality to 
  * [VRTK_ObjectAutoGrab](#auto-grabbing-interactable-objects-vrtk_objectautograb)
  * [VRTK_Simulator](#simulator-vrtk_simulator)
  * [VRTK_PlayerClimb](#player-climb-vrtk_playerclimb)
- * [VRTK_PlayerClimbStamina](#player-climb-vrtk_playerclimbstamina)
+ * [VRTK_PlayerClimbStamina](#player-climb-stamina-vrtk_playerclimbstamina)
 
 ---
 
