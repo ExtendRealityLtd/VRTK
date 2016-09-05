@@ -59,6 +59,11 @@ namespace VRTK
             }
         }
 
+        public void ToggleTeleportEnabled(bool state)
+        {
+            enableTeleport = state;
+        }
+
         protected virtual void Awake()
         {
             Utilities.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.CameraRig);
@@ -76,7 +81,6 @@ namespace VRTK
         protected virtual void OnDisable()
         {
             InitDestinationMarkerListeners(false);
-            InitHeadsetCollisionListener(false);
             VRTK_ObjectCache.registeredTeleporters.Remove(this);
         }
 
@@ -183,7 +187,6 @@ namespace VRTK
         {
             yield return new WaitForEndOfFrame();
             InitDestinationMarkerListeners(true);
-            InitHeadsetCollisionListener(true);
         }
 
         private void InitDestinationMarkerListeners(bool state)
@@ -199,34 +202,6 @@ namespace VRTK
                     InitDestinationSetListener(destinationMarker.gameObject, state);
                 }
             }
-        }
-
-        private void InitHeadsetCollisionListener(bool state)
-        {
-            var headset = VRTK_ObjectCache.registeredHeadsetCollider;
-            if (headset)
-            {
-                if (state)
-                {
-                    headset.HeadsetCollisionDetect += new HeadsetCollisionEventHandler(DisableTeleport);
-                    headset.HeadsetCollisionEnded += new HeadsetCollisionEventHandler(EnableTeleport);
-                }
-                else
-                {
-                    headset.HeadsetCollisionDetect -= new HeadsetCollisionEventHandler(DisableTeleport);
-                    headset.HeadsetCollisionEnded -= new HeadsetCollisionEventHandler(EnableTeleport);
-                }
-            }
-        }
-
-        private void DisableTeleport(object sender, HeadsetCollisionEventArgs e)
-        {
-            enableTeleport = false;
-        }
-
-        private void EnableTeleport(object sender, HeadsetCollisionEventArgs e)
-        {
-            enableTeleport = true;
         }
     }
 }

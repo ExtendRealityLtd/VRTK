@@ -199,6 +199,7 @@ This directory contains all of the toolkit scripts that add VR functionality to 
  * [VRTK_HeadsetCollision](#headset-collision-vrtk_headsetcollision)
  * [VRTK_HeadsetFade](#headset-fade-vrtk_headsetfade)
  * [VRTK_HeadsetCollisionFade](#headset-collision-fade-vrtk_headsetcollisionfade)
+ * [VRTK_TeleportDisableOnHeadsetCollision](#teleport-disable-on-headset-collision)
  * [VRTK_PlayerPresence](#player-presence-vrtk_playerpresence)
  * [VRTK_TouchpadWalking](#touchpad-movement-vrtk_touchpadwalking)
  * [VRTK_RoomExtender](#play-space-extension-vrtk_roomextender)
@@ -926,6 +927,17 @@ Adding the `VRTK_BasicTeleport_UnityEvents` component to `VRTK_BasicTeleport` ob
 
 The InitDestinationSetListener method is used to register the teleport script to listen to events from the given game object that is used to generate destination markers. Any destination set event emitted by a registered game object will initiate the teleport to the given destination location.
 
+#### ToggleTeleportEnabled/1
+
+  > `public void ToggleTeleportEnabled(bool state)`
+
+  * Parameters
+   * `bool state` - Toggles whether the teleporter is enabled or disabled.
+  * Returns
+   * _none_
+
+The ToggleTeleportEnabled method is used to determine whether the teleporter will initiate a teleport on a destination set event, if the state is true then the teleporter will work as normal, if the state is false then the teleporter will not be operational.
+
 ### Example
 
 `VRTK/Examples/004_CameraRig_BasicTeleport` uses the `VRTK_SimplePointer` script on the Controllers to initiate a laser pointer by pressing the `Touchpad` on the controller and when the laser pointer is deactivated (release the `Touchpad`) then the user is teleported to the location of the laser pointer tip as this is where the pointer destination marker position is set to.
@@ -1120,6 +1132,14 @@ The Headset Collision Fade uses a composition of the Headset Collision and Heads
 ### Example
 
 `VRTK/Examples/011_Camera_HeadSetCollisionFading` has collidable walls around the play area and if the user puts their head into any of the walls then the headset will fade to black.
+
+---
+
+## Teleport Disable On Headset Collision (VRTK_TeleportDisableOnHeadsetCollision)
+
+### Overview
+
+The purpose of the Teleport Disable On Headset Collision script is to detect when the headset is colliding with a valid object and prevent teleportation from working. This is to ensure that if a user is clipping their head into a wall then they cannot teleport to an area beyond the wall.
 
 ---
 
