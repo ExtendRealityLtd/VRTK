@@ -98,19 +98,19 @@ namespace VRTK
         protected GameObject grabbingObject = null;
         protected GameObject usingObject = null;
 
-        private int usingState = 0;
-        private Dictionary<string, Color[]> originalObjectColours;
+        protected int usingState = 0;
+        protected Dictionary<string, Color[]> originalObjectColours;
 
-        private Transform grabbedSnapHandle;
-        private Transform trackPoint;
-        private bool customTrackPoint = false;
-        private Transform originalControllerAttachPoint;
+        protected Transform grabbedSnapHandle;
+        protected Transform trackPoint;
+        protected bool customTrackPoint = false;
+        protected Transform originalControllerAttachPoint;
 
-        private Transform previousParent;
-        private bool previousKinematicState;
-        private bool previousIsGrabbable;
-        private bool forcedDropped;
-        private bool forceDisabled;
+        protected Transform previousParent;
+        protected bool previousKinematicState;
+        protected bool previousIsGrabbable;
+        protected bool forcedDropped;
+        protected bool forceDisabled;
 
         public bool CheckHideMode(bool defaultMode, ControllerHideMode overrideMode)
         {
