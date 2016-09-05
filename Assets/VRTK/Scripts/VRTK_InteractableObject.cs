@@ -59,6 +59,7 @@ namespace VRTK
         public bool isDroppable = true;
         public bool isSwappable = true;
         public bool holdButtonToGrab = true;
+        public bool ignoreKinematic = false;
         public VRTK_ControllerEvents.ButtonAlias grabOverrideButton = VRTK_ControllerEvents.ButtonAlias.Undefined;
         public Vector2 rumbleOnGrab = Vector2.zero;
         public AllowedController allowedGrabControllers = AllowedController.Both;
@@ -487,7 +488,10 @@ namespace VRTK
             }
             if (rb)
             {
-                rb.isKinematic = previousKinematicState;
+                if (!ignoreKinematic)
+                {
+                    rb.isKinematic = previousKinematicState;
+                }
             }
             if (!isSwappable)
             {
