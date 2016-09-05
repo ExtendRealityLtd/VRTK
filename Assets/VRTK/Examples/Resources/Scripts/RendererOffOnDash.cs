@@ -7,20 +7,20 @@ public class RendererOffOnDash : MonoBehaviour
 
     private void OnEnable()
     {
-        VRTK_DashTeleport.OnWillDashThruObjects += RendererOff;
-        VRTK_DashTeleport.OnDashedThruObjects += RendererOn;
+        VRTK_DashTeleport.WillDashThruObjects += new DashTeleportEventHandler(RendererOff);
+        VRTK_DashTeleport.DashedThruObjects += new DashTeleportEventHandler(RendererOn);
     }
 
     private void OnDisable()
     {
-        VRTK_DashTeleport.OnWillDashThruObjects -= RendererOff;
-        VRTK_DashTeleport.OnDashedThruObjects -= RendererOn;
+        VRTK_DashTeleport.WillDashThruObjects -= new DashTeleportEventHandler(RendererOff);
+        VRTK_DashTeleport.DashedThruObjects -= new DashTeleportEventHandler(RendererOn);
     }
 
-    private void RendererOff(RaycastHit[] allHits)
+    private void RendererOff(object sender, DashTeleportEventArgs e)
     {
         GameObject go = this.transform.gameObject;
-        foreach (RaycastHit hit in allHits)
+        foreach (RaycastHit hit in e.hits)
         {
             if (hit.collider.gameObject == go)
             {
@@ -30,7 +30,7 @@ public class RendererOffOnDash : MonoBehaviour
         }
     }
 
-    private void RendererOn(RaycastHit[] allHits)
+    private void RendererOn(object sender, DashTeleportEventArgs e)
     {
         GameObject go = this.transform.gameObject;
         if (wasSwitchedOff)

@@ -3,21 +3,44 @@ namespace VRTK
     using UnityEngine;
     using System.Collections;
 
+    public struct DashTeleportEventArgs
+    {
+        public RaycastHit[] hits;
+    }
+
+    public delegate void DashTeleportEventHandler(object sender, DashTeleportEventArgs e);
+
     public class VRTK_DashTeleport : VRTK_HeightAdjustTeleport
     {
-        public delegate void DashAction(RaycastHit[] hit);
-        public static event DashAction OnWillDashThruObjects;
-        public static event DashAction OnDashedThruObjects;
         public float normalLerpTime = 0.1f; // 100ms for every dash above minDistanceForNormalLerp
         public float minSpeedMps = 50.0f; // clamped to minimum speed 50m/s to avoid sickness
         public float capsuleTopOffset = 0.2f;
         public float capsuleBottomOffset = 0.5f;
         public float capsuleRadius = 0.5f;
 
+        public static event DashTeleportEventHandler WillDashThruObjects;
+        public static event DashTeleportEventHandler DashedThruObjects;
+
         // The minimum distance for fixed time lerp is determined by the minSpeed and the normalLerpTime
         // If you want to always lerp with a fixed mps speed, set the normalLerpTime to a high value
         private float minDistanceForNormalLerp;
         private float lerpTime = 0.1f;
+
+        public virtual void OnWillDashThruObjects(DashTeleportEventArgs e)
+        {
+            if (WillDashThruObjects != null)
+            {
+                WillDashThruObjects(this, e);
+            }
+        }
+
+        public virtual void OnDashedThruObjects(DashTeleportEventArgs e)
+        {
+            if (DashedThruObjects != null)
+            {
+                DashedThruObjects(this, e);
+            }
+        }
 
         protected override void Awake()
         {
@@ -33,7 +56,7 @@ namespace VRTK
 
         private IEnumerator lerpToPosition(Vector3 targetPosition, Transform target)
         {
-            base.enableTeleport = false;
+            enableTeleport = false;
             bool gameObjectInTheWay = false;
 
             // Find the objects we will be dashing through and broadcast them via events
@@ -52,9 +75,9 @@ namespace VRTK
                 gameObjectInTheWay = hit.collider.gameObject != target.gameObject ? true : false;
             }
 
-            if (gameObjectInTheWay && OnWillDashThruObjects != null)
+            if (gameObjectInTheWay)
             {
-                OnWillDashThruObjects(allHits);
+                OnWillDashThruObjects(SetDashTeleportEvent(allHits));
             }
 
             if (maxDistance >= minDistanceForNormalLerp)
@@ -82,13 +105,20 @@ namespace VRTK
                 yield return new WaitForEndOfFrame();
             }
 
-            if (gameObjectInTheWay && OnDashedThruObjects != null)
+            if (gameObjectInTheWay)
             {
-                OnDashedThruObjects(allHits);
+                OnDashedThruObjects(SetDashTeleportEvent(allHits));
             }
 
             gameObjectInTheWay = false;
-            base.enableTeleport = true;
+            enableTeleport = true;
+        }
+
+        private DashTeleportEventArgs SetDashTeleportEvent(RaycastHit[] hits)
+        {
+            DashTeleportEventArgs e;
+            e.hits = hits;
+            return e;
         }
     }
 }
