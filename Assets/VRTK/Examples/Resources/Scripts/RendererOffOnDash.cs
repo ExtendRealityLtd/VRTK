@@ -1,20 +1,37 @@
 using UnityEngine;
+using System.Collections.Generic;
 using VRTK;
 
 public class RendererOffOnDash : MonoBehaviour
 {
     private bool wasSwitchedOff = false;
+    private List<VRTK_DashTeleport> dashTeleporters = new List<VRTK_DashTeleport>();
 
     private void OnEnable()
     {
-        VRTK_DashTeleport.WillDashThruObjects += new DashTeleportEventHandler(RendererOff);
-        VRTK_DashTeleport.DashedThruObjects += new DashTeleportEventHandler(RendererOn);
+        foreach(var teleporter in VRTK_ObjectCache.registeredTeleporters)
+        {
+            var dashTeleporter = teleporter.GetComponent<VRTK_DashTeleport>();
+            if(dashTeleporter)
+            {
+                dashTeleporters.Add(dashTeleporter);
+            }
+        }
+
+        foreach(var dashTeleport in dashTeleporters)
+        {
+            dashTeleport.WillDashThruObjects += new DashTeleportEventHandler(RendererOff);
+            dashTeleport.DashedThruObjects += new DashTeleportEventHandler(RendererOn);
+        }
     }
 
     private void OnDisable()
     {
-        VRTK_DashTeleport.WillDashThruObjects -= new DashTeleportEventHandler(RendererOff);
-        VRTK_DashTeleport.DashedThruObjects -= new DashTeleportEventHandler(RendererOn);
+        foreach (var dashTeleport in dashTeleporters)
+        {
+            dashTeleport.WillDashThruObjects -= new DashTeleportEventHandler(RendererOff);
+            dashTeleport.DashedThruObjects -= new DashTeleportEventHandler(RendererOn);
+        }
     }
 
     private void RendererOff(object sender, DashTeleportEventArgs e)

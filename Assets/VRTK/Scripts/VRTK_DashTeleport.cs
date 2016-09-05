@@ -18,8 +18,8 @@ namespace VRTK
         public float capsuleBottomOffset = 0.5f;
         public float capsuleRadius = 0.5f;
 
-        public static event DashTeleportEventHandler WillDashThruObjects;
-        public static event DashTeleportEventHandler DashedThruObjects;
+        public event DashTeleportEventHandler WillDashThruObjects;
+        public event DashTeleportEventHandler DashedThruObjects;
 
         // The minimum distance for fixed time lerp is determined by the minSpeed and the normalLerpTime
         // If you want to always lerp with a fixed mps speed, set the normalLerpTime to a high value
