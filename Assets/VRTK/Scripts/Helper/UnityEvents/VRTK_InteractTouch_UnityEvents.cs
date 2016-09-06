@@ -9,7 +9,14 @@ public class VRTK_InteractTouch_UnityEvents : MonoBehaviour
 
     [System.Serializable]
     public class UnityObjectEvent : UnityEvent<ObjectInteractEventArgs> { };
+
+    /// <summary>
+    /// Emits the ControllerTouchInteractableObject class event.
+    /// </summary>
     public UnityObjectEvent OnControllerTouchInteractableObject;
+    /// <summary>
+    /// Emits the ControllerUntouchInteractableObject class event.
+    /// </summary>
     public UnityObjectEvent OnControllerUntouchInteractableObject;
 
     private void SetInteractTouch()

@@ -1,23 +1,32 @@
-﻿//====================================================================================
-//
-// Purpose: Provide height adjustable teleportation of VR CameraRig
-//
-// This script must be attached to the CameraRig
-//
-// A GameObject must have the VRTK_WorldPointer attached to it to listen for the
-// updated world position to teleport to.
-//
-//====================================================================================
+﻿// Height Adjust Teleport|Scripts|0080
 namespace VRTK
 {
     using UnityEngine;
 
+    /// <summary>
+    /// The height adjust teleporter extends the basic teleporter and allows for the y position of the `[CameraRig]` to be altered based on whether the teleport location is on top of another object.
+    /// </summary>
+    /// <remarks>
+    /// Like the basic teleporter the Height Adjust Teleport script is attached to the `[CameraRig]` prefab.
+    /// </remarks>
+    /// <example>
+    /// `VRTK/Examples/007_CameraRig_HeightAdjustTeleport` has a collection of varying height objects that the user can either walk up and down or use the laser pointer to climb on top of them.
+    ///
+    /// `VRTK/Examples/010_CameraRig_TerrainTeleporting` shows how the teleportation of a user can also traverse terrain colliders.
+    ///
+    /// `VRTK/Examples/020_CameraRig_MeshTeleporting` shows how the teleportation of a user can also traverse mesh colliders.
+    /// </example>
     public class VRTK_HeightAdjustTeleport : VRTK_BasicTeleport
     {
+        [Tooltip("Checks if the user steps off an object into a part of their play area that is not on the object then they are automatically teleported down to the nearest floor. The `Play Space Falling` option also works in the opposite way that if the user's headset is above an object then the user is teleported automatically on top of that object, which is useful for simulating climbing stairs without needing to use the pointer beam location. If this option is turned off then the user can hover in mid-air at the same y position of the object they are standing on.")]
         public bool playSpaceFalling = true;
+        [Tooltip("Allows for gravity based falling when the distance is greater than `Gravity Fall Height`.")]
         public bool useGravity = true;
+        [Tooltip("Fall distance needed before gravity based falling can be triggered.")]
         public float gravityFallHeight = 1.0f;
+        [Tooltip("The `y` distance between the floor and the headset that must change before the fade transition is initiated. If the new user location is at a higher distance than the threshold then the headset blink transition will activate on teleport. If the new user location is within the threshold then no blink transition will happen, which is useful for walking up slopes, meshes and terrains where constant blinking would be annoying.")]
         public float blinkYThreshold = 0.1f;
+        [Tooltip("The amount the `y` position needs to change by between the current floor `y` position and the previous floor `y` position before a change in floor height is considered to have occurred. A higher value here will mean that a `Drop To Floor` teleport event will be less likely to happen if the `y` of the floor beneath the user hasn't changed as much as the given threshold.")]
         public float floorHeightTolerance = 0.001f;
 
         private float currentRayDownY = 0f;
@@ -25,7 +34,6 @@ namespace VRTK
         private bool originalPlaySpaceFalling;
         private bool isClimbing = false;
         private float previousFloorY;
-
         private VRTK_PlayerPresence playerPresence;
 
         protected override void Awake()

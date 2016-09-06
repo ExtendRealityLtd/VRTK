@@ -9,11 +9,30 @@ public class VRTK_InteractableObject_UnityEvents : MonoBehaviour
 
     [System.Serializable]
     public class UnityObjectEvent : UnityEvent<InteractableObjectEventArgs> { };
+
+    /// <summary>
+    /// Emits the InteractableObjectTouched class event.
+    /// </summary>
     public UnityObjectEvent OnTouch;
+    /// <summary>
+    /// Emits the InteractableObjectUntouched class event.
+    /// </summary>
     public UnityObjectEvent OnUntouch;
+    /// <summary>
+    /// Emits the InteractableObjectGrabbed class event.
+    /// </summary>
     public UnityObjectEvent OnGrab;
+    /// <summary>
+    /// Emits the InteractableObjectUngrabbed class event.
+    /// </summary>
     public UnityObjectEvent OnUngrab;
+    /// <summary>
+    /// Emits the InteractableObjectUsed class event.
+    /// </summary>
     public UnityObjectEvent OnUse;
+    /// <summary>
+    /// Emits the InteractableObjectUnused class event.
+    /// </summary>
     public UnityObjectEvent OnUnuse;
 
     private void SetInteractableObject()

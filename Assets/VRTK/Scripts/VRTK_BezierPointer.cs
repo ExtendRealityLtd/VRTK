@@ -1,35 +1,46 @@
-﻿//====================================================================================
-//
-// Purpose: Provide curved laser pointer at the ground to VR Controller
-//
-// This script must be attached to a Controller
-//
-// The VRTK_ControllerEvents script must also be attached to the Controller
-//
-// Press the default 'Grip' button on the controller to activate the beam
-// Released the default 'Grip' button on the controller to deactivate the beam
-//
-// This script is an implementation of the VRTK_WorldPointer.
-//
-//====================================================================================
+﻿// Bezier Pointer|Scripts|0050
 namespace VRTK
 {
     using UnityEngine;
 
+    /// <summary>
+    /// The Bezier Pointer emits a curved line (made out of game objects) from the end of the controller to a point on a ground surface (at any height). It is more useful than the Simple Laser Pointer for traversing objects of various heights as the end point can be curved on top of objects that are not visible to the user.
+    /// </summary>
+    /// <remarks>
+    /// The laser beam is activated by default by pressing the `Touchpad` on the controller. The event it is listening for is the `AliasPointer` events so the pointer toggle button can be set by changing the `Pointer Toggle` button on the `VRTK_ControllerEvents` script parameters.
+    ///
+    /// The Bezier Pointer script can be attached to a Controller object within the `[CameraRig]` prefab and the Controller object also requires the `VRTK_ControllerEvents` script to be attached as it uses this for listening to the controller button events for enabling and disabling the beam. It is also possible to attach the Bezier Pointer script to another object (like the `[CameraRig]/Camera (head)`) to enable other objects to project the beam. The controller parameter must be entered with the desired controller to toggle the beam if this is the case.
+    ///
+    ///   > The bezier curve generation code is in another script located at `VRTK/Scripts/Helper/CurveGenerator.cs` and was heavily inspired by the tutorial and code from [Catlike Coding](http://catlikecoding.com/unity/tutorials/curves-and-splines/).
+    /// </remarks>
+    /// <example>
+    /// `VRTK/Examples/009_Controller_BezierPointer` is used in conjunction with the Height Adjust Teleporter shows how it is possible to traverse different height objects using the curved pointer without needing to see the top of the object.
+    ///
+    /// `VRTK/Examples/012_Controller_PointerWithAreaCollision` shows how a Bezier Pointer with the Play Area Cursor and Collision Detection enabled can be used to traverse a game area but not allow teleporting into areas where the walls or other objects would fall into the play area space enabling the user to enter walls.
+    ///
+    /// `VRTK/Examples/036_Controller_CustomCompoundPointer' shows how to display an object (a teleport beam) only if the teleport location is valid, and can create an animated trail along the tracer curve.
+    /// </example>
     public class VRTK_BezierPointer : VRTK_WorldPointer
     {
+        [Tooltip("The length of the projected forward pointer beam, this is basically the distance able to point from the controller position.")]
         public float pointerLength = 10f;
+        [Tooltip("The number of items to render in the beam bezier curve. A high number here will most likely have a negative impact of game performance due to large number of rendered objects.")]
         public int pointerDensity = 10;
+        [Tooltip("A cursor is displayed on the ground at the location the beam ends at, it is useful to see what height the beam end location is, however it can be turned off by toggling this.")]
         public bool showPointerCursor = true;
+        [Tooltip("The size of the ground pointer cursor. This number also affects the size of the objects in the bezier curve beam. The larger the radius, the larger the objects will be.")]
         public float pointerCursorRadius = 0.5f;
+        [Tooltip("The amount of height offset to apply to the projected beam to generate a smoother curve even when the beam is pointing straight.")]
         public float beamCurveOffset = 1f;
+        [Tooltip("A custom Game Object can be applied here to use instead of the default sphere for the beam tracer. The custom Game Object will match the rotation of the controller.")]
         public GameObject customPointerTracer;
+        [Tooltip("A custom Game Object can be applied here to use instead of the default flat cylinder for the pointer cursor.")]
         public GameObject customPointerCursor;
+        [Tooltip("The layers to ignore when raycasting.")]
         public LayerMask layersToIgnore = Physics.IgnoreRaycastLayer;
-
-        [Tooltip("Optional object that appears\nwhen the teleport is allowed")]
+        [Tooltip("A custom Game Object can be applied here to appear only if the teleport is allowed (its material will not be changed ).")]
         public GameObject validTeleportLocationObject = null;
-        [Tooltip("Adapt tracer instances to the curve length")]
+        [Tooltip("Rescale each pointer tracer element according to the length of the Bezier curve.")]
         public bool rescalePointerTracer = false;
 
         private GameObject projectedBeamContainer;
@@ -42,13 +53,11 @@ namespace VRTK
         private CurveGenerator curvedBeam;
 
         private GameObject validTeleportLocationInstance = null;
-        // materials of customPointerCursor and teleportBeam (if defined)
         private Material customPointerMaterial;
         private Material beamTraceMaterial;
 
         protected override void OnEnable()
         {
-
             base.OnEnable();
             InitProjectedBeams();
             InitPointer();
@@ -175,7 +184,7 @@ namespace VRTK
         {
             state = (pointerVisibility == pointerVisibilityStates.Always_On ? true : state);
 
-            if(projectedBeamForward)
+            if (projectedBeamForward)
             {
                 projectedBeamForward.gameObject.SetActive(state);
             }

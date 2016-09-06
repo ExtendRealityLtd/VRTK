@@ -9,7 +9,14 @@ public class VRTK_UIPointer_UnityEvents : MonoBehaviour
 
     [System.Serializable]
     public class UnityObjectEvent : UnityEvent<UIPointerEventArgs> { };
+
+    /// <summary>
+    /// Emits the UIPointerElementEnter class event.
+    /// </summary>
     public UnityObjectEvent OnUIPointerElementEnter;
+    /// <summary>
+    /// Emits the UIPointerElementExit class event.
+    /// </summary>
     public UnityObjectEvent OnUIPointerElementExit;
 
     private void SetUIPointer()

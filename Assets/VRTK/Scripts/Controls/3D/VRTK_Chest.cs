@@ -1,31 +1,42 @@
-﻿namespace VRTK
+﻿// Chest|Controls3D|0030
+namespace VRTK
 {
     using UnityEngine;
 
+    /// <summary>
+    /// Transforms a game object into a chest with a lid. The direction can be auto-detected with very high reliability or set manually.
+    /// </summary>
+    /// <remarks>
+    /// The script will instantiate the required Rigidbody, Interactable and HingeJoint components automatically in case they do not exist yet. It will expect three distinct game objects: a body, a lid and a handle. These should be independent and not children of each other.
+    /// </remarks>
+    /// <example>
+    /// `VRTK/Examples/025_Controls_Overview` shows a chest that can be open and closed, it also displays the current opening angle of the chest.
+    /// </example>
     public class VRTK_Chest : VRTK_Control
     {
+        [Tooltip("The axis on which the chest should open. All other axis will be frozen.")]
         public Direction direction = Direction.autodetect;
-
+        [Tooltip("The game object for the lid.")]
         public GameObject lid;
+        [Tooltip("The game object for the body.")]
         public GameObject body;
-        [Tooltip("An optional game object that represents a handle attached to the lid of the chest. If it is not specified the whole lid will be interactable.")]
+        [Tooltip("The game object for the handle.")]
         public GameObject handle;
-        [Tooltip("An optional game object that is the parent of the content inside the chest. If set all interactables will become managed so that they only react if the lid is wide enough open.")]
+        [Tooltip("The parent game object for the chest content elements.")]
         public GameObject content;
-        [Tooltip("Will make the content invisible if the chest is closed. This way players cannot peak into it by moving the camera.")]
+        [Tooltip("Makes the content invisible while the chest is closed.")]
         public bool hideContent = true;
+        [Tooltip("The maximum opening angle of the chest.")]
         public float maxAngle = 160f;
 
         private float minAngle = 0f;
         private float stepSize = 1f;
-
         private Rigidbody handleRb;
         private FixedJoint handleFj;
         private VRTK_InteractableObject io;
         private Rigidbody lidRb;
         private HingeJoint lidHj;
         private Rigidbody bodyRb;
-
         private Direction finalDirection;
         private float subDirection = 1; // positive or negative can be determined automatically since handle dictates that
         private bool lidHjCreated;

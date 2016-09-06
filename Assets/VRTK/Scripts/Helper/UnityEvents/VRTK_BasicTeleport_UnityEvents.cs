@@ -9,7 +9,14 @@ public class VRTK_BasicTeleport_UnityEvents : MonoBehaviour
 
     [System.Serializable]
     public class UnityObjectEvent : UnityEvent<DestinationMarkerEventArgs> { };
+
+    /// <summary>
+    /// Emits the Teleporting class event.
+    /// </summary>
     public UnityObjectEvent OnTeleporting;
+    /// <summary>
+    /// Emits the Teleported class event.
+    /// </summary>
     public UnityObjectEvent OnTeleported;
 
     private void SetBasicTeleport()

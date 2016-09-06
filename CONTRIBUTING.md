@@ -81,13 +81,43 @@ e.g.
 
 ## Documentation
 
-If a new feature is being added then the `DOCUMENTATION.md` should
-also be updated to contain information about the relevant elements
-such as:
+All scripts that require documentation need to include a comment marker
+on the first line of the script in this format:
 
-  * New general purpose prefabs added.
-  * New general purpose scripts.
-  * New example scenes showcasing the feature.
+`// <Script Title>|<Section>|<Position>`
+
+ * **Script Title:** A user friendly name for the script.
+ * **Section:** The section the script will appear in:
+  * `Prefabs` - A script required for configuring an included prefab.
+  * `Abstractions` - An abstract script providing user functionality.
+  * `Scripts` - A script for providing user functionality.
+  * `Controls3D` - A script for providing a 3D control.
+ * **Position:** The position the text will appear in the section.
+
+  > Example `// UI Pointer|Scripts|0060`
+
+All core scripts, abstractions, controls and prefabs should contain
+inline code documentation adhering to the .NET Framework XML
+documentation comments convention which can be
+[viewed online here](https://msdn.microsoft.com/en-us/library/b2s063f7.aspx)
+
+Public classes, methods, delegate events and unity events should be
+documented using the XML comments and contain a 1 line `<summary>`
+with any additional lines included in `<remarks>`.
+
+Public parameters that appear in the inspector do not need XML
+comments and just require a `[Tooltip("")]` which is used to generate
+the documentation. However, other public class variables that are
+hidden from the inspector do need XML style comments to document them.
+
+C# delegate events also require to reference the event payload `struct`
+which also requires documenting using XML comments.
+
+Any accompanying example scenes can be documented within the `class`
+comments within the `<example>` tag with multiple lines being used
+for each example rather than using multiple `<example>` tags.
+
+Also, any example scene requires an entry in the `EXAMPLES.md` file.
 
 ## Commit Messages
 
@@ -116,7 +146,7 @@ The type must be one of the folowing:
   * refactor: A code change that neither fixes a bug or adds a feature
   * perf: A code change that improves performance
   * test: Adding missing tests
-  * chore: Changes to the build process or auxiliary tools an
+  * chore: Changes to the build process or auxiliary tools or
   libraries such as documentation generation
 
 ### Scope

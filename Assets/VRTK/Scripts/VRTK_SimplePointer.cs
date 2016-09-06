@@ -1,34 +1,36 @@
-﻿//====================================================================================
-//
-// Purpose: Provide basic laser pointer to VR Controller
-//
-// This script must be attached to a Controller within the CameraRig Prefab
-//
-// The VRTK_ControllerEvents script must also be attached to the Controller
-//
-// Press the default 'Grip' button on the controller to activate the beam
-// Released the default 'Grip' button on the controller to deactivate the beam
-//
-// This script is an implementation of the VRTK_WorldPointer.
-//
-//====================================================================================
+﻿// Simple Pointer|Scripts|0040
 namespace VRTK
 {
     using UnityEngine;
 
+    /// <summary>
+    /// The Simple Pointer emits a coloured beam from the end of the controller to simulate a laser beam. It can be useful for pointing to objects within a scene and it can also determine the object it is pointing at and the distance the object is from the controller the beam is being emitted from.
+    /// </summary>
+    /// <remarks>
+    /// The laser beam is activated by default by pressing the `Touchpad` on the controller. The event it is listening for is the `AliasPointer` events so the pointer toggle button can be set by changing the `Pointer Toggle` button on the `VRTK_ControllerEvents` script parameters.
+    ///
+    /// The Simple Pointer script can be attached to a Controller object within the `[CameraRig]` prefab and the Controller object also requires the `VRTK_ControllerEvents` script to be attached as it uses this for listening to the controller button events for enabling and disabling the beam. It is also possible to attach the Simple Pointer script to another object (like the `[CameraRig]/Camera (head)`) to enable other objects to project the beam. The controller parameter must be entered with the desired controller to toggle the beam if this is the case.
+    /// </remarks>
+    /// <example>
+    /// `VRTK/Examples/003_Controller_SimplePointer` shows the simple pointer in action and code examples of how the events are utilised and listened to can be viewed in the script `VRTK/Examples/Resources/Scripts/VRTK_ControllerPointerEvents_ListenerExample.cs`
+    /// </example>
     public class VRTK_SimplePointer : VRTK_WorldPointer
     {
+        [Tooltip("The thickness and length of the beam can also be set on the script as well as the ability to toggle the sphere beam tip that is displayed at the end of the beam (to represent a cursor).")]
         public float pointerThickness = 0.002f;
+        [Tooltip("The distance the beam will project before stopping.")]
         public float pointerLength = 100f;
+        [Tooltip("Toggle whether the cursor is shown on the end of the pointer beam.")]
         public bool showPointerTip = true;
+        [Tooltip("A custom Game Object can be applied here to use instead of the default sphere for the pointer cursor.")]
         public GameObject customPointerCursor;
+        [Tooltip("The layers to ignore when raycasting.")]
         public LayerMask layersToIgnore = Physics.IgnoreRaycastLayer;
 
         private GameObject pointerHolder;
         private GameObject pointer;
         private GameObject pointerTip;
         private Vector3 pointerTipScale = new Vector3(0.05f, 0.05f, 0.05f);
-
         // material of customPointerCursor (if defined)
         private Material customPointerMaterial;
 

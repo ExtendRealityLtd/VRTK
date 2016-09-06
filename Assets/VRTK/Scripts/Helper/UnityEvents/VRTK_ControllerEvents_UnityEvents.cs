@@ -9,34 +9,122 @@ public class VRTK_ControllerEvents_UnityEvents : MonoBehaviour
 
     [System.Serializable]
     public class UnityObjectEvent : UnityEvent<ControllerInteractionEventArgs> { };
+
+    /// <summary>
+    /// Emits the TriggerPressed class event.
+    /// </summary>
     public UnityObjectEvent OnTriggerPressed;
+    /// <summary>
+    /// Emits the TriggerReleased class event.
+    /// </summary>
     public UnityObjectEvent OnTriggerReleased;
+    /// <summary>
+    /// Emits the TriggerTouchStart class event.
+    /// </summary>
     public UnityObjectEvent OnTriggerTouchStart;
+    /// <summary>
+    /// Emits the TriggerTouchEnd class event.
+    /// </summary>
     public UnityObjectEvent OnTriggerTouchEnd;
+    /// <summary>
+    /// Emits the TriggerHairlineStart class event.
+    /// </summary>
     public UnityObjectEvent OnTriggerHairlineStart;
+    /// <summary>
+    /// Emits the TriggerHairlineEnd class event.
+    /// </summary>
     public UnityObjectEvent OnTriggerHairlineEnd;
+    /// <summary>
+    /// Emits the TriggerClicked class event.
+    /// </summary>
     public UnityObjectEvent OnTriggerClicked;
+    /// <summary>
+    /// Emits the TriggerUnclicked class event.
+    /// </summary>
     public UnityObjectEvent OnTriggerUnclicked;
+    /// <summary>
+    /// Emits the TriggerAxisChanged class event.
+    /// </summary>
     public UnityObjectEvent OnTriggerAxisChanged;
+    /// <summary>
+    /// Emits the ApplicationMenuPressed class event.
+    /// </summary>
     public UnityObjectEvent OnApplicationMenuPressed;
+    /// <summary>
+    /// Emits the ApplicationMenuReleased class event.
+    /// </summary>
     public UnityObjectEvent OnApplicationMenuReleased;
+    /// <summary>
+    /// Emits the GripPressed class event.
+    /// </summary>
     public UnityObjectEvent OnGripPressed;
+    /// <summary>
+    /// Emits the GripReleased class event.
+    /// </summary>
     public UnityObjectEvent OnGripReleased;
+    /// <summary>
+    /// Emits the TouchpadPressed class event.
+    /// </summary>
     public UnityObjectEvent OnTouchpadPressed;
+    /// <summary>
+    /// Emits the TouchpadReleased class event.
+    /// </summary>
     public UnityObjectEvent OnTouchpadReleased;
+    /// <summary>
+    /// Emits the TouchpadTouchStart class event.
+    /// </summary>
     public UnityObjectEvent OnTouchpadTouchStart;
+    /// <summary>
+    /// Emits the TouchpadTouchEnd class event.
+    /// </summary>
     public UnityObjectEvent OnTouchpadTouchEnd;
+    /// <summary>
+    /// Emits the TouchpadAxisChanged class event.
+    /// </summary>
     public UnityObjectEvent OnTouchpadAxisChanged;
+    /// <summary>
+    /// Emits the AliasPointerOn class event.
+    /// </summary>
     public UnityObjectEvent OnAliasPointerOn;
+    /// <summary>
+    /// Emits the AliasPointerOff class event.
+    /// </summary>
     public UnityObjectEvent OnAliasPointerOff;
+    /// <summary>
+    /// Emits the AliasPointerSet class event.
+    /// </summary>
     public UnityObjectEvent OnAliasPointerSet;
+    /// <summary>
+    /// Emits the AliasGrabOn class event.
+    /// </summary>
     public UnityObjectEvent OnAliasGrabOn;
+    /// <summary>
+    /// Emits the AliasGrabOff class event.
+    /// </summary>
     public UnityObjectEvent OnAliasGrabOff;
+    /// <summary>
+    /// Emits the AliasUseOn class event.
+    /// </summary>
     public UnityObjectEvent OnAliasUseOn;
+    /// <summary>
+    /// Emits the AliasUseOff class event.
+    /// </summary>
     public UnityObjectEvent OnAliasUseOff;
+    /// <summary>
+    /// Emits the AliasMenuOn class event.
+    /// </summary>
     public UnityObjectEvent OnAliasUIClickOn;
+    /// <summary>
+    /// Emits the AliasMenuOff class event.
+    /// </summary>
     public UnityObjectEvent OnAliasUIClickOff;
+    /// <summary>
+    /// Emits the AliasUIClickOn class event.
+    /// </summary>
     public UnityObjectEvent OnAliasMenuOn;
+    /// <summary>
+    /// Emits the AliasUIClickOff class event.
+    /// </summary>
     public UnityObjectEvent OnAliasMenuOff;
 
     private void SetControllerEvents()

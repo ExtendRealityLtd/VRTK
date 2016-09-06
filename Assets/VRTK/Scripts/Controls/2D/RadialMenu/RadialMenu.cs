@@ -1,3 +1,4 @@
+// Radial Menu|Prefabs|0040
 using UnityEngine;
 using System.Collections;
 using UnityEngine.Events;
@@ -7,29 +8,53 @@ using UnityEngine.EventSystems;
 
 public delegate void HapticPulseEventHandler(ushort strength);
 
-[ExecuteInEditMode] //Lets us set up buttons from inspector option
+/// <summary>
+/// This adds a UI element into the world space that can be dropped into a Controller object and used to create and use Radial Menus from the touchpad.
+/// </summary>
+/// <remarks>
+/// If the RadialMenu is placed inside a controller, it will automatically find a `VRTK_ControllerEvents` in its parent to use at the input. However, a `VRTK_ControllerEvents` can be defined explicitly by setting the `Events` parameter of the `Radial Menu Controller` script also attached to the prefab.
+///
+/// The RadialMenu can also be placed inside a `VRTK_InteractableObject` for the RadialMenu to be anchored to a world object instead of the controller. The `Events Manager` parameter will automatically be set if the RadialMenu is a child of an InteractableObject, but it can also be set manually in the inspector. Additionally, for the RadialMenu to be anchored in the world, the `RadialMenuController` script in the prefab must be replaced with `VRTK_IndependentRadialMenuController`. See the script information for further details on making the RadialMenu independent of the controllers.
+/// </remarks>
+/// <example>
+/// `VRTK/Examples/030_Controls_RadialTouchpadMenu` displays a radial menu for each controller. The left controller uses the `Hide On Release` variable, so it will only be visible if the left touchpad is being touched. It also uses the `Execute On Unclick` variable to delay execution until the touchpad button is unclicked. The example scene also contains a demonstration of anchoring the RadialMenu to an interactable cube instead of a controller.
+/// </example>
+[ExecuteInEditMode]
 public class RadialMenu : MonoBehaviour
 {
     #region Variables
+    [Tooltip("An array of Buttons that define the interactive buttons required to be displayed as part of the radial menu.")]
     public List<RadialMenuButton> buttons;
+    [Tooltip("The base for each button in the menu, by default set to a dynamic circle arc that will fill up a portion of the menu.")]
     public GameObject buttonPrefab;
+    [Tooltip("Percentage of the menu the buttons should fill, 1.0 is a pie slice, 0.1 is a thin ring.")]
     [Range(0f, 1f)]
     public float buttonThickness = 0.5f;
+    [Tooltip("The background colour of the buttons, default is white.")]
     public Color buttonColor = Color.white;
+    [Tooltip("The distance the buttons should move away from the centre. This creates space between the individual buttons.")]
     public float offsetDistance = 1;
+    [Tooltip("The additional rotation of the Radial Menu.")]
     [Range(0, 359)]
     public float offsetRotation;
+    [Tooltip("Whether button icons should rotate according to their arc or be vertical compared to the controller.")]
     public bool rotateIcons;
+    [Tooltip("The margin in pixels that the icon should keep within the button.")]
     public float iconMargin;
+    [Tooltip("Whether the buttons are shown")]
     public bool isShown;
+    [Tooltip("Whether the buttons should be visible when not in use.")]
     public bool hideOnRelease;
+    [Tooltip("Whether the button action should happen when the button is released, as opposed to happening immediately when the button is pressed.")]
     public bool executeOnUnclick;
+    [Tooltip("The base strength of the haptic pulses when the selected button is changed, or a button is pressed. Set to zero to disable.")]
     [Range(0, 1599)]
     public ushort baseHapticStrength;
 
     public event HapticPulseEventHandler FireHapticPulse;
 
     //Has to be public to keep state from editor -> play mode?
+    [Tooltip("The actual GameObjects that make up the radial menu.")]
     public List<GameObject> menuButtons;
 
     private int currentHover = -1;
@@ -82,7 +107,7 @@ public class RadialMenu : MonoBehaviour
             if (executeOnUnclick && currentPress != -1)
             {
                 ExecuteEvents.Execute(menuButtons[buttonID], pointer, ExecuteEvents.pointerDownHandler);
-                AttempHapticPulse ((ushort)(baseHapticStrength * 1.666f));
+                AttempHapticPulse((ushort)(baseHapticStrength * 1.666f));
             }
         }
         if (evt == ButtonEvent.click) //Click button if click, and keep track of current press (executes button action)
@@ -91,8 +116,8 @@ public class RadialMenu : MonoBehaviour
             currentPress = buttonID;
             if (!executeOnUnclick)
             {
-                buttons[buttonID].OnClick.Invoke ();
-                AttempHapticPulse ((ushort)(baseHapticStrength * 2.5f));
+                buttons[buttonID].OnClick.Invoke();
+                AttempHapticPulse((ushort)(baseHapticStrength * 2.5f));
             }
         }
         else if (evt == ButtonEvent.unclick) //Clear press id to stop invoking OnHold method (hide menu)
@@ -102,15 +127,15 @@ public class RadialMenu : MonoBehaviour
 
             if (executeOnUnclick)
             {
-                AttempHapticPulse ((ushort)(baseHapticStrength * 2.5f));
-                buttons[buttonID].OnClick.Invoke ();
+                AttempHapticPulse((ushort)(baseHapticStrength * 2.5f));
+                buttons[buttonID].OnClick.Invoke();
             }
         }
         else if (evt == ButtonEvent.hoverOn && currentHover != buttonID) // Show hover UI event (darken button etc). Show menu
         {
             ExecuteEvents.Execute(menuButtons[buttonID], pointer, ExecuteEvents.pointerEnterHandler);
             buttons[buttonID].OnHoverEnter.Invoke();
-            AttempHapticPulse (baseHapticStrength);
+            AttempHapticPulse(baseHapticStrength);
         }
         currentHover = buttonID; //Set current hover ID, need this to un-hover if selected button changes
     }
@@ -214,7 +239,7 @@ public class RadialMenu : MonoBehaviour
     {
         if (strength > 0 && FireHapticPulse != null)
         {
-            FireHapticPulse (strength);
+            FireHapticPulse(strength);
         }
     }
 
@@ -329,7 +354,6 @@ public class RadialMenu : MonoBehaviour
 public class RadialMenuButton
 {
     public Sprite ButtonIcon;
-
     public UnityEvent OnClick;
     public UnityEvent OnHold;
     public UnityEvent OnHoverEnter;

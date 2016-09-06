@@ -9,7 +9,14 @@ public class VRTK_InteractUse_UnityEvents : MonoBehaviour
 
     [System.Serializable]
     public class UnityObjectEvent : UnityEvent<ObjectInteractEventArgs> { };
+
+    /// <summary>
+    /// Emits the ControllerUseInteractableObject class event.
+    /// </summary>
     public UnityObjectEvent OnControllerUseInteractableObject;
+    /// <summary>
+    /// Emits the ControllerUnuseInteractableObject class event.
+    /// </summary>
     public UnityObjectEvent OnControllerUnuseInteractableObject;
 
     private void SetInteractUse()

@@ -9,7 +9,14 @@ public class VRTK_PlayerClimb_UnityEvents : MonoBehaviour
 
     [System.Serializable]
     public class UnityObjectEvent : UnityEvent<PlayerClimbEventArgs> { };
+
+    /// <summary>
+    /// Emits the PlayerClimbStarted class event.
+    /// </summary>
     public UnityObjectEvent OnPlayerClimbStarted;
+    /// <summary>
+    /// Emits the PlayerClimbEnded class event.
+    /// </summary>
     public UnityObjectEvent OnPlayerClimbEnded;
 
     private void SetPlayerClimb()
