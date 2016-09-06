@@ -19,10 +19,13 @@ namespace VRTK
     public class VRTK_SimplePointer : VRTK_WorldPointer
     {
         public float pointerThickness = 0.002f;
+        [Tooltip("Maximum distance the pointer can reach")]
         public float pointerLength = 100f;
         public bool showPointerTip = true;
         public GameObject customPointerCursor;
         public LayerMask layersToIgnore = Physics.IgnoreRaycastLayer;
+        [Tooltip("Scales the pointer proportional to this (usually CameraRig)")]
+        public GameObject scaledReference;
 
         private GameObject pointerHolder;
         private GameObject pointer;
@@ -177,14 +180,16 @@ namespace VRTK
                 destinationPosition = pointerTip.transform.position;
 
                 UpdatePointerMaterial(pointerHitColor);
+                actualLength = Mathf.Min(pointerContactDistance, pointerLength); // Can it even get here if with public-max value?
 
                 base.PointerIn();
             }
 
-            //adjust beam length if something is blocking it
-            if (hasRayHit && pointerContactDistance < pointerLength)
+            if (scaledReference != null)
             {
-                actualLength = pointerContactDistance;
+                // Ensure that playArea is set to 1,1,1 scale as default. This is used in initial setup.
+                var scaleAmount = 1f / scaledReference.transform.localScale.x;
+                actualLength *= scaleAmount;
             }
 
             return actualLength;
