@@ -1,9 +1,13 @@
-﻿using UnityEngine;
-
-public class BowHandle : MonoBehaviour
+﻿
+namespace VRTK.Example
 {
-    public Transform arrowNockingPoint;
-    public BowAim aim;
-    [HideInInspector]
-    public Transform nockSide;
+    using UnityEngine;
+
+    public class BowHandle : MonoBehaviour
+    {
+        public Transform arrowNockingPoint;
+        public BowAim aim;
+        [HideInInspector]
+        public Transform nockSide;
+    }
 }

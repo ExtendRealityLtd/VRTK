@@ -1,22 +1,22 @@
-﻿using UnityEngine;
-using VRTK;
-
-[ExecuteInEditMode]
-public class Add_HeadsetCollisionFade : MonoBehaviour
+﻿namespace VRTK.Example
 {
-    private bool initalised = false;
-#if UNITY_EDITOR
-    private void Update()
+    using UnityEngine;
+
+    [ExecuteInEditMode]
+    public class Add_HeadsetCollisionFade : MonoBehaviour
     {
-        if (!initalised)
+        private bool initalised = false;
+#if UNITY_EDITOR
+        private void Update ()
         {
-            var headset = VRTK_DeviceFinder.HeadsetTransform();
-            if (!headset.GetComponent<VRTK_HeadsetCollisionFade>())
-            {
-                headset.gameObject.AddComponent<VRTK_HeadsetCollisionFade>();
+            if (!initalised) {
+                var headset = VRTK_DeviceFinder.HeadsetTransform();
+                if (!headset.GetComponent<VRTK_HeadsetCollisionFade>()) {
+                    headset.gameObject.AddComponent<VRTK_HeadsetCollisionFade>();
+                }
+                initalised = true;
             }
-            initalised = true;
         }
-    }
 #endif
+    }
 }
