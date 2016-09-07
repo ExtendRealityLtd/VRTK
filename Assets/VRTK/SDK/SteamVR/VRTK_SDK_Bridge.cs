@@ -94,11 +94,15 @@
 
         public static Transform GetHeadset()
         {
+            if (cachedHeadset == null)
+            {
 #if (UNITY_5_4_OR_NEWER)
-            return FindObjectOfType<SteamVR_Camera>().GetComponent<Transform>();
+                cachedHeadset = FindObjectOfType<SteamVR_Camera>().GetComponent<Transform>();
 #else
-            return FindObjectOfType<SteamVR_GameView>().GetComponent<Transform>();
+                cachedHeadset = FindObjectOfType<SteamVR_GameView>().GetComponent<Transform>();
 #endif
+            }
+            return cachedHeadset;
         }
 
         public static Transform GetHeadsetCamera()

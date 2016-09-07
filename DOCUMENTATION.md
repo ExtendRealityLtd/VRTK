@@ -199,6 +199,7 @@ This directory contains all of the toolkit scripts that add VR functionality to 
  * [VRTK_HeadsetCollision](#headset-collision-vrtk_headsetcollision)
  * [VRTK_HeadsetFade](#headset-fade-vrtk_headsetfade)
  * [VRTK_HeadsetCollisionFade](#headset-collision-fade-vrtk_headsetcollisionfade)
+ * [VRTK_TeleportDisableOnHeadsetCollision](#teleport-disable-on-headset-collision)
  * [VRTK_PlayerPresence](#player-presence-vrtk_playerpresence)
  * [VRTK_TouchpadWalking](#touchpad-movement-vrtk_touchpadwalking)
  * [VRTK_RoomExtender](#play-space-extension-vrtk_roomextender)
@@ -209,9 +210,9 @@ This directory contains all of the toolkit scripts that add VR functionality to 
  * [VRTK_ObjectAutoGrab](#auto-grabbing-interactable-objects-vrtk_objectautograb)
  * [VRTK_Simulator](#simulator-vrtk_simulator)
  * [VRTK_PlayerClimb](#player-climb-vrtk_playerclimb)
+ * [VRTK_DashTeleport](#dash-teleporter-vrtk_dashteleport)
  * [VRTK_PlayerClimbStamina](#player-climb-stamina-vrtk_playerclimbstamina)
 
----
 
 ## Controller Events (VRTK_ControllerEvents)
 
@@ -285,6 +286,40 @@ The script also has a public boolean pressed state for the buttons to allow the 
   * `AliasMenuOff` - Emitted when the menu toggle alias button is released.
   * `AliasUIClickOn` - Emitted when the UI click alias button is pressed.
   * `AliasUIClickOff` - Emitted when the UI click alias button is released.
+
+### Unity Events
+
+Adding the `VRTK_ControllerEvents_UnityEvents` component to `VRTK_ControllerEvents` object allows access to `UnityEvents` that will react identically to the Class Events.
+
+  * `OnTriggerPressed` - Emits the TriggerPressed class event.
+  * `OnTriggerReleased` - Emits the TriggerReleased class event.
+  * `OnTriggerTouchStart` - Emits the TriggerTouchStart class event.
+  * `OnTriggerTouchEnd` - Emits the TriggerTouchEnd class event.
+  * `OnTriggerHairlineStart` - Emits the TriggerHairlineStart class event.
+  * `OnTriggerHairlineEnd` - Emits the TriggerHairlineEnd class event.
+  * `OnTriggerClicked` - Emits the TriggerClicked class event.
+  * `OnTriggerUnclicked` - Emits the TriggerUnclicked class event.
+  * `OnTriggerAxisChanged` - Emits the TriggerAxisChanged class event.
+  * `OnApplicationMenuPressed` - Emits the ApplicationMenuPressed class event.
+  * `OnApplicationMenuReleased` - Emits the ApplicationMenuReleased class event.
+  * `OnGripPressed` - Emits the GripPressed class event.
+  * `OnGripReleased` - Emits the GripReleased class event.
+  * `OnTouchpadPressed` - Emits the TouchpadPressed class event.
+  * `OnTouchpadReleased` - Emits the TouchpadReleased class event.
+  * `OnTouchpadTouchStart` - Emits the TouchpadTouchStart class event.
+  * `OnTouchpadTouchEnd` - Emits the TouchpadTouchEnd class event.
+  * `OnTouchpadAxisChanged` - Emits the TouchpadAxisChanged class event.
+  * `OnAliasPointerOn` - Emits the AliasPointerOn class event.
+  * `OnAliasPointerOff` - Emits the AliasPointerOff class event.
+  * `OnAliasPointerSet` - Emits the AliasPointerSet class event.
+  * `OnAliasGrabOn` - Emits the AliasGrabOn class event.
+  * `OnAliasGrabOff` - Emits the AliasGrabOff class event.
+  * `OnAliasUseOn` - Emits the AliasUseOn class event.
+  * `OnAliasUseOff` - Emits the AliasUseOff class event.
+  * `OnAliasMenuOn` - Emits the AliasMenuOn class event.
+  * `OnAliasMenuOff` - Emits the AliasMenuOff class event.
+  * `OnAliasUIClickOn` - Emits the AliasUIClickOn class event.
+  * `OnAliasUIClickOff` - Emits the AliasUIClickOff class event.
 
 #### Event Payload
 
@@ -793,6 +828,13 @@ The UI pointer is activated via the `Pointer` alias on the `Controller Events` a
   * `UIPointerElementEnter` - Emitted when the UI Pointer is colliding with a valid UI element.
   * `UIPointerElementExit` - Emitted when the UI Pointer is no longer colliding with any valid UI elements.
 
+### Unity Events
+
+Adding the `VRTK_UIPointer_UnityEvents` component to `VRTK_UIPointer` object allows access to `UnityEvents` that will react identically to the Class Events.
+
+  * `OnUIPointerElementEnter` - Emits the UIPointerElementEnter class event.
+  * `OnUIPointerElementExit` - Emits the UIPointerElementExit class event.
+
 #### Event Payload
 
   * `uint controllerIndex` - The index of the controller that was used.
@@ -861,6 +903,13 @@ The Basic Teleport script is attached to the `[CameraRig]` prefab and requires a
   * `Teleporting` - Emitted when the teleport process has begun.
   * `Teleported` - Emitted when the teleport process has successfully completed.
 
+### Unity Events
+
+Adding the `VRTK_BasicTeleport_UnityEvents` component to `VRTK_BasicTeleport` object allows access to `UnityEvents` that will react identically to the Class Events.
+
+  * `OnTeleporting` - Emits the Teleporting class event.
+  * `OnTeleported` - Emits the Teleported class event.
+
 #### Event Payload
 
   > The event payload is reused from the [VRTK_DestinationMarker Event Payload](#vrtk_destinationmarker)
@@ -877,6 +926,17 @@ The Basic Teleport script is attached to the `[CameraRig]` prefab and requires a
    * _none_
 
 The InitDestinationSetListener method is used to register the teleport script to listen to events from the given game object that is used to generate destination markers. Any destination set event emitted by a registered game object will initiate the teleport to the given destination location.
+
+#### ToggleTeleportEnabled/1
+
+  > `public void ToggleTeleportEnabled(bool state)`
+
+  * Parameters
+   * `bool state` - Toggles whether the teleporter is enabled or disabled.
+  * Returns
+   * _none_
+
+The ToggleTeleportEnabled method is used to determine whether the teleporter will initiate a teleport on a destination set event, if the state is true then the teleporter will work as normal, if the state is false then the teleporter will not be operational.
 
 ### Example
 
@@ -904,6 +964,7 @@ Like the basic teleporter the Height Adjust Teleport script is attached to the `
   * **Use Gravity**: allows for gravity based falling when the distance is greater than `Gravity Fall Height`.
   * **Gravity Fall Height**: Fall distance needed before gravity based falling can be triggered.
   * **Blink Y Threshold:** The `y` distance between the floor and the headset that must change before the fade transition is initiated. If the new user location is at a higher distance than the threshold then the headset blink transition will activate on teleport. If the new user location is within the threshold then no blink transition will happen, which is useful for walking up slopes, meshes and terrains where constant blinking would be annoying.
+  * **Floor Height Tolerance:** The amount the `y` position needs to change by between the current floor `y` position and the previous floor `y` position before a change in floor height is considered to have occurred. A higher value here will mean that a `Drop To Floor` teleport event will be less likely to happen if the `y` of the floor beneath the user hasn't changed as much as the given threshold.
 
 ### Example
 
@@ -935,6 +996,13 @@ If the headset is colliding then the teleport action is also disabled to prevent
 
   * `HeadsetCollisionDetect` - Emitted when the user's headset collides with another game object.
   * `HeadsetCollisionEnded` - Emitted when the user's headset stops colliding with a game object.
+
+### Unity Events
+
+Adding the `VRTK_HeadsetCollision_UnityEvents` component to `VRTK_HeadsetCollision` object allows access to `UnityEvents` that will react identically to the Class Events.
+
+  * `OnHeadsetCollisionDetect` - Emits the HeadsetCollisionDetect class event.
+  * `OnHeadsetCollisionEnded` - Emits the HeadsetCollisionEnded class event.
 
 #### Event Payload
 
@@ -976,6 +1044,15 @@ The purpose of the Headset Fade is to change the colour of the headset view to a
   * `HeadsetFadeComplete` - Emitted when the user's headset has completed the fade and is now fully at the given colour.
   * `HeadsetUnfadeStart` - Emitted when the user's headset begins to unfade back to a transparent colour.
   * `HeadsetUnfadeComplete` - Emitted when the user's headset has completed unfading and is now fully transparent again.
+
+### Unity Events
+
+Adding the `VRTK_HeadsetFade_UnityEvents` component to `VRTK_HeadsetFade` object allows access to `UnityEvents` that will react identically to the Class Events.
+
+  * `OnHeadsetFadeStart` - Emits the HeadsetFadeStart class event.
+  * `OnHeadsetFadeComplete` - Emits the HeadsetFadeComplete class event.
+  * `OnHeadsetUnfadeStart` - Emits the HeadsetUnfadeStart class event.
+  * `OnHeadsetUnfadeComplete` - Emits the HeadsetUnfadeComplete class event.
 
 #### Event Payload
 
@@ -1059,6 +1136,14 @@ The Headset Collision Fade uses a composition of the Headset Collision and Heads
 
 ---
 
+## Teleport Disable On Headset Collision (VRTK_TeleportDisableOnHeadsetCollision)
+
+### Overview
+
+The purpose of the Teleport Disable On Headset Collision script is to detect when the headset is colliding with a valid object and prevent teleportation from working. This is to ensure that if a user is clipping their head into a wall then they cannot teleport to an area beyond the wall.
+
+---
+
 ## Player Presence (VRTK_PlayerPresence)
 
 ### Overview
@@ -1076,6 +1161,13 @@ The concept that the VR user has a physical in game presence which is accomplish
 
   * `PresenceFallStarted` - Emitted when a gravity based fall has started
   * `PresenceFallEnded` - Emitted when a gravity based fall has ended
+
+### Unity Events
+
+Adding the `VRTK_PlayerPresence_UnityEvents` component to `VRTK_PlayerPresence` object allows access to `UnityEvents` that will react identically to the Class Events.
+
+  * `OnPresenceFallStarted` - Emits the PresenceFallStarted class event.
+  * `OnPresenceFallEnded` - Emits the PresenceFallEnded class event.
 
 #### Event Payload
 
@@ -1272,14 +1364,14 @@ The basis of this script is to provide a simple mechanism for identifying object
 
 ### Unity Events
 
-Adding the `VRTK_InteractableObject_UnityEvents` component to an Interactable Object allows access to `UnityEvents` that will react identically to the Class Events.
+Adding the `VRTK_InteractableObject_UnityEvents` component to `VRTK_InteractableObject` object allows access to `UnityEvents` that will react identically to the Class Events.
 
-  * `OnTouch` - Emitted when another object touches the current object.
-  * `OnUntouch` - Emitted when the other object stops touching the current object.
-  * `OnGrab` - Emitted when another object grabs the current object (e.g. a controller).
-  * `OnUngrab` - Emitted when the other object stops grabbing the current object.
-  * `OnUse` - Emitted when another object uses the current object (e.g. a controller).
-  * `OnUnuse` - Emitted when the other object stops using the current object.
+  * `OnTouch` - Emits the InteractableObjectTouched class event.
+  * `OnUntouch` - Emits the InteractableObjectUntouched class event.
+  * `OnGrab` - Emits the InteractableObjectGrabbed class event.
+  * `OnUngrab` - Emits the InteractableObjectUngrabbed class event.
+  * `OnUse` - Emits the InteractableObjectUsed class event.
+  * `OnUnuse` - Emits the InteractableObjectUnused class event.
 
 #### Event Payload
 
@@ -1605,6 +1697,13 @@ The Interact Touch script is attached to a Controller object within the `[Camera
   * `ControllerTouchInteractableObject` - Emitted when a valid object is touched
   * `ControllerUntouchInteractableObject` - Emitted when a valid object is no longer being touched
 
+### Unity Events
+
+Adding the `VRTK_InteractTouch_UnityEvents` component to `VRTK_InteractTouch` object allows access to `UnityEvents` that will react identically to the Class Events.
+
+  * `OnControllerTouchInteractableObject` - Emits the ControllerTouchInteractableObject class event.
+  * `OnControllerUntouchInteractableObject` - Emits the ControllerUntouchInteractableObject class event.
+
 #### Event Payload
 
   * `uint controllerIndex` -  The index of the controller doing the interaction
@@ -1725,6 +1824,13 @@ The interactable objects require a collider to activate the trigger and a rigidb
   * `ControllerGrabInteractableObject` - Emitted when a valid object is grabbed.
   * `ControllerUngrabInteractableObject` - Emitted when a valid object is released from being grabbed.
 
+### Unity Events
+
+Adding the `VRTK_InteractGrab_UnityEvents` component to `VRTK_InteractGrab` object allows access to `UnityEvents` that will react identically to the Class Events.
+
+  * `OnControllerGrabInteractableObject` - Emits the ControllerGrabInteractableObject class event.
+  * `OnControllerUngrabInteractableObject` - Emits the ControllerUngrabInteractableObject class event.
+
 #### Event Payload
 
   * `uint controllerIndex` - The index of the controller doing the interaction.
@@ -1796,6 +1902,13 @@ If a valid interactable object is usable then pressing the set `Use` button on t
 
   * `ControllerUseInteractableObject` - Emitted when a valid object starts being used.
   * `ControllerUnuseInteractableObject` - Emitted when a valid object stops being used.
+
+### Unity Events
+
+Adding the `VRTK_InteractUse_UnityEvents` component to `VRTK_InteractUse` object allows access to `UnityEvents` that will react identically to the Class Events.
+
+  * `OnControllerUseInteractableObject` - Emits the ControllerUseInteractableObject class event.
+  * `OnControllerUnuseInteractableObject` - Emits the ControllerUnuseInteractableObject class event.
 
 #### Event Payload
 
@@ -1898,6 +2011,13 @@ This class allows player movement based on grabbing of `VRTK_InteractableObject`
   * `PlayerClimbStarted` - Emitted when player climbing has started.
   * `PlayerClimbEnded` - Emitted when player climbing has ended.
 
+### Unity Events
+
+Adding the `VRTK_PlayerClimb_UnityEvents` component to `VRTK_PlayerClimb` object allows access to `UnityEvents` that will react identically to the Class Events.
+
+  * `OnPlayerClimbStarted` - Emits the PlayerClimbStarted class event.
+  * `OnPlayerClimbEnded` - Emits the PlayerClimbEnded class event.
+
 #### Event Payload
 
   * `uint controllerIndex` - The index of the controller doing the interaction.
@@ -1906,6 +2026,58 @@ This class allows player movement based on grabbing of `VRTK_InteractableObject`
 ### Example
 
 `VRTK/Examples/037_CameraRig_ClimbingFalling` shows how to set up a scene with player climbing. There are many different examples showing how the same system can be used in unique ways.
+
+---
+
+## Dash Teleporter (VRTK_DashTeleport)
+  > extends [VRTK_HeightAdjustTeleport](#height-adjustable-teleporter-vrtk_heightadjustteleport)
+
+### Overview
+
+The dash teleporter extends the height adjust teleporter and allows to have the `[CameraRig]` dashing to a new teleport location. 
+
+Like the basic teleporter and the height adjustable teleporter the Dash Teleport script is attached to the `[CameraRig]` prefab and requires a World Pointer to be available.
+
+The basic principle is to dash for a very short amount of time, to avoid sim sickness. The default value is 100 miliseconds. This value is fixed for all normal and longer distances. When the distances get very short the minimum speed is clamped to 50 mps, so the dash time becomes even shorter.
+This idea is taken from Realities' "ludicrous speed".
+The minimum distance for the fixed time dash is determined by the minSpeed and normalLerpTime values, if you want to always lerp with a fixed mps speed instead, set the normalLerpTime to a high value. Right before the teleport a capsule is cast towards the target and registers all colliders blocking the way. These obstacles are then broadcast in an event so that for example their gameobjects or renderers can be turned off while the dash is in progress.
+
+### Inspector Parameters
+
+  * **Blink Transition Speed:** The fade blink speed on teleport. Probably should best be set to a value of 0 for dashing so that no blink occurs.
+  * **Distance Blink Delay:** A range between 0 and 32 that determines how long the blink transition will stay blacked out depending on the distance being teleported. A value of 0 will not delay the teleport blink effect over any distance, a value of 32 will delay the teleport blink fade in even when the distance teleported is very close to the original position. This can be used to simulate time taking longer to pass the further a user teleports. A value of 16 provides a decent basis to simulate this to the user.
+  * **Headset Position Compensation:** If this is checked then the teleported location will be the position of the headset within the play area. If it is unchecked then the teleported location will always be the centre of the play area even if the headset position is not in the centre of the play area.
+  * **Ignore Target With Tag Or Class:** A string that specifies an object Tag or the name of a Script attached to an obejct and notifies the teleporter that the destination is to be ignored so the user cannot teleport to that location. It also ensure the pointer colour is set to the miss colour.
+  * **Limit To Nav Mesh:** If this is checked then teleporting will be limited to the bounds of a baked NavMesh. If the pointer destination is outside the NavMesh then it will be ignored.
+  * **Play Space Falling:** Checks if the user steps off an object into a part of their play area that is not on the object then they are automatically teleported down to the nearest floor. The `Play Space Falling` option also works in the opposite way that if the user's headset is above an object then the user is teleported automatically on top of that object, which is useful for simulating climbing stairs without needing to use the pointer beam location. If this option is turned off then the user can hover in mid air at the same y position of the object they are standing on.
+  * **Use Gravity**: allows for gravity based falling when the distance is greater than `Gravity Fall Height`.
+  * **Gravity Fall Height**: Fall distance needed before gravity based falling can be triggered.
+  * **Blink Y Threshold:** The `y` distance between the floor and the headset that must change before the fade transition is initiated. If the new user location is at a higher distance than the threshold then the headset blink transition will activate on teleport. If the new user location is within the threshold then no blink transition will happen, which is useful for walking up slopes, meshes and terrains where constant blinking would be annoying.
+  * **Normal Lerp Time:** The fixed time it takes to dash to a new position.
+  * **Min Speed Mps:** The minimum speed for dashing in meters per second.
+  * **Capsule Top Offset:** The Offset of the CapsuleCast above the camera.
+  * **Capsule Bottom Offset:** The Offset of the CapsuleCast below the camera.
+  * **Capsule Radius:** The radius of the CapsuleCast.
+
+### Class Events
+
+  * `WillDashThruObjects` - Emitted when the CapsuleCast towards the target has found that obstacles are in the way.
+  * `DashedThruObjects` - Emitted when obstacles have been crossed and the dash has ended.
+
+### Unity Events
+
+Adding the `VRTK_DashTeleport_UnityEvents` component to `VRTK_DashTeleport` object allows access to `UnityEvents` that will react identically to the Class Events.
+
+  * `OnWillDashThruObjects` - Emits the WillDashThruObjects class event.
+  * `OnDashedThruObjects` - Emits the DashedThruObjects class event.
+
+#### Event Payload
+
+  * `RaycastHit[] hits` - An array of objects that the CapsuleCast has collided with.
+
+### Example
+
+`SteamVR_Unity_Toolkit/Examples/038_CameraRig_DashTeleport` shows how to turn off the mesh renderers of objects that are in the way during the dash.
 
 ---
 
@@ -2256,6 +2428,14 @@ It is utilised by the `VRTK_WorldPointer` for dealing with pointer events when t
   * `DestinationMarkerExit` - Emitted when the collision with the other game object finishes.
   * `DestinationMarkerSet` - Emitted when the destination marker is active in the scene to determine the last destination position (useful for selecting and teleporting).
 
+### Unity Events
+
+Adding the `VRTK_DestinationMarker_UnityEvents` component to `VRTK_DestinationMarker` object allows access to `UnityEvents` that will react identically to the Class Events.
+
+  * `OnDestinationMarkerEnter` - Emits the DestinationMarkerEnter class event.
+  * `OnDestinationMarkerExit` - Emits the DestinationMarkerExit class event.
+  * `OnDestinationMarkerSet` - Emits the DestinationMarkerSet class event.
+
 #### Event Payload
 
   * `float distance` - The distance between the origin and the collided destination.
@@ -2302,6 +2482,7 @@ The SetHeadsetPositionCompensation method determines whether the offset position
 ---
 
 ## VRTK_WorldPointer
+  > extends [VRTK_DestinationMarker](#vrtk_destinationmarker)
 
 ### Overview
 
@@ -2590,9 +2771,12 @@ A scene that demonstrates how the Bezier Pointer can display an object (teleport
 
 A scene that demonstrates how to set up the climbing mechanism with different activities to try it with. A `VRTK_PlayerClimb` object is needed on the `[CameraRig]`. `VRTK_HeightAdjustTeleport` is also added to the `[CameraRig]` to allow movement, but also to allow walking off edges with `UseGravity` enabled. Various objects with a `VRTK_InteractableObject` component are scattered throughout the level. They all have the `GrabAttachMechanic` set to `Climbable`.
 
+### 038_CameraRig_CameraRig_DashTeleport
+
+A Scene that shows the teleporting behaviour and also demonstrates a way to use the broadcasted RaycastHit array. In the example obstacles in the way of the dash turn off their mesh renderers while the dash is in progress.
+
 ### 039_CameraRig_ClimbingStamina
 
 A scene that demonstrates the climbing stamina mechanism. It reuses scene 037_CameraRig_ClimbingFalling with the new 'VRTK_PlayerClimbStamina' script in place of the `VRTK_PlayerClimb` object needed on the `[CameraRig]`. The 'GripStamina' prefab has been added which is placed on Controller (left) and Controller (right). The [CameraRig] is added to the 'GripStamina' script to visualize the current stamina while climbing.
-
 
 [Catlike Coding]: http://catlikecoding.com/unity/tutorials/curves-and-splines/

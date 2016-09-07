@@ -98,19 +98,19 @@ namespace VRTK
         protected GameObject grabbingObject = null;
         protected GameObject usingObject = null;
 
-        private int usingState = 0;
-        private Dictionary<string, Color[]> originalObjectColours;
+        protected int usingState = 0;
+        protected Dictionary<string, Color[]> originalObjectColours;
 
-        private Transform grabbedSnapHandle;
-        private Transform trackPoint;
-        private bool customTrackPoint = false;
-        private Transform originalControllerAttachPoint;
+        protected Transform grabbedSnapHandle;
+        protected Transform trackPoint;
+        protected bool customTrackPoint = false;
+        protected Transform originalControllerAttachPoint;
 
-        private Transform previousParent;
-        private bool previousKinematicState;
-        private bool previousIsGrabbable;
-        private bool forcedDropped;
-        private bool forceDisabled;
+        protected Transform previousParent;
+        protected bool previousKinematicState;
+        protected bool previousIsGrabbable;
+        protected bool forcedDropped;
+        protected bool forceDisabled;
 
         public bool CheckHideMode(bool defaultMode, ControllerHideMode overrideMode)
         {
@@ -264,6 +264,11 @@ namespace VRTK
                     Color color = (touchHighlightColor != Color.clear ? touchHighlightColor : globalHighlightColor);
                     if (color != Color.clear)
                     {
+                        if (originalObjectColours == null)
+                        {
+                            originalObjectColours = StoreOriginalColors();
+                        }
+
                         var colorArray = BuildHighlightColorArray(color);
                         ChangeColor(colorArray);
                     }
@@ -395,11 +400,7 @@ namespace VRTK
 
         public void RegisterTeleporters()
         {
-            foreach (var teleporter in FindObjectsOfType<VRTK_BasicTeleport>())
-            {
-                teleporter.Teleporting += new TeleportEventHandler(OnTeleporting);
-                teleporter.Teleported += new TeleportEventHandler(OnTeleported);
-            }
+            StartCoroutine(RegisterTeleportersAtEndOfFrame());
         }
 
         protected virtual void Awake()
@@ -421,7 +422,10 @@ namespace VRTK
 
         protected virtual void Start()
         {
-            originalObjectColours = StoreOriginalColors();
+            if (highlightOnTouch)
+            {
+                originalObjectColours = StoreOriginalColors();
+            }
         }
 
         protected virtual void Update()
@@ -460,7 +464,7 @@ namespace VRTK
 
         protected virtual void OnDisable()
         {
-            foreach (var teleporter in FindObjectsOfType<VRTK_BasicTeleport>())
+            foreach (var teleporter in VRTK_ObjectCache.registeredTeleporters)
             {
                 teleporter.Teleporting -= new TeleportEventHandler(OnTeleporting);
                 teleporter.Teleported -= new TeleportEventHandler(OnTeleported);
@@ -528,14 +532,15 @@ namespace VRTK
             var colors = new Dictionary<string, Color[]>();
             foreach (Renderer renderer in GetRendererArray())
             {
-                colors[renderer.gameObject.name] = new Color[renderer.materials.Length];
+                var objectReference = renderer.gameObject.GetInstanceID().ToString();
+                colors[objectReference] = new Color[renderer.materials.Length];
 
                 for (int i = 0; i < renderer.materials.Length; i++)
                 {
                     var material = renderer.materials[i];
                     if (material.HasProperty("_Color"))
                     {
-                        colors[renderer.gameObject.name][i] = material.color;
+                        colors[objectReference][i] = material.color;
                     }
                 }
             }
@@ -547,13 +552,14 @@ namespace VRTK
             var colors = new Dictionary<string, Color[]>();
             foreach (Renderer renderer in GetRendererArray())
             {
-                colors[renderer.gameObject.name] = new Color[renderer.materials.Length];
+                var objectReference = renderer.gameObject.GetInstanceID().ToString();
+                colors[objectReference] = new Color[renderer.materials.Length];
                 for (int i = 0; i < renderer.materials.Length; i++)
                 {
                     var material = renderer.materials[i];
                     if (material.HasProperty("_Color"))
                     {
-                        colors[renderer.gameObject.name][i] = color;
+                        colors[objectReference][i] = color;
                     }
                 }
             }
@@ -564,7 +570,8 @@ namespace VRTK
         {
             foreach (Renderer renderer in GetRendererArray())
             {
-                if (!colors.ContainsKey(renderer.gameObject.name))
+                var objectReference = renderer.gameObject.GetInstanceID().ToString();
+                if (!colors.ContainsKey(objectReference))
                 {
                     continue;
                 }
@@ -574,7 +581,7 @@ namespace VRTK
                     var material = renderer.materials[i];
                     if (material.HasProperty("_Color"))
                     {
-                        material.color = colors[renderer.gameObject.name][i];
+                        material.color = colors[objectReference][i];
                     }
                 }
             }
@@ -701,6 +708,16 @@ namespace VRTK
             if (stayGrabbedOnTeleport && AttachIsTrackObject() && trackPoint)
             {
                 transform.position = grabbingObject.transform.position;
+            }
+        }
+
+        private IEnumerator RegisterTeleportersAtEndOfFrame()
+        {
+            yield return new WaitForEndOfFrame();
+            foreach (var teleporter in VRTK_ObjectCache.registeredTeleporters)
+            {
+                teleporter.Teleporting += new TeleportEventHandler(OnTeleporting);
+                teleporter.Teleported += new TeleportEventHandler(OnTeleported);
             }
         }
 

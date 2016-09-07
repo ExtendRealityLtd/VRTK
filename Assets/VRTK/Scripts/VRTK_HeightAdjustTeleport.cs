@@ -18,6 +18,7 @@ namespace VRTK
         public bool useGravity = true;
         public float gravityFallHeight = 1.0f;
         public float blinkYThreshold = 0.1f;
+        public float floorHeightTolerance = 0.001f;
 
         private float currentRayDownY = 0f;
         private GameObject currentFloor = null;
@@ -128,50 +129,65 @@ namespace VRTK
             return (collidedObj.transform.GetComponent<VRTK_InteractableObject>() && collidedObj.transform.GetComponent<VRTK_InteractableObject>().IsGrabbed());
         }
 
+        private bool FloorHeightChanged(float currentY)
+        {
+            var yDelta = Mathf.Abs(currentY - previousFloorY);
+            return (yDelta > floorHeightTolerance || yDelta < -floorHeightTolerance);
+        }
+
+        private bool ValidDrop(bool rayHit, RaycastHit rayCollidedWith, float floorY)
+        {
+            return (rayHit && ValidLocation(rayCollidedWith.transform, rayCollidedWith.point) && !FloorIsGrabbedObject(rayCollidedWith) && FloorHeightChanged(floorY));
+        }
+
+        private bool UsePhysicsFall(bool useGravityFall, float floorY)
+        {
+            float fallDistance = transform.position.y - floorY;
+            return (useGravityFall && (playerPresence.IsFalling() || fallDistance > gravityFallHeight));
+        }
+
+        private void TeleportFall(bool withBlink, float floorY, RaycastHit rayCollidedWith)
+        {
+            var floorDelta = currentRayDownY - floorY;
+            currentFloor = rayCollidedWith.transform.gameObject;
+            currentRayDownY = floorY;
+            var newPosition = new Vector3(transform.position.x, floorY, transform.position.z);
+
+            var teleportArgs = new DestinationMarkerEventArgs
+            {
+                destinationPosition = newPosition,
+                distance = rayCollidedWith.distance,
+                enableTeleport = true,
+                target = currentFloor.transform
+            };
+
+            OnTeleporting(gameObject, teleportArgs);
+            if (withBlink && (floorDelta > blinkYThreshold || floorDelta < -blinkYThreshold))
+            {
+                Blink(blinkTransitionSpeed);
+            }
+            SetNewPosition(newPosition, currentFloor.transform);
+            OnTeleported(gameObject, teleportArgs);
+        }
+
         private void DropToNearestFloor(bool withBlink, bool useGravityFall)
         {
             if (enableTeleport && eyeCamera.transform.position.y > transform.position.y)
             {
-                //send a ray down to find the closest object to stand on
                 Ray ray = new Ray(eyeCamera.transform.position, -transform.up);
                 RaycastHit rayCollidedWith;
                 bool rayHit = Physics.Raycast(ray, out rayCollidedWith);
                 float floorY = eyeCamera.transform.position.y - rayCollidedWith.distance;
 
-                if (rayHit && ValidLocation(rayCollidedWith.transform, rayCollidedWith.point) && !FloorIsGrabbedObject(rayCollidedWith))
+                if (ValidDrop(rayHit, rayCollidedWith, floorY))
                 {
-                    var floorDelta = currentRayDownY - floorY;
-                    currentFloor = rayCollidedWith.transform.gameObject;
-                    currentRayDownY = floorY;
-
-                    float fallDistance = transform.position.y - floorY;
-                    bool shouldDoGravityFall = useGravityFall && (playerPresence.IsFalling() || fallDistance > gravityFallHeight);
-
-                    if (withBlink && !shouldDoGravityFall && (floorDelta > blinkYThreshold || floorDelta < -blinkYThreshold))
+                    if (UsePhysicsFall(useGravityFall, floorY))
                     {
-                        Blink(blinkTransitionSpeed);
+                        playerPresence.StartPhysicsFall(Vector3.zero);
                     }
-
-                    if (floorY != previousFloorY)
+                    else
                     {
-                        if (shouldDoGravityFall)
-                        {
-                            playerPresence.StartPhysicsFall(Vector3.zero);
-                        }
-                        else // teleport fall
-                        {
-                            Vector3 newPosition = new Vector3(transform.position.x, floorY, transform.position.z);
-                            var teleportArgs = new DestinationMarkerEventArgs
-                            {
-                                destinationPosition = newPosition,
-                                distance = rayCollidedWith.distance,
-                                enableTeleport = true,
-                                target = currentFloor.transform
-                            };
-                            OnTeleporting(gameObject, teleportArgs);
-                            SetNewPosition(newPosition, currentFloor.transform);
-                            OnTeleported(gameObject, teleportArgs);
-                        }
+                        TeleportFall(withBlink, floorY, rayCollidedWith);
                     }
                 }
                 previousFloorY = floorY;

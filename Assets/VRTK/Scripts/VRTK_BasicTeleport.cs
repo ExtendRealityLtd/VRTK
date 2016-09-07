@@ -12,6 +12,7 @@
 namespace VRTK
 {
     using UnityEngine;
+    using System.Collections;
 
     public delegate void TeleportEventHandler(object sender, DestinationMarkerEventArgs e);
 
@@ -58,6 +59,11 @@ namespace VRTK
             }
         }
 
+        public void ToggleTeleportEnabled(bool state)
+        {
+            enableTeleport = state;
+        }
+
         protected virtual void Awake()
         {
             Utilities.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.CameraRig);
@@ -68,14 +74,14 @@ namespace VRTK
         {
             adjustYForTerrain = false;
             enableTeleport = true;
-            InitDestinationMarkerListeners(true);
-            InitHeadsetCollisionListener(true);
+            StartCoroutine(InitListenersAtEndOfFrame());
+            VRTK_ObjectCache.registeredTeleporters.Add(this);
         }
 
         protected virtual void OnDisable()
         {
             InitDestinationMarkerListeners(false);
-            InitHeadsetCollisionListener(false);
+            VRTK_ObjectCache.registeredTeleporters.Remove(this);
         }
 
         protected void OnTeleporting(object sender, DestinationMarkerEventArgs e)
@@ -177,48 +183,25 @@ namespace VRTK
             fadeInTime = 0f;
         }
 
+        private IEnumerator InitListenersAtEndOfFrame()
+        {
+            yield return new WaitForEndOfFrame();
+            InitDestinationMarkerListeners(true);
+        }
+
         private void InitDestinationMarkerListeners(bool state)
         {
             var leftHand = VRTK_SDK_Bridge.GetControllerLeftHand();
             var rightHand = VRTK_SDK_Bridge.GetControllerRightHand();
             InitDestinationSetListener(leftHand, state);
             InitDestinationSetListener(rightHand, state);
-
-            foreach (var destinationMarker in FindObjectsOfType<VRTK_DestinationMarker>())
+            foreach (var destinationMarker in VRTK_ObjectCache.registeredDestinationMarkers)
             {
                 if (destinationMarker.gameObject != leftHand && destinationMarker.gameObject != rightHand)
                 {
                     InitDestinationSetListener(destinationMarker.gameObject, state);
                 }
             }
-        }
-
-        private void InitHeadsetCollisionListener(bool state)
-        {
-            var headset = FindObjectOfType<VRTK_HeadsetCollision>();
-            if (headset)
-            {
-                if (state)
-                {
-                    headset.HeadsetCollisionDetect += new HeadsetCollisionEventHandler(DisableTeleport);
-                    headset.HeadsetCollisionEnded += new HeadsetCollisionEventHandler(EnableTeleport);
-                }
-                else
-                {
-                    headset.HeadsetCollisionDetect -= new HeadsetCollisionEventHandler(DisableTeleport);
-                    headset.HeadsetCollisionEnded -= new HeadsetCollisionEventHandler(EnableTeleport);
-                }
-            }
-        }
-
-        private void DisableTeleport(object sender, HeadsetCollisionEventArgs e)
-        {
-            enableTeleport = false;
-        }
-
-        private void EnableTeleport(object sender, HeadsetCollisionEventArgs e)
-        {
-            enableTeleport = true;
         }
     }
 }

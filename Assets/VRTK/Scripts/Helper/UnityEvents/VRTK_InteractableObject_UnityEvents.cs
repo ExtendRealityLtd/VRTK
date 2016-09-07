@@ -1,12 +1,10 @@
 ﻿using UnityEngine;
-using System.Collections;
 using UnityEngine.Events;
 using VRTK;
 
 [RequireComponent(typeof(VRTK_InteractableObject))]
 public class VRTK_InteractableObject_UnityEvents : MonoBehaviour
 {
-
     private VRTK_InteractableObject io;
 
     [System.Serializable]

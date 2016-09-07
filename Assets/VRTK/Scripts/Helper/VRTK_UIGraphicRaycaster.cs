@@ -20,7 +20,7 @@
 
         private Canvas m_Canvas;
         private Vector2 lastKnownPosition;
-        private const float UI_CONTROL_OFFSET = 0.5f;
+        private const float UI_CONTROL_OFFSET = 0.00001f;
 
         [NonSerialized]
         private List<VRGraphic> m_RaycastResults = new List<VRGraphic>();
