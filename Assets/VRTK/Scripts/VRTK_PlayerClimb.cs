@@ -23,6 +23,7 @@
         private Transform headCamera;
         private Transform controllerTransform;
         private Vector3 startControllerPosition;
+        private Vector3 startClimbingObjectPosition;
         private Vector3 startPosition;
 
         private Vector3 lastGoodHeadsetPosition;
@@ -162,6 +163,7 @@
                 isClimbing = true;
                 controllerTransform = ((VRTK_InteractGrab)sender).transform;
                 startControllerPosition = GetPosition(controllerTransform);
+                startClimbingObjectPosition = climbingObject.transform.position;
                 startPosition = transform.position;
             }
         }
@@ -240,11 +242,11 @@
             return interactObject != null && interactObject.AttachIsClimbObject();
         }
 
-        private void Update()
+        private void LateUpdate()
         {
             if (isClimbing)
             {
-                transform.position = startPosition - (GetPosition(controllerTransform) - startControllerPosition);
+                transform.position = startPosition - (GetPosition(controllerTransform) - startControllerPosition) + (climbingObject.transform.position - startClimbingObjectPosition);
             }
 
             if (!headsetColliding)
