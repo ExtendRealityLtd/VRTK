@@ -8,6 +8,7 @@
 
         public GameObject lid;
         public GameObject body;
+        [Tooltip("An optional game object that represents a handle attached to the lid of the chest. If it is not specified the whole lid will be interactable.")]
         public GameObject handle;
         [Tooltip("An optional game object that is the parent of the content inside the chest. If set all interactables will become managed so that they only react if the lid is wide enough open.")]
         public GameObject content;
@@ -20,7 +21,7 @@
 
         private Rigidbody handleRb;
         private FixedJoint handleFj;
-        private VRTK_InteractableObject handleIo;
+        private VRTK_InteractableObject io;
         private Rigidbody lidRb;
         private HingeJoint lidHj;
         private Rigidbody bodyRb;
@@ -38,9 +39,17 @@
             }
 
             // show opening direction
-            Bounds handleBounds = Utilities.GetBounds(handle.transform, handle.transform);
-            float length = handleBounds.extents.y * 5f;
-            Vector3 point = handleBounds.center + new Vector3(0, length, 0);
+            Bounds bounds;
+            if (handle)
+            {
+                bounds = Utilities.GetBounds(handle.transform, handle.transform);
+            }
+            else
+            {
+                bounds = Utilities.GetBounds(lid.transform, lid.transform);
+            }
+            float length = bounds.extents.y * 5f;
+            Vector3 point = bounds.center + new Vector3(0, length, 0);
             switch (finalDirection)
             {
                 case Direction.x:
@@ -54,7 +63,7 @@
                     break;
             }
 
-            Gizmos.DrawLine(handleBounds.center + new Vector3(0, handleBounds.extents.y, 0), point);
+            Gizmos.DrawLine(bounds.center + new Vector3(0, bounds.extents.y, 0), point);
             Gizmos.DrawSphere(point, length / 8f);
         }
 
@@ -69,7 +78,7 @@
 
         protected override bool DetectSetup()
         {
-            if (lid == null || body == null || handle == null)
+            if (lid == null || body == null)
             {
                 return false;
             }
@@ -80,31 +89,36 @@
                 return false;
             }
 
-            // determin sub-direction depending on handle
-            Bounds handleBounds = Utilities.GetBounds(handle.transform, transform);
             Bounds lidBounds = Utilities.GetBounds(lid.transform, transform);
-            switch (finalDirection)
-            {
-                case Direction.x:
-                    subDirection = (handleBounds.center.x > lidBounds.center.x) ? -1 : 1;
-                    break;
-                case Direction.y:
-                    subDirection = (handleBounds.center.y > lidBounds.center.y) ? -1 : 1;
-                    break;
-                case Direction.z:
-                    subDirection = (handleBounds.center.z > lidBounds.center.z) ? -1 : 1;
-                    break;
-            }
 
-            if (lid & handle)
+            // determin sub-direction depending on handle
+            if (handle)
             {
+                Bounds handleBounds = Utilities.GetBounds(handle.transform, transform);
+                switch (finalDirection)
+                {
+                    case Direction.x:
+                        subDirection = (handleBounds.center.x > lidBounds.center.x) ? -1 : 1;
+                        break;
+                    case Direction.y:
+                        subDirection = (handleBounds.center.y > lidBounds.center.y) ? -1 : 1;
+                        break;
+                    case Direction.z:
+                        subDirection = (handleBounds.center.z > lidBounds.center.z) ? -1 : 1;
+                        break;
+                }
+
                 // handle should be outside lid hierarchy, otherwise anchor-by-bounds calculation is off
                 if (handle.transform.IsChildOf(lid.transform))
                 {
                     return false;
                 }
             }
-            if (lidHjCreated && handle)
+            else
+            {
+                subDirection = -1;
+            }
+            if (lidHjCreated)
             {
                 lidHj.useLimits = true;
                 lidHj.enableCollision = true;
@@ -175,6 +189,11 @@
         {
             Direction direction = Direction.autodetect;
 
+            if (!handle)
+            {
+                return direction;
+            }
+
             Bounds handleBounds = Utilities.GetBounds(handle.transform, transform);
             Bounds lidBounds = Utilities.GetBounds(lid.transform, transform);
 
@@ -228,10 +247,19 @@
                 lidHjCreated = true;
             }
             lidHj.connectedBody = bodyRb;
+
+            if (!handle)
+            {
+                CreateIO(lid);
+            }
         }
 
         private void InitHandle()
         {
+            if (!handle)
+            {
+                return;
+            }
             handleRb = handle.GetComponent<Rigidbody>();
             if (handleRb == null)
             {
@@ -247,15 +275,20 @@
                 handleFj.connectedBody = lidRb;
             }
 
-            handleIo = handle.GetComponent<VRTK_InteractableObject>();
-            if (handleIo == null)
+            CreateIO(handle);
+        }
+
+        private void CreateIO(GameObject go)
+        {
+            io = go.GetComponent<VRTK_InteractableObject>();
+            if (io == null)
             {
-                handleIo = handle.AddComponent<VRTK_InteractableObject>();
+                io = go.AddComponent<VRTK_InteractableObject>();
             }
-            handleIo.isGrabbable = true;
-            handleIo.precisionSnap = true;
-            handleIo.stayGrabbedOnTeleport = false;
-            handleIo.grabAttachMechanic = VRTK_InteractableObject.GrabAttachType.Track_Object;
+            io.isGrabbable = true;
+            io.precisionSnap = true;
+            io.stayGrabbedOnTeleport = false;
+            io.grabAttachMechanic = VRTK_InteractableObject.GrabAttachType.Track_Object;
         }
 
         private float CalculateValue()

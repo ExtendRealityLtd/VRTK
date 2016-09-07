@@ -584,7 +584,7 @@ namespace VRTK
         {
             if (trackPoint)
             {
-                float distance = Vector3.Distance(trackPoint.position, transform.position);
+                float distance = Vector3.Distance(trackPoint.position, originalControllerAttachPoint.position);
                 if (distance > (detachThreshold / 1000))
                 {
                     ForceReleaseGrab();

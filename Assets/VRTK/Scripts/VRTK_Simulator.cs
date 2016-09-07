@@ -66,15 +66,15 @@
             }
             else if (Input.GetKey(keys.backward))
             {
-                movDir = overwriteY(cam.forward, 0) * -1;
+                movDir = overwriteY(-cam.forward, 0);
             }
             else if (Input.GetKey(keys.strafeLeft))
             {
-                movDir = overwriteY(cam.right, 0);
+                movDir = overwriteY(-cam.right, 0);
             }
             else if (Input.GetKey(keys.strafeRight))
             {
-                movDir = overwriteY(cam.right, 0) * -1;
+                movDir = overwriteY(cam.right, 0);
             }
             else if (Input.GetKey(keys.up))
             {
@@ -86,11 +86,11 @@
             }
             else if (Input.GetKey(keys.left))
             {
-                rotDir = new Vector3(0, 1, 0);
+                rotDir = new Vector3(0, -1, 0);
             }
             else if (Input.GetKey(keys.right))
             {
-                rotDir = new Vector3(0, -1, 0);
+                rotDir = new Vector3(0, 1, 0);
             }
             else if (Input.GetKey(keys.reset))
             {
