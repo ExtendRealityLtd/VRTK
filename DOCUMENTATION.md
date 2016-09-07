@@ -1907,6 +1907,7 @@ This class allows player movement based on grabbing of `VRTK_InteractableObject`
 
 `VRTK/Examples/037_CameraRig_ClimbingFalling` shows how to set up a scene with player climbing. There are many different examples showing how the same system can be used in unique ways.
 
+---
 
 ## Player Climb Stamina (VRTK_PlayerClimbStamina)
 
@@ -1921,6 +1922,7 @@ This class adds climbing stamina to the climbing script. Player stamina changes 
   * **Safe Zone Teleport Offset:** An additional amount to move the player away from a wall if an ungrab teleport happens due to camera/object collisions.
   * **Min Reach:** Minimum distance in xz plane the controller must be from the headset to reduce stamina.
   * **Max Reach:** Furthest distance in xz plane the controller must be from the headset to contribute maximum reduction of stamina.
+  * **Max Stamina:** The Starting Maximum Stamina. When Stamina reaches zero, the player will fall.
   * **Stamina Recovery Rate:** The rate in which stamina is regenerated. Stamina regenerates twice as fast when no objects are being held as compared to when both hands are holding climbable objects.
   * **Stamina Drain Rate:** The base rate in which stamina is reduced.
 
