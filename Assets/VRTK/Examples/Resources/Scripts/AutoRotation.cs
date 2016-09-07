@@ -1,24 +1,26 @@
-﻿using UnityEngine;
-using System.Collections;
-public class AutoRotation : MonoBehaviour
+﻿namespace VRTK.Example
 {
+    using UnityEngine;
 
-    [Tooltip("Angular velocity in degrees per seconds")]
-    public float degPerSec = 60.0f;
-
-    [Tooltip("Rotation axis")]
-    public Vector3 rotAxis = Vector3.up;
-
-    // Use this for initialization
-    void Start()
+    public class AutoRotation : MonoBehaviour
     {
-        rotAxis.Normalize();
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        transform.Rotate(rotAxis, degPerSec * Time.deltaTime);
+        [Tooltip("Angular velocity in degrees per seconds")]
+        public float degPerSec = 60.0f;
+
+        [Tooltip("Rotation axis")]
+        public Vector3 rotAxis = Vector3.up;
+
+        // Use this for initialization
+        void Start ()
+        {
+            rotAxis.Normalize();
+        }
+
+        // Update is called once per frame
+        void Update ()
+        {
+            transform.Rotate(rotAxis, degPerSec * Time.deltaTime);
+        }
     }
 }
-
