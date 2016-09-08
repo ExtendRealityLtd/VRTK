@@ -17,7 +17,7 @@ namespace VRTK
     /// <example>
     /// `VRTK/Examples/018_CameraRig_FramesPerSecondCounter` displays the frames per second in the centre of the headset view. Pressing the trigger generates a new sphere and pressing the touchpad generates ten new spheres. Eventually when lots of spheres are present the FPS will drop and demonstrate the prefab.
     /// </example>
-    public class FramsPerSecondViewer : MonoBehaviour
+    public class VRTK_FramesPerSecondViewer : MonoBehaviour
     {
         [Tooltip("Toggles whether the FPS text is visible.")]
         public bool displayFPS = true;
