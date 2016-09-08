@@ -54,6 +54,10 @@ level using the `public` `protected` `private` keywords.
 All core classes should be within the `VRTK` namespace and the class
 name should be prefixed with `VRTK_`.
 
+Any example code should be within the`VRTK.Examples` namespace and any
+Unity Event Helpers should be within the `VRTK.UnityEventHelper`
+namespace.
+
 Parameters should be defined at the top of the class before any methods
 are defined.
 

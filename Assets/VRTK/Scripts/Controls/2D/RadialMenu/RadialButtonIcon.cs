@@ -1,6 +1,9 @@
-﻿using UnityEngine;
-
-public class RadialButtonIcon : MonoBehaviour
+﻿namespace VRTK
 {
-    //Easier than getting tag, can't change through project settings
+    using UnityEngine;
+
+    public class RadialButtonIcon : MonoBehaviour
+    {
+        //Easier than getting tag, can't change through project settings
+    }
 }
