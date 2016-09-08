@@ -1,63 +1,65 @@
-﻿using UnityEngine;
-using UnityEngine.Events;
-using VRTK;
-
-[RequireComponent(typeof(VRTK_BasicTeleport))]
-public class VRTK_BasicTeleport_UnityEvents : MonoBehaviour
+﻿namespace VRTK.UnityEventHelper
 {
-    private VRTK_BasicTeleport bt;
+    using UnityEngine;
+    using UnityEngine.Events;
 
-    [System.Serializable]
-    public class UnityObjectEvent : UnityEvent<DestinationMarkerEventArgs> { };
-
-    /// <summary>
-    /// Emits the Teleporting class event.
-    /// </summary>
-    public UnityObjectEvent OnTeleporting;
-    /// <summary>
-    /// Emits the Teleported class event.
-    /// </summary>
-    public UnityObjectEvent OnTeleported;
-
-    private void SetBasicTeleport()
+    [RequireComponent(typeof(VRTK_BasicTeleport))]
+    public class VRTK_BasicTeleport_UnityEvents : MonoBehaviour
     {
-        if (bt == null)
-        {
-            bt = GetComponent<VRTK_BasicTeleport>();
-        }
-    }
+        private VRTK_BasicTeleport bt;
 
-    private void OnEnable()
-    {
-        SetBasicTeleport();
-        if (bt == null)
+        [System.Serializable]
+        public class UnityObjectEvent : UnityEvent<DestinationMarkerEventArgs> { };
+
+        /// <summary>
+        /// Emits the Teleporting class event.
+        /// </summary>
+        public UnityObjectEvent OnTeleporting;
+        /// <summary>
+        /// Emits the Teleported class event.
+        /// </summary>
+        public UnityObjectEvent OnTeleported;
+
+        private void SetBasicTeleport()
         {
-            Debug.LogError("The VRTK_BasicTeleport_UnityEvents script requires to be attached to a GameObject that contains a VRTK_BasicTeleport script");
-            return;
+            if (bt == null)
+            {
+                bt = GetComponent<VRTK_BasicTeleport>();
+            }
         }
 
-        bt.Teleporting += Teleporting;
-        bt.Teleported += Teleported;
-    }
-
-    private void Teleporting(object o, DestinationMarkerEventArgs e)
-    {
-        OnTeleporting.Invoke(e);
-    }
-
-    private void Teleported(object o, DestinationMarkerEventArgs e)
-    {
-        OnTeleported.Invoke(e);
-    }
-
-    private void OnDisable()
-    {
-        if (bt == null)
+        private void OnEnable()
         {
-            return;
+            SetBasicTeleport();
+            if (bt == null)
+            {
+                Debug.LogError("The VRTK_BasicTeleport_UnityEvents script requires to be attached to a GameObject that contains a VRTK_BasicTeleport script");
+                return;
+            }
+
+            bt.Teleporting += Teleporting;
+            bt.Teleported += Teleported;
         }
 
-        bt.Teleporting += Teleporting;
-        bt.Teleported += Teleported;
+        private void Teleporting(object o, DestinationMarkerEventArgs e)
+        {
+            OnTeleporting.Invoke(e);
+        }
+
+        private void Teleported(object o, DestinationMarkerEventArgs e)
+        {
+            OnTeleported.Invoke(e);
+        }
+
+        private void OnDisable()
+        {
+            if (bt == null)
+            {
+                return;
+            }
+
+            bt.Teleporting += Teleporting;
+            bt.Teleported += Teleported;
+        }
     }
 }

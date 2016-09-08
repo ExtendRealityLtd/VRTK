@@ -1,63 +1,65 @@
-﻿using UnityEngine;
-using UnityEngine.Events;
-using VRTK;
-
-[RequireComponent(typeof(VRTK_InteractTouch))]
-public class VRTK_InteractTouch_UnityEvents : MonoBehaviour
+﻿namespace VRTK.UnityEventHelper
 {
-    private VRTK_InteractTouch it;
+    using UnityEngine;
+    using UnityEngine.Events;
 
-    [System.Serializable]
-    public class UnityObjectEvent : UnityEvent<ObjectInteractEventArgs> { };
-
-    /// <summary>
-    /// Emits the ControllerTouchInteractableObject class event.
-    /// </summary>
-    public UnityObjectEvent OnControllerTouchInteractableObject;
-    /// <summary>
-    /// Emits the ControllerUntouchInteractableObject class event.
-    /// </summary>
-    public UnityObjectEvent OnControllerUntouchInteractableObject;
-
-    private void SetInteractTouch()
+    [RequireComponent(typeof(VRTK_InteractTouch))]
+    public class VRTK_InteractTouch_UnityEvents : MonoBehaviour
     {
-        if (it == null)
-        {
-            it = GetComponent<VRTK_InteractTouch>();
-        }
-    }
+        private VRTK_InteractTouch it;
 
-    private void OnEnable()
-    {
-        SetInteractTouch();
-        if (it == null)
+        [System.Serializable]
+        public class UnityObjectEvent : UnityEvent<ObjectInteractEventArgs> { };
+
+        /// <summary>
+        /// Emits the ControllerTouchInteractableObject class event.
+        /// </summary>
+        public UnityObjectEvent OnControllerTouchInteractableObject;
+        /// <summary>
+        /// Emits the ControllerUntouchInteractableObject class event.
+        /// </summary>
+        public UnityObjectEvent OnControllerUntouchInteractableObject;
+
+        private void SetInteractTouch()
         {
-            Debug.LogError("The VRTK_InteractTouch_UnityEvents script requires to be attached to a GameObject that contains a VRTK_InteractTouch script");
-            return;
+            if (it == null)
+            {
+                it = GetComponent<VRTK_InteractTouch>();
+            }
         }
 
-        it.ControllerTouchInteractableObject += ControllerTouchInteractableObject;
-        it.ControllerUntouchInteractableObject += ControllerUntouchInteractableObject;
-    }
-
-    private void ControllerTouchInteractableObject(object o, ObjectInteractEventArgs e)
-    {
-        OnControllerTouchInteractableObject.Invoke(e);
-    }
-
-    private void ControllerUntouchInteractableObject(object o, ObjectInteractEventArgs e)
-    {
-        OnControllerUntouchInteractableObject.Invoke(e);
-    }
-
-    private void OnDisable()
-    {
-        if (it == null)
+        private void OnEnable()
         {
-            return;
+            SetInteractTouch();
+            if (it == null)
+            {
+                Debug.LogError("The VRTK_InteractTouch_UnityEvents script requires to be attached to a GameObject that contains a VRTK_InteractTouch script");
+                return;
+            }
+
+            it.ControllerTouchInteractableObject += ControllerTouchInteractableObject;
+            it.ControllerUntouchInteractableObject += ControllerUntouchInteractableObject;
         }
 
-        it.ControllerTouchInteractableObject -= ControllerTouchInteractableObject;
-        it.ControllerUntouchInteractableObject -= ControllerUntouchInteractableObject;
+        private void ControllerTouchInteractableObject(object o, ObjectInteractEventArgs e)
+        {
+            OnControllerTouchInteractableObject.Invoke(e);
+        }
+
+        private void ControllerUntouchInteractableObject(object o, ObjectInteractEventArgs e)
+        {
+            OnControllerUntouchInteractableObject.Invoke(e);
+        }
+
+        private void OnDisable()
+        {
+            if (it == null)
+            {
+                return;
+            }
+
+            it.ControllerTouchInteractableObject -= ControllerTouchInteractableObject;
+            it.ControllerUntouchInteractableObject -= ControllerUntouchInteractableObject;
+        }
     }
 }

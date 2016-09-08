@@ -1,85 +1,87 @@
-﻿using UnityEngine;
-using UnityEngine.Events;
-using VRTK;
-
-[RequireComponent(typeof(VRTK_HeadsetFade))]
-public class VRTK_HeadsetFade_UnityEvents : MonoBehaviour
+﻿namespace VRTK.UnityEventHelper
 {
-    private VRTK_HeadsetFade hf;
+    using UnityEngine;
+    using UnityEngine.Events;
 
-    [System.Serializable]
-    public class UnityObjectEvent : UnityEvent<HeadsetFadeEventArgs> { };
-
-    /// <summary>
-    /// Emits the HeadsetFadeStart class event.
-    /// </summary>
-    public UnityObjectEvent OnHeadsetFadeStart;
-    /// <summary>
-    /// Emits the HeadsetFadeComplete class event.
-    /// </summary>
-    public UnityObjectEvent OnHeadsetFadeComplete;
-    /// <summary>
-    /// Emits the HeadsetUnfadeStart class event.
-    /// </summary>
-    public UnityObjectEvent OnHeadsetUnfadeStart;
-    /// <summary>
-    /// Emits the HeadsetUnfadeComplete class event.
-    /// </summary>
-    public UnityObjectEvent OnHeadsetUnfadeComplete;
-
-    private void SetHeadsetFade()
+    [RequireComponent(typeof(VRTK_HeadsetFade))]
+    public class VRTK_HeadsetFade_UnityEvents : MonoBehaviour
     {
-        if (hf == null)
-        {
-            hf = GetComponent<VRTK_HeadsetFade>();
-        }
-    }
+        private VRTK_HeadsetFade hf;
 
-    private void OnEnable()
-    {
-        SetHeadsetFade();
-        if (hf == null)
+        [System.Serializable]
+        public class UnityObjectEvent : UnityEvent<HeadsetFadeEventArgs> { };
+
+        /// <summary>
+        /// Emits the HeadsetFadeStart class event.
+        /// </summary>
+        public UnityObjectEvent OnHeadsetFadeStart;
+        /// <summary>
+        /// Emits the HeadsetFadeComplete class event.
+        /// </summary>
+        public UnityObjectEvent OnHeadsetFadeComplete;
+        /// <summary>
+        /// Emits the HeadsetUnfadeStart class event.
+        /// </summary>
+        public UnityObjectEvent OnHeadsetUnfadeStart;
+        /// <summary>
+        /// Emits the HeadsetUnfadeComplete class event.
+        /// </summary>
+        public UnityObjectEvent OnHeadsetUnfadeComplete;
+
+        private void SetHeadsetFade()
         {
-            Debug.LogError("The VRTK_HeadsetFade_UnityEvents script requires to be attached to a GameObject that contains a VRTK_HeadsetFade script");
-            return;
+            if (hf == null)
+            {
+                hf = GetComponent<VRTK_HeadsetFade>();
+            }
         }
 
-        hf.HeadsetFadeStart += HeadsetFadeStart;
-        hf.HeadsetFadeComplete += HeadsetFadeComplete;
-        hf.HeadsetUnfadeStart += HeadsetUnfadeStart;
-        hf.HeadsetUnfadeComplete += HeadsetUnfadeComplete;
-    }
-
-    private void HeadsetFadeStart(object o, HeadsetFadeEventArgs e)
-    {
-        OnHeadsetFadeStart.Invoke(e);
-    }
-
-    private void HeadsetFadeComplete(object o, HeadsetFadeEventArgs e)
-    {
-        OnHeadsetFadeComplete.Invoke(e);
-    }
-
-    private void HeadsetUnfadeStart(object o, HeadsetFadeEventArgs e)
-    {
-        OnHeadsetUnfadeStart.Invoke(e);
-    }
-
-    private void HeadsetUnfadeComplete(object o, HeadsetFadeEventArgs e)
-    {
-        OnHeadsetUnfadeComplete.Invoke(e);
-    }
-
-    private void OnDisable()
-    {
-        if (hf == null)
+        private void OnEnable()
         {
-            return;
+            SetHeadsetFade();
+            if (hf == null)
+            {
+                Debug.LogError("The VRTK_HeadsetFade_UnityEvents script requires to be attached to a GameObject that contains a VRTK_HeadsetFade script");
+                return;
+            }
+
+            hf.HeadsetFadeStart += HeadsetFadeStart;
+            hf.HeadsetFadeComplete += HeadsetFadeComplete;
+            hf.HeadsetUnfadeStart += HeadsetUnfadeStart;
+            hf.HeadsetUnfadeComplete += HeadsetUnfadeComplete;
         }
 
-        hf.HeadsetFadeStart -= HeadsetFadeStart;
-        hf.HeadsetFadeComplete -= HeadsetFadeComplete;
-        hf.HeadsetUnfadeStart -= HeadsetUnfadeStart;
-        hf.HeadsetUnfadeComplete -= HeadsetUnfadeComplete;
+        private void HeadsetFadeStart(object o, HeadsetFadeEventArgs e)
+        {
+            OnHeadsetFadeStart.Invoke(e);
+        }
+
+        private void HeadsetFadeComplete(object o, HeadsetFadeEventArgs e)
+        {
+            OnHeadsetFadeComplete.Invoke(e);
+        }
+
+        private void HeadsetUnfadeStart(object o, HeadsetFadeEventArgs e)
+        {
+            OnHeadsetUnfadeStart.Invoke(e);
+        }
+
+        private void HeadsetUnfadeComplete(object o, HeadsetFadeEventArgs e)
+        {
+            OnHeadsetUnfadeComplete.Invoke(e);
+        }
+
+        private void OnDisable()
+        {
+            if (hf == null)
+            {
+                return;
+            }
+
+            hf.HeadsetFadeStart -= HeadsetFadeStart;
+            hf.HeadsetFadeComplete -= HeadsetFadeComplete;
+            hf.HeadsetUnfadeStart -= HeadsetUnfadeStart;
+            hf.HeadsetUnfadeComplete -= HeadsetUnfadeComplete;
+        }
     }
 }

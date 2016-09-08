@@ -1,31 +1,33 @@
-﻿using UnityEngine;
-using VRTK;
-
-public class Whirlygig : VRTK_InteractableObject
+﻿namespace VRTK.Examples
 {
-    float spinSpeed = 0f;
-    Transform rotator;
+    using UnityEngine;
 
-    public override void StartUsing(GameObject usingObject)
+    public class Whirlygig : VRTK_InteractableObject
     {
-        base.StartUsing(usingObject);
-        spinSpeed = 360f;
-    }
+        float spinSpeed = 0f;
+        Transform rotator;
 
-    public override void StopUsing(GameObject usingObject)
-    {
-        base.StopUsing(usingObject);
-        spinSpeed = 0f;
-    }
+        public override void StartUsing(GameObject usingObject)
+        {
+            base.StartUsing(usingObject);
+            spinSpeed = 360f;
+        }
 
-    protected override void Start()
-    {
-        base.Start();
-        rotator = transform.Find("Capsule");
-    }
+        public override void StopUsing(GameObject usingObject)
+        {
+            base.StopUsing(usingObject);
+            spinSpeed = 0f;
+        }
 
-    protected override void Update()
-    {
-        rotator.transform.Rotate(new Vector3(spinSpeed * Time.deltaTime, 0f, 0f));
+        protected override void Start()
+        {
+            base.Start();
+            rotator = transform.Find("Capsule");
+        }
+
+        protected override void Update()
+        {
+            rotator.transform.Rotate(new Vector3(spinSpeed * Time.deltaTime, 0f, 0f));
+        }
     }
 }

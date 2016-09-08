@@ -1,63 +1,65 @@
-﻿using UnityEngine;
-using UnityEngine.Events;
-using VRTK;
-
-[RequireComponent(typeof(VRTK_InteractUse))]
-public class VRTK_InteractUse_UnityEvents : MonoBehaviour
+﻿namespace VRTK.UnityEventHelper
 {
-    private VRTK_InteractUse iu;
+    using UnityEngine;
+    using UnityEngine.Events;
 
-    [System.Serializable]
-    public class UnityObjectEvent : UnityEvent<ObjectInteractEventArgs> { };
-
-    /// <summary>
-    /// Emits the ControllerUseInteractableObject class event.
-    /// </summary>
-    public UnityObjectEvent OnControllerUseInteractableObject;
-    /// <summary>
-    /// Emits the ControllerUnuseInteractableObject class event.
-    /// </summary>
-    public UnityObjectEvent OnControllerUnuseInteractableObject;
-
-    private void SetInteractUse()
+    [RequireComponent(typeof(VRTK_InteractUse))]
+    public class VRTK_InteractUse_UnityEvents : MonoBehaviour
     {
-        if (iu == null)
-        {
-            iu = GetComponent<VRTK_InteractUse>();
-        }
-    }
+        private VRTK_InteractUse iu;
 
-    private void OnEnable()
-    {
-        SetInteractUse();
-        if (iu == null)
+        [System.Serializable]
+        public class UnityObjectEvent : UnityEvent<ObjectInteractEventArgs> { };
+
+        /// <summary>
+        /// Emits the ControllerUseInteractableObject class event.
+        /// </summary>
+        public UnityObjectEvent OnControllerUseInteractableObject;
+        /// <summary>
+        /// Emits the ControllerUnuseInteractableObject class event.
+        /// </summary>
+        public UnityObjectEvent OnControllerUnuseInteractableObject;
+
+        private void SetInteractUse()
         {
-            Debug.LogError("The VRTK_InteractUse_UnityEvents script requires to be attached to a GameObject that contains a VRTK_InteractUse script");
-            return;
+            if (iu == null)
+            {
+                iu = GetComponent<VRTK_InteractUse>();
+            }
         }
 
-        iu.ControllerUseInteractableObject += ControllerUseInteractableObject;
-        iu.ControllerUnuseInteractableObject += ControllerUnuseInteractableObject;
-    }
-
-    private void ControllerUseInteractableObject(object o, ObjectInteractEventArgs e)
-    {
-        OnControllerUseInteractableObject.Invoke(e);
-    }
-
-    private void ControllerUnuseInteractableObject(object o, ObjectInteractEventArgs e)
-    {
-        OnControllerUnuseInteractableObject.Invoke(e);
-    }
-
-    private void OnDisable()
-    {
-        if (iu == null)
+        private void OnEnable()
         {
-            return;
+            SetInteractUse();
+            if (iu == null)
+            {
+                Debug.LogError("The VRTK_InteractUse_UnityEvents script requires to be attached to a GameObject that contains a VRTK_InteractUse script");
+                return;
+            }
+
+            iu.ControllerUseInteractableObject += ControllerUseInteractableObject;
+            iu.ControllerUnuseInteractableObject += ControllerUnuseInteractableObject;
         }
 
-        iu.ControllerUseInteractableObject -= ControllerUseInteractableObject;
-        iu.ControllerUnuseInteractableObject -= ControllerUnuseInteractableObject;
+        private void ControllerUseInteractableObject(object o, ObjectInteractEventArgs e)
+        {
+            OnControllerUseInteractableObject.Invoke(e);
+        }
+
+        private void ControllerUnuseInteractableObject(object o, ObjectInteractEventArgs e)
+        {
+            OnControllerUnuseInteractableObject.Invoke(e);
+        }
+
+        private void OnDisable()
+        {
+            if (iu == null)
+            {
+                return;
+            }
+
+            iu.ControllerUseInteractableObject -= ControllerUseInteractableObject;
+            iu.ControllerUnuseInteractableObject -= ControllerUnuseInteractableObject;
+        }
     }
 }

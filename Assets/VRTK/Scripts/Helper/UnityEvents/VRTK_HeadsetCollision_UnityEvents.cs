@@ -1,63 +1,65 @@
-﻿using UnityEngine;
-using UnityEngine.Events;
-using VRTK;
-
-[RequireComponent(typeof(VRTK_HeadsetCollision))]
-public class VRTK_HeadsetCollision_UnityEvents : MonoBehaviour
+﻿namespace VRTK.UnityEventHelper
 {
-    private VRTK_HeadsetCollision hc;
+    using UnityEngine;
+    using UnityEngine.Events;
 
-    [System.Serializable]
-    public class UnityObjectEvent : UnityEvent<HeadsetCollisionEventArgs> { };
-
-    /// <summary>
-    /// Emits the HeadsetCollisionDetect class event.
-    /// </summary>
-    public UnityObjectEvent OnHeadsetCollisionDetect;
-    /// <summary>
-    /// Emits the HeadsetCollisionEnded class event.
-    /// </summary>
-    public UnityObjectEvent OnHeadsetCollisionEnded;
-
-    private void SetHeadsetCollision()
+    [RequireComponent(typeof(VRTK_HeadsetCollision))]
+    public class VRTK_HeadsetCollision_UnityEvents : MonoBehaviour
     {
-        if (hc == null)
-        {
-            hc = GetComponent<VRTK_HeadsetCollision>();
-        }
-    }
+        private VRTK_HeadsetCollision hc;
 
-    private void OnEnable()
-    {
-        SetHeadsetCollision();
-        if (hc == null)
+        [System.Serializable]
+        public class UnityObjectEvent : UnityEvent<HeadsetCollisionEventArgs> { };
+
+        /// <summary>
+        /// Emits the HeadsetCollisionDetect class event.
+        /// </summary>
+        public UnityObjectEvent OnHeadsetCollisionDetect;
+        /// <summary>
+        /// Emits the HeadsetCollisionEnded class event.
+        /// </summary>
+        public UnityObjectEvent OnHeadsetCollisionEnded;
+
+        private void SetHeadsetCollision()
         {
-            Debug.LogError("The VRTK_HeadsetCollision_UnityEvents script requires to be attached to a GameObject that contains a VRTK_HeadsetCollision script");
-            return;
+            if (hc == null)
+            {
+                hc = GetComponent<VRTK_HeadsetCollision>();
+            }
         }
 
-        hc.HeadsetCollisionDetect += HeadsetCollisionDetect;
-        hc.HeadsetCollisionEnded += HeadsetCollisionEnded;
-    }
-
-    private void HeadsetCollisionDetect(object o, HeadsetCollisionEventArgs e)
-    {
-        OnHeadsetCollisionDetect.Invoke(e);
-    }
-
-    private void HeadsetCollisionEnded(object o, HeadsetCollisionEventArgs e)
-    {
-        OnHeadsetCollisionEnded.Invoke(e);
-    }
-
-    private void OnDisable()
-    {
-        if (hc == null)
+        private void OnEnable()
         {
-            return;
+            SetHeadsetCollision();
+            if (hc == null)
+            {
+                Debug.LogError("The VRTK_HeadsetCollision_UnityEvents script requires to be attached to a GameObject that contains a VRTK_HeadsetCollision script");
+                return;
+            }
+
+            hc.HeadsetCollisionDetect += HeadsetCollisionDetect;
+            hc.HeadsetCollisionEnded += HeadsetCollisionEnded;
         }
 
-        hc.HeadsetCollisionDetect -= HeadsetCollisionDetect;
-        hc.HeadsetCollisionEnded -= HeadsetCollisionEnded;
+        private void HeadsetCollisionDetect(object o, HeadsetCollisionEventArgs e)
+        {
+            OnHeadsetCollisionDetect.Invoke(e);
+        }
+
+        private void HeadsetCollisionEnded(object o, HeadsetCollisionEventArgs e)
+        {
+            OnHeadsetCollisionEnded.Invoke(e);
+        }
+
+        private void OnDisable()
+        {
+            if (hc == null)
+            {
+                return;
+            }
+
+            hc.HeadsetCollisionDetect -= HeadsetCollisionDetect;
+            hc.HeadsetCollisionEnded -= HeadsetCollisionEnded;
+        }
     }
 }

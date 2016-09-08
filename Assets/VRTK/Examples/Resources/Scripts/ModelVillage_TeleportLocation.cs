@@ -1,23 +1,25 @@
-﻿using UnityEngine;
-using VRTK;
-
-public class ModelVillage_TeleportLocation : VRTK_DestinationMarker
+﻿namespace VRTK.Examples
 {
-    public Transform destination;
-    private bool lastUsePressedState = false;
+    using UnityEngine;
 
-    private void OnTriggerStay(Collider collider)
+    public class ModelVillage_TeleportLocation : VRTK_DestinationMarker
     {
-        var controller = (collider.GetComponent<VRTK_ControllerEvents>() ? collider.GetComponent<VRTK_ControllerEvents>() : collider.GetComponentInParent<VRTK_ControllerEvents>());
-        if (controller)
+        public Transform destination;
+        private bool lastUsePressedState = false;
+
+        private void OnTriggerStay(Collider collider)
         {
-            if (lastUsePressedState == true && !controller.usePressed)
+            var controller = (collider.GetComponent<VRTK_ControllerEvents>() ? collider.GetComponent<VRTK_ControllerEvents>() : collider.GetComponentInParent<VRTK_ControllerEvents>());
+            if (controller)
             {
-                var distance = Vector3.Distance(transform.position, destination.position);
-                var controllerIndex = VRTK_DeviceFinder.GetControllerIndex(controller.gameObject);
-                OnDestinationMarkerSet(SetDestinationMarkerEvent(distance, destination, destination.position, controllerIndex));
+                if (lastUsePressedState == true && !controller.usePressed)
+                {
+                    var distance = Vector3.Distance(transform.position, destination.position);
+                    var controllerIndex = VRTK_DeviceFinder.GetControllerIndex(controller.gameObject);
+                    OnDestinationMarkerSet(SetDestinationMarkerEvent(distance, destination, destination.position, controllerIndex));
+                }
+                lastUsePressedState = controller.usePressed;
             }
-            lastUsePressedState = controller.usePressed;
         }
     }
 }

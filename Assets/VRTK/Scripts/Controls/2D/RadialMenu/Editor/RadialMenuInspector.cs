@@ -1,18 +1,20 @@
-using UnityEngine;
-using System.Collections;
-using UnityEditor;
-
-[CustomEditor(typeof(RadialMenu))]
-public class RadialMenuInspector : Editor
+namespace VRTK
 {
-    public override void OnInspectorGUI()
-    {
-        DrawDefaultInspector();
+    using UnityEngine;
+    using UnityEditor;
 
-        RadialMenu rMenu = (RadialMenu)target;
-        if (GUILayout.Button("Regenerate Buttons"))
+    [CustomEditor(typeof(RadialMenu))]
+    public class RadialMenuInspector : Editor
+    {
+        public override void OnInspectorGUI()
         {
-            rMenu.RegenerateButtons();
+            DrawDefaultInspector();
+
+            RadialMenu rMenu = (RadialMenu)target;
+            if (GUILayout.Button("Regenerate Buttons"))
+            {
+                rMenu.RegenerateButtons();
+            }
         }
     }
 }

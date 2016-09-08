@@ -1,112 +1,115 @@
-using UnityEngine;
-using UnityEngine.UI;
-[ExecuteInEditMode]
-public class UICircle : Graphic
+namespace VRTK
 {
-    [Range(0, 100)]
-    public int fillPercent;
-    public bool fill = true;
-    public int thickness = 5;
-    [Range(0, 360)]
-    public int segments = 360;
-
-    [SerializeField]
-    private Texture m_Texture;
-
-    public override Texture mainTexture
+    using UnityEngine;
+    using UnityEngine.UI;
+    [ExecuteInEditMode]
+    public class UICircle : Graphic
     {
-        get
-        {
-            return (m_Texture == null ? s_WhiteTexture : m_Texture);
-        }
-    }
+        [Range(0, 100)]
+        public int fillPercent;
+        public bool fill = true;
+        public int thickness = 5;
+        [Range(0, 360)]
+        public int segments = 360;
 
-    // Texture to be used.
-    public Texture texture
-    {
-        get
+        [SerializeField]
+        private Texture m_Texture;
+
+        public override Texture mainTexture
         {
-            return m_Texture;
-        }
-        set
-        {
-            if (m_Texture == value)
+            get
             {
-                return;
+                return (m_Texture == null ? s_WhiteTexture : m_Texture);
             }
-            m_Texture = value;
-            SetVerticesDirty();
-            SetMaterialDirty();
         }
-    }
 
-    protected UIVertex[] SetVbo(Vector2[] vertices, Vector2[] uvs)
-    {
-        UIVertex[] vbo = new UIVertex[4];
-        for (int i = 0; i < vertices.Length; i++)
+        // Texture to be used.
+        public Texture texture
         {
-            var vert = UIVertex.simpleVert;
-            vert.color = color;
-            vert.position = vertices[i];
-            vert.uv0 = uvs[i];
-            vbo[i] = vert;
-        }
-        return vbo;
-    }
-
-    [System.Obsolete("Use OnPopulateMesh(VertexHelper vh) instead.")]
-    protected override void OnPopulateMesh(Mesh toFill)
-    {
-        float outer = -rectTransform.pivot.x * rectTransform.rect.width;
-        float inner = -rectTransform.pivot.x * rectTransform.rect.width + thickness;
-        toFill.Clear();
-        var vbo = new VertexHelper(toFill);
-        Vector2 prevX = Vector2.zero;
-        Vector2 prevY = Vector2.zero;
-        Vector2 uv0 = new Vector2(0, 0);
-        Vector2 uv1 = new Vector2(0, 1);
-        Vector2 uv2 = new Vector2(1, 1);
-        Vector2 uv3 = new Vector2(1, 0);
-        Vector2 pos0;
-        Vector2 pos1;
-        Vector2 pos2;
-        Vector2 pos3;
-        float f = (fillPercent / 100f);
-        float degrees = 360f / segments;
-        int fa = (int)((segments + 1) * f);
-        for (int i = -1 - (fa / 2); i < fa / 2 + 1; i++)
-        {
-            float rad = Mathf.Deg2Rad * (i * degrees);
-            float c = Mathf.Cos(rad);
-            float s = Mathf.Sin(rad);
-            uv0 = new Vector2(0, 1);
-            uv1 = new Vector2(1, 1);
-            uv2 = new Vector2(1, 0);
-            uv3 = new Vector2(0, 0);
-            pos0 = prevX;
-            pos1 = new Vector2(outer * c, outer * s);
-            if (fill)
+            get
             {
-                pos2 = Vector2.zero;
-                pos3 = Vector2.zero;
+                return m_Texture;
             }
-            else
+            set
             {
-                pos2 = new Vector2(inner * c, inner * s);
-                pos3 = prevY;
+                if (m_Texture == value)
+                {
+                    return;
+                }
+                m_Texture = value;
+                SetVerticesDirty();
+                SetMaterialDirty();
             }
-            prevX = pos1;
-            prevY = pos2;
-            vbo.AddUIVertexQuad(SetVbo(new[] { pos0, pos1, pos2, pos3 }, new[] { uv0, uv1, uv2, uv3 }));
         }
-        if (vbo.currentVertCount > 3)
-        {
-            vbo.FillMesh(toFill);
-        }
-    }
 
-    private void Update()
-    {
-        thickness = (int)Mathf.Clamp(thickness, 0, rectTransform.rect.width / 2);
+        protected UIVertex[] SetVbo(Vector2[] vertices, Vector2[] uvs)
+        {
+            UIVertex[] vbo = new UIVertex[4];
+            for (int i = 0; i < vertices.Length; i++)
+            {
+                var vert = UIVertex.simpleVert;
+                vert.color = color;
+                vert.position = vertices[i];
+                vert.uv0 = uvs[i];
+                vbo[i] = vert;
+            }
+            return vbo;
+        }
+
+        [System.Obsolete("Use OnPopulateMesh(VertexHelper vh) instead.")]
+        protected override void OnPopulateMesh(Mesh toFill)
+        {
+            float outer = -rectTransform.pivot.x * rectTransform.rect.width;
+            float inner = -rectTransform.pivot.x * rectTransform.rect.width + thickness;
+            toFill.Clear();
+            var vbo = new VertexHelper(toFill);
+            Vector2 prevX = Vector2.zero;
+            Vector2 prevY = Vector2.zero;
+            Vector2 uv0 = new Vector2(0, 0);
+            Vector2 uv1 = new Vector2(0, 1);
+            Vector2 uv2 = new Vector2(1, 1);
+            Vector2 uv3 = new Vector2(1, 0);
+            Vector2 pos0;
+            Vector2 pos1;
+            Vector2 pos2;
+            Vector2 pos3;
+            float f = (fillPercent / 100f);
+            float degrees = 360f / segments;
+            int fa = (int)((segments + 1) * f);
+            for (int i = -1 - (fa / 2); i < fa / 2 + 1; i++)
+            {
+                float rad = Mathf.Deg2Rad * (i * degrees);
+                float c = Mathf.Cos(rad);
+                float s = Mathf.Sin(rad);
+                uv0 = new Vector2(0, 1);
+                uv1 = new Vector2(1, 1);
+                uv2 = new Vector2(1, 0);
+                uv3 = new Vector2(0, 0);
+                pos0 = prevX;
+                pos1 = new Vector2(outer * c, outer * s);
+                if (fill)
+                {
+                    pos2 = Vector2.zero;
+                    pos3 = Vector2.zero;
+                }
+                else
+                {
+                    pos2 = new Vector2(inner * c, inner * s);
+                    pos3 = prevY;
+                }
+                prevX = pos1;
+                prevY = pos2;
+                vbo.AddUIVertexQuad(SetVbo(new[] { pos0, pos1, pos2, pos3 }, new[] { uv0, uv1, uv2, uv3 }));
+            }
+            if (vbo.currentVertCount > 3)
+            {
+                vbo.FillMesh(toFill);
+            }
+        }
+
+        private void Update()
+        {
+            thickness = (int)Mathf.Clamp(thickness, 0, rectTransform.rect.width / 2);
+        }
     }
 }

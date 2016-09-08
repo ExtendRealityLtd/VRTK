@@ -1,63 +1,65 @@
-﻿using UnityEngine;
-using UnityEngine.Events;
-using VRTK;
-
-[RequireComponent(typeof(VRTK_InteractGrab))]
-public class VRTK_InteractGrab_UnityEvents : MonoBehaviour
+﻿namespace VRTK.UnityEventHelper
 {
-    private VRTK_InteractGrab ig;
+    using UnityEngine;
+    using UnityEngine.Events;
 
-    [System.Serializable]
-    public class UnityObjectEvent : UnityEvent<ObjectInteractEventArgs> { };
-
-    /// <summary>
-    /// Emits the ControllerGrabInteractableObject class event.
-    /// </summary>
-    public UnityObjectEvent OnControllerGrabInteractableObject;
-    /// <summary>
-    /// Emits the ControllerUngrabInteractableObject class event.
-    /// </summary>
-    public UnityObjectEvent OnControllerUngrabInteractableObject;
-
-    private void SetInteractGrab()
+    [RequireComponent(typeof(VRTK_InteractGrab))]
+    public class VRTK_InteractGrab_UnityEvents : MonoBehaviour
     {
-        if (ig == null)
-        {
-            ig = GetComponent<VRTK_InteractGrab>();
-        }
-    }
+        private VRTK_InteractGrab ig;
 
-    private void OnEnable()
-    {
-        SetInteractGrab();
-        if (ig == null)
+        [System.Serializable]
+        public class UnityObjectEvent : UnityEvent<ObjectInteractEventArgs> { };
+
+        /// <summary>
+        /// Emits the ControllerGrabInteractableObject class event.
+        /// </summary>
+        public UnityObjectEvent OnControllerGrabInteractableObject;
+        /// <summary>
+        /// Emits the ControllerUngrabInteractableObject class event.
+        /// </summary>
+        public UnityObjectEvent OnControllerUngrabInteractableObject;
+
+        private void SetInteractGrab()
         {
-            Debug.LogError("The VRTK_InteractGrab_UnityEvents script requires to be attached to a GameObject that contains a VRTK_InteractGrab script");
-            return;
+            if (ig == null)
+            {
+                ig = GetComponent<VRTK_InteractGrab>();
+            }
         }
 
-        ig.ControllerGrabInteractableObject += ControllerGrabInteractableObject;
-        ig.ControllerUngrabInteractableObject += ControllerUngrabInteractableObject;
-    }
-
-    private void ControllerGrabInteractableObject(object o, ObjectInteractEventArgs e)
-    {
-        OnControllerGrabInteractableObject.Invoke(e);
-    }
-
-    private void ControllerUngrabInteractableObject(object o, ObjectInteractEventArgs e)
-    {
-        OnControllerUngrabInteractableObject.Invoke(e);
-    }
-
-    private void OnDisable()
-    {
-        if (ig == null)
+        private void OnEnable()
         {
-            return;
+            SetInteractGrab();
+            if (ig == null)
+            {
+                Debug.LogError("The VRTK_InteractGrab_UnityEvents script requires to be attached to a GameObject that contains a VRTK_InteractGrab script");
+                return;
+            }
+
+            ig.ControllerGrabInteractableObject += ControllerGrabInteractableObject;
+            ig.ControllerUngrabInteractableObject += ControllerUngrabInteractableObject;
         }
 
-        ig.ControllerGrabInteractableObject -= ControllerGrabInteractableObject;
-        ig.ControllerUngrabInteractableObject -= ControllerUngrabInteractableObject;
+        private void ControllerGrabInteractableObject(object o, ObjectInteractEventArgs e)
+        {
+            OnControllerGrabInteractableObject.Invoke(e);
+        }
+
+        private void ControllerUngrabInteractableObject(object o, ObjectInteractEventArgs e)
+        {
+            OnControllerUngrabInteractableObject.Invoke(e);
+        }
+
+        private void OnDisable()
+        {
+            if (ig == null)
+            {
+                return;
+            }
+
+            ig.ControllerGrabInteractableObject -= ControllerGrabInteractableObject;
+            ig.ControllerUngrabInteractableObject -= ControllerUngrabInteractableObject;
+        }
     }
 }

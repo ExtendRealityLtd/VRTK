@@ -1,48 +1,50 @@
-﻿using UnityEngine;
-using System.Collections;
-using VRTK;
-
-public class UseRotate : VRTK_InteractableObject
+﻿namespace VRTK.Examples
 {
-    [Header("Rotation when in use")]
-    [SerializeField]
-    [Tooltip("Rotation speed when not in use (deg/sec)")]
-    private float idleSpinSpeed = 0f;
-    [SerializeField]
-    [Tooltip("Rotation speed when in use (deg/sec)")]
-    private float activeSpinSpeed = 360f;
-    [Tooltip("Game object to rotate\n(leave empty to use this object)")]
-    [SerializeField]
-    private Transform rotatingObject;
-    [SerializeField]
-    private Vector3 rotationAxis = Vector3.up;
+    using UnityEngine;
+    using VRTK;
 
-    private float spinSpeed = 0f;
-
-    public override void StartUsing(GameObject usingObject)
+    public class UseRotate : VRTK_InteractableObject
     {
-        base.StartUsing(usingObject);
-        spinSpeed = activeSpinSpeed;
-    }
+        [Header("Rotation when in use")]
+        [SerializeField]
+        [Tooltip("Rotation speed when not in use (deg/sec)")]
+        private float idleSpinSpeed = 0f;
+        [SerializeField]
+        [Tooltip("Rotation speed when in use (deg/sec)")]
+        private float activeSpinSpeed = 360f;
+        [Tooltip("Game object to rotate\n(leave empty to use this object)")]
+        [SerializeField]
+        private Transform rotatingObject;
+        [SerializeField]
+        private Vector3 rotationAxis = Vector3.up;
 
-    public override void StopUsing(GameObject usingObject)
-    {
-        base.StopUsing(usingObject);
-        spinSpeed = idleSpinSpeed;
-    }
+        private float spinSpeed = 0f;
 
-    protected override void Start()
-    {
-        base.Start();
-        if (rotatingObject == null)
+        public override void StartUsing(GameObject usingObject)
         {
-            rotatingObject = this.transform;
+            base.StartUsing(usingObject);
+            spinSpeed = activeSpinSpeed;
         }
-        spinSpeed = idleSpinSpeed;
-    }
 
-    protected override void Update()
-    {
-        rotatingObject.Rotate(rotationAxis, spinSpeed * Time.deltaTime);
+        public override void StopUsing(GameObject usingObject)
+        {
+            base.StopUsing(usingObject);
+            spinSpeed = idleSpinSpeed;
+        }
+
+        protected override void Start()
+        {
+            base.Start();
+            if (rotatingObject == null)
+            {
+                rotatingObject = this.transform;
+            }
+            spinSpeed = idleSpinSpeed;
+        }
+
+        protected override void Update()
+        {
+            rotatingObject.Rotate(rotationAxis, spinSpeed * Time.deltaTime);
+        }
     }
 }

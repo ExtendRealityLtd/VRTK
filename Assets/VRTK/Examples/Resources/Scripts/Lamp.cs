@@ -1,25 +1,27 @@
-﻿using UnityEngine;
-using VRTK;
-
-public class Lamp : VRTK_InteractableObject
+﻿namespace VRTK.Examples
 {
-    public override void Grabbed(GameObject grabbingObject)
-    {
-        base.Grabbed(grabbingObject);
-        ToggleKinematics(false);
-    }
+    using UnityEngine;
 
-    public override void Ungrabbed(GameObject previousGrabbingObject)
+    public class Lamp : VRTK_InteractableObject
     {
-        base.Ungrabbed(previousGrabbingObject);
-        ToggleKinematics(true);
-    }
-
-    private void ToggleKinematics(bool state)
-    {
-        foreach(Rigidbody rigid in transform.parent.GetComponentsInChildren<Rigidbody>())
+        public override void Grabbed(GameObject grabbingObject)
         {
-            rigid.isKinematic = state;
+            base.Grabbed(grabbingObject);
+            ToggleKinematics(false);
+        }
+
+        public override void Ungrabbed(GameObject previousGrabbingObject)
+        {
+            base.Ungrabbed(previousGrabbingObject);
+            ToggleKinematics(true);
+        }
+
+        private void ToggleKinematics(bool state)
+        {
+            foreach (Rigidbody rigid in transform.parent.GetComponentsInChildren<Rigidbody>())
+            {
+                rigid.isKinematic = state;
+            }
         }
     }
 }
