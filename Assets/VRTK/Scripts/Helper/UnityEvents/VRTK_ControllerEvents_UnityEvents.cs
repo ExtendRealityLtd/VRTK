@@ -127,6 +127,14 @@
         /// Emits the AliasUIClickOff class event.
         /// </summary>
         public UnityObjectEvent OnAliasMenuOff;
+        /// <summary>
+        /// Emits the ControllerEnabled class event.
+        /// </summary>
+        public UnityObjectEvent OnControllerEnabled;
+        /// <summary>
+        /// Emits the ControllerDisabled class event.
+        /// </summary>
+        public UnityObjectEvent OnControllerDisabled;
 
         private void SetControllerEvents()
         {
@@ -174,6 +182,8 @@
             ce.AliasUIClickOff += AliasUIClickOff;
             ce.AliasMenuOn += AliasMenuOn;
             ce.AliasMenuOff += AliasMenuOff;
+            ce.ControllerEnabled += ControllerEnabled;
+            ce.ControllerDisabled += ControllerDisabled;
         }
 
         private void TriggerPressed(object o, ControllerInteractionEventArgs e)
@@ -321,6 +331,16 @@
             OnAliasMenuOff.Invoke(e);
         }
 
+        private void ControllerEnabled(object o, ControllerInteractionEventArgs e)
+        {
+            OnControllerEnabled.Invoke(e);
+        }
+
+        private void ControllerDisabled(object o, ControllerInteractionEventArgs e)
+        {
+            OnControllerDisabled.Invoke(e);
+        }
+
         private void OnDisable()
         {
             if (ce == null)
@@ -357,6 +377,8 @@
             ce.AliasUIClickOff -= AliasUIClickOff;
             ce.AliasMenuOn -= AliasMenuOn;
             ce.AliasMenuOff -= AliasMenuOff;
+            ce.ControllerEnabled -= ControllerEnabled;
+            ce.ControllerDisabled -= ControllerDisabled;
         }
     }
 }

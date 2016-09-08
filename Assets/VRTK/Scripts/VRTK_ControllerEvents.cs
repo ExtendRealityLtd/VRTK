@@ -290,6 +290,15 @@ namespace VRTK
         /// </summary>
         public event ControllerInteractionEventHandler AliasUIClickOff;
 
+        /// <summary>
+        /// Emitted when the controller is enabled.
+        /// </summary>
+        public event ControllerInteractionEventHandler ControllerEnabled;
+        /// <summary>
+        /// Emitted when the controller is disabled.
+        /// </summary>
+        public event ControllerInteractionEventHandler ControllerDisabled;
+
         private uint controllerIndex;
         private Vector2 touchpadAxis = Vector2.zero;
         private Vector2 triggerAxis = Vector2.zero;
@@ -529,6 +538,22 @@ namespace VRTK
             }
         }
 
+        public virtual void OnControllerEnabled(ControllerInteractionEventArgs e)
+        {
+            if (ControllerEnabled != null)
+            {
+                ControllerEnabled(this, e);
+            }
+        }
+
+        public virtual void OnControllerDisabled(ControllerInteractionEventArgs e)
+        {
+            if (ControllerDisabled != null)
+            {
+                ControllerDisabled(this, e);
+            }
+        }
+
         /// <summary>
         /// The GetVelocity method is useful for getting the current velocity of the physical game controller. This can be useful to determine the speed at which the controller is being swung or the direction it is being moved in.
         /// </summary>
@@ -613,6 +638,16 @@ namespace VRTK
         private void Start()
         {
             controllerIndex = VRTK_DeviceFinder.GetControllerIndex(gameObject);
+        }
+
+        private void OnEnable()
+        {
+            Invoke("EnableEvents", 0f);
+        }
+
+        private void OnDisable()
+        {
+            Invoke("DisableEvents", 0f);
         }
 
         private float CalculateTouchpadAxisAngle(Vector2 axis)
@@ -713,13 +748,17 @@ namespace VRTK
                     vectorA.y.ToString("F" + axisFidelity) == vectorB.y.ToString("F" + axisFidelity));
         }
 
-        private void OnDisable()
+        private void EnableEvents()
         {
-            Invoke("DisableEvents", 0.1f);
+            bool nullBool = false;
+            OnControllerEnabled(SetButtonEvent(ref nullBool, true, 0f));
         }
 
         private void DisableEvents()
         {
+            bool nullBool = false;
+            OnControllerDisabled(SetButtonEvent(ref nullBool, false, 0f));
+
             if (triggerPressed)
             {
                 OnTriggerReleased(SetButtonEvent(ref triggerPressed, false, 0f));
