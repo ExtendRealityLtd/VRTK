@@ -26,13 +26,6 @@ public class VRTK_ConsoleViewer : MonoBehaviour
     [Tooltip("The colour of the text for an exception log message.")]
     public Color exceptionMessage = Color.red;
 
-    private struct Log
-    {
-        public string message;
-        public string stackTrace;
-        public LogType type;
-    }
-
     private Dictionary<LogType, Color> logTypeColors;
     private ScrollRect scrollWindow;
     private RectTransform consoleRect;
