@@ -1,63 +1,65 @@
-﻿using UnityEngine;
-using UnityEngine.Events;
-using VRTK;
-
-[RequireComponent(typeof(VRTK_PlayerClimb))]
-public class VRTK_PlayerClimb_UnityEvents : MonoBehaviour
+﻿namespace VRTK.UnityEventHelper
 {
-    private VRTK_PlayerClimb pc;
+    using UnityEngine;
+    using UnityEngine.Events;
 
-    [System.Serializable]
-    public class UnityObjectEvent : UnityEvent<PlayerClimbEventArgs> { };
-
-    /// <summary>
-    /// Emits the PlayerClimbStarted class event.
-    /// </summary>
-    public UnityObjectEvent OnPlayerClimbStarted;
-    /// <summary>
-    /// Emits the PlayerClimbEnded class event.
-    /// </summary>
-    public UnityObjectEvent OnPlayerClimbEnded;
-
-    private void SetPlayerClimb()
+    [RequireComponent(typeof(VRTK_PlayerClimb))]
+    public class VRTK_PlayerClimb_UnityEvents : MonoBehaviour
     {
-        if (pc == null)
-        {
-            pc = GetComponent<VRTK_PlayerClimb>();
-        }
-    }
+        private VRTK_PlayerClimb pc;
 
-    private void OnEnable()
-    {
-        SetPlayerClimb();
-        if (pc == null)
+        [System.Serializable]
+        public class UnityObjectEvent : UnityEvent<PlayerClimbEventArgs> { };
+
+        /// <summary>
+        /// Emits the PlayerClimbStarted class event.
+        /// </summary>
+        public UnityObjectEvent OnPlayerClimbStarted;
+        /// <summary>
+        /// Emits the PlayerClimbEnded class event.
+        /// </summary>
+        public UnityObjectEvent OnPlayerClimbEnded;
+
+        private void SetPlayerClimb()
         {
-            Debug.LogError("The VRTK_PlayerClimb_UnityEvents script requires to be attached to a GameObject that contains a VRTK_PlayerClimb script");
-            return;
+            if (pc == null)
+            {
+                pc = GetComponent<VRTK_PlayerClimb>();
+            }
         }
 
-        pc.PlayerClimbStarted += PlayerClimbStarted;
-        pc.PlayerClimbEnded += PlayerClimbEnded;
-    }
-
-    private void PlayerClimbStarted(object o, PlayerClimbEventArgs e)
-    {
-        OnPlayerClimbStarted.Invoke(e);
-    }
-
-    private void PlayerClimbEnded(object o, PlayerClimbEventArgs e)
-    {
-        OnPlayerClimbEnded.Invoke(e);
-    }
-
-    private void OnDisable()
-    {
-        if (pc == null)
+        private void OnEnable()
         {
-            return;
+            SetPlayerClimb();
+            if (pc == null)
+            {
+                Debug.LogError("The VRTK_PlayerClimb_UnityEvents script requires to be attached to a GameObject that contains a VRTK_PlayerClimb script");
+                return;
+            }
+
+            pc.PlayerClimbStarted += PlayerClimbStarted;
+            pc.PlayerClimbEnded += PlayerClimbEnded;
         }
 
-        pc.PlayerClimbStarted -= PlayerClimbStarted;
-        pc.PlayerClimbEnded -= PlayerClimbEnded;
+        private void PlayerClimbStarted(object o, PlayerClimbEventArgs e)
+        {
+            OnPlayerClimbStarted.Invoke(e);
+        }
+
+        private void PlayerClimbEnded(object o, PlayerClimbEventArgs e)
+        {
+            OnPlayerClimbEnded.Invoke(e);
+        }
+
+        private void OnDisable()
+        {
+            if (pc == null)
+            {
+                return;
+            }
+
+            pc.PlayerClimbStarted -= PlayerClimbStarted;
+            pc.PlayerClimbEnded -= PlayerClimbEnded;
+        }
     }
 }
