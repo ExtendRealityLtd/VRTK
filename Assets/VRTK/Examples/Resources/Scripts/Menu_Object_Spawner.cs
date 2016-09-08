@@ -1,51 +1,54 @@
-﻿using UnityEngine;
-using VRTK;
-
-public class Menu_Object_Spawner : VRTK_InteractableObject
+﻿namespace VRTK.Examples
 {
-    public enum PrimitiveTypes
-    {
-        Cube,
-        Sphere
-    }
+    using UnityEngine;
 
-    public PrimitiveTypes shape;
-    private Color selectedColor;
-
-    public void SetSelectedColor(Color color)
+    public class Menu_Object_Spawner : VRTK_InteractableObject
     {
-        selectedColor = color;
-        gameObject.GetComponent<MeshRenderer>().material.color = color;
-    }
-
-    public override void StartUsing(GameObject usingObject)
-    {
-        base.StartUsing(usingObject);
-        
-        if (shape == PrimitiveTypes.Cube)
+        public enum PrimitiveTypes
         {
-            CreateShape(PrimitiveType.Cube, selectedColor);
-        } else if(shape == PrimitiveTypes.Sphere)
-        {
-            CreateShape(PrimitiveType.Sphere, selectedColor);
+            Cube,
+            Sphere
         }
-        ResetMenuItems();
-    }
 
-    private void CreateShape(PrimitiveType shape, Color color)
-    {
-        GameObject obj = GameObject.CreatePrimitive(shape);
-        obj.transform.position = transform.position;
-        obj.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
-        obj.GetComponent<MeshRenderer>().material.color = color;
-        obj.AddComponent<Rigidbody>();
-    }
+        public PrimitiveTypes shape;
+        private Color selectedColor;
 
-    private void ResetMenuItems()
-    {
-        foreach (Menu_Object_Spawner menuObjectSpawner in FindObjectsOfType<Menu_Object_Spawner>())
+        public void SetSelectedColor(Color color)
         {
-            menuObjectSpawner.StopUsing(null);
+            selectedColor = color;
+            gameObject.GetComponent<MeshRenderer>().material.color = color;
+        }
+
+        public override void StartUsing(GameObject usingObject)
+        {
+            base.StartUsing(usingObject);
+
+            if (shape == PrimitiveTypes.Cube)
+            {
+                CreateShape(PrimitiveType.Cube, selectedColor);
+            }
+            else if (shape == PrimitiveTypes.Sphere)
+            {
+                CreateShape(PrimitiveType.Sphere, selectedColor);
+            }
+            ResetMenuItems();
+        }
+
+        private void CreateShape(PrimitiveType shape, Color color)
+        {
+            GameObject obj = GameObject.CreatePrimitive(shape);
+            obj.transform.position = transform.position;
+            obj.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+            obj.GetComponent<MeshRenderer>().material.color = color;
+            obj.AddComponent<Rigidbody>();
+        }
+
+        private void ResetMenuItems()
+        {
+            foreach (Menu_Object_Spawner menuObjectSpawner in FindObjectsOfType<Menu_Object_Spawner>())
+            {
+                menuObjectSpawner.StopUsing(null);
+            }
         }
     }
 }

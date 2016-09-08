@@ -1,66 +1,68 @@
-﻿using UnityEngine;
-using VRTK;
-
-public class LightSaber : VRTK_InteractableObject
+﻿namespace VRTK.Examples
 {
-    private bool beamActive = false;
-    private Vector2 beamLimits = new Vector2(0f, 1.2f);
-    private float currentBeamSize;
-    private float beamExtendSpeed = 0;
+    using UnityEngine;
 
-    private GameObject blade;
-    private Color activeColor;
-    private Color targetColor;
-    private Color[] bladePhaseColors;
-
-    public override void StartUsing(GameObject usingObject)
+    public class LightSaber : VRTK_InteractableObject
     {
-        base.StartUsing(usingObject);
-        beamExtendSpeed = 5f;
-        bladePhaseColors = new Color[2] { Color.blue, Color.cyan };
-        activeColor = bladePhaseColors[0];
-        targetColor = bladePhaseColors[1];
-    }
+        private bool beamActive = false;
+        private Vector2 beamLimits = new Vector2(0f, 1.2f);
+        private float currentBeamSize;
+        private float beamExtendSpeed = 0;
 
-    public override void StopUsing(GameObject usingObject)
-    {
-        base.StopUsing(usingObject);
-        beamExtendSpeed = -5f;
-    }
+        private GameObject blade;
+        private Color activeColor;
+        private Color targetColor;
+        private Color[] bladePhaseColors;
 
-    protected override void Start()
-    {
-        base.Start();
-        blade = transform.Find("Blade").gameObject;
-        currentBeamSize = beamLimits.x;
-        SetBeamSize();
-    }
-
-    protected override void Update()
-    {
-        currentBeamSize = Mathf.Clamp(blade.transform.localScale.y + (beamExtendSpeed * Time.deltaTime), beamLimits.x, beamLimits.y);
-        SetBeamSize();
-        PulseBeam();
-    }
-
-    private void SetBeamSize()
-    {
-        blade.transform.localScale = new Vector3(1f, currentBeamSize, 1f);
-        beamActive = (currentBeamSize >= beamLimits.y ? true : false);
-    }
-
-    private void PulseBeam()
-    {
-        if (beamActive)
+        public override void StartUsing(GameObject usingObject)
         {
-            Color bladeColor = Color.Lerp(activeColor, targetColor, Mathf.PingPong(Time.time, 1));
-            blade.transform.FindChild("Beam").GetComponent<MeshRenderer>().material.color = bladeColor;
+            base.StartUsing(usingObject);
+            beamExtendSpeed = 5f;
+            bladePhaseColors = new Color[2] { Color.blue, Color.cyan };
+            activeColor = bladePhaseColors[0];
+            targetColor = bladePhaseColors[1];
+        }
 
-            if (bladeColor == targetColor)
+        public override void StopUsing(GameObject usingObject)
+        {
+            base.StopUsing(usingObject);
+            beamExtendSpeed = -5f;
+        }
+
+        protected override void Start()
+        {
+            base.Start();
+            blade = transform.Find("Blade").gameObject;
+            currentBeamSize = beamLimits.x;
+            SetBeamSize();
+        }
+
+        protected override void Update()
+        {
+            currentBeamSize = Mathf.Clamp(blade.transform.localScale.y + (beamExtendSpeed * Time.deltaTime), beamLimits.x, beamLimits.y);
+            SetBeamSize();
+            PulseBeam();
+        }
+
+        private void SetBeamSize()
+        {
+            blade.transform.localScale = new Vector3(1f, currentBeamSize, 1f);
+            beamActive = (currentBeamSize >= beamLimits.y ? true : false);
+        }
+
+        private void PulseBeam()
+        {
+            if (beamActive)
             {
-                var previouslyActiveColor = activeColor;
-                activeColor = targetColor;
-                targetColor = previouslyActiveColor;
+                Color bladeColor = Color.Lerp(activeColor, targetColor, Mathf.PingPong(Time.time, 1));
+                blade.transform.FindChild("Beam").GetComponent<MeshRenderer>().material.color = bladeColor;
+
+                if (bladeColor == targetColor)
+                {
+                    var previouslyActiveColor = activeColor;
+                    activeColor = targetColor;
+                    targetColor = previouslyActiveColor;
+                }
             }
         }
     }

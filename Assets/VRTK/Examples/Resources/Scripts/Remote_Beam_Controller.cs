@@ -1,26 +1,28 @@
-﻿using UnityEngine;
-using VRTK;
-
-public class Remote_Beam_Controller : MonoBehaviour
+﻿namespace VRTK.Examples
 {
-    public GameObject remoteBeam;
-    private Remote_Beam remoteBeamScript;
+    using UnityEngine;
 
-    private void Start()
+    public class Remote_Beam_Controller : MonoBehaviour
     {
-        remoteBeamScript = remoteBeam.GetComponent<Remote_Beam>();
+        public GameObject remoteBeam;
+        private Remote_Beam remoteBeamScript;
 
-        GetComponent<VRTK_ControllerEvents>().TouchpadAxisChanged += new ControllerInteractionEventHandler(DoTouchpadAxisChanged);
-        GetComponent<VRTK_ControllerEvents>().TouchpadTouchEnd += new ControllerInteractionEventHandler(DoTouchpadTouchEnd);
-    }
+        private void Start()
+        {
+            remoteBeamScript = remoteBeam.GetComponent<Remote_Beam>();
 
-    private void DoTouchpadAxisChanged(object sender, ControllerInteractionEventArgs e)
-    {
-        remoteBeamScript.SetTouchAxis(e.touchpadAxis);
-    }
+            GetComponent<VRTK_ControllerEvents>().TouchpadAxisChanged += new ControllerInteractionEventHandler(DoTouchpadAxisChanged);
+            GetComponent<VRTK_ControllerEvents>().TouchpadTouchEnd += new ControllerInteractionEventHandler(DoTouchpadTouchEnd);
+        }
 
-    private void DoTouchpadTouchEnd(object sender, ControllerInteractionEventArgs e)
-    {
-        remoteBeamScript.SetTouchAxis(Vector2.zero);
+        private void DoTouchpadAxisChanged(object sender, ControllerInteractionEventArgs e)
+        {
+            remoteBeamScript.SetTouchAxis(e.touchpadAxis);
+        }
+
+        private void DoTouchpadTouchEnd(object sender, ControllerInteractionEventArgs e)
+        {
+            remoteBeamScript.SetTouchAxis(Vector2.zero);
+        }
     }
 }

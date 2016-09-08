@@ -1,30 +1,34 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
+﻿namespace VRTK.Examples
+{
+    using UnityEngine;
+    using UnityEngine.UI;
 
-public class UI_Keyboard : MonoBehaviour {
-    private InputField input;
-
-    public void ClickKey(string character)
+    public class UI_Keyboard : MonoBehaviour
     {
-        input.text += character;
-    }
+        private InputField input;
 
-    public void Backspace()
-    {
-        if (input.text.Length > 0)
+        public void ClickKey(string character)
         {
-            input.text = input.text.Substring(0, input.text.Length - 1);
+            input.text += character;
         }
-    }
 
-    public void Enter()
-    {
-        Debug.Log("You've typed [" + input.text + "]");
-        input.text = "";
-    }
+        public void Backspace()
+        {
+            if (input.text.Length > 0)
+            {
+                input.text = input.text.Substring(0, input.text.Length - 1);
+            }
+        }
 
-    private void Start()
-    {
-        input = GetComponentInChildren<InputField>();
+        public void Enter()
+        {
+            Debug.Log("You've typed [" + input.text + "]");
+            input.text = "";
+        }
+
+        private void Start()
+        {
+            input = GetComponentInChildren<InputField>();
+        }
     }
 }

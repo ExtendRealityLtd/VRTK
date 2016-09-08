@@ -1,37 +1,39 @@
-﻿using UnityEngine;
-using VRTK;
-
-[ExecuteInEditMode]
-public class Setup_Scene_034 : MonoBehaviour
+﻿namespace VRTK.Examples.Utilities
 {
-    private bool initalised = false;
-#if UNITY_EDITOR
-    private void Update()
+    using UnityEngine;
+
+    [ExecuteInEditMode]
+    public class Setup_Scene_034 : MonoBehaviour
     {
-        if (!initalised)
+        private bool initalised = false;
+#if UNITY_EDITOR
+        private void Update()
         {
-            var headset = VRTK_DeviceFinder.HeadsetTransform();
-            var controllerEvents = VRTK_SDK_Bridge.GetControllerLeftHand().GetComponent<VRTK_ControllerEvents>();
-
-            if (!headset.GetComponent<VRTK_SimplePointer>())
+            if (!initalised)
             {
-                var pointer = headset.gameObject.AddComponent<VRTK_SimplePointer>();
+                var headset = VRTK_DeviceFinder.HeadsetTransform();
+                var controllerEvents = VRTK_SDK_Bridge.GetControllerLeftHand().GetComponent<VRTK_ControllerEvents>();
 
-                pointer.controller = controllerEvents;
-                pointer.enableTeleport = false;
-                pointer.pointerVisibility = VRTK_WorldPointer.pointerVisibilityStates.Always_Off;
-                pointer.pointerLength = 100f;
-                pointer.showPointerTip = true;
-            }
+                if (!headset.GetComponent<VRTK_SimplePointer>())
+                {
+                    var pointer = headset.gameObject.AddComponent<VRTK_SimplePointer>();
 
-            if (!headset.GetComponent<VRTK_UIPointer>())
-            {
-                var uiPointer = headset.gameObject.AddComponent<VRTK_UIPointer>();
-                uiPointer.controller = controllerEvents;
-                uiPointer.ignoreCanvasWithTagOrClass = "ExcludeTeleport";
+                    pointer.controller = controllerEvents;
+                    pointer.enableTeleport = false;
+                    pointer.pointerVisibility = VRTK_WorldPointer.pointerVisibilityStates.Always_Off;
+                    pointer.pointerLength = 100f;
+                    pointer.showPointerTip = true;
+                }
+
+                if (!headset.GetComponent<VRTK_UIPointer>())
+                {
+                    var uiPointer = headset.gameObject.AddComponent<VRTK_UIPointer>();
+                    uiPointer.controller = controllerEvents;
+                    uiPointer.ignoreCanvasWithTagOrClass = "ExcludeTeleport";
+                }
+                initalised = true;
             }
-            initalised = true;
         }
-    }
 #endif
+    }
 }

@@ -1,35 +1,37 @@
-﻿using UnityEngine;
-using VRTK;
-
-public class Sphere_Spawner : MonoBehaviour
+﻿namespace VRTK.Examples
 {
-    private GameObject spawnMe;
-    private Vector3 position;
+    using UnityEngine;
 
-    private void Start()
+    public class Sphere_Spawner : MonoBehaviour
     {
-        if (GetComponent<VRTK_ControllerEvents>() == null)
+        private GameObject spawnMe;
+        private Vector3 position;
+
+        private void Start()
         {
-            Debug.LogError("VRTK_ControllerEvents_ListenerExample is required to be attached to a Controller that has the VRTK_ControllerEvents script attached to it");
-            return;
+            if (GetComponent<VRTK_ControllerEvents>() == null)
+            {
+                Debug.LogError("VRTK_ControllerEvents_ListenerExample is required to be attached to a Controller that has the VRTK_ControllerEvents script attached to it");
+                return;
+            }
+
+            GetComponent<VRTK_ControllerEvents>().TriggerPressed += new ControllerInteractionEventHandler(DoTriggerPressed);
+            GetComponent<VRTK_ControllerEvents>().TouchpadPressed += new ControllerInteractionEventHandler(DoTouchpadPressed);
+            spawnMe = GameObject.Find("SpawnMe");
+            position = spawnMe.transform.position;
         }
 
-        GetComponent<VRTK_ControllerEvents>().TriggerPressed += new ControllerInteractionEventHandler(DoTriggerPressed);
-        GetComponent<VRTK_ControllerEvents>().TouchpadPressed += new ControllerInteractionEventHandler(DoTouchpadPressed);
-        spawnMe = GameObject.Find("SpawnMe");
-        position = spawnMe.transform.position;
-    }
-
-    private void DoTriggerPressed(object sender, ControllerInteractionEventArgs e)
-    {
-        Instantiate(spawnMe, position, Quaternion.identity);
-    }
-
-    private void DoTouchpadPressed(object sender, ControllerInteractionEventArgs e)
-    {
-        for (int i = 0; i < 20; i++)
+        private void DoTriggerPressed(object sender, ControllerInteractionEventArgs e)
         {
             Instantiate(spawnMe, position, Quaternion.identity);
+        }
+
+        private void DoTouchpadPressed(object sender, ControllerInteractionEventArgs e)
+        {
+            for (int i = 0; i < 20; i++)
+            {
+                Instantiate(spawnMe, position, Quaternion.identity);
+            }
         }
     }
 }
