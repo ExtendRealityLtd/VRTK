@@ -97,9 +97,9 @@
             if (cachedHeadset == null)
             {
 #if (UNITY_5_4_OR_NEWER)
-                cachedHeadset = FindObjectOfType<SteamVR_Camera>().GetComponent<Transform>();
+                cachedHeadset = FindObjectOfType<SteamVR_Camera>().transform;
 #else
-                cachedHeadset = FindObjectOfType<SteamVR_GameView>().GetComponent<Transform>();
+                cachedHeadset = FindObjectOfType<SteamVR_GameView>().transform;
 #endif
             }
             return cachedHeadset;
@@ -109,7 +109,7 @@
         {
             if (cachedHeadsetCamera == null)
             {
-                cachedHeadsetCamera = FindObjectOfType<SteamVR_Camera>().GetComponent<Transform>();
+                cachedHeadsetCamera = FindObjectOfType<SteamVR_Camera>().transform;
             }
             return cachedHeadsetCamera;
         }
@@ -118,7 +118,7 @@
         {
             if (cachedPlayArea == null)
             {
-                cachedPlayArea = FindObjectOfType<SteamVR_PlayArea>().gameObject.transform;
+                cachedPlayArea = FindObjectOfType<SteamVR_PlayArea>().transform;
             }
             return cachedPlayArea;
         }
