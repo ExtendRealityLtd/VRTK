@@ -57,6 +57,7 @@ namespace VRTK
         private VRTK_ControllerEvents controllerEvents;
         private int grabEnabledState = 0;
         private float grabPrecognitionTimer = 0f;
+        private GameObject undroppableGrabbedObject;
 
         public virtual void OnControllerGrabInteractableObject(ObjectInteractEventArgs e)
         {
@@ -127,6 +128,17 @@ namespace VRTK
                 return;
             }
 
+            if (undroppableGrabbedObject && !undroppableGrabbedObject.GetComponent<VRTK_InteractableObject>().IsGrabbed())
+            {
+                undroppableGrabbedObject.SetActive(true);
+                interactTouch.ForceTouch(undroppableGrabbedObject);
+                AttemptGrab();
+            }
+            else
+            {
+                undroppableGrabbedObject = null;
+            }
+
             GetComponent<VRTK_ControllerEvents>().AliasGrabOn += new ControllerInteractionEventHandler(DoGrabObject);
             GetComponent<VRTK_ControllerEvents>().AliasGrabOff += new ControllerInteractionEventHandler(DoReleaseObject);
 
@@ -135,6 +147,17 @@ namespace VRTK
 
         private void OnDisable()
         {
+            if (undroppableGrabbedObject)
+            {
+                if (undroppableGrabbedObject.GetComponent<VRTK_InteractableObject>().isDroppable)
+                {
+                    undroppableGrabbedObject = null;
+                }
+                else
+                {
+                    undroppableGrabbedObject.SetActive(false);
+                }
+            }
             ForceRelease();
             GetComponent<VRTK_ControllerEvents>().AliasGrabOn -= new ControllerInteractionEventHandler(DoGrabObject);
             GetComponent<VRTK_ControllerEvents>().AliasGrabOff -= new ControllerInteractionEventHandler(DoReleaseObject);
@@ -252,7 +275,7 @@ namespace VRTK
                 }
                 controllerAttachJoint = tempSpringJoint;
             }
-            controllerAttachJoint.breakForce = objectScript.detachThreshold;
+            controllerAttachJoint.breakForce = (objectScript.isDroppable ? objectScript.detachThreshold : Mathf.Infinity);
             controllerAttachJoint.connectedBody = controllerAttachPoint;
         }
 
@@ -488,6 +511,8 @@ namespace VRTK
                 {
                     initialGrabAttempt = GrabInteractedObject();
                 }
+
+                undroppableGrabbedObject = (grabbedObject && grabbedObject.GetComponent<VRTK_InteractableObject>() && !grabbedObject.GetComponent<VRTK_InteractableObject>().isDroppable ? grabbedObject : null);
 
                 if (grabbedObject && initialGrabAttempt)
                 {
