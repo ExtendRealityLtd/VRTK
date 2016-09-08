@@ -1,99 +1,102 @@
-﻿using UnityEngine;
-
-public class Arrow : MonoBehaviour
+﻿namespace VRTK.Examples.Archery
 {
-    public float maxArrowLife = 10f;
-    [HideInInspector]
-    public bool inFlight = false;
+    using UnityEngine;
 
-    private bool collided = false;
-    private Rigidbody rigidBody;
-    private GameObject arrowHolder;
-    private Vector3 originalPosition;
-    private Quaternion originalRotation;
-    private Vector3 originalScale;
-
-    public void SetArrowHolder(GameObject holder)
+    public class Arrow : MonoBehaviour
     {
-        arrowHolder = holder;
-        arrowHolder.SetActive(false);
-    }
+        public float maxArrowLife = 10f;
+        [HideInInspector]
+        public bool inFlight = false;
 
-    public void OnNock()
-    {
-        collided = false;
-        inFlight = false;
-    }
+        private bool collided = false;
+        private Rigidbody rigidBody;
+        private GameObject arrowHolder;
+        private Vector3 originalPosition;
+        private Quaternion originalRotation;
+        private Vector3 originalScale;
 
-    public void Fired()
-    {
-        DestroyArrow(maxArrowLife);
-    }
-
-    public void ResetArrow()
-    {
-        collided = true;
-        inFlight = false;
-        RecreateNotch();
-        ResetTransform();
-    }
-
-    private void Start()
-    {
-        rigidBody = GetComponent<Rigidbody>();
-        SetOrigns();
-    }
-
-    private void SetOrigns()
-    {
-        originalPosition = transform.localPosition;
-        originalRotation = transform.localRotation;
-        originalScale = transform.localScale;
-    }
-
-    private void FixedUpdate()
-    {
-        if (!collided)
+        public void SetArrowHolder(GameObject holder)
         {
-            transform.LookAt(transform.position + rigidBody.velocity);
+            arrowHolder = holder;
+            arrowHolder.SetActive(false);
         }
-    }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (inFlight)
+        public void OnNock()
         {
-            ResetArrow();
+            collided = false;
+            inFlight = false;
         }
-    }
 
-    private void RecreateNotch()
-    {
-        //swap the arrow holder to be the parent again
-        arrowHolder.transform.parent = null;
-        arrowHolder.SetActive(true);
+        public void Fired()
+        {
+            DestroyArrow(maxArrowLife);
+        }
 
-        //make the arrow a child of the holder again
-        transform.parent = arrowHolder.transform;
+        public void ResetArrow()
+        {
+            collided = true;
+            inFlight = false;
+            RecreateNotch();
+            ResetTransform();
+        }
 
-        //reset the state of the rigidbodies and colliders
-        GetComponent<Rigidbody>().isKinematic = true;
-        GetComponent<Collider>().enabled = false;
-        arrowHolder.GetComponent<Rigidbody>().isKinematic = false;
-    }
+        private void Start()
+        {
+            rigidBody = GetComponent<Rigidbody>();
+            SetOrigns();
+        }
 
-    private void ResetTransform()
-    {
-        arrowHolder.transform.position = transform.position;
-        arrowHolder.transform.rotation = transform.rotation;
-        transform.localPosition = originalPosition;
-        transform.localRotation = originalRotation;
-        transform.localScale = originalScale;
-    }
+        private void SetOrigns()
+        {
+            originalPosition = transform.localPosition;
+            originalRotation = transform.localRotation;
+            originalScale = transform.localScale;
+        }
 
-    private void DestroyArrow(float time)
-    {
-        Destroy(arrowHolder, time);
-        Destroy(gameObject, time);
+        private void FixedUpdate()
+        {
+            if (!collided)
+            {
+                transform.LookAt(transform.position + rigidBody.velocity);
+            }
+        }
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            if (inFlight)
+            {
+                ResetArrow();
+            }
+        }
+
+        private void RecreateNotch()
+        {
+            //swap the arrow holder to be the parent again
+            arrowHolder.transform.parent = null;
+            arrowHolder.SetActive(true);
+
+            //make the arrow a child of the holder again
+            transform.parent = arrowHolder.transform;
+
+            //reset the state of the rigidbodies and colliders
+            GetComponent<Rigidbody>().isKinematic = true;
+            GetComponent<Collider>().enabled = false;
+            arrowHolder.GetComponent<Rigidbody>().isKinematic = false;
+        }
+
+        private void ResetTransform()
+        {
+            arrowHolder.transform.position = transform.position;
+            arrowHolder.transform.rotation = transform.rotation;
+            transform.localPosition = originalPosition;
+            transform.localRotation = originalRotation;
+            transform.localScale = originalScale;
+        }
+
+        private void DestroyArrow(float time)
+        {
+            Destroy(arrowHolder, time);
+            Destroy(gameObject, time);
+        }
     }
 }
