@@ -1387,17 +1387,6 @@ The SetFallingPhysicsOnlyParams method will toggle the `fallingPhysicsOnly` clas
 
 The IsFalling method will return if the class is using physics based falling and is currently in a falling state.
 
-#### GetHeadset/0
-
-  > `public Transform GetHeadset()`
-
-  * Parameters
-   * _none_
-  * Returns
-   * `Transform` - The transform for the object representing the VR headset.
-
-The GetHeadset method returns the transform of the object representing the VR headset in the game world.
-
 #### StartPhysicsFall/1
 
   > `public void StartPhysicsFall(Vector3 velocity)`

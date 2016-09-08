@@ -87,15 +87,6 @@ namespace VRTK
         }
 
         /// <summary>
-        /// The GetHeadset method returns the transform of the object representing the VR headset in the game world.
-        /// </summary>
-        /// <returns>The transform for the object representing the VR headset.</returns>
-        public Transform GetHeadset()
-        {
-            return headset;
-        }
-
-        /// <summary>
         /// The StartPhysicsFall method initializes the physics based fall state, enable physics and send out the `PresenceFallStarted` event.
         /// </summary>
         /// <param name="velocity">The starting velocity to use at the start of a fall.</param>
