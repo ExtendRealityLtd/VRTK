@@ -11,7 +11,7 @@ using System.Linq;
 /// <remarks>
 /// It's also recommended to use the Simple Pointer and UI Pointer on a controller to interact with the Console Viewer Canvas as it has a scrollable text area, a button to clear the log and a checkbox to toggle whether the log messages are collapsed.
 /// </remarks>
-public class ConsoleViewer : MonoBehaviour
+public class VRTK_ConsoleViewer : MonoBehaviour
 {
     [Tooltip("The size of the font the log text is displayed in.")]
     public int fontSize = 14;

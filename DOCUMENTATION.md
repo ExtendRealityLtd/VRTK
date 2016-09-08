@@ -13,16 +13,16 @@ This file provides documentation on how to use the included prefabs and scripts 
 
 A collection of pre-defined usable prefabs have been included to allow for each drag-and-drop set up of common elements.
 
- * [Frames Per Second Canvas](#frames-per-second-canvas-framspersecondviewer)
+ * [Frames Per Second Canvas](#frames-per-second-canvas-vrtk_framespersecondviewer)
  * [Object Tooltip](#object-tooltip-vrtk_objecttooltip)
  * [Controller Tooltips](#controller-tooltips-vrtk_controllertooltips)
  * [Radial Menu](#radial-menu-radialmenu)
  * [Independent Radial Menu Controller](#independent-radial-menu-controller-vrtk_independentradialmenucontroller)
- * [Console Viewer Canvas](#console-viewer-canvas-consoleviewer)
+ * [Console Viewer Canvas](#console-viewer-canvas-vrtk_consoleviewer)
 
 ---
 
-## Frames Per Second Canvas (FramsPerSecondViewer)
+## Frames Per Second Canvas (VRTK_FramesPerSecondViewer)
 
 ### Overview
 
@@ -191,7 +191,7 @@ To convert the default `RadialMenu` prefab to be independent of the controllers:
 
 ---
 
-## Console Viewer Canvas (ConsoleViewer)
+## Console Viewer Canvas (VRTK_ConsoleViewer)
 
 ### Overview
 
