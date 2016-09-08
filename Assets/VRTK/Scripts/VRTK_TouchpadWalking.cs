@@ -12,7 +12,6 @@ namespace VRTK
     /// <example>
     /// `VRTK/Examples/017_CameraRig_TouchpadWalking` has a collection of walls and slopes that can be traversed by the user with the touchpad. There is also an area that can only be traversed if the user is crouching. Standing up in this crouched area will cause the user to appear back at their last good known position.
     /// </example>
-    [RequireComponent(typeof(VRTK_PlayerPresence))]
     public class VRTK_TouchpadWalking : MonoBehaviour
     {
         public bool LeftController
@@ -56,20 +55,10 @@ namespace VRTK
         private bool rightSubscribed;
         private ControllerInteractionEventHandler touchpadAxisChanged;
         private ControllerInteractionEventHandler touchpadUntouched;
-        private VRTK_PlayerPresence playerPresence;
+        private Transform headset;
 
         private void Awake()
         {
-            if (GetComponent<VRTK_PlayerPresence>())
-            {
-                playerPresence = GetComponent<VRTK_PlayerPresence>();
-            }
-            else
-            {
-                Debug.LogError("The VRTK_TouchpadWalking script requires the VRTK_PlayerPresence script to be attached to the CameraRig");
-                return;
-            }
-
             touchpadAxisChanged = new ControllerInteractionEventHandler(DoTouchpadAxisChanged);
             touchpadUntouched = new ControllerInteractionEventHandler(DoTouchpadTouchEnd);
 
@@ -80,7 +69,7 @@ namespace VRTK
         private void Start()
         {
             Utilities.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.CameraRig);
-
+            headset = VRTK.VRTK_DeviceFinder.HeadsetTransform();
             SetControllerListeners(controllerLeftHand);
             SetControllerListeners(controllerRightHand);
         }
@@ -131,8 +120,8 @@ namespace VRTK
 
         private void Move()
         {
-            var movement = playerPresence.GetHeadset().forward * movementSpeed * Time.deltaTime;
-            var strafe = playerPresence.GetHeadset().right * strafeSpeed * Time.deltaTime;
+            var movement = headset.forward * movementSpeed * Time.deltaTime;
+            var strafe = headset.right * strafeSpeed * Time.deltaTime;
             float fixY = transform.position.y;
             transform.position += (movement + strafe);
             transform.position = new Vector3(transform.position.x, fixY, transform.position.z);
