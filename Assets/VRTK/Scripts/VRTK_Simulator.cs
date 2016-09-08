@@ -1,7 +1,14 @@
-﻿namespace VRTK
+﻿// Simulating Headset Movement|Scripts|0230
+namespace VRTK
 {
     using UnityEngine;
 
+    /// <summary>
+    /// To test a scene it is often necessary to use the headset to move to a location. This increases turn-around times and can become cumbersome. The simulator allows navigating through the scene using the keyboard instead, without the need to put on the headset. One can then move around (also through walls) while looking at the monitor and still use the controllers to interact.
+    /// </summary>
+    /// <remarks>
+    /// The Simulator script is attached to the `[CameraRig]` prefab. Supported movements are: forward, backward, strafe left, strafe right, turn left, turn right, up, down.
+    /// </remarks>
     public class VRTK_Simulator : MonoBehaviour
     {
         [System.Serializable]
@@ -17,9 +24,12 @@
             public KeyCode down = KeyCode.C;
             public KeyCode reset = KeyCode.X;
         }
+
+        [Tooltip("Per default the keys on the left-hand side of the keyboard are used (WASD). They can be individually set as needed. The reset key brings the camera to its initial location.")]
         public Keys keys;
-        [Tooltip("Will deactivate the script if run in a build outside the editor.")]
+        [Tooltip("Typically the simulator should be turned off when not testing anymore. This option will do this automatically when outside the editor.")]
         public bool onlyInEditor = true;
+        [Tooltip("Depending on the scale of the world the step size can be defined to increase or decrease movement speed.")]
         public float stepSize = 0.05f;
         [Tooltip("An optional game object marking the position and rotation at which the camera should be initially placed.")]
         public Transform camStart;
@@ -28,7 +38,7 @@
         private Vector3 initialPosition;
         private Quaternion initialRotation;
 
-        void Start()
+        private void Start()
         {
             // don't run in builds outside the editor
             if (onlyInEditor && !Application.isEditor)
@@ -55,7 +65,7 @@
             initialRotation = transform.rotation;
         }
 
-        void Update()
+        private void Update()
         {
             Vector3 movDir = Vector3.zero;
             Vector3 rotDir = Vector3.zero;

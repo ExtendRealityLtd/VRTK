@@ -9,8 +9,18 @@ public class VRTK_DestinationMarker_UnityEvents : MonoBehaviour
 
     [System.Serializable]
     public class UnityObjectEvent : UnityEvent<DestinationMarkerEventArgs> { };
+
+    /// <summary>
+    /// Emits the DestinationMarkerEnter class event.
+    /// </summary>
     public UnityObjectEvent OnDestinationMarkerEnter;
+    /// <summary>
+    /// Emits the DestinationMarkerExit class event.
+    /// </summary>
     public UnityObjectEvent OnDestinationMarkerExit;
+    /// <summary>
+    /// Emits the DestinationMarkerSet class event.
+    /// </summary>
     public UnityObjectEvent OnDestinationMarkerSet;
 
     private void SetDestinationMarker()

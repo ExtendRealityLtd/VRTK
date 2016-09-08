@@ -1,19 +1,39 @@
-﻿namespace VRTK
+﻿// Independent Radial Menu Controller|Prefabs|0050
+namespace VRTK
 {
     using UnityEngine;
     using System.Collections.Generic;
     using System.Collections;
+
+    /// <summary>
+    /// This script inherited from `RadialMenuController` and therefore can be used instead of `RadialMenuController` to allow the RadialMenu to be anchored to any object, not just a controller. The RadialMenu will show when a controller is near the object and the buttons can be clicked with the `Use Alias` button. The menu also automatically rotates towards the user.
+    /// </summary>
+    /// <remarks>
+    /// To convert the default `RadialMenu` prefab to be independent of the controllers:
+    ///
+    ///   * Make the `RadialMenu` a child of an object other than a controller.
+    ///   * Position and scale the menu by adjusting the transform of the `RadialMenu` empty.
+    ///   * Replace `RadialMenuController` with `VRTK_IndependentRadialMenuController`.
+    ///   * Ensure the parent object has the `VRTK_InteractableObject` script.
+    ///   * Verify that `Is Usable` and `Hold Button to Use` are both checked.
+    ///   * Attach `VRTK_InteractTouch` and `VRTK_InteractUse` scripts to the controllers.
+    /// </remarks>
     public class VRTK_IndependentRadialMenuController : RadialMenuController
     {
         #region Variables
+        [Tooltip("If the RadialMenu is the child of an object with VRTK_InteractableObject attached, this will be automatically obtained. It can also be manually set.")]
         public VRTK_InteractableObject eventsManager;
+        [Tooltip("Whether or not the script should dynamically add a SphereCollider to surround the menu.")]
         public bool addMenuCollider = true;
+        [Tooltip("This times the size of the RadialMenu is the size of the collider.")]
         [Range(0, 10)]
         public float colliderRadiusMultiplier = 1.2f;
+        [Tooltip("If true, after a button is clicked, the RadialMenu will hide.")]
         public bool hideAfterExecution = true;
-
+        [Tooltip("How far away from the object the menu should be placed, relative to the size of the RadialMenu.")]
         [Range(-10, 10)]
         public float offsetMultiplier = 1.1f;
+        [Tooltip("The object the RadialMenu should face towards. If left empty, it will automatically try to find the Headset Camera.")]
         public GameObject rotateTowards;
 
         private List<GameObject> interactingObjects; // Objects (controllers) that are either colliding with the menu or clicking the menu

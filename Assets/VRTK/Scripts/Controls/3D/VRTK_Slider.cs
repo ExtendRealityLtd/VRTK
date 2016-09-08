@@ -1,21 +1,35 @@
-﻿namespace VRTK
+﻿// Slider|Controls3D|0080
+namespace VRTK
 {
     using UnityEngine;
 
+    /// <summary>
+    /// Attaching the script to a game object will allow the user to interact with it as if it were a horizontal or vertical slider. The direction can be freely set and auto-detection is supported.
+    /// </summary>
+    /// <remarks>
+    /// The script will instantiate the required Rigidbody and Interactable components automatically in case they do not exist yet.
+    /// </remarks>
+    /// <example>
+    /// `VRTK/Examples/025_Controls_Overview` has a selection of sliders at various angles with different step values to demonstrate their usage.
+    /// </example>
     public class VRTK_Slider : VRTK_Control
     {
+        [Tooltip("The axis on which the slider should move. All other axis will be frozen.")]
         public Direction direction = Direction.autodetect;
-
+        [Tooltip("The minimum value of the slider.")]
         public float min = 0f;
+        [Tooltip("The maximum value of the slider.")]
         public float max = 100f;
+        [Tooltip("The increments in which slider values can change. The slider supports snapping.")]
         public float stepSize = 0.1f;
-
+        [Tooltip("Automatically detect the minimum and maximum positions.")]
         public bool detectMinMax = true;
+        [Tooltip("The minimum point on the slider.")]
         public Vector3 minPoint;
+        [Tooltip("The maximum point on the slider.")]
         public Vector3 maxPoint;
 
         private static float MAX_AUTODETECT_SLIDER_LENGTH = 30; // multiple of the slider width
-
         private Direction finalDirection;
         private Vector3 finalMinPoint;
         private Vector3 finalMaxPoint;

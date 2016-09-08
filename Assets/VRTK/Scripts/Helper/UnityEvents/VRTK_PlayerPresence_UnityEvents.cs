@@ -9,7 +9,14 @@ public class VRTK_PlayerPresence_UnityEvents : MonoBehaviour
 
     [System.Serializable]
     public class UnityObjectEvent : UnityEvent<PlayerPresenceEventArgs> { };
+
+    /// <summary>
+    /// Emits the PresenceFallStarted class event.
+    /// </summary>
     public UnityObjectEvent OnPresenceFallStarted;
+    /// <summary>
+    /// Emits the PresenceFallEnded class event.
+    /// </summary>
     public UnityObjectEvent OnPresenceFallEnded;
 
     private void SetPlayerPresence()

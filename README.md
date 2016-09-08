@@ -83,6 +83,13 @@ documentation for this GitHub repository. Alternatively, the
 stable versions of the documentation can be viewed online at
 [http://docs.vrtk.io](http://docs.vrtk.io).
 
+## Examples
+
+A collection of example scenes have been created to aid with
+understanding the different aspects of the toolkit. A list
+of the examples can be viewed within this repository in
+[EXAMPLES.md] which includes an up to date list of examples.
+
 ## Contributing
 
 I would love to get contributions from you! Follow the instructions
@@ -109,5 +116,6 @@ Code released under the [MIT License].
 [MIT License]: https://github.com/thestonefox/SteamVR_Unity_Toolkit/blob/master/LICENSE
 [Contribution Document]: https://github.com/thestonefox/SteamVR_Unity_Toolkit/blob/master/CONTRIBUTING.md
 [DOCUMENTATION.md]: https://github.com/thestonefox/SteamVR_Unity_Toolkit/blob/master/DOCUMENTATION.md
+[EXAMPLES.md]: https://github.com/thestonefox/SteamVR_Unity_Toolkit/blob/master/EXAMPLES.md
 [Fork]: http://help.github.com/fork-a-repo/
 [Open a Pull Request]: https://help.github.com/articles/using-pull-requests/

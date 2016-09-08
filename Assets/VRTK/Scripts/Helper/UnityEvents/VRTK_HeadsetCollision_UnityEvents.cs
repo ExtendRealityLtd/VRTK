@@ -9,7 +9,14 @@ public class VRTK_HeadsetCollision_UnityEvents : MonoBehaviour
 
     [System.Serializable]
     public class UnityObjectEvent : UnityEvent<HeadsetCollisionEventArgs> { };
+
+    /// <summary>
+    /// Emits the HeadsetCollisionDetect class event.
+    /// </summary>
     public UnityObjectEvent OnHeadsetCollisionDetect;
+    /// <summary>
+    /// Emits the HeadsetCollisionEnded class event.
+    /// </summary>
     public UnityObjectEvent OnHeadsetCollisionEnded;
 
     private void SetHeadsetCollision()

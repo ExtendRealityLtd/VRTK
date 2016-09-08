@@ -1,7 +1,17 @@
-﻿namespace VRTK
+﻿// Knob|Controls3D|0060
+namespace VRTK
 {
     using UnityEngine;
 
+    /// <summary>
+    /// Attaching the script to a game object will allow the user to interact with it as if it were a radial knob. The direction can be freely set.
+    /// </summary>
+    /// <remarks>
+    /// The script will instantiate the required Rigidbody and Interactable components automatically in case they do not exist yet.
+    /// </remarks>
+    /// <example>
+    /// `VRTK/Examples/025_Controls_Overview` has a couple of rotator knobs that can be rotated by grabbing with the controller and then rotating the controller in the desired direction.
+    /// </example>
     public class VRTK_Knob : VRTK_Control
     {
         public enum KnobDirection
@@ -9,13 +19,16 @@
             x, y, z // TODO: autodetect not yet done, it's a bit more difficult to get it right
         }
 
+        [Tooltip("The axis on which the knob should rotate. All other axis will be frozen.")]
         public KnobDirection direction = KnobDirection.x;
+        [Tooltip("The minimum value of the knob.")]
         public float min = 0f;
+        [Tooltip("The maximum value of the knob.")]
         public float max = 100f;
+        [Tooltip("The increments in which knob values can change.")]
         public float stepSize = 1f;
 
         private static float MAX_AUTODETECT_KNOB_WIDTH = 3; // multiple of the knob width
-
         private KnobDirection finalDirection;
         private Quaternion initialRotation;
         private Vector3 initialLocalRotation;

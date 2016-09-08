@@ -1,12 +1,20 @@
-﻿namespace VRTK
+﻿// Touchpad Walking|Scripts|0140
+namespace VRTK
 {
     using UnityEngine;
 
+    /// <summary>
+    /// The ability to move the play area around the game world by sliding a finger over the touchpad is achieved using this script. The Touchpad Walking script is applied to the `[CameraRig]` prefab and adds a rigidbody and a box collider to the user's position to prevent them from walking through other collidable game objects.
+    /// </summary>
+    /// <remarks>
+    /// If the Headset Collision Fade script has been applied to the Camera prefab, then if a user attempts to collide with an object then their position is reset to the last good known position. This can happen if the user is moving through a section where they need to crouch and then they stand up and collide with the ceiling. Rather than allow a user to do this and cause collision resolution issues it is better to just move them back to a valid location. This does break immersion but the user is doing something that isn't natural.
+    /// </remarks>
+    /// <example>
+    /// `VRTK/Examples/017_CameraRig_TouchpadWalking` has a collection of walls and slopes that can be traversed by the user with the touchpad. There is also an area that can only be traversed if the user is crouching. Standing up in this crouched area will cause the user to appear back at their last good known position.
+    /// </example>
     [RequireComponent(typeof(VRTK_PlayerPresence))]
     public class VRTK_TouchpadWalking : MonoBehaviour
     {
-        [SerializeField]
-        private bool leftController = true;
         public bool LeftController
         {
             get { return leftController; }
@@ -17,8 +25,6 @@
             }
         }
 
-        [SerializeField]
-        private bool rightController = true;
         public bool RightController
         {
             get { return rightController; }
@@ -29,22 +35,27 @@
             }
         }
 
+        [Tooltip("If this is checked then the left controller touchpad will be enabled to move the play area. It can also be toggled at runtime.")]
+        [SerializeField]
+        private bool leftController = true;
+        [Tooltip("If this is checked then the right controller touchpad will be enabled to move the play area. It can also be toggled at runtime.")]
+        [SerializeField]
+        private bool rightController = true;
+
+        [Tooltip("The maximum speed the play area will be moved when the touchpad is being touched at the extremes of the axis. If a lower part of the touchpad axis is touched (nearer the centre) then the walk speed is slower.")]
         public float maxWalkSpeed = 3f;
+        [Tooltip("The speed in which the play area slows down to a complete stop when the user is no longer touching the touchpad. This deceleration effect can ease any motion sickness that may be suffered.")]
         public float deceleration = 0.1f;
 
         private GameObject controllerLeftHand;
         private GameObject controllerRightHand;
-
         private Vector2 touchAxis;
         private float movementSpeed = 0f;
         private float strafeSpeed = 0f;
-
         private bool leftSubscribed;
         private bool rightSubscribed;
-
         private ControllerInteractionEventHandler touchpadAxisChanged;
         private ControllerInteractionEventHandler touchpadUntouched;
-
         private VRTK_PlayerPresence playerPresence;
 
         private void Awake()

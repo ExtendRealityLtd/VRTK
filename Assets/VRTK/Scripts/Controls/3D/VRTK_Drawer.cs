@@ -1,17 +1,34 @@
-﻿namespace VRTK
+﻿// Drawer|Controls3D|0050
+namespace VRTK
 {
     using UnityEngine;
 
+    /// <summary>
+    /// Transforms a game object into a drawer. The direction can be freely set and also auto-detected with very high reliability.
+    /// </summary>
+    /// <remarks>
+    /// The script will instantiate the required Rigidbody, Interactable and Joint components automatically in case they do not exist yet. There are situations when it can be very hard to automatically calculate the correct axis for the joint. If this situation is encountered simply add the configurable joint manually and set the axis. All the rest will still be handled by the script.
+    ///
+    /// It will expect two distinct game objects: a body and a handle. These should be independent and not children of each other. The distance to which the drawer can be pulled out will automatically set depending on the length of it. If no body is specified the current object is assumed to be the body.
+    ///
+    /// It is possible to supply a third game object which is the root of the contents inside the drawer. When this is specified the VRTK_InteractableObject components will be automatically deactivated in case the drawer is closed or not yet far enough open. This eliminates the issue that a user could grab an object inside a drawer although it is closed.
+    /// </remarks>
+    /// <example>
+    /// `VRTK/Examples/025_Controls_Overview` shows a drawer with contents that can be opened and closed freely and the contents can be removed from the drawer.
+    /// </example>
     public class VRTK_Drawer : VRTK_Control
     {
+        [Tooltip("The axis on which the drawer should open. All other axis will be frozen.")]
         public Direction direction = Direction.autodetect;
-
+        [Tooltip("The game object for the body.")]
         public GameObject body;
+        [Tooltip("The game object for the handle.")]
         public GameObject handle;
-        [Tooltip("An optional game object that is the parent of the content inside the drawer. If set all interactables will become managed so that they only react if the drawer is wide enough open.")]
+        [Tooltip("The parent game object for the drawer content elements.")]
         public GameObject content;
-        [Tooltip("Will make the content invisible if the drawer is closed. This way players cannot peak into it by moving the camera.")]
+        [Tooltip("Makes the content invisible while the drawer is closed.")]
         public bool hideContent = true;
+        [Tooltip("Keeps the drawer closed with a slight force. This way the drawer will not gradually open due to some minor physics effect.")]
         public bool snapping = false;
 
         private Rigidbody rb;
@@ -20,7 +37,6 @@
         private ConfigurableJoint cj;
         private VRTK_InteractableObject io;
         private ConstantForce cf;
-
         private Direction finalDirection;
         private float subDirection = 1; // positive or negative can be determined automatically since handle dictates that
         private float pullDistance = 0f;

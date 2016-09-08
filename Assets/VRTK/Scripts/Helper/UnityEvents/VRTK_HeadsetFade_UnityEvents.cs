@@ -9,9 +9,22 @@ public class VRTK_HeadsetFade_UnityEvents : MonoBehaviour
 
     [System.Serializable]
     public class UnityObjectEvent : UnityEvent<HeadsetFadeEventArgs> { };
+
+    /// <summary>
+    /// Emits the HeadsetFadeStart class event.
+    /// </summary>
     public UnityObjectEvent OnHeadsetFadeStart;
+    /// <summary>
+    /// Emits the HeadsetFadeComplete class event.
+    /// </summary>
     public UnityObjectEvent OnHeadsetFadeComplete;
+    /// <summary>
+    /// Emits the HeadsetUnfadeStart class event.
+    /// </summary>
     public UnityObjectEvent OnHeadsetUnfadeStart;
+    /// <summary>
+    /// Emits the HeadsetUnfadeComplete class event.
+    /// </summary>
     public UnityObjectEvent OnHeadsetUnfadeComplete;
 
     private void SetHeadsetFade()

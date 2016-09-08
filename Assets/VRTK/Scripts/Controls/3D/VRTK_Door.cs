@@ -1,30 +1,44 @@
-﻿namespace VRTK
+﻿// Door|Controls3D|0040
+namespace VRTK
 {
     using UnityEngine;
 
+    /// <summary>
+    /// Transforms a game object into a door with an optional handle attached to an optional frame. The direction can be freely set and also very reliably auto-detected.
+    /// </summary>
+    /// <remarks>
+    /// There are situations when it can be very hard to automatically calculate the correct axis and anchor values for the hinge joint. If this situation is encountered then simply add the hinge joint manually and set these two values. All the rest will still be handled by the script.
+    ///
+    /// The script will instantiate the required Rigidbodies, Interactable and HingeJoint components automatically in case they do not exist yet. Gizmos will indicate the direction.
+    /// </remarks>
+    /// <example>
+    /// `VRTK/Examples/025_Controls_Overview` shows a selection of door types, from a normal door and trapdoor, to a door with a cat-flap in the middle.
+    /// </example>
     public class VRTK_Door : VRTK_Control
     {
-        [Tooltip("The axis on which the door will swing (in local space).")]
+        [Tooltip("The axis on which the door should open.")]
         public Direction direction = Direction.autodetect;
-
-        [Tooltip("An optional game object that will be used as the door. Otherwise the current object will be used.")]
+        [Tooltip("The game object for the door. Can also be an empty parent or left empty if the script is put onto the actual door mesh. If no colliders exist yet a collider will tried to be automatically attached to all children that expose renderers.")]
         public GameObject door;
-        [Tooltip("An optional game object that will be used to interact with the door. Otherwise the whole door will be interactable.")]
+        [Tooltip("The game object for the handles. Can also be an empty parent or left empty. If empty the door can only be moved using the rigidbody mode of the controller. If no collider exists yet a compound collider made up of all children will try to be calculated but this will fail if the door is rotated. In that case a manual collider will need to be assigned.")]
         public GameObject handles;
-        [Tooltip("An optional game object that the door is connected to. This should be specified if the connected object will move as well.")]
+        [Tooltip("The game object for the frame to which the door is attached. Should only be set if the frame will move as well to ensure that the door moves along with the frame.")]
         public GameObject frame;
-        [Tooltip("An optional game object that is the parent of the content behind the door. If set all interactables will become managed so that they only react if the door is wide enough open.")]
+        [Tooltip("The parent game object for the door content elements.")]
         public GameObject content;
-        [Tooltip("Will make the content invisible if the door is closed. This way players cannot peak into it by moving the camera.")]
+        [Tooltip("Makes the content invisible while the door is closed.")]
         public bool hideContent = true;
+        [Tooltip("The maximum opening angle of the door.")]
         public float maxAngle = 120f;
+        [Tooltip("Can the door be pulled to open.")]
         public bool openInward = false;
+        [Tooltip("Can the door be pushed to open.")]
         public bool openOutward = true;
+        [Tooltip("Keeps the door closed with a slight force. This way the door will not gradually open due to some minor physics effect. Only works if either inward or outward is selected, not both.")]
         public bool snapping = true;
 
         private static float DOOR_ANGULAR_DRAG = 10;
         private float stepSize = 1f;
-
         private Rigidbody handleRb;
         private FixedJoint handleFj;
         private VRTK_InteractableObject handleIo;
@@ -32,7 +46,6 @@
         private HingeJoint doorHj;
         private ConstantForce doorCf;
         private Rigidbody frameRb;
-
         private Direction finalDirection;
         private float subDirection = 1; // positive or negative can be determined automatically since handles dictate that
         private Vector3 secondaryDirection;

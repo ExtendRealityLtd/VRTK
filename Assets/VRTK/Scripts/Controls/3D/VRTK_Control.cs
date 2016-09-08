@@ -1,8 +1,12 @@
-﻿namespace VRTK
+﻿// Control|Controls3D|0010
+namespace VRTK
 {
     using UnityEngine;
     using UnityEngine.Events;
 
+    /// <summary>
+    /// All 3D controls extend the `VRTK_Control` abstract class which provides a default set of methods and events that all of the subsequent controls expose.
+    /// </summary>
     [ExecuteInEditMode]
     public abstract class VRTK_Control : MonoBehaviour
     {
@@ -17,6 +21,9 @@
         [System.Serializable]
         public class DefaultControlEvents
         {
+            /// <summary>
+            /// Emitted when the control is interacted with.
+            /// </summary>
             public ValueChangedEvent OnValueChanged;
         }
 
@@ -37,36 +44,48 @@
         abstract protected bool DetectSetup();
         abstract protected ControlValueRange RegisterValueRange();
         abstract protected void HandleUpdate();
-
         protected Bounds bounds;
         protected bool setupSuccessful = true;
 
         protected float value;
-        private ControlValueRange cvr;
 
+        private ControlValueRange cvr;
         private GameObject controlContent;
         private bool hideControlContent = false;
 
+        /// <summary>
+        /// The GetValue method returns the current value/position/setting of the control depending on the control that is extending this abstract class.
+        /// </summary>
+        /// <returns>The current value of the control.</returns>
         public float GetValue()
         {
             return value;
         }
 
         /// <summary>
-        /// Returns the current value mapped onto a range between 0% and 100%.
+        /// The GetNormalizedValue method returns the current value mapped onto a range between 0 and 100.
         /// </summary>
-        /// <returns>Normalized Value</returns>
+        /// <returns>The current normalized value of the control.</returns>
         public float GetNormalizedValue()
         {
             return Mathf.Abs(Mathf.Round((value - cvr.controlMin) / (cvr.controlMax - cvr.controlMin) * 100));
         }
 
+        /// <summary>
+        /// The SetContent method sets the given game object as the content of the control. This will then disable and optionally hide the content when a control is obscuring its view to prevent interacting with content within a control.
+        /// </summary>
+        /// <param name="content">The content to be considered within the control.</param>
+        /// <param name="hideContent">When true the content will be hidden in addition to being non-interactable in case the control is fully closed.</param>
         public void SetContent(GameObject content, bool hideContent)
         {
             controlContent = content;
             hideControlContent = hideContent;
         }
 
+        /// <summary>
+        /// The GetContent method returns the current game object of the control's content.
+        /// </summary>
+        /// <returns>The currently stored content for the control.</returns>
         public GameObject GetContent()
         {
             return controlContent;
@@ -167,6 +186,5 @@
                 io.enabled = value > MIN_OPENING_DISTANCE;
             }
         }
-
     }
 }

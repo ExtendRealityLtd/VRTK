@@ -1,35 +1,49 @@
-﻿namespace VRTK
+﻿// Button|Controls3D|0020
+namespace VRTK
 {
     using UnityEngine;
     using UnityEngine.Events;
 
+    /// <summary>
+    /// Attaching the script to a game object will allow the user to interact with it as if it were a push button. The direction into which the button should be pushable can be freely set and auto-detection is supported. Since this is physics-based there needs to be empty space in the push direction so that the button can move.
+    /// </summary>
+    /// <remarks>
+    /// The script will instantiate the required Rigidbody and ConstantForce components automatically in case they do not exist yet.
+    /// </remarks>
+    /// <example>
+    /// `VRTK/Examples/025_Controls_Overview` shows a collection of pressable buttons that are interacted with by activating the rigidbody on the controller by pressing the grab button without grabbing an object.
+    /// </example>
     public class VRTK_Button : VRTK_Control
     {
-        [System.Serializable]
-        public class ButtonEvents
-        {
-            public UnityEvent OnPush;
-        }
-
         public enum ButtonDirection
         {
             autodetect, x, y, z, negX, negY, negZ
         }
 
-        public ButtonEvents events;
-
-        [Tooltip("An optional game object that when it moves also moves the button.")]
+        [Tooltip("An optional game object to which the button will be connected. If the game object moves the button will follow along.")]
         public GameObject connectedTo;
+        [Tooltip("The axis on which the button should move. All other axis will be frozen.")]
         public ButtonDirection direction = ButtonDirection.autodetect;
+        [Tooltip("The local distance the button needs to be pushed until a push event is triggered.")]
         public float activationDistance = 1.0f;
+        [Tooltip("The amount of force needed to push the button down as well as the speed with which it will go back into its original position.")]
         public float buttonStrength = 5.0f;
 
-        private static float MAX_AUTODETECT_ACTIVATION_LENGTH = 4; // full hight of button
+        [System.Serializable]
+        public class ButtonEvents
+        {
+            /// <summary>
+            /// Emitted when the button is successfully pushed.
+            /// </summary>
+            public UnityEvent OnPush;
+        }
 
+        public ButtonEvents events;
+
+        private static float MAX_AUTODETECT_ACTIVATION_LENGTH = 4; // full hight of button
         private ButtonDirection finalDirection;
         private Vector3 restingPosition;
         private Vector3 activationDir;
-
         private Rigidbody rb;
         private ConfigurableJoint cj;
         private ConstantForce cf;

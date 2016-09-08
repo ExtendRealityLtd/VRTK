@@ -9,7 +9,14 @@ public class VRTK_DashTeleport_UnityEvents : MonoBehaviour
 
     [System.Serializable]
     public class UnityObjectEvent : UnityEvent<DashTeleportEventArgs> { };
+
+    /// <summary>
+    /// Emits the WillDashThruObjects class event.
+    /// </summary>
     public UnityObjectEvent OnWillDashThruObjects;
+    /// <summary>
+    /// Emits the DashedThruObjects class event.
+    /// </summary>
     public UnityObjectEvent OnDashedThruObjects;
 
     private void SetDashTeleport()

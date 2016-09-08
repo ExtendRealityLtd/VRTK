@@ -1,18 +1,24 @@
-﻿namespace VRTK
+﻿// Slider|Controls3D|0080
+namespace VRTK
 {
     using UnityEngine;
 
     /// <summary>
-    /// This script will make objects inside of control contents properly interactable by reparenting them. 
-    /// Otherwise they would disappear if e.g. a drawer is closed even if the object was outside the drawer.
-    /// We need to go through collisions instead of hooking to the Ungrabbed event since ungrabbing will most likely happen above the inside causing the object to drop first. 
-    /// This approach is much more stable and allows for many more scenarios.
-    /// Not supported yet: detect if an object is taken from one content manager and dropped into another one.
+    /// Manages objects defined as content. When taking out an object from a drawer and closing the drawer this object would otherwise disappear even if outside the drawer.
     /// </summary>
+    /// <remarks>
+    /// The script will use the boundaries of the control to determine if it is in or out and re-parent the object as necessary. It can be put onto individual objects or the parent of multiple objects. Using the latter way all interactable objects under that parent will become managed by the script.
+    /// </remarks>
+    /// <example>
+    /// `VRTK/Examples/025_Controls_Overview` has a drawer with a collection of items that adhere to this concept.
+    /// </example>
     public class VRTK_ContentHandler : MonoBehaviour
     {
+        [Tooltip("The 3D control responsible for the content.")]
         public VRTK_Control control;
+        [Tooltip("The transform containing the meshes or colliders that define the inside of the control.")]
         public Transform inside;
+        [Tooltip("Any transform that will act as the parent while the object is not inside the control.")]
         public Transform outside;
 
         private void Start()
@@ -48,6 +54,5 @@
                 transform.parent = outside;
             }
         }
-
     }
 }

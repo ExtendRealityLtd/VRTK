@@ -9,7 +9,14 @@ public class VRTK_InteractGrab_UnityEvents : MonoBehaviour
 
     [System.Serializable]
     public class UnityObjectEvent : UnityEvent<ObjectInteractEventArgs> { };
+
+    /// <summary>
+    /// Emits the ControllerGrabInteractableObject class event.
+    /// </summary>
     public UnityObjectEvent OnControllerGrabInteractableObject;
+    /// <summary>
+    /// Emits the ControllerUngrabInteractableObject class event.
+    /// </summary>
     public UnityObjectEvent OnControllerUngrabInteractableObject;
 
     private void SetInteractGrab()

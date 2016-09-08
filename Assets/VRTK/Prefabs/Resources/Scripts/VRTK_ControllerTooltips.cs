@@ -1,7 +1,19 @@
-﻿namespace VRTK
+﻿// Controller Tooltips|Prefabs|0030
+namespace VRTK
 {
     using UnityEngine;
 
+    /// <summary>
+    /// This adds a collection of Object Tooltips to the Controller that give information on what the main controller buttons may do. To add the prefab, it just needs to be added as a child of the relevant controller e.g. `[CameraRig]/Controller (right)` would add the controller tooltips to the right controller.
+    /// </summary>
+    /// <remarks>
+    /// If the transforms for the buttons are not provided, then the script will attempt to find the attach transforms on the default controller model in the `[CameraRig]` prefab.
+    /// If no text is provided for one of the elements then the tooltip for that element will be set to disabled.
+    /// There are a number of parameters that can be set on the Prefab which are provided by the `VRTK/Scripts/VRTK_ControllerTooltips` script which is applied to the prefab.
+    /// </remarks>
+    /// <example>
+    /// `VRTK/Examples/029_Controller_Tooltips` displays two cubes that have an object tooltip added to them along with tooltips that have been added to the controllers.
+    /// </example>
     public class VRTK_ControllerTooltips : MonoBehaviour
     {
         public enum TooltipButtons
@@ -13,18 +25,27 @@
             None
         }
 
+        [Tooltip("The text to display for the trigger button action.")]
         public string triggerText;
+        [Tooltip("The text to display for the grip button action.")]
         public string gripText;
+        [Tooltip("The text to display for the touchpad action.")]
         public string touchpadText;
+        [Tooltip("The text to display for the application menu button action.")]
         public string appMenuText;
-
+        [Tooltip("The colour to use for the tooltip background container.")]
         public Color tipBackgroundColor = Color.black;
+        [Tooltip("The colour to use for the text within the tooltip.")]
         public Color tipTextColor = Color.white;
+        [Tooltip("The colour to use for the line between the tooltip and the relevant controller button.")]
         public Color tipLineColor = Color.black;
-
+        [Tooltip("The transform for the position of the trigger button on the controller (this is usually found in `Model/trigger/attach`.")]
         public Transform trigger;
+        [Tooltip("The transform for the position of the grip button on the controller (this is usually found in `Model/lgrip/attach`.")]
         public Transform grip;
+        [Tooltip("The transform for the position of the touchpad button on the controller (this is usually found in `Model/trackpad/attach`.")]
         public Transform touchpad;
+        [Tooltip("The transform for the position of the app menu button on the controller (this is usually found in `Model/button/attach`.")]
         public Transform appMenu;
 
         private bool triggerInitialised = false;
@@ -34,7 +55,12 @@
 
         private GameObject[] buttonTooltips;
 
-        public void ShowTips(bool state, TooltipButtons element = TooltipButtons.None)
+        /// <summary>
+        /// The ToggleTips method will display the controller tooltips if the state is `true` and will hide the controller tooltips if the state is `false`. An optional `element` can be passed to target a specific controller tooltip to toggle otherwise all tooltips are toggled.
+        /// </summary>
+        /// <param name="state">The state of whether to display or hide the controller tooltips, true will display and false will hide.</param>
+        /// <param name="element">The specific element to hide the tooltip on, if it is `TooltipButtons.None` then it will hide all tooltips. Optional parameter defaults to `TooltipButtons.None`</param>
+        public void ToggleTips(bool state, TooltipButtons element = TooltipButtons.None)
         {
             if (element == TooltipButtons.None)
             {
