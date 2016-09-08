@@ -20,7 +20,7 @@
         public bool useGravity = true;
         public float safeZoneTeleportOffset = 0.4f;
 
-        private Transform headCamera;
+        protected Transform headCamera;
         private Transform controllerTransform;
         private Vector3 startControllerPosition;
         private Vector3 startPosition;
@@ -59,7 +59,7 @@
             return e;
         }
 
-        private void Awake()
+        protected virtual void Awake()
         {
             // Required Component: VRTK_PlayerPresence
             playerPresence = GetComponent<VRTK_PlayerPresence>();
@@ -87,12 +87,12 @@
             }
         }
 
-        private void OnEnable()
+        protected virtual void OnEnable()
         {
             InitListeners(true);
         }
 
-        private void OnDisable()
+        protected virtual void OnDisable()
         {
             Ungrab(false, 0, climbingObject);
             InitListeners(false);
@@ -240,7 +240,7 @@
             return interactObject != null && interactObject.AttachIsClimbObject();
         }
 
-        private void Update()
+        protected virtual void Update()
         {
             if (isClimbing)
             {
