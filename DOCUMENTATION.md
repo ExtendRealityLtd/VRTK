@@ -211,8 +211,8 @@ This directory contains all of the toolkit scripts that add VR functionality to 
  * [VRTK_Simulator](#simulator-vrtk_simulator)
  * [VRTK_PlayerClimb](#player-climb-vrtk_playerclimb)
  * [VRTK_DashTeleport](#dash-teleporter-vrtk_dashteleport)
+ * [VRTK_PlayerClimbStamina](#player-climb-stamina-vrtk_playerclimbstamina)
 
----
 
 ## Controller Events (VRTK_ControllerEvents)
 
@@ -2081,6 +2081,39 @@ Adding the `VRTK_DashTeleport_UnityEvents` component to `VRTK_DashTeleport` obje
 
 ---
 
+## Player Climb Stamina (VRTK_PlayerClimbStamina)
+
+### Overview
+
+This class adds climbing stamina to the climbing script. Player stamina changes depending on the distance the players controllers are from their head in the xz plane. It should be attached to the `[CameraRig]` object. Stamina regenerates when both or neither controllers are grabbing a climbable object.
+
+### Inspector Parameters
+
+  * **Use Player Scale:** Will scale movement up and down based on the player transform's scale.
+  * **Use Gravity:** Will allow physics based falling when the user lets go of objects above ground.
+  * **Safe Zone Teleport Offset:** An additional amount to move the player away from a wall if an ungrab teleport happens due to camera/object collisions.
+  * **Min Reach:** Minimum distance in xz plane the controller must be from the headset to reduce stamina.
+  * **Max Reach:** Furthest distance in xz plane the controller must be from the headset to contribute maximum reduction of stamina.
+  * **Max Stamina:** The Starting Maximum Stamina. When Stamina reaches zero, the player will fall.
+  * **Stamina Recovery Rate:** The rate in which stamina is regenerated. Stamina regenerates twice as fast when no objects are being held as compared to when both hands are holding climbable objects.
+  * **Stamina Drain Rate:** The base rate in which stamina is reduced.
+
+### Class Events
+
+  * `PlayerClimbStarted` - Emitted when player climbing has started.
+  * `PlayerClimbEnded` - Emitted when player climbing has ended.
+
+#### Event Payload
+
+  * `uint controllerIndex` - The index of the controller doing the interaction.
+  * `GameObject target` - The GameObject of the interactable object that is being interacted with by the controller.
+
+### Example
+
+`VRTK/Examples/039_CameraRig_ClimbingStamina` shows how to set up a scene with player climbing with stamina. There are many different examples showing how the same system can be used in unique ways.
+
+---
+
 # 3D Controls (Controls/3D)
 
 In order to interact with the world beyond grabbing and throwing, controls can be used to mimic real-life objects.
@@ -2738,8 +2771,12 @@ A scene that demonstrates how the Bezier Pointer can display an object (teleport
 
 A scene that demonstrates how to set up the climbing mechanism with different activities to try it with. A `VRTK_PlayerClimb` object is needed on the `[CameraRig]`. `VRTK_HeightAdjustTeleport` is also added to the `[CameraRig]` to allow movement, but also to allow walking off edges with `UseGravity` enabled. Various objects with a `VRTK_InteractableObject` component are scattered throughout the level. They all have the `GrabAttachMechanic` set to `Climbable`.
 
-[Catlike Coding]: http://catlikecoding.com/unity/tutorials/curves-and-splines/
-
 ### 038_CameraRig_CameraRig_DashTeleport
 
 A Scene that shows the teleporting behaviour and also demonstrates a way to use the broadcasted RaycastHit array. In the example obstacles in the way of the dash turn off their mesh renderers while the dash is in progress.
+
+### 039_CameraRig_ClimbingStamina
+
+A scene that demonstrates the climbing stamina mechanism. It reuses scene 037_CameraRig_ClimbingFalling with the new 'VRTK_PlayerClimbStamina' script in place of the `VRTK_PlayerClimb` object needed on the `[CameraRig]`. The 'GripStamina' prefab has been added which is placed on Controller (left) and Controller (right). The [CameraRig] is added to the 'GripStamina' script to visualize the current stamina while climbing.
+
+[Catlike Coding]: http://catlikecoding.com/unity/tutorials/curves-and-splines/
