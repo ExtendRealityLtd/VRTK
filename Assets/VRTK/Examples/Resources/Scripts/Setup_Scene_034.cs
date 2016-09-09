@@ -12,7 +12,7 @@
             if (!initalised)
             {
                 var headset = VRTK_DeviceFinder.HeadsetTransform();
-                var controllerEvents = VRTK_SDK_Bridge.GetControllerLeftHand().GetComponent<VRTK_ControllerEvents>();
+                var controllerEvents = VRTK_DeviceFinder.GetControllerLeftHand().GetComponent<VRTK_ControllerEvents>();
 
                 if (!headset.GetComponent<VRTK_SimplePointer>())
                 {

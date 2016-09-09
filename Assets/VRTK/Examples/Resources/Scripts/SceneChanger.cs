@@ -49,7 +49,7 @@
 
         private void Update()
         {
-            var rightHand = VRTK_SDK_Bridge.GetControllerRightHand();
+            var rightHand = VRTK_DeviceFinder.GetControllerRightHand();
             controllerIndex = VRTK_DeviceFinder.GetControllerIndex(rightHand);
             if (ForwardPressed() || Input.GetKeyUp(KeyCode.Space))
             {

@@ -65,8 +65,8 @@ namespace VRTK
             touchpadAxisChanged = new ControllerInteractionEventHandler(DoTouchpadAxisChanged);
             touchpadUntouched = new ControllerInteractionEventHandler(DoTouchpadTouchEnd);
 
-            controllerLeftHand = VRTK_SDK_Bridge.GetControllerLeftHand();
-            controllerRightHand = VRTK_SDK_Bridge.GetControllerRightHand();
+            controllerLeftHand = VRTK_DeviceFinder.GetControllerLeftHand();
+            controllerRightHand = VRTK_DeviceFinder.GetControllerRightHand();
         }
 
         private void Start()
