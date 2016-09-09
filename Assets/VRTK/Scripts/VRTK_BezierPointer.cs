@@ -42,6 +42,7 @@ namespace VRTK
         private CurveGenerator curvedBeam;
 
         private GameObject validTeleportLocationInstance = null;
+        private Vector3 contactNormal;
         // materials of customPointerCursor and teleportBeam (if defined)
         private Material customPointerMaterial;
         private Material beamTraceMaterial;
@@ -276,6 +277,8 @@ namespace VRTK
             projectedBeamContainer.transform.localRotation = Quaternion.identity;
         }
 
+        
+
         private void ProjectDownBeam()
         {
             projectedBeamDown.transform.position = new Vector3(projectedBeamJoint.transform.position.x, projectedBeamJoint.transform.position.y, projectedBeamJoint.transform.position.z);
@@ -300,6 +303,9 @@ namespace VRTK
                 projectedBeamDown.transform.position = new Vector3(projectedBeamJoint.transform.position.x, projectedBeamJoint.transform.position.y - collidedWith.distance, projectedBeamJoint.transform.position.z);
                 projectedBeamDown.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
                 pointerContactTarget = collidedWith.transform;
+                
+                contactNormal = collidedWith.normal;
+                Debug.Log(contactNormal);
                 destinationPosition = projectedBeamDown.transform.position;
 
                 base.PointerIn();
@@ -312,6 +318,8 @@ namespace VRTK
             {
                 TogglePointerCursor(true);
                 pointerCursor.transform.position = projectedBeamDown.transform.position;
+                var rotation = Quaternion.FromToRotation(Vector3.up, contactNormal);
+                pointerCursor.transform.rotation = rotation;
                 base.SetPlayAreaCursorTransform(pointerCursor.transform.position);
                 UpdatePointerMaterial(pointerHitColor);
                 if (validTeleportLocationInstance != null)
