@@ -96,7 +96,7 @@ Material:
       second: 0
     - first:
         name: _FPOW
-      second: 1.11
+      second: 0.03
     - first:
         name: _Glossiness
       second: 0.5
@@ -117,7 +117,7 @@ Material:
       second: 0.02
     - first:
         name: _R0
-      second: 0.38
+      second: -0.2
     - first:
         name: _SrcBlend
       second: 1
