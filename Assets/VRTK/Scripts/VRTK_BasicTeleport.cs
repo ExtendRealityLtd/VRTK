@@ -214,8 +214,8 @@ namespace VRTK
 
         private void InitDestinationMarkerListeners(bool state)
         {
-            var leftHand = VRTK_SDK_Bridge.GetControllerLeftHand();
-            var rightHand = VRTK_SDK_Bridge.GetControllerRightHand();
+            var leftHand = VRTK_DeviceFinder.GetControllerLeftHand();
+            var rightHand = VRTK_DeviceFinder.GetControllerRightHand();
             InitDestinationSetListener(leftHand, state);
             InitDestinationSetListener(rightHand, state);
             foreach (var destinationMarker in VRTK_ObjectCache.registeredDestinationMarkers)

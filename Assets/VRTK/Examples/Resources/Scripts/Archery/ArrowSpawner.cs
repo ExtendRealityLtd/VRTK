@@ -37,11 +37,11 @@
         {
             if (VRTK_SDK_Bridge.IsControllerLeftHand(controller))
             {
-                bow = VRTK_SDK_Bridge.GetControllerRightHand().GetComponentInChildren<BowAim>();
+                bow = VRTK_DeviceFinder.GetControllerRightHand().GetComponentInChildren<BowAim>();
             }
             else if (VRTK_SDK_Bridge.IsControllerRightHand(controller))
             {
-                bow = VRTK_SDK_Bridge.GetControllerLeftHand().GetComponentInChildren<BowAim>();
+                bow = VRTK_DeviceFinder.GetControllerLeftHand().GetComponentInChildren<BowAim>();
             }
             return (bow == null || !bow.HasArrow());
         }

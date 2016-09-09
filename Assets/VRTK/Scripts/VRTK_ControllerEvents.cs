@@ -619,6 +619,35 @@ namespace VRTK
             return (triggerPressed || gripPressed || touchpadPressed || applicationMenuPressed);
         }
 
+        /// <summary>
+        /// The IsButtonPressed method takes a given button alias and returns a boolean whether that given button is currently being pressed or not.
+        /// </summary>
+        /// <param name="button">The button to check if it's being pressed.</param>
+        /// <returns>Is true if the button is being pressed.</returns>
+        public bool IsButtonPressed(ButtonAlias button)
+        {
+            switch (button)
+            {
+                case ButtonAlias.Trigger_Hairline:
+                    return triggerHairlinePressed;
+                case ButtonAlias.Trigger_Touch:
+                    return triggerTouched;
+                case ButtonAlias.Trigger_Press:
+                    return triggerPressed;
+                case ButtonAlias.Trigger_Click:
+                    return triggerClicked;
+                case ButtonAlias.Grip:
+                    return grabPressed;
+                case ButtonAlias.Touchpad_Touch:
+                    return touchpadTouched;
+                case ButtonAlias.Touchpad_Press:
+                    return touchpadPressed;
+                case ButtonAlias.Application_Menu:
+                    return applicationMenuPressed;
+            }
+            return false;
+        }
+
         private ControllerInteractionEventArgs SetButtonEvent(ref bool buttonBool, bool value, float buttonPressure)
         {
             buttonBool = value;

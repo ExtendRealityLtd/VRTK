@@ -122,8 +122,8 @@ namespace VRTK
 
         private void InitListeners(bool state)
         {
-            InitControllerListeners(VRTK_SDK_Bridge.GetControllerLeftHand(), state);
-            InitControllerListeners(VRTK_SDK_Bridge.GetControllerRightHand(), state);
+            InitControllerListeners(VRTK_DeviceFinder.GetControllerLeftHand(), state);
+            InitControllerListeners(VRTK_DeviceFinder.GetControllerRightHand(), state);
 
             InitTeleportListener(state);
             InitCollisionFadeListener(state);

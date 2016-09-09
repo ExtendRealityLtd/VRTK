@@ -45,6 +45,10 @@ namespace VRTK
         public float maxWalkSpeed = 3f;
         [Tooltip("The speed in which the play area slows down to a complete stop when the user is no longer touching the touchpad. This deceleration effect can ease any motion sickness that may be suffered.")]
         public float deceleration = 0.1f;
+        [Tooltip("If a button is defined then movement will only occur when the specified button is being held down and the touchpad axis changes.")]
+        public VRTK_ControllerEvents.ButtonAlias moveOnButtonPress = VRTK_ControllerEvents.ButtonAlias.Undefined;
+        [Tooltip("The direction that will be moved in is the direction of this device.")]
+        public VRTK_DeviceFinder.Devices deviceForDirection = VRTK_DeviceFinder.Devices.Headset;
 
         private GameObject controllerLeftHand;
         private GameObject controllerRightHand;
@@ -55,27 +59,31 @@ namespace VRTK
         private bool rightSubscribed;
         private ControllerInteractionEventHandler touchpadAxisChanged;
         private ControllerInteractionEventHandler touchpadUntouched;
-        private Transform headset;
 
         private void Awake()
         {
             touchpadAxisChanged = new ControllerInteractionEventHandler(DoTouchpadAxisChanged);
             touchpadUntouched = new ControllerInteractionEventHandler(DoTouchpadTouchEnd);
 
-            controllerLeftHand = VRTK_SDK_Bridge.GetControllerLeftHand();
-            controllerRightHand = VRTK_SDK_Bridge.GetControllerRightHand();
+            controllerLeftHand = VRTK_DeviceFinder.GetControllerLeftHand();
+            controllerRightHand = VRTK_DeviceFinder.GetControllerRightHand();
         }
 
         private void Start()
         {
             Utilities.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.CameraRig);
-            headset = VRTK.VRTK_DeviceFinder.HeadsetTransform();
             SetControllerListeners(controllerLeftHand);
             SetControllerListeners(controllerRightHand);
         }
 
         private void DoTouchpadAxisChanged(object sender, ControllerInteractionEventArgs e)
         {
+            var controllerEvents = (VRTK_ControllerEvents)sender;
+            if (moveOnButtonPress != VRTK_ControllerEvents.ButtonAlias.Undefined && !controllerEvents.IsButtonPressed(moveOnButtonPress))
+            {
+                touchAxis = Vector2.zero;
+                return;
+            }
             touchAxis = e.touchpadAxis;
         }
 
@@ -120,8 +128,9 @@ namespace VRTK
 
         private void Move()
         {
-            var movement = headset.forward * movementSpeed * Time.deltaTime;
-            var strafe = headset.right * strafeSpeed * Time.deltaTime;
+            var deviceDirector = VRTK_DeviceFinder.DeviceTransform(deviceForDirection);
+            var movement = deviceDirector.forward * movementSpeed * Time.deltaTime;
+            var strafe = deviceDirector.right * strafeSpeed * Time.deltaTime;
             float fixY = transform.position.y;
             transform.position += (movement + strafe);
             transform.position = new Vector3(transform.position.x, fixY, transform.position.z);

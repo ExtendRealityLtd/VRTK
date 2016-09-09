@@ -8,6 +8,25 @@ namespace VRTK
     /// </summary>
     public class VRTK_DeviceFinder : MonoBehaviour
     {
+        /// <summary>
+        /// Possible devices.
+        /// </summary>
+        /// <param name="Headset">The headset.</param>
+        /// <param name="Left_Controller">The left hand controller.</param>
+        /// <param name="Right_Controller">The right hand controller.</param>
+        public enum Devices
+        {
+            Headset,
+            Left_Controller,
+            Right_Controller,
+        }
+
+        /// <summary>
+        /// Controller hand reference.
+        /// </summary>
+        /// <param name="None">No hand is assigned.</param>
+        /// <param name="Left">The left hand is assigned.</param>
+        /// <param name="Right">The right hand is assigned.</param>
         public enum ControllerHand
         {
             None,
@@ -56,6 +75,25 @@ namespace VRTK
         }
 
         /// <summary>
+        /// The DeviceTransform method returns the transform for a given Devices enum.
+        /// </summary>
+        /// <param name="device">The Devices enum to get the transform for.</param>
+        /// <returns>The transform for the given Devices enum.</returns>
+        public static Transform DeviceTransform(Devices device)
+        {
+            switch (device)
+            {
+                case Devices.Headset:
+                    return HeadsetTransform();
+                case Devices.Left_Controller:
+                    return GetControllerLeftHand().transform;
+                case Devices.Right_Controller:
+                    return GetControllerRightHand().transform;
+            }
+            return null;
+        }
+
+        /// <summary>
         /// The GetControllerHandType method is used for getting the enum representation of ControllerHand from a given string.
         /// </summary>
         /// <param name="hand">The string representation of the hand to retrieve the type of. `left` or `right`.</param>
@@ -92,6 +130,24 @@ namespace VRTK
             {
                 return ControllerHand.None;
             }
+        }
+
+        /// <summary>
+        /// The GetControllerLeftHand method retrieves the game object for the left hand controller.
+        /// </summary>
+        /// <returns>The left hand controller.</returns>
+        public static GameObject GetControllerLeftHand()
+        {
+            return VRTK_SDK_Bridge.GetControllerLeftHand();
+        }
+
+        /// <summary>
+        /// The GetControllerRightHand method retrieves the game object for the right hand controller.
+        /// </summary>
+        /// <returns>The right hand controller.</returns>
+        public static GameObject GetControllerRightHand()
+        {
+            return VRTK_SDK_Bridge.GetControllerRightHand();
         }
 
         /// <summary>

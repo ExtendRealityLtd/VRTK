@@ -160,16 +160,16 @@ namespace VRTK
             headset = VRTK_DeviceFinder.HeadsetTransform();
             StartCoroutine(WaitForHeadsetCollision(true));
 
-            InitControllerListeners(VRTK_SDK_Bridge.GetControllerLeftHand(), true);
-            InitControllerListeners(VRTK_SDK_Bridge.GetControllerRightHand(), true);
+            InitControllerListeners(VRTK_DeviceFinder.GetControllerLeftHand(), true);
+            InitControllerListeners(VRTK_DeviceFinder.GetControllerRightHand(), true);
         }
 
         private void OnDisable()
         {
             DestroyCollider();
             InitHeadsetListeners(false);
-            InitControllerListeners(VRTK_SDK_Bridge.GetControllerLeftHand(), false);
-            InitControllerListeners(VRTK_SDK_Bridge.GetControllerRightHand(), false);
+            InitControllerListeners(VRTK_DeviceFinder.GetControllerLeftHand(), false);
+            InitControllerListeners(VRTK_DeviceFinder.GetControllerRightHand(), false);
         }
 
         private IEnumerator WaitForHeadsetCollision(bool state)

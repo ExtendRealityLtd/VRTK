@@ -63,19 +63,19 @@
         {
             if (VRTK_SDK_Bridge.IsControllerLeftHand(e.interactingObject))
             {
-                holdControl = VRTK_SDK_Bridge.GetControllerLeftHand().GetComponent<VRTK_ControllerEvents>();
-                stringControl = VRTK_SDK_Bridge.GetControllerRightHand().GetComponent<VRTK_ControllerEvents>();
+                holdControl = VRTK_DeviceFinder.GetControllerLeftHand().GetComponent<VRTK_ControllerEvents>();
+                stringControl = VRTK_DeviceFinder.GetControllerRightHand().GetComponent<VRTK_ControllerEvents>();
 
-                holdActions = VRTK_SDK_Bridge.GetControllerLeftHand().GetComponent<VRTK_ControllerActions>();
-                stringActions = VRTK_SDK_Bridge.GetControllerRightHand().GetComponent<VRTK_ControllerActions>();
+                holdActions = VRTK_DeviceFinder.GetControllerLeftHand().GetComponent<VRTK_ControllerActions>();
+                stringActions = VRTK_DeviceFinder.GetControllerRightHand().GetComponent<VRTK_ControllerActions>();
             }
             else
             {
-                stringControl = VRTK_SDK_Bridge.GetControllerLeftHand().GetComponent<VRTK_ControllerEvents>();
-                holdControl = VRTK_SDK_Bridge.GetControllerRightHand().GetComponent<VRTK_ControllerEvents>();
+                stringControl = VRTK_DeviceFinder.GetControllerLeftHand().GetComponent<VRTK_ControllerEvents>();
+                holdControl = VRTK_DeviceFinder.GetControllerRightHand().GetComponent<VRTK_ControllerEvents>();
 
-                stringActions = VRTK_SDK_Bridge.GetControllerLeftHand().GetComponent<VRTK_ControllerActions>();
-                holdActions = VRTK_SDK_Bridge.GetControllerRightHand().GetComponent<VRTK_ControllerActions>();
+                stringActions = VRTK_DeviceFinder.GetControllerLeftHand().GetComponent<VRTK_ControllerActions>();
+                holdActions = VRTK_DeviceFinder.GetControllerRightHand().GetComponent<VRTK_ControllerActions>();
             }
             StartCoroutine("GetBaseRotation");
         }
