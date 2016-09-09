@@ -1,4 +1,4 @@
-﻿namespace VRTK
+namespace VRTK
 {
     using UnityEngine;
     using Valve.VR;
@@ -147,6 +147,24 @@
         {
             var area = playArea.GetComponent<SteamVR_PlayArea>();
             return (area.size == SteamVR_PlayArea.Size.Calibrated);
+        }
+
+        public static bool IsDisplayOnDesktop()
+        {
+            return (OpenVR.System == null || OpenVR.System.IsDisplayOnDesktop());
+        }
+
+        public static bool ShouldAppRenderWithLowResources()
+        {
+            return (OpenVR.Compositor != null && OpenVR.Compositor.ShouldAppRenderWithLowResources());
+        }
+
+        public static void ForceInterleavedReprojectionOn(bool force)
+        {
+            if (OpenVR.Compositor != null)
+            {
+                OpenVR.Compositor.ForceInterleavedReprojectionOn(force);
+            }
         }
 
         public static GameObject GetControllerRenderModel(GameObject controller)
