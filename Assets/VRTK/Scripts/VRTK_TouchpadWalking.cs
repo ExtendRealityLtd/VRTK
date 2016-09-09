@@ -47,6 +47,8 @@ namespace VRTK
         public float deceleration = 0.1f;
         [Tooltip("If a button is defined then movement will only occur when the specified button is being held down and the touchpad axis changes.")]
         public VRTK_ControllerEvents.ButtonAlias moveOnButtonPress = VRTK_ControllerEvents.ButtonAlias.Undefined;
+        [Tooltip("The direction that will be moved in is the direction of this device.")]
+        public VRTK_DeviceFinder.Devices deviceForDirection = VRTK_DeviceFinder.Devices.Headset;
 
         private GameObject controllerLeftHand;
         private GameObject controllerRightHand;
@@ -57,7 +59,6 @@ namespace VRTK
         private bool rightSubscribed;
         private ControllerInteractionEventHandler touchpadAxisChanged;
         private ControllerInteractionEventHandler touchpadUntouched;
-        private Transform headset;
 
         private void Awake()
         {
@@ -71,7 +72,6 @@ namespace VRTK
         private void Start()
         {
             Utilities.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.CameraRig);
-            headset = VRTK.VRTK_DeviceFinder.HeadsetTransform();
             SetControllerListeners(controllerLeftHand);
             SetControllerListeners(controllerRightHand);
         }
@@ -128,8 +128,9 @@ namespace VRTK
 
         private void Move()
         {
-            var movement = headset.forward * movementSpeed * Time.deltaTime;
-            var strafe = headset.right * strafeSpeed * Time.deltaTime;
+            var deviceDirector = VRTK_DeviceFinder.DeviceTransform(deviceForDirection);
+            var movement = deviceDirector.forward * movementSpeed * Time.deltaTime;
+            var strafe = deviceDirector.right * strafeSpeed * Time.deltaTime;
             float fixY = transform.position.y;
             transform.position += (movement + strafe);
             transform.position = new Vector3(transform.position.x, fixY, transform.position.z);

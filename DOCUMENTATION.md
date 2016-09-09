@@ -829,6 +829,17 @@ The TriggerHapticPulse/3 method calls a haptic pulse for a specified amount of t
 
 The Device Finder offers a collection of static methods that can be called to find common game devices such as the headset or controllers, or used to determine key information about the connected devices.
 
+### Class Variables
+
+ * `public enum Devices` - Possible devices.
+  * `Headset` - The headset.
+  * `Left_Controller` - The left hand controller.
+  * `Right_Controller` - The right hand controller.
+ * `public enum ControllerHand` - Controller hand reference.
+  * `None` - No hand is assigned.
+  * `Left` - The left hand is assigned.
+  * `Right` - The right hand is assigned.
+
 ### Class Methods
 
 #### TrackedIndexIsController/1
@@ -875,6 +886,17 @@ The TrackedObjectByIndex method is used to find the GameObject of a tracked obje
 
 The TrackedObjectOrigin method is used to find the tracked object's origin.
 
+#### DeviceTransform/1
+
+  > `public static Transform DeviceTransform(Devices device)`
+
+  * Parameters
+   * `Devices device` - The Devices enum to get the transform for.
+  * Returns
+   * `Transform` - The transform for the given Devices enum.
+
+The DeviceTransform method returns the transform for a given Devices enum.
+
 #### GetControllerHandType/1
 
   > `public static ControllerHand GetControllerHandType(string hand)`
@@ -896,6 +918,28 @@ The GetControllerHandType method is used for getting the enum representation of 
    * `ControllerHand` - A ControllerHand representing either the Left or Right hand.
 
 The GetControllerHand method is used for getting the enum representation of ControllerHand for the given controller game object.
+
+#### GetControllerLeftHand/0
+
+  > `public static GameObject GetControllerLeftHand()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `GameObject` - The left hand controller.
+
+The GetControllerLeftHand method retrieves the game object for the left hand controller.
+
+#### GetControllerRightHand/0
+
+  > `public static GameObject GetControllerRightHand()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `GameObject` - The right hand controller.
+
+The GetControllerRightHand method retrieves the game object for the right hand controller.
 
 #### IsControllerOfHand/2
 
@@ -1443,6 +1487,7 @@ If the Headset Collision Fade script has been applied to the Camera prefab, then
  * **Max Walk Speed:** The maximum speed the play area will be moved when the touchpad is being touched at the extremes of the axis. If a lower part of the touchpad axis is touched (nearer the centre) then the walk speed is slower.
  * **Deceleration:** The speed in which the play area slows down to a complete stop when the user is no longer touching the touchpad. This deceleration effect can ease any motion sickness that may be suffered.
  * **Move On Button Press:** If a button is defined then movement will only occur when the specified button is being held down and the touchpad axis changes.
+ * **Device For Direction:** The direction that will be moved in is the direction of this device.
 
 ### Example
 
