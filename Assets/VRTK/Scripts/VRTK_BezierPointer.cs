@@ -32,6 +32,9 @@ namespace VRTK
         public float pointerCursorRadius = 0.5f;
         [Tooltip("The amount of height offset to apply to the projected beam to generate a smoother curve even when the beam is pointing straight.")]
         public float beamCurveOffset = 1f;
+        [Tooltip("The maximum angle in degrees of the controller before the beam curve height is restricted. A lower angle setting will prevent the beam being projected high into the sky and curving back down.")]
+        [Range(1, 100)]
+        public float beamHeightLimitAngle = 100f;
         [Tooltip("A custom Game Object can be applied here to use instead of the default sphere for the beam tracer. The custom Game Object will match the rotation of the controller.")]
         public GameObject customPointerTracer;
         [Tooltip("A custom Game Object can be applied here to use instead of the default flat cylinder for the pointer cursor.")]
@@ -46,12 +49,11 @@ namespace VRTK
         private GameObject pointerCursor;
         private GameObject curvedBeamContainer;
         private CurveGenerator curvedBeam;
-
         private GameObject validTeleportLocationInstance = null;
         private Material customPointerMaterial;
         private Material beamTraceMaterial;
-
         private bool beamActive = false;
+        private Vector3 fixedForwardBeamForward;
 
         protected override void OnEnable()
         {
@@ -204,10 +206,25 @@ namespace VRTK
 
         private Vector3 ProjectForwardBeam()
         {
-            var actualLength = pointerLength;
-            Ray pointerRaycast = new Ray(transform.position, transform.forward);
+            var controllerRotation = Vector3.Dot(Vector3.up, controller.transform.forward.normalized);
+            var calculatedLength = pointerLength;
+            var useForward = transform.forward;
+            if ((controllerRotation * 100f) > beamHeightLimitAngle)
+            {
+                useForward = new Vector3(transform.forward.x, fixedForwardBeamForward.y, transform.forward.z);
+                var controllerRotationOffset = 1f - (controllerRotation - (beamHeightLimitAngle / 100f));
+                calculatedLength = (pointerLength * controllerRotationOffset) * controllerRotationOffset;
+            }
+            else
+            {
+                fixedForwardBeamForward = transform.forward;
+            }
+
+            var actualLength = calculatedLength;
+            Ray pointerRaycast = new Ray(transform.position, useForward);
+
             RaycastHit collidedWith;
-            var hasRayHit = Physics.Raycast(pointerRaycast, out collidedWith, pointerLength, ~layersToIgnore);
+            var hasRayHit = Physics.Raycast(pointerRaycast, out collidedWith, calculatedLength, ~layersToIgnore);
 
             //reset if beam not hitting or hitting new target
             if (!hasRayHit || (pointerContactTarget && pointerContactTarget != collidedWith.transform))
@@ -222,7 +239,7 @@ namespace VRTK
             }
 
             //adjust beam length if something is blocking it
-            if (hasRayHit && pointerContactDistance < pointerLength)
+            if (hasRayHit && pointerContactDistance < calculatedLength)
             {
                 actualLength = pointerContactDistance;
             }
