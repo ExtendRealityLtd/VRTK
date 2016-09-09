@@ -43,11 +43,6 @@ namespace VRTK
         [Tooltip("Rescale each pointer tracer element according to the length of the Bezier curve.")]
         public bool rescalePointerTracer = false;
 
-        private GameObject projectedBeamContainer;
-        private GameObject projectedBeamForward;
-        private GameObject projectedBeamJoint;
-        private GameObject projectedBeamDown;
-
         private GameObject pointerCursor;
         private GameObject curvedBeamContainer;
         private CurveGenerator curvedBeam;
@@ -56,10 +51,12 @@ namespace VRTK
         private Material customPointerMaterial;
         private Material beamTraceMaterial;
 
+        private bool beamActive = false;
+
         protected override void OnEnable()
         {
             base.OnEnable();
-            InitProjectedBeams();
+            beamActive = false;
             InitPointer();
             TogglePointer(false);
         }
@@ -67,10 +64,7 @@ namespace VRTK
         protected override void OnDisable()
         {
             base.OnDisable();
-            if (projectedBeamDown != null)
-            {
-                Destroy(projectedBeamDown);
-            }
+            beamActive = false;
             if (pointerCursor != null)
             {
                 Destroy(pointerCursor);
@@ -78,10 +72,6 @@ namespace VRTK
             if (curvedBeam != null)
             {
                 Destroy(curvedBeam);
-            }
-            if (projectedBeamContainer != null)
-            {
-                Destroy(projectedBeamContainer);
             }
             if (curvedBeamContainer != null)
             {
@@ -92,12 +82,12 @@ namespace VRTK
         protected override void Update()
         {
             base.Update();
-            if (projectedBeamForward.gameObject.activeSelf)
+            if (beamActive)
             {
-                ProjectForwardBeam();
-                ProjectDownBeam();
-                DisplayCurvedBeam();
-                SetPointerCursor();
+                var jointPosition = ProjectForwardBeam();
+                var downPosition = ProjectDownBeam(jointPosition);
+                DisplayCurvedBeam(jointPosition, downPosition);
+                SetPointerCursor(downPosition);
             }
         }
 
@@ -108,7 +98,7 @@ namespace VRTK
                 var renderer = customPointerTracer.GetComponentInChildren<MeshRenderer>();
                 if (renderer)
                 {
-                    beamTraceMaterial = Material.Instantiate(renderer.sharedMaterial);
+                    beamTraceMaterial = Instantiate(renderer.sharedMaterial);
                 }
             }
             if (customPointerCursor)
@@ -116,9 +106,9 @@ namespace VRTK
                 Renderer renderer = customPointerCursor.GetComponentInChildren<MeshRenderer>();
                 if (renderer != null)
                 {
-                    customPointerMaterial = Material.Instantiate(renderer.sharedMaterial);
+                    customPointerMaterial = Instantiate(renderer.sharedMaterial);
                 }
-                pointerCursor = GameObject.Instantiate(customPointerCursor);
+                pointerCursor = Instantiate(customPointerCursor);
                 foreach (Renderer mr in pointerCursor.GetComponentsInChildren<Renderer>())
                 {
                     mr.material = customPointerMaterial;
@@ -183,19 +173,7 @@ namespace VRTK
         protected override void TogglePointer(bool state)
         {
             state = (pointerVisibility == pointerVisibilityStates.Always_On ? true : state);
-
-            if (projectedBeamForward)
-            {
-                projectedBeamForward.gameObject.SetActive(state);
-            }
-            if (projectedBeamJoint)
-            {
-                projectedBeamJoint.gameObject.SetActive(state);
-            }
-            if (projectedBeamDown)
-            {
-                projectedBeamDown.SetActive(state);
-            }
+            beamActive = state;
         }
 
         protected override void DisablePointerBeam(object sender, ControllerInteractionEventArgs e)
@@ -224,27 +202,7 @@ namespace VRTK
             base.TogglePointer(playAreaCursorState);
         }
 
-        private void InitProjectedBeams()
-        {
-            projectedBeamContainer = new GameObject(string.Format("[{0}]WorldPointer_BezierPointer_ProjectedBeamContainer", gameObject.name));
-            Utilities.SetPlayerObject(projectedBeamContainer, VRTK_PlayerObject.ObjectTypes.Pointer);
-            projectedBeamContainer.transform.parent = transform;
-            projectedBeamContainer.transform.localPosition = Vector3.zero;
-
-            projectedBeamForward = new GameObject(string.Format("[{0}]WorldPointer_BezierPointer_ProjectedBeamForward", gameObject.name));
-            Utilities.SetPlayerObject(projectedBeamForward, VRTK_PlayerObject.ObjectTypes.Pointer);
-            projectedBeamForward.transform.parent = projectedBeamContainer.transform;
-
-            projectedBeamJoint = new GameObject(string.Format("[{0}]WorldPointer_BezierPointer_ProjectedBeamJoint", gameObject.name));
-            Utilities.SetPlayerObject(projectedBeamJoint, VRTK_PlayerObject.ObjectTypes.Pointer);
-            projectedBeamJoint.transform.parent = projectedBeamContainer.transform;
-            projectedBeamJoint.transform.localScale = new Vector3(0.01f, 0.01f, 0.01f);
-
-            projectedBeamDown = new GameObject(string.Format("[{0}]WorldPointer_BezierPointer_ProjectedBeamDown", gameObject.name));
-            Utilities.SetPlayerObject(projectedBeamDown, VRTK_PlayerObject.ObjectTypes.Pointer);
-        }
-
-        private float GetForwardBeamLength()
+        private Vector3 ProjectForwardBeam()
         {
             var actualLength = pointerLength;
             Ray pointerRaycast = new Ray(transform.position, transform.forward);
@@ -269,27 +227,12 @@ namespace VRTK
                 actualLength = pointerContactDistance;
             }
 
-            return actualLength;
+            return pointerRaycast.GetPoint(actualLength - 0.00001f);
         }
 
-        private void ProjectForwardBeam()
+        private Vector3 ProjectDownBeam(Vector3 jointPosition)
         {
-            var setThicknes = 0.01f;
-            var setLength = GetForwardBeamLength();
-            //if the additional decimal isn't added then the beam position glitches
-            var beamPosition = setLength / (2 + 0.00001f);
-
-            projectedBeamForward.transform.localScale = new Vector3(setThicknes, setThicknes, setLength);
-            projectedBeamForward.transform.localPosition = new Vector3(0f, 0f, beamPosition);
-            projectedBeamJoint.transform.localPosition = new Vector3(0f, 0f, setLength - (projectedBeamJoint.transform.localScale.z / 2.0f));
-            projectedBeamContainer.transform.localRotation = Quaternion.identity;
-        }
-
-        private void ProjectDownBeam()
-        {
-            projectedBeamDown.transform.position = new Vector3(projectedBeamJoint.transform.position.x, projectedBeamJoint.transform.position.y, projectedBeamJoint.transform.position.z);
-
-            Ray projectedBeamDownRaycast = new Ray(projectedBeamDown.transform.position, Vector3.down);
+            Ray projectedBeamDownRaycast = new Ray(jointPosition, Vector3.down);
             RaycastHit collidedWith;
 
             var downRayHit = Physics.Raycast(projectedBeamDownRaycast, out collidedWith, float.PositiveInfinity, ~layersToIgnore);
@@ -301,26 +244,25 @@ namespace VRTK
                     base.PointerOut();
                 }
                 pointerContactTarget = null;
-                destinationPosition = Vector3.zero;
+                destinationPosition = projectedBeamDownRaycast.GetPoint(0f);
             }
 
             if (downRayHit)
             {
-                projectedBeamDown.transform.position = new Vector3(projectedBeamJoint.transform.position.x, projectedBeamJoint.transform.position.y - collidedWith.distance, projectedBeamJoint.transform.position.z);
-                projectedBeamDown.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
                 pointerContactTarget = collidedWith.transform;
-                destinationPosition = projectedBeamDown.transform.position;
-
+                destinationPosition = projectedBeamDownRaycast.GetPoint(collidedWith.distance);
                 base.PointerIn();
             }
+
+            return destinationPosition;
         }
 
-        private void SetPointerCursor()
+        private void SetPointerCursor(Vector3 downPosition)
         {
             if (pointerContactTarget != null)
             {
                 TogglePointerCursor(true);
-                pointerCursor.transform.position = projectedBeamDown.transform.position;
+                pointerCursor.transform.position = downPosition;
                 base.SetPlayAreaCursorTransform(pointerCursor.transform.position);
                 UpdatePointerMaterial(pointerHitColor);
                 if (validTeleportLocationInstance != null)
@@ -335,14 +277,14 @@ namespace VRTK
             }
         }
 
-        private void DisplayCurvedBeam()
+        private void DisplayCurvedBeam(Vector3 jointPosition, Vector3 downPosition)
         {
             Vector3[] beamPoints = new Vector3[]
             {
                 transform.position,
-                projectedBeamJoint.transform.position + new Vector3(0f, beamCurveOffset, 0f),
-                projectedBeamDown.transform.position,
-                projectedBeamDown.transform.position,
+                jointPosition + new Vector3(0f, beamCurveOffset, 0f),
+                downPosition,
+                downPosition,
             };
             curvedBeam.SetPoints(beamPoints, beamTraceMaterial ?? pointerMaterial);
             if (pointerVisibility != pointerVisibilityStates.Always_Off)
