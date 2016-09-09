@@ -120,7 +120,7 @@ namespace VRTK
             }
             else
             {
-                lerpTime = (1 / minSpeedMps) * maxDistance; // clamped to speed for small dashes
+                lerpTime = (1f / minSpeedMps) * maxDistance; // clamped to speed for small dashes
             }
 
             Vector3 startPosition = new Vector3(transform.position.x, transform.position.y, transform.position.z);
@@ -134,6 +134,10 @@ namespace VRTK
                 t = elapsedTime / lerpTime;
                 if (t > 1)
                 {
+                    if (transform.position != targetPosition)
+                    {
+                        transform.position = targetPosition;
+                    }
                     t = 1;
                 }
                 yield return new WaitForEndOfFrame();
