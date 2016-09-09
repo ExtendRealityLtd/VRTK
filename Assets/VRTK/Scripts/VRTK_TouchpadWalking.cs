@@ -45,6 +45,8 @@ namespace VRTK
         public float maxWalkSpeed = 3f;
         [Tooltip("The speed in which the play area slows down to a complete stop when the user is no longer touching the touchpad. This deceleration effect can ease any motion sickness that may be suffered.")]
         public float deceleration = 0.1f;
+        [Tooltip("If a button is defined then movement will only occur when the specified button is being held down and the touchpad axis changes.")]
+        public VRTK_ControllerEvents.ButtonAlias moveOnButtonPress = VRTK_ControllerEvents.ButtonAlias.Undefined;
 
         private GameObject controllerLeftHand;
         private GameObject controllerRightHand;
@@ -76,6 +78,12 @@ namespace VRTK
 
         private void DoTouchpadAxisChanged(object sender, ControllerInteractionEventArgs e)
         {
+            var controllerEvents = (VRTK_ControllerEvents)sender;
+            if (moveOnButtonPress != VRTK_ControllerEvents.ButtonAlias.Undefined && !controllerEvents.IsButtonPressed(moveOnButtonPress))
+            {
+                touchAxis = Vector2.zero;
+                return;
+            }
             touchAxis = e.touchpadAxis;
         }
 

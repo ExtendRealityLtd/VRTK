@@ -629,6 +629,17 @@ The GetHairTriggerDelta method returns a float representing the difference in ho
 
 The AnyButtonPressed method returns true if any of the controller buttons are being pressed and this can be useful to determine if an action can be taken whilst the user is using the controller.
 
+#### IsButtonPressed/1
+
+  > `public bool IsButtonPressed(ButtonAlias button)`
+
+  * Parameters
+   * `ButtonAlias button` - The button to check if it's being pressed.
+  * Returns
+   * `bool` - Is true if the button is being pressed.
+
+The IsButtonPressed method takes a given button alias and returns a boolean whether that given button is currently being pressed or not.
+
 ### Example
 
 `VRTK/Examples/002_Controller_Events` shows how the events are utilised and listened to. The accompanying example script can be viewed in `VRTK/Examples/Resources/Scripts/VRTK_ControllerEvents_ListenerExample.cs`.
@@ -1431,6 +1442,7 @@ If the Headset Collision Fade script has been applied to the Camera prefab, then
 
  * **Max Walk Speed:** The maximum speed the play area will be moved when the touchpad is being touched at the extremes of the axis. If a lower part of the touchpad axis is touched (nearer the centre) then the walk speed is slower.
  * **Deceleration:** The speed in which the play area slows down to a complete stop when the user is no longer touching the touchpad. This deceleration effect can ease any motion sickness that may be suffered.
+ * **Move On Button Press:** If a button is defined then movement will only occur when the specified button is being held down and the touchpad axis changes.
 
 ### Example
 
