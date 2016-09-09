@@ -28,11 +28,11 @@ namespace VRTK
     /// </example>
     public class VRTK_PlayerPresence : MonoBehaviour
     {
-        [Tooltip("The box collider which is created for the user is set at a height from the user's headset position. If the collider is required to be lower to allow for room between the play area collider and the headset then this offset value will shorten the height of the generated box collider.")]
+        [Tooltip("The collider which is created for the user is set at a height from the user's headset position. If the collider is required to be lower to allow for room between the play area collider and the headset then this offset value will shorten the height of the generated collider.")]
         public float headsetYOffset = 0.2f;
-        [Tooltip("If this is checked then any items that are grabbed with the controller will not collide with the box collider and rigid body on the play area. This is very useful if the user is required to grab and wield objects because if the collider was active they would bounce off the play area collider.")]
+        [Tooltip("If this is checked then any items that are grabbed with the controller will not collide with the player presence collider. This is very useful if the user is required to grab and wield objects because if the collider was active they would bounce off the collider.")]
         public bool ignoreGrabbedCollisions = true;
-        [Tooltip("If this is checked then if the Headset Collision Fade script is present and a headset collision occurs, the Camera Rig is moved back to the last good known standing position. This deals with any collision issues if a user stands up whilst moving through a crouched area as instead of them being able to clip into objects they are transported back to a position where they are able to stand.")]
+        [Tooltip("If this is checked then if the Headset Collision script is present and a headset collision occurs, the CameraRig is moved back to the last good known standing position. This deals with any collision issues if a user stands up whilst moving through a crouched area as instead of them being able to clip into objects they are transported back to a position where they are able to stand.")]
         public bool resetPositionOnCollision = true;
         [Tooltip("Only use physics when an explicit falling state is set.")]
         public bool fallingPhysicsOnly = false;
@@ -48,7 +48,7 @@ namespace VRTK
 
         private Transform headset;
         private Rigidbody rb;
-        private BoxCollider bc;
+        private CapsuleCollider presenceCollider;
         private Vector3 lastGoodPosition;
         private bool lastGoodPositionSet = false;
         private float highestHeadsetY = 0f;
@@ -242,12 +242,13 @@ namespace VRTK
                 customRigidBody = false;
             }
 
-            bc = gameObject.GetComponent<BoxCollider>();
-            if (bc == null)
+            presenceCollider = gameObject.GetComponent<CapsuleCollider>();
+            if (presenceCollider == null)
             {
-                bc = gameObject.AddComponent<BoxCollider>();
-                bc.center = new Vector3(0f, 1f, 0f);
-                bc.size = new Vector3(0.25f, 1f, 0.25f);
+                presenceCollider = gameObject.AddComponent<CapsuleCollider>();
+                presenceCollider.center = new Vector3(0f, 1f, 0f);
+                presenceCollider.height = 1f;
+                presenceCollider.radius = 0.15f;
                 customCollider = false;
             }
 
@@ -267,7 +268,7 @@ namespace VRTK
             }
             if (!customCollider)
             {
-                Destroy(bc);
+                Destroy(presenceCollider);
             }
         }
 
@@ -277,9 +278,9 @@ namespace VRTK
             {
                 rb.isKinematic = state;
             }
-            if (bc)
+            if (presenceCollider)
             {
-                bc.isTrigger = state;
+                presenceCollider.isTrigger = state;
             }
         }
 
@@ -296,13 +297,13 @@ namespace VRTK
         private void UpdateCollider()
         {
             var playAreaHeightAdjustment = 0.009f;
-            var newBCYSize = (headset.transform.position.y - headsetYOffset) - transform.position.y;
-            var newBCYCenter = (newBCYSize != 0 ? (newBCYSize / 2) + playAreaHeightAdjustment : 0);
+            var newpresenceColliderYSize = (headset.transform.position.y - headsetYOffset) - transform.position.y;
+            var newpresenceColliderYCenter = (newpresenceColliderYSize != 0 ? (newpresenceColliderYSize / 2) + playAreaHeightAdjustment : 0);
 
-            if (bc)
+            if (presenceCollider)
             {
-                bc.size = new Vector3(bc.size.x, newBCYSize, bc.size.z);
-                bc.center = new Vector3(headset.localPosition.x, newBCYCenter, headset.localPosition.z);
+                presenceCollider.height = newpresenceColliderYSize;
+                presenceCollider.center = new Vector3(headset.localPosition.x, newpresenceColliderYCenter, headset.localPosition.z);
             }
         }
 
