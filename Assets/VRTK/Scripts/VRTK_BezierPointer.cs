@@ -30,6 +30,8 @@ namespace VRTK
         public bool showPointerCursor = true;
         [Tooltip("The size of the ground pointer cursor. This number also affects the size of the objects in the bezier curve beam. The larger the radius, the larger the objects will be.")]
         public float pointerCursorRadius = 0.5f;
+        [Tooltip("The pointer cursor will be rotated to match the angle of the target surface if this is true, if it is false then the pointer cursor will always be horizontal.")]
+        public bool pointerCursorMatchTargetRotation = false;
         [Tooltip("The amount of height offset to apply to the projected beam to generate a smoother curve even when the beam is pointing straight.")]
         public float beamCurveOffset = 1f;
         [Tooltip("The maximum angle in degrees of the controller before the beam curve height is restricted. A lower angle setting will prevent the beam being projected high into the sky and curving back down.")]
@@ -54,6 +56,7 @@ namespace VRTK
         private Material beamTraceMaterial;
         private bool beamActive = false;
         private Vector3 fixedForwardBeamForward;
+        private Vector3 contactNormal;
 
         protected override void OnEnable()
         {
@@ -261,12 +264,14 @@ namespace VRTK
                     base.PointerOut();
                 }
                 pointerContactTarget = null;
+                contactNormal = Vector3.zero;
                 destinationPosition = projectedBeamDownRaycast.GetPoint(0f);
             }
 
             if (downRayHit)
             {
                 pointerContactTarget = collidedWith.transform;
+                contactNormal = collidedWith.normal;
                 destinationPosition = projectedBeamDownRaycast.GetPoint(collidedWith.distance);
                 base.PointerIn();
             }
@@ -280,6 +285,10 @@ namespace VRTK
             {
                 TogglePointerCursor(true);
                 pointerCursor.transform.position = downPosition;
+                if (pointerCursorMatchTargetRotation)
+                {
+                    pointerCursor.transform.rotation = Quaternion.FromToRotation(Vector3.up, contactNormal);
+                }
                 base.SetPlayAreaCursorTransform(pointerCursor.transform.position);
                 UpdatePointerMaterial(pointerHitColor);
                 if (validTeleportLocationInstance != null)
