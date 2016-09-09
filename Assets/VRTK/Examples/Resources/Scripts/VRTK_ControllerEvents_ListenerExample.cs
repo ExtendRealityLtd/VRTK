@@ -40,6 +40,9 @@
             GetComponent<VRTK_ControllerEvents>().TouchpadTouchEnd += new ControllerInteractionEventHandler(DoTouchpadTouchEnd);
 
             GetComponent<VRTK_ControllerEvents>().TouchpadAxisChanged += new ControllerInteractionEventHandler(DoTouchpadAxisChanged);
+
+            GetComponent<VRTK_ControllerEvents>().ControllerEnabled += new ControllerInteractionEventHandler(DoControllerEnabled);
+            GetComponent<VRTK_ControllerEvents>().ControllerDisabled += new ControllerInteractionEventHandler(DoControllerDisabled);
         }
 
         private void DebugLogger(uint index, string button, string action, ControllerInteractionEventArgs e)
@@ -136,6 +139,16 @@
         private void DoTouchpadAxisChanged(object sender, ControllerInteractionEventArgs e)
         {
             DebugLogger(e.controllerIndex, "TOUCHPAD", "axis changed", e);
+        }
+
+        private void DoControllerEnabled(object sender, ControllerInteractionEventArgs e)
+        {
+            DebugLogger(e.controllerIndex, "CONTROLLER STATE", "ENABLED", e);
+        }
+
+        private void DoControllerDisabled(object sender, ControllerInteractionEventArgs e)
+        {
+            DebugLogger(e.controllerIndex, "CONTROLLER STATE", "DISABLED", e);
         }
     }
 }

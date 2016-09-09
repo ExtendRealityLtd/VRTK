@@ -504,6 +504,8 @@ The script also has a public boolean pressed state for the buttons to allow the 
  * `AliasMenuOff` - Emitted when the menu toggle alias button is released.
  * `AliasUIClickOn` - Emitted when the UI click alias button is pressed.
  * `AliasUIClickOff` - Emitted when the UI click alias button is released.
+ * `ControllerEnabled` - Emitted when the controller is enabled.
+ * `ControllerDisabled` - Emitted when the controller is disabled.
 
 ### Unity Events
 
@@ -538,6 +540,8 @@ Adding the `VRTK_ControllerEvents_UnityEvents` component to `VRTK_ControllerEven
  * `OnAliasUIClickOff` - Emits the AliasMenuOff class event.
  * `OnAliasMenuOn` - Emits the AliasUIClickOn class event.
  * `OnAliasMenuOff` - Emits the AliasUIClickOff class event.
+ * `OnControllerEnabled` - Emits the ControllerEnabled class event.
+ * `OnControllerDisabled` - Emits the ControllerDisabled class event.
 
 ### Event Payload
 
