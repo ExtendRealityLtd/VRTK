@@ -766,7 +766,7 @@ namespace VRTK
 
         private void CheckBreakDistance()
         {
-            if (trackPoint)
+            if (trackPoint && isDroppable)
             {
                 float distance = Vector3.Distance(trackPoint.position, originalControllerAttachPoint.position);
                 if (distance > (detachThreshold / 1000))
