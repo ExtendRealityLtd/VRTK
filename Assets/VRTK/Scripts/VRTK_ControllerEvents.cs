@@ -977,8 +977,7 @@ namespace VRTK
             }
             else
             {
-                OnTouchpadAxisChanged(SetButtonEvent(ref touchpadTouched, true, 1f));
-                touchpadAxisChanged = true;
+                OnTouchpadAxisChanged(SetButtonEvent(ref touchpadAxisChanged, true, 1f));
             }
 
             // Save current touch and trigger settings to detect next change.
