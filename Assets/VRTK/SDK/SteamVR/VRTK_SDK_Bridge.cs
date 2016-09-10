@@ -10,6 +10,15 @@
         private static Transform cachedHeadsetCamera;
         private static Transform cachedPlayArea;
 
+        public static string defaultAttachPointPath = "Model/tip/attach";
+        public static string defaultTriggerModelPath = "Model/trigger";
+        public static string defaultGripLeftModelPath = "Model/lgrip";
+        public static string defaultGripRightModelPath = "Model/rgrip";
+        public static string defaultTouchpadModelPath = "Model/trackpad";
+        public static string defaultApplicationMenuModelPath = "Model/button";
+        public static string defaultSystemModelPath = "Model/sys_button";
+        public static string defaultBodyModelPath = "Model/body";
+
         public static GameObject GetTrackedObject(GameObject obj, out uint index)
         {
             var trackedObject = obj.GetComponent<SteamVR_TrackedObject>();
