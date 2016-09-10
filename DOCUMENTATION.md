@@ -886,6 +886,18 @@ The TrackedObjectByIndex method is used to find the GameObject of a tracked obje
 
 The TrackedObjectOrigin method is used to find the tracked object's origin.
 
+#### TrackedObjectOfGameObject/2
+
+  > `public static GameObject TrackedObjectOfGameObject(GameObject obj, out uint index)`
+
+  * Parameters
+   * `GameObject obj` - The game object to check for the presence of a tracked object on.
+   * `out uint index` - The variable to store the tracked object's index if one is found. It returns 0 if no index is found.
+  * Returns
+   * `GameObject` - The GameObject of the tracked object.
+
+The TrackedObjectOfGameObject method is used to find the tracked object associated with the given game object and it can also return the index of the tracked object.
+
 #### DeviceTransform/1
 
   > `public static Transform DeviceTransform(Devices device)`

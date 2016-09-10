@@ -75,6 +75,17 @@ namespace VRTK
         }
 
         /// <summary>
+        /// The TrackedObjectOfGameObject method is used to find the tracked object associated with the given game object and it can also return the index of the tracked object.
+        /// </summary>
+        /// <param name="obj">The game object to check for the presence of a tracked object on.</param>
+        /// <param name="index">The variable to store the tracked object's index if one is found. It returns 0 if no index is found.</param>
+        /// <returns>The GameObject of the tracked object.</returns>
+        public static GameObject TrackedObjectOfGameObject(GameObject obj, out uint index)
+        {
+            return VRTK_SDK_Bridge.GetTrackedObject(obj, out index);
+        }
+
+        /// <summary>
         /// The DeviceTransform method returns the transform for a given Devices enum.
         /// </summary>
         /// <param name="device">The Devices enum to get the transform for.</param>
