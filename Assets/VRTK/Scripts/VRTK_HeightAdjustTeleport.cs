@@ -18,8 +18,27 @@ namespace VRTK
     /// </example>
     public class VRTK_HeightAdjustTeleport : VRTK_BasicTeleport
     {
+        /// <summary>
+        /// Options for testing if a play space fall is valid
+        /// </summary>
+        /// <param name="No_Restriction">Always play space fall when the headset is no longer over the current standing object.</param>
+        /// <param name="Left_Controller">Don't play space fall if the Left Controller is still over the current standing object even if the headset isn't.</param>
+        /// <param name="Right_Controller">Don't play space fall if the Right Controller is still over the current standing object even if the headset isn't.</param>
+        /// <param name="Either_Controller">Don't play space fall if Either Controller is still over the current standing object even if the headset isn't.</param>
+        /// <param name="Both_Controllers">Don't play space fall only if Both Controllers are still over the current standing object even if the headset isn't.</param>
+        public enum FallingRestrictors
+        {
+            No_Restriction,
+            Left_Controller,
+            Right_Controller,
+            Either_Controller,
+            Both_Controllers,
+        }
+
         [Tooltip("Checks if the user steps off an object into a part of their play area that is not on the object then they are automatically teleported down to the nearest floor. The `Play Space Falling` option also works in the opposite way that if the user's headset is above an object then the user is teleported automatically on top of that object, which is useful for simulating climbing stairs without needing to use the pointer beam location. If this option is turned off then the user can hover in mid-air at the same y position of the object they are standing on.")]
         public bool playSpaceFalling = true;
+        [Tooltip("An additional check to see if the play space fall should take place. If the selected restrictor is still over the current floor then the play space fall will not occur. Works well for being able to lean over ledges and look down. Only works for falling down not teleporting up.")]
+        public FallingRestrictors playSpaceFallRestriction = FallingRestrictors.No_Restriction;
         [Tooltip("Allows for gravity based falling when the distance is greater than `Gravity Fall Height`.")]
         public bool useGravity = true;
         [Tooltip("Fall distance needed before gravity based falling can be triggered.")]
@@ -34,6 +53,7 @@ namespace VRTK
         private bool originalPlaySpaceFalling;
         private bool isClimbing = false;
         private float previousFloorY;
+        private bool initialFloorDrop = false;
         private VRTK_PlayerPresence playerPresence;
 
         protected override void Awake()
@@ -55,6 +75,7 @@ namespace VRTK
         protected override void OnEnable()
         {
             base.OnEnable();
+            initialFloorDrop = false;
             adjustYForTerrain = true;
             originalPlaySpaceFalling = playSpaceFalling;
             InitClimbEvents(true);
@@ -178,6 +199,47 @@ namespace VRTK
             OnTeleported(gameObject, teleportArgs);
         }
 
+        private float ControllerHeightCheck(GameObject controllerObj)
+        {
+            Debug.DrawRay(controllerObj.transform.transform.position, -transform.up, Color.red);
+            Ray ray = new Ray(controllerObj.transform.transform.position, -transform.up);
+            RaycastHit rayCollidedWith;
+            Physics.Raycast(ray, out rayCollidedWith);
+            return controllerObj.transform.position.y - rayCollidedWith.distance;
+        }
+
+        private bool ControllersStillOverPreviousFloor()
+        {
+            if(playSpaceFallRestriction == FallingRestrictors.No_Restriction)
+            {
+                return false;
+            }
+
+            var controllerDropThreshold = 0.05f;
+            var rightController = VRTK_DeviceFinder.GetControllerRightHand();
+            var leftController = VRTK_DeviceFinder.GetControllerLeftHand();
+            var previousY = transform.position.y;
+            var rightCheck = (rightController.activeInHierarchy && Mathf.Abs(ControllerHeightCheck(rightController) - previousY) < controllerDropThreshold);
+            var leftCheck = (leftController.activeInHierarchy && Mathf.Abs(ControllerHeightCheck(leftController) - previousY) < controllerDropThreshold);
+
+            if(playSpaceFallRestriction == FallingRestrictors.Left_Controller)
+            {
+                rightCheck = false;
+            }
+
+            if (playSpaceFallRestriction == FallingRestrictors.Right_Controller)
+            {
+                leftCheck = false;
+            }
+
+            if(playSpaceFallRestriction == FallingRestrictors.Both_Controllers)
+            {
+                return (rightCheck && leftCheck);
+            }
+
+            return (rightCheck || leftCheck);
+        }
+
         private void DropToNearestFloor(bool withBlink, bool useGravityFall)
         {
             if (enableTeleport && eyeCamera.transform.position.y > transform.position.y)
@@ -185,20 +247,26 @@ namespace VRTK
                 Ray ray = new Ray(eyeCamera.transform.position, -transform.up);
                 RaycastHit rayCollidedWith;
                 bool rayHit = Physics.Raycast(ray, out rayCollidedWith);
-                float floorY = eyeCamera.transform.position.y - rayCollidedWith.distance;
+                float hitFloorY = eyeCamera.transform.position.y - rayCollidedWith.distance;
 
-                if (ValidDrop(rayHit, rayCollidedWith, floorY))
+                if (ValidDrop(rayHit, rayCollidedWith, hitFloorY))
                 {
-                    if (UsePhysicsFall(useGravityFall, floorY))
+                    if (initialFloorDrop && hitFloorY < previousFloorY && ControllersStillOverPreviousFloor())
+                    {
+                        return;
+                    }
+
+                    if (UsePhysicsFall(useGravityFall, hitFloorY))
                     {
                         playerPresence.StartPhysicsFall(Vector3.zero);
                     }
                     else
                     {
-                        TeleportFall(withBlink, floorY, rayCollidedWith);
+                        TeleportFall(withBlink, hitFloorY, rayCollidedWith);
                     }
+                    initialFloorDrop = true;
                 }
-                previousFloorY = floorY;
+                previousFloorY = hitFloorY;
             }
         }
 

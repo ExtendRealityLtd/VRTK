@@ -1214,10 +1214,20 @@ Like the basic teleporter the Height Adjust Teleport script is attached to the `
 ### Inspector Parameters
 
  * **Play Space Falling:** Checks if the user steps off an object into a part of their play area that is not on the object then they are automatically teleported down to the nearest floor. The `Play Space Falling` option also works in the opposite way that if the user's headset is above an object then the user is teleported automatically on top of that object, which is useful for simulating climbing stairs without needing to use the pointer beam location. If this option is turned off then the user can hover in mid-air at the same y position of the object they are standing on.
+ * **Play Space Fall Restriction:** An additional check to see if the play space fall should take place. If the selected restrictor is still over the current floor then the play space fall will not occur. Works well for being able to lean over ledges and look down. Only works for falling down not teleporting up.
  * **Use Gravity:** Allows for gravity based falling when the distance is greater than `Gravity Fall Height`.
  * **Gravity Fall Height:** Fall distance needed before gravity based falling can be triggered.
  * **Blink Y Threshold:** The `y` distance between the floor and the headset that must change before the fade transition is initiated. If the new user location is at a higher distance than the threshold then the headset blink transition will activate on teleport. If the new user location is within the threshold then no blink transition will happen, which is useful for walking up slopes, meshes and terrains where constant blinking would be annoying.
  * **Floor Height Tolerance:** The amount the `y` position needs to change by between the current floor `y` position and the previous floor `y` position before a change in floor height is considered to have occurred. A higher value here will mean that a `Drop To Floor` teleport event will be less likely to happen if the `y` of the floor beneath the user hasn't changed as much as the given threshold.
+
+### Class Variables
+
+ * `public enum FallingRestrictors` - Options for testing if a play space fall is valid
+  * `No_Restriction` - Always play space fall when the headset is no longer over the current standing object.
+  * `Left_Controller` - Don't play space fall if the Left Controller is still over the current standing object even if the headset isn't.
+  * `Right_Controller` - Don't play space fall if the Right Controller is still over the current standing object even if the headset isn't.
+  * `Either_Controller` - Don't play space fall if Either Controller is still over the current standing object even if the headset isn't.
+  * `Both_Controllers` - Don't play space fall only if Both Controllers are still over the current standing object even if the headset isn't.
 
 ### Example
 
