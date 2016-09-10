@@ -169,7 +169,7 @@ namespace VRTK
             if (controllerAttachPoint == null)
             {
                 //attempt to find the attach point on the controller
-                var defaultAttachPoint = transform.Find("Model/tip/attach");
+                var defaultAttachPoint = transform.Find(VRTK_SDK_Bridge.defaultAttachPointPath);
                 if (defaultAttachPoint != null)
                 {
                     controllerAttachPoint = defaultAttachPoint.GetComponent<Rigidbody>();

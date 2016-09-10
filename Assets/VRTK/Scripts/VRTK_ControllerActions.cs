@@ -189,7 +189,7 @@ namespace VRTK
             {
                 return;
             }
-            ToggleHighlightAlias(state, "Model/trigger", highlight, duration);
+            ToggleHighlightAlias(state, VRTK_SDK_Bridge.defaultTriggerModelPath, highlight, duration);
         }
 
         /// <summary>
@@ -204,8 +204,8 @@ namespace VRTK
             {
                 return;
             }
-            ToggleHighlightAlias(state, "Model/lgrip", highlight, duration);
-            ToggleHighlightAlias(state, "Model/rgrip", highlight, duration);
+            ToggleHighlightAlias(state, VRTK_SDK_Bridge.defaultGripLeftModelPath, highlight, duration);
+            ToggleHighlightAlias(state, VRTK_SDK_Bridge.defaultGripRightModelPath, highlight, duration);
         }
 
         /// <summary>
@@ -220,7 +220,7 @@ namespace VRTK
             {
                 return;
             }
-            ToggleHighlightAlias(state, "Model/trackpad", highlight, duration);
+            ToggleHighlightAlias(state, VRTK_SDK_Bridge.defaultTouchpadModelPath, highlight, duration);
         }
 
         /// <summary>
@@ -235,7 +235,7 @@ namespace VRTK
             {
                 return;
             }
-            ToggleHighlightAlias(state, "Model/button", highlight, duration);
+            ToggleHighlightAlias(state, VRTK_SDK_Bridge.defaultApplicationMenuModelPath, highlight, duration);
         }
 
         /// <summary>
@@ -251,8 +251,8 @@ namespace VRTK
             ToggleHighlightGrip(state, highlight, duration);
             ToggleHighlightTouchpad(state, highlight, duration);
             ToggleHighlightApplicationMenu(state, highlight, duration);
-            ToggleHighlightAlias(state, "Model/sys_button", highlight, duration);
-            ToggleHighlightAlias(state, "Model/body", highlight, duration);
+            ToggleHighlightAlias(state, VRTK_SDK_Bridge.defaultSystemModelPath, highlight, duration);
+            ToggleHighlightAlias(state, VRTK_SDK_Bridge.defaultBodyModelPath, highlight, duration);
         }
 
         /// <summary>
@@ -330,7 +330,7 @@ namespace VRTK
 
         private Transform GetElementTransform(string path)
         {
-            if (!cachedElements.ContainsKey(path))
+            if (!cachedElements.ContainsKey(path) || cachedElements[path] == null)
             {
                 cachedElements[path] = transform.Find(path);
             }
