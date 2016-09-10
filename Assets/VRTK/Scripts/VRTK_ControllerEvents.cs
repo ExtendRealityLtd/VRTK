@@ -779,7 +779,10 @@ namespace VRTK
             if (tmpControllerIndex > 0 && tmpControllerIndex < uint.MaxValue && tmpControllerIndex != controllerIndex)
             {
                 RemoveControllerIndexFromCache();
-                VRTK_ObjectCache.trackedControllers.Add(tmpControllerIndex, trackedObject);
+                if (!VRTK_ObjectCache.trackedControllers.ContainsKey(tmpControllerIndex))
+                {
+                    VRTK_ObjectCache.trackedControllers.Add(tmpControllerIndex, trackedObject);
+                }
                 controllerIndex = tmpControllerIndex;
             }
         }
