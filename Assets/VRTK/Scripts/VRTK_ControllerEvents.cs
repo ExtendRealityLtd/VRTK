@@ -664,11 +664,6 @@ namespace VRTK
             gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
         }
 
-        private void Start()
-        {
-            controllerIndex = VRTK_DeviceFinder.GetControllerIndex(gameObject);
-        }
-
         private void OnEnable()
         {
             Invoke("EnableEvents", 0f);
@@ -777,14 +772,37 @@ namespace VRTK
                     vectorA.y.ToString("F" + axisFidelity) == vectorB.y.ToString("F" + axisFidelity));
         }
 
+        private void CacheControllerIndex()
+        {
+            uint tmpControllerIndex = 0;
+            var trackedObject = VRTK_DeviceFinder.TrackedObjectOfGameObject(gameObject, out tmpControllerIndex);
+            if (tmpControllerIndex > 0 && tmpControllerIndex != controllerIndex)
+            {
+                RemoveControllerIndexFromCache();
+                VRTK_ObjectCache.trackedControllers.Add(tmpControllerIndex, trackedObject);
+                controllerIndex = tmpControllerIndex;
+            }
+        }
+
+        private void RemoveControllerIndexFromCache()
+        {
+            if (VRTK_ObjectCache.trackedControllers.ContainsKey(controllerIndex))
+            {
+                VRTK_ObjectCache.trackedControllers.Remove(controllerIndex);
+            }
+        }
+
         private void EnableEvents()
         {
+            CacheControllerIndex();
             bool nullBool = false;
             OnControllerEnabled(SetButtonEvent(ref nullBool, true, 0f));
+
         }
 
         private void DisableEvents()
         {
+            RemoveControllerIndexFromCache();
             bool nullBool = false;
             OnControllerDisabled(SetButtonEvent(ref nullBool, false, 0f));
 
@@ -839,7 +857,7 @@ namespace VRTK
             triggerAxisChanged = false;
             touchpadAxisChanged = false;
 
-            controllerIndex = VRTK_DeviceFinder.GetControllerIndex(gameObject);
+            CacheControllerIndex();
             if (controllerIndex < uint.MaxValue)
             {
                 Vector2 currentTriggerAxis = VRTK_SDK_Bridge.GetTriggerAxisOnIndex(controllerIndex);
@@ -854,7 +872,7 @@ namespace VRTK
 
         private void Update()
         {
-            controllerIndex = VRTK_DeviceFinder.GetControllerIndex(gameObject);
+            CacheControllerIndex();
             //Only continue if the controller index has been set to a sensible number
             if (controllerIndex >= uint.MaxValue)
             {

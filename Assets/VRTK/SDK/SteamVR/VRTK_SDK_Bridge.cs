@@ -10,8 +10,27 @@
         private static Transform cachedHeadsetCamera;
         private static Transform cachedPlayArea;
 
+        public static GameObject GetTrackedObject(GameObject obj, out uint index)
+        {
+            var trackedObject = obj.GetComponent<SteamVR_TrackedObject>();
+            index = 0;
+            if (trackedObject)
+            {
+                index = (uint)trackedObject.index;
+                return trackedObject.gameObject;
+            }
+            return null;
+        }
+
         public static GameObject GetTrackedObjectByIndex(uint index)
         {
+            //attempt to get from cache first
+            if (VRTK_ObjectCache.trackedControllers.ContainsKey(index))
+            {
+                return VRTK_ObjectCache.trackedControllers[index];
+            }
+
+            //if not found in cache then brute force check
             foreach (SteamVR_TrackedObject trackedObject in FindObjectsOfType<SteamVR_TrackedObject>())
             {
                 if ((uint)trackedObject.index == index)
@@ -19,17 +38,15 @@
                     return trackedObject.gameObject;
                 }
             }
+
             return null;
         }
 
         public static uint GetIndexOfTrackedObject(GameObject trackedObject)
         {
-            var obj = trackedObject.GetComponent<SteamVR_TrackedObject>();
-            if (obj)
-            {
-                return (uint)obj.index;
-            }
-            return 0;
+            uint index = 0;
+            GetTrackedObject(trackedObject, out index);
+            return index;
         }
 
         public static Transform GetTrackedObjectOrigin(GameObject obj)
