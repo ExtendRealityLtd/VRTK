@@ -776,7 +776,7 @@ namespace VRTK
         {
             uint tmpControllerIndex = 0;
             var trackedObject = VRTK_DeviceFinder.TrackedObjectOfGameObject(gameObject, out tmpControllerIndex);
-            if (tmpControllerIndex > 0 && tmpControllerIndex != controllerIndex)
+            if (tmpControllerIndex > 0 && tmpControllerIndex < uint.MaxValue && tmpControllerIndex != controllerIndex)
             {
                 RemoveControllerIndexFromCache();
                 VRTK_ObjectCache.trackedControllers.Add(tmpControllerIndex, trackedObject);
