@@ -330,7 +330,7 @@ namespace VRTK
 
         private Transform GetElementTransform(string path)
         {
-            if (!cachedElements.ContainsKey(path))
+            if (!cachedElements.ContainsKey(path) || cachedElements[path] == null)
             {
                 cachedElements[path] = transform.Find(path);
             }
