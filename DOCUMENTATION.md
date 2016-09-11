@@ -652,6 +652,22 @@ The IsButtonPressed method takes a given button alias and returns a boolean whet
 
 The Controller Actions script provides helper methods to deal with common controller actions. It deals with actions that can be done to the controller.
 
+### Class Events
+
+ * `ControllerModelVisible` - Emitted when the controller model is toggled to be visible.
+ * `ControllerModelInvisible` - Emitted when the controller model is toggled to be invisible.
+
+### Unity Events
+
+Adding the `VRTK_ControllerActions_UnityEvents` component to `VRTK_ControllerActions` object allows access to `UnityEvents` that will react identically to the Class Events.
+
+ * `OnControllerModelVisible` - Emits the ControllerModelVisible class event.
+ * `OnControllerModelInvisible` - Emits the ControllerModelInvisible class event.
+
+### Event Payload
+
+ * `uint controllerIndex` - The index of the controller that was used.
+
 ### Class Methods
 
 #### IsControllerVisible/0

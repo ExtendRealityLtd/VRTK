@@ -6,6 +6,22 @@ namespace VRTK
     using System.Collections.Generic;
 
     /// <summary>
+    /// Event Payload
+    /// </summary>
+    /// <param name="controllerIndex">The index of the controller that was used.</param>
+    public struct ControllerActionsEventArgs
+    {
+        public uint controllerIndex;
+    }
+
+    /// <summary>
+    /// Event Payload
+    /// </summary>
+    /// <param name="sender">this object</param>
+    /// <param name="e"><see cref="ControllerActionsEventArgs"/></param>
+    public delegate void ControllerActionsEventHandler(object sender, ControllerActionsEventArgs e);
+
+    /// <summary>
     /// The Controller Actions script provides helper methods to deal with common controller actions. It deals with actions that can be done to the controller.
     /// </summary>
     /// <example>
@@ -15,14 +31,39 @@ namespace VRTK
     /// </example>
     public class VRTK_ControllerActions : MonoBehaviour
     {
+        /// <summary>
+        /// Emitted when the controller model is toggled to be visible.
+        /// </summary>
+        public event ControllerActionsEventHandler ControllerModelVisible;
+
+        /// <summary>
+        /// Emitted when the controller model is toggled to be invisible.
+        /// </summary>
+        public event ControllerActionsEventHandler ControllerModelInvisible;
+
         private bool controllerVisible = true;
         private ushort hapticPulseStrength;
-
         private uint controllerIndex;
         private ushort maxHapticVibration = 3999;
         private bool controllerHighlighted = false;
         private Dictionary<GameObject, Material> storedMaterials;
         private Dictionary<string, Transform> cachedElements;
+
+        public virtual void OnControllerModelVisible(ControllerActionsEventArgs e)
+        {
+            if (ControllerModelVisible != null)
+            {
+                ControllerModelVisible(this, e);
+            }
+        }
+
+        public virtual void OnControllerModelInvisible(ControllerActionsEventArgs e)
+        {
+            if (ControllerModelInvisible != null)
+            {
+                ControllerModelInvisible(this, e);
+            }
+        }
 
         /// <summary>
         /// The IsControllerVisible method returns true if the controller is currently visible by whether the renderers on the controller are enabled.
@@ -60,7 +101,16 @@ namespace VRTK
                     renderer.enabled = state;
                 }
             }
+
             controllerVisible = state;
+            if(state)
+            {
+                OnControllerModelVisible(SetActionEvent(controllerIndex));
+            }
+            else
+            {
+                OnControllerModelInvisible(SetActionEvent(controllerIndex));
+            }
         }
 
         /// <summary>
@@ -344,6 +394,13 @@ namespace VRTK
             {
                 ToggleHighlightControllerElement(state, element.gameObject, highlight, duration);
             }
+        }
+
+        private ControllerActionsEventArgs SetActionEvent(uint index)
+        {
+            ControllerActionsEventArgs e;
+            e.controllerIndex= index;
+            return e;
         }
     }
 }
