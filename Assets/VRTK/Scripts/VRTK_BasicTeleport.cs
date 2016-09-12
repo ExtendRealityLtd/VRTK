@@ -31,6 +31,8 @@ namespace VRTK
         public bool headsetPositionCompensation = true;
         [Tooltip("A string that specifies an object Tag or the name of a Script attached to an object and notifies the teleporter that the destination is to be ignored so the user cannot teleport to that location. It also ensure the pointer colour is set to the miss colour.")]
         public string ignoreTargetWithTagOrClass;
+        [Tooltip("A specified VRTK_TagOrScriptPolicyList to use to determine whether destination targets will be acted upon by the Teleporter. If a list is provided then the 'Ignore Target With Tag Or Class' parameter will be ignored.")]
+        public VRTK_TagOrScriptPolicyList targetTagOrScriptListPolicy;
         [Tooltip("The max distance the nav mesh edge can be from the teleport destination to be considered valid. If a value of `0` is given then the nav mesh restriction will be ignored.")]
         public float navMeshLimitDistance = 0f;
 
@@ -66,7 +68,7 @@ namespace VRTK
                     if (register)
                     {
                         worldMarker.DestinationMarkerSet += new DestinationMarkerEventHandler(DoTeleport);
-                        worldMarker.SetInvalidTarget(ignoreTargetWithTagOrClass);
+                        worldMarker.SetInvalidTarget(ignoreTargetWithTagOrClass, targetTagOrScriptListPolicy);
                         worldMarker.SetNavMeshCheckDistance(navMeshLimitDistance);
                         worldMarker.SetHeadsetPositionCompensation(headsetPositionCompensation);
                     }
@@ -149,7 +151,7 @@ namespace VRTK
                 validNavMeshLocation = true;
             }
 
-            return (validNavMeshLocation && target && target.tag != ignoreTargetWithTagOrClass && target.GetComponent(ignoreTargetWithTagOrClass) == null);
+            return (validNavMeshLocation && target && !(Utilities.TagOrScriptCheck(target.gameObject, targetTagOrScriptListPolicy, ignoreTargetWithTagOrClass)));
         }
 
         protected virtual void DoTeleport(object sender, DestinationMarkerEventArgs e)

@@ -119,5 +119,17 @@
                 Vector3.Dot(n, Vector3.Cross(v1, v2)),
                 Vector3.Dot(v1, v2)) * Mathf.Rad2Deg;
         }
+
+        public static bool TagOrScriptCheck(GameObject obj, VRTK_TagOrScriptPolicyList tagOrScriptList, string ignoreString)
+        {
+            if (tagOrScriptList)
+            {
+                return tagOrScriptList.Find(obj);
+            }
+            else
+            {
+                return (obj.tag == ignoreString || obj.GetComponent(ignoreString) != null);
+            }
+        }
     }
 }
