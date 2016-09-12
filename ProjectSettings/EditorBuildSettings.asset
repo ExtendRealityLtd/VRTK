@@ -81,3 +81,5 @@ EditorBuildSettings:
     path: Assets/VRTK/Examples/037_CameraRig_ClimbingFalling.unity
   - enabled: 1
     path: Assets/VRTK/Examples/038_CameraRig_DashTeleport.unity
+  - enabled: 1
+    path: Assets/VRTK/Examples/039_CameraRig_AdaptiveQuality.unity
