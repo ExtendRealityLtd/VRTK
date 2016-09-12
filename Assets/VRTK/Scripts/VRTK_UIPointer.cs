@@ -59,6 +59,8 @@ namespace VRTK
         public string ignoreCanvasWithTagOrClass;
         [Tooltip("Determines when the UI pointer should be active.")]
         public ActivationMethods activationMode = ActivationMethods.Hold_Button;
+        [Tooltip("A specified VRTK_TagOrScriptPolicyList to use to determine whether any world canvases will be acted upon by the UI Pointer. If a list is provided then the 'Ignore Canvas With Tag Or Class' parameter will be ignored.")]
+        public VRTK_TagOrScriptPolicyList canvasTagOrScriptListPolicy;
 
         [HideInInspector]
         public PointerEventData pointerEventData;
@@ -142,7 +144,7 @@ namespace VRTK
         /// <param name="canvas">The canvas object to initialise for use with the UI pointers. Must be of type `WorldSpace`.</param>
         public void SetWorldCanvas(Canvas canvas)
         {
-            if (canvas.renderMode != RenderMode.WorldSpace || canvas.gameObject.tag == ignoreCanvasWithTagOrClass || canvas.GetComponent(ignoreCanvasWithTagOrClass) != null)
+            if (canvas.renderMode != RenderMode.WorldSpace || Utilities.TagOrScriptCheck(canvas.gameObject, canvasTagOrScriptListPolicy, ignoreCanvasWithTagOrClass))
             {
                 return;
             }
@@ -184,7 +186,7 @@ namespace VRTK
         /// <returns>Returns true if the ui pointer should be currently active.</returns>
         public bool PointerActive()
         {
-            if(activationMode == ActivationMethods.Always_On)
+            if (activationMode == ActivationMethods.Always_On)
             {
                 return true;
             }
@@ -201,7 +203,7 @@ namespace VRTK
                 }
                 lastPointerPressState = controller.pointerPressed;
 
-                if(pointerClicked)
+                if (pointerClicked)
                 {
                     beamEnabledState = !beamEnabledState;
                 }
