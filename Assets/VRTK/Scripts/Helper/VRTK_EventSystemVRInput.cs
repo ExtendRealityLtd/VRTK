@@ -79,17 +79,22 @@
             return false;
         }
 
-        private bool ShouldIgnoreElement(GameObject obj, string ignoreCanvasWithTagOrClass)
+        private bool ShouldIgnoreElement(GameObject obj, string ignoreCanvasWithTagOrClass, VRTK_TagOrScriptPolicyList canvasTagOrScriptListPolicy)
         {
             var canvas = obj.GetComponentInParent<Canvas>();
-            return (canvas && (canvas.gameObject.tag == ignoreCanvasWithTagOrClass || canvas.GetComponent(ignoreCanvasWithTagOrClass) != null));
+            if (!canvas)
+            {
+                return false;
+            }
+
+            return (Utilities.TagOrScriptCheck(canvas.gameObject, canvasTagOrScriptListPolicy, ignoreCanvasWithTagOrClass));
         }
 
         private void Hover(VRTK_UIPointer pointer, List<RaycastResult> results)
         {
             if (pointer.pointerEventData.pointerEnter)
             {
-                if (ShouldIgnoreElement(pointer.pointerEventData.pointerEnter, pointer.ignoreCanvasWithTagOrClass))
+                if (ShouldIgnoreElement(pointer.pointerEventData.pointerEnter, pointer.ignoreCanvasWithTagOrClass, pointer.canvasTagOrScriptListPolicy))
                 {
                     return;
                 }
@@ -105,7 +110,7 @@
             {
                 foreach (var result in results)
                 {
-                    if (ShouldIgnoreElement(result.gameObject, pointer.ignoreCanvasWithTagOrClass))
+                    if (ShouldIgnoreElement(result.gameObject, pointer.ignoreCanvasWithTagOrClass, pointer.canvasTagOrScriptListPolicy))
                     {
                         continue;
                     }
@@ -152,7 +157,7 @@
 
             if (pointer.pointerEventData.pointerPress)
             {
-                if (ShouldIgnoreElement(pointer.pointerEventData.pointerPress, pointer.ignoreCanvasWithTagOrClass))
+                if (ShouldIgnoreElement(pointer.pointerEventData.pointerPress, pointer.ignoreCanvasWithTagOrClass, pointer.canvasTagOrScriptListPolicy))
                 {
                     return;
                 }
@@ -176,7 +181,7 @@
             {
                 foreach (var result in results)
                 {
-                    if (ShouldIgnoreElement(result.gameObject, pointer.ignoreCanvasWithTagOrClass))
+                    if (ShouldIgnoreElement(result.gameObject, pointer.ignoreCanvasWithTagOrClass, pointer.canvasTagOrScriptListPolicy))
                     {
                         continue;
                     }
@@ -199,7 +204,7 @@
 
             if (pointer.pointerEventData.pointerDrag)
             {
-                if (ShouldIgnoreElement(pointer.pointerEventData.pointerDrag, pointer.ignoreCanvasWithTagOrClass))
+                if (ShouldIgnoreElement(pointer.pointerEventData.pointerDrag, pointer.ignoreCanvasWithTagOrClass, pointer.canvasTagOrScriptListPolicy))
                 {
                     return;
                 }
@@ -226,7 +231,7 @@
             {
                 foreach (var result in results)
                 {
-                    if (ShouldIgnoreElement(result.gameObject, pointer.ignoreCanvasWithTagOrClass))
+                    if (ShouldIgnoreElement(result.gameObject, pointer.ignoreCanvasWithTagOrClass, pointer.canvasTagOrScriptListPolicy))
                     {
                         continue;
                     }
@@ -252,14 +257,14 @@
                 if (pointer.pointerEventData.scrollDelta != Vector2.zero)
                 {
                     var target = ExecuteEvents.ExecuteHierarchy(result.gameObject, pointer.pointerEventData, ExecuteEvents.scrollHandler);
-                    if(target)
+                    if (target)
                     {
                         scrollWheelVisible = true;
                     }
                 }
             }
 
-            if(pointer.controllerRenderModel)
+            if (pointer.controllerRenderModel)
             {
                 VRTK_SDK_Bridge.SetControllerRenderModelWheel(pointer.controllerRenderModel, scrollWheelVisible);
             }

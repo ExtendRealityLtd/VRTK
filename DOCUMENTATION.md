@@ -279,16 +279,17 @@ Adding the `VRTK_DestinationMarker_UnityEvents` component to `VRTK_DestinationMa
 
 ### Class Methods
 
-#### SetInvalidTarget/1
+#### SetInvalidTarget/2
 
-  > `public virtual void SetInvalidTarget(string name)`
+  > `public virtual void SetInvalidTarget(string name, VRTK_TagOrScriptPolicyList list = null)`
 
   * Parameters
    * `string name` - The name of the tag or class that is the invalid target.
+   * `VRTK_TagOrScriptPolicyList list` - The Tag Or Script list policy to check the set operation on.
   * Returns
    * _none_
 
-The SetInvalidTarget method is used to set objects that contain the given tag or class matching the name as invalid destination targets.
+The SetInvalidTarget method is used to set objects that contain the given tag or class matching the name as invalid destination targets. It can also accept a VRTK_TagOrScriptPolicyList for a more custom level of policy management.
 
 #### SetNavMeshCheckDistance/1
 
@@ -333,6 +334,7 @@ The play area collider does not work well with terrains as they are uneven and c
  * **Play Area Cursor Dimensions:** Determines the size of the play area cursor and collider. If the values are left as zero then the Play Area Cursor will be sized to the calibrated Play Area space.
  * **Handle Play Area Cursor Collisions:** If this is ticked then if the play area cursor is colliding with any other object then the pointer colour will change to the `Pointer Miss Color` and the `WorldPointerDestinationSet` event will not be triggered, which will prevent teleporting into areas where the play area will collide.
  * **Ignore Target With Tag Or Class:** A string that specifies an object Tag or the name of a Script attached to an object and notifies the play area cursor to ignore collisions with the object.
+ * **Target Tag Or Script List Policy:** A specified VRTK_TagOrScriptPolicyList to use to determine whether the play area cursor collisions will be acted upon. If a list is provided then the 'Ignore Target With Tag Or Class' parameter will be ignored.
  * **Pointer Visibility:** Determines when the pointer beam should be displayed.
  * **Hold Button To Activate:** If this is checked then the pointer beam will be activated on first press of the pointer alias button and will stay active until the pointer alias button is pressed again. The destination set event is emitted when the beam is deactivated on the second button press.
  * **Activate Delay:** The time in seconds to delay the pointer beam being able to be active again. Useful for preventing constant teleportation.
@@ -418,6 +420,7 @@ This directory contains all of the toolkit scripts that add VR functionality to 
  * [Object Auto Grab](#object-auto-grab-vrtk_objectautograb)
  * [Player Climb](#player-climb-vrtk_playerclimb)
  * [Dash Teleport](#dash-teleport-vrtk_dashteleport)
+ * [Tag Or Script Policy List](#tag-or-script-policy-list-vrtk_tagorscriptpolicylist)
  * [Simulating Headset Movement](#simulating-headset-movement-vrtk_simulator)
 
 ---
@@ -1096,6 +1099,7 @@ The UI pointer is activated via the `Pointer` alias on the `Controller Events` a
  * **Controller:** The controller that will be used to toggle the pointer. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.
  * **Ignore Canvas With Tag Or Class:** A string that specifies a canvas Tag or the name of a Script attached to a canvas and denotes that any world canvases that contain this tag or script will be ignored by the UI Pointer.
  * **Activation Mode:** Determines when the UI pointer should be active.
+ * **Canvas Tag Or Script List Policy:** A specified VRTK_TagOrScriptPolicyList to use to determine whether any world canvases will be acted upon by the UI Pointer. If a list is provided then the 'Ignore Canvas With Tag Or Class' parameter will be ignored.
 
 ### Class Variables
 
@@ -1177,6 +1181,7 @@ The Basic Teleport script is attached to the `[CameraRig]` prefab.
  * **Distance Blink Delay:** A range between 0 and 32 that determines how long the blink transition will stay blacked out depending on the distance being teleported. A value of 0 will not delay the teleport blink effect over any distance, a value of 32 will delay the teleport blink fade in even when the distance teleported is very close to the original position. This can be used to simulate time taking longer to pass the further a user teleports. A value of 16 provides a decent basis to simulate this to the user.
  * **Headset Position Compensation:** If this is checked then the teleported location will be the position of the headset within the play area. If it is unchecked then the teleported location will always be the centre of the play area even if the headset position is not in the centre of the play area.
  * **Ignore Target With Tag Or Class:** A string that specifies an object Tag or the name of a Script attached to an object and notifies the teleporter that the destination is to be ignored so the user cannot teleport to that location. It also ensure the pointer colour is set to the miss colour.
+ * **Target Tag Or Script List Policy:** A specified VRTK_TagOrScriptPolicyList to use to determine whether destination targets will be acted upon by the Teleporter. If a list is provided then the 'Ignore Target With Tag Or Class' parameter will be ignored.
  * **Nav Mesh Limit Distance:** The max distance the nav mesh edge can be from the teleport destination to be considered valid. If a value of `0` is given then the nav mesh restriction will be ignored.
 
 ### Class Events
@@ -1280,6 +1285,7 @@ The purpose of the Headset Collision is to detect when the user's VR headset col
 ### Inspector Parameters
 
  * **Ignore Target With Tag Or Class:** A string that specifies an object Tag or the name of a Script attached to an object and will be ignored on headset collision.
+ * **Target Tag Or Script List Policy:** A specified VRTK_TagOrScriptPolicyList to use to determine whether any objects will be acted upon by the Headset Collision. If a list is provided then the 'Ignore Target With Tag Or Class' parameter will be ignored.
 
 ### Class Events
 
@@ -1418,6 +1424,7 @@ The Headset Collision Fade uses a composition of the Headset Collision and Heads
  * **Blink Transition Speed:** The fade blink speed on collision.
  * **Fade Color:** The colour to fade the headset to on collision.
  * **Ignore Target With Tag Or Class:** A string that specifies an object Tag or the name of a Script attached to an object and will prevent the object from fading the headset view on collision.
+ * **Target Tag Or Script List Policy:** A specified VRTK_TagOrScriptPolicyList to use to determine whether any objects will be acted upon by the Headset Collision Fade. If a list is provided then the 'Ignore Target With Tag Or Class' parameter will be ignored.
 
 ### Example
 
@@ -2320,6 +2327,52 @@ Adding the `VRTK_DashTeleport_UnityEvents` component to `VRTK_DashTeleport` obje
 ### Example
 
 `SteamVR_Unity_Toolkit/Examples/038_CameraRig_DashTeleport` shows how to turn off the mesh renderers of objects that are in the way during the dash.
+
+---
+
+## Tag Or Script Policy List (VRTK_TagOrScriptPolicyList)
+
+### Overview
+
+The Tag Or Script Policy List allows to create a list of either tag names or script names that can be checked against to see if another operation is permitted.
+
+A number of other scripts can use a Tag Or Script Policy List to determine if an operation is permitted based on whether a game object has a tag applied or a script component on it.
+
+For example, the Teleporter scripts can ignore game object targets as a teleport location if the game object contains a tag that is in the identifiers list and the policy is set to ignore.
+
+Or the teleporter can only allow teleport to targets that contain a tag that is in the identifiers list and the policy is set to include.
+
+Add the Tag Or Script Policy List script to a game object (preferably the same component utilising the list) and then configure the list accordingly.
+
+Then in the component that has a Tag Or Script Policy List paramter (e.g. BasicTeleporter has `Target Tag Or Script List Policy`) simply select the list that has been created and defined.
+
+### Inspector Parameters
+
+ * **Operation:** The operation to apply on the list of identifiers.
+ * **Check Type:** The element type on the game object to check against.
+
+### Class Variables
+
+ * `public enum OperationTypes` - The operation to apply on the list of identifiers.
+  * `Ignore` - Will ignore any game objects that contain either a tag or script component that is included in the identifiers list.
+  * `Include` - Will only include game objects that contain either a tag or script component that is included in the identifiers list.
+ * `public enum CheckTypes` - The types of element that can be checked against.
+  * `Tag` - The tag applied to the game object.
+  * `Script` - A script component added to the game object.
+  * `Tag_Or_Script` - Either a tag applied to the game object or a script component added to the game object.
+
+### Class Methods
+
+#### Find/1
+
+  > `public bool Find(GameObject obj)`
+
+  * Parameters
+   * `GameObject obj` - The game object to check if it has a tag or script that is listed in the identifiers list.
+  * Returns
+   * `bool` - If the operation is `Ignore` and the game object is matched by an identifier from the list then it returns true. If the operation is `Include` and the game object is not matched by an identifier from the list then it returns true.
+
+The Find method performs the set operation to determine if the given game object contains one of the identifiers on the set check type. For instance, if the Operation is `Ignore` and the Check Type is `Tag` then the Find method will attempt to see if the given game object has a tag that matches one of the identifiers.
 
 ---
 

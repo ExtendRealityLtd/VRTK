@@ -42,6 +42,8 @@ namespace VRTK
         public bool handlePlayAreaCursorCollisions = false;
         [Tooltip("A string that specifies an object Tag or the name of a Script attached to an object and notifies the play area cursor to ignore collisions with the object.")]
         public string ignoreTargetWithTagOrClass;
+        [Tooltip("A specified VRTK_TagOrScriptPolicyList to use to determine whether the play area cursor collisions will be acted upon. If a list is provided then the 'Ignore Target With Tag Or Class' parameter will be ignored.")]
+        public VRTK_TagOrScriptPolicyList targetTagOrScriptListPolicy;
         [Tooltip("Determines when the pointer beam should be displayed.")]
         public pointerVisibilityStates pointerVisibility = pointerVisibilityStates.On_When_Active;
         [Tooltip("If this is checked then the pointer beam will be activated on first press of the pointer alias button and will stay active until the pointer alias button is pressed again. The destination set event is emitted when the beam is deactivated on the second button press.")]
@@ -307,7 +309,7 @@ namespace VRTK
             {
                 validNavMeshLocation = true;
             }
-            return (validNavMeshLocation && target && target.tag != invalidTargetWithTagOrClass && target.GetComponent(invalidTargetWithTagOrClass) == null);
+            return (validNavMeshLocation && target && !(Utilities.TagOrScriptCheck(target.gameObject, invalidTagOrScriptListPolicy, invalidTargetWithTagOrClass)));
         }
 
         private bool PointerActivatesUseAction(VRTK_InteractableObject io)
@@ -431,7 +433,7 @@ namespace VRTK
 
             var playAreaCursorScript = playAreaCursor.AddComponent<VRTK_PlayAreaCollider>();
             playAreaCursorScript.SetParent(gameObject);
-            playAreaCursorScript.SetIgnoreTarget(ignoreTargetWithTagOrClass);
+            playAreaCursorScript.SetIgnoreTarget(ignoreTargetWithTagOrClass, targetTagOrScriptListPolicy);
             playAreaCursor.layer = LayerMask.NameToLayer("Ignore Raycast");
 
             var playAreaBoundaryX = playArea.transform.localScale.x / 2;
@@ -467,20 +469,22 @@ namespace VRTK
     {
         private GameObject parent;
         private string ignoreTargetWithTagOrClass;
+        private VRTK_TagOrScriptPolicyList targetTagOrScriptListPolicy;
 
         public void SetParent(GameObject setParent)
         {
             parent = setParent;
         }
 
-        public void SetIgnoreTarget(string ignore)
+        public void SetIgnoreTarget(string ignore, VRTK_TagOrScriptPolicyList list = null)
         {
             ignoreTargetWithTagOrClass = ignore;
+            targetTagOrScriptListPolicy = list;
         }
 
         private bool ValidTarget(Collider collider)
         {
-            return (!collider.GetComponent<VRTK_PlayerObject>() & collider.tag != ignoreTargetWithTagOrClass && collider.GetComponent(ignoreTargetWithTagOrClass) == null);
+            return (!collider.GetComponent<VRTK_PlayerObject>() && !(Utilities.TagOrScriptCheck(collider.gameObject, targetTagOrScriptListPolicy, ignoreTargetWithTagOrClass)));
         }
 
         private void OnTriggerStay(Collider collider)

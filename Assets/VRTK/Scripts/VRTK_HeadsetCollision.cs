@@ -36,6 +36,8 @@ namespace VRTK
     {
         [Tooltip("A string that specifies an object Tag or the name of a Script attached to an object and will be ignored on headset collision.")]
         public string ignoreTargetWithTagOrClass;
+        [Tooltip("A specified VRTK_TagOrScriptPolicyList to use to determine whether any objects will be acted upon by the Headset Collision. If a list is provided then the 'Ignore Target With Tag Or Class' parameter will be ignored.")]
+        public VRTK_TagOrScriptPolicyList targetTagOrScriptListPolicy;
 
         /// <summary>
         /// Emitted when the user's headset collides with another game object.
@@ -106,7 +108,7 @@ namespace VRTK
 
         private bool ValidTarget(Transform target)
         {
-            return (target && target.tag != ignoreTargetWithTagOrClass && target.GetComponent(ignoreTargetWithTagOrClass) == null);
+            return (target && !(Utilities.TagOrScriptCheck(target.gameObject, targetTagOrScriptListPolicy, ignoreTargetWithTagOrClass)));
         }
 
         private void OnTriggerStay(Collider collider)
