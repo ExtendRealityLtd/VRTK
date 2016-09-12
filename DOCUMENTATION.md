@@ -422,6 +422,7 @@ This directory contains all of the toolkit scripts that add VR functionality to 
  * [Dash Teleport](#dash-teleport-vrtk_dashteleport)
  * [Tag Or Script Policy List](#tag-or-script-policy-list-vrtk_tagorscriptpolicylist)
  * [Simulating Headset Movement](#simulating-headset-movement-vrtk_simulator)
+ * [Adaptive Quality](#adaptive-quality-vrtk_adaptivequality)
 
 ---
 
@@ -2392,6 +2393,95 @@ The Simulator script is attached to the `[CameraRig]` prefab. Supported movement
  * **Only In Editor:** Typically the simulator should be turned off when not testing anymore. This option will do this automatically when outside the editor.
  * **Step Size:** Depending on the scale of the world the step size can be defined to increase or decrease movement speed.
  * **Cam Start:** An optional game object marking the position and rotation at which the camera should be initially placed.
+
+---
+
+## Adaptive Quality (VRTK_AdaptiveQuality)
+
+### Overview
+
+Adaptive Quality dynamically changes rendering settings to maintain VR framerate while maximizing GPU utilization.
+
+The Adaptive Quality script is attached to the `eye` object within the `[CameraRig]` prefab.
+
+There are two goals:
+ * Reduce the chances of dropping frames and reprojecting
+ * Increase quality when there are idle GPU cycles
+
+This script currently changes the following to reach these goals:
+ * Rendering resolution and viewport (aka Dynamic Resolution)
+
+In the future it could be changed to also change the following:
+ * MSAA level
+ * Fixed Foveated Rendering
+ * Radial Density Masking
+ * (Non-fixed) Foveated Rendering (once HMDs support eye tracking)
+
+Some shaders, especially Image Effects, need to be modified to work with the changed render scale. To fix them
+pass `1.0f / VRSettings.renderViewportScale` into the shader and scale all incoming UV values with it in the vertex
+program. Do this by using `Material.SetFloat` to set the value in the script that configures the shader.
+
+In more detail:
+ * In the `.shader` file: Add a new runtime-set property value `float _InverseOfRenderViewportScale` and add `vertexInput.texcoord *= _InverseOfRenderViewportScale` to the start of the vertex program
+ * In the `.cs` file: Before using the material (eg. `Graphics.Blit`) add `material.SetFloat("_InverseOfRenderViewportScale", 1.0f / VRSettings.renderViewportScale)`
+
+### Inspector Parameters
+
+ * **Msaa Level:** The MSAA level to use.
+ * **Minimum Render Scale:** The minimum allowed render scale.
+ * **Maximum Render Scale:** The maximum allowed render scale.
+ * **Render Scale Fill Rate Step Size In Percent:** The fill rate step size in percent by which the render scale levels will be calculated.
+ * **Override Render Scale:** Toggles whether to override the used render scale level.
+ * **Override Render Scale Level:** The render scale level to override the current one with.
+
+### Class Variables
+
+ * `public readonly ReadOnlyCollection<float> renderScales` - All the calculated render scales. The elements of this collection are to be interpreted as modifiers to the recommended render target resolution provided by the current `VRDevice`.
+ * `public float currentRenderScale` - The current render scale. A render scale of 1.0 represents the recommended render target resolution provided by the current `VRDevice`.
+ * `public Vector2 defaultRenderTargetResolution` - The recommended render target resolution provided by the current `VRDevice`.
+ * `public Vector2 currentRenderTargetResolution` - The current render target resolution.
+
+### Class Methods
+
+#### RenderTargetResolutionForRenderScale/1
+
+  > `public static Vector2 RenderTargetResolutionForRenderScale(float renderScale)`
+
+  * Parameters
+   * `float renderScale` -  The render scale to calculate the render target resolution with.
+  * Returns
+   * `Vector2` -  The render target resolution for `renderScale`.
+
+Calculates and returns the render target resolution for a given render scale.
+
+#### BiggestAllowedMaximumRenderScale/0
+
+  > `public float BiggestAllowedMaximumRenderScale()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `float` -  The biggest allowed maximum render scale.
+
+Calculates and returns the biggest allowed maximum render scale to be used for `maximumRenderScale` given the current `maximumRenderTargetDimension`.
+
+#### ToString/0
+
+  > `public override string ToString()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `string` -  The summary.
+
+A summary of this script by listing all the calculated render scales with their corresponding render target resolution.
+
+### Example
+
+`VRTK/Examples/039_CameraRig_AdaptiveQuality` displays the frames per second in the centre of the headset view.
+The debug visualization of this script is displayed near the top edge of the headset view.
+Pressing the trigger generates a new sphere and pressing the touchpad generates ten new spheres.
+Eventually when lots of spheres are present the FPS will drop and demonstrate the script.
 
 ---
 
