@@ -1097,8 +1097,9 @@ The UI pointer is activated via the `Pointer` alias on the `Controller Events` a
 ### Inspector Parameters
 
  * **Controller:** The controller that will be used to toggle the pointer. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.
- * **Ignore Canvas With Tag Or Class:** A string that specifies a canvas Tag or the name of a Script attached to a canvas and denotes that any world canvases that contain this tag or script will be ignored by the UI Pointer.
  * **Activation Mode:** Determines when the UI pointer should be active.
+ * **Attempt Click On Deactivate:** Determines whether the UI click action should be triggered when the pointer is deactivated. If the pointer is hovering over a clickable element then it will invoke the click action on that element.
+ * **Ignore Canvas With Tag Or Class:** A string that specifies a canvas Tag or the name of a Script attached to a canvas and denotes that any world canvases that contain this tag or script will be ignored by the UI Pointer.
  * **Canvas Tag Or Script List Policy:** A specified VRTK_TagOrScriptPolicyList to use to determine whether any world canvases will be acted upon by the UI Pointer. If a list is provided then the 'Ignore Canvas With Tag Or Class' parameter will be ignored.
 
 ### Class Variables
@@ -1123,6 +1124,7 @@ Adding the `VRTK_UIPointer_UnityEvents` component to `VRTK_UIPointer` object all
 ### Event Payload
 
  * `uint controllerIndex` - The index of the controller that was used.
+ * `bool isActive` - The state of whether the UI Pointer is currently active or not.
  * `GameObject currentTarget` - The current UI element that the pointer is colliding with.
  * `GameObject previousTarget` - The previous UI element that the pointer was colliding with.
 

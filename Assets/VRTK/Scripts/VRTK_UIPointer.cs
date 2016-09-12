@@ -9,11 +9,13 @@ namespace VRTK
     /// Event Payload
     /// </summary>
     /// <param name="controllerIndex">The index of the controller that was used.</param>
+    /// <param name="isActive">The state of whether the UI Pointer is currently active or not.</param>
     /// <param name="currentTarget">The current UI element that the pointer is colliding with.</param>
     /// <param name="previousTarget">The previous UI element that the pointer was colliding with.</param>
     public struct UIPointerEventArgs
     {
         public uint controllerIndex;
+        public bool isActive;
         public GameObject currentTarget;
         public GameObject previousTarget;
     }
@@ -55,10 +57,12 @@ namespace VRTK
 
         [Tooltip("The controller that will be used to toggle the pointer. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.")]
         public VRTK_ControllerEvents controller;
-        [Tooltip("A string that specifies a canvas Tag or the name of a Script attached to a canvas and denotes that any world canvases that contain this tag or script will be ignored by the UI Pointer.")]
-        public string ignoreCanvasWithTagOrClass;
         [Tooltip("Determines when the UI pointer should be active.")]
         public ActivationMethods activationMode = ActivationMethods.Hold_Button;
+        [Tooltip("Determines whether the UI click action should be triggered when the pointer is deactivated. If the pointer is hovering over a clickable element then it will invoke the click action on that element.")]
+        public bool attemptClickOnDeactivate = false;
+        [Tooltip("A string that specifies a canvas Tag or the name of a Script attached to a canvas and denotes that any world canvases that contain this tag or script will be ignored by the UI Pointer.")]
+        public string ignoreCanvasWithTagOrClass;
         [Tooltip("A specified VRTK_TagOrScriptPolicyList to use to determine whether any world canvases will be acted upon by the UI Pointer. If a list is provided then the 'Ignore Canvas With Tag Or Class' parameter will be ignored.")]
         public VRTK_TagOrScriptPolicyList canvasTagOrScriptListPolicy;
 
@@ -95,6 +99,11 @@ namespace VRTK
             if (UIPointerElementExit != null)
             {
                 UIPointerElementExit(this, e);
+
+                if (attemptClickOnDeactivate && !e.isActive && e.previousTarget)
+                {
+                    pointerEventData.pointerPress = e.previousTarget;
+                }
             }
         }
 
@@ -102,6 +111,7 @@ namespace VRTK
         {
             UIPointerEventArgs e;
             e.controllerIndex = VRTK_DeviceFinder.GetControllerIndex(controller.gameObject);
+            e.isActive = PointerActive();
             e.currentTarget = currentTarget;
             e.previousTarget = lastTarget;
             return e;
