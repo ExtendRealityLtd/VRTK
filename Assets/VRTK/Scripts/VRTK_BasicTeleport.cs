@@ -46,6 +46,13 @@ namespace VRTK
         protected Transform eyeCamera;
         protected bool adjustYForTerrain = false;
         protected bool enableTeleport = true;
+        protected int _navMeshLayerMask = -1;
+        public int NavMeshLayerMask
+        {
+            get { return _navMeshLayerMask; }
+            set { _navMeshLayerMask = value; }
+        }
+
 
         private float blinkPause = 0f;
         private float fadeInTime = 0f;
@@ -139,14 +146,17 @@ namespace VRTK
             }
 
             bool validNavMeshLocation = false;
-            if (target)
-            {
-                NavMeshHit hit;
-                validNavMeshLocation = NavMesh.SamplePosition(destinationPosition, out hit, 0.1f, NavMesh.AllAreas);
-            }
             if (navMeshLimitDistance == 0f)
             {
                 validNavMeshLocation = true;
+            }
+            else
+            { 
+                if (target)
+                {
+                    NavMeshHit hit;
+                    validNavMeshLocation = NavMesh.SamplePosition(destinationPosition, out hit, navMeshLimitDistance, NavMeshLayerMask);
+                }
             }
 
             return (validNavMeshLocation && target && target.tag != ignoreTargetWithTagOrClass && target.GetComponent(ignoreTargetWithTagOrClass) == null);
