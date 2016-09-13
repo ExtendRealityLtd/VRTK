@@ -38,10 +38,10 @@
                 EditorGUILayout.PrefixLabel("Rumble on Touch:");
                 EditorGUI.indentLevel--;
                 GUILayout.Label("Strength", GUILayout.MinWidth(49f));
-                float x = EditorGUILayout.FloatField(targ.rumbleOnTouch.x, GUILayout.MinWidth(10f));
-                GUILayout.Label("Duration", GUILayout.MinWidth(50f));
                 float y = EditorGUILayout.FloatField(targ.rumbleOnTouch.y, GUILayout.MinWidth(10f));
-                targ.rumbleOnTouch = new Vector2(y, x);
+                GUILayout.Label("Duration", GUILayout.MinWidth(50f));
+                float x = EditorGUILayout.FloatField(targ.rumbleOnTouch.x, GUILayout.MinWidth(10f));
+                targ.rumbleOnTouch = new Vector2(x, y);
                 EditorGUI.indentLevel++;
                 GUILayout.EndHorizontal();
 
@@ -80,10 +80,10 @@
                     EditorGUILayout.PrefixLabel("Rumble on Grab:");
                     EditorGUI.indentLevel--;
                     GUILayout.Label("Strength", GUILayout.MinWidth(49f));
-                    float x = EditorGUILayout.FloatField(targ.rumbleOnGrab.x, GUILayout.MinWidth(10f));
-                    GUILayout.Label("Duration", GUILayout.MinWidth(50f));
                     float y = EditorGUILayout.FloatField(targ.rumbleOnGrab.y, GUILayout.MinWidth(10f));
-                    targ.rumbleOnGrab = new Vector2(y, x);
+                    GUILayout.Label("Duration", GUILayout.MinWidth(50f));
+                    float x = EditorGUILayout.FloatField(targ.rumbleOnGrab.x, GUILayout.MinWidth(10f));
+                    targ.rumbleOnGrab = new Vector2(x, y);
                     EditorGUI.indentLevel++;
                     GUILayout.EndHorizontal();
 
@@ -143,10 +143,10 @@
                     EditorGUILayout.PrefixLabel("Rumble on Use:");
                     EditorGUI.indentLevel--;
                     GUILayout.Label("Strength", GUILayout.MinWidth(49f));
-                    float x = EditorGUILayout.FloatField(targ.rumbleOnUse.x, GUILayout.MinWidth(10f));
-                    GUILayout.Label("Duration", GUILayout.MinWidth(50f));
                     float y = EditorGUILayout.FloatField(targ.rumbleOnUse.y, GUILayout.MinWidth(10f));
-                    targ.rumbleOnUse = new Vector2(y, x);
+                    GUILayout.Label("Duration", GUILayout.MinWidth(50f));
+                    float x = EditorGUILayout.FloatField(targ.rumbleOnUse.x, GUILayout.MinWidth(10f));
+                    targ.rumbleOnUse = new Vector2(x, y);
                     EditorGUI.indentLevel++;
                     GUILayout.EndHorizontal();
 
