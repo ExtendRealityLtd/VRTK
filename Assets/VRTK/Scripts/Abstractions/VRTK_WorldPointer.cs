@@ -233,9 +233,15 @@ namespace VRTK
             StopUseAction();
         }
 
+        private bool InvalidConstantBeam()
+        {
+            var equalToggleSet = controller.pointerToggleButton == controller.pointerSetButton;
+            return (!holdButtonToActivate && ((equalToggleSet && beamEnabledState != 0) || (!equalToggleSet && !isActive)));
+        }
+
         protected virtual void PointerSet()
         {
-            if (!enabled || !destinationSetActive || !pointerContactTarget || !CanActivate() || (!holdButtonToActivate && beamEnabledState != 0))
+            if (!enabled || !destinationSetActive || !pointerContactTarget || !CanActivate() || InvalidConstantBeam())
             {
                 return;
             }
