@@ -9,11 +9,11 @@ namespace VRTK
     public class VRTK_AdaptiveQualityEditor : Editor
     {
         private const string NoSteamVR_CameraFoundHelpBoxText =
-          "This script needs to be added to a GameObject that has a SteamVR_Camera attached to it.";
+          "This script needs to be added to a `GameObject` that has a `SteamVR_Camera` attached to it.";
         private const string DontDisableHelpBoxText =
           "This script supports command line arguments to configure the adaptive quality scaling."
           + " If this script is disabled it won't respond to the arguments.\n\n"
-          + "Leave this script enabled and use the \"active\" property if you want to disable"
+          + "Leave this script enabled and use the `active` property if you want to disable"
           + " the adaptive quality scaling for now, but want to leave it possible for your built"
           + " binary to respond to the arguments.";
         private const string MaximumRenderScaleTooBigHelpBoxText =
