@@ -2431,20 +2431,20 @@ In more detail:
  * **Draw Debug Visualization:** Toggles whether to show the debug overlay. Each square represents a different level on the quality scale. Levels increase from left to right,  and the first green box that is lit above represents the recommended render target resolution provided by  the current `VRDevice`. The yellow boxes represent resolutions below the recommended render target resolution. The currently lit box becomes red whenever the user is likely seeing reprojection in the HMD since the  application isn't maintaining VR framerate. If lit, the box all the way on the left is almost always lit red because  it represents the lowest render scale with reprojection on.
  * **Responds To Keyboard Shortcuts:** Toggles whether to allow keyboard shortcuts to control this script.
   * The supported shortcuts are:
-    * Shift+F1: Toggle debug visualization on/off
-    * Shift+F2: Toggle usage of override render scale on/off
-    * Shift+F3: Decrease override render scale level
-    * Shift+F4: Increase override render scale level
+    * `Shift+F1`: Toggle debug visualization on/off
+    * `Shift+F2`: Toggle usage of override render scale on/off
+    * `Shift+F3`: Decrease override render scale level
+    * `Shift+F4`: Increase override render scale level
  * **Responds To Command Line Arguments:** Toggles whether to allow command line arguments to control this script at startup of the standalone build.
   * The supported command line arguments all begin with '-' and are:
-    * -noaq: Disable adaptive quality
-    * -aqminscale X: Set minimum render scale to X
-    * -aqmaxscale X: Set maximum render scale to X
-    * -aqmaxres X: Set maximum render target dimension to X
-    * -aqfillratestep X: Set render scale fill rate step size in percent to X (X from 1 to 100)
-    * -aqoverride X: Set override render scale level to X
-    * -vrdebug: Enable debug visualization
-    * -msaa X: Set MSAA level to X
+    * `-noaq`: Disable adaptive quality
+    * `-aqminscale X`: Set minimum render scale to X
+    * `-aqmaxscale X`: Set maximum render scale to X
+    * `-aqmaxres X`: Set maximum render target dimension to X
+    * `-aqfillratestep X`: Set render scale fill rate step size in percent to X (X from 1 to 100)
+    * `-aqoverride X`: Set override render scale level to X
+    * `-vrdebug`: Enable debug visualization
+    * `-msaa X`: Set MSAA level to X
  * **Msaa Level:** The MSAA level to use.
  * **Minimum Render Scale:** The minimum allowed render scale.
  * **Maximum Render Scale:** The maximum allowed render scale.
