@@ -9,7 +9,9 @@
         private bool viewTouch = true;
         private bool viewGrab = false;
         private bool viewUse = false;
-        private bool viewCustom = false;
+        private bool viewCustom = true;
+        private bool isGrabbableLastState = false;
+        private bool isUsableLastState = false;
 
         public override void OnInspectorGUI()
         {
@@ -52,6 +54,11 @@
             //Grab Layout
             GUILayout.Space(10);
             targ.isGrabbable = EditorGUILayout.Toggle("Is Grabbable:", targ.isGrabbable);
+            if (targ.isGrabbable != isGrabbableLastState && targ.isGrabbable)
+            {
+                viewGrab = true;
+            }
+            isGrabbableLastState = targ.isGrabbable;
             if (targ.isGrabbable)
             {
                 guiStyle = EditorStyles.foldout;
@@ -110,6 +117,11 @@
 
             GUILayout.Space(10);
             targ.isUsable = EditorGUILayout.Toggle("Is Usable:", targ.isUsable);
+            if (targ.isUsable != isUsableLastState && targ.isUsable)
+            {
+                viewUse = true;
+            }
+            isUsableLastState = targ.isUsable;
             if (targ.isUsable)
             {
                 guiStyle = EditorStyles.foldout;
