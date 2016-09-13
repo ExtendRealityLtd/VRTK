@@ -331,7 +331,6 @@ namespace VRTK
                 rb.velocity = velocity * (throwMultiplier * objectThrowMultiplier);
                 rb.angularVelocity = angularVelocity;
             }
-            rb.maxAngularVelocity = rb.angularVelocity.magnitude;
         }
 
         private bool GrabInteractedObject()
