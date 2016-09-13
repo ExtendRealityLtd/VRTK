@@ -2427,9 +2427,28 @@ In more detail:
 
 ### Inspector Parameters
 
+ * **Active:** Toggles whether the render quality is dynamically adjusted to maintain VR framerate. If unchecked, the renderer will render at the recommended resolution provided by the current `VRDevice`.
+ * **Draw Debug Visualization:** Toggles whether to show the debug overlay. Each square represents a different level on the quality scale. Levels increase from left to right,  and the first green box that is lit above represents the recommended render target resolution provided by  the current `VRDevice`. The yellow boxes represent resolutions below the recommended render target resolution. The currently lit box becomes red whenever the user is likely seeing reprojection in the HMD since the  application isn't maintaining VR framerate. If lit, the box all the way on the left is almost always lit red because  it represents the lowest render scale with reprojection on.
+ * **Responds To Keyboard Shortcuts:** Toggles whether to allow keyboard shortcuts to control this script.
+  * The supported shortcuts are:
+   * Shift+F1: Toggle debug visualization on/off
+   * Shift+F2: Toggle usage of override render scale on/off
+   * Shift+F3: Decrease override render scale level
+   * Shift+F4: Increase override render scale level
+ * **Responds To Command Line Arguments:** Toggles whether to allow command line arguments to control this script at startup of the standalone build.
+  * The supported command line arguments all begin with '-' and are:
+   * -noaq: Disable adaptive quality
+   * -aqminscale X: Set minimum render scale to X
+   * -aqmaxscale X: Set maximum render scale to X
+   * -aqmaxres X: Set maximum render target dimension to X
+   * -aqfillratestep X: Set render scale fill rate step size in percent to X (X from 1 to 100)
+   * -aqoverride X: Set override render scale level to X
+   * -vrdebug: Enable debug visualization
+   * -msaa X: Set MSAA level to X
  * **Msaa Level:** The MSAA level to use.
  * **Minimum Render Scale:** The minimum allowed render scale.
  * **Maximum Render Scale:** The maximum allowed render scale.
+ * **Maximum Render Target Dimension:** The maximum allowed render target dimension. This puts an upper limit on the size of the render target regardless of the maximum render scale.
  * **Render Scale Fill Rate Step Size In Percent:** The fill rate step size in percent by which the render scale levels will be calculated.
  * **Override Render Scale:** Toggles whether to override the used render scale level.
  * **Override Render Scale Level:** The render scale level to override the current one with.
@@ -2448,9 +2467,9 @@ In more detail:
   > `public static Vector2 RenderTargetResolutionForRenderScale(float renderScale)`
 
   * Parameters
-   * `float renderScale` -  The render scale to calculate the render target resolution with.
+   * `float renderScale` - The render scale to calculate the render target resolution with.
   * Returns
-   * `Vector2` -  The render target resolution for `renderScale`.
+   * `Vector2` - The render target resolution for `renderScale`.
 
 Calculates and returns the render target resolution for a given render scale.
 
@@ -2461,7 +2480,7 @@ Calculates and returns the render target resolution for a given render scale.
   * Parameters
    * _none_
   * Returns
-   * `float` -  The biggest allowed maximum render scale.
+   * `float` - The biggest allowed maximum render scale.
 
 Calculates and returns the biggest allowed maximum render scale to be used for `maximumRenderScale` given the current `maximumRenderTargetDimension`.
 
@@ -2472,7 +2491,7 @@ Calculates and returns the biggest allowed maximum render scale to be used for `
   * Parameters
    * _none_
   * Returns
-   * `string` -  The summary.
+   * `string` - The summary.
 
 A summary of this script by listing all the calculated render scales with their corresponding render target resolution.
 
