@@ -401,6 +401,7 @@ namespace VRTK
                 {
                     controllerCollisionDetector = Instantiate(customRigidbodyObject, transform.position, transform.rotation) as GameObject;
                     controllerCollisionDetector.transform.SetParent(transform);
+                    controllerCollisionDetector.transform.localScale = transform.localScale;
                     destroyColliderOnDisable = true;
                 }
             }
