@@ -179,10 +179,10 @@ namespace VRTK
         private float previousMaximumRenderScale;
         private float previousRenderScaleFillRateStepSizeInPercent;
 
+        private readonly Timing timing = new Timing();
+        private const int RenderScaleChangeFrameCost = 2;
         private int lastRenderScaleChangeFrameCount;
-        private readonly float[] frameTimeRingBuffer = { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
-                                                         0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };
-        private int frameTimeRingBufferIndex;
+
         private bool interleavedReprojectionEnabled;
         private bool hmdDisplayIsOnDesktop;
         private float singleFrameDurationInMilliseconds;
@@ -317,6 +317,8 @@ namespace VRTK
             HandleKeyPresses();
             UpdateRenderScaleLevels();
             UpdateDebugVisualization();
+
+            timing.SaveCurrentFrameTiming();
         }
 
 #if UNITY_5_4_1 || UNITY_5_5_OR_NEWER
@@ -480,88 +482,46 @@ namespace VRTK
                 return;
             }
 
-            // Add latest timing to ring buffer
-            frameTimeRingBufferIndex = (frameTimeRingBufferIndex + 1) % frameTimeRingBuffer.Length;
-            frameTimeRingBuffer[frameTimeRingBufferIndex] = VRStats.gpuTimeLastFrame;
-
             // Rendering in low resolution means adaptive quality needs to scale back the render scale target to free up gpu cycles
             bool renderInLowResolution = VRTK_SDK_Bridge.ShouldAppRenderWithLowResources();
 
             // Thresholds
-            float thresholdModifier = renderInLowResolution
-                                      ? singleFrameDurationInMilliseconds * 0.75f
-                                      : singleFrameDurationInMilliseconds;
-            float lowThresholdInMilliseconds = 0.7f * thresholdModifier;
-            float extrapolationThresholdInMilliseconds = 0.85f * thresholdModifier;
-            float highThresholdInMilliseconds = 0.9f * thresholdModifier;
+            float allowedSingleFrameDurationInMilliseconds = renderInLowResolution
+                                                             ? singleFrameDurationInMilliseconds * 0.75f
+                                                             : singleFrameDurationInMilliseconds;
+            float lowThresholdInMilliseconds = 0.7f * allowedSingleFrameDurationInMilliseconds;
+            float extrapolationThresholdInMilliseconds = 0.85f * allowedSingleFrameDurationInMilliseconds;
+            float highThresholdInMilliseconds = 0.9f * allowedSingleFrameDurationInMilliseconds;
 
-            // Get latest 3 frames
-            float frameMinus0 = frameTimeRingBuffer[(frameTimeRingBufferIndex - 0 + frameTimeRingBuffer.Length) % frameTimeRingBuffer.Length];
-            float frameMinus1 = frameTimeRingBuffer[(frameTimeRingBufferIndex - 1 + frameTimeRingBuffer.Length) % frameTimeRingBuffer.Length];
-            float frameMinus2 = frameTimeRingBuffer[(frameTimeRingBufferIndex - 2 + frameTimeRingBuffer.Length) % frameTimeRingBuffer.Length];
+            int newRenderScaleLevel = currentRenderScaleLevel;
 
-            int previousLevel = currentRenderScaleLevel;
+            // Rapidly reduce quality if cost of last 1 or 3 frames, or the predicted next frame's cost are expensive
+            if (timing.WasFrameTimingBad(1, highThresholdInMilliseconds, lastRenderScaleChangeFrameCount, RenderScaleChangeFrameCost)
+                || timing.WasFrameTimingBad(3, highThresholdInMilliseconds, lastRenderScaleChangeFrameCount, RenderScaleChangeFrameCost)
+                || timing.WillFrameTimingBeBad(extrapolationThresholdInMilliseconds, highThresholdInMilliseconds,
+                                               lastRenderScaleChangeFrameCount, RenderScaleChangeFrameCost))
+            {
+                // Always drop 2 levels except when dropping from level 2 (level 0 is for reprojection)
+                newRenderScaleLevel = currentRenderScaleLevel == 2 ? 1 : currentRenderScaleLevel - 2;
+            }
+            // Slowly increase quality if last 3 frames are cheap
+            else if (timing.WasFrameTimingGood(3, lowThresholdInMilliseconds, lastRenderScaleChangeFrameCount, RenderScaleChangeFrameCost))
+            {
+                // Only increase by 1 level to prevent frame drops caused by adjusting
+                newRenderScaleLevel = currentRenderScaleLevel + 1;
+            }
 
-            // Always drop 2 levels except when dropping from level 2
-            int dropTargetLevel = previousLevel == 2 ? 1 : previousLevel - 2;
-            int newLevel = Mathf.Clamp(dropTargetLevel, 0, allRenderScales.Count - 1);
+            // Apply and remember the change
+            if (newRenderScaleLevel != currentRenderScaleLevel)
+            {
+                currentRenderScaleLevel = Mathf.Clamp(newRenderScaleLevel, 0, allRenderScales.Count - 1);
+                lastRenderScaleChangeFrameCount = Time.frameCount;
+            }
 
             // Ignore frame timings if overriding
             if (overrideRenderScale)
             {
                 currentRenderScaleLevel = overrideRenderScaleLevel;
-            }
-            // Rapidly reduce quality 2 levels if last frame was critical
-            else if (Time.frameCount >= lastRenderScaleChangeFrameCount + 2 + 1
-                && frameMinus0 > highThresholdInMilliseconds
-                && newLevel != previousLevel)
-            {
-                currentRenderScaleLevel = newLevel;
-                lastRenderScaleChangeFrameCount = Time.frameCount;
-            }
-            // Rapidly reduce quality 2 levels if last 3 frames are expensive
-            else if (Time.frameCount >= lastRenderScaleChangeFrameCount + 2 + 3
-                && frameMinus0 > highThresholdInMilliseconds
-                && frameMinus1 > highThresholdInMilliseconds
-                && frameMinus2 > highThresholdInMilliseconds
-                && newLevel != previousLevel)
-            {
-                currentRenderScaleLevel = newLevel;
-                lastRenderScaleChangeFrameCount = Time.frameCount;
-            }
-            // Predict next frame's cost using linear extrapolation: max(frame-1 to frame+1, frame-2 to frame+1)
-            else if (Time.frameCount >= lastRenderScaleChangeFrameCount + 2 + 2
-                     && frameMinus0 > extrapolationThresholdInMilliseconds)
-            {
-                float frameDelta = frameMinus0 - frameMinus1;
-
-                // Use frame-2 if it's available
-                if (Time.frameCount >= lastRenderScaleChangeFrameCount + 2 + 3)
-                {
-                    float frameDelta2 = (frameMinus0 - frameMinus2) * 0.5f;
-                    frameDelta = Mathf.Max(frameDelta, frameDelta2);
-                }
-
-                if (frameMinus0 + frameDelta > highThresholdInMilliseconds
-                    && newLevel != previousLevel)
-                {
-                    currentRenderScaleLevel = newLevel;
-                    lastRenderScaleChangeFrameCount = Time.frameCount;
-                }
-            }
-            else
-            {
-                // Increase quality 1 level if last 3 frames are cheap
-                newLevel = Mathf.Clamp(previousLevel + 1, 0, allRenderScales.Count - 1);
-                if (Time.frameCount >= lastRenderScaleChangeFrameCount + 2 + 3
-                    && frameMinus0 < lowThresholdInMilliseconds
-                    && frameMinus1 < lowThresholdInMilliseconds
-                    && frameMinus2 < lowThresholdInMilliseconds
-                    && newLevel != previousLevel)
-                {
-                    currentRenderScaleLevel = newLevel;
-                    lastRenderScaleChangeFrameCount = Time.frameCount;
-                }
             }
 
             // Force on interleaved reprojection for level 0 which is just a replica of level 1 with reprojection enabled
@@ -570,11 +530,11 @@ namespace VRTK
             {
                 if (currentRenderScaleLevel == 0)
                 {
-                    if (interleavedReprojectionEnabled && frameMinus0 < singleFrameDurationInMilliseconds * 0.85f)
+                    if (interleavedReprojectionEnabled && timing.GetFrameTiming(0) < singleFrameDurationInMilliseconds * 0.85f)
                     {
                         interleavedReprojectionEnabled = false;
                     }
-                    else if (frameMinus0 > singleFrameDurationInMilliseconds * 0.925f)
+                    else if (timing.GetFrameTiming(0) > singleFrameDurationInMilliseconds * 0.925f)
                     {
                         interleavedReprojectionEnabled = true;
                     }
@@ -707,6 +667,92 @@ namespace VRTK
             public static readonly int DefaultLevel = Shader.PropertyToID("_DefaultLevel");
             public static readonly int CurrentLevel = Shader.PropertyToID("_CurrentLevel");
             public static readonly int LastFrameIsInBudget = Shader.PropertyToID("_LastFrameIsInBudget");
+        }
+
+        private sealed class Timing
+        {
+            private readonly float[] buffer = new float[12];
+            private int bufferIndex;
+
+            public void SaveCurrentFrameTiming()
+            {
+                bufferIndex = (bufferIndex + 1) % buffer.Length;
+                buffer[bufferIndex] = VRStats.gpuTimeLastFrame;
+            }
+
+            public float GetFrameTiming(int framesAgo)
+            {
+                return buffer[(bufferIndex - framesAgo + buffer.Length) % buffer.Length];
+            }
+
+            public bool WasFrameTimingBad(int framesAgo, float thresholdInMilliseconds, int lastChangeFrameCount, int changeFrameCost)
+            {
+                if (!AreFramesAvailable(framesAgo, lastChangeFrameCount, changeFrameCost))
+                {
+                    // Too early to know
+                    return false;
+                }
+
+                for (int frame = 0; frame < framesAgo; frame++)
+                {
+                    if (GetFrameTiming(frame) <= thresholdInMilliseconds)
+                    {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+
+            public bool WasFrameTimingGood(int framesAgo, float thresholdInMilliseconds, int lastChangeFrameCount, int changeFrameCost)
+            {
+                if (!AreFramesAvailable(framesAgo, lastChangeFrameCount, changeFrameCost))
+                {
+                    // Too early to know
+                    return false;
+                }
+
+                for (int frame = 0; frame < framesAgo; frame++)
+                {
+                    if (GetFrameTiming(frame) > thresholdInMilliseconds)
+                    {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+
+            public bool WillFrameTimingBeBad(float extrapolationThresholdInMilliseconds, float thresholdInMilliseconds,
+                                             int lastChangeFrameCount, int changeFrameCost)
+            {
+                if (!AreFramesAvailable(2, lastChangeFrameCount, changeFrameCost))
+                {
+                    // Too early to know
+                    return false;
+                }
+
+                // Predict next frame's cost using linear extrapolation: max(frame-1 to frame+1, frame-2 to frame+1)
+                float frameMinus0Timing = GetFrameTiming(0);
+                if (frameMinus0Timing <= extrapolationThresholdInMilliseconds)
+                {
+                    return false;
+                }
+
+                float delta = frameMinus0Timing - GetFrameTiming(1);
+
+                if (!AreFramesAvailable(3, lastChangeFrameCount, changeFrameCost))
+                {
+                    delta = Mathf.Max(delta, (frameMinus0Timing - GetFrameTiming(2)) / 2f);
+                }
+
+                return frameMinus0Timing + delta > thresholdInMilliseconds;
+            }
+
+            private static bool AreFramesAvailable(int framesAgo, int lastChangeFrameCount, int changeFrameCost)
+            {
+                return Time.frameCount >= lastChangeFrameCount + changeFrameCost + framesAgo;
+            }
         }
 
         #endregion
