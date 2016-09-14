@@ -12,11 +12,19 @@
 
         public override void Initialise(Color? color = null)
         {
-            if(color != cachedHighlightColor)
+            if (color != cachedHighlightColor)
             {
+                originalRendererMaterials = new Dictionary<string, Material[]>();
+                originalSharedRendererMaterials = new Dictionary<string, Material[]>();
+                highlightRendererMaterials = new Dictionary<string, Material[]>();
+
                 SetupCloneMaterials((Color)color);
                 cachedHighlightColor = color;
             }
+        }
+
+        public override void ResetMainTexture()
+        {
         }
 
         public override void Highlight(Color? color = null, float duration = 0f)
@@ -28,13 +36,6 @@
         public override void Unhighlight(Color? color = null, float duration = 0f)
         {
             ResetMaterials();
-        }
-
-        private void Awake()
-        {
-            originalRendererMaterials = new Dictionary<string, Material[]>();
-            originalSharedRendererMaterials = new Dictionary<string, Material[]>();
-            highlightRendererMaterials = new Dictionary<string, Material[]>();
         }
 
         private void OnDestroy()
@@ -75,11 +76,11 @@
                     tmpMaterial.color = color;
                 }
 
+                tmpMaterial.EnableKeyword("_EMISSION");
                 if (tmpMaterial.HasProperty("_EmissionColor"))
                 {
                     tmpMaterial.SetColor("_EmissionColor", Darken(color, 20f));
                 }
-
                 highlightMaterials[i] = tmpMaterial;
             }
 
