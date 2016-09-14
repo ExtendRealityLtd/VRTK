@@ -504,8 +504,8 @@ namespace VRTK
                 // Always drop 2 levels except when dropping from level 2 (level 0 is for reprojection)
                 newRenderScaleLevel = currentRenderScaleLevel == 2 ? 1 : currentRenderScaleLevel - 2;
             }
-            // Slowly increase quality if last 3 frames are cheap
-            else if (timing.WasFrameTimingGood(3, lowThresholdInMilliseconds, lastRenderScaleChangeFrameCount, RenderScaleChangeFrameCost))
+            // Slowly increase quality if last 6 frames are cheap
+            else if (timing.WasFrameTimingGood(6, lowThresholdInMilliseconds, lastRenderScaleChangeFrameCount, RenderScaleChangeFrameCost))
             {
                 // Only increase by 1 level to prevent frame drops caused by adjusting
                 newRenderScaleLevel = currentRenderScaleLevel + 1;
