@@ -143,7 +143,7 @@ namespace VRTK
         /// <remarks>
         /// A render scale of 1.0 represents the recommended render target resolution provided by the current `VRDevice`.
         /// </remarks>
-        public float currentRenderScale
+        public static float CurrentRenderScale
         {
             get { return VRSettings.renderScale * VRSettings.renderViewportScale; }
         }
@@ -161,7 +161,7 @@ namespace VRTK
         /// </summary>
         public Vector2 currentRenderTargetResolution
         {
-            get { return RenderTargetResolutionForRenderScale(currentRenderScale); }
+            get { return RenderTargetResolutionForRenderScale(CurrentRenderScale); }
         }
 
         #endregion
