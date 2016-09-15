@@ -11,6 +11,7 @@ namespace VRTK
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.Linq;
     using System.Text;
     using UnityEngine;
     using UnityEngine.VR;
@@ -386,32 +387,25 @@ namespace VRTK
 
         private void HandleKeyPresses()
         {
-            if (!respondsToKeyboardShortcuts || !(Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)))
+            if (!respondsToKeyboardShortcuts || !KeyboardShortcuts.Modifiers.Any(Input.GetKey))
             {
                 return;
             }
 
-            // Toggle debug visualization on Shift+F1
-            if (Input.GetKeyDown(KeyCode.F1))
+            if (Input.GetKeyDown(KeyboardShortcuts.ToggleDrawDebugVisualization))
             {
                 drawDebugVisualization = !drawDebugVisualization;
                 CreateOrDestroyDebugVisualization();
             }
-
-            // Toggle usage of override render scale on Shift+F2
-            if (Input.GetKeyDown(KeyCode.F2))
+            else if (Input.GetKeyDown(KeyboardShortcuts.ToggleOverrideRenderScale))
             {
                 overrideRenderScale = !overrideRenderScale;
             }
-
-            // Decrease override render scale level on Shift+F3
-            if (Input.GetKeyDown(KeyCode.F3))
+            else if (Input.GetKeyDown(KeyboardShortcuts.DecreaseOverrideRenderScaleLevel))
             {
                 overrideRenderScaleLevel = Mathf.Clamp(overrideRenderScaleLevel - 1, 0, allRenderScales.Count - 1);
             }
-
-            // Increase override render scale level on Shift+F4
-            if (Input.GetKeyDown(KeyCode.F4))
+            else if (Input.GetKeyDown(KeyboardShortcuts.IncreaseOverrideRenderScaleLevel))
             {
                 overrideRenderScaleLevel = Mathf.Clamp(overrideRenderScaleLevel + 1, 0, allRenderScales.Count - 1);
             }
@@ -659,6 +653,15 @@ namespace VRTK
             public const string DrawDebugVisualization = "-vrdebug";
 
             public const string MSAALevel = "-msaa";
+        }
+
+        private static class KeyboardShortcuts
+        {
+            public static readonly KeyCode[] Modifiers = { KeyCode.LeftShift, KeyCode.RightShift };
+            public const KeyCode ToggleDrawDebugVisualization = KeyCode.F1;
+            public const KeyCode ToggleOverrideRenderScale = KeyCode.F2;
+            public const KeyCode DecreaseOverrideRenderScaleLevel = KeyCode.F3;
+            public const KeyCode IncreaseOverrideRenderScaleLevel = KeyCode.F4;
         }
 
         private static class ShaderPropertyIDs
