@@ -9,7 +9,7 @@
         public float buttonPressure;
         public Vector2 touchpadAxis;
         public float touchpadAngle;
-	public Vector2 triggerPressedVal;
+	    public Vector2 triggerPressedVal;
     }
 
     public delegate void ControllerInteractionEventHandler(object sender, ControllerInteractionEventArgs e);
@@ -266,7 +266,7 @@
             e.buttonPressure = buttonPressure;
             e.touchpadAxis = device.GetAxis();
             e.touchpadAngle = CalculateTouchpadAxisAngle(e.touchpadAxis);
-	    e.triggerPressedVal = new Vector2(buttonPressure, controllerIndex);
+	        e.triggerPressedVal = new Vector2(buttonPressure, controllerIndex);
             return e;
         }
 
