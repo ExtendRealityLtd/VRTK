@@ -297,7 +297,7 @@ namespace VRTK
         private void UpdateCollider()
         {
             var playAreaHeightAdjustment = 0.009f;
-            var newpresenceColliderYSize = (headset.transform.localPosition.y - headsetYOffset) - transform.localPosition.y;
+            var newpresenceColliderYSize = (headset.transform.localPosition.y - headsetYOffset);
             var newpresenceColliderYCenter = (newpresenceColliderYSize != 0 ? (newpresenceColliderYSize / 2) + playAreaHeightAdjustment : 0);
 
             if (presenceCollider)
