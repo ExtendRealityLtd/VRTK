@@ -1,9 +1,10 @@
 # Introduction
 
-This file provides documentation on how to use the included prefabs and scripts along with a breakdown of the example scenes.
+This file provides documentation on how to use the included prefabs and scripts.
 
  * [Prefabs](#prefabs-vrtkprefabs)
  * [Abstract Classes](#abstract-classes-vrtkscriptsabstractions)
+ * [Highlighters](#highlighters-vrtkscriptshighlighters)
  * [Scripts](#scripts-vrtkscripts)
  * [3D Controls](#3d-controls-vrtkscriptscontrols3d)
 
@@ -394,6 +395,121 @@ The ToggleBeam method allows the pointer beam to be toggled on or off via code a
 
 ---
 
+# Highlighters (VRTK/Scripts/Highlighters)
+
+This directory contains scripts that are used to provide different object highlighting.
+
+ * [Base Highlighter](#base-highlighter-vrtk_basehighlighter)
+ * [Material Colour Swap](#material-colour-swap-vrtk_materialcolorswaphighlighter)
+
+---
+
+## Base Highlighter (VRTK_BaseHighlighter)
+
+### Overview
+
+The Base Highlighter is an abstract class that all other highlighters inherit and are required to implement the public methods.
+
+As this is an abstract class, it cannot be applied directly to a game object and performs no logic.
+
+### Class Methods
+
+#### Initialise/2
+
+  > `public abstract void Initialise(Color? color = null, Dictionary<string, object> options = null);`
+
+  * Parameters
+   * `Color? color` - An optional colour may be passed through at point of initialisation in case the highlighter requires it.
+   * `Dictionary<string, object> options` - An optional dictionary of highlighter specific options that may be differ with highlighter implementations.
+  * Returns
+   * _none_
+
+The Initalise method is used to set up the state of the highlighter.
+
+#### Highlight/2
+
+  > `public abstract void Highlight(Color? color = null, float duration = 0f);`
+
+  * Parameters
+   * `Color? color` - An optional colour to highlight the game object to. The highlight colour may already have been set in the `Initialise` method so may not be required here.
+   * `float duration` - An optional duration of how long before the highlight has occured. It can be used by highlighters to fade the colour if possible.
+  * Returns
+   * _none_
+
+The Highlight method is used to initiate the highlighting logic to apply to an object.
+
+#### Unhighlight/2
+
+  > `public abstract void Unhighlight(Color? color = null, float duration = 0f);`
+
+  * Parameters
+   * `Color? color` - An optional colour that could be used during the unhighlight phase. Usually will be left as null.
+   * `float duration` - An optional duration of how long before the unhighlight has occured.
+  * Returns
+   * _none_
+
+The Unhighlight method is used to initiate the logic that returns an object back to it's original appearance.
+
+---
+
+## Material Colour Swap (VRTK_MaterialColorSwapHighlighter)
+ > extends [VRTK_BaseHighlighter](#base-highlighter-vrtk_basehighlighter)
+
+### Overview
+
+The Material Colour Swap Highlighter is a basic implementation that simply swaps the texture colour for the given highlight colour.
+
+Due to the way the object material is interacted with, changing the material colour will break Draw Call Batching in Unity whilst the object is highlighted.
+
+The Draw Call Batching will resume on the original material when the item is no longer highlighted.
+
+This is the default highlighter that is applied to any script that requires a highlighting component (e.g. `VRTK_Interactable_Object` or `VRTK_ControllerActions`).
+
+### Class Variables
+
+ * `public float emissionDarken` - The emission colour of the texture will be the highlight colour but this percent darker. Default: `50f`
+
+### Class Methods
+
+#### Initialise/2
+
+  > `public override void Initialise(Color? color = null, Dictionary<string, object> options = null)`
+
+  * Parameters
+   * `Color? color` - Not used.
+   * `Dictionary<string, object> options` - A dictionary array containing the highlighter options:
+     * `<'resetMainTexture', bool>` - Determines if the default main texture should be cleared on highlight. `true` to reset the main default texture, `false` to not reset it.
+  * Returns
+   * _none_
+
+The Initialise method sets up the highlighter for use.
+
+#### Highlight/2
+
+  > `public override void Highlight(Color? color, float duration = 0f)`
+
+  * Parameters
+   * `Color? color` - The colour to highlight to.
+   * `float duration` - The time taken to fade to the highlighted colour.
+  * Returns
+   * _none_
+
+The Highlight method initiates the change of colour on the object and will fade to that colour (from a base white colour) for the given duration.
+
+#### Unhighlight/2
+
+  > `public override void Unhighlight(Color? color = null, float duration = 0f)`
+
+  * Parameters
+   * `Color? color` - Not used.
+   * `float duration` - Not used.
+  * Returns
+   * _none_
+
+The Unhighlight method returns the object back to it's original colour.
+
+---
+
 # Scripts (VRTK/Scripts)
 
 This directory contains all of the toolkit scripts that add VR functionality to Unity.
@@ -655,6 +771,8 @@ The IsButtonPressed method takes a given button alias and returns a boolean whet
 ### Overview
 
 The Controller Actions script provides helper methods to deal with common controller actions. It deals with actions that can be done to the controller.
+
+The highlighting of the controller is defaulted to use the `VRTK_MaterialColorSwapHighlighter` if no other highlighter is applied to the Object.
 
 ### Class Events
 
@@ -1581,6 +1699,8 @@ There is an additional script `VRTK_RoomExtender_PlayAreaGizmo` which can be att
 The Interactable Object script is attached to any game object that is required to be interacted with (e.g. via the controllers).
 
 The basis of this script is to provide a simple mechanism for identifying objects in the game world that can be grabbed or used but it is expected that this script is the base to be inherited into a script with richer functionality.
+
+The highlighting of an Interactable Object is defaulted to use the `VRTK_MaterialColorSwapHighlighter` if no other highlighter is applied to the Object.
 
 ### Inspector Parameters
 
