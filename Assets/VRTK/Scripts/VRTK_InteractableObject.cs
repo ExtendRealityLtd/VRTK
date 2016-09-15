@@ -178,6 +178,7 @@ namespace VRTK
         public int usingState = 0;
 
         protected Rigidbody rb;
+        protected bool autoRigidbody = false;
         protected GameObject touchingObject = null;
         protected GameObject grabbingObject = null;
         protected GameObject usingObject = null;
@@ -422,10 +423,6 @@ namespace VRTK
         {
             if (onGrabCollisionDelay > 0f)
             {
-                if (GetComponent<Rigidbody>())
-                {
-                    GetComponent<Rigidbody>().detectCollisions = false;
-                }
                 foreach (Rigidbody rb in GetComponentsInChildren<Rigidbody>())
                 {
                     rb.detectCollisions = false;
@@ -484,10 +481,10 @@ namespace VRTK
         /// </summary>
         public void ZeroVelocity()
         {
-            if (GetComponent<Rigidbody>())
+            if (rb)
             {
-                GetComponent<Rigidbody>().velocity = Vector3.zero;
-                GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+                rb.velocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
             }
         }
 
@@ -583,7 +580,7 @@ namespace VRTK
         protected virtual void Awake()
         {
             rb = GetComponent<Rigidbody>();
-
+            autoRigidbody = false;
             if (!AttachIsStaticObject())
             {
                 // If there is no rigid body, add one and set it to 'kinematic'.
@@ -591,6 +588,7 @@ namespace VRTK
                 {
                     rb = gameObject.AddComponent<Rigidbody>();
                     rb.isKinematic = true;
+                    autoRigidbody = true;
                 }
                 rb.maxAngularVelocity = float.MaxValue;
             }
@@ -682,10 +680,6 @@ namespace VRTK
 
         private void UnpauseCollisions()
         {
-            if (GetComponent<Rigidbody>())
-            {
-                GetComponent<Rigidbody>().detectCollisions = true;
-            }
             foreach (Rigidbody rb in GetComponentsInChildren<Rigidbody>())
             {
                 rb.detectCollisions = true;
