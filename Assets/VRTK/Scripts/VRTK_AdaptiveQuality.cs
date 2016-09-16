@@ -32,7 +32,7 @@ namespace VRTK
     /// <para />
     /// This script currently changes the following to reach these goals:
     /// <list type="bullet">
-    /// <item> <description>Rendering resolution and viewport (aka Dynamic Resolution)</description> </item>
+    /// <item> <description>Rendering resolution and viewport size (aka Dynamic Resolution)</description> </item>
     /// </list>
     /// <para />
     /// In the future it could be changed to also change the following:
@@ -141,7 +141,7 @@ namespace VRTK
         /// The current render scale.
         /// </summary>
         /// <remarks>
-        /// A render scale of 1.0 represents the recommended render target resolution provided by the current `VRDevice`.
+        /// A render scale of `1.0` represents the recommended render target resolution provided by the current `VRDevice`.
         /// </remarks>
         public static float CurrentRenderScale
         {
