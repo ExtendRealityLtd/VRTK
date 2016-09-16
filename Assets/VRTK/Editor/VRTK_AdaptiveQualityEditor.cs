@@ -46,7 +46,7 @@ namespace VRTK
             float minimumRenderScale = adaptiveQuality.minimumRenderScale;
             float maximumRenderScale = adaptiveQuality.maximumRenderScale;
 
-            AddHeader(adaptiveQuality, "minimumRenderScale");
+            VRTK_EditorUtilities.AddHeader<VRTK_AdaptiveQuality>("minimumRenderScale");
             EditorGUILayout.BeginHorizontal();
             {
                 var fieldInfo = adaptiveQuality.GetType().GetField("minimumRenderScale");
@@ -88,7 +88,7 @@ namespace VRTK
 
             EditorGUI.BeginDisabledGroup(disabled);
             {
-                AddHeader(adaptiveQuality, "overrideRenderScale");
+                VRTK_EditorUtilities.AddHeader<VRTK_AdaptiveQuality>("overrideRenderScale");
 
                 if (disabled)
                 {
@@ -116,16 +116,16 @@ namespace VRTK
             }
             EditorGUI.EndDisabledGroup();
 
+            if (Application.isPlaying)
+            {
+                string summary = adaptiveQuality.ToString();
+                summary = summary.Substring(summary.IndexOf("\n", StringComparison.Ordinal) + 1);
+
+                VRTK_EditorUtilities.AddHeader("Current State");
+                EditorGUILayout.HelpBox(summary, MessageType.None);
+            }
+
             serializedObject.ApplyModifiedProperties();
-        }
-
-        private static void AddHeader(VRTK_AdaptiveQuality adaptiveQuality, string fieldName)
-        {
-            var fieldInfo = adaptiveQuality.GetType().GetField(fieldName);
-            var headerAttribute = (HeaderAttribute)Attribute.GetCustomAttribute(fieldInfo, typeof(HeaderAttribute));
-
-            EditorGUILayout.Space();
-            EditorGUILayout.LabelField(headerAttribute.header, EditorStyles.boldLabel);
         }
     }
 }
