@@ -199,7 +199,6 @@ namespace VRTK
         {
             if(e.target)
             {
-                IgnoreCollisions(e.target.GetComponents<Collider>(), true);
                 IgnoreCollisions(e.target.GetComponentsInChildren<Collider>(), true);
             }
         }
@@ -208,7 +207,6 @@ namespace VRTK
         {
             if (e.target && e.target.GetComponent<VRTK_InteractableObject>())
             {
-                IgnoreCollisions(e.target.GetComponents<Collider>(), false);
                 IgnoreCollisions(e.target.GetComponentsInChildren<Collider>(), false);
             }
         }
@@ -351,7 +349,6 @@ namespace VRTK
         {
             if (controller)
             {
-                IgnoreCollisions(controller.GetComponents<Collider>(), true);
                 IgnoreCollisions(controller.GetComponentsInChildren<Collider>(), true);
 
                 var grabbingController = controller.GetComponent<VRTK_InteractGrab>();

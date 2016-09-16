@@ -106,18 +106,23 @@ namespace VRTK
                     beamTraceMaterial = Instantiate(renderer.sharedMaterial);
                 }
             }
+
             if (customPointerCursor)
             {
-                Renderer renderer = customPointerCursor.GetComponentInChildren<MeshRenderer>();
-                if (renderer != null)
+                var customPointerCursorRenderer = customPointerCursor.GetComponentInChildren<MeshRenderer>();
+
+                if (customPointerCursorRenderer != null)
                 {
-                    customPointerMaterial = Instantiate(renderer.sharedMaterial);
+                    customPointerMaterial = Instantiate(customPointerCursorRenderer.sharedMaterial);
                 }
+
                 pointerCursor = Instantiate(customPointerCursor);
-                foreach (Renderer mr in pointerCursor.GetComponentsInChildren<Renderer>())
+
+                foreach (var pointerCursorRenderer in pointerCursor.GetComponentsInChildren<Renderer>())
                 {
-                    mr.material = customPointerMaterial;
+                    pointerCursorRenderer.material = customPointerMaterial;
                 }
+
                 if (validTeleportLocationObject != null)
                 {
                     validTeleportLocationInstance = Instantiate(validTeleportLocationObject);
@@ -131,6 +136,7 @@ namespace VRTK
             {
                 pointerCursor = CreateCursor();
             }
+
             pointerCursor.name = string.Format("[{0}]WorldPointer_BezierPointer_PointerCursor", gameObject.name);
             Utilities.SetPlayerObject(pointerCursor, VRTK_PlayerObject.ObjectTypes.Pointer);
             pointerCursor.layer = LayerMask.NameToLayer("Ignore Raycast");
@@ -162,14 +168,9 @@ namespace VRTK
 
             if (customPointerCursor == null)
             {
-                if (pointerCursor.GetComponent<Renderer>())
+                foreach (var pointerCursorRenderers in pointerCursor.GetComponentsInChildren<Renderer>())
                 {
-                    pointerCursor.GetComponent<Renderer>().material = pointerMaterial;
-                }
-
-                foreach (Renderer mr in pointerCursor.GetComponentsInChildren<Renderer>())
-                {
-                    mr.material = pointerMaterial;
+                    pointerCursorRenderers.material = pointerMaterial;
                 }
             }
             base.SetPointerMaterial();

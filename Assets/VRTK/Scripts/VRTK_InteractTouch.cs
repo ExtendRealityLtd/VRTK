@@ -146,11 +146,6 @@ namespace VRTK
             if (controllerCollisionDetector && touchRigidBody)
             {
                 touchRigidBody.isKinematic = !state;
-                foreach (var collider in controllerCollisionDetector.GetComponents<Collider>())
-                {
-                    collider.isTrigger = !state;
-                }
-
                 foreach (var collider in controllerCollisionDetector.GetComponentsInChildren<Collider>())
                 {
                     collider.isTrigger = !state;
@@ -372,7 +367,7 @@ namespace VRTK
         {
             foreach (var childTransform in GetComponentsInChildren<Transform>())
             {
-                if (childTransform == customRigidbodyObject.transform)
+                if (childTransform != transform && childTransform == customRigidbodyObject.transform)
                 {
                     return true;
                 }

@@ -304,27 +304,17 @@ namespace VRTK
 
         private void setMeshMaterial(GameObject item, Material material)
         {
-            if (item.GetComponent<MeshRenderer>())
+            foreach (MeshRenderer itemRenderer in item.GetComponentsInChildren<MeshRenderer>())
             {
-                item.GetComponent<MeshRenderer>().material = material;
-            }
-
-            foreach (MeshRenderer mr in item.GetComponentsInChildren<MeshRenderer>())
-            {
-                mr.material = material;
+                itemRenderer.material = material;
             }
         }
 
         private void setSkinnedMeshMaterial(GameObject item, Material material)
         {
-            if (item.GetComponent<SkinnedMeshRenderer>())
+            foreach (SkinnedMeshRenderer itemRenderer in item.GetComponentsInChildren<SkinnedMeshRenderer>())
             {
-                item.GetComponent<SkinnedMeshRenderer>().material = material;
-            }
-
-            foreach (SkinnedMeshRenderer mr in item.GetComponentsInChildren<SkinnedMeshRenderer>())
-            {
-                mr.material = material;
+                itemRenderer.material = material;
             }
         }
     }
