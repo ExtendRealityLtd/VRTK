@@ -243,21 +243,21 @@ namespace VRTK
         /// </returns>
         public override string ToString()
         {
-            var stringBuilder = new StringBuilder("Adaptive Quality:\n");
+            var stringBuilder = new StringBuilder("Adaptive Quality\n");
+            stringBuilder.AppendLine("Render Scale:");
+            stringBuilder.AppendLine("Level - Resolution - Multiplier");
 
             for (int index = 0; index < allRenderScales.Count; index++)
             {
                 float renderScale = allRenderScales[index];
                 var renderTargetResolution = RenderTargetResolutionForRenderScale(renderScale);
 
-                stringBuilder.Append(index);
-                stringBuilder.Append(". ");
-                stringBuilder.Append(" ");
-                stringBuilder.Append((int)renderTargetResolution.x);
-                stringBuilder.Append("x");
-                stringBuilder.Append((int)renderTargetResolution.y);
-                stringBuilder.Append(" ");
-                stringBuilder.Append(renderScale);
+                stringBuilder.AppendFormat(
+                    "{0, 3} {1, 5}x{2, -5} {3, -8}",
+                    index,
+                    (int)renderTargetResolution.x,
+                    (int)renderTargetResolution.y,
+                    renderScale);
 
                 if (index == 0)
                 {
@@ -268,9 +268,14 @@ namespace VRTK
                     stringBuilder.Append(" (Default)");
                 }
 
+                if (index == currentRenderScaleLevel)
+                {
+                    stringBuilder.Append(" (Current)");
+                }
+
                 if (index != allRenderScales.Count - 1)
                 {
-                    stringBuilder.Append("\n");
+                    stringBuilder.AppendLine();
                 }
             }
 
