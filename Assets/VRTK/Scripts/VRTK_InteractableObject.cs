@@ -3,7 +3,8 @@ namespace VRTK
 {
     using UnityEngine;
     using System.Collections;
-    using VRTK.Highlighters;
+    using System.Collections.Generic;
+    using Highlighters;
 
     /// <summary>
     /// Event Payload
@@ -181,7 +182,7 @@ namespace VRTK
 
         protected Rigidbody rb;
         protected bool autoRigidbody = false;
-        protected GameObject touchingObject = null;
+        protected List<GameObject> touchingObjects = new List<GameObject>();
         protected GameObject grabbingObject = null;
         protected GameObject usingObject = null;
         protected Transform grabbedSnapHandle;
@@ -276,7 +277,7 @@ namespace VRTK
         /// <returns>Returns `true` if the object is currently being touched.</returns>
         public bool IsTouched()
         {
-            return (touchingObject != null);
+            return (touchingObjects.Count > 0);
         }
 
         /// <summary>
@@ -303,8 +304,11 @@ namespace VRTK
         /// <param name="currentTouchingObject">The game object that is currently touching this object.</param>
         public virtual void StartTouching(GameObject currentTouchingObject)
         {
-            OnInteractableObjectTouched(SetInteractableObjectEvent(currentTouchingObject));
-            touchingObject = currentTouchingObject;
+            if (!touchingObjects.Contains(currentTouchingObject))
+            {
+                touchingObjects.Add(currentTouchingObject);
+                OnInteractableObjectTouched(SetInteractableObjectEvent(currentTouchingObject));
+            }
         }
 
         /// <summary>
@@ -313,11 +317,14 @@ namespace VRTK
         /// <param name="previousTouchingObject">The game object that was previously touching this object.</param>
         public virtual void StopTouching(GameObject previousTouchingObject)
         {
-            OnInteractableObjectUntouched(SetInteractableObjectEvent(previousTouchingObject));
-            touchingObject = null;
-            if (gameObject.activeInHierarchy)
+            if (touchingObjects.Contains(previousTouchingObject))
             {
-                StartCoroutine(StopUsingOnControllerChange(previousTouchingObject));
+                OnInteractableObjectUntouched(SetInteractableObjectEvent(previousTouchingObject));
+                if (gameObject.activeInHierarchy)
+                {
+                    StartCoroutine(StopUsingOnControllerChange(previousTouchingObject));
+                }
+                touchingObjects.Remove(previousTouchingObject);
             }
         }
 
@@ -392,6 +399,11 @@ namespace VRTK
         /// <param name="globalHighlightColor">The colour to use when highlighting the object.</param>
         public virtual void ToggleHighlight(bool toggle, Color globalHighlightColor)
         {
+            if(IsTouched())
+            {
+                return;
+            }
+
             if (highlightOnTouch)
             {
                 if (toggle && !IsGrabbed() && !IsUsing())
@@ -854,10 +866,13 @@ namespace VRTK
 
         private void ForceStopAllInteractions()
         {
-            if (touchingObject != null && (touchingObject.activeInHierarchy || forceDisabled))
+            foreach (var touchingObject in touchingObjects)
             {
-                touchingObject.GetComponent<VRTK_InteractTouch>().ForceStopTouching();
-                forcedDropped = true;
+                if (touchingObject.activeInHierarchy || forceDisabled)
+                {
+                    touchingObject.GetComponent<VRTK_InteractTouch>().ForceStopTouching();
+                    forcedDropped = true;
+                }
             }
 
             if (grabbingObject != null && (grabbingObject.activeInHierarchy || forceDisabled))
