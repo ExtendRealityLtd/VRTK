@@ -97,9 +97,9 @@
             return camera;
         }
 
-        public static void CreateColliders(GameObject go)
+        public static void CreateColliders(GameObject obj)
         {
-            Renderer[] renderers = go.GetComponentsInChildren<Renderer>();
+            Renderer[] renderers = obj.GetComponentsInChildren<Renderer>();
             foreach (Renderer renderer in renderers)
             {
                 if (!renderer.gameObject.GetComponent<Collider>())

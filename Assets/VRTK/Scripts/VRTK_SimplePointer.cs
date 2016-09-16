@@ -88,7 +88,7 @@ namespace VRTK
                 Renderer renderer = customPointerCursor.GetComponentInChildren<MeshRenderer>();
                 if (renderer)
                 {
-                    customPointerMaterial = Material.Instantiate(renderer.sharedMaterial);
+                    customPointerMaterial = Instantiate(renderer.sharedMaterial);
                 }
                 pointerTip = Instantiate(customPointerCursor);
                 foreach (Renderer mr in pointerTip.GetComponentsInChildren<Renderer>())
