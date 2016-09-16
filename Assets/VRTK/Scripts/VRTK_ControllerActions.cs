@@ -4,6 +4,8 @@ namespace VRTK
     using UnityEngine;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Reflection;
+    using Highlighters;
 
     /// <summary>
     /// Event Payload
@@ -24,6 +26,9 @@ namespace VRTK
     /// <summary>
     /// The Controller Actions script provides helper methods to deal with common controller actions. It deals with actions that can be done to the controller.
     /// </summary>
+    /// <remarks>
+    /// The highlighting of the controller is defaulted to use the `VRTK_MaterialColorSwapHighlighter` if no other highlighter is applied to the Object.
+    /// </remarks>
     /// <example>
     /// `VRTK/Examples/016_Controller_HapticRumble` demonstrates the ability to hide a controller model and make the controller vibrate for a given length of time at a given intensity.
     ///
@@ -46,8 +51,9 @@ namespace VRTK
         private uint controllerIndex;
         private ushort maxHapticVibration = 3999;
         private bool controllerHighlighted = false;
-        private Dictionary<GameObject, Material> storedMaterials;
         private Dictionary<string, Transform> cachedElements;
+        private VRTK_BaseHighlighter objectHighlighter;
+        private Dictionary<string, object> highlighterOptions;
 
         public virtual void OnControllerModelVisible(ControllerActionsEventArgs e)
         {
@@ -103,7 +109,7 @@ namespace VRTK
             }
 
             controllerVisible = state;
-            if(state)
+            if (state)
             {
                 OnControllerModelVisible(SetActionEvent(controllerIndex));
             }
@@ -168,18 +174,10 @@ namespace VRTK
                 return;
             }
 
-            var renderer = element.GetComponent<Renderer>();
-            if (renderer && renderer.material)
+            var highlighter = element.GetComponent<VRTK_BaseHighlighter>();
+            if (highlighter)
             {
-                if (!storedMaterials.ContainsKey(element))
-                {
-                    storedMaterials.Add(element, new Material(renderer.material));
-                }
-                renderer.material.SetTexture("_MainTex", new Texture());
-                if (renderer.material.HasProperty("_Color"))
-                {
-                    StartCoroutine(CycleColor(renderer.material, new Color(renderer.material.color.r, renderer.material.color.g, renderer.material.color.b), highlight ?? Color.white, fadeDuration));
-                }
+                highlighter.Highlight(highlight ?? Color.white, fadeDuration);
             }
         }
 
@@ -194,14 +192,10 @@ namespace VRTK
                 return;
             }
 
-            var renderer = element.GetComponent<Renderer>();
-            if (renderer && renderer.material)
+            var highlighter = element.GetComponent<VRTK_BaseHighlighter>();
+            if (highlighter)
             {
-                if (storedMaterials.ContainsKey(element))
-                {
-                    renderer.material = new Material(storedMaterials[element]);
-                    storedMaterials.Remove(element);
-                }
+                highlighter.Unhighlight();
             }
         }
 
@@ -340,13 +334,56 @@ namespace VRTK
         private void Awake()
         {
             gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
-            storedMaterials = new Dictionary<GameObject, Material>();
             cachedElements = new Dictionary<string, Transform>();
+        }
+
+        private void OnEnable()
+        {
+            StartCoroutine(SetupHighlighter());
         }
 
         private void Update()
         {
             controllerIndex = VRTK_DeviceFinder.GetControllerIndex(gameObject);
+        }
+
+        private IEnumerator SetupHighlighter()
+        {
+            highlighterOptions = new Dictionary<string, object>();
+            highlighterOptions.Add("resetMainTexture", true);
+            while (GetElementTransform(VRTK_SDK_Bridge.defaultBodyModelPath) == null)
+            {
+                yield return null;
+            }
+
+            objectHighlighter = GetComponent<VRTK_BaseHighlighter>();
+            if (!objectHighlighter)
+            {
+                objectHighlighter = gameObject.AddComponent<VRTK_MaterialColorSwapHighlighter>();
+            }
+
+            objectHighlighter.Initialise(null, highlighterOptions);
+
+            AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.defaultApplicationMenuModelPath), objectHighlighter);
+            AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.defaultBodyModelPath), objectHighlighter);
+            AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.defaultGripLeftModelPath), objectHighlighter);
+            AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.defaultGripRightModelPath), objectHighlighter);
+            AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.defaultSystemModelPath), objectHighlighter);
+            AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.defaultTouchpadModelPath), objectHighlighter);
+            AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.defaultTriggerModelPath), objectHighlighter);
+        }
+
+        private void AddHighlighterToElement(Transform element, VRTK_BaseHighlighter highlighter)
+        {
+            if (element)
+            {
+                VRTK_BaseHighlighter tmpComponent = (VRTK_BaseHighlighter)element.gameObject.AddComponent(highlighter.GetType());
+                foreach (FieldInfo f in highlighter.GetType().GetFields())
+                {
+                    f.SetValue(tmpComponent, f.GetValue(highlighter));
+                }
+                tmpComponent.Initialise(null, highlighterOptions);
+            }
         }
 
         private IEnumerator HapticPulse(float duration, ushort hapticPulseStrength, float pulseInterval)
@@ -399,7 +436,7 @@ namespace VRTK
         private ControllerActionsEventArgs SetActionEvent(uint index)
         {
             ControllerActionsEventArgs e;
-            e.controllerIndex= index;
+            e.controllerIndex = index;
             return e;
         }
     }

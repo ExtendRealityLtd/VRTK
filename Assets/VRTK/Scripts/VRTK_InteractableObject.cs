@@ -3,7 +3,7 @@ namespace VRTK
 {
     using UnityEngine;
     using System.Collections;
-    using System.Collections.Generic;
+    using VRTK.Highlighters;
 
     /// <summary>
     /// Event Payload
@@ -26,6 +26,8 @@ namespace VRTK
     /// </summary>
     /// <remarks>
     /// The basis of this script is to provide a simple mechanism for identifying objects in the game world that can be grabbed or used but it is expected that this script is the base to be inherited into a script with richer functionality.
+    ///
+    /// The highlighting of an Interactable Object is defaulted to use the `VRTK_MaterialColorSwapHighlighter` if no other highlighter is applied to the Object.
     /// </remarks>
     /// <example>
     /// `VRTK/Examples/005_Controller_BasicObjectGrabbing` uses the `VRTK_InteractTouch` and `VRTK_InteractGrab` scripts on the controllers to show how an interactable object can be grabbed and snapped to the controller and thrown around the game world.
@@ -182,7 +184,6 @@ namespace VRTK
         protected GameObject touchingObject = null;
         protected GameObject grabbingObject = null;
         protected GameObject usingObject = null;
-        protected Dictionary<string, Color[]> originalObjectColours;
         protected Transform grabbedSnapHandle;
         protected Transform trackPoint;
         protected bool customTrackPoint = false;
@@ -192,6 +193,9 @@ namespace VRTK
         protected bool previousIsGrabbable;
         protected bool forcedDropped;
         protected bool forceDisabled;
+
+        private VRTK_BaseHighlighter objectHighlighter;
+        private bool autoHighlighter = false;
 
         public virtual void OnInteractableObjectTouched(InteractableObjectEventArgs e)
         {
@@ -395,23 +399,12 @@ namespace VRTK
                     Color color = (touchHighlightColor != Color.clear ? touchHighlightColor : globalHighlightColor);
                     if (color != Color.clear)
                     {
-                        if (originalObjectColours == null)
-                        {
-                            originalObjectColours = StoreOriginalColors();
-                        }
-
-                        var colorArray = BuildHighlightColorArray(color);
-                        ChangeColor(colorArray);
+                        objectHighlighter.Highlight(color);
                     }
                 }
                 else
                 {
-                    if (originalObjectColours == null)
-                    {
-                        Debug.LogError("VRTK_InteractableObject has not had the Start() method called, if you are inheriting this class then call base.Start() in your Start() method.");
-                        return;
-                    }
-                    ChangeColor(originalObjectColours);
+                    objectHighlighter.Unhighlight();
                 }
             }
         }
@@ -597,10 +590,6 @@ namespace VRTK
 
         protected virtual void Start()
         {
-            if (highlightOnTouch)
-            {
-                originalObjectColours = StoreOriginalColors();
-            }
         }
 
         protected virtual void Update()
@@ -629,6 +618,7 @@ namespace VRTK
 
         protected virtual void OnEnable()
         {
+            SetupHighlighter();
             RegisterTeleporters();
             forceDisabled = false;
             if (forcedDropped)
@@ -643,6 +633,10 @@ namespace VRTK
             {
                 teleporter.Teleporting -= new TeleportEventHandler(OnTeleporting);
                 teleporter.Teleported -= new TeleportEventHandler(OnTeleported);
+            }
+            if (autoHighlighter)
+            {
+                Destroy(objectHighlighter);
             }
             forceDisabled = true;
             ForceStopInteracting();
@@ -670,6 +664,21 @@ namespace VRTK
             }
         }
 
+        private void SetupHighlighter()
+        {
+            if (highlightOnTouch)
+            {
+                autoHighlighter = false;
+                objectHighlighter = GetComponent<VRTK_BaseHighlighter>();
+                if (!objectHighlighter)
+                {
+                    autoHighlighter = true;
+                    objectHighlighter = gameObject.AddComponent<VRTK_MaterialColorSwapHighlighter>();
+                }
+                objectHighlighter.Initialise(touchHighlightColor);
+            }
+        }
+
         private void ForceReleaseGrab()
         {
             if (grabbingObject)
@@ -683,78 +692,6 @@ namespace VRTK
             foreach (Rigidbody rb in GetComponentsInChildren<Rigidbody>())
             {
                 rb.detectCollisions = true;
-            }
-        }
-
-        private Renderer[] GetRendererArray()
-        {
-            var main = GetComponents<Renderer>();
-            var children = GetComponentsInChildren<Renderer>();
-
-            var allRenderers = new Renderer[main.Length + children.Length];
-            main.CopyTo(allRenderers, 0);
-            children.CopyTo(allRenderers, main.Length);
-
-            return allRenderers;
-        }
-
-        private Dictionary<string, Color[]> StoreOriginalColors()
-        {
-            var colors = new Dictionary<string, Color[]>();
-            foreach (Renderer renderer in GetRendererArray())
-            {
-                var objectReference = renderer.gameObject.GetInstanceID().ToString();
-                colors[objectReference] = new Color[renderer.materials.Length];
-
-                for (int i = 0; i < renderer.materials.Length; i++)
-                {
-                    var material = renderer.materials[i];
-                    if (material.HasProperty("_Color"))
-                    {
-                        colors[objectReference][i] = material.color;
-                    }
-                }
-            }
-            return colors;
-        }
-
-        private Dictionary<string, Color[]> BuildHighlightColorArray(Color color)
-        {
-            var colors = new Dictionary<string, Color[]>();
-            foreach (Renderer renderer in GetRendererArray())
-            {
-                var objectReference = renderer.gameObject.GetInstanceID().ToString();
-                colors[objectReference] = new Color[renderer.materials.Length];
-                for (int i = 0; i < renderer.materials.Length; i++)
-                {
-                    var material = renderer.materials[i];
-                    if (material.HasProperty("_Color"))
-                    {
-                        colors[objectReference][i] = color;
-                    }
-                }
-            }
-            return colors;
-        }
-
-        private void ChangeColor(Dictionary<string, Color[]> colors)
-        {
-            foreach (Renderer renderer in GetRendererArray())
-            {
-                var objectReference = renderer.gameObject.GetInstanceID().ToString();
-                if (!colors.ContainsKey(objectReference))
-                {
-                    continue;
-                }
-
-                for (int i = 0; i < renderer.materials.Length; i++)
-                {
-                    var material = renderer.materials[i];
-                    if (material.HasProperty("_Color"))
-                    {
-                        material.color = colors[objectReference][i];
-                    }
-                }
             }
         }
 
