@@ -4,8 +4,31 @@ namespace VRTK
     using UnityEngine;
     using System.Collections;
     using System.Collections.Generic;
-    using System.Reflection;
     using Highlighters;
+
+    [System.Serializable]
+    public class VRTK_ControllerModelElementPaths
+    {
+        public string bodyModelPath = VRTK_SDK_Bridge.defaultBodyModelPath;
+        public string triggerModelPath = VRTK_SDK_Bridge.defaultTriggerModelPath;
+        public string leftGripModelPath = VRTK_SDK_Bridge.defaultGripLeftModelPath;
+        public string rightGripModelPath = VRTK_SDK_Bridge.defaultGripRightModelPath;
+        public string touchpadModelPath = VRTK_SDK_Bridge.defaultTouchpadModelPath;
+        public string appMenuModelPath = VRTK_SDK_Bridge.defaultApplicationMenuModelPath;
+        public string systemMenuModelPath = VRTK_SDK_Bridge.defaultSystemModelPath;
+    }
+
+    [System.Serializable]
+    public struct VRTK_ControllerElementHighlighers
+    {
+        public VRTK_BaseHighlighter body;
+        public VRTK_BaseHighlighter trigger;
+        public VRTK_BaseHighlighter gripLeft;
+        public VRTK_BaseHighlighter gripRight;
+        public VRTK_BaseHighlighter touchpad;
+        public VRTK_BaseHighlighter appMenu;
+        public VRTK_BaseHighlighter systemMenu;
+    }
 
     /// <summary>
     /// Event Payload
@@ -32,10 +55,32 @@ namespace VRTK
     /// <example>
     /// `VRTK/Examples/016_Controller_HapticRumble` demonstrates the ability to hide a controller model and make the controller vibrate for a given length of time at a given intensity.
     ///
-    /// `VRTK/Examples/035_Controller_OpacityAndHighlighting`demonstrates the ability to change the opacity of a controller model and to highlight specific elements of a controller such as the buttons or even the entire controller model.
+    /// `VRTK/Examples/035_Controller_OpacityAndHighlighting` demonstrates the ability to change the opacity of a controller model and to highlight specific elements of a controller such as the buttons or even the entire controller model.
     /// </example>
     public class VRTK_ControllerActions : MonoBehaviour
     {
+        [Tooltip("A collection of strings that determine the path to the controller model sub elements for identifying the model parts at runtime. The paths will default to the model element paths of the selected SDK Bridge.\n\n"
+         + "* The available model sub elements are:\n\n"
+         + " * `Body Model Path`: The overall shape of the controller.\n"
+         + " * `Trigger Model Path`: The model that represents the trigger button.\n"
+         + " * `Grip Left Model Path`: The model that represents the left grip button.\n"
+         + " * `Grip Right Model Path`: The model that represents the right grip button.\n"
+         + " * `Touchpad Model Path`: The model that represents the touchpad.\n"
+         + " * `App Menu Model Path`: The model that represents the application menu button.\n"
+         + " * `System Menu Model Path`: The model that represents the system menu button.")]
+        public VRTK_ControllerModelElementPaths modelElementPaths;
+
+        [Tooltip("A collection of highlighter overrides for each controller model sub element. If no highlighter override is given then highlighter on the Controller game object is used.\n\n"
+         + "* The available model sub elements are:\n\n"
+         + " * `Body`: The highlighter to use on the overall shape of the controller.\n"
+         + " * `Trigger`: The highlighter to use on the trigger button.\n"
+         + " * `Grip Left`: The highlighter to use on the left grip button.\n"
+         + " * `Grip Right`: The highlighter to use on the  right grip button.\n"
+         + " * `Touchpad`: The highlighter to use on the touchpad.\n"
+         + " * `App Menu`: The highlighter to use on the application menu button.\n"
+         + " * `System Menu`: The highlighter to use on the system menu button.")]
+        public VRTK_ControllerElementHighlighers elementHighlighterOverrides;
+
         /// <summary>
         /// Emitted when the controller model is toggled to be visible.
         /// </summary>
@@ -233,7 +278,7 @@ namespace VRTK
             {
                 return;
             }
-            ToggleHighlightAlias(state, VRTK_SDK_Bridge.defaultTriggerModelPath, highlight, duration);
+            ToggleHighlightAlias(state, modelElementPaths.triggerModelPath, highlight, duration);
         }
 
         /// <summary>
@@ -248,8 +293,8 @@ namespace VRTK
             {
                 return;
             }
-            ToggleHighlightAlias(state, VRTK_SDK_Bridge.defaultGripLeftModelPath, highlight, duration);
-            ToggleHighlightAlias(state, VRTK_SDK_Bridge.defaultGripRightModelPath, highlight, duration);
+            ToggleHighlightAlias(state, modelElementPaths.leftGripModelPath, highlight, duration);
+            ToggleHighlightAlias(state, modelElementPaths.rightGripModelPath, highlight, duration);
         }
 
         /// <summary>
@@ -264,7 +309,7 @@ namespace VRTK
             {
                 return;
             }
-            ToggleHighlightAlias(state, VRTK_SDK_Bridge.defaultTouchpadModelPath, highlight, duration);
+            ToggleHighlightAlias(state, modelElementPaths.touchpadModelPath, highlight, duration);
         }
 
         /// <summary>
@@ -279,7 +324,22 @@ namespace VRTK
             {
                 return;
             }
-            ToggleHighlightAlias(state, VRTK_SDK_Bridge.defaultApplicationMenuModelPath, highlight, duration);
+            ToggleHighlightAlias(state, modelElementPaths.appMenuModelPath, highlight, duration);
+        }
+
+        /// <summary>
+        /// The ToggleHighlighBody method is a shortcut method that makes it easier to toggle the highlight state of the controller body element.
+        /// </summary>
+        /// <param name="state">The highlight colour state, `true` will enable the highlight on the body and `false` will remove the highlight from the body.</param>
+        /// <param name="highlight">The colour to highlight the body with.</param>
+        /// <param name="duration">The duration of fade from white to the highlight colour.</param>
+        public void ToggleHighlighBody(bool state, Color? highlight = null, float duration = 0f)
+        {
+            if (!state && controllerHighlighted)
+            {
+                return;
+            }
+            ToggleHighlightAlias(state, modelElementPaths.bodyModelPath, highlight, duration);
         }
 
         /// <summary>
@@ -295,8 +355,8 @@ namespace VRTK
             ToggleHighlightGrip(state, highlight, duration);
             ToggleHighlightTouchpad(state, highlight, duration);
             ToggleHighlightApplicationMenu(state, highlight, duration);
-            ToggleHighlightAlias(state, VRTK_SDK_Bridge.defaultSystemModelPath, highlight, duration);
-            ToggleHighlightAlias(state, VRTK_SDK_Bridge.defaultBodyModelPath, highlight, duration);
+            ToggleHighlightAlias(state, modelElementPaths.systemMenuModelPath, highlight, duration);
+            ToggleHighlightAlias(state, modelElementPaths.bodyModelPath, highlight, duration);
         }
 
         /// <summary>
@@ -331,6 +391,31 @@ namespace VRTK
             StartCoroutine(HapticPulse(duration, hapticPulseStrength, pulseInterval));
         }
 
+        /// <summary>
+        /// The InitaliseHighlighters method sets up the highlighters on the controller model.
+        /// </summary>
+        public void InitaliseHighlighters()
+        {
+
+            highlighterOptions = new Dictionary<string, object>();
+            highlighterOptions.Add("resetMainTexture", true);
+            VRTK_BaseHighlighter objectHighlighter = Utilities.GetActiveHighlighter(gameObject);
+
+            if (objectHighlighter == null)
+            {
+                objectHighlighter = gameObject.AddComponent<VRTK_MaterialColorSwapHighlighter>();
+            }
+
+            objectHighlighter.Initialise(null, highlighterOptions);
+            AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.defaultApplicationMenuModelPath), objectHighlighter, elementHighlighterOverrides.appMenu);
+            AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.defaultBodyModelPath), objectHighlighter, elementHighlighterOverrides.body);
+            AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.defaultGripLeftModelPath), objectHighlighter, elementHighlighterOverrides.gripLeft);
+            AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.defaultGripRightModelPath), objectHighlighter, elementHighlighterOverrides.gripRight);
+            AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.defaultSystemModelPath), objectHighlighter, elementHighlighterOverrides.systemMenu);
+            AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.defaultTouchpadModelPath), objectHighlighter, elementHighlighterOverrides.touchpad);
+            AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.defaultTriggerModelPath), objectHighlighter, elementHighlighterOverrides.trigger);
+        }
+
         private void Awake()
         {
             gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
@@ -339,7 +424,7 @@ namespace VRTK
 
         private void OnEnable()
         {
-            StartCoroutine(SetupHighlighter());
+            StartCoroutine(WaitForModel());
         }
 
         private void Update()
@@ -347,42 +432,23 @@ namespace VRTK
             controllerIndex = VRTK_DeviceFinder.GetControllerIndex(gameObject);
         }
 
-        private IEnumerator SetupHighlighter()
+        private IEnumerator WaitForModel()
         {
-            highlighterOptions = new Dictionary<string, object>();
-            highlighterOptions.Add("resetMainTexture", true);
-            while (GetElementTransform(VRTK_SDK_Bridge.defaultBodyModelPath) == null)
+            while (GetElementTransform(modelElementPaths.bodyModelPath) == null)
             {
                 yield return null;
             }
 
-            objectHighlighter = GetComponent<VRTK_BaseHighlighter>();
-            if (!objectHighlighter)
-            {
-                objectHighlighter = gameObject.AddComponent<VRTK_MaterialColorSwapHighlighter>();
-            }
-
-            objectHighlighter.Initialise(null, highlighterOptions);
-
-            AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.defaultApplicationMenuModelPath), objectHighlighter);
-            AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.defaultBodyModelPath), objectHighlighter);
-            AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.defaultGripLeftModelPath), objectHighlighter);
-            AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.defaultGripRightModelPath), objectHighlighter);
-            AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.defaultSystemModelPath), objectHighlighter);
-            AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.defaultTouchpadModelPath), objectHighlighter);
-            AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.defaultTriggerModelPath), objectHighlighter);
+            InitaliseHighlighters();
         }
 
-        private void AddHighlighterToElement(Transform element, VRTK_BaseHighlighter highlighter)
+        private void AddHighlighterToElement(Transform element, VRTK_BaseHighlighter parentHighlighter, VRTK_BaseHighlighter overrideHighlighter)
         {
             if (element)
             {
-                VRTK_BaseHighlighter tmpComponent = (VRTK_BaseHighlighter)element.gameObject.AddComponent(highlighter.GetType());
-                foreach (FieldInfo f in highlighter.GetType().GetFields())
-                {
-                    f.SetValue(tmpComponent, f.GetValue(highlighter));
-                }
-                tmpComponent.Initialise(null, highlighterOptions);
+                var highlighter = (overrideHighlighter != null ? overrideHighlighter : parentHighlighter);
+                VRTK_BaseHighlighter clonedHighlighter = (VRTK_BaseHighlighter)Utilities.CloneComponent(highlighter, element.gameObject);
+                clonedHighlighter.Initialise(null, highlighterOptions);
             }
         }
 

@@ -15,11 +15,14 @@ namespace VRTK.Highlighters
     ///
     /// This is the default highlighter that is applied to any script that requires a highlighting component (e.g. `VRTK_Interactable_Object` or `VRTK_ControllerActions`).
     /// </remarks>
+    /// <example>
+    /// `VRTK/Examples/005_Controller_BasicObjectGrabbing` demonstrates the solid highlighting on the green cube, red cube and flying saucer when the controller touches it.
+    ///
+    /// `VRTK/Examples/035_Controller_OpacityAndHighlighting` demonstrates the solid highlighting if the right controller collides with the green box or if any of the buttons are pressed.
+    /// </example>
     public class VRTK_MaterialColorSwapHighlighter : VRTK_BaseHighlighter
     {
-        /// <summary>
-        /// The emission colour of the texture will be the highlight colour but this percent darker.
-        /// </summary>
+        [Tooltip("The emission colour of the texture will be the highlight colour but this percent darker.")]
         public float emissionDarken = 50f;
 
         private Dictionary<string, Material[]> originalSharedRendererMaterials;
@@ -39,10 +42,7 @@ namespace VRTK.Highlighters
             faderRoutines = new Dictionary<string, Coroutine>();
             StoreOriginalMaterials();
 
-            if (options != null && options.ContainsKey("resetMainTexture") && options["resetMainTexture"] != null && options["resetMainTexture"] is bool)
-            {
-                resetMainTexture = (bool)options["resetMainTexture"];
-            }
+            resetMainTexture = GetOption<bool>(options, "resetMainTexture");
         }
 
         /// <summary>

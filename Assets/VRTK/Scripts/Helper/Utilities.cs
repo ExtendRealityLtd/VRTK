@@ -1,6 +1,8 @@
 ﻿namespace VRTK
 {
     using UnityEngine;
+    using System.Reflection;
+    using Highlighters;
 
     public class Utilities : MonoBehaviour
     {
@@ -130,6 +132,31 @@
             {
                 return (obj.tag == ignoreString || obj.GetComponent(ignoreString) != null);
             }
+        }
+
+        public static Component CloneComponent(Component source, GameObject destination)
+        {
+            Component tmpComponent = destination.gameObject.AddComponent(source.GetType());
+            foreach (FieldInfo f in source.GetType().GetFields())
+            {
+                f.SetValue(tmpComponent, f.GetValue(source));
+            }
+            return tmpComponent;
+        }
+
+        public static VRTK_BaseHighlighter GetActiveHighlighter(GameObject obj)
+        {
+            VRTK_BaseHighlighter objectHighlighter = null;
+            foreach (var tmpHighlighter in obj.GetComponents<VRTK_BaseHighlighter>())
+            {
+                if (tmpHighlighter.active)
+                {
+                    objectHighlighter = tmpHighlighter;
+                    break;
+                }
+            }
+
+            return objectHighlighter;
         }
     }
 }

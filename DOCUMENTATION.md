@@ -401,6 +401,7 @@ This directory contains scripts that are used to provide different object highli
 
  * [Base Highlighter](#base-highlighter-vrtk_basehighlighter)
  * [Material Colour Swap](#material-colour-swap-vrtk_materialcolorswaphighlighter)
+ * [Outline Object Copy](#outline-object-copy-vrtk_outlineobjectcopyhighlighter)
 
 ---
 
@@ -411,6 +412,10 @@ This directory contains scripts that are used to provide different object highli
 The Base Highlighter is an abstract class that all other highlighters inherit and are required to implement the public methods.
 
 As this is an abstract class, it cannot be applied directly to a game object and performs no logic.
+
+### Inspector Parameters
+
+ * **Active:** Determines if this highlighter is the active highlighter for the object the component is attached to. Only 1 active highlighter can be applied to a game object.
 
 ### Class Methods
 
@@ -450,6 +455,20 @@ The Highlight method is used to initiate the highlighting logic to apply to an o
 
 The Unhighlight method is used to initiate the logic that returns an object back to it's original appearance.
 
+#### GetOption<T>/2
+
+  > `public virtual T GetOption<T>(Dictionary<string, object> options, string key)`
+
+  * Type Params
+   * `T` - The system type that is expected to be returned.
+  * Parameters
+   * `Dictionary<string, object> options` - The dictionary of options to check in.
+   * `string key` - The identifier key to look for.
+  * Returns
+   * `T` - The value in the options at the given key returned in the provided system type.
+
+The GetOption method is used to return a value from the options array if the given key exists.
+
 ---
 
 ## Material Colour Swap (VRTK_MaterialColorSwapHighlighter)
@@ -465,9 +484,9 @@ The Draw Call Batching will resume on the original material when the item is no 
 
 This is the default highlighter that is applied to any script that requires a highlighting component (e.g. `VRTK_Interactable_Object` or `VRTK_ControllerActions`).
 
-### Class Variables
+### Inspector Parameters
 
- * `public float emissionDarken` - The emission colour of the texture will be the highlight colour but this percent darker. Default: `50f`
+ * **Emission Darken:** The emission colour of the texture will be the highlight colour but this percent darker.
 
 ### Class Methods
 
@@ -507,6 +526,74 @@ The Highlight method initiates the change of colour on the object and will fade 
    * _none_
 
 The Unhighlight method returns the object back to it's original colour.
+
+### Example
+
+`VRTK/Examples/005_Controller_BasicObjectGrabbing` demonstrates the solid highlighting on the green cube, red cube and flying saucer when the controller touches it.
+
+`VRTK/Examples/035_Controller_OpacityAndHighlighting` demonstrates the solid highlighting if the right controller collides with the green box or if any of the buttons are pressed.
+
+---
+
+## Outline Object Copy (VRTK_OutlineObjectCopyHighlighter)
+ > extends [VRTK_BaseHighlighter](#base-highlighter-vrtk_basehighlighter)
+
+### Overview
+
+The Outline Object Copy Highlighter works by making a copy of a mesh and adding an outline shader to it and toggling the appearance of the highlighted object.
+
+### Inspector Parameters
+
+ * **Thickness:** The thickness of the outline effect
+ * **Custom Outline Model:** The GameObject to use as the model to outline. If one isn't provided then the first GameObject with a valid Renderer in the current GameObject hierarchy will be used.
+ * **Custom Outline Model Path:** A path to a GameObject to find at runtime, if the GameObject doesn't exist at edit time.
+
+### Class Methods
+
+#### Initialise/2
+
+  > `public override void Initialise(Color? color = null, Dictionary<string, object> options = null)`
+
+  * Parameters
+   * `Color? color` - Not used.
+   * `Dictionary<string, object> options` - A dictionary array containing the highlighter options:
+     * `<'thickness', float>` - Same as `thickness` inspector parameter.
+     * `<'customOutlineModel', GameObject>` - Same as `customOutlineModel` inspector parameter.
+     * `<'customOutlineModelPath', string>` - Same as `customOutlineModelPath` inspector parameter.
+  * Returns
+   * _none_
+
+The Initialise method sets up the highlighter for use.
+
+#### Highlight/2
+
+  > `public override void Highlight(Color? color, float duration = 0f)`
+
+  * Parameters
+   * `Color? color` - The colour to outline with.
+   * `float duration` - Not used.
+  * Returns
+   * _none_
+
+The Highlight method initiates the outline object to be enabled and display the outline colour.
+
+#### Unhighlight/2
+
+  > `public override void Unhighlight(Color? color = null, float duration = 0f)`
+
+  * Parameters
+   * `Color? color` - Not used.
+   * `float duration` - Not used.
+  * Returns
+   * _none_
+
+The Unhighlight method hides the outline object and removes the outline colour.
+
+### Example
+
+`VRTK/Examples/005_Controller_BasicObjectGrabbing` demonstrates the outline highlighting on the green sphere when the controller touches it.
+
+`VRTK/Examples/035_Controller_OpacityAndHighlighting` demonstrates the outline highlighting if the left controller collides with the green box.
 
 ---
 
@@ -774,6 +861,27 @@ The Controller Actions script provides helper methods to deal with common contro
 
 The highlighting of the controller is defaulted to use the `VRTK_MaterialColorSwapHighlighter` if no other highlighter is applied to the Object.
 
+### Inspector Parameters
+
+ * **Model Element Paths:** A collection of strings that determine the path to the controller model sub elements for identifying the model parts at runtime. The paths will default to the model element paths of the selected SDK Bridge.
+  * The available model sub elements are:
+    * `Body Model Path`: The overall shape of the controller.
+    * `Trigger Model Path`: The model that represents the trigger button.
+    * `Grip Left Model Path`: The model that represents the left grip button.
+    * `Grip Right Model Path`: The model that represents the right grip button.
+    * `Touchpad Model Path`: The model that represents the touchpad.
+    * `App Menu Model Path`: The model that represents the application menu button.
+    * `System Menu Model Path`: The model that represents the system menu button.
+ * **Element Highlighter Overrides:** A collection of highlighter overrides for each controller model sub element. If no highlighter override is given then highlighter on the Controller game object is used.
+  * The available model sub elements are:
+    * `Body`: The highlighter to use on the overall shape of the controller.
+    * `Trigger`: The highlighter to use on the trigger button.
+    * `Grip Left`: The highlighter to use on the left grip button.
+    * `Grip Right`: The highlighter to use on the  right grip button.
+    * `Touchpad`: The highlighter to use on the touchpad.
+    * `App Menu`: The highlighter to use on the application menu button.
+    * `System Menu`: The highlighter to use on the system menu button.
+
 ### Class Events
 
  * `ControllerModelVisible` - Emitted when the controller model is toggled to be visible.
@@ -916,6 +1024,19 @@ The ToggleHighlightTouchpad method is a shortcut method that makes it easier to 
 
 The ToggleHighlightApplicationMenu method is a shortcut method that makes it easier to toggle the highlight state of the controller application menu element.
 
+#### ToggleHighlighBody/3
+
+  > `public void ToggleHighlighBody(bool state, Color? highlight = null, float duration = 0f)`
+
+  * Parameters
+   * `bool state` - The highlight colour state, `true` will enable the highlight on the body and `false` will remove the highlight from the body.
+   * `Color? highlight` - The colour to highlight the body with.
+   * `float duration` - The duration of fade from white to the highlight colour.
+  * Returns
+   * _none_
+
+The ToggleHighlighBody method is a shortcut method that makes it easier to toggle the highlight state of the controller body element.
+
 #### ToggleHighlightController/3
 
   > `public void ToggleHighlightController(bool state, Color? highlight = null, float duration = 0f)`
@@ -953,11 +1074,22 @@ The TriggerHapticPulse/1 method calls a single haptic pulse call on the controll
 
 The TriggerHapticPulse/3 method calls a haptic pulse for a specified amount of time rather than just a single tick. Each pulse can be separated by providing a `pulseInterval` to pause between each haptic pulse.
 
+#### InitaliseHighlighters/0
+
+  > `public void InitaliseHighlighters()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The InitaliseHighlighters method sets up the highlighters on the controller model.
+
 ### Example
 
 `VRTK/Examples/016_Controller_HapticRumble` demonstrates the ability to hide a controller model and make the controller vibrate for a given length of time at a given intensity.
 
-`VRTK/Examples/035_Controller_OpacityAndHighlighting`demonstrates the ability to change the opacity of a controller model and to highlight specific elements of a controller such as the buttons or even the entire controller model.
+`VRTK/Examples/035_Controller_OpacityAndHighlighting` demonstrates the ability to change the opacity of a controller model and to highlight specific elements of a controller such as the buttons or even the entire controller model.
 
 ---
 
@@ -1753,6 +1885,7 @@ The highlighting of an Interactable Object is defaulted to use the `VRTK_Materia
   * `Default` - Use the hide settings from the controller.
   * `OverrideHide` - Hide the controller when interacting, overriding controller settings.
   * `OverrideDontHide` - Don't hide the controller when interacting, overriding controller settings.
+ * `public int usingState` - The current using state of the object. `0` not being used, `1` being used. Default: `0`
 
 ### Class Events
 

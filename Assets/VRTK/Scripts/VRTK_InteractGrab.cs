@@ -385,6 +385,7 @@ namespace VRTK
                 if (!grabbedObjectScript.IsValidInteractableController(gameObject, grabbedObjectScript.allowedGrabControllers))
                 {
                     grabbedObject = null;
+                    interactTouch.ForceStopTouching();
                     return;
                 }
 
@@ -465,6 +466,7 @@ namespace VRTK
 
             grabEnabledState = 0;
             grabbedObject = null;
+            interactTouch.ForceStopTouching();
         }
 
         private void ReleaseObject(bool withThrow)
