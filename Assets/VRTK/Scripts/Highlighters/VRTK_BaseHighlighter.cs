@@ -12,6 +12,9 @@ namespace VRTK.Highlighters
     /// </remarks>
     public abstract class VRTK_BaseHighlighter : MonoBehaviour
     {
+        [Tooltip("Determines if this highlighter is the active highlighter for the object the component is attached to. Only 1 active highlighter can be applied to a game object.")]
+        public bool active = true;
+
         /// <summary>
         /// The Initalise method is used to set up the state of the highlighter.
         /// </summary>
@@ -32,5 +35,21 @@ namespace VRTK.Highlighters
         /// <param name="color">An optional colour that could be used during the unhighlight phase. Usually will be left as null.</param>
         /// <param name="duration">An optional duration of how long before the unhighlight has occured.</param>
         public abstract void Unhighlight(Color? color = null, float duration = 0f);
+
+        /// <summary>
+        /// The GetOption method is used to return a value from the options array if the given key exists.
+        /// </summary>
+        /// <typeparam name="T">The system type that is expected to be returned.</typeparam>
+        /// <param name="options">The dictionary of options to check in.</param>
+        /// <param name="key">The identifier key to look for.</param>
+        /// <returns>The value in the options at the given key returned in the provided system type.</returns>
+        public virtual T GetOption<T>(Dictionary<string, object> options, string key)
+        {
+            if (options != null && options.ContainsKey(key) && options[key] != null)
+            {
+                return (T)options[key];
+            }
+            return default(T);
+        }
     }
 }

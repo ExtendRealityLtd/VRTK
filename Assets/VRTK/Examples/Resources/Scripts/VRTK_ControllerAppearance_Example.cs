@@ -4,6 +4,8 @@
 
     public class VRTK_ControllerAppearance_Example : MonoBehaviour
     {
+        public bool highlightBodyOnlyOnCollision = false;
+
         private VRTK_ControllerTooltips tooltips;
         private VRTK_ControllerActions actions;
         private VRTK_ControllerEvents events;
@@ -106,12 +108,26 @@
 
         private void OnTriggerEnter(Collider collider)
         {
-            actions.ToggleHighlightController(true, Color.yellow, 0.4f);
+            if (highlightBodyOnlyOnCollision)
+            {
+                actions.ToggleHighlighBody(true, Color.yellow, 0.4f);
+            }
+            else
+            {
+                actions.ToggleHighlightController(true, Color.yellow, 0.4f);
+            }
         }
 
         private void OnTriggerExit(Collider collider)
         {
-            actions.ToggleHighlightController(false);
+            if (highlightBodyOnlyOnCollision)
+            {
+                actions.ToggleHighlighBody(false);
+            }
+            else
+            {
+                actions.ToggleHighlightController(false);
+            }
         }
     }
 }

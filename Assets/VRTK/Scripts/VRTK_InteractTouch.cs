@@ -344,8 +344,12 @@ namespace VRTK
                 }
 
                 OnControllerUntouchInteractableObject(SetControllerInteractEvent(untouched.gameObject));
-                untouched.GetComponent<VRTK_InteractableObject>().StopTouching(gameObject);
-                untouched.GetComponent<VRTK_InteractableObject>().ToggleHighlight(false);
+                var untouchedObjectScript = untouched.GetComponent<VRTK_InteractableObject>();
+                untouchedObjectScript.StopTouching(gameObject);
+                if (!untouchedObjectScript.IsTouched())
+                {
+                    untouchedObjectScript.ToggleHighlight(false);
+                }
             }
 
             if (updatedHideControllerOnTouch)
