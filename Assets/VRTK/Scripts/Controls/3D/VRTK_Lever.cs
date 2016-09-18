@@ -28,9 +28,10 @@ namespace VRTK
         [Tooltip("The increments in which lever values can change.")]
         public float stepSize = 1f;
 
+        protected HingeJoint hj;
+
         private Rigidbody rb;
         private VRTK_InteractableObject io;
-        private HingeJoint hj;
         private bool hjCreated = false;
 
         protected override void InitRequiredComponents()
