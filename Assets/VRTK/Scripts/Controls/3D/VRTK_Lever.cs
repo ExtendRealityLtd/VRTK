@@ -58,7 +58,7 @@ namespace VRTK
             io.isGrabbable = true;
             io.precisionSnap = true;
             io.stayGrabbedOnTeleport = false;
-            io.grabAttachMechanic = VRTK_InteractableObject.GrabAttachType.Track_Object;
+            io.grabAttachMechanic = VRTK_InteractableObject.GrabAttachType.Rotator_Track;
 
             hj = GetComponent<HingeJoint>();
             if (hj == null)
