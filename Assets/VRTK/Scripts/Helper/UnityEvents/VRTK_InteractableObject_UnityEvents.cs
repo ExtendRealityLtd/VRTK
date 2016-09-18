@@ -9,7 +9,7 @@
         private VRTK_InteractableObject io;
 
         [System.Serializable]
-        public class UnityObjectEvent : UnityEvent<InteractableObjectEventArgs> { };
+        public class UnityObjectEvent : UnityEvent<object, InteractableObjectEventArgs> { };
 
         /// <summary>
         /// Emits the InteractableObjectTouched class event.
@@ -63,32 +63,32 @@
 
         private void Touch(object o, InteractableObjectEventArgs e)
         {
-            OnTouch.Invoke(e);
+            OnTouch.Invoke(o, e);
         }
 
         private void UnTouch(object o, InteractableObjectEventArgs e)
         {
-            OnUntouch.Invoke(e);
+            OnUntouch.Invoke(o, e);
         }
 
         private void Grab(object o, InteractableObjectEventArgs e)
         {
-            OnGrab.Invoke(e);
+            OnGrab.Invoke(o, e);
         }
 
         private void UnGrab(object o, InteractableObjectEventArgs e)
         {
-            OnUngrab.Invoke(e);
+            OnUngrab.Invoke(o, e);
         }
 
         private void Use(object o, InteractableObjectEventArgs e)
         {
-            OnUse.Invoke(e);
+            OnUse.Invoke(o, e);
         }
 
         private void Unuse(object o, InteractableObjectEventArgs e)
         {
-            OnUnuse.Invoke(e);
+            OnUnuse.Invoke(o, e);
         }
 
         private void OnDisable()

@@ -9,7 +9,7 @@
         private VRTK_InteractTouch it;
 
         [System.Serializable]
-        public class UnityObjectEvent : UnityEvent<ObjectInteractEventArgs> { };
+        public class UnityObjectEvent : UnityEvent<object, ObjectInteractEventArgs> { };
 
         /// <summary>
         /// Emits the ControllerTouchInteractableObject class event.
@@ -43,12 +43,12 @@
 
         private void ControllerTouchInteractableObject(object o, ObjectInteractEventArgs e)
         {
-            OnControllerTouchInteractableObject.Invoke(e);
+            OnControllerTouchInteractableObject.Invoke(o, e);
         }
 
         private void ControllerUntouchInteractableObject(object o, ObjectInteractEventArgs e)
         {
-            OnControllerUntouchInteractableObject.Invoke(e);
+            OnControllerUntouchInteractableObject.Invoke(o, e);
         }
 
         private void OnDisable()

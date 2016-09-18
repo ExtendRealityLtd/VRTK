@@ -9,7 +9,7 @@
         private VRTK_ControllerEvents ce;
 
         [System.Serializable]
-        public class UnityObjectEvent : UnityEvent<ControllerInteractionEventArgs> { };
+        public class UnityObjectEvent : UnityEvent<object, ControllerInteractionEventArgs> { };
 
         /// <summary>
         /// Emits the TriggerPressed class event.
@@ -188,157 +188,157 @@
 
         private void TriggerPressed(object o, ControllerInteractionEventArgs e)
         {
-            OnTriggerPressed.Invoke(e);
+            OnTriggerPressed.Invoke(o, e);
         }
 
         private void TriggerReleased(object o, ControllerInteractionEventArgs e)
         {
-            OnTriggerReleased.Invoke(e);
+            OnTriggerReleased.Invoke(o, e);
         }
 
         private void TriggerTouchStart(object o, ControllerInteractionEventArgs e)
         {
-            OnTriggerTouchStart.Invoke(e);
+            OnTriggerTouchStart.Invoke(o, e);
         }
 
         private void TriggerTouchEnd(object o, ControllerInteractionEventArgs e)
         {
-            OnTriggerTouchEnd.Invoke(e);
+            OnTriggerTouchEnd.Invoke(o, e);
         }
 
         private void TriggerHairlineStart(object o, ControllerInteractionEventArgs e)
         {
-            OnTriggerHairlineStart.Invoke(e);
+            OnTriggerHairlineStart.Invoke(o, e);
         }
 
         private void TriggerHairlineEnd(object o, ControllerInteractionEventArgs e)
         {
-            OnTriggerHairlineEnd.Invoke(e);
+            OnTriggerHairlineEnd.Invoke(o, e);
         }
 
         private void TriggerClicked(object o, ControllerInteractionEventArgs e)
         {
-            OnTriggerClicked.Invoke(e);
+            OnTriggerClicked.Invoke(o, e);
         }
 
         private void TriggerUnclicked(object o, ControllerInteractionEventArgs e)
         {
-            OnTriggerUnclicked.Invoke(e);
+            OnTriggerUnclicked.Invoke(o, e);
         }
 
         private void TriggerAxisChanged(object o, ControllerInteractionEventArgs e)
         {
-            OnTriggerAxisChanged.Invoke(e);
+            OnTriggerAxisChanged.Invoke(o, e);
         }
 
         private void ApplicationMenuPressed(object o, ControllerInteractionEventArgs e)
         {
-            OnApplicationMenuPressed.Invoke(e);
+            OnApplicationMenuPressed.Invoke(o, e);
         }
 
         private void ApplicationMenuReleased(object o, ControllerInteractionEventArgs e)
         {
-            OnApplicationMenuReleased.Invoke(e);
+            OnApplicationMenuReleased.Invoke(o, e);
         }
 
         private void GripPressed(object o, ControllerInteractionEventArgs e)
         {
-            OnGripPressed.Invoke(e);
+            OnGripPressed.Invoke(o, e);
         }
 
         private void GripReleased(object o, ControllerInteractionEventArgs e)
         {
-            OnGripReleased.Invoke(e);
+            OnGripReleased.Invoke(o, e);
         }
 
         private void TouchpadPressed(object o, ControllerInteractionEventArgs e)
         {
-            OnTouchpadPressed.Invoke(e);
+            OnTouchpadPressed.Invoke(o, e);
         }
 
         private void TouchpadReleased(object o, ControllerInteractionEventArgs e)
         {
-            OnTouchpadReleased.Invoke(e);
+            OnTouchpadReleased.Invoke(o, e);
         }
 
         private void TouchpadTouchStart(object o, ControllerInteractionEventArgs e)
         {
-            OnTouchpadTouchStart.Invoke(e);
+            OnTouchpadTouchStart.Invoke(o, e);
         }
 
         private void TouchpadTouchEnd(object o, ControllerInteractionEventArgs e)
         {
-            OnTouchpadTouchEnd.Invoke(e);
+            OnTouchpadTouchEnd.Invoke(o, e);
         }
 
         private void TouchpadAxisChanged(object o, ControllerInteractionEventArgs e)
         {
-            OnTouchpadAxisChanged.Invoke(e);
+            OnTouchpadAxisChanged.Invoke(o, e);
         }
 
         private void AliasPointerOn(object o, ControllerInteractionEventArgs e)
         {
-            OnAliasPointerOn.Invoke(e);
+            OnAliasPointerOn.Invoke(o, e);
         }
 
         private void AliasPointerOff(object o, ControllerInteractionEventArgs e)
         {
-            OnAliasPointerOff.Invoke(e);
+            OnAliasPointerOff.Invoke(o, e);
         }
 
         private void AliasPointerSet(object o, ControllerInteractionEventArgs e)
         {
-            OnAliasPointerSet.Invoke(e);
+            OnAliasPointerSet.Invoke(o, e);
         }
 
         private void AliasGrabOn(object o, ControllerInteractionEventArgs e)
         {
-            OnAliasGrabOn.Invoke(e);
+            OnAliasGrabOn.Invoke(o, e);
         }
 
         private void AliasGrabOff(object o, ControllerInteractionEventArgs e)
         {
-            OnAliasGrabOff.Invoke(e);
+            OnAliasGrabOff.Invoke(o, e);
         }
 
         private void AliasUseOn(object o, ControllerInteractionEventArgs e)
         {
-            OnAliasUseOn.Invoke(e);
+            OnAliasUseOn.Invoke(o, e);
         }
 
         private void AliasUseOff(object o, ControllerInteractionEventArgs e)
         {
-            OnAliasUseOff.Invoke(e);
+            OnAliasUseOff.Invoke(o, e);
         }
 
         private void AliasUIClickOn(object o, ControllerInteractionEventArgs e)
         {
-            OnAliasUIClickOn.Invoke(e);
+            OnAliasUIClickOn.Invoke(o, e);
         }
 
         private void AliasUIClickOff(object o, ControllerInteractionEventArgs e)
         {
-            OnAliasUIClickOff.Invoke(e);
+            OnAliasUIClickOff.Invoke(o, e);
         }
 
         private void AliasMenuOn(object o, ControllerInteractionEventArgs e)
         {
-            OnAliasMenuOn.Invoke(e);
+            OnAliasMenuOn.Invoke(o, e);
         }
 
         private void AliasMenuOff(object o, ControllerInteractionEventArgs e)
         {
-            OnAliasMenuOff.Invoke(e);
+            OnAliasMenuOff.Invoke(o, e);
         }
 
         private void ControllerEnabled(object o, ControllerInteractionEventArgs e)
         {
-            OnControllerEnabled.Invoke(e);
+            OnControllerEnabled.Invoke(o, e);
         }
 
         private void ControllerDisabled(object o, ControllerInteractionEventArgs e)
         {
-            OnControllerDisabled.Invoke(e);
+            OnControllerDisabled.Invoke(o, e);
         }
 
         private void OnDisable()

@@ -9,7 +9,7 @@
         private VRTK_PlayerClimb pc;
 
         [System.Serializable]
-        public class UnityObjectEvent : UnityEvent<PlayerClimbEventArgs> { };
+        public class UnityObjectEvent : UnityEvent<object, PlayerClimbEventArgs> { };
 
         /// <summary>
         /// Emits the PlayerClimbStarted class event.
@@ -43,12 +43,12 @@
 
         private void PlayerClimbStarted(object o, PlayerClimbEventArgs e)
         {
-            OnPlayerClimbStarted.Invoke(e);
+            OnPlayerClimbStarted.Invoke(o, e);
         }
 
         private void PlayerClimbEnded(object o, PlayerClimbEventArgs e)
         {
-            OnPlayerClimbEnded.Invoke(e);
+            OnPlayerClimbEnded.Invoke(o, e);
         }
 
         private void OnDisable()

@@ -9,7 +9,7 @@
         private VRTK_HeadsetCollision hc;
 
         [System.Serializable]
-        public class UnityObjectEvent : UnityEvent<HeadsetCollisionEventArgs> { };
+        public class UnityObjectEvent : UnityEvent<object, HeadsetCollisionEventArgs> { };
 
         /// <summary>
         /// Emits the HeadsetCollisionDetect class event.
@@ -43,12 +43,12 @@
 
         private void HeadsetCollisionDetect(object o, HeadsetCollisionEventArgs e)
         {
-            OnHeadsetCollisionDetect.Invoke(e);
+            OnHeadsetCollisionDetect.Invoke(o, e);
         }
 
         private void HeadsetCollisionEnded(object o, HeadsetCollisionEventArgs e)
         {
-            OnHeadsetCollisionEnded.Invoke(e);
+            OnHeadsetCollisionEnded.Invoke(o, e);
         }
 
         private void OnDisable()
