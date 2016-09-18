@@ -866,6 +866,11 @@ namespace VRTK
 
         private void ForceStopAllInteractions()
         {
+            if(touchingObjects == null)
+            {
+                return;
+            }
+
             foreach (var touchingObject in touchingObjects)
             {
                 if (touchingObject.activeInHierarchy || forceDisabled)
