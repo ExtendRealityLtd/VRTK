@@ -177,6 +177,9 @@ namespace VRTK
         /// </summary>
         public event InteractableObjectEventHandler InteractableObjectUnused;
 
+        /// <summary>
+        /// The current using state of the object. `0` not being used, `1` being used.
+        /// </summary>
         [HideInInspector]
         public int usingState = 0;
 
@@ -194,9 +197,8 @@ namespace VRTK
         protected bool previousIsGrabbable;
         protected bool forcedDropped;
         protected bool forceDisabled;
-
-        private VRTK_BaseHighlighter objectHighlighter;
-        private bool autoHighlighter = false;
+        protected VRTK_BaseHighlighter objectHighlighter;
+        protected bool autoHighlighter = false;
 
         public virtual void OnInteractableObjectTouched(InteractableObjectEventArgs e)
         {
@@ -399,11 +401,6 @@ namespace VRTK
         /// <param name="globalHighlightColor">The colour to use when highlighting the object.</param>
         public virtual void ToggleHighlight(bool toggle, Color globalHighlightColor)
         {
-            if (IsTouched())
-            {
-                return;
-            }
-
             if (highlightOnTouch)
             {
                 if (toggle && !IsGrabbed() && !IsUsing())
@@ -630,7 +627,7 @@ namespace VRTK
 
         protected virtual void OnEnable()
         {
-            SetupHighlighter();
+            InitialiseHighlighter();
             RegisterTeleporters();
             forceDisabled = false;
             if (forcedDropped)
@@ -676,13 +673,13 @@ namespace VRTK
             }
         }
 
-        private void SetupHighlighter()
+        protected virtual void InitialiseHighlighter()
         {
             if (highlightOnTouch)
             {
                 autoHighlighter = false;
-                objectHighlighter = GetComponent<VRTK_BaseHighlighter>();
-                if (!objectHighlighter)
+                objectHighlighter = Utilities.GetActiveHighlighter(gameObject);
+                if (objectHighlighter == null)
                 {
                     autoHighlighter = true;
                     objectHighlighter = gameObject.AddComponent<VRTK_MaterialColorSwapHighlighter>();
