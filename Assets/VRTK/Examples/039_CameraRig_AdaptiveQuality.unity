@@ -463,7 +463,6 @@ MonoBehaviour:
   _head: {fileID: 278938379}
   _ears: {fileID: 278938380}
   wireframe: 0
-  flip: {fileID: 0}
 --- !u!124 &278938388
 Behaviour:
   m_ObjectHideFlags: 0
@@ -927,6 +926,35 @@ Transform:
   m_Children: []
   m_Father: {fileID: 506744366}
   m_RootOrder: 0
+--- !u!21 &1367273665
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: Sprites/Default
+  m_Shader: {fileID: 10753, guid: 0000000000000000f000000000000000, type: 0}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 5
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  m_SavedProperties:
+    serializedVersion: 2
+    m_TexEnvs:
+    - first:
+        name: _MainTex
+      second:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - first:
+        name: PixelSnap
+      second: 0
+    m_Colors:
+    - first:
+        name: _Color
+      second: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &1621413731
 GameObject:
   m_ObjectHideFlags: 0
@@ -1085,35 +1113,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 506744366}
   m_RootOrder: 5
---- !u!21 &1627398361
-Material:
-  serializedVersion: 6
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_Name: Sprites/Default
-  m_Shader: {fileID: 10753, guid: 0000000000000000f000000000000000, type: 0}
-  m_ShaderKeywords: 
-  m_LightmapFlags: 5
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  m_SavedProperties:
-    serializedVersion: 2
-    m_TexEnvs:
-    - first:
-        name: _MainTex
-      second:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Floats:
-    - first:
-        name: PixelSnap
-      second: 0
-    m_Colors:
-    - first:
-        name: _Color
-      second: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &1646366261
 GameObject:
   m_ObjectHideFlags: 0
@@ -1217,15 +1216,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc42913721fa5ac43aa12864be562cb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  active: 1
   drawDebugVisualization: 1
   respondsToKeyboardShortcuts: 1
   respondsToCommandLineArguments: 1
   msaaLevel: 4
+  scaleRenderViewport: 1
   minimumRenderScale: 0.8
   maximumRenderScale: 1.4
   maximumRenderTargetDimension: 4096
   renderScaleFillRateStepSizeInPercent: 15
+  scaleRenderTargetResolution: 0
 --- !u!114 &1730361482
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1260,7 +1260,7 @@ MeshFilter:
     type: 2}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1730361479}
-  m_Mesh: {fileID: 1964586736}
+  m_Mesh: {fileID: 1913318924}
 --- !u!23 &1730361484
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1275,7 +1275,7 @@ MeshRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_Materials:
-  - {fileID: 1627398361}
+  - {fileID: 1367273665}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
@@ -1670,7 +1670,7 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 39aa6e3f7c442a04d997c9ed23f46981, type: 2}
   m_IsPrefabParent: 0
---- !u!43 &1964586736
+--- !u!43 &1913318924
 Mesh:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
@@ -1738,7 +1738,7 @@ Mesh:
       format: 0
       dimension: 0
     m_DataSize: 288
-    _typelessdata: 6766863f0ad7233c696666bf000000000000803f0000803f0000803f0000000000000000676686bf0ad7233c696666bf000000000000803f0000803f0000803f0000803f00000000676686bf0ad7233c6966663f000000000000803f0000803f0000803f00000000000000006766863f0ad7233c6966663f000000000000803f0000803f0000803f0000803f000000009a99993f0ad7233c686686bf000000000000803f0000803f00000000000000000000803f9a9999bf0ad7233c686686bf000000000000803f0000803f000000000000803f0000803f9a9999bf0ad7233c6866863f000000000000803f0000803f00000000000000000000803f9a99993f0ad7233c6866863f000000000000803f0000803f000000000000803f0000803f
+    _typelessdata: ceccac3f0ad7233ccdcc8cbf000000000000803f0000803f0000803f0000000000000000ceccacbf0ad7233ccdcc8cbf000000000000803f0000803f0000803f0000803f00000000ceccacbf0ad7233ccdcc8c3f000000000000803f0000803f0000803f0000000000000000ceccac3f0ad7233ccdcc8c3f000000000000803f0000803f0000803f0000803f000000000100c03f0ad7233c0000a0bf000000000000803f0000803f00000000000000000000803f0100c0bf0ad7233c0000a0bf000000000000803f0000803f000000000000803f0000803f0100c0bf0ad7233c0000a03f000000000000803f0000803f00000000000000000000803f0100c03f0ad7233c0000a03f000000000000803f0000803f000000000000803f0000803f
   m_CompressedMesh:
     m_Vertices:
       m_NumItems: 0

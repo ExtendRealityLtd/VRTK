@@ -65,17 +65,14 @@ namespace VRTK
     {
         #region Public fields
 
-        [Tooltip("Toggles whether the render quality is dynamically adjusted to maintain VR framerate.\n\n"
-                 + "If unchecked, the renderer will render at the recommended resolution provided by the current `VRDevice`.")]
-        public bool active = true;
-
         [Tooltip("Toggles whether to show the debug overlay.\n\n"
                  + "Each square represents a different level on the quality scale. Levels increase from left to right,"
-                 + " and the first green box that is lit above represents the recommended render target resolution provided by"
-                 + " the current `VRDevice`. The yellow boxes represent resolutions below the recommended render target resolution.\n"
+                 + " the first green box that is lit above represents the recommended render target resolution provided by the"
+                 + " current `VRDevice`, the box that is lit below in cyan represents the current resolution and the filled box"
+                 + " represents the current viewport scale. The yellow boxes represent resolutions below the recommended render target resolution.\n"
                  + "The currently lit box becomes red whenever the user is likely seeing reprojection in the HMD since the"
-                 + " application isn't maintaining VR framerate. If lit, the box all the way on the left is almost always lit red because"
-                 + " it represents the lowest render scale with reprojection on.")]
+                 + " application isn't maintaining VR framerate. If lit, the box all the way on the left is almost always lit"
+                 + " red because it represents the lowest render scale with reprojection on.")]
         public bool drawDebugVisualization;
 
         [Tooltip("Toggles whether to allow keyboard shortcuts to control this script.\n\n"
@@ -103,8 +100,10 @@ namespace VRTK
         [Range(0, 8)]
         public int msaaLevel = 4;
 
+        [Tooltip("Toggles whether the render viewport scale is dynamically adjusted to maintain VR framerate.\n\n"
+                 + "If unchecked, the renderer will render at the recommended resolution provided by the current `VRDevice`.")]
+        public bool scaleRenderViewport = true;
         [Tooltip("The minimum allowed render scale.")]
-        [Header("Render Scale")]
         [Range(0.01f, 5)]
         public float minimumRenderScale = 0.8f;
         [Tooltip("The maximum allowed render scale.")]
@@ -115,14 +114,17 @@ namespace VRTK
         [Tooltip("The fill rate step size in percent by which the render scale levels will be calculated.")]
         [Range(1, 100)]
         public int renderScaleFillRateStepSizeInPercent = 15;
+        [Tooltip("Toggles whether the render target resolution is dynamically adjusted to maintain VR framerate.\n\n"
+                 + "If unchecked, the renderer will use the maximum target resolution specified by `maximumRenderScale`.")]
+        public bool scaleRenderTargetResolution = false;
 
-        [Tooltip("Toggles whether to override the used render scale level.")]
+        [Tooltip("Toggles whether to override the used render viewport scale level.")]
         [Header("Override")]
         [NonSerialized]
-        public bool overrideRenderScale;
-        [Tooltip("The render scale level to override the current one with.")]
+        public bool overrideRenderViewportScale;
+        [Tooltip("The render viewport scale level to override the current one with.")]
         [NonSerialized]
-        public int overrideRenderScaleLevel;
+        public int overrideRenderViewportScaleLevel;
 
         #endregion
 
@@ -153,7 +155,7 @@ namespace VRTK
         /// </summary>
         public Vector2 defaultRenderTargetResolution
         {
-            get { return RenderTargetResolutionForRenderScale(allRenderScales[defaultRenderScaleLevel]); }
+            get { return RenderTargetResolutionForRenderScale(allRenderScales[defaultRenderViewportScaleLevel]); }
         }
 
         /// <summary>
@@ -173,15 +175,17 @@ namespace VRTK
         /// </summary>
         private const float DefaultFrameDurationInMilliseconds = 1000f / 90f;
 
+        private readonly AdaptiveSetting<int> renderViewportScaleSetting = new AdaptiveSetting<int>(0, 30, 10);
+        private readonly AdaptiveSetting<int> renderScaleSetting = new AdaptiveSetting<int>(0, 180, 90);
+
         private readonly List<float> allRenderScales = new List<float>();
-        private int defaultRenderScaleLevel;
-        private int currentRenderScaleLevel;
+        private int defaultRenderViewportScaleLevel;
         private float previousMinimumRenderScale;
         private float previousMaximumRenderScale;
         private float previousRenderScaleFillRateStepSizeInPercent;
 
         private readonly Timing timing = new Timing();
-        private readonly Setting renderScaleSetting = new Setting(30, 10);
+        private int lastRenderViewportScaleLevelBelowRenderScaleLevelFrameCount;
 
         private bool interleavedReprojectionEnabled;
         private bool hmdDisplayIsOnDesktop;
@@ -262,14 +266,19 @@ namespace VRTK
                 {
                     stringBuilder.Append(" (Interleaved reprojection hint)");
                 }
-                else if (index == defaultRenderScaleLevel)
+                else if (index == defaultRenderViewportScaleLevel)
                 {
                     stringBuilder.Append(" (Default)");
                 }
 
-                if (index == currentRenderScaleLevel)
+                if (index == renderViewportScaleSetting.currentValue)
                 {
-                    stringBuilder.Append(" (Current)");
+                    stringBuilder.Append(" (Current Viewport)");
+                }
+
+                if (index == renderScaleSetting.currentValue)
+                {
+                    stringBuilder.Append(" (Current Target Resolution)");
                 }
 
                 if (index != allRenderScales.Count - 1)
@@ -369,7 +378,7 @@ namespace VRTK
                 switch (argument)
                 {
                     case CommandLineArguments.Disable:
-                        active = false;
+                        scaleRenderViewport = false;
                         break;
                     case CommandLineArguments.MinimumRenderScale:
                         minimumRenderScale = float.Parse(nextArgument);
@@ -384,8 +393,8 @@ namespace VRTK
                         renderScaleFillRateStepSizeInPercent = int.Parse(nextArgument);
                         break;
                     case CommandLineArguments.OverrideRenderScaleLevel:
-                        overrideRenderScale = true;
-                        overrideRenderScaleLevel = int.Parse(nextArgument);
+                        overrideRenderViewportScale = true;
+                        overrideRenderViewportScaleLevel = int.Parse(nextArgument);
                         break;
                     case CommandLineArguments.DrawDebugVisualization:
                         drawDebugVisualization = true;
@@ -412,15 +421,15 @@ namespace VRTK
             }
             else if (Input.GetKeyDown(KeyboardShortcuts.ToggleOverrideRenderScale))
             {
-                overrideRenderScale = !overrideRenderScale;
+                overrideRenderViewportScale = !overrideRenderViewportScale;
             }
             else if (Input.GetKeyDown(KeyboardShortcuts.DecreaseOverrideRenderScaleLevel))
             {
-                overrideRenderScaleLevel = Mathf.Clamp(overrideRenderScaleLevel - 1, 0, allRenderScales.Count - 1);
+                overrideRenderViewportScaleLevel = ClampRenderScaleLevel(overrideRenderViewportScaleLevel - 1);
             }
             else if (Input.GetKeyDown(KeyboardShortcuts.IncreaseOverrideRenderScaleLevel))
             {
-                overrideRenderScaleLevel = Mathf.Clamp(overrideRenderScaleLevel + 1, 0, allRenderScales.Count - 1);
+                overrideRenderViewportScaleLevel = ClampRenderScaleLevel(overrideRenderViewportScaleLevel + 1);
             }
         }
 
@@ -470,23 +479,24 @@ namespace VRTK
                 }
             }
 
-            // Figure out default level for debug visualization
-            defaultRenderScaleLevel = Mathf.Clamp(
+            // Figure out default render viewport scale level for debug visualization
+            defaultRenderViewportScaleLevel = Mathf.Clamp(
                 allRenderScales.FindIndex(renderScale => renderScale >= 1.0f),
                 1,
                 allRenderScales.Count - 1);
-            currentRenderScaleLevel = defaultRenderScaleLevel;
-
-            overrideRenderScaleLevel = Mathf.Clamp(overrideRenderScaleLevel, 0, allRenderScales.Count - 1);
-            currentRenderScaleLevel = Mathf.Clamp(currentRenderScaleLevel, 0, allRenderScales.Count - 1);
+            renderViewportScaleSetting.currentValue = defaultRenderViewportScaleLevel;
+            renderScaleSetting.currentValue = defaultRenderViewportScaleLevel;
+            overrideRenderViewportScaleLevel = ClampRenderScaleLevel(overrideRenderViewportScaleLevel);
         }
 
         private void UpdateRenderScale()
         {
-            if (!active)
+            if (!scaleRenderViewport)
             {
-                currentRenderScaleLevel = defaultRenderScaleLevel;
+                renderViewportScaleSetting.currentValue = defaultRenderViewportScaleLevel;
+                renderScaleSetting.currentValue = defaultRenderViewportScaleLevel;
                 SetRenderScale(1.0f, 1.0f);
+
                 return;
             }
 
@@ -501,42 +511,64 @@ namespace VRTK
             float extrapolationThresholdInMilliseconds = 0.85f * allowedSingleFrameDurationInMilliseconds;
             float highThresholdInMilliseconds = 0.9f * allowedSingleFrameDurationInMilliseconds;
 
-            int newRenderScaleLevel = currentRenderScaleLevel;
+            int newRenderViewportScaleLevel = renderViewportScaleSetting.currentValue;
 
-            // Rapidly reduce quality if cost of last 1 or 3 frames, or the predicted next frame's cost are expensive
-            if (timing.WasFrameTimingBad(1, highThresholdInMilliseconds, renderScaleSetting.LastChangeFrameCount, renderScaleSetting.DecreaseFrameCost)
-                || timing.WasFrameTimingBad(3, highThresholdInMilliseconds, renderScaleSetting.LastChangeFrameCount, renderScaleSetting.DecreaseFrameCost)
-                || timing.WillFrameTimingBeBad(extrapolationThresholdInMilliseconds, highThresholdInMilliseconds,
-                                               renderScaleSetting.LastChangeFrameCount, renderScaleSetting.DecreaseFrameCost))
+            // Rapidly reduce render viewport scale level if cost of last 1 or 3 frames, or the predicted next frame's cost are expensive
+            if (timing.WasFrameTimingBad(
+                    1,
+                    highThresholdInMilliseconds,
+                    renderViewportScaleSetting.lastChangeFrameCount,
+                    renderViewportScaleSetting.decreaseFrameCost)
+                || timing.WasFrameTimingBad(
+                    3,
+                    highThresholdInMilliseconds,
+                    renderViewportScaleSetting.lastChangeFrameCount,
+                    renderViewportScaleSetting.decreaseFrameCost)
+                || timing.WillFrameTimingBeBad(
+                    extrapolationThresholdInMilliseconds,
+                    highThresholdInMilliseconds,
+                    renderViewportScaleSetting.lastChangeFrameCount,
+                    renderViewportScaleSetting.decreaseFrameCost))
             {
                 // Always drop 2 levels except when dropping from level 2 (level 0 is for reprojection)
-                newRenderScaleLevel = currentRenderScaleLevel == 2 ? 1 : currentRenderScaleLevel - 2;
+                newRenderViewportScaleLevel = ClampRenderScaleLevel(renderViewportScaleSetting.currentValue == 2
+                                                                    ? 1
+                                                                    : renderViewportScaleSetting.currentValue - 2);
             }
-            // Slowly increase quality if last 6 frames are cheap
-            else if (timing.WasFrameTimingGood(6, lowThresholdInMilliseconds, renderScaleSetting.LastChangeFrameCount, renderScaleSetting.IncreaseFrameCost))
+            // Slowly increase render viewport scale level if last 6 frames are cheap
+            else if (timing.WasFrameTimingGood(
+                6,
+                lowThresholdInMilliseconds,
+                renderViewportScaleSetting.lastChangeFrameCount,
+                renderViewportScaleSetting.increaseFrameCost))
             {
                 // Only increase by 1 level to prevent frame drops caused by adjusting
-                newRenderScaleLevel = currentRenderScaleLevel + 1;
+                newRenderViewportScaleLevel = ClampRenderScaleLevel(renderViewportScaleSetting.currentValue + 1);
             }
 
-            // Apply and remember the change
-            if (newRenderScaleLevel != currentRenderScaleLevel)
+            // Apply and remember when render viewport scale level changed
+            if (newRenderViewportScaleLevel != renderViewportScaleSetting.currentValue)
             {
-                currentRenderScaleLevel = Mathf.Clamp(newRenderScaleLevel, 0, allRenderScales.Count - 1);
-                renderScaleSetting.LastChangeFrameCount = Time.frameCount;
+                if (renderViewportScaleSetting.currentValue >= renderScaleSetting.currentValue
+                    && newRenderViewportScaleLevel < renderScaleSetting.currentValue)
+                {
+                    lastRenderViewportScaleLevelBelowRenderScaleLevelFrameCount = Time.frameCount;
+                }
+
+                renderViewportScaleSetting.currentValue = newRenderViewportScaleLevel;
             }
 
             // Ignore frame timings if overriding
-            if (overrideRenderScale)
+            if (overrideRenderViewportScale)
             {
-                currentRenderScaleLevel = overrideRenderScaleLevel;
+                renderViewportScaleSetting.currentValue = overrideRenderViewportScaleLevel;
             }
 
             // Force on interleaved reprojection for level 0 which is just a replica of level 1 with reprojection enabled
             float additionalViewportScale = 1.0f;
             if (!hmdDisplayIsOnDesktop)
             {
-                if (currentRenderScaleLevel == 0)
+                if (renderViewportScaleSetting.currentValue == 0)
                 {
                     if (interleavedReprojectionEnabled && timing.GetFrameTiming(0) < singleFrameDurationInMilliseconds * 0.85f)
                     {
@@ -554,14 +586,43 @@ namespace VRTK
 
                 VRTK_SDK_Bridge.ForceInterleavedReprojectionOn(interleavedReprojectionEnabled);
             }
-            // Not running in direct mode! Interleaved reprojection not supported, so scale down the viewport
-            else if (currentRenderScaleLevel == 0)
+            // Not running in direct mode! Interleaved reprojection not supported, so scale down the viewport some more
+            else if (renderViewportScaleSetting.currentValue == 0)
             {
                 additionalViewportScale = 0.8f;
             }
 
-            float newRenderScale = allRenderScales[allRenderScales.Count - 1];
-            float newRenderViewportScale = allRenderScales[currentRenderScaleLevel] / newRenderScale * additionalViewportScale;
+            int newRenderScaleLevel = renderScaleSetting.currentValue;
+            int levelInBetween = (renderViewportScaleSetting.currentValue - renderScaleSetting.currentValue) / 2;
+
+            // Increase render scale level to the level in between
+            if (renderScaleSetting.currentValue < renderViewportScaleSetting.currentValue
+                && Time.frameCount >= renderScaleSetting.lastChangeFrameCount + renderScaleSetting.increaseFrameCost)
+            {
+                newRenderScaleLevel = ClampRenderScaleLevel(renderScaleSetting.currentValue + Mathf.Max(1, levelInBetween));
+            }
+            // Decrease render scale level
+            else if (renderScaleSetting.currentValue > renderViewportScaleSetting.currentValue
+                     && Time.frameCount >= renderScaleSetting.lastChangeFrameCount + renderScaleSetting.decreaseFrameCost
+                     && Time.frameCount >= lastRenderViewportScaleLevelBelowRenderScaleLevelFrameCount + renderViewportScaleSetting.increaseFrameCost)
+            {
+                // Slowly decrease render scale level to level in between if last 6 frames are cheap, otherwise rapidly
+                newRenderScaleLevel = timing.WasFrameTimingGood(6, lowThresholdInMilliseconds, 0, 0)
+                                      ? ClampRenderScaleLevel(renderScaleSetting.currentValue + Mathf.Min(-1, levelInBetween))
+                                      : renderViewportScaleSetting.currentValue;
+            }
+
+            // Apply and remember when render scale level changed
+            renderScaleSetting.currentValue = newRenderScaleLevel;
+
+            if (!scaleRenderTargetResolution)
+            {
+                renderScaleSetting.currentValue = allRenderScales.Count - 1;
+            }
+
+            float newRenderScale = allRenderScales[renderScaleSetting.currentValue];
+            float newRenderViewportScale = allRenderScales[Mathf.Min(renderViewportScaleSetting.currentValue, renderScaleSetting.currentValue)]
+                                           / newRenderScale * additionalViewportScale;
 
             SetRenderScale(newRenderScale, newRenderViewportScale);
         }
@@ -576,6 +637,11 @@ namespace VRTK
             {
                 VRSettings.renderViewportScale = renderViewportScale;
             }
+        }
+
+        private int ClampRenderScaleLevel(int renderScaleLevel)
+        {
+            return Mathf.Clamp(renderScaleLevel, 0, allRenderScales.Count - 1);
         }
 
         #endregion
@@ -643,15 +709,50 @@ namespace VRTK
                                       ? 0
                                       : 1;
 
-            debugVisualizationQuadMaterial.SetInt(ShaderPropertyIDs.LevelsCount, allRenderScales.Count);
-            debugVisualizationQuadMaterial.SetInt(ShaderPropertyIDs.DefaultLevel, defaultRenderScaleLevel);
-            debugVisualizationQuadMaterial.SetInt(ShaderPropertyIDs.CurrentLevel, currentRenderScaleLevel);
+            debugVisualizationQuadMaterial.SetInt(ShaderPropertyIDs.RenderScaleLevelsCount, allRenderScales.Count);
+            debugVisualizationQuadMaterial.SetInt(ShaderPropertyIDs.DefaultRenderViewportScaleLevel, defaultRenderViewportScaleLevel);
+            debugVisualizationQuadMaterial.SetInt(ShaderPropertyIDs.CurrentRenderViewportScaleLevel, renderViewportScaleSetting.currentValue);
+            debugVisualizationQuadMaterial.SetInt(ShaderPropertyIDs.CurrentRenderScaleLevel, renderScaleSetting.currentValue);
             debugVisualizationQuadMaterial.SetInt(ShaderPropertyIDs.LastFrameIsInBudget, lastFrameIsInBudget);
         }
 
         #endregion
 
         #region Private helper classes
+
+        private sealed class AdaptiveSetting<T>
+        {
+            public T currentValue
+            {
+                get { return _currentValue; }
+                set
+                {
+                    if (!EqualityComparer<T>.Default.Equals(value, _currentValue))
+                    {
+                        lastChangeFrameCount = Time.frameCount;
+                    }
+
+                    previousValue = _currentValue;
+                    _currentValue = value;
+                }
+            }
+            public T previousValue { get; private set; }
+            public int lastChangeFrameCount { get; private set; }
+
+            public readonly int increaseFrameCost;
+            public readonly int decreaseFrameCost;
+
+            private T _currentValue;
+
+            public AdaptiveSetting(T currentValue, int increaseFrameCost, int decreaseFrameCost)
+            {
+                previousValue = currentValue;
+                this.currentValue = currentValue;
+
+                this.increaseFrameCost = increaseFrameCost;
+                this.decreaseFrameCost = decreaseFrameCost;
+            }
+        }
 
         private static class CommandLineArguments
         {
@@ -680,24 +781,11 @@ namespace VRTK
 
         private static class ShaderPropertyIDs
         {
-            public static readonly int LevelsCount = Shader.PropertyToID("_LevelsCount");
-            public static readonly int DefaultLevel = Shader.PropertyToID("_DefaultLevel");
-            public static readonly int CurrentLevel = Shader.PropertyToID("_CurrentLevel");
+            public static readonly int RenderScaleLevelsCount = Shader.PropertyToID("_RenderScaleLevelsCount");
+            public static readonly int DefaultRenderViewportScaleLevel = Shader.PropertyToID("_DefaultRenderViewportScaleLevel");
+            public static readonly int CurrentRenderViewportScaleLevel = Shader.PropertyToID("_CurrentRenderViewportScaleLevel");
+            public static readonly int CurrentRenderScaleLevel = Shader.PropertyToID("_CurrentRenderScaleLevel");
             public static readonly int LastFrameIsInBudget = Shader.PropertyToID("_LastFrameIsInBudget");
-        }
-
-        private sealed class Setting
-        {
-            public int IncreaseFrameCost { get; private set; }
-            public int DecreaseFrameCost { get; private set; }
-
-            public int LastChangeFrameCount;
-
-            public Setting(int increaseFrameCost, int decreaseFrameCost)
-            {
-                IncreaseFrameCost = increaseFrameCost;
-                DecreaseFrameCost = decreaseFrameCost;
-            }
         }
 
         private sealed class Timing
@@ -782,7 +870,7 @@ namespace VRTK
 
             private static bool AreFramesAvailable(int framesAgo, int lastChangeFrameCount, int changeFrameCost)
             {
-                return Time.frameCount >= lastChangeFrameCount + changeFrameCost + framesAgo;
+                return Time.frameCount >= framesAgo + lastChangeFrameCount + changeFrameCost;
             }
         }
 
