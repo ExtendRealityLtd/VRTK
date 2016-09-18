@@ -399,7 +399,7 @@ namespace VRTK
         /// <param name="globalHighlightColor">The colour to use when highlighting the object.</param>
         public virtual void ToggleHighlight(bool toggle, Color globalHighlightColor)
         {
-            if(IsTouched())
+            if (IsTouched())
             {
                 return;
             }
@@ -866,13 +866,15 @@ namespace VRTK
 
         private void ForceStopAllInteractions()
         {
-            if(touchingObjects == null)
+            if (touchingObjects == null)
             {
                 return;
             }
 
-            foreach (var touchingObject in touchingObjects)
+            for (int i = 0; i < touchingObjects.Count; i++)
             {
+                var touchingObject = touchingObjects[i];
+
                 if (touchingObject.activeInHierarchy || forceDisabled)
                 {
                     touchingObject.GetComponent<VRTK_InteractTouch>().ForceStopTouching();
