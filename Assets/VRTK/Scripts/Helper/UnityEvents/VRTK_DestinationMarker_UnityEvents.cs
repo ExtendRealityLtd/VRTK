@@ -9,7 +9,7 @@
         private VRTK_DestinationMarker dm;
 
         [System.Serializable]
-        public class UnityObjectEvent : UnityEvent<DestinationMarkerEventArgs> { };
+        public class UnityObjectEvent : UnityEvent<object, DestinationMarkerEventArgs> { };
 
         /// <summary>
         /// Emits the DestinationMarkerEnter class event.
@@ -48,17 +48,17 @@
 
         private void DestinationMarkerEnter(object o, DestinationMarkerEventArgs e)
         {
-            OnDestinationMarkerEnter.Invoke(e);
+            OnDestinationMarkerEnter.Invoke(o, e);
         }
 
         private void DestinationMarkerExit(object o, DestinationMarkerEventArgs e)
         {
-            OnDestinationMarkerExit.Invoke(e);
+            OnDestinationMarkerExit.Invoke(o, e);
         }
 
         private void DestinationMarkerSet(object o, DestinationMarkerEventArgs e)
         {
-            OnDestinationMarkerSet.Invoke(e);
+            OnDestinationMarkerSet.Invoke(o, e);
         }
 
         private void OnDisable()

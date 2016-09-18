@@ -9,7 +9,7 @@
         private VRTK_HeadsetFade hf;
 
         [System.Serializable]
-        public class UnityObjectEvent : UnityEvent<HeadsetFadeEventArgs> { };
+        public class UnityObjectEvent : UnityEvent<object, HeadsetFadeEventArgs> { };
 
         /// <summary>
         /// Emits the HeadsetFadeStart class event.
@@ -53,22 +53,22 @@
 
         private void HeadsetFadeStart(object o, HeadsetFadeEventArgs e)
         {
-            OnHeadsetFadeStart.Invoke(e);
+            OnHeadsetFadeStart.Invoke(o, e);
         }
 
         private void HeadsetFadeComplete(object o, HeadsetFadeEventArgs e)
         {
-            OnHeadsetFadeComplete.Invoke(e);
+            OnHeadsetFadeComplete.Invoke(o, e);
         }
 
         private void HeadsetUnfadeStart(object o, HeadsetFadeEventArgs e)
         {
-            OnHeadsetUnfadeStart.Invoke(e);
+            OnHeadsetUnfadeStart.Invoke(o, e);
         }
 
         private void HeadsetUnfadeComplete(object o, HeadsetFadeEventArgs e)
         {
-            OnHeadsetUnfadeComplete.Invoke(e);
+            OnHeadsetUnfadeComplete.Invoke(o, e);
         }
 
         private void OnDisable()

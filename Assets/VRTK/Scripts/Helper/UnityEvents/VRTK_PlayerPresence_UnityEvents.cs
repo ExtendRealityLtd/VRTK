@@ -9,7 +9,7 @@
         private VRTK_PlayerPresence pp;
 
         [System.Serializable]
-        public class UnityObjectEvent : UnityEvent<PlayerPresenceEventArgs> { };
+        public class UnityObjectEvent : UnityEvent<object, PlayerPresenceEventArgs> { };
 
         /// <summary>
         /// Emits the PresenceFallStarted class event.
@@ -43,12 +43,12 @@
 
         private void PresenceFallStarted(object o, PlayerPresenceEventArgs e)
         {
-            OnPresenceFallStarted.Invoke(e);
+            OnPresenceFallStarted.Invoke(o, e);
         }
 
         private void PresenceFallEnded(object o, PlayerPresenceEventArgs e)
         {
-            OnPresenceFallEnded.Invoke(e);
+            OnPresenceFallEnded.Invoke(o, e);
         }
 
         private void OnDisable()
