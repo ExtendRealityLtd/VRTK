@@ -57,6 +57,7 @@ namespace VRTK
         private bool beamActive = false;
         private Vector3 fixedForwardBeamForward;
         private Vector3 contactNormal;
+        private const float BEAM_ADJUST_OFFSET = 0.00001f;
 
         protected override void OnEnable()
         {
@@ -248,7 +249,8 @@ namespace VRTK
                 actualLength = pointerContactDistance;
             }
 
-            return pointerRaycast.GetPoint(actualLength - 0.00001f);
+            //Use BEAM_ADJUST_OFFSET to move point back and up a bit to prevent beam clipping at collision point
+            return (pointerRaycast.GetPoint(actualLength - BEAM_ADJUST_OFFSET) + (Vector3.up * BEAM_ADJUST_OFFSET));
         }
 
         private Vector3 ProjectDownBeam(Vector3 jointPosition)
@@ -276,7 +278,6 @@ namespace VRTK
                 destinationPosition = projectedBeamDownRaycast.GetPoint(collidedWith.distance);
                 base.PointerIn();
             }
-
             return destinationPosition;
         }
 
