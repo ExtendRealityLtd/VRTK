@@ -2774,6 +2774,7 @@ All 3D controls extend the `VRTK_Control` abstract class which provides common m
  * [Lever](#lever-vrtk_lever)
  * [Spring Lever](#spring-lever-vrtk_spring_lever)
  * [Slider](#slider-vrtk_slider)
+ * [Content Handler](#content-handler-vrtk_contenthandler)
 
 ---
 
@@ -3030,6 +3031,26 @@ The script will instantiate the required Rigidbody and Interactable components a
 ### Example
 
 `VRTK/Examples/025_Controls_Overview` has a selection of sliders at various angles with different step values to demonstrate their usage.
+
+---
+
+## Content Handler (VRTK_ContentHandler)
+
+### Overview
+
+Manages objects defined as content. When taking out an object from a drawer and closing the drawer this object would otherwise disappear even if outside the drawer.
+
+The script will use the boundaries of the control to determine if it is in or out and re-parent the object as necessary. It can be put onto individual objects or the parent of multiple objects. Using the latter way all interactable objects under that parent will become managed by the script.
+
+### Inspector Parameters
+
+ * **Control:** The 3D control responsible for the content.
+ * **Inside:** The transform containing the meshes or colliders that define the inside of the control.
+ * **Outside:** Any transform that will act as the parent while the object is not inside the control.
+
+### Example
+
+`VRTK/Examples/025_Controls_Overview` has a drawer with a collection of items that adhere to this concept.
 
 ---
 
