@@ -212,4 +212,8 @@ A scene that demonstrates how to set up the climbing mechanism with different ac
 
 ### 038_CameraRig_CameraRig_DashTeleport
 
-A Scene that shows the teleporting behaviour and also demonstrates a way to use the broadcasted RaycastHit array. In the example obstacles in the way of the dash turn off their mesh renderers while the dash is in progress.
+A scene that shows the teleporting behaviour and also demonstrates a way to use the broadcasted RaycastHit array. In the example obstacles in the way of the dash turn off their mesh renderers while the dash is in progress.
+
+### 039_CameraRig_AdaptiveQuality
+
+A scene displays the frames per second in the centre of the headset view. The debug visualization of this script is displayed near the top edge of the headset view. Pressing the trigger generates a new sphere and pressing the touchpad generates ten new spheres. Eventually when lots of spheres are present the FPS will drop and demonstrate the script.
