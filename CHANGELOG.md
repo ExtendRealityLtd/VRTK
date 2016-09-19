@@ -1,5 +1,129 @@
 # Changelog
 
+# 2.2.0
+
+## Bug Fixes
+
+ * **Colliders**
+  * ensure colliders scale properly (25c192a9bbf0d9f18818593ab5f9ffe504e23ea0)
+ * **Components**
+  * simplify getting components and child components (338508a87f238ca13176fff6c06eac1283685e73)
+ * **ConsoleViewer**
+  * include in VRTK namespace (6f45bf2a6a51275eeaa04ac6c5dc3fbf3992698d)
+  * remove unnecessary struct (278c4c9ab134a44d6489941d1e1973afed527b7b)
+ * **Controller**
+  * ensure controller colliders scale (ec40a450085fdca1b976a40cf190518d169ffcb5)
+  * ensure controller elements are cached initially (ed83890b70201ba49c96fccdf9106c08ea26ef4c)
+  * ensure cached tracked object index does not exist (cd02b4bc6c40adc652c4fcb0e0bf160aa3f2acd9)
+  * prevent error on cache controller tracked object (5cdd30789e5e84e9212ef122e22aea4bb27018f7)
+  * ensure touchpadTouched is correctly reset to false (00d5e84d3a276a641c6c1e499a9e9baa33258783)
+  * calculate velocity correctly on play area rotation (b3b9f75b52b22671a5081f9989997293ff0a557a)
+  * button only disables when controller not highlighted (c31f78e6bb7b2f94137536dc6cd33232a6439a50)
+  * prevent crash if model has no material colour (88dcf8e8cc84feabe0e9b4858463fe155ea5f55c)
+ * **Controls**
+  * replace lever to use rotator track (d7591066cccf518afc1337ae4a11cbcb971de324)
+ * **DOCUMENTATION**
+  * add missing controls content handler docs (63ed7b63712adcae57ba8159442ac86ced3d8fb9)
+  * ensure nested lists in tooltips generate correct markdown (bd9090168a095ce1521a8b35057efa45a13e80de)
+  * ensure multiline tooltips are included (a39d935e59eb545d9d316000eabacd8e5b6dd4b2)
+ * **Editor**
+  * prevent interactable object rumble values from switching (0ee0baa168571a228bd49b0c10c1f93fd39e1c80)
+  * ensure custom properties are changeable and savable (ebf7b0e0db680a2e027b7916f3551dc9b5dc1d1f)
+ * **Interaction**
+  * replace force drop enumerator for list index access (f27da1c927d086087baa3580ad756f49bcc31b61)
+  * stop crash with interactable object switching scene (f9c5ca2e9321fec8ce68296de4a530a391459cdb)
+  * track every touching object instead of last one (16293dddbc7b39400f2f24259780ef795a47353e)
+  * remove limiting max angular velocity on throw (7339f353d585a45cb5c7df3e73cd4a4fb9735838)
+  * ensure undroppable objects cannot be dropped (0eeb7a3bbe1f39b2890dd9aeb3d7a3ec3aa2f438)
+  * ensure unity event helper doesn't crash (79ff3dcbab83562cacee2f2a24ac223501b28fd3)
+  * use game object instance id as ref for highlighting (5c38bbf32611bf636fb65c91564bb6e654a944e5)
+  * detachment check from grab point (45f8fd59c0e4b36138417ca0f7fd6eccdff2bbed)
+  * improve simulator (e405a52357c92f999ea09601436688e7f6766cd6)
+  * only instance materials if highlight is used (d1c53e8e6d65982b796b36146f91f3f48ae552a3)
+  * improve door gizmos (549c8cf59d77aa216a980558e199adccc72e1e88)
+  * make tracked objects throw the same as other objects (75d20e536336dec1fbfbaf24e4063011dc9a167f)
+  * ensure touch highlight works with multiple renders (276b4d164fadb9d164c759c8429b815da31014b4)
+  * ensure autograb always happens on enable (823c4d9bbaf85f0a1779b0403aadaf296201d7e2)
+  * ensure pointer use activation honours valid hand (37a6c9b2ef07640cc67fde6bd1581efbf3efb134)
+  * ensure object is released on disable (c553ff3a9cf74cbfebdaf3b7c69cf599cddf1525)
+  * make force stop interactions wait for end of frame (6a94c07a48d4fe42ad8f3583edc4fbc2cdb11965)
+  * remove unused code in 3D button (af60a54f9d461170c441785db571fc73ee94cd6b)
+ * **Pointer**
+  * prevent bezier pointer joint clipping on down cast (9c248dd9faa7aa72a48518f796233a769d940f92)
+  * set destination correctly for constant beam (6d1cd8feb06a5f124b6f2ae07a8a8023a943d0a7)
+  * switch material back to unlit/transparent (861660905204922b4baf109cd9468adde4e338d7)
+  * enable ZWrite on pointer shader to fix UI issues (56e8c1c48c1f2a9e180ee1582218b75d8246ed5a)
+ * **Presence**
+  * ensure player collider height is set correctly (087b5679bafb9affd839f6247db9c19b328d86c4)
+  * ensure controller colliders do not affect user collider (d02adb472caab0ff45fa709a0bc5381a391cc621)
+ * **Teleport**
+  * ensure position change over tiny distance change (de6358c5d8b6e6065fca7c61894669505da2a465)
+  * add required components to dash teleport example scene (41a03554ef15903ae32790092fd3c2d36518cd47)
+  * add floor height tolerance parameter (5e47d291f42b634691b0547be01236cb17ce1666)
+  * prevent constant teleporting to nearest floor (0fd5d9e7201d62c45188893df58f5c9f332d18af)
+ * **Tooltips**
+  * ensure tips are hidden when controller is hidden (94ea57780bb3b1810b65a882b3e3e4e3f9c02f22)
+ * **UIPointer**
+  * prevent central button flickering on hover (be26979423ef1eb35d426549331b238fab2d934c)
+  * ensure blocking objects prevent ui ray (284a5adc03a49e2544bb56475514bac79a45bcd4)
+
+## Features
+
+ * **AdaptiveQuality**
+  * add Adaptive Quality (0a607b7029ec57be53d0d60795459b591dcd6a67)
+ * **Caching**
+  * add object cache to reduce expensive find calls (d2e1d558a3497934f8dbdbb868bd03587614cc7c)
+ * **Controller**
+  * add event for action of toggling visibility (574f2a4f43146c6b70c18d0df604413183425c78)
+  * add event for controller enable and disable state (36e2ae7fc62af490244f9af59307efb6536e7d73)
+  * add trigger click threshold parameter (a5d31da0d11128d180b04fbd6861d8772ba88041)
+ * **Controls**
+  * add spring lever (7d9180721812fdade075a560c35510ba73b71913)
+ * **Editor**
+  * add interactable object custom inspector (9d61fad65a85f133a9eb51b4f6f418952cb260af)
+ * **Events**
+  * add unity event for dash teleport (d2ecf7c9a18bda86ebc76bc30a55012993b37f66)
+  * add unity events helper scripts for delegate events (b5f9b10e219d617296af53f1403a06e8e51bb042)
+ * **Headset**
+  * decouple collision and fade into separate scripts (07760291531045198e3f4cd86cc5b3f32aa2b663)
+ * **Highlighters**
+  * add outline copy highlighter (8dee20322ebefda037205d2d58646e43758d24aa)
+  * add highlighter composition scripts (5b850bba845622f7092013588540b5e940f2cae3)
+ * **Interaction**
+  * add variable to know when rigidbody is auto created (0c4d5d5523ada7ec13a719fd7e527ce2ebe5879a)
+  * support chests without handle (3ae8fde5ddab5c8f4b05df802c05a1a18b0b7c90)
+  * add helper for interaction unity events (7a9ab9bd75b39e0b9a23d9f06498f519926f79d2)
+  * add stay grabbed on teleport option (a6aeb523fe1e5161c673677e7ce4e508eefbcadd)
+  * add custom grab/use override buttons (cbda41565bf65e9bb221594de6b4ef403a81de6f)
+ * **Locomotion**
+  * add ability for touchpad walking to follow controller (8e27f8f5ce6680fac06f4c81945618a72c5cb701)
+  * add option to only touchpad walk on button press (6fa5d5bfb89d69cc7ec01aea532b78871d3d8c58)
+  * decouple touchpad walking from player presence (5a18a66c48871cd8b0d3aad826c754d014f8e642)
+ * **Pointer**
+  * rotate bezier pointer cursor to hit surface (d0551fa80d35ff42629278e7ebbfbb0848237ffa)
+  * add bezier beam height limit based on controller angle (a1759a9000ceb16232e472fcb71297991bc88291)
+  * update default pointer material (38948815241950cc37f078dab1d6b7d89d0ebda9)
+ * **PolicyList**
+  * add ability to have multiple tag/script ignore checks (5f99aed4df38d8700de40c6d215bc59a38fe6045)
+ * **Presence**
+  * replace collider with capsule collider (b436c75e4690112e273c7cd513c8ac17722aa88f)
+ * **Structure**
+  * rename to VRTK brand (dbe23f28d4d57f223d1a5e682382d10913507d37)
+  * decouple SteamVR dependency from toolkit (2e72bd498a3cc4fd42d60f58708b159efc4e06a5)
+ * **Teleport**
+  * add play space falling restrictions on height adjust (01fa673d365a43e52f665c4e3d1838965261a814)
+  * extract teleport disable on headset collision (7f27b6c52b021c70218d17ba0a2cf07b9e371ece)
+  * add dash teleport (e05371ae5747b9fe2167d1986cb3b5fcc8927d85)
+ * **UIPointer**
+  * add option to do click when pointer is deactivated (6cce633f845606c45faf66f41fa80bdd9b38dca6)
+ * **UnityEvents**
+  * add sender object to unity event payload (beb35bbf3ee7ce06e6089ff2350449d1f991fdc1)
+
+## Performance Improvements
+
+ * **Controller**
+  * cache tracked objects for controllers (adc4b5baf16af837d30658a3bba8078f39ed39c0)
+
 ## 2.1.0
 
 ### Bug Fixes
