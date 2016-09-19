@@ -9,7 +9,7 @@
         private VRTK_InteractUse iu;
 
         [System.Serializable]
-        public class UnityObjectEvent : UnityEvent<ObjectInteractEventArgs> { };
+        public class UnityObjectEvent : UnityEvent<object, ObjectInteractEventArgs> { };
 
         /// <summary>
         /// Emits the ControllerUseInteractableObject class event.
@@ -43,12 +43,12 @@
 
         private void ControllerUseInteractableObject(object o, ObjectInteractEventArgs e)
         {
-            OnControllerUseInteractableObject.Invoke(e);
+            OnControllerUseInteractableObject.Invoke(o, e);
         }
 
         private void ControllerUnuseInteractableObject(object o, ObjectInteractEventArgs e)
         {
-            OnControllerUnuseInteractableObject.Invoke(e);
+            OnControllerUnuseInteractableObject.Invoke(o, e);
         }
 
         private void OnDisable()

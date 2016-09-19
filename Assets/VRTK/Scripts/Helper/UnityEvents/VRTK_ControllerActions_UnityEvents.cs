@@ -9,7 +9,7 @@
         private VRTK_ControllerActions ca;
 
         [System.Serializable]
-        public class UnityObjectEvent : UnityEvent<ControllerActionsEventArgs> { };
+        public class UnityObjectEvent : UnityEvent<object, ControllerActionsEventArgs> { };
 
         /// <summary>
         /// Emits the ControllerModelVisible class event.
@@ -43,12 +43,12 @@
 
         private void ControllerModelVisible(object o, ControllerActionsEventArgs e)
         {
-            OnControllerModelVisible.Invoke(e);
+            OnControllerModelVisible.Invoke(o, e);
         }
 
         private void ControllerModelInvisible(object o, ControllerActionsEventArgs e)
         {
-            OnControllerModelInvisible.Invoke(e);
+            OnControllerModelInvisible.Invoke(o, e);
         }
 
         private void OnDisable()

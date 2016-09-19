@@ -9,7 +9,7 @@
         private VRTK_DashTeleport dt;
 
         [System.Serializable]
-        public class UnityObjectEvent : UnityEvent<DashTeleportEventArgs> { };
+        public class UnityObjectEvent : UnityEvent<object, DashTeleportEventArgs> { };
 
         /// <summary>
         /// Emits the WillDashThruObjects class event.
@@ -43,12 +43,12 @@
 
         private void WillDashThruObjects(object o, DashTeleportEventArgs e)
         {
-            OnWillDashThruObjects.Invoke(e);
+            OnWillDashThruObjects.Invoke(o, e);
         }
 
         private void DashedThruObjects(object o, DashTeleportEventArgs e)
         {
-            OnDashedThruObjects.Invoke(e);
+            OnDashedThruObjects.Invoke(o, e);
         }
 
         private void OnDisable()

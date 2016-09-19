@@ -9,7 +9,7 @@
         private VRTK_InteractGrab ig;
 
         [System.Serializable]
-        public class UnityObjectEvent : UnityEvent<ObjectInteractEventArgs> { };
+        public class UnityObjectEvent : UnityEvent<object, ObjectInteractEventArgs> { };
 
         /// <summary>
         /// Emits the ControllerGrabInteractableObject class event.
@@ -43,12 +43,12 @@
 
         private void ControllerGrabInteractableObject(object o, ObjectInteractEventArgs e)
         {
-            OnControllerGrabInteractableObject.Invoke(e);
+            OnControllerGrabInteractableObject.Invoke(o, e);
         }
 
         private void ControllerUngrabInteractableObject(object o, ObjectInteractEventArgs e)
         {
-            OnControllerUngrabInteractableObject.Invoke(e);
+            OnControllerUngrabInteractableObject.Invoke(o, e);
         }
 
         private void OnDisable()
