@@ -1,4 +1,4 @@
-﻿// Slider|Controls3D|0080
+﻿// Content Handler|Controls3D|0090
 namespace VRTK
 {
     using UnityEngine;
