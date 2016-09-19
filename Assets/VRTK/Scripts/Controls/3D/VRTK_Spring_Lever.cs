@@ -1,4 +1,4 @@
-﻿// Lever|Controls3D|0071
+﻿// Spring Lever|Controls3D|0071
 namespace VRTK
 {
     using UnityEngine;
@@ -11,7 +11,6 @@ namespace VRTK
     /// </remarks>
     public class VRTK_Spring_Lever : VRTK_Lever
     {
-
         [Tooltip("Strength of the spring force that will be applied toward either end of the lever's range.")]
         public float springStrength = 10;
 
@@ -66,6 +65,5 @@ namespace VRTK
                 wasTowardZero = towardZero;
             }
         }
-
     }
 }
