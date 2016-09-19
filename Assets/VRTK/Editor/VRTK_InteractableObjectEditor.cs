@@ -2,6 +2,8 @@
 {
     using UnityEngine;
     using UnityEditor;
+    using System;
+    using System.Collections.Generic;
 
     [CustomEditor(typeof(VRTK_InteractableObject), true)]
     public class VRTK_InteractableObjectEditor : Editor
@@ -12,6 +14,13 @@
         private bool viewCustom = true;
         private bool isGrabbableLastState = false;
         private bool isUsableLastState = false;
+        private VRTK_InteractableObject.GrabAttachType[] hasDetachThreshold = new VRTK_InteractableObject.GrabAttachType[]
+        {
+            VRTK_InteractableObject.GrabAttachType.Fixed_Joint,
+            VRTK_InteractableObject.GrabAttachType.Spring_Joint,
+            VRTK_InteractableObject.GrabAttachType.Track_Object,
+            VRTK_InteractableObject.GrabAttachType.Rotator_Track
+        };
 
         public override void OnInspectorGUI()
         {
@@ -28,14 +37,14 @@
             {
                 EditorGUI.indentLevel++;
 
-                targ.highlightOnTouch = EditorGUILayout.Toggle("Highlight on Touch:", targ.highlightOnTouch);
+                targ.highlightOnTouch = EditorGUILayout.Toggle(Utilities.BuildGUIContent<VRTK_InteractableObject>("highlightOnTouch"), targ.highlightOnTouch);
                 if (targ.highlightOnTouch)
                 {
-                    targ.touchHighlightColor = EditorGUILayout.ColorField("Touch Highlight Color:", targ.touchHighlightColor);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("touchHighlightColor"));
                 }
 
                 GUILayout.BeginHorizontal();
-                EditorGUILayout.PrefixLabel("Rumble on Touch:");
+                EditorGUILayout.PrefixLabel(Utilities.BuildGUIContent<VRTK_InteractableObject>("rumbleOnTouch"));
                 EditorGUI.indentLevel--;
                 GUILayout.Label("Strength", GUILayout.MinWidth(49f));
                 float y = EditorGUILayout.FloatField(targ.rumbleOnTouch.y, GUILayout.MinWidth(10f));
@@ -45,15 +54,15 @@
                 EditorGUI.indentLevel++;
                 GUILayout.EndHorizontal();
 
-                targ.allowedTouchControllers = (VRTK_InteractableObject.AllowedController)EditorGUILayout.EnumPopup("Allowed Touch Controllers:", targ.allowedTouchControllers);
-                targ.hideControllerOnTouch = (VRTK_InteractableObject.ControllerHideMode)EditorGUILayout.EnumPopup("Hide Controller On Touch:", targ.hideControllerOnTouch);
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("allowedTouchControllers"));
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("hideControllerOnTouch"));
 
                 EditorGUI.indentLevel--;
             }
 
             //Grab Layout
             GUILayout.Space(10);
-            targ.isGrabbable = EditorGUILayout.Toggle("Is Grabbable:", targ.isGrabbable);
+            targ.isGrabbable = EditorGUILayout.Toggle(Utilities.BuildGUIContent<VRTK_InteractableObject>("isGrabbable"), targ.isGrabbable);
             if (targ.isGrabbable != isGrabbableLastState && targ.isGrabbable)
             {
                 viewGrab = true;
@@ -71,13 +80,13 @@
                 {
                     EditorGUI.indentLevel++;
 
-                    targ.isDroppable = EditorGUILayout.Toggle("Is Droppable:", targ.isDroppable);
-                    targ.isSwappable = EditorGUILayout.Toggle("Is Swappable:", targ.isSwappable);
-                    targ.holdButtonToGrab = EditorGUILayout.Toggle("Hold Button To Grab:", targ.holdButtonToGrab);
-                    targ.grabOverrideButton = (VRTK_ControllerEvents.ButtonAlias)EditorGUILayout.EnumPopup("Grab Override Button:", targ.grabOverrideButton);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("isDroppable"));
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("isSwappable"));
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("holdButtonToGrab"));
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("grabOverrideButton"));
 
                     GUILayout.BeginHorizontal();
-                    EditorGUILayout.PrefixLabel("Rumble on Grab:");
+                    EditorGUILayout.PrefixLabel(Utilities.BuildGUIContent<VRTK_InteractableObject>("rumbleOnGrab"));
                     EditorGUI.indentLevel--;
                     GUILayout.Label("Strength", GUILayout.MinWidth(49f));
                     float y = EditorGUILayout.FloatField(targ.rumbleOnGrab.y, GUILayout.MinWidth(10f));
@@ -87,40 +96,41 @@
                     EditorGUI.indentLevel++;
                     GUILayout.EndHorizontal();
 
-                    targ.allowedGrabControllers = (VRTK_InteractableObject.AllowedController)EditorGUILayout.EnumPopup("Allowed Controllers:", targ.allowedGrabControllers);
-                    targ.precisionSnap = EditorGUILayout.Toggle("Precision Snap:", targ.precisionSnap);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("allowedGrabControllers"));
+                    targ.precisionSnap = EditorGUILayout.Toggle(Utilities.BuildGUIContent<VRTK_InteractableObject>("precisionSnap", "Precision Grab(Snap)"), targ.precisionSnap);
                     if (!targ.precisionSnap)
                     {
-                        targ.rightSnapHandle = EditorGUILayout.ObjectField("Right Snap Handle:", targ.rightSnapHandle, typeof(Transform), true) as Transform;
-                        targ.leftSnapHandle = EditorGUILayout.ObjectField("Left Snap Handle:", targ.leftSnapHandle, typeof(Transform), true) as Transform;
+                        EditorGUILayout.PropertyField(serializedObject.FindProperty("rightSnapHandle"));
+                        EditorGUILayout.PropertyField(serializedObject.FindProperty("leftSnapHandle"));
 
                     }
-                    targ.hideControllerOnGrab = (VRTK_InteractableObject.ControllerHideMode)EditorGUILayout.EnumPopup("Hide Controller On Grab:", targ.hideControllerOnGrab);
-                    targ.stayGrabbedOnTeleport = EditorGUILayout.Toggle("Stay Grabbed on Teleport:", targ.stayGrabbedOnTeleport);
-                    targ.grabAttachMechanic = (VRTK_InteractableObject.GrabAttachType)EditorGUILayout.EnumPopup("Grab Attach Mechanic:", targ.grabAttachMechanic);
-                    if (targ.grabAttachMechanic == VRTK_InteractableObject.GrabAttachType.Fixed_Joint || targ.grabAttachMechanic == VRTK_InteractableObject.GrabAttachType.Spring_Joint
-                        || targ.grabAttachMechanic == VRTK_InteractableObject.GrabAttachType.Track_Object || targ.grabAttachMechanic == VRTK_InteractableObject.GrabAttachType.Rotator_Track)
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("hideControllerOnGrab"));
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("stayGrabbedOnTeleport"));
+
+                    targ.grabAttachMechanic = (VRTK_InteractableObject.GrabAttachType)EditorGUILayout.EnumPopup(Utilities.BuildGUIContent<VRTK_InteractableObject>("grabAttachMechanic"), targ.grabAttachMechanic);
+                    if (Array.IndexOf(hasDetachThreshold, targ.grabAttachMechanic) >= 0)
                     {
-                        targ.detachThreshold = EditorGUILayout.FloatField("Detach Threshold:", targ.detachThreshold);
+                        EditorGUILayout.PropertyField(serializedObject.FindProperty("detachThreshold"));
                         if (targ.grabAttachMechanic == VRTK_InteractableObject.GrabAttachType.Spring_Joint)
                         {
-                            targ.springJointStrength = EditorGUILayout.FloatField("Spring Joint Strength:", targ.springJointStrength);
-                            targ.springJointDamper = EditorGUILayout.FloatField("Spring Joint Damper:", targ.springJointDamper);
+                            EditorGUILayout.PropertyField(serializedObject.FindProperty("springJointStrength"));
+                            EditorGUILayout.PropertyField(serializedObject.FindProperty("springJointDamper"));
                         }
                     }
-                    targ.throwMultiplier = EditorGUILayout.FloatField("Throw Multiplier:", targ.throwMultiplier);
-                    targ.onGrabCollisionDelay = EditorGUILayout.FloatField("On Grab Collision Delay:", targ.onGrabCollisionDelay);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("throwMultiplier"));
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("onGrabCollisionDelay"));
 
                     EditorGUI.indentLevel--;
                 }
             }
 
             GUILayout.Space(10);
-            targ.isUsable = EditorGUILayout.Toggle("Is Usable:", targ.isUsable);
+            targ.isUsable = EditorGUILayout.Toggle(Utilities.BuildGUIContent<VRTK_InteractableObject>("isUsable"), targ.isUsable);
             if (targ.isUsable != isUsableLastState && targ.isUsable)
             {
                 viewUse = true;
             }
+
             isUsableLastState = targ.isUsable;
             if (targ.isUsable)
             {
@@ -133,14 +143,13 @@
                 if (viewUse)
                 {
                     EditorGUI.indentLevel++;
-
-                    targ.useOnlyIfGrabbed = EditorGUILayout.Toggle("Use Only If Grabbed: ", targ.useOnlyIfGrabbed);
-                    targ.holdButtonToUse = EditorGUILayout.Toggle("Hold Button To Use: ", targ.holdButtonToUse);
-                    targ.useOverrideButton = (VRTK_ControllerEvents.ButtonAlias)EditorGUILayout.EnumPopup("Use Override Button:", targ.useOverrideButton);
-                    targ.pointerActivatesUseAction = EditorGUILayout.Toggle("Pointer Activates Use Action: ", targ.pointerActivatesUseAction);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("useOnlyIfGrabbed"));
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("holdButtonToUse"));
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("useOverrideButton"));
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("pointerActivatesUseAction"));
 
                     GUILayout.BeginHorizontal();
-                    EditorGUILayout.PrefixLabel("Rumble on Use:");
+                    EditorGUILayout.PrefixLabel(Utilities.BuildGUIContent<VRTK_InteractableObject>("rumbleOnUse"));
                     EditorGUI.indentLevel--;
                     GUILayout.Label("Strength", GUILayout.MinWidth(49f));
                     float y = EditorGUILayout.FloatField(targ.rumbleOnUse.y, GUILayout.MinWidth(10f));
@@ -150,8 +159,8 @@
                     EditorGUI.indentLevel++;
                     GUILayout.EndHorizontal();
 
-                    targ.allowedUseControllers = (VRTK_InteractableObject.AllowedController)EditorGUILayout.EnumPopup("Allowed Use Controllers:", targ.allowedUseControllers);
-                    targ.hideControllerOnUse = (VRTK_InteractableObject.ControllerHideMode)EditorGUILayout.EnumPopup("Hide Controller On Use:", targ.hideControllerOnUse);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("allowedUseControllers"));
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("hideControllerOnUse"));
 
                     EditorGUI.indentLevel--;
                 }
@@ -168,10 +177,13 @@
                 GUILayout.Space(2);
                 if (viewCustom)
                 {
-                    DrawPropertiesExcluding(serializedObject, new string[] {"hideControllerOnUse","allowedUseControllers","rumbleOnUse","pointerActivatesUseAction","useOverrideButton",
-                    "holdButtonToUse","useOnlyIfGrabbed","throwMultiplier","onGrabCollisionDelay","springJointDamper","springJointStrength","detachThreshold","grabAttachMechanic","stayGrabbedOnTeleport",
-                    "hideControllerOnGrab","leftSnapHandle","rightSnapHandle","precisionSnap","allowedGrabControllers","rumbleOnGrab","grabOverrideButton","holdButtonToGrab","isSwappable","isDroppable",
-                    "isGrabbable","hideControllerOnTouch","allowedTouchControllers","rumbleOnTouch","touchHighlightColor","highlightOnTouch", "isUsable"});
+                    List<string> excludedProperties = new List<string>();
+                    foreach (var ioProperty in typeof(VRTK_InteractableObject).GetFields())
+                    {
+                        excludedProperties.Add(ioProperty.Name);
+                    }
+
+                    DrawPropertiesExcluding(serializedObject, excludedProperties.ToArray());
                 }
             }
             serializedObject.ApplyModifiedProperties();

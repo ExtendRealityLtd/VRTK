@@ -83,6 +83,7 @@ namespace VRTK
         }
 
         [Header("Touch Interactions", order = 1)]
+
         [Tooltip("The object will only highlight when a controller touches it if this is checked.")]
         public bool highlightOnTouch = false;
         [Tooltip("The colour to highlight the object when it is touched. This colour will override any globally set colour (for instance on the `VRTK_InteractTouch` script).")]
@@ -95,9 +96,10 @@ namespace VRTK
         public ControllerHideMode hideControllerOnTouch = ControllerHideMode.Default;
 
         [Header("Grab Interactions", order = 2)]
+
         [Tooltip("Determines if the object can be grabbed.")]
         public bool isGrabbable = false;
-        [Tooltip("Determines if the object can be dropped by the controller grab button being used. If this is unchecked then it's not possible to drop the item once it's picked up using the controller button. It is still possible for the item to be dropped if the Grab Attach Mechanic is a joint and too much force is applied to the object and the joint is broken. To prevent this it's better to use the Child Of Controller mechanic.")]
+        [Tooltip("Determines if the object can be dropped by the controller grab button being used. If this is unchecked then it's not possible to drop the item once it's picked up using the controller button.")]
         public bool isDroppable = true;
         [Tooltip("Determines if the object can be swapped between controllers when it is picked up. If it is unchecked then the object must be dropped before it can be picked up by the other controller.")]
         public bool isSwappable = true;
@@ -121,6 +123,7 @@ namespace VRTK
         public bool stayGrabbedOnTeleport = true;
 
         [Header("Grab Mechanics", order = 3)]
+
         [Tooltip("This determines how the grabbed item will be attached to the controller when it is grabbed.")]
         public GrabAttachType grabAttachMechanic = GrabAttachType.Fixed_Joint;
         [Tooltip("The force amount when to detach the object from the grabbed controller. If the controller tries to exert a force higher than this threshold on the object (from pulling it through another object or pushing it into another object) then the joint holding the object to the grabbing controller will break and the object will no longer be grabbed. This also works with Tracked Object grabbing but determines how far the controller is from the object before breaking the grab. Only required for `Fixed Joint`, `Spring Joint`, `Track Object` and `Rotator Track`.")]
@@ -135,9 +138,10 @@ namespace VRTK
         public float onGrabCollisionDelay = 0f;
 
         [Header("Use Interactions", order = 4)]
+
         [Tooltip("Determines if the object can be used.")]
         public bool isUsable = false;
-        [Tooltip("If this is checked the object can be used only if it was grabbed before.")]
+        [Tooltip("If this is checked the object can be used only if it is currently being grabbed.")]
         public bool useOnlyIfGrabbed = false;
         [Tooltip("If this is checked then the use button on the controller needs to be continually held down to keep using. If this is unchecked the the use button toggles the use action with one button press to start using and another to stop using.")]
         public bool holdButtonToUse = true;
