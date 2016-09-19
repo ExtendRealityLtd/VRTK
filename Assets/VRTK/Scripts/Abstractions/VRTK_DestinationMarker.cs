@@ -52,6 +52,7 @@ namespace VRTK
         public event DestinationMarkerEventHandler DestinationMarkerSet;
 
         protected string invalidTargetWithTagOrClass;
+        protected VRTK_TagOrScriptPolicyList invalidTagOrScriptListPolicy;
         protected float navMeshCheckDistance;
         protected bool headsetPositionCompensation;
 
@@ -80,12 +81,15 @@ namespace VRTK
         }
 
         /// <summary>
-        /// The SetInvalidTarget method is used to set objects that contain the given tag or class matching the name as invalid destination targets.
+        /// The SetInvalidTarget method is used to set objects that contain the given tag or class matching the name as invalid destination targets. It can also accept a VRTK_TagOrScriptPolicyList for a more custom level of policy management.
         /// </summary>
         /// <param name="name">The name of the tag or class that is the invalid target.</param>
-        public virtual void SetInvalidTarget(string name)
+        /// <param name="list">The Tag Or Script list policy to check the set operation on.</param>
+        public virtual void SetInvalidTarget(string name, VRTK_TagOrScriptPolicyList list = null)
         {
             invalidTargetWithTagOrClass = name;
+            invalidTagOrScriptListPolicy = list;
+
         }
 
         /// <summary>

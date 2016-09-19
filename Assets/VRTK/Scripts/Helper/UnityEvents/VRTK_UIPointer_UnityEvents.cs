@@ -9,7 +9,7 @@
         private VRTK_UIPointer uip;
 
         [System.Serializable]
-        public class UnityObjectEvent : UnityEvent<UIPointerEventArgs> { };
+        public class UnityObjectEvent : UnityEvent<object, UIPointerEventArgs> { };
 
         /// <summary>
         /// Emits the UIPointerElementEnter class event.
@@ -42,12 +42,12 @@
 
         private void UIPointerElementEnter(object o, UIPointerEventArgs e)
         {
-            OnUIPointerElementEnter.Invoke(e);
+            OnUIPointerElementEnter.Invoke(o, e);
         }
 
         private void UIPointerElementExit(object o, UIPointerEventArgs e)
         {
-            OnUIPointerElementExit.Invoke(e);
+            OnUIPointerElementExit.Invoke(o, e);
         }
 
         private void OnDisable()

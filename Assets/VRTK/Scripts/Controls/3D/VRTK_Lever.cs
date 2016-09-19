@@ -28,9 +28,10 @@ namespace VRTK
         [Tooltip("The increments in which lever values can change.")]
         public float stepSize = 1f;
 
+        protected HingeJoint hj;
+
         private Rigidbody rb;
         private VRTK_InteractableObject io;
-        private HingeJoint hj;
         private bool hjCreated = false;
 
         protected override void InitRequiredComponents()
@@ -58,7 +59,7 @@ namespace VRTK
             io.isGrabbable = true;
             io.precisionSnap = true;
             io.stayGrabbedOnTeleport = false;
-            io.grabAttachMechanic = VRTK_InteractableObject.GrabAttachType.Track_Object;
+            io.grabAttachMechanic = VRTK_InteractableObject.GrabAttachType.Rotator_Track;
 
             hj = GetComponent<HingeJoint>();
             if (hj == null)

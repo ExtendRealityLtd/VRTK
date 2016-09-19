@@ -1,9 +1,10 @@
 # Introduction
 
-This file provides documentation on how to use the included prefabs and scripts along with a breakdown of the example scenes.
+This file provides documentation on how to use the included prefabs and scripts.
 
  * [Prefabs](#prefabs-vrtkprefabs)
  * [Abstract Classes](#abstract-classes-vrtkscriptsabstractions)
+ * [Highlighters](#highlighters-vrtkscriptshighlighters)
  * [Scripts](#scripts-vrtkscripts)
  * [3D Controls](#3d-controls-vrtkscriptscontrols3d)
 
@@ -279,16 +280,17 @@ Adding the `VRTK_DestinationMarker_UnityEvents` component to `VRTK_DestinationMa
 
 ### Class Methods
 
-#### SetInvalidTarget/1
+#### SetInvalidTarget/2
 
-  > `public virtual void SetInvalidTarget(string name)`
+  > `public virtual void SetInvalidTarget(string name, VRTK_TagOrScriptPolicyList list = null)`
 
   * Parameters
    * `string name` - The name of the tag or class that is the invalid target.
+   * `VRTK_TagOrScriptPolicyList list` - The Tag Or Script list policy to check the set operation on.
   * Returns
    * _none_
 
-The SetInvalidTarget method is used to set objects that contain the given tag or class matching the name as invalid destination targets.
+The SetInvalidTarget method is used to set objects that contain the given tag or class matching the name as invalid destination targets. It can also accept a VRTK_TagOrScriptPolicyList for a more custom level of policy management.
 
 #### SetNavMeshCheckDistance/1
 
@@ -333,6 +335,7 @@ The play area collider does not work well with terrains as they are uneven and c
  * **Play Area Cursor Dimensions:** Determines the size of the play area cursor and collider. If the values are left as zero then the Play Area Cursor will be sized to the calibrated Play Area space.
  * **Handle Play Area Cursor Collisions:** If this is ticked then if the play area cursor is colliding with any other object then the pointer colour will change to the `Pointer Miss Color` and the `WorldPointerDestinationSet` event will not be triggered, which will prevent teleporting into areas where the play area will collide.
  * **Ignore Target With Tag Or Class:** A string that specifies an object Tag or the name of a Script attached to an object and notifies the play area cursor to ignore collisions with the object.
+ * **Target Tag Or Script List Policy:** A specified VRTK_TagOrScriptPolicyList to use to determine whether the play area cursor collisions will be acted upon. If a list is provided then the 'Ignore Target With Tag Or Class' parameter will be ignored.
  * **Pointer Visibility:** Determines when the pointer beam should be displayed.
  * **Hold Button To Activate:** If this is checked then the pointer beam will be activated on first press of the pointer alias button and will stay active until the pointer alias button is pressed again. The destination set event is emitted when the beam is deactivated on the second button press.
  * **Activate Delay:** The time in seconds to delay the pointer beam being able to be active again. Useful for preventing constant teleportation.
@@ -392,6 +395,208 @@ The ToggleBeam method allows the pointer beam to be toggled on or off via code a
 
 ---
 
+# Highlighters (VRTK/Scripts/Highlighters)
+
+This directory contains scripts that are used to provide different object highlighting.
+
+ * [Base Highlighter](#base-highlighter-vrtk_basehighlighter)
+ * [Material Colour Swap](#material-colour-swap-vrtk_materialcolorswaphighlighter)
+ * [Outline Object Copy](#outline-object-copy-vrtk_outlineobjectcopyhighlighter)
+
+---
+
+## Base Highlighter (VRTK_BaseHighlighter)
+
+### Overview
+
+The Base Highlighter is an abstract class that all other highlighters inherit and are required to implement the public methods.
+
+As this is an abstract class, it cannot be applied directly to a game object and performs no logic.
+
+### Inspector Parameters
+
+ * **Active:** Determines if this highlighter is the active highlighter for the object the component is attached to. Only 1 active highlighter can be applied to a game object.
+
+### Class Methods
+
+#### Initialise/2
+
+  > `public abstract void Initialise(Color? color = null, Dictionary<string, object> options = null);`
+
+  * Parameters
+   * `Color? color` - An optional colour may be passed through at point of initialisation in case the highlighter requires it.
+   * `Dictionary<string, object> options` - An optional dictionary of highlighter specific options that may be differ with highlighter implementations.
+  * Returns
+   * _none_
+
+The Initalise method is used to set up the state of the highlighter.
+
+#### Highlight/2
+
+  > `public abstract void Highlight(Color? color = null, float duration = 0f);`
+
+  * Parameters
+   * `Color? color` - An optional colour to highlight the game object to. The highlight colour may already have been set in the `Initialise` method so may not be required here.
+   * `float duration` - An optional duration of how long before the highlight has occured. It can be used by highlighters to fade the colour if possible.
+  * Returns
+   * _none_
+
+The Highlight method is used to initiate the highlighting logic to apply to an object.
+
+#### Unhighlight/2
+
+  > `public abstract void Unhighlight(Color? color = null, float duration = 0f);`
+
+  * Parameters
+   * `Color? color` - An optional colour that could be used during the unhighlight phase. Usually will be left as null.
+   * `float duration` - An optional duration of how long before the unhighlight has occured.
+  * Returns
+   * _none_
+
+The Unhighlight method is used to initiate the logic that returns an object back to it's original appearance.
+
+#### GetOption<T>/2
+
+  > `public virtual T GetOption<T>(Dictionary<string, object> options, string key)`
+
+  * Type Params
+   * `T` - The system type that is expected to be returned.
+  * Parameters
+   * `Dictionary<string, object> options` - The dictionary of options to check in.
+   * `string key` - The identifier key to look for.
+  * Returns
+   * `T` - The value in the options at the given key returned in the provided system type.
+
+The GetOption method is used to return a value from the options array if the given key exists.
+
+---
+
+## Material Colour Swap (VRTK_MaterialColorSwapHighlighter)
+ > extends [VRTK_BaseHighlighter](#base-highlighter-vrtk_basehighlighter)
+
+### Overview
+
+The Material Colour Swap Highlighter is a basic implementation that simply swaps the texture colour for the given highlight colour.
+
+Due to the way the object material is interacted with, changing the material colour will break Draw Call Batching in Unity whilst the object is highlighted.
+
+The Draw Call Batching will resume on the original material when the item is no longer highlighted.
+
+This is the default highlighter that is applied to any script that requires a highlighting component (e.g. `VRTK_Interactable_Object` or `VRTK_ControllerActions`).
+
+### Inspector Parameters
+
+ * **Emission Darken:** The emission colour of the texture will be the highlight colour but this percent darker.
+
+### Class Methods
+
+#### Initialise/2
+
+  > `public override void Initialise(Color? color = null, Dictionary<string, object> options = null)`
+
+  * Parameters
+   * `Color? color` - Not used.
+   * `Dictionary<string, object> options` - A dictionary array containing the highlighter options:
+     * `<'resetMainTexture', bool>` - Determines if the default main texture should be cleared on highlight. `true` to reset the main default texture, `false` to not reset it.
+  * Returns
+   * _none_
+
+The Initialise method sets up the highlighter for use.
+
+#### Highlight/2
+
+  > `public override void Highlight(Color? color, float duration = 0f)`
+
+  * Parameters
+   * `Color? color` - The colour to highlight to.
+   * `float duration` - The time taken to fade to the highlighted colour.
+  * Returns
+   * _none_
+
+The Highlight method initiates the change of colour on the object and will fade to that colour (from a base white colour) for the given duration.
+
+#### Unhighlight/2
+
+  > `public override void Unhighlight(Color? color = null, float duration = 0f)`
+
+  * Parameters
+   * `Color? color` - Not used.
+   * `float duration` - Not used.
+  * Returns
+   * _none_
+
+The Unhighlight method returns the object back to it's original colour.
+
+### Example
+
+`VRTK/Examples/005_Controller_BasicObjectGrabbing` demonstrates the solid highlighting on the green cube, red cube and flying saucer when the controller touches it.
+
+`VRTK/Examples/035_Controller_OpacityAndHighlighting` demonstrates the solid highlighting if the right controller collides with the green box or if any of the buttons are pressed.
+
+---
+
+## Outline Object Copy (VRTK_OutlineObjectCopyHighlighter)
+ > extends [VRTK_BaseHighlighter](#base-highlighter-vrtk_basehighlighter)
+
+### Overview
+
+The Outline Object Copy Highlighter works by making a copy of a mesh and adding an outline shader to it and toggling the appearance of the highlighted object.
+
+### Inspector Parameters
+
+ * **Thickness:** The thickness of the outline effect
+ * **Custom Outline Model:** The GameObject to use as the model to outline. If one isn't provided then the first GameObject with a valid Renderer in the current GameObject hierarchy will be used.
+ * **Custom Outline Model Path:** A path to a GameObject to find at runtime, if the GameObject doesn't exist at edit time.
+
+### Class Methods
+
+#### Initialise/2
+
+  > `public override void Initialise(Color? color = null, Dictionary<string, object> options = null)`
+
+  * Parameters
+   * `Color? color` - Not used.
+   * `Dictionary<string, object> options` - A dictionary array containing the highlighter options:
+     * `<'thickness', float>` - Same as `thickness` inspector parameter.
+     * `<'customOutlineModel', GameObject>` - Same as `customOutlineModel` inspector parameter.
+     * `<'customOutlineModelPath', string>` - Same as `customOutlineModelPath` inspector parameter.
+  * Returns
+   * _none_
+
+The Initialise method sets up the highlighter for use.
+
+#### Highlight/2
+
+  > `public override void Highlight(Color? color, float duration = 0f)`
+
+  * Parameters
+   * `Color? color` - The colour to outline with.
+   * `float duration` - Not used.
+  * Returns
+   * _none_
+
+The Highlight method initiates the outline object to be enabled and display the outline colour.
+
+#### Unhighlight/2
+
+  > `public override void Unhighlight(Color? color = null, float duration = 0f)`
+
+  * Parameters
+   * `Color? color` - Not used.
+   * `float duration` - Not used.
+  * Returns
+   * _none_
+
+The Unhighlight method hides the outline object and removes the outline colour.
+
+### Example
+
+`VRTK/Examples/005_Controller_BasicObjectGrabbing` demonstrates the outline highlighting on the green sphere when the controller touches it.
+
+`VRTK/Examples/035_Controller_OpacityAndHighlighting` demonstrates the outline highlighting if the left controller collides with the green box.
+
+---
+
 # Scripts (VRTK/Scripts)
 
 This directory contains all of the toolkit scripts that add VR functionality to Unity.
@@ -418,7 +623,9 @@ This directory contains all of the toolkit scripts that add VR functionality to 
  * [Object Auto Grab](#object-auto-grab-vrtk_objectautograb)
  * [Player Climb](#player-climb-vrtk_playerclimb)
  * [Dash Teleport](#dash-teleport-vrtk_dashteleport)
+ * [Tag Or Script Policy List](#tag-or-script-policy-list-vrtk_tagorscriptpolicylist)
  * [Simulating Headset Movement](#simulating-headset-movement-vrtk_simulator)
+ * [Adaptive Quality](#adaptive-quality-vrtk_adaptivequality)
 
 ---
 
@@ -652,6 +859,45 @@ The IsButtonPressed method takes a given button alias and returns a boolean whet
 
 The Controller Actions script provides helper methods to deal with common controller actions. It deals with actions that can be done to the controller.
 
+The highlighting of the controller is defaulted to use the `VRTK_MaterialColorSwapHighlighter` if no other highlighter is applied to the Object.
+
+### Inspector Parameters
+
+ * **Model Element Paths:** A collection of strings that determine the path to the controller model sub elements for identifying the model parts at runtime. The paths will default to the model element paths of the selected SDK Bridge.
+  * The available model sub elements are:
+    * `Body Model Path`: The overall shape of the controller.
+    * `Trigger Model Path`: The model that represents the trigger button.
+    * `Grip Left Model Path`: The model that represents the left grip button.
+    * `Grip Right Model Path`: The model that represents the right grip button.
+    * `Touchpad Model Path`: The model that represents the touchpad.
+    * `App Menu Model Path`: The model that represents the application menu button.
+    * `System Menu Model Path`: The model that represents the system menu button.
+ * **Element Highlighter Overrides:** A collection of highlighter overrides for each controller model sub element. If no highlighter override is given then highlighter on the Controller game object is used.
+  * The available model sub elements are:
+    * `Body`: The highlighter to use on the overall shape of the controller.
+    * `Trigger`: The highlighter to use on the trigger button.
+    * `Grip Left`: The highlighter to use on the left grip button.
+    * `Grip Right`: The highlighter to use on the  right grip button.
+    * `Touchpad`: The highlighter to use on the touchpad.
+    * `App Menu`: The highlighter to use on the application menu button.
+    * `System Menu`: The highlighter to use on the system menu button.
+
+### Class Events
+
+ * `ControllerModelVisible` - Emitted when the controller model is toggled to be visible.
+ * `ControllerModelInvisible` - Emitted when the controller model is toggled to be invisible.
+
+### Unity Events
+
+Adding the `VRTK_ControllerActions_UnityEvents` component to `VRTK_ControllerActions` object allows access to `UnityEvents` that will react identically to the Class Events.
+
+ * `OnControllerModelVisible` - Emits the ControllerModelVisible class event.
+ * `OnControllerModelInvisible` - Emits the ControllerModelInvisible class event.
+
+### Event Payload
+
+ * `uint controllerIndex` - The index of the controller that was used.
+
 ### Class Methods
 
 #### IsControllerVisible/0
@@ -778,6 +1024,19 @@ The ToggleHighlightTouchpad method is a shortcut method that makes it easier to 
 
 The ToggleHighlightApplicationMenu method is a shortcut method that makes it easier to toggle the highlight state of the controller application menu element.
 
+#### ToggleHighlighBody/3
+
+  > `public void ToggleHighlighBody(bool state, Color? highlight = null, float duration = 0f)`
+
+  * Parameters
+   * `bool state` - The highlight colour state, `true` will enable the highlight on the body and `false` will remove the highlight from the body.
+   * `Color? highlight` - The colour to highlight the body with.
+   * `float duration` - The duration of fade from white to the highlight colour.
+  * Returns
+   * _none_
+
+The ToggleHighlighBody method is a shortcut method that makes it easier to toggle the highlight state of the controller body element.
+
 #### ToggleHighlightController/3
 
   > `public void ToggleHighlightController(bool state, Color? highlight = null, float duration = 0f)`
@@ -815,11 +1074,22 @@ The TriggerHapticPulse/1 method calls a single haptic pulse call on the controll
 
 The TriggerHapticPulse/3 method calls a haptic pulse for a specified amount of time rather than just a single tick. Each pulse can be separated by providing a `pulseInterval` to pause between each haptic pulse.
 
+#### InitaliseHighlighters/0
+
+  > `public void InitaliseHighlighters()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The InitaliseHighlighters method sets up the highlighters on the controller model.
+
 ### Example
 
 `VRTK/Examples/016_Controller_HapticRumble` demonstrates the ability to hide a controller model and make the controller vibrate for a given length of time at a given intensity.
 
-`VRTK/Examples/035_Controller_OpacityAndHighlighting`demonstrates the ability to change the opacity of a controller model and to highlight specific elements of a controller such as the buttons or even the entire controller model.
+`VRTK/Examples/035_Controller_OpacityAndHighlighting` demonstrates the ability to change the opacity of a controller model and to highlight specific elements of a controller such as the buttons or even the entire controller model.
 
 ---
 
@@ -885,6 +1155,18 @@ The TrackedObjectByIndex method is used to find the GameObject of a tracked obje
    * `Transform` - The transform of the tracked object's origin or if an origin is not set then the transform parent.
 
 The TrackedObjectOrigin method is used to find the tracked object's origin.
+
+#### TrackedObjectOfGameObject/2
+
+  > `public static GameObject TrackedObjectOfGameObject(GameObject obj, out uint index)`
+
+  * Parameters
+   * `GameObject obj` - The game object to check for the presence of a tracked object on.
+   * `out uint index` - The variable to store the tracked object's index if one is found. It returns 0 if no index is found.
+  * Returns
+   * `GameObject` - The GameObject of the tracked object.
+
+The TrackedObjectOfGameObject method is used to find the tracked object associated with the given game object and it can also return the index of the tracked object.
 
 #### DeviceTransform/1
 
@@ -1066,8 +1348,10 @@ The UI pointer is activated via the `Pointer` alias on the `Controller Events` a
 ### Inspector Parameters
 
  * **Controller:** The controller that will be used to toggle the pointer. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.
- * **Ignore Canvas With Tag Or Class:** A string that specifies a canvas Tag or the name of a Script attached to a canvas and denotes that any world canvases that contain this tag or script will be ignored by the UI Pointer.
  * **Activation Mode:** Determines when the UI pointer should be active.
+ * **Attempt Click On Deactivate:** Determines whether the UI click action should be triggered when the pointer is deactivated. If the pointer is hovering over a clickable element then it will invoke the click action on that element.
+ * **Ignore Canvas With Tag Or Class:** A string that specifies a canvas Tag or the name of a Script attached to a canvas and denotes that any world canvases that contain this tag or script will be ignored by the UI Pointer.
+ * **Canvas Tag Or Script List Policy:** A specified VRTK_TagOrScriptPolicyList to use to determine whether any world canvases will be acted upon by the UI Pointer. If a list is provided then the 'Ignore Canvas With Tag Or Class' parameter will be ignored.
 
 ### Class Variables
 
@@ -1091,6 +1375,7 @@ Adding the `VRTK_UIPointer_UnityEvents` component to `VRTK_UIPointer` object all
 ### Event Payload
 
  * `uint controllerIndex` - The index of the controller that was used.
+ * `bool isActive` - The state of whether the UI Pointer is currently active or not.
  * `GameObject currentTarget` - The current UI element that the pointer is colliding with.
  * `GameObject previousTarget` - The previous UI element that the pointer was colliding with.
 
@@ -1149,6 +1434,7 @@ The Basic Teleport script is attached to the `[CameraRig]` prefab.
  * **Distance Blink Delay:** A range between 0 and 32 that determines how long the blink transition will stay blacked out depending on the distance being teleported. A value of 0 will not delay the teleport blink effect over any distance, a value of 32 will delay the teleport blink fade in even when the distance teleported is very close to the original position. This can be used to simulate time taking longer to pass the further a user teleports. A value of 16 provides a decent basis to simulate this to the user.
  * **Headset Position Compensation:** If this is checked then the teleported location will be the position of the headset within the play area. If it is unchecked then the teleported location will always be the centre of the play area even if the headset position is not in the centre of the play area.
  * **Ignore Target With Tag Or Class:** A string that specifies an object Tag or the name of a Script attached to an object and notifies the teleporter that the destination is to be ignored so the user cannot teleport to that location. It also ensure the pointer colour is set to the miss colour.
+ * **Target Tag Or Script List Policy:** A specified VRTK_TagOrScriptPolicyList to use to determine whether destination targets will be acted upon by the Teleporter. If a list is provided then the 'Ignore Target With Tag Or Class' parameter will be ignored.
  * **Nav Mesh Limit Distance:** The max distance the nav mesh edge can be from the teleport destination to be considered valid. If a value of `0` is given then the nav mesh restriction will be ignored.
 
 ### Class Events
@@ -1252,6 +1538,7 @@ The purpose of the Headset Collision is to detect when the user's VR headset col
 ### Inspector Parameters
 
  * **Ignore Target With Tag Or Class:** A string that specifies an object Tag or the name of a Script attached to an object and will be ignored on headset collision.
+ * **Target Tag Or Script List Policy:** A specified VRTK_TagOrScriptPolicyList to use to determine whether any objects will be acted upon by the Headset Collision. If a list is provided then the 'Ignore Target With Tag Or Class' parameter will be ignored.
 
 ### Class Events
 
@@ -1390,6 +1677,7 @@ The Headset Collision Fade uses a composition of the Headset Collision and Heads
  * **Blink Transition Speed:** The fade blink speed on collision.
  * **Fade Color:** The colour to fade the headset to on collision.
  * **Ignore Target With Tag Or Class:** A string that specifies an object Tag or the name of a Script attached to an object and will prevent the object from fading the headset view on collision.
+ * **Target Tag Or Script List Policy:** A specified VRTK_TagOrScriptPolicyList to use to determine whether any objects will be acted upon by the Headset Collision Fade. If a list is provided then the 'Ignore Target With Tag Or Class' parameter will be ignored.
 
 ### Example
 
@@ -1544,6 +1832,8 @@ The Interactable Object script is attached to any game object that is required t
 
 The basis of this script is to provide a simple mechanism for identifying objects in the game world that can be grabbed or used but it is expected that this script is the base to be inherited into a script with richer functionality.
 
+The highlighting of an Interactable Object is defaulted to use the `VRTK_MaterialColorSwapHighlighter` if no other highlighter is applied to the Object.
+
 ### Inspector Parameters
 
  * **Highlight On Touch:** The object will only highlight when a controller touches it if this is checked.
@@ -1552,7 +1842,7 @@ The basis of this script is to provide a simple mechanism for identifying object
  * **Allowed Touch Controllers:** Determines which controller can initiate a touch action.
  * **Hide Controller On Touch:** Optionally override the controller setting.
  * **Is Grabbable:** Determines if the object can be grabbed.
- * **Is Droppable:** Determines if the object can be dropped by the controller grab button being used. If this is unchecked then it's not possible to drop the item once it's picked up using the controller button. It is still possible for the item to be dropped if the Grab Attach Mechanic is a joint and too much force is applied to the object and the joint is broken. To prevent this it's better to use the Child Of Controller mechanic.
+ * **Is Droppable:** Determines if the object can be dropped by the controller grab button being used. If this is unchecked then it's not possible to drop the item once it's picked up using the controller button.
  * **Is Swappable:** Determines if the object can be swapped between controllers when it is picked up. If it is unchecked then the object must be dropped before it can be picked up by the other controller.
  * **Hold Button To Grab:** If this is checked then the grab button on the controller needs to be continually held down to keep grabbing. If this is unchecked the grab button toggles the grab action with one button press to grab and another to release.
  * **Grab Override Button:** If this is set to `Undefined` then the global grab alias button will grab the object, setting it to any other button will ensure the override button is used to grab this specific interactable object.
@@ -1570,7 +1860,7 @@ The basis of this script is to provide a simple mechanism for identifying object
  * **Throw Multiplier:** An amount to multiply the velocity of the given object when it is thrown. This can also be used in conjunction with the Interact Grab Throw Multiplier to have certain objects be thrown even further than normal (or thrown a shorter distance if a number below 1 is entered).
  * **On Grab Collision Delay:** The amount of time to delay collisions affecting the object when it is first grabbed. This is useful if a game object may get stuck inside another object when it is being grabbed.
  * **Is Usable:** Determines if the object can be used.
- * **Use Only If Grabbed:** If this is checked the object can be used only if it was grabbed before.
+ * **Use Only If Grabbed:** If this is checked the object can be used only if it is currently being grabbed.
  * **Hold Button To Use:** If this is checked then the use button on the controller needs to be continually held down to keep using. If this is unchecked the the use button toggles the use action with one button press to start using and another to stop using.
  * **Use Override Button:** If this is set to `Undefined` then the global use alias button will use the object, setting it to any other button will ensure the override button is used to use this specific interactable object.
  * **Pointer Activates Use Action:** If this is checked then when a World Pointer beam (projected from the controller) hits the interactable object, if the object has `Hold Button To Use` unchecked then whilst the pointer is over the object it will run it's `Using` method. If `Hold Button To Use` is unchecked then the `Using` method will be run when the pointer is deactivated. The world pointer will not throw the `Destination Set` event if it is affecting an interactable object with this setting checked as this prevents unwanted teleporting from happening when using an object with a pointer.
@@ -1595,6 +1885,7 @@ The basis of this script is to provide a simple mechanism for identifying object
   * `Default` - Use the hide settings from the controller.
   * `OverrideHide` - Hide the controller when interacting, overriding controller settings.
   * `OverrideDontHide` - Don't hide the controller when interacting, overriding controller settings.
+ * `public int usingState` - The current using state of the object. `0` not being used, `1` being used. Default: `0`
 
 ### Class Events
 
@@ -2295,6 +2586,52 @@ Adding the `VRTK_DashTeleport_UnityEvents` component to `VRTK_DashTeleport` obje
 
 ---
 
+## Tag Or Script Policy List (VRTK_TagOrScriptPolicyList)
+
+### Overview
+
+The Tag Or Script Policy List allows to create a list of either tag names or script names that can be checked against to see if another operation is permitted.
+
+A number of other scripts can use a Tag Or Script Policy List to determine if an operation is permitted based on whether a game object has a tag applied or a script component on it.
+
+For example, the Teleporter scripts can ignore game object targets as a teleport location if the game object contains a tag that is in the identifiers list and the policy is set to ignore.
+
+Or the teleporter can only allow teleport to targets that contain a tag that is in the identifiers list and the policy is set to include.
+
+Add the Tag Or Script Policy List script to a game object (preferably the same component utilising the list) and then configure the list accordingly.
+
+Then in the component that has a Tag Or Script Policy List paramter (e.g. BasicTeleporter has `Target Tag Or Script List Policy`) simply select the list that has been created and defined.
+
+### Inspector Parameters
+
+ * **Operation:** The operation to apply on the list of identifiers.
+ * **Check Type:** The element type on the game object to check against.
+
+### Class Variables
+
+ * `public enum OperationTypes` - The operation to apply on the list of identifiers.
+  * `Ignore` - Will ignore any game objects that contain either a tag or script component that is included in the identifiers list.
+  * `Include` - Will only include game objects that contain either a tag or script component that is included in the identifiers list.
+ * `public enum CheckTypes` - The types of element that can be checked against.
+  * `Tag` - The tag applied to the game object.
+  * `Script` - A script component added to the game object.
+  * `Tag_Or_Script` - Either a tag applied to the game object or a script component added to the game object.
+
+### Class Methods
+
+#### Find/1
+
+  > `public bool Find(GameObject obj)`
+
+  * Parameters
+   * `GameObject obj` - The game object to check if it has a tag or script that is listed in the identifiers list.
+  * Returns
+   * `bool` - If the operation is `Ignore` and the game object is matched by an identifier from the list then it returns true. If the operation is `Include` and the game object is not matched by an identifier from the list then it returns true.
+
+The Find method performs the set operation to determine if the given game object contains one of the identifiers on the set check type. For instance, if the Operation is `Ignore` and the Check Type is `Tag` then the Find method will attempt to see if the given game object has a tag that matches one of the identifiers.
+
+---
+
 ## Simulating Headset Movement (VRTK_Simulator)
 
 ### Overview
@@ -2309,6 +2646,114 @@ The Simulator script is attached to the `[CameraRig]` prefab. Supported movement
  * **Only In Editor:** Typically the simulator should be turned off when not testing anymore. This option will do this automatically when outside the editor.
  * **Step Size:** Depending on the scale of the world the step size can be defined to increase or decrease movement speed.
  * **Cam Start:** An optional game object marking the position and rotation at which the camera should be initially placed.
+
+---
+
+## Adaptive Quality (VRTK_AdaptiveQuality)
+
+### Overview
+
+Adaptive Quality dynamically changes rendering settings to maintain VR framerate while maximizing GPU utilization.
+
+The Adaptive Quality script is attached to the `eye` object within the `[CameraRig]` prefab.
+
+There are two goals:
+ * Reduce the chances of dropping frames and reprojecting
+ * Increase quality when there are idle GPU cycles
+
+This script currently changes the following to reach these goals:
+ * Rendering resolution and viewport (aka Dynamic Resolution)
+
+In the future it could be changed to also change the following:
+ * MSAA level
+ * Fixed Foveated Rendering
+ * Radial Density Masking
+ * (Non-fixed) Foveated Rendering (once HMDs support eye tracking)
+
+Some shaders, especially Image Effects, need to be modified to work with the changed render scale. To fix them
+pass `1.0f / VRSettings.renderViewportScale` into the shader and scale all incoming UV values with it in the vertex
+program. Do this by using `Material.SetFloat` to set the value in the script that configures the shader.
+
+In more detail:
+ * In the `.shader` file: Add a new runtime-set property value `float _InverseOfRenderViewportScale` and add `vertexInput.texcoord *= _InverseOfRenderViewportScale` to the start of the vertex program
+ * In the `.cs` file: Before using the material (eg. `Graphics.Blit`) add `material.SetFloat("_InverseOfRenderViewportScale", 1.0f / VRSettings.renderViewportScale)`
+
+### Inspector Parameters
+
+ * **Active:** Toggles whether the render quality is dynamically adjusted to maintain VR framerate. If unchecked, the renderer will render at the recommended resolution provided by the current `VRDevice`.
+ * **Draw Debug Visualization:** Toggles whether to show the debug overlay. Each square represents a different level on the quality scale. Levels increase from left to right,  and the first green box that is lit above represents the recommended render target resolution provided by  the current `VRDevice`. The yellow boxes represent resolutions below the recommended render target resolution. The currently lit box becomes red whenever the user is likely seeing reprojection in the HMD since the  application isn't maintaining VR framerate. If lit, the box all the way on the left is almost always lit red because  it represents the lowest render scale with reprojection on.
+ * **Responds To Keyboard Shortcuts:** Toggles whether to allow keyboard shortcuts to control this script.
+  * The supported shortcuts are:
+    * `Shift+F1`: Toggle debug visualization on/off
+    * `Shift+F2`: Toggle usage of override render scale on/off
+    * `Shift+F3`: Decrease override render scale level
+    * `Shift+F4`: Increase override render scale level
+ * **Responds To Command Line Arguments:** Toggles whether to allow command line arguments to control this script at startup of the standalone build.
+  * The supported command line arguments all begin with '-' and are:
+    * `-noaq`: Disable adaptive quality
+    * `-aqminscale X`: Set minimum render scale to X
+    * `-aqmaxscale X`: Set maximum render scale to X
+    * `-aqmaxres X`: Set maximum render target dimension to X
+    * `-aqfillratestep X`: Set render scale fill rate step size in percent to X (X from 1 to 100)
+    * `-aqoverride X`: Set override render scale level to X
+    * `-vrdebug`: Enable debug visualization
+    * `-msaa X`: Set MSAA level to X
+ * **Msaa Level:** The MSAA level to use.
+ * **Minimum Render Scale:** The minimum allowed render scale.
+ * **Maximum Render Scale:** The maximum allowed render scale.
+ * **Maximum Render Target Dimension:** The maximum allowed render target dimension. This puts an upper limit on the size of the render target regardless of the maximum render scale.
+ * **Render Scale Fill Rate Step Size In Percent:** The fill rate step size in percent by which the render scale levels will be calculated.
+ * **Override Render Scale:** Toggles whether to override the used render scale level.
+ * **Override Render Scale Level:** The render scale level to override the current one with.
+
+### Class Variables
+
+ * `public readonly ReadOnlyCollection<float> renderScales` - All the calculated render scales. The elements of this collection are to be interpreted as modifiers to the recommended render target resolution provided by the current `VRDevice`.
+ * `public float currentRenderScale` - The current render scale. A render scale of 1.0 represents the recommended render target resolution provided by the current `VRDevice`.
+ * `public Vector2 defaultRenderTargetResolution` - The recommended render target resolution provided by the current `VRDevice`.
+ * `public Vector2 currentRenderTargetResolution` - The current render target resolution.
+
+### Class Methods
+
+#### RenderTargetResolutionForRenderScale/1
+
+  > `public static Vector2 RenderTargetResolutionForRenderScale(float renderScale)`
+
+  * Parameters
+   * `float renderScale` - The render scale to calculate the render target resolution with.
+  * Returns
+   * `Vector2` - The render target resolution for `renderScale`.
+
+Calculates and returns the render target resolution for a given render scale.
+
+#### BiggestAllowedMaximumRenderScale/0
+
+  > `public float BiggestAllowedMaximumRenderScale()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `float` - The biggest allowed maximum render scale.
+
+Calculates and returns the biggest allowed maximum render scale to be used for `maximumRenderScale` given the current `maximumRenderTargetDimension`.
+
+#### ToString/0
+
+  > `public override string ToString()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `string` - The summary.
+
+A summary of this script by listing all the calculated render scales with their corresponding render target resolution.
+
+### Example
+
+`VRTK/Examples/039_CameraRig_AdaptiveQuality` displays the frames per second in the centre of the headset view.
+The debug visualization of this script is displayed near the top edge of the headset view.
+Pressing the trigger generates a new sphere and pressing the touchpad generates ten new spheres.
+Eventually when lots of spheres are present the FPS will drop and demonstrate the script.
 
 ---
 
@@ -2327,7 +2772,9 @@ All 3D controls extend the `VRTK_Control` abstract class which provides common m
  * [Drawer](#drawer-vrtk_drawer)
  * [Knob](#knob-vrtk_knob)
  * [Lever](#lever-vrtk_lever)
+ * [Spring Lever](#spring-lever-vrtk_spring_lever)
  * [Slider](#slider-vrtk_slider)
+ * [Content Handler](#content-handler-vrtk_contenthandler)
 
 ---
 
@@ -2547,6 +2994,21 @@ The script will instantiate the required Rigidbody, Interactable and HingeJoint 
 
 ---
 
+## Spring Lever (VRTK_Spring_Lever)
+ > extends [VRTK_Lever](#lever-vrtk_lever)
+
+### Overview
+
+This script extends VRTK_Lever to add spring force toward whichever end of the lever's range it is closest to.
+
+The script will instantiate the required Rigidbody, Interactable and HingeJoint components automatically in case they do not exist yet. The joint is very tricky to setup automatically though and will only work in straight forward cases. If there are any issues, then create the HingeJoint component manually and configure it as needed.
+
+### Inspector Parameters
+
+ * **Spring Strength:** Strength of the spring force that will be applied toward either end of the lever's range.
+
+---
+
 ## Slider (VRTK_Slider)
  > extends [VRTK_Control](#control-vrtk_control)
 
@@ -2569,6 +3031,26 @@ The script will instantiate the required Rigidbody and Interactable components a
 ### Example
 
 `VRTK/Examples/025_Controls_Overview` has a selection of sliders at various angles with different step values to demonstrate their usage.
+
+---
+
+## Content Handler (VRTK_ContentHandler)
+
+### Overview
+
+Manages objects defined as content. When taking out an object from a drawer and closing the drawer this object would otherwise disappear even if outside the drawer.
+
+The script will use the boundaries of the control to determine if it is in or out and re-parent the object as necessary. It can be put onto individual objects or the parent of multiple objects. Using the latter way all interactable objects under that parent will become managed by the script.
+
+### Inspector Parameters
+
+ * **Control:** The 3D control responsible for the content.
+ * **Inside:** The transform containing the meshes or colliders that define the inside of the control.
+ * **Outside:** Any transform that will act as the parent while the object is not inside the control.
+
+### Example
+
+`VRTK/Examples/025_Controls_Overview` has a drawer with a collection of items that adhere to this concept.
 
 ---
 

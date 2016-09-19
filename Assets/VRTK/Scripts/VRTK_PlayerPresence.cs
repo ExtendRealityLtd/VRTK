@@ -199,7 +199,6 @@ namespace VRTK
         {
             if(e.target)
             {
-                IgnoreCollisions(e.target.GetComponents<Collider>(), true);
                 IgnoreCollisions(e.target.GetComponentsInChildren<Collider>(), true);
             }
         }
@@ -208,7 +207,6 @@ namespace VRTK
         {
             if (e.target && e.target.GetComponent<VRTK_InteractableObject>())
             {
-                IgnoreCollisions(e.target.GetComponents<Collider>(), false);
                 IgnoreCollisions(e.target.GetComponentsInChildren<Collider>(), false);
             }
         }
@@ -297,7 +295,7 @@ namespace VRTK
         private void UpdateCollider()
         {
             var playAreaHeightAdjustment = 0.009f;
-            var newpresenceColliderYSize = (headset.transform.position.y - headsetYOffset) - transform.position.y;
+            var newpresenceColliderYSize = (headset.transform.localPosition.y - headsetYOffset);
             var newpresenceColliderYCenter = (newpresenceColliderYSize != 0 ? (newpresenceColliderYSize / 2) + playAreaHeightAdjustment : 0);
 
             if (presenceCollider)
@@ -351,7 +349,6 @@ namespace VRTK
         {
             if (controller)
             {
-                IgnoreCollisions(controller.GetComponents<Collider>(), true);
                 IgnoreCollisions(controller.GetComponentsInChildren<Collider>(), true);
 
                 var grabbingController = controller.GetComponent<VRTK_InteractGrab>();

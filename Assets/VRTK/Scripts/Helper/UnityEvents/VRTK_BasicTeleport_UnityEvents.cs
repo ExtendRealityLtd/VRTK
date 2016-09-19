@@ -9,7 +9,7 @@
         private VRTK_BasicTeleport bt;
 
         [System.Serializable]
-        public class UnityObjectEvent : UnityEvent<DestinationMarkerEventArgs> { };
+        public class UnityObjectEvent : UnityEvent<object, DestinationMarkerEventArgs> { };
 
         /// <summary>
         /// Emits the Teleporting class event.
@@ -43,12 +43,12 @@
 
         private void Teleporting(object o, DestinationMarkerEventArgs e)
         {
-            OnTeleporting.Invoke(e);
+            OnTeleporting.Invoke(o, e);
         }
 
         private void Teleported(object o, DestinationMarkerEventArgs e)
         {
-            OnTeleported.Invoke(e);
+            OnTeleported.Invoke(o, e);
         }
 
         private void OnDisable()

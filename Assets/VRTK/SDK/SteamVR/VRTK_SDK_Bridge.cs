@@ -1,4 +1,4 @@
-﻿namespace VRTK
+namespace VRTK
 {
     using UnityEngine;
     using Valve.VR;
@@ -10,8 +10,36 @@
         private static Transform cachedHeadsetCamera;
         private static Transform cachedPlayArea;
 
+        public static string defaultAttachPointPath = "Model/tip/attach";
+        public static string defaultTriggerModelPath = "Model/trigger";
+        public static string defaultGripLeftModelPath = "Model/lgrip";
+        public static string defaultGripRightModelPath = "Model/rgrip";
+        public static string defaultTouchpadModelPath = "Model/trackpad";
+        public static string defaultApplicationMenuModelPath = "Model/button";
+        public static string defaultSystemModelPath = "Model/sys_button";
+        public static string defaultBodyModelPath = "Model/body";
+
+        public static GameObject GetTrackedObject(GameObject obj, out uint index)
+        {
+            var trackedObject = obj.GetComponent<SteamVR_TrackedObject>();
+            index = 0;
+            if (trackedObject)
+            {
+                index = (uint)trackedObject.index;
+                return trackedObject.gameObject;
+            }
+            return null;
+        }
+
         public static GameObject GetTrackedObjectByIndex(uint index)
         {
+            //attempt to get from cache first
+            if (VRTK_ObjectCache.trackedControllers.ContainsKey(index))
+            {
+                return VRTK_ObjectCache.trackedControllers[index];
+            }
+
+            //if not found in cache then brute force check
             foreach (SteamVR_TrackedObject trackedObject in FindObjectsOfType<SteamVR_TrackedObject>())
             {
                 if ((uint)trackedObject.index == index)
@@ -19,17 +47,15 @@
                     return trackedObject.gameObject;
                 }
             }
+
             return null;
         }
 
         public static uint GetIndexOfTrackedObject(GameObject trackedObject)
         {
-            var obj = trackedObject.GetComponent<SteamVR_TrackedObject>();
-            if (obj)
-            {
-                return (uint)obj.index;
-            }
-            return 0;
+            uint index = 0;
+            GetTrackedObject(trackedObject, out index);
+            return index;
         }
 
         public static Transform GetTrackedObjectOrigin(GameObject obj)
@@ -147,6 +173,24 @@
         {
             var area = playArea.GetComponent<SteamVR_PlayArea>();
             return (area.size == SteamVR_PlayArea.Size.Calibrated);
+        }
+
+        public static bool IsDisplayOnDesktop()
+        {
+            return (OpenVR.System == null || OpenVR.System.IsDisplayOnDesktop());
+        }
+
+        public static bool ShouldAppRenderWithLowResources()
+        {
+            return (OpenVR.Compositor != null && OpenVR.Compositor.ShouldAppRenderWithLowResources());
+        }
+
+        public static void ForceInterleavedReprojectionOn(bool force)
+        {
+            if (OpenVR.Compositor != null)
+            {
+                OpenVR.Compositor.ForceInterleavedReprojectionOn(force);
+            }
         }
 
         public static GameObject GetControllerRenderModel(GameObject controller)

@@ -4,6 +4,7 @@ namespace VRTK
     using UnityEngine;
     using System.Collections;
     using System.Collections.Generic;
+    using Highlighters;
 
     /// <summary>
     /// Event Payload
@@ -26,6 +27,8 @@ namespace VRTK
     /// </summary>
     /// <remarks>
     /// The basis of this script is to provide a simple mechanism for identifying objects in the game world that can be grabbed or used but it is expected that this script is the base to be inherited into a script with richer functionality.
+    ///
+    /// The highlighting of an Interactable Object is defaulted to use the `VRTK_MaterialColorSwapHighlighter` if no other highlighter is applied to the Object.
     /// </remarks>
     /// <example>
     /// `VRTK/Examples/005_Controller_BasicObjectGrabbing` uses the `VRTK_InteractTouch` and `VRTK_InteractGrab` scripts on the controllers to show how an interactable object can be grabbed and snapped to the controller and thrown around the game world.
@@ -80,6 +83,7 @@ namespace VRTK
         }
 
         [Header("Touch Interactions", order = 1)]
+
         [Tooltip("The object will only highlight when a controller touches it if this is checked.")]
         public bool highlightOnTouch = false;
         [Tooltip("The colour to highlight the object when it is touched. This colour will override any globally set colour (for instance on the `VRTK_InteractTouch` script).")]
@@ -92,9 +96,10 @@ namespace VRTK
         public ControllerHideMode hideControllerOnTouch = ControllerHideMode.Default;
 
         [Header("Grab Interactions", order = 2)]
+
         [Tooltip("Determines if the object can be grabbed.")]
         public bool isGrabbable = false;
-        [Tooltip("Determines if the object can be dropped by the controller grab button being used. If this is unchecked then it's not possible to drop the item once it's picked up using the controller button. It is still possible for the item to be dropped if the Grab Attach Mechanic is a joint and too much force is applied to the object and the joint is broken. To prevent this it's better to use the Child Of Controller mechanic.")]
+        [Tooltip("Determines if the object can be dropped by the controller grab button being used. If this is unchecked then it's not possible to drop the item once it's picked up using the controller button.")]
         public bool isDroppable = true;
         [Tooltip("Determines if the object can be swapped between controllers when it is picked up. If it is unchecked then the object must be dropped before it can be picked up by the other controller.")]
         public bool isSwappable = true;
@@ -118,6 +123,7 @@ namespace VRTK
         public bool stayGrabbedOnTeleport = true;
 
         [Header("Grab Mechanics", order = 3)]
+
         [Tooltip("This determines how the grabbed item will be attached to the controller when it is grabbed.")]
         public GrabAttachType grabAttachMechanic = GrabAttachType.Fixed_Joint;
         [Tooltip("The force amount when to detach the object from the grabbed controller. If the controller tries to exert a force higher than this threshold on the object (from pulling it through another object or pushing it into another object) then the joint holding the object to the grabbing controller will break and the object will no longer be grabbed. This also works with Tracked Object grabbing but determines how far the controller is from the object before breaking the grab. Only required for `Fixed Joint`, `Spring Joint`, `Track Object` and `Rotator Track`.")]
@@ -132,9 +138,10 @@ namespace VRTK
         public float onGrabCollisionDelay = 0f;
 
         [Header("Use Interactions", order = 4)]
+
         [Tooltip("Determines if the object can be used.")]
         public bool isUsable = false;
-        [Tooltip("If this is checked the object can be used only if it was grabbed before.")]
+        [Tooltip("If this is checked the object can be used only if it is currently being grabbed.")]
         public bool useOnlyIfGrabbed = false;
         [Tooltip("If this is checked then the use button on the controller needs to be continually held down to keep using. If this is unchecked the the use button toggles the use action with one button press to start using and another to stop using.")]
         public bool holdButtonToUse = true;
@@ -174,14 +181,17 @@ namespace VRTK
         /// </summary>
         public event InteractableObjectEventHandler InteractableObjectUnused;
 
+        /// <summary>
+        /// The current using state of the object. `0` not being used, `1` being used.
+        /// </summary>
         [HideInInspector]
         public int usingState = 0;
 
         protected Rigidbody rb;
-        protected GameObject touchingObject = null;
+        protected bool autoRigidbody = false;
+        protected List<GameObject> touchingObjects = new List<GameObject>();
         protected GameObject grabbingObject = null;
         protected GameObject usingObject = null;
-        protected Dictionary<string, Color[]> originalObjectColours;
         protected Transform grabbedSnapHandle;
         protected Transform trackPoint;
         protected bool customTrackPoint = false;
@@ -191,6 +201,8 @@ namespace VRTK
         protected bool previousIsGrabbable;
         protected bool forcedDropped;
         protected bool forceDisabled;
+        protected VRTK_BaseHighlighter objectHighlighter;
+        protected bool autoHighlighter = false;
 
         public virtual void OnInteractableObjectTouched(InteractableObjectEventArgs e)
         {
@@ -271,7 +283,7 @@ namespace VRTK
         /// <returns>Returns `true` if the object is currently being touched.</returns>
         public bool IsTouched()
         {
-            return (touchingObject != null);
+            return (touchingObjects.Count > 0);
         }
 
         /// <summary>
@@ -298,8 +310,11 @@ namespace VRTK
         /// <param name="currentTouchingObject">The game object that is currently touching this object.</param>
         public virtual void StartTouching(GameObject currentTouchingObject)
         {
-            OnInteractableObjectTouched(SetInteractableObjectEvent(currentTouchingObject));
-            touchingObject = currentTouchingObject;
+            if (!touchingObjects.Contains(currentTouchingObject))
+            {
+                touchingObjects.Add(currentTouchingObject);
+                OnInteractableObjectTouched(SetInteractableObjectEvent(currentTouchingObject));
+            }
         }
 
         /// <summary>
@@ -308,11 +323,14 @@ namespace VRTK
         /// <param name="previousTouchingObject">The game object that was previously touching this object.</param>
         public virtual void StopTouching(GameObject previousTouchingObject)
         {
-            OnInteractableObjectUntouched(SetInteractableObjectEvent(previousTouchingObject));
-            touchingObject = null;
-            if (gameObject.activeInHierarchy)
+            if (touchingObjects.Contains(previousTouchingObject))
             {
-                StartCoroutine(StopUsingOnControllerChange(previousTouchingObject));
+                OnInteractableObjectUntouched(SetInteractableObjectEvent(previousTouchingObject));
+                if (gameObject.activeInHierarchy)
+                {
+                    StartCoroutine(StopUsingOnControllerChange(previousTouchingObject));
+                }
+                touchingObjects.Remove(previousTouchingObject);
             }
         }
 
@@ -394,23 +412,12 @@ namespace VRTK
                     Color color = (touchHighlightColor != Color.clear ? touchHighlightColor : globalHighlightColor);
                     if (color != Color.clear)
                     {
-                        if (originalObjectColours == null)
-                        {
-                            originalObjectColours = StoreOriginalColors();
-                        }
-
-                        var colorArray = BuildHighlightColorArray(color);
-                        ChangeColor(colorArray);
+                        objectHighlighter.Highlight(color);
                     }
                 }
                 else
                 {
-                    if (originalObjectColours == null)
-                    {
-                        Debug.LogError("VRTK_InteractableObject has not had the Start() method called, if you are inheriting this class then call base.Start() in your Start() method.");
-                        return;
-                    }
-                    ChangeColor(originalObjectColours);
+                    objectHighlighter.Unhighlight();
                 }
             }
         }
@@ -422,10 +429,6 @@ namespace VRTK
         {
             if (onGrabCollisionDelay > 0f)
             {
-                if (GetComponent<Rigidbody>())
-                {
-                    GetComponent<Rigidbody>().detectCollisions = false;
-                }
                 foreach (Rigidbody rb in GetComponentsInChildren<Rigidbody>())
                 {
                     rb.detectCollisions = false;
@@ -484,10 +487,10 @@ namespace VRTK
         /// </summary>
         public void ZeroVelocity()
         {
-            if (GetComponent<Rigidbody>())
+            if (rb)
             {
-                GetComponent<Rigidbody>().velocity = Vector3.zero;
-                GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+                rb.velocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
             }
         }
 
@@ -583,7 +586,7 @@ namespace VRTK
         protected virtual void Awake()
         {
             rb = GetComponent<Rigidbody>();
-
+            autoRigidbody = false;
             if (!AttachIsStaticObject())
             {
                 // If there is no rigid body, add one and set it to 'kinematic'.
@@ -591,6 +594,7 @@ namespace VRTK
                 {
                     rb = gameObject.AddComponent<Rigidbody>();
                     rb.isKinematic = true;
+                    autoRigidbody = true;
                 }
                 rb.maxAngularVelocity = float.MaxValue;
             }
@@ -599,10 +603,6 @@ namespace VRTK
 
         protected virtual void Start()
         {
-            if (highlightOnTouch)
-            {
-                originalObjectColours = StoreOriginalColors();
-            }
         }
 
         protected virtual void Update()
@@ -631,6 +631,7 @@ namespace VRTK
 
         protected virtual void OnEnable()
         {
+            InitialiseHighlighter();
             RegisterTeleporters();
             forceDisabled = false;
             if (forcedDropped)
@@ -645,6 +646,10 @@ namespace VRTK
             {
                 teleporter.Teleporting -= new TeleportEventHandler(OnTeleporting);
                 teleporter.Teleported -= new TeleportEventHandler(OnTeleported);
+            }
+            if (autoHighlighter)
+            {
+                Destroy(objectHighlighter);
             }
             forceDisabled = true;
             ForceStopInteracting();
@@ -672,6 +677,21 @@ namespace VRTK
             }
         }
 
+        protected virtual void InitialiseHighlighter()
+        {
+            if (highlightOnTouch)
+            {
+                autoHighlighter = false;
+                objectHighlighter = Utilities.GetActiveHighlighter(gameObject);
+                if (objectHighlighter == null)
+                {
+                    autoHighlighter = true;
+                    objectHighlighter = gameObject.AddComponent<VRTK_MaterialColorSwapHighlighter>();
+                }
+                objectHighlighter.Initialise(touchHighlightColor);
+            }
+        }
+
         private void ForceReleaseGrab()
         {
             if (grabbingObject)
@@ -682,85 +702,9 @@ namespace VRTK
 
         private void UnpauseCollisions()
         {
-            if (GetComponent<Rigidbody>())
-            {
-                GetComponent<Rigidbody>().detectCollisions = true;
-            }
             foreach (Rigidbody rb in GetComponentsInChildren<Rigidbody>())
             {
                 rb.detectCollisions = true;
-            }
-        }
-
-        private Renderer[] GetRendererArray()
-        {
-            var main = GetComponents<Renderer>();
-            var children = GetComponentsInChildren<Renderer>();
-
-            var allRenderers = new Renderer[main.Length + children.Length];
-            main.CopyTo(allRenderers, 0);
-            children.CopyTo(allRenderers, main.Length);
-
-            return allRenderers;
-        }
-
-        private Dictionary<string, Color[]> StoreOriginalColors()
-        {
-            var colors = new Dictionary<string, Color[]>();
-            foreach (Renderer renderer in GetRendererArray())
-            {
-                var objectReference = renderer.gameObject.GetInstanceID().ToString();
-                colors[objectReference] = new Color[renderer.materials.Length];
-
-                for (int i = 0; i < renderer.materials.Length; i++)
-                {
-                    var material = renderer.materials[i];
-                    if (material.HasProperty("_Color"))
-                    {
-                        colors[objectReference][i] = material.color;
-                    }
-                }
-            }
-            return colors;
-        }
-
-        private Dictionary<string, Color[]> BuildHighlightColorArray(Color color)
-        {
-            var colors = new Dictionary<string, Color[]>();
-            foreach (Renderer renderer in GetRendererArray())
-            {
-                var objectReference = renderer.gameObject.GetInstanceID().ToString();
-                colors[objectReference] = new Color[renderer.materials.Length];
-                for (int i = 0; i < renderer.materials.Length; i++)
-                {
-                    var material = renderer.materials[i];
-                    if (material.HasProperty("_Color"))
-                    {
-                        colors[objectReference][i] = color;
-                    }
-                }
-            }
-            return colors;
-        }
-
-        private void ChangeColor(Dictionary<string, Color[]> colors)
-        {
-            foreach (Renderer renderer in GetRendererArray())
-            {
-                var objectReference = renderer.gameObject.GetInstanceID().ToString();
-                if (!colors.ContainsKey(objectReference))
-                {
-                    continue;
-                }
-
-                for (int i = 0; i < renderer.materials.Length; i++)
-                {
-                    var material = renderer.materials[i];
-                    if (material.HasProperty("_Color"))
-                    {
-                        material.color = colors[objectReference][i];
-                    }
-                }
             }
         }
 
@@ -923,10 +867,20 @@ namespace VRTK
 
         private void ForceStopAllInteractions()
         {
-            if (touchingObject != null && (touchingObject.activeInHierarchy || forceDisabled))
+            if (touchingObjects == null)
             {
-                touchingObject.GetComponent<VRTK_InteractTouch>().ForceStopTouching();
-                forcedDropped = true;
+                return;
+            }
+
+            for (int i = 0; i < touchingObjects.Count; i++)
+            {
+                var touchingObject = touchingObjects[i];
+
+                if (touchingObject.activeInHierarchy || forceDisabled)
+                {
+                    touchingObject.GetComponent<VRTK_InteractTouch>().ForceStopTouching();
+                    forcedDropped = true;
+                }
             }
 
             if (grabbingObject != null && (grabbingObject.activeInHierarchy || forceDisabled))

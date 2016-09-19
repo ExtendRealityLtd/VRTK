@@ -24,6 +24,8 @@ namespace VRTK
         public Color fadeColor = Color.black;
         [Tooltip("A string that specifies an object Tag or the name of a Script attached to an object and will prevent the object from fading the headset view on collision.")]
         public string ignoreTargetWithTagOrClass;
+        [Tooltip("A specified VRTK_TagOrScriptPolicyList to use to determine whether any objects will be acted upon by the Headset Collision Fade. If a list is provided then the 'Ignore Target With Tag Or Class' parameter will be ignored.")]
+        public VRTK_TagOrScriptPolicyList targetTagOrScriptListPolicy;
 
         private VRTK_HeadsetCollision headsetCollision;
         private VRTK_HeadsetFade headsetFade;
@@ -32,6 +34,7 @@ namespace VRTK
         {
             headsetCollision = gameObject.AddComponent<VRTK_HeadsetCollision>();
             headsetCollision.ignoreTargetWithTagOrClass = ignoreTargetWithTagOrClass;
+            headsetCollision.targetTagOrScriptListPolicy = targetTagOrScriptListPolicy;
 
             headsetFade = gameObject.AddComponent<VRTK_HeadsetFade>();
 

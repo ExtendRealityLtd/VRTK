@@ -7,7 +7,7 @@ Material:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: WorldPointer
-  m_Shader: {fileID: 4800000, guid: 2da0089da6324ed4abd8da04795831be, type: 3}
+  m_Shader: {fileID: 4800000, guid: 4c84081e4523a5646919b30697cfccb8, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 5
   m_CustomRenderQueue: -1

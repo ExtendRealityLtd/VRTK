@@ -52,8 +52,10 @@ namespace VRTK
         private bool gripInitialised = false;
         private bool touchpadInitialised = false;
         private bool appMenuInitialised = false;
-
+        private TooltipButtons[] availableButtons;
         private GameObject[] buttonTooltips;
+        private VRTK_ControllerActions controllerActions;
+        private bool[] tooltipStates;
 
         /// <summary>
         /// The ToggleTips method will display the controller tooltips if the state is `true` and will hide the controller tooltips if the state is `false`. An optional `element` can be passed to target a specific controller tooltip to toggle otherwise all tooltips are toggled.
@@ -77,18 +79,62 @@ namespace VRTK
 
         private void Awake()
         {
+            controllerActions = transform.parent.GetComponent<VRTK_ControllerActions>();
             triggerInitialised = false;
             gripInitialised = false;
             touchpadInitialised = false;
             appMenuInitialised = false;
             InitialiseTips();
-            buttonTooltips = new GameObject[4]
+            availableButtons = new TooltipButtons[]
             {
-                transform.FindChild(TooltipButtons.TriggerTooltip.ToString()).gameObject,
-                transform.FindChild(TooltipButtons.GripTooltip.ToString()).gameObject,
-                transform.FindChild(TooltipButtons.TouchpadTooltip.ToString()).gameObject,
-                transform.FindChild(TooltipButtons.AppMenuTooltip.ToString()).gameObject,
+                TooltipButtons.TriggerTooltip,
+                TooltipButtons.GripTooltip,
+                TooltipButtons.TouchpadTooltip,
+                TooltipButtons.AppMenuTooltip
             };
+
+            buttonTooltips = new GameObject[availableButtons.Length];
+            tooltipStates = new bool[availableButtons.Length];
+
+            for (int i = 0; i < availableButtons.Length; i++)
+            {
+                buttonTooltips[i] = transform.FindChild(availableButtons[i].ToString()).gameObject;
+            }
+        }
+
+        private void OnEnable()
+        {
+            if (controllerActions)
+            {
+                controllerActions.ControllerModelVisible += new ControllerActionsEventHandler(DoControllerVisible);
+                controllerActions.ControllerModelInvisible += new ControllerActionsEventHandler(DoControllerInvisible);
+            }
+        }
+
+        private void OnDisable()
+        {
+            if (controllerActions)
+            {
+                controllerActions.ControllerModelVisible -= new ControllerActionsEventHandler(DoControllerVisible);
+                controllerActions.ControllerModelInvisible -= new ControllerActionsEventHandler(DoControllerInvisible);
+            }
+        }
+
+        private void DoControllerVisible(object sender, ControllerActionsEventArgs e)
+        {
+            for (int i = 0; i < availableButtons.Length; i++)
+            {
+                ToggleTips(tooltipStates[i], availableButtons[i]);
+            }
+        }
+
+        private void DoControllerInvisible(object sender, ControllerActionsEventArgs e)
+        {
+            for (int i = 0; i < buttonTooltips.Length; i++)
+            {
+                tooltipStates[i] = buttonTooltips[i].activeSelf;
+            }
+            ToggleTips(false);
         }
 
         private void InitialiseTips()

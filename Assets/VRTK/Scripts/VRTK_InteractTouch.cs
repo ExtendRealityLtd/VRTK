@@ -146,11 +146,6 @@ namespace VRTK
             if (controllerCollisionDetector && touchRigidBody)
             {
                 touchRigidBody.isKinematic = !state;
-                foreach (var collider in controllerCollisionDetector.GetComponents<Collider>())
-                {
-                    collider.isTrigger = !state;
-                }
-
                 foreach (var collider in controllerCollisionDetector.GetComponentsInChildren<Collider>())
                 {
                     collider.isTrigger = !state;
@@ -349,8 +344,12 @@ namespace VRTK
                 }
 
                 OnControllerUntouchInteractableObject(SetControllerInteractEvent(untouched.gameObject));
-                untouched.GetComponent<VRTK_InteractableObject>().ToggleHighlight(false);
-                untouched.GetComponent<VRTK_InteractableObject>().StopTouching(gameObject);
+                var untouchedObjectScript = untouched.GetComponent<VRTK_InteractableObject>();
+                untouchedObjectScript.StopTouching(gameObject);
+                if (!untouchedObjectScript.IsTouched())
+                {
+                    untouchedObjectScript.ToggleHighlight(false);
+                }
             }
 
             if (updatedHideControllerOnTouch)
@@ -372,7 +371,7 @@ namespace VRTK
         {
             foreach (var childTransform in GetComponentsInChildren<Transform>())
             {
-                if (childTransform == customRigidbodyObject.transform)
+                if (childTransform != transform && childTransform == customRigidbodyObject.transform)
                 {
                     return true;
                 }
@@ -386,6 +385,7 @@ namespace VRTK
             {
                 controllerCollisionDetector = Instantiate(defaultColliderPrefab, transform.position, transform.rotation) as GameObject;
                 controllerCollisionDetector.transform.SetParent(transform);
+                controllerCollisionDetector.transform.localScale = transform.localScale;
                 controllerCollisionDetector.name = "ControllerColliders";
                 destroyColliderOnDisable = true;
             }
@@ -400,6 +400,7 @@ namespace VRTK
                 {
                     controllerCollisionDetector = Instantiate(customRigidbodyObject, transform.position, transform.rotation) as GameObject;
                     controllerCollisionDetector.transform.SetParent(transform);
+                    controllerCollisionDetector.transform.localScale = transform.localScale;
                     destroyColliderOnDisable = true;
                 }
             }

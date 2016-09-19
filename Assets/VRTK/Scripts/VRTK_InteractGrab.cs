@@ -169,7 +169,7 @@ namespace VRTK
             if (controllerAttachPoint == null)
             {
                 //attempt to find the attach point on the controller
-                var defaultAttachPoint = transform.Find("Model/tip/attach");
+                var defaultAttachPoint = transform.Find(VRTK_SDK_Bridge.defaultAttachPointPath);
                 if (defaultAttachPoint != null)
                 {
                     controllerAttachPoint = defaultAttachPoint.GetComponent<Rigidbody>();
@@ -331,7 +331,6 @@ namespace VRTK
                 rb.velocity = velocity * (throwMultiplier * objectThrowMultiplier);
                 rb.angularVelocity = angularVelocity;
             }
-            rb.maxAngularVelocity = rb.angularVelocity.magnitude;
         }
 
         private bool GrabInteractedObject()
@@ -386,6 +385,7 @@ namespace VRTK
                 if (!grabbedObjectScript.IsValidInteractableController(gameObject, grabbedObjectScript.allowedGrabControllers))
                 {
                     grabbedObject = null;
+                    interactTouch.ForceStopTouching();
                     return;
                 }
 
@@ -466,6 +466,7 @@ namespace VRTK
 
             grabEnabledState = 0;
             grabbedObject = null;
+            interactTouch.ForceStopTouching();
         }
 
         private void ReleaseObject(bool withThrow)
