@@ -2655,6 +2655,8 @@ The Simulator script is attached to the `[CameraRig]` prefab. Supported movement
 
 Adaptive Quality dynamically changes rendering settings to maintain VR framerate while maximizing GPU utilization.
 
+> **Only Compatible With Unity 5.4 and above**
+
 The Adaptive Quality script is attached to the `eye` object within the `[CameraRig]` prefab.
 
 There are two goals:
