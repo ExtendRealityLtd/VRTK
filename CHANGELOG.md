@@ -1,5 +1,12 @@
 # Changelog
 
+# 2.2.1
+
+## Bug Fixes
+
+ * **Editor**
+  * prevent crash on build due to UnityEditor (ff74eaeb11761ff61a91b7dd2f33a631b741fdae)
+
 # 2.2.0
 
 ## Bug Fixes
