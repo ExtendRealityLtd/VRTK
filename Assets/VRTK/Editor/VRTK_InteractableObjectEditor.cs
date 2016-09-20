@@ -37,14 +37,14 @@
             {
                 EditorGUI.indentLevel++;
 
-                targ.highlightOnTouch = EditorGUILayout.Toggle(Utilities.BuildGUIContent<VRTK_InteractableObject>("highlightOnTouch"), targ.highlightOnTouch);
+                targ.highlightOnTouch = EditorGUILayout.Toggle(VRTK_EditorUtilities.BuildGUIContent<VRTK_InteractableObject>("highlightOnTouch"), targ.highlightOnTouch);
                 if (targ.highlightOnTouch)
                 {
                     EditorGUILayout.PropertyField(serializedObject.FindProperty("touchHighlightColor"));
                 }
 
                 GUILayout.BeginHorizontal();
-                EditorGUILayout.PrefixLabel(Utilities.BuildGUIContent<VRTK_InteractableObject>("rumbleOnTouch"));
+                EditorGUILayout.PrefixLabel(VRTK_EditorUtilities.BuildGUIContent<VRTK_InteractableObject>("rumbleOnTouch"));
                 EditorGUI.indentLevel--;
                 GUILayout.Label("Strength", GUILayout.MinWidth(49f));
                 float y = EditorGUILayout.FloatField(targ.rumbleOnTouch.y, GUILayout.MinWidth(10f));
@@ -62,7 +62,7 @@
 
             //Grab Layout
             GUILayout.Space(10);
-            targ.isGrabbable = EditorGUILayout.Toggle(Utilities.BuildGUIContent<VRTK_InteractableObject>("isGrabbable"), targ.isGrabbable);
+            targ.isGrabbable = EditorGUILayout.Toggle(VRTK_EditorUtilities.BuildGUIContent<VRTK_InteractableObject>("isGrabbable"), targ.isGrabbable);
             if (targ.isGrabbable != isGrabbableLastState && targ.isGrabbable)
             {
                 viewGrab = true;
@@ -86,7 +86,7 @@
                     EditorGUILayout.PropertyField(serializedObject.FindProperty("grabOverrideButton"));
 
                     GUILayout.BeginHorizontal();
-                    EditorGUILayout.PrefixLabel(Utilities.BuildGUIContent<VRTK_InteractableObject>("rumbleOnGrab"));
+                    EditorGUILayout.PrefixLabel(VRTK_EditorUtilities.BuildGUIContent<VRTK_InteractableObject>("rumbleOnGrab"));
                     EditorGUI.indentLevel--;
                     GUILayout.Label("Strength", GUILayout.MinWidth(49f));
                     float y = EditorGUILayout.FloatField(targ.rumbleOnGrab.y, GUILayout.MinWidth(10f));
@@ -97,7 +97,7 @@
                     GUILayout.EndHorizontal();
 
                     EditorGUILayout.PropertyField(serializedObject.FindProperty("allowedGrabControllers"));
-                    targ.precisionSnap = EditorGUILayout.Toggle(Utilities.BuildGUIContent<VRTK_InteractableObject>("precisionSnap", "Precision Grab(Snap)"), targ.precisionSnap);
+                    targ.precisionSnap = EditorGUILayout.Toggle(VRTK_EditorUtilities.BuildGUIContent<VRTK_InteractableObject>("precisionSnap", "Precision Grab(Snap)"), targ.precisionSnap);
                     if (!targ.precisionSnap)
                     {
                         EditorGUILayout.PropertyField(serializedObject.FindProperty("rightSnapHandle"));
@@ -107,7 +107,7 @@
                     EditorGUILayout.PropertyField(serializedObject.FindProperty("hideControllerOnGrab"));
                     EditorGUILayout.PropertyField(serializedObject.FindProperty("stayGrabbedOnTeleport"));
 
-                    targ.grabAttachMechanic = (VRTK_InteractableObject.GrabAttachType)EditorGUILayout.EnumPopup(Utilities.BuildGUIContent<VRTK_InteractableObject>("grabAttachMechanic"), targ.grabAttachMechanic);
+                    targ.grabAttachMechanic = (VRTK_InteractableObject.GrabAttachType)EditorGUILayout.EnumPopup(VRTK_EditorUtilities.BuildGUIContent<VRTK_InteractableObject>("grabAttachMechanic"), targ.grabAttachMechanic);
                     if (Array.IndexOf(hasDetachThreshold, targ.grabAttachMechanic) >= 0)
                     {
                         EditorGUILayout.PropertyField(serializedObject.FindProperty("detachThreshold"));
@@ -125,7 +125,7 @@
             }
 
             GUILayout.Space(10);
-            targ.isUsable = EditorGUILayout.Toggle(Utilities.BuildGUIContent<VRTK_InteractableObject>("isUsable"), targ.isUsable);
+            targ.isUsable = EditorGUILayout.Toggle(VRTK_EditorUtilities.BuildGUIContent<VRTK_InteractableObject>("isUsable"), targ.isUsable);
             if (targ.isUsable != isUsableLastState && targ.isUsable)
             {
                 viewUse = true;
@@ -149,7 +149,7 @@
                     EditorGUILayout.PropertyField(serializedObject.FindProperty("pointerActivatesUseAction"));
 
                     GUILayout.BeginHorizontal();
-                    EditorGUILayout.PrefixLabel(Utilities.BuildGUIContent<VRTK_InteractableObject>("rumbleOnUse"));
+                    EditorGUILayout.PrefixLabel(VRTK_EditorUtilities.BuildGUIContent<VRTK_InteractableObject>("rumbleOnUse"));
                     EditorGUI.indentLevel--;
                     GUILayout.Label("Strength", GUILayout.MinWidth(49f));
                     float y = EditorGUILayout.FloatField(targ.rumbleOnUse.y, GUILayout.MinWidth(10f));
