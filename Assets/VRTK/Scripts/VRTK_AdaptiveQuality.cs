@@ -3,6 +3,9 @@
 // Adapted from The Lab Renderer's ValveCamera.cs, available at
 // https://github.com/ValveSoftware/the_lab_renderer/blob/ae64c48a8ccbe5406aba1e39b160d4f2f7156c2c/Assets/TheLabRenderer/Scripts/ValveCamera.cs
 // For The Lab Renderer's license see THIRD_PARTY_NOTICES.
+// **Only Compatible With Unity 5.4 and above**
+
+#if (UNITY_5_4_OR_NEWER)
 namespace VRTK
 {
     using System;
@@ -16,6 +19,8 @@ namespace VRTK
     /// Adaptive Quality dynamically changes rendering settings to maintain VR framerate while maximizing GPU utilization.
     /// </summary>
     /// <remarks>
+    ///   > **Only Compatible With Unity 5.4 and above**
+    ///
     /// The Adaptive Quality script is attached to the `eye` object within the `[CameraRig]` prefab.
     /// <para>&#160;</para>
     /// There are two goals:
@@ -329,7 +334,7 @@ namespace VRTK
             UpdateMSAALevel();
         }
 
-#endregion
+        #endregion
 
         private void HandleCommandLineArguments()
         {
@@ -379,7 +384,7 @@ namespace VRTK
 
         private void HandleKeyPresses()
         {
-            if (!respondsToKeyboardShortcuts|| !(Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)))
+            if (!respondsToKeyboardShortcuts || !(Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)))
             {
                 return;
             }
@@ -418,7 +423,7 @@ namespace VRTK
             }
         }
 
-#region Render scale methods
+        #region Render scale methods
 
         private void UpdateRenderScaleLevels()
         {
@@ -605,9 +610,9 @@ namespace VRTK
             }
         }
 
-#endregion
+        #endregion
 
-#region Debug visualization methods
+        #region Debug visualization methods
 
         private void CreateOrDestroyDebugVisualization()
         {
@@ -676,9 +681,9 @@ namespace VRTK
             debugVisualizationQuadMaterial.SetInt(ShaderPropertyIDs.LastFrameIsInBudget, lastFrameIsInBudget);
         }
 
-#endregion
+        #endregion
 
-#region Private helper classes
+        #region Private helper classes
 
         private static class CommandLineArguments
         {
@@ -704,6 +709,7 @@ namespace VRTK
             public static readonly int LastFrameIsInBudget = Shader.PropertyToID("_LastFrameIsInBudget");
         }
 
-#endregion
+        #endregion
     }
 }
+#endif

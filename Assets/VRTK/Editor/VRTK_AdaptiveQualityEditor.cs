@@ -1,3 +1,4 @@
+#if (UNITY_5_4_OR_NEWER)
 namespace VRTK
 {
     using System;
@@ -128,3 +129,4 @@ namespace VRTK
         }
     }
 }
+#endif
