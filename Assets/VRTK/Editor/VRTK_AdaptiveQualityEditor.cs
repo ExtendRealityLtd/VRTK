@@ -99,14 +99,14 @@ namespace VRTK
                 }
 
                 adaptiveQuality.overrideRenderScale = EditorGUILayout.Toggle(
-                  Utilities.BuildGUIContent<VRTK_AdaptiveQuality>("overrideRenderScale"),
+                  VRTK_EditorUtilities.BuildGUIContent<VRTK_AdaptiveQuality>("overrideRenderScale"),
                   adaptiveQuality.overrideRenderScale);
 
                 EditorGUI.BeginDisabledGroup(!adaptiveQuality.overrideRenderScale);
                 {
                     adaptiveQuality.overrideRenderScaleLevel =
                       EditorGUILayout.IntSlider(
-                        Utilities.BuildGUIContent<VRTK_AdaptiveQuality>("overrideRenderScaleLevel"),
+                        VRTK_EditorUtilities.BuildGUIContent<VRTK_AdaptiveQuality>("overrideRenderScaleLevel"),
                         adaptiveQuality.overrideRenderScaleLevel,
                         0,
                         maxRenderScaleLevel);
