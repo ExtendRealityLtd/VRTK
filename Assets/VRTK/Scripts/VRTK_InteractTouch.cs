@@ -2,6 +2,7 @@
 namespace VRTK
 {
     using UnityEngine;
+    using System.Collections.Generic;
 
     /// <summary>
     /// Event Payload
@@ -49,9 +50,10 @@ namespace VRTK
         public event ObjectInteractEventHandler ControllerUntouchInteractableObject;
 
         private GameObject touchedObject = null;
-        private GameObject lastTouchedObject = null;
-        private bool updatedHideControllerOnTouch = false;
+        private List<Collider> touchedObjectColliders = new List<Collider>();
+        private List<Collider> touchedObjectActiveColliders = new List<Collider>();
 
+        private bool updatedHideControllerOnTouch = false;
         private VRTK_ControllerEvents controllerEvents;
         private VRTK_ControllerActions controllerActions;
         private GameObject controllerCollisionDetector;
@@ -213,67 +215,109 @@ namespace VRTK
             {
                 found = collider.gameObject;
             }
-            else
+            else if (collider.transform.parent && collider.gameObject.GetComponentInParent<VRTK_InteractableObject>())
             {
                 found = collider.gameObject.GetComponentInParent<VRTK_InteractableObject>().gameObject;
             }
             return found;
         }
 
-        private void OnTriggerEnter(Collider collider)
+        private void AddActiveCollider(Collider collider)
         {
-            if (IsObjectInteractable(collider.gameObject) && (touchedObject == null || !touchedObject.GetComponent<VRTK_InteractableObject>().IsGrabbed()))
+            if (touchedObject != null && !touchedObjectActiveColliders.Contains(collider) && touchedObjectColliders.Contains(collider))
             {
-                lastTouchedObject = GetColliderInteractableObject(collider);
+                touchedObjectActiveColliders.Add(collider);
             }
         }
 
-        private void OnTriggerStay(Collider collider)
+        private void StoreTouchedObjectColliders(Collider collider)
         {
-            if (!enabled)
+            touchedObjectColliders.Clear();
+            touchedObjectActiveColliders.Clear();
+            foreach (var touchedObjectCollider in touchedObject.GetComponentsInChildren<Collider>())
             {
-                return;
+                touchedObjectColliders.Add(touchedObjectCollider);
             }
+            touchedObjectActiveColliders.Add(collider);
+        }
 
-            if (touchedObject != null && touchedObject != lastTouchedObject && touchedObject != collider.gameObject && !touchedObject.GetComponent<VRTK_InteractableObject>().IsGrabbed())
+        private void CheckHideController(VRTK_InteractableObject touchedObjectScript)
+        {
+            updatedHideControllerOnTouch = touchedObjectScript.CheckHideMode(hideControllerOnTouch, touchedObjectScript.hideControllerOnTouch);
+            if (controllerActions.IsControllerVisible() && updatedHideControllerOnTouch)
+            {
+                Invoke("HideController", hideControllerDelay);
+            }
+        }
+
+        private void CheckRumbleController(VRTK_InteractableObject touchedObjectScript)
+        {
+            var rumbleAmount = touchedObjectScript.rumbleOnTouch;
+            if (!rumbleAmount.Equals(Vector2.zero) && !triggerRumble)
+            {
+                triggerRumble = true;
+                controllerActions.TriggerHapticPulse((ushort)rumbleAmount.y, rumbleAmount.x, 0.05f);
+                Invoke("ResetTriggerRumble", rumbleAmount.x);
+            }
+        }
+
+        private void OnTriggerEnter(Collider collider)
+        {
+            AddActiveCollider(collider);
+
+            var colliderInteractableObject = GetColliderInteractableObject(collider);
+            //If the new collider is not part of the existing touched object (and the object isn't being grabbed) then start touching the new object
+            if (touchedObject != null && touchedObject != colliderInteractableObject && !touchedObject.GetComponent<VRTK_InteractableObject>().IsGrabbed())
             {
                 CancelInvoke("ResetTriggerRumble");
                 ResetTriggerRumble();
                 ForceStopTouching();
             }
+        }
 
+        private void OnTriggerStay(Collider collider)
+        {
+            AddActiveCollider(collider);
+
+            var colliderInteractableObject = GetColliderInteractableObject(collider);
             if (touchedObject == null && IsObjectInteractable(collider.gameObject))
             {
-                touchedObject = GetColliderInteractableObject(collider);
-                lastTouchedObject = touchedObject;
-
+                touchedObject = colliderInteractableObject;
                 var touchedObjectScript = touchedObject.GetComponent<VRTK_InteractableObject>();
 
+                //If this controller is not allowed to touch this interactable object then clean up touch and return before initiating a touch.
                 if (!touchedObjectScript.IsValidInteractableController(gameObject, touchedObjectScript.allowedTouchControllers))
                 {
-                    touchedObject = null;
+                    CleanupEndTouch();
                     return;
                 }
 
+                StoreTouchedObjectColliders(collider);
                 CheckButtonOverrides(touchedObjectScript);
 
-                updatedHideControllerOnTouch = touchedObjectScript.CheckHideMode(hideControllerOnTouch, touchedObjectScript.hideControllerOnTouch);
-                OnControllerTouchInteractableObject(SetControllerInteractEvent(touchedObject));
                 touchedObjectScript.ToggleHighlight(true, globalTouchHighlightColor);
+
+                OnControllerTouchInteractableObject(SetControllerInteractEvent(touchedObject));
                 touchedObjectScript.StartTouching(gameObject);
 
-                if (controllerActions.IsControllerVisible() && updatedHideControllerOnTouch)
-                {
-                    Invoke("HideController", hideControllerDelay);
-                }
+                CheckHideController(touchedObjectScript);
+                CheckRumbleController(touchedObjectScript);
+            }
+        }
 
-                var rumbleAmount = touchedObjectScript.rumbleOnTouch;
-                if (!rumbleAmount.Equals(Vector2.zero) && !triggerRumble)
-                {
-                    triggerRumble = true;
-                    controllerActions.TriggerHapticPulse((ushort)rumbleAmount.y, rumbleAmount.x, 0.05f);
-                    Invoke("ResetTriggerRumble", rumbleAmount.x);
-                }
+        private void OnTriggerExit(Collider collider)
+        {
+            if (touchedObjectActiveColliders.Contains(collider))
+            {
+                touchedObjectActiveColliders.Remove(collider);
+            }
+        }
+
+        private void LateUpdate()
+        {
+            if (touchedObject != null && touchedObjectActiveColliders.Count == 0)
+            {
+                StopTouching(touchedObject);
             }
         }
 
@@ -311,41 +355,16 @@ namespace VRTK
             triggerRumble = false;
         }
 
-        private bool IsColliderChildOfTouchedObject(GameObject collider)
+        private void StopTouching(GameObject untouched)
         {
-            if (touchedObject != null && collider.GetComponentInParent<VRTK_InteractableObject>() && collider.GetComponentInParent<VRTK_InteractableObject>().gameObject == touchedObject)
-            {
-                return true;
-            }
-            return false;
-        }
-
-        private void OnTriggerExit(Collider collider)
-        {
-            if (touchedObject != null && (touchedObject == collider.gameObject || IsColliderChildOfTouchedObject(collider.gameObject)))
-            {
-                StopTouching(collider.gameObject);
-            }
-        }
-
-        private void StopTouching(GameObject obj)
-        {
-            if (IsObjectInteractable(obj))
+            if (IsObjectInteractable(untouched))
             {
                 ResetButtonOverrides();
-                GameObject untouched;
-                if (obj.GetComponent<VRTK_InteractableObject>())
-                {
-                    untouched = obj;
-                }
-                else
-                {
-                    untouched = obj.GetComponentInParent<VRTK_InteractableObject>().gameObject;
-                }
-
                 OnControllerUntouchInteractableObject(SetControllerInteractEvent(untouched.gameObject));
+
                 var untouchedObjectScript = untouched.GetComponent<VRTK_InteractableObject>();
                 untouchedObjectScript.StopTouching(gameObject);
+
                 if (!untouchedObjectScript.IsTouched())
                 {
                     untouchedObjectScript.ToggleHighlight(false);
@@ -356,7 +375,15 @@ namespace VRTK
             {
                 controllerActions.ToggleControllerModel(true, touchedObject);
             }
+
+            CleanupEndTouch();
+        }
+
+        private void CleanupEndTouch()
+        {
             touchedObject = null;
+            touchedObjectActiveColliders.Clear();
+            touchedObjectColliders.Clear();
         }
 
         private void DestroyTouchCollider()
