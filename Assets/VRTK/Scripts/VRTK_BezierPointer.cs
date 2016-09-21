@@ -232,7 +232,7 @@ namespace VRTK
             var hasRayHit = Physics.Raycast(pointerRaycast, out collidedWith, calculatedLength, ~layersToIgnore);
 
             //reset if beam not hitting or hitting new target
-            if (!hasRayHit || (pointerContactTarget && pointerContactTarget != collidedWith.transform))
+            if (!hasRayHit || (pointerContactRaycastHit.collider && pointerContactRaycastHit.collider != collidedWith.collider))
             {
                 pointerContactDistance = 0f;
             }
@@ -260,13 +260,14 @@ namespace VRTK
 
             var downRayHit = Physics.Raycast(projectedBeamDownRaycast, out collidedWith, float.PositiveInfinity, ~layersToIgnore);
 
-            if (!downRayHit || (pointerContactTarget && pointerContactTarget != collidedWith.transform))
+            if (!downRayHit || (pointerContactRaycastHit.collider && pointerContactRaycastHit.collider != collidedWith.collider))
             {
-                if (pointerContactTarget != null)
+                if (pointerContactRaycastHit.collider != null)
                 {
                     base.PointerOut();
                 }
                 pointerContactTarget = null;
+                pointerContactRaycastHit = new RaycastHit();
                 contactNormal = Vector3.zero;
                 destinationPosition = projectedBeamDownRaycast.GetPoint(0f);
             }
@@ -274,6 +275,7 @@ namespace VRTK
             if (downRayHit)
             {
                 pointerContactTarget = collidedWith.transform;
+                pointerContactRaycastHit = collidedWith;
                 contactNormal = collidedWith.normal;
                 destinationPosition = projectedBeamDownRaycast.GetPoint(collidedWith.distance);
                 base.PointerIn();
