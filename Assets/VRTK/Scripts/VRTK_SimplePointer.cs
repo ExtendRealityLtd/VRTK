@@ -156,16 +156,17 @@ namespace VRTK
         {
             var actualLength = pointerLength;
 
-            //reset if beam not hitting or hitting new target
-            if (!hasRayHit || (pointerContactTarget && pointerContactTarget != collidedWith.transform))
+            //reset if beam not hitting or hitting new collider
+            if (!hasRayHit || (pointerContactRaycastHit.collider && pointerContactRaycastHit.collider != collidedWith.collider))
             {
-                if (pointerContactTarget != null)
+                if (pointerContactRaycastHit.collider != null)
                 {
                     base.PointerOut();
                 }
 
                 pointerContactDistance = 0f;
                 pointerContactTarget = null;
+                pointerContactRaycastHit = new RaycastHit();
                 destinationPosition = Vector3.zero;
 
                 UpdatePointerMaterial(pointerMissColor);
@@ -176,6 +177,7 @@ namespace VRTK
             {
                 pointerContactDistance = collidedWith.distance;
                 pointerContactTarget = collidedWith.transform;
+                pointerContactRaycastHit = collidedWith;
                 destinationPosition = pointerTip.transform.position;
 
                 UpdatePointerMaterial(pointerHitColor);

@@ -16,7 +16,7 @@
                 {
                     var distance = Vector3.Distance(transform.position, destination.position);
                     var controllerIndex = VRTK_DeviceFinder.GetControllerIndex(controller.gameObject);
-                    OnDestinationMarkerSet(SetDestinationMarkerEvent(distance, destination, destination.position, controllerIndex));
+                    OnDestinationMarkerSet(SetDestinationMarkerEvent(distance, destination, new RaycastHit(), destination.position, controllerIndex));
                 }
                 lastUsePressedState = controller.usePressed;
             }

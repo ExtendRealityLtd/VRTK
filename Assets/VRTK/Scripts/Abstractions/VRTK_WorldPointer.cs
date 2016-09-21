@@ -54,6 +54,7 @@ namespace VRTK
         protected Vector3 destinationPosition;
         protected float pointerContactDistance = 0f;
         protected Transform pointerContactTarget = null;
+        protected RaycastHit pointerContactRaycastHit = new RaycastHit();
         protected uint controllerIndex;
         protected bool playAreaCursorCollided = false;
 
@@ -218,7 +219,7 @@ namespace VRTK
                 return;
             }
 
-            OnDestinationMarkerEnter(SetDestinationMarkerEvent(pointerContactDistance, pointerContactTarget, destinationPosition, controllerIndex));
+            OnDestinationMarkerEnter(SetDestinationMarkerEvent(pointerContactDistance, pointerContactTarget, pointerContactRaycastHit, destinationPosition, controllerIndex));
             StartUseAction(pointerContactTarget);
         }
 
@@ -229,7 +230,7 @@ namespace VRTK
                 return;
             }
 
-            OnDestinationMarkerExit(SetDestinationMarkerEvent(pointerContactDistance, pointerContactTarget, destinationPosition, controllerIndex));
+            OnDestinationMarkerExit(SetDestinationMarkerEvent(pointerContactDistance, pointerContactTarget, pointerContactRaycastHit, destinationPosition, controllerIndex));
             StopUseAction();
         }
 
@@ -263,7 +264,7 @@ namespace VRTK
 
             if (!playAreaCursorCollided && !PointerActivatesUseAction(interactableObject))
             {
-                OnDestinationMarkerSet(SetDestinationMarkerEvent(pointerContactDistance, pointerContactTarget, destinationPosition, controllerIndex));
+                OnDestinationMarkerSet(SetDestinationMarkerEvent(pointerContactDistance, pointerContactTarget, pointerContactRaycastHit, destinationPosition, controllerIndex));
             }
 
             if (!isActive)

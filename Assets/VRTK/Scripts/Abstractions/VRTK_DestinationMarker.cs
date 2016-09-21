@@ -8,6 +8,7 @@ namespace VRTK
     /// </summary>
     /// <param name="distance">The distance between the origin and the collided destination.</param>
     /// <param name="target">The Transform of the collided destination object.</param>
+    /// <param name="raycastHit">The optional RaycastHit generated from when the ray collided.</param>
     /// <param name="destinationPosition">The world position of the destination marker.</param>
     /// <param name="enableTeleport">Whether the destination set event should trigger teleport.</param>
     /// <param name="controllerIndex">The optional index of the controller emitting the beam.</param>
@@ -15,6 +16,7 @@ namespace VRTK
     {
         public float distance;
         public Transform target;
+        public RaycastHit raycastHit;
         public Vector3 destinationPosition;
         public bool enableTeleport;
         public uint controllerIndex;
@@ -120,12 +122,13 @@ namespace VRTK
             VRTK_ObjectCache.registeredDestinationMarkers.Remove(this);
         }
 
-        protected DestinationMarkerEventArgs SetDestinationMarkerEvent(float distance, Transform target, Vector3 position, uint controllerIndex)
+        protected DestinationMarkerEventArgs SetDestinationMarkerEvent(float distance, Transform target, RaycastHit raycastHit, Vector3 position, uint controllerIndex)
         {
             DestinationMarkerEventArgs e;
             e.controllerIndex = controllerIndex;
             e.distance = distance;
             e.target = target;
+            e.raycastHit = raycastHit;
             e.destinationPosition = position;
             e.enableTeleport = enableTeleport;
             return e;
