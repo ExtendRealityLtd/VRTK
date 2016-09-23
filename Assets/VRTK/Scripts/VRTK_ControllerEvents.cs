@@ -579,7 +579,8 @@ namespace VRTK
         /// The GetMagnitude method is used to return the current magnitude of the physical game controller. This can be useful for determining the speed at which the controller is being swung.
         /// </summary>
         /// <returns>A float illustrating the length of the vector based on current real world physical controller velocity.</returns>
-        public float GetMagnitude() {
+        public float GetMagnitude()
+        {
             SetVelocity();
             return controllerMagnitude;
         }
