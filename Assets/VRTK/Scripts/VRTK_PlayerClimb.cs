@@ -83,7 +83,6 @@ namespace VRTK
 
         private void Awake()
         {
-            // Required Component: VRTK_PlayerPresence
             playerPresence = GetComponent<VRTK_PlayerPresence>();
             if (useGravity)
             {
@@ -215,6 +214,31 @@ namespace VRTK
             headsetColliding = false;
         }
 
+        // Should the object physics fall down, or teleport up
+        private bool ShouldEnablePhysics()
+        {
+            bool enablePhysics = true;
+
+            Transform headset = VRTK_DeviceFinder.HeadsetCamera();
+
+            if (headset != null)
+            {
+                Ray ray = new Ray(headset.position, -transform.up);
+                RaycastHit rayCollidedWith;
+                bool rayHit = Physics.Raycast(ray, out rayCollidedWith);
+
+                // if the in game floor is already at or above our playspace floor, 
+                // just let VRTK_HeightAdjustTeleport teleport us up
+                if (rayHit && rayCollidedWith.point.y > transform.position.y)
+                {
+                    enablePhysics = false;
+                }
+
+            }
+
+            return enablePhysics;
+        }
+
         private void Ungrab(bool carryMomentum, uint controllerIndex, GameObject target)
         {
             OnPlayerClimbEnded(SetPlayerClimbEvent(controllerIndex, target));
@@ -246,7 +270,11 @@ namespace VRTK
                     }
                 }
 
-                playerPresence.StartPhysicsFall(velocity);
+                // check if we should teleport up or physics fall down
+                if (ShouldEnablePhysics())
+                {
+                    playerPresence.StartPhysicsFall(velocity);
+                }
             }
             climbingObject = null;
         }

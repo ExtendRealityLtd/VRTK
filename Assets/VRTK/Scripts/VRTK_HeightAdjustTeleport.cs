@@ -105,6 +105,7 @@ namespace VRTK
         protected void OnClimbEnded(object sender, PlayerClimbEventArgs e)
         {
             isClimbing = false;
+            previousFloorY = float.MaxValue; // insure a height adjustment can trigger on climb release
         }
 
         protected override Vector3 GetNewPosition(Vector3 tipPosition, Transform target)
