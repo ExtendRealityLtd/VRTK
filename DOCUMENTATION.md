@@ -615,6 +615,7 @@ This directory contains all of the toolkit scripts that add VR functionality to 
  * [Headset Collision Fade](#headset-collision-fade-vrtk_headsetcollisionfade)
  * [Teleport Disable On Headset Collision](#teleport-disable-on-headset-collision-vrtk_teleportdisableonheadsetcollision)
  * [Player Presence](#player-presence-vrtk_playerpresence)
+ * [Hip Tracking](#hip-tracking-vrtk_hip_tracking)
  * [Touchpad Walking](#touchpad-walking-vrtk_touchpadwalking)
  * [Room Extender](#room-extender-vrtk_roomextender)
  * [Interactable Object](#interactable-object-vrtk_interactableobject)
@@ -1773,6 +1774,22 @@ The StopPhysicsFall method ends the physics based fall state, disables physics a
 ### Example
 
 `VRTK/Examples/017_CameraRig_TouchpadWalking` has a collection of walls and slopes that can be traversed by the user with the touchpad but the user cannot pass through the objects as they are collidable and the rigidbody physics won't allow the intersection to occur.
+
+---
+
+## Hip Tracking (VRTK_Hip_Tracking)
+
+### Overview
+
+Hip Tracking attempts to reasonably track hip position in the absence of a hip position sensor.
+
+The Hip Tracking script is placed on an empty GameObject which will be positioned at the estimated hip position.
+
+### Inspector Parameters
+
+ * **Head Offset:** Distance underneath Player Head for hips to reside.
+ * **Head Override:** Optional Transform to use as the Head Object for calculating hip position. If none is given one will try to be found in the scene.
+ * **Reference Up:** Optional Transform to use for calculating which way is 'Up' relative to the player for hip positioning.
 
 ---
 
