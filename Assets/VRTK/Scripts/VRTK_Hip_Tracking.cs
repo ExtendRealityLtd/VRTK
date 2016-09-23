@@ -18,7 +18,7 @@ namespace VRTK
 		[Header ("Optional")]
 		[Tooltip("Optional Transform to use as the Head Object for calculating hip position. If none is given one will try to be found in the scene.")]
 		public Transform headOverride;
-		[Tooltip("Optional Transform to use for calculating which way is "Up" relative to the player for hip positioning.")]
+		[Tooltip("Optional Transform to use for calculating which way is 'Up' relative to the player for hip positioning.")]
 		public Transform ReferenceUp;
 		private Transform playerHead;
 
