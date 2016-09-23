@@ -37,6 +37,8 @@ namespace VRTK
         public float grabPrecognition = 0f;
         [Tooltip("An amount to multiply the velocity of any objects being thrown. This can be useful when scaling up the `[CameraRig]` to simulate being able to throw items further.")]
         public float throwMultiplier = 1f;
+        [Tooltip("Automatically scale the throw velocity up and down to match the scale of the `[CameraRig]`.")]
+        public bool throwScalesWithPlayer = true;
         [Tooltip("If this is checked and the controller is not touching an Interactable Object when the grab button is pressed then a rigid body is added to the controller to allow the controller to push other rigid body objects around.")]
         public bool createRigidBodyWhenNotTouching = false;
 
@@ -323,7 +325,9 @@ namespace VRTK
 
             if (origin != null)
             {
-                rb.velocity = origin.TransformDirection(velocity) * (throwMultiplier * objectThrowMultiplier);
+                Vector3 worldSpaceVelocity = throwScalesWithPlayer ? origin.TransformVector(velocity) : origin.TransformDirection(velocity);
+
+                rb.velocity = worldSpaceVelocity * (throwMultiplier * objectThrowMultiplier);
                 rb.angularVelocity = origin.TransformDirection(angularVelocity);
             }
             else
