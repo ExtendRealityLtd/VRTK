@@ -274,6 +274,7 @@ Adding the `VRTK_DestinationMarker_UnityEvents` component to `VRTK_DestinationMa
 
  * `float distance` - The distance between the origin and the collided destination.
  * `Transform target` - The Transform of the collided destination object.
+ * `RaycastHit raycastHit` - The optional RaycastHit generated from when the ray collided.
  * `Vector3 destinationPosition` - The world position of the destination marker.
  * `bool enableTeleport` - Whether the destination set event should trigger teleport.
  * `uint controllerIndex` - The optional index of the controller emitting the beam.
@@ -1453,6 +1454,7 @@ Adding the `VRTK_BasicTeleport_UnityEvents` component to `VRTK_BasicTeleport` ob
 
  * `float distance` - The distance between the origin and the collided destination.
  * `Transform target` - The Transform of the collided destination object.
+ * `RaycastHit raycastHit` - The optional RaycastHit generated from when the ray collided.
  * `Vector3 destinationPosition` - The world position of the destination marker.
  * `bool enableTeleport` - Whether the destination set event should trigger teleport.
  * `uint controllerIndex` - The optional index of the controller emitting the beam.
