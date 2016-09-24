@@ -97,7 +97,6 @@ namespace VRTK
         private ushort maxHapticVibration = 3999;
         private bool controllerHighlighted = false;
         private Dictionary<string, Transform> cachedElements;
-        private VRTK_BaseHighlighter objectHighlighter;
         private Dictionary<string, object> highlighterOptions;
 
         public virtual void OnControllerModelVisible(ControllerActionsEventArgs e)
