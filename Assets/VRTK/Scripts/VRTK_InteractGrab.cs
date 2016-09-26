@@ -323,7 +323,7 @@ namespace VRTK
 
             if (origin != null)
             {
-                rb.velocity = origin.TransformDirection(velocity) * (throwMultiplier * objectThrowMultiplier);
+                rb.velocity = origin.TransformVector(velocity) * (throwMultiplier * objectThrowMultiplier);
                 rb.angularVelocity = origin.TransformDirection(angularVelocity);
             }
             else
