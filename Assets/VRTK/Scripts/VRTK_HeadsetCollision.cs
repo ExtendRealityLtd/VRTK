@@ -49,6 +49,7 @@ namespace VRTK
         public event HeadsetCollisionEventHandler HeadsetCollisionEnded;
 
         private bool headsetColliding = false;
+        private Collider collidingWith = null;
 
         public virtual void OnHeadsetCollisionDetect(HeadsetCollisionEventArgs e)
         {
@@ -92,8 +93,8 @@ namespace VRTK
 
         private void OnDisable()
         {
+            EndCollision(collidingWith);
             VRTK_ObjectCache.registeredHeadsetCollider = null;
-            headsetColliding = false;
             Destroy(gameObject.GetComponent<BoxCollider>());
             Destroy(gameObject.GetComponent<Rigidbody>());
         }
@@ -116,15 +117,30 @@ namespace VRTK
             if (enabled && !collider.GetComponent<VRTK_PlayerObject>() && ValidTarget(collider.transform))
             {
                 headsetColliding = true;
+                collidingWith = collider;
                 OnHeadsetCollisionDetect(SetHeadsetCollisionEvent(collider, transform));
             }
         }
 
         private void OnTriggerExit(Collider collider)
         {
-            if (!collider.GetComponent<VRTK_PlayerObject>())
+            EndCollision(collider);
+        }
+
+        private void Update()
+        {
+            if (headsetColliding && (!collidingWith || !collidingWith.gameObject.activeInHierarchy))
+            {
+                EndCollision(collidingWith);
+            }
+        }
+
+        private void EndCollision(Collider collider)
+        {
+            if (!collider || !collider.GetComponent<VRTK_PlayerObject>())
             {
                 headsetColliding = false;
+                collidingWith = null;
                 OnHeadsetCollisionEnded(SetHeadsetCollisionEvent(collider, transform));
             }
         }
