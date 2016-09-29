@@ -291,8 +291,6 @@ namespace VRTK
             {
                 OnValidate();
             }
-
-            CreateOrDestroyDebugVisualization();
         }
 
         private void OnDisable()
@@ -308,14 +306,13 @@ namespace VRTK
             maximumRenderTargetDimension = Mathf.Max(2, maximumRenderTargetDimension);
             renderScaleFillRateStepSizeInPercent = Mathf.Max(1, renderScaleFillRateStepSizeInPercent);
             msaaLevel = msaaLevel == 1 ? 0 : Mathf.Clamp(Mathf.ClosestPowerOfTwo(msaaLevel), 0, 8);
-
-            CreateOrDestroyDebugVisualization();
         }
 
         private void Update()
         {
             HandleKeyPresses();
             UpdateRenderScaleLevels();
+            CreateOrDestroyDebugVisualization();
             UpdateDebugVisualization();
         }
 
@@ -373,7 +370,6 @@ namespace VRTK
                         break;
                     case CommandLineArguments.DrawDebugVisualization:
                         drawDebugVisualization = true;
-                        CreateOrDestroyDebugVisualization();
                         break;
                     case CommandLineArguments.MSAALevel:
                         msaaLevel = int.Parse(nextArgument);
@@ -393,7 +389,6 @@ namespace VRTK
             if (Input.GetKeyDown(KeyCode.F1))
             {
                 drawDebugVisualization = !drawDebugVisualization;
-                CreateOrDestroyDebugVisualization();
             }
 
             // Toggle usage of override render scale on Shift+F2
@@ -643,7 +638,9 @@ namespace VRTK
                         },
                     triangles = new[] { 0, 1, 2, 0, 2, 3 }
                 };
+#if !UNITY_5_5_OR_NEWER
                 mesh.Optimize();
+#endif
                 mesh.UploadMeshData(true);
 
                 debugVisualizationQuad = new GameObject("AdaptiveQualityDebugVisualizationQuad");
