@@ -5,7 +5,7 @@
     using System;
     using System.Collections.Generic;
 
-    [CustomEditor(typeof(VRTK_InteractableObject), true)]
+    [CustomEditor(typeof(VRTK_InteractableObject), true), CanEditMultipleObjects]
     public class VRTK_InteractableObjectEditor : Editor
     {
         private bool viewTouch = true;
