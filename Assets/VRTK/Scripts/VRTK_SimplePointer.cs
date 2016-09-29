@@ -149,7 +149,7 @@ namespace VRTK
             pointer.transform.localPosition = new Vector3(0f, 0f, beamPosition);
             pointerTip.transform.localPosition = new Vector3(0f, 0f, setLength - (pointerTip.transform.localScale.z / 2));
             pointerHolder.transform.localRotation = Quaternion.identity;
-            base.SetPlayAreaCursorTransform(pointerTip.transform.position);
+            base.UpdateDependencies(pointerTip.transform.position);
         }
 
         private float GetPointerBeamLength(bool hasRayHit, RaycastHit collidedWith)
