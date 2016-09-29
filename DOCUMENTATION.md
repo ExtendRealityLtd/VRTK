@@ -332,11 +332,6 @@ The play area collider does not work well with terrains as they are uneven and c
 
  * **Controller:** The controller that will be used to toggle the pointer. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.
  * **Pointer Material:** The material to use on the rendered version of the pointer. If no material is selected then the default `WorldPointer` material will be used.
- * **Show Play Area Cursor:** If this is enabled then the play area boundaries are displayed at the tip of the pointer beam in the current pointer colour.
- * **Play Area Cursor Dimensions:** Determines the size of the play area cursor and collider. If the values are left as zero then the Play Area Cursor will be sized to the calibrated Play Area space.
- * **Handle Play Area Cursor Collisions:** If this is ticked then if the play area cursor is colliding with any other object then the pointer colour will change to the `Pointer Miss Color` and the `WorldPointerDestinationSet` event will not be triggered, which will prevent teleporting into areas where the play area will collide.
- * **Ignore Target With Tag Or Class:** A string that specifies an object Tag or the name of a Script attached to an object and notifies the play area cursor to ignore collisions with the object.
- * **Target Tag Or Script List Policy:** A specified VRTK_TagOrScriptPolicyList to use to determine whether the play area cursor collisions will be acted upon. If a list is provided then the 'Ignore Target With Tag Or Class' parameter will be ignored.
  * **Pointer Visibility:** Determines when the pointer beam should be displayed.
  * **Hold Button To Activate:** If this is checked then the pointer beam will be activated on first press of the pointer alias button and will stay active until the pointer alias button is pressed again. The destination set event is emitted when the beam is deactivated on the second button press.
  * **Activate Delay:** The time in seconds to delay the pointer beam being able to be active again. Useful for preventing constant teleportation.
@@ -349,17 +344,6 @@ The play area collider does not work well with terrains as they are uneven and c
   * `Always_Off` - Ensures the pointer beam is never visible but the destination point is still set and pressing the Pointer button on the controller still initiates the destination set event.
 
 ### Class Methods
-
-#### setPlayAreaCursorCollision/1
-
-  > `public virtual void setPlayAreaCursorCollision(bool state)`
-
-  * Parameters
-   * `bool state` - The state of whether to check for play area collisions.
-  * Returns
-   * _none_
-
-The setPlayAreaCursorCollision method determines whether play area collisions should be taken into consideration with the play area cursor.
 
 #### IsActive/0
 
@@ -607,6 +591,7 @@ This directory contains all of the toolkit scripts that add VR functionality to 
  * [Device Finder](#device-finder-vrtk_devicefinder)
  * [Simple Pointer](#simple-pointer-vrtk_simplepointer)
  * [Bezier Pointer](#bezier-pointer-vrtk_bezierpointer)
+ * [Play Area Cursor](#play-area-cursor-vrtk_playareacursor)
  * [UI Pointer](#ui-pointer-vrtk_uipointer)
  * [Basic Teleport](#basic-teleport-vrtk_basicteleport)
  * [Height Adjust Teleport](#height-adjust-teleport-vrtk_heightadjustteleport)
@@ -1329,9 +1314,94 @@ The Bezier Pointer script can be attached to a Controller object within the `[Ca
 
 `VRTK/Examples/009_Controller_BezierPointer` is used in conjunction with the Height Adjust Teleporter shows how it is possible to traverse different height objects using the curved pointer without needing to see the top of the object.
 
-`VRTK/Examples/012_Controller_PointerWithAreaCollision` shows how a Bezier Pointer with the Play Area Cursor and Collision Detection enabled can be used to traverse a game area but not allow teleporting into areas where the walls or other objects would fall into the play area space enabling the user to enter walls.
-
 `VRTK/Examples/036_Controller_CustomCompoundPointer' shows how to display an object (a teleport beam) only if the teleport location is valid, and can create an animated trail along the tracer curve.
+
+---
+
+## Play Area Cursor (VRTK_PlayAreaCursor)
+
+### Overview
+
+The Play Area Cursor is used in conjunction with a World Pointer script and displays a representation of the play area where the pointer cursor hits.
+
+### Inspector Parameters
+
+ * **Play Area Cursor Dimensions:** Determines the size of the play area cursor and collider. If the values are left as zero then the Play Area Cursor will be sized to the calibrated Play Area space.
+ * **Handle Play Area Cursor Collisions:** If this is ticked then if the play area cursor is colliding with any other object then the pointer colour will change to the `Pointer Miss Color` and the `WorldPointerDestinationSet` event will not be triggered, which will prevent teleporting into areas where the play area will collide.
+ * **Ignore Target With Tag Or Class:** A string that specifies an object Tag or the name of a Script attached to an object and notifies the play area cursor to ignore collisions with the object.
+ * **Target Tag Or Script List Policy:** A specified VRTK_TagOrScriptPolicyList to use to determine whether the play area cursor collisions will be acted upon. If a list is provided then the 'Ignore Target With Tag Or Class' parameter will be ignored.
+
+### Class Methods
+
+#### HasCollided/0
+
+  > `public virtual bool HasCollided()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `bool` - A bool to determine the state of collision. `true` if the play area is colliding with a valid object and `false` if not.
+
+The HasCollided method returns the state of whether the play area cursor has currently collided with another valid object.
+
+#### SetHeadsetPositionCompensation/1
+
+  > `public virtual void SetHeadsetPositionCompensation(bool state)`
+
+  * Parameters
+   * `bool state` - The state of whether to take the position of the headset within the play area into account when setting the destination marker.
+  * Returns
+   * _none_
+
+The SetHeadsetPositionCompensation method determines whether the offset position of the headset from the centre of the play area should be taken into consideration when setting the destination marker. If `true` then it will take the offset position into consideration.
+
+#### SetPlayAreaCursorCollision/1
+
+  > `public virtual void SetPlayAreaCursorCollision(bool state)`
+
+  * Parameters
+   * `bool state` - The state of whether to check for play area collisions.
+  * Returns
+   * _none_
+
+The SetPlayAreaCursorCollision method determines whether play area collisions should be taken into consideration with the play area cursor.
+
+#### SetMaterial/1
+
+  > `public virtual void SetMaterial(Material material)`
+
+  * Parameters
+   * `Material material` - The material to update the play area cursor to.
+  * Returns
+   * _none_
+
+The SetMaterial method sets the current material on the play area cursor.
+
+#### SetPlayAreaCursorTransform/1
+
+  > `public virtual void SetPlayAreaCursorTransform(Vector3 location)`
+
+  * Parameters
+   * `Vector3 location` - The location where to draw the play area cursor.
+  * Returns
+   * _none_
+
+The SetPlayAreaCursorTransform method is used to update the position of the play area cursor in world space to the given location.
+
+#### ToggleState/1
+
+  > `public virtual void ToggleState(bool state)`
+
+  * Parameters
+   * `bool state` - The state of whether to show or hide the play area cursor.
+  * Returns
+   * _none_
+
+The ToggleState method enables or disables the visibility of the play area cursor.
+
+### Example
+
+`VRTK/Examples/012_Controller_PointerWithAreaCollision` shows how a Bezier Pointer with the Play Area Cursor and Collision Detection enabled can be used to traverse a game area but not allow teleporting into areas where the walls or other objects would fall into the play area space enabling the user to enter walls.
 
 ---
 

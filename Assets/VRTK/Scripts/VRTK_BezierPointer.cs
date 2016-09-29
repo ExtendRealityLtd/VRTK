@@ -16,8 +16,6 @@ namespace VRTK
     /// <example>
     /// `VRTK/Examples/009_Controller_BezierPointer` is used in conjunction with the Height Adjust Teleporter shows how it is possible to traverse different height objects using the curved pointer without needing to see the top of the object.
     ///
-    /// `VRTK/Examples/012_Controller_PointerWithAreaCollision` shows how a Bezier Pointer with the Play Area Cursor and Collision Detection enabled can be used to traverse a game area but not allow teleporting into areas where the walls or other objects would fall into the play area space enabling the user to enter walls.
-    ///
     /// `VRTK/Examples/036_Controller_CustomCompoundPointer' shows how to display an object (a teleport beam) only if the teleport location is valid, and can create an animated trail along the tracer curve.
     /// </example>
     public class VRTK_BezierPointer : VRTK_WorldPointer
@@ -204,9 +202,8 @@ namespace VRTK
         private void TogglePointerCursor(bool state)
         {
             var pointerCursorState = (showPointerCursor && state ? showPointerCursor : false);
-            var playAreaCursorState = (showPlayAreaCursor && state ? showPlayAreaCursor : false);
             pointerCursor.gameObject.SetActive(pointerCursorState);
-            base.TogglePointer(playAreaCursorState);
+            base.TogglePointer(state);
         }
 
         private Vector3 ProjectForwardBeam()
@@ -293,7 +290,7 @@ namespace VRTK
                 {
                     pointerCursor.transform.rotation = Quaternion.FromToRotation(Vector3.up, contactNormal);
                 }
-                base.SetPlayAreaCursorTransform(pointerCursor.transform.position);
+                base.UpdateDependencies(pointerCursor.transform.position);
                 UpdatePointerMaterial(pointerHitColor);
                 if (validTeleportLocationInstance != null)
                 {
