@@ -437,6 +437,18 @@ namespace VRTK
             return IsButtonPressed(index, ButtonPressTypes.TouchUp, SteamVR_Controller.ButtonMask.ApplicationMenu);
         }
 
+        [RuntimeInitializeOnLoadMethod]
+        private static void Initialise()
+        {
+            SteamVR_Utils.Event.Listen("TrackedDeviceRoleChanged", OnTrackedDeviceRoleChanged);
+        }
+
+        private static void OnTrackedDeviceRoleChanged(params object[] args)
+        {
+            cachedControllerManager = null;
+            VRTK_ObjectCache.trackedControllers.Clear();
+        }
+
         private static SteamVR_ControllerManager GetControllerManager()
         {
             if (cachedControllerManager == null)
