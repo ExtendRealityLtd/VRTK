@@ -158,5 +158,16 @@
 
             return objectHighlighter;
         }
+
+        public static Color ColorDarken(Color color, float percent)
+        {
+            return new Color(ColorPercent(color.r, percent), ColorPercent(color.g, percent), ColorPercent(color.b, percent), color.a);
+        }
+
+        public static float ColorPercent(float value, float percent)
+        {
+            percent = Mathf.Clamp(percent, 0f, 100f);
+            return (percent == 0f ? value : (value - (percent / 100f)));
+        }
     }
 }

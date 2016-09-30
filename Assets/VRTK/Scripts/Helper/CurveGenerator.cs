@@ -70,7 +70,7 @@ namespace VRTK
         private bool customTracer;
         private bool rescalePointerTracer;
 
-        public void Create(int setFrequency, float radius, GameObject tracer, bool rescaleTracer=false)
+        public void Create(int setFrequency, float radius, GameObject tracer, bool rescaleTracer = false)
         {
             float circleSize = radius / 8;
 
@@ -88,7 +88,7 @@ namespace VRTK
             rescalePointerTracer = rescaleTracer;
         }
 
-        public void SetPoints(Vector3[] controlPoints, Material material)
+        public void SetPoints(Vector3[] controlPoints, Material material, Color color)
         {
             points = controlPoints;
             modes = new BezierControlPointMode[]
@@ -96,7 +96,7 @@ namespace VRTK
                 BezierControlPointMode.Free,
                 BezierControlPointMode.Free
             };
-            SetObjects(material);
+            SetObjects(material, color);
         }
 
         public void TogglePoints(bool state)
@@ -259,7 +259,7 @@ namespace VRTK
             return transform.TransformPoint(Bezier.GetPoint(points[i], points[i + 1], points[i + 2], points[i + 3], t));
         }
 
-        private void SetObjects(Material material)
+        private void SetObjects(Material material, Color color)
         {
             float stepSize = frequency * 1;
             if (Loop || stepSize == 1)
@@ -278,8 +278,7 @@ namespace VRTK
                     items[f].SetActive(false);
                     continue;
                 }
-                setMeshMaterial(items[f], material);
-                setSkinnedMeshMaterial(items[f], material);
+                setMaterial(items[f], material, color);
 
                 Vector3 position = GetPoint(f * stepSize);
                 items[f].transform.position = position;
@@ -295,26 +294,36 @@ namespace VRTK
                     if (rescalePointerTracer)
                     {
                         Vector3 scl = items[f].transform.localScale;
-                        scl.z = offset.magnitude/2f; // (assuming a center-based scaling)
+                        scl.z = offset.magnitude / 2f; // (assuming a center-based scaling)
                         items[f].transform.localScale = scl;
                     }
                 }
             }
         }
 
-        private void setMeshMaterial(GameObject item, Material material)
+        private void setMaterial(GameObject item, Material material, Color color)
         {
-            foreach (MeshRenderer itemRenderer in item.GetComponentsInChildren<MeshRenderer>())
+            foreach (Renderer mr in item.GetComponentsInChildren<Renderer>())
             {
-                itemRenderer.material = material;
-            }
-        }
+                if (material != null)
+                {
+                    mr.material = material;
+                }
 
-        private void setSkinnedMeshMaterial(GameObject item, Material material)
-        {
-            foreach (SkinnedMeshRenderer itemRenderer in item.GetComponentsInChildren<SkinnedMeshRenderer>())
-            {
-                itemRenderer.material = material;
+                if (mr.material)
+                {
+                    mr.material.EnableKeyword("_EMISSION");
+
+                    if (mr.material.HasProperty("_Color"))
+                    {
+                        mr.material.color = color;
+                    }
+
+                    if (mr.material.HasProperty("_EmissionColor"))
+                    {
+                        mr.material.SetColor("_EmissionColor", Utilities.ColorDarken(color, 50));
+                    }
+                }
             }
         }
     }

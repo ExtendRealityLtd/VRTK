@@ -136,7 +136,7 @@ namespace VRTK.Highlighters
                             material.color = color;
                             if (material.HasProperty("_EmissionColor"))
                             {
-                                material.SetColor("_EmissionColor", Darken(color, emissionDarken));
+                                material.SetColor("_EmissionColor", Utilities.ColorDarken(color, emissionDarken));
                             }
                         }
                     }
@@ -156,21 +156,10 @@ namespace VRTK.Highlighters
                 }
                 if (material.HasProperty("_EmissionColor"))
                 {
-                    material.SetColor("_EmissionColor", Color.Lerp(startColor, Darken(endColor, emissionDarken), (elapsedTime / duration)));
+                    material.SetColor("_EmissionColor", Color.Lerp(startColor, Utilities.ColorDarken(endColor, emissionDarken), (elapsedTime / duration)));
                 }
                 yield return null;
             }
-        }
-
-        private Color Darken(Color color, float percent)
-        {
-            return new Color(ColorPercent(color.r, percent), ColorPercent(color.g, percent), ColorPercent(color.b, percent), color.a);
-        }
-
-        private float ColorPercent(float value, float percent)
-        {
-            percent = Mathf.Clamp(percent, 0f, 100f);
-            return (percent == 0f ? value : (value - (percent / 100f)));
         }
     }
 }

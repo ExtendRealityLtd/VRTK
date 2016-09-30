@@ -26,6 +26,7 @@ namespace VRTK
             Always_Off
         }
 
+        [Header("Generic Pointer Settings", order = 2)]
         [Tooltip("The controller that will be used to toggle the pointer. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.")]
         public VRTK_ControllerEvents controller = null;
         [Tooltip("The material to use on the rendered version of the pointer. If no material is selected then the default `WorldPointer` material will be used.")]
@@ -40,6 +41,8 @@ namespace VRTK
         public bool holdButtonToActivate = true;
         [Tooltip("The time in seconds to delay the pointer beam being able to be active again. Useful for preventing constant teleportation.")]
         public float activateDelay = 0f;
+        [Tooltip("The layers to ignore when raycasting.")]
+        public LayerMask layersToIgnore = Physics.IgnoreRaycastLayer;
 
         protected Vector3 destinationPosition;
         protected float pointerContactDistance = 0f;
@@ -47,6 +50,7 @@ namespace VRTK
         protected RaycastHit pointerContactRaycastHit = new RaycastHit();
         protected uint controllerIndex;
         protected VRTK_PlayAreaCursor playAreaCursor;
+        protected Color currentPointerColor;
 
         private bool isActive;
         private bool destinationSetActive;
@@ -95,13 +99,11 @@ namespace VRTK
             {
                 controller = GetComponent<VRTK_ControllerEvents>();
             }
-
             if (controller == null)
             {
                 Debug.LogError("VRTK_WorldPointer requires a Controller that has the VRTK_ControllerEvents script attached to it");
                 return;
             }
-
             Utilities.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.Pointer);
         }
 
@@ -238,11 +240,32 @@ namespace VRTK
             }
         }
 
-        protected virtual void SetPointerMaterial()
+        protected virtual void ChangeMaterialColor(GameObject obj, Color color)
+        {
+            foreach (Renderer mr in obj.GetComponentsInChildren<Renderer>())
+            {
+                if (mr.material)
+                {
+                    mr.material.EnableKeyword("_EMISSION");
+
+                    if (mr.material.HasProperty("_Color"))
+                    {
+                        mr.material.color = color;
+                    }
+
+                    if (mr.material.HasProperty("_EmissionColor"))
+                    {
+                        mr.material.SetColor("_EmissionColor", Utilities.ColorDarken(color, 50));
+                    }
+                }
+            }
+        }
+
+        protected virtual void SetPointerMaterial(Color color)
         {
             if (playAreaCursor)
             {
-                playAreaCursor.SetMaterial(pointerMaterial);
+                playAreaCursor.SetMaterialColor(color);
             }
         }
 
@@ -252,8 +275,8 @@ namespace VRTK
             {
                 color = pointerMissColor;
             }
-            pointerMaterial.color = color;
-            SetPointerMaterial();
+            currentPointerColor = color;
+            SetPointerMaterial(color);
         }
 
         protected virtual bool ValidDestination(Transform target, Vector3 destinationPosition)

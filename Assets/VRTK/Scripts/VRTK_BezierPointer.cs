@@ -20,38 +20,36 @@ namespace VRTK
     /// </example>
     public class VRTK_BezierPointer : VRTK_WorldPointer
     {
+        [Header("Bezier Pointer Settings", order = 3)]
         [Tooltip("The length of the projected forward pointer beam, this is basically the distance able to point from the controller position.")]
         public float pointerLength = 10f;
         [Tooltip("The number of items to render in the beam bezier curve. A high number here will most likely have a negative impact of game performance due to large number of rendered objects.")]
         public int pointerDensity = 10;
+        [Tooltip("The amount of height offset to apply to the projected beam to generate a smoother curve even when the beam is pointing straight.")]
+        public float beamCurveOffset = 1f;
+        [Tooltip("The maximum angle in degrees of the controller before the beam curve height is restricted. A lower angle setting will prevent the beam being projected high into the sky and curving back down.")]
+        [Range(1, 100)]
+        public float beamHeightLimitAngle = 100f;
+        [Tooltip("Rescale each pointer tracer element according to the length of the Bezier curve.")]
+        public bool rescalePointerTracer = false;
         [Tooltip("A cursor is displayed on the ground at the location the beam ends at, it is useful to see what height the beam end location is, however it can be turned off by toggling this.")]
         public bool showPointerCursor = true;
         [Tooltip("The size of the ground pointer cursor. This number also affects the size of the objects in the bezier curve beam. The larger the radius, the larger the objects will be.")]
         public float pointerCursorRadius = 0.5f;
         [Tooltip("The pointer cursor will be rotated to match the angle of the target surface if this is true, if it is false then the pointer cursor will always be horizontal.")]
         public bool pointerCursorMatchTargetRotation = false;
-        [Tooltip("The amount of height offset to apply to the projected beam to generate a smoother curve even when the beam is pointing straight.")]
-        public float beamCurveOffset = 1f;
-        [Tooltip("The maximum angle in degrees of the controller before the beam curve height is restricted. A lower angle setting will prevent the beam being projected high into the sky and curving back down.")]
-        [Range(1, 100)]
-        public float beamHeightLimitAngle = 100f;
+        [Header("Custom Appearance Settings", order = 4)]
         [Tooltip("A custom Game Object can be applied here to use instead of the default sphere for the beam tracer. The custom Game Object will match the rotation of the controller.")]
         public GameObject customPointerTracer;
         [Tooltip("A custom Game Object can be applied here to use instead of the default flat cylinder for the pointer cursor.")]
         public GameObject customPointerCursor;
-        [Tooltip("The layers to ignore when raycasting.")]
-        public LayerMask layersToIgnore = Physics.IgnoreRaycastLayer;
         [Tooltip("A custom Game Object can be applied here to appear only if the teleport is allowed (its material will not be changed ).")]
         public GameObject validTeleportLocationObject = null;
-        [Tooltip("Rescale each pointer tracer element according to the length of the Bezier curve.")]
-        public bool rescalePointerTracer = false;
 
         private GameObject pointerCursor;
         private GameObject curvedBeamContainer;
         private CurveGenerator curvedBeam;
         private GameObject validTeleportLocationInstance = null;
-        private Material customPointerMaterial;
-        private Material beamTraceMaterial;
         private bool beamActive = false;
         private Vector3 fixedForwardBeamForward;
         private Vector3 contactNormal;
@@ -97,43 +95,14 @@ namespace VRTK
 
         protected override void InitPointer()
         {
-            if (customPointerTracer != null)
+            pointerCursor = (customPointerCursor ? Instantiate(customPointerCursor) : CreateCursor());
+            if (validTeleportLocationObject != null)
             {
-                var renderer = customPointerTracer.GetComponentInChildren<MeshRenderer>();
-                if (renderer)
-                {
-                    beamTraceMaterial = Instantiate(renderer.sharedMaterial);
-                }
-            }
-
-            if (customPointerCursor)
-            {
-                var customPointerCursorRenderer = customPointerCursor.GetComponentInChildren<MeshRenderer>();
-
-                if (customPointerCursorRenderer != null)
-                {
-                    customPointerMaterial = Instantiate(customPointerCursorRenderer.sharedMaterial);
-                }
-
-                pointerCursor = Instantiate(customPointerCursor);
-
-                foreach (var pointerCursorRenderer in pointerCursor.GetComponentsInChildren<Renderer>())
-                {
-                    pointerCursorRenderer.material = customPointerMaterial;
-                }
-
-                if (validTeleportLocationObject != null)
-                {
-                    validTeleportLocationInstance = Instantiate(validTeleportLocationObject);
-                    validTeleportLocationInstance.name = string.Format("[{0}]WorldPointer_BezierPointer_TeleportBeam", gameObject.name);
-                    validTeleportLocationInstance.transform.parent = pointerCursor.transform;
-                    validTeleportLocationInstance.layer = LayerMask.NameToLayer("Ignore Raycast");
-                    validTeleportLocationInstance.SetActive(false);
-                }
-            }
-            else
-            {
-                pointerCursor = CreateCursor();
+                validTeleportLocationInstance = Instantiate(validTeleportLocationObject);
+                validTeleportLocationInstance.name = string.Format("[{0}]WorldPointer_BezierPointer_TeleportBeam", gameObject.name);
+                validTeleportLocationInstance.transform.parent = pointerCursor.transform;
+                validTeleportLocationInstance.layer = LayerMask.NameToLayer("Ignore Raycast");
+                validTeleportLocationInstance.SetActive(false);
             }
 
             pointerCursor.name = string.Format("[{0}]WorldPointer_BezierPointer_PointerCursor", gameObject.name);
@@ -147,32 +116,14 @@ namespace VRTK
             curvedBeam = curvedBeamContainer.gameObject.AddComponent<CurveGenerator>();
             curvedBeam.transform.parent = null;
             curvedBeam.Create(pointerDensity, pointerCursorRadius, customPointerTracer, rescalePointerTracer);
+
             base.InitPointer();
         }
 
-        protected override void SetPointerMaterial()
+        protected override void SetPointerMaterial(Color color)
         {
-            if (customPointerMaterial != null)
-            {
-                customPointerMaterial.color = pointerMaterial.color;
-            }
-            if (beamTraceMaterial != null)
-            {
-                beamTraceMaterial.color = pointerMaterial.color;
-                if (beamTraceMaterial.HasProperty("_EmissionColor"))
-                {
-                    beamTraceMaterial.SetColor("_EmissionColor", pointerMaterial.color);
-                }
-            }
-
-            if (customPointerCursor == null)
-            {
-                foreach (var pointerCursorRenderers in pointerCursor.GetComponentsInChildren<Renderer>())
-                {
-                    pointerCursorRenderers.material = pointerMaterial;
-                }
-            }
-            base.SetPointerMaterial();
+            base.ChangeMaterialColor(pointerCursor, color);
+            base.SetPointerMaterial(color);
         }
 
         protected override void TogglePointer(bool state)
@@ -192,9 +143,12 @@ namespace VRTK
         {
             var cursorYOffset = 0.02f;
             var cursor = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-            cursor.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
-            cursor.GetComponent<MeshRenderer>().receiveShadows = false;
+            var cursorRenderer = cursor.GetComponent<MeshRenderer>();
+
             cursor.transform.localScale = new Vector3(pointerCursorRadius, cursorYOffset, pointerCursorRadius);
+            cursorRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+            cursorRenderer.receiveShadows = false;
+            cursorRenderer.material = pointerMaterial;
             Destroy(cursor.GetComponent<CapsuleCollider>());
             return cursor;
         }
@@ -313,7 +267,8 @@ namespace VRTK
                 downPosition,
                 downPosition,
             };
-            curvedBeam.SetPoints(beamPoints, beamTraceMaterial ?? pointerMaterial);
+            var tracerMaterial = (customPointerTracer ? null : pointerMaterial);
+            curvedBeam.SetPoints(beamPoints, tracerMaterial, currentPointerColor);
             if (pointerVisibility != pointerVisibilityStates.Always_Off)
             {
                 curvedBeam.TogglePoints(true);
