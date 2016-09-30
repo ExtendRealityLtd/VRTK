@@ -332,9 +332,10 @@ The play area collider does not work well with terrains as they are uneven and c
 
  * **Controller:** The controller that will be used to toggle the pointer. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.
  * **Pointer Material:** The material to use on the rendered version of the pointer. If no material is selected then the default `WorldPointer` material will be used.
- * **Pointer Visibility:** Determines when the pointer beam should be displayed.
+ * **Interact With Objects:** If this is checked then the pointer will be an extension of the controller and able to interact with Interactable Objects.
  * **Hold Button To Activate:** If this is checked then the pointer beam will be activated on first press of the pointer alias button and will stay active until the pointer alias button is pressed again. The destination set event is emitted when the beam is deactivated on the second button press.
  * **Activate Delay:** The time in seconds to delay the pointer beam being able to be active again. Useful for preventing constant teleportation.
+ * **Pointer Visibility:** Determines when the pointer beam should be displayed.
  * **Layers To Ignore:** The layers to ignore when raycasting.
 
 ### Class Variables

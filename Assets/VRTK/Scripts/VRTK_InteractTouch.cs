@@ -59,6 +59,8 @@ namespace VRTK
         private GameObject controllerCollisionDetector;
         private bool triggerRumble;
         private bool destroyColliderOnDisable;
+        private bool triggerIsColliding = false;
+        private bool triggerWasColliding = false;
         private Rigidbody touchRigidBody;
         private Object defaultColliderPrefab;
         private VRTK_ControllerEvents.ButtonAlias originalGrabAlias;
@@ -263,6 +265,7 @@ namespace VRTK
 
         private void OnTriggerEnter(Collider collider)
         {
+            triggerIsColliding = true;
             AddActiveCollider(collider);
 
             var colliderInteractableObject = GetColliderInteractableObject(collider);
@@ -275,8 +278,17 @@ namespace VRTK
             }
         }
 
+        private void OnTriggerExit(Collider collider)
+        {
+            if (touchedObjectActiveColliders.Contains(collider))
+            {
+                touchedObjectActiveColliders.Remove(collider);
+            }
+        }
+
         private void OnTriggerStay(Collider collider)
         {
+            triggerIsColliding = true;
             AddActiveCollider(collider);
 
             var colliderInteractableObject = GetColliderInteractableObject(collider);
@@ -291,7 +303,6 @@ namespace VRTK
                     CleanupEndTouch();
                     return;
                 }
-
                 StoreTouchedObjectColliders(collider);
                 CheckButtonOverrides(touchedObjectScript);
 
@@ -305,20 +316,14 @@ namespace VRTK
             }
         }
 
-        private void OnTriggerExit(Collider collider)
-        {
-            if (touchedObjectActiveColliders.Contains(collider))
-            {
-                touchedObjectActiveColliders.Remove(collider);
-            }
-        }
-
         private void LateUpdate()
         {
-            if (touchedObject != null && touchedObjectActiveColliders.Count == 0)
+            if (touchedObject != null && (touchedObjectActiveColliders.Count == 0 || (!triggerIsColliding && !triggerWasColliding)))
             {
                 StopTouching(touchedObject);
             }
+            triggerWasColliding = triggerIsColliding;
+            triggerIsColliding = false;
         }
 
         private void CheckButtonOverrides(VRTK_InteractableObject touchedObjectScript)
@@ -364,7 +369,6 @@ namespace VRTK
 
                 var untouchedObjectScript = untouched.GetComponent<VRTK_InteractableObject>();
                 untouchedObjectScript.StopTouching(gameObject);
-
                 if (!untouchedObjectScript.IsTouched())
                 {
                     untouchedObjectScript.ToggleHighlight(false);
