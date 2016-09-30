@@ -34,16 +34,6 @@ namespace VRTK
         public Color pointerHitColor = new Color(0f, 0.5f, 0f, 1f);
         [Tooltip("The colour of the beam when it is not hitting a valid target. It can be set to a different colour for each controller.")]
         public Color pointerMissColor = new Color(0.8f, 0f, 0f, 1f);
-        [Tooltip("If this is enabled then the play area boundaries are displayed at the tip of the pointer beam in the current pointer colour.")]
-        public bool showPlayAreaCursor = false;
-        [Tooltip("Determines the size of the play area cursor and collider. If the values are left as zero then the Play Area Cursor will be sized to the calibrated Play Area space.")]
-        public Vector2 playAreaCursorDimensions = Vector2.zero;
-        [Tooltip("If this is ticked then if the play area cursor is colliding with any other object then the pointer colour will change to the `Pointer Miss Color` and the `WorldPointerDestinationSet` event will not be triggered, which will prevent teleporting into areas where the play area will collide.")]
-        public bool handlePlayAreaCursorCollisions = false;
-        [Tooltip("A string that specifies an object Tag or the name of a Script attached to an object and notifies the play area cursor to ignore collisions with the object.")]
-        public string ignoreTargetWithTagOrClass;
-        [Tooltip("A specified VRTK_TagOrScriptPolicyList to use to determine whether the play area cursor collisions will be acted upon. If a list is provided then the 'Ignore Target With Tag Or Class' parameter will be ignored.")]
-        public VRTK_TagOrScriptPolicyList targetTagOrScriptListPolicy;
         [Tooltip("Determines when the pointer beam should be displayed.")]
         public pointerVisibilityStates pointerVisibility = pointerVisibilityStates.On_When_Active;
         [Tooltip("If this is checked then the pointer beam will be activated on first press of the pointer alias button and will stay active until the pointer alias button is pressed again. The destination set event is emitted when the beam is deactivated on the second button press.")]
@@ -56,30 +46,13 @@ namespace VRTK
         protected Transform pointerContactTarget = null;
         protected RaycastHit pointerContactRaycastHit = new RaycastHit();
         protected uint controllerIndex;
-        protected bool playAreaCursorCollided = false;
+        protected VRTK_PlayAreaCursor playAreaCursor;
 
-        private Transform playArea;
-        private GameObject playAreaCursor;
-        private GameObject[] playAreaCursorBoundaries;
-        private BoxCollider playAreaCursorCollider;
-        private Transform headset;
         private bool isActive;
         private bool destinationSetActive;
         private float activateDelayTimer = 0f;
         private int beamEnabledState = 0;
         private VRTK_InteractableObject interactableObject = null;
-
-        /// <summary>
-        /// The setPlayAreaCursorCollision method determines whether play area collisions should be taken into consideration with the play area cursor.
-        /// </summary>
-        /// <param name="state">The state of whether to check for play area collisions.</param>
-        public virtual void setPlayAreaCursorCollision(bool state)
-        {
-            if (handlePlayAreaCursorCollisions)
-            {
-                playAreaCursorCollided = state;
-            }
-        }
 
         /// <summary>
         /// The IsActive method is used to determine if the pointer currently active.
@@ -129,11 +102,7 @@ namespace VRTK
                 return;
             }
 
-            Utilities.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.Controller);
-
-            headset = VRTK_DeviceFinder.HeadsetTransform();
-            playArea = VRTK_DeviceFinder.PlayAreaTransform();
-            playAreaCursorBoundaries = new GameObject[4];
+            Utilities.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.Pointer);
         }
 
         protected override void OnEnable()
@@ -151,6 +120,8 @@ namespace VRTK
 
             pointerMaterial = new Material(tmpMaterial);
             pointerMaterial.color = pointerMissColor;
+
+            playAreaCursor = (GetComponent<VRTK_PlayAreaCursor>() ?? GetComponent<VRTK_PlayAreaCursor>());
         }
 
         protected override void OnDisable()
@@ -165,36 +136,22 @@ namespace VRTK
             controller.AliasPointerOn -= new ControllerInteractionEventHandler(EnablePointerBeam);
             controller.AliasPointerOff -= new ControllerInteractionEventHandler(DisablePointerBeam);
             controller.AliasPointerSet -= new ControllerInteractionEventHandler(SetPointerDestination);
-
-            if (playAreaCursor != null)
-            {
-                Destroy(playAreaCursor);
-            }
         }
 
         protected virtual void Update()
         {
-            if (playAreaCursor && playAreaCursor.activeSelf)
-            {
-                UpdateCollider();
-            }
         }
 
         protected virtual void InitPointer()
         {
-            InitPlayAreaCursor();
         }
 
-        protected virtual void SetPlayAreaCursorTransform(Vector3 destination)
+        protected virtual void UpdateDependencies(Vector3 location)
         {
-            var offset = Vector3.zero;
-            if (headsetPositionCompensation)
+            if (playAreaCursor)
             {
-                var playAreaPos = new Vector3(playArea.transform.position.x, 0, playArea.transform.position.z);
-                var headsetPos = new Vector3(headset.position.x, 0, headset.position.z);
-                offset = playAreaPos - headsetPos;
+                playAreaCursor.SetPlayAreaCursorTransform(location);
             }
-            playAreaCursor.transform.position = destination + offset;
         }
 
         protected virtual void EnablePointerBeam(object sender, ControllerInteractionEventArgs e)
@@ -234,12 +191,6 @@ namespace VRTK
             StopUseAction();
         }
 
-        private bool InvalidConstantBeam()
-        {
-            var equalToggleSet = controller.pointerToggleButton == controller.pointerSetButton;
-            return (!holdButtonToActivate && ((equalToggleSet && beamEnabledState != 0) || (!equalToggleSet && !isActive)));
-        }
-
         protected virtual void PointerSet()
         {
             if (!enabled || !destinationSetActive || !pointerContactTarget || !CanActivate() || InvalidConstantBeam())
@@ -262,7 +213,7 @@ namespace VRTK
                 }
             }
 
-            if (!playAreaCursorCollided && !PointerActivatesUseAction(interactableObject))
+            if ((!playAreaCursor || !playAreaCursor.HasCollided()) && !PointerActivatesUseAction(interactableObject))
             {
                 OnDestinationMarkerSet(SetDestinationMarkerEvent(pointerContactDistance, pointerContactTarget, pointerContactRaycastHit, destinationPosition, controllerIndex));
             }
@@ -275,11 +226,12 @@ namespace VRTK
 
         protected virtual void TogglePointer(bool state)
         {
-            var playAreaState = (showPlayAreaCursor ? state : false);
             if (playAreaCursor)
             {
-                playAreaCursor.gameObject.SetActive(playAreaState);
+                playAreaCursor.SetHeadsetPositionCompensation(headsetPositionCompensation);
+                playAreaCursor.ToggleState(state);
             }
+
             if (!state && PointerActivatesUseAction(interactableObject) && interactableObject.holdButtonToUse && interactableObject.IsUsing())
             {
                 interactableObject.StopUsing(gameObject);
@@ -288,15 +240,15 @@ namespace VRTK
 
         protected virtual void SetPointerMaterial()
         {
-            foreach (GameObject playAreaCursorBoundary in playAreaCursorBoundaries)
+            if (playAreaCursor)
             {
-                playAreaCursorBoundary.GetComponent<Renderer>().material = pointerMaterial;
+                playAreaCursor.SetMaterial(pointerMaterial);
             }
         }
 
         protected void UpdatePointerMaterial(Color color)
         {
-            if (playAreaCursorCollided || !ValidDestination(pointerContactTarget, destinationPosition))
+            if ((playAreaCursor && playAreaCursor.HasCollided()) || !ValidDestination(pointerContactTarget, destinationPosition))
             {
                 color = pointerMissColor;
             }
@@ -317,6 +269,12 @@ namespace VRTK
                 validNavMeshLocation = true;
             }
             return (validNavMeshLocation && target && !(Utilities.TagOrScriptCheck(target.gameObject, invalidTagOrScriptListPolicy, invalidTargetWithTagOrClass)));
+        }
+
+        private bool InvalidConstantBeam()
+        {
+            var equalToggleSet = controller.pointerToggleButton == controller.pointerSetButton;
+            return (!holdButtonToActivate && ((equalToggleSet && beamEnabledState != 0) || (!equalToggleSet && !isActive)));
         }
 
         private bool PointerActivatesUseAction(VRTK_InteractableObject io)
@@ -348,7 +306,10 @@ namespace VRTK
             beamEnabledState++;
             if (enabled && !isActive && CanActivate())
             {
-                setPlayAreaCursorCollision(false);
+                if (playAreaCursor)
+                {
+                    playAreaCursor.SetPlayAreaCursorCollision(false);
+                }
                 controllerIndex = index;
                 TogglePointer(true);
                 isActive = true;
@@ -370,144 +331,6 @@ namespace VRTK
             TogglePointer(false);
             isActive = false;
             beamEnabledState = 0;
-        }
-
-        private void DrawPlayAreaCursorBoundary(int index, float left, float right, float top, float bottom, float thickness, Vector3 localPosition)
-        {
-            var playAreaCursorBoundary = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            playAreaCursorBoundary.name = string.Format("[{0}]WorldPointer_PlayAreaCursorBoundary_" + index, gameObject.name);
-            Utilities.SetPlayerObject(playAreaCursorBoundary, VRTK_PlayerObject.ObjectTypes.Pointer);
-
-            var width = (right - left) / 1.065f;
-            var length = (top - bottom) / 1.08f;
-            var height = thickness;
-
-            playAreaCursorBoundary.transform.localScale = new Vector3(width, height, length);
-            Destroy(playAreaCursorBoundary.GetComponent<BoxCollider>());
-            playAreaCursorBoundary.layer = LayerMask.NameToLayer("Ignore Raycast");
-
-            playAreaCursorBoundary.transform.parent = playAreaCursor.transform;
-            playAreaCursorBoundary.transform.localPosition = localPosition;
-
-            playAreaCursorBoundaries[index] = playAreaCursorBoundary;
-        }
-
-        private void InitPlayAreaCursor()
-        {
-            var btmRightInner = 0;
-            var btmLeftInner = 1;
-            var topLeftInner = 2;
-            var topRightInner = 3;
-
-            var btmRightOuter = 4;
-            var btmLeftOuter = 5;
-            var topLeftOuter = 6;
-            var topRightOuter = 7;
-
-            Vector3[] cursorDrawVertices = VRTK_SDK_Bridge.GetPlayAreaVertices(playArea.gameObject);
-
-            if (playAreaCursorDimensions != Vector2.zero)
-            {
-                var customAreaPadding = VRTK_SDK_Bridge.GetPlayAreaBorderThickness(playArea.gameObject);
-
-                cursorDrawVertices[btmRightOuter] = new Vector3(playAreaCursorDimensions.x / 2, 0f, (playAreaCursorDimensions.y / 2) * -1);
-                cursorDrawVertices[btmLeftOuter] = new Vector3((playAreaCursorDimensions.x / 2) * -1, 0f, (playAreaCursorDimensions.y / 2) * -1);
-                cursorDrawVertices[topLeftOuter] = new Vector3((playAreaCursorDimensions.x / 2) * -1, 0f, playAreaCursorDimensions.y / 2);
-                cursorDrawVertices[topRightOuter] = new Vector3(playAreaCursorDimensions.x / 2, 0f, playAreaCursorDimensions.y / 2);
-
-                cursorDrawVertices[btmRightInner] = cursorDrawVertices[btmRightOuter] + new Vector3(-customAreaPadding, 0f, customAreaPadding);
-                cursorDrawVertices[btmLeftInner] = cursorDrawVertices[btmLeftOuter] + new Vector3(customAreaPadding, 0f, customAreaPadding);
-                cursorDrawVertices[topLeftInner] = cursorDrawVertices[topLeftOuter] + new Vector3(customAreaPadding, 0f, -customAreaPadding);
-                cursorDrawVertices[topRightInner] = cursorDrawVertices[topRightOuter] + new Vector3(-customAreaPadding, 0f, -customAreaPadding);
-            }
-
-            var width = cursorDrawVertices[btmRightOuter].x - cursorDrawVertices[topLeftOuter].x;
-            var length = cursorDrawVertices[topLeftOuter].z - cursorDrawVertices[btmRightOuter].z;
-            var height = 0.01f;
-
-            playAreaCursor = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            playAreaCursor.name = string.Format("[{0}]WorldPointer_PlayAreaCursor", gameObject.name);
-            Utilities.SetPlayerObject(playAreaCursor, VRTK_PlayerObject.ObjectTypes.Pointer);
-            playAreaCursor.transform.parent = null;
-            playAreaCursor.transform.localScale = new Vector3(width, height, length);
-            playAreaCursor.SetActive(false);
-
-            playAreaCursor.GetComponent<Renderer>().enabled = false;
-
-            CreateCursorCollider(playAreaCursor);
-
-            playAreaCursor.AddComponent<Rigidbody>().isKinematic = true;
-
-            var playAreaCursorScript = playAreaCursor.AddComponent<VRTK_PlayAreaCollider>();
-            playAreaCursorScript.SetParent(gameObject);
-            playAreaCursorScript.SetIgnoreTarget(ignoreTargetWithTagOrClass, targetTagOrScriptListPolicy);
-            playAreaCursor.layer = LayerMask.NameToLayer("Ignore Raycast");
-
-            var playAreaBoundaryX = playArea.transform.localScale.x / 2;
-            var playAreaBoundaryZ = playArea.transform.localScale.z / 2;
-            var heightOffset = 0f;
-
-            DrawPlayAreaCursorBoundary(0, cursorDrawVertices[btmLeftOuter].x, cursorDrawVertices[btmRightOuter].x, cursorDrawVertices[btmRightInner].z, cursorDrawVertices[btmRightOuter].z, height, new Vector3(0f, heightOffset, playAreaBoundaryZ));
-            DrawPlayAreaCursorBoundary(1, cursorDrawVertices[btmLeftOuter].x, cursorDrawVertices[btmLeftInner].x, cursorDrawVertices[topLeftOuter].z, cursorDrawVertices[btmLeftOuter].z, height, new Vector3(playAreaBoundaryX, heightOffset, 0f));
-            DrawPlayAreaCursorBoundary(2, cursorDrawVertices[btmLeftOuter].x, cursorDrawVertices[btmRightOuter].x, cursorDrawVertices[btmRightInner].z, cursorDrawVertices[btmRightOuter].z, height, new Vector3(0f, heightOffset, -playAreaBoundaryZ));
-            DrawPlayAreaCursorBoundary(3, cursorDrawVertices[btmLeftOuter].x, cursorDrawVertices[btmLeftInner].x, cursorDrawVertices[topLeftOuter].z, cursorDrawVertices[btmLeftOuter].z, height, new Vector3(-playAreaBoundaryX, heightOffset, 0f));
-        }
-
-        private void CreateCursorCollider(GameObject cursor)
-        {
-            playAreaCursorCollider = cursor.GetComponent<BoxCollider>();
-            playAreaCursorCollider.isTrigger = true;
-            playAreaCursorCollider.center = new Vector3(0f, 65f, 0f);
-            playAreaCursorCollider.size = new Vector3(1f, 1f, 1f);
-        }
-
-        private void UpdateCollider()
-        {
-            var playAreaHeightAdjustment = 1f;
-            var newBCYSize = (headset.transform.position.y - playArea.transform.position.y) * 100f;
-            var newBCYCenter = (newBCYSize != 0 ? (newBCYSize / 2) + playAreaHeightAdjustment : 0);
-
-            playAreaCursorCollider.size = new Vector3(playAreaCursorCollider.size.x, newBCYSize, playAreaCursorCollider.size.z);
-            playAreaCursorCollider.center = new Vector3(playAreaCursorCollider.center.x, newBCYCenter, playAreaCursorCollider.center.z);
-        }
-    }
-
-    public class VRTK_PlayAreaCollider : MonoBehaviour
-    {
-        private GameObject parent;
-        private string ignoreTargetWithTagOrClass;
-        private VRTK_TagOrScriptPolicyList targetTagOrScriptListPolicy;
-
-        public void SetParent(GameObject setParent)
-        {
-            parent = setParent;
-        }
-
-        public void SetIgnoreTarget(string ignore, VRTK_TagOrScriptPolicyList list = null)
-        {
-            ignoreTargetWithTagOrClass = ignore;
-            targetTagOrScriptListPolicy = list;
-        }
-
-        private bool ValidTarget(Collider collider)
-        {
-            return (!collider.GetComponent<VRTK_PlayerObject>() && !(Utilities.TagOrScriptCheck(collider.gameObject, targetTagOrScriptListPolicy, ignoreTargetWithTagOrClass)));
-        }
-
-        private void OnTriggerStay(Collider collider)
-        {
-            if (parent.GetComponent<VRTK_WorldPointer>().IsActive() && ValidTarget(collider))
-            {
-                parent.GetComponent<VRTK_WorldPointer>().setPlayAreaCursorCollision(true);
-            }
-        }
-
-        private void OnTriggerExit(Collider collider)
-        {
-            if (ValidTarget(collider))
-            {
-                parent.GetComponent<VRTK_WorldPointer>().setPlayAreaCursorCollision(false);
-            }
         }
     }
 }
