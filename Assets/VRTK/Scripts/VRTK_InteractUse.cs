@@ -167,8 +167,6 @@ namespace VRTK
                     Invoke("HideController", hideControllerDelay);
                 }
 
-                usingObjectScript.ToggleHighlight(false);
-
                 var rumbleAmount = usingObjectScript.rumbleOnUse;
                 if (!rumbleAmount.Equals(Vector2.zero))
                 {
@@ -197,10 +195,6 @@ namespace VRTK
                 if (updatedHideControllerOnUse)
                 {
                     controllerActions.ToggleControllerModel(true, usingObject);
-                }
-                if (completeStop)
-                {
-                    usingObject.GetComponent<VRTK_InteractableObject>().ToggleHighlight(false);
                 }
                 usingObject = null;
             }
