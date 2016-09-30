@@ -61,14 +61,19 @@ namespace VRTK
         }
 
         /// <summary>
-        /// The SetMaterial method sets the current material on the play area cursor.
+        /// The SetMaterialColor method sets the current material colour on the play area cursor.
         /// </summary>
-        /// <param name="material">The material to update the play area cursor to.</param>
-        public virtual void SetMaterial(Material material)
+        /// <param name="color">The colour to update the play area cursor material to.</param>
+        public virtual void SetMaterialColor(Color color)
         {
             foreach (GameObject playAreaCursorBoundary in playAreaCursorBoundaries)
             {
-                playAreaCursorBoundary.GetComponent<Renderer>().material = material;
+                var paRenderer = playAreaCursorBoundary.GetComponent<Renderer>();
+
+                if (paRenderer && paRenderer.material && paRenderer.material.HasProperty("_Color"))
+                {
+                    paRenderer.material.color = color;
+                }
             }
         }
 

@@ -37,6 +37,7 @@ namespace VRTK
     /// </remarks>
     public abstract class VRTK_DestinationMarker : MonoBehaviour
     {
+        [Header("Destination Marker Settings", order = 1)]
         [Tooltip("If this is checked then the teleport flag is set to true in the Destination Set event so teleport scripts will know whether to action the new destination.")]
         public bool enableTeleport = true;
 

@@ -335,6 +335,7 @@ The play area collider does not work well with terrains as they are uneven and c
  * **Pointer Visibility:** Determines when the pointer beam should be displayed.
  * **Hold Button To Activate:** If this is checked then the pointer beam will be activated on first press of the pointer alias button and will stay active until the pointer alias button is pressed again. The destination set event is emitted when the beam is deactivated on the second button press.
  * **Activate Delay:** The time in seconds to delay the pointer beam being able to be active again. Useful for preventing constant teleportation.
+ * **Layers To Ignore:** The layers to ignore when raycasting.
 
 ### Class Variables
 
@@ -1274,7 +1275,6 @@ The Simple Pointer script can be attached to a Controller object within the `[Ca
  * **Pointer Length:** The distance the beam will project before stopping.
  * **Show Pointer Tip:** Toggle whether the cursor is shown on the end of the pointer beam.
  * **Custom Pointer Cursor:** A custom Game Object can be applied here to use instead of the default sphere for the pointer cursor.
- * **Layers To Ignore:** The layers to ignore when raycasting.
 
 ### Example
 
@@ -1299,16 +1299,15 @@ The Bezier Pointer script can be attached to a Controller object within the `[Ca
 
  * **Pointer Length:** The length of the projected forward pointer beam, this is basically the distance able to point from the controller position.
  * **Pointer Density:** The number of items to render in the beam bezier curve. A high number here will most likely have a negative impact of game performance due to large number of rendered objects.
+ * **Beam Curve Offset:** The amount of height offset to apply to the projected beam to generate a smoother curve even when the beam is pointing straight.
+ * **Beam Height Limit Angle:** The maximum angle in degrees of the controller before the beam curve height is restricted. A lower angle setting will prevent the beam being projected high into the sky and curving back down.
+ * **Rescale Pointer Tracer:** Rescale each pointer tracer element according to the length of the Bezier curve.
  * **Show Pointer Cursor:** A cursor is displayed on the ground at the location the beam ends at, it is useful to see what height the beam end location is, however it can be turned off by toggling this.
  * **Pointer Cursor Radius:** The size of the ground pointer cursor. This number also affects the size of the objects in the bezier curve beam. The larger the radius, the larger the objects will be.
  * **Pointer Cursor Match Target Rotation:** The pointer cursor will be rotated to match the angle of the target surface if this is true, if it is false then the pointer cursor will always be horizontal.
- * **Beam Curve Offset:** The amount of height offset to apply to the projected beam to generate a smoother curve even when the beam is pointing straight.
- * **Beam Height Limit Angle:** The maximum angle in degrees of the controller before the beam curve height is restricted. A lower angle setting will prevent the beam being projected high into the sky and curving back down.
  * **Custom Pointer Tracer:** A custom Game Object can be applied here to use instead of the default sphere for the beam tracer. The custom Game Object will match the rotation of the controller.
  * **Custom Pointer Cursor:** A custom Game Object can be applied here to use instead of the default flat cylinder for the pointer cursor.
- * **Layers To Ignore:** The layers to ignore when raycasting.
  * **Valid Teleport Location Object:** A custom Game Object can be applied here to appear only if the teleport is allowed (its material will not be changed ).
- * **Rescale Pointer Tracer:** Rescale each pointer tracer element according to the length of the Bezier curve.
 
 ### Example
 
@@ -1366,16 +1365,16 @@ The SetHeadsetPositionCompensation method determines whether the offset position
 
 The SetPlayAreaCursorCollision method determines whether play area collisions should be taken into consideration with the play area cursor.
 
-#### SetMaterial/1
+#### SetMaterialColor/1
 
-  > `public virtual void SetMaterial(Material material)`
+  > `public virtual void SetMaterialColor(Color color)`
 
   * Parameters
-   * `Material material` - The material to update the play area cursor to.
+   * `Color color` - The colour to update the play area cursor material to.
   * Returns
    * _none_
 
-The SetMaterial method sets the current material on the play area cursor.
+The SetMaterialColor method sets the current material colour on the play area cursor.
 
 #### SetPlayAreaCursorTransform/1
 
