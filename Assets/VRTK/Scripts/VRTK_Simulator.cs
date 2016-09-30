@@ -107,7 +107,7 @@ namespace VRTK
                 transform.position = initialPosition;
                 transform.rotation = initialRotation;
             }
-            transform.Translate(movDir * stepSize);
+            transform.Translate(movDir * stepSize, Space.World);
             transform.Rotate(rotDir);
         }
 
