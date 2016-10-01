@@ -19,6 +19,8 @@ namespace VRTK
             x, y, z
         }
 
+        [Tooltip("An optional game object to which the lever will be connected. If the game object moves the lever will follow along.")]
+        public GameObject connectedTo;
         [Tooltip("The axis on which the lever should rotate. All other axis will be frozen.")]
         public LeverDirection direction = LeverDirection.y;
         [Tooltip("The minimum angle of the lever counted from its initial position.")]
@@ -67,6 +69,16 @@ namespace VRTK
                 hj = gameObject.AddComponent<HingeJoint>();
                 hjCreated = true;
             }
+
+            if (connectedTo)
+            {
+                Rigidbody rb2 = GetComponent<Rigidbody>();
+                if (rb2 == null)
+                {
+                    rb2 = connectedTo.AddComponent<Rigidbody>();
+                }
+                rb2.useGravity = false;
+            }
         }
 
         protected override bool DetectSetup()
@@ -98,6 +110,11 @@ namespace VRTK
                 limits.min = minAngle;
                 limits.max = maxAngle;
                 hj.limits = limits;
+
+                if (connectedTo)
+                {
+                    hj.connectedBody = connectedTo.GetComponent<Rigidbody>();
+                }
             }
 
             return true;
