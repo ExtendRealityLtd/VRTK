@@ -407,7 +407,7 @@ namespace VRTK
         {
             if (highlightOnTouch)
             {
-                if (toggle && !IsGrabbed() && !IsUsing())
+                if (toggle && !IsGrabbed())
                 {
                     Color color = (touchHighlightColor != Color.clear ? touchHighlightColor : globalHighlightColor);
                     if (color != Color.clear)

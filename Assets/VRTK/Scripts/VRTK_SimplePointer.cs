@@ -105,6 +105,11 @@ namespace VRTK
 
             base.InitPointer();
 
+            if (showPointerTip && objectInteractor)
+            {
+                objectInteractor.transform.localScale = pointerTip.transform.localScale * 1.05f;
+            }
+
             SetPointerTransform(pointerLength, pointerThickness);
             TogglePointer(false);
         }

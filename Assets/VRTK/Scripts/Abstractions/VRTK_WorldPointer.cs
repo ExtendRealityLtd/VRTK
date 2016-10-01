@@ -35,12 +35,14 @@ namespace VRTK
         public Color pointerHitColor = new Color(0f, 0.5f, 0f, 1f);
         [Tooltip("The colour of the beam when it is not hitting a valid target. It can be set to a different colour for each controller.")]
         public Color pointerMissColor = new Color(0.8f, 0f, 0f, 1f);
-        [Tooltip("Determines when the pointer beam should be displayed.")]
-        public pointerVisibilityStates pointerVisibility = pointerVisibilityStates.On_When_Active;
+        [Tooltip("If this is checked then the pointer will be an extension of the controller and able to interact with Interactable Objects.")]
+        public bool interactWithObjects = false;
         [Tooltip("If this is checked then the pointer beam will be activated on first press of the pointer alias button and will stay active until the pointer alias button is pressed again. The destination set event is emitted when the beam is deactivated on the second button press.")]
         public bool holdButtonToActivate = true;
         [Tooltip("The time in seconds to delay the pointer beam being able to be active again. Useful for preventing constant teleportation.")]
         public float activateDelay = 0f;
+        [Tooltip("Determines when the pointer beam should be displayed.")]
+        public pointerVisibilityStates pointerVisibility = pointerVisibilityStates.On_When_Active;
         [Tooltip("The layers to ignore when raycasting.")]
         public LayerMask layersToIgnore = Physics.IgnoreRaycastLayer;
 
@@ -51,6 +53,7 @@ namespace VRTK
         protected uint controllerIndex;
         protected VRTK_PlayAreaCursor playAreaCursor;
         protected Color currentPointerColor;
+        protected GameObject objectInteractor;
 
         private bool isActive;
         private bool destinationSetActive;
@@ -124,12 +127,18 @@ namespace VRTK
             pointerMaterial.color = pointerMissColor;
 
             playAreaCursor = (GetComponent<VRTK_PlayAreaCursor>() ?? GetComponent<VRTK_PlayAreaCursor>());
+
+            if (interactWithObjects)
+            {
+                CreateObjectInteractor();
+            }
         }
 
         protected override void OnDisable()
         {
             base.OnDisable();
             DisableBeam();
+            Destroy(objectInteractor);
             destinationSetActive = false;
             pointerContactDistance = 0f;
             pointerContactTarget = null;
@@ -142,6 +151,15 @@ namespace VRTK
 
         protected virtual void Update()
         {
+            if (interactWithObjects && objectInteractor.activeInHierarchy)
+            {
+                UpdateObjectInteractor();
+            }
+        }
+
+        protected virtual void UpdateObjectInteractor()
+        {
+            objectInteractor.transform.position = destinationPosition;
         }
 
         protected virtual void InitPointer()
@@ -228,6 +246,11 @@ namespace VRTK
 
         protected virtual void TogglePointer(bool state)
         {
+            if (interactWithObjects)
+            {
+                objectInteractor.SetActive(state);
+            }
+
             if (playAreaCursor)
             {
                 playAreaCursor.SetHeadsetPositionCompensation(headsetPositionCompensation);
@@ -292,6 +315,27 @@ namespace VRTK
                 validNavMeshLocation = true;
             }
             return (validNavMeshLocation && target && !(Utilities.TagOrScriptCheck(target.gameObject, invalidTagOrScriptListPolicy, invalidTargetWithTagOrClass)));
+        }
+
+        protected virtual void CreateObjectInteractor()
+        {
+            objectInteractor = new GameObject(string.Format("[{0}]WorldPointer_ObjectIneractor_Holder", gameObject.name));
+            objectInteractor.transform.SetParent(controller.transform);
+            objectInteractor.transform.localPosition = Vector3.zero;
+            objectInteractor.layer = LayerMask.NameToLayer("Ignore Raycast");
+            Utilities.SetPlayerObject(objectInteractor, VRTK_PlayerObject.ObjectTypes.Pointer);
+
+            var objectInteractorCollider = new GameObject(string.Format("[{0}]WorldPointer_ObjectIneractor_Collider", gameObject.name));
+            objectInteractorCollider.transform.SetParent(objectInteractor.transform);
+            objectInteractorCollider.transform.localPosition = Vector3.zero;
+            objectInteractorCollider.layer = LayerMask.NameToLayer("Ignore Raycast");
+            var tmpCollider = objectInteractorCollider.AddComponent<SphereCollider>();
+            tmpCollider.isTrigger = true;
+            Utilities.SetPlayerObject(objectInteractorCollider, VRTK_PlayerObject.ObjectTypes.Pointer);
+
+            var objectInteractorScale = 0.025f;
+            objectInteractor.transform.localScale = new Vector3(objectInteractorScale, objectInteractorScale, objectInteractorScale);
+            objectInteractor.SetActive(false);
         }
 
         private bool InvalidConstantBeam()
