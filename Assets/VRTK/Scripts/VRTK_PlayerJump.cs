@@ -88,8 +88,6 @@ namespace VRTK
 
         #endregion
 
-
-
         private void Awake()
         {
             // Required Component: VRTK_PlayerPresence
@@ -122,7 +120,6 @@ namespace VRTK
         {
             CheckPosture();
         }
-
 
         private void CheckPosture()
         {
@@ -171,21 +168,11 @@ namespace VRTK
                     jumping = false;
                 }
             }
-
             if (debugging)
             {
                 //DebugPosture( dv, jumpVelocity );
             }
         }
-
-
-
-
-
-
-
-
-
 
         private bool HMDHeightExceedsBaseline()
         {
@@ -206,8 +193,6 @@ namespace VRTK
         {
             return crouchStartTime > 0;
         }
-
-
 
         private float CalcAdjustedFinalJumpVelocity()
         {
@@ -290,7 +275,6 @@ namespace VRTK
             heightSum += historicVelocity[historyLen - 1];
             historicVelocity[historyLen - 1] = deltaHeight;
 
-
             // Velocity, scaled for convenience, signreversed for sanity or lazyness or something
             return (heightSum / historyLen) * 100 * -1;
         }
@@ -323,7 +307,6 @@ namespace VRTK
             // float xAmount = 0.5f;
             // float zAmount = 0.5f;
 
-
             // OR 
 
             // a simpler method :) - assumes an X/Z plane
@@ -336,10 +319,6 @@ namespace VRTK
         {
             QuitLogging();
         }
-
-
-
-
 
         #region ### Private Logging and Debugging Methods ###
 
@@ -383,6 +362,5 @@ namespace VRTK
         }
 
         #endregion
-
     }
 }
