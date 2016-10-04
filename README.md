@@ -71,7 +71,7 @@ of the examples can be viewed within this repository in
 | Ocarina of Vive | [Itch.io Store Page](https://tomcat94.itch.io/ocarina-of-vive-shooting-gallery) |
 | Danc<R | [Itch.io Store Page](https://tomcat94.itch.io/dancr-alpha) |
 | Tower Island: Explore, Discover and Disassemble | [Steam Store Page](http://store.steampowered.com/app/487740/) |
-| Virtual Warfighter | [Game website](http://virtual-warfighter.com/) |
+| Virtual Warfighter | [Steam Store Page](http://store.steampowered.com/app/517020/) |
 | VR Regatta | [Steam Store Page](http://store.steampowered.com/app/468240/) |
 | Car Car Crash Hands | [Steam Store Page](http://store.steampowered.com/app/472720) |
 | MegaPolice | [Youtube Trailer](https://www.youtube.com/watch?v=d6hCgfMxldY) |
@@ -90,6 +90,7 @@ of the examples can be viewed within this repository in
 | Quantized | [Steam Greenlight Page](https://steamcommunity.com/sharedfiles/filedetails/?id=195344075) |
 | Caketomino | [Steam Store Page](http://store.steampowered.com/app/517770) |
 | Escape Station | [Steam Store Page](http://store.steampowered.com/app/527360) |
+| Outrageous Grounds: The Maze | [Steam Store Page](http://store.steampowered.com/app/513050) |
 
 ## Contributing
 
