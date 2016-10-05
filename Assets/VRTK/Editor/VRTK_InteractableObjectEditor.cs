@@ -84,6 +84,7 @@
                     targ.precisionSnap = EditorGUILayout.Toggle("Precision Snap:", targ.precisionSnap);
                     if (!targ.precisionSnap)
                     {
+                        targ.showSnapHandles = EditorGUILayout.Toggle("Show Snap Handles:", targ.showSnapHandles);
                         targ.rightSnapHandle = EditorGUILayout.ObjectField("Right Snap Handle:", targ.rightSnapHandle, typeof(Transform), true) as Transform;
                         targ.leftSnapHandle = EditorGUILayout.ObjectField("Left Snap Handle:", targ.leftSnapHandle, typeof(Transform), true) as Transform;
 
