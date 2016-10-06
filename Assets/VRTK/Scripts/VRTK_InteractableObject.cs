@@ -113,6 +113,8 @@ namespace VRTK
         public AllowedController allowedGrabControllers = AllowedController.Both;
         [Tooltip("If this is checked then when the controller grabs the object, it will grab it with precision and pick it up at the particular point on the object the controller is touching.")]
         public bool precisionSnap;
+        [Tooltip("If this is checked then wireframe boxes will appear to help in orienting snap handles.")]
+        public bool showSnapHandles = false;
         [Tooltip("A Transform provided as an empty game object which must be the child of the item being grabbed and serves as an orientation point to rotate and position the grabbed item in relation to the right handed controller. If no Right Snap Handle is provided but a Left Snap Handle is provided, then the Left Snap Handle will be used in place. If no Snap Handle is provided then the object will be grabbed at its central point. Not required for `Precision Snap`.")]
         public Transform rightSnapHandle;
         [Tooltip("A Transform provided as an empty game object which must be the child of the item being grabbed and serves as an orientation point to rotate and position the grabbed item in relation to the left handed controller. If no Left Snap Handle is provided but a Right Snap Handle is provided, then the Right Snap Handle will be used in place. If no Snap Handle is provided then the object will be grabbed at its central point. Not required for `Precision Snap`.")]
@@ -897,5 +899,34 @@ namespace VRTK
                 forcedDropped = true;
             }
         }
+
+        private void OnDrawGizmosSelected()
+        {
+            if (showSnapHandles)
+            {
+                if (rightSnapHandle != null)
+                {
+                    Gizmos.color = Color.green;
+
+                    var wristPosition = rightSnapHandle.position + (rightSnapHandle.rotation * (Vector3.forward * 0.1f));
+                    var thumbPosition = rightSnapHandle.position + (rightSnapHandle.rotation * (Vector3.right * 0.075f));
+                    Gizmos.DrawWireCube(rightSnapHandle.position, new Vector3(0.1f, 0.1f, 0.05f));
+                    Gizmos.DrawWireCube(wristPosition, new Vector3(0.05f, 0.05f, 0.05f));
+                    Gizmos.DrawWireCube(thumbPosition, new Vector3(0.025f, 0.05f, 0.05f));
+                }
+
+                if (leftSnapHandle != null)
+                {
+                    Gizmos.color = Color.magenta;
+
+                    var wristPosition = leftSnapHandle.position + (leftSnapHandle.rotation * (Vector3.forward * 0.1f));
+                    var thumbPosition = rightSnapHandle.position + (rightSnapHandle.rotation * (Vector3.right * -0.075f));
+                    Gizmos.DrawWireCube(leftSnapHandle.position, new Vector3(0.1f, 0.1f, 0.05f));
+                    Gizmos.DrawWireCube(wristPosition, new Vector3(0.05f, 0.05f, 0.05f));
+                    Gizmos.DrawWireCube(thumbPosition, new Vector3(0.025f, 0.05f, 0.05f));
+                }
+            }
+        }
+
     }
 }
