@@ -26,11 +26,16 @@ namespace VRTK
         [Header("Custom Appearance Settings", order = 4)]
         [Tooltip("A custom Game Object can be applied here to use instead of the default sphere for the pointer cursor.")]
         public GameObject customPointerCursor;
+        [Tooltip("Rotate the pointer cursor to match the normal of the target surface (or the pointer direction if no target was hit).")]
+        public bool pointerCursorMatchTargetNormal = false;
+        [Tooltip("Rescale the pointer cursor proportionally to the distance from this game object (useful when used as a gaze pointer).")]
+        public bool pointerCursorRescaledAlongDistance = false;
 
         private GameObject pointerHolder;
         private GameObject pointer;
         private GameObject pointerTip;
         private Vector3 pointerTipScale = new Vector3(0.05f, 0.05f, 0.05f);
+        private Vector3 pointerCursorOriginalScale = Vector3.one;
 
         protected override void OnEnable()
         {
@@ -57,6 +62,25 @@ namespace VRTK
                 var rayHit = Physics.Raycast(pointerRaycast, out pointerCollidedWith, pointerLength, ~layersToIgnore);
                 var pointerBeamLength = GetPointerBeamLength(rayHit, pointerCollidedWith);
                 SetPointerTransform(pointerBeamLength, pointerThickness);
+                if (rayHit)
+                {
+                    if (pointerCursorMatchTargetNormal)
+                    {
+                        pointerTip.transform.forward = -pointerCollidedWith.normal;
+                    }
+                    if (pointerCursorRescaledAlongDistance)
+                    {
+                        float collisionDistance = Vector3.Distance(pointerCollidedWith.point, transform.position);
+                        pointerTip.transform.localScale = pointerCursorOriginalScale * collisionDistance;
+                    }
+                }
+                else
+                {
+                    if (pointerCursorMatchTargetNormal)
+                    {
+                        pointerTip.transform.forward = transform.forward;
+                    }
+                }
             }
         }
 
@@ -96,6 +120,7 @@ namespace VRTK
                 pointerTipRenderer.material = pointerMaterial;
             }
 
+            pointerCursorOriginalScale = pointerTip.transform.localScale;
             pointerTip.transform.name = string.Format("[{0}]WorldPointer_SimplePointer_PointerTip", gameObject.name);
             pointerTip.transform.parent = pointerHolder.transform;
             pointerTip.GetComponent<Collider>().isTrigger = true;
