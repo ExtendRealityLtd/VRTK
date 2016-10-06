@@ -1328,6 +1328,7 @@ The Play Area Cursor is used in conjunction with a World Pointer script and disp
 
  * **Play Area Cursor Dimensions:** Determines the size of the play area cursor and collider. If the values are left as zero then the Play Area Cursor will be sized to the calibrated Play Area space.
  * **Handle Play Area Cursor Collisions:** If this is ticked then if the play area cursor is colliding with any other object then the pointer colour will change to the `Pointer Miss Color` and the `WorldPointerDestinationSet` event will not be triggered, which will prevent teleporting into areas where the play area will collide.
+ * **Headset Out Of Bounds Is Collision:** If this is ticked then if the user's headset is outside of the play area cursor bounds then it is considered a collision even if the play area isn't colliding with anything.
  * **Ignore Target With Tag Or Class:** A string that specifies an object Tag or the name of a Script attached to an object and notifies the play area cursor to ignore collisions with the object.
  * **Target Tag Or Script List Policy:** A specified VRTK_TagOrScriptPolicyList to use to determine whether the play area cursor collisions will be acted upon. If a list is provided then the 'Ignore Target With Tag Or Class' parameter will be ignored.
 
@@ -3074,6 +3075,7 @@ The script will instantiate the required Rigidbody, Interactable and HingeJoint 
 
 ### Inspector Parameters
 
+ * **Connected To:** An optional game object to which the lever will be connected. If the game object moves the lever will follow along.
  * **Direction:** The axis on which the lever should rotate. All other axis will be frozen.
  * **Min Angle:** The minimum angle of the lever counted from its initial position.
  * **Max Angle:** The maximum angle of the lever counted from its initial position.

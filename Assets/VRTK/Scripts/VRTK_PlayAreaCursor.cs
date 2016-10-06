@@ -15,6 +15,8 @@ namespace VRTK
         public Vector2 playAreaCursorDimensions = Vector2.zero;
         [Tooltip("If this is ticked then if the play area cursor is colliding with any other object then the pointer colour will change to the `Pointer Miss Color` and the `WorldPointerDestinationSet` event will not be triggered, which will prevent teleporting into areas where the play area will collide.")]
         public bool handlePlayAreaCursorCollisions = false;
+        [Tooltip("If this is ticked then if the user's headset is outside of the play area cursor bounds then it is considered a collision even if the play area isn't colliding with anything.")]
+        public bool headsetOutOfBoundsIsCollision = false;
         [Tooltip("A string that specifies an object Tag or the name of a Script attached to an object and notifies the play area cursor to ignore collisions with the object.")]
         public string ignoreTargetWithTagOrClass;
         [Tooltip("A specified VRTK_TagOrScriptPolicyList to use to determine whether the play area cursor collisions will be acted upon. If a list is provided then the 'Ignore Target With Tag Or Class' parameter will be ignored.")]
@@ -22,6 +24,7 @@ namespace VRTK
 
         private bool headsetPositionCompensation;
         private bool playAreaCursorCollided = false;
+        private bool headsetOutOfBounds = false;
         private Transform playArea;
         private GameObject playAreaCursor;
         private GameObject[] playAreaCursorBoundaries;
@@ -34,7 +37,7 @@ namespace VRTK
         /// <returns>A bool to determine the state of collision. `true` if the play area is colliding with a valid object and `false` if not.</returns>
         public virtual bool HasCollided()
         {
-            return playAreaCursorCollided;
+            return (playAreaCursorCollided || headsetOutOfBounds);
         }
 
         /// <summary>
@@ -53,10 +56,9 @@ namespace VRTK
         public virtual void SetPlayAreaCursorCollision(bool state)
         {
             playAreaCursorCollided = false;
-            state = (!enabled ? false : state);
             if (handlePlayAreaCursorCollisions)
             {
-                playAreaCursorCollided = state;
+                playAreaCursorCollided = (!enabled ? false : state);
             }
         }
 
@@ -90,6 +92,20 @@ namespace VRTK
                 var headsetPos = new Vector3(headset.position.x, 0f, headset.position.z);
                 offset = playAreaPos - headsetPos;
             }
+
+            if (playAreaCursor.activeInHierarchy && handlePlayAreaCursorCollisions && headsetOutOfBoundsIsCollision)
+            {
+                var checkPoint = new Vector3(location.x, playAreaCursor.transform.position.y + (playAreaCursor.transform.localScale.y * 2), location.z);
+                if (!playAreaCursorCollider.bounds.Contains(checkPoint))
+                {
+                    headsetOutOfBounds = true;
+                }
+                else
+                {
+                    headsetOutOfBounds = false;
+                }
+            }
+
             playAreaCursor.transform.position = location + offset;
         }
 
@@ -188,18 +204,15 @@ namespace VRTK
             var length = cursorDrawVertices[topLeftOuter].z - cursorDrawVertices[btmRightOuter].z;
             var height = 0.01f;
 
-            playAreaCursor = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            playAreaCursor.name = string.Format("[{0}]PlayAreaCursor", gameObject.name);
-            Utilities.SetPlayerObject(playAreaCursor, VRTK_PlayerObject.ObjectTypes.Pointer);
+            playAreaCursor = new GameObject(string.Format("[{0}]PlayAreaCursor", gameObject.name));
             playAreaCursor.transform.parent = null;
             playAreaCursor.transform.localScale = new Vector3(width, height, length);
             playAreaCursor.SetActive(false);
 
-            playAreaCursor.GetComponent<Renderer>().enabled = false;
-
             CreateCursorCollider(playAreaCursor);
-
             playAreaCursor.AddComponent<Rigidbody>().isKinematic = true;
+
+            Utilities.SetPlayerObject(playAreaCursor, VRTK_PlayerObject.ObjectTypes.Pointer);
 
             var playAreaCursorScript = playAreaCursor.AddComponent<VRTK_PlayAreaCollider>();
             playAreaCursorScript.SetParent(gameObject);
@@ -218,7 +231,7 @@ namespace VRTK
 
         private void CreateCursorCollider(GameObject cursor)
         {
-            playAreaCursorCollider = cursor.GetComponent<BoxCollider>();
+            playAreaCursorCollider = cursor.AddComponent<BoxCollider>();
             playAreaCursorCollider.isTrigger = true;
             playAreaCursorCollider.center = new Vector3(0f, 65f, 0f);
             playAreaCursorCollider.size = new Vector3(1f, 1f, 1f);
