@@ -7,7 +7,7 @@ namespace VRTK
     {
         private SteamVR_ControllerManager cachedControllerManager;
 
-        public override string GetControllerElementPath(ControllerElelements element)
+        public override string GetControllerElementPath(ControllerElelements element, VRTK_DeviceFinder.ControllerHand hand)
         {
             switch (element)
             {

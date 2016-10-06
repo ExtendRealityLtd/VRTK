@@ -944,7 +944,7 @@ The highlighting of the controller is defaulted to use the `VRTK_MaterialColorSw
 
 ### Inspector Parameters
 
- * **Model Element Paths:** A collection of strings that determine the path to the controller model sub elements for identifying the model parts at runtime. The paths will default to the model element paths of the selected SDK Bridge.
+ * **Model Element Paths:** A collection of strings that determine the path to the controller model sub elements for identifying the model parts at runtime. If the paths are left empty they will default to the model element paths of the selected SDK Bridge.
   * The available model sub elements are:
     * `Body Model Path`: The overall shape of the controller.
     * `Trigger Model Path`: The model that represents the trigger button.

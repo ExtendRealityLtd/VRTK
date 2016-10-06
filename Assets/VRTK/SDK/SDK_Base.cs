@@ -2,7 +2,7 @@
 {
     using UnityEngine;
 
-    public abstract class SDK_Base : MonoBehaviour
+    public abstract class SDK_Base : ScriptableObject
     {
         public enum ControllerElelements
         {
@@ -20,7 +20,7 @@
         protected Transform cachedHeadsetCamera;
         protected Transform cachedPlayArea;
 
-        public abstract string GetControllerElementPath(ControllerElelements element);
+        public abstract string GetControllerElementPath(ControllerElelements element, VRTK_DeviceFinder.ControllerHand hand);
         public abstract GameObject GetTrackedObject(GameObject obj, out uint index);
         public abstract GameObject GetTrackedObjectByIndex(uint index);
         public abstract uint GetIndexOfTrackedObject(GameObject trackedObject);

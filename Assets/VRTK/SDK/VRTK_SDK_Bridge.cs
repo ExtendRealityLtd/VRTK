@@ -6,9 +6,9 @@
     {
         private static SDK_Base activeSDK = null;
 
-        public static string GetControllerElementPath(SDK_Base.ControllerElelements element)
+        public static string GetControllerElementPath(SDK_Base.ControllerElelements element, VRTK_DeviceFinder.ControllerHand hand = VRTK_DeviceFinder.ControllerHand.Right)
         {
-            return GetActiveSDK().GetControllerElementPath(element);
+            return GetActiveSDK().GetControllerElementPath(element, hand);
         }
 
         public static GameObject GetTrackedObject(GameObject obj, out uint index)
@@ -303,7 +303,7 @@
         {
             if (activeSDK == null)
             {
-                activeSDK = new SDK_SteamVR();
+                activeSDK = ScriptableObject.CreateInstance<SDK_SteamVR>();
             }
 
             return activeSDK;
