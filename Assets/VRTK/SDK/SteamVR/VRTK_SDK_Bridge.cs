@@ -140,6 +140,11 @@ namespace VRTK
             return cachedHeadsetCamera;
         }
 
+        public static GameObject GetHeadsetCamera(GameObject obj)
+        {
+            return obj.GetComponent<SteamVR_Camera>().gameObject;
+        }
+
         public static Transform GetPlayArea()
         {
             if (cachedPlayArea == null)
