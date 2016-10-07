@@ -2,6 +2,7 @@
 namespace VRTK.Highlighters
 {
     using UnityEngine;
+    using System;
     using System.Collections.Generic;
 
     /// <summary>
@@ -37,6 +38,14 @@ namespace VRTK.Highlighters
                 stencilOutline = Instantiate((Material)Resources.Load("OutlineBasic"));
             }
             SetOptions(options);
+            Reset();
+        }
+
+        /// <summary>
+        /// The Reset method creates the additional model to use as the outline highlighted object.
+        /// </summary>
+        public override void Reset()
+        {
             CreateHighlightModel();
         }
 
@@ -128,7 +137,7 @@ namespace VRTK.Highlighters
 
             foreach (var component in copyModel.GetComponents<Component>())
             {
-                if (System.Array.IndexOf(copyComponents, component.GetType().ToString()) >= 0)
+                if (Array.IndexOf(copyComponents, component.GetType().ToString()) >= 0)
                 {
                     Utilities.CloneComponent(component, highlightModel);
                 }

@@ -477,6 +477,17 @@ As this is an abstract class, it cannot be applied directly to a game object and
 
 The Initalise method is used to set up the state of the highlighter.
 
+#### Reset/0
+
+  > `public abstract void Reset();`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The Reset method is used to reset the highlighter if anything on the object has changed. It should be called by any scripts changing object materials or colours.
+
 #### Highlight/2
 
   > `public abstract void Highlight(Color? color = null, float duration = 0f);`
@@ -549,6 +560,17 @@ This is the default highlighter that is applied to any script that requires a hi
 
 The Initialise method sets up the highlighter for use.
 
+#### Reset/0
+
+  > `public override void Reset()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The Reset method stores the object's materials and shared materials prior to highlighting.
+
 #### Highlight/2
 
   > `public override void Highlight(Color? color, float duration = 0f)`
@@ -610,6 +632,17 @@ The Outline Object Copy Highlighter works by making a copy of a mesh and adding 
    * _none_
 
 The Initialise method sets up the highlighter for use.
+
+#### Reset/0
+
+  > `public override void Reset()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The Reset method creates the additional model to use as the outline highlighted object.
 
 #### Highlight/2
 
