@@ -405,6 +405,10 @@ namespace VRTK
         /// <param name="globalHighlightColor">The colour to use when highlighting the object.</param>
         public virtual void ToggleHighlight(bool toggle, Color globalHighlightColor)
         {
+            if (highlightOnTouch && objectHighlighter == null)
+            {
+                InitialiseHighlighter();
+            }
             if (highlightOnTouch)
             {
                 if (toggle && !IsGrabbed())
@@ -650,6 +654,7 @@ namespace VRTK
             if (autoHighlighter)
             {
                 Destroy(objectHighlighter);
+                objectHighlighter = null;
             }
             forceDisabled = true;
             ForceStopInteracting();
