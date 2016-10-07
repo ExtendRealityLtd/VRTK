@@ -9,13 +9,13 @@ namespace VRTK
     [System.Serializable]
     public class VRTK_ControllerModelElementPaths
     {
-        public string bodyModelPath = VRTK_SDK_Bridge.defaultBodyModelPath;
-        public string triggerModelPath = VRTK_SDK_Bridge.defaultTriggerModelPath;
-        public string leftGripModelPath = VRTK_SDK_Bridge.defaultGripLeftModelPath;
-        public string rightGripModelPath = VRTK_SDK_Bridge.defaultGripRightModelPath;
-        public string touchpadModelPath = VRTK_SDK_Bridge.defaultTouchpadModelPath;
-        public string appMenuModelPath = VRTK_SDK_Bridge.defaultApplicationMenuModelPath;
-        public string systemMenuModelPath = VRTK_SDK_Bridge.defaultSystemModelPath;
+        public string bodyModelPath = "";
+        public string triggerModelPath = "";
+        public string leftGripModelPath = "";
+        public string rightGripModelPath = "";
+        public string touchpadModelPath = "";
+        public string appMenuModelPath = "";
+        public string systemMenuModelPath = "";
     }
 
     [System.Serializable]
@@ -59,7 +59,7 @@ namespace VRTK
     /// </example>
     public class VRTK_ControllerActions : MonoBehaviour
     {
-        [Tooltip("A collection of strings that determine the path to the controller model sub elements for identifying the model parts at runtime. The paths will default to the model element paths of the selected SDK Bridge.\n\n"
+        [Tooltip("A collection of strings that determine the path to the controller model sub elements for identifying the model parts at runtime. If the paths are left empty they will default to the model element paths of the selected SDK Bridge.\n\n"
          + "* The available model sub elements are:\n\n"
          + " * `Body Model Path`: The overall shape of the controller.\n"
          + " * `Trigger Model Path`: The model that represents the trigger button.\n"
@@ -406,19 +406,50 @@ namespace VRTK
             }
 
             objectHighlighter.Initialise(null, highlighterOptions);
-            AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.defaultApplicationMenuModelPath), objectHighlighter, elementHighlighterOverrides.appMenu);
-            AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.defaultBodyModelPath), objectHighlighter, elementHighlighterOverrides.body);
-            AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.defaultGripLeftModelPath), objectHighlighter, elementHighlighterOverrides.gripLeft);
-            AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.defaultGripRightModelPath), objectHighlighter, elementHighlighterOverrides.gripRight);
-            AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.defaultSystemModelPath), objectHighlighter, elementHighlighterOverrides.systemMenu);
-            AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.defaultTouchpadModelPath), objectHighlighter, elementHighlighterOverrides.touchpad);
-            AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.defaultTriggerModelPath), objectHighlighter, elementHighlighterOverrides.trigger);
+            AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_Base.ControllerElelements.ApplicationMenu)), objectHighlighter, elementHighlighterOverrides.appMenu);
+            AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_Base.ControllerElelements.Body)), objectHighlighter, elementHighlighterOverrides.body);
+            AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_Base.ControllerElelements.GripLeft)), objectHighlighter, elementHighlighterOverrides.gripLeft);
+            AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_Base.ControllerElelements.GripRight)), objectHighlighter, elementHighlighterOverrides.gripRight);
+            AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_Base.ControllerElelements.SystemMenu)), objectHighlighter, elementHighlighterOverrides.systemMenu);
+            AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_Base.ControllerElelements.Touchpad)), objectHighlighter, elementHighlighterOverrides.touchpad);
+            AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_Base.ControllerElelements.Trigger)), objectHighlighter, elementHighlighterOverrides.trigger);
         }
 
         private void Awake()
         {
             gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
             cachedElements = new Dictionary<string, Transform>();
+
+            var controllerHand = VRTK_DeviceFinder.GetControllerHand(gameObject);
+
+            if (modelElementPaths.bodyModelPath.Trim() == "")
+            {
+                modelElementPaths.bodyModelPath = VRTK_SDK_Bridge.GetControllerElementPath(SDK_Base.ControllerElelements.Body, controllerHand);
+            }
+            if (modelElementPaths.triggerModelPath.Trim() == "")
+            {
+                modelElementPaths.triggerModelPath = VRTK_SDK_Bridge.GetControllerElementPath(SDK_Base.ControllerElelements.Trigger, controllerHand);
+            }
+            if (modelElementPaths.leftGripModelPath.Trim() == "")
+            {
+                modelElementPaths.leftGripModelPath = VRTK_SDK_Bridge.GetControllerElementPath(SDK_Base.ControllerElelements.GripLeft, controllerHand);
+            }
+            if (modelElementPaths.rightGripModelPath.Trim() == "")
+            {
+                modelElementPaths.rightGripModelPath = VRTK_SDK_Bridge.GetControllerElementPath(SDK_Base.ControllerElelements.GripRight, controllerHand);
+            }
+            if (modelElementPaths.touchpadModelPath.Trim() == "")
+            {
+                modelElementPaths.touchpadModelPath = VRTK_SDK_Bridge.GetControllerElementPath(SDK_Base.ControllerElelements.Touchpad, controllerHand);
+            }
+            if (modelElementPaths.appMenuModelPath.Trim() == "")
+            {
+                modelElementPaths.appMenuModelPath = VRTK_SDK_Bridge.GetControllerElementPath(SDK_Base.ControllerElelements.ApplicationMenu, controllerHand);
+            }
+            if (modelElementPaths.systemMenuModelPath.Trim() == "")
+            {
+                modelElementPaths.systemMenuModelPath = VRTK_SDK_Bridge.GetControllerElementPath(SDK_Base.ControllerElelements.SystemMenu, controllerHand);
+            }
         }
 
         private void OnEnable()
