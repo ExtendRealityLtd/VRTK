@@ -20,6 +20,8 @@ A collection of pre-defined usable prefabs have been included to allow for each 
  * [Radial Menu](#radial-menu-radialmenu)
  * [Independent Radial Menu Controller](#independent-radial-menu-controller-vrtk_independentradialmenucontroller)
  * [Console Viewer Canvas](#console-viewer-canvas-vrtk_consoleviewer)
+ * [Panel Menu Controller](#panel-menu-controller-panelmenucontroller)
+ * [Panel Menu Item Controller](#panel-menu-item-controller-panelmenuitemcontroller)
 
 ---
 
@@ -232,6 +234,63 @@ The SetCollapse method determines whether the console will collapse same message
    * _none_
 
 The ClearLog method clears the current log view of all messages
+
+---
+
+## Panel Menu Controller (PanelMenuController)
+
+### Overview
+
+Purpose: top-level controller class to handle the display of up to four child PanelMenuItemController items which are displayed as a canvas UI panel.
+
+This script should be attached to a VRTK_InteractableObject > first child GameObject [PanelMenuController].
+The [PanelMenuController] must have a child GameObject [panel items container].
+The [panel items container] must have a Canvas component.
+A [panel items container] can have up to four child GameObject, each of these contains the UI for a panel that can be displayed by [PanelMenuController].
+They also have the [PanelMenuItemController] script attached to them. The [PanelMenuItemController] script intercepts the controller events sent from this [PanelMenuController] and passes them onto additional custom event subscriber scripts, which then carry out the required custom UI actions.
+To show / hide a UI panel, you must first pick up the VRTK_InteractableObject and then by pressing the touchpad top/bottom/left/right you can open/close the child UI panel that has been assigned via the Unity Editor panel. Button type UI actions are handled by a trigger press when the panel is open.
+
+### Inspector Parameters
+
+ * **Rotate Towards:** The GameObject the panel should rotate towards, which is the Camera (eye) by default.
+ * **Zoom Scale Multiplier:** The scale multiplier, which relates to the scale of parent interactable object.
+ * **Top Panel Menu Item Controller:** The top PanelMenuItemController, which is triggered by pressing up on the controller touchpad.
+ * **Bottom Panel Menu Item Controller:** The bottom PanelMenuItemController, which is triggered by pressing down on the controller touchpad.
+ * **Left Panel Menu Item Controller:** The left PanelMenuItemController, which is triggered by pressing left on the controller touchpad.
+ * **Right Panel Menu Item Controller:** The right PanelMenuItemController, which is triggered by pressing right on the controller touchpad.
+
+### Example
+
+`040_Controls_Panel_Menu` contains three basic interactive object examples of the PanelMenu in use.
+
+---
+
+## Panel Menu Item Controller (PanelMenuItemController)
+
+### Overview
+
+Purpose: panel item controller class that intercepts the controller events sent from a [PanelMenuController] and passes them onto additional custom event subscriber scripts, which then carry out the required custom UI actions.
+
+This script should be attached to a VRTK_InteractableObject > [PanelMenuController] > [panel items container] > child GameObject (See the [PanelMenuController] class for more details on setup structure.).
+To show / hide a UI panel, you must first pick up the VRTK_InteractableObject and then by pressing the touchpad top/bottom/left/right you can open/close the child UI panel that has been assigned via the Unity Editor panel.
+
+### Class Events
+
+ * `PanelMenuItemShowing` - Emitted when the panel menu item is showing.
+ * `PanelMenuItemHiding` - Emitted when the panel menu item is hiding.
+ * `PanelMenuItemSwipeLeft` - Emitted when the panel menu item is open and the user swipes left on the controller touchpad.
+ * `PanelMenuItemSwipeRight` - Emitted when the panel menu item is open and the user swipes right on the controller touchpad.
+ * `PanelMenuItemSwipeTop` - Emitted when the panel menu item is open and the user swipes top on the controller touchpad.
+ * `PanelMenuItemSwipeBottom` - Emitted when the panel menu item is open and the user swipes bottom on the controller touchpad.
+ * `PanelMenuItemTriggerPressed` - Emitted when the panel menu item is open and the user presses the trigger of the controller holding the interactable object.
+
+### Event Payload
+
+ * `GameObject interactableObject` - The GameObject for the interactable object the PanelMenu is attached to.
+
+### Example
+
+`040_Controls_Panel_Menu` contains three basic interactive object examples of the PanelMenu in use.
 
 ---
 

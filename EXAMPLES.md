@@ -219,3 +219,7 @@ A scene that shows the teleporting behaviour and also demonstrates a way to use 
   > **Only Compatible With Unity 5.4 and above**
 
 A scene displays the frames per second in the centre of the headset view. The debug visualization of this script is displayed near the top edge of the headset view. Pressing the trigger generates a new sphere and pressing the touchpad generates ten new spheres. Eventually when lots of spheres are present the FPS will drop and demonstrate the script.
+
+### 040_Controls_Panel_Menu
+
+A scene that demonstrates how to attach interactable panel prefabs to game objects to provide additional settings.
