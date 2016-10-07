@@ -46,6 +46,7 @@ namespace VRTK.Highlighters
         /// </summary>
         public override void Reset()
         {
+            DeleteExistingHighlightModels();
             CreateHighlightModel();
         }
 
@@ -105,6 +106,18 @@ namespace VRTK.Highlighters
             }
         }
 
+        private void DeleteExistingHighlightModels()
+        {
+            var existingHighlighterObjects = GetComponentsInChildren<VRTK_PlayerObject>(true);
+            for (int i = 0; i < existingHighlighterObjects.Length; i++)
+            {
+                if (existingHighlighterObjects[i].objectType == VRTK_PlayerObject.ObjectTypes.Highlighter)
+                {
+                    Destroy(existingHighlighterObjects[i].gameObject);
+                }
+            }
+        }
+
         private void CreateHighlightModel()
         {
             if (customOutlineModel != null)
@@ -147,6 +160,8 @@ namespace VRTK.Highlighters
             highlightModel.GetComponent<MeshFilter>().mesh = copyMesh.mesh;
             highlightModel.GetComponent<Renderer>().material = stencilOutline;
             highlightModel.SetActive(false);
+
+            Utilities.SetPlayerObject(highlightModel, VRTK_PlayerObject.ObjectTypes.Highlighter);
         }
     }
 }

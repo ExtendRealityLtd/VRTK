@@ -15,7 +15,8 @@ namespace VRTK
             CameraRig,
             Headset,
             Controller,
-            Pointer
+            Pointer,
+            Highlighter
         }
 
         public ObjectTypes objectType;
