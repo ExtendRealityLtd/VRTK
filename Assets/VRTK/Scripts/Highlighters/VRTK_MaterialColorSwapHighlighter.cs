@@ -40,9 +40,16 @@ namespace VRTK.Highlighters
             originalSharedRendererMaterials = new Dictionary<string, Material[]>();
             originalRendererMaterials = new Dictionary<string, Material[]>();
             faderRoutines = new Dictionary<string, Coroutine>();
-            StoreOriginalMaterials();
-
             resetMainTexture = GetOption<bool>(options, "resetMainTexture");
+            Reset();
+        }
+
+        /// <summary>
+        /// The Reset method stores the object's materials and shared materials prior to highlighting.
+        /// </summary>
+        public override void Reset()
+        {
+            StoreOriginalMaterials();
         }
 
         /// <summary>

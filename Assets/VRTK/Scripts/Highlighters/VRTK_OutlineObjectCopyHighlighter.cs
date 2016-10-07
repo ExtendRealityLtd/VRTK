@@ -2,6 +2,7 @@
 namespace VRTK.Highlighters
 {
     using UnityEngine;
+    using System;
     using System.Collections.Generic;
 
     /// <summary>
@@ -37,6 +38,15 @@ namespace VRTK.Highlighters
                 stencilOutline = Instantiate((Material)Resources.Load("OutlineBasic"));
             }
             SetOptions(options);
+            Reset();
+        }
+
+        /// <summary>
+        /// The Reset method creates the additional model to use as the outline highlighted object.
+        /// </summary>
+        public override void Reset()
+        {
+            DeleteExistingHighlightModels();
             CreateHighlightModel();
         }
 
@@ -96,6 +106,18 @@ namespace VRTK.Highlighters
             }
         }
 
+        private void DeleteExistingHighlightModels()
+        {
+            var existingHighlighterObjects = GetComponentsInChildren<VRTK_PlayerObject>(true);
+            for (int i = 0; i < existingHighlighterObjects.Length; i++)
+            {
+                if (existingHighlighterObjects[i].objectType == VRTK_PlayerObject.ObjectTypes.Highlighter)
+                {
+                    Destroy(existingHighlighterObjects[i].gameObject);
+                }
+            }
+        }
+
         private void CreateHighlightModel()
         {
             if (customOutlineModel != null)
@@ -128,7 +150,7 @@ namespace VRTK.Highlighters
 
             foreach (var component in copyModel.GetComponents<Component>())
             {
-                if (System.Array.IndexOf(copyComponents, component.GetType().ToString()) >= 0)
+                if (Array.IndexOf(copyComponents, component.GetType().ToString()) >= 0)
                 {
                     Utilities.CloneComponent(component, highlightModel);
                 }
@@ -138,6 +160,8 @@ namespace VRTK.Highlighters
             highlightModel.GetComponent<MeshFilter>().mesh = copyMesh.mesh;
             highlightModel.GetComponent<Renderer>().material = stencilOutline;
             highlightModel.SetActive(false);
+
+            Utilities.SetPlayerObject(highlightModel, VRTK_PlayerObject.ObjectTypes.Highlighter);
         }
     }
 }
