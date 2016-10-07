@@ -1276,6 +1276,8 @@ The Simple Pointer script can be attached to a Controller object within the `[Ca
  * **Pointer Length:** The distance the beam will project before stopping.
  * **Show Pointer Tip:** Toggle whether the cursor is shown on the end of the pointer beam.
  * **Custom Pointer Cursor:** A custom Game Object can be applied here to use instead of the default sphere for the pointer cursor.
+ * **Pointer Cursor Match Target Normal:** Rotate the pointer cursor to match the normal of the target surface (or the pointer direction if no target was hit).
+ * **Pointer Cursor Rescaled Along Distance:** Rescale the pointer cursor proportionally to the distance from this game object (useful when used as a gaze pointer).
 
 ### Example
 
