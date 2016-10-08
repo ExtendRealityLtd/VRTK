@@ -18,6 +18,8 @@ namespace VRTK
     /// </example>
     public class VRTK_Drawer : VRTK_Control
     {
+        [Tooltip("An optional game object to which the drawer will be connected. If the game object moves the drawer will follow along.")]
+        public GameObject connectedTo;
         [Tooltip("The axis on which the drawer should open. All other axis will be frozen.")]
         public Direction direction = Direction.autodetect;
         [Tooltip("The game object for the body.")]
@@ -153,6 +155,11 @@ namespace VRTK
                 SoftJointLimit limit = cj.linearLimit;
                 limit.limit = pullDistance;
                 cj.linearLimit = limit;
+
+                if (connectedTo)
+                {
+                    cj.connectedBody = connectedTo.GetComponent<Rigidbody>();
+                }
             }
             if (cfCreated)
             {
@@ -192,6 +199,17 @@ namespace VRTK
             io.precisionSnap = true;
             io.stayGrabbedOnTeleport = false;
             io.grabAttachMechanic = VRTK_InteractableObject.GrabAttachType.Spring_Joint;
+
+            if (connectedTo)
+            {
+                Rigidbody rb2 = connectedTo.GetComponent<Rigidbody>();
+                if (rb2 == null)
+                {
+                    rb2 = connectedTo.AddComponent<Rigidbody>();
+                    rb2.useGravity = false;
+                    rb2.isKinematic = true;
+                }
+            }
 
             cj = GetComponent<ConfigurableJoint>();
             if (cj == null)
