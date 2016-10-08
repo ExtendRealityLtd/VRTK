@@ -3,11 +3,41 @@ namespace VRTK
 {
     using UnityEngine;
     using System.Collections.Generic;
+    using System;
 
     [RequireComponent(typeof(VRTK_PlayerPresence))]
 
+    /// <summary>
+    /// Real Movement allows you to move the play area by calculating the y-movement of your controllers and propelling you the more they are moving.  This simulates walking in game by walking in real life.
+    /// </summary>
+    /// <remarks>
+    /// It is recommend you combine this with the VRTK_HeightAdjustTeleport
+    /// </remarks>
+    /// <example>
+    /// `VRTK/Examples/040_CameraRig_RealMovement` shows how the user can move and traverse colliders.
+    /// </example>
     public class VRTK_RealMovement : MonoBehaviour
     {
+
+        /// <summary>
+        /// Options for testing if a play space fall is valid
+        /// </summary>
+        /// <param name="HeadsetAndControllers">Track both headset and controllers for movement calculations.</param>
+        /// <param name="ControllersOnly">Track only the controllers for movement calculations.</param>
+        /// <param name="HeadsetOnly">Track only headset for movement caluclations.</param>
+        public enum ControlOptions
+        {
+            HeadsetAndControllers,
+            ControllersOnly,
+            HeadsetOnly,
+        }
+        
+        public enum DirectionalMethod
+        {
+            Gaze,
+            DumbDecoupling,
+            SmartDecoupling
+        }
 
         public bool LeftController
         {
@@ -36,12 +66,10 @@ namespace VRTK
         [SerializeField]
         private bool rightController = true;
 
-        // Amount of frames to sample to smooth out the movement.  Higher frames = higher stability?
+        [Tooltip("Select which trackables are used to determine movement.")]
         [SerializeField]
-        [Tooltip("How many samples should be used to determine average movement speed. (60's good bro, don't change unless you know what you're doing)")]
-        private int m_averagePeriod = 60;
+        private ControlOptions m_controlOptions = ControlOptions.HeadsetAndControllers;
 
-        // How quick you should move.
         [SerializeField]
         [Tooltip("Lower to decrease speed, raise to increase.")]
         private float m_speedScale = 1;
@@ -51,24 +79,25 @@ namespace VRTK
         private float m_maxSpeed = 4;
 
         [SerializeField]
-        [Tooltip("How your movement direction will be determined.  The Gaze method tends to lead to the least motion sickness.  Smart decoupling is still a Work In Progress.  Using the trackpad will override all other Immersive Movement functions.")]
+        [Tooltip("How your movement direction will be determined.  The Gaze method tends to lead to the least motion sickness.  Smart decoupling is still a Work In Progress.")]
         private DirectionalMethod m_dirMethod = DirectionalMethod.Gaze;
 
         [SerializeField]
-        [Tooltip("If we're using Smart Decoupling, .")]
+        [Tooltip("If we're using Smart Decoupling, all trackables must be within this degree threshold to change direction.")]
         private float m_smartDecoupleThreshold = 30f;
-
-        // Which tracked objects to use to determine amount of movement.
-        private List<Transform> m_trackedObjects = new List<Transform>();
 
         // The cap before we stop adding the delta to the movement list.  This will help regulate speed.
         [SerializeField]
         [Tooltip("The max amount of movement we wish to register in the virutal world.  Decreasing this will increase acceleration, and vice versa.")]
         private float m_sensitivity = 0.02f;
 
+        private int m_averagePeriod = 60;
         private float m_cameraLastYRotation = 0f;
+        
+        // Which tracked objects to use to determine amount of movement.
+        private List<Transform> m_trackedObjects = new List<Transform>();
 
-        public VRTK_PlayerPresence m_playerBody;
+        private VRTK_PlayerPresence m_playerBody;
         private Rigidbody m_rigidBody;
         private GameObject controllerLeftHand;
         private GameObject controllerRightHand;
@@ -94,36 +123,34 @@ namespace VRTK
 
         private bool active = false;
 
-        public VRTK_RealMovement()
+        // If we're in Unity 5.4, we need to make sure we are using the eyes, not the head.
+        void Awake()
         {
-            // Constructor population no longer works in 5.4 due to new restrictions.
-#if (!UNITY_5_4)
-        m_trackedObjects = new List<Transform>();
+            controllerLeftHand = VRTK_DeviceFinder.GetControllerLeftHand();
+            controllerRightHand = VRTK_DeviceFinder.GetControllerRightHand();
+            headset = VRTK_DeviceFinder.HeadsetTransform();
 
-        foreach (Camera obj in GetComponentsInChildren<Camera>())
-        {
-            // If we're not using 5.4, we want to track the head.
-            if (obj.name.ToLower().Contains("head"))
-        // If we're using 5.4, we want to track the eye, not the head.
-        if (obj.name.ToLower().Contains("eye"))
-            {
-                m_camera = obj.transform;
-                m_trackedObjects.Add(obj.transform);
-            }
+            setControlOptions(m_controlOptions);
+
+            touchpadPressed = new ControllerInteractionEventHandler(DoTouchpadDown);
+            touchpadUp = new ControllerInteractionEventHandler(DoTouchpadUp);
         }
 
-        foreach (SteamVR_TrackedObject obj in GetComponentsInChildren<SteamVR_TrackedObject>())
+        public void setControlOptions(ControlOptions p_controlOptions)
         {
-            if (obj.name.ToLower().Contains("controller"))
+            m_controlOptions = p_controlOptions;
+            m_trackedObjects.Clear();
+
+            if (m_controlOptions.Equals(ControlOptions.HeadsetAndControllers) || m_controlOptions.Equals(ControlOptions.ControllersOnly))
             {
-                if (obj.name.ToLower().Contains("right"))
-                {
-                    m_controller = obj.GetComponent<SteamVR_TrackedObject>();
-                }
-                m_trackedObjects.Add(obj.transform);
+                m_trackedObjects.Add(controllerLeftHand.transform);
+                m_trackedObjects.Add(controllerRightHand.transform);
             }
-        }
-#endif
+
+            if (m_controlOptions.Equals(ControlOptions.HeadsetAndControllers) || m_controlOptions.Equals(ControlOptions.HeadsetOnly))
+            {
+                m_trackedObjects.Add(headset.transform);
+            }
         }
 
         // Use this for initialization
@@ -141,22 +168,7 @@ namespace VRTK
             }
             m_playAreaPreviousY = transform.position.y;
         }
-
-        // If we're in Unity 5.4, we need to make sure we are using the eyes, not the head.
-        void Awake()
-        {
-            controllerLeftHand = VRTK_DeviceFinder.GetControllerLeftHand();
-            controllerRightHand = VRTK_DeviceFinder.GetControllerRightHand();
-            headset = VRTK_DeviceFinder.HeadsetTransform();
-
-            m_trackedObjects.Add(controllerLeftHand.transform);
-            m_trackedObjects.Add(controllerRightHand.transform);
-            m_trackedObjects.Add(headset.transform);
-
-            touchpadPressed = new ControllerInteractionEventHandler(DoTouchpadDown);
-            touchpadUp = new ControllerInteractionEventHandler(DoTouchpadUp);
-        }
-
+        
         private void DoTouchpadDown(object sender, ControllerInteractionEventArgs e)
         {
             var controllerEvents = (VRTK_ControllerEvents)sender;
@@ -334,14 +346,5 @@ namespace VRTK
                 }
             }
         }
-    }
-
-    [System.Serializable]
-
-    public enum DirectionalMethod : int
-    {
-        Gaze,
-        DumbDecoupling,
-        SmartDecoupling
     }
 }
