@@ -72,7 +72,7 @@ namespace VRTK
 
             if (connectedTo)
             {
-                Rigidbody rb2 = GetComponent<Rigidbody>();
+                Rigidbody rb2 = connectedTo.GetComponent<Rigidbody>();
                 if (rb2 == null)
                 {
                     rb2 = connectedTo.AddComponent<Rigidbody>();
