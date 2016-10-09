@@ -14,7 +14,7 @@ namespace VRTK
     /// It is recommend you combine this with the VRTK_HeightAdjustTeleport
     /// </remarks>
     /// <example>
-    /// `VRTK/Examples/040_CameraRig_RealMovement` shows how the user can move and traverse colliders.
+    /// `VRTK/Examples/042_CameraRig_RealMovement` shows how the user can move and traverse colliders.
     /// </example>
     public class VRTK_RealMovement : MonoBehaviour
     {
