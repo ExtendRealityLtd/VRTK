@@ -197,7 +197,7 @@ namespace VRTK
 
         private void OnGrabObject(object sender, ObjectInteractEventArgs e)
         {
-            if(e.target)
+            if (e.target)
             {
                 IgnoreCollisions(e.target.GetComponentsInChildren<Collider>(), true);
             }
@@ -213,9 +213,16 @@ namespace VRTK
 
         private void IgnoreCollisions(Collider[] colliders, bool state)
         {
-            foreach (var controllerCollider in colliders)
+            var collider = GetComponent<Collider>();
+            if (collider.gameObject.activeInHierarchy)
             {
-                Physics.IgnoreCollision(GetComponent<Collider>(), controllerCollider, state);
+                foreach (var controllerCollider in colliders)
+                {
+                    if (controllerCollider.gameObject.activeInHierarchy)
+                    {
+                        Physics.IgnoreCollision(collider, controllerCollider, state);
+                    }
+                }
             }
         }
 
