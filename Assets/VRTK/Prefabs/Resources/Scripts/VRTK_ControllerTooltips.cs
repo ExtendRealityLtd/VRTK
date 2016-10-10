@@ -56,6 +56,7 @@ namespace VRTK
         private GameObject[] buttonTooltips;
         private VRTK_ControllerActions controllerActions;
         private bool[] tooltipStates;
+        private VRTK_HeadsetControllerAware headsetControllerAware;
 
         /// <summary>
         /// The ToggleTips method will display the controller tooltips if the state is `true` and will hide the controller tooltips if the state is `false`. An optional `element` can be passed to target a specific controller tooltip to toggle otherwise all tooltips are toggled.
@@ -84,7 +85,7 @@ namespace VRTK
             gripInitialised = false;
             touchpadInitialised = false;
             appMenuInitialised = false;
-            InitialiseTips();
+
             availableButtons = new TooltipButtons[]
             {
                 TooltipButtons.TriggerTooltip,
@@ -100,6 +101,8 @@ namespace VRTK
             {
                 buttonTooltips[i] = transform.FindChild(availableButtons[i].ToString()).gameObject;
             }
+
+            InitialiseTips();
         }
 
         private void OnEnable()
@@ -109,6 +112,14 @@ namespace VRTK
                 controllerActions.ControllerModelVisible += new ControllerActionsEventHandler(DoControllerVisible);
                 controllerActions.ControllerModelInvisible += new ControllerActionsEventHandler(DoControllerInvisible);
             }
+
+            headsetControllerAware = FindObjectOfType<VRTK_HeadsetControllerAware>();
+            if (headsetControllerAware)
+            {
+                headsetControllerAware.ControllerGlanceEnter += new HeadsetControllerAwareEventHandler(DoGlanceEnterController);
+                headsetControllerAware.ControllerGlanceExit += new HeadsetControllerAwareEventHandler(DoGlanceExitController);
+                ToggleTips(false);
+            }
         }
 
         private void OnDisable()
@@ -117,6 +128,12 @@ namespace VRTK
             {
                 controllerActions.ControllerModelVisible -= new ControllerActionsEventHandler(DoControllerVisible);
                 controllerActions.ControllerModelInvisible -= new ControllerActionsEventHandler(DoControllerInvisible);
+            }
+
+            if (headsetControllerAware)
+            {
+                headsetControllerAware.ControllerGlanceEnter -= new HeadsetControllerAwareEventHandler(DoGlanceEnterController);
+                headsetControllerAware.ControllerGlanceExit -= new HeadsetControllerAwareEventHandler(DoGlanceExitController);
             }
         }
 
@@ -135,6 +152,23 @@ namespace VRTK
                 tooltipStates[i] = buttonTooltips[i].activeSelf;
             }
             ToggleTips(false);
+        }
+
+
+        private void DoGlanceEnterController(object sender, HeadsetControllerAwareEventArgs e)
+        {
+            if (VRTK_DeviceFinder.GetControllerIndex(transform.parent.gameObject) == e.controllerIndex)
+            {
+                ToggleTips(true);
+            }
+        }
+
+        private void DoGlanceExitController(object sender, HeadsetControllerAwareEventArgs e)
+        {
+            if (VRTK_DeviceFinder.GetControllerIndex(transform.parent.gameObject) == e.controllerIndex)
+            {
+                ToggleTips(false);
+            }
         }
 
         private void InitialiseTips()
