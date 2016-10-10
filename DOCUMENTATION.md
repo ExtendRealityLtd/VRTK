@@ -3123,6 +3123,7 @@ It is possible to supply a third game object which is the root of the contents i
 
 ### Inspector Parameters
 
+ * **Connected To:** An optional game object to which the drawer will be connected. If the game object moves the drawer will follow along.
  * **Direction:** The axis on which the drawer should open. All other axis will be frozen.
  * **Body:** The game object for the body.
  * **Handle:** The game object for the handle.
