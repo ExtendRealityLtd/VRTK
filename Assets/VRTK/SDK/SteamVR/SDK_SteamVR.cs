@@ -470,7 +470,14 @@ namespace VRTK
         {
             if (cachedControllerManager == null)
             {
-                cachedControllerManager = FindObjectOfType<SteamVR_ControllerManager>();
+                SteamVR_ControllerManager[] controllerManagers = FindObjectsOfType<SteamVR_ControllerManager>();
+                foreach (SteamVR_ControllerManager cm in controllerManagers)
+                {
+                    if (cm.left && cm.right) 
+                    {
+                        cachedControllerManager = cm;
+                    }
+                }
             }
             return cachedControllerManager;
         }
