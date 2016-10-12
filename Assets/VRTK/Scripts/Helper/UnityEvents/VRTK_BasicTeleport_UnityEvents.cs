@@ -58,8 +58,8 @@
                 return;
             }
 
-            bt.Teleporting += Teleporting;
-            bt.Teleported += Teleported;
+            bt.Teleporting -= Teleporting;
+            bt.Teleported -= Teleported;
         }
     }
 }
