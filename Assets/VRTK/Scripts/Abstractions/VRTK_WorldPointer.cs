@@ -319,13 +319,13 @@ namespace VRTK
 
         protected virtual void CreateObjectInteractor()
         {
-            objectInteractor = new GameObject(string.Format("[{0}]WorldPointer_ObjectIneractor_Holder", gameObject.name));
+            objectInteractor = new GameObject(string.Format("[{0}]WorldPointer_ObjectInteractor_Holder", gameObject.name));
             objectInteractor.transform.SetParent(controller.transform);
             objectInteractor.transform.localPosition = Vector3.zero;
             objectInteractor.layer = LayerMask.NameToLayer("Ignore Raycast");
             Utilities.SetPlayerObject(objectInteractor, VRTK_PlayerObject.ObjectTypes.Pointer);
 
-            var objectInteractorCollider = new GameObject(string.Format("[{0}]WorldPointer_ObjectIneractor_Collider", gameObject.name));
+            var objectInteractorCollider = new GameObject(string.Format("[{0}]WorldPointer_ObjectInteractor_Collider", gameObject.name));
             objectInteractorCollider.transform.SetParent(objectInteractor.transform);
             objectInteractorCollider.transform.localPosition = Vector3.zero;
             objectInteractorCollider.layer = LayerMask.NameToLayer("Ignore Raycast");
