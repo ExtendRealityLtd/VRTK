@@ -80,6 +80,10 @@ namespace VRTK
                     {
                         pointerTip.transform.forward = transform.forward;
                     }
+                    if (pointerCursorRescaledAlongDistance)
+                    {
+                        pointerTip.transform.localScale = pointerCursorOriginalScale * pointerBeamLength;
+                    }
                 }
             }
         }
