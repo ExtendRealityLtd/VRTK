@@ -100,7 +100,7 @@ namespace VRTK
                 EnablePhysics();
                 if (rb)
                 {
-                    rb.velocity = velocity + new Vector3(0.0f, -0.001f, 0.0f);
+                    rb.velocity = transform.TransformVector(velocity) + new Vector3(0.0f, -0.001f, 0.0f);
                 }
                 fallStartHeight = transform.position.y;
             }
