@@ -12,8 +12,8 @@
 
 ## Quick Start for SteamVR
 
-  * Clone this repository `git clone https://github.com/thestonefox/SteamVR_Unity_Toolkit.git`
-  * Open `SteamVR_Unity_Toolkit` within Unity3d
+  * Clone this repository `git clone https://github.com/thestonefox/VRTK.git`
+  * Open `VRTK` within Unity3d
   * Import the [SteamVR Plugin] from the Unity Asset Store
   * Browse the `Examples` scenes for example usage of the scripts
 
