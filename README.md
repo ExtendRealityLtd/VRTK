@@ -1,18 +1,19 @@
-# [VRTK] VR Toolkit - [![Slack](https://vrtk-slack-invite.herokuapp.com/badge.svg)](http://invite.vrtk.io) [![Waffle](https://img.shields.io/badge/waffle-tracker-blue.svg?style=flat-square)](http://tracker.vrtk.io)
+![vrtk logo](https://raw.githubusercontent.com/thestonefox/SteamVR_Unity_Toolkit/master/Assets/VRTK/Examples/Resources/Images/logos/vrtk-capsule-clear.png)
+> ### VRTK - Virtual Reality Toolkit
+> A collection of useful scripts and prefabs for building VR titles in Unity 5.
 
-A collection of useful scripts and prefabs for building VR titles in
-Unity 5.
+[![Slack](https://vrtk-slack-invite.herokuapp.com/badge.svg)](http://invite.vrtk.io)
+[![Waffle](https://img.shields.io/badge/waffle-tracker-blue.svg?style=flat-square)](http://tracker.vrtk.io)
 
-**This Toolkit requires a compatible VR SDK to be imported into your
-Unity Project**
+**This Toolkit requires a compatible VR SDK to be imported into your Unity Project**
 
   * Compatible SDKs
    * [SteamVR Plugin]
 
 ## Quick Start for SteamVR
 
-  * Clone this repository `git clone https://github.com/thestonefox/SteamVR_Unity_Toolkit.git`
-  * Open `SteamVR_Unity_Toolkit` within Unity3d
+  * Clone this repository `git clone https://github.com/thestonefox/VRTK.git`
+  * Open `VRTK` within Unity3d
   * Import the [SteamVR Plugin] from the Unity Asset Store
   * Browse the `Examples` scenes for example usage of the scripts
 
