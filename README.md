@@ -1,4 +1,4 @@
-![vrtk logo](https://raw.githubusercontent.com/thestonefox/SteamVR_Unity_Toolkit/master/Assets/VRTK/Examples/Resources/Images/logos/vrtk-capsule-clear.png)
+![vrtk logo](https://raw.githubusercontent.com/thestonefox/VRTK/master/Assets/VRTK/Examples/Resources/Images/logos/vrtk-capsule-clear.png)
 > ### VRTK - Virtual Reality Toolkit
 > A collection of useful scripts and prefabs for building VR titles in Unity 5.
 
