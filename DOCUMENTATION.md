@@ -692,6 +692,7 @@ This directory contains all of the toolkit scripts that add VR functionality to 
  * [Headset Collision](#headset-collision-vrtk_headsetcollision)
  * [Headset Fade](#headset-fade-vrtk_headsetfade)
  * [Headset Collision Fade](#headset-collision-fade-vrtk_headsetcollisionfade)
+ * [Headset Controller Aware](#headset-controller-aware-vrtk_headsetcontrolleraware)
  * [Teleport Disable On Headset Collision](#teleport-disable-on-headset-collision-vrtk_teleportdisableonheadsetcollision)
  * [Player Presence](#player-presence-vrtk_playerpresence)
  * [Hip Tracking](#hip-tracking-vrtk_hip_tracking)
@@ -1850,6 +1851,93 @@ The Headset Collision Fade uses a composition of the Headset Collision and Heads
 ### Example
 
 `VRTK/Examples/011_Camera_HeadSetCollisionFading` has collidable walls around the play area and if the user puts their head into any of the walls then the headset will fade to black.
+
+---
+
+## Headset Controller Aware (VRTK_HeadsetControllerAware)
+
+### Overview
+
+The purpose of Headset Controller Aware is to allow the headset to know if something is blocking the path between the headset and controllers and to know if the headset is looking at a controller.
+
+### Inspector Parameters
+
+ * **Track Left Controller:** If this is checked then the left controller will be checked if items obscure it's path from the headset.
+ * **Track Right Controller:** If this is checked then the right controller will be checked if items obscure it's path from the headset.
+ * **Controller Glance Radius:** The radius of the accepted distance from the controller origin point to determine if the controller is being looked at.
+ * **Custom Right Controller Origin:** A custom transform to provide the world space position of the right controller.
+ * **Custom Left Controller Origin:** A custom transform to provide the world space position of the left controller.
+
+### Class Events
+
+ * `ControllerObscured` - Emitted when the controller is obscured by another object.
+ * `ControllerUnobscured` - Emitted when the controller is no longer obscured by an object.
+ * `ControllerGlanceEnter` - Emitted when the controller is seen by the headset view.
+ * `ControllerGlanceExit` - Emitted when the controller is no longer seen by the headset view.
+
+### Unity Events
+
+Adding the `VRTK_HeadsetControllerAware_UnityEvents` component to `VRTK_HeadsetControllerAware` object allows access to `UnityEvents` that will react identically to the Class Events.
+
+ * `OnControllerObscured` - Emits the ControllerObscured class event.
+ * `OnControllerUnobscured` - Emits the ControllerUnobscured class event.
+ * `OnControllerGlanceEnter` - Emits the ControllerGlanceEnter class event.
+ * `OnControllerGlanceExit` - Emits the ControllerGlanceExit class event.
+
+### Event Payload
+
+ * `RaycastHit raycastHit` - The Raycast Hit struct of item that is obscuring the path to the controller.
+ * `uint controllerIndex` - The index of the controller that is being or has been obscured or being or has been glanced.
+
+### Class Methods
+
+#### LeftControllerObscured/0
+
+  > `public bool LeftControllerObscured()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `bool` - Returns true if the path between the headset and the controller is obscured.
+
+The LeftControllerObscured method returns the state of if the left controller is being obscured from the path of the headset.
+
+#### RightControllerObscured/0
+
+  > `public bool RightControllerObscured()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `bool` - Returns true if the path between the headset and the controller is obscured.
+
+The RightControllerObscured method returns the state of if the right controller is being obscured from the path of the headset.
+
+#### LeftControllerGlanced/0
+
+  > `public bool LeftControllerGlanced()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `bool` - Returns true if the headset can currently see the controller within the given radius threshold.
+
+the LeftControllerGlanced method returns the state of if the headset is currently looking at the left controller or not.
+
+#### RightControllerGlanced/0
+
+  > `public bool RightControllerGlanced()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `bool` - Returns true if the headset can currently see the controller within the given radius threshold.
+
+the RightControllerGlanced method returns the state of if the headset is currently looking at the right controller or not.
+
+### Example
+
+`VRTK/Examples/029_Controller_Tooltips` displays tooltips that have been added to the controllers and are only visible when the controller is being looked at.
 
 ---
 
