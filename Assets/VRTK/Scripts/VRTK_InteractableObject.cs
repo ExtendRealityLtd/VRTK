@@ -409,7 +409,7 @@ namespace VRTK
             {
                 InitialiseHighlighter();
             }
-            if (highlightOnTouch)
+            if (objectHighlighter && highlightOnTouch)
             {
                 if (toggle && !IsGrabbed())
                 {
