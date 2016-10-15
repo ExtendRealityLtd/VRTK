@@ -694,6 +694,7 @@ This directory contains all of the toolkit scripts that add VR functionality to 
  * [Headset Collision Fade](#headset-collision-fade-vrtk_headsetcollisionfade)
  * [Headset Controller Aware](#headset-controller-aware-vrtk_headsetcontrolleraware)
  * [Teleport Disable On Headset Collision](#teleport-disable-on-headset-collision-vrtk_teleportdisableonheadsetcollision)
+ * [Teleport Disable On Controller Obscured](#teleport-disable-on-controller-obscured-vrtk_teleportdisableoncontrollerobscured)
  * [Player Presence](#player-presence-vrtk_playerpresence)
  * [Hip Tracking](#hip-tracking-vrtk_hip_tracking)
  * [Touchpad Walking](#touchpad-walking-vrtk_touchpadwalking)
@@ -1946,6 +1947,14 @@ the RightControllerGlanced method returns the state of if the headset is current
 ### Overview
 
 The purpose of the Teleport Disable On Headset Collision script is to detect when the headset is colliding with a valid object and prevent teleportation from working. This is to ensure that if a user is clipping their head into a wall then they cannot teleport to an area beyond the wall.
+
+---
+
+## Teleport Disable On Controller Obscured (VRTK_TeleportDisableOnControllerObscured)
+
+### Overview
+
+The purpose of the Teleport Disable On Controller Obscured script is to detect when the headset does not have a line of sight to the controllers and prevent teleportation from working. This is to ensure that if a user is clipping their controllers through a wall then they cannot teleport to an area beyond the wall.
 
 ---
 
