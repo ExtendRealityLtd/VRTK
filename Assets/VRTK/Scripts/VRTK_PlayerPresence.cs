@@ -199,15 +199,25 @@ namespace VRTK
         {
             if (e.target)
             {
+                StopCoroutine("RestoreCollisions");
                 IgnoreCollisions(e.target.GetComponentsInChildren<Collider>(), true);
             }
         }
 
         private void OnUngrabObject(object sender, ObjectInteractEventArgs e)
         {
-            if (e.target && e.target.GetComponent<VRTK_InteractableObject>())
+            if (gameObject.activeInHierarchy)
             {
-                IgnoreCollisions(e.target.GetComponentsInChildren<Collider>(), false);
+                StartCoroutine(RestoreCollisions(e.target));
+            }
+        }
+
+        private IEnumerator RestoreCollisions(GameObject obj)
+        {
+            yield return new WaitForEndOfFrame();
+            if (obj && obj.GetComponent<VRTK_InteractableObject>() && !obj.GetComponent<VRTK_InteractableObject>().IsGrabbed())
+            {
+                IgnoreCollisions(obj.GetComponentsInChildren<Collider>(), false);
             }
         }
 
