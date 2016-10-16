@@ -62,6 +62,7 @@ namespace VRTK
         private bool triggerIsColliding = false;
         private bool triggerWasColliding = false;
         private Rigidbody touchRigidBody;
+        private bool rigidBodyForcedActive = false;
         private Object defaultColliderPrefab;
         private VRTK_ControllerEvents.ButtonAlias originalGrabAlias;
         private VRTK_ControllerEvents.ButtonAlias originalUseAlias;
@@ -145,11 +146,13 @@ namespace VRTK
         /// The ToggleControllerRigidBody method toggles the controller's rigidbody's ability to detect collisions. If it is true then the controller rigidbody will collide with other collidable game objects.
         /// </summary>
         /// <param name="state">The state of whether the rigidbody is on or off. `true` toggles the rigidbody on and `false` turns it off.</param>
-        public void ToggleControllerRigidBody(bool state)
+        /// <param name="forceToggle">Determines if the rigidbody has been forced into it's new state by another script. This can be used to override other non-force settings. Defaults to `false`</param>
+        public void ToggleControllerRigidBody(bool state, bool forceToggle = false)
         {
             if (controllerCollisionDetector && touchRigidBody)
             {
                 touchRigidBody.isKinematic = !state;
+                rigidBodyForcedActive = forceToggle;
                 foreach (var collider in controllerCollisionDetector.GetComponentsInChildren<Collider>())
                 {
                     collider.isTrigger = !state;
@@ -164,6 +167,15 @@ namespace VRTK
         public bool IsRigidBodyActive()
         {
             return !touchRigidBody.isKinematic;
+        }
+
+        /// <summary>
+        /// The IsRigidBodyForcedActive method checks to see if the rigidbody on the controller object has been forced into the active state.
+        /// </summary>
+        /// <returns>Is true if the rigidbody is active and has been forced into the active state.</returns>
+        public bool IsRigidBodyForcedActive()
+        {
+            return (IsRigidBodyActive() && rigidBodyForcedActive);
         }
 
         /// <summary>

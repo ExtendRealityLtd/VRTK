@@ -573,7 +573,7 @@ namespace VRTK
 
             if (createRigidBodyWhenNotTouching && grabbedObject == null)
             {
-                if (interactTouch.IsRigidBodyActive() != controllerEvents.grabPressed)
+                if (!interactTouch.IsRigidBodyForcedActive() && interactTouch.IsRigidBodyActive() != controllerEvents.grabPressed)
                 {
                     interactTouch.ToggleControllerRigidBody(controllerEvents.grabPressed);
                 }

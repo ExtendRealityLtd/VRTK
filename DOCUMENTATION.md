@@ -17,6 +17,7 @@ A collection of pre-defined usable prefabs have been included to allow for each 
  * [Frames Per Second Canvas](#frames-per-second-canvas-vrtk_framespersecondviewer)
  * [Object Tooltip](#object-tooltip-vrtk_objecttooltip)
  * [Controller Tooltips](#controller-tooltips-vrtk_controllertooltips)
+ * [Controller Rigidbody Activator](#controller-rigidbody-activator-vrtk_controllerrigidbodyactivator)
  * [Radial Menu](#radial-menu-radialmenu)
  * [Independent Radial Menu Controller](#independent-radial-menu-controller-vrtk_independentradialmenucontroller)
  * [Console Viewer Canvas](#console-viewer-canvas-vrtk_consoleviewer)
@@ -132,6 +133,22 @@ The ToggleTips method will display the controller tooltips if the state is `true
 ### Example
 
 `VRTK/Examples/029_Controller_Tooltips` displays two cubes that have an object tooltip added to them along with tooltips that have been added to the controllers.
+
+---
+
+## Controller Rigidbody Activator (VRTK_ControllerRigidbodyActivator)
+
+### Overview
+
+This adds a simple trigger collider volume that when a controller enters will enable the rigidbody on the controller.
+
+The prefab game object should be placed in the scene where another interactable game object (such as a button control) is located to turn the controller rigidbody on at the appropriate time for interaction with the control without needing to manually activate by pressing the grab.
+
+If the prefab is placed as a child of the target interactable game object then the collider volume on the prefab will trigger collisions on the interactable object.
+
+The sphere collider on the prefab can have the radius adjusted to determine how close the controller needs to be to the object before the rigidbody is activated.
+
+It's also possible to replace the sphere trigger collider with an alternative trigger collider for customised collision detection.
 
 ---
 
@@ -2556,12 +2573,13 @@ The GetTouchedObject method returns the current object being touched by the cont
 
 The IsObjectInteractable method is used to check if a given game object is of type `VRTK_InteractableObject` and whether the object is enabled.
 
-#### ToggleControllerRigidBody/1
+#### ToggleControllerRigidBody/2
 
-  > `public void ToggleControllerRigidBody(bool state)`
+  > `public void ToggleControllerRigidBody(bool state, bool forceToggle = false)`
 
   * Parameters
    * `bool state` - The state of whether the rigidbody is on or off. `true` toggles the rigidbody on and `false` turns it off.
+   * `bool forceToggle` - Determines if the rigidbody has been forced into it's new state by another script. This can be used to override other non-force settings. Defaults to `false`
   * Returns
    * _none_
 
@@ -2577,6 +2595,17 @@ The ToggleControllerRigidBody method toggles the controller's rigidbody's abilit
    * `bool` - Is true if the rigidbody on the controller is currently active and able to affect other scene rigidbodies.
 
 The IsRigidBodyActive method checks to see if the rigidbody on the controller object is active and can affect other rigidbodies in the scene.
+
+#### IsRigidBodyForcedActive/0
+
+  > `public bool IsRigidBodyForcedActive()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `bool` - Is true if the rigidbody is active and has been forced into the active state.
+
+The IsRigidBodyForcedActive method checks to see if the rigidbody on the controller object has been forced into the active state.
 
 #### ForceStopTouching/0
 
