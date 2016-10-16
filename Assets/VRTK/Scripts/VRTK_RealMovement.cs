@@ -1,14 +1,14 @@
-﻿// Touchpad Walking|Scripts|0140
+﻿// Real Movement|Scripts|0145
 namespace VRTK
 {
     using UnityEngine;
     using System.Collections.Generic;
-    using System;
 
     [RequireComponent(typeof(VRTK_PlayerPresence))]
 
     /// <summary>
     /// Real Movement allows you to move the play area by calculating the y-movement of your controllers and propelling you the more they are moving.  This simulates walking in game by walking in real life.
+    /// This locomotion method is based on Immersive Movement, originally created by Highsight.
     /// </summary>
     /// <remarks>
     /// It is recommend you combine this with the VRTK_HeightAdjustTeleport
@@ -20,7 +20,7 @@ namespace VRTK
     {
 
         /// <summary>
-        /// Options for testing if a play space fall is valid
+        /// Options for testing if a play space fall is valid.
         /// </summary>
         /// <param name="HeadsetAndControllers">Track both headset and controllers for movement calculations.</param>
         /// <param name="ControllersOnly">Track only the controllers for movement calculations.</param>
@@ -31,7 +31,13 @@ namespace VRTK
             ControllersOnly,
             HeadsetOnly,
         }
-        
+
+        /// <summary>
+        /// Options for which method is used to determine player direction while moving.
+        /// </summary>
+        /// <param name="Gaze">Player will always move in the direction they are currently looking.</param>
+        /// <param name="DumbDecoupling">Player will move in the direction they were first looking when they engaged Real Movement.</param>
+        /// <param name="SmartDecoupling">Player will move in the direction they are looking only if their headset point the same direction as their controllers.</param>
         public enum DirectionalMethod
         {
             Gaze,
@@ -39,6 +45,9 @@ namespace VRTK
             SmartDecoupling
         }
 
+        /// <summary>
+        /// If true, the left controller's trackpad will engage Real Movement.
+        /// </summary>
         public bool LeftController
         {
             get { return leftController; }
@@ -49,6 +58,9 @@ namespace VRTK
             }
         }
 
+        /// <summary>
+        /// If true, the right controller's trackpad will engage Real Movement.
+        /// </summary>
         public bool RightController
         {
             get { return rightController; }
@@ -68,37 +80,39 @@ namespace VRTK
 
         [Tooltip("Select which trackables are used to determine movement.")]
         [SerializeField]
-        private ControlOptions m_controlOptions = ControlOptions.HeadsetAndControllers;
+        public ControlOptions controlOptions = ControlOptions.HeadsetAndControllers;
 
         [SerializeField]
         [Tooltip("Lower to decrease speed, raise to increase.")]
-        private float m_speedScale = 1;
+        public float speedScale = 1;
 
         [SerializeField]
         [Tooltip("The max speed you can move in game units. (If 0 or less, max speed is uncapped)")]
-        private float m_maxSpeed = 4;
+        public float maxSpeed = 4;
 
         [SerializeField]
         [Tooltip("How your movement direction will be determined.  The Gaze method tends to lead to the least motion sickness.  Smart decoupling is still a Work In Progress.")]
-        private DirectionalMethod m_dirMethod = DirectionalMethod.Gaze;
+        public DirectionalMethod dirMethod = DirectionalMethod.Gaze;
 
         [SerializeField]
         [Tooltip("If we're using Smart Decoupling, all trackables must be within this degree threshold to change direction.")]
-        private float m_smartDecoupleThreshold = 30f;
+        public float smartDecoupleThreshold = 30f;
 
         // The cap before we stop adding the delta to the movement list.  This will help regulate speed.
         [SerializeField]
         [Tooltip("The max amount of movement we wish to register in the virutal world.  Decreasing this will increase acceleration, and vice versa.")]
-        private float m_sensitivity = 0.02f;
+        public float sensitivity = 0.02f;
 
-        private int m_averagePeriod = 60;
-        private float m_cameraLastYRotation = 0f;
+        // The maximum number of updates we should hold to process movements.  The higher the number, the slower the acceleration/deceleration & vice versa.
+        private int averagePeriod = 60;
+        private float cameraLastYRotation = 0f;
         
         // Which tracked objects to use to determine amount of movement.
-        private List<Transform> m_trackedObjects = new List<Transform>();
+        private List<Transform> trackedObjects = new List<Transform>();
 
-        private VRTK_PlayerPresence m_playerBody;
-        private Rigidbody m_rigidBody;
+        private VRTK_PlayerPresence playerBody;
+        private Rigidbody rigidBody;
+
         private GameObject controllerLeftHand;
         private GameObject controllerRightHand;
         private Transform headset;
@@ -107,66 +121,91 @@ namespace VRTK
         private ControllerInteractionEventHandler touchpadPressed;
         private ControllerInteractionEventHandler touchpadUp;
 
-        // List of all the frames movements over the average period.
-        private Dictionary<Transform, List<float>> m_movementList = new Dictionary<Transform, List<float>>();
-        private Dictionary<Transform, float> m_previousYPositions = new Dictionary<Transform, float>();
+        // List of all the update's movements over the average period.
+        private Dictionary<Transform, List<float>> movementList = new Dictionary<Transform, List<float>>();
+        private Dictionary<Transform, float> previousYPositions = new Dictionary<Transform, float>();
 
-        private float m_playAreaPreviousY = 0f;
+        // Keeps track of the play area's last Y position.  This number is used to determine the delta position of the play area between updates.
+        // the delta y-position is then subtracted by all calculations to discount the movement of the play area from the trackable's movements. 
+        private float playAreaPreviousY = 0f;
 
-        private Vector3 m_initalGaze = Vector3.zero;
+        // Used to determine the direction when using a decoupling method.
+        private Vector3 initalGaze = Vector3.zero;
 
-        private Dictionary<Transform, Vector3> m_initialTrackableDirs = new Dictionary<Transform, Vector3>();
+        // The current move speed of the player.  If Real Movement is not active, it will be set to 0.00f.
+        private float curSpeed = 0.00f;
 
-        private float m_curSpeed = 0.00f;
+        // The current direction the player is moving.  If Real Movement is not active, it will be set to Vector.zero.
+        private Vector3 direction = new Vector3();
 
-        private Vector3 m_direction = new Vector3();
-
+        // True if Real Movement is currently engaged.
         private bool active = false;
 
-        // If we're in Unity 5.4, we need to make sure we are using the eyes, not the head.
-        void Awake()
+        /// <summary>
+        /// Set your control options and modify the trackables to match.
+        /// </summary>
+        public void SetControlOptions(ControlOptions controlOptions)
+        {
+            this.controlOptions = controlOptions;
+            trackedObjects.Clear();
+
+            if (this.controlOptions.Equals(ControlOptions.HeadsetAndControllers) || this.controlOptions.Equals(ControlOptions.ControllersOnly))
+            {
+                trackedObjects.Add(controllerLeftHand.transform);
+                trackedObjects.Add(controllerRightHand.transform);
+            }
+
+            if (this.controlOptions.Equals(ControlOptions.HeadsetAndControllers) || this.controlOptions.Equals(ControlOptions.HeadsetOnly))
+            {
+                trackedObjects.Add(headset.transform);
+            }
+        }
+        
+        public Vector3 GetMovementDirection()
+        {
+            return direction;
+        }
+
+        public float GetSpeed()
+        {
+            return curSpeed;
+        }
+
+        private void Awake()
         {
             controllerLeftHand = VRTK_DeviceFinder.GetControllerLeftHand();
             controllerRightHand = VRTK_DeviceFinder.GetControllerRightHand();
             headset = VRTK_DeviceFinder.HeadsetTransform();
 
-            setControlOptions(m_controlOptions);
+            SetControlOptions(controlOptions);
+        }
 
+        private void OnEnable()
+        {
             touchpadPressed = new ControllerInteractionEventHandler(DoTouchpadDown);
             touchpadUp = new ControllerInteractionEventHandler(DoTouchpadUp);
         }
 
-        public void setControlOptions(ControlOptions p_controlOptions)
+        private void OnDisable()
         {
-            m_controlOptions = p_controlOptions;
-            m_trackedObjects.Clear();
-
-            if (m_controlOptions.Equals(ControlOptions.HeadsetAndControllers) || m_controlOptions.Equals(ControlOptions.ControllersOnly))
-            {
-                m_trackedObjects.Add(controllerLeftHand.transform);
-                m_trackedObjects.Add(controllerRightHand.transform);
-            }
-
-            if (m_controlOptions.Equals(ControlOptions.HeadsetAndControllers) || m_controlOptions.Equals(ControlOptions.HeadsetOnly))
-            {
-                m_trackedObjects.Add(headset.transform);
-            }
+            touchpadPressed -= DoTouchpadDown;
+            touchpadUp -= DoTouchpadUp;
         }
 
-        // Use this for initialization
-        void Start()
+        private void Start()
         {
-            m_rigidBody = GetComponent<Rigidbody>();
+            rigidBody = GetComponent<Rigidbody>();
             SetControllerListeners(controllerLeftHand);
             SetControllerListeners(controllerRightHand);
+
             // Initialize the lists.
-            foreach (Transform trackedObj in m_trackedObjects)
+            foreach (Transform trackedObj in trackedObjects)
             {
-                m_movementList.Add(trackedObj, new List<float>());
-                m_previousYPositions.Add(trackedObj, trackedObj.transform.localPosition.y);
-                m_cameraLastYRotation = headset.transform.rotation.y;
+                movementList.Add(trackedObj, new List<float>());
+                previousYPositions.Add(trackedObj, trackedObj.transform.localPosition.y);
+                cameraLastYRotation = headset.transform.rotation.y;
             }
-            m_playAreaPreviousY = transform.position.y;
+            playAreaPreviousY = transform.position.y;
         }
         
         private void DoTouchpadDown(object sender, ControllerInteractionEventArgs e)
@@ -180,52 +219,49 @@ namespace VRTK
             var controllerEvents = (VRTK_ControllerEvents)sender;
 
             // If the button is released, clear all the lists.
-            foreach (Transform obj in m_trackedObjects)
+            foreach (Transform obj in trackedObjects)
             {
-                m_movementList[obj].Clear();
+                movementList[obj].Clear();
             }
-            m_initalGaze = Vector3.zero;
-            m_initialTrackableDirs = new Dictionary<Transform, Vector3>();
-            m_direction = Vector3.zero;
-            m_curSpeed = 0;
+            initalGaze = Vector3.zero;
+            direction = Vector3.zero;
+            curSpeed = 0;
 
             active = false;
         }
-
-        // FixedUpdate is called at a regular rate.
-        void FixedUpdate()
+        
+        private void FixedUpdate()
         { 
-            // If the button is pressed...
+            // If Real Movement is currently engaged.
             if (active)
             {
-                // Initialze the average and crosscount.
+                // Initialze the list average.
                 float listAverage = 0;
 
-                float m_playAreaDeltaY = Mathf.Abs(m_playAreaPreviousY - transform.position.y);
+                // Get the y-position delta of the play area.
+                float m_playAreaDeltaY = Mathf.Abs(playAreaPreviousY - transform.position.y);
 
-                foreach (Transform trackedObj in m_trackedObjects)
+                foreach (Transform trackedObj in trackedObjects)
                 {
                     // Get the amount of Y movement that's occured since the last update.
-                    float deltaYPostion = Mathf.Abs(m_previousYPositions[trackedObj] - trackedObj.transform.localPosition.y);
-
-                    //deltaYPostion = Mathf.Max(0, deltaYPostion - (m_playAreaDeltaY));
+                    float deltaYPostion = Mathf.Abs(previousYPositions[trackedObj] - trackedObj.transform.localPosition.y);
 
                     // Convenience code.
-                    List<float> trackedObjList = m_movementList[trackedObj];
+                    List<float> trackedObjList = movementList[trackedObj];
 
-                    if ((m_playerBody != null && (!m_playerBody.IsFalling() /*|| m_playerBody.IsClimbing()*/)) || m_playerBody == null)
+                    if ((playerBody != null && (!playerBody.IsFalling())) || playerBody == null)
                     {
                         // Cap off the speed.
-                        if (deltaYPostion > m_sensitivity)
+                        if (deltaYPostion > sensitivity)
                         {
-                            trackedObjList.Add(m_sensitivity);
+                            trackedObjList.Add(sensitivity);
                         }
                         else {
                             trackedObjList.Add(deltaYPostion);
                         }
 
                         // Keep our tracking list at m_averagePeriod number of elements.
-                        if (trackedObjList.Count > m_averagePeriod)
+                        if (trackedObjList.Count > averagePeriod)
                         {
                             trackedObjList.RemoveAt(0);
                         }
@@ -237,82 +273,75 @@ namespace VRTK
                     {
                         sum += diffrences;
                     }
-                    float avg = sum / m_averagePeriod;
+                    float avg = sum / averagePeriod;
 
                     // Add the average to the the list average.
                     listAverage += avg;
                 }
 
-                float speed = ((m_speedScale * 350) * (listAverage / m_trackedObjects.Count));
+                float speed = ((speedScale * 350) * (listAverage / trackedObjects.Count));
 
-                if (speed > m_maxSpeed && m_maxSpeed >= 0)
-                    speed = m_maxSpeed;
-
-                m_direction = Vector3.zero;
-
-                if (m_dirMethod == DirectionalMethod.SmartDecoupling || m_dirMethod == DirectionalMethod.DumbDecoupling)
+                if (speed > maxSpeed && maxSpeed >= 0)
                 {
-                    if (m_initalGaze.Equals(Vector3.zero))
+                    speed = maxSpeed;
+                }
+
+                direction = Vector3.zero;
+
+                // If we're doing a decoupling method...
+                if (dirMethod == DirectionalMethod.SmartDecoupling || dirMethod == DirectionalMethod.DumbDecoupling)
+                {
+                    // If we haven't set an inital gaze yet, set it now.
+                    // If we're doing dumb decoupling, this is what we'll be sticking with.
+                    if (initalGaze.Equals(Vector3.zero))
                     {
-                        m_initalGaze = new Vector3(headset.forward.x, 0, headset.forward.z);
+                        initalGaze = new Vector3(headset.forward.x, 0, headset.forward.z);
                     }
 
-                    if (m_dirMethod == DirectionalMethod.SmartDecoupling)
+                    // If we're doing smart decoupling, check to see if we want to reset our distance.
+                    if (dirMethod == DirectionalMethod.SmartDecoupling)
                     {
                         bool closeEnough = true;
                         float curXDir = headset.rotation.eulerAngles.y;
-                        if (curXDir <= m_smartDecoupleThreshold)
+                        if (curXDir <= smartDecoupleThreshold)
                         {
                             curXDir += 360;
                         }
                     
-                        closeEnough = closeEnough && (Mathf.Abs(curXDir - controllerLeftHand.transform.rotation.eulerAngles.y) <= m_smartDecoupleThreshold);
-                        closeEnough = closeEnough && (Mathf.Abs(curXDir - controllerRightHand.transform.rotation.eulerAngles.y) <= m_smartDecoupleThreshold);
+                        closeEnough = closeEnough && (Mathf.Abs(curXDir - controllerLeftHand.transform.rotation.eulerAngles.y) <= smartDecoupleThreshold);
+                        closeEnough = closeEnough && (Mathf.Abs(curXDir - controllerRightHand.transform.rotation.eulerAngles.y) <= smartDecoupleThreshold);
 
+                        // If the controllers and the headset are pointing the same direction (within the threshold) reset the direction the player's moving.
                         if (closeEnough)
-                            m_initalGaze = new Vector3(headset.forward.x, 0, headset.forward.z);
+                        {
+                            initalGaze = new Vector3(headset.forward.x, 0, headset.forward.z);
+                        }
                     }
-                    m_direction = m_initalGaze;
+                    direction = initalGaze;
                 }
-                else if (m_dirMethod.Equals(DirectionalMethod.Gaze))
+                // Otherwise if we're just doing Gaze movement, always set the direction to where we're looking.
+                else if (dirMethod.Equals(DirectionalMethod.Gaze))
                 {
-                    m_direction = (new Vector3(headset.forward.x, 0, headset.forward.z));
+                    direction = (new Vector3(headset.forward.x, 0, headset.forward.z));
                 }
 
-                m_curSpeed = speed;
+                // Update our current speed.
+                curSpeed = speed;
 
-                m_cameraLastYRotation = m_direction.y;
+                cameraLastYRotation = direction.y;
             }
 
-            foreach (Transform trackedObj in m_trackedObjects)
+            foreach (Transform trackedObj in trackedObjects)
             {
                 // Get delta postions and rotations
-                m_previousYPositions[trackedObj] = trackedObj.transform.localPosition.y;
+                previousYPositions[trackedObj] = trackedObj.transform.localPosition.y;
             }
 
-            Vector3 movement = (m_direction * m_curSpeed) * Time.fixedDeltaTime;
+            Vector3 movement = (direction * curSpeed) * Time.fixedDeltaTime;
 
-            /*if (m_playerBody != null)
-            {
-                m_playerBody.updatePlayerBodyPosition();
-                Vector3 cameraDistance = m_playerBody.getCameraDistance();
-                movement = movement + m_playerBody.getImmersiveMovementModifier() - (cameraDistance);
-                m_playerBody.resetImmersiveMovementModifier();
-            }*/
+            rigidBody.MovePosition(rigidBody.transform.position + movement);
 
-            m_rigidBody.MovePosition(m_rigidBody.transform.position + movement);
-
-            m_playAreaPreviousY = transform.position.y;
-        }
-
-        public Vector3 getMovementDirection()
-        {
-            return m_direction;
-        }
-
-        public float getSpeed()
-        {
-            return m_curSpeed;
+            playAreaPreviousY = transform.position.y;
         }
 
         private void SetControllerListeners(GameObject controller)
