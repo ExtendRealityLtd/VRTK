@@ -39,6 +39,8 @@ namespace VRTK
         private static float MIN_OPENING_DISTANCE = 20f; // percentage how far open something needs to be in order to activate it
 
         public DefaultControlEvents defaultEvents;
+        [Tooltip("If active the control will react to the controller without the need to push the grab button.")]
+        public bool interactWithoutGrab = false;
 
         abstract protected void InitRequiredComponents();
         abstract protected bool DetectSetup();
@@ -96,6 +98,10 @@ namespace VRTK
             if (Application.isPlaying)
             {
                 InitRequiredComponents();
+                if (interactWithoutGrab)
+                {
+                    CreateTriggerVolume();
+                }
             }
 
             setupSuccessful = DetectSetup();
@@ -166,6 +172,21 @@ namespace VRTK
                 return Vector3.right;
             }
 
+        }
+
+        private void CreateTriggerVolume()
+        {
+            GameObject tvGo = new GameObject(name + "-Trigger");
+            tvGo.transform.SetParent(transform);
+            tvGo.AddComponent<VRTK_ControllerRigidbodyActivator>();
+
+            // calculate bounding box
+            Bounds bounds = Utilities.GetBounds(transform);
+            bounds.Expand(bounds.size * 0.2f);
+            tvGo.transform.position = bounds.center;
+            BoxCollider bc = tvGo.AddComponent<BoxCollider>();
+            bc.isTrigger = true;
+            bc.size = bounds.size;
         }
 
         private void HandleInteractables()
