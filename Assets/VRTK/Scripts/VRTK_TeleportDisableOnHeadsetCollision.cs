@@ -10,7 +10,7 @@ namespace VRTK
     public class VRTK_TeleportDisableOnHeadsetCollision : MonoBehaviour
     {
         private VRTK_BasicTeleport basicTeleport;
-        private VRTK_HeadsetCollision headset;
+        private VRTK_HeadsetCollision headsetCollision;
 
         private void OnEnable()
         {
@@ -26,11 +26,11 @@ namespace VRTK
             }
             yield return new WaitForEndOfFrame();
 
-            headset = VRTK_ObjectCache.registeredHeadsetCollider;
-            if (headset)
+            headsetCollision = VRTK_ObjectCache.registeredHeadsetCollider;
+            if (headsetCollision)
             {
-                headset.HeadsetCollisionDetect += new HeadsetCollisionEventHandler(DisableTeleport);
-                headset.HeadsetCollisionEnded += new HeadsetCollisionEventHandler(EnableTeleport);
+                headsetCollision.HeadsetCollisionDetect += new HeadsetCollisionEventHandler(DisableTeleport);
+                headsetCollision.HeadsetCollisionEnded += new HeadsetCollisionEventHandler(EnableTeleport);
             }
         }
 
@@ -41,10 +41,10 @@ namespace VRTK
                 return;
             }
 
-            if (headset)
+            if (headsetCollision)
             {
-                headset.HeadsetCollisionDetect -= new HeadsetCollisionEventHandler(DisableTeleport);
-                headset.HeadsetCollisionEnded -= new HeadsetCollisionEventHandler(EnableTeleport);
+                headsetCollision.HeadsetCollisionDetect -= new HeadsetCollisionEventHandler(DisableTeleport);
+                headsetCollision.HeadsetCollisionEnded -= new HeadsetCollisionEventHandler(EnableTeleport);
             }
         }
 
