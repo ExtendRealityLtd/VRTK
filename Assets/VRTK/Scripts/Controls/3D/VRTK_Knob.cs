@@ -19,7 +19,7 @@ namespace VRTK
             x, y, z // TODO: autodetect not yet done, it's a bit more difficult to get it right
         }
 
-        [Tooltip("The axis on which the knob should rotate. All other axis will be frozen.")]
+        [Tooltip("The local axis around which the knob should rotate. All other axis will be frozen.")]
         public KnobDirection direction = KnobDirection.x;
         [Tooltip("The minimum value of the knob.")]
         public float min = 0f;
@@ -31,22 +31,48 @@ namespace VRTK
         private static float MAX_AUTODETECT_KNOB_WIDTH = 3; // multiple of the knob width
         private KnobDirection finalDirection;
         private Quaternion initialRotation;
-        private Vector3 initialLocalRotation;
         private Rigidbody rb;
+        private ConfigurableJoint cj;
         private VRTK_InteractableObject io;
 
         protected override void InitRequiredComponents()
         {
             initialRotation = transform.rotation;
-            initialLocalRotation = transform.localRotation.eulerAngles;
             InitRigidBody();
+            InitJoint();
             InitInteractable();
         }
 
         protected override bool DetectSetup()
         {
             finalDirection = direction;
-            SetConstraints(finalDirection);
+
+            if (cj)
+            {
+                cj.xMotion = ConfigurableJointMotion.Locked;
+                cj.yMotion = ConfigurableJointMotion.Locked;
+                cj.zMotion = ConfigurableJointMotion.Locked;
+                cj.angularXMotion = ConfigurableJointMotion.Locked;
+                cj.angularYMotion = ConfigurableJointMotion.Locked;
+                cj.angularZMotion = ConfigurableJointMotion.Locked;
+
+                // use axis different than direction
+                switch (finalDirection)
+                {
+                    case KnobDirection.x:
+                        cj.axis = Vector3.forward;
+                        cj.angularXMotion = ConfigurableJointMotion.Free;
+                        break;
+                    case KnobDirection.y:
+                        cj.axis = Vector3.right;
+                        cj.angularYMotion = ConfigurableJointMotion.Free;
+                        break;
+                    case KnobDirection.z:
+                        cj.axis = Vector3.up;
+                        cj.angularZMotion = ConfigurableJointMotion.Free;
+                        break;
+                }
+            }
 
             return true;
         }
@@ -73,22 +99,14 @@ namespace VRTK
             rb.angularDrag = 10; // otherwise knob will continue to move too far on its own
         }
 
-        private void SetConstraints(KnobDirection direction)
+        private void InitJoint()
         {
-            if (!rb) return;
-
-            rb.constraints = RigidbodyConstraints.FreezeAll;
-            switch (direction)
+            cj = GetComponent<ConfigurableJoint>();
+            if (cj == null)
             {
-                case KnobDirection.x:
-                    rb.constraints -= RigidbodyConstraints.FreezeRotationX;
-                    break;
-                case KnobDirection.y:
-                    rb.constraints -= RigidbodyConstraints.FreezeRotationY;
-                    break;
-                case KnobDirection.z:
-                    rb.constraints -= RigidbodyConstraints.FreezeRotationZ;
-                    break;
+                cj = gameObject.AddComponent<ConfigurableJoint>();
+                cj.configuredInWorldSpace = false;
+                cj.anchor = Vector3.zero;
             }
         }
 
@@ -167,13 +185,13 @@ namespace VRTK
             switch (finalDirection)
             {
                 case KnobDirection.x:
-                    angle = transform.localRotation.eulerAngles.x - initialLocalRotation.x;
+                    angle = transform.rotation.eulerAngles.x - initialRotation.eulerAngles.x;
                     break;
                 case KnobDirection.y:
-                    angle = transform.localRotation.eulerAngles.y - initialLocalRotation.y;
+                    angle = transform.rotation.eulerAngles.y - initialRotation.eulerAngles.y;
                     break;
                 case KnobDirection.z:
-                    angle = transform.localRotation.eulerAngles.z - initialLocalRotation.z;
+                    angle = transform.rotation.eulerAngles.z - initialRotation.eulerAngles.z;
                     break;
             }
             angle = Mathf.Round(angle * 1000f) / 1000f; // not rounding will produce slight offsets in 4th digit that mess up initial value
@@ -195,6 +213,9 @@ namespace VRTK
             {
                 value = (max + min) - value;
             }
+
+            // For debugging
+            // Debug.Log(value + " / " + angle + " / " + Quaternion.Angle(initialRotation, transform.rotation));
 
             return value;
         }
