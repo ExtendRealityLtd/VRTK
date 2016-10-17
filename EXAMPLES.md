@@ -178,9 +178,13 @@ A scene that demonstrates the concept of extending the physical room scale space
 
 A scene that demonstrates adding tooltips to game objects and to the controllers using the prefabs `ObjectTooltip` and `ControllerTooltips`.
 
+  > [View Example Tour on YouTube](https://www.youtube.com/watch?v=5bgJ5inm404)
+
 ### 030_Controls_RadialTouchpadMenu
 
 A scene that demonstrates adding dynamic radial menus to controllers and other objects using the prefab `RadialMenu`.
+
+  > [View Example Tour on YouTube](https://www.youtube.com/watch?v=9X1BJeomnPM)
 
 ### 031_CameraRig_HeadsetGazePointer
 
