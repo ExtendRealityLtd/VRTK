@@ -1718,14 +1718,17 @@ Like the basic teleporter the Height Adjust Teleport script is attached to the `
 
 The purpose of the Headset Collision is to detect when the user's VR headset collides with another game object.
 
-> **Unity Version Information**
-> * If using `Unity 5.3` or older then the Headset Collision script is attached to the `Camera(head)` object within the `[CameraRig]` prefab.
-> * If using `Unity 5.4` or newer then the Headset Collision script is attached to the `Camera(eye)` object within the `[CameraRig]->Camera(head)` prefab.
+The Headset Collision script is added to the `[CameraRig]` prefab. It will automatically create a script on the headset to deal with the collision events.
 
 ### Inspector Parameters
 
  * **Ignore Target With Tag Or Class:** A string that specifies an object Tag or the name of a Script attached to an object and will be ignored on headset collision.
  * **Target Tag Or Script List Policy:** A specified VRTK_TagOrScriptPolicyList to use to determine whether any objects will be acted upon by the Headset Collision. If a list is provided then the 'Ignore Target With Tag Or Class' parameter will be ignored.
+
+### Class Variables
+
+ * `public bool headsetColliding` - Determines if the headset is currently colliding with another object. Default: `false`
+ * `public Collider collidingWith` - Stores the collider of what the headset is colliding with. Default: `null`
 
 ### Class Events
 
@@ -1769,9 +1772,7 @@ The IsColliding method is used to determine if the headset is currently collidin
 
 The purpose of the Headset Fade is to change the colour of the headset view to a specified colour over a given duration and to also unfade it back to being transparent. The `Fade` and `Unfade` methods can only be called via another script and this Headset Fade script does not do anything on initialisation to fade or unfade the headset view.
 
-> **Unity Version Information**
-> * If using `Unity 5.3` or older then the Headset Fade script is attached to the `Camera(head)` object within the `[CameraRig]` prefab.
-> * If using `Unity 5.4` or newer then the Headset Fade script is attached to the `Camera(eye)` object within the `[CameraRig]->Camera(head)` prefab.
+The Headset Fade script is added to the `[CameraRig]` prefab.
 
 ### Class Events
 
@@ -1855,16 +1856,12 @@ The purpose of the Headset Collision Fade is to detect when the user's VR headse
 
 The Headset Collision Fade uses a composition of the Headset Collision and Headset Fade scripts to derive the desired behaviour.
 
-> **Unity Version Information**
-> * If using `Unity 5.3` or older then the Headset Collision Fade script is attached to the `Camera(head)` object within the `[CameraRig]` prefab.
-> * If using `Unity 5.4` or newer then the Headset Collision Fade script is attached to the `Camera(eye)` object within the `[CameraRig]->Camera(head)` prefab.
+The Headset Collision Fade script is added to the `[CameraRig]` prefab.
 
 ### Inspector Parameters
 
  * **Blink Transition Speed:** The fade blink speed on collision.
  * **Fade Color:** The colour to fade the headset to on collision.
- * **Ignore Target With Tag Or Class:** A string that specifies an object Tag or the name of a Script attached to an object and will prevent the object from fading the headset view on collision.
- * **Target Tag Or Script List Policy:** A specified VRTK_TagOrScriptPolicyList to use to determine whether any objects will be acted upon by the Headset Collision Fade. If a list is provided then the 'Ignore Target With Tag Or Class' parameter will be ignored.
 
 ### Example
 
@@ -2967,7 +2964,7 @@ Adaptive Quality dynamically changes rendering settings to maintain VR framerate
 
 > **Only Compatible With Unity 5.4 and above**
 
-The Adaptive Quality script is attached to the `eye` object within the `[CameraRig]` prefab.
+The Adaptive Quality script is attached to the `[CameraRig]` game object.
 
 There are two goals:
  * Reduce the chances of dropping frames and reprojecting

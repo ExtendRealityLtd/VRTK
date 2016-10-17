@@ -28,7 +28,7 @@ namespace VRTK
             serializedObject.Update();
 
             var adaptiveQuality = (VRTK_AdaptiveQuality)target;
-            if (VRTK_SDK_Bridge.GetHeadsetCamera(adaptiveQuality.gameObject) == null)
+            if (VRTK_SDK_Bridge.GetHeadsetCamera() == null)
             {
                 EditorGUILayout.HelpBox(NoSteamVR_CameraFoundHelpBoxText, MessageType.Error);
                 return;

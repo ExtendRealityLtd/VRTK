@@ -21,8 +21,8 @@ namespace VRTK
     /// <remarks>
     ///   > **Only Compatible With Unity 5.4 and above**
     ///
-    /// The Adaptive Quality script is attached to the `eye` object within the `[CameraRig]` prefab.
-    /// <para>&#160;</para>
+    /// The Adaptive Quality script is attached to the `[CameraRig]` game object.
+    ///
     /// There are two goals:
     /// <list type="bullet">
     /// <item> <description>Reduce the chances of dropping frames and reprojecting</description> </item>
@@ -647,7 +647,7 @@ namespace VRTK
                 mesh.UploadMeshData(true);
 
                 debugVisualizationQuad = new GameObject("AdaptiveQualityDebugVisualizationQuad");
-                debugVisualizationQuad.transform.parent = transform;
+                debugVisualizationQuad.transform.parent = VRTK_DeviceFinder.HeadsetTransform();
                 debugVisualizationQuad.transform.localPosition = Vector3.forward;
                 debugVisualizationQuad.transform.localRotation = Quaternion.identity;
                 debugVisualizationQuad.AddComponent<MeshFilter>().mesh = mesh;

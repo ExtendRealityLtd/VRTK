@@ -25,9 +25,7 @@ namespace VRTK
     /// The purpose of the Headset Fade is to change the colour of the headset view to a specified colour over a given duration and to also unfade it back to being transparent. The `Fade` and `Unfade` methods can only be called via another script and this Headset Fade script does not do anything on initialisation to fade or unfade the headset view.
     /// </summary>
     /// <remarks>
-    ///   > **Unity Version Information**
-    ///   > * If using `Unity 5.3` or older then the Headset Fade script is attached to the `Camera(head)` object within the `[CameraRig]` prefab.
-    ///   > * If using `Unity 5.4` or newer then the Headset Fade script is attached to the `Camera(eye)` object within the `[CameraRig]->Camera(head)` prefab.
+    /// The Headset Fade script is added to the `[CameraRig]` prefab.
     /// </remarks>
     /// <example>
     /// `VRTK/Examples/011_Camera_HeadSetCollisionFading` has collidable walls around the play area and if the user puts their head into any of the walls then the headset will fade to black.
@@ -51,6 +49,7 @@ namespace VRTK
         /// </summary>
         public event HeadsetFadeEventHandler HeadsetUnfadeComplete;
 
+        private Transform headset;
         private bool isTransitioning = false;
         private bool isFaded = false;
 
@@ -114,7 +113,7 @@ namespace VRTK
             isFaded = false;
             isTransitioning = true;
             VRTK_SDK_Bridge.HeadsetFade(color, duration);
-            OnHeadsetFadeStart(SetHeadsetFadeEvent(transform, duration));
+            OnHeadsetFadeStart(SetHeadsetFadeEvent(headset, duration));
             CancelInvoke("UnfadeComplete");
             Invoke("FadeComplete", duration);
         }
@@ -128,20 +127,21 @@ namespace VRTK
             isFaded = true;
             isTransitioning = true;
             VRTK_SDK_Bridge.HeadsetFade(Color.clear, duration);
-            OnHeadsetUnfadeStart(SetHeadsetFadeEvent(transform, duration));
+            OnHeadsetUnfadeStart(SetHeadsetFadeEvent(headset, duration));
             CancelInvoke("FadeComplete");
             Invoke("UnfadeComplete", duration);
         }
 
         private void Start()
         {
+            headset = VRTK_DeviceFinder.HeadsetTransform();
             isTransitioning = false;
             isFaded = false;
 
             Utilities.AddCameraFade();
-            if (!VRTK_SDK_Bridge.HasHeadsetFade(gameObject))
+            if (!VRTK_SDK_Bridge.HasHeadsetFade(headset.gameObject))
             {
-                Debug.LogWarning("This 'VRTK_HeadsetCollisionFade' script needs a compatible fade script on the camera eye.");
+                Debug.LogWarning("This 'VRTK_HeadsetFade' script needs a compatible fade script on the camera game object.");
             }
         }
 
@@ -157,14 +157,14 @@ namespace VRTK
         {
             isFaded = true;
             isTransitioning = false;
-            OnHeadsetFadeComplete(SetHeadsetFadeEvent(transform, 0f));
+            OnHeadsetFadeComplete(SetHeadsetFadeEvent(headset, 0f));
         }
 
         private void UnfadeComplete()
         {
             isFaded = false;
             isTransitioning = false;
-            OnHeadsetUnfadeComplete(SetHeadsetFadeEvent(transform, 0f));
+            OnHeadsetUnfadeComplete(SetHeadsetFadeEvent(headset, 0f));
         }
     }
 }
