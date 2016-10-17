@@ -139,6 +139,7 @@ MonoBehaviour:
         m_Calls: []
       m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
+  interactWithoutGrab: 0
   direction: 0
   lid: {fileID: 88356432}
   body: {fileID: 1316366091}
@@ -304,134 +305,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 39677371}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!43 &43002350
-Mesh:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_Name: 
-  serializedVersion: 8
-  m_SubMeshes:
-  - serializedVersion: 2
-    firstByte: 0
-    indexCount: 24
-    topology: 0
-    firstVertex: 0
-    vertexCount: 8
-    localAABB:
-      m_Center: {x: 0, y: 0.01, z: 0}
-      m_Extent: {x: 1.65, y: 0, z: 0.9000001}
-  m_Shapes:
-    vertices: []
-    shapes: []
-    channels: []
-    fullWeights: []
-  m_BindPose: []
-  m_BoneNameHashes: 
-  m_RootBoneNameHash: 0
-  m_MeshCompression: 0
-  m_IsReadable: 1
-  m_KeepVertices: 1
-  m_KeepIndices: 1
-  m_IndexBuffer: 000001000400010005000400010002000500020006000500020003000600030007000600030000000700000004000700
-  m_Skin: []
-  m_VertexData:
-    m_CurrentChannels: 13
-    m_VertexCount: 8
-    m_Channels:
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 3
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 12
-      format: 0
-      dimension: 4
-    - stream: 0
-      offset: 28
-      format: 0
-      dimension: 2
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    m_DataSize: 288
-    _typelessdata: 0000c03f0ad7233c010040bf000000000000803f0000803f0000803f00000000000000000000c0bf0ad7233c010040bf000000000000803f0000803f0000803f0000803f000000000000c0bf0ad7233c0100403f000000000000803f0000803f0000803f00000000000000000000c03f0ad7233c0100403f000000000000803f0000803f0000803f0000803f000000003333d33f0ad7233c686666bf000000000000803f0000803f00000000000000000000803f3333d3bf0ad7233c686666bf000000000000803f0000803f000000000000803f0000803f3333d3bf0ad7233c6866663f000000000000803f0000803f00000000000000000000803f3333d33f0ad7233c6866663f000000000000803f0000803f000000000000803f0000803f
-  m_CompressedMesh:
-    m_Vertices:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_UV:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Normals:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Tangents:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Weights:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_NormalSigns:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_TangentSigns:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_FloatColors:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_BoneIndices:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Triangles:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_UVInfo: 0
-  m_LocalAABB:
-    m_Center: {x: 0, y: 0.01, z: 0}
-    m_Extent: {x: 1.65, y: 0, z: 0.9000001}
-  m_MeshUsageFlags: 0
-  m_BakedConvexCollisionMesh: 
-  m_BakedTriangleCollisionMesh: 
-  m_MeshOptimized: 0
 --- !u!1 &48637168
 GameObject:
   m_ObjectHideFlags: 0
@@ -520,6 +393,7 @@ MonoBehaviour:
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
   hideControllerOnUse: 0
+  usingState: 0
 --- !u!114 &48637172
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -537,6 +411,7 @@ MonoBehaviour:
         m_Calls: []
       m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
+  interactWithoutGrab: 0
   direction: 1
   min: 1
   max: 10
@@ -754,6 +629,7 @@ MonoBehaviour:
         m_Calls: []
       m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
+  interactWithoutGrab: 0
   direction: 0
   min: 0
   max: 100
@@ -1054,6 +930,7 @@ MonoBehaviour:
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
   hideControllerOnUse: 0
+  usingState: 0
 --- !u!54 &80646939
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2581,6 +2458,7 @@ MonoBehaviour:
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
   hideControllerOnUse: 0
+  usingState: 0
 --- !u!54 &226280889
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -3943,6 +3821,7 @@ MonoBehaviour:
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
   hideControllerOnUse: 0
+  usingState: 0
 --- !u!54 &318632998
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -4118,6 +3997,7 @@ MonoBehaviour:
         m_Calls: []
       m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
+  interactWithoutGrab: 0
   direction: 0
   lid: {fileID: 1655260105}
   body: {fileID: 957849495}
@@ -4287,6 +4167,7 @@ MonoBehaviour:
         m_Calls: []
       m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
+  interactWithoutGrab: 0
   direction: 0
   door: {fileID: 433076924}
   handles: {fileID: 1723976829}
@@ -4846,6 +4727,7 @@ MonoBehaviour:
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
   hideControllerOnUse: 0
+  usingState: 0
 --- !u!114 &386808180
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4863,16 +4745,17 @@ MonoBehaviour:
         m_Calls: []
       m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
+  interactWithoutGrab: 1
+  connectedTo: {fileID: 0}
+  direction: 0
+  activationDistance: 0.031024741
+  buttonStrength: 5
   events:
     OnPush:
       m_PersistentCalls:
         m_Calls: []
       m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
-  connectedTo: {fileID: 0}
-  direction: 0
-  activationDistance: 0.031024741
-  buttonStrength: 5
 --- !u!23 &386808181
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -5415,6 +5298,7 @@ MonoBehaviour:
         m_Calls: []
       m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
+  interactWithoutGrab: 0
   direction: 0
   lid: {fileID: 1198275049}
   body: {fileID: 1004531196}
@@ -5927,6 +5811,7 @@ MonoBehaviour:
         m_Calls: []
       m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
+  interactWithoutGrab: 0
   direction: 0
   lid: {fileID: 793700859}
   body: {fileID: 549199849}
@@ -7204,9 +7089,12 @@ MonoBehaviour:
         m_Calls: []
       m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
+  interactWithoutGrab: 1
+  connectedTo: {fileID: 0}
   direction: 2
   minAngle: 0
   maxAngle: 120
+  stepSize: 1
 --- !u!23 &564304742
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -7922,6 +7810,7 @@ MonoBehaviour:
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
   hideControllerOnUse: 0
+  usingState: 0
 --- !u!54 &630186608
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -8297,6 +8186,7 @@ MonoBehaviour:
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
   hideControllerOnUse: 0
+  usingState: 0
 --- !u!54 &643236390
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -8500,6 +8390,7 @@ MonoBehaviour:
         m_Calls: []
       m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
+  interactWithoutGrab: 0
   direction: 1
   lid: {fileID: 206119189}
   body: {fileID: 195392701}
@@ -8595,6 +8486,7 @@ MonoBehaviour:
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
   hideControllerOnUse: 0
+  usingState: 0
 --- !u!114 &670552610
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8612,16 +8504,17 @@ MonoBehaviour:
         m_Calls: []
       m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
+  interactWithoutGrab: 1
+  connectedTo: {fileID: 0}
+  direction: 0
+  activationDistance: 0.046147197
+  buttonStrength: 5
   events:
     OnPush:
       m_PersistentCalls:
         m_Calls: []
       m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
-  connectedTo: {fileID: 0}
-  direction: 0
-  activationDistance: 0.046147197
-  buttonStrength: 5
 --- !u!23 &670552611
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -9585,6 +9478,7 @@ MonoBehaviour:
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
   hideControllerOnUse: 0
+  usingState: 0
 --- !u!114 &752776155
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9602,16 +9496,17 @@ MonoBehaviour:
         m_Calls: []
       m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
+  interactWithoutGrab: 1
+  connectedTo: {fileID: 337570959}
+  direction: 0
+  activationDistance: 0.025608616
+  buttonStrength: 5
   events:
     OnPush:
       m_PersistentCalls:
         m_Calls: []
       m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
-  connectedTo: {fileID: 337570959}
-  direction: 0
-  activationDistance: 0.025608616
-  buttonStrength: 5
 --- !u!23 &752776156
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -9802,6 +9697,7 @@ MonoBehaviour:
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
   hideControllerOnUse: 0
+  usingState: 0
 --- !u!54 &758710436
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -10478,6 +10374,7 @@ MonoBehaviour:
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
   hideControllerOnUse: 0
+  usingState: 0
 --- !u!54 &801254836
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -10986,7 +10883,7 @@ Transform:
   - {fileID: 337570960}
   - {fileID: 752776152}
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 11
 --- !u!1 &862512961
 GameObject:
   m_ObjectHideFlags: 0
@@ -11350,6 +11247,7 @@ MonoBehaviour:
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
   hideControllerOnUse: 0
+  usingState: 0
 --- !u!54 &878348682
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -11957,6 +11855,7 @@ MonoBehaviour:
         m_Calls: []
       m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
+  interactWithoutGrab: 1
   direction: 0
   min: 1
   max: 5
@@ -12054,6 +11953,7 @@ MonoBehaviour:
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
   hideControllerOnUse: 0
+  usingState: 0
 --- !u!1 &951483492
 GameObject:
   m_ObjectHideFlags: 0
@@ -12610,16 +12510,17 @@ MonoBehaviour:
         m_Calls: []
       m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
+  interactWithoutGrab: 1
+  connectedTo: {fileID: 0}
+  direction: 1
+  activationDistance: 0.1
+  buttonStrength: 5
   events:
     OnPush:
       m_PersistentCalls:
         m_Calls: []
       m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
-  connectedTo: {fileID: 0}
-  direction: 1
-  activationDistance: 0.1
-  buttonStrength: 5
 --- !u!23 &989800205
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -13196,6 +13097,7 @@ MonoBehaviour:
         m_Calls: []
       m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
+  interactWithoutGrab: 0
   direction: 0
   lid: {fileID: 1536700038}
   body: {fileID: 773366195}
@@ -13267,6 +13169,7 @@ MonoBehaviour:
         m_Calls: []
       m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
+  interactWithoutGrab: 0
   direction: 3
   door: {fileID: 0}
   handles: {fileID: 0}
@@ -13398,9 +13301,12 @@ MonoBehaviour:
         m_Calls: []
       m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
+  interactWithoutGrab: 0
+  connectedTo: {fileID: 0}
   direction: 0
   minAngle: -130
   maxAngle: 0
+  stepSize: 1
 --- !u!114 &1068412306
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13621,6 +13527,7 @@ MonoBehaviour:
         m_Calls: []
       m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
+  interactWithoutGrab: 0
   direction: 1
   lid: {fileID: 48941951}
   body: {fileID: 251300955}
@@ -13948,6 +13855,7 @@ MonoBehaviour:
         m_Calls: []
       m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
+  interactWithoutGrab: 0
   direction: 0
   door: {fileID: 469879064}
   handles: {fileID: 236596579}
@@ -14321,6 +14229,7 @@ MonoBehaviour:
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
   hideControllerOnUse: 0
+  usingState: 0
 --- !u!54 &1138379887
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -15410,6 +15319,7 @@ MonoBehaviour:
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
   hideControllerOnUse: 0
+  usingState: 0
 --- !u!114 &1232002164
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15427,6 +15337,7 @@ MonoBehaviour:
         m_Calls: []
       m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
+  interactWithoutGrab: 0
   direction: 1
   min: 1
   max: 5
@@ -15757,6 +15668,7 @@ MonoBehaviour:
         m_Calls: []
       m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
+  interactWithoutGrab: 0
   direction: 2
   lid: {fileID: 1733974794}
   body: {fileID: 865374237}
@@ -15986,6 +15898,7 @@ MonoBehaviour:
         m_Calls: []
       m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
+  interactWithoutGrab: 0
   direction: 2
   door: {fileID: 0}
   handles: {fileID: 0}
@@ -18170,6 +18083,7 @@ MonoBehaviour:
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
   hideControllerOnUse: 0
+  usingState: 0
 --- !u!114 &1413909005
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18187,16 +18101,17 @@ MonoBehaviour:
         m_Calls: []
       m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
+  interactWithoutGrab: 1
+  connectedTo: {fileID: 0}
+  direction: 0
+  activationDistance: 0.025608616
+  buttonStrength: 5
   events:
     OnPush:
       m_PersistentCalls:
         m_Calls: []
       m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
-  connectedTo: {fileID: 0}
-  direction: 0
-  activationDistance: 0.025608616
-  buttonStrength: 5
 --- !u!23 &1413909006
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -18560,6 +18475,8 @@ MonoBehaviour:
         m_Calls: []
       m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
+  interactWithoutGrab: 0
+  connectedTo: {fileID: 0}
   direction: 0
   body: {fileID: 1358027778}
   handle: {fileID: 1783395876}
@@ -19010,6 +18927,7 @@ MonoBehaviour:
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
   hideControllerOnUse: 0
+  usingState: 0
 --- !u!54 &1473594646
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -20040,6 +19958,7 @@ MonoBehaviour:
         m_Calls: []
       m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
+  interactWithoutGrab: 0
   direction: 0
   lid: {fileID: 1299706961}
   body: {fileID: 240563735}
@@ -20367,6 +20286,7 @@ MonoBehaviour:
         m_Calls: []
       m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
+  interactWithoutGrab: 0
   direction: 0
   lid: {fileID: 582109180}
   body: {fileID: 1588813354}
@@ -20491,6 +20411,7 @@ MonoBehaviour:
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
   hideControllerOnUse: 0
+  usingState: 0
 --- !u!114 &1578491623
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20508,16 +20429,17 @@ MonoBehaviour:
         m_Calls: []
       m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
+  interactWithoutGrab: 1
+  connectedTo: {fileID: 0}
+  direction: 6
+  activationDistance: 0.08
+  buttonStrength: 5
   events:
     OnPush:
       m_PersistentCalls:
         m_Calls: []
       m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
-  connectedTo: {fileID: 0}
-  direction: 6
-  activationDistance: 0.08
-  buttonStrength: 5
 --- !u!23 &1578491624
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -21628,6 +21550,7 @@ MonoBehaviour:
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
   hideControllerOnUse: 0
+  usingState: 0
 --- !u!54 &1662784855
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -22697,6 +22620,7 @@ MonoBehaviour:
         m_Calls: []
       m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
+  interactWithoutGrab: 0
   direction: 1
   min: 100
   max: 0
@@ -23591,6 +23515,7 @@ MonoBehaviour:
         m_Calls: []
       m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
+  interactWithoutGrab: 0
   direction: 3
   door: {fileID: 730950275}
   handles: {fileID: 0}
@@ -23780,6 +23705,7 @@ MonoBehaviour:
         m_Calls: []
       m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
+  interactWithoutGrab: 0
   direction: 0
   lid: {fileID: 561422149}
   body: {fileID: 1682875442}
@@ -24262,6 +24188,7 @@ MonoBehaviour:
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
   hideControllerOnUse: 0
+  usingState: 0
 --- !u!54 &1879024479
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -24865,6 +24792,7 @@ MonoBehaviour:
         m_Calls: []
       m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
+  interactWithoutGrab: 0
   direction: 2
   min: 1
   max: 7
@@ -24990,6 +24918,7 @@ MonoBehaviour:
         m_Calls: []
       m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
+  interactWithoutGrab: 1
   direction: 3
   door: {fileID: 245234964}
   handles: {fileID: 829530009}
@@ -25106,6 +25035,7 @@ MonoBehaviour:
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
   hideControllerOnUse: 0
+  usingState: 0
 --- !u!114 &1931883185
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25123,16 +25053,17 @@ MonoBehaviour:
         m_Calls: []
       m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
+  interactWithoutGrab: 0
+  connectedTo: {fileID: 0}
+  direction: 0
+  activationDistance: 0.03607156
+  buttonStrength: 5
   events:
     OnPush:
       m_PersistentCalls:
         m_Calls: []
       m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
-  connectedTo: {fileID: 0}
-  direction: 0
-  activationDistance: 0.03607156
-  buttonStrength: 5
 --- !u!23 &1931883186
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -25221,6 +25152,8 @@ MonoBehaviour:
         m_Calls: []
       m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
+  interactWithoutGrab: 0
+  connectedTo: {fileID: 0}
   direction: 0
   body: {fileID: 962525669}
   handle: {fileID: 862512961}
@@ -25880,6 +25813,8 @@ MonoBehaviour:
         m_Calls: []
       m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
+  interactWithoutGrab: 0
+  connectedTo: {fileID: 0}
   direction: 0
   body: {fileID: 388702892}
   handle: {fileID: 1413734214}
@@ -26284,12 +26219,12 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 420908, guid: 4d293c8e162f3874b982baadd71153d2, type: 2}
       propertyPath: m_RootOrder
-      value: 11
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 3380982, guid: 4d293c8e162f3874b982baadd71153d2, type: 2}
       propertyPath: m_Mesh
       value: 
-      objectReference: {fileID: 43002350}
+      objectReference: {fileID: 2103814735}
     - target: {fileID: 11489174, guid: 4d293c8e162f3874b982baadd71153d2, type: 2}
       propertyPath: drawInGame
       value: 1
@@ -26416,6 +26351,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d45c8d32f1d960d4498790bb3961fc52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  modelElementPaths:
+    bodyModelPath: 
+    triggerModelPath: 
+    leftGripModelPath: 
+    rightGripModelPath: 
+    touchpadModelPath: 
+    appMenuModelPath: 
+    systemMenuModelPath: 
+  elementHighlighterOverrides:
+    body: {fileID: 0}
+    trigger: {fileID: 0}
+    gripLeft: {fileID: 0}
+    gripRight: {fileID: 0}
+    touchpad: {fileID: 0}
+    appMenu: {fileID: 0}
+    systemMenu: {fileID: 0}
 --- !u!114 &2032240558
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26493,6 +26444,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d45c8d32f1d960d4498790bb3961fc52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  modelElementPaths:
+    bodyModelPath: 
+    triggerModelPath: 
+    leftGripModelPath: 
+    rightGripModelPath: 
+    touchpadModelPath: 
+    appMenuModelPath: 
+    systemMenuModelPath: 
+  elementHighlighterOverrides:
+    body: {fileID: 0}
+    trigger: {fileID: 0}
+    gripLeft: {fileID: 0}
+    gripRight: {fileID: 0}
+    touchpad: {fileID: 0}
+    appMenu: {fileID: 0}
+    systemMenu: {fileID: 0}
 --- !u!114 &2032240562
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26827,6 +26794,8 @@ MonoBehaviour:
         m_Calls: []
       m_TypeName: VRTK.VRTK_Control+ValueChangedEvent, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
+  interactWithoutGrab: 0
+  connectedTo: {fileID: 0}
   direction: 0
   body: {fileID: 149084987}
   handle: {fileID: 1897828306}
@@ -27082,6 +27051,134 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2085581303}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!43 &2103814735
+Mesh:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: 
+  serializedVersion: 8
+  m_SubMeshes:
+  - serializedVersion: 2
+    firstByte: 0
+    indexCount: 24
+    topology: 0
+    firstVertex: 0
+    vertexCount: 8
+    localAABB:
+      m_Center: {x: 0, y: 0.01, z: 0}
+      m_Extent: {x: 1.65, y: 0, z: 0.9000001}
+  m_Shapes:
+    vertices: []
+    shapes: []
+    channels: []
+    fullWeights: []
+  m_BindPose: []
+  m_BoneNameHashes: 
+  m_RootBoneNameHash: 0
+  m_MeshCompression: 0
+  m_IsReadable: 1
+  m_KeepVertices: 1
+  m_KeepIndices: 1
+  m_IndexBuffer: 000001000400010005000400010002000500020006000500020003000600030007000600030000000700000004000700
+  m_Skin: []
+  m_VertexData:
+    m_CurrentChannels: 13
+    m_VertexCount: 8
+    m_Channels:
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 3
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 12
+      format: 0
+      dimension: 4
+    - stream: 0
+      offset: 28
+      format: 0
+      dimension: 2
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    m_DataSize: 288
+    _typelessdata: 0000c03f0ad7233c010040bf000000000000803f0000803f0000803f00000000000000000000c0bf0ad7233c010040bf000000000000803f0000803f0000803f0000803f000000000000c0bf0ad7233c0100403f000000000000803f0000803f0000803f00000000000000000000c03f0ad7233c0100403f000000000000803f0000803f0000803f0000803f000000003333d33f0ad7233c686666bf000000000000803f0000803f00000000000000000000803f3333d3bf0ad7233c686666bf000000000000803f0000803f000000000000803f0000803f3333d3bf0ad7233c6866663f000000000000803f0000803f00000000000000000000803f3333d33f0ad7233c6866663f000000000000803f0000803f000000000000803f0000803f
+  m_CompressedMesh:
+    m_Vertices:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_UV:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Normals:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Tangents:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Weights:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_NormalSigns:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_TangentSigns:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_FloatColors:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_BoneIndices:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Triangles:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_UVInfo: 0
+  m_LocalAABB:
+    m_Center: {x: 0, y: 0.01, z: 0}
+    m_Extent: {x: 1.65, y: 0, z: 0.9000001}
+  m_MeshUsageFlags: 0
+  m_BakedConvexCollisionMesh: 
+  m_BakedTriangleCollisionMesh: 
+  m_MeshOptimized: 0
 --- !u!1 &2103946830
 GameObject:
   m_ObjectHideFlags: 0
@@ -27315,6 +27412,7 @@ MonoBehaviour:
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
   hideControllerOnUse: 0
+  usingState: 0
 --- !u!54 &2111933694
 Rigidbody:
   m_ObjectHideFlags: 0
