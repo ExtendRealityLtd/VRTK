@@ -3093,6 +3093,10 @@ All 3D controls extend the `VRTK_Control` abstract class which provides common m
 
 All 3D controls extend the `VRTK_Control` abstract class which provides a default set of methods and events that all of the subsequent controls expose.
 
+### Inspector Parameters
+
+ * **Interact Without Grab:** If active the control will react to the controller without the need to push the grab button.
+
 ### Class Variables
 
  * `public ValueChangedEvent OnValueChanged` - Emitted when the control is interacted with.
