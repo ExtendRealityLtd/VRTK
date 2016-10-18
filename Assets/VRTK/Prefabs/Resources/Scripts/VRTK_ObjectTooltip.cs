@@ -37,9 +37,9 @@ namespace VRTK
         private LineRenderer line;
 
         /// <summary>
-        /// The Reset method resets the tooltip back to its initial state.
+        /// The ResetTooltip method resets the tooltip back to its initial state.
         /// </summary>
-        public void Reset()
+        public void ResetTooltip()
         {
             SetContainer();
             SetText("UITextFront");
@@ -58,12 +58,12 @@ namespace VRTK
         public void UpdateText(string newText)
         {
             displayText = newText;
-            Reset();
+            ResetTooltip();
         }
 
         private void Start()
         {
-            Reset();
+            ResetTooltip();
         }
 
         private void SetContainer()

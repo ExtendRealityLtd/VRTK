@@ -75,16 +75,16 @@ There are a number of parameters that can be set on the Prefab which are provide
 
 ### Class Methods
 
-#### Reset/0
+#### ResetTooltip/0
 
-  > `public void Reset()`
+  > `public void ResetTooltip()`
 
   * Parameters
    * _none_
   * Returns
    * _none_
 
-The Reset method resets the tooltip back to its initial state.
+The ResetTooltip method resets the tooltip back to its initial state.
 
 #### UpdateText/1
 
@@ -129,9 +129,9 @@ There are a number of parameters that can be set on the Prefab which are provide
 
 ### Class Methods
 
-#### Reset/0
+#### ResetTooltip/0
 
-  > `public void Reset()`
+  > `public void ResetTooltip()`
 
   * Parameters
    * _none_
@@ -528,16 +528,16 @@ As this is an abstract class, it cannot be applied directly to a game object and
 
 The Initalise method is used to set up the state of the highlighter.
 
-#### Reset/0
+#### ResetHighlighter/0
 
-  > `public abstract void Reset();`
+  > `public abstract void ResetHighlighter();`
 
   * Parameters
    * _none_
   * Returns
    * _none_
 
-The Reset method is used to reset the highlighter if anything on the object has changed. It should be called by any scripts changing object materials or colours.
+The ResetHighlighter method is used to reset the highlighter if anything on the object has changed. It should be called by any scripts changing object materials or colours.
 
 #### Highlight/2
 
@@ -611,16 +611,16 @@ This is the default highlighter that is applied to any script that requires a hi
 
 The Initialise method sets up the highlighter for use.
 
-#### Reset/0
+#### ResetHighlighter/0
 
-  > `public override void Reset()`
+  > `public override void ResetHighlighter()`
 
   * Parameters
    * _none_
   * Returns
    * _none_
 
-The Reset method stores the object's materials and shared materials prior to highlighting.
+The ResetHighlighter method stores the object's materials and shared materials prior to highlighting.
 
 #### Highlight/2
 
@@ -684,16 +684,16 @@ The Outline Object Copy Highlighter works by making a copy of a mesh and adding 
 
 The Initialise method sets up the highlighter for use.
 
-#### Reset/0
+#### ResetHighlighter/0
 
-  > `public override void Reset()`
+  > `public override void ResetHighlighter()`
 
   * Parameters
    * _none_
   * Returns
    * _none_
 
-The Reset method creates the additional model to use as the outline highlighted object.
+The ResetHighlighter method creates the additional model to use as the outline highlighted object.
 
 #### Highlight/2
 

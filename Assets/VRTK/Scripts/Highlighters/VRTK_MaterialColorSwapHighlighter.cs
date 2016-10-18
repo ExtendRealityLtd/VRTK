@@ -25,8 +25,8 @@ namespace VRTK.Highlighters
         [Tooltip("The emission colour of the texture will be the highlight colour but this percent darker.")]
         public float emissionDarken = 50f;
 
-        private Dictionary<string, Material[]> originalSharedRendererMaterials;
-        private Dictionary<string, Material[]> originalRendererMaterials;
+        private Dictionary<string, Material[]> originalSharedRendererMaterials = new Dictionary<string, Material[]>();
+        private Dictionary<string, Material[]> originalRendererMaterials = new Dictionary<string, Material[]>();
         private Dictionary<string, Coroutine> faderRoutines;
         private bool resetMainTexture = false;
 
@@ -41,13 +41,13 @@ namespace VRTK.Highlighters
             originalRendererMaterials = new Dictionary<string, Material[]>();
             faderRoutines = new Dictionary<string, Coroutine>();
             resetMainTexture = GetOption<bool>(options, "resetMainTexture");
-            Reset();
+            ResetHighlighter();
         }
 
         /// <summary>
-        /// The Reset method stores the object's materials and shared materials prior to highlighting.
+        /// The ResetHighlighter method stores the object's materials and shared materials prior to highlighting.
         /// </summary>
-        public override void Reset()
+        public override void ResetHighlighter()
         {
             StoreOriginalMaterials();
         }

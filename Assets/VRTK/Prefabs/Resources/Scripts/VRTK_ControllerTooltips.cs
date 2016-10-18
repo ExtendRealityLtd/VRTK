@@ -61,7 +61,7 @@ namespace VRTK
         /// <summary>
         /// The Reset method reinitalises the tooltips on all of the controller elements.
         /// </summary>
-        public void Reset()
+        public void ResetTooltip()
         {
             triggerInitialised = false;
             gripInitialised = false;
@@ -91,7 +91,7 @@ namespace VRTK
                     triggerText = newText;
                     break;
             }
-            Reset();
+            ResetTooltip();
         }
 
         /// <summary>
@@ -257,7 +257,7 @@ namespace VRTK
                 tooltip.fontColor = tipTextColor;
                 tooltip.lineColor = tipLineColor;
 
-                tooltip.Reset();
+                tooltip.ResetTooltip();
 
                 if (tipText.Trim().Length == 0)
                 {

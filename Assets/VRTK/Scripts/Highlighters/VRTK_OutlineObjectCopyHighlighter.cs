@@ -38,13 +38,13 @@ namespace VRTK.Highlighters
                 stencilOutline = Instantiate((Material)Resources.Load("OutlineBasic"));
             }
             SetOptions(options);
-            Reset();
+            ResetHighlighter();
         }
 
         /// <summary>
-        /// The Reset method creates the additional model to use as the outline highlighted object.
+        /// The ResetHighlighter method creates the additional model to use as the outline highlighted object.
         /// </summary>
-        public override void Reset()
+        public override void ResetHighlighter()
         {
             DeleteExistingHighlightModels();
             CreateHighlightModel();

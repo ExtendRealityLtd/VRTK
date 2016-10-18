@@ -23,9 +23,9 @@ namespace VRTK.Highlighters
         public abstract void Initialise(Color? color = null, Dictionary<string, object> options = null);
 
         /// <summary>
-        /// The Reset method is used to reset the highlighter if anything on the object has changed. It should be called by any scripts changing object materials or colours.
+        /// The ResetHighlighter method is used to reset the highlighter if anything on the object has changed. It should be called by any scripts changing object materials or colours.
         /// </summary>
-        public abstract void Reset();
+        public abstract void ResetHighlighter();
 
         /// <summary>
         /// The Highlight method is used to initiate the highlighting logic to apply to an object.
