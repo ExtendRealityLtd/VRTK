@@ -163,7 +163,7 @@ namespace VRTK
             }
             if (cfCreated)
             {
-                cf.force = getThirdDirection(cj.axis, cj.secondaryAxis) * subDirection * -10f;
+                cf.relativeForce = getThirdDirection(cj.axis, cj.secondaryAxis) * subDirection * -10f;
             }
 
             return true;
