@@ -18,6 +18,7 @@ A collection of pre-defined usable prefabs have been included to allow for each 
  * [Object Tooltip](#object-tooltip-vrtk_objecttooltip)
  * [Controller Tooltips](#controller-tooltips-vrtk_controllertooltips)
  * [Controller Rigidbody Activator](#controller-rigidbody-activator-vrtk_controllerrigidbodyactivator)
+ * [Snap Drop Zone](#snap-drop-zone-vrtk_snapdropzone)
  * [Radial Menu](#radial-menu-radialmenu)
  * [Independent Radial Menu Controller](#independent-radial-menu-controller-vrtk_independentradialmenucontroller)
  * [Console Viewer Canvas](#console-viewer-canvas-vrtk_consoleviewer)
@@ -183,6 +184,104 @@ If the prefab is placed as a child of the target interactable game object then t
 The sphere collider on the prefab can have the radius adjusted to determine how close the controller needs to be to the object before the rigidbody is activated.
 
 It's also possible to replace the sphere trigger collider with an alternative trigger collider for customised collision detection.
+
+---
+
+## Snap Drop Zone (VRTK_SnapDropZone)
+
+### Overview
+
+This sets up a predefined zone where an existing interactable object can be dropped and upon dropping it snaps to the set snap drop zone transform position, rotation and scale.
+
+The position, rotation and scale of the `SnapDropZone` Game Object will be used to determine the final position of the dropped interactable object if it is dropped within the drop zone collider volume.
+
+The provided Highlight Object Prefab is used to create the highlighting object (also within the Editor for easy placement) and by default the standard Material Color Swap highlighter is used.
+
+An alternative highlighter can also be added to the `SnapDropZone` Game Object and this new highlighter component will be used to show the interactable object position on release.
+
+The prefab is a pre-built game object that contains a default trigger collider (Sphere Collider) and a kinematic rigidbody (to ensure collisions occur).
+
+If an alternative collider is required, then the default Sphere Collider can be removed and another collider added.
+
+If the `Use Joint` Snap Type is selected then a custom Joint component is required to be added to the `SnapDropZone` Game Object and upon release the interactable object's rigidbody will be linked to this joint as the `Connected Body`.
+
+### Inspector Parameters
+
+ * **Highlight Object Prefab:** A game object that is used to draw the highlighted destination for within the drop zone. This object will also be created in the Editor for easy placement.
+ * **Snap Type:** The Snap Type to apply when a valid interactable object is dropped within the snap zone.
+ * **Snap Duration:** The amount of time it takes for the object being snapped to move into the new snapped position, rotation and scale.
+ * **Apply Scaling On Snap:** If this is checked then the scaled size of the snap drop zone will be applied to the object that is snapped to it.
+ * **Highlight Color:** The colour to use when showing the snap zone is active.
+ * **Highlight Always Active:** The highlight object will always be displayed when the snap drop zone is available even if a valid item isn't being hovered over.
+ * **Valid Object With Tag Or Class:** A string that specifies an object Tag or the name of a Script attached to an object and notifies the snap drop zone that this is a valid object for snapping on release.
+ * **Valid Object Tag Or Script List Policy:** A specified VRTK_TagOrScriptPolicyList to use to determine which interactable objects will be snapped to the snap drop zone on release. If a list is provided then the 'Valid Object With Tag Or Class' parameter will be ignored.
+ * **Display Drop Zone In Editor:** If this is checked then the drop zone highlight section will be displayed in the scene editor window.
+
+### Class Variables
+
+ * `public enum SnapTypes` - The types of snap on release available.
+  * `Use_Kinematic` - Will set the interactable object rigidbody to `isKinematic = true`.
+  * `Use_Joint` - Will attach the interactable object's rigidbody to the provided joint as it's `Connected Body`.
+  * `Use_Parenting` - Will set the SnapDropZone as the interactable object's parent and set it's rigidbody to `isKinematic = true`.
+
+### Class Events
+
+ * `ObjectEnteredSnapDropZone` - Emitted when a valid interactable object enters the snap drop zone trigger collider.
+ * `ObjectExitedSnapDropZone` - Emitted when a valid interactable object exists the snap drop zone trigger collider.
+ * `ObjectSnappedToDropZone` - Emitted when an interactable object is successfully snapped into a drop zone.
+ * `ObjectUnsnappedFromDropZone` - Emitted when an interactable object is removed from a snapped drop zone.
+
+### Unity Events
+
+Adding the `VRTK_SnapDropZone_UnityEvents` component to `VRTK_SnapDropZone` object allows access to `UnityEvents` that will react identically to the Class Events.
+
+ * `OnObjectEnteredSnapDropZone` - Emits the ObjectEnteredSnapDropZone class event.
+ * `OnObjectExitedSnapDropZone` - Emits the ObjectExitedSnapDropZone class event.
+ * `OnObjectSnappedToDropZone` - Emits the ObjectSnappedToDropZone class event.
+ * `OnObjectUnsnappedFromDropZone` - Emits the ObjectUnsnappedFromDropZone class event.
+
+### Event Payload
+
+ * `GameObject snappedObject` - The interactable object that is dealing with the snap drop zone.
+
+### Class Methods
+
+#### InitaliseHighlightObject/1
+
+  > `public void InitaliseHighlightObject(bool removeOldObject = false)`
+
+  * Parameters
+   * `bool removeOldObject` - If this is set to true then it attempts to delete the old highlight object if it exists. Defaults to `false`
+  * Returns
+   * _none_
+
+The InitaliseHighlightObject method sets up the highlight object based on the given Highlight Object Prefab.
+
+#### ForceSnap/1
+
+  > `public void ForceSnap(GameObject objectToSnap)`
+
+  * Parameters
+   * `GameObject objectToSnap` - The GameObject to attempt to snap.
+  * Returns
+   * _none_
+
+the ForceSnap method attempts to automatically attach a valid game object to the snap drop zone.
+
+#### ForceUnsnap/0
+
+  > `public void ForceUnsnap()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The ForceUnsnap method attempts to automatically remove the current snapped game object from the snap drop zone.
+
+### Example
+
+`VRTK/Examples/041_Controller_ObjectSnappingToDropZones` uses the `VRTK_SnapDropZone` prefab to set up pre-determined snap zones for a range of objects and demonstrates how only objects of certain types can be snapped into certain areas.
 
 ---
 
@@ -2487,6 +2586,17 @@ The SaveCurrentState method stores the existing object parent and the object's r
 
 The ToggleKinematic method is used to set the object's internal rigidbody kinematic state.
 
+#### IsKinematic/0
+
+  > `public bool IsKinematic()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `bool` - Returns true if the rigidbody is set to kinematic and returns false if it's not.
+
+the IsKinematic method returns whether the rigidbody is set to kinematic or not.
+
 #### GetGrabbingObject/0
 
   > `public GameObject GetGrabbingObject()`
@@ -2542,6 +2652,40 @@ The SetGrabbedSnapHandle method is used to set the snap handle of the object at 
    * _none_
 
 The RegisterTeleporters method is used to find all objects that have a teleporter script and register the object on the `OnTeleported` event. This is used internally by the object for keeping Tracked objects positions updated after teleporting.
+
+#### StoreLocalScale/0
+
+  > `public void StoreLocalScale()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+the StoreLocalScale method saves the current transform local scale values.
+
+#### ToggleSnapDropZone/2
+
+  > `public void ToggleSnapDropZone(VRTK_SnapDropZone snapDropZone, bool state)`
+
+  * Parameters
+   * `VRTK_SnapDropZone snapDropZone` - The Snap Drop Zone object that is being interacted with.
+   * `bool state` - The state of whether the interactable object is fixed in or removed from the Snap Drop Zone. True denotes the interactable object is fixed to the Snap Drop Zone and false denotes it has been removed from the Snap Drop Zone.
+  * Returns
+   * _none_
+
+The ToggleSnapDropZone method is used to set the state of whether the interactable object is in a Snap Drop Zone or not.
+
+#### IsInSnapDropZone/0
+
+  > `public bool IsInSnapDropZone()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `bool` - Returns true if the interactable object is currently snapped in a drop zone and returns false if it is not.
+
+The IsInSnapDropZone method determines whether the interactable object is currently snapped to a drop zone.
 
 ### Example
 

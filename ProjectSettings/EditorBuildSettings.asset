@@ -83,3 +83,7 @@ EditorBuildSettings:
     path: Assets/VRTK/Examples/038_CameraRig_DashTeleport.unity
   - enabled: 1
     path: Assets/VRTK/Examples/039_CameraRig_AdaptiveQuality.unity
+  - enabled: 1
+    path: Assets/VRTK/Examples/040_Controls_Panel_Menu.unity
+  - enabled: 1
+    path: Assets/VRTK/Examples/041_Controller_ObjectSnappingToDropZones.unity
