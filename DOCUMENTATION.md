@@ -595,6 +595,7 @@ This is the default highlighter that is applied to any script that requires a hi
 ### Inspector Parameters
 
  * **Emission Darken:** The emission colour of the texture will be the highlight colour but this percent darker.
+ * **Custom Material:** A custom material to use on the highlighted object.
 
 ### Class Methods
 

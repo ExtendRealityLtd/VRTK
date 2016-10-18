@@ -24,6 +24,8 @@ namespace VRTK.Highlighters
     {
         [Tooltip("The emission colour of the texture will be the highlight colour but this percent darker.")]
         public float emissionDarken = 50f;
+        [Tooltip("A custom material to use on the highlighted object.")]
+        public Material customMaterial;
 
         private Dictionary<string, Material[]> originalSharedRendererMaterials = new Dictionary<string, Material[]>();
         private Dictionary<string, Material[]> originalRendererMaterials = new Dictionary<string, Material[]>();
@@ -114,9 +116,17 @@ namespace VRTK.Highlighters
         {
             foreach (Renderer renderer in GetComponentsInChildren<Renderer>(true))
             {
+                var swapCustomMaterials = new Material[renderer.materials.Length];
+
                 for (int i = 0; i < renderer.materials.Length; i++)
                 {
                     var material = renderer.materials[i];
+                    if (customMaterial)
+                    {
+                        material = customMaterial;
+                        swapCustomMaterials[i] = material;
+                    }
+
                     var faderRoutineID = material.GetInstanceID().ToString();
 
                     if (faderRoutines.ContainsKey(faderRoutineID) && faderRoutines[faderRoutineID] != null)
@@ -147,6 +157,11 @@ namespace VRTK.Highlighters
                             }
                         }
                     }
+                }
+
+                if (customMaterial)
+                {
+                    renderer.materials = swapCustomMaterials;
                 }
             }
         }
