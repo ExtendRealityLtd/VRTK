@@ -33,6 +33,8 @@ namespace VRTK.Highlighters
         /// <param name="options">A dictionary array containing the highlighter options:\r     * `&lt;'thickness', float&gt;` - Same as `thickness` inspector parameter.\r     * `&lt;'customOutlineModel', GameObject&gt;` - Same as `customOutlineModel` inspector parameter.\r     * `&lt;'customOutlineModelPath', string&gt;` - Same as `customOutlineModelPath` inspector parameter.</param>
         public override void Initialise(Color? color = null, Dictionary<string, object> options = null)
         {
+            usesClonedObject = true;
+
             if (stencilOutline == null)
             {
                 stencilOutline = Instantiate((Material)Resources.Load("OutlineBasic"));

@@ -577,6 +577,17 @@ The Unhighlight method is used to initiate the logic that returns an object back
 
 The GetOption method is used to return a value from the options array if the given key exists.
 
+#### UsesClonedObject/0
+
+  > `public virtual bool UsesClonedObject()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `bool` - Returns true if the highlighter creates a cloned object to apply the highlighter on, returns false if no additional object is created.
+
+The UsesClonedObject method is used to return whether the current highlighter creates a cloned object to do the highlighting with.
+
 ---
 
 ## Material Colour Swap (VRTK_MaterialColorSwapHighlighter)
