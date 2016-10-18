@@ -84,7 +84,18 @@ There are a number of parameters that can be set on the Prefab which are provide
   * Returns
    * _none_
 
-The Reset method resets the tooltip back to its initial state
+The Reset method resets the tooltip back to its initial state.
+
+#### UpdateText/1
+
+  > `public void UpdateText(string newText)`
+
+  * Parameters
+   * `string newText` - A string containing the text to update the tooltip to display.
+  * Returns
+   * _none_
+
+The UpdateText method allows the tooltip text to be updated at runtime.
 
 ### Example
 
@@ -117,6 +128,29 @@ There are a number of parameters that can be set on the Prefab which are provide
  * **App Menu:** The transform for the position of the app menu button on the controller (this is usually found in `Model/button/attach`.
 
 ### Class Methods
+
+#### Reset/0
+
+  > `public void Reset()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The Reset method reinitalises the tooltips on all of the controller elements.
+
+#### UpdateText/2
+
+  > `public void UpdateText(TooltipButtons element, string newText)`
+
+  * Parameters
+   * `TooltipButtons element` - The specific controller element to change the tooltip text on.
+   * `string newText` - A string containing the text to update the tooltip to display.
+  * Returns
+   * _none_
+
+The UpdateText method allows the tooltip text on a specific controller element to be updated at runtime.
 
 #### ToggleTips/2
 

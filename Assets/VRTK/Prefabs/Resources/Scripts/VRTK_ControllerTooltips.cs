@@ -59,6 +59,42 @@ namespace VRTK
         private VRTK_HeadsetControllerAware headsetControllerAware;
 
         /// <summary>
+        /// The Reset method reinitalises the tooltips on all of the controller elements.
+        /// </summary>
+        public void Reset()
+        {
+            triggerInitialised = false;
+            gripInitialised = false;
+            touchpadInitialised = false;
+            appMenuInitialised = false;
+        }
+
+        /// <summary>
+        /// The UpdateText method allows the tooltip text on a specific controller element to be updated at runtime.
+        /// </summary>
+        /// <param name="element">The specific controller element to change the tooltip text on.</param>
+        /// <param name="newText">A string containing the text to update the tooltip to display.</param>
+        public void UpdateText(TooltipButtons element, string newText)
+        {
+            switch (element)
+            {
+                case TooltipButtons.AppMenuTooltip:
+                    appMenuText = newText;
+                    break;
+                case TooltipButtons.GripTooltip:
+                    gripText = newText;
+                    break;
+                case TooltipButtons.TouchpadTooltip:
+                    touchpadText = newText;
+                    break;
+                case TooltipButtons.TriggerTooltip:
+                    triggerText = newText;
+                    break;
+            }
+            Reset();
+        }
+
+        /// <summary>
         /// The ToggleTips method will display the controller tooltips if the state is `true` and will hide the controller tooltips if the state is `false`. An optional `element` can be passed to target a specific controller tooltip to toggle otherwise all tooltips are toggled.
         /// </summary>
         /// <param name="state">The state of whether to display or hide the controller tooltips, true will display and false will hide.</param>
