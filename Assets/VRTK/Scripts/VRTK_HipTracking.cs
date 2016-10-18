@@ -11,7 +11,7 @@ namespace VRTK
 	/// The Hip Tracking script is placed on an empty GameObject which will be positioned at the estimated hip position.
 	/// </remarks>
 
-	public class VRTK_Hip_Tracking : MonoBehaviour
+	public class VRTK_HipTracking : MonoBehaviour
 	{
 		[Tooltip("Distance underneath Player Head for hips to reside.")]
 		public float HeadOffset = -0.35f;
