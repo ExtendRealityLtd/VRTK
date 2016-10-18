@@ -713,7 +713,7 @@ This directory contains all of the toolkit scripts that add VR functionality to 
  * [Teleport Disable On Headset Collision](#teleport-disable-on-headset-collision-vrtk_teleportdisableonheadsetcollision)
  * [Teleport Disable On Controller Obscured](#teleport-disable-on-controller-obscured-vrtk_teleportdisableoncontrollerobscured)
  * [Player Presence](#player-presence-vrtk_playerpresence)
- * [Hip Tracking](#hip-tracking-vrtk_hip_tracking)
+ * [Hip Tracking](#hip-tracking-vrtk_hiptracking)
  * [Touchpad Walking](#touchpad-walking-vrtk_touchpadwalking)
  * [Room Extender](#room-extender-vrtk_roomextender)
  * [Interactable Object](#interactable-object-vrtk_interactableobject)
@@ -2053,7 +2053,7 @@ The StopPhysicsFall method ends the physics based fall state, disables physics a
 
 ---
 
-## Hip Tracking (VRTK_Hip_Tracking)
+## Hip Tracking (VRTK_HipTracking)
 
 ### Overview
 
