@@ -80,11 +80,14 @@ namespace VRTK.Highlighters
                 return;
             }
 
-            foreach (var fadeRoutine in faderRoutines)
+            if (faderRoutines != null)
             {
-                StopCoroutine(fadeRoutine.Value);
+                foreach (var fadeRoutine in faderRoutines)
+                {
+                    StopCoroutine(fadeRoutine.Value);
+                }
+                faderRoutines.Clear();
             }
-            faderRoutines.Clear();
 
             foreach (Renderer renderer in GetComponentsInChildren<Renderer>(true))
             {
