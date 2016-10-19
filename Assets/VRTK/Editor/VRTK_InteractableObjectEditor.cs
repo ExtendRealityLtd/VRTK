@@ -100,6 +100,7 @@
                     targ.precisionSnap = EditorGUILayout.Toggle(VRTK_EditorUtilities.BuildGUIContent<VRTK_InteractableObject>("precisionSnap", "Precision Grab(Snap)"), targ.precisionSnap);
                     if (!targ.precisionSnap)
                     {
+                        targ.showSnapHandles = EditorGUILayout.Toggle("Show Snap Handles:", targ.showSnapHandles);
                         EditorGUILayout.PropertyField(serializedObject.FindProperty("rightSnapHandle"));
                         EditorGUILayout.PropertyField(serializedObject.FindProperty("leftSnapHandle"));
 
