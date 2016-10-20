@@ -80,7 +80,7 @@
                 {
                     EditorGUI.indentLevel++;
 
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("isDroppable"));
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("validDrop"));
                     EditorGUILayout.PropertyField(serializedObject.FindProperty("isSwappable"));
                     EditorGUILayout.PropertyField(serializedObject.FindProperty("holdButtonToGrab"));
                     EditorGUILayout.PropertyField(serializedObject.FindProperty("grabOverrideButton"));

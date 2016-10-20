@@ -82,6 +82,19 @@ namespace VRTK
             OverrideDontHide,
         }
 
+        /// <summary>
+        /// The types of valid situations that the object can be released from grab.
+        /// </summary>
+        /// <param name="No_Drop">The object cannot be dropped via the controller</param>
+        /// <param name="Drop_Anywhere">The object can be dropped anywhere in the scene via the controller.</param>
+        /// <param name="Drop_ValidSnapDropZone">The object can only be dropped when it is hovering over a valid snap drop zone.</param>
+        public enum ValidDropTypes
+        {
+            No_Drop,
+            Drop_Anywhere,
+            Drop_ValidSnapDropZone
+        }
+
         [Header("Touch Interactions", order = 1)]
 
         [Tooltip("The object will only highlight when a controller touches it if this is checked.")]
@@ -99,8 +112,8 @@ namespace VRTK
 
         [Tooltip("Determines if the object can be grabbed.")]
         public bool isGrabbable = false;
-        [Tooltip("Determines if the object can be dropped by the controller grab button being used. If this is unchecked then it's not possible to drop the item once it's picked up using the controller button.")]
-        public bool isDroppable = true;
+        [Tooltip("Determines in what situation the object can be dropped by the controller grab button.")]
+        public ValidDropTypes validDrop = ValidDropTypes.Drop_Anywhere;
         [Tooltip("Determines if the object can be swapped between controllers when it is picked up. If it is unchecked then the object must be dropped before it can be picked up by the other controller.")]
         public bool isSwappable = true;
         [Tooltip("If this is checked then the grab button on the controller needs to be continually held down to keep grabbing. If this is unchecked the grab button toggles the grab action with one button press to grab and another to release.")]
@@ -203,7 +216,8 @@ namespace VRTK
         protected bool forceDisabled;
         protected VRTK_BaseHighlighter objectHighlighter;
         protected bool autoHighlighter = false;
-        protected bool inSnapDropZone = false;
+        protected bool hoveredOverSnapDropZone = false;
+        protected bool snappedInSnapDropZone = false;
         protected VRTK_SnapDropZone storedSnapDropZone;
         protected Vector3 previousLocalScale = Vector3.zero;
 
@@ -343,7 +357,7 @@ namespace VRTK
         /// <param name="currentGrabbingObject">The game object that is currently grabbing this object.</param>
         public virtual void Grabbed(GameObject currentGrabbingObject)
         {
-            if (inSnapDropZone)
+            if (snappedInSnapDropZone)
             {
                 ToggleSnapDropZone(storedSnapDropZone, false);
             }
@@ -510,7 +524,7 @@ namespace VRTK
         /// </summary>
         public void SaveCurrentState()
         {
-            if (grabbingObject == null && !inSnapDropZone)
+            if (grabbingObject == null && !snappedInSnapDropZone)
             {
                 previousParent = transform.parent;
 
@@ -622,7 +636,7 @@ namespace VRTK
         /// <param name="state">The state of whether the interactable object is fixed in or removed from the Snap Drop Zone. True denotes the interactable object is fixed to the Snap Drop Zone and false denotes it has been removed from the Snap Drop Zone.</param>
         public void ToggleSnapDropZone(VRTK_SnapDropZone snapDropZone, bool state)
         {
-            inSnapDropZone = state;
+            snappedInSnapDropZone = state;
             if (state)
             {
                 storedSnapDropZone = snapDropZone;
@@ -639,12 +653,43 @@ namespace VRTK
         /// <returns>Returns true if the interactable object is currently snapped in a drop zone and returns false if it is not.</returns>
         public bool IsInSnapDropZone()
         {
-            return inSnapDropZone;
+            return snappedInSnapDropZone;
         }
 
+        /// <summary>
+        /// The SetSnapDropZoneHover method sets whether the interactable object is currently being hovered over a valid Snap Drop Zone.
+        /// </summary>
+        /// <param name="state">The state of whether the object is being hovered or not.</param>
+        public void SetSnapDropZoneHover(bool state)
+        {
+            hoveredOverSnapDropZone = state;
+        }
+
+        /// <summary>
+        /// The GetStoredSnapDropZone method returns the snap drop zone that the interactable object is currently snapped to.
+        /// </summary>
+        /// <returns>The SnapDropZone that the interactable object is currently snapped to.</returns>
         public VRTK_SnapDropZone GetStoredSnapDropZone()
         {
             return storedSnapDropZone;
+        }
+
+        /// <summary>
+        /// The IsDroppable method returns whether the item can be dropped or not in it's current situation.
+        /// </summary>
+        /// <returns>Returns true if the item can currently be dropped and returns false if it is not currently possible to drop.</returns>
+        public bool IsDroppable()
+        {
+            switch (validDrop)
+            {
+                case ValidDropTypes.No_Drop:
+                    return false;
+                case ValidDropTypes.Drop_Anywhere:
+                    return true;
+                case ValidDropTypes.Drop_ValidSnapDropZone:
+                    return hoveredOverSnapDropZone;
+            }
+            return false;
         }
 
         protected virtual void Awake()
@@ -775,7 +820,7 @@ namespace VRTK
 
         private void CheckBreakDistance()
         {
-            if (trackPoint && isDroppable)
+            if (trackPoint && IsDroppable())
             {
                 float distance = Vector3.Distance(trackPoint.position, originalControllerAttachPoint.position);
                 if (distance > (detachThreshold / 1000))

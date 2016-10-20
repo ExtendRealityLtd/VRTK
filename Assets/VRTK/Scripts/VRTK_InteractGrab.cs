@@ -149,7 +149,7 @@ namespace VRTK
         {
             if (undroppableGrabbedObject)
             {
-                if (undroppableGrabbedObject.GetComponent<VRTK_InteractableObject>().isDroppable)
+                if (undroppableGrabbedObject.GetComponent<VRTK_InteractableObject>().IsDroppable())
                 {
                     undroppableGrabbedObject = null;
                 }
@@ -275,7 +275,7 @@ namespace VRTK
                 }
                 controllerAttachJoint = tempSpringJoint;
             }
-            controllerAttachJoint.breakForce = (objectScript.isDroppable ? objectScript.detachThreshold : Mathf.Infinity);
+            controllerAttachJoint.breakForce = (objectScript.IsDroppable() ? objectScript.detachThreshold : Mathf.Infinity);
             controllerAttachJoint.connectedBody = controllerAttachPoint;
         }
 
@@ -513,7 +513,7 @@ namespace VRTK
                     initialGrabAttempt = GrabInteractedObject();
                 }
 
-                undroppableGrabbedObject = (grabbedObject && grabbedObject.GetComponent<VRTK_InteractableObject>() && !grabbedObject.GetComponent<VRTK_InteractableObject>().isDroppable ? grabbedObject : null);
+                undroppableGrabbedObject = (grabbedObject && grabbedObject.GetComponent<VRTK_InteractableObject>() && !grabbedObject.GetComponent<VRTK_InteractableObject>().IsDroppable() ? grabbedObject : null);
 
                 if (grabbedObject && initialGrabAttempt)
                 {
@@ -532,7 +532,7 @@ namespace VRTK
 
         private bool CanRelease()
         {
-            return (grabbedObject && grabbedObject.GetComponent<VRTK_InteractableObject>().isDroppable);
+            return (grabbedObject && grabbedObject.GetComponent<VRTK_InteractableObject>().IsDroppable());
         }
 
         private void AttemptReleaseObject()

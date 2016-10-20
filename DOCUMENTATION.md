@@ -2282,7 +2282,7 @@ The highlighting of an Interactable Object is defaulted to use the `VRTK_Materia
  * **Allowed Touch Controllers:** Determines which controller can initiate a touch action.
  * **Hide Controller On Touch:** Optionally override the controller setting.
  * **Is Grabbable:** Determines if the object can be grabbed.
- * **Is Droppable:** Determines if the object can be dropped by the controller grab button being used. If this is unchecked then it's not possible to drop the item once it's picked up using the controller button.
+ * **Valid Drop:** Determines in what situation the object can be dropped by the controller grab button.
  * **Is Swappable:** Determines if the object can be swapped between controllers when it is picked up. If it is unchecked then the object must be dropped before it can be picked up by the other controller.
  * **Hold Button To Grab:** If this is checked then the grab button on the controller needs to be continually held down to keep grabbing. If this is unchecked the grab button toggles the grab action with one button press to grab and another to release.
  * **Grab Override Button:** If this is set to `Undefined` then the global grab alias button will grab the object, setting it to any other button will ensure the override button is used to grab this specific interactable object.
@@ -2325,6 +2325,10 @@ The highlighting of an Interactable Object is defaulted to use the `VRTK_Materia
   * `Default` - Use the hide settings from the controller.
   * `OverrideHide` - Hide the controller when interacting, overriding controller settings.
   * `OverrideDontHide` - Don't hide the controller when interacting, overriding controller settings.
+ * `public enum ValidDropTypes` - The types of valid situations that the object can be released from grab.
+  * `No_Drop` - The object cannot be dropped via the controller
+  * `Drop_Anywhere` - The object can be dropped anywhere in the scene via the controller.
+  * `Drop_ValidSnapDropZone` - The object can only be dropped when it is hovering over a valid snap drop zone.
  * `public int usingState` - The current using state of the object. `0` not being used, `1` being used. Default: `0`
 
 ### Class Events
@@ -2686,6 +2690,39 @@ The ToggleSnapDropZone method is used to set the state of whether the interactab
    * `bool` - Returns true if the interactable object is currently snapped in a drop zone and returns false if it is not.
 
 The IsInSnapDropZone method determines whether the interactable object is currently snapped to a drop zone.
+
+#### SetSnapDropZoneHover/1
+
+  > `public void SetSnapDropZoneHover(bool state)`
+
+  * Parameters
+   * `bool state` - The state of whether the object is being hovered or not.
+  * Returns
+   * _none_
+
+The SetSnapDropZoneHover method sets whether the interactable object is currently being hovered over a valid Snap Drop Zone.
+
+#### GetStoredSnapDropZone/0
+
+  > `public VRTK_SnapDropZone GetStoredSnapDropZone()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `VRTK_SnapDropZone` - The SnapDropZone that the interactable object is currently snapped to.
+
+The GetStoredSnapDropZone method returns the snap drop zone that the interactable object is currently snapped to.
+
+#### IsDroppable/0
+
+  > `public bool IsDroppable()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `bool` - Returns true if the item can currently be dropped and returns false if it is not currently possible to drop.
+
+The IsDroppable method returns whether the item can be dropped or not in it's current situation.
 
 ### Example
 

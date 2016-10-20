@@ -232,7 +232,7 @@ namespace VRTK
             //set reference to current highlightObjectPrefab
             previousPrefab = highlightObjectPrefab;
 
-            if(highlightAlwaysActive && !isSnapped && !isHighlighted)
+            if (highlightAlwaysActive && !isSnapped && !isHighlighted)
             {
                 highlightObject.SetActive(true);
             }
@@ -525,8 +525,11 @@ namespace VRTK
             {
                 //Turn on the highlighter
                 highlightObject.SetActive(state);
+                ioCheck.SetSnapDropZoneHover(state);
+
                 willSnap = state;
                 isHighlighted = state;
+
                 if (state)
                 {
                     OnObjectEnteredSnapDropZone(SetSnapDropZoneEvent(collider.gameObject));
