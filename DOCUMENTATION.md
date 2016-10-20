@@ -3321,6 +3321,7 @@ The script will instantiate the required Rigidbody and Interactable components a
 
 ### Inspector Parameters
 
+ * **Connected To:** An optional game object to which the knob will be connected. If the game object moves the knob will follow along.
  * **Direction:** The axis on which the knob should rotate. All other axis will be frozen.
  * **Min:** The minimum value of the knob.
  * **Max:** The maximum value of the knob.
