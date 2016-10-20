@@ -277,12 +277,9 @@ namespace VRTK
 
         private void OnTriggerEnter(Collider collider)
         {
-            triggerIsColliding = true;
-            AddActiveCollider(collider);
-
-            var colliderInteractableObject = GetColliderInteractableObject(collider);
+            var colliderInteractableObject = TriggerStart(collider);
             //If the new collider is not part of the existing touched object (and the object isn't being grabbed) then start touching the new object
-            if (touchedObject != null && touchedObject != colliderInteractableObject && !touchedObject.GetComponent<VRTK_InteractableObject>().IsGrabbed())
+            if (touchedObject != null && colliderInteractableObject && touchedObject != colliderInteractableObject && !touchedObject.GetComponent<VRTK_InteractableObject>().IsGrabbed())
             {
                 CancelInvoke("ResetTriggerRumble");
                 ResetTriggerRumble();
@@ -300,11 +297,8 @@ namespace VRTK
 
         private void OnTriggerStay(Collider collider)
         {
-            triggerIsColliding = true;
-            AddActiveCollider(collider);
-
-            var colliderInteractableObject = GetColliderInteractableObject(collider);
-            if (touchedObject == null && IsObjectInteractable(collider.gameObject))
+            var colliderInteractableObject = TriggerStart(collider);
+            if (touchedObject == null && colliderInteractableObject && IsObjectInteractable(collider.gameObject))
             {
                 touchedObject = colliderInteractableObject;
                 var touchedObjectScript = touchedObject.GetComponent<VRTK_InteractableObject>();
@@ -336,6 +330,28 @@ namespace VRTK
             }
             triggerWasColliding = triggerIsColliding;
             triggerIsColliding = false;
+        }
+
+        private GameObject TriggerStart(Collider collider)
+        {
+            if (IsSnapDropZone(collider))
+            {
+                return null;
+            }
+
+            triggerIsColliding = true;
+            AddActiveCollider(collider);
+
+            return GetColliderInteractableObject(collider);
+        }
+
+        private bool IsSnapDropZone(Collider collider)
+        {
+            if (collider.GetComponent<VRTK_SnapDropZone>())
+            {
+                return true;
+            }
+            return false;
         }
 
         private void CheckButtonOverrides(VRTK_InteractableObject touchedObjectScript)

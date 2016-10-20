@@ -176,5 +176,10 @@
             percent = Mathf.Clamp(percent, 0f, 100f);
             return (percent == 0f ? value : (value - (percent / 100f)));
         }
+
+        public static bool IsEditTime()
+        {
+            return (Application.isEditor && !Application.isPlaying);
+        }
     }
 }
