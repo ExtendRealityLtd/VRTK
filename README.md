@@ -63,6 +63,7 @@ of the examples can be viewed within this repository in
 
 | Name | Link |
 |-------------------------------------------------|-------------------------------------------------------------------------------------------|
+| Potioneer: The VR Gardening Simulator | [Steam Store Page](http://store.steampowered.com/app/544410/) |
 | QuiVR | [Steam Store Page](http://store.steampowered.com/app/489380) |
 | Left-Hand Path | [Steam Store Page](http://store.steampowered.com/app/488760) |
 | Holodaze | [Steam Store Page](http://store.steampowered.com/app/475520) |
