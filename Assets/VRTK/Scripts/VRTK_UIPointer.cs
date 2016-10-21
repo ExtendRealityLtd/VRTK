@@ -72,6 +72,8 @@ namespace VRTK
         public ActivationMethods activationMode = ActivationMethods.Hold_Button;
         [Tooltip("Determines when the UI Click event action should happen.")]
         public ClickMethods clickMethod = ClickMethods.Click_On_Button_Up;
+        [Tooltip("Determines if a UI Click event action should happen when the game object the UI Pointer is attached to collides with the canvas.")]
+        public bool clickOnPointerCollision = false;
         [Tooltip("Determines whether the UI click action should be triggered when the pointer is deactivated. If the pointer is hovering over a clickable element then it will invoke the click action on that element.")]
         public bool attemptClickOnDeactivate = false;
         [Tooltip("A string that specifies a canvas Tag or the name of a Script attached to a canvas and denotes that any world canvases that contain this tag or script will be ignored by the UI Pointer.")]
@@ -99,6 +101,7 @@ namespace VRTK
         private bool beamEnabledState = false;
         private bool lastPointerPressState = false;
         private bool lastPointerClickState = false;
+        private bool collisionClick = false;
 
         public virtual void OnUIPointerElementEnter(UIPointerEventArgs e)
         {
@@ -245,8 +248,9 @@ namespace VRTK
         /// <returns>Returns true if the UI Click button is in a valid state to action a click, returns false if it is not in a valid state.</returns>
         public bool ValidClick(bool checkLastClick, bool lastClickState = false)
         {
-            var result = (checkLastClick ? controller.uiClickPressed && lastPointerClickState == lastClickState : controller.uiClickPressed);
-            lastPointerClickState = controller.uiClickPressed;
+            var controllerClicked = (collisionClick ? collisionClick : controller.uiClickPressed);
+            var result = (checkLastClick ? controllerClicked && lastPointerClickState == lastClickState : controllerClicked);
+            lastPointerClickState = controllerClicked;
 
             return result;
         }
@@ -306,6 +310,23 @@ namespace VRTK
             {
                 Destroy(canvasBoxCollider);
             }
+        }
+
+        private void OnTriggerEnter(Collider collider)
+        {
+            collisionClick = false;
+            if (collider.GetComponent<VRTK_UIGraphicRaycaster>())
+            {
+                if (clickOnPointerCollision)
+                {
+                    collisionClick = true;
+                }
+            }
+        }
+
+        private void OnTriggerExit(Collider collider)
+        {
+            collisionClick = false;
         }
     }
 }
