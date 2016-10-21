@@ -94,6 +94,7 @@ of the examples can be viewed within this repository in
 | Outrageous Grounds: The Maze | [Steam Store Page](http://store.steampowered.com/app/513050) |
 | Draco Dux | [Steam Store Page](http://store.steampowered.com/app/460730) |
 | Deisim | [Steam Store Page](http://store.steampowered.com/app/525680) |
+| Potioneer: The VR Gardening Simulator | [Steam Store Page](http://store.steampowered.com/app/544410) |
 
 ## Contributing
 
