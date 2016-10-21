@@ -286,6 +286,8 @@ namespace VRTK
 
         private void OnEnable()
         {
+            Camera.onPreCull += OnCameraPreCull;
+
             hmdDisplayIsOnDesktop = VRTK_SDK_Bridge.IsDisplayOnDesktop();
             singleFrameDurationInMilliseconds = VRDevice.refreshRate > 0.0f
                                                 ? 1000.0f / VRDevice.refreshRate
@@ -303,6 +305,8 @@ namespace VRTK
 
         private void OnDisable()
         {
+            Camera.onPreCull -= OnCameraPreCull;
+
             CreateOrDestroyDebugVisualization();
             SetRenderScale(1.0f, 1.0f);
         }
@@ -334,9 +338,14 @@ namespace VRTK
         }
 #endif
 
-        private void OnPreCull()
+        private void OnCameraPreCull(Camera camera)
         {
 #if !(UNITY_5_4_1 || UNITY_5_5_OR_NEWER)
+            if (camera.transform != VRTK_SDK_Bridge.GetHeadsetCamera())
+            {
+                return;
+            }
+
             UpdateRenderScale();
 #endif
             UpdateMSAALevel();
