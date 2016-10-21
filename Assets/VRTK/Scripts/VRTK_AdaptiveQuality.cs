@@ -331,7 +331,7 @@ namespace VRTK
             timing.SaveCurrentFrameTiming();
         }
 
-#if UNITY_5_4_1 || UNITY_5_5_OR_NEWER
+#if UNITY_5_4_1 || UNITY_5_4_2 || UNITY_5_5_OR_NEWER
         private void LateUpdate()
         {
             UpdateRenderScale();
@@ -340,12 +340,12 @@ namespace VRTK
 
         private void OnCameraPreCull(Camera camera)
         {
-#if !(UNITY_5_4_1 || UNITY_5_5_OR_NEWER)
             if (camera.transform != VRTK_SDK_Bridge.GetHeadsetCamera())
             {
                 return;
             }
 
+#if !(UNITY_5_4_1 || UNITY_5_4_2 || UNITY_5_5_OR_NEWER)
             UpdateRenderScale();
 #endif
             UpdateMSAALevel();
