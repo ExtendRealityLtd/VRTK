@@ -955,16 +955,20 @@ namespace VRTK
         private IEnumerator StopUsingOnControllerChange(GameObject previousController)
         {
             yield return new WaitForEndOfFrame();
-            var usingObject = previousController.GetComponent<VRTK_InteractUse>();
-            if (usingObject)
+
+            if (previousController)
             {
-                if (holdButtonToUse)
+                var usingObject = previousController.GetComponent<VRTK_InteractUse>();
+                if (usingObject)
                 {
-                    usingObject.ForceStopUsing();
-                }
-                else
-                {
-                    usingObject.ForceResetUsing();
+                    if (holdButtonToUse)
+                    {
+                        usingObject.ForceStopUsing();
+                    }
+                    else
+                    {
+                        usingObject.ForceResetUsing();
+                    }
                 }
             }
         }
