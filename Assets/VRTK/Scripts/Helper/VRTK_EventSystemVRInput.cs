@@ -25,6 +25,7 @@
                     {
                         results = CheckRaycasts(pointer);
                     }
+
                     //Process events
                     Hover(pointer, results);
                     Click(pointer, results);
@@ -153,13 +154,70 @@
 
         private void Click(VRTK_UIPointer pointer, List<RaycastResult> results)
         {
-            pointer.pointerEventData.eligibleForClick = pointer.controller.uiClickPressed;
+            switch (pointer.clickMethod)
+            {
+                case VRTK_UIPointer.ClickMethods.Click_On_Button_Up:
+                    ClickOnUp(pointer, results);
+                    break;
+                case VRTK_UIPointer.ClickMethods.Click_On_Button_Down:
+                    ClickOnDown(pointer, results);
+                    break;
+            }
+        }
 
+        private void ClickOnUp(VRTK_UIPointer pointer, List<RaycastResult> results)
+        {
+            pointer.pointerEventData.eligibleForClick = pointer.ValidClick(false);
+
+            if (!AttemptClick(pointer))
+            {
+                IsEligibleClick(pointer, results);
+            }
+        }
+
+        private void ClickOnDown(VRTK_UIPointer pointer, List<RaycastResult> results)
+        {
+            pointer.pointerEventData.eligibleForClick = pointer.ValidClick(true);
+
+            if (IsEligibleClick(pointer, results))
+            {
+                pointer.pointerEventData.eligibleForClick = false;
+                AttemptClick(pointer);
+            }
+        }
+
+        private bool IsEligibleClick(VRTK_UIPointer pointer, List<RaycastResult> results)
+        {
+            if (pointer.pointerEventData.eligibleForClick)
+            {
+                foreach (var result in results)
+                {
+                    if (ShouldIgnoreElement(result.gameObject, pointer.ignoreCanvasWithTagOrClass, pointer.canvasTagOrScriptListPolicy))
+                    {
+                        continue;
+                    }
+
+                    var target = ExecuteEvents.ExecuteHierarchy(result.gameObject, pointer.pointerEventData, ExecuteEvents.pointerDownHandler);
+                    if (target != null)
+                    {
+                        pointer.pointerEventData.pressPosition = pointer.pointerEventData.position;
+                        pointer.pointerEventData.pointerPressRaycast = result;
+                        pointer.pointerEventData.pointerPress = target;
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        private bool AttemptClick(VRTK_UIPointer pointer)
+        {
             if (pointer.pointerEventData.pointerPress)
             {
                 if (ShouldIgnoreElement(pointer.pointerEventData.pointerPress, pointer.ignoreCanvasWithTagOrClass, pointer.canvasTagOrScriptListPolicy))
                 {
-                    return;
+                    return true;
                 }
 
                 if (pointer.pointerEventData.eligibleForClick)
@@ -176,26 +234,9 @@
                     ExecuteEvents.ExecuteHierarchy(pointer.pointerEventData.pointerPress, pointer.pointerEventData, ExecuteEvents.pointerUpHandler);
                     pointer.pointerEventData.pointerPress = null;
                 }
+                return true;
             }
-            else if (pointer.pointerEventData.eligibleForClick)
-            {
-                foreach (var result in results)
-                {
-                    if (ShouldIgnoreElement(result.gameObject, pointer.ignoreCanvasWithTagOrClass, pointer.canvasTagOrScriptListPolicy))
-                    {
-                        continue;
-                    }
-
-                    var target = ExecuteEvents.ExecuteHierarchy(result.gameObject, pointer.pointerEventData, ExecuteEvents.pointerDownHandler);
-                    if (target != null)
-                    {
-                        pointer.pointerEventData.pressPosition = pointer.pointerEventData.position;
-                        pointer.pointerEventData.pointerPressRaycast = result;
-                        pointer.pointerEventData.pointerPress = target;
-                        break;
-                    }
-                }
-            }
+            return false;
         }
 
         private void Drag(VRTK_UIPointer pointer, List<RaycastResult> results)

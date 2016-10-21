@@ -55,10 +55,23 @@ namespace VRTK
             Always_On
         }
 
+        /// <summary>
+        /// Methods of when to consider a UI Click action
+        /// </summary>
+        /// <param name="Click_On_Button_Up">Consider a UI Click action has happened when the UI Click alias button is released.</param>
+        /// <param name="Click_On_Button_Down">Consider a UI Click action has happened when the UI Click alias button is pressed.</param>
+        public enum ClickMethods
+        {
+            Click_On_Button_Up,
+            Click_On_Button_Down
+        }
+
         [Tooltip("The controller that will be used to toggle the pointer. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.")]
         public VRTK_ControllerEvents controller;
         [Tooltip("Determines when the UI pointer should be active.")]
         public ActivationMethods activationMode = ActivationMethods.Hold_Button;
+        [Tooltip("Determines when the UI Click event action should happen.")]
+        public ClickMethods clickMethod = ClickMethods.Click_On_Button_Up;
         [Tooltip("Determines whether the UI click action should be triggered when the pointer is deactivated. If the pointer is hovering over a clickable element then it will invoke the click action on that element.")]
         public bool attemptClickOnDeactivate = false;
         [Tooltip("A string that specifies a canvas Tag or the name of a Script attached to a canvas and denotes that any world canvases that contain this tag or script will be ignored by the UI Pointer.")]
@@ -85,6 +98,7 @@ namespace VRTK
         private bool pointerClicked = false;
         private bool beamEnabledState = false;
         private bool lastPointerPressState = false;
+        private bool lastPointerClickState = false;
 
         public virtual void OnUIPointerElementEnter(UIPointerEventArgs e)
         {
@@ -223,7 +237,21 @@ namespace VRTK
             }
         }
 
-        private void Start()
+        /// <summary>
+        /// The ValidClick method determines if the UI Click button is in a valid state to register a click action.
+        /// </summary>
+        /// <param name="checkLastClick">If this is true then the last frame's state of the UI Click button is also checked to see if a valid click has happened.</param>
+        /// <param name="lastClickState">This determines what the last frame's state of the UI Click button should be in for it to be a valid click.</param>
+        /// <returns>Returns true if the UI Click button is in a valid state to action a click, returns false if it is not in a valid state.</returns>
+        public bool ValidClick(bool checkLastClick, bool lastClickState = false)
+        {
+            var result = (checkLastClick ? controller.uiClickPressed && lastPointerClickState == lastClickState : controller.uiClickPressed);
+            lastPointerClickState = controller.uiClickPressed;
+
+            return result;
+        }
+
+        private void OnEnable()
         {
             if (controller == null)
             {
@@ -233,6 +261,7 @@ namespace VRTK
             ConfigureWorldCanvases();
             pointerClicked = false;
             lastPointerPressState = false;
+            lastPointerClickState = false;
             beamEnabledState = false;
             controllerRenderModel = VRTK_SDK_Bridge.GetControllerRenderModel(controller.gameObject);
         }
