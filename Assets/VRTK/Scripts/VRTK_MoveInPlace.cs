@@ -33,11 +33,13 @@ namespace VRTK
         /// Options for which method is used to determine player direction while moving.
         /// </summary>
         /// <param name="Gaze">Player will always move in the direction they are currently looking.</param>
+        /// <param name="ControllerRotation">Player will move in the direction that the controllers are pointing (averaged).</param>
         /// <param name="DumbDecoupling">Player will move in the direction they were first looking when they engaged Move In Place.</param>
         /// <param name="SmartDecoupling">Player will move in the direction they are looking only if their headset point the same direction as their controllers.</param>
         public enum DirectionalMethod
         {
             Gaze,
+            ControllerRotation,
             DumbDecoupling,
             SmartDecoupling
         }
@@ -233,7 +235,7 @@ namespace VRTK
             // If Move In Place is currently engaged.
             if (active)
             {
-                // Initialze the list average.
+                // Initialize the list average.
                 float listAverage = 0;
 
                 foreach (Transform trackedObj in trackedObjects)
@@ -312,6 +314,11 @@ namespace VRTK
                     }
                     direction = initalGaze;
                 }
+                // if we're doing controller rotation movement
+                else if (directionMethod.Equals(DirectionalMethod.ControllerRotation))
+                {
+                    direction = DetermineAverageControllerRotation() * Vector3.forward;
+                }
                 // Otherwise if we're just doing Gaze movement, always set the direction to where we're looking.
                 else if (directionMethod.Equals(DirectionalMethod.Gaze))
                 {
@@ -331,6 +338,47 @@ namespace VRTK
             Vector3 movement = (direction * curSpeed) * Time.fixedDeltaTime;
 
             rigidBody.MovePosition(rigidBody.transform.position + movement);
+        }
+
+        private Quaternion DetermineAverageControllerRotation()
+        {
+            // Build the average rotation of the controller(s)
+            Quaternion newRotation;
+
+            // Both controllers are present
+            if (controllerLeftHand != null && controllerRightHand != null)
+            {
+                newRotation = AverageRotation(controllerLeftHand.transform.rotation, controllerRightHand.transform.rotation);
+            }
+            // Left controller only
+            else if (controllerRightHand != null && controllerRightHand == null)
+            {
+                newRotation = controllerLeftHand.transform.rotation;
+            }
+            // Right controller only
+            else if (controllerRightHand != null && controllerLeftHand == null)
+            {
+                newRotation = controllerRightHand.transform.rotation;
+            }
+            // No controllers!
+            else 
+            {
+                newRotation = Quaternion.identity;
+            }
+
+            return newRotation;
+        }
+
+        // Returns the average of two Quaternions
+        private Quaternion AverageRotation(Quaternion rot1, Quaternion rot2) 
+        {
+            return Quaternion.Slerp(rot1, rot2, 0.5f);
+        }
+
+        // Returns a Vector3 with only the X and Z components (Y is 0'd)
+        private static Vector3 Vector3XZOnly(Vector3 vec) 
+        {
+            return new Vector3(vec.x, 0f, vec.z);
         }
 
         private void SetControllerListeners(GameObject controller)
