@@ -369,14 +369,14 @@ namespace VRTK
             }
         }
 
-        private void ResetButtonOverrides()
+        private void ResetButtonOverrides(bool isGrabbed, bool isUsing)
         {
-            if (originalGrabAlias != VRTK_ControllerEvents.ButtonAlias.Undefined)
+            if (!isGrabbed && originalGrabAlias != VRTK_ControllerEvents.ButtonAlias.Undefined)
             {
                 controllerEvents.grabToggleButton = originalGrabAlias;
                 originalGrabAlias = VRTK_ControllerEvents.ButtonAlias.Undefined;
             }
-            if (originalUseAlias != VRTK_ControllerEvents.ButtonAlias.Undefined)
+            if (!isUsing && originalUseAlias != VRTK_ControllerEvents.ButtonAlias.Undefined)
             {
                 controllerEvents.useToggleButton = originalUseAlias;
                 originalUseAlias = VRTK_ControllerEvents.ButtonAlias.Undefined;
@@ -392,11 +392,11 @@ namespace VRTK
         {
             if (IsObjectInteractable(untouched))
             {
-                ResetButtonOverrides();
                 OnControllerUntouchInteractableObject(SetControllerInteractEvent(untouched.gameObject));
 
                 var untouchedObjectScript = untouched.GetComponent<VRTK_InteractableObject>();
                 untouchedObjectScript.StopTouching(gameObject);
+                ResetButtonOverrides(untouchedObjectScript.IsGrabbed(), untouchedObjectScript.IsUsing());
                 if (!untouchedObjectScript.IsTouched())
                 {
                     untouchedObjectScript.ToggleHighlight(false);
