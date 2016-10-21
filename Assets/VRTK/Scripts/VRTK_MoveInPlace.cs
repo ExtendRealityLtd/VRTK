@@ -5,11 +5,10 @@ namespace VRTK
     using System.Collections.Generic;
 
     /// <summary>
-    /// Move In Place allows the user to move the play area by calculating the y-movement of the user's headset and/or controllers.  The user is propelled forward the more they are moving.  This simulates moving in game by moving in real life.
+    /// Move In Place allows the user to move the play area by calculating the y-movement of the user's headset and/or controllers. The user is propelled forward the more they are moving. This simulates moving in game by moving in real life.
     /// </summary>
     /// <remarks>
     ///   > This locomotion method is based on Immersive Movement, originally created by Highsight.
-    /// It is recommend that the VRTK_HeightAdjustTeleport script is used in combination with this one.
     /// </remarks>
     /// <example>
     /// `VRTK/Examples/042_CameraRig_MoveInPlace` shows how the user can move and traverse colliders.
@@ -99,14 +98,14 @@ namespace VRTK
         [Tooltip("The degree threshold that all tracked objects (controllers, headset) must be within to change direction when using the Smart Decoupling Direction Method.")]
         public float smartDecoupleThreshold = 30f;
 
-        // The cap before we stop adding the delta to the movement list.  This will help regulate speed.
+        // The cap before we stop adding the delta to the movement list. This will help regulate speed.
         [SerializeField]
         [Tooltip("The maximum amount of movement required to register in the virtual world.  Decreasing this will increase acceleration, and vice versa.")]
         public float sensitivity = 0.02f;
 
-        // The maximum number of updates we should hold to process movements.  The higher the number, the slower the acceleration/deceleration & vice versa.
+        // The maximum number of updates we should hold to process movements. The higher the number, the slower the acceleration/deceleration & vice versa.
         private int averagePeriod = 60;
-        
+
         // Which tracked objects to use to determine amount of movement.
         private List<Transform> trackedObjects = new List<Transform>();
 
@@ -127,10 +126,10 @@ namespace VRTK
         // Used to determine the direction when using a decoupling method.
         private Vector3 initalGaze = Vector3.zero;
 
-        // The current move speed of the player.  If Move In Place is not active, it will be set to 0.00f.
+        // The current move speed of the player. If Move In Place is not active, it will be set to 0.00f.
         private float curSpeed = 0.00f;
 
-        // The current direction the player is moving.  If Move In Place is not active, it will be set to Vector.zero.
+        // The current direction the player is moving. If Move In Place is not active, it will be set to Vector.zero.
         private Vector3 direction = new Vector3();
 
         // True if Move In Place is currently engaged.
@@ -228,9 +227,9 @@ namespace VRTK
 
             active = false;
         }
-        
+
         private void FixedUpdate()
-        { 
+        {
             // If Move In Place is currently engaged.
             if (active)
             {
@@ -301,7 +300,7 @@ namespace VRTK
                         {
                             curXDir += 360;
                         }
-                    
+
                         closeEnough = closeEnough && (Mathf.Abs(curXDir - controllerLeftHand.transform.rotation.eulerAngles.y) <= smartDecoupleThreshold);
                         closeEnough = closeEnough && (Mathf.Abs(curXDir - controllerRightHand.transform.rotation.eulerAngles.y) <= smartDecoupleThreshold);
 

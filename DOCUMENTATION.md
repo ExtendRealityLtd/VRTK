@@ -860,6 +860,7 @@ This directory contains all of the toolkit scripts that add VR functionality to 
  * [Player Presence](#player-presence-vrtk_playerpresence)
  * [Hip Tracking](#hip-tracking-vrtk_hiptracking)
  * [Touchpad Walking](#touchpad-walking-vrtk_touchpadwalking)
+ * [Move In Place](#move-in-place-vrtk_moveinplace)
  * [Room Extender](#room-extender-vrtk_roomextender)
  * [Interactable Object](#interactable-object-vrtk_interactableobject)
  * [Interact Touch](#interact-touch-vrtk_interacttouch)
@@ -2232,6 +2233,78 @@ If the Headset Collision Fade script has been applied to the Camera prefab, then
 ### Example
 
 `VRTK/Examples/017_CameraRig_TouchpadWalking` has a collection of walls and slopes that can be traversed by the user with the touchpad. There is also an area that can only be traversed if the user is crouching. Standing up in this crouched area will cause the user to appear back at their last good known position.
+
+---
+
+## Move In Place (VRTK_MoveInPlace)
+
+### Overview
+
+Move In Place allows the user to move the play area by calculating the y-movement of the user's headset and/or controllers. The user is propelled forward the more they are moving. This simulates moving in game by moving in real life.
+
+> This locomotion method is based on Immersive Movement, originally created by Highsight.
+
+### Inspector Parameters
+
+ * **Engage Button:** Select which button to hold to engage Move In Place.
+ * **Control Options:** Select which trackables are used to determine movement.
+ * **Speed Scale:** Lower to decrease speed, raise to increase.
+ * **Max Speed:** The max speed the user can move in game units. (If 0 or less, max speed is uncapped)
+ * **Direction Method:** How the user's movement direction will be determined.  The Gaze method tends to lead to the least motion sickness.  Smart decoupling is still a Work In Progress.
+ * **Smart Decouple Threshold:** The degree threshold that all tracked objects (controllers, headset) must be within to change direction when using the Smart Decoupling Direction Method.
+ * **Sensitivity:** The maximum amount of movement required to register in the virtual world.  Decreasing this will increase acceleration, and vice versa.
+
+### Class Variables
+
+ * `public enum ControlOptions` - Options for testing if a play space fall is valid.
+  * `HeadsetAndControllers` - Track both headset and controllers for movement calculations.
+  * `ControllersOnly` - Track only the controllers for movement calculations.
+  * `HeadsetOnly` - Track only headset for movement caluclations.
+ * `public enum DirectionalMethod` - Options for which method is used to determine player direction while moving.
+  * `Gaze` - Player will always move in the direction they are currently looking.
+  * `DumbDecoupling` - Player will move in the direction they were first looking when they engaged Move In Place.
+  * `SmartDecoupling` - Player will move in the direction they are looking only if their headset point the same direction as their controllers.
+ * `public bool LeftController` - If true, the left controller's trackpad will engage Move In Place.
+ * `public bool RightController` - If true, the right controller's trackpad will engage Move In Place.
+
+### Class Methods
+
+#### SetControlOptions/1
+
+  > `public void SetControlOptions(ControlOptions givenControlOptions)`
+
+  * Parameters
+   * `ControlOptions givenControlOptions` - The control options to set the current control options to.
+  * Returns
+   * _none_
+
+Set the control options and modify the trackables to match.
+
+#### GetMovementDirection/0
+
+  > `public Vector3 GetMovementDirection()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `Vector3` - Returns a vector representing the player's current movement direction.
+
+The GetMovementDirection method will return the direction the player is moving.
+
+#### GetSpeed/0
+
+  > `public float GetSpeed()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `float` - Returns a float representing the player's current movement speed.
+
+The GetSpeed method will return the current speed the player is moving at.
+
+### Example
+
+`VRTK/Examples/042_CameraRig_MoveInPlace` shows how the user can move and traverse colliders.
 
 ---
 
