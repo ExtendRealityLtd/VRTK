@@ -72,8 +72,11 @@ namespace VRTK
         public ActivationMethods activationMode = ActivationMethods.Hold_Button;
         [Tooltip("Determines when the UI Click event action should happen.")]
         public ClickMethods clickMethod = ClickMethods.Click_On_Button_Up;
-        [Tooltip("Determines if a UI Click event action should happen when the game object the UI Pointer is attached to collides with the canvas.")]
+        [Tooltip("Determines if a UI Click event action should happen when the game object the UI Pointer is attached to collides with a valid canvas.")]
         public bool clickOnPointerCollision = false;
+        [Tooltip("Determines if the UI Pointer will be auto activated if the game object the UI Pointer is attached to comes within the given distance of a valid canvas. If a value of `0` is given then no auto activation will occur.")]
+        [Range(0f, 5f)]
+        public float autoActivateWithinDistance = 0f;
         [Tooltip("Determines whether the UI click action should be triggered when the pointer is deactivated. If the pointer is hovering over a clickable element then it will invoke the click action on that element.")]
         public bool attemptClickOnDeactivate = false;
         [Tooltip("A string that specifies a canvas Tag or the name of a Script attached to a canvas and denotes that any world canvases that contain this tag or script will be ignored by the UI Pointer.")]
@@ -97,11 +100,19 @@ namespace VRTK
         /// </summary>
         public event UIPointerEventHandler UIPointerElementExit;
 
+        /// <summary>
+        /// The GameObject of the front trigger activator of the canvas currently being activated by this pointer.
+        /// </summary>
+        [HideInInspector]
+        public GameObject autoActivatingCanvas = null;
+
         private bool pointerClicked = false;
         private bool beamEnabledState = false;
         private bool lastPointerPressState = false;
         private bool lastPointerClickState = false;
         private bool collisionClick = false;
+
+        private const string ACTIVATOR_FRONT_TRIGGER_GAMEOBJECT = "UIPointer_Activator_Front_Trigger";
 
         public virtual void OnUIPointerElementEnter(UIPointerEventArgs e)
         {
@@ -202,6 +213,25 @@ namespace VRTK
                 canvasBoxCollider.center = new Vector3(0f, 0f, 5f);
             }
 
+            //if autoActivateWithinDistance is greater than 0 then create the front collider sub object
+            if (autoActivateWithinDistance > 0f && !canvas.transform.FindChild(ACTIVATOR_FRONT_TRIGGER_GAMEOBJECT))
+            {
+                var frontTrigger = new GameObject(ACTIVATOR_FRONT_TRIGGER_GAMEOBJECT);
+                frontTrigger.transform.SetParent(canvas.transform);
+                frontTrigger.transform.localPosition = Vector3.zero;
+                frontTrigger.transform.localScale = Vector3.one;
+
+                var actualActivationDistance = autoActivateWithinDistance * 10f;
+                var frontTriggerBoxCollider = frontTrigger.AddComponent<BoxCollider>();
+                frontTriggerBoxCollider.isTrigger = true;
+                frontTriggerBoxCollider.size = new Vector3(canvasSize.x, canvasSize.y, actualActivationDistance);
+                frontTriggerBoxCollider.center = new Vector3(0f, 0f, (actualActivationDistance / 2));
+
+                frontTrigger.AddComponent<Rigidbody>().isKinematic = true;
+                frontTrigger.AddComponent<VRTK_UIPointerAutoActivator>();
+                frontTrigger.layer = LayerMask.NameToLayer("Ignore Raycast");
+            }
+
             if (!canvas.gameObject.GetComponent<Image>())
             {
                 canvas.gameObject.AddComponent<Image>().color = Color.clear;
@@ -214,7 +244,7 @@ namespace VRTK
         /// <returns>Returns true if the ui pointer should be currently active.</returns>
         public bool PointerActive()
         {
-            if (activationMode == ActivationMethods.Always_On)
+            if (activationMode == ActivationMethods.Always_On || autoActivatingCanvas != null)
             {
                 return true;
             }
@@ -310,6 +340,12 @@ namespace VRTK
             {
                 Destroy(canvasBoxCollider);
             }
+
+            var frontTrigger = canvas.transform.FindChild(ACTIVATOR_FRONT_TRIGGER_GAMEOBJECT);
+            if (frontTrigger)
+            {
+                Destroy(frontTrigger);
+            }
         }
 
         private void OnTriggerEnter(Collider collider)
@@ -327,6 +363,28 @@ namespace VRTK
         private void OnTriggerExit(Collider collider)
         {
             collisionClick = false;
+        }
+    }
+
+    public class VRTK_UIPointerAutoActivator : MonoBehaviour
+    {
+        private void OnTriggerEnter(Collider collider)
+        {
+            var colliderCheck = collider.GetComponentInParent<VRTK_PlayerObject>();
+            var pointerCheck = collider.GetComponentInParent<VRTK_UIPointer>();
+            if (pointerCheck && colliderCheck && colliderCheck.objectType == VRTK_PlayerObject.ObjectTypes.Collider)
+            {
+                pointerCheck.autoActivatingCanvas = gameObject;
+            }
+        }
+
+        private void OnTriggerExit(Collider collider)
+        {
+            var pointerCheck = collider.GetComponentInParent<VRTK_UIPointer>();
+            if (pointerCheck && pointerCheck.autoActivatingCanvas == gameObject)
+            {
+                pointerCheck.autoActivatingCanvas = null;
+            }
         }
     }
 }

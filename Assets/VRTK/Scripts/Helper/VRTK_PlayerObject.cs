@@ -16,7 +16,8 @@ namespace VRTK
             Headset,
             Controller,
             Pointer,
-            Highlighter
+            Highlighter,
+            Collider
         }
 
         public ObjectTypes objectType;
