@@ -181,8 +181,7 @@ namespace VRTK
         private float previousRenderScaleFillRateStepSizeInPercent;
 
         private readonly Timing timing = new Timing();
-        private const int RenderScaleChangeFrameCost = 2;
-        private int lastRenderScaleChangeFrameCount;
+        private readonly Setting renderScaleSetting = new Setting(2, 2);
 
         private bool interleavedReprojectionEnabled;
         private bool hmdDisplayIsOnDesktop;
@@ -505,16 +504,16 @@ namespace VRTK
             int newRenderScaleLevel = currentRenderScaleLevel;
 
             // Rapidly reduce quality if cost of last 1 or 3 frames, or the predicted next frame's cost are expensive
-            if (timing.WasFrameTimingBad(1, highThresholdInMilliseconds, lastRenderScaleChangeFrameCount, RenderScaleChangeFrameCost)
-                || timing.WasFrameTimingBad(3, highThresholdInMilliseconds, lastRenderScaleChangeFrameCount, RenderScaleChangeFrameCost)
+            if (timing.WasFrameTimingBad(1, highThresholdInMilliseconds, renderScaleSetting.LastChangeFrameCount, renderScaleSetting.DecreaseFrameCost)
+                || timing.WasFrameTimingBad(3, highThresholdInMilliseconds, renderScaleSetting.LastChangeFrameCount, renderScaleSetting.DecreaseFrameCost)
                 || timing.WillFrameTimingBeBad(extrapolationThresholdInMilliseconds, highThresholdInMilliseconds,
-                                               lastRenderScaleChangeFrameCount, RenderScaleChangeFrameCost))
+                                               renderScaleSetting.LastChangeFrameCount, renderScaleSetting.DecreaseFrameCost))
             {
                 // Always drop 2 levels except when dropping from level 2 (level 0 is for reprojection)
                 newRenderScaleLevel = currentRenderScaleLevel == 2 ? 1 : currentRenderScaleLevel - 2;
             }
             // Slowly increase quality if last 6 frames are cheap
-            else if (timing.WasFrameTimingGood(6, lowThresholdInMilliseconds, lastRenderScaleChangeFrameCount, RenderScaleChangeFrameCost))
+            else if (timing.WasFrameTimingGood(6, lowThresholdInMilliseconds, renderScaleSetting.LastChangeFrameCount, renderScaleSetting.IncreaseFrameCost))
             {
                 // Only increase by 1 level to prevent frame drops caused by adjusting
                 newRenderScaleLevel = currentRenderScaleLevel + 1;
@@ -524,7 +523,7 @@ namespace VRTK
             if (newRenderScaleLevel != currentRenderScaleLevel)
             {
                 currentRenderScaleLevel = Mathf.Clamp(newRenderScaleLevel, 0, allRenderScales.Count - 1);
-                lastRenderScaleChangeFrameCount = Time.frameCount;
+                renderScaleSetting.LastChangeFrameCount = Time.frameCount;
             }
 
             // Ignore frame timings if overriding
@@ -685,6 +684,20 @@ namespace VRTK
             public static readonly int DefaultLevel = Shader.PropertyToID("_DefaultLevel");
             public static readonly int CurrentLevel = Shader.PropertyToID("_CurrentLevel");
             public static readonly int LastFrameIsInBudget = Shader.PropertyToID("_LastFrameIsInBudget");
+        }
+
+        private sealed class Setting
+        {
+            public int IncreaseFrameCost { get; private set; }
+            public int DecreaseFrameCost { get; private set; }
+
+            public int LastChangeFrameCount;
+
+            public Setting(int increaseFrameCost, int decreaseFrameCost)
+            {
+                IncreaseFrameCost = increaseFrameCost;
+                DecreaseFrameCost = decreaseFrameCost;
+            }
         }
 
         private sealed class Timing
