@@ -231,3 +231,7 @@ A scene that demonstrates how to attach interactable panel prefabs to game objec
 ### 041_Controller_ObjectSnappingToDropZones
 
 A scene that uses the `VRTK_SnapDropZone` prefab to set up pre-determined snap zones for a range of objects and demonstrates how only objects of certain types can be snapped into certain areas.
+
+### 042_Controller_BasicObjectScaling
+
+A scene that demonstrates how to uniform scale a grabbed object by "using" it. Grab objects by squeezing, use by pressing trigger on either controller, pull hands apart or bring together to scale the object.
