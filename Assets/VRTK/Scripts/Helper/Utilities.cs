@@ -169,5 +169,25 @@
             percent = Mathf.Clamp(percent, 0f, 100f);
             return (percent == 0f ? value : (value - (percent / 100f)));
         }
+
+        public static float GetDistanceBetweenControllers()
+        {
+            GameObject leftController = VRTK_SDK_Bridge.GetControllerLeftHand();
+            GameObject rightController = VRTK_SDK_Bridge.GetControllerRightHand();
+            float dist = 0f;
+
+            if (leftController != null &&
+                rightController != null)
+            {
+                Vector3 distVec = leftController.transform.position - rightController.transform.position;
+                dist = distVec.magnitude;
+            }
+            else
+            {
+                Debug.LogWarning("GetDistanceBetweenControllers: oops, missing one or both controllers.");
+            }
+
+            return dist;
+        }
     }
 }
