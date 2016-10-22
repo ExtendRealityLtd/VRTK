@@ -227,3 +227,7 @@ A scene displays the frames per second in the centre of the headset view. The de
 ### 040_Controls_Panel_Menu
 
 A scene that demonstrates how to attach interactable panel prefabs to game objects to provide additional settings.
+
+### 041_Controller_BasicObjectScaling
+
+A scene that demonstrates how to uniform scale a grabbed object by "using" it. Grab objects by squeezing, use by pressing trigger on either controller, pull hands apart or bring together to scale the object.
