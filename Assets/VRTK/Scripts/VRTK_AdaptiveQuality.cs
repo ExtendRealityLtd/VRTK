@@ -181,7 +181,7 @@ namespace VRTK
         private float previousRenderScaleFillRateStepSizeInPercent;
 
         private readonly Timing timing = new Timing();
-        private readonly Setting renderScaleSetting = new Setting(2, 2);
+        private readonly Setting renderScaleSetting = new Setting(30, 10);
 
         private bool interleavedReprojectionEnabled;
         private bool hmdDisplayIsOnDesktop;
