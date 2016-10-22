@@ -41,7 +41,7 @@
 
         private void DoApplicationMenuPressed(object sender, ControllerInteractionEventArgs e)
         {
-            rcCarScript.Reset();
+            rcCarScript.ResetCar();
         }
     }
 }

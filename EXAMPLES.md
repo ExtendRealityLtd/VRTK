@@ -228,6 +228,6 @@ A scene displays the frames per second in the centre of the headset view. The de
 
 A scene that demonstrates how to attach interactable panel prefabs to game objects to provide additional settings.
 
-### 041_Controller_BasicObjectScaling
+### 041_Controller_ObjectSnappingToDropZones
 
-A scene that demonstrates how to uniform scale a grabbed object by "using" it. Grab objects by squeezing, use by pressing trigger on either controller, pull hands apart or bring together to scale the object.
+A scene that uses the `VRTK_SnapDropZone` prefab to set up pre-determined snap zones for a range of objects and demonstrates how only objects of certain types can be snapped into certain areas.

@@ -24,9 +24,11 @@ namespace VRTK.Highlighters
     {
         [Tooltip("The emission colour of the texture will be the highlight colour but this percent darker.")]
         public float emissionDarken = 50f;
+        [Tooltip("A custom material to use on the highlighted object.")]
+        public Material customMaterial;
 
-        private Dictionary<string, Material[]> originalSharedRendererMaterials;
-        private Dictionary<string, Material[]> originalRendererMaterials;
+        private Dictionary<string, Material[]> originalSharedRendererMaterials = new Dictionary<string, Material[]>();
+        private Dictionary<string, Material[]> originalRendererMaterials = new Dictionary<string, Material[]>();
         private Dictionary<string, Coroutine> faderRoutines;
         private bool resetMainTexture = false;
 
@@ -41,13 +43,13 @@ namespace VRTK.Highlighters
             originalRendererMaterials = new Dictionary<string, Material[]>();
             faderRoutines = new Dictionary<string, Coroutine>();
             resetMainTexture = GetOption<bool>(options, "resetMainTexture");
-            Reset();
+            ResetHighlighter();
         }
 
         /// <summary>
-        /// The Reset method stores the object's materials and shared materials prior to highlighting.
+        /// The ResetHighlighter method stores the object's materials and shared materials prior to highlighting.
         /// </summary>
-        public override void Reset()
+        public override void ResetHighlighter()
         {
             StoreOriginalMaterials();
         }
@@ -78,11 +80,14 @@ namespace VRTK.Highlighters
                 return;
             }
 
-            foreach (var fadeRoutine in faderRoutines)
+            if (faderRoutines != null)
             {
-                StopCoroutine(fadeRoutine.Value);
+                foreach (var fadeRoutine in faderRoutines)
+                {
+                    StopCoroutine(fadeRoutine.Value);
+                }
+                faderRoutines.Clear();
             }
-            faderRoutines.Clear();
 
             foreach (Renderer renderer in GetComponentsInChildren<Renderer>(true))
             {
@@ -114,9 +119,17 @@ namespace VRTK.Highlighters
         {
             foreach (Renderer renderer in GetComponentsInChildren<Renderer>(true))
             {
+                var swapCustomMaterials = new Material[renderer.materials.Length];
+
                 for (int i = 0; i < renderer.materials.Length; i++)
                 {
                     var material = renderer.materials[i];
+                    if (customMaterial)
+                    {
+                        material = customMaterial;
+                        swapCustomMaterials[i] = material;
+                    }
+
                     var faderRoutineID = material.GetInstanceID().ToString();
 
                     if (faderRoutines.ContainsKey(faderRoutineID) && faderRoutines[faderRoutineID] != null)
@@ -147,6 +160,11 @@ namespace VRTK.Highlighters
                             }
                         }
                     }
+                }
+
+                if (customMaterial)
+                {
+                    renderer.materials = swapCustomMaterials;
                 }
             }
         }

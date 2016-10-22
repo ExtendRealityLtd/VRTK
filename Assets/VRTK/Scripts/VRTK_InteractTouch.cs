@@ -277,12 +277,9 @@ namespace VRTK
 
         private void OnTriggerEnter(Collider collider)
         {
-            triggerIsColliding = true;
-            AddActiveCollider(collider);
-
-            var colliderInteractableObject = GetColliderInteractableObject(collider);
+            var colliderInteractableObject = TriggerStart(collider);
             //If the new collider is not part of the existing touched object (and the object isn't being grabbed) then start touching the new object
-            if (touchedObject != null && touchedObject != colliderInteractableObject && !touchedObject.GetComponent<VRTK_InteractableObject>().IsGrabbed())
+            if (touchedObject != null && colliderInteractableObject && touchedObject != colliderInteractableObject && !touchedObject.GetComponent<VRTK_InteractableObject>().IsGrabbed())
             {
                 CancelInvoke("ResetTriggerRumble");
                 ResetTriggerRumble();
@@ -300,11 +297,8 @@ namespace VRTK
 
         private void OnTriggerStay(Collider collider)
         {
-            triggerIsColliding = true;
-            AddActiveCollider(collider);
-
-            var colliderInteractableObject = GetColliderInteractableObject(collider);
-            if (touchedObject == null && IsObjectInteractable(collider.gameObject))
+            var colliderInteractableObject = TriggerStart(collider);
+            if (touchedObject == null && colliderInteractableObject && IsObjectInteractable(collider.gameObject))
             {
                 touchedObject = colliderInteractableObject;
                 var touchedObjectScript = touchedObject.GetComponent<VRTK_InteractableObject>();
@@ -338,6 +332,28 @@ namespace VRTK
             triggerIsColliding = false;
         }
 
+        private GameObject TriggerStart(Collider collider)
+        {
+            if (IsSnapDropZone(collider))
+            {
+                return null;
+            }
+
+            triggerIsColliding = true;
+            AddActiveCollider(collider);
+
+            return GetColliderInteractableObject(collider);
+        }
+
+        private bool IsSnapDropZone(Collider collider)
+        {
+            if (collider.GetComponent<VRTK_SnapDropZone>())
+            {
+                return true;
+            }
+            return false;
+        }
+
         private void CheckButtonOverrides(VRTK_InteractableObject touchedObjectScript)
         {
             if (touchedObjectScript.grabOverrideButton != VRTK_ControllerEvents.ButtonAlias.Undefined)
@@ -353,14 +369,14 @@ namespace VRTK
             }
         }
 
-        private void ResetButtonOverrides()
+        private void ResetButtonOverrides(bool isGrabbed, bool isUsing)
         {
-            if (originalGrabAlias != VRTK_ControllerEvents.ButtonAlias.Undefined)
+            if (!isGrabbed && originalGrabAlias != VRTK_ControllerEvents.ButtonAlias.Undefined)
             {
                 controllerEvents.grabToggleButton = originalGrabAlias;
                 originalGrabAlias = VRTK_ControllerEvents.ButtonAlias.Undefined;
             }
-            if (originalUseAlias != VRTK_ControllerEvents.ButtonAlias.Undefined)
+            if (!isUsing && originalUseAlias != VRTK_ControllerEvents.ButtonAlias.Undefined)
             {
                 controllerEvents.useToggleButton = originalUseAlias;
                 originalUseAlias = VRTK_ControllerEvents.ButtonAlias.Undefined;
@@ -376,11 +392,11 @@ namespace VRTK
         {
             if (IsObjectInteractable(untouched))
             {
-                ResetButtonOverrides();
                 OnControllerUntouchInteractableObject(SetControllerInteractEvent(untouched.gameObject));
 
                 var untouchedObjectScript = untouched.GetComponent<VRTK_InteractableObject>();
                 untouchedObjectScript.StopTouching(gameObject);
+                ResetButtonOverrides(untouchedObjectScript.IsGrabbed(), untouchedObjectScript.IsUsing());
                 if (!untouchedObjectScript.IsTouched())
                 {
                     untouchedObjectScript.ToggleHighlight(false);

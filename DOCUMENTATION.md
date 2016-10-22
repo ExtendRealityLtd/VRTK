@@ -18,6 +18,7 @@ A collection of pre-defined usable prefabs have been included to allow for each 
  * [Object Tooltip](#object-tooltip-vrtk_objecttooltip)
  * [Controller Tooltips](#controller-tooltips-vrtk_controllertooltips)
  * [Controller Rigidbody Activator](#controller-rigidbody-activator-vrtk_controllerrigidbodyactivator)
+ * [Snap Drop Zone](#snap-drop-zone-vrtk_snapdropzone)
  * [Radial Menu](#radial-menu-radialmenu)
  * [Independent Radial Menu Controller](#independent-radial-menu-controller-vrtk_independentradialmenucontroller)
  * [Console Viewer Canvas](#console-viewer-canvas-vrtk_consoleviewer)
@@ -75,16 +76,27 @@ There are a number of parameters that can be set on the Prefab which are provide
 
 ### Class Methods
 
-#### Reset/0
+#### ResetTooltip/0
 
-  > `public void Reset()`
+  > `public void ResetTooltip()`
 
   * Parameters
    * _none_
   * Returns
    * _none_
 
-The Reset method resets the tooltip back to its initial state
+The ResetTooltip method resets the tooltip back to its initial state.
+
+#### UpdateText/1
+
+  > `public void UpdateText(string newText)`
+
+  * Parameters
+   * `string newText` - A string containing the text to update the tooltip to display.
+  * Returns
+   * _none_
+
+The UpdateText method allows the tooltip text to be updated at runtime.
 
 ### Example
 
@@ -118,6 +130,29 @@ There are a number of parameters that can be set on the Prefab which are provide
 
 ### Class Methods
 
+#### ResetTooltip/0
+
+  > `public void ResetTooltip()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The Reset method reinitalises the tooltips on all of the controller elements.
+
+#### UpdateText/2
+
+  > `public void UpdateText(TooltipButtons element, string newText)`
+
+  * Parameters
+   * `TooltipButtons element` - The specific controller element to change the tooltip text on.
+   * `string newText` - A string containing the text to update the tooltip to display.
+  * Returns
+   * _none_
+
+The UpdateText method allows the tooltip text on a specific controller element to be updated at runtime.
+
 #### ToggleTips/2
 
   > `public void ToggleTips(bool state, TooltipButtons element = TooltipButtons.None)`
@@ -149,6 +184,104 @@ If the prefab is placed as a child of the target interactable game object then t
 The sphere collider on the prefab can have the radius adjusted to determine how close the controller needs to be to the object before the rigidbody is activated.
 
 It's also possible to replace the sphere trigger collider with an alternative trigger collider for customised collision detection.
+
+---
+
+## Snap Drop Zone (VRTK_SnapDropZone)
+
+### Overview
+
+This sets up a predefined zone where an existing interactable object can be dropped and upon dropping it snaps to the set snap drop zone transform position, rotation and scale.
+
+The position, rotation and scale of the `SnapDropZone` Game Object will be used to determine the final position of the dropped interactable object if it is dropped within the drop zone collider volume.
+
+The provided Highlight Object Prefab is used to create the highlighting object (also within the Editor for easy placement) and by default the standard Material Color Swap highlighter is used.
+
+An alternative highlighter can also be added to the `SnapDropZone` Game Object and this new highlighter component will be used to show the interactable object position on release.
+
+The prefab is a pre-built game object that contains a default trigger collider (Sphere Collider) and a kinematic rigidbody (to ensure collisions occur).
+
+If an alternative collider is required, then the default Sphere Collider can be removed and another collider added.
+
+If the `Use Joint` Snap Type is selected then a custom Joint component is required to be added to the `SnapDropZone` Game Object and upon release the interactable object's rigidbody will be linked to this joint as the `Connected Body`.
+
+### Inspector Parameters
+
+ * **Highlight Object Prefab:** A game object that is used to draw the highlighted destination for within the drop zone. This object will also be created in the Editor for easy placement.
+ * **Snap Type:** The Snap Type to apply when a valid interactable object is dropped within the snap zone.
+ * **Snap Duration:** The amount of time it takes for the object being snapped to move into the new snapped position, rotation and scale.
+ * **Apply Scaling On Snap:** If this is checked then the scaled size of the snap drop zone will be applied to the object that is snapped to it.
+ * **Highlight Color:** The colour to use when showing the snap zone is active.
+ * **Highlight Always Active:** The highlight object will always be displayed when the snap drop zone is available even if a valid item isn't being hovered over.
+ * **Valid Object With Tag Or Class:** A string that specifies an object Tag or the name of a Script attached to an object and notifies the snap drop zone that this is a valid object for snapping on release.
+ * **Valid Object Tag Or Script List Policy:** A specified VRTK_TagOrScriptPolicyList to use to determine which interactable objects will be snapped to the snap drop zone on release. If a list is provided then the 'Valid Object With Tag Or Class' parameter will be ignored.
+ * **Display Drop Zone In Editor:** If this is checked then the drop zone highlight section will be displayed in the scene editor window.
+
+### Class Variables
+
+ * `public enum SnapTypes` - The types of snap on release available.
+  * `Use_Kinematic` - Will set the interactable object rigidbody to `isKinematic = true`.
+  * `Use_Joint` - Will attach the interactable object's rigidbody to the provided joint as it's `Connected Body`.
+  * `Use_Parenting` - Will set the SnapDropZone as the interactable object's parent and set it's rigidbody to `isKinematic = true`.
+
+### Class Events
+
+ * `ObjectEnteredSnapDropZone` - Emitted when a valid interactable object enters the snap drop zone trigger collider.
+ * `ObjectExitedSnapDropZone` - Emitted when a valid interactable object exists the snap drop zone trigger collider.
+ * `ObjectSnappedToDropZone` - Emitted when an interactable object is successfully snapped into a drop zone.
+ * `ObjectUnsnappedFromDropZone` - Emitted when an interactable object is removed from a snapped drop zone.
+
+### Unity Events
+
+Adding the `VRTK_SnapDropZone_UnityEvents` component to `VRTK_SnapDropZone` object allows access to `UnityEvents` that will react identically to the Class Events.
+
+ * `OnObjectEnteredSnapDropZone` - Emits the ObjectEnteredSnapDropZone class event.
+ * `OnObjectExitedSnapDropZone` - Emits the ObjectExitedSnapDropZone class event.
+ * `OnObjectSnappedToDropZone` - Emits the ObjectSnappedToDropZone class event.
+ * `OnObjectUnsnappedFromDropZone` - Emits the ObjectUnsnappedFromDropZone class event.
+
+### Event Payload
+
+ * `GameObject snappedObject` - The interactable object that is dealing with the snap drop zone.
+
+### Class Methods
+
+#### InitaliseHighlightObject/1
+
+  > `public void InitaliseHighlightObject(bool removeOldObject = false)`
+
+  * Parameters
+   * `bool removeOldObject` - If this is set to true then it attempts to delete the old highlight object if it exists. Defaults to `false`
+  * Returns
+   * _none_
+
+The InitaliseHighlightObject method sets up the highlight object based on the given Highlight Object Prefab.
+
+#### ForceSnap/1
+
+  > `public void ForceSnap(GameObject objectToSnap)`
+
+  * Parameters
+   * `GameObject objectToSnap` - The GameObject to attempt to snap.
+  * Returns
+   * _none_
+
+the ForceSnap method attempts to automatically attach a valid game object to the snap drop zone.
+
+#### ForceUnsnap/0
+
+  > `public void ForceUnsnap()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The ForceUnsnap method attempts to automatically remove the current snapped game object from the snap drop zone.
+
+### Example
+
+`VRTK/Examples/041_Controller_ObjectSnappingToDropZones` uses the `VRTK_SnapDropZone` prefab to set up pre-determined snap zones for a range of objects and demonstrates how only objects of certain types can be snapped into certain areas.
 
 ---
 
@@ -494,16 +627,16 @@ As this is an abstract class, it cannot be applied directly to a game object and
 
 The Initalise method is used to set up the state of the highlighter.
 
-#### Reset/0
+#### ResetHighlighter/0
 
-  > `public abstract void Reset();`
+  > `public abstract void ResetHighlighter();`
 
   * Parameters
    * _none_
   * Returns
    * _none_
 
-The Reset method is used to reset the highlighter if anything on the object has changed. It should be called by any scripts changing object materials or colours.
+The ResetHighlighter method is used to reset the highlighter if anything on the object has changed. It should be called by any scripts changing object materials or colours.
 
 #### Highlight/2
 
@@ -543,6 +676,17 @@ The Unhighlight method is used to initiate the logic that returns an object back
 
 The GetOption method is used to return a value from the options array if the given key exists.
 
+#### UsesClonedObject/0
+
+  > `public virtual bool UsesClonedObject()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `bool` - Returns true if the highlighter creates a cloned object to apply the highlighter on, returns false if no additional object is created.
+
+The UsesClonedObject method is used to return whether the current highlighter creates a cloned object to do the highlighting with.
+
 ---
 
 ## Material Colour Swap (VRTK_MaterialColorSwapHighlighter)
@@ -561,6 +705,7 @@ This is the default highlighter that is applied to any script that requires a hi
 ### Inspector Parameters
 
  * **Emission Darken:** The emission colour of the texture will be the highlight colour but this percent darker.
+ * **Custom Material:** A custom material to use on the highlighted object.
 
 ### Class Methods
 
@@ -577,16 +722,16 @@ This is the default highlighter that is applied to any script that requires a hi
 
 The Initialise method sets up the highlighter for use.
 
-#### Reset/0
+#### ResetHighlighter/0
 
-  > `public override void Reset()`
+  > `public override void ResetHighlighter()`
 
   * Parameters
    * _none_
   * Returns
    * _none_
 
-The Reset method stores the object's materials and shared materials prior to highlighting.
+The ResetHighlighter method stores the object's materials and shared materials prior to highlighting.
 
 #### Highlight/2
 
@@ -650,16 +795,16 @@ The Outline Object Copy Highlighter works by making a copy of a mesh and adding 
 
 The Initialise method sets up the highlighter for use.
 
-#### Reset/0
+#### ResetHighlighter/0
 
-  > `public override void Reset()`
+  > `public override void ResetHighlighter()`
 
   * Parameters
    * _none_
   * Returns
    * _none_
 
-The Reset method creates the additional model to use as the outline highlighted object.
+The ResetHighlighter method creates the additional model to use as the outline highlighted object.
 
 #### Highlight/2
 
@@ -713,8 +858,9 @@ This directory contains all of the toolkit scripts that add VR functionality to 
  * [Teleport Disable On Headset Collision](#teleport-disable-on-headset-collision-vrtk_teleportdisableonheadsetcollision)
  * [Teleport Disable On Controller Obscured](#teleport-disable-on-controller-obscured-vrtk_teleportdisableoncontrollerobscured)
  * [Player Presence](#player-presence-vrtk_playerpresence)
- * [Hip Tracking](#hip-tracking-vrtk_hip_tracking)
+ * [Hip Tracking](#hip-tracking-vrtk_hiptracking)
  * [Touchpad Walking](#touchpad-walking-vrtk_touchpadwalking)
+ * [Move In Place](#move-in-place-vrtk_moveinplace)
  * [Room Extender](#room-extender-vrtk_roomextender)
  * [Interactable Object](#interactable-object-vrtk_interactableobject)
  * [Interact Touch](#interact-touch-vrtk_interacttouch)
@@ -2053,7 +2199,7 @@ The StopPhysicsFall method ends the physics based fall state, disables physics a
 
 ---
 
-## Hip Tracking (VRTK_Hip_Tracking)
+## Hip Tracking (VRTK_HipTracking)
 
 ### Overview
 
@@ -2087,6 +2233,78 @@ If the Headset Collision Fade script has been applied to the Camera prefab, then
 ### Example
 
 `VRTK/Examples/017_CameraRig_TouchpadWalking` has a collection of walls and slopes that can be traversed by the user with the touchpad. There is also an area that can only be traversed if the user is crouching. Standing up in this crouched area will cause the user to appear back at their last good known position.
+
+---
+
+## Move In Place (VRTK_MoveInPlace)
+
+### Overview
+
+Move In Place allows the user to move the play area by calculating the y-movement of the user's headset and/or controllers. The user is propelled forward the more they are moving. This simulates moving in game by moving in real life.
+
+> This locomotion method is based on Immersive Movement, originally created by Highsight.
+
+### Inspector Parameters
+
+ * **Engage Button:** Select which button to hold to engage Move In Place.
+ * **Control Options:** Select which trackables are used to determine movement.
+ * **Speed Scale:** Lower to decrease speed, raise to increase.
+ * **Max Speed:** The max speed the user can move in game units. (If 0 or less, max speed is uncapped)
+ * **Direction Method:** How the user's movement direction will be determined.  The Gaze method tends to lead to the least motion sickness.  Smart decoupling is still a Work In Progress.
+ * **Smart Decouple Threshold:** The degree threshold that all tracked objects (controllers, headset) must be within to change direction when using the Smart Decoupling Direction Method.
+ * **Sensitivity:** The maximum amount of movement required to register in the virtual world.  Decreasing this will increase acceleration, and vice versa.
+
+### Class Variables
+
+ * `public enum ControlOptions` - Options for testing if a play space fall is valid.
+  * `HeadsetAndControllers` - Track both headset and controllers for movement calculations.
+  * `ControllersOnly` - Track only the controllers for movement calculations.
+  * `HeadsetOnly` - Track only headset for movement caluclations.
+ * `public enum DirectionalMethod` - Options for which method is used to determine player direction while moving.
+  * `Gaze` - Player will always move in the direction they are currently looking.
+  * `DumbDecoupling` - Player will move in the direction they were first looking when they engaged Move In Place.
+  * `SmartDecoupling` - Player will move in the direction they are looking only if their headset point the same direction as their controllers.
+ * `public bool LeftController` - If true, the left controller's trackpad will engage Move In Place.
+ * `public bool RightController` - If true, the right controller's trackpad will engage Move In Place.
+
+### Class Methods
+
+#### SetControlOptions/1
+
+  > `public void SetControlOptions(ControlOptions givenControlOptions)`
+
+  * Parameters
+   * `ControlOptions givenControlOptions` - The control options to set the current control options to.
+  * Returns
+   * _none_
+
+Set the control options and modify the trackables to match.
+
+#### GetMovementDirection/0
+
+  > `public Vector3 GetMovementDirection()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `Vector3` - Returns a vector representing the player's current movement direction.
+
+The GetMovementDirection method will return the direction the player is moving.
+
+#### GetSpeed/0
+
+  > `public float GetSpeed()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `float` - Returns a float representing the player's current movement speed.
+
+The GetSpeed method will return the current speed the player is moving at.
+
+### Example
+
+`VRTK/Examples/042_CameraRig_MoveInPlace` shows how the user can move and traverse colliders.
 
 ---
 
@@ -2137,7 +2355,7 @@ The highlighting of an Interactable Object is defaulted to use the `VRTK_Materia
  * **Allowed Touch Controllers:** Determines which controller can initiate a touch action.
  * **Hide Controller On Touch:** Optionally override the controller setting.
  * **Is Grabbable:** Determines if the object can be grabbed.
- * **Is Droppable:** Determines if the object can be dropped by the controller grab button being used. If this is unchecked then it's not possible to drop the item once it's picked up using the controller button.
+ * **Valid Drop:** Determines in what situation the object can be dropped by the controller grab button.
  * **Is Swappable:** Determines if the object can be swapped between controllers when it is picked up. If it is unchecked then the object must be dropped before it can be picked up by the other controller.
  * **Hold Button To Grab:** If this is checked then the grab button on the controller needs to be continually held down to keep grabbing. If this is unchecked the grab button toggles the grab action with one button press to grab and another to release.
  * **Grab Override Button:** If this is set to `Undefined` then the global grab alias button will grab the object, setting it to any other button will ensure the override button is used to grab this specific interactable object.
@@ -2180,6 +2398,10 @@ The highlighting of an Interactable Object is defaulted to use the `VRTK_Materia
   * `Default` - Use the hide settings from the controller.
   * `OverrideHide` - Hide the controller when interacting, overriding controller settings.
   * `OverrideDontHide` - Don't hide the controller when interacting, overriding controller settings.
+ * `public enum ValidDropTypes` - The types of valid situations that the object can be released from grab.
+  * `No_Drop` - The object cannot be dropped via the controller
+  * `Drop_Anywhere` - The object can be dropped anywhere in the scene via the controller.
+  * `Drop_ValidSnapDropZone` - The object can only be dropped when it is hovering over a valid snap drop zone.
  * `public int usingState` - The current using state of the object. `0` not being used, `1` being used. Default: `0`
 
 ### Class Events
@@ -2441,6 +2663,17 @@ The SaveCurrentState method stores the existing object parent and the object's r
 
 The ToggleKinematic method is used to set the object's internal rigidbody kinematic state.
 
+#### IsKinematic/0
+
+  > `public bool IsKinematic()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `bool` - Returns true if the rigidbody is set to kinematic and returns false if it's not.
+
+the IsKinematic method returns whether the rigidbody is set to kinematic or not.
+
 #### GetGrabbingObject/0
 
   > `public GameObject GetGrabbingObject()`
@@ -2496,6 +2729,73 @@ The SetGrabbedSnapHandle method is used to set the snap handle of the object at 
    * _none_
 
 The RegisterTeleporters method is used to find all objects that have a teleporter script and register the object on the `OnTeleported` event. This is used internally by the object for keeping Tracked objects positions updated after teleporting.
+
+#### StoreLocalScale/0
+
+  > `public void StoreLocalScale()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+the StoreLocalScale method saves the current transform local scale values.
+
+#### ToggleSnapDropZone/2
+
+  > `public void ToggleSnapDropZone(VRTK_SnapDropZone snapDropZone, bool state)`
+
+  * Parameters
+   * `VRTK_SnapDropZone snapDropZone` - The Snap Drop Zone object that is being interacted with.
+   * `bool state` - The state of whether the interactable object is fixed in or removed from the Snap Drop Zone. True denotes the interactable object is fixed to the Snap Drop Zone and false denotes it has been removed from the Snap Drop Zone.
+  * Returns
+   * _none_
+
+The ToggleSnapDropZone method is used to set the state of whether the interactable object is in a Snap Drop Zone or not.
+
+#### IsInSnapDropZone/0
+
+  > `public bool IsInSnapDropZone()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `bool` - Returns true if the interactable object is currently snapped in a drop zone and returns false if it is not.
+
+The IsInSnapDropZone method determines whether the interactable object is currently snapped to a drop zone.
+
+#### SetSnapDropZoneHover/1
+
+  > `public void SetSnapDropZoneHover(bool state)`
+
+  * Parameters
+   * `bool state` - The state of whether the object is being hovered or not.
+  * Returns
+   * _none_
+
+The SetSnapDropZoneHover method sets whether the interactable object is currently being hovered over a valid Snap Drop Zone.
+
+#### GetStoredSnapDropZone/0
+
+  > `public VRTK_SnapDropZone GetStoredSnapDropZone()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `VRTK_SnapDropZone` - The SnapDropZone that the interactable object is currently snapped to.
+
+The GetStoredSnapDropZone method returns the snap drop zone that the interactable object is currently snapped to.
+
+#### IsDroppable/0
+
+  > `public bool IsDroppable()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `bool` - Returns true if the item can currently be dropped and returns false if it is not currently possible to drop.
+
+The IsDroppable method returns whether the item can be dropped or not in it's current situation.
 
 ### Example
 
@@ -3275,6 +3575,7 @@ The script will instantiate the required Rigidbody and Interactable components a
 
 ### Inspector Parameters
 
+ * **Connected To:** An optional game object to which the knob will be connected. If the game object moves the knob will follow along.
  * **Direction:** The axis on which the knob should rotate. All other axis will be frozen.
  * **Min:** The minimum value of the knob.
  * **Max:** The maximum value of the knob.

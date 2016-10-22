@@ -156,6 +156,7 @@ namespace VRTK
         {
             if (canvas.renderMode != RenderMode.WorldSpace || Utilities.TagOrScriptCheck(canvas.gameObject, canvasTagOrScriptListPolicy, ignoreCanvasWithTagOrClass))
             {
+                RemoveUIPointerCanvas(canvas);
                 return;
             }
 
@@ -251,6 +252,30 @@ namespace VRTK
             foreach (var canvas in FindObjectsOfType<Canvas>())
             {
                 SetWorldCanvas(canvas);
+            }
+        }
+
+        private void RemoveUIPointerCanvas(Canvas canvas)
+        {
+            var defaultRaycaster = canvas.gameObject.GetComponent<GraphicRaycaster>();
+            var customRaycaster = canvas.gameObject.GetComponent<VRTK_UIGraphicRaycaster>();
+            //if a custom raycaster exists then remove it
+            if (customRaycaster)
+            {
+                Destroy(customRaycaster);
+            }
+
+            //If the default raycaster is disabled, then re-enable it
+            if (defaultRaycaster && !defaultRaycaster.enabled)
+            {
+                defaultRaycaster.enabled = true;
+            }
+
+            //Check if there is a collider and remove it if there is
+            var canvasBoxCollider = canvas.gameObject.GetComponent<BoxCollider>();
+            if (canvasBoxCollider)
+            {
+                Destroy(canvasBoxCollider);
             }
         }
     }

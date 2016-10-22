@@ -33,18 +33,20 @@ namespace VRTK.Highlighters
         /// <param name="options">A dictionary array containing the highlighter options:\r     * `&lt;'thickness', float&gt;` - Same as `thickness` inspector parameter.\r     * `&lt;'customOutlineModel', GameObject&gt;` - Same as `customOutlineModel` inspector parameter.\r     * `&lt;'customOutlineModelPath', string&gt;` - Same as `customOutlineModelPath` inspector parameter.</param>
         public override void Initialise(Color? color = null, Dictionary<string, object> options = null)
         {
+            usesClonedObject = true;
+
             if (stencilOutline == null)
             {
                 stencilOutline = Instantiate((Material)Resources.Load("OutlineBasic"));
             }
             SetOptions(options);
-            Reset();
+            ResetHighlighter();
         }
 
         /// <summary>
-        /// The Reset method creates the additional model to use as the outline highlighted object.
+        /// The ResetHighlighter method creates the additional model to use as the outline highlighted object.
         /// </summary>
-        public override void Reset()
+        public override void ResetHighlighter()
         {
             DeleteExistingHighlightModels();
             CreateHighlightModel();
@@ -143,9 +145,9 @@ namespace VRTK.Highlighters
             }
 
             highlightModel = new GameObject(name + "_HighlightModel");
-            highlightModel.transform.position = transform.position;
-            highlightModel.transform.rotation = transform.rotation;
-            highlightModel.transform.localScale = transform.localScale;
+            highlightModel.transform.position = copyModel.transform.position;
+            highlightModel.transform.rotation = copyModel.transform.rotation;
+            highlightModel.transform.localScale = copyModel.transform.localScale;
             highlightModel.transform.SetParent(transform);
 
             foreach (var component in copyModel.GetComponents<Component>())

@@ -286,7 +286,7 @@ namespace VRTK
             }
             if (doorCfCreated)
             {
-                doorCf.force = getThirdDirection(doorHj.axis, secondaryDirection) * subDirection * -50f;
+                doorCf.relativeForce = getThirdDirection(doorHj.axis, secondaryDirection) * subDirection * -50f;
             }
 
             return true;
