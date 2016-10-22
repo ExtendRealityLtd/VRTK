@@ -486,6 +486,7 @@ namespace VRTK
         {
             if (!active)
             {
+                currentRenderScaleLevel = defaultRenderScaleLevel;
                 SetRenderScale(1.0f, 1.0f);
                 return;
             }
