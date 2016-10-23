@@ -133,6 +133,11 @@ namespace VRTK
 
                 VRTK_EditorUtilities.AddHeader("Current State");
                 EditorGUILayout.HelpBox(summary, MessageType.None);
+
+                if (GUILayout.RepeatButton("Refresh"))
+                {
+                    Repaint();
+                }
             }
 
             serializedObject.ApplyModifiedProperties();
