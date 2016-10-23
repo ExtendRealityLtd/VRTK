@@ -9,8 +9,6 @@ namespace VRTK
     [CustomEditor(typeof(VRTK_AdaptiveQuality))]
     public class VRTK_AdaptiveQualityEditor : Editor
     {
-        private const string NoSteamVR_CameraFoundHelpBoxText =
-          "This script needs to be added to a `GameObject` that has a `SteamVR_Camera` attached to it.";
         private const string DontDisableHelpBoxText =
             "This script supports command line arguments to configure the adaptive quality scaling."
             + " If this script is disabled it won't respond to the arguments.\n\n"
@@ -32,11 +30,6 @@ namespace VRTK
             serializedObject.Update();
 
             var adaptiveQuality = (VRTK_AdaptiveQuality)target;
-            if (VRTK_SDK_Bridge.GetHeadsetCamera() == null)
-            {
-                EditorGUILayout.HelpBox(NoSteamVR_CameraFoundHelpBoxText, MessageType.Error);
-                return;
-            }
 
             EditorGUILayout.HelpBox(DontDisableHelpBoxText, adaptiveQuality.enabled ? MessageType.Warning : MessageType.Error);
             EditorGUILayout.Space();
