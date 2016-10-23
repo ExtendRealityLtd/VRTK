@@ -35,8 +35,8 @@ namespace VRTK
             EditorGUILayout.Space();
 
             EditorGUILayout.PropertyField(serializedObject.FindProperty("drawDebugVisualization"));
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("respondsToKeyboardShortcuts"));
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("respondsToCommandLineArguments"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("allowKeyboardShortcuts"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("allowCommandLineArguments"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("msaaLevel"));
 
             EditorGUILayout.Space();

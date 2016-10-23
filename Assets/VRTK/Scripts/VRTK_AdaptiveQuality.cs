@@ -81,7 +81,7 @@ namespace VRTK
                  + " * `Shift+F2`: Toggle usage of override render scale on/off\n"
                  + " * `Shift+F3`: Decrease override render scale level\n"
                  + " * `Shift+F4`: Increase override render scale level")]
-        public bool respondsToKeyboardShortcuts = true;
+        public bool allowKeyboardShortcuts = true;
 
         [Tooltip("Toggles whether to allow command line arguments to control this script at startup of the standalone build.\n\n"
                  + "* The supported command line arguments all begin with '-' and are:\n"
@@ -93,7 +93,7 @@ namespace VRTK
                  + " * `-aqoverride X`: Set override render scale level to X\n"
                  + " * `-vrdebug`: Enable debug visualization\n"
                  + " * `-msaa X`: Set MSAA level to X")]
-        public bool respondsToCommandLineArguments = true;
+        public bool allowCommandLineArguments = true;
 
         [Tooltip("The MSAA level to use.")]
         [Header("Quality")]
@@ -363,7 +363,7 @@ namespace VRTK
 
         private void HandleCommandLineArguments()
         {
-            if (!respondsToCommandLineArguments)
+            if (!allowCommandLineArguments)
             {
                 return;
             }
@@ -409,7 +409,7 @@ namespace VRTK
 
         private void HandleKeyPresses()
         {
-            if (!respondsToKeyboardShortcuts || !KeyboardShortcuts.Modifiers.Any(Input.GetKey))
+            if (!allowKeyboardShortcuts || !KeyboardShortcuts.Modifiers.Any(Input.GetKey))
             {
                 return;
             }
