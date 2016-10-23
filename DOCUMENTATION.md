@@ -540,9 +540,10 @@ The play area collider does not work well with terrains as they are uneven and c
 ### Inspector Parameters
 
  * **Controller:** The controller that will be used to toggle the pointer. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.
+ * **Pointer Origin Transform:** A custom transform to use as the origin of the pointer. If no pointer origin transform is provided then the transform the script is attached to is used.
  * **Pointer Material:** The material to use on the rendered version of the pointer. If no material is selected then the default `WorldPointer` material will be used.
- * **Interact With Objects:** If this is checked then the pointer will be an extension of the controller and able to interact with Interactable Objects.
  * **Hold Button To Activate:** If this is checked then the pointer beam will be activated on first press of the pointer alias button and will stay active until the pointer alias button is pressed again. The destination set event is emitted when the beam is deactivated on the second button press.
+ * **Interact With Objects:** If this is checked then the pointer will be an extension of the controller and able to interact with Interactable Objects.
  * **Activate Delay:** The time in seconds to delay the pointer beam being able to be active again. Useful for preventing constant teleportation.
  * **Pointer Visibility:** Determines when the pointer beam should be displayed.
  * **Layers To Ignore:** The layers to ignore when raycasting.
@@ -1680,6 +1681,7 @@ The UI pointer is activated via the `Pointer` alias on the `Controller Events` a
 ### Inspector Parameters
 
  * **Controller:** The controller that will be used to toggle the pointer. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.
+ * **Pointer Origin Transform:** A custom transform to use as the origin of the pointer. If no pointer origin transform is provided then the transform the script is attached to is used.
  * **Activation Mode:** Determines when the UI pointer should be active.
  * **Click Method:** Determines when the UI Click event action should happen.
  * **Click On Pointer Collision:** Determines if a UI Click event action should happen when the game object the UI Pointer is attached to collides with a valid canvas.
@@ -1764,6 +1766,28 @@ The PointerActive method determines if the ui pointer beam should be active base
    * `bool` - Returns true if the UI Click button is in a valid state to action a click, returns false if it is not in a valid state.
 
 The ValidClick method determines if the UI Click button is in a valid state to register a click action.
+
+#### GetOriginPosition/0
+
+  > `public Vector3 GetOriginPosition()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `Vector3` - A Vector3 of the pointer transform position
+
+The GetOriginPosition method returns the relevant transform position for the pointer based on whether the pointerOriginTransform variable is valid.
+
+#### GetOriginForward/0
+
+  > `public Vector3 GetOriginForward()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `Vector3` - A Vector3 of the pointer transform forward
+
+The GetOriginPosition method returns the relevant transform forward for the pointer based on whether the pointerOriginTransform variable is valid.
 
 ### Example
 

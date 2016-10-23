@@ -68,6 +68,8 @@ namespace VRTK
 
         [Tooltip("The controller that will be used to toggle the pointer. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.")]
         public VRTK_ControllerEvents controller;
+        [Tooltip("A custom transform to use as the origin of the pointer. If no pointer origin transform is provided then the transform the script is attached to is used.")]
+        public Transform pointerOriginTransform = null;
         [Tooltip("Determines when the UI pointer should be active.")]
         public ActivationMethods activationMode = ActivationMethods.Hold_Button;
         [Tooltip("Determines when the UI Click event action should happen.")]
@@ -283,6 +285,24 @@ namespace VRTK
             lastPointerClickState = controllerClicked;
 
             return result;
+        }
+
+        /// <summary>
+        /// The GetOriginPosition method returns the relevant transform position for the pointer based on whether the pointerOriginTransform variable is valid.
+        /// </summary>
+        /// <returns>A Vector3 of the pointer transform position</returns>
+        public Vector3 GetOriginPosition()
+        {
+            return (pointerOriginTransform ? pointerOriginTransform.position : transform.position);
+        }
+
+        /// <summary>
+        /// The GetOriginPosition method returns the relevant transform forward for the pointer based on whether the pointerOriginTransform variable is valid.
+        /// </summary>
+        /// <returns>A Vector3 of the pointer transform forward</returns>
+        public Vector3 GetOriginForward()
+        {
+            return (pointerOriginTransform ? pointerOriginTransform.forward : transform.forward);
         }
 
         private void OnEnable()

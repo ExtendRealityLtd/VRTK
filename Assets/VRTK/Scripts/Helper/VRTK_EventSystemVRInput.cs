@@ -38,8 +38,8 @@
         private List<RaycastResult> CheckRaycasts(VRTK_UIPointer pointer)
         {
             var raycastResult = new RaycastResult();
-            raycastResult.worldPosition = pointer.transform.position;
-            raycastResult.worldNormal = pointer.transform.forward;
+            raycastResult.worldPosition = pointer.GetOriginPosition();
+            raycastResult.worldNormal = pointer.GetOriginForward();
 
             pointer.pointerEventData.pointerCurrentRaycast = raycastResult;
 
