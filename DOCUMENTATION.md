@@ -850,6 +850,7 @@ This directory contains all of the toolkit scripts that add VR functionality to 
  * [Bezier Pointer](#bezier-pointer-vrtk_bezierpointer)
  * [Play Area Cursor](#play-area-cursor-vrtk_playareacursor)
  * [UI Pointer](#ui-pointer-vrtk_uipointer)
+ * [UI Canvas](#ui-canvas-vrtk_uicanvas)
  * [Basic Teleport](#basic-teleport-vrtk_basicteleport)
  * [Height Adjust Teleport](#height-adjust-teleport-vrtk_heightadjustteleport)
  * [Headset Collision](#headset-collision-vrtk_headsetcollision)
@@ -1672,8 +1673,6 @@ The ToggleState method enables or disables the visibility of the play area curso
 
 The UI Pointer provides a mechanism for interacting with Unity UI elements on a world canvas. The UI Pointer can be attached to any game object the same way in which a World Pointer can be and the UI Pointer also requires a controller to initiate the pointer activation and pointer click states.
 
-It's possible to prevent a world canvas from being interactable with a UI Pointer by setting a tag or applying a class to the canvas and then entering the tag or class name for the UI Pointer to ignore on the UI Pointer inspector parameters.
-
 The simplest way to use the UI Pointer is to attach the script to a game controller within the `[CameraRig]` along with a Simple Pointer as this provides visual feedback as to where the UI ray is pointing.
 
 The UI pointer is activated via the `Pointer` alias on the `Controller Events` and the UI pointer click state is triggered via the `UI Click` alias on the `Controller Events`.
@@ -1684,11 +1683,7 @@ The UI pointer is activated via the `Pointer` alias on the `Controller Events` a
  * **Pointer Origin Transform:** A custom transform to use as the origin of the pointer. If no pointer origin transform is provided then the transform the script is attached to is used.
  * **Activation Mode:** Determines when the UI pointer should be active.
  * **Click Method:** Determines when the UI Click event action should happen.
- * **Click On Pointer Collision:** Determines if a UI Click event action should happen when the game object the UI Pointer is attached to collides with a valid canvas.
- * **Auto Activate Within Distance:** Determines if the UI Pointer will be auto activated if the game object the UI Pointer is attached to comes within the given distance of a valid canvas. If a value of `0` is given then no auto activation will occur.
- * **Attempt Click On Deactivate:** Determines whether the UI click action should be triggered when the pointer is deactivated. If the pointer is hovering over a clickable element then it will invoke the click action on that element.
- * **Ignore Canvas With Tag Or Class:** A string that specifies a canvas Tag or the name of a Script attached to a canvas and denotes that any world canvases that contain this tag or script will be ignored by the UI Pointer.
- * **Canvas Tag Or Script List Policy:** A specified VRTK_TagOrScriptPolicyList to use to determine whether any world canvases will be acted upon by the UI Pointer. If a list is provided then the 'Ignore Canvas With Tag Or Class' parameter will be ignored.
+ * **Attempt Click On Deactivate:** Determines whether the UI click action should be triggered when the pointer is deactivated. If the pointer is hovering over a clickable element then it will invoke the click action on that element. Note: Only works with `Click Method =  Click_On_Button_Up`
 
 ### Class Variables
 
@@ -1700,6 +1695,7 @@ The UI pointer is activated via the `Pointer` alias on the `Controller Events` a
   * `Click_On_Button_Up` - Consider a UI Click action has happened when the UI Click alias button is released.
   * `Click_On_Button_Down` - Consider a UI Click action has happened when the UI Click alias button is pressed.
  * `public GameObject autoActivatingCanvas` - The GameObject of the front trigger activator of the canvas currently being activated by this pointer. Default: `null`
+ * `public bool collisionClick` - Determines if the UI Pointer has collided with a valid canvas that has collision click turned on. Default: `false`
 
 ### Class Events
 
@@ -1733,16 +1729,16 @@ Adding the `VRTK_UIPointer_UnityEvents` component to `VRTK_UIPointer` object all
 
 The SetEventSystem method is used to set up the global Unity event system for the UI pointer. It also handles disabling the existing Standalone Input Module that exists on the EventSystem and adds a custom VRTK Event System VR Input component that is required for interacting with the UI with VR inputs.
 
-#### SetWorldCanvas/1
+#### RemoveEventSystem/0
 
-  > `public void SetWorldCanvas(Canvas canvas)`
+  > `public void RemoveEventSystem()`
 
   * Parameters
-   * `Canvas canvas` - The canvas object to initialise for use with the UI pointers. Must be of type `WorldSpace`.
+   * _none_
   * Returns
    * _none_
 
-The SetWorldCanvas method is used to initialise a `WorldSpace` canvas for use with the UI Pointer. This method is called automatically on start for all editor created canvases but would need to be manually called if a canvas was generated at runtime.
+The RemoveEventSystem resets the Unity EventSystem back to the original state before the VRTK_EventSystemVRInput was swapped for it.
 
 #### PointerActive/0
 
@@ -1792,6 +1788,25 @@ The GetOriginPosition method returns the relevant transform forward for the poin
 ### Example
 
 `VRTK/Examples/034_Controls_InteractingWithUnityUI` uses the `VRTK_UIPointer` script on the right Controller to allow for the interaction with Unity UI elements using a Simple Pointer beam. The left Controller controls a Simple Pointer on the headset to demonstrate gaze interaction with Unity UI elements.
+
+---
+
+## UI Canvas (VRTK_UICanvas)
+
+### Overview
+
+The UI Canvas is used to denote which World Canvases are interactable by a UI Pointer.
+
+When the script is enabled it will disable the `Graphic Raycaster` on the canvas and create a custom `UI Graphics Raycaster` and the Blocking Objects and Blocking Mask settings are copied over from the `Graphic Raycaster`.
+
+### Inspector Parameters
+
+ * **Click On Pointer Collision:** Determines if a UI Click action should happen when a UI Pointer game object collides with this canvas.
+ * **Auto Activate Within Distance:** Determines if a UI Pointer will be auto activated if a UI Pointer game object comes within the given distance of this canvas. If a value of `0` is given then no auto activation will occur.
+
+### Example
+
+`VRTK/Examples/034_Controls_InteractingWithUnityUI` uses the `VRTK_UICanvas` script on two of the canvases to show how the UI Pointer can interact with them.
 
 ---
 

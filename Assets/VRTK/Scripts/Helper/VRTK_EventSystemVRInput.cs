@@ -80,22 +80,17 @@
             return false;
         }
 
-        private bool ShouldIgnoreElement(GameObject obj, string ignoreCanvasWithTagOrClass, VRTK_TagOrScriptPolicyList canvasTagOrScriptListPolicy)
+        private bool ValidElement(GameObject obj)
         {
-            var canvas = obj.GetComponentInParent<Canvas>();
-            if (!canvas)
-            {
-                return false;
-            }
-
-            return (Utilities.TagOrScriptCheck(canvas.gameObject, canvasTagOrScriptListPolicy, ignoreCanvasWithTagOrClass));
+            var canvasCheck = obj.GetComponentInParent<VRTK_UICanvas>();
+            return (canvasCheck && canvasCheck.enabled ? true : false);
         }
 
         private void Hover(VRTK_UIPointer pointer, List<RaycastResult> results)
         {
             if (pointer.pointerEventData.pointerEnter)
             {
-                if (ShouldIgnoreElement(pointer.pointerEventData.pointerEnter, pointer.ignoreCanvasWithTagOrClass, pointer.canvasTagOrScriptListPolicy))
+                if (!ValidElement(pointer.pointerEventData.pointerEnter))
                 {
                     return;
                 }
@@ -111,7 +106,7 @@
             {
                 foreach (var result in results)
                 {
-                    if (ShouldIgnoreElement(result.gameObject, pointer.ignoreCanvasWithTagOrClass, pointer.canvasTagOrScriptListPolicy))
+                    if (!ValidElement(result.gameObject))
                     {
                         continue;
                     }
@@ -192,7 +187,7 @@
             {
                 foreach (var result in results)
                 {
-                    if (ShouldIgnoreElement(result.gameObject, pointer.ignoreCanvasWithTagOrClass, pointer.canvasTagOrScriptListPolicy))
+                    if (!ValidElement(result.gameObject))
                     {
                         continue;
                     }
@@ -215,7 +210,7 @@
         {
             if (pointer.pointerEventData.pointerPress)
             {
-                if (ShouldIgnoreElement(pointer.pointerEventData.pointerPress, pointer.ignoreCanvasWithTagOrClass, pointer.canvasTagOrScriptListPolicy))
+                if (!ValidElement(pointer.pointerEventData.pointerPress))
                 {
                     return true;
                 }
@@ -245,7 +240,7 @@
 
             if (pointer.pointerEventData.pointerDrag)
             {
-                if (ShouldIgnoreElement(pointer.pointerEventData.pointerDrag, pointer.ignoreCanvasWithTagOrClass, pointer.canvasTagOrScriptListPolicy))
+                if (!ValidElement(pointer.pointerEventData.pointerDrag))
                 {
                     return;
                 }
@@ -272,7 +267,7 @@
             {
                 foreach (var result in results)
                 {
-                    if (ShouldIgnoreElement(result.gameObject, pointer.ignoreCanvasWithTagOrClass, pointer.canvasTagOrScriptListPolicy))
+                    if (!ValidElement(result.gameObject))
                     {
                         continue;
                     }

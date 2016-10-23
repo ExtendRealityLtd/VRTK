@@ -34,7 +34,7 @@
             newCanvasGO.layer = 5;
             var canvas = newCanvasGO.AddComponent<Canvas>();
             var canvasRT = canvas.GetComponent<RectTransform>();
-            canvasRT.position = new Vector3(-4f, 2f, 2f + canvasCount);
+            canvasRT.position = new Vector3(-4f, 2f, 3f + canvasCount);
             canvasRT.sizeDelta = new Vector2(300f, 400f);
             canvasRT.localScale = new Vector3(0.005f, 0.005f, 0.005f);
             canvasRT.eulerAngles = new Vector3(0f, 270f, 0f);
@@ -76,7 +76,7 @@
             txt.color = Color.black;
             txt.font = Resources.GetBuiltinResource(typeof(Font), "Arial.ttf") as Font;
 
-            FindObjectOfType<VRTK_UIPointer>().SetWorldCanvas(canvas);
+            newCanvasGO.AddComponent<VRTK_UICanvas>();
         }
     }
 }
