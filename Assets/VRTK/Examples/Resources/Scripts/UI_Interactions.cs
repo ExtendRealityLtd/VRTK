@@ -1,6 +1,7 @@
 ﻿namespace VRTK.Examples
 {
     using UnityEngine;
+    using UnityEngine.EventSystems;
     using UnityEngine.UI;
 
     public class UI_Interactions : MonoBehaviour
@@ -25,6 +26,17 @@
         public void Dropdown(int value)
         {
             Debug.Log("Dropdown option selected was ID " + value);
+        }
+
+        public void SetDropText(BaseEventData data)
+        {
+            var pointerData = data as PointerEventData;
+            var textObject = GameObject.Find("ActionText");
+            if (textObject)
+            {
+                var text = textObject.GetComponent<Text>();
+                text.text = pointerData.pointerDrag.name + " Dropped On " + pointerData.pointerEnter.name;
+            }
         }
 
         public void CreateCanvas()

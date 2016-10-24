@@ -851,6 +851,8 @@ This directory contains all of the toolkit scripts that add VR functionality to 
  * [Play Area Cursor](#play-area-cursor-vrtk_playareacursor)
  * [UI Pointer](#ui-pointer-vrtk_uipointer)
  * [UI Canvas](#ui-canvas-vrtk_uicanvas)
+ * [UI Draggable Item](#ui-draggable-item-vrtk_uidraggableitem)
+ * [UI Drop Zone](#ui-drop-zone-vrtk_uidropzone)
  * [Basic Teleport](#basic-teleport-vrtk_basicteleport)
  * [Height Adjust Teleport](#height-adjust-teleport-vrtk_heightadjustteleport)
  * [Headset Collision](#headset-collision-vrtk_headsetcollision)
@@ -1807,6 +1809,46 @@ When the script is enabled it will disable the `Graphic Raycaster` on the canvas
 ### Example
 
 `VRTK/Examples/034_Controls_InteractingWithUnityUI` uses the `VRTK_UICanvas` script on two of the canvases to show how the UI Pointer can interact with them.
+
+---
+
+## UI Draggable Item (VRTK_UIDraggableItem)
+ > extends MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+
+### Overview
+
+The UI Draggable item will make any UI element draggable on the canvas.
+
+If a UI Draggable item is set to `Restrict To Drop Zone = true` then the UI Draggable item must be a child of an element that has the VRTK_UIDropZone script applied to it to ensure it starts in a valid drop zone.
+
+### Inspector Parameters
+
+ * **Restrict To Drop Zone:** If checked then the UI element can only be dropped in valid a VRTK_UIDropZone object and must start as a child of a VRTK_UIDropZone object. If unchecked then the UI element can be dropped anywhere on the canvas.
+ * **Restrict To Original Canvas:** If checked then the UI element can only be dropped on the original parent canvas. If unchecked the UI element can be dropped on any valid VRTK_UICanvas.
+ * **Forward Offset:** The offset to bring the UI element forward when it is being dragged.
+
+### Class Variables
+
+ * `public GameObject validDropZone` - The current valid drop zone the dragged element is hovering over.
+
+### Example
+
+`VRTK/Examples/034_Controls_InteractingWithUnityUI` demonstrates a collection of UI elements that are draggable
+
+---
+
+## UI Drop Zone (VRTK_UIDropZone)
+ > extends MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+
+### Overview
+
+A UI Drop Zone is applied to any UI element that is to be considered a valid parent for any UI Draggable element to be dropped into it.
+
+It's usually appropriate to use a Panel UI element as a drop zone with a layout group applied so new children dropped into the drop zone automatically align.
+
+### Example
+
+`VRTK/Examples/034_Controls_InteractingWithUnityUI` demonstrates a collection of UI Drop Zones.
 
 ---
 

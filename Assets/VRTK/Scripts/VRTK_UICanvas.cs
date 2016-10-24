@@ -3,6 +3,7 @@ namespace VRTK
 {
     using UnityEngine;
     using UnityEngine.UI;
+    using UnityEngine.EventSystems;
 
     /// <summary>
     /// The UI Canvas is used to denote which World Canvases are interactable by a UI Pointer.
@@ -20,6 +21,7 @@ namespace VRTK
         [Tooltip("Determines if a UI Pointer will be auto activated if a UI Pointer game object comes within the given distance of this canvas. If a value of `0` is given then no auto activation will occur.")]
         public float autoActivateWithinDistance = 0f;
 
+        private const string CANVAS_DRAGGABLE_PANEL = "VRTK_UICANVAS_DRAGGABLE_PANEL";
         private const string ACTIVATOR_FRONT_TRIGGER_GAMEOBJECT = "VRTK_UICANVAS_ACTIVATOR_FRONT_TRIGGER";
 
         private void OnEnable()
@@ -47,9 +49,11 @@ namespace VRTK
                 return;
             }
 
+            var canvasSize = canvas.GetComponent<RectTransform>().sizeDelta;
             //copy public params then disable existing graphic raycaster
             var defaultRaycaster = canvas.gameObject.GetComponent<GraphicRaycaster>();
             var customRaycaster = canvas.gameObject.GetComponent<VRTK_UIGraphicRaycaster>();
+
             //if it doesn't already exist, add the custom raycaster
             if (!customRaycaster)
             {
@@ -64,7 +68,6 @@ namespace VRTK
             }
 
             //add a box collider and background image to ensure the rays always hit
-            var canvasSize = canvas.GetComponent<RectTransform>().sizeDelta;
             if (!canvas.gameObject.GetComponent<BoxCollider>())
             {
                 var canvasBoxCollider = canvas.gameObject.AddComponent<BoxCollider>();
@@ -79,8 +82,32 @@ namespace VRTK
                 canvas.gameObject.AddComponent<Rigidbody>().isKinematic = true;
             }
 
+            CreateDraggablePanel(canvas, canvasSize);
+            CreateActivator(canvas, canvasSize);
+        }
+
+        private void CreateDraggablePanel(Canvas canvas, Vector2 canvasSize)
+        {
+            if (canvas && !canvas.transform.FindChild(CANVAS_DRAGGABLE_PANEL))
+            {
+                var draggablePanel = new GameObject(CANVAS_DRAGGABLE_PANEL);
+                draggablePanel.transform.SetParent(canvas.transform);
+                draggablePanel.transform.localPosition = Vector3.zero;
+                draggablePanel.transform.localRotation = Quaternion.identity;
+                draggablePanel.transform.localScale = Vector3.one;
+                draggablePanel.transform.SetAsFirstSibling();
+                draggablePanel.AddComponent<RectTransform>();
+                draggablePanel.AddComponent<Image>().color = Color.clear;
+                draggablePanel.AddComponent<EventTrigger>();
+
+                draggablePanel.GetComponent<RectTransform>().sizeDelta = canvasSize;
+            }
+        }
+
+        private void CreateActivator(Canvas canvas, Vector2 canvasSize)
+        {
             //if autoActivateWithinDistance is greater than 0 then create the front collider sub object
-            if (autoActivateWithinDistance > 0f && !canvas.transform.FindChild(ACTIVATOR_FRONT_TRIGGER_GAMEOBJECT))
+            if (autoActivateWithinDistance > 0f && canvas && !canvas.transform.FindChild(ACTIVATOR_FRONT_TRIGGER_GAMEOBJECT))
             {
                 var frontTrigger = new GameObject(ACTIVATOR_FRONT_TRIGGER_GAMEOBJECT);
                 frontTrigger.transform.SetParent(canvas.transform);
@@ -98,11 +125,6 @@ namespace VRTK
                 frontTrigger.AddComponent<Rigidbody>().isKinematic = true;
                 frontTrigger.AddComponent<VRTK_UIPointerAutoActivator>();
                 frontTrigger.layer = LayerMask.NameToLayer("Ignore Raycast");
-            }
-
-            if (!canvas.gameObject.GetComponent<Image>())
-            {
-                canvas.gameObject.AddComponent<Image>().color = Color.clear;
             }
         }
 
@@ -140,6 +162,12 @@ namespace VRTK
             if (canvasRigidBody)
             {
                 Destroy(canvasRigidBody);
+            }
+
+            var draggablePanel = canvas.transform.FindChild(CANVAS_DRAGGABLE_PANEL);
+            if (draggablePanel)
+            {
+                Destroy(draggablePanel.gameObject);
             }
 
             var frontTrigger = canvas.transform.FindChild(ACTIVATOR_FRONT_TRIGGER_GAMEOBJECT);
