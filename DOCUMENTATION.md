@@ -2262,6 +2262,7 @@ Move In Place allows the user to move the play area by calculating the y-movemen
   * `HeadsetOnly` - Track only headset for movement caluclations.
  * `public enum DirectionalMethod` - Options for which method is used to determine player direction while moving.
   * `Gaze` - Player will always move in the direction they are currently looking.
+  * `ControllerRotation` - Player will move in the direction that the controllers are pointing (averaged).
   * `DumbDecoupling` - Player will move in the direction they were first looking when they engaged Move In Place.
   * `SmartDecoupling` - Player will move in the direction they are looking only if their headset point the same direction as their controllers.
  * `public bool LeftController` - If true, the left controller's trackpad will engage Move In Place.
