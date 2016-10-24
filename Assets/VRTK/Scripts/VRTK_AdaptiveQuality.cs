@@ -535,6 +535,15 @@ namespace VRTK
                                                                     ? 1
                                                                     : renderViewportScaleSetting.currentValue - 2);
             }
+            // Rapidly increase render viewport scale level if last 12 frames are cheap
+            else if (timing.WasFrameTimingGood(
+                    12,
+                    lowThresholdInMilliseconds,
+                    renderViewportScaleSetting.lastChangeFrameCount - renderViewportScaleSetting.increaseFrameCost,
+                    renderViewportScaleSetting.increaseFrameCost))
+            {
+                newRenderViewportScaleLevel = ClampRenderScaleLevel(renderViewportScaleSetting.currentValue + 2);
+            }
             // Slowly increase render viewport scale level if last 6 frames are cheap
             else if (timing.WasFrameTimingGood(
                 6,
