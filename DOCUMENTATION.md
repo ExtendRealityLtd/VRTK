@@ -3272,7 +3272,7 @@ There are two goals:
  * Increase quality when there are idle GPU cycles
 
 This script currently changes the following to reach these goals:
- * Rendering resolution and viewport (aka Dynamic Resolution)
+ * Rendering resolution and viewport size (aka Dynamic Resolution)
 
 In the future it could be changed to also change the following:
  * MSAA level
@@ -3290,15 +3290,14 @@ In more detail:
 
 ### Inspector Parameters
 
- * **Active:** Toggles whether the render quality is dynamically adjusted to maintain VR framerate. If unchecked, the renderer will render at the recommended resolution provided by the current `VRDevice`.
- * **Draw Debug Visualization:** Toggles whether to show the debug overlay. Each square represents a different level on the quality scale. Levels increase from left to right,  and the first green box that is lit above represents the recommended render target resolution provided by  the current `VRDevice`. The yellow boxes represent resolutions below the recommended render target resolution. The currently lit box becomes red whenever the user is likely seeing reprojection in the HMD since the  application isn't maintaining VR framerate. If lit, the box all the way on the left is almost always lit red because  it represents the lowest render scale with reprojection on.
- * **Responds To Keyboard Shortcuts:** Toggles whether to allow keyboard shortcuts to control this script.
+ * **Draw Debug Visualization:** Toggles whether to show the debug overlay. Each square represents a different level on the quality scale. Levels increase from left to right,  the first green box that is lit above represents the recommended render target resolution provided by the  current `VRDevice`, the box that is lit below in cyan represents the current resolution and the filled box  represents the current viewport scale. The yellow boxes represent resolutions below the recommended render target resolution. The currently lit box becomes red whenever the user is likely seeing reprojection in the HMD since the  application isn't maintaining VR framerate. If lit, the box all the way on the left is almost always lit  red because it represents the lowest render scale with reprojection on.
+ * **Allow Keyboard Shortcuts:** Toggles whether to allow keyboard shortcuts to control this script.
   * The supported shortcuts are:
     * `Shift+F1`: Toggle debug visualization on/off
     * `Shift+F2`: Toggle usage of override render scale on/off
     * `Shift+F3`: Decrease override render scale level
     * `Shift+F4`: Increase override render scale level
- * **Responds To Command Line Arguments:** Toggles whether to allow command line arguments to control this script at startup of the standalone build.
+ * **Allow Command Line Arguments:** Toggles whether to allow command line arguments to control this script at startup of the standalone build.
   * The supported command line arguments all begin with '-' and are:
     * `-noaq`: Disable adaptive quality
     * `-aqminscale X`: Set minimum render scale to X
@@ -3309,17 +3308,19 @@ In more detail:
     * `-vrdebug`: Enable debug visualization
     * `-msaa X`: Set MSAA level to X
  * **Msaa Level:** The MSAA level to use.
+ * **Scale Render Viewport:** Toggles whether the render viewport scale is dynamically adjusted to maintain VR framerate. If unchecked, the renderer will render at the recommended resolution provided by the current `VRDevice`.
  * **Minimum Render Scale:** The minimum allowed render scale.
  * **Maximum Render Scale:** The maximum allowed render scale.
  * **Maximum Render Target Dimension:** The maximum allowed render target dimension. This puts an upper limit on the size of the render target regardless of the maximum render scale.
  * **Render Scale Fill Rate Step Size In Percent:** The fill rate step size in percent by which the render scale levels will be calculated.
- * **Override Render Scale:** Toggles whether to override the used render scale level.
- * **Override Render Scale Level:** The render scale level to override the current one with.
+ * **Scale Render Target Resolution:** Toggles whether the render target resolution is dynamically adjusted to maintain VR framerate. If unchecked, the renderer will use the maximum target resolution specified by `maximumRenderScale`.
+ * **Override Render Viewport Scale:** Toggles whether to override the used render viewport scale level.
+ * **Override Render Viewport Scale Level:** The render viewport scale level to override the current one with.
 
 ### Class Variables
 
  * `public readonly ReadOnlyCollection<float> renderScales` - All the calculated render scales. The elements of this collection are to be interpreted as modifiers to the recommended render target resolution provided by the current `VRDevice`.
- * `public float currentRenderScale` - The current render scale. A render scale of 1.0 represents the recommended render target resolution provided by the current `VRDevice`.
+ * `public static float CurrentRenderScale` - The current render scale. A render scale of `1.0` represents the recommended render target resolution provided by the current `VRDevice`.
  * `public Vector2 defaultRenderTargetResolution` - The recommended render target resolution provided by the current `VRDevice`.
  * `public Vector2 currentRenderTargetResolution` - The current render target resolution.
 
