@@ -58,6 +58,7 @@ namespace VRTK
         private int grabEnabledState = 0;
         private float grabPrecognitionTimer = 0f;
         private GameObject undroppableGrabbedObject;
+        private bool controllerVisibilityState = true;
 
         public virtual void OnControllerGrabInteractableObject(ObjectInteractEventArgs e)
         {
@@ -105,6 +106,15 @@ namespace VRTK
         public GameObject GetGrabbedObject()
         {
             return grabbedObject;
+        }
+
+        /// <summary>
+        /// The GetControllerVisibilityState method returns the current expected controller visibility state from the grabbed action.
+        /// </summary>
+        /// <returns>Returns true if the expected grabbed state of the controller visibility should be visible, and returns false if the expected state should be hidden.</returns>
+        public bool GetControllerVisibilityState()
+        {
+            return controllerVisibilityState;
         }
 
         private void Awake()
@@ -420,6 +430,7 @@ namespace VRTK
             if (grabbedObject != null)
             {
                 controllerActions.ToggleControllerModel(false, grabbedObject);
+                controllerVisibilityState = false;
             }
         }
 
@@ -464,6 +475,7 @@ namespace VRTK
             if (updatedHideControllerOnGrab)
             {
                 controllerActions.ToggleControllerModel(true, grabbedObject);
+                controllerVisibilityState = true;
             }
 
             grabEnabledState = 0;

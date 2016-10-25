@@ -39,6 +39,7 @@ namespace VRTK
         private VRTK_InteractTouch interactTouch;
         private VRTK_ControllerActions controllerActions;
         private bool updatedHideControllerOnUse = false;
+        private bool currentControllerHideState = false;
 
         public virtual void OnControllerUseInteractableObject(ObjectInteractEventArgs e)
         {
@@ -159,12 +160,17 @@ namespace VRTK
                 }
 
                 updatedHideControllerOnUse = usingObjectScript.CheckHideMode(hideControllerOnUse, usingObjectScript.hideControllerOnUse);
+                currentControllerHideState = controllerActions.IsControllerVisible();
                 OnControllerUseInteractableObject(interactTouch.SetControllerInteractEvent(usingObject));
                 usingObjectScript.StartUsing(gameObject);
 
                 if (updatedHideControllerOnUse)
                 {
                     Invoke("HideController", hideControllerDelay);
+                }
+                else
+                {
+                    controllerActions.ToggleControllerModel(true, usingObject);
                 }
 
                 var rumbleAmount = usingObjectScript.rumbleOnUse;
@@ -183,19 +189,28 @@ namespace VRTK
             }
         }
 
+        private bool ControllerGrabVisibilityState()
+        {
+            var interactGrab = GetComponent<VRTK_InteractGrab>();
+            if (interactGrab)
+            {
+                return interactGrab.GetControllerVisibilityState();
+            }
+            return currentControllerHideState;
+        }
+
         private void UnuseInteractedObject(bool completeStop)
         {
             if (usingObject != null)
             {
                 OnControllerUnuseInteractableObject(interactTouch.SetControllerInteractEvent(usingObject));
-                if (completeStop)
+                var usingObjectCheck = usingObject.GetComponent<VRTK_InteractableObject>();
+                if (usingObjectCheck && completeStop)
                 {
-                    usingObject.GetComponent<VRTK_InteractableObject>().StopUsing(gameObject);
+                    usingObjectCheck.StopUsing(gameObject);
                 }
-                if (updatedHideControllerOnUse)
-                {
-                    controllerActions.ToggleControllerModel(true, usingObject);
-                }
+                var toggleControllerState = (usingObjectCheck && usingObjectCheck.IsGrabbed(gameObject) ? ControllerGrabVisibilityState() : true);
+                controllerActions.ToggleControllerModel(toggleControllerState, usingObject);
                 usingObject = null;
             }
         }
