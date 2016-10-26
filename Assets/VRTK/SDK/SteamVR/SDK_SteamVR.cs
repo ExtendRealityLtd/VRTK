@@ -213,7 +213,7 @@ namespace VRTK
         public override GameObject GetControllerRenderModel(GameObject controller)
         {
             var renderModel = (controller.GetComponent<SteamVR_RenderModel>() ? controller.GetComponent<SteamVR_RenderModel>() : controller.GetComponentInChildren<SteamVR_RenderModel>());
-            return renderModel.gameObject;
+            return (renderModel ? renderModel.gameObject : null);
         }
 
         public override void SetControllerRenderModelWheel(GameObject renderModel, bool state)
