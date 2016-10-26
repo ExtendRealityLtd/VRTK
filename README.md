@@ -2,7 +2,7 @@
 > ### VRTK - Virtual Reality Toolkit
 > A collection of useful scripts and prefabs for building VR titles in Unity 5.
 
-[![Slack](https://vrtk-slack-invite.herokuapp.com/badge.svg)](http://invite.vrtk.io)
+[![Slack](http://invite.vrtk.io/badge.svg)](http://invite.vrtk.io)
 [![Waffle](https://img.shields.io/badge/waffle-tracker-blue.svg?style=flat-square)](http://tracker.vrtk.io)
 
 **This Toolkit requires a compatible VR SDK to be imported into your Unity Project**
