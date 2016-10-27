@@ -1703,6 +1703,9 @@ The UI pointer is activated via the `Pointer` alias on the `Controller Events` a
 
  * `UIPointerElementEnter` - Emitted when the UI Pointer is colliding with a valid UI element.
  * `UIPointerElementExit` - Emitted when the UI Pointer is no longer colliding with any valid UI elements.
+ * `UIPointerElementClick` - Emitted when the UI Pointer has clicked the currently collided UI element.
+ * `UIPointerElementDragStart` - Emitted when the UI Pointer begins dragging a valid UI element.
+ * `UIPointerElementDragEnd` - Emitted when the UI Pointer stops dragging a valid UI element.
 
 ### Unity Events
 
@@ -1710,6 +1713,9 @@ Adding the `VRTK_UIPointer_UnityEvents` component to `VRTK_UIPointer` object all
 
  * `OnUIPointerElementEnter` - Emits the UIPointerElementEnter class event.
  * `OnUIPointerElementExit` - Emits the UIPointerElementExit class event.
+ * `OnUIPointerElementClick` - Emits the UIPointerElementClick class event.
+ * `OnUIPointerElementDragStart` - Emits the UIPointerElementDragStart class event.
+ * `OnUIPointerElementDragEnd` - Emits the UIPointerElementDragEnd class event.
 
 ### Event Payload
 

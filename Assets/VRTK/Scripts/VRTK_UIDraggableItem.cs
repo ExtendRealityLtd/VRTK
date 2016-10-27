@@ -52,6 +52,11 @@ namespace VRTK
             }
 
             SetDragPosition(eventData);
+            var pointer = GetPointer(eventData);
+            if (pointer)
+            {
+                pointer.OnUIPointerElementDragStart(pointer.SetUIPointerEvent(gameObject));
+            }
         }
 
         public void OnDrag(PointerEventData eventData)
@@ -65,6 +70,7 @@ namespace VRTK
             dragTransform = null;
 
             transform.position += (transform.forward * forwardOffset);
+            var validDragEnd = true;
             if (restrictToDropZone)
             {
                 if (validDropZone && validDropZone != startDropZone)
@@ -74,15 +80,26 @@ namespace VRTK
                 else
                 {
                     ResetElement();
+                    validDragEnd = false;
                 }
             }
 
             if (restrictToOriginalCanvas)
             {
-                var destinationCanvas = eventData.pointerEnter.GetComponentInParent<Canvas>();
+                var destinationCanvas = (eventData.pointerEnter ? eventData.pointerEnter.GetComponentInParent<Canvas>() : null);
                 if (destinationCanvas && destinationCanvas != startCanvas)
                 {
                     ResetElement();
+                    validDragEnd = false;
+                }
+            }
+
+            if (validDragEnd)
+            {
+                var pointer = GetPointer(eventData);
+                if (pointer)
+                {
+                    pointer.OnUIPointerElementDragEnd(pointer.SetUIPointerEvent(gameObject));
                 }
             }
 
@@ -99,6 +116,18 @@ namespace VRTK
                 enabled = false;
                 Debug.LogError("A VRTK_UIDraggableItem with a `freeDrop = false` is required to be a child of a VRTK_UIDropZone GameObject.");
             }
+        }
+
+        private VRTK_UIPointer GetPointer(PointerEventData eventData)
+        {
+            var controller = VRTK_DeviceFinder.TrackedObjectByIndex((uint)eventData.pointerId);
+            if (controller)
+            {
+                var pointer = controller.GetComponent<VRTK_UIPointer>();
+                return pointer;
+            }
+
+            return null;
         }
 
         private void SetDragPosition(PointerEventData eventData)

@@ -3,6 +3,7 @@ namespace VRTK
 {
     using UnityEngine;
     using UnityEngine.EventSystems;
+    using System.Collections;
 
     /// <summary>
     /// Event Payload
@@ -90,6 +91,18 @@ namespace VRTK
         /// Emitted when the UI Pointer is no longer colliding with any valid UI elements.
         /// </summary>
         public event UIPointerEventHandler UIPointerElementExit;
+        /// <summary>
+        /// Emitted when the UI Pointer has clicked the currently collided UI element.
+        /// </summary>
+        public event UIPointerEventHandler UIPointerElementClick;
+        /// <summary>
+        /// Emitted when the UI Pointer begins dragging a valid UI element.
+        /// </summary>
+        public event UIPointerEventHandler UIPointerElementDragStart;
+        /// <summary>
+        /// Emitted when the UI Pointer stops dragging a valid UI element.
+        /// </summary>
+        public event UIPointerEventHandler UIPointerElementDragEnd;
 
         /// <summary>
         /// The GameObject of the front trigger activator of the canvas currently being activated by this pointer.
@@ -127,6 +140,30 @@ namespace VRTK
                 {
                     pointerEventData.pointerPress = e.previousTarget;
                 }
+            }
+        }
+
+        public virtual void OnUIPointerElementClick(UIPointerEventArgs e)
+        {
+            if (UIPointerElementClick != null)
+            {
+                UIPointerElementClick(this, e);
+            }
+        }
+
+        public virtual void OnUIPointerElementDragStart(UIPointerEventArgs e)
+        {
+            if (UIPointerElementDragStart != null)
+            {
+                UIPointerElementDragStart(this, e);
+            }
+        }
+
+        public virtual void OnUIPointerElementDragEnd(UIPointerEventArgs e)
+        {
+            if (UIPointerElementDragEnd != null)
+            {
+                UIPointerElementDragEnd(this, e);
             }
         }
 
@@ -284,8 +321,19 @@ namespace VRTK
             var eventSystemInput = SetEventSystem(eventSystem);
 
             pointerEventData = new PointerEventData(eventSystem);
-            pointerEventData.pointerId = (int)VRTK_SDK_Bridge.GetIndexOfTrackedObject(controller.gameObject) + 1000;
+            StartCoroutine(WaitForPointerId());
             eventSystemInput.pointers.Add(this);
+        }
+
+        private IEnumerator WaitForPointerId()
+        {
+            var index = (int)VRTK_SDK_Bridge.GetIndexOfTrackedObject(controller.gameObject);
+            while(index < 0 || index == int.MaxValue)
+            {
+                index = (int)VRTK_SDK_Bridge.GetIndexOfTrackedObject(controller.gameObject);
+                yield return null;
+            }
+            pointerEventData.pointerId = index;
         }
     }
 }
