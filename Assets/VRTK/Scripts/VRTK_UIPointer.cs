@@ -2,8 +2,8 @@
 namespace VRTK
 {
     using UnityEngine;
-    using UnityEngine.UI;
     using UnityEngine.EventSystems;
+    using System.Collections;
 
     /// <summary>
     /// Event Payload
@@ -31,8 +31,6 @@ namespace VRTK
     /// The UI Pointer provides a mechanism for interacting with Unity UI elements on a world canvas. The UI Pointer can be attached to any game object the same way in which a World Pointer can be and the UI Pointer also requires a controller to initiate the pointer activation and pointer click states.
     /// </summary>
     /// <remarks>
-    /// It's possible to prevent a world canvas from being interactable with a UI Pointer by setting a tag or applying a class to the canvas and then entering the tag or class name for the UI Pointer to ignore on the UI Pointer inspector parameters.
-    ///
     /// The simplest way to use the UI Pointer is to attach the script to a game controller within the `[CameraRig]` along with a Simple Pointer as this provides visual feedback as to where the UI ray is pointing.
     ///
     /// The UI pointer is activated via the `Pointer` alias on the `Controller Events` and the UI pointer click state is triggered via the `UI Click` alias on the `Controller Events`.
@@ -55,16 +53,28 @@ namespace VRTK
             Always_On
         }
 
+        /// <summary>
+        /// Methods of when to consider a UI Click action
+        /// </summary>
+        /// <param name="Click_On_Button_Up">Consider a UI Click action has happened when the UI Click alias button is released.</param>
+        /// <param name="Click_On_Button_Down">Consider a UI Click action has happened when the UI Click alias button is pressed.</param>
+        public enum ClickMethods
+        {
+            Click_On_Button_Up,
+            Click_On_Button_Down
+        }
+
         [Tooltip("The controller that will be used to toggle the pointer. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.")]
         public VRTK_ControllerEvents controller;
+        [Tooltip("A custom transform to use as the origin of the pointer. If no pointer origin transform is provided then the transform the script is attached to is used.")]
+        public Transform pointerOriginTransform = null;
         [Tooltip("Determines when the UI pointer should be active.")]
         public ActivationMethods activationMode = ActivationMethods.Hold_Button;
-        [Tooltip("Determines whether the UI click action should be triggered when the pointer is deactivated. If the pointer is hovering over a clickable element then it will invoke the click action on that element.")]
+        [Tooltip("Determines when the UI Click event action should happen.")]
+        public ClickMethods clickMethod = ClickMethods.Click_On_Button_Up;
+        [Tooltip("Determines whether the UI click action should be triggered when the pointer is deactivated. If the pointer is hovering over a clickable element then it will invoke the click action on that element. Note: Only works with `Click Method =  Click_On_Button_Up`")]
         public bool attemptClickOnDeactivate = false;
-        [Tooltip("A string that specifies a canvas Tag or the name of a Script attached to a canvas and denotes that any world canvases that contain this tag or script will be ignored by the UI Pointer.")]
-        public string ignoreCanvasWithTagOrClass;
-        [Tooltip("A specified VRTK_TagOrScriptPolicyList to use to determine whether any world canvases will be acted upon by the UI Pointer. If a list is provided then the 'Ignore Canvas With Tag Or Class' parameter will be ignored.")]
-        public VRTK_TagOrScriptPolicyList canvasTagOrScriptListPolicy;
+
 
         [HideInInspector]
         public PointerEventData pointerEventData;
@@ -81,10 +91,36 @@ namespace VRTK
         /// Emitted when the UI Pointer is no longer colliding with any valid UI elements.
         /// </summary>
         public event UIPointerEventHandler UIPointerElementExit;
+        /// <summary>
+        /// Emitted when the UI Pointer has clicked the currently collided UI element.
+        /// </summary>
+        public event UIPointerEventHandler UIPointerElementClick;
+        /// <summary>
+        /// Emitted when the UI Pointer begins dragging a valid UI element.
+        /// </summary>
+        public event UIPointerEventHandler UIPointerElementDragStart;
+        /// <summary>
+        /// Emitted when the UI Pointer stops dragging a valid UI element.
+        /// </summary>
+        public event UIPointerEventHandler UIPointerElementDragEnd;
+
+        /// <summary>
+        /// The GameObject of the front trigger activator of the canvas currently being activated by this pointer.
+        /// </summary>
+        [HideInInspector]
+        public GameObject autoActivatingCanvas = null;
+        /// <summary>
+        /// Determines if the UI Pointer has collided with a valid canvas that has collision click turned on.
+        /// </summary>
+        [HideInInspector]
+        public bool collisionClick = false;
 
         private bool pointerClicked = false;
         private bool beamEnabledState = false;
         private bool lastPointerPressState = false;
+        private bool lastPointerClickState = false;
+
+        private const string ACTIVATOR_FRONT_TRIGGER_GAMEOBJECT = "UIPointer_Activator_Front_Trigger";
 
         public virtual void OnUIPointerElementEnter(UIPointerEventArgs e)
         {
@@ -104,6 +140,30 @@ namespace VRTK
                 {
                     pointerEventData.pointerPress = e.previousTarget;
                 }
+            }
+        }
+
+        public virtual void OnUIPointerElementClick(UIPointerEventArgs e)
+        {
+            if (UIPointerElementClick != null)
+            {
+                UIPointerElementClick(this, e);
+            }
+        }
+
+        public virtual void OnUIPointerElementDragStart(UIPointerEventArgs e)
+        {
+            if (UIPointerElementDragStart != null)
+            {
+                UIPointerElementDragStart(this, e);
+            }
+        }
+
+        public virtual void OnUIPointerElementDragEnd(UIPointerEventArgs e)
+        {
+            if (UIPointerElementDragEnd != null)
+            {
+                UIPointerElementDragEnd(this, e);
             }
         }
 
@@ -149,45 +209,30 @@ namespace VRTK
         }
 
         /// <summary>
-        /// The SetWorldCanvas method is used to initialise a `WorldSpace` canvas for use with the UI Pointer. This method is called automatically on start for all editor created canvases but would need to be manually called if a canvas was generated at runtime.
+        /// The RemoveEventSystem resets the Unity EventSystem back to the original state before the VRTK_EventSystemVRInput was swapped for it.
         /// </summary>
-        /// <param name="canvas">The canvas object to initialise for use with the UI pointers. Must be of type `WorldSpace`.</param>
-        public void SetWorldCanvas(Canvas canvas)
+        public void RemoveEventSystem()
         {
-            if (canvas.renderMode != RenderMode.WorldSpace || Utilities.TagOrScriptCheck(canvas.gameObject, canvasTagOrScriptListPolicy, ignoreCanvasWithTagOrClass))
+            var eventSystem = FindObjectOfType<EventSystem>();
+
+            if (!eventSystem)
             {
-                RemoveUIPointerCanvas(canvas);
+                Debug.LogError("A VRTK_UIPointer requires an EventSystem");
                 return;
             }
 
-            //copy public params then disable existing graphic raycaster
-            var defaultRaycaster = canvas.gameObject.GetComponent<GraphicRaycaster>();
-            var customRaycaster = canvas.gameObject.GetComponent<VRTK_UIGraphicRaycaster>();
-            //if it doesn't already exist, add the custom raycaster
-            if (!customRaycaster)
+            //re-enable existing standalone input module
+            var standaloneInputModule = eventSystem.gameObject.GetComponent<StandaloneInputModule>();
+            if (!standaloneInputModule.enabled)
             {
-                customRaycaster = canvas.gameObject.AddComponent<VRTK_UIGraphicRaycaster>();
+                standaloneInputModule.enabled = true;
             }
 
-            if (defaultRaycaster && defaultRaycaster.enabled)
+            //remove the custom event system
+            var eventSystemInput = eventSystem.GetComponent<VRTK_EventSystemVRInput>();
+            if (eventSystemInput)
             {
-                customRaycaster.ignoreReversedGraphics = defaultRaycaster.ignoreReversedGraphics;
-                customRaycaster.blockingObjects = defaultRaycaster.blockingObjects;
-                defaultRaycaster.enabled = false;
-            }
-
-            //add a box collider and background image to ensure the rays always hit
-            var canvasSize = canvas.GetComponent<RectTransform>().sizeDelta;
-            if (!canvas.gameObject.GetComponent<BoxCollider>())
-            {
-                var canvasBoxCollider = canvas.gameObject.AddComponent<BoxCollider>();
-                canvasBoxCollider.size = new Vector3(canvasSize.x, canvasSize.y, 10f);
-                canvasBoxCollider.center = new Vector3(0f, 0f, 5f);
-            }
-
-            if (!canvas.gameObject.GetComponent<Image>())
-            {
-                canvas.gameObject.AddComponent<Image>().color = Color.clear;
+                Destroy(eventSystemInput);
             }
         }
 
@@ -197,7 +242,7 @@ namespace VRTK
         /// <returns>Returns true if the ui pointer should be currently active.</returns>
         public bool PointerActive()
         {
-            if (activationMode == ActivationMethods.Always_On)
+            if (activationMode == ActivationMethods.Always_On || autoActivatingCanvas != null)
             {
                 return true;
             }
@@ -223,16 +268,49 @@ namespace VRTK
             }
         }
 
-        private void Start()
+        /// <summary>
+        /// The ValidClick method determines if the UI Click button is in a valid state to register a click action.
+        /// </summary>
+        /// <param name="checkLastClick">If this is true then the last frame's state of the UI Click button is also checked to see if a valid click has happened.</param>
+        /// <param name="lastClickState">This determines what the last frame's state of the UI Click button should be in for it to be a valid click.</param>
+        /// <returns>Returns true if the UI Click button is in a valid state to action a click, returns false if it is not in a valid state.</returns>
+        public bool ValidClick(bool checkLastClick, bool lastClickState = false)
+        {
+            var controllerClicked = (collisionClick ? collisionClick : controller.uiClickPressed);
+            var result = (checkLastClick ? controllerClicked && lastPointerClickState == lastClickState : controllerClicked);
+            lastPointerClickState = controllerClicked;
+
+            return result;
+        }
+
+        /// <summary>
+        /// The GetOriginPosition method returns the relevant transform position for the pointer based on whether the pointerOriginTransform variable is valid.
+        /// </summary>
+        /// <returns>A Vector3 of the pointer transform position</returns>
+        public Vector3 GetOriginPosition()
+        {
+            return (pointerOriginTransform ? pointerOriginTransform.position : transform.position);
+        }
+
+        /// <summary>
+        /// The GetOriginPosition method returns the relevant transform forward for the pointer based on whether the pointerOriginTransform variable is valid.
+        /// </summary>
+        /// <returns>A Vector3 of the pointer transform forward</returns>
+        public Vector3 GetOriginForward()
+        {
+            return (pointerOriginTransform ? pointerOriginTransform.forward : transform.forward);
+        }
+
+        private void OnEnable()
         {
             if (controller == null)
             {
                 controller = GetComponent<VRTK_ControllerEvents>();
             }
             ConfigureEventSystem();
-            ConfigureWorldCanvases();
             pointerClicked = false;
             lastPointerPressState = false;
+            lastPointerClickState = false;
             beamEnabledState = false;
             controllerRenderModel = VRTK_SDK_Bridge.GetControllerRenderModel(controller.gameObject);
         }
@@ -243,40 +321,19 @@ namespace VRTK
             var eventSystemInput = SetEventSystem(eventSystem);
 
             pointerEventData = new PointerEventData(eventSystem);
-            pointerEventData.pointerId = (int)VRTK_SDK_Bridge.GetIndexOfTrackedObject(controller.gameObject) + 1000;
+            StartCoroutine(WaitForPointerId());
             eventSystemInput.pointers.Add(this);
         }
 
-        private void ConfigureWorldCanvases()
+        private IEnumerator WaitForPointerId()
         {
-            foreach (var canvas in FindObjectsOfType<Canvas>())
+            var index = (int)VRTK_SDK_Bridge.GetIndexOfTrackedObject(controller.gameObject);
+            while(index < 0 || index == int.MaxValue)
             {
-                SetWorldCanvas(canvas);
+                index = (int)VRTK_SDK_Bridge.GetIndexOfTrackedObject(controller.gameObject);
+                yield return null;
             }
-        }
-
-        private void RemoveUIPointerCanvas(Canvas canvas)
-        {
-            var defaultRaycaster = canvas.gameObject.GetComponent<GraphicRaycaster>();
-            var customRaycaster = canvas.gameObject.GetComponent<VRTK_UIGraphicRaycaster>();
-            //if a custom raycaster exists then remove it
-            if (customRaycaster)
-            {
-                Destroy(customRaycaster);
-            }
-
-            //If the default raycaster is disabled, then re-enable it
-            if (defaultRaycaster && !defaultRaycaster.enabled)
-            {
-                defaultRaycaster.enabled = true;
-            }
-
-            //Check if there is a collider and remove it if there is
-            var canvasBoxCollider = canvas.gameObject.GetComponent<BoxCollider>();
-            if (canvasBoxCollider)
-            {
-                Destroy(canvasBoxCollider);
-            }
+            pointerEventData.pointerId = index;
         }
     }
 }

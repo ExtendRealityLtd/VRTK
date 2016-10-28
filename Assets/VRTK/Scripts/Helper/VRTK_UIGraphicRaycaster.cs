@@ -116,8 +116,8 @@
                 }
 
                 var graphicTransform = graphic.transform;
-                Vector3 graphicFormward = graphicTransform.forward;
-                float distance = (Vector3.Dot(graphicFormward, graphicTransform.position - ray.origin) / Vector3.Dot(graphicFormward, ray.direction));
+                Vector3 graphicForward = graphicTransform.forward;
+                float distance = (Vector3.Dot(graphicForward, graphicTransform.position - ray.origin) / Vector3.Dot(graphicForward, ray.direction));
 
                 if (distance < 0)
                 {

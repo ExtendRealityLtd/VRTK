@@ -540,9 +540,10 @@ The play area collider does not work well with terrains as they are uneven and c
 ### Inspector Parameters
 
  * **Controller:** The controller that will be used to toggle the pointer. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.
+ * **Pointer Origin Transform:** A custom transform to use as the origin of the pointer. If no pointer origin transform is provided then the transform the script is attached to is used.
  * **Pointer Material:** The material to use on the rendered version of the pointer. If no material is selected then the default `WorldPointer` material will be used.
- * **Interact With Objects:** If this is checked then the pointer will be an extension of the controller and able to interact with Interactable Objects.
  * **Hold Button To Activate:** If this is checked then the pointer beam will be activated on first press of the pointer alias button and will stay active until the pointer alias button is pressed again. The destination set event is emitted when the beam is deactivated on the second button press.
+ * **Interact With Objects:** If this is checked then the pointer will be an extension of the controller and able to interact with Interactable Objects.
  * **Activate Delay:** The time in seconds to delay the pointer beam being able to be active again. Useful for preventing constant teleportation.
  * **Pointer Visibility:** Determines when the pointer beam should be displayed.
  * **Layers To Ignore:** The layers to ignore when raycasting.
@@ -849,6 +850,9 @@ This directory contains all of the toolkit scripts that add VR functionality to 
  * [Bezier Pointer](#bezier-pointer-vrtk_bezierpointer)
  * [Play Area Cursor](#play-area-cursor-vrtk_playareacursor)
  * [UI Pointer](#ui-pointer-vrtk_uipointer)
+ * [UI Canvas](#ui-canvas-vrtk_uicanvas)
+ * [UI Draggable Item](#ui-draggable-item-vrtk_uidraggableitem)
+ * [UI Drop Zone](#ui-drop-zone-vrtk_uidropzone)
  * [Basic Teleport](#basic-teleport-vrtk_basicteleport)
  * [Height Adjust Teleport](#height-adjust-teleport-vrtk_heightadjustteleport)
  * [Headset Collision](#headset-collision-vrtk_headsetcollision)
@@ -1671,8 +1675,6 @@ The ToggleState method enables or disables the visibility of the play area curso
 
 The UI Pointer provides a mechanism for interacting with Unity UI elements on a world canvas. The UI Pointer can be attached to any game object the same way in which a World Pointer can be and the UI Pointer also requires a controller to initiate the pointer activation and pointer click states.
 
-It's possible to prevent a world canvas from being interactable with a UI Pointer by setting a tag or applying a class to the canvas and then entering the tag or class name for the UI Pointer to ignore on the UI Pointer inspector parameters.
-
 The simplest way to use the UI Pointer is to attach the script to a game controller within the `[CameraRig]` along with a Simple Pointer as this provides visual feedback as to where the UI ray is pointing.
 
 The UI pointer is activated via the `Pointer` alias on the `Controller Events` and the UI pointer click state is triggered via the `UI Click` alias on the `Controller Events`.
@@ -1680,10 +1682,10 @@ The UI pointer is activated via the `Pointer` alias on the `Controller Events` a
 ### Inspector Parameters
 
  * **Controller:** The controller that will be used to toggle the pointer. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.
+ * **Pointer Origin Transform:** A custom transform to use as the origin of the pointer. If no pointer origin transform is provided then the transform the script is attached to is used.
  * **Activation Mode:** Determines when the UI pointer should be active.
- * **Attempt Click On Deactivate:** Determines whether the UI click action should be triggered when the pointer is deactivated. If the pointer is hovering over a clickable element then it will invoke the click action on that element.
- * **Ignore Canvas With Tag Or Class:** A string that specifies a canvas Tag or the name of a Script attached to a canvas and denotes that any world canvases that contain this tag or script will be ignored by the UI Pointer.
- * **Canvas Tag Or Script List Policy:** A specified VRTK_TagOrScriptPolicyList to use to determine whether any world canvases will be acted upon by the UI Pointer. If a list is provided then the 'Ignore Canvas With Tag Or Class' parameter will be ignored.
+ * **Click Method:** Determines when the UI Click event action should happen.
+ * **Attempt Click On Deactivate:** Determines whether the UI click action should be triggered when the pointer is deactivated. If the pointer is hovering over a clickable element then it will invoke the click action on that element. Note: Only works with `Click Method =  Click_On_Button_Up`
 
 ### Class Variables
 
@@ -1691,11 +1693,19 @@ The UI pointer is activated via the `Pointer` alias on the `Controller Events` a
   * `Hold_Button` - Only activates the UI Pointer when the Pointer button on the controller is pressed and held down.
   * `Toggle_Button` - Activates the UI Pointer on the first click of the Pointer button on the controller and it stays active until the Pointer button is clicked again.
   * `Always_On` - The UI Pointer is always active regardless of whether the Pointer button on the controller is pressed or not.
+ * `public enum ClickMethods` - Methods of when to consider a UI Click action
+  * `Click_On_Button_Up` - Consider a UI Click action has happened when the UI Click alias button is released.
+  * `Click_On_Button_Down` - Consider a UI Click action has happened when the UI Click alias button is pressed.
+ * `public GameObject autoActivatingCanvas` - The GameObject of the front trigger activator of the canvas currently being activated by this pointer. Default: `null`
+ * `public bool collisionClick` - Determines if the UI Pointer has collided with a valid canvas that has collision click turned on. Default: `false`
 
 ### Class Events
 
  * `UIPointerElementEnter` - Emitted when the UI Pointer is colliding with a valid UI element.
  * `UIPointerElementExit` - Emitted when the UI Pointer is no longer colliding with any valid UI elements.
+ * `UIPointerElementClick` - Emitted when the UI Pointer has clicked the currently collided UI element.
+ * `UIPointerElementDragStart` - Emitted when the UI Pointer begins dragging a valid UI element.
+ * `UIPointerElementDragEnd` - Emitted when the UI Pointer stops dragging a valid UI element.
 
 ### Unity Events
 
@@ -1703,6 +1713,9 @@ Adding the `VRTK_UIPointer_UnityEvents` component to `VRTK_UIPointer` object all
 
  * `OnUIPointerElementEnter` - Emits the UIPointerElementEnter class event.
  * `OnUIPointerElementExit` - Emits the UIPointerElementExit class event.
+ * `OnUIPointerElementClick` - Emits the UIPointerElementClick class event.
+ * `OnUIPointerElementDragStart` - Emits the UIPointerElementDragStart class event.
+ * `OnUIPointerElementDragEnd` - Emits the UIPointerElementDragEnd class event.
 
 ### Event Payload
 
@@ -1724,16 +1737,16 @@ Adding the `VRTK_UIPointer_UnityEvents` component to `VRTK_UIPointer` object all
 
 The SetEventSystem method is used to set up the global Unity event system for the UI pointer. It also handles disabling the existing Standalone Input Module that exists on the EventSystem and adds a custom VRTK Event System VR Input component that is required for interacting with the UI with VR inputs.
 
-#### SetWorldCanvas/1
+#### RemoveEventSystem/0
 
-  > `public void SetWorldCanvas(Canvas canvas)`
+  > `public void RemoveEventSystem()`
 
   * Parameters
-   * `Canvas canvas` - The canvas object to initialise for use with the UI pointers. Must be of type `WorldSpace`.
+   * _none_
   * Returns
    * _none_
 
-The SetWorldCanvas method is used to initialise a `WorldSpace` canvas for use with the UI Pointer. This method is called automatically on start for all editor created canvases but would need to be manually called if a canvas was generated at runtime.
+The RemoveEventSystem resets the Unity EventSystem back to the original state before the VRTK_EventSystemVRInput was swapped for it.
 
 #### PointerActive/0
 
@@ -1746,9 +1759,102 @@ The SetWorldCanvas method is used to initialise a `WorldSpace` canvas for use wi
 
 The PointerActive method determines if the ui pointer beam should be active based on whether the pointer alias is being held and whether the Hold Button To Use parameter is checked.
 
+#### ValidClick/2
+
+  > `public bool ValidClick(bool checkLastClick, bool lastClickState = false)`
+
+  * Parameters
+   * `bool checkLastClick` - If this is true then the last frame's state of the UI Click button is also checked to see if a valid click has happened.
+   * `bool lastClickState` - This determines what the last frame's state of the UI Click button should be in for it to be a valid click.
+  * Returns
+   * `bool` - Returns true if the UI Click button is in a valid state to action a click, returns false if it is not in a valid state.
+
+The ValidClick method determines if the UI Click button is in a valid state to register a click action.
+
+#### GetOriginPosition/0
+
+  > `public Vector3 GetOriginPosition()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `Vector3` - A Vector3 of the pointer transform position
+
+The GetOriginPosition method returns the relevant transform position for the pointer based on whether the pointerOriginTransform variable is valid.
+
+#### GetOriginForward/0
+
+  > `public Vector3 GetOriginForward()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `Vector3` - A Vector3 of the pointer transform forward
+
+The GetOriginPosition method returns the relevant transform forward for the pointer based on whether the pointerOriginTransform variable is valid.
+
 ### Example
 
 `VRTK/Examples/034_Controls_InteractingWithUnityUI` uses the `VRTK_UIPointer` script on the right Controller to allow for the interaction with Unity UI elements using a Simple Pointer beam. The left Controller controls a Simple Pointer on the headset to demonstrate gaze interaction with Unity UI elements.
+
+---
+
+## UI Canvas (VRTK_UICanvas)
+
+### Overview
+
+The UI Canvas is used to denote which World Canvases are interactable by a UI Pointer.
+
+When the script is enabled it will disable the `Graphic Raycaster` on the canvas and create a custom `UI Graphics Raycaster` and the Blocking Objects and Blocking Mask settings are copied over from the `Graphic Raycaster`.
+
+### Inspector Parameters
+
+ * **Click On Pointer Collision:** Determines if a UI Click action should happen when a UI Pointer game object collides with this canvas.
+ * **Auto Activate Within Distance:** Determines if a UI Pointer will be auto activated if a UI Pointer game object comes within the given distance of this canvas. If a value of `0` is given then no auto activation will occur.
+
+### Example
+
+`VRTK/Examples/034_Controls_InteractingWithUnityUI` uses the `VRTK_UICanvas` script on two of the canvases to show how the UI Pointer can interact with them.
+
+---
+
+## UI Draggable Item (VRTK_UIDraggableItem)
+ > extends MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+
+### Overview
+
+The UI Draggable item will make any UI element draggable on the canvas.
+
+If a UI Draggable item is set to `Restrict To Drop Zone = true` then the UI Draggable item must be a child of an element that has the VRTK_UIDropZone script applied to it to ensure it starts in a valid drop zone.
+
+### Inspector Parameters
+
+ * **Restrict To Drop Zone:** If checked then the UI element can only be dropped in valid a VRTK_UIDropZone object and must start as a child of a VRTK_UIDropZone object. If unchecked then the UI element can be dropped anywhere on the canvas.
+ * **Restrict To Original Canvas:** If checked then the UI element can only be dropped on the original parent canvas. If unchecked the UI element can be dropped on any valid VRTK_UICanvas.
+ * **Forward Offset:** The offset to bring the UI element forward when it is being dragged.
+
+### Class Variables
+
+ * `public GameObject validDropZone` - The current valid drop zone the dragged element is hovering over.
+
+### Example
+
+`VRTK/Examples/034_Controls_InteractingWithUnityUI` demonstrates a collection of UI elements that are draggable
+
+---
+
+## UI Drop Zone (VRTK_UIDropZone)
+ > extends MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+
+### Overview
+
+A UI Drop Zone is applied to any UI element that is to be considered a valid parent for any UI Draggable element to be dropped into it.
+
+It's usually appropriate to use a Panel UI element as a drop zone with a layout group applied so new children dropped into the drop zone automatically align.
+
+### Example
+
+`VRTK/Examples/034_Controls_InteractingWithUnityUI` demonstrates a collection of UI Drop Zones.
 
 ---
 

@@ -29,16 +29,18 @@ namespace VRTK
         [Header("Generic Pointer Settings", order = 2)]
         [Tooltip("The controller that will be used to toggle the pointer. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.")]
         public VRTK_ControllerEvents controller = null;
+        [Tooltip("A custom transform to use as the origin of the pointer. If no pointer origin transform is provided then the transform the script is attached to is used.")]
+        public Transform pointerOriginTransform = null;
         [Tooltip("The material to use on the rendered version of the pointer. If no material is selected then the default `WorldPointer` material will be used.")]
         public Material pointerMaterial;
         [Tooltip("The colour of the beam when it is colliding with a valid target. It can be set to a different colour for each controller.")]
         public Color pointerHitColor = new Color(0f, 0.5f, 0f, 1f);
         [Tooltip("The colour of the beam when it is not hitting a valid target. It can be set to a different colour for each controller.")]
         public Color pointerMissColor = new Color(0.8f, 0f, 0f, 1f);
-        [Tooltip("If this is checked then the pointer will be an extension of the controller and able to interact with Interactable Objects.")]
-        public bool interactWithObjects = false;
         [Tooltip("If this is checked then the pointer beam will be activated on first press of the pointer alias button and will stay active until the pointer alias button is pressed again. The destination set event is emitted when the beam is deactivated on the second button press.")]
         public bool holdButtonToActivate = true;
+        [Tooltip("If this is checked then the pointer will be an extension of the controller and able to interact with Interactable Objects.")]
+        public bool interactWithObjects = false;
         [Tooltip("The time in seconds to delay the pointer beam being able to be active again. Useful for preventing constant teleportation.")]
         public float activateDelay = 0f;
         [Tooltip("Determines when the pointer beam should be displayed.")]
@@ -155,6 +157,26 @@ namespace VRTK
             {
                 UpdateObjectInteractor();
             }
+        }
+
+        protected virtual Vector3 GetOriginPosition()
+        {
+            return (pointerOriginTransform ? pointerOriginTransform.position : transform.position);
+        }
+
+        protected virtual Vector3 GetOriginLocalPosition()
+        {
+            return (pointerOriginTransform ? pointerOriginTransform.localPosition : Vector3.zero);
+        }
+
+        protected virtual Vector3 GetOriginForward()
+        {
+            return (pointerOriginTransform ? pointerOriginTransform.forward : transform.forward);
+        }
+
+        protected virtual Quaternion GetOriginLocalRotation()
+        {
+            return (pointerOriginTransform ? pointerOriginTransform.localRotation : Quaternion.identity);
         }
 
         protected virtual void UpdateObjectInteractor()

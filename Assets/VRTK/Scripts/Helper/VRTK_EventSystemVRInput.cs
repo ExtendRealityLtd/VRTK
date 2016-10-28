@@ -25,6 +25,7 @@
                     {
                         results = CheckRaycasts(pointer);
                     }
+
                     //Process events
                     Hover(pointer, results);
                     Click(pointer, results);
@@ -37,8 +38,8 @@
         private List<RaycastResult> CheckRaycasts(VRTK_UIPointer pointer)
         {
             var raycastResult = new RaycastResult();
-            raycastResult.worldPosition = pointer.transform.position;
-            raycastResult.worldNormal = pointer.transform.forward;
+            raycastResult.worldPosition = pointer.GetOriginPosition();
+            raycastResult.worldNormal = pointer.GetOriginForward();
 
             pointer.pointerEventData.pointerCurrentRaycast = raycastResult;
 
@@ -79,22 +80,17 @@
             return false;
         }
 
-        private bool ShouldIgnoreElement(GameObject obj, string ignoreCanvasWithTagOrClass, VRTK_TagOrScriptPolicyList canvasTagOrScriptListPolicy)
+        private bool ValidElement(GameObject obj)
         {
-            var canvas = obj.GetComponentInParent<Canvas>();
-            if (!canvas)
-            {
-                return false;
-            }
-
-            return (Utilities.TagOrScriptCheck(canvas.gameObject, canvasTagOrScriptListPolicy, ignoreCanvasWithTagOrClass));
+            var canvasCheck = obj.GetComponentInParent<VRTK_UICanvas>();
+            return (canvasCheck && canvasCheck.enabled ? true : false);
         }
 
         private void Hover(VRTK_UIPointer pointer, List<RaycastResult> results)
         {
             if (pointer.pointerEventData.pointerEnter)
             {
-                if (ShouldIgnoreElement(pointer.pointerEventData.pointerEnter, pointer.ignoreCanvasWithTagOrClass, pointer.canvasTagOrScriptListPolicy))
+                if (!ValidElement(pointer.pointerEventData.pointerEnter))
                 {
                     return;
                 }
@@ -110,7 +106,7 @@
             {
                 foreach (var result in results)
                 {
-                    if (ShouldIgnoreElement(result.gameObject, pointer.ignoreCanvasWithTagOrClass, pointer.canvasTagOrScriptListPolicy))
+                    if (!ValidElement(result.gameObject))
                     {
                         continue;
                     }
@@ -153,13 +149,70 @@
 
         private void Click(VRTK_UIPointer pointer, List<RaycastResult> results)
         {
-            pointer.pointerEventData.eligibleForClick = pointer.controller.uiClickPressed;
+            switch (pointer.clickMethod)
+            {
+                case VRTK_UIPointer.ClickMethods.Click_On_Button_Up:
+                    ClickOnUp(pointer, results);
+                    break;
+                case VRTK_UIPointer.ClickMethods.Click_On_Button_Down:
+                    ClickOnDown(pointer, results);
+                    break;
+            }
+        }
 
+        private void ClickOnUp(VRTK_UIPointer pointer, List<RaycastResult> results)
+        {
+            pointer.pointerEventData.eligibleForClick = pointer.ValidClick(false);
+
+            if (!AttemptClick(pointer))
+            {
+                IsEligibleClick(pointer, results);
+            }
+        }
+
+        private void ClickOnDown(VRTK_UIPointer pointer, List<RaycastResult> results)
+        {
+            pointer.pointerEventData.eligibleForClick = pointer.ValidClick(true);
+
+            if (IsEligibleClick(pointer, results))
+            {
+                pointer.pointerEventData.eligibleForClick = false;
+                AttemptClick(pointer);
+            }
+        }
+
+        private bool IsEligibleClick(VRTK_UIPointer pointer, List<RaycastResult> results)
+        {
+            if (pointer.pointerEventData.eligibleForClick)
+            {
+                foreach (var result in results)
+                {
+                    if (!ValidElement(result.gameObject))
+                    {
+                        continue;
+                    }
+
+                    var target = ExecuteEvents.ExecuteHierarchy(result.gameObject, pointer.pointerEventData, ExecuteEvents.pointerDownHandler);
+                    if (target != null)
+                    {
+                        pointer.pointerEventData.pressPosition = pointer.pointerEventData.position;
+                        pointer.pointerEventData.pointerPressRaycast = result;
+                        pointer.pointerEventData.pointerPress = target;
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        private bool AttemptClick(VRTK_UIPointer pointer)
+        {
             if (pointer.pointerEventData.pointerPress)
             {
-                if (ShouldIgnoreElement(pointer.pointerEventData.pointerPress, pointer.ignoreCanvasWithTagOrClass, pointer.canvasTagOrScriptListPolicy))
+                if (!ValidElement(pointer.pointerEventData.pointerPress))
                 {
-                    return;
+                    return true;
                 }
 
                 if (pointer.pointerEventData.eligibleForClick)
@@ -172,30 +225,14 @@
                 }
                 else
                 {
+                    pointer.OnUIPointerElementClick(pointer.SetUIPointerEvent(pointer.pointerEventData.pointerPress));
                     ExecuteEvents.ExecuteHierarchy(pointer.pointerEventData.pointerPress, pointer.pointerEventData, ExecuteEvents.pointerClickHandler);
                     ExecuteEvents.ExecuteHierarchy(pointer.pointerEventData.pointerPress, pointer.pointerEventData, ExecuteEvents.pointerUpHandler);
                     pointer.pointerEventData.pointerPress = null;
                 }
+                return true;
             }
-            else if (pointer.pointerEventData.eligibleForClick)
-            {
-                foreach (var result in results)
-                {
-                    if (ShouldIgnoreElement(result.gameObject, pointer.ignoreCanvasWithTagOrClass, pointer.canvasTagOrScriptListPolicy))
-                    {
-                        continue;
-                    }
-
-                    var target = ExecuteEvents.ExecuteHierarchy(result.gameObject, pointer.pointerEventData, ExecuteEvents.pointerDownHandler);
-                    if (target != null)
-                    {
-                        pointer.pointerEventData.pressPosition = pointer.pointerEventData.position;
-                        pointer.pointerEventData.pointerPressRaycast = result;
-                        pointer.pointerEventData.pointerPress = target;
-                        break;
-                    }
-                }
-            }
+            return false;
         }
 
         private void Drag(VRTK_UIPointer pointer, List<RaycastResult> results)
@@ -204,7 +241,7 @@
 
             if (pointer.pointerEventData.pointerDrag)
             {
-                if (ShouldIgnoreElement(pointer.pointerEventData.pointerDrag, pointer.ignoreCanvasWithTagOrClass, pointer.canvasTagOrScriptListPolicy))
+                if (!ValidElement(pointer.pointerEventData.pointerDrag))
                 {
                     return;
                 }
@@ -231,7 +268,7 @@
             {
                 foreach (var result in results)
                 {
-                    if (ShouldIgnoreElement(result.gameObject, pointer.ignoreCanvasWithTagOrClass, pointer.canvasTagOrScriptListPolicy))
+                    if (!ValidElement(result.gameObject))
                     {
                         continue;
                     }

@@ -19,6 +19,18 @@
         /// Emits the UIPointerElementExit class event.
         /// </summary>
         public UnityObjectEvent OnUIPointerElementExit;
+        /// <summary>
+        /// Emits the UIPointerElementClick class event.
+        /// </summary>
+        public UnityObjectEvent OnUIPointerElementClick;
+        /// <summary>
+        /// Emits the UIPointerElementDragStart class event.
+        /// </summary>
+        public UnityObjectEvent OnUIPointerElementDragStart;
+        /// <summary>
+        /// Emits the UIPointerElementDragEnd class event.
+        /// </summary>
+        public UnityObjectEvent OnUIPointerElementDragEnd;
 
         private void SetUIPointer()
         {
@@ -38,6 +50,9 @@
             }
             uip.UIPointerElementEnter += UIPointerElementEnter;
             uip.UIPointerElementExit += UIPointerElementExit;
+            uip.UIPointerElementClick += UIPointerElementClick;
+            uip.UIPointerElementDragStart += UIPointerElementDragStart;
+            uip.UIPointerElementDragEnd += UIPointerElementDragEnd;
         }
 
         private void UIPointerElementEnter(object o, UIPointerEventArgs e)
@@ -50,6 +65,21 @@
             OnUIPointerElementExit.Invoke(o, e);
         }
 
+        private void UIPointerElementClick(object o, UIPointerEventArgs e)
+        {
+            OnUIPointerElementClick.Invoke(o, e);
+        }
+
+        private void UIPointerElementDragStart(object o, UIPointerEventArgs e)
+        {
+            OnUIPointerElementDragStart.Invoke(o, e);
+        }
+
+        private void UIPointerElementDragEnd(object o, UIPointerEventArgs e)
+        {
+            OnUIPointerElementDragEnd.Invoke(o, e);
+        }
+
         private void OnDisable()
         {
             if (uip == null)
@@ -59,6 +89,9 @@
 
             uip.UIPointerElementEnter -= UIPointerElementEnter;
             uip.UIPointerElementExit -= UIPointerElementExit;
+            uip.UIPointerElementClick -= UIPointerElementClick;
+            uip.UIPointerElementDragStart -= UIPointerElementDragStart;
+            uip.UIPointerElementDragEnd -= UIPointerElementDragEnd;
         }
     }
 }

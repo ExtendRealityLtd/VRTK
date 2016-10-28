@@ -1,6 +1,7 @@
 ﻿namespace VRTK.Examples
 {
     using UnityEngine;
+    using UnityEngine.EventSystems;
     using UnityEngine.UI;
 
     public class UI_Interactions : MonoBehaviour
@@ -27,6 +28,17 @@
             Debug.Log("Dropdown option selected was ID " + value);
         }
 
+        public void SetDropText(BaseEventData data)
+        {
+            var pointerData = data as PointerEventData;
+            var textObject = GameObject.Find("ActionText");
+            if (textObject)
+            {
+                var text = textObject.GetComponent<Text>();
+                text.text = pointerData.pointerDrag.name + " Dropped On " + pointerData.pointerEnter.name;
+            }
+        }
+
         public void CreateCanvas()
         {
             var canvasCount = FindObjectsOfType<Canvas>().Length - EXISTING_CANVAS_COUNT;
@@ -34,7 +46,7 @@
             newCanvasGO.layer = 5;
             var canvas = newCanvasGO.AddComponent<Canvas>();
             var canvasRT = canvas.GetComponent<RectTransform>();
-            canvasRT.position = new Vector3(-4f, 2f, 2f + canvasCount);
+            canvasRT.position = new Vector3(-4f, 2f, 3f + canvasCount);
             canvasRT.sizeDelta = new Vector2(300f, 400f);
             canvasRT.localScale = new Vector3(0.005f, 0.005f, 0.005f);
             canvasRT.eulerAngles = new Vector3(0f, 270f, 0f);
@@ -76,7 +88,7 @@
             txt.color = Color.black;
             txt.font = Resources.GetBuiltinResource(typeof(Font), "Arial.ttf") as Font;
 
-            FindObjectOfType<VRTK_UIPointer>().SetWorldCanvas(canvas);
+            newCanvasGO.AddComponent<VRTK_UICanvas>();
         }
     }
 }

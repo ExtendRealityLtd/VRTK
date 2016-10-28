@@ -57,7 +57,7 @@ namespace VRTK
             base.Update();
             if (pointer.gameObject.activeSelf)
             {
-                Ray pointerRaycast = new Ray(transform.position, transform.forward);
+                Ray pointerRaycast = new Ray(GetOriginPosition(), GetOriginForward());
                 RaycastHit pointerCollidedWith;
                 var rayHit = Physics.Raycast(pointerRaycast, out pointerCollidedWith, pointerLength, ~layersToIgnore);
                 var pointerBeamLength = GetPointerBeamLength(rayHit, pointerCollidedWith);
@@ -70,7 +70,7 @@ namespace VRTK
                     }
                     if (pointerCursorRescaledAlongDistance)
                     {
-                        float collisionDistance = Vector3.Distance(pointerCollidedWith.point, transform.position);
+                        float collisionDistance = Vector3.Distance(pointerCollidedWith.point, GetOriginPosition());
                         pointerTip.transform.localScale = pointerCursorOriginalScale * collisionDistance;
                     }
                 }
@@ -78,7 +78,7 @@ namespace VRTK
                 {
                     if (pointerCursorMatchTargetNormal)
                     {
-                        pointerTip.transform.forward = transform.forward;
+                        pointerTip.transform.forward = GetOriginForward();
                     }
                     if (pointerCursorRescaledAlongDistance)
                     {
@@ -174,7 +174,9 @@ namespace VRTK
             pointer.transform.localScale = new Vector3(setThicknes, setThicknes, setLength);
             pointer.transform.localPosition = new Vector3(0f, 0f, beamPosition);
             pointerTip.transform.localPosition = new Vector3(0f, 0f, setLength - (pointerTip.transform.localScale.z / 2));
-            pointerHolder.transform.localRotation = Quaternion.identity;
+
+            pointerHolder.transform.localPosition = GetOriginLocalPosition();
+            pointerHolder.transform.localRotation = GetOriginLocalRotation();
             base.UpdateDependencies(pointerTip.transform.position);
         }
 

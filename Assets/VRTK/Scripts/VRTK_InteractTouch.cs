@@ -463,6 +463,7 @@ namespace VRTK
                     destroyColliderOnDisable = true;
                 }
             }
+            controllerCollisionDetector.AddComponent<VRTK_PlayerObject>().objectType = VRTK_PlayerObject.ObjectTypes.Collider;
         }
 
         private void CreateTouchRigidBody()

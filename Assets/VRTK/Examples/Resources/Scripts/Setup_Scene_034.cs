@@ -29,7 +29,6 @@
                 {
                     var uiPointer = headset.gameObject.AddComponent<VRTK_UIPointer>();
                     uiPointer.controller = controllerEvents;
-                    uiPointer.ignoreCanvasWithTagOrClass = "ExcludeTeleport";
                 }
                 initalised = true;
             }

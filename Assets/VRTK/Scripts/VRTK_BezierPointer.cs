@@ -164,20 +164,20 @@ namespace VRTK
         {
             var controllerRotation = Vector3.Dot(Vector3.up, controller.transform.forward.normalized);
             var calculatedLength = pointerLength;
-            var useForward = transform.forward;
+            var useForward = GetOriginForward();
             if ((controllerRotation * 100f) > beamHeightLimitAngle)
             {
-                useForward = new Vector3(transform.forward.x, fixedForwardBeamForward.y, transform.forward.z);
+                useForward = new Vector3(useForward.x, fixedForwardBeamForward.y, useForward.z);
                 var controllerRotationOffset = 1f - (controllerRotation - (beamHeightLimitAngle / 100f));
                 calculatedLength = (pointerLength * controllerRotationOffset) * controllerRotationOffset;
             }
             else
             {
-                fixedForwardBeamForward = transform.forward;
+                fixedForwardBeamForward = GetOriginForward();
             }
 
             var actualLength = calculatedLength;
-            Ray pointerRaycast = new Ray(transform.position, useForward);
+            Ray pointerRaycast = new Ray(GetOriginPosition(), useForward);
 
             RaycastHit collidedWith;
             var hasRayHit = Physics.Raycast(pointerRaycast, out collidedWith, calculatedLength, ~layersToIgnore);
@@ -262,7 +262,7 @@ namespace VRTK
         {
             Vector3[] beamPoints = new Vector3[]
             {
-                transform.position,
+                GetOriginPosition(),
                 jointPosition + new Vector3(0f, beamCurveOffset, 0f),
                 downPosition,
                 downPosition,
