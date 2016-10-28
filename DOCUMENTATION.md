@@ -2560,23 +2560,23 @@ The CheckHideMode method is a simple service method used only by some scripts (e
 
 The IsTouched method is used to determine if the object is currently being touched.
 
-#### IsGrabbed/0
+#### IsGrabbed/1
 
-  > `public bool IsGrabbed()`
+  > `public bool IsGrabbed(GameObject grabbedBy = null)`
 
   * Parameters
-   * _none_
+   * `GameObject grabbedBy` - An optional GameObject to check if the Interactable Object is grabbed by that specific GameObject. Defaults to `null`
   * Returns
    * `bool` - Returns `true` if the object is currently being grabbed.
 
 The IsGrabbed method is used to determine if the object is currently being grabbed.
 
-#### IsUsing/0
+#### IsUsing/1
 
-  > `public bool IsUsing()`
+  > `public bool IsUsing(GameObject usedBy = null)`
 
   * Parameters
-   * _none_
+   * `GameObject usedBy` - An optional GameObject to check if the Interactable Object is used by that specific GameObject. Defaults to `null`
   * Returns
    * `bool` - Returns `true` if the object is currently being used.
 
@@ -2781,6 +2781,17 @@ The ToggleKinematic method is used to set the object's internal rigidbody kinema
 
 the IsKinematic method returns whether the rigidbody is set to kinematic or not.
 
+#### GetTouchingObjects/0
+
+  > `public List<GameObject> GetTouchingObjects()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `List<GameObject>` - A list of game object of that are currently touching the current object.
+
+The GetTouchingObjects method is used to return the collecetion of valid game objects that are currently touching this object.
+
 #### GetGrabbingObject/0
 
   > `public GameObject GetGrabbingObject()`
@@ -2791,6 +2802,17 @@ the IsKinematic method returns whether the rigidbody is set to kinematic or not.
    * `GameObject` - The game object of what is grabbing the current object.
 
 The GetGrabbingObject method is used to return the game object that is currently grabbing this object.
+
+#### GetUsingObject/0
+
+  > `public GameObject GetUsingObject()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `GameObject` - The game object of what is using the current object.
+
+The GetUsingObject method is used to return the game object that is currently using this object.
 
 #### IsValidInteractableController/2
 
@@ -3115,6 +3137,17 @@ The AttemptGrab method will attempt to grab the currently touched object without
    * `GameObject` - The game object of what is currently being grabbed by this controller.
 
 The GetGrabbedObject method returns the current object being grabbed by the controller.
+
+#### GetControllerVisibilityState/0
+
+  > `public bool GetControllerVisibilityState()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `bool` - Returns true if the expected grabbed state of the controller visibility should be visible, and returns false if the expected state should be hidden.
+
+The GetControllerVisibilityState method returns the current expected controller visibility state from the grabbed action.
 
 ### Example
 

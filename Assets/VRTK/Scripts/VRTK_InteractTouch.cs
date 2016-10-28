@@ -326,7 +326,12 @@ namespace VRTK
         {
             if (touchedObject != null && (touchedObjectActiveColliders.Count == 0 || (!triggerIsColliding && !triggerWasColliding)))
             {
-                StopTouching(touchedObject);
+                var touchedObjectScript = touchedObject.GetComponent<VRTK_InteractableObject>();
+                //If it's being grabbed by the current touching object then it hasn't stopped being touched.
+                if (touchedObjectScript && touchedObjectScript.GetGrabbingObject() != gameObject)
+                {
+                    StopTouching(touchedObject);
+                }
             }
             triggerWasColliding = triggerIsColliding;
             triggerIsColliding = false;
@@ -396,7 +401,7 @@ namespace VRTK
 
                 var untouchedObjectScript = untouched.GetComponent<VRTK_InteractableObject>();
                 untouchedObjectScript.StopTouching(gameObject);
-                ResetButtonOverrides(untouchedObjectScript.IsGrabbed(), untouchedObjectScript.IsUsing());
+                ResetButtonOverrides(untouchedObjectScript.IsGrabbed(gameObject), untouchedObjectScript.IsUsing(gameObject));
                 if (!untouchedObjectScript.IsTouched())
                 {
                     untouchedObjectScript.ToggleHighlight(false);

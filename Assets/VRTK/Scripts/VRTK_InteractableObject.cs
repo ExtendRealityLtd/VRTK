@@ -306,18 +306,28 @@ namespace VRTK
         /// <summary>
         /// The IsGrabbed method is used to determine if the object is currently being grabbed.
         /// </summary>
+        /// <param name="grabbedBy">An optional GameObject to check if the Interactable Object is grabbed by that specific GameObject. Defaults to `null`</param>
         /// <returns>Returns `true` if the object is currently being grabbed.</returns>
-        public bool IsGrabbed()
+        public bool IsGrabbed(GameObject grabbedBy = null)
         {
+            if (grabbingObject && grabbedBy != null)
+            {
+                return (grabbingObject == grabbedBy);
+            }
             return (grabbingObject != null);
         }
 
         /// <summary>
         /// The IsUsing method is used to determine if the object is currently being used.
         /// </summary>
+        /// <param name="usedBy">An optional GameObject to check if the Interactable Object is used by that specific GameObject. Defaults to `null`</param>
         /// <returns>Returns `true` if the object is currently being used.</returns>
-        public bool IsUsing()
+        public bool IsUsing(GameObject usedBy = null)
         {
+            if (usingObject && usedBy != null)
+            {
+                return (usingObject == usedBy);
+            }
             return (usingObject != null);
         }
 
@@ -342,11 +352,8 @@ namespace VRTK
         {
             if (touchingObjects.Contains(previousTouchingObject))
             {
+                ResetUseState(previousTouchingObject);
                 OnInteractableObjectUntouched(SetInteractableObjectEvent(previousTouchingObject));
-                if (gameObject.activeInHierarchy)
-                {
-                    StartCoroutine(StopUsingOnControllerChange(previousTouchingObject));
-                }
                 touchingObjects.Remove(previousTouchingObject);
             }
         }
@@ -379,15 +386,12 @@ namespace VRTK
         /// <param name="previousGrabbingObject">The game object that was previously grabbing this object.</param>
         public virtual void Ungrabbed(GameObject previousGrabbingObject)
         {
-            OnInteractableObjectUngrabbed(SetInteractableObjectEvent(previousGrabbingObject));
             RemoveTrackPoint();
+            ResetUseState(previousGrabbingObject);
+            OnInteractableObjectUngrabbed(SetInteractableObjectEvent(previousGrabbingObject));
             grabbedSnapHandle = null;
             grabbingObject = null;
             LoadPreviousState();
-            if (gameObject.activeInHierarchy)
-            {
-                StartCoroutine(StopUsingOnControllerChange(previousGrabbingObject));
-            }
         }
 
         /// <summary>
@@ -396,6 +400,10 @@ namespace VRTK
         /// <param name="currentUsingObject">The game object that is currently using this object.</param>
         public virtual void StartUsing(GameObject currentUsingObject)
         {
+            if (IsUsing() && !IsUsing(currentUsingObject))
+            {
+                usingObject.GetComponent<VRTK_InteractUse>().ForceResetUsing();
+            }
             OnInteractableObjectUsed(SetInteractableObjectEvent(currentUsingObject));
             usingObject = currentUsingObject;
         }
@@ -561,12 +569,30 @@ namespace VRTK
         }
 
         /// <summary>
+        /// The GetTouchingObjects method is used to return the collecetion of valid game objects that are currently touching this object.
+        /// </summary>
+        /// <returns>A list of game object of that are currently touching the current object.</returns>
+        public List<GameObject> GetTouchingObjects()
+        {
+            return touchingObjects;
+        }
+
+        /// <summary>
         /// The GetGrabbingObject method is used to return the game object that is currently grabbing this object.
         /// </summary>
         /// <returns>The game object of what is grabbing the current object.</returns>
         public GameObject GetGrabbingObject()
         {
             return grabbingObject;
+        }
+
+        /// <summary>
+        /// The GetUsingObject method is used to return the game object that is currently using this object.
+        /// </summary>
+        /// <returns>The game object of what is using the current object.</returns>
+        public GameObject GetUsingObject()
+        {
+            return usingObject;
         }
 
         /// <summary>
@@ -952,23 +978,14 @@ namespace VRTK
             }
         }
 
-        private IEnumerator StopUsingOnControllerChange(GameObject previousController)
+        private void ResetUseState(GameObject checkObject)
         {
-            yield return new WaitForEndOfFrame();
-
-            if (previousController)
+            var usingObjectCheck = checkObject.GetComponent<VRTK_InteractUse>();
+            if (usingObjectCheck)
             {
-                var usingObject = previousController.GetComponent<VRTK_InteractUse>();
-                if (usingObject)
+                if (holdButtonToUse)
                 {
-                    if (holdButtonToUse)
-                    {
-                        usingObject.ForceStopUsing();
-                    }
-                    else
-                    {
-                        usingObject.ForceResetUsing();
-                    }
+                    usingObjectCheck.ForceStopUsing();
                 }
             }
         }
