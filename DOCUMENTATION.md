@@ -2463,7 +2463,7 @@ The highlighting of an Interactable Object is defaulted to use the `VRTK_Materia
  * **Hide Controller On Touch:** Optionally override the controller setting.
  * **Is Grabbable:** Determines if the object can be grabbed.
  * **Valid Drop:** Determines in what situation the object can be dropped by the controller grab button.
- * **Is Swappable:** Determines if the object can be swapped between controllers when it is picked up. If it is unchecked then the object must be dropped before it can be picked up by the other controller.
+ * **Secondary Grab Action:** Determines what should happen to the object if another grab attempt is made by a secondary controller if the object is already being grabbed.
  * **Hold Button To Grab:** If this is checked then the grab button on the controller needs to be continually held down to keep grabbing. If this is unchecked the grab button toggles the grab action with one button press to grab and another to release.
  * **Grab Override Button:** If this is set to `Undefined` then the global grab alias button will grab the object, setting it to any other button will ensure the override button is used to grab this specific interactable object.
  * **Rumble On Grab:** The haptic feedback on the controller can be triggered upon grabbing the object, the `Strength` denotes the strength of the pulse, the `Duration` denotes the length of time.
@@ -2509,6 +2509,9 @@ The highlighting of an Interactable Object is defaulted to use the `VRTK_Materia
   * `No_Drop` - The object cannot be dropped via the controller
   * `Drop_Anywhere` - The object can be dropped anywhere in the scene via the controller.
   * `Drop_ValidSnapDropZone` - The object can only be dropped when it is hovering over a valid snap drop zone.
+ * `public enum SecondaryControllerActions` - The types of actions the secondary controller will have on the object on a secondary grab attempt
+  * `No_Action` - Nothing will happen to the grabbed object if a secondary controller attempts to grab it.
+  * `Swap_Controller` - The object will be swapped after another grab attempt to the secondary grabbing controller.
  * `public int usingState` - The current using state of the object. `0` not being used, `1` being used. Default: `0`
 
 ### Class Events
@@ -2803,6 +2806,17 @@ The GetTouchingObjects method is used to return the collecetion of valid game ob
 
 The GetGrabbingObject method is used to return the game object that is currently grabbing this object.
 
+#### GetSecondaryGrabbingObject/0
+
+  > `public GameObject GetSecondaryGrabbingObject()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `GameObject` - The game object of the secondary controller influencing the current grabbed object.
+
+The GetSecondaryGrabbingObject method is used to return the game object that is currently being used to influence this object whilst it is being grabbed by a secondary controller.
+
 #### GetUsingObject/0
 
   > `public GameObject GetUsingObject()`
@@ -2922,9 +2936,31 @@ The GetStoredSnapDropZone method returns the snap drop zone that the interactabl
   * Parameters
    * _none_
   * Returns
-   * `bool` - Returns true if the item can currently be dropped and returns false if it is not currently possible to drop.
+   * `bool` - Returns true if the object can currently be dropped and returns false if it is not currently possible to drop.
 
-The IsDroppable method returns whether the item can be dropped or not in it's current situation.
+The IsDroppable method returns whether the object can be dropped or not in it's current situation.
+
+#### IsSwappable/0
+
+  > `public bool IsSwappable()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `bool` - Returns true if the object can be grabbed by a secondary controller whilst already being grabbed and the object will swap controllers. Returns false if the object cannot be swapped.
+
+The IsSwappable method returns whether the object can be grabbed with one controller and then swapped to another controller by grabbing with the secondary controller.
+
+#### PerformSecondaryAction/0
+
+  > `public bool PerformSecondaryAction()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `bool` - Returns true if the obejct has a secondary action, returns false if it has no secondary action or is swappable.
+
+The PerformSecondaryAction method returns whether the object has a secondary action that can be performed when grabbing the object with a secondary controller.
 
 ### Example
 
