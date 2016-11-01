@@ -772,6 +772,10 @@ namespace VRTK
                 rb.maxAngularVelocity = float.MaxValue;
             }
             forcedDropped = false;
+            if(AttachIsTrackObject())
+            {
+                FlipSnapHandles();
+            }
         }
 
         protected virtual void Start()
@@ -1140,6 +1144,20 @@ namespace VRTK
 
             storedSnapDropZone.OnObjectUnsnappedFromDropZone(storedSnapDropZone.SetSnapDropZoneEvent(gameObject));
             storedSnapDropZone = null;
+        }
+
+        private void FlipSnapHandles()
+        {
+            FlipSnapHandle(rightSnapHandle);
+            FlipSnapHandle(leftSnapHandle);
+        }
+
+        private void FlipSnapHandle(Transform snapHandle)
+        {
+            if (snapHandle)
+            {
+                snapHandle.rotation = Quaternion.Inverse(snapHandle.rotation);
+            }
         }
     }
 }
