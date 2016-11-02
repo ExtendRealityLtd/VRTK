@@ -45,13 +45,6 @@ namespace VRTK.SecondaryControllerGrabActions
             }
         }
 
-        /// <summary>
-        /// The ProcessUpdate method runs in every Update on the Interactable Object whilst it is being grabbed by a secondary controller. Empty implementation to adhere to interface.
-        /// </summary>
-        public override void ProcessUpdate()
-        {
-        }
-
         private void NonUniformScale()
         {
             var existingScale = grabbedObject.transform.localScale;

@@ -655,6 +655,18 @@ namespace VRTK
         }
 
         /// <summary>
+        /// The ForceStopSecondaryGrabInteraction method forces the object to no longer be influenced by the second controller grabbing it.
+        /// </summary>
+        public void ForceStopSecondaryGrabInteraction()
+        {
+            var grabbingObject = GetSecondaryGrabbingObject();
+            if (grabbingObject)
+            {
+                grabbingObject.GetComponent<VRTK_InteractGrab>().ForceRelease();
+            }
+        }
+
+        /// <summary>
         /// The SetGrabbedSnapHandle method is used to set the snap handle of the object at runtime.
         /// </summary>
         /// <param name="handle">A transform of an object to use for the snap handle when the object is grabbed.</param>
@@ -920,6 +932,10 @@ namespace VRTK
             ResetUseState(previousGrabbingObject);
             grabbedSnapHandle = null;
             grabbingObjects.Clear();
+            if (customSecondaryAction)
+            {
+                customSecondaryAction.OnDropAction();
+            }
             LoadPreviousState();
         }
 

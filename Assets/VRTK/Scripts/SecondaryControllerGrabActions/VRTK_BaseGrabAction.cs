@@ -11,6 +11,9 @@ namespace VRTK.SecondaryControllerGrabActions
     /// </remarks>
     public abstract class VRTK_BaseGrabAction : MonoBehaviour
     {
+        [Tooltip("The distance the secondary controller must move away from the original grab position before the secondary controller auto ungrabs the object.")]
+        public float ungrabDistance = 1f;
+
         protected VRTK_InteractableObject grabbedObject;
         protected VRTK_InteractGrab primaryGrabbingObject;
         protected VRTK_InteractGrab secondaryGrabbingObject;
@@ -50,13 +53,28 @@ namespace VRTK.SecondaryControllerGrabActions
         }
 
         /// <summary>
-        /// The ProcessFixedUpdate method runs in every FixedUpdate on the Interactable Object whilst it is being grabbed by a secondary controller.
-        /// </summary>
-        public abstract void ProcessFixedUpdate();
-
-        /// <summary>
         /// The ProcessUpdate method runs in every Update on the Interactable Object whilst it is being grabbed by a secondary controller.
         /// </summary>
-        public abstract void ProcessUpdate();
+        public virtual void ProcessUpdate()
+        {
+            if (initialised && Vector3.Distance(secondaryGrabbingObject.transform.position, secondaryInitialGrabPoint.position) > ungrabDistance)
+            {
+                grabbedObject.ForceStopSecondaryGrabInteraction();
+            }
+        }
+
+        /// <summary>
+        /// The ProcessFixedUpdate method runs in every FixedUpdate on the Interactable Object whilst it is being grabbed by a secondary controller.
+        /// </summary>
+        public virtual void ProcessFixedUpdate()
+        {
+        }
+
+        /// <summary>
+        /// The OnDropAction method is executed when the current grabbed object is dropped and can be used up to clean up any secondary grab actions.
+        /// </summary>
+        public virtual void OnDropAction()
+        {
+        }
     }
 }

@@ -846,6 +846,7 @@ This directory contains scripts that are used to provide different actions when 
 
  * [Base Grab Action](#base-grab-action-vrtk_basegrabaction)
  * [Axis Scale Grab Action](#axis-scale-grab-action-vrtk_axisscalegrabaction)
+ * [Control Direction Grab Action](#control-direction-grab-action-vrtk_controldirectiongrabaction)
 
 ---
 
@@ -856,6 +857,10 @@ This directory contains scripts that are used to provide different actions when 
 The Base Grab Action is an abstract class that all other secondary controller actions inherit and are required to implement the public abstract methods.
 
 As this is an abstract class, it cannot be applied directly to a game object and performs no logic.
+
+### Inspector Parameters
+
+ * **Ungrab Distance:** The distance the secondary controller must move away from the original grab position before the secondary controller auto ungrabs the object.
 
 ### Class Methods
 
@@ -885,9 +890,20 @@ The Initalise method is used to set up the state of the secondary action when th
 
 The ResetAction method is used to reset the secondary action when the object is no longer grabbed by a secondary controller.
 
+#### ProcessUpdate/0
+
+  > `public virtual void ProcessUpdate()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The ProcessUpdate method runs in every Update on the Interactable Object whilst it is being grabbed by a secondary controller.
+
 #### ProcessFixedUpdate/0
 
-  > `public abstract void ProcessFixedUpdate();`
+  > `public virtual void ProcessFixedUpdate()`
 
   * Parameters
    * _none_
@@ -896,16 +912,16 @@ The ResetAction method is used to reset the secondary action when the object is 
 
 The ProcessFixedUpdate method runs in every FixedUpdate on the Interactable Object whilst it is being grabbed by a secondary controller.
 
-#### ProcessUpdate/0
+#### OnDropAction/0
 
-  > `public abstract void ProcessUpdate();`
+  > `public virtual void OnDropAction()`
 
   * Parameters
    * _none_
   * Returns
    * _none_
 
-The ProcessUpdate method runs in every Update on the Interactable Object whilst it is being grabbed by a secondary controller.
+The OnDropAction method is executed when the current grabbed object is dropped and can be used up to clean up any secondary grab actions.
 
 ---
 
@@ -950,20 +966,80 @@ The Initalise method is used to set up the state of the secondary action when th
 
 The ProcessFixedUpdate method runs in every FixedUpdate on the Interactable Object whilst it is being grabbed by a secondary controller and performs the scaling action.
 
-#### ProcessUpdate/0
+### Example
 
-  > `public override void ProcessUpdate()`
+`VRTK/Examples/043_Controller_SecondaryControllerActions` demonstrates the ability to grab an object with one controller and scale it by grabbing and pulling with the second controller.
+
+---
+
+## Control Direction Grab Action (VRTK_ControlDirectionGrabAction)
+ > extends [VRTK_BaseGrabAction](#base-grab-action-vrtk_basegrabaction)
+
+### Overview
+
+The Control Direction Grab Action provides a mechanism to control the facing direction of the object when they are grabbed with a secondary controller.
+
+For an object to correctly be rotated it must be created with the front of the object pointing down the z-axis (forward) and the upwards of the object pointing up the y-axis (up).
+
+It's not possible to control the direction of an interactable object with a `Fixed_Joint` as the joint fixes the rotation of the object.
+
+### Inspector Parameters
+
+ * **Release Snap Speed:** The speed in which the object will snap back to it's original rotation when the secondary controller stops grabbing it. `0` for instant snap, `infinity` for no snap back.
+
+### Class Methods
+
+#### Initialise/5
+
+  > `public override void Initialise(VRTK_InteractableObject currentGrabbdObject, VRTK_InteractGrab currentPrimaryGrabbingObject, VRTK_InteractGrab currentSecondaryGrabbingObject, Transform primaryGrabPoint, Transform secondaryGrabPoint)`
+
+  * Parameters
+   * `VRTK_InteractableObject currentGrabbdObject` - The Interactable Object script for the object currently being grabbed by the primary controller.
+   * `VRTK_InteractGrab currentPrimaryGrabbingObject` - The Interact Grab script for the object that is associated with the primary controller.
+   * `VRTK_InteractGrab currentSecondaryGrabbingObject` - The Interact Grab script for the object that is associated with the secondary controller.
+   * `Transform primaryGrabPoint` - The point on the object where the primary controller initially grabbed the object.
+   * `Transform secondaryGrabPoint` - The point on the object where the secondary controller initially grabbed the object.
+  * Returns
+   * _none_
+
+The Initalise method is used to set up the state of the secondary action when the object is initially grabbed by a secondary controller.
+
+#### ResetAction/0
+
+  > `public override void ResetAction()`
 
   * Parameters
    * _none_
   * Returns
    * _none_
 
-The ProcessUpdate method runs in every Update on the Interactable Object whilst it is being grabbed by a secondary controller. Empty implementation to adhere to interface.
+The ResetAction method is used to reset the secondary action when the object is no longer grabbed by a secondary controller.
+
+#### OnDropAction/0
+
+  > `public override void OnDropAction()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The OnDropAction method is executed when the current grabbed object is dropped and can be used up to clean up any secondary grab actions.
+
+#### ProcessFixedUpdate/0
+
+  > `public override void ProcessFixedUpdate()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The ProcessFixedUpdate method runs in every FixedUpdate on the Interactable Object whilst it is being grabbed by a secondary controller and influences the rotation of the object.
 
 ### Example
 
-`VRTK/Examples/043_Controller_SecondaryControllerActions` demonstrates the ability to grab an object with one controller and scale it by grabbing and pulling with the second controller.
+`VRTK/Examples/043_Controller_SecondaryControllerActions` demonstrates the ability to grab an object with one controller and control their direction with the second controller.
 
 ---
 
@@ -2980,6 +3056,17 @@ The IsValidInteractableController method is used to check to see if a controller
    * _none_
 
 The ForceStopInteracting method forces the object to no longer be interacted with and will cause a controller to drop the object and stop touching it. This is useful if the controller is required to auto interact with another object.
+
+#### ForceStopSecondaryGrabInteraction/0
+
+  > `public void ForceStopSecondaryGrabInteraction()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The ForceStopSecondaryGrabInteraction method forces the object to no longer be influenced by the second controller grabbing it.
 
 #### SetGrabbedSnapHandle/1
 
