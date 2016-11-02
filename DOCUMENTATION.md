@@ -5,6 +5,7 @@ This file provides documentation on how to use the included prefabs and scripts.
  * [Prefabs](#prefabs-vrtkprefabs)
  * [Abstract Classes](#abstract-classes-vrtkscriptsabstractions)
  * [Highlighters](#highlighters-vrtkscriptshighlighters)
+ * [Secondary Controller Grab Actions](#secondary-controller-grab-actions-vrtkscriptsecondarycontrollergrabactions)
  * [Scripts](#scripts-vrtkscripts)
  * [3D Controls](#3d-controls-vrtkscriptscontrols3d)
 
@@ -836,6 +837,133 @@ The Unhighlight method hides the outline object and removes the outline colour.
 `VRTK/Examples/005_Controller_BasicObjectGrabbing` demonstrates the outline highlighting on the green sphere when the controller touches it.
 
 `VRTK/Examples/035_Controller_OpacityAndHighlighting` demonstrates the outline highlighting if the left controller collides with the green box.
+
+---
+
+# Secondary Controller Grab Actions (VRTK/Scripts/SecondaryControllerGrabActions)
+
+This directory contains scripts that are used to provide different actions when a secondary controller grabs a grabbed obejct.
+
+ * [Base Grab Action](#base-grab-action-vrtk_basegrabaction)
+ * [Axis Scale Grab Action](#axis-scale-grab-action-vrtk_axisscalegrabaction)
+
+---
+
+## Base Grab Action (VRTK_BaseGrabAction)
+
+### Overview
+
+The Base Grab Action is an abstract class that all other secondary controller actions inherit and are required to implement the public abstract methods.
+
+As this is an abstract class, it cannot be applied directly to a game object and performs no logic.
+
+### Class Methods
+
+#### Initialise/5
+
+  > `public virtual void Initialise(VRTK_InteractableObject currentGrabbdObject, VRTK_InteractGrab currentPrimaryGrabbingObject, VRTK_InteractGrab currentSecondaryGrabbingObject, Transform primaryGrabPoint, Transform secondaryGrabPoint)`
+
+  * Parameters
+   * `VRTK_InteractableObject currentGrabbdObject` - The Interactable Object script for the object currently being grabbed by the primary controller.
+   * `VRTK_InteractGrab currentPrimaryGrabbingObject` - The Interact Grab script for the object that is associated with the primary controller.
+   * `VRTK_InteractGrab currentSecondaryGrabbingObject` - The Interact Grab script for the object that is associated with the secondary controller.
+   * `Transform primaryGrabPoint` - The point on the object where the primary controller initially grabbed the object.
+   * `Transform secondaryGrabPoint` - The point on the object where the secondary controller initially grabbed the object.
+  * Returns
+   * _none_
+
+The Initalise method is used to set up the state of the secondary action when the object is initially grabbed by a secondary controller.
+
+#### ResetAction/0
+
+  > `public virtual void ResetAction()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The ResetAction method is used to reset the secondary action when the object is no longer grabbed by a secondary controller.
+
+#### ProcessFixedUpdate/0
+
+  > `public abstract void ProcessFixedUpdate();`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The ProcessFixedUpdate method runs in every FixedUpdate on the Interactable Object whilst it is being grabbed by a secondary controller.
+
+#### ProcessUpdate/0
+
+  > `public abstract void ProcessUpdate();`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The ProcessUpdate method runs in every Update on the Interactable Object whilst it is being grabbed by a secondary controller.
+
+---
+
+## Axis Scale Grab Action (VRTK_AxisScaleGrabAction)
+ > extends [VRTK_BaseGrabAction](#base-grab-action-vrtk_basegrabaction)
+
+### Overview
+
+The Axis Scale Grab Action provides a mechanism to scale objects when they are grabbed with a secondary controller.
+
+### Inspector Parameters
+
+ * **Lock X Axis:** If checked the current X Axis of the object won't be scaled
+ * **Lock Y Axis:** If checked the current Y Axis of the object won't be scaled
+ * **Lock Z Axis:** If checked the current Z Axis of the object won't be scaled
+
+### Class Methods
+
+#### Initialise/5
+
+  > `public override void Initialise(VRTK_InteractableObject currentGrabbdObject, VRTK_InteractGrab currentPrimaryGrabbingObject, VRTK_InteractGrab currentSecondaryGrabbingObject, Transform primaryGrabPoint, Transform secondaryGrabPoint)`
+
+  * Parameters
+   * `VRTK_InteractableObject currentGrabbdObject` - The Interactable Object script for the object currently being grabbed by the primary controller.
+   * `VRTK_InteractGrab currentPrimaryGrabbingObject` - The Interact Grab script for the object that is associated with the primary controller.
+   * `VRTK_InteractGrab currentSecondaryGrabbingObject` - The Interact Grab script for the object that is associated with the secondary controller.
+   * `Transform primaryGrabPoint` - The point on the object where the primary controller initially grabbed the object.
+   * `Transform secondaryGrabPoint` - The point on the object where the secondary controller initially grabbed the object.
+  * Returns
+   * _none_
+
+The Initalise method is used to set up the state of the secondary action when the object is initially grabbed by a secondary controller.
+
+#### ProcessFixedUpdate/0
+
+  > `public override void ProcessFixedUpdate()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The ProcessFixedUpdate method runs in every FixedUpdate on the Interactable Object whilst it is being grabbed by a secondary controller and performs the scaling action.
+
+#### ProcessUpdate/0
+
+  > `public override void ProcessUpdate()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The ProcessUpdate method runs in every Update on the Interactable Object whilst it is being grabbed by a secondary controller. Empty implementation to adhere to interface.
+
+### Example
+
+`VRTK/Examples/043_Controller_SecondaryControllerActions` demonstrates the ability to grab an object with one controller and scale it by grabbing and pulling with the second controller.
 
 ---
 
@@ -2411,7 +2539,7 @@ The GetSpeed method will return the current speed the player is moving at.
 
 ### Example
 
-`VRTK/Examples/042_CameraRig_MoveInPlace` shows how the user can move and traverse colliders.
+`VRTK/Examples/042_CameraRig_MoveInPlace` demonstrates how the user can move and traverse colliders by either swinging the controllers in a walking fashion or by running on the spot utilisng the head bob for movement.
 
 ---
 
@@ -2464,6 +2592,7 @@ The highlighting of an Interactable Object is defaulted to use the `VRTK_Materia
  * **Is Grabbable:** Determines if the object can be grabbed.
  * **Valid Drop:** Determines in what situation the object can be dropped by the controller grab button.
  * **Secondary Grab Action:** Determines what should happen to the object if another grab attempt is made by a secondary controller if the object is already being grabbed.
+ * **Custom Secondary Action:** The script to utilise to process the secondary controller action when a secondary grab attempt is made.
  * **Hold Button To Grab:** If this is checked then the grab button on the controller needs to be continually held down to keep grabbing. If this is unchecked the grab button toggles the grab action with one button press to grab and another to release.
  * **Grab Override Button:** If this is set to `Undefined` then the global grab alias button will grab the object, setting it to any other button will ensure the override button is used to grab this specific interactable object.
  * **Rumble On Grab:** The haptic feedback on the controller can be triggered upon grabbing the object, the `Strength` denotes the strength of the pulse, the `Duration` denotes the length of time.
@@ -2512,6 +2641,7 @@ The highlighting of an Interactable Object is defaulted to use the `VRTK_Materia
  * `public enum SecondaryControllerActions` - The types of actions the secondary controller will have on the object on a secondary grab attempt
   * `No_Action` - Nothing will happen to the grabbed object if a secondary controller attempts to grab it.
   * `Swap_Controller` - The object will be swapped after another grab attempt to the secondary grabbing controller.
+  * `Custom_Action` - The object will be manipulated by the script provided in the `Secondary Custom Action` parameter.
  * `public int usingState` - The current using state of the object. `0` not being used, `1` being used. Default: `0`
 
 ### Class Events

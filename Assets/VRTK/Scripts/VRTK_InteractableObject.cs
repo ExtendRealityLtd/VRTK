@@ -100,10 +100,12 @@ namespace VRTK
         /// </summary>
         /// <param name="No_Action">Nothing will happen to the grabbed object if a secondary controller attempts to grab it.</param>
         /// <param name="Swap_Controller">The object will be swapped after another grab attempt to the secondary grabbing controller.</param>
+        /// <param name="Custom_Action">The object will be manipulated by the script provided in the `Secondary Custom Action` parameter.</param>
         public enum SecondaryControllerActions
         {
             No_Action,
-            Swap_Controller
+            Swap_Controller,
+            Custom_Action
         }
 
         [Header("Touch Interactions", order = 1)]
@@ -127,6 +129,8 @@ namespace VRTK
         public ValidDropTypes validDrop = ValidDropTypes.Drop_Anywhere;
         [Tooltip("Determines what should happen to the object if another grab attempt is made by a secondary controller if the object is already being grabbed.")]
         public SecondaryControllerActions secondaryGrabAction = SecondaryControllerActions.Swap_Controller;
+        [Tooltip("The script to utilise to process the secondary controller action when a secondary grab attempt is made.")]
+        public VRTK.SecondaryControllerGrabActions.VRTK_BaseGrabAction customSecondaryAction;
         [Tooltip("If this is checked then the grab button on the controller needs to be continually held down to keep grabbing. If this is unchecked the grab button toggles the grab action with one button press to grab and another to release.")]
         public bool holdButtonToGrab = true;
         [Tooltip("If this is set to `Undefined` then the global grab alias button will grab the object, setting it to any other button will ensure the override button is used to grab this specific interactable object.")]
@@ -772,7 +776,7 @@ namespace VRTK
                 rb.maxAngularVelocity = float.MaxValue;
             }
             forcedDropped = false;
-            if(AttachIsTrackObject())
+            if (AttachIsTrackObject())
             {
                 FlipSnapHandles();
             }
@@ -785,6 +789,10 @@ namespace VRTK
         protected virtual void Update()
         {
             CheckBreakDistance();
+            if (customSecondaryAction)
+            {
+                customSecondaryAction.ProcessUpdate();
+            }
         }
 
         protected virtual void FixedUpdate()
@@ -800,6 +808,10 @@ namespace VRTK
                         FixedUpdateTrackObject();
                         break;
                 }
+            }
+            if (customSecondaryAction)
+            {
+                customSecondaryAction.ProcessFixedUpdate();
             }
         }
 
@@ -894,6 +906,11 @@ namespace VRTK
                 secondaryControllerAttachPoint.parent = transform;
                 secondaryControllerAttachPoint.position = currentGrabbingObject.transform.position;
                 secondaryControllerAttachPoint.rotation = currentGrabbingObject.transform.rotation;
+
+                if (customSecondaryAction)
+                {
+                    customSecondaryAction.Initialise(this, GetGrabbingObject().GetComponent<VRTK_InteractGrab>(), GetSecondaryGrabbingObject().GetComponent<VRTK_InteractGrab>(), primaryControllerAttachPoint, secondaryControllerAttachPoint);
+                }
             }
         }
 
@@ -913,6 +930,10 @@ namespace VRTK
                 grabbingObjects.Remove(previousGrabbingObject);
                 Destroy(secondaryControllerAttachPoint.gameObject);
                 secondaryControllerAttachPoint = null;
+                if (customSecondaryAction)
+                {
+                    customSecondaryAction.ResetAction();
+                }
             }
         }
 
