@@ -86,7 +86,7 @@ of the examples can be viewed within this repository in
 | VR Explosive Kitten Toss | [Itch.io Store Page](https://ldvr.itch.io/ldvrs-kitten-toss) |
 | Zika VR | [Itch.io Store Page](https://ldvr.itch.io/ldvr-presents-zika-vr) |
 | Domino VR | [Steam Store Page](http://store.steampowered.com/app/508680) |
-| One Of The Last | [Game website](http://oneofthelast.com) |
+| One Of The Last | [Steam Store Page](http://store.steampowered.com/app/550360) |
 | The Days After | [Game website](http://www.fivefingerstudios.com/thedaysafter) |
 | Quantized | [Steam Greenlight Page](https://steamcommunity.com/sharedfiles/filedetails/?id=195344075) |
 | Caketomino | [Steam Store Page](http://store.steampowered.com/app/517770) |
