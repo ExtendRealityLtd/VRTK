@@ -545,6 +545,7 @@ The play area collider does not work well with terrains as they are uneven and c
  * **Pointer Material:** The material to use on the rendered version of the pointer. If no material is selected then the default `WorldPointer` material will be used.
  * **Hold Button To Activate:** If this is checked then the pointer beam will be activated on first press of the pointer alias button and will stay active until the pointer alias button is pressed again. The destination set event is emitted when the beam is deactivated on the second button press.
  * **Interact With Objects:** If this is checked then the pointer will be an extension of the controller and able to interact with Interactable Objects.
+ * **Grab To Pointer Tip:** If `Interact With Objects` is checked and this is checked then when an object is grabbed with the pointer touching it, the object will attach to the pointer tip and not snap to the controller.
  * **Activate Delay:** The time in seconds to delay the pointer beam being able to be active again. Useful for preventing constant teleportation.
  * **Pointer Visibility:** Determines when the pointer beam should be displayed.
  * **Layers To Ignore:** The layers to ignore when raycasting.
@@ -3358,12 +3359,12 @@ Adding the `VRTK_InteractGrab_UnityEvents` component to `VRTK_InteractGrab` obje
 
 ### Class Methods
 
-#### ForceRelease/0
+#### ForceRelease/1
 
-  > `public void ForceRelease()`
+  > `public void ForceRelease(bool applyGrabbingObjectVelocity = false)`
 
   * Parameters
-   * _none_
+   * `bool applyGrabbingObjectVelocity` - If this is true then upon releasing the object any velocity on the grabbing object will be applied to the object to essentiall throw it. Defaults to `false`.
   * Returns
    * _none_
 
