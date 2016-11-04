@@ -928,6 +928,7 @@ namespace VRTK
 
         private void PrimaryControllerUngrab(GameObject previousGrabbingObject)
         {
+            UnpauseCollisions();
             RemoveTrackPoint();
             ResetUseState(previousGrabbingObject);
             grabbedSnapHandle = null;
