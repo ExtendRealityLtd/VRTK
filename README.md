@@ -3,7 +3,7 @@
 > A collection of useful scripts and prefabs for building VR titles in Unity 5.
 
 [![Slack](http://sysdia2.co.uk/badge.svg)](http://invite.vrtk.io)
-[![Waffle](https://img.shields.io/badge/waffle-tracker-blue.svg?style=flat-square)](http://tracker.vrtk.io)
+[![Waffle](https://img.shields.io/badge/waffle-tracker-blue.svg)](http://tracker.vrtk.io)
 
 **This Toolkit requires a compatible VR SDK to be imported into your Unity Project**
 
