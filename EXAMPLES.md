@@ -231,3 +231,11 @@ A scene that demonstrates how to attach interactable panel prefabs to game objec
 ### 041_Controller_ObjectSnappingToDropZones
 
 A scene that uses the `VRTK_SnapDropZone` prefab to set up pre-determined snap zones for a range of objects and demonstrates how only objects of certain types can be snapped into certain areas.
+
+### 042_CameraRig_MoveInPlace
+
+A scene that demonstrates how the user can move and traverse colliders by either swinging the controllers in a walking fashion or by running on the spot utilisng the head bob for movement.
+
+### 043_Controller_SecondaryControllerActions
+
+A scene that demonstrates the ability to grab an object with one controller and scale it by grabbing and pulling with the second controller.

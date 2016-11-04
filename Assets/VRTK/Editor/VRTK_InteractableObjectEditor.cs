@@ -81,7 +81,12 @@
                     EditorGUI.indentLevel++;
 
                     EditorGUILayout.PropertyField(serializedObject.FindProperty("validDrop"));
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("isSwappable"));
+                    targ.secondaryGrabAction = (VRTK_InteractableObject.SecondaryControllerActions)EditorGUILayout.EnumPopup(VRTK_EditorUtilities.BuildGUIContent<VRTK_InteractableObject>("secondaryGrabAction"), targ.secondaryGrabAction);
+                    if(targ.secondaryGrabAction == VRTK_InteractableObject.SecondaryControllerActions.Custom_Action)
+                    {
+                        EditorGUILayout.PropertyField(serializedObject.FindProperty("customSecondaryAction"));
+                    }
+
                     EditorGUILayout.PropertyField(serializedObject.FindProperty("holdButtonToGrab"));
                     EditorGUILayout.PropertyField(serializedObject.FindProperty("grabOverrideButton"));
 
