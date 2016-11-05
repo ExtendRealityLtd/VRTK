@@ -36,6 +36,10 @@ namespace VRTK
         public string ignoreTargetWithTagOrClass;
         [Tooltip("A specified VRTK_TagOrScriptPolicyList to use to determine whether any objects will be acted upon by the Headset Collision. If a list is provided then the 'Ignore Target With Tag Or Class' parameter will be ignored.")]
         public VRTK_TagOrScriptPolicyList targetTagOrScriptListPolicy;
+        [Tooltip("Radius of the sphere collider")]
+        public float colliderRadius = 0.2f;
+        [Tooltip("The offset of the sphere collider in relation to the eye camera.")]
+        public Vector3 colliderOffset;
 
         /// <summary>
         /// Emitted when the user's headset collides with another game object.
@@ -108,8 +112,9 @@ namespace VRTK
             var headsetCollider = headset.GetComponent<Collider>();
             if (!headsetCollider)
             {
-                var newCollider = headset.gameObject.AddComponent<BoxCollider>();
-                newCollider.size = new Vector3(0.1f, 0.1f, 0.1f);
+                var newCollider = headset.gameObject.AddComponent<SphereCollider>();
+                newCollider.radius = colliderRadius;
+                newCollider.center = colliderOffset;
                 headsetCollider = newCollider;
                 generateCollider = true;
             }
@@ -136,7 +141,7 @@ namespace VRTK
         {
             if (generateCollider)
             {
-                Destroy(headset.gameObject.GetComponent<BoxCollider>());
+                Destroy(headset.gameObject.GetComponent<SphereCollider>());
             }
             if (generateRigidbody)
             {
