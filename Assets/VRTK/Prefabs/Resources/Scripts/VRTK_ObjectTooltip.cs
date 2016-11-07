@@ -88,8 +88,15 @@ namespace VRTK
             line = transform.FindChild("Line").GetComponent<LineRenderer>();
             line.material = Resources.Load("TooltipLine") as Material;
             line.material.color = lineColor;
+#if UNITY_5_5_OR_NEWER
+            line.startColor = lineColor;
+            line.endColor = lineColor;
+            line.startWidth = lineWidth;
+            line.endWidth = lineWidth;
+#else
             line.SetColors(lineColor, lineColor);
             line.SetWidth(lineWidth, lineWidth);
+#endif
             if (drawLineFrom == null)
             {
                 drawLineFrom = transform;

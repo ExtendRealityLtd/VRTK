@@ -686,7 +686,9 @@ namespace VRTK
                         },
                     triangles = new[] { 0, 1, 2, 0, 2, 3 }
                 };
+#if !UNITY_5_5_OR_NEWER
                 mesh.Optimize();
+#endif
                 mesh.UploadMeshData(true);
 
                 debugVisualizationQuad = new GameObject("AdaptiveQualityDebugVisualizationQuad");

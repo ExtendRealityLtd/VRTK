@@ -143,8 +143,13 @@ namespace VRTK
             bool validNavMeshLocation = false;
             if (target)
             {
+#if UNITY_5_5_OR_NEWER
+                UnityEngine.AI.NavMeshHit hit;
+                validNavMeshLocation = UnityEngine.AI.NavMesh.SamplePosition(destinationPosition, out hit, 0.1f, UnityEngine.AI.NavMesh.AllAreas);
+#else
                 NavMeshHit hit;
                 validNavMeshLocation = NavMesh.SamplePosition(destinationPosition, out hit, 0.1f, NavMesh.AllAreas);
+#endif
             }
             if (navMeshLimitDistance == 0f)
             {
