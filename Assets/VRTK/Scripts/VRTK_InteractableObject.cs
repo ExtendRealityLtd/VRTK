@@ -114,8 +114,6 @@ namespace VRTK
         public bool highlightOnTouch = false;
         [Tooltip("The colour to highlight the object when it is touched. This colour will override any globally set colour (for instance on the `VRTK_InteractTouch` script).")]
         public Color touchHighlightColor = Color.clear;
-        [Tooltip("The haptic feedback on the controller can be triggered upon touching the object, the `Strength` denotes the strength of the pulse, the `Duration` denotes the length of time.")]
-        public Vector2 rumbleOnTouch = Vector2.zero;
         [Tooltip("Determines which controller can initiate a touch action.")]
         public AllowedController allowedTouchControllers = AllowedController.Both;
         [Tooltip("Optionally override the controller setting.")]
@@ -135,8 +133,6 @@ namespace VRTK
         public bool holdButtonToGrab = true;
         [Tooltip("If this is set to `Undefined` then the global grab alias button will grab the object, setting it to any other button will ensure the override button is used to grab this specific interactable object.")]
         public VRTK_ControllerEvents.ButtonAlias grabOverrideButton = VRTK_ControllerEvents.ButtonAlias.Undefined;
-        [Tooltip("The haptic feedback on the controller can be triggered upon grabbing the object, the `Strength` denotes the strength of the pulse, the `Duration` denotes the length of time.")]
-        public Vector2 rumbleOnGrab = Vector2.zero;
         [Tooltip("Determines which controller can initiate a grab action.")]
         public AllowedController allowedGrabControllers = AllowedController.Both;
         [Tooltip("If this is checked then when the controller grabs the object, it will grab it with precision and pick it up at the particular point on the object the controller is touching.")]
@@ -177,8 +173,6 @@ namespace VRTK
         public VRTK_ControllerEvents.ButtonAlias useOverrideButton = VRTK_ControllerEvents.ButtonAlias.Undefined;
         [Tooltip("If this is checked then when a World Pointer beam (projected from the controller) hits the interactable object, if the object has `Hold Button To Use` unchecked then whilst the pointer is over the object it will run it's `Using` method. If `Hold Button To Use` is unchecked then the `Using` method will be run when the pointer is deactivated. The world pointer will not throw the `Destination Set` event if it is affecting an interactable object with this setting checked as this prevents unwanted teleporting from happening when using an object with a pointer.")]
         public bool pointerActivatesUseAction = false;
-        [Tooltip("The haptic feedback on the controller can be triggered upon using the object, the `Strength` denotes the strength of the pulse, the `Duration` denotes the length of time.")]
-        public Vector2 rumbleOnUse = Vector2.zero;
         [Tooltip("Determines which controller can initiate a use action.")]
         public AllowedController allowedUseControllers = AllowedController.Both;
         [Tooltip("Optionally override the controller setting.")]

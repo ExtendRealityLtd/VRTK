@@ -386,24 +386,26 @@ namespace VRTK
             return (grabbedObject ? true : false);
         }
 
+        private void ChooseGrabSequence(VRTK_InteractableObject grabbedObjectScript)
+        {
+            if (!grabbedObjectScript.IsGrabbed() || grabbedObjectScript.IsSwappable())
+            {
+                InitPrimaryGrab(grabbedObjectScript);
+            }
+            else
+            {
+                InitSecondaryGrab(grabbedObjectScript);
+            }
+        }
+
         private void InitGrabbedObject()
         {
             grabbedObject = interactTouch.GetTouchedObject();
             if (grabbedObject)
             {
                 var grabbedObjectScript = grabbedObject.GetComponent<VRTK_InteractableObject>();
-
-                if (!grabbedObjectScript.IsGrabbed() || grabbedObjectScript.IsSwappable())
-                {
-                    InitPrimaryGrab(grabbedObjectScript);
-                }
-                else
-                {
-                    InitSecondaryGrab(grabbedObjectScript);
-                }
-
+                ChooseGrabSequence(grabbedObjectScript);
                 updatedHideControllerOnGrab = grabbedObjectScript.CheckHideMode(hideControllerOnGrab, grabbedObjectScript.hideControllerOnGrab);
-
                 OnControllerGrabInteractableObject(interactTouch.SetControllerInteractEvent(grabbedObject));
             }
 
@@ -536,6 +538,23 @@ namespace VRTK
             }
         }
 
+        private GameObject GetUndroppableObject()
+        {
+            return (grabbedObject && grabbedObject.GetComponent<VRTK_InteractableObject>() && !grabbedObject.GetComponent<VRTK_InteractableObject>().IsDroppable() ? grabbedObject : null);
+        }
+
+        private void AttemptHaptics(bool initialGrabAttempt)
+        {
+            if (grabbedObject && initialGrabAttempt)
+            {
+                var doHaptics = grabbedObject.GetComponentInParent<VRTK_InteractHaptics>();
+                if (doHaptics)
+                {
+                    doHaptics.HapticsOnGrab(controllerActions);
+                }
+            }
+        }
+
         private void AttemptGrabObject()
         {
             var objectToGrab = GetGrabbableObject();
@@ -550,16 +569,8 @@ namespace VRTK
                     initialGrabAttempt = CheckGrabAttempt(objectToGrabScript);
                 }
 
-                undroppableGrabbedObject = (grabbedObject && grabbedObject.GetComponent<VRTK_InteractableObject>() && !grabbedObject.GetComponent<VRTK_InteractableObject>().IsDroppable() ? grabbedObject : null);
-
-                if (grabbedObject && initialGrabAttempt)
-                {
-                    var rumbleAmount = grabbedObject.GetComponent<VRTK_InteractableObject>().rumbleOnGrab;
-                    if (!rumbleAmount.Equals(Vector2.zero))
-                    {
-                        controllerActions.TriggerHapticPulse((ushort)rumbleAmount.y, rumbleAmount.x, 0.05f);
-                    }
-                }
+                undroppableGrabbedObject = GetUndroppableObject();
+                AttemptHaptics(initialGrabAttempt);
             }
             else
             {

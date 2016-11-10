@@ -43,17 +43,6 @@
                     EditorGUILayout.PropertyField(serializedObject.FindProperty("touchHighlightColor"));
                 }
 
-                GUILayout.BeginHorizontal();
-                EditorGUILayout.PrefixLabel(VRTK_EditorUtilities.BuildGUIContent<VRTK_InteractableObject>("rumbleOnTouch"));
-                EditorGUI.indentLevel--;
-                GUILayout.Label("Strength", GUILayout.MinWidth(49f));
-                float y = EditorGUILayout.FloatField(targ.rumbleOnTouch.y, GUILayout.MinWidth(10f));
-                GUILayout.Label("Duration", GUILayout.MinWidth(50f));
-                float x = EditorGUILayout.FloatField(targ.rumbleOnTouch.x, GUILayout.MinWidth(10f));
-                targ.rumbleOnTouch = new Vector2(x, y);
-                EditorGUI.indentLevel++;
-                GUILayout.EndHorizontal();
-
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("allowedTouchControllers"));
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("hideControllerOnTouch"));
 
@@ -89,17 +78,6 @@
 
                     EditorGUILayout.PropertyField(serializedObject.FindProperty("holdButtonToGrab"));
                     EditorGUILayout.PropertyField(serializedObject.FindProperty("grabOverrideButton"));
-
-                    GUILayout.BeginHorizontal();
-                    EditorGUILayout.PrefixLabel(VRTK_EditorUtilities.BuildGUIContent<VRTK_InteractableObject>("rumbleOnGrab"));
-                    EditorGUI.indentLevel--;
-                    GUILayout.Label("Strength", GUILayout.MinWidth(49f));
-                    float y = EditorGUILayout.FloatField(targ.rumbleOnGrab.y, GUILayout.MinWidth(10f));
-                    GUILayout.Label("Duration", GUILayout.MinWidth(50f));
-                    float x = EditorGUILayout.FloatField(targ.rumbleOnGrab.x, GUILayout.MinWidth(10f));
-                    targ.rumbleOnGrab = new Vector2(x, y);
-                    EditorGUI.indentLevel++;
-                    GUILayout.EndHorizontal();
 
                     EditorGUILayout.PropertyField(serializedObject.FindProperty("allowedGrabControllers"));
                     targ.precisionSnap = EditorGUILayout.Toggle(VRTK_EditorUtilities.BuildGUIContent<VRTK_InteractableObject>("precisionSnap", "Precision Grab(Snap)"), targ.precisionSnap);
@@ -152,18 +130,6 @@
                     EditorGUILayout.PropertyField(serializedObject.FindProperty("holdButtonToUse"));
                     EditorGUILayout.PropertyField(serializedObject.FindProperty("useOverrideButton"));
                     EditorGUILayout.PropertyField(serializedObject.FindProperty("pointerActivatesUseAction"));
-
-                    GUILayout.BeginHorizontal();
-                    EditorGUILayout.PrefixLabel(VRTK_EditorUtilities.BuildGUIContent<VRTK_InteractableObject>("rumbleOnUse"));
-                    EditorGUI.indentLevel--;
-                    GUILayout.Label("Strength", GUILayout.MinWidth(49f));
-                    float y = EditorGUILayout.FloatField(targ.rumbleOnUse.y, GUILayout.MinWidth(10f));
-                    GUILayout.Label("Duration", GUILayout.MinWidth(50f));
-                    float x = EditorGUILayout.FloatField(targ.rumbleOnUse.x, GUILayout.MinWidth(10f));
-                    targ.rumbleOnUse = new Vector2(x, y);
-                    EditorGUI.indentLevel++;
-                    GUILayout.EndHorizontal();
-
                     EditorGUILayout.PropertyField(serializedObject.FindProperty("allowedUseControllers"));
                     EditorGUILayout.PropertyField(serializedObject.FindProperty("hideControllerOnUse"));
 

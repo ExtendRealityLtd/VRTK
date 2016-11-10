@@ -1076,6 +1076,7 @@ This directory contains all of the toolkit scripts that add VR functionality to 
  * [Interact Touch](#interact-touch-vrtk_interacttouch)
  * [Interact Grab](#interact-grab-vrtk_interactgrab)
  * [Interact Use](#interact-use-vrtk_interactuse)
+ * [Interact Haptics](#interact-haptics-vrtk_interacthaptics)
  * [Object Auto Grab](#object-auto-grab-vrtk_objectautograb)
  * [Player Climb](#player-climb-vrtk_playerclimb)
  * [Dash Teleport](#dash-teleport-vrtk_dashteleport)
@@ -2664,7 +2665,6 @@ The highlighting of an Interactable Object is defaulted to use the `VRTK_Materia
 
  * **Highlight On Touch:** The object will only highlight when a controller touches it if this is checked.
  * **Touch Highlight Color:** The colour to highlight the object when it is touched. This colour will override any globally set colour (for instance on the `VRTK_InteractTouch` script).
- * **Rumble On Touch:** The haptic feedback on the controller can be triggered upon touching the object, the `Strength` denotes the strength of the pulse, the `Duration` denotes the length of time.
  * **Allowed Touch Controllers:** Determines which controller can initiate a touch action.
  * **Hide Controller On Touch:** Optionally override the controller setting.
  * **Is Grabbable:** Determines if the object can be grabbed.
@@ -2673,7 +2673,6 @@ The highlighting of an Interactable Object is defaulted to use the `VRTK_Materia
  * **Custom Secondary Action:** The script to utilise to process the secondary controller action when a secondary grab attempt is made.
  * **Hold Button To Grab:** If this is checked then the grab button on the controller needs to be continually held down to keep grabbing. If this is unchecked the grab button toggles the grab action with one button press to grab and another to release.
  * **Grab Override Button:** If this is set to `Undefined` then the global grab alias button will grab the object, setting it to any other button will ensure the override button is used to grab this specific interactable object.
- * **Rumble On Grab:** The haptic feedback on the controller can be triggered upon grabbing the object, the `Strength` denotes the strength of the pulse, the `Duration` denotes the length of time.
  * **Allowed Grab Controllers:** Determines which controller can initiate a grab action.
  * **Precision Snap:** If this is checked then when the controller grabs the object, it will grab it with precision and pick it up at the particular point on the object the controller is touching.
  * **Right Snap Handle:** A Transform provided as an empty game object which must be the child of the item being grabbed and serves as an orientation point to rotate and position the grabbed item in relation to the right handed controller. If no Right Snap Handle is provided but a Left Snap Handle is provided, then the Left Snap Handle will be used in place. If no Snap Handle is provided then the object will be grabbed at its central point. Not required for `Precision Snap`.
@@ -2691,7 +2690,6 @@ The highlighting of an Interactable Object is defaulted to use the `VRTK_Materia
  * **Hold Button To Use:** If this is checked then the use button on the controller needs to be continually held down to keep using. If this is unchecked the the use button toggles the use action with one button press to start using and another to stop using.
  * **Use Override Button:** If this is set to `Undefined` then the global use alias button will use the object, setting it to any other button will ensure the override button is used to use this specific interactable object.
  * **Pointer Activates Use Action:** If this is checked then when a World Pointer beam (projected from the controller) hits the interactable object, if the object has `Hold Button To Use` unchecked then whilst the pointer is over the object it will run it's `Using` method. If `Hold Button To Use` is unchecked then the `Using` method will be run when the pointer is deactivated. The world pointer will not throw the `Destination Set` event if it is affecting an interactable object with this setting checked as this prevents unwanted teleporting from happening when using an object with a pointer.
- * **Rumble On Use:** The haptic feedback on the controller can be triggered upon using the object, the `Strength` denotes the strength of the pulse, the `Duration` denotes the length of time.
  * **Allowed Use Controllers:** Determines which controller can initiate a use action.
  * **Hide Controller On Use:** Optionally override the controller setting.
 
@@ -3488,6 +3486,61 @@ The ForceResetUsing will force the controller to stop using the currently touche
 `VRTK/Examples/006_Controller_UsingADoor` simulates using a door object to open and close it. It also has a cube on the floor that can be grabbed to show how interactable objects can be usable or grabbable.
 
 `VRTK/Examples/008_Controller_UsingAGrabbedObject` which shows that objects can be grabbed with one button and used with another (e.g. firing a gun).
+
+---
+
+## Interact Haptics (VRTK_InteractHaptics)
+
+### Overview
+
+The Interact Haptics script is attached along side the Interactable Object script and provides controller haptics on touch, grab and use of the object.
+
+### Inspector Parameters
+
+ * **Strength On Touch:** Denotes how strong the rumble in the controller will be on touch.
+ * **Duration On Touch:** Denotes how long the rumble in the controller will last on touch.
+ * **Interval On Touch:** Denotes interval betweens rumble in the controller on touch.
+ * **Strength On Grab:** Denotes how strong the rumble in the controller will be on grab.
+ * **Duration On Grab:** Denotes how long the rumble in the controller will last on grab.
+ * **Interval On Grab:** Denotes interval betweens rumble in the controller on grab.
+ * **Strength On Use:** Denotes how strong the rumble in the controller will be on use.
+ * **Duration On Use:** Denotes how long the rumble in the controller will last on use.
+ * **Interval On Use:** Denotes interval betweens rumble in the controller on use.
+
+### Class Methods
+
+#### HapticsOnTouch/1
+
+  > `public void HapticsOnTouch(VRTK_ControllerActions controllerActions)`
+
+  * Parameters
+   * `VRTK_ControllerActions controllerActions` - The controller to activate the haptic feedback on.
+  * Returns
+   * _none_
+
+The HapticsOnTouch method triggers the haptic feedback on the given controller for the settings associated with touch.
+
+#### HapticsOnGrab/1
+
+  > `public void HapticsOnGrab(VRTK_ControllerActions controllerActions)`
+
+  * Parameters
+   * `VRTK_ControllerActions controllerActions` - The controller to activate the haptic feedback on.
+  * Returns
+   * _none_
+
+The HapticsOnGrab method triggers the haptic feedback on the given controller for the settings associated with grab.
+
+#### HapticsOnUse/1
+
+  > `public void HapticsOnUse(VRTK_ControllerActions controllerActions)`
+
+  * Parameters
+   * `VRTK_ControllerActions controllerActions` - The controller to activate the haptic feedback on.
+  * Returns
+   * _none_
+
+The HapticsOnUse method triggers the haptic feedback on the given controller for the settings associated with use.
 
 ---
 

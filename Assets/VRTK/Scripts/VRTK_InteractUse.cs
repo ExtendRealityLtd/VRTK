@@ -146,6 +146,15 @@ namespace VRTK
             }
         }
 
+        private void AttemptHaptics()
+        {
+            var doHaptics = usingObject.GetComponentInParent<VRTK_InteractHaptics>();
+            if (doHaptics)
+            {
+                doHaptics.HapticsOnUse(controllerActions);
+            }
+        }
+
         private void UseInteractedObject(GameObject touchedObject)
         {
             if ((usingObject == null || usingObject != touchedObject) && IsObjectUsable(touchedObject))
@@ -163,6 +172,7 @@ namespace VRTK
                 currentControllerHideState = controllerActions.IsControllerVisible();
                 OnControllerUseInteractableObject(interactTouch.SetControllerInteractEvent(usingObject));
                 usingObjectScript.StartUsing(gameObject);
+                AttemptHaptics();
 
                 if (updatedHideControllerOnUse)
                 {
@@ -171,12 +181,6 @@ namespace VRTK
                 else
                 {
                     controllerActions.ToggleControllerModel(true, usingObject);
-                }
-
-                var rumbleAmount = usingObjectScript.rumbleOnUse;
-                if (!rumbleAmount.Equals(Vector2.zero))
-                {
-                    controllerActions.TriggerHapticPulse((ushort)rumbleAmount.y, rumbleAmount.x, 0.05f);
                 }
             }
         }

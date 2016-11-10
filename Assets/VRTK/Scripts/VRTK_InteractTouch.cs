@@ -250,12 +250,15 @@ namespace VRTK
 
         private void CheckRumbleController(VRTK_InteractableObject touchedObjectScript)
         {
-            var rumbleAmount = touchedObjectScript.rumbleOnTouch;
-            if (!rumbleAmount.Equals(Vector2.zero) && !triggerRumble)
+            if (!triggerRumble)
             {
-                triggerRumble = true;
-                controllerActions.TriggerHapticPulse((ushort)rumbleAmount.y, rumbleAmount.x, 0.05f);
-                Invoke("ResetTriggerRumble", rumbleAmount.x);
+                var doHaptics = touchedObject.GetComponentInParent<VRTK_InteractHaptics>();
+                if (doHaptics)
+                {
+                    triggerRumble = true;
+                    doHaptics.HapticsOnTouch(controllerActions);
+                    Invoke("ResetTriggerRumble", doHaptics.durationOnTouch);
+                }
             }
         }
 
