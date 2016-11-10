@@ -368,6 +368,15 @@ namespace VRTK
             }
         }
 
+        private void SetContainer()
+        {
+            var findContainer = transform.FindChild(HIGHLIGHT_CONTAINER_NAME);
+            if (findContainer)
+            {
+                highlightContainer = findContainer.gameObject;
+            }
+        }
+
         private void GenerateObjects()
         {
             GenerateHighlightObject();
@@ -398,7 +407,7 @@ namespace VRTK
                     isSnapped = true;
                     currentSnappedObject = ioCheck.gameObject;
 
-                    transitionInPlace = StartCoroutine(UpdateTransformDimensions(ioCheck, highlightObject.transform.position, highlightObject.transform.rotation, newLocalScale, snapDuration));
+                    transitionInPlace = StartCoroutine(UpdateTransformDimensions(ioCheck, highlightContainer.transform.position, highlightContainer.transform.rotation, newLocalScale, snapDuration));
 
                     ioCheck.ToggleSnapDropZone(this, true);
                 }
@@ -449,6 +458,11 @@ namespace VRTK
                 ioTransform.localScale = Vector3.Lerp(startScale, endScale, (elapsedTime / duration));
                 yield return null;
             }
+
+            //Force all to the last setting in case anything has moved during the transition
+            ioTransform.position = endPosition;
+            ioTransform.rotation = endRotation;
+            ioTransform.localScale = endScale;
 
             ioCheck.ToggleKinematic(storedKinematicState);
             SetDropSnapType(ioCheck);
@@ -585,6 +599,7 @@ namespace VRTK
             {
                 highlightObject.SetActive(false);
             }
+            SetContainer();
         }
 
         private void DeleteHighlightObject()
