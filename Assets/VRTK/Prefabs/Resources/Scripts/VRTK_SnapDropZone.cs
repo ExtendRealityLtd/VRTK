@@ -174,7 +174,7 @@ namespace VRTK
         /// <param name="objectToSnap">The GameObject to attempt to snap.</param>
         public void ForceSnap(GameObject objectToSnap)
         {
-            var ioCheck = objectToSnap.GetComponent<VRTK_InteractableObject>();
+            var ioCheck = objectToSnap.GetComponentInParent<VRTK_InteractableObject>();
             if (ioCheck)
             {
                 StopCoroutine("AttemptForceSnapAtEndOfFrame");
@@ -280,7 +280,7 @@ namespace VRTK
 
         private VRTK_InteractableObject ValidSnapObject(GameObject checkObject, bool grabState)
         {
-            var ioCheck = checkObject.GetComponent<VRTK_InteractableObject>();
+            var ioCheck = checkObject.GetComponentInParent<VRTK_InteractableObject>();
             return (ioCheck && ioCheck.IsGrabbed() == grabState && !Utilities.TagOrScriptCheck(checkObject, validObjectTagOrScriptListPolicy, validObjectWithTagOrClass, true) ? ioCheck : null);
         }
 
@@ -322,7 +322,7 @@ namespace VRTK
             //If there is a current valid snap object
             if (currentValidSnapObject)
             {
-                var currentIOCheck = currentValidSnapObject.GetComponent<VRTK_InteractableObject>();
+                var currentIOCheck = currentValidSnapObject.GetComponentInParent<VRTK_InteractableObject>();
                 //and the interactbale object associated with it has been snapped to another zone, then unset the current valid snap object
                 if (currentIOCheck && currentIOCheck.GetStoredSnapDropZone() != null && currentIOCheck.GetStoredSnapDropZone() != gameObject)
                 {
