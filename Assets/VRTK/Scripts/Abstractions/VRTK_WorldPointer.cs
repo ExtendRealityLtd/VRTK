@@ -364,7 +364,7 @@ namespace VRTK
             if (target)
             {
                 NavMeshHit hit;
-                validNavMeshLocation = NavMesh.SamplePosition(destinationPosition, out hit, 0.1f, NavMesh.AllAreas);
+                validNavMeshLocation = NavMesh.SamplePosition(destinationPosition, out hit, navMeshCheckDistance, NavMesh.AllAreas);
             }
             if (navMeshCheckDistance == 0f)
             {
