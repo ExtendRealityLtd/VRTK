@@ -125,18 +125,10 @@ namespace VRTK
         {
             if (obj)
             {
-                var io = obj.GetComponent<VRTK_InteractableObject>();
+                var io = obj.GetComponentInParent<VRTK_InteractableObject>();
                 if (io)
                 {
                     return io.enabled;
-                }
-                else
-                {
-                    io = obj.GetComponentInParent<VRTK_InteractableObject>();
-                    if (io)
-                    {
-                        return io.enabled;
-                    }
                 }
             }
             return false;
@@ -224,16 +216,8 @@ namespace VRTK
 
         private GameObject GetColliderInteractableObject(Collider collider)
         {
-            GameObject found = null;
-            if (collider.gameObject.GetComponent<VRTK_InteractableObject>())
-            {
-                found = collider.gameObject;
-            }
-            else if (collider.transform.parent && collider.gameObject.GetComponentInParent<VRTK_InteractableObject>())
-            {
-                found = collider.gameObject.GetComponentInParent<VRTK_InteractableObject>().gameObject;
-            }
-            return found;
+            var checkIO = collider.GetComponentInParent<VRTK_InteractableObject>();
+            return (checkIO ? checkIO.gameObject : null);
         }
 
         private void AddActiveCollider(Collider collider)
