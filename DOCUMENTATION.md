@@ -2663,7 +2663,6 @@ The highlighting of an Interactable Object is defaulted to use the `VRTK_Materia
 
 ### Inspector Parameters
 
- * **Highlight On Touch:** The object will only highlight when a controller touches it if this is checked.
  * **Touch Highlight Color:** The colour to highlight the object when it is touched. This colour will override any globally set colour (for instance on the `VRTK_InteractTouch` script).
  * **Allowed Touch Controllers:** Determines which controller can initiate a touch action.
  * **Hide Controller On Touch:** Optionally override the controller setting.
@@ -2866,19 +2865,7 @@ The StopUsing method is called automatically when the object has stopped being u
   * Returns
    * _none_
 
-The ToggleHighlight/1 method is used as a shortcut to disable highlights whilst keeping the same method signature. It should always be used with `false` and it calls ToggleHighlight/2 with a `Color.clear`.
-
-#### ToggleHighlight/2
-
-  > `public virtual void ToggleHighlight(bool toggle, Color globalHighlightColor)`
-
-  * Parameters
-   * `bool toggle` - The state to determine whether to activate or deactivate the highlight. `true` will enable the highlight and `false` will remove the highlight.
-   * `Color globalHighlightColor` - The colour to use when highlighting the object.
-  * Returns
-   * _none_
-
-The ToggleHighlight/2 method is used to turn on or off the colour highlight of the object.
+The ToggleHighlight method is used to turn on or off the colour highlight of the object.
 
 #### PauseCollisions/0
 
@@ -3197,7 +3184,6 @@ The Interact Touch script is attached to a Controller object within the `[Camera
 
  * **Hide Controller On Touch:** Hides the controller model when a valid touch occurs.
  * **Hide Controller Delay:** The amount of seconds to wait before hiding the controller on touch.
- * **Global Touch Highlight Color:** If the interactable object can be highlighted when it's touched but no local colour is set then this global colour is used.
  * **Custom Rigidbody Object:** If a custom rigidbody and collider for the rigidbody are required, then a gameobject containing a rigidbody and collider can be passed into this parameter. If this is empty then the rigidbody and collider will be auto generated at runtime to match the HTC Vive default controller.
 
 ### Class Events

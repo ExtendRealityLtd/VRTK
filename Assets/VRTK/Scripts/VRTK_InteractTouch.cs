@@ -35,8 +35,6 @@ namespace VRTK
         public bool hideControllerOnTouch = false;
         [Tooltip("The amount of seconds to wait before hiding the controller on touch.")]
         public float hideControllerDelay = 0f;
-        [Tooltip("If the interactable object can be highlighted when it's touched but no local colour is set then this global colour is used.")]
-        public Color globalTouchHighlightColor = Color.clear;
         [Tooltip("If a custom rigidbody and collider for the rigidbody are required, then a gameobject containing a rigidbody and collider can be passed into this parameter. If this is empty then the rigidbody and collider will be auto generated at runtime to match the HTC Vive default controller.")]
         public GameObject customRigidbodyObject;
 
@@ -299,7 +297,7 @@ namespace VRTK
                 StoreTouchedObjectColliders(collider);
                 CheckButtonOverrides(touchedObjectScript);
 
-                touchedObjectScript.ToggleHighlight(true, globalTouchHighlightColor);
+                touchedObjectScript.ToggleHighlight(true);
 
                 OnControllerTouchInteractableObject(SetControllerInteractEvent(touchedObject));
                 touchedObjectScript.StartTouching(gameObject);

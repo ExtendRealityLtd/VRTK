@@ -36,13 +36,7 @@
             if (viewTouch)
             {
                 EditorGUI.indentLevel++;
-
-                targ.highlightOnTouch = EditorGUILayout.Toggle(VRTK_EditorUtilities.BuildGUIContent<VRTK_InteractableObject>("highlightOnTouch"), targ.highlightOnTouch);
-                if (targ.highlightOnTouch)
-                {
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("touchHighlightColor"));
-                }
-
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("touchHighlightColor"));
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("allowedTouchControllers"));
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("hideControllerOnTouch"));
 
@@ -71,7 +65,7 @@
 
                     EditorGUILayout.PropertyField(serializedObject.FindProperty("validDrop"));
                     targ.secondaryGrabAction = (VRTK_InteractableObject.SecondaryControllerActions)EditorGUILayout.EnumPopup(VRTK_EditorUtilities.BuildGUIContent<VRTK_InteractableObject>("secondaryGrabAction"), targ.secondaryGrabAction);
-                    if(targ.secondaryGrabAction == VRTK_InteractableObject.SecondaryControllerActions.Custom_Action)
+                    if (targ.secondaryGrabAction == VRTK_InteractableObject.SecondaryControllerActions.Custom_Action)
                     {
                         EditorGUILayout.PropertyField(serializedObject.FindProperty("customSecondaryAction"));
                     }

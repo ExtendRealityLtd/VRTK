@@ -110,8 +110,6 @@ namespace VRTK
 
         [Header("Touch Interactions", order = 1)]
 
-        [Tooltip("The object will only highlight when a controller touches it if this is checked.")]
-        public bool highlightOnTouch = false;
         [Tooltip("The colour to highlight the object when it is touched. This colour will override any globally set colour (for instance on the `VRTK_InteractTouch` script).")]
         public Color touchHighlightColor = Color.clear;
         [Tooltip("Determines which controller can initiate a touch action.")]
@@ -128,7 +126,7 @@ namespace VRTK
         [Tooltip("Determines what should happen to the object if another grab attempt is made by a secondary controller if the object is already being grabbed.")]
         public SecondaryControllerActions secondaryGrabAction = SecondaryControllerActions.Swap_Controller;
         [Tooltip("The script to utilise to process the secondary controller action when a secondary grab attempt is made.")]
-        public VRTK.SecondaryControllerGrabActions.VRTK_BaseGrabAction customSecondaryAction;
+        public SecondaryControllerGrabActions.VRTK_BaseGrabAction customSecondaryAction;
         [Tooltip("If this is checked then the grab button on the controller needs to be continually held down to keep grabbing. If this is unchecked the grab button toggles the grab action with one button press to grab and another to release.")]
         public bool holdButtonToGrab = true;
         [Tooltip("If this is set to `Undefined` then the global grab alias button will grab the object, setting it to any other button will ensure the override button is used to grab this specific interactable object.")]
@@ -428,34 +426,18 @@ namespace VRTK
         }
 
         /// <summary>
-        /// The ToggleHighlight/1 method is used as a shortcut to disable highlights whilst keeping the same method signature. It should always be used with `false` and it calls ToggleHighlight/2 with a `Color.clear`.
+        /// The ToggleHighlight method is used to turn on or off the colour highlight of the object.
         /// </summary>
         /// <param name="toggle">The state to determine whether to activate or deactivate the highlight. `true` will enable the highlight and `false` will remove the highlight.</param>
         public virtual void ToggleHighlight(bool toggle)
         {
-            ToggleHighlight(toggle, Color.clear);
-        }
+            InitialiseHighlighter();
 
-        /// <summary>
-        /// The ToggleHighlight/2 method is used to turn on or off the colour highlight of the object.
-        /// </summary>
-        /// <param name="toggle">The state to determine whether to activate or deactivate the highlight. `true` will enable the highlight and `false` will remove the highlight.</param>
-        /// <param name="globalHighlightColor">The colour to use when highlighting the object.</param>
-        public virtual void ToggleHighlight(bool toggle, Color globalHighlightColor)
-        {
-            if (highlightOnTouch && objectHighlighter == null)
-            {
-                InitialiseHighlighter();
-            }
-            if (objectHighlighter && highlightOnTouch)
+            if (touchHighlightColor != Color.clear && objectHighlighter)
             {
                 if (toggle && !IsGrabbed())
                 {
-                    Color color = (touchHighlightColor != Color.clear ? touchHighlightColor : globalHighlightColor);
-                    if (color != Color.clear)
-                    {
-                        objectHighlighter.Highlight(color);
-                    }
+                    objectHighlighter.Highlight(touchHighlightColor);
                 }
                 else
                 {
@@ -872,7 +854,7 @@ namespace VRTK
 
         protected virtual void InitialiseHighlighter()
         {
-            if (highlightOnTouch)
+            if (touchHighlightColor != Color.clear && !objectHighlighter)
             {
                 autoHighlighter = false;
                 objectHighlighter = Utilities.GetActiveHighlighter(gameObject);
