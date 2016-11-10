@@ -938,6 +938,7 @@ The Axis Scale Grab Action provides a mechanism to scale objects when they are g
  * **Lock X Axis:** If checked the current X Axis of the object won't be scaled
  * **Lock Y Axis:** If checked the current Y Axis of the object won't be scaled
  * **Lock Z Axis:** If checked the current Z Axis of the object won't be scaled
+ * **Uniform Scaling:** If checked all the axes will be scaled together (unless locked)
 
 ### Class Methods
 
