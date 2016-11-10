@@ -1077,6 +1077,7 @@ This directory contains all of the toolkit scripts that add VR functionality to 
  * [Interact Grab](#interact-grab-vrtk_interactgrab)
  * [Interact Use](#interact-use-vrtk_interactuse)
  * [Interact Haptics](#interact-haptics-vrtk_interacthaptics)
+ * [Interact Controller Appearance](#interact-controller-appearance-vrtk_interactcontrollerappearance)
  * [Object Auto Grab](#object-auto-grab-vrtk_objectautograb)
  * [Player Climb](#player-climb-vrtk_playerclimb)
  * [Dash Teleport](#dash-teleport-vrtk_dashteleport)
@@ -2665,19 +2666,17 @@ The highlighting of an Interactable Object is defaulted to use the `VRTK_Materia
 
  * **Touch Highlight Color:** The colour to highlight the object when it is touched. This colour will override any globally set colour (for instance on the `VRTK_InteractTouch` script).
  * **Allowed Touch Controllers:** Determines which controller can initiate a touch action.
- * **Hide Controller On Touch:** Optionally override the controller setting.
  * **Is Grabbable:** Determines if the object can be grabbed.
+ * **Hold Button To Grab:** If this is checked then the grab button on the controller needs to be continually held down to keep grabbing. If this is unchecked the grab button toggles the grab action with one button press to grab and another to release.
+ * **Stay Grabbed On Teleport:** If this is checked then the object will stay grabbed to the controller when a teleport occurs. If it is unchecked then the object will be released when a teleport occurs.
  * **Valid Drop:** Determines in what situation the object can be dropped by the controller grab button.
  * **Secondary Grab Action:** Determines what should happen to the object if another grab attempt is made by a secondary controller if the object is already being grabbed.
  * **Custom Secondary Action:** The script to utilise to process the secondary controller action when a secondary grab attempt is made.
- * **Hold Button To Grab:** If this is checked then the grab button on the controller needs to be continually held down to keep grabbing. If this is unchecked the grab button toggles the grab action with one button press to grab and another to release.
  * **Grab Override Button:** If this is set to `Undefined` then the global grab alias button will grab the object, setting it to any other button will ensure the override button is used to grab this specific interactable object.
  * **Allowed Grab Controllers:** Determines which controller can initiate a grab action.
  * **Precision Snap:** If this is checked then when the controller grabs the object, it will grab it with precision and pick it up at the particular point on the object the controller is touching.
  * **Right Snap Handle:** A Transform provided as an empty game object which must be the child of the item being grabbed and serves as an orientation point to rotate and position the grabbed item in relation to the right handed controller. If no Right Snap Handle is provided but a Left Snap Handle is provided, then the Left Snap Handle will be used in place. If no Snap Handle is provided then the object will be grabbed at its central point. Not required for `Precision Snap`.
  * **Left Snap Handle:** A Transform provided as an empty game object which must be the child of the item being grabbed and serves as an orientation point to rotate and position the grabbed item in relation to the left handed controller. If no Left Snap Handle is provided but a Right Snap Handle is provided, then the Right Snap Handle will be used in place. If no Snap Handle is provided then the object will be grabbed at its central point. Not required for `Precision Snap`.
- * **Hide Controller On Grab:** Optionally override the controller setting.
- * **Stay Grabbed On Teleport:** If this is checked then the object will stay grabbed to the controller when a teleport occurs. If it is unchecked then the object will be released when a teleport occurs.
  * **Grab Attach Mechanic:** This determines how the grabbed item will be attached to the controller when it is grabbed.
  * **Detach Threshold:** The force amount when to detach the object from the grabbed controller. If the controller tries to exert a force higher than this threshold on the object (from pulling it through another object or pushing it into another object) then the joint holding the object to the grabbing controller will break and the object will no longer be grabbed. This also works with Tracked Object grabbing but determines how far the controller is from the object before breaking the grab. Only required for `Fixed Joint`, `Spring Joint`, `Track Object` and `Rotator Track`.
  * **Spring Joint Strength:** The strength of the spring holding the object to the controller. A low number will mean the spring is very loose and the object will require more force to move it, a high number will mean a tight spring meaning less force is required to move it. Only required for `Spring Joint`.
@@ -2687,10 +2686,9 @@ The highlighting of an Interactable Object is defaulted to use the `VRTK_Materia
  * **Is Usable:** Determines if the object can be used.
  * **Use Only If Grabbed:** If this is checked the object can be used only if it is currently being grabbed.
  * **Hold Button To Use:** If this is checked then the use button on the controller needs to be continually held down to keep using. If this is unchecked the the use button toggles the use action with one button press to start using and another to stop using.
- * **Use Override Button:** If this is set to `Undefined` then the global use alias button will use the object, setting it to any other button will ensure the override button is used to use this specific interactable object.
  * **Pointer Activates Use Action:** If this is checked then when a World Pointer beam (projected from the controller) hits the interactable object, if the object has `Hold Button To Use` unchecked then whilst the pointer is over the object it will run it's `Using` method. If `Hold Button To Use` is unchecked then the `Using` method will be run when the pointer is deactivated. The world pointer will not throw the `Destination Set` event if it is affecting an interactable object with this setting checked as this prevents unwanted teleporting from happening when using an object with a pointer.
+ * **Use Override Button:** If this is set to `Undefined` then the global use alias button will use the object, setting it to any other button will ensure the override button is used to use this specific interactable object.
  * **Allowed Use Controllers:** Determines which controller can initiate a use action.
- * **Hide Controller On Use:** Optionally override the controller setting.
 
 ### Class Variables
 
@@ -2705,10 +2703,6 @@ The highlighting of an Interactable Object is defaulted to use the `VRTK_Materia
   * `Both` - Both controllers are allowed to interact.
   * `Left_Only` - Only the left controller is allowed to interact.
   * `Right_Only` - Only the right controller is allowed to interact.
- * `public enum ControllerHideMode` - Hide controller state.
-  * `Default` - Use the hide settings from the controller.
-  * `OverrideHide` - Hide the controller when interacting, overriding controller settings.
-  * `OverrideDontHide` - Don't hide the controller when interacting, overriding controller settings.
  * `public enum ValidDropTypes` - The types of valid situations that the object can be released from grab.
   * `No_Drop` - The object cannot be dropped via the controller
   * `Drop_Anywhere` - The object can be dropped anywhere in the scene via the controller.
@@ -2744,18 +2738,6 @@ Adding the `VRTK_InteractableObject_UnityEvents` component to `VRTK_Interactable
  * `GameObject interactingObject` - The object that is initiating the interaction (e.g. a controller).
 
 ### Class Methods
-
-#### CheckHideMode/2
-
-  > `public bool CheckHideMode(bool defaultMode, ControllerHideMode overrideMode)`
-
-  * Parameters
-   * `bool defaultMode` - The default setting of the controller. true = hide, false = don't hide.
-   * `ControllerHideMode overrideMode` - The override setting of the object.
-  * Returns
-   * `bool` - Returns `true` if the combination of `defaultMode` and `overrideMode` lead to "hide controller.
-
-The CheckHideMode method is a simple service method used only by some scripts (e.g. InteractTouch InteractGrab InteractUse) to calculate the "hide controller" condition according to the default controller settings and the interactive object override method.
 
 #### IsTouched/0
 
@@ -3182,8 +3164,6 @@ The Interact Touch script is attached to a Controller object within the `[Camera
 
 ### Inspector Parameters
 
- * **Hide Controller On Touch:** Hides the controller model when a valid touch occurs.
- * **Hide Controller Delay:** The amount of seconds to wait before hiding the controller on touch.
  * **Custom Rigidbody Object:** If a custom rigidbody and collider for the rigidbody are required, then a gameobject containing a rigidbody and collider can be passed into this parameter. If this is empty then the rigidbody and collider will be auto generated at runtime to match the HTC Vive default controller.
 
 ### Class Events
@@ -3319,8 +3299,6 @@ The interactable objects require a collider to activate the trigger and a rigidb
 ### Inspector Parameters
 
  * **Controller Attach Point:** The rigidbody point on the controller model to snap the grabbed object to (defaults to the tip).
- * **Hide Controller On Grab:** Hides the controller model when a valid grab occurs.
- * **Hide Controller Delay:** The amount of seconds to wait before hiding the controller on grab.
  * **Grab Precognition:** An amount of time between when the grab button is pressed to when the controller is touching something to grab it. For example, if an object is falling at a fast rate, then it is very hard to press the grab button in time to catch the object due to human reaction times. A higher number here will mean the grab button can be pressed before the controller touches the object and when the collision takes place, if the grab button is still being held down then the grab action will be successful.
  * **Throw Multiplier:** An amount to multiply the velocity of any objects being thrown. This can be useful when scaling up the `[CameraRig]` to simulate being able to throw items further.
  * **Create Rigid Body When Not Touching:** If this is checked and the controller is not touching an Interactable Object when the grab button is pressed then a rigid body is added to the controller to allow the controller to push other rigid body objects around.
@@ -3377,17 +3355,6 @@ The AttemptGrab method will attempt to grab the currently touched object without
 
 The GetGrabbedObject method returns the current object being grabbed by the controller.
 
-#### GetControllerVisibilityState/0
-
-  > `public bool GetControllerVisibilityState()`
-
-  * Parameters
-   * _none_
-  * Returns
-   * `bool` - Returns true if the expected grabbed state of the controller visibility should be visible, and returns false if the expected state should be hidden.
-
-The GetControllerVisibilityState method returns the current expected controller visibility state from the grabbed action.
-
 ### Example
 
 `VRTK/Examples/005_Controller/BasicObjectGrabbing` demonstrates the grabbing of interactable objects that have the `VRTK_InteractableObject` script attached to them. The objects can be picked up and thrown around.
@@ -3409,11 +3376,6 @@ The Controller object also requires the `VRTK_InteractTouch` script to be attach
 An object can be used if the Controller touches a game object which contains the `VRTK_InteractableObject` script and has the flag `isUsable` set to `true`.
 
 If a valid interactable object is usable then pressing the set `Use` button on the Controller (default is `Trigger`) will call the `StartUsing` method on the touched interactable object.
-
-### Inspector Parameters
-
- * **Hide Controller On Use:** Hides the controller model when a valid use action starts.
- * **Hide Controller Delay:** The amount of seconds to wait before hiding the controller on use.
 
 ### Class Events
 
@@ -3471,7 +3433,7 @@ The ForceResetUsing will force the controller to stop using the currently touche
 
 `VRTK/Examples/006_Controller_UsingADoor` simulates using a door object to open and close it. It also has a cube on the floor that can be grabbed to show how interactable objects can be usable or grabbable.
 
-`VRTK/Examples/008_Controller_UsingAGrabbedObject` which shows that objects can be grabbed with one button and used with another (e.g. firing a gun).
+`VRTK/Examples/008_Controller_UsingAGrabbedObject` shows that objects can be grabbed with one button and used with another (e.g. firing a gun).
 
 ---
 
@@ -3527,6 +3489,68 @@ The HapticsOnGrab method triggers the haptic feedback on the given controller fo
    * _none_
 
 The HapticsOnUse method triggers the haptic feedback on the given controller for the settings associated with use.
+
+---
+
+## Interact Controller Appearance (VRTK_InteractControllerAppearance)
+
+### Overview
+
+The Interact Controller Appearance script is used to determine whether the controller model should be visible or hidden on touch, grab or use.
+
+### Inspector Parameters
+
+ * **Hide Controller On Touch:** Hides the controller model when a valid touch occurs.
+ * **Hide Delay On Touch:** The amount of seconds to wait before hiding the controller on touch.
+ * **Hide Controller On Grab:** Hides the controller model when a valid grab occurs.
+ * **Hide Delay On Grab:** The amount of seconds to wait before hiding the controller on grab.
+ * **Hide Controller On Use:** Hides the controller model when a valid use occurs.
+ * **Hide Delay On Use:** The amount of seconds to wait before hiding the controller on use.
+
+### Class Methods
+
+#### ToggleControllerOnTouch/3
+
+  > `public void ToggleControllerOnTouch(bool showController, VRTK_ControllerActions controllerActions, GameObject obj)`
+
+  * Parameters
+   * `bool showController` - If true then the controller will attempt to be made visible when no longer touching, if false then the controller will be hidden on touch.
+   * `VRTK_ControllerActions controllerActions` - The controller to apply the visibility state to.
+   * `GameObject obj` - The object that is currently being interacted with by the controller which is passed through to the visibility to prevent the object from being hidden as well.
+  * Returns
+   * _none_
+
+The ToggleControllerOnTouch method determines whether the controller should be shown or hidden when touching an interactable object.
+
+#### ToggleControllerOnGrab/3
+
+  > `public void ToggleControllerOnGrab(bool showController, VRTK_ControllerActions controllerActions, GameObject obj)`
+
+  * Parameters
+   * `bool showController` - If true then the controller will attempt to be made visible when no longer grabbing, if false then the controller will be hidden on grab.
+   * `VRTK_ControllerActions controllerActions` - The controller to apply the visibility state to.
+   * `GameObject obj` - The object that is currently being interacted with by the controller which is passed through to the visibility to prevent the object from being hidden as well.
+  * Returns
+   * _none_
+
+The ToggleControllerOnGrab method determines whether the controller should be shown or hidden when grabbing an interactable object.
+
+#### ToggleControllerOnUse/3
+
+  > `public void ToggleControllerOnUse(bool showController, VRTK_ControllerActions controllerActions, GameObject obj)`
+
+  * Parameters
+   * `bool showController` - If true then the controller will attempt to be made visible when no longer using, if false then the controller will be hidden on use.
+   * `VRTK_ControllerActions controllerActions` - The controller to apply the visibility state to.
+   * `GameObject obj` - The object that is currently being interacted with by the controller which is passed through to the visibility to prevent the object from being hidden as well.
+  * Returns
+   * _none_
+
+The ToggleControllerOnUse method determines whether the controller should be shown or hidden when using an interactable object.
+
+### Example
+
+`VRTK/Examples/008_Controller_UsingAGrabbedObject` shows that the controller can be hidden when touching, grabbing and using an object.
 
 ---
 

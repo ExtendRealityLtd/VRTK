@@ -31,10 +31,6 @@ namespace VRTK
     [RequireComponent(typeof(VRTK_ControllerActions))]
     public class VRTK_InteractTouch : MonoBehaviour
     {
-        [Tooltip("Hides the controller model when a valid touch occurs.")]
-        public bool hideControllerOnTouch = false;
-        [Tooltip("The amount of seconds to wait before hiding the controller on touch.")]
-        public float hideControllerDelay = 0f;
         [Tooltip("If a custom rigidbody and collider for the rigidbody are required, then a gameobject containing a rigidbody and collider can be passed into this parameter. If this is empty then the rigidbody and collider will be auto generated at runtime to match the HTC Vive default controller.")]
         public GameObject customRigidbodyObject;
 
@@ -50,8 +46,6 @@ namespace VRTK
         private GameObject touchedObject = null;
         private List<Collider> touchedObjectColliders = new List<Collider>();
         private List<Collider> touchedObjectActiveColliders = new List<Collider>();
-
-        private bool updatedHideControllerOnTouch = false;
         private VRTK_ControllerEvents controllerEvents;
         private VRTK_ControllerActions controllerActions;
         private GameObject controllerCollisionDetector;
@@ -237,12 +231,19 @@ namespace VRTK
             touchedObjectActiveColliders.Add(collider);
         }
 
-        private void CheckHideController(VRTK_InteractableObject touchedObjectScript)
+        private void ToggleControllerVisibility(bool visible)
         {
-            updatedHideControllerOnTouch = touchedObjectScript.CheckHideMode(hideControllerOnTouch, touchedObjectScript.hideControllerOnTouch);
-            if (controllerActions.IsControllerVisible() && updatedHideControllerOnTouch)
+            if(touchedObject)
             {
-                Invoke("HideController", hideControllerDelay);
+                var controllerAppearanceScript = touchedObject.GetComponentInParent<VRTK_InteractControllerAppearance>();
+                if(controllerAppearanceScript)
+                {
+                    controllerAppearanceScript.ToggleControllerOnTouch(visible, controllerActions, touchedObject);
+                }
+            }
+            else if (visible)
+            {
+                controllerActions.ToggleControllerModel(true, touchedObject);
             }
         }
 
@@ -298,12 +299,11 @@ namespace VRTK
                 CheckButtonOverrides(touchedObjectScript);
 
                 touchedObjectScript.ToggleHighlight(true);
-
-                OnControllerTouchInteractableObject(SetControllerInteractEvent(touchedObject));
+                ToggleControllerVisibility(false);
+                CheckRumbleController(touchedObjectScript);
                 touchedObjectScript.StartTouching(gameObject);
 
-                CheckHideController(touchedObjectScript);
-                CheckRumbleController(touchedObjectScript);
+                OnControllerTouchInteractableObject(SetControllerInteractEvent(touchedObject));
             }
         }
 
@@ -318,6 +318,7 @@ namespace VRTK
                     StopTouching(touchedObject);
                 }
             }
+
             triggerWasColliding = triggerIsColliding;
             triggerIsColliding = false;
         }
@@ -382,8 +383,6 @@ namespace VRTK
         {
             if (IsObjectInteractable(untouched))
             {
-                OnControllerUntouchInteractableObject(SetControllerInteractEvent(untouched.gameObject));
-
                 var untouchedObjectScript = untouched.GetComponent<VRTK_InteractableObject>();
                 untouchedObjectScript.StopTouching(gameObject);
                 ResetButtonOverrides(untouchedObjectScript.IsGrabbed(gameObject), untouchedObjectScript.IsUsing(gameObject));
@@ -393,11 +392,8 @@ namespace VRTK
                 }
             }
 
-            if (updatedHideControllerOnTouch)
-            {
-                controllerActions.ToggleControllerModel(true, touchedObject);
-            }
-
+            ToggleControllerVisibility(true);
+            OnControllerUntouchInteractableObject(SetControllerInteractEvent(untouched.gameObject));
             CleanupEndTouch();
         }
 

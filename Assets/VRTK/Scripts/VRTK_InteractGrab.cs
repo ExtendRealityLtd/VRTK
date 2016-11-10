@@ -29,10 +29,6 @@ namespace VRTK
     {
         [Tooltip("The rigidbody point on the controller model to snap the grabbed object to (defaults to the tip).")]
         public Rigidbody controllerAttachPoint = null;
-        [Tooltip("Hides the controller model when a valid grab occurs.")]
-        public bool hideControllerOnGrab = false;
-        [Tooltip("The amount of seconds to wait before hiding the controller on grab.")]
-        public float hideControllerDelay = 0f;
         [Tooltip("An amount of time between when the grab button is pressed to when the controller is touching something to grab it. For example, if an object is falling at a fast rate, then it is very hard to press the grab button in time to catch the object due to human reaction times. A higher number here will mean the grab button can be pressed before the controller touches the object and when the collision takes place, if the grab button is still being held down then the grab action will be successful.")]
         public float grabPrecognition = 0f;
         [Tooltip("An amount to multiply the velocity of any objects being thrown. This can be useful when scaling up the `[CameraRig]` to simulate being able to throw items further.")]
@@ -52,14 +48,12 @@ namespace VRTK
         private Joint controllerAttachJoint;
         private GameObject grabbedObject = null;
         private bool influencingGrabbedObject = false;
-        private bool updatedHideControllerOnGrab = false;
         private VRTK_InteractTouch interactTouch;
         private VRTK_ControllerActions controllerActions;
         private VRTK_ControllerEvents controllerEvents;
         private int grabEnabledState = 0;
         private float grabPrecognitionTimer = 0f;
         private GameObject undroppableGrabbedObject;
-        private bool controllerVisibilityState = true;
 
         public virtual void OnControllerGrabInteractableObject(ObjectInteractEventArgs e)
         {
@@ -108,15 +102,6 @@ namespace VRTK
         public GameObject GetGrabbedObject()
         {
             return grabbedObject;
-        }
-
-        /// <summary>
-        /// The GetControllerVisibilityState method returns the current expected controller visibility state from the grabbed action.
-        /// </summary>
-        /// <returns>Returns true if the expected grabbed state of the controller visibility should be visible, and returns false if the expected state should be hidden.</returns>
-        public bool GetControllerVisibilityState()
-        {
-            return controllerVisibilityState;
         }
 
         private void Awake()
@@ -398,6 +383,22 @@ namespace VRTK
             }
         }
 
+        private void ToggleControllerVisibility(bool visible)
+        {
+            if (grabbedObject)
+            {
+                var controllerAppearanceScript = grabbedObject.GetComponentInParent<VRTK_InteractControllerAppearance>();
+                if (controllerAppearanceScript)
+                {
+                    controllerAppearanceScript.ToggleControllerOnGrab(visible, controllerActions, grabbedObject);
+                }
+            }
+            else if (visible)
+            {
+                controllerActions.ToggleControllerModel(true, grabbedObject);
+            }
+        }
+
         private void InitGrabbedObject()
         {
             grabbedObject = interactTouch.GetTouchedObject();
@@ -405,13 +406,8 @@ namespace VRTK
             {
                 var grabbedObjectScript = grabbedObject.GetComponent<VRTK_InteractableObject>();
                 ChooseGrabSequence(grabbedObjectScript);
-                updatedHideControllerOnGrab = grabbedObjectScript.CheckHideMode(hideControllerOnGrab, grabbedObjectScript.hideControllerOnGrab);
+                ToggleControllerVisibility(false);
                 OnControllerGrabInteractableObject(interactTouch.SetControllerInteractEvent(grabbedObject));
-            }
-
-            if (updatedHideControllerOnGrab)
-            {
-                Invoke("HideController", hideControllerDelay);
             }
         }
 
@@ -457,15 +453,6 @@ namespace VRTK
             currentGrabbedObject.Grabbed(gameObject);
         }
 
-        private void HideController()
-        {
-            if (grabbedObject != null)
-            {
-                controllerActions.ToggleControllerModel(false, grabbedObject);
-                controllerVisibilityState = false;
-            }
-        }
-
         private void UngrabInteractedObject(bool withThrow)
         {
             if (grabbedObject != null && !influencingGrabbedObject)
@@ -495,27 +482,28 @@ namespace VRTK
             }
         }
 
-        private void InitUngrabbedObject()
+        private void CheckInfluencingObjectOnRelease()
         {
-            if (grabbedObject != null)
-            {
-                grabbedObject.GetComponent<VRTK_InteractableObject>().Ungrabbed(gameObject);
-                grabbedObject.GetComponent<VRTK_InteractableObject>().ToggleHighlight(false);
-            }
-
-            if (updatedHideControllerOnGrab)
-            {
-                controllerActions.ToggleControllerModel(true, grabbedObject);
-                controllerVisibilityState = true;
-            }
-
             if (!influencingGrabbedObject)
             {
                 interactTouch.ForceStopTouching();
             }
             influencingGrabbedObject = false;
+        }
 
+        private void InitUngrabbedObject()
+        {
+            if (grabbedObject != null)
+            {
+                var grabbedObjectScript = grabbedObject.GetComponent<VRTK_InteractableObject>();
+                grabbedObjectScript.Ungrabbed(gameObject);
+                grabbedObjectScript.ToggleHighlight(false);
+            }
+
+            CheckInfluencingObjectOnRelease();
+            ToggleControllerVisibility(true);
             OnControllerUngrabInteractableObject(interactTouch.SetControllerInteractEvent(grabbedObject));
+
             grabEnabledState = 0;
             grabbedObject = null;
         }

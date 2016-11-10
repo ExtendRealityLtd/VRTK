@@ -38,8 +38,6 @@
                 EditorGUI.indentLevel++;
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("touchHighlightColor"));
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("allowedTouchControllers"));
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("hideControllerOnTouch"));
-
                 EditorGUI.indentLevel--;
             }
 
@@ -63,6 +61,8 @@
                 {
                     EditorGUI.indentLevel++;
 
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("holdButtonToGrab"));
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("stayGrabbedOnTeleport"));
                     EditorGUILayout.PropertyField(serializedObject.FindProperty("validDrop"));
                     targ.secondaryGrabAction = (VRTK_InteractableObject.SecondaryControllerActions)EditorGUILayout.EnumPopup(VRTK_EditorUtilities.BuildGUIContent<VRTK_InteractableObject>("secondaryGrabAction"), targ.secondaryGrabAction);
                     if (targ.secondaryGrabAction == VRTK_InteractableObject.SecondaryControllerActions.Custom_Action)
@@ -70,7 +70,6 @@
                         EditorGUILayout.PropertyField(serializedObject.FindProperty("customSecondaryAction"));
                     }
 
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("holdButtonToGrab"));
                     EditorGUILayout.PropertyField(serializedObject.FindProperty("grabOverrideButton"));
 
                     EditorGUILayout.PropertyField(serializedObject.FindProperty("allowedGrabControllers"));
@@ -81,8 +80,6 @@
                         EditorGUILayout.PropertyField(serializedObject.FindProperty("leftSnapHandle"));
 
                     }
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("hideControllerOnGrab"));
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("stayGrabbedOnTeleport"));
 
                     targ.grabAttachMechanic = (VRTK_InteractableObject.GrabAttachType)EditorGUILayout.EnumPopup(VRTK_EditorUtilities.BuildGUIContent<VRTK_InteractableObject>("grabAttachMechanic"), targ.grabAttachMechanic);
                     if (Array.IndexOf(hasDetachThreshold, targ.grabAttachMechanic) >= 0)
@@ -122,11 +119,9 @@
                     EditorGUI.indentLevel++;
                     EditorGUILayout.PropertyField(serializedObject.FindProperty("useOnlyIfGrabbed"));
                     EditorGUILayout.PropertyField(serializedObject.FindProperty("holdButtonToUse"));
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("useOverrideButton"));
                     EditorGUILayout.PropertyField(serializedObject.FindProperty("pointerActivatesUseAction"));
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("useOverrideButton"));
                     EditorGUILayout.PropertyField(serializedObject.FindProperty("allowedUseControllers"));
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("hideControllerOnUse"));
-
                     EditorGUI.indentLevel--;
                 }
             }

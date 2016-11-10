@@ -70,19 +70,6 @@ namespace VRTK
         }
 
         /// <summary>
-        /// Hide controller state.
-        /// </summary>
-        /// <param name="Default">Use the hide settings from the controller.</param>
-        /// <param name="OverrideHide">Hide the controller when interacting, overriding controller settings.</param>
-        /// <param name="OverrideDontHide">Don't hide the controller when interacting, overriding controller settings.</param>
-        public enum ControllerHideMode
-        {
-            Default,
-            OverrideHide,
-            OverrideDontHide,
-        }
-
-        /// <summary>
         /// The types of valid situations that the object can be released from grab.
         /// </summary>
         /// <param name="No_Drop">The object cannot be dropped via the controller</param>
@@ -114,21 +101,21 @@ namespace VRTK
         public Color touchHighlightColor = Color.clear;
         [Tooltip("Determines which controller can initiate a touch action.")]
         public AllowedController allowedTouchControllers = AllowedController.Both;
-        [Tooltip("Optionally override the controller setting.")]
-        public ControllerHideMode hideControllerOnTouch = ControllerHideMode.Default;
 
         [Header("Grab Interactions", order = 2)]
 
         [Tooltip("Determines if the object can be grabbed.")]
         public bool isGrabbable = false;
+        [Tooltip("If this is checked then the grab button on the controller needs to be continually held down to keep grabbing. If this is unchecked the grab button toggles the grab action with one button press to grab and another to release.")]
+        public bool holdButtonToGrab = true;
+        [Tooltip("If this is checked then the object will stay grabbed to the controller when a teleport occurs. If it is unchecked then the object will be released when a teleport occurs.")]
+        public bool stayGrabbedOnTeleport = true;
         [Tooltip("Determines in what situation the object can be dropped by the controller grab button.")]
         public ValidDropTypes validDrop = ValidDropTypes.Drop_Anywhere;
         [Tooltip("Determines what should happen to the object if another grab attempt is made by a secondary controller if the object is already being grabbed.")]
         public SecondaryControllerActions secondaryGrabAction = SecondaryControllerActions.Swap_Controller;
         [Tooltip("The script to utilise to process the secondary controller action when a secondary grab attempt is made.")]
         public SecondaryControllerGrabActions.VRTK_BaseGrabAction customSecondaryAction;
-        [Tooltip("If this is checked then the grab button on the controller needs to be continually held down to keep grabbing. If this is unchecked the grab button toggles the grab action with one button press to grab and another to release.")]
-        public bool holdButtonToGrab = true;
         [Tooltip("If this is set to `Undefined` then the global grab alias button will grab the object, setting it to any other button will ensure the override button is used to grab this specific interactable object.")]
         public VRTK_ControllerEvents.ButtonAlias grabOverrideButton = VRTK_ControllerEvents.ButtonAlias.Undefined;
         [Tooltip("Determines which controller can initiate a grab action.")]
@@ -139,10 +126,6 @@ namespace VRTK
         public Transform rightSnapHandle;
         [Tooltip("A Transform provided as an empty game object which must be the child of the item being grabbed and serves as an orientation point to rotate and position the grabbed item in relation to the left handed controller. If no Left Snap Handle is provided but a Right Snap Handle is provided, then the Right Snap Handle will be used in place. If no Snap Handle is provided then the object will be grabbed at its central point. Not required for `Precision Snap`.")]
         public Transform leftSnapHandle;
-        [Tooltip("Optionally override the controller setting.")]
-        public ControllerHideMode hideControllerOnGrab = ControllerHideMode.Default;
-        [Tooltip("If this is checked then the object will stay grabbed to the controller when a teleport occurs. If it is unchecked then the object will be released when a teleport occurs.")]
-        public bool stayGrabbedOnTeleport = true;
 
         [Header("Grab Mechanics", order = 3)]
 
@@ -167,14 +150,12 @@ namespace VRTK
         public bool useOnlyIfGrabbed = false;
         [Tooltip("If this is checked then the use button on the controller needs to be continually held down to keep using. If this is unchecked the the use button toggles the use action with one button press to start using and another to stop using.")]
         public bool holdButtonToUse = true;
-        [Tooltip("If this is set to `Undefined` then the global use alias button will use the object, setting it to any other button will ensure the override button is used to use this specific interactable object.")]
-        public VRTK_ControllerEvents.ButtonAlias useOverrideButton = VRTK_ControllerEvents.ButtonAlias.Undefined;
         [Tooltip("If this is checked then when a World Pointer beam (projected from the controller) hits the interactable object, if the object has `Hold Button To Use` unchecked then whilst the pointer is over the object it will run it's `Using` method. If `Hold Button To Use` is unchecked then the `Using` method will be run when the pointer is deactivated. The world pointer will not throw the `Destination Set` event if it is affecting an interactable object with this setting checked as this prevents unwanted teleporting from happening when using an object with a pointer.")]
         public bool pointerActivatesUseAction = false;
+        [Tooltip("If this is set to `Undefined` then the global use alias button will use the object, setting it to any other button will ensure the override button is used to use this specific interactable object.")]
+        public VRTK_ControllerEvents.ButtonAlias useOverrideButton = VRTK_ControllerEvents.ButtonAlias.Undefined;
         [Tooltip("Determines which controller can initiate a use action.")]
         public AllowedController allowedUseControllers = AllowedController.Both;
-        [Tooltip("Optionally override the controller setting.")]
-        public ControllerHideMode hideControllerOnUse = ControllerHideMode.Default;
 
         /// <summary>
         /// Emitted when another object touches the current object.
@@ -283,24 +264,6 @@ namespace VRTK
             InteractableObjectEventArgs e;
             e.interactingObject = interactingObject;
             return e;
-        }
-
-        /// <summary>
-        /// The CheckHideMode method is a simple service method used only by some scripts (e.g. InteractTouch InteractGrab InteractUse) to calculate the "hide controller" condition according to the default controller settings and the interactive object override method.
-        /// </summary>
-        /// <param name="defaultMode">The default setting of the controller. true = hide, false = don't hide.</param>
-        /// <param name="overrideMode">The override setting of the object.</param>
-        /// <returns>Returns `true` if the combination of `defaultMode` and `overrideMode` lead to "hide controller.</returns>
-        public bool CheckHideMode(bool defaultMode, ControllerHideMode overrideMode)
-        {
-            switch (overrideMode)
-            {
-                case ControllerHideMode.OverrideDontHide:
-                    return false;
-                case ControllerHideMode.OverrideHide:
-                    return true;
-            }
-            return defaultMode;
         }
 
         /// <summary>
