@@ -13,7 +13,7 @@
             ResetMenuItems();
         }
 
-        protected override void Start()
+        protected void Start()
         {
             gameObject.GetComponent<MeshRenderer>().material.color = newMenuColor;
         }

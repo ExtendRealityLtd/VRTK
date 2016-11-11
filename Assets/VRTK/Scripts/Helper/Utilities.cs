@@ -141,9 +141,20 @@
             }
         }
 
-        public static Component CloneComponent(Component source, GameObject destination)
+        public static Component CloneComponent(Component source, GameObject destination, bool copyProperties = false)
         {
             Component tmpComponent = destination.gameObject.AddComponent(source.GetType());
+            if(copyProperties)
+            {
+                foreach (PropertyInfo p in source.GetType().GetProperties())
+                {
+                    if (p.CanWrite)
+                    {
+                        p.SetValue(tmpComponent, p.GetValue(source, null), null);
+                    }
+                }
+            }
+
             foreach (FieldInfo f in source.GetType().GetFields())
             {
                 f.SetValue(tmpComponent, f.GetValue(source));

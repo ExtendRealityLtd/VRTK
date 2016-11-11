@@ -14,13 +14,6 @@
         private bool viewCustom = true;
         private bool isGrabbableLastState = false;
         private bool isUsableLastState = false;
-        private VRTK_InteractableObject.GrabAttachType[] hasDetachThreshold = new VRTK_InteractableObject.GrabAttachType[]
-        {
-            VRTK_InteractableObject.GrabAttachType.Fixed_Joint,
-            VRTK_InteractableObject.GrabAttachType.Spring_Joint,
-            VRTK_InteractableObject.GrabAttachType.Track_Object,
-            VRTK_InteractableObject.GrabAttachType.Rotator_Track
-        };
 
         public override void OnInspectorGUI()
         {
@@ -64,36 +57,14 @@
                     EditorGUILayout.PropertyField(serializedObject.FindProperty("holdButtonToGrab"));
                     EditorGUILayout.PropertyField(serializedObject.FindProperty("stayGrabbedOnTeleport"));
                     EditorGUILayout.PropertyField(serializedObject.FindProperty("validDrop"));
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("grabOverrideButton"));
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("allowedGrabControllers"));
                     targ.secondaryGrabAction = (VRTK_InteractableObject.SecondaryControllerActions)EditorGUILayout.EnumPopup(VRTK_EditorUtilities.BuildGUIContent<VRTK_InteractableObject>("secondaryGrabAction"), targ.secondaryGrabAction);
                     if (targ.secondaryGrabAction == VRTK_InteractableObject.SecondaryControllerActions.Custom_Action)
                     {
                         EditorGUILayout.PropertyField(serializedObject.FindProperty("customSecondaryAction"));
                     }
-
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("grabOverrideButton"));
-
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("allowedGrabControllers"));
-                    targ.precisionSnap = EditorGUILayout.Toggle(VRTK_EditorUtilities.BuildGUIContent<VRTK_InteractableObject>("precisionSnap", "Precision Grab(Snap)"), targ.precisionSnap);
-                    if (!targ.precisionSnap)
-                    {
-                        EditorGUILayout.PropertyField(serializedObject.FindProperty("rightSnapHandle"));
-                        EditorGUILayout.PropertyField(serializedObject.FindProperty("leftSnapHandle"));
-
-                    }
-
-                    targ.grabAttachMechanic = (VRTK_InteractableObject.GrabAttachType)EditorGUILayout.EnumPopup(VRTK_EditorUtilities.BuildGUIContent<VRTK_InteractableObject>("grabAttachMechanic"), targ.grabAttachMechanic);
-                    if (Array.IndexOf(hasDetachThreshold, targ.grabAttachMechanic) >= 0)
-                    {
-                        EditorGUILayout.PropertyField(serializedObject.FindProperty("detachThreshold"));
-                        if (targ.grabAttachMechanic == VRTK_InteractableObject.GrabAttachType.Spring_Joint)
-                        {
-                            EditorGUILayout.PropertyField(serializedObject.FindProperty("springJointStrength"));
-                            EditorGUILayout.PropertyField(serializedObject.FindProperty("springJointDamper"));
-                        }
-                    }
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("throwMultiplier"));
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("onGrabCollisionDelay"));
-
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("grabAttachMechanicScript"));
                     EditorGUI.indentLevel--;
                 }
             }

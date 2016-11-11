@@ -19,9 +19,8 @@
             spinSpeed = 0f;
         }
 
-        protected override void Start()
+        protected void Start()
         {
-            base.Start();
             rotator = transform.Find("Capsule");
         }
 

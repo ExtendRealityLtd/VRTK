@@ -884,9 +884,10 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 584630027}
-  - 114: {fileID: 584630026}
   - 54: {fileID: 584630025}
   - 65: {fileID: 584630028}
+  - 114: {fileID: 584630026}
+  - 114: {fileID: 584630029}
   m_Layer: 0
   m_Name: LightSaber
   m_TagString: Untagged
@@ -924,21 +925,14 @@ MonoBehaviour:
   allowedTouchControllers: 0
   isGrabbable: 1
   holdButtonToGrab: 1
+  stayGrabbedOnTeleport: 1
   validDrop: 1
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  precisionSnap: 0
-  rightSnapHandle: {fileID: 1453485}
-  leftSnapHandle: {fileID: 388999741}
-  stayGrabbedOnTeleport: 1
+  secondaryGrabAction: 1
+  customSecondaryAction: {fileID: 0}
+  grabAttachMechanicScript: {fileID: 584630029}
   grabAttachMechanic: 4
-  detachThreshold: 1500
-  springJointStrength: 500
-  springJointDamper: 50
-  throwMultiplier: 1
-  onGrabCollisionDelay: 0
   isUsable: 1
   useOnlyIfGrabbed: 0
   holdButtonToUse: 1
@@ -975,6 +969,22 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.04, y: 0.2, z: 0.04}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &584630029
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 584630024}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ec2ac476f2fc9a45a4e69712580a603, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  precisionGrab: 0
+  rightSnapHandle: {fileID: 1453485}
+  leftSnapHandle: {fileID: 388999741}
+  throwMultiplier: 1
+  onGrabCollisionDelay: 0
 --- !u!43 &605015551
 Mesh:
   m_ObjectHideFlags: 0
@@ -1118,6 +1128,7 @@ GameObject:
   - 54: {fileID: 664157673}
   - 65: {fileID: 664157672}
   - 114: {fileID: 664157671}
+  - 114: {fileID: 664157675}
   m_Layer: 0
   m_Name: Gun PrecisionSnap
   m_TagString: Untagged
@@ -1140,21 +1151,14 @@ MonoBehaviour:
   allowedTouchControllers: 0
   isGrabbable: 1
   holdButtonToGrab: 1
+  stayGrabbedOnTeleport: 1
   validDrop: 1
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  precisionSnap: 1
-  rightSnapHandle: {fileID: 0}
-  leftSnapHandle: {fileID: 0}
-  stayGrabbedOnTeleport: 1
+  secondaryGrabAction: 1
+  customSecondaryAction: {fileID: 0}
+  grabAttachMechanicScript: {fileID: 664157675}
   grabAttachMechanic: 0
-  detachThreshold: 1500
-  springJointStrength: 500
-  springJointDamper: 50
-  throwMultiplier: 1
-  onGrabCollisionDelay: 0.5
   isUsable: 0
   useOnlyIfGrabbed: 0
   holdButtonToUse: 0
@@ -1205,6 +1209,24 @@ Transform:
   - {fileID: 567306041}
   m_Father: {fileID: 0}
   m_RootOrder: 7
+--- !u!114 &664157675
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 664157670}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8afa0b205791c9f4496bf2814aeac078, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  precisionGrab: 1
+  rightSnapHandle: {fileID: 0}
+  leftSnapHandle: {fileID: 0}
+  throwMultiplier: 1
+  onGrabCollisionDelay: 0.5
+  customJoint: {fileID: 0}
+  breakForce: 1500
 --- !u!1 &798182789
 GameObject:
   m_ObjectHideFlags: 0
@@ -1394,6 +1416,7 @@ GameObject:
   - 54: {fileID: 1061858098}
   - 65: {fileID: 1061858097}
   - 114: {fileID: 1061858100}
+  - 114: {fileID: 1061858101}
   m_Layer: 0
   m_Name: Gun
   m_TagString: Untagged
@@ -1461,21 +1484,14 @@ MonoBehaviour:
   allowedTouchControllers: 0
   isGrabbable: 1
   holdButtonToGrab: 1
+  stayGrabbedOnTeleport: 1
   validDrop: 1
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  precisionSnap: 0
-  rightSnapHandle: {fileID: 526777005}
-  leftSnapHandle: {fileID: 200562050}
-  stayGrabbedOnTeleport: 1
+  secondaryGrabAction: 1
+  customSecondaryAction: {fileID: 0}
+  grabAttachMechanicScript: {fileID: 1061858101}
   grabAttachMechanic: 0
-  detachThreshold: 1500
-  springJointStrength: 500
-  springJointDamper: 50
-  throwMultiplier: 1
-  onGrabCollisionDelay: 0.5
   isUsable: 1
   useOnlyIfGrabbed: 0
   holdButtonToUse: 1
@@ -1483,6 +1499,24 @@ MonoBehaviour:
   useOverrideButton: 8
   allowedUseControllers: 0
   usingState: 0
+--- !u!114 &1061858101
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1061858096}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8afa0b205791c9f4496bf2814aeac078, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  precisionGrab: 0
+  rightSnapHandle: {fileID: 526777005}
+  leftSnapHandle: {fileID: 200562050}
+  throwMultiplier: 1
+  onGrabCollisionDelay: 0.5
+  customJoint: {fileID: 0}
+  breakForce: 1500
 --- !u!1 &1107851905
 GameObject:
   m_ObjectHideFlags: 0
@@ -2570,6 +2604,7 @@ GameObject:
   - 54: {fileID: 1719889270}
   - 65: {fileID: 1719889269}
   - 114: {fileID: 1719889268}
+  - 114: {fileID: 1719889272}
   - 114: {fileID: 1719889267}
   m_Layer: 0
   m_Name: Gun With Hide
@@ -2610,21 +2645,14 @@ MonoBehaviour:
   allowedTouchControllers: 0
   isGrabbable: 1
   holdButtonToGrab: 1
+  stayGrabbedOnTeleport: 1
   validDrop: 1
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  precisionSnap: 0
-  rightSnapHandle: {fileID: 1674975574}
-  leftSnapHandle: {fileID: 971791267}
-  stayGrabbedOnTeleport: 1
+  secondaryGrabAction: 1
+  customSecondaryAction: {fileID: 0}
+  grabAttachMechanicScript: {fileID: 1719889272}
   grabAttachMechanic: 0
-  detachThreshold: 1500
-  springJointStrength: 500
-  springJointDamper: 50
-  throwMultiplier: 1
-  onGrabCollisionDelay: 0.5
   isUsable: 1
   useOnlyIfGrabbed: 0
   holdButtonToUse: 1
@@ -2677,6 +2705,24 @@ Transform:
   - {fileID: 971791267}
   m_Father: {fileID: 0}
   m_RootOrder: 8
+--- !u!114 &1719889272
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1719889266}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8afa0b205791c9f4496bf2814aeac078, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  precisionGrab: 0
+  rightSnapHandle: {fileID: 1674975574}
+  leftSnapHandle: {fileID: 971791267}
+  throwMultiplier: 1
+  onGrabCollisionDelay: 0.5
+  customJoint: {fileID: 0}
+  breakForce: 1500
 --- !u!1 &1768600013
 GameObject:
   m_ObjectHideFlags: 0
@@ -2688,6 +2734,7 @@ GameObject:
   - 54: {fileID: 1768600016}
   - 65: {fileID: 1768600015}
   - 114: {fileID: 1768600014}
+  - 114: {fileID: 1768600018}
   m_Layer: 0
   m_Name: Gun SimpleSnap
   m_TagString: Untagged
@@ -2710,21 +2757,14 @@ MonoBehaviour:
   allowedTouchControllers: 0
   isGrabbable: 1
   holdButtonToGrab: 1
+  stayGrabbedOnTeleport: 1
   validDrop: 1
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  precisionSnap: 0
-  rightSnapHandle: {fileID: 0}
-  leftSnapHandle: {fileID: 0}
-  stayGrabbedOnTeleport: 1
+  secondaryGrabAction: 1
+  customSecondaryAction: {fileID: 0}
+  grabAttachMechanicScript: {fileID: 1768600018}
   grabAttachMechanic: 0
-  detachThreshold: 1500
-  springJointStrength: 500
-  springJointDamper: 50
-  throwMultiplier: 1
-  onGrabCollisionDelay: 0.5
   isUsable: 0
   useOnlyIfGrabbed: 0
   holdButtonToUse: 0
@@ -2775,6 +2815,24 @@ Transform:
   - {fileID: 1268904576}
   m_Father: {fileID: 0}
   m_RootOrder: 6
+--- !u!114 &1768600018
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1768600013}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8afa0b205791c9f4496bf2814aeac078, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  precisionGrab: 0
+  rightSnapHandle: {fileID: 0}
+  leftSnapHandle: {fileID: 0}
+  throwMultiplier: 1
+  onGrabCollisionDelay: 0.5
+  customJoint: {fileID: 0}
+  breakForce: 1500
 --- !u!1 &1839840859
 GameObject:
   m_ObjectHideFlags: 0
@@ -3055,6 +3113,7 @@ GameObject:
   - 54: {fileID: 2010777317}
   - 65: {fileID: 2010777316}
   - 114: {fileID: 2010777315}
+  - 114: {fileID: 2010777319}
   m_Layer: 0
   m_Name: Gun (1)
   m_TagString: Untagged
@@ -3077,21 +3136,14 @@ MonoBehaviour:
   allowedTouchControllers: 0
   isGrabbable: 1
   holdButtonToGrab: 1
+  stayGrabbedOnTeleport: 1
   validDrop: 1
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  precisionSnap: 0
-  rightSnapHandle: {fileID: 1990384343}
-  leftSnapHandle: {fileID: 389828249}
-  stayGrabbedOnTeleport: 1
+  secondaryGrabAction: 1
+  customSecondaryAction: {fileID: 0}
+  grabAttachMechanicScript: {fileID: 2010777319}
   grabAttachMechanic: 0
-  detachThreshold: 1500
-  springJointStrength: 500
-  springJointDamper: 50
-  throwMultiplier: 1
-  onGrabCollisionDelay: 0.5
   isUsable: 1
   useOnlyIfGrabbed: 0
   holdButtonToUse: 1
@@ -3144,6 +3196,24 @@ Transform:
   - {fileID: 389828249}
   m_Father: {fileID: 0}
   m_RootOrder: 4
+--- !u!114 &2010777319
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2010777314}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8afa0b205791c9f4496bf2814aeac078, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  precisionGrab: 0
+  rightSnapHandle: {fileID: 1990384343}
+  leftSnapHandle: {fileID: 389828249}
+  throwMultiplier: 1
+  onGrabCollisionDelay: 0.5
+  customJoint: {fileID: 0}
+  breakForce: 1500
 --- !u!1 &2045761826
 GameObject:
   m_ObjectHideFlags: 0

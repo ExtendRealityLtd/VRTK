@@ -447,8 +447,8 @@ namespace VRTK
             var startPosition = ioTransform.position;
             var startRotation = ioTransform.rotation;
             var startScale = ioTransform.localScale;
-            var storedKinematicState = ioCheck.IsKinematic();
-            ioCheck.ToggleKinematic(true);
+            var storedKinematicState = ioCheck.isKinematic;
+            ioCheck.isKinematic = true;
 
             while (elapsedTime <= duration)
             {
@@ -464,7 +464,7 @@ namespace VRTK
             ioTransform.rotation = endRotation;
             ioTransform.localScale = endScale;
 
-            ioCheck.ToggleKinematic(storedKinematicState);
+            ioCheck.isKinematic = storedKinematicState;
             SetDropSnapType(ioCheck);
         }
 
@@ -474,11 +474,11 @@ namespace VRTK
             {
                 case SnapTypes.Use_Kinematic:
                     ioCheck.SaveCurrentState();
-                    ioCheck.ToggleKinematic(true);
+                    ioCheck.isKinematic = true;
                     break;
                 case SnapTypes.Use_Parenting:
                     ioCheck.SaveCurrentState();
-                    ioCheck.ToggleKinematic(true);
+                    ioCheck.isKinematic = true;
                     ioCheck.transform.SetParent(transform);
                     break;
                 case SnapTypes.Use_Joint:

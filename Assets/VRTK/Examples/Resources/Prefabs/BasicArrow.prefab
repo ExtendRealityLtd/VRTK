@@ -107,11 +107,12 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 487352}
+  - 65: {fileID: 6539290}
   - 54: {fileID: 5471240}
   - 114: {fileID: 11495840}
-  - 65: {fileID: 6539290}
-  - 114: {fileID: 11494472}
+  - 114: {fileID: 114000014213219204}
   - 114: {fileID: 114000012382301128}
+  - 114: {fileID: 11494472}
   m_Layer: 0
   m_Name: BasicArrow
   m_TagString: Untagged
@@ -484,21 +485,14 @@ MonoBehaviour:
   allowedTouchControllers: 0
   isGrabbable: 1
   holdButtonToGrab: 1
+  stayGrabbedOnTeleport: 1
   validDrop: 1
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  precisionSnap: 0
-  rightSnapHandle: {fileID: 429606}
-  leftSnapHandle: {fileID: 0}
-  stayGrabbedOnTeleport: 1
+  secondaryGrabAction: 1
+  customSecondaryAction: {fileID: 0}
+  grabAttachMechanicScript: {fileID: 114000014213219204}
   grabAttachMechanic: 4
-  detachThreshold: 500
-  springJointStrength: 500
-  springJointDamper: 50
-  throwMultiplier: 1
-  onGrabCollisionDelay: 0
   isUsable: 0
   useOnlyIfGrabbed: 0
   holdButtonToUse: 0
@@ -534,3 +528,19 @@ MonoBehaviour:
   hideDelayOnGrab: 0
   hideControllerOnUse: 0
   hideDelayOnUse: 0
+--- !u!114 &114000014213219204
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 182108}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ec2ac476f2fc9a45a4e69712580a603, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  precisionGrab: 0
+  rightSnapHandle: {fileID: 429606}
+  leftSnapHandle: {fileID: 0}
+  throwMultiplier: 1
+  onGrabCollisionDelay: 0

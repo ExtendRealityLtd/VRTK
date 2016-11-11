@@ -5,6 +5,7 @@ namespace VRTK
     using System.Collections;
     using System.Collections.Generic;
     using Highlighters;
+    using GrabAttachMechanics;
 
     /// <summary>
     /// Event Payload
@@ -37,25 +38,6 @@ namespace VRTK
     /// </example>
     public class VRTK_InteractableObject : MonoBehaviour
     {
-        /// <summary>
-        /// Types of grab attachment.
-        /// </summary>
-        /// <param name="Fixed_Joint">Attaches the object to the controller with a fixed joint meaning it tracks the position and rotation of the controller with perfect 1:1 tracking.</param>
-        /// <param name="Spring_Joint">Attaches the object to the controller with a spring joint meaning there is some flexibility between the item and the controller force moving the item. This works well when attempting to pull an item rather than snap the item directly to the controller. It creates the illusion that the item has resistance to move it.</param>
-        /// <param name="Track_Object">Doesn't attach the object to the controller via a joint, instead it ensures the object tracks the direction of the controller, which works well for items that are on hinged joints.</param>
-        /// <param name="Rotator_Track">Tracks the object but instead of the object tracking the direction of the controller, a force is applied to the object to cause it to rotate. This is ideal for hinged joints on items such as wheels or doors.</param>
-        /// <param name="Child_Of_Controller">Makes the object a child of the controller grabbing so it naturally tracks the position of the controller motion.</param>
-        /// <param name="Climbable">Non-rigid body interactable object used to allow player climbing.</param>
-        public enum GrabAttachType
-        {
-            Fixed_Joint,
-            Spring_Joint,
-            Track_Object,
-            Rotator_Track,
-            Child_Of_Controller,
-            Climbable
-        }
-
         /// <summary>
         /// Allowed controller type.
         /// </summary>
@@ -112,37 +94,18 @@ namespace VRTK
         public bool stayGrabbedOnTeleport = true;
         [Tooltip("Determines in what situation the object can be dropped by the controller grab button.")]
         public ValidDropTypes validDrop = ValidDropTypes.Drop_Anywhere;
-        [Tooltip("Determines what should happen to the object if another grab attempt is made by a secondary controller if the object is already being grabbed.")]
-        public SecondaryControllerActions secondaryGrabAction = SecondaryControllerActions.Swap_Controller;
-        [Tooltip("The script to utilise to process the secondary controller action when a secondary grab attempt is made.")]
-        public SecondaryControllerGrabActions.VRTK_BaseGrabAction customSecondaryAction;
         [Tooltip("If this is set to `Undefined` then the global grab alias button will grab the object, setting it to any other button will ensure the override button is used to grab this specific interactable object.")]
         public VRTK_ControllerEvents.ButtonAlias grabOverrideButton = VRTK_ControllerEvents.ButtonAlias.Undefined;
         [Tooltip("Determines which controller can initiate a grab action.")]
         public AllowedController allowedGrabControllers = AllowedController.Both;
-        [Tooltip("If this is checked then when the controller grabs the object, it will grab it with precision and pick it up at the particular point on the object the controller is touching.")]
-        public bool precisionSnap;
-        [Tooltip("A Transform provided as an empty game object which must be the child of the item being grabbed and serves as an orientation point to rotate and position the grabbed item in relation to the right handed controller. If no Right Snap Handle is provided but a Left Snap Handle is provided, then the Left Snap Handle will be used in place. If no Snap Handle is provided then the object will be grabbed at its central point. Not required for `Precision Snap`.")]
-        public Transform rightSnapHandle;
-        [Tooltip("A Transform provided as an empty game object which must be the child of the item being grabbed and serves as an orientation point to rotate and position the grabbed item in relation to the left handed controller. If no Left Snap Handle is provided but a Right Snap Handle is provided, then the Right Snap Handle will be used in place. If no Snap Handle is provided then the object will be grabbed at its central point. Not required for `Precision Snap`.")]
-        public Transform leftSnapHandle;
+        [Tooltip("Determines what should happen to the object if another grab attempt is made by a secondary controller if the object is already being grabbed.")]
+        public SecondaryControllerActions secondaryGrabAction = SecondaryControllerActions.Swap_Controller;
+        [Tooltip("The script to utilise to process the secondary controller action when a secondary grab attempt is made.")]
+        public SecondaryControllerGrabActions.VRTK_BaseGrabAction customSecondaryAction;
+        [Tooltip("This determines how the grabbed item will be attached to the controller when it is grabbed. If one isn't provided then the first Grab Attach script on the GameObject will be used, if one is not found and the object is grabbable then a Fixed Joint Grab Attach script will be created at runtime.")]
+        public VRTK_BaseGrabAttach grabAttachMechanicScript;
 
-        [Header("Grab Mechanics", order = 3)]
-
-        [Tooltip("This determines how the grabbed item will be attached to the controller when it is grabbed.")]
-        public GrabAttachType grabAttachMechanic = GrabAttachType.Fixed_Joint;
-        [Tooltip("The force amount when to detach the object from the grabbed controller. If the controller tries to exert a force higher than this threshold on the object (from pulling it through another object or pushing it into another object) then the joint holding the object to the grabbing controller will break and the object will no longer be grabbed. This also works with Tracked Object grabbing but determines how far the controller is from the object before breaking the grab. Only required for `Fixed Joint`, `Spring Joint`, `Track Object` and `Rotator Track`.")]
-        public float detachThreshold = 500f;
-        [Tooltip("The strength of the spring holding the object to the controller. A low number will mean the spring is very loose and the object will require more force to move it, a high number will mean a tight spring meaning less force is required to move it. Only required for `Spring Joint`.")]
-        public float springJointStrength = 500f;
-        [Tooltip("The amount to damper the spring effect when using a Spring Joint grab mechanic. A higher number here will reduce the oscillation effect when moving jointed Interactable Objects. Only required for `Spring Joint`.")]
-        public float springJointDamper = 50f;
-        [Tooltip("An amount to multiply the velocity of the given object when it is thrown. This can also be used in conjunction with the Interact Grab Throw Multiplier to have certain objects be thrown even further than normal (or thrown a shorter distance if a number below 1 is entered).")]
-        public float throwMultiplier = 1f;
-        [Tooltip("The amount of time to delay collisions affecting the object when it is first grabbed. This is useful if a game object may get stuck inside another object when it is being grabbed.")]
-        public float onGrabCollisionDelay = 0f;
-
-        [Header("Use Interactions", order = 4)]
+        [Header("Use Interactions", order = 3)]
 
         [Tooltip("Determines if the object can be used.")]
         public bool isUsable = false;
@@ -188,12 +151,32 @@ namespace VRTK
         [HideInInspector]
         public int usingState = 0;
 
-        protected Rigidbody rb;
-        protected bool autoRigidbody = false;
+        /// <summary>
+        /// isKinematic is a pass through to the `isKinematic` getter/setter on the object's rigidbody component.
+        /// </summary>
+        public bool isKinematic
+        {
+            get
+            {
+                if (interactableRigidbody)
+                {
+                    return interactableRigidbody.isKinematic;
+                }
+                return true;
+            }
+            set
+            {
+                if (interactableRigidbody)
+                {
+                    interactableRigidbody.isKinematic = value;
+                }
+            }
+        }
+
+        protected Rigidbody interactableRigidbody;
         protected List<GameObject> touchingObjects = new List<GameObject>();
         protected List<GameObject> grabbingObjects = new List<GameObject>();
         protected GameObject usingObject = null;
-        protected Transform grabbedSnapHandle;
         protected Transform trackPoint;
         protected bool customTrackPoint = false;
         protected Transform primaryControllerAttachPoint;
@@ -412,61 +395,17 @@ namespace VRTK
         /// <summary>
         /// The PauseCollisions method temporarily pauses all collisions on the object at grab time by removing the object's rigidbody's ability to detect collisions. This can be useful for preventing clipping when initially grabbing an item.
         /// </summary>
-        public void PauseCollisions()
+        /// <param name="delay">The amount of time to pause the collisions for.</param>
+        public void PauseCollisions(float delay)
         {
-            if (onGrabCollisionDelay > 0f)
+            if (delay > 0f)
             {
                 foreach (Rigidbody rb in GetComponentsInChildren<Rigidbody>())
                 {
                     rb.detectCollisions = false;
                 }
-                Invoke("UnpauseCollisions", onGrabCollisionDelay);
+                Invoke("UnpauseCollisions", delay);
             }
-        }
-
-        /// <summary>
-        /// The AttachIsTrackObject method is used to determine if the object is using one of the track grab attach mechanics.
-        /// </summary>
-        /// <returns>Is true if the grab attach mechanic is one of the track types like `Track Object` or `Rotator Track`.</returns>
-        public bool AttachIsTrackObject()
-        {
-            return (grabAttachMechanic == GrabAttachType.Track_Object || grabAttachMechanic == GrabAttachType.Rotator_Track);
-        }
-
-        /// <summary>
-        /// The AttachIsClimbObject method is used to determine if the object is using the `Climbable` grab attach mechanics.
-        /// </summary>
-        /// <returns>Is true if the grab attach mechanic is `Climbable`.</returns>
-        public bool AttachIsClimbObject()
-        {
-            return (grabAttachMechanic == GrabAttachType.Climbable);
-        }
-
-        /// <summary>
-        /// The AttachIsKinematicObject method is used to determine if the object has kinematics turned on at the point of grab.
-        /// </summary>
-        /// <returns>Is true if the grab attach mechanic sets the object to a kinematic state on grab.</returns>
-        public bool AttachIsKinematicObject()
-        {
-            return (grabAttachMechanic == GrabAttachType.Child_Of_Controller);
-        }
-
-        /// <summary>
-        /// The AttachIsStaticObject method is used to determine if the object is using one of the static grab attach types.
-        /// </summary>
-        /// <returns>Is true if the grab attach mechanic is one of the static types like `Climbable`.</returns>
-        public bool AttachIsStaticObject()
-        {
-            return AttachIsClimbObject(); // only one at the moment
-        }
-
-        /// <summary>
-        /// The AttachIsUnthrowableObject method is used to determine if the object is using one of the grab types that should not be thrown when released.
-        /// </summary>
-        /// <returns>Is true if the grab attach mechanic is of a type that shouldn't be considered thrown when released.</returns>
-        public bool AttachIsUnthrowableObject()
-        {
-            return (grabAttachMechanic == GrabAttachType.Rotator_Track);
         }
 
         /// <summary>
@@ -474,10 +413,10 @@ namespace VRTK
         /// </summary>
         public void ZeroVelocity()
         {
-            if (rb)
+            if (interactableRigidbody)
             {
-                rb.velocity = Vector3.zero;
-                rb.angularVelocity = Vector3.zero;
+                interactableRigidbody.velocity = Vector3.zero;
+                interactableRigidbody.angularVelocity = Vector3.zero;
             }
         }
 
@@ -490,36 +429,11 @@ namespace VRTK
             {
                 previousParent = transform.parent;
 
-                if (rb)
+                if (interactableRigidbody)
                 {
-                    previousKinematicState = rb.isKinematic;
+                    previousKinematicState = interactableRigidbody.isKinematic;
                 }
             }
-        }
-
-        /// <summary>
-        /// The ToggleKinematic method is used to set the object's internal rigidbody kinematic state.
-        /// </summary>
-        /// <param name="state">The object's rigidbody kinematic state.</param>
-        public void ToggleKinematic(bool state)
-        {
-            if (rb)
-            {
-                rb.isKinematic = state;
-            }
-        }
-
-        /// <summary>
-        /// the IsKinematic method returns whether the rigidbody is set to kinematic or not.
-        /// </summary>
-        /// <returns>Returns true if the rigidbody is set to kinematic and returns false if it's not.</returns>
-        public bool IsKinematic()
-        {
-            if (rb)
-            {
-                return rb.isKinematic;
-            }
-            return true;
         }
 
         /// <summary>
@@ -606,20 +520,23 @@ namespace VRTK
         }
 
         /// <summary>
-        /// The SetGrabbedSnapHandle method is used to set the snap handle of the object at runtime.
-        /// </summary>
-        /// <param name="handle">A transform of an object to use for the snap handle when the object is grabbed.</param>
-        public void SetGrabbedSnapHandle(Transform handle)
-        {
-            grabbedSnapHandle = handle;
-        }
-
-        /// <summary>
         /// The RegisterTeleporters method is used to find all objects that have a teleporter script and register the object on the `OnTeleported` event. This is used internally by the object for keeping Tracked objects positions updated after teleporting.
         /// </summary>
         public void RegisterTeleporters()
         {
             StartCoroutine(RegisterTeleportersAtEndOfFrame());
+        }
+
+        /// <summary>
+        /// The UnregisterTeleporters method is used to unregister all teleporter events that are active on this object.
+        /// </summary>
+        public void UnregisterTeleporters()
+        {
+            foreach (var teleporter in VRTK_ObjectCache.registeredTeleporters)
+            {
+                teleporter.Teleporting -= new TeleportEventHandler(OnTeleporting);
+                teleporter.Teleported -= new TeleportEventHandler(OnTeleported);
+            }
         }
 
         /// <summary>
@@ -713,56 +630,10 @@ namespace VRTK
 
         protected virtual void Awake()
         {
-            rb = GetComponent<Rigidbody>();
-            autoRigidbody = false;
-            if (!AttachIsStaticObject())
+            interactableRigidbody = GetComponent<Rigidbody>();
+            if (interactableRigidbody)
             {
-                // If there is no rigid body, add one and set it to 'kinematic'.
-                if (!rb)
-                {
-                    rb = gameObject.AddComponent<Rigidbody>();
-                    rb.isKinematic = true;
-                    autoRigidbody = true;
-                }
-                rb.maxAngularVelocity = float.MaxValue;
-            }
-            forcedDropped = false;
-            if (AttachIsTrackObject())
-            {
-                FlipSnapHandles();
-            }
-        }
-
-        protected virtual void Start()
-        {
-        }
-
-        protected virtual void Update()
-        {
-            CheckBreakDistance();
-            if (customSecondaryAction)
-            {
-                customSecondaryAction.ProcessUpdate();
-            }
-        }
-
-        protected virtual void FixedUpdate()
-        {
-            if (trackPoint)
-            {
-                switch (grabAttachMechanic)
-                {
-                    case GrabAttachType.Rotator_Track:
-                        FixedUpdateRotatorTrack();
-                        break;
-                    case GrabAttachType.Track_Object:
-                        FixedUpdateTrackObject();
-                        break;
-                }
-            }
-            if (customSecondaryAction)
-            {
-                customSecondaryAction.ProcessFixedUpdate();
+                interactableRigidbody.maxAngularVelocity = float.MaxValue;
             }
         }
 
@@ -775,27 +646,49 @@ namespace VRTK
             {
                 LoadPreviousState();
             }
+            forcedDropped = false;
         }
 
         protected virtual void OnDisable()
         {
-            foreach (var teleporter in VRTK_ObjectCache.registeredTeleporters)
-            {
-                teleporter.Teleporting -= new TeleportEventHandler(OnTeleporting);
-                teleporter.Teleported -= new TeleportEventHandler(OnTeleported);
-            }
+            UnregisterTeleporters();
+
             if (autoHighlighter)
             {
                 Destroy(objectHighlighter);
                 objectHighlighter = null;
             }
+
             forceDisabled = true;
             ForceStopInteracting();
         }
 
-        protected virtual void OnJointBreak(float force)
+        protected virtual void Update()
         {
-            ForceReleaseGrab();
+            AttemptSetGrabMechanic();
+
+            if (trackPoint && grabAttachMechanicScript)
+            {
+                grabAttachMechanicScript.ProcessUpdate();
+            }
+
+            if (customSecondaryAction)
+            {
+                customSecondaryAction.ProcessUpdate();
+            }
+        }
+
+        protected virtual void FixedUpdate()
+        {
+            if (trackPoint && grabAttachMechanicScript)
+            {
+                grabAttachMechanicScript.ProcessFixedUpdate();
+            }
+
+            if (customSecondaryAction)
+            {
+                customSecondaryAction.ProcessFixedUpdate();
+            }
         }
 
         protected virtual void LoadPreviousState()
@@ -805,9 +698,9 @@ namespace VRTK
                 transform.parent = previousParent;
                 forcedDropped = false;
             }
-            if (rb)
+            if (interactableRigidbody)
             {
-                rb.isKinematic = previousKinematicState;
+                interactableRigidbody.isKinematic = previousKinematicState;
             }
             if (!IsSwappable())
             {
@@ -827,6 +720,28 @@ namespace VRTK
                     objectHighlighter = gameObject.AddComponent<VRTK_MaterialColorSwapHighlighter>();
                 }
                 objectHighlighter.Initialise(touchHighlightColor);
+            }
+        }
+
+        private void AttemptSetGrabMechanic()
+        {
+            if (isGrabbable && grabAttachMechanicScript == null)
+            {
+                var setGrabMechanic = GetComponent<VRTK_BaseGrabAttach>();
+                if (!setGrabMechanic)
+                {
+                    setGrabMechanic = gameObject.AddComponent<VRTK_FixedJointGrabAttach>();
+                }
+                grabAttachMechanicScript = setGrabMechanic;
+            }
+        }
+
+        private void ForceReleaseGrab()
+        {
+            var grabbingObject = GetGrabbingObject();
+            if (grabbingObject)
+            {
+                grabbingObject.GetComponent<VRTK_InteractGrab>().ForceRelease();
             }
         }
 
@@ -852,11 +767,7 @@ namespace VRTK
             if (!grabbingObjects.Contains(currentGrabbingObject))
             {
                 grabbingObjects.Add(currentGrabbingObject);
-
-                secondaryControllerAttachPoint = new GameObject(string.Format("[{0}]Secondary_Controller_AttachPoint", currentGrabbingObject.name)).transform;
-                secondaryControllerAttachPoint.parent = transform;
-                secondaryControllerAttachPoint.position = currentGrabbingObject.transform.position;
-                secondaryControllerAttachPoint.rotation = currentGrabbingObject.transform.rotation;
+                secondaryControllerAttachPoint = CreateAttachPoint(currentGrabbingObject.name, "Secondary", currentGrabbingObject.transform);
 
                 if (customSecondaryAction)
                 {
@@ -870,7 +781,6 @@ namespace VRTK
             UnpauseCollisions();
             RemoveTrackPoint();
             ResetUseState(previousGrabbingObject);
-            grabbedSnapHandle = null;
             grabbingObjects.Clear();
             if (customSecondaryAction)
             {
@@ -893,15 +803,6 @@ namespace VRTK
             }
         }
 
-        private void ForceReleaseGrab()
-        {
-            var grabbingObject = GetGrabbingObject();
-            if (grabbingObject)
-            {
-                grabbingObject.GetComponent<VRTK_InteractGrab>().ForceRelease();
-            }
-        }
-
         private void UnpauseCollisions()
         {
             foreach (Rigidbody rb in GetComponentsInChildren<Rigidbody>())
@@ -910,54 +811,36 @@ namespace VRTK
             }
         }
 
-        private void CheckBreakDistance()
+        private void SetTrackPoint(GameObject currentGrabbingObject)
         {
-            if (AttachIsTrackObject() && trackPoint && IsDroppable())
+            AddTrackPoint(currentGrabbingObject);
+            primaryControllerAttachPoint = CreateAttachPoint(GetGrabbingObject().name, "Original", trackPoint);
+
+            if (grabAttachMechanicScript)
             {
-                float distance = Vector3.Distance(trackPoint.position, primaryControllerAttachPoint.position);
-                if (distance > (detachThreshold / 1000))
-                {
-                    ForceReleaseGrab();
-                }
+                grabAttachMechanicScript.SetTrackPoint(trackPoint);
+                grabAttachMechanicScript.SetInitialAttachPoint(primaryControllerAttachPoint);
             }
         }
 
-        private void SetTrackPoint(GameObject point)
+        private Transform CreateAttachPoint(string namePrefix, string nameSuffix, Transform origin)
         {
-            var controllerPoint = point.transform;
-            var grabScript = point.GetComponent<VRTK_InteractGrab>();
+            var attachPoint = new GameObject(string.Format("[{0}][{1}]_Controller_AttachPoint", namePrefix, nameSuffix)).transform;
+            attachPoint.parent = transform;
+            attachPoint.position = origin.position;
+            attachPoint.rotation = origin.rotation;
+            return attachPoint;
+        }
 
-            if (grabScript && grabScript.controllerAttachPoint)
-            {
-                controllerPoint = grabScript.controllerAttachPoint.transform;
-            }
+        private void AddTrackPoint(GameObject currentGrabbingObject)
+        {
+            var grabScript = currentGrabbingObject.GetComponent<VRTK_InteractGrab>();
+            var controllerPoint = ((grabScript && grabScript.controllerAttachPoint) ? grabScript.controllerAttachPoint.transform : currentGrabbingObject.transform);
 
-            if (AttachIsTrackObject() && precisionSnap)
+            if (grabAttachMechanicScript)
             {
-                trackPoint = new GameObject(string.Format("[{0}]TrackObject_PrecisionSnap_AttachPoint", gameObject.name)).transform;
-                trackPoint.parent = point.transform;
-                customTrackPoint = true;
-                if (grabAttachMechanic == GrabAttachType.Track_Object)
-                {
-                    trackPoint.position = transform.position;
-                    trackPoint.rotation = transform.rotation;
-                }
-                else
-                {
-                    trackPoint.position = controllerPoint.position;
-                    trackPoint.rotation = controllerPoint.rotation;
-                }
+                trackPoint = grabAttachMechanicScript.CreateTrackPoint(controllerPoint, gameObject, currentGrabbingObject, ref customTrackPoint);
             }
-            else
-            {
-                trackPoint = controllerPoint;
-                customTrackPoint = false;
-            }
-
-            primaryControllerAttachPoint = new GameObject(string.Format("[{0}]Original_Controller_AttachPoint", GetGrabbingObject().name)).transform;
-            primaryControllerAttachPoint.parent = transform;
-            primaryControllerAttachPoint.position = trackPoint.position;
-            primaryControllerAttachPoint.rotation = trackPoint.rotation;
         }
 
         private void RemoveTrackPoint()
@@ -976,47 +859,6 @@ namespace VRTK
             }
         }
 
-        private void FixedUpdateRotatorTrack()
-        {
-            var rotateForce = trackPoint.position - primaryControllerAttachPoint.position;
-            rb.AddForceAtPosition(rotateForce, primaryControllerAttachPoint.position, ForceMode.VelocityChange);
-        }
-
-        private void FixedUpdateTrackObject()
-        {
-            float maxDistanceDelta = 10f;
-
-            Quaternion rotationDelta;
-            Vector3 positionDelta;
-
-            float angle;
-            Vector3 axis;
-
-            if (grabbedSnapHandle != null)
-            {
-                rotationDelta = trackPoint.rotation * Quaternion.Inverse(grabbedSnapHandle.rotation);
-                positionDelta = trackPoint.position - grabbedSnapHandle.position;
-            }
-            else
-            {
-                rotationDelta = trackPoint.rotation * Quaternion.Inverse(transform.rotation);
-                positionDelta = trackPoint.position - transform.position;
-            }
-
-            rotationDelta.ToAngleAxis(out angle, out axis);
-
-            angle = (angle > 180 ? angle -= 360 : angle);
-
-            if (angle != 0)
-            {
-                Vector3 angularTarget = angle * axis;
-                rb.angularVelocity = Vector3.MoveTowards(rb.angularVelocity, angularTarget, maxDistanceDelta);
-            }
-
-            Vector3 velocityTarget = positionDelta / Time.fixedDeltaTime;
-            rb.velocity = Vector3.MoveTowards(rb.velocity, velocityTarget, maxDistanceDelta);
-        }
-
         private void OnTeleporting(object sender, DestinationMarkerEventArgs e)
         {
             if (!stayGrabbedOnTeleport)
@@ -1028,7 +870,7 @@ namespace VRTK
 
         private void OnTeleported(object sender, DestinationMarkerEventArgs e)
         {
-            if (stayGrabbedOnTeleport && AttachIsTrackObject() && trackPoint)
+            if (grabAttachMechanicScript && grabAttachMechanicScript.IsTracked() && stayGrabbedOnTeleport && trackPoint)
             {
                 transform.position = GetGrabbingObject().transform.position;
             }
@@ -1069,6 +911,13 @@ namespace VRTK
                 return;
             }
 
+            StopTouchingInteractions();
+            StopGrabbingInteractions();
+            StopUsingInteractions();
+        }
+
+        private void StopTouchingInteractions()
+        {
             for (int i = 0; i < touchingObjects.Count; i++)
             {
                 var touchingObject = touchingObjects[i];
@@ -1079,7 +928,10 @@ namespace VRTK
                     forcedDropped = true;
                 }
             }
+        }
 
+        private void StopGrabbingInteractions()
+        {
             var grabbingObject = GetGrabbingObject();
 
             if (grabbingObject != null && (grabbingObject.activeInHierarchy || forceDisabled))
@@ -1088,7 +940,10 @@ namespace VRTK
                 grabbingObject.GetComponent<VRTK_InteractGrab>().ForceRelease();
                 forcedDropped = true;
             }
+        }
 
+        private void StopUsingInteractions()
+        {
             if (usingObject != null && (usingObject.activeInHierarchy || forceDisabled))
             {
                 usingObject.GetComponent<VRTK_InteractTouch>().ForceStopTouching();
@@ -1121,20 +976,6 @@ namespace VRTK
 
             storedSnapDropZone.OnObjectUnsnappedFromDropZone(storedSnapDropZone.SetSnapDropZoneEvent(gameObject));
             storedSnapDropZone = null;
-        }
-
-        private void FlipSnapHandles()
-        {
-            FlipSnapHandle(rightSnapHandle);
-            FlipSnapHandle(leftSnapHandle);
-        }
-
-        private void FlipSnapHandle(Transform snapHandle)
-        {
-            if (snapHandle)
-            {
-                snapHandle.rotation = Quaternion.Inverse(snapHandle.rotation);
-            }
         }
     }
 }

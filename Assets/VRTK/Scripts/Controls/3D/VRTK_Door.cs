@@ -444,9 +444,9 @@ namespace VRTK
                 handleIo = handles.AddComponent<VRTK_InteractableObject>();
             }
             handleIo.isGrabbable = true;
-            handleIo.precisionSnap = true;
+            handleIo.grabAttachMechanicScript = gameObject.AddComponent<GrabAttachMechanics.VRTK_TrackObjectGrabAttach>();
+            handleIo.grabAttachMechanicScript.precisionGrab = true;
             handleIo.stayGrabbedOnTeleport = false;
-            handleIo.grabAttachMechanic = VRTK_InteractableObject.GrabAttachType.Track_Object;
         }
 
         private float CalculateValue()

@@ -24,9 +24,8 @@
             open = !open;
         }
 
-        protected override void Start()
+        protected void Start()
         {
-            base.Start();
             defaultRotation = transform.eulerAngles;
             SetRotation();
             sideFlip = (flipped ? 1 : -1);

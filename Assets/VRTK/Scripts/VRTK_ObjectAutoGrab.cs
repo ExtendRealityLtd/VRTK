@@ -65,9 +65,9 @@ namespace VRTK
 
             if (grabbableObject.isGrabbable && !grabbableObject.IsGrabbed())
             {
-                if (grabbableObject.AttachIsKinematicObject())
+                if (grabbableObject.grabAttachMechanicScript && grabbableObject.grabAttachMechanicScript.IsKinematic())
                 {
-                    grabbableObject.ToggleKinematic(true);
+                    grabbableObject.isKinematic = true;
                 }
 
                 grabbableObject.transform.position = transform.position;

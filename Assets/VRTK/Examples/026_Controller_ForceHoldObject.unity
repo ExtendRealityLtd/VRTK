@@ -10511,6 +10511,7 @@ GameObject:
   - 65: {fileID: 1879913573}
   - 54: {fileID: 1879913572}
   - 114: {fileID: 1879913571}
+  - 114: {fileID: 1879913576}
   - 114: {fileID: 1879913575}
   m_Layer: 0
   m_Name: Sword
@@ -10534,21 +10535,14 @@ MonoBehaviour:
   allowedTouchControllers: 0
   isGrabbable: 1
   holdButtonToGrab: 1
+  stayGrabbedOnTeleport: 1
   validDrop: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  precisionSnap: 0
-  rightSnapHandle: {fileID: 2061086901}
-  leftSnapHandle: {fileID: 0}
-  stayGrabbedOnTeleport: 1
+  secondaryGrabAction: 1
+  customSecondaryAction: {fileID: 0}
+  grabAttachMechanicScript: {fileID: 1879913576}
   grabAttachMechanic: 4
-  detachThreshold: 500
-  springJointStrength: 500
-  springJointDamper: 50
-  throwMultiplier: 1
-  onGrabCollisionDelay: 0
   isUsable: 0
   useOnlyIfGrabbed: 0
   holdButtonToUse: 0
@@ -10617,6 +10611,22 @@ MonoBehaviour:
   hideDelayOnGrab: 0
   hideControllerOnUse: 0
   hideDelayOnUse: 0
+--- !u!114 &1879913576
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1879913570}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ec2ac476f2fc9a45a4e69712580a603, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  precisionGrab: 0
+  rightSnapHandle: {fileID: 2061086901}
+  leftSnapHandle: {fileID: 0}
+  throwMultiplier: 1
+  onGrabCollisionDelay: 0
 --- !u!1 &1907208195
 GameObject:
   m_ObjectHideFlags: 0

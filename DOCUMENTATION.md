@@ -5,6 +5,7 @@ This file provides documentation on how to use the included prefabs and scripts.
  * [Prefabs](#prefabs-vrtkprefabs)
  * [Abstract Classes](#abstract-classes-vrtkscriptsabstractions)
  * [Highlighters](#highlighters-vrtkscriptshighlighters)
+ * [Grab Attach Mechanics](#grab-attach-mechanics-vrtkscriptgrabattachmechanics)
  * [Secondary Controller Grab Actions](#secondary-controller-grab-actions-vrtkscriptsecondarycontrollergrabactions)
  * [Scripts](#scripts-vrtkscripts)
  * [3D Controls](#3d-controls-vrtkscriptscontrols3d)
@@ -1042,6 +1043,429 @@ The ProcessFixedUpdate method runs in every FixedUpdate on the Interactable Obje
 ### Example
 
 `VRTK/Examples/043_Controller_SecondaryControllerActions` demonstrates the ability to grab an object with one controller and control their direction with the second controller.
+
+---
+
+# Grab Attach Mechanics (VRTK/Scripts/GrabAttachMechanics)
+
+This directory contains scripts that are used to provide different mechanics to apply when grabbing an interactable object.
+
+ * [Base Grab Attach](#base-grab-attach-vrtk_basegrabattach)
+ * [Base Joint Grab Attach](#base-joint-grab-attach-vrtk_basejointgrabattach)
+ * [Fixed Joint Grab Attach](#fixed-joint-grab-attach-vrtk_fixedjointgrabattach)
+ * [Spring Joint Grab Attach](#spring-joint-grab-attach-vrtk_springjointgrabattach)
+ * [Custom Joint Grab Attach](#custom-joint-grab-attach-vrtk_customjointgrabattach)
+ * [Child Of Controller Grab Attach](#child-of-controller-grab-attach-vrtk_childofcontrollergrabattach)
+ * [Track Object Grab Attach](#track-object-grab-attach-vrtk_trackobjectgrabattach)
+ * [Rotator Track Grab Attach](#rotator-track-grab-attach-vrtk_rotatortrackgrabattach)
+ * [Climbable Grab Attach](#climbable-grab-attach-vrtk_climbablegrabattach)
+
+---
+
+## Base Grab Attach (VRTK_BaseGrabAttach)
+
+### Overview
+
+The Base Grab Attach script is an abstract class that all grab attach script inherit.
+
+As this is an abstract class, it cannot be applied directly to a game object and performs no logic.
+
+### Inspector Parameters
+
+ * **Precision Grab:** If this is checked then when the controller grabs the object, it will grab it with precision and pick it up at the particular point on the object the controller is touching.
+ * **Right Snap Handle:** A Transform provided as an empty game object which must be the child of the item being grabbed and serves as an orientation point to rotate and position the grabbed item in relation to the right handed controller. If no Right Snap Handle is provided but a Left Snap Handle is provided, then the Left Snap Handle will be used in place. If no Snap Handle is provided then the object will be grabbed at its central point. Not required for `Precision Snap`.
+ * **Left Snap Handle:** A Transform provided as an empty game object which must be the child of the item being grabbed and serves as an orientation point to rotate and position the grabbed item in relation to the left handed controller. If no Left Snap Handle is provided but a Right Snap Handle is provided, then the Right Snap Handle will be used in place. If no Snap Handle is provided then the object will be grabbed at its central point. Not required for `Precision Snap`.
+ * **Throw Multiplier:** An amount to multiply the velocity of the given object when it is thrown. This can also be used in conjunction with the Interact Grab Throw Multiplier to have certain objects be thrown even further than normal (or thrown a shorter distance if a number below 1 is entered).
+ * **On Grab Collision Delay:** The amount of time to delay collisions affecting the object when it is first grabbed. This is useful if a game object may get stuck inside another object when it is being grabbed.
+
+### Class Methods
+
+#### IsTracked/0
+
+  > `public bool IsTracked()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `bool` - Is true if the mechanic is of type tracked.
+
+The IsTracked method determines if the grab attach mechanic is a track object type.
+
+#### IsClimbable/0
+
+  > `public bool IsClimbable()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `bool` - Is true if the mechanic is of type climbable.
+
+The IsClimbable method determines if the grab attach mechanic is a climbable object type.
+
+#### IsKinematic/0
+
+  > `public bool IsKinematic()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `bool` - Is true if the mechanic is of type kinematic.
+
+The IsKinematic method determines if the grab attach mechanic is a kinematic object type.
+
+#### ValidGrab/1
+
+  > `public virtual bool ValidGrab(Rigidbody checkAttachPoint)`
+
+  * Parameters
+   * `Rigidbody checkAttachPoint` -
+  * Returns
+   * `bool` - Always returns true for the base check.
+
+The ValidGrab method determines if the grab attempt is valid.
+
+#### SetTrackPoint/1
+
+  > `public virtual void SetTrackPoint(Transform givenTrackPoint)`
+
+  * Parameters
+   * `Transform givenTrackPoint` - The track point to set on the grabbed object.
+  * Returns
+   * _none_
+
+The SetTrackPoint method sets the point on the grabbed object where the grab is happening.
+
+#### SetInitialAttachPoint/1
+
+  > `public virtual void SetInitialAttachPoint(Transform givenInitialAttachPoint)`
+
+  * Parameters
+   * `Transform givenInitialAttachPoint` - The point where the initial grab took place.
+  * Returns
+   * _none_
+
+The SetInitialAttachPoint method sets the point on the grabbed object where the initial grab happened.
+
+#### StartGrab/3
+
+  > `public virtual bool StartGrab(GameObject grabbingObject, GameObject givenGrabbedObject, Rigidbody givenControllerAttachPoint)`
+
+  * Parameters
+   * `GameObject grabbingObject` - The object that is doing the grabbing.
+   * `GameObject givenGrabbedObject` - The object that is being grabbed.
+   * `Rigidbody givenControllerAttachPoint` - The point on the grabbing object that the grabbed object should be attached to after grab occurs.
+  * Returns
+   * `bool` - Is true if the grab is successful, false if the grab is unsuccessful.
+
+The StartGrab method sets up the grab attach mechanic as soon as an object is grabbed.
+
+#### StopGrab/1
+
+  > `public virtual void StopGrab(bool applyGrabbingObjectVelocity)`
+
+  * Parameters
+   * `bool applyGrabbingObjectVelocity` - If true will apply the current velocity of the grabbing object to the grabbed object on release.
+  * Returns
+   * _none_
+
+The StopGrab method ends the grab of the current object and cleans up the state.
+
+#### CreateTrackPoint/4
+
+  > `public virtual Transform CreateTrackPoint(Transform controllerPoint, GameObject currentGrabbedObject, GameObject currentGrabbingObject, ref bool customTrackPoint)`
+
+  * Parameters
+   * `Transform controllerPoint` - The point on the controller where the grab was initiated.
+   * `GameObject currentGrabbedObject` - The object that is currently being grabbed.
+   * `GameObject currentGrabbingObject` - The object that is currently doing the grabbing.
+   * `ref bool customTrackPoint` - A reference to whether the created track point is an auto generated custom object.
+  * Returns
+   * `Transform` - The transform of the created track point.
+
+The CreateTrackPoint method sets up the point of grab to track on the grabbed object.
+
+#### ProcessUpdate/0
+
+  > `public virtual void ProcessUpdate()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The ProcessUpdate method is run in every Update method on the interactable object.
+
+#### ProcessFixedUpdate/0
+
+  > `public virtual void ProcessFixedUpdate()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The ProcessFixedUpdate method is run in every FixedUpdate method on the interactable object.
+
+---
+
+## Base Joint Grab Attach (VRTK_BaseJointGrabAttach)
+ > extends [VRTK_BaseGrabAttach](#base-grab-attach-vrtk_basegrabattach)
+
+### Overview
+
+The Base Joint Grab Attach script is an abstract class that all joint grab attach types inherit.
+
+As this is an abstract class, it cannot be applied directly to a game object and performs no logic.
+
+### Inspector Parameters
+
+ * **Destroy Immediately On Throw:** Determines whether the joint should be destroyed immediately on release or whether to wait till the end of the frame before being destroyed.
+
+### Class Methods
+
+#### ValidGrab/1
+
+  > `public override bool ValidGrab(Rigidbody checkAttachPoint)`
+
+  * Parameters
+   * `Rigidbody checkAttachPoint` -
+  * Returns
+   * `bool` - Returns true if there is no current grab happening, or the grab is initiated by another grabbing object.
+
+The ValidGrab method determines if the grab attempt is valid.
+
+#### StartGrab/3
+
+  > `public override bool StartGrab(GameObject grabbingObject, GameObject givenGrabbedObject, Rigidbody givenControllerAttachPoint)`
+
+  * Parameters
+   * `GameObject grabbingObject` - The object that is doing the grabbing.
+   * `GameObject givenGrabbedObject` - The object that is being grabbed.
+   * `Rigidbody givenControllerAttachPoint` - The point on the grabbing object that the grabbed object should be attached to after grab occurs.
+  * Returns
+   * `bool` - Is true if the grab is successful, false if the grab is unsuccessful.
+
+The StartGrab method sets up the grab attach mechanic as soon as an object is grabbed. It is also responsible for creating the joint on the grabbed object.
+
+#### StopGrab/1
+
+  > `public override void StopGrab(bool applyGrabbingObjectVelocity)`
+
+  * Parameters
+   * `bool applyGrabbingObjectVelocity` - If true will apply the current velocity of the grabbing object to the grabbed object on release.
+  * Returns
+   * _none_
+
+The StopGrab method ends the grab of the current object and cleans up the state. It is also responsible for removing the joint from the grabbed object.
+
+---
+
+## Fixed Joint Grab Attach (VRTK_FixedJointGrabAttach)
+ > extends [VRTK_BaseJointGrabAttach](#base-joint-grab-attach-vrtk_basejointgrabattach)
+
+### Overview
+
+The Fixed Joint Grab Attach script is used to create a simple Fixed Joint connection between the object and the grabbing object.
+
+### Inspector Parameters
+
+ * **Break Force:** Maximum force the joint can withstand before breaking. Infinity means unbreakable.
+
+### Example
+
+`VRTK/Examples/005_Controller_BasicObjectGrabbing` demonstrates this grab attach mechanic all of the grabbable objects in the scene.
+
+---
+
+## Spring Joint Grab Attach (VRTK_SpringJointGrabAttach)
+ > extends [VRTK_BaseJointGrabAttach](#base-joint-grab-attach-vrtk_basejointgrabattach)
+
+### Overview
+
+The Spring Joint Grab Attach script is used to create a simple Spring Joint connection between the object and the grabbing object.
+
+### Inspector Parameters
+
+ * **Break Force:** Maximum force the joint can withstand before breaking. Infinity means unbreakable.
+ * **Strength:** The strength of the spring.
+ * **Damper:** The amount of dampening to apply to the spring.
+
+### Example
+
+`VRTK/Examples/021_Controller_GrabbingObjectsWithJoints` demonstrates this grab attach mechanic on the Drawer object in the scene.
+
+---
+
+## Custom Joint Grab Attach (VRTK_CustomJointGrabAttach)
+ > extends [VRTK_BaseJointGrabAttach](#base-joint-grab-attach-vrtk_basejointgrabattach)
+
+### Overview
+
+The Custom Joint Grab Attach script allows a custom joint to be provided for the grab attach mechanic.
+
+The custom joint is placed on the interactable object and at runtime the joint is copied into a `JointHolder` game object that becomes a child of the interactable object.
+
+The custom joint is then copied from this `JointHolder` to the interactable object when a grab happens and is removed when a grab ends.
+
+### Inspector Parameters
+
+ * **Custom Joint:** The joint to use for the grab attach joint.
+
+### Example
+
+`VRTK/Examples/021_Controller_GrabbingObjectsWithJoints` demonstrates this grab attach mechanic on the Lamp object in the scene.
+
+---
+
+## Child Of Controller Grab Attach (VRTK_ChildOfControllerGrabAttach)
+ > extends [VRTK_BaseGrabAttach](#base-grab-attach-vrtk_basegrabattach)
+
+### Overview
+
+The Child Of Controller Grab Attach script is used to make the grabbed object a child of the grabbing object upon grab.
+
+The object upon grab will naturally track the position and rotation of the grabbing object as it is a child of the grabbing game object.
+
+The rigidbody of the object will be set to kinematic upon grab and returned to it's original state on release.
+
+### Class Methods
+
+#### StartGrab/3
+
+  > `public override bool StartGrab(GameObject grabbingObject, GameObject givenGrabbedObject, Rigidbody givenControllerAttachPoint)`
+
+  * Parameters
+   * `GameObject grabbingObject` - The object that is doing the grabbing.
+   * `GameObject givenGrabbedObject` - The object that is being grabbed.
+   * `Rigidbody givenControllerAttachPoint` - The point on the grabbing object that the grabbed object should be attached to after grab occurs.
+  * Returns
+   * `bool` - Is true if the grab is successful, false if the grab is unsuccessful.
+
+The StartGrab method sets up the grab attach mechanic as soon as an object is grabbed. It is also responsible for creating the joint on the grabbed object.
+
+#### StopGrab/1
+
+  > `public override void StopGrab(bool applyGrabbingObjectVelocity)`
+
+  * Parameters
+   * `bool applyGrabbingObjectVelocity` - If true will apply the current velocity of the grabbing object to the grabbed object on release.
+  * Returns
+   * _none_
+
+The StopGrab method ends the grab of the current object and cleans up the state.
+
+### Example
+
+`VRTK/Examples/023_Controller_ChildOfControllerOnGrab` uses this grab attach mechanic for the bow and the arrow.
+
+---
+
+## Track Object Grab Attach (VRTK_TrackObjectGrabAttach)
+ > extends [VRTK_BaseGrabAttach](#base-grab-attach-vrtk_basegrabattach)
+
+### Overview
+
+The Track Object Grab Attach script doesn't attach the object to the controller via a joint, instead it ensures the object tracks the direction of the controller.
+
+This works well for items that are on hinged joints or objects that require to interact naturally with other scene rigidbodies.
+
+### Inspector Parameters
+
+ * **Detach Distance:** The maximum distance the grabbing controller is away from the object before it is automatically dropped.
+
+### Class Methods
+
+#### StopGrab/1
+
+  > `public override void StopGrab(bool applyGrabbingObjectVelocity)`
+
+  * Parameters
+   * `bool applyGrabbingObjectVelocity` - If true will apply the current velocity of the grabbing object to the grabbed object on release.
+  * Returns
+   * _none_
+
+The StopGrab method ends the grab of the current object and cleans up the state.
+
+#### CreateTrackPoint/4
+
+  > `public override Transform CreateTrackPoint(Transform controllerPoint, GameObject currentGrabbedObject, GameObject currentGrabbingObject, ref bool customTrackPoint)`
+
+  * Parameters
+   * `Transform controllerPoint` - The point on the controller where the grab was initiated.
+   * `GameObject currentGrabbedObject` - The object that is currently being grabbed.
+   * `GameObject currentGrabbingObject` - The object that is currently doing the grabbing.
+   * `ref bool customTrackPoint` - A reference to whether the created track point is an auto generated custom object.
+  * Returns
+   * `Transform` - The transform of the created track point.
+
+The CreateTrackPoint method sets up the point of grab to track on the grabbed object.
+
+#### ProcessUpdate/0
+
+  > `public override void ProcessUpdate()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The ProcessUpdate method is run in every Update method on the interactable object. It is responsible for checking if the tracked object has exceeded it's detach distance.
+
+#### ProcessFixedUpdate/0
+
+  > `public override void ProcessFixedUpdate()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The ProcessFixedUpdate method is run in every FixedUpdate method on the interactable object. It applies velocity to the object to ensure it is tracking the grabbing object.
+
+### Example
+
+`VRTK/Examples/021_Controller_GrabbingObjectsWithJoints` demonstrates this grab attach mechanic on the Chest handle and Fire Extinguisher body.
+
+---
+
+## Rotator Track Grab Attach (VRTK_RotatorTrackGrabAttach)
+ > extends [VRTK_TrackObjectGrabAttach](#track-object-grab-attach-vrtk_trackobjectgrabattach)
+
+### Overview
+
+The Rotator Track Grab Attach script is used to track the object but instead of the object tracking the direction of the controller, a force is applied to the object to cause it to rotate.
+
+This is ideal for hinged joints on items such as wheels or doors.
+
+### Class Methods
+
+#### ProcessFixedUpdate/0
+
+  > `public override void ProcessFixedUpdate()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The ProcessFixedUpdate method is run in every FixedUpdate method on the interactable object. It applies a force to the grabbed object to move it in the direction of the grabbing object.
+
+### Example
+
+`VRTK/Examples/021_Controller_GrabbingObjectsWithJoints` demonstrates this grab attach mechanic on the Wheel and Door objects in the scene.
+
+---
+
+## Climbable Grab Attach (VRTK_ClimbableGrabAttach)
+ > extends [VRTK_BaseGrabAttach](#base-grab-attach-vrtk_basegrabattach)
+
+### Overview
+
+The Climbable Grab Attach script is used to mark the object as a climbable interactable object.
+
+### Example
+
+`VRTK/Examples/037_CameraRig_ClimbingFalling` uses this grab attach mechanic for each item that is climbable in the scene.
 
 ---
 
@@ -2670,19 +3094,11 @@ The highlighting of an Interactable Object is defaulted to use the `VRTK_Materia
  * **Hold Button To Grab:** If this is checked then the grab button on the controller needs to be continually held down to keep grabbing. If this is unchecked the grab button toggles the grab action with one button press to grab and another to release.
  * **Stay Grabbed On Teleport:** If this is checked then the object will stay grabbed to the controller when a teleport occurs. If it is unchecked then the object will be released when a teleport occurs.
  * **Valid Drop:** Determines in what situation the object can be dropped by the controller grab button.
- * **Secondary Grab Action:** Determines what should happen to the object if another grab attempt is made by a secondary controller if the object is already being grabbed.
- * **Custom Secondary Action:** The script to utilise to process the secondary controller action when a secondary grab attempt is made.
  * **Grab Override Button:** If this is set to `Undefined` then the global grab alias button will grab the object, setting it to any other button will ensure the override button is used to grab this specific interactable object.
  * **Allowed Grab Controllers:** Determines which controller can initiate a grab action.
- * **Precision Snap:** If this is checked then when the controller grabs the object, it will grab it with precision and pick it up at the particular point on the object the controller is touching.
- * **Right Snap Handle:** A Transform provided as an empty game object which must be the child of the item being grabbed and serves as an orientation point to rotate and position the grabbed item in relation to the right handed controller. If no Right Snap Handle is provided but a Left Snap Handle is provided, then the Left Snap Handle will be used in place. If no Snap Handle is provided then the object will be grabbed at its central point. Not required for `Precision Snap`.
- * **Left Snap Handle:** A Transform provided as an empty game object which must be the child of the item being grabbed and serves as an orientation point to rotate and position the grabbed item in relation to the left handed controller. If no Left Snap Handle is provided but a Right Snap Handle is provided, then the Right Snap Handle will be used in place. If no Snap Handle is provided then the object will be grabbed at its central point. Not required for `Precision Snap`.
- * **Grab Attach Mechanic:** This determines how the grabbed item will be attached to the controller when it is grabbed.
- * **Detach Threshold:** The force amount when to detach the object from the grabbed controller. If the controller tries to exert a force higher than this threshold on the object (from pulling it through another object or pushing it into another object) then the joint holding the object to the grabbing controller will break and the object will no longer be grabbed. This also works with Tracked Object grabbing but determines how far the controller is from the object before breaking the grab. Only required for `Fixed Joint`, `Spring Joint`, `Track Object` and `Rotator Track`.
- * **Spring Joint Strength:** The strength of the spring holding the object to the controller. A low number will mean the spring is very loose and the object will require more force to move it, a high number will mean a tight spring meaning less force is required to move it. Only required for `Spring Joint`.
- * **Spring Joint Damper:** The amount to damper the spring effect when using a Spring Joint grab mechanic. A higher number here will reduce the oscillation effect when moving jointed Interactable Objects. Only required for `Spring Joint`.
- * **Throw Multiplier:** An amount to multiply the velocity of the given object when it is thrown. This can also be used in conjunction with the Interact Grab Throw Multiplier to have certain objects be thrown even further than normal (or thrown a shorter distance if a number below 1 is entered).
- * **On Grab Collision Delay:** The amount of time to delay collisions affecting the object when it is first grabbed. This is useful if a game object may get stuck inside another object when it is being grabbed.
+ * **Secondary Grab Action:** Determines what should happen to the object if another grab attempt is made by a secondary controller if the object is already being grabbed.
+ * **Custom Secondary Action:** The script to utilise to process the secondary controller action when a secondary grab attempt is made.
+ * **Grab Attach Mechanic Script:** This determines how the grabbed item will be attached to the controller when it is grabbed. If one isn't provided then the first Grab Attach script on the GameObject will be used, if one is not found and the object is grabbable then a Fixed Joint Grab Attach script will be created at runtime.
  * **Is Usable:** Determines if the object can be used.
  * **Use Only If Grabbed:** If this is checked the object can be used only if it is currently being grabbed.
  * **Hold Button To Use:** If this is checked then the use button on the controller needs to be continually held down to keep using. If this is unchecked the the use button toggles the use action with one button press to start using and another to stop using.
@@ -2692,13 +3108,6 @@ The highlighting of an Interactable Object is defaulted to use the `VRTK_Materia
 
 ### Class Variables
 
- * `public enum GrabAttachType` - Types of grab attachment.
-  * `Fixed_Joint` - Attaches the object to the controller with a fixed joint meaning it tracks the position and rotation of the controller with perfect 1:1 tracking.
-  * `Spring_Joint` - Attaches the object to the controller with a spring joint meaning there is some flexibility between the item and the controller force moving the item. This works well when attempting to pull an item rather than snap the item directly to the controller. It creates the illusion that the item has resistance to move it.
-  * `Track_Object` - Doesn't attach the object to the controller via a joint, instead it ensures the object tracks the direction of the controller, which works well for items that are on hinged joints.
-  * `Rotator_Track` - Tracks the object but instead of the object tracking the direction of the controller, a force is applied to the object to cause it to rotate. This is ideal for hinged joints on items such as wheels or doors.
-  * `Child_Of_Controller` - Makes the object a child of the controller grabbing so it naturally tracks the position of the controller motion.
-  * `Climbable` - Non-rigid body interactable object used to allow player climbing.
  * `public enum AllowedController` - Allowed controller type.
   * `Both` - Both controllers are allowed to interact.
   * `Left_Only` - Only the left controller is allowed to interact.
@@ -2712,6 +3121,7 @@ The highlighting of an Interactable Object is defaulted to use the `VRTK_Materia
   * `Swap_Controller` - The object will be swapped after another grab attempt to the secondary grabbing controller.
   * `Custom_Action` - The object will be manipulated by the script provided in the `Secondary Custom Action` parameter.
  * `public int usingState` - The current using state of the object. `0` not being used, `1` being used. Default: `0`
+ * `public bool isKinematic` - isKinematic is a pass through to the `isKinematic` getter/setter on the object's rigidbody component.
 
 ### Class Events
 
@@ -2849,71 +3259,16 @@ The StopUsing method is called automatically when the object has stopped being u
 
 The ToggleHighlight method is used to turn on or off the colour highlight of the object.
 
-#### PauseCollisions/0
+#### PauseCollisions/1
 
-  > `public void PauseCollisions()`
+  > `public void PauseCollisions(float delay)`
 
   * Parameters
-   * _none_
+   * `float delay` - The amount of time to pause the collisions for.
   * Returns
    * _none_
 
 The PauseCollisions method temporarily pauses all collisions on the object at grab time by removing the object's rigidbody's ability to detect collisions. This can be useful for preventing clipping when initially grabbing an item.
-
-#### AttachIsTrackObject/0
-
-  > `public bool AttachIsTrackObject()`
-
-  * Parameters
-   * _none_
-  * Returns
-   * `bool` - Is true if the grab attach mechanic is one of the track types like `Track Object` or `Rotator Track`.
-
-The AttachIsTrackObject method is used to determine if the object is using one of the track grab attach mechanics.
-
-#### AttachIsClimbObject/0
-
-  > `public bool AttachIsClimbObject()`
-
-  * Parameters
-   * _none_
-  * Returns
-   * `bool` - Is true if the grab attach mechanic is `Climbable`.
-
-The AttachIsClimbObject method is used to determine if the object is using the `Climbable` grab attach mechanics.
-
-#### AttachIsKinematicObject/0
-
-  > `public bool AttachIsKinematicObject()`
-
-  * Parameters
-   * _none_
-  * Returns
-   * `bool` - Is true if the grab attach mechanic sets the object to a kinematic state on grab.
-
-The AttachIsKinematicObject method is used to determine if the object has kinematics turned on at the point of grab.
-
-#### AttachIsStaticObject/0
-
-  > `public bool AttachIsStaticObject()`
-
-  * Parameters
-   * _none_
-  * Returns
-   * `bool` - Is true if the grab attach mechanic is one of the static types like `Climbable`.
-
-The AttachIsStaticObject method is used to determine if the object is using one of the static grab attach types.
-
-#### AttachIsUnthrowableObject/0
-
-  > `public bool AttachIsUnthrowableObject()`
-
-  * Parameters
-   * _none_
-  * Returns
-   * `bool` - Is true if the grab attach mechanic is of a type that shouldn't be considered thrown when released.
-
-The AttachIsUnthrowableObject method is used to determine if the object is using one of the grab types that should not be thrown when released.
 
 #### ZeroVelocity/0
 
@@ -2936,28 +3291,6 @@ The ZeroVelocity method resets the velocity and angular velocity to zero on the 
    * _none_
 
 The SaveCurrentState method stores the existing object parent and the object's rigidbody kinematic setting.
-
-#### ToggleKinematic/1
-
-  > `public void ToggleKinematic(bool state)`
-
-  * Parameters
-   * `bool state` - The object's rigidbody kinematic state.
-  * Returns
-   * _none_
-
-The ToggleKinematic method is used to set the object's internal rigidbody kinematic state.
-
-#### IsKinematic/0
-
-  > `public bool IsKinematic()`
-
-  * Parameters
-   * _none_
-  * Returns
-   * `bool` - Returns true if the rigidbody is set to kinematic and returns false if it's not.
-
-the IsKinematic method returns whether the rigidbody is set to kinematic or not.
 
 #### GetTouchingObjects/0
 
@@ -3037,17 +3370,6 @@ The ForceStopInteracting method forces the object to no longer be interacted wit
 
 The ForceStopSecondaryGrabInteraction method forces the object to no longer be influenced by the second controller grabbing it.
 
-#### SetGrabbedSnapHandle/1
-
-  > `public void SetGrabbedSnapHandle(Transform handle)`
-
-  * Parameters
-   * `Transform handle` - A transform of an object to use for the snap handle when the object is grabbed.
-  * Returns
-   * _none_
-
-The SetGrabbedSnapHandle method is used to set the snap handle of the object at runtime.
-
 #### RegisterTeleporters/0
 
   > `public void RegisterTeleporters()`
@@ -3058,6 +3380,17 @@ The SetGrabbedSnapHandle method is used to set the snap handle of the object at 
    * _none_
 
 The RegisterTeleporters method is used to find all objects that have a teleporter script and register the object on the `OnTeleported` event. This is used internally by the object for keeping Tracked objects positions updated after teleporting.
+
+#### UnregisterTeleporters/0
+
+  > `public void UnregisterTeleporters()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The UnregisterTeleporters method is used to unregister all teleporter events that are active on this object.
 
 #### StoreLocalScale/0
 

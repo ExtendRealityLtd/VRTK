@@ -24,7 +24,7 @@
         protected override void Awake()
         {
             base.Awake();
-            rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
+            interactableRigidbody.collisionDetectionMode = CollisionDetectionMode.Continuous;
         }
 
         private void OnCollisionEnter(Collision collision)

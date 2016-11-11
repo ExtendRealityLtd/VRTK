@@ -47,7 +47,7 @@ namespace VRTK.SecondaryControllerGrabActions
         public override void ResetAction()
         {
             releaseRotation = transform.localRotation;
-            if (!grabbedObject.precisionSnap)
+            if (!grabbedObject.grabAttachMechanicScript.precisionGrab)
             {
                 if (releaseSnapSpeed < float.MaxValue && releaseSnapSpeed > 0)
                 {
@@ -106,7 +106,7 @@ namespace VRTK.SecondaryControllerGrabActions
         private void AimObject()
         {
             transform.rotation = Quaternion.LookRotation(secondaryGrabbingObject.transform.position - primaryGrabbingObject.transform.position, secondaryGrabbingObject.transform.TransformDirection(Vector3.forward));
-            if (grabbedObject.precisionSnap)
+            if (grabbedObject.grabAttachMechanicScript.precisionGrab)
             {
                 transform.Translate(primaryGrabbingObject.controllerAttachPoint.transform.position - primaryInitialGrabPoint.position, Space.World);
             }

@@ -241,6 +241,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d45c8d32f1d960d4498790bb3961fc52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  modelElementPaths:
+    bodyModelPath: 
+    triggerModelPath: 
+    leftGripModelPath: 
+    rightGripModelPath: 
+    touchpadModelPath: 
+    appMenuModelPath: 
+    systemMenuModelPath: 
+  elementHighlighterOverrides:
+    body: {fileID: 0}
+    trigger: {fileID: 0}
+    gripLeft: {fileID: 0}
+    gripRight: {fileID: 0}
+    touchpad: {fileID: 0}
+    appMenu: {fileID: 0}
+    systemMenu: {fileID: 0}
 --- !u!114 &45710401
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -253,9 +269,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64e104da36bd3b04b90c6ae969ac66dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideControllerOnTouch: 0
-  hideControllerDelay: 0
-  globalTouchHighlightColor: {r: 0.74509805, g: 0.9411765, b: 1, a: 1}
   customRigidbodyObject: {fileID: 0}
 --- !u!114 &45710402
 MonoBehaviour:
@@ -270,8 +283,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controllerAttachPoint: {fileID: 0}
-  hideControllerOnGrab: 0
-  hideControllerDelay: 0
   grabPrecognition: 0
   throwMultiplier: 1
   createRigidBodyWhenNotTouching: 0
@@ -286,8 +297,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65eb64f0f2fd6d64faddbcf5d7d3bdbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideControllerOnUse: 0
-  hideControllerDelay: 0
 --- !u!114 &45710405
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -302,29 +311,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enableTeleport: 1
   controller: {fileID: 0}
+  pointerOriginTransform: {fileID: 0}
   pointerMaterial: {fileID: 0}
   pointerHitColor: {r: 0.74509805, g: 0.9411765, b: 1, a: 1}
   pointerMissColor: {r: 1, g: 0.353, b: 0.272, a: 1}
-  showPlayAreaCursor: 0
-  playAreaCursorDimensions: {x: 0.3, y: 0.3}
-  handlePlayAreaCursorCollisions: 0
-  ignoreTargetWithTagOrClass: ExcludeTeleport
-  pointerVisibility: 0
   holdButtonToActivate: 1
+  interactWithObjects: 0
+  grabToPointerTip: 0
   activateDelay: 0
-  pointerLength: 15
-  pointerDensity: 40
-  showPointerCursor: 1
-  pointerCursorRadius: 0.5
-  beamCurveOffset: 0.5
-  customPointerTracer: {fileID: 152786, guid: 78ca952d2c8152c44a89f9b406f7e137, type: 2}
-  customPointerCursor: {fileID: 115170, guid: dedfb5ee6b3a49745b85a120679a1bfd, type: 2}
+  pointerVisibility: 0
   layersToIgnore:
     serializedVersion: 2
     m_Bits: 4
+  pointerLength: 15
+  pointerDensity: 40
+  beamCurveOffset: 0.5
+  beamHeightLimitAngle: 100
+  rescalePointerTracer: 1
+  showPointerCursor: 1
+  pointerCursorRadius: 0.5
+  pointerCursorMatchTargetRotation: 0
+  customPointerTracer: {fileID: 152786, guid: 78ca952d2c8152c44a89f9b406f7e137, type: 2}
+  customPointerCursor: {fileID: 115170, guid: dedfb5ee6b3a49745b85a120679a1bfd, type: 2}
   validTeleportLocationObject: {fileID: 146986, guid: a7c0ca5b1925f554795cd723c81e7a44,
     type: 2}
-  rescalePointerTracer: 1
 --- !u!114 &45710406
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -344,6 +354,7 @@ MonoBehaviour:
   uiClickButton: 3
   menuToggleButton: 7
   axisFidelity: 1
+  triggerClickThreshold: 1
   triggerPressed: 0
   triggerTouched: 0
   triggerHairlinePressed: 0
@@ -2686,6 +2697,7 @@ GameObject:
   - 23: {fileID: 1006727178}
   - 54: {fileID: 1006727177}
   - 114: {fileID: 1006727176}
+  - 114: {fileID: 1006727181}
   m_Layer: 0
   m_Name: Usable Grabbable Sphere
   m_TagString: Untagged
@@ -2718,34 +2730,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3851f5f8fea44d438c121062c9b2673, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  highlightOnTouch: 0
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
-  rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
-  hideControllerOnTouch: 0
   isGrabbable: 1
-  isDroppable: 1
-  isSwappable: 1
   holdButtonToGrab: 1
-  rumbleOnGrab: {x: 0, y: 0}
+  stayGrabbedOnTeleport: 1
+  validDrop: 1
+  grabOverrideButton: 8
   allowedGrabControllers: 0
-  precisionSnap: 1
-  rightSnapHandle: {fileID: 0}
-  leftSnapHandle: {fileID: 0}
-  hideControllerOnGrab: 0
+  secondaryGrabAction: 1
+  customSecondaryAction: {fileID: 0}
+  grabAttachMechanicScript: {fileID: 1006727181}
   grabAttachMechanic: 0
-  detachThreshold: 500
-  springJointStrength: 500
-  springJointDamper: 50
-  throwMultiplier: 2
-  onGrabCollisionDelay: 0
   isUsable: 1
   useOnlyIfGrabbed: 1
   holdButtonToUse: 1
   pointerActivatesUseAction: 1
-  rumbleOnUse: {x: 0, y: 0}
+  useOverrideButton: 8
   allowedUseControllers: 0
-  hideControllerOnUse: 1
+  usingState: 0
   idleSpinSpeed: 30
   activeSpinSpeed: 360
   rotatingObject: {fileID: 400710284}
@@ -2817,6 +2820,24 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1006727174}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1006727181
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1006727174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8afa0b205791c9f4496bf2814aeac078, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  precisionGrab: 0
+  rightSnapHandle: {fileID: 0}
+  leftSnapHandle: {fileID: 0}
+  throwMultiplier: 1
+  onGrabCollisionDelay: 0.5
+  customJoint: {fileID: 0}
+  breakForce: 1500
 --- !u!1 &1037927597
 GameObject:
   m_ObjectHideFlags: 0
@@ -2851,6 +2872,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d45c8d32f1d960d4498790bb3961fc52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  modelElementPaths:
+    bodyModelPath: 
+    triggerModelPath: 
+    leftGripModelPath: 
+    rightGripModelPath: 
+    touchpadModelPath: 
+    appMenuModelPath: 
+    systemMenuModelPath: 
+  elementHighlighterOverrides:
+    body: {fileID: 0}
+    trigger: {fileID: 0}
+    gripLeft: {fileID: 0}
+    gripRight: {fileID: 0}
+    touchpad: {fileID: 0}
+    appMenu: {fileID: 0}
+    systemMenu: {fileID: 0}
 --- !u!114 &1037927599
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2863,9 +2900,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64e104da36bd3b04b90c6ae969ac66dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideControllerOnTouch: 0
-  hideControllerDelay: 0
-  globalTouchHighlightColor: {r: 0, g: 1, b: 1, a: 0}
   customRigidbodyObject: {fileID: 0}
 --- !u!114 &1037927600
 MonoBehaviour:
@@ -2880,8 +2914,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controllerAttachPoint: {fileID: 0}
-  hideControllerOnGrab: 0
-  hideControllerDelay: 0
   grabPrecognition: 0
   throwMultiplier: 1
   createRigidBodyWhenNotTouching: 0
@@ -2904,6 +2936,7 @@ MonoBehaviour:
   uiClickButton: 0
   menuToggleButton: 4
   axisFidelity: 1
+  triggerClickThreshold: 1
   triggerPressed: 0
   triggerTouched: 0
   triggerHairlinePressed: 0
@@ -2933,23 +2966,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enableTeleport: 0
   controller: {fileID: 0}
+  pointerOriginTransform: {fileID: 0}
   pointerMaterial: {fileID: 0}
   pointerHitColor: {r: 0.74509805, g: 0.9411765, b: 1, a: 1}
   pointerMissColor: {r: 1, g: 0.3907872, b: 0.3907872, a: 1}
-  showPlayAreaCursor: 0
-  playAreaCursorDimensions: {x: 0.3, y: 0.3}
-  handlePlayAreaCursorCollisions: 0
-  ignoreTargetWithTagOrClass: 
-  pointerVisibility: 0
   holdButtonToActivate: 1
+  interactWithObjects: 0
+  grabToPointerTip: 0
   activateDelay: 0
+  pointerVisibility: 0
+  layersToIgnore:
+    serializedVersion: 2
+    m_Bits: 4
   pointerThickness: 0.002
   pointerLength: 100
   showPointerTip: 1
   customPointerCursor: {fileID: 192136, guid: cefd23182bb4eb441a261e77e4f1016a, type: 2}
-  layersToIgnore:
-    serializedVersion: 2
-    m_Bits: 4
+  pointerCursorMatchTargetNormal: 0
+  pointerCursorRescaledAlongDistance: 0
 --- !u!114 &1037927604
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2969,6 +3003,7 @@ MonoBehaviour:
   uiClickButton: 3
   menuToggleButton: 7
   axisFidelity: 1
+  triggerClickThreshold: 1
   triggerPressed: 0
   triggerTouched: 0
   triggerHairlinePressed: 0
@@ -3867,34 +3902,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3851f5f8fea44d438c121062c9b2673, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  highlightOnTouch: 0
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
-  rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
-  hideControllerOnTouch: 0
   isGrabbable: 0
-  isDroppable: 0
-  isSwappable: 0
   holdButtonToGrab: 0
-  rumbleOnGrab: {x: 0, y: 0}
+  stayGrabbedOnTeleport: 1
+  validDrop: 1
+  grabOverrideButton: 8
   allowedGrabControllers: 0
-  precisionSnap: 0
-  rightSnapHandle: {fileID: 0}
-  leftSnapHandle: {fileID: 0}
-  hideControllerOnGrab: 0
+  secondaryGrabAction: 1
+  customSecondaryAction: {fileID: 0}
+  grabAttachMechanicScript: {fileID: 0}
   grabAttachMechanic: 0
-  detachThreshold: 500
-  springJointStrength: 500
-  springJointDamper: 50
-  throwMultiplier: 1
-  onGrabCollisionDelay: 0
   isUsable: 1
   useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 1
-  rumbleOnUse: {x: 0, y: 0}
+  useOverrideButton: 8
   allowedUseControllers: 0
-  hideControllerOnUse: 0
+  usingState: 0
   idleSpinSpeed: 30
   activeSpinSpeed: 360
   rotatingObject: {fileID: 804905403}
@@ -4129,11 +4155,14 @@ MonoBehaviour:
   distanceBlinkDelay: 0
   headsetPositionCompensation: 1
   ignoreTargetWithTagOrClass: ExcludeTeleport
+  targetTagOrScriptListPolicy: {fileID: 0}
   navMeshLimitDistance: 0
   playSpaceFalling: 0
+  playSpaceFallRestriction: 0
   useGravity: 0
   gravityFallHeight: 1
   blinkYThreshold: 0.1
+  floorHeightTolerance: 0.001
 --- !u!114 &1665097738
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4596,34 +4625,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3851f5f8fea44d438c121062c9b2673, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  highlightOnTouch: 0
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
-  rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
-  hideControllerOnTouch: 0
   isGrabbable: 0
-  isDroppable: 0
-  isSwappable: 0
   holdButtonToGrab: 0
-  rumbleOnGrab: {x: 0, y: 0}
+  stayGrabbedOnTeleport: 1
+  validDrop: 1
+  grabOverrideButton: 8
   allowedGrabControllers: 0
-  precisionSnap: 0
-  rightSnapHandle: {fileID: 0}
-  leftSnapHandle: {fileID: 0}
-  hideControllerOnGrab: 0
+  secondaryGrabAction: 1
+  customSecondaryAction: {fileID: 0}
+  grabAttachMechanicScript: {fileID: 0}
   grabAttachMechanic: 0
-  detachThreshold: 500
-  springJointStrength: 500
-  springJointDamper: 50
-  throwMultiplier: 1
-  onGrabCollisionDelay: 0
   isUsable: 1
   useOnlyIfGrabbed: 0
   holdButtonToUse: 1
   pointerActivatesUseAction: 1
-  rumbleOnUse: {x: 0, y: 0}
+  useOverrideButton: 8
   allowedUseControllers: 0
-  hideControllerOnUse: 0
+  usingState: 0
   idleSpinSpeed: 30
   activeSpinSpeed: 360
   rotatingObject: {fileID: 455226068}

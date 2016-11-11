@@ -29,9 +29,8 @@
             beamExtendSpeed = -5f;
         }
 
-        protected override void Start()
+        protected void Start()
         {
-            base.Start();
             blade = transform.Find("Blade").gameObject;
             currentBeamSize = beamLimits.x;
             SetBeamSize();

@@ -287,7 +287,7 @@ namespace VRTK
         private bool IsClimbableObject(GameObject obj)
         {
             var interactObject = obj.GetComponent<VRTK_InteractableObject>();
-            return interactObject != null && interactObject.AttachIsClimbObject();
+            return (interactObject && interactObject.grabAttachMechanicScript && interactObject.grabAttachMechanicScript.IsClimbable());
         }
 
         private void Update()
