@@ -1,6 +1,9 @@
 ﻿namespace VRTK
 {
     using UnityEngine;
+#if UNITY_5_4_OR_NEWER
+    using UnityEngine.VR;
+#endif
 
     public class VRTK_SDK_Bridge
     {
@@ -301,6 +304,24 @@
 
         private static SDK_Base GetActiveSDK()
         {
+#if (UNITY_5_4_OR_NEWER)
+            switch (VRSettings.loadedDeviceName)
+            {
+                case "Oculus":
+#if (UNITY_ANDROID)// && !UNITY_EDITOR)
+                    activeSDK = ScriptableObject.CreateInstance<SDK_GearVR>();
+#else
+                    // activeSDK = ScriptableObject.CreateInstance<SDK_Touch>(); ??? (Oculus Touch)
+#endif
+                    break;
+                case "OpenVR":
+                    activeSDK = ScriptableObject.CreateInstance<SDK_SteamVR>();
+                    break;
+                default:
+                    activeSDK = ScriptableObject.CreateInstance<SDK_Default>();
+                    break;
+            }
+#endif
             if (activeSDK == null)
             {
                 activeSDK = ScriptableObject.CreateInstance<SDK_SteamVR>();
