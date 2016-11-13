@@ -20,7 +20,7 @@
 
                     pointer.controller = controllerEvents;
                     pointer.enableTeleport = false;
-                    pointer.pointerVisibility = VRTK_WorldPointer.pointerVisibilityStates.Always_Off;
+                    pointer.pointerVisibility = VRTK_BasePointer.pointerVisibilityStates.Always_Off;
                     pointer.pointerLength = 100f;
                     pointer.showPointerTip = true;
                 }

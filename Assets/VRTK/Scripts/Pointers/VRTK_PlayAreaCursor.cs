@@ -4,7 +4,7 @@ namespace VRTK
     using UnityEngine;
 
     /// <summary>
-    /// The Play Area Cursor is used in conjunction with a World Pointer script and displays a representation of the play area where the pointer cursor hits.
+    /// The Play Area Cursor is used in conjunction with a Base Pointer script and displays a representation of the play area where the pointer cursor hits.
     /// </summary>
     /// <example>
     /// `VRTK/Examples/012_Controller_PointerWithAreaCollision` shows how a Bezier Pointer with the Play Area Cursor and Collision Detection enabled can be used to traverse a game area but not allow teleporting into areas where the walls or other objects would fall into the play area space enabling the user to enter walls.
@@ -13,7 +13,7 @@ namespace VRTK
     {
         [Tooltip("Determines the size of the play area cursor and collider. If the values are left as zero then the Play Area Cursor will be sized to the calibrated Play Area space.")]
         public Vector2 playAreaCursorDimensions = Vector2.zero;
-        [Tooltip("If this is ticked then if the play area cursor is colliding with any other object then the pointer colour will change to the `Pointer Miss Color` and the `WorldPointerDestinationSet` event will not be triggered, which will prevent teleporting into areas where the play area will collide.")]
+        [Tooltip("If this is ticked then if the play area cursor is colliding with any other object then the pointer colour will change to the `Pointer Miss Color` and the `DestinationMarkerSet` event will not be triggered, which will prevent teleporting into areas where the play area will collide.")]
         public bool handlePlayAreaCursorCollisions = false;
         [Tooltip("If this is ticked then if the user's headset is outside of the play area cursor bounds then it is considered a collision even if the play area isn't colliding with anything.")]
         public bool headsetOutOfBoundsIsCollision = false;
@@ -121,9 +121,9 @@ namespace VRTK
 
         protected virtual void Awake()
         {
-            if (!GetComponent<VRTK_WorldPointer>())
+            if (!GetComponent<VRTK_BasePointer>())
             {
-                Debug.LogError("VRTK_PlayAreaCursor requires a VRTK_WorldPointer script attached to the same object.");
+                Debug.LogError("VRTK_PlayAreaCursor requires a VRTK_BasePointer script attached to the same object.");
                 return;
             }
 

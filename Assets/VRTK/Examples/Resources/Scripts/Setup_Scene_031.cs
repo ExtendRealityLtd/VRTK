@@ -21,7 +21,7 @@
                     var pointer = headset.gameObject.AddComponent<VRTK_BezierPointer>();
 
                     pointer.controller = VRTK_DeviceFinder.GetControllerRightHand().GetComponent<VRTK_ControllerEvents>();
-                    pointer.pointerVisibility = VRTK_WorldPointer.pointerVisibilityStates.Always_Off;
+                    pointer.pointerVisibility = VRTK_BasePointer.pointerVisibilityStates.Always_Off;
                     pointer.pointerLength = 7f;
                     pointer.pointerDensity = 1;
                     pointer.pointerCursorRadius = 0.3f;

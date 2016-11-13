@@ -14,9 +14,10 @@ namespace VRTK
     /// <example>
     /// `VRTK/Examples/003_Controller_SimplePointer` shows the simple pointer in action and code examples of how the events are utilised and listened to can be viewed in the script `VRTK/Examples/Resources/Scripts/VRTK_ControllerPointerEvents_ListenerExample.cs`
     /// </example>
-    public class VRTK_SimplePointer : VRTK_WorldPointer
+    public class VRTK_SimplePointer : VRTK_BasePointer
     {
         [Header("Simple Pointer Settings", order = 3)]
+
         [Tooltip("The thickness and length of the beam can also be set on the script as well as the ability to toggle the sphere beam tip that is displayed at the end of the beam (to represent a cursor).")]
         public float pointerThickness = 0.002f;
         [Tooltip("The distance the beam will project before stopping.")]
@@ -100,13 +101,13 @@ namespace VRTK
 
         protected override void InitPointer()
         {
-            pointerHolder = new GameObject(string.Format("[{0}]WorldPointer_SimplePointer_Holder", gameObject.name));
+            pointerHolder = new GameObject(string.Format("[{0}]BasePointer_SimplePointer_Holder", gameObject.name));
             pointerHolder.transform.parent = transform;
             pointerHolder.transform.localPosition = Vector3.zero;
             Utilities.SetPlayerObject(pointerHolder, VRTK_PlayerObject.ObjectTypes.Pointer);
 
             pointer = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            pointer.transform.name = string.Format("[{0}]WorldPointer_SimplePointer_Pointer", gameObject.name);
+            pointer.transform.name = string.Format("[{0}]BasePointer_SimplePointer_Pointer", gameObject.name);
             pointer.transform.parent = pointerHolder.transform;
             pointer.GetComponent<BoxCollider>().isTrigger = true;
             pointer.AddComponent<Rigidbody>().isKinematic = true;
@@ -135,7 +136,7 @@ namespace VRTK
             }
 
             pointerCursorOriginalScale = pointerTip.transform.localScale;
-            pointerTip.transform.name = string.Format("[{0}]WorldPointer_SimplePointer_PointerTip", gameObject.name);
+            pointerTip.transform.name = string.Format("[{0}]BasePointer_SimplePointer_PointerTip", gameObject.name);
             pointerTip.transform.parent = pointerHolder.transform;
             pointerTip.GetComponent<Collider>().isTrigger = true;
             pointerTip.AddComponent<Rigidbody>().isKinematic = true;

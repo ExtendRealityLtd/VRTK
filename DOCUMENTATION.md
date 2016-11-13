@@ -455,7 +455,7 @@ To show / hide a UI panel, you must first pick up the VRTK_InteractableObject an
 A collection of scripts that provide the ability to create pointers and set destination markers in the scene.
 
  * [Destination Marker](#destination-marker-vrtk_destinationmarker)
- * [World Pointer](#world-pointer-vrtk_worldpointer)
+ * [Base Pointer](#base-pointer-vrtk_basepointer)
  * [Simple Pointer](#simple-pointer-vrtk_simplepointer)
  * [Bezier Pointer](#bezier-pointer-vrtk_bezierpointer)
  * [Play Area Cursor](#play-area-cursor-vrtk_playareacursor)
@@ -468,7 +468,7 @@ A collection of scripts that provide the ability to create pointers and set dest
 
 This abstract class provides the ability to emit events of destination markers within the game world. It can be useful for tagging locations for specific purposes such as teleporting.
 
-It is utilised by the `VRTK_WorldPointer` for dealing with pointer events when the pointer cursor touches areas within the game world.
+It is utilised by the `VRTK_BasePointer` for dealing with pointer events when the pointer cursor touches areas within the game world.
 
 ### Inspector Parameters
 
@@ -535,16 +535,16 @@ The SetHeadsetPositionCompensation method determines whether the offset position
 
 ---
 
-## World Pointer (VRTK_WorldPointer)
+## Base Pointer (VRTK_BasePointer)
  > extends [VRTK_DestinationMarker](#destination-marker-vrtk_destinationmarker)
 
 ### Overview
 
-This abstract class provides any game pointer the ability to know the state of the implemented pointer. It extends the `VRTK_DestinationMarker` to allow for destination events to be emitted when the pointer cursor collides with objects.
+This abstract class provides any game pointer the ability to know the state of the implemented pointer.
 
-The World Pointer also provides a play area cursor to be displayed for all cursors that utilise this class. The play area cursor is a representation of the current calibrated play area space and is useful for visualising the potential new play area space in the game world prior to teleporting. It can also handle collisions with objects on the new play area space and prevent teleporting if there are any collisions with objects at the potential new destination.
+It extends the `VRTK_DestinationMarker` to allow for destination events to be emitted when the pointer cursor collides with objects.
 
-The play area collider does not work well with terrains as they are uneven and cause collisions regularly so it is recommended that handling play area collisions is not enabled when using terrains.
+As this is an abstract class, it cannot be applied directly to a game object and performs no logic.
 
 ### Inspector Parameters
 
@@ -603,7 +603,7 @@ The ToggleBeam method allows the pointer beam to be toggled on or off via code a
 ---
 
 ## Simple Pointer (VRTK_SimplePointer)
- > extends [VRTK_WorldPointer](#world-pointer-vrtk_worldpointer)
+ > extends [VRTK_BasePointer](#base-pointer-vrtk_basepointer)
 
 ### Overview
 
@@ -629,7 +629,7 @@ The Simple Pointer script can be attached to a Controller object within the `[Ca
 ---
 
 ## Bezier Pointer (VRTK_BezierPointer)
- > extends [VRTK_WorldPointer](#world-pointer-vrtk_worldpointer)
+ > extends [VRTK_BasePointer](#base-pointer-vrtk_basepointer)
 
 ### Overview
 
@@ -667,12 +667,12 @@ The Bezier Pointer script can be attached to a Controller object within the `[Ca
 
 ### Overview
 
-The Play Area Cursor is used in conjunction with a World Pointer script and displays a representation of the play area where the pointer cursor hits.
+The Play Area Cursor is used in conjunction with a Base Pointer script and displays a representation of the play area where the pointer cursor hits.
 
 ### Inspector Parameters
 
  * **Play Area Cursor Dimensions:** Determines the size of the play area cursor and collider. If the values are left as zero then the Play Area Cursor will be sized to the calibrated Play Area space.
- * **Handle Play Area Cursor Collisions:** If this is ticked then if the play area cursor is colliding with any other object then the pointer colour will change to the `Pointer Miss Color` and the `WorldPointerDestinationSet` event will not be triggered, which will prevent teleporting into areas where the play area will collide.
+ * **Handle Play Area Cursor Collisions:** If this is ticked then if the play area cursor is colliding with any other object then the pointer colour will change to the `Pointer Miss Color` and the `DestinationMarkerSet` event will not be triggered, which will prevent teleporting into areas where the play area will collide.
  * **Headset Out Of Bounds Is Collision:** If this is ticked then if the user's headset is outside of the play area cursor bounds then it is considered a collision even if the play area isn't colliding with anything.
  * **Ignore Target With Tag Or Class:** A string that specifies an object Tag or the name of a Script attached to an object and notifies the play area cursor to ignore collisions with the object.
  * **Target Tag Or Script List Policy:** A specified VRTK_TagOrScriptPolicyList to use to determine whether the play area cursor collisions will be acted upon. If a list is provided then the 'Ignore Target With Tag Or Class' parameter will be ignored.
@@ -771,7 +771,7 @@ A collection of scripts that provide varying methods of moving the user around t
 
 ### Overview
 
-The basic teleporter updates the `[CameraRig]` x/z position in the game world to the position of a World Pointer's tip location which is set via the `WorldPointerDestinationSet` event. The y position is never altered so the basic teleporter cannot be used to move up and down game objects as it only allows for travel across a flat plane.
+The basic teleporter updates the `[CameraRig]` x/z position in the game world to the position of a Base Pointer's tip location which is set via the `DestinationMarkerSet` event. The y position is never altered so the basic teleporter cannot be used to move up and down game objects as it only allows for travel across a flat plane.
 
 The Basic Teleport script is attached to the `[CameraRig]` prefab.
 
@@ -880,7 +880,7 @@ Like the basic teleporter the Height Adjust Teleport script is attached to the `
 
 The dash teleporter extends the height adjust teleporter and allows to have the `[CameraRig]` dashing to a new teleport location.
 
-Like the basic teleporter and the height adjustable teleporter the Dash Teleport script is attached to the `[CameraRig]` prefab and requires a World Pointer to be available.
+Like the basic teleporter and the height adjustable teleporter the Dash Teleport script is attached to the `[CameraRig]` prefab.
 
 The basic principle is to dash for a very short amount of time, to avoid sim sickness. The default value is 100 miliseconds. This value is fixed for all normal and longer distances. When the distances get very short the minimum speed is clamped to 50 mps, so the dash time becomes even shorter.
 
@@ -1595,7 +1595,7 @@ The highlighting of an Interactable Object is defaulted to use the `VRTK_Materia
  * **Is Usable:** Determines if the object can be used.
  * **Hold Button To Use:** If this is checked then the use button on the controller needs to be continually held down to keep using. If this is unchecked the the use button toggles the use action with one button press to start using and another to stop using.
  * **Use Only If Grabbed:** If this is checked the object can be used only if it is currently being grabbed.
- * **Pointer Activates Use Action:** If this is checked then when a World Pointer beam (projected from the controller) hits the interactable object, if the object has `Hold Button To Use` unchecked then whilst the pointer is over the object it will run it's `Using` method. If `Hold Button To Use` is unchecked then the `Using` method will be run when the pointer is deactivated. The world pointer will not throw the `Destination Set` event if it is affecting an interactable object with this setting checked as this prevents unwanted teleporting from happening when using an object with a pointer.
+ * **Pointer Activates Use Action:** If this is checked then when a Base Pointer beam (projected from the controller) hits the interactable object, if the object has `Hold Button To Use` unchecked then whilst the pointer is over the object it will run it's `Using` method. If `Hold Button To Use` is unchecked then the `Using` method will be run when the pointer is deactivated. The world pointer will not throw the `Destination Set` event if it is affecting an interactable object with this setting checked as this prevents unwanted teleporting from happening when using an object with a pointer.
  * **Use Override Button:** If this is set to `Undefined` then the global use alias button will use the object, setting it to any other button will ensure the override button is used to use this specific interactable object.
  * **Allowed Use Controllers:** Determines which controller can initiate a use action.
 
@@ -3713,7 +3713,7 @@ When the script is enabled it will disable the `Graphic Raycaster` on the canvas
 
 ### Overview
 
-The UI Pointer provides a mechanism for interacting with Unity UI elements on a world canvas. The UI Pointer can be attached to any game object the same way in which a World Pointer can be and the UI Pointer also requires a controller to initiate the pointer activation and pointer click states.
+The UI Pointer provides a mechanism for interacting with Unity UI elements on a world canvas. The UI Pointer can be attached to any game object the same way in which a Base Pointer can be and the UI Pointer also requires a controller to initiate the pointer activation and pointer click states.
 
 The simplest way to use the UI Pointer is to attach the script to a game controller within the `[CameraRig]` along with a Simple Pointer as this provides visual feedback as to where the UI ray is pointing.
 

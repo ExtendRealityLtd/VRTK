@@ -1,17 +1,17 @@
-﻿// World Pointer|Pointers|10020
+﻿// Base Pointer|Pointers|10020
 namespace VRTK
 {
     using UnityEngine;
 
     /// <summary>
-    /// This abstract class provides any game pointer the ability to know the state of the implemented pointer. It extends the `VRTK_DestinationMarker` to allow for destination events to be emitted when the pointer cursor collides with objects.
+    /// This abstract class provides any game pointer the ability to know the state of the implemented pointer.
     /// </summary>
     /// <remarks>
-    /// The World Pointer also provides a play area cursor to be displayed for all cursors that utilise this class. The play area cursor is a representation of the current calibrated play area space and is useful for visualising the potential new play area space in the game world prior to teleporting. It can also handle collisions with objects on the new play area space and prevent teleporting if there are any collisions with objects at the potential new destination.
+    /// It extends the `VRTK_DestinationMarker` to allow for destination events to be emitted when the pointer cursor collides with objects.
     ///
-    /// The play area collider does not work well with terrains as they are uneven and cause collisions regularly so it is recommended that handling play area collisions is not enabled when using terrains.
+    /// As this is an abstract class, it cannot be applied directly to a game object and performs no logic.
     /// </remarks>
-    public abstract class VRTK_WorldPointer : VRTK_DestinationMarker
+    public abstract class VRTK_BasePointer : VRTK_DestinationMarker
     {
         /// <summary>
         /// States of Pointer Visibility.
@@ -26,7 +26,8 @@ namespace VRTK
             Always_Off
         }
 
-        [Header("Generic Pointer Settings", order = 2)]
+        [Header("Base Pointer Settings", order = 2)]
+
         [Tooltip("The controller that will be used to toggle the pointer. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.")]
         public VRTK_ControllerEvents controller = null;
         [Tooltip("A custom transform to use as the origin of the pointer. If no pointer origin transform is provided then the transform the script is attached to is used.")]
@@ -113,7 +114,7 @@ namespace VRTK
             }
             if (controller == null)
             {
-                Debug.LogError("VRTK_WorldPointer requires a Controller that has the VRTK_ControllerEvents script attached to it");
+                Debug.LogError("VRTK_BasePointer requires a Controller that has the VRTK_ControllerEvents script attached to it");
                 return;
             }
             Utilities.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.Pointer);
@@ -375,13 +376,13 @@ namespace VRTK
 
         protected virtual void CreateObjectInteractor()
         {
-            objectInteractor = new GameObject(string.Format("[{0}]WorldPointer_ObjectInteractor_Holder", gameObject.name));
+            objectInteractor = new GameObject(string.Format("[{0}]BasePointer_ObjectInteractor_Holder", gameObject.name));
             objectInteractor.transform.SetParent(controller.transform);
             objectInteractor.transform.localPosition = Vector3.zero;
             objectInteractor.layer = LayerMask.NameToLayer("Ignore Raycast");
             Utilities.SetPlayerObject(objectInteractor, VRTK_PlayerObject.ObjectTypes.Pointer);
 
-            var objectInteractorCollider = new GameObject(string.Format("[{0}]WorldPointer_ObjectInteractor_Collider", gameObject.name));
+            var objectInteractorCollider = new GameObject(string.Format("[{0}]BasePointer_ObjectInteractor_Collider", gameObject.name));
             objectInteractorCollider.transform.SetParent(objectInteractor.transform);
             objectInteractorCollider.transform.localPosition = Vector3.zero;
             objectInteractorCollider.layer = LayerMask.NameToLayer("Ignore Raycast");
@@ -391,7 +392,7 @@ namespace VRTK
 
             if (grabToPointerTip)
             {
-                objectInteractorAttachPoint = new GameObject(string.Format("[{0}]WorldPointer_ObjectInteractor_AttachPoint", gameObject.name));
+                objectInteractorAttachPoint = new GameObject(string.Format("[{0}]BasePointer_ObjectInteractor_AttachPoint", gameObject.name));
                 objectInteractorAttachPoint.transform.SetParent(objectInteractor.transform);
                 objectInteractorAttachPoint.transform.localPosition = Vector3.zero;
                 objectInteractorAttachPoint.layer = LayerMask.NameToLayer("Ignore Raycast");

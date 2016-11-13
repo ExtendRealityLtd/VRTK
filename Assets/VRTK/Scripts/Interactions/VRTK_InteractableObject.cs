@@ -99,7 +99,7 @@ namespace VRTK
         public bool holdButtonToUse = true;
         [Tooltip("If this is checked the object can be used only if it is currently being grabbed.")]
         public bool useOnlyIfGrabbed = false;
-        [Tooltip("If this is checked then when a World Pointer beam (projected from the controller) hits the interactable object, if the object has `Hold Button To Use` unchecked then whilst the pointer is over the object it will run it's `Using` method. If `Hold Button To Use` is unchecked then the `Using` method will be run when the pointer is deactivated. The world pointer will not throw the `Destination Set` event if it is affecting an interactable object with this setting checked as this prevents unwanted teleporting from happening when using an object with a pointer.")]
+        [Tooltip("If this is checked then when a Base Pointer beam (projected from the controller) hits the interactable object, if the object has `Hold Button To Use` unchecked then whilst the pointer is over the object it will run it's `Using` method. If `Hold Button To Use` is unchecked then the `Using` method will be run when the pointer is deactivated. The world pointer will not throw the `Destination Set` event if it is affecting an interactable object with this setting checked as this prevents unwanted teleporting from happening when using an object with a pointer.")]
         public bool pointerActivatesUseAction = false;
         [Tooltip("If this is set to `Undefined` then the global use alias button will use the object, setting it to any other button will ensure the override button is used to use this specific interactable object.")]
         public VRTK_ControllerEvents.ButtonAlias useOverrideButton = VRTK_ControllerEvents.ButtonAlias.Undefined;

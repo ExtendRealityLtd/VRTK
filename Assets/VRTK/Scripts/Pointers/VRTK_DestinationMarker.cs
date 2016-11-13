@@ -33,7 +33,7 @@ namespace VRTK
     /// This abstract class provides the ability to emit events of destination markers within the game world. It can be useful for tagging locations for specific purposes such as teleporting.
     /// </summary>
     /// <remarks>
-    /// It is utilised by the `VRTK_WorldPointer` for dealing with pointer events when the pointer cursor touches areas within the game world.
+    /// It is utilised by the `VRTK_BasePointer` for dealing with pointer events when the pointer cursor touches areas within the game world.
     /// </remarks>
     public abstract class VRTK_DestinationMarker : MonoBehaviour
     {

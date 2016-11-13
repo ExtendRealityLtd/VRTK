@@ -18,9 +18,10 @@ namespace VRTK
     ///
     /// `VRTK/Examples/036_Controller_CustomCompoundPointer' shows how to display an object (a teleport beam) only if the teleport location is valid, and can create an animated trail along the tracer curve.
     /// </example>
-    public class VRTK_BezierPointer : VRTK_WorldPointer
+    public class VRTK_BezierPointer : VRTK_BasePointer
     {
         [Header("Bezier Pointer Settings", order = 3)]
+
         [Tooltip("The length of the projected forward pointer beam, this is basically the distance able to point from the controller position.")]
         public float pointerLength = 10f;
         [Tooltip("The number of items to render in the beam bezier curve. A high number here will most likely have a negative impact of game performance due to large number of rendered objects.")]
@@ -99,18 +100,18 @@ namespace VRTK
             if (validTeleportLocationObject != null)
             {
                 validTeleportLocationInstance = Instantiate(validTeleportLocationObject);
-                validTeleportLocationInstance.name = string.Format("[{0}]WorldPointer_BezierPointer_TeleportBeam", gameObject.name);
+                validTeleportLocationInstance.name = string.Format("[{0}]BasePointer_BezierPointer_TeleportBeam", gameObject.name);
                 validTeleportLocationInstance.transform.parent = pointerCursor.transform;
                 validTeleportLocationInstance.layer = LayerMask.NameToLayer("Ignore Raycast");
                 validTeleportLocationInstance.SetActive(false);
             }
 
-            pointerCursor.name = string.Format("[{0}]WorldPointer_BezierPointer_PointerCursor", gameObject.name);
+            pointerCursor.name = string.Format("[{0}]BasePointer_BezierPointer_PointerCursor", gameObject.name);
             Utilities.SetPlayerObject(pointerCursor, VRTK_PlayerObject.ObjectTypes.Pointer);
             pointerCursor.layer = LayerMask.NameToLayer("Ignore Raycast");
             pointerCursor.SetActive(false);
 
-            curvedBeamContainer = new GameObject(string.Format("[{0}]WorldPointer_BezierPointer_CurvedBeamContainer", gameObject.name));
+            curvedBeamContainer = new GameObject(string.Format("[{0}]BasePointer_BezierPointer_CurvedBeamContainer", gameObject.name));
             Utilities.SetPlayerObject(curvedBeamContainer, VRTK_PlayerObject.ObjectTypes.Pointer);
             curvedBeamContainer.SetActive(false);
             curvedBeam = curvedBeamContainer.gameObject.AddComponent<CurveGenerator>();

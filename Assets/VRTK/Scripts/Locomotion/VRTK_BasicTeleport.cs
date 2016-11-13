@@ -12,7 +12,7 @@ namespace VRTK
     public delegate void TeleportEventHandler(object sender, DestinationMarkerEventArgs e);
 
     /// <summary>
-    /// The basic teleporter updates the `[CameraRig]` x/z position in the game world to the position of a World Pointer's tip location which is set via the `WorldPointerDestinationSet` event. The y position is never altered so the basic teleporter cannot be used to move up and down game objects as it only allows for travel across a flat plane.
+    /// The basic teleporter updates the `[CameraRig]` x/z position in the game world to the position of a Base Pointer's tip location which is set via the `DestinationMarkerSet` event. The y position is never altered so the basic teleporter cannot be used to move up and down game objects as it only allows for travel across a flat plane.
     /// </summary>
     /// <remarks>
     /// The Basic Teleport script is attached to the `[CameraRig]` prefab.

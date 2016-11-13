@@ -24,7 +24,7 @@ namespace VRTK
     /// The dash teleporter extends the height adjust teleporter and allows to have the `[CameraRig]` dashing to a new teleport location. 
     /// </summary>
     /// <remarks>
-    /// Like the basic teleporter and the height adjustable teleporter the Dash Teleport script is attached to the `[CameraRig]` prefab and requires a World Pointer to be available.
+    /// Like the basic teleporter and the height adjustable teleporter the Dash Teleport script is attached to the `[CameraRig]` prefab.
     ///
     /// The basic principle is to dash for a very short amount of time, to avoid sim sickness. The default value is 100 miliseconds. This value is fixed for all normal and longer distances. When the distances get very short the minimum speed is clamped to 50 mps, so the dash time becomes even shorter.
     ///
