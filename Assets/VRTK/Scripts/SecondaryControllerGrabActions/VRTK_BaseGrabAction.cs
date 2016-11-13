@@ -11,15 +11,14 @@ namespace VRTK.SecondaryControllerGrabActions
     /// </remarks>
     public abstract class VRTK_BaseGrabAction : MonoBehaviour
     {
-        [Tooltip("The distance the secondary controller must move away from the original grab position before the secondary controller auto ungrabs the object.")]
-        public float ungrabDistance = 1f;
-
         protected VRTK_InteractableObject grabbedObject;
         protected VRTK_InteractGrab primaryGrabbingObject;
         protected VRTK_InteractGrab secondaryGrabbingObject;
         protected Transform primaryInitialGrabPoint;
         protected Transform secondaryInitialGrabPoint;
         protected bool initialised = false;
+        protected bool isActionable = true;
+        protected bool isSwappable = false;
 
         /// <summary>
         /// The Initalise method is used to set up the state of the secondary action when the object is initially grabbed by a secondary controller.
@@ -53,14 +52,28 @@ namespace VRTK.SecondaryControllerGrabActions
         }
 
         /// <summary>
+        /// The IsActionable method is used to determine if the secondary grab action performs an action on grab.
+        /// </summary>
+        /// <returns>Is true if the secondary grab action does perform an action on secondary grab.</returns>
+        public bool IsActionable()
+        {
+            return isActionable;
+        }
+
+        /// <summary>
+        /// The IsSwappable method is used to determine if the secondary grab action allows to swab the grab state to another grabbing object.
+        /// </summary>
+        /// <returns>Is true if the grab action allows swapping to another grabbing object.</returns>
+        public bool IsSwappable()
+        {
+            return isSwappable;
+        }
+
+        /// <summary>
         /// The ProcessUpdate method runs in every Update on the Interactable Object whilst it is being grabbed by a secondary controller.
         /// </summary>
         public virtual void ProcessUpdate()
         {
-            if (initialised && Vector3.Distance(secondaryGrabbingObject.transform.position, secondaryInitialGrabPoint.position) > ungrabDistance)
-            {
-                grabbedObject.ForceStopSecondaryGrabInteraction();
-            }
         }
 
         /// <summary>
@@ -75,6 +88,14 @@ namespace VRTK.SecondaryControllerGrabActions
         /// </summary>
         public virtual void OnDropAction()
         {
+        }
+
+        protected virtual void CheckForceStopDistance(float ungrabDistance)
+        {
+            if (initialised && Vector3.Distance(secondaryGrabbingObject.transform.position, secondaryInitialGrabPoint.position) > ungrabDistance)
+            {
+                grabbedObject.ForceStopSecondaryGrabInteraction();
+            }
         }
     }
 }

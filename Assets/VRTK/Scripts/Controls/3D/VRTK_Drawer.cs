@@ -196,11 +196,10 @@ namespace VRTK
                 io = gameObject.AddComponent<VRTK_InteractableObject>();
             }
 
-            var grabAttachSpring = gameObject.AddComponent<GrabAttachMechanics.VRTK_SpringJointGrabAttach>();
-            grabAttachSpring.precisionGrab = true;
-
             io.isGrabbable = true;
-            io.grabAttachMechanicScript = grabAttachSpring;
+            io.grabAttachMechanicScript = gameObject.AddComponent<GrabAttachMechanics.VRTK_SpringJointGrabAttach>();
+            io.grabAttachMechanicScript.precisionGrab = true;
+            io.secondaryGrabActionScript = gameObject.AddComponent<SecondaryControllerGrabActions.VRTK_SwapControllerGrabAction>();
             io.stayGrabbedOnTeleport = false;
 
             if (connectedTo)

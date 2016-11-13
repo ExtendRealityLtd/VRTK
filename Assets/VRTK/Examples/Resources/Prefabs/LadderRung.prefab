@@ -13,6 +13,7 @@ GameObject:
   - 136: {fileID: 13644116}
   - 114: {fileID: 11465244}
   - 114: {fileID: 114000013673663818}
+  - 114: {fileID: 114000010250561756}
   m_Layer: 0
   m_Name: LadderRung
   m_TagString: TeleportIgnore
@@ -88,12 +89,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 114000013673663818}
+  secondaryGrabActionScript: {fileID: 114000010250561756}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -122,6 +122,17 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 108798}
   m_IsPrefabParent: 1
+--- !u!114 &114000010250561756
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 108798}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114000013673663818
 MonoBehaviour:
   m_ObjectHideFlags: 1

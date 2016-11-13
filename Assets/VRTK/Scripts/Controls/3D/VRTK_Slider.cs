@@ -146,6 +146,7 @@ namespace VRTK
             io.isGrabbable = true;
             io.grabAttachMechanicScript = gameObject.AddComponent<GrabAttachMechanics.VRTK_TrackObjectGrabAttach>();
             io.grabAttachMechanicScript.precisionGrab = true;
+            io.secondaryGrabActionScript = gameObject.AddComponent<SecondaryControllerGrabActions.VRTK_SwapControllerGrabAction>();
             io.stayGrabbedOnTeleport = false;
         }
 

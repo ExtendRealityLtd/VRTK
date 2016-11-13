@@ -5,8 +5,8 @@ This file provides documentation on how to use the included prefabs and scripts.
  * [Prefabs](#prefabs-vrtkprefabs)
  * [Abstract Classes](#abstract-classes-vrtkscriptsabstractions)
  * [Highlighters](#highlighters-vrtkscriptshighlighters)
- * [Grab Attach Mechanics](#grab-attach-mechanics-vrtkscriptgrabattachmechanics)
- * [Secondary Controller Grab Actions](#secondary-controller-grab-actions-vrtkscriptsecondarycontrollergrabactions)
+ * [Grab Attach Mechanics](#grab-attach-mechanics-vrtkscriptsgrabattachmechanics)
+ * [Secondary Controller Grab Actions](#secondary-controller-grab-actions-vrtkscriptssecondarycontrollergrabactions)
  * [Scripts](#scripts-vrtkscripts)
  * [3D Controls](#3d-controls-vrtkscriptscontrols3d)
 
@@ -842,210 +842,6 @@ The Unhighlight method hides the outline object and removes the outline colour.
 
 ---
 
-# Secondary Controller Grab Actions (VRTK/Scripts/SecondaryControllerGrabActions)
-
-This directory contains scripts that are used to provide different actions when a secondary controller grabs a grabbed obejct.
-
- * [Base Grab Action](#base-grab-action-vrtk_basegrabaction)
- * [Axis Scale Grab Action](#axis-scale-grab-action-vrtk_axisscalegrabaction)
- * [Control Direction Grab Action](#control-direction-grab-action-vrtk_controldirectiongrabaction)
-
----
-
-## Base Grab Action (VRTK_BaseGrabAction)
-
-### Overview
-
-The Base Grab Action is an abstract class that all other secondary controller actions inherit and are required to implement the public abstract methods.
-
-As this is an abstract class, it cannot be applied directly to a game object and performs no logic.
-
-### Inspector Parameters
-
- * **Ungrab Distance:** The distance the secondary controller must move away from the original grab position before the secondary controller auto ungrabs the object.
-
-### Class Methods
-
-#### Initialise/5
-
-  > `public virtual void Initialise(VRTK_InteractableObject currentGrabbdObject, VRTK_InteractGrab currentPrimaryGrabbingObject, VRTK_InteractGrab currentSecondaryGrabbingObject, Transform primaryGrabPoint, Transform secondaryGrabPoint)`
-
-  * Parameters
-   * `VRTK_InteractableObject currentGrabbdObject` - The Interactable Object script for the object currently being grabbed by the primary controller.
-   * `VRTK_InteractGrab currentPrimaryGrabbingObject` - The Interact Grab script for the object that is associated with the primary controller.
-   * `VRTK_InteractGrab currentSecondaryGrabbingObject` - The Interact Grab script for the object that is associated with the secondary controller.
-   * `Transform primaryGrabPoint` - The point on the object where the primary controller initially grabbed the object.
-   * `Transform secondaryGrabPoint` - The point on the object where the secondary controller initially grabbed the object.
-  * Returns
-   * _none_
-
-The Initalise method is used to set up the state of the secondary action when the object is initially grabbed by a secondary controller.
-
-#### ResetAction/0
-
-  > `public virtual void ResetAction()`
-
-  * Parameters
-   * _none_
-  * Returns
-   * _none_
-
-The ResetAction method is used to reset the secondary action when the object is no longer grabbed by a secondary controller.
-
-#### ProcessUpdate/0
-
-  > `public virtual void ProcessUpdate()`
-
-  * Parameters
-   * _none_
-  * Returns
-   * _none_
-
-The ProcessUpdate method runs in every Update on the Interactable Object whilst it is being grabbed by a secondary controller.
-
-#### ProcessFixedUpdate/0
-
-  > `public virtual void ProcessFixedUpdate()`
-
-  * Parameters
-   * _none_
-  * Returns
-   * _none_
-
-The ProcessFixedUpdate method runs in every FixedUpdate on the Interactable Object whilst it is being grabbed by a secondary controller.
-
-#### OnDropAction/0
-
-  > `public virtual void OnDropAction()`
-
-  * Parameters
-   * _none_
-  * Returns
-   * _none_
-
-The OnDropAction method is executed when the current grabbed object is dropped and can be used up to clean up any secondary grab actions.
-
----
-
-## Axis Scale Grab Action (VRTK_AxisScaleGrabAction)
- > extends [VRTK_BaseGrabAction](#base-grab-action-vrtk_basegrabaction)
-
-### Overview
-
-The Axis Scale Grab Action provides a mechanism to scale objects when they are grabbed with a secondary controller.
-
-### Inspector Parameters
-
- * **Lock X Axis:** If checked the current X Axis of the object won't be scaled
- * **Lock Y Axis:** If checked the current Y Axis of the object won't be scaled
- * **Lock Z Axis:** If checked the current Z Axis of the object won't be scaled
- * **Uniform Scaling:** If checked all the axes will be scaled together (unless locked)
-
-### Class Methods
-
-#### Initialise/5
-
-  > `public override void Initialise(VRTK_InteractableObject currentGrabbdObject, VRTK_InteractGrab currentPrimaryGrabbingObject, VRTK_InteractGrab currentSecondaryGrabbingObject, Transform primaryGrabPoint, Transform secondaryGrabPoint)`
-
-  * Parameters
-   * `VRTK_InteractableObject currentGrabbdObject` - The Interactable Object script for the object currently being grabbed by the primary controller.
-   * `VRTK_InteractGrab currentPrimaryGrabbingObject` - The Interact Grab script for the object that is associated with the primary controller.
-   * `VRTK_InteractGrab currentSecondaryGrabbingObject` - The Interact Grab script for the object that is associated with the secondary controller.
-   * `Transform primaryGrabPoint` - The point on the object where the primary controller initially grabbed the object.
-   * `Transform secondaryGrabPoint` - The point on the object where the secondary controller initially grabbed the object.
-  * Returns
-   * _none_
-
-The Initalise method is used to set up the state of the secondary action when the object is initially grabbed by a secondary controller.
-
-#### ProcessFixedUpdate/0
-
-  > `public override void ProcessFixedUpdate()`
-
-  * Parameters
-   * _none_
-  * Returns
-   * _none_
-
-The ProcessFixedUpdate method runs in every FixedUpdate on the Interactable Object whilst it is being grabbed by a secondary controller and performs the scaling action.
-
-### Example
-
-`VRTK/Examples/043_Controller_SecondaryControllerActions` demonstrates the ability to grab an object with one controller and scale it by grabbing and pulling with the second controller.
-
----
-
-## Control Direction Grab Action (VRTK_ControlDirectionGrabAction)
- > extends [VRTK_BaseGrabAction](#base-grab-action-vrtk_basegrabaction)
-
-### Overview
-
-The Control Direction Grab Action provides a mechanism to control the facing direction of the object when they are grabbed with a secondary controller.
-
-For an object to correctly be rotated it must be created with the front of the object pointing down the z-axis (forward) and the upwards of the object pointing up the y-axis (up).
-
-It's not possible to control the direction of an interactable object with a `Fixed_Joint` as the joint fixes the rotation of the object.
-
-### Inspector Parameters
-
- * **Release Snap Speed:** The speed in which the object will snap back to it's original rotation when the secondary controller stops grabbing it. `0` for instant snap, `infinity` for no snap back.
-
-### Class Methods
-
-#### Initialise/5
-
-  > `public override void Initialise(VRTK_InteractableObject currentGrabbdObject, VRTK_InteractGrab currentPrimaryGrabbingObject, VRTK_InteractGrab currentSecondaryGrabbingObject, Transform primaryGrabPoint, Transform secondaryGrabPoint)`
-
-  * Parameters
-   * `VRTK_InteractableObject currentGrabbdObject` - The Interactable Object script for the object currently being grabbed by the primary controller.
-   * `VRTK_InteractGrab currentPrimaryGrabbingObject` - The Interact Grab script for the object that is associated with the primary controller.
-   * `VRTK_InteractGrab currentSecondaryGrabbingObject` - The Interact Grab script for the object that is associated with the secondary controller.
-   * `Transform primaryGrabPoint` - The point on the object where the primary controller initially grabbed the object.
-   * `Transform secondaryGrabPoint` - The point on the object where the secondary controller initially grabbed the object.
-  * Returns
-   * _none_
-
-The Initalise method is used to set up the state of the secondary action when the object is initially grabbed by a secondary controller.
-
-#### ResetAction/0
-
-  > `public override void ResetAction()`
-
-  * Parameters
-   * _none_
-  * Returns
-   * _none_
-
-The ResetAction method is used to reset the secondary action when the object is no longer grabbed by a secondary controller.
-
-#### OnDropAction/0
-
-  > `public override void OnDropAction()`
-
-  * Parameters
-   * _none_
-  * Returns
-   * _none_
-
-The OnDropAction method is executed when the current grabbed object is dropped and can be used up to clean up any secondary grab actions.
-
-#### ProcessFixedUpdate/0
-
-  > `public override void ProcessFixedUpdate()`
-
-  * Parameters
-   * _none_
-  * Returns
-   * _none_
-
-The ProcessFixedUpdate method runs in every FixedUpdate on the Interactable Object whilst it is being grabbed by a secondary controller and influences the rotation of the object.
-
-### Example
-
-`VRTK/Examples/043_Controller_SecondaryControllerActions` demonstrates the ability to grab an object with one controller and control their direction with the second controller.
-
----
-
 # Grab Attach Mechanics (VRTK/Scripts/GrabAttachMechanics)
 
 This directory contains scripts that are used to provide different mechanics to apply when grabbing an interactable object.
@@ -1466,6 +1262,266 @@ The Climbable Grab Attach script is used to mark the object as a climbable inter
 ### Example
 
 `VRTK/Examples/037_CameraRig_ClimbingFalling` uses this grab attach mechanic for each item that is climbable in the scene.
+
+---
+
+# Secondary Controller Grab Actions (VRTK/Scripts/SecondaryControllerGrabActions)
+
+This directory contains scripts that are used to provide different actions when a secondary controller grabs a grabbed obejct.
+
+ * [Base Grab Action](#base-grab-action-vrtk_basegrabaction)
+ * [Swap Controller Grab Action](#swap-controller-grab-action-vrtk_swapcontrollergrabaction)
+ * [Axis Scale Grab Action](#axis-scale-grab-action-vrtk_axisscalegrabaction)
+ * [Control Direction Grab Action](#control-direction-grab-action-vrtk_controldirectiongrabaction)
+
+---
+
+## Base Grab Action (VRTK_BaseGrabAction)
+
+### Overview
+
+The Base Grab Action is an abstract class that all other secondary controller actions inherit and are required to implement the public abstract methods.
+
+As this is an abstract class, it cannot be applied directly to a game object and performs no logic.
+
+### Class Methods
+
+#### Initialise/5
+
+  > `public virtual void Initialise(VRTK_InteractableObject currentGrabbdObject, VRTK_InteractGrab currentPrimaryGrabbingObject, VRTK_InteractGrab currentSecondaryGrabbingObject, Transform primaryGrabPoint, Transform secondaryGrabPoint)`
+
+  * Parameters
+   * `VRTK_InteractableObject currentGrabbdObject` - The Interactable Object script for the object currently being grabbed by the primary controller.
+   * `VRTK_InteractGrab currentPrimaryGrabbingObject` - The Interact Grab script for the object that is associated with the primary controller.
+   * `VRTK_InteractGrab currentSecondaryGrabbingObject` - The Interact Grab script for the object that is associated with the secondary controller.
+   * `Transform primaryGrabPoint` - The point on the object where the primary controller initially grabbed the object.
+   * `Transform secondaryGrabPoint` - The point on the object where the secondary controller initially grabbed the object.
+  * Returns
+   * _none_
+
+The Initalise method is used to set up the state of the secondary action when the object is initially grabbed by a secondary controller.
+
+#### ResetAction/0
+
+  > `public virtual void ResetAction()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The ResetAction method is used to reset the secondary action when the object is no longer grabbed by a secondary controller.
+
+#### IsActionable/0
+
+  > `public bool IsActionable()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `bool` - Is true if the secondary grab action does perform an action on secondary grab.
+
+The IsActionable method is used to determine if the secondary grab action performs an action on grab.
+
+#### IsSwappable/0
+
+  > `public bool IsSwappable()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `bool` - Is true if the grab action allows swapping to another grabbing object.
+
+The IsSwappable method is used to determine if the secondary grab action allows to swab the grab state to another grabbing object.
+
+#### ProcessUpdate/0
+
+  > `public virtual void ProcessUpdate()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The ProcessUpdate method runs in every Update on the Interactable Object whilst it is being grabbed by a secondary controller.
+
+#### ProcessFixedUpdate/0
+
+  > `public virtual void ProcessFixedUpdate()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The ProcessFixedUpdate method runs in every FixedUpdate on the Interactable Object whilst it is being grabbed by a secondary controller.
+
+#### OnDropAction/0
+
+  > `public virtual void OnDropAction()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The OnDropAction method is executed when the current grabbed object is dropped and can be used up to clean up any secondary grab actions.
+
+---
+
+## Swap Controller Grab Action (VRTK_SwapControllerGrabAction)
+ > extends [VRTK_BaseGrabAction](#base-grab-action-vrtk_basegrabaction)
+
+### Overview
+
+The Swap Controller Grab Action provides a mechanism to allow grabbed objects to be swapped between controllers.
+
+### Example
+
+`VRTK/Examples/005_Controller_BasicObjectGrabbing` demonstrates the ability to swap objects between controllers on grab.
+
+---
+
+## Axis Scale Grab Action (VRTK_AxisScaleGrabAction)
+ > extends [VRTK_BaseGrabAction](#base-grab-action-vrtk_basegrabaction)
+
+### Overview
+
+The Axis Scale Grab Action provides a mechanism to scale objects when they are grabbed with a secondary controller.
+
+### Inspector Parameters
+
+ * **Ungrab Distance:** The distance the secondary controller must move away from the original grab position before the secondary controller auto ungrabs the object.
+ * **Lock X Axis:** If checked the current X Axis of the object won't be scaled
+ * **Lock Y Axis:** If checked the current Y Axis of the object won't be scaled
+ * **Lock Z Axis:** If checked the current Z Axis of the object won't be scaled
+ * **Uniform Scaling:** If checked all the axes will be scaled together (unless locked)
+
+### Class Methods
+
+#### Initialise/5
+
+  > `public override void Initialise(VRTK_InteractableObject currentGrabbdObject, VRTK_InteractGrab currentPrimaryGrabbingObject, VRTK_InteractGrab currentSecondaryGrabbingObject, Transform primaryGrabPoint, Transform secondaryGrabPoint)`
+
+  * Parameters
+   * `VRTK_InteractableObject currentGrabbdObject` - The Interactable Object script for the object currently being grabbed by the primary controller.
+   * `VRTK_InteractGrab currentPrimaryGrabbingObject` - The Interact Grab script for the object that is associated with the primary controller.
+   * `VRTK_InteractGrab currentSecondaryGrabbingObject` - The Interact Grab script for the object that is associated with the secondary controller.
+   * `Transform primaryGrabPoint` - The point on the object where the primary controller initially grabbed the object.
+   * `Transform secondaryGrabPoint` - The point on the object where the secondary controller initially grabbed the object.
+  * Returns
+   * _none_
+
+The Initalise method is used to set up the state of the secondary action when the object is initially grabbed by a secondary controller.
+
+#### ProcessUpdate/0
+
+  > `public override void ProcessUpdate()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The ProcessUpdate method runs in every Update on the Interactable Object whilst it is being grabbed by a secondary controller.
+
+#### ProcessFixedUpdate/0
+
+  > `public override void ProcessFixedUpdate()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The ProcessFixedUpdate method runs in every FixedUpdate on the Interactable Object whilst it is being grabbed by a secondary controller and performs the scaling action.
+
+### Example
+
+`VRTK/Examples/043_Controller_SecondaryControllerActions` demonstrates the ability to grab an object with one controller and scale it by grabbing and pulling with the second controller.
+
+---
+
+## Control Direction Grab Action (VRTK_ControlDirectionGrabAction)
+ > extends [VRTK_BaseGrabAction](#base-grab-action-vrtk_basegrabaction)
+
+### Overview
+
+The Control Direction Grab Action provides a mechanism to control the facing direction of the object when they are grabbed with a secondary controller.
+
+For an object to correctly be rotated it must be created with the front of the object pointing down the z-axis (forward) and the upwards of the object pointing up the y-axis (up).
+
+It's not possible to control the direction of an interactable object with a `Fixed_Joint` as the joint fixes the rotation of the object.
+
+### Inspector Parameters
+
+ * **Ungrab Distance:** The distance the secondary controller must move away from the original grab position before the secondary controller auto ungrabs the object.
+ * **Release Snap Speed:** The speed in which the object will snap back to it's original rotation when the secondary controller stops grabbing it. `0` for instant snap, `infinity` for no snap back.
+
+### Class Methods
+
+#### Initialise/5
+
+  > `public override void Initialise(VRTK_InteractableObject currentGrabbdObject, VRTK_InteractGrab currentPrimaryGrabbingObject, VRTK_InteractGrab currentSecondaryGrabbingObject, Transform primaryGrabPoint, Transform secondaryGrabPoint)`
+
+  * Parameters
+   * `VRTK_InteractableObject currentGrabbdObject` - The Interactable Object script for the object currently being grabbed by the primary controller.
+   * `VRTK_InteractGrab currentPrimaryGrabbingObject` - The Interact Grab script for the object that is associated with the primary controller.
+   * `VRTK_InteractGrab currentSecondaryGrabbingObject` - The Interact Grab script for the object that is associated with the secondary controller.
+   * `Transform primaryGrabPoint` - The point on the object where the primary controller initially grabbed the object.
+   * `Transform secondaryGrabPoint` - The point on the object where the secondary controller initially grabbed the object.
+  * Returns
+   * _none_
+
+The Initalise method is used to set up the state of the secondary action when the object is initially grabbed by a secondary controller.
+
+#### ResetAction/0
+
+  > `public override void ResetAction()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The ResetAction method is used to reset the secondary action when the object is no longer grabbed by a secondary controller.
+
+#### OnDropAction/0
+
+  > `public override void OnDropAction()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The OnDropAction method is executed when the current grabbed object is dropped and can be used up to clean up any secondary grab actions.
+
+#### ProcessUpdate/0
+
+  > `public override void ProcessUpdate()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The ProcessUpdate method runs in every Update on the Interactable Object whilst it is being grabbed by a secondary controller.
+
+#### ProcessFixedUpdate/0
+
+  > `public override void ProcessFixedUpdate()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The ProcessFixedUpdate method runs in every FixedUpdate on the Interactable Object whilst it is being grabbed by a secondary controller and influences the rotation of the object.
+
+### Example
+
+`VRTK/Examples/043_Controller_SecondaryControllerActions` demonstrates the ability to grab an object with one controller and control their direction with the second controller.
 
 ---
 
@@ -3096,12 +3152,11 @@ The highlighting of an Interactable Object is defaulted to use the `VRTK_Materia
  * **Valid Drop:** Determines in what situation the object can be dropped by the controller grab button.
  * **Grab Override Button:** If this is set to `Undefined` then the global grab alias button will grab the object, setting it to any other button will ensure the override button is used to grab this specific interactable object.
  * **Allowed Grab Controllers:** Determines which controller can initiate a grab action.
- * **Secondary Grab Action:** Determines what should happen to the object if another grab attempt is made by a secondary controller if the object is already being grabbed.
- * **Custom Secondary Action:** The script to utilise to process the secondary controller action when a secondary grab attempt is made.
  * **Grab Attach Mechanic Script:** This determines how the grabbed item will be attached to the controller when it is grabbed. If one isn't provided then the first Grab Attach script on the GameObject will be used, if one is not found and the object is grabbable then a Fixed Joint Grab Attach script will be created at runtime.
+ * **Secondary Grab Action Script:** The script to utilise when processing the secondary controller action on a secondary grab attempt. If one isn't provided then the first Secondary Controller Grab Action script on the GameObject will be used, if one is not found then no action will be taken on secondary grab.
  * **Is Usable:** Determines if the object can be used.
- * **Use Only If Grabbed:** If this is checked the object can be used only if it is currently being grabbed.
  * **Hold Button To Use:** If this is checked then the use button on the controller needs to be continually held down to keep using. If this is unchecked the the use button toggles the use action with one button press to start using and another to stop using.
+ * **Use Only If Grabbed:** If this is checked the object can be used only if it is currently being grabbed.
  * **Pointer Activates Use Action:** If this is checked then when a World Pointer beam (projected from the controller) hits the interactable object, if the object has `Hold Button To Use` unchecked then whilst the pointer is over the object it will run it's `Using` method. If `Hold Button To Use` is unchecked then the `Using` method will be run when the pointer is deactivated. The world pointer will not throw the `Destination Set` event if it is affecting an interactable object with this setting checked as this prevents unwanted teleporting from happening when using an object with a pointer.
  * **Use Override Button:** If this is set to `Undefined` then the global use alias button will use the object, setting it to any other button will ensure the override button is used to use this specific interactable object.
  * **Allowed Use Controllers:** Determines which controller can initiate a use action.
@@ -3116,10 +3171,6 @@ The highlighting of an Interactable Object is defaulted to use the `VRTK_Materia
   * `No_Drop` - The object cannot be dropped via the controller
   * `Drop_Anywhere` - The object can be dropped anywhere in the scene via the controller.
   * `Drop_ValidSnapDropZone` - The object can only be dropped when it is hovering over a valid snap drop zone.
- * `public enum SecondaryControllerActions` - The types of actions the secondary controller will have on the object on a secondary grab attempt
-  * `No_Action` - Nothing will happen to the grabbed object if a secondary controller attempts to grab it.
-  * `Swap_Controller` - The object will be swapped after another grab attempt to the secondary grabbing controller.
-  * `Custom_Action` - The object will be manipulated by the script provided in the `Secondary Custom Action` parameter.
  * `public int usingState` - The current using state of the object. `0` not being used, `1` being used. Default: `0`
  * `public bool isKinematic` - isKinematic is a pass through to the `isKinematic` getter/setter on the object's rigidbody component.
 

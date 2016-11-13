@@ -312,6 +312,7 @@ GameObject:
   - 114: {fileID: 47643387}
   - 138: {fileID: 47643385}
   - 114: {fileID: 47643391}
+  - 114: {fileID: 47643392}
   m_Layer: 0
   m_Name: Handle
   m_TagString: Untagged
@@ -377,12 +378,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 47643391}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 0
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -452,6 +452,17 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   detachDistance: 1
+--- !u!114 &47643392
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 47643383}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &65695295
 GameObject:
   m_ObjectHideFlags: 0
@@ -704,6 +715,7 @@ GameObject:
   - 59: {fileID: 202874232}
   - 114: {fileID: 202874231}
   - 114: {fileID: 202874237}
+  - 114: {fileID: 202874238}
   m_Layer: 0
   m_Name: Door
   m_TagString: Untagged
@@ -746,12 +758,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 202874237}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 0
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -868,6 +879,17 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   detachDistance: 1
+--- !u!114 &202874238
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 202874229}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &205246623
 GameObject:
   m_ObjectHideFlags: 0
@@ -1118,6 +1140,7 @@ GameObject:
   - 114: {fileID: 334155191}
   - 114: {fileID: 334155195}
   - 153: {fileID: 334155193}
+  - 114: {fileID: 334155196}
   m_Layer: 0
   m_Name: Unit
   m_TagString: Untagged
@@ -1162,12 +1185,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 334155195}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 0
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -1311,6 +1333,17 @@ MonoBehaviour:
   breakForce: 500
   strength: 500
   damper: 50
+--- !u!114 &334155196
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 334155189}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &356131605
 GameObject:
   m_ObjectHideFlags: 0
@@ -1365,6 +1398,7 @@ GameObject:
   - 54: {fileID: 390846147}
   - 114: {fileID: 390846146}
   - 114: {fileID: 390846152}
+  - 114: {fileID: 390846153}
   m_Layer: 0
   m_Name: TrackGrab_Cube
   m_TagString: Untagged
@@ -1391,12 +1425,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 390846152}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 0
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -1494,6 +1527,17 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   detachDistance: 1
+--- !u!114 &390846153
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 390846145}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &401011195
 GameObject:
   m_ObjectHideFlags: 0
@@ -1508,6 +1552,7 @@ GameObject:
   - 54: {fileID: 401011197}
   - 114: {fileID: 401011196}
   - 114: {fileID: 401011202}
+  - 114: {fileID: 401011203}
   m_Layer: 0
   m_Name: JointGrab_Cube
   m_TagString: Untagged
@@ -1534,12 +1579,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 401011202}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 0
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -1638,6 +1682,17 @@ MonoBehaviour:
   onGrabCollisionDelay: 0
   destroyImmediatelyOnThrow: 1
   breakForce: 1500
+--- !u!114 &401011203
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 401011195}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &407896145
 GameObject:
   m_ObjectHideFlags: 0
@@ -1812,6 +1867,7 @@ GameObject:
   - 114: {fileID: 481597121}
   - 145: {fileID: 481597120}
   - 144: {fileID: 481597115}
+  - 114: {fileID: 481597122}
   m_Layer: 0
   m_Name: TopJoint
   m_TagString: Untagged
@@ -1853,12 +1909,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 481597121}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 0
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -2005,6 +2060,17 @@ MonoBehaviour:
   onGrabCollisionDelay: 0
   destroyImmediatelyOnThrow: 1
   customJoint: {fileID: 481597120}
+--- !u!114 &481597122
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 481597112}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &538547916
 GameObject:
   m_ObjectHideFlags: 0
@@ -2196,6 +2262,7 @@ GameObject:
   - 114: {fileID: 666210214}
   - 114: {fileID: 666210218}
   - 153: {fileID: 666210216}
+  - 114: {fileID: 666210219}
   m_Layer: 0
   m_Name: Unit
   m_TagString: Untagged
@@ -2240,12 +2307,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 666210218}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 0
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -2389,6 +2455,17 @@ MonoBehaviour:
   breakForce: 500
   strength: 500
   damper: 50
+--- !u!114 &666210219
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 666210212}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &734526451
 GameObject:
   m_ObjectHideFlags: 0
@@ -2958,7 +3035,108 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 873625818}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!43 &904632614
+--- !u!1 &1032069105
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1032069106}
+  m_Layer: 0
+  m_Name: Drawers
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1032069106
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1032069105}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.096, y: 0.9, z: -2.082}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Children:
+  - {fileID: 1947187945}
+  - {fileID: 1318367177}
+  - {fileID: 873625819}
+  - {fileID: 1330424390}
+  - {fileID: 1150277088}
+  - {fileID: 1347765566}
+  - {fileID: 1456844313}
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+--- !u!1 &1064744766
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1064744767}
+  - 33: {fileID: 1064744769}
+  - 23: {fileID: 1064744768}
+  m_Layer: 0
+  m_Name: Knob2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1064744767
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1064744766}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.40000004, y: -0, z: 1.8}
+  m_LocalScale: {x: 0.1, y: 0.049999997, z: 2}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Children: []
+  m_Father: {fileID: 202874230}
+  m_RootOrder: 2
+--- !u!23 &1064744768
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1064744766}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_Materials:
+  - {fileID: 2100000, guid: 33af27359b49eda48829e2c0bf1e12b8, type: 2}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 1
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_SelectedWireframeHidden: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+--- !u!33 &1064744769
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1064744766}
+  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!43 &1091576537
 Mesh:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
@@ -3086,107 +3264,6 @@ Mesh:
   m_BakedConvexCollisionMesh: 
   m_BakedTriangleCollisionMesh: 
   m_MeshOptimized: 0
---- !u!1 &1032069105
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 1032069106}
-  m_Layer: 0
-  m_Name: Drawers
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1032069106
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1032069105}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.096, y: 0.9, z: -2.082}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_Children:
-  - {fileID: 1947187945}
-  - {fileID: 1318367177}
-  - {fileID: 873625819}
-  - {fileID: 1330424390}
-  - {fileID: 1150277088}
-  - {fileID: 1347765566}
-  - {fileID: 1456844313}
-  m_Father: {fileID: 0}
-  m_RootOrder: 7
---- !u!1 &1064744766
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 1064744767}
-  - 33: {fileID: 1064744769}
-  - 23: {fileID: 1064744768}
-  m_Layer: 0
-  m_Name: Knob2
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1064744767
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1064744766}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.40000004, y: -0, z: 1.8}
-  m_LocalScale: {x: 0.1, y: 0.049999997, z: 2}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_Children: []
-  m_Father: {fileID: 202874230}
-  m_RootOrder: 2
---- !u!23 &1064744768
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1064744766}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_Materials:
-  - {fileID: 2100000, guid: 33af27359b49eda48829e2c0bf1e12b8, type: 2}
-  m_SubsetIndices: 
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_PreserveUVs: 1
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_SelectedWireframeHidden: 0
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
---- !u!33 &1064744769
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1064744766}
-  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &1099383346
 GameObject:
   m_ObjectHideFlags: 0
@@ -3266,6 +3343,35 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1099383346}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!21 &1102475556
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: Sprites/Default
+  m_Shader: {fileID: 10753, guid: 0000000000000000f000000000000000, type: 0}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 5
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  m_SavedProperties:
+    serializedVersion: 2
+    m_TexEnvs:
+    - first:
+        name: _MainTex
+      second:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - first:
+        name: PixelSnap
+      second: 0
+    m_Colors:
+    - first:
+        name: _Color
+      second: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &1135670851
 GameObject:
   m_ObjectHideFlags: 0
@@ -3598,6 +3704,7 @@ GameObject:
   - 114: {fileID: 1288855063}
   - 145: {fileID: 1288855062}
   - 144: {fileID: 1288855057}
+  - 114: {fileID: 1288855064}
   m_Layer: 0
   m_Name: Sphere
   m_TagString: Untagged
@@ -3637,12 +3744,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 1288855063}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 0
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -3790,6 +3896,17 @@ MonoBehaviour:
   onGrabCollisionDelay: 0
   destroyImmediatelyOnThrow: 1
   customJoint: {fileID: 1288855062}
+--- !u!114 &1288855064
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1288855054}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1318367176
 GameObject:
   m_ObjectHideFlags: 0
@@ -4201,35 +4318,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1404741528}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!21 &1416658827
-Material:
-  serializedVersion: 6
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_Name: Sprites/Default
-  m_Shader: {fileID: 10753, guid: 0000000000000000f000000000000000, type: 0}
-  m_ShaderKeywords: 
-  m_LightmapFlags: 5
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  m_SavedProperties:
-    serializedVersion: 2
-    m_TexEnvs:
-    - first:
-        name: _MainTex
-      second:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Floats:
-    - first:
-        name: PixelSnap
-      second: 0
-    m_Colors:
-    - first:
-        name: _Color
-      second: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &1418996706
 GameObject:
   m_ObjectHideFlags: 0
@@ -4433,6 +4521,7 @@ GameObject:
   - 114: {fileID: 1542158551}
   - 145: {fileID: 1542158550}
   - 144: {fileID: 1542158545}
+  - 114: {fileID: 1542158552}
   m_Layer: 0
   m_Name: MiddleJoint
   m_TagString: Untagged
@@ -4474,12 +4563,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 1542158551}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 0
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -4626,6 +4714,17 @@ MonoBehaviour:
   onGrabCollisionDelay: 0
   destroyImmediatelyOnThrow: 1
   customJoint: {fileID: 1542158550}
+--- !u!114 &1542158552
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1542158542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1569913139
 GameObject:
   m_ObjectHideFlags: 0
@@ -4973,7 +5072,7 @@ Prefab:
     - target: {fileID: 3380982, guid: 4d293c8e162f3874b982baadd71153d2, type: 2}
       propertyPath: m_Mesh
       value: 
-      objectReference: {fileID: 904632614}
+      objectReference: {fileID: 1091576537}
     - target: {fileID: 11489174, guid: 4d293c8e162f3874b982baadd71153d2, type: 2}
       propertyPath: drawWireframeWhenSelectedOnly
       value: 0
@@ -5053,7 +5152,7 @@ Prefab:
     - target: {fileID: 2348914, guid: 4d293c8e162f3874b982baadd71153d2, type: 2}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 1416658827}
+      objectReference: {fileID: 1102475556}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 4d293c8e162f3874b982baadd71153d2, type: 2}
   m_IsPrefabParent: 0

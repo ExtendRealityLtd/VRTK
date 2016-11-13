@@ -61,6 +61,7 @@ namespace VRTK
             io.isGrabbable = true;
             io.grabAttachMechanicScript = gameObject.AddComponent<GrabAttachMechanics.VRTK_RotatorTrackGrabAttach>();
             io.grabAttachMechanicScript.precisionGrab = true;
+            io.secondaryGrabActionScript = gameObject.AddComponent<SecondaryControllerGrabActions.VRTK_SwapControllerGrabAction>();
             io.stayGrabbedOnTeleport = false;
 
             hj = GetComponent<HingeJoint>();

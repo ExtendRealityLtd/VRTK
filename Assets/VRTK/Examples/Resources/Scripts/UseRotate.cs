@@ -43,6 +43,7 @@
 
         protected override void Update()
         {
+            base.Update();
             rotatingObject.Rotate(rotationAxis, spinSpeed * Time.deltaTime);
         }
     }

@@ -304,6 +304,7 @@ GameObject:
   - 54: {fileID: 85712402}
   - 114: {fileID: 85712407}
   - 114: {fileID: 85712408}
+  - 114: {fileID: 85712409}
   m_Layer: 0
   m_Name: Cube_NoHightlightOnTouch
   m_TagString: Cubes
@@ -406,13 +407,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 85712408}
-  grabAttachMechanic: 0
+  secondaryGrabActionScript: {fileID: 85712409}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -433,8 +432,19 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
-  customJoint: {fileID: 0}
+  destroyImmediatelyOnThrow: 1
   breakForce: 1500
+--- !u!114 &85712409
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 85712401}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &109547596
 GameObject:
   m_ObjectHideFlags: 0
@@ -1114,134 +1124,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2, y: 1.8, z: 0.8}
   m_Center: {x: 0, y: -0.1, z: 0}
---- !u!43 &349039534
-Mesh:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_Name: 
-  serializedVersion: 8
-  m_SubMeshes:
-  - serializedVersion: 2
-    firstByte: 0
-    indexCount: 24
-    topology: 0
-    firstVertex: 0
-    vertexCount: 8
-    localAABB:
-      m_Center: {x: 0, y: 0.01, z: 0}
-      m_Extent: {x: 1.2, y: 0, z: 1.0500002}
-  m_Shapes:
-    vertices: []
-    shapes: []
-    channels: []
-    fullWeights: []
-  m_BindPose: []
-  m_BoneNameHashes: 
-  m_RootBoneNameHash: 0
-  m_MeshCompression: 0
-  m_IsReadable: 1
-  m_KeepVertices: 1
-  m_KeepIndices: 1
-  m_IndexBuffer: 000004000100010004000500010005000200020005000600020006000300030006000700030007000000000007000400
-  m_Skin: []
-  m_VertexData:
-    m_CurrentChannels: 13
-    m_VertexCount: 8
-    m_Channels:
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 3
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 12
-      format: 0
-      dimension: 4
-    - stream: 0
-      offset: 28
-      format: 0
-      dimension: 2
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    m_DataSize: 288
-    _typelessdata: 6766863f0ad7233c696666bf000000000000803f0000803f0000803f0000000000000000676686bf0ad7233c696666bf000000000000803f0000803f0000803f0000803f00000000676686bf0ad7233c6966663f000000000000803f0000803f0000803f00000000000000006766863f0ad7233c6966663f000000000000803f0000803f0000803f0000803f000000009a99993f0ad7233c686686bf000000000000803f0000803f00000000000000000000803f9a9999bf0ad7233c686686bf000000000000803f0000803f000000000000803f0000803f9a9999bf0ad7233c6866863f000000000000803f0000803f00000000000000000000803f9a99993f0ad7233c6866863f000000000000803f0000803f000000000000803f0000803f
-  m_CompressedMesh:
-    m_Vertices:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_UV:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Normals:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Tangents:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Weights:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_NormalSigns:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_TangentSigns:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_FloatColors:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_BoneIndices:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Triangles:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_UVInfo: 0
-  m_LocalAABB:
-    m_Center: {x: 0, y: 0.01, z: 0}
-    m_Extent: {x: 1.2, y: 0, z: 1.0500002}
-  m_MeshUsageFlags: 0
-  m_BakedConvexCollisionMesh: 
-  m_BakedTriangleCollisionMesh: 
-  m_MeshOptimized: 0
 --- !u!1 &365483936
 GameObject:
   m_ObjectHideFlags: 0
@@ -1256,6 +1138,7 @@ GameObject:
   - 54: {fileID: 365483941}
   - 114: {fileID: 365483942}
   - 114: {fileID: 365483944}
+  - 114: {fileID: 365483945}
   - 114: {fileID: 365483943}
   m_Layer: 0
   m_Name: Sphere_HightlightOnTouch
@@ -1359,13 +1242,11 @@ MonoBehaviour:
   validDrop: 2
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 365483944}
-  grabAttachMechanic: 0
+  secondaryGrabActionScript: {fileID: 365483945}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -1401,8 +1282,19 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
-  customJoint: {fileID: 0}
+  destroyImmediatelyOnThrow: 1
   breakForce: 1500
+--- !u!114 &365483945
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 365483936}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &388566456
 GameObject:
   m_ObjectHideFlags: 0
@@ -1825,7 +1717,7 @@ Prefab:
     - target: {fileID: 3380982, guid: 4d293c8e162f3874b982baadd71153d2, type: 2}
       propertyPath: m_Mesh
       value: 
-      objectReference: {fileID: 349039534}
+      objectReference: {fileID: 549035932}
     - target: {fileID: 11489174, guid: 4d293c8e162f3874b982baadd71153d2, type: 2}
       propertyPath: drawInGame
       value: 1
@@ -1901,7 +1793,7 @@ Prefab:
     - target: {fileID: 2348914, guid: 4d293c8e162f3874b982baadd71153d2, type: 2}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 1272908461}
+      objectReference: {fileID: 1156560492}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 4d293c8e162f3874b982baadd71153d2, type: 2}
   m_IsPrefabParent: 0
@@ -2443,6 +2335,134 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 502350259}
   m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!43 &549035932
+Mesh:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: 
+  serializedVersion: 8
+  m_SubMeshes:
+  - serializedVersion: 2
+    firstByte: 0
+    indexCount: 24
+    topology: 0
+    firstVertex: 0
+    vertexCount: 8
+    localAABB:
+      m_Center: {x: 0, y: 0.01, z: 0}
+      m_Extent: {x: 1.2, y: 0, z: 1.0500002}
+  m_Shapes:
+    vertices: []
+    shapes: []
+    channels: []
+    fullWeights: []
+  m_BindPose: []
+  m_BoneNameHashes: 
+  m_RootBoneNameHash: 0
+  m_MeshCompression: 0
+  m_IsReadable: 1
+  m_KeepVertices: 1
+  m_KeepIndices: 1
+  m_IndexBuffer: 000004000100010004000500010005000200020005000600020006000300030006000700030007000000000007000400
+  m_Skin: []
+  m_VertexData:
+    m_CurrentChannels: 13
+    m_VertexCount: 8
+    m_Channels:
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 3
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 12
+      format: 0
+      dimension: 4
+    - stream: 0
+      offset: 28
+      format: 0
+      dimension: 2
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    m_DataSize: 288
+    _typelessdata: 6766863f0ad7233c696666bf000000000000803f0000803f0000803f0000000000000000676686bf0ad7233c696666bf000000000000803f0000803f0000803f0000803f00000000676686bf0ad7233c6966663f000000000000803f0000803f0000803f00000000000000006766863f0ad7233c6966663f000000000000803f0000803f0000803f0000803f000000009a99993f0ad7233c686686bf000000000000803f0000803f00000000000000000000803f9a9999bf0ad7233c686686bf000000000000803f0000803f000000000000803f0000803f9a9999bf0ad7233c6866863f000000000000803f0000803f00000000000000000000803f9a99993f0ad7233c6866863f000000000000803f0000803f000000000000803f0000803f
+  m_CompressedMesh:
+    m_Vertices:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_UV:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Normals:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Tangents:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Weights:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_NormalSigns:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_TangentSigns:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_FloatColors:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_BoneIndices:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Triangles:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_UVInfo: 0
+  m_LocalAABB:
+    m_Center: {x: 0, y: 0.01, z: 0}
+    m_Extent: {x: 1.2, y: 0, z: 1.0500002}
+  m_MeshUsageFlags: 0
+  m_BakedConvexCollisionMesh: 
+  m_BakedTriangleCollisionMesh: 
+  m_MeshOptimized: 0
 --- !u!1 &550770261
 GameObject:
   m_ObjectHideFlags: 0
@@ -2457,6 +2477,7 @@ GameObject:
   - 54: {fileID: 550770262}
   - 114: {fileID: 550770267}
   - 114: {fileID: 550770268}
+  - 114: {fileID: 550770269}
   m_Layer: 0
   m_Name: Cube_HighlightOnTouch
   m_TagString: Cubes
@@ -2559,13 +2580,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 550770268}
-  grabAttachMechanic: 0
+  secondaryGrabActionScript: {fileID: 550770269}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -2586,8 +2605,19 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
-  customJoint: {fileID: 0}
+  destroyImmediatelyOnThrow: 1
   breakForce: 1500
+--- !u!114 &550770269
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 550770261}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &554083329
 GameObject:
   m_ObjectHideFlags: 0
@@ -3309,6 +3339,7 @@ GameObject:
   - 54: {fileID: 756550052}
   - 114: {fileID: 756550053}
   - 114: {fileID: 756550058}
+  - 114: {fileID: 756550059}
   m_Layer: 0
   m_Name: UpperArm
   m_TagString: Arm
@@ -3350,13 +3381,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 756550058}
-  grabAttachMechanic: 0
+  secondaryGrabActionScript: {fileID: 756550059}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -3439,8 +3468,19 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
-  customJoint: {fileID: 0}
+  destroyImmediatelyOnThrow: 1
   breakForce: 1500
+--- !u!114 &756550059
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 756550051}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &758529183
 GameObject:
   m_ObjectHideFlags: 0
@@ -4384,6 +4424,7 @@ GameObject:
   - 54: {fileID: 1015537596}
   - 114: {fileID: 1015537597}
   - 114: {fileID: 1015537602}
+  - 114: {fileID: 1015537603}
   m_Layer: 0
   m_Name: Thigh
   m_TagString: Leg
@@ -4425,13 +4466,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 1015537602}
-  grabAttachMechanic: 0
+  secondaryGrabActionScript: {fileID: 1015537603}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -4514,8 +4553,19 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
-  customJoint: {fileID: 0}
+  destroyImmediatelyOnThrow: 1
   breakForce: 1500
+--- !u!114 &1015537603
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1015537595}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1016017967
 GameObject:
   m_ObjectHideFlags: 0
@@ -5039,6 +5089,7 @@ GameObject:
   - 54: {fileID: 1156011845}
   - 114: {fileID: 1156011846}
   - 114: {fileID: 1156011850}
+  - 114: {fileID: 1156011851}
   - 144: {fileID: 1156011844}
   m_Layer: 0
   m_Name: ForeArm
@@ -5136,13 +5187,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 1156011850}
-  grabAttachMechanic: 0
+  secondaryGrabActionScript: {fileID: 1156011851}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -5212,8 +5261,48 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
-  customJoint: {fileID: 0}
+  destroyImmediatelyOnThrow: 1
   breakForce: 1500
+--- !u!114 &1156011851
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1156011842}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!21 &1156560492
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: Sprites/Default
+  m_Shader: {fileID: 10753, guid: 0000000000000000f000000000000000, type: 0}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 5
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  m_SavedProperties:
+    serializedVersion: 2
+    m_TexEnvs:
+    - first:
+        name: _MainTex
+      second:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - first:
+        name: PixelSnap
+      second: 0
+    m_Colors:
+    - first:
+        name: _Color
+      second: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &1193702949
 GameObject:
   m_ObjectHideFlags: 0
@@ -5485,35 +5574,6 @@ Transform:
   - {fileID: 983303684}
   m_Father: {fileID: 199383613}
   m_RootOrder: 0
---- !u!21 &1272908461
-Material:
-  serializedVersion: 6
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_Name: Sprites/Default
-  m_Shader: {fileID: 10753, guid: 0000000000000000f000000000000000, type: 0}
-  m_ShaderKeywords: 
-  m_LightmapFlags: 5
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  m_SavedProperties:
-    serializedVersion: 2
-    m_TexEnvs:
-    - first:
-        name: _MainTex
-      second:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Floats:
-    - first:
-        name: PixelSnap
-      second: 0
-    m_Colors:
-    - first:
-        name: _Color
-      second: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &1322842848
 GameObject:
   m_ObjectHideFlags: 0
@@ -5851,6 +5911,7 @@ GameObject:
   - 54: {fileID: 1457627803}
   - 114: {fileID: 1457627804}
   - 114: {fileID: 1457627809}
+  - 114: {fileID: 1457627810}
   m_Layer: 0
   m_Name: UpperArm
   m_TagString: Arm
@@ -5892,13 +5953,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 1457627809}
-  grabAttachMechanic: 0
+  secondaryGrabActionScript: {fileID: 1457627810}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -5981,8 +6040,19 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
-  customJoint: {fileID: 0}
+  destroyImmediatelyOnThrow: 1
   breakForce: 1500
+--- !u!114 &1457627810
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1457627802}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1477721416
 GameObject:
   m_ObjectHideFlags: 0
@@ -5995,6 +6065,7 @@ GameObject:
   - 54: {fileID: 1477721420}
   - 114: {fileID: 1477721419}
   - 114: {fileID: 1477721421}
+  - 114: {fileID: 1477721422}
   m_Layer: 0
   m_Name: OtherSaucer_HightlightOnTouch
   m_TagString: OtherSaucers
@@ -6047,13 +6118,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 1477721421}
-  grabAttachMechanic: 0
+  secondaryGrabActionScript: {fileID: 1477721422}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -6089,8 +6158,19 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
-  customJoint: {fileID: 0}
+  destroyImmediatelyOnThrow: 1
   breakForce: 1500
+--- !u!114 &1477721422
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1477721416}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1487149702
 GameObject:
   m_ObjectHideFlags: 0
@@ -6250,6 +6330,7 @@ GameObject:
   - 54: {fileID: 1563557790}
   - 114: {fileID: 1563557791}
   - 114: {fileID: 1563557796}
+  - 114: {fileID: 1563557797}
   m_Layer: 0
   m_Name: Thigh
   m_TagString: Leg
@@ -6291,13 +6372,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 1563557796}
-  grabAttachMechanic: 0
+  secondaryGrabActionScript: {fileID: 1563557797}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -6380,8 +6459,19 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
-  customJoint: {fileID: 0}
+  destroyImmediatelyOnThrow: 1
   breakForce: 1500
+--- !u!114 &1563557797
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1563557789}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1583407958
 GameObject:
   m_ObjectHideFlags: 0
@@ -6396,6 +6486,7 @@ GameObject:
   - 54: {fileID: 1583407961}
   - 114: {fileID: 1583407962}
   - 114: {fileID: 1583407966}
+  - 114: {fileID: 1583407967}
   - 144: {fileID: 1583407960}
   m_Layer: 0
   m_Name: ForeArm
@@ -6493,13 +6584,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 1583407966}
-  grabAttachMechanic: 0
+  secondaryGrabActionScript: {fileID: 1583407967}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -6569,8 +6658,19 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
-  customJoint: {fileID: 0}
+  destroyImmediatelyOnThrow: 1
   breakForce: 1500
+--- !u!114 &1583407967
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1583407958}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1610967775
 GameObject:
   m_ObjectHideFlags: 0
@@ -6585,6 +6685,7 @@ GameObject:
   - 54: {fileID: 1610967776}
   - 114: {fileID: 1610967781}
   - 114: {fileID: 1610967782}
+  - 114: {fileID: 1610967783}
   m_Layer: 0
   m_Name: Sphere_NoHightlightOnTouch
   m_TagString: Spheres
@@ -6687,13 +6788,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 1610967782}
-  grabAttachMechanic: 0
+  secondaryGrabActionScript: {fileID: 1610967783}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -6714,8 +6813,19 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
-  customJoint: {fileID: 0}
+  destroyImmediatelyOnThrow: 1
   breakForce: 1500
+--- !u!114 &1610967783
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1610967775}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1692954784
 GameObject:
   m_ObjectHideFlags: 0
@@ -6761,6 +6871,7 @@ GameObject:
   - 54: {fileID: 1695119062}
   - 114: {fileID: 1695119063}
   - 114: {fileID: 1695119067}
+  - 114: {fileID: 1695119068}
   - 144: {fileID: 1695119061}
   m_Layer: 0
   m_Name: LowerLeg
@@ -6858,13 +6969,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 1695119067}
-  grabAttachMechanic: 0
+  secondaryGrabActionScript: {fileID: 1695119068}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -6934,8 +7043,19 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
-  customJoint: {fileID: 0}
+  destroyImmediatelyOnThrow: 1
   breakForce: 1500
+--- !u!114 &1695119068
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1695119059}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1718470159
 GameObject:
   m_ObjectHideFlags: 0
@@ -6990,6 +7110,7 @@ GameObject:
   - 54: {fileID: 1719093154}
   - 114: {fileID: 1719093153}
   - 114: {fileID: 1719093156}
+  - 114: {fileID: 1719093157}
   m_Layer: 0
   m_Name: FlyingSaucer_HightlightOnTouch
   m_TagString: Saucers
@@ -7032,13 +7153,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 1719093156}
-  grabAttachMechanic: 0
+  secondaryGrabActionScript: {fileID: 1719093157}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -7086,8 +7205,19 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
-  customJoint: {fileID: 0}
+  destroyImmediatelyOnThrow: 1
   breakForce: 1500
+--- !u!114 &1719093157
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1719093151}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1734605855
 GameObject:
   m_ObjectHideFlags: 0
@@ -7388,6 +7518,7 @@ GameObject:
   - 54: {fileID: 1849463934}
   - 114: {fileID: 1849463935}
   - 114: {fileID: 1849463939}
+  - 114: {fileID: 1849463940}
   - 144: {fileID: 1849463933}
   m_Layer: 0
   m_Name: LowerLeg
@@ -7485,13 +7616,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 1849463939}
-  grabAttachMechanic: 0
+  secondaryGrabActionScript: {fileID: 1849463940}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -7561,8 +7690,19 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
-  customJoint: {fileID: 0}
+  destroyImmediatelyOnThrow: 1
   breakForce: 1500
+--- !u!114 &1849463940
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1849463931}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1855537432
 GameObject:
   m_ObjectHideFlags: 0
@@ -8239,6 +8379,7 @@ GameObject:
   - 54: {fileID: 2084466897}
   - 114: {fileID: 2084466893}
   - 114: {fileID: 2084466898}
+  - 114: {fileID: 2084466899}
   m_Layer: 0
   m_Name: Torso
   m_TagString: Torso
@@ -8282,13 +8423,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 2084466898}
-  grabAttachMechanic: 0
+  secondaryGrabActionScript: {fileID: 2084466899}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -8372,8 +8511,19 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
-  customJoint: {fileID: 0}
+  destroyImmediatelyOnThrow: 1
   breakForce: 1500
+--- !u!114 &2084466899
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2084466891}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2107897281
 Prefab:
   m_ObjectHideFlags: 0

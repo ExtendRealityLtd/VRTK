@@ -6,6 +6,7 @@ namespace VRTK
     using System.Collections.Generic;
     using Highlighters;
     using GrabAttachMechanics;
+    using SecondaryControllerGrabActions;
 
     /// <summary>
     /// Event Payload
@@ -64,27 +65,14 @@ namespace VRTK
             Drop_ValidSnapDropZone
         }
 
-        /// <summary>
-        /// The types of actions the secondary controller will have on the object on a secondary grab attempt
-        /// </summary>
-        /// <param name="No_Action">Nothing will happen to the grabbed object if a secondary controller attempts to grab it.</param>
-        /// <param name="Swap_Controller">The object will be swapped after another grab attempt to the secondary grabbing controller.</param>
-        /// <param name="Custom_Action">The object will be manipulated by the script provided in the `Secondary Custom Action` parameter.</param>
-        public enum SecondaryControllerActions
-        {
-            No_Action,
-            Swap_Controller,
-            Custom_Action
-        }
-
-        [Header("Touch Interactions", order = 1)]
+        [Header("Touch Options", order = 1)]
 
         [Tooltip("The colour to highlight the object when it is touched. This colour will override any globally set colour (for instance on the `VRTK_InteractTouch` script).")]
         public Color touchHighlightColor = Color.clear;
         [Tooltip("Determines which controller can initiate a touch action.")]
         public AllowedController allowedTouchControllers = AllowedController.Both;
 
-        [Header("Grab Interactions", order = 2)]
+        [Header("Grab Options", order = 2)]
 
         [Tooltip("Determines if the object can be grabbed.")]
         public bool isGrabbable = false;
@@ -98,21 +86,19 @@ namespace VRTK
         public VRTK_ControllerEvents.ButtonAlias grabOverrideButton = VRTK_ControllerEvents.ButtonAlias.Undefined;
         [Tooltip("Determines which controller can initiate a grab action.")]
         public AllowedController allowedGrabControllers = AllowedController.Both;
-        [Tooltip("Determines what should happen to the object if another grab attempt is made by a secondary controller if the object is already being grabbed.")]
-        public SecondaryControllerActions secondaryGrabAction = SecondaryControllerActions.Swap_Controller;
-        [Tooltip("The script to utilise to process the secondary controller action when a secondary grab attempt is made.")]
-        public SecondaryControllerGrabActions.VRTK_BaseGrabAction customSecondaryAction;
         [Tooltip("This determines how the grabbed item will be attached to the controller when it is grabbed. If one isn't provided then the first Grab Attach script on the GameObject will be used, if one is not found and the object is grabbable then a Fixed Joint Grab Attach script will be created at runtime.")]
         public VRTK_BaseGrabAttach grabAttachMechanicScript;
+        [Tooltip("The script to utilise when processing the secondary controller action on a secondary grab attempt. If one isn't provided then the first Secondary Controller Grab Action script on the GameObject will be used, if one is not found then no action will be taken on secondary grab.")]
+        public VRTK_BaseGrabAction secondaryGrabActionScript;
 
-        [Header("Use Interactions", order = 3)]
+        [Header("Use Options", order = 3)]
 
         [Tooltip("Determines if the object can be used.")]
         public bool isUsable = false;
-        [Tooltip("If this is checked the object can be used only if it is currently being grabbed.")]
-        public bool useOnlyIfGrabbed = false;
         [Tooltip("If this is checked then the use button on the controller needs to be continually held down to keep using. If this is unchecked the the use button toggles the use action with one button press to start using and another to stop using.")]
         public bool holdButtonToUse = true;
+        [Tooltip("If this is checked the object can be used only if it is currently being grabbed.")]
+        public bool useOnlyIfGrabbed = false;
         [Tooltip("If this is checked then when a World Pointer beam (projected from the controller) hits the interactable object, if the object has `Hold Button To Use` unchecked then whilst the pointer is over the object it will run it's `Using` method. If `Hold Button To Use` is unchecked then the `Using` method will be run when the pointer is deactivated. The world pointer will not throw the `Destination Set` event if it is affecting an interactable object with this setting checked as this prevents unwanted teleporting from happening when using an object with a pointer.")]
         public bool pointerActivatesUseAction = false;
         [Tooltip("If this is set to `Undefined` then the global use alias button will use the object, setting it to any other button will ensure the override button is used to use this specific interactable object.")]
@@ -192,7 +178,6 @@ namespace VRTK
         protected bool snappedInSnapDropZone = false;
         protected VRTK_SnapDropZone storedSnapDropZone;
         protected Vector3 previousLocalScale = Vector3.zero;
-        protected List<SecondaryControllerActions> excludeSecondaryActions = new List<SecondaryControllerActions> { SecondaryControllerActions.No_Action, SecondaryControllerActions.Swap_Controller };
 
         public virtual void OnInteractableObjectTouched(InteractableObjectEventArgs e)
         {
@@ -616,7 +601,7 @@ namespace VRTK
         /// <returns>Returns true if the object can be grabbed by a secondary controller whilst already being grabbed and the object will swap controllers. Returns false if the object cannot be swapped.</returns>
         public bool IsSwappable()
         {
-            return (secondaryGrabAction == SecondaryControllerActions.Swap_Controller ? true : false);
+            return (secondaryGrabActionScript ? secondaryGrabActionScript.IsSwappable() : false);
         }
 
         /// <summary>
@@ -625,7 +610,7 @@ namespace VRTK
         /// <returns>Returns true if the obejct has a secondary action, returns false if it has no secondary action or is swappable.</returns>
         public bool PerformSecondaryAction()
         {
-            return (!GetSecondaryGrabbingObject() && !excludeSecondaryActions.Contains(secondaryGrabAction) ? true : false);
+            return (!GetSecondaryGrabbingObject() && secondaryGrabActionScript ? secondaryGrabActionScript.IsActionable() : false);
         }
 
         protected virtual void Awake()
@@ -666,15 +651,16 @@ namespace VRTK
         protected virtual void Update()
         {
             AttemptSetGrabMechanic();
+            AttemptSetSecondaryGrabAction();
 
             if (trackPoint && grabAttachMechanicScript)
             {
                 grabAttachMechanicScript.ProcessUpdate();
             }
 
-            if (customSecondaryAction)
+            if (secondaryGrabActionScript)
             {
-                customSecondaryAction.ProcessUpdate();
+                secondaryGrabActionScript.ProcessUpdate();
             }
         }
 
@@ -685,9 +671,9 @@ namespace VRTK
                 grabAttachMechanicScript.ProcessFixedUpdate();
             }
 
-            if (customSecondaryAction)
+            if (secondaryGrabActionScript)
             {
-                customSecondaryAction.ProcessFixedUpdate();
+                secondaryGrabActionScript.ProcessFixedUpdate();
             }
         }
 
@@ -736,6 +722,14 @@ namespace VRTK
             }
         }
 
+        private void AttemptSetSecondaryGrabAction()
+        {
+            if (isGrabbable && secondaryGrabActionScript == null)
+            {
+                secondaryGrabActionScript = GetComponent<VRTK_BaseGrabAction>();
+            }
+        }
+
         private void ForceReleaseGrab()
         {
             var grabbingObject = GetGrabbingObject();
@@ -769,9 +763,9 @@ namespace VRTK
                 grabbingObjects.Add(currentGrabbingObject);
                 secondaryControllerAttachPoint = CreateAttachPoint(currentGrabbingObject.name, "Secondary", currentGrabbingObject.transform);
 
-                if (customSecondaryAction)
+                if (secondaryGrabActionScript)
                 {
-                    customSecondaryAction.Initialise(this, GetGrabbingObject().GetComponent<VRTK_InteractGrab>(), GetSecondaryGrabbingObject().GetComponent<VRTK_InteractGrab>(), primaryControllerAttachPoint, secondaryControllerAttachPoint);
+                    secondaryGrabActionScript.Initialise(this, GetGrabbingObject().GetComponent<VRTK_InteractGrab>(), GetSecondaryGrabbingObject().GetComponent<VRTK_InteractGrab>(), primaryControllerAttachPoint, secondaryControllerAttachPoint);
                 }
             }
         }
@@ -782,9 +776,9 @@ namespace VRTK
             RemoveTrackPoint();
             ResetUseState(previousGrabbingObject);
             grabbingObjects.Clear();
-            if (customSecondaryAction)
+            if (secondaryGrabActionScript)
             {
-                customSecondaryAction.OnDropAction();
+                secondaryGrabActionScript.OnDropAction();
             }
             LoadPreviousState();
         }
@@ -796,9 +790,9 @@ namespace VRTK
                 grabbingObjects.Remove(previousGrabbingObject);
                 Destroy(secondaryControllerAttachPoint.gameObject);
                 secondaryControllerAttachPoint = null;
-                if (customSecondaryAction)
+                if (secondaryGrabActionScript)
                 {
-                    customSecondaryAction.ResetAction();
+                    secondaryGrabActionScript.ResetAction();
                 }
             }
         }

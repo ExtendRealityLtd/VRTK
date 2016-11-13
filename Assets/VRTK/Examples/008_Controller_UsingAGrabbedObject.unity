@@ -212,7 +212,7 @@ Prefab:
     - target: {fileID: 3380982, guid: 4d293c8e162f3874b982baadd71153d2, type: 2}
       propertyPath: m_Mesh
       value: 
-      objectReference: {fileID: 281983064}
+      objectReference: {fileID: 850426983}
     - target: {fileID: 11489174, guid: 4d293c8e162f3874b982baadd71153d2, type: 2}
       propertyPath: drawInGame
       value: 1
@@ -288,7 +288,7 @@ Prefab:
     - target: {fileID: 2348914, guid: 4d293c8e162f3874b982baadd71153d2, type: 2}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 1150779836}
+      objectReference: {fileID: 643978798}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 4d293c8e162f3874b982baadd71153d2, type: 2}
   m_IsPrefabParent: 0
@@ -498,134 +498,6 @@ MonoBehaviour:
   usePressed: 0
   uiClickPressed: 0
   menuPressed: 0
---- !u!43 &281983064
-Mesh:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_Name: 
-  serializedVersion: 8
-  m_SubMeshes:
-  - serializedVersion: 2
-    firstByte: 0
-    indexCount: 24
-    topology: 0
-    firstVertex: 0
-    vertexCount: 8
-    localAABB:
-      m_Center: {x: 0, y: 0.01, z: 0}
-      m_Extent: {x: 1.2, y: 0, z: 1.0500002}
-  m_Shapes:
-    vertices: []
-    shapes: []
-    channels: []
-    fullWeights: []
-  m_BindPose: []
-  m_BoneNameHashes: 
-  m_RootBoneNameHash: 0
-  m_MeshCompression: 0
-  m_IsReadable: 1
-  m_KeepVertices: 1
-  m_KeepIndices: 1
-  m_IndexBuffer: 000004000100010004000500010005000200020005000600020006000300030006000700030007000000000007000400
-  m_Skin: []
-  m_VertexData:
-    m_CurrentChannels: 13
-    m_VertexCount: 8
-    m_Channels:
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 3
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 12
-      format: 0
-      dimension: 4
-    - stream: 0
-      offset: 28
-      format: 0
-      dimension: 2
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    m_DataSize: 288
-    _typelessdata: 6766863f0ad7233c696666bf000000000000803f0000803f0000803f0000000000000000676686bf0ad7233c696666bf000000000000803f0000803f0000803f0000803f00000000676686bf0ad7233c6966663f000000000000803f0000803f0000803f00000000000000006766863f0ad7233c6966663f000000000000803f0000803f0000803f0000803f000000009a99993f0ad7233c686686bf000000000000803f0000803f00000000000000000000803f9a9999bf0ad7233c686686bf000000000000803f0000803f000000000000803f0000803f9a9999bf0ad7233c6866863f000000000000803f0000803f00000000000000000000803f9a99993f0ad7233c6866863f000000000000803f0000803f000000000000803f0000803f
-  m_CompressedMesh:
-    m_Vertices:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_UV:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Normals:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Tangents:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Weights:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_NormalSigns:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_TangentSigns:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_FloatColors:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_BoneIndices:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Triangles:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_UVInfo: 0
-  m_LocalAABB:
-    m_Center: {x: 0, y: 0.01, z: 0}
-    m_Extent: {x: 1.2, y: 0, z: 1.0500002}
-  m_MeshUsageFlags: 0
-  m_BakedConvexCollisionMesh: 
-  m_BakedTriangleCollisionMesh: 
-  m_MeshOptimized: 0
 --- !u!1 &330470334
 GameObject:
   m_ObjectHideFlags: 0
@@ -1194,6 +1066,7 @@ GameObject:
   - 54: {fileID: 576094162}
   - 114: {fileID: 576094165}
   - 114: {fileID: 576094166}
+  - 114: {fileID: 576094167}
   m_Layer: 0
   m_Name: Whirlygig
   m_TagString: Untagged
@@ -1262,13 +1135,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 576094166}
-  grabAttachMechanic: 0
+  secondaryGrabActionScript: {fileID: 576094167}
   isUsable: 1
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -1289,7 +1160,48 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+  destroyImmediatelyOnThrow: 1
   breakForce: 1500
+--- !u!114 &576094167
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 576094161}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!21 &643978798
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: Sprites/Default
+  m_Shader: {fileID: 10753, guid: 0000000000000000f000000000000000, type: 0}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 5
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  m_SavedProperties:
+    serializedVersion: 2
+    m_TexEnvs:
+    - first:
+        name: _MainTex
+      second:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - first:
+        name: PixelSnap
+      second: 0
+    m_Colors:
+    - first:
+        name: _Color
+      second: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &656137375
 GameObject:
   m_ObjectHideFlags: 0
@@ -1435,6 +1347,7 @@ GameObject:
   - 114: {fileID: 735835455}
   - 114: {fileID: 735835459}
   - 114: {fileID: 735835458}
+  - 114: {fileID: 735835460}
   m_Layer: 0
   m_Name: Whirlygig (4)
   m_TagString: Untagged
@@ -1476,13 +1389,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 2
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 735835459}
-  grabAttachMechanic: 4
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 1
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 2
   allowedUseControllers: 0
@@ -1547,6 +1458,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &735835460
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 735835453}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &766821296
 GameObject:
   m_ObjectHideFlags: 0
@@ -1560,6 +1482,7 @@ GameObject:
   - 114: {fileID: 766821298}
   - 114: {fileID: 766821302}
   - 114: {fileID: 766821301}
+  - 114: {fileID: 766821303}
   m_Layer: 0
   m_Name: Whirlygig (5)
   m_TagString: Untagged
@@ -1601,13 +1524,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 2
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 766821302}
-  grabAttachMechanic: 2
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 1
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 2
   allowedUseControllers: 0
@@ -1673,6 +1594,17 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   detachDistance: 5
+--- !u!114 &766821303
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 766821296}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &828784613
 GameObject:
   m_ObjectHideFlags: 0
@@ -1753,6 +1685,134 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 828784613}
   m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!43 &850426983
+Mesh:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: 
+  serializedVersion: 8
+  m_SubMeshes:
+  - serializedVersion: 2
+    firstByte: 0
+    indexCount: 24
+    topology: 0
+    firstVertex: 0
+    vertexCount: 8
+    localAABB:
+      m_Center: {x: 0, y: 0.01, z: 0}
+      m_Extent: {x: 1.2, y: 0, z: 1.0500002}
+  m_Shapes:
+    vertices: []
+    shapes: []
+    channels: []
+    fullWeights: []
+  m_BindPose: []
+  m_BoneNameHashes: 
+  m_RootBoneNameHash: 0
+  m_MeshCompression: 0
+  m_IsReadable: 1
+  m_KeepVertices: 1
+  m_KeepIndices: 1
+  m_IndexBuffer: 000004000100010004000500010005000200020005000600020006000300030006000700030007000000000007000400
+  m_Skin: []
+  m_VertexData:
+    m_CurrentChannels: 13
+    m_VertexCount: 8
+    m_Channels:
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 3
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 12
+      format: 0
+      dimension: 4
+    - stream: 0
+      offset: 28
+      format: 0
+      dimension: 2
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    m_DataSize: 288
+    _typelessdata: 6766863f0ad7233c696666bf000000000000803f0000803f0000803f0000000000000000676686bf0ad7233c696666bf000000000000803f0000803f0000803f0000803f00000000676686bf0ad7233c6966663f000000000000803f0000803f0000803f00000000000000006766863f0ad7233c6966663f000000000000803f0000803f0000803f0000803f000000009a99993f0ad7233c686686bf000000000000803f0000803f00000000000000000000803f9a9999bf0ad7233c686686bf000000000000803f0000803f000000000000803f0000803f9a9999bf0ad7233c6866863f000000000000803f0000803f00000000000000000000803f9a99993f0ad7233c6866863f000000000000803f0000803f000000000000803f0000803f
+  m_CompressedMesh:
+    m_Vertices:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_UV:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Normals:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Tangents:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Weights:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_NormalSigns:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_TangentSigns:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_FloatColors:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_BoneIndices:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Triangles:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_UVInfo: 0
+  m_LocalAABB:
+    m_Center: {x: 0, y: 0.01, z: 0}
+    m_Extent: {x: 1.2, y: 0, z: 1.0500002}
+  m_MeshUsageFlags: 0
+  m_BakedConvexCollisionMesh: 
+  m_BakedTriangleCollisionMesh: 
+  m_MeshOptimized: 0
 --- !u!1 &965280895
 GameObject:
   m_ObjectHideFlags: 0
@@ -1911,6 +1971,7 @@ GameObject:
   - 65: {fileID: 1061858097}
   - 114: {fileID: 1061858100}
   - 114: {fileID: 1061858101}
+  - 114: {fileID: 1061858102}
   m_Layer: 0
   m_Name: Gun
   m_TagString: Untagged
@@ -1980,13 +2041,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 1061858101}
-  grabAttachMechanic: 0
+  secondaryGrabActionScript: {fileID: 1061858102}
   isUsable: 1
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -2007,7 +2066,19 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0.5
+  destroyImmediatelyOnThrow: 1
   breakForce: 1500
+--- !u!114 &1061858102
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1061858096}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1135670851
 GameObject:
   m_ObjectHideFlags: 0
@@ -2087,35 +2158,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
---- !u!21 &1150779836
-Material:
-  serializedVersion: 6
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_Name: Sprites/Default
-  m_Shader: {fileID: 10753, guid: 0000000000000000f000000000000000, type: 0}
-  m_ShaderKeywords: 
-  m_LightmapFlags: 5
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  m_SavedProperties:
-    serializedVersion: 2
-    m_TexEnvs:
-    - first:
-        name: _MainTex
-      second:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Floats:
-    - first:
-        name: PixelSnap
-      second: 0
-    m_Colors:
-    - first:
-        name: _Color
-      second: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &1161667211
 GameObject:
   m_ObjectHideFlags: 0
@@ -2207,6 +2249,7 @@ GameObject:
   - 54: {fileID: 1402712455}
   - 114: {fileID: 1402712454}
   - 114: {fileID: 1402712457}
+  - 114: {fileID: 1402712458}
   m_Layer: 0
   m_Name: Whirlygig (7)
   m_TagString: Untagged
@@ -2248,13 +2291,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 2
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 1402712457}
-  grabAttachMechanic: 2
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 1
-  useOnlyIfGrabbed: 1
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 1
   pointerActivatesUseAction: 0
   useOverrideButton: 2
   allowedUseControllers: 0
@@ -2303,6 +2344,17 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   detachDistance: 5
+--- !u!114 &1402712458
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1402712452}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1412567693
 GameObject:
   m_ObjectHideFlags: 0
@@ -2593,6 +2645,7 @@ GameObject:
   - 114: {fileID: 1720070317}
   - 114: {fileID: 1720070321}
   - 114: {fileID: 1720070320}
+  - 114: {fileID: 1720070322}
   m_Layer: 0
   m_Name: Whirlygig (6)
   m_TagString: Untagged
@@ -2634,13 +2687,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 2
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 1720070321}
-  grabAttachMechanic: 2
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 1
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 2
   allowedUseControllers: 0
@@ -2706,6 +2757,17 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   detachDistance: 5
+--- !u!114 &1720070322
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1720070315}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1746905710
 GameObject:
   m_ObjectHideFlags: 0
@@ -2944,6 +3006,7 @@ GameObject:
   - 114: {fileID: 2033634044}
   - 114: {fileID: 2033634048}
   - 114: {fileID: 2033634047}
+  - 114: {fileID: 2033634049}
   m_Layer: 0
   m_Name: Whirlygig (3)
   m_TagString: Untagged
@@ -2985,13 +3048,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 2033634048}
-  grabAttachMechanic: 2
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 1
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -3057,6 +3118,17 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   detachDistance: 5
+--- !u!114 &2033634049
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2033634042}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2039976142
 GameObject:
   m_ObjectHideFlags: 0
@@ -3069,6 +3141,7 @@ GameObject:
   - 54: {fileID: 2039976145}
   - 114: {fileID: 2039976144}
   - 114: {fileID: 2039976147}
+  - 114: {fileID: 2039976148}
   m_Layer: 0
   m_Name: Whirlygig (1)
   m_TagString: Untagged
@@ -3110,13 +3183,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 2039976147}
-  grabAttachMechanic: 2
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 1
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -3165,6 +3236,17 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   detachDistance: 5
+--- !u!114 &2039976148
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2039976142}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2053156293
 GameObject:
   m_ObjectHideFlags: 0
@@ -3320,6 +3402,7 @@ GameObject:
   - 54: {fileID: 2127055839}
   - 114: {fileID: 2127055838}
   - 114: {fileID: 2127055841}
+  - 114: {fileID: 2127055842}
   m_Layer: 0
   m_Name: Whirlygig (2)
   m_TagString: Untagged
@@ -3361,13 +3444,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 2127055841}
-  grabAttachMechanic: 4
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 1
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -3415,3 +3496,14 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &2127055842
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2127055836}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

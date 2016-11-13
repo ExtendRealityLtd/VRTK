@@ -38,6 +38,7 @@
 
         protected override void Update()
         {
+            base.Update();
             currentBeamSize = Mathf.Clamp(blade.transform.localScale.y + (beamExtendSpeed * Time.deltaTime), beamLimits.x, beamLimits.y);
             SetBeamSize();
             PulseBeam();

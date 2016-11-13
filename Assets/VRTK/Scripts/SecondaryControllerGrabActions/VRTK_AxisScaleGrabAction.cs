@@ -1,4 +1,4 @@
-﻿// Axis Scale Grab Action|SecondaryControllerGrabActions|0020
+﻿// Axis Scale Grab Action|SecondaryControllerGrabActions|0030
 namespace VRTK.SecondaryControllerGrabActions
 {
     using UnityEngine;
@@ -11,6 +11,8 @@ namespace VRTK.SecondaryControllerGrabActions
     /// </example>
     public class VRTK_AxisScaleGrabAction : VRTK_BaseGrabAction
     {
+        [Tooltip("The distance the secondary controller must move away from the original grab position before the secondary controller auto ungrabs the object.")]
+        public float ungrabDistance = 1f;
         [Tooltip("If checked the current X Axis of the object won't be scaled")]
         public bool lockXAxis = false;
         [Tooltip("If checked the current Y Axis of the object won't be scaled")]
@@ -34,6 +36,14 @@ namespace VRTK.SecondaryControllerGrabActions
         {
             base.Initialise(currentGrabbdObject, currentPrimaryGrabbingObject, currentSecondaryGrabbingObject, primaryGrabPoint, secondaryGrabPoint);
             initialScale = currentGrabbdObject.transform.localScale;
+        }
+
+        /// <summary>
+        /// The ProcessUpdate method runs in every Update on the Interactable Object whilst it is being grabbed by a secondary controller.
+        /// </summary>
+        public override void ProcessUpdate()
+        {
+            CheckForceStopDistance(ungrabDistance);
         }
 
         /// <summary>

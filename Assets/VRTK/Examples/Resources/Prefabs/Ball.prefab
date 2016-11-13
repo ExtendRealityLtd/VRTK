@@ -14,6 +14,7 @@ GameObject:
   - 54: {fileID: 5422252}
   - 114: {fileID: 11453984}
   - 114: {fileID: 114000012159568216}
+  - 114: {fileID: 114000011474977398}
   m_Layer: 0
   m_Name: Ball
   m_TagString: Untagged
@@ -104,13 +105,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 114000012159568216}
-  grabAttachMechanic: 0
+  secondaryGrabActionScript: {fileID: 114000011474977398}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -138,6 +137,17 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 123458}
   m_IsPrefabParent: 1
+--- !u!114 &114000011474977398
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 123458}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114000012159568216
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -154,5 +164,5 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
-  customJoint: {fileID: 0}
+  destroyImmediatelyOnThrow: 1
   breakForce: 1500

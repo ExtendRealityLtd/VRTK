@@ -1,4 +1,4 @@
-﻿// Control Direction Grab Action|SecondaryControllerGrabActions|0030
+﻿// Control Direction Grab Action|SecondaryControllerGrabActions|0040
 namespace VRTK.SecondaryControllerGrabActions
 {
     using UnityEngine;
@@ -17,6 +17,8 @@ namespace VRTK.SecondaryControllerGrabActions
     /// </example>
     public class VRTK_ControlDirectionGrabAction : VRTK_BaseGrabAction
     {
+        [Tooltip("The distance the secondary controller must move away from the original grab position before the secondary controller auto ungrabs the object.")]
+        public float ungrabDistance = 1f;
         [Tooltip("The speed in which the object will snap back to it's original rotation when the secondary controller stops grabbing it. `0` for instant snap, `infinity` for no snap back.")]
         public float releaseSnapSpeed = 0.1f;
 
@@ -67,6 +69,14 @@ namespace VRTK.SecondaryControllerGrabActions
         public override void OnDropAction()
         {
             StopRealignOnRelease();
+        }
+
+        /// <summary>
+        /// The ProcessUpdate method runs in every Update on the Interactable Object whilst it is being grabbed by a secondary controller.
+        /// </summary>
+        public override void ProcessUpdate()
+        {
+            CheckForceStopDistance(ungrabDistance);
         }
 
         /// <summary>

@@ -177,6 +177,7 @@ GameObject:
   - 23: {fileID: 22349922}
   - 114: {fileID: 22349921}
   - 114: {fileID: 22349926}
+  - 114: {fileID: 22349927}
   m_Layer: 0
   m_Name: lip (3)
   m_TagString: Untagged
@@ -203,12 +204,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 22349926}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -290,6 +290,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &22349927
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 22349920}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &23582923
 GameObject:
   m_ObjectHideFlags: 0
@@ -303,6 +314,7 @@ GameObject:
   - 23: {fileID: 23582925}
   - 114: {fileID: 23582924}
   - 114: {fileID: 23582929}
+  - 114: {fileID: 23582930}
   m_Layer: 0
   m_Name: Light (5)
   m_TagString: Untagged
@@ -329,12 +341,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 23582929}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -416,6 +427,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &23582930
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 23582923}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &32269401
 Prefab:
   m_ObjectHideFlags: 0
@@ -495,6 +517,7 @@ GameObject:
   - 23: {fileID: 36853476}
   - 114: {fileID: 36853475}
   - 114: {fileID: 36853479}
+  - 114: {fileID: 36853480}
   m_Layer: 0
   m_Name: trunk (5)
   m_TagString: Untagged
@@ -534,12 +557,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 36853479}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -609,6 +631,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &36853480
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 36853473}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &43272382
 GameObject:
   m_ObjectHideFlags: 0
@@ -622,6 +655,7 @@ GameObject:
   - 23: {fileID: 43272385}
   - 114: {fileID: 43272384}
   - 114: {fileID: 43272388}
+  - 114: {fileID: 43272389}
   m_Layer: 0
   m_Name: climb (20)
   m_TagString: Untagged
@@ -661,12 +695,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 43272388}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -735,6 +768,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &43272389
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 43272382}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &45024614
 Prefab:
   m_ObjectHideFlags: 0
@@ -816,7 +860,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 81186593}
-  m_LocalRotation: {x: -0.13039498, y: -0.7205761, z: -0.6680776, w: 0.13205935}
+  m_LocalRotation: {x: -0.13039497, y: -0.72057605, z: -0.6680775, w: 0.13205934}
   m_LocalPosition: {x: 16.99, y: 0.56, z: -1.15}
   m_LocalScale: {x: 0.20000015, y: 0.73330235, z: 0.20000017}
   m_LocalEulerAnglesHint: {x: -85.743095, y: -167.48149, z: 8.8867}
@@ -991,6 +1035,7 @@ GameObject:
   - 23: {fileID: 88335198}
   - 114: {fileID: 88335197}
   - 114: {fileID: 88335201}
+  - 114: {fileID: 88335202}
   m_Layer: 0
   m_Name: trunk (7)
   m_TagString: Untagged
@@ -1030,12 +1075,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 88335201}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -1105,6 +1149,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &88335202
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 88335195}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &89356823
 Prefab:
   m_ObjectHideFlags: 0
@@ -1184,6 +1239,7 @@ GameObject:
   - 23: {fileID: 111530455}
   - 114: {fileID: 111530454}
   - 114: {fileID: 111530458}
+  - 114: {fileID: 111530459}
   m_Layer: 0
   m_Name: trunk (1)
   m_TagString: Untagged
@@ -1223,12 +1279,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 111530458}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -1298,6 +1353,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &111530459
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 111530452}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &154444438
 GameObject:
   m_ObjectHideFlags: 0
@@ -1390,6 +1456,7 @@ GameObject:
   - 23: {fileID: 173231246}
   - 114: {fileID: 173231245}
   - 114: {fileID: 173231249}
+  - 114: {fileID: 173231250}
   m_Layer: 0
   m_Name: climb (24)
   m_TagString: Untagged
@@ -1429,12 +1496,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 173231249}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -1503,6 +1569,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &173231250
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 173231243}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &178269073
 GameObject:
   m_ObjectHideFlags: 0
@@ -1717,6 +1794,7 @@ GameObject:
   - 23: {fileID: 190381771}
   - 114: {fileID: 190381770}
   - 114: {fileID: 190381774}
+  - 114: {fileID: 190381775}
   m_Layer: 0
   m_Name: climb (27)
   m_TagString: Untagged
@@ -1756,12 +1834,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 190381774}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -1830,6 +1907,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &190381775
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 190381768}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &203939567
 GameObject:
   m_ObjectHideFlags: 0
@@ -1843,6 +1931,7 @@ GameObject:
   - 23: {fileID: 203939569}
   - 114: {fileID: 203939568}
   - 114: {fileID: 203939573}
+  - 114: {fileID: 203939574}
   m_Layer: 0
   m_Name: lip (5)
   m_TagString: Untagged
@@ -1869,12 +1958,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 203939573}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -1956,6 +2044,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &203939574
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 203939567}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &211674936
 GameObject:
   m_ObjectHideFlags: 0
@@ -2048,6 +2147,7 @@ GameObject:
   - 23: {fileID: 229174535}
   - 114: {fileID: 229174534}
   - 114: {fileID: 229174539}
+  - 114: {fileID: 229174540}
   m_Layer: 0
   m_Name: Light (1)
   m_TagString: Untagged
@@ -2074,12 +2174,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 229174539}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -2161,6 +2260,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &229174540
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 229174533}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &236549588
 Prefab:
   m_ObjectHideFlags: 0
@@ -2235,134 +2345,6 @@ Prefab:
 Transform:
   m_PrefabParentObject: {fileID: 486932, guid: fb2f1dd059eb2ee48b1005209155582b, type: 2}
   m_PrefabInternal: {fileID: 236549588}
---- !u!43 &260389827
-Mesh:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_Name: 
-  serializedVersion: 8
-  m_SubMeshes:
-  - serializedVersion: 2
-    firstByte: 0
-    indexCount: 24
-    topology: 0
-    firstVertex: 0
-    vertexCount: 8
-    localAABB:
-      m_Center: {x: 0, y: 0.01, z: 0}
-      m_Extent: {x: 1.2, y: 0, z: 1.0500002}
-  m_Shapes:
-    vertices: []
-    shapes: []
-    channels: []
-    fullWeights: []
-  m_BindPose: []
-  m_BoneNameHashes: 
-  m_RootBoneNameHash: 0
-  m_MeshCompression: 0
-  m_IsReadable: 1
-  m_KeepVertices: 1
-  m_KeepIndices: 1
-  m_IndexBuffer: 000004000100010004000500010005000200020005000600020006000300030006000700030007000000000007000400
-  m_Skin: []
-  m_VertexData:
-    m_CurrentChannels: 13
-    m_VertexCount: 8
-    m_Channels:
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 3
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 12
-      format: 0
-      dimension: 4
-    - stream: 0
-      offset: 28
-      format: 0
-      dimension: 2
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    m_DataSize: 288
-    _typelessdata: 6766863f0ad7233c696666bf000000000000803f0000803f0000803f0000000000000000676686bf0ad7233c696666bf000000000000803f0000803f0000803f0000803f00000000676686bf0ad7233c6966663f000000000000803f0000803f0000803f00000000000000006766863f0ad7233c6966663f000000000000803f0000803f0000803f0000803f000000009a99993f0ad7233c686686bf000000000000803f0000803f00000000000000000000803f9a9999bf0ad7233c686686bf000000000000803f0000803f000000000000803f0000803f9a9999bf0ad7233c6866863f000000000000803f0000803f00000000000000000000803f9a99993f0ad7233c6866863f000000000000803f0000803f000000000000803f0000803f
-  m_CompressedMesh:
-    m_Vertices:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_UV:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Normals:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Tangents:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Weights:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_NormalSigns:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_TangentSigns:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_FloatColors:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_BoneIndices:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Triangles:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_UVInfo: 0
-  m_LocalAABB:
-    m_Center: {x: 0, y: 0.01, z: 0}
-    m_Extent: {x: 1.2, y: 0, z: 1.0500002}
-  m_MeshUsageFlags: 0
-  m_BakedConvexCollisionMesh: 
-  m_BakedTriangleCollisionMesh: 
-  m_MeshOptimized: 0
 --- !u!1001 &262401027
 Prefab:
   m_ObjectHideFlags: 0
@@ -2454,6 +2436,7 @@ GameObject:
   - 23: {fileID: 294918497}
   - 114: {fileID: 294918496}
   - 114: {fileID: 294918501}
+  - 114: {fileID: 294918502}
   m_Layer: 0
   m_Name: Light (7)
   m_TagString: Untagged
@@ -2480,12 +2463,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 294918501}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -2567,6 +2549,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &294918502
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 294918495}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &301830903
 GameObject:
   m_ObjectHideFlags: 0
@@ -2580,6 +2573,7 @@ GameObject:
   - 23: {fileID: 301830906}
   - 114: {fileID: 301830905}
   - 114: {fileID: 301830909}
+  - 114: {fileID: 301830910}
   m_Layer: 0
   m_Name: climb (19)
   m_TagString: Untagged
@@ -2619,12 +2613,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 301830909}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -2693,6 +2686,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &301830910
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 301830903}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &339274728
 GameObject:
   m_ObjectHideFlags: 0
@@ -2706,6 +2710,7 @@ GameObject:
   - 23: {fileID: 339274730}
   - 114: {fileID: 339274729}
   - 114: {fileID: 339274734}
+  - 114: {fileID: 339274735}
   m_Layer: 0
   m_Name: Light (10)
   m_TagString: Untagged
@@ -2732,12 +2737,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 339274734}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -2819,6 +2823,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &339274735
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 339274728}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &344726543
 GameObject:
   m_ObjectHideFlags: 0
@@ -3011,6 +3026,7 @@ GameObject:
   - 23: {fileID: 372246704}
   - 114: {fileID: 372246703}
   - 114: {fileID: 372246707}
+  - 114: {fileID: 372246708}
   m_Layer: 0
   m_Name: trunk (2)
   m_TagString: Untagged
@@ -3050,12 +3066,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 372246707}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -3125,6 +3140,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &372246708
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 372246701}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &399442449
 GameObject:
   m_ObjectHideFlags: 0
@@ -3217,6 +3243,7 @@ GameObject:
   - 23: {fileID: 415293907}
   - 114: {fileID: 415293906}
   - 114: {fileID: 415293910}
+  - 114: {fileID: 415293911}
   m_Layer: 0
   m_Name: climb (16)
   m_TagString: Untagged
@@ -3256,12 +3283,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 415293910}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -3330,35 +3356,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
---- !u!21 &443114081
-Material:
-  serializedVersion: 6
+--- !u!114 &415293911
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: Sprites/Default
-  m_Shader: {fileID: 10753, guid: 0000000000000000f000000000000000, type: 0}
-  m_ShaderKeywords: 
-  m_LightmapFlags: 5
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  m_SavedProperties:
-    serializedVersion: 2
-    m_TexEnvs:
-    - first:
-        name: _MainTex
-      second:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Floats:
-    - first:
-        name: PixelSnap
-      second: 0
-    m_Colors:
-    - first:
-        name: _Color
-      second: {r: 1, g: 1, b: 1, a: 1}
+  m_GameObject: {fileID: 415293904}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &448623048
 Prefab:
   m_ObjectHideFlags: 0
@@ -3422,6 +3430,7 @@ GameObject:
   - 23: {fileID: 449315068}
   - 114: {fileID: 449315067}
   - 114: {fileID: 449315071}
+  - 114: {fileID: 449315072}
   m_Layer: 0
   m_Name: trunk (15)
   m_TagString: Untagged
@@ -3461,12 +3470,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 449315071}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -3536,6 +3544,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &449315072
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 449315065}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &450637873
 GameObject:
   m_ObjectHideFlags: 0
@@ -3549,6 +3568,7 @@ GameObject:
   - 65: {fileID: 450637876}
   - 114: {fileID: 450637874}
   - 114: {fileID: 450637879}
+  - 114: {fileID: 450637880}
   m_Layer: 0
   m_Name: climb (6)
   m_TagString: Untagged
@@ -3575,12 +3595,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 450637879}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -3662,6 +3681,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &450637880
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 450637873}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &463354126
 GameObject:
   m_ObjectHideFlags: 0
@@ -3894,6 +3924,7 @@ GameObject:
   - 23: {fileID: 473830976}
   - 114: {fileID: 473830975}
   - 114: {fileID: 473830979}
+  - 114: {fileID: 473830980}
   m_Layer: 0
   m_Name: trunk (11)
   m_TagString: Untagged
@@ -3933,12 +3964,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 473830979}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -4008,6 +4038,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &473830980
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 473830973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &491901267
 Prefab:
   m_ObjectHideFlags: 0
@@ -4050,11 +4091,11 @@ Prefab:
     - target: {fileID: 3380982, guid: 4d293c8e162f3874b982baadd71153d2, type: 2}
       propertyPath: m_Mesh
       value: 
-      objectReference: {fileID: 260389827}
+      objectReference: {fileID: 1588573992}
     - target: {fileID: 2348914, guid: 4d293c8e162f3874b982baadd71153d2, type: 2}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 443114081}
+      objectReference: {fileID: 1410559835}
     - target: {fileID: 11489174, guid: 4d293c8e162f3874b982baadd71153d2, type: 2}
       propertyPath: size
       value: 0
@@ -4455,6 +4496,7 @@ GameObject:
   - 23: {fileID: 526253357}
   - 114: {fileID: 526253356}
   - 114: {fileID: 526253360}
+  - 114: {fileID: 526253361}
   m_Layer: 0
   m_Name: edge (1)
   m_TagString: TeleportIgnore
@@ -4494,12 +4536,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 526253360}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -4568,6 +4609,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &526253361
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 526253354}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &548235054
 Prefab:
   m_ObjectHideFlags: 0
@@ -5052,6 +5104,7 @@ GameObject:
   - 23: {fileID: 633978868}
   - 114: {fileID: 633978867}
   - 114: {fileID: 633978871}
+  - 114: {fileID: 633978872}
   m_Layer: 0
   m_Name: climb (29)
   m_TagString: Untagged
@@ -5091,12 +5144,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 633978871}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -5165,6 +5217,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &633978872
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 633978865}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &686387054
 GameObject:
   m_ObjectHideFlags: 0
@@ -5178,6 +5241,7 @@ GameObject:
   - 23: {fileID: 686387057}
   - 114: {fileID: 686387056}
   - 114: {fileID: 686387060}
+  - 114: {fileID: 686387061}
   m_Layer: 0
   m_Name: trunk (6)
   m_TagString: Untagged
@@ -5217,12 +5281,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 686387060}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -5292,6 +5355,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &686387061
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 686387054}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &688040789
 GameObject:
   m_ObjectHideFlags: 0
@@ -5305,6 +5379,7 @@ GameObject:
   - 23: {fileID: 688040792}
   - 114: {fileID: 688040791}
   - 114: {fileID: 688040795}
+  - 114: {fileID: 688040796}
   m_Layer: 0
   m_Name: Cylinder (2)
   m_TagString: Untagged
@@ -5344,12 +5419,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 688040795}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -5419,6 +5493,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &688040796
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 688040789}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &699573794
 GameObject:
   m_ObjectHideFlags: 0
@@ -5569,6 +5654,7 @@ GameObject:
   - 23: {fileID: 723325748}
   - 114: {fileID: 723325747}
   - 114: {fileID: 723325752}
+  - 114: {fileID: 723325753}
   m_Layer: 0
   m_Name: Light (9)
   m_TagString: Untagged
@@ -5595,12 +5681,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 723325752}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -5682,6 +5767,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &723325753
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 723325746}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &738037761
 GameObject:
   m_ObjectHideFlags: 0
@@ -5774,6 +5870,7 @@ GameObject:
   - 23: {fileID: 739518964}
   - 114: {fileID: 739518963}
   - 114: {fileID: 739518968}
+  - 114: {fileID: 739518969}
   m_Layer: 0
   m_Name: Light (17)
   m_TagString: Untagged
@@ -5800,12 +5897,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 739518968}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -5887,6 +5983,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &739518969
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 739518962}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &742868953
 GameObject:
   m_ObjectHideFlags: 0
@@ -6130,6 +6237,7 @@ GameObject:
   - 23: {fileID: 846207955}
   - 114: {fileID: 846207954}
   - 114: {fileID: 846207958}
+  - 114: {fileID: 846207959}
   m_Layer: 0
   m_Name: climb (25)
   m_TagString: Untagged
@@ -6169,12 +6277,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 846207958}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -6243,6 +6350,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &846207959
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 846207952}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &855540478
 GameObject:
   m_ObjectHideFlags: 0
@@ -6256,6 +6374,7 @@ GameObject:
   - 23: {fileID: 855540480}
   - 114: {fileID: 855540479}
   - 114: {fileID: 855540484}
+  - 114: {fileID: 855540485}
   m_Layer: 0
   m_Name: lip (6)
   m_TagString: Untagged
@@ -6282,12 +6401,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 855540484}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -6369,6 +6487,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &855540485
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 855540478}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &883911895
 GameObject:
   m_ObjectHideFlags: 0
@@ -6382,6 +6511,7 @@ GameObject:
   - 65: {fileID: 883911898}
   - 114: {fileID: 883911896}
   - 114: {fileID: 883911901}
+  - 114: {fileID: 883911902}
   m_Layer: 0
   m_Name: climb (4)
   m_TagString: Untagged
@@ -6408,12 +6538,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 883911901}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -6495,6 +6624,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &883911902
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 883911895}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &890081253
 GameObject:
   m_ObjectHideFlags: 0
@@ -6587,6 +6727,7 @@ GameObject:
   - 65: {fileID: 895534971}
   - 114: {fileID: 895534969}
   - 114: {fileID: 895534974}
+  - 114: {fileID: 895534975}
   m_Layer: 0
   m_Name: climb (1)
   m_TagString: Untagged
@@ -6613,12 +6754,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 895534974}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -6700,6 +6840,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &895534975
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 895534968}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &911706196
 Prefab:
   m_ObjectHideFlags: 0
@@ -6771,6 +6922,7 @@ GameObject:
   - 65: {fileID: 930587312}
   - 114: {fileID: 930587310}
   - 114: {fileID: 930587315}
+  - 114: {fileID: 930587316}
   m_Layer: 0
   m_Name: climb (5)
   m_TagString: Untagged
@@ -6797,12 +6949,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 930587315}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -6884,6 +7035,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &930587316
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 930587309}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &942772176
 GameObject:
   m_ObjectHideFlags: 0
@@ -6897,6 +7059,7 @@ GameObject:
   - 23: {fileID: 942772179}
   - 114: {fileID: 942772178}
   - 114: {fileID: 942772182}
+  - 114: {fileID: 942772183}
   m_Layer: 0
   m_Name: climb (17)
   m_TagString: Untagged
@@ -6936,12 +7099,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 942772182}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -7010,6 +7172,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &942772183
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 942772176}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &946220532
 GameObject:
   m_ObjectHideFlags: 0
@@ -7023,6 +7196,7 @@ GameObject:
   - 23: {fileID: 946220535}
   - 114: {fileID: 946220534}
   - 114: {fileID: 946220538}
+  - 114: {fileID: 946220539}
   m_Layer: 0
   m_Name: Rope (1)
   m_TagString: Untagged
@@ -7062,12 +7236,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 946220538}
+  secondaryGrabActionScript: {fileID: 946220539}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -7137,6 +7310,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &946220539
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 946220532}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &948734097
 Prefab:
   m_ObjectHideFlags: 0
@@ -7379,6 +7563,7 @@ GameObject:
   - 23: {fileID: 965723036}
   - 114: {fileID: 965723035}
   - 114: {fileID: 965723040}
+  - 114: {fileID: 965723041}
   m_Layer: 0
   m_Name: Bush
   m_TagString: Untagged
@@ -7405,12 +7590,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 965723040}
+  secondaryGrabActionScript: {fileID: 965723041}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -7492,6 +7676,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &965723041
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 965723034}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &973724735
 GameObject:
   m_ObjectHideFlags: 0
@@ -7505,6 +7700,7 @@ GameObject:
   - 23: {fileID: 973724738}
   - 114: {fileID: 973724737}
   - 114: {fileID: 973724741}
+  - 114: {fileID: 973724742}
   m_Layer: 0
   m_Name: Cube (2)
   m_TagString: Untagged
@@ -7544,12 +7740,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 2
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 973724741}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -7618,6 +7813,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &973724742
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 973724735}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &996183321
 Prefab:
   m_ObjectHideFlags: 0
@@ -7705,6 +7911,7 @@ GameObject:
   - 65: {fileID: 1002880806}
   - 114: {fileID: 1002880804}
   - 114: {fileID: 1002880809}
+  - 114: {fileID: 1002880810}
   m_Layer: 0
   m_Name: climb (2)
   m_TagString: Untagged
@@ -7731,12 +7938,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 1002880809}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -7818,6 +8024,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &1002880810
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1002880803}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1005106252
 Prefab:
   m_ObjectHideFlags: 0
@@ -7955,6 +8172,7 @@ GameObject:
   - 23: {fileID: 1019696421}
   - 114: {fileID: 1019696420}
   - 114: {fileID: 1019696425}
+  - 114: {fileID: 1019696426}
   m_Layer: 0
   m_Name: Light (3)
   m_TagString: Untagged
@@ -7981,12 +8199,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 1019696425}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -8068,6 +8285,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &1019696426
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1019696419}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1023834342
 Prefab:
   m_ObjectHideFlags: 0
@@ -8155,6 +8383,7 @@ GameObject:
   - 65: {fileID: 1040694170}
   - 114: {fileID: 1040694168}
   - 114: {fileID: 1040694173}
+  - 114: {fileID: 1040694174}
   m_Layer: 0
   m_Name: climb (8)
   m_TagString: Untagged
@@ -8181,12 +8410,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 1040694173}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -8268,6 +8496,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &1040694174
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1040694167}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1043370319
 GameObject:
   m_ObjectHideFlags: 0
@@ -8323,6 +8562,7 @@ GameObject:
   - 23: {fileID: 1048683698}
   - 114: {fileID: 1048683697}
   - 114: {fileID: 1048683702}
+  - 114: {fileID: 1048683703}
   m_Layer: 0
   m_Name: lip (4)
   m_TagString: Untagged
@@ -8349,12 +8589,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 1048683702}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -8436,6 +8675,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &1048683703
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1048683696}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1075814468
 GameObject:
   m_ObjectHideFlags: 0
@@ -8449,6 +8699,7 @@ GameObject:
   - 23: {fileID: 1075814470}
   - 114: {fileID: 1075814469}
   - 114: {fileID: 1075814474}
+  - 114: {fileID: 1075814475}
   m_Layer: 0
   m_Name: Light (8)
   m_TagString: Untagged
@@ -8475,12 +8726,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 1075814474}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -8562,6 +8812,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &1075814475
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1075814468}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1080050342
 GameObject:
   m_ObjectHideFlags: 0
@@ -8575,6 +8836,7 @@ GameObject:
   - 65: {fileID: 1080050345}
   - 114: {fileID: 1080050343}
   - 114: {fileID: 1080050348}
+  - 114: {fileID: 1080050349}
   m_Layer: 0
   m_Name: climb (3)
   m_TagString: Untagged
@@ -8601,12 +8863,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 1080050348}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -8688,6 +8949,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &1080050349
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1080050342}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1091928367
 GameObject:
   m_ObjectHideFlags: 0
@@ -8996,6 +9268,7 @@ GameObject:
   - 23: {fileID: 1117833008}
   - 114: {fileID: 1117833007}
   - 114: {fileID: 1117833012}
+  - 114: {fileID: 1117833013}
   m_Layer: 0
   m_Name: Light (6)
   m_TagString: Untagged
@@ -9022,12 +9295,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 1117833012}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -9109,6 +9381,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &1117833013
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1117833006}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1138727085
 GameObject:
   m_ObjectHideFlags: 0
@@ -9122,6 +9405,7 @@ GameObject:
   - 23: {fileID: 1138727087}
   - 114: {fileID: 1138727086}
   - 114: {fileID: 1138727091}
+  - 114: {fileID: 1138727092}
   m_Layer: 0
   m_Name: Light (14)
   m_TagString: Untagged
@@ -9148,12 +9432,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 1138727091}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -9235,6 +9518,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &1138727092
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1138727085}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1182361964
 Prefab:
   m_ObjectHideFlags: 0
@@ -9306,6 +9600,7 @@ GameObject:
   - 23: {fileID: 1182543820}
   - 114: {fileID: 1182543819}
   - 114: {fileID: 1182543823}
+  - 114: {fileID: 1182543824}
   m_Layer: 0
   m_Name: Rope (2)
   m_TagString: Untagged
@@ -9345,12 +9640,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 1182543823}
+  secondaryGrabActionScript: {fileID: 1182543824}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -9420,6 +9714,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &1182543824
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1182543817}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1183806295
 GameObject:
   m_ObjectHideFlags: 0
@@ -9433,6 +9738,7 @@ GameObject:
   - 23: {fileID: 1183806297}
   - 114: {fileID: 1183806296}
   - 114: {fileID: 1183806301}
+  - 114: {fileID: 1183806302}
   m_Layer: 0
   m_Name: lip
   m_TagString: Untagged
@@ -9459,12 +9765,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 1183806301}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -9546,6 +9851,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &1183806302
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1183806295}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1185614297
 GameObject:
   m_ObjectHideFlags: 0
@@ -9559,6 +9875,7 @@ GameObject:
   - 23: {fileID: 1185614300}
   - 114: {fileID: 1185614299}
   - 114: {fileID: 1185614303}
+  - 114: {fileID: 1185614304}
   m_Layer: 0
   m_Name: trunk (12)
   m_TagString: Untagged
@@ -9598,12 +9915,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 1185614303}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -9673,6 +9989,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &1185614304
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1185614297}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1186028983
 GameObject:
   m_ObjectHideFlags: 0
@@ -9686,6 +10013,7 @@ GameObject:
   - 23: {fileID: 1186028986}
   - 114: {fileID: 1186028985}
   - 114: {fileID: 1186028989}
+  - 114: {fileID: 1186028990}
   m_Layer: 0
   m_Name: climb (24)
   m_TagString: Untagged
@@ -9725,12 +10053,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 1186028989}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -9799,6 +10126,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &1186028990
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1186028983}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1193308312
 GameObject:
   m_ObjectHideFlags: 0
@@ -9931,6 +10269,7 @@ GameObject:
   - 23: {fileID: 1207604168}
   - 114: {fileID: 1207604167}
   - 114: {fileID: 1207604172}
+  - 114: {fileID: 1207604173}
   m_Layer: 0
   m_Name: lip (2)
   m_TagString: Untagged
@@ -9957,12 +10296,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 1207604172}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -10044,6 +10382,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &1207604173
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1207604166}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1229587011
 GameObject:
   m_ObjectHideFlags: 0
@@ -10163,6 +10512,7 @@ GameObject:
   - 65: {fileID: 1234229026}
   - 114: {fileID: 1234229024}
   - 114: {fileID: 1234229029}
+  - 114: {fileID: 1234229030}
   m_Layer: 0
   m_Name: climb (11)
   m_TagString: Untagged
@@ -10189,12 +10539,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 1234229029}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -10276,6 +10625,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &1234229030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1234229023}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1240842793
 GameObject:
   m_ObjectHideFlags: 0
@@ -10504,6 +10864,7 @@ GameObject:
   - 23: {fileID: 1270762161}
   - 114: {fileID: 1270762160}
   - 114: {fileID: 1270762165}
+  - 114: {fileID: 1270762166}
   m_Layer: 0
   m_Name: Bush (1)
   m_TagString: Untagged
@@ -10530,12 +10891,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 1270762165}
+  secondaryGrabActionScript: {fileID: 1270762166}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -10617,6 +10977,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &1270762166
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1270762159}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1285600059
 Prefab:
   m_ObjectHideFlags: 0
@@ -10762,6 +11133,7 @@ GameObject:
   - 65: {fileID: 1304172371}
   - 114: {fileID: 1304172369}
   - 114: {fileID: 1304172374}
+  - 114: {fileID: 1304172375}
   m_Layer: 0
   m_Name: climb (9)
   m_TagString: Untagged
@@ -10788,12 +11160,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 1304172374}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -10875,6 +11246,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &1304172375
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1304172368}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1308948524
 GameObject:
   m_ObjectHideFlags: 0
@@ -10888,6 +11270,7 @@ GameObject:
   - 23: {fileID: 1308948527}
   - 114: {fileID: 1308948526}
   - 114: {fileID: 1308948530}
+  - 114: {fileID: 1308948531}
   m_Layer: 0
   m_Name: climb (21)
   m_TagString: Untagged
@@ -10927,12 +11310,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 1308948530}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -11001,6 +11383,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &1308948531
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1308948524}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1309028072
 GameObject:
   m_ObjectHideFlags: 0
@@ -11014,6 +11407,7 @@ GameObject:
   - 23: {fileID: 1309028075}
   - 114: {fileID: 1309028074}
   - 114: {fileID: 1309028078}
+  - 114: {fileID: 1309028079}
   m_Layer: 0
   m_Name: Quad
   m_TagString: Untagged
@@ -11053,12 +11447,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 1309028078}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -11127,6 +11520,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &1309028079
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1309028072}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1313247599
 GameObject:
   m_ObjectHideFlags: 0
@@ -11140,6 +11544,7 @@ GameObject:
   - 23: {fileID: 1313247602}
   - 114: {fileID: 1313247601}
   - 114: {fileID: 1313247605}
+  - 114: {fileID: 1313247606}
   m_Layer: 0
   m_Name: Rope (4)
   m_TagString: Untagged
@@ -11179,12 +11584,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 1313247605}
+  secondaryGrabActionScript: {fileID: 1313247606}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -11254,6 +11658,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &1313247606
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1313247599}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1340036284
 GameObject:
   m_ObjectHideFlags: 0
@@ -11267,6 +11682,7 @@ GameObject:
   - 23: {fileID: 1340036287}
   - 114: {fileID: 1340036286}
   - 114: {fileID: 1340036290}
+  - 114: {fileID: 1340036291}
   m_Layer: 0
   m_Name: Cylinder (1)
   m_TagString: Untagged
@@ -11306,12 +11722,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 1340036290}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -11381,6 +11796,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &1340036291
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1340036284}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1342780339
 Prefab:
   m_ObjectHideFlags: 0
@@ -11547,6 +11973,7 @@ GameObject:
   - 23: {fileID: 1369299034}
   - 114: {fileID: 1369299033}
   - 114: {fileID: 1369299037}
+  - 114: {fileID: 1369299038}
   m_Layer: 0
   m_Name: climb (18)
   m_TagString: Untagged
@@ -11586,12 +12013,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 1369299037}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -11660,6 +12086,46 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &1369299038
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1369299031}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!21 &1410559835
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: Sprites/Default
+  m_Shader: {fileID: 10753, guid: 0000000000000000f000000000000000, type: 0}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 5
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  m_SavedProperties:
+    serializedVersion: 2
+    m_TexEnvs:
+    - first:
+        name: _MainTex
+      second:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - first:
+        name: PixelSnap
+      second: 0
+    m_Colors:
+    - first:
+        name: _Color
+      second: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &1423915798
 GameObject:
   m_ObjectHideFlags: 0
@@ -11673,6 +12139,7 @@ GameObject:
   - 23: {fileID: 1423915801}
   - 114: {fileID: 1423915800}
   - 114: {fileID: 1423915804}
+  - 114: {fileID: 1423915805}
   m_Layer: 0
   m_Name: trunk (10)
   m_TagString: Untagged
@@ -11712,12 +12179,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 1423915804}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -11787,6 +12253,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &1423915805
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1423915798}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1435345615
 GameObject:
   m_ObjectHideFlags: 0
@@ -11800,6 +12277,7 @@ GameObject:
   - 23: {fileID: 1435345618}
   - 114: {fileID: 1435345617}
   - 114: {fileID: 1435345621}
+  - 114: {fileID: 1435345622}
   m_Layer: 0
   m_Name: climb (28)
   m_TagString: Untagged
@@ -11839,12 +12317,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 1435345621}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -11913,6 +12390,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &1435345622
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1435345615}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1441616080
 GameObject:
   m_ObjectHideFlags: 0
@@ -12022,6 +12510,7 @@ GameObject:
   - 23: {fileID: 1512964438}
   - 114: {fileID: 1512964437}
   - 114: {fileID: 1512964441}
+  - 114: {fileID: 1512964442}
   m_Layer: 0
   m_Name: climb (26)
   m_TagString: Untagged
@@ -12061,12 +12550,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 1512964441}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -12135,6 +12623,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &1512964442
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1512964435}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1513591192
 GameObject:
   m_ObjectHideFlags: 0
@@ -12148,6 +12647,7 @@ GameObject:
   - 23: {fileID: 1513591195}
   - 114: {fileID: 1513591194}
   - 114: {fileID: 1513591198}
+  - 114: {fileID: 1513591199}
   m_Layer: 0
   m_Name: climb (14)
   m_TagString: Untagged
@@ -12187,12 +12687,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 1513591198}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -12261,6 +12760,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &1513591199
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1513591192}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1531318824
 GameObject:
   m_ObjectHideFlags: 0
@@ -12274,6 +12784,7 @@ GameObject:
   - 65: {fileID: 1531318827}
   - 114: {fileID: 1531318825}
   - 114: {fileID: 1531318830}
+  - 114: {fileID: 1531318831}
   m_Layer: 0
   m_Name: climb (10)
   m_TagString: Untagged
@@ -12300,12 +12811,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 1531318830}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -12387,6 +12897,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &1531318831
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1531318824}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1550704420
 GameObject:
   m_ObjectHideFlags: 0
@@ -12400,6 +12921,7 @@ GameObject:
   - 23: {fileID: 1550704423}
   - 114: {fileID: 1550704422}
   - 114: {fileID: 1550704426}
+  - 114: {fileID: 1550704427}
   m_Layer: 0
   m_Name: Rope
   m_TagString: Untagged
@@ -12439,12 +12961,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 1550704426}
+  secondaryGrabActionScript: {fileID: 1550704427}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -12514,6 +13035,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &1550704427
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1550704420}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1569371613
 GameObject:
   m_ObjectHideFlags: 0
@@ -12641,6 +13173,7 @@ GameObject:
   - 23: {fileID: 1579160958}
   - 114: {fileID: 1579160957}
   - 114: {fileID: 1579160961}
+  - 114: {fileID: 1579160962}
   m_Layer: 0
   m_Name: edge
   m_TagString: TeleportIgnore
@@ -12680,12 +13213,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 1579160961}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -12754,6 +13286,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &1579160962
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1579160955}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1587789927
 GameObject:
   m_ObjectHideFlags: 0
@@ -12767,6 +13310,7 @@ GameObject:
   - 23: {fileID: 1587789930}
   - 114: {fileID: 1587789929}
   - 114: {fileID: 1587789933}
+  - 114: {fileID: 1587789934}
   m_Layer: 0
   m_Name: climb (22)
   m_TagString: Untagged
@@ -12806,12 +13350,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 1587789933}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -12880,6 +13423,145 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &1587789934
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1587789927}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!43 &1588573992
+Mesh:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: 
+  serializedVersion: 8
+  m_SubMeshes:
+  - serializedVersion: 2
+    firstByte: 0
+    indexCount: 24
+    topology: 0
+    firstVertex: 0
+    vertexCount: 8
+    localAABB:
+      m_Center: {x: 0, y: 0.01, z: 0}
+      m_Extent: {x: 1.2, y: 0, z: 1.0500002}
+  m_Shapes:
+    vertices: []
+    shapes: []
+    channels: []
+    fullWeights: []
+  m_BindPose: []
+  m_BoneNameHashes: 
+  m_RootBoneNameHash: 0
+  m_MeshCompression: 0
+  m_IsReadable: 1
+  m_KeepVertices: 1
+  m_KeepIndices: 1
+  m_IndexBuffer: 000004000100010004000500010005000200020005000600020006000300030006000700030007000000000007000400
+  m_Skin: []
+  m_VertexData:
+    m_CurrentChannels: 13
+    m_VertexCount: 8
+    m_Channels:
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 3
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 12
+      format: 0
+      dimension: 4
+    - stream: 0
+      offset: 28
+      format: 0
+      dimension: 2
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    m_DataSize: 288
+    _typelessdata: 6766863f0ad7233c696666bf000000000000803f0000803f0000803f0000000000000000676686bf0ad7233c696666bf000000000000803f0000803f0000803f0000803f00000000676686bf0ad7233c6966663f000000000000803f0000803f0000803f00000000000000006766863f0ad7233c6966663f000000000000803f0000803f0000803f0000803f000000009a99993f0ad7233c686686bf000000000000803f0000803f00000000000000000000803f9a9999bf0ad7233c686686bf000000000000803f0000803f000000000000803f0000803f9a9999bf0ad7233c6866863f000000000000803f0000803f00000000000000000000803f9a99993f0ad7233c6866863f000000000000803f0000803f000000000000803f0000803f
+  m_CompressedMesh:
+    m_Vertices:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_UV:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Normals:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Tangents:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Weights:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_NormalSigns:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_TangentSigns:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_FloatColors:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_BoneIndices:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Triangles:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_UVInfo: 0
+  m_LocalAABB:
+    m_Center: {x: 0, y: 0.01, z: 0}
+    m_Extent: {x: 1.2, y: 0, z: 1.0500002}
+  m_MeshUsageFlags: 0
+  m_BakedConvexCollisionMesh: 
+  m_BakedTriangleCollisionMesh: 
+  m_MeshOptimized: 0
 --- !u!1001 &1606229392
 Prefab:
   m_ObjectHideFlags: 0
@@ -13274,6 +13956,7 @@ GameObject:
   - 23: {fileID: 1676782681}
   - 114: {fileID: 1676782680}
   - 114: {fileID: 1676782685}
+  - 114: {fileID: 1676782686}
   m_Layer: 0
   m_Name: Light (15)
   m_TagString: Untagged
@@ -13300,12 +13983,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 1676782685}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -13387,6 +14069,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &1676782686
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1676782679}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1690654310
 GameObject:
   m_ObjectHideFlags: 0
@@ -13479,6 +14172,7 @@ GameObject:
   - 23: {fileID: 1708630552}
   - 114: {fileID: 1708630551}
   - 114: {fileID: 1708630555}
+  - 114: {fileID: 1708630556}
   m_Layer: 0
   m_Name: climb (15)
   m_TagString: Untagged
@@ -13518,12 +14212,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 1708630555}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -13592,6 +14285,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &1708630556
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1708630549}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1719188465
 GameObject:
   m_ObjectHideFlags: 0
@@ -13605,6 +14309,7 @@ GameObject:
   - 23: {fileID: 1719188468}
   - 114: {fileID: 1719188467}
   - 114: {fileID: 1719188471}
+  - 114: {fileID: 1719188472}
   m_Layer: 0
   m_Name: trunk (13)
   m_TagString: Untagged
@@ -13644,12 +14349,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 1719188471}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -13719,6 +14423,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &1719188472
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1719188465}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1736378440
 Prefab:
   m_ObjectHideFlags: 0
@@ -13868,6 +14583,7 @@ GameObject:
   - 23: {fileID: 1772134319}
   - 114: {fileID: 1772134318}
   - 114: {fileID: 1772134322}
+  - 114: {fileID: 1772134323}
   m_Layer: 0
   m_Name: trunk (8)
   m_TagString: Untagged
@@ -13907,12 +14623,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 1772134322}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -13982,6 +14697,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &1772134323
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1772134316}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1782797839
 Prefab:
   m_ObjectHideFlags: 0
@@ -14053,6 +14779,7 @@ GameObject:
   - 23: {fileID: 1816127662}
   - 114: {fileID: 1816127661}
   - 114: {fileID: 1816127665}
+  - 114: {fileID: 1816127666}
   m_Layer: 0
   m_Name: climb (23)
   m_TagString: Untagged
@@ -14092,12 +14819,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 1816127665}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -14166,6 +14892,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &1816127666
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1816127659}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1851051963
 GameObject:
   m_ObjectHideFlags: 0
@@ -14179,6 +14916,7 @@ GameObject:
   - 23: {fileID: 1851051966}
   - 114: {fileID: 1851051965}
   - 114: {fileID: 1851051969}
+  - 114: {fileID: 1851051970}
   m_Layer: 0
   m_Name: trunk (14)
   m_TagString: Untagged
@@ -14218,12 +14956,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 1851051969}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -14293,6 +15030,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &1851051970
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1851051963}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1854401935
 GameObject:
   m_ObjectHideFlags: 0
@@ -14385,6 +15133,7 @@ GameObject:
   - 23: {fileID: 1858914820}
   - 114: {fileID: 1858914819}
   - 114: {fileID: 1858914823}
+  - 114: {fileID: 1858914824}
   m_Layer: 0
   m_Name: climb (13)
   m_TagString: Untagged
@@ -14424,12 +15173,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 1858914823}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -14498,6 +15246,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &1858914824
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1858914817}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1862460660
 GameObject:
   m_ObjectHideFlags: 0
@@ -14511,6 +15270,7 @@ GameObject:
   - 23: {fileID: 1862460663}
   - 114: {fileID: 1862460662}
   - 114: {fileID: 1862460666}
+  - 114: {fileID: 1862460667}
   m_Layer: 0
   m_Name: trunk (4)
   m_TagString: Untagged
@@ -14550,12 +15310,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 1862460666}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -14625,6 +15384,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &1862460667
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1862460660}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1865442798
 GameObject:
   m_ObjectHideFlags: 0
@@ -14668,6 +15438,7 @@ GameObject:
   - 23: {fileID: 1887688690}
   - 114: {fileID: 1887688689}
   - 114: {fileID: 1887688693}
+  - 114: {fileID: 1887688694}
   m_Layer: 0
   m_Name: Cube (3)
   m_TagString: Untagged
@@ -14707,12 +15478,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 1
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 1887688693}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -14781,6 +15551,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &1887688694
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1887688687}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1897752681
 GameObject:
   m_ObjectHideFlags: 0
@@ -14794,6 +15575,7 @@ GameObject:
   - 23: {fileID: 1897752684}
   - 114: {fileID: 1897752683}
   - 114: {fileID: 1897752687}
+  - 114: {fileID: 1897752688}
   m_Layer: 0
   m_Name: climb (12)
   m_TagString: Untagged
@@ -14833,12 +15615,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 1897752687}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -14907,6 +15688,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &1897752688
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1897752681}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1902164839
 GameObject:
   m_ObjectHideFlags: 0
@@ -14920,6 +15712,7 @@ GameObject:
   - 65: {fileID: 1902164842}
   - 114: {fileID: 1902164840}
   - 114: {fileID: 1902164845}
+  - 114: {fileID: 1902164846}
   m_Layer: 0
   m_Name: climb (7)
   m_TagString: Untagged
@@ -14946,12 +15739,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 1902164845}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -15033,6 +15825,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &1902164846
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1902164839}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1909279230
 Prefab:
   m_ObjectHideFlags: 0
@@ -15194,6 +15997,7 @@ GameObject:
   - 23: {fileID: 1967233911}
   - 114: {fileID: 1967233910}
   - 114: {fileID: 1967233914}
+  - 114: {fileID: 1967233915}
   m_Layer: 0
   m_Name: trunk (3)
   m_TagString: Untagged
@@ -15233,12 +16037,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 1967233914}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -15308,6 +16111,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &1967233915
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1967233908}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1972956528
 GameObject:
   m_ObjectHideFlags: 0
@@ -15321,6 +16135,7 @@ GameObject:
   - 23: {fileID: 1972956530}
   - 114: {fileID: 1972956529}
   - 114: {fileID: 1972956534}
+  - 114: {fileID: 1972956535}
   m_Layer: 0
   m_Name: lip (1)
   m_TagString: Untagged
@@ -15347,12 +16162,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 1972956534}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -15434,6 +16248,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &1972956535
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1972956528}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1995176540
 GameObject:
   m_ObjectHideFlags: 0
@@ -15477,6 +16302,7 @@ GameObject:
   - 23: {fileID: 1997774684}
   - 114: {fileID: 1997774683}
   - 114: {fileID: 1997774688}
+  - 114: {fileID: 1997774689}
   m_Layer: 0
   m_Name: Light (12)
   m_TagString: Untagged
@@ -15503,12 +16329,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 1997774688}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -15590,6 +16415,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &1997774689
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1997774682}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2010883407
 GameObject:
   m_ObjectHideFlags: 0
@@ -15603,6 +16439,7 @@ GameObject:
   - 23: {fileID: 2010883410}
   - 114: {fileID: 2010883409}
   - 114: {fileID: 2010883413}
+  - 114: {fileID: 2010883414}
   m_Layer: 0
   m_Name: trunk (9)
   m_TagString: Untagged
@@ -15642,12 +16479,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 2010883413}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -15717,6 +16553,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &2010883414
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2010883407}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2011202845
 GameObject:
   m_ObjectHideFlags: 0
@@ -15730,6 +16577,7 @@ GameObject:
   - 23: {fileID: 2011202847}
   - 114: {fileID: 2011202846}
   - 114: {fileID: 2011202851}
+  - 114: {fileID: 2011202852}
   m_Layer: 0
   m_Name: Cylinder
   m_TagString: Untagged
@@ -15756,12 +16604,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 2011202851}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -15844,6 +16691,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &2011202852
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2011202845}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2030690141
 GameObject:
   m_ObjectHideFlags: 0
@@ -16010,6 +16868,7 @@ GameObject:
   - 23: {fileID: 2059760629}
   - 114: {fileID: 2059760628}
   - 114: {fileID: 2059760633}
+  - 114: {fileID: 2059760634}
   m_Layer: 0
   m_Name: Light (11)
   m_TagString: Untagged
@@ -16036,12 +16895,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 2059760633}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -16123,6 +16981,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &2059760634
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2059760627}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2068362723
 GameObject:
   m_ObjectHideFlags: 0
@@ -16244,6 +17113,7 @@ GameObject:
   - 23: {fileID: 2093465456}
   - 114: {fileID: 2093465455}
   - 114: {fileID: 2093465459}
+  - 114: {fileID: 2093465460}
   m_Layer: 0
   m_Name: Quad (1)
   m_TagString: Untagged
@@ -16283,12 +17153,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 2093465459}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -16357,6 +17226,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &2093465460
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2093465453}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2095310213
 GameObject:
   m_ObjectHideFlags: 0
@@ -16607,6 +17487,7 @@ GameObject:
   - 23: {fileID: 2120344686}
   - 114: {fileID: 2120344685}
   - 114: {fileID: 2120344689}
+  - 114: {fileID: 2120344690}
   m_Layer: 0
   m_Name: Rope (3)
   m_TagString: Untagged
@@ -16646,12 +17527,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 2120344689}
+  secondaryGrabActionScript: {fileID: 2120344690}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -16721,6 +17601,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &2120344690
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2120344683}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2121838768
 GameObject:
   m_ObjectHideFlags: 0
@@ -16734,6 +17625,7 @@ GameObject:
   - 23: {fileID: 2121838771}
   - 114: {fileID: 2121838770}
   - 114: {fileID: 2121838774}
+  - 114: {fileID: 2121838775}
   m_Layer: 0
   m_Name: trunk
   m_TagString: Untagged
@@ -16773,12 +17665,11 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 8
   allowedGrabControllers: 0
-  secondaryGrabAction: 1
-  customSecondaryAction: {fileID: 0}
   grabAttachMechanicScript: {fileID: 2121838774}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
   useOverrideButton: 8
   allowedUseControllers: 0
@@ -16848,6 +17739,17 @@ MonoBehaviour:
   leftSnapHandle: {fileID: 0}
   throwMultiplier: 1
   onGrabCollisionDelay: 0
+--- !u!114 &2121838775
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2121838768}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18055ba762aa3994f9c10208cd088bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2123374220
 GameObject:
   m_ObjectHideFlags: 0

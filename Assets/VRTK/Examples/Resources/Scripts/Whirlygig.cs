@@ -26,6 +26,7 @@
 
         protected override void Update()
         {
+            base.Update();
             rotator.transform.Rotate(new Vector3(spinSpeed * Time.deltaTime, 0f, 0f));
         }
     }
