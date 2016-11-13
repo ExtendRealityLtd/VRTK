@@ -1,4 +1,4 @@
-﻿// Outline Object Copy|Highlighters|0030
+﻿// Outline Object Copy|Highlighters|40030
 namespace VRTK.Highlighters
 {
     using UnityEngine;

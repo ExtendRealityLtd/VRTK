@@ -1,4 +1,4 @@
-﻿// Play Area Cursor|Scripts|0055
+﻿// Play Area Cursor|Pointers|10050
 namespace VRTK
 {
     using UnityEngine;

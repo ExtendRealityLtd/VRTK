@@ -1,4 +1,4 @@
-﻿// Interact Touch|Scripts|0170
+﻿// Interact Touch|Interactions|30040
 namespace VRTK
 {
     using UnityEngine;

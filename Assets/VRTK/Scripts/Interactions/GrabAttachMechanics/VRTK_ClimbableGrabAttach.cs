@@ -1,4 +1,4 @@
-﻿// Climbable Grab Attach|GrabAttachMechanics|0100
+﻿// Climbable Grab Attach|GrabAttachMechanics|50100
 namespace VRTK.GrabAttachMechanics
 {
 

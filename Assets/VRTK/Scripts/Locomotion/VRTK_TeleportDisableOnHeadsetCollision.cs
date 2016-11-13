@@ -1,4 +1,4 @@
-﻿// Teleport Disable On Headset Collision|Scripts|0120
+﻿// Teleport Disable On Headset Collision|Locomotion|20040
 namespace VRTK
 {
     using UnityEngine;

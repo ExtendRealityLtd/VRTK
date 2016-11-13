@@ -1,4 +1,4 @@
-﻿// Touchpad Walking|Scripts|0140
+﻿// Touchpad Walking|Locomotion|20060
 namespace VRTK
 {
     using UnityEngine;

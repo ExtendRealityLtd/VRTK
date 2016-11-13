@@ -1,4 +1,4 @@
-﻿// UI Canvas|Scripts|0063
+﻿// UI Canvas|UI|80010
 namespace VRTK
 {
     using UnityEngine;

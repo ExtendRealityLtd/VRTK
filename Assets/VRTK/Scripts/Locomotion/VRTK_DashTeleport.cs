@@ -1,4 +1,4 @@
-// Dash Teleport|Scripts|0220
+// Dash Teleport|Locomotion|20030
 namespace VRTK
 {
     using UnityEngine;

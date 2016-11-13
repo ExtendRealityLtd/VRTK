@@ -1,4 +1,4 @@
-﻿// Move In Place|Scripts|0145
+﻿// Move In Place|Locomotion|20070
 namespace VRTK
 {
     using UnityEngine;

@@ -1,4 +1,4 @@
-// Room Extender|Scripts|0150
+// Room Extender|Locomotion|20090
 namespace VRTK
 {
     using UnityEngine;

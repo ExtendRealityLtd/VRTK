@@ -1,4 +1,4 @@
-﻿// Button|Controls3D|0020
+﻿// Button|Controls3D|100020
 namespace VRTK
 {
     using UnityEngine;

@@ -1,4 +1,4 @@
-﻿// Interact Controller Appearance|Scripts|0193
+﻿// Interact Controller Appearance|Interactions|30080
 namespace VRTK
 {
     using UnityEngine;

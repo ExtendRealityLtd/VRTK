@@ -1,4 +1,4 @@
-﻿// Height Adjust Teleport|Scripts|0080
+﻿// Height Adjust Teleport|Locomotion|20020
 namespace VRTK
 {
     using UnityEngine;

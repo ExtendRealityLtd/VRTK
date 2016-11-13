@@ -1,4 +1,4 @@
-﻿// Axis Scale Grab Action|SecondaryControllerGrabActions|0030
+﻿// Axis Scale Grab Action|SecondaryControllerGrabActions|60030
 namespace VRTK.SecondaryControllerGrabActions
 {
     using UnityEngine;

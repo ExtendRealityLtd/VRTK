@@ -1,4 +1,4 @@
-﻿// Control|Controls3D|0010
+﻿// Control|Controls3D|100010
 namespace VRTK
 {
     using UnityEngine;

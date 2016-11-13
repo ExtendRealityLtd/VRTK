@@ -1,4 +1,4 @@
-﻿// Base Highlighter|Highlighters|0010
+﻿// Base Highlighter|Highlighters|40010
 namespace VRTK.Highlighters
 {
     using UnityEngine;

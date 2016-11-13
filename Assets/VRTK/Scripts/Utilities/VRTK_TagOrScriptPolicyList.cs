@@ -1,4 +1,4 @@
-﻿// Tag Or Script Policy List|Scripts|0225
+﻿// Tag Or Script Policy List|Utilities|90020
 namespace VRTK
 {
     using UnityEngine;

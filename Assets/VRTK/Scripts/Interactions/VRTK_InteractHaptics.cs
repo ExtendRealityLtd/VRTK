@@ -1,4 +1,4 @@
-﻿// Interact Haptics|Scripts|0192
+﻿// Interact Haptics|Interactions|30070
 namespace VRTK
 {
     using UnityEngine;

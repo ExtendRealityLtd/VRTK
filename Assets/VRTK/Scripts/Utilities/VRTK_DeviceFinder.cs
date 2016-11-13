@@ -1,4 +1,4 @@
-﻿// Device Finder|Scripts|0030
+﻿// Device Finder|Utilities|90010
 namespace VRTK
 {
     using UnityEngine;

@@ -1,4 +1,4 @@
-﻿// Interact Grab|Scripts|0180
+﻿// Interact Grab|Interactions|30050
 namespace VRTK
 {
     using UnityEngine;

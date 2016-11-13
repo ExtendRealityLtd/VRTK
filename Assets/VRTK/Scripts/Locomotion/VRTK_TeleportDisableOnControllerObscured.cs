@@ -1,4 +1,4 @@
-﻿// Teleport Disable On Controller Obscured|Scripts|0122
+﻿// Teleport Disable On Controller Obscured|Locomotion|20050
 namespace VRTK
 {
     using UnityEngine;

@@ -1,4 +1,4 @@
-﻿// Basic Teleport|Scripts|0070
+﻿// Basic Teleport|Locomotion|20010
 namespace VRTK
 {
     using UnityEngine;

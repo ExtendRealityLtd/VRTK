@@ -1,4 +1,4 @@
-// Adaptive Quality|Scripts|0240
+// Adaptive Quality|Utilities|90030
 
 // Adapted from The Lab Renderer's ValveCamera.cs, available at
 // https://github.com/ValveSoftware/the_lab_renderer/blob/ae64c48a8ccbe5406aba1e39b160d4f2f7156c2c/Assets/TheLabRenderer/Scripts/ValveCamera.cs

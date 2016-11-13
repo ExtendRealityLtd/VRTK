@@ -1,4 +1,4 @@
-﻿// Simple Pointer|Scripts|0040
+﻿// Simple Pointer|Pointers|10030
 namespace VRTK
 {
     using UnityEngine;

@@ -1,4 +1,4 @@
-﻿// Base Grab Action|SecondaryControllerGrabActions|0010
+﻿// Base Grab Action|SecondaryControllerGrabActions|60010
 namespace VRTK.SecondaryControllerGrabActions
 {
     using UnityEngine;

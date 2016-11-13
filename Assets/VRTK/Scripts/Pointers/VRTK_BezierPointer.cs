@@ -1,4 +1,4 @@
-﻿// Bezier Pointer|Scripts|0050
+﻿// Bezier Pointer|Pointers|10040
 namespace VRTK
 {
     using UnityEngine;

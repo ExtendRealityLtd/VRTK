@@ -1,4 +1,4 @@
-﻿// Headset Fade|Scripts|0100
+﻿// Headset Fade|Presence|70020
 namespace VRTK
 {
     using UnityEngine;

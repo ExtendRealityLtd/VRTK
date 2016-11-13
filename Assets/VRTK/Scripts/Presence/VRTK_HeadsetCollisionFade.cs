@@ -1,4 +1,4 @@
-﻿// Headset Collision Fade|Scripts|0110
+﻿// Headset Collision Fade|Presence|70030
 namespace VRTK
 {
     using UnityEngine;

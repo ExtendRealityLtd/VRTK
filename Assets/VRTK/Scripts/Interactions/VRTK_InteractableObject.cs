@@ -1,4 +1,4 @@
-﻿// Interactable Object|Scripts|0160
+﻿// Interactable Object|Interactions|30030
 namespace VRTK
 {
     using UnityEngine;

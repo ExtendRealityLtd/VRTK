@@ -1,4 +1,4 @@
-﻿// Controller Actions|Scripts|0020
+﻿// Controller Actions|Interactions|30020
 namespace VRTK
 {
     using UnityEngine;

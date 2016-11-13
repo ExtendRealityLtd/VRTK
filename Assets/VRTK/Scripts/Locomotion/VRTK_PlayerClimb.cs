@@ -1,4 +1,4 @@
-﻿// Player Climb|Scripts|0210
+﻿// Player Climb|Locomotion|20080
 namespace VRTK
 {
     using UnityEngine;

@@ -1,4 +1,4 @@
-﻿// Door|Controls3D|0040
+﻿// Door|Controls3D|100040
 namespace VRTK
 {
     using UnityEngine;

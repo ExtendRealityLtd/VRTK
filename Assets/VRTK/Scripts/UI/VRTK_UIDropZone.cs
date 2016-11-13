@@ -1,4 +1,4 @@
-﻿// UI Drop Zone|Scripts|0066
+﻿// UI Drop Zone|UI|80040
 namespace VRTK
 {
     using UnityEngine;

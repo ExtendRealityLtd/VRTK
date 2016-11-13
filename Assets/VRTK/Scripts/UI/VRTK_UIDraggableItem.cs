@@ -1,4 +1,4 @@
-﻿// UI Draggable Item|Scripts|0065
+﻿// UI Draggable Item|UI|80030
 namespace VRTK
 {
     using UnityEngine;

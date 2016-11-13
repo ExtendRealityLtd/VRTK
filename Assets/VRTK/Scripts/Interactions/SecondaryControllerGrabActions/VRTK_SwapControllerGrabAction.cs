@@ -1,4 +1,4 @@
-﻿// Swap Controller Grab Action|SecondaryControllerGrabActions|0020
+﻿// Swap Controller Grab Action|SecondaryControllerGrabActions|60020
 namespace VRTK.SecondaryControllerGrabActions
 {
     using UnityEngine;

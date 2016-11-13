@@ -1,4 +1,4 @@
-﻿// UI Pointer|Scripts|0060
+﻿// UI Pointer|UI|80020
 namespace VRTK
 {
     using UnityEngine;

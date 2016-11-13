@@ -1,4 +1,4 @@
-﻿// Material Colour Swap|Highlighters|0020
+﻿// Material Colour Swap|Highlighters|40020
 namespace VRTK.Highlighters
 {
     using UnityEngine;

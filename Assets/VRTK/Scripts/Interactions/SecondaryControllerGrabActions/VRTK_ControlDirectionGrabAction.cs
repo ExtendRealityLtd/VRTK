@@ -1,4 +1,4 @@
-﻿// Control Direction Grab Action|SecondaryControllerGrabActions|0040
+﻿// Control Direction Grab Action|SecondaryControllerGrabActions|60040
 namespace VRTK.SecondaryControllerGrabActions
 {
     using UnityEngine;

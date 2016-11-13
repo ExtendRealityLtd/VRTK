@@ -1,4 +1,4 @@
-﻿// Fixed Joint Grab Attach|GrabAttachMechanics|0040
+﻿// Fixed Joint Grab Attach|GrabAttachMechanics|50040
 namespace VRTK.GrabAttachMechanics
 {
     using UnityEngine;

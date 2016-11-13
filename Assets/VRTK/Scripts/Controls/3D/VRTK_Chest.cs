@@ -1,4 +1,4 @@
-﻿// Chest|Controls3D|0030
+﻿// Chest|Controls3D|100030
 namespace VRTK
 {
     using UnityEngine;
