@@ -259,10 +259,12 @@ namespace VRTK
                 if (setInteractableObject.IsUsing())
                 {
                     setInteractableObject.StopUsing(gameObject);
+                    interactableObject.usingState = 0;
                 }
                 else if (!setInteractableObject.holdButtonToUse)
                 {
                     setInteractableObject.StartUsing(gameObject);
+                    interactableObject.usingState++;
                 }
             }
 
@@ -410,7 +412,7 @@ namespace VRTK
 
         protected virtual float OverrideBeamLength(float currentLength)
         {
-            if(!controllerGrabScript || !controllerGrabScript.GetGrabbedObject())
+            if (!controllerGrabScript || !controllerGrabScript.GetGrabbedObject())
             {
                 savedBeamLength = 0f;
             }
@@ -442,6 +444,7 @@ namespace VRTK
             if (PointerActivatesUseAction(interactableObject) && interactableObject.holdButtonToUse && !cannotUseBecauseNotGrabbed)
             {
                 interactableObject.StartUsing(gameObject);
+                interactableObject.usingState++;
             }
         }
 
@@ -450,6 +453,7 @@ namespace VRTK
             if (PointerActivatesUseAction(interactableObject) && interactableObject.holdButtonToUse)
             {
                 interactableObject.StopUsing(gameObject);
+                interactableObject.usingState = 0;
             }
         }
 
