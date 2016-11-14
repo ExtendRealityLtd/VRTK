@@ -92,7 +92,7 @@ namespace VRTK
             VRTK_ObjectCache.registeredHeadsetCollider = this;
             headset = VRTK_DeviceFinder.HeadsetTransform();
             headsetColliding = false;
-            Utilities.SetPlayerObject(headset.gameObject, VRTK_PlayerObject.ObjectTypes.Headset);
+            VRTK_SharedMethods.SetPlayerObject(headset.gameObject, VRTK_PlayerObject.ObjectTypes.Headset);
             SetupHeadset();
         }
 
@@ -186,7 +186,7 @@ namespace VRTK
 
         private bool ValidTarget(Transform target)
         {
-            return (target && !(Utilities.TagOrScriptCheck(target.gameObject, targetTagOrScriptListPolicy, ignoreTargetWithTagOrClass)));
+            return (target && !(VRTK_SharedMethods.TagOrScriptCheck(target.gameObject, targetTagOrScriptListPolicy, ignoreTargetWithTagOrClass)));
         }
 
         private void OnTriggerStay(Collider collider)

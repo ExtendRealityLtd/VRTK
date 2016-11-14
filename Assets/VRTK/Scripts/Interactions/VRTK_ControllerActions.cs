@@ -398,7 +398,7 @@ namespace VRTK
 
             highlighterOptions = new Dictionary<string, object>();
             highlighterOptions.Add("resetMainTexture", true);
-            VRTK_BaseHighlighter objectHighlighter = Utilities.GetActiveHighlighter(gameObject);
+            VRTK_BaseHighlighter objectHighlighter = VRTK_SharedMethods.GetActiveHighlighter(gameObject);
 
             if (objectHighlighter == null)
             {
@@ -477,7 +477,7 @@ namespace VRTK
             if (element)
             {
                 var highlighter = (overrideHighlighter != null ? overrideHighlighter : parentHighlighter);
-                VRTK_BaseHighlighter clonedHighlighter = (VRTK_BaseHighlighter)Utilities.CloneComponent(highlighter, element.gameObject);
+                VRTK_BaseHighlighter clonedHighlighter = (VRTK_BaseHighlighter)VRTK_SharedMethods.CloneComponent(highlighter, element.gameObject);
                 clonedHighlighter.Initialise(null, highlighterOptions);
             }
         }

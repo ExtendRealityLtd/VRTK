@@ -142,7 +142,7 @@ namespace VRTK
         private KnobDirection DetectDirection()
         {
             KnobDirection direction = KnobDirection.x;
-            Bounds bounds = Utilities.GetBounds(transform);
+            Bounds bounds = VRTK_SharedMethods.GetBounds(transform);
 
             // shoot rays in all directions to learn about surroundings
             RaycastHit hitForward;
@@ -167,27 +167,27 @@ namespace VRTK
             float lengthNegZ = (hitForward.collider != null) ? hitForward.distance : float.MaxValue;
 
             // TODO: not yet the right decision strategy, works only partially
-            if (Utilities.IsLowest(lengthX, new float[] { lengthY, lengthZ, lengthNegX, lengthNegY, lengthNegZ }))
+            if (VRTK_SharedMethods.IsLowest(lengthX, new float[] { lengthY, lengthZ, lengthNegX, lengthNegY, lengthNegZ }))
             {
                 direction = KnobDirection.z;
             }
-            else if (Utilities.IsLowest(lengthY, new float[] { lengthX, lengthZ, lengthNegX, lengthNegY, lengthNegZ }))
+            else if (VRTK_SharedMethods.IsLowest(lengthY, new float[] { lengthX, lengthZ, lengthNegX, lengthNegY, lengthNegZ }))
             {
                 direction = KnobDirection.y;
             }
-            else if (Utilities.IsLowest(lengthZ, new float[] { lengthX, lengthY, lengthNegX, lengthNegY, lengthNegZ }))
+            else if (VRTK_SharedMethods.IsLowest(lengthZ, new float[] { lengthX, lengthY, lengthNegX, lengthNegY, lengthNegZ }))
             {
                 direction = KnobDirection.x;
             }
-            else if (Utilities.IsLowest(lengthNegX, new float[] { lengthX, lengthY, lengthZ, lengthNegY, lengthNegZ }))
+            else if (VRTK_SharedMethods.IsLowest(lengthNegX, new float[] { lengthX, lengthY, lengthZ, lengthNegY, lengthNegZ }))
             {
                 direction = KnobDirection.z;
             }
-            else if (Utilities.IsLowest(lengthNegY, new float[] { lengthX, lengthY, lengthZ, lengthNegX, lengthNegZ }))
+            else if (VRTK_SharedMethods.IsLowest(lengthNegY, new float[] { lengthX, lengthY, lengthZ, lengthNegX, lengthNegZ }))
             {
                 direction = KnobDirection.y;
             }
-            else if (Utilities.IsLowest(lengthNegZ, new float[] { lengthX, lengthY, lengthZ, lengthNegX, lengthNegY }))
+            else if (VRTK_SharedMethods.IsLowest(lengthNegZ, new float[] { lengthX, lengthY, lengthZ, lengthNegX, lengthNegY }))
             {
                 direction = KnobDirection.x;
             }

@@ -91,8 +91,8 @@ namespace VRTK
 
         protected virtual void Awake()
         {
-            Utilities.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.CameraRig);
-            eyeCamera = Utilities.AddCameraFade();
+            VRTK_SharedMethods.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.CameraRig);
+            eyeCamera = VRTK_SharedMethods.AddCameraFade();
         }
 
         protected virtual void OnEnable()
@@ -151,7 +151,7 @@ namespace VRTK
                 validNavMeshLocation = true;
             }
 
-            return (validNavMeshLocation && target && !(Utilities.TagOrScriptCheck(target.gameObject, targetTagOrScriptListPolicy, ignoreTargetWithTagOrClass)));
+            return (validNavMeshLocation && target && !(VRTK_SharedMethods.TagOrScriptCheck(target.gameObject, targetTagOrScriptListPolicy, ignoreTargetWithTagOrClass)));
         }
 
         protected virtual void DoTeleport(object sender, DestinationMarkerEventArgs e)

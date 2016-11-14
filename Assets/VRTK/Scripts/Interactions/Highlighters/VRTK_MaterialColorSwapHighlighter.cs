@@ -156,7 +156,7 @@ namespace VRTK.Highlighters
                             material.color = color;
                             if (material.HasProperty("_EmissionColor"))
                             {
-                                material.SetColor("_EmissionColor", Utilities.ColorDarken(color, emissionDarken));
+                                material.SetColor("_EmissionColor", VRTK_SharedMethods.ColorDarken(color, emissionDarken));
                             }
                         }
                     }
@@ -181,7 +181,7 @@ namespace VRTK.Highlighters
                 }
                 if (material.HasProperty("_EmissionColor"))
                 {
-                    material.SetColor("_EmissionColor", Color.Lerp(startColor, Utilities.ColorDarken(endColor, emissionDarken), (elapsedTime / duration)));
+                    material.SetColor("_EmissionColor", Color.Lerp(startColor, VRTK_SharedMethods.ColorDarken(endColor, emissionDarken), (elapsedTime / duration)));
                 }
                 yield return null;
             }

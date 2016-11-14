@@ -53,7 +53,7 @@ namespace VRTK
         }
     }
 
-    public class CurveGenerator : MonoBehaviour
+    public class VRTK_CurveGenerator : MonoBehaviour
     {
         private enum BezierControlPointMode
         {
@@ -321,7 +321,7 @@ namespace VRTK
 
                     if (mr.material.HasProperty("_EmissionColor"))
                     {
-                        mr.material.SetColor("_EmissionColor", Utilities.ColorDarken(color, 50));
+                        mr.material.SetColor("_EmissionColor", VRTK_SharedMethods.ColorDarken(color, 50));
                     }
                 }
             }

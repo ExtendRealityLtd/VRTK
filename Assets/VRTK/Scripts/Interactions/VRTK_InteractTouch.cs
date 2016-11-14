@@ -186,7 +186,7 @@ namespace VRTK
         {
             controllerEvents = GetComponent<VRTK_ControllerEvents>();
             controllerActions = GetComponent<VRTK_ControllerActions>();
-            Utilities.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.Controller);
+            VRTK_SharedMethods.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.Controller);
             destroyColliderOnDisable = false;
             defaultColliderPrefab = Resources.Load("ControllerColliders/HTCVive");
         }

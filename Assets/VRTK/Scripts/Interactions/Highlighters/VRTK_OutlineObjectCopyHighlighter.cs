@@ -154,7 +154,7 @@ namespace VRTK.Highlighters
             {
                 if (Array.IndexOf(copyComponents, component.GetType().ToString()) >= 0)
                 {
-                    Utilities.CloneComponent(component, highlightModel);
+                    VRTK_SharedMethods.CloneComponent(component, highlightModel);
                 }
             }
 
@@ -163,7 +163,7 @@ namespace VRTK.Highlighters
             highlightModel.GetComponent<Renderer>().material = stencilOutline;
             highlightModel.SetActive(false);
 
-            Utilities.SetPlayerObject(highlightModel, VRTK_PlayerObject.ObjectTypes.Highlighter);
+            VRTK_SharedMethods.SetPlayerObject(highlightModel, VRTK_PlayerObject.ObjectTypes.Highlighter);
         }
     }
 }

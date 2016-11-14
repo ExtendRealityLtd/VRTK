@@ -639,7 +639,7 @@ The laser beam is activated by default by pressing the `Touchpad` on the control
 
 The Bezier Pointer script can be attached to a Controller object within the `[CameraRig]` prefab and the Controller object also requires the `VRTK_ControllerEvents` script to be attached as it uses this for listening to the controller button events for enabling and disabling the beam. It is also possible to attach the Bezier Pointer script to another object (like the `[CameraRig]/Camera (head)`) to enable other objects to project the beam. The controller parameter must be entered with the desired controller to toggle the beam if this is the case.
 
-> The bezier curve generation code is in another script located at `VRTK/Scripts/Helper/CurveGenerator.cs` and was heavily inspired by the tutorial and code from [Catlike Coding](http://catlikecoding.com/unity/tutorials/curves-and-splines/).
+> The bezier curve generation code is in another script located at `VRTK/Scripts/Internal/VRTK_CurveGenerator.cs` and was heavily inspired by the tutorial and code from [Catlike Coding](http://catlikecoding.com/unity/tutorials/curves-and-splines/).
 
 ### Inspector Parameters
 
@@ -4188,6 +4188,7 @@ The script will use the boundaries of the control to determine if it is in or ou
 A collection of scripts that provide useful functionality to aid the creation process.
 
  * [Device Finder](#device-finder-vrtk_devicefinder)
+ * [Shared Methods](#shared-methods-vrtk_sharedmethods)
  * [Tag Or Script Policy List](#tag-or-script-policy-list-vrtk_tagorscriptpolicylist)
  * [Adaptive Quality](#adaptive-quality-vrtk_adaptivequality)
  * [Simulating Headset Movement](#simulating-headset-movement-vrtk_simulator)
@@ -4368,6 +4369,149 @@ The HeadsetCamera method is used to retrieve the transform for the VR Camera in 
    * `Transform` - The transform of the VR Play Area component.
 
 The PlayAreaTransform method is used to retrieve the transform for the play area in the scene.
+
+---
+
+## Shared Methods (VRTK_SharedMethods)
+
+### Overview
+
+The Shared Methods script is a collection of reusable static methods that are used across a range of different scripts.
+
+### Class Methods
+
+#### GetBounds/3
+
+  > `public static Bounds GetBounds(Transform transform, Transform excludeRotation = null, Transform excludeTransform = null)`
+
+  * Parameters
+   * `Transform transform` -
+   * `Transform excludeRotation` - Resets the rotation of the transform temporarily to 0 to eliminate skewed bounds.
+   * `Transform excludeTransform` - Does not consider the stated object when calculating the bounds.
+  * Returns
+   * `Bounds` - The bounds of the transform.
+
+The GetBounds methods returns the bounds of the transform including all children in world space.
+
+#### IsLowest/2
+
+  > `public static bool IsLowest(float value, float[] others)`
+
+  * Parameters
+   * `float value` - The value to check to see if it is lowest.
+   * `float[] others` - The array of values to check against.
+  * Returns
+   * `bool` - Returns true if the value is lower than all numbers in the given array, returns false if it is not the lowest.
+
+The IsLowest method checks to see if the given value is the lowest number in the given array of values.
+
+#### SetPlayerObject/2
+
+  > `public static void SetPlayerObject(GameObject obj, VRTK_PlayerObject.ObjectTypes objType)`
+
+  * Parameters
+   * `GameObject obj` - The game object to add the player object class to.
+   * `VRTK_PlayerObject.ObjectTypes objType` - The type of player object that is to be assigned.
+  * Returns
+   * _none_
+
+The SetPlayerObject method tags the given game object with a special player object class for easier identification.
+
+#### AddCameraFade/0
+
+  > `public static Transform AddCameraFade()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `Transform` - The transform of the headset camera.
+
+The AddCameraFade method finds the headset camera and adds a headset fade script to it.
+
+#### CreateColliders/1
+
+  > `public static void CreateColliders(GameObject obj)`
+
+  * Parameters
+   * `GameObject obj` - The game object to attempt to add the colliders to.
+  * Returns
+   * _none_
+
+The CreateColliders method attempts to add box colliders to all child objects in the given object that have a renderer but no collider.
+
+#### AngleSigned/3
+
+  > `public static float AngleSigned(Vector3 v1, Vector3 v2, Vector3 n)`
+
+  * Parameters
+   * `Vector3 v1` - The first given vector.
+   * `Vector3 v2` - The second given vector.
+   * `Vector3 n` - The normal vector.
+  * Returns
+   * `float` - The signed angle between v1, v2 with the given normal as the rotation axis.
+
+The AngleSigned method returns the signed angle between the two vectors, v1 and v2, with normal 'n' as the rotation axis.
+
+#### TagOrScriptCheck/4
+
+  > `public static bool TagOrScriptCheck(GameObject obj, VRTK_TagOrScriptPolicyList tagOrScriptList, string ignoreString, bool ignoreStringIsInclude = false)`
+
+  * Parameters
+   * `GameObject obj` - The game object to check.
+   * `VRTK_TagOrScriptPolicyList tagOrScriptList` - The policy list to use for checking.
+   * `string ignoreString` - The string to check against.
+   * `bool ignoreStringIsInclude` - Determines whether it should actually look to see if the game object includes the policy list or string to make it not ignored.
+  * Returns
+   * `bool` - Returns true of the given game object matches the policy list or given string logic.
+
+The TagOrScriptCheck method is used to check if a game object should be ignored based on a given string or policy list.
+
+#### CloneComponent/3
+
+  > `public static Component CloneComponent(Component source, GameObject destination, bool copyProperties = false)`
+
+  * Parameters
+   * `Component source` - The component to copy.
+   * `GameObject destination` - The game object to copy the component to.
+   * `bool copyProperties` - Determines whether the properties of the component as well as the fields should be copied.
+  * Returns
+   * `Component` - The component that has been cloned onto the given game object.
+
+The CloneComponent method takes a source component and copies it to the given destination game object.
+
+#### GetActiveHighlighter/1
+
+  > `public static VRTK_BaseHighlighter GetActiveHighlighter(GameObject obj)`
+
+  * Parameters
+   * `GameObject obj` - The game object to check for a highlighter on.
+  * Returns
+   * `VRTK_BaseHighlighter` - A valid and active highlighter.
+
+The GetActiveHighlighter method checks the given game object for a valid and active highlighter.
+
+#### ColorDarken/2
+
+  > `public static Color ColorDarken(Color color, float percent)`
+
+  * Parameters
+   * `Color color` - The source colour to apply the darken to.
+   * `float percent` - The percent to darken the colour by.
+  * Returns
+   * `Color` - The new colour with the darken applied.
+
+The ColorDarken method takes a given colour and darkens it by the given percentage.
+
+#### IsEditTime/0
+
+  > `public static bool IsEditTime()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `bool` - Returns true if Unity is in the Unity Editor and not in play mode.
+
+The IsEditTime method determines if the state of Unity is in the Unity Editor and the scene is not in play mode.
 
 ---
 

@@ -281,7 +281,7 @@ namespace VRTK
         private VRTK_InteractableObject ValidSnapObject(GameObject checkObject, bool grabState)
         {
             var ioCheck = checkObject.GetComponentInParent<VRTK_InteractableObject>();
-            return (ioCheck && ioCheck.IsGrabbed() == grabState && !Utilities.TagOrScriptCheck(checkObject, validObjectTagOrScriptListPolicy, validObjectWithTagOrClass, true) ? ioCheck : null);
+            return (ioCheck && ioCheck.IsGrabbed() == grabState && !VRTK_SharedMethods.TagOrScriptCheck(checkObject, validObjectTagOrScriptListPolicy, validObjectWithTagOrClass, true) ? ioCheck : null);
         }
 
         private string ObjectPath(string name)
@@ -292,7 +292,7 @@ namespace VRTK
         private void CreateHighlightersInEditor()
         {
             //Only run if it's in the editor
-            if (Utilities.IsEditTime())
+            if (VRTK_SharedMethods.IsEditTime())
             {
                 //Generate the main highlight object
                 GenerateHighlightObject();
@@ -666,7 +666,7 @@ namespace VRTK
 
         private void InitialiseHighlighter()
         {
-            var existingHighlighter = Utilities.GetActiveHighlighter(gameObject);
+            var existingHighlighter = VRTK_SharedMethods.GetActiveHighlighter(gameObject);
             //If no highlighter is found on the GameObject then create the default one
             if (existingHighlighter == null)
             {
@@ -674,7 +674,7 @@ namespace VRTK
             }
             else
             {
-                Utilities.CloneComponent(existingHighlighter, highlightObject);
+                VRTK_SharedMethods.CloneComponent(existingHighlighter, highlightObject);
             }
 
             //Initialise highlighter and set highlight colour
@@ -706,7 +706,7 @@ namespace VRTK
 
         private void ChooseDestroyType(GameObject deleteObject)
         {
-            if (Utilities.IsEditTime())
+            if (VRTK_SharedMethods.IsEditTime())
             {
                 if (deleteObject)
                 {
@@ -724,7 +724,7 @@ namespace VRTK
 
         private void ChooseDestroyType(Component deleteComponent)
         {
-            if (Utilities.IsEditTime())
+            if (VRTK_SharedMethods.IsEditTime())
             {
                 if (deleteComponent)
                 {
@@ -744,7 +744,7 @@ namespace VRTK
         {
             if (highlightObject && !displayDropZoneInEditor)
             {
-                var boxSize = Utilities.GetBounds(highlightObject.transform).size * 1.05f;
+                var boxSize = VRTK_SharedMethods.GetBounds(highlightObject.transform).size * 1.05f;
                 Gizmos.color = Color.red;
                 Gizmos.DrawWireCube(highlightObject.transform.position, boxSize);
             }

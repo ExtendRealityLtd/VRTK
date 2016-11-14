@@ -104,7 +104,7 @@ namespace VRTK
             pointerHolder = new GameObject(string.Format("[{0}]BasePointer_SimplePointer_Holder", gameObject.name));
             pointerHolder.transform.parent = transform;
             pointerHolder.transform.localPosition = Vector3.zero;
-            Utilities.SetPlayerObject(pointerHolder, VRTK_PlayerObject.ObjectTypes.Pointer);
+            VRTK_SharedMethods.SetPlayerObject(pointerHolder, VRTK_PlayerObject.ObjectTypes.Pointer);
 
             pointer = GameObject.CreatePrimitive(PrimitiveType.Cube);
             pointer.transform.name = string.Format("[{0}]BasePointer_SimplePointer_Pointer", gameObject.name);
@@ -118,7 +118,7 @@ namespace VRTK
             pointerRenderer.receiveShadows = false;
             pointerRenderer.material = pointerMaterial;
 
-            Utilities.SetPlayerObject(pointer, VRTK_PlayerObject.ObjectTypes.Pointer);
+            VRTK_SharedMethods.SetPlayerObject(pointer, VRTK_PlayerObject.ObjectTypes.Pointer);
 
             if (customPointerCursor)
             {
@@ -141,7 +141,7 @@ namespace VRTK
             pointerTip.GetComponent<Collider>().isTrigger = true;
             pointerTip.AddComponent<Rigidbody>().isKinematic = true;
             pointerTip.layer = LayerMask.NameToLayer("Ignore Raycast");
-            Utilities.SetPlayerObject(pointerTip, VRTK_PlayerObject.ObjectTypes.Pointer);
+            VRTK_SharedMethods.SetPlayerObject(pointerTip, VRTK_PlayerObject.ObjectTypes.Pointer);
 
             base.InitPointer();
 

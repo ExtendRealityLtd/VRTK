@@ -699,7 +699,7 @@ namespace VRTK
             if (touchHighlightColor != Color.clear && !objectHighlighter)
             {
                 autoHighlighter = false;
-                objectHighlighter = Utilities.GetActiveHighlighter(gameObject);
+                objectHighlighter = VRTK_SharedMethods.GetActiveHighlighter(gameObject);
                 if (objectHighlighter == null)
                 {
                     autoHighlighter = true;

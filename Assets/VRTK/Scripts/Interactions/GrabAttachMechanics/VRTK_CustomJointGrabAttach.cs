@@ -36,7 +36,7 @@ namespace VRTK.GrabAttachMechanics
             }
             var storedJoint = jointHolder.GetComponent<Joint>();
             var storeName = gameObject.name;
-            Utilities.CloneComponent(storedJoint, obj, true);
+            VRTK_SharedMethods.CloneComponent(storedJoint, obj, true);
             gameObject.name = storeName;
             givenJoint = obj.GetComponent(storedJoint.GetType()) as Joint;
 
@@ -55,7 +55,7 @@ namespace VRTK.GrabAttachMechanics
                 jointHolder = new GameObject();
                 jointHolder.transform.SetParent(transform);
                 jointHolder.AddComponent<Rigidbody>().isKinematic = true;
-                Utilities.CloneComponent(customJoint, jointHolder, true);
+                VRTK_SharedMethods.CloneComponent(customJoint, jointHolder, true);
                 jointHolder.name = "JointHolder";
                 jointHolder.SetActive(false);
                 Destroy(customJoint);

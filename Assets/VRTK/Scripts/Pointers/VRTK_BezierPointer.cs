@@ -11,7 +11,7 @@ namespace VRTK
     ///
     /// The Bezier Pointer script can be attached to a Controller object within the `[CameraRig]` prefab and the Controller object also requires the `VRTK_ControllerEvents` script to be attached as it uses this for listening to the controller button events for enabling and disabling the beam. It is also possible to attach the Bezier Pointer script to another object (like the `[CameraRig]/Camera (head)`) to enable other objects to project the beam. The controller parameter must be entered with the desired controller to toggle the beam if this is the case.
     ///
-    ///   > The bezier curve generation code is in another script located at `VRTK/Scripts/Helper/CurveGenerator.cs` and was heavily inspired by the tutorial and code from [Catlike Coding](http://catlikecoding.com/unity/tutorials/curves-and-splines/).
+    ///   > The bezier curve generation code is in another script located at `VRTK/Scripts/Internal/VRTK_CurveGenerator.cs` and was heavily inspired by the tutorial and code from [Catlike Coding](http://catlikecoding.com/unity/tutorials/curves-and-splines/).
     /// </remarks>
     /// <example>
     /// `VRTK/Examples/009_Controller_BezierPointer` is used in conjunction with the Height Adjust Teleporter shows how it is possible to traverse different height objects using the curved pointer without needing to see the top of the object.
@@ -49,7 +49,7 @@ namespace VRTK
 
         private GameObject pointerCursor;
         private GameObject curvedBeamContainer;
-        private CurveGenerator curvedBeam;
+        private VRTK_CurveGenerator curvedBeam;
         private GameObject validTeleportLocationInstance = null;
         private bool beamActive = false;
         private Vector3 fixedForwardBeamForward;
@@ -107,14 +107,14 @@ namespace VRTK
             }
 
             pointerCursor.name = string.Format("[{0}]BasePointer_BezierPointer_PointerCursor", gameObject.name);
-            Utilities.SetPlayerObject(pointerCursor, VRTK_PlayerObject.ObjectTypes.Pointer);
+            VRTK_SharedMethods.SetPlayerObject(pointerCursor, VRTK_PlayerObject.ObjectTypes.Pointer);
             pointerCursor.layer = LayerMask.NameToLayer("Ignore Raycast");
             pointerCursor.SetActive(false);
 
             curvedBeamContainer = new GameObject(string.Format("[{0}]BasePointer_BezierPointer_CurvedBeamContainer", gameObject.name));
-            Utilities.SetPlayerObject(curvedBeamContainer, VRTK_PlayerObject.ObjectTypes.Pointer);
+            VRTK_SharedMethods.SetPlayerObject(curvedBeamContainer, VRTK_PlayerObject.ObjectTypes.Pointer);
             curvedBeamContainer.SetActive(false);
-            curvedBeam = curvedBeamContainer.gameObject.AddComponent<CurveGenerator>();
+            curvedBeam = curvedBeamContainer.gameObject.AddComponent<VRTK_CurveGenerator>();
             curvedBeam.transform.parent = null;
             curvedBeam.Create(pointerDensity, pointerCursorRadius, customPointerTracer, rescalePointerTracer);
 

@@ -40,7 +40,7 @@ namespace VRTK
         {
             if (GetComponentInChildren<Collider>() == null)
             {
-                Utilities.CreateColliders(gameObject);
+                VRTK_SharedMethods.CreateColliders(gameObject);
             }
 
             rb = GetComponent<Rigidbody>();
@@ -86,7 +86,7 @@ namespace VRTK
         {
             if (hjCreated)
             {
-                Bounds bounds = Utilities.GetBounds(transform, transform);
+                Bounds bounds = VRTK_SharedMethods.GetBounds(transform, transform);
                 switch (direction)
                 {
                     case LeverDirection.x:

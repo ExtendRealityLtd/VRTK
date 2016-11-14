@@ -148,7 +148,7 @@ namespace VRTK
 
         private void Awake()
         {
-            Utilities.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.CameraRig);
+            VRTK_SharedMethods.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.CameraRig);
             customRigidBody = false;
             customCollider = false;
         }
