@@ -1,18 +1,18 @@
-// Panel Menu Demo Flying Saucer
-
-using UnityEngine;
-
-/// <summary>
-/// Demo component for Panel Menu example scene.
-/// </summary>
-/// <example>
-/// See the demo scene for a complete example: [ 040_Controls_Panel_Menu ]
-/// </example>
-public class PanelMenuDemoFlyingSaucer : MonoBehaviour
+namespace VRTK.Examples.PanelMenu
 {
+    using UnityEngine;
 
-    private readonly Color[] colors =
+    /// <summary>
+    /// Demo component for Panel Menu example scene.
+    /// </summary>
+    /// <example>
+    /// See the demo scene for a complete example: [ 040_Controls_Panel_Menu ]
+    /// </example>
+    public class PanelMenuDemoFlyingSaucer : MonoBehaviour
     {
+
+        private readonly Color[] colors =
+        {
         Color.black,
         Color.blue,
         Color.cyan,
@@ -23,8 +23,9 @@ public class PanelMenuDemoFlyingSaucer : MonoBehaviour
         Color.white
     };
 
-    public void UpdateGridLayoutValue(int selectedIndex)
-    {
-        transform.GetChild(1).GetComponent<MeshRenderer>().materials[0].color = colors[selectedIndex];
+        public void UpdateGridLayoutValue(int selectedIndex)
+        {
+            transform.GetChild(1).GetComponent<MeshRenderer>().materials[0].color = colors[selectedIndex];
+        }
     }
 }
