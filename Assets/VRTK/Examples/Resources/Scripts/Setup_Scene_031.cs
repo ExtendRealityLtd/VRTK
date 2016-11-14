@@ -6,16 +6,23 @@
     public class Setup_Scene_031 : MonoBehaviour
     {
         private bool initalised = false;
+
+        private void Awake()
+        {
+            Initialise();
+        }
+
 #if UNITY_EDITOR
         private void Update()
+        {
+            Initialise();
+        }
+#endif
+        private void Initialise()
         {
             if (!initalised)
             {
                 var headset = VRTK_DeviceFinder.HeadsetTransform();
-                if (!headset.GetComponent<VRTK_PlayAreaCursor>())
-                {
-                    headset.gameObject.AddComponent<VRTK_PlayAreaCursor>();
-                }
                 if (!headset.GetComponent<VRTK_BezierPointer>())
                 {
                     var pointer = headset.gameObject.AddComponent<VRTK_BezierPointer>();
@@ -27,9 +34,12 @@
                     pointer.pointerCursorRadius = 0.3f;
                     pointer.beamCurveOffset = 1f;
                 }
+                if (!headset.GetComponent<VRTK_PlayAreaCursor>())
+                {
+                    headset.gameObject.AddComponent<VRTK_PlayAreaCursor>();
+                }
                 initalised = true;
             }
         }
-#endif
     }
 }

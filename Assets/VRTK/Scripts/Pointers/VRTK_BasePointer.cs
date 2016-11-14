@@ -108,26 +108,13 @@ namespace VRTK
 
         protected virtual void Awake()
         {
-            if (controller == null)
-            {
-                controller = GetComponent<VRTK_ControllerEvents>();
-            }
-            if (controller == null)
-            {
-                Debug.LogError("VRTK_BasePointer requires a Controller that has the VRTK_ControllerEvents script attached to it");
-                return;
-            }
             VRTK_PlayerObject.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.Pointer);
         }
 
         protected override void OnEnable()
         {
             base.OnEnable();
-            controller.AliasPointerOn += new ControllerInteractionEventHandler(EnablePointerBeam);
-            controller.AliasPointerOff += new ControllerInteractionEventHandler(DisablePointerBeam);
-            controller.AliasPointerSet += new ControllerInteractionEventHandler(SetPointerDestination);
-
-            controllerGrabScript = controller.GetComponent<VRTK_InteractGrab>();
+            AttemptSetController();
 
             var tmpMaterial = Resources.Load("WorldPointer") as Material;
             if (pointerMaterial != null)
@@ -160,6 +147,11 @@ namespace VRTK
             controller.AliasPointerOff -= new ControllerInteractionEventHandler(DisablePointerBeam);
             controller.AliasPointerSet -= new ControllerInteractionEventHandler(SetPointerDestination);
             controllerGrabScript = null;
+        }
+
+        protected virtual void Start()
+        {
+            SetupController();
         }
 
         protected virtual void Update()
@@ -423,6 +415,31 @@ namespace VRTK
                 return savedBeamLength;
             }
             return currentLength;
+        }
+
+        private void SetupController()
+        {
+            if (controller == null)
+            {
+                controller = GetComponent<VRTK_ControllerEvents>();
+                AttemptSetController();
+            }
+            if (controller == null)
+            {
+                Debug.LogError("VRTK_BasePointer requires a Controller that has the VRTK_ControllerEvents script attached to it");
+            }
+        }
+
+        private void AttemptSetController()
+        {
+            if (controller)
+            {
+                controller.AliasPointerOn += new ControllerInteractionEventHandler(EnablePointerBeam);
+                controller.AliasPointerOff += new ControllerInteractionEventHandler(DisablePointerBeam);
+                controller.AliasPointerSet += new ControllerInteractionEventHandler(SetPointerDestination);
+
+                controllerGrabScript = controller.GetComponent<VRTK_InteractGrab>();
+            }
         }
 
         private bool InvalidConstantBeam()
