@@ -1748,6 +1748,17 @@ The StopUsing method is called automatically when the object has stopped being u
 
 The ToggleHighlight method is used to turn on or off the colour highlight of the object.
 
+#### ResetHighlighter/0
+
+  > `public virtual void ResetHighlighter()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The ResetHighlighter method is used to reset the currently attached highlighter.
+
 #### PauseCollisions/1
 
   > `public void PauseCollisions(float delay)`

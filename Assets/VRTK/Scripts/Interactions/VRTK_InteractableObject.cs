@@ -380,6 +380,17 @@ namespace VRTK
         }
 
         /// <summary>
+        /// The ResetHighlighter method is used to reset the currently attached highlighter.
+        /// </summary>
+        public virtual void ResetHighlighter()
+        {
+            if (objectHighlighter)
+            {
+                objectHighlighter.ResetHighlighter();
+            }
+        }
+
+        /// <summary>
         /// The PauseCollisions method temporarily pauses all collisions on the object at grab time by removing the object's rigidbody's ability to detect collisions. This can be useful for preventing clipping when initially grabbing an item.
         /// </summary>
         /// <param name="delay">The amount of time to pause the collisions for.</param>
