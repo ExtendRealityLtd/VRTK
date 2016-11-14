@@ -321,8 +321,10 @@ namespace VRTK
         /// <param name="previousGrabbingObject">The game object that was previously grabbing this object.</param>
         public virtual void Ungrabbed(GameObject previousGrabbingObject)
         {
-            if (GetSecondaryGrabbingObject() == null)
+            var secondaryGrabbingObject = GetSecondaryGrabbingObject();
+            if (!secondaryGrabbingObject || secondaryGrabbingObject != previousGrabbingObject)
             {
+                SecondaryControllerUngrab(secondaryGrabbingObject);
                 PrimaryControllerUngrab(previousGrabbingObject);
             }
             else

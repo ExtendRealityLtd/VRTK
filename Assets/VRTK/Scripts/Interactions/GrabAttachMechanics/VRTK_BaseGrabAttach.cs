@@ -194,29 +194,35 @@ namespace VRTK.GrabAttachMechanics
 
         private void ThrowReleasedObject(Rigidbody objectRigidbody)
         {
-            var grabbingObject = grabbedObjectScript.GetGrabbingObject();
-            var grabbingObjectScript = grabbingObject.GetComponent<VRTK_InteractGrab>();
-            var controllerEvents = grabbingObject.GetComponent<VRTK_ControllerEvents>();
-
-            var grabbingObjectThrowMultiplier = grabbingObjectScript.throwMultiplier;
-
-            var origin = VRTK_DeviceFinder.TrackedObjectOrigin(grabbingObject);
-
-            var velocity = (controllerEvents ? controllerEvents.GetVelocity() : Vector3.zero);
-            var angularVelocity = (controllerEvents ? controllerEvents.GetAngularVelocity() : Vector3.zero);
-
-            if (origin != null)
+            if (grabbedObjectScript)
             {
-                objectRigidbody.velocity = origin.TransformVector(velocity) * (grabbingObjectThrowMultiplier * throwMultiplier);
-                objectRigidbody.angularVelocity = origin.TransformDirection(angularVelocity);
-            }
-            else
-            {
-                objectRigidbody.velocity = velocity * (grabbingObjectThrowMultiplier * throwMultiplier);
-                objectRigidbody.angularVelocity = angularVelocity;
-            }
+                var grabbingObject = grabbedObjectScript.GetGrabbingObject();
+                if (grabbingObject)
+                {
+                    var grabbingObjectScript = grabbingObject.GetComponent<VRTK_InteractGrab>();
+                    var controllerEvents = grabbingObject.GetComponent<VRTK_ControllerEvents>();
 
-            objectRigidbody.velocity = objectRigidbody.GetPointVelocity(objectRigidbody.position + (objectRigidbody.position - transform.position));
+                    var grabbingObjectThrowMultiplier = grabbingObjectScript.throwMultiplier;
+
+                    var origin = VRTK_DeviceFinder.TrackedObjectOrigin(grabbingObject);
+
+                    var velocity = (controllerEvents ? controllerEvents.GetVelocity() : Vector3.zero);
+                    var angularVelocity = (controllerEvents ? controllerEvents.GetAngularVelocity() : Vector3.zero);
+
+                    if (origin != null)
+                    {
+                        objectRigidbody.velocity = origin.TransformVector(velocity) * (grabbingObjectThrowMultiplier * throwMultiplier);
+                        objectRigidbody.angularVelocity = origin.TransformDirection(angularVelocity);
+                    }
+                    else
+                    {
+                        objectRigidbody.velocity = velocity * (grabbingObjectThrowMultiplier * throwMultiplier);
+                        objectRigidbody.angularVelocity = angularVelocity;
+                    }
+
+                    objectRigidbody.velocity = objectRigidbody.GetPointVelocity(objectRigidbody.position + (objectRigidbody.position - transform.position));
+                }
+            }
         }
 
         private Transform GetSnapHandle(GameObject grabbingObject)
