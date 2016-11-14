@@ -244,7 +244,7 @@ namespace VRTK
             Vector3 projection = transform.position + Vector3.ProjectOnPlane(toController, transform.forward);
 
             float angle = 0;
-            angle = VRTK_SharedMethods.AngleSigned(transform.right * -1, projection - transform.position, transform.forward);
+            angle = AngleSigned(transform.right * -1, projection - transform.position, transform.forward);
 
             // Ensure angle is positive
             if (angle < 0)
@@ -253,6 +253,13 @@ namespace VRTK
             }
 
             return angle;
+        }
+
+        private float AngleSigned(Vector3 v1, Vector3 v2, Vector3 n)
+        {
+            return Mathf.Atan2(
+                Vector3.Dot(n, Vector3.Cross(v1, v2)),
+                Vector3.Dot(v1, v2)) * Mathf.Rad2Deg;
         }
 
         private void ImmediatelyHideMenu(InteractableObjectEventArgs e)

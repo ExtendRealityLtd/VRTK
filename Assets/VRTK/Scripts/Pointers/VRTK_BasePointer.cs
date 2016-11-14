@@ -117,7 +117,7 @@ namespace VRTK
                 Debug.LogError("VRTK_BasePointer requires a Controller that has the VRTK_ControllerEvents script attached to it");
                 return;
             }
-            VRTK_SharedMethods.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.Pointer);
+            VRTK_PlayerObject.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.Pointer);
         }
 
         protected override void OnEnable()
@@ -371,7 +371,7 @@ namespace VRTK
             {
                 validNavMeshLocation = true;
             }
-            return (validNavMeshLocation && target && !(VRTK_SharedMethods.TagOrScriptCheck(target.gameObject, invalidTagOrScriptListPolicy, invalidTargetWithTagOrClass)));
+            return (validNavMeshLocation && target && !(VRTK_TagOrScriptPolicyList.TagOrScriptCheck(target.gameObject, invalidTagOrScriptListPolicy, invalidTargetWithTagOrClass)));
         }
 
         protected virtual void CreateObjectInteractor()
@@ -380,7 +380,7 @@ namespace VRTK
             objectInteractor.transform.SetParent(controller.transform);
             objectInteractor.transform.localPosition = Vector3.zero;
             objectInteractor.layer = LayerMask.NameToLayer("Ignore Raycast");
-            VRTK_SharedMethods.SetPlayerObject(objectInteractor, VRTK_PlayerObject.ObjectTypes.Pointer);
+            VRTK_PlayerObject.SetPlayerObject(objectInteractor, VRTK_PlayerObject.ObjectTypes.Pointer);
 
             var objectInteractorCollider = new GameObject(string.Format("[{0}]BasePointer_ObjectInteractor_Collider", gameObject.name));
             objectInteractorCollider.transform.SetParent(objectInteractor.transform);
@@ -388,7 +388,7 @@ namespace VRTK
             objectInteractorCollider.layer = LayerMask.NameToLayer("Ignore Raycast");
             var tmpCollider = objectInteractorCollider.AddComponent<SphereCollider>();
             tmpCollider.isTrigger = true;
-            VRTK_SharedMethods.SetPlayerObject(objectInteractorCollider, VRTK_PlayerObject.ObjectTypes.Pointer);
+            VRTK_PlayerObject.SetPlayerObject(objectInteractorCollider, VRTK_PlayerObject.ObjectTypes.Pointer);
 
             if (grabToPointerTip)
             {
@@ -400,7 +400,7 @@ namespace VRTK
                 objectInteratorRigidBody.isKinematic = true;
                 objectInteratorRigidBody.freezeRotation = true;
                 objectInteratorRigidBody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
-                VRTK_SharedMethods.SetPlayerObject(objectInteractorAttachPoint, VRTK_PlayerObject.ObjectTypes.Pointer);
+                VRTK_PlayerObject.SetPlayerObject(objectInteractorAttachPoint, VRTK_PlayerObject.ObjectTypes.Pointer);
             }
 
             var objectInteractorScale = 0.025f;

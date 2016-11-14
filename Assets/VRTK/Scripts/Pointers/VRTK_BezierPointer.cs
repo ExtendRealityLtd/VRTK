@@ -107,12 +107,12 @@ namespace VRTK
             }
 
             pointerCursor.name = string.Format("[{0}]BasePointer_BezierPointer_PointerCursor", gameObject.name);
-            VRTK_SharedMethods.SetPlayerObject(pointerCursor, VRTK_PlayerObject.ObjectTypes.Pointer);
+            VRTK_PlayerObject.SetPlayerObject(pointerCursor, VRTK_PlayerObject.ObjectTypes.Pointer);
             pointerCursor.layer = LayerMask.NameToLayer("Ignore Raycast");
             pointerCursor.SetActive(false);
 
             curvedBeamContainer = new GameObject(string.Format("[{0}]BasePointer_BezierPointer_CurvedBeamContainer", gameObject.name));
-            VRTK_SharedMethods.SetPlayerObject(curvedBeamContainer, VRTK_PlayerObject.ObjectTypes.Pointer);
+            VRTK_PlayerObject.SetPlayerObject(curvedBeamContainer, VRTK_PlayerObject.ObjectTypes.Pointer);
             curvedBeamContainer.SetActive(false);
             curvedBeam = curvedBeamContainer.gameObject.AddComponent<VRTK_CurveGenerator>();
             curvedBeam.transform.parent = null;

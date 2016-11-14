@@ -281,7 +281,7 @@ namespace VRTK
         private VRTK_InteractableObject ValidSnapObject(GameObject checkObject, bool grabState)
         {
             var ioCheck = checkObject.GetComponentInParent<VRTK_InteractableObject>();
-            return (ioCheck && ioCheck.IsGrabbed() == grabState && !VRTK_SharedMethods.TagOrScriptCheck(checkObject, validObjectTagOrScriptListPolicy, validObjectWithTagOrClass, true) ? ioCheck : null);
+            return (ioCheck && ioCheck.IsGrabbed() == grabState && !VRTK_TagOrScriptPolicyList.TagOrScriptCheck(checkObject, validObjectTagOrScriptListPolicy, validObjectWithTagOrClass, true) ? ioCheck : null);
         }
 
         private string ObjectPath(string name)
@@ -666,7 +666,7 @@ namespace VRTK
 
         private void InitialiseHighlighter()
         {
-            var existingHighlighter = VRTK_SharedMethods.GetActiveHighlighter(gameObject);
+            var existingHighlighter = VRTK_BaseHighlighter.GetActiveHighlighter(gameObject);
             //If no highlighter is found on the GameObject then create the default one
             if (existingHighlighter == null)
             {

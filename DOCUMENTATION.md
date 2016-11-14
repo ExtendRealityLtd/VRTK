@@ -2491,6 +2491,17 @@ The GetOption method is used to return a value from the options array if the giv
 
 The UsesClonedObject method is used to return whether the current highlighter creates a cloned object to do the highlighting with.
 
+#### GetActiveHighlighter/1
+
+  > `public static VRTK_BaseHighlighter GetActiveHighlighter(GameObject obj)`
+
+  * Parameters
+   * `GameObject obj` - The game object to check for a highlighter on.
+  * Returns
+   * `VRTK_BaseHighlighter` - A valid and active highlighter.
+
+The GetActiveHighlighter method checks the given game object for a valid and active highlighter.
+
 ---
 
 ## Material Colour Swap (VRTK_MaterialColorSwapHighlighter)
@@ -4405,18 +4416,6 @@ The GetBounds methods returns the bounds of the transform including all children
 
 The IsLowest method checks to see if the given value is the lowest number in the given array of values.
 
-#### SetPlayerObject/2
-
-  > `public static void SetPlayerObject(GameObject obj, VRTK_PlayerObject.ObjectTypes objType)`
-
-  * Parameters
-   * `GameObject obj` - The game object to add the player object class to.
-   * `VRTK_PlayerObject.ObjectTypes objType` - The type of player object that is to be assigned.
-  * Returns
-   * _none_
-
-The SetPlayerObject method tags the given game object with a special player object class for easier identification.
-
 #### AddCameraFade/0
 
   > `public static Transform AddCameraFade()`
@@ -4439,33 +4438,6 @@ The AddCameraFade method finds the headset camera and adds a headset fade script
 
 The CreateColliders method attempts to add box colliders to all child objects in the given object that have a renderer but no collider.
 
-#### AngleSigned/3
-
-  > `public static float AngleSigned(Vector3 v1, Vector3 v2, Vector3 n)`
-
-  * Parameters
-   * `Vector3 v1` - The first given vector.
-   * `Vector3 v2` - The second given vector.
-   * `Vector3 n` - The normal vector.
-  * Returns
-   * `float` - The signed angle between v1, v2 with the given normal as the rotation axis.
-
-The AngleSigned method returns the signed angle between the two vectors, v1 and v2, with normal 'n' as the rotation axis.
-
-#### TagOrScriptCheck/4
-
-  > `public static bool TagOrScriptCheck(GameObject obj, VRTK_TagOrScriptPolicyList tagOrScriptList, string ignoreString, bool ignoreStringIsInclude = false)`
-
-  * Parameters
-   * `GameObject obj` - The game object to check.
-   * `VRTK_TagOrScriptPolicyList tagOrScriptList` - The policy list to use for checking.
-   * `string ignoreString` - The string to check against.
-   * `bool ignoreStringIsInclude` - Determines whether it should actually look to see if the game object includes the policy list or string to make it not ignored.
-  * Returns
-   * `bool` - Returns true of the given game object matches the policy list or given string logic.
-
-The TagOrScriptCheck method is used to check if a game object should be ignored based on a given string or policy list.
-
 #### CloneComponent/3
 
   > `public static Component CloneComponent(Component source, GameObject destination, bool copyProperties = false)`
@@ -4478,17 +4450,6 @@ The TagOrScriptCheck method is used to check if a game object should be ignored 
    * `Component` - The component that has been cloned onto the given game object.
 
 The CloneComponent method takes a source component and copies it to the given destination game object.
-
-#### GetActiveHighlighter/1
-
-  > `public static VRTK_BaseHighlighter GetActiveHighlighter(GameObject obj)`
-
-  * Parameters
-   * `GameObject obj` - The game object to check for a highlighter on.
-  * Returns
-   * `VRTK_BaseHighlighter` - A valid and active highlighter.
-
-The GetActiveHighlighter method checks the given game object for a valid and active highlighter.
 
 #### ColorDarken/2
 
@@ -4558,6 +4519,20 @@ Then in the component that has a Tag Or Script Policy List paramter (e.g. BasicT
    * `bool` - If the operation is `Ignore` and the game object is matched by an identifier from the list then it returns true. If the operation is `Include` and the game object is not matched by an identifier from the list then it returns true.
 
 The Find method performs the set operation to determine if the given game object contains one of the identifiers on the set check type. For instance, if the Operation is `Ignore` and the Check Type is `Tag` then the Find method will attempt to see if the given game object has a tag that matches one of the identifiers.
+
+#### TagOrScriptCheck/4
+
+  > `public static bool TagOrScriptCheck(GameObject obj, VRTK_TagOrScriptPolicyList tagOrScriptList, string ignoreString, bool ignoreStringIsInclude = false)`
+
+  * Parameters
+   * `GameObject obj` - The game object to check.
+   * `VRTK_TagOrScriptPolicyList tagOrScriptList` - The policy list to use for checking.
+   * `string ignoreString` - The string to check against.
+   * `bool ignoreStringIsInclude` - Determines whether it should actually look to see if the game object includes the policy list or string to make it not ignored.
+  * Returns
+   * `bool` - Returns true of the given game object matches the policy list or given string logic.
+
+The TagOrScriptCheck method is used to check if a game object should be ignored based on a given string or policy list.
 
 ---
 

@@ -127,7 +127,7 @@ namespace VRTK
                 return;
             }
 
-            VRTK_SharedMethods.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.Pointer);
+            VRTK_PlayerObject.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.Pointer);
 
             headset = VRTK_DeviceFinder.HeadsetTransform();
             playArea = VRTK_DeviceFinder.PlayAreaTransform();
@@ -155,7 +155,7 @@ namespace VRTK
         {
             var playAreaCursorBoundary = GameObject.CreatePrimitive(PrimitiveType.Cube);
             playAreaCursorBoundary.name = string.Format("[{0}]PlayAreaCursorBoundary_" + index, gameObject.name);
-            VRTK_SharedMethods.SetPlayerObject(playAreaCursorBoundary, VRTK_PlayerObject.ObjectTypes.Pointer);
+            VRTK_PlayerObject.SetPlayerObject(playAreaCursorBoundary, VRTK_PlayerObject.ObjectTypes.Pointer);
 
             var width = (right - left) / 1.065f;
             var length = (top - bottom) / 1.08f;
@@ -212,7 +212,7 @@ namespace VRTK
             CreateCursorCollider(playAreaCursor);
             playAreaCursor.AddComponent<Rigidbody>().isKinematic = true;
 
-            VRTK_SharedMethods.SetPlayerObject(playAreaCursor, VRTK_PlayerObject.ObjectTypes.Pointer);
+            VRTK_PlayerObject.SetPlayerObject(playAreaCursor, VRTK_PlayerObject.ObjectTypes.Pointer);
 
             var playAreaCursorScript = playAreaCursor.AddComponent<VRTK_PlayAreaCollider>();
             playAreaCursorScript.SetParent(gameObject);
@@ -267,7 +267,7 @@ namespace VRTK
 
         private bool ValidTarget(Collider collider)
         {
-            return (!collider.GetComponent<VRTK_PlayerObject>() && !(VRTK_SharedMethods.TagOrScriptCheck(collider.gameObject, targetTagOrScriptListPolicy, ignoreTargetWithTagOrClass)));
+            return (!collider.GetComponent<VRTK_PlayerObject>() && !(VRTK_TagOrScriptPolicyList.TagOrScriptCheck(collider.gameObject, targetTagOrScriptListPolicy, ignoreTargetWithTagOrClass)));
         }
 
         private void OnTriggerStay(Collider collider)

@@ -71,7 +71,7 @@ namespace VRTK
 
         private void Start()
         {
-            VRTK_SharedMethods.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.CameraRig);
+            VRTK_PlayerObject.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.CameraRig);
             SetControllerListeners(controllerLeftHand);
             SetControllerListeners(controllerRightHand);
         }

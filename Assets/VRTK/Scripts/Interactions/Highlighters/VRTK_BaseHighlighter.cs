@@ -67,5 +67,25 @@ namespace VRTK.Highlighters
         {
             return usesClonedObject;
         }
+
+        /// <summary>
+        /// The GetActiveHighlighter method checks the given game object for a valid and active highlighter.
+        /// </summary>
+        /// <param name="obj">The game object to check for a highlighter on.</param>
+        /// <returns>A valid and active highlighter.</returns>
+        public static VRTK_BaseHighlighter GetActiveHighlighter(GameObject obj)
+        {
+            VRTK_BaseHighlighter objectHighlighter = null;
+            foreach (var tmpHighlighter in obj.GetComponents<VRTK_BaseHighlighter>())
+            {
+                if (tmpHighlighter.active)
+                {
+                    objectHighlighter = tmpHighlighter;
+                    break;
+                }
+            }
+
+            return objectHighlighter;
+        }
     }
 }

@@ -398,7 +398,7 @@ namespace VRTK
 
             highlighterOptions = new Dictionary<string, object>();
             highlighterOptions.Add("resetMainTexture", true);
-            VRTK_BaseHighlighter objectHighlighter = VRTK_SharedMethods.GetActiveHighlighter(gameObject);
+            VRTK_BaseHighlighter objectHighlighter = VRTK_BaseHighlighter.GetActiveHighlighter(gameObject);
 
             if (objectHighlighter == null)
             {

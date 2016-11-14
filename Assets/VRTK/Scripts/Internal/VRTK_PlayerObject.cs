@@ -21,5 +21,19 @@ namespace VRTK
         }
 
         public ObjectTypes objectType;
+
+        /// <summary>
+        /// The SetPlayerObject method tags the given game object with a special player object class for easier identification.
+        /// </summary>
+        /// <param name="obj">The game object to add the player object class to.</param>
+        /// <param name="objType">The type of player object that is to be assigned.</param>
+        public static void SetPlayerObject(GameObject obj, ObjectTypes objType)
+        {
+            if (!obj.GetComponent<VRTK_PlayerObject>())
+            {
+                var playerObject = obj.AddComponent<VRTK_PlayerObject>();
+                playerObject.objectType = objType;
+            }
+        }
     }
 }

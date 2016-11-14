@@ -71,6 +71,33 @@ namespace VRTK
             }
         }
 
+        /// <summary>
+        /// The TagOrScriptCheck method is used to check if a game object should be ignored based on a given string or policy list.
+        /// </summary>
+        /// <param name="obj">The game object to check.</param>
+        /// <param name="tagOrScriptList">The policy list to use for checking.</param>
+        /// <param name="ignoreString">The string to check against.</param>
+        /// <param name="ignoreStringIsInclude">Determines whether it should actually look to see if the game object includes the policy list or string to make it not ignored.</param>
+        /// <returns>Returns true of the given game object matches the policy list or given string logic.</returns>
+        public static bool TagOrScriptCheck(GameObject obj, VRTK_TagOrScriptPolicyList tagOrScriptList, string ignoreString, bool ignoreStringIsInclude = false)
+        {
+            if (tagOrScriptList)
+            {
+                return tagOrScriptList.Find(obj);
+            }
+            else
+            {
+                if (!ignoreStringIsInclude)
+                {
+                    return (obj.tag == ignoreString || obj.GetComponent(ignoreString) != null);
+                }
+                else
+                {
+                    return (obj.tag != ignoreString && obj.GetComponent(ignoreString) == null);
+                }
+            }
+        }
+
         private bool ScriptCheck(GameObject obj, bool returnState)
         {
             foreach (var identifier in identifiers)

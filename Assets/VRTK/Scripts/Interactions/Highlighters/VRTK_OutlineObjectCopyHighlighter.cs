@@ -163,7 +163,7 @@ namespace VRTK.Highlighters
             highlightModel.GetComponent<Renderer>().material = stencilOutline;
             highlightModel.SetActive(false);
 
-            VRTK_SharedMethods.SetPlayerObject(highlightModel, VRTK_PlayerObject.ObjectTypes.Highlighter);
+            VRTK_PlayerObject.SetPlayerObject(highlightModel, VRTK_PlayerObject.ObjectTypes.Highlighter);
         }
     }
 }
