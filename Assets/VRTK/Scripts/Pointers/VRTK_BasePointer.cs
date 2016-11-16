@@ -143,9 +143,12 @@ namespace VRTK
             pointerContactTarget = null;
             destinationPosition = Vector3.zero;
 
-            controller.AliasPointerOn -= new ControllerInteractionEventHandler(EnablePointerBeam);
-            controller.AliasPointerOff -= new ControllerInteractionEventHandler(DisablePointerBeam);
-            controller.AliasPointerSet -= new ControllerInteractionEventHandler(SetPointerDestination);
+            if (controller)
+            {
+                controller.AliasPointerOn -= new ControllerInteractionEventHandler(EnablePointerBeam);
+                controller.AliasPointerOff -= new ControllerInteractionEventHandler(DisablePointerBeam);
+                controller.AliasPointerSet -= new ControllerInteractionEventHandler(SetPointerDestination);
+            }
             controllerGrabScript = null;
         }
 
