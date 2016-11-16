@@ -118,6 +118,50 @@ Transform:
   m_Children: []
   m_Father: {fileID: 584630027}
   m_RootOrder: 2
+--- !u!1 &27569561
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 27569563}
+  - 114: {fileID: 27569562}
+  m_Layer: 0
+  m_Name: '##SDKManager##'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &27569562
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 27569561}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5837af0260a118e4d808bfe0405429a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  systemSDK: 1
+  headsetSDK: 1
+  controllerSDK: 1
+  boundariesSDK: 1
+--- !u!4 &27569563
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 27569561}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -13.121759, y: -0.40796566, z: 7.124752}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 11
 --- !u!1 &41791480
 GameObject:
   m_ObjectHideFlags: 0
@@ -1139,6 +1183,7 @@ MonoBehaviour:
   precisionGrab: 0
   rightSnapHandle: {fileID: 1453485}
   leftSnapHandle: {fileID: 388999741}
+  throwVelocityWithAttachDistance: 0
   throwMultiplier: 1
   onGrabCollisionDelay: 0
 --- !u!114 &584630030
@@ -1261,6 +1306,7 @@ MonoBehaviour:
   precisionGrab: 1
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  throwVelocityWithAttachDistance: 0
   throwMultiplier: 1
   onGrabCollisionDelay: 0.5
   destroyImmediatelyOnThrow: 1
@@ -1561,6 +1607,7 @@ MonoBehaviour:
   precisionGrab: 0
   rightSnapHandle: {fileID: 526777005}
   leftSnapHandle: {fileID: 200562050}
+  throwVelocityWithAttachDistance: 0
   throwMultiplier: 1
   onGrabCollisionDelay: 0.5
   destroyImmediatelyOnThrow: 1
@@ -2777,6 +2824,7 @@ MonoBehaviour:
   precisionGrab: 0
   rightSnapHandle: {fileID: 1674975574}
   leftSnapHandle: {fileID: 971791267}
+  throwVelocityWithAttachDistance: 0
   throwMultiplier: 1
   onGrabCollisionDelay: 0.5
   destroyImmediatelyOnThrow: 1
@@ -2897,6 +2945,7 @@ MonoBehaviour:
   precisionGrab: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  throwVelocityWithAttachDistance: 0
   throwMultiplier: 1
   onGrabCollisionDelay: 0.5
   destroyImmediatelyOnThrow: 1
@@ -3288,6 +3337,7 @@ MonoBehaviour:
   precisionGrab: 0
   rightSnapHandle: {fileID: 1990384343}
   leftSnapHandle: {fileID: 389828249}
+  throwVelocityWithAttachDistance: 0
   throwMultiplier: 1
   onGrabCollisionDelay: 0.5
   destroyImmediatelyOnThrow: 1

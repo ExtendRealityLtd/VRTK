@@ -243,7 +243,7 @@ namespace VRTK
 
         private void DropToNearestFloor(bool withBlink, bool useGravityFall)
         {
-            if (enableTeleport && eyeCamera.transform.position.y > transform.position.y)
+            if (enableTeleport && eyeCamera && eyeCamera.transform.position.y > transform.position.y)
             {
                 Ray ray = new Ray(eyeCamera.transform.position, -transform.up);
                 RaycastHit rayCollidedWith;

@@ -1157,6 +1157,50 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 796197912}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &868607461
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 868607463}
+  - 114: {fileID: 868607462}
+  m_Layer: 0
+  m_Name: '##SDKManager##'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &868607462
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 868607461}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5837af0260a118e4d808bfe0405429a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  systemSDK: 1
+  headsetSDK: 1
+  controllerSDK: 1
+  boundariesSDK: 1
+--- !u!4 &868607463
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 868607461}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -13.121759, y: -0.40796566, z: 7.124752}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
 --- !u!1 &884550209
 GameObject:
   m_ObjectHideFlags: 0
@@ -2220,11 +2264,14 @@ MonoBehaviour:
   distanceBlinkDelay: 0
   headsetPositionCompensation: 1
   ignoreTargetWithTagOrClass: 
+  targetTagOrScriptListPolicy: {fileID: 0}
   navMeshLimitDistance: 0
   playSpaceFalling: 1
+  playSpaceFallRestriction: 0
   useGravity: 0
   gravityFallHeight: 1
   blinkYThreshold: 0.1
+  floorHeightTolerance: 0.001
 --- !u!114 &1766522782
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2238,28 +2285,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enableTeleport: 1
   controller: {fileID: 0}
+  pointerOriginTransform: {fileID: 0}
   pointerMaterial: {fileID: 0}
   pointerHitColor: {r: 0, g: 1, b: 1, a: 1}
   pointerMissColor: {r: 1, g: 0, b: 0, a: 1}
-  showPlayAreaCursor: 0
-  playAreaCursorDimensions: {x: 0, y: 0}
-  handlePlayAreaCursorCollisions: 0
-  ignoreTargetWithTagOrClass: 
-  pointerVisibility: 0
   holdButtonToActivate: 1
+  interactWithObjects: 0
+  grabToPointerTip: 0
   activateDelay: 0
-  pointerLength: 10
-  pointerDensity: 50
-  showPointerCursor: 1
-  pointerCursorRadius: 0.5
-  beamCurveOffset: 1
-  customPointerTracer: {fileID: 107788, guid: e37e13a70e9fc254b886bddb315e74c0, type: 2}
-  customPointerCursor: {fileID: 110196, guid: 6335d1c9ab948f940ab0ef87b99dd5a4, type: 2}
+  pointerVisibility: 0
   layersToIgnore:
     serializedVersion: 2
     m_Bits: 4
-  validTeleportLocationObject: {fileID: 0}
+  pointerLength: 10
+  pointerDensity: 50
+  beamCurveOffset: 1
+  beamHeightLimitAngle: 100
   rescalePointerTracer: 0
+  showPointerCursor: 1
+  pointerCursorRadius: 0.5
+  pointerCursorMatchTargetRotation: 0
+  customPointerTracer: {fileID: 107788, guid: e37e13a70e9fc254b886bddb315e74c0, type: 2}
+  customPointerCursor: {fileID: 110196, guid: 6335d1c9ab948f940ab0ef87b99dd5a4, type: 2}
+  validTeleportLocationObject: {fileID: 0}
 --- !u!114 &1766522783
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2278,6 +2326,7 @@ MonoBehaviour:
   uiClickButton: 3
   menuToggleButton: 7
   axisFidelity: 1
+  triggerClickThreshold: 1
   triggerPressed: 0
   triggerTouched: 0
   triggerHairlinePressed: 0
@@ -2306,28 +2355,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enableTeleport: 1
   controller: {fileID: 0}
+  pointerOriginTransform: {fileID: 0}
   pointerMaterial: {fileID: 0}
   pointerHitColor: {r: 0, g: 1, b: 1, a: 1}
   pointerMissColor: {r: 1, g: 0, b: 0, a: 1}
-  showPlayAreaCursor: 0
-  playAreaCursorDimensions: {x: 0, y: 0}
-  handlePlayAreaCursorCollisions: 0
-  ignoreTargetWithTagOrClass: 
-  pointerVisibility: 0
   holdButtonToActivate: 1
+  interactWithObjects: 0
+  grabToPointerTip: 0
   activateDelay: 0
-  pointerLength: 10
-  pointerDensity: 50
-  showPointerCursor: 1
-  pointerCursorRadius: 0.5
-  beamCurveOffset: 1
-  customPointerTracer: {fileID: 107788, guid: e37e13a70e9fc254b886bddb315e74c0, type: 2}
-  customPointerCursor: {fileID: 110196, guid: 6335d1c9ab948f940ab0ef87b99dd5a4, type: 2}
+  pointerVisibility: 0
   layersToIgnore:
     serializedVersion: 2
     m_Bits: 4
-  validTeleportLocationObject: {fileID: 0}
+  pointerLength: 10
+  pointerDensity: 50
+  beamCurveOffset: 1
+  beamHeightLimitAngle: 100
   rescalePointerTracer: 0
+  showPointerCursor: 1
+  pointerCursorRadius: 0.5
+  pointerCursorMatchTargetRotation: 0
+  customPointerTracer: {fileID: 107788, guid: e37e13a70e9fc254b886bddb315e74c0, type: 2}
+  customPointerCursor: {fileID: 110196, guid: 6335d1c9ab948f940ab0ef87b99dd5a4, type: 2}
+  validTeleportLocationObject: {fileID: 0}
 --- !u!114 &1766522785
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2346,6 +2396,7 @@ MonoBehaviour:
   uiClickButton: 3
   menuToggleButton: 7
   axisFidelity: 1
+  triggerClickThreshold: 1
   triggerPressed: 0
   triggerTouched: 0
   triggerHairlinePressed: 0

@@ -2,7 +2,7 @@
 {
     using UnityEngine;
 
-    public abstract class SDK_Base : ScriptableObject
+    public abstract class SDK_InterfaceController : ScriptableObject
     {
         public enum ControllerElelements
         {
@@ -16,9 +16,15 @@
             Body
         }
 
-        protected Transform cachedHeadset;
-        protected Transform cachedHeadsetCamera;
-        protected Transform cachedPlayArea;
+        public enum ButtonPressTypes
+        {
+            Press,
+            PressDown,
+            PressUp,
+            Touch,
+            TouchDown,
+            TouchUp
+        }
 
         public abstract string GetControllerElementPath(ControllerElelements element, VRTK_DeviceFinder.ControllerHand hand);
         public abstract GameObject GetTrackedObject(GameObject obj, out uint index);
@@ -30,21 +36,8 @@
         public abstract GameObject GetControllerRightHand();
         public abstract bool IsControllerLeftHand(GameObject controller);
         public abstract bool IsControllerRightHand(GameObject controller);
-        public abstract Transform GetHeadset();
-        public abstract Transform GetHeadsetCamera();
-        public abstract GameObject GetHeadsetCamera(GameObject obj);
-        public abstract Transform GetPlayArea();
-        public abstract Vector3[] GetPlayAreaVertices(GameObject playArea);
-        public abstract float GetPlayAreaBorderThickness(GameObject playArea);
-        public abstract bool IsPlayAreaSizeCalibrated(GameObject playArea);
-        public abstract bool IsDisplayOnDesktop();
-        public abstract bool ShouldAppRenderWithLowResources();
-        public abstract void ForceInterleavedReprojectionOn(bool force);
         public abstract GameObject GetControllerRenderModel(GameObject controller);
         public abstract void SetControllerRenderModelWheel(GameObject renderModel, bool state);
-        public abstract void HeadsetFade(Color color, float duration, bool fadeOverlay = false);
-        public abstract bool HasHeadsetFade(GameObject obj);
-        public abstract void AddHeadsetFade(Transform camera);
         public abstract void HapticPulseOnIndex(uint index, ushort durationMicroSec = 500);
         public abstract Vector3 GetVelocityOnIndex(uint index);
         public abstract Vector3 GetAngularVelocityOnIndex(uint index);

@@ -15,6 +15,7 @@
   * Clone this repository `git clone https://github.com/thestonefox/VRTK.git`
   * Open `VRTK` within Unity3d
   * Import the [SteamVR Plugin] from the Unity Asset Store
+  * Add the `VRTK_SDKManager` script to the scene and select `SteamVR` for each of the sections.
   * Browse the `Examples` scenes for example usage of the scripts
 
 ## Summary

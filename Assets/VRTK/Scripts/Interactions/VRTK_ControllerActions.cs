@@ -406,13 +406,13 @@ namespace VRTK
             }
 
             objectHighlighter.Initialise(null, highlighterOptions);
-            AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_Base.ControllerElelements.ApplicationMenu)), objectHighlighter, elementHighlighterOverrides.appMenu);
-            AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_Base.ControllerElelements.Body)), objectHighlighter, elementHighlighterOverrides.body);
-            AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_Base.ControllerElelements.GripLeft)), objectHighlighter, elementHighlighterOverrides.gripLeft);
-            AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_Base.ControllerElelements.GripRight)), objectHighlighter, elementHighlighterOverrides.gripRight);
-            AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_Base.ControllerElelements.SystemMenu)), objectHighlighter, elementHighlighterOverrides.systemMenu);
-            AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_Base.ControllerElelements.Touchpad)), objectHighlighter, elementHighlighterOverrides.touchpad);
-            AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_Base.ControllerElelements.Trigger)), objectHighlighter, elementHighlighterOverrides.trigger);
+            AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_InterfaceController.ControllerElelements.ApplicationMenu)), objectHighlighter, elementHighlighterOverrides.appMenu);
+            AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_InterfaceController.ControllerElelements.Body)), objectHighlighter, elementHighlighterOverrides.body);
+            AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_InterfaceController.ControllerElelements.GripLeft)), objectHighlighter, elementHighlighterOverrides.gripLeft);
+            AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_InterfaceController.ControllerElelements.GripRight)), objectHighlighter, elementHighlighterOverrides.gripRight);
+            AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_InterfaceController.ControllerElelements.SystemMenu)), objectHighlighter, elementHighlighterOverrides.systemMenu);
+            AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_InterfaceController.ControllerElelements.Touchpad)), objectHighlighter, elementHighlighterOverrides.touchpad);
+            AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_InterfaceController.ControllerElelements.Trigger)), objectHighlighter, elementHighlighterOverrides.trigger);
         }
 
         private void Awake()
@@ -424,31 +424,31 @@ namespace VRTK
 
             if (modelElementPaths.bodyModelPath.Trim() == "")
             {
-                modelElementPaths.bodyModelPath = VRTK_SDK_Bridge.GetControllerElementPath(SDK_Base.ControllerElelements.Body, controllerHand);
+                modelElementPaths.bodyModelPath = VRTK_SDK_Bridge.GetControllerElementPath(SDK_InterfaceController.ControllerElelements.Body, controllerHand);
             }
             if (modelElementPaths.triggerModelPath.Trim() == "")
             {
-                modelElementPaths.triggerModelPath = VRTK_SDK_Bridge.GetControllerElementPath(SDK_Base.ControllerElelements.Trigger, controllerHand);
+                modelElementPaths.triggerModelPath = VRTK_SDK_Bridge.GetControllerElementPath(SDK_InterfaceController.ControllerElelements.Trigger, controllerHand);
             }
             if (modelElementPaths.leftGripModelPath.Trim() == "")
             {
-                modelElementPaths.leftGripModelPath = VRTK_SDK_Bridge.GetControllerElementPath(SDK_Base.ControllerElelements.GripLeft, controllerHand);
+                modelElementPaths.leftGripModelPath = VRTK_SDK_Bridge.GetControllerElementPath(SDK_InterfaceController.ControllerElelements.GripLeft, controllerHand);
             }
             if (modelElementPaths.rightGripModelPath.Trim() == "")
             {
-                modelElementPaths.rightGripModelPath = VRTK_SDK_Bridge.GetControllerElementPath(SDK_Base.ControllerElelements.GripRight, controllerHand);
+                modelElementPaths.rightGripModelPath = VRTK_SDK_Bridge.GetControllerElementPath(SDK_InterfaceController.ControllerElelements.GripRight, controllerHand);
             }
             if (modelElementPaths.touchpadModelPath.Trim() == "")
             {
-                modelElementPaths.touchpadModelPath = VRTK_SDK_Bridge.GetControllerElementPath(SDK_Base.ControllerElelements.Touchpad, controllerHand);
+                modelElementPaths.touchpadModelPath = VRTK_SDK_Bridge.GetControllerElementPath(SDK_InterfaceController.ControllerElelements.Touchpad, controllerHand);
             }
             if (modelElementPaths.appMenuModelPath.Trim() == "")
             {
-                modelElementPaths.appMenuModelPath = VRTK_SDK_Bridge.GetControllerElementPath(SDK_Base.ControllerElelements.ApplicationMenu, controllerHand);
+                modelElementPaths.appMenuModelPath = VRTK_SDK_Bridge.GetControllerElementPath(SDK_InterfaceController.ControllerElelements.ApplicationMenu, controllerHand);
             }
             if (modelElementPaths.systemMenuModelPath.Trim() == "")
             {
-                modelElementPaths.systemMenuModelPath = VRTK_SDK_Bridge.GetControllerElementPath(SDK_Base.ControllerElelements.SystemMenu, controllerHand);
+                modelElementPaths.systemMenuModelPath = VRTK_SDK_Bridge.GetControllerElementPath(SDK_InterfaceController.ControllerElelements.SystemMenu, controllerHand);
             }
         }
 

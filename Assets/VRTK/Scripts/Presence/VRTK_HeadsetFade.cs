@@ -139,7 +139,7 @@ namespace VRTK
             isFaded = false;
 
             VRTK_SharedMethods.AddCameraFade();
-            if (!VRTK_SDK_Bridge.HasHeadsetFade(headset.gameObject))
+            if (!VRTK_SDK_Bridge.HasHeadsetFade(headset))
             {
                 Debug.LogWarning("This 'VRTK_HeadsetFade' script needs a compatible fade script on the camera game object.");
             }

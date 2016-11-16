@@ -4210,11 +4210,31 @@ The script will use the boundaries of the control to determine if it is in or ou
 
 A collection of scripts that provide useful functionality to aid the creation process.
 
+ * [SDK Manager](#sdk-manager-vrtk_sdkmanager)
  * [Device Finder](#device-finder-vrtk_devicefinder)
  * [Shared Methods](#shared-methods-vrtk_sharedmethods)
  * [Tag Or Script Policy List](#tag-or-script-policy-list-vrtk_tagorscriptpolicylist)
  * [Adaptive Quality](#adaptive-quality-vrtk_adaptivequality)
  * [Simulating Headset Movement](#simulating-headset-movement-vrtk_simulator)
+
+---
+
+## SDK Manager (VRTK_SDKManager)
+
+### Overview
+
+The SDK Manager script enables easy configuration of supported SDKs
+
+### Inspector Parameters
+
+ * **System SDK:** The SDK to use to deal with all system actions.
+ * **Headset SDK:** The SDK to use to utilise the VR headset.
+ * **Controller SDK:** The SDK to use to utilise the input devices.
+ * **Boundaries SDK:** The SDK to use to utilise room scale boundaries.
+
+### Class Variables
+
+ * `public enum SupportedSDKs` - The supported SDKs
 
 ---
 

@@ -181,34 +181,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7540575af55528e45a58556fc246738f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  highlightOnTouch: 0
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
-  rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
-  hideControllerOnTouch: 0
   isGrabbable: 0
-  isDroppable: 1
-  isSwappable: 1
   holdButtonToGrab: 0
-  rumbleOnGrab: {x: 0, y: 0}
+  stayGrabbedOnTeleport: 1
+  validDrop: 1
+  grabOverrideButton: 8
   allowedGrabControllers: 0
-  precisionSnap: 0
-  rightSnapHandle: {fileID: 0}
-  leftSnapHandle: {fileID: 0}
-  hideControllerOnGrab: 0
-  grabAttachMechanic: 0
-  detachThreshold: 500
-  springJointStrength: 500
-  springJointDamper: 50
-  throwMultiplier: 1
-  onGrabCollisionDelay: 0
+  grabAttachMechanicScript: {fileID: 0}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 1
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 0
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 1
-  rumbleOnUse: {x: 0, y: 0}
+  useOverrideButton: 8
   allowedUseControllers: 0
-  hideControllerOnUse: 0
+  usingState: 0
   shape: 1
 --- !u!1 &106033243
 GameObject:
@@ -239,34 +228,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0add3563657b3341a31d6a06fe05a7a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  highlightOnTouch: 0
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
-  rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
-  hideControllerOnTouch: 0
   isGrabbable: 0
-  isDroppable: 1
-  isSwappable: 1
   holdButtonToGrab: 0
-  rumbleOnGrab: {x: 0, y: 0}
+  stayGrabbedOnTeleport: 1
+  validDrop: 1
+  grabOverrideButton: 8
   allowedGrabControllers: 0
-  precisionSnap: 0
-  rightSnapHandle: {fileID: 0}
-  leftSnapHandle: {fileID: 0}
-  hideControllerOnGrab: 0
-  grabAttachMechanic: 0
-  detachThreshold: 500
-  springJointStrength: 500
-  springJointDamper: 50
-  throwMultiplier: 1
-  onGrabCollisionDelay: 0
+  grabAttachMechanicScript: {fileID: 0}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 1
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 0
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
-  rumbleOnUse: {x: 0, y: 0}
+  useOverrideButton: 8
   allowedUseControllers: 0
-  hideControllerOnUse: 0
+  usingState: 0
 --- !u!54 &106033245
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -418,34 +396,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0add3563657b3341a31d6a06fe05a7a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  highlightOnTouch: 0
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
-  rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
-  hideControllerOnTouch: 0
   isGrabbable: 0
-  isDroppable: 1
-  isSwappable: 1
   holdButtonToGrab: 0
-  rumbleOnGrab: {x: 0, y: 0}
+  stayGrabbedOnTeleport: 1
+  validDrop: 1
+  grabOverrideButton: 8
   allowedGrabControllers: 0
-  precisionSnap: 0
-  rightSnapHandle: {fileID: 0}
-  leftSnapHandle: {fileID: 0}
-  hideControllerOnGrab: 0
-  grabAttachMechanic: 0
-  detachThreshold: 500
-  springJointStrength: 500
-  springJointDamper: 50
-  throwMultiplier: 1
-  onGrabCollisionDelay: 0
+  grabAttachMechanicScript: {fileID: 0}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 1
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 1
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 1
-  rumbleOnUse: {x: 0, y: 0}
+  useOverrideButton: 8
   allowedUseControllers: 0
-  hideControllerOnUse: 0
+  usingState: 0
 --- !u!54 &176885992
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -680,34 +647,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d72dbb476f681bb4fb0837faa838031a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  highlightOnTouch: 0
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
-  rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
-  hideControllerOnTouch: 0
   isGrabbable: 0
-  isDroppable: 1
-  isSwappable: 1
   holdButtonToGrab: 0
-  rumbleOnGrab: {x: 0, y: 0}
+  stayGrabbedOnTeleport: 1
+  validDrop: 1
+  grabOverrideButton: 8
   allowedGrabControllers: 0
-  precisionSnap: 0
-  rightSnapHandle: {fileID: 0}
-  leftSnapHandle: {fileID: 0}
-  hideControllerOnGrab: 0
-  grabAttachMechanic: 0
-  detachThreshold: 500
-  springJointStrength: 500
-  springJointDamper: 50
-  throwMultiplier: 1
-  onGrabCollisionDelay: 0
+  grabAttachMechanicScript: {fileID: 0}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 1
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 0
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 1
-  rumbleOnUse: {x: 0, y: 0}
+  useOverrideButton: 8
   allowedUseControllers: 0
-  hideControllerOnUse: 0
+  usingState: 0
   newMenuColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!23 &424470191
 MeshRenderer:
@@ -956,34 +912,67 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0add3563657b3341a31d6a06fe05a7a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  highlightOnTouch: 0
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
-  rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
-  hideControllerOnTouch: 0
   isGrabbable: 0
-  isDroppable: 1
-  isSwappable: 1
   holdButtonToGrab: 0
-  rumbleOnGrab: {x: 0, y: 0}
+  stayGrabbedOnTeleport: 1
+  validDrop: 1
+  grabOverrideButton: 8
   allowedGrabControllers: 0
-  precisionSnap: 0
-  rightSnapHandle: {fileID: 0}
-  leftSnapHandle: {fileID: 0}
-  hideControllerOnGrab: 0
-  grabAttachMechanic: 0
-  detachThreshold: 500
-  springJointStrength: 500
-  springJointDamper: 50
-  throwMultiplier: 1
-  onGrabCollisionDelay: 0
+  grabAttachMechanicScript: {fileID: 0}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 1
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 0
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 1
-  rumbleOnUse: {x: 0, y: 0}
+  useOverrideButton: 8
   allowedUseControllers: 0
-  hideControllerOnUse: 0
+  usingState: 0
+--- !u!1 &669537290
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 669537292}
+  - 114: {fileID: 669537291}
+  m_Layer: 0
+  m_Name: '##SDKManager##'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &669537291
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 669537290}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5837af0260a118e4d808bfe0405429a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  systemSDK: 1
+  headsetSDK: 1
+  controllerSDK: 1
+  boundariesSDK: 1
+--- !u!4 &669537292
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 669537290}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -13.121759, y: -0.40796566, z: 7.124752}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 10
 --- !u!1 &692987374
 GameObject:
   m_ObjectHideFlags: 0
@@ -1397,34 +1386,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d72dbb476f681bb4fb0837faa838031a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  highlightOnTouch: 0
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
-  rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
-  hideControllerOnTouch: 0
   isGrabbable: 0
-  isDroppable: 1
-  isSwappable: 1
   holdButtonToGrab: 0
-  rumbleOnGrab: {x: 0, y: 0}
+  stayGrabbedOnTeleport: 1
+  validDrop: 1
+  grabOverrideButton: 8
   allowedGrabControllers: 0
-  precisionSnap: 0
-  rightSnapHandle: {fileID: 0}
-  leftSnapHandle: {fileID: 0}
-  hideControllerOnGrab: 0
-  grabAttachMechanic: 0
-  detachThreshold: 500
-  springJointStrength: 500
-  springJointDamper: 50
-  throwMultiplier: 1
-  onGrabCollisionDelay: 0
+  grabAttachMechanicScript: {fileID: 0}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 1
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 0
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 1
-  rumbleOnUse: {x: 0, y: 0}
+  useOverrideButton: 8
   allowedUseControllers: 0
-  hideControllerOnUse: 0
+  usingState: 0
   newMenuColor: {r: 1, g: 1, b: 0, a: 1}
 --- !u!23 &1270810979
 MeshRenderer:
@@ -1619,6 +1597,7 @@ MonoBehaviour:
   distanceBlinkDelay: 0
   headsetPositionCompensation: 1
   ignoreTargetWithTagOrClass: 
+  targetTagOrScriptListPolicy: {fileID: 0}
   navMeshLimitDistance: 0
 --- !u!114 &1312097559
 MonoBehaviour:
@@ -1645,23 +1624,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enableTeleport: 1
   controller: {fileID: 0}
+  pointerOriginTransform: {fileID: 0}
   pointerMaterial: {fileID: 0}
   pointerHitColor: {r: 0, g: 0.5, b: 0, a: 1}
   pointerMissColor: {r: 0.8, g: 0, b: 0, a: 1}
-  showPlayAreaCursor: 0
-  playAreaCursorDimensions: {x: 0, y: 0}
-  handlePlayAreaCursorCollisions: 0
-  ignoreTargetWithTagOrClass: 
-  pointerVisibility: 0
   holdButtonToActivate: 1
+  interactWithObjects: 0
+  grabToPointerTip: 0
   activateDelay: 0
+  pointerVisibility: 0
+  layersToIgnore:
+    serializedVersion: 2
+    m_Bits: 4
   pointerThickness: 0.002
   pointerLength: 100
   showPointerTip: 1
   customPointerCursor: {fileID: 0}
-  layersToIgnore:
-    serializedVersion: 2
-    m_Bits: 4
+  pointerCursorMatchTargetNormal: 0
+  pointerCursorRescaledAlongDistance: 0
 --- !u!114 &1312097561
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1673,8 +1653,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65eb64f0f2fd6d64faddbcf5d7d3bdbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideControllerOnUse: 0
-  hideControllerDelay: 0
 --- !u!114 &1312097562
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1686,9 +1664,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64e104da36bd3b04b90c6ae969ac66dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideControllerOnTouch: 0
-  hideControllerDelay: 0
-  globalTouchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   customRigidbodyObject: {fileID: 0}
 --- !u!114 &1312097563
 MonoBehaviour:
@@ -1701,6 +1676,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d45c8d32f1d960d4498790bb3961fc52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  modelElementPaths:
+    bodyModelPath: 
+    triggerModelPath: 
+    leftGripModelPath: 
+    rightGripModelPath: 
+    touchpadModelPath: 
+    appMenuModelPath: 
+    systemMenuModelPath: 
+  elementHighlighterOverrides:
+    body: {fileID: 0}
+    trigger: {fileID: 0}
+    gripLeft: {fileID: 0}
+    gripRight: {fileID: 0}
+    touchpad: {fileID: 0}
+    appMenu: {fileID: 0}
+    systemMenu: {fileID: 0}
 --- !u!114 &1312097564
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1719,6 +1710,7 @@ MonoBehaviour:
   uiClickButton: 3
   menuToggleButton: 7
   axisFidelity: 1
+  triggerClickThreshold: 1
   triggerPressed: 0
   triggerTouched: 0
   triggerHairlinePressed: 0
@@ -1759,23 +1751,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enableTeleport: 1
   controller: {fileID: 0}
+  pointerOriginTransform: {fileID: 0}
   pointerMaterial: {fileID: 0}
   pointerHitColor: {r: 0, g: 0.5, b: 0, a: 1}
   pointerMissColor: {r: 0.8, g: 0, b: 0, a: 1}
-  showPlayAreaCursor: 0
-  playAreaCursorDimensions: {x: 0, y: 0}
-  handlePlayAreaCursorCollisions: 0
-  ignoreTargetWithTagOrClass: 
-  pointerVisibility: 0
   holdButtonToActivate: 1
+  interactWithObjects: 0
+  grabToPointerTip: 0
   activateDelay: 0
+  pointerVisibility: 0
+  layersToIgnore:
+    serializedVersion: 2
+    m_Bits: 4
   pointerThickness: 0.002
   pointerLength: 100
   showPointerTip: 1
   customPointerCursor: {fileID: 0}
-  layersToIgnore:
-    serializedVersion: 2
-    m_Bits: 4
+  pointerCursorMatchTargetNormal: 0
+  pointerCursorRescaledAlongDistance: 0
 --- !u!114 &1312097567
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1787,8 +1780,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65eb64f0f2fd6d64faddbcf5d7d3bdbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideControllerOnUse: 0
-  hideControllerDelay: 0
 --- !u!114 &1312097568
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1800,9 +1791,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64e104da36bd3b04b90c6ae969ac66dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideControllerOnTouch: 0
-  hideControllerDelay: 0
-  globalTouchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   customRigidbodyObject: {fileID: 0}
 --- !u!114 &1312097569
 MonoBehaviour:
@@ -1815,6 +1803,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d45c8d32f1d960d4498790bb3961fc52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  modelElementPaths:
+    bodyModelPath: 
+    triggerModelPath: 
+    leftGripModelPath: 
+    rightGripModelPath: 
+    touchpadModelPath: 
+    appMenuModelPath: 
+    systemMenuModelPath: 
+  elementHighlighterOverrides:
+    body: {fileID: 0}
+    trigger: {fileID: 0}
+    gripLeft: {fileID: 0}
+    gripRight: {fileID: 0}
+    touchpad: {fileID: 0}
+    appMenu: {fileID: 0}
+    systemMenu: {fileID: 0}
 --- !u!114 &1312097570
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1833,6 +1837,7 @@ MonoBehaviour:
   uiClickButton: 3
   menuToggleButton: 7
   axisFidelity: 1
+  triggerClickThreshold: 1
   triggerPressed: 0
   triggerTouched: 0
   triggerHairlinePressed: 0
@@ -1939,34 +1944,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7540575af55528e45a58556fc246738f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  highlightOnTouch: 0
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
-  rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
-  hideControllerOnTouch: 0
   isGrabbable: 0
-  isDroppable: 1
-  isSwappable: 1
   holdButtonToGrab: 0
-  rumbleOnGrab: {x: 0, y: 0}
+  stayGrabbedOnTeleport: 1
+  validDrop: 1
+  grabOverrideButton: 8
   allowedGrabControllers: 0
-  precisionSnap: 0
-  rightSnapHandle: {fileID: 0}
-  leftSnapHandle: {fileID: 0}
-  hideControllerOnGrab: 0
-  grabAttachMechanic: 0
-  detachThreshold: 500
-  springJointStrength: 500
-  springJointDamper: 50
-  throwMultiplier: 1
-  onGrabCollisionDelay: 0
+  grabAttachMechanicScript: {fileID: 0}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 1
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 0
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 1
-  rumbleOnUse: {x: 0, y: 0}
+  useOverrideButton: 8
   allowedUseControllers: 0
-  hideControllerOnUse: 0
+  usingState: 0
   shape: 0
 --- !u!1 &1741874944
 GameObject:
@@ -2082,34 +2076,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d63834c1123bfa40a54a6aa8aa563d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  highlightOnTouch: 0
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
-  rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
-  hideControllerOnTouch: 0
   isGrabbable: 0
-  isDroppable: 1
-  isSwappable: 1
   holdButtonToGrab: 0
-  rumbleOnGrab: {x: 0, y: 0}
+  stayGrabbedOnTeleport: 1
+  validDrop: 1
+  grabOverrideButton: 8
   allowedGrabControllers: 0
-  precisionSnap: 0
-  rightSnapHandle: {fileID: 0}
-  leftSnapHandle: {fileID: 0}
-  hideControllerOnGrab: 0
-  grabAttachMechanic: 0
-  detachThreshold: 500
-  springJointStrength: 500
-  springJointDamper: 50
-  throwMultiplier: 1
-  onGrabCollisionDelay: 0
+  grabAttachMechanicScript: {fileID: 0}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 0
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 0
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 1
-  rumbleOnUse: {x: 0, y: 0}
+  useOverrideButton: 8
   allowedUseControllers: 0
-  hideControllerOnUse: 0
+  usingState: 0
 --- !u!23 &1844990885
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -2343,34 +2326,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d72dbb476f681bb4fb0837faa838031a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  highlightOnTouch: 0
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
-  rumbleOnTouch: {x: 0, y: 0}
   allowedTouchControllers: 0
-  hideControllerOnTouch: 0
   isGrabbable: 0
-  isDroppable: 1
-  isSwappable: 1
   holdButtonToGrab: 0
-  rumbleOnGrab: {x: 0, y: 0}
+  stayGrabbedOnTeleport: 1
+  validDrop: 1
+  grabOverrideButton: 8
   allowedGrabControllers: 0
-  precisionSnap: 0
-  rightSnapHandle: {fileID: 0}
-  leftSnapHandle: {fileID: 0}
-  hideControllerOnGrab: 0
-  grabAttachMechanic: 0
-  detachThreshold: 500
-  springJointStrength: 500
-  springJointDamper: 50
-  throwMultiplier: 1
-  onGrabCollisionDelay: 0
+  grabAttachMechanicScript: {fileID: 0}
+  secondaryGrabActionScript: {fileID: 0}
   isUsable: 1
-  useOnlyIfGrabbed: 0
   holdButtonToUse: 0
+  useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 1
-  rumbleOnUse: {x: 0, y: 0}
+  useOverrideButton: 8
   allowedUseControllers: 0
-  hideControllerOnUse: 0
+  usingState: 0
   newMenuColor: {r: 0, g: 0, b: 1, a: 1}
 --- !u!23 &2128396827
 MeshRenderer:

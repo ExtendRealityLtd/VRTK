@@ -91,16 +91,22 @@ namespace VRTK
         {
             VRTK_ObjectCache.registeredHeadsetCollider = this;
             headset = VRTK_DeviceFinder.HeadsetTransform();
-            headsetColliding = false;
-            VRTK_PlayerObject.SetPlayerObject(headset.gameObject, VRTK_PlayerObject.ObjectTypes.Headset);
-            SetupHeadset();
+            if (headset)
+            {
+                headsetColliding = false;
+                VRTK_PlayerObject.SetPlayerObject(headset.gameObject, VRTK_PlayerObject.ObjectTypes.Headset);
+                SetupHeadset();
+            }
         }
 
         private void OnDisable()
         {
-            headsetColliderScript.EndCollision(collidingWith);
-            VRTK_ObjectCache.registeredHeadsetCollider = null;
-            TearDownHeadset();
+            if (headset)
+            {
+                headsetColliderScript.EndCollision(collidingWith);
+                VRTK_ObjectCache.registeredHeadsetCollider = null;
+                TearDownHeadset();
+            }
         }
 
         private void SetupHeadset()
