@@ -345,7 +345,8 @@ namespace VRTK
                 rb.angularVelocity = angularVelocity;
             }
 
-            rb.velocity = rb.GetPointVelocity(rb.position + (rb.position - transform.position));
+            Vector3 collisionCenter = rb.GetComponent<Collider>().bounds.center;
+            rb.velocity = rb.GetPointVelocity(collisionCenter + (collisionCenter - transform.position));
         }
 
         private bool GrabInteractedObject()
