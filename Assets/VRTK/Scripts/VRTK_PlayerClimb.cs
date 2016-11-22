@@ -49,6 +49,7 @@ namespace VRTK
         private Transform controllerTransform;
         private Vector3 startControllerPosition;
         private Vector3 startPosition;
+        private Vector3 startGrabPosition;
         private Vector3 lastGoodHeadsetPosition;
         private bool headsetColliding = false;
         private bool isClimbing = false;
@@ -184,6 +185,7 @@ namespace VRTK
                 controllerTransform = ((VRTK_InteractGrab)sender).transform;
                 startControllerPosition = GetPosition(controllerTransform);
                 startPosition = transform.position;
+                startGrabPosition = climbingObject.transform.position;
             }
         }
 
@@ -294,7 +296,7 @@ namespace VRTK
         {
             if (isClimbing)
             {
-                transform.position = startPosition - (GetPosition(controllerTransform) - startControllerPosition);
+                transform.position = startPosition - (startGrabPosition - climbingObject.transform.position) - (GetPosition(controllerTransform) - startControllerPosition);
             }
 
             if (!headsetColliding)
