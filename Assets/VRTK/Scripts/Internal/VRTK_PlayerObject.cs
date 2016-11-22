@@ -12,6 +12,7 @@ namespace VRTK
     {
         public enum ObjectTypes
         {
+            Null,
             CameraRig,
             Headset,
             Controller,
@@ -34,6 +35,18 @@ namespace VRTK
                 var playerObject = obj.AddComponent<VRTK_PlayerObject>();
                 playerObject.objectType = objType;
             }
+        }
+
+        /// <summary>
+        /// The IsPlayerObject method determines if the given game object is a player object and can also check if it's of a specific type.
+        /// </summary>
+        /// <param name="obj">The GameObjet to check if it's a player object.</param>
+        /// <param name="ofType">An optional ObjectType to check if the given GameObject is of a specific player object.</param>
+        /// <returns>Returns true if the object is a player object with the optional given type.</returns>
+        public static bool IsPlayerObject(GameObject obj, ObjectTypes ofType = ObjectTypes.Null)
+        {
+            var playerObject = obj.GetComponent<VRTK_PlayerObject>();
+            return (playerObject && (ofType == ObjectTypes.Null || (ofType == playerObject.objectType)));
         }
     }
 }

@@ -494,6 +494,7 @@ Adding the `VRTK_DestinationMarker_UnityEvents` component to `VRTK_DestinationMa
  * `Transform target` - The Transform of the collided destination object.
  * `RaycastHit raycastHit` - The optional RaycastHit generated from when the ray collided.
  * `Vector3 destinationPosition` - The world position of the destination marker.
+ * `bool forceDestinationPosition` - If true then the given destination position should not be altered by anything consuming the payload.
  * `bool enableTeleport` - Whether the destination set event should trigger teleport.
  * `uint controllerIndex` - The optional index of the controller emitting the beam.
 
@@ -802,6 +803,7 @@ Adding the `VRTK_BasicTeleport_UnityEvents` component to `VRTK_BasicTeleport` ob
  * `Transform target` - The Transform of the collided destination object.
  * `RaycastHit raycastHit` - The optional RaycastHit generated from when the ray collided.
  * `Vector3 destinationPosition` - The world position of the destination marker.
+ * `bool forceDestinationPosition` - If true then the given destination position should not be altered by anything consuming the payload.
  * `bool enableTeleport` - Whether the destination set event should trigger teleport.
  * `uint controllerIndex` - The optional index of the controller emitting the beam.
 
@@ -844,24 +846,6 @@ The ToggleTeleportEnabled method is used to determine whether the teleporter wil
 The height adjust teleporter extends the basic teleporter and allows for the y position of the `[CameraRig]` to be altered based on whether the teleport location is on top of another object.
 
 Like the basic teleporter the Height Adjust Teleport script is attached to the `[CameraRig]` prefab.
-
-### Inspector Parameters
-
- * **Play Space Falling:** Checks if the user steps off an object into a part of their play area that is not on the object then they are automatically teleported down to the nearest floor. The `Play Space Falling` option also works in the opposite way that if the user's headset is above an object then the user is teleported automatically on top of that object, which is useful for simulating climbing stairs without needing to use the pointer beam location. If this option is turned off then the user can hover in mid-air at the same y position of the object they are standing on.
- * **Play Space Fall Restriction:** An additional check to see if the play space fall should take place. If the selected restrictor is still over the current floor then the play space fall will not occur. Works well for being able to lean over ledges and look down. Only works for falling down not teleporting up.
- * **Use Gravity:** Allows for gravity based falling when the distance is greater than `Gravity Fall Height`.
- * **Gravity Fall Height:** Fall distance needed before gravity based falling can be triggered.
- * **Blink Y Threshold:** The `y` distance between the floor and the headset that must change before the fade transition is initiated. If the new user location is at a higher distance than the threshold then the headset blink transition will activate on teleport. If the new user location is within the threshold then no blink transition will happen, which is useful for walking up slopes, meshes and terrains where constant blinking would be annoying.
- * **Floor Height Tolerance:** The amount the `y` position needs to change by between the current floor `y` position and the previous floor `y` position before a change in floor height is considered to have occurred. A higher value here will mean that a `Drop To Floor` teleport event will be less likely to happen if the `y` of the floor beneath the user hasn't changed as much as the given threshold.
-
-### Class Variables
-
- * `public enum FallingRestrictors` - Options for testing if a play space fall is valid
-  * `No_Restriction` - Always play space fall when the headset is no longer over the current standing object.
-  * `Left_Controller` - Don't play space fall if the Left Controller is still over the current standing object even if the headset isn't.
-  * `Right_Controller` - Don't play space fall if the Right Controller is still over the current standing object even if the headset isn't.
-  * `Either_Controller` - Don't play space fall if Either Controller is still over the current standing object even if the headset isn't.
-  * `Both_Controllers` - Don't play space fall only if Both Controllers are still over the current standing object even if the headset isn't.
 
 ### Example
 
@@ -1030,13 +1014,11 @@ The GetSpeed method will return the current speed the player is moving at.
 
 ### Overview
 
-This class allows player movement based on grabbing of `VRTK_InteractableObject` objects that are tagged as `Climbable`. It should be attached to the `[CameraRig]` object. Because it works by grabbing, each controller should have a `VRTK_InteractGrab` and `VRTK_InteractTouch` component attached.
+The Player Climb allows player movement based on grabbing of `VRTK_InteractableObject` objects that have a `Climbable` grab attach script. Because it works by grabbing, each controller should have a `VRTK_InteractGrab` and `VRTK_InteractTouch` component attached.
 
 ### Inspector Parameters
 
  * **Use Player Scale:** Will scale movement up and down based on the player transform's scale.
- * **Use Gravity:** Will allow physics based falling when the user lets go of objects above ground.
- * **Safe Zone Teleport Offset:** An additional amount to move the player away from a wall if an ungrab teleport happens due to camera/object collisions.
 
 ### Class Events
 
@@ -3357,7 +3339,7 @@ A collection of scripts that provide the ability to deal with tracking the world
  * [Headset Collision Fade](#headset-collision-fade-vrtk_headsetcollisionfade)
  * [Headset Controller Aware](#headset-controller-aware-vrtk_headsetcontrolleraware)
  * [Hip Tracking](#hip-tracking-vrtk_hiptracking)
- * [Player Presence](#player-presence-vrtk_playerpresence)
+ * [Body Physics](#body-physics-vrtk_bodyphysics)
 
 ---
 
@@ -3621,47 +3603,113 @@ The Hip Tracking script is placed on an empty GameObject which will be positione
 
 ---
 
-## Player Presence (VRTK_PlayerPresence)
+## Body Physics (VRTK_BodyPhysics)
+ > extends [VRTK_DestinationMarker](#destination-marker-vrtk_destinationmarker)
 
 ### Overview
 
-The concept that the VR user has a physical in game presence which is accomplished by adding a collider and a rigidbody at the position the user is standing within their play area. This physical collider and rigidbody will prevent the user from ever being able to walk through walls or intersect other collidable objects. The height of the collider is determined by the height the user has the headset at, so if the user crouches then the collider shrinks with them, meaning it's possible to crouch and crawl under low ceilings.
+The body physics script deals with how a user's body in the scene reacts to world physics and how to handle drops.
+
+The body physics creates a rigidbody and collider for where the user is standing to allow physics interactions and prevent walking through walls.
+
+Upon actually moving in the play area, the rigidbody is set to kinematic to prevent the world from being pushed back in the user's view reducing sickness.
+
+The body physics script also deals with snapping a user to the nearest floor if they look over a ledge or walk up stairs then it will move the play area to simulate movement in the scene.
+
+To allow for peeking over a ledge and not falling, a fall restiction can happen by keeping a controller over the existing floor and the snap to the nearest floor will not happen until the controllers are also over the floor.
 
 ### Inspector Parameters
 
+ * **Enable Body Collisions:** If checked then the body collider and rigidbody will be used to check for rigidbody collisions.
+ * **Ignore Grabbed Collisions:** If this is checked then any items that are grabbed with the controller will not collide with the body collider. This is very useful if the user is required to grab and wield objects because if the collider was active they would bounce off the collider.
  * **Headset Y Offset:** The collider which is created for the user is set at a height from the user's headset position. If the collider is required to be lower to allow for room between the play area collider and the headset then this offset value will shorten the height of the generated collider.
- * **Ignore Grabbed Collisions:** If this is checked then any items that are grabbed with the controller will not collide with the player presence collider. This is very useful if the user is required to grab and wield objects because if the collider was active they would bounce off the collider.
- * **Reset Position On Collision:** If this is checked then if the Headset Collision script is present and a headset collision occurs, the CameraRig is moved back to the last good known standing position. This deals with any collision issues if a user stands up whilst moving through a crouched area as instead of them being able to clip into objects they are transported back to a position where they are able to stand.
- * **Falling Physics Only:** Only use physics when an explicit falling state is set.
+ * **Movement Threshold:** The amount of movement of the headset between the headset's current position and the current standing position to determine if the user is walking in play space and to ignore the body physics collisions if the movement delta is above this threshold.
+ * **Standing History Samples:** The maximum number of samples to collect of headset position before determining if the current standing position within the play space has changed.
+ * **Lean Y Threshold:** The `y` distance between the headset and the object being leaned over, if object being leaned over is taller than this threshold then the current standing position won't be updated.
+ * **Fall Restriction:** A check to see if the drop to nearest floor should take place. If the selected restrictor is still over the current floor then the drop to nearest floor will not occur. Works well for being able to lean over ledges and look down. Only works for falling down not teleporting up.
+ * **Gravity Fall Y Threshold:** When the `y` distance between the floor and the headset exceeds this distance and `Enable Body Collisions` is true then the rigidbody gravity will be used instead of teleport to drop to nearest floor.
+ * **Blink Y Threshold:** The `y` distance between the floor and the headset that must change before a fade transition is initiated. If the new user location is at a higher distance than the threshold then the headset blink transition will activate on teleport. If the new user location is within the threshold then no blink transition will happen, which is useful for walking up slopes, meshes and terrains to prevent constant blinking.
+ * **Floor Height Tolerance:** The amount the `y` position needs to change by between the current floor `y` position and the previous floor `y` position before a change in floor height is considered to have occurred. A higher value here will mean that a `Drop To Floor` will be less likely to happen if the `y` of the floor beneath the user hasn't changed as much as the given threshold.
+
+### Class Variables
+
+ * `public enum FallingRestrictors` - Options for testing if a play space fall is valid
+  * `No_Restriction` - Always drop to nearest floor when the headset is no longer over the current standing object.
+  * `Left_Controller` - Don't drop to nearest floor  if the Left Controller is still over the current standing object even if the headset isn't.
+  * `Right_Controller` - Don't drop to nearest floor  if the Right Controller is still over the current standing object even if the headset isn't.
+  * `Either_Controller` - Don't drop to nearest floor  if Either Controller is still over the current standing object even if the headset isn't.
+  * `Both_Controllers` - Don't drop to nearest floor only if Both Controllers are still over the current standing object even if the headset isn't.
 
 ### Class Events
 
- * `PresenceFallStarted` - Emitted when a gravity based fall has started.
- * `PresenceFallEnded` - Emitted when a gravity based fall has ended.
+ * `StartFalling` - Emitted when a fall begins.
+ * `StopFalling` - Emitted when a fall ends.
+ * `StartMoving` - Emitted when movement in the play area begins.
+ * `StopMoving` - Emitted when movement in the play area ends
+ * `StartColliding` - Emitted when the body collider starts colliding with another game object
+ * `StopColliding` - Emitted when the body collider stops colliding with another game object
 
 ### Unity Events
 
-Adding the `VRTK_PlayerPresence_UnityEvents` component to `VRTK_PlayerPresence` object allows access to `UnityEvents` that will react identically to the Class Events.
+Adding the `VRTK_BodyPhysics_UnityEvents` component to `VRTK_BodyPhysics` object allows access to `UnityEvents` that will react identically to the Class Events.
 
- * `OnPresenceFallStarted` - Emits the PresenceFallStarted class event.
- * `OnPresenceFallEnded` - Emits the PresenceFallEnded class event.
+ * `OnStartFalling` - Emits the StartFalling class event.
+ * `OnStopFalling` - Emits the StopFalling class event.
+ * `OnStartMoving` - Emits the StartMoving class event.
+ * `OnStopMoving` - Emits the StopMoving class event.
+ * `OnStartColliding` - Emits the StartColliding class event.
+ * `OnStopColliding` - Emits the StopColliding class event.
 
 ### Event Payload
 
- * `float fallDistance` - The total height the player has dropped from a gravity based fall.
+ * `GameObject target` - The target the event is dealing with.
 
 ### Class Methods
 
-#### SetFallingPhysicsOnlyParams/1
+#### ArePhysicsEnabled/0
 
-  > `public void SetFallingPhysicsOnlyParams(bool falling)`
+  > `public bool ArePhysicsEnabled()`
 
   * Parameters
-   * `bool falling` - Toggle the physics falling on or off.
+   * _none_
+  * Returns
+   * `bool` - Returns true if the body physics will interact with other scene physics objects and false if the body physics will ignore other scene physics objects.
+
+The ArePhysicsEnabled method determines whether the body physics are set to interact with other scene physics objects.
+
+#### ApplyBodyVelocity/2
+
+  > `public void ApplyBodyVelocity(Vector3 velocity, bool forcePhysicsOn = false)`
+
+  * Parameters
+   * `Vector3 velocity` - The velocity to apply.
+   * `bool forcePhysicsOn` - If true will toggle the body collision physics back on if enable body collisions is true.
   * Returns
    * _none_
 
-The SetFallingPhysicsOnlyParams method will toggle the `fallingPhysicsOnly` class state as well as enable or disable physics if needed.
+The ApplyBodyVelocity method applies a given velocity to the rigidbody attached to the body physics.
+
+#### ToggleOnGround/1
+
+  > `public void ToggleOnGround(bool state)`
+
+  * Parameters
+   * `bool state` - If true then body physics are set to being on the ground.
+  * Returns
+   * _none_
+
+The ToggleOnGround method sets whether the body is considered on the ground or not.
+
+#### TogglePreventSnapToFloor/1
+
+  > `public void TogglePreventSnapToFloor(bool state)`
+
+  * Parameters
+   * `bool state` - If true the the snap to floor mechanic will not execute.
+  * Returns
+   * _none_
+
+The PreventSnapToFloor method sets whether the snap to floor mechanic should be used.
 
 #### IsFalling/0
 
@@ -3670,31 +3718,42 @@ The SetFallingPhysicsOnlyParams method will toggle the `fallingPhysicsOnly` clas
   * Parameters
    * _none_
   * Returns
-   * `bool` - Returns if the player is in a physics falling state or not.
+   * `bool` - Returns true if the body is currently falling via gravity or via teleport.
 
-The IsFalling method will return if the class is using physics based falling and is currently in a falling state.
+The IsFalling method returns the falling state of the body.
 
-#### StartPhysicsFall/1
+#### IsMoving/0
 
-  > `public void StartPhysicsFall(Vector3 velocity)`
-
-  * Parameters
-   * `Vector3 velocity` - The starting velocity to use at the start of a fall.
-  * Returns
-   * _none_
-
-The StartPhysicsFall method initializes the physics based fall state, enable physics and send out the `PresenceFallStarted` event.
-
-#### StopPhysicsFall/0
-
-  > `public void StopPhysicsFall()`
+  > `public bool IsMoving()`
 
   * Parameters
    * _none_
   * Returns
-   * _none_
+   * `bool` - Returns true if the user is currently walking around their play area space.
 
-The StopPhysicsFall method ends the physics based fall state, disables physics and send out the `PresenceFallEnded` event.
+The IsMoving method returns the moving within play area state of the body.
+
+#### IsLeaning/0
+
+  > `public bool IsLeaning()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `bool` - Returns true if the user is considered to be leaning over an object.
+
+The IsLeaning method returns the leaning state of the user.
+
+#### OnGround/0
+
+  > `public bool OnGround()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `bool` - Returns true if the play area is on the ground and false if the play area is in the air.
+
+The OnGround method returns whether the user is currently standing on the ground or not.
 
 ### Example
 

@@ -82,9 +82,9 @@ namespace VRTK
             minDistanceForNormalLerp = minSpeedMps * normalLerpTime; // default values give 5.0f
         }
 
-        protected override void SetNewPosition(Vector3 position, Transform target)
+        protected override void SetNewPosition(Vector3 position, Transform target, bool forceDestinationPosition)
         {
-            Vector3 targetPosition = CheckTerrainCollision(position, target);
+            Vector3 targetPosition = CheckTerrainCollision(position, target, forceDestinationPosition);
             StartCoroutine(lerpToPosition(targetPosition, target));
         }
 
@@ -94,7 +94,7 @@ namespace VRTK
             bool gameObjectInTheWay = false;
 
             // Find the objects we will be dashing through and broadcast them via events
-            Vector3 eyeCameraPosition = eyeCamera.transform.position;
+            Vector3 eyeCameraPosition = headset.transform.position;
             Vector3 eyeCameraPositionOnGround = new Vector3(eyeCameraPosition.x, transform.position.y, eyeCameraPosition.z);
             Vector3 eyeCameraRelativeToRig = eyeCameraPosition - transform.position;
             Vector3 targetEyeCameraPosition = targetPosition + eyeCameraRelativeToRig;

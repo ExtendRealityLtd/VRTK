@@ -3,6 +3,7 @@ namespace VRTK
 {
     using UnityEngine;
     using System.Collections;
+    using System.Collections.Generic;
 
     /// <summary>
     /// Event Payload
@@ -45,7 +46,7 @@ namespace VRTK
         /// </summary>
         public event TeleportEventHandler Teleported;
 
-        protected Transform eyeCamera;
+        protected Transform headset;
         protected bool adjustYForTerrain = false;
         protected bool enableTeleport = true;
 
@@ -89,10 +90,32 @@ namespace VRTK
             enableTeleport = state;
         }
 
+        public virtual bool ValidLocation(Transform target, Vector3 destinationPosition)
+        {
+            //If the target is one of the player objects or a UI Canvas then it's never a valid location
+            if (target.GetComponent<VRTK_PlayerObject>() || target.GetComponent<VRTK_UIGraphicRaycaster>())
+            {
+                return false;
+            }
+
+            bool validNavMeshLocation = false;
+            if (target)
+            {
+                NavMeshHit hit;
+                validNavMeshLocation = NavMesh.SamplePosition(destinationPosition, out hit, navMeshLimitDistance, NavMesh.AllAreas);
+            }
+            if (navMeshLimitDistance == 0f)
+            {
+                validNavMeshLocation = true;
+            }
+
+            return (validNavMeshLocation && target && !(VRTK_TagOrScriptPolicyList.TagOrScriptCheck(target.gameObject, targetTagOrScriptListPolicy, ignoreTargetWithTagOrClass)));
+        }
+
         protected virtual void Awake()
         {
             VRTK_PlayerObject.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.CameraRig);
-            eyeCamera = VRTK_SharedMethods.AddCameraFade();
+            headset = VRTK_SharedMethods.AddCameraFade();
         }
 
         protected virtual void OnEnable()
@@ -128,30 +151,11 @@ namespace VRTK
         protected virtual void Blink(float transitionSpeed)
         {
             fadeInTime = transitionSpeed;
-            VRTK_SDK_Bridge.HeadsetFade(Color.black, 0);
+            if (transitionSpeed > 0f)
+            {
+                VRTK_SDK_Bridge.HeadsetFade(Color.black, 0);
+            }
             Invoke("ReleaseBlink", blinkPause);
-        }
-
-        protected virtual bool ValidLocation(Transform target, Vector3 destinationPosition)
-        {
-            //If the target is one of the player objects or a UI Canvas then it's never a valid location
-            if (target.GetComponent<VRTK_PlayerObject>() || target.GetComponent<VRTK_UIGraphicRaycaster>())
-            {
-                return false;
-            }
-
-            bool validNavMeshLocation = false;
-            if (target)
-            {
-                NavMeshHit hit;
-                validNavMeshLocation = NavMesh.SamplePosition(destinationPosition, out hit, navMeshLimitDistance, NavMesh.AllAreas);
-            }
-            if (navMeshLimitDistance == 0f)
-            {
-                validNavMeshLocation = true;
-            }
-
-            return (validNavMeshLocation && target && !(VRTK_TagOrScriptPolicyList.TagOrScriptCheck(target.gameObject, targetTagOrScriptListPolicy, ignoreTargetWithTagOrClass)));
         }
 
         protected virtual void DoTeleport(object sender, DestinationMarkerEventArgs e)
@@ -159,33 +163,39 @@ namespace VRTK
             if (enableTeleport && ValidLocation(e.target, e.destinationPosition) && e.enableTeleport)
             {
                 OnTeleporting(sender, e);
-                Vector3 newPosition = GetNewPosition(e.destinationPosition, e.target);
+                Vector3 newPosition = GetNewPosition(e.destinationPosition, e.target, e.forceDestinationPosition);
                 CalculateBlinkDelay(blinkTransitionSpeed, newPosition);
                 Blink(blinkTransitionSpeed);
-                SetNewPosition(newPosition, e.target);
+                SetNewPosition(newPosition, e.target, e.forceDestinationPosition);
                 OnTeleported(sender, e);
             }
         }
 
-        protected virtual void SetNewPosition(Vector3 position, Transform target)
+        protected virtual void SetNewPosition(Vector3 position, Transform target, bool forceDestinationPosition)
         {
-            transform.position = CheckTerrainCollision(position, target);
+            transform.position = CheckTerrainCollision(position, target, forceDestinationPosition);
         }
 
-        protected virtual Vector3 GetNewPosition(Vector3 tipPosition, Transform target)
+        protected virtual Vector3 GetNewPosition(Vector3 tipPosition, Transform target, bool returnOriginalPosition)
         {
-            float newX = (headsetPositionCompensation ? (tipPosition.x - (eyeCamera.position.x - transform.position.x)) : tipPosition.x);
+            if (returnOriginalPosition)
+            {
+                return tipPosition;
+            }
+
+            float newX = (headsetPositionCompensation ? (tipPosition.x - (headset.position.x - transform.position.x)) : tipPosition.x);
             float newY = transform.position.y;
-            float newZ = (headsetPositionCompensation ? (tipPosition.z - (eyeCamera.position.z - transform.position.z)) : tipPosition.z);
+            float newZ = (headsetPositionCompensation ? (tipPosition.z - (headset.position.z - transform.position.z)) : tipPosition.z);
 
             return new Vector3(newX, newY, newZ);
         }
 
-        protected Vector3 CheckTerrainCollision(Vector3 position, Transform target)
+        protected virtual Vector3 CheckTerrainCollision(Vector3 position, Transform target, bool useHeadsetForPosition)
         {
             if (adjustYForTerrain && target.GetComponent<Terrain>())
             {
-                var terrainHeight = Terrain.activeTerrain.SampleHeight(position);
+                var checkPosition = (useHeadsetForPosition ? new Vector3(headset.position.x, position.y, headset.position.z) : position);
+                var terrainHeight = Terrain.activeTerrain.SampleHeight(checkPosition);
                 position.y = (terrainHeight > position.y ? position.y : terrainHeight);
             }
             return position;

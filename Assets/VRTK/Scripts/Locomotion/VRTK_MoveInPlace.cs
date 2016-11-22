@@ -13,7 +13,7 @@ namespace VRTK
     /// <example>
     /// `VRTK/Examples/042_CameraRig_MoveInPlace` demonstrates how the user can move and traverse colliders by either swinging the controllers in a walking fashion or by running on the spot utilisng the head bob for movement.
     /// </example>
-    [RequireComponent(typeof(VRTK_PlayerPresence))]
+    [RequireComponent(typeof(VRTK_BodyPhysics))]
     public class VRTK_MoveInPlace : MonoBehaviour
     {
         /// <summary>
@@ -146,13 +146,13 @@ namespace VRTK
             controlOptions = givenControlOptions;
             trackedObjects.Clear();
 
-            if (controlOptions.Equals(ControlOptions.HeadsetAndControllers) || controlOptions.Equals(ControlOptions.ControllersOnly))
+            if (controllerLeftHand && controllerRightHand && (controlOptions.Equals(ControlOptions.HeadsetAndControllers) || controlOptions.Equals(ControlOptions.ControllersOnly)))
             {
                 trackedObjects.Add(controllerLeftHand.transform);
                 trackedObjects.Add(controllerRightHand.transform);
             }
 
-            if (controlOptions.Equals(ControlOptions.HeadsetAndControllers) || controlOptions.Equals(ControlOptions.HeadsetOnly))
+            if (headset && (controlOptions.Equals(ControlOptions.HeadsetAndControllers) || controlOptions.Equals(ControlOptions.HeadsetOnly)))
             {
                 trackedObjects.Add(headset.transform);
             }
@@ -361,7 +361,7 @@ namespace VRTK
                 newRotation = controllerRightHand.transform.rotation;
             }
             // No controllers!
-            else 
+            else
             {
                 newRotation = Quaternion.identity;
             }
@@ -370,13 +370,13 @@ namespace VRTK
         }
 
         // Returns the average of two Quaternions
-        private Quaternion AverageRotation(Quaternion rot1, Quaternion rot2) 
+        private Quaternion AverageRotation(Quaternion rot1, Quaternion rot2)
         {
             return Quaternion.Slerp(rot1, rot2, 0.5f);
         }
 
         // Returns a Vector3 with only the X and Z components (Y is 0'd)
-        private static Vector3 Vector3XZOnly(Vector3 vec) 
+        private static Vector3 Vector3XZOnly(Vector3 vec)
         {
             return new Vector3(vec.x, 0f, vec.z);
         }
