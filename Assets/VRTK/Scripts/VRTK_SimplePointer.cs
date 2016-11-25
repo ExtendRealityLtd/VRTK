@@ -88,6 +88,16 @@ namespace VRTK
             }
         }
 
+        protected override void UpdateObjectInteractor()
+        {
+            base.UpdateObjectInteractor();
+            //if the object interactor is too far from the pointer tip then set it to the pointer tip position to prevent glitching.
+            if (Vector3.Distance(objectInteractor.transform.position, pointerTip.transform.position) > 0)
+            {
+                objectInteractor.transform.position = pointerTip.transform.position;
+            }
+        }
+
         protected override void InitPointer()
         {
             pointerHolder = new GameObject(string.Format("[{0}]WorldPointer_SimplePointer_Holder", gameObject.name));
@@ -219,7 +229,7 @@ namespace VRTK
                 actualLength = pointerContactDistance;
             }
 
-            return actualLength;
+            return OverrideBeamLength(actualLength);
         }
     }
 }

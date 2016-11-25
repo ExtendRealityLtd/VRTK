@@ -33,7 +33,7 @@ namespace VRTK
         public string ignoreTargetWithTagOrClass;
         [Tooltip("A specified VRTK_TagOrScriptPolicyList to use to determine whether destination targets will be acted upon by the Teleporter. If a list is provided then the 'Ignore Target With Tag Or Class' parameter will be ignored.")]
         public VRTK_TagOrScriptPolicyList targetTagOrScriptListPolicy;
-        [Tooltip("The max distance the nav mesh edge can be from the teleport destination to be considered valid. If a value of `0` is given then the nav mesh restriction will be ignored.")]
+        [Tooltip("The max distance the teleport destination can be outside the nav mesh to be considered valid. If a value of `0` is given then the nav mesh restrictions will be ignored.")]
         public float navMeshLimitDistance = 0f;
 
         /// <summary>
@@ -144,7 +144,7 @@ namespace VRTK
             if (target)
             {
                 NavMeshHit hit;
-                validNavMeshLocation = NavMesh.SamplePosition(destinationPosition, out hit, 0.1f, NavMesh.AllAreas);
+                validNavMeshLocation = NavMesh.SamplePosition(destinationPosition, out hit, navMeshLimitDistance, NavMesh.AllAreas);
             }
             if (navMeshLimitDistance == 0f)
             {

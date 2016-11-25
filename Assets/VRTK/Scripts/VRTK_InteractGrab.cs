@@ -80,7 +80,8 @@ namespace VRTK
         /// <summary>
         /// The ForceRelease method will force the controller to stop grabbing the currently grabbed object.
         /// </summary>
-        public void ForceRelease()
+        /// <param name="applyGrabbingObjectVelocity">If this is true then upon releasing the object any velocity on the grabbing object will be applied to the object to essentiall throw it. Defaults to `false`.</param>
+        public void ForceRelease(bool applyGrabbingObjectVelocity = false)
         {
             if (grabbedObject != null && grabbedObject.GetComponent<VRTK_InteractableObject>() && grabbedObject.GetComponent<VRTK_InteractableObject>().AttachIsUnthrowableObject())
             {
@@ -88,7 +89,7 @@ namespace VRTK
             }
             else
             {
-                UngrabInteractedObject(false);
+                UngrabInteractedObject(applyGrabbingObjectVelocity);
             }
         }
 

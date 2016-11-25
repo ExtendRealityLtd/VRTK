@@ -17,6 +17,8 @@ namespace VRTK.SecondaryControllerGrabActions
         public bool lockYAxis = false;
         [Tooltip("If checked the current Z Axis of the object won't be scaled")]
         public bool lockZAxis = false;
+        [Tooltip("If checked all the axes will be scaled together (unless locked)")]
+        public bool uniformScaling = false;
 
         private Vector3 initialScale;
 
@@ -41,28 +43,25 @@ namespace VRTK.SecondaryControllerGrabActions
         {
             if (initialised)
             {
-                NonUniformScale();
+                if (uniformScaling)
+                {
+                    UniformScale();
+                }
+                else
+                {
+                    NonUniformScale();
+                }
             }
         }
 
-        private void NonUniformScale()
+        private void ApplyScale(Vector3 newScale)
         {
             var existingScale = grabbedObject.transform.localScale;
-            var initialRotatedPosition = grabbedObject.transform.rotation * grabbedObject.transform.position;
-            var initialSecondGrabRotatedPosition = grabbedObject.transform.rotation * secondaryInitialGrabPoint.position;
-            var currentSecondGrabRotatedPosition = grabbedObject.transform.rotation * secondaryGrabbingObject.transform.position;
+            Vector3 rotatedScale = initialScale + newScale;
 
-            var newScaleX = CalculateAxisScale(initialRotatedPosition.x, initialSecondGrabRotatedPosition.x, currentSecondGrabRotatedPosition.x);
-            var newScaleY = CalculateAxisScale(initialRotatedPosition.y, initialSecondGrabRotatedPosition.y, currentSecondGrabRotatedPosition.y);
-            var newScaleZ = CalculateAxisScale(initialRotatedPosition.z, initialSecondGrabRotatedPosition.z, currentSecondGrabRotatedPosition.z);
-
-            var newScale = new Vector3(newScaleX, newScaleY, newScaleZ);
-
-            var rotatedScale = initialScale + newScale;
-
-            var finalScaleX = (lockXAxis ? existingScale.x : rotatedScale.x);
-            var finalScaleY = (lockYAxis ? existingScale.y : rotatedScale.y);
-            var finalScaleZ = (lockZAxis ? existingScale.z : rotatedScale.z);
+            float finalScaleX = (lockXAxis ? existingScale.x : rotatedScale.x);
+            float finalScaleY = (lockYAxis ? existingScale.y : rotatedScale.y);
+            float finalScaleZ = (lockZAxis ? existingScale.z : rotatedScale.z);
             var finalScale = new Vector3(finalScaleX, finalScaleY, finalScaleZ);
 
             if (finalScaleX > 0 && finalScaleY > 0 && finalScaleZ > 0)
@@ -71,9 +70,37 @@ namespace VRTK.SecondaryControllerGrabActions
             }
         }
 
+        private void NonUniformScale()
+        {
+            Vector3 initialRotatedPosition = grabbedObject.transform.rotation * grabbedObject.transform.position;
+            Vector3 initialSecondGrabRotatedPosition = grabbedObject.transform.rotation * secondaryInitialGrabPoint.position;
+            Vector3 currentSecondGrabRotatedPosition = grabbedObject.transform.rotation * secondaryGrabbingObject.transform.position;
+
+            float newScaleX = CalculateAxisScale(initialRotatedPosition.x, initialSecondGrabRotatedPosition.x, currentSecondGrabRotatedPosition.x);
+            float newScaleY = CalculateAxisScale(initialRotatedPosition.y, initialSecondGrabRotatedPosition.y, currentSecondGrabRotatedPosition.y);
+            float newScaleZ = CalculateAxisScale(initialRotatedPosition.z, initialSecondGrabRotatedPosition.z, currentSecondGrabRotatedPosition.z);
+
+            var newScale = new Vector3(newScaleX, newScaleY, newScaleZ);
+            ApplyScale(newScale);
+        }
+
+        private void UniformScale()
+        {
+            Vector3 initialRotatedPosition = grabbedObject.transform.rotation * grabbedObject.transform.position;
+            Vector3 initialSecondGrabRotatedPosition = grabbedObject.transform.rotation * secondaryInitialGrabPoint.position;
+            Vector3 currentSecondGrabRotatedPosition = grabbedObject.transform.rotation * secondaryGrabbingObject.transform.position;
+
+            float initialDistance = Vector3.Distance(initialSecondGrabRotatedPosition, initialRotatedPosition);
+            float distance = Vector3.Distance(currentSecondGrabRotatedPosition, initialRotatedPosition);
+            float deltaDistance = distance - initialDistance;
+
+            Vector3 newScale = new Vector3(deltaDistance, deltaDistance, deltaDistance);
+            ApplyScale(newScale);
+        }
+
         private float CalculateAxisScale(float centerPosition, float initialPosition, float currentPosition)
         {
-            var distance = currentPosition - initialPosition;
+            float distance = currentPosition - initialPosition;
             distance = (centerPosition < initialPosition ? distance : -distance);
             return distance;
         }

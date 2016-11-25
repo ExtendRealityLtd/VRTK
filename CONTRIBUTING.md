@@ -130,8 +130,8 @@ All pull request commit messages are automatically checked using
 issues with your commit message and give you an opportunity to rectify
 any issues.
 
-The commit message lines should never exceed 72 lines and should be
-entered in the following format:
+The commit message lines should never exceed 72 characters and should
+be entered in the following format:
 
 ```
 <type>(<scope>): <subject>

@@ -545,6 +545,7 @@ The play area collider does not work well with terrains as they are uneven and c
  * **Pointer Material:** The material to use on the rendered version of the pointer. If no material is selected then the default `WorldPointer` material will be used.
  * **Hold Button To Activate:** If this is checked then the pointer beam will be activated on first press of the pointer alias button and will stay active until the pointer alias button is pressed again. The destination set event is emitted when the beam is deactivated on the second button press.
  * **Interact With Objects:** If this is checked then the pointer will be an extension of the controller and able to interact with Interactable Objects.
+ * **Grab To Pointer Tip:** If `Interact With Objects` is checked and this is checked then when an object is grabbed with the pointer touching it, the object will attach to the pointer tip and not snap to the controller.
  * **Activate Delay:** The time in seconds to delay the pointer beam being able to be active again. Useful for preventing constant teleportation.
  * **Pointer Visibility:** Determines when the pointer beam should be displayed.
  * **Layers To Ignore:** The layers to ignore when raycasting.
@@ -937,6 +938,7 @@ The Axis Scale Grab Action provides a mechanism to scale objects when they are g
  * **Lock X Axis:** If checked the current X Axis of the object won't be scaled
  * **Lock Y Axis:** If checked the current Y Axis of the object won't be scaled
  * **Lock Z Axis:** If checked the current Z Axis of the object won't be scaled
+ * **Uniform Scaling:** If checked all the axes will be scaled together (unless locked)
 
 ### Class Methods
 
@@ -2077,7 +2079,7 @@ The Basic Teleport script is attached to the `[CameraRig]` prefab.
  * **Headset Position Compensation:** If this is checked then the teleported location will be the position of the headset within the play area. If it is unchecked then the teleported location will always be the centre of the play area even if the headset position is not in the centre of the play area.
  * **Ignore Target With Tag Or Class:** A string that specifies an object Tag or the name of a Script attached to an object and notifies the teleporter that the destination is to be ignored so the user cannot teleport to that location. It also ensure the pointer colour is set to the miss colour.
  * **Target Tag Or Script List Policy:** A specified VRTK_TagOrScriptPolicyList to use to determine whether destination targets will be acted upon by the Teleporter. If a list is provided then the 'Ignore Target With Tag Or Class' parameter will be ignored.
- * **Nav Mesh Limit Distance:** The max distance the nav mesh edge can be from the teleport destination to be considered valid. If a value of `0` is given then the nav mesh restriction will be ignored.
+ * **Nav Mesh Limit Distance:** The max distance the teleport destination can be outside the nav mesh to be considered valid. If a value of `0` is given then the nav mesh restrictions will be ignored.
 
 ### Class Events
 
@@ -3358,12 +3360,12 @@ Adding the `VRTK_InteractGrab_UnityEvents` component to `VRTK_InteractGrab` obje
 
 ### Class Methods
 
-#### ForceRelease/0
+#### ForceRelease/1
 
-  > `public void ForceRelease()`
+  > `public void ForceRelease(bool applyGrabbingObjectVelocity = false)`
 
   * Parameters
-   * _none_
+   * `bool applyGrabbingObjectVelocity` - If this is true then upon releasing the object any velocity on the grabbing object will be applied to the object to essentiall throw it. Defaults to `false`.
   * Returns
    * _none_
 

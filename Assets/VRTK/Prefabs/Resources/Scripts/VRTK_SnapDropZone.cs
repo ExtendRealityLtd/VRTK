@@ -174,7 +174,7 @@ namespace VRTK
         /// <param name="objectToSnap">The GameObject to attempt to snap.</param>
         public void ForceSnap(GameObject objectToSnap)
         {
-            var ioCheck = objectToSnap.GetComponent<VRTK_InteractableObject>();
+            var ioCheck = objectToSnap.GetComponentInParent<VRTK_InteractableObject>();
             if (ioCheck)
             {
                 StopCoroutine("AttemptForceSnapAtEndOfFrame");
@@ -280,7 +280,7 @@ namespace VRTK
 
         private VRTK_InteractableObject ValidSnapObject(GameObject checkObject, bool grabState)
         {
-            var ioCheck = checkObject.GetComponent<VRTK_InteractableObject>();
+            var ioCheck = checkObject.GetComponentInParent<VRTK_InteractableObject>();
             return (ioCheck && ioCheck.IsGrabbed() == grabState && !Utilities.TagOrScriptCheck(checkObject, validObjectTagOrScriptListPolicy, validObjectWithTagOrClass, true) ? ioCheck : null);
         }
 
@@ -322,7 +322,7 @@ namespace VRTK
             //If there is a current valid snap object
             if (currentValidSnapObject)
             {
-                var currentIOCheck = currentValidSnapObject.GetComponent<VRTK_InteractableObject>();
+                var currentIOCheck = currentValidSnapObject.GetComponentInParent<VRTK_InteractableObject>();
                 //and the interactbale object associated with it has been snapped to another zone, then unset the current valid snap object
                 if (currentIOCheck && currentIOCheck.GetStoredSnapDropZone() != null && currentIOCheck.GetStoredSnapDropZone() != gameObject)
                 {
@@ -368,6 +368,15 @@ namespace VRTK
             }
         }
 
+        private void SetContainer()
+        {
+            var findContainer = transform.FindChild(HIGHLIGHT_CONTAINER_NAME);
+            if (findContainer)
+            {
+                highlightContainer = findContainer.gameObject;
+            }
+        }
+
         private void GenerateObjects()
         {
             GenerateHighlightObject();
@@ -398,7 +407,7 @@ namespace VRTK
                     isSnapped = true;
                     currentSnappedObject = ioCheck.gameObject;
 
-                    transitionInPlace = StartCoroutine(UpdateTransformDimensions(ioCheck, highlightObject.transform.position, highlightObject.transform.rotation, newLocalScale, snapDuration));
+                    transitionInPlace = StartCoroutine(UpdateTransformDimensions(ioCheck, highlightContainer.transform.position, highlightContainer.transform.rotation, newLocalScale, snapDuration));
 
                     ioCheck.ToggleSnapDropZone(this, true);
                 }
@@ -449,6 +458,11 @@ namespace VRTK
                 ioTransform.localScale = Vector3.Lerp(startScale, endScale, (elapsedTime / duration));
                 yield return null;
             }
+
+            //Force all to the last setting in case anything has moved during the transition
+            ioTransform.position = endPosition;
+            ioTransform.rotation = endRotation;
+            ioTransform.localScale = endScale;
 
             ioCheck.ToggleKinematic(storedKinematicState);
             SetDropSnapType(ioCheck);
@@ -585,6 +599,7 @@ namespace VRTK
             {
                 highlightObject.SetActive(false);
             }
+            SetContainer();
         }
 
         private void DeleteHighlightObject()

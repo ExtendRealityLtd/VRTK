@@ -41,6 +41,8 @@ namespace VRTK
         public bool holdButtonToActivate = true;
         [Tooltip("If this is checked then the pointer will be an extension of the controller and able to interact with Interactable Objects.")]
         public bool interactWithObjects = false;
+        [Tooltip("If `Interact With Objects` is checked and this is checked then when an object is grabbed with the pointer touching it, the object will attach to the pointer tip and not snap to the controller.")]
+        public bool grabToPointerTip = false;
         [Tooltip("The time in seconds to delay the pointer beam being able to be active again. Useful for preventing constant teleportation.")]
         public float activateDelay = 0f;
         [Tooltip("Determines when the pointer beam should be displayed.")]
@@ -56,12 +58,17 @@ namespace VRTK
         protected VRTK_PlayAreaCursor playAreaCursor;
         protected Color currentPointerColor;
         protected GameObject objectInteractor;
+        protected GameObject objectInteractorAttachPoint;
 
         private bool isActive;
         private bool destinationSetActive;
         private float activateDelayTimer = 0f;
         private int beamEnabledState = 0;
         private VRTK_InteractableObject interactableObject = null;
+        private Rigidbody savedAttachPoint;
+        private bool attachedToInteractorAttachPoint = false;
+        private float savedBeamLength = 0f;
+        private VRTK_InteractGrab controllerGrabScript;
 
         /// <summary>
         /// The IsActive method is used to determine if the pointer currently active.
@@ -119,6 +126,8 @@ namespace VRTK
             controller.AliasPointerOff += new ControllerInteractionEventHandler(DisablePointerBeam);
             controller.AliasPointerSet += new ControllerInteractionEventHandler(SetPointerDestination);
 
+            controllerGrabScript = controller.GetComponent<VRTK_InteractGrab>();
+
             var tmpMaterial = Resources.Load("WorldPointer") as Material;
             if (pointerMaterial != null)
             {
@@ -149,6 +158,7 @@ namespace VRTK
             controller.AliasPointerOn -= new ControllerInteractionEventHandler(EnablePointerBeam);
             controller.AliasPointerOff -= new ControllerInteractionEventHandler(DisablePointerBeam);
             controller.AliasPointerSet -= new ControllerInteractionEventHandler(SetPointerDestination);
+            controllerGrabScript = null;
         }
 
         protected virtual void Update()
@@ -268,10 +278,7 @@ namespace VRTK
 
         protected virtual void TogglePointer(bool state)
         {
-            if (interactWithObjects)
-            {
-                objectInteractor.SetActive(state);
-            }
+            ToggleObjectInteraction(state);
 
             if (playAreaCursor)
             {
@@ -282,6 +289,33 @@ namespace VRTK
             if (!state && PointerActivatesUseAction(interactableObject) && interactableObject.holdButtonToUse && interactableObject.IsUsing())
             {
                 interactableObject.StopUsing(gameObject);
+            }
+        }
+
+        protected virtual void ToggleObjectInteraction(bool state)
+        {
+            if (interactWithObjects)
+            {
+                if (state && grabToPointerTip && controllerGrabScript)
+                {
+                    savedAttachPoint = controllerGrabScript.controllerAttachPoint;
+                    controllerGrabScript.controllerAttachPoint = objectInteractorAttachPoint.GetComponent<Rigidbody>();
+                    attachedToInteractorAttachPoint = true;
+                }
+
+                if (!state && grabToPointerTip && controllerGrabScript)
+                {
+                    if (attachedToInteractorAttachPoint)
+                    {
+                        controllerGrabScript.ForceRelease(true);
+                    }
+                    controllerGrabScript.controllerAttachPoint = savedAttachPoint;
+                    savedAttachPoint = null;
+                    attachedToInteractorAttachPoint = false;
+                    savedBeamLength = 0f;
+                }
+
+                objectInteractor.SetActive(state);
             }
         }
 
@@ -330,7 +364,7 @@ namespace VRTK
             if (target)
             {
                 NavMeshHit hit;
-                validNavMeshLocation = NavMesh.SamplePosition(destinationPosition, out hit, 0.1f, NavMesh.AllAreas);
+                validNavMeshLocation = NavMesh.SamplePosition(destinationPosition, out hit, navMeshCheckDistance, NavMesh.AllAreas);
             }
             if (navMeshCheckDistance == 0f)
             {
@@ -355,9 +389,37 @@ namespace VRTK
             tmpCollider.isTrigger = true;
             Utilities.SetPlayerObject(objectInteractorCollider, VRTK_PlayerObject.ObjectTypes.Pointer);
 
+            if (grabToPointerTip)
+            {
+                objectInteractorAttachPoint = new GameObject(string.Format("[{0}]WorldPointer_ObjectInteractor_AttachPoint", gameObject.name));
+                objectInteractorAttachPoint.transform.SetParent(objectInteractor.transform);
+                objectInteractorAttachPoint.transform.localPosition = Vector3.zero;
+                objectInteractorAttachPoint.layer = LayerMask.NameToLayer("Ignore Raycast");
+                var objectInteratorRigidBody = objectInteractorAttachPoint.AddComponent<Rigidbody>();
+                objectInteratorRigidBody.isKinematic = true;
+                objectInteratorRigidBody.freezeRotation = true;
+                objectInteratorRigidBody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+                Utilities.SetPlayerObject(objectInteractorAttachPoint, VRTK_PlayerObject.ObjectTypes.Pointer);
+            }
+
             var objectInteractorScale = 0.025f;
             objectInteractor.transform.localScale = new Vector3(objectInteractorScale, objectInteractorScale, objectInteractorScale);
             objectInteractor.SetActive(false);
+        }
+
+        protected virtual float OverrideBeamLength(float currentLength)
+        {
+            if(!controllerGrabScript || !controllerGrabScript.GetGrabbedObject())
+            {
+                savedBeamLength = 0f;
+            }
+
+            if (interactWithObjects && grabToPointerTip && attachedToInteractorAttachPoint && controllerGrabScript && controllerGrabScript.GetGrabbedObject())
+            {
+                savedBeamLength = (savedBeamLength == 0f ? currentLength : savedBeamLength);
+                return savedBeamLength;
+            }
+            return currentLength;
         }
 
         private bool InvalidConstantBeam()
