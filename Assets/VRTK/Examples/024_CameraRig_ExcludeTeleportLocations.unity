@@ -1544,6 +1544,7 @@ GameObject:
   - 23: {fileID: 1360725304}
   - 33: {fileID: 1360725303}
   - 114: {fileID: 1360725302}
+  - 114: {fileID: 1360725312}
   - 114: {fileID: 1360725297}
   - 114: {fileID: 1360725311}
   m_Layer: 0
@@ -1603,8 +1604,7 @@ MonoBehaviour:
   blinkTransitionSpeed: 0.6
   distanceBlinkDelay: 0
   headsetPositionCompensation: 1
-  ignoreTargetWithTagOrClass: ExcludeTeleport
-  targetTagOrScriptListPolicy: {fileID: 0}
+  targetTagOrScriptListPolicy: {fileID: 1360725312}
   navMeshLimitDistance: 0
 --- !u!114 &1360725298
 MonoBehaviour:
@@ -1915,13 +1915,28 @@ MonoBehaviour:
   enableBodyCollisions: 0
   ignoreGrabbedCollisions: 1
   headsetYOffset: 0.2
-  ignoreCollisionThreshold: 0
+  movementThreshold: 0.0015
   standingHistorySamples: 5
   leanYThreshold: 0.5
   fallRestriction: 0
   gravityFallYThreshold: 1
   blinkYThreshold: 0.15
   floorHeightTolerance: 0.001
+--- !u!114 &1360725312
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1360725294}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ed2aa1a29b92ca4f84a26a5f6e9218b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  operation: 0
+  checkType: 2
+  identifiers:
+  - ExcludeTeleport
 --- !u!1 &1382275221
 GameObject:
   m_ObjectHideFlags: 0

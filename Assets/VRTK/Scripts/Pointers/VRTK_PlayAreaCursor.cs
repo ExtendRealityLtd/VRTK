@@ -17,9 +17,7 @@ namespace VRTK
         public bool handlePlayAreaCursorCollisions = false;
         [Tooltip("If this is ticked then if the user's headset is outside of the play area cursor bounds then it is considered a collision even if the play area isn't colliding with anything.")]
         public bool headsetOutOfBoundsIsCollision = false;
-        [Tooltip("A string that specifies an object Tag or the name of a Script attached to an object and notifies the play area cursor to ignore collisions with the object.")]
-        public string ignoreTargetWithTagOrClass;
-        [Tooltip("A specified VRTK_TagOrScriptPolicyList to use to determine whether the play area cursor collisions will be acted upon. If a list is provided then the 'Ignore Target With Tag Or Class' parameter will be ignored.")]
+        [Tooltip("A specified VRTK_TagOrScriptPolicyList to use to determine whether the play area cursor collisions will be acted upon.")]
         public VRTK_TagOrScriptPolicyList targetTagOrScriptListPolicy;
 
         private bool headsetPositionCompensation;
@@ -216,7 +214,7 @@ namespace VRTK
 
             var playAreaCursorScript = playAreaCursor.AddComponent<VRTK_PlayAreaCollider>();
             playAreaCursorScript.SetParent(gameObject);
-            playAreaCursorScript.SetIgnoreTarget(ignoreTargetWithTagOrClass, targetTagOrScriptListPolicy);
+            playAreaCursorScript.SetIgnoreTarget(targetTagOrScriptListPolicy);
             playAreaCursor.layer = LayerMask.NameToLayer("Ignore Raycast");
 
             var playAreaBoundaryX = playArea.transform.localScale.x / 2;
@@ -251,7 +249,6 @@ namespace VRTK
     public class VRTK_PlayAreaCollider : MonoBehaviour
     {
         private VRTK_PlayAreaCursor parent;
-        private string ignoreTargetWithTagOrClass;
         private VRTK_TagOrScriptPolicyList targetTagOrScriptListPolicy;
 
         public void SetParent(GameObject setParent)
@@ -259,15 +256,14 @@ namespace VRTK
             parent = setParent.GetComponent<VRTK_PlayAreaCursor>();
         }
 
-        public void SetIgnoreTarget(string ignore, VRTK_TagOrScriptPolicyList list = null)
+        public void SetIgnoreTarget(VRTK_TagOrScriptPolicyList list = null)
         {
-            ignoreTargetWithTagOrClass = ignore;
             targetTagOrScriptListPolicy = list;
         }
 
         private bool ValidTarget(Collider collider)
         {
-            return (!collider.GetComponent<VRTK_PlayerObject>() && !(VRTK_TagOrScriptPolicyList.TagOrScriptCheck(collider.gameObject, targetTagOrScriptListPolicy, ignoreTargetWithTagOrClass)));
+            return (!collider.GetComponent<VRTK_PlayerObject>() && !(VRTK_TagOrScriptPolicyList.TagOrScriptCheck(collider.gameObject, targetTagOrScriptListPolicy)));
         }
 
         private void OnTriggerStay(Collider collider)

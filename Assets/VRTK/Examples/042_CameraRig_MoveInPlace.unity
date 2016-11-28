@@ -1038,7 +1038,7 @@ GameObject:
   - 114: {fileID: 738581659}
   m_Layer: 0
   m_Name: Cube
-  m_TagString: Untagged
+  m_TagString: ExcludeTeleport
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2270,6 +2270,7 @@ GameObject:
   - 114: {fileID: 1738779864}
   - 114: {fileID: 1738779867}
   - 114: {fileID: 1738779873}
+  - 114: {fileID: 1738779874}
   - 114: {fileID: 1738779866}
   m_Layer: 0
   m_Name: '[CameraRig]'
@@ -2300,7 +2301,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 057015237f68bd74d9c6c6c28ea347e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ignoreTargetWithTagOrClass: 
   targetTagOrScriptListPolicy: {fileID: 0}
   headsetColliding: 0
   collidingWith: {fileID: 0}
@@ -2339,11 +2339,6 @@ MonoBehaviour:
   gravityFallYThreshold: 1
   blinkYThreshold: 0.15
   floorHeightTolerance: 0.001
-  isFalling: 0
-  isMoving: 0
-  isLeaning: 0
-  onGround: 1
-  preventSnapToFloor: 0
 --- !u!114 &1738779867
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2474,9 +2469,23 @@ MonoBehaviour:
   blinkTransitionSpeed: 0.6
   distanceBlinkDelay: 0
   headsetPositionCompensation: 1
-  ignoreTargetWithTagOrClass: 
-  targetTagOrScriptListPolicy: {fileID: 0}
+  targetTagOrScriptListPolicy: {fileID: 1738779874}
   navMeshLimitDistance: 0
+--- !u!114 &1738779874
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1738779862}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ed2aa1a29b92ca4f84a26a5f6e9218b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  operation: 0
+  checkType: 0
+  identifiers:
+  - ExcludeTeleport
 --- !u!1 &1746116181
 GameObject:
   m_ObjectHideFlags: 0

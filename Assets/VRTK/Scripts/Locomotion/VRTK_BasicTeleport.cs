@@ -30,9 +30,7 @@ namespace VRTK
         public float distanceBlinkDelay = 0f;
         [Tooltip("If this is checked then the teleported location will be the position of the headset within the play area. If it is unchecked then the teleported location will always be the centre of the play area even if the headset position is not in the centre of the play area.")]
         public bool headsetPositionCompensation = true;
-        [Tooltip("A string that specifies an object Tag or the name of a Script attached to an object and notifies the teleporter that the destination is to be ignored so the user cannot teleport to that location. It also ensure the pointer colour is set to the miss colour.")]
-        public string ignoreTargetWithTagOrClass;
-        [Tooltip("A specified VRTK_TagOrScriptPolicyList to use to determine whether destination targets will be acted upon by the Teleporter. If a list is provided then the 'Ignore Target With Tag Or Class' parameter will be ignored.")]
+        [Tooltip("A specified VRTK_TagOrScriptPolicyList to use to determine whether destination targets will be acted upon by the Teleporter.")]
         public VRTK_TagOrScriptPolicyList targetTagOrScriptListPolicy;
         [Tooltip("The max distance the teleport destination can be outside the nav mesh to be considered valid. If a value of `0` is given then the nav mesh restrictions will be ignored.")]
         public float navMeshLimitDistance = 0f;
@@ -69,7 +67,7 @@ namespace VRTK
                     if (register)
                     {
                         worldMarker.DestinationMarkerSet += new DestinationMarkerEventHandler(DoTeleport);
-                        worldMarker.SetInvalidTarget(ignoreTargetWithTagOrClass, targetTagOrScriptListPolicy);
+                        worldMarker.SetInvalidTarget(targetTagOrScriptListPolicy);
                         worldMarker.SetNavMeshCheckDistance(navMeshLimitDistance);
                         worldMarker.SetHeadsetPositionCompensation(headsetPositionCompensation);
                     }
@@ -109,7 +107,7 @@ namespace VRTK
                 validNavMeshLocation = true;
             }
 
-            return (validNavMeshLocation && target && !(VRTK_TagOrScriptPolicyList.TagOrScriptCheck(target.gameObject, targetTagOrScriptListPolicy, ignoreTargetWithTagOrClass)));
+            return (validNavMeshLocation && target && !(VRTK_TagOrScriptPolicyList.TagOrScriptCheck(target.gameObject, targetTagOrScriptListPolicy)));
         }
 
         protected virtual void Awake()

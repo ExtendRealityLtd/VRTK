@@ -32,9 +32,7 @@ namespace VRTK
     /// </example>
     public class VRTK_HeadsetCollision : MonoBehaviour
     {
-        [Tooltip("A string that specifies an object Tag or the name of a Script attached to an object and will be ignored on headset collision.")]
-        public string ignoreTargetWithTagOrClass;
-        [Tooltip("A specified VRTK_TagOrScriptPolicyList to use to determine whether any objects will be acted upon by the Headset Collision. If a list is provided then the 'Ignore Target With Tag Or Class' parameter will be ignored.")]
+        [Tooltip("A specified VRTK_TagOrScriptPolicyList to use to determine whether any objects will be acted upon by the Headset Collision.")]
         public VRTK_TagOrScriptPolicyList targetTagOrScriptListPolicy;
 
         /// <summary>
@@ -134,7 +132,7 @@ namespace VRTK
             {
                 headsetColliderScript = headset.gameObject.AddComponent<VRTK_HeadsetCollider>();
                 headsetColliderScript.SetParent(gameObject);
-                headsetColliderScript.SetIgnoreTarget(ignoreTargetWithTagOrClass, targetTagOrScriptListPolicy);
+                headsetColliderScript.SetIgnoreTarget(targetTagOrScriptListPolicy);
             }
         }
 
@@ -158,7 +156,6 @@ namespace VRTK
     public class VRTK_HeadsetCollider : MonoBehaviour
     {
         private VRTK_HeadsetCollision parent;
-        private string ignoreTargetWithTagOrClass;
         private VRTK_TagOrScriptPolicyList targetTagOrScriptListPolicy;
 
         public void SetParent(GameObject setParent)
@@ -166,9 +163,8 @@ namespace VRTK
             parent = setParent.GetComponent<VRTK_HeadsetCollision>();
         }
 
-        public void SetIgnoreTarget(string ignore, VRTK_TagOrScriptPolicyList list = null)
+        public void SetIgnoreTarget(VRTK_TagOrScriptPolicyList list = null)
         {
-            ignoreTargetWithTagOrClass = ignore;
             targetTagOrScriptListPolicy = list;
         }
 
@@ -192,7 +188,7 @@ namespace VRTK
 
         private bool ValidTarget(Transform target)
         {
-            return (target && !(VRTK_TagOrScriptPolicyList.TagOrScriptCheck(target.gameObject, targetTagOrScriptListPolicy, ignoreTargetWithTagOrClass)));
+            return (target && !(VRTK_TagOrScriptPolicyList.TagOrScriptCheck(target.gameObject, targetTagOrScriptListPolicy)));
         }
 
         private void OnTriggerStay(Collider collider)

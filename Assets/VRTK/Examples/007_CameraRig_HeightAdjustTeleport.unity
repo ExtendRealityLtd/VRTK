@@ -781,6 +781,7 @@ GameObject:
   - 33: {fileID: 335626801}
   - 114: {fileID: 335626800}
   - 114: {fileID: 335626794}
+  - 114: {fileID: 335626815}
   - 114: {fileID: 335626799}
   m_Layer: 0
   m_Name: '[CameraRig]'
@@ -845,8 +846,7 @@ MonoBehaviour:
   blinkTransitionSpeed: 0.6
   distanceBlinkDelay: 0
   headsetPositionCompensation: 1
-  ignoreTargetWithTagOrClass: ExcludeTeleport
-  targetTagOrScriptListPolicy: {fileID: 0}
+  targetTagOrScriptListPolicy: {fileID: 335626815}
   navMeshLimitDistance: 0
 --- !u!114 &335626795
 MonoBehaviour:
@@ -993,7 +993,7 @@ MonoBehaviour:
   enableBodyCollisions: 0
   ignoreGrabbedCollisions: 1
   headsetYOffset: 0.2
-  ignoreCollisionThreshold: 0
+  movementThreshold: 0.0015
   standingHistorySamples: 5
   leanYThreshold: 0.5
   fallRestriction: 0
@@ -1262,6 +1262,21 @@ Transform:
   - {fileID: 1857866952}
   m_Father: {fileID: 0}
   m_RootOrder: 3
+--- !u!114 &335626815
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 335626791}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ed2aa1a29b92ca4f84a26a5f6e9218b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  operation: 0
+  checkType: 0
+  identifiers:
+  - ExcludeTeleport
 --- !u!1 &385480578
 GameObject:
   m_ObjectHideFlags: 0
