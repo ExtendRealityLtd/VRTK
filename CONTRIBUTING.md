@@ -178,6 +178,6 @@ previous commit hashes is actively encouraged if they are relevant.
 ## Submitting Changes
   * Push your changes to your topic branch in your repository.
   * Submit a pull request to the repository
-  `thestonefox/SteamVR_Unity_Plugin`.
+  `thestonefox/VRTK`.
   * The core team will aim to look at the pull request as soon as
   possible and provide feedback where required.
