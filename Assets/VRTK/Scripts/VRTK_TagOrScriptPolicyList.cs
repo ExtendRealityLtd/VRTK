@@ -8,7 +8,7 @@ namespace VRTK
     /// The Tag Or Script Policy List allows to create a list of either tag names or script names that can be checked against to see if another operation is permitted.
     /// </summary>
     /// <remarks>
-    /// A number of other scripts can use a Tag Or Script Policy List to determine if an operation is permitted based on whether a game object has a tag applied or a script component on it.
+    /// A number of other scripts can use a Tag Or Script Policy List to determine if an operation is permitted based on whether a game object has a tag applied, a layer applied or a script component on it.
     ///
     /// For example, the Teleporter scripts can ignore game object targets as a teleport location if the game object contains a tag that is in the identifiers list and the policy is set to ignore.
     ///
@@ -36,12 +36,14 @@ namespace VRTK
         /// </summary>
         /// <param name="Tag">The tag applied to the game object.</param>
         /// <param name="Script">A script component added to the game object.</param>
-        /// <param name="Tag_Or_Script">Either a tag applied to the game object or a script component added to the game object.</param>
+        /// <param name="Layer">A layer applied to the game object.</param>
+        /// <param name="TagOrScriptOrLayer">Either a tag applied to the game object, a layer applied to the game object or a script component added to the game object.</param>
         public enum CheckTypes
         {
             Tag,
             Script,
-            Tag_Or_Script
+            Layer,
+            TagOrScriptOrLayer
         }
 
         [Tooltip("The operation to apply on the list of identifiers.")]
@@ -95,6 +97,18 @@ namespace VRTK
             }
         }
 
+        private bool LayerCheck(GameObject obj, bool returnState)
+        {
+            if (returnState)
+            {
+                return identifiers.Contains(LayerMask.LayerToName(obj.layer));
+            }
+            else
+            {
+                return !identifiers.Contains(LayerMask.LayerToName(obj.layer));
+            }
+        }
+
         private bool TypeCheck(GameObject obj, bool returnState)
         {
             switch (checkType)
@@ -103,12 +117,18 @@ namespace VRTK
                     return ScriptCheck(obj, returnState);
                 case CheckTypes.Tag:
                     return TagCheck(obj, returnState);
-                case CheckTypes.Tag_Or_Script:
-                    if ((returnState && ScriptCheck(obj, returnState)) || (!returnState && !ScriptCheck(obj, returnState)))
+                case CheckTypes.Layer:
+                    return LayerCheck(obj, returnState);
+                case CheckTypes.TagOrScriptOrLayer:
+                    if ((returnState && TagCheck(obj, returnState)) || (!returnState && !TagCheck(obj, returnState)))
                     {
                         return returnState;
                     }
-                    if ((returnState && TagCheck(obj, returnState)) || (!returnState && !TagCheck(obj, returnState)))
+                    if ((returnState && LayerCheck(obj, returnState)) || (!returnState && !LayerCheck(obj, returnState)))
+                    {
+                        return returnState;
+                    }
+                    if ((returnState && ScriptCheck(obj, returnState)) || (!returnState && !ScriptCheck(obj, returnState)))
                     {
                         return returnState;
                     }
