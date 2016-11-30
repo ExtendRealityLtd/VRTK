@@ -65,6 +65,9 @@ namespace VRTK
             Drop_ValidSnapDropZone
         }
 
+        [Tooltip("If this is checked then the interactable object script will be disabled when the object is not being interacted with. This will eliminate the potential number of calls the interactable objects make each frame.")]
+        public bool disableWhenIdle = true;
+
         [Header("Touch Options", order = 1)]
 
         [Tooltip("The colour to highlight the object when it is touched. This colour will override any globally set colour (for instance on the `VRTK_InteractTouch` script).")]
@@ -279,6 +282,7 @@ namespace VRTK
         {
             if (!touchingObjects.Contains(currentTouchingObject))
             {
+                ToggleEnableState(true);
                 touchingObjects.Add(currentTouchingObject);
                 OnInteractableObjectTouched(SetInteractableObjectEvent(currentTouchingObject));
             }
@@ -304,6 +308,7 @@ namespace VRTK
         /// <param name="currentGrabbingObject">The game object that is currently grabbing this object.</param>
         public virtual void Grabbed(GameObject currentGrabbingObject)
         {
+            ToggleEnableState(true);
             if (!IsGrabbed() || IsSwappable())
             {
                 PrimaryControllerGrab(currentGrabbingObject);
@@ -340,6 +345,7 @@ namespace VRTK
         /// <param name="currentUsingObject">The game object that is currently using this object.</param>
         public virtual void StartUsing(GameObject currentUsingObject)
         {
+            ToggleEnableState(true);
             if (IsUsing() && !IsUsing(currentUsingObject))
             {
                 usingObject.GetComponent<VRTK_InteractUse>().ForceResetUsing();
@@ -633,6 +639,8 @@ namespace VRTK
             {
                 interactableRigidbody.maxAngularVelocity = float.MaxValue;
             }
+
+            enabled = !(enabled && disableWhenIdle);
         }
 
         protected virtual void OnEnable()
@@ -661,6 +669,19 @@ namespace VRTK
             ForceStopInteracting();
         }
 
+        protected virtual void FixedUpdate()
+        {
+            if (trackPoint && grabAttachMechanicScript)
+            {
+                grabAttachMechanicScript.ProcessFixedUpdate();
+            }
+
+            if (secondaryGrabActionScript)
+            {
+                secondaryGrabActionScript.ProcessFixedUpdate();
+            }
+        }
+
         protected virtual void Update()
         {
             AttemptSetGrabMechanic();
@@ -677,16 +698,11 @@ namespace VRTK
             }
         }
 
-        protected virtual void FixedUpdate()
+        protected virtual void LateUpdate()
         {
-            if (trackPoint && grabAttachMechanicScript)
+            if (disableWhenIdle && !IsTouched() && !IsGrabbed() && !IsUsing())
             {
-                grabAttachMechanicScript.ProcessFixedUpdate();
-            }
-
-            if (secondaryGrabActionScript)
-            {
-                secondaryGrabActionScript.ProcessFixedUpdate();
+                ToggleEnableState(false);
             }
         }
 
@@ -719,6 +735,14 @@ namespace VRTK
                     objectHighlighter = gameObject.AddComponent<VRTK_MaterialColorSwapHighlighter>();
                 }
                 objectHighlighter.Initialise(touchHighlightColor);
+            }
+        }
+
+        private void ToggleEnableState(bool state)
+        {
+            if (disableWhenIdle)
+            {
+                enabled = state;
             }
         }
 

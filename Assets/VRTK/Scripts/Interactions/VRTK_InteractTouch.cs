@@ -120,6 +120,10 @@ namespace VRTK
                 var io = obj.GetComponentInParent<VRTK_InteractableObject>();
                 if (io)
                 {
+                    if (io.disableWhenIdle && !io.enabled)
+                    {
+                        return true;
+                    }
                     return io.enabled;
                 }
             }
@@ -233,10 +237,10 @@ namespace VRTK
 
         private void ToggleControllerVisibility(bool visible)
         {
-            if(touchedObject)
+            if (touchedObject)
             {
                 var controllerAppearanceScript = touchedObject.GetComponentInParent<VRTK_InteractControllerAppearance>();
-                if(controllerAppearanceScript)
+                if (controllerAppearanceScript)
                 {
                     controllerAppearanceScript.ToggleControllerOnTouch(visible, controllerActions, touchedObject);
                 }

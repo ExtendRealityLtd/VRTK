@@ -1560,6 +1560,7 @@ The highlighting of an Interactable Object is defaulted to use the `VRTK_Materia
 
 ### Inspector Parameters
 
+ * **Disable When Idle:** If this is checked then the interactable object script will be disabled when the object is not being interacted with. This will eliminate the potential number of calls the interactable objects make each frame.
  * **Touch Highlight Color:** The colour to highlight the object when it is touched. This colour will override any globally set colour (for instance on the `VRTK_InteractTouch` script).
  * **Allowed Touch Controllers:** Determines which controller can initiate a touch action.
  * **Is Grabbable:** Determines if the object can be grabbed.
