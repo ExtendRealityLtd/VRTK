@@ -121,7 +121,13 @@ namespace VRTK
         [Tooltip("Optionally override the controller setting.")]
         public ControllerHideMode hideControllerOnTouch = ControllerHideMode.Default;
 
-        [Header("Grab Interactions", order = 2)]
+        [Header("Target Interactions", order = 2)]
+        [Tooltip("Object will be highlighted if a pointer selects it if this is checked.")]
+        public bool highlightOnTarget = false;
+        [Tooltip("The material to use for highlighting on targetting.")]
+        public Material highlightOnTargetMaterial;
+
+        [Header("Grab Interactions", order = 3)]
 
         [Tooltip("Determines if the object can be grabbed.")]
         public bool isGrabbable = false;
@@ -150,7 +156,7 @@ namespace VRTK
         [Tooltip("If this is checked then the object will stay grabbed to the controller when a teleport occurs. If it is unchecked then the object will be released when a teleport occurs.")]
         public bool stayGrabbedOnTeleport = true;
 
-        [Header("Grab Mechanics", order = 3)]
+        [Header("Grab Mechanics", order = 4)]
 
         [Tooltip("This determines how the grabbed item will be attached to the controller when it is grabbed.")]
         public GrabAttachType grabAttachMechanic = GrabAttachType.Fixed_Joint;
@@ -165,7 +171,7 @@ namespace VRTK
         [Tooltip("The amount of time to delay collisions affecting the object when it is first grabbed. This is useful if a game object may get stuck inside another object when it is being grabbed.")]
         public float onGrabCollisionDelay = 0f;
 
-        [Header("Use Interactions", order = 4)]
+        [Header("Use Interactions", order = 5)]
 
         [Tooltip("Determines if the object can be used.")]
         public bool isUsable = false;

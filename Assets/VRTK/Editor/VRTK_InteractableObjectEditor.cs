@@ -9,11 +9,13 @@
     public class VRTK_InteractableObjectEditor : Editor
     {
         private bool viewTouch = true;
+        private bool viewTarget = false;
         private bool viewGrab = false;
         private bool viewUse = false;
         private bool viewCustom = true;
         private bool isGrabbableLastState = false;
         private bool isUsableLastState = false;
+
         private VRTK_InteractableObject.GrabAttachType[] hasDetachThreshold = new VRTK_InteractableObject.GrabAttachType[]
         {
             VRTK_InteractableObject.GrabAttachType.Fixed_Joint,
@@ -59,6 +61,23 @@
 
                 EditorGUI.indentLevel--;
             }
+
+            #region TargetLayout
+            GUILayout.Space(2);
+            viewTarget = EditorGUILayout.Foldout(viewTarget, "Target Options", guiStyle);
+            if (viewTarget)
+            {
+                EditorGUI.indentLevel++;
+                targ.highlightOnTarget = EditorGUILayout.Toggle(VRTK_EditorUtilities.BuildGUIContent<VRTK_InteractableObject>("highlightOnTarget"), targ.highlightOnTarget);
+                if (targ.highlightOnTarget)
+                {
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("highlightOnTargetMaterial"));
+                }
+                EditorGUI.indentLevel--;
+            }
+
+
+            #endregion
 
             //Grab Layout
             GUILayout.Space(10);
