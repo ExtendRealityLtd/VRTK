@@ -22,8 +22,6 @@ namespace VRTK
     /// <remarks>
     ///   > **Only Compatible With Unity 5.4 and above**
     ///
-    /// The Adaptive Quality script is attached to the `[CameraRig]` game object.
-    ///
     /// There are two goals:
     /// <list type="bullet">
     /// <item> <description>Reduce the chances of dropping frames and reprojecting</description> </item>

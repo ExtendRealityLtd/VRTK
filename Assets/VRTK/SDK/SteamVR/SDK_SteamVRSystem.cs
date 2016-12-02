@@ -1,7 +1,7 @@
-﻿// SteamVR System|SDK|001
+﻿// SteamVR System|SDK_SteamVR|001
 namespace VRTK
 {
-#if VRTK_SDK_SYSTEM_STEAMVR
+#if VRTK_SDK_STEAMVR
     using Valve.VR;
 #endif
 
@@ -10,7 +10,7 @@ namespace VRTK
     /// </summary>
     public class SDK_SteamVRSystem : SDK_BaseSystem
     {
-#if VRTK_SDK_SYSTEM_STEAMVR
+#if VRTK_SDK_STEAMVR
         /// <summary>
         /// The IsDisplayOnDesktop method returns true if the display is extending the desktop.
         /// </summary>

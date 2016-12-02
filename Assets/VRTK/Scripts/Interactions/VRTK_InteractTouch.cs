@@ -23,15 +23,20 @@ namespace VRTK
     public delegate void ObjectInteractEventHandler(object sender, ObjectInteractEventArgs e);
 
     /// <summary>
-    /// The Interact Touch script is attached to a Controller object within the `[CameraRig]` prefab.
+    /// The Interact Touch script is usually applied to a Controller and provides a collider to know when the controller is touching something.
     /// </summary>
+    /// <remarks>
+    /// Colliders are created for the controller and by default the selected controller SDK will have a set of colliders for the given default controller of that SDK.
+    ///
+    /// A custom collider can be provided by the Custom Rigidbody Object parameter.
+    /// </remarks>
     /// <example>
     /// `VRTK/Examples/005_Controller/BasicObjectGrabbing` demonstrates the highlighting of objects that have the `VRTK_InteractableObject` script added to them to show the ability to highlight interactable objects when they are touched by the controllers.
     /// </example>
     [RequireComponent(typeof(VRTK_ControllerActions))]
     public class VRTK_InteractTouch : MonoBehaviour
     {
-        [Tooltip("If a custom rigidbody and collider for the rigidbody are required, then a gameobject containing a rigidbody and collider can be passed into this parameter. If this is empty then the rigidbody and collider will be auto generated at runtime to match the HTC Vive default controller.")]
+        [Tooltip("If a custom rigidbody and collider for the rigidbody are required, then a gameobject containing a rigidbody and collider can be passed into this parameter. If this is empty then the rigidbody and collider will be auto generated at runtime to match the SDK default controller.")]
         public GameObject customRigidbodyObject;
 
         /// <summary>
@@ -192,7 +197,7 @@ namespace VRTK
             controllerActions = GetComponent<VRTK_ControllerActions>();
             VRTK_PlayerObject.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.Controller);
             destroyColliderOnDisable = false;
-            defaultColliderPrefab = Resources.Load("ControllerColliders/HTCVive");
+            defaultColliderPrefab = Resources.Load(VRTK_SDK_Bridge.GetControllerDefaultColliderPath());
         }
 
         private void OnEnable()
@@ -292,6 +297,7 @@ namespace VRTK
             {
                 touchedObject = colliderInteractableObject;
                 var touchedObjectScript = touchedObject.GetComponent<VRTK_InteractableObject>();
+                var touchingObject = gameObject;
 
                 //If this controller is not allowed to touch this interactable object then clean up touch and return before initiating a touch.
                 if (!touchedObjectScript.IsValidInteractableController(gameObject, touchedObjectScript.allowedTouchControllers))
@@ -305,7 +311,7 @@ namespace VRTK
                 touchedObjectScript.ToggleHighlight(true);
                 ToggleControllerVisibility(false);
                 CheckRumbleController(touchedObjectScript);
-                touchedObjectScript.StartTouching(gameObject);
+                touchedObjectScript.StartTouching(touchingObject);
 
                 OnControllerTouchInteractableObject(SetControllerInteractEvent(touchedObject));
             }
@@ -316,8 +322,10 @@ namespace VRTK
             if (touchedObject != null && (touchedObjectActiveColliders.Count == 0 || (!triggerIsColliding && !triggerWasColliding)))
             {
                 var touchedObjectScript = touchedObject.GetComponent<VRTK_InteractableObject>();
+                var touchingObject = gameObject;
+
                 //If it's being grabbed by the current touching object then it hasn't stopped being touched.
-                if (touchedObjectScript && touchedObjectScript.GetGrabbingObject() != gameObject)
+                if (touchedObjectScript && touchedObjectScript.GetGrabbingObject() != touchingObject)
                 {
                     StopTouching(touchedObject);
                 }
@@ -387,9 +395,10 @@ namespace VRTK
         {
             if (IsObjectInteractable(untouched))
             {
+                var touchingObject = gameObject;
                 var untouchedObjectScript = untouched.GetComponent<VRTK_InteractableObject>();
-                untouchedObjectScript.StopTouching(gameObject);
-                ResetButtonOverrides(untouchedObjectScript.IsGrabbed(gameObject), untouchedObjectScript.IsUsing(gameObject));
+                untouchedObjectScript.StopTouching(touchingObject);
+                ResetButtonOverrides(untouchedObjectScript.IsGrabbed(touchingObject), untouchedObjectScript.IsUsing(touchingObject));
                 if (!untouchedObjectScript.IsTouched())
                 {
                     untouchedObjectScript.ToggleHighlight(false);
@@ -397,7 +406,7 @@ namespace VRTK
             }
 
             ToggleControllerVisibility(true);
-            OnControllerUntouchInteractableObject(SetControllerInteractEvent(untouched.gameObject));
+            OnControllerUntouchInteractableObject(SetControllerInteractEvent(untouched));
             CleanupEndTouch();
         }
 
@@ -458,7 +467,7 @@ namespace VRTK
 
         private void CreateTouchRigidBody()
         {
-            touchRigidBody = gameObject.GetComponent<Rigidbody>();
+            touchRigidBody = GetComponent<Rigidbody>();
             if (touchRigidBody == null)
             {
                 touchRigidBody = gameObject.AddComponent<Rigidbody>();

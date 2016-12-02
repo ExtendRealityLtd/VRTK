@@ -110,8 +110,6 @@ namespace VRTK
         private Transform headset;
         private Rigidbody bodyRigidbody;
         private CapsuleCollider bodyCollider;
-        private bool customRigidBody = false;
-        private bool customCollider = false;
         private bool currentBodyCollisionsSetting;
         private GameObject currentCollidingObject = null;
         private GameObject currentValidFloorObject = null;
@@ -134,6 +132,8 @@ namespace VRTK
         private bool isLeaning = false;
         private bool onGround = true;
         private bool preventSnapToFloor = false;
+        private bool generateCollider = false;
+        private bool generateRigidbody = false;
 
         // Draws a sphere for current standing position and a sphere for current headset position.
         // Set to `true` to view the debug spheres.
@@ -223,13 +223,6 @@ namespace VRTK
             return onGround;
         }
 
-        protected void Awake()
-        {
-            VRTK_PlayerObject.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.CameraRig);
-            customRigidBody = false;
-            customCollider = false;
-        }
-
         protected override void OnEnable()
         {
             base.OnEnable();
@@ -274,7 +267,7 @@ namespace VRTK
 
         protected void OnCollisionEnter(Collision collision)
         {
-            if (VRTK_PlayerObject.IsPlayerObject(collision.gameObject) && currentValidFloorObject && !currentValidFloorObject.Equals(collision.gameObject))
+            if (!VRTK_PlayerObject.IsPlayerObject(collision.gameObject) && currentValidFloorObject && !currentValidFloorObject.Equals(collision.gameObject))
             {
                 currentCollidingObject = collision.gameObject;
                 OnStartColliding(SetBodyPhysicsEvent(currentCollidingObject));
@@ -283,7 +276,7 @@ namespace VRTK
 
         protected void OnTriggerEnter(Collider collider)
         {
-            if (VRTK_PlayerObject.IsPlayerObject(collider.gameObject) && currentValidFloorObject && !currentValidFloorObject.Equals(collider.gameObject))
+            if (!VRTK_PlayerObject.IsPlayerObject(collider.gameObject) && currentValidFloorObject && !currentValidFloorObject.Equals(collider.gameObject))
             {
                 currentCollidingObject = collider.gameObject;
                 OnStartColliding(SetBodyPhysicsEvent(currentCollidingObject));
@@ -564,39 +557,41 @@ namespace VRTK
 
         private void CreateCollider()
         {
-            customRigidBody = true;
-            customCollider = true;
-            bodyRigidbody = gameObject.GetComponent<Rigidbody>();
+            generateCollider = false;
+            generateRigidbody = false;
+
+            VRTK_PlayerObject.SetPlayerObject(playArea.gameObject, VRTK_PlayerObject.ObjectTypes.CameraRig);
+            bodyRigidbody = playArea.GetComponent<Rigidbody>();
             if (bodyRigidbody == null)
             {
-                bodyRigidbody = gameObject.AddComponent<Rigidbody>();
+                generateRigidbody = true;
+                bodyRigidbody = playArea.gameObject.AddComponent<Rigidbody>();
                 bodyRigidbody.mass = 100f;
                 bodyRigidbody.freezeRotation = true;
-                customRigidBody = false;
             }
 
-            bodyCollider = gameObject.GetComponent<CapsuleCollider>();
+            bodyCollider = playArea.GetComponent<CapsuleCollider>();
             if (bodyCollider == null)
             {
-                bodyCollider = gameObject.AddComponent<CapsuleCollider>();
+                generateCollider = true;
+                bodyCollider = playArea.gameObject.AddComponent<CapsuleCollider>();
                 bodyCollider.center = new Vector3(0f, 1f, 0f);
                 bodyCollider.height = 1f;
                 bodyCollider.radius = 0.15f;
-                customCollider = false;
             }
 
-            gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
+            playArea.gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
             TogglePhysics(enableBodyCollisions);
         }
 
         private void DestroyCollider()
         {
-            if (!customRigidBody)
+            if (generateRigidbody)
             {
                 Destroy(bodyRigidbody);
             }
 
-            if (!customCollider)
+            if (generateCollider)
             {
                 Destroy(bodyCollider);
             }
@@ -614,13 +609,13 @@ namespace VRTK
             }
         }
 
-        private void InitControllerListeners(GameObject controller, bool state)
+        private void InitControllerListeners(GameObject mappedController, bool state)
         {
-            if (controller)
+            if (mappedController)
             {
-                IgnoreCollisions(controller.GetComponentsInChildren<Collider>(), true);
+                IgnoreCollisions(mappedController.GetComponentsInChildren<Collider>(), true);
 
-                var grabbingController = controller.GetComponent<VRTK_InteractGrab>();
+                var grabbingController = mappedController.GetComponent<VRTK_InteractGrab>();
                 if (grabbingController && ignoreGrabbedCollisions)
                 {
                     if (state)
@@ -640,22 +635,29 @@ namespace VRTK
         private IEnumerator RestoreCollisions(GameObject obj)
         {
             yield return new WaitForEndOfFrame();
-            if (obj && obj.GetComponent<VRTK_InteractableObject>() && !obj.GetComponent<VRTK_InteractableObject>().IsGrabbed())
+            if (obj)
             {
-                IgnoreCollisions(obj.GetComponentsInChildren<Collider>(), false);
+                var objScript = obj.GetComponent<VRTK_InteractableObject>();
+                if (objScript && !objScript.IsGrabbed())
+                {
+                    IgnoreCollisions(obj.GetComponentsInChildren<Collider>(), false);
+                }
             }
         }
 
         private void IgnoreCollisions(Collider[] colliders, bool state)
         {
-            var collider = GetComponent<Collider>();
-            if (collider.gameObject.activeInHierarchy)
+            if (playArea)
             {
-                foreach (var controllerCollider in colliders)
+                var collider = playArea.GetComponent<Collider>();
+                if (collider.gameObject.activeInHierarchy)
                 {
-                    if (controllerCollider.gameObject.activeInHierarchy)
+                    foreach (var controllerCollider in colliders)
                     {
-                        Physics.IgnoreCollision(collider, controllerCollider, state);
+                        if (controllerCollider.gameObject.activeInHierarchy)
+                        {
+                            Physics.IgnoreCollision(collider, controllerCollider, state);
+                        }
                     }
                 }
             }
@@ -672,7 +674,7 @@ namespace VRTK
 
         private void OnUngrabObject(object sender, ObjectInteractEventArgs e)
         {
-            if (gameObject.activeInHierarchy)
+            if (gameObject.activeInHierarchy && playArea.gameObject.activeInHierarchy)
             {
                 StartCoroutine(RestoreCollisions(e.target));
             }

@@ -212,7 +212,7 @@ A scene that demonstrates how the Bezier Pointer can display an object (teleport
 
 ### 037_CameraRig_ClimbingFalling
 
-A scene that demonstrates how to set up the climbing mechanism with different activities to try it with. A `VRTK_PlayerClimb` object is needed on the `[CameraRig]`. `VRTK_HeightAdjustTeleport` is also added to the `[CameraRig]` to allow movement, but also to allow walking off edges with `UseGravity` enabled. Various objects with a `VRTK_InteractableObject` component are scattered throughout the level. They all have the `GrabAttachMechanic` set to `Climbable`.
+A scene that demonstrates how to set up the climbing mechanism with different activities to try it with. Various objects with a `VRTK_InteractableObject` component are scattered throughout the level. They all have the `GrabAttachMechanic` set to `Climbable`.
 
 ### 038_CameraRig_CameraRig_DashTeleport
 
@@ -234,7 +234,7 @@ A scene that uses the `VRTK_SnapDropZone` prefab to set up pre-determined snap z
 
 ### 042_CameraRig_MoveInPlace
 
-A scene that demonstrates how the user can move and traverse colliders by either swinging the controllers in a walking fashion or by running on the spot utilisng the head bob for movement.
+A scene that demonstrates how the user can move and traverse colliders by either swinging the controllers in a walking fashion or by running on the spot utilising the head bob for movement.
 
 ### 043_Controller_SecondaryControllerActions
 

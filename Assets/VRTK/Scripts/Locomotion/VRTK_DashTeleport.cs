@@ -21,11 +21,9 @@ namespace VRTK
     public delegate void DashTeleportEventHandler(object sender, DashTeleportEventArgs e);
 
     /// <summary>
-    /// The dash teleporter extends the height adjust teleporter and allows to have the `[CameraRig]` dashing to a new teleport location. 
+    /// The dash teleporter extends the height adjust teleporter and allows to have the user's position dashing to a new teleport location. 
     /// </summary>
     /// <remarks>
-    /// Like the basic teleporter and the height adjustable teleporter the Dash Teleport script is attached to the `[CameraRig]` prefab.
-    ///
     /// The basic principle is to dash for a very short amount of time, to avoid sim sickness. The default value is 100 miliseconds. This value is fixed for all normal and longer distances. When the distances get very short the minimum speed is clamped to 50 mps, so the dash time becomes even shorter.
     ///
     /// The minimum distance for the fixed time dash is determined by the minSpeed and normalLerpTime values, if you want to always lerp with a fixed mps speed instead, set the normalLerpTime to a high value. Right before the teleport a capsule is cast towards the target and registers all colliders blocking the way. These obstacles are then broadcast in an event so that for example their gameobjects or renderers can be turned off while the dash is in progress.
@@ -95,13 +93,13 @@ namespace VRTK
 
             // Find the objects we will be dashing through and broadcast them via events
             Vector3 eyeCameraPosition = headset.transform.position;
-            Vector3 eyeCameraPositionOnGround = new Vector3(eyeCameraPosition.x, transform.position.y, eyeCameraPosition.z);
-            Vector3 eyeCameraRelativeToRig = eyeCameraPosition - transform.position;
+            Vector3 eyeCameraPositionOnGround = new Vector3(eyeCameraPosition.x, playArea.position.y, eyeCameraPosition.z);
+            Vector3 eyeCameraRelativeToRig = eyeCameraPosition - playArea.position;
             Vector3 targetEyeCameraPosition = targetPosition + eyeCameraRelativeToRig;
             Vector3 direction = (targetEyeCameraPosition - eyeCameraPosition).normalized;
             Vector3 bottomPoint = eyeCameraPositionOnGround + (Vector3.up * capsuleBottomOffset) + direction;
             Vector3 topPoint = eyeCameraPosition + (Vector3.up * capsuleTopOffset) + direction;
-            float maxDistance = Vector3.Distance(transform.position, targetPosition - direction * 0.5f);
+            float maxDistance = Vector3.Distance(playArea.position, targetPosition - direction * 0.5f);
             RaycastHit[] allHits = Physics.CapsuleCastAll(bottomPoint, topPoint, capsuleRadius, direction, maxDistance);
 
             foreach (RaycastHit hit in allHits)
@@ -123,20 +121,20 @@ namespace VRTK
                 lerpTime = (1f / minSpeedMps) * maxDistance; // clamped to speed for small dashes
             }
 
-            Vector3 startPosition = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+            Vector3 startPosition = new Vector3(playArea.position.x, playArea.position.y, playArea.position.z);
             float elapsedTime = 0;
             float t = 0;
 
             while (t < 1)
             {
-                transform.position = Vector3.Lerp(startPosition, targetPosition, t);
+                playArea.position = Vector3.Lerp(startPosition, targetPosition, t);
                 elapsedTime += Time.deltaTime;
                 t = elapsedTime / lerpTime;
                 if (t > 1)
                 {
-                    if (transform.position != targetPosition)
+                    if (playArea.position != targetPosition)
                     {
-                        transform.position = targetPosition;
+                        playArea.position = targetPosition;
                     }
                     t = 1;
                 }

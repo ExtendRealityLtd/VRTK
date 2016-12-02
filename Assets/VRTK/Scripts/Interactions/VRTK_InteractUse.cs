@@ -4,9 +4,11 @@ namespace VRTK
     using UnityEngine;
 
     /// <summary>
-    /// The Interact Use script is attached to a Controller object within the `[CameraRig]` prefab and the Controller object requires the `VRTK_ControllerEvents` script to be attached as it uses this for listening to the controller button events for using and stop using interactable game objects. It listens for the `AliasUseOn` and `AliasUseOff` events to determine when an object should be used and should stop using.
+    /// The Interact Use script is attached to a Controller object and requires the `VRTK_ControllerEvents` script to be attached as it uses this for listening to the controller button events for using and stop using interactable game objects.
     /// </summary>
     /// <remarks>
+    /// It listens for the `AliasUseOn` and `AliasUseOff` events to determine when an object should be used and should stop using.
+    ///
     /// The Controller object also requires the `VRTK_InteractTouch` script to be attached to it as this is used to determine when an interactable object is being touched. Only valid touched objects can be used.
     ///
     /// An object can be used if the Controller touches a game object which contains the `VRTK_InteractableObject` script and has the flag `isUsable` set to `true`.
@@ -33,6 +35,7 @@ namespace VRTK
         private GameObject usingObject = null;
         private VRTK_InteractTouch interactTouch;
         private VRTK_ControllerActions controllerActions;
+        private VRTK_ControllerEvents controllerEvents;
 
         public virtual void OnControllerUseInteractableObject(ObjectInteractEventArgs e)
         {
@@ -83,33 +86,22 @@ namespace VRTK
 
         private void Awake()
         {
-            if (GetComponent<VRTK_InteractTouch>() == null)
-            {
-                Debug.LogError("VRTK_InteractUse is required to be attached to a Controller that has the VRTK_InteractTouch script attached to it");
-                return;
-            }
-
             interactTouch = GetComponent<VRTK_InteractTouch>();
             controllerActions = GetComponent<VRTK_ControllerActions>();
+            controllerEvents = GetComponent<VRTK_ControllerEvents>();
         }
 
         private void OnEnable()
         {
-            if (GetComponent<VRTK_ControllerEvents>() == null)
-            {
-                Debug.LogError("VRTK_InteractUse is required to be attached to a Controller that has the VRTK_ControllerEvents script attached to it");
-                return;
-            }
-
-            GetComponent<VRTK_ControllerEvents>().AliasUseOn += new ControllerInteractionEventHandler(DoStartUseObject);
-            GetComponent<VRTK_ControllerEvents>().AliasUseOff += new ControllerInteractionEventHandler(DoStopUseObject);
+            controllerEvents.AliasUseOn += new ControllerInteractionEventHandler(DoStartUseObject);
+            controllerEvents.AliasUseOff += new ControllerInteractionEventHandler(DoStopUseObject);
         }
 
         private void OnDisable()
         {
             ForceStopUsing();
-            GetComponent<VRTK_ControllerEvents>().AliasUseOn -= new ControllerInteractionEventHandler(DoStartUseObject);
-            GetComponent<VRTK_ControllerEvents>().AliasUseOff -= new ControllerInteractionEventHandler(DoStopUseObject);
+            controllerEvents.AliasUseOn -= new ControllerInteractionEventHandler(DoStartUseObject);
+            controllerEvents.AliasUseOff -= new ControllerInteractionEventHandler(DoStopUseObject);
         }
 
         private bool IsObjectUsable(GameObject obj)
@@ -119,23 +111,36 @@ namespace VRTK
 
         private bool IsObjectHoldOnUse(GameObject obj)
         {
-            return (obj && obj.GetComponent<VRTK_InteractableObject>() && obj.GetComponent<VRTK_InteractableObject>().holdButtonToUse);
+            if (obj)
+            {
+                var objScript = obj.GetComponent<VRTK_InteractableObject>();
+                return (objScript && objScript.holdButtonToUse);
+            }
+            return false;
         }
 
         private int GetObjectUsingState(GameObject obj)
         {
-            if (obj && obj.GetComponent<VRTK_InteractableObject>())
+            if (obj)
             {
-                return obj.GetComponent<VRTK_InteractableObject>().usingState;
+                var objScript = obj.GetComponent<VRTK_InteractableObject>();
+                if (objScript)
+                {
+                    return objScript.usingState;
+                }
             }
             return 0;
         }
 
         private void SetObjectUsingState(GameObject obj, int value)
         {
-            if (obj && obj.GetComponent<VRTK_InteractableObject>())
+            if (obj)
             {
-                obj.GetComponent<VRTK_InteractableObject>().usingState = value;
+                var objScript = obj.GetComponent<VRTK_InteractableObject>();
+                if (objScript)
+                {
+                    objScript.usingState = value;
+                }
             }
         }
 
@@ -158,7 +163,7 @@ namespace VRTK
                     controllerAppearanceScript.ToggleControllerOnUse(visible, controllerActions, usingObject);
                 }
             }
-            else if(visible)
+            else if (visible)
             {
                 controllerActions.ToggleControllerModel(true, usingObject);
             }
@@ -209,9 +214,10 @@ namespace VRTK
 
         private GameObject GetFromGrab()
         {
-            if (GetComponent<VRTK_InteractGrab>())
+            var grabScript = GetComponent<VRTK_InteractGrab>();
+            if (grabScript)
             {
-                return GetComponent<VRTK_InteractGrab>().GetGrabbedObject();
+                return grabScript.GetGrabbedObject();
             }
             return null;
         }

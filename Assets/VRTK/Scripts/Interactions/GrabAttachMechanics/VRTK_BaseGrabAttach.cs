@@ -206,7 +206,7 @@ namespace VRTK.GrabAttachMechanics
 
                     var grabbingObjectThrowMultiplier = grabbingObjectScript.throwMultiplier;
 
-                    var origin = VRTK_DeviceFinder.TrackedObjectOrigin(grabbingObject);
+                    var origin = VRTK_DeviceFinder.GetControllerOrigin(grabbingObject);
 
                     var velocity = (controllerEvents ? controllerEvents.GetVelocity() : Vector3.zero);
                     var angularVelocity = (controllerEvents ? controllerEvents.GetAngularVelocity() : Vector3.zero);
@@ -242,12 +242,12 @@ namespace VRTK.GrabAttachMechanics
                 leftSnapHandle = rightSnapHandle;
             }
 
-            if (VRTK_DeviceFinder.IsControllerOfHand(grabbingObject, VRTK_DeviceFinder.ControllerHand.Right))
+            if (VRTK_DeviceFinder.IsControllerRightHand(grabbingObject))
             {
                 return rightSnapHandle;
             }
 
-            if (VRTK_DeviceFinder.IsControllerOfHand(grabbingObject, VRTK_DeviceFinder.ControllerHand.Left))
+            if (VRTK_DeviceFinder.IsControllerLeftHand(grabbingObject))
             {
                 return leftSnapHandle;
             }

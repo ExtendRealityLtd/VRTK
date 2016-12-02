@@ -59,6 +59,9 @@ namespace VRTK
     /// </example>
     public class VRTK_ControllerActions : MonoBehaviour
     {
+        [Tooltip("The GameObject that contains the actual renderers for the controller model. Will default to the actual controller GameObject if none is provided.")]
+        public GameObject modelContainer;
+
         [Tooltip("A collection of strings that determine the path to the controller model sub elements for identifying the model parts at runtime. If the paths are left empty they will default to the model element paths of the selected SDK Bridge.\n\n"
          + "* The available model sub elements are:\n\n"
          + " * `Body Model Path`: The overall shape of the controller.\n"
@@ -93,7 +96,6 @@ namespace VRTK
 
         private bool controllerVisible = true;
         private ushort hapticPulseStrength;
-        private uint controllerIndex;
         private ushort maxHapticVibration = 3999;
         private bool controllerHighlighted = false;
         private Dictionary<string, Transform> cachedElements;
@@ -136,23 +138,10 @@ namespace VRTK
                 return;
             }
 
-            foreach (MeshRenderer renderer in GetComponentsInChildren<MeshRenderer>())
-            {
-                if (renderer.gameObject != grabbedChildObject && (grabbedChildObject == null || !renderer.transform.IsChildOf(grabbedChildObject.transform)))
-                {
-                    renderer.enabled = state;
-                }
-            }
-
-            foreach (SkinnedMeshRenderer renderer in GetComponentsInChildren<SkinnedMeshRenderer>())
-            {
-                if (renderer.gameObject != grabbedChildObject && (grabbedChildObject == null || !renderer.transform.IsChildOf(grabbedChildObject.transform)))
-                {
-                    renderer.enabled = state;
-                }
-            }
+            ToggleModelRenderers(modelContainer, state, grabbedChildObject);
 
             controllerVisible = state;
+            var controllerIndex = VRTK_DeviceFinder.GetControllerIndex(gameObject);
             if (state)
             {
                 OnControllerModelVisible(SetActionEvent(controllerIndex));
@@ -175,34 +164,7 @@ namespace VRTK
             }
 
             alpha = Mathf.Clamp(alpha, 0f, 1f);
-            foreach (var renderer in gameObject.GetComponentsInChildren<Renderer>())
-            {
-                if (alpha < 1f)
-                {
-                    renderer.material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
-                    renderer.material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
-                    renderer.material.SetInt("_ZWrite", 0);
-                    renderer.material.DisableKeyword("_ALPHATEST_ON");
-                    renderer.material.DisableKeyword("_ALPHABLEND_ON");
-                    renderer.material.EnableKeyword("_ALPHAPREMULTIPLY_ON");
-                    renderer.material.renderQueue = 3000;
-                }
-                else
-                {
-                    renderer.material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
-                    renderer.material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.Zero);
-                    renderer.material.SetInt("_ZWrite", 1);
-                    renderer.material.DisableKeyword("_ALPHATEST_ON");
-                    renderer.material.DisableKeyword("_ALPHABLEND_ON");
-                    renderer.material.DisableKeyword("_ALPHAPREMULTIPLY_ON");
-                    renderer.material.renderQueue = -1;
-                }
-
-                if (renderer.material.HasProperty("_Color"))
-                {
-                    renderer.material.color = new Color(renderer.material.color.r, renderer.material.color.g, renderer.material.color.b, alpha);
-                }
-            }
+            SetModelOpacity(modelContainer, alpha);
         }
 
         /// <summary>
@@ -256,11 +218,11 @@ namespace VRTK
             {
                 if (state)
                 {
-                    HighlightControllerElement(element.gameObject, highlight ?? Color.white, duration);
+                    HighlightControllerElement(element, highlight ?? Color.white, duration);
                 }
                 else
                 {
-                    UnhighlightControllerElement(element.gameObject);
+                    UnhighlightControllerElement(element);
                 }
             }
         }
@@ -370,7 +332,7 @@ namespace VRTK
             }
 
             hapticPulseStrength = (strength <= maxHapticVibration ? strength : maxHapticVibration);
-            VRTK_SDK_Bridge.HapticPulseOnIndex(controllerIndex, hapticPulseStrength);
+            VRTK_SDK_Bridge.HapticPulseOnIndex(VRTK_DeviceFinder.GetControllerIndex(gameObject), hapticPulseStrength);
         }
 
         /// <summary>
@@ -395,7 +357,6 @@ namespace VRTK
         /// </summary>
         public void InitaliseHighlighters()
         {
-
             highlighterOptions = new Dictionary<string, object>();
             highlighterOptions.Add("resetMainTexture", true);
             VRTK_BaseHighlighter objectHighlighter = VRTK_BaseHighlighter.GetActiveHighlighter(gameObject);
@@ -417,8 +378,8 @@ namespace VRTK
 
         private void Awake()
         {
-            gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
             cachedElements = new Dictionary<string, Transform>();
+            gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
 
             var controllerHand = VRTK_DeviceFinder.GetControllerHand(gameObject);
 
@@ -454,12 +415,8 @@ namespace VRTK
 
         private void OnEnable()
         {
+            modelContainer = (!modelContainer ? VRTK_DeviceFinder.GetActualController(gameObject) : modelContainer);
             StartCoroutine(WaitForModel());
-        }
-
-        private void Update()
-        {
-            controllerIndex = VRTK_DeviceFinder.GetControllerIndex(gameObject);
         }
 
         private IEnumerator WaitForModel()
@@ -491,7 +448,7 @@ namespace VRTK
 
             while (duration > 0)
             {
-                VRTK_SDK_Bridge.HapticPulseOnIndex(controllerIndex, hapticPulseStrength);
+                VRTK_SDK_Bridge.HapticPulseOnIndex(VRTK_DeviceFinder.GetControllerIndex(gameObject), hapticPulseStrength);
                 yield return new WaitForSeconds(pulseInterval);
                 duration -= pulseInterval;
             }
@@ -520,7 +477,7 @@ namespace VRTK
 
             if (!cachedElements.ContainsKey(path) || cachedElements[path] == null)
             {
-                cachedElements[path] = transform.Find(path);
+                cachedElements[path] = modelContainer.transform.Find(path);
             }
             return cachedElements[path];
         }
@@ -539,6 +496,55 @@ namespace VRTK
             ControllerActionsEventArgs e;
             e.controllerIndex = index;
             return e;
+        }
+
+        private void ToggleModelRenderers(GameObject obj, bool state, GameObject grabbedChildObject)
+        {
+            if (obj)
+            {
+                foreach (var renderer in obj.GetComponentsInChildren<Renderer>())
+                {
+                    if (renderer.gameObject != grabbedChildObject && (grabbedChildObject == null || !renderer.transform.IsChildOf(grabbedChildObject.transform)))
+                    {
+                        renderer.enabled = state;
+                    }
+                }
+            }
+        }
+
+        private void SetModelOpacity(GameObject obj, float alpha)
+        {
+            if (obj)
+            {
+                foreach (var renderer in obj.GetComponentsInChildren<Renderer>())
+                {
+                    if (alpha < 1f)
+                    {
+                        renderer.material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
+                        renderer.material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+                        renderer.material.SetInt("_ZWrite", 0);
+                        renderer.material.DisableKeyword("_ALPHATEST_ON");
+                        renderer.material.DisableKeyword("_ALPHABLEND_ON");
+                        renderer.material.EnableKeyword("_ALPHAPREMULTIPLY_ON");
+                        renderer.material.renderQueue = 3000;
+                    }
+                    else
+                    {
+                        renderer.material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
+                        renderer.material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.Zero);
+                        renderer.material.SetInt("_ZWrite", 1);
+                        renderer.material.DisableKeyword("_ALPHATEST_ON");
+                        renderer.material.DisableKeyword("_ALPHABLEND_ON");
+                        renderer.material.DisableKeyword("_ALPHAPREMULTIPLY_ON");
+                        renderer.material.renderQueue = -1;
+                    }
+
+                    if (renderer.material.HasProperty("_Color"))
+                    {
+                        renderer.material.color = new Color(renderer.material.color.r, renderer.material.color.g, renderer.material.color.b, alpha);
+                    }
+                }
+            }
         }
     }
 }

@@ -1,6 +1,7 @@
-﻿// Base Controller|SDK|003
+﻿// Base Controller|SDK_Base|003
 namespace VRTK
 {
+    using System;
     using UnityEngine;
 
     /// <summary>
@@ -12,103 +13,116 @@ namespace VRTK
     public class SDK_BaseController : SDK_InterfaceController
     {
         /// <summary>
-        /// The GetControllerElementPath returns the path to the game object that the given controller element for the given hand resides in.
+        /// The GetControllerDefaultColliderPath returns the path to the prefab that contains the collider objects for the default controller of this SDK.
         /// </summary>
-        /// <param name="element">The controller element to look up.</param>
-        /// <param name="hand">The controller hand to look up.</param>
-        /// <returns>A string containing the path to the game object that the controller element resides in.</returns>
-        public override string GetControllerElementPath(ControllerElelements element, VRTK_DeviceFinder.ControllerHand hand)
+        /// <returns>A path to the resource that contains the collider GameObject.</returns>
+        public override string GetControllerDefaultColliderPath()
         {
             return "";
         }
 
         /// <summary>
-        /// The GetTrackedObject method checks to see if the given game object is a tracked object and returns the game object back if it is valid along with it's tracked index.
+        /// The GetControllerElementPath returns the path to the game object that the given controller element for the given hand resides in.
         /// </summary>
-        /// <param name="obj">The GameObject to check on.</param>
-        /// <param name="index">The variable to store the tracked index in if one is found.</param>
-        /// <returns>A GameObject of the tracked object if one is found.</returns>
-        public override GameObject GetTrackedObject(GameObject obj, out uint index)
+        /// <param name="element">The controller element to look up.</param>
+        /// <param name="hand">The controller hand to look up.</param>
+        /// <param name="fullPath">Whether to get the initial path or the full path to the element.</param>
+        /// <returns>A string containing the path to the game object that the controller element resides in.</returns>
+        public override string GetControllerElementPath(ControllerElelements element, VRTK_DeviceFinder.ControllerHand hand, bool fullPath = false)
         {
-            index = uint.MaxValue;
-            return null;
+            return "";
         }
 
         /// <summary>
-        /// The GetTrackedObjectByIndex method retrieves a tracked object game object by it's index.
+        /// The GetControllerIndex method returns the index of the given controller.
         /// </summary>
-        /// <param name="index">The index of the tracked object to look up.</param>
-        /// <returns>The GameObject of the found tracked object.</returns>
-        public override GameObject GetTrackedObjectByIndex(uint index)
-        {
-            return null;
-        }
-
-        /// <summary>
-        /// The GetIndexOfTrackedObject method returns the tracked index of the given tracked object.
-        /// </summary>
-        /// <param name="trackedObject">The GameObject containing the tracked object.</param>
-        /// <returns>The tracked index of the given tracked object.</returns>
-        public override uint GetIndexOfTrackedObject(GameObject trackedObject)
+        /// <param name="controller">The GameObject containing the controller.</param>
+        /// <returns>The index of the given controller.</returns>
+        public override uint GetControllerIndex(GameObject controller)
         {
             return uint.MaxValue;
         }
 
         /// <summary>
-        /// The GetTrackedObjectOrigin method returns the origin of the given game object if it is a tracked object.
+        /// The GetControllerByIndex method returns the GameObject of a controller with a specific index.
         /// </summary>
-        /// <param name="obj">The GameObject to retrieve the origin from.</param>
-        /// <returns>A Transform containing the origin of the tracked object.</returns>
-        public override Transform GetTrackedObjectOrigin(GameObject obj)
+        /// <param name="index">The index of the controller to find.</param>
+        /// <param name="actual">If true it will return the actual controller, if false it will return the script alias controller GameObject.</param>
+        /// <returns></returns>
+        public override GameObject GetControllerByIndex(uint index, bool actual = false)
         {
             return null;
         }
 
         /// <summary>
-        /// The TrackedIndexIsController method is used to determine if the given tracked index is a controller.
+        /// The GetControllerOrigin method returns the origin of the given controller.
         /// </summary>
-        /// <param name="index">The tracked index to check for.</param>
-        /// <returns>Returns true if the tracked object found is a controller.</returns>
-        public override bool TrackedIndexIsController(uint index)
+        /// <param name="controller">The controller to retrieve the origin from.</param>
+        /// <returns>A Transform containing the origin of the controller.</returns>
+        public override Transform GetControllerOrigin(GameObject controller)
         {
-            return false;
+            return null;
         }
 
         /// <summary>
-        /// The GetControllerLeftHand method returns the game object containing the representation of the left hand controller.
+        /// The GetControllerLeftHand method returns the GameObject containing the representation of the left hand controller.
         /// </summary>
+        /// <param name="actual">If true it will return the actual controller, if false it will return the script alias controller GameObject.</param>
         /// <returns>The GameObject containing the left hand controller.</returns>
-        public override GameObject GetControllerLeftHand()
+        public override GameObject GetControllerLeftHand(bool actual = false)
         {
+            var sdkManager = VRTK_SDKManager.instance;
+            if (sdkManager != null)
+            {
+                return (actual ? sdkManager.actualLeftController : sdkManager.scriptAliasLeftController);
+            }
             return null;
         }
 
         /// <summary>
-        /// The GetControllerRightHand method returns the game object containing the representation of the right hand controller.
+        /// The GetControllerRightHand method returns the GameObject containing the representation of the right hand controller.
         /// </summary>
+        /// <param name="actual">If true it will return the actual controller, if false it will return the script alias controller GameObject.</param>
         /// <returns>The GameObject containing the right hand controller.</returns>
-        public override GameObject GetControllerRightHand()
+        public override GameObject GetControllerRightHand(bool actual = false)
         {
+            var sdkManager = VRTK_SDKManager.instance;
+            if (sdkManager != null)
+            {
+                return (actual ? sdkManager.actualRightController : sdkManager.scriptAliasRightController);
+            }
             return null;
         }
 
         /// <summary>
-        /// The IsControllerLeftHand method is used to check if the given game object is the game object containing the left hand controller.
+        /// The IsControllerLeftHand method is used to check if the given controller is the the left hand controller.
         /// </summary>
         /// <param name="controller">The GameObject to check.</param>
-        /// <returns>Returns true if the given game object is the left hand controller.</returns>
-        public override bool IsControllerLeftHand(GameObject controller)
+        /// <param name="actual">If true it will check the actual controller, if false it will check the script alias controller.</param>
+        /// <returns>Returns true if the given controller is the left hand controller.</returns>
+        public override bool IsControllerLeftHand(GameObject controller, bool actual = false)
         {
+            var sdkManager = VRTK_SDKManager.instance;
+            if (sdkManager != null)
+            {
+                return (actual ? controller.Equals(sdkManager.actualLeftController) : controller.Equals(sdkManager.scriptAliasLeftController));
+            }
             return false;
         }
 
         /// <summary>
-        /// The IsControllerRightHand method is used to check if the given game object is the game object containing the right hand controller.
+        /// The IsControllerRightHand method is used to check if the given controller is the the right hand controller.
         /// </summary>
         /// <param name="controller">The GameObject to check.</param>
-        /// <returns>Returns true if the given game object is the right hand controller.</returns>
-        public override bool IsControllerRightHand(GameObject controller)
+        /// <param name="actual">If true it will check the actual controller, if false it will check the script alias controller.</param>
+        /// <returns>Returns true if the given controller is the right hand controller.</returns>
+        public override bool IsControllerRightHand(GameObject controller, bool actual = false)
         {
+            var sdkManager = VRTK_SDKManager.instance;
+            if (sdkManager != null)
+            {
+                return (actual ? controller.Equals(sdkManager.actualRightController) : controller.Equals(sdkManager.scriptAliasRightController));
+            }
             return false;
         }
 

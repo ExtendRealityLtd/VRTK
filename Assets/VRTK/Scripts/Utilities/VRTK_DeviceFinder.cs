@@ -35,54 +35,34 @@ namespace VRTK
         }
 
         /// <summary>
-        /// The TrackedIndexIsController method is used to determine if a given tracked object index belongs to a tracked controller.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to find.</param>
-        /// <returns>Returns true if the given index is a tracked object of type controller.</returns>
-        public static bool TrackedIndexIsController(uint index)
-        {
-            return VRTK_SDK_Bridge.TrackedIndexIsController(index);
-        }
-
-        /// <summary>
         /// The GetControllerIndex method is used to find the index of a given controller object.
         /// </summary>
-        /// <param name="controller">The controller object to check the index on.</param>
+        /// <param name="controller">The controller object to get the index of a controller.</param>
         /// <returns>The index of the given controller.</returns>
         public static uint GetControllerIndex(GameObject controller)
         {
-            return VRTK_SDK_Bridge.GetIndexOfTrackedObject(controller);
+            return VRTK_SDK_Bridge.GetControllerIndex(controller);
         }
 
         /// <summary>
-        /// The TrackedObjectByIndex method is used to find the GameObject of a tracked object by its generated index.
+        /// The GetControllerByIndex method is used to find a controller based on it's unique index.
         /// </summary>
-        /// <param name="index">The index of the tracked object to find.</param>
-        /// <returns>The tracked object that matches the given index.</returns>
-        public static GameObject TrackedObjectByIndex(uint index)
+        /// <param name="index">The index of the actual controller to find.</param>
+        /// <param name="getActual">An optional parameter that if true will return the game object that the SDK controller is attached to.</param>
+        /// <returns>The actual controller GameObject that matches the given index.</returns>
+        public static GameObject GetControllerByIndex(uint index, bool getActual)
         {
-            return VRTK_SDK_Bridge.GetTrackedObjectByIndex(index);
+            return VRTK_SDK_Bridge.GetControllerByIndex(index, getActual);
         }
 
         /// <summary>
-        /// The TrackedObjectOrigin method is used to find the tracked object's origin.
+        /// The GetControllerOrigin method is used to find the controller's origin.
         /// </summary>
-        /// <param name="obj">The GameObject to get the origin for.</param>
-        /// <returns>The transform of the tracked object's origin or if an origin is not set then the transform parent.</returns>
-        public static Transform TrackedObjectOrigin(GameObject obj)
+        /// <param name="controller">The GameObject to get the origin for.</param>
+        /// <returns>The transform of the controller origin or if an origin is not set then the transform parent.</returns>
+        public static Transform GetControllerOrigin(GameObject controller)
         {
-            return VRTK_SDK_Bridge.GetTrackedObjectOrigin(obj);
-        }
-
-        /// <summary>
-        /// The TrackedObjectOfGameObject method is used to find the tracked object associated with the given game object and it can also return the index of the tracked object.
-        /// </summary>
-        /// <param name="obj">The game object to check for the presence of a tracked object on.</param>
-        /// <param name="index">The variable to store the tracked object's index if one is found. It returns 0 if no index is found.</param>
-        /// <returns>The GameObject of the tracked object.</returns>
-        public static GameObject TrackedObjectOfGameObject(GameObject obj, out uint index)
-        {
-            return VRTK_SDK_Bridge.GetTrackedObject(obj, out index);
+            return VRTK_SDK_Bridge.GetControllerOrigin(controller);
         }
 
         /// <summary>
@@ -129,11 +109,11 @@ namespace VRTK
         /// <returns>A ControllerHand representing either the Left or Right hand.</returns>
         public static ControllerHand GetControllerHand(GameObject controller)
         {
-            if (VRTK_SDK_Bridge.IsControllerLeftHand(controller))
+            if (VRTK_SDK_Bridge.IsControllerLeftHand(controller, true) || VRTK_SDK_Bridge.IsControllerLeftHand(controller, false))
             {
                 return ControllerHand.Left;
             }
-            else if (VRTK_SDK_Bridge.IsControllerRightHand(controller))
+            else if (VRTK_SDK_Bridge.IsControllerRightHand(controller, true) || VRTK_SDK_Bridge.IsControllerRightHand(controller, false))
             {
                 return ControllerHand.Right;
             }
@@ -146,19 +126,21 @@ namespace VRTK
         /// <summary>
         /// The GetControllerLeftHand method retrieves the game object for the left hand controller.
         /// </summary>
+        /// <param name="getActual">An optional parameter that if true will return the game object that the SDK controller is attached to.</param>
         /// <returns>The left hand controller.</returns>
-        public static GameObject GetControllerLeftHand()
+        public static GameObject GetControllerLeftHand(bool getActual = false)
         {
-            return VRTK_SDK_Bridge.GetControllerLeftHand();
+            return VRTK_SDK_Bridge.GetControllerLeftHand(getActual);
         }
 
         /// <summary>
         /// The GetControllerRightHand method retrieves the game object for the right hand controller.
         /// </summary>
+        /// <param name="getActual">An optional parameter that if true will return the game object that the SDK controller is attached to.</param>
         /// <returns>The right hand controller.</returns>
-        public static GameObject GetControllerRightHand()
+        public static GameObject GetControllerRightHand(bool getActual = false)
         {
-            return VRTK_SDK_Bridge.GetControllerRightHand();
+            return VRTK_SDK_Bridge.GetControllerRightHand(getActual);
         }
 
         /// <summary>
@@ -169,17 +151,87 @@ namespace VRTK
         /// <returns>Is true if the given controller matches the given hand.</returns>
         public static bool IsControllerOfHand(GameObject checkController, ControllerHand hand)
         {
-            if (hand == ControllerHand.Left && VRTK_SDK_Bridge.IsControllerLeftHand(checkController))
+            if (hand == ControllerHand.Left && (VRTK_SDK_Bridge.IsControllerLeftHand(checkController, true) || VRTK_SDK_Bridge.IsControllerLeftHand(checkController, false)))
             {
                 return true;
             }
 
-            if (hand == ControllerHand.Right && VRTK_SDK_Bridge.IsControllerRightHand(checkController))
+            if (hand == ControllerHand.Right && (VRTK_SDK_Bridge.IsControllerRightHand(checkController, true) || VRTK_SDK_Bridge.IsControllerRightHand(checkController, false)))
             {
                 return true;
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// The IsControllerLeftHand method is used to check if a given controller game object is the left handed controller.
+        /// </summary>
+        /// <param name="checkController">The controller object that is being checked.</param>
+        /// <returns>Is true if the given controller is the left controller.</returns>
+        public static bool IsControllerLeftHand(GameObject checkController)
+        {
+            return IsControllerOfHand(checkController, ControllerHand.Left);
+        }
+
+        /// <summary>
+        /// The IsControllerRightHand method is used to check if a given controller game object is the right handed controller.
+        /// </summary>
+        /// <param name="checkController">The controller object that is being checked.</param>
+        /// <returns>Is true if the given controller is the right controller.</returns>
+        public static bool IsControllerRightHand(GameObject checkController)
+        {
+            return IsControllerOfHand(checkController, ControllerHand.Right);
+        }
+
+        /// <summary>
+        /// The GetActualController method will attempt to get the actual SDK controller object.
+        /// </summary>
+        /// <param name="givenController">The GameObject of the controller.</param>
+        /// <returns>The GameObject that is the actual controller.</returns>
+        public static GameObject GetActualController(GameObject givenController)
+        {
+            if(VRTK_SDK_Bridge.IsControllerLeftHand(givenController, true) || VRTK_SDK_Bridge.IsControllerRightHand(givenController, true))
+            {
+                return givenController;
+            }
+
+            if (VRTK_SDK_Bridge.IsControllerLeftHand(givenController, false))
+            {
+                return VRTK_SDK_Bridge.GetControllerLeftHand(true);
+            }
+
+            if (VRTK_SDK_Bridge.IsControllerRightHand(givenController, false))
+            {
+                return VRTK_SDK_Bridge.GetControllerRightHand(true);
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// The GetAliasController method will attempt to get the object that contains the scripts for the controller.
+        /// </summary>
+        /// <param name="givenController">The GameObject of the controller.</param>
+        /// <returns>The GameObject that is the alias controller containing the scripts.</returns>
+        public static GameObject GetAliasController(GameObject givenController)
+        {
+            if (VRTK_SDK_Bridge.IsControllerLeftHand(givenController, false) || VRTK_SDK_Bridge.IsControllerRightHand(givenController, false))
+            {
+                return givenController;
+            }
+
+            if (VRTK_SDK_Bridge.IsControllerLeftHand(givenController, true))
+            {
+                return VRTK_SDK_Bridge.GetControllerLeftHand(false);
+            }
+
+            if (VRTK_SDK_Bridge.IsControllerRightHand(givenController, true))
+            {
+                return VRTK_SDK_Bridge.GetControllerRightHand(false);
+            }
+
+            return null;
         }
 
         /// <summary>

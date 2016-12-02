@@ -4,12 +4,12 @@ namespace VRTK
     using UnityEngine;
 
     /// <summary>
-    /// The Simple Pointer emits a coloured beam from the end of the controller to simulate a laser beam. It can be useful for pointing to objects within a scene and it can also determine the object it is pointing at and the distance the object is from the controller the beam is being emitted from.
+    /// The Simple Pointer emits a coloured beam from the end of the object it is attached to and simulates a laser beam.
     /// </summary>
     /// <remarks>
-    /// The laser beam is activated by default by pressing the `Touchpad` on the controller. The event it is listening for is the `AliasPointer` events so the pointer toggle button can be set by changing the `Pointer Toggle` button on the `VRTK_ControllerEvents` script parameters.
+    /// It can be useful for pointing to objects within a scene and it can also determine the object it is pointing at and the distance the object is from the controller the beam is being emitted from.
     ///
-    /// The Simple Pointer script can be attached to a Controller object within the `[CameraRig]` prefab and the Controller object also requires the `VRTK_ControllerEvents` script to be attached as it uses this for listening to the controller button events for enabling and disabling the beam. It is also possible to attach the Simple Pointer script to another object (like the `[CameraRig]/Camera (head)`) to enable other objects to project the beam. The controller parameter must be entered with the desired controller to toggle the beam if this is the case.
+    /// The laser beam is activated by default by pressing the `Touchpad` on the linked controller. The event it is listening for is the `AliasPointer` events so the pointer toggle button can be set by changing the `Pointer Toggle` button on the `VRTK_ControllerEvents` script parameters.
     /// </remarks>
     /// <example>
     /// `VRTK/Examples/003_Controller_SimplePointer` shows the simple pointer in action and code examples of how the events are utilised and listened to can be viewed in the script `VRTK/Examples/Resources/Scripts/VRTK_ControllerPointerEvents_ListenerExample.cs`
@@ -102,13 +102,13 @@ namespace VRTK
         protected override void InitPointer()
         {
             pointerHolder = new GameObject(string.Format("[{0}]BasePointer_SimplePointer_Holder", gameObject.name));
-            pointerHolder.transform.parent = transform;
+            pointerHolder.transform.SetParent(transform);
             pointerHolder.transform.localPosition = Vector3.zero;
             VRTK_PlayerObject.SetPlayerObject(pointerHolder, VRTK_PlayerObject.ObjectTypes.Pointer);
 
             pointer = GameObject.CreatePrimitive(PrimitiveType.Cube);
             pointer.transform.name = string.Format("[{0}]BasePointer_SimplePointer_Pointer", gameObject.name);
-            pointer.transform.parent = pointerHolder.transform;
+            pointer.transform.SetParent(pointerHolder.transform);
             pointer.GetComponent<BoxCollider>().isTrigger = true;
             pointer.AddComponent<Rigidbody>().isKinematic = true;
             pointer.layer = LayerMask.NameToLayer("Ignore Raycast");
@@ -137,7 +137,7 @@ namespace VRTK
 
             pointerCursorOriginalScale = pointerTip.transform.localScale;
             pointerTip.transform.name = string.Format("[{0}]BasePointer_SimplePointer_PointerTip", gameObject.name);
-            pointerTip.transform.parent = pointerHolder.transform;
+            pointerTip.transform.SetParent(pointerHolder.transform);
             pointerTip.GetComponent<Collider>().isTrigger = true;
             pointerTip.AddComponent<Rigidbody>().isKinematic = true;
             pointerTip.layer = LayerMask.NameToLayer("Ignore Raycast");

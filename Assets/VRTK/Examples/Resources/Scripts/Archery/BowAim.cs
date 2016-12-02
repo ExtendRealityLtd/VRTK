@@ -61,7 +61,7 @@
 
         private void DoObjectGrab(object sender, InteractableObjectEventArgs e)
         {
-            if (VRTK_SDK_Bridge.IsControllerLeftHand(e.interactingObject))
+            if (VRTK_DeviceFinder.IsControllerLeftHand(e.interactingObject))
             {
                 holdControl = VRTK_DeviceFinder.GetControllerLeftHand().GetComponent<VRTK_ControllerEvents>();
                 stringControl = VRTK_DeviceFinder.GetControllerRightHand().GetComponent<VRTK_ControllerEvents>();

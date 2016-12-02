@@ -1,4 +1,4 @@
-﻿// Base Boundaries|SDK|004
+﻿// Base Boundaries|SDK_Base|004
 namespace VRTK
 {
     using UnityEngine;
@@ -19,6 +19,12 @@ namespace VRTK
         /// <returns>A transform of the object representing the play area in the scene.</returns>
         public override Transform GetPlayArea()
         {
+            var sdkManager = VRTK_SDKManager.instance;
+            if (sdkManager != null)
+            {
+                cachedPlayArea = sdkManager.actualBoundaries.transform;
+                return cachedPlayArea;
+            }
             return null;
         }
 

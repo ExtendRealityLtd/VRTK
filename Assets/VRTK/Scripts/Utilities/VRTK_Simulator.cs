@@ -4,10 +4,12 @@ namespace VRTK
     using UnityEngine;
 
     /// <summary>
-    /// To test a scene it is often necessary to use the headset to move to a location. This increases turn-around times and can become cumbersome. The simulator allows navigating through the scene using the keyboard instead, without the need to put on the headset. One can then move around (also through walls) while looking at the monitor and still use the controllers to interact.
+    /// To test a scene it is often necessary to use the headset to move to a location. This increases turn-around times and can become cumbersome.
     /// </summary>
     /// <remarks>
-    /// The Simulator script is attached to the `[CameraRig]` prefab. Supported movements are: forward, backward, strafe left, strafe right, turn left, turn right, up, down.
+    /// The simulator allows navigating through the scene using the keyboard instead, without the need to put on the headset. One can then move around (also through walls) while looking at the monitor and still use the controllers to interact.
+    ///
+    /// Supported movements are: forward, backward, strafe left, strafe right, turn left, turn right, up, down.
     /// </remarks>
     public class VRTK_Simulator : MonoBehaviour
     {
@@ -34,7 +36,8 @@ namespace VRTK
         [Tooltip("An optional game object marking the position and rotation at which the camera should be initially placed.")]
         public Transform camStart;
 
-        private Transform cam;
+        private Transform headset;
+        private Transform playArea;
         private Vector3 initialPosition;
         private Quaternion initialRotation;
 
@@ -47,8 +50,9 @@ namespace VRTK
                 return;
             }
 
-            cam = GetComponentInChildren<Camera>().transform;
-            if (!cam)
+            headset = VRTK_DeviceFinder.HeadsetTransform();
+            playArea = VRTK_DeviceFinder.PlayAreaTransform();
+            if (!headset)
             {
                 Debug.LogWarning("Could not find camera. Simulator deactivated.");
                 enabled = false;
@@ -57,12 +61,12 @@ namespace VRTK
 
             if (camStart && camStart.gameObject.activeInHierarchy)
             {
-                transform.position = camStart.position;
-                transform.rotation = camStart.rotation;
+                playArea.position = camStart.position;
+                playArea.rotation = camStart.rotation;
             }
 
-            initialPosition = transform.position;
-            initialRotation = transform.rotation;
+            initialPosition = playArea.position;
+            initialRotation = playArea.rotation;
         }
 
         private void Update()
@@ -72,19 +76,19 @@ namespace VRTK
 
             if (Input.GetKey(keys.forward))
             {
-                movDir = overwriteY(cam.forward, 0);
+                movDir = overwriteY(headset.forward, 0);
             }
             else if (Input.GetKey(keys.backward))
             {
-                movDir = overwriteY(-cam.forward, 0);
+                movDir = overwriteY(-headset.forward, 0);
             }
             else if (Input.GetKey(keys.strafeLeft))
             {
-                movDir = overwriteY(-cam.right, 0);
+                movDir = overwriteY(-headset.right, 0);
             }
             else if (Input.GetKey(keys.strafeRight))
             {
-                movDir = overwriteY(cam.right, 0);
+                movDir = overwriteY(headset.right, 0);
             }
             else if (Input.GetKey(keys.up))
             {
@@ -104,11 +108,11 @@ namespace VRTK
             }
             else if (Input.GetKey(keys.reset))
             {
-                transform.position = initialPosition;
-                transform.rotation = initialRotation;
+                playArea.position = initialPosition;
+                playArea.rotation = initialRotation;
             }
-            transform.Translate(movDir * stepSize, Space.World);
-            transform.Rotate(rotDir);
+            playArea.Translate(movDir * stepSize, Space.World);
+            playArea.Rotate(rotDir);
         }
 
         private Vector3 overwriteY(Vector3 vector, float value)

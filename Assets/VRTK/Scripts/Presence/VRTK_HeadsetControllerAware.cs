@@ -181,7 +181,7 @@ namespace VRTK
         private void RayCastToController(GameObject controller, Transform customDestination, ref bool obscured, ref bool lastState)
         {
             obscured = false;
-            if (controller && controller.activeInHierarchy)
+            if (controller && controller.gameObject.activeInHierarchy)
             {
                 var destination = (customDestination ? customDestination.position : controller.transform.position);
                 RaycastHit hitInfo;
@@ -192,7 +192,7 @@ namespace VRTK
 
                 if (lastState != obscured)
                 {
-                    ObscuredStateChanged(controller, obscured, hitInfo);
+                    ObscuredStateChanged(controller.gameObject, obscured, hitInfo);
                 }
 
                 lastState = obscured;
@@ -214,7 +214,7 @@ namespace VRTK
         private void CheckHeadsetView(GameObject controller, Transform customDestination, ref bool controllerGlance, ref bool controllerGlanceLastState)
         {
             controllerGlance = false;
-            if (controller && controller.activeInHierarchy)
+            if (controller && controller.gameObject.activeInHierarchy)
             {
                 var controllerPosition = (customDestination ? customDestination.position : controller.transform.position);
                 var distanceFromHeadsetToController = Vector3.Distance(headset.position, controllerPosition);
@@ -227,7 +227,7 @@ namespace VRTK
 
                 if (controllerGlanceLastState != controllerGlance)
                 {
-                    GlanceStateChanged(controller, controllerGlance);
+                    GlanceStateChanged(controller.gameObject, controllerGlance);
                 }
 
                 controllerGlanceLastState = controllerGlance;

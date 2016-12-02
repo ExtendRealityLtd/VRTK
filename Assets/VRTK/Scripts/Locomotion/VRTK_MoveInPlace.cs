@@ -111,8 +111,7 @@ namespace VRTK
         // Which tracked objects to use to determine amount of movement.
         private List<Transform> trackedObjects = new List<Transform>();
 
-        private Rigidbody rigidBody;
-
+        private Transform playArea;
         private GameObject controllerLeftHand;
         private GameObject controllerRightHand;
         private Transform headset;
@@ -148,8 +147,8 @@ namespace VRTK
 
             if (controllerLeftHand && controllerRightHand && (controlOptions.Equals(ControlOptions.HeadsetAndControllers) || controlOptions.Equals(ControlOptions.ControllersOnly)))
             {
-                trackedObjects.Add(controllerLeftHand.transform);
-                trackedObjects.Add(controllerRightHand.transform);
+                trackedObjects.Add(VRTK_DeviceFinder.GetActualController(controllerLeftHand).transform);
+                trackedObjects.Add(VRTK_DeviceFinder.GetActualController(controllerRightHand).transform);
             }
 
             if (headset && (controlOptions.Equals(ControlOptions.HeadsetAndControllers) || controlOptions.Equals(ControlOptions.HeadsetOnly)))
@@ -199,7 +198,7 @@ namespace VRTK
 
         private void Start()
         {
-            rigidBody = GetComponent<Rigidbody>();
+            playArea = VRTK_DeviceFinder.PlayAreaTransform();
             SetControllerListeners(controllerLeftHand);
             SetControllerListeners(controllerRightHand);
 
@@ -336,8 +335,7 @@ namespace VRTK
             }
 
             Vector3 movement = (direction * curSpeed) * Time.fixedDeltaTime;
-
-            rigidBody.MovePosition(rigidBody.transform.position + movement);
+            playArea.position = new Vector3(movement.x + playArea.position.x, playArea.position.y, movement.z + playArea.position.z);
         }
 
         private Quaternion DetermineAverageControllerRotation()
@@ -383,11 +381,11 @@ namespace VRTK
 
         private void SetControllerListeners(GameObject controller)
         {
-            if (controller && VRTK_SDK_Bridge.IsControllerLeftHand(controller))
+            if (controller && VRTK_DeviceFinder.IsControllerLeftHand(controller))
             {
                 ToggleControllerListeners(controller, leftController, ref leftSubscribed);
             }
-            else if (controller && VRTK_SDK_Bridge.IsControllerRightHand(controller))
+            else if (controller && VRTK_DeviceFinder.IsControllerRightHand(controller))
             {
                 ToggleControllerListeners(controller, rightController, ref rightSubscribed);
             }

@@ -1,4 +1,4 @@
-﻿// SteamVR Boundaries|SDK|004
+﻿// SteamVR Boundaries|SDK_SteamVR|004
 namespace VRTK
 {
     using UnityEngine;
@@ -8,13 +8,14 @@ namespace VRTK
     /// </summary>
     public class SDK_SteamVRBoundaries : SDK_BaseBoundaries
     {
-#if VRTK_SDK_BOUNDARIES_STEAMVR
+#if VRTK_SDK_STEAMVR
         /// <summary>
         /// The GetPlayArea method returns the Transform of the object that is used to represent the play area in the scene.
         /// </summary>
         /// <returns>A transform of the object representing the play area in the scene.</returns>
         public override Transform GetPlayArea()
         {
+            cachedPlayArea = base.GetPlayArea();
             if (cachedPlayArea == null)
             {
                 cachedPlayArea = FindObjectOfType<SteamVR_PlayArea>().transform;

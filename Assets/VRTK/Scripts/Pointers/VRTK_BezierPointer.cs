@@ -4,12 +4,12 @@ namespace VRTK
     using UnityEngine;
 
     /// <summary>
-    /// The Bezier Pointer emits a curved line (made out of game objects) from the end of the controller to a point on a ground surface (at any height). It is more useful than the Simple Laser Pointer for traversing objects of various heights as the end point can be curved on top of objects that are not visible to the user.
+    /// The Bezier Pointer emits a curved line (made out of game objects) from the end of the attached object to a point on a ground surface (at any height).
     /// </summary>
     /// <remarks>
-    /// The laser beam is activated by default by pressing the `Touchpad` on the controller. The event it is listening for is the `AliasPointer` events so the pointer toggle button can be set by changing the `Pointer Toggle` button on the `VRTK_ControllerEvents` script parameters.
+    /// It is more useful than the Simple Laser Pointer for traversing objects of various heights as the end point can be curved on top of objects that are not visible to the user.
     ///
-    /// The Bezier Pointer script can be attached to a Controller object within the `[CameraRig]` prefab and the Controller object also requires the `VRTK_ControllerEvents` script to be attached as it uses this for listening to the controller button events for enabling and disabling the beam. It is also possible to attach the Bezier Pointer script to another object (like the `[CameraRig]/Camera (head)`) to enable other objects to project the beam. The controller parameter must be entered with the desired controller to toggle the beam if this is the case.
+    /// The laser beam is activated by default by pressing the `Touchpad` on the controller. The event it is listening for is the `AliasPointer` events so the pointer toggle button can be set by changing the `Pointer Toggle` button on the `VRTK_ControllerEvents` script parameters.
     ///
     ///   > The bezier curve generation code is in another script located at `VRTK/Scripts/Internal/VRTK_CurveGenerator.cs` and was heavily inspired by the tutorial and code from [Catlike Coding](http://catlikecoding.com/unity/tutorials/curves-and-splines/).
     /// </remarks>
@@ -22,13 +22,13 @@ namespace VRTK
     {
         [Header("Bezier Pointer Settings", order = 3)]
 
-        [Tooltip("The length of the projected forward pointer beam, this is basically the distance able to point from the controller position.")]
+        [Tooltip("The length of the projected forward pointer beam, this is basically the distance able to point from the origin position.")]
         public float pointerLength = 10f;
         [Tooltip("The number of items to render in the beam bezier curve. A high number here will most likely have a negative impact of game performance due to large number of rendered objects.")]
         public int pointerDensity = 10;
         [Tooltip("The amount of height offset to apply to the projected beam to generate a smoother curve even when the beam is pointing straight.")]
         public float beamCurveOffset = 1f;
-        [Tooltip("The maximum angle in degrees of the controller before the beam curve height is restricted. A lower angle setting will prevent the beam being projected high into the sky and curving back down.")]
+        [Tooltip("The maximum angle in degrees of the origin before the beam curve height is restricted. A lower angle setting will prevent the beam being projected high into the sky and curving back down.")]
         [Range(1, 100)]
         public float beamHeightLimitAngle = 100f;
         [Tooltip("Rescale each pointer tracer element according to the length of the Bezier curve.")]
@@ -40,7 +40,7 @@ namespace VRTK
         [Tooltip("The pointer cursor will be rotated to match the angle of the target surface if this is true, if it is false then the pointer cursor will always be horizontal.")]
         public bool pointerCursorMatchTargetRotation = false;
         [Header("Custom Appearance Settings", order = 4)]
-        [Tooltip("A custom Game Object can be applied here to use instead of the default sphere for the beam tracer. The custom Game Object will match the rotation of the controller.")]
+        [Tooltip("A custom Game Object can be applied here to use instead of the default sphere for the beam tracer. The custom Game Object will match the rotation of the object attached to.")]
         public GameObject customPointerTracer;
         [Tooltip("A custom Game Object can be applied here to use instead of the default flat cylinder for the pointer cursor.")]
         public GameObject customPointerCursor;
@@ -101,7 +101,7 @@ namespace VRTK
             {
                 validTeleportLocationInstance = Instantiate(validTeleportLocationObject);
                 validTeleportLocationInstance.name = string.Format("[{0}]BasePointer_BezierPointer_TeleportBeam", gameObject.name);
-                validTeleportLocationInstance.transform.parent = pointerCursor.transform;
+                validTeleportLocationInstance.transform.SetParent(pointerCursor.transform);
                 validTeleportLocationInstance.layer = LayerMask.NameToLayer("Ignore Raycast");
                 validTeleportLocationInstance.SetActive(false);
             }
@@ -115,7 +115,7 @@ namespace VRTK
             VRTK_PlayerObject.SetPlayerObject(curvedBeamContainer, VRTK_PlayerObject.ObjectTypes.Pointer);
             curvedBeamContainer.SetActive(false);
             curvedBeam = curvedBeamContainer.gameObject.AddComponent<VRTK_CurveGenerator>();
-            curvedBeam.transform.parent = null;
+            curvedBeam.transform.SetParent(null);
             curvedBeam.Create(pointerDensity, pointerCursorRadius, customPointerTracer, rescalePointerTracer);
 
             base.InitPointer();
@@ -163,13 +163,13 @@ namespace VRTK
 
         private Vector3 ProjectForwardBeam()
         {
-            var controllerRotation = Vector3.Dot(Vector3.up, controller.transform.forward.normalized);
+            var attachedRotation = Vector3.Dot(Vector3.up, transform.forward.normalized);
             var calculatedLength = pointerLength;
             var useForward = GetOriginForward();
-            if ((controllerRotation * 100f) > beamHeightLimitAngle)
+            if ((attachedRotation * 100f) > beamHeightLimitAngle)
             {
                 useForward = new Vector3(useForward.x, fixedForwardBeamForward.y, useForward.z);
-                var controllerRotationOffset = 1f - (controllerRotation - (beamHeightLimitAngle / 100f));
+                var controllerRotationOffset = 1f - (attachedRotation - (beamHeightLimitAngle / 100f));
                 calculatedLength = (pointerLength * controllerRotationOffset) * controllerRotationOffset;
             }
             else

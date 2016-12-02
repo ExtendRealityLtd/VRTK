@@ -4,11 +4,8 @@ namespace VRTK
     using UnityEngine;
 
     /// <summary>
-    /// The height adjust teleporter extends the basic teleporter and allows for the y position of the `[CameraRig]` to be altered based on whether the teleport location is on top of another object.
+    /// The height adjust teleporter extends the basic teleporter and allows for the y position of the user's position to be altered based on whether the teleport location is on top of another object.
     /// </summary>
-    /// <remarks>
-    /// Like the basic teleporter the Height Adjust Teleport script is attached to the `[CameraRig]` prefab.
-    /// </remarks>
     /// <example>
     /// `VRTK/Examples/007_CameraRig_HeightAdjustTeleport` has a collection of varying height objects that the user can either walk up and down or use the laser pointer to climb on top of them.
     ///
@@ -41,11 +38,11 @@ namespace VRTK
 
         private float GetTeleportY(Transform target, Vector3 tipPosition)
         {
-            var newY = transform.position.y;
+            var newY = playArea.position.y;
             var heightOffset = 0.1f;
             //Check to see if the tip is on top of an object
             var rayStartPositionOffset = Vector3.up * heightOffset;
-            var ray = new Ray(tipPosition + rayStartPositionOffset, -transform.up);
+            var ray = new Ray(tipPosition + rayStartPositionOffset, -playArea.up);
             RaycastHit rayCollidedWith;
             if (target && Physics.Raycast(ray, out rayCollidedWith))
             {

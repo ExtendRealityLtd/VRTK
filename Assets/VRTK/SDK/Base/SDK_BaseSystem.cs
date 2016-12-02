@@ -1,4 +1,4 @@
-﻿// Base System|SDK|001
+﻿// Base System|SDK_Base|001
 namespace VRTK
 {
     /// <summary>

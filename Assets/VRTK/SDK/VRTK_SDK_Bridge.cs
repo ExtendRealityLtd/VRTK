@@ -11,54 +11,49 @@
         private static SDK_BaseController controllerSDK = null;
         private static SDK_BaseBoundaries boundariesSDK = null;
 
-        public static string GetControllerElementPath(SDK_InterfaceController.ControllerElelements element, VRTK_DeviceFinder.ControllerHand hand = VRTK_DeviceFinder.ControllerHand.Right)
+        public static string GetControllerDefaultColliderPath()
         {
-            return GetControllerSDK().GetControllerElementPath(element, hand);
+            return GetControllerSDK().GetControllerDefaultColliderPath();
         }
 
-        public static GameObject GetTrackedObject(GameObject obj, out uint index)
+        public static string GetControllerElementPath(SDK_InterfaceController.ControllerElelements element, VRTK_DeviceFinder.ControllerHand hand = VRTK_DeviceFinder.ControllerHand.Right, bool fullPath = false)
         {
-            return GetControllerSDK().GetTrackedObject(obj, out index);
+            return GetControllerSDK().GetControllerElementPath(element, hand, fullPath);
         }
 
-        public static GameObject GetTrackedObjectByIndex(uint index)
+        public static uint GetControllerIndex(GameObject controller)
         {
-            return GetControllerSDK().GetTrackedObjectByIndex(index);
+            return GetControllerSDK().GetControllerIndex(controller);
         }
 
-        public static uint GetIndexOfTrackedObject(GameObject trackedObject)
+        public static GameObject GetControllerByIndex(uint index, bool actual)
         {
-            return GetControllerSDK().GetIndexOfTrackedObject(trackedObject);
+            return GetControllerSDK().GetControllerByIndex(index, actual);
         }
 
-        public static Transform GetTrackedObjectOrigin(GameObject obj)
+        public static Transform GetControllerOrigin(GameObject controller)
         {
-            return GetControllerSDK().GetTrackedObjectOrigin(obj);
+            return GetControllerSDK().GetControllerOrigin(controller);
         }
 
-        public static bool TrackedIndexIsController(uint index)
+        public static GameObject GetControllerLeftHand(bool actual)
         {
-            return GetControllerSDK().TrackedIndexIsController(index);
+            return GetControllerSDK().GetControllerLeftHand(actual);
         }
 
-        public static GameObject GetControllerLeftHand()
+        public static GameObject GetControllerRightHand(bool actual)
         {
-            return GetControllerSDK().GetControllerLeftHand();
+            return GetControllerSDK().GetControllerRightHand(actual);
         }
 
-        public static GameObject GetControllerRightHand()
+        public static bool IsControllerLeftHand(GameObject controller, bool actual)
         {
-            return GetControllerSDK().GetControllerRightHand();
+            return GetControllerSDK().IsControllerLeftHand(controller, actual);
         }
 
-        public static bool IsControllerLeftHand(GameObject controller)
+        public static bool IsControllerRightHand(GameObject controller, bool actual)
         {
-            return GetControllerSDK().IsControllerLeftHand(controller);
-        }
-
-        public static bool IsControllerRightHand(GameObject controller)
-        {
-            return GetControllerSDK().IsControllerRightHand(controller);
+            return GetControllerSDK().IsControllerRightHand(controller, actual);
         }
 
         public static GameObject GetControllerRenderModel(GameObject controller)
@@ -303,13 +298,18 @@
         {
             if (systemSDK == null)
             {
-#if VRTK_SDK_SYSTEM_STEAMVR
-                systemSDK = ScriptableObject.CreateInstance<SDK_SteamVRSystem>();
-#endif
-                if(systemSDK == null)
+                systemSDK = ScriptableObject.CreateInstance<SDK_BaseSystem>();
+                if (VRTK_SDKManager.instance)
                 {
-                    systemSDK = ScriptableObject.CreateInstance<SDK_BaseSystem>();
-                    Debug.LogError("No System SDK configured, falling back to Base System SDK.");
+                    switch (VRTK_SDKManager.instance.systemSDK)
+                    {
+                        case VRTK_SDKManager.SupportedSDKs.SteamVR:
+                            systemSDK = ScriptableObject.CreateInstance<SDK_SteamVRSystem>();
+                            break;
+                        default:
+                            Debug.LogError("No System SDK configured, falling back to Base System SDK.");
+                            break;
+                    }
                 }
             }
             return systemSDK;
@@ -319,13 +319,18 @@
         {
             if (headsetSDK == null)
             {
-#if VRTK_SDK_HEADSET_STEAMVR
-                headsetSDK = ScriptableObject.CreateInstance<SDK_SteamVRHeadset>();
-#endif
-                if (headsetSDK == null)
+                headsetSDK = ScriptableObject.CreateInstance<SDK_BaseHeadset>();
+                if (VRTK_SDKManager.instance)
                 {
-                    headsetSDK = ScriptableObject.CreateInstance<SDK_BaseHeadset>();
-                    Debug.LogError("No Headset SDK configured, falling back to Base Headset SDK.");
+                    switch (VRTK_SDKManager.instance.headsetSDK)
+                    {
+                        case VRTK_SDKManager.SupportedSDKs.SteamVR:
+                            headsetSDK = ScriptableObject.CreateInstance<SDK_SteamVRHeadset>();
+                            break;
+                        default:
+                            Debug.LogError("No Headset SDK configured, falling back to Base Headset SDK.");
+                            break;
+                    }
                 }
             }
             return headsetSDK;
@@ -335,13 +340,18 @@
         {
             if (controllerSDK == null)
             {
-#if VRTK_SDK_CONTROLLER_STEAMVR
-                controllerSDK = ScriptableObject.CreateInstance<SDK_SteamVRController>();
-#endif
-                if (controllerSDK == null)
+                controllerSDK = ScriptableObject.CreateInstance<SDK_BaseController>();
+                if (VRTK_SDKManager.instance)
                 {
-                    controllerSDK = ScriptableObject.CreateInstance<SDK_BaseController>();
-                    Debug.LogError("No Controller SDK configured, falling back to Base Controller SDK.");
+                    switch (VRTK_SDKManager.instance.controllerSDK)
+                    {
+                        case VRTK_SDKManager.SupportedSDKs.SteamVR:
+                            controllerSDK = ScriptableObject.CreateInstance<SDK_SteamVRController>();
+                            break;
+                        default:
+                            Debug.LogError("No Controller SDK configured, falling back to Base Controller SDK.");
+                            break;
+                    }
                 }
             }
             return controllerSDK;
@@ -351,13 +361,18 @@
         {
             if (boundariesSDK == null)
             {
-#if VRTK_SDK_BOUNDARIES_STEAMVR
-                boundariesSDK = ScriptableObject.CreateInstance<SDK_SteamVRBoundaries>();
-#endif
-                if (boundariesSDK == null)
+                boundariesSDK = ScriptableObject.CreateInstance<SDK_BaseBoundaries>();
+                if (VRTK_SDKManager.instance)
                 {
-                    boundariesSDK = ScriptableObject.CreateInstance<SDK_BaseBoundaries>();
-                    Debug.LogError("No Boundaries SDK configured, falling back to Base Boundaries SDK.");
+                    switch (VRTK_SDKManager.instance.boundariesSDK)
+                    {
+                        case VRTK_SDKManager.SupportedSDKs.SteamVR:
+                            boundariesSDK = ScriptableObject.CreateInstance<SDK_SteamVRBoundaries>();
+                            break;
+                        default:
+                            Debug.LogError("No Boundaries SDK configured, falling back to Base Boundaries SDK.");
+                            break;
+                    }
                 }
             }
             return boundariesSDK;

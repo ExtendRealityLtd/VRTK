@@ -95,7 +95,7 @@ namespace VRTK
         /// <param name="state">The state of whether to enable or disable the beam.</param>
         public virtual void ToggleBeam(bool state)
         {
-            var index = VRTK_DeviceFinder.GetControllerIndex(gameObject);
+            var index = (controller ? VRTK_DeviceFinder.GetControllerIndex(controller.gameObject) : uint.MaxValue);
             if (state)
             {
                 TurnOnBeam(index);
@@ -125,7 +125,8 @@ namespace VRTK
             pointerMaterial = new Material(tmpMaterial);
             pointerMaterial.color = pointerMissColor;
 
-            playAreaCursor = (GetComponent<VRTK_PlayAreaCursor>() ?? GetComponent<VRTK_PlayAreaCursor>());
+            var fetchedPlayAreaCursor = GetComponent<VRTK_PlayAreaCursor>();
+            playAreaCursor = (fetchedPlayAreaCursor ?? fetchedPlayAreaCursor);
 
             if (interactWithObjects)
             {
@@ -253,12 +254,12 @@ namespace VRTK
             {
                 if (setInteractableObject.IsUsing())
                 {
-                    setInteractableObject.StopUsing(gameObject);
+                    setInteractableObject.StopUsing(controller.gameObject);
                     interactableObject.usingState = 0;
                 }
                 else if (!setInteractableObject.holdButtonToUse)
                 {
-                    setInteractableObject.StartUsing(gameObject);
+                    setInteractableObject.StartUsing(controller.gameObject);
                     interactableObject.usingState++;
                 }
             }
@@ -286,7 +287,7 @@ namespace VRTK
 
             if (!state && PointerActivatesUseAction(interactableObject) && interactableObject.holdButtonToUse && interactableObject.IsUsing())
             {
-                interactableObject.StopUsing(gameObject);
+                interactableObject.StopUsing(controller.gameObject);
             }
         }
 
@@ -427,6 +428,7 @@ namespace VRTK
                 controller = GetComponent<VRTK_ControllerEvents>();
                 AttemptSetController();
             }
+
             if (controller == null)
             {
                 Debug.LogError("VRTK_BasePointer requires a Controller that has the VRTK_ControllerEvents script attached to it");
@@ -453,7 +455,7 @@ namespace VRTK
 
         private bool PointerActivatesUseAction(VRTK_InteractableObject io)
         {
-            return (io && io.pointerActivatesUseAction && io.IsValidInteractableController(controller.gameObject, io.allowedUseControllers));
+            return (io && io.pointerActivatesUseAction && io.IsValidInteractableController(gameObject, io.allowedUseControllers));
         }
 
         private void StartUseAction(Transform target)
@@ -463,7 +465,7 @@ namespace VRTK
 
             if (PointerActivatesUseAction(interactableObject) && interactableObject.holdButtonToUse && !cannotUseBecauseNotGrabbed)
             {
-                interactableObject.StartUsing(gameObject);
+                interactableObject.StartUsing(controller.gameObject);
                 interactableObject.usingState++;
             }
         }
@@ -472,7 +474,7 @@ namespace VRTK
         {
             if (PointerActivatesUseAction(interactableObject) && interactableObject.holdButtonToUse)
             {
-                interactableObject.StopUsing(gameObject);
+                interactableObject.StopUsing(controller.gameObject);
                 interactableObject.usingState = 0;
             }
         }

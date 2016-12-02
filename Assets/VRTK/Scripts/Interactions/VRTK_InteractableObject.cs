@@ -640,7 +640,10 @@ namespace VRTK
                 interactableRigidbody.maxAngularVelocity = float.MaxValue;
             }
 
-            enabled = !(enabled && disableWhenIdle);
+            if (disableWhenIdle && enabled)
+            {
+                enabled = false;
+            }
         }
 
         protected virtual void OnEnable()
@@ -903,7 +906,8 @@ namespace VRTK
         {
             if (grabAttachMechanicScript && grabAttachMechanicScript.IsTracked() && stayGrabbedOnTeleport && trackPoint)
             {
-                transform.position = GetGrabbingObject().transform.position;
+                var actualController = VRTK_DeviceFinder.GetActualController(GetGrabbingObject());
+                transform.position = (actualController ? actualController.transform.position : transform.position);
             }
         }
 

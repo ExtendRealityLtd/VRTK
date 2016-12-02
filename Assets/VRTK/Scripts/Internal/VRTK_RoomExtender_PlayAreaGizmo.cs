@@ -10,15 +10,15 @@
         public bool drawWireframeWhenSelectedOnly = false;
 
         private Transform playArea;
-        private VRTK_RoomExtender vrtk_RoomExtender;
+        private VRTK_RoomExtender roomExtender;
 
-        private void OnEnable()
+        private void Awake()
         {
             playArea = VRTK_DeviceFinder.PlayAreaTransform();
-            vrtk_RoomExtender = FindObjectOfType<VRTK_RoomExtender>();
-            if (playArea == null || vrtk_RoomExtender == null)
+            roomExtender = FindObjectOfType<VRTK_RoomExtender>();
+            if (playArea == null || roomExtender == null)
             {
-                Debug.LogWarning("Could not find PlayArea or 'VRTK_RoomExtender'. Please check if they are attached to the CameraRig");
+                Debug.LogWarning("Could not find PlayArea or 'VRTK_RoomExtender'.");
                 return;
             }
         }
@@ -53,13 +53,13 @@
             var topLeft = 6;
             var topRight = 7;
 
-            var btmRightVertex = vertices[btmRight] * vrtk_RoomExtender.additionalMovementMultiplier;
-            var btmLeftVertex = vertices[btmLeft] * vrtk_RoomExtender.additionalMovementMultiplier;
-            var topLeftVertex = vertices[topLeft] * vrtk_RoomExtender.additionalMovementMultiplier;
-            var topRightVertex = vertices[topRight] * vrtk_RoomExtender.additionalMovementMultiplier;
+            var btmRightVertex = vertices[btmRight] * roomExtender.additionalMovementMultiplier;
+            var btmLeftVertex = vertices[btmLeft] * roomExtender.additionalMovementMultiplier;
+            var topLeftVertex = vertices[topLeft] * roomExtender.additionalMovementMultiplier;
+            var topRightVertex = vertices[topRight] * roomExtender.additionalMovementMultiplier;
 
-            var btmOffset = new Vector3(0f, vrtk_RoomExtender.transform.localPosition.y, 0f);
-            var topOffset = btmOffset + transform.TransformVector(Vector3.up * wireframeHeight);
+            var btmOffset = new Vector3(0f, roomExtender.transform.localPosition.y, 0f);
+            var topOffset = btmOffset + playArea.TransformVector(Vector3.up * wireframeHeight);
             Gizmos.color = color;
             //bottom rectangle
             Gizmos.DrawLine(btmRightVertex + btmOffset, btmLeftVertex + btmOffset);

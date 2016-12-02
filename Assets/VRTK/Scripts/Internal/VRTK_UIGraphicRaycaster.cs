@@ -20,6 +20,8 @@
 
         private Canvas m_Canvas;
         private Vector2 lastKnownPosition;
+        private int tickCount = 0;
+        private int maxTickCount = 2;
         private const float UI_CONTROL_OFFSET = 0.00001f;
 
         [NonSerialized]
@@ -65,8 +67,16 @@
             if (nearestRaycast.HasValue)
             {
                 eventData.position = nearestRaycast.Value.screenPosition;
-                eventData.delta = eventData.position - lastKnownPosition;
-                lastKnownPosition = eventData.position;
+                if (tickCount == 0)
+                {
+                    eventData.delta = eventData.position - lastKnownPosition;
+                    lastKnownPosition = eventData.position;
+                }
+                tickCount++;
+                if (tickCount >= maxTickCount)
+                {
+                    tickCount = 0;
+                }
                 eventData.pointerCurrentRaycast = nearestRaycast.Value;
             }
         }
@@ -83,7 +93,7 @@
                 {
                     RaycastHit hit;
                     Physics.Raycast(ray, out hit, maxDistance);
-                    if (hit.collider && !hit.collider.GetComponent<VRTK_PlayerObject>())
+                    if (hit.collider && !VRTK_PlayerObject.IsPlayerObject(hit.collider.gameObject))
                     {
                         hitDistance = hit.distance;
                     }
@@ -93,7 +103,7 @@
                 {
                     RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, maxDistance);
 
-                    if (hit.collider != null && !hit.collider.GetComponent<VRTK_PlayerObject>())
+                    if (hit.collider != null && !VRTK_PlayerObject.IsPlayerObject(hit.collider.gameObject))
                     {
                         hitDistance = hit.fraction * maxDistance;
                     }

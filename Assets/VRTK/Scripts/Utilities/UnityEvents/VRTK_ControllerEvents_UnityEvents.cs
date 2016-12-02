@@ -135,6 +135,10 @@
         /// Emits the ControllerDisabled class event.
         /// </summary>
         public UnityObjectEvent OnControllerDisabled;
+        /// <summary>
+        /// Emits the ControllerIndexChanged class event.
+        /// </summary>
+        public UnityObjectEvent OnControllerIndexChanged;
 
         private void SetControllerEvents()
         {
@@ -184,6 +188,7 @@
             ce.AliasMenuOff += AliasMenuOff;
             ce.ControllerEnabled += ControllerEnabled;
             ce.ControllerDisabled += ControllerDisabled;
+            ce.ControllerIndexChanged += ControllerIndexChanged;
         }
 
         private void TriggerPressed(object o, ControllerInteractionEventArgs e)
@@ -341,6 +346,11 @@
             OnControllerDisabled.Invoke(o, e);
         }
 
+        private void ControllerIndexChanged(object o, ControllerInteractionEventArgs e)
+        {
+            OnControllerIndexChanged.Invoke(o, e);
+        }
+
         private void OnDisable()
         {
             if (ce == null)
@@ -379,6 +389,7 @@
             ce.AliasMenuOff -= AliasMenuOff;
             ce.ControllerEnabled -= ControllerEnabled;
             ce.ControllerDisabled -= ControllerDisabled;
+            ce.ControllerIndexChanged -= ControllerIndexChanged;
         }
     }
 }

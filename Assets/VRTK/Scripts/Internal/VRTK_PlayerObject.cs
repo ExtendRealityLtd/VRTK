@@ -45,7 +45,7 @@ namespace VRTK
         /// <returns>Returns true if the object is a player object with the optional given type.</returns>
         public static bool IsPlayerObject(GameObject obj, ObjectTypes ofType = ObjectTypes.Null)
         {
-            var playerObject = obj.GetComponent<VRTK_PlayerObject>();
+            var playerObject = obj.GetComponentInParent<VRTK_PlayerObject>();
             return (playerObject && (ofType == ObjectTypes.Null || (ofType == playerObject.objectType)));
         }
     }

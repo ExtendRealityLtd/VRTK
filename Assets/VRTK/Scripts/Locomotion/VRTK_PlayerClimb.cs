@@ -42,6 +42,7 @@ namespace VRTK
         /// </summary>
         public event PlayerClimbEventHandler PlayerClimbEnded;
 
+        private Transform playArea;
         private Vector3 startControllerPosition;
         private Vector3 startPosition;
         private GameObject grabbingController;
@@ -75,6 +76,7 @@ namespace VRTK
 
         private void Awake()
         {
+            playArea = VRTK_DeviceFinder.PlayAreaTransform();
             bodyPhysics = GetComponent<VRTK_BodyPhysics>();
         }
 
@@ -93,7 +95,7 @@ namespace VRTK
         {
             if (isClimbing)
             {
-                transform.position = startPosition - (GetPosition(grabbingController.transform) - startControllerPosition);
+                playArea.position = startPosition - (GetPosition(grabbingController.transform) - startControllerPosition);
             }
         }
 
@@ -130,31 +132,33 @@ namespace VRTK
         {
             if (usePlayerScale)
             {
-                return transform.localRotation * Vector3.Scale(objTransform.localPosition, transform.localScale);
+                return playArea.localRotation * Vector3.Scale(objTransform.localPosition, playArea.localScale);
             }
 
-            return transform.localRotation * objTransform.localPosition;
+            return playArea.localRotation * objTransform.localPosition;
         }
 
         private void OnGrabObject(object sender, ObjectInteractEventArgs e)
         {
             if (IsClimbableObject(e.target))
             {
-                Grab(((VRTK_InteractGrab)sender).gameObject, e.controllerIndex, e.target);
+                var controller = ((VRTK_InteractGrab)sender).gameObject;
+                var actualController = VRTK_DeviceFinder.GetActualController(controller);
+                Grab(actualController, e.controllerIndex, e.target);
             }
         }
 
         private void OnUngrabObject(object sender, ObjectInteractEventArgs e)
         {
             var controller = ((VRTK_InteractGrab)sender).gameObject;
-
-            if (e.target && IsClimbableObject(e.target) && IsActiveClimbingController(controller))
+            var actualController = VRTK_DeviceFinder.GetActualController(controller);
+            if (e.target && IsClimbableObject(e.target) && IsActiveClimbingController(actualController))
             {
                 Ungrab(true, e.controllerIndex, e.target);
             }
         }
 
-        private void Grab(GameObject currentGrabbingcontroller, uint controllerIndex, GameObject target)
+        private void Grab(GameObject currentGrabbingController, uint controllerIndex, GameObject target)
         {
             bodyPhysics.TogglePreventSnapToFloor(true);
             bodyPhysics.enableBodyCollisions = false;
@@ -162,9 +166,9 @@ namespace VRTK
 
             isClimbing = true;
             climbingObject = target;
-            grabbingController = currentGrabbingcontroller;
+            grabbingController = currentGrabbingController;
             startControllerPosition = GetPosition(grabbingController.transform);
-            startPosition = transform.position;
+            startPosition = playArea.position;
 
             OnPlayerClimbStarted(SetPlayerClimbEvent(controllerIndex, climbingObject));
         }
@@ -177,14 +181,14 @@ namespace VRTK
             if (carryMomentum)
             {
                 Vector3 velocity = Vector3.zero;
-                var device = VRTK_DeviceFinder.TrackedObjectByIndex(controllerIndex);
+                var device = VRTK_DeviceFinder.GetControllerByIndex(controllerIndex, false);
 
                 if (device)
                 {
                     velocity = -device.GetComponent<VRTK_ControllerEvents>().GetVelocity();
                     if (usePlayerScale)
                     {
-                        velocity = Vector3.Scale(velocity, transform.localScale);
+                        velocity = Vector3.Scale(velocity, playArea.localScale);
                     }
                 }
 
@@ -213,18 +217,18 @@ namespace VRTK
         {
             if (controller)
             {
-                var grabbingController = controller.GetComponent<VRTK_InteractGrab>();
-                if (grabbingController)
+                var grabScript = controller.GetComponent<VRTK_InteractGrab>();
+                if (grabScript)
                 {
                     if (state)
                     {
-                        grabbingController.ControllerGrabInteractableObject += new ObjectInteractEventHandler(OnGrabObject);
-                        grabbingController.ControllerUngrabInteractableObject += new ObjectInteractEventHandler(OnUngrabObject);
+                        grabScript.ControllerGrabInteractableObject += new ObjectInteractEventHandler(OnGrabObject);
+                        grabScript.ControllerUngrabInteractableObject += new ObjectInteractEventHandler(OnUngrabObject);
                     }
                     else
                     {
-                        grabbingController.ControllerGrabInteractableObject -= new ObjectInteractEventHandler(OnGrabObject);
-                        grabbingController.ControllerUngrabInteractableObject -= new ObjectInteractEventHandler(OnUngrabObject);
+                        grabScript.ControllerGrabInteractableObject -= new ObjectInteractEventHandler(OnGrabObject);
+                        grabScript.ControllerUngrabInteractableObject -= new ObjectInteractEventHandler(OnUngrabObject);
                     }
                 }
             }

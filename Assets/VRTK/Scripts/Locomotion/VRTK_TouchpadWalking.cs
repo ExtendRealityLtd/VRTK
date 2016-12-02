@@ -4,13 +4,13 @@ namespace VRTK
     using UnityEngine;
 
     /// <summary>
-    /// The ability to move the play area around the game world by sliding a finger over the touchpad is achieved using this script. The Touchpad Walking script is applied to the `[CameraRig]` prefab and adds a rigidbody and a box collider to the user's position to prevent them from walking through other collidable game objects.
+    /// The ability to move the play area around the game world by sliding a finger over the touchpad is achieved using this script.
     /// </summary>
     /// <remarks>
-    /// If the Headset Collision Fade script has been applied to the Camera prefab, then if a user attempts to collide with an object then their position is reset to the last good known position. This can happen if the user is moving through a section where they need to crouch and then they stand up and collide with the ceiling. Rather than allow a user to do this and cause collision resolution issues it is better to just move them back to a valid location. This does break immersion but the user is doing something that isn't natural.
+    /// The Touchpad Walking script adds a rigidbody and a box collider to the user's position to prevent them from walking through other collidable game objects.
     /// </remarks>
     /// <example>
-    /// `VRTK/Examples/017_CameraRig_TouchpadWalking` has a collection of walls and slopes that can be traversed by the user with the touchpad. There is also an area that can only be traversed if the user is crouching. Standing up in this crouched area will cause the user to appear back at their last good known position.
+    /// `VRTK/Examples/017_CameraRig_TouchpadWalking` has a collection of walls and slopes that can be traversed by the user with the touchpad. There is also an area that can only be traversed if the user is crouching.
     /// </example>
     public class VRTK_TouchpadWalking : MonoBehaviour
     {
@@ -52,6 +52,7 @@ namespace VRTK
 
         private GameObject controllerLeftHand;
         private GameObject controllerRightHand;
+        private Transform playArea;
         private Vector2 touchAxis;
         private float movementSpeed = 0f;
         private float strafeSpeed = 0f;
@@ -64,7 +65,7 @@ namespace VRTK
         {
             touchpadAxisChanged = new ControllerInteractionEventHandler(DoTouchpadAxisChanged);
             touchpadUntouched = new ControllerInteractionEventHandler(DoTouchpadTouchEnd);
-
+            playArea = VRTK_DeviceFinder.PlayAreaTransform();
             controllerLeftHand = VRTK_DeviceFinder.GetControllerLeftHand();
             controllerRightHand = VRTK_DeviceFinder.GetControllerRightHand();
         }
@@ -131,9 +132,9 @@ namespace VRTK
             var deviceDirector = VRTK_DeviceFinder.DeviceTransform(deviceForDirection);
             var movement = deviceDirector.forward * movementSpeed * Time.deltaTime;
             var strafe = deviceDirector.right * strafeSpeed * Time.deltaTime;
-            float fixY = transform.position.y;
-            transform.position += (movement + strafe);
-            transform.position = new Vector3(transform.position.x, fixY, transform.position.z);
+            float fixY = playArea.position.y;
+            playArea.position += (movement + strafe);
+            playArea.position = new Vector3(playArea.position.x, fixY, playArea.position.z);
         }
 
         private void FixedUpdate()
@@ -145,11 +146,11 @@ namespace VRTK
 
         private void SetControllerListeners(GameObject controller)
         {
-            if (controller && VRTK_SDK_Bridge.IsControllerLeftHand(controller))
+            if (controller && VRTK_DeviceFinder.IsControllerLeftHand(controller))
             {
                 ToggleControllerListeners(controller, leftController, ref leftSubscribed);
             }
-            else if (controller && VRTK_SDK_Bridge.IsControllerRightHand(controller))
+            else if (controller && VRTK_DeviceFinder.IsControllerRightHand(controller))
             {
                 ToggleControllerListeners(controller, rightController, ref rightSubscribed);
             }

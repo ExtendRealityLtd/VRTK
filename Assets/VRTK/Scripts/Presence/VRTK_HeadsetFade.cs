@@ -22,10 +22,10 @@ namespace VRTK
     public delegate void HeadsetFadeEventHandler(object sender, HeadsetFadeEventArgs e);
 
     /// <summary>
-    /// The purpose of the Headset Fade is to change the colour of the headset view to a specified colour over a given duration and to also unfade it back to being transparent. The `Fade` and `Unfade` methods can only be called via another script and this Headset Fade script does not do anything on initialisation to fade or unfade the headset view.
+    /// The purpose of the Headset Fade is to change the colour of the headset view to a specified colour over a given duration and to also unfade it back to being transparent.
     /// </summary>
     /// <remarks>
-    /// The Headset Fade script is added to the `[CameraRig]` prefab.
+    /// The `Fade` and `Unfade` methods can only be called via another script and this Headset Fade script does not do anything on initialisation to fade or unfade the headset view.
     /// </remarks>
     /// <example>
     /// `VRTK/Examples/011_Camera_HeadSetCollisionFading` has collidable walls around the play area and if the user puts their head into any of the walls then the headset will fade to black.

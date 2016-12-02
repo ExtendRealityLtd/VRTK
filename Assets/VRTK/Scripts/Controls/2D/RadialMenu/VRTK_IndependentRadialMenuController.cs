@@ -70,7 +70,7 @@ namespace VRTK
                 // Subscribe to new events
                 OnEnable();
 
-                Object.Destroy(menuCollider);
+                Destroy(menuCollider);
 
                 // Reset to initial state
                 Initialize();
@@ -170,7 +170,7 @@ namespace VRTK
         #region Event Listeners
         protected virtual void ObjectClicked(object sender, InteractableObjectEventArgs e)
         {
-            base.DoClickButton(sender);
+            DoClickButton(sender);
             isClicked = true;
 
             if (hideAfterExecution && !menu.executeOnUnclick)
@@ -181,7 +181,7 @@ namespace VRTK
 
         protected virtual void ObjectUnClicked(object sender, InteractableObjectEventArgs e)
         {
-            base.DoUnClickButton(sender);
+            DoUnClickButton(sender);
             isClicked = false;
 
             if ((hideAfterExecution || (collidingObjects.Count == 0 && menu.hideOnRelease)) && menu.executeOnUnclick)
@@ -192,7 +192,7 @@ namespace VRTK
 
         protected virtual void ObjectTouched(object sender, InteractableObjectEventArgs e)
         {
-            base.DoShowMenu(CalculateAngle(e.interactingObject), sender);
+            DoShowMenu(CalculateAngle(e.interactingObject), sender);
             collidingObjects.Add(e.interactingObject);
 
             interactingObjects.Add(e.interactingObject);
@@ -211,7 +211,7 @@ namespace VRTK
             collidingObjects.Remove(e.interactingObject);
             if (((!menu.executeOnUnclick || !isClicked) && menu.hideOnRelease) || (Object)sender == this)
             {
-                base.DoHideMenu(hideAfterExecution, sender);
+                DoHideMenu(hideAfterExecution, sender);
 
                 interactingObjects.Remove(e.interactingObject);
                 if (addMenuCollider && menuCollider != null)
@@ -349,7 +349,7 @@ namespace VRTK
             {
                 if (interactingObjects.Count > 0) // There's not really an event for the controller moving, so just update the position every frame
                 {
-                    base.DoChangeAngle(CalculateAngle(interactingObjects[0]), this);
+                    DoChangeAngle(CalculateAngle(interactingObjects[0]), this);
                 }
 
                 if (rotateTowards != null)

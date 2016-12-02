@@ -68,7 +68,6 @@ namespace VRTK
         {
             canvasGroup.blocksRaycasts = true;
             dragTransform = null;
-
             transform.position += (transform.forward * forwardOffset);
             var validDragEnd = true;
             if (restrictToDropZone)
@@ -120,14 +119,8 @@ namespace VRTK
 
         private VRTK_UIPointer GetPointer(PointerEventData eventData)
         {
-            var controller = VRTK_DeviceFinder.TrackedObjectByIndex((uint)eventData.pointerId);
-            if (controller)
-            {
-                var pointer = controller.GetComponent<VRTK_UIPointer>();
-                return pointer;
-            }
-
-            return null;
+            var controller = VRTK_DeviceFinder.GetControllerByIndex((uint)eventData.pointerId, false);
+            return (controller ? controller.GetComponent<VRTK_UIPointer>() : null);
         }
 
         private void SetDragPosition(PointerEventData eventData)

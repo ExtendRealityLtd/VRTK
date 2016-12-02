@@ -59,8 +59,10 @@ namespace VRTK
         {
             if (hideControllerOnGrab)
             {
+                var objScript = (obj ? obj.GetComponentInParent<VRTK_InteractableObject>() : null);
+
                 //if attempting to show the controller but it's touched and the touch should hide the controller
-                if (showController && !touchControllerShow && obj && obj.GetComponentInParent<VRTK_InteractableObject>().IsTouched())
+                if (showController && !touchControllerShow && objScript && objScript.IsTouched())
                 {
                     return;
                 }
@@ -79,8 +81,10 @@ namespace VRTK
         {
             if (hideControllerOnUse)
             {
+                var objScript = (obj ? obj.GetComponentInParent<VRTK_InteractableObject>() : null);
+
                 //if attempting to show the controller but it's grabbed and the grab should hide the controller
-                if (showController && ((!grabControllerShow && obj && obj.GetComponentInParent<VRTK_InteractableObject>().IsGrabbed()) || (!touchControllerShow && obj && obj.GetComponentInParent<VRTK_InteractableObject>().IsTouched())))
+                if (showController && ((!grabControllerShow && objScript && objScript.IsGrabbed()) || (!touchControllerShow && objScript && objScript.IsTouched())))
                 {
                     return;
                 }

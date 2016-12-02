@@ -1,4 +1,4 @@
-﻿// Base Headset|SDK|002
+﻿// Base Headset|SDK_Base|002
 namespace VRTK
 {
     using UnityEngine;
@@ -20,6 +20,12 @@ namespace VRTK
         /// <returns>A transform of the object representing the headset in the scene.</returns>
         public override Transform GetHeadset()
         {
+            var sdkManager = VRTK_SDKManager.instance;
+            if (sdkManager != null)
+            {
+                cachedHeadset = sdkManager.actualHeadset.transform;
+                return cachedHeadset;
+            }
             return null;
         }
 
@@ -29,7 +35,8 @@ namespace VRTK
         /// <returns>A transform of the object holding the headset camera in the scene.</returns>
         public override Transform GetHeadsetCamera()
         {
-            return null;
+            cachedHeadsetCamera = GetHeadset();
+            return cachedHeadsetCamera;
         }
 
         /// <summary>

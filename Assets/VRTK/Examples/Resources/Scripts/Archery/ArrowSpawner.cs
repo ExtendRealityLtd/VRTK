@@ -22,7 +22,7 @@
             {
                 GameObject newArrow = Instantiate(arrowPrefab);
                 newArrow.name = "ArrowClone";
-                grabbingController.gameObject.GetComponent<VRTK_InteractTouch>().ForceTouch(newArrow);
+                grabbingController.GetComponent<VRTK_InteractTouch>().ForceTouch(newArrow);
                 grabbingController.AttemptGrab();
                 spawnDelayTimer = Time.time + spawnDelay;
             }
@@ -35,13 +35,13 @@
 
         private bool NoArrowNotched(GameObject controller)
         {
-            if (VRTK_SDK_Bridge.IsControllerLeftHand(controller))
+            if (VRTK_DeviceFinder.IsControllerLeftHand(controller))
             {
-                bow = VRTK_DeviceFinder.GetControllerRightHand().GetComponentInChildren<BowAim>();
+                bow = VRTK_DeviceFinder.GetControllerRightHand(true).GetComponentInChildren<BowAim>();
             }
-            else if (VRTK_SDK_Bridge.IsControllerRightHand(controller))
+            else if (VRTK_DeviceFinder.IsControllerRightHand(controller))
             {
-                bow = VRTK_DeviceFinder.GetControllerLeftHand().GetComponentInChildren<BowAim>();
+                bow = VRTK_DeviceFinder.GetControllerLeftHand(true).GetComponentInChildren<BowAim>();
             }
             return (bow == null || !bow.HasArrow());
         }

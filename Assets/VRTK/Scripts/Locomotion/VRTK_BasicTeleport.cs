@@ -3,7 +3,6 @@ namespace VRTK
 {
     using UnityEngine;
     using System.Collections;
-    using System.Collections.Generic;
 
     /// <summary>
     /// Event Payload
@@ -13,10 +12,10 @@ namespace VRTK
     public delegate void TeleportEventHandler(object sender, DestinationMarkerEventArgs e);
 
     /// <summary>
-    /// The basic teleporter updates the `[CameraRig]` x/z position in the game world to the position of a Base Pointer's tip location which is set via the `DestinationMarkerSet` event. The y position is never altered so the basic teleporter cannot be used to move up and down game objects as it only allows for travel across a flat plane.
+    /// The basic teleporter updates the user's x/z position in the game world to the position of a Base Pointer's tip location which is set via the `DestinationMarkerSet` event.
     /// </summary>
     /// <remarks>
-    /// The Basic Teleport script is attached to the `[CameraRig]` prefab.
+    /// The y position is never altered so the basic teleporter cannot be used to move up and down game objects as it only allows for travel across a flat plane.
     /// </remarks>
     /// <example>
     /// `VRTK/Examples/004_CameraRig_BasicTeleport` uses the `VRTK_SimplePointer` script on the Controllers to initiate a laser pointer by pressing the `Touchpad` on the controller and when the laser pointer is deactivated (release the `Touchpad`) then the user is teleported to the location of the laser pointer tip as this is where the pointer destination marker position is set to.
@@ -45,6 +44,7 @@ namespace VRTK
         public event TeleportEventHandler Teleported;
 
         protected Transform headset;
+        protected Transform playArea;
         protected bool adjustYForTerrain = false;
         protected bool enableTeleport = true;
 
@@ -91,7 +91,7 @@ namespace VRTK
         public virtual bool ValidLocation(Transform target, Vector3 destinationPosition)
         {
             //If the target is one of the player objects or a UI Canvas then it's never a valid location
-            if (target.GetComponent<VRTK_PlayerObject>() || target.GetComponent<VRTK_UIGraphicRaycaster>())
+            if (VRTK_PlayerObject.IsPlayerObject(target.gameObject) || target.GetComponent<VRTK_UIGraphicRaycaster>())
             {
                 return false;
             }
@@ -114,6 +114,7 @@ namespace VRTK
         {
             VRTK_PlayerObject.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.CameraRig);
             headset = VRTK_SharedMethods.AddCameraFade();
+            playArea = VRTK_DeviceFinder.PlayAreaTransform();
         }
 
         protected virtual void OnEnable()
@@ -171,7 +172,7 @@ namespace VRTK
 
         protected virtual void SetNewPosition(Vector3 position, Transform target, bool forceDestinationPosition)
         {
-            transform.position = CheckTerrainCollision(position, target, forceDestinationPosition);
+            playArea.position = CheckTerrainCollision(position, target, forceDestinationPosition);
         }
 
         protected virtual Vector3 GetNewPosition(Vector3 tipPosition, Transform target, bool returnOriginalPosition)
@@ -181,9 +182,9 @@ namespace VRTK
                 return tipPosition;
             }
 
-            float newX = (headsetPositionCompensation ? (tipPosition.x - (headset.position.x - transform.position.x)) : tipPosition.x);
-            float newY = transform.position.y;
-            float newZ = (headsetPositionCompensation ? (tipPosition.z - (headset.position.z - transform.position.z)) : tipPosition.z);
+            float newX = (headsetPositionCompensation ? (tipPosition.x - (headset.position.x - playArea.position.x)) : tipPosition.x);
+            float newY = playArea.position.y;
+            float newZ = (headsetPositionCompensation ? (tipPosition.z - (headset.position.z - playArea.position.z)) : tipPosition.z);
 
             return new Vector3(newX, newY, newZ);
         }
@@ -204,7 +205,7 @@ namespace VRTK
             blinkPause = 0f;
             if (distanceBlinkDelay > 0f)
             {
-                float distance = Vector3.Distance(transform.position, newPosition);
+                float distance = Vector3.Distance(playArea.position, newPosition);
                 blinkPause = Mathf.Clamp((distance * blinkTransitionSpeed) / (maxBlinkDistance - distanceBlinkDelay), 0, maxBlinkTransitionSpeed);
                 blinkPause = (blinkSpeed <= 0.25 ? 0f : blinkPause);
             }
@@ -226,8 +227,10 @@ namespace VRTK
         {
             var leftHand = VRTK_DeviceFinder.GetControllerLeftHand();
             var rightHand = VRTK_DeviceFinder.GetControllerRightHand();
+
             InitDestinationSetListener(leftHand, state);
-            InitDestinationSetListener(rightHand, state);
+            InitDestinationSetListener(rightHand, state)
+;
             foreach (var destinationMarker in VRTK_ObjectCache.registeredDestinationMarkers)
             {
                 if (destinationMarker.gameObject != leftHand && destinationMarker.gameObject != rightHand)

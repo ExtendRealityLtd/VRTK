@@ -73,6 +73,8 @@ namespace VRTK
                 if (paRenderer && paRenderer.material && paRenderer.material.HasProperty("_Color"))
                 {
                     paRenderer.material.color = color;
+                    paRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+                    paRenderer.receiveShadows = false;
                 }
             }
         }
@@ -213,7 +215,7 @@ namespace VRTK
             VRTK_PlayerObject.SetPlayerObject(playAreaCursor, VRTK_PlayerObject.ObjectTypes.Pointer);
 
             var playAreaCursorScript = playAreaCursor.AddComponent<VRTK_PlayAreaCollider>();
-            playAreaCursorScript.SetParent(gameObject);
+            playAreaCursorScript.SetParent(this);
             playAreaCursorScript.SetIgnoreTarget(targetTagOrScriptListPolicy);
             playAreaCursor.layer = LayerMask.NameToLayer("Ignore Raycast");
 
@@ -251,9 +253,9 @@ namespace VRTK
         private VRTK_PlayAreaCursor parent;
         private VRTK_TagOrScriptPolicyList targetTagOrScriptListPolicy;
 
-        public void SetParent(GameObject setParent)
+        public void SetParent(VRTK_PlayAreaCursor setParent)
         {
-            parent = setParent.GetComponent<VRTK_PlayAreaCursor>();
+            parent = setParent;
         }
 
         public void SetIgnoreTarget(VRTK_TagOrScriptPolicyList list = null)
@@ -263,7 +265,7 @@ namespace VRTK
 
         private bool ValidTarget(Collider collider)
         {
-            return (!collider.GetComponent<VRTK_PlayerObject>() && !(VRTK_TagOrScriptPolicyList.TagOrScriptCheck(collider.gameObject, targetTagOrScriptListPolicy)));
+            return (!VRTK_PlayerObject.IsPlayerObject(collider.gameObject) && !(VRTK_TagOrScriptPolicyList.TagOrScriptCheck(collider.gameObject, targetTagOrScriptListPolicy)));
         }
 
         private void OnTriggerStay(Collider collider)

@@ -31,7 +31,7 @@ namespace VRTK
     /// The UI Pointer provides a mechanism for interacting with Unity UI elements on a world canvas. The UI Pointer can be attached to any game object the same way in which a Base Pointer can be and the UI Pointer also requires a controller to initiate the pointer activation and pointer click states.
     /// </summary>
     /// <remarks>
-    /// The simplest way to use the UI Pointer is to attach the script to a game controller within the `[CameraRig]` along with a Simple Pointer as this provides visual feedback as to where the UI ray is pointing.
+    /// The simplest way to use the UI Pointer is to attach the script to a game controller along with a Simple Pointer as this provides visual feedback as to where the UI ray is pointing.
     ///
     /// The UI pointer is activated via the `Pointer` alias on the `Controller Events` and the UI pointer click state is triggered via the `UI Click` alias on the `Controller Events`.
     /// </remarks>
@@ -327,10 +327,10 @@ namespace VRTK
 
         private IEnumerator WaitForPointerId()
         {
-            var index = (int)VRTK_SDK_Bridge.GetIndexOfTrackedObject(controller.gameObject);
+            var index = (int)VRTK_SDK_Bridge.GetControllerIndex(controller.gameObject);
             while(index < 0 || index == int.MaxValue)
             {
-                index = (int)VRTK_SDK_Bridge.GetIndexOfTrackedObject(controller.gameObject);
+                index = (int)VRTK_SDK_Bridge.GetControllerIndex(controller.gameObject);
                 yield return null;
             }
             pointerEventData.pointerId = index;

@@ -43,6 +43,8 @@
 
             GetComponent<VRTK_ControllerEvents>().ControllerEnabled += new ControllerInteractionEventHandler(DoControllerEnabled);
             GetComponent<VRTK_ControllerEvents>().ControllerDisabled += new ControllerInteractionEventHandler(DoControllerDisabled);
+
+            GetComponent<VRTK_ControllerEvents>().ControllerIndexChanged += new ControllerInteractionEventHandler(DoControllerIndexChanged);
         }
 
         private void DebugLogger(uint index, string button, string action, ControllerInteractionEventArgs e)
@@ -149,6 +151,11 @@
         private void DoControllerDisabled(object sender, ControllerInteractionEventArgs e)
         {
             DebugLogger(e.controllerIndex, "CONTROLLER STATE", "DISABLED", e);
+        }
+
+        private void DoControllerIndexChanged(object sender, ControllerInteractionEventArgs e)
+        {
+            DebugLogger(e.controllerIndex, "CONTROLLER STATE", "INDEX CHANGED", e);
         }
     }
 }

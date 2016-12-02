@@ -16,7 +16,7 @@
             }
             if (FindObjectOfType<VRTK_RoomExtender>() == null)
             {
-                Debug.LogError("VRTK_RoomExtender is required to be attached to the CameraRig that has the VRTK_RoomExtender script attached to it");
+                Debug.LogError("VRTK_RoomExtender script is required.");
                 return;
             }
             roomExtender = FindObjectOfType<VRTK_RoomExtender>();

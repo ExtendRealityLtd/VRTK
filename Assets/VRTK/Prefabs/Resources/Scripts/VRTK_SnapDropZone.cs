@@ -685,8 +685,7 @@ namespace VRTK
             {
                 foreach (var renderer in GetComponentsInChildren<Renderer>(true))
                 {
-                    var check = renderer.GetComponent<VRTK_PlayerObject>();
-                    if (!check || check.objectType != VRTK_PlayerObject.ObjectTypes.Highlighter)
+                    if (!VRTK_PlayerObject.IsPlayerObject(renderer.gameObject, VRTK_PlayerObject.ObjectTypes.Highlighter))
                     {
                         renderer.enabled = false;
                     }
