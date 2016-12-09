@@ -34,8 +34,8 @@ namespace VRTK
     {
         [Tooltip("The radius of the auto generated sphere collider for detecting collisions on the headset.")]
         public float colliderRadius = 0.1f;
-        [Tooltip("A specified VRTK_TagOrScriptPolicyList to use to determine whether any objects will be acted upon by the Headset Collision.")]
-        public VRTK_TagOrScriptPolicyList targetTagOrScriptListPolicy;
+        [Tooltip("A specified VRTK_PolicyList to use to determine whether any objects will be acted upon by the Headset Collision.")]
+        public VRTK_PolicyList targetListPolicy;
 
         /// <summary>
         /// Emitted when the user's headset collides with another game object.
@@ -160,7 +160,7 @@ namespace VRTK
                 var attachTo = (headsetColliderContainer ? headsetColliderContainer : headset.gameObject);
                 headsetColliderScript = attachTo.AddComponent<VRTK_HeadsetCollider>();
                 headsetColliderScript.SetParent(gameObject);
-                headsetColliderScript.SetIgnoreTarget(targetTagOrScriptListPolicy);
+                headsetColliderScript.SetIgnoreTarget(targetListPolicy);
             }
         }
 
@@ -188,16 +188,16 @@ namespace VRTK
     public class VRTK_HeadsetCollider : MonoBehaviour
     {
         private VRTK_HeadsetCollision parent;
-        private VRTK_TagOrScriptPolicyList targetTagOrScriptListPolicy;
+        private VRTK_PolicyList targetListPolicy;
 
         public void SetParent(GameObject setParent)
         {
             parent = setParent.GetComponent<VRTK_HeadsetCollision>();
         }
 
-        public void SetIgnoreTarget(VRTK_TagOrScriptPolicyList list = null)
+        public void SetIgnoreTarget(VRTK_PolicyList list = null)
         {
-            targetTagOrScriptListPolicy = list;
+            targetListPolicy = list;
         }
 
         public void EndCollision(Collider collider)
@@ -220,7 +220,7 @@ namespace VRTK
 
         private bool ValidTarget(Transform target)
         {
-            return (target && !(VRTK_TagOrScriptPolicyList.TagOrScriptCheck(target.gameObject, targetTagOrScriptListPolicy)));
+            return (target && !(VRTK_PolicyList.Check(target.gameObject, targetListPolicy)));
         }
 
         private void OnTriggerStay(Collider collider)

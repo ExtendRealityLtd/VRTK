@@ -69,8 +69,8 @@ namespace VRTK
         public Color highlightColor;
         [Tooltip("The highlight object will always be displayed when the snap drop zone is available even if a valid item isn't being hovered over.")]
         public bool highlightAlwaysActive = false;
-        [Tooltip("A specified VRTK_TagOrScriptPolicyList to use to determine which interactable objects will be snapped to the snap drop zone on release.")]
-        public VRTK_TagOrScriptPolicyList validObjectTagOrScriptListPolicy;
+        [Tooltip("A specified VRTK_PolicyList to use to determine which interactable objects will be snapped to the snap drop zone on release.")]
+        public VRTK_PolicyList validObjectListPolicy;
         [Tooltip("If this is checked then the drop zone highlight section will be displayed in the scene editor window.")]
         public bool displayDropZoneInEditor = true;
 
@@ -279,7 +279,7 @@ namespace VRTK
         private VRTK_InteractableObject ValidSnapObject(GameObject checkObject, bool grabState)
         {
             var ioCheck = checkObject.GetComponentInParent<VRTK_InteractableObject>();
-            return (ioCheck && ioCheck.IsGrabbed() == grabState && !VRTK_TagOrScriptPolicyList.TagOrScriptCheck(checkObject, validObjectTagOrScriptListPolicy) ? ioCheck : null);
+            return (ioCheck && ioCheck.IsGrabbed() == grabState && !VRTK_PolicyList.Check(checkObject, validObjectListPolicy) ? ioCheck : null);
         }
 
         private string ObjectPath(string name)

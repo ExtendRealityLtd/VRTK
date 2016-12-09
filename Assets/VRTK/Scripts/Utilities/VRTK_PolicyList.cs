@@ -1,24 +1,24 @@
-﻿// Tag Or Script Policy List|Utilities|90040
+﻿// Policy List|Utilities|90040
 namespace VRTK
 {
     using UnityEngine;
     using System.Collections.Generic;
 
     /// <summary>
-    /// The Tag Or Script Policy List allows to create a list of either tag names or script names that can be checked against to see if another operation is permitted.
+    /// The Policy List allows to create a list of either tag names, script names or layer names that can be checked against to see if another operation is permitted.
     /// </summary>
     /// <remarks>
-    /// A number of other scripts can use a Tag Or Script Policy List to determine if an operation is permitted based on whether a game object has a tag applied or a script component on it.
+    /// A number of other scripts can use a Policy List to determine if an operation is permitted based on whether a game object has a tag applied, a script component on it or whether it's on a given layer.
     ///
     /// For example, the Teleporter scripts can ignore game object targets as a teleport location if the game object contains a tag that is in the identifiers list and the policy is set to ignore.
     ///
     /// Or the teleporter can only allow teleport to targets that contain a tag that is in the identifiers list and the policy is set to include.
     ///
-    /// Add the Tag Or Script Policy List script to a game object (preferably the same component utilising the list) and then configure the list accordingly.
+    /// Add the Policy List script to a game object (preferably the same component utilising the list) and then configure the list accordingly.
     ///
-    /// Then in the component that has a Tag Or Script Policy List paramter (e.g. BasicTeleporter has `Target Tag Or Script List Policy`) simply select the list that has been created and defined.
+    /// Then in the component that has a Policy List paramter (e.g. BasicTeleporter has `Target List Policy`) simply select the list that has been created and defined.
     /// </remarks>
-    public class VRTK_TagOrScriptPolicyList : MonoBehaviour
+    public class VRTK_PolicyList : MonoBehaviour
     {
         /// <summary>
         /// The operation to apply on the list of identifiers.
@@ -36,12 +36,12 @@ namespace VRTK
         /// </summary>
         /// <param name="Tag">The tag applied to the game object.</param>
         /// <param name="Script">A script component added to the game object.</param>
-        /// <param name="Tag_Or_Script">Either a tag applied to the game object or a script component added to the game object.</param>
+        /// <param name="Layer">A layer applied to the game object.</param>
         public enum CheckTypes
         {
-            Tag,
-            Script,
-            Tag_Or_Script
+            Tag = 1,
+            Script = 2,
+            Layer = 4
         }
 
         [Tooltip("The operation to apply on the list of identifiers.")]
@@ -72,16 +72,16 @@ namespace VRTK
         }
 
         /// <summary>
-        /// The TagOrScriptCheck method is used to check if a game object should be ignored based on a given string or policy list.
+        /// The Check method is used to check if a game object should be ignored based on a given string or policy list.
         /// </summary>
         /// <param name="obj">The game object to check.</param>
-        /// <param name="tagOrScriptList">The policy list to use for checking.</param>
+        /// <param name="list">The policy list to use for checking.</param>
         /// <returns>Returns true of the given game object matches the policy list or given string logic.</returns>
-        public static bool TagOrScriptCheck(GameObject obj, VRTK_TagOrScriptPolicyList tagOrScriptList)
+        public static bool Check(GameObject obj, VRTK_PolicyList list)
         {
-            if (tagOrScriptList)
+            if (list)
             {
-                return tagOrScriptList.Find(obj);
+                return list.Find(obj);
             }
             return false;
         }
@@ -110,25 +110,89 @@ namespace VRTK
             }
         }
 
+        private bool LayerCheck(GameObject obj, bool returnState)
+        {
+            if (returnState)
+            {
+                return identifiers.Contains(LayerMask.LayerToName(obj.layer));
+            }
+            else
+            {
+                return !identifiers.Contains(LayerMask.LayerToName(obj.layer));
+            }
+        }
+
         private bool TypeCheck(GameObject obj, bool returnState)
         {
-            switch (checkType)
+            var selection = 0;
+
+            if (((int)checkType & (int)CheckTypes.Tag) != 0)
             {
-                case CheckTypes.Script:
-                    return ScriptCheck(obj, returnState);
-                case CheckTypes.Tag:
+                selection += 1;
+            }
+            if (((int)checkType & (int)CheckTypes.Script) != 0)
+            {
+                selection += 2;
+            }
+            if (((int)checkType & (int)CheckTypes.Layer) != 0)
+            {
+                selection += 4;
+            }
+
+            switch (selection)
+            {
+                case 1:
                     return TagCheck(obj, returnState);
-                case CheckTypes.Tag_Or_Script:
+                case 2:
+                    return ScriptCheck(obj, returnState);
+                case 3:
+                    if ((returnState && TagCheck(obj, returnState)) || (!returnState && !TagCheck(obj, returnState)))
+                    {
+                        return returnState;
+                    }
                     if ((returnState && ScriptCheck(obj, returnState)) || (!returnState && !ScriptCheck(obj, returnState)))
                     {
                         return returnState;
                     }
+                    break;
+                case 4:
+                    return LayerCheck(obj, returnState);
+                case 5:
                     if ((returnState && TagCheck(obj, returnState)) || (!returnState && !TagCheck(obj, returnState)))
+                    {
+                        return returnState;
+                    }
+                    if ((returnState && LayerCheck(obj, returnState)) || (!returnState && !LayerCheck(obj, returnState)))
+                    {
+                        return returnState;
+                    }
+                    break;
+                case 6:
+                    if ((returnState && ScriptCheck(obj, returnState)) || (!returnState && !ScriptCheck(obj, returnState)))
+                    {
+                        return returnState;
+                    }
+                    if ((returnState && LayerCheck(obj, returnState)) || (!returnState && !LayerCheck(obj, returnState)))
+                    {
+                        return returnState;
+                    }
+                    break;
+                case 7:
+                    if ((returnState && TagCheck(obj, returnState)) || (!returnState && !TagCheck(obj, returnState)))
+                    {
+                        return returnState;
+                    }
+                    if ((returnState && ScriptCheck(obj, returnState)) || (!returnState && !ScriptCheck(obj, returnState)))
+                    {
+                        return returnState;
+                    }
+                    if ((returnState && LayerCheck(obj, returnState)) || (!returnState && !LayerCheck(obj, returnState)))
                     {
                         return returnState;
                     }
                     break;
             }
+
             return !returnState;
         }
     }

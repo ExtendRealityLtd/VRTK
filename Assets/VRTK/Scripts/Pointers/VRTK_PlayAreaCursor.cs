@@ -17,8 +17,8 @@ namespace VRTK
         public bool handlePlayAreaCursorCollisions = false;
         [Tooltip("If this is ticked then if the user's headset is outside of the play area cursor bounds then it is considered a collision even if the play area isn't colliding with anything.")]
         public bool headsetOutOfBoundsIsCollision = false;
-        [Tooltip("A specified VRTK_TagOrScriptPolicyList to use to determine whether the play area cursor collisions will be acted upon.")]
-        public VRTK_TagOrScriptPolicyList targetTagOrScriptListPolicy;
+        [Tooltip("A specified VRTK_PolicyList to use to determine whether the play area cursor collisions will be acted upon.")]
+        public VRTK_PolicyList targetListPolicy;
 
         private bool headsetPositionCompensation;
         private bool playAreaCursorCollided = false;
@@ -216,7 +216,7 @@ namespace VRTK
 
             var playAreaCursorScript = playAreaCursor.AddComponent<VRTK_PlayAreaCollider>();
             playAreaCursorScript.SetParent(this);
-            playAreaCursorScript.SetIgnoreTarget(targetTagOrScriptListPolicy);
+            playAreaCursorScript.SetIgnoreTarget(targetListPolicy);
             playAreaCursor.layer = LayerMask.NameToLayer("Ignore Raycast");
 
             var playAreaBoundaryX = playArea.transform.localScale.x / 2;
@@ -251,21 +251,21 @@ namespace VRTK
     public class VRTK_PlayAreaCollider : MonoBehaviour
     {
         private VRTK_PlayAreaCursor parent;
-        private VRTK_TagOrScriptPolicyList targetTagOrScriptListPolicy;
+        private VRTK_PolicyList targetListPolicy;
 
         public void SetParent(VRTK_PlayAreaCursor setParent)
         {
             parent = setParent;
         }
 
-        public void SetIgnoreTarget(VRTK_TagOrScriptPolicyList list = null)
+        public void SetIgnoreTarget(VRTK_PolicyList list = null)
         {
-            targetTagOrScriptListPolicy = list;
+            targetListPolicy = list;
         }
 
         private bool ValidTarget(Collider collider)
         {
-            return (!VRTK_PlayerObject.IsPlayerObject(collider.gameObject) && !(VRTK_TagOrScriptPolicyList.TagOrScriptCheck(collider.gameObject, targetTagOrScriptListPolicy)));
+            return (!VRTK_PlayerObject.IsPlayerObject(collider.gameObject) && !(VRTK_PolicyList.Check(collider.gameObject, targetListPolicy)));
         }
 
         private void OnTriggerStay(Collider collider)

@@ -223,7 +223,7 @@ If the `Use Joint` Snap Type is selected then a custom Joint component is requir
  * **Apply Scaling On Snap:** If this is checked then the scaled size of the snap drop zone will be applied to the object that is snapped to it.
  * **Highlight Color:** The colour to use when showing the snap zone is active.
  * **Highlight Always Active:** The highlight object will always be displayed when the snap drop zone is available even if a valid item isn't being hovered over.
- * **Valid Object Tag Or Script List Policy:** A specified VRTK_TagOrScriptPolicyList to use to determine which interactable objects will be snapped to the snap drop zone on release.
+ * **Valid Object List Policy:** A specified VRTK_PolicyList to use to determine which interactable objects will be snapped to the snap drop zone on release.
  * **Display Drop Zone In Editor:** If this is checked then the drop zone highlight section will be displayed in the scene editor window.
 
 ### Class Variables
@@ -505,14 +505,14 @@ Adding the `VRTK_DestinationMarker_UnityEvents` component to `VRTK_DestinationMa
 
 #### SetInvalidTarget/1
 
-  > `public virtual void SetInvalidTarget(VRTK_TagOrScriptPolicyList list = null)`
+  > `public virtual void SetInvalidTarget(VRTK_PolicyList list = null)`
 
   * Parameters
-   * `VRTK_TagOrScriptPolicyList list` - The Tag Or Script list policy to check the set operation on.
+   * `VRTK_PolicyList list` - The Tag Or Script list policy to check the set operation on.
   * Returns
    * _none_
 
-The SetInvalidTarget method is used to set objects that contain the given tag or class matching the name as invalid destination targets. It accepts a VRTK_TagOrScriptPolicyList for a custom level of policy management.
+The SetInvalidTarget method is used to set objects that contain the given tag or class matching the name as invalid destination targets. It accepts a VRTK_PolicyList for a custom level of policy management.
 
 #### SetNavMeshCheckDistance/1
 
@@ -677,7 +677,7 @@ The Play Area Cursor is used in conjunction with a Base Pointer script and displ
  * **Play Area Cursor Dimensions:** Determines the size of the play area cursor and collider. If the values are left as zero then the Play Area Cursor will be sized to the calibrated Play Area space.
  * **Handle Play Area Cursor Collisions:** If this is ticked then if the play area cursor is colliding with any other object then the pointer colour will change to the `Pointer Miss Color` and the `DestinationMarkerSet` event will not be triggered, which will prevent teleporting into areas where the play area will collide.
  * **Headset Out Of Bounds Is Collision:** If this is ticked then if the user's headset is outside of the play area cursor bounds then it is considered a collision even if the play area isn't colliding with anything.
- * **Target Tag Or Script List Policy:** A specified VRTK_TagOrScriptPolicyList to use to determine whether the play area cursor collisions will be acted upon.
+ * **Target List Policy:** A specified VRTK_PolicyList to use to determine whether the play area cursor collisions will be acted upon.
 
 ### Class Methods
 
@@ -782,7 +782,7 @@ The y position is never altered so the basic teleporter cannot be used to move u
  * **Blink Transition Speed:** The fade blink speed can be changed on the basic teleport script to provide a customised teleport experience. Setting the speed to 0 will mean no fade blink effect is present.
  * **Distance Blink Delay:** A range between 0 and 32 that determines how long the blink transition will stay blacked out depending on the distance being teleported. A value of 0 will not delay the teleport blink effect over any distance, a value of 32 will delay the teleport blink fade in even when the distance teleported is very close to the original position. This can be used to simulate time taking longer to pass the further a user teleports. A value of 16 provides a decent basis to simulate this to the user.
  * **Headset Position Compensation:** If this is checked then the teleported location will be the position of the headset within the play area. If it is unchecked then the teleported location will always be the centre of the play area even if the headset position is not in the centre of the play area.
- * **Target Tag Or Script List Policy:** A specified VRTK_TagOrScriptPolicyList to use to determine whether destination targets will be acted upon by the Teleporter.
+ * **Target List Policy:** A specified VRTK_PolicyList to use to determine whether destination targets will be acted upon by the Teleporter.
  * **Nav Mesh Limit Distance:** The max distance the teleport destination can be outside the nav mesh to be considered valid. If a value of `0` is given then the nav mesh restrictions will be ignored.
 
 ### Class Events
@@ -3360,7 +3360,7 @@ The Headset Collision script will automatically create a script on the headset t
 ### Inspector Parameters
 
  * **Collider Radius:** The radius of the auto generated sphere collider for detecting collisions on the headset.
- * **Target Tag Or Script List Policy:** A specified VRTK_TagOrScriptPolicyList to use to determine whether any objects will be acted upon by the Headset Collision.
+ * **Target List Policy:** A specified VRTK_PolicyList to use to determine whether any objects will be acted upon by the Headset Collision.
 
 ### Class Variables
 
@@ -4278,7 +4278,7 @@ A collection of scripts that provide useful functionality to aid the creation pr
  * [SDK Manager](#sdk-manager-vrtk_sdkmanager)
  * [Device Finder](#device-finder-vrtk_devicefinder)
  * [Shared Methods](#shared-methods-vrtk_sharedmethods)
- * [Tag Or Script Policy List](#tag-or-script-policy-list-vrtk_tagorscriptpolicylist)
+ * [Policy List](#policy-list-vrtk_policylist)
  * [Adaptive Quality](#adaptive-quality-vrtk_adaptivequality)
  * [Simulating Headset Movement](#simulating-headset-movement-vrtk_simulator)
 
@@ -4603,21 +4603,21 @@ The IsEditTime method determines if the state of Unity is in the Unity Editor an
 
 ---
 
-## Tag Or Script Policy List (VRTK_TagOrScriptPolicyList)
+## Policy List (VRTK_PolicyList)
 
 ### Overview
 
-The Tag Or Script Policy List allows to create a list of either tag names or script names that can be checked against to see if another operation is permitted.
+The Policy List allows to create a list of either tag names, script names or layer names that can be checked against to see if another operation is permitted.
 
-A number of other scripts can use a Tag Or Script Policy List to determine if an operation is permitted based on whether a game object has a tag applied or a script component on it.
+A number of other scripts can use a Policy List to determine if an operation is permitted based on whether a game object has a tag applied, a script component on it or whether it's on a given layer.
 
 For example, the Teleporter scripts can ignore game object targets as a teleport location if the game object contains a tag that is in the identifiers list and the policy is set to ignore.
 
 Or the teleporter can only allow teleport to targets that contain a tag that is in the identifiers list and the policy is set to include.
 
-Add the Tag Or Script Policy List script to a game object (preferably the same component utilising the list) and then configure the list accordingly.
+Add the Policy List script to a game object (preferably the same component utilising the list) and then configure the list accordingly.
 
-Then in the component that has a Tag Or Script Policy List paramter (e.g. BasicTeleporter has `Target Tag Or Script List Policy`) simply select the list that has been created and defined.
+Then in the component that has a Policy List paramter (e.g. BasicTeleporter has `Target List Policy`) simply select the list that has been created and defined.
 
 ### Inspector Parameters
 
@@ -4632,7 +4632,7 @@ Then in the component that has a Tag Or Script Policy List paramter (e.g. BasicT
  * `public enum CheckTypes` - The types of element that can be checked against.
   * `Tag` - The tag applied to the game object.
   * `Script` - A script component added to the game object.
-  * `Tag_Or_Script` - Either a tag applied to the game object or a script component added to the game object.
+  * `Layer` - A layer applied to the game object.
 
 ### Class Methods
 
@@ -4647,17 +4647,17 @@ Then in the component that has a Tag Or Script Policy List paramter (e.g. BasicT
 
 The Find method performs the set operation to determine if the given game object contains one of the identifiers on the set check type. For instance, if the Operation is `Ignore` and the Check Type is `Tag` then the Find method will attempt to see if the given game object has a tag that matches one of the identifiers.
 
-#### TagOrScriptCheck/2
+#### Check/2
 
-  > `public static bool TagOrScriptCheck(GameObject obj, VRTK_TagOrScriptPolicyList tagOrScriptList)`
+  > `public static bool Check(GameObject obj, VRTK_PolicyList list)`
 
   * Parameters
    * `GameObject obj` - The game object to check.
-   * `VRTK_TagOrScriptPolicyList tagOrScriptList` - The policy list to use for checking.
+   * `VRTK_PolicyList list` - The policy list to use for checking.
   * Returns
    * `bool` - Returns true of the given game object matches the policy list or given string logic.
 
-The TagOrScriptCheck method is used to check if a game object should be ignored based on a given string or policy list.
+The Check method is used to check if a game object should be ignored based on a given string or policy list.
 
 ---
 

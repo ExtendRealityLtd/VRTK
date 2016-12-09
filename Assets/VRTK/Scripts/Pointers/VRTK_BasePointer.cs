@@ -369,7 +369,7 @@ namespace VRTK
             {
                 validNavMeshLocation = true;
             }
-            return (validNavMeshLocation && target && !(VRTK_TagOrScriptPolicyList.TagOrScriptCheck(target.gameObject, invalidTagOrScriptListPolicy)));
+            return (validNavMeshLocation && target && !(VRTK_PolicyList.Check(target.gameObject, invalidListPolicy)));
         }
 
         protected virtual void CreateObjectInteractor()
