@@ -305,6 +305,7 @@ namespace VRTK
         private float hairTriggerDelta;
         private Vector3 controllerVelocity = Vector3.zero;
         private Vector3 controllerAngularVelocity = Vector3.zero;
+        private float controllerMagnitude = 0;
 
         public virtual void OnTriggerPressed(ControllerInteractionEventArgs e)
         {
@@ -572,6 +573,16 @@ namespace VRTK
         {
             SetVelocity();
             return controllerAngularVelocity;
+        }
+
+        /// <summary>
+        /// The GetMagnitude method is used to return the current magnitude of the physical game controller. This can be useful for determining the speed at which the controller is being swung.
+        /// </summary>
+        /// <returns>A float illustrating the length of the vector based on current real world physical controller velocity.</returns>
+        public float GetMagnitude()
+        {
+            SetVelocity();
+            return controllerMagnitude;
         }
 
         /// <summary>
@@ -1009,8 +1020,9 @@ namespace VRTK
 
         private void SetVelocity()
         {
-            controllerVelocity = VRTK_SDK_Bridge.GetVelocityOnIndex(controllerIndex); ;
-            controllerAngularVelocity = VRTK_SDK_Bridge.GetAngularVelocityOnIndex(controllerIndex); ;
+            controllerVelocity = VRTK_SDK_Bridge.GetVelocityOnIndex(controllerIndex);
+            controllerAngularVelocity = VRTK_SDK_Bridge.GetAngularVelocityOnIndex(controllerIndex);
+            controllerMagnitude = Vector3.Magnitude(controllerVelocity);
         }
     }
 }
