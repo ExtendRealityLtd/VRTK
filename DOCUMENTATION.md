@@ -14,6 +14,7 @@ This file provides documentation on how to use the included prefabs and scripts.
  * [3D Controls](#3d-controls-vrtkscriptscontrols3d)
  * [Utilities](#utilities-vrtkscriptsutilities)
  * [Base SDK](#base-sdk-vrtksdkbase)
+  * [Fallback SDK](#fallback-sdk-vrtksdkfallback)
   * [SteamVR SDK](#steamvr-sdk-vrtksdksteamvr)
 
 ---
@@ -4820,11 +4821,688 @@ The base scripts used to determine the interface for interacting with a Unity VR
 ---
 
 ## Base System (SDK_BaseSystem)
- > extends SDK_InterfaceSystem
+ > extends ScriptableObject, SDK_InterfaceSystem
 
 ### Overview
 
 The Base System SDK script provides a bridge to core system SDK methods.
+
+This is an abstract class to implement the interface required by all implemented SDKs.
+
+### Class Methods
+
+#### IsDisplayOnDesktop/0
+
+  > `public abstract bool IsDisplayOnDesktop();`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `bool` - Returns true if the display is extending the desktop
+
+The IsDisplayOnDesktop method returns true if the display is extending the desktop.
+
+#### ShouldAppRenderWithLowResources/0
+
+  > `public abstract bool ShouldAppRenderWithLowResources();`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `bool` - Returns true if the Unity app should render with low resources.
+
+The ShouldAppRenderWithLowResources method is used to determine if the Unity app should use low resource mode. Typically true when the dashboard is showing.
+
+#### ForceInterleavedReprojectionOn/1
+
+  > `public abstract void ForceInterleavedReprojectionOn(bool force);`
+
+  * Parameters
+   * `bool force` - If true then Interleaved Reprojection will be forced on, if false it will not be forced on.
+  * Returns
+   * _none_
+
+The ForceInterleavedReprojectionOn method determines whether Interleaved Reprojection should be forced on or off.
+
+---
+
+## Base Headset (SDK_BaseHeadset)
+ > extends ScriptableObject, SDK_InterfaceHeadset
+
+### Overview
+
+The Base Headset SDK script provides a bridge to SDK methods that deal with the VR Headset.
+
+This is an abstract class to implement the interface required by all implemented SDKs.
+
+### Class Methods
+
+#### GetHeadset/0
+
+  > `public virtual Transform GetHeadset()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `Transform` - A transform of the object representing the headset in the scene.
+
+The GetHeadset method returns the Transform of the object that is used to represent the headset in the scene.
+
+#### GetHeadsetCamera/0
+
+  > `public virtual Transform GetHeadsetCamera()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `Transform` - A transform of the object holding the headset camera in the scene.
+
+The GetHeadsetCamera method returns the Transform of the object that is used to hold the headset camera in the scene.
+
+#### HeadsetFade/3
+
+  > `public abstract void HeadsetFade(Color color, float duration, bool fadeOverlay = false);`
+
+  * Parameters
+   * `Color color` - The colour to fade to.
+   * `float duration` - The amount of time the fade should take to reach the given colour.
+   * `bool fadeOverlay` - Determines whether to use an overlay on the fade.
+  * Returns
+   * _none_
+
+The HeadsetFade method is used to apply a fade to the headset camera to progressively change the colour.
+
+#### HasHeadsetFade/1
+
+  > `public abstract bool HasHeadsetFade(Transform obj);`
+
+  * Parameters
+   * `Transform obj` - The Transform to check to see if a camera fade is available on.
+  * Returns
+   * `bool` - Returns true if the headset has fade functionality on it.
+
+The HasHeadsetFade method checks to see if the given game object (usually the camera) has the ability to fade the viewpoint.
+
+#### AddHeadsetFade/1
+
+  > `public abstract void AddHeadsetFade(Transform camera);`
+
+  * Parameters
+   * `Transform camera` - The Transform to with the camera on to add the fade functionality to.
+  * Returns
+   * _none_
+
+The AddHeadsetFade method attempts to add the fade functionality to the game object with the camera on it.
+
+---
+
+## Base Controller (SDK_BaseController)
+ > extends ScriptableObject, SDK_InterfaceController
+
+### Overview
+
+The Base Controller SDK script provides a bridge to SDK methods that deal with the input devices.
+
+This is an abstract class to implement the interface required by all implemented SDKs.
+
+### Class Methods
+
+#### GetControllerDefaultColliderPath/0
+
+  > `public abstract string GetControllerDefaultColliderPath();`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `string` - A path to the resource that contains the collider GameObject.
+
+The GetControllerDefaultColliderPath returns the path to the prefab that contains the collider objects for the default controller of this SDK.
+
+#### GetControllerElementPath/3
+
+  > `public abstract string GetControllerElementPath(VRTK_ControllerElements element, VRTK_DeviceFinder.ControllerHand hand, bool fullPath = false);`
+
+  * Parameters
+   * `VRTK_ControllerElements element` - The controller element to look up.
+   * `VRTK_DeviceFinder.ControllerHand hand` - The controller hand to look up.
+   * `bool fullPath` - Whether to get the initial path or the full path to the element.
+  * Returns
+   * `string` - A string containing the path to the game object that the controller element resides in.
+
+The GetControllerElementPath returns the path to the game object that the given controller element for the given hand resides in.
+
+#### GetControllerIndex/1
+
+  > `public abstract uint GetControllerIndex(GameObject controller);`
+
+  * Parameters
+   * `GameObject controller` - The GameObject containing the controller.
+  * Returns
+   * `uint` - The index of the given controller.
+
+The GetControllerIndex method returns the index of the given controller.
+
+#### GetControllerByIndex/2
+
+  > `public abstract GameObject GetControllerByIndex(uint index, bool actual = false);`
+
+  * Parameters
+   * `uint index` - The index of the controller to find.
+   * `bool actual` - If true it will return the actual controller, if false it will return the script alias controller GameObject.
+  * Returns
+   * `GameObject` -
+
+The GetControllerByIndex method returns the GameObject of a controller with a specific index.
+
+#### GetControllerOrigin/1
+
+  > `public abstract Transform GetControllerOrigin(GameObject controller);`
+
+  * Parameters
+   * `GameObject controller` - The controller to retrieve the origin from.
+  * Returns
+   * `Transform` - A Transform containing the origin of the controller.
+
+The GetControllerOrigin method returns the origin of the given controller.
+
+#### GetControllerLeftHand/1
+
+  > `public virtual GameObject GetControllerLeftHand(bool actual = false)`
+
+  * Parameters
+   * `bool actual` - If true it will return the actual controller, if false it will return the script alias controller GameObject.
+  * Returns
+   * `GameObject` - The GameObject containing the left hand controller.
+
+The GetControllerLeftHand method returns the GameObject containing the representation of the left hand controller.
+
+#### GetControllerRightHand/1
+
+  > `public virtual GameObject GetControllerRightHand(bool actual = false)`
+
+  * Parameters
+   * `bool actual` - If true it will return the actual controller, if false it will return the script alias controller GameObject.
+  * Returns
+   * `GameObject` - The GameObject containing the right hand controller.
+
+The GetControllerRightHand method returns the GameObject containing the representation of the right hand controller.
+
+#### IsControllerLeftHand/2
+
+  > `public virtual bool IsControllerLeftHand(GameObject controller, bool actual = false)`
+
+  * Parameters
+   * `GameObject controller` - The GameObject to check.
+   * `bool actual` - If true it will check the actual controller, if false it will check the script alias controller.
+  * Returns
+   * `bool` - Returns true if the given controller is the left hand controller.
+
+The IsControllerLeftHand method is used to check if the given controller is the the left hand controller.
+
+#### IsControllerRightHand/2
+
+  > `public virtual bool IsControllerRightHand(GameObject controller, bool actual = false)`
+
+  * Parameters
+   * `GameObject controller` - The GameObject to check.
+   * `bool actual` - If true it will check the actual controller, if false it will check the script alias controller.
+  * Returns
+   * `bool` - Returns true if the given controller is the right hand controller.
+
+The IsControllerRightHand method is used to check if the given controller is the the right hand controller.
+
+#### GetControllerRenderModel/1
+
+  > `public abstract GameObject GetControllerRenderModel(GameObject controller);`
+
+  * Parameters
+   * `GameObject controller` - The GameObject to check.
+  * Returns
+   * `GameObject` - A GameObject containing the object that has a render model for the controller.
+
+The GetControllerRenderModel method gets the game object that contains the given controller's render model.
+
+#### SetControllerRenderModelWheel/2
+
+  > `public abstract void SetControllerRenderModelWheel(GameObject renderModel, bool state);`
+
+  * Parameters
+   * `GameObject renderModel` - The GameObject containing the controller render model.
+   * `bool state` - If true and the render model has a scroll wheen then it will be displayed, if false then the scroll wheel will be hidden.
+  * Returns
+   * _none_
+
+The SetControllerRenderModelWheel method sets the state of the scroll wheel on the controller render model.
+
+#### HapticPulseOnIndex/2
+
+  > `public abstract void HapticPulseOnIndex(uint index, ushort durationMicroSec = 500);`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to initiate the haptic pulse on.
+   * `ushort durationMicroSec` - The amount of microseconds to run the haptic pulse for.
+  * Returns
+   * _none_
+
+The HapticPulseOnIndex method is used to initiate a simple haptic pulse on the tracked object of the given index.
+
+#### GetVelocityOnIndex/1
+
+  > `public abstract Vector3 GetVelocityOnIndex(uint index);`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `Vector3` - A Vector3 containing the current velocity of the tracked object.
+
+The GetVelocityOnIndex method is used to determine the current velocity of the tracked object on the given index.
+
+#### GetAngularVelocityOnIndex/1
+
+  > `public abstract Vector3 GetAngularVelocityOnIndex(uint index);`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `Vector3` - A Vector3 containing the current angular velocity of the tracked object.
+
+The GetAngularVelocityOnIndex method is used to determine the current angular velocity of the tracked object on the given index.
+
+#### GetTouchpadAxisOnIndex/1
+
+  > `public abstract Vector2 GetTouchpadAxisOnIndex(uint index);`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `Vector2` - A Vector2 containing the current x,y position of where the touchpad is being touched.
+
+The GetTouchpadAxisOnIndex method is used to get the current touch position on the controller touchpad.
+
+#### GetTriggerAxisOnIndex/1
+
+  > `public abstract Vector2 GetTriggerAxisOnIndex(uint index);`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `Vector2` - A Vector2 containing the current position of the trigger.
+
+The GetTriggerAxisOnIndex method is used to get the current trigger position on the controller.
+
+#### GetTriggerHairlineDeltaOnIndex/1
+
+  > `public abstract float GetTriggerHairlineDeltaOnIndex(uint index);`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `float` - The delta between the trigger presses.
+
+The GetTriggerHairlineDeltaOnIndex method is used to get the difference between the current trigger press and the previous frame trigger press.
+
+#### IsTriggerPressedOnIndex/1
+
+  > `public abstract bool IsTriggerPressedOnIndex(uint index);`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button is continually being pressed.
+
+The IsTriggerPressedOnIndex method is used to determine if the controller button is being pressed down continually.
+
+#### IsTriggerPressedDownOnIndex/1
+
+  > `public abstract bool IsTriggerPressedDownOnIndex(uint index);`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button has just been pressed down.
+
+The IsTriggerPressedDownOnIndex method is used to determine if the controller button has just been pressed down.
+
+#### IsTriggerPressedUpOnIndex/1
+
+  > `public abstract bool IsTriggerPressedUpOnIndex(uint index);`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button has just been released.
+
+The IsTriggerPressedUpOnIndex method is used to determine if the controller button has just been released.
+
+#### IsTriggerTouchedOnIndex/1
+
+  > `public abstract bool IsTriggerTouchedOnIndex(uint index);`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button is continually being touched.
+
+The IsTriggerTouchedOnIndex method is used to determine if the controller button is being touched down continually.
+
+#### IsTriggerTouchedDownOnIndex/1
+
+  > `public abstract bool IsTriggerTouchedDownOnIndex(uint index);`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button has just been touched down.
+
+The IsTriggerTouchedDownOnIndex method is used to determine if the controller button has just been touched down.
+
+#### IsTriggerTouchedUpOnIndex/1
+
+  > `public abstract bool IsTriggerTouchedUpOnIndex(uint index);`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button has just been released.
+
+The IsTriggerTouchedUpOnIndex method is used to determine if the controller button has just been released.
+
+#### IsHairTriggerDownOnIndex/1
+
+  > `public abstract bool IsHairTriggerDownOnIndex(uint index);`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button has passed it's press threshold.
+
+The IsHairTriggerDownOnIndex method is used to determine if the controller button has passed it's press threshold.
+
+#### IsHairTriggerUpOnIndex/1
+
+  > `public abstract bool IsHairTriggerUpOnIndex(uint index);`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button has just been released from it's press threshold.
+
+The IsHairTriggerUpOnIndex method is used to determine if the controller button has been released from it's press threshold.
+
+#### IsGripPressedOnIndex/1
+
+  > `public abstract bool IsGripPressedOnIndex(uint index);`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button is continually being pressed.
+
+The IsGripPressedOnIndex method is used to determine if the controller button is being pressed down continually.
+
+#### IsGripPressedDownOnIndex/1
+
+  > `public abstract bool IsGripPressedDownOnIndex(uint index);`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button has just been pressed down.
+
+The IsGripPressedDownOnIndex method is used to determine if the controller button has just been pressed down.
+
+#### IsGripPressedUpOnIndex/1
+
+  > `public abstract bool IsGripPressedUpOnIndex(uint index);`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button has just been released.
+
+The IsGripPressedUpOnIndex method is used to determine if the controller button has just been released.
+
+#### IsGripTouchedOnIndex/1
+
+  > `public abstract bool IsGripTouchedOnIndex(uint index);`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button is continually being touched.
+
+The IsGripTouchedOnIndex method is used to determine if the controller button is being touched down continually.
+
+#### IsGripTouchedDownOnIndex/1
+
+  > `public abstract bool IsGripTouchedDownOnIndex(uint index);`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button has just been touched down.
+
+The IsGripTouchedDownOnIndex method is used to determine if the controller button has just been touched down.
+
+#### IsGripTouchedUpOnIndex/1
+
+  > `public abstract bool IsGripTouchedUpOnIndex(uint index);`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button has just been released.
+
+The IsGripTouchedUpOnIndex method is used to determine if the controller button has just been released.
+
+#### IsTouchpadPressedOnIndex/1
+
+  > `public abstract bool IsTouchpadPressedOnIndex(uint index);`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button is continually being pressed.
+
+The IsTouchpadPressedOnIndex method is used to determine if the controller button is being pressed down continually.
+
+#### IsTouchpadPressedDownOnIndex/1
+
+  > `public abstract bool IsTouchpadPressedDownOnIndex(uint index);`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button has just been pressed down.
+
+The IsTouchpadPressedDownOnIndex method is used to determine if the controller button has just been pressed down.
+
+#### IsTouchpadPressedUpOnIndex/1
+
+  > `public abstract bool IsTouchpadPressedUpOnIndex(uint index);`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button has just been released.
+
+The IsTouchpadPressedUpOnIndex method is used to determine if the controller button has just been released.
+
+#### IsTouchpadTouchedOnIndex/1
+
+  > `public abstract bool IsTouchpadTouchedOnIndex(uint index);`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button is continually being touched.
+
+The IsTouchpadTouchedOnIndex method is used to determine if the controller button is being touched down continually.
+
+#### IsTouchpadTouchedDownOnIndex/1
+
+  > `public abstract bool IsTouchpadTouchedDownOnIndex(uint index);`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button has just been touched down.
+
+The IsTouchpadTouchedDownOnIndex method is used to determine if the controller button has just been touched down.
+
+#### IsTouchpadTouchedUpOnIndex/1
+
+  > `public abstract bool IsTouchpadTouchedUpOnIndex(uint index);`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button has just been released.
+
+The IsTouchpadTouchedUpOnIndex method is used to determine if the controller button has just been released.
+
+#### IsApplicationMenuPressedOnIndex/1
+
+  > `public abstract bool IsApplicationMenuPressedOnIndex(uint index);`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button is continually being pressed.
+
+The IsApplicationMenuPressedOnIndex method is used to determine if the controller button is being pressed down continually.
+
+#### IsApplicationMenuPressedDownOnIndex/1
+
+  > `public abstract bool IsApplicationMenuPressedDownOnIndex(uint index);`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button has just been pressed down.
+
+The IsApplicationMenuPressedDownOnIndex method is used to determine if the controller button has just been pressed down.
+
+#### IsApplicationMenuPressedUpOnIndex/1
+
+  > `public abstract bool IsApplicationMenuPressedUpOnIndex(uint index);`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button has just been released.
+
+The IsApplicationMenuPressedUpOnIndex method is used to determine if the controller button has just been released.
+
+#### IsApplicationMenuTouchedOnIndex/1
+
+  > `public abstract bool IsApplicationMenuTouchedOnIndex(uint index);`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button is continually being touched.
+
+The IsApplicationMenuTouchedOnIndex method is used to determine if the controller button is being touched down continually.
+
+#### IsApplicationMenuTouchedDownOnIndex/1
+
+  > `public abstract bool IsApplicationMenuTouchedDownOnIndex(uint index);`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button has just been touched down.
+
+The IsApplicationMenuTouchedDownOnIndex method is used to determine if the controller button has just been touched down.
+
+#### IsApplicationMenuTouchedUpOnIndex/1
+
+  > `public abstract bool IsApplicationMenuTouchedUpOnIndex(uint index);`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button has just been released.
+
+The IsApplicationMenuTouchedUpOnIndex method is used to determine if the controller button has just been released.
+
+---
+
+## Base Boundaries (SDK_BaseBoundaries)
+ > extends ScriptableObject, SDK_InterfaceBoundaries
+
+### Overview
+
+The Base Boundaries SDK script provides a bridge to SDK methods that deal with the play area of SDKs that support room scale play spaces.
+
+This is an abstract class to implement the interface required by all implemented SDKs.
+
+### Class Methods
+
+#### GetPlayArea/0
+
+  > `public virtual Transform GetPlayArea()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `Transform` - A transform of the object representing the play area in the scene.
+
+The GetPlayArea method returns the Transform of the object that is used to represent the play area in the scene.
+
+#### GetPlayAreaVertices/1
+
+  > `public abstract Vector3[] GetPlayAreaVertices(GameObject playArea);`
+
+  * Parameters
+   * `GameObject playArea` - The GameObject containing the play area representation.
+  * Returns
+   * `Vector3[]` - A Vector3 array of the points in the scene that represent the play area boundaries.
+
+The GetPlayAreaVertices method returns the points of the play area boundaries.
+
+#### GetPlayAreaBorderThickness/1
+
+  > `public abstract float GetPlayAreaBorderThickness(GameObject playArea);`
+
+  * Parameters
+   * `GameObject playArea` - The GameObject containing the play area representation.
+  * Returns
+   * `float` - The thickness of the drawn border.
+
+The GetPlayAreaBorderThickness returns the thickness of the drawn border for the given play area.
+
+#### IsPlayAreaSizeCalibrated/1
+
+  > `public abstract bool IsPlayAreaSizeCalibrated(GameObject playArea);`
+
+  * Parameters
+   * `GameObject playArea` - The GameObject containing the play area representation.
+  * Returns
+   * `bool` - Returns true if the play area size has been auto calibrated and set by external sensors.
+
+The IsPlayAreaSizeCalibrated method returns whether the given play area size has been auto calibrated by external sensors.
+
+---
+
+# Fallback SDK (VRTK/SDK/Fallback)
+
+The scripts used to provide a default/null fallback for any implemented SDK.
+
+ * [Fallback System](#fallback-system-sdk_fallbacksystem)
+ * [Fallback Headset](#fallback-headset-sdk_fallbackheadset)
+ * [Fallback Controller](#fallback-controller-sdk_fallbackcontroller)
+ * [Fallback Boundaries](#fallback-boundaries-sdk_fallbackboundaries)
+
+---
+
+## Fallback System (SDK_FallbackSystem)
+ > extends [SDK_BaseSystem](#base-system-sdk_basesystem)
+
+### Overview
+
+The Fallback System SDK script provides a fallback collection of methods that return null or default system values.
 
 This is the fallback class that will just return default values.
 
@@ -4865,12 +5543,12 @@ The ForceInterleavedReprojectionOn method determines whether Interleaved Reproje
 
 ---
 
-## Base Headset (SDK_BaseHeadset)
- > extends SDK_InterfaceHeadset
+## Fallback Headset (SDK_FallbackHeadset)
+ > extends [SDK_BaseHeadset](#base-headset-sdk_baseheadset)
 
 ### Overview
 
-The Base Headset SDK script provides a bridge to SDK methods that deal with the VR Headset.
+The Fallback System SDK script provides a fallback collection of methods that return null or default Headset values.
 
 This is the fallback class that will just return default values.
 
@@ -4896,7 +5574,7 @@ The GetHeadset method returns the Transform of the object that is used to repres
   * Returns
    * `Transform` - A transform of the object holding the headset camera in the scene.
 
-The GetHeadsetCamera/0 method returns the Transform of the object that is used to hold the headset camera in the scene.
+The GetHeadsetCamera method returns the Transform of the object that is used to hold the headset camera in the scene.
 
 #### HeadsetFade/3
 
@@ -4935,8 +5613,8 @@ The AddHeadsetFade method attempts to add the fade functionality to the game obj
 
 ---
 
-## Base Controller (SDK_BaseController)
- > extends SDK_InterfaceController
+## Fallback Controller (SDK_FallbackController)
+ > extends [SDK_BaseController](#base-controller-sdk_basecontroller)
 
 ### Overview
 
@@ -4959,10 +5637,10 @@ The GetControllerDefaultColliderPath returns the path to the prefab that contain
 
 #### GetControllerElementPath/3
 
-  > `public override string GetControllerElementPath(ControllerElelements element, VRTK_DeviceFinder.ControllerHand hand, bool fullPath = false)`
+  > `public override string GetControllerElementPath(VRTK_ControllerElements element, VRTK_DeviceFinder.ControllerHand hand, bool fullPath = false)`
 
   * Parameters
-   * `ControllerElelements element` - The controller element to look up.
+   * `VRTK_ControllerElements element` - The controller element to look up.
    * `VRTK_DeviceFinder.ControllerHand hand` - The controller hand to look up.
    * `bool fullPath` - Whether to get the initial path or the full path to the element.
   * Returns
@@ -5428,8 +6106,8 @@ The IsApplicationMenuTouchedUpOnIndex method is used to determine if the control
 
 ---
 
-## Base Boundaries (SDK_BaseBoundaries)
- > extends SDK_InterfaceBoundaries
+## Fallback Boundaries (SDK_FallbackBoundaries)
+ > extends [SDK_BaseBoundaries](#base-boundaries-sdk_baseboundaries)
 
 ### Overview
 
@@ -5569,7 +6247,7 @@ The GetHeadset method returns the Transform of the object that is used to repres
   * Returns
    * `Transform` - A transform of the object holding the headset camera in the scene.
 
-The GetHeadsetCamera/0 method returns the Transform of the object that is used to hold the headset camera in the scene.
+The GetHeadsetCamera method returns the Transform of the object that is used to hold the headset camera in the scene.
 
 #### HeadsetFade/3
 
@@ -5630,10 +6308,10 @@ The GetControllerDefaultColliderPath returns the path to the prefab that contain
 
 #### GetControllerElementPath/3
 
-  > `public override string GetControllerElementPath(ControllerElelements element, VRTK_DeviceFinder.ControllerHand hand, bool fullPath = false)`
+  > `public override string GetControllerElementPath(VRTK_ControllerElements element, VRTK_DeviceFinder.ControllerHand hand, bool fullPath = false)`
 
   * Parameters
-   * `ControllerElelements element` - The controller element to look up.
+   * `VRTK_ControllerElements element` - The controller element to look up.
    * `VRTK_DeviceFinder.ControllerHand hand` - The controller hand to look up.
    * `bool fullPath` - Whether to get the initial path or the full path to the element.
   * Returns

@@ -1,17 +1,15 @@
 ﻿// SteamVR Controller|SDK_SteamVR|003
 namespace VRTK
 {
-    using UnityEngine;
 #if VRTK_SDK_STEAMVR
+    using UnityEngine;
     using Valve.VR;
-#endif
 
     /// <summary>
     /// The SteamVR Controller SDK script provides a bridge to SDK methods that deal with the input devices.
     /// </summary>
     public class SDK_SteamVRController : SDK_BaseController
     {
-#if VRTK_SDK_STEAMVR
         private SteamVR_TrackedObject cachedLeftTrackedObject;
         private SteamVR_TrackedObject cachedRightTrackedObject;
 
@@ -31,26 +29,26 @@ namespace VRTK
         /// <param name="hand">The controller hand to look up.</param>
         /// <param name="fullPath">Whether to get the initial path or the full path to the element.</param>
         /// <returns>A string containing the path to the game object that the controller element resides in.</returns>
-        public override string GetControllerElementPath(ControllerElelements element, VRTK_DeviceFinder.ControllerHand hand, bool fullPath = false)
+        public override string GetControllerElementPath(VRTK_ControllerElements element, VRTK_DeviceFinder.ControllerHand hand, bool fullPath = false)
         {
             var suffix = (fullPath ? "/attach" : "");
             switch (element)
             {
-                case ControllerElelements.AttachPoint:
+                case VRTK_ControllerElements.AttachPoint:
                     return "Model/tip/attach";
-                case ControllerElelements.Trigger:
+                case VRTK_ControllerElements.Trigger:
                     return "Model/trigger" + suffix;
-                case ControllerElelements.GripLeft:
+                case VRTK_ControllerElements.GripLeft:
                     return "Model/lgrip" + suffix;
-                case ControllerElelements.GripRight:
+                case VRTK_ControllerElements.GripRight:
                     return "Model/rgrip" + suffix;
-                case ControllerElelements.Touchpad:
+                case VRTK_ControllerElements.Touchpad:
                     return "Model/trackpad" + suffix;
-                case ControllerElelements.ApplicationMenu:
+                case VRTK_ControllerElements.ApplicationMenu:
                     return "Model/button" + suffix;
-                case ControllerElelements.SystemMenu:
+                case VRTK_ControllerElements.SystemMenu:
                     return "Model/sys_button" + suffix;
-                case ControllerElelements.Body:
+                case VRTK_ControllerElements.Body:
                     return "Model/body";
             }
             return null;
@@ -586,6 +584,10 @@ namespace VRTK
 
             return false;
         }
-#endif
     }
+#else
+    public class SDK_SteamVRController : SDK_FallbackController
+    {
+    }
+#endif
 }

@@ -1,6 +1,7 @@
 ﻿// SteamVR Boundaries|SDK_SteamVR|004
 namespace VRTK
 {
+#if VRTK_SDK_STEAMVR
     using UnityEngine;
 
     /// <summary>
@@ -8,7 +9,6 @@ namespace VRTK
     /// </summary>
     public class SDK_SteamVRBoundaries : SDK_BaseBoundaries
     {
-#if VRTK_SDK_STEAMVR
         /// <summary>
         /// The GetPlayArea method returns the Transform of the object that is used to represent the play area in the scene.
         /// </summary>
@@ -63,6 +63,10 @@ namespace VRTK
             var area = playArea.GetComponent<SteamVR_PlayArea>();
             return (area.size == SteamVR_PlayArea.Size.Calibrated);
         }
-#endif
     }
+#else
+    public class SDK_SteamVRBoundaries : SDK_FallbackBoundaries
+    {
+    }
+#endif
 }

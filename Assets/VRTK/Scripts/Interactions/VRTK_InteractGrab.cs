@@ -159,7 +159,7 @@ namespace VRTK
             if (actualController && controllerAttachPoint == null)
             {
                 //attempt to find the attach point on the controller
-                var defaultAttachPoint = actualController.transform.Find(VRTK_SDK_Bridge.GetControllerElementPath(SDK_InterfaceController.ControllerElelements.AttachPoint, VRTK_DeviceFinder.GetControllerHand(gameObject)));
+                var defaultAttachPoint = actualController.transform.Find(VRTK_SDK_Bridge.GetControllerElementPath(VRTK_ControllerElements.AttachPoint, VRTK_DeviceFinder.GetControllerHand(gameObject)));
                 if (defaultAttachPoint != null)
                 {
                     controllerAttachPoint = defaultAttachPoint.GetComponent<Rigidbody>();

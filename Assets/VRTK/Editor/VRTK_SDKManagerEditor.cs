@@ -47,17 +47,20 @@
         {
             var message = "SDK has been selected but is not currently installed.";
 
+            //STEAMVR START CHECKS
+            if (!CheckSDKInstalled("SteamVR " + message, "SteamVR") || (system != VRTK_SDKManager.SupportedSDKs.SteamVR && headset != VRTK_SDKManager.SupportedSDKs.SteamVR && controller != VRTK_SDKManager.SupportedSDKs.SteamVR && boundaries != VRTK_SDKManager.SupportedSDKs.SteamVR))
+            {
+                RemoveScriptingDefineSymbol("VRTK_SDK_STEAMVR");
+            }
+
             if (system == VRTK_SDKManager.SupportedSDKs.SteamVR || headset == VRTK_SDKManager.SupportedSDKs.SteamVR || controller == VRTK_SDKManager.SupportedSDKs.SteamVR || boundaries == VRTK_SDKManager.SupportedSDKs.SteamVR)
             {
                 if (CheckSDKInstalled("SteamVR " + message, "SteamVR"))
                 {
                     AddScriptingDefineSymbol("VRTK_SDK_STEAMVR");
                 }
-                else
-                {
-                    RemoveScriptingDefineSymbol("VRTK_SDK_STEAMVR");
-                }
             }
+            //STEAMVR END CHECKS
         }
 
         private bool CheckSDKInstalled(string message, string checkType)

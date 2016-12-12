@@ -2,11 +2,11 @@
 {
     using UnityEngine;
 
-    public abstract class SDK_InterfaceBoundaries : ScriptableObject
+    public interface SDK_InterfaceBoundaries
     {
-        public abstract Transform GetPlayArea();
-        public abstract Vector3[] GetPlayAreaVertices(GameObject playArea);
-        public abstract float GetPlayAreaBorderThickness(GameObject playArea);
-        public abstract bool IsPlayAreaSizeCalibrated(GameObject playArea);
+        Transform GetPlayArea();
+        Vector3[] GetPlayAreaVertices(GameObject playArea);
+        float GetPlayAreaBorderThickness(GameObject playArea);
+        bool IsPlayAreaSizeCalibrated(GameObject playArea);
     }
 }

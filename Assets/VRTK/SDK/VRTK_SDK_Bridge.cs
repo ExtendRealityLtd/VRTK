@@ -4,8 +4,6 @@
 
     public class VRTK_SDK_Bridge
     {
-        public SDK_BaseSystem currentSystemSDK = null;
-
         private static SDK_BaseSystem systemSDK = null;
         private static SDK_BaseHeadset headsetSDK = null;
         private static SDK_BaseController controllerSDK = null;
@@ -16,7 +14,7 @@
             return GetControllerSDK().GetControllerDefaultColliderPath();
         }
 
-        public static string GetControllerElementPath(SDK_InterfaceController.ControllerElelements element, VRTK_DeviceFinder.ControllerHand hand = VRTK_DeviceFinder.ControllerHand.Right, bool fullPath = false)
+        public static string GetControllerElementPath(VRTK_ControllerElements element, VRTK_DeviceFinder.ControllerHand hand = VRTK_DeviceFinder.ControllerHand.Right, bool fullPath = false)
         {
             return GetControllerSDK().GetControllerElementPath(element, hand, fullPath);
         }
@@ -298,7 +296,7 @@
         {
             if (systemSDK == null)
             {
-                systemSDK = ScriptableObject.CreateInstance<SDK_BaseSystem>();
+                systemSDK = ScriptableObject.CreateInstance<SDK_FallbackSystem>();
                 if (VRTK_SDKManager.instance)
                 {
                     switch (VRTK_SDKManager.instance.systemSDK)
@@ -307,7 +305,7 @@
                             systemSDK = ScriptableObject.CreateInstance<SDK_SteamVRSystem>();
                             break;
                         default:
-                            Debug.LogError("No System SDK configured, falling back to Base System SDK.");
+                            Debug.LogError("No System SDK configured, falling back to generic System SDK.");
                             break;
                     }
                 }
@@ -319,7 +317,7 @@
         {
             if (headsetSDK == null)
             {
-                headsetSDK = ScriptableObject.CreateInstance<SDK_BaseHeadset>();
+                headsetSDK = ScriptableObject.CreateInstance<SDK_FallbackHeadset>();
                 if (VRTK_SDKManager.instance)
                 {
                     switch (VRTK_SDKManager.instance.headsetSDK)
@@ -328,7 +326,7 @@
                             headsetSDK = ScriptableObject.CreateInstance<SDK_SteamVRHeadset>();
                             break;
                         default:
-                            Debug.LogError("No Headset SDK configured, falling back to Base Headset SDK.");
+                            Debug.LogError("No Headset SDK configured, falling back to generic Headset SDK.");
                             break;
                     }
                 }
@@ -340,7 +338,7 @@
         {
             if (controllerSDK == null)
             {
-                controllerSDK = ScriptableObject.CreateInstance<SDK_BaseController>();
+                controllerSDK = ScriptableObject.CreateInstance<SDK_FallbackController>();
                 if (VRTK_SDKManager.instance)
                 {
                     switch (VRTK_SDKManager.instance.controllerSDK)
@@ -349,7 +347,7 @@
                             controllerSDK = ScriptableObject.CreateInstance<SDK_SteamVRController>();
                             break;
                         default:
-                            Debug.LogError("No Controller SDK configured, falling back to Base Controller SDK.");
+                            Debug.LogError("No Controller SDK configured, falling back to generic Controller SDK.");
                             break;
                     }
                 }
@@ -361,7 +359,7 @@
         {
             if (boundariesSDK == null)
             {
-                boundariesSDK = ScriptableObject.CreateInstance<SDK_BaseBoundaries>();
+                boundariesSDK = ScriptableObject.CreateInstance<SDK_FallbackBoundaries>();
                 if (VRTK_SDKManager.instance)
                 {
                     switch (VRTK_SDKManager.instance.boundariesSDK)
@@ -370,7 +368,7 @@
                             boundariesSDK = ScriptableObject.CreateInstance<SDK_SteamVRBoundaries>();
                             break;
                         default:
-                            Debug.LogError("No Boundaries SDK configured, falling back to Base Boundaries SDK.");
+                            Debug.LogError("No Boundaries SDK configured, falling back to generic Boundaries SDK.");
                             break;
                     }
                 }
