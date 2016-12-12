@@ -3346,6 +3346,7 @@ A collection of scripts that provide the ability to deal with tracking the world
  * [Headset Controller Aware](#headset-controller-aware-vrtk_headsetcontrolleraware)
  * [Hip Tracking](#hip-tracking-vrtk_hiptracking)
  * [Body Physics](#body-physics-vrtk_bodyphysics)
+ * [Position Rewind](#position-rewind-vrtk_positionrewind)
 
 ---
 
@@ -3764,6 +3765,24 @@ The OnGround method returns whether the user is currently standing on the ground
 ### Example
 
 `VRTK/Examples/017_CameraRig_TouchpadWalking` has a collection of walls and slopes that can be traversed by the user with the touchpad but the user cannot pass through the objects as they are collidable and the rigidbody physics won't allow the intersection to occur.
+
+---
+
+## Position Rewind (VRTK_PositionRewind)
+
+### Overview
+
+The Position Rewind script is used to reset the user back to a good known standing position upon receiving a headset collision event.
+
+### Inspector Parameters
+
+ * **Rewind Delay:** The amount of time from original headset collision until the rewind to the last good known position takes place.
+ * **Pushback Distance:** The additional distance to push the play area back upon rewind to prevent being right next to the wall again.
+ * **Crouch Threshold:** The threshold to determine how low the headset has to be before it is considered the user is crouching. The last good position will only be recorded in a non-crouching position.
+
+### Example
+
+`VRTK/Examples/017_CameraRig_TouchpadWalking` has the position rewind script to reset the user's position if they walk into objects.
 
 ---
 
