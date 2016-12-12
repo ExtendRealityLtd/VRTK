@@ -41,6 +41,7 @@ namespace VRTK
 
         private void Start()
         {
+            transform.parent.GetComponent<Canvas>().planeDistance = 0.5f;
             text = GetComponent<Text>();
             text.fontSize = fontSize;
             text.transform.localPosition = position;
