@@ -230,7 +230,7 @@ namespace VRTK
                         break;
                     case "grip":
                         tipText = gripText;
-                        tipTransform = GetTransform(grip, VRTK_ControllerElements.GripLeft); ;
+                        tipTransform = GetTransform(grip, VRTK_ControllerElements.GripLeft);
                         if (tipTransform != null)
                         {
                             gripInitialised = true;
@@ -238,7 +238,7 @@ namespace VRTK
                         break;
                     case "touchpad":
                         tipText = touchpadText;
-                        tipTransform = GetTransform(touchpad, VRTK_ControllerElements.Touchpad); ;
+                        tipTransform = GetTransform(touchpad, VRTK_ControllerElements.Touchpad);
                         if (tipTransform != null)
                         {
                             touchpadInitialised = true;
@@ -246,7 +246,7 @@ namespace VRTK
                         break;
                     case "appmenu":
                         tipText = appMenuText;
-                        tipTransform = GetTransform(appMenu, VRTK_ControllerElements.ApplicationMenu); ;
+                        tipTransform = GetTransform(appMenu, VRTK_ControllerElements.ApplicationMenu);
                         if (tipTransform != null)
                         {
                             appMenuInitialised = true;

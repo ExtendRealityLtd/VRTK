@@ -1028,8 +1028,8 @@ namespace VRTK
         private void SetVelocity()
         {
             var controllerIndex = VRTK_DeviceFinder.GetControllerIndex(gameObject);
-            controllerVelocity = VRTK_SDK_Bridge.GetVelocityOnIndex(controllerIndex); ;
-            controllerAngularVelocity = VRTK_SDK_Bridge.GetAngularVelocityOnIndex(controllerIndex); ;
+            controllerVelocity = VRTK_SDK_Bridge.GetVelocityOnIndex(controllerIndex);
+            controllerAngularVelocity = VRTK_SDK_Bridge.GetAngularVelocityOnIndex(controllerIndex);
         }
     }
 }
