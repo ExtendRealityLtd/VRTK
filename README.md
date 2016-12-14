@@ -111,6 +111,7 @@ of the examples can be viewed within this repository in
 | Potioneer: The VR Gardening Simulator | [Steam Store Page](http://store.steampowered.com/app/544410) |
 | Manastorm: Champions of G'nar | [Steam Store Page](http://store.steampowered.com/app/548560) |
 | Keep Defending | [Steam Store Page](http://store.steampowered.com/app/527720) |
+| Stage Presence | [Steam Store Page](http://store.steampowered.com/app/391640) |
 
 ## Contributing
 
