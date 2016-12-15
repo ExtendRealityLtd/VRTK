@@ -23,7 +23,7 @@ namespace VRTK
             TriggerTooltip,
             GripTooltip,
             TouchpadTooltip,
-            AppMenuTooltip,
+            ButtonOneTooltip,
             None
         }
 
@@ -33,27 +33,27 @@ namespace VRTK
         public string gripText;
         [Tooltip("The text to display for the touchpad action.")]
         public string touchpadText;
-        [Tooltip("The text to display for the application menu button action.")]
-        public string appMenuText;
+        [Tooltip("The text to display for button one action.")]
+        public string buttonOneText;
         [Tooltip("The colour to use for the tooltip background container.")]
         public Color tipBackgroundColor = Color.black;
         [Tooltip("The colour to use for the text within the tooltip.")]
         public Color tipTextColor = Color.white;
         [Tooltip("The colour to use for the line between the tooltip and the relevant controller button.")]
         public Color tipLineColor = Color.black;
-        [Tooltip("The transform for the position of the trigger button on the controller (this is usually found in `Model/trigger/attach`.")]
+        [Tooltip("The transform for the position of the trigger button on the controller.")]
         public Transform trigger;
-        [Tooltip("The transform for the position of the grip button on the controller (this is usually found in `Model/lgrip/attach`.")]
+        [Tooltip("The transform for the position of the grip button on the controller.")]
         public Transform grip;
-        [Tooltip("The transform for the position of the touchpad button on the controller (this is usually found in `Model/trackpad/attach`.")]
+        [Tooltip("The transform for the position of the touchpad button on the controller.")]
         public Transform touchpad;
-        [Tooltip("The transform for the position of the app menu button on the controller (this is usually found in `Model/button/attach`.")]
-        public Transform appMenu;
+        [Tooltip("The transform for the position of button one on the controller.")]
+        public Transform buttonOne;
 
         private bool triggerInitialised = false;
         private bool gripInitialised = false;
         private bool touchpadInitialised = false;
-        private bool appMenuInitialised = false;
+        private bool buttonOneInitialised = false;
         private TooltipButtons[] availableButtons;
         private GameObject[] buttonTooltips;
         private bool[] tooltipStates;
@@ -68,7 +68,7 @@ namespace VRTK
             triggerInitialised = false;
             gripInitialised = false;
             touchpadInitialised = false;
-            appMenuInitialised = false;
+            buttonOneInitialised = false;
         }
 
         /// <summary>
@@ -80,8 +80,8 @@ namespace VRTK
         {
             switch (element)
             {
-                case TooltipButtons.AppMenuTooltip:
-                    appMenuText = newText;
+                case TooltipButtons.ButtonOneTooltip:
+                    buttonOneText = newText;
                     break;
                 case TooltipButtons.GripTooltip:
                     gripText = newText;
@@ -122,14 +122,14 @@ namespace VRTK
             triggerInitialised = false;
             gripInitialised = false;
             touchpadInitialised = false;
-            appMenuInitialised = false;
+            buttonOneInitialised = false;
 
             availableButtons = new TooltipButtons[]
             {
                 TooltipButtons.TriggerTooltip,
                 TooltipButtons.GripTooltip,
                 TooltipButtons.TouchpadTooltip,
-                TooltipButtons.AppMenuTooltip
+                TooltipButtons.ButtonOneTooltip
             };
 
             buttonTooltips = new GameObject[availableButtons.Length];
@@ -244,12 +244,12 @@ namespace VRTK
                             touchpadInitialised = true;
                         }
                         break;
-                    case "appmenu":
-                        tipText = appMenuText;
-                        tipTransform = GetTransform(appMenu, VRTK_ControllerElements.ApplicationMenu);
+                    case "buttonone":
+                        tipText = buttonOneText;
+                        tipTransform = GetTransform(buttonOne, VRTK_ControllerElements.ButtonOne);
                         if (tipTransform != null)
                         {
-                            appMenuInitialised = true;
+                            buttonOneInitialised = true;
                         }
                         break;
                 }
@@ -272,7 +272,7 @@ namespace VRTK
 
         private bool TipsInitialised()
         {
-            return (triggerInitialised && gripInitialised && touchpadInitialised && appMenuInitialised);
+            return (triggerInitialised && gripInitialised && touchpadInitialised && buttonOneInitialised);
         }
 
         private Transform GetTransform(Transform setTransform, VRTK_ControllerElements findElement)
@@ -284,13 +284,13 @@ namespace VRTK
             }
             else
             {
-                var actualController = VRTK_DeviceFinder.GetActualController(controllerActions.gameObject);
+                var modelController = VRTK_DeviceFinder.GetModelAliasController(controllerActions.gameObject);
 
-                if (actualController && actualController.activeInHierarchy)
+                if (modelController && modelController.activeInHierarchy)
                 {
                     var controllerHand = VRTK_DeviceFinder.GetControllerHand(controllerActions.gameObject);
                     var elementPath = VRTK_SDK_Bridge.GetControllerElementPath(findElement, controllerHand, true);
-                    returnTransform = actualController.transform.FindChild(elementPath);
+                    returnTransform = modelController.transform.FindChild(elementPath);
                 }
             }
 

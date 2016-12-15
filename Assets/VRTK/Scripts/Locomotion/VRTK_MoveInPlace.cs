@@ -400,22 +400,6 @@ namespace VRTK
                 {
                     switch (engageButton)
                     {
-                        case VRTK_ControllerEvents.ButtonAlias.Application_Menu:
-                            controllerEvent.ApplicationMenuPressed += engageButtonPressed;
-                            controllerEvent.ApplicationMenuReleased += engageButtonUp;
-                            break;
-                        case VRTK_ControllerEvents.ButtonAlias.Grip:
-                            controllerEvent.GripPressed += engageButtonPressed;
-                            controllerEvent.GripReleased += engageButtonUp;
-                            break;
-                        case VRTK_ControllerEvents.ButtonAlias.Touchpad_Press:
-                            controllerEvent.TouchpadPressed += engageButtonPressed;
-                            controllerEvent.TouchpadReleased += engageButtonUp;
-                            break;
-                        case VRTK_ControllerEvents.ButtonAlias.Touchpad_Touch:
-                            controllerEvent.TouchpadTouchStart += engageButtonPressed;
-                            controllerEvent.TouchpadTouchEnd += engageButtonUp;
-                            break;
                         case VRTK_ControllerEvents.ButtonAlias.Trigger_Click:
                             controllerEvent.TriggerClicked += engageButtonPressed;
                             controllerEvent.TriggerUnclicked += engageButtonUp;
@@ -432,7 +416,37 @@ namespace VRTK
                             controllerEvent.TriggerTouchStart += engageButtonPressed;
                             controllerEvent.TriggerTouchEnd += engageButtonUp;
                             break;
-                        default:
+                        case VRTK_ControllerEvents.ButtonAlias.Grip_Click:
+                            controllerEvent.GripClicked += engageButtonPressed;
+                            controllerEvent.GripUnclicked += engageButtonUp;
+                            break;
+                        case VRTK_ControllerEvents.ButtonAlias.Grip_Hairline:
+                            controllerEvent.GripHairlineStart += engageButtonPressed;
+                            controllerEvent.GripHairlineEnd += engageButtonUp;
+                            break;
+                        case VRTK_ControllerEvents.ButtonAlias.Grip_Press:
+                            controllerEvent.GripPressed += engageButtonPressed;
+                            controllerEvent.GripReleased += engageButtonUp;
+                            break;
+                        case VRTK_ControllerEvents.ButtonAlias.Grip_Touch:
+                            controllerEvent.GripTouchStart += engageButtonPressed;
+                            controllerEvent.GripTouchEnd += engageButtonUp;
+                            break;
+                        case VRTK_ControllerEvents.ButtonAlias.Touchpad_Press:
+                            controllerEvent.TouchpadPressed += engageButtonPressed;
+                            controllerEvent.TouchpadReleased += engageButtonUp;
+                            break;
+                        case VRTK_ControllerEvents.ButtonAlias.Touchpad_Touch:
+                            controllerEvent.TouchpadTouchStart += engageButtonPressed;
+                            controllerEvent.TouchpadTouchEnd += engageButtonUp;
+                            break;
+                        case VRTK_ControllerEvents.ButtonAlias.Button_One_Press:
+                            controllerEvent.ButtonOnePressed += engageButtonPressed;
+                            controllerEvent.ButtonOneReleased += engageButtonUp;
+                            break;
+                        case VRTK_ControllerEvents.ButtonAlias.Button_One_Touch:
+                            controllerEvent.ButtonOneTouchStart += engageButtonPressed;
+                            controllerEvent.ButtonOneTouchEnd += engageButtonUp;
                             break;
                     }
                     subscribed = true;
@@ -441,22 +455,6 @@ namespace VRTK
                 {
                     switch (engageButton)
                     {
-                        case VRTK_ControllerEvents.ButtonAlias.Application_Menu:
-                            controllerEvent.ApplicationMenuPressed -= engageButtonPressed;
-                            controllerEvent.ApplicationMenuReleased -= engageButtonUp;
-                            break;
-                        case VRTK_ControllerEvents.ButtonAlias.Grip:
-                            controllerEvent.GripPressed -= engageButtonPressed;
-                            controllerEvent.GripReleased -= engageButtonUp;
-                            break;
-                        case VRTK_ControllerEvents.ButtonAlias.Touchpad_Press:
-                            controllerEvent.TouchpadPressed -= engageButtonPressed;
-                            controllerEvent.TouchpadReleased -= engageButtonUp;
-                            break;
-                        case VRTK_ControllerEvents.ButtonAlias.Touchpad_Touch:
-                            controllerEvent.TouchpadTouchStart -= engageButtonPressed;
-                            controllerEvent.TouchpadTouchEnd -= engageButtonUp;
-                            break;
                         case VRTK_ControllerEvents.ButtonAlias.Trigger_Click:
                             controllerEvent.TriggerClicked -= engageButtonPressed;
                             controllerEvent.TriggerUnclicked -= engageButtonUp;
@@ -473,7 +471,37 @@ namespace VRTK
                             controllerEvent.TriggerTouchStart -= engageButtonPressed;
                             controllerEvent.TriggerTouchEnd -= engageButtonUp;
                             break;
-                        default:
+                        case VRTK_ControllerEvents.ButtonAlias.Grip_Click:
+                            controllerEvent.GripClicked -= engageButtonPressed;
+                            controllerEvent.GripUnclicked -= engageButtonUp;
+                            break;
+                        case VRTK_ControllerEvents.ButtonAlias.Grip_Hairline:
+                            controllerEvent.GripHairlineStart -= engageButtonPressed;
+                            controllerEvent.GripHairlineEnd -= engageButtonUp;
+                            break;
+                        case VRTK_ControllerEvents.ButtonAlias.Grip_Press:
+                            controllerEvent.GripPressed -= engageButtonPressed;
+                            controllerEvent.GripReleased -= engageButtonUp;
+                            break;
+                        case VRTK_ControllerEvents.ButtonAlias.Grip_Touch:
+                            controllerEvent.GripTouchStart -= engageButtonPressed;
+                            controllerEvent.GripTouchEnd -= engageButtonUp;
+                            break;
+                        case VRTK_ControllerEvents.ButtonAlias.Touchpad_Press:
+                            controllerEvent.TouchpadPressed -= engageButtonPressed;
+                            controllerEvent.TouchpadReleased -= engageButtonUp;
+                            break;
+                        case VRTK_ControllerEvents.ButtonAlias.Touchpad_Touch:
+                            controllerEvent.TouchpadTouchStart -= engageButtonPressed;
+                            controllerEvent.TouchpadTouchEnd -= engageButtonUp;
+                            break;
+                        case VRTK_ControllerEvents.ButtonAlias.Button_One_Press:
+                            controllerEvent.ButtonOnePressed -= engageButtonPressed;
+                            controllerEvent.ButtonOneReleased -= engageButtonUp;
+                            break;
+                        case VRTK_ControllerEvents.ButtonAlias.Button_One_Touch:
+                            controllerEvent.ButtonOneTouchStart -= engageButtonPressed;
+                            controllerEvent.ButtonOneTouchEnd -= engageButtonUp;
                             break;
                     }
                     subscribed = false;

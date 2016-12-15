@@ -14,7 +14,7 @@ namespace VRTK
         public string leftGripModelPath = "";
         public string rightGripModelPath = "";
         public string touchpadModelPath = "";
-        public string appMenuModelPath = "";
+        public string buttonOneModelPath = "";
         public string systemMenuModelPath = "";
     }
 
@@ -26,7 +26,7 @@ namespace VRTK
         public VRTK_BaseHighlighter gripLeft;
         public VRTK_BaseHighlighter gripRight;
         public VRTK_BaseHighlighter touchpad;
-        public VRTK_BaseHighlighter appMenu;
+        public VRTK_BaseHighlighter buttonOne;
         public VRTK_BaseHighlighter systemMenu;
     }
 
@@ -59,9 +59,6 @@ namespace VRTK
     /// </example>
     public class VRTK_ControllerActions : MonoBehaviour
     {
-        [Tooltip("The GameObject that contains the actual renderers for the controller model. Will default to the actual controller GameObject if none is provided.")]
-        public GameObject modelContainer;
-
         [Tooltip("A collection of strings that determine the path to the controller model sub elements for identifying the model parts at runtime. If the paths are left empty they will default to the model element paths of the selected SDK Bridge.\n\n"
          + "* The available model sub elements are:\n\n"
          + " * `Body Model Path`: The overall shape of the controller.\n"
@@ -69,7 +66,7 @@ namespace VRTK
          + " * `Grip Left Model Path`: The model that represents the left grip button.\n"
          + " * `Grip Right Model Path`: The model that represents the right grip button.\n"
          + " * `Touchpad Model Path`: The model that represents the touchpad.\n"
-         + " * `App Menu Model Path`: The model that represents the application menu button.\n"
+         + " * `Button One Model Path`: The model that represents button one.\n"
          + " * `System Menu Model Path`: The model that represents the system menu button.")]
         public VRTK_ControllerModelElementPaths modelElementPaths;
 
@@ -80,7 +77,7 @@ namespace VRTK
          + " * `Grip Left`: The highlighter to use on the left grip button.\n"
          + " * `Grip Right`: The highlighter to use on the  right grip button.\n"
          + " * `Touchpad`: The highlighter to use on the touchpad.\n"
-         + " * `App Menu`: The highlighter to use on the application menu button.\n"
+         + " * `Button One`: The highlighter to use on button one.\n"
          + " * `System Menu`: The highlighter to use on the system menu button.")]
         public VRTK_ControllerElementHighlighers elementHighlighterOverrides;
 
@@ -94,6 +91,7 @@ namespace VRTK
         /// </summary>
         public event ControllerActionsEventHandler ControllerModelInvisible;
 
+        private GameObject modelContainer;
         private bool controllerVisible = true;
         private ushort hapticPulseStrength;
         private ushort maxHapticVibration = 3999;
@@ -274,18 +272,18 @@ namespace VRTK
         }
 
         /// <summary>
-        /// The ToggleHighlightApplicationMenu method is a shortcut method that makes it easier to toggle the highlight state of the controller application menu element.
+        /// The ToggleHighlightButtonOne method is a shortcut method that makes it easier to toggle the highlight state of the button one controller element.
         /// </summary>
-        /// <param name="state">The highlight colour state, `true` will enable the highlight on the application menu and `false` will remove the highlight from the application menu.</param>
-        /// <param name="highlight">The colour to highlight the application menu with.</param>
+        /// <param name="state">The highlight colour state, `true` will enable the highlight on button one and `false` will remove the highlight from button one.</param>
+        /// <param name="highlight">The colour to highlight button one with.</param>
         /// <param name="duration">The duration of fade from white to the highlight colour.</param>
-        public void ToggleHighlightApplicationMenu(bool state, Color? highlight = null, float duration = 0f)
+        public void ToggleHighlightButtonOne(bool state, Color? highlight = null, float duration = 0f)
         {
             if (!state && controllerHighlighted)
             {
                 return;
             }
-            ToggleHighlightAlias(state, modelElementPaths.appMenuModelPath, highlight, duration);
+            ToggleHighlightAlias(state, modelElementPaths.buttonOneModelPath, highlight, duration);
         }
 
         /// <summary>
@@ -315,7 +313,7 @@ namespace VRTK
             ToggleHighlightTrigger(state, highlight, duration);
             ToggleHighlightGrip(state, highlight, duration);
             ToggleHighlightTouchpad(state, highlight, duration);
-            ToggleHighlightApplicationMenu(state, highlight, duration);
+            ToggleHighlightButtonOne(state, highlight, duration);
             ToggleHighlightAlias(state, modelElementPaths.systemMenuModelPath, highlight, duration);
             ToggleHighlightAlias(state, modelElementPaths.bodyModelPath, highlight, duration);
         }
@@ -367,7 +365,7 @@ namespace VRTK
             }
 
             objectHighlighter.Initialise(null, highlighterOptions);
-            AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(VRTK_ControllerElements.ApplicationMenu)), objectHighlighter, elementHighlighterOverrides.appMenu);
+            AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(VRTK_ControllerElements.ButtonOne)), objectHighlighter, elementHighlighterOverrides.buttonOne);
             AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(VRTK_ControllerElements.Body)), objectHighlighter, elementHighlighterOverrides.body);
             AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(VRTK_ControllerElements.GripLeft)), objectHighlighter, elementHighlighterOverrides.gripLeft);
             AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(VRTK_ControllerElements.GripRight)), objectHighlighter, elementHighlighterOverrides.gripRight);
@@ -402,9 +400,9 @@ namespace VRTK
             {
                 modelElementPaths.touchpadModelPath = VRTK_SDK_Bridge.GetControllerElementPath(VRTK_ControllerElements.Touchpad, controllerHand);
             }
-            if (modelElementPaths.appMenuModelPath.Trim() == "")
+            if (modelElementPaths.buttonOneModelPath.Trim() == "")
             {
-                modelElementPaths.appMenuModelPath = VRTK_SDK_Bridge.GetControllerElementPath(VRTK_ControllerElements.ApplicationMenu, controllerHand);
+                modelElementPaths.buttonOneModelPath = VRTK_SDK_Bridge.GetControllerElementPath(VRTK_ControllerElements.ButtonOne, controllerHand);
             }
             if (modelElementPaths.systemMenuModelPath.Trim() == "")
             {
@@ -414,7 +412,7 @@ namespace VRTK
 
         private void OnEnable()
         {
-            modelContainer = (!modelContainer ? VRTK_DeviceFinder.GetActualController(gameObject) : modelContainer);
+            modelContainer = (!modelContainer ? VRTK_DeviceFinder.GetModelAliasController(gameObject) : modelContainer);
             StartCoroutine(WaitForModel());
         }
 

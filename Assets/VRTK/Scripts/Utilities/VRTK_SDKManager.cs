@@ -47,6 +47,13 @@ namespace VRTK
         public GameObject actualLeftController;
         [Tooltip("A reference to the GameObject that contains the SDK Right Hand Controller.")]
         public GameObject actualRightController;
+
+        [Header("Controller Aliases")]
+
+        [Tooltip("A reference to the GameObject that models for the Left Hand Controller.")]
+        public GameObject modelAliasLeftController;
+        [Tooltip("A reference to the GameObject that models for the Right Hand Controller")]
+        public GameObject modelAliasRightController;
         [Tooltip("A reference to the GameObject that contains any scripts that apply to the Left Hand Controller.")]
         public GameObject scriptAliasLeftController;
         [Tooltip("A reference to the GameObject that contains any scripts that apply to the Right Hand Controller.")]

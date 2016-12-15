@@ -130,14 +130,14 @@ There are a number of parameters that can be set on the Prefab which are provide
  * **Trigger Text:** The text to display for the trigger button action.
  * **Grip Text:** The text to display for the grip button action.
  * **Touchpad Text:** The text to display for the touchpad action.
- * **App Menu Text:** The text to display for the application menu button action.
+ * **Button One Text:** The text to display for button one action.
  * **Tip Background Color:** The colour to use for the tooltip background container.
  * **Tip Text Color:** The colour to use for the text within the tooltip.
  * **Tip Line Color:** The colour to use for the line between the tooltip and the relevant controller button.
- * **Trigger:** The transform for the position of the trigger button on the controller (this is usually found in `Model/trigger/attach`.
- * **Grip:** The transform for the position of the grip button on the controller (this is usually found in `Model/lgrip/attach`.
- * **Touchpad:** The transform for the position of the touchpad button on the controller (this is usually found in `Model/trackpad/attach`.
- * **App Menu:** The transform for the position of the app menu button on the controller (this is usually found in `Model/button/attach`.
+ * **Trigger:** The transform for the position of the trigger button on the controller.
+ * **Grip:** The transform for the position of the grip button on the controller.
+ * **Touchpad:** The transform for the position of the touchpad button on the controller.
+ * **Button One:** The transform for the position of button one on the controller.
 
 ### Class Methods
 
@@ -1111,6 +1111,7 @@ The script also has a public boolean pressed state for the buttons to allow the 
  * **Menu Toggle Button:** The button to use for the action of bringing up an in-game menu.
  * **Axis Fidelity:** The amount of fidelity in the changes on the axis, which is defaulted to 1. Any number higher than 2 will probably give too sensitive results.
  * **Trigger Click Threshold:** The level on the trigger axis to reach before a click is registered.
+ * **Grip Click Threshold:** The level on the grip axis to reach before a click is registered.
 
 ### Class Variables
 
@@ -1118,27 +1119,36 @@ The script also has a public boolean pressed state for the buttons to allow the 
   * `Trigger_Hairline` - The trigger is squeezed past the current hairline threshold.
   * `Trigger_Touch` - The trigger is squeezed a small amount.
   * `Trigger_Press` - The trigger is squeezed about half way in.
-  * `Trigger_Click` - The trigger is squeezed all the way until it clicks.
-  * `Grip` - The grip button is pressed.
+  * `Trigger_Click` - The trigger is squeezed all the way down.
+  * `Grip_Hairline` - The grip is squeezed past the current hairline threshold.
+  * `Grip_Touch` - The grip button is touched.
+  * `Grip_Press` - The grip button is pressed.
+  * `Grip_Click` - The grip button is pressed all the way down.
   * `Touchpad_Touch` - The touchpad is touched (without pressing down to click).
   * `Touchpad_Press` - The touchpad is pressed (to the point of hearing a click).
-  * `Application_Menu` - The application menu button is pressed.
+  * `Button_One_Touch` - The button one is touched.
+  * `Button_One_Press` - The button one is pressed.
   * `Undefined` - No button specified
  * `public bool triggerPressed` - This will be true if the trigger is squeezed about half way in. Default: `false`
  * `public bool triggerTouched` - This will be true if the trigger is squeezed a small amount. Default: `false`
  * `public bool triggerHairlinePressed` - This will be true if the trigger is squeezed a small amount more from any previous squeeze on the trigger. Default: `false`
- * `public bool triggerClicked` - This will be true if the trigger is squeezed all the way until it clicks. Default: `false`
+ * `public bool triggerClicked` - This will be true if the trigger is squeezed all the way down. Default: `false`
  * `public bool triggerAxisChanged` - This will be true if the trigger has been squeezed more or less. Default: `false`
- * `public bool applicationMenuPressed` - This will be true if the application menu is held down. Default: `false`
+ * `public bool gripPressed` - This will be true if the grip is squeezed about half way in. Default: `false`
+ * `public bool gripTouched` - This will be true if the grip is touched. Default: `false`
+ * `public bool gripHairlinePressed` - This will be true if the grip is squeezed a small amount more from any previous squeeze on the grip. Default: `false`
+ * `public bool gripClicked` - This will be true if the grip is squeezed all the way down. Default: `false`
+ * `public bool gripAxisChanged` - This will be true if the grip has been squeezed more or less. Default: `false`
  * `public bool touchpadPressed` - This will be true if the touchpad is held down. Default: `false`
  * `public bool touchpadTouched` - This will be true if the touchpad is being touched. Default: `false`
  * `public bool touchpadAxisChanged` - This will be true if the touchpad touch position has changed. Default: `false`
- * `public bool gripPressed` - This will be true if the grip is held down. Default: `false`
+ * `public bool buttonOnePressed` - This will be true if button one is held down. Default: `false`
+ * `public bool buttonOneTouched` - This will be true if button one is being touched. Default: `false`
  * `public bool pointerPressed` - This will be true if the button aliased to the pointer is held down. Default: `false`
  * `public bool grabPressed` - This will be true if the button aliased to the grab is held down. Default: `false`
  * `public bool usePressed` - This will be true if the button aliased to the use is held down. Default: `false`
  * `public bool uiClickPressed` - This will be true if the button aliased to the UI click is held down. Default: `false`
- * `public bool menuPressed` - This will be true if the button aliased to the application menu is held down. Default: `false`
+ * `public bool menuPressed` - This will be true if the button aliased to the menu is held down. Default: `false`
 
 ### Class Events
 
@@ -1148,18 +1158,27 @@ The script also has a public boolean pressed state for the buttons to allow the 
  * `TriggerTouchEnd` - Emitted when the trigger is no longer being squeezed at all.
  * `TriggerHairlineStart` - Emitted when the trigger is squeezed past the current hairline threshold.
  * `TriggerHairlineEnd` - Emitted when the trigger is released past the current hairline threshold.
- * `TriggerClicked` - Emitted when the trigger is squeezed all the way until it clicks.
+ * `TriggerClicked` - Emitted when the trigger is squeezed all the way down.
  * `TriggerUnclicked` - Emitted when the trigger is no longer being held all the way down.
  * `TriggerAxisChanged` - Emitted when the amount of squeeze on the trigger changes.
- * `ApplicationMenuPressed` - Emitted when the application menu button is pressed.
- * `ApplicationMenuReleased` - Emitted when the application menu button is released.
- * `GripPressed` - Emitted when the grip button is pressed.
- * `GripReleased` - Emitted when the grip button is released.
+ * `GripPressed` - Emitted when the grip is squeezed about half way in.
+ * `GripReleased` - Emitted when the grip is released under half way.
+ * `GripTouchStart` - Emitted when the grip is squeezed a small amount.
+ * `GripTouchEnd` - Emitted when the grip is no longer being squeezed at all.
+ * `GripHairlineStart` - Emitted when the grip is squeezed past the current hairline threshold.
+ * `GripHairlineEnd` - Emitted when the grip is released past the current hairline threshold.
+ * `GripClicked` - Emitted when the grip is squeezed all the way down.
+ * `GripUnclicked` - Emitted when the grip is no longer being held all the way down.
+ * `GripAxisChanged` - Emitted when the amount of squeeze on the grip changes.
  * `TouchpadPressed` - Emitted when the touchpad is pressed (to the point of hearing a click).
  * `TouchpadReleased` - Emitted when the touchpad has been released after a pressed state.
  * `TouchpadTouchStart` - Emitted when the touchpad is touched (without pressing down to click).
  * `TouchpadTouchEnd` - Emitted when the touchpad is no longer being touched.
  * `TouchpadAxisChanged` - Emitted when the touchpad is being touched in a different location.
+ * `ButtonOneTouchStart` - Emitted when button one is touched.
+ * `ButtonOneTouchEnd` - Emitted when button one is no longer being touched.
+ * `ButtonOnePressed` - Emitted when button one is pressed.
+ * `ButtonOneReleased` - Emitted when button one is released.
  * `AliasPointerOn` - Emitted when the pointer toggle alias button is pressed.
  * `AliasPointerOff` - Emitted when the pointer toggle alias button is released.
  * `AliasPointerSet` - Emitted when the pointer set alias button is released.
@@ -1188,15 +1207,24 @@ Adding the `VRTK_ControllerEvents_UnityEvents` component to `VRTK_ControllerEven
  * `OnTriggerClicked` - Emits the TriggerClicked class event.
  * `OnTriggerUnclicked` - Emits the TriggerUnclicked class event.
  * `OnTriggerAxisChanged` - Emits the TriggerAxisChanged class event.
- * `OnApplicationMenuPressed` - Emits the ApplicationMenuPressed class event.
- * `OnApplicationMenuReleased` - Emits the ApplicationMenuReleased class event.
  * `OnGripPressed` - Emits the GripPressed class event.
  * `OnGripReleased` - Emits the GripReleased class event.
+ * `OnGripTouchStart` - Emits the GripTouchStart class event.
+ * `OnGripTouchEnd` - Emits the GripTouchEnd class event.
+ * `OnGripHairlineStart` - Emits the GripHairlineStart class event.
+ * `OnGripHairlineEnd` - Emits the GripHairlineEnd class event.
+ * `OnGripClicked` - Emits the GripClicked class event.
+ * `OnGripUnclicked` - Emits the GripUnclicked class event.
+ * `OnGripAxisChanged` - Emits the GripAxisChanged class event.
  * `OnTouchpadPressed` - Emits the TouchpadPressed class event.
  * `OnTouchpadReleased` - Emits the TouchpadReleased class event.
  * `OnTouchpadTouchStart` - Emits the TouchpadTouchStart class event.
  * `OnTouchpadTouchEnd` - Emits the TouchpadTouchEnd class event.
  * `OnTouchpadAxisChanged` - Emits the TouchpadAxisChanged class event.
+ * `OnButtonOnePressed` - Emits the ButtonOnePressed class event.
+ * `OnButtonOneReleased` - Emits the ButtonOneReleased class event.
+ * `OnButtonOneTouchStart` - Emits the ButtonOneTouchStart class event.
+ * `OnButtonOneTouchEnd` - Emits the ButtonOneTouchEnd class event.
  * `OnAliasPointerOn` - Emits the AliasPointerOn class event.
  * `OnAliasPointerOff` - Emits the AliasPointerOff class event.
  * `OnAliasPointerSet` - Emits the AliasPointerSet class event.
@@ -1276,9 +1304,31 @@ The GetTouchpadAxisAngle method returns the angle of where the touchpad is curre
 
 The GetTriggerAxis method returns a float that represents how much the trigger is being squeezed. This can be useful for using the trigger axis to perform high fidelity tasks or only activating the trigger press once it has exceeded a given press threshold.
 
+#### GetGripAxis/0
+
+  > `public float GetGripAxis()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `float` - A float representing the amount of squeeze that is being applied to the grip. `0f` to `1f`.
+
+The GetGripAxis method returns a float that represents how much the grip is being squeezed. This can be useful for using the grip axis to perform high fidelity tasks or only activating the grip press once it has exceeded a given press threshold.
+
 #### GetHairTriggerDelta/0
 
   > `public float GetHairTriggerDelta()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `float` - A float representing the difference in the trigger pressure from the hairline threshold start to current position.
+
+The GetHairTriggerDelta method returns a float representing the difference in how much the trigger is being pressed in relation to the hairline threshold start.
+
+#### GetHairGripDelta/0
+
+  > `public float GetHairGripDelta()`
 
   * Parameters
    * _none_
@@ -1325,7 +1375,6 @@ The highlighting of the controller is defaulted to use the `VRTK_MaterialColorSw
 
 ### Inspector Parameters
 
- * **Model Container:** The GameObject that contains the actual renderers for the controller model. Will default to the actual controller GameObject if none is provided.
  * **Model Element Paths:** A collection of strings that determine the path to the controller model sub elements for identifying the model parts at runtime. If the paths are left empty they will default to the model element paths of the selected SDK Bridge.
   * The available model sub elements are:
     * `Body Model Path`: The overall shape of the controller.
@@ -1333,7 +1382,7 @@ The highlighting of the controller is defaulted to use the `VRTK_MaterialColorSw
     * `Grip Left Model Path`: The model that represents the left grip button.
     * `Grip Right Model Path`: The model that represents the right grip button.
     * `Touchpad Model Path`: The model that represents the touchpad.
-    * `App Menu Model Path`: The model that represents the application menu button.
+    * `Button One Model Path`: The model that represents button one.
     * `System Menu Model Path`: The model that represents the system menu button.
  * **Element Highlighter Overrides:** A collection of highlighter overrides for each controller model sub element. If no highlighter override is given then highlighter on the Controller game object is used.
   * The available model sub elements are:
@@ -1342,7 +1391,7 @@ The highlighting of the controller is defaulted to use the `VRTK_MaterialColorSw
     * `Grip Left`: The highlighter to use on the left grip button.
     * `Grip Right`: The highlighter to use on the  right grip button.
     * `Touchpad`: The highlighter to use on the touchpad.
-    * `App Menu`: The highlighter to use on the application menu button.
+    * `Button One`: The highlighter to use on button one.
     * `System Menu`: The highlighter to use on the system menu button.
 
 ### Class Events
@@ -1474,18 +1523,18 @@ The ToggleHighlightGrip method is a shortcut method that makes it easier to togg
 
 The ToggleHighlightTouchpad method is a shortcut method that makes it easier to toggle the highlight state of the controller touchpad element.
 
-#### ToggleHighlightApplicationMenu/3
+#### ToggleHighlightButtonOne/3
 
-  > `public void ToggleHighlightApplicationMenu(bool state, Color? highlight = null, float duration = 0f)`
+  > `public void ToggleHighlightButtonOne(bool state, Color? highlight = null, float duration = 0f)`
 
   * Parameters
-   * `bool state` - The highlight colour state, `true` will enable the highlight on the application menu and `false` will remove the highlight from the application menu.
-   * `Color? highlight` - The colour to highlight the application menu with.
+   * `bool state` - The highlight colour state, `true` will enable the highlight on button one and `false` will remove the highlight from button one.
+   * `Color? highlight` - The colour to highlight button one with.
    * `float duration` - The duration of fade from white to the highlight colour.
   * Returns
    * _none_
 
-The ToggleHighlightApplicationMenu method is a shortcut method that makes it easier to toggle the highlight state of the controller application menu element.
+The ToggleHighlightButtonOne method is a shortcut method that makes it easier to toggle the highlight state of the button one controller element.
 
 #### ToggleHighlighBody/3
 
@@ -2124,7 +2173,7 @@ The interactable objects require a collider to activate the trigger and a rigidb
 
 ### Inspector Parameters
 
- * **Controller Attach Point:** The rigidbody point on the controller model to snap the grabbed object to (defaults to the tip).
+ * **Controller Attach Point:** The rigidbody point on the controller model to snap the grabbed object to. If blank it will be set to the SDK default.
  * **Grab Precognition:** An amount of time between when the grab button is pressed to when the controller is touching something to grab it. For example, if an object is falling at a fast rate, then it is very hard to press the grab button in time to catch the object due to human reaction times. A higher number here will mean the grab button can be pressed before the controller touches the object and when the collision takes place, if the grab button is still being held down then the grab action will be successful.
  * **Throw Multiplier:** An amount to multiply the velocity of any objects being thrown. This can be useful when scaling up the play area to simulate being able to throw items further.
  * **Create Rigid Body When Not Touching:** If this is checked and the controller is not touching an Interactable Object when the grab button is pressed then a rigid body is added to the controller to allow the controller to push other rigid body objects around.
@@ -4327,6 +4376,8 @@ The SDK Manager script provides configuration of supported SDKs
  * **Actual Headset:** A reference to the GameObject that contains the VR camera, most likely provided by the SDK's Camera Rig Headset.
  * **Actual Left Controller:** A reference to the GameObject that contains the SDK Left Hand Controller.
  * **Actual Right Controller:** A reference to the GameObject that contains the SDK Right Hand Controller.
+ * **Model Alias Left Controller:** A reference to the GameObject that models for the Left Hand Controller.
+ * **Model Alias Right Controller:** A reference to the GameObject that models for the Right Hand Controller
  * **Script Alias Left Controller:** A reference to the GameObject that contains any scripts that apply to the Left Hand Controller.
  * **Script Alias Right Controller:** A reference to the GameObject that contains any scripts that apply to the Right Hand Controller.
 
@@ -4490,16 +4541,27 @@ The IsControllerRightHand method is used to check if a given controller game obj
 
 The GetActualController method will attempt to get the actual SDK controller object.
 
-#### GetAliasController/1
+#### GetScriptAliasController/1
 
-  > `public static GameObject GetAliasController(GameObject givenController)`
+  > `public static GameObject GetScriptAliasController(GameObject givenController)`
 
   * Parameters
    * `GameObject givenController` - The GameObject of the controller.
   * Returns
    * `GameObject` - The GameObject that is the alias controller containing the scripts.
 
-The GetAliasController method will attempt to get the object that contains the scripts for the controller.
+The GetScriptAliasController method will attempt to get the object that contains the scripts for the controller.
+
+#### GetModelAliasController/1
+
+  > `public static GameObject GetModelAliasController(GameObject givenController)`
+
+  * Parameters
+   * `GameObject givenController` - The GameObject of the controller.
+  * Returns
+   * `GameObject` - The GameObject that is the alias controller containing the controller model.
+
+The GetModelAliasController method will attempt to get the object that contains the model for the controller.
 
 #### HeadsetTransform/0
 
@@ -5033,9 +5095,31 @@ The GetControllerLeftHand method returns the GameObject containing the represent
 
 The GetControllerRightHand method returns the GameObject containing the representation of the right hand controller.
 
+#### IsControllerLeftHand/1
+
+  > `public virtual bool IsControllerLeftHand(GameObject controller)`
+
+  * Parameters
+   * `GameObject controller` - The GameObject to check.
+  * Returns
+   * `bool` - Returns true if the given controller is the left hand controller.
+
+The IsControllerLeftHand/1 method is used to check if the given controller is the the left hand controller.
+
+#### IsControllerRightHand/1
+
+  > `public virtual bool IsControllerRightHand(GameObject controller)`
+
+  * Parameters
+   * `GameObject controller` - The GameObject to check.
+  * Returns
+   * `bool` - Returns true if the given controller is the right hand controller.
+
+The IsControllerRightHand/1 method is used to check if the given controller is the the right hand controller.
+
 #### IsControllerLeftHand/2
 
-  > `public virtual bool IsControllerLeftHand(GameObject controller, bool actual = false)`
+  > `public virtual bool IsControllerLeftHand(GameObject controller, bool actual)`
 
   * Parameters
    * `GameObject controller` - The GameObject to check.
@@ -5043,11 +5127,11 @@ The GetControllerRightHand method returns the GameObject containing the represen
   * Returns
    * `bool` - Returns true if the given controller is the left hand controller.
 
-The IsControllerLeftHand method is used to check if the given controller is the the left hand controller.
+The IsControllerLeftHand/2 method is used to check if the given controller is the the left hand controller.
 
 #### IsControllerRightHand/2
 
-  > `public virtual bool IsControllerRightHand(GameObject controller, bool actual = false)`
+  > `public virtual bool IsControllerRightHand(GameObject controller, bool actual)`
 
   * Parameters
    * `GameObject controller` - The GameObject to check.
@@ -5055,7 +5139,29 @@ The IsControllerLeftHand method is used to check if the given controller is the 
   * Returns
    * `bool` - Returns true if the given controller is the right hand controller.
 
-The IsControllerRightHand method is used to check if the given controller is the the right hand controller.
+The IsControllerRightHand/2 method is used to check if the given controller is the the right hand controller.
+
+#### GetControllerModel/1
+
+  > `public virtual GameObject GetControllerModel(GameObject controller)`
+
+  * Parameters
+   * `GameObject controller` - The GameObject to get the model alias for.
+  * Returns
+   * `GameObject` - The GameObject that has the model alias within it.
+
+The GetControllerModel method returns the model alias for the given GameObject.
+
+#### GetControllerModel/1
+
+  > `public virtual GameObject GetControllerModel(VRTK_DeviceFinder.ControllerHand hand)`
+
+  * Parameters
+   * `VRTK_DeviceFinder.ControllerHand hand` - The hand enum of which controller model to retrieve.
+  * Returns
+   * `GameObject` - The GameObject that has the model alias within it.
+
+The GetControllerModel method returns the model alias for the given controller hand.
 
 #### GetControllerRenderModel/1
 
@@ -5136,6 +5242,17 @@ The GetTouchpadAxisOnIndex method is used to get the current touch position on t
 
 The GetTriggerAxisOnIndex method is used to get the current trigger position on the controller.
 
+#### GetGripAxisOnIndex/1
+
+  > `public abstract Vector2 GetGripAxisOnIndex(uint index);`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `Vector2` - A Vector2 containing the current position of the grip.
+
+The GetGripAxisOnIndex method is used to get the current grip position on the controller.
+
 #### GetTriggerHairlineDeltaOnIndex/1
 
   > `public abstract float GetTriggerHairlineDeltaOnIndex(uint index);`
@@ -5146,6 +5263,17 @@ The GetTriggerAxisOnIndex method is used to get the current trigger position on 
    * `float` - The delta between the trigger presses.
 
 The GetTriggerHairlineDeltaOnIndex method is used to get the difference between the current trigger press and the previous frame trigger press.
+
+#### GetGripHairlineDeltaOnIndex/1
+
+  > `public abstract float GetGripHairlineDeltaOnIndex(uint index);`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `float` - The delta between the grip presses.
+
+The GetGripHairlineDeltaOnIndex method is used to get the difference between the current grip press and the previous frame grip press.
 
 #### IsTriggerPressedOnIndex/1
 
@@ -5301,6 +5429,28 @@ The IsGripTouchedDownOnIndex method is used to determine if the controller butto
 
 The IsGripTouchedUpOnIndex method is used to determine if the controller button has just been released.
 
+#### IsHairGripDownOnIndex/1
+
+  > `public abstract bool IsHairGripDownOnIndex(uint index);`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button has passed it's press threshold.
+
+The IsHairGripDownOnIndex method is used to determine if the controller button has passed it's press threshold.
+
+#### IsHairGripUpOnIndex/1
+
+  > `public abstract bool IsHairGripUpOnIndex(uint index);`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button has just been released from it's press threshold.
+
+The IsHairGripUpOnIndex method is used to determine if the controller button has been released from it's press threshold.
+
 #### IsTouchpadPressedOnIndex/1
 
   > `public abstract bool IsTouchpadPressedOnIndex(uint index);`
@@ -5367,71 +5517,71 @@ The IsTouchpadTouchedDownOnIndex method is used to determine if the controller b
 
 The IsTouchpadTouchedUpOnIndex method is used to determine if the controller button has just been released.
 
-#### IsApplicationMenuPressedOnIndex/1
+#### IsButtonOnePressedOnIndex/1
 
-  > `public abstract bool IsApplicationMenuPressedOnIndex(uint index);`
+  > `public abstract bool IsButtonOnePressedOnIndex(uint index);`
 
   * Parameters
    * `uint index` - The index of the tracked object to check for.
   * Returns
    * `bool` - Returns true if the button is continually being pressed.
 
-The IsApplicationMenuPressedOnIndex method is used to determine if the controller button is being pressed down continually.
+The IsButtonOnePressedOnIndex method is used to determine if the controller button is being pressed down continually.
 
-#### IsApplicationMenuPressedDownOnIndex/1
+#### IsButtonOnePressedDownOnIndex/1
 
-  > `public abstract bool IsApplicationMenuPressedDownOnIndex(uint index);`
+  > `public abstract bool IsButtonOnePressedDownOnIndex(uint index);`
 
   * Parameters
    * `uint index` - The index of the tracked object to check for.
   * Returns
    * `bool` - Returns true if the button has just been pressed down.
 
-The IsApplicationMenuPressedDownOnIndex method is used to determine if the controller button has just been pressed down.
+The IsButtonOnePressedDownOnIndex method is used to determine if the controller button has just been pressed down.
 
-#### IsApplicationMenuPressedUpOnIndex/1
+#### IsButtonOnePressedUpOnIndex/1
 
-  > `public abstract bool IsApplicationMenuPressedUpOnIndex(uint index);`
+  > `public abstract bool IsButtonOnePressedUpOnIndex(uint index);`
 
   * Parameters
    * `uint index` - The index of the tracked object to check for.
   * Returns
    * `bool` - Returns true if the button has just been released.
 
-The IsApplicationMenuPressedUpOnIndex method is used to determine if the controller button has just been released.
+The IsButtonOnePressedUpOnIndex method is used to determine if the controller button has just been released.
 
-#### IsApplicationMenuTouchedOnIndex/1
+#### IsButtonOneTouchedOnIndex/1
 
-  > `public abstract bool IsApplicationMenuTouchedOnIndex(uint index);`
+  > `public abstract bool IsButtonOneTouchedOnIndex(uint index);`
 
   * Parameters
    * `uint index` - The index of the tracked object to check for.
   * Returns
    * `bool` - Returns true if the button is continually being touched.
 
-The IsApplicationMenuTouchedOnIndex method is used to determine if the controller button is being touched down continually.
+The IsButtonOneTouchedOnIndex method is used to determine if the controller button is being touched down continually.
 
-#### IsApplicationMenuTouchedDownOnIndex/1
+#### IsButtonOneTouchedDownOnIndex/1
 
-  > `public abstract bool IsApplicationMenuTouchedDownOnIndex(uint index);`
+  > `public abstract bool IsButtonOneTouchedDownOnIndex(uint index);`
 
   * Parameters
    * `uint index` - The index of the tracked object to check for.
   * Returns
    * `bool` - Returns true if the button has just been touched down.
 
-The IsApplicationMenuTouchedDownOnIndex method is used to determine if the controller button has just been touched down.
+The IsButtonOneTouchedDownOnIndex method is used to determine if the controller button has just been touched down.
 
-#### IsApplicationMenuTouchedUpOnIndex/1
+#### IsButtonOneTouchedUpOnIndex/1
 
-  > `public abstract bool IsApplicationMenuTouchedUpOnIndex(uint index);`
+  > `public abstract bool IsButtonOneTouchedUpOnIndex(uint index);`
 
   * Parameters
    * `uint index` - The index of the tracked object to check for.
   * Returns
    * `bool` - Returns true if the button has just been released.
 
-The IsApplicationMenuTouchedUpOnIndex method is used to determine if the controller button has just been released.
+The IsButtonOneTouchedUpOnIndex method is used to determine if the controller button has just been released.
 
 ---
 
@@ -5710,9 +5860,31 @@ The GetControllerLeftHand method returns the GameObject containing the represent
 
 The GetControllerRightHand method returns the GameObject containing the representation of the right hand controller.
 
+#### IsControllerLeftHand/1
+
+  > `public override bool IsControllerLeftHand(GameObject controller)`
+
+  * Parameters
+   * `GameObject controller` - The GameObject to check.
+  * Returns
+   * `bool` - Returns true if the given controller is the left hand controller.
+
+The IsControllerLeftHand/1 method is used to check if the given controller is the the left hand controller.
+
+#### IsControllerRightHand/1
+
+  > `public override bool IsControllerRightHand(GameObject controller)`
+
+  * Parameters
+   * `GameObject controller` - The GameObject to check.
+  * Returns
+   * `bool` - Returns true if the given controller is the right hand controller.
+
+The IsControllerRightHand/1 method is used to check if the given controller is the the right hand controller.
+
 #### IsControllerLeftHand/2
 
-  > `public override bool IsControllerLeftHand(GameObject controller, bool actual = false)`
+  > `public override bool IsControllerLeftHand(GameObject controller, bool actual)`
 
   * Parameters
    * `GameObject controller` - The GameObject to check.
@@ -5720,11 +5892,11 @@ The GetControllerRightHand method returns the GameObject containing the represen
   * Returns
    * `bool` - Returns true if the given controller is the left hand controller.
 
-The IsControllerLeftHand method is used to check if the given controller is the the left hand controller.
+The IsControllerLeftHand/2 method is used to check if the given controller is the the left hand controller.
 
 #### IsControllerRightHand/2
 
-  > `public override bool IsControllerRightHand(GameObject controller, bool actual = false)`
+  > `public override bool IsControllerRightHand(GameObject controller, bool actual)`
 
   * Parameters
    * `GameObject controller` - The GameObject to check.
@@ -5732,7 +5904,29 @@ The IsControllerLeftHand method is used to check if the given controller is the 
   * Returns
    * `bool` - Returns true if the given controller is the right hand controller.
 
-The IsControllerRightHand method is used to check if the given controller is the the right hand controller.
+The IsControllerRightHand/2 method is used to check if the given controller is the the right hand controller.
+
+#### GetControllerModel/1
+
+  > `public override GameObject GetControllerModel(GameObject controller)`
+
+  * Parameters
+   * `GameObject controller` - The GameObject to get the model alias for.
+  * Returns
+   * `GameObject` - The GameObject that has the model alias within it.
+
+The GetControllerModel method returns the model alias for the given GameObject.
+
+#### GetControllerModel/1
+
+  > `public override GameObject GetControllerModel(VRTK_DeviceFinder.ControllerHand hand)`
+
+  * Parameters
+   * `VRTK_DeviceFinder.ControllerHand hand` - The hand enum of which controller model to retrieve.
+  * Returns
+   * `GameObject` - The GameObject that has the model alias within it.
+
+The GetControllerModel method returns the model alias for the given controller hand.
 
 #### GetControllerRenderModel/1
 
@@ -5813,6 +6007,17 @@ The GetTouchpadAxisOnIndex method is used to get the current touch position on t
 
 The GetTriggerAxisOnIndex method is used to get the current trigger position on the controller.
 
+#### GetGripAxisOnIndex/1
+
+  > `public override Vector2 GetGripAxisOnIndex(uint index)`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `Vector2` - A Vector2 containing the current position of the grip.
+
+The GetGripAxisOnIndex method is used to get the current grip position on the controller.
+
 #### GetTriggerHairlineDeltaOnIndex/1
 
   > `public override float GetTriggerHairlineDeltaOnIndex(uint index)`
@@ -5823,6 +6028,17 @@ The GetTriggerAxisOnIndex method is used to get the current trigger position on 
    * `float` - The delta between the trigger presses.
 
 The GetTriggerHairlineDeltaOnIndex method is used to get the difference between the current trigger press and the previous frame trigger press.
+
+#### GetGripHairlineDeltaOnIndex/1
+
+  > `public override float GetGripHairlineDeltaOnIndex(uint index)`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `float` - The delta between the grip presses.
+
+The GetGripHairlineDeltaOnIndex method is used to get the difference between the current grip press and the previous frame grip press.
 
 #### IsTriggerPressedOnIndex/1
 
@@ -5978,6 +6194,28 @@ The IsGripTouchedDownOnIndex method is used to determine if the controller butto
 
 The IsGripTouchedUpOnIndex method is used to determine if the controller button has just been released.
 
+#### IsHairGripDownOnIndex/1
+
+  > `public override bool IsHairGripDownOnIndex(uint index)`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button has passed it's press threshold.
+
+The IsHairGripDownOnIndex method is used to determine if the controller button has passed it's press threshold.
+
+#### IsHairGripUpOnIndex/1
+
+  > `public override bool IsHairGripUpOnIndex(uint index)`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button has just been released from it's press threshold.
+
+The IsHairGripUpOnIndex method is used to determine if the controller button has been released from it's press threshold.
+
 #### IsTouchpadPressedOnIndex/1
 
   > `public override bool IsTouchpadPressedOnIndex(uint index)`
@@ -6044,71 +6282,71 @@ The IsTouchpadTouchedDownOnIndex method is used to determine if the controller b
 
 The IsTouchpadTouchedUpOnIndex method is used to determine if the controller button has just been released.
 
-#### IsApplicationMenuPressedOnIndex/1
+#### IsButtonOnePressedOnIndex/1
 
-  > `public override bool IsApplicationMenuPressedOnIndex(uint index)`
+  > `public override bool IsButtonOnePressedOnIndex(uint index)`
 
   * Parameters
    * `uint index` - The index of the tracked object to check for.
   * Returns
    * `bool` - Returns true if the button is continually being pressed.
 
-The IsApplicationMenuPressedOnIndex method is used to determine if the controller button is being pressed down continually.
+The IsButtonOnePressedOnIndex method is used to determine if the controller button is being pressed down continually.
 
-#### IsApplicationMenuPressedDownOnIndex/1
+#### IsButtonOnePressedDownOnIndex/1
 
-  > `public override bool IsApplicationMenuPressedDownOnIndex(uint index)`
+  > `public override bool IsButtonOnePressedDownOnIndex(uint index)`
 
   * Parameters
    * `uint index` - The index of the tracked object to check for.
   * Returns
    * `bool` - Returns true if the button has just been pressed down.
 
-The IsApplicationMenuPressedDownOnIndex method is used to determine if the controller button has just been pressed down.
+The IsButtonOnePressedDownOnIndex method is used to determine if the controller button has just been pressed down.
 
-#### IsApplicationMenuPressedUpOnIndex/1
+#### IsButtonOnePressedUpOnIndex/1
 
-  > `public override bool IsApplicationMenuPressedUpOnIndex(uint index)`
+  > `public override bool IsButtonOnePressedUpOnIndex(uint index)`
 
   * Parameters
    * `uint index` - The index of the tracked object to check for.
   * Returns
    * `bool` - Returns true if the button has just been released.
 
-The IsApplicationMenuPressedUpOnIndex method is used to determine if the controller button has just been released.
+The IsButtonOnePressedUpOnIndex method is used to determine if the controller button has just been released.
 
-#### IsApplicationMenuTouchedOnIndex/1
+#### IsButtonOneTouchedOnIndex/1
 
-  > `public override bool IsApplicationMenuTouchedOnIndex(uint index)`
+  > `public override bool IsButtonOneTouchedOnIndex(uint index)`
 
   * Parameters
    * `uint index` - The index of the tracked object to check for.
   * Returns
    * `bool` - Returns true if the button is continually being touched.
 
-The IsApplicationMenuTouchedOnIndex method is used to determine if the controller button is being touched down continually.
+The IsButtonOneTouchedOnIndex method is used to determine if the controller button is being touched down continually.
 
-#### IsApplicationMenuTouchedDownOnIndex/1
+#### IsButtonOneTouchedDownOnIndex/1
 
-  > `public override bool IsApplicationMenuTouchedDownOnIndex(uint index)`
+  > `public override bool IsButtonOneTouchedDownOnIndex(uint index)`
 
   * Parameters
    * `uint index` - The index of the tracked object to check for.
   * Returns
    * `bool` - Returns true if the button has just been touched down.
 
-The IsApplicationMenuTouchedDownOnIndex method is used to determine if the controller button has just been touched down.
+The IsButtonOneTouchedDownOnIndex method is used to determine if the controller button has just been touched down.
 
-#### IsApplicationMenuTouchedUpOnIndex/1
+#### IsButtonOneTouchedUpOnIndex/1
 
-  > `public override bool IsApplicationMenuTouchedUpOnIndex(uint index)`
+  > `public override bool IsButtonOneTouchedUpOnIndex(uint index)`
 
   * Parameters
    * `uint index` - The index of the tracked object to check for.
   * Returns
    * `bool` - Returns true if the button has just been released.
 
-The IsApplicationMenuTouchedUpOnIndex method is used to determine if the controller button has just been released.
+The IsButtonOneTouchedUpOnIndex method is used to determine if the controller button has just been released.
 
 ---
 
@@ -6348,6 +6586,28 @@ The GetControllerIndex method returns the index of the given controller.
 
 The GetControllerByIndex method returns the GameObject of a controller with a specific index.
 
+#### GetControllerLeftHand/1
+
+  > `public override GameObject GetControllerLeftHand(bool actual = false)`
+
+  * Parameters
+   * `bool actual` - If true it will return the actual controller, if false it will return the script alias controller GameObject.
+  * Returns
+   * `GameObject` - The GameObject containing the left hand controller.
+
+The GetControllerLeftHand method returns the GameObject containing the representation of the left hand controller.
+
+#### GetControllerRightHand/1
+
+  > `public override GameObject GetControllerRightHand(bool actual = false)`
+
+  * Parameters
+   * `bool actual` - If true it will return the actual controller, if false it will return the script alias controller GameObject.
+  * Returns
+   * `GameObject` - The GameObject containing the right hand controller.
+
+The GetControllerRightHand method returns the GameObject containing the representation of the right hand controller.
+
 #### GetControllerOrigin/1
 
   > `public override Transform GetControllerOrigin(GameObject controller)`
@@ -6358,6 +6618,17 @@ The GetControllerByIndex method returns the GameObject of a controller with a sp
    * `Transform` - A Transform containing the origin of the controller.
 
 The GetControllerOrigin method returns the origin of the given controller.
+
+#### GetControllerModel/1
+
+  > `public override GameObject GetControllerModel(VRTK_DeviceFinder.ControllerHand hand)`
+
+  * Parameters
+   * `VRTK_DeviceFinder.ControllerHand hand` - The hand enum of which controller model to retrieve.
+  * Returns
+   * `GameObject` - The GameObject that has the model alias within it.
+
+The GetControllerModel method returns the model alias for the given controller hand.
 
 #### GetControllerRenderModel/1
 
@@ -6438,6 +6709,17 @@ The GetTouchpadAxisOnIndex method is used to get the current touch position on t
 
 The GetTriggerAxisOnIndex method is used to get the current trigger position on the controller.
 
+#### GetGripAxisOnIndex/1
+
+  > `public override Vector2 GetGripAxisOnIndex(uint index)`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `Vector2` - A Vector2 containing the current position of the grip.
+
+The GetGripAxisOnIndex method is used to get the current grip position on the controller.
+
 #### GetTriggerHairlineDeltaOnIndex/1
 
   > `public override float GetTriggerHairlineDeltaOnIndex(uint index)`
@@ -6448,6 +6730,17 @@ The GetTriggerAxisOnIndex method is used to get the current trigger position on 
    * `float` - The delta between the trigger presses.
 
 The GetTriggerHairlineDeltaOnIndex method is used to get the difference between the current trigger press and the previous frame trigger press.
+
+#### GetGripHairlineDeltaOnIndex/1
+
+  > `public override float GetGripHairlineDeltaOnIndex(uint index)`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `float` - The delta between the grip presses.
+
+The GetGripHairlineDeltaOnIndex method is used to get the difference between the current grip press and the previous frame grip press.
 
 #### IsTriggerPressedOnIndex/1
 
@@ -6603,6 +6896,28 @@ The IsGripTouchedDownOnIndex method is used to determine if the controller butto
 
 The IsGripTouchedUpOnIndex method is used to determine if the controller button has just been released.
 
+#### IsHairGripDownOnIndex/1
+
+  > `public override bool IsHairGripDownOnIndex(uint index)`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button has passed it's press threshold.
+
+The IsHairGripDownOnIndex method is used to determine if the controller button has passed it's press threshold.
+
+#### IsHairGripUpOnIndex/1
+
+  > `public override bool IsHairGripUpOnIndex(uint index)`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button has just been released from it's press threshold.
+
+The IsHairGripUpOnIndex method is used to determine if the controller button has been released from it's press threshold.
+
 #### IsTouchpadPressedOnIndex/1
 
   > `public override bool IsTouchpadPressedOnIndex(uint index)`
@@ -6669,71 +6984,71 @@ The IsTouchpadTouchedDownOnIndex method is used to determine if the controller b
 
 The IsTouchpadTouchedUpOnIndex method is used to determine if the controller button has just been released.
 
-#### IsApplicationMenuPressedOnIndex/1
+#### IsButtonOnePressedOnIndex/1
 
-  > `public override bool IsApplicationMenuPressedOnIndex(uint index)`
+  > `public override bool IsButtonOnePressedOnIndex(uint index)`
 
   * Parameters
    * `uint index` - The index of the tracked object to check for.
   * Returns
    * `bool` - Returns true if the button is continually being pressed.
 
-The IsApplicationMenuPressedOnIndex method is used to determine if the controller button is being pressed down continually.
+The IsButtonOnePressedOnIndex method is used to determine if the controller button is being pressed down continually.
 
-#### IsApplicationMenuPressedDownOnIndex/1
+#### IsButtonOnePressedDownOnIndex/1
 
-  > `public override bool IsApplicationMenuPressedDownOnIndex(uint index)`
+  > `public override bool IsButtonOnePressedDownOnIndex(uint index)`
 
   * Parameters
    * `uint index` - The index of the tracked object to check for.
   * Returns
    * `bool` - Returns true if the button has just been pressed down.
 
-The IsApplicationMenuPressedDownOnIndex method is used to determine if the controller button has just been pressed down.
+The IsButtonOnePressedDownOnIndex method is used to determine if the controller button has just been pressed down.
 
-#### IsApplicationMenuPressedUpOnIndex/1
+#### IsButtonOnePressedUpOnIndex/1
 
-  > `public override bool IsApplicationMenuPressedUpOnIndex(uint index)`
+  > `public override bool IsButtonOnePressedUpOnIndex(uint index)`
 
   * Parameters
    * `uint index` - The index of the tracked object to check for.
   * Returns
    * `bool` - Returns true if the button has just been released.
 
-The IsApplicationMenuPressedUpOnIndex method is used to determine if the controller button has just been released.
+The IsButtonOnePressedUpOnIndex method is used to determine if the controller button has just been released.
 
-#### IsApplicationMenuTouchedOnIndex/1
+#### IsButtonOneTouchedOnIndex/1
 
-  > `public override bool IsApplicationMenuTouchedOnIndex(uint index)`
+  > `public override bool IsButtonOneTouchedOnIndex(uint index)`
 
   * Parameters
    * `uint index` - The index of the tracked object to check for.
   * Returns
    * `bool` - Returns true if the button is continually being touched.
 
-The IsApplicationMenuTouchedOnIndex method is used to determine if the controller button is being touched down continually.
+The IsButtonOneTouchedOnIndex method is used to determine if the controller button is being touched down continually.
 
-#### IsApplicationMenuTouchedDownOnIndex/1
+#### IsButtonOneTouchedDownOnIndex/1
 
-  > `public override bool IsApplicationMenuTouchedDownOnIndex(uint index)`
+  > `public override bool IsButtonOneTouchedDownOnIndex(uint index)`
 
   * Parameters
    * `uint index` - The index of the tracked object to check for.
   * Returns
    * `bool` - Returns true if the button has just been touched down.
 
-The IsApplicationMenuTouchedDownOnIndex method is used to determine if the controller button has just been touched down.
+The IsButtonOneTouchedDownOnIndex method is used to determine if the controller button has just been touched down.
 
-#### IsApplicationMenuTouchedUpOnIndex/1
+#### IsButtonOneTouchedUpOnIndex/1
 
-  > `public override bool IsApplicationMenuTouchedUpOnIndex(uint index)`
+  > `public override bool IsButtonOneTouchedUpOnIndex(uint index)`
 
   * Parameters
    * `uint index` - The index of the tracked object to check for.
   * Returns
    * `bool` - Returns true if the button has just been released.
 
-The IsApplicationMenuTouchedUpOnIndex method is used to determine if the controller button has just been released.
+The IsButtonOneTouchedUpOnIndex method is used to determine if the controller button has just been released.
 
 ---
 

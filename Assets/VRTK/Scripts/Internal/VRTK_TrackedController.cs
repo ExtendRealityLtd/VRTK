@@ -55,7 +55,7 @@
 
         private void OnEnable()
         {
-            aliasController = VRTK_DeviceFinder.GetAliasController(gameObject);
+            aliasController = VRTK_DeviceFinder.GetScriptAliasController(gameObject);
 
             if (enableControllerCoroutine != null)
             {

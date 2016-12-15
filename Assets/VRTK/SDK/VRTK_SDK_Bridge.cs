@@ -44,6 +44,16 @@
             return GetControllerSDK().GetControllerRightHand(actual);
         }
 
+        public static bool IsControllerLeftHand(GameObject controller)
+        {
+            return GetControllerSDK().IsControllerLeftHand(controller);
+        }
+
+        public static bool IsControllerRightHand(GameObject controller)
+        {
+            return GetControllerSDK().IsControllerRightHand(controller);
+        }
+
         public static bool IsControllerLeftHand(GameObject controller, bool actual)
         {
             return GetControllerSDK().IsControllerLeftHand(controller, actual);
@@ -52,6 +62,16 @@
         public static bool IsControllerRightHand(GameObject controller, bool actual)
         {
             return GetControllerSDK().IsControllerRightHand(controller, actual);
+        }
+
+        public static GameObject GetControllerModel(GameObject controller)
+        {
+            return GetControllerSDK().GetControllerModel(controller);
+        }
+
+        public static GameObject GetControllerModel(VRTK_DeviceFinder.ControllerHand hand)
+        {
+            return GetControllerSDK().GetControllerModel(hand);
         }
 
         public static GameObject GetControllerRenderModel(GameObject controller)
@@ -89,9 +109,19 @@
             return GetControllerSDK().GetTriggerAxisOnIndex(index);
         }
 
+        public static Vector2 GetGripAxisOnIndex(uint index)
+        {
+            return GetControllerSDK().GetGripAxisOnIndex(index);
+        }
+
         public static float GetTriggerHairlineDeltaOnIndex(uint index)
         {
             return GetControllerSDK().GetTriggerHairlineDeltaOnIndex(index);
+        }
+
+        public static float GetGripHairlineDeltaOnIndex(uint index)
+        {
+            return GetControllerSDK().GetGripHairlineDeltaOnIndex(index);
         }
 
         //Trigger
@@ -168,6 +198,16 @@
             return GetControllerSDK().IsGripTouchedUpOnIndex(index);
         }
 
+        public static bool IsHairGripDownOnIndex(uint index)
+        {
+            return GetControllerSDK().IsHairGripDownOnIndex(index);
+        }
+
+        public static bool IsHairGripUpOnIndex(uint index)
+        {
+            return GetControllerSDK().IsHairGripUpOnIndex(index);
+        }
+
         //Touchpad
 
         public static bool IsTouchpadPressedOnIndex(uint index)
@@ -200,36 +240,36 @@
             return GetControllerSDK().IsTouchpadTouchedUpOnIndex(index);
         }
 
-        //Application Menu
+        //ButtonOne Menu
 
-        public static bool IsApplicationMenuPressedOnIndex(uint index)
+        public static bool IsButtonOnePressedOnIndex(uint index)
         {
-            return GetControllerSDK().IsApplicationMenuPressedOnIndex(index);
+            return GetControllerSDK().IsButtonOnePressedOnIndex(index);
         }
 
-        public static bool IsApplicationMenuPressedDownOnIndex(uint index)
+        public static bool IsButtonOnePressedDownOnIndex(uint index)
         {
-            return GetControllerSDK().IsApplicationMenuPressedDownOnIndex(index);
+            return GetControllerSDK().IsButtonOnePressedDownOnIndex(index);
         }
 
-        public static bool IsApplicationMenuPressedUpOnIndex(uint index)
+        public static bool IsButtonOnePressedUpOnIndex(uint index)
         {
-            return GetControllerSDK().IsApplicationMenuPressedUpOnIndex(index);
+            return GetControllerSDK().IsButtonOnePressedUpOnIndex(index);
         }
 
-        public static bool IsApplicationMenuTouchedOnIndex(uint index)
+        public static bool IsButtonOneTouchedOnIndex(uint index)
         {
-            return GetControllerSDK().IsApplicationMenuTouchedOnIndex(index);
+            return GetControllerSDK().IsButtonOneTouchedOnIndex(index);
         }
 
-        public static bool IsApplicationMenuTouchedDownOnIndex(uint index)
+        public static bool IsButtonOneTouchedDownOnIndex(uint index)
         {
-            return GetControllerSDK().IsApplicationMenuTouchedDownOnIndex(index);
+            return GetControllerSDK().IsButtonOneTouchedDownOnIndex(index);
         }
 
-        public static bool IsApplicationMenuTouchedUpOnIndex(uint index)
+        public static bool IsButtonOneTouchedUpOnIndex(uint index)
         {
-            return GetControllerSDK().IsApplicationMenuTouchedUpOnIndex(index);
+            return GetControllerSDK().IsButtonOneTouchedUpOnIndex(index);
         }
 
         public static Transform GetHeadset()

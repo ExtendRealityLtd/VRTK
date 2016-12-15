@@ -81,13 +81,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3abaf4521bf2344ea21ed3020b98eb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  disableWhenIdle: 1
   touchHighlightColor: {r: 0, g: 1, b: 0, a: 0}
   allowedTouchControllers: 0
   isGrabbable: 1
   holdButtonToGrab: 1
   stayGrabbedOnTeleport: 1
   validDrop: 1
-  grabOverrideButton: 8
+  grabOverrideButton: 12
   allowedGrabControllers: 0
   grabAttachMechanicScript: {fileID: 114000010683824860}
   secondaryGrabActionScript: {fileID: 114000012034015630}
@@ -95,7 +96,7 @@ MonoBehaviour:
   holdButtonToUse: 1
   useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
-  useOverrideButton: 8
+  useOverrideButton: 12
   allowedUseControllers: 0
   usingState: 0
 --- !u!135 &13546248
@@ -135,6 +136,7 @@ MonoBehaviour:
   precisionGrab: 0
   rightSnapHandle: {fileID: 0}
   leftSnapHandle: {fileID: 0}
+  throwVelocityWithAttachDistance: 0
   throwMultiplier: 1
   onGrabCollisionDelay: 0
 --- !u!114 &114000012034015630

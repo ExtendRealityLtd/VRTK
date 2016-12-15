@@ -47,14 +47,7 @@
         /// Emits the TriggerAxisChanged class event.
         /// </summary>
         public UnityObjectEvent OnTriggerAxisChanged;
-        /// <summary>
-        /// Emits the ApplicationMenuPressed class event.
-        /// </summary>
-        public UnityObjectEvent OnApplicationMenuPressed;
-        /// <summary>
-        /// Emits the ApplicationMenuReleased class event.
-        /// </summary>
-        public UnityObjectEvent OnApplicationMenuReleased;
+
         /// <summary>
         /// Emits the GripPressed class event.
         /// </summary>
@@ -63,6 +56,35 @@
         /// Emits the GripReleased class event.
         /// </summary>
         public UnityObjectEvent OnGripReleased;
+        /// <summary>
+        /// Emits the GripTouchStart class event.
+        /// </summary>
+        public UnityObjectEvent OnGripTouchStart;
+        /// <summary>
+        /// Emits the GripTouchEnd class event.
+        /// </summary>
+        public UnityObjectEvent OnGripTouchEnd;
+        /// <summary>
+        /// Emits the GripHairlineStart class event.
+        /// </summary>
+        public UnityObjectEvent OnGripHairlineStart;
+        /// <summary>
+        /// Emits the GripHairlineEnd class event.
+        /// </summary>
+        public UnityObjectEvent OnGripHairlineEnd;
+        /// <summary>
+        /// Emits the GripClicked class event.
+        /// </summary>
+        public UnityObjectEvent OnGripClicked;
+        /// <summary>
+        /// Emits the GripUnclicked class event.
+        /// </summary>
+        public UnityObjectEvent OnGripUnclicked;
+        /// <summary>
+        /// Emits the GripAxisChanged class event.
+        /// </summary>
+        public UnityObjectEvent OnGripAxisChanged;
+
         /// <summary>
         /// Emits the TouchpadPressed class event.
         /// </summary>
@@ -83,6 +105,24 @@
         /// Emits the TouchpadAxisChanged class event.
         /// </summary>
         public UnityObjectEvent OnTouchpadAxisChanged;
+
+        /// <summary>
+        /// Emits the ButtonOnePressed class event.
+        /// </summary>
+        public UnityObjectEvent OnButtonOnePressed;
+        /// <summary>
+        /// Emits the ButtonOneReleased class event.
+        /// </summary>
+        public UnityObjectEvent OnButtonOneReleased;
+        /// <summary>
+        /// Emits the ButtonOneTouchStart class event.
+        /// </summary>
+        public UnityObjectEvent OnButtonOneTouchStart;
+        /// <summary>
+        /// Emits the ButtonOneTouchEnd class event.
+        /// </summary>
+        public UnityObjectEvent OnButtonOneTouchEnd;
+
         /// <summary>
         /// Emits the AliasPointerOn class event.
         /// </summary>
@@ -166,15 +206,28 @@
             ce.TriggerClicked += TriggerClicked;
             ce.TriggerUnclicked += TriggerUnclicked;
             ce.TriggerAxisChanged += TriggerAxisChanged;
-            ce.ApplicationMenuPressed += ApplicationMenuPressed;
-            ce.ApplicationMenuReleased += ApplicationMenuReleased;
+
             ce.GripPressed += GripPressed;
             ce.GripReleased += GripReleased;
+            ce.GripTouchStart += GripTouchStart;
+            ce.GripTouchEnd += GripTouchEnd;
+            ce.GripHairlineStart += GripHairlineStart;
+            ce.GripHairlineEnd += GripHairlineEnd;
+            ce.GripClicked += GripClicked;
+            ce.GripUnclicked += GripUnclicked;
+            ce.GripAxisChanged += GripAxisChanged;
+
             ce.TouchpadPressed += TouchpadPressed;
             ce.TouchpadReleased += TouchpadReleased;
             ce.TouchpadTouchStart += TouchpadTouchStart;
             ce.TouchpadTouchEnd += TouchpadTouchEnd;
             ce.TouchpadAxisChanged += TouchpadAxisChanged;
+
+            ce.ButtonOnePressed += ButtonOnePressed;
+            ce.ButtonOneReleased += ButtonOneReleased;
+            ce.ButtonOneTouchStart += ButtonOneTouchStart;
+            ce.ButtonOneTouchEnd += ButtonOneTouchEnd;
+
             ce.AliasPointerOn += AliasPointerOn;
             ce.AliasPointerOff += AliasPointerOff;
             ce.AliasPointerSet += AliasPointerSet;
@@ -186,6 +239,7 @@
             ce.AliasUIClickOff += AliasUIClickOff;
             ce.AliasMenuOn += AliasMenuOn;
             ce.AliasMenuOff += AliasMenuOff;
+
             ce.ControllerEnabled += ControllerEnabled;
             ce.ControllerDisabled += ControllerDisabled;
             ce.ControllerIndexChanged += ControllerIndexChanged;
@@ -236,16 +290,6 @@
             OnTriggerAxisChanged.Invoke(o, e);
         }
 
-        private void ApplicationMenuPressed(object o, ControllerInteractionEventArgs e)
-        {
-            OnApplicationMenuPressed.Invoke(o, e);
-        }
-
-        private void ApplicationMenuReleased(object o, ControllerInteractionEventArgs e)
-        {
-            OnApplicationMenuReleased.Invoke(o, e);
-        }
-
         private void GripPressed(object o, ControllerInteractionEventArgs e)
         {
             OnGripPressed.Invoke(o, e);
@@ -254,6 +298,41 @@
         private void GripReleased(object o, ControllerInteractionEventArgs e)
         {
             OnGripReleased.Invoke(o, e);
+        }
+
+        private void GripTouchStart(object o, ControllerInteractionEventArgs e)
+        {
+            OnGripTouchStart.Invoke(o, e);
+        }
+
+        private void GripTouchEnd(object o, ControllerInteractionEventArgs e)
+        {
+            OnGripTouchEnd.Invoke(o, e);
+        }
+
+        private void GripHairlineStart(object o, ControllerInteractionEventArgs e)
+        {
+            OnGripHairlineStart.Invoke(o, e);
+        }
+
+        private void GripHairlineEnd(object o, ControllerInteractionEventArgs e)
+        {
+            OnGripHairlineEnd.Invoke(o, e);
+        }
+
+        private void GripClicked(object o, ControllerInteractionEventArgs e)
+        {
+            OnGripClicked.Invoke(o, e);
+        }
+
+        private void GripUnclicked(object o, ControllerInteractionEventArgs e)
+        {
+            OnGripUnclicked.Invoke(o, e);
+        }
+
+        private void GripAxisChanged(object o, ControllerInteractionEventArgs e)
+        {
+            OnGripAxisChanged.Invoke(o, e);
         }
 
         private void TouchpadPressed(object o, ControllerInteractionEventArgs e)
@@ -279,6 +358,26 @@
         private void TouchpadAxisChanged(object o, ControllerInteractionEventArgs e)
         {
             OnTouchpadAxisChanged.Invoke(o, e);
+        }
+
+        private void ButtonOnePressed(object o, ControllerInteractionEventArgs e)
+        {
+            OnButtonOnePressed.Invoke(o, e);
+        }
+
+        private void ButtonOneReleased(object o, ControllerInteractionEventArgs e)
+        {
+            OnButtonOneReleased.Invoke(o, e);
+        }
+
+        private void ButtonOneTouchStart(object o, ControllerInteractionEventArgs e)
+        {
+            OnButtonOneTouchStart.Invoke(o, e);
+        }
+
+        private void ButtonOneTouchEnd(object o, ControllerInteractionEventArgs e)
+        {
+            OnButtonOneTouchEnd.Invoke(o, e);
         }
 
         private void AliasPointerOn(object o, ControllerInteractionEventArgs e)
@@ -367,15 +466,28 @@
             ce.TriggerClicked -= TriggerClicked;
             ce.TriggerUnclicked -= TriggerUnclicked;
             ce.TriggerAxisChanged -= TriggerAxisChanged;
-            ce.ApplicationMenuPressed -= ApplicationMenuPressed;
-            ce.ApplicationMenuReleased -= ApplicationMenuReleased;
+
             ce.GripPressed -= GripPressed;
             ce.GripReleased -= GripReleased;
+            ce.GripTouchStart -= GripTouchStart;
+            ce.GripTouchEnd -= GripTouchEnd;
+            ce.GripHairlineStart -= GripHairlineStart;
+            ce.GripHairlineEnd -= GripHairlineEnd;
+            ce.GripClicked -= GripClicked;
+            ce.GripUnclicked -= GripUnclicked;
+            ce.GripAxisChanged -= GripAxisChanged;
+
             ce.TouchpadPressed -= TouchpadPressed;
             ce.TouchpadReleased -= TouchpadReleased;
             ce.TouchpadTouchStart -= TouchpadTouchStart;
             ce.TouchpadTouchEnd -= TouchpadTouchEnd;
             ce.TouchpadAxisChanged -= TouchpadAxisChanged;
+
+            ce.ButtonOnePressed -= ButtonOnePressed;
+            ce.ButtonOneReleased -= ButtonOneReleased;
+            ce.ButtonOneTouchStart -= ButtonOneTouchStart;
+            ce.ButtonOneTouchEnd -= ButtonOneTouchEnd;
+
             ce.AliasPointerOn -= AliasPointerOn;
             ce.AliasPointerOff -= AliasPointerOff;
             ce.AliasPointerSet -= AliasPointerSet;
@@ -387,6 +499,7 @@
             ce.AliasUIClickOff -= AliasUIClickOff;
             ce.AliasMenuOn -= AliasMenuOn;
             ce.AliasMenuOff -= AliasMenuOff;
+
             ce.ControllerEnabled -= ControllerEnabled;
             ce.ControllerDisabled -= ControllerDisabled;
             ce.ControllerIndexChanged -= ControllerIndexChanged;

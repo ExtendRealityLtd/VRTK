@@ -29,7 +29,7 @@ namespace VRTK
     [RequireComponent(typeof(VRTK_InteractTouch)), RequireComponent(typeof(VRTK_ControllerEvents))]
     public class VRTK_InteractGrab : MonoBehaviour
     {
-        [Tooltip("The rigidbody point on the controller model to snap the grabbed object to (defaults to the tip).")]
+        [Tooltip("The rigidbody point on the controller model to snap the grabbed object to. If blank it will be set to the SDK default.")]
         public Rigidbody controllerAttachPoint = null;
         [Tooltip("An amount of time between when the grab button is pressed to when the controller is touching something to grab it. For example, if an object is falling at a fast rate, then it is very hard to press the grab button in time to catch the object due to human reaction times. A higher number here will mean the grab button can be pressed before the controller touches the object and when the collision takes place, if the grab button is still being held down then the grab action will be successful.")]
         public float grabPrecognition = 0f;
@@ -154,12 +154,12 @@ namespace VRTK
 
         private void SetControllerAttachPoint()
         {
-            var actualController = VRTK_DeviceFinder.GetActualController(gameObject);
+            var modelController = VRTK_DeviceFinder.GetModelAliasController(gameObject);
             //If no attach point has been specified then just use the tip of the controller
-            if (actualController && controllerAttachPoint == null)
+            if (modelController && controllerAttachPoint == null)
             {
                 //attempt to find the attach point on the controller
-                var defaultAttachPoint = actualController.transform.Find(VRTK_SDK_Bridge.GetControllerElementPath(VRTK_ControllerElements.AttachPoint, VRTK_DeviceFinder.GetControllerHand(gameObject)));
+                var defaultAttachPoint = modelController.transform.Find(VRTK_SDK_Bridge.GetControllerElementPath(VRTK_ControllerElements.AttachPoint, VRTK_DeviceFinder.GetControllerHand(gameObject)));
                 if (defaultAttachPoint != null)
                 {
                     controllerAttachPoint = defaultAttachPoint.GetComponent<Rigidbody>();

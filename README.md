@@ -27,6 +27,10 @@
    `Actual Left Controller` parameter in the `VRTK_SDKManager`.
    * Drag the `[CameraRig] -> Controller (right)` GameObject to the
    `Actual Right Controller` parameter in the `VRTK_SDKManager`.
+   * Drag the `[CameraRig] -> Controller (left) -> Model` GameObject to the
+   `Model Alias Left Controller` parameter in the `VRTK_SDKManager`.
+   * Drag the `[CameraRig] -> Controller (right) -> MOdel` GameObject to the
+   `Model Alias Right Controller` parameter in the `VRTK_SDKManager`.
   * Optionally, browse the `Examples` scenes for example usage of the
   scripts.
 

@@ -35,7 +35,7 @@
                 return false;
             }
 
-            if (canPress && VRTK_SDK_Bridge.IsTriggerPressedOnIndex(controllerIndex) && VRTK_SDK_Bridge.IsGripPressedOnIndex(controllerIndex) && VRTK_SDK_Bridge.IsApplicationMenuPressedOnIndex(controllerIndex))
+            if (canPress && VRTK_SDK_Bridge.IsTriggerPressedOnIndex(controllerIndex) && VRTK_SDK_Bridge.IsGripPressedOnIndex(controllerIndex) && VRTK_SDK_Bridge.IsButtonOnePressedOnIndex(controllerIndex))
             {
                 return true;
             }
