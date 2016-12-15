@@ -12,9 +12,8 @@
             }
         }
 
-        protected override void Start()
+        protected void Start()
         {
-            base.Start();
             SetSelectedColor(Color.red);
             SaveCurrentState();
         }

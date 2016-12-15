@@ -1,17 +1,17 @@
-// Panel Menu Demo Sphere
-
-using UnityEngine;
-
-/// <summary>
-/// Demo component for Panel Menu example scene.
-/// </summary>
-/// <example>
-/// See the demo scene for a complete example: [ 038_Controls_Panel_Menu ]
-/// </example>
-public class PanelMenuDemoSphere : MonoBehaviour
+namespace VRTK.Examples.PanelMenu
 {
-    private readonly Color[] colors =
+    using UnityEngine;
+
+    /// <summary>
+    /// Demo component for Panel Menu example scene.
+    /// </summary>
+    /// <example>
+    /// See the demo scene for a complete example: [ 038_Controls_Panel_Menu ]
+    /// </example>
+    public class PanelMenuDemoSphere : MonoBehaviour
     {
+        private readonly Color[] colors =
+        {
         Color.black,
         Color.blue,
         Color.cyan,
@@ -24,8 +24,9 @@ public class PanelMenuDemoSphere : MonoBehaviour
         Color.black
     };
 
-    public void UpdateSliderValue(float value)
-    {
-        GetComponent<MeshRenderer>().materials[0].color = colors[(int) (value -1)];
+        public void UpdateSliderValue(float value)
+        {
+            GetComponent<MeshRenderer>().materials[0].color = colors[(int)(value - 1)];
+        }
     }
 }

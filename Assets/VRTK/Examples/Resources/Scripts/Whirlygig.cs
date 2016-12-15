@@ -19,14 +19,14 @@
             spinSpeed = 0f;
         }
 
-        protected override void Start()
+        protected void Start()
         {
-            base.Start();
             rotator = transform.Find("Capsule");
         }
 
         protected override void Update()
         {
+            base.Update();
             rotator.transform.Rotate(new Vector3(spinSpeed * Time.deltaTime, 0f, 0f));
         }
     }

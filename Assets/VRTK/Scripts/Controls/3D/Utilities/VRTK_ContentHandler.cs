@@ -1,4 +1,4 @@
-﻿// Content Handler|Controls3D|0090
+﻿// Content Handler|Controls3D|100100
 namespace VRTK
 {
     using UnityEngine;
@@ -42,8 +42,8 @@ namespace VRTK
 
         private void OnCollisionEnter(Collision collision)
         {
-            Bounds insideBounds = Utilities.GetBounds(inside, null, control.GetContent().transform);
-            Bounds objBounds = Utilities.GetBounds(transform);
+            Bounds insideBounds = VRTK_SharedMethods.GetBounds(inside, null, control.GetContent().transform);
+            Bounds objBounds = VRTK_SharedMethods.GetBounds(transform);
 
             if (objBounds.Intersects(insideBounds))
             {

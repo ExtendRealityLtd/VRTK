@@ -1,4 +1,4 @@
-﻿// Knob|Controls3D|0060
+﻿// Knob|Controls3D|100060
 namespace VRTK
 {
     using UnityEngine;
@@ -114,9 +114,10 @@ namespace VRTK
                 io = gameObject.AddComponent<VRTK_InteractableObject>();
             }
             io.isGrabbable = true;
-            io.precisionSnap = true;
+            io.grabAttachMechanicScript = gameObject.AddComponent<GrabAttachMechanics.VRTK_TrackObjectGrabAttach>();
+            io.grabAttachMechanicScript.precisionGrab = true;
+            io.secondaryGrabActionScript = gameObject.AddComponent<SecondaryControllerGrabActions.VRTK_SwapControllerGrabAction>();
             io.stayGrabbedOnTeleport = false;
-            io.grabAttachMechanic = VRTK_InteractableObject.GrabAttachType.Track_Object;
 
             cj = GetComponent<ConfigurableJoint>();
             if (cj == null)
@@ -141,7 +142,7 @@ namespace VRTK
         private KnobDirection DetectDirection()
         {
             KnobDirection direction = KnobDirection.x;
-            Bounds bounds = Utilities.GetBounds(transform);
+            Bounds bounds = VRTK_SharedMethods.GetBounds(transform);
 
             // shoot rays in all directions to learn about surroundings
             RaycastHit hitForward;
@@ -166,27 +167,27 @@ namespace VRTK
             float lengthNegZ = (hitForward.collider != null) ? hitForward.distance : float.MaxValue;
 
             // TODO: not yet the right decision strategy, works only partially
-            if (Utilities.IsLowest(lengthX, new float[] { lengthY, lengthZ, lengthNegX, lengthNegY, lengthNegZ }))
+            if (VRTK_SharedMethods.IsLowest(lengthX, new float[] { lengthY, lengthZ, lengthNegX, lengthNegY, lengthNegZ }))
             {
                 direction = KnobDirection.z;
             }
-            else if (Utilities.IsLowest(lengthY, new float[] { lengthX, lengthZ, lengthNegX, lengthNegY, lengthNegZ }))
+            else if (VRTK_SharedMethods.IsLowest(lengthY, new float[] { lengthX, lengthZ, lengthNegX, lengthNegY, lengthNegZ }))
             {
                 direction = KnobDirection.y;
             }
-            else if (Utilities.IsLowest(lengthZ, new float[] { lengthX, lengthY, lengthNegX, lengthNegY, lengthNegZ }))
+            else if (VRTK_SharedMethods.IsLowest(lengthZ, new float[] { lengthX, lengthY, lengthNegX, lengthNegY, lengthNegZ }))
             {
                 direction = KnobDirection.x;
             }
-            else if (Utilities.IsLowest(lengthNegX, new float[] { lengthX, lengthY, lengthZ, lengthNegY, lengthNegZ }))
+            else if (VRTK_SharedMethods.IsLowest(lengthNegX, new float[] { lengthX, lengthY, lengthZ, lengthNegY, lengthNegZ }))
             {
                 direction = KnobDirection.z;
             }
-            else if (Utilities.IsLowest(lengthNegY, new float[] { lengthX, lengthY, lengthZ, lengthNegX, lengthNegZ }))
+            else if (VRTK_SharedMethods.IsLowest(lengthNegY, new float[] { lengthX, lengthY, lengthZ, lengthNegX, lengthNegZ }))
             {
                 direction = KnobDirection.y;
             }
-            else if (Utilities.IsLowest(lengthNegZ, new float[] { lengthX, lengthY, lengthZ, lengthNegX, lengthNegY }))
+            else if (VRTK_SharedMethods.IsLowest(lengthNegZ, new float[] { lengthX, lengthY, lengthZ, lengthNegX, lengthNegY }))
             {
                 direction = KnobDirection.x;
             }

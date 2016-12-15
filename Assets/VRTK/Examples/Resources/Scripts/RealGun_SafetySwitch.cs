@@ -15,9 +15,8 @@
             SetSafety(!safetyOff);
         }
 
-        protected override void Start()
+        protected void Start()
         {
-            base.Start();
             fixedPosition = transform.localPosition;
             SetSafety(safetyOff);
         }

@@ -69,10 +69,8 @@ namespace VRTK
         public Color highlightColor;
         [Tooltip("The highlight object will always be displayed when the snap drop zone is available even if a valid item isn't being hovered over.")]
         public bool highlightAlwaysActive = false;
-        [Tooltip("A string that specifies an object Tag or the name of a Script attached to an object and notifies the snap drop zone that this is a valid object for snapping on release.")]
-        public string validObjectWithTagOrClass;
-        [Tooltip("A specified VRTK_TagOrScriptPolicyList to use to determine which interactable objects will be snapped to the snap drop zone on release. If a list is provided then the 'Valid Object With Tag Or Class' parameter will be ignored.")]
-        public VRTK_TagOrScriptPolicyList validObjectTagOrScriptListPolicy;
+        [Tooltip("A specified VRTK_PolicyList to use to determine which interactable objects will be snapped to the snap drop zone on release.")]
+        public VRTK_PolicyList validObjectListPolicy;
         [Tooltip("If this is checked then the drop zone highlight section will be displayed in the scene editor window.")]
         public bool displayDropZoneInEditor = true;
 
@@ -281,7 +279,7 @@ namespace VRTK
         private VRTK_InteractableObject ValidSnapObject(GameObject checkObject, bool grabState)
         {
             var ioCheck = checkObject.GetComponentInParent<VRTK_InteractableObject>();
-            return (ioCheck && ioCheck.IsGrabbed() == grabState && !Utilities.TagOrScriptCheck(checkObject, validObjectTagOrScriptListPolicy, validObjectWithTagOrClass, true) ? ioCheck : null);
+            return (ioCheck && ioCheck.IsGrabbed() == grabState && !VRTK_PolicyList.Check(checkObject, validObjectListPolicy) ? ioCheck : null);
         }
 
         private string ObjectPath(string name)
@@ -292,7 +290,7 @@ namespace VRTK
         private void CreateHighlightersInEditor()
         {
             //Only run if it's in the editor
-            if (Utilities.IsEditTime())
+            if (VRTK_SharedMethods.IsEditTime())
             {
                 //Generate the main highlight object
                 GenerateHighlightObject();
@@ -447,8 +445,8 @@ namespace VRTK
             var startPosition = ioTransform.position;
             var startRotation = ioTransform.rotation;
             var startScale = ioTransform.localScale;
-            var storedKinematicState = ioCheck.IsKinematic();
-            ioCheck.ToggleKinematic(true);
+            var storedKinematicState = ioCheck.isKinematic;
+            ioCheck.isKinematic = true;
 
             while (elapsedTime <= duration)
             {
@@ -464,7 +462,7 @@ namespace VRTK
             ioTransform.rotation = endRotation;
             ioTransform.localScale = endScale;
 
-            ioCheck.ToggleKinematic(storedKinematicState);
+            ioCheck.isKinematic = storedKinematicState;
             SetDropSnapType(ioCheck);
         }
 
@@ -474,11 +472,11 @@ namespace VRTK
             {
                 case SnapTypes.Use_Kinematic:
                     ioCheck.SaveCurrentState();
-                    ioCheck.ToggleKinematic(true);
+                    ioCheck.isKinematic = true;
                     break;
                 case SnapTypes.Use_Parenting:
                     ioCheck.SaveCurrentState();
-                    ioCheck.ToggleKinematic(true);
+                    ioCheck.isKinematic = true;
                     ioCheck.transform.SetParent(transform);
                     break;
                 case SnapTypes.Use_Joint:
@@ -666,7 +664,7 @@ namespace VRTK
 
         private void InitialiseHighlighter()
         {
-            var existingHighlighter = Utilities.GetActiveHighlighter(gameObject);
+            var existingHighlighter = VRTK_BaseHighlighter.GetActiveHighlighter(gameObject);
             //If no highlighter is found on the GameObject then create the default one
             if (existingHighlighter == null)
             {
@@ -674,7 +672,7 @@ namespace VRTK
             }
             else
             {
-                Utilities.CloneComponent(existingHighlighter, highlightObject);
+                VRTK_SharedMethods.CloneComponent(existingHighlighter, highlightObject);
             }
 
             //Initialise highlighter and set highlight colour
@@ -687,8 +685,7 @@ namespace VRTK
             {
                 foreach (var renderer in GetComponentsInChildren<Renderer>(true))
                 {
-                    var check = renderer.GetComponent<VRTK_PlayerObject>();
-                    if (!check || check.objectType != VRTK_PlayerObject.ObjectTypes.Highlighter)
+                    if (!VRTK_PlayerObject.IsPlayerObject(renderer.gameObject, VRTK_PlayerObject.ObjectTypes.Highlighter))
                     {
                         renderer.enabled = false;
                     }
@@ -706,7 +703,7 @@ namespace VRTK
 
         private void ChooseDestroyType(GameObject deleteObject)
         {
-            if (Utilities.IsEditTime())
+            if (VRTK_SharedMethods.IsEditTime())
             {
                 if (deleteObject)
                 {
@@ -724,7 +721,7 @@ namespace VRTK
 
         private void ChooseDestroyType(Component deleteComponent)
         {
-            if (Utilities.IsEditTime())
+            if (VRTK_SharedMethods.IsEditTime())
             {
                 if (deleteComponent)
                 {
@@ -744,7 +741,7 @@ namespace VRTK
         {
             if (highlightObject && !displayDropZoneInEditor)
             {
-                var boxSize = Utilities.GetBounds(highlightObject.transform).size * 1.05f;
+                var boxSize = VRTK_SharedMethods.GetBounds(highlightObject.transform).size * 1.05f;
                 Gizmos.color = Color.red;
                 Gizmos.DrawWireCube(highlightObject.transform.position, boxSize);
             }

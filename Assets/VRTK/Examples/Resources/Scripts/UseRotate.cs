@@ -32,18 +32,18 @@
             spinSpeed = idleSpinSpeed;
         }
 
-        protected override void Start()
+        protected void Start()
         {
-            base.Start();
             if (rotatingObject == null)
             {
-                rotatingObject = this.transform;
+                rotatingObject = transform;
             }
             spinSpeed = idleSpinSpeed;
         }
 
         protected override void Update()
         {
+            base.Update();
             rotatingObject.Rotate(rotationAxis, spinSpeed * Time.deltaTime);
         }
     }

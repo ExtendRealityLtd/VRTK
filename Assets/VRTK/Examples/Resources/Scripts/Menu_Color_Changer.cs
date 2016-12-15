@@ -13,14 +13,15 @@
             ResetMenuItems();
         }
 
-        protected override void Start()
+        protected override void OnEnable()
         {
+            base.OnEnable();
             gameObject.GetComponent<MeshRenderer>().material.color = newMenuColor;
         }
 
         private void ResetMenuItems()
         {
-            foreach (Menu_Color_Changer menuColorChanger in GameObject.FindObjectsOfType<Menu_Color_Changer>())
+            foreach (Menu_Color_Changer menuColorChanger in FindObjectsOfType<Menu_Color_Changer>())
             {
                 menuColorChanger.StopUsing(null);
             }

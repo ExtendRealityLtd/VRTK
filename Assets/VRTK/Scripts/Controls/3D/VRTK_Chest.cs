@@ -1,4 +1,4 @@
-﻿// Chest|Controls3D|0030
+﻿// Chest|Controls3D|100030
 namespace VRTK
 {
     using UnityEngine;
@@ -53,11 +53,11 @@ namespace VRTK
             Bounds bounds;
             if (handle)
             {
-                bounds = Utilities.GetBounds(handle.transform, handle.transform);
+                bounds = VRTK_SharedMethods.GetBounds(handle.transform, handle.transform);
             }
             else
             {
-                bounds = Utilities.GetBounds(lid.transform, lid.transform);
+                bounds = VRTK_SharedMethods.GetBounds(lid.transform, lid.transform);
             }
             float length = bounds.extents.y * 5f;
             Vector3 point = bounds.center + new Vector3(0, length, 0);
@@ -100,12 +100,12 @@ namespace VRTK
                 return false;
             }
 
-            Bounds lidBounds = Utilities.GetBounds(lid.transform, transform);
+            Bounds lidBounds = VRTK_SharedMethods.GetBounds(lid.transform, transform);
 
             // determin sub-direction depending on handle
             if (handle)
             {
-                Bounds handleBounds = Utilities.GetBounds(handle.transform, transform);
+                Bounds handleBounds = VRTK_SharedMethods.GetBounds(handle.transform, transform);
                 switch (finalDirection)
                 {
                     case Direction.x:
@@ -205,27 +205,27 @@ namespace VRTK
                 return direction;
             }
 
-            Bounds handleBounds = Utilities.GetBounds(handle.transform, transform);
-            Bounds lidBounds = Utilities.GetBounds(lid.transform, transform);
+            Bounds handleBounds = VRTK_SharedMethods.GetBounds(handle.transform, transform);
+            Bounds lidBounds = VRTK_SharedMethods.GetBounds(lid.transform, transform);
 
             float lengthX = Mathf.Abs(handleBounds.center.x - (lidBounds.center.x + lidBounds.extents.x));
             float lengthZ = Mathf.Abs(handleBounds.center.z - (lidBounds.center.z + lidBounds.extents.z));
             float lengthNegX = Mathf.Abs(handleBounds.center.x - (lidBounds.center.x - lidBounds.extents.x));
             float lengthNegZ = Mathf.Abs(handleBounds.center.z - (lidBounds.center.z - lidBounds.extents.z));
 
-            if (Utilities.IsLowest(lengthX, new float[] { lengthZ, lengthNegX, lengthNegZ }))
+            if (VRTK_SharedMethods.IsLowest(lengthX, new float[] { lengthZ, lengthNegX, lengthNegZ }))
             {
                 direction = Direction.x;
             }
-            else if (Utilities.IsLowest(lengthNegX, new float[] { lengthX, lengthZ, lengthNegZ }))
+            else if (VRTK_SharedMethods.IsLowest(lengthNegX, new float[] { lengthX, lengthZ, lengthNegZ }))
             {
                 direction = Direction.x;
             }
-            else if (Utilities.IsLowest(lengthZ, new float[] { lengthX, lengthNegX, lengthNegZ }))
+            else if (VRTK_SharedMethods.IsLowest(lengthZ, new float[] { lengthX, lengthNegX, lengthNegZ }))
             {
                 direction = Direction.z;
             }
-            else if (Utilities.IsLowest(lengthNegZ, new float[] { lengthX, lengthZ, lengthNegX }))
+            else if (VRTK_SharedMethods.IsLowest(lengthNegZ, new float[] { lengthX, lengthZ, lengthNegX }))
             {
                 direction = Direction.z;
             }
@@ -297,9 +297,10 @@ namespace VRTK
                 io = go.AddComponent<VRTK_InteractableObject>();
             }
             io.isGrabbable = true;
-            io.precisionSnap = true;
+            io.grabAttachMechanicScript = gameObject.AddComponent<GrabAttachMechanics.VRTK_TrackObjectGrabAttach>();
+            io.grabAttachMechanicScript.precisionGrab = true;
+            io.secondaryGrabActionScript = gameObject.AddComponent<SecondaryControllerGrabActions.VRTK_SwapControllerGrabAction>();
             io.stayGrabbedOnTeleport = false;
-            io.grabAttachMechanic = VRTK_InteractableObject.GrabAttachType.Track_Object;
         }
 
         private float CalculateValue()

@@ -1,4 +1,4 @@
-﻿// Door|Controls3D|0040
+﻿// Door|Controls3D|100040
 namespace VRTK
 {
     using UnityEngine;
@@ -62,11 +62,11 @@ namespace VRTK
 
             // show opening direction
             Bounds handleBounds = new Bounds();
-            Bounds doorBounds = Utilities.GetBounds(getDoor().transform, getDoor().transform);
+            Bounds doorBounds = VRTK_SharedMethods.GetBounds(getDoor().transform, getDoor().transform);
             float length = 0.5f;
             if (handles)
             {
-                handleBounds = Utilities.GetBounds(handles.transform, handles.transform);
+                handleBounds = VRTK_SharedMethods.GetBounds(handles.transform, handles.transform);
             }
             Vector3 dir = Vector3.zero;
             Vector3 dir2 = Vector3.zero;
@@ -168,13 +168,13 @@ namespace VRTK
             }
 
             // detect opening direction
-            Bounds doorBounds = Utilities.GetBounds(getDoor().transform, transform);
+            Bounds doorBounds = VRTK_SharedMethods.GetBounds(getDoor().transform, transform);
             if (doorHj == null || doorHjCreated)
             {
                 if (handles)
                 {
                     // determin sub-direction depending on handle location
-                    Bounds handleBounds = Utilities.GetBounds(handles.transform, transform);
+                    Bounds handleBounds = VRTK_SharedMethods.GetBounds(handles.transform, transform);
                     switch (finalDirection)
                     {
                         case Direction.x:
@@ -347,8 +347,8 @@ namespace VRTK
             {
                 if (handles)
                 {
-                    Bounds handleBounds = Utilities.GetBounds(handles.transform, transform);
-                    Bounds doorBounds = Utilities.GetBounds(getDoor().transform, transform, handles.transform);
+                    Bounds handleBounds = VRTK_SharedMethods.GetBounds(handles.transform, transform);
+                    Bounds doorBounds = VRTK_SharedMethods.GetBounds(getDoor().transform, transform, handles.transform);
 
                     // handles determine direction, there are actually two directions possible depending on handle position, we'll just detect one of them for now, preference is y
                     if ((handleBounds.center.y + handleBounds.extents.y) > (doorBounds.center.y + doorBounds.extents.y) || (handleBounds.center.y - handleBounds.extents.y) < (doorBounds.center.y - doorBounds.extents.y))
@@ -383,7 +383,7 @@ namespace VRTK
 
         private void InitDoor()
         {
-            Utilities.CreateColliders(getDoor());
+            VRTK_SharedMethods.CreateColliders(getDoor());
 
             doorRb = getDoor().GetComponent<Rigidbody>();
             if (doorRb == null)
@@ -420,7 +420,7 @@ namespace VRTK
 
             if (handles.GetComponentInChildren<Collider>() == null)
             {
-                Utilities.CreateColliders(handles);
+                VRTK_SharedMethods.CreateColliders(handles);
             }
 
             handleRb = handles.GetComponent<Rigidbody>();
@@ -444,9 +444,10 @@ namespace VRTK
                 handleIo = handles.AddComponent<VRTK_InteractableObject>();
             }
             handleIo.isGrabbable = true;
-            handleIo.precisionSnap = true;
+            handleIo.grabAttachMechanicScript = gameObject.AddComponent<GrabAttachMechanics.VRTK_TrackObjectGrabAttach>();
+            handleIo.grabAttachMechanicScript.precisionGrab = true;
+            handleIo.secondaryGrabActionScript = gameObject.AddComponent<SecondaryControllerGrabActions.VRTK_SwapControllerGrabAction>();
             handleIo.stayGrabbedOnTeleport = false;
-            handleIo.grabAttachMechanic = VRTK_InteractableObject.GrabAttachType.Track_Object;
         }
 
         private float CalculateValue()

@@ -12,10 +12,23 @@
 
 ## Quick Start for SteamVR
 
-  * Clone this repository `git clone https://github.com/thestonefox/VRTK.git`
-  * Open `VRTK` within Unity3d
-  * Import the [SteamVR Plugin] from the Unity Asset Store
-  * Browse the `Examples` scenes for example usage of the scripts
+  * Clone this repository `git clone https://github.com/thestonefox/VRTK.git`.
+  * Open `VRTK` within Unity3d.
+  * Import the [SteamVR Plugin] from the Unity Asset Store.
+  * Drag the `[CameraRig]` prefab from the SteamVR plugin into the
+  scene.
+  * Add the `VRTK_SDKManager` script a GameObject in the scene.
+   * Select `Steam VR` for each of the SDK Choices.
+   * Drag the `[CameraRig]` GameObject to the `Actual Boundaries`
+   parameter in the `VRTK_SDKManager`.
+   * Drag the `[CameraRig] -> Camera (head) -> Camera (eye)` GameObject
+   to the `Actual Headset` parameter in the `VRTK_SDKManager`.
+   * Drag the `[CameraRig] -> Controller (left)` GameObject to the
+   `Actual Left Controller` parameter in the `VRTK_SDKManager`.
+   * Drag the `[CameraRig] -> Controller (right)` GameObject to the
+   `Actual Right Controller` parameter in the `VRTK_SDKManager`.
+  * Optionally, browse the `Examples` scenes for example usage of the
+  scripts.
 
 ## Summary
 
@@ -38,6 +51,7 @@ This toolkit project is split into three main sections:
   * Prefabs - `VRTK/Prefabs/`
   * Scripts - `VRTK/Scripts/`
   * Examples - `VRTK/Examples/`
+  * SDK - `VRTK/SDK`
 
 The `VRTK` directory is where all of the relevant files are kept
 and this directory can be simply copied over to an existing project.
@@ -95,6 +109,9 @@ of the examples can be viewed within this repository in
 | Draco Dux | [Steam Store Page](http://store.steampowered.com/app/460730) |
 | Deisim | [Steam Store Page](http://store.steampowered.com/app/525680) |
 | Potioneer: The VR Gardening Simulator | [Steam Store Page](http://store.steampowered.com/app/544410) |
+| Manastorm: Champions of G'nar | [Steam Store Page](http://store.steampowered.com/app/548560) |
+| Keep Defending | [Steam Store Page](http://store.steampowered.com/app/527720) |
+| Stage Presence | [Steam Store Page](http://store.steampowered.com/app/391640) |
 
 ## Contributing
 

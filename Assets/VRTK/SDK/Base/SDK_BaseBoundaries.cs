@@ -1,0 +1,52 @@
+﻿// Base Boundaries|SDK_Base|004
+namespace VRTK
+{
+    using UnityEngine;
+
+    /// <summary>
+    /// The Base Boundaries SDK script provides a bridge to SDK methods that deal with the play area of SDKs that support room scale play spaces.
+    /// </summary>
+    /// <remarks>
+    /// This is an abstract class to implement the interface required by all implemented SDKs.
+    /// </remarks>
+    public abstract class SDK_BaseBoundaries : ScriptableObject, SDK_InterfaceBoundaries
+    {
+        protected Transform cachedPlayArea;
+
+        /// <summary>
+        /// The GetPlayArea method returns the Transform of the object that is used to represent the play area in the scene.
+        /// </summary>
+        /// <returns>A transform of the object representing the play area in the scene.</returns>
+        public virtual Transform GetPlayArea()
+        {
+            var sdkManager = VRTK_SDKManager.instance;
+            if (sdkManager != null)
+            {
+                cachedPlayArea = sdkManager.actualBoundaries.transform;
+                return cachedPlayArea;
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// The GetPlayAreaVertices method returns the points of the play area boundaries.
+        /// </summary>
+        /// <param name="playArea">The GameObject containing the play area representation.</param>
+        /// <returns>A Vector3 array of the points in the scene that represent the play area boundaries.</returns>
+        public abstract Vector3[] GetPlayAreaVertices(GameObject playArea);
+
+        /// <summary>
+        /// The GetPlayAreaBorderThickness returns the thickness of the drawn border for the given play area.
+        /// </summary>
+        /// <param name="playArea">The GameObject containing the play area representation.</param>
+        /// <returns>The thickness of the drawn border.</returns>
+        public abstract float GetPlayAreaBorderThickness(GameObject playArea);
+
+        /// <summary>
+        /// The IsPlayAreaSizeCalibrated method returns whether the given play area size has been auto calibrated by external sensors.
+        /// </summary>
+        /// <param name="playArea">The GameObject containing the play area representation.</param>
+        /// <returns>Returns true if the play area size has been auto calibrated and set by external sensors.</returns>
+        public abstract bool IsPlayAreaSizeCalibrated(GameObject playArea);
+    }
+}

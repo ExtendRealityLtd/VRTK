@@ -1,4 +1,4 @@
-﻿// Button|Controls3D|0020
+﻿// Button|Controls3D|100020
 namespace VRTK
 {
     using UnityEngine;
@@ -246,7 +246,7 @@ namespace VRTK
         private ButtonDirection DetectDirection()
         {
             ButtonDirection direction = ButtonDirection.autodetect;
-            Bounds bounds = Utilities.GetBounds(transform);
+            Bounds bounds = VRTK_SharedMethods.GetBounds(transform);
 
             // shoot rays from the center of the button to learn about surroundings
             RaycastHit hitForward;
@@ -272,37 +272,37 @@ namespace VRTK
 
             float extents = 0;
             Vector3 hitPoint = Vector3.zero;
-            if (Utilities.IsLowest(lengthX, new float[] { lengthY, lengthZ, lengthNegX, lengthNegY, lengthNegZ }))
+            if (VRTK_SharedMethods.IsLowest(lengthX, new float[] { lengthY, lengthZ, lengthNegX, lengthNegY, lengthNegZ }))
             {
                 direction = ButtonDirection.negX;
                 hitPoint = hitRight.point;
                 extents = bounds.extents.x;
             }
-            else if (Utilities.IsLowest(lengthY, new float[] { lengthX, lengthZ, lengthNegX, lengthNegY, lengthNegZ }))
+            else if (VRTK_SharedMethods.IsLowest(lengthY, new float[] { lengthX, lengthZ, lengthNegX, lengthNegY, lengthNegZ }))
             {
                 direction = ButtonDirection.y;
                 hitPoint = hitDown.point;
                 extents = bounds.extents.y;
             }
-            else if (Utilities.IsLowest(lengthZ, new float[] { lengthX, lengthY, lengthNegX, lengthNegY, lengthNegZ }))
+            else if (VRTK_SharedMethods.IsLowest(lengthZ, new float[] { lengthX, lengthY, lengthNegX, lengthNegY, lengthNegZ }))
             {
                 direction = ButtonDirection.z;
                 hitPoint = hitBack.point;
                 extents = bounds.extents.z;
             }
-            else if (Utilities.IsLowest(lengthNegX, new float[] { lengthX, lengthY, lengthZ, lengthNegY, lengthNegZ }))
+            else if (VRTK_SharedMethods.IsLowest(lengthNegX, new float[] { lengthX, lengthY, lengthZ, lengthNegY, lengthNegZ }))
             {
                 direction = ButtonDirection.x;
                 hitPoint = hitLeft.point;
                 extents = bounds.extents.x;
             }
-            else if (Utilities.IsLowest(lengthNegY, new float[] { lengthX, lengthY, lengthZ, lengthNegX, lengthNegZ }))
+            else if (VRTK_SharedMethods.IsLowest(lengthNegY, new float[] { lengthX, lengthY, lengthZ, lengthNegX, lengthNegZ }))
             {
                 direction = ButtonDirection.negY;
                 hitPoint = hitUp.point;
                 extents = bounds.extents.y;
             }
-            else if (Utilities.IsLowest(lengthNegZ, new float[] { lengthX, lengthY, lengthZ, lengthNegX, lengthNegY }))
+            else if (VRTK_SharedMethods.IsLowest(lengthNegZ, new float[] { lengthX, lengthY, lengthZ, lengthNegX, lengthNegY }))
             {
                 direction = ButtonDirection.negZ;
                 hitPoint = hitForward.point;
@@ -328,7 +328,7 @@ namespace VRTK
 
         private Vector3 CalculateActivationDir()
         {
-            Bounds bounds = Utilities.GetBounds(transform, transform);
+            Bounds bounds = VRTK_SharedMethods.GetBounds(transform, transform);
 
             Vector3 buttonDirection = Vector3.zero;
             float extents = 0;

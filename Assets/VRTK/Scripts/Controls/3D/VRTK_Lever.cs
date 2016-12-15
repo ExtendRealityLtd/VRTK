@@ -1,4 +1,4 @@
-﻿// Lever|Controls3D|0070
+﻿// Lever|Controls3D|100070
 namespace VRTK
 {
     using UnityEngine;
@@ -40,7 +40,7 @@ namespace VRTK
         {
             if (GetComponentInChildren<Collider>() == null)
             {
-                Utilities.CreateColliders(gameObject);
+                VRTK_SharedMethods.CreateColliders(gameObject);
             }
 
             rb = GetComponent<Rigidbody>();
@@ -59,9 +59,10 @@ namespace VRTK
                 io = gameObject.AddComponent<VRTK_InteractableObject>();
             }
             io.isGrabbable = true;
-            io.precisionSnap = true;
+            io.grabAttachMechanicScript = gameObject.AddComponent<GrabAttachMechanics.VRTK_RotatorTrackGrabAttach>();
+            io.grabAttachMechanicScript.precisionGrab = true;
+            io.secondaryGrabActionScript = gameObject.AddComponent<SecondaryControllerGrabActions.VRTK_SwapControllerGrabAction>();
             io.stayGrabbedOnTeleport = false;
-            io.grabAttachMechanic = VRTK_InteractableObject.GrabAttachType.Rotator_Track;
 
             hj = GetComponent<HingeJoint>();
             if (hj == null)
@@ -85,7 +86,7 @@ namespace VRTK
         {
             if (hjCreated)
             {
-                Bounds bounds = Utilities.GetBounds(transform, transform);
+                Bounds bounds = VRTK_SharedMethods.GetBounds(transform, transform);
                 switch (direction)
                 {
                     case LeverDirection.x:

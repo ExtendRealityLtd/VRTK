@@ -1,4 +1,4 @@
-﻿// Control|Controls3D|0010
+﻿// Control|Controls3D|100010
 namespace VRTK
 {
     using UnityEngine;
@@ -140,7 +140,7 @@ namespace VRTK
                 return;
             }
 
-            bounds = Utilities.GetBounds(transform);
+            bounds = VRTK_SharedMethods.GetBounds(transform);
             Gizmos.color = (setupSuccessful) ? COLOR_OK : COLOR_ERROR;
 
             if (setupSuccessful)
@@ -181,7 +181,7 @@ namespace VRTK
             tvGo.AddComponent<VRTK_ControllerRigidbodyActivator>();
 
             // calculate bounding box
-            Bounds bounds = Utilities.GetBounds(transform);
+            Bounds bounds = VRTK_SharedMethods.GetBounds(transform);
             bounds.Expand(bounds.size * 0.2f);
             tvGo.transform.position = bounds.center;
             BoxCollider bc = tvGo.AddComponent<BoxCollider>();
