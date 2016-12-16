@@ -17,6 +17,7 @@ namespace VRTK
             None,
             SteamVR,
             OculusVR
+            Simulator
         }
 
         /// <summary>

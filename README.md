@@ -5,10 +5,93 @@
 [![Slack](http://sysdia2.co.uk/badge.svg)](http://invite.vrtk.io)
 [![Waffle](https://img.shields.io/badge/waffle-tracker-blue.svg)](http://tracker.vrtk.io)
 
+<<<<<<< d7e2cab01bb33a336bebd43c055ea4658670bcb5
 | Supported SDK | Download Link |
 |---------------|---------------|
 | SteamVR Unity Asset | [SteamVR Plugin] |
 | Oculus Utilities Unity Package | [Oculus Utilities] |
+=======
+**This Toolkit requires a compatible VR SDK to be imported into your Unity Project**
+
+  * Compatible SDKs
+   * [SteamVR Plugin]
+   * [Simulator]
+
+## Quick Start for SteamVR
+
+  * Clone this repository `git clone https://github.com/thestonefox/VRTK.git`.
+  * Open `VRTK` within Unity3d.
+  * Import the [SteamVR Plugin] from the Unity Asset Store.
+  * Drag the `[CameraRig]` prefab from the SteamVR plugin into the
+  scene.
+  * Add the `VRTK_SDKManager` script a GameObject in the scene.
+   * Select `Steam VR` for each of the SDK Choices.
+   * Drag the `[CameraRig]` GameObject to the `Actual Boundaries`
+   parameter in the `VRTK_SDKManager`.
+   * Drag the `[CameraRig] -> Camera (head) -> Camera (eye)` GameObject
+   to the `Actual Headset` parameter in the `VRTK_SDKManager`.
+   * Drag the `[CameraRig] -> Controller (left)` GameObject to the
+   `Actual Left Controller` parameter in the `VRTK_SDKManager`.
+   * Drag the `[CameraRig] -> Controller (right)` GameObject to the
+   `Actual Right Controller` parameter in the `VRTK_SDKManager`.
+  * Optionally, browse the `Examples` scenes for example usage of the
+  scripts.
+
+## Quick Start for Simulator
+  Simulator SDK is as the name suggests a simulator to be able to use VRTK without
+  the need of a VR controller and/or headset. It uses the mouse and some modifier keys
+  to move and rotate the "hands" around in 3d space to enable the user to grab and use
+  objects the same way as if they had a controller. 
+
+  * Clone this repository `git clone https://github.com/thestonefox/VRTK.git`.
+  * Open `VRTK` within Unity3d.
+  * Drag the `VRTK_SimPlayer` prefab from the VRTK/Prefabs into the
+  scene.
+  * Add the `VRTK_SDKManager` script a GameObject in the scene.
+   * Select `Simulator` for each of the SDK Choices.
+   * Drag the `VRTK_SimPlayer` GameObject to the `Actual Boundaries`
+   parameter in the `VRTK_SDKManager`.
+   * Drag the `VRTK_SimPlayer -> Camera` GameObject
+   to the `Actual Headset` parameter in the `VRTK_SDKManager`.
+   * Drag the `VRTK_SimPlayer -> LeftHand` GameObject to the
+   `Actual Left Controller` parameter in the `VRTK_SDKManager`.
+   * Drag the `VRTK_SimPlayer -> RightHand` GameObject to the
+   `Actual Right Controller` parameter in the `VRTK_SDKManager`.
+  * Go to the `VRTK_ControllerEvents` scripts and set `Use Toggle Button` to `Trigger_Press`
+  * Button mapping are as follows:
+   * Grip: Left mouse button
+   * Trigger: Right mouse button
+   * Touchpad Press: Q
+   * Application Menu: E
+
+## Summary
+
+This toolkit provides many common VR functionality within Unity3d such
+as (but not limited to):
+
+  * Controller button events with common aliases
+  * Controller world pointers (e.g. laser pointers)
+  * Player Locomotion
+  * Grabbing/holding objects using the controllers
+  * Interacting with objects using the controllers
+  * Transforming game objects into interactive UI elements
+
+The toolkit is heavily inspired by the [SteamVR Plugin for Unity3d Github Repo].
+
+## What's In The Box
+
+This toolkit project is split into three main sections:
+
+  * Prefabs - `VRTK/Prefabs/`
+  * Scripts - `VRTK/Scripts/`
+  * Examples - `VRTK/Examples/`
+  * SDK - `VRTK/SDK`
+
+The `VRTK` directory is where all of the relevant files are kept
+and this directory can be simply copied over to an existing project.
+The `Examples` directory contains useful scenes showing the VR Toolkit
+in action.
+>>>>>>> feat(SDK): Add Simulator
 
 ## Documentation
 
