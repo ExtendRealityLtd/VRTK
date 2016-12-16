@@ -19,8 +19,10 @@
         {
             if (trackedController && transform.parent != trackedController.transform)
             {
+                var transformLocalScale = transform.localScale;
                 transform.SetParent(trackedController.transform);
                 transform.localPosition = Vector3.zero;
+                transform.localScale = transformLocalScale;
             }
         }
     }
