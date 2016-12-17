@@ -114,6 +114,9 @@ namespace VRTK
         protected override void OnEnable()
         {
             base.OnEnable();
+
+            pointerOriginTransform = (pointerOriginTransform == null ? VRTK_SDK_Bridge.GenerateControllerPointerOrigin() : pointerOriginTransform);
+
             AttemptSetController();
 
             var tmpMaterial = Resources.Load("WorldPointer") as Material;

@@ -303,6 +303,8 @@ namespace VRTK
 
         private void OnEnable()
         {
+            pointerOriginTransform = (pointerOriginTransform == null ? VRTK_SDK_Bridge.GenerateControllerPointerOrigin() : pointerOriginTransform);
+
             if (controller == null)
             {
                 controller = GetComponent<VRTK_ControllerEvents>();

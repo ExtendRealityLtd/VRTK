@@ -5092,6 +5092,17 @@ The GetControllerByIndex method returns the GameObject of a controller with a sp
 
 The GetControllerOrigin method returns the origin of the given controller.
 
+#### GenerateControllerPointerOrigin/0
+
+  > `public abstract Transform GenerateControllerPointerOrigin();`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `Transform` - A generated Transform that contains the custom pointer origin.
+
+The GenerateControllerPointerOrigin method can create a custom pointer origin Transform to represent the pointer position and forward.
+
 #### GetControllerLeftHand/1
 
   > `public abstract GameObject GetControllerLeftHand(bool actual = false);`
@@ -5857,6 +5868,17 @@ The GetControllerByIndex method returns the GameObject of a controller with a sp
 
 The GetControllerOrigin method returns the origin of the given controller.
 
+#### GenerateControllerPointerOrigin/0
+
+  > `public override Transform GenerateControllerPointerOrigin()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `Transform` - A generated Transform that contains the custom pointer origin.
+
+The GenerateControllerPointerOrigin method can create a custom pointer origin Transform to represent the pointer position and forward.
+
 #### GetControllerLeftHand/1
 
   > `public override GameObject GetControllerLeftHand(bool actual = false)`
@@ -6615,6 +6637,17 @@ The GetControllerByIndex method returns the GameObject of a controller with a sp
    * `Transform` - A Transform containing the origin of the controller.
 
 The GetControllerOrigin method returns the origin of the given controller.
+
+#### GenerateControllerPointerOrigin/0
+
+  > `public override Transform GenerateControllerPointerOrigin()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `Transform` - A generated Transform that contains the custom pointer origin.
+
+The GenerateControllerPointerOrigin method can create a custom pointer origin Transform to represent the pointer position and forward.
 
 #### GetControllerLeftHand/1
 

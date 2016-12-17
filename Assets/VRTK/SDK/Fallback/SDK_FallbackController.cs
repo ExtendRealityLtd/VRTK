@@ -64,6 +64,15 @@ namespace VRTK
         }
 
         /// <summary>
+        /// The GenerateControllerPointerOrigin method can create a custom pointer origin Transform to represent the pointer position and forward.
+        /// </summary>
+        /// <returns>A generated Transform that contains the custom pointer origin.</returns>
+        public override Transform GenerateControllerPointerOrigin()
+        {
+            return null;
+        }
+
+        /// <summary>
         /// The GetControllerLeftHand method returns the GameObject containing the representation of the left hand controller.
         /// </summary>
         /// <param name="actual">If true it will return the actual controller, if false it will return the script alias controller GameObject.</param>
