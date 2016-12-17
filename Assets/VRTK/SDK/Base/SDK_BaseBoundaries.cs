@@ -45,7 +45,7 @@ namespace VRTK
             var sdkManager = VRTK_SDKManager.instance;
             if (sdkManager != null)
             {
-                cachedPlayArea = sdkManager.actualBoundaries.transform;
+                cachedPlayArea = (sdkManager.actualBoundaries ? sdkManager.actualBoundaries.transform : null);
                 return cachedPlayArea;
             }
             return null;

@@ -131,6 +131,7 @@ There are a number of parameters that can be set on the Prefab which are provide
  * **Grip Text:** The text to display for the grip button action.
  * **Touchpad Text:** The text to display for the touchpad action.
  * **Button One Text:** The text to display for button one action.
+ * **Button Two Text:** The text to display for button two action.
  * **Tip Background Color:** The colour to use for the tooltip background container.
  * **Tip Text Color:** The colour to use for the text within the tooltip.
  * **Tip Line Color:** The colour to use for the line between the tooltip and the relevant controller button.
@@ -138,6 +139,7 @@ There are a number of parameters that can be set on the Prefab which are provide
  * **Grip:** The transform for the position of the grip button on the controller.
  * **Touchpad:** The transform for the position of the touchpad button on the controller.
  * **Button One:** The transform for the position of button one on the controller.
+ * **Button Two:** The transform for the position of button two on the controller.
 
 ### Class Methods
 
@@ -1144,6 +1146,8 @@ The script also has a public boolean pressed state for the buttons to allow the 
  * `public bool touchpadAxisChanged` - This will be true if the touchpad touch position has changed. Default: `false`
  * `public bool buttonOnePressed` - This will be true if button one is held down. Default: `false`
  * `public bool buttonOneTouched` - This will be true if button one is being touched. Default: `false`
+ * `public bool buttonTwoPressed` - This will be true if button two is held down. Default: `false`
+ * `public bool buttonTwoTouched` - This will be true if button two is being touched. Default: `false`
  * `public bool pointerPressed` - This will be true if the button aliased to the pointer is held down. Default: `false`
  * `public bool grabPressed` - This will be true if the button aliased to the grab is held down. Default: `false`
  * `public bool usePressed` - This will be true if the button aliased to the use is held down. Default: `false`
@@ -1179,6 +1183,10 @@ The script also has a public boolean pressed state for the buttons to allow the 
  * `ButtonOneTouchEnd` - Emitted when button one is no longer being touched.
  * `ButtonOnePressed` - Emitted when button one is pressed.
  * `ButtonOneReleased` - Emitted when button one is released.
+ * `ButtonTwoTouchStart` - Emitted when button two is touched.
+ * `ButtonTwoTouchEnd` - Emitted when button two is no longer being touched.
+ * `ButtonTwoPressed` - Emitted when button two is pressed.
+ * `ButtonTwoReleased` - Emitted when button two is released.
  * `AliasPointerOn` - Emitted when the pointer toggle alias button is pressed.
  * `AliasPointerOff` - Emitted when the pointer toggle alias button is released.
  * `AliasPointerSet` - Emitted when the pointer set alias button is released.
@@ -1225,6 +1233,10 @@ Adding the `VRTK_ControllerEvents_UnityEvents` component to `VRTK_ControllerEven
  * `OnButtonOneReleased` - Emits the ButtonOneReleased class event.
  * `OnButtonOneTouchStart` - Emits the ButtonOneTouchStart class event.
  * `OnButtonOneTouchEnd` - Emits the ButtonOneTouchEnd class event.
+ * `OnButtonTwoPressed` - Emits the ButtonTwoPressed class event.
+ * `OnButtonTwoReleased` - Emits the ButtonTwoReleased class event.
+ * `OnButtonTwoTouchStart` - Emits the ButtonTwoTouchStart class event.
+ * `OnButtonTwoTouchEnd` - Emits the ButtonTwoTouchEnd class event.
  * `OnAliasPointerOn` - Emits the AliasPointerOn class event.
  * `OnAliasPointerOff` - Emits the AliasPointerOff class event.
  * `OnAliasPointerSet` - Emits the AliasPointerSet class event.
@@ -1535,6 +1547,19 @@ The ToggleHighlightTouchpad method is a shortcut method that makes it easier to 
    * _none_
 
 The ToggleHighlightButtonOne method is a shortcut method that makes it easier to toggle the highlight state of the button one controller element.
+
+#### ToggleHighlightButtonTwo/3
+
+  > `public void ToggleHighlightButtonTwo(bool state, Color? highlight = null, float duration = 0f)`
+
+  * Parameters
+   * `bool state` - The highlight colour state, `true` will enable the highlight on button two and `false` will remove the highlight from button two.
+   * `Color? highlight` - The colour to highlight button two with.
+   * `float duration` - The duration of fade from white to the highlight colour.
+  * Returns
+   * _none_
+
+The ToggleHighlightButtonTwo method is a shortcut method that makes it easier to toggle the highlight state of the button two controller element.
 
 #### ToggleHighlighBody/3
 
@@ -5025,6 +5050,7 @@ This is an abstract class to implement the interface required by all implemented
   * `GripRight` - The right part of the grip button collection.
   * `Touchpad` - The touch pad/stick.
   * `ButtonOne` - The first generic button.
+  * `ButtonTwo` - The second generic button.
   * `SystemMenu` - The system menu button.
   * `Body` - The encompassing mesh of the controller body.
  * `public enum ControllerHand` - Controller hand reference.
@@ -5612,6 +5638,72 @@ The IsButtonOneTouchedDownOnIndex method is used to determine if the controller 
    * `bool` - Returns true if the button has just been released.
 
 The IsButtonOneTouchedUpOnIndex method is used to determine if the controller button has just been released.
+
+#### IsButtonTwoPressedOnIndex/1
+
+  > `public abstract bool IsButtonTwoPressedOnIndex(uint index);`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button is continually being pressed.
+
+The IsButtonTwoPressedOnIndex method is used to determine if the controller button is being pressed down continually.
+
+#### IsButtonTwoPressedDownOnIndex/1
+
+  > `public abstract bool IsButtonTwoPressedDownOnIndex(uint index);`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button has just been pressed down.
+
+The IsButtonTwoPressedDownOnIndex method is used to determine if the controller button has just been pressed down.
+
+#### IsButtonTwoPressedUpOnIndex/1
+
+  > `public abstract bool IsButtonTwoPressedUpOnIndex(uint index);`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button has just been released.
+
+The IsButtonTwoPressedUpOnIndex method is used to determine if the controller button has just been released.
+
+#### IsButtonTwoTouchedOnIndex/1
+
+  > `public abstract bool IsButtonTwoTouchedOnIndex(uint index);`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button is continually being touched.
+
+The IsButtonTwoTouchedOnIndex method is used to determine if the controller button is being touched down continually.
+
+#### IsButtonTwoTouchedDownOnIndex/1
+
+  > `public abstract bool IsButtonTwoTouchedDownOnIndex(uint index);`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button has just been touched down.
+
+The IsButtonTwoTouchedDownOnIndex method is used to determine if the controller button has just been touched down.
+
+#### IsButtonTwoTouchedUpOnIndex/1
+
+  > `public abstract bool IsButtonTwoTouchedUpOnIndex(uint index);`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button has just been released.
+
+The IsButtonTwoTouchedUpOnIndex method is used to determine if the controller button has just been released.
 
 ---
 
@@ -6389,6 +6481,72 @@ The IsButtonOneTouchedDownOnIndex method is used to determine if the controller 
 
 The IsButtonOneTouchedUpOnIndex method is used to determine if the controller button has just been released.
 
+#### IsButtonTwoPressedOnIndex/1
+
+  > `public override bool IsButtonTwoPressedOnIndex(uint index)`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button is continually being pressed.
+
+The IsButtonTwoPressedOnIndex method is used to determine if the controller button is being pressed down continually.
+
+#### IsButtonTwoPressedDownOnIndex/1
+
+  > `public override bool IsButtonTwoPressedDownOnIndex(uint index)`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button has just been pressed down.
+
+The IsButtonTwoPressedDownOnIndex method is used to determine if the controller button has just been pressed down.
+
+#### IsButtonTwoPressedUpOnIndex/1
+
+  > `public override bool IsButtonTwoPressedUpOnIndex(uint index)`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button has just been released.
+
+The IsButtonTwoPressedUpOnIndex method is used to determine if the controller button has just been released.
+
+#### IsButtonTwoTouchedOnIndex/1
+
+  > `public override bool IsButtonTwoTouchedOnIndex(uint index)`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button is continually being touched.
+
+The IsButtonTwoTouchedOnIndex method is used to determine if the controller button is being touched down continually.
+
+#### IsButtonTwoTouchedDownOnIndex/1
+
+  > `public override bool IsButtonTwoTouchedDownOnIndex(uint index)`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button has just been touched down.
+
+The IsButtonTwoTouchedDownOnIndex method is used to determine if the controller button has just been touched down.
+
+#### IsButtonTwoTouchedUpOnIndex/1
+
+  > `public override bool IsButtonTwoTouchedUpOnIndex(uint index)`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button has just been released.
+
+The IsButtonTwoTouchedUpOnIndex method is used to determine if the controller button has just been released.
+
 ---
 
 ## Fallback Boundaries (SDK_FallbackBoundaries)
@@ -7158,6 +7316,72 @@ The IsButtonOneTouchedDownOnIndex method is used to determine if the controller 
    * `bool` - Returns true if the button has just been released.
 
 The IsButtonOneTouchedUpOnIndex method is used to determine if the controller button has just been released.
+
+#### IsButtonTwoPressedOnIndex/1
+
+  > `public override bool IsButtonTwoPressedOnIndex(uint index)`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button is continually being pressed.
+
+The IsButtonTwoPressedOnIndex method is used to determine if the controller button is being pressed down continually.
+
+#### IsButtonTwoPressedDownOnIndex/1
+
+  > `public override bool IsButtonTwoPressedDownOnIndex(uint index)`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button has just been pressed down.
+
+The IsButtonTwoPressedDownOnIndex method is used to determine if the controller button has just been pressed down.
+
+#### IsButtonTwoPressedUpOnIndex/1
+
+  > `public override bool IsButtonTwoPressedUpOnIndex(uint index)`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button has just been released.
+
+The IsButtonTwoPressedUpOnIndex method is used to determine if the controller button has just been released.
+
+#### IsButtonTwoTouchedOnIndex/1
+
+  > `public override bool IsButtonTwoTouchedOnIndex(uint index)`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button is continually being touched.
+
+The IsButtonTwoTouchedOnIndex method is used to determine if the controller button is being touched down continually.
+
+#### IsButtonTwoTouchedDownOnIndex/1
+
+  > `public override bool IsButtonTwoTouchedDownOnIndex(uint index)`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button has just been touched down.
+
+The IsButtonTwoTouchedDownOnIndex method is used to determine if the controller button has just been touched down.
+
+#### IsButtonTwoTouchedUpOnIndex/1
+
+  > `public override bool IsButtonTwoTouchedUpOnIndex(uint index)`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button has just been released.
+
+The IsButtonTwoTouchedUpOnIndex method is used to determine if the controller button has just been released.
 
 ---
 

@@ -52,7 +52,7 @@ namespace VRTK
             var sdkManager = VRTK_SDKManager.instance;
             if (sdkManager != null)
             {
-                cachedHeadset = sdkManager.actualHeadset.transform;
+                cachedHeadset = (sdkManager.actualHeadset ? sdkManager.actualHeadset.transform : null);
                 return cachedHeadset;
             }
             return null;

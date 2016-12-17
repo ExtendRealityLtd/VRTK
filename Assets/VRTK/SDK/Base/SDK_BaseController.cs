@@ -39,6 +39,7 @@ namespace VRTK
         /// <param name="GripRight">The right part of the grip button collection.</param>
         /// <param name="Touchpad">The touch pad/stick.</param>
         /// <param name="ButtonOne">The first generic button.</param>
+        /// <param name="ButtonTwo">The second generic button.</param>
         /// <param name="SystemMenu">The system menu button.</param>
         /// <param name="Body">The encompassing mesh of the controller body.</param>
         public enum ControllerElements
@@ -49,6 +50,7 @@ namespace VRTK
             GripRight,
             Touchpad,
             ButtonOne,
+            ButtonTwo,
             SystemMenu,
             Body
         }
@@ -433,6 +435,48 @@ namespace VRTK
         /// <param name="index">The index of the tracked object to check for.</param>
         /// <returns>Returns true if the button has just been released.</returns>
         public abstract bool IsButtonOneTouchedUpOnIndex(uint index);
+
+        /// <summary>
+        /// The IsButtonTwoPressedOnIndex method is used to determine if the controller button is being pressed down continually.
+        /// </summary>
+        /// <param name="index">The index of the tracked object to check for.</param>
+        /// <returns>Returns true if the button is continually being pressed.</returns>
+        public abstract bool IsButtonTwoPressedOnIndex(uint index);
+
+        /// <summary>
+        /// The IsButtonTwoPressedDownOnIndex method is used to determine if the controller button has just been pressed down.
+        /// </summary>
+        /// <param name="index">The index of the tracked object to check for.</param>
+        /// <returns>Returns true if the button has just been pressed down.</returns>
+        public abstract bool IsButtonTwoPressedDownOnIndex(uint index);
+
+        /// <summary>
+        /// The IsButtonTwoPressedUpOnIndex method is used to determine if the controller button has just been released.
+        /// </summary>
+        /// <param name="index">The index of the tracked object to check for.</param>
+        /// <returns>Returns true if the button has just been released.</returns>
+        public abstract bool IsButtonTwoPressedUpOnIndex(uint index);
+
+        /// <summary>
+        /// The IsButtonTwoTouchedOnIndex method is used to determine if the controller button is being touched down continually.
+        /// </summary>
+        /// <param name="index">The index of the tracked object to check for.</param>
+        /// <returns>Returns true if the button is continually being touched.</returns>
+        public abstract bool IsButtonTwoTouchedOnIndex(uint index);
+
+        /// <summary>
+        /// The IsButtonTwoTouchedDownOnIndex method is used to determine if the controller button has just been touched down.
+        /// </summary>
+        /// <param name="index">The index of the tracked object to check for.</param>
+        /// <returns>Returns true if the button has just been touched down.</returns>
+        public abstract bool IsButtonTwoTouchedDownOnIndex(uint index);
+
+        /// <summary>
+        /// The IsButtonTwoTouchedUpOnIndex method is used to determine if the controller button has just been released.
+        /// </summary>
+        /// <param name="index">The index of the tracked object to check for.</param>
+        /// <returns>Returns true if the button has just been released.</returns>
+        public abstract bool IsButtonTwoTouchedUpOnIndex(uint index);
 
         protected GameObject GetSDKManagerControllerLeftHand(bool actual = false)
         {

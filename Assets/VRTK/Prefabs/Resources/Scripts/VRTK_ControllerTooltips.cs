@@ -24,6 +24,7 @@ namespace VRTK
             GripTooltip,
             TouchpadTooltip,
             ButtonOneTooltip,
+            ButtonTwoTooltip,
             None
         }
 
@@ -35,6 +36,8 @@ namespace VRTK
         public string touchpadText;
         [Tooltip("The text to display for button one action.")]
         public string buttonOneText;
+        [Tooltip("The text to display for button two action.")]
+        public string buttonTwoText;
         [Tooltip("The colour to use for the tooltip background container.")]
         public Color tipBackgroundColor = Color.black;
         [Tooltip("The colour to use for the text within the tooltip.")]
@@ -49,13 +52,16 @@ namespace VRTK
         public Transform touchpad;
         [Tooltip("The transform for the position of button one on the controller.")]
         public Transform buttonOne;
+        [Tooltip("The transform for the position of button two on the controller.")]
+        public Transform buttonTwo;
 
         private bool triggerInitialised = false;
         private bool gripInitialised = false;
         private bool touchpadInitialised = false;
         private bool buttonOneInitialised = false;
+        private bool buttonTwoInitialised = false;
         private TooltipButtons[] availableButtons;
-        private GameObject[] buttonTooltips;
+        private VRTK_ObjectTooltip[] buttonTooltips;
         private bool[] tooltipStates;
         private VRTK_ControllerActions controllerActions;
         private VRTK_HeadsetControllerAware headsetControllerAware;
@@ -69,6 +75,7 @@ namespace VRTK
             gripInitialised = false;
             touchpadInitialised = false;
             buttonOneInitialised = false;
+            buttonTwoInitialised = false;
         }
 
         /// <summary>
@@ -82,6 +89,9 @@ namespace VRTK
             {
                 case TooltipButtons.ButtonOneTooltip:
                     buttonOneText = newText;
+                    break;
+                case TooltipButtons.ButtonTwoTooltip:
+                    buttonTwoText = newText;
                     break;
                 case TooltipButtons.GripTooltip:
                     gripText = newText;
@@ -107,12 +117,18 @@ namespace VRTK
             {
                 for (int i = 0; i < buttonTooltips.Length; i++)
                 {
-                    buttonTooltips[i].SetActive(state);
+                    if (buttonTooltips[i].displayText.Length > 0)
+                    {
+                        buttonTooltips[i].gameObject.SetActive(state);
+                    }
                 }
             }
             else
             {
-                buttonTooltips[(int)element].SetActive(state);
+                if (buttonTooltips[(int)element].displayText.Length > 0)
+                {
+                    buttonTooltips[(int)element].gameObject.SetActive(state);
+                }
             }
         }
 
@@ -123,21 +139,23 @@ namespace VRTK
             gripInitialised = false;
             touchpadInitialised = false;
             buttonOneInitialised = false;
+            buttonTwoInitialised = false;
 
             availableButtons = new TooltipButtons[]
             {
                 TooltipButtons.TriggerTooltip,
                 TooltipButtons.GripTooltip,
                 TooltipButtons.TouchpadTooltip,
-                TooltipButtons.ButtonOneTooltip
+                TooltipButtons.ButtonOneTooltip,
+                TooltipButtons.ButtonTwoTooltip
             };
 
-            buttonTooltips = new GameObject[availableButtons.Length];
+            buttonTooltips = new VRTK_ObjectTooltip[availableButtons.Length];
             tooltipStates = new bool[availableButtons.Length];
 
             for (int i = 0; i < availableButtons.Length; i++)
             {
-                buttonTooltips[i] = transform.FindChild(availableButtons[i].ToString()).gameObject;
+                buttonTooltips[i] = transform.FindChild(availableButtons[i].ToString()).GetComponent<VRTK_ObjectTooltip>();
             }
 
             InitialiseTips();
@@ -187,7 +205,7 @@ namespace VRTK
         {
             for (int i = 0; i < buttonTooltips.Length; i++)
             {
-                tooltipStates[i] = buttonTooltips[i].activeSelf;
+                tooltipStates[i] = buttonTooltips[i].gameObject.activeSelf;
             }
             ToggleTips(false);
         }
@@ -252,6 +270,14 @@ namespace VRTK
                             buttonOneInitialised = true;
                         }
                         break;
+                    case "buttontwo":
+                        tipText = buttonTwoText;
+                        tipTransform = GetTransform(buttonTwo, SDK_BaseController.ControllerElements.ButtonTwo);
+                        if (tipTransform != null)
+                        {
+                            buttonTwoInitialised = true;
+                        }
+                        break;
                 }
 
                 tooltip.displayText = tipText;
@@ -272,7 +298,7 @@ namespace VRTK
 
         private bool TipsInitialised()
         {
-            return (triggerInitialised && gripInitialised && touchpadInitialised && buttonOneInitialised);
+            return (triggerInitialised && gripInitialised && touchpadInitialised && (buttonOneInitialised || buttonTwoInitialised));
         }
 
         private Transform GetTransform(Transform setTransform, SDK_BaseController.ControllerElements findElement)

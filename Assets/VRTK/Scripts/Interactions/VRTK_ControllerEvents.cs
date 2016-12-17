@@ -58,6 +58,7 @@ namespace VRTK
         /// <param name="Undefined">No button specified</param>
         public enum ButtonAlias
         {
+            Undefined,
             Trigger_Hairline,
             Trigger_Touch,
             Trigger_Press,
@@ -70,7 +71,8 @@ namespace VRTK
             Touchpad_Press,
             Button_One_Touch,
             Button_One_Press,
-            Undefined
+            Button_Two_Touch,
+            Button_Two_Press
         }
 
         [Header("Action Alias Buttons")]
@@ -175,6 +177,17 @@ namespace VRTK
         /// </summary>
         [HideInInspector]
         public bool buttonOneTouched = false;
+
+        /// <summary>
+        /// This will be true if button two is held down.
+        /// </summary>
+        [HideInInspector]
+        public bool buttonTwoPressed = false;
+        /// <summary>
+        /// This will be true if button two is being touched.
+        /// </summary>
+        [HideInInspector]
+        public bool buttonTwoTouched = false;
 
         /// <summary>
         /// This will be true if the button aliased to the pointer is held down.
@@ -323,6 +336,23 @@ namespace VRTK
         /// Emitted when button one is released.
         /// </summary>
         public event ControllerInteractionEventHandler ButtonOneReleased;
+
+        /// <summary>
+        /// Emitted when button two is touched.
+        /// </summary>
+        public event ControllerInteractionEventHandler ButtonTwoTouchStart;
+        /// <summary>
+        /// Emitted when button two is no longer being touched.
+        /// </summary>
+        public event ControllerInteractionEventHandler ButtonTwoTouchEnd;
+        /// <summary>
+        /// Emitted when button two is pressed.
+        /// </summary>
+        public event ControllerInteractionEventHandler ButtonTwoPressed;
+        /// <summary>
+        /// Emitted when button two is released.
+        /// </summary>
+        public event ControllerInteractionEventHandler ButtonTwoReleased;
 
         /// <summary>
         /// Emitted when the pointer toggle alias button is pressed.
@@ -612,6 +642,38 @@ namespace VRTK
             }
         }
 
+        public virtual void OnButtonTwoTouchStart(ControllerInteractionEventArgs e)
+        {
+            if (ButtonTwoTouchStart != null)
+            {
+                ButtonTwoTouchStart(this, e);
+            }
+        }
+
+        public virtual void OnButtonTwoTouchEnd(ControllerInteractionEventArgs e)
+        {
+            if (ButtonTwoTouchEnd != null)
+            {
+                ButtonTwoTouchEnd(this, e);
+            }
+        }
+
+        public virtual void OnButtonTwoPressed(ControllerInteractionEventArgs e)
+        {
+            if (ButtonTwoPressed != null)
+            {
+                ButtonTwoPressed(this, e);
+            }
+        }
+
+        public virtual void OnButtonTwoReleased(ControllerInteractionEventArgs e)
+        {
+            if (ButtonTwoReleased != null)
+            {
+                ButtonTwoReleased(this, e);
+            }
+        }
+
         public virtual void OnAliasPointerOn(ControllerInteractionEventArgs e)
         {
             if (AliasPointerOn != null)
@@ -804,7 +866,7 @@ namespace VRTK
         /// <returns>Is true if any of the controller buttons are currently being pressed.</returns>
         public bool AnyButtonPressed()
         {
-            return (triggerPressed || gripPressed || touchpadPressed || buttonOnePressed);
+            return (triggerPressed || gripPressed || touchpadPressed || buttonOnePressed || buttonTwoPressed);
         }
 
         /// <summary>
@@ -840,6 +902,10 @@ namespace VRTK
                     return buttonOnePressed;
                 case ButtonAlias.Button_One_Touch:
                     return buttonOneTouched;
+                case ButtonAlias.Button_Two_Press:
+                    return buttonTwoPressed;
+                case ButtonAlias.Button_Two_Touch:
+                    return buttonTwoTouched;
             }
             return false;
         }
@@ -1077,6 +1143,18 @@ namespace VRTK
                 EmitAlias(ButtonAlias.Button_One_Touch, false, 0f, ref buttonOneTouched);
             }
 
+            if (buttonTwoPressed)
+            {
+                OnButtonTwoReleased(SetButtonEvent(ref buttonTwoPressed, false, 0f));
+                EmitAlias(ButtonAlias.Button_Two_Press, false, 0f, ref buttonTwoPressed);
+            }
+
+            if (buttonTwoTouched)
+            {
+                OnButtonTwoTouchEnd(SetButtonEvent(ref buttonTwoTouched, false, 0f));
+                EmitAlias(ButtonAlias.Button_Two_Touch, false, 0f, ref buttonTwoTouched);
+            }
+
             triggerAxisChanged = false;
             gripAxisChanged = false;
             touchpadAxisChanged = false;
@@ -1269,7 +1347,6 @@ namespace VRTK
             }
             else if (VRTK_SDK_Bridge.IsButtonOnePressedUpOnIndex(controllerIndex))
             {
-
                 OnButtonOneReleased(SetButtonEvent(ref buttonOnePressed, false, 0f));
                 EmitAlias(ButtonAlias.Button_One_Press, false, 0f, ref buttonOnePressed);
             }
@@ -1282,9 +1359,32 @@ namespace VRTK
             }
             else if (VRTK_SDK_Bridge.IsButtonOneTouchedUpOnIndex(controllerIndex))
             {
-
                 OnButtonOneTouchEnd(SetButtonEvent(ref buttonOneTouched, false, 0f));
                 EmitAlias(ButtonAlias.Button_One_Touch, false, 0f, ref buttonOneTouched);
+            }
+
+            //ButtonTwo Pressed
+            if (VRTK_SDK_Bridge.IsButtonTwoPressedDownOnIndex(controllerIndex))
+            {
+                OnButtonTwoPressed(SetButtonEvent(ref buttonTwoPressed, true, 1f));
+                EmitAlias(ButtonAlias.Button_Two_Press, true, 1f, ref buttonTwoPressed);
+            }
+            else if (VRTK_SDK_Bridge.IsButtonTwoPressedUpOnIndex(controllerIndex))
+            {
+                OnButtonTwoReleased(SetButtonEvent(ref buttonTwoPressed, false, 0f));
+                EmitAlias(ButtonAlias.Button_Two_Press, false, 0f, ref buttonTwoPressed);
+            }
+
+            //ButtonTwo Touched
+            if (VRTK_SDK_Bridge.IsButtonTwoTouchedDownOnIndex(controllerIndex))
+            {
+                OnButtonTwoTouchStart(SetButtonEvent(ref buttonTwoTouched, true, 1f));
+                EmitAlias(ButtonAlias.Button_Two_Touch, true, 1f, ref buttonTwoTouched);
+            }
+            else if (VRTK_SDK_Bridge.IsButtonTwoTouchedUpOnIndex(controllerIndex))
+            {
+                OnButtonTwoTouchEnd(SetButtonEvent(ref buttonTwoTouched, false, 0f));
+                EmitAlias(ButtonAlias.Button_Two_Touch, false, 0f, ref buttonTwoTouched);
             }
 
             // Save current touch and trigger settings to detect next change.

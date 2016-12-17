@@ -15,6 +15,7 @@ namespace VRTK
         public string rightGripModelPath = "";
         public string touchpadModelPath = "";
         public string buttonOneModelPath = "";
+        public string buttonTwoModelPath = "";
         public string systemMenuModelPath = "";
     }
 
@@ -27,6 +28,7 @@ namespace VRTK
         public VRTK_BaseHighlighter gripRight;
         public VRTK_BaseHighlighter touchpad;
         public VRTK_BaseHighlighter buttonOne;
+        public VRTK_BaseHighlighter buttonTwo;
         public VRTK_BaseHighlighter systemMenu;
     }
 
@@ -287,6 +289,21 @@ namespace VRTK
         }
 
         /// <summary>
+        /// The ToggleHighlightButtonTwo method is a shortcut method that makes it easier to toggle the highlight state of the button two controller element.
+        /// </summary>
+        /// <param name="state">The highlight colour state, `true` will enable the highlight on button two and `false` will remove the highlight from button two.</param>
+        /// <param name="highlight">The colour to highlight button two with.</param>
+        /// <param name="duration">The duration of fade from white to the highlight colour.</param>
+        public void ToggleHighlightButtonTwo(bool state, Color? highlight = null, float duration = 0f)
+        {
+            if (!state && controllerHighlighted)
+            {
+                return;
+            }
+            ToggleHighlightAlias(state, modelElementPaths.buttonTwoModelPath, highlight, duration);
+        }
+
+        /// <summary>
         /// The ToggleHighlighBody method is a shortcut method that makes it easier to toggle the highlight state of the controller body element.
         /// </summary>
         /// <param name="state">The highlight colour state, `true` will enable the highlight on the body and `false` will remove the highlight from the body.</param>
@@ -314,6 +331,7 @@ namespace VRTK
             ToggleHighlightGrip(state, highlight, duration);
             ToggleHighlightTouchpad(state, highlight, duration);
             ToggleHighlightButtonOne(state, highlight, duration);
+            ToggleHighlightButtonTwo(state, highlight, duration);
             ToggleHighlightAlias(state, modelElementPaths.systemMenuModelPath, highlight, duration);
             ToggleHighlightAlias(state, modelElementPaths.bodyModelPath, highlight, duration);
         }
@@ -366,6 +384,7 @@ namespace VRTK
 
             objectHighlighter.Initialise(null, highlighterOptions);
             AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.ButtonOne)), objectHighlighter, elementHighlighterOverrides.buttonOne);
+            AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.ButtonTwo)), objectHighlighter, elementHighlighterOverrides.buttonTwo);
             AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.Body)), objectHighlighter, elementHighlighterOverrides.body);
             AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.GripLeft)), objectHighlighter, elementHighlighterOverrides.gripLeft);
             AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.GripRight)), objectHighlighter, elementHighlighterOverrides.gripRight);
@@ -403,6 +422,10 @@ namespace VRTK
             if (modelElementPaths.buttonOneModelPath.Trim() == "")
             {
                 modelElementPaths.buttonOneModelPath = VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.ButtonOne, controllerHand);
+            }
+            if (modelElementPaths.buttonTwoModelPath.Trim() == "")
+            {
+                modelElementPaths.buttonTwoModelPath = VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.ButtonTwo, controllerHand);
             }
             if (modelElementPaths.systemMenuModelPath.Trim() == "")
             {
@@ -467,7 +490,7 @@ namespace VRTK
 
         private Transform GetElementTransform(string path)
         {
-            if (cachedElements == null)
+            if (cachedElements == null || path == null)
             {
                 return null;
             }

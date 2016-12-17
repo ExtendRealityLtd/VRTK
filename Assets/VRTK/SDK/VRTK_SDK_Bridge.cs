@@ -245,7 +245,7 @@
             return GetControllerSDK().IsTouchpadTouchedUpOnIndex(index);
         }
 
-        //ButtonOne Menu
+        //ButtonOne
 
         public static bool IsButtonOnePressedOnIndex(uint index)
         {
@@ -275,6 +275,38 @@
         public static bool IsButtonOneTouchedUpOnIndex(uint index)
         {
             return GetControllerSDK().IsButtonOneTouchedUpOnIndex(index);
+        }
+
+        //ButtonTwo
+
+        public static bool IsButtonTwoPressedOnIndex(uint index)
+        {
+            return GetControllerSDK().IsButtonTwoPressedOnIndex(index);
+        }
+
+        public static bool IsButtonTwoPressedDownOnIndex(uint index)
+        {
+            return GetControllerSDK().IsButtonTwoPressedDownOnIndex(index);
+        }
+
+        public static bool IsButtonTwoPressedUpOnIndex(uint index)
+        {
+            return GetControllerSDK().IsButtonTwoPressedUpOnIndex(index);
+        }
+
+        public static bool IsButtonTwoTouchedOnIndex(uint index)
+        {
+            return GetControllerSDK().IsButtonTwoTouchedOnIndex(index);
+        }
+
+        public static bool IsButtonTwoTouchedDownOnIndex(uint index)
+        {
+            return GetControllerSDK().IsButtonTwoTouchedDownOnIndex(index);
+        }
+
+        public static bool IsButtonTwoTouchedUpOnIndex(uint index)
+        {
+            return GetControllerSDK().IsButtonTwoTouchedUpOnIndex(index);
         }
 
         public static Transform GetHeadset()

@@ -194,6 +194,35 @@ MonoBehaviour:
   verbose: 0
   createComponents: 1
   updateDynamically: 1
+--- !u!21 &126759739
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: Sprites/Default
+  m_Shader: {fileID: 10753, guid: 0000000000000000f000000000000000, type: 0}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 5
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  m_SavedProperties:
+    serializedVersion: 2
+    m_TexEnvs:
+    - first:
+        name: _MainTex
+      second:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - first:
+        name: PixelSnap
+      second: 0
+    m_Colors:
+    - first:
+        name: _Color
+      second: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &158088513
 GameObject:
   m_ObjectHideFlags: 0
@@ -800,6 +829,7 @@ MonoBehaviour:
     rightGripModelPath: 
     touchpadModelPath: ModelPieces/Thumb
     buttonOneModelPath: 
+    buttonTwoModelPath: 
     systemMenuModelPath: 
   elementHighlighterOverrides:
     body: {fileID: 0}
@@ -808,6 +838,7 @@ MonoBehaviour:
     gripRight: {fileID: 0}
     touchpad: {fileID: 0}
     buttonOne: {fileID: 0}
+    buttonTwo: {fileID: 0}
     systemMenu: {fileID: 0}
 --- !u!114 &464980880
 MonoBehaviour:
@@ -820,12 +851,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eba3cd5456cd79e49948f5ceb58544b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pointerToggleButton: 9
-  pointerSetButton: 9
-  grabToggleButton: 6
-  useToggleButton: 2
-  uiClickButton: 2
-  menuToggleButton: 11
+  pointerToggleButton: 10
+  pointerSetButton: 10
+  grabToggleButton: 7
+  useToggleButton: 3
+  uiClickButton: 3
+  menuToggleButton: 12
   axisFidelity: 1
   triggerClickThreshold: 1
   gripClickThreshold: 1
@@ -844,6 +875,8 @@ MonoBehaviour:
   touchpadAxisChanged: 0
   buttonOnePressed: 0
   buttonOneTouched: 0
+  buttonTwoPressed: 0
+  buttonTwoTouched: 0
   pointerPressed: 0
   grabPressed: 0
   usePressed: 0
@@ -1197,7 +1230,7 @@ MonoBehaviour:
   holdButtonToGrab: 1
   stayGrabbedOnTeleport: 1
   validDrop: 1
-  grabOverrideButton: 12
+  grabOverrideButton: 0
   allowedGrabControllers: 0
   grabAttachMechanicScript: {fileID: 584630029}
   secondaryGrabActionScript: {fileID: 584630030}
@@ -1205,7 +1238,7 @@ MonoBehaviour:
   holdButtonToUse: 1
   useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
-  useOverrideButton: 12
+  useOverrideButton: 0
   allowedUseControllers: 0
   usingState: 0
 --- !u!4 &584630027
@@ -1307,7 +1340,7 @@ MonoBehaviour:
   holdButtonToGrab: 1
   stayGrabbedOnTeleport: 1
   validDrop: 1
-  grabOverrideButton: 12
+  grabOverrideButton: 0
   allowedGrabControllers: 0
   grabAttachMechanicScript: {fileID: 664157675}
   secondaryGrabActionScript: {fileID: 664157676}
@@ -1315,7 +1348,7 @@ MonoBehaviour:
   holdButtonToUse: 0
   useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
-  useOverrideButton: 12
+  useOverrideButton: 0
   allowedUseControllers: 0
   usingState: 0
 --- !u!65 &664157672
@@ -1457,40 +1490,7 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 798182789}
   m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
---- !u!54 &866213769 stripped
-Rigidbody:
-  m_PrefabParentObject: {fileID: 5456728, guid: d68e9e7dde1a3e34cb897e384d794527,
-    type: 2}
-  m_PrefabInternal: {fileID: 304371891}
---- !u!1 &971791266
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 971791267}
-  m_Layer: 0
-  m_Name: LeftHandSnapPoint
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &971791267
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 971791266}
-  m_LocalRotation: {x: 1, y: -0.00000016292068, z: -0.00000016292068, w: 2.654315e-14}
-  m_LocalPosition: {x: -0.03, y: 0.005, z: -0.042899996}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 180}
-  m_Children: []
-  m_Father: {fileID: 1719889271}
-  m_RootOrder: 4
---- !u!43 &977370543
+--- !u!43 &806998737
 Mesh:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
@@ -1618,6 +1618,39 @@ Mesh:
   m_BakedConvexCollisionMesh: 
   m_BakedTriangleCollisionMesh: 
   m_MeshOptimized: 0
+--- !u!54 &866213769 stripped
+Rigidbody:
+  m_PrefabParentObject: {fileID: 5456728, guid: d68e9e7dde1a3e34cb897e384d794527,
+    type: 2}
+  m_PrefabInternal: {fileID: 304371891}
+--- !u!1 &971791266
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 971791267}
+  m_Layer: 0
+  m_Name: LeftHandSnapPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &971791267
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 971791266}
+  m_LocalRotation: {x: 1, y: -0.00000016292068, z: -0.00000016292068, w: 2.654315e-14}
+  m_LocalPosition: {x: -0.03, y: 0.005, z: -0.042899996}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 180}
+  m_Children: []
+  m_Father: {fileID: 1719889271}
+  m_RootOrder: 4
 --- !u!1 &1009483874
 GameObject:
   m_ObjectHideFlags: 0
@@ -1780,7 +1813,7 @@ MonoBehaviour:
   holdButtonToGrab: 1
   stayGrabbedOnTeleport: 1
   validDrop: 1
-  grabOverrideButton: 12
+  grabOverrideButton: 0
   allowedGrabControllers: 0
   grabAttachMechanicScript: {fileID: 1061858101}
   secondaryGrabActionScript: {fileID: 1061858102}
@@ -1788,7 +1821,7 @@ MonoBehaviour:
   holdButtonToUse: 1
   useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
-  useOverrideButton: 12
+  useOverrideButton: 0
   allowedUseControllers: 0
   usingState: 0
 --- !u!114 &1061858101
@@ -1966,35 +1999,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
---- !u!21 &1162572508
-Material:
-  serializedVersion: 6
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_Name: Sprites/Default
-  m_Shader: {fileID: 10753, guid: 0000000000000000f000000000000000, type: 0}
-  m_ShaderKeywords: 
-  m_LightmapFlags: 5
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  m_SavedProperties:
-    serializedVersion: 2
-    m_TexEnvs:
-    - first:
-        name: _MainTex
-      second:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Floats:
-    - first:
-        name: PixelSnap
-      second: 0
-    m_Colors:
-    - first:
-        name: _Color
-      second: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &1167141450
 GameObject:
   m_ObjectHideFlags: 0
@@ -2516,7 +2520,7 @@ MeshFilter:
     type: 2}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1435612831}
-  m_Mesh: {fileID: 977370543}
+  m_Mesh: {fileID: 806998737}
 --- !u!23 &1435612834
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -2531,7 +2535,7 @@ MeshRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_Materials:
-  - {fileID: 1162572508}
+  - {fileID: 126759739}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
@@ -3093,7 +3097,7 @@ MonoBehaviour:
   holdButtonToGrab: 1
   stayGrabbedOnTeleport: 1
   validDrop: 1
-  grabOverrideButton: 12
+  grabOverrideButton: 0
   allowedGrabControllers: 0
   grabAttachMechanicScript: {fileID: 1719889272}
   secondaryGrabActionScript: {fileID: 1719889273}
@@ -3101,7 +3105,7 @@ MonoBehaviour:
   holdButtonToUse: 1
   useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
-  useOverrideButton: 12
+  useOverrideButton: 0
   allowedUseControllers: 0
   usingState: 0
 --- !u!65 &1719889269
@@ -3217,7 +3221,7 @@ MonoBehaviour:
   holdButtonToGrab: 1
   stayGrabbedOnTeleport: 1
   validDrop: 1
-  grabOverrideButton: 12
+  grabOverrideButton: 0
   allowedGrabControllers: 0
   grabAttachMechanicScript: {fileID: 1768600018}
   secondaryGrabActionScript: {fileID: 1768600019}
@@ -3225,7 +3229,7 @@ MonoBehaviour:
   holdButtonToUse: 0
   useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
-  useOverrideButton: 12
+  useOverrideButton: 0
   allowedUseControllers: 0
   usingState: 0
 --- !u!65 &1768600015
@@ -3608,7 +3612,7 @@ MonoBehaviour:
   holdButtonToGrab: 1
   stayGrabbedOnTeleport: 1
   validDrop: 1
-  grabOverrideButton: 12
+  grabOverrideButton: 0
   allowedGrabControllers: 0
   grabAttachMechanicScript: {fileID: 2010777319}
   secondaryGrabActionScript: {fileID: 2010777320}
@@ -3616,7 +3620,7 @@ MonoBehaviour:
   holdButtonToUse: 1
   useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
-  useOverrideButton: 12
+  useOverrideButton: 0
   allowedUseControllers: 0
   usingState: 0
 --- !u!65 &2010777316
@@ -3770,6 +3774,7 @@ MonoBehaviour:
     rightGripModelPath: 
     touchpadModelPath: ModelPieces/Thumb
     buttonOneModelPath: 
+    buttonTwoModelPath: 
     systemMenuModelPath: 
   elementHighlighterOverrides:
     body: {fileID: 0}
@@ -3778,6 +3783,7 @@ MonoBehaviour:
     gripRight: {fileID: 0}
     touchpad: {fileID: 0}
     buttonOne: {fileID: 0}
+    buttonTwo: {fileID: 0}
     systemMenu: {fileID: 0}
 --- !u!114 &2033805017
 MonoBehaviour:
@@ -3790,12 +3796,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eba3cd5456cd79e49948f5ceb58544b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pointerToggleButton: 9
-  pointerSetButton: 9
-  grabToggleButton: 6
-  useToggleButton: 2
-  uiClickButton: 2
-  menuToggleButton: 11
+  pointerToggleButton: 10
+  pointerSetButton: 10
+  grabToggleButton: 7
+  useToggleButton: 3
+  uiClickButton: 3
+  menuToggleButton: 12
   axisFidelity: 1
   triggerClickThreshold: 1
   gripClickThreshold: 1
@@ -3814,6 +3820,8 @@ MonoBehaviour:
   touchpadAxisChanged: 0
   buttonOnePressed: 0
   buttonOneTouched: 0
+  buttonTwoPressed: 0
+  buttonTwoTouched: 0
   pointerPressed: 0
   grabPressed: 0
   usePressed: 0

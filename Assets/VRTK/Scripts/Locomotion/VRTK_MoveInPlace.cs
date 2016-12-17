@@ -503,6 +503,14 @@ namespace VRTK
                             controllerEvent.ButtonOneTouchStart -= engageButtonPressed;
                             controllerEvent.ButtonOneTouchEnd -= engageButtonUp;
                             break;
+                        case VRTK_ControllerEvents.ButtonAlias.Button_Two_Press:
+                            controllerEvent.ButtonTwoPressed -= engageButtonPressed;
+                            controllerEvent.ButtonTwoReleased -= engageButtonUp;
+                            break;
+                        case VRTK_ControllerEvents.ButtonAlias.Button_Two_Touch:
+                            controllerEvent.ButtonTwoTouchStart -= engageButtonPressed;
+                            controllerEvent.ButtonTwoTouchEnd -= engageButtonUp;
+                            break;
                     }
                     subscribed = false;
                 }

@@ -531,5 +531,65 @@ namespace VRTK
         {
             return false;
         }
+
+        /// <summary>
+        /// The IsButtonTwoPressedOnIndex method is used to determine if the controller button is being pressed down continually.
+        /// </summary>
+        /// <param name="index">The index of the tracked object to check for.</param>
+        /// <returns>Returns true if the button is continually being pressed.</returns>
+        public override bool IsButtonTwoPressedOnIndex(uint index)
+        {
+            return false;
+        }
+
+        /// <summary>
+        /// The IsButtonTwoPressedDownOnIndex method is used to determine if the controller button has just been pressed down.
+        /// </summary>
+        /// <param name="index">The index of the tracked object to check for.</param>
+        /// <returns>Returns true if the button has just been pressed down.</returns>
+        public override bool IsButtonTwoPressedDownOnIndex(uint index)
+        {
+            return false;
+        }
+
+        /// <summary>
+        /// The IsButtonTwoPressedUpOnIndex method is used to determine if the controller button has just been released.
+        /// </summary>
+        /// <param name="index">The index of the tracked object to check for.</param>
+        /// <returns>Returns true if the button has just been released.</returns>
+        public override bool IsButtonTwoPressedUpOnIndex(uint index)
+        {
+            return false;
+        }
+
+        /// <summary>
+        /// The IsButtonTwoTouchedOnIndex method is used to determine if the controller button is being touched down continually.
+        /// </summary>
+        /// <param name="index">The index of the tracked object to check for.</param>
+        /// <returns>Returns true if the button is continually being touched.</returns>
+        public override bool IsButtonTwoTouchedOnIndex(uint index)
+        {
+            return false;
+        }
+
+        /// <summary>
+        /// The IsButtonTwoTouchedDownOnIndex method is used to determine if the controller button has just been touched down.
+        /// </summary>
+        /// <param name="index">The index of the tracked object to check for.</param>
+        /// <returns>Returns true if the button has just been touched down.</returns>
+        public override bool IsButtonTwoTouchedDownOnIndex(uint index)
+        {
+            return false;
+        }
+
+        /// <summary>
+        /// The IsButtonTwoTouchedUpOnIndex method is used to determine if the controller button has just been released.
+        /// </summary>
+        /// <param name="index">The index of the tracked object to check for.</param>
+        /// <returns>Returns true if the button has just been released.</returns>
+        public override bool IsButtonTwoTouchedUpOnIndex(uint index)
+        {
+            return false;
+        }
     }
 }

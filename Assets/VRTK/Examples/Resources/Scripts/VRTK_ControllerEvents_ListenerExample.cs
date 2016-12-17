@@ -55,6 +55,12 @@
             GetComponent<VRTK_ControllerEvents>().ButtonOneTouchStart += new ControllerInteractionEventHandler(DoButtonOneTouchStart);
             GetComponent<VRTK_ControllerEvents>().ButtonOneTouchEnd += new ControllerInteractionEventHandler(DoButtonOneTouchEnd);
 
+            GetComponent<VRTK_ControllerEvents>().ButtonTwoPressed += new ControllerInteractionEventHandler(DoButtonTwoPressed);
+            GetComponent<VRTK_ControllerEvents>().ButtonTwoReleased += new ControllerInteractionEventHandler(DoButtonTwoReleased);
+
+            GetComponent<VRTK_ControllerEvents>().ButtonTwoTouchStart += new ControllerInteractionEventHandler(DoButtonTwoTouchStart);
+            GetComponent<VRTK_ControllerEvents>().ButtonTwoTouchEnd += new ControllerInteractionEventHandler(DoButtonTwoTouchEnd);
+
             GetComponent<VRTK_ControllerEvents>().ControllerEnabled += new ControllerInteractionEventHandler(DoControllerEnabled);
             GetComponent<VRTK_ControllerEvents>().ControllerDisabled += new ControllerInteractionEventHandler(DoControllerDisabled);
 
@@ -200,6 +206,26 @@
         private void DoButtonOneTouchEnd(object sender, ControllerInteractionEventArgs e)
         {
             DebugLogger(e.controllerIndex, "BUTTON ONE", "untouched", e);
+        }
+
+        private void DoButtonTwoPressed(object sender, ControllerInteractionEventArgs e)
+        {
+            DebugLogger(e.controllerIndex, "BUTTON TWO", "pressed down", e);
+        }
+
+        private void DoButtonTwoReleased(object sender, ControllerInteractionEventArgs e)
+        {
+            DebugLogger(e.controllerIndex, "BUTTON TWO", "released", e);
+        }
+
+        private void DoButtonTwoTouchStart(object sender, ControllerInteractionEventArgs e)
+        {
+            DebugLogger(e.controllerIndex, "BUTTON TWO", "touched", e);
+        }
+
+        private void DoButtonTwoTouchEnd(object sender, ControllerInteractionEventArgs e)
+        {
+            DebugLogger(e.controllerIndex, "BUTTON TWO", "untouched", e);
         }
 
         private void DoControllerEnabled(object sender, ControllerInteractionEventArgs e)

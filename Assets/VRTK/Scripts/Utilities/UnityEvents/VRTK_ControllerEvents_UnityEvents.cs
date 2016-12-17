@@ -124,6 +124,23 @@
         public UnityObjectEvent OnButtonOneTouchEnd;
 
         /// <summary>
+        /// Emits the ButtonTwoPressed class event.
+        /// </summary>
+        public UnityObjectEvent OnButtonTwoPressed;
+        /// <summary>
+        /// Emits the ButtonTwoReleased class event.
+        /// </summary>
+        public UnityObjectEvent OnButtonTwoReleased;
+        /// <summary>
+        /// Emits the ButtonTwoTouchStart class event.
+        /// </summary>
+        public UnityObjectEvent OnButtonTwoTouchStart;
+        /// <summary>
+        /// Emits the ButtonTwoTouchEnd class event.
+        /// </summary>
+        public UnityObjectEvent OnButtonTwoTouchEnd;
+
+        /// <summary>
         /// Emits the AliasPointerOn class event.
         /// </summary>
         public UnityObjectEvent OnAliasPointerOn;
@@ -227,6 +244,11 @@
             ce.ButtonOneReleased += ButtonOneReleased;
             ce.ButtonOneTouchStart += ButtonOneTouchStart;
             ce.ButtonOneTouchEnd += ButtonOneTouchEnd;
+
+            ce.ButtonTwoPressed += ButtonTwoPressed;
+            ce.ButtonTwoReleased += ButtonTwoReleased;
+            ce.ButtonTwoTouchStart += ButtonTwoTouchStart;
+            ce.ButtonTwoTouchEnd += ButtonTwoTouchEnd;
 
             ce.AliasPointerOn += AliasPointerOn;
             ce.AliasPointerOff += AliasPointerOff;
@@ -380,6 +402,26 @@
             OnButtonOneTouchEnd.Invoke(o, e);
         }
 
+        private void ButtonTwoPressed(object o, ControllerInteractionEventArgs e)
+        {
+            OnButtonTwoPressed.Invoke(o, e);
+        }
+
+        private void ButtonTwoReleased(object o, ControllerInteractionEventArgs e)
+        {
+            OnButtonTwoReleased.Invoke(o, e);
+        }
+
+        private void ButtonTwoTouchStart(object o, ControllerInteractionEventArgs e)
+        {
+            OnButtonTwoTouchStart.Invoke(o, e);
+        }
+
+        private void ButtonTwoTouchEnd(object o, ControllerInteractionEventArgs e)
+        {
+            OnButtonTwoTouchEnd.Invoke(o, e);
+        }
+
         private void AliasPointerOn(object o, ControllerInteractionEventArgs e)
         {
             OnAliasPointerOn.Invoke(o, e);
@@ -487,6 +529,11 @@
             ce.ButtonOneReleased -= ButtonOneReleased;
             ce.ButtonOneTouchStart -= ButtonOneTouchStart;
             ce.ButtonOneTouchEnd -= ButtonOneTouchEnd;
+
+            ce.ButtonTwoPressed -= ButtonTwoPressed;
+            ce.ButtonTwoReleased -= ButtonTwoReleased;
+            ce.ButtonTwoTouchStart -= ButtonTwoTouchStart;
+            ce.ButtonTwoTouchEnd -= ButtonTwoTouchEnd;
 
             ce.AliasPointerOn -= AliasPointerOn;
             ce.AliasPointerOff -= AliasPointerOff;

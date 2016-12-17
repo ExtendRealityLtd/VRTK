@@ -23,15 +23,20 @@
 
         private void DoTriggerPressed(object sender, ControllerInteractionEventArgs e)
         {
-            Instantiate(spawnMe, position, Quaternion.identity);
+            Invoke("CreateSphere", 0f);
         }
 
         private void DoTouchpadPressed(object sender, ControllerInteractionEventArgs e)
         {
             for (int i = 0; i < 20; i++)
             {
-                Instantiate(spawnMe, position, Quaternion.identity);
+                Invoke("CreateSphere", 0f);
             }
+        }
+
+        private void CreateSphere()
+        {
+            Instantiate(spawnMe, position, Quaternion.identity);
         }
     }
 }
