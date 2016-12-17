@@ -222,7 +222,7 @@ namespace VRTK
                 {
                     case "trigger":
                         tipText = triggerText;
-                        tipTransform = GetTransform(trigger, VRTK_ControllerElements.Trigger);
+                        tipTransform = GetTransform(trigger, SDK_BaseController.ControllerElements.Trigger);
                         if (tipTransform != null)
                         {
                             triggerInitialised = true;
@@ -230,7 +230,7 @@ namespace VRTK
                         break;
                     case "grip":
                         tipText = gripText;
-                        tipTransform = GetTransform(grip, VRTK_ControllerElements.GripLeft);
+                        tipTransform = GetTransform(grip, SDK_BaseController.ControllerElements.GripLeft);
                         if (tipTransform != null)
                         {
                             gripInitialised = true;
@@ -238,7 +238,7 @@ namespace VRTK
                         break;
                     case "touchpad":
                         tipText = touchpadText;
-                        tipTransform = GetTransform(touchpad, VRTK_ControllerElements.Touchpad);
+                        tipTransform = GetTransform(touchpad, SDK_BaseController.ControllerElements.Touchpad);
                         if (tipTransform != null)
                         {
                             touchpadInitialised = true;
@@ -246,7 +246,7 @@ namespace VRTK
                         break;
                     case "buttonone":
                         tipText = buttonOneText;
-                        tipTransform = GetTransform(buttonOne, VRTK_ControllerElements.ButtonOne);
+                        tipTransform = GetTransform(buttonOne, SDK_BaseController.ControllerElements.ButtonOne);
                         if (tipTransform != null)
                         {
                             buttonOneInitialised = true;
@@ -275,7 +275,7 @@ namespace VRTK
             return (triggerInitialised && gripInitialised && touchpadInitialised && buttonOneInitialised);
         }
 
-        private Transform GetTransform(Transform setTransform, VRTK_ControllerElements findElement)
+        private Transform GetTransform(Transform setTransform, SDK_BaseController.ControllerElements findElement)
         {
             Transform returnTransform = null;
             if (setTransform)

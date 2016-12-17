@@ -141,14 +141,14 @@
 
             if (controllerSDK && (!sdkManager.modelAliasLeftController || !previousControllerSDK || controllerSDK.GetType() != previousControllerSDK.GetType()))
             {
-                var controllerLeft = controllerSDK.GetControllerModel(VRTK_DeviceFinder.ControllerHand.Left);
+                var controllerLeft = controllerSDK.GetControllerModel(SDK_BaseController.ControllerHand.Left);
                 sdkManager.modelAliasLeftController = (controllerLeft ? controllerLeft : null);
                 setPreviousControllerSDK = true;
             }
 
             if (controllerSDK && (!sdkManager.modelAliasRightController || !previousControllerSDK || controllerSDK.GetType() != previousControllerSDK.GetType()))
             {
-                var controllerRight = controllerSDK.GetControllerModel(VRTK_DeviceFinder.ControllerHand.Right);
+                var controllerRight = controllerSDK.GetControllerModel(SDK_BaseController.ControllerHand.Right);
                 sdkManager.modelAliasRightController = (controllerRight ? controllerRight : null);
                 setPreviousControllerSDK = true;
             }

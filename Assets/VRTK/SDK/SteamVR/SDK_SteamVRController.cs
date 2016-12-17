@@ -29,26 +29,26 @@ namespace VRTK
         /// <param name="hand">The controller hand to look up.</param>
         /// <param name="fullPath">Whether to get the initial path or the full path to the element.</param>
         /// <returns>A string containing the path to the game object that the controller element resides in.</returns>
-        public override string GetControllerElementPath(VRTK_ControllerElements element, VRTK_DeviceFinder.ControllerHand hand, bool fullPath = false)
+        public override string GetControllerElementPath(ControllerElements element, ControllerHand hand, bool fullPath = false)
         {
             var suffix = (fullPath ? "/attach" : "");
             switch (element)
             {
-                case VRTK_ControllerElements.AttachPoint:
+                case ControllerElements.AttachPoint:
                     return "tip/attach";
-                case VRTK_ControllerElements.Trigger:
+                case ControllerElements.Trigger:
                     return "trigger" + suffix;
-                case VRTK_ControllerElements.GripLeft:
+                case ControllerElements.GripLeft:
                     return "lgrip" + suffix;
-                case VRTK_ControllerElements.GripRight:
+                case ControllerElements.GripRight:
                     return "rgrip" + suffix;
-                case VRTK_ControllerElements.Touchpad:
+                case ControllerElements.Touchpad:
                     return "trackpad" + suffix;
-                case VRTK_ControllerElements.ButtonOne:
+                case ControllerElements.ButtonOne:
                     return "button" + suffix;
-                case VRTK_ControllerElements.SystemMenu:
+                case ControllerElements.SystemMenu:
                     return "sys_button" + suffix;
-                case VRTK_ControllerElements.Body:
+                case ControllerElements.Body:
                     return "body";
             }
             return null;
@@ -91,36 +91,6 @@ namespace VRTK
         }
 
         /// <summary>
-        /// The GetControllerLeftHand method returns the GameObject containing the representation of the left hand controller.
-        /// </summary>
-        /// <param name="actual">If true it will return the actual controller, if false it will return the script alias controller GameObject.</param>
-        /// <returns>The GameObject containing the left hand controller.</returns>
-        public override GameObject GetControllerLeftHand(bool actual = false)
-        {
-            var controller = base.GetControllerLeftHand(actual);
-            if (!controller && actual)
-            {
-                controller = GameObject.Find("[CameraRig]/Controller (left)");
-            }
-            return controller;
-        }
-
-        /// <summary>
-        /// The GetControllerRightHand method returns the GameObject containing the representation of the right hand controller.
-        /// </summary>
-        /// <param name="actual">If true it will return the actual controller, if false it will return the script alias controller GameObject.</param>
-        /// <returns>The GameObject containing the right hand controller.</returns>
-        public override GameObject GetControllerRightHand(bool actual = false)
-        {
-            var controller = base.GetControllerRightHand(actual);
-            if (!controller && actual)
-            {
-                controller = GameObject.Find("[CameraRig]/Controller (right)");
-            }
-            return controller;
-        }
-
-        /// <summary>
         /// The GetControllerOrigin method returns the origin of the given controller.
         /// </summary>
         /// <param name="controller">The controller to retrieve the origin from.</param>
@@ -137,21 +107,103 @@ namespace VRTK
         }
 
         /// <summary>
+        /// The GetControllerLeftHand method returns the GameObject containing the representation of the left hand controller.
+        /// </summary>
+        /// <param name="actual">If true it will return the actual controller, if false it will return the script alias controller GameObject.</param>
+        /// <returns>The GameObject containing the left hand controller.</returns>
+        public override GameObject GetControllerLeftHand(bool actual = false)
+        {
+            var controller = GetSDKManagerControllerLeftHand(actual);
+            if (!controller && actual)
+            {
+                controller = GameObject.Find("[CameraRig]/Controller (left)");
+            }
+            return controller;
+        }
+
+        /// <summary>
+        /// The GetControllerRightHand method returns the GameObject containing the representation of the right hand controller.
+        /// </summary>
+        /// <param name="actual">If true it will return the actual controller, if false it will return the script alias controller GameObject.</param>
+        /// <returns>The GameObject containing the right hand controller.</returns>
+        public override GameObject GetControllerRightHand(bool actual = false)
+        {
+            var controller = GetSDKManagerControllerRightHand(actual);
+            if (!controller && actual)
+            {
+                controller = GameObject.Find("[CameraRig]/Controller (right)");
+            }
+            return controller;
+        }
+
+        /// <summary>
+        /// The IsControllerLeftHand/1 method is used to check if the given controller is the the left hand controller.
+        /// </summary>
+        /// <param name="controller">The GameObject to check.</param>
+        /// <returns>Returns true if the given controller is the left hand controller.</returns>
+        public override bool IsControllerLeftHand(GameObject controller)
+        {
+            return CheckActualOrScriptAliasControllerIsLeftHand(controller);
+        }
+
+        /// <summary>
+        /// The IsControllerRightHand/1 method is used to check if the given controller is the the right hand controller.
+        /// </summary>
+        /// <param name="controller">The GameObject to check.</param>
+        /// <returns>Returns true if the given controller is the right hand controller.</returns>
+        public override bool IsControllerRightHand(GameObject controller)
+        {
+            return CheckActualOrScriptAliasControllerIsRightHand(controller);
+        }
+
+        /// <summary>
+        /// The IsControllerLeftHand/2 method is used to check if the given controller is the the left hand controller.
+        /// </summary>
+        /// <param name="controller">The GameObject to check.</param>
+        /// <param name="actual">If true it will check the actual controller, if false it will check the script alias controller.</param>
+        /// <returns>Returns true if the given controller is the left hand controller.</returns>
+        public override bool IsControllerLeftHand(GameObject controller, bool actual)
+        {
+            return CheckControllerLeftHand(controller, actual);
+        }
+
+        /// <summary>
+        /// The IsControllerRightHand/2 method is used to check if the given controller is the the right hand controller.
+        /// </summary>
+        /// <param name="controller">The GameObject to check.</param>
+        /// <param name="actual">If true it will check the actual controller, if false it will check the script alias controller.</param>
+        /// <returns>Returns true if the given controller is the right hand controller.</returns>
+        public override bool IsControllerRightHand(GameObject controller, bool actual)
+        {
+            return CheckControllerRightHand(controller, actual);
+        }
+
+        /// <summary>
+        /// The GetControllerModel method returns the model alias for the given GameObject.
+        /// </summary>
+        /// <param name="controller">The GameObject to get the model alias for.</param>
+        /// <returns>The GameObject that has the model alias within it.</returns>
+        public override GameObject GetControllerModel(GameObject controller)
+        {
+            return GetControllerModelFromController(controller);
+        }
+
+        /// <summary>
         /// The GetControllerModel method returns the model alias for the given controller hand.
         /// </summary>
         /// <param name="hand">The hand enum of which controller model to retrieve.</param>
         /// <returns>The GameObject that has the model alias within it.</returns>
-        public override GameObject GetControllerModel(VRTK_DeviceFinder.ControllerHand hand)
+        public override GameObject GetControllerModel(ControllerHand hand)
         {
-            var model = base.GetControllerModel(hand);
+            var model = GetSDKManagerControllerModelForHand(hand);
             if (!model)
             {
                 switch (hand)
                 {
-                    case VRTK_DeviceFinder.ControllerHand.Left:
+                    case ControllerHand.Left:
                         model = GameObject.Find("[CameraRig]/Controller (left)/Model");
                         break;
-                    case VRTK_DeviceFinder.ControllerHand.Right:
+                    case ControllerHand.Right:
                         model = GameObject.Find("[CameraRig]/Controller (right)/Model");
                         break;
                 }

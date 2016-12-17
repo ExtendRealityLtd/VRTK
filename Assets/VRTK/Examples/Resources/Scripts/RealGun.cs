@@ -60,14 +60,14 @@
             ToggleSafetySwitch(true);
 
             //Limit hands grabbing when picked up
-            if (VRTK_DeviceFinder.GetControllerHand(currentGrabbingObject) == VRTK_DeviceFinder.ControllerHand.Left)
+            if (VRTK_DeviceFinder.GetControllerHand(currentGrabbingObject) == SDK_BaseController.ControllerHand.Left)
             {
                 allowedTouchControllers = AllowedController.Left_Only;
                 allowedUseControllers = AllowedController.Left_Only;
                 slide.allowedGrabControllers = AllowedController.Right_Only;
                 safetySwitch.allowedGrabControllers = AllowedController.Right_Only;
             }
-            else if (VRTK_DeviceFinder.GetControllerHand(currentGrabbingObject) == VRTK_DeviceFinder.ControllerHand.Right)
+            else if (VRTK_DeviceFinder.GetControllerHand(currentGrabbingObject) == SDK_BaseController.ControllerHand.Right)
             {
                 allowedTouchControllers = AllowedController.Right_Only;
                 allowedUseControllers = AllowedController.Right_Only;

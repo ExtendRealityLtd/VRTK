@@ -9,8 +9,17 @@ namespace VRTK
     /// <remarks>
     /// This is an abstract class to implement the interface required by all implemented SDKs.
     /// </remarks>
-    public abstract class SDK_BaseController : ScriptableObject, SDK_InterfaceController
+    public abstract class SDK_BaseController : ScriptableObject
     {
+        /// <summary>
+        /// Concepts of controller button press
+        /// </summary>
+        /// <param name="Press">The button is currently being pressed.</param>
+        /// <param name="PressDown">The button has just been pressed down.</param>
+        /// <param name="PressUp">The button has just been released.</param>
+        /// <param name="Touch">The button is currently being touched.</param>
+        /// <param name="TouchDown">The button has just been touched.</param>
+        /// <param name="TouchUp">The button is no longer being touched.</param>
         public enum ButtonPressTypes
         {
             Press,
@@ -19,6 +28,42 @@ namespace VRTK
             Touch,
             TouchDown,
             TouchUp
+        }
+
+        /// <summary>
+        /// The elements of a generic controller
+        /// </summary>
+        /// <param name="AttachPoint">The default point on the controller to attach grabbed objects to.</param>
+        /// <param name="Trigger">The trigger button.</param>
+        /// <param name="GripLeft">The left part of the grip button collection.</param>
+        /// <param name="GripRight">The right part of the grip button collection.</param>
+        /// <param name="Touchpad">The touch pad/stick.</param>
+        /// <param name="ButtonOne">The first generic button.</param>
+        /// <param name="SystemMenu">The system menu button.</param>
+        /// <param name="Body">The encompassing mesh of the controller body.</param>
+        public enum ControllerElements
+        {
+            AttachPoint,
+            Trigger,
+            GripLeft,
+            GripRight,
+            Touchpad,
+            ButtonOne,
+            SystemMenu,
+            Body
+        }
+
+        /// <summary>
+        /// Controller hand reference.
+        /// </summary>
+        /// <param name="None">No hand is assigned.</param>
+        /// <param name="Left">The left hand is assigned.</param>
+        /// <param name="Right">The right hand is assigned.</param>
+        public enum ControllerHand
+        {
+            None,
+            Left,
+            Right
         }
 
         /// <summary>
@@ -34,7 +79,7 @@ namespace VRTK
         /// <param name="hand">The controller hand to look up.</param>
         /// <param name="fullPath">Whether to get the initial path or the full path to the element.</param>
         /// <returns>A string containing the path to the game object that the controller element resides in.</returns>
-        public abstract string GetControllerElementPath(VRTK_ControllerElements element, VRTK_DeviceFinder.ControllerHand hand, bool fullPath = false);
+        public abstract string GetControllerElementPath(ControllerElements element, ControllerHand hand, bool fullPath = false);
 
         /// <summary>
         /// The GetControllerIndex method returns the index of the given controller.
@@ -63,50 +108,28 @@ namespace VRTK
         /// </summary>
         /// <param name="actual">If true it will return the actual controller, if false it will return the script alias controller GameObject.</param>
         /// <returns>The GameObject containing the left hand controller.</returns>
-        public virtual GameObject GetControllerLeftHand(bool actual = false)
-        {
-            var sdkManager = VRTK_SDKManager.instance;
-            if (sdkManager != null)
-            {
-                return (actual ? sdkManager.actualLeftController : sdkManager.scriptAliasLeftController);
-            }
-            return null;
-        }
+        public abstract GameObject GetControllerLeftHand(bool actual = false);
 
         /// <summary>
         /// The GetControllerRightHand method returns the GameObject containing the representation of the right hand controller.
         /// </summary>
         /// <param name="actual">If true it will return the actual controller, if false it will return the script alias controller GameObject.</param>
         /// <returns>The GameObject containing the right hand controller.</returns>
-        public virtual GameObject GetControllerRightHand(bool actual = false)
-        {
-            var sdkManager = VRTK_SDKManager.instance;
-            if (sdkManager != null)
-            {
-                return (actual ? sdkManager.actualRightController : sdkManager.scriptAliasRightController);
-            }
-            return null;
-        }
+        public abstract GameObject GetControllerRightHand(bool actual = false);
 
         /// <summary>
         /// The IsControllerLeftHand/1 method is used to check if the given controller is the the left hand controller.
         /// </summary>
         /// <param name="controller">The GameObject to check.</param>
         /// <returns>Returns true if the given controller is the left hand controller.</returns>
-        public virtual bool IsControllerLeftHand(GameObject controller)
-        {
-            return (IsControllerLeftHand(controller, true) || IsControllerLeftHand(controller, false));
-        }
+        public abstract bool IsControllerLeftHand(GameObject controller);
 
         /// <summary>
         /// The IsControllerRightHand/1 method is used to check if the given controller is the the right hand controller.
         /// </summary>
         /// <param name="controller">The GameObject to check.</param>
         /// <returns>Returns true if the given controller is the right hand controller.</returns>
-        public virtual bool IsControllerRightHand(GameObject controller)
-        {
-            return (IsControllerRightHand(controller, true) || IsControllerRightHand(controller, false));
-        }
+        public abstract bool IsControllerRightHand(GameObject controller);
 
         /// <summary>
         /// The IsControllerLeftHand/2 method is used to check if the given controller is the the left hand controller.
@@ -114,15 +137,7 @@ namespace VRTK
         /// <param name="controller">The GameObject to check.</param>
         /// <param name="actual">If true it will check the actual controller, if false it will check the script alias controller.</param>
         /// <returns>Returns true if the given controller is the left hand controller.</returns>
-        public virtual bool IsControllerLeftHand(GameObject controller, bool actual)
-        {
-            var sdkManager = VRTK_SDKManager.instance;
-            if (sdkManager != null)
-            {
-                return (actual ? controller.Equals(sdkManager.actualLeftController) : controller.Equals(sdkManager.scriptAliasLeftController));
-            }
-            return false;
-        }
+        public abstract bool IsControllerLeftHand(GameObject controller, bool actual);
 
         /// <summary>
         /// The IsControllerRightHand/2 method is used to check if the given controller is the the right hand controller.
@@ -130,25 +145,14 @@ namespace VRTK
         /// <param name="controller">The GameObject to check.</param>
         /// <param name="actual">If true it will check the actual controller, if false it will check the script alias controller.</param>
         /// <returns>Returns true if the given controller is the right hand controller.</returns>
-        public virtual bool IsControllerRightHand(GameObject controller, bool actual)
-        {
-            var sdkManager = VRTK_SDKManager.instance;
-            if (sdkManager != null)
-            {
-                return (actual ? controller.Equals(sdkManager.actualRightController) : controller.Equals(sdkManager.scriptAliasRightController));
-            }
-            return false;
-        }
+        public abstract bool IsControllerRightHand(GameObject controller, bool actual);
 
         /// <summary>
         /// The GetControllerModel method returns the model alias for the given GameObject.
         /// </summary>
         /// <param name="controller">The GameObject to get the model alias for.</param>
         /// <returns>The GameObject that has the model alias within it.</returns>
-        public virtual GameObject GetControllerModel(GameObject controller)
-        {
-            return GetControllerModel(VRTK_DeviceFinder.GetControllerHand(controller));
-        }
+        public abstract GameObject GetControllerModel(GameObject controller);
 
 
         /// <summary>
@@ -156,21 +160,7 @@ namespace VRTK
         /// </summary>
         /// <param name="hand">The hand enum of which controller model to retrieve.</param>
         /// <returns>The GameObject that has the model alias within it.</returns>
-        public virtual GameObject GetControllerModel(VRTK_DeviceFinder.ControllerHand hand)
-        {
-            var sdkManager = VRTK_SDKManager.instance;
-            if (sdkManager != null)
-            {
-                switch (hand)
-                {
-                    case VRTK_DeviceFinder.ControllerHand.Left:
-                        return sdkManager.modelAliasLeftController;
-                    case VRTK_DeviceFinder.ControllerHand.Right:
-                        return sdkManager.modelAliasRightController;
-                }
-            }
-            return null;
-        }
+        public abstract GameObject GetControllerModel(ControllerHand hand);
 
         /// <summary>
         /// The GetControllerRenderModel method gets the game object that contains the given controller's render model.
@@ -437,5 +427,76 @@ namespace VRTK
         /// <param name="index">The index of the tracked object to check for.</param>
         /// <returns>Returns true if the button has just been released.</returns>
         public abstract bool IsButtonOneTouchedUpOnIndex(uint index);
+
+        protected GameObject GetSDKManagerControllerLeftHand(bool actual = false)
+        {
+            var sdkManager = VRTK_SDKManager.instance;
+            if (sdkManager != null)
+            {
+                return (actual ? sdkManager.actualLeftController : sdkManager.scriptAliasLeftController);
+            }
+            return null;
+        }
+
+        protected GameObject GetSDKManagerControllerRightHand(bool actual = false)
+        {
+            var sdkManager = VRTK_SDKManager.instance;
+            if (sdkManager != null)
+            {
+                return (actual ? sdkManager.actualRightController : sdkManager.scriptAliasRightController);
+            }
+            return null;
+        }
+
+        protected bool CheckActualOrScriptAliasControllerIsLeftHand(GameObject controller)
+        {
+            return (IsControllerLeftHand(controller, true) || IsControllerLeftHand(controller, false));
+        }
+
+        protected bool CheckActualOrScriptAliasControllerIsRightHand(GameObject controller)
+        {
+            return (IsControllerRightHand(controller, true) || IsControllerRightHand(controller, false));
+        }
+
+        protected bool CheckControllerLeftHand(GameObject controller, bool actual)
+        {
+            var sdkManager = VRTK_SDKManager.instance;
+            if (sdkManager != null)
+            {
+                return (actual ? controller.Equals(sdkManager.actualLeftController) : controller.Equals(sdkManager.scriptAliasLeftController));
+            }
+            return false;
+        }
+
+        protected bool CheckControllerRightHand(GameObject controller, bool actual)
+        {
+            var sdkManager = VRTK_SDKManager.instance;
+            if (sdkManager != null)
+            {
+                return (actual ? controller.Equals(sdkManager.actualRightController) : controller.Equals(sdkManager.scriptAliasRightController));
+            }
+            return false;
+        }
+
+        protected GameObject GetControllerModelFromController(GameObject controller)
+        {
+            return GetControllerModel(VRTK_DeviceFinder.GetControllerHand(controller));
+        }
+
+        protected GameObject GetSDKManagerControllerModelForHand(ControllerHand hand)
+        {
+            var sdkManager = VRTK_SDKManager.instance;
+            if (sdkManager != null)
+            {
+                switch (hand)
+                {
+                    case ControllerHand.Left:
+                        return sdkManager.modelAliasLeftController;
+                    case ControllerHand.Right:
+                        return sdkManager.modelAliasRightController;
+                }
+            }
+            return null;
+        }
     }
 }

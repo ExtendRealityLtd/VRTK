@@ -14,7 +14,7 @@
             return GetControllerSDK().GetControllerDefaultColliderPath();
         }
 
-        public static string GetControllerElementPath(VRTK_ControllerElements element, VRTK_DeviceFinder.ControllerHand hand = VRTK_DeviceFinder.ControllerHand.Right, bool fullPath = false)
+        public static string GetControllerElementPath(SDK_BaseController.ControllerElements element, SDK_BaseController.ControllerHand hand = SDK_BaseController.ControllerHand.Right, bool fullPath = false)
         {
             return GetControllerSDK().GetControllerElementPath(element, hand, fullPath);
         }
@@ -69,7 +69,7 @@
             return GetControllerSDK().GetControllerModel(controller);
         }
 
-        public static GameObject GetControllerModel(VRTK_DeviceFinder.ControllerHand hand)
+        public static GameObject GetControllerModel(SDK_BaseController.ControllerHand hand)
         {
             return GetControllerSDK().GetControllerModel(hand);
         }
@@ -332,7 +332,7 @@
             GetSystemSDK().ForceInterleavedReprojectionOn(force);
         }
 
-        private static SDK_InterfaceSystem GetSystemSDK()
+        private static SDK_BaseSystem GetSystemSDK()
         {
             if (systemSDK == null)
             {
@@ -353,7 +353,7 @@
             return systemSDK;
         }
 
-        private static SDK_InterfaceHeadset GetHeadsetSDK()
+        private static SDK_BaseHeadset GetHeadsetSDK()
         {
             if (headsetSDK == null)
             {
@@ -374,7 +374,7 @@
             return headsetSDK;
         }
 
-        private static SDK_InterfaceController GetControllerSDK()
+        private static SDK_BaseController GetControllerSDK()
         {
             if (controllerSDK == null)
             {
@@ -395,7 +395,7 @@
             return controllerSDK;
         }
 
-        private static SDK_InterfaceBoundaries GetBoundariesSDK()
+        private static SDK_BaseBoundaries GetBoundariesSDK()
         {
             if (boundariesSDK == null)
             {

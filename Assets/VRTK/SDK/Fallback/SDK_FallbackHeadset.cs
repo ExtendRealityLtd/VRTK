@@ -17,7 +17,7 @@ namespace VRTK
         /// <returns>A transform of the object representing the headset in the scene.</returns>
         public override Transform GetHeadset()
         {
-            return base.GetHeadset();
+            return GetSDKManagerHeadset();
         }
 
         /// <summary>
@@ -26,7 +26,7 @@ namespace VRTK
         /// <returns>A transform of the object holding the headset camera in the scene.</returns>
         public override Transform GetHeadsetCamera()
         {
-            return base.GetHeadsetCamera();
+            return GetSDKManagerHeadset();
         }
 
         /// <summary>

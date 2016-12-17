@@ -9,7 +9,7 @@ namespace VRTK
     /// <remarks>
     /// This is an abstract class to implement the interface required by all implemented SDKs.
     /// </remarks>
-    public abstract class SDK_BaseSystem : ScriptableObject, SDK_InterfaceSystem
+    public abstract class SDK_BaseSystem : ScriptableObject
     {
         /// <summary>
         /// The IsDisplayOnDesktop method returns true if the display is extending the desktop.

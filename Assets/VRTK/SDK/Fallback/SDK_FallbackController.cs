@@ -27,7 +27,7 @@ namespace VRTK
         /// <param name="hand">The controller hand to look up.</param>
         /// <param name="fullPath">Whether to get the initial path or the full path to the element.</param>
         /// <returns>A string containing the path to the game object that the controller element resides in.</returns>
-        public override string GetControllerElementPath(VRTK_ControllerElements element, VRTK_DeviceFinder.ControllerHand hand, bool fullPath = false)
+        public override string GetControllerElementPath(ControllerElements element, ControllerHand hand, bool fullPath = false)
         {
             return "";
         }
@@ -70,7 +70,7 @@ namespace VRTK
         /// <returns>The GameObject containing the left hand controller.</returns>
         public override GameObject GetControllerLeftHand(bool actual = false)
         {
-            return base.GetControllerLeftHand(actual);
+            return GetSDKManagerControllerLeftHand(actual);
         }
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace VRTK
         /// <returns>The GameObject containing the right hand controller.</returns>
         public override GameObject GetControllerRightHand(bool actual = false)
         {
-            return base.GetControllerRightHand(actual);
+            return GetSDKManagerControllerRightHand(actual);
         }
 
         /// <summary>
@@ -90,7 +90,7 @@ namespace VRTK
         /// <returns>Returns true if the given controller is the left hand controller.</returns>
         public override bool IsControllerLeftHand(GameObject controller)
         {
-            return base.IsControllerLeftHand(controller);
+            return CheckActualOrScriptAliasControllerIsLeftHand(controller);
         }
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace VRTK
         /// <returns>Returns true if the given controller is the right hand controller.</returns>
         public override bool IsControllerRightHand(GameObject controller)
         {
-            return base.IsControllerRightHand(controller);
+            return CheckActualOrScriptAliasControllerIsRightHand(controller);
         }
 
         /// <summary>
@@ -111,7 +111,7 @@ namespace VRTK
         /// <returns>Returns true if the given controller is the left hand controller.</returns>
         public override bool IsControllerLeftHand(GameObject controller, bool actual)
         {
-            return base.IsControllerLeftHand(controller, actual);
+            return CheckControllerLeftHand(controller, actual);
         }
 
         /// <summary>
@@ -122,7 +122,7 @@ namespace VRTK
         /// <returns>Returns true if the given controller is the right hand controller.</returns>
         public override bool IsControllerRightHand(GameObject controller, bool actual)
         {
-            return base.IsControllerRightHand(controller, actual);
+            return CheckControllerRightHand(controller, actual);
         }
 
         /// <summary>
@@ -132,18 +132,17 @@ namespace VRTK
         /// <returns>The GameObject that has the model alias within it.</returns>
         public override GameObject GetControllerModel(GameObject controller)
         {
-            return base.GetControllerModel(controller);
+            return GetControllerModelFromController(controller);
         }
-
 
         /// <summary>
         /// The GetControllerModel method returns the model alias for the given controller hand.
         /// </summary>
         /// <param name="hand">The hand enum of which controller model to retrieve.</param>
         /// <returns>The GameObject that has the model alias within it.</returns>
-        public override GameObject GetControllerModel(VRTK_DeviceFinder.ControllerHand hand)
+        public override GameObject GetControllerModel(ControllerHand hand)
         {
-            return base.GetControllerModel(hand);
+            return GetSDKManagerControllerModelForHand(hand);
         }
 
         /// <summary>

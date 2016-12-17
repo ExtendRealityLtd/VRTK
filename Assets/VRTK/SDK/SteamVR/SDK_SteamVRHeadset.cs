@@ -15,7 +15,7 @@ namespace VRTK
         /// <returns>A transform of the object representing the headset in the scene.</returns>
         public override Transform GetHeadset()
         {
-            cachedHeadset = base.GetHeadset();
+            cachedHeadset = GetSDKManagerHeadset();
             if (cachedHeadset == null)
             {
 #if (UNITY_5_4_OR_NEWER)
@@ -33,7 +33,7 @@ namespace VRTK
         /// <returns>A transform of the object holding the headset camera in the scene.</returns>
         public override Transform GetHeadsetCamera()
         {
-            cachedHeadsetCamera = base.GetHeadsetCamera();
+            cachedHeadsetCamera = GetSDKManagerHeadset();
             if (cachedHeadsetCamera == null)
             {
                 cachedHeadsetCamera = FindObjectOfType<SteamVR_Camera>().transform;

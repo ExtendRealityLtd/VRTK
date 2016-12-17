@@ -17,7 +17,7 @@ namespace VRTK
         /// <returns>A transform of the object representing the play area in the scene.</returns>
         public override Transform GetPlayArea()
         {
-            return base.GetPlayArea();
+            return GetSDKManagerPlayArea();
         }
 
         /// <summary>
