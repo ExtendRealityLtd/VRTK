@@ -43,7 +43,7 @@ namespace VRTK
         protected Transform GetSDKManagerPlayArea()
         {
             var sdkManager = VRTK_SDKManager.instance;
-            if (sdkManager != null)
+            if (sdkManager != null && sdkManager.actualBoundaries != null)
             {
                 cachedPlayArea = (sdkManager.actualBoundaries ? sdkManager.actualBoundaries.transform : null);
                 return cachedPlayArea;

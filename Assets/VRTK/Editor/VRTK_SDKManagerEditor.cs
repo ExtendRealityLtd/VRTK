@@ -109,11 +109,14 @@
             var headsetSDK = GetHeadsetSDK(sdkManager);
             var controllerSDK = GetControllerSDK(sdkManager);
 
+            var forceSaveScene = false;
+
             if (boundariesSDK && (!sdkManager.actualBoundaries || !previousBoundariesSDK || boundariesSDK.GetType() != previousBoundariesSDK.GetType()))
             {
                 var playareaTransform = boundariesSDK.GetPlayArea();
                 sdkManager.actualBoundaries = (playareaTransform ? playareaTransform.gameObject : null);
                 previousBoundariesSDK = boundariesSDK;
+                forceSaveScene = true;
             }
 
             if (headsetSDK && (!sdkManager.actualHeadset || !previousHeadsetSDK || headsetSDK.GetType() != previousHeadsetSDK.GetType()))
@@ -121,6 +124,7 @@
                 var headsetTransform = headsetSDK.GetHeadset();
                 sdkManager.actualHeadset = (headsetTransform ? headsetTransform.gameObject : null);
                 previousHeadsetSDK = headsetSDK;
+                forceSaveScene = true;
             }
 
             var setPreviousControllerSDK = false;
@@ -156,6 +160,12 @@
             if (setPreviousControllerSDK)
             {
                 previousControllerSDK = controllerSDK;
+                forceSaveScene = true;
+            }
+
+            if (forceSaveScene)
+            {
+                UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
             }
         }
 

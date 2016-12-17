@@ -79,7 +79,7 @@ namespace VRTK
         /// <returns>The GameObject containing the left hand controller.</returns>
         public override GameObject GetControllerLeftHand(bool actual = false)
         {
-            return GetSDKManagerControllerLeftHand(actual);
+            return null;
         }
 
         /// <summary>
@@ -89,7 +89,7 @@ namespace VRTK
         /// <returns>The GameObject containing the right hand controller.</returns>
         public override GameObject GetControllerRightHand(bool actual = false)
         {
-            return GetSDKManagerControllerRightHand(actual);
+            return null;
         }
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace VRTK
         /// <returns>Returns true if the given controller is the left hand controller.</returns>
         public override bool IsControllerLeftHand(GameObject controller)
         {
-            return CheckActualOrScriptAliasControllerIsLeftHand(controller);
+            return false;
         }
 
         /// <summary>
@@ -109,7 +109,7 @@ namespace VRTK
         /// <returns>Returns true if the given controller is the right hand controller.</returns>
         public override bool IsControllerRightHand(GameObject controller)
         {
-            return CheckActualOrScriptAliasControllerIsRightHand(controller);
+            return false;
         }
 
         /// <summary>
@@ -120,7 +120,7 @@ namespace VRTK
         /// <returns>Returns true if the given controller is the left hand controller.</returns>
         public override bool IsControllerLeftHand(GameObject controller, bool actual)
         {
-            return CheckControllerLeftHand(controller, actual);
+            return false;
         }
 
         /// <summary>
@@ -131,7 +131,7 @@ namespace VRTK
         /// <returns>Returns true if the given controller is the right hand controller.</returns>
         public override bool IsControllerRightHand(GameObject controller, bool actual)
         {
-            return CheckControllerRightHand(controller, actual);
+            return false;
         }
 
         /// <summary>
@@ -141,7 +141,7 @@ namespace VRTK
         /// <returns>The GameObject that has the model alias within it.</returns>
         public override GameObject GetControllerModel(GameObject controller)
         {
-            return GetControllerModelFromController(controller);
+            return null;
         }
 
         /// <summary>
@@ -151,7 +151,7 @@ namespace VRTK
         /// <returns>The GameObject that has the model alias within it.</returns>
         public override GameObject GetControllerModel(ControllerHand hand)
         {
-            return GetSDKManagerControllerModelForHand(hand);
+            return null;
         }
 
         /// <summary>
