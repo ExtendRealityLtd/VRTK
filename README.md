@@ -17,7 +17,7 @@
   * Import the [SteamVR Plugin] from the Unity Asset Store.
   * Drag the `[CameraRig]` prefab from the SteamVR plugin into the
   scene.
-  * Add the `VRTK_SDKManager` script a GameObject in the scene.
+  * Add the `VRTK_SDKManager` script to a GameObject in the scene.
    * Select `Steam VR` for each of the SDK Choices.
    * Drag the `[CameraRig]` GameObject to the `Actual Boundaries`
    parameter in the `VRTK_SDKManager`.
