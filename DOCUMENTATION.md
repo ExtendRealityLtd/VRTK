@@ -4411,6 +4411,52 @@ The SDK Manager script provides configuration of supported SDKs
  * `public enum SupportedSDKs` - The supported SDKs
  * `public static VRTK_SDKManager instance` - The singleton instance to access the SDK Manager variables from. Default: `null`
 
+### Class Methods
+
+#### GetSystemSDK/0
+
+  > `public SDK_BaseSystem GetSystemSDK()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `SDK_BaseSystem` - The currently selected System SDK
+
+The GetSystemSDK method returns the selected system SDK
+
+#### GetHeadsetSDK/0
+
+  > `public SDK_BaseHeadset GetHeadsetSDK()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `SDK_BaseHeadset` - The currently selected Headset SDK
+
+The GetHeadsetSDK method returns the selected headset SDK
+
+#### GetControllerSDK/0
+
+  > `public SDK_BaseController GetControllerSDK()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `SDK_BaseController` - The currently selected Controller SDK
+
+The GetControllerSDK method returns the selected controller SDK
+
+#### GetBoundariesSDK/0
+
+  > `public SDK_BaseBoundaries GetBoundariesSDK()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `SDK_BaseBoundaries` - The currently selected Boundaries SDK
+
+The GetBoundariesSDK method returns the selected boundaries SDK
+
 ---
 
 ## Device Finder (VRTK_DeviceFinder)

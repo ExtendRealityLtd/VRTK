@@ -59,6 +59,82 @@ namespace VRTK
         [Tooltip("A reference to the GameObject that contains any scripts that apply to the Right Hand Controller.")]
         public GameObject scriptAliasRightController;
 
+        /// <summary>
+        /// The GetSystemSDK method returns the selected system SDK
+        /// </summary>
+        /// <returns>The currently selected System SDK</returns>
+        public SDK_BaseSystem GetSystemSDK()
+        {
+            SDK_BaseSystem returnSDK = null;
+            switch (systemSDK)
+            {
+                case SupportedSDKs.SteamVR:
+                    returnSDK = ScriptableObject.CreateInstance<SDK_SteamVRSystem>();
+                    break;
+                default:
+                    returnSDK = ScriptableObject.CreateInstance<SDK_FallbackSystem>();
+                    break;
+            }
+            return returnSDK;
+        }
+
+        /// <summary>
+        /// The GetHeadsetSDK method returns the selected headset SDK
+        /// </summary>
+        /// <returns>The currently selected Headset SDK</returns>
+        public SDK_BaseHeadset GetHeadsetSDK()
+        {
+            SDK_BaseHeadset returnSDK = null;
+            switch (headsetSDK)
+            {
+                case SupportedSDKs.SteamVR:
+                    returnSDK = ScriptableObject.CreateInstance<SDK_SteamVRHeadset>();
+                    break;
+                default:
+                    returnSDK = ScriptableObject.CreateInstance<SDK_FallbackHeadset>();
+                    break;
+            }
+            return returnSDK;
+        }
+
+        /// <summary>
+        /// The GetControllerSDK method returns the selected controller SDK
+        /// </summary>
+        /// <returns>The currently selected Controller SDK</returns>
+        public SDK_BaseController GetControllerSDK()
+        {
+            SDK_BaseController returnSDK = null;
+            switch (controllerSDK)
+            {
+                case SupportedSDKs.SteamVR:
+                    returnSDK = ScriptableObject.CreateInstance<SDK_SteamVRController>();
+                    break;
+                default:
+                    returnSDK = ScriptableObject.CreateInstance<SDK_FallbackController>();
+                    break;
+            }
+            return returnSDK;
+        }
+
+        /// <summary>
+        /// The GetBoundariesSDK method returns the selected boundaries SDK
+        /// </summary>
+        /// <returns>The currently selected Boundaries SDK</returns>
+        public SDK_BaseBoundaries GetBoundariesSDK()
+        {
+            SDK_BaseBoundaries returnSDK = null;
+            switch (boundariesSDK)
+            {
+                case SupportedSDKs.SteamVR:
+                    returnSDK = ScriptableObject.CreateInstance<SDK_SteamVRBoundaries>();
+                    break;
+                default:
+                    returnSDK = ScriptableObject.CreateInstance<SDK_FallbackBoundaries>();
+                    break;
+            }
+            return returnSDK;
+        }
+
         private void Awake()
         {
             CreateInstance();

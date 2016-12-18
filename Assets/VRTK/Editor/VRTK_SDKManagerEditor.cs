@@ -58,49 +58,19 @@
             serializedObject.ApplyModifiedProperties();
         }
 
-        private SDK_BaseBoundaries GetBoundariesSDK(VRTK_SDKManager sdkManager)
-        {
-            SDK_BaseBoundaries boundariesSDK = null;
-            switch (sdkManager.boundariesSDK)
-            {
-                case VRTK_SDKManager.SupportedSDKs.SteamVR:
-                    boundariesSDK = CreateInstance<SDK_SteamVRBoundaries>();
-                    break;
-                default:
-                    boundariesSDK = CreateInstance<SDK_FallbackBoundaries>();
-                    break;
-            }
-            return boundariesSDK;
-        }
-
         private SDK_BaseHeadset GetHeadsetSDK(VRTK_SDKManager sdkManager)
         {
-            SDK_BaseHeadset headsetSDK = null;
-            switch (sdkManager.headsetSDK)
-            {
-                case VRTK_SDKManager.SupportedSDKs.SteamVR:
-                    headsetSDK = CreateInstance<SDK_SteamVRHeadset>();
-                    break;
-                default:
-                    headsetSDK = CreateInstance<SDK_FallbackHeadset>();
-                    break;
-            }
-            return headsetSDK;
+            return sdkManager.GetHeadsetSDK();
         }
 
         private SDK_BaseController GetControllerSDK(VRTK_SDKManager sdkManager)
         {
-            SDK_BaseController controllerSDK = null;
-            switch (sdkManager.controllerSDK)
-            {
-                case VRTK_SDKManager.SupportedSDKs.SteamVR:
-                    controllerSDK = CreateInstance<SDK_SteamVRController>();
-                    break;
-                default:
-                    controllerSDK = CreateInstance<SDK_FallbackController>();
-                    break;
-            }
-            return controllerSDK;
+            return sdkManager.GetControllerSDK();
+        }
+
+        private SDK_BaseBoundaries GetBoundariesSDK(VRTK_SDKManager sdkManager)
+        {
+            return sdkManager.GetBoundariesSDK();
         }
 
         private void AutoPopulate(VRTK_SDKManager sdkManager)
@@ -171,22 +141,25 @@
 
         private void CheckSDKUsage(VRTK_SDKManager.SupportedSDKs system, VRTK_SDKManager.SupportedSDKs headset, VRTK_SDKManager.SupportedSDKs controller, VRTK_SDKManager.SupportedSDKs boundaries)
         {
+            ProcessSDK(VRTK_SDKManager.SupportedSDKs.SteamVR, "VRTK_SDK_STEAMVR", "SteamVR", "SteamVR", system, headset, controller, boundaries);
+        }
+
+        private void ProcessSDK(VRTK_SDKManager.SupportedSDKs sdk, string defineSymbol, string name, string checkType, VRTK_SDKManager.SupportedSDKs system, VRTK_SDKManager.SupportedSDKs headset, VRTK_SDKManager.SupportedSDKs controller, VRTK_SDKManager.SupportedSDKs boundaries)
+        {
             var message = "SDK has been selected but is not currently installed.";
 
-            //STEAMVR START CHECKS
-            if (!CheckSDKInstalled("SteamVR " + message, "SteamVR") || (system != VRTK_SDKManager.SupportedSDKs.SteamVR && headset != VRTK_SDKManager.SupportedSDKs.SteamVR && controller != VRTK_SDKManager.SupportedSDKs.SteamVR && boundaries != VRTK_SDKManager.SupportedSDKs.SteamVR))
+            if (!CheckSDKInstalled(name + message, checkType) || (system != sdk && headset != sdk && controller != sdk && boundaries != sdk))
             {
-                RemoveScriptingDefineSymbol("VRTK_SDK_STEAMVR");
+                RemoveScriptingDefineSymbol(defineSymbol);
             }
 
-            if (system == VRTK_SDKManager.SupportedSDKs.SteamVR || headset == VRTK_SDKManager.SupportedSDKs.SteamVR || controller == VRTK_SDKManager.SupportedSDKs.SteamVR || boundaries == VRTK_SDKManager.SupportedSDKs.SteamVR)
+            if (system == sdk || headset == sdk || controller == sdk || boundaries == sdk)
             {
-                if (CheckSDKInstalled("SteamVR " + message, "SteamVR"))
+                if (CheckSDKInstalled(name + message, checkType))
                 {
-                    AddScriptingDefineSymbol("VRTK_SDK_STEAMVR");
+                    AddScriptingDefineSymbol(defineSymbol);
                 }
             }
-            //STEAMVR END CHECKS
         }
 
         private bool CheckSDKInstalled(string message, string checkType)

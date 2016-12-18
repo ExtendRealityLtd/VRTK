@@ -373,19 +373,7 @@
         {
             if (systemSDK == null)
             {
-                systemSDK = ScriptableObject.CreateInstance<SDK_FallbackSystem>();
-                if (VRTK_SDKManager.instance)
-                {
-                    switch (VRTK_SDKManager.instance.systemSDK)
-                    {
-                        case VRTK_SDKManager.SupportedSDKs.SteamVR:
-                            systemSDK = ScriptableObject.CreateInstance<SDK_SteamVRSystem>();
-                            break;
-                        default:
-                            Debug.LogError("No System SDK configured, falling back to generic System SDK.");
-                            break;
-                    }
-                }
+                systemSDK = (VRTK_SDKManager.instance ? VRTK_SDKManager.instance.GetSystemSDK() : ScriptableObject.CreateInstance<SDK_FallbackSystem>());
             }
             return systemSDK;
         }
@@ -394,19 +382,7 @@
         {
             if (headsetSDK == null)
             {
-                headsetSDK = ScriptableObject.CreateInstance<SDK_FallbackHeadset>();
-                if (VRTK_SDKManager.instance)
-                {
-                    switch (VRTK_SDKManager.instance.headsetSDK)
-                    {
-                        case VRTK_SDKManager.SupportedSDKs.SteamVR:
-                            headsetSDK = ScriptableObject.CreateInstance<SDK_SteamVRHeadset>();
-                            break;
-                        default:
-                            Debug.LogError("No Headset SDK configured, falling back to generic Headset SDK.");
-                            break;
-                    }
-                }
+                headsetSDK = (VRTK_SDKManager.instance ? VRTK_SDKManager.instance.GetHeadsetSDK() : ScriptableObject.CreateInstance<SDK_FallbackHeadset>());
             }
             return headsetSDK;
         }
@@ -415,19 +391,7 @@
         {
             if (controllerSDK == null)
             {
-                controllerSDK = ScriptableObject.CreateInstance<SDK_FallbackController>();
-                if (VRTK_SDKManager.instance)
-                {
-                    switch (VRTK_SDKManager.instance.controllerSDK)
-                    {
-                        case VRTK_SDKManager.SupportedSDKs.SteamVR:
-                            controllerSDK = ScriptableObject.CreateInstance<SDK_SteamVRController>();
-                            break;
-                        default:
-                            Debug.LogError("No Controller SDK configured, falling back to generic Controller SDK.");
-                            break;
-                    }
-                }
+                controllerSDK = (VRTK_SDKManager.instance ? VRTK_SDKManager.instance.GetControllerSDK() : ScriptableObject.CreateInstance<SDK_FallbackController>());
             }
             return controllerSDK;
         }
@@ -436,19 +400,7 @@
         {
             if (boundariesSDK == null)
             {
-                boundariesSDK = ScriptableObject.CreateInstance<SDK_FallbackBoundaries>();
-                if (VRTK_SDKManager.instance)
-                {
-                    switch (VRTK_SDKManager.instance.boundariesSDK)
-                    {
-                        case VRTK_SDKManager.SupportedSDKs.SteamVR:
-                            boundariesSDK = ScriptableObject.CreateInstance<SDK_SteamVRBoundaries>();
-                            break;
-                        default:
-                            Debug.LogError("No Boundaries SDK configured, falling back to generic Boundaries SDK.");
-                            break;
-                    }
-                }
+                boundariesSDK = (VRTK_SDKManager.instance ? VRTK_SDKManager.instance.GetBoundariesSDK() : ScriptableObject.CreateInstance<SDK_FallbackBoundaries>());
             }
             return boundariesSDK;
         }
