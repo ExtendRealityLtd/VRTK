@@ -1,13 +1,13 @@
-﻿// SteamVR Headset|SDK_SteamVR|002
+﻿// OculusVR Headset|SDK_OculusVR|002
 namespace VRTK
 {
-#if VRTK_SDK_STEAMVR
+#if VRTK_SDK_OCULUSVR
     using UnityEngine;
 
     /// <summary>
-    /// The SteamVR Headset SDK script provides a bridge to the SteamVR SDK.
+    /// The OculusVR Headset SDK script provides a bridge to the OculusVR SDK.
     /// </summary>
-    public class SDK_SteamVRHeadset : SDK_BaseHeadset
+    public class SDK_OculusVRHeadset : SDK_BaseHeadset
     {
         /// <summary>
         /// The GetHeadset method returns the Transform of the object that is used to represent the headset in the scene.
@@ -18,14 +18,10 @@ namespace VRTK
             cachedHeadset = GetSDKManagerHeadset();
             if (cachedHeadset == null)
             {
-#if (UNITY_5_4_OR_NEWER)
-                var foundCamera = FindObjectOfType<SteamVR_Camera>();
-#else
-                var foundCamera = FindObjectOfType<SteamVR_GameView>();
-#endif
-                if (foundCamera)
+                var ovrManager = FindObjectOfType<OVRManager>();
+                if (ovrManager)
                 {
-                    cachedHeadset = foundCamera.transform;
+                    cachedHeadset = ovrManager.transform.FindChild("TrackingSpace/CenterEyeAnchor");
                 }
             }
             return cachedHeadset;
@@ -40,11 +36,7 @@ namespace VRTK
             cachedHeadsetCamera = GetSDKManagerHeadset();
             if (cachedHeadsetCamera == null)
             {
-                var foundCamera = FindObjectOfType<SteamVR_Camera>();
-                if (foundCamera)
-                {
-                    cachedHeadsetCamera = foundCamera.transform;
-                }
+                cachedHeadsetCamera = GetHeadset();
             }
             return cachedHeadsetCamera;
         }
@@ -57,7 +49,7 @@ namespace VRTK
         /// <param name="fadeOverlay">Determines whether to use an overlay on the fade.</param>
         public override void HeadsetFade(Color color, float duration, bool fadeOverlay = false)
         {
-            SteamVR_Fade.Start(color, duration, fadeOverlay);
+            VRTK_ScreenFade.Start(color, duration);
         }
 
         /// <summary>
@@ -67,7 +59,7 @@ namespace VRTK
         /// <returns>Returns true if the headset has fade functionality on it.</returns>
         public override bool HasHeadsetFade(Transform obj)
         {
-            if (obj.GetComponentInChildren<SteamVR_Fade>())
+            if (obj.GetComponentInChildren<VRTK_ScreenFade>())
             {
                 return true;
             }
@@ -80,14 +72,14 @@ namespace VRTK
         /// <param name="camera">The Transform to with the camera on to add the fade functionality to.</param>
         public override void AddHeadsetFade(Transform camera)
         {
-            if (camera && !camera.GetComponent<SteamVR_Fade>())
+            if (camera && !camera.GetComponent<VRTK_ScreenFade>())
             {
-                camera.gameObject.AddComponent<SteamVR_Fade>();
+                camera.gameObject.AddComponent<VRTK_ScreenFade>();
             }
         }
     }
 #else
-    public class SDK_SteamVRHeadset : SDK_FallbackHeadset
+    public class SDK_OculusVRHeadset : SDK_FallbackHeadset
     {
     }
 #endif

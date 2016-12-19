@@ -2,6 +2,7 @@
 namespace VRTK
 {
     using UnityEngine;
+    using System.Collections.Generic;
 
     /// <summary>
     /// The Base Controller SDK script provides a bridge to SDK methods that deal with the input devices.
@@ -11,6 +12,15 @@ namespace VRTK
     /// </remarks>
     public class SDK_FallbackController : SDK_BaseController
     {
+        /// <summary>
+        /// The ProcessUpdate method enables an SDK to run logic for every Unity Update
+        /// </summary>
+        /// <param name="index">The index of the controller.</param>
+        /// <param name="options">A dictionary of generic options that can be used to within the update.</param>
+        public override void ProcessUpdate(uint index, Dictionary<string, object> options)
+        {
+        }
+
         /// <summary>
         /// The GetControllerDefaultColliderPath returns the path to the prefab that contains the collider objects for the default controller of this SDK.
         /// </summary>
@@ -177,9 +187,18 @@ namespace VRTK
         /// The HapticPulseOnIndex method is used to initiate a simple haptic pulse on the tracked object of the given index.
         /// </summary>
         /// <param name="index">The index of the tracked object to initiate the haptic pulse on.</param>
-        /// <param name="durationMicroSec">The amount of microseconds to run the haptic pulse for.</param>
-        public override void HapticPulseOnIndex(uint index, ushort durationMicroSec = 500)
+        /// <param name="strength">The intensity of the rumble of the controller motor. `0` to `1`.</param>
+        public override void HapticPulseOnIndex(uint index, float strength = 0.5f)
         {
+        }
+
+        /// <summary>
+        /// The GetHapticModifiers method is used to return modifiers for the duration and interval if the SDK handles it slightly differently.
+        /// </summary>
+        /// <returns>An SDK_ControllerHapticModifiers object with a given `durationModifier` and an `intervalModifier`.</returns>
+        public override SDK_ControllerHapticModifiers GetHapticModifiers()
+        {
+            return new SDK_ControllerHapticModifiers();
         }
 
         /// <summary>

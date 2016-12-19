@@ -23,6 +23,7 @@
                 transform.SetParent(trackedController.transform);
                 transform.localPosition = Vector3.zero;
                 transform.localScale = transformLocalScale;
+                transform.localRotation = Quaternion.identity;
             }
         }
     }

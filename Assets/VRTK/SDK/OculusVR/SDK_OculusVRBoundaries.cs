@@ -1,13 +1,13 @@
-﻿// SteamVR Boundaries|SDK_SteamVR|004
+﻿// OculusVR Boundaries|SDK_OculusVR|004
 namespace VRTK
 {
-#if VRTK_SDK_STEAMVR
+#if VRTK_SDK_OCULUSVR
     using UnityEngine;
 
     /// <summary>
-    /// The SteamVR Boundaries SDK script provides a bridge to the SteamVR SDK play area.
+    /// The OculusVR Boundaries SDK script provides a bridge to the OculusVR SDK play area.
     /// </summary>
-    public class SDK_SteamVRBoundaries : SDK_BaseBoundaries
+    public class SDK_OculusVRBoundaries : SDK_BaseBoundaries
     {
         /// <summary>
         /// The GetPlayArea method returns the Transform of the object that is used to represent the play area in the scene.
@@ -18,12 +18,13 @@ namespace VRTK
             cachedPlayArea = GetSDKManagerPlayArea();
             if (cachedPlayArea == null)
             {
-                var steamVRPlayArea = FindObjectOfType<SteamVR_PlayArea>();
-                if (steamVRPlayArea)
+                var ovrManager = FindObjectOfType<OVRManager>();
+                if (ovrManager)
                 {
-                    cachedPlayArea = steamVRPlayArea.transform;
+                    cachedPlayArea = ovrManager.transform;
                 }
             }
+
             return cachedPlayArea;
         }
 
@@ -34,12 +35,27 @@ namespace VRTK
         /// <returns>A Vector3 array of the points in the scene that represent the play area boundaries.</returns>
         public override Vector3[] GetPlayAreaVertices(GameObject playArea)
         {
-            var area = playArea.GetComponent<SteamVR_PlayArea>();
-            if (area)
+            var area = new OVRBoundary();
+            if (area.GetConfigured())
             {
-                return area.vertices;
+                var outerBoundary = area.GetDimensions(OVRBoundary.BoundaryType.OuterBoundary);
+                var thickness = 0.1f;
+
+                var vertices = new Vector3[8];
+
+                vertices[0] = new Vector3(outerBoundary.x - thickness, 0f, outerBoundary.z - thickness);
+                vertices[1] = new Vector3(0f + thickness, 0f, outerBoundary.z - thickness);
+                vertices[2] = new Vector3(0f + thickness, 0f, 0f + thickness);
+                vertices[3] = new Vector3(outerBoundary.x - thickness, 0f, 0f + thickness);
+
+                vertices[4] = new Vector3(outerBoundary.x, 0f, outerBoundary.z);
+                vertices[5] = new Vector3(0f, 0f, outerBoundary.z);
+                vertices[6] = new Vector3(0f, 0f, 0f);
+                vertices[7] = new Vector3(outerBoundary.x, 0f, 0f);
+
+                return vertices;
             }
-            return null;
+            return new Vector3[0];
         }
 
         /// <summary>
@@ -49,12 +65,7 @@ namespace VRTK
         /// <returns>The thickness of the drawn border.</returns>
         public override float GetPlayAreaBorderThickness(GameObject playArea)
         {
-            var area = playArea.GetComponent<SteamVR_PlayArea>();
-            if (area)
-            {
-                return area.borderThickness;
-            }
-            return 0f;
+            return 0.1f;
         }
 
         /// <summary>
@@ -64,12 +75,11 @@ namespace VRTK
         /// <returns>Returns true if the play area size has been auto calibrated and set by external sensors.</returns>
         public override bool IsPlayAreaSizeCalibrated(GameObject playArea)
         {
-            var area = playArea.GetComponent<SteamVR_PlayArea>();
-            return (area.size == SteamVR_PlayArea.Size.Calibrated);
+            return true;
         }
     }
 #else
-    public class SDK_SteamVRBoundaries : SDK_FallbackBoundaries
+    public class SDK_OculusVRBoundaries : SDK_FallbackBoundaries
     {
     }
 #endif

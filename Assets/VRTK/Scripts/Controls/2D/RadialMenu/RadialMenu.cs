@@ -8,7 +8,7 @@ namespace VRTK
     using UnityEngine.UI;
     using UnityEngine.EventSystems;
 
-    public delegate void HapticPulseEventHandler(ushort strength);
+    public delegate void HapticPulseEventHandler(float strength);
 
     /// <summary>
     /// This adds a UI element into the world space that can be dropped into a Controller object and used to create and use Radial Menus from the touchpad.
@@ -50,8 +50,8 @@ namespace VRTK
         [Tooltip("Whether the button action should happen when the button is released, as opposed to happening immediately when the button is pressed.")]
         public bool executeOnUnclick;
         [Tooltip("The base strength of the haptic pulses when the selected button is changed, or a button is pressed. Set to zero to disable.")]
-        [Range(0, 1599)]
-        public ushort baseHapticStrength;
+        [Range(0, 1)]
+        public float baseHapticStrength;
 
         public event HapticPulseEventHandler FireHapticPulse;
 
@@ -109,7 +109,7 @@ namespace VRTK
                 if (executeOnUnclick && currentPress != -1)
                 {
                     ExecuteEvents.Execute(menuButtons[buttonID], pointer, ExecuteEvents.pointerDownHandler);
-                    AttempHapticPulse((ushort)(baseHapticStrength * 1.666f));
+                    AttempHapticPulse(baseHapticStrength * 1.666f);
                 }
             }
             if (evt == ButtonEvent.click) //Click button if click, and keep track of current press (executes button action)
@@ -119,7 +119,7 @@ namespace VRTK
                 if (!executeOnUnclick)
                 {
                     buttons[buttonID].OnClick.Invoke();
-                    AttempHapticPulse((ushort)(baseHapticStrength * 2.5f));
+                    AttempHapticPulse(baseHapticStrength * 2.5f);
                 }
             }
             else if (evt == ButtonEvent.unclick) //Clear press id to stop invoking OnHold method (hide menu)
@@ -129,7 +129,7 @@ namespace VRTK
 
                 if (executeOnUnclick)
                 {
-                    AttempHapticPulse((ushort)(baseHapticStrength * 2.5f));
+                    AttempHapticPulse(baseHapticStrength * 2.5f);
                     buttons[buttonID].OnClick.Invoke();
                 }
             }
@@ -237,7 +237,7 @@ namespace VRTK
             StopCoroutine("TweenMenuScale");
         }
 
-        private void AttempHapticPulse(ushort strength)
+        private void AttempHapticPulse(float strength)
         {
             if (strength > 0 && FireHapticPulse != null)
             {

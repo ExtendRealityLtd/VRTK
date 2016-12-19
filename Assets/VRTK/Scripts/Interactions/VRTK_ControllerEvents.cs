@@ -1186,6 +1186,8 @@ namespace VRTK
                 return;
             }
 
+            VRTK_SDK_Bridge.ControllerProcessUpdate(controllerIndex);
+
             Vector2 currentTriggerAxis = VRTK_SDK_Bridge.GetTriggerAxisOnIndex(controllerIndex);
             Vector2 currentGripAxis = VRTK_SDK_Bridge.GetGripAxisOnIndex(controllerIndex);
             Vector2 currentTouchpadAxis = VRTK_SDK_Bridge.GetTouchpadAxisOnIndex(controllerIndex);

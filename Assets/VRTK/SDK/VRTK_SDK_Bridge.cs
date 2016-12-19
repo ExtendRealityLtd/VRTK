@@ -1,6 +1,7 @@
 ﻿namespace VRTK
 {
     using UnityEngine;
+    using System.Collections.Generic;
 
     public class VRTK_SDK_Bridge
     {
@@ -8,6 +9,11 @@
         private static SDK_BaseHeadset headsetSDK = null;
         private static SDK_BaseController controllerSDK = null;
         private static SDK_BaseBoundaries boundariesSDK = null;
+
+        public static void ControllerProcessUpdate(uint index, Dictionary<string, object> options = null)
+        {
+            GetControllerSDK().ProcessUpdate(index, options);
+        }
 
         public static string GetControllerDefaultColliderPath()
         {
@@ -89,9 +95,14 @@
             GetControllerSDK().SetControllerRenderModelWheel(renderModel, state);
         }
 
-        public static void HapticPulseOnIndex(uint index, ushort durationMicroSec = 500)
+        public static void HapticPulseOnIndex(uint index, float strength = 0.5f)
         {
-            GetControllerSDK().HapticPulseOnIndex(index, durationMicroSec);
+            GetControllerSDK().HapticPulseOnIndex(index, strength);
+        }
+
+        public static SDK_ControllerHapticModifiers GetHapticModifiers()
+        {
+            return GetControllerSDK().GetHapticModifiers();
         }
 
         public static Vector3 GetVelocityOnIndex(uint index)

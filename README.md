@@ -9,30 +9,46 @@
 
   * Compatible SDKs
    * [SteamVR Plugin]
+   * [Oculus Utilities]
 
-## Quick Start for SteamVR
+## Quick Start
 
   * Clone this repository `git clone https://github.com/thestonefox/VRTK.git`.
   * Open `VRTK` within Unity3d.
+  * Add the `VRTK_SDKManager` script to a GameObject in the scene.
+
+### SteamVR
+
   * Import the [SteamVR Plugin] from the Unity Asset Store.
   * Drag the `[CameraRig]` prefab from the SteamVR plugin into the
   scene.
-  * Add the `VRTK_SDKManager` script a GameObject in the scene.
+  * Check that `Virtual Reality Supported` is ticked in the
+  `Edit -> Project Settings -> Player` menu.
+  * Ensure that `OpenVR` is added in the `Virtual Reality SDKs` list
+  in the `Edit -> Project Settings -> Player` menu.
+  * Select the GameObject with the `VRTK_SDKManager` script attached
+  to it.
    * Select `Steam VR` for each of the SDK Choices.
-   * Drag the `[CameraRig]` GameObject to the `Actual Boundaries`
-   parameter in the `VRTK_SDKManager`.
-   * Drag the `[CameraRig] -> Camera (head) -> Camera (eye)` GameObject
-   to the `Actual Headset` parameter in the `VRTK_SDKManager`.
-   * Drag the `[CameraRig] -> Controller (left)` GameObject to the
-   `Actual Left Controller` parameter in the `VRTK_SDKManager`.
-   * Drag the `[CameraRig] -> Controller (right)` GameObject to the
-   `Actual Right Controller` parameter in the `VRTK_SDKManager`.
-   * Drag the `[CameraRig] -> Controller (left) -> Model` GameObject to the
-   `Model Alias Left Controller` parameter in the `VRTK_SDKManager`.
-   * Drag the `[CameraRig] -> Controller (right) -> MOdel` GameObject to the
-   `Model Alias Right Controller` parameter in the `VRTK_SDKManager`.
+   * Click the `Auto Populate Linked Objects` button to find the
+   relevant Linked Objects.
   * Optionally, browse the `Examples` scenes for example usage of the
   scripts.
+
+### Oculus Utilities
+
+  * Download the [Oculus Utilities] from the Oculus developer website.
+  * Import the `OculusUtilities.unitypackage` into the project.
+  * Drag the `OVRCameraRig` prefab from the Oculus package into the
+  scene.
+  * Check that `Virtual Reality Supported` is ticked in the
+  `Edit -> Project Settings -> Player` menu.
+  * Ensure that `Oculus` is added in the `Virtual Reality SDKs` list
+  in the `Edit -> Project Settings -> Player` menu.
+  * Select the GameObject with the `VRTK_SDKManager` script attached
+  to it.
+   * Select `Oculus VR` for each of the SDK Choices.
+   * Click the `Auto Populate Linked Objects` button to find the
+   relevant Linked Objects.
 
 ## Summary
 
@@ -139,6 +155,7 @@ Code released under the [MIT License].
 
 [SteamVR Plugin]: https://www.assetstore.unity3d.com/en/#!/content/32647
 [SteamVR Plugin for Unity3d Github Repo]: https://github.com/ValveSoftware/openvr/tree/master/unity_package/Assets/SteamVR
+[Oculus Utilities]: https://developer3.oculus.com/downloads/game-engines/1.10.0/Oculus_Utilities_for_Unity_5/
 [Catlike Coding]: http://catlikecoding.com/unity/tutorials/curves-and-splines/
 [MIT License]: https://github.com/thestonefox/SteamVR_Unity_Toolkit/blob/master/LICENSE
 [Contribution Document]: https://github.com/thestonefox/SteamVR_Unity_Toolkit/blob/master/CONTRIBUTING.md

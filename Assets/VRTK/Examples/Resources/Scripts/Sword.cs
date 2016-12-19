@@ -8,6 +8,7 @@
         private VRTK_ControllerEvents controllerEvents;
         private float impactMagnifier = 120f;
         private float collisionForce = 0f;
+        private float maxCollisionForce = 4000f;
 
         public float CollisionForce()
         {
@@ -32,7 +33,8 @@
             if (controllerActions && controllerEvents && IsGrabbed())
             {
                 collisionForce = controllerEvents.GetVelocity().magnitude * impactMagnifier;
-                controllerActions.TriggerHapticPulse((ushort)collisionForce, 0.5f, 0.01f);
+                var hapticStrength = collisionForce / maxCollisionForce;
+                controllerActions.TriggerHapticPulse(hapticStrength, 0.5f, 0.01f);
             }
             else
             {

@@ -142,31 +142,35 @@
         private void CheckSDKUsage(VRTK_SDKManager.SupportedSDKs system, VRTK_SDKManager.SupportedSDKs headset, VRTK_SDKManager.SupportedSDKs controller, VRTK_SDKManager.SupportedSDKs boundaries)
         {
             ProcessSDK(VRTK_SDKManager.SupportedSDKs.SteamVR, "VRTK_SDK_STEAMVR", "SteamVR", "SteamVR", system, headset, controller, boundaries);
+            ProcessSDK(VRTK_SDKManager.SupportedSDKs.OculusVR, "VRTK_SDK_OCULUSVR", "OculusVR", "OVRInput", system, headset, controller, boundaries);
         }
 
         private void ProcessSDK(VRTK_SDKManager.SupportedSDKs sdk, string defineSymbol, string name, string checkType, VRTK_SDKManager.SupportedSDKs system, VRTK_SDKManager.SupportedSDKs headset, VRTK_SDKManager.SupportedSDKs controller, VRTK_SDKManager.SupportedSDKs boundaries)
         {
             var message = "SDK has been selected but is not currently installed.";
 
-            if (!CheckSDKInstalled(name + message, checkType) || (system != sdk && headset != sdk && controller != sdk && boundaries != sdk))
+            if (!CheckSDKInstalled(name + message, checkType, false) || (system != sdk && headset != sdk && controller != sdk && boundaries != sdk))
             {
                 RemoveScriptingDefineSymbol(defineSymbol);
             }
 
             if (system == sdk || headset == sdk || controller == sdk || boundaries == sdk)
             {
-                if (CheckSDKInstalled(name + message, checkType))
+                if (CheckSDKInstalled(name + message, checkType, true))
                 {
                     AddScriptingDefineSymbol(defineSymbol);
                 }
             }
         }
 
-        private bool CheckSDKInstalled(string message, string checkType)
+        private bool CheckSDKInstalled(string message, string checkType, bool showMessage)
         {
             if (!TypeExists(checkType))
             {
-                EditorGUILayout.HelpBox(message, MessageType.Warning);
+                if (showMessage)
+                {
+                    EditorGUILayout.HelpBox(message, MessageType.Warning);
+                }
                 return false;
             }
             return true;

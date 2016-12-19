@@ -95,11 +95,10 @@ namespace VRTK
 
         private GameObject modelContainer;
         private bool controllerVisible = true;
-        private ushort hapticPulseStrength;
-        private ushort maxHapticVibration = 3999;
         private bool controllerHighlighted = false;
         private Dictionary<string, Transform> cachedElements;
         private Dictionary<string, object> highlighterOptions;
+        private Coroutine hapticLoop;
 
         public virtual void OnControllerModelVisible(ControllerActionsEventArgs e)
         {
@@ -339,33 +338,32 @@ namespace VRTK
         /// <summary>
         /// The TriggerHapticPulse/1 method calls a single haptic pulse call on the controller for a single tick.
         /// </summary>
-        /// <param name="strength">The intensity of the rumble of the controller motor. `0` to `3999`.</param>
-        public void TriggerHapticPulse(ushort strength)
+        /// <param name="strength">The intensity of the rumble of the controller motor. `0` to `1`.</param>
+        public void TriggerHapticPulse(float strength)
         {
-            if (!enabled)
+            if (enabled)
             {
-                return;
+                CancelHapticPulse();
+                var hapticPulseStrength = Mathf.Clamp(strength, 0f, 1f);
+                VRTK_SDK_Bridge.HapticPulseOnIndex(VRTK_DeviceFinder.GetControllerIndex(gameObject), hapticPulseStrength);
             }
-
-            hapticPulseStrength = (strength <= maxHapticVibration ? strength : maxHapticVibration);
-            VRTK_SDK_Bridge.HapticPulseOnIndex(VRTK_DeviceFinder.GetControllerIndex(gameObject), hapticPulseStrength);
         }
 
         /// <summary>
         /// The TriggerHapticPulse/3 method calls a haptic pulse for a specified amount of time rather than just a single tick. Each pulse can be separated by providing a `pulseInterval` to pause between each haptic pulse.
         /// </summary>
-        /// <param name="strength">The intensity of the rumble of the controller motor. `0` to `3999`.</param>
+        /// <param name="strength">The intensity of the rumble of the controller motor. `0` to `1`.</param>
         /// <param name="duration">The length of time the rumble should continue for.</param>
         /// <param name="pulseInterval">The interval to wait between each haptic pulse.</param>
-        public void TriggerHapticPulse(ushort strength, float duration, float pulseInterval)
+        public void TriggerHapticPulse(float strength, float duration, float pulseInterval)
         {
-            if (!enabled)
+            if (enabled)
             {
-                return;
+                CancelHapticPulse();
+                var hapticPulseStrength = Mathf.Clamp(strength, 0f, 1f);
+                var hapticModifiers = VRTK_SDK_Bridge.GetHapticModifiers();
+                hapticLoop = StartCoroutine(HapticPulse(duration * hapticModifiers.durationModifier, hapticPulseStrength, pulseInterval * hapticModifiers.intervalModifier));
             }
-
-            hapticPulseStrength = (strength <= maxHapticVibration ? strength : maxHapticVibration);
-            StartCoroutine(HapticPulse(duration, hapticPulseStrength, pulseInterval));
         }
 
         /// <summary>
@@ -459,7 +457,15 @@ namespace VRTK
             }
         }
 
-        private IEnumerator HapticPulse(float duration, ushort hapticPulseStrength, float pulseInterval)
+        private void CancelHapticPulse()
+        {
+            if (hapticLoop != null)
+            {
+                StopCoroutine(hapticLoop);
+            }
+        }
+
+        private IEnumerator HapticPulse(float duration, float hapticPulseStrength, float pulseInterval)
         {
             if (pulseInterval <= 0)
             {

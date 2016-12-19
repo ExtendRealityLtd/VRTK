@@ -9,8 +9,8 @@
         public float pullMultiplier;
         public float pullOffset;
         public float maxPullDistance = 1.1f;
-        public int bowVibration = 250;
-        public int stringVibration = 350;
+        public float bowVibration = 0.062f;
+        public float stringVibration = 0.087f;
 
         private BowAnimation bowAnimation;
         private GameObject currentArrow;
@@ -172,8 +172,8 @@
 
             if (!currentPull.ToString("F2").Equals(previousPull.ToString("F2")))
             {
-                holdActions.TriggerHapticPulse((ushort)bowVibration);
-                stringActions.TriggerHapticPulse((ushort)stringVibration);
+                holdActions.TriggerHapticPulse(bowVibration);
+                stringActions.TriggerHapticPulse(stringVibration);
             }
             previousPull = currentPull;
         }

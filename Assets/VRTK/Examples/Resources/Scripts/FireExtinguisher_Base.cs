@@ -32,7 +32,7 @@
             {
                 var power = controllerEvents.GetTriggerAxis();
                 Spray(power);
-                controllerActions.TriggerHapticPulse(Convert.ToUInt16(1000f * power), 0.1f, 0.01f);
+                controllerActions.TriggerHapticPulse(power * 0.25f, 0.1f, 0.01f);
             }
             else
             {

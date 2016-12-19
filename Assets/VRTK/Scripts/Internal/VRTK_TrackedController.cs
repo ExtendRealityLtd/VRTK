@@ -13,6 +13,8 @@
 
     public class VRTK_TrackedController : MonoBehaviour
     {
+        public uint index;
+
         public event VRTKTrackedControllerEventHandler ControllerEnabled;
         public event VRTKTrackedControllerEventHandler ControllerDisabled;
         public event VRTKTrackedControllerEventHandler ControllerIndexChanged;

@@ -222,7 +222,7 @@ namespace VRTK
             }
         }
 
-        protected override void AttemptHapticPulse(ushort strength)
+        protected override void AttemptHapticPulse(float strength)
         {
             if (interactingObjects.Count > 0)
             {
