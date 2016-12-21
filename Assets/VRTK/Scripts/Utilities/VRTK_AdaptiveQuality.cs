@@ -337,7 +337,7 @@ namespace VRTK
             timing.SaveCurrentFrameTiming();
         }
 
-#if UNITY_5_4_1 || UNITY_5_4_2 || UNITY_5_5_OR_NEWER
+#if UNITY_5_4_1 || UNITY_5_4_2 || UNITY_5_4_3 || UNITY_5_5_OR_NEWER
         private void LateUpdate()
         {
             UpdateRenderScale();
@@ -351,7 +351,7 @@ namespace VRTK
                 return;
             }
 
-#if !(UNITY_5_4_1 || UNITY_5_4_2 || UNITY_5_5_OR_NEWER)
+#if !(UNITY_5_4_1 || UNITY_5_4_2 || UNITY_5_4_3 || UNITY_5_5_OR_NEWER)
             UpdateRenderScale();
 #endif
             UpdateMSAALevel();
