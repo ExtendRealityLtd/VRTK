@@ -55,7 +55,7 @@ namespace VRTK
         /// <param name="controllerActions">The controller to activate the haptic feedback on.</param>
         public void HapticsOnGrab(VRTK_ControllerActions controllerActions)
         {
-            if (strengthOnTouch > 0 && durationOnTouch > 0f)
+            if (strengthOnGrab > 0 && durationOnGrab > 0f)
             {
                 TriggerHapticPulse(controllerActions, strengthOnGrab, durationOnGrab, intervalOnGrab);
             }
@@ -67,7 +67,7 @@ namespace VRTK
         /// <param name="controllerActions">The controller to activate the haptic feedback on.</param>
         public void HapticsOnUse(VRTK_ControllerActions controllerActions)
         {
-            if (strengthOnTouch > 0 && durationOnTouch > 0f)
+            if (strengthOnUse > 0 && durationOnUse > 0f)
             {
                 TriggerHapticPulse(controllerActions, strengthOnUse, durationOnUse, intervalOnUse);
             }
