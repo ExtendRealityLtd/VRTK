@@ -405,7 +405,7 @@ namespace VRTK
                     isSnapped = true;
                     currentSnappedObject = ioCheck.gameObject;
 
-                    transitionInPlace = StartCoroutine(UpdateTransformDimensions(ioCheck, highlightContainer.transform.position, highlightContainer.transform.rotation, newLocalScale, snapDuration));
+                    transitionInPlace = StartCoroutine(UpdateTransformDimensions(ioCheck, highlightContainer, newLocalScale, snapDuration));
 
                     ioCheck.ToggleSnapDropZone(this, true);
                 }
@@ -438,7 +438,7 @@ namespace VRTK
             return newLocalScale;
         }
 
-        private IEnumerator UpdateTransformDimensions(VRTK_InteractableObject ioCheck, Vector3 endPosition, Quaternion endRotation, Vector3 endScale, float duration)
+        private IEnumerator UpdateTransformDimensions(VRTK_InteractableObject ioCheck, GameObject endSettings, Vector3 endScale, float duration)
         {
             var elapsedTime = 0f;
             var ioTransform = ioCheck.transform;
@@ -451,15 +451,15 @@ namespace VRTK
             while (elapsedTime <= duration)
             {
                 elapsedTime += Time.deltaTime;
-                ioTransform.position = Vector3.Lerp(startPosition, endPosition, (elapsedTime / duration));
-                ioTransform.rotation = Quaternion.Lerp(startRotation, endRotation, (elapsedTime / duration));
+                ioTransform.position = Vector3.Lerp(startPosition, endSettings.transform.position, (elapsedTime / duration));
+                ioTransform.rotation = Quaternion.Lerp(startRotation, endSettings.transform.rotation, (elapsedTime / duration));
                 ioTransform.localScale = Vector3.Lerp(startScale, endScale, (elapsedTime / duration));
                 yield return null;
             }
 
             //Force all to the last setting in case anything has moved during the transition
-            ioTransform.position = endPosition;
-            ioTransform.rotation = endRotation;
+            ioTransform.position = endSettings.transform.position;
+            ioTransform.rotation = endSettings.transform.rotation;
             ioTransform.localScale = endScale;
 
             ioCheck.isKinematic = storedKinematicState;
