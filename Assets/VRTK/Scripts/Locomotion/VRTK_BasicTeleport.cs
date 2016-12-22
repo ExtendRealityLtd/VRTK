@@ -22,6 +22,8 @@ namespace VRTK
     /// </example>
     public class VRTK_BasicTeleport : MonoBehaviour
     {
+        [Header("Base Options")]
+
         [Tooltip("The fade blink speed can be changed on the basic teleport script to provide a customised teleport experience. Setting the speed to 0 will mean no fade blink effect is present.")]
         public float blinkTransitionSpeed = 0.6f;
         [Tooltip("A range between 0 and 32 that determines how long the blink transition will stay blacked out depending on the distance being teleported. A value of 0 will not delay the teleport blink effect over any distance, a value of 32 will delay the teleport blink fade in even when the distance teleported is very close to the original position. This can be used to simulate time taking longer to pass the further a user teleports. A value of 16 provides a decent basis to simulate this to the user.")]

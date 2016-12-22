@@ -671,11 +671,6 @@ namespace VRTK
             return e;
         }
 
-        private void Awake()
-        {
-            gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
-        }
-
         private void OnEnable()
         {
             var actualController = VRTK_DeviceFinder.GetActualController(gameObject);

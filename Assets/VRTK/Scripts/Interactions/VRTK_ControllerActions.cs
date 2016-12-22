@@ -379,7 +379,6 @@ namespace VRTK
         private void Awake()
         {
             cachedElements = new Dictionary<string, Transform>();
-            gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
 
             var controllerHand = VRTK_DeviceFinder.GetControllerHand(gameObject);
 

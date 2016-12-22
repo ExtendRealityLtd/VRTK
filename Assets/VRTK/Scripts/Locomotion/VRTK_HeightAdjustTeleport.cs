@@ -15,6 +15,11 @@ namespace VRTK
     /// </example>
     public class VRTK_HeightAdjustTeleport : VRTK_BasicTeleport
     {
+        [Header("Height Adjust Options")]
+
+        [Tooltip("The layers to ignore when raycasting to find floors.")]
+        public LayerMask layersToIgnore = Physics.IgnoreRaycastLayer;
+
         protected override void OnEnable()
         {
             base.OnEnable();
@@ -44,7 +49,7 @@ namespace VRTK
             var rayStartPositionOffset = Vector3.up * heightOffset;
             var ray = new Ray(tipPosition + rayStartPositionOffset, -playArea.up);
             RaycastHit rayCollidedWith;
-            if (target && Physics.Raycast(ray, out rayCollidedWith))
+            if (target && Physics.Raycast(ray, out rayCollidedWith, Mathf.Infinity, ~layersToIgnore))
             {
                 newY = (tipPosition.y - rayCollidedWith.distance) + heightOffset;
             }

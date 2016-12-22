@@ -124,10 +124,11 @@ namespace VRTK
         {
             if (!headsetColliderContainer)
             {
-                headsetColliderContainer = new GameObject("HeadsetCollider");
+                headsetColliderContainer = new GameObject("VRTK_HeadsetColliderContainer");
                 headsetColliderContainer.transform.position = Vector3.zero;
                 headsetColliderContainer.transform.localRotation = headset.localRotation;
                 headsetColliderContainer.transform.localScale = Vector3.one;
+                headsetColliderContainer.layer = LayerMask.NameToLayer("Ignore Raycast");
             }
         }
 
