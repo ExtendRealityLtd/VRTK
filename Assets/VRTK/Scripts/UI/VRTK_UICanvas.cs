@@ -21,6 +21,8 @@ namespace VRTK
         [Tooltip("Determines if a UI Pointer will be auto activated if a UI Pointer game object comes within the given distance of this canvas. If a value of `0` is given then no auto activation will occur.")]
         public float autoActivateWithinDistance = 0f;
 
+        private BoxCollider canvasBoxCollider;
+        private Rigidbody canvasRigidBody;
         private const string CANVAS_DRAGGABLE_PANEL = "VRTK_UICANVAS_DRAGGABLE_PANEL";
         private const string ACTIVATOR_FRONT_TRIGGER_GAMEOBJECT = "VRTK_UICANVAS_ACTIVATOR_FRONT_TRIGGER";
 
@@ -70,16 +72,16 @@ namespace VRTK
             //add a box collider and background image to ensure the rays always hit
             if (!canvas.gameObject.GetComponent<BoxCollider>())
             {
-                var canvasBoxCollider = canvas.gameObject.AddComponent<BoxCollider>();
+                canvasBoxCollider = canvas.gameObject.AddComponent<BoxCollider>();
                 canvasBoxCollider.size = new Vector3(canvasSize.x, canvasSize.y, 10f);
                 canvasBoxCollider.center = new Vector3(0f, 0f, 5f);
                 canvasBoxCollider.isTrigger = true;
             }
 
-            var canvasRigidBody = canvas.gameObject.GetComponent<Rigidbody>();
-            if (!canvasRigidBody)
+            if (!canvas.gameObject.GetComponent<Rigidbody>())
             {
-                canvas.gameObject.AddComponent<Rigidbody>().isKinematic = true;
+                canvasRigidBody = canvas.gameObject.AddComponent<Rigidbody>();
+                canvasRigidBody.isKinematic = true;
             }
 
             CreateDraggablePanel(canvas, canvasSize);
@@ -152,13 +154,11 @@ namespace VRTK
             }
 
             //Check if there is a collider and remove it if there is
-            var canvasBoxCollider = canvas.gameObject.GetComponent<BoxCollider>();
             if (canvasBoxCollider)
             {
                 Destroy(canvasBoxCollider);
             }
 
-            var canvasRigidBody = canvas.gameObject.GetComponent<Rigidbody>();
             if (canvasRigidBody)
             {
                 Destroy(canvasRigidBody);
