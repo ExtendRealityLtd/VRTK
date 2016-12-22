@@ -21,6 +21,8 @@ namespace VRTK.SecondaryControllerGrabActions
         public float ungrabDistance = 1f;
         [Tooltip("The speed in which the object will snap back to it's original rotation when the secondary controller stops grabbing it. `0` for instant snap, `infinity` for no snap back.")]
         public float releaseSnapSpeed = 0.1f;
+        [Tooltip("Prevent the secondary controller rotating the grabbed object through it's z-axis.")]
+        public bool lockZRotation = true;
 
         private Vector3 initialPosition;
         private Quaternion initialRotation;
@@ -115,7 +117,15 @@ namespace VRTK.SecondaryControllerGrabActions
 
         private void AimObject()
         {
+            var existingEularAngles = transform.rotation.eulerAngles;
             transform.rotation = Quaternion.LookRotation(secondaryGrabbingObject.transform.position - primaryGrabbingObject.transform.position, secondaryGrabbingObject.transform.TransformDirection(Vector3.forward));
+
+            if (lockZRotation)
+            {
+                existingEularAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, existingEularAngles.z);
+                transform.rotation = Quaternion.Euler(existingEularAngles);
+            }
+
             if (grabbedObject.grabAttachMechanicScript.precisionGrab)
             {
                 transform.Translate(primaryGrabbingObject.controllerAttachPoint.transform.position - primaryInitialGrabPoint.position, Space.World);

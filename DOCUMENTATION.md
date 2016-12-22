@@ -3273,6 +3273,7 @@ It's not possible to control the direction of an interactable object with a `Fix
 
  * **Ungrab Distance:** The distance the secondary controller must move away from the original grab position before the secondary controller auto ungrabs the object.
  * **Release Snap Speed:** The speed in which the object will snap back to it's original rotation when the secondary controller stops grabbing it. `0` for instant snap, `infinity` for no snap back.
+ * **Lock Z Rotation:** Prevent the secondary controller rotating the grabbed object through it's z-axis.
 
 ### Class Methods
 
