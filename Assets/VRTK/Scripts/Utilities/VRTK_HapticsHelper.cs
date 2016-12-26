@@ -12,6 +12,7 @@ namespace VRTK
     {
         static ushort maxHapticStrength = 3999;
         static int bufferSize = 8192;
+        static int sampleCount = 1024;
 
         /// <summary>
         /// Play a provided audioclip as a series of haptic pulses.  Note:  If the clip is compressed, it must be set to Decompress on Load in import settings.
@@ -23,6 +24,17 @@ namespace VRTK
         public static void PlayHaptics(this VRTK_ControllerActions controller, AudioClip clip, float strength = 1, float timeScale = 1)
         {
             controller.StartCoroutine(PlayHapticsRoutine(controller, clip, strength, timeScale));
+        }
+
+        /// <summary>
+        /// Play the provided audiosource's output as a series of haptic pulses.  Stops when the audiosource stops playing.
+        /// </summary>
+        /// <param name="controller">The controller to play the haptic sequence on</param>
+        /// <param name="sound">The audiosource to use as the source of haptic data</param>
+        /// <param name="strength">The strength to play the haptic sequence at.  At 1, the audio will scale from 0 to maxHapticPulse.</param>
+        public static void PlayHaptics(this VRTK_ControllerActions controller, AudioSource sound, float strength = 1)
+        {
+            controller.StartCoroutine(PlayHapticsRoutine(controller, sound, strength));
         }
 
         /// <summary>
@@ -67,6 +79,25 @@ namespace VRTK
                 }
                 var currentSample = Mathf.Abs(audioData[sampleIndex - sampleOffset]);
                 var hapticStrength = (ushort)(hapticScalar * currentSample);
+                controller.TriggerHapticPulse(hapticStrength);
+                yield return null;
+            }
+        }
+
+        static IEnumerator PlayHapticsRoutine(VRTK_ControllerActions controller, AudioSource sound, float strength) {
+            float hapticScalar = maxHapticStrength * strength;
+            float[] bufferL = new float[sampleCount];
+            float[] bufferR = new float[sampleCount];
+            while (sound.isPlaying) {
+                float sum = 0;
+                sound.GetOutputData(bufferL, 0);
+                sound.GetOutputData(bufferR, 1);
+                for (int i=0;i<sampleCount;i++) {
+                    sum += bufferL[i] * bufferL[i];
+                    sum += bufferR[i] * bufferR[i];
+                }
+                var rms = Mathf.Sqrt(sum / (sampleCount * 2));
+                var hapticStrength = (ushort)(hapticScalar * rms);
                 controller.TriggerHapticPulse(hapticStrength);
                 yield return null;
             }
