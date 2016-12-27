@@ -22,19 +22,6 @@ namespace VRTK
         }
 
         /// <summary>
-        /// Controller hand reference.
-        /// </summary>
-        /// <param name="None">No hand is assigned.</param>
-        /// <param name="Left">The left hand is assigned.</param>
-        /// <param name="Right">The right hand is assigned.</param>
-        public enum ControllerHand
-        {
-            None,
-            Left,
-            Right
-        }
-
-        /// <summary>
         /// The GetControllerIndex method is used to find the index of a given controller object.
         /// </summary>
         /// <param name="controller">The controller object to get the index of a controller.</param>
@@ -89,16 +76,16 @@ namespace VRTK
         /// </summary>
         /// <param name="hand">The string representation of the hand to retrieve the type of. `left` or `right`.</param>
         /// <returns>A ControllerHand representing either the Left or Right hand.</returns>
-        public static ControllerHand GetControllerHandType(string hand)
+        public static SDK_BaseController.ControllerHand GetControllerHandType(string hand)
         {
             switch (hand.ToLower())
             {
                 case "left":
-                    return ControllerHand.Left;
+                    return SDK_BaseController.ControllerHand.Left;
                 case "right":
-                    return ControllerHand.Right;
+                    return SDK_BaseController.ControllerHand.Right;
                 default:
-                    return ControllerHand.None;
+                    return SDK_BaseController.ControllerHand.None;
             }
         }
 
@@ -107,19 +94,19 @@ namespace VRTK
         /// </summary>
         /// <param name="controller">The controller game object to check the hand of.</param>
         /// <returns>A ControllerHand representing either the Left or Right hand.</returns>
-        public static ControllerHand GetControllerHand(GameObject controller)
+        public static SDK_BaseController.ControllerHand GetControllerHand(GameObject controller)
         {
-            if (VRTK_SDK_Bridge.IsControllerLeftHand(controller, true) || VRTK_SDK_Bridge.IsControllerLeftHand(controller, false))
+            if (VRTK_SDK_Bridge.IsControllerLeftHand(controller))
             {
-                return ControllerHand.Left;
+                return SDK_BaseController.ControllerHand.Left;
             }
-            else if (VRTK_SDK_Bridge.IsControllerRightHand(controller, true) || VRTK_SDK_Bridge.IsControllerRightHand(controller, false))
+            else if (VRTK_SDK_Bridge.IsControllerRightHand(controller))
             {
-                return ControllerHand.Right;
+                return SDK_BaseController.ControllerHand.Right;
             }
             else
             {
-                return ControllerHand.None;
+                return SDK_BaseController.ControllerHand.None;
             }
         }
 
@@ -149,16 +136,14 @@ namespace VRTK
         /// <param name="checkController">The actual controller object that is being checked.</param>
         /// <param name="hand">The representation of a hand to check if the given controller matches.</param>
         /// <returns>Is true if the given controller matches the given hand.</returns>
-        public static bool IsControllerOfHand(GameObject checkController, ControllerHand hand)
+        public static bool IsControllerOfHand(GameObject checkController, SDK_BaseController.ControllerHand hand)
         {
-            if (hand == ControllerHand.Left && (VRTK_SDK_Bridge.IsControllerLeftHand(checkController, true) || VRTK_SDK_Bridge.IsControllerLeftHand(checkController, false)))
+            switch (hand)
             {
-                return true;
-            }
-
-            if (hand == ControllerHand.Right && (VRTK_SDK_Bridge.IsControllerRightHand(checkController, true) || VRTK_SDK_Bridge.IsControllerRightHand(checkController, false)))
-            {
-                return true;
+                case SDK_BaseController.ControllerHand.Left:
+                    return (IsControllerLeftHand(checkController));
+                case SDK_BaseController.ControllerHand.Right:
+                    return (IsControllerRightHand(checkController));
             }
 
             return false;
@@ -171,7 +156,7 @@ namespace VRTK
         /// <returns>Is true if the given controller is the left controller.</returns>
         public static bool IsControllerLeftHand(GameObject checkController)
         {
-            return IsControllerOfHand(checkController, ControllerHand.Left);
+            return VRTK_SDK_Bridge.IsControllerLeftHand(checkController);
         }
 
         /// <summary>
@@ -181,7 +166,7 @@ namespace VRTK
         /// <returns>Is true if the given controller is the right controller.</returns>
         public static bool IsControllerRightHand(GameObject checkController)
         {
-            return IsControllerOfHand(checkController, ControllerHand.Right);
+            return VRTK_SDK_Bridge.IsControllerRightHand(checkController);
         }
 
         /// <summary>
@@ -191,7 +176,7 @@ namespace VRTK
         /// <returns>The GameObject that is the actual controller.</returns>
         public static GameObject GetActualController(GameObject givenController)
         {
-            if(VRTK_SDK_Bridge.IsControllerLeftHand(givenController, true) || VRTK_SDK_Bridge.IsControllerRightHand(givenController, true))
+            if (VRTK_SDK_Bridge.IsControllerLeftHand(givenController, true) || VRTK_SDK_Bridge.IsControllerRightHand(givenController, true))
             {
                 return givenController;
             }
@@ -210,11 +195,11 @@ namespace VRTK
         }
 
         /// <summary>
-        /// The GetAliasController method will attempt to get the object that contains the scripts for the controller.
+        /// The GetScriptAliasController method will attempt to get the object that contains the scripts for the controller.
         /// </summary>
         /// <param name="givenController">The GameObject of the controller.</param>
         /// <returns>The GameObject that is the alias controller containing the scripts.</returns>
-        public static GameObject GetAliasController(GameObject givenController)
+        public static GameObject GetScriptAliasController(GameObject givenController)
         {
             if (VRTK_SDK_Bridge.IsControllerLeftHand(givenController, false) || VRTK_SDK_Bridge.IsControllerRightHand(givenController, false))
             {
@@ -232,6 +217,16 @@ namespace VRTK
             }
 
             return null;
+        }
+
+        /// <summary>
+        /// The GetModelAliasController method will attempt to get the object that contains the model for the controller.
+        /// </summary>
+        /// <param name="givenController">The GameObject of the controller.</param>
+        /// <returns>The GameObject that is the alias controller containing the controller model.</returns>
+        public static GameObject GetModelAliasController(GameObject givenController)
+        {
+            return VRTK_SDK_Bridge.GetControllerModel(givenController);
         }
 
         /// <summary>

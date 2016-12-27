@@ -27,11 +27,19 @@
 
             GetComponent<VRTK_ControllerEvents>().TriggerAxisChanged += new ControllerInteractionEventHandler(DoTriggerAxisChanged);
 
-            GetComponent<VRTK_ControllerEvents>().ApplicationMenuPressed += new ControllerInteractionEventHandler(DoApplicationMenuPressed);
-            GetComponent<VRTK_ControllerEvents>().ApplicationMenuReleased += new ControllerInteractionEventHandler(DoApplicationMenuReleased);
-
             GetComponent<VRTK_ControllerEvents>().GripPressed += new ControllerInteractionEventHandler(DoGripPressed);
             GetComponent<VRTK_ControllerEvents>().GripReleased += new ControllerInteractionEventHandler(DoGripReleased);
+
+            GetComponent<VRTK_ControllerEvents>().GripTouchStart += new ControllerInteractionEventHandler(DoGripTouchStart);
+            GetComponent<VRTK_ControllerEvents>().GripTouchEnd += new ControllerInteractionEventHandler(DoGripTouchEnd);
+
+            GetComponent<VRTK_ControllerEvents>().GripHairlineStart += new ControllerInteractionEventHandler(DoGripHairlineStart);
+            GetComponent<VRTK_ControllerEvents>().GripHairlineEnd += new ControllerInteractionEventHandler(DoGripHairlineEnd);
+
+            GetComponent<VRTK_ControllerEvents>().GripClicked += new ControllerInteractionEventHandler(DoGripClicked);
+            GetComponent<VRTK_ControllerEvents>().GripUnclicked += new ControllerInteractionEventHandler(DoGripUnclicked);
+
+            GetComponent<VRTK_ControllerEvents>().GripAxisChanged += new ControllerInteractionEventHandler(DoGripAxisChanged);
 
             GetComponent<VRTK_ControllerEvents>().TouchpadPressed += new ControllerInteractionEventHandler(DoTouchpadPressed);
             GetComponent<VRTK_ControllerEvents>().TouchpadReleased += new ControllerInteractionEventHandler(DoTouchpadReleased);
@@ -40,6 +48,18 @@
             GetComponent<VRTK_ControllerEvents>().TouchpadTouchEnd += new ControllerInteractionEventHandler(DoTouchpadTouchEnd);
 
             GetComponent<VRTK_ControllerEvents>().TouchpadAxisChanged += new ControllerInteractionEventHandler(DoTouchpadAxisChanged);
+
+            GetComponent<VRTK_ControllerEvents>().ButtonOnePressed += new ControllerInteractionEventHandler(DoButtonOnePressed);
+            GetComponent<VRTK_ControllerEvents>().ButtonOneReleased += new ControllerInteractionEventHandler(DoButtonOneReleased);
+
+            GetComponent<VRTK_ControllerEvents>().ButtonOneTouchStart += new ControllerInteractionEventHandler(DoButtonOneTouchStart);
+            GetComponent<VRTK_ControllerEvents>().ButtonOneTouchEnd += new ControllerInteractionEventHandler(DoButtonOneTouchEnd);
+
+            GetComponent<VRTK_ControllerEvents>().ButtonTwoPressed += new ControllerInteractionEventHandler(DoButtonTwoPressed);
+            GetComponent<VRTK_ControllerEvents>().ButtonTwoReleased += new ControllerInteractionEventHandler(DoButtonTwoReleased);
+
+            GetComponent<VRTK_ControllerEvents>().ButtonTwoTouchStart += new ControllerInteractionEventHandler(DoButtonTwoTouchStart);
+            GetComponent<VRTK_ControllerEvents>().ButtonTwoTouchEnd += new ControllerInteractionEventHandler(DoButtonTwoTouchEnd);
 
             GetComponent<VRTK_ControllerEvents>().ControllerEnabled += new ControllerInteractionEventHandler(DoControllerEnabled);
             GetComponent<VRTK_ControllerEvents>().ControllerDisabled += new ControllerInteractionEventHandler(DoControllerDisabled);
@@ -98,24 +118,49 @@
             DebugLogger(e.controllerIndex, "TRIGGER", "axis changed", e);
         }
 
-        private void DoApplicationMenuPressed(object sender, ControllerInteractionEventArgs e)
-        {
-            DebugLogger(e.controllerIndex, "APPLICATION MENU", "pressed down", e);
-        }
-
-        private void DoApplicationMenuReleased(object sender, ControllerInteractionEventArgs e)
-        {
-            DebugLogger(e.controllerIndex, "APPLICATION MENU", "released", e);
-        }
-
         private void DoGripPressed(object sender, ControllerInteractionEventArgs e)
         {
-            DebugLogger(e.controllerIndex, "GRIP", "pressed down", e);
+            DebugLogger(e.controllerIndex, "GRIP", "pressed", e);
         }
 
         private void DoGripReleased(object sender, ControllerInteractionEventArgs e)
         {
             DebugLogger(e.controllerIndex, "GRIP", "released", e);
+        }
+
+        private void DoGripTouchStart(object sender, ControllerInteractionEventArgs e)
+        {
+            DebugLogger(e.controllerIndex, "GRIP", "touched", e);
+        }
+
+        private void DoGripTouchEnd(object sender, ControllerInteractionEventArgs e)
+        {
+            DebugLogger(e.controllerIndex, "GRIP", "untouched", e);
+        }
+
+        private void DoGripHairlineStart(object sender, ControllerInteractionEventArgs e)
+        {
+            DebugLogger(e.controllerIndex, "GRIP", "hairline start", e);
+        }
+
+        private void DoGripHairlineEnd(object sender, ControllerInteractionEventArgs e)
+        {
+            DebugLogger(e.controllerIndex, "GRIP", "hairline end", e);
+        }
+
+        private void DoGripClicked(object sender, ControllerInteractionEventArgs e)
+        {
+            DebugLogger(e.controllerIndex, "GRIP", "clicked", e);
+        }
+
+        private void DoGripUnclicked(object sender, ControllerInteractionEventArgs e)
+        {
+            DebugLogger(e.controllerIndex, "GRIP", "unclicked", e);
+        }
+
+        private void DoGripAxisChanged(object sender, ControllerInteractionEventArgs e)
+        {
+            DebugLogger(e.controllerIndex, "GRIP", "axis changed", e);
         }
 
         private void DoTouchpadPressed(object sender, ControllerInteractionEventArgs e)
@@ -141,6 +186,46 @@
         private void DoTouchpadAxisChanged(object sender, ControllerInteractionEventArgs e)
         {
             DebugLogger(e.controllerIndex, "TOUCHPAD", "axis changed", e);
+        }
+
+        private void DoButtonOnePressed(object sender, ControllerInteractionEventArgs e)
+        {
+            DebugLogger(e.controllerIndex, "BUTTON ONE", "pressed down", e);
+        }
+
+        private void DoButtonOneReleased(object sender, ControllerInteractionEventArgs e)
+        {
+            DebugLogger(e.controllerIndex, "BUTTON ONE", "released", e);
+        }
+
+        private void DoButtonOneTouchStart(object sender, ControllerInteractionEventArgs e)
+        {
+            DebugLogger(e.controllerIndex, "BUTTON ONE", "touched", e);
+        }
+
+        private void DoButtonOneTouchEnd(object sender, ControllerInteractionEventArgs e)
+        {
+            DebugLogger(e.controllerIndex, "BUTTON ONE", "untouched", e);
+        }
+
+        private void DoButtonTwoPressed(object sender, ControllerInteractionEventArgs e)
+        {
+            DebugLogger(e.controllerIndex, "BUTTON TWO", "pressed down", e);
+        }
+
+        private void DoButtonTwoReleased(object sender, ControllerInteractionEventArgs e)
+        {
+            DebugLogger(e.controllerIndex, "BUTTON TWO", "released", e);
+        }
+
+        private void DoButtonTwoTouchStart(object sender, ControllerInteractionEventArgs e)
+        {
+            DebugLogger(e.controllerIndex, "BUTTON TWO", "touched", e);
+        }
+
+        private void DoButtonTwoTouchEnd(object sender, ControllerInteractionEventArgs e)
+        {
+            DebugLogger(e.controllerIndex, "BUTTON TWO", "untouched", e);
         }
 
         private void DoControllerEnabled(object sender, ControllerInteractionEventArgs e)

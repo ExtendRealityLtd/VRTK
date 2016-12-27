@@ -1314,6 +1314,8 @@ MonoBehaviour:
   actualHeadset: {fileID: 1766187857}
   actualLeftController: {fileID: 1816111286}
   actualRightController: {fileID: 209142361}
+  modelAliasLeftController: {fileID: 749163899}
+  modelAliasRightController: {fileID: 333017453}
   scriptAliasLeftController: {fileID: 0}
   scriptAliasRightController: {fileID: 0}
 --- !u!1 &2123877843

@@ -15,14 +15,18 @@ namespace VRTK
         /// <returns>A transform of the object representing the headset in the scene.</returns>
         public override Transform GetHeadset()
         {
-            cachedHeadset = base.GetHeadset();
+            cachedHeadset = GetSDKManagerHeadset();
             if (cachedHeadset == null)
             {
 #if (UNITY_5_4_OR_NEWER)
-                cachedHeadset = FindObjectOfType<SteamVR_Camera>().transform;
+                var foundCamera = FindObjectOfType<SteamVR_Camera>();
 #else
-                cachedHeadset = FindObjectOfType<SteamVR_GameView>().transform;
+                var foundCamera = FindObjectOfType<SteamVR_GameView>();
 #endif
+                if (foundCamera)
+                {
+                    cachedHeadset = foundCamera.transform;
+                }
             }
             return cachedHeadset;
         }
@@ -33,10 +37,14 @@ namespace VRTK
         /// <returns>A transform of the object holding the headset camera in the scene.</returns>
         public override Transform GetHeadsetCamera()
         {
-            cachedHeadsetCamera = base.GetHeadsetCamera();
+            cachedHeadsetCamera = GetSDKManagerHeadset();
             if (cachedHeadsetCamera == null)
             {
-                cachedHeadsetCamera = FindObjectOfType<SteamVR_Camera>().transform;
+                var foundCamera = FindObjectOfType<SteamVR_Camera>();
+                if (foundCamera)
+                {
+                    cachedHeadsetCamera = foundCamera.transform;
+                }
             }
             return cachedHeadsetCamera;
         }
@@ -72,7 +80,7 @@ namespace VRTK
         /// <param name="camera">The Transform to with the camera on to add the fade functionality to.</param>
         public override void AddHeadsetFade(Transform camera)
         {
-            if (camera && !camera.gameObject.GetComponent<SteamVR_Fade>())
+            if (camera && !camera.GetComponent<SteamVR_Fade>())
             {
                 camera.gameObject.AddComponent<SteamVR_Fade>();
             }

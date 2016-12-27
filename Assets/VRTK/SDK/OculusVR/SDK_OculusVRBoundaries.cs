@@ -1,15 +1,13 @@
-﻿// Fallback Boundaries|SDK_Fallback|004
+﻿// OculusVR Boundaries|SDK_OculusVR|004
 namespace VRTK
 {
+#if VRTK_SDK_OCULUSVR
     using UnityEngine;
 
     /// <summary>
-    /// The Base Boundaries SDK script provides a bridge to SDK methods that deal with the play area of SDKs that support room scale play spaces.
+    /// The OculusVR Boundaries SDK script provides a bridge to the OculusVR SDK play area.
     /// </summary>
-    /// <remarks>
-    /// This is the fallback class that will just return default values.
-    /// </remarks>
-    public class SDK_FallbackBoundaries : SDK_BaseBoundaries
+    public class SDK_OculusVRBoundaries : SDK_BaseBoundaries
     {
         /// <summary>
         /// The GetPlayArea method returns the Transform of the object that is used to represent the play area in the scene.
@@ -17,7 +15,17 @@ namespace VRTK
         /// <returns>A transform of the object representing the play area in the scene.</returns>
         public override Transform GetPlayArea()
         {
-            return null;
+            cachedPlayArea = GetSDKManagerPlayArea();
+            if (cachedPlayArea == null)
+            {
+                var ovrManager = FindObjectOfType<OVRManager>();
+                if (ovrManager)
+                {
+                    cachedPlayArea = ovrManager.transform;
+                }
+            }
+
+            return cachedPlayArea;
         }
 
         /// <summary>
@@ -27,17 +35,27 @@ namespace VRTK
         /// <returns>A Vector3 array of the points in the scene that represent the play area boundaries.</returns>
         public override Vector3[] GetPlayAreaVertices(GameObject playArea)
         {
-            return new Vector3[8]
+            var area = new OVRBoundary();
+            if (area.GetConfigured())
             {
-                Vector3.zero,
-                Vector3.zero,
-                Vector3.zero,
-                Vector3.zero,
-                Vector3.zero,
-                Vector3.zero,
-                Vector3.zero,
-                Vector3.zero
-            };
+                var outerBoundary = area.GetDimensions(OVRBoundary.BoundaryType.OuterBoundary);
+                var thickness = 0.1f;
+
+                var vertices = new Vector3[8];
+
+                vertices[0] = new Vector3(outerBoundary.x - thickness, 0f, outerBoundary.z - thickness);
+                vertices[1] = new Vector3(0f + thickness, 0f, outerBoundary.z - thickness);
+                vertices[2] = new Vector3(0f + thickness, 0f, 0f + thickness);
+                vertices[3] = new Vector3(outerBoundary.x - thickness, 0f, 0f + thickness);
+
+                vertices[4] = new Vector3(outerBoundary.x, 0f, outerBoundary.z);
+                vertices[5] = new Vector3(0f, 0f, outerBoundary.z);
+                vertices[6] = new Vector3(0f, 0f, 0f);
+                vertices[7] = new Vector3(outerBoundary.x, 0f, 0f);
+
+                return vertices;
+            }
+            return new Vector3[0];
         }
 
         /// <summary>
@@ -47,7 +65,7 @@ namespace VRTK
         /// <returns>The thickness of the drawn border.</returns>
         public override float GetPlayAreaBorderThickness(GameObject playArea)
         {
-            return 0f;
+            return 0.1f;
         }
 
         /// <summary>
@@ -57,7 +75,12 @@ namespace VRTK
         /// <returns>Returns true if the play area size has been auto calibrated and set by external sensors.</returns>
         public override bool IsPlayAreaSizeCalibrated(GameObject playArea)
         {
-            return false;
+            return true;
         }
     }
+#else
+    public class SDK_OculusVRBoundaries : SDK_FallbackBoundaries
+    {
+    }
+#endif
 }

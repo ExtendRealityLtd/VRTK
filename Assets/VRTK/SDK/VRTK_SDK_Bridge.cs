@@ -1,6 +1,7 @@
 ﻿namespace VRTK
 {
     using UnityEngine;
+    using System.Collections.Generic;
 
     public class VRTK_SDK_Bridge
     {
@@ -9,12 +10,17 @@
         private static SDK_BaseController controllerSDK = null;
         private static SDK_BaseBoundaries boundariesSDK = null;
 
+        public static void ControllerProcessUpdate(uint index, Dictionary<string, object> options = null)
+        {
+            GetControllerSDK().ProcessUpdate(index, options);
+        }
+
         public static string GetControllerDefaultColliderPath()
         {
             return GetControllerSDK().GetControllerDefaultColliderPath();
         }
 
-        public static string GetControllerElementPath(VRTK_ControllerElements element, VRTK_DeviceFinder.ControllerHand hand = VRTK_DeviceFinder.ControllerHand.Right, bool fullPath = false)
+        public static string GetControllerElementPath(SDK_BaseController.ControllerElements element, SDK_BaseController.ControllerHand hand = SDK_BaseController.ControllerHand.Right, bool fullPath = false)
         {
             return GetControllerSDK().GetControllerElementPath(element, hand, fullPath);
         }
@@ -34,6 +40,11 @@
             return GetControllerSDK().GetControllerOrigin(controller);
         }
 
+        public static Transform GenerateControllerPointerOrigin()
+        {
+            return GetControllerSDK().GenerateControllerPointerOrigin();
+        }
+
         public static GameObject GetControllerLeftHand(bool actual)
         {
             return GetControllerSDK().GetControllerLeftHand(actual);
@@ -42,6 +53,16 @@
         public static GameObject GetControllerRightHand(bool actual)
         {
             return GetControllerSDK().GetControllerRightHand(actual);
+        }
+
+        public static bool IsControllerLeftHand(GameObject controller)
+        {
+            return GetControllerSDK().IsControllerLeftHand(controller);
+        }
+
+        public static bool IsControllerRightHand(GameObject controller)
+        {
+            return GetControllerSDK().IsControllerRightHand(controller);
         }
 
         public static bool IsControllerLeftHand(GameObject controller, bool actual)
@@ -54,6 +75,16 @@
             return GetControllerSDK().IsControllerRightHand(controller, actual);
         }
 
+        public static GameObject GetControllerModel(GameObject controller)
+        {
+            return GetControllerSDK().GetControllerModel(controller);
+        }
+
+        public static GameObject GetControllerModel(SDK_BaseController.ControllerHand hand)
+        {
+            return GetControllerSDK().GetControllerModel(hand);
+        }
+
         public static GameObject GetControllerRenderModel(GameObject controller)
         {
             return GetControllerSDK().GetControllerRenderModel(controller);
@@ -64,9 +95,14 @@
             GetControllerSDK().SetControllerRenderModelWheel(renderModel, state);
         }
 
-        public static void HapticPulseOnIndex(uint index, ushort durationMicroSec = 500)
+        public static void HapticPulseOnIndex(uint index, float strength = 0.5f)
         {
-            GetControllerSDK().HapticPulseOnIndex(index, durationMicroSec);
+            GetControllerSDK().HapticPulseOnIndex(index, strength);
+        }
+
+        public static SDK_ControllerHapticModifiers GetHapticModifiers()
+        {
+            return GetControllerSDK().GetHapticModifiers();
         }
 
         public static Vector3 GetVelocityOnIndex(uint index)
@@ -89,9 +125,19 @@
             return GetControllerSDK().GetTriggerAxisOnIndex(index);
         }
 
+        public static Vector2 GetGripAxisOnIndex(uint index)
+        {
+            return GetControllerSDK().GetGripAxisOnIndex(index);
+        }
+
         public static float GetTriggerHairlineDeltaOnIndex(uint index)
         {
             return GetControllerSDK().GetTriggerHairlineDeltaOnIndex(index);
+        }
+
+        public static float GetGripHairlineDeltaOnIndex(uint index)
+        {
+            return GetControllerSDK().GetGripHairlineDeltaOnIndex(index);
         }
 
         //Trigger
@@ -168,6 +214,16 @@
             return GetControllerSDK().IsGripTouchedUpOnIndex(index);
         }
 
+        public static bool IsHairGripDownOnIndex(uint index)
+        {
+            return GetControllerSDK().IsHairGripDownOnIndex(index);
+        }
+
+        public static bool IsHairGripUpOnIndex(uint index)
+        {
+            return GetControllerSDK().IsHairGripUpOnIndex(index);
+        }
+
         //Touchpad
 
         public static bool IsTouchpadPressedOnIndex(uint index)
@@ -200,36 +256,68 @@
             return GetControllerSDK().IsTouchpadTouchedUpOnIndex(index);
         }
 
-        //Application Menu
+        //ButtonOne
 
-        public static bool IsApplicationMenuPressedOnIndex(uint index)
+        public static bool IsButtonOnePressedOnIndex(uint index)
         {
-            return GetControllerSDK().IsApplicationMenuPressedOnIndex(index);
+            return GetControllerSDK().IsButtonOnePressedOnIndex(index);
         }
 
-        public static bool IsApplicationMenuPressedDownOnIndex(uint index)
+        public static bool IsButtonOnePressedDownOnIndex(uint index)
         {
-            return GetControllerSDK().IsApplicationMenuPressedDownOnIndex(index);
+            return GetControllerSDK().IsButtonOnePressedDownOnIndex(index);
         }
 
-        public static bool IsApplicationMenuPressedUpOnIndex(uint index)
+        public static bool IsButtonOnePressedUpOnIndex(uint index)
         {
-            return GetControllerSDK().IsApplicationMenuPressedUpOnIndex(index);
+            return GetControllerSDK().IsButtonOnePressedUpOnIndex(index);
         }
 
-        public static bool IsApplicationMenuTouchedOnIndex(uint index)
+        public static bool IsButtonOneTouchedOnIndex(uint index)
         {
-            return GetControllerSDK().IsApplicationMenuTouchedOnIndex(index);
+            return GetControllerSDK().IsButtonOneTouchedOnIndex(index);
         }
 
-        public static bool IsApplicationMenuTouchedDownOnIndex(uint index)
+        public static bool IsButtonOneTouchedDownOnIndex(uint index)
         {
-            return GetControllerSDK().IsApplicationMenuTouchedDownOnIndex(index);
+            return GetControllerSDK().IsButtonOneTouchedDownOnIndex(index);
         }
 
-        public static bool IsApplicationMenuTouchedUpOnIndex(uint index)
+        public static bool IsButtonOneTouchedUpOnIndex(uint index)
         {
-            return GetControllerSDK().IsApplicationMenuTouchedUpOnIndex(index);
+            return GetControllerSDK().IsButtonOneTouchedUpOnIndex(index);
+        }
+
+        //ButtonTwo
+
+        public static bool IsButtonTwoPressedOnIndex(uint index)
+        {
+            return GetControllerSDK().IsButtonTwoPressedOnIndex(index);
+        }
+
+        public static bool IsButtonTwoPressedDownOnIndex(uint index)
+        {
+            return GetControllerSDK().IsButtonTwoPressedDownOnIndex(index);
+        }
+
+        public static bool IsButtonTwoPressedUpOnIndex(uint index)
+        {
+            return GetControllerSDK().IsButtonTwoPressedUpOnIndex(index);
+        }
+
+        public static bool IsButtonTwoTouchedOnIndex(uint index)
+        {
+            return GetControllerSDK().IsButtonTwoTouchedOnIndex(index);
+        }
+
+        public static bool IsButtonTwoTouchedDownOnIndex(uint index)
+        {
+            return GetControllerSDK().IsButtonTwoTouchedDownOnIndex(index);
+        }
+
+        public static bool IsButtonTwoTouchedUpOnIndex(uint index)
+        {
+            return GetControllerSDK().IsButtonTwoTouchedUpOnIndex(index);
         }
 
         public static Transform GetHeadset()
@@ -292,86 +380,38 @@
             GetSystemSDK().ForceInterleavedReprojectionOn(force);
         }
 
-        private static SDK_InterfaceSystem GetSystemSDK()
+        private static SDK_BaseSystem GetSystemSDK()
         {
             if (systemSDK == null)
             {
-                systemSDK = ScriptableObject.CreateInstance<SDK_FallbackSystem>();
-                if (VRTK_SDKManager.instance)
-                {
-                    switch (VRTK_SDKManager.instance.systemSDK)
-                    {
-                        case VRTK_SDKManager.SupportedSDKs.SteamVR:
-                            systemSDK = ScriptableObject.CreateInstance<SDK_SteamVRSystem>();
-                            break;
-                        default:
-                            Debug.LogError("No System SDK configured, falling back to generic System SDK.");
-                            break;
-                    }
-                }
+                systemSDK = (VRTK_SDKManager.instance ? VRTK_SDKManager.instance.GetSystemSDK() : ScriptableObject.CreateInstance<SDK_FallbackSystem>());
             }
             return systemSDK;
         }
 
-        private static SDK_InterfaceHeadset GetHeadsetSDK()
+        private static SDK_BaseHeadset GetHeadsetSDK()
         {
             if (headsetSDK == null)
             {
-                headsetSDK = ScriptableObject.CreateInstance<SDK_FallbackHeadset>();
-                if (VRTK_SDKManager.instance)
-                {
-                    switch (VRTK_SDKManager.instance.headsetSDK)
-                    {
-                        case VRTK_SDKManager.SupportedSDKs.SteamVR:
-                            headsetSDK = ScriptableObject.CreateInstance<SDK_SteamVRHeadset>();
-                            break;
-                        default:
-                            Debug.LogError("No Headset SDK configured, falling back to generic Headset SDK.");
-                            break;
-                    }
-                }
+                headsetSDK = (VRTK_SDKManager.instance ? VRTK_SDKManager.instance.GetHeadsetSDK() : ScriptableObject.CreateInstance<SDK_FallbackHeadset>());
             }
             return headsetSDK;
         }
 
-        private static SDK_InterfaceController GetControllerSDK()
+        private static SDK_BaseController GetControllerSDK()
         {
             if (controllerSDK == null)
             {
-                controllerSDK = ScriptableObject.CreateInstance<SDK_FallbackController>();
-                if (VRTK_SDKManager.instance)
-                {
-                    switch (VRTK_SDKManager.instance.controllerSDK)
-                    {
-                        case VRTK_SDKManager.SupportedSDKs.SteamVR:
-                            controllerSDK = ScriptableObject.CreateInstance<SDK_SteamVRController>();
-                            break;
-                        default:
-                            Debug.LogError("No Controller SDK configured, falling back to generic Controller SDK.");
-                            break;
-                    }
-                }
+                controllerSDK = (VRTK_SDKManager.instance ? VRTK_SDKManager.instance.GetControllerSDK() : ScriptableObject.CreateInstance<SDK_FallbackController>());
             }
             return controllerSDK;
         }
 
-        private static SDK_InterfaceBoundaries GetBoundariesSDK()
+        private static SDK_BaseBoundaries GetBoundariesSDK()
         {
             if (boundariesSDK == null)
             {
-                boundariesSDK = ScriptableObject.CreateInstance<SDK_FallbackBoundaries>();
-                if (VRTK_SDKManager.instance)
-                {
-                    switch (VRTK_SDKManager.instance.boundariesSDK)
-                    {
-                        case VRTK_SDKManager.SupportedSDKs.SteamVR:
-                            boundariesSDK = ScriptableObject.CreateInstance<SDK_SteamVRBoundaries>();
-                            break;
-                        default:
-                            Debug.LogError("No Boundaries SDK configured, falling back to generic Boundaries SDK.");
-                            break;
-                    }
-                }
+                boundariesSDK = (VRTK_SDKManager.instance ? VRTK_SDKManager.instance.GetBoundariesSDK() : ScriptableObject.CreateInstance<SDK_FallbackBoundaries>());
             }
             return boundariesSDK;
         }

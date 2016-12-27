@@ -9,7 +9,7 @@ namespace VRTK
     /// <remarks>
     /// This is an abstract class to implement the interface required by all implemented SDKs.
     /// </remarks>
-    public abstract class SDK_BaseBoundaries : ScriptableObject, SDK_InterfaceBoundaries
+    public abstract class SDK_BaseBoundaries : ScriptableObject
     {
         protected Transform cachedPlayArea;
 
@@ -17,16 +17,7 @@ namespace VRTK
         /// The GetPlayArea method returns the Transform of the object that is used to represent the play area in the scene.
         /// </summary>
         /// <returns>A transform of the object representing the play area in the scene.</returns>
-        public virtual Transform GetPlayArea()
-        {
-            var sdkManager = VRTK_SDKManager.instance;
-            if (sdkManager != null)
-            {
-                cachedPlayArea = sdkManager.actualBoundaries.transform;
-                return cachedPlayArea;
-            }
-            return null;
-        }
+        public abstract Transform GetPlayArea();
 
         /// <summary>
         /// The GetPlayAreaVertices method returns the points of the play area boundaries.
@@ -48,5 +39,16 @@ namespace VRTK
         /// <param name="playArea">The GameObject containing the play area representation.</param>
         /// <returns>Returns true if the play area size has been auto calibrated and set by external sensors.</returns>
         public abstract bool IsPlayAreaSizeCalibrated(GameObject playArea);
+
+        protected Transform GetSDKManagerPlayArea()
+        {
+            var sdkManager = VRTK_SDKManager.instance;
+            if (sdkManager != null && sdkManager.actualBoundaries != null)
+            {
+                cachedPlayArea = (sdkManager.actualBoundaries ? sdkManager.actualBoundaries.transform : null);
+                return cachedPlayArea;
+            }
+            return null;
+        }
     }
 }

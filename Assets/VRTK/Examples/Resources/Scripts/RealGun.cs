@@ -60,14 +60,14 @@
             ToggleSafetySwitch(true);
 
             //Limit hands grabbing when picked up
-            if (VRTK_DeviceFinder.GetControllerHand(currentGrabbingObject) == VRTK_DeviceFinder.ControllerHand.Left)
+            if (VRTK_DeviceFinder.GetControllerHand(currentGrabbingObject) == SDK_BaseController.ControllerHand.Left)
             {
                 allowedTouchControllers = AllowedController.Left_Only;
                 allowedUseControllers = AllowedController.Left_Only;
                 slide.allowedGrabControllers = AllowedController.Right_Only;
                 safetySwitch.allowedGrabControllers = AllowedController.Right_Only;
             }
-            else if (VRTK_DeviceFinder.GetControllerHand(currentGrabbingObject) == VRTK_DeviceFinder.ControllerHand.Right)
+            else if (VRTK_DeviceFinder.GetControllerHand(currentGrabbingObject) == SDK_BaseController.ControllerHand.Right)
             {
                 allowedTouchControllers = AllowedController.Right_Only;
                 allowedUseControllers = AllowedController.Right_Only;
@@ -100,11 +100,11 @@
             {
                 slide.Fire();
                 FireBullet();
-                controllerActions.TriggerHapticPulse(2500, 0.2f, 0.01f);
+                controllerActions.TriggerHapticPulse(0.63f, 0.2f, 0.01f);
             }
             else
             {
-                controllerActions.TriggerHapticPulse(300, 0.1f, 0.01f);
+                controllerActions.TriggerHapticPulse(0.08f, 0.1f, 0.01f);
             }
         }
 

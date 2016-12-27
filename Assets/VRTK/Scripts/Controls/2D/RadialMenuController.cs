@@ -86,7 +86,7 @@ namespace VRTK
             menu.HoverButton(currentAngle);
         }
 
-        protected virtual void AttemptHapticPulse(ushort strength)
+        protected virtual void AttemptHapticPulse(float strength)
         {
             var controllerActions = GetComponentInParent<VRTK_ControllerActions>();
             if (controllerActions)

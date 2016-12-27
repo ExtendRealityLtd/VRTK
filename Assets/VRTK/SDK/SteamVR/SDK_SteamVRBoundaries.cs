@@ -15,10 +15,14 @@ namespace VRTK
         /// <returns>A transform of the object representing the play area in the scene.</returns>
         public override Transform GetPlayArea()
         {
-            cachedPlayArea = base.GetPlayArea();
+            cachedPlayArea = GetSDKManagerPlayArea();
             if (cachedPlayArea == null)
             {
-                cachedPlayArea = FindObjectOfType<SteamVR_PlayArea>().transform;
+                var steamVRPlayArea = FindObjectOfType<SteamVR_PlayArea>();
+                if (steamVRPlayArea)
+                {
+                    cachedPlayArea = steamVRPlayArea.transform;
+                }
             }
             return cachedPlayArea;
         }

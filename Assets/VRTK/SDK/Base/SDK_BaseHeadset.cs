@@ -9,7 +9,7 @@ namespace VRTK
     /// <remarks>
     /// This is an abstract class to implement the interface required by all implemented SDKs.
     /// </remarks>
-    public abstract class SDK_BaseHeadset : ScriptableObject, SDK_InterfaceHeadset
+    public abstract class SDK_BaseHeadset : ScriptableObject
     {
         protected Transform cachedHeadset;
         protected Transform cachedHeadsetCamera;
@@ -18,26 +18,13 @@ namespace VRTK
         /// The GetHeadset method returns the Transform of the object that is used to represent the headset in the scene.
         /// </summary>
         /// <returns>A transform of the object representing the headset in the scene.</returns>
-        public virtual Transform GetHeadset()
-        {
-            var sdkManager = VRTK_SDKManager.instance;
-            if (sdkManager != null)
-            {
-                cachedHeadset = sdkManager.actualHeadset.transform;
-                return cachedHeadset;
-            }
-            return null;
-        }
+        public abstract Transform GetHeadset();
 
         /// <summary>
         /// The GetHeadsetCamera method returns the Transform of the object that is used to hold the headset camera in the scene.
         /// </summary>
         /// <returns>A transform of the object holding the headset camera in the scene.</returns>
-        public virtual Transform GetHeadsetCamera()
-        {
-            cachedHeadsetCamera = GetHeadset();
-            return cachedHeadsetCamera;
-        }
+        public abstract Transform GetHeadsetCamera();
 
         /// <summary>
         /// The HeadsetFade method is used to apply a fade to the headset camera to progressively change the colour.
@@ -59,5 +46,16 @@ namespace VRTK
         /// </summary>
         /// <param name="camera">The Transform to with the camera on to add the fade functionality to.</param>
         public abstract void AddHeadsetFade(Transform camera);
+
+        protected Transform GetSDKManagerHeadset()
+        {
+            var sdkManager = VRTK_SDKManager.instance;
+            if (sdkManager != null && sdkManager.actualHeadset != null)
+            {
+                cachedHeadset = (sdkManager.actualHeadset ? sdkManager.actualHeadset.transform : null);
+                return cachedHeadset;
+            }
+            return null;
+        }
     }
 }

@@ -23,7 +23,7 @@
             //Setup controller event listeners
             GetComponent<VRTK_ControllerEvents>().TouchpadPressed += new ControllerInteractionEventHandler(DoTouchpadPressed);
             GetComponent<VRTK_ControllerEvents>().TouchpadReleased += new ControllerInteractionEventHandler(DoTouchpadReleased);
-            GetComponent<VRTK_ControllerEvents>().ApplicationMenuPressed += new ControllerInteractionEventHandler(DoApplicationMenuPressed);
+            GetComponent<VRTK_ControllerEvents>().ButtonOnePressed += new ControllerInteractionEventHandler(DoSwitchMovementFunction);
         }
 
         private void DoTouchpadPressed(object sender, ControllerInteractionEventArgs e)
@@ -51,7 +51,7 @@
             }
         }
 
-        private void DoApplicationMenuPressed(object sender, ControllerInteractionEventArgs e)
+        private void DoSwitchMovementFunction(object sender, ControllerInteractionEventArgs e)
         {
             switch (roomExtender.movementFunction)
             {

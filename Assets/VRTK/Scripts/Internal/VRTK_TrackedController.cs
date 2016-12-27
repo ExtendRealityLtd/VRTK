@@ -13,6 +13,8 @@
 
     public class VRTK_TrackedController : MonoBehaviour
     {
+        public uint index;
+
         public event VRTKTrackedControllerEventHandler ControllerEnabled;
         public event VRTKTrackedControllerEventHandler ControllerDisabled;
         public event VRTKTrackedControllerEventHandler ControllerIndexChanged;
@@ -55,7 +57,7 @@
 
         private void OnEnable()
         {
-            aliasController = VRTK_DeviceFinder.GetAliasController(gameObject);
+            aliasController = VRTK_DeviceFinder.GetScriptAliasController(gameObject);
 
             if (enableControllerCoroutine != null)
             {

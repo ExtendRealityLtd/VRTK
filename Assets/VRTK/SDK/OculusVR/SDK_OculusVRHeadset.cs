@@ -1,15 +1,13 @@
-﻿// Fallback Headset|SDK_Fallback|002
+﻿// OculusVR Headset|SDK_OculusVR|002
 namespace VRTK
 {
+#if VRTK_SDK_OCULUSVR
     using UnityEngine;
 
     /// <summary>
-    /// The Fallback System SDK script provides a fallback collection of methods that return null or default Headset values.
+    /// The OculusVR Headset SDK script provides a bridge to the OculusVR SDK.
     /// </summary>
-    /// <remarks>
-    /// This is the fallback class that will just return default values.
-    /// </remarks>
-    public class SDK_FallbackHeadset : SDK_BaseHeadset
+    public class SDK_OculusVRHeadset : SDK_BaseHeadset
     {
         /// <summary>
         /// The GetHeadset method returns the Transform of the object that is used to represent the headset in the scene.
@@ -17,7 +15,16 @@ namespace VRTK
         /// <returns>A transform of the object representing the headset in the scene.</returns>
         public override Transform GetHeadset()
         {
-            return null;
+            cachedHeadset = GetSDKManagerHeadset();
+            if (cachedHeadset == null)
+            {
+                var ovrManager = FindObjectOfType<OVRManager>();
+                if (ovrManager)
+                {
+                    cachedHeadset = ovrManager.transform.FindChild("TrackingSpace/CenterEyeAnchor");
+                }
+            }
+            return cachedHeadset;
         }
 
         /// <summary>
@@ -26,7 +33,12 @@ namespace VRTK
         /// <returns>A transform of the object holding the headset camera in the scene.</returns>
         public override Transform GetHeadsetCamera()
         {
-            return null;
+            cachedHeadsetCamera = GetSDKManagerHeadset();
+            if (cachedHeadsetCamera == null)
+            {
+                cachedHeadsetCamera = GetHeadset();
+            }
+            return cachedHeadsetCamera;
         }
 
         /// <summary>
@@ -37,6 +49,7 @@ namespace VRTK
         /// <param name="fadeOverlay">Determines whether to use an overlay on the fade.</param>
         public override void HeadsetFade(Color color, float duration, bool fadeOverlay = false)
         {
+            VRTK_ScreenFade.Start(color, duration);
         }
 
         /// <summary>
@@ -46,6 +59,10 @@ namespace VRTK
         /// <returns>Returns true if the headset has fade functionality on it.</returns>
         public override bool HasHeadsetFade(Transform obj)
         {
+            if (obj.GetComponentInChildren<VRTK_ScreenFade>())
+            {
+                return true;
+            }
             return false;
         }
 
@@ -55,6 +72,15 @@ namespace VRTK
         /// <param name="camera">The Transform to with the camera on to add the fade functionality to.</param>
         public override void AddHeadsetFade(Transform camera)
         {
+            if (camera && !camera.GetComponent<VRTK_ScreenFade>())
+            {
+                camera.gameObject.AddComponent<VRTK_ScreenFade>();
+            }
         }
     }
+#else
+    public class SDK_OculusVRHeadset : SDK_FallbackHeadset
+    {
+    }
+#endif
 }

@@ -16,7 +16,7 @@
             GetComponent<VRTK_ControllerEvents>().TriggerReleased += new ControllerInteractionEventHandler(DoTriggerReleased);
             GetComponent<VRTK_ControllerEvents>().TouchpadTouchEnd += new ControllerInteractionEventHandler(DoTouchpadTouchEnd);
 
-            GetComponent<VRTK_ControllerEvents>().ApplicationMenuPressed += new ControllerInteractionEventHandler(DoApplicationMenuPressed);
+            GetComponent<VRTK_ControllerEvents>().ButtonOnePressed += new ControllerInteractionEventHandler(DoCarReset);
         }
 
         private void DoTouchpadAxisChanged(object sender, ControllerInteractionEventArgs e)
@@ -39,7 +39,7 @@
             rcCarScript.SetTriggerAxis(0f);
         }
 
-        private void DoApplicationMenuPressed(object sender, ControllerInteractionEventArgs e)
+        private void DoCarReset(object sender, ControllerInteractionEventArgs e)
         {
             rcCarScript.ResetCar();
         }
