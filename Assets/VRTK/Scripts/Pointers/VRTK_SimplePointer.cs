@@ -33,7 +33,7 @@ namespace VRTK
         public bool pointerCursorRescaledAlongDistance = false;
 
         private GameObject pointerHolder;
-        private GameObject pointer;
+        private GameObject pointerBeam;
         private GameObject pointerTip;
         private Vector3 pointerTipScale = new Vector3(0.05f, 0.05f, 0.05f);
         private Vector3 pointerCursorOriginalScale = Vector3.one;
@@ -56,7 +56,7 @@ namespace VRTK
         protected override void Update()
         {
             base.Update();
-            if (pointer.gameObject.activeSelf)
+            if (pointerBeam && pointerBeam.activeSelf)
             {
                 Ray pointerRaycast = new Ray(GetOriginPosition(), GetOriginForward());
                 RaycastHit pointerCollidedWith;
@@ -102,23 +102,22 @@ namespace VRTK
         protected override void InitPointer()
         {
             pointerHolder = new GameObject(string.Format("[{0}]BasePointer_SimplePointer_Holder", gameObject.name));
-            pointerHolder.transform.SetParent(transform);
             pointerHolder.transform.localPosition = Vector3.zero;
             VRTK_PlayerObject.SetPlayerObject(pointerHolder, VRTK_PlayerObject.ObjectTypes.Pointer);
 
-            pointer = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            pointer.transform.name = string.Format("[{0}]BasePointer_SimplePointer_Pointer", gameObject.name);
-            pointer.transform.SetParent(pointerHolder.transform);
-            pointer.GetComponent<BoxCollider>().isTrigger = true;
-            pointer.AddComponent<Rigidbody>().isKinematic = true;
-            pointer.layer = LayerMask.NameToLayer("Ignore Raycast");
+            pointerBeam = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            pointerBeam.transform.name = string.Format("[{0}]BasePointer_SimplePointer_Pointer", gameObject.name);
+            pointerBeam.transform.SetParent(pointerHolder.transform);
+            pointerBeam.GetComponent<BoxCollider>().isTrigger = true;
+            pointerBeam.AddComponent<Rigidbody>().isKinematic = true;
+            pointerBeam.layer = LayerMask.NameToLayer("Ignore Raycast");
 
-            var pointerRenderer = pointer.GetComponent<MeshRenderer>();
+            var pointerRenderer = pointerBeam.GetComponent<MeshRenderer>();
             pointerRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
             pointerRenderer.receiveShadows = false;
             pointerRenderer.material = pointerMaterial;
 
-            VRTK_PlayerObject.SetPlayerObject(pointer, VRTK_PlayerObject.ObjectTypes.Pointer);
+            VRTK_PlayerObject.SetPlayerObject(pointerBeam, VRTK_PlayerObject.ObjectTypes.Pointer);
 
             if (customPointerCursor)
             {
@@ -158,7 +157,7 @@ namespace VRTK
         {
             base.SetPointerMaterial(color);
 
-            base.ChangeMaterialColor(pointer, color);
+            base.ChangeMaterialColor(pointerBeam, color);
             base.ChangeMaterialColor(pointerTip, color);
         }
 
@@ -166,14 +165,20 @@ namespace VRTK
         {
             state = (pointerVisibility == pointerVisibilityStates.Always_On ? true : state);
             base.TogglePointer(state);
-            pointer.gameObject.SetActive(state);
+            if (pointerBeam)
+            {
+                pointerBeam.SetActive(state);
+            }
 
             var tipState = (showPointerTip ? state : false);
-            pointerTip.gameObject.SetActive(tipState);
-
-            if (pointer.GetComponent<Renderer>() && pointerVisibility == pointerVisibilityStates.Always_Off)
+            if (pointerTip)
             {
-                pointer.GetComponent<Renderer>().enabled = false;
+                pointerTip.SetActive(tipState);
+            }
+
+            if (pointerBeam && pointerBeam.GetComponent<Renderer>() && pointerVisibility == pointerVisibilityStates.Always_Off)
+            {
+                pointerBeam.GetComponent<Renderer>().enabled = false;
             }
         }
 
@@ -182,12 +187,14 @@ namespace VRTK
             //if the additional decimal isn't added then the beam position glitches
             var beamPosition = setLength / (2 + 0.00001f);
 
-            pointer.transform.localScale = new Vector3(setThicknes, setThicknes, setLength);
-            pointer.transform.localPosition = new Vector3(0f, 0f, beamPosition);
+            pointerBeam.transform.localScale = new Vector3(setThicknes, setThicknes, setLength);
+            pointerBeam.transform.localPosition = new Vector3(0f, 0f, beamPosition);
             pointerTip.transform.localPosition = new Vector3(0f, 0f, setLength - (pointerTip.transform.localScale.z / 2));
 
             pointerHolder.transform.localPosition = GetOriginLocalPosition();
             pointerHolder.transform.localRotation = GetOriginLocalRotation();
+            pointerHolder.transform.position = transform.position;
+            pointerHolder.transform.rotation = transform.rotation;
             base.UpdateDependencies(pointerTip.transform.position);
         }
 
