@@ -78,18 +78,6 @@ It covers a number of common solutions such as:
  * 2D and 3D controls like buttons, levers, doors, drawers, etc.
  * And much more...
 
-VRTK is split into four main sections:
-
- * Prefabs - `VRTK/Prefabs/`
- * Scripts - `VRTK/Scripts/`
- * Examples - `VRTK/Examples/`
- * SDK - `VRTK/SDK`
-
-The `VRTK` directory is where all of the relevant files are kept
-and this directory can be simply copied over to an existing project.
-
-*VRTK is heavily inspired by the [SteamVR Plugin for Unity3d Github Repo].*
-
 ## Examples
 
 A collection of example scenes have been created to aid with
