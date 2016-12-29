@@ -652,6 +652,7 @@ The laser beam is activated by default by pressing the `Touchpad` on the control
 
  * **Pointer Length:** The length of the projected forward pointer beam, this is basically the distance able to point from the origin position.
  * **Pointer Density:** The number of items to render in the beam bezier curve. A high number here will most likely have a negative impact of game performance due to large number of rendered objects.
+ * **Collision Check Frequency:** The number of points along the bezier curve to check for an early beam collision. Useful if the bezier curve is appearing to clip through teleport locations. 0 won't make any checks and it will be capped at `Pointer Density`. The higher the number, the more CPU intensive the checks become.
  * **Beam Curve Offset:** The amount of height offset to apply to the projected beam to generate a smoother curve even when the beam is pointing straight.
  * **Beam Height Limit Angle:** The maximum angle in degrees of the origin before the beam curve height is restricted. A lower angle setting will prevent the beam being projected high into the sky and curving back down.
  * **Rescale Pointer Tracer:** Rescale each pointer tracer element according to the length of the Bezier curve.
