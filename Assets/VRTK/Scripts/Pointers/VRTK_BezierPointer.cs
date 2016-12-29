@@ -26,6 +26,8 @@ namespace VRTK
         public float pointerLength = 10f;
         [Tooltip("The number of items to render in the beam bezier curve. A high number here will most likely have a negative impact of game performance due to large number of rendered objects.")]
         public int pointerDensity = 10;
+        [Tooltip("The number of points along the bezier curve to check for an early beam collision. Useful if the bezier curve is appearing to clip through teleport locations. 0 won't make any checks and it will be capped at `Pointer Density`. The higher the number, the more CPU intensive the checks become.")]
+        public int collisionCheckFrequency = 0;
         [Tooltip("The amount of height offset to apply to the projected beam to generate a smoother curve even when the beam is pointing straight.")]
         public float beamCurveOffset = 1f;
         [Tooltip("The maximum angle in degrees of the origin before the beam curve height is restricted. A lower angle setting will prevent the beam being projected high into the sky and curving back down.")]
@@ -39,7 +41,9 @@ namespace VRTK
         public float pointerCursorRadius = 0.5f;
         [Tooltip("The pointer cursor will be rotated to match the angle of the target surface if this is true, if it is false then the pointer cursor will always be horizontal.")]
         public bool pointerCursorMatchTargetRotation = false;
+
         [Header("Custom Appearance Settings", order = 4)]
+
         [Tooltip("A custom Game Object can be applied here to use instead of the default sphere for the beam tracer. The custom Game Object will match the rotation of the object attached to.")]
         public GameObject customPointerTracer;
         [Tooltip("A custom Game Object can be applied here to use instead of the default flat cylinder for the pointer cursor.")]
@@ -89,8 +93,7 @@ namespace VRTK
             {
                 var jointPosition = ProjectForwardBeam();
                 var downPosition = ProjectDownBeam(jointPosition);
-                DisplayCurvedBeam(jointPosition, downPosition);
-                SetPointerCursor(downPosition);
+                AdjustForEarlyCollisions(jointPosition, downPosition);
             }
         }
 
@@ -207,6 +210,7 @@ namespace VRTK
 
         private Vector3 ProjectDownBeam(Vector3 jointPosition)
         {
+            Vector3 downPosition = Vector3.zero;
             Ray projectedBeamDownRaycast = new Ray(jointPosition, Vector3.down);
             RaycastHit collidedWith;
 
@@ -221,7 +225,7 @@ namespace VRTK
                 pointerContactTarget = null;
                 pointerContactRaycastHit = new RaycastHit();
                 contactNormal = Vector3.zero;
-                destinationPosition = projectedBeamDownRaycast.GetPoint(0f);
+                downPosition = projectedBeamDownRaycast.GetPoint(0f);
             }
 
             if (downRayHit)
@@ -229,18 +233,20 @@ namespace VRTK
                 pointerContactTarget = collidedWith.transform;
                 pointerContactRaycastHit = collidedWith;
                 contactNormal = collidedWith.normal;
-                destinationPosition = projectedBeamDownRaycast.GetPoint(collidedWith.distance);
+                downPosition = projectedBeamDownRaycast.GetPoint(collidedWith.distance);
                 base.PointerIn();
             }
-            return destinationPosition;
+            return downPosition;
         }
 
-        private void SetPointerCursor(Vector3 downPosition)
+        private void SetPointerCursor(Vector3 cursorPosition)
         {
+            destinationPosition = cursorPosition;
+
             if (pointerContactTarget != null)
             {
                 TogglePointerCursor(true);
-                pointerCursor.transform.position = downPosition;
+                pointerCursor.transform.position = cursorPosition;
                 if (pointerCursorMatchTargetRotation)
                 {
                     pointerCursor.transform.rotation = Quaternion.FromToRotation(Vector3.up, contactNormal);
@@ -257,6 +263,55 @@ namespace VRTK
                 TogglePointerCursor(false);
                 UpdatePointerMaterial(pointerMissColor);
             }
+        }
+
+        private void AdjustForEarlyCollisions(Vector3 jointPosition, Vector3 downPosition)
+        {
+            Vector3 newDownPosition = downPosition;
+            Vector3 newJointPosition = jointPosition;
+
+            if (collisionCheckFrequency > 0)
+            {
+                collisionCheckFrequency = Mathf.Clamp(collisionCheckFrequency, 0, pointerDensity);
+                Vector3[] beamPoints = new Vector3[]
+{
+                GetOriginPosition(),
+                jointPosition + new Vector3(0f, beamCurveOffset, 0f),
+                downPosition,
+                downPosition,
+};
+
+                Vector3[] checkPoints = curvedBeam.GetPoints(beamPoints);
+                int checkFrequency = pointerDensity / collisionCheckFrequency;
+
+                for (int i = 0; i < pointerDensity - checkFrequency; i += checkFrequency)
+                {
+                    var currentPoint = checkPoints[i];
+                    var nextPoint = (i + checkFrequency < checkPoints.Length ? checkPoints[i + checkFrequency] : checkPoints[checkPoints.Length - 1]);
+                    var nextPointDirection = (nextPoint - currentPoint).normalized;
+                    var nextPointDistance = Vector3.Distance(currentPoint, nextPoint);
+
+                    Ray checkCollisionRay = new Ray(currentPoint, nextPointDirection);
+                    RaycastHit checkCollisionHit;
+
+                    if (Physics.Raycast(checkCollisionRay, out checkCollisionHit, nextPointDistance, ~layersToIgnore))
+                    {
+                        var collisionPoint = checkCollisionRay.GetPoint(checkCollisionHit.distance);
+                        Ray downwardCheckRay = new Ray(collisionPoint + (Vector3.up * 0.01f), Vector3.down);
+                        RaycastHit downwardCheckHit;
+
+                        if (Physics.Raycast(downwardCheckRay, out downwardCheckHit, float.PositiveInfinity, ~layersToIgnore))
+                        {
+                            newDownPosition = downwardCheckRay.GetPoint(downwardCheckHit.distance); ;
+                            newJointPosition = (newDownPosition.y < jointPosition.y ? new Vector3(newDownPosition.x, jointPosition.y, newDownPosition.z) : jointPosition);
+                            break;
+                        }
+                    }
+                }
+            }
+
+            DisplayCurvedBeam(newJointPosition, newDownPosition);
+            SetPointerCursor(newDownPosition);
         }
 
         private void DisplayCurvedBeam(Vector3 jointPosition, Vector3 downPosition)

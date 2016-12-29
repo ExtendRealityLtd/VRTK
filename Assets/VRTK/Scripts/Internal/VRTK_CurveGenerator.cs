@@ -90,18 +90,45 @@ namespace VRTK
 
         public void SetPoints(Vector3[] controlPoints, Material material, Color color)
         {
+            PointsInit(controlPoints);
+            SetObjects(material, color);
+        }
+
+        public Vector3[] GetPoints(Vector3[] controlPoints)
+        {
+            PointsInit(controlPoints);
+
+            Vector3[] calculatedPoints = new Vector3[frequency];
+            float stepSize = frequency * 1;
+            if (Loop || stepSize == 1)
+            {
+                stepSize = 1f / stepSize;
+            }
+            else
+            {
+                stepSize = 1f / (stepSize - 1);
+            }
+
+            for (int f = 0; f < frequency; f++)
+            {
+                calculatedPoints[f] = GetPoint(f * stepSize);
+            }
+            return calculatedPoints;
+        }
+
+        public void TogglePoints(bool state)
+        {
+            gameObject.SetActive(state);
+        }
+
+        private void PointsInit(Vector3[] controlPoints)
+        {
             points = controlPoints;
             modes = new BezierControlPointMode[]
             {
                 BezierControlPointMode.Free,
                 BezierControlPointMode.Free
             };
-            SetObjects(material, color);
-        }
-
-        public void TogglePoints(bool state)
-        {
-            gameObject.SetActive(state);
         }
 
         private GameObject CreateSphere()
