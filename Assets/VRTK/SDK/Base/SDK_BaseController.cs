@@ -79,8 +79,9 @@ namespace VRTK
         /// <summary>
         /// The GetControllerDefaultColliderPath returns the path to the prefab that contains the collider objects for the default controller of this SDK.
         /// </summary>
+        /// <param name="hand">The controller hand to check for</param>
         /// <returns>A path to the resource that contains the collider GameObject.</returns>
-        public abstract string GetControllerDefaultColliderPath();
+        public abstract string GetControllerDefaultColliderPath(ControllerHand hand);
 
         /// <summary>
         /// The GetControllerElementPath returns the path to the game object that the given controller element for the given hand resides in.

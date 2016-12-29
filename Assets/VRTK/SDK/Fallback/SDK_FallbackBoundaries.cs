@@ -12,6 +12,13 @@ namespace VRTK
     public class SDK_FallbackBoundaries : SDK_BaseBoundaries
     {
         /// <summary>
+        /// The InitBoundaries method is run on start of scene and can be used to initialse anything on game start.
+        /// </summary>
+        public override void InitBoundaries()
+        {
+        }
+
+        /// <summary>
         /// The GetPlayArea method returns the Transform of the object that is used to represent the play area in the scene.
         /// </summary>
         /// <returns>A transform of the object representing the play area in the scene.</returns>

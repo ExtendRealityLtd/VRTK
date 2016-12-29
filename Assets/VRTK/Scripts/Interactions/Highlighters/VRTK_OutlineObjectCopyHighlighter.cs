@@ -159,8 +159,12 @@ namespace VRTK.Highlighters
             }
 
             var copyMesh = copyModel.GetComponent<MeshFilter>();
-            highlightModel.GetComponent<MeshFilter>().mesh = copyMesh.mesh;
-            highlightModel.GetComponent<Renderer>().material = stencilOutline;
+            var highlightMesh = highlightModel.GetComponent<MeshFilter>();
+            if (highlightMesh)
+            {
+                highlightModel.GetComponent<MeshFilter>().mesh = copyMesh.mesh;
+                highlightModel.GetComponent<Renderer>().material = stencilOutline;
+            }
             highlightModel.SetActive(false);
 
             VRTK_PlayerObject.SetPlayerObject(highlightModel, VRTK_PlayerObject.ObjectTypes.Highlighter);

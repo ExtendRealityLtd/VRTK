@@ -154,6 +154,7 @@ namespace VRTK
             if (!VRTK_SharedMethods.IsEditTime())
             {
                 SetupControllers();
+                GetBoundariesSDK().InitBoundaries();
             }
         }
 

@@ -197,7 +197,8 @@ namespace VRTK
             controllerActions = GetComponent<VRTK_ControllerActions>();
             VRTK_PlayerObject.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.Controller);
             destroyColliderOnDisable = false;
-            defaultColliderPrefab = Resources.Load(VRTK_SDK_Bridge.GetControllerDefaultColliderPath());
+            var controllerHand = VRTK_DeviceFinder.GetControllerHand(gameObject);
+            defaultColliderPrefab = Resources.Load(VRTK_SDK_Bridge.GetControllerDefaultColliderPath(controllerHand));
         }
 
         private void OnEnable()
