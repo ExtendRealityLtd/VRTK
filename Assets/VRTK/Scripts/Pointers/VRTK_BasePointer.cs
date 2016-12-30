@@ -130,11 +130,6 @@ namespace VRTK
 
             var fetchedPlayAreaCursor = GetComponent<VRTK_PlayAreaCursor>();
             playAreaCursor = (fetchedPlayAreaCursor ?? fetchedPlayAreaCursor);
-
-            if (interactWithObjects)
-            {
-                CreateObjectInteractor();
-            }
         }
 
         protected override void OnDisable()
@@ -163,7 +158,7 @@ namespace VRTK
 
         protected virtual void Update()
         {
-            if (interactWithObjects && objectInteractor.activeInHierarchy)
+            if (interactWithObjects && objectInteractor && objectInteractor.activeInHierarchy)
             {
                 UpdateObjectInteractor();
             }
@@ -317,7 +312,10 @@ namespace VRTK
                     savedBeamLength = 0f;
                 }
 
-                objectInteractor.SetActive(state);
+                if (objectInteractor)
+                {
+                    objectInteractor.SetActive(state);
+                }
             }
         }
 
@@ -447,6 +445,11 @@ namespace VRTK
                 controller.AliasPointerSet += new ControllerInteractionEventHandler(SetPointerDestination);
 
                 controllerGrabScript = controller.GetComponent<VRTK_InteractGrab>();
+
+                if (interactWithObjects)
+                {
+                    CreateObjectInteractor();
+                }
             }
         }
 
