@@ -143,6 +143,7 @@
         {
             ProcessSDK(VRTK_SDKManager.SupportedSDKs.SteamVR, "VRTK_SDK_STEAMVR", "SteamVR", "SteamVR", system, headset, controller, boundaries);
             ProcessSDK(VRTK_SDKManager.SupportedSDKs.OculusVR, "VRTK_SDK_OCULUSVR", "OculusVR", "OVRInput", system, headset, controller, boundaries);
+            ProcessSDK(VRTK_SDKManager.SupportedSDKs.Simulator, "VRTK_SDK_SIM", "Simulator", "VRTK_SDKManager", system, headset, controller, boundaries);
         }
 
         private void ProcessSDK(VRTK_SDKManager.SupportedSDKs sdk, string defineSymbol, string name, string checkType, VRTK_SDKManager.SupportedSDKs system, VRTK_SDKManager.SupportedSDKs headset, VRTK_SDKManager.SupportedSDKs controller, VRTK_SDKManager.SupportedSDKs boundaries)

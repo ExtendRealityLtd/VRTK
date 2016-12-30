@@ -16,7 +16,8 @@ namespace VRTK
         {
             None,
             SteamVR,
-            OculusVR
+            OculusVR,
+            Simulator
         }
 
         /// <summary>
@@ -75,6 +76,9 @@ namespace VRTK
                 case SupportedSDKs.OculusVR:
                     returnSDK = ScriptableObject.CreateInstance<SDK_OculusVRSystem>();
                     break;
+                case SupportedSDKs.Simulator:
+                    returnSDK = ScriptableObject.CreateInstance<SDK_SimSystem>();
+                    break;
                 default:
                     returnSDK = ScriptableObject.CreateInstance<SDK_FallbackSystem>();
                     break;
@@ -96,6 +100,9 @@ namespace VRTK
                     break;
                 case SupportedSDKs.OculusVR:
                     returnSDK = ScriptableObject.CreateInstance<SDK_OculusVRHeadset>();
+                    break;
+                case SupportedSDKs.Simulator:
+                    returnSDK = ScriptableObject.CreateInstance<SDK_SimHeadset>();
                     break;
                 default:
                     returnSDK = ScriptableObject.CreateInstance<SDK_FallbackHeadset>();
@@ -119,6 +126,9 @@ namespace VRTK
                 case SupportedSDKs.OculusVR:
                     returnSDK = ScriptableObject.CreateInstance<SDK_OculusVRController>();
                     break;
+                case SupportedSDKs.Simulator:
+                    returnSDK = ScriptableObject.CreateInstance<SDK_SimController>();
+                    break;
                 default:
                     returnSDK = ScriptableObject.CreateInstance<SDK_FallbackController>();
                     break;
@@ -140,6 +150,9 @@ namespace VRTK
                     break;
                 case SupportedSDKs.OculusVR:
                     returnSDK = ScriptableObject.CreateInstance<SDK_OculusVRBoundaries>();
+                    break;
+                case SupportedSDKs.Simulator:
+                    returnSDK = ScriptableObject.CreateInstance<SDK_SimBoundaries>();
                     break;
                 default:
                     returnSDK = ScriptableObject.CreateInstance<SDK_FallbackBoundaries>();
