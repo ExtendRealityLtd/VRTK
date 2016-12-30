@@ -312,6 +312,7 @@ The RadialMenu can also be placed inside a `VRTK_InteractableObject` for the Rad
 
  * **Buttons:** An array of Buttons that define the interactive buttons required to be displayed as part of the radial menu.
  * **Button Prefab:** The base for each button in the menu, by default set to a dynamic circle arc that will fill up a portion of the menu.
+ * **Generate On Awake:** If checked, then the buttons will be auto generated on awake.
  * **Button Thickness:** Percentage of the menu the buttons should fill, 1.0 is a pie slice, 0.1 is a thin ring.
  * **Button Color:** The background colour of the buttons, default is white.
  * **Offset Distance:** The distance the buttons should move away from the centre. This creates space between the individual buttons.

@@ -29,6 +29,8 @@ namespace VRTK
         public List<RadialMenuButton> buttons;
         [Tooltip("The base for each button in the menu, by default set to a dynamic circle arc that will fill up a portion of the menu.")]
         public GameObject buttonPrefab;
+        [Tooltip("If checked, then the buttons will be auto generated on awake.")]
+        public bool generateOnAwake = true;
         [Tooltip("Percentage of the menu the buttons should fill, 1.0 is a pie slice, 0.1 is a thin ring.")]
         [Range(0f, 1f)]
         public float buttonThickness = 0.5f;
@@ -73,7 +75,10 @@ namespace VRTK
                 {
                     transform.localScale = Vector3.zero;
                 }
-                RegenerateButtons();
+                if (generateOnAwake)
+                {
+                    RegenerateButtons();
+                }
             }
         }
 
