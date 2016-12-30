@@ -2,6 +2,9 @@
 namespace VRTK
 {
     using UnityEngine;
+#if UNITY_5_5_OR_NEWER
+    using UnityEngine.AI;
+#endif
 
     /// <summary>
     /// This abstract class provides any game pointer the ability to know the state of the implemented pointer.

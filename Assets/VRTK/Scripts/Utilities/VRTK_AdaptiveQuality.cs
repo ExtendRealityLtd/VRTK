@@ -305,15 +305,11 @@ namespace VRTK
             {
                 OnValidate();
             }
-
-            CreateOrDestroyDebugVisualization();
         }
 
         private void OnDisable()
         {
             Camera.onPreCull -= OnCameraPreCull;
-
-            CreateOrDestroyDebugVisualization();
             SetRenderScale(1.0f, 1.0f);
         }
 
@@ -332,6 +328,7 @@ namespace VRTK
         {
             HandleKeyPresses();
             UpdateRenderScaleLevels();
+            CreateOrDestroyDebugVisualization();
             UpdateDebugVisualization();
 
             timing.SaveCurrentFrameTiming();
@@ -684,7 +681,9 @@ namespace VRTK
                         },
                     triangles = new[] { 0, 1, 2, 0, 2, 3 }
                 };
+#if !UNITY_5_5_OR_NEWER
                 mesh.Optimize();
+#endif
                 mesh.UploadMeshData(true);
 
                 debugVisualizationQuad = new GameObject("AdaptiveQualityDebugVisualizationQuad");
