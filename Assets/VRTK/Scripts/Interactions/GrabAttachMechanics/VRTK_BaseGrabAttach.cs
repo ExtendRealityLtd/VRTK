@@ -224,7 +224,16 @@ namespace VRTK.GrabAttachMechanics
 
                     if (throwVelocityWithAttachDistance)
                     {
-                        objectRigidbody.velocity = objectRigidbody.GetPointVelocity(objectRigidbody.position + (objectRigidbody.position - transform.position));
+                        var rigidbodyCollider = objectRigidbody.GetComponentInChildren<Collider>();
+                        if (rigidbodyCollider)
+                        {
+                            Vector3 collisionCenter = rigidbodyCollider.bounds.center;
+                            objectRigidbody.velocity = objectRigidbody.GetPointVelocity(collisionCenter + (collisionCenter - transform.position));
+                        }
+                        else
+                        {
+                            objectRigidbody.velocity = objectRigidbody.GetPointVelocity(objectRigidbody.position + (objectRigidbody.position - transform.position));
+                        }
                     }
                 }
             }
