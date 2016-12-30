@@ -526,7 +526,6 @@ namespace VRTK
             return IsButtonPressed(index, ButtonPressTypes.TouchUp, SteamVR_Controller.ButtonMask.Grip);
         }
 
-
         /// <summary>
         /// The IsHairGripDownOnIndex method is used to determine if the controller button has passed it's press threshold.
         /// </summary>

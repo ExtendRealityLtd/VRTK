@@ -12,13 +12,20 @@ namespace VRTK
         private Transform area;
 
         /// <summary>
+        /// The InitBoundaries method is run on start of scene and can be used to initialse anything on game start.
+        /// </summary>
+        public override void InitBoundaries()
+        {
+        }
+
+        /// <summary>
         /// The GetPlayArea method returns the Transform of the object that is used to represent the play area in the scene.
         /// </summary>
         /// <returns>A transform of the object representing the play area in the scene.</returns>
         public override Transform GetPlayArea()
         {
             if(area == null)
-				area = GameObject.Find("VRTK_SimPlayer").transform.FindChild("PlayArea");
+				area = GameObject.Find("VRTK_SimPlayer").transform;
 
             return area;
         }

@@ -19,7 +19,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 4000014032533114}
-  - 65: {fileID: 65000010341378898}
+  - 135: {fileID: 135000013971900078}
   m_Layer: 0
   m_Name: Simulator
   m_TagString: Untagged
@@ -40,8 +40,8 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
---- !u!65 &65000010341378898
-BoxCollider:
+--- !u!135 &135000013971900078
+SphereCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
@@ -50,5 +50,5 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.1, y: 0.1, z: 0.1}
+  m_Radius: 0.03
   m_Center: {x: 0, y: 0, z: 0}
