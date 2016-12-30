@@ -348,7 +348,7 @@ namespace VRTK
             ToggleEnableState(true);
             if (IsUsing() && !IsUsing(currentUsingObject))
             {
-                usingObject.GetComponent<VRTK_InteractUse>().ForceResetUsing();
+                ResetUsingObject();
             }
             OnInteractableObjectUsed(SetInteractableObjectEvent(currentUsingObject));
             usingObject = currentUsingObject;
@@ -361,6 +361,7 @@ namespace VRTK
         public virtual void StopUsing(GameObject previousUsingObject)
         {
             OnInteractableObjectUnused(SetInteractableObjectEvent(previousUsingObject));
+            ResetUsingObject();
             usingObject = null;
         }
 
@@ -1011,6 +1012,18 @@ namespace VRTK
 
             storedSnapDropZone.OnObjectUnsnappedFromDropZone(storedSnapDropZone.SetSnapDropZoneEvent(gameObject));
             storedSnapDropZone = null;
+        }
+
+        private void ResetUsingObject()
+        {
+            if (usingObject)
+            {
+                var usingObjectScript = usingObject.GetComponent<VRTK_InteractUse>();
+                if (usingObjectScript)
+                {
+                    usingObjectScript.ForceResetUsing();
+                }
+            }
         }
     }
 }
