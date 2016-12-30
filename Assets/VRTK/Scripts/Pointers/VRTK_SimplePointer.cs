@@ -37,6 +37,9 @@ namespace VRTK
         private GameObject pointerTip;
         private Vector3 pointerTipScale = new Vector3(0.05f, 0.05f, 0.05f);
         private Vector3 pointerCursorOriginalScale = Vector3.one;
+        private bool activeEnabled;
+        private bool storedBeamState;
+        private bool storedTipState;
 
         protected override void OnEnable()
         {
@@ -85,6 +88,13 @@ namespace VRTK
                     {
                         pointerTip.transform.localScale = pointerCursorOriginalScale * pointerBeamLength;
                     }
+                }
+
+                if (activeEnabled)
+                {
+                    activeEnabled = false;
+                    pointerBeam.GetComponentInChildren<Renderer>().enabled = storedBeamState;
+                    pointerTip.GetComponentInChildren<Renderer>().enabled = storedTipState;
                 }
             }
         }
@@ -176,9 +186,20 @@ namespace VRTK
                 pointerTip.SetActive(tipState);
             }
 
-            if (pointerBeam && pointerBeam.GetComponent<Renderer>() && pointerVisibility == pointerVisibilityStates.Always_Off)
+            if (pointerBeam && pointerBeam.GetComponentInChildren<Renderer>() && pointerVisibility == pointerVisibilityStates.Always_Off)
             {
-                pointerBeam.GetComponent<Renderer>().enabled = false;
+                pointerBeam.GetComponentInChildren<Renderer>().enabled = false;
+            }
+
+            activeEnabled = state;
+
+            if (activeEnabled)
+            {
+                storedBeamState = pointerBeam.GetComponentInChildren<Renderer>().enabled;
+                storedTipState = pointerTip.GetComponentInChildren<Renderer>().enabled;
+
+                pointerBeam.GetComponentInChildren<Renderer>().enabled = false;
+                pointerTip.GetComponentInChildren<Renderer>().enabled = false;
             }
         }
 
