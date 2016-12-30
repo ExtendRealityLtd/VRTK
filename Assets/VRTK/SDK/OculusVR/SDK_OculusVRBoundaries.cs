@@ -10,6 +10,16 @@ namespace VRTK
     public class SDK_OculusVRBoundaries : SDK_BaseBoundaries
     {
         /// <summary>
+        /// The InitBoundaries method is run on start of scene and can be used to initialse anything on game start.
+        /// </summary>
+        public override void InitBoundaries()
+        {
+#if VRTK_SDK_OCULUSVR_AVATAR
+            GetAvatar();
+#endif
+        }
+
+        /// <summary>
         /// The GetPlayArea method returns the Transform of the object that is used to represent the play area in the scene.
         /// </summary>
         /// <returns>A transform of the object representing the play area in the scene.</returns>
@@ -77,6 +87,28 @@ namespace VRTK
         {
             return true;
         }
+
+#if VRTK_SDK_OCULUSVR_AVATAR
+        private OvrAvatar avatarContainer;
+
+        /// <summary>
+        /// The GetAvatar method is used to retrieve the Oculus Avatar object if it exists in the scene. This method is only available if the Oculus Avatar package is installed.
+        /// </summary>
+        /// <returns>The OvrAvatar script for managing the Oculus Avatar.</returns>
+        public virtual OvrAvatar GetAvatar()
+        {
+            if (avatarContainer == null)
+            {
+                avatarContainer = FindObjectOfType<OvrAvatar>();
+                if (avatarContainer)
+                {
+                    var objectFollow = avatarContainer.gameObject.AddComponent<VRTK_ObjectFollow>();
+                    objectFollow.objectToFollow = GetPlayArea();
+                }
+            }
+            return avatarContainer;
+        }
+#endif
     }
 #else
     public class SDK_OculusVRBoundaries : SDK_FallbackBoundaries

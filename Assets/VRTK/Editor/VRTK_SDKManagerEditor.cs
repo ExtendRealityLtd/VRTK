@@ -161,6 +161,26 @@
                     AddScriptingDefineSymbol(defineSymbol);
                 }
             }
+
+            CheckAvatarSupport(sdk);
+        }
+
+        private void CheckAvatarSupport(VRTK_SDKManager.SupportedSDKs sdk)
+        {
+            switch (sdk)
+            {
+                case VRTK_SDKManager.SupportedSDKs.OculusVR:
+                    var defineSymbol = "VRTK_SDK_OCULUSVR_AVATAR";
+                    if (TypeExists("OvrAvatar"))
+                    {
+                        AddScriptingDefineSymbol(defineSymbol);
+                    }
+                    else
+                    {
+                        RemoveScriptingDefineSymbol(defineSymbol);
+                    }
+                    break;
+            }
         }
 
         private bool CheckSDKInstalled(string message, string checkType, bool showMessage)

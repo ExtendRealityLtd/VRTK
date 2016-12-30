@@ -4383,6 +4383,7 @@ A collection of scripts that provide useful functionality to aid the creation pr
  * [Shared Methods](#shared-methods-vrtk_sharedmethods)
  * [Policy List](#policy-list-vrtk_policylist)
  * [Adaptive Quality](#adaptive-quality-vrtk_adaptivequality)
+ * [Object Transform Follow](#object-transform-follow-vrtk_objectfollow)
  * [Simulating Headset Movement](#simulating-headset-movement-vrtk_simulator)
 
 ---
@@ -4928,6 +4929,21 @@ Eventually when lots of spheres are present the FPS will drop and demonstrate th
 
 ---
 
+## Object Transform Follow (VRTK_ObjectFollow)
+
+### Overview
+
+A simple script that when attached to a GameObject will follow the position, scale and rotation of the given Transform.
+
+### Inspector Parameters
+
+ * **Object To Follow:** A transform of an object to follow the position, scale and rotation of.
+ * **Follow Position:** Follow the position of the given object.
+ * **Follow Rotation:** Follow the rotation of the given object.
+ * **Follow Scale:** Follow the scale of the given object.
+
+---
+
 ## Simulating Headset Movement (VRTK_Simulator)
 
 ### Overview
@@ -5121,12 +5137,12 @@ This is an abstract class to implement the interface required by all implemented
 
 The ProcessUpdate method enables an SDK to run logic for every Unity Update
 
-#### GetControllerDefaultColliderPath/0
+#### GetControllerDefaultColliderPath/1
 
-  > `public abstract string GetControllerDefaultColliderPath();`
+  > `public abstract string GetControllerDefaultColliderPath(ControllerHand hand);`
 
   * Parameters
-   * _none_
+   * `ControllerHand hand` - The controller hand to check for
   * Returns
    * `string` - A path to the resource that contains the collider GameObject.
 
@@ -5790,6 +5806,17 @@ This is an abstract class to implement the interface required by all implemented
 
 ### Class Methods
 
+#### InitBoundaries/0
+
+  > `public abstract void InitBoundaries();`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The InitBoundaries method is run on start of scene and can be used to initialse anything on game start.
+
 #### GetPlayArea/0
 
   > `public abstract Transform GetPlayArea();`
@@ -5986,12 +6013,12 @@ This is the fallback class that will just return default values.
 
 The ProcessUpdate method enables an SDK to run logic for every Unity Update
 
-#### GetControllerDefaultColliderPath/0
+#### GetControllerDefaultColliderPath/1
 
-  > `public override string GetControllerDefaultColliderPath()`
+  > `public override string GetControllerDefaultColliderPath(ControllerHand hand)`
 
   * Parameters
-   * _none_
+   * `ControllerHand hand` - The controller hand to check for
   * Returns
    * `string` - A path to the resource that contains the collider GameObject.
 
@@ -6655,6 +6682,17 @@ This is the fallback class that will just return default values.
 
 ### Class Methods
 
+#### InitBoundaries/0
+
+  > `public override void InitBoundaries()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The InitBoundaries method is run on start of scene and can be used to initialse anything on game start.
+
 #### GetPlayArea/0
 
   > `public override Transform GetPlayArea()`
@@ -6845,12 +6883,12 @@ The SteamVR Controller SDK script provides a bridge to SDK methods that deal wit
 
 The ProcessUpdate method enables an SDK to run logic for every Unity Update
 
-#### GetControllerDefaultColliderPath/0
+#### GetControllerDefaultColliderPath/1
 
-  > `public override string GetControllerDefaultColliderPath()`
+  > `public override string GetControllerDefaultColliderPath(ControllerHand hand)`
 
   * Parameters
-   * _none_
+   * `ControllerHand hand` - The controller hand to check for
   * Returns
    * `string` - A path to the resource that contains the collider GameObject.
 
@@ -7512,6 +7550,17 @@ The SteamVR Boundaries SDK script provides a bridge to the SteamVR SDK play area
 
 ### Class Methods
 
+#### InitBoundaries/0
+
+  > `public override void InitBoundaries()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The InitBoundaries method is run on start of scene and can be used to initialse anything on game start.
+
 #### GetPlayArea/0
 
   > `public override Transform GetPlayArea()`
@@ -7702,12 +7751,12 @@ The OculusVR Controller SDK script provides a bridge to SDK methods that deal wi
 
 The ProcessUpdate method enables an SDK to run logic for every Unity Update
 
-#### GetControllerDefaultColliderPath/0
+#### GetControllerDefaultColliderPath/1
 
-  > `public override string GetControllerDefaultColliderPath()`
+  > `public override string GetControllerDefaultColliderPath(ControllerHand hand)`
 
   * Parameters
-   * _none_
+   * `ControllerHand hand` - The controller hand to check for
   * Returns
    * `string` - A path to the resource that contains the collider GameObject.
 
@@ -8369,6 +8418,17 @@ The OculusVR Boundaries SDK script provides a bridge to the OculusVR SDK play ar
 
 ### Class Methods
 
+#### InitBoundaries/0
+
+  > `public override void InitBoundaries()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The InitBoundaries method is run on start of scene and can be used to initialse anything on game start.
+
 #### GetPlayArea/0
 
   > `public override Transform GetPlayArea()`
@@ -8412,6 +8472,17 @@ The GetPlayAreaBorderThickness returns the thickness of the drawn border for the
    * `bool` - Returns true if the play area size has been auto calibrated and set by external sensors.
 
 The IsPlayAreaSizeCalibrated method returns whether the given play area size has been auto calibrated by external sensors.
+
+#### GetAvatar/0
+
+  > `public virtual OvrAvatar GetAvatar()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `OvrAvatar` - The OvrAvatar script for managing the Oculus Avatar.
+
+The GetAvatar method is used to retrieve the Oculus Avatar object if it exists in the scene. This method is only available if the Oculus Avatar package is installed.
 
 ---
 

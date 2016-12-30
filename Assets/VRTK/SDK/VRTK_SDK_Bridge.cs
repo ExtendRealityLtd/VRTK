@@ -15,12 +15,12 @@
             GetControllerSDK().ProcessUpdate(index, options);
         }
 
-        public static string GetControllerDefaultColliderPath()
+        public static string GetControllerDefaultColliderPath(SDK_BaseController.ControllerHand hand)
         {
-            return GetControllerSDK().GetControllerDefaultColliderPath();
+            return GetControllerSDK().GetControllerDefaultColliderPath(hand);
         }
 
-        public static string GetControllerElementPath(SDK_BaseController.ControllerElements element, SDK_BaseController.ControllerHand hand = SDK_BaseController.ControllerHand.Right, bool fullPath = false)
+        public static string GetControllerElementPath(SDK_BaseController.ControllerElements element, SDK_BaseController.ControllerHand hand, bool fullPath = false)
         {
             return GetControllerSDK().GetControllerElementPath(element, hand, fullPath);
         }

@@ -11,6 +11,7 @@ namespace VRTK
     public class SDK_OculusVRController : SDK_BaseController
     {
         private bool floorLevelSet = false;
+        private SDK_OculusVRBoundaries cachedBoundariesSDK;
         private VRTK_TrackedController cachedLeftController;
         private VRTK_TrackedController cachedRightController;
         private OVRInput.Controller[] touchControllers = new OVRInput.Controller[] { OVRInput.Controller.LTouch, OVRInput.Controller.RTouch };
@@ -50,9 +51,15 @@ namespace VRTK
         /// <summary>
         /// The GetControllerDefaultColliderPath returns the path to the prefab that contains the collider objects for the default controller of this SDK.
         /// </summary>
+        /// <param name="hand">The controller hand to check for</param>
         /// <returns>A path to the resource that contains the collider GameObject.</returns>
-        public override string GetControllerDefaultColliderPath()
+        public override string GetControllerDefaultColliderPath(ControllerHand hand)
         {
+            if (HasAvatar())
+            {
+                return "ControllerColliders/OculusTouch_" + hand.ToString();
+            }
+
             return "ControllerColliders/Fallback";
         }
 
@@ -65,7 +72,37 @@ namespace VRTK
         /// <returns>A string containing the path to the game object that the controller element resides in.</returns>
         public override string GetControllerElementPath(ControllerElements element, ControllerHand hand, bool fullPath = false)
         {
-            //TODO: NOT IMPLEMENTED
+            if (GetAvatar())
+            {
+                var suffix = (fullPath ? "" : "");
+                var parent = "controller_" + (hand == ControllerHand.Left ? "left" : "right") + "_renderPart_0";
+                var prefix = (hand == ControllerHand.Left ? "l" : "r") + "ctrl:";
+                var child = prefix + (hand == ControllerHand.Left ? "left" : "right") + "_touch_controller_world";
+
+                var path = parent + "/" + child + "/" + prefix + "b_";
+
+                switch (element)
+                {
+                    case ControllerElements.AttachPoint:
+                        return null;
+                    case ControllerElements.Trigger:
+                        return path + "trigger" + suffix;
+                    case ControllerElements.GripLeft:
+                        return path + "hold" + suffix;
+                    case ControllerElements.GripRight:
+                        return path + "hold" + suffix;
+                    case ControllerElements.Touchpad:
+                        return path + "stick/" + prefix + "b_stick_IGNORE" + suffix;
+                    case ControllerElements.ButtonOne:
+                        return path + "button01" + suffix;
+                    case ControllerElements.ButtonTwo:
+                        return path + "button02" + suffix;
+                    case ControllerElements.SystemMenu:
+                        return path + "button03" + suffix;
+                    case ControllerElements.Body:
+                        return parent;
+                }
+            }
             return null;
         }
 
@@ -216,15 +253,31 @@ namespace VRTK
             var model = GetSDKManagerControllerModelForHand(hand);
             if (!model)
             {
+                var avatarObject = GetAvatar();
+                var avatarName = (avatarObject ? avatarObject.name : "");
                 switch (hand)
                 {
                     case ControllerHand.Left:
-                        model = GameObject.Find("OVRCameraRig/TrackingSpace/LeftHandAnchor");
-                        model = (model.transform.childCount > 0 ? model.transform.GetChild(0).gameObject : null);
+                        if (avatarName != "")
+                        {
+                            model = GameObject.Find(avatarName + "/controller_left");
+                        }
+                        else
+                        {
+                            model = GameObject.Find("OVRCameraRig/TrackingSpace/LeftHandAnchor");
+                            model = (model.transform.childCount > 0 ? model.transform.GetChild(0).gameObject : null);
+                        }
                         break;
                     case ControllerHand.Right:
-                        model = GameObject.Find("OVRCameraRig/TrackingSpace/RightHandAnchor");
-                        model = (model.transform.childCount > 0 ? model.transform.GetChild(0).gameObject : null);
+                        if (avatarName != "")
+                        {
+                            model = GameObject.Find(avatarName + "/controller_right");
+                        }
+                        else
+                        {
+                            model = GameObject.Find("OVRCameraRig/TrackingSpace/RightHandAnchor");
+                            model = (model.transform.childCount > 0 ? model.transform.GetChild(0).gameObject : null);
+                        }
                         break;
                 }
             }
@@ -888,6 +941,45 @@ namespace VRTK
             }
 
             hairLimit = (currentState ? Mathf.Max(hairLimit, value) : Mathf.Min(hairLimit, value));
+        }
+
+        private SDK_OculusVRBoundaries GetBoundariesSDK()
+        {
+            if (cachedBoundariesSDK == null)
+            {
+                cachedBoundariesSDK = (VRTK_SDKManager.instance ? VRTK_SDKManager.instance.GetBoundariesSDK() : CreateInstance<SDK_OculusVRBoundaries>()) as SDK_OculusVRBoundaries;
+            }
+
+            return cachedBoundariesSDK;
+        }
+
+        private bool HasAvatar(bool controllersAreVisible = true)
+        {
+            GetBoundariesSDK();
+#if VRTK_SDK_OCULUSVR_AVATAR
+            if (cachedBoundariesSDK)
+            {
+                var avatar = cachedBoundariesSDK.GetAvatar();
+                return (avatar && controllersAreVisible && avatar.StartWithControllers);
+            }
+#endif
+            return false;
+        }
+
+        private GameObject GetAvatar()
+        {
+            GetBoundariesSDK();
+#if VRTK_SDK_OCULUSVR_AVATAR
+            if (cachedBoundariesSDK)
+            {
+                var avatar = cachedBoundariesSDK.GetAvatar();
+                if (avatar)
+                {
+                    return avatar.gameObject;
+                }
+            }
+#endif
+            return null;
         }
     }
 #else
