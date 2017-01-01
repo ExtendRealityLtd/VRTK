@@ -56,5 +56,10 @@ namespace VRTK
         public override void AddHeadsetFade(Transform camera)
         {
         }
+
+        private void Awake()
+        {
+            Debug.LogError("Fallback Headset SDK is being used. Have you selected a valid Headset SDK in the SDK Manager? If you are unsure, then click the GameObject with the `VRTK_SDKManager` script attached to it in Edit Mode and select a Headset SDK from the dropdown.");
+        }
     }
 }

@@ -611,5 +611,10 @@ namespace VRTK
         {
             return false;
         }
+
+        private void Awake()
+        {
+            Debug.LogError("Fallback Controller SDK is being used. Have you selected a valid Controller SDK in the SDK Manager? If you are unsure, then click the GameObject with the `VRTK_SDKManager` script attached to it in Edit Mode and select a Controller SDK from the dropdown.");
+        }
     }
 }
