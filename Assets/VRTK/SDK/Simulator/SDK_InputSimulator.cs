@@ -54,6 +54,20 @@ namespace VRTK
 
         #endregion
 
+        /// <summary>
+        /// The FindInScene method is used to find the `VRTK_SimPlayer` GameObject within the current scene.
+        /// </summary>
+        /// <returns>Returns the found `VRTK_SimPlayer` GameObject if it is found. If it is not found then it prints a debug log error.</returns>
+        public static GameObject FindInScene()
+        {
+            var simPlayer = GameObject.Find("VRTK_SimPlayer");
+            if (!simPlayer)
+            {
+                Debug.LogError("No `VRTK_SimPlayer` GameObject is found in the scene, have you added the `VRTK/Prefabs/VRTK_SimPlayer` prefab to the scene?");
+            }
+            return simPlayer;
+        }
+
         private void Awake()
         {
             rightHand = transform.FindChild("RightHand");

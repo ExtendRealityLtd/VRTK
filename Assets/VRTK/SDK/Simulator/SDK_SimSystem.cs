@@ -33,7 +33,7 @@ namespace VRTK
         /// <param name="force">If true then Interleaved Reprojection will be forced on, if false it will not be forced on.</param>
         public override void ForceInterleavedReprojectionOn(bool force)
         {
-  
+
         }
     }
 #else

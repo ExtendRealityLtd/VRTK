@@ -24,9 +24,13 @@ namespace VRTK
         /// <returns>A transform of the object representing the play area in the scene.</returns>
         public override Transform GetPlayArea()
         {
-            if(area == null)
+            if (area == null)
             {
-                area = GameObject.Find("VRTK_SimPlayer").transform;
+                GameObject simPlayer = SDK_InputSimulator.FindInScene();
+                if (simPlayer)
+                {
+                    area = simPlayer.transform;
+                }
             }
 
             return area;
@@ -42,10 +46,10 @@ namespace VRTK
             if (area)
             {
                 Vector3[] vertices = new Vector3[4];
-                vertices[0] = new Vector3(1, 0 ,1);
-                vertices[1] = new Vector3(-1, 0 ,1);
-                vertices[2] = new Vector3(1, 0 ,-1);
-                vertices[3] = new Vector3(-1, 0 ,-1);
+                vertices[0] = new Vector3(1, 0, 1);
+                vertices[1] = new Vector3(-1, 0, 1);
+                vertices[2] = new Vector3(1, 0, -1);
+                vertices[3] = new Vector3(-1, 0, -1);
                 return vertices;
             }
             return null;

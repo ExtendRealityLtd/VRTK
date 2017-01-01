@@ -72,7 +72,7 @@ namespace VRTK
         {
             uint index = 0;
 
-            switch(controller.name)
+            switch (controller.name)
             {
                 case "Camera":
                     index = 0;
@@ -95,7 +95,7 @@ namespace VRTK
         /// <returns></returns>
         public override GameObject GetControllerByIndex(uint index, bool actual = false)
         {
-            switch(index)
+            switch (index)
             {
                 case 1:
                     return controllers.rightHand.gameObject;
@@ -133,11 +133,10 @@ namespace VRTK
         public override GameObject GetControllerLeftHand(bool actual = false)
         {
             GameObject controller = null;
-            GameObject player = GameObject.Find("VRTK_SimPlayer");
-
-            if(player != null)
+            GameObject simPlayer = SDK_InputSimulator.FindInScene();
+            if (simPlayer != null)
             {
-                controller = player.transform.FindChild("LeftHand").gameObject;
+                controller = simPlayer.transform.FindChild("LeftHand").gameObject;
             }
 
             return controller;
@@ -151,11 +150,11 @@ namespace VRTK
         public override GameObject GetControllerRightHand(bool actual = false)
         {
             GameObject controller = null;
-            GameObject player = GameObject.Find("VRTK_SimPlayer");
-            
-            if(player != null)
+            GameObject simPlayer = SDK_InputSimulator.FindInScene();
+
+            if (simPlayer != null)
             {
-                controller = player.transform.FindChild("RightHand").gameObject;
+                controller = simPlayer.transform.FindChild("RightHand").gameObject;
             }
 
             return controller;
@@ -221,14 +220,18 @@ namespace VRTK
         public override GameObject GetControllerModel(ControllerHand hand)
         {
             GameObject model = null;
-            switch (hand)
+            GameObject simPlayer = SDK_InputSimulator.FindInScene();
+            if (simPlayer)
             {
-                case ControllerHand.Left:
-                    model = GameObject.Find("VRTK_SimPlayer").transform.FindChild("LeftHand/Hand").gameObject;
-                    break;
-                case ControllerHand.Right:
-                    model = GameObject.Find("VRTK_SimPlayer").transform.FindChild("RightHand/Hand").gameObject;
-                    break;
+                switch (hand)
+                {
+                    case ControllerHand.Left:
+                        model = simPlayer.transform.FindChild("LeftHand/Hand").gameObject;
+                        break;
+                    case ControllerHand.Right:
+                        model = simPlayer.transform.FindChild("RightHand/Hand").gameObject;
+                        break;
+                }
             }
             return model;
         }
@@ -250,7 +253,7 @@ namespace VRTK
         /// <param name="state">If true and the render model has a scroll wheen then it will be displayed, if false then the scroll wheel will be hidden.</param>
         public override void SetControllerRenderModelWheel(GameObject renderModel, bool state)
         {
-      
+
         }
 
         /// <summary>
@@ -260,7 +263,7 @@ namespace VRTK
         /// <param name="strength">The intensity of the rumble of the controller motor. `0` to `1`.</param>
         public override void HapticPulseOnIndex(uint index, float strength = 0.5f)
         {
-      
+
         }
 
         /// <summary>
@@ -279,7 +282,7 @@ namespace VRTK
         /// <returns>A Vector3 containing the current velocity of the tracked object.</returns>
         public override Vector3 GetVelocityOnIndex(uint index)
         {
-            switch(index)
+            switch (index)
             {
                 case 1:
                     return controllers.rightController.GetVelocity();
@@ -297,7 +300,7 @@ namespace VRTK
         /// <returns>A Vector3 containing the current angular velocity of the tracked object.</returns>
         public override Vector3 GetAngularVelocityOnIndex(uint index)
         {
-            switch(index)
+            switch (index)
             {
                 case 1:
                     return controllers.rightController.GetAngularVelocity();
@@ -710,16 +713,16 @@ namespace VRTK
                 return false;
             }
 
-            if(index == 1)
+            if (index == 1)
             {
-                if(!controllers.rightController.Selected)
+                if (!controllers.rightController.Selected)
                 {
                     return false;
                 }
             }
-            else if(index == 2)
+            else if (index == 2)
             {
-                if(!controllers.leftController.Selected)
+                if (!controllers.leftController.Selected)
                 {
                     return false;
                 }
@@ -728,7 +731,7 @@ namespace VRTK
             {
                 return false;
             }
-                
+
 
             switch (type)
             {
@@ -750,10 +753,14 @@ namespace VRTK
             public SDK_ControllerSim leftController;
             public SimControllers()
             {
-                rightHand = GameObject.Find("VRTK_SimPlayer").transform.FindChild("RightHand");
-                leftHand = GameObject.Find("VRTK_SimPlayer").transform.FindChild("LeftHand");
-                rightController = rightHand.GetComponent<SDK_ControllerSim>();
-                leftController = leftHand.GetComponent<SDK_ControllerSim>();
+                GameObject simPlayer = SDK_InputSimulator.FindInScene();
+                if (simPlayer)
+                {
+                    rightHand = simPlayer.transform.FindChild("RightHand");
+                    leftHand = simPlayer.transform.FindChild("LeftHand");
+                    rightController = rightHand.GetComponent<SDK_ControllerSim>();
+                    leftController = leftHand.GetComponent<SDK_ControllerSim>();
+                }
             }
         }
     }

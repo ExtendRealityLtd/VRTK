@@ -60,6 +60,19 @@ Use the mouse and keyboard to move around both play area and hands and interacti
  * **Rotation Position:** Key used to switch between positional and rotational movement.
  * **Change Axis:** Key used to switch between X/Y and X/Z axis.
 
+### Class Methods
+
+#### FindInScene/0
+
+  > `public static GameObject FindInScene()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `GameObject` - Returns the found `VRTK_SimPlayer` GameObject if it is found. If it is not found then it prints a debug log error.
+
+The FindInScene method is used to find the `VRTK_SimPlayer` GameObject within the current scene.
+
 ---
 
 ## Frames Per Second Canvas (VRTK_FramesPerSecondViewer)
