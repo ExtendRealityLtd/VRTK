@@ -67,7 +67,7 @@ namespace VRTK
         {
             if (markerMaker)
             {
-                foreach (var worldMarker in markerMaker.GetComponents<VRTK_DestinationMarker>())
+                foreach (var worldMarker in markerMaker.GetComponentsInChildren<VRTK_DestinationMarker>())
                 {
                     if (register)
                     {
