@@ -163,10 +163,6 @@ namespace VRTK
                     controllerAppearanceScript.ToggleControllerOnUse(visible, controllerActions, usingObject);
                 }
             }
-            else if (visible)
-            {
-                controllerActions.ToggleControllerModel(true, usingObject);
-            }
         }
 
         private void UseInteractedObject(GameObject touchedObject)
@@ -186,14 +182,6 @@ namespace VRTK
                 ToggleControllerVisibility(false);
                 AttemptHaptics();
                 OnControllerUseInteractableObject(interactTouch.SetControllerInteractEvent(usingObject));
-            }
-        }
-
-        private void HideController()
-        {
-            if (usingObject != null)
-            {
-                controllerActions.ToggleControllerModel(false, usingObject);
             }
         }
 

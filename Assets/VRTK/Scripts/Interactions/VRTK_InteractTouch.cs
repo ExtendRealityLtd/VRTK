@@ -483,13 +483,5 @@ namespace VRTK
                 touchRigidBody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
             }
         }
-
-        private void HideController()
-        {
-            if (touchedObject != null)
-            {
-                controllerActions.ToggleControllerModel(false, touchedObject);
-            }
-        }
     }
 }
