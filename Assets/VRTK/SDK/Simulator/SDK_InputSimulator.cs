@@ -51,6 +51,8 @@ namespace VRTK
         private Transform myCamera;
         private SDK_ControllerSim rightController;
         private SDK_ControllerSim leftController;
+        private static GameObject cachedCameraRig;
+        private static bool destroyed = false;
 
         #endregion
 
@@ -60,12 +62,15 @@ namespace VRTK
         /// <returns>Returns the found `VRSimulatorCameraRig` GameObject if it is found. If it is not found then it prints a debug log error.</returns>
         public static GameObject FindInScene()
         {
-            var simPlayer = GameObject.Find("VRSimulatorCameraRig");
-            if (!simPlayer)
+            if (cachedCameraRig == null && !destroyed)
             {
-                Debug.LogError("No `VRSimulatorCameraRig` GameObject is found in the scene, have you added the `VRTK/Prefabs/VRSimulatorCameraRig` prefab to the scene?");
+                cachedCameraRig = GameObject.Find("VRSimulatorCameraRig");
+                if (!cachedCameraRig)
+                {
+                    Debug.LogError("No `VRSimulatorCameraRig` GameObject is found in the scene, have you added the `VRTK/Prefabs/VRSimulatorCameraRig` prefab to the scene?");
+                }
             }
-            return simPlayer;
+            return cachedCameraRig;
         }
 
         private void Awake()
@@ -83,6 +88,12 @@ namespace VRTK
             leftController = leftHand.GetComponent<SDK_ControllerSim>();
             rightController.Selected = true;
             leftController.Selected = false;
+            destroyed = false;
+        }
+
+        private void OnDestroy()
+        {
+            destroyed = true;
         }
 
         private void Update()
