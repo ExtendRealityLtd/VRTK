@@ -338,8 +338,12 @@ namespace VRTK
         {
             if (rotateTowards == null) // Backup
             {
-                rotateTowards = VRTK_DeviceFinder.HeadsetCamera().gameObject;
-                if (rotateTowards == null)
+                var headsetCamera = VRTK_DeviceFinder.HeadsetCamera();
+                if (headsetCamera)
+                {
+                    rotateTowards = headsetCamera.gameObject;
+                }
+                else
                 {
                     Debug.LogWarning("The IndependentRadialMenu could not automatically find an object to rotate towards.");
                 }

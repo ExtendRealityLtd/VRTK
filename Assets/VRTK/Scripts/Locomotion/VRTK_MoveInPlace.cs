@@ -208,6 +208,10 @@ namespace VRTK
                 movementList.Add(trackedObj, new List<float>());
                 previousYPositions.Add(trackedObj, trackedObj.transform.localPosition.y);
             }
+            if (!playArea)
+            {
+                Debug.LogError("No play area could be found. Have you selected a valid Boundaries SDK in the SDK Manager? If you are unsure, then click the GameObject with the `VRTK_SDKManager` script attached to it in Edit Mode and select a Boundaries SDK from the dropdown.");
+            }
         }
 
         private void DoTouchpadDown(object sender, ControllerInteractionEventArgs e)
@@ -335,7 +339,10 @@ namespace VRTK
             }
 
             Vector3 movement = (direction * curSpeed) * Time.fixedDeltaTime;
-            playArea.position = new Vector3(movement.x + playArea.position.x, playArea.position.y, movement.z + playArea.position.z);
+            if (playArea)
+            {
+                playArea.position = new Vector3(movement.x + playArea.position.x, playArea.position.y, movement.z + playArea.position.z);
+            }
         }
 
         private Quaternion DetermineAverageControllerRotation()

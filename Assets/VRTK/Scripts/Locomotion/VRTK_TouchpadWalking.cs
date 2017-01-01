@@ -68,6 +68,10 @@ namespace VRTK
             playArea = VRTK_DeviceFinder.PlayAreaTransform();
             controllerLeftHand = VRTK_DeviceFinder.GetControllerLeftHand();
             controllerRightHand = VRTK_DeviceFinder.GetControllerRightHand();
+            if (!playArea)
+            {
+                Debug.LogError("No play area could be found. Have you selected a valid Boundaries SDK in the SDK Manager? If you are unsure, then click the GameObject with the `VRTK_SDKManager` script attached to it in Edit Mode and select a Boundaries SDK from the dropdown.");
+            }
         }
 
         private void Start()
@@ -130,11 +134,14 @@ namespace VRTK
         private void Move()
         {
             var deviceDirector = VRTK_DeviceFinder.DeviceTransform(deviceForDirection);
-            var movement = deviceDirector.forward * movementSpeed * Time.deltaTime;
-            var strafe = deviceDirector.right * strafeSpeed * Time.deltaTime;
-            float fixY = playArea.position.y;
-            playArea.position += (movement + strafe);
-            playArea.position = new Vector3(playArea.position.x, fixY, playArea.position.z);
+            if (deviceDirector)
+            {
+                var movement = deviceDirector.forward * movementSpeed * Time.deltaTime;
+                var strafe = deviceDirector.right * strafeSpeed * Time.deltaTime;
+                float fixY = playArea.position.y;
+                playArea.position += (movement + strafe);
+                playArea.position = new Vector3(playArea.position.x, fixY, playArea.position.z);
+            }
         }
 
         private void FixedUpdate()

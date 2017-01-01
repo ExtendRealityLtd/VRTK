@@ -183,6 +183,12 @@ namespace VRTK
             var topLeftOuter = 6;
             var topRightOuter = 7;
 
+            if (!playArea)
+            {
+                Debug.LogError("No play area could be found. Have you selected a valid Boundaries SDK in the SDK Manager? If you are unsure, then click the GameObject with the `VRTK_SDKManager` script attached to it in Edit Mode and select a Boundaries SDK from the dropdown.");
+                return;
+            }
+
             Vector3[] cursorDrawVertices = VRTK_SDK_Bridge.GetPlayAreaVertices(playArea.gameObject);
 
             if (playAreaCursorDimensions != Vector2.zero)

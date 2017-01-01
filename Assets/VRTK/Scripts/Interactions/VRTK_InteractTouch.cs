@@ -442,6 +442,11 @@ namespace VRTK
         {
             if (customRigidbodyObject == null)
             {
+                if (!defaultColliderPrefab)
+                {
+                    Debug.LogError("No default collider prefab could be found. Have you selected a valid Controller SDK in the SDK Manager? If you are unsure, then click the GameObject with the `VRTK_SDKManager` script attached to it in Edit Mode and select a Controller SDK from the dropdown.");
+                    return;
+                }
                 controllerCollisionDetector = Instantiate(defaultColliderPrefab, transform.position, transform.rotation) as GameObject;
                 controllerCollisionDetector.transform.SetParent(transform);
                 controllerCollisionDetector.transform.localScale = transform.localScale;

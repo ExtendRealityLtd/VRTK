@@ -505,6 +505,11 @@ namespace VRTK
 
             if (!cachedElements.ContainsKey(path) || cachedElements[path] == null)
             {
+                if (!modelContainer)
+                {
+                    Debug.LogError("No model container could be found. Have you selected a valid Controller SDK in the SDK Manager? If you are unsure, then click the GameObject with the `VRTK_SDKManager` script attached to it in Edit Mode and select a Controller SDK from the dropdown.");
+                    return null;
+                }
                 cachedElements[path] = modelContainer.transform.Find(path);
             }
             return cachedElements[path];

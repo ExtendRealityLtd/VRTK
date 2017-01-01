@@ -361,8 +361,14 @@ namespace VRTK
 
         protected void TogglePhysics(bool state)
         {
-            bodyRigidbody.isKinematic = !state;
-            bodyCollider.isTrigger = !state;
+            if (bodyRigidbody)
+            {
+                bodyRigidbody.isKinematic = !state;
+            }
+            if (bodyCollider)
+            {
+                bodyCollider.isTrigger = !state;
+            }
         }
 
         private void CheckBodyCollisionsSetting()
@@ -562,6 +568,12 @@ namespace VRTK
             generateCollider = false;
             generateRigidbody = false;
 
+            if (!playArea)
+            {
+                Debug.LogError("No play area could be found. Have you selected a valid Boundaries SDK in the SDK Manager? If you are unsure, then click the GameObject with the `VRTK_SDKManager` script attached to it in Edit Mode and select a Boundaries SDK from the dropdown.");
+                return;
+            }
+
             VRTK_PlayerObject.SetPlayerObject(playArea.gameObject, VRTK_PlayerObject.ObjectTypes.CameraRig);
             bodyRigidbody = playArea.GetComponent<Rigidbody>();
             if (bodyRigidbody == null)
@@ -604,13 +616,16 @@ namespace VRTK
 
         private void UpdateCollider()
         {
-            var newpresenceColliderYSize = (headset ? headset.transform.localPosition.y - headsetYOffset : 0f);
-            var newpresenceColliderYCenter = Mathf.Max((newpresenceColliderYSize / 2) + playAreaHeightAdjustment, bodyCollider.radius + playAreaHeightAdjustment);
-
-            if (headset && bodyCollider)
+            if (bodyCollider)
             {
-                bodyCollider.height = Mathf.Max(newpresenceColliderYSize, bodyCollider.radius);
-                bodyCollider.center = new Vector3(headset.localPosition.x, newpresenceColliderYCenter, headset.localPosition.z);
+                var newpresenceColliderYSize = (headset ? headset.transform.localPosition.y - headsetYOffset : 0f);
+                var newpresenceColliderYCenter = Mathf.Max((newpresenceColliderYSize / 2) + playAreaHeightAdjustment, bodyCollider.radius + playAreaHeightAdjustment);
+
+                if (headset && bodyCollider)
+                {
+                    bodyCollider.height = Mathf.Max(newpresenceColliderYSize, bodyCollider.radius);
+                    bodyCollider.center = new Vector3(headset.localPosition.x, newpresenceColliderYCenter, headset.localPosition.z);
+                }
             }
         }
 

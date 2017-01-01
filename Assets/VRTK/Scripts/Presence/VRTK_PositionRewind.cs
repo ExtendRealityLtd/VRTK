@@ -40,6 +40,10 @@ namespace VRTK
             playArea = VRTK_DeviceFinder.PlayAreaTransform();
             headsetCollision = GetComponent<VRTK_HeadsetCollision>();
             ManageHeadsetListeners(true);
+            if (!playArea)
+            {
+                Debug.LogError("No play area could be found. Have you selected a valid Boundaries SDK in the SDK Manager? If you are unsure, then click the GameObject with the `VRTK_SDKManager` script attached to it in Edit Mode and select a Boundaries SDK from the dropdown.");
+            }
         }
 
         private void OnDisable()
@@ -66,7 +70,7 @@ namespace VRTK
 
         private void FixedUpdate()
         {
-            if (!isColliding)
+            if (!isColliding && playArea)
             {
                 var floorVariant = 0.005f;
                 if (playArea.position.y > (lastPlayAreaY + floorVariant) || playArea.position.y < (lastPlayAreaY - floorVariant))
