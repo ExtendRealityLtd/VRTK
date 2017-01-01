@@ -3198,7 +3198,7 @@ The Climbable Grab Attach script is used to mark the object as a climbable inter
 
 # Secondary Controller Grab Actions (VRTK/Scripts/Interactions/SecondaryControllerGrabActions)
 
-This directory contains scripts that are used to provide different actions when a secondary controller grabs a grabbed obejct.
+This directory contains scripts that are used to provide different actions when a secondary controller grabs a grabbed object.
 
  * [Base Grab Action](#base-grab-action-vrtk_basegrabaction)
  * [Swap Controller Grab Action](#swap-controller-grab-action-vrtk_swapcontrollergrabaction)
@@ -4123,7 +4123,7 @@ All 3D controls extend the `VRTK_Control` abstract class which provides common m
  * [Drawer](#drawer-vrtk_drawer)
  * [Knob](#knob-vrtk_knob)
  * [Lever](#lever-vrtk_lever)
- * [Spring Lever](#spring-lever-vrtk_spring_lever)
+ * [Spring Lever](#spring-lever-vrtk_springlever)
  * [Slider](#slider-vrtk_slider)
  * [Content Handler](#content-handler-vrtk_contenthandler)
 
@@ -4352,7 +4352,7 @@ The script will instantiate the required Rigidbody, Interactable and HingeJoint 
 
 ---
 
-## Spring Lever (VRTK_Spring_Lever)
+## Spring Lever (VRTK_SpringLever)
  > extends [VRTK_Lever](#lever-vrtk_lever)
 
 ### Overview

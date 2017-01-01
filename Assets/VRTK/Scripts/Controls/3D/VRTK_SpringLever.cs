@@ -9,7 +9,7 @@ namespace VRTK
     /// <remarks>
     /// The script will instantiate the required Rigidbody, Interactable and HingeJoint components automatically in case they do not exist yet. The joint is very tricky to setup automatically though and will only work in straight forward cases. If there are any issues, then create the HingeJoint component manually and configure it as needed.
     /// </remarks>
-    public class VRTK_Spring_Lever : VRTK_Lever
+    public class VRTK_SpringLever : VRTK_Lever
     {
         [Tooltip("Strength of the spring force that will be applied toward either end of the lever's range.")]
         public float springStrength = 10;
