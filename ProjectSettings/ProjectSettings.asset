@@ -353,7 +353,7 @@ PlayerSettings:
   psmSplashimage: {fileID: 0}
   spritePackerPolicy: 
   scriptingDefineSymbols:
-    1: 
+    1: VRTK_SDK_STEAMVR
   metroPackageName: SteamVR_Unity_Toolkit
   metroPackageVersion: 
   metroCertificatePath: 
