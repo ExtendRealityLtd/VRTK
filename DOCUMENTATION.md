@@ -43,7 +43,7 @@ A collection of pre-defined usable prefabs have been included to allow for each 
 
 ### Overview
 
-The `VRTK_SimPlayer` prefab is a mock Camera Rig set up that can be used to develop with VRTK without the need for VR Hardware.
+The `VRSimulatorCameraRig` prefab is a mock Camera Rig set up that can be used to develop with VRTK without the need for VR Hardware.
 
 Use the mouse and keyboard to move around both play area and hands and interacting with objects without the need of a hmd or VR controls.
 
@@ -69,9 +69,9 @@ Use the mouse and keyboard to move around both play area and hands and interacti
   * Parameters
    * _none_
   * Returns
-   * `GameObject` - Returns the found `VRTK_SimPlayer` GameObject if it is found. If it is not found then it prints a debug log error.
+   * `GameObject` - Returns the found `VRSimulatorCameraRig` GameObject if it is found. If it is not found then it prints a debug log error.
 
-The FindInScene method is used to find the `VRTK_SimPlayer` GameObject within the current scene.
+The FindInScene method is used to find the `VRSimulatorCameraRig` GameObject within the current scene.
 
 ---
 

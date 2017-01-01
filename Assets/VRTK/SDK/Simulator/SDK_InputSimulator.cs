@@ -4,7 +4,7 @@ namespace VRTK
     using UnityEngine;
 
     /// <summary>
-    /// The `VRTK_SimPlayer` prefab is a mock Camera Rig set up that can be used to develop with VRTK without the need for VR Hardware.    
+    /// The `VRSimulatorCameraRig` prefab is a mock Camera Rig set up that can be used to develop with VRTK without the need for VR Hardware.
     /// </summary>
     /// <remarks>
     /// Use the mouse and keyboard to move around both play area and hands and interacting with objects without the need of a hmd or VR controls.
@@ -55,15 +55,15 @@ namespace VRTK
         #endregion
 
         /// <summary>
-        /// The FindInScene method is used to find the `VRTK_SimPlayer` GameObject within the current scene.
+        /// The FindInScene method is used to find the `VRSimulatorCameraRig` GameObject within the current scene.
         /// </summary>
-        /// <returns>Returns the found `VRTK_SimPlayer` GameObject if it is found. If it is not found then it prints a debug log error.</returns>
+        /// <returns>Returns the found `VRSimulatorCameraRig` GameObject if it is found. If it is not found then it prints a debug log error.</returns>
         public static GameObject FindInScene()
         {
-            var simPlayer = GameObject.Find("VRTK_SimPlayer");
+            var simPlayer = GameObject.Find("VRSimulatorCameraRig");
             if (!simPlayer)
             {
-                Debug.LogError("No `VRTK_SimPlayer` GameObject is found in the scene, have you added the `VRTK/Prefabs/VRTK_SimPlayer` prefab to the scene?");
+                Debug.LogError("No `VRSimulatorCameraRig` GameObject is found in the scene, have you added the `VRTK/Prefabs/VRSimulatorCameraRig` prefab to the scene?");
             }
             return simPlayer;
         }
