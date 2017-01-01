@@ -2,6 +2,7 @@
 namespace VRTK
 {
     using UnityEngine;
+    using System.Collections.Generic;
 
     /// <summary>
     /// The SDK Manager script provides configuration of supported SDKs
@@ -19,6 +20,14 @@ namespace VRTK
             OculusVR,
             Simulator
         }
+
+        public Dictionary<SupportedSDKs, VRTK_SDKDetails> sdkDetails = new Dictionary<SupportedSDKs, VRTK_SDKDetails>()
+        {
+            { SupportedSDKs.None, new VRTK_SDKDetails("", "", "") },
+            { SupportedSDKs.SteamVR, new VRTK_SDKDetails("VRTK_SDK_STEAMVR", "SteamVR", "SteamVR") },
+            { SupportedSDKs.OculusVR, new VRTK_SDKDetails("VRTK_SDK_OCULUSVR", "OculusVR", "OVRInput") },
+            { SupportedSDKs.Simulator, new VRTK_SDKDetails("VRTK_SDK_SIM", "Simulator", "VRTK_SDKManager") }
+        };
 
         /// <summary>
         /// The singleton instance to access the SDK Manager variables from.
@@ -80,6 +89,7 @@ namespace VRTK
                     returnSDK = ScriptableObject.CreateInstance<SDK_SimSystem>();
                     break;
                 default:
+                    Debug.LogError("No valid System SDK has been selected. If you're seeing this error in Unity Edit mode, then try selecting the GameObject with the `VRTK_SDKManager` script and selecting a valid System SDK from the dropdown list.");
                     returnSDK = ScriptableObject.CreateInstance<SDK_FallbackSystem>();
                     break;
             }
@@ -105,6 +115,7 @@ namespace VRTK
                     returnSDK = ScriptableObject.CreateInstance<SDK_SimHeadset>();
                     break;
                 default:
+                    Debug.LogError("No valid Headset SDK has been selected. If you're seeing this error in Unity Edit mode, then try selecting the GameObject with the `VRTK_SDKManager` script and selecting a valid Headset SDK from the dropdown list.");
                     returnSDK = ScriptableObject.CreateInstance<SDK_FallbackHeadset>();
                     break;
             }
@@ -130,6 +141,7 @@ namespace VRTK
                     returnSDK = ScriptableObject.CreateInstance<SDK_SimController>();
                     break;
                 default:
+                    Debug.LogError("No valid Controller SDK has been selected. If you're seeing this error in Unity Edit mode, then try selecting the GameObject with the `VRTK_SDKManager` script and selecting a valid Controller SDK from the dropdown list.");
                     returnSDK = ScriptableObject.CreateInstance<SDK_FallbackController>();
                     break;
             }
@@ -155,6 +167,7 @@ namespace VRTK
                     returnSDK = ScriptableObject.CreateInstance<SDK_SimBoundaries>();
                     break;
                 default:
+                    Debug.LogError("No valid Boundaries SDK has been selected. If you're seeing this error in Unity Edit mode, then try selecting the GameObject with the `VRTK_SDKManager` script and selecting a valid Boundaries SDK from the dropdown list.");
                     returnSDK = ScriptableObject.CreateInstance<SDK_FallbackBoundaries>();
                     break;
             }
@@ -209,6 +222,20 @@ namespace VRTK
             {
                 DontDestroyOnLoad(gameObject);
             }
+        }
+    }
+
+    public class VRTK_SDKDetails
+    {
+        public string defineSymbol;
+        public string prettyName;
+        public string checkType;
+
+        public VRTK_SDKDetails(string givenDefineSymbol, string givenPrettyName, string givenCheckType)
+        {
+            defineSymbol = givenDefineSymbol;
+            prettyName = givenPrettyName;
+            checkType = givenCheckType;
         }
     }
 }

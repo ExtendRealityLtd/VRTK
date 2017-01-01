@@ -2,8 +2,8 @@
 {
     using UnityEngine;
     using UnityEditor;
-    using System;
     using System.Collections.Generic;
+    using System;
     using System.Linq;
 
     [CustomEditor(typeof(VRTK_SDKManager))]
@@ -29,7 +29,7 @@
             sdkManager.headsetSDK = (VRTK_SDKManager.SupportedSDKs)EditorGUILayout.EnumPopup(VRTK_EditorUtilities.BuildGUIContent<VRTK_SDKManager>("headsetSDK"), sdkManager.headsetSDK);
             sdkManager.controllerSDK = (VRTK_SDKManager.SupportedSDKs)EditorGUILayout.EnumPopup(VRTK_EditorUtilities.BuildGUIContent<VRTK_SDKManager>("controllerSDK"), sdkManager.controllerSDK);
 
-            CheckSDKUsage(sdkManager.systemSDK, sdkManager.headsetSDK, sdkManager.controllerSDK, sdkManager.boundariesSDK);
+            CheckSDKUsage(sdkManager);
 
             EditorGUILayout.EndVertical();
 
@@ -139,31 +139,41 @@
             }
         }
 
-        private void CheckSDKUsage(VRTK_SDKManager.SupportedSDKs system, VRTK_SDKManager.SupportedSDKs headset, VRTK_SDKManager.SupportedSDKs controller, VRTK_SDKManager.SupportedSDKs boundaries)
+        private void CheckSDKUsage(VRTK_SDKManager sdkManager)
         {
-            ProcessSDK(VRTK_SDKManager.SupportedSDKs.SteamVR, "VRTK_SDK_STEAMVR", "SteamVR", "SteamVR", system, headset, controller, boundaries);
-            ProcessSDK(VRTK_SDKManager.SupportedSDKs.OculusVR, "VRTK_SDK_OCULUSVR", "OculusVR", "OVRInput", system, headset, controller, boundaries);
-            ProcessSDK(VRTK_SDKManager.SupportedSDKs.Simulator, "VRTK_SDK_SIM", "Simulator", "VRTK_SDKManager", system, headset, controller, boundaries);
+            ProcessSDK(sdkManager, VRTK_SDKManager.SupportedSDKs.SteamVR);
+            ProcessSDK(sdkManager, VRTK_SDKManager.SupportedSDKs.OculusVR);
+            ProcessSDK(sdkManager, VRTK_SDKManager.SupportedSDKs.Simulator);
         }
 
-        private void ProcessSDK(VRTK_SDKManager.SupportedSDKs sdk, string defineSymbol, string name, string checkType, VRTK_SDKManager.SupportedSDKs system, VRTK_SDKManager.SupportedSDKs headset, VRTK_SDKManager.SupportedSDKs controller, VRTK_SDKManager.SupportedSDKs boundaries)
+        private void ProcessSDK(VRTK_SDKManager sdkManager, VRTK_SDKManager.SupportedSDKs supportedSDK)
         {
+            var system = sdkManager.systemSDK;
+            var headset = sdkManager.headsetSDK;
+            var controller = sdkManager.controllerSDK;
+            var boundaries = sdkManager.boundariesSDK;
+            var sdkDetails = sdkManager.sdkDetails[supportedSDK];
+
+            var defineSymbol = sdkDetails.defineSymbol;
+            var prettyName = sdkDetails.prettyName;
+            var checkType = sdkDetails.checkType;
+
             var message = "SDK has been selected but is not currently installed.";
 
-            if (!CheckSDKInstalled(name + message, checkType, false) || (system != sdk && headset != sdk && controller != sdk && boundaries != sdk))
+            if (!CheckSDKInstalled(prettyName + message, checkType, false) || (system != supportedSDK && headset != supportedSDK && controller != supportedSDK && boundaries != supportedSDK))
             {
                 RemoveScriptingDefineSymbol(defineSymbol);
             }
 
-            if (system == sdk || headset == sdk || controller == sdk || boundaries == sdk)
+            if (system == supportedSDK || headset == supportedSDK || controller == supportedSDK || boundaries == supportedSDK)
             {
-                if (CheckSDKInstalled(name + message, checkType, true))
+                if (CheckSDKInstalled(prettyName + message, checkType, true))
                 {
                     AddScriptingDefineSymbol(defineSymbol);
                 }
             }
 
-            CheckAvatarSupport(sdk);
+            CheckAvatarSupport(supportedSDK);
         }
 
         private void CheckAvatarSupport(VRTK_SDKManager.SupportedSDKs sdk)
@@ -229,7 +239,7 @@
             PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildTargetGroup.Standalone, string.Join(";", definesList.ToArray()));
         }
 
-        private static bool TypeExists(string className)
+        private bool TypeExists(string className)
         {
             var foundType = (from assembly in AppDomain.CurrentDomain.GetAssemblies()
                              from type in assembly.GetTypes()
