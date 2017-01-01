@@ -1,4 +1,4 @@
-﻿// Sim Controller|SDK|003
+﻿// Simulator Controller|SDK_Simulator|003
 namespace VRTK
 {
 #if VRTK_SDK_SIM

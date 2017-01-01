@@ -1,4 +1,4 @@
-﻿// Sim Boundaries|SDK|004
+﻿// Simulator Boundaries|SDK_Simulator|004
 namespace VRTK
 {
 #if VRTK_SDK_SIM

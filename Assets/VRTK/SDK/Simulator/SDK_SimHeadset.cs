@@ -1,4 +1,4 @@
-﻿// Sim Headset|SDK|002
+﻿// Simulator Headset|SDK_Simulator|002
 namespace VRTK
 {
 #if VRTK_SDK_SIM

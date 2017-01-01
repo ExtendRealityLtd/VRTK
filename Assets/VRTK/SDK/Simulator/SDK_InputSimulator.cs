@@ -1,12 +1,14 @@
-﻿namespace VRTK
+﻿// VR Simulator|Prefabs|0005
+namespace VRTK
 {
     using UnityEngine;
 
     /// <summary>
-    /// Use the mouse and keyboard to move around both player and hands and interacting with objects
-    /// without the need of a hmd or VR controls.
+    /// The `VRTK_SimPlayer` prefab is a mock Camera Rig set up that can be used to develop with VRTK without the need for VR Hardware.    
     /// </summary>
-
+    /// <remarks>
+    /// Use the mouse and keyboard to move around both play area and hands and interacting with objects without the need of a hmd or VR controls.
+    /// </remarks>
     public class SDK_InputSimulator : MonoBehaviour
     {
         #region Public fields
@@ -15,7 +17,9 @@
         public bool hideHandsAtSwitch = false;
         [Tooltip("Reset hand position and rotation when enabling them.")]
         public bool resetHandsAtSwitch = true;
+
         [Header("Adjustments")]
+
         [Tooltip("Adjust hand movement speed.")]
         public float handMoveMultiplier = 0.002f;
         [Tooltip("Adjust hand rotation speed.")]
@@ -24,7 +28,9 @@
         public float playerMoveMultiplier = 5;
         [Tooltip("Adjust player rotation speed.")]
         public float playerRotationMultiplier = 0.5f;
+
         [Header("Key bindings")]
+
         [Tooltip("Key used to switch between left and righ hand.")]
         public KeyCode changeHands = KeyCode.Tab;
         [Tooltip("Key used to switch hands On/Off.")]
@@ -48,7 +54,7 @@
 
         #endregion
 
-        private void Awake ()
+        private void Awake()
         {
             rightHand = transform.FindChild("RightHand");
             rightHand.gameObject.SetActive(false);
@@ -64,12 +70,12 @@
             rightController.Selected = true;
             leftController.Selected = false;
         }
-        
-        private void Update ()
+
+        private void Update()
         {
-            if(Input.GetKeyDown(handsOnOff))
+            if (Input.GetKeyDown(handsOnOff))
             {
-                if(isHand)
+                if (isHand)
                 {
                     SetMove();
                 }
@@ -79,9 +85,9 @@
                 }
             }
 
-            if(Input.GetKeyDown(changeHands))
+            if (Input.GetKeyDown(changeHands))
             {
-                if(currentHand.name == "LeftHand")
+                if (currentHand.name == "LeftHand")
                 {
                     currentHand = rightHand;
                     rightController.Selected = true;
@@ -95,7 +101,7 @@
                 }
             }
 
-            if(isHand)
+            if (isHand)
             {
                 UpdateHands();
             }
@@ -111,9 +117,9 @@
         {
             Vector3 mouseDiff = Input.mousePosition - oldPos;
 
-            if(Input.GetKey(rotationPosition)) //Rotation
+            if (Input.GetKey(rotationPosition)) //Rotation
             {
-                if(Input.GetKey(changeAxis))
+                if (Input.GetKey(changeAxis))
                 {
                     Vector3 rot = Vector3.zero;
                     rot.x += (mouseDiff * handRotationMultiplier).y;
@@ -130,7 +136,7 @@
             }
             else //Position
             {
-                if(Input.GetKey(changeAxis))
+                if (Input.GetKey(changeAxis))
                 {
                     Vector3 pos = Vector3.zero;
                     pos += mouseDiff * handMoveMultiplier;
@@ -157,15 +163,15 @@
 
             rot = myCamera.rotation.eulerAngles;
 
-            if(rot.x > 180)
+            if (rot.x > 180)
             {
                 rot.x -= 360;
             }
-            
-            if(rot.x < 80 && rot.x > -80)
+
+            if (rot.x < 80 && rot.x > -80)
             {
                 rot.x += (mouseDiff * playerRotationMultiplier).y * -1;
-                rot.x = Mathf.Clamp (rot.x, -79, 79);
+                rot.x = Mathf.Clamp(rot.x, -79, 79);
                 myCamera.rotation = Quaternion.Euler(rot);
             }
 
@@ -174,19 +180,19 @@
 
         private void UpdatePosition()
         {
-            if(Input.GetKey(KeyCode.W))
+            if (Input.GetKey(KeyCode.W))
             {
                 transform.Translate(transform.forward * Time.deltaTime * playerMoveMultiplier, Space.World);
             }
-            else if(Input.GetKey(KeyCode.S))
+            else if (Input.GetKey(KeyCode.S))
             {
                 transform.Translate(-transform.forward * Time.deltaTime * playerMoveMultiplier, Space.World);
             }
-            if(Input.GetKey(KeyCode.A))
+            if (Input.GetKey(KeyCode.A))
             {
                 transform.Translate(-transform.right * Time.deltaTime * playerMoveMultiplier, Space.World);
             }
-            else if(Input.GetKey(KeyCode.D))
+            else if (Input.GetKey(KeyCode.D))
             {
                 transform.Translate(transform.right * Time.deltaTime * playerMoveMultiplier, Space.World);
             }
@@ -199,7 +205,7 @@
             rightHand.gameObject.SetActive(true);
             leftHand.gameObject.SetActive(true);
             oldPos = Input.mousePosition;
-            if(resetHandsAtSwitch)
+            if (resetHandsAtSwitch)
             {
                 rightHand.transform.localPosition = new Vector3(0.2f, 1.2f, 0.5f);
                 rightHand.transform.localRotation = Quaternion.identity;
@@ -212,7 +218,7 @@
         {
             Cursor.visible = true;
             isHand = false;
-            if(hideHandsAtSwitch)
+            if (hideHandsAtSwitch)
             {
                 rightHand.gameObject.SetActive(false);
                 leftHand.gameObject.SetActive(false);

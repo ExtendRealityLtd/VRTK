@@ -3,7 +3,7 @@
     using UnityEngine;
     using System.Collections.Generic;
 
-    public class SDK_ControllerSim : MonoBehaviour 
+    public class SDK_ControllerSim : MonoBehaviour
     {
         private Vector3 lastPos;
         private Vector3 lastRot;
@@ -26,7 +26,7 @@
         public Vector3 GetVelocity()
         {
             Vector3 velocity = Vector3.zero;
-            foreach(Vector3 vel in posList)
+            foreach (Vector3 vel in posList)
             {
                 velocity += vel;
             }
@@ -37,7 +37,7 @@
         public Vector3 GetAngularVelocity()
         {
             Vector3 angularVelocity = Vector3.zero;
-            foreach(Vector3 vel in rotList)
+            foreach (Vector3 vel in rotList)
             {
                 angularVelocity += vel;
             }
@@ -52,16 +52,16 @@
             lastPos = transform.position;
             lastRot = transform.rotation.eulerAngles;
         }
-        
-        private void Update ()
+
+        private void Update()
         {
             posList.Add((transform.position - lastPos) / Time.deltaTime);
-            if(posList.Count > 10)
+            if (posList.Count > 10)
             {
                 posList.RemoveAt(0);
             }
             rotList.Add((Quaternion.FromToRotation(lastRot, transform.rotation.eulerAngles)).eulerAngles / Time.deltaTime);
-            if(rotList.Count > 10)
+            if (rotList.Count > 10)
             {
                 rotList.RemoveAt(0);
             }

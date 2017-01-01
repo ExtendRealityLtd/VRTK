@@ -1,4 +1,4 @@
-﻿// Sim System|SDK|001
+﻿// Simulator System|SDK_Simulator|001
 namespace VRTK
 {
 #if VRTK_SDK_SIM
