@@ -42,7 +42,7 @@ GameObject:
   - 81: {fileID: 81000010771154298}
   m_Layer: 0
   m_Name: Camera
-  m_TagString: Untagged
+  m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -124,7 +124,7 @@ GameObject:
   - 114: {fileID: 114000013693848938}
   m_Layer: 0
   m_Name: VRSimulatorCameraRig
-  m_TagString: MainCamera
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
