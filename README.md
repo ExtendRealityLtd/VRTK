@@ -30,24 +30,24 @@ online at [http://docs.vrtk.io](http://docs.vrtk.io).
 
 <details><summary>**Instructions for using the VR Simulator**</summary>
 
-  * Drag the `VRSimulatorCameraRig` prefab from the VRTK/Prefabs into the
-  scene.
-  * Select the GameObject with the `VRTK_SDKManager` script attached
+ * Drag the `VRSimulatorCameraRig` prefab from the VRTK/Prefabs into the
+ scene.
+ * Select the GameObject with the `VRTK_SDKManager` script attached
  to it.
-   * Select `Simulator` for each of the SDK Choices.
-   * Click the `Auto Populate Linked Objects` button to find the
-   relevant Linked Objects.
-  * Use the Left Alt to switch between mouse look and move a hand.
-  * Press Tab to switch between left/right hands.
-  * Hold Left Shift to change from translation to rotation for the hands.
-  * Hold Left Crtl to switch between X/Y and X/Z axis.
-  * All above keys can be remapped using the inspector on the `VRSimulatorCameraRig` prefab.
-  * Button mapping for the VR control are as follows:
-   * Grip: Left mouse button
-   * Trigger: Right mouse button
-   * Touchpad Press: Q
-   * Button One: E
-   * Button Two: R
+  * Select `Simulator` for each of the SDK Choices.
+  * Click the `Auto Populate Linked Objects` button to find the
+  relevant Linked Objects.
+ * Use the Left Alt to switch between mouse look and move a hand.
+ * Press Tab to switch between left/right hands.
+ * Hold Left Shift to change from translation to rotation for the hands.
+ * Hold Left Crtl to switch between X/Y and X/Z axis.
+ * All above keys can be remapped using the inspector on the `VRSimulatorCameraRig` prefab.
+ * Button mapping for the VR control are as follows:
+  * Grip: Left mouse button
+  * Trigger: Right mouse button
+  * Touchpad Press: Q
+  * Button One: E
+  * Button Two: R
 
 </details>
  
