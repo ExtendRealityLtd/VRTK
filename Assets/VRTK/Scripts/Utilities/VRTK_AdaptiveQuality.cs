@@ -687,7 +687,10 @@ namespace VRTK
                 mesh.UploadMeshData(true);
 
                 debugVisualizationQuad = new GameObject("AdaptiveQualityDebugVisualizationQuad");
-                debugVisualizationQuad.transform.parent = VRTK_DeviceFinder.HeadsetTransform();
+                if (VRTK_SDKManager.instance)
+                {
+                    debugVisualizationQuad.transform.parent = VRTK_DeviceFinder.HeadsetTransform();
+                }
                 debugVisualizationQuad.transform.localPosition = Vector3.forward;
                 debugVisualizationQuad.transform.localRotation = Quaternion.identity;
                 debugVisualizationQuad.AddComponent<MeshFilter>().mesh = mesh;
