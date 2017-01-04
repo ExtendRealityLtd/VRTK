@@ -23,6 +23,8 @@ namespace VRTK.SecondaryControllerGrabActions
         public bool uniformScaling = false;
 
         private Vector3 initialScale;
+        private float initalLength;
+        private float initialScaleFactor;
 
         /// <summary>
         /// The Initalise method is used to set up the state of the secondary action when the object is initially grabbed by a secondary controller.
@@ -36,6 +38,8 @@ namespace VRTK.SecondaryControllerGrabActions
         {
             base.Initialise(currentGrabbdObject, currentPrimaryGrabbingObject, currentSecondaryGrabbingObject, primaryGrabPoint, secondaryGrabPoint);
             initialScale = currentGrabbdObject.transform.localScale;
+            initalLength = (grabbedObject.transform.position - secondaryGrabbingObject.transform.position).magnitude;
+            initialScaleFactor = currentGrabbdObject.transform.localScale.x / initalLength;
         }
 
         /// <summary>
@@ -67,16 +71,14 @@ namespace VRTK.SecondaryControllerGrabActions
         private void ApplyScale(Vector3 newScale)
         {
             var existingScale = grabbedObject.transform.localScale;
-            Vector3 rotatedScale = initialScale + newScale;
 
-            float finalScaleX = (lockXAxis ? existingScale.x : rotatedScale.x);
-            float finalScaleY = (lockYAxis ? existingScale.y : rotatedScale.y);
-            float finalScaleZ = (lockZAxis ? existingScale.z : rotatedScale.z);
-            var finalScale = new Vector3(finalScaleX, finalScaleY, finalScaleZ);
+            float finalScaleX = (lockXAxis ? existingScale.x : newScale.x);
+            float finalScaleY = (lockYAxis ? existingScale.y : newScale.y);
+            float finalScaleZ = (lockZAxis ? existingScale.z : newScale.z);
 
             if (finalScaleX > 0 && finalScaleY > 0 && finalScaleZ > 0)
             {
-                grabbedObject.transform.localScale = finalScale;
+                grabbedObject.transform.localScale = new Vector3(finalScaleX, finalScaleY, finalScaleZ); ;
             }
         }
 
@@ -90,21 +92,16 @@ namespace VRTK.SecondaryControllerGrabActions
             float newScaleY = CalculateAxisScale(initialRotatedPosition.y, initialSecondGrabRotatedPosition.y, currentSecondGrabRotatedPosition.y);
             float newScaleZ = CalculateAxisScale(initialRotatedPosition.z, initialSecondGrabRotatedPosition.z, currentSecondGrabRotatedPosition.z);
 
-            var newScale = new Vector3(newScaleX, newScaleY, newScaleZ);
+            var newScale = new Vector3(newScaleX, newScaleY, newScaleZ) + initialScale;
             ApplyScale(newScale);
         }
 
         private void UniformScale()
         {
-            Vector3 initialRotatedPosition = grabbedObject.transform.rotation * grabbedObject.transform.position;
-            Vector3 initialSecondGrabRotatedPosition = grabbedObject.transform.rotation * secondaryInitialGrabPoint.position;
-            Vector3 currentSecondGrabRotatedPosition = grabbedObject.transform.rotation * secondaryGrabbingObject.transform.position;
+            float adjustedLength = (grabbedObject.transform.position - secondaryGrabbingObject.transform.position).magnitude;
+            float adjustedScale = initialScaleFactor * adjustedLength;
 
-            float initialDistance = Vector3.Distance(initialSecondGrabRotatedPosition, initialRotatedPosition);
-            float distance = Vector3.Distance(currentSecondGrabRotatedPosition, initialRotatedPosition);
-            float deltaDistance = distance - initialDistance;
-
-            Vector3 newScale = new Vector3(deltaDistance, deltaDistance, deltaDistance);
+            var newScale = new Vector3(adjustedScale, adjustedScale, adjustedScale);
             ApplyScale(newScale);
         }
 
