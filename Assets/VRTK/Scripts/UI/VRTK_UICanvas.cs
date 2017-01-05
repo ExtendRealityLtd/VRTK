@@ -51,7 +51,8 @@ namespace VRTK
                 return;
             }
 
-            var canvasSize = canvas.GetComponent<RectTransform>().sizeDelta;
+            var canvasRectTransform = canvas.GetComponent<RectTransform>();
+            var canvasSize = canvasRectTransform.sizeDelta;
             //copy public params then disable existing graphic raycaster
             var defaultRaycaster = canvas.gameObject.GetComponent<GraphicRaycaster>();
             var customRaycaster = canvas.gameObject.GetComponent<VRTK_UIGraphicRaycaster>();
@@ -72,9 +73,13 @@ namespace VRTK
             //add a box collider and background image to ensure the rays always hit
             if (!canvas.gameObject.GetComponent<BoxCollider>())
             {
+                Vector2 pivot = canvasRectTransform.pivot;
+                float zSize = 0.1f;
+                float zScale = zSize / canvasRectTransform.localScale.z;
+
                 canvasBoxCollider = canvas.gameObject.AddComponent<BoxCollider>();
-                canvasBoxCollider.size = new Vector3(canvasSize.x, canvasSize.y, 10f);
-                canvasBoxCollider.center = new Vector3(0f, 0f, 5f);
+                canvasBoxCollider.size = new Vector3(canvasSize.x, canvasSize.y, zScale);
+                canvasBoxCollider.center = new Vector3(canvasSize.x / 2 - canvasSize.x * pivot.x, canvasSize.y / 2 - canvasSize.y * pivot.y, zScale / 2f);
                 canvasBoxCollider.isTrigger = true;
             }
 
@@ -111,14 +116,17 @@ namespace VRTK
             //if autoActivateWithinDistance is greater than 0 then create the front collider sub object
             if (autoActivateWithinDistance > 0f && canvas && !canvas.transform.FindChild(ACTIVATOR_FRONT_TRIGGER_GAMEOBJECT))
             {
+                var canvasRectTransform = canvas.GetComponent<RectTransform>();
+                Vector2 pivot = canvasRectTransform.pivot;
+
                 var frontTrigger = new GameObject(ACTIVATOR_FRONT_TRIGGER_GAMEOBJECT);
                 frontTrigger.transform.SetParent(canvas.transform);
                 frontTrigger.transform.SetAsFirstSibling();
-                frontTrigger.transform.localPosition = Vector3.zero;
+                frontTrigger.transform.localPosition = new Vector3(canvasSize.x / 2 - canvasSize.x * pivot.x, canvasSize.y / 2 - canvasSize.y * pivot.y);
                 frontTrigger.transform.localRotation = Quaternion.identity;
                 frontTrigger.transform.localScale = Vector3.one;
 
-                var actualActivationDistance = autoActivateWithinDistance * 10f;
+                var actualActivationDistance = autoActivateWithinDistance / canvasRectTransform.localScale.z;
                 var frontTriggerBoxCollider = frontTrigger.AddComponent<BoxCollider>();
                 frontTriggerBoxCollider.isTrigger = true;
                 frontTriggerBoxCollider.size = new Vector3(canvasSize.x, canvasSize.y, actualActivationDistance);
