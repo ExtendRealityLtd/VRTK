@@ -280,6 +280,7 @@ namespace VRTK
                 CancelInvoke("ResetTriggerRumble");
                 ResetTriggerRumble();
                 ForceStopTouching();
+                triggerIsColliding = true;
             }
         }
 
@@ -296,6 +297,7 @@ namespace VRTK
             var colliderInteractableObject = TriggerStart(collider);
             if (touchedObject == null && colliderInteractableObject && IsObjectInteractable(collider.gameObject))
             {
+                triggerIsColliding = true;
                 touchedObject = colliderInteractableObject;
                 var touchedObjectScript = touchedObject.GetComponent<VRTK_InteractableObject>();
                 var touchingObject = gameObject;
@@ -318,9 +320,27 @@ namespace VRTK
             }
         }
 
+        private void FixedUpdate()
+        {
+            if (!triggerIsColliding && !triggerWasColliding)
+            {
+                CheckStopTouching();
+            }
+            triggerWasColliding = triggerIsColliding;
+            triggerIsColliding = false;
+        }
+
         private void LateUpdate()
         {
-            if (touchedObject != null && (touchedObjectActiveColliders.Count == 0 || (!triggerIsColliding && !triggerWasColliding)))
+            if (touchedObjectActiveColliders.Count == 0)
+            {
+                CheckStopTouching();
+            }
+        }
+
+        private void CheckStopTouching()
+        {
+            if (touchedObject != null)
             {
                 var touchedObjectScript = touchedObject.GetComponent<VRTK_InteractableObject>();
                 var touchingObject = gameObject;
@@ -331,9 +351,6 @@ namespace VRTK
                     StopTouching(touchedObject);
                 }
             }
-
-            triggerWasColliding = triggerIsColliding;
-            triggerIsColliding = false;
         }
 
         private GameObject TriggerStart(Collider collider)
@@ -343,7 +360,6 @@ namespace VRTK
                 return null;
             }
 
-            triggerIsColliding = true;
             AddActiveCollider(collider);
 
             return GetColliderInteractableObject(collider);
