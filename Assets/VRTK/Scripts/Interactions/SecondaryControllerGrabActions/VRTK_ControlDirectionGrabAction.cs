@@ -117,19 +117,69 @@ namespace VRTK.SecondaryControllerGrabActions
 
         private void AimObject()
         {
-            var existingEularAngles = transform.rotation.eulerAngles;
-            transform.rotation = Quaternion.LookRotation(secondaryGrabbingObject.transform.position - primaryGrabbingObject.transform.position, secondaryGrabbingObject.transform.TransformDirection(Vector3.forward));
-
             if (lockZRotation)
             {
-                existingEularAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, existingEularAngles.z);
-                transform.rotation = Quaternion.Euler(existingEularAngles);
+                ZLockedAim();
+            }
+            else
+            {
+                transform.rotation = Quaternion.LookRotation(secondaryGrabbingObject.transform.position - primaryGrabbingObject.transform.position, secondaryGrabbingObject.transform.TransformDirection(Vector3.forward));
             }
 
             if (grabbedObject.grabAttachMechanicScript.precisionGrab)
             {
                 transform.Translate(primaryGrabbingObject.controllerAttachPoint.transform.position - primaryInitialGrabPoint.position, Space.World);
             }
+        }
+
+        private void ZLockedAim()
+        {
+            Vector3 forward = (secondaryGrabbingObject.transform.position - primaryGrabbingObject.transform.position).normalized;
+
+            // calculate rightLocked rotation
+            Quaternion rightLocked = Quaternion.LookRotation(forward, Vector3.Cross(-primaryGrabbingObject.transform.right, forward).normalized);
+
+            // delta from current rotation to the rightLocked rotation
+            Quaternion rightLockedDelta = Quaternion.Inverse(grabbedObject.transform.rotation) * rightLocked;
+
+            float rightLockedAngle;
+            Vector3 rightLockedAxis;
+
+            // forward direction and roll
+            rightLockedDelta.ToAngleAxis(out rightLockedAngle, out rightLockedAxis);
+
+            if (rightLockedAngle > 180f)
+            {
+                // remap ranges from 0-360 to -180 to 180
+                rightLockedAngle -= 360f;
+            }
+
+            // make any negative values into positive values;
+            rightLockedAngle = Mathf.Abs(rightLockedAngle);
+
+            // calculate upLocked rotation
+            Quaternion upLocked = Quaternion.LookRotation(forward, primaryGrabbingObject.transform.forward);
+
+            // delta from current rotation to the upLocked rotation
+            Quaternion upLockedDelta = Quaternion.Inverse(grabbedObject.transform.rotation) * upLocked;
+
+            float upLockedAngle;
+            Vector3 upLockedAxis;
+
+            // forward direction and roll
+            upLockedDelta.ToAngleAxis(out upLockedAngle, out upLockedAxis);
+
+            // remap ranges from 0-360 to -180 to 180
+            if (upLockedAngle > 180f)
+            {
+                upLockedAngle -= 360f;
+            }
+
+            // make any negative values into positive values;
+            upLockedAngle = Mathf.Abs(upLockedAngle);
+
+            // assign the one that involves less change to roll
+            grabbedObject.transform.rotation = (upLockedAngle < rightLockedAngle ? upLocked : rightLocked);
         }
     }
 }
