@@ -268,7 +268,7 @@ namespace VRTK.GrabAttachMechanics
         {
             if (snapHandle)
             {
-                snapHandle.rotation = Quaternion.Inverse(snapHandle.rotation);
+                snapHandle.localRotation = Quaternion.Inverse(snapHandle.localRotation);
             }
         }
     }
