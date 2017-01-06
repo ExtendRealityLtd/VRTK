@@ -48,6 +48,9 @@ namespace VRTK
         [Tooltip("The SDK to use to utilise the input devices.")]
         public SupportedSDKs controllerSDK = SupportedSDKs.None;
 
+        [Tooltip("This determines whether the scripting define symbols required by the selected SDKs are automatically added to the player settings when using the SDK Manager inspector window.")]
+        public bool autoManageScriptDefines = true;
+
         [Header("Linked Objects")]
 
         [Tooltip("A reference to the GameObject that is the user's boundary or play area, most likely provided by the SDK's Camera Rig.")]

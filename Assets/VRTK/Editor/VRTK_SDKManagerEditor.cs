@@ -29,6 +29,8 @@
             sdkManager.headsetSDK = (VRTK_SDKManager.SupportedSDKs)EditorGUILayout.EnumPopup(VRTK_EditorUtilities.BuildGUIContent<VRTK_SDKManager>("headsetSDK"), sdkManager.headsetSDK);
             sdkManager.controllerSDK = (VRTK_SDKManager.SupportedSDKs)EditorGUILayout.EnumPopup(VRTK_EditorUtilities.BuildGUIContent<VRTK_SDKManager>("controllerSDK"), sdkManager.controllerSDK);
 
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("autoManageScriptDefines"));
+
             CheckSDKUsage(sdkManager);
 
             EditorGUILayout.EndVertical();
@@ -160,20 +162,23 @@
 
             var message = "SDK has been selected but is not currently installed.";
 
-            if (!CheckSDKInstalled(prettyName + message, checkType, false) || (system != supportedSDK && headset != supportedSDK && controller != supportedSDK && boundaries != supportedSDK))
+            if ((!CheckSDKInstalled(prettyName + message, checkType, false) || (system != supportedSDK && headset != supportedSDK && controller != supportedSDK && boundaries != supportedSDK)) && sdkManager.autoManageScriptDefines)
             {
                 RemoveScriptingDefineSymbol(defineSymbol);
             }
 
             if (system == supportedSDK || headset == supportedSDK || controller == supportedSDK || boundaries == supportedSDK)
             {
-                if (CheckSDKInstalled(prettyName + message, checkType, true))
+                if (CheckSDKInstalled(prettyName + message, checkType, true) && sdkManager.autoManageScriptDefines)
                 {
                     AddScriptingDefineSymbol(defineSymbol);
                 }
             }
 
-            CheckAvatarSupport(supportedSDK);
+            if (sdkManager.autoManageScriptDefines)
+            {
+                CheckAvatarSupport(supportedSDK);
+            }
         }
 
         private void CheckAvatarSupport(VRTK_SDKManager.SupportedSDKs sdk)

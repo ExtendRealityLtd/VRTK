@@ -4439,6 +4439,7 @@ The SDK Manager script provides configuration of supported SDKs
  * **Boundaries SDK:** The SDK to use to utilise room scale boundaries.
  * **Headset SDK:** The SDK to use to utilise the VR headset.
  * **Controller SDK:** The SDK to use to utilise the input devices.
+ * **Auto Manage Script Defines:** This determines whether the scripting define symbols required by the selected SDKs are automatically added to the player settings when using the SDK Manager inspector window.
  * **Actual Boundaries:** A reference to the GameObject that is the user's boundary or play area, most likely provided by the SDK's Camera Rig.
  * **Actual Headset:** A reference to the GameObject that contains the VR camera, most likely provided by the SDK's Camera Rig Headset.
  * **Actual Left Controller:** A reference to the GameObject that contains the SDK Left Hand Controller.
