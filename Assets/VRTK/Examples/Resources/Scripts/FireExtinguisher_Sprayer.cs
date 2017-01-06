@@ -24,7 +24,13 @@
                 {
                     particles.Play();
                 }
+
+#if UNITY_5_5_OR_NEWER
+                var mainModule = particles.main;
+                mainModule.startSpeedMultiplier = maxSprayPower * power;
+#else
                 particles.startSpeed = maxSprayPower * power;
+#endif
             }
         }
 
