@@ -100,7 +100,7 @@ namespace VRTK
         {
             //Get button ID from angle
             float buttonAngle = 360f / buttons.Count; //Each button is an arc with this angle
-            angle = mod((angle + offsetRotation), 360); //Offset the touch coordinate with our offset
+            angle = mod((angle + -offsetRotation), 360); //Offset the touch coordinate with our offset
 
             int buttonID = (int)mod(((angle + (buttonAngle / 2f)) / buttonAngle), buttons.Count); //Convert angle into ButtonID (This is the magic)
             var pointer = new PointerEventData(EventSystem.current); //Create a new EventSystem (UI) Event
