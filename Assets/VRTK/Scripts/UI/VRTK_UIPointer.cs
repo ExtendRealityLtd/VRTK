@@ -120,6 +120,9 @@ namespace VRTK
         private bool lastPointerPressState = false;
         private bool lastPointerClickState = false;
 
+        private EventSystem cachedEventSystem;
+        private VRTK_EventSystemVRInput cachedEventSystemInput;
+
         private const string ACTIVATOR_FRONT_TRIGGER_GAMEOBJECT = "UIPointer_Activator_Front_Trigger";
 
         public virtual void OnUIPointerElementEnter(UIPointerEventArgs e)
@@ -317,20 +320,46 @@ namespace VRTK
             controllerRenderModel = VRTK_SDK_Bridge.GetControllerRenderModel(controller.gameObject);
         }
 
+        private void OnDisable()
+        {
+            if (cachedEventSystemInput && cachedEventSystemInput.pointers.Contains(this))
+            {
+                cachedEventSystemInput.pointers.Remove(this);
+            }
+        }
+
         private void ConfigureEventSystem()
         {
-            var eventSystem = FindObjectOfType<EventSystem>();
-            var eventSystemInput = SetEventSystem(eventSystem);
+            if (!cachedEventSystem)
+            {
+                cachedEventSystem = FindObjectOfType<EventSystem>();
+            }
 
-            pointerEventData = new PointerEventData(eventSystem);
-            StartCoroutine(WaitForPointerId());
-            eventSystemInput.pointers.Add(this);
+            if (!cachedEventSystemInput)
+            {
+                cachedEventSystemInput = SetEventSystem(cachedEventSystem);
+            }
+
+            if (cachedEventSystem && cachedEventSystemInput)
+            {
+                if (pointerEventData == null)
+                {
+                    pointerEventData = new PointerEventData(cachedEventSystem);
+                }
+
+                StartCoroutine(WaitForPointerId());
+
+                if (!cachedEventSystemInput.pointers.Contains(this))
+                {
+                    cachedEventSystemInput.pointers.Add(this);
+                }
+            }
         }
 
         private IEnumerator WaitForPointerId()
         {
             var index = (int)VRTK_SDK_Bridge.GetControllerIndex(controller.gameObject);
-            while(index < 0 || index == int.MaxValue)
+            while (index < 0 || index == int.MaxValue)
             {
                 index = (int)VRTK_SDK_Bridge.GetControllerIndex(controller.gameObject);
                 yield return null;

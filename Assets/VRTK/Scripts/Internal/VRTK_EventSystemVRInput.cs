@@ -7,11 +7,11 @@
 
     public class VRTK_EventSystemVRInput : PointerInputModule
     {
-        public List<VRTK_UIPointer> pointers;
+        public List<VRTK_UIPointer> pointers = new List<VRTK_UIPointer>();
 
         public void Initialise()
         {
-            pointers = new List<VRTK_UIPointer>();
+            pointers.Clear();
         }
 
         public override void Process()
