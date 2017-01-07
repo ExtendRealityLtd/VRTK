@@ -295,9 +295,14 @@ namespace VRTK
         private void OnTriggerStay(Collider collider)
         {
             var colliderInteractableObject = TriggerStart(collider);
-            if (touchedObject == null && colliderInteractableObject && IsObjectInteractable(collider.gameObject))
+
+            if (touchedObject == null || touchedObject == collider.gameObject)
             {
                 triggerIsColliding = true;
+            }
+
+            if (touchedObject == null && colliderInteractableObject && IsObjectInteractable(collider.gameObject))
+            {
                 touchedObject = colliderInteractableObject;
                 var touchedObjectScript = touchedObject.GetComponent<VRTK_InteractableObject>();
                 var touchingObject = gameObject;
