@@ -2,6 +2,7 @@
 namespace VRTK
 {
     using UnityEngine;
+    using System;
 
     /// <summary>
     /// Event Payload
@@ -1065,8 +1066,9 @@ namespace VRTK
 
         private bool Vector2ShallowEquals(Vector2 vectorA, Vector2 vectorB)
         {
-            return (vectorA.x.ToString("F" + axisFidelity) == vectorB.x.ToString("F" + axisFidelity) &&
-                    vectorA.y.ToString("F" + axisFidelity) == vectorB.y.ToString("F" + axisFidelity));
+            var distanceVector = vectorA - vectorB;
+            return Math.Round(Mathf.Abs(distanceVector.x), axisFidelity, MidpointRounding.AwayFromZero) < float.Epsilon
+                   && Math.Round(Mathf.Abs(distanceVector.y), axisFidelity, MidpointRounding.AwayFromZero) < float.Epsilon;
         }
 
         private void DisableEvents()
