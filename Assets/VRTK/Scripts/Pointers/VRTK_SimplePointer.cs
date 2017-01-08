@@ -63,7 +63,8 @@ namespace VRTK
             base.Update();
             if (pointerBeam && pointerBeam.activeSelf)
             {
-                Ray pointerRaycast = new Ray(GetOriginPosition(), GetOriginForward());
+                var origin = GetOrigin();
+                Ray pointerRaycast = new Ray(origin.position, origin.forward);
                 RaycastHit pointerCollidedWith;
                 var rayHit = Physics.Raycast(pointerRaycast, out pointerCollidedWith, pointerLength, ~layersToIgnore);
                 var pointerBeamLength = GetPointerBeamLength(rayHit, pointerCollidedWith);
@@ -76,7 +77,7 @@ namespace VRTK
                     }
                     if (pointerCursorRescaledAlongDistance)
                     {
-                        float collisionDistance = Vector3.Distance(pointerCollidedWith.point, GetOriginPosition());
+                        float collisionDistance = Vector3.Distance(pointerCollidedWith.point, origin.position);
                         pointerTip.transform.localScale = pointerCursorOriginalScale * collisionDistance;
                     }
                 }
@@ -84,7 +85,7 @@ namespace VRTK
                 {
                     if (pointerCursorMatchTargetNormal)
                     {
-                        pointerTip.transform.forward = GetOriginForward();
+                        pointerTip.transform.forward = origin.forward;
                     }
                     if (pointerCursorRescaledAlongDistance)
                     {
@@ -216,13 +217,15 @@ namespace VRTK
         {
             //if the additional decimal isn't added then the beam position glitches
             var beamPosition = setLength / (2 + 0.00001f);
+            Transform smoothedOrigin = GetOrigin();
 
             pointerBeam.transform.localScale = new Vector3(setThicknes, setThicknes, setLength);
             pointerBeam.transform.localPosition = new Vector3(0f, 0f, beamPosition);
-            pointerTip.transform.localPosition = new Vector3(0f, 0f, setLength - (pointerTip.transform.localScale.z / 2));
 
-            pointerHolder.transform.position = GetOriginPosition();
-            pointerHolder.transform.rotation = GetOriginRotation();
+            pointerHolder.transform.position = GetOrigin(false).position;
+            pointerTip.transform.position = smoothedOrigin.position + smoothedOrigin.forward * (setLength - (pointerTip.transform.localScale.z / 2));
+            pointerHolder.transform.LookAt(pointerTip.transform);
+
             base.UpdateDependencies(pointerTip.transform.position);
         }
 
