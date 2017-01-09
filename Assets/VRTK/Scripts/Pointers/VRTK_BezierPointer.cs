@@ -134,13 +134,25 @@ namespace VRTK
         {
             state = (pointerVisibility == pointerVisibilityStates.Always_On ? true : state);
             beamActive = state;
+            if (!beamActive)
+            {
+                ToggleBezierBeam(beamActive);
+            }
         }
 
         protected override void DisablePointerBeam(object sender, ControllerInteractionEventArgs e)
         {
             base.DisablePointerBeam(sender, e);
-            TogglePointerCursor(false);
-            curvedBeam.TogglePoints(false);
+            ToggleBezierBeam(false);
+        }
+
+        private void ToggleBezierBeam(bool state)
+        {
+            if (gameObject.activeInHierarchy)
+            {
+                TogglePointerCursor(state);
+                curvedBeam.TogglePoints(state);
+            }
         }
 
         private GameObject CreateCursor()
