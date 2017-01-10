@@ -290,7 +290,7 @@ namespace VRTK
         /// <returns>A Vector3 containing the current velocity of the tracked object.</returns>
         public override Vector3 GetVelocityOnIndex(uint index)
         {
-            if (index >= OpenVR.k_unTrackedDeviceIndexInvalid)
+            if (index <= (uint)SteamVR_TrackedObject.EIndex.Hmd || index >= OpenVR.k_unTrackedDeviceIndexInvalid)
             {
                 return Vector3.zero;
             }
@@ -305,7 +305,7 @@ namespace VRTK
         /// <returns>A Vector3 containing the current angular velocity of the tracked object.</returns>
         public override Vector3 GetAngularVelocityOnIndex(uint index)
         {
-            if (index >= OpenVR.k_unTrackedDeviceIndexInvalid)
+            if (index <= (uint)SteamVR_TrackedObject.EIndex.Hmd || index >= OpenVR.k_unTrackedDeviceIndexInvalid)
             {
                 return Vector3.zero;
             }

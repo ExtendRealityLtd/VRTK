@@ -11,6 +11,10 @@ namespace VRTK
     public class SDK_SimHeadset : SDK_BaseHeadset
     {
         private Transform camera;
+        private Vector3 lastPos;
+        private Vector3 lastRot;
+        private List<Vector3> posList;
+        private List<Vector3> rotList;
 
         /// <summary>
         /// The ProcessUpdate method enables an SDK to run logic for every Unity Update
@@ -18,6 +22,18 @@ namespace VRTK
         /// <param name="options">A dictionary of generic options that can be used to within the update.</param>
         public override void ProcessUpdate(Dictionary<string, object> options)
         {
+            posList.Add((camera.position - lastPos) / Time.deltaTime);
+            if (posList.Count > 10)
+            {
+                posList.RemoveAt(0);
+            }
+            rotList.Add((Quaternion.FromToRotation(lastRot, camera.rotation.eulerAngles)).eulerAngles / Time.deltaTime);
+            if (rotList.Count > 10)
+            {
+                rotList.RemoveAt(0);
+            }
+            lastPos = camera.position;
+            lastRot = camera.rotation.eulerAngles;
         }
 
         /// <summary>
@@ -57,6 +73,36 @@ namespace VRTK
         }
 
         /// <summary>
+        /// The GetHeadsetVelocity method is used to determine the current velocity of the headset.
+        /// </summary>
+        /// <returns>A Vector3 containing the current velocity of the headset.</returns>
+        public override Vector3 GetHeadsetVelocity()
+        {
+            Vector3 velocity = Vector3.zero;
+            foreach (Vector3 vel in posList)
+            {
+                velocity += vel;
+            }
+            velocity /= posList.Count;
+            return velocity;
+        }
+
+        /// <summary>
+        /// The GetHeadsetAngularVelocity method is used to determine the current angular velocity of the headset.
+        /// </summary>
+        /// <returns>A Vector3 containing the current angular velocity of the headset.</returns>
+        public override Vector3 GetHeadsetAngularVelocity()
+        {
+            Vector3 angularVelocity = Vector3.zero;
+            foreach (Vector3 vel in rotList)
+            {
+                angularVelocity += vel;
+            }
+            angularVelocity /= rotList.Count;
+            return angularVelocity;
+        }
+
+        /// <summary>
         /// The HeadsetFade method is used to apply a fade to the headset camera to progressively change the colour.
         /// </summary>
         /// <param name="color">The colour to fade to.</param>
@@ -84,6 +130,16 @@ namespace VRTK
         public override void AddHeadsetFade(Transform camera)
         {
 
+        }
+
+        private void Awake()
+        {
+            posList = new List<Vector3>();
+            rotList = new List<Vector3>();
+
+            var headset = GetHeadset();
+            lastPos = headset.position;
+            lastRot = headset.rotation.eulerAngles;
         }
     }
 #else
