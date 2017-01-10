@@ -264,7 +264,7 @@ namespace VRTK
         /// <param name="strength">The intensity of the rumble of the controller motor. `0` to `1`.</param>
         public override void HapticPulseOnIndex(uint index, float strength = 0.5f)
         {
-            if (index < uint.MaxValue)
+            if (index < OpenVR.k_unTrackedDeviceIndexInvalid)
             {
                 var convertedStrength = maxHapticVibration * strength;
                 var device = SteamVR_Controller.Input((int)index);
@@ -288,7 +288,7 @@ namespace VRTK
         /// <returns>A Vector3 containing the current velocity of the tracked object.</returns>
         public override Vector3 GetVelocityOnIndex(uint index)
         {
-            if (index >= uint.MaxValue)
+            if (index >= OpenVR.k_unTrackedDeviceIndexInvalid)
             {
                 return Vector3.zero;
             }
@@ -303,7 +303,7 @@ namespace VRTK
         /// <returns>A Vector3 containing the current angular velocity of the tracked object.</returns>
         public override Vector3 GetAngularVelocityOnIndex(uint index)
         {
-            if (index >= uint.MaxValue)
+            if (index >= OpenVR.k_unTrackedDeviceIndexInvalid)
             {
                 return Vector3.zero;
             }
@@ -318,7 +318,7 @@ namespace VRTK
         /// <returns>A Vector2 containing the current x,y position of where the touchpad is being touched.</returns>
         public override Vector2 GetTouchpadAxisOnIndex(uint index)
         {
-            if (index >= uint.MaxValue)
+            if (index >= OpenVR.k_unTrackedDeviceIndexInvalid)
             {
                 return Vector2.zero;
             }
@@ -333,7 +333,7 @@ namespace VRTK
         /// <returns>A Vector2 containing the current position of the trigger.</returns>
         public override Vector2 GetTriggerAxisOnIndex(uint index)
         {
-            if (index >= uint.MaxValue)
+            if (index >= OpenVR.k_unTrackedDeviceIndexInvalid)
             {
                 return Vector2.zero;
             }
@@ -358,7 +358,7 @@ namespace VRTK
         /// <returns>The delta between the trigger presses.</returns>
         public override float GetTriggerHairlineDeltaOnIndex(uint index)
         {
-            if (index >= uint.MaxValue)
+            if (index >= OpenVR.k_unTrackedDeviceIndexInvalid)
             {
                 return 0f;
             }
@@ -443,7 +443,7 @@ namespace VRTK
         /// <returns>Returns true if the button has passed it's press threshold.</returns>
         public override bool IsHairTriggerDownOnIndex(uint index)
         {
-            if (index >= uint.MaxValue)
+            if (index >= OpenVR.k_unTrackedDeviceIndexInvalid)
             {
                 return false;
             }
@@ -458,7 +458,7 @@ namespace VRTK
         /// <returns>Returns true if the button has just been released from it's press threshold.</returns>
         public override bool IsHairTriggerUpOnIndex(uint index)
         {
-            if (index >= uint.MaxValue)
+            if (index >= OpenVR.k_unTrackedDeviceIndexInvalid)
             {
                 return false;
             }
@@ -778,7 +778,7 @@ namespace VRTK
 
         private bool IsButtonPressed(uint index, ButtonPressTypes type, ulong button)
         {
-            if (index >= uint.MaxValue)
+            if (index >= OpenVR.k_unTrackedDeviceIndexInvalid)
             {
                 return false;
             }
