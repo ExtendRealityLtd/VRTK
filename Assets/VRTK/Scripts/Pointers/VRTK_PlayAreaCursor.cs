@@ -116,7 +116,10 @@ namespace VRTK
         public virtual void ToggleState(bool state)
         {
             state = (!enabled ? false : state);
-            playAreaCursor.SetActive(state);
+            if (playAreaCursor)
+            {
+                playAreaCursor.SetActive(state);
+            }
         }
 
         protected virtual void Awake()
