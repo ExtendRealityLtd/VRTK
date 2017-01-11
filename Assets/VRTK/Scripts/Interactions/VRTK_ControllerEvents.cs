@@ -424,9 +424,6 @@ namespace VRTK
         private float hairTriggerDelta;
         private float hairGripDelta;
 
-        private Vector3 controllerVelocity = Vector3.zero;
-        private Vector3 controllerAngularVelocity = Vector3.zero;
-
         public virtual void OnTriggerPressed(ControllerInteractionEventArgs e)
         {
             if (TriggerPressed != null)
@@ -791,20 +788,20 @@ namespace VRTK
         /// The GetVelocity method is useful for getting the current velocity of the physical game controller. This can be useful to determine the speed at which the controller is being swung or the direction it is being moved in.
         /// </summary>
         /// <returns>A 3 dimensional vector containing the current real world physical controller velocity.</returns>
+        [Obsolete("`VRTK_ControllerEvents.GetVelocity()` has been replaced with `VRTK_DeviceFinder.GetControllerVelocity(givenController)`. This method will be removed in a future version of VRTK.")]
         public Vector3 GetVelocity()
         {
-            SetVelocity();
-            return controllerVelocity;
+            return VRTK_DeviceFinder.GetControllerVelocity(gameObject);
         }
 
         /// <summary>
         /// The GetAngularVelocity method is useful for getting the current rotational velocity of the physical game controller. This can be useful for determining which way the controller is being rotated and at what speed the rotation is occurring.
         /// </summary>
         /// <returns>A 3 dimensional vector containing the current real world physical controller angular (rotational) velocity.</returns>
+        [Obsolete("`VRTK_ControllerEvents.GetAngularVelocity()` has been replaced with `VRTK_DeviceFinder.GetControllerAngularVelocity(givenController)`. This method will be removed in a future version of VRTK.")]
         public Vector3 GetAngularVelocity()
         {
-            SetVelocity();
-            return controllerAngularVelocity;
+            return VRTK_DeviceFinder.GetControllerAngularVelocity(gameObject);
         }
 
         /// <summary>
@@ -1188,8 +1185,6 @@ namespace VRTK
                 return;
             }
 
-            VRTK_SDK_Bridge.ControllerProcessUpdate(controllerIndex);
-
             Vector2 currentTriggerAxis = VRTK_SDK_Bridge.GetTriggerAxisOnIndex(controllerIndex);
             Vector2 currentGripAxis = VRTK_SDK_Bridge.GetGripAxisOnIndex(controllerIndex);
             Vector2 currentTouchpadAxis = VRTK_SDK_Bridge.GetTouchpadAxisOnIndex(controllerIndex);
@@ -1398,13 +1393,6 @@ namespace VRTK
 
             hairTriggerDelta = VRTK_SDK_Bridge.GetTriggerHairlineDeltaOnIndex(controllerIndex);
             hairGripDelta = VRTK_SDK_Bridge.GetGripHairlineDeltaOnIndex(controllerIndex);
-        }
-
-        private void SetVelocity()
-        {
-            var controllerIndex = VRTK_DeviceFinder.GetControllerIndex(gameObject);
-            controllerVelocity = VRTK_SDK_Bridge.GetVelocityOnIndex(controllerIndex);
-            controllerAngularVelocity = VRTK_SDK_Bridge.GetAngularVelocityOnIndex(controllerIndex);
         }
     }
 }

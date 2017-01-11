@@ -104,6 +104,8 @@
                 OnControllerIndexChanged(SetEventPayload(previousIndex));
             }
 
+            VRTK_SDK_Bridge.ControllerProcessUpdate(currentIndex);
+
             if (aliasController && gameObject.activeInHierarchy && !aliasController.activeSelf)
             {
                 aliasController.SetActive(true);

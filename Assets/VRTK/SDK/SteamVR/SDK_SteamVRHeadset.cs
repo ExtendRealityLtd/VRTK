@@ -3,12 +3,21 @@ namespace VRTK
 {
 #if VRTK_SDK_STEAMVR
     using UnityEngine;
+    using System.Collections.Generic;
 
     /// <summary>
     /// The SteamVR Headset SDK script provides a bridge to the SteamVR SDK.
     /// </summary>
     public class SDK_SteamVRHeadset : SDK_BaseHeadset
     {
+        /// <summary>
+        /// The ProcessUpdate method enables an SDK to run logic for every Unity Update
+        /// </summary>
+        /// <param name="options">A dictionary of generic options that can be used to within the update.</param>
+        public override void ProcessUpdate(Dictionary<string, object> options)
+        {
+        }
+
         /// <summary>
         /// The GetHeadset method returns the Transform of the object that is used to represent the headset in the scene.
         /// </summary>

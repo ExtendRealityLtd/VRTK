@@ -3,6 +3,7 @@ namespace VRTK
 {
 #if VRTK_SDK_SIM
     using UnityEngine;
+    using System.Collections.Generic;
 
     /// <summary>
     /// The Sim Headset SDK script  provides dummy functions for the headset.
@@ -10,6 +11,14 @@ namespace VRTK
     public class SDK_SimHeadset : SDK_BaseHeadset
     {
         private Transform camera;
+
+        /// <summary>
+        /// The ProcessUpdate method enables an SDK to run logic for every Unity Update
+        /// </summary>
+        /// <param name="options">A dictionary of generic options that can be used to within the update.</param>
+        public override void ProcessUpdate(Dictionary<string, object> options)
+        {
+        }
 
         /// <summary>
         /// The GetHeadset method returns the Transform of the object that is used to represent the headset in the scene.

@@ -3,12 +3,21 @@ namespace VRTK
 {
 #if VRTK_SDK_OCULUSVR
     using UnityEngine;
+    using System.Collections.Generic;
 
     /// <summary>
     /// The OculusVR Headset SDK script provides a bridge to the OculusVR SDK.
     /// </summary>
     public class SDK_OculusVRHeadset : SDK_BaseHeadset
     {
+        /// <summary>
+        /// The ProcessUpdate method enables an SDK to run logic for every Unity Update
+        /// </summary>
+        /// <param name="options">A dictionary of generic options that can be used to within the update.</param>
+        public override void ProcessUpdate(Dictionary<string, object> options)
+        {
+        }
+
         /// <summary>
         /// The GetHeadset method returns the Transform of the object that is used to represent the headset in the scene.
         /// </summary>
