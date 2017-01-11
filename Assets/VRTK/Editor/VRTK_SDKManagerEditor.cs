@@ -12,6 +12,7 @@
         private SDK_BaseHeadset previousHeadsetSDK;
         private SDK_BaseController previousControllerSDK;
         private SDK_BaseBoundaries previousBoundariesSDK;
+        private VRTK_SDKManager.SupportedSDKs quicklySelectedSDK = VRTK_SDKManager.SupportedSDKs.None;
 
         public override void OnInspectorGUI()
         {
@@ -23,13 +24,21 @@
             EditorGUILayout.BeginVertical("Box");
 
             EditorGUILayout.PropertyField(serializedObject.FindProperty("persistOnLoad"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("autoManageScriptDefines"));
 
             sdkManager.systemSDK = (VRTK_SDKManager.SupportedSDKs)EditorGUILayout.EnumPopup(VRTK_EditorUtilities.BuildGUIContent<VRTK_SDKManager>("systemSDK"), sdkManager.systemSDK);
             sdkManager.boundariesSDK = (VRTK_SDKManager.SupportedSDKs)EditorGUILayout.EnumPopup(VRTK_EditorUtilities.BuildGUIContent<VRTK_SDKManager>("boundariesSDK"), sdkManager.boundariesSDK);
             sdkManager.headsetSDK = (VRTK_SDKManager.SupportedSDKs)EditorGUILayout.EnumPopup(VRTK_EditorUtilities.BuildGUIContent<VRTK_SDKManager>("headsetSDK"), sdkManager.headsetSDK);
             sdkManager.controllerSDK = (VRTK_SDKManager.SupportedSDKs)EditorGUILayout.EnumPopup(VRTK_EditorUtilities.BuildGUIContent<VRTK_SDKManager>("controllerSDK"), sdkManager.controllerSDK);
 
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("autoManageScriptDefines"));
+            EditorGUILayout.Space();
+
+            quicklySelectedSDK = (VRTK_SDKManager.SupportedSDKs)EditorGUILayout.EnumPopup(new GUIContent("Quick select SDK", "Quickly select one of the SDKs into all slots."), quicklySelectedSDK);
+            if (quicklySelectedSDK != VRTK_SDKManager.SupportedSDKs.None)
+            {
+                QuickSelectSDK(quicklySelectedSDK);
+                quicklySelectedSDK = VRTK_SDKManager.SupportedSDKs.None;
+            }
 
             CheckSDKUsage(sdkManager);
 
@@ -58,6 +67,16 @@
             EditorGUILayout.EndVertical();
 
             serializedObject.ApplyModifiedProperties();
+        }
+
+        private void QuickSelectSDK(VRTK_SDKManager.SupportedSDKs sdk)
+        {
+            VRTK_SDKManager sdkManager = (VRTK_SDKManager)target;
+
+            sdkManager.systemSDK = sdk;
+            sdkManager.boundariesSDK = sdk;
+            sdkManager.headsetSDK = sdk;
+            sdkManager.controllerSDK = sdk;
         }
 
         private SDK_BaseHeadset GetHeadsetSDK(VRTK_SDKManager sdkManager)
