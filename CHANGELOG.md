@@ -1,5 +1,16 @@
 # Changelog
 
+# 3.0.1
+
+## Bug Fixes
+
+ * **Pointer**
+  * set pointer transform correctly (619535066c9ce981affec11788bad754ed9c7e28)
+  * ensure ToggleBeam() turns off bezier pointer (44d55aa1c76117ddb459fd4d449cb633e66e797b)
+ * **SDK**
+  * support SteamVR Plugin version 1.2.0 (53dc577ee9e4e85ba555e82890422e4f1ced2111)
+  * run controller init code using Awake (cbc397a8fbd0e1c23512c34d9f425edcf6a80bb3)
+
 # 3.0.0
 
 ## Breaking Changes
