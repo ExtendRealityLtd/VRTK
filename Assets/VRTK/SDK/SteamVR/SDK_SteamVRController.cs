@@ -728,8 +728,7 @@ namespace VRTK
             return false;
         }
 
-        [RuntimeInitializeOnLoadMethod]
-        private void Initialise()
+        private void Awake()
         {
             Assembly executingAssembly = Assembly.GetExecutingAssembly();
             Type eventClass = executingAssembly.GetType("SteamVR_Utils").GetNestedType("Event");

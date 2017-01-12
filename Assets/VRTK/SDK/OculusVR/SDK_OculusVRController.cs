@@ -810,12 +810,6 @@ namespace VRTK
             return IsButtonPressed(index, ButtonPressTypes.TouchUp, OVRInput.Touch.Two);
         }
 
-        [RuntimeInitializeOnLoadMethod]
-        private void Initialise()
-        {
-            SetTrackedControllerCaches(true);
-        }
-
         private void SetTrackedControllerCaches(bool forceRefresh = false)
         {
             if (forceRefresh)
