@@ -10,6 +10,11 @@
         private static SDK_BaseController controllerSDK = null;
         private static SDK_BaseBoundaries boundariesSDK = null;
 
+        public static void HeadsetProcessUpdate(Dictionary<string, object> options = null)
+        {
+            GetHeadsetSDK().ProcessUpdate(options);
+        }
+
         public static void ControllerProcessUpdate(uint index, Dictionary<string, object> options = null)
         {
             GetControllerSDK().ProcessUpdate(index, options);

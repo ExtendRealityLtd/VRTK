@@ -1302,28 +1302,6 @@ Adding the `VRTK_ControllerEvents_UnityEvents` component to `VRTK_ControllerEven
 
 ### Class Methods
 
-#### GetVelocity/0
-
-  > `public Vector3 GetVelocity()`
-
-  * Parameters
-   * _none_
-  * Returns
-   * `Vector3` - A 3 dimensional vector containing the current real world physical controller velocity.
-
-The GetVelocity method is useful for getting the current velocity of the physical game controller. This can be useful to determine the speed at which the controller is being swung or the direction it is being moved in.
-
-#### GetAngularVelocity/0
-
-  > `public Vector3 GetAngularVelocity()`
-
-  * Parameters
-   * _none_
-  * Returns
-   * `Vector3` - A 3 dimensional vector containing the current real world physical controller angular (rotational) velocity.
-
-The GetAngularVelocity method is useful for getting the current rotational velocity of the physical game controller. This can be useful for determining which way the controller is being rotated and at what speed the rotation is occurring.
-
 #### GetTouchpadAxis/0
 
   > `public Vector2 GetTouchpadAxis()`
@@ -4673,6 +4651,28 @@ The GetScriptAliasController method will attempt to get the object that contains
 
 The GetModelAliasController method will attempt to get the object that contains the model for the controller.
 
+#### GetControllerVelocity/1
+
+  > `public static Vector3 GetControllerVelocity(GameObject givenController)`
+
+  * Parameters
+   * `GameObject givenController` - The GameObject of the controller.
+  * Returns
+   * `Vector3` - A 3 dimensional vector containing the current real world physical controller velocity.
+
+The GetControllerVelocity method is used for getting the current velocity of the physical game controller. This can be useful to determine the speed at which the controller is being swung or the direction it is being moved in.
+
+#### GetControllerAngularVelocity/1
+
+  > `public static Vector3 GetControllerAngularVelocity(GameObject givenController)`
+
+  * Parameters
+   * `GameObject givenController` - The GameObject of the controller.
+  * Returns
+   * `Vector3` - A 3 dimensional vector containing the current real world physical controller angular (rotational) velocity.
+
+The GetControllerAngularVelocity method is used for getting the current rotational velocity of the physical game controller. This can be useful for determining which way the controller is being rotated and at what speed the rotation is occurring.
+
 #### HeadsetTransform/0
 
   > `public static Transform HeadsetTransform()`
@@ -5069,6 +5069,17 @@ The Base Headset SDK script provides a bridge to SDK methods that deal with the 
 This is an abstract class to implement the interface required by all implemented SDKs.
 
 ### Class Methods
+
+#### ProcessUpdate/1
+
+  > `public abstract void ProcessUpdate(Dictionary<string, object> options);`
+
+  * Parameters
+   * `Dictionary<string, object> options` - A dictionary of generic options that can be used to within the update.
+  * Returns
+   * _none_
+
+The ProcessUpdate method enables an SDK to run logic for every Unity Update
 
 #### GetHeadset/0
 
@@ -5970,6 +5981,17 @@ This is the fallback class that will just return default values.
 
 ### Class Methods
 
+#### ProcessUpdate/1
+
+  > `public override void ProcessUpdate(Dictionary<string, object> options)`
+
+  * Parameters
+   * `Dictionary<string, object> options` - A dictionary of generic options that can be used to within the update.
+  * Returns
+   * _none_
+
+The ProcessUpdate method enables an SDK to run logic for every Unity Update
+
 #### GetHeadset/0
 
   > `public override Transform GetHeadset()`
@@ -6842,6 +6864,17 @@ The Sim Headset SDK script  provides dummy functions for the headset.
 
 ### Class Methods
 
+#### ProcessUpdate/1
+
+  > `public override void ProcessUpdate(Dictionary<string, object> options)`
+
+  * Parameters
+   * `Dictionary<string, object> options` - A dictionary of generic options that can be used to within the update.
+  * Returns
+   * _none_
+
+The ProcessUpdate method enables an SDK to run logic for every Unity Update
+
 #### GetHeadset/0
 
   > `public override Transform GetHeadset()`
@@ -7710,6 +7743,17 @@ The SteamVR Headset SDK script provides a bridge to the SteamVR SDK.
 
 ### Class Methods
 
+#### ProcessUpdate/1
+
+  > `public override void ProcessUpdate(Dictionary<string, object> options)`
+
+  * Parameters
+   * `Dictionary<string, object> options` - A dictionary of generic options that can be used to within the update.
+  * Returns
+   * _none_
+
+The ProcessUpdate method enables an SDK to run logic for every Unity Update
+
 #### GetHeadset/0
 
   > `public override Transform GetHeadset()`
@@ -8577,6 +8621,17 @@ The ForceInterleavedReprojectionOn method determines whether Interleaved Reproje
 The OculusVR Headset SDK script provides a bridge to the OculusVR SDK.
 
 ### Class Methods
+
+#### ProcessUpdate/1
+
+  > `public override void ProcessUpdate(Dictionary<string, object> options)`
+
+  * Parameters
+   * `Dictionary<string, object> options` - A dictionary of generic options that can be used to within the update.
+  * Returns
+   * _none_
+
+The ProcessUpdate method enables an SDK to run logic for every Unity Update
 
 #### GetHeadset/0
 

@@ -230,6 +230,28 @@ namespace VRTK
         }
 
         /// <summary>
+        /// The GetControllerVelocity method is used for getting the current velocity of the physical game controller. This can be useful to determine the speed at which the controller is being swung or the direction it is being moved in.
+        /// </summary>
+        /// <param name="givenController">The GameObject of the controller.</param>
+        /// <returns>A 3 dimensional vector containing the current real world physical controller velocity.</returns>
+        public static Vector3 GetControllerVelocity(GameObject givenController)
+        {
+            var controllerIndex = GetControllerIndex(givenController);
+            return VRTK_SDK_Bridge.GetVelocityOnIndex(controllerIndex);
+        }
+
+        /// <summary>
+        /// The GetControllerAngularVelocity method is used for getting the current rotational velocity of the physical game controller. This can be useful for determining which way the controller is being rotated and at what speed the rotation is occurring.
+        /// </summary>
+        /// <param name="givenController">The GameObject of the controller.</param>
+        /// <returns>A 3 dimensional vector containing the current real world physical controller angular (rotational) velocity.</returns>
+        public static Vector3 GetControllerAngularVelocity(GameObject givenController)
+        {
+            var controllerIndex = GetControllerIndex(givenController);
+            return VRTK_SDK_Bridge.GetAngularVelocityOnIndex(controllerIndex);
+        }
+
+        /// <summary>
         /// The HeadsetTransform method is used to retrieve the transform for the VR Headset in the scene. It can be useful to determine the position of the user's head in the game world.
         /// </summary>
         /// <returns>The transform of the VR Headset component.</returns>
