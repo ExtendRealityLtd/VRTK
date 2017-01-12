@@ -3,7 +3,9 @@ namespace VRTK
 {
 #if VRTK_SDK_STEAMVR
     using UnityEngine;
+    using System;
     using System.Collections.Generic;
+    using System.Reflection;
     using Valve.VR;
 
     /// <summary>
@@ -729,11 +731,38 @@ namespace VRTK
         [RuntimeInitializeOnLoadMethod]
         private void Initialise()
         {
-            SteamVR_Utils.Event.Listen("TrackedDeviceRoleChanged", OnTrackedDeviceRoleChanged);
+            Assembly executingAssembly = Assembly.GetExecutingAssembly();
+            Type eventClass = executingAssembly.GetType("SteamVR_Utils").GetNestedType("Event");
+            MethodInfo targetMethod = typeof(SDK_SteamVRController).GetMethod("OnTrackedDeviceRoleChanged", BindingFlags.NonPublic | BindingFlags.Instance);
+
+            if (eventClass == null)
+            {
+                //SteamVR plugin >= 1.2.0
+                eventClass = executingAssembly.GetType("SteamVR_Events");
+                MethodInfo systemMethod = eventClass.GetMethod("System", BindingFlags.Public | BindingFlags.Static);
+                object steamVREventInstance = systemMethod.Invoke(null, new object[] { "TrackedDeviceRoleChanged" });
+                MethodInfo listenMethod = steamVREventInstance.GetType().GetMethod("Listen", BindingFlags.Public | BindingFlags.Instance);
+                Type listenMethodParameterType = listenMethod.GetParameters()[0].ParameterType;
+
+                targetMethod = targetMethod.MakeGenericMethod(listenMethodParameterType.GetGenericArguments()[0]);
+                var targetMethodDelegate = Delegate.CreateDelegate(listenMethodParameterType, this, targetMethod);
+                listenMethod.Invoke(steamVREventInstance, new object[] { targetMethodDelegate });
+            }
+            else
+            {
+                //SteamVR plugin < 1.2.0
+                MethodInfo listenMethod = eventClass.GetMethod("Listen", BindingFlags.Public | BindingFlags.Static);
+                Type listenMethodParameterType = listenMethod.GetParameters()[1].ParameterType;
+
+                targetMethod = targetMethod.MakeGenericMethod(listenMethodParameterType.GetMethod("Invoke").GetParameters()[0].ParameterType);
+                Delegate targetMethodDelegate = Delegate.CreateDelegate(listenMethodParameterType, this, targetMethod);
+                listenMethod.Invoke(null, new object[] { "TrackedDeviceRoleChanged", targetMethodDelegate });
+            }
+
             SetTrackedControllerCaches(true);
         }
 
-        private void OnTrackedDeviceRoleChanged(params object[] args)
+        private void OnTrackedDeviceRoleChanged<T>(T ignoredArgument)
         {
             SetTrackedControllerCaches(true);
         }
