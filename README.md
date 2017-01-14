@@ -22,6 +22,11 @@ documentation for this GitHub repository.
 Alternatively, the stable versions of the documentation can be viewed
 online at [http://docs.vrtk.io](http://docs.vrtk.io).
 
+## Frequently Asked Questions
+
+If you have an issue or question then check the [FAQ] document to see
+if your query has already been answered.
+
 ## Getting Started
 
 > *VRTK requires a supported VR SDK to be imported into your Unity3d Project.*
@@ -43,7 +48,8 @@ online at [http://docs.vrtk.io](http://docs.vrtk.io).
  * Press Tab to switch between left/right hands.
  * Hold Left Shift to change from translation to rotation for the hands.
  * Hold Left Crtl to switch between X/Y and X/Z axis.
- * All above keys can be remapped using the inspector on the `VRSimulatorCameraRig` prefab.
+ * All above keys can be remapped using the inspector on the
+ `VRSimulatorCameraRig` prefab.
  * Button mapping for the VR control are as follows:
   * Grip: Left mouse button
   * Trigger: Right mouse button
@@ -160,3 +166,4 @@ Code released under the [MIT License].
 [EXAMPLES.md]: https://github.com/thestonefox/SteamVR_Unity_Toolkit/blob/master/EXAMPLES.md
 [Fork]: http://help.github.com/fork-a-repo/
 [Open a Pull Request]: https://help.github.com/articles/using-pull-requests/
+[FAQ]: https://github.com/thestonefox/SteamVR_Unity_Toolkit/blob/master/FAQ.md
