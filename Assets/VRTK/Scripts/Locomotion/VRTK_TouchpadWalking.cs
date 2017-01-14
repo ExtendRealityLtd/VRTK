@@ -49,6 +49,10 @@ namespace VRTK
         public VRTK_ControllerEvents.ButtonAlias moveOnButtonPress = VRTK_ControllerEvents.ButtonAlias.Undefined;
         [Tooltip("The direction that will be moved in is the direction of this device.")]
         public VRTK_DeviceFinder.Devices deviceForDirection = VRTK_DeviceFinder.Devices.Headset;
+        [Tooltip("If the defined speed multiplier button is pressed then the current movement speed will be multiplied by the `Speed Multiplier` value.")]
+        public VRTK_ControllerEvents.ButtonAlias speedMultiplierButton = VRTK_ControllerEvents.ButtonAlias.Undefined;
+        [Tooltip("The amount to mmultiply the movement speed by if the `Speed Multiplier Button` is pressed.")]
+        public float speedMultiplier = 1f;
 
         private GameObject controllerLeftHand;
         private GameObject controllerRightHand;
@@ -60,6 +64,8 @@ namespace VRTK
         private bool rightSubscribed;
         private ControllerInteractionEventHandler touchpadAxisChanged;
         private ControllerInteractionEventHandler touchpadUntouched;
+        private bool multiplySpeed = false;
+        private VRTK_ControllerEvents controllerEvents;
 
         private void Awake()
         {
@@ -83,18 +89,21 @@ namespace VRTK
 
         private void DoTouchpadAxisChanged(object sender, ControllerInteractionEventArgs e)
         {
-            var controllerEvents = (VRTK_ControllerEvents)sender;
+            controllerEvents = (VRTK_ControllerEvents)sender;
             if (moveOnButtonPress != VRTK_ControllerEvents.ButtonAlias.Undefined && !controllerEvents.IsButtonPressed(moveOnButtonPress))
             {
                 touchAxis = Vector2.zero;
+                controllerEvents = null;
                 return;
             }
+
             touchAxis = e.touchpadAxis;
         }
 
         private void DoTouchpadTouchEnd(object sender, ControllerInteractionEventArgs e)
         {
             touchAxis = Vector2.zero;
+            controllerEvents = null;
         }
 
         private void CalculateSpeed(ref float speed, float inputValue)
@@ -102,6 +111,7 @@ namespace VRTK
             if (inputValue != 0f)
             {
                 speed = (maxWalkSpeed * inputValue);
+                speed = (multiplySpeed ? speed * speedMultiplier : speed);
             }
             else
             {
@@ -142,6 +152,11 @@ namespace VRTK
                 playArea.position += (movement + strafe);
                 playArea.position = new Vector3(playArea.position.x, fixY, playArea.position.z);
             }
+        }
+
+        private void Update()
+        {
+            multiplySpeed = (controllerEvents && speedMultiplierButton != VRTK_ControllerEvents.ButtonAlias.Undefined && controllerEvents.IsButtonPressed(speedMultiplierButton));
         }
 
         private void FixedUpdate()

@@ -974,6 +974,8 @@ The Touchpad Walking script adds a rigidbody and a box collider to the user's po
  * **Deceleration:** The speed in which the play area slows down to a complete stop when the user is no longer touching the touchpad. This deceleration effect can ease any motion sickness that may be suffered.
  * **Move On Button Press:** If a button is defined then movement will only occur when the specified button is being held down and the touchpad axis changes.
  * **Device For Direction:** The direction that will be moved in is the direction of this device.
+ * **Speed Multiplier Button:** If the defined speed multiplier button is pressed then the current movement speed will be multiplied by the `Speed Multiplier` value.
+ * **Speed Multiplier:** The amount to mmultiply the movement speed by if the `Speed Multiplier Button` is pressed.
 
 ### Example
 
