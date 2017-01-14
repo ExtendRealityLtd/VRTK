@@ -78,7 +78,8 @@ namespace VRTK
         public ClickMethods clickMethod = ClickMethods.Click_On_Button_Up;
         [Tooltip("Determines whether the UI click action should be triggered when the pointer is deactivated. If the pointer is hovering over a clickable element then it will invoke the click action on that element. Note: Only works with `Click Method =  Click_On_Button_Up`")]
         public bool attemptClickOnDeactivate = false;
-
+        [Tooltip("The amount of time the pointer can be over the same UI element before it automatically attempts to click it. 0f means no click attempt will be made.")]
+        public float clickAfterHoverDuration = 0f;
 
         [HideInInspector]
         public PointerEventData pointerEventData;
@@ -86,6 +87,21 @@ namespace VRTK
         public GameObject hoveringElement;
         [HideInInspector]
         public GameObject controllerRenderModel;
+        [HideInInspector]
+        public float hoverDurationTimer = 0f;
+        [HideInInspector]
+        public bool canClickOnHover = false;
+
+        /// <summary>
+        /// The GameObject of the front trigger activator of the canvas currently being activated by this pointer.
+        /// </summary>
+        [HideInInspector]
+        public GameObject autoActivatingCanvas = null;
+        /// <summary>
+        /// Determines if the UI Pointer has collided with a valid canvas that has collision click turned on.
+        /// </summary>
+        [HideInInspector]
+        public bool collisionClick = false;
 
         /// <summary>
         /// Emitted when the UI Pointer is colliding with a valid UI element.
@@ -108,21 +124,11 @@ namespace VRTK
         /// </summary>
         public event UIPointerEventHandler UIPointerElementDragEnd;
 
-        /// <summary>
-        /// The GameObject of the front trigger activator of the canvas currently being activated by this pointer.
-        /// </summary>
-        [HideInInspector]
-        public GameObject autoActivatingCanvas = null;
-        /// <summary>
-        /// Determines if the UI Pointer has collided with a valid canvas that has collision click turned on.
-        /// </summary>
-        [HideInInspector]
-        public bool collisionClick = false;
-
         private bool pointerClicked = false;
         private bool beamEnabledState = false;
         private bool lastPointerPressState = false;
         private bool lastPointerClickState = false;
+        private GameObject currentTarget;
 
         private EventSystem cachedEventSystem;
         private VRTK_EventSystemVRInput cachedEventSystemInput;
@@ -131,6 +137,18 @@ namespace VRTK
 
         public virtual void OnUIPointerElementEnter(UIPointerEventArgs e)
         {
+            if (e.currentTarget != currentTarget)
+            {
+                ResetHoverTimer();
+            }
+
+            if (clickAfterHoverDuration > 0f && hoverDurationTimer <= 0f)
+            {
+                canClickOnHover = true;
+                hoverDurationTimer = clickAfterHoverDuration;
+            }
+
+            currentTarget = e.currentTarget;
             if (UIPointerElementEnter != null)
             {
                 UIPointerElementEnter(this, e);
@@ -139,6 +157,10 @@ namespace VRTK
 
         public virtual void OnUIPointerElementExit(UIPointerEventArgs e)
         {
+            if (e.previousTarget == currentTarget)
+            {
+                ResetHoverTimer();
+            }
             if (UIPointerElementExit != null)
             {
                 UIPointerElementExit(this, e);
@@ -152,6 +174,11 @@ namespace VRTK
 
         public virtual void OnUIPointerElementClick(UIPointerEventArgs e)
         {
+            if (e.currentTarget == currentTarget)
+            {
+                ResetHoverTimer();
+            }
+
             if (UIPointerElementClick != null)
             {
                 UIPointerElementClick(this, e);
@@ -357,6 +384,12 @@ namespace VRTK
             {
                 cachedEventSystemInput.pointers.Remove(this);
             }
+        }
+
+        private void ResetHoverTimer()
+        {
+            hoverDurationTimer = 0f;
+            canClickOnHover = false;
         }
 
         private void ConfigureEventSystem()

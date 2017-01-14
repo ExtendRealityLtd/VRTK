@@ -3933,6 +3933,7 @@ The UI pointer is activated via the `Pointer` alias on the `Controller Events` a
  * **Activation Mode:** Determines when the UI pointer should be active.
  * **Click Method:** Determines when the UI Click event action should happen.
  * **Attempt Click On Deactivate:** Determines whether the UI click action should be triggered when the pointer is deactivated. If the pointer is hovering over a clickable element then it will invoke the click action on that element. Note: Only works with `Click Method =  Click_On_Button_Up`
+ * **Click After Hover Duration:** The amount of time the pointer can be over the same UI element before it automatically attempts to click it. 0f means no click attempt will be made.
 
 ### Class Variables
 
