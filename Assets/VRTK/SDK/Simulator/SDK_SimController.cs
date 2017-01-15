@@ -10,7 +10,16 @@ namespace VRTK
     /// </summary>
     public class SDK_SimController : SDK_BaseController
     {
-        SimControllers controllers;
+        private SimControllers controllers;
+        private Dictionary<string, KeyCode> keyMappings = new Dictionary<string, KeyCode>()
+        {
+            {"Trigger", KeyCode.Mouse1 },
+            {"Grip", KeyCode.Mouse0 },
+            {"TouchpadPress", KeyCode.Q },
+            {"ButtonOne", KeyCode.E },
+            {"ButtonTwo", KeyCode.R },
+            {"StartMenu", KeyCode.F }
+        };
 
         /// <summary>
         /// The ProcessUpdate method enables an SDK to run logic for every Unity Update
@@ -368,7 +377,7 @@ namespace VRTK
         /// <returns>Returns true if the button is continually being pressed.</returns>
         public override bool IsTriggerPressedOnIndex(uint index)
         {
-            return IsButtonPressed(index, ButtonPressTypes.Press, KeyCode.Mouse1);
+            return IsButtonPressed(index, ButtonPressTypes.Press, keyMappings["Trigger"]);
         }
 
         /// <summary>
@@ -378,7 +387,7 @@ namespace VRTK
         /// <returns>Returns true if the button has just been pressed down.</returns>
         public override bool IsTriggerPressedDownOnIndex(uint index)
         {
-            return IsButtonPressed(index, ButtonPressTypes.PressDown, KeyCode.Mouse1);
+            return IsButtonPressed(index, ButtonPressTypes.PressDown, keyMappings["Trigger"]);
         }
 
         /// <summary>
@@ -388,7 +397,7 @@ namespace VRTK
         /// <returns>Returns true if the button has just been released.</returns>
         public override bool IsTriggerPressedUpOnIndex(uint index)
         {
-            return IsButtonPressed(index, ButtonPressTypes.PressUp, KeyCode.Mouse1);
+            return IsButtonPressed(index, ButtonPressTypes.PressUp, keyMappings["Trigger"]);
         }
 
         /// <summary>
@@ -448,7 +457,7 @@ namespace VRTK
         /// <returns>Returns true if the button is continually being pressed.</returns>
         public override bool IsGripPressedOnIndex(uint index)
         {
-            return IsButtonPressed(index, ButtonPressTypes.Press, KeyCode.Mouse0);
+            return IsButtonPressed(index, ButtonPressTypes.Press, keyMappings["Grip"]);
         }
 
         /// <summary>
@@ -458,7 +467,7 @@ namespace VRTK
         /// <returns>Returns true if the button has just been pressed down.</returns>
         public override bool IsGripPressedDownOnIndex(uint index)
         {
-            return IsButtonPressed(index, ButtonPressTypes.PressDown, KeyCode.Mouse0);
+            return IsButtonPressed(index, ButtonPressTypes.PressDown, keyMappings["Grip"]);
         }
 
         /// <summary>
@@ -468,7 +477,7 @@ namespace VRTK
         /// <returns>Returns true if the button has just been released.</returns>
         public override bool IsGripPressedUpOnIndex(uint index)
         {
-            return IsButtonPressed(index, ButtonPressTypes.PressUp, KeyCode.Mouse0);
+            return IsButtonPressed(index, ButtonPressTypes.PressUp, keyMappings["Grip"]);
         }
 
         /// <summary>
@@ -528,7 +537,7 @@ namespace VRTK
         /// <returns>Returns true if the button is continually being pressed.</returns>
         public override bool IsTouchpadPressedOnIndex(uint index)
         {
-            return IsButtonPressed(index, ButtonPressTypes.Press, KeyCode.Q);
+            return IsButtonPressed(index, ButtonPressTypes.Press, keyMappings["TouchpadPress"]);
         }
 
         /// <summary>
@@ -538,7 +547,7 @@ namespace VRTK
         /// <returns>Returns true if the button has just been pressed down.</returns>
         public override bool IsTouchpadPressedDownOnIndex(uint index)
         {
-            return IsButtonPressed(index, ButtonPressTypes.PressDown, KeyCode.Q);
+            return IsButtonPressed(index, ButtonPressTypes.PressDown, keyMappings["TouchpadPress"]);
         }
 
         /// <summary>
@@ -548,7 +557,7 @@ namespace VRTK
         /// <returns>Returns true if the button has just been released.</returns>
         public override bool IsTouchpadPressedUpOnIndex(uint index)
         {
-            return IsButtonPressed(index, ButtonPressTypes.PressUp, KeyCode.Q);
+            return IsButtonPressed(index, ButtonPressTypes.PressUp, keyMappings["TouchpadPress"]);
         }
 
         /// <summary>
@@ -588,7 +597,7 @@ namespace VRTK
         /// <returns>Returns true if the button is continually being pressed.</returns>
         public override bool IsButtonOnePressedOnIndex(uint index)
         {
-            return IsButtonPressed(index, ButtonPressTypes.Press, KeyCode.E);
+            return IsButtonPressed(index, ButtonPressTypes.Press, keyMappings["ButtonOne"]);
         }
 
         /// <summary>
@@ -598,7 +607,7 @@ namespace VRTK
         /// <returns>Returns true if the button has just been pressed down.</returns>
         public override bool IsButtonOnePressedDownOnIndex(uint index)
         {
-            return IsButtonPressed(index, ButtonPressTypes.PressDown, KeyCode.E);
+            return IsButtonPressed(index, ButtonPressTypes.PressDown, keyMappings["ButtonOne"]);
         }
 
         /// <summary>
@@ -608,7 +617,7 @@ namespace VRTK
         /// <returns>Returns true if the button has just been released.</returns>
         public override bool IsButtonOnePressedUpOnIndex(uint index)
         {
-            return IsButtonPressed(index, ButtonPressTypes.PressUp, KeyCode.E);
+            return IsButtonPressed(index, ButtonPressTypes.PressUp, keyMappings["ButtonOne"]);
         }
 
         /// <summary>
@@ -648,7 +657,7 @@ namespace VRTK
         /// <returns>Returns true if the button is continually being pressed.</returns>
         public override bool IsButtonTwoPressedOnIndex(uint index)
         {
-            return IsButtonPressed(index, ButtonPressTypes.Press, KeyCode.R);
+            return IsButtonPressed(index, ButtonPressTypes.Press, keyMappings["ButtonTwo"]);
         }
 
         /// <summary>
@@ -658,7 +667,7 @@ namespace VRTK
         /// <returns>Returns true if the button has just been pressed down.</returns>
         public override bool IsButtonTwoPressedDownOnIndex(uint index)
         {
-            return IsButtonPressed(index, ButtonPressTypes.PressDown, KeyCode.R);
+            return IsButtonPressed(index, ButtonPressTypes.PressDown, keyMappings["ButtonTwo"]);
         }
 
         /// <summary>
@@ -668,7 +677,7 @@ namespace VRTK
         /// <returns>Returns true if the button has just been released.</returns>
         public override bool IsButtonTwoPressedUpOnIndex(uint index)
         {
-            return IsButtonPressed(index, ButtonPressTypes.PressUp, KeyCode.R);
+            return IsButtonPressed(index, ButtonPressTypes.PressUp, keyMappings["ButtonTwo"]);
         }
 
         /// <summary>
@@ -697,6 +706,66 @@ namespace VRTK
         /// <param name="index">The index of the tracked object to check for.</param>
         /// <returns>Returns true if the button has just been released.</returns>
         public override bool IsButtonTwoTouchedUpOnIndex(uint index)
+        {
+            return false;
+        }
+
+        /// <summary>
+        /// The IsStartMenuPressedOnIndex method is used to determine if the controller button is being pressed down continually.
+        /// </summary>
+        /// <param name="index">The index of the tracked object to check for.</param>
+        /// <returns>Returns true if the button is continually being pressed.</returns>
+        public override bool IsStartMenuPressedOnIndex(uint index)
+        {
+            return IsButtonPressed(index, ButtonPressTypes.Press, keyMappings["StartMenu"]);
+        }
+
+        /// <summary>
+        /// The IsStartMenuPressedDownOnIndex method is used to determine if the controller button has just been pressed down.
+        /// </summary>
+        /// <param name="index">The index of the tracked object to check for.</param>
+        /// <returns>Returns true if the button has just been pressed down.</returns>
+        public override bool IsStartMenuPressedDownOnIndex(uint index)
+        {
+            return IsButtonPressed(index, ButtonPressTypes.PressDown, keyMappings["StartMenu"]);
+        }
+
+        /// <summary>
+        /// The IsStartMenuPressedUpOnIndex method is used to determine if the controller button has just been released.
+        /// </summary>
+        /// <param name="index">The index of the tracked object to check for.</param>
+        /// <returns>Returns true if the button has just been released.</returns>
+        public override bool IsStartMenuPressedUpOnIndex(uint index)
+        {
+            return IsButtonPressed(index, ButtonPressTypes.PressUp, keyMappings["StartMenu"]);
+        }
+
+        /// <summary>
+        /// The IsStartMenuTouchedOnIndex method is used to determine if the controller button is being touched down continually.
+        /// </summary>
+        /// <param name="index">The index of the tracked object to check for.</param>
+        /// <returns>Returns true if the button is continually being touched.</returns>
+        public override bool IsStartMenuTouchedOnIndex(uint index)
+        {
+            return false;
+        }
+
+        /// <summary>
+        /// The IsStartMenuTouchedDownOnIndex method is used to determine if the controller button has just been touched down.
+        /// </summary>
+        /// <param name="index">The index of the tracked object to check for.</param>
+        /// <returns>Returns true if the button has just been touched down.</returns>
+        public override bool IsStartMenuTouchedDownOnIndex(uint index)
+        {
+            return false;
+        }
+
+        /// <summary>
+        /// The IsStartMenuTouchedUpOnIndex method is used to determine if the controller button has just been released.
+        /// </summary>
+        /// <param name="index">The index of the tracked object to check for.</param>
+        /// <returns>Returns true if the button has just been released.</returns>
+        public override bool IsStartMenuTouchedUpOnIndex(uint index)
         {
             return false;
         }

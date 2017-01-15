@@ -40,12 +40,16 @@ namespace VRTK
         /// <param name="options">A dictionary of generic options that can be used to within the update.</param>
         public override void ProcessUpdate(uint index, Dictionary<string, object> options)
         {
-            var device = GetTrackedObject(GetControllerByIndex(index));
-            previousControllerRotations[index] = currentControllerRotations[index];
-            currentControllerRotations[index] = device.transform.rotation;
 
-            UpdateHairValues(index, GetTriggerAxisOnIndex(index).x, GetTriggerHairlineDeltaOnIndex(index), ref previousHairTriggerState[index], ref currentHairTriggerState[index], ref hairTriggerLimit[index]);
-            UpdateHairValues(index, GetGripAxisOnIndex(index).x, GetGripHairlineDeltaOnIndex(index), ref previousHairGripState[index], ref currentHairGripState[index], ref hairGripLimit[index]);
+            if (index < uint.MaxValue)
+            {
+                var device = GetTrackedObject(GetControllerByIndex(index));
+                previousControllerRotations[index] = currentControllerRotations[index];
+                currentControllerRotations[index] = device.transform.rotation;
+
+                UpdateHairValues(index, GetTriggerAxisOnIndex(index).x, GetTriggerHairlineDeltaOnIndex(index), ref previousHairTriggerState[index], ref currentHairTriggerState[index], ref hairTriggerLimit[index]);
+                UpdateHairValues(index, GetGripAxisOnIndex(index).x, GetGripHairlineDeltaOnIndex(index), ref previousHairGripState[index], ref currentHairGripState[index], ref hairGripLimit[index]);
+            }
         }
 
         /// <summary>
@@ -98,6 +102,8 @@ namespace VRTK
                     case ControllerElements.ButtonTwo:
                         return path + "button02" + suffix;
                     case ControllerElements.SystemMenu:
+                        return path + "button03" + suffix;
+                    case ControllerElements.StartMenu:
                         return path + "button03" + suffix;
                     case ControllerElements.Body:
                         return parent;
@@ -808,6 +814,66 @@ namespace VRTK
         public override bool IsButtonTwoTouchedUpOnIndex(uint index)
         {
             return IsButtonPressed(index, ButtonPressTypes.TouchUp, OVRInput.Touch.Two);
+        }
+
+        /// <summary>
+        /// The IsStartMenuPressedOnIndex method is used to determine if the controller button is being pressed down continually.
+        /// </summary>
+        /// <param name="index">The index of the tracked object to check for.</param>
+        /// <returns>Returns true if the button is continually being pressed.</returns>
+        public override bool IsStartMenuPressedOnIndex(uint index)
+        {
+            return IsButtonPressed(index, ButtonPressTypes.Press, OVRInput.Button.Start);
+        }
+
+        /// <summary>
+        /// The IsStartMenuPressedDownOnIndex method is used to determine if the controller button has just been pressed down.
+        /// </summary>
+        /// <param name="index">The index of the tracked object to check for.</param>
+        /// <returns>Returns true if the button has just been pressed down.</returns>
+        public override bool IsStartMenuPressedDownOnIndex(uint index)
+        {
+            return IsButtonPressed(index, ButtonPressTypes.PressDown, OVRInput.Button.Start);
+        }
+
+        /// <summary>
+        /// The IsStartMenuPressedUpOnIndex method is used to determine if the controller button has just been released.
+        /// </summary>
+        /// <param name="index">The index of the tracked object to check for.</param>
+        /// <returns>Returns true if the button has just been released.</returns>
+        public override bool IsStartMenuPressedUpOnIndex(uint index)
+        {
+            return IsButtonPressed(index, ButtonPressTypes.PressUp, OVRInput.Button.Start);
+        }
+
+        /// <summary>
+        /// The IsStartMenuTouchedOnIndex method is used to determine if the controller button is being touched down continually.
+        /// </summary>
+        /// <param name="index">The index of the tracked object to check for.</param>
+        /// <returns>Returns true if the button is continually being touched.</returns>
+        public override bool IsStartMenuTouchedOnIndex(uint index)
+        {
+            return false;
+        }
+
+        /// <summary>
+        /// The IsStartMenuTouchedDownOnIndex method is used to determine if the controller button has just been touched down.
+        /// </summary>
+        /// <param name="index">The index of the tracked object to check for.</param>
+        /// <returns>Returns true if the button has just been touched down.</returns>
+        public override bool IsStartMenuTouchedDownOnIndex(uint index)
+        {
+            return false;
+        }
+
+        /// <summary>
+        /// The IsStartMenuTouchedUpOnIndex method is used to determine if the controller button has just been released.
+        /// </summary>
+        /// <param name="index">The index of the tracked object to check for.</param>
+        /// <returns>Returns true if the button has just been released.</returns>
+        public override bool IsStartMenuTouchedUpOnIndex(uint index)
+        {
+            return false;
         }
 
         private void SetTrackedControllerCaches(bool forceRefresh = false)

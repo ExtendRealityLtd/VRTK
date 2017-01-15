@@ -29,6 +29,12 @@
             events.ButtonOnePressed += new ControllerInteractionEventHandler(DoButtonOnePressed);
             events.ButtonOneReleased += new ControllerInteractionEventHandler(DoButtonOneReleased);
 
+            events.ButtonTwoPressed += new ControllerInteractionEventHandler(DoButtonTwoPressed);
+            events.ButtonTwoReleased += new ControllerInteractionEventHandler(DoButtonTwoReleased);
+
+            events.StartMenuPressed += new ControllerInteractionEventHandler(DoStartMenuPressed);
+            events.StartMenuReleased += new ControllerInteractionEventHandler(DoStartMenuReleased);
+
             events.GripPressed += new ControllerInteractionEventHandler(DoGripPressed);
             events.GripReleased += new ControllerInteractionEventHandler(DoGripReleased);
 
@@ -66,6 +72,40 @@
         {
             tooltips.ToggleTips(false, VRTK_ControllerTooltips.TooltipButtons.ButtonOneTooltip);
             actions.ToggleHighlightButtonOne(false);
+            if (!events.AnyButtonPressed())
+            {
+                actions.SetControllerOpacity(1f);
+            }
+        }
+
+        private void DoButtonTwoPressed(object sender, ControllerInteractionEventArgs e)
+        {
+            tooltips.ToggleTips(true, VRTK_ControllerTooltips.TooltipButtons.ButtonTwoTooltip);
+            actions.ToggleHighlightButtonTwo(true, Color.yellow, 0.5f);
+            actions.SetControllerOpacity(0.8f);
+        }
+
+        private void DoButtonTwoReleased(object sender, ControllerInteractionEventArgs e)
+        {
+            tooltips.ToggleTips(false, VRTK_ControllerTooltips.TooltipButtons.ButtonTwoTooltip);
+            actions.ToggleHighlightButtonTwo(false);
+            if (!events.AnyButtonPressed())
+            {
+                actions.SetControllerOpacity(1f);
+            }
+        }
+
+        private void DoStartMenuPressed(object sender, ControllerInteractionEventArgs e)
+        {
+            tooltips.ToggleTips(true, VRTK_ControllerTooltips.TooltipButtons.StartMenuTooltip);
+            actions.ToggleHighlightStartMenu(true, Color.yellow, 0.5f);
+            actions.SetControllerOpacity(0.8f);
+        }
+
+        private void DoStartMenuReleased(object sender, ControllerInteractionEventArgs e)
+        {
+            tooltips.ToggleTips(false, VRTK_ControllerTooltips.TooltipButtons.StartMenuTooltip);
+            actions.ToggleHighlightStartMenu(false);
             if (!events.AnyButtonPressed())
             {
                 actions.SetControllerOpacity(1f);

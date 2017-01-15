@@ -44,6 +44,7 @@ namespace VRTK
         /// <summary>
         /// Button types
         /// </summary>
+        /// <param name="Undefined">No button specified</param>
         /// <param name="Trigger_Hairline">The trigger is squeezed past the current hairline threshold.</param>
         /// <param name="Trigger_Touch">The trigger is squeezed a small amount.</param>
         /// <param name="Trigger_Press">The trigger is squeezed about half way in.</param>
@@ -56,7 +57,9 @@ namespace VRTK
         /// <param name="Touchpad_Press">The touchpad is pressed (to the point of hearing a click).</param>
         /// <param name="Button_One_Touch">The button one is touched.</param>
         /// <param name="Button_One_Press">The button one is pressed.</param>
-        /// <param name="Undefined">No button specified</param>
+        /// <param name="Button_Two_Touch">The button one is touched.</param>
+        /// <param name="Button_Two_Press">The button one is pressed.</param>
+        /// <param name="Start_Menu_Press">The button one is pressed.</param>
         public enum ButtonAlias
         {
             Undefined,
@@ -73,7 +76,8 @@ namespace VRTK
             Button_One_Touch,
             Button_One_Press,
             Button_Two_Touch,
-            Button_Two_Press
+            Button_Two_Press,
+            Start_Menu_Press
         }
 
         [Header("Action Alias Buttons")]
@@ -189,6 +193,12 @@ namespace VRTK
         /// </summary>
         [HideInInspector]
         public bool buttonTwoTouched = false;
+
+        /// <summary>
+        /// This will be true if start menu is held down.
+        /// </summary>
+        [HideInInspector]
+        public bool startMenuPressed = false;
 
         /// <summary>
         /// This will be true if the button aliased to the pointer is held down.
@@ -354,6 +364,15 @@ namespace VRTK
         /// Emitted when button two is released.
         /// </summary>
         public event ControllerInteractionEventHandler ButtonTwoReleased;
+
+        /// <summary>
+        /// Emitted when start menu is pressed.
+        /// </summary>
+        public event ControllerInteractionEventHandler StartMenuPressed;
+        /// <summary>
+        /// Emitted when start menu is released.
+        /// </summary>
+        public event ControllerInteractionEventHandler StartMenuReleased;
 
         /// <summary>
         /// Emitted when the pointer toggle alias button is pressed.
@@ -672,6 +691,22 @@ namespace VRTK
             }
         }
 
+        public virtual void OnStartMenuPressed(ControllerInteractionEventArgs e)
+        {
+            if (StartMenuPressed != null)
+            {
+                StartMenuPressed(this, e);
+            }
+        }
+
+        public virtual void OnStartMenuReleased(ControllerInteractionEventArgs e)
+        {
+            if (StartMenuReleased != null)
+            {
+                StartMenuReleased(this, e);
+            }
+        }
+
         public virtual void OnAliasPointerOn(ControllerInteractionEventArgs e)
         {
             if (AliasPointerOn != null)
@@ -864,7 +899,7 @@ namespace VRTK
         /// <returns>Is true if any of the controller buttons are currently being pressed.</returns>
         public bool AnyButtonPressed()
         {
-            return (triggerPressed || gripPressed || touchpadPressed || buttonOnePressed || buttonTwoPressed);
+            return (triggerPressed || gripPressed || touchpadPressed || buttonOnePressed || buttonTwoPressed || startMenuPressed);
         }
 
         /// <summary>
@@ -904,6 +939,8 @@ namespace VRTK
                     return buttonTwoPressed;
                 case ButtonAlias.Button_Two_Touch:
                     return buttonTwoTouched;
+                case ButtonAlias.Start_Menu_Press:
+                    return startMenuPressed;
             }
             return false;
         }
@@ -1154,6 +1191,12 @@ namespace VRTK
                 EmitAlias(ButtonAlias.Button_Two_Touch, false, 0f, ref buttonTwoTouched);
             }
 
+            if (startMenuPressed)
+            {
+                OnStartMenuReleased(SetButtonEvent(ref startMenuPressed, false, 0f));
+                EmitAlias(ButtonAlias.Start_Menu_Press, false, 0f, ref startMenuPressed);
+            }
+
             triggerAxisChanged = false;
             gripAxisChanged = false;
             touchpadAxisChanged = false;
@@ -1384,6 +1427,18 @@ namespace VRTK
             {
                 OnButtonTwoTouchEnd(SetButtonEvent(ref buttonTwoTouched, false, 0f));
                 EmitAlias(ButtonAlias.Button_Two_Touch, false, 0f, ref buttonTwoTouched);
+            }
+
+            //StartMenu Pressed
+            if (VRTK_SDK_Bridge.IsStartMenuPressedDownOnIndex(controllerIndex))
+            {
+                OnStartMenuPressed(SetButtonEvent(ref startMenuPressed, true, 1f));
+                EmitAlias(ButtonAlias.Start_Menu_Press, true, 1f, ref startMenuPressed);
+            }
+            else if (VRTK_SDK_Bridge.IsStartMenuPressedUpOnIndex(controllerIndex))
+            {
+                OnStartMenuReleased(SetButtonEvent(ref startMenuPressed, false, 0f));
+                EmitAlias(ButtonAlias.Start_Menu_Press, false, 0f, ref startMenuPressed);
             }
 
             // Save current touch and trigger settings to detect next change.

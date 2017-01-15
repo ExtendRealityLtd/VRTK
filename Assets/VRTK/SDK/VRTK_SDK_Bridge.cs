@@ -325,6 +325,38 @@
             return GetControllerSDK().IsButtonTwoTouchedUpOnIndex(index);
         }
 
+        //StartMenu
+
+        public static bool IsStartMenuPressedOnIndex(uint index)
+        {
+            return GetControllerSDK().IsStartMenuPressedOnIndex(index);
+        }
+
+        public static bool IsStartMenuPressedDownOnIndex(uint index)
+        {
+            return GetControllerSDK().IsStartMenuPressedDownOnIndex(index);
+        }
+
+        public static bool IsStartMenuPressedUpOnIndex(uint index)
+        {
+            return GetControllerSDK().IsStartMenuPressedUpOnIndex(index);
+        }
+
+        public static bool IsStartMenuTouchedOnIndex(uint index)
+        {
+            return GetControllerSDK().IsStartMenuTouchedOnIndex(index);
+        }
+
+        public static bool IsStartMenuTouchedDownOnIndex(uint index)
+        {
+            return GetControllerSDK().IsStartMenuTouchedDownOnIndex(index);
+        }
+
+        public static bool IsStartMenuTouchedUpOnIndex(uint index)
+        {
+            return GetControllerSDK().IsStartMenuTouchedUpOnIndex(index);
+        }
+
         public static Transform GetHeadset()
         {
             return GetHeadsetSDK().GetHeadset();

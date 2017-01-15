@@ -141,6 +141,15 @@
         public UnityObjectEvent OnButtonTwoTouchEnd;
 
         /// <summary>
+        /// Emits the StartMenuPressed class event.
+        /// </summary>
+        public UnityObjectEvent OnStartMenuPressed;
+        /// <summary>
+        /// Emits the StartMenuReleased class event.
+        /// </summary>
+        public UnityObjectEvent OnStartMenuReleased;
+
+        /// <summary>
         /// Emits the AliasPointerOn class event.
         /// </summary>
         public UnityObjectEvent OnAliasPointerOn;
@@ -249,6 +258,9 @@
             ce.ButtonTwoReleased += ButtonTwoReleased;
             ce.ButtonTwoTouchStart += ButtonTwoTouchStart;
             ce.ButtonTwoTouchEnd += ButtonTwoTouchEnd;
+
+            ce.StartMenuPressed += StartMenuPressed;
+            ce.StartMenuReleased += StartMenuReleased;
 
             ce.AliasPointerOn += AliasPointerOn;
             ce.AliasPointerOff += AliasPointerOff;
@@ -422,6 +434,16 @@
             OnButtonTwoTouchEnd.Invoke(o, e);
         }
 
+        private void StartMenuPressed(object o, ControllerInteractionEventArgs e)
+        {
+            OnStartMenuPressed.Invoke(o, e);
+        }
+
+        private void StartMenuReleased(object o, ControllerInteractionEventArgs e)
+        {
+            OnStartMenuReleased.Invoke(o, e);
+        }
+
         private void AliasPointerOn(object o, ControllerInteractionEventArgs e)
         {
             OnAliasPointerOn.Invoke(o, e);
@@ -534,6 +556,9 @@
             ce.ButtonTwoReleased -= ButtonTwoReleased;
             ce.ButtonTwoTouchStart -= ButtonTwoTouchStart;
             ce.ButtonTwoTouchEnd -= ButtonTwoTouchEnd;
+
+            ce.StartMenuPressed -= StartMenuPressed;
+            ce.StartMenuReleased -= StartMenuReleased;
 
             ce.AliasPointerOn -= AliasPointerOn;
             ce.AliasPointerOff -= AliasPointerOff;
