@@ -148,7 +148,7 @@ namespace VRTK.Highlighters
             highlightModel.transform.SetParent(transform);
             highlightModel.transform.position = copyModel.transform.position;
             highlightModel.transform.rotation = copyModel.transform.rotation;
-            highlightModel.transform.localScale = copyModel.transform.localScale;
+            highlightModel.transform.localScale = Vector3.one;
 
             foreach (var component in copyModel.GetComponents<Component>())
             {
