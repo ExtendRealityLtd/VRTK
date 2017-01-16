@@ -13,6 +13,9 @@ Alternatively, if you have any general setup issues or other questions relating 
 ### I've upgraded to VRTK version 3 and I'm getting errors using Unity 5.3.
   > VRTK version 3 does not support Unity 5.3 so you will need to update to Unity 5.4 or above. VRTK aims to only provide support for the recent and current version of Unity (e.g. recent is 5.4 and current is 5.5). VRTK also does not support Unity beta versions.
 
+### I'm using Unity version xx or a beta version of Unity and VRTK is throwing errors.
+  > VRTK aims to only provide support for the recent and current version of Unity (e.g. recent is 5.4 and current is 5.5). VRTK also does not support Unity beta versions. If you are on a supported version and still have an issue then raise a bug report on the [VRTK GitHub Issues](https://github.com/thestonefox/VRTK/issues) page.
+
 ### I've upgraded from VRTK version 2.2.1 to version 3 and many of the VRTK scripts are missing or have changed.
   > Watch [Road to Version 3.0](https://www.youtube.com/watch?v=tMz04CqAYjw)
 
@@ -41,6 +44,14 @@ Alternatively, if you have any general setup issues or other questions relating 
 
 ### Does VRTK provide `x` feature?
   > Check the [Example Scenes](https://github.com/thestonefox/VRTK/tree/master/Assets/VRTK/Examples) first and see if the feature you're after is demonstrated, if not then ask in [Slack](http://invite.vrtk.io) and finally raise a new [GitHub Issue](https://github.com/thestonefox/VRTK/issues).
+
+## Development
+
+### How do I automatically grab an object to a controller either when the scene starts or just on touch?
+  > Watch [How to automatically grab objects](https://www.youtube.com/watch?v=YkeWIAonku0)
+
+### Which grab mechanic should I be using?
+  > Watch [Grab attach mechanics](https://www.youtube.com/watch?v=KPJBFpl2bPI)
 
 ## General
 
