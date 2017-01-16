@@ -144,13 +144,16 @@ namespace VRTK
             }
         }
 
-        private void AttemptHaptics()
-        {
-            var doHaptics = usingObject.GetComponentInParent<VRTK_InteractHaptics>();
-            if (doHaptics)
-            {
-                doHaptics.HapticsOnUse(controllerActions);
-            }
+		private void AttemptHaptics()
+		{
+			if (usingObject) 
+			{ 
+				var doHaptics = usingObject.GetComponentInParent<VRTK_InteractHaptics>();
+				if (doHaptics)
+				{
+					doHaptics.HapticsOnUse(controllerActions);
+				}
+			}
         }
 
         private void ToggleControllerVisibility(bool visible)
