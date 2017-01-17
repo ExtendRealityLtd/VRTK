@@ -705,7 +705,7 @@ namespace VRTK
         /// <returns>Returns true if the button is continually being touched.</returns>
         public override bool IsButtonTwoTouchedOnIndex(uint index)
         {
-            return IsButtonPressed(index, ButtonPressTypes.Touch, SteamVR_Controller.ButtonMask.ApplicationMenu);
+            return false;
         }
 
         /// <summary>
