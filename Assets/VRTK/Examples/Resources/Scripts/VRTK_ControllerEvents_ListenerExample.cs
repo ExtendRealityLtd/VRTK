@@ -61,6 +61,9 @@
             GetComponent<VRTK_ControllerEvents>().ButtonTwoTouchStart += new ControllerInteractionEventHandler(DoButtonTwoTouchStart);
             GetComponent<VRTK_ControllerEvents>().ButtonTwoTouchEnd += new ControllerInteractionEventHandler(DoButtonTwoTouchEnd);
 
+            GetComponent<VRTK_ControllerEvents>().StartMenuPressed += new ControllerInteractionEventHandler(DoStartMenuPressed);
+            GetComponent<VRTK_ControllerEvents>().StartMenuReleased += new ControllerInteractionEventHandler(DoStartMenuReleased);
+
             GetComponent<VRTK_ControllerEvents>().ControllerEnabled += new ControllerInteractionEventHandler(DoControllerEnabled);
             GetComponent<VRTK_ControllerEvents>().ControllerDisabled += new ControllerInteractionEventHandler(DoControllerDisabled);
 
@@ -226,6 +229,16 @@
         private void DoButtonTwoTouchEnd(object sender, ControllerInteractionEventArgs e)
         {
             DebugLogger(e.controllerIndex, "BUTTON TWO", "untouched", e);
+        }
+
+        private void DoStartMenuPressed(object sender, ControllerInteractionEventArgs e)
+        {
+            DebugLogger(e.controllerIndex, "START MENU", "pressed down", e);
+        }
+
+        private void DoStartMenuReleased(object sender, ControllerInteractionEventArgs e)
+        {
+            DebugLogger(e.controllerIndex, "START MENU", "released", e);
         }
 
         private void DoControllerEnabled(object sender, ControllerInteractionEventArgs e)

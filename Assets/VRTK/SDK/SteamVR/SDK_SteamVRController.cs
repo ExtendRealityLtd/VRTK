@@ -728,6 +728,66 @@ namespace VRTK
             return false;
         }
 
+        /// <summary>
+        /// The IsStartMenuPressedOnIndex method is used to determine if the controller button is being pressed down continually.
+        /// </summary>
+        /// <param name="index">The index of the tracked object to check for.</param>
+        /// <returns>Returns true if the button is continually being pressed.</returns>
+        public override bool IsStartMenuPressedOnIndex(uint index)
+        {
+            return false;
+        }
+
+        /// <summary>
+        /// The IsStartMenuPressedDownOnIndex method is used to determine if the controller button has just been pressed down.
+        /// </summary>
+        /// <param name="index">The index of the tracked object to check for.</param>
+        /// <returns>Returns true if the button has just been pressed down.</returns>
+        public override bool IsStartMenuPressedDownOnIndex(uint index)
+        {
+            return false;
+        }
+
+        /// <summary>
+        /// The IsStartMenuPressedUpOnIndex method is used to determine if the controller button has just been released.
+        /// </summary>
+        /// <param name="index">The index of the tracked object to check for.</param>
+        /// <returns>Returns true if the button has just been released.</returns>
+        public override bool IsStartMenuPressedUpOnIndex(uint index)
+        {
+            return false;
+        }
+
+        /// <summary>
+        /// The IsStartMenuTouchedOnIndex method is used to determine if the controller button is being touched down continually.
+        /// </summary>
+        /// <param name="index">The index of the tracked object to check for.</param>
+        /// <returns>Returns true if the button is continually being touched.</returns>
+        public override bool IsStartMenuTouchedOnIndex(uint index)
+        {
+            return false;
+        }
+
+        /// <summary>
+        /// The IsStartMenuTouchedDownOnIndex method is used to determine if the controller button has just been touched down.
+        /// </summary>
+        /// <param name="index">The index of the tracked object to check for.</param>
+        /// <returns>Returns true if the button has just been touched down.</returns>
+        public override bool IsStartMenuTouchedDownOnIndex(uint index)
+        {
+            return false;
+        }
+
+        /// <summary>
+        /// The IsStartMenuTouchedUpOnIndex method is used to determine if the controller button has just been released.
+        /// </summary>
+        /// <param name="index">The index of the tracked object to check for.</param>
+        /// <returns>Returns true if the button has just been released.</returns>
+        public override bool IsStartMenuTouchedUpOnIndex(uint index)
+        {
+            return false;
+        }
+
         private void Awake()
         {
             Assembly executingAssembly = Assembly.GetExecutingAssembly();

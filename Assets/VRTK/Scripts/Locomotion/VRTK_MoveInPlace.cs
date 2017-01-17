@@ -518,6 +518,10 @@ namespace VRTK
                             controllerEvent.ButtonTwoTouchStart -= engageButtonPressed;
                             controllerEvent.ButtonTwoTouchEnd -= engageButtonUp;
                             break;
+                        case VRTK_ControllerEvents.ButtonAlias.Start_Menu_Press:
+                            controllerEvent.StartMenuPressed -= engageButtonPressed;
+                            controllerEvent.StartMenuReleased -= engageButtonUp;
+                            break;
                     }
                     subscribed = false;
                 }

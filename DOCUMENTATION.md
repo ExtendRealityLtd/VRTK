@@ -171,6 +171,7 @@ There are a number of parameters that can be set on the Prefab which are provide
  * **Touchpad Text:** The text to display for the touchpad action.
  * **Button One Text:** The text to display for button one action.
  * **Button Two Text:** The text to display for button two action.
+ * **Start Menu Text:** The text to display for the start menu action.
  * **Tip Background Color:** The colour to use for the tooltip background container.
  * **Tip Text Color:** The colour to use for the text within the tooltip.
  * **Tip Line Color:** The colour to use for the line between the tooltip and the relevant controller button.
@@ -179,6 +180,7 @@ There are a number of parameters that can be set on the Prefab which are provide
  * **Touchpad:** The transform for the position of the touchpad button on the controller.
  * **Button One:** The transform for the position of button one on the controller.
  * **Button Two:** The transform for the position of button two on the controller.
+ * **Start Menu:** The transform for the position of the start menu on the controller.
 
 ### Class Methods
 
@@ -1161,6 +1163,7 @@ The script also has a public boolean pressed state for the buttons to allow the 
 ### Class Variables
 
  * `public enum ButtonAlias` - Button types
+  * `Undefined` - No button specified
   * `Trigger_Hairline` - The trigger is squeezed past the current hairline threshold.
   * `Trigger_Touch` - The trigger is squeezed a small amount.
   * `Trigger_Press` - The trigger is squeezed about half way in.
@@ -1173,7 +1176,9 @@ The script also has a public boolean pressed state for the buttons to allow the 
   * `Touchpad_Press` - The touchpad is pressed (to the point of hearing a click).
   * `Button_One_Touch` - The button one is touched.
   * `Button_One_Press` - The button one is pressed.
-  * `Undefined` - No button specified
+  * `Button_Two_Touch` - The button one is touched.
+  * `Button_Two_Press` - The button one is pressed.
+  * `Start_Menu_Press` - The button one is pressed.
  * `public bool triggerPressed` - This will be true if the trigger is squeezed about half way in. Default: `false`
  * `public bool triggerTouched` - This will be true if the trigger is squeezed a small amount. Default: `false`
  * `public bool triggerHairlinePressed` - This will be true if the trigger is squeezed a small amount more from any previous squeeze on the trigger. Default: `false`
@@ -1191,6 +1196,7 @@ The script also has a public boolean pressed state for the buttons to allow the 
  * `public bool buttonOneTouched` - This will be true if button one is being touched. Default: `false`
  * `public bool buttonTwoPressed` - This will be true if button two is held down. Default: `false`
  * `public bool buttonTwoTouched` - This will be true if button two is being touched. Default: `false`
+ * `public bool startMenuPressed` - This will be true if start menu is held down. Default: `false`
  * `public bool pointerPressed` - This will be true if the button aliased to the pointer is held down. Default: `false`
  * `public bool grabPressed` - This will be true if the button aliased to the grab is held down. Default: `false`
  * `public bool usePressed` - This will be true if the button aliased to the use is held down. Default: `false`
@@ -1230,6 +1236,8 @@ The script also has a public boolean pressed state for the buttons to allow the 
  * `ButtonTwoTouchEnd` - Emitted when button two is no longer being touched.
  * `ButtonTwoPressed` - Emitted when button two is pressed.
  * `ButtonTwoReleased` - Emitted when button two is released.
+ * `StartMenuPressed` - Emitted when start menu is pressed.
+ * `StartMenuReleased` - Emitted when start menu is released.
  * `AliasPointerOn` - Emitted when the pointer toggle alias button is pressed.
  * `AliasPointerOff` - Emitted when the pointer toggle alias button is released.
  * `AliasPointerSet` - Emitted when the pointer set alias button is released.
@@ -1280,6 +1288,8 @@ Adding the `VRTK_ControllerEvents_UnityEvents` component to `VRTK_ControllerEven
  * `OnButtonTwoReleased` - Emits the ButtonTwoReleased class event.
  * `OnButtonTwoTouchStart` - Emits the ButtonTwoTouchStart class event.
  * `OnButtonTwoTouchEnd` - Emits the ButtonTwoTouchEnd class event.
+ * `OnStartMenuPressed` - Emits the StartMenuPressed class event.
+ * `OnStartMenuReleased` - Emits the StartMenuReleased class event.
  * `OnAliasPointerOn` - Emits the AliasPointerOn class event.
  * `OnAliasPointerOff` - Emits the AliasPointerOff class event.
  * `OnAliasPointerSet` - Emits the AliasPointerSet class event.
@@ -1581,6 +1591,19 @@ The ToggleHighlightButtonOne method is a shortcut method that makes it easier to
    * _none_
 
 The ToggleHighlightButtonTwo method is a shortcut method that makes it easier to toggle the highlight state of the button two controller element.
+
+#### ToggleHighlightStartMenu/3
+
+  > `public void ToggleHighlightStartMenu(bool state, Color? highlight = null, float duration = 0f)`
+
+  * Parameters
+   * `bool state` - The highlight colour state, `true` will enable the highlight on the start menu and `false` will remove the highlight from the start menu.
+   * `Color? highlight` - The colour to highlight the start menu with.
+   * `float duration` - The duration of fade from white to the highlight colour.
+  * Returns
+   * _none_
+
+The ToggleHighlightStartMenu method is a shortcut method that makes it easier to toggle the highlight state of the start menu controller element.
 
 #### ToggleHighlighBody/3
 
@@ -5171,6 +5194,7 @@ This is an abstract class to implement the interface required by all implemented
   * `ButtonTwo` - The second generic button.
   * `SystemMenu` - The system menu button.
   * `Body` - The encompassing mesh of the controller body.
+  * `StartMenu` - The start menu button.
  * `public enum ControllerHand` - Controller hand reference.
   * `None` - No hand is assigned.
   * `Left` - The left hand is assigned.
@@ -5845,6 +5869,72 @@ The IsButtonTwoTouchedDownOnIndex method is used to determine if the controller 
    * `bool` - Returns true if the button has just been released.
 
 The IsButtonTwoTouchedUpOnIndex method is used to determine if the controller button has just been released.
+
+#### IsStartMenuPressedOnIndex/1
+
+  > `public abstract bool IsStartMenuPressedOnIndex(uint index);`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button is continually being pressed.
+
+The IsStartMenuPressedOnIndex method is used to determine if the controller button is being pressed down continually.
+
+#### IsStartMenuPressedDownOnIndex/1
+
+  > `public abstract bool IsStartMenuPressedDownOnIndex(uint index);`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button has just been pressed down.
+
+The IsStartMenuPressedDownOnIndex method is used to determine if the controller button has just been pressed down.
+
+#### IsStartMenuPressedUpOnIndex/1
+
+  > `public abstract bool IsStartMenuPressedUpOnIndex(uint index);`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button has just been released.
+
+The IsStartMenuPressedUpOnIndex method is used to determine if the controller button has just been released.
+
+#### IsStartMenuTouchedOnIndex/1
+
+  > `public abstract bool IsStartMenuTouchedOnIndex(uint index);`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button is continually being touched.
+
+The IsStartMenuTouchedOnIndex method is used to determine if the controller button is being touched down continually.
+
+#### IsStartMenuTouchedDownOnIndex/1
+
+  > `public abstract bool IsStartMenuTouchedDownOnIndex(uint index);`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button has just been touched down.
+
+The IsStartMenuTouchedDownOnIndex method is used to determine if the controller button has just been touched down.
+
+#### IsStartMenuTouchedUpOnIndex/1
+
+  > `public abstract bool IsStartMenuTouchedUpOnIndex(uint index);`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button has just been released.
+
+The IsStartMenuTouchedUpOnIndex method is used to determine if the controller button has just been released.
 
 ---
 
@@ -6733,6 +6823,72 @@ The IsButtonTwoTouchedDownOnIndex method is used to determine if the controller 
 
 The IsButtonTwoTouchedUpOnIndex method is used to determine if the controller button has just been released.
 
+#### IsStartMenuPressedOnIndex/1
+
+  > `public override bool IsStartMenuPressedOnIndex(uint index)`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button is continually being pressed.
+
+The IsStartMenuPressedOnIndex method is used to determine if the controller button is being pressed down continually.
+
+#### IsStartMenuPressedDownOnIndex/1
+
+  > `public override bool IsStartMenuPressedDownOnIndex(uint index)`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button has just been pressed down.
+
+The IsStartMenuPressedDownOnIndex method is used to determine if the controller button has just been pressed down.
+
+#### IsStartMenuPressedUpOnIndex/1
+
+  > `public override bool IsStartMenuPressedUpOnIndex(uint index)`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button has just been released.
+
+The IsStartMenuPressedUpOnIndex method is used to determine if the controller button has just been released.
+
+#### IsStartMenuTouchedOnIndex/1
+
+  > `public override bool IsStartMenuTouchedOnIndex(uint index)`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button is continually being touched.
+
+The IsStartMenuTouchedOnIndex method is used to determine if the controller button is being touched down continually.
+
+#### IsStartMenuTouchedDownOnIndex/1
+
+  > `public override bool IsStartMenuTouchedDownOnIndex(uint index)`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button has just been touched down.
+
+The IsStartMenuTouchedDownOnIndex method is used to determine if the controller button has just been touched down.
+
+#### IsStartMenuTouchedUpOnIndex/1
+
+  > `public override bool IsStartMenuTouchedUpOnIndex(uint index)`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button has just been released.
+
+The IsStartMenuTouchedUpOnIndex method is used to determine if the controller button has just been released.
+
 ---
 
 ## Fallback Boundaries (SDK_FallbackBoundaries)
@@ -7614,6 +7770,72 @@ The IsButtonTwoTouchedDownOnIndex method is used to determine if the controller 
 
 The IsButtonTwoTouchedUpOnIndex method is used to determine if the controller button has just been released.
 
+#### IsStartMenuPressedOnIndex/1
+
+  > `public override bool IsStartMenuPressedOnIndex(uint index)`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button is continually being pressed.
+
+The IsStartMenuPressedOnIndex method is used to determine if the controller button is being pressed down continually.
+
+#### IsStartMenuPressedDownOnIndex/1
+
+  > `public override bool IsStartMenuPressedDownOnIndex(uint index)`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button has just been pressed down.
+
+The IsStartMenuPressedDownOnIndex method is used to determine if the controller button has just been pressed down.
+
+#### IsStartMenuPressedUpOnIndex/1
+
+  > `public override bool IsStartMenuPressedUpOnIndex(uint index)`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button has just been released.
+
+The IsStartMenuPressedUpOnIndex method is used to determine if the controller button has just been released.
+
+#### IsStartMenuTouchedOnIndex/1
+
+  > `public override bool IsStartMenuTouchedOnIndex(uint index)`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button is continually being touched.
+
+The IsStartMenuTouchedOnIndex method is used to determine if the controller button is being touched down continually.
+
+#### IsStartMenuTouchedDownOnIndex/1
+
+  > `public override bool IsStartMenuTouchedDownOnIndex(uint index)`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button has just been touched down.
+
+The IsStartMenuTouchedDownOnIndex method is used to determine if the controller button has just been touched down.
+
+#### IsStartMenuTouchedUpOnIndex/1
+
+  > `public override bool IsStartMenuTouchedUpOnIndex(uint index)`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button has just been released.
+
+The IsStartMenuTouchedUpOnIndex method is used to determine if the controller button has just been released.
+
 ---
 
 ## Simulator Boundaries (SDK_SimBoundaries)
@@ -8493,6 +8715,72 @@ The IsButtonTwoTouchedDownOnIndex method is used to determine if the controller 
 
 The IsButtonTwoTouchedUpOnIndex method is used to determine if the controller button has just been released.
 
+#### IsStartMenuPressedOnIndex/1
+
+  > `public override bool IsStartMenuPressedOnIndex(uint index)`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button is continually being pressed.
+
+The IsStartMenuPressedOnIndex method is used to determine if the controller button is being pressed down continually.
+
+#### IsStartMenuPressedDownOnIndex/1
+
+  > `public override bool IsStartMenuPressedDownOnIndex(uint index)`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button has just been pressed down.
+
+The IsStartMenuPressedDownOnIndex method is used to determine if the controller button has just been pressed down.
+
+#### IsStartMenuPressedUpOnIndex/1
+
+  > `public override bool IsStartMenuPressedUpOnIndex(uint index)`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button has just been released.
+
+The IsStartMenuPressedUpOnIndex method is used to determine if the controller button has just been released.
+
+#### IsStartMenuTouchedOnIndex/1
+
+  > `public override bool IsStartMenuTouchedOnIndex(uint index)`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button is continually being touched.
+
+The IsStartMenuTouchedOnIndex method is used to determine if the controller button is being touched down continually.
+
+#### IsStartMenuTouchedDownOnIndex/1
+
+  > `public override bool IsStartMenuTouchedDownOnIndex(uint index)`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button has just been touched down.
+
+The IsStartMenuTouchedDownOnIndex method is used to determine if the controller button has just been touched down.
+
+#### IsStartMenuTouchedUpOnIndex/1
+
+  > `public override bool IsStartMenuTouchedUpOnIndex(uint index)`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button has just been released.
+
+The IsStartMenuTouchedUpOnIndex method is used to determine if the controller button has just been released.
+
 ---
 
 ## SteamVR Boundaries (SDK_SteamVRBoundaries)
@@ -9371,6 +9659,72 @@ The IsButtonTwoTouchedDownOnIndex method is used to determine if the controller 
    * `bool` - Returns true if the button has just been released.
 
 The IsButtonTwoTouchedUpOnIndex method is used to determine if the controller button has just been released.
+
+#### IsStartMenuPressedOnIndex/1
+
+  > `public override bool IsStartMenuPressedOnIndex(uint index)`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button is continually being pressed.
+
+The IsStartMenuPressedOnIndex method is used to determine if the controller button is being pressed down continually.
+
+#### IsStartMenuPressedDownOnIndex/1
+
+  > `public override bool IsStartMenuPressedDownOnIndex(uint index)`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button has just been pressed down.
+
+The IsStartMenuPressedDownOnIndex method is used to determine if the controller button has just been pressed down.
+
+#### IsStartMenuPressedUpOnIndex/1
+
+  > `public override bool IsStartMenuPressedUpOnIndex(uint index)`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button has just been released.
+
+The IsStartMenuPressedUpOnIndex method is used to determine if the controller button has just been released.
+
+#### IsStartMenuTouchedOnIndex/1
+
+  > `public override bool IsStartMenuTouchedOnIndex(uint index)`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button is continually being touched.
+
+The IsStartMenuTouchedOnIndex method is used to determine if the controller button is being touched down continually.
+
+#### IsStartMenuTouchedDownOnIndex/1
+
+  > `public override bool IsStartMenuTouchedDownOnIndex(uint index)`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button has just been touched down.
+
+The IsStartMenuTouchedDownOnIndex method is used to determine if the controller button has just been touched down.
+
+#### IsStartMenuTouchedUpOnIndex/1
+
+  > `public override bool IsStartMenuTouchedUpOnIndex(uint index)`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button has just been released.
+
+The IsStartMenuTouchedUpOnIndex method is used to determine if the controller button has just been released.
 
 ---
 

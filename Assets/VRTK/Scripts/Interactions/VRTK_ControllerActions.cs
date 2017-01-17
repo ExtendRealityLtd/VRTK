@@ -17,6 +17,7 @@ namespace VRTK
         public string buttonOneModelPath = "";
         public string buttonTwoModelPath = "";
         public string systemMenuModelPath = "";
+        public string startMenuModelPath = "";
     }
 
     [System.Serializable]
@@ -30,6 +31,7 @@ namespace VRTK
         public VRTK_BaseHighlighter buttonOne;
         public VRTK_BaseHighlighter buttonTwo;
         public VRTK_BaseHighlighter systemMenu;
+        public VRTK_BaseHighlighter startMenu;
     }
 
     /// <summary>
@@ -303,6 +305,21 @@ namespace VRTK
         }
 
         /// <summary>
+        /// The ToggleHighlightStartMenu method is a shortcut method that makes it easier to toggle the highlight state of the start menu controller element.
+        /// </summary>
+        /// <param name="state">The highlight colour state, `true` will enable the highlight on the start menu and `false` will remove the highlight from the start menu.</param>
+        /// <param name="highlight">The colour to highlight the start menu with.</param>
+        /// <param name="duration">The duration of fade from white to the highlight colour.</param>
+        public void ToggleHighlightStartMenu(bool state, Color? highlight = null, float duration = 0f)
+        {
+            if (!state && controllerHighlighted)
+            {
+                return;
+            }
+            ToggleHighlightAlias(state, modelElementPaths.startMenuModelPath, highlight, duration);
+        }
+
+        /// <summary>
         /// The ToggleHighlighBody method is a shortcut method that makes it easier to toggle the highlight state of the controller body element.
         /// </summary>
         /// <param name="state">The highlight colour state, `true` will enable the highlight on the body and `false` will remove the highlight from the body.</param>
@@ -331,6 +348,7 @@ namespace VRTK
             ToggleHighlightTouchpad(state, highlight, duration);
             ToggleHighlightButtonOne(state, highlight, duration);
             ToggleHighlightButtonTwo(state, highlight, duration);
+            ToggleHighlightStartMenu(state, highlight, duration);
             ToggleHighlightAlias(state, modelElementPaths.systemMenuModelPath, highlight, duration);
             ToggleHighlightAlias(state, modelElementPaths.bodyModelPath, highlight, duration);
         }
@@ -388,6 +406,7 @@ namespace VRTK
             AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.Body, controllerHand)), objectHighlighter, elementHighlighterOverrides.body);
             AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.GripLeft, controllerHand)), objectHighlighter, elementHighlighterOverrides.gripLeft);
             AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.GripRight, controllerHand)), objectHighlighter, elementHighlighterOverrides.gripRight);
+            AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.StartMenu, controllerHand)), objectHighlighter, elementHighlighterOverrides.startMenu);
             AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.SystemMenu, controllerHand)), objectHighlighter, elementHighlighterOverrides.systemMenu);
             AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.Touchpad, controllerHand)), objectHighlighter, elementHighlighterOverrides.touchpad);
             AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.Trigger, controllerHand)), objectHighlighter, elementHighlighterOverrides.trigger);
@@ -430,6 +449,10 @@ namespace VRTK
             if (modelElementPaths.systemMenuModelPath.Trim() == "")
             {
                 modelElementPaths.systemMenuModelPath = VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.SystemMenu, controllerHand);
+            }
+            if (modelElementPaths.startMenuModelPath.Trim() == "")
+            {
+                modelElementPaths.startMenuModelPath = VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.StartMenu, controllerHand);
             }
         }
 
