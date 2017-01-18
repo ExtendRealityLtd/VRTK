@@ -18,7 +18,9 @@ namespace VRTK
             {"TouchpadPress", KeyCode.Q },
             {"ButtonOne", KeyCode.E },
             {"ButtonTwo", KeyCode.R },
-            {"StartMenu", KeyCode.F }
+            {"StartMenu", KeyCode.F },
+            {"TouchModifier", KeyCode.T},
+            {"HairTouchModifier", KeyCode.H}
         };
 
         protected const string RIGHT_HAND_CONTROLLER_NAME = "RightHand";
@@ -409,7 +411,8 @@ namespace VRTK
         /// <returns>Returns true if the button is continually being pressed.</returns>
         public override bool IsTriggerPressedOnIndex(uint index)
         {
-            return IsButtonPressed(index, ButtonPressTypes.Press, keyMappings["Trigger"]);
+            // button presses shall be ignored if the hair touch or touch modifiers are used
+            return !IsButtonPressIgnored() && IsTriggerTouchedOnIndex(index);
         }
 
         /// <summary>
@@ -419,7 +422,8 @@ namespace VRTK
         /// <returns>Returns true if the button has just been pressed down.</returns>
         public override bool IsTriggerPressedDownOnIndex(uint index)
         {
-            return IsButtonPressed(index, ButtonPressTypes.PressDown, keyMappings["Trigger"]);
+            // button presses shall be ignored if the hair touch or touch modifiers are used
+            return !IsButtonPressIgnored() && IsTriggerTouchedDownOnIndex(index);
         }
 
         /// <summary>
@@ -429,7 +433,8 @@ namespace VRTK
         /// <returns>Returns true if the button has just been released.</returns>
         public override bool IsTriggerPressedUpOnIndex(uint index)
         {
-            return IsButtonPressed(index, ButtonPressTypes.PressUp, keyMappings["Trigger"]);
+            // button presses shall be ignored if the hair touch or touch modifiers are used
+            return !IsButtonPressIgnored() && IsTriggerTouchedUpOnIndex(index);
         }
 
         /// <summary>
@@ -439,7 +444,7 @@ namespace VRTK
         /// <returns>Returns true if the button is continually being touched.</returns>
         public override bool IsTriggerTouchedOnIndex(uint index)
         {
-            return false;
+            return IsButtonPressed(index, ButtonPressTypes.Press, keyMappings["Trigger"]);
         }
 
         /// <summary>
@@ -449,7 +454,7 @@ namespace VRTK
         /// <returns>Returns true if the button has just been touched down.</returns>
         public override bool IsTriggerTouchedDownOnIndex(uint index)
         {
-            return false;
+            return IsButtonPressed(index, ButtonPressTypes.PressDown, keyMappings["Trigger"]);
         }
 
         /// <summary>
@@ -459,7 +464,7 @@ namespace VRTK
         /// <returns>Returns true if the button has just been released.</returns>
         public override bool IsTriggerTouchedUpOnIndex(uint index)
         {
-            return false;
+            return IsButtonPressed(index, ButtonPressTypes.PressUp, keyMappings["Trigger"]);
         }
 
         /// <summary>
@@ -469,7 +474,8 @@ namespace VRTK
         /// <returns>Returns true if the button has passed it's press threshold.</returns>
         public override bool IsHairTriggerDownOnIndex(uint index)
         {
-            return false;
+            // button hair touches shall be ignored if the only the touch modifier is used
+            return !IsButtonHairTouchIgnored() && IsTriggerTouchedDownOnIndex(index);
         }
 
         /// <summary>
@@ -479,7 +485,8 @@ namespace VRTK
         /// <returns>Returns true if the button has just been released from it's press threshold.</returns>
         public override bool IsHairTriggerUpOnIndex(uint index)
         {
-            return false;
+            // button hair touches shall be ignored if the only the touch modifier is used
+            return !IsButtonHairTouchIgnored() && IsTriggerTouchedUpOnIndex(index);
         }
 
         /// <summary>
@@ -489,7 +496,8 @@ namespace VRTK
         /// <returns>Returns true if the button is continually being pressed.</returns>
         public override bool IsGripPressedOnIndex(uint index)
         {
-            return IsButtonPressed(index, ButtonPressTypes.Press, keyMappings["Grip"]);
+            // button presses shall be ignored if the hair touch or touch modifiers are used
+            return !IsButtonPressIgnored() && IsGripTouchedOnIndex(index);
         }
 
         /// <summary>
@@ -499,7 +507,8 @@ namespace VRTK
         /// <returns>Returns true if the button has just been pressed down.</returns>
         public override bool IsGripPressedDownOnIndex(uint index)
         {
-            return IsButtonPressed(index, ButtonPressTypes.PressDown, keyMappings["Grip"]);
+            // button presses shall be ignored if the hair touch or touch modifiers are used
+            return !IsButtonPressIgnored() && IsGripTouchedDownOnIndex(index);
         }
 
         /// <summary>
@@ -509,7 +518,8 @@ namespace VRTK
         /// <returns>Returns true if the button has just been released.</returns>
         public override bool IsGripPressedUpOnIndex(uint index)
         {
-            return IsButtonPressed(index, ButtonPressTypes.PressUp, keyMappings["Grip"]);
+            // button presses shall be ignored if the hair touch or touch modifiers are used
+            return !IsButtonPressIgnored() && IsGripTouchedUpOnIndex(index);
         }
 
         /// <summary>
@@ -519,7 +529,7 @@ namespace VRTK
         /// <returns>Returns true if the button is continually being touched.</returns>
         public override bool IsGripTouchedOnIndex(uint index)
         {
-            return false;
+            return IsButtonPressed(index, ButtonPressTypes.Press, keyMappings["Grip"]);
         }
 
         /// <summary>
@@ -529,7 +539,7 @@ namespace VRTK
         /// <returns>Returns true if the button has just been touched down.</returns>
         public override bool IsGripTouchedDownOnIndex(uint index)
         {
-            return false;
+            return IsButtonPressed(index, ButtonPressTypes.PressDown, keyMappings["Grip"]);
         }
 
         /// <summary>
@@ -539,7 +549,7 @@ namespace VRTK
         /// <returns>Returns true if the button has just been released.</returns>
         public override bool IsGripTouchedUpOnIndex(uint index)
         {
-            return false;
+            return IsButtonPressed(index, ButtonPressTypes.PressUp, keyMappings["Grip"]);
         }
 
         /// <summary>
@@ -549,7 +559,8 @@ namespace VRTK
         /// <returns>Returns true if the button has passed it's press threshold.</returns>
         public override bool IsHairGripDownOnIndex(uint index)
         {
-            return false;
+            // button hair touches shall be ignored if the hair touch modifier is used
+            return !IsButtonHairTouchIgnored() && IsGripTouchedDownOnIndex(index);
         }
 
         /// <summary>
@@ -559,7 +570,8 @@ namespace VRTK
         /// <returns>Returns true if the button has just been released from it's press threshold.</returns>
         public override bool IsHairGripUpOnIndex(uint index)
         {
-            return false;
+            // button hair touches shall be ignored if the hair touch modifier is used
+            return !IsButtonHairTouchIgnored() && IsGripTouchedUpOnIndex(index);
         }
 
         /// <summary>
@@ -569,7 +581,8 @@ namespace VRTK
         /// <returns>Returns true if the button is continually being pressed.</returns>
         public override bool IsTouchpadPressedOnIndex(uint index)
         {
-            return IsButtonPressed(index, ButtonPressTypes.Press, keyMappings["TouchpadPress"]);
+            // button presses shall be ignored if the hair touch or touch modifiers are used
+            return !IsButtonPressIgnored() && IsTouchpadTouchedOnIndex(index);
         }
 
         /// <summary>
@@ -579,7 +592,8 @@ namespace VRTK
         /// <returns>Returns true if the button has just been pressed down.</returns>
         public override bool IsTouchpadPressedDownOnIndex(uint index)
         {
-            return IsButtonPressed(index, ButtonPressTypes.PressDown, keyMappings["TouchpadPress"]);
+            // button presses shall be ignored if the hair touch or touch modifiers are used
+            return !IsButtonPressIgnored() && IsTouchpadTouchedDownOnIndex(index);
         }
 
         /// <summary>
@@ -589,7 +603,8 @@ namespace VRTK
         /// <returns>Returns true if the button has just been released.</returns>
         public override bool IsTouchpadPressedUpOnIndex(uint index)
         {
-            return IsButtonPressed(index, ButtonPressTypes.PressUp, keyMappings["TouchpadPress"]);
+            // button presses shall be ignored if the hair touch or touch modifiers are used
+            return !IsButtonPressIgnored() && IsTouchpadTouchedUpOnIndex(index);
         }
 
         /// <summary>
@@ -599,7 +614,7 @@ namespace VRTK
         /// <returns>Returns true if the button is continually being touched.</returns>
         public override bool IsTouchpadTouchedOnIndex(uint index)
         {
-            return false;
+            return IsButtonPressed(index, ButtonPressTypes.Press, keyMappings["TouchpadPress"]);
         }
 
         /// <summary>
@@ -609,7 +624,7 @@ namespace VRTK
         /// <returns>Returns true if the button has just been touched down.</returns>
         public override bool IsTouchpadTouchedDownOnIndex(uint index)
         {
-            return false;
+            return IsButtonPressed(index, ButtonPressTypes.PressDown, keyMappings["TouchpadPress"]);
         }
 
         /// <summary>
@@ -619,7 +634,7 @@ namespace VRTK
         /// <returns>Returns true if the button has just been released.</returns>
         public override bool IsTouchpadTouchedUpOnIndex(uint index)
         {
-            return false;
+            return IsButtonPressed(index, ButtonPressTypes.PressUp, keyMappings["TouchpadPress"]);
         }
 
         /// <summary>
@@ -629,7 +644,8 @@ namespace VRTK
         /// <returns>Returns true if the button is continually being pressed.</returns>
         public override bool IsButtonOnePressedOnIndex(uint index)
         {
-            return IsButtonPressed(index, ButtonPressTypes.Press, keyMappings["ButtonOne"]);
+            // button presses shall be ignored if the hair touch or touch modifiers are used
+            return !IsButtonPressIgnored() && IsButtonOneTouchedOnIndex(index);
         }
 
         /// <summary>
@@ -639,7 +655,8 @@ namespace VRTK
         /// <returns>Returns true if the button has just been pressed down.</returns>
         public override bool IsButtonOnePressedDownOnIndex(uint index)
         {
-            return IsButtonPressed(index, ButtonPressTypes.PressDown, keyMappings["ButtonOne"]);
+            // button presses shall be ignored if the hair touch or touch modifiers are used
+            return !IsButtonPressIgnored() && IsButtonOneTouchedDownOnIndex(index);
         }
 
         /// <summary>
@@ -649,7 +666,8 @@ namespace VRTK
         /// <returns>Returns true if the button has just been released.</returns>
         public override bool IsButtonOnePressedUpOnIndex(uint index)
         {
-            return IsButtonPressed(index, ButtonPressTypes.PressUp, keyMappings["ButtonOne"]);
+            // button presses shall be ignored if the hair touch or touch modifiers are used
+            return !IsButtonPressIgnored() && IsButtonOneTouchedUpOnIndex(index);
         }
 
         /// <summary>
@@ -659,7 +677,7 @@ namespace VRTK
         /// <returns>Returns true if the button is continually being touched.</returns>
         public override bool IsButtonOneTouchedOnIndex(uint index)
         {
-            return false;
+            return IsButtonPressed(index, ButtonPressTypes.Press, keyMappings["ButtonOne"]);
         }
 
         /// <summary>
@@ -669,7 +687,7 @@ namespace VRTK
         /// <returns>Returns true if the button has just been touched down.</returns>
         public override bool IsButtonOneTouchedDownOnIndex(uint index)
         {
-            return false;
+            return IsButtonPressed(index, ButtonPressTypes.PressDown, keyMappings["ButtonOne"]);
         }
 
         /// <summary>
@@ -679,7 +697,7 @@ namespace VRTK
         /// <returns>Returns true if the button has just been released.</returns>
         public override bool IsButtonOneTouchedUpOnIndex(uint index)
         {
-            return false;
+            return IsButtonPressed(index, ButtonPressTypes.PressUp, keyMappings["ButtonOne"]);
         }
 
         /// <summary>
@@ -689,7 +707,8 @@ namespace VRTK
         /// <returns>Returns true if the button is continually being pressed.</returns>
         public override bool IsButtonTwoPressedOnIndex(uint index)
         {
-            return IsButtonPressed(index, ButtonPressTypes.Press, keyMappings["ButtonTwo"]);
+            // button presses shall be ignored if the hair touch or touch modifiers are used
+            return !IsButtonPressIgnored() && IsButtonTwoTouchedOnIndex(index);
         }
 
         /// <summary>
@@ -699,7 +718,8 @@ namespace VRTK
         /// <returns>Returns true if the button has just been pressed down.</returns>
         public override bool IsButtonTwoPressedDownOnIndex(uint index)
         {
-            return IsButtonPressed(index, ButtonPressTypes.PressDown, keyMappings["ButtonTwo"]);
+            // button presses shall be ignored if the hair touch or touch modifiers are used
+            return !IsButtonPressIgnored() && IsButtonTwoTouchedDownOnIndex(index);
         }
 
         /// <summary>
@@ -709,7 +729,8 @@ namespace VRTK
         /// <returns>Returns true if the button has just been released.</returns>
         public override bool IsButtonTwoPressedUpOnIndex(uint index)
         {
-            return IsButtonPressed(index, ButtonPressTypes.PressUp, keyMappings["ButtonTwo"]);
+            // button presses shall be ignored if the hair touch or touch modifiers are used
+            return !IsButtonPressIgnored() && IsButtonTwoTouchedUpOnIndex(index);
         }
 
         /// <summary>
@@ -719,7 +740,7 @@ namespace VRTK
         /// <returns>Returns true if the button is continually being touched.</returns>
         public override bool IsButtonTwoTouchedOnIndex(uint index)
         {
-            return false;
+            return IsButtonPressed(index, ButtonPressTypes.Press, keyMappings["ButtonTwo"]);
         }
 
         /// <summary>
@@ -729,7 +750,7 @@ namespace VRTK
         /// <returns>Returns true if the button has just been touched down.</returns>
         public override bool IsButtonTwoTouchedDownOnIndex(uint index)
         {
-            return false;
+            return IsButtonPressed(index, ButtonPressTypes.PressDown, keyMappings["ButtonTwo"]);
         }
 
         /// <summary>
@@ -739,7 +760,7 @@ namespace VRTK
         /// <returns>Returns true if the button has just been released.</returns>
         public override bool IsButtonTwoTouchedUpOnIndex(uint index)
         {
-            return false;
+            return IsButtonPressed(index, ButtonPressTypes.PressUp, keyMappings["ButtonTwo"]);
         }
 
         /// <summary>
@@ -749,7 +770,8 @@ namespace VRTK
         /// <returns>Returns true if the button is continually being pressed.</returns>
         public override bool IsStartMenuPressedOnIndex(uint index)
         {
-            return IsButtonPressed(index, ButtonPressTypes.Press, keyMappings["StartMenu"]);
+            // button presses shall be ignored if the hair touch or touch modifiers are used
+            return !IsButtonPressIgnored() && IsStartMenuTouchedOnIndex(index);
         }
 
         /// <summary>
@@ -759,7 +781,8 @@ namespace VRTK
         /// <returns>Returns true if the button has just been pressed down.</returns>
         public override bool IsStartMenuPressedDownOnIndex(uint index)
         {
-            return IsButtonPressed(index, ButtonPressTypes.PressDown, keyMappings["StartMenu"]);
+            // button presses shall be ignored if the hair touch or touch modifiers are used
+            return !IsButtonPressIgnored() && IsStartMenuTouchedDownOnIndex(index);
         }
 
         /// <summary>
@@ -769,7 +792,8 @@ namespace VRTK
         /// <returns>Returns true if the button has just been released.</returns>
         public override bool IsStartMenuPressedUpOnIndex(uint index)
         {
-            return IsButtonPressed(index, ButtonPressTypes.PressUp, keyMappings["StartMenu"]);
+            // button presses shall be ignored if the hair touch or touch modifiers are used
+            return !IsButtonPressIgnored() && IsStartMenuTouchedUpOnIndex(index);
         }
 
         /// <summary>
@@ -779,7 +803,7 @@ namespace VRTK
         /// <returns>Returns true if the button is continually being touched.</returns>
         public override bool IsStartMenuTouchedOnIndex(uint index)
         {
-            return false;
+            return IsButtonPressed(index, ButtonPressTypes.Press, keyMappings["StartMenu"]);
         }
 
         /// <summary>
@@ -789,7 +813,7 @@ namespace VRTK
         /// <returns>Returns true if the button has just been touched down.</returns>
         public override bool IsStartMenuTouchedDownOnIndex(uint index)
         {
-            return false;
+            return IsButtonPressed(index, ButtonPressTypes.PressDown, keyMappings["StartMenu"]);
         }
 
         /// <summary>
@@ -799,7 +823,7 @@ namespace VRTK
         /// <returns>Returns true if the button has just been released.</returns>
         public override bool IsStartMenuTouchedUpOnIndex(uint index)
         {
-            return false;
+            return IsButtonPressed(index, ButtonPressTypes.PressUp, keyMappings["StartMenu"]);
         }
 
         private void OnEnable()
@@ -807,6 +831,58 @@ namespace VRTK
             controllers = new SimControllers();
         }
 
+        /// <summary>
+        /// whether or not the touch modifier is currently pressed
+        /// if so, pressing a key on the keyboard will only emit touch events,
+        /// but not a real press (or hair touch events).
+        /// </summary>
+        /// <returns>whether or not the TouchModifier is active</returns>
+        protected bool IsTouchModifierPressed()
+        {
+            return Input.GetKey(keyMappings["TouchModifier"]);
+        }
+
+        /// <summary>
+        /// whether or not the hair touch modifier is currently pressed
+        /// if so, pressing a key on the keyboard will only emit touch and hair touch events,
+        /// but not a real press.
+        /// </summary>
+        /// <returns>whether or not the HairTouchModifier is active</returns>
+        protected bool IsHairTouchModifierPressed()
+        {
+            return Input.GetKey(keyMappings["HairTouchModifier"]);
+        }
+
+        /// <summary>
+        /// whether or not a button press shall be ignored, e.g. because of the
+        /// use of the touch or hair touch modifier
+        /// </summary>
+        /// <returns></returns>
+        protected bool IsButtonPressIgnored()
+        {
+            // button presses shall be ignored if the hair touch or touch modifiers are used
+            return IsHairTouchModifierPressed() || IsTouchModifierPressed();
+        }
+
+        /// <summary>
+        /// whether or not a button press shall be ignored, e.g. because of the
+        /// use of the touch or hair touch modifier
+        /// </summary>
+        /// <returns></returns>
+        protected bool IsButtonHairTouchIgnored()
+        {
+            // button presses shall be ignored if the hair touch or touch modifiers are used
+            return IsTouchModifierPressed() && !IsHairTouchModifierPressed();
+        }
+
+        /// <summary>
+        /// checks if the given button (KeyCode) is currently in a specific pressed state (ButtonPressTypes) on the keyboard
+        /// also asserts that button presses are only handled for the currently active controller by comparing the controller indices
+        /// </summary>
+        /// <param name="index">unique index of the controller for which the button press is to be checked</param>
+        /// <param name="type">the type of press (up, down, hold)</param>
+        /// <param name="button">the button on the keyboard</param>
+        /// <returns></returns>
         private bool IsButtonPressed(uint index, ButtonPressTypes type, KeyCode button)
         {
             if (index >= uint.MaxValue)
