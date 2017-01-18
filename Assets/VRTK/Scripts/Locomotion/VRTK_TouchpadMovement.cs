@@ -4,6 +4,24 @@ namespace VRTK
     using UnityEngine;
 
     /// <summary>
+    /// Event Payload
+    /// </summary>
+    /// <param name="movementType">The type of movement for the axis.</param>
+    /// <param name="direction">The direction of the axis.</param>
+    public struct TouchpadMovementAxisEventArgs
+    {
+        public VRTK_TouchpadMovement.AxisMovementType movementType;
+        public VRTK_TouchpadMovement.AxisMovementDirection direction;
+    }
+
+    /// <summary>
+    /// Event Payload
+    /// </summary>
+    /// <param name="sender">this object</param>
+    /// <param name="e"><see cref="TouchpadMovementAxisEventArgs"/></param>
+    public delegate void TouchpadMovementAxisEventHandler(VRTK_TouchpadMovement sender, TouchpadMovementAxisEventArgs e);
+
+    /// <summary>
     /// Adds the ability to move and rotate the play area and the player by using the touchpad. 
     /// </summary>
     /// <remarks>
@@ -91,12 +109,10 @@ namespace VRTK
             Backward
         }
 
-        public delegate void AxisMovementEventHandler(VRTK_TouchpadMovement sender, AxisMovementType movementType, AxisMovementDirection direction);
-
         /// <summary>
         /// Emitted when a warp, a flip direction or a snap rotate movement has successfully completed.
         /// </summary>
-        public event AxisMovementEventHandler AxisMovement;
+        public event TouchpadMovementAxisEventHandler AxisMovement;
 
         public bool LeftController
         {
@@ -282,11 +298,14 @@ namespace VRTK
             controllerEvents = null;
         }
 
-        private void OnAxisMovement(AxisMovementType movementType, AxisMovementDirection direction)
+        private void OnAxisMovement(AxisMovementType givenMovementType, AxisMovementDirection givenDirection)
         {
             if (AxisMovement != null)
             {
-                AxisMovement(this, movementType, direction);
+                var args = new TouchpadMovementAxisEventArgs();
+                args.movementType = givenMovementType;
+                args.direction = givenDirection;
+                AxisMovement(this, args);
             }
         }
 

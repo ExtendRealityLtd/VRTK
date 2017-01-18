@@ -809,6 +809,7 @@ A collection of scripts that provide varying methods of moving the user around t
  * [Teleport Disable On Headset Collision](#teleport-disable-on-headset-collision-vrtk_teleportdisableonheadsetcollision)
  * [Teleport Disable On Controller Obscured](#teleport-disable-on-controller-obscured-vrtk_teleportdisableoncontrollerobscured)
  * [Touchpad Walking](#touchpad-walking-vrtk_touchpadwalking)
+ * [Touchpad Movement](#touchpad-movement-vrtk_touchpadmovement)
  * [Move In Place](#move-in-place-vrtk_moveinplace)
  * [Player Climb](#player-climb-vrtk_playerclimb)
  * [Room Extender](#room-extender-vrtk_roomextender)
@@ -982,6 +983,90 @@ The Touchpad Walking script adds a rigidbody and a box collider to the user's po
 ### Example
 
 `VRTK/Examples/017_CameraRig_TouchpadWalking` has a collection of walls and slopes that can be traversed by the user with the touchpad. There is also an area that can only be traversed if the user is crouching.
+
+---
+
+## Touchpad Movement (VRTK_TouchpadMovement)
+
+### Overview
+
+Adds the ability to move and rotate the play area and the player by using the touchpad.
+
+The Touchpad Movement script requires VRTK_BodyPhysics script to be present in one of the scene GameObjects for collision detection.
+
+Vertical axis movement types include:
+- regular smooth sliding (walking)
+- warping, which instantly moves the player forward at a fixed distance
+
+Horizontal axis movement types include:
+- smooth sliding (strafing)
+- smooth rotation
+- snap rotation, which instantly rotates the player at a fixed angle
+- warping, which instantly moves the player sideways (instant strafing)
+
+Additionally it's possible to enable direction flip feature which allows the user to do an instant 180 degree turn by pressing the touchpad down.
+
+It's also possible to define a button to multiply any type of movement (speed, range, angle) when the set button is pressed. Values above one will give a boost effect
+and values below one will do the opposite. All movement values are public properties and can be set from other script at runtime.
+
+Different movement types can be split across the controllers by having one script per hand side and with the desired options.
+Warp and snap rotate options may provide more comfortable experience for some and blink effect can be used to soften the movement.
+Snap rotate and flip direction options can be useful with teleport scripts for seated experiences and for people using front facing camera setups(Oculus default, PSVR).
+
+### Inspector Parameters
+
+ * **Move On Button Press:** If a button is defined then the selected movement will only be performed when the specified button is being held down and the touchpad axis changes.
+ * **Movement Multiplier Button:** If the defined movement multiplier button is pressed then the movement will be affected by the axis multiplier value.
+ * **Vertical Axis Movement:** Selects the main movement type to be performed when the vertical axis changes occur.
+ * **Vertical Deadzone:** Dead zone for the vertical axis. High value recommended for warp movement.
+ * **Vertical Multiplier:** Multiplier for the vertical axis movement when the multiplier button is pressed.
+ * **Device For Direction:** The direction that will be moved in is the direction of this device.
+ * **Flip Direction Enabled:** Enables a secondary action of a direction flip of 180 degrees when the touchpad is pulled downwards.
+ * **Flip Deadzone:** Dead zone for the downwards pull. High value recommended.
+ * **Flip Delay:** The delay before the next direction flip is allowed to happen.
+ * **Flip Blink:** Enables blink on flip.
+ * **Horizontal Axis Movement:** Selects the movement type to be performed when the horizontal axis changes occur.
+ * **Horizontal Deadzone:** Dead zone for the horizontal axis. High value recommended for snap rotate and warp movement.
+ * **Horizontal Multiplier:** Multiplier for the horizontal axis movement when the multiplier button is pressed.
+ * **Snap Rotate Delay:** The delay before the next snap rotation is allowed to happen.
+ * **Snap Rotate Angle:** The number of degrees to instantly rotate in to the given direction.
+ * **Rotate Max Speed:** The maximum speed the play area will be rotated when the touchpad is being touched at the extremes of the axis. If a lower part of the touchpad axis is touched (nearer the centre) then the rotation speed is slower.
+ * **Blink Duration Multiplier:** Blink effect duration multiplier for the movement delay, ie. 1.0 means blink transition lasts until the delay has expired and 0.5 means the effect has completed when half of the delay time is done.
+ * **Slide Max Speed:** The maximum speed the play area will be moved by sliding when the touchpad is being touched at the extremes of the axis. If a lower part of the touchpad axis is touched (nearer the centre) then the speed is slower.
+ * **Slide Deceleration:** The speed in which the play area slows down to a complete stop when the user is no longer touching the touchpad. This deceleration effect can ease any motion sickness that may be suffered.
+ * **Warp Delay:** The delay before the next warp is allowed to happen.
+ * **Warp Range:** The distance to warp in to the given direction.
+ * **Warp Max Altitude Change:** The maximum altitude change allowed for a warp to happen.
+
+### Class Variables
+
+ * `public enum VerticalAxisMovement` - Movement types that can be performed by the vertical axis.
+  * `None` - No movement is performed.
+  * `Slide` - Performs smooth movement (walk).
+  * `Warp` - Performs an instant warp movement.
+  * `WarpWithBlink` - Performs an instant warp movement with a blink effect.
+ * `public enum HorizontalAxisMovement` - Movement types that can be performed by the horizontal axis.
+  * `None` - No movement is performed.
+  * `Slide` - Performs smooth movement (strafe).
+  * `Rotate` - Performs smooth rotation.
+  * `SnapRotate` - Performs fixed angle rotation.
+  * `SnapRotateWithBlink` - Performs fixed angle rotation with a blink effect.
+  * `Warp` - Performs an instant warp movement.
+  * `WarpWithBlink` - Performs an instant warp movement with a blink effect.
+ * `public enum AxisMovementType` - Which type axis movement did occur.
+  * `Warp` - User warped.
+  * `FlipDirection` - User flipped the direction.
+  * `SnapRotate` - User snap rotated.
+ * `public enum AxisMovementDirection` - Which direction did the axis movement occur.
+
+### Class Events
+
+ * `AxisMovement` - Emitted when a warp, a flip direction or a snap rotate movement has successfully completed.
+
+### Event Payload
+
+ * `VRTK_TouchpadMovement.AxisMovementType movementType` - The type of movement for the axis.
+ * `VRTK_TouchpadMovement.AxisMovementDirection direction` - The direction of the axis.
 
 ---
 
