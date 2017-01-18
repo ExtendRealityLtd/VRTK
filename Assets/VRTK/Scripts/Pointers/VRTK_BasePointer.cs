@@ -477,7 +477,7 @@ namespace VRTK
             interactableObject = target.GetComponent<VRTK_InteractableObject>();
             bool cannotUseBecauseNotGrabbed = (interactableObject && interactableObject.useOnlyIfGrabbed && !interactableObject.IsGrabbed());
 
-            if (PointerActivatesUseAction(interactableObject) && interactableObject.holdButtonToUse && !cannotUseBecauseNotGrabbed)
+            if (PointerActivatesUseAction(interactableObject) && interactableObject.holdButtonToUse && !cannotUseBecauseNotGrabbed && interactableObject.usingState == 0)
             {
                 interactableObject.StartUsing(controller.gameObject);
                 interactableObject.usingState++;
