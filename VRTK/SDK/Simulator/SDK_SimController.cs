@@ -21,6 +21,9 @@ namespace VRTK
             {"StartMenu", KeyCode.F }
         };
 
+        protected const string RIGHT_HAND_CONTROLLER_NAME = "RightHand";
+        protected const string LEFT_HAND_CONTROLLER_NAME = "LeftHand";
+
         /// <summary>
         /// The ProcessUpdate method enables an SDK to run logic for every Unity Update
         /// </summary>
@@ -141,11 +144,12 @@ namespace VRTK
         /// <returns>The GameObject containing the left hand controller.</returns>
         public override GameObject GetControllerLeftHand(bool actual = false)
         {
-            GameObject controller = null;
-            GameObject simPlayer = SDK_InputSimulator.FindInScene();
-            if (simPlayer != null)
+            // use the basic base functionality to find the left hand controller
+            var controller = GetSDKManagerControllerLeftHand(actual);
+            // if the controller cannot be found with default settings, try finding it below the InputSimulator by name
+            if (!controller && actual)
             {
-                controller = simPlayer.transform.FindChild("LeftHand").gameObject;
+                controller = GetActualController(ControllerHand.Left);
             }
 
             return controller;
@@ -158,12 +162,40 @@ namespace VRTK
         /// <returns>The GameObject containing the right hand controller.</returns>
         public override GameObject GetControllerRightHand(bool actual = false)
         {
-            GameObject controller = null;
+            // use the basic base functionality to find the right hand controller
+            var controller = GetSDKManagerControllerRightHand(actual);
+            // if the controller cannot be found with default settings, try finding it below the InputSimulator by name
+            if (!controller && actual)
+            {
+                controller = GetActualController(ControllerHand.Right);
+            }
+
+            return controller;
+        }
+
+        /// <summary>
+        /// finds the actual controller for the specified hand (identified by name) and returns it
+        /// </summary>
+        /// <param name="hand">the for which to find the respective controller gameobject</param>
+        /// <returns>the gameobject of the actual controller corresponding to the specified hand</returns>
+        private static GameObject GetActualController(ControllerHand hand)
+        {
             GameObject simPlayer = SDK_InputSimulator.FindInScene();
+            GameObject controller = null;
 
             if (simPlayer != null)
             {
-                controller = simPlayer.transform.FindChild("RightHand").gameObject;
+                switch (hand)
+                {
+                    case ControllerHand.Right:
+                        controller = simPlayer.transform.FindChild(RIGHT_HAND_CONTROLLER_NAME).gameObject;
+                        break;
+                    case ControllerHand.Left:
+                        controller = simPlayer.transform.FindChild(LEFT_HAND_CONTROLLER_NAME).gameObject;
+                        break;
+                    default:
+                        break;
+                }
             }
 
             return controller;
@@ -235,10 +267,10 @@ namespace VRTK
                 switch (hand)
                 {
                     case ControllerHand.Left:
-                        model = simPlayer.transform.FindChild("LeftHand/Hand").gameObject;
+                        model = simPlayer.transform.FindChild(string.Format("{0}/Hand", LEFT_HAND_CONTROLLER_NAME)).gameObject;
                         break;
                     case ControllerHand.Right:
-                        model = simPlayer.transform.FindChild("RightHand/Hand").gameObject;
+                        model = simPlayer.transform.FindChild(string.Format("{0}/Hand", RIGHT_HAND_CONTROLLER_NAME)).gameObject;
                         break;
                 }
             }
@@ -407,7 +439,7 @@ namespace VRTK
         /// <returns>Returns true if the button is continually being touched.</returns>
         public override bool IsTriggerTouchedOnIndex(uint index)
         {
-            return false;
+            return IsTriggerTouchedDownOnIndex(index);
         }
 
         /// <summary>
@@ -417,7 +449,7 @@ namespace VRTK
         /// <returns>Returns true if the button has just been touched down.</returns>
         public override bool IsTriggerTouchedDownOnIndex(uint index)
         {
-            return false;
+            return IsTriggerPressedDownOnIndex(index);
         }
 
         /// <summary>
@@ -427,7 +459,7 @@ namespace VRTK
         /// <returns>Returns true if the button has just been released.</returns>
         public override bool IsTriggerTouchedUpOnIndex(uint index)
         {
-            return false;
+            return IsTriggerPressedUpOnIndex(index);
         }
 
         /// <summary>
@@ -437,7 +469,7 @@ namespace VRTK
         /// <returns>Returns true if the button has passed it's press threshold.</returns>
         public override bool IsHairTriggerDownOnIndex(uint index)
         {
-            return false;
+            return IsTriggerTouchedDownOnIndex(index);
         }
 
         /// <summary>
@@ -447,7 +479,7 @@ namespace VRTK
         /// <returns>Returns true if the button has just been released from it's press threshold.</returns>
         public override bool IsHairTriggerUpOnIndex(uint index)
         {
-            return false;
+            return IsTriggerTouchedUpOnIndex(index);
         }
 
         /// <summary>
@@ -487,7 +519,7 @@ namespace VRTK
         /// <returns>Returns true if the button is continually being touched.</returns>
         public override bool IsGripTouchedOnIndex(uint index)
         {
-            return false;
+            return IsGripTouchedDownOnIndex(index);
         }
 
         /// <summary>
@@ -497,7 +529,7 @@ namespace VRTK
         /// <returns>Returns true if the button has just been touched down.</returns>
         public override bool IsGripTouchedDownOnIndex(uint index)
         {
-            return false;
+            return IsGripPressedDownOnIndex(index);
         }
 
         /// <summary>
@@ -507,7 +539,7 @@ namespace VRTK
         /// <returns>Returns true if the button has just been released.</returns>
         public override bool IsGripTouchedUpOnIndex(uint index)
         {
-            return false;
+            return IsGripPressedUpOnIndex(index);
         }
 
         /// <summary>
@@ -517,7 +549,7 @@ namespace VRTK
         /// <returns>Returns true if the button has passed it's press threshold.</returns>
         public override bool IsHairGripDownOnIndex(uint index)
         {
-            return false;
+            return IsGripTouchedDownOnIndex(index);
         }
 
         /// <summary>
@@ -527,7 +559,7 @@ namespace VRTK
         /// <returns>Returns true if the button has just been released from it's press threshold.</returns>
         public override bool IsHairGripUpOnIndex(uint index)
         {
-            return false;
+            return IsGripTouchedUpOnIndex(index);
         }
 
         /// <summary>
@@ -567,7 +599,7 @@ namespace VRTK
         /// <returns>Returns true if the button is continually being touched.</returns>
         public override bool IsTouchpadTouchedOnIndex(uint index)
         {
-            return false;
+            return IsTouchpadPressedDownOnIndex(index);
         }
 
         /// <summary>
@@ -577,7 +609,7 @@ namespace VRTK
         /// <returns>Returns true if the button has just been touched down.</returns>
         public override bool IsTouchpadTouchedDownOnIndex(uint index)
         {
-            return false;
+            return IsTouchpadPressedDownOnIndex(index);
         }
 
         /// <summary>
@@ -587,7 +619,7 @@ namespace VRTK
         /// <returns>Returns true if the button has just been released.</returns>
         public override bool IsTouchpadTouchedUpOnIndex(uint index)
         {
-            return false;
+            return IsTouchpadPressedUpOnIndex(index);
         }
 
         /// <summary>
@@ -627,7 +659,7 @@ namespace VRTK
         /// <returns>Returns true if the button is continually being touched.</returns>
         public override bool IsButtonOneTouchedOnIndex(uint index)
         {
-            return false;
+            return IsButtonOneTouchedDownOnIndex(index);
         }
 
         /// <summary>
@@ -637,7 +669,7 @@ namespace VRTK
         /// <returns>Returns true if the button has just been touched down.</returns>
         public override bool IsButtonOneTouchedDownOnIndex(uint index)
         {
-            return false;
+            return IsButtonOnePressedDownOnIndex(index);
         }
 
         /// <summary>
@@ -647,7 +679,7 @@ namespace VRTK
         /// <returns>Returns true if the button has just been released.</returns>
         public override bool IsButtonOneTouchedUpOnIndex(uint index)
         {
-            return false;
+            return IsButtonOnePressedUpOnIndex(index);
         }
 
         /// <summary>
@@ -687,7 +719,7 @@ namespace VRTK
         /// <returns>Returns true if the button is continually being touched.</returns>
         public override bool IsButtonTwoTouchedOnIndex(uint index)
         {
-            return false;
+            return IsButtonTwoTouchedDownOnIndex(index);
         }
 
         /// <summary>
@@ -697,7 +729,7 @@ namespace VRTK
         /// <returns>Returns true if the button has just been touched down.</returns>
         public override bool IsButtonTwoTouchedDownOnIndex(uint index)
         {
-            return false;
+            return IsButtonTwoPressedDownOnIndex(index);
         }
 
         /// <summary>
@@ -707,7 +739,7 @@ namespace VRTK
         /// <returns>Returns true if the button has just been released.</returns>
         public override bool IsButtonTwoTouchedUpOnIndex(uint index)
         {
-            return false;
+            return IsButtonTwoPressedUpOnIndex(index);
         }
 
         /// <summary>
@@ -747,7 +779,7 @@ namespace VRTK
         /// <returns>Returns true if the button is continually being touched.</returns>
         public override bool IsStartMenuTouchedOnIndex(uint index)
         {
-            return false;
+            return IsStartMenuTouchedDownOnIndex(index);
         }
 
         /// <summary>
@@ -757,7 +789,7 @@ namespace VRTK
         /// <returns>Returns true if the button has just been touched down.</returns>
         public override bool IsStartMenuTouchedDownOnIndex(uint index)
         {
-            return false;
+            return IsStartMenuPressedDownOnIndex(index);
         }
 
         /// <summary>
@@ -767,7 +799,7 @@ namespace VRTK
         /// <returns>Returns true if the button has just been released.</returns>
         public override bool IsStartMenuTouchedUpOnIndex(uint index)
         {
-            return false;
+            return IsStartMenuPressedUpOnIndex(index);
         }
 
         private void OnEnable()
@@ -825,8 +857,8 @@ namespace VRTK
                 GameObject simPlayer = SDK_InputSimulator.FindInScene();
                 if (simPlayer)
                 {
-                    rightHand = simPlayer.transform.FindChild("RightHand");
-                    leftHand = simPlayer.transform.FindChild("LeftHand");
+                    rightHand = simPlayer.transform.FindChild(RIGHT_HAND_CONTROLLER_NAME);
+                    leftHand = simPlayer.transform.FindChild(LEFT_HAND_CONTROLLER_NAME);
                     rightController = rightHand.GetComponent<SDK_ControllerSim>();
                     leftController = leftHand.GetComponent<SDK_ControllerSim>();
                 }
