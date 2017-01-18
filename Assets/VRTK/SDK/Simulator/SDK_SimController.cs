@@ -21,6 +21,9 @@ namespace VRTK
             {"StartMenu", KeyCode.F }
         };
 
+        protected const string RIGHT_HAND_CONTROLLER_NAME = "RightHand";
+        protected const string LEFT_HAND_CONTROLLER_NAME = "LeftHand";
+
         /// <summary>
         /// The ProcessUpdate method enables an SDK to run logic for every Unity Update
         /// </summary>
@@ -141,11 +144,12 @@ namespace VRTK
         /// <returns>The GameObject containing the left hand controller.</returns>
         public override GameObject GetControllerLeftHand(bool actual = false)
         {
-            GameObject controller = null;
-            GameObject simPlayer = SDK_InputSimulator.FindInScene();
-            if (simPlayer != null)
+            // use the basic base functionality to find the left hand controller
+            var controller = GetSDKManagerControllerLeftHand(actual);
+            // if the controller cannot be found with default settings, try finding it below the InputSimulator by name
+            if (!controller && actual)
             {
-                controller = simPlayer.transform.FindChild("LeftHand").gameObject;
+                controller = GetActualController(ControllerHand.Left);
             }
 
             return controller;
@@ -158,12 +162,40 @@ namespace VRTK
         /// <returns>The GameObject containing the right hand controller.</returns>
         public override GameObject GetControllerRightHand(bool actual = false)
         {
-            GameObject controller = null;
+            // use the basic base functionality to find the right hand controller
+            var controller = GetSDKManagerControllerRightHand(actual);
+            // if the controller cannot be found with default settings, try finding it below the InputSimulator by name
+            if (!controller && actual)
+            {
+                controller = GetActualController(ControllerHand.Right);
+            }
+
+            return controller;
+        }
+
+        /// <summary>
+        /// finds the actual controller for the specified hand (identified by name) and returns it
+        /// </summary>
+        /// <param name="hand">the for which to find the respective controller gameobject</param>
+        /// <returns>the gameobject of the actual controller corresponding to the specified hand</returns>
+        private static GameObject GetActualController(ControllerHand hand)
+        {
             GameObject simPlayer = SDK_InputSimulator.FindInScene();
+            GameObject controller = null;
 
             if (simPlayer != null)
             {
-                controller = simPlayer.transform.FindChild("RightHand").gameObject;
+                switch (hand)
+                {
+                    case ControllerHand.Right:
+                        controller = simPlayer.transform.FindChild(RIGHT_HAND_CONTROLLER_NAME).gameObject;
+                        break;
+                    case ControllerHand.Left:
+                        controller = simPlayer.transform.FindChild(LEFT_HAND_CONTROLLER_NAME).gameObject;
+                        break;
+                    default:
+                        break;
+                }
             }
 
             return controller;
@@ -235,10 +267,10 @@ namespace VRTK
                 switch (hand)
                 {
                     case ControllerHand.Left:
-                        model = simPlayer.transform.FindChild("LeftHand/Hand").gameObject;
+                        model = simPlayer.transform.FindChild(string.Format("{0}/Hand", LEFT_HAND_CONTROLLER_NAME)).gameObject;
                         break;
                     case ControllerHand.Right:
-                        model = simPlayer.transform.FindChild("RightHand/Hand").gameObject;
+                        model = simPlayer.transform.FindChild(string.Format("{0}/Hand", RIGHT_HAND_CONTROLLER_NAME)).gameObject;
                         break;
                 }
             }
@@ -825,8 +857,8 @@ namespace VRTK
                 GameObject simPlayer = SDK_InputSimulator.FindInScene();
                 if (simPlayer)
                 {
-                    rightHand = simPlayer.transform.FindChild("RightHand");
-                    leftHand = simPlayer.transform.FindChild("LeftHand");
+                    rightHand = simPlayer.transform.FindChild(RIGHT_HAND_CONTROLLER_NAME);
+                    leftHand = simPlayer.transform.FindChild(LEFT_HAND_CONTROLLER_NAME);
                     rightController = rightHand.GetComponent<SDK_ControllerSim>();
                     leftController = leftHand.GetComponent<SDK_ControllerSim>();
                 }
