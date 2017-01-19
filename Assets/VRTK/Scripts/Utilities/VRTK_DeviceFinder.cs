@@ -252,6 +252,24 @@ namespace VRTK
         }
 
         /// <summary>
+        /// The GetHeadsetVelocity method is used to determine the current velocity of the headset.
+        /// </summary>
+        /// <returns>A Vector3 containing the current velocity of the headset.</returns>
+        public static Vector3 GetHeadsetVelocity()
+        {
+            return VRTK_SDK_Bridge.GetHeadsetVelocity();
+        }
+
+        /// <summary>
+        /// The GetHeadsetAngularVelocity method is used to determine the current angular velocity of the headset.
+        /// </summary>
+        /// <returns>A Vector3 containing the current angular velocity of the headset.</returns>
+        public static Vector3 GetHeadsetAngularVelocity()
+        {
+            return VRTK_SDK_Bridge.GetHeadsetAngularVelocity();
+        }
+
+        /// <summary>
         /// The HeadsetTransform method is used to retrieve the transform for the VR Headset in the scene. It can be useful to determine the position of the user's head in the game world.
         /// </summary>
         /// <returns>The transform of the VR Headset component.</returns>

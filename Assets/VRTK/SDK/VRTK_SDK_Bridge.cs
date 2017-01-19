@@ -120,6 +120,16 @@
             return GetControllerSDK().GetAngularVelocityOnIndex(index);
         }
 
+        public static Vector3 GetHeadsetVelocity()
+        {
+            return GetHeadsetSDK().GetHeadsetVelocity();
+        }
+
+        public static Vector3 GetHeadsetAngularVelocity()
+        {
+            return GetHeadsetSDK().GetHeadsetAngularVelocity();
+        }
+
         public static Vector2 GetTouchpadAxisOnIndex(uint index)
         {
             return GetControllerSDK().GetTouchpadAxisOnIndex(index);

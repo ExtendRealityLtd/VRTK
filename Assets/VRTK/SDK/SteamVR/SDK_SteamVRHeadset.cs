@@ -59,6 +59,24 @@ namespace VRTK
         }
 
         /// <summary>
+        /// The GetHeadsetVelocity method is used to determine the current velocity of the headset.
+        /// </summary>
+        /// <returns>A Vector3 containing the current velocity of the headset.</returns>
+        public override Vector3 GetHeadsetVelocity()
+        {
+            return SteamVR_Controller.Input((int)SteamVR_TrackedObject.EIndex.Hmd).velocity;
+        }
+
+        /// <summary>
+        /// The GetHeadsetAngularVelocity method is used to determine the current angular velocity of the headset.
+        /// </summary>
+        /// <returns>A Vector3 containing the current angular velocity of the headset.</returns>
+        public override Vector3 GetHeadsetAngularVelocity()
+        {
+            return SteamVR_Controller.Input((int)SteamVR_TrackedObject.EIndex.Hmd).angularVelocity;
+        }
+
+        /// <summary>
         /// The HeadsetFade method is used to apply a fade to the headset camera to progressively change the colour.
         /// </summary>
         /// <param name="color">The colour to fade to.</param>
