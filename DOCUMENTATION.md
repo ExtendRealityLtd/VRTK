@@ -4784,6 +4784,28 @@ The GetControllerVelocity method is used for getting the current velocity of the
 
 The GetControllerAngularVelocity method is used for getting the current rotational velocity of the physical game controller. This can be useful for determining which way the controller is being rotated and at what speed the rotation is occurring.
 
+#### GetHeadsetVelocity/0
+
+  > `public static Vector3 GetHeadsetVelocity()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `Vector3` - A Vector3 containing the current velocity of the headset.
+
+The GetHeadsetVelocity method is used to determine the current velocity of the headset.
+
+#### GetHeadsetAngularVelocity/0
+
+  > `public static Vector3 GetHeadsetAngularVelocity()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `Vector3` - A Vector3 containing the current angular velocity of the headset.
+
+The GetHeadsetAngularVelocity method is used to determine the current angular velocity of the headset.
+
 #### HeadsetTransform/0
 
   > `public static Transform HeadsetTransform()`
@@ -5213,6 +5235,28 @@ The GetHeadset method returns the Transform of the object that is used to repres
    * `Transform` - A transform of the object holding the headset camera in the scene.
 
 The GetHeadsetCamera method returns the Transform of the object that is used to hold the headset camera in the scene.
+
+#### GetHeadsetVelocity/0
+
+  > `public abstract Vector3 GetHeadsetVelocity();`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `Vector3` - A Vector3 containing the current velocity of the headset.
+
+The GetHeadsetVelocity method is used to determine the current velocity of the headset.
+
+#### GetHeadsetAngularVelocity/0
+
+  > `public abstract Vector3 GetHeadsetAngularVelocity();`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `Vector3` - A Vector3 containing the current angular velocity of the headset.
+
+The GetHeadsetAngularVelocity method is used to determine the current angular velocity of the headset.
 
 #### HeadsetFade/3
 
@@ -6192,6 +6236,28 @@ The GetHeadset method returns the Transform of the object that is used to repres
 
 The GetHeadsetCamera method returns the Transform of the object that is used to hold the headset camera in the scene.
 
+#### GetHeadsetVelocity/0
+
+  > `public override Vector3 GetHeadsetVelocity()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `Vector3` - A Vector3 containing the current velocity of the headset.
+
+The GetHeadsetVelocity method is used to determine the current velocity of the headset.
+
+#### GetHeadsetAngularVelocity/0
+
+  > `public override Vector3 GetHeadsetAngularVelocity()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `Vector3` - A Vector3 containing the current angular velocity of the headset.
+
+The GetHeadsetAngularVelocity method is used to determine the current angular velocity of the headset.
+
 #### HeadsetFade/3
 
   > `public override void HeadsetFade(Color color, float duration, bool fadeOverlay = false)`
@@ -7141,6 +7207,28 @@ The GetHeadset method returns the Transform of the object that is used to repres
 
 The GetHeadsetCamera/0 method returns the Transform of the object that is used to hold the headset camera in the scene.
 
+#### GetHeadsetVelocity/0
+
+  > `public override Vector3 GetHeadsetVelocity()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `Vector3` - A Vector3 containing the current velocity of the headset.
+
+The GetHeadsetVelocity method is used to determine the current velocity of the headset.
+
+#### GetHeadsetAngularVelocity/0
+
+  > `public override Vector3 GetHeadsetAngularVelocity()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `Vector3` - A Vector3 containing the current angular velocity of the headset.
+
+The GetHeadsetAngularVelocity method is used to determine the current angular velocity of the headset.
+
 #### HeadsetFade/3
 
   > `public override void HeadsetFade(Color color, float duration, bool fadeOverlay = false)`
@@ -8086,6 +8174,28 @@ The GetHeadset method returns the Transform of the object that is used to repres
 
 The GetHeadsetCamera method returns the Transform of the object that is used to hold the headset camera in the scene.
 
+#### GetHeadsetVelocity/0
+
+  > `public override Vector3 GetHeadsetVelocity()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `Vector3` - A Vector3 containing the current velocity of the headset.
+
+The GetHeadsetVelocity method is used to determine the current velocity of the headset.
+
+#### GetHeadsetAngularVelocity/0
+
+  > `public override Vector3 GetHeadsetAngularVelocity()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `Vector3` - A Vector3 containing the current angular velocity of the headset.
+
+The GetHeadsetAngularVelocity method is used to determine the current angular velocity of the headset.
+
 #### HeadsetFade/3
 
   > `public override void HeadsetFade(Color color, float duration, bool fadeOverlay = false)`
@@ -9030,6 +9140,28 @@ The GetHeadset method returns the Transform of the object that is used to repres
    * `Transform` - A transform of the object holding the headset camera in the scene.
 
 The GetHeadsetCamera method returns the Transform of the object that is used to hold the headset camera in the scene.
+
+#### GetHeadsetVelocity/0
+
+  > `public override Vector3 GetHeadsetVelocity()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `Vector3` - A Vector3 containing the current velocity of the headset.
+
+The GetHeadsetVelocity method is used to determine the current velocity of the headset.
+
+#### GetHeadsetAngularVelocity/0
+
+  > `public override Vector3 GetHeadsetAngularVelocity()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `Vector3` - A Vector3 containing the current angular velocity of the headset.
+
+The GetHeadsetAngularVelocity method is used to determine the current angular velocity of the headset.
 
 #### HeadsetFade/3
 
