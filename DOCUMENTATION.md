@@ -2472,7 +2472,7 @@ The ForceResetUsing will force the controller to stop using the currently touche
 
 ### Overview
 
-The Interact Haptics script is attached along side the Interactable Object script and provides controller haptics on touch, grab and use of the object.
+The Interact Haptics script is attached on the same GameObject as an Interactable Object script and provides controller haptics on touch, grab and use of the object.
 
 ### Inspector Parameters
 
@@ -2527,7 +2527,7 @@ The HapticsOnUse method triggers the haptic feedback on the given controller for
 
 ### Overview
 
-The Interact Controller Appearance script is used to determine whether the controller model should be visible or hidden on touch, grab or use.
+The Interact Controller Appearance script is attached on the same GameObject as an Interactable Object script and is used to determine whether the controller model should be visible or hidden on touch, grab or use.
 
 ### Inspector Parameters
 
