@@ -4,7 +4,7 @@ namespace VRTK
     using UnityEngine;
 
     /// <summary>
-    /// The Interact Haptics script is attached along side the Interactable Object script and provides controller haptics on touch, grab and use of the object.
+    /// The Interact Haptics script is attached on the same GameObject as an Interactable Object script and provides controller haptics on touch, grab and use of the object.
     /// </summary>
     public class VRTK_InteractHaptics : MonoBehaviour
     {
@@ -70,6 +70,14 @@ namespace VRTK
             if (strengthOnUse > 0 && durationOnUse > 0f)
             {
                 TriggerHapticPulse(controllerActions, strengthOnUse, durationOnUse, intervalOnUse);
+            }
+        }
+
+        protected virtual void OnEnable()
+        {
+            if (!GetComponent<VRTK_InteractableObject>())
+            {
+                Debug.LogError("The `VRTK_InteractHaptics` script is required to be attached to a GameObject that has the `VRTK_InteractableObject` script also attached to it.");
             }
         }
 

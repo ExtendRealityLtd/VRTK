@@ -4,7 +4,7 @@ namespace VRTK
     using UnityEngine;
 
     /// <summary>
-    /// The Interact Controller Appearance script is used to determine whether the controller model should be visible or hidden on touch, grab or use.
+    /// The Interact Controller Appearance script is attached on the same GameObject as an Interactable Object script and is used to determine whether the controller model should be visible or hidden on touch, grab or use.
     /// </summary>
     /// <example>
     /// `VRTK/Examples/008_Controller_UsingAGrabbedObject` shows that the controller can be hidden when touching, grabbing and using an object.
@@ -89,6 +89,14 @@ namespace VRTK
                     return;
                 }
                 ToggleController(showController, controllerActions, obj.gameObject, hideDelayOnUse);
+            }
+        }
+
+        protected virtual void OnEnable()
+        {
+            if (!GetComponent<VRTK_InteractableObject>())
+            {
+                Debug.LogError("The `VRTK_InteractControllerAppearance` script is required to be attached to a GameObject that has the `VRTK_InteractableObject` script also attached to it.");
             }
         }
 
