@@ -77,8 +77,9 @@ namespace VRTK
         /// <summary>
         /// The GenerateControllerPointerOrigin method can create a custom pointer origin Transform to represent the pointer position and forward.
         /// </summary>
+        /// <param name="parent">The GameObject that the origin will become parent of. If it is a controller then it will also be used to determine the hand if required.</param>
         /// <returns>A generated Transform that contains the custom pointer origin.</returns>
-        public override Transform GenerateControllerPointerOrigin()
+        public override Transform GenerateControllerPointerOrigin(GameObject parent)
         {
             return null;
         }
