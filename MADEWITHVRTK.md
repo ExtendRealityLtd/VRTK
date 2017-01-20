@@ -10,6 +10,7 @@ A collection of titles that have been made with VRTK.
 | Deisim | [Steam Store Page](http://store.steampowered.com/app/525680) |
 | Holodaze | [Steam Store Page](http://store.steampowered.com/app/475520) |
 | Stage Presence | [Steam Store Page](http://store.steampowered.com/app/391640) |
+| Nock: Hidden Arrow | [Steam Store Page](http://store.steampowered.com/app/525210) |
 | ViveSpray | [Steam Store Page](http://store.steampowered.com/app/494830) |
 | VeeR Pong | [Steam Store Page](http://store.steampowered.com/app/494850) |
 | Emergence Fractal Universe | [Steam Store Page](http://store.steampowered.com/app/500470) |
@@ -31,6 +32,7 @@ A collection of titles that have been made with VRTK.
 | Manastorm: Champions of G'nar | [Steam Store Page](http://store.steampowered.com/app/548560) |
 | Keep Defending | [Steam Store Page](http://store.steampowered.com/app/527720) |
 | ObserVR | [Steam Store Page](http://store.steampowered.com/app/549360) |
+| Sky Sanctuary | [Steam Store Page](http://store.steampowered.com/app/526130) |
 | Coinvault | [Itch.io Store Page](https://ldvr.itch.io/ldvrs-coinvault-for-the-vive) |
 | VR Explosive Kitten Toss | [Itch.io Store Page](https://ldvr.itch.io/ldvrs-kitten-toss) |
 | Zika VR | [Itch.io Store Page](https://ldvr.itch.io/ldvr-presents-zika-vr) |
