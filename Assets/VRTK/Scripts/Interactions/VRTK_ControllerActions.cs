@@ -71,7 +71,9 @@ namespace VRTK
          + " * `Grip Right Model Path`: The model that represents the right grip button.\n"
          + " * `Touchpad Model Path`: The model that represents the touchpad.\n"
          + " * `Button One Model Path`: The model that represents button one.\n"
-         + " * `System Menu Model Path`: The model that represents the system menu button.")]
+         + " * `Button Two Model Path`: The model that represents button two.\n"
+         + " * `System Menu Model Path`: The model that represents the system menu button."
+         + " * `Start Menu Model Path`: The model that represents the start menu button.")]
         public VRTK_ControllerModelElementPaths modelElementPaths;
 
         [Tooltip("A collection of highlighter overrides for each controller model sub element. If no highlighter override is given then highlighter on the Controller game object is used.\n\n"
@@ -82,7 +84,9 @@ namespace VRTK
          + " * `Grip Right`: The highlighter to use on the  right grip button.\n"
          + " * `Touchpad`: The highlighter to use on the touchpad.\n"
          + " * `Button One`: The highlighter to use on button one.\n"
-         + " * `System Menu`: The highlighter to use on the system menu button.")]
+         + " * `Button Two`: The highlighter to use on button two.\n"
+         + " * `System Menu`: The highlighter to use on the system menu button."
+         + " * `Start Menu`: The highlighter to use on the start menu button.")]
         public VRTK_ControllerElementHighlighers elementHighlighterOverrides;
 
         /// <summary>

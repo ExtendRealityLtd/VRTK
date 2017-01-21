@@ -93,7 +93,7 @@ namespace VRTK
         [Tooltip("The button to use for the action of clicking a UI element.")]
         public ButtonAlias uiClickButton = ButtonAlias.Trigger_Press;
         [Tooltip("The button to use for the action of bringing up an in-game menu.")]
-        public ButtonAlias menuToggleButton = ButtonAlias.Button_One_Press;
+        public ButtonAlias menuToggleButton = ButtonAlias.Button_Two_Press;
 
         [Header("Axis Refinement")]
 

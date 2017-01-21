@@ -1511,7 +1511,8 @@ The highlighting of the controller is defaulted to use the `VRTK_MaterialColorSw
     * `Grip Right Model Path`: The model that represents the right grip button.
     * `Touchpad Model Path`: The model that represents the touchpad.
     * `Button One Model Path`: The model that represents button one.
-    * `System Menu Model Path`: The model that represents the system menu button.
+    * `Button Two Model Path`: The model that represents button two.
+    * `System Menu Model Path`: The model that represents the system menu button.  * `Start Menu Model Path`: The model that represents the start menu button.
  * **Element Highlighter Overrides:** A collection of highlighter overrides for each controller model sub element. If no highlighter override is given then highlighter on the Controller game object is used.
   * The available model sub elements are:
     * `Body`: The highlighter to use on the overall shape of the controller.
@@ -1520,7 +1521,8 @@ The highlighting of the controller is defaulted to use the `VRTK_MaterialColorSw
     * `Grip Right`: The highlighter to use on the  right grip button.
     * `Touchpad`: The highlighter to use on the touchpad.
     * `Button One`: The highlighter to use on button one.
-    * `System Menu`: The highlighter to use on the system menu button.
+    * `Button Two`: The highlighter to use on button two.
+    * `System Menu`: The highlighter to use on the system menu button.  * `Start Menu`: The highlighter to use on the start menu button.
 
 ### Class Events
 
@@ -4603,6 +4605,12 @@ The Device Finder offers a collection of static methods that can be called to fi
   * `Headset` - The headset.
   * `Left_Controller` - The left hand controller.
   * `Right_Controller` - The right hand controller.
+ * `public enum Headsets` - Possible headsets
+  * `Unknown` - An unknown headset.
+  * `OculusRift` - A summary of all Oculus Rift headset versions.
+  * `OculusRiftCV1` - A specific version of the Oculus Rift headset, the Consumer Version 1.
+  * `Vive` - A summary of all HTC Vive headset versions.
+  * `ViveMV` - A specific version of the HTC Vive headset, the first consumer version.
 
 ### Class Methods
 
@@ -4827,6 +4835,17 @@ The HeadsetTransform method is used to retrieve the transform for the VR Headset
    * `Transform` - The transform of the VR Camera component.
 
 The HeadsetCamera method is used to retrieve the transform for the VR Camera in the scene.
+
+#### GetHeadsetType/1
+
+  > `public static Headsets GetHeadsetType(bool summary = false)`
+
+  * Parameters
+   * `bool summary` - If this is true, then the generic name for the headset is returned not including the version type (e.g. OculusRift will be returned for DK2 and CV1).
+  * Returns
+   * `Headsets` - The Headset type that is connected.
+
+The GetHeadsetType method returns the type of headset connected to the computer.
 
 #### PlayAreaTransform/0
 
@@ -5401,12 +5420,12 @@ The GetControllerByIndex method returns the GameObject of a controller with a sp
 
 The GetControllerOrigin method returns the origin of the given controller.
 
-#### GenerateControllerPointerOrigin/0
+#### GenerateControllerPointerOrigin/1
 
-  > `public abstract Transform GenerateControllerPointerOrigin();`
+  > `public abstract Transform GenerateControllerPointerOrigin(GameObject parent);`
 
   * Parameters
-   * _none_
+   * `GameObject parent` - The GameObject that the origin will become parent of. If it is a controller then it will also be used to determine the hand if required.
   * Returns
    * `Transform` - A generated Transform that contains the custom pointer origin.
 
@@ -6376,12 +6395,12 @@ The GetControllerByIndex method returns the GameObject of a controller with a sp
 
 The GetControllerOrigin method returns the origin of the given controller.
 
-#### GenerateControllerPointerOrigin/0
+#### GenerateControllerPointerOrigin/1
 
-  > `public override Transform GenerateControllerPointerOrigin()`
+  > `public override Transform GenerateControllerPointerOrigin(GameObject parent)`
 
   * Parameters
-   * _none_
+   * `GameObject parent` - The GameObject that the origin will become parent of. If it is a controller then it will also be used to determine the hand if required.
   * Returns
    * `Transform` - A generated Transform that contains the custom pointer origin.
 
@@ -7345,12 +7364,12 @@ The GetControllerByIndex method returns the GameObject of a controller with a sp
 
 The GetControllerOrigin method returns the origin of the given controller.
 
-#### GenerateControllerPointerOrigin/0
+#### GenerateControllerPointerOrigin/1
 
-  > `public override Transform GenerateControllerPointerOrigin()`
+  > `public override Transform GenerateControllerPointerOrigin(GameObject parent)`
 
   * Parameters
-   * _none_
+   * `GameObject parent` - The GameObject that the origin will become parent of. If it is a controller then it will also be used to determine the hand if required.
   * Returns
    * `Transform` - A generated Transform that contains the custom pointer origin.
 
@@ -7820,7 +7839,7 @@ The IsTouchpadTouchedUpOnIndex method is used to determine if the controller but
   * Returns
    * `bool` - Returns true if the button is continually being pressed.
 
-The IsApplicationMenuPressedOnIndex method is used to determine if the controller button is being pressed down continually.
+The IsButtonOnePressedOnIndex method is used to determine if the controller button is being pressed down continually.
 
 #### IsButtonOnePressedDownOnIndex/1
 
@@ -7831,7 +7850,7 @@ The IsApplicationMenuPressedOnIndex method is used to determine if the controlle
   * Returns
    * `bool` - Returns true if the button has just been pressed down.
 
-The IsApplicationMenuPressedDownOnIndex method is used to determine if the controller button has just been pressed down.
+The IsButtonOnePressedDownOnIndex method is used to determine if the controller button has just been pressed down.
 
 #### IsButtonOnePressedUpOnIndex/1
 
@@ -7842,7 +7861,7 @@ The IsApplicationMenuPressedDownOnIndex method is used to determine if the contr
   * Returns
    * `bool` - Returns true if the button has just been released.
 
-The IsApplicationMenuPressedUpOnIndex method is used to determine if the controller button has just been released.
+The IsButtonOnePressedUpOnIndex method is used to determine if the controller button has just been released.
 
 #### IsButtonOneTouchedOnIndex/1
 
@@ -7853,7 +7872,7 @@ The IsApplicationMenuPressedUpOnIndex method is used to determine if the control
   * Returns
    * `bool` - Returns true if the button is continually being touched.
 
-The IsApplicationMenuTouchedOnIndex method is used to determine if the controller button is being touched down continually.
+The IsButtonOneTouchedOnIndex method is used to determine if the controller button is being touched down continually.
 
 #### IsButtonOneTouchedDownOnIndex/1
 
@@ -7864,7 +7883,7 @@ The IsApplicationMenuTouchedOnIndex method is used to determine if the controlle
   * Returns
    * `bool` - Returns true if the button has just been touched down.
 
-The IsApplicationMenuTouchedDownOnIndex method is used to determine if the controller button has just been touched down.
+The IsButtonOneTouchedDownOnIndex method is used to determine if the controller button has just been touched down.
 
 #### IsButtonOneTouchedUpOnIndex/1
 
@@ -7875,7 +7894,7 @@ The IsApplicationMenuTouchedDownOnIndex method is used to determine if the contr
   * Returns
    * `bool` - Returns true if the button has just been released.
 
-The IsApplicationMenuTouchedUpOnIndex method is used to determine if the controller button has just been released.
+The IsButtonOneTouchedUpOnIndex method is used to determine if the controller button has just been released.
 
 #### IsButtonTwoPressedOnIndex/1
 
@@ -8312,12 +8331,12 @@ The GetControllerByIndex method returns the GameObject of a controller with a sp
 
 The GetControllerOrigin method returns the origin of the given controller.
 
-#### GenerateControllerPointerOrigin/0
+#### GenerateControllerPointerOrigin/1
 
-  > `public override Transform GenerateControllerPointerOrigin()`
+  > `public override Transform GenerateControllerPointerOrigin(GameObject parent)`
 
   * Parameters
-   * _none_
+   * `GameObject parent` - The GameObject that the origin will become parent of. If it is a controller then it will also be used to determine the hand if required.
   * Returns
    * `Transform` - A generated Transform that contains the custom pointer origin.
 
@@ -9279,12 +9298,12 @@ The GetControllerByIndex method returns the GameObject of a controller with a sp
 
 The GetControllerOrigin method returns the origin of the given controller.
 
-#### GenerateControllerPointerOrigin/0
+#### GenerateControllerPointerOrigin/1
 
-  > `public override Transform GenerateControllerPointerOrigin()`
+  > `public override Transform GenerateControllerPointerOrigin(GameObject parent)`
 
   * Parameters
-   * _none_
+   * `GameObject parent` - The GameObject that the origin will become parent of. If it is a controller then it will also be used to determine the hand if required.
   * Returns
    * `Transform` - A generated Transform that contains the custom pointer origin.
 

@@ -45,9 +45,9 @@
             return GetControllerSDK().GetControllerOrigin(controller);
         }
 
-        public static Transform GenerateControllerPointerOrigin()
+        public static Transform GenerateControllerPointerOrigin(GameObject parent)
         {
-            return GetControllerSDK().GenerateControllerPointerOrigin();
+            return GetControllerSDK().GenerateControllerPointerOrigin(parent);
         }
 
         public static GameObject GetControllerLeftHand(bool actual)

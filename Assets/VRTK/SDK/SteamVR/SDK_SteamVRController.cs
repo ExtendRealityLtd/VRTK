@@ -33,7 +33,17 @@ namespace VRTK
         /// <returns>A path to the resource that contains the collider GameObject.</returns>
         public override string GetControllerDefaultColliderPath(ControllerHand hand)
         {
-            return "ControllerColliders/HTCVive";
+            var returnCollider = "ControllerColliders/Fallback";
+            switch (VRTK_DeviceFinder.GetHeadsetType(true))
+            {
+                case VRTK_DeviceFinder.Headsets.OculusRift:
+                    returnCollider = (hand == ControllerHand.Left ? "ControllerColliders/SteamVROculusTouch_Left" : "ControllerColliders/SteamVROculusTouch_Right");
+                    break;
+                case VRTK_DeviceFinder.Headsets.Vive:
+                    returnCollider = "ControllerColliders/HTCVive";
+                    break;
+            }
+            return returnCollider;
         }
 
         /// <summary>
@@ -53,15 +63,19 @@ namespace VRTK
                 case ControllerElements.Trigger:
                     return "trigger" + suffix;
                 case ControllerElements.GripLeft:
-                    return "lgrip" + suffix;
+                    return GetControllerGripPath(hand, suffix, ControllerHand.Left);
                 case ControllerElements.GripRight:
-                    return "rgrip" + suffix;
+                    return GetControllerGripPath(hand, suffix, ControllerHand.Right);
                 case ControllerElements.Touchpad:
-                    return "trackpad" + suffix;
+                    return GetControllerTouchpadPath(hand, suffix);
                 case ControllerElements.ButtonOne:
-                    return "button" + suffix;
+                    return GetControllerButtonOnePath(hand, suffix);
+                case ControllerElements.ButtonTwo:
+                    return GetControllerButtonTwoPath(hand, suffix);
                 case ControllerElements.SystemMenu:
-                    return "sys_button" + suffix;
+                    return GetControllerSystemMenuPath(hand, suffix);
+                case ControllerElements.StartMenu:
+                    return GetControllerStartMenuPath(hand, suffix);
                 case ControllerElements.Body:
                     return "body";
             }
@@ -123,9 +137,23 @@ namespace VRTK
         /// <summary>
         /// The GenerateControllerPointerOrigin method can create a custom pointer origin Transform to represent the pointer position and forward.
         /// </summary>
+        /// <param name="parent">The GameObject that the origin will become parent of. If it is a controller then it will also be used to determine the hand if required.</param>
         /// <returns>A generated Transform that contains the custom pointer origin.</returns>
-        public override Transform GenerateControllerPointerOrigin()
+        public override Transform GenerateControllerPointerOrigin(GameObject parent)
         {
+            switch (VRTK_DeviceFinder.GetHeadsetType(true))
+            {
+                case VRTK_DeviceFinder.Headsets.OculusRift:
+                    if (IsControllerLeftHand(parent) || IsControllerRightHand(parent))
+                    {
+                        var generatedOrigin = new GameObject(parent.name + " _CustomPointerOrigin");
+                        generatedOrigin.transform.SetParent(parent.transform);
+                        generatedOrigin.transform.localEulerAngles = new Vector3(40f, 0f, 0f);
+                        generatedOrigin.transform.localPosition = new Vector3((IsControllerLeftHand(parent) ? 0.0081f : -0.0081f), -0.0273f, -0.0311f);
+                        return generatedOrigin.transform;
+                    }
+                    break;
+            }
             return null;
         }
 
@@ -615,7 +643,7 @@ namespace VRTK
         /// <returns>Returns true if the button is continually being pressed.</returns>
         public override bool IsButtonOnePressedOnIndex(uint index)
         {
-            return IsButtonPressed(index, ButtonPressTypes.Press, SteamVR_Controller.ButtonMask.ApplicationMenu);
+            return IsButtonPressed(index, ButtonPressTypes.Press, (1ul << (int)EVRButtonId.k_EButton_A));
         }
 
         /// <summary>
@@ -625,7 +653,7 @@ namespace VRTK
         /// <returns>Returns true if the button has just been pressed down.</returns>
         public override bool IsButtonOnePressedDownOnIndex(uint index)
         {
-            return IsButtonPressed(index, ButtonPressTypes.PressDown, SteamVR_Controller.ButtonMask.ApplicationMenu);
+            return IsButtonPressed(index, ButtonPressTypes.PressDown, (1ul << (int)EVRButtonId.k_EButton_A));
         }
 
         /// <summary>
@@ -635,7 +663,7 @@ namespace VRTK
         /// <returns>Returns true if the button has just been released.</returns>
         public override bool IsButtonOnePressedUpOnIndex(uint index)
         {
-            return IsButtonPressed(index, ButtonPressTypes.PressUp, SteamVR_Controller.ButtonMask.ApplicationMenu);
+            return IsButtonPressed(index, ButtonPressTypes.PressUp, (1ul << (int)EVRButtonId.k_EButton_A));
         }
 
         /// <summary>
@@ -645,7 +673,7 @@ namespace VRTK
         /// <returns>Returns true if the button is continually being touched.</returns>
         public override bool IsButtonOneTouchedOnIndex(uint index)
         {
-            return IsButtonPressed(index, ButtonPressTypes.Touch, SteamVR_Controller.ButtonMask.ApplicationMenu);
+            return IsButtonPressed(index, ButtonPressTypes.Touch, (1ul << (int)EVRButtonId.k_EButton_A));
         }
 
         /// <summary>
@@ -655,7 +683,7 @@ namespace VRTK
         /// <returns>Returns true if the button has just been touched down.</returns>
         public override bool IsButtonOneTouchedDownOnIndex(uint index)
         {
-            return IsButtonPressed(index, ButtonPressTypes.TouchDown, SteamVR_Controller.ButtonMask.ApplicationMenu);
+            return IsButtonPressed(index, ButtonPressTypes.TouchDown, (1ul << (int)EVRButtonId.k_EButton_A));
         }
 
         /// <summary>
@@ -665,7 +693,7 @@ namespace VRTK
         /// <returns>Returns true if the button has just been released.</returns>
         public override bool IsButtonOneTouchedUpOnIndex(uint index)
         {
-            return IsButtonPressed(index, ButtonPressTypes.TouchUp, SteamVR_Controller.ButtonMask.ApplicationMenu);
+            return IsButtonPressed(index, ButtonPressTypes.TouchUp, (1ul << (int)EVRButtonId.k_EButton_A));
         }
 
         /// <summary>
@@ -675,7 +703,7 @@ namespace VRTK
         /// <returns>Returns true if the button is continually being pressed.</returns>
         public override bool IsButtonTwoPressedOnIndex(uint index)
         {
-            return false;
+            return IsButtonPressed(index, ButtonPressTypes.Press, SteamVR_Controller.ButtonMask.ApplicationMenu);
         }
 
         /// <summary>
@@ -685,7 +713,7 @@ namespace VRTK
         /// <returns>Returns true if the button has just been pressed down.</returns>
         public override bool IsButtonTwoPressedDownOnIndex(uint index)
         {
-            return false;
+            return IsButtonPressed(index, ButtonPressTypes.PressDown, SteamVR_Controller.ButtonMask.ApplicationMenu);
         }
 
         /// <summary>
@@ -695,7 +723,7 @@ namespace VRTK
         /// <returns>Returns true if the button has just been released.</returns>
         public override bool IsButtonTwoPressedUpOnIndex(uint index)
         {
-            return false;
+            return IsButtonPressed(index, ButtonPressTypes.PressUp, SteamVR_Controller.ButtonMask.ApplicationMenu);
         }
 
         /// <summary>
@@ -705,7 +733,7 @@ namespace VRTK
         /// <returns>Returns true if the button is continually being touched.</returns>
         public override bool IsButtonTwoTouchedOnIndex(uint index)
         {
-            return false;
+            return IsButtonPressed(index, ButtonPressTypes.Touch, SteamVR_Controller.ButtonMask.ApplicationMenu);
         }
 
         /// <summary>
@@ -715,7 +743,7 @@ namespace VRTK
         /// <returns>Returns true if the button has just been touched down.</returns>
         public override bool IsButtonTwoTouchedDownOnIndex(uint index)
         {
-            return false;
+            return IsButtonPressed(index, ButtonPressTypes.TouchDown, SteamVR_Controller.ButtonMask.ApplicationMenu);
         }
 
         /// <summary>
@@ -725,7 +753,7 @@ namespace VRTK
         /// <returns>Returns true if the button has just been released.</returns>
         public override bool IsButtonTwoTouchedUpOnIndex(uint index)
         {
-            return false;
+            return IsButtonPressed(index, ButtonPressTypes.TouchUp, SteamVR_Controller.ButtonMask.ApplicationMenu);
         }
 
         /// <summary>
@@ -735,7 +763,7 @@ namespace VRTK
         /// <returns>Returns true if the button is continually being pressed.</returns>
         public override bool IsStartMenuPressedOnIndex(uint index)
         {
-            return false;
+            return IsButtonPressed(index, ButtonPressTypes.Press, SteamVR_Controller.ButtonMask.System);
         }
 
         /// <summary>
@@ -745,7 +773,7 @@ namespace VRTK
         /// <returns>Returns true if the button has just been pressed down.</returns>
         public override bool IsStartMenuPressedDownOnIndex(uint index)
         {
-            return false;
+            return IsButtonPressed(index, ButtonPressTypes.PressDown, SteamVR_Controller.ButtonMask.System);
         }
 
         /// <summary>
@@ -755,7 +783,7 @@ namespace VRTK
         /// <returns>Returns true if the button has just been released.</returns>
         public override bool IsStartMenuPressedUpOnIndex(uint index)
         {
-            return false;
+            return IsButtonPressed(index, ButtonPressTypes.PressUp, SteamVR_Controller.ButtonMask.System);
         }
 
         /// <summary>
@@ -765,7 +793,7 @@ namespace VRTK
         /// <returns>Returns true if the button is continually being touched.</returns>
         public override bool IsStartMenuTouchedOnIndex(uint index)
         {
-            return false;
+            return IsButtonPressed(index, ButtonPressTypes.Touch, SteamVR_Controller.ButtonMask.System);
         }
 
         /// <summary>
@@ -775,7 +803,7 @@ namespace VRTK
         /// <returns>Returns true if the button has just been touched down.</returns>
         public override bool IsStartMenuTouchedDownOnIndex(uint index)
         {
-            return false;
+            return IsButtonPressed(index, ButtonPressTypes.TouchDown, SteamVR_Controller.ButtonMask.System);
         }
 
         /// <summary>
@@ -785,7 +813,7 @@ namespace VRTK
         /// <returns>Returns true if the button has just been released.</returns>
         public override bool IsStartMenuTouchedUpOnIndex(uint index)
         {
-            return false;
+            return IsButtonPressed(index, ButtonPressTypes.TouchUp, SteamVR_Controller.ButtonMask.System);
         }
 
         private void Awake()
@@ -889,6 +917,78 @@ namespace VRTK
             }
 
             return false;
+        }
+
+        private string GetControllerGripPath(ControllerHand hand, string suffix, ControllerHand forceHand)
+        {
+            switch (VRTK_DeviceFinder.GetHeadsetType(true))
+            {
+                case VRTK_DeviceFinder.Headsets.Vive:
+                    return (forceHand == ControllerHand.Left ? "lgrip" : "rgrip") + suffix;
+                case VRTK_DeviceFinder.Headsets.OculusRift:
+                    return "grip" + suffix;
+            }
+            return null;
+        }
+
+        private string GetControllerTouchpadPath(ControllerHand hand, string suffix)
+        {
+            switch (VRTK_DeviceFinder.GetHeadsetType(true))
+            {
+                case VRTK_DeviceFinder.Headsets.Vive:
+                    return "trackpad" + suffix;
+                case VRTK_DeviceFinder.Headsets.OculusRift:
+                    return "thumbstick" + suffix;
+            }
+            return null;
+        }
+
+        private string GetControllerButtonOnePath(ControllerHand hand, string suffix)
+        {
+            switch (VRTK_DeviceFinder.GetHeadsetType(true))
+            {
+                case VRTK_DeviceFinder.Headsets.Vive:
+                    return null;
+                case VRTK_DeviceFinder.Headsets.OculusRift:
+                    return (hand == ControllerHand.Left ? "x_button" : "a_button") + suffix;
+            }
+            return null;
+        }
+
+        private string GetControllerButtonTwoPath(ControllerHand hand, string suffix)
+        {
+            switch (VRTK_DeviceFinder.GetHeadsetType(true))
+            {
+                case VRTK_DeviceFinder.Headsets.Vive:
+                    return "button" + suffix;
+                case VRTK_DeviceFinder.Headsets.OculusRift:
+                    return (hand == ControllerHand.Left ? "y_button" : "b_button") + suffix;
+            }
+            return null;
+        }
+
+        private string GetControllerSystemMenuPath(ControllerHand hand, string suffix)
+        {
+            switch (VRTK_DeviceFinder.GetHeadsetType(true))
+            {
+                case VRTK_DeviceFinder.Headsets.Vive:
+                    return "sys_button" + suffix;
+                case VRTK_DeviceFinder.Headsets.OculusRift:
+                    return (hand == ControllerHand.Left ? "enter_button" : "home_button") + suffix;
+            }
+            return null;
+        }
+
+        private string GetControllerStartMenuPath(ControllerHand hand, string suffix)
+        {
+            switch (VRTK_DeviceFinder.GetHeadsetType(true))
+            {
+                case VRTK_DeviceFinder.Headsets.Vive:
+                    return null;
+                case VRTK_DeviceFinder.Headsets.OculusRift:
+                    return (hand == ControllerHand.Left ? "enter_button" : "home_button") + suffix;
+            }
+            return null;
         }
     }
 #else

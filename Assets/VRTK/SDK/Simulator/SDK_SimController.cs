@@ -128,8 +128,9 @@ namespace VRTK
         /// <summary>
         /// The GenerateControllerPointerOrigin method can create a custom pointer origin Transform to represent the pointer position and forward.
         /// </summary>
+        /// <param name="parent">The GameObject that the origin will become parent of. If it is a controller then it will also be used to determine the hand if required.</param>
         /// <returns>A generated Transform that contains the custom pointer origin.</returns>
-        public override Transform GenerateControllerPointerOrigin()
+        public override Transform GenerateControllerPointerOrigin(GameObject parent)
         {
             return null;
         }
@@ -591,7 +592,7 @@ namespace VRTK
         }
 
         /// <summary>
-        /// The IsApplicationMenuPressedOnIndex method is used to determine if the controller button is being pressed down continually.
+        /// The IsButtonOnePressedOnIndex method is used to determine if the controller button is being pressed down continually.
         /// </summary>
         /// <param name="index">The index of the tracked object to check for.</param>
         /// <returns>Returns true if the button is continually being pressed.</returns>
@@ -601,7 +602,7 @@ namespace VRTK
         }
 
         /// <summary>
-        /// The IsApplicationMenuPressedDownOnIndex method is used to determine if the controller button has just been pressed down.
+        /// The IsButtonOnePressedDownOnIndex method is used to determine if the controller button has just been pressed down.
         /// </summary>
         /// <param name="index">The index of the tracked object to check for.</param>
         /// <returns>Returns true if the button has just been pressed down.</returns>
@@ -611,7 +612,7 @@ namespace VRTK
         }
 
         /// <summary>
-        /// The IsApplicationMenuPressedUpOnIndex method is used to determine if the controller button has just been released.
+        /// The IsButtonOnePressedUpOnIndex method is used to determine if the controller button has just been released.
         /// </summary>
         /// <param name="index">The index of the tracked object to check for.</param>
         /// <returns>Returns true if the button has just been released.</returns>
@@ -621,7 +622,7 @@ namespace VRTK
         }
 
         /// <summary>
-        /// The IsApplicationMenuTouchedOnIndex method is used to determine if the controller button is being touched down continually.
+        /// The IsButtonOneTouchedOnIndex method is used to determine if the controller button is being touched down continually.
         /// </summary>
         /// <param name="index">The index of the tracked object to check for.</param>
         /// <returns>Returns true if the button is continually being touched.</returns>
@@ -631,7 +632,7 @@ namespace VRTK
         }
 
         /// <summary>
-        /// The IsApplicationMenuTouchedDownOnIndex method is used to determine if the controller button has just been touched down.
+        /// The IsButtonOneTouchedDownOnIndex method is used to determine if the controller button has just been touched down.
         /// </summary>
         /// <param name="index">The index of the tracked object to check for.</param>
         /// <returns>Returns true if the button has just been touched down.</returns>
@@ -641,7 +642,7 @@ namespace VRTK
         }
 
         /// <summary>
-        /// The IsApplicationMenuTouchedUpOnIndex method is used to determine if the controller button has just been released.
+        /// The IsButtonOneTouchedUpOnIndex method is used to determine if the controller button has just been released.
         /// </summary>
         /// <param name="index">The index of the tracked object to check for.</param>
         /// <returns>Returns true if the button has just been released.</returns>

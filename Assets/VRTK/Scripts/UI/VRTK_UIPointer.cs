@@ -364,7 +364,7 @@ namespace VRTK
 
         private void OnEnable()
         {
-            pointerOriginTransform = (pointerOriginTransform == null ? VRTK_SDK_Bridge.GenerateControllerPointerOrigin() : pointerOriginTransform);
+            pointerOriginTransform = (pointerOriginTransform == null ? VRTK_SDK_Bridge.GenerateControllerPointerOrigin(gameObject) : pointerOriginTransform);
 
             if (controller == null)
             {

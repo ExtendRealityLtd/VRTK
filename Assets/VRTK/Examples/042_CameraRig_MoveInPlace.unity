@@ -178,7 +178,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 1198462162}
   - 20: {fileID: 106742182}
-  - 114: {fileID: 106742181}
   - 114: {fileID: 106742180}
   - 92: {fileID: 106742179}
   m_Layer: 0
@@ -211,18 +210,6 @@ MonoBehaviour:
   index: 0
   origin: {fileID: 0}
   isValid: 0
---- !u!114 &106742181
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11420968, guid: 4d293c8e162f3874b982baadd71153d2,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 106742178}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: be96d45fe21847a4a805d408a8015c84, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!20 &106742182
 Camera:
   m_ObjectHideFlags: 0
@@ -324,6 +311,7 @@ MonoBehaviour:
     buttonOneModelPath: 
     buttonTwoModelPath: 
     systemMenuModelPath: 
+    startMenuModelPath: 
   elementHighlighterOverrides:
     body: {fileID: 0}
     trigger: {fileID: 0}
@@ -333,6 +321,7 @@ MonoBehaviour:
     buttonOne: {fileID: 0}
     buttonTwo: {fileID: 0}
     systemMenu: {fileID: 0}
+    startMenu: {fileID: 0}
 --- !u!114 &179645992
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -349,7 +338,7 @@ MonoBehaviour:
   grabToggleButton: 7
   useToggleButton: 3
   uiClickButton: 3
-  menuToggleButton: 12
+  menuToggleButton: 14
   axisFidelity: 1
   triggerClickThreshold: 1
   gripClickThreshold: 1
@@ -370,6 +359,7 @@ MonoBehaviour:
   buttonOneTouched: 0
   buttonTwoPressed: 0
   buttonTwoTouched: 0
+  startMenuPressed: 0
   pointerPressed: 0
   grabPressed: 0
   usePressed: 0
@@ -388,35 +378,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1021416841}
   m_RootOrder: 3
---- !u!21 &263828513
-Material:
-  serializedVersion: 6
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_Name: Sprites/Default
-  m_Shader: {fileID: 10753, guid: 0000000000000000f000000000000000, type: 0}
-  m_ShaderKeywords: 
-  m_LightmapFlags: 5
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  m_SavedProperties:
-    serializedVersion: 2
-    m_TexEnvs:
-    - first:
-        name: _MainTex
-      second:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Floats:
-    - first:
-        name: PixelSnap
-      second: 0
-    m_Colors:
-    - first:
-        name: _Color
-      second: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &394372160
 GameObject:
   m_ObjectHideFlags: 0
@@ -903,6 +864,9 @@ MonoBehaviour:
   headsetPositionCompensation: 1
   targetListPolicy: {fileID: 455459366}
   navMeshLimitDistance: 0
+  layersToIgnore:
+    serializedVersion: 2
+    m_Bits: 4
 --- !u!114 &455459368
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -921,6 +885,9 @@ MonoBehaviour:
   movementThreshold: 0.0015
   standingHistorySamples: 5
   leanYThreshold: 0.5
+  layersToIgnore:
+    serializedVersion: 2
+    m_Bits: 4
   fallRestriction: 0
   gravityFallYThreshold: 0.15
   blinkYThreshold: 0.15
@@ -1004,7 +971,7 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 498481027}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!43 &579987401
+--- !u!43 &599792462
 Mesh:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
@@ -1020,7 +987,7 @@ Mesh:
     vertexCount: 8
     localAABB:
       m_Center: {x: 0, y: 0.01, z: 0}
-      m_Extent: {x: 1.2, y: 0, z: 1.0500002}
+      m_Extent: {x: 0.65, y: 0, z: 0.65}
   m_Shapes:
     vertices: []
     shapes: []
@@ -1072,7 +1039,7 @@ Mesh:
       format: 0
       dimension: 0
     m_DataSize: 288
-    _typelessdata: 6766863f0ad7233c696666bf000000000000803f0000803f0000803f0000000000000000676686bf0ad7233c696666bf000000000000803f0000803f0000803f0000803f00000000676686bf0ad7233c6966663f000000000000803f0000803f0000803f00000000000000006766863f0ad7233c6966663f000000000000803f0000803f0000803f0000803f000000009a99993f0ad7233c686686bf000000000000803f0000803f00000000000000000000803f9a9999bf0ad7233c686686bf000000000000803f0000803f000000000000803f0000803f9a9999bf0ad7233c6866863f000000000000803f0000803f00000000000000000000803f9a99993f0ad7233c6866863f000000000000803f0000803f000000000000803f0000803f
+    _typelessdata: 0000003f0ad7233c000000bf000000000000803f0000803f0000803f0000000000000000000000bf0ad7233c000000bf000000000000803f0000803f0000803f0000803f00000000000000bf0ad7233c0000003f000000000000803f0000803f0000803f00000000000000000000003f0ad7233c0000003f000000000000803f0000803f0000803f0000803f000000006666263f0ad7233c666626bf000000000000803f0000803f00000000000000000000803f666626bf0ad7233c666626bf000000000000803f0000803f000000000000803f0000803f666626bf0ad7233c6666263f000000000000803f0000803f00000000000000000000803f6666263f0ad7233c6666263f000000000000803f0000803f000000000000803f0000803f
   m_CompressedMesh:
     m_Vertices:
       m_NumItems: 0
@@ -1127,7 +1094,7 @@ Mesh:
     m_UVInfo: 0
   m_LocalAABB:
     m_Center: {x: 0, y: 0.01, z: 0}
-    m_Extent: {x: 1.2, y: 0, z: 1.0500002}
+    m_Extent: {x: 0.65, y: 0, z: 0.65}
   m_MeshUsageFlags: 0
   m_BakedConvexCollisionMesh: 
   m_BakedTriangleCollisionMesh: 
@@ -1654,7 +1621,6 @@ MonoBehaviour:
   _head: {fileID: 1198462162}
   _ears: {fileID: 1719029911}
   wireframe: 0
-  flip: {fileID: 0}
 --- !u!1 &929885766
 GameObject:
   m_ObjectHideFlags: 0
@@ -1876,6 +1842,35 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
+--- !u!21 &982010925
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: Sprites/Default
+  m_Shader: {fileID: 10753, guid: 0000000000000000f000000000000000, type: 0}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 5
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  m_SavedProperties:
+    serializedVersion: 2
+    m_TexEnvs:
+    - first:
+        name: _MainTex
+      second:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - first:
+        name: PixelSnap
+      second: 0
+    m_Colors:
+    - first:
+        name: _Color
+      second: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &1021416839
 GameObject:
   m_ObjectHideFlags: 0
@@ -1908,6 +1903,7 @@ MonoBehaviour:
   boundariesSDK: 1
   headsetSDK: 1
   controllerSDK: 1
+  autoManageScriptDefines: 1
   actualBoundaries: {fileID: 1738779862}
   actualHeadset: {fileID: 768841348}
   actualLeftController: {fileID: 400535854}
@@ -2398,14 +2394,14 @@ MonoBehaviour:
   size: 0
   color: {r: 0, g: 1, b: 1, a: 1}
   vertices:
-  - {x: 1.0500001, y: 0.01, z: -0.90000015}
-  - {x: -1.0500001, y: 0.01, z: -0.90000015}
-  - {x: -1.0500001, y: 0.01, z: 0.90000015}
-  - {x: 1.0500001, y: 0.01, z: 0.90000015}
-  - {x: 1.2, y: 0.01, z: -1.0500002}
-  - {x: -1.2, y: 0.01, z: -1.0500002}
-  - {x: -1.2, y: 0.01, z: 1.0500002}
-  - {x: 1.2, y: 0.01, z: 1.0500002}
+  - {x: 0.5, y: 0.01, z: -0.5}
+  - {x: -0.5, y: 0.01, z: -0.5}
+  - {x: -0.5, y: 0.01, z: 0.5}
+  - {x: 0.5, y: 0.01, z: 0.5}
+  - {x: 0.65, y: 0.01, z: -0.65}
+  - {x: -0.65, y: 0.01, z: -0.65}
+  - {x: -0.65, y: 0.01, z: 0.65}
+  - {x: 0.65, y: 0.01, z: 0.65}
 --- !u!33 &1738779869
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -2413,7 +2409,7 @@ MeshFilter:
     type: 2}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1738779862}
-  m_Mesh: {fileID: 579987401}
+  m_Mesh: {fileID: 599792462}
 --- !u!23 &1738779870
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -2428,7 +2424,7 @@ MeshRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_Materials:
-  - {fileID: 263828513}
+  - {fileID: 982010925}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
@@ -2459,6 +2455,7 @@ MonoBehaviour:
   left: {fileID: 400535854}
   right: {fileID: 1525851884}
   objects: []
+  assignAllBeforeIdentified: 0
 --- !u!4 &1738779872
 Transform:
   m_ObjectHideFlags: 0
@@ -2939,6 +2936,7 @@ MonoBehaviour:
     buttonOneModelPath: 
     buttonTwoModelPath: 
     systemMenuModelPath: 
+    startMenuModelPath: 
   elementHighlighterOverrides:
     body: {fileID: 0}
     trigger: {fileID: 0}
@@ -2948,6 +2946,7 @@ MonoBehaviour:
     buttonOne: {fileID: 0}
     buttonTwo: {fileID: 0}
     systemMenu: {fileID: 0}
+    startMenu: {fileID: 0}
 --- !u!114 &1884158758
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2964,7 +2963,7 @@ MonoBehaviour:
   grabToggleButton: 7
   useToggleButton: 3
   uiClickButton: 3
-  menuToggleButton: 12
+  menuToggleButton: 14
   axisFidelity: 1
   triggerClickThreshold: 1
   gripClickThreshold: 1
@@ -2985,6 +2984,7 @@ MonoBehaviour:
   buttonOneTouched: 0
   buttonTwoPressed: 0
   buttonTwoTouched: 0
+  startMenuPressed: 0
   pointerPressed: 0
   grabPressed: 0
   usePressed: 0
