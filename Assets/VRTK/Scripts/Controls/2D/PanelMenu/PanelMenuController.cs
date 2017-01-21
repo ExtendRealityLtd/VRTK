@@ -1,4 +1,4 @@
-// Panel Menu Controller|Prefabs|0070
+﻿// Panel Menu Controller|Prefabs|0070
 namespace VRTK
 {
     using System.Collections;
@@ -106,7 +106,7 @@ namespace VRTK
             {
                 if (rotateTowards == null)
                 {
-                    rotateTowards = GameObject.Find("Camera (eye)");
+                    rotateTowards = VRTK_DeviceFinder.HeadsetCamera().gameObject;
                     if (rotateTowards == null)
                     {
                         Debug.LogWarning("The PanelMenuController could not automatically find an object to rotate towards.");
