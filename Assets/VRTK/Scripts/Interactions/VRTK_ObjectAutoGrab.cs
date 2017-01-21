@@ -91,11 +91,6 @@ namespace VRTK
 
                 if (grabbableObject.isGrabbable && !grabbableObject.IsGrabbed())
                 {
-                    if (grabbableObject.grabAttachMechanicScript && grabbableObject.grabAttachMechanicScript.IsKinematic())
-                    {
-                        grabbableObject.isKinematic = true;
-                    }
-
                     grabbableObject.transform.position = transform.position;
                     controllerTouch.ForceStopTouching();
                     controllerTouch.ForceTouch(grabbableObject.gameObject);
