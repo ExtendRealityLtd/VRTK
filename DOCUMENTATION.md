@@ -2596,7 +2596,22 @@ It is possible to automatically grab an Interactable Object to a specific contro
 ### Inspector Parameters
 
  * **Object To Grab:** A game object (either within the scene or a prefab) that will be grabbed by the controller on game start.
+ * **Object Is Prefab:** If the `Object To Grab` is a prefab then this needs to be checked, if the `Object To Grab` already exists in the scene then this needs to be unchecked.
  * **Clone Grabbed Object:** If this is checked then the Object To Grab will be cloned into a new object and attached to the controller leaving the existing object in the scene. This is required if the same object is to be grabbed to both controllers as a single object cannot be grabbed by different controllers at the same time. It is also required to clone a grabbed object if it is a prefab as it needs to exist within the scene to be grabbed.
+ * **Always Clone On Enable:** If `Clone Grabbed Object` is checked and this is checked, then whenever this script is disabled and re-enabled, it will always create a new clone of the object to grab. If this is false then the original cloned object will attempt to be grabbed again. If the original cloned object no longer exists then a new clone will be created.
+
+### Class Methods
+
+#### ClearPreviousClone/0
+
+  > `public void ClearPreviousClone()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The ClearPreviousClone method resets the previous cloned object to null to ensure when the script is re-enabled that a new cloned object is created, rather than the original clone being grabbed again.
 
 ### Example
 
