@@ -140,7 +140,7 @@ namespace VRTK
             return rightControllerGlance;
         }
 
-        private void OnEnable()
+        protected virtual void OnEnable()
         {
             VRTK_ObjectCache.registeredHeadsetControllerAwareness = this;
             headset = VRTK_DeviceFinder.HeadsetTransform();
@@ -148,14 +148,14 @@ namespace VRTK
             rightController = VRTK_DeviceFinder.GetControllerRightHand();
         }
 
-        private void OnDisable()
+        protected virtual void OnDisable()
         {
             VRTK_ObjectCache.registeredHeadsetControllerAwareness = null;
             leftController = null;
             rightController = null;
         }
 
-        private void Update()
+        protected virtual void Update()
         {
             if (trackLeftController)
             {

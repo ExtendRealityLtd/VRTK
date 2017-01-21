@@ -249,7 +249,7 @@ namespace VRTK
             DisableBodyPhysics();
         }
 
-        protected void FixedUpdate()
+        protected virtual void FixedUpdate()
         {
             CheckBodyCollisionsSetting();
             if (!isFalling)
@@ -267,7 +267,7 @@ namespace VRTK
             UpdateCollider();
         }
 
-        protected void OnCollisionEnter(Collision collision)
+        protected virtual void OnCollisionEnter(Collision collision)
         {
             if (!VRTK_PlayerObject.IsPlayerObject(collision.gameObject) && currentValidFloorObject && !currentValidFloorObject.Equals(collision.gameObject))
             {
@@ -276,7 +276,7 @@ namespace VRTK
             }
         }
 
-        protected void OnTriggerEnter(Collider collider)
+        protected virtual void OnTriggerEnter(Collider collider)
         {
             if (!VRTK_PlayerObject.IsPlayerObject(collider.gameObject) && currentValidFloorObject && !currentValidFloorObject.Equals(collider.gameObject))
             {
@@ -286,7 +286,7 @@ namespace VRTK
 
         }
 
-        protected void OnCollisionExit(Collision collision)
+        protected virtual void OnCollisionExit(Collision collision)
         {
             if (currentCollidingObject && currentCollidingObject.Equals(collision.gameObject))
             {
@@ -295,12 +295,23 @@ namespace VRTK
             }
         }
 
-        protected void OnTriggerExit(Collider collider)
+        protected virtual void OnTriggerExit(Collider collider)
         {
             if (currentCollidingObject && currentCollidingObject.Equals(collider.gameObject))
             {
                 OnStopColliding(SetBodyPhysicsEvent(currentCollidingObject));
                 currentCollidingObject = null;
+            }
+        }
+
+        protected virtual void OnDrawGizmos()
+        {
+            if (drawDebugGizmo && headset)
+            {
+                Gizmos.color = Color.green;
+                Gizmos.DrawSphere(new Vector3(headset.position.x, headset.position.y - 0.3f, headset.position.z), 0.075f);
+                Gizmos.color = Color.red;
+                Gizmos.DrawSphere(new Vector3(currentStandingPosition.x, headset.position.y - 0.3f, currentStandingPosition.y), 0.05f);
             }
         }
 
@@ -849,17 +860,6 @@ namespace VRTK
             teleporter.blinkTransitionSpeed = originalblinkTransitionSpeed;
 
             resetPhysicsAfterTeleport = true;
-        }
-
-        private void OnDrawGizmos()
-        {
-            if (drawDebugGizmo && headset)
-            {
-                Gizmos.color = Color.green;
-                Gizmos.DrawSphere(new Vector3(headset.position.x, headset.position.y - 0.3f, headset.position.z), 0.075f);
-                Gizmos.color = Color.red;
-                Gizmos.DrawSphere(new Vector3(currentStandingPosition.x, headset.position.y - 0.3f, currentStandingPosition.y), 0.05f);
-            }
         }
     }
 }

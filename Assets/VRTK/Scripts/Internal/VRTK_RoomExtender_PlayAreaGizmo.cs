@@ -12,7 +12,7 @@
         private Transform playArea;
         private VRTK_RoomExtender roomExtender;
 
-        private void Awake()
+        protected virtual void Awake()
         {
             playArea = VRTK_DeviceFinder.PlayAreaTransform();
             roomExtender = FindObjectOfType<VRTK_RoomExtender>();
@@ -23,7 +23,7 @@
             }
         }
 
-        private void OnDrawGizmos()
+        protected virtual void OnDrawGizmos()
         {
             if (!drawWireframeWhenSelectedOnly)
             {
@@ -31,7 +31,7 @@
             }
         }
 
-        private void OnDrawGizmosSelected()
+        protected virtual void OnDrawGizmosSelected()
         {
             if (drawWireframeWhenSelectedOnly)
             {

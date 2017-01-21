@@ -40,7 +40,7 @@ namespace VRTK
         /// <param name="showController">If true then the controller will attempt to be made visible when no longer touching, if false then the controller will be hidden on touch.</param>
         /// <param name="controllerActions">The controller to apply the visibility state to.</param>
         /// <param name="obj">The object that is currently being interacted with by the controller which is passed through to the visibility to prevent the object from being hidden as well.</param>
-        public void ToggleControllerOnTouch(bool showController, VRTK_ControllerActions controllerActions, GameObject obj)
+        public virtual void ToggleControllerOnTouch(bool showController, VRTK_ControllerActions controllerActions, GameObject obj)
         {
             if (hideControllerOnTouch)
             {
@@ -55,7 +55,7 @@ namespace VRTK
         /// <param name="showController">If true then the controller will attempt to be made visible when no longer grabbing, if false then the controller will be hidden on grab.</param>
         /// <param name="controllerActions">The controller to apply the visibility state to.</param>
         /// <param name="obj">The object that is currently being interacted with by the controller which is passed through to the visibility to prevent the object from being hidden as well.</param>
-        public void ToggleControllerOnGrab(bool showController, VRTK_ControllerActions controllerActions, GameObject obj)
+        public virtual void ToggleControllerOnGrab(bool showController, VRTK_ControllerActions controllerActions, GameObject obj)
         {
             if (hideControllerOnGrab)
             {
@@ -77,7 +77,7 @@ namespace VRTK
         /// <param name="showController">If true then the controller will attempt to be made visible when no longer using, if false then the controller will be hidden on use.</param>
         /// <param name="controllerActions">The controller to apply the visibility state to.</param>
         /// <param name="obj">The object that is currently being interacted with by the controller which is passed through to the visibility to prevent the object from being hidden as well.</param>
-        public void ToggleControllerOnUse(bool showController, VRTK_ControllerActions controllerActions, GameObject obj)
+        public virtual void ToggleControllerOnUse(bool showController, VRTK_ControllerActions controllerActions, GameObject obj)
         {
             if (hideControllerOnUse)
             {

@@ -234,13 +234,24 @@ namespace VRTK
             }
         }
 
-        private void FixedUpdate()
+        protected virtual void FixedUpdate()
         {
             // update reference position if no force is acting on the button to support scenarios where the button is moved at runtime with a connected body
             if (forceCount == 0 && cj.connectedBody)
             {
                 restingPosition = transform.position;
             }
+        }
+
+        protected virtual void OnCollisionExit(Collision collision)
+        {
+            // TODO: this will not always be triggered for some reason, we probably need some "healing"
+            forceCount -= 1;
+        }
+
+        protected virtual void OnCollisionEnter(Collision collision)
+        {
+            forceCount += 1;
         }
 
         private ButtonDirection DetectDirection()
@@ -405,17 +416,6 @@ namespace VRTK
         private Vector3 GetForceVector()
         {
             return -activationDir.normalized * buttonStrength;
-        }
-
-        private void OnCollisionExit(Collision collision)
-        {
-            // TODO: this will not always be triggered for some reason, we probably need some "healing"
-            forceCount -= 1;
-        }
-
-        private void OnCollisionEnter(Collision collision)
-        {
-            forceCount += 1;
         }
     }
 }

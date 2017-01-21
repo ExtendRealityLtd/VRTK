@@ -223,7 +223,7 @@ namespace VRTK
         private ControllerInteractionEventHandler touchpadUntouched;
         private VRTK_ControllerEvents controllerEvents;
 
-        private void Awake()
+        protected virtual void Awake()
         {
             touchpadAxisChanged = new ControllerInteractionEventHandler(DoTouchpadAxisChanged);
             touchpadUntouched = new ControllerInteractionEventHandler(DoTouchpadTouchEnd);
@@ -244,7 +244,7 @@ namespace VRTK
             }
         }
 
-        private void Start()
+        protected virtual void Start()
         {
             VRTK_PlayerObject.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.CameraRig);
             SetControllerListeners(controllerLeftHand);
@@ -254,6 +254,57 @@ namespace VRTK
             if (!bodyCollider)
             {
                 Debug.LogError("No body collider could be found in the play area. VRTK_BodyPhysics script is required in one of the scene GameObjects.");
+            }
+        }
+
+        protected virtual void Update()
+        {
+            multiplyMovement = (controllerEvents && movementMultiplierButton != VRTK_ControllerEvents.ButtonAlias.Undefined && controllerEvents.IsButtonPressed(movementMultiplierButton));
+        }
+
+        protected virtual void FixedUpdate()
+        {
+            bool moved = false;
+
+            if (horizontalAxisMovement == HorizontalAxisMovement.Slide)
+            {
+                CalculateSpeed(true, ref strafeSpeed, touchAxis.x);
+                moved = true;
+            }
+            else if (horizontalAxisMovement == HorizontalAxisMovement.Rotate)
+            {
+                Rotate();
+            }
+            else if ((horizontalAxisMovement == HorizontalAxisMovement.SnapRotate || horizontalAxisMovement == HorizontalAxisMovement.SnapRotateWithBlink) && Mathf.Abs(touchAxis.x) > horizontalDeadzone && lastSnapRotate < Time.timeSinceLevelLoad)
+            {
+                SnapRotate(horizontalAxisMovement == HorizontalAxisMovement.SnapRotateWithBlink);
+            }
+            else if ((horizontalAxisMovement == HorizontalAxisMovement.Warp || horizontalAxisMovement == HorizontalAxisMovement.WarpWithBlink) && Mathf.Abs(touchAxis.x) > horizontalDeadzone && lastWarp < Time.timeSinceLevelLoad)
+            {
+                Warp(horizontalAxisMovement == HorizontalAxisMovement.WarpWithBlink, true);
+            }
+
+            if (flipDirectionEnabled && touchAxis.y < 0)
+            {
+                if (touchAxis.y < -flipDeadzone && lastFlip < Time.timeSinceLevelLoad)
+                {
+                    lastFlip = Time.timeSinceLevelLoad + flipDelay;
+                    SnapRotate(flipBlink, true);
+                }
+            }
+            else if (verticalAxisMovement == VerticalAxisMovement.Slide)
+            {
+                CalculateSpeed(false, ref movementSpeed, touchAxis.y);
+                moved = true;
+            }
+            else if ((verticalAxisMovement == VerticalAxisMovement.Warp || verticalAxisMovement == VerticalAxisMovement.WarpWithBlink) && Mathf.Abs(touchAxis.y) > verticalDeadzone && lastWarp < Time.timeSinceLevelLoad)
+            {
+                Warp(verticalAxisMovement == VerticalAxisMovement.WarpWithBlink);
+            }
+
+            if (moved)
+            {
+                Move();
             }
         }
 
@@ -426,57 +477,6 @@ namespace VRTK
         private void ReleaseBlink()
         {
             VRTK_SDK_Bridge.HeadsetFade(Color.clear, blinkFadeInTime);
-        }
-
-        private void Update()
-        {
-            multiplyMovement = (controllerEvents && movementMultiplierButton != VRTK_ControllerEvents.ButtonAlias.Undefined && controllerEvents.IsButtonPressed(movementMultiplierButton));
-        }
-
-        private void FixedUpdate()
-        {
-            bool moved = false;
-
-            if (horizontalAxisMovement == HorizontalAxisMovement.Slide)
-            {
-                CalculateSpeed(true, ref strafeSpeed, touchAxis.x);
-                moved = true;
-            }
-            else if (horizontalAxisMovement == HorizontalAxisMovement.Rotate)
-            {
-                Rotate();
-            }
-            else if ((horizontalAxisMovement == HorizontalAxisMovement.SnapRotate || horizontalAxisMovement == HorizontalAxisMovement.SnapRotateWithBlink) && Mathf.Abs(touchAxis.x) > horizontalDeadzone && lastSnapRotate < Time.timeSinceLevelLoad)
-            {
-                SnapRotate(horizontalAxisMovement == HorizontalAxisMovement.SnapRotateWithBlink);
-            }
-            else if ((horizontalAxisMovement == HorizontalAxisMovement.Warp || horizontalAxisMovement == HorizontalAxisMovement.WarpWithBlink) && Mathf.Abs(touchAxis.x) > horizontalDeadzone && lastWarp < Time.timeSinceLevelLoad)
-            {
-                Warp(horizontalAxisMovement == HorizontalAxisMovement.WarpWithBlink, true);
-            }
-
-            if (flipDirectionEnabled && touchAxis.y < 0)
-            {
-                if (touchAxis.y < -flipDeadzone && lastFlip < Time.timeSinceLevelLoad)
-                {
-                    lastFlip = Time.timeSinceLevelLoad + flipDelay;
-                    SnapRotate(flipBlink, true);
-                }
-            }
-            else if (verticalAxisMovement == VerticalAxisMovement.Slide)
-            {
-                CalculateSpeed(false, ref movementSpeed, touchAxis.y);
-                moved = true;
-            }
-            else if ((verticalAxisMovement == VerticalAxisMovement.Warp || verticalAxisMovement == VerticalAxisMovement.WarpWithBlink) && Mathf.Abs(touchAxis.y) > verticalDeadzone && lastWarp < Time.timeSinceLevelLoad)
-            {
-                Warp(verticalAxisMovement == VerticalAxisMovement.WarpWithBlink);
-            }
-
-            if (moved)
-            {
-                Move();
-            }
         }
 
         private void SetControllerListeners(GameObject controller)

@@ -50,6 +50,31 @@ namespace VRTK
         private VRTK_BodyPhysics bodyPhysics;
         private bool isClimbing = false;
 
+        protected virtual void Awake()
+        {
+            playArea = VRTK_DeviceFinder.PlayAreaTransform();
+            bodyPhysics = GetComponent<VRTK_BodyPhysics>();
+        }
+
+        protected virtual void OnEnable()
+        {
+            InitListeners(true);
+        }
+
+        protected virtual void OnDisable()
+        {
+            Ungrab(false, 0, climbingObject);
+            InitListeners(false);
+        }
+
+        protected virtual void Update()
+        {
+            if (isClimbing)
+            {
+                playArea.position = startPosition - (GetPosition(grabbingController.transform) - startControllerPosition);
+            }
+        }
+
         private void OnPlayerClimbStarted(PlayerClimbEventArgs e)
         {
             if (PlayerClimbStarted != null)
@@ -72,31 +97,6 @@ namespace VRTK
             e.controllerIndex = controllerIndex;
             e.target = target;
             return e;
-        }
-
-        private void Awake()
-        {
-            playArea = VRTK_DeviceFinder.PlayAreaTransform();
-            bodyPhysics = GetComponent<VRTK_BodyPhysics>();
-        }
-
-        private void OnEnable()
-        {
-            InitListeners(true);
-        }
-
-        private void OnDisable()
-        {
-            Ungrab(false, 0, climbingObject);
-            InitListeners(false);
-        }
-
-        private void Update()
-        {
-            if (isClimbing)
-            {
-                playArea.position = startPosition - (GetPosition(grabbingController.transform) - startControllerPosition);
-            }
         }
 
         private void InitListeners(bool state)

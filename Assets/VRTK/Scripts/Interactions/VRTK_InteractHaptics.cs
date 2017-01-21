@@ -41,7 +41,7 @@ namespace VRTK
         /// The HapticsOnTouch method triggers the haptic feedback on the given controller for the settings associated with touch.
         /// </summary>
         /// <param name="controllerActions">The controller to activate the haptic feedback on.</param>
-        public void HapticsOnTouch(VRTK_ControllerActions controllerActions)
+        public virtual void HapticsOnTouch(VRTK_ControllerActions controllerActions)
         {
             if (strengthOnTouch > 0 && durationOnTouch > 0f)
             {
@@ -53,7 +53,7 @@ namespace VRTK
         /// The HapticsOnGrab method triggers the haptic feedback on the given controller for the settings associated with grab.
         /// </summary>
         /// <param name="controllerActions">The controller to activate the haptic feedback on.</param>
-        public void HapticsOnGrab(VRTK_ControllerActions controllerActions)
+        public virtual void HapticsOnGrab(VRTK_ControllerActions controllerActions)
         {
             if (strengthOnGrab > 0 && durationOnGrab > 0f)
             {
@@ -65,7 +65,7 @@ namespace VRTK
         /// The HapticsOnUse method triggers the haptic feedback on the given controller for the settings associated with use.
         /// </summary>
         /// <param name="controllerActions">The controller to activate the haptic feedback on.</param>
-        public void HapticsOnUse(VRTK_ControllerActions controllerActions)
+        public virtual void HapticsOnUse(VRTK_ControllerActions controllerActions)
         {
             if (strengthOnUse > 0 && durationOnUse > 0f)
             {

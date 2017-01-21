@@ -191,7 +191,7 @@ namespace VRTK
             return (controllerCollisionDetector.GetComponents<Collider>().Length > 0 ? controllerCollisionDetector.GetComponents<Collider>() : controllerCollisionDetector.GetComponentsInChildren<Collider>());
         }
 
-        private void Awake()
+        protected virtual void Awake()
         {
             controllerEvents = GetComponent<VRTK_ControllerEvents>();
             controllerActions = GetComponent<VRTK_ControllerActions>();
@@ -201,7 +201,7 @@ namespace VRTK
             defaultColliderPrefab = Resources.Load(VRTK_SDK_Bridge.GetControllerDefaultColliderPath(controllerHand));
         }
 
-        private void OnEnable()
+        protected virtual void OnEnable()
         {
             triggerRumble = false;
             CreateTouchCollider();
@@ -210,10 +210,82 @@ namespace VRTK
             originalUseAlias = VRTK_ControllerEvents.ButtonAlias.Undefined;
         }
 
-        private void OnDisable()
+        protected virtual void OnDisable()
         {
             ForceStopTouching();
             DestroyTouchCollider();
+        }
+
+        protected virtual void OnTriggerEnter(Collider collider)
+        {
+            var colliderInteractableObject = TriggerStart(collider);
+            //If the new collider is not part of the existing touched object (and the object isn't being grabbed) then start touching the new object
+            if (touchedObject != null && colliderInteractableObject && touchedObject != colliderInteractableObject && !touchedObject.GetComponent<VRTK_InteractableObject>().IsGrabbed())
+            {
+                CancelInvoke("ResetTriggerRumble");
+                ResetTriggerRumble();
+                ForceStopTouching();
+                triggerIsColliding = true;
+            }
+        }
+
+        protected virtual void OnTriggerExit(Collider collider)
+        {
+            if (touchedObjectActiveColliders.Contains(collider))
+            {
+                touchedObjectActiveColliders.Remove(collider);
+            }
+        }
+
+        protected virtual void OnTriggerStay(Collider collider)
+        {
+            var colliderInteractableObject = TriggerStart(collider);
+
+            if (touchedObject == null || touchedObject == collider.gameObject)
+            {
+                triggerIsColliding = true;
+            }
+
+            if (touchedObject == null && colliderInteractableObject && IsObjectInteractable(collider.gameObject))
+            {
+                touchedObject = colliderInteractableObject;
+                var touchedObjectScript = touchedObject.GetComponent<VRTK_InteractableObject>();
+                var touchingObject = gameObject;
+
+                //If this controller is not allowed to touch this interactable object then clean up touch and return before initiating a touch.
+                if (!touchedObjectScript.IsValidInteractableController(gameObject, touchedObjectScript.allowedTouchControllers))
+                {
+                    CleanupEndTouch();
+                    return;
+                }
+                StoreTouchedObjectColliders(collider);
+                CheckButtonOverrides(touchedObjectScript);
+
+                touchedObjectScript.ToggleHighlight(true);
+                ToggleControllerVisibility(false);
+                CheckRumbleController(touchedObjectScript);
+                touchedObjectScript.StartTouching(touchingObject);
+
+                OnControllerTouchInteractableObject(SetControllerInteractEvent(touchedObject));
+            }
+        }
+
+        protected virtual void FixedUpdate()
+        {
+            if (!triggerIsColliding && !triggerWasColliding)
+            {
+                CheckStopTouching();
+            }
+            triggerWasColliding = triggerIsColliding;
+            triggerIsColliding = false;
+        }
+
+        protected virtual void LateUpdate()
+        {
+            if (touchedObjectActiveColliders.Count == 0)
+            {
+                CheckStopTouching();
+            }
         }
 
         private GameObject GetColliderInteractableObject(Collider collider)
@@ -268,78 +340,6 @@ namespace VRTK
                     doHaptics.HapticsOnTouch(controllerActions);
                     Invoke("ResetTriggerRumble", doHaptics.durationOnTouch);
                 }
-            }
-        }
-
-        private void OnTriggerEnter(Collider collider)
-        {
-            var colliderInteractableObject = TriggerStart(collider);
-            //If the new collider is not part of the existing touched object (and the object isn't being grabbed) then start touching the new object
-            if (touchedObject != null && colliderInteractableObject && touchedObject != colliderInteractableObject && !touchedObject.GetComponent<VRTK_InteractableObject>().IsGrabbed())
-            {
-                CancelInvoke("ResetTriggerRumble");
-                ResetTriggerRumble();
-                ForceStopTouching();
-                triggerIsColliding = true;
-            }
-        }
-
-        private void OnTriggerExit(Collider collider)
-        {
-            if (touchedObjectActiveColliders.Contains(collider))
-            {
-                touchedObjectActiveColliders.Remove(collider);
-            }
-        }
-
-        private void OnTriggerStay(Collider collider)
-        {
-            var colliderInteractableObject = TriggerStart(collider);
-
-            if (touchedObject == null || touchedObject == collider.gameObject)
-            {
-                triggerIsColliding = true;
-            }
-
-            if (touchedObject == null && colliderInteractableObject && IsObjectInteractable(collider.gameObject))
-            {
-                touchedObject = colliderInteractableObject;
-                var touchedObjectScript = touchedObject.GetComponent<VRTK_InteractableObject>();
-                var touchingObject = gameObject;
-
-                //If this controller is not allowed to touch this interactable object then clean up touch and return before initiating a touch.
-                if (!touchedObjectScript.IsValidInteractableController(gameObject, touchedObjectScript.allowedTouchControllers))
-                {
-                    CleanupEndTouch();
-                    return;
-                }
-                StoreTouchedObjectColliders(collider);
-                CheckButtonOverrides(touchedObjectScript);
-
-                touchedObjectScript.ToggleHighlight(true);
-                ToggleControllerVisibility(false);
-                CheckRumbleController(touchedObjectScript);
-                touchedObjectScript.StartTouching(touchingObject);
-
-                OnControllerTouchInteractableObject(SetControllerInteractEvent(touchedObject));
-            }
-        }
-
-        private void FixedUpdate()
-        {
-            if (!triggerIsColliding && !triggerWasColliding)
-            {
-                CheckStopTouching();
-            }
-            triggerWasColliding = triggerIsColliding;
-            triggerIsColliding = false;
-        }
-
-        private void LateUpdate()
-        {
-            if (touchedObjectActiveColliders.Count == 0)
-            {
-                CheckStopTouching();
             }
         }
 

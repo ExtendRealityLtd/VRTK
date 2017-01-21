@@ -945,19 +945,7 @@ namespace VRTK
             return false;
         }
 
-        private ControllerInteractionEventArgs SetButtonEvent(ref bool buttonBool, bool value, float buttonPressure)
-        {
-            var controllerIndex = VRTK_DeviceFinder.GetControllerIndex(gameObject);
-            buttonBool = value;
-            ControllerInteractionEventArgs e;
-            e.controllerIndex = controllerIndex;
-            e.buttonPressure = buttonPressure;
-            e.touchpadAxis = VRTK_SDK_Bridge.GetTouchpadAxisOnIndex(controllerIndex);
-            e.touchpadAngle = CalculateTouchpadAxisAngle(e.touchpadAxis);
-            return e;
-        }
-
-        private void OnEnable()
+        protected virtual void OnEnable()
         {
             var actualController = VRTK_DeviceFinder.GetActualController(gameObject);
             if (actualController)
@@ -972,7 +960,7 @@ namespace VRTK
             }
         }
 
-        private void OnDisable()
+        protected virtual void OnDisable()
         {
             Invoke("DisableEvents", 0f);
             var actualController = VRTK_DeviceFinder.GetActualController(gameObject);
@@ -987,238 +975,7 @@ namespace VRTK
             }
         }
 
-        private void TrackedControllerEnabled(object sender, VRTKTrackedControllerEventArgs e)
-        {
-            var nullBool = false;
-            OnControllerEnabled(SetButtonEvent(ref nullBool, true, 0f));
-        }
-
-        private void TrackedControllerDisabled(object sender, VRTKTrackedControllerEventArgs e)
-        {
-            DisableEvents();
-            var nullBool = false;
-            OnControllerDisabled(SetButtonEvent(ref nullBool, false, 0f));
-        }
-
-        private void TrackedControllerIndexChanged(object sender, VRTKTrackedControllerEventArgs e)
-        {
-            var nullBool = false;
-            OnControllerIndexChanged(SetButtonEvent(ref nullBool, false, 0f));
-        }
-
-        private float CalculateTouchpadAxisAngle(Vector2 axis)
-        {
-            float angle = Mathf.Atan2(axis.y, axis.x) * Mathf.Rad2Deg;
-            angle = 90.0f - angle;
-            if (angle < 0)
-            {
-                angle += 360.0f;
-            }
-            return angle;
-        }
-
-        private void EmitAlias(ButtonAlias type, bool touchDown, float buttonPressure, ref bool buttonBool)
-        {
-            if (pointerToggleButton == type)
-            {
-                if (touchDown)
-                {
-                    pointerPressed = true;
-                    OnAliasPointerOn(SetButtonEvent(ref buttonBool, true, buttonPressure));
-                }
-                else
-                {
-                    pointerPressed = false;
-                    OnAliasPointerOff(SetButtonEvent(ref buttonBool, false, buttonPressure));
-                }
-            }
-
-            if (pointerSetButton == type)
-            {
-                if (!touchDown)
-                {
-                    OnAliasPointerSet(SetButtonEvent(ref buttonBool, false, buttonPressure));
-                }
-            }
-
-            if (grabToggleButton == type)
-            {
-                if (touchDown)
-                {
-                    grabPressed = true;
-                    OnAliasGrabOn(SetButtonEvent(ref buttonBool, true, buttonPressure));
-                }
-                else
-                {
-                    grabPressed = false;
-                    OnAliasGrabOff(SetButtonEvent(ref buttonBool, false, buttonPressure));
-                }
-            }
-
-            if (useToggleButton == type)
-            {
-                if (touchDown)
-                {
-                    usePressed = true;
-                    OnAliasUseOn(SetButtonEvent(ref buttonBool, true, buttonPressure));
-                }
-                else
-                {
-                    usePressed = false;
-                    OnAliasUseOff(SetButtonEvent(ref buttonBool, false, buttonPressure));
-                }
-            }
-
-            if (uiClickButton == type)
-            {
-                if (touchDown)
-                {
-                    uiClickPressed = true;
-                    OnAliasUIClickOn(SetButtonEvent(ref buttonBool, true, buttonPressure));
-                }
-                else
-                {
-                    uiClickPressed = false;
-                    OnAliasUIClickOff(SetButtonEvent(ref buttonBool, false, buttonPressure));
-                }
-            }
-
-            if (menuToggleButton == type)
-            {
-                if (touchDown)
-                {
-                    menuPressed = true;
-                    OnAliasMenuOn(SetButtonEvent(ref buttonBool, true, buttonPressure));
-                }
-                else
-                {
-                    menuPressed = false;
-                    OnAliasMenuOff(SetButtonEvent(ref buttonBool, false, buttonPressure));
-                }
-            }
-        }
-
-        private bool Vector2ShallowEquals(Vector2 vectorA, Vector2 vectorB)
-        {
-            var distanceVector = vectorA - vectorB;
-            return Math.Round(Mathf.Abs(distanceVector.x), axisFidelity, MidpointRounding.AwayFromZero) < float.Epsilon
-                   && Math.Round(Mathf.Abs(distanceVector.y), axisFidelity, MidpointRounding.AwayFromZero) < float.Epsilon;
-        }
-
-        private void DisableEvents()
-        {
-            if (triggerPressed)
-            {
-                OnTriggerReleased(SetButtonEvent(ref triggerPressed, false, 0f));
-                EmitAlias(ButtonAlias.Trigger_Press, false, 0f, ref triggerPressed);
-            }
-
-            if (triggerTouched)
-            {
-                OnTriggerTouchEnd(SetButtonEvent(ref triggerTouched, false, 0f));
-                EmitAlias(ButtonAlias.Trigger_Touch, false, 0f, ref triggerTouched);
-            }
-
-            if (triggerHairlinePressed)
-            {
-                OnTriggerHairlineEnd(SetButtonEvent(ref triggerHairlinePressed, false, 0f));
-                EmitAlias(ButtonAlias.Trigger_Hairline, false, 0f, ref triggerHairlinePressed);
-            }
-
-            if (triggerClicked)
-            {
-                OnTriggerUnclicked(SetButtonEvent(ref triggerClicked, false, 0f));
-                EmitAlias(ButtonAlias.Trigger_Click, false, 0f, ref triggerClicked);
-            }
-
-            if (gripPressed)
-            {
-                OnGripReleased(SetButtonEvent(ref gripPressed, false, 0f));
-                EmitAlias(ButtonAlias.Grip_Press, false, 0f, ref gripPressed);
-            }
-
-            if (gripTouched)
-            {
-                OnGripTouchEnd(SetButtonEvent(ref gripTouched, false, 0f));
-                EmitAlias(ButtonAlias.Grip_Touch, false, 0f, ref gripTouched);
-            }
-
-            if (gripHairlinePressed)
-            {
-                OnGripHairlineEnd(SetButtonEvent(ref gripHairlinePressed, false, 0f));
-                EmitAlias(ButtonAlias.Grip_Hairline, false, 0f, ref gripHairlinePressed);
-            }
-
-            if (gripClicked)
-            {
-                OnGripUnclicked(SetButtonEvent(ref gripClicked, false, 0f));
-                EmitAlias(ButtonAlias.Grip_Click, false, 0f, ref gripClicked);
-            }
-
-            if (touchpadPressed)
-            {
-                OnTouchpadReleased(SetButtonEvent(ref touchpadPressed, false, 0f));
-                EmitAlias(ButtonAlias.Touchpad_Press, false, 0f, ref touchpadPressed);
-            }
-
-            if (touchpadTouched)
-            {
-                OnTouchpadTouchEnd(SetButtonEvent(ref touchpadTouched, false, 0f));
-                EmitAlias(ButtonAlias.Touchpad_Touch, false, 0f, ref touchpadTouched);
-            }
-
-            if (buttonOnePressed)
-            {
-                OnButtonOneReleased(SetButtonEvent(ref buttonOnePressed, false, 0f));
-                EmitAlias(ButtonAlias.Button_One_Press, false, 0f, ref buttonOnePressed);
-            }
-
-            if (buttonOneTouched)
-            {
-                OnButtonOneTouchEnd(SetButtonEvent(ref buttonOneTouched, false, 0f));
-                EmitAlias(ButtonAlias.Button_One_Touch, false, 0f, ref buttonOneTouched);
-            }
-
-            if (buttonTwoPressed)
-            {
-                OnButtonTwoReleased(SetButtonEvent(ref buttonTwoPressed, false, 0f));
-                EmitAlias(ButtonAlias.Button_Two_Press, false, 0f, ref buttonTwoPressed);
-            }
-
-            if (buttonTwoTouched)
-            {
-                OnButtonTwoTouchEnd(SetButtonEvent(ref buttonTwoTouched, false, 0f));
-                EmitAlias(ButtonAlias.Button_Two_Touch, false, 0f, ref buttonTwoTouched);
-            }
-
-            if (startMenuPressed)
-            {
-                OnStartMenuReleased(SetButtonEvent(ref startMenuPressed, false, 0f));
-                EmitAlias(ButtonAlias.Start_Menu_Press, false, 0f, ref startMenuPressed);
-            }
-
-            triggerAxisChanged = false;
-            gripAxisChanged = false;
-            touchpadAxisChanged = false;
-
-            var controllerIndex = VRTK_DeviceFinder.GetControllerIndex(gameObject);
-
-            if (controllerIndex < uint.MaxValue)
-            {
-                Vector2 currentTriggerAxis = VRTK_SDK_Bridge.GetTriggerAxisOnIndex(controllerIndex);
-                Vector2 currentGripAxis = VRTK_SDK_Bridge.GetGripAxisOnIndex(controllerIndex);
-                Vector2 currentTouchpadAxis = VRTK_SDK_Bridge.GetTouchpadAxisOnIndex(controllerIndex);
-
-                // Save current touch and trigger settings to detect next change.
-                touchpadAxis = new Vector2(currentTouchpadAxis.x, currentTouchpadAxis.y);
-                triggerAxis = new Vector2(currentTriggerAxis.x, currentTriggerAxis.y);
-                gripAxis = new Vector2(currentGripAxis.x, currentGripAxis.y);
-                hairTriggerDelta = VRTK_SDK_Bridge.GetTriggerHairlineDeltaOnIndex(controllerIndex);
-                hairGripDelta = VRTK_SDK_Bridge.GetGripHairlineDeltaOnIndex(controllerIndex);
-            }
-        }
-
-        private void Update()
+        protected virtual void Update()
         {
             var controllerIndex = VRTK_DeviceFinder.GetControllerIndex(gameObject);
 
@@ -1467,6 +1224,249 @@ namespace VRTK
 
             hairTriggerDelta = VRTK_SDK_Bridge.GetTriggerHairlineDeltaOnIndex(controllerIndex);
             hairGripDelta = VRTK_SDK_Bridge.GetGripHairlineDeltaOnIndex(controllerIndex);
+        }
+
+        private ControllerInteractionEventArgs SetButtonEvent(ref bool buttonBool, bool value, float buttonPressure)
+        {
+            var controllerIndex = VRTK_DeviceFinder.GetControllerIndex(gameObject);
+            buttonBool = value;
+            ControllerInteractionEventArgs e;
+            e.controllerIndex = controllerIndex;
+            e.buttonPressure = buttonPressure;
+            e.touchpadAxis = VRTK_SDK_Bridge.GetTouchpadAxisOnIndex(controllerIndex);
+            e.touchpadAngle = CalculateTouchpadAxisAngle(e.touchpadAxis);
+            return e;
+        }
+
+        private void TrackedControllerEnabled(object sender, VRTKTrackedControllerEventArgs e)
+        {
+            var nullBool = false;
+            OnControllerEnabled(SetButtonEvent(ref nullBool, true, 0f));
+        }
+
+        private void TrackedControllerDisabled(object sender, VRTKTrackedControllerEventArgs e)
+        {
+            DisableEvents();
+            var nullBool = false;
+            OnControllerDisabled(SetButtonEvent(ref nullBool, false, 0f));
+        }
+
+        private void TrackedControllerIndexChanged(object sender, VRTKTrackedControllerEventArgs e)
+        {
+            var nullBool = false;
+            OnControllerIndexChanged(SetButtonEvent(ref nullBool, false, 0f));
+        }
+
+        private float CalculateTouchpadAxisAngle(Vector2 axis)
+        {
+            float angle = Mathf.Atan2(axis.y, axis.x) * Mathf.Rad2Deg;
+            angle = 90.0f - angle;
+            if (angle < 0)
+            {
+                angle += 360.0f;
+            }
+            return angle;
+        }
+
+        private void EmitAlias(ButtonAlias type, bool touchDown, float buttonPressure, ref bool buttonBool)
+        {
+            if (pointerToggleButton == type)
+            {
+                if (touchDown)
+                {
+                    pointerPressed = true;
+                    OnAliasPointerOn(SetButtonEvent(ref buttonBool, true, buttonPressure));
+                }
+                else
+                {
+                    pointerPressed = false;
+                    OnAliasPointerOff(SetButtonEvent(ref buttonBool, false, buttonPressure));
+                }
+            }
+
+            if (pointerSetButton == type)
+            {
+                if (!touchDown)
+                {
+                    OnAliasPointerSet(SetButtonEvent(ref buttonBool, false, buttonPressure));
+                }
+            }
+
+            if (grabToggleButton == type)
+            {
+                if (touchDown)
+                {
+                    grabPressed = true;
+                    OnAliasGrabOn(SetButtonEvent(ref buttonBool, true, buttonPressure));
+                }
+                else
+                {
+                    grabPressed = false;
+                    OnAliasGrabOff(SetButtonEvent(ref buttonBool, false, buttonPressure));
+                }
+            }
+
+            if (useToggleButton == type)
+            {
+                if (touchDown)
+                {
+                    usePressed = true;
+                    OnAliasUseOn(SetButtonEvent(ref buttonBool, true, buttonPressure));
+                }
+                else
+                {
+                    usePressed = false;
+                    OnAliasUseOff(SetButtonEvent(ref buttonBool, false, buttonPressure));
+                }
+            }
+
+            if (uiClickButton == type)
+            {
+                if (touchDown)
+                {
+                    uiClickPressed = true;
+                    OnAliasUIClickOn(SetButtonEvent(ref buttonBool, true, buttonPressure));
+                }
+                else
+                {
+                    uiClickPressed = false;
+                    OnAliasUIClickOff(SetButtonEvent(ref buttonBool, false, buttonPressure));
+                }
+            }
+
+            if (menuToggleButton == type)
+            {
+                if (touchDown)
+                {
+                    menuPressed = true;
+                    OnAliasMenuOn(SetButtonEvent(ref buttonBool, true, buttonPressure));
+                }
+                else
+                {
+                    menuPressed = false;
+                    OnAliasMenuOff(SetButtonEvent(ref buttonBool, false, buttonPressure));
+                }
+            }
+        }
+
+        private bool Vector2ShallowEquals(Vector2 vectorA, Vector2 vectorB)
+        {
+            var distanceVector = vectorA - vectorB;
+            return Math.Round(Mathf.Abs(distanceVector.x), axisFidelity, MidpointRounding.AwayFromZero) < float.Epsilon
+                   && Math.Round(Mathf.Abs(distanceVector.y), axisFidelity, MidpointRounding.AwayFromZero) < float.Epsilon;
+        }
+
+        private void DisableEvents()
+        {
+            if (triggerPressed)
+            {
+                OnTriggerReleased(SetButtonEvent(ref triggerPressed, false, 0f));
+                EmitAlias(ButtonAlias.Trigger_Press, false, 0f, ref triggerPressed);
+            }
+
+            if (triggerTouched)
+            {
+                OnTriggerTouchEnd(SetButtonEvent(ref triggerTouched, false, 0f));
+                EmitAlias(ButtonAlias.Trigger_Touch, false, 0f, ref triggerTouched);
+            }
+
+            if (triggerHairlinePressed)
+            {
+                OnTriggerHairlineEnd(SetButtonEvent(ref triggerHairlinePressed, false, 0f));
+                EmitAlias(ButtonAlias.Trigger_Hairline, false, 0f, ref triggerHairlinePressed);
+            }
+
+            if (triggerClicked)
+            {
+                OnTriggerUnclicked(SetButtonEvent(ref triggerClicked, false, 0f));
+                EmitAlias(ButtonAlias.Trigger_Click, false, 0f, ref triggerClicked);
+            }
+
+            if (gripPressed)
+            {
+                OnGripReleased(SetButtonEvent(ref gripPressed, false, 0f));
+                EmitAlias(ButtonAlias.Grip_Press, false, 0f, ref gripPressed);
+            }
+
+            if (gripTouched)
+            {
+                OnGripTouchEnd(SetButtonEvent(ref gripTouched, false, 0f));
+                EmitAlias(ButtonAlias.Grip_Touch, false, 0f, ref gripTouched);
+            }
+
+            if (gripHairlinePressed)
+            {
+                OnGripHairlineEnd(SetButtonEvent(ref gripHairlinePressed, false, 0f));
+                EmitAlias(ButtonAlias.Grip_Hairline, false, 0f, ref gripHairlinePressed);
+            }
+
+            if (gripClicked)
+            {
+                OnGripUnclicked(SetButtonEvent(ref gripClicked, false, 0f));
+                EmitAlias(ButtonAlias.Grip_Click, false, 0f, ref gripClicked);
+            }
+
+            if (touchpadPressed)
+            {
+                OnTouchpadReleased(SetButtonEvent(ref touchpadPressed, false, 0f));
+                EmitAlias(ButtonAlias.Touchpad_Press, false, 0f, ref touchpadPressed);
+            }
+
+            if (touchpadTouched)
+            {
+                OnTouchpadTouchEnd(SetButtonEvent(ref touchpadTouched, false, 0f));
+                EmitAlias(ButtonAlias.Touchpad_Touch, false, 0f, ref touchpadTouched);
+            }
+
+            if (buttonOnePressed)
+            {
+                OnButtonOneReleased(SetButtonEvent(ref buttonOnePressed, false, 0f));
+                EmitAlias(ButtonAlias.Button_One_Press, false, 0f, ref buttonOnePressed);
+            }
+
+            if (buttonOneTouched)
+            {
+                OnButtonOneTouchEnd(SetButtonEvent(ref buttonOneTouched, false, 0f));
+                EmitAlias(ButtonAlias.Button_One_Touch, false, 0f, ref buttonOneTouched);
+            }
+
+            if (buttonTwoPressed)
+            {
+                OnButtonTwoReleased(SetButtonEvent(ref buttonTwoPressed, false, 0f));
+                EmitAlias(ButtonAlias.Button_Two_Press, false, 0f, ref buttonTwoPressed);
+            }
+
+            if (buttonTwoTouched)
+            {
+                OnButtonTwoTouchEnd(SetButtonEvent(ref buttonTwoTouched, false, 0f));
+                EmitAlias(ButtonAlias.Button_Two_Touch, false, 0f, ref buttonTwoTouched);
+            }
+
+            if (startMenuPressed)
+            {
+                OnStartMenuReleased(SetButtonEvent(ref startMenuPressed, false, 0f));
+                EmitAlias(ButtonAlias.Start_Menu_Press, false, 0f, ref startMenuPressed);
+            }
+
+            triggerAxisChanged = false;
+            gripAxisChanged = false;
+            touchpadAxisChanged = false;
+
+            var controllerIndex = VRTK_DeviceFinder.GetControllerIndex(gameObject);
+
+            if (controllerIndex < uint.MaxValue)
+            {
+                Vector2 currentTriggerAxis = VRTK_SDK_Bridge.GetTriggerAxisOnIndex(controllerIndex);
+                Vector2 currentGripAxis = VRTK_SDK_Bridge.GetGripAxisOnIndex(controllerIndex);
+                Vector2 currentTouchpadAxis = VRTK_SDK_Bridge.GetTouchpadAxisOnIndex(controllerIndex);
+
+                // Save current touch and trigger settings to detect next change.
+                touchpadAxis = new Vector2(currentTouchpadAxis.x, currentTouchpadAxis.y);
+                triggerAxis = new Vector2(currentTriggerAxis.x, currentTriggerAxis.y);
+                gripAxis = new Vector2(currentGripAxis.x, currentGripAxis.y);
+                hairTriggerDelta = VRTK_SDK_Bridge.GetTriggerHairlineDeltaOnIndex(controllerIndex);
+                hairGripDelta = VRTK_SDK_Bridge.GetGripHairlineDeltaOnIndex(controllerIndex);
+            }
         }
     }
 }

@@ -55,7 +55,7 @@
             return e;
         }
 
-        private void OnEnable()
+        protected virtual void OnEnable()
         {
             aliasController = VRTK_DeviceFinder.GetScriptAliasController(gameObject);
 
@@ -66,25 +66,12 @@
             enableControllerCoroutine = StartCoroutine(Enable());
         }
 
-        private void OnDisable()
+        protected virtual void OnDisable()
         {
             Invoke("Disable", 0f);
         }
 
-        private IEnumerator Enable()
-        {
-            yield return new WaitForEndOfFrame();
-
-            while (!gameObject.activeInHierarchy)
-            {
-                yield return null;
-            }
-
-            currentIndex = VRTK_DeviceFinder.GetControllerIndex(gameObject);
-            OnControllerEnabled(SetEventPayload());
-        }
-
-        private void Disable()
+        protected virtual void Disable()
         {
             if (enableControllerCoroutine != null)
             {
@@ -94,7 +81,7 @@
             OnControllerDisabled(SetEventPayload());
         }
 
-        private void Update()
+        protected virtual void Update()
         {
             var checkIndex = VRTK_DeviceFinder.GetControllerIndex(gameObject);
             if (currentIndex < uint.MaxValue && checkIndex != currentIndex)
@@ -110,6 +97,19 @@
             {
                 aliasController.SetActive(true);
             }
+        }
+
+        private IEnumerator Enable()
+        {
+            yield return new WaitForEndOfFrame();
+
+            while (!gameObject.activeInHierarchy)
+            {
+                yield return null;
+            }
+
+            currentIndex = VRTK_DeviceFinder.GetControllerIndex(gameObject);
+            OnControllerEnabled(SetEventPayload());
         }
     }
 }

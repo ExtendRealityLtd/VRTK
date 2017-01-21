@@ -37,7 +37,7 @@ namespace VRTK
         private Canvas startCanvas;
         private CanvasGroup canvasGroup;
 
-        public void OnBeginDrag(PointerEventData eventData)
+        public virtual void OnBeginDrag(PointerEventData eventData)
         {
             startPosition = transform.position;
             startRotation = transform.rotation;
@@ -59,12 +59,12 @@ namespace VRTK
             }
         }
 
-        public void OnDrag(PointerEventData eventData)
+        public virtual void OnDrag(PointerEventData eventData)
         {
             SetDragPosition(eventData);
         }
 
-        public void OnEndDrag(PointerEventData eventData)
+        public virtual void OnEndDrag(PointerEventData eventData)
         {
             canvasGroup.blocksRaycasts = true;
             dragTransform = null;
@@ -107,7 +107,7 @@ namespace VRTK
             startCanvas = null;
         }
 
-        private void OnEnable()
+        protected virtual void OnEnable()
         {
             canvasGroup = GetComponent<CanvasGroup>();
             if (restrictToDropZone && !GetComponentInParent<VRTK_UIDropZone>())

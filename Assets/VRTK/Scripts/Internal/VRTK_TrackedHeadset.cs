@@ -4,7 +4,7 @@
 
     public class VRTK_TrackedHeadset : MonoBehaviour
     {
-        private void Update()
+        protected virtual void Update()
         {
             VRTK_SDK_Bridge.HeadsetProcessUpdate();
         }
