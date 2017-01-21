@@ -175,6 +175,7 @@ namespace VRTK
             var ioCheck = objectToSnap.GetComponentInParent<VRTK_InteractableObject>();
             if (ioCheck)
             {
+                ioCheck.SaveCurrentState();
                 StopCoroutine("AttemptForceSnapAtEndOfFrame");
                 if (ioCheck.IsGrabbed())
                 {
