@@ -2625,6 +2625,7 @@ This directory contains scripts that are used to provide different object highli
 
  * [Base Highlighter](#base-highlighter-vrtk_basehighlighter)
  * [Material Colour Swap](#material-colour-swap-vrtk_materialcolorswaphighlighter)
+ * [Material Property Block Colour Swap](#material-property-block-colour-swap-vrtk_materialpropertyblockcolorswaphighlighter)
  * [Outline Object Copy](#outline-object-copy-vrtk_outlineobjectcopyhighlighter)
 
 ---
@@ -2801,6 +2802,48 @@ The Unhighlight method returns the object back to it's original colour.
 `VRTK/Examples/005_Controller_BasicObjectGrabbing` demonstrates the solid highlighting on the green cube, red cube and flying saucer when the controller touches it.
 
 `VRTK/Examples/035_Controller_OpacityAndHighlighting` demonstrates the solid highlighting if the right controller collides with the green box or if any of the buttons are pressed.
+
+---
+
+## Material Property Block Colour Swap (VRTK_MaterialPropertyBlockColorSwapHighlighter)
+ > extends [VRTK_MaterialColorSwapHighlighter](#material-colour-swap-vrtk_materialcolorswaphighlighter)
+
+### Overview
+
+This highlighter swaps the texture colour for the given highlight colour using MaterialPropertyBlocks.
+The effect of this highlighter is the same as of the VRTK_MaterialColorSwapHighlighter.cs but this highlighter
+can additionally handle objects which make use material instances.
+
+Due to the way the object material is interacted with, changing the material colour will break Draw Call Batching in Unity whilst the object is highlighted.
+
+The Draw Call Batching will resume on the original material when the item is no longer highlighted.
+
+### Class Methods
+
+#### Initialise/2
+
+  > `public override void Initialise(Color? color = null, Dictionary<string, object> options = null)`
+
+  * Parameters
+   * `Color? color` - Not used.
+   * `Dictionary<string, object> options` - A dictionary array containing the highlighter options:
+     * `<'resetMainTexture', bool>` - Determines if the default main texture should be cleared on highlight. `true` to reset the main default texture, `false` to not reset it.
+  * Returns
+   * _none_
+
+The Initialise method sets up the highlighter for use.
+
+#### Unhighlight/2
+
+  > `public override void Unhighlight(Color? color = null, float duration = 0f)`
+
+  * Parameters
+   * `Color? color` - Not used.
+   * `float duration` - Not used.
+  * Returns
+   * _none_
+
+The Unhighlight method returns the object back to it's original colour.
 
 ---
 
