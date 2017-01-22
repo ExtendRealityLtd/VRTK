@@ -29,8 +29,8 @@ namespace VRTK.Highlighters
 
         private Dictionary<string, Material[]> originalSharedRendererMaterials = new Dictionary<string, Material[]>();
         private Dictionary<string, Material[]> originalRendererMaterials = new Dictionary<string, Material[]>();
-        private Dictionary<string, Coroutine> faderRoutines;
-        private bool resetMainTexture = false;
+        protected Dictionary<string, Coroutine> faderRoutines;
+        protected bool resetMainTexture = false;
 
         /// <summary>
         /// The Initialise method sets up the highlighter for use.
@@ -102,7 +102,7 @@ namespace VRTK.Highlighters
             }
         }
 
-        private void StoreOriginalMaterials()
+        protected virtual void StoreOriginalMaterials()
         {
             originalSharedRendererMaterials.Clear();
             originalRendererMaterials.Clear();
@@ -115,7 +115,7 @@ namespace VRTK.Highlighters
             }
         }
 
-        private void ChangeToHighlightColor(Color color, float duration = 0f)
+        protected virtual void ChangeToHighlightColor(Color color, float duration = 0f)
         {
             foreach (Renderer renderer in GetComponentsInChildren<Renderer>(true))
             {
