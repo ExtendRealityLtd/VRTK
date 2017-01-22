@@ -1,4 +1,4 @@
-﻿// Simple Colour Swap|Highlighters|0020
+﻿// Material Property Block Colour Swap|Highlighters|40021
 namespace VRTK.Highlighters
 {
     using UnityEngine;
@@ -6,7 +6,9 @@ namespace VRTK.Highlighters
     using System.Collections.Generic;
 
     /// <summary>
-    /// This highlighter swaps the texture colour for the given highlight colour using MaterialPropertyBlock.
+    /// This highlighter swaps the texture colour for the given highlight colour using MaterialPropertyBlocks.
+    /// The effect of this highlighter is the same as of the VRTK_MaterialColorSwapHighlighter.cs but this highlighter
+    /// can additionally handle objects which make use material instances.
     /// </summary>
     /// <remarks>
     /// Due to the way the object material is interacted with, changing the material colour will break Draw Call Batching in Unity whilst the object is highlighted.
@@ -27,35 +29,8 @@ namespace VRTK.Highlighters
         {
             originalMaterialPropertyBlocks = new Dictionary<string, MaterialPropertyBlock>();
             highlightMaterialPropertyBlocks = new Dictionary<string, MaterialPropertyBlock>();
-            faderRoutines = new Dictionary<string, Coroutine>();
-            string key = "resetMainTexture";
-            if (options != null && options.ContainsKey(key) && options[key] != null)
-            {
-                resetMainTexture = (bool)options[key];
-            }
-            ResetHighlighter();
-        }
-
-        /// <summary>
-        /// The ResetHighlighter method stores the object's materials and shared materials prior to highlighting.
-        /// </summary>
-        public override void ResetHighlighter()
-        {
-            StoreOriginalMaterials();
-        }
-
-        /// <summary>
-        /// The Highlight method initiates the change of colour on the object and will fade to that colour (from a base white colour) for the given duration.
-        /// </summary>
-        /// <param name="color">The colour to highlight to.</param>
-        /// <param name="duration">The time taken to fade to the highlighted colour.</param>
-        public override void Highlight(Color? color, float duration = 0f)
-        {
-            if (color == null)
-            {
-                return;
-            }
-            ChangeToHighlightColor((Color)color, duration);
+            // call to parent highlighter
+            base.Initialise(color, options);
         }
 
         /// <summary>
@@ -91,7 +66,7 @@ namespace VRTK.Highlighters
             }
         }
 
-        override protected void StoreOriginalMaterials()
+        protected override void StoreOriginalMaterials()
         {
             originalMaterialPropertyBlocks.Clear();
             highlightMaterialPropertyBlocks.Clear();
@@ -104,7 +79,7 @@ namespace VRTK.Highlighters
             }
         }
 
-        private void ChangeToHighlightColor(Color color, float duration = 0f)
+        protected override void ChangeToHighlightColor(Color color, float duration = 0f)
         {
             foreach (Renderer renderer in GetComponentsInChildren<Renderer>(true))
             {

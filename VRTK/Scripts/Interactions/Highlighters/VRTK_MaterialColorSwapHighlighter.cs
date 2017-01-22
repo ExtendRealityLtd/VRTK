@@ -109,25 +109,13 @@ namespace VRTK.Highlighters
             foreach (Renderer renderer in GetComponentsInChildren<Renderer>(true))
             {
                 var objectReference = renderer.gameObject.GetInstanceID().ToString();
-                // create real clones of the materials to be restored to avoid overwriting
-                Material[] sharedMaterials = new Material[renderer.sharedMaterials.Length];
-                for (int i = 0; i < renderer.sharedMaterials.Length; i++)
-                {
-                    sharedMaterials[i] = new Material(renderer.sharedMaterials[i]);
-                }
-                originalSharedRendererMaterials[objectReference] = sharedMaterials;
-                // create real clones of the materials to be restored to avoid overwriting
-                Material[] materials = new Material[renderer.materials.Length];
-                for (int i = 0; i < renderer.materials.Length; i++)
-                {
-                    materials[i] = new Material(renderer.materials[i]);
-                }
-                originalRendererMaterials[objectReference] = materials;
+                originalSharedRendererMaterials[objectReference] = renderer.sharedMaterials;
+                originalRendererMaterials[objectReference] = renderer.materials;
                 renderer.sharedMaterials = originalSharedRendererMaterials[objectReference];
             }
         }
 
-        private void ChangeToHighlightColor(Color color, float duration = 0f)
+        protected virtual void ChangeToHighlightColor(Color color, float duration = 0f)
         {
             foreach (Renderer renderer in GetComponentsInChildren<Renderer>(true))
             {
