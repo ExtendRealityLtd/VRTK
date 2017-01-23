@@ -142,7 +142,7 @@ namespace VRTK
             }
         }
 
-        private void Awake()
+        protected virtual void Awake()
         {
             controllerActions = GetComponentInParent<VRTK_ControllerActions>();
             triggerInitialised = false;
@@ -174,7 +174,7 @@ namespace VRTK
             InitialiseTips();
         }
 
-        private void OnEnable()
+        protected virtual void OnEnable()
         {
             if (controllerActions)
             {
@@ -191,7 +191,7 @@ namespace VRTK
             }
         }
 
-        private void OnDisable()
+        protected virtual void OnDisable()
         {
             if (controllerActions)
             {
@@ -203,6 +203,15 @@ namespace VRTK
             {
                 headsetControllerAware.ControllerGlanceEnter -= new HeadsetControllerAwareEventHandler(DoGlanceEnterController);
                 headsetControllerAware.ControllerGlanceExit -= new HeadsetControllerAwareEventHandler(DoGlanceExitController);
+            }
+        }
+
+        protected virtual void Update()
+        {
+            var actualController = VRTK_DeviceFinder.GetActualController(controllerActions.gameObject);
+            if (!TipsInitialised() && actualController && actualController.activeInHierarchy)
+            {
+                InitialiseTips();
             }
         }
 
@@ -342,15 +351,6 @@ namespace VRTK
             }
 
             return returnTransform;
-        }
-
-        private void Update()
-        {
-            var actualController = VRTK_DeviceFinder.GetActualController(controllerActions.gameObject);
-            if (!TipsInitialised() && actualController && actualController.activeInHierarchy)
-            {
-                InitialiseTips();
-            }
         }
     }
 }

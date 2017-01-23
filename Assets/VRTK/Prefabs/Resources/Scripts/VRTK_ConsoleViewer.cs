@@ -57,16 +57,16 @@ namespace VRTK
             lastMessage = "";
         }
 
-        private void Awake()
+        protected virtual void Awake()
         {
             logTypeColors = new Dictionary<LogType, Color>()
-        {
-            { LogType.Assert, assertMessage },
-            { LogType.Error, errorMessage },
-            { LogType.Exception, exceptionMessage },
-            { LogType.Log, infoMessage },
-            { LogType.Warning, warningMessage }
-        };
+            {
+                { LogType.Assert, assertMessage },
+                { LogType.Error, errorMessage },
+                { LogType.Exception, exceptionMessage },
+                { LogType.Log, infoMessage },
+                { LogType.Warning, warningMessage }
+            };
             scrollWindow = transform.FindChild("Panel/Scroll View").GetComponent<ScrollRect>();
             consoleRect = transform.FindChild("Panel/Scroll View/Viewport/Content").GetComponent<RectTransform>();
             consoleOutput = transform.FindChild("Panel/Scroll View/Viewport/Content/ConsoleOutput").GetComponent<Text>();
@@ -75,12 +75,12 @@ namespace VRTK
             ClearLog();
         }
 
-        private void OnEnable()
+        protected virtual void OnEnable()
         {
             Application.logMessageReceived += HandleLog;
         }
 
-        private void OnDisable()
+        protected virtual void OnDisable()
         {
             Application.logMessageReceived -= HandleLog;
             consoleRect.sizeDelta = Vector2.zero;

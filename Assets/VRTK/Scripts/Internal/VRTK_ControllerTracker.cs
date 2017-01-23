@@ -6,7 +6,7 @@
     {
         private VRTK_TrackedController trackedController;
 
-        private void OnEnable()
+        protected virtual void OnEnable()
         {
             var actualController = VRTK_DeviceFinder.GetActualController(gameObject);
             if (actualController)
@@ -15,7 +15,7 @@
             }
         }
 
-        private void Update()
+        protected virtual void Update()
         {
             if (trackedController && transform.parent != trackedController.transform)
             {

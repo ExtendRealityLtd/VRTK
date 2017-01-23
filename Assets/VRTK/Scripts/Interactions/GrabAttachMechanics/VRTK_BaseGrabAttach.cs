@@ -189,7 +189,7 @@ namespace VRTK.GrabAttachMechanics
             FlipSnapHandle(leftSnapHandle);
         }
 
-        private void Awake()
+        protected virtual void Awake()
         {
             Initialise();
         }

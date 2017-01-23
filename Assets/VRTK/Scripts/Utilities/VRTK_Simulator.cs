@@ -41,7 +41,7 @@ namespace VRTK
         private Vector3 initialPosition;
         private Quaternion initialRotation;
 
-        private void Start()
+        protected virtual void Start()
         {
             // don't run in builds outside the editor
             if (onlyInEditor && !Application.isEditor)
@@ -69,7 +69,7 @@ namespace VRTK
             initialRotation = playArea.rotation;
         }
 
-        private void Update()
+        protected virtual void Update()
         {
             Vector3 movDir = Vector3.zero;
             Vector3 rotDir = Vector3.zero;

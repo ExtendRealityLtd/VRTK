@@ -88,7 +88,7 @@ namespace VRTK
             return headsetColliding;
         }
 
-        private void OnEnable()
+        protected virtual void OnEnable()
         {
             VRTK_ObjectCache.registeredHeadsetCollider = this;
             headset = VRTK_DeviceFinder.HeadsetTransform();
@@ -100,7 +100,7 @@ namespace VRTK
             }
         }
 
-        private void OnDisable()
+        protected virtual void OnDisable()
         {
             if (headset)
             {
@@ -110,7 +110,7 @@ namespace VRTK
             }
         }
 
-        private void Update()
+        protected virtual void Update()
         {
             if (headsetColliderContainer && headsetColliderContainer.transform.parent != headset)
             {
@@ -211,6 +211,29 @@ namespace VRTK
             }
         }
 
+        protected virtual void OnTriggerStay(Collider collider)
+        {
+            if (enabled && !VRTK_PlayerObject.IsPlayerObject(collider.gameObject) && ValidTarget(collider.transform))
+            {
+                parent.headsetColliding = true;
+                parent.collidingWith = collider;
+                parent.OnHeadsetCollisionDetect(SetHeadsetCollisionEvent(collider, transform));
+            }
+        }
+
+        protected virtual void OnTriggerExit(Collider collider)
+        {
+            EndCollision(collider);
+        }
+
+        protected virtual void Update()
+        {
+            if (parent.headsetColliding && (!parent.collidingWith || !parent.collidingWith.gameObject.activeInHierarchy))
+            {
+                EndCollision(parent.collidingWith);
+            }
+        }
+
         private HeadsetCollisionEventArgs SetHeadsetCollisionEvent(Collider collider, Transform currentTransform)
         {
             HeadsetCollisionEventArgs e;
@@ -222,29 +245,6 @@ namespace VRTK
         private bool ValidTarget(Transform target)
         {
             return (target && !(VRTK_PolicyList.Check(target.gameObject, targetListPolicy)));
-        }
-
-        private void OnTriggerStay(Collider collider)
-        {
-            if (enabled && !VRTK_PlayerObject.IsPlayerObject(collider.gameObject) && ValidTarget(collider.transform))
-            {
-                parent.headsetColliding = true;
-                parent.collidingWith = collider;
-                parent.OnHeadsetCollisionDetect(SetHeadsetCollisionEvent(collider, transform));
-            }
-        }
-
-        private void OnTriggerExit(Collider collider)
-        {
-            EndCollision(collider);
-        }
-
-        private void Update()
-        {
-            if (parent.headsetColliding && (!parent.collidingWith || !parent.collidingWith.gameObject.activeInHierarchy))
-            {
-                EndCollision(parent.collidingWith);
-            }
         }
     }
 }

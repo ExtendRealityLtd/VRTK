@@ -32,7 +32,7 @@ namespace VRTK
             previousClonedObject = null;
         }
 
-        private void OnEnable()
+        protected virtual void OnEnable()
         {
             //Must always clone if the object is a prefab
             if (objectIsPrefab)

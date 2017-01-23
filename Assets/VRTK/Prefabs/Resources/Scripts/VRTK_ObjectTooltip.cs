@@ -61,9 +61,14 @@ namespace VRTK
             ResetTooltip();
         }
 
-        private void Start()
+        protected virtual void Start()
         {
             ResetTooltip();
+        }
+
+        protected virtual void Update()
+        {
+            DrawLine();
         }
 
         private void SetContainer()
@@ -110,11 +115,6 @@ namespace VRTK
                 line.SetPosition(0, drawLineFrom.position);
                 line.SetPosition(1, drawLineTo.position);
             }
-        }
-
-        private void Update()
-        {
-            DrawLine();
         }
     }
 }

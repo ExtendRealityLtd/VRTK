@@ -301,7 +301,7 @@ Adding the `VRTK_SnapDropZone_UnityEvents` component to `VRTK_SnapDropZone` obje
 
 #### InitaliseHighlightObject/1
 
-  > `public void InitaliseHighlightObject(bool removeOldObject = false)`
+  > `public virtual void InitaliseHighlightObject(bool removeOldObject = false)`
 
   * Parameters
    * `bool removeOldObject` - If this is set to true then it attempts to delete the old highlight object if it exists. Defaults to `false`
@@ -312,7 +312,7 @@ The InitaliseHighlightObject method sets up the highlight object based on the gi
 
 #### ForceSnap/1
 
-  > `public void ForceSnap(GameObject objectToSnap)`
+  > `public virtual void ForceSnap(GameObject objectToSnap)`
 
   * Parameters
    * `GameObject objectToSnap` - The GameObject to attempt to snap.
@@ -323,7 +323,7 @@ the ForceSnap method attempts to automatically attach a valid game object to the
 
 #### ForceUnsnap/0
 
-  > `public void ForceUnsnap()`
+  > `public virtual void ForceUnsnap()`
 
   * Parameters
    * _none_
@@ -858,7 +858,7 @@ Adding the `VRTK_BasicTeleport_UnityEvents` component to `VRTK_BasicTeleport` ob
 
 #### InitDestinationSetListener/2
 
-  > `public void InitDestinationSetListener(GameObject markerMaker, bool register)`
+  > `public virtual void InitDestinationSetListener(GameObject markerMaker, bool register)`
 
   * Parameters
    * `GameObject markerMaker` - The game object that is used to generate destination marker events, such as a controller.
@@ -870,7 +870,7 @@ The InitDestinationSetListener method is used to register the teleport script to
 
 #### ToggleTeleportEnabled/1
 
-  > `public void ToggleTeleportEnabled(bool state)`
+  > `public virtual void ToggleTeleportEnabled(bool state)`
 
   * Parameters
    * `bool state` - Toggles whether the teleporter is enabled or disabled.
@@ -878,6 +878,18 @@ The InitDestinationSetListener method is used to register the teleport script to
    * _none_
 
 The ToggleTeleportEnabled method is used to determine whether the teleporter will initiate a teleport on a destination set event, if the state is true then the teleporter will work as normal, if the state is false then the teleporter will not be operational.
+
+#### ValidLocation/2
+
+  > `public virtual bool ValidLocation(Transform target, Vector3 destinationPosition)`
+
+  * Parameters
+   * `Transform target` - The Transform that the destination marker is touching.
+   * `Vector3 destinationPosition` - The position in world space that is the destination.
+  * Returns
+   * `bool` - Returns true if the target is a valid location.
+
+The ValidLocation method determines if the given target is a location that can be teleported to
 
 ### Example
 
@@ -1555,7 +1567,7 @@ The IsControllerVisible method returns true if the controller is currently visib
 
 #### ToggleControllerModel/2
 
-  > `public void ToggleControllerModel(bool state, GameObject grabbedChildObject)`
+  > `public virtual void ToggleControllerModel(bool state, GameObject grabbedChildObject)`
 
   * Parameters
    * `bool state` - The visibility state to toggle the controller to, `true` will make the controller visible - `false` will hide the controller model.
@@ -1567,7 +1579,7 @@ The ToggleControllerModel method is used to turn on or off the controller model 
 
 #### SetControllerOpacity/1
 
-  > `public void SetControllerOpacity(float alpha)`
+  > `public virtual void SetControllerOpacity(float alpha)`
 
   * Parameters
    * `float alpha` - The alpha level to apply to opacity of the controller object. `0f` to `1f`.
@@ -1578,7 +1590,7 @@ The SetControllerOpacity method allows the opacity of the controller model to be
 
 #### HighlightControllerElement/3
 
-  > `public void HighlightControllerElement(GameObject element, Color? highlight, float fadeDuration = 0f)`
+  > `public virtual void HighlightControllerElement(GameObject element, Color? highlight, float fadeDuration = 0f)`
 
   * Parameters
    * `GameObject element` - The element of the controller to apply the highlight to.
@@ -1591,7 +1603,7 @@ The HighlightControllerElement method allows for an element of the controller to
 
 #### UnhighlightControllerElement/1
 
-  > `public void UnhighlightControllerElement(GameObject element)`
+  > `public virtual void UnhighlightControllerElement(GameObject element)`
 
   * Parameters
    * `GameObject element` - The element of the controller to remove the highlight from.
@@ -1602,7 +1614,7 @@ The UnhighlightControllerElement method is the inverse of the HighlightControlle
 
 #### ToggleHighlightControllerElement/4
 
-  > `public void ToggleHighlightControllerElement(bool state, GameObject element, Color? highlight = null, float duration = 0f)`
+  > `public virtual void ToggleHighlightControllerElement(bool state, GameObject element, Color? highlight = null, float duration = 0f)`
 
   * Parameters
    * `bool state` - The highlight colour state, `true` will enable the highlight on the given element and `false` will remove the highlight from the given element.
@@ -1616,7 +1628,7 @@ The ToggleHighlightControllerElement method is a shortcut method that makes it e
 
 #### ToggleHighlightTrigger/3
 
-  > `public void ToggleHighlightTrigger(bool state, Color? highlight = null, float duration = 0f)`
+  > `public virtual void ToggleHighlightTrigger(bool state, Color? highlight = null, float duration = 0f)`
 
   * Parameters
    * `bool state` - The highlight colour state, `true` will enable the highlight on the trigger and `false` will remove the highlight from the trigger.
@@ -1629,7 +1641,7 @@ The ToggleHighlightTrigger method is a shortcut method that makes it easier to t
 
 #### ToggleHighlightGrip/3
 
-  > `public void ToggleHighlightGrip(bool state, Color? highlight = null, float duration = 0f)`
+  > `public virtual void ToggleHighlightGrip(bool state, Color? highlight = null, float duration = 0f)`
 
   * Parameters
    * `bool state` - The highlight colour state, `true` will enable the highlight on the grip and `false` will remove the highlight from the grip.
@@ -1642,7 +1654,7 @@ The ToggleHighlightGrip method is a shortcut method that makes it easier to togg
 
 #### ToggleHighlightTouchpad/3
 
-  > `public void ToggleHighlightTouchpad(bool state, Color? highlight = null, float duration = 0f)`
+  > `public virtual void ToggleHighlightTouchpad(bool state, Color? highlight = null, float duration = 0f)`
 
   * Parameters
    * `bool state` - The highlight colour state, `true` will enable the highlight on the touchpad and `false` will remove the highlight from the touchpad.
@@ -1655,7 +1667,7 @@ The ToggleHighlightTouchpad method is a shortcut method that makes it easier to 
 
 #### ToggleHighlightButtonOne/3
 
-  > `public void ToggleHighlightButtonOne(bool state, Color? highlight = null, float duration = 0f)`
+  > `public virtual void ToggleHighlightButtonOne(bool state, Color? highlight = null, float duration = 0f)`
 
   * Parameters
    * `bool state` - The highlight colour state, `true` will enable the highlight on button one and `false` will remove the highlight from button one.
@@ -1668,7 +1680,7 @@ The ToggleHighlightButtonOne method is a shortcut method that makes it easier to
 
 #### ToggleHighlightButtonTwo/3
 
-  > `public void ToggleHighlightButtonTwo(bool state, Color? highlight = null, float duration = 0f)`
+  > `public virtual void ToggleHighlightButtonTwo(bool state, Color? highlight = null, float duration = 0f)`
 
   * Parameters
    * `bool state` - The highlight colour state, `true` will enable the highlight on button two and `false` will remove the highlight from button two.
@@ -1681,7 +1693,7 @@ The ToggleHighlightButtonTwo method is a shortcut method that makes it easier to
 
 #### ToggleHighlightStartMenu/3
 
-  > `public void ToggleHighlightStartMenu(bool state, Color? highlight = null, float duration = 0f)`
+  > `public virtual void ToggleHighlightStartMenu(bool state, Color? highlight = null, float duration = 0f)`
 
   * Parameters
    * `bool state` - The highlight colour state, `true` will enable the highlight on the start menu and `false` will remove the highlight from the start menu.
@@ -1694,7 +1706,7 @@ The ToggleHighlightStartMenu method is a shortcut method that makes it easier to
 
 #### ToggleHighlighBody/3
 
-  > `public void ToggleHighlighBody(bool state, Color? highlight = null, float duration = 0f)`
+  > `public virtual void ToggleHighlighBody(bool state, Color? highlight = null, float duration = 0f)`
 
   * Parameters
    * `bool state` - The highlight colour state, `true` will enable the highlight on the body and `false` will remove the highlight from the body.
@@ -1707,7 +1719,7 @@ The ToggleHighlighBody method is a shortcut method that makes it easier to toggl
 
 #### ToggleHighlightController/3
 
-  > `public void ToggleHighlightController(bool state, Color? highlight = null, float duration = 0f)`
+  > `public virtual void ToggleHighlightController(bool state, Color? highlight = null, float duration = 0f)`
 
   * Parameters
    * `bool state` - The highlight colour state, `true` will enable the highlight on the entire controller `false` will remove the highlight from the entire controller.
@@ -1720,7 +1732,7 @@ The ToggleHighlightController method is a shortcut method that makes it easier t
 
 #### TriggerHapticPulse/1
 
-  > `public void TriggerHapticPulse(float strength)`
+  > `public virtual void TriggerHapticPulse(float strength)`
 
   * Parameters
    * `float strength` - The intensity of the rumble of the controller motor. `0` to `1`.
@@ -1731,7 +1743,7 @@ The TriggerHapticPulse/1 method calls a single haptic pulse call on the controll
 
 #### TriggerHapticPulse/3
 
-  > `public void TriggerHapticPulse(float strength, float duration, float pulseInterval)`
+  > `public virtual void TriggerHapticPulse(float strength, float duration, float pulseInterval)`
 
   * Parameters
    * `float strength` - The intensity of the rumble of the controller motor. `0` to `1`.
@@ -1744,7 +1756,7 @@ The TriggerHapticPulse/3 method calls a haptic pulse for a specified amount of t
 
 #### InitaliseHighlighters/0
 
-  > `public void InitaliseHighlighters()`
+  > `public virtual void InitaliseHighlighters()`
 
   * Parameters
    * _none_
@@ -1953,7 +1965,7 @@ The ResetHighlighter method is used to reset the currently attached highlighter.
 
 #### PauseCollisions/1
 
-  > `public void PauseCollisions(float delay)`
+  > `public virtual void PauseCollisions(float delay)`
 
   * Parameters
    * `float delay` - The amount of time to pause the collisions for.
@@ -1964,7 +1976,7 @@ The PauseCollisions method temporarily pauses all collisions on the object at gr
 
 #### ZeroVelocity/0
 
-  > `public void ZeroVelocity()`
+  > `public virtual void ZeroVelocity()`
 
   * Parameters
    * _none_
@@ -1975,7 +1987,7 @@ The ZeroVelocity method resets the velocity and angular velocity to zero on the 
 
 #### SaveCurrentState/0
 
-  > `public void SaveCurrentState()`
+  > `public virtual void SaveCurrentState()`
 
   * Parameters
    * _none_
@@ -2030,7 +2042,7 @@ The GetUsingObject method is used to return the game object that is currently us
 
 #### IsValidInteractableController/2
 
-  > `public bool IsValidInteractableController(GameObject actualController, AllowedController controllerCheck)`
+  > `public virtual bool IsValidInteractableController(GameObject actualController, AllowedController controllerCheck)`
 
   * Parameters
    * `GameObject actualController` - The game object of the controller that is being checked.
@@ -2042,7 +2054,7 @@ The IsValidInteractableController method is used to check to see if a controller
 
 #### ForceStopInteracting/0
 
-  > `public void ForceStopInteracting()`
+  > `public virtual void ForceStopInteracting()`
 
   * Parameters
    * _none_
@@ -2053,7 +2065,7 @@ The ForceStopInteracting method forces the object to no longer be interacted wit
 
 #### ForceStopSecondaryGrabInteraction/0
 
-  > `public void ForceStopSecondaryGrabInteraction()`
+  > `public virtual void ForceStopSecondaryGrabInteraction()`
 
   * Parameters
    * _none_
@@ -2086,7 +2098,7 @@ The UnregisterTeleporters method is used to unregister all teleporter events tha
 
 #### StoreLocalScale/0
 
-  > `public void StoreLocalScale()`
+  > `public virtual void StoreLocalScale()`
 
   * Parameters
    * _none_
@@ -2097,7 +2109,7 @@ the StoreLocalScale method saves the current transform local scale values.
 
 #### ToggleSnapDropZone/2
 
-  > `public void ToggleSnapDropZone(VRTK_SnapDropZone snapDropZone, bool state)`
+  > `public virtual void ToggleSnapDropZone(VRTK_SnapDropZone snapDropZone, bool state)`
 
   * Parameters
    * `VRTK_SnapDropZone snapDropZone` - The Snap Drop Zone object that is being interacted with.
@@ -2492,7 +2504,7 @@ The Interact Haptics script is attached on the same GameObject as an Interactabl
 
 #### HapticsOnTouch/1
 
-  > `public void HapticsOnTouch(VRTK_ControllerActions controllerActions)`
+  > `public virtual void HapticsOnTouch(VRTK_ControllerActions controllerActions)`
 
   * Parameters
    * `VRTK_ControllerActions controllerActions` - The controller to activate the haptic feedback on.
@@ -2503,7 +2515,7 @@ The HapticsOnTouch method triggers the haptic feedback on the given controller f
 
 #### HapticsOnGrab/1
 
-  > `public void HapticsOnGrab(VRTK_ControllerActions controllerActions)`
+  > `public virtual void HapticsOnGrab(VRTK_ControllerActions controllerActions)`
 
   * Parameters
    * `VRTK_ControllerActions controllerActions` - The controller to activate the haptic feedback on.
@@ -2514,7 +2526,7 @@ The HapticsOnGrab method triggers the haptic feedback on the given controller fo
 
 #### HapticsOnUse/1
 
-  > `public void HapticsOnUse(VRTK_ControllerActions controllerActions)`
+  > `public virtual void HapticsOnUse(VRTK_ControllerActions controllerActions)`
 
   * Parameters
    * `VRTK_ControllerActions controllerActions` - The controller to activate the haptic feedback on.
@@ -2544,7 +2556,7 @@ The Interact Controller Appearance script is attached on the same GameObject as 
 
 #### ToggleControllerOnTouch/3
 
-  > `public void ToggleControllerOnTouch(bool showController, VRTK_ControllerActions controllerActions, GameObject obj)`
+  > `public virtual void ToggleControllerOnTouch(bool showController, VRTK_ControllerActions controllerActions, GameObject obj)`
 
   * Parameters
    * `bool showController` - If true then the controller will attempt to be made visible when no longer touching, if false then the controller will be hidden on touch.
@@ -2557,7 +2569,7 @@ The ToggleControllerOnTouch method determines whether the controller should be s
 
 #### ToggleControllerOnGrab/3
 
-  > `public void ToggleControllerOnGrab(bool showController, VRTK_ControllerActions controllerActions, GameObject obj)`
+  > `public virtual void ToggleControllerOnGrab(bool showController, VRTK_ControllerActions controllerActions, GameObject obj)`
 
   * Parameters
    * `bool showController` - If true then the controller will attempt to be made visible when no longer grabbing, if false then the controller will be hidden on grab.
@@ -2570,7 +2582,7 @@ The ToggleControllerOnGrab method determines whether the controller should be sh
 
 #### ToggleControllerOnUse/3
 
-  > `public void ToggleControllerOnUse(bool showController, VRTK_ControllerActions controllerActions, GameObject obj)`
+  > `public virtual void ToggleControllerOnUse(bool showController, VRTK_ControllerActions controllerActions, GameObject obj)`
 
   * Parameters
    * `bool showController` - If true then the controller will attempt to be made visible when no longer using, if false then the controller will be hidden on use.
@@ -4146,7 +4158,7 @@ Adding the `VRTK_UIPointer_UnityEvents` component to `VRTK_UIPointer` object all
 
 #### SetEventSystem/1
 
-  > `public VRTK_EventSystemVRInput SetEventSystem(EventSystem eventSystem)`
+  > `public virtual VRTK_EventSystemVRInput SetEventSystem(EventSystem eventSystem)`
 
   * Parameters
    * `EventSystem eventSystem` - The global Unity event system to be used by the UI pointers.
@@ -4157,7 +4169,7 @@ The SetEventSystem method is used to set up the global Unity event system for th
 
 #### RemoveEventSystem/0
 
-  > `public void RemoveEventSystem()`
+  > `public virtual void RemoveEventSystem()`
 
   * Parameters
    * _none_
@@ -4168,7 +4180,7 @@ The RemoveEventSystem resets the Unity EventSystem back to the original state be
 
 #### PointerActive/0
 
-  > `public bool PointerActive()`
+  > `public virtual bool PointerActive()`
 
   * Parameters
    * _none_
@@ -4179,7 +4191,7 @@ The PointerActive method determines if the ui pointer beam should be active base
 
 #### ValidClick/2
 
-  > `public bool ValidClick(bool checkLastClick, bool lastClickState = false)`
+  > `public virtual bool ValidClick(bool checkLastClick, bool lastClickState = false)`
 
   * Parameters
    * `bool checkLastClick` - If this is true then the last frame's state of the UI Click button is also checked to see if a valid click has happened.
@@ -4191,7 +4203,7 @@ The ValidClick method determines if the UI Click button is in a valid state to r
 
 #### GetOriginPosition/0
 
-  > `public Vector3 GetOriginPosition()`
+  > `public virtual Vector3 GetOriginPosition()`
 
   * Parameters
    * _none_
@@ -4202,7 +4214,7 @@ The GetOriginPosition method returns the relevant transform position for the poi
 
 #### GetOriginForward/0
 
-  > `public Vector3 GetOriginForward()`
+  > `public virtual Vector3 GetOriginForward()`
 
   * Parameters
    * _none_
@@ -5046,7 +5058,7 @@ Then in the component that has a Policy List paramter (e.g. BasicTeleporter has 
 
 #### Find/1
 
-  > `public bool Find(GameObject obj)`
+  > `public virtual bool Find(GameObject obj)`
 
   * Parameters
    * `GameObject obj` - The game object to check if it has a tag or script that is listed in the identifiers list.

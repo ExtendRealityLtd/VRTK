@@ -33,13 +33,13 @@
             }
         }
 
-        private void Awake()
+        protected virtual void Awake()
         {
             fadeMaterial = new Material(Shader.Find("Unlit/TransparentColor"));
             instance = this;
         }
 
-        private void OnPostRender()
+        protected virtual void OnPostRender()
         {
             if (currentColor != targetColor)
             {

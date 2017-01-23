@@ -12,10 +12,24 @@ namespace VRTK
         private VRTK_BasicTeleport basicTeleport;
         private VRTK_HeadsetCollision headsetCollision;
 
-        private void OnEnable()
+        protected virtual void OnEnable()
         {
             basicTeleport = GetComponent<VRTK_BasicTeleport>();
             StartCoroutine(EnableAtEndOfFrame());
+        }
+
+        protected virtual void OnDisable()
+        {
+            if (basicTeleport == null)
+            {
+                return;
+            }
+
+            if (headsetCollision)
+            {
+                headsetCollision.HeadsetCollisionDetect -= new HeadsetCollisionEventHandler(DisableTeleport);
+                headsetCollision.HeadsetCollisionEnded -= new HeadsetCollisionEventHandler(EnableTeleport);
+            }
         }
 
         private IEnumerator EnableAtEndOfFrame()
@@ -31,20 +45,6 @@ namespace VRTK
             {
                 headsetCollision.HeadsetCollisionDetect += new HeadsetCollisionEventHandler(DisableTeleport);
                 headsetCollision.HeadsetCollisionEnded += new HeadsetCollisionEventHandler(EnableTeleport);
-            }
-        }
-
-        private void OnDisable()
-        {
-            if (basicTeleport == null)
-            {
-                return;
-            }
-
-            if (headsetCollision)
-            {
-                headsetCollision.HeadsetCollisionDetect -= new HeadsetCollisionEventHandler(DisableTeleport);
-                headsetCollision.HeadsetCollisionEnded -= new HeadsetCollisionEventHandler(EnableTeleport);
             }
         }
 

@@ -49,7 +49,7 @@ namespace VRTK
         protected Vector3 lastPosition;
         protected Vector3 lastMovement;
 
-        private void Start()
+        protected virtual void Start()
         {
             if (movementTransform == null)
             {
@@ -72,7 +72,7 @@ namespace VRTK
             lastPosition = movementTransform.localPosition;
         }
 
-        private void Update()
+        protected virtual void Update()
         {
             switch (movementFunction)
             {

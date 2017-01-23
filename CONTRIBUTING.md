@@ -108,6 +108,11 @@ it's not necessary.
 
   > `GameObject.FindObjectsOfType` *is simplified to* `FindObjectsOfType`
 
+All MonoBehaviour inherited classes that implement a MonoBehaviour
+[Message](https://docs.unity3d.com/ScriptReference/MonoBehaviour.html)
+method must at least be `protected virtual` to allow any further
+inherited class to override and extend the methods.
+
 ## Documentation
 
 All scripts that require documentation need to include a comment marker
