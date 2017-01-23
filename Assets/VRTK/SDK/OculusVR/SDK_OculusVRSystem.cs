@@ -1,12 +1,18 @@
-﻿// OculusVR System|SDK_OculusVR|001
+﻿// OculusVR System|SDK_OculusVR|002
 namespace VRTK
 {
-#if VRTK_SDK_OCULUSVR
     /// <summary>
     /// The OculusVR System SDK script provides a bridge to the OculusVR SDK.
     /// </summary>
-    public class SDK_OculusVRSystem : SDK_BaseSystem
+    [SDK_Description("OculusVR", SDK_OculusVRDefines.ScriptingDefineSymbol)]
+    public class SDK_OculusVRSystem
+#if VRTK_DEFINE_SDK_OCULUSVR
+        : SDK_BaseSystem
+#else
+        : SDK_FallbackSystem
+#endif
     {
+#if VRTK_DEFINE_SDK_OCULUSVR
         /// <summary>
         /// The IsDisplayOnDesktop method returns true if the display is extending the desktop.
         /// </summary>
@@ -32,10 +38,6 @@ namespace VRTK
         public override void ForceInterleavedReprojectionOn(bool force)
         {
         }
-    }
-#else
-    public class SDK_OculusVRSystem : SDK_FallbackSystem
-    {
-    }
 #endif
+    }
 }

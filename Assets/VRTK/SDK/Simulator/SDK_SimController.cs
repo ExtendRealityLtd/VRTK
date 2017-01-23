@@ -1,13 +1,13 @@
 ﻿// Simulator Controller|SDK_Simulator|003
 namespace VRTK
 {
-#if VRTK_SDK_SIM
     using UnityEngine;
     using System.Collections.Generic;
 
     /// <summary>
     /// The Sim Controller SDK script provides functions to help simulate VR controllers.
     /// </summary>
+    [SDK_Description(typeof(SDK_SimSystem))]
     public class SDK_SimController : SDK_BaseController
     {
         private SimControllers controllers;
@@ -915,7 +915,6 @@ namespace VRTK
                 return false;
             }
 
-
             switch (type)
             {
                 case ButtonPressTypes.Press:
@@ -947,9 +946,4 @@ namespace VRTK
             }
         }
     }
-#else
-    public class SDK_SimController : SDK_FallbackController
-    {
-    }
-#endif
 }

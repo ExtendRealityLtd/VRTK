@@ -1,15 +1,23 @@
-﻿// SteamVR Headset|SDK_SteamVR|002
+﻿// SteamVR Headset|SDK_SteamVR|003
 namespace VRTK
 {
-#if VRTK_SDK_STEAMVR
+#if VRTK_DEFINE_SDK_STEAMVR
     using UnityEngine;
     using System.Collections.Generic;
+#endif
 
     /// <summary>
     /// The SteamVR Headset SDK script provides a bridge to the SteamVR SDK.
     /// </summary>
-    public class SDK_SteamVRHeadset : SDK_BaseHeadset
+    [SDK_Description(typeof(SDK_SteamVRSystem))]
+    public class SDK_SteamVRHeadset
+#if VRTK_DEFINE_SDK_STEAMVR
+        : SDK_BaseHeadset
+#else
+        : SDK_FallbackHeadset
+#endif
     {
+#if VRTK_DEFINE_SDK_STEAMVR
         /// <summary>
         /// The ProcessUpdate method enables an SDK to run logic for every Unity Update
         /// </summary>
@@ -112,10 +120,6 @@ namespace VRTK
                 camera.gameObject.AddComponent<SteamVR_Fade>();
             }
         }
-    }
-#else
-    public class SDK_SteamVRHeadset : SDK_FallbackHeadset
-    {
-    }
 #endif
+    }
 }

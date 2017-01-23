@@ -1,4 +1,4 @@
-﻿// Base Boundaries|SDK_Base|004
+﻿// Base Boundaries|SDK_Base|007
 namespace VRTK
 {
     using UnityEngine;
@@ -9,7 +9,7 @@ namespace VRTK
     /// <remarks>
     /// This is an abstract class to implement the interface required by all implemented SDKs.
     /// </remarks>
-    public abstract class SDK_BaseBoundaries : ScriptableObject
+    public abstract class SDK_BaseBoundaries : SDK_Base
     {
         protected Transform cachedPlayArea;
 

@@ -4,7 +4,7 @@ namespace VRTK
     using UnityEngine;
 
     /// <summary>
-    /// The Base Boundaries SDK script provides a bridge to SDK methods that deal with the play area of SDKs that support room scale play spaces.
+    /// The Fallback Boundaries SDK script provides a fallback collection of methods that return null or default headset values.
     /// </summary>
     /// <remarks>
     /// This is the fallback class that will just return default values.
@@ -65,11 +65,6 @@ namespace VRTK
         public override bool IsPlayAreaSizeCalibrated(GameObject playArea)
         {
             return false;
-        }
-
-        private void Awake()
-        {
-            Debug.LogError("Fallback Boundaries SDK is being used. Have you selected a valid Boundaries SDK in the SDK Manager? If you are unsure, then click the GameObject with the `VRTK_SDKManager` script attached to it in Edit Mode and select a Boundaries SDK from the dropdown.");
         }
     }
 }

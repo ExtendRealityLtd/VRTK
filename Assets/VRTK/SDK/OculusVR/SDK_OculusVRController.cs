@@ -1,15 +1,23 @@
-﻿// OculusVR Controller|SDK_OculusVR|003
+﻿// OculusVR Controller|SDK_OculusVR|004
 namespace VRTK
 {
-#if VRTK_SDK_OCULUSVR
+#if VRTK_DEFINE_SDK_OCULUSVR
     using UnityEngine;
     using System.Collections.Generic;
+#endif
 
     /// <summary>
     /// The OculusVR Controller SDK script provides a bridge to SDK methods that deal with the input devices.
     /// </summary>
-    public class SDK_OculusVRController : SDK_BaseController
+    [SDK_Description(typeof(SDK_OculusVRSystem))]
+    public class SDK_OculusVRController
+#if VRTK_DEFINE_SDK_OCULUSVR
+        : SDK_BaseController
+#else
+        : SDK_FallbackController
+#endif
     {
+#if VRTK_DEFINE_SDK_OCULUSVR
         private bool floorLevelSet = false;
         private SDK_OculusVRBoundaries cachedBoundariesSDK;
         private VRTK_TrackedController cachedLeftController;
@@ -1017,7 +1025,7 @@ namespace VRTK
         private bool HasAvatar(bool controllersAreVisible = true)
         {
             GetBoundariesSDK();
-#if VRTK_SDK_OCULUSVR_AVATAR
+#if VRTK_DEFINE_SDK_OCULUSVR_AVATAR
             if (cachedBoundariesSDK)
             {
                 var avatar = cachedBoundariesSDK.GetAvatar();
@@ -1030,7 +1038,7 @@ namespace VRTK
         private GameObject GetAvatar()
         {
             GetBoundariesSDK();
-#if VRTK_SDK_OCULUSVR_AVATAR
+#if VRTK_DEFINE_SDK_OCULUSVR_AVATAR
             if (cachedBoundariesSDK)
             {
                 var avatar = cachedBoundariesSDK.GetAvatar();
@@ -1042,10 +1050,6 @@ namespace VRTK
 #endif
             return null;
         }
-    }
-#else
-    public class SDK_OculusVRController : SDK_FallbackController
-    {
-    }
 #endif
+    }
 }
