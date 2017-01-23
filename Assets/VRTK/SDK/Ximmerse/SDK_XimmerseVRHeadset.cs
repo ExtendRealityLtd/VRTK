@@ -1,17 +1,25 @@
-﻿// XimmerseVR Headset|SDK_XimmerseVR|002
+﻿// XimmerseVR Headset|SDK_XimmerseVR|003
 namespace VRTK
 {
-#if VRTK_SDK_XIMMERSEVR
+#if VRTK_DEFINE_SDK_XIMMERSEVR
+    using UnityEngine;
     using System.Collections.Generic;
     using Ximmerse.InputSystem;
     using Ximmerse.VR;
-    using UnityEngine;
+#endif
 
     /// <summary>
     /// The XimmerseVR Headset SDK script provides a bridge to the XimmerseVR SDK.
     /// </summary>
-    public class SDK_XimmerseVRHeadset : SDK_BaseHeadset
+    [SDK_Description(typeof(SDK_XimmerseVRSystem))]
+    public class SDK_XimmerseVRHeadset
+#if VRTK_DEFINE_SDK_XIMMERSEVR
+        : SDK_BaseHeadset
+#else
+        : SDK_FallbackHeadset
+#endif
     {
+#if VRTK_DEFINE_SDK_XIMMERSEVR
         private Quaternion previousHeadsetRotation;
         private Quaternion currentHeadsetRotation;
 
@@ -125,10 +133,6 @@ namespace VRTK
                 camera.gameObject.AddComponent<VRTK_ScreenFade>();
             }
         }
-    }
-#else
-    public class SDK_XimmerseVRHeadset : SDK_FallbackHeadset
-    {
-    }
 #endif
+    }
 }

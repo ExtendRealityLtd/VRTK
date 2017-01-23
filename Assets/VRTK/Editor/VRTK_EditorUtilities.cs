@@ -22,9 +22,13 @@
             AddHeader(headerAttribute == null ? displayName : headerAttribute.header);
         }
 
-        public static void AddHeader(string header)
+        public static void AddHeader(string header, bool spaceBeforeHeader = true)
         {
-            EditorGUILayout.Space();
+            if (spaceBeforeHeader)
+            {
+                EditorGUILayout.Space();
+            }
+
             EditorGUILayout.LabelField(header, EditorStyles.boldLabel);
         }
     }

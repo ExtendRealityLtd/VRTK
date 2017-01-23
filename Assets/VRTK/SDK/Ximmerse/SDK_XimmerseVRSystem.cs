@@ -1,14 +1,18 @@
-﻿// XimmerseVR System|SDK_XimmerseVR|001
+﻿// XimmerseVR System|SDK_XimmerseVR|002
 namespace VRTK
 {
-#if VRTK_SDK_XIMMERSEVR
-    using Ximmerse.InputSystem;
-
     /// <summary>
     /// The XimmerseVR System SDK script provides a bridge to the XimmerseVR SDK.
     /// </summary>
-    public class SDK_XimmerseVRSystem : SDK_BaseSystem
+    [SDK_Description("XimmerseVR", SDK_XimmerseVRDefines.ScriptingDefineSymbol)]
+    public class SDK_XimmerseVRSystem
+#if VRTK_DEFINE_SDK_XIMMERSEVR
+        : SDK_BaseSystem
+#else
+        : SDK_FallbackSystem
+#endif
     {
+#if VRTK_DEFINE_SDK_XIMMERSEVR
         /// <summary>
         /// The IsDisplayOnDesktop method returns true if the display is extending the desktop.
         /// </summary>
@@ -33,12 +37,7 @@ namespace VRTK
         /// <param name="force">If true then Interleaved Reprojection will be forced on, if false it will not be forced on.</param>
         public override void ForceInterleavedReprojectionOn(bool force)
         {
-            
         }
-    }
-#else
-    public class SDK_XimmerseVRSystem : SDK_FallbackSystem
-    {
-    }
 #endif
+    }
 }

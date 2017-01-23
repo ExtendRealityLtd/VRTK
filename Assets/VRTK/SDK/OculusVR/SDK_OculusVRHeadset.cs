@@ -1,15 +1,23 @@
-﻿// OculusVR Headset|SDK_OculusVR|002
+﻿// OculusVR Headset|SDK_OculusVR|003
 namespace VRTK
 {
-#if VRTK_SDK_OCULUSVR
+#if VRTK_DEFINE_SDK_OCULUSVR
     using UnityEngine;
     using System.Collections.Generic;
+#endif
 
     /// <summary>
     /// The OculusVR Headset SDK script provides a bridge to the OculusVR SDK.
     /// </summary>
-    public class SDK_OculusVRHeadset : SDK_BaseHeadset
+    [SDK_Description(typeof(SDK_OculusVRSystem))]
+    public class SDK_OculusVRHeadset
+#if VRTK_DEFINE_SDK_OCULUSVR
+        : SDK_BaseHeadset
+#else
+        : SDK_FallbackHeadset
+#endif
     {
+#if VRTK_DEFINE_SDK_OCULUSVR
         private Quaternion previousHeadsetRotation;
         private Quaternion currentHeadsetRotation;
 
@@ -111,10 +119,6 @@ namespace VRTK
                 camera.gameObject.AddComponent<VRTK_ScreenFade>();
             }
         }
-    }
-#else
-    public class SDK_OculusVRHeadset : SDK_FallbackHeadset
-    {
-    }
 #endif
+    }
 }

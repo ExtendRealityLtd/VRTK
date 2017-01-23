@@ -1,4 +1,4 @@
-﻿// Base Headset|SDK_Base|002
+﻿// Base Headset|SDK_Base|005
 namespace VRTK
 {
     using UnityEngine;
@@ -10,7 +10,7 @@ namespace VRTK
     /// <remarks>
     /// This is an abstract class to implement the interface required by all implemented SDKs.
     /// </remarks>
-    public abstract class SDK_BaseHeadset : ScriptableObject
+    public abstract class SDK_BaseHeadset : SDK_Base
     {
         protected Transform cachedHeadset;
         protected Transform cachedHeadsetCamera;

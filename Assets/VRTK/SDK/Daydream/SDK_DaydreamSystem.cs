@@ -1,12 +1,18 @@
-﻿// Daydream System|SDK_Daydream|001
+﻿// Daydream System|SDK_Daydream|002
 namespace VRTK
 {
-#if VRTK_SDK_DAYDREAM
     /// <summary>
     /// The Daydream System SDK script provides dummy functions for system functions.
     /// </summary>
-    public class SDK_DaydreamSystem : SDK_BaseSystem
+    [SDK_Description("Daydream", SDK_DaydreamDefines.ScriptingDefineSymbol)]
+    public class SDK_DaydreamSystem
+#if VRTK_DEFINE_SDK_DAYDREAM
+        : SDK_BaseSystem
+#else
+        : SDK_FallbackSystem
+#endif
     {
+#if VRTK_DEFINE_SDK_DAYDREAM
         /// <summary>
         /// The IsDisplayOnDesktop method returns true if the display is extending the desktop.
         /// </summary>
@@ -32,10 +38,6 @@ namespace VRTK
         public override void ForceInterleavedReprojectionOn(bool force)
         {
         }
-    }
-#else
-    public class SDK_DaydreamSystem : SDK_FallbackSystem
-    {
-    }
 #endif
+    }
 }

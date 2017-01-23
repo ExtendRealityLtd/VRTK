@@ -1,4 +1,4 @@
-﻿// Base Controller|SDK_Base|003
+﻿// Base Controller|SDK_Base|006
 namespace VRTK
 {
     using UnityEngine;
@@ -10,7 +10,7 @@ namespace VRTK
     /// <remarks>
     /// This is an abstract class to implement the interface required by all implemented SDKs.
     /// </remarks>
-    public abstract class SDK_BaseController : ScriptableObject
+    public abstract class SDK_BaseController : SDK_Base
     {
         /// <summary>
         /// Concepts of controller button press

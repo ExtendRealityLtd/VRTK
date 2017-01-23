@@ -1,18 +1,24 @@
-﻿// SteamVR Controller|SDK_SteamVR|003
+﻿// SteamVR Controller|SDK_SteamVR|004
 namespace VRTK
 {
-#if VRTK_SDK_STEAMVR
+#if VRTK_DEFINE_SDK_STEAMVR
     using UnityEngine;
-    using System;
     using System.Collections.Generic;
-    using System.Reflection;
     using Valve.VR;
+#endif
 
     /// <summary>
     /// The SteamVR Controller SDK script provides a bridge to SDK methods that deal with the input devices.
     /// </summary>
-    public class SDK_SteamVRController : SDK_BaseController
+    [SDK_Description(typeof(SDK_SteamVRSystem))]
+    public class SDK_SteamVRController
+#if VRTK_DEFINE_SDK_STEAMVR
+        : SDK_BaseController
+#else
+        : SDK_FallbackController
+#endif
     {
+#if VRTK_DEFINE_SDK_STEAMVR
         private SteamVR_TrackedObject cachedLeftTrackedObject;
         private SteamVR_TrackedObject cachedRightTrackedObject;
         private ushort maxHapticVibration = 3999;
@@ -818,45 +824,13 @@ namespace VRTK
 
         private void Awake()
         {
-            Assembly executingAssembly = Assembly.GetExecutingAssembly();
-            Type eventClass = executingAssembly.GetType("SteamVR_Utils").GetNestedType("Event");
-            MethodInfo targetMethod = typeof(SDK_SteamVRController).GetMethod("OnTrackedDeviceRoleChanged", BindingFlags.NonPublic | BindingFlags.Instance);
-
-            if (eventClass == null)
-            {
-                eventClass = executingAssembly.GetType("SteamVR_Events");
-                MethodInfo systemMethod = eventClass.GetMethod("System", BindingFlags.Public | BindingFlags.Static);
-
-                object steamVREventInstance;
-                if (systemMethod.GetParameters()[0].ParameterType == typeof(string))
-                {
-                    //SteamVR plugin == 1.2.0
-                    steamVREventInstance = systemMethod.Invoke(null, new object[] { "TrackedDeviceRoleChanged" });
-                }
-                else
-                {
-                    //SteamVR plugin >= 1.2.1
-                    steamVREventInstance = systemMethod.Invoke(null, new object[] { EVREventType.VREvent_TrackedDeviceRoleChanged });
-                }
-
-                MethodInfo listenMethod = steamVREventInstance.GetType().GetMethod("Listen", BindingFlags.Public | BindingFlags.Instance);
-                Type listenMethodParameterType = listenMethod.GetParameters()[0].ParameterType;
-
-                targetMethod = targetMethod.MakeGenericMethod(listenMethodParameterType.GetGenericArguments()[0]);
-                Delegate targetMethodDelegate = Delegate.CreateDelegate(listenMethodParameterType, this, targetMethod);
-                listenMethod.Invoke(steamVREventInstance, new object[] { targetMethodDelegate });
-            }
-            else
-            {
-                //SteamVR plugin < 1.2.0
-                MethodInfo listenMethod = eventClass.GetMethod("Listen", BindingFlags.Public | BindingFlags.Static);
-                Type listenMethodParameterType = listenMethod.GetParameters()[1].ParameterType;
-
-                targetMethod = targetMethod.MakeGenericMethod(listenMethodParameterType.GetMethod("Invoke").GetParameters()[0].ParameterType);
-                Delegate targetMethodDelegate = Delegate.CreateDelegate(listenMethodParameterType, this, targetMethod);
-                listenMethod.Invoke(null, new object[] { "TrackedDeviceRoleChanged", targetMethodDelegate });
-            }
-
+#if VRTK_DEFINE_STEAMVR_PLUGIN_1_1_1_OR_OLDER
+            SteamVR_Utils.Event.Listen("TrackedDeviceRoleChanged", OnTrackedDeviceRoleChanged);
+#elif VRTK_DEFINE_STEAMVR_PLUGIN_1_2_0
+            SteamVR_Events.System("TrackedDeviceRoleChanged").Listen(OnTrackedDeviceRoleChanged);
+#elif VRTK_DEFINE_STEAMVR_PLUGIN_1_2_1_OR_NEWER
+            SteamVR_Events.System(EVREventType.VREvent_TrackedDeviceRoleChanged).Listen(OnTrackedDeviceRoleChanged);
+#endif
             SetTrackedControllerCaches(true);
         }
 
@@ -1001,10 +975,6 @@ namespace VRTK
             }
             return null;
         }
-    }
-#else
-    public class SDK_SteamVRController : SDK_FallbackController
-    {
-    }
 #endif
+    }
 }
