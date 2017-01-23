@@ -19,13 +19,18 @@ namespace VRTK.GrabAttachMechanics
         [Tooltip("The maximum distance the grabbing controller is away from the object before it is automatically dropped.")]
         public float detachDistance = 1f;
 
+        protected bool isReleasable = true;
+
         /// <summary>
         /// The StopGrab method ends the grab of the current object and cleans up the state.
         /// </summary>
         /// <param name="applyGrabbingObjectVelocity">If true will apply the current velocity of the grabbing object to the grabbed object on release.</param>
         public override void StopGrab(bool applyGrabbingObjectVelocity)
         {
-            ReleaseObject(applyGrabbingObjectVelocity);
+            if (isReleasable)
+            {
+                ReleaseObject(applyGrabbingObjectVelocity);
+            }
             base.StopGrab(applyGrabbingObjectVelocity);
         }
 
