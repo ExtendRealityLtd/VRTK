@@ -12,7 +12,10 @@ namespace VRTK
     {
         public enum Direction
         {
-            autodetect, x, y, z
+            autodetect,
+            x,
+            y,
+            z
         }
 
         [System.Serializable]
@@ -34,10 +37,6 @@ namespace VRTK
             public float controlMax;
         }
 
-        private static Color COLOR_OK = Color.yellow;
-        private static Color COLOR_ERROR = new Color(1, 0, 0, 0.9f);
-        private static float MIN_OPENING_DISTANCE = 20f; // percentage how far open something needs to be in order to activate it
-
         public DefaultControlEvents defaultEvents;
         [Tooltip("If active the control will react to the controller without the need to push the grab button.")]
         public bool interactWithoutGrab = false;
@@ -46,12 +45,18 @@ namespace VRTK
         abstract protected bool DetectSetup();
         abstract protected ControlValueRange RegisterValueRange();
         abstract protected void HandleUpdate();
+
         protected Bounds bounds;
         protected bool setupSuccessful = true;
+        protected VRTK_ControllerRigidbodyActivator autoTriggerVolume;
 
         protected float value;
 
-        private ControlValueRange cvr;
+        private static Color COLOR_OK = Color.yellow;
+        private static Color COLOR_ERROR = new Color(1, 0, 0, 0.9f);
+        private static float MIN_OPENING_DISTANCE = 20f; // percentage how far open something needs to be in order to activate it
+
+        private ControlValueRange valueRange;
         private GameObject controlContent;
         private bool hideControlContent = false;
 
@@ -70,7 +75,7 @@ namespace VRTK
         /// <returns>The current normalized value of the control.</returns>
         public float GetNormalizedValue()
         {
-            return Mathf.Abs(Mathf.Round((value - cvr.controlMin) / (cvr.controlMax - cvr.controlMin) * 100));
+            return Mathf.Abs(Mathf.Round((value - valueRange.controlMin) / (valueRange.controlMax - valueRange.controlMin) * 100));
         }
 
         /// <summary>
@@ -108,7 +113,7 @@ namespace VRTK
 
             if (Application.isPlaying)
             {
-                cvr = RegisterValueRange();
+                valueRange = RegisterValueRange();
                 HandleInteractables();
             }
         }
@@ -153,6 +158,21 @@ namespace VRTK
             }
         }
 
+        protected virtual void CreateTriggerVolume()
+        {
+            GameObject autoTriggerVolumeGO = new GameObject(name + "-Trigger");
+            autoTriggerVolumeGO.transform.SetParent(transform);
+            autoTriggerVolume = autoTriggerVolumeGO.AddComponent<VRTK_ControllerRigidbodyActivator>();
+
+            // calculate bounding box
+            Bounds bounds = VRTK_SharedMethods.GetBounds(transform);
+            bounds.Expand(bounds.size * 0.2f);
+            autoTriggerVolumeGO.transform.position = bounds.center;
+            BoxCollider triggerCollider = autoTriggerVolumeGO.AddComponent<BoxCollider>();
+            triggerCollider.isTrigger = true;
+            triggerCollider.size = bounds.size;
+        }
+
         protected Vector3 getThirdDirection(Vector3 axis1, Vector3 axis2)
         {
             bool xTaken = axis1.x != 0 || axis2.x != 0;
@@ -172,21 +192,6 @@ namespace VRTK
                 return Vector3.right;
             }
 
-        }
-
-        private void CreateTriggerVolume()
-        {
-            GameObject tvGo = new GameObject(name + "-Trigger");
-            tvGo.transform.SetParent(transform);
-            tvGo.AddComponent<VRTK_ControllerRigidbodyActivator>();
-
-            // calculate bounding box
-            Bounds bounds = VRTK_SharedMethods.GetBounds(transform);
-            bounds.Expand(bounds.size * 0.2f);
-            tvGo.transform.position = bounds.center;
-            BoxCollider bc = tvGo.AddComponent<BoxCollider>();
-            bc.isTrigger = true;
-            bc.size = bounds.size;
         }
 
         private void HandleInteractables()

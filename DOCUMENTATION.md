@@ -239,6 +239,10 @@ The sphere collider on the prefab can have the radius adjusted to determine how 
 
 It's also possible to replace the sphere trigger collider with an alternative trigger collider for customised collision detection.
 
+### Inspector Parameters
+
+ * **Is Enabled:** If this is checked then the collider will have it's rigidbody toggled on and off during a collision.
+
 ---
 
 ## Snap Drop Zone (VRTK_SnapDropZone)
@@ -4472,7 +4476,8 @@ It is possible to supply a third game object which is the root of the contents i
  * **Handle:** The game object for the handle.
  * **Content:** The parent game object for the drawer content elements.
  * **Hide Content:** Makes the content invisible while the drawer is closed.
- * **Snapping:** Keeps the drawer closed with a slight force. This way the drawer will not gradually open due to some minor physics effect.
+ * **Min Snap Close:** If the extension of the drawer is below this percentage then the drawer will snap shut.
+ * **Max Extend:** The maximum percentage of the drawer's total length that the drawer will open to.
 
 ### Example
 
