@@ -3326,6 +3326,17 @@ This is ideal for hinged joints on items such as wheels or doors.
 
 ### Class Methods
 
+#### StopGrab/1
+
+  > `public override void StopGrab(bool applyGrabbingObjectVelocity)`
+
+  * Parameters
+   * `bool applyGrabbingObjectVelocity` - If true will apply the current velocity of the grabbing object to the grabbed object on release.
+  * Returns
+   * _none_
+
+The StopGrab method ends the grab of the current object and cleans up the state.
+
 #### ProcessFixedUpdate/0
 
   > `public override void ProcessFixedUpdate()`
