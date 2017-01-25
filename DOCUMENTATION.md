@@ -4447,7 +4447,10 @@ The script will instantiate the required Rigidbodies, Interactable and HingeJoin
  * **Max Angle:** The maximum opening angle of the door.
  * **Open Inward:** Can the door be pulled to open.
  * **Open Outward:** Can the door be pushed to open.
- * **Snapping:** Keeps the door closed with a slight force. This way the door will not gradually open due to some minor physics effect. Only works if either inward or outward is selected, not both.
+ * **Min Snap Close:** The range at which the door must be to being closed before it snaps shut. Only works if either inward or outward is selected, not both.
+ * **Released Friction:** The amount of friction the door will have whilst swinging when it is not grabbed.
+ * **Grabbed Friction:** The amount of friction the door will have whilst swinging when it is grabbed.
+ * **Handle Interactable Only:** If this is checked then only the door handle is grabbale to operate the door.
 
 ### Example
 
