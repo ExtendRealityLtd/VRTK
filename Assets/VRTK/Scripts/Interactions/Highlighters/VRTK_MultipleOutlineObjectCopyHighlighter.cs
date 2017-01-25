@@ -85,8 +85,8 @@ namespace VRTK.Highlighters
                 foreach (var model in highlightModels)
                 {
                     Destroy(model);
-                }                    
-            }                
+                }
+            }
 
             Destroy(stencilOutline);
         }
@@ -164,7 +164,9 @@ namespace VRTK.Highlighters
 
                 highlightModels = modelsToAdd.ToArray();
                 foreach (var model in highlightModels)
+                {
                     VRTK_PlayerObject.SetPlayerObject(model, VRTK_PlayerObject.ObjectTypes.Highlighter);
+                }
 
             }
 
