@@ -145,10 +145,11 @@ namespace VRTK.Highlighters
             }
 
             highlightModel = new GameObject(name + "_HighlightModel");
+            highlightModel.transform.SetParent(copyModel.transform.parent, false);
+            highlightModel.transform.localPosition = copyModel.transform.localPosition;
+            highlightModel.transform.localRotation = copyModel.transform.localRotation;
+            highlightModel.transform.localScale = copyModel.transform.localScale;
             highlightModel.transform.SetParent(transform);
-            highlightModel.transform.position = copyModel.transform.position;
-            highlightModel.transform.rotation = copyModel.transform.rotation;
-            highlightModel.transform.localScale = Vector3.one;
 
             foreach (var component in copyModel.GetComponents<Component>())
             {
