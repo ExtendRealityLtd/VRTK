@@ -4590,13 +4590,15 @@ The script will instantiate the required Rigidbody and Interactable components a
 
 ### Inspector Parameters
 
+ * **Connected To:** An optional game object to which the wheel will be connected. If the game object moves the wheel will follow along.
  * **Direction:** The axis on which the slider should move. All other axis will be frozen.
- * **Min:** The minimum value of the slider.
- * **Max:** The maximum value of the slider.
- * **Step Size:** The increments in which slider values can change. The slider supports snapping.
- * **Detect Min Max:** Automatically detect the minimum and maximum positions.
- * **Min Point:** The minimum point on the slider.
- * **Max Point:** The maximum point on the slider.
+ * **Minimum Limit:** The collider to specify the minimum limit of the slider.
+ * **Maximum Limit:** The collider to specify the maximum limit of the slider.
+ * **Minimum Value:** The minimum value of the slider.
+ * **Maximum Value:** The maximum value of the slider.
+ * **Step Size:** The increments in which slider values can change.
+ * **Snap To Step:** If this is checked then when the slider is released, it will snap to the nearest value position.
+ * **Released Friction:** The amount of friction the slider will have when it is released.
 
 ### Example
 
