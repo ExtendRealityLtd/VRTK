@@ -72,7 +72,7 @@ namespace VRTK
         private SDK_ControllerSim leftController;
         private static GameObject cachedCameraRig;
         private static bool destroyed = false;
-
+        private static bool isFocused = false;
         #endregion
 
         /// <summary>
@@ -162,16 +162,25 @@ namespace VRTK
                 }
             }
 
-            if (isHand)
+            // only update if focused
+            if (isFocused)
             {
-                UpdateHands();
-            }
-            else
-            {
-                UpdateRotation();
-            }
+                if (isHand)
+                {
+                    UpdateHands();
+                }
+                else
+                {
+                    UpdateRotation();
+                }
 
-            UpdatePosition();
+                UpdatePosition();
+            }
+        }
+
+        private void OnApplicationFocus(bool focus)
+        {
+            isFocused = focus;
         }
 
         private void UpdateHands()
