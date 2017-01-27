@@ -642,7 +642,7 @@ namespace VRTK
                 interactableRigidbody.maxAngularVelocity = float.MaxValue;
             }
 
-            if (disableWhenIdle && enabled)
+            if (disableWhenIdle && enabled && IsIdle())
             {
                 enabled = false;
             }
@@ -703,9 +703,20 @@ namespace VRTK
             }
         }
 
+        /// <summary>
+        /// determines if this object is currently idle
+        /// used to determine whether or not the script
+        /// can be disabled for now
+        /// </summary>
+        /// <returns>whether or not the script is currently idle</returns>
+        protected virtual bool IsIdle()
+        {
+            return !IsTouched() && !IsGrabbed() && !IsUsing();
+        }
+
         protected virtual void LateUpdate()
         {
-            if (disableWhenIdle && !IsTouched() && !IsGrabbed() && !IsUsing())
+            if (disableWhenIdle && IsIdle())
             {
                 ToggleEnableState(false);
             }
