@@ -4300,6 +4300,7 @@ All 3D controls extend the `VRTK_Control` abstract class which provides common m
  * [Door](#door-vrtk_door)
  * [Drawer](#drawer-vrtk_drawer)
  * [Knob](#knob-vrtk_knob)
+ * [Wheel](#wheel-vrtk_wheel)
  * [Lever](#lever-vrtk_lever)
  * [Spring Lever](#spring-lever-vrtk_springlever)
  * [Slider](#slider-vrtk_slider)
@@ -4508,6 +4509,35 @@ The script will instantiate the required Rigidbody and Interactable components a
 ### Example
 
 `VRTK/Examples/025_Controls_Overview` has a couple of rotator knobs that can be rotated by grabbing with the controller and then rotating the controller in the desired direction.
+
+---
+
+## Wheel (VRTK_Wheel)
+ > extends [VRTK_Control](#control-vrtk_control)
+
+### Overview
+
+Attaching the script to a game object will allow the user to interact with it as if it were a spinnable wheel.
+
+The script will instantiate the required Rigidbody and Interactable components automatically in case they do not exist yet.
+
+### Inspector Parameters
+
+ * **Connected To:** An optional game object to which the wheel will be connected. If the game object moves the wheel will follow along.
+ * **Grab Type:** The grab attach mechanic to use. Track Object allows for rotations of the controller, Rotator Track allows for grabbing the wheel and spinning it.
+ * **Detatch Distance:** The maximum distance the grabbing controller is away from the wheel before it is automatically released.
+ * **Minimum Value:** The minimum value the wheel can be set to.
+ * **Maximum Value:** The maximum value the wheel can be set to.
+ * **Step Size:** The increments in which values can change.
+ * **Snap To Step:** If this is checked then when the wheel is released, it will snap to the step rotation.
+ * **Grabbed Friction:** The amount of friction the wheel will have when it is grabbed.
+ * **Released Friction:** The amount of friction the wheel will have when it is released.
+ * **Max Angle:** The maximum angle the wheel has to be turned to reach it's maximum value.
+ * **Lock At Limits:** If this is checked then the wheel cannot be turned beyond the minimum and maximum value.
+
+### Example
+
+`VRTK/Examples/025_Controls_Overview` has a collection of wheels that can be rotated by grabbing with the controller and then rotating the controller in the desired direction.
 
 ---
 
