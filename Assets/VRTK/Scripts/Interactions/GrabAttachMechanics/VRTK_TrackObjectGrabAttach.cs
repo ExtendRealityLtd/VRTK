@@ -18,6 +18,10 @@ namespace VRTK.GrabAttachMechanics
 
         [Tooltip("The maximum distance the grabbing controller is away from the object before it is automatically dropped.")]
         public float detachDistance = 1f;
+        [Tooltip("The maximum amount of velocity magnitude that can be applied to the object. Lowering this can prevent physics glitches if objects are moving too fast.")]
+        public float velocityLimit = float.PositiveInfinity;
+        [Tooltip("The maximum amount of angular velocity magnitude that can be applied to the object. Lowering this can prevent physics glitches if objects are moving too fast.")]
+        public float angularVelocityLimit = float.PositiveInfinity;
 
         protected bool isReleasable = true;
 
@@ -79,6 +83,11 @@ namespace VRTK.GrabAttachMechanics
         /// </summary>
         public override void ProcessFixedUpdate()
         {
+            if (!grabbedObject)
+            {
+                return;
+            }
+
             float maxDistanceDelta = 10f;
             float angle;
             Vector3 axis;
@@ -103,11 +112,20 @@ namespace VRTK.GrabAttachMechanics
             if (angle != 0)
             {
                 Vector3 angularTarget = angle * axis;
-                grabbedObjectRigidBody.angularVelocity = Vector3.MoveTowards(grabbedObjectRigidBody.angularVelocity, angularTarget, maxDistanceDelta);
+                Vector3 calculatedAngularVelocity = Vector3.MoveTowards(grabbedObjectRigidBody.angularVelocity, angularTarget, maxDistanceDelta);
+                if (angularVelocityLimit == float.PositiveInfinity || calculatedAngularVelocity.sqrMagnitude < angularVelocityLimit)
+                {
+                    grabbedObjectRigidBody.angularVelocity = calculatedAngularVelocity;
+                }
             }
 
             Vector3 velocityTarget = positionDelta / Time.fixedDeltaTime;
-            grabbedObjectRigidBody.velocity = Vector3.MoveTowards(grabbedObjectRigidBody.velocity, velocityTarget, maxDistanceDelta);
+            Vector3 calculatedVelocity = Vector3.MoveTowards(grabbedObjectRigidBody.velocity, velocityTarget, maxDistanceDelta);
+
+            if (velocityLimit == float.PositiveInfinity || calculatedVelocity.sqrMagnitude < velocityLimit)
+            {
+                grabbedObjectRigidBody.velocity = calculatedVelocity;
+            }
         }
 
         protected override void Initialise()

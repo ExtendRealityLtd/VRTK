@@ -3259,6 +3259,8 @@ This works well for items that are on hinged joints or objects that require to i
 ### Inspector Parameters
 
  * **Detach Distance:** The maximum distance the grabbing controller is away from the object before it is automatically dropped.
+ * **Velocity Limit:** The maximum amount of velocity magnitude that can be applied to the object. Lowering this can prevent physics glitches if objects are moving too fast.
+ * **Angular Velocity Limit:** The maximum amount of angular velocity magnitude that can be applied to the object. Lowering this can prevent physics glitches if objects are moving too fast.
 
 ### Class Methods
 
