@@ -2,6 +2,7 @@
 namespace VRTK
 {
     using UnityEngine;
+    using UnityEngine.VR;
 
     /// <summary>
     /// The Device Finder offers a collection of static methods that can be called to find common game devices such as the headset or controllers, or used to determine key information about the connected devices.
@@ -19,6 +20,23 @@ namespace VRTK
             Headset,
             Left_Controller,
             Right_Controller,
+        }
+
+        /// <summary>
+        /// Possible headsets
+        /// </summary>
+        /// <param name="Unknown">An unknown headset.</param>
+        /// <param name="OculusRift">A summary of all Oculus Rift headset versions.</param>
+        /// <param name="OculusRiftCV1">A specific version of the Oculus Rift headset, the Consumer Version 1.</param>
+        /// <param name="Vive">A summary of all HTC Vive headset versions.</param>
+        /// <param name="ViveMV">A specific version of the HTC Vive headset, the first consumer version.</param>
+        public enum Headsets
+        {
+            Unknown,
+            OculusRift,
+            OculusRiftCV1,
+            Vive,
+            ViveMV
         }
 
         /// <summary>
@@ -252,6 +270,24 @@ namespace VRTK
         }
 
         /// <summary>
+        /// The GetHeadsetVelocity method is used to determine the current velocity of the headset.
+        /// </summary>
+        /// <returns>A Vector3 containing the current velocity of the headset.</returns>
+        public static Vector3 GetHeadsetVelocity()
+        {
+            return VRTK_SDK_Bridge.GetHeadsetVelocity();
+        }
+
+        /// <summary>
+        /// The GetHeadsetAngularVelocity method is used to determine the current angular velocity of the headset.
+        /// </summary>
+        /// <returns>A Vector3 containing the current angular velocity of the headset.</returns>
+        public static Vector3 GetHeadsetAngularVelocity()
+        {
+            return VRTK_SDK_Bridge.GetHeadsetAngularVelocity();
+        }
+
+        /// <summary>
         /// The HeadsetTransform method is used to retrieve the transform for the VR Headset in the scene. It can be useful to determine the position of the user's head in the game world.
         /// </summary>
         /// <returns>The transform of the VR Headset component.</returns>
@@ -267,6 +303,27 @@ namespace VRTK
         public static Transform HeadsetCamera()
         {
             return VRTK_SDK_Bridge.GetHeadsetCamera();
+        }
+
+        /// <summary>
+        /// The GetHeadsetType method returns the type of headset connected to the computer.
+        /// </summary>
+        /// <param name="summary">If this is true, then the generic name for the headset is returned not including the version type (e.g. OculusRift will be returned for DK2 and CV1).</param>
+        /// <returns>The Headset type that is connected.</returns>
+        public static Headsets GetHeadsetType(bool summary = false)
+        {
+            Headsets returnValue = Headsets.Unknown;
+            string checkValue = VRDevice.model;
+            switch (checkValue)
+            {
+                case "Oculus Rift CV1":
+                    returnValue = (summary ? Headsets.OculusRift : Headsets.OculusRiftCV1);
+                    break;
+                case "Vive MV":
+                    returnValue = (summary ? Headsets.Vive : Headsets.ViveMV);
+                    break;
+            }
+            return returnValue;
         }
 
         /// <summary>

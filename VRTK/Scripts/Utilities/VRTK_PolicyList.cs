@@ -59,7 +59,7 @@ namespace VRTK
         /// </remarks>
         /// <param name="obj">The game object to check if it has a tag or script that is listed in the identifiers list.</param>
         /// <returns>If the operation is `Ignore` and the game object is matched by an identifier from the list then it returns true. If the operation is `Include` and the game object is not matched by an identifier from the list then it returns true.</returns>
-        public bool Find(GameObject obj)
+        public virtual bool Find(GameObject obj)
         {
             if (operation == OperationTypes.Ignore)
             {

@@ -34,6 +34,18 @@ namespace VRTK
         public abstract Transform GetHeadsetCamera();
 
         /// <summary>
+        /// The GetHeadsetVelocity method is used to determine the current velocity of the headset.
+        /// </summary>
+        /// <returns>A Vector3 containing the current velocity of the headset.</returns>
+        public abstract Vector3 GetHeadsetVelocity();
+
+        /// <summary>
+        /// The GetHeadsetAngularVelocity method is used to determine the current angular velocity of the headset.
+        /// </summary>
+        /// <returns>A Vector3 containing the current angular velocity of the headset.</returns>
+        public abstract Vector3 GetHeadsetAngularVelocity();
+
+        /// <summary>
         /// The HeadsetFade method is used to apply a fade to the headset camera to progressively change the colour.
         /// </summary>
         /// <param name="color">The colour to fade to.</param>

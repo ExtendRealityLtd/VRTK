@@ -132,7 +132,7 @@ namespace VRTK
             Invoke("UnfadeComplete", duration);
         }
 
-        private void Start()
+        protected virtual void Start()
         {
             headset = VRTK_DeviceFinder.HeadsetTransform();
             isTransitioning = false;

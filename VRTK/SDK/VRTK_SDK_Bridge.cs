@@ -45,9 +45,9 @@
             return GetControllerSDK().GetControllerOrigin(controller);
         }
 
-        public static Transform GenerateControllerPointerOrigin()
+        public static Transform GenerateControllerPointerOrigin(GameObject parent)
         {
-            return GetControllerSDK().GenerateControllerPointerOrigin();
+            return GetControllerSDK().GenerateControllerPointerOrigin(parent);
         }
 
         public static GameObject GetControllerLeftHand(bool actual)
@@ -118,6 +118,16 @@
         public static Vector3 GetAngularVelocityOnIndex(uint index)
         {
             return GetControllerSDK().GetAngularVelocityOnIndex(index);
+        }
+
+        public static Vector3 GetHeadsetVelocity()
+        {
+            return GetHeadsetSDK().GetHeadsetVelocity();
+        }
+
+        public static Vector3 GetHeadsetAngularVelocity()
+        {
+            return GetHeadsetSDK().GetHeadsetAngularVelocity();
         }
 
         public static Vector2 GetTouchpadAxisOnIndex(uint index)

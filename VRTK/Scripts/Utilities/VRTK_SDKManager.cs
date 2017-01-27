@@ -177,7 +177,7 @@ namespace VRTK
             return returnSDK;
         }
 
-        private void Awake()
+        protected virtual void Awake()
         {
             CreateInstance();
             if (!VRTK_SharedMethods.IsEditTime())

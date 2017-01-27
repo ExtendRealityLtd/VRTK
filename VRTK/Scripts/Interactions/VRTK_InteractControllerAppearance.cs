@@ -4,7 +4,7 @@ namespace VRTK
     using UnityEngine;
 
     /// <summary>
-    /// The Interact Controller Appearance script is used to determine whether the controller model should be visible or hidden on touch, grab or use.
+    /// The Interact Controller Appearance script is attached on the same GameObject as an Interactable Object script and is used to determine whether the controller model should be visible or hidden on touch, grab or use.
     /// </summary>
     /// <example>
     /// `VRTK/Examples/008_Controller_UsingAGrabbedObject` shows that the controller can be hidden when touching, grabbing and using an object.
@@ -40,7 +40,7 @@ namespace VRTK
         /// <param name="showController">If true then the controller will attempt to be made visible when no longer touching, if false then the controller will be hidden on touch.</param>
         /// <param name="controllerActions">The controller to apply the visibility state to.</param>
         /// <param name="obj">The object that is currently being interacted with by the controller which is passed through to the visibility to prevent the object from being hidden as well.</param>
-        public void ToggleControllerOnTouch(bool showController, VRTK_ControllerActions controllerActions, GameObject obj)
+        public virtual void ToggleControllerOnTouch(bool showController, VRTK_ControllerActions controllerActions, GameObject obj)
         {
             if (hideControllerOnTouch)
             {
@@ -55,7 +55,7 @@ namespace VRTK
         /// <param name="showController">If true then the controller will attempt to be made visible when no longer grabbing, if false then the controller will be hidden on grab.</param>
         /// <param name="controllerActions">The controller to apply the visibility state to.</param>
         /// <param name="obj">The object that is currently being interacted with by the controller which is passed through to the visibility to prevent the object from being hidden as well.</param>
-        public void ToggleControllerOnGrab(bool showController, VRTK_ControllerActions controllerActions, GameObject obj)
+        public virtual void ToggleControllerOnGrab(bool showController, VRTK_ControllerActions controllerActions, GameObject obj)
         {
             if (hideControllerOnGrab)
             {
@@ -77,7 +77,7 @@ namespace VRTK
         /// <param name="showController">If true then the controller will attempt to be made visible when no longer using, if false then the controller will be hidden on use.</param>
         /// <param name="controllerActions">The controller to apply the visibility state to.</param>
         /// <param name="obj">The object that is currently being interacted with by the controller which is passed through to the visibility to prevent the object from being hidden as well.</param>
-        public void ToggleControllerOnUse(bool showController, VRTK_ControllerActions controllerActions, GameObject obj)
+        public virtual void ToggleControllerOnUse(bool showController, VRTK_ControllerActions controllerActions, GameObject obj)
         {
             if (hideControllerOnUse)
             {
@@ -89,6 +89,14 @@ namespace VRTK
                     return;
                 }
                 ToggleController(showController, controllerActions, obj.gameObject, hideDelayOnUse);
+            }
+        }
+
+        protected virtual void OnEnable()
+        {
+            if (!GetComponent<VRTK_InteractableObject>())
+            {
+                Debug.LogError("The `VRTK_InteractControllerAppearance` script is required to be attached to a GameObject that has the `VRTK_InteractableObject` script also attached to it.");
             }
         }
 

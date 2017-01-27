@@ -272,12 +272,7 @@ namespace VRTK
             targetListPolicy = list;
         }
 
-        private bool ValidTarget(Collider collider)
-        {
-            return (!VRTK_PlayerObject.IsPlayerObject(collider.gameObject) && !(VRTK_PolicyList.Check(collider.gameObject, targetListPolicy)));
-        }
-
-        private void OnTriggerStay(Collider collider)
+        protected virtual void OnTriggerStay(Collider collider)
         {
             if (parent.enabled && parent.gameObject.activeInHierarchy && ValidTarget(collider))
             {
@@ -285,12 +280,17 @@ namespace VRTK
             }
         }
 
-        private void OnTriggerExit(Collider collider)
+        protected virtual void OnTriggerExit(Collider collider)
         {
             if (ValidTarget(collider))
             {
                 parent.SetPlayAreaCursorCollision(false);
             }
+        }
+
+        private bool ValidTarget(Collider collider)
+        {
+            return (!VRTK_PlayerObject.IsPlayerObject(collider.gameObject) && !(VRTK_PolicyList.Check(collider.gameObject, targetListPolicy)));
         }
     }
 }

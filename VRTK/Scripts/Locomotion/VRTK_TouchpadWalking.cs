@@ -67,7 +67,7 @@ namespace VRTK
         private bool multiplySpeed = false;
         private VRTK_ControllerEvents controllerEvents;
 
-        private void Awake()
+        protected virtual void Awake()
         {
             touchpadAxisChanged = new ControllerInteractionEventHandler(DoTouchpadAxisChanged);
             touchpadUntouched = new ControllerInteractionEventHandler(DoTouchpadTouchEnd);
@@ -80,11 +80,23 @@ namespace VRTK
             }
         }
 
-        private void Start()
+        protected virtual void Start()
         {
             VRTK_PlayerObject.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.CameraRig);
             SetControllerListeners(controllerLeftHand);
             SetControllerListeners(controllerRightHand);
+        }
+
+        protected virtual void Update()
+        {
+            multiplySpeed = (controllerEvents && speedMultiplierButton != VRTK_ControllerEvents.ButtonAlias.Undefined && controllerEvents.IsButtonPressed(speedMultiplierButton));
+        }
+
+        protected virtual void FixedUpdate()
+        {
+            CalculateSpeed(ref movementSpeed, touchAxis.y);
+            CalculateSpeed(ref strafeSpeed, touchAxis.x);
+            Move();
         }
 
         private void DoTouchpadAxisChanged(object sender, ControllerInteractionEventArgs e)
@@ -152,18 +164,6 @@ namespace VRTK
                 playArea.position += (movement + strafe);
                 playArea.position = new Vector3(playArea.position.x, fixY, playArea.position.z);
             }
-        }
-
-        private void Update()
-        {
-            multiplySpeed = (controllerEvents && speedMultiplierButton != VRTK_ControllerEvents.ButtonAlias.Undefined && controllerEvents.IsButtonPressed(speedMultiplierButton));
-        }
-
-        private void FixedUpdate()
-        {
-            CalculateSpeed(ref movementSpeed, touchAxis.y);
-            CalculateSpeed(ref strafeSpeed, touchAxis.x);
-            Move();
         }
 
         private void SetControllerListeners(GameObject controller)

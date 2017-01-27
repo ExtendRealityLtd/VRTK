@@ -98,14 +98,14 @@ namespace VRTK
             return grabbedObject;
         }
 
-        private void Awake()
+        protected virtual void Awake()
         {
             interactTouch = GetComponent<VRTK_InteractTouch>();
             controllerActions = GetComponent<VRTK_ControllerActions>();
             controllerEvents = GetComponent<VRTK_ControllerEvents>();
         }
 
-        private void OnEnable()
+        protected virtual void OnEnable()
         {
             RegrabUndroppableObject();
 
@@ -115,12 +115,19 @@ namespace VRTK
             SetControllerAttachPoint();
         }
 
-        private void OnDisable()
+        protected virtual void OnDisable()
         {
             SetUndroppableObject();
             ForceRelease();
             controllerEvents.AliasGrabOn -= new ControllerInteractionEventHandler(DoGrabObject);
             controllerEvents.AliasGrabOff -= new ControllerInteractionEventHandler(DoReleaseObject);
+        }
+
+        protected virtual void Update()
+        {
+            CheckControllerAttachPointSet();
+            CreateNonTouchingRigidbody();
+            CheckPrecognitionGrab();
         }
 
         private void RegrabUndroppableObject()
@@ -398,13 +405,6 @@ namespace VRTK
         private void DoReleaseObject(object sender, ControllerInteractionEventArgs e)
         {
             AttemptReleaseObject();
-        }
-
-        private void Update()
-        {
-            CheckControllerAttachPointSet();
-            CreateNonTouchingRigidbody();
-            CheckPrecognitionGrab();
         }
 
         private void CheckControllerAttachPointSet()

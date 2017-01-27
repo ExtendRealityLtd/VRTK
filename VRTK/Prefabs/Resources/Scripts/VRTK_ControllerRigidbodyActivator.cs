@@ -17,12 +17,12 @@ namespace VRTK
     /// </remarks>
     public class VRTK_ControllerRigidbodyActivator : MonoBehaviour
     {
-        private void OnTriggerEnter(Collider collider)
+        protected virtual void OnTriggerEnter(Collider collider)
         {
             ToggleRigidbody(collider, true);
         }
 
-        private void OnTriggerExit(Collider collider)
+        protected virtual void OnTriggerExit(Collider collider)
         {
             ToggleRigidbody(collider, false);
         }

@@ -301,7 +301,7 @@ Adding the `VRTK_SnapDropZone_UnityEvents` component to `VRTK_SnapDropZone` obje
 
 #### InitaliseHighlightObject/1
 
-  > `public void InitaliseHighlightObject(bool removeOldObject = false)`
+  > `public virtual void InitaliseHighlightObject(bool removeOldObject = false)`
 
   * Parameters
    * `bool removeOldObject` - If this is set to true then it attempts to delete the old highlight object if it exists. Defaults to `false`
@@ -312,7 +312,7 @@ The InitaliseHighlightObject method sets up the highlight object based on the gi
 
 #### ForceSnap/1
 
-  > `public void ForceSnap(GameObject objectToSnap)`
+  > `public virtual void ForceSnap(GameObject objectToSnap)`
 
   * Parameters
    * `GameObject objectToSnap` - The GameObject to attempt to snap.
@@ -323,7 +323,7 @@ the ForceSnap method attempts to automatically attach a valid game object to the
 
 #### ForceUnsnap/0
 
-  > `public void ForceUnsnap()`
+  > `public virtual void ForceUnsnap()`
 
   * Parameters
    * _none_
@@ -809,6 +809,7 @@ A collection of scripts that provide varying methods of moving the user around t
  * [Teleport Disable On Headset Collision](#teleport-disable-on-headset-collision-vrtk_teleportdisableonheadsetcollision)
  * [Teleport Disable On Controller Obscured](#teleport-disable-on-controller-obscured-vrtk_teleportdisableoncontrollerobscured)
  * [Touchpad Walking](#touchpad-walking-vrtk_touchpadwalking)
+ * [Touchpad Movement](#touchpad-movement-vrtk_touchpadmovement)
  * [Move In Place](#move-in-place-vrtk_moveinplace)
  * [Player Climb](#player-climb-vrtk_playerclimb)
  * [Room Extender](#room-extender-vrtk_roomextender)
@@ -857,7 +858,7 @@ Adding the `VRTK_BasicTeleport_UnityEvents` component to `VRTK_BasicTeleport` ob
 
 #### InitDestinationSetListener/2
 
-  > `public void InitDestinationSetListener(GameObject markerMaker, bool register)`
+  > `public virtual void InitDestinationSetListener(GameObject markerMaker, bool register)`
 
   * Parameters
    * `GameObject markerMaker` - The game object that is used to generate destination marker events, such as a controller.
@@ -869,7 +870,7 @@ The InitDestinationSetListener method is used to register the teleport script to
 
 #### ToggleTeleportEnabled/1
 
-  > `public void ToggleTeleportEnabled(bool state)`
+  > `public virtual void ToggleTeleportEnabled(bool state)`
 
   * Parameters
    * `bool state` - Toggles whether the teleporter is enabled or disabled.
@@ -877,6 +878,18 @@ The InitDestinationSetListener method is used to register the teleport script to
    * _none_
 
 The ToggleTeleportEnabled method is used to determine whether the teleporter will initiate a teleport on a destination set event, if the state is true then the teleporter will work as normal, if the state is false then the teleporter will not be operational.
+
+#### ValidLocation/2
+
+  > `public virtual bool ValidLocation(Transform target, Vector3 destinationPosition)`
+
+  * Parameters
+   * `Transform target` - The Transform that the destination marker is touching.
+   * `Vector3 destinationPosition` - The position in world space that is the destination.
+  * Returns
+   * `bool` - Returns true if the target is a valid location.
+
+The ValidLocation method determines if the given target is a location that can be teleported to
 
 ### Example
 
@@ -982,6 +995,90 @@ The Touchpad Walking script adds a rigidbody and a box collider to the user's po
 ### Example
 
 `VRTK/Examples/017_CameraRig_TouchpadWalking` has a collection of walls and slopes that can be traversed by the user with the touchpad. There is also an area that can only be traversed if the user is crouching.
+
+---
+
+## Touchpad Movement (VRTK_TouchpadMovement)
+
+### Overview
+
+Adds the ability to move and rotate the play area and the player by using the touchpad.
+
+The Touchpad Movement script requires VRTK_BodyPhysics script to be present in one of the scene GameObjects for collision detection.
+
+Vertical axis movement types include:
+- regular smooth sliding (walking)
+- warping, which instantly moves the player forward at a fixed distance
+
+Horizontal axis movement types include:
+- smooth sliding (strafing)
+- smooth rotation
+- snap rotation, which instantly rotates the player at a fixed angle
+- warping, which instantly moves the player sideways (instant strafing)
+
+Additionally it's possible to enable direction flip feature which allows the user to do an instant 180 degree turn by pressing the touchpad down.
+
+It's also possible to define a button to multiply any type of movement (speed, range, angle) when the set button is pressed. Values above one will give a boost effect
+and values below one will do the opposite. All movement values are public properties and can be set from other script at runtime.
+
+Different movement types can be split across the controllers by having one script per hand side and with the desired options.
+Warp and snap rotate options may provide more comfortable experience for some and blink effect can be used to soften the movement.
+Snap rotate and flip direction options can be useful with teleport scripts for seated experiences and for people using front facing camera setups(Oculus default, PSVR).
+
+### Inspector Parameters
+
+ * **Move On Button Press:** If a button is defined then the selected movement will only be performed when the specified button is being held down and the touchpad axis changes.
+ * **Movement Multiplier Button:** If the defined movement multiplier button is pressed then the movement will be affected by the axis multiplier value.
+ * **Vertical Axis Movement:** Selects the main movement type to be performed when the vertical axis changes occur.
+ * **Vertical Deadzone:** Dead zone for the vertical axis. High value recommended for warp movement.
+ * **Vertical Multiplier:** Multiplier for the vertical axis movement when the multiplier button is pressed.
+ * **Device For Direction:** The direction that will be moved in is the direction of this device.
+ * **Flip Direction Enabled:** Enables a secondary action of a direction flip of 180 degrees when the touchpad is pulled downwards.
+ * **Flip Deadzone:** Dead zone for the downwards pull. High value recommended.
+ * **Flip Delay:** The delay before the next direction flip is allowed to happen.
+ * **Flip Blink:** Enables blink on flip.
+ * **Horizontal Axis Movement:** Selects the movement type to be performed when the horizontal axis changes occur.
+ * **Horizontal Deadzone:** Dead zone for the horizontal axis. High value recommended for snap rotate and warp movement.
+ * **Horizontal Multiplier:** Multiplier for the horizontal axis movement when the multiplier button is pressed.
+ * **Snap Rotate Delay:** The delay before the next snap rotation is allowed to happen.
+ * **Snap Rotate Angle:** The number of degrees to instantly rotate in to the given direction.
+ * **Rotate Max Speed:** The maximum speed the play area will be rotated when the touchpad is being touched at the extremes of the axis. If a lower part of the touchpad axis is touched (nearer the centre) then the rotation speed is slower.
+ * **Blink Duration Multiplier:** Blink effect duration multiplier for the movement delay, ie. 1.0 means blink transition lasts until the delay has expired and 0.5 means the effect has completed when half of the delay time is done.
+ * **Slide Max Speed:** The maximum speed the play area will be moved by sliding when the touchpad is being touched at the extremes of the axis. If a lower part of the touchpad axis is touched (nearer the centre) then the speed is slower.
+ * **Slide Deceleration:** The speed in which the play area slows down to a complete stop when the user is no longer touching the touchpad. This deceleration effect can ease any motion sickness that may be suffered.
+ * **Warp Delay:** The delay before the next warp is allowed to happen.
+ * **Warp Range:** The distance to warp in to the given direction.
+ * **Warp Max Altitude Change:** The maximum altitude change allowed for a warp to happen.
+
+### Class Variables
+
+ * `public enum VerticalAxisMovement` - Movement types that can be performed by the vertical axis.
+  * `None` - No movement is performed.
+  * `Slide` - Performs smooth movement (walk).
+  * `Warp` - Performs an instant warp movement.
+  * `WarpWithBlink` - Performs an instant warp movement with a blink effect.
+ * `public enum HorizontalAxisMovement` - Movement types that can be performed by the horizontal axis.
+  * `None` - No movement is performed.
+  * `Slide` - Performs smooth movement (strafe).
+  * `Rotate` - Performs smooth rotation.
+  * `SnapRotate` - Performs fixed angle rotation.
+  * `SnapRotateWithBlink` - Performs fixed angle rotation with a blink effect.
+  * `Warp` - Performs an instant warp movement.
+  * `WarpWithBlink` - Performs an instant warp movement with a blink effect.
+ * `public enum AxisMovementType` - Which type axis movement did occur.
+  * `Warp` - User warped.
+  * `FlipDirection` - User flipped the direction.
+  * `SnapRotate` - User snap rotated.
+ * `public enum AxisMovementDirection` - Which direction did the axis movement occur.
+
+### Class Events
+
+ * `AxisMovement` - Emitted when a warp, a flip direction or a snap rotate movement has successfully completed.
+
+### Event Payload
+
+ * `VRTK_TouchpadMovement.AxisMovementType movementType` - The type of movement for the axis.
+ * `VRTK_TouchpadMovement.AxisMovementDirection direction` - The direction of the axis.
 
 ---
 
@@ -1426,7 +1523,8 @@ The highlighting of the controller is defaulted to use the `VRTK_MaterialColorSw
     * `Grip Right Model Path`: The model that represents the right grip button.
     * `Touchpad Model Path`: The model that represents the touchpad.
     * `Button One Model Path`: The model that represents button one.
-    * `System Menu Model Path`: The model that represents the system menu button.
+    * `Button Two Model Path`: The model that represents button two.
+    * `System Menu Model Path`: The model that represents the system menu button.  * `Start Menu Model Path`: The model that represents the start menu button.
  * **Element Highlighter Overrides:** A collection of highlighter overrides for each controller model sub element. If no highlighter override is given then highlighter on the Controller game object is used.
   * The available model sub elements are:
     * `Body`: The highlighter to use on the overall shape of the controller.
@@ -1435,7 +1533,8 @@ The highlighting of the controller is defaulted to use the `VRTK_MaterialColorSw
     * `Grip Right`: The highlighter to use on the  right grip button.
     * `Touchpad`: The highlighter to use on the touchpad.
     * `Button One`: The highlighter to use on button one.
-    * `System Menu`: The highlighter to use on the system menu button.
+    * `Button Two`: The highlighter to use on button two.
+    * `System Menu`: The highlighter to use on the system menu button.  * `Start Menu`: The highlighter to use on the start menu button.
 
 ### Class Events
 
@@ -1468,7 +1567,7 @@ The IsControllerVisible method returns true if the controller is currently visib
 
 #### ToggleControllerModel/2
 
-  > `public void ToggleControllerModel(bool state, GameObject grabbedChildObject)`
+  > `public virtual void ToggleControllerModel(bool state, GameObject grabbedChildObject)`
 
   * Parameters
    * `bool state` - The visibility state to toggle the controller to, `true` will make the controller visible - `false` will hide the controller model.
@@ -1480,7 +1579,7 @@ The ToggleControllerModel method is used to turn on or off the controller model 
 
 #### SetControllerOpacity/1
 
-  > `public void SetControllerOpacity(float alpha)`
+  > `public virtual void SetControllerOpacity(float alpha)`
 
   * Parameters
    * `float alpha` - The alpha level to apply to opacity of the controller object. `0f` to `1f`.
@@ -1491,7 +1590,7 @@ The SetControllerOpacity method allows the opacity of the controller model to be
 
 #### HighlightControllerElement/3
 
-  > `public void HighlightControllerElement(GameObject element, Color? highlight, float fadeDuration = 0f)`
+  > `public virtual void HighlightControllerElement(GameObject element, Color? highlight, float fadeDuration = 0f)`
 
   * Parameters
    * `GameObject element` - The element of the controller to apply the highlight to.
@@ -1504,7 +1603,7 @@ The HighlightControllerElement method allows for an element of the controller to
 
 #### UnhighlightControllerElement/1
 
-  > `public void UnhighlightControllerElement(GameObject element)`
+  > `public virtual void UnhighlightControllerElement(GameObject element)`
 
   * Parameters
    * `GameObject element` - The element of the controller to remove the highlight from.
@@ -1515,7 +1614,7 @@ The UnhighlightControllerElement method is the inverse of the HighlightControlle
 
 #### ToggleHighlightControllerElement/4
 
-  > `public void ToggleHighlightControllerElement(bool state, GameObject element, Color? highlight = null, float duration = 0f)`
+  > `public virtual void ToggleHighlightControllerElement(bool state, GameObject element, Color? highlight = null, float duration = 0f)`
 
   * Parameters
    * `bool state` - The highlight colour state, `true` will enable the highlight on the given element and `false` will remove the highlight from the given element.
@@ -1529,7 +1628,7 @@ The ToggleHighlightControllerElement method is a shortcut method that makes it e
 
 #### ToggleHighlightTrigger/3
 
-  > `public void ToggleHighlightTrigger(bool state, Color? highlight = null, float duration = 0f)`
+  > `public virtual void ToggleHighlightTrigger(bool state, Color? highlight = null, float duration = 0f)`
 
   * Parameters
    * `bool state` - The highlight colour state, `true` will enable the highlight on the trigger and `false` will remove the highlight from the trigger.
@@ -1542,7 +1641,7 @@ The ToggleHighlightTrigger method is a shortcut method that makes it easier to t
 
 #### ToggleHighlightGrip/3
 
-  > `public void ToggleHighlightGrip(bool state, Color? highlight = null, float duration = 0f)`
+  > `public virtual void ToggleHighlightGrip(bool state, Color? highlight = null, float duration = 0f)`
 
   * Parameters
    * `bool state` - The highlight colour state, `true` will enable the highlight on the grip and `false` will remove the highlight from the grip.
@@ -1555,7 +1654,7 @@ The ToggleHighlightGrip method is a shortcut method that makes it easier to togg
 
 #### ToggleHighlightTouchpad/3
 
-  > `public void ToggleHighlightTouchpad(bool state, Color? highlight = null, float duration = 0f)`
+  > `public virtual void ToggleHighlightTouchpad(bool state, Color? highlight = null, float duration = 0f)`
 
   * Parameters
    * `bool state` - The highlight colour state, `true` will enable the highlight on the touchpad and `false` will remove the highlight from the touchpad.
@@ -1568,7 +1667,7 @@ The ToggleHighlightTouchpad method is a shortcut method that makes it easier to 
 
 #### ToggleHighlightButtonOne/3
 
-  > `public void ToggleHighlightButtonOne(bool state, Color? highlight = null, float duration = 0f)`
+  > `public virtual void ToggleHighlightButtonOne(bool state, Color? highlight = null, float duration = 0f)`
 
   * Parameters
    * `bool state` - The highlight colour state, `true` will enable the highlight on button one and `false` will remove the highlight from button one.
@@ -1581,7 +1680,7 @@ The ToggleHighlightButtonOne method is a shortcut method that makes it easier to
 
 #### ToggleHighlightButtonTwo/3
 
-  > `public void ToggleHighlightButtonTwo(bool state, Color? highlight = null, float duration = 0f)`
+  > `public virtual void ToggleHighlightButtonTwo(bool state, Color? highlight = null, float duration = 0f)`
 
   * Parameters
    * `bool state` - The highlight colour state, `true` will enable the highlight on button two and `false` will remove the highlight from button two.
@@ -1594,7 +1693,7 @@ The ToggleHighlightButtonTwo method is a shortcut method that makes it easier to
 
 #### ToggleHighlightStartMenu/3
 
-  > `public void ToggleHighlightStartMenu(bool state, Color? highlight = null, float duration = 0f)`
+  > `public virtual void ToggleHighlightStartMenu(bool state, Color? highlight = null, float duration = 0f)`
 
   * Parameters
    * `bool state` - The highlight colour state, `true` will enable the highlight on the start menu and `false` will remove the highlight from the start menu.
@@ -1607,7 +1706,7 @@ The ToggleHighlightStartMenu method is a shortcut method that makes it easier to
 
 #### ToggleHighlighBody/3
 
-  > `public void ToggleHighlighBody(bool state, Color? highlight = null, float duration = 0f)`
+  > `public virtual void ToggleHighlighBody(bool state, Color? highlight = null, float duration = 0f)`
 
   * Parameters
    * `bool state` - The highlight colour state, `true` will enable the highlight on the body and `false` will remove the highlight from the body.
@@ -1620,7 +1719,7 @@ The ToggleHighlighBody method is a shortcut method that makes it easier to toggl
 
 #### ToggleHighlightController/3
 
-  > `public void ToggleHighlightController(bool state, Color? highlight = null, float duration = 0f)`
+  > `public virtual void ToggleHighlightController(bool state, Color? highlight = null, float duration = 0f)`
 
   * Parameters
    * `bool state` - The highlight colour state, `true` will enable the highlight on the entire controller `false` will remove the highlight from the entire controller.
@@ -1633,7 +1732,7 @@ The ToggleHighlightController method is a shortcut method that makes it easier t
 
 #### TriggerHapticPulse/1
 
-  > `public void TriggerHapticPulse(float strength)`
+  > `public virtual void TriggerHapticPulse(float strength)`
 
   * Parameters
    * `float strength` - The intensity of the rumble of the controller motor. `0` to `1`.
@@ -1644,7 +1743,7 @@ The TriggerHapticPulse/1 method calls a single haptic pulse call on the controll
 
 #### TriggerHapticPulse/3
 
-  > `public void TriggerHapticPulse(float strength, float duration, float pulseInterval)`
+  > `public virtual void TriggerHapticPulse(float strength, float duration, float pulseInterval)`
 
   * Parameters
    * `float strength` - The intensity of the rumble of the controller motor. `0` to `1`.
@@ -1657,7 +1756,7 @@ The TriggerHapticPulse/3 method calls a haptic pulse for a specified amount of t
 
 #### InitaliseHighlighters/0
 
-  > `public void InitaliseHighlighters()`
+  > `public virtual void InitaliseHighlighters()`
 
   * Parameters
    * _none_
@@ -1866,7 +1965,7 @@ The ResetHighlighter method is used to reset the currently attached highlighter.
 
 #### PauseCollisions/1
 
-  > `public void PauseCollisions(float delay)`
+  > `public virtual void PauseCollisions(float delay)`
 
   * Parameters
    * `float delay` - The amount of time to pause the collisions for.
@@ -1877,7 +1976,7 @@ The PauseCollisions method temporarily pauses all collisions on the object at gr
 
 #### ZeroVelocity/0
 
-  > `public void ZeroVelocity()`
+  > `public virtual void ZeroVelocity()`
 
   * Parameters
    * _none_
@@ -1888,7 +1987,7 @@ The ZeroVelocity method resets the velocity and angular velocity to zero on the 
 
 #### SaveCurrentState/0
 
-  > `public void SaveCurrentState()`
+  > `public virtual void SaveCurrentState()`
 
   * Parameters
    * _none_
@@ -1943,7 +2042,7 @@ The GetUsingObject method is used to return the game object that is currently us
 
 #### IsValidInteractableController/2
 
-  > `public bool IsValidInteractableController(GameObject actualController, AllowedController controllerCheck)`
+  > `public virtual bool IsValidInteractableController(GameObject actualController, AllowedController controllerCheck)`
 
   * Parameters
    * `GameObject actualController` - The game object of the controller that is being checked.
@@ -1955,7 +2054,7 @@ The IsValidInteractableController method is used to check to see if a controller
 
 #### ForceStopInteracting/0
 
-  > `public void ForceStopInteracting()`
+  > `public virtual void ForceStopInteracting()`
 
   * Parameters
    * _none_
@@ -1966,7 +2065,7 @@ The ForceStopInteracting method forces the object to no longer be interacted wit
 
 #### ForceStopSecondaryGrabInteraction/0
 
-  > `public void ForceStopSecondaryGrabInteraction()`
+  > `public virtual void ForceStopSecondaryGrabInteraction()`
 
   * Parameters
    * _none_
@@ -1999,7 +2098,7 @@ The UnregisterTeleporters method is used to unregister all teleporter events tha
 
 #### StoreLocalScale/0
 
-  > `public void StoreLocalScale()`
+  > `public virtual void StoreLocalScale()`
 
   * Parameters
    * _none_
@@ -2010,7 +2109,7 @@ the StoreLocalScale method saves the current transform local scale values.
 
 #### ToggleSnapDropZone/2
 
-  > `public void ToggleSnapDropZone(VRTK_SnapDropZone snapDropZone, bool state)`
+  > `public virtual void ToggleSnapDropZone(VRTK_SnapDropZone snapDropZone, bool state)`
 
   * Parameters
    * `VRTK_SnapDropZone snapDropZone` - The Snap Drop Zone object that is being interacted with.
@@ -2387,7 +2486,7 @@ The ForceResetUsing will force the controller to stop using the currently touche
 
 ### Overview
 
-The Interact Haptics script is attached along side the Interactable Object script and provides controller haptics on touch, grab and use of the object.
+The Interact Haptics script is attached on the same GameObject as an Interactable Object script and provides controller haptics on touch, grab and use of the object.
 
 ### Inspector Parameters
 
@@ -2405,7 +2504,7 @@ The Interact Haptics script is attached along side the Interactable Object scrip
 
 #### HapticsOnTouch/1
 
-  > `public void HapticsOnTouch(VRTK_ControllerActions controllerActions)`
+  > `public virtual void HapticsOnTouch(VRTK_ControllerActions controllerActions)`
 
   * Parameters
    * `VRTK_ControllerActions controllerActions` - The controller to activate the haptic feedback on.
@@ -2416,7 +2515,7 @@ The HapticsOnTouch method triggers the haptic feedback on the given controller f
 
 #### HapticsOnGrab/1
 
-  > `public void HapticsOnGrab(VRTK_ControllerActions controllerActions)`
+  > `public virtual void HapticsOnGrab(VRTK_ControllerActions controllerActions)`
 
   * Parameters
    * `VRTK_ControllerActions controllerActions` - The controller to activate the haptic feedback on.
@@ -2427,7 +2526,7 @@ The HapticsOnGrab method triggers the haptic feedback on the given controller fo
 
 #### HapticsOnUse/1
 
-  > `public void HapticsOnUse(VRTK_ControllerActions controllerActions)`
+  > `public virtual void HapticsOnUse(VRTK_ControllerActions controllerActions)`
 
   * Parameters
    * `VRTK_ControllerActions controllerActions` - The controller to activate the haptic feedback on.
@@ -2442,7 +2541,7 @@ The HapticsOnUse method triggers the haptic feedback on the given controller for
 
 ### Overview
 
-The Interact Controller Appearance script is used to determine whether the controller model should be visible or hidden on touch, grab or use.
+The Interact Controller Appearance script is attached on the same GameObject as an Interactable Object script and is used to determine whether the controller model should be visible or hidden on touch, grab or use.
 
 ### Inspector Parameters
 
@@ -2457,7 +2556,7 @@ The Interact Controller Appearance script is used to determine whether the contr
 
 #### ToggleControllerOnTouch/3
 
-  > `public void ToggleControllerOnTouch(bool showController, VRTK_ControllerActions controllerActions, GameObject obj)`
+  > `public virtual void ToggleControllerOnTouch(bool showController, VRTK_ControllerActions controllerActions, GameObject obj)`
 
   * Parameters
    * `bool showController` - If true then the controller will attempt to be made visible when no longer touching, if false then the controller will be hidden on touch.
@@ -2470,7 +2569,7 @@ The ToggleControllerOnTouch method determines whether the controller should be s
 
 #### ToggleControllerOnGrab/3
 
-  > `public void ToggleControllerOnGrab(bool showController, VRTK_ControllerActions controllerActions, GameObject obj)`
+  > `public virtual void ToggleControllerOnGrab(bool showController, VRTK_ControllerActions controllerActions, GameObject obj)`
 
   * Parameters
    * `bool showController` - If true then the controller will attempt to be made visible when no longer grabbing, if false then the controller will be hidden on grab.
@@ -2483,7 +2582,7 @@ The ToggleControllerOnGrab method determines whether the controller should be sh
 
 #### ToggleControllerOnUse/3
 
-  > `public void ToggleControllerOnUse(bool showController, VRTK_ControllerActions controllerActions, GameObject obj)`
+  > `public virtual void ToggleControllerOnUse(bool showController, VRTK_ControllerActions controllerActions, GameObject obj)`
 
   * Parameters
    * `bool showController` - If true then the controller will attempt to be made visible when no longer using, if false then the controller will be hidden on use.
@@ -2509,7 +2608,22 @@ It is possible to automatically grab an Interactable Object to a specific contro
 ### Inspector Parameters
 
  * **Object To Grab:** A game object (either within the scene or a prefab) that will be grabbed by the controller on game start.
+ * **Object Is Prefab:** If the `Object To Grab` is a prefab then this needs to be checked, if the `Object To Grab` already exists in the scene then this needs to be unchecked.
  * **Clone Grabbed Object:** If this is checked then the Object To Grab will be cloned into a new object and attached to the controller leaving the existing object in the scene. This is required if the same object is to be grabbed to both controllers as a single object cannot be grabbed by different controllers at the same time. It is also required to clone a grabbed object if it is a prefab as it needs to exist within the scene to be grabbed.
+ * **Always Clone On Enable:** If `Clone Grabbed Object` is checked and this is checked, then whenever this script is disabled and re-enabled, it will always create a new clone of the object to grab. If this is false then the original cloned object will attempt to be grabbed again. If the original cloned object no longer exists then a new clone will be created.
+
+### Class Methods
+
+#### ClearPreviousClone/0
+
+  > `public void ClearPreviousClone()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The ClearPreviousClone method resets the previous cloned object to null to ensure when the script is re-enabled that a new cloned object is created, rather than the original clone being grabbed again.
 
 ### Example
 
@@ -2523,6 +2637,7 @@ This directory contains scripts that are used to provide different object highli
 
  * [Base Highlighter](#base-highlighter-vrtk_basehighlighter)
  * [Material Colour Swap](#material-colour-swap-vrtk_materialcolorswaphighlighter)
+ * [Material Property Block Colour Swap](#material-property-block-colour-swap-vrtk_materialpropertyblockcolorswaphighlighter)
  * [Outline Object Copy](#outline-object-copy-vrtk_outlineobjectcopyhighlighter)
 
 ---
@@ -2699,6 +2814,48 @@ The Unhighlight method returns the object back to it's original colour.
 `VRTK/Examples/005_Controller_BasicObjectGrabbing` demonstrates the solid highlighting on the green cube, red cube and flying saucer when the controller touches it.
 
 `VRTK/Examples/035_Controller_OpacityAndHighlighting` demonstrates the solid highlighting if the right controller collides with the green box or if any of the buttons are pressed.
+
+---
+
+## Material Property Block Colour Swap (VRTK_MaterialPropertyBlockColorSwapHighlighter)
+ > extends [VRTK_MaterialColorSwapHighlighter](#material-colour-swap-vrtk_materialcolorswaphighlighter)
+
+### Overview
+
+This highlighter swaps the texture colour for the given highlight colour using MaterialPropertyBlocks.
+The effect of this highlighter is the same as of the VRTK_MaterialColorSwapHighlighter.cs but this highlighter
+can additionally handle objects which make use material instances.
+
+Due to the way the object material is interacted with, changing the material colour will break Draw Call Batching in Unity whilst the object is highlighted.
+
+The Draw Call Batching will resume on the original material when the item is no longer highlighted.
+
+### Class Methods
+
+#### Initialise/2
+
+  > `public override void Initialise(Color? color = null, Dictionary<string, object> options = null)`
+
+  * Parameters
+   * `Color? color` - Not used.
+   * `Dictionary<string, object> options` - A dictionary array containing the highlighter options:
+     * `<'resetMainTexture', bool>` - Determines if the default main texture should be cleared on highlight. `true` to reset the main default texture, `false` to not reset it.
+  * Returns
+   * _none_
+
+The Initialise method sets up the highlighter for use.
+
+#### Unhighlight/2
+
+  > `public override void Unhighlight(Color? color = null, float duration = 0f)`
+
+  * Parameters
+   * `Color? color` - Not used.
+   * `float duration` - Not used.
+  * Returns
+   * _none_
+
+The Unhighlight method returns the object back to it's original colour.
 
 ---
 
@@ -3102,6 +3259,8 @@ This works well for items that are on hinged joints or objects that require to i
 ### Inspector Parameters
 
  * **Detach Distance:** The maximum distance the grabbing controller is away from the object before it is automatically dropped.
+ * **Velocity Limit:** The maximum amount of velocity magnitude that can be applied to the object. Lowering this can prevent physics glitches if objects are moving too fast.
+ * **Angular Velocity Limit:** The maximum amount of angular velocity magnitude that can be applied to the object. Lowering this can prevent physics glitches if objects are moving too fast.
 
 ### Class Methods
 
@@ -3168,6 +3327,17 @@ The Rotator Track Grab Attach script is used to track the object but instead of 
 This is ideal for hinged joints on items such as wheels or doors.
 
 ### Class Methods
+
+#### StopGrab/1
+
+  > `public override void StopGrab(bool applyGrabbingObjectVelocity)`
+
+  * Parameters
+   * `bool applyGrabbingObjectVelocity` - If true will apply the current velocity of the grabbing object to the grabbed object on release.
+  * Returns
+   * _none_
+
+The StopGrab method ends the grab of the current object and cleans up the state.
 
 #### ProcessFixedUpdate/0
 
@@ -4001,7 +4171,7 @@ Adding the `VRTK_UIPointer_UnityEvents` component to `VRTK_UIPointer` object all
 
 #### SetEventSystem/1
 
-  > `public VRTK_EventSystemVRInput SetEventSystem(EventSystem eventSystem)`
+  > `public virtual VRTK_EventSystemVRInput SetEventSystem(EventSystem eventSystem)`
 
   * Parameters
    * `EventSystem eventSystem` - The global Unity event system to be used by the UI pointers.
@@ -4012,7 +4182,7 @@ The SetEventSystem method is used to set up the global Unity event system for th
 
 #### RemoveEventSystem/0
 
-  > `public void RemoveEventSystem()`
+  > `public virtual void RemoveEventSystem()`
 
   * Parameters
    * _none_
@@ -4023,7 +4193,7 @@ The RemoveEventSystem resets the Unity EventSystem back to the original state be
 
 #### PointerActive/0
 
-  > `public bool PointerActive()`
+  > `public virtual bool PointerActive()`
 
   * Parameters
    * _none_
@@ -4034,7 +4204,7 @@ The PointerActive method determines if the ui pointer beam should be active base
 
 #### ValidClick/2
 
-  > `public bool ValidClick(bool checkLastClick, bool lastClickState = false)`
+  > `public virtual bool ValidClick(bool checkLastClick, bool lastClickState = false)`
 
   * Parameters
    * `bool checkLastClick` - If this is true then the last frame's state of the UI Click button is also checked to see if a valid click has happened.
@@ -4046,7 +4216,7 @@ The ValidClick method determines if the UI Click button is in a valid state to r
 
 #### GetOriginPosition/0
 
-  > `public Vector3 GetOriginPosition()`
+  > `public virtual Vector3 GetOriginPosition()`
 
   * Parameters
    * _none_
@@ -4057,7 +4227,7 @@ The GetOriginPosition method returns the relevant transform position for the poi
 
 #### GetOriginForward/0
 
-  > `public Vector3 GetOriginForward()`
+  > `public virtual Vector3 GetOriginForward()`
 
   * Parameters
    * _none_
@@ -4518,6 +4688,12 @@ The Device Finder offers a collection of static methods that can be called to fi
   * `Headset` - The headset.
   * `Left_Controller` - The left hand controller.
   * `Right_Controller` - The right hand controller.
+ * `public enum Headsets` - Possible headsets
+  * `Unknown` - An unknown headset.
+  * `OculusRift` - A summary of all Oculus Rift headset versions.
+  * `OculusRiftCV1` - A specific version of the Oculus Rift headset, the Consumer Version 1.
+  * `Vive` - A summary of all HTC Vive headset versions.
+  * `ViveMV` - A specific version of the HTC Vive headset, the first consumer version.
 
 ### Class Methods
 
@@ -4699,6 +4875,28 @@ The GetControllerVelocity method is used for getting the current velocity of the
 
 The GetControllerAngularVelocity method is used for getting the current rotational velocity of the physical game controller. This can be useful for determining which way the controller is being rotated and at what speed the rotation is occurring.
 
+#### GetHeadsetVelocity/0
+
+  > `public static Vector3 GetHeadsetVelocity()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `Vector3` - A Vector3 containing the current velocity of the headset.
+
+The GetHeadsetVelocity method is used to determine the current velocity of the headset.
+
+#### GetHeadsetAngularVelocity/0
+
+  > `public static Vector3 GetHeadsetAngularVelocity()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `Vector3` - A Vector3 containing the current angular velocity of the headset.
+
+The GetHeadsetAngularVelocity method is used to determine the current angular velocity of the headset.
+
 #### HeadsetTransform/0
 
   > `public static Transform HeadsetTransform()`
@@ -4720,6 +4918,17 @@ The HeadsetTransform method is used to retrieve the transform for the VR Headset
    * `Transform` - The transform of the VR Camera component.
 
 The HeadsetCamera method is used to retrieve the transform for the VR Camera in the scene.
+
+#### GetHeadsetType/1
+
+  > `public static Headsets GetHeadsetType(bool summary = false)`
+
+  * Parameters
+   * `bool summary` - If this is true, then the generic name for the headset is returned not including the version type (e.g. OculusRift will be returned for DK2 and CV1).
+  * Returns
+   * `Headsets` - The Headset type that is connected.
+
+The GetHeadsetType method returns the type of headset connected to the computer.
 
 #### PlayAreaTransform/0
 
@@ -4862,7 +5071,7 @@ Then in the component that has a Policy List paramter (e.g. BasicTeleporter has 
 
 #### Find/1
 
-  > `public bool Find(GameObject obj)`
+  > `public virtual bool Find(GameObject obj)`
 
   * Parameters
    * `GameObject obj` - The game object to check if it has a tag or script that is listed in the identifiers list.
@@ -5129,6 +5338,28 @@ The GetHeadset method returns the Transform of the object that is used to repres
 
 The GetHeadsetCamera method returns the Transform of the object that is used to hold the headset camera in the scene.
 
+#### GetHeadsetVelocity/0
+
+  > `public abstract Vector3 GetHeadsetVelocity();`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `Vector3` - A Vector3 containing the current velocity of the headset.
+
+The GetHeadsetVelocity method is used to determine the current velocity of the headset.
+
+#### GetHeadsetAngularVelocity/0
+
+  > `public abstract Vector3 GetHeadsetAngularVelocity();`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `Vector3` - A Vector3 containing the current angular velocity of the headset.
+
+The GetHeadsetAngularVelocity method is used to determine the current angular velocity of the headset.
+
 #### HeadsetFade/3
 
   > `public abstract void HeadsetFade(Color color, float duration, bool fadeOverlay = false);`
@@ -5272,12 +5503,12 @@ The GetControllerByIndex method returns the GameObject of a controller with a sp
 
 The GetControllerOrigin method returns the origin of the given controller.
 
-#### GenerateControllerPointerOrigin/0
+#### GenerateControllerPointerOrigin/1
 
-  > `public abstract Transform GenerateControllerPointerOrigin();`
+  > `public abstract Transform GenerateControllerPointerOrigin(GameObject parent);`
 
   * Parameters
-   * _none_
+   * `GameObject parent` - The GameObject that the origin will become parent of. If it is a controller then it will also be used to determine the hand if required.
   * Returns
    * `Transform` - A generated Transform that contains the custom pointer origin.
 
@@ -6107,6 +6338,28 @@ The GetHeadset method returns the Transform of the object that is used to repres
 
 The GetHeadsetCamera method returns the Transform of the object that is used to hold the headset camera in the scene.
 
+#### GetHeadsetVelocity/0
+
+  > `public override Vector3 GetHeadsetVelocity()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `Vector3` - A Vector3 containing the current velocity of the headset.
+
+The GetHeadsetVelocity method is used to determine the current velocity of the headset.
+
+#### GetHeadsetAngularVelocity/0
+
+  > `public override Vector3 GetHeadsetAngularVelocity()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `Vector3` - A Vector3 containing the current angular velocity of the headset.
+
+The GetHeadsetAngularVelocity method is used to determine the current angular velocity of the headset.
+
 #### HeadsetFade/3
 
   > `public override void HeadsetFade(Color color, float duration, bool fadeOverlay = false)`
@@ -6225,12 +6478,12 @@ The GetControllerByIndex method returns the GameObject of a controller with a sp
 
 The GetControllerOrigin method returns the origin of the given controller.
 
-#### GenerateControllerPointerOrigin/0
+#### GenerateControllerPointerOrigin/1
 
-  > `public override Transform GenerateControllerPointerOrigin()`
+  > `public override Transform GenerateControllerPointerOrigin(GameObject parent)`
 
   * Parameters
-   * _none_
+   * `GameObject parent` - The GameObject that the origin will become parent of. If it is a controller then it will also be used to determine the hand if required.
   * Returns
    * `Transform` - A generated Transform that contains the custom pointer origin.
 
@@ -7056,6 +7309,28 @@ The GetHeadset method returns the Transform of the object that is used to repres
 
 The GetHeadsetCamera/0 method returns the Transform of the object that is used to hold the headset camera in the scene.
 
+#### GetHeadsetVelocity/0
+
+  > `public override Vector3 GetHeadsetVelocity()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `Vector3` - A Vector3 containing the current velocity of the headset.
+
+The GetHeadsetVelocity method is used to determine the current velocity of the headset.
+
+#### GetHeadsetAngularVelocity/0
+
+  > `public override Vector3 GetHeadsetAngularVelocity()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `Vector3` - A Vector3 containing the current angular velocity of the headset.
+
+The GetHeadsetAngularVelocity method is used to determine the current angular velocity of the headset.
+
 #### HeadsetFade/3
 
   > `public override void HeadsetFade(Color color, float duration, bool fadeOverlay = false)`
@@ -7172,12 +7447,12 @@ The GetControllerByIndex method returns the GameObject of a controller with a sp
 
 The GetControllerOrigin method returns the origin of the given controller.
 
-#### GenerateControllerPointerOrigin/0
+#### GenerateControllerPointerOrigin/1
 
-  > `public override Transform GenerateControllerPointerOrigin()`
+  > `public override Transform GenerateControllerPointerOrigin(GameObject parent)`
 
   * Parameters
-   * _none_
+   * `GameObject parent` - The GameObject that the origin will become parent of. If it is a controller then it will also be used to determine the hand if required.
   * Returns
    * `Transform` - A generated Transform that contains the custom pointer origin.
 
@@ -7647,7 +7922,7 @@ The IsTouchpadTouchedUpOnIndex method is used to determine if the controller but
   * Returns
    * `bool` - Returns true if the button is continually being pressed.
 
-The IsApplicationMenuPressedOnIndex method is used to determine if the controller button is being pressed down continually.
+The IsButtonOnePressedOnIndex method is used to determine if the controller button is being pressed down continually.
 
 #### IsButtonOnePressedDownOnIndex/1
 
@@ -7658,7 +7933,7 @@ The IsApplicationMenuPressedOnIndex method is used to determine if the controlle
   * Returns
    * `bool` - Returns true if the button has just been pressed down.
 
-The IsApplicationMenuPressedDownOnIndex method is used to determine if the controller button has just been pressed down.
+The IsButtonOnePressedDownOnIndex method is used to determine if the controller button has just been pressed down.
 
 #### IsButtonOnePressedUpOnIndex/1
 
@@ -7669,7 +7944,7 @@ The IsApplicationMenuPressedDownOnIndex method is used to determine if the contr
   * Returns
    * `bool` - Returns true if the button has just been released.
 
-The IsApplicationMenuPressedUpOnIndex method is used to determine if the controller button has just been released.
+The IsButtonOnePressedUpOnIndex method is used to determine if the controller button has just been released.
 
 #### IsButtonOneTouchedOnIndex/1
 
@@ -7680,7 +7955,7 @@ The IsApplicationMenuPressedUpOnIndex method is used to determine if the control
   * Returns
    * `bool` - Returns true if the button is continually being touched.
 
-The IsApplicationMenuTouchedOnIndex method is used to determine if the controller button is being touched down continually.
+The IsButtonOneTouchedOnIndex method is used to determine if the controller button is being touched down continually.
 
 #### IsButtonOneTouchedDownOnIndex/1
 
@@ -7691,7 +7966,7 @@ The IsApplicationMenuTouchedOnIndex method is used to determine if the controlle
   * Returns
    * `bool` - Returns true if the button has just been touched down.
 
-The IsApplicationMenuTouchedDownOnIndex method is used to determine if the controller button has just been touched down.
+The IsButtonOneTouchedDownOnIndex method is used to determine if the controller button has just been touched down.
 
 #### IsButtonOneTouchedUpOnIndex/1
 
@@ -7702,7 +7977,7 @@ The IsApplicationMenuTouchedDownOnIndex method is used to determine if the contr
   * Returns
    * `bool` - Returns true if the button has just been released.
 
-The IsApplicationMenuTouchedUpOnIndex method is used to determine if the controller button has just been released.
+The IsButtonOneTouchedUpOnIndex method is used to determine if the controller button has just been released.
 
 #### IsButtonTwoPressedOnIndex/1
 
@@ -8001,6 +8276,28 @@ The GetHeadset method returns the Transform of the object that is used to repres
 
 The GetHeadsetCamera method returns the Transform of the object that is used to hold the headset camera in the scene.
 
+#### GetHeadsetVelocity/0
+
+  > `public override Vector3 GetHeadsetVelocity()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `Vector3` - A Vector3 containing the current velocity of the headset.
+
+The GetHeadsetVelocity method is used to determine the current velocity of the headset.
+
+#### GetHeadsetAngularVelocity/0
+
+  > `public override Vector3 GetHeadsetAngularVelocity()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `Vector3` - A Vector3 containing the current angular velocity of the headset.
+
+The GetHeadsetAngularVelocity method is used to determine the current angular velocity of the headset.
+
 #### HeadsetFade/3
 
   > `public override void HeadsetFade(Color color, float duration, bool fadeOverlay = false)`
@@ -8117,12 +8414,12 @@ The GetControllerByIndex method returns the GameObject of a controller with a sp
 
 The GetControllerOrigin method returns the origin of the given controller.
 
-#### GenerateControllerPointerOrigin/0
+#### GenerateControllerPointerOrigin/1
 
-  > `public override Transform GenerateControllerPointerOrigin()`
+  > `public override Transform GenerateControllerPointerOrigin(GameObject parent)`
 
   * Parameters
-   * _none_
+   * `GameObject parent` - The GameObject that the origin will become parent of. If it is a controller then it will also be used to determine the hand if required.
   * Returns
    * `Transform` - A generated Transform that contains the custom pointer origin.
 
@@ -8946,6 +9243,28 @@ The GetHeadset method returns the Transform of the object that is used to repres
 
 The GetHeadsetCamera method returns the Transform of the object that is used to hold the headset camera in the scene.
 
+#### GetHeadsetVelocity/0
+
+  > `public override Vector3 GetHeadsetVelocity()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `Vector3` - A Vector3 containing the current velocity of the headset.
+
+The GetHeadsetVelocity method is used to determine the current velocity of the headset.
+
+#### GetHeadsetAngularVelocity/0
+
+  > `public override Vector3 GetHeadsetAngularVelocity()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `Vector3` - A Vector3 containing the current angular velocity of the headset.
+
+The GetHeadsetAngularVelocity method is used to determine the current angular velocity of the headset.
+
 #### HeadsetFade/3
 
   > `public override void HeadsetFade(Color color, float duration, bool fadeOverlay = false)`
@@ -9062,12 +9381,12 @@ The GetControllerByIndex method returns the GameObject of a controller with a sp
 
 The GetControllerOrigin method returns the origin of the given controller.
 
-#### GenerateControllerPointerOrigin/0
+#### GenerateControllerPointerOrigin/1
 
-  > `public override Transform GenerateControllerPointerOrigin()`
+  > `public override Transform GenerateControllerPointerOrigin(GameObject parent)`
 
   * Parameters
-   * _none_
+   * `GameObject parent` - The GameObject that the origin will become parent of. If it is a controller then it will also be used to determine the hand if required.
   * Returns
    * `Transform` - A generated Transform that contains the custom pointer origin.
 

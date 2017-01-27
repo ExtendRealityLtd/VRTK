@@ -313,7 +313,7 @@ namespace VRTK
             }
         }
 
-        IEnumerator DelayedSetColliderEnabled(bool enabled, float delay, InteractableObjectEventArgs e)
+        private IEnumerator DelayedSetColliderEnabled(bool enabled, float delay, InteractableObjectEventArgs e)
         {
             yield return new WaitForSeconds(delay);
 
@@ -324,17 +324,17 @@ namespace VRTK
         #endregion Helpers
 
         #region Unity Methods
-        private void Awake()
+        protected override void Awake()
         {
             menu = GetComponent<RadialMenu>();
         }
 
-        private void Start()
+        protected virtual void Start()
         {
             Initialize();
         }
 
-        private void Update()
+        protected virtual void Update()
         {
             if (rotateTowards == null) // Backup
             {
@@ -363,7 +363,7 @@ namespace VRTK
             }
         }
 
-        private void FixedUpdate()
+        protected virtual void FixedUpdate()
         {
             if (waitingToDisableCollider)
             {

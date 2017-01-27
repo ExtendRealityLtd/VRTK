@@ -67,7 +67,7 @@ namespace VRTK
 
         #region Unity Methods
 
-        private void Awake()
+        protected virtual void Awake()
         {
             if (Application.isPlaying)
             {
@@ -82,7 +82,7 @@ namespace VRTK
             }
         }
 
-        private void Update()
+        protected virtual void Update()
         {
             //Keep track of pressed button and constantly invoke Hold event
             if (currentPress != -1)

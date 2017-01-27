@@ -84,20 +84,20 @@ namespace VRTK
             }
         }
 
-        private void Awake()
+        protected virtual void Awake()
         {
             interactTouch = GetComponent<VRTK_InteractTouch>();
             controllerActions = GetComponent<VRTK_ControllerActions>();
             controllerEvents = GetComponent<VRTK_ControllerEvents>();
         }
 
-        private void OnEnable()
+        protected virtual void OnEnable()
         {
             controllerEvents.AliasUseOn += new ControllerInteractionEventHandler(DoStartUseObject);
             controllerEvents.AliasUseOff += new ControllerInteractionEventHandler(DoStopUseObject);
         }
 
-        private void OnDisable()
+        protected virtual void OnDisable()
         {
             ForceStopUsing();
             controllerEvents.AliasUseOn -= new ControllerInteractionEventHandler(DoStartUseObject);

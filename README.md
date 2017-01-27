@@ -2,6 +2,8 @@
 > ### VRTK - Virtual Reality Toolkit
 > A productive VR Toolkit for rapidly building VR solutions in Unity3d.
 
+## VRTK has just launched a Kickstarter campaign to fund version 4 and beyond. [Visit the Kickstarter campaign and pledge today! :)](https://www.kickstarter.com/projects/thestonefox/virtual-reality-toolkit-vrtk-version-4-and-beyond)
+
 [![Slack](http://sysdia2.co.uk/badge.svg)](http://invite.vrtk.io)
 [![Twitter Follow](https://img.shields.io/twitter/follow/vr_toolkit.svg?style=flat&label=twitter)](https://twitter.com/VR_Toolkit)
 [![YouTube](https://img.shields.io/badge/youtube-channel-e52d27.svg)](http://videos.vrtk.io)

@@ -26,19 +26,38 @@ namespace VRTK
         private const string CANVAS_DRAGGABLE_PANEL = "VRTK_UICANVAS_DRAGGABLE_PANEL";
         private const string ACTIVATOR_FRONT_TRIGGER_GAMEOBJECT = "VRTK_UICANVAS_ACTIVATOR_FRONT_TRIGGER";
 
-        private void OnEnable()
+        protected virtual void OnEnable()
         {
             SetupCanvas();
         }
 
-        private void OnDisable()
+        protected virtual void OnDisable()
         {
             RemoveCanvas();
         }
 
-        private void OnDestroy()
+        protected virtual void OnDestroy()
         {
             RemoveCanvas();
+        }
+
+        protected virtual void OnTriggerEnter(Collider collider)
+        {
+            var colliderCheck = collider.GetComponentInParent<VRTK_PlayerObject>();
+            var pointerCheck = collider.GetComponentInParent<VRTK_UIPointer>();
+            if (pointerCheck && colliderCheck && colliderCheck.objectType == VRTK_PlayerObject.ObjectTypes.Collider)
+            {
+                pointerCheck.collisionClick = (clickOnPointerCollision ? true : false);
+            }
+        }
+
+        protected virtual void OnTriggerExit(Collider collider)
+        {
+            var pointerCheck = collider.GetComponentInParent<VRTK_UIPointer>();
+            if (pointerCheck)
+            {
+                pointerCheck.collisionClick = false;
+            }
         }
 
         private void SetupCanvas()
@@ -184,30 +203,11 @@ namespace VRTK
                 Destroy(frontTrigger.gameObject);
             }
         }
-
-        private void OnTriggerEnter(Collider collider)
-        {
-            var colliderCheck = collider.GetComponentInParent<VRTK_PlayerObject>();
-            var pointerCheck = collider.GetComponentInParent<VRTK_UIPointer>();
-            if (pointerCheck && colliderCheck && colliderCheck.objectType == VRTK_PlayerObject.ObjectTypes.Collider)
-            {
-                pointerCheck.collisionClick = (clickOnPointerCollision ? true : false);
-            }
-        }
-
-        private void OnTriggerExit(Collider collider)
-        {
-            var pointerCheck = collider.GetComponentInParent<VRTK_UIPointer>();
-            if (pointerCheck)
-            {
-                pointerCheck.collisionClick = false;
-            }
-        }
     }
 
     public class VRTK_UIPointerAutoActivator : MonoBehaviour
     {
-        private void OnTriggerEnter(Collider collider)
+        protected virtual void OnTriggerEnter(Collider collider)
         {
             var colliderCheck = collider.GetComponentInParent<VRTK_PlayerObject>();
             var pointerCheck = collider.GetComponentInParent<VRTK_UIPointer>();
@@ -217,7 +217,7 @@ namespace VRTK
             }
         }
 
-        private void OnTriggerExit(Collider collider)
+        protected virtual void OnTriggerExit(Collider collider)
         {
             var pointerCheck = collider.GetComponentInParent<VRTK_UIPointer>();
             if (pointerCheck && pointerCheck.autoActivatingCanvas == gameObject)
