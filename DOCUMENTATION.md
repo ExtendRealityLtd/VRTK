@@ -4557,6 +4557,8 @@ The script will instantiate the required Rigidbody, Interactable and HingeJoint 
  * **Min Angle:** The minimum angle of the lever counted from its initial position.
  * **Max Angle:** The maximum angle of the lever counted from its initial position.
  * **Step Size:** The increments in which lever values can change.
+ * **Released Friction:** The amount of friction the lever will have whilst swinging when it is not grabbed.
+ * **Grabbed Friction:** The amount of friction the lever will have whilst swinging when it is grabbed.
 
 ### Example
 
@@ -4575,7 +4577,10 @@ The script will instantiate the required Rigidbody, Interactable and HingeJoint 
 
 ### Inspector Parameters
 
- * **Spring Strength:** Strength of the spring force that will be applied toward either end of the lever's range.
+ * **Spring Strength:** The strength of the spring force that will be applied upon the lever.
+ * **Spring Damper:** The damper of the spring force that will be applied upon the lever.
+ * **Snap To Nearest Limit:** If this is checked then the spring will snap the lever to the nearest end point (either min or max angle). If it is unchecked, the lever will always snap to the min angle position.
+ * **Always Active:** If this is checked then the spring will always be active even when grabbing the lever.
 
 ---
 

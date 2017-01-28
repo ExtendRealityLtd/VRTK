@@ -470,16 +470,16 @@ namespace VRTK
             targetInteractableObject.secondaryGrabActionScript = target.AddComponent<SecondaryControllerGrabActions.VRTK_SwapControllerGrabAction>();
             targetInteractableObject.stayGrabbedOnTeleport = false;
 
-            targetInteractableObject.InteractableObjectGrabbed += TargetInteractableObject_InteractableObjectGrabbed;
-            targetInteractableObject.InteractableObjectUngrabbed += TargetInteractableObject_InteractableObjectUngrabbed;
+            targetInteractableObject.InteractableObjectGrabbed += InteractableObjectGrabbed;
+            targetInteractableObject.InteractableObjectUngrabbed += InteractableObjectUngrabbed;
         }
 
-        private void TargetInteractableObject_InteractableObjectGrabbed(object sender, InteractableObjectEventArgs e)
+        private void InteractableObjectGrabbed(object sender, InteractableObjectEventArgs e)
         {
             doorRigidbody.angularDrag = grabbedFriction;
         }
 
-        private void TargetInteractableObject_InteractableObjectUngrabbed(object sender, InteractableObjectEventArgs e)
+        private void InteractableObjectUngrabbed(object sender, InteractableObjectEventArgs e)
         {
             doorRigidbody.angularDrag = releasedFriction;
         }

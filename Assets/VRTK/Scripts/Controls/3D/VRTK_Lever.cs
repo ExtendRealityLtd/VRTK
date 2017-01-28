@@ -31,11 +31,14 @@ namespace VRTK
         public float maxAngle = 130f;
         [Tooltip("The increments in which lever values can change.")]
         public float stepSize = 1f;
+        [Tooltip("The amount of friction the lever will have whilst swinging when it is not grabbed.")]
+        public float releasedFriction = 30f;
+        [Tooltip("The amount of friction the lever will have whilst swinging when it is grabbed.")]
+        public float grabbedFriction = 60f;
 
         protected HingeJoint leverHingeJoint;
         protected bool leverHingeJointCreated = false;
-
-        private const float RELEASE_FRICTION = 30f;
+        protected Rigidbody leverRigidbody;
 
         protected override void InitRequiredComponents()
         {
@@ -44,43 +47,9 @@ namespace VRTK
                 VRTK_SharedMethods.CreateColliders(gameObject);
             }
 
-            Rigidbody leverRigidbody = GetComponent<Rigidbody>();
-            if (leverRigidbody == null)
-            {
-                leverRigidbody = gameObject.AddComponent<Rigidbody>();
-                leverRigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
-                leverRigidbody.angularDrag = RELEASE_FRICTION; // otherwise lever will continue to move too far on its own
-            }
-            leverRigidbody.isKinematic = false;
-            leverRigidbody.useGravity = false;
-
-            VRTK_InteractableObject leverInteractableObject = GetComponent<VRTK_InteractableObject>();
-            if (leverInteractableObject == null)
-            {
-                leverInteractableObject = gameObject.AddComponent<VRTK_InteractableObject>();
-            }
-            leverInteractableObject.isGrabbable = true;
-            leverInteractableObject.grabAttachMechanicScript = gameObject.AddComponent<GrabAttachMechanics.VRTK_RotatorTrackGrabAttach>();
-            leverInteractableObject.secondaryGrabActionScript = gameObject.AddComponent<SecondaryControllerGrabActions.VRTK_SwapControllerGrabAction>();
-            leverInteractableObject.grabAttachMechanicScript.precisionGrab = true;
-            leverInteractableObject.stayGrabbedOnTeleport = false;
-
-            leverHingeJoint = GetComponent<HingeJoint>();
-            if (leverHingeJoint == null)
-            {
-                leverHingeJoint = gameObject.AddComponent<HingeJoint>();
-                leverHingeJointCreated = true;
-            }
-
-            if (connectedTo)
-            {
-                Rigidbody leverConnectedToRigidbody = connectedTo.GetComponent<Rigidbody>();
-                if (leverConnectedToRigidbody == null)
-                {
-                    leverConnectedToRigidbody = connectedTo.AddComponent<Rigidbody>();
-                }
-                leverConnectedToRigidbody.useGravity = false;
-            }
+            InitRigidbody();
+            InitInteractableObject();
+            InitHingeJoint();
         }
 
         protected override bool DetectSetup()
@@ -135,6 +104,66 @@ namespace VRTK
         {
             value = CalculateValue();
             SnapToValue(value);
+        }
+
+        protected virtual void InitRigidbody()
+        {
+            leverRigidbody = GetComponent<Rigidbody>();
+            if (leverRigidbody == null)
+            {
+                leverRigidbody = gameObject.AddComponent<Rigidbody>();
+                leverRigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+                leverRigidbody.angularDrag = releasedFriction; // otherwise lever will continue to move too far on its own
+            }
+            leverRigidbody.isKinematic = false;
+            leverRigidbody.useGravity = false;
+        }
+
+        protected virtual void InitInteractableObject()
+        {
+            VRTK_InteractableObject leverInteractableObject = GetComponent<VRTK_InteractableObject>();
+            if (leverInteractableObject == null)
+            {
+                leverInteractableObject = gameObject.AddComponent<VRTK_InteractableObject>();
+            }
+            leverInteractableObject.isGrabbable = true;
+            leverInteractableObject.grabAttachMechanicScript = gameObject.AddComponent<GrabAttachMechanics.VRTK_RotatorTrackGrabAttach>();
+            leverInteractableObject.secondaryGrabActionScript = gameObject.AddComponent<SecondaryControllerGrabActions.VRTK_SwapControllerGrabAction>();
+            leverInteractableObject.grabAttachMechanicScript.precisionGrab = true;
+            leverInteractableObject.stayGrabbedOnTeleport = false;
+
+            leverInteractableObject.InteractableObjectGrabbed += InteractableObjectGrabbed;
+            leverInteractableObject.InteractableObjectUngrabbed += InteractableObjectUngrabbed;
+        }
+
+        protected virtual void InteractableObjectGrabbed(object sender, InteractableObjectEventArgs e)
+        {
+            leverRigidbody.angularDrag = grabbedFriction;
+        }
+
+        protected virtual void InteractableObjectUngrabbed(object sender, InteractableObjectEventArgs e)
+        {
+            leverRigidbody.angularDrag = releasedFriction;
+        }
+
+        protected virtual void InitHingeJoint()
+        {
+            leverHingeJoint = GetComponent<HingeJoint>();
+            if (leverHingeJoint == null)
+            {
+                leverHingeJoint = gameObject.AddComponent<HingeJoint>();
+                leverHingeJointCreated = true;
+            }
+
+            if (connectedTo)
+            {
+                Rigidbody leverConnectedToRigidbody = connectedTo.GetComponent<Rigidbody>();
+                if (leverConnectedToRigidbody == null)
+                {
+                    leverConnectedToRigidbody = connectedTo.AddComponent<Rigidbody>();
+                }
+                leverConnectedToRigidbody.useGravity = false;
+            }
         }
 
         private float CalculateValue()
