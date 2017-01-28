@@ -16,7 +16,9 @@ namespace VRTK
     {
         public enum KnobDirection
         {
-            x, y, z // TODO: autodetect not yet done, it's a bit more difficult to get it right
+            x,
+            y,
+            z
         }
 
         [Tooltip("An optional game object to which the knob will be connected. If the game object moves the knob will follow along.")]
@@ -30,16 +32,14 @@ namespace VRTK
         [Tooltip("The increments in which knob values can change.")]
         public float stepSize = 1f;
 
-        private static float MAX_AUTODETECT_KNOB_WIDTH = 3; // multiple of the knob width
+        private const float MAX_AUTODETECT_KNOB_WIDTH = 3; // multiple of the knob width
         private KnobDirection finalDirection;
         private KnobDirection subDirection;
         private bool subDirectionFound = false;
         private Quaternion initialRotation;
         private Vector3 initialLocalRotation;
-        private Rigidbody rb;
-        private ConfigurableJoint cj;
-        private VRTK_InteractableObject io;
-        private bool cjCreated = false;
+        private ConfigurableJoint knobJoint;
+        private bool knobJointCreated = false;
 
         protected override void InitRequiredComponents()
         {
@@ -52,35 +52,35 @@ namespace VRTK
         {
             finalDirection = direction;
 
-            if (cjCreated)
+            if (knobJointCreated)
             {
-                cj.angularXMotion = ConfigurableJointMotion.Locked;
-                cj.angularYMotion = ConfigurableJointMotion.Locked;
-                cj.angularZMotion = ConfigurableJointMotion.Locked;
+                knobJoint.angularXMotion = ConfigurableJointMotion.Locked;
+                knobJoint.angularYMotion = ConfigurableJointMotion.Locked;
+                knobJoint.angularZMotion = ConfigurableJointMotion.Locked;
 
                 switch (finalDirection)
                 {
                     case KnobDirection.x:
-                        cj.angularXMotion = ConfigurableJointMotion.Free;
+                        knobJoint.angularXMotion = ConfigurableJointMotion.Free;
                         break;
                     case KnobDirection.y:
-                        cj.angularYMotion = ConfigurableJointMotion.Free;
+                        knobJoint.angularYMotion = ConfigurableJointMotion.Free;
                         break;
                     case KnobDirection.z:
-                        cj.angularZMotion = ConfigurableJointMotion.Free;
+                        knobJoint.angularZMotion = ConfigurableJointMotion.Free;
                         break;
                 }
             }
 
-            if (cj)
+            if (knobJoint)
             {
-                cj.xMotion = ConfigurableJointMotion.Locked;
-                cj.yMotion = ConfigurableJointMotion.Locked;
-                cj.zMotion = ConfigurableJointMotion.Locked;
+                knobJoint.xMotion = ConfigurableJointMotion.Locked;
+                knobJoint.yMotion = ConfigurableJointMotion.Locked;
+                knobJoint.zMotion = ConfigurableJointMotion.Locked;
 
                 if (connectedTo)
                 {
-                    cj.connectedBody = connectedTo.GetComponent<Rigidbody>();
+                    knobJoint.connectedBody = connectedTo.GetComponent<Rigidbody>();
                 }
             }
 
@@ -89,7 +89,11 @@ namespace VRTK
 
         protected override ControlValueRange RegisterValueRange()
         {
-            return new ControlValueRange() { controlMin = min, controlMax = max };
+            return new ControlValueRange()
+            {
+                controlMin = min,
+                controlMax = max
+            };
         }
 
         protected override void HandleUpdate()
@@ -99,49 +103,49 @@ namespace VRTK
 
         private void InitKnob()
         {
-            rb = GetComponent<Rigidbody>();
-            if (rb == null)
+            Rigidbody knobRigidbody = GetComponent<Rigidbody>();
+            if (knobRigidbody == null)
             {
-                rb = gameObject.AddComponent<Rigidbody>();
-                rb.angularDrag = 10; // otherwise knob will continue to move too far on its own
+                knobRigidbody = gameObject.AddComponent<Rigidbody>();
+                knobRigidbody.angularDrag = 10; // otherwise knob will continue to move too far on its own
             }
-            rb.isKinematic = false;
-            rb.useGravity = false;
+            knobRigidbody.isKinematic = false;
+            knobRigidbody.useGravity = false;
 
-            io = GetComponent<VRTK_InteractableObject>();
-            if (io == null)
+            VRTK_InteractableObject knobInteractableObject = GetComponent<VRTK_InteractableObject>();
+            if (knobInteractableObject == null)
             {
-                io = gameObject.AddComponent<VRTK_InteractableObject>();
+                knobInteractableObject = gameObject.AddComponent<VRTK_InteractableObject>();
             }
-            io.isGrabbable = true;
-            io.grabAttachMechanicScript = gameObject.AddComponent<GrabAttachMechanics.VRTK_TrackObjectGrabAttach>();
-            io.grabAttachMechanicScript.precisionGrab = true;
-            io.secondaryGrabActionScript = gameObject.AddComponent<SecondaryControllerGrabActions.VRTK_SwapControllerGrabAction>();
-            io.stayGrabbedOnTeleport = false;
+            knobInteractableObject.isGrabbable = true;
+            knobInteractableObject.grabAttachMechanicScript = gameObject.AddComponent<GrabAttachMechanics.VRTK_TrackObjectGrabAttach>();
+            knobInteractableObject.grabAttachMechanicScript.precisionGrab = true;
+            knobInteractableObject.secondaryGrabActionScript = gameObject.AddComponent<SecondaryControllerGrabActions.VRTK_SwapControllerGrabAction>();
+            knobInteractableObject.stayGrabbedOnTeleport = false;
 
-            cj = GetComponent<ConfigurableJoint>();
-            if (cj == null)
+            knobJoint = GetComponent<ConfigurableJoint>();
+            if (knobJoint == null)
             {
-                cj = gameObject.AddComponent<ConfigurableJoint>();
-                cj.configuredInWorldSpace = false;
-                cjCreated = true;
+                knobJoint = gameObject.AddComponent<ConfigurableJoint>();
+                knobJoint.configuredInWorldSpace = false;
+                knobJointCreated = true;
             }
 
             if (connectedTo)
             {
-                Rigidbody rb2 = connectedTo.GetComponent<Rigidbody>();
-                if (rb2 == null)
+                Rigidbody knobConnectedToRigidbody = connectedTo.GetComponent<Rigidbody>();
+                if (knobConnectedToRigidbody == null)
                 {
-                    rb2 = connectedTo.AddComponent<Rigidbody>();
-                    rb2.useGravity = false;
-                    rb2.isKinematic = true;
+                    knobConnectedToRigidbody = connectedTo.AddComponent<Rigidbody>();
+                    knobConnectedToRigidbody.useGravity = false;
+                    knobConnectedToRigidbody.isKinematic = true;
                 }
             }
         }
 
         private KnobDirection DetectDirection()
         {
-            KnobDirection direction = KnobDirection.x;
+            KnobDirection returnDirection = KnobDirection.x;
             Bounds bounds = VRTK_SharedMethods.GetBounds(transform);
 
             // shoot rays in all directions to learn about surroundings
@@ -169,30 +173,30 @@ namespace VRTK
             // TODO: not yet the right decision strategy, works only partially
             if (VRTK_SharedMethods.IsLowest(lengthX, new float[] { lengthY, lengthZ, lengthNegX, lengthNegY, lengthNegZ }))
             {
-                direction = KnobDirection.z;
+                returnDirection = KnobDirection.z;
             }
             else if (VRTK_SharedMethods.IsLowest(lengthY, new float[] { lengthX, lengthZ, lengthNegX, lengthNegY, lengthNegZ }))
             {
-                direction = KnobDirection.y;
+                returnDirection = KnobDirection.y;
             }
             else if (VRTK_SharedMethods.IsLowest(lengthZ, new float[] { lengthX, lengthY, lengthNegX, lengthNegY, lengthNegZ }))
             {
-                direction = KnobDirection.x;
+                returnDirection = KnobDirection.x;
             }
             else if (VRTK_SharedMethods.IsLowest(lengthNegX, new float[] { lengthX, lengthY, lengthZ, lengthNegY, lengthNegZ }))
             {
-                direction = KnobDirection.z;
+                returnDirection = KnobDirection.z;
             }
             else if (VRTK_SharedMethods.IsLowest(lengthNegY, new float[] { lengthX, lengthY, lengthZ, lengthNegX, lengthNegZ }))
             {
-                direction = KnobDirection.y;
+                returnDirection = KnobDirection.y;
             }
             else if (VRTK_SharedMethods.IsLowest(lengthNegZ, new float[] { lengthX, lengthY, lengthZ, lengthNegX, lengthNegY }))
             {
-                direction = KnobDirection.x;
+                returnDirection = KnobDirection.x;
             }
 
-            return direction;
+            return returnDirection;
         }
 
         private float CalculateValue()
@@ -229,24 +233,24 @@ namespace VRTK
             angle = Mathf.Round(angle * 1000f) / 1000f; // not rounding will produce slight offsets in 4th digit that mess up initial value
 
             // Quaternion.angle will calculate shortest route and only go to 180
-            float value = 0;
+            float calculatedValue = 0;
             if (angle > 0 && angle <= 180)
             {
-                value = 360 - Quaternion.Angle(initialRotation, transform.rotation);
+                calculatedValue = 360 - Quaternion.Angle(initialRotation, transform.rotation);
             }
             else
             {
-                value = Quaternion.Angle(initialRotation, transform.rotation);
+                calculatedValue = Quaternion.Angle(initialRotation, transform.rotation);
             }
 
             // adjust to value scale
-            value = Mathf.Round((min + Mathf.Clamp01(value / 360f) * (max - min)) / stepSize) * stepSize;
+            calculatedValue = Mathf.Round((min + Mathf.Clamp01(calculatedValue / 360f) * (max - min)) / stepSize) * stepSize;
             if (min > max && angle != 0)
             {
-                value = (max + min) - value;
+                calculatedValue = (max + min) - calculatedValue;
             }
 
-            return value;
+            return calculatedValue;
         }
     }
 }

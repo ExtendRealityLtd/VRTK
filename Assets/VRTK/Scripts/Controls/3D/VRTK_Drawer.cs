@@ -157,9 +157,9 @@ namespace VRTK
 
                 pullDistance *= (maxExtend * 1.8f); // don't let it pull out completely
 
-                SoftJointLimit limit = drawerJoint.linearLimit;
-                limit.limit = pullDistance;
-                drawerJoint.linearLimit = limit;
+                SoftJointLimit drawerJointLimit = drawerJoint.linearLimit;
+                drawerJointLimit.limit = pullDistance;
+                drawerJoint.linearLimit = drawerJointLimit;
 
                 if (connectedTo)
                 {
@@ -176,7 +176,11 @@ namespace VRTK
 
         protected override ControlValueRange RegisterValueRange()
         {
-            return new ControlValueRange() { controlMin = 0, controlMax = 100 };
+            return new ControlValueRange()
+            {
+                controlMin = 0,
+                controlMax = 100
+            };
         }
 
         protected override void HandleUpdate()
@@ -214,12 +218,12 @@ namespace VRTK
 
             if (connectedTo)
             {
-                Rigidbody rb2 = connectedTo.GetComponent<Rigidbody>();
-                if (rb2 == null)
+                Rigidbody drawerConnectedToRigidbody = connectedTo.GetComponent<Rigidbody>();
+                if (drawerConnectedToRigidbody == null)
                 {
-                    rb2 = connectedTo.AddComponent<Rigidbody>();
-                    rb2.useGravity = false;
-                    rb2.isKinematic = true;
+                    drawerConnectedToRigidbody = connectedTo.AddComponent<Rigidbody>();
+                    drawerConnectedToRigidbody.useGravity = false;
+                    drawerConnectedToRigidbody.isKinematic = true;
                 }
             }
 
@@ -259,7 +263,7 @@ namespace VRTK
 
         private Direction DetectDirection()
         {
-            Direction direction = Direction.autodetect;
+            Direction returnDirection = Direction.autodetect;
 
             Bounds handleBounds = VRTK_SharedMethods.GetBounds(GetHandle().transform, transform);
             Bounds bodyBounds = VRTK_SharedMethods.GetBounds(GetBody().transform, transform);
@@ -273,35 +277,35 @@ namespace VRTK
 
             if (VRTK_SharedMethods.IsLowest(lengthX, new float[] { lengthY, lengthZ, lengthNegX, lengthNegY, lengthNegZ }))
             {
-                direction = Direction.x;
+                returnDirection = Direction.x;
             }
             else if (VRTK_SharedMethods.IsLowest(lengthNegX, new float[] { lengthX, lengthY, lengthZ, lengthNegY, lengthNegZ }))
             {
-                direction = Direction.x;
+                returnDirection = Direction.x;
             }
             else if (VRTK_SharedMethods.IsLowest(lengthY, new float[] { lengthX, lengthZ, lengthNegX, lengthNegY, lengthNegZ }))
             {
-                direction = Direction.y;
+                returnDirection = Direction.y;
             }
             else if (VRTK_SharedMethods.IsLowest(lengthNegY, new float[] { lengthX, lengthY, lengthZ, lengthNegX, lengthNegZ }))
             {
-                direction = Direction.y;
+                returnDirection = Direction.y;
             }
             else if (VRTK_SharedMethods.IsLowest(lengthZ, new float[] { lengthX, lengthY, lengthNegX, lengthNegY, lengthNegZ }))
             {
-                direction = Direction.z;
+                returnDirection = Direction.z;
             }
             else if (VRTK_SharedMethods.IsLowest(lengthNegZ, new float[] { lengthX, lengthY, lengthZ, lengthNegY, lengthNegX }))
             {
-                direction = Direction.z;
+                returnDirection = Direction.z;
             }
 
-            return direction;
+            return returnDirection;
         }
 
         private float CalculateValue()
         {
-            return Mathf.Round((transform.position - initialPosition).magnitude / pullDistance * 100);
+            return (Mathf.Round((transform.position - initialPosition).magnitude / pullDistance * 100));
         }
 
         private GameObject GetBody()

@@ -38,6 +38,7 @@ namespace VRTK
         }
 
         public DefaultControlEvents defaultEvents;
+
         [Tooltip("If active the control will react to the controller without the need to push the grab button.")]
         public bool interactWithoutGrab = false;
 
@@ -54,7 +55,7 @@ namespace VRTK
 
         private static Color COLOR_OK = Color.yellow;
         private static Color COLOR_ERROR = new Color(1, 0, 0, 0.9f);
-        private static float MIN_OPENING_DISTANCE = 20f; // percentage how far open something needs to be in order to activate it
+        private const float MIN_OPENING_DISTANCE = 20f; // percentage how far open something needs to be in order to activate it
 
         private ControlValueRange valueRange;
         private GameObject controlContent;
@@ -165,12 +166,12 @@ namespace VRTK
             autoTriggerVolume = autoTriggerVolumeGO.AddComponent<VRTK_ControllerRigidbodyActivator>();
 
             // calculate bounding box
-            Bounds bounds = VRTK_SharedMethods.GetBounds(transform);
-            bounds.Expand(bounds.size * 0.2f);
-            autoTriggerVolumeGO.transform.position = bounds.center;
+            Bounds triggerBounds = VRTK_SharedMethods.GetBounds(transform);
+            triggerBounds.Expand(triggerBounds.size * 0.2f);
+            autoTriggerVolumeGO.transform.position = triggerBounds.center;
             BoxCollider triggerCollider = autoTriggerVolumeGO.AddComponent<BoxCollider>();
             triggerCollider.isTrigger = true;
-            triggerCollider.size = bounds.size;
+            triggerCollider.size = triggerBounds.size;
         }
 
         protected Vector3 getThirdDirection(Vector3 axis1, Vector3 axis2)
@@ -191,7 +192,6 @@ namespace VRTK
             {
                 return Vector3.right;
             }
-
         }
 
         private void HandleInteractables()
@@ -207,7 +207,7 @@ namespace VRTK
             }
 
             // do not cache objects since otherwise they would still be made inactive once taken out of the content
-            foreach (VRTK_InteractableObject io in controlContent.GetComponentsInChildren<VRTK_InteractableObject>(true))
+            foreach (var io in controlContent.GetComponentsInChildren<VRTK_InteractableObject>(true))
             {
                 io.enabled = value > MIN_OPENING_DISTANCE;
             }

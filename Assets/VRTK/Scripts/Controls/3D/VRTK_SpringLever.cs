@@ -24,19 +24,19 @@ namespace VRTK
         protected override void InitRequiredComponents()
         {
             base.InitRequiredComponents();
-            if (!hj.useSpring)
+            if (!leverHingeJoint.useSpring)
             {
                 // If useSpring isn't set, the hingeJoint was probably automatically added - fix it
-                hj.useSpring = true;
-                JointSpring spring = hj.spring;
+                leverHingeJoint.useSpring = true;
+                JointSpring spring = leverHingeJoint.spring;
                 spring.spring = springStrength;
                 spring.targetPosition = minAngle;
-                hj.spring = spring;
+                leverHingeJoint.spring = spring;
             }
             else
             {
                 // If useSpring is set, the hingeJoint was manually added - respect its settings
-                springStrength = hj.spring.spring;
+                springStrength = leverHingeJoint.spring.spring;
             }
         }
 
@@ -59,9 +59,9 @@ namespace VRTK
             towardZero = (GetNormalizedValue() <= 50);
             if (towardZero != wasTowardZero)
             {
-                JointSpring spring = hj.spring;
+                JointSpring spring = leverHingeJoint.spring;
                 spring.targetPosition = (towardZero) ? minAngle : maxAngle;
-                hj.spring = spring;
+                leverHingeJoint.spring = spring;
                 wasTowardZero = towardZero;
             }
         }
