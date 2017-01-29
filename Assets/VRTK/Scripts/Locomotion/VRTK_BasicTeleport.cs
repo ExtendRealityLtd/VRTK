@@ -57,6 +57,7 @@ namespace VRTK
         private float fadeInTime = 0f;
         private float maxBlinkTransitionSpeed = 1.5f;
         private float maxBlinkDistance = 33f;
+        private Coroutine initaliseListeners;
 
         /// <summary>
         /// The InitDestinationSetListener method is used to register the teleport script to listen to events from the given game object that is used to generate destination markers. Any destination set event emitted by a registered game object will initiate the teleport to the given destination location.
@@ -132,12 +133,16 @@ namespace VRTK
         {
             adjustYForTerrain = false;
             enableTeleport = true;
-            StartCoroutine(InitListenersAtEndOfFrame());
+            initaliseListeners = StartCoroutine(InitListenersAtEndOfFrame());
             VRTK_ObjectCache.registeredTeleporters.Add(this);
         }
 
         protected virtual void OnDisable()
         {
+            if (initaliseListeners != null)
+            {
+                StopCoroutine(initaliseListeners);
+            }
             InitDestinationMarkerListeners(false);
             VRTK_ObjectCache.registeredTeleporters.Remove(this);
         }
@@ -231,7 +236,10 @@ namespace VRTK
         private IEnumerator InitListenersAtEndOfFrame()
         {
             yield return new WaitForEndOfFrame();
-            InitDestinationMarkerListeners(true);
+            if (enabled)
+            {
+                InitDestinationMarkerListeners(true);
+            }
         }
 
         private void InitDestinationMarkerListeners(bool state)
