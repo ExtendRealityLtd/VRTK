@@ -4321,10 +4321,26 @@ All 3D controls extend the `VRTK_Control` abstract class which provides a defaul
 ### Class Variables
 
  * `public ValueChangedEvent OnValueChanged` - Emitted when the control is interacted with.
+ * `public enum Direction` - 3D Control Directions
+  * `autodetect` - Attempt to auto detect the axis
+  * `x` - X axis
+  * `y` - Y axis
+  * `z` - Z axis
+
+### Class Events
+
+ * `ValueChanged` - Emitted when the 3D Control value has changed.
 
 ### Unity Events
 
- * `OnValueChanged` - Emitted when the control is interacted with.
+Adding the `VRTK_Control_UnityEvents` component to `VRTK_Control` object allows access to `UnityEvents` that will react identically to the Class Events.
+
+ * `OnValueChanged` - Emits the ValueChanged class event.
+
+### Event Payload
+
+ * `float value` - The current value being reported by the control.
+ * `float normalizedValue` - The normalized value being reported by the control.
 
 ### Class Methods
 
@@ -4391,9 +4407,31 @@ The script will instantiate the required Rigidbody and ConstantForce components 
  * **Activation Distance:** The local distance the button needs to be pushed until a push event is triggered.
  * **Button Strength:** The amount of force needed to push the button down as well as the speed with which it will go back into its original position.
 
+### Class Variables
+
+ * `public enum ButtonDirection` - 3D Control Button Directions
+  * `autodetect` - Attempt to auto detect the axis
+  * `x` - X axis
+  * `y` - Y axis
+  * `z` - Z axis
+  * `negX` - Negative X axis
+  * `negY` - Negative Y axis
+  * `negZ` - Negative Z axis
+
+### Class Events
+
+ * `Pushed` - Emitted when the 3D Button has reached it's activation distance.
+
 ### Unity Events
 
- * `OnPush` - Emitted when the button is successfully pushed.
+Adding the `VRTK_Button_UnityEvents` component to `VRTK_Button` object allows access to `UnityEvents` that will react identically to the Class Events.
+
+ * `OnPushed` - Emits the Pushed class event.
+
+### Event Payload
+
+ * `float value` - The current value being reported by the control.
+ * `float normalizedValue` - The normalized value being reported by the control.
 
 ### Example
 

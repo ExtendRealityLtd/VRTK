@@ -3,6 +3,14 @@ namespace VRTK
 {
     using UnityEngine;
     using UnityEngine.Events;
+    using System;
+
+    /// <summary>
+    /// Event Payload
+    /// </summary>
+    /// <param name="sender">this object</param>
+    /// <param name="e"><see cref="Control3DEventArgs"/></param>
+    public delegate void Button3DEventHandler(object sender, Control3DEventArgs e);
 
     /// <summary>
     /// Attaching the script to a game object will allow the user to interact with it as if it were a push button. The direction into which the button should be pushable can be freely set and auto-detection is supported. Since this is physics-based there needs to be empty space in the push direction so that the button can move.
@@ -15,6 +23,27 @@ namespace VRTK
     /// </example>
     public class VRTK_Button : VRTK_Control
     {
+
+        [Serializable]
+        [Obsolete("`VRTK_Control.ButtonEvents` has been replaced with delegate events. `VRTK_Button_UnityEvents` is now required to access Unity events. This method will be removed in a future version of VRTK.")]
+        public class ButtonEvents
+        {
+            /// <summary>
+            /// Emitted when the button is successfully pushed.
+            /// </summary>
+            public UnityEvent OnPush;
+        }
+
+        /// <summary>
+        /// 3D Control Button Directions
+        /// </summary>
+        /// <param name="autodetect">Attempt to auto detect the axis</param>
+        /// <param name="x">X axis</param>
+        /// <param name="y">Y axis</param>
+        /// <param name="z">Z axis</param>
+        /// <param name="negX">Negative X axis</param>
+        /// <param name="negY">Negative Y axis</param>
+        /// <param name="negZ">Negative Z axis</param>
         public enum ButtonDirection
         {
             autodetect,
@@ -35,16 +64,14 @@ namespace VRTK
         [Tooltip("The amount of force needed to push the button down as well as the speed with which it will go back into its original position.")]
         public float buttonStrength = 5.0f;
 
-        [System.Serializable]
-        public class ButtonEvents
-        {
-            /// <summary>
-            /// Emitted when the button is successfully pushed.
-            /// </summary>
-            public UnityEvent OnPush;
-        }
-
+        [Tooltip("The events specific to the button control. This parameter is deprecated and will be removed in a future version of VRTK.")]
+        [Obsolete("`VRTK_Control.events` has been replaced with delegate events. `VRTK_Button_UnityEvents` is now required to access Unity events. This method will be removed in a future version of VRTK.")]
         public ButtonEvents events;
+
+        /// <summary>
+        /// Emitted when the 3D Button has reached it's activation distance.
+        /// </summary>
+        public event Button3DEventHandler Pushed;
 
         private const float MAX_AUTODETECT_ACTIVATION_LENGTH = 4f; // full hight of button
         private ButtonDirection finalDirection;
@@ -54,6 +81,14 @@ namespace VRTK
         private ConfigurableJoint buttonJoint;
         private ConstantForce buttonForce;
         private int forceCount = 0;
+
+        public virtual void OnPushed(Control3DEventArgs e)
+        {
+            if (Pushed != null)
+            {
+                Pushed(this, e);
+            }
+        }
 
         protected override void OnDrawGizmos()
         {
@@ -235,7 +270,13 @@ namespace VRTK
                 if (oldState == 0)
                 {
                     value = 1;
+
+                    /// <obsolete>
+                    /// This is an obsolete call that will be removed in a future version
+                    /// </obsolete>
                     events.OnPush.Invoke();
+
+                    OnPushed(SetControlEvent());
                 }
             }
             else

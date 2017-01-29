@@ -3,6 +3,25 @@ namespace VRTK
 {
     using UnityEngine;
     using UnityEngine.Events;
+    using System;
+
+    /// <summary>
+    /// Event Payload
+    /// </summary>
+    /// <param name="value">The current value being reported by the control.</param>
+    /// <param name="normalizedValue">The normalized value being reported by the control.</param>
+    public struct Control3DEventArgs
+    {
+        public float value;
+        public float normalizedValue;
+    }
+
+    /// <summary>
+    /// Event Payload
+    /// </summary>
+    /// <param name="sender">this object</param>
+    /// <param name="e"><see cref="Control3DEventArgs"/></param>
+    public delegate void Control3DEventHandler(object sender, Control3DEventArgs e);
 
     /// <summary>
     /// All 3D controls extend the `VRTK_Control` abstract class which provides a default set of methods and events that all of the subsequent controls expose.
@@ -10,18 +29,12 @@ namespace VRTK
     [ExecuteInEditMode]
     public abstract class VRTK_Control : MonoBehaviour
     {
-        public enum Direction
-        {
-            autodetect,
-            x,
-            y,
-            z
-        }
-
-        [System.Serializable]
+        [Serializable]
+        [Obsolete("`VRTK_Control.ValueChangedEvent` has been replaced with delegate events. `VRTK_Control_UnityEvents` is now required to access Unity events. This method will be removed in a future version of VRTK.")]
         public class ValueChangedEvent : UnityEvent<float, float> { }
 
-        [System.Serializable]
+        [Serializable]
+        [Obsolete("`VRTK_Control.DefaultControlEvents` has been replaced with delegate events. `VRTK_Control_UnityEvents` is now required to access Unity events. This method will be removed in a future version of VRTK.")]
         public class DefaultControlEvents
         {
             /// <summary>
@@ -30,22 +43,45 @@ namespace VRTK
             public ValueChangedEvent OnValueChanged;
         }
 
-        // to be registered by each control to support value normalization
+        /// <summary>
+        /// The ControlValueRange struct provides a way for each inherited control to support value normalization.
+        /// </summary>
         public struct ControlValueRange
         {
             public float controlMin;
             public float controlMax;
         }
 
+        /// <summary>
+        /// 3D Control Directions
+        /// </summary>
+        /// <param name="autodetect">Attempt to auto detect the axis</param>
+        /// <param name="x">X axis</param>
+        /// <param name="y">Y axis</param>
+        /// <param name="z">Z axis</param>
+        public enum Direction
+        {
+            autodetect,
+            x,
+            y,
+            z
+        }
+
+        [Tooltip("The default events for the control. This parameter is deprecated and will be removed in a future version of VRTK.")]
+        [Obsolete("`VRTK_Control.defaultEvents` has been replaced with delegate events. `VRTK_Control_UnityEvents` is now required to access Unity events. This method will be removed in a future version of VRTK.")]
         public DefaultControlEvents defaultEvents;
 
         [Tooltip("If active the control will react to the controller without the need to push the grab button.")]
         public bool interactWithoutGrab = false;
 
+        /// <summary>
+        /// Emitted when the 3D Control value has changed.
+        /// </summary>
+        public event Control3DEventHandler ValueChanged;
+
         abstract protected void InitRequiredComponents();
         abstract protected bool DetectSetup();
         abstract protected ControlValueRange RegisterValueRange();
-        abstract protected void HandleUpdate();
 
         protected Bounds bounds;
         protected bool setupSuccessful = true;
@@ -60,6 +96,14 @@ namespace VRTK
         private ControlValueRange valueRange;
         private GameObject controlContent;
         private bool hideControlContent = false;
+
+        public virtual void OnValueChanged(Control3DEventArgs e)
+        {
+            if (ValueChanged != null)
+            {
+                ValueChanged(this, e);
+            }
+        }
 
         /// <summary>
         /// The GetValue method returns the current value/position/setting of the control depending on the control that is extending this abstract class.
@@ -99,6 +143,8 @@ namespace VRTK
             return controlContent;
         }
 
+        abstract protected void HandleUpdate();
+
         protected virtual void Awake()
         {
             if (Application.isPlaying)
@@ -134,9 +180,23 @@ namespace VRTK
                 if (value != oldValue)
                 {
                     HandleInteractables();
+
+                    /// <obsolete>
+                    /// This is an obsolete call that will be removed in a future version
+                    /// </obsolete>
                     defaultEvents.OnValueChanged.Invoke(GetValue(), GetNormalizedValue());
+
+                    OnValueChanged(SetControlEvent());
                 }
             }
+        }
+
+        protected virtual Control3DEventArgs SetControlEvent()
+        {
+            Control3DEventArgs e;
+            e.value = GetValue();
+            e.normalizedValue = GetNormalizedValue();
+            return e;
         }
 
         protected virtual void OnDrawGizmos()
