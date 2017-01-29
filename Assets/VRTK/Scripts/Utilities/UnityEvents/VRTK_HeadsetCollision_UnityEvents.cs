@@ -14,11 +14,11 @@
         /// <summary>
         /// Emits the HeadsetCollisionDetect class event.
         /// </summary>
-        public UnityObjectEvent OnHeadsetCollisionDetect;
+        public UnityObjectEvent OnHeadsetCollisionDetect = new UnityObjectEvent();
         /// <summary>
         /// Emits the HeadsetCollisionEnded class event.
         /// </summary>
-        public UnityObjectEvent OnHeadsetCollisionEnded;
+        public UnityObjectEvent OnHeadsetCollisionEnded = new UnityObjectEvent();
 
         private void SetHeadsetCollision()
         {

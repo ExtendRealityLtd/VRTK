@@ -14,11 +14,11 @@
         /// <summary>
         /// Emits the Teleporting class event.
         /// </summary>
-        public UnityObjectEvent OnTeleporting;
+        public UnityObjectEvent OnTeleporting = new UnityObjectEvent();
         /// <summary>
         /// Emits the Teleported class event.
         /// </summary>
-        public UnityObjectEvent OnTeleported;
+        public UnityObjectEvent OnTeleported = new UnityObjectEvent();
 
         private void SetBasicTeleport()
         {

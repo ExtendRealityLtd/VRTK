@@ -14,20 +14,20 @@
         /// <summary>
         /// Emits the ControllerObscured class event.
         /// </summary>
-        public UnityObjectEvent OnControllerObscured;
+        public UnityObjectEvent OnControllerObscured = new UnityObjectEvent();
         /// <summary>
         /// Emits the ControllerUnobscured class event.
         /// </summary>
-        public UnityObjectEvent OnControllerUnobscured;
+        public UnityObjectEvent OnControllerUnobscured = new UnityObjectEvent();
 
         /// <summary>
         /// Emits the ControllerGlanceEnter class event.
         /// </summary>
-        public UnityObjectEvent OnControllerGlanceEnter;
+        public UnityObjectEvent OnControllerGlanceEnter = new UnityObjectEvent();
         /// <summary>
         /// Emits the ControllerGlanceExit class event.
         /// </summary>
-        public UnityObjectEvent OnControllerGlanceExit;
+        public UnityObjectEvent OnControllerGlanceExit = new UnityObjectEvent();
 
         private void SetHeadsetControllerAware()
         {

@@ -14,19 +14,19 @@
         /// <summary>
         /// Emits the ObjectEnteredSnapDropZone class event.
         /// </summary>
-        public UnityObjectEvent OnObjectEnteredSnapDropZone;
+        public UnityObjectEvent OnObjectEnteredSnapDropZone = new UnityObjectEvent();
         /// <summary>
         /// Emits the ObjectExitedSnapDropZone class event.
         /// </summary>
-        public UnityObjectEvent OnObjectExitedSnapDropZone;
+        public UnityObjectEvent OnObjectExitedSnapDropZone = new UnityObjectEvent();
         /// <summary>
         /// Emits the ObjectSnappedToDropZone class event.
         /// </summary>
-        public UnityObjectEvent OnObjectSnappedToDropZone;
+        public UnityObjectEvent OnObjectSnappedToDropZone = new UnityObjectEvent();
         /// <summary>
         /// Emits the ObjectUnsnappedFromDropZone class event.
         /// </summary>
-        public UnityObjectEvent OnObjectUnsnappedFromDropZone;
+        public UnityObjectEvent OnObjectUnsnappedFromDropZone = new UnityObjectEvent();
 
         private void SetSnapDropZone()
         {
