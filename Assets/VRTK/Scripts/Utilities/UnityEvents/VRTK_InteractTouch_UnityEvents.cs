@@ -14,11 +14,11 @@
         /// <summary>
         /// Emits the ControllerTouchInteractableObject class event.
         /// </summary>
-        public UnityObjectEvent OnControllerTouchInteractableObject;
+        public UnityObjectEvent OnControllerTouchInteractableObject = new UnityObjectEvent();
         /// <summary>
         /// Emits the ControllerUntouchInteractableObject class event.
         /// </summary>
-        public UnityObjectEvent OnControllerUntouchInteractableObject;
+        public UnityObjectEvent OnControllerUntouchInteractableObject = new UnityObjectEvent();
 
         private void SetInteractTouch()
         {
