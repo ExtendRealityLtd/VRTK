@@ -14,27 +14,34 @@ namespace VRTK
     /// </example>
     public class VRTK_Slider : VRTK_Control
     {
+        [Tooltip("An optional game object to which the wheel will be connected. If the game object moves the wheel will follow along.")]
+        public GameObject connectedTo;
         [Tooltip("The axis on which the slider should move. All other axis will be frozen.")]
         public Direction direction = Direction.autodetect;
+        [Tooltip("The collider to specify the minimum limit of the slider.")]
+        public Collider minimumLimit;
+        [Tooltip("The collider to specify the maximum limit of the slider.")]
+        public Collider maximumLimit;
         [Tooltip("The minimum value of the slider.")]
-        public float min = 0f;
+        public float minimumValue = 0f;
         [Tooltip("The maximum value of the slider.")]
-        public float max = 100f;
-        [Tooltip("The increments in which slider values can change. The slider supports snapping.")]
+        public float maximumValue = 100f;
+        [Tooltip("The increments in which slider values can change.")]
         public float stepSize = 0.1f;
-        [Tooltip("Automatically detect the minimum and maximum positions.")]
-        public bool detectMinMax = true;
-        [Tooltip("The minimum point on the slider.")]
-        public Vector3 minPoint;
-        [Tooltip("The maximum point on the slider.")]
-        public Vector3 maxPoint;
+        [Tooltip("If this is checked then when the slider is released, it will snap to the nearest value position.")]
+        public bool snapToStep = false;
+        [Tooltip("The amount of friction the slider will have when it is released.")]
+        public float releasedFriction = 50f;
 
-        private static float MAX_AUTODETECT_SLIDER_LENGTH = 30; // multiple of the slider width
         private Direction finalDirection;
-        private Vector3 finalMinPoint;
-        private Vector3 finalMaxPoint;
-        private Rigidbody rb;
-        private VRTK_InteractableObject io;
+        private Rigidbody sliderRigidbody;
+        private ConfigurableJoint sliderJoint;
+        private bool sliderJointCreated = false;
+
+        private Vector3 minimumLimitDiff;
+        private Vector3 maximumLimitDiff;
+
+        private Vector3 snapPosition;
 
         protected override void OnDrawGizmos()
         {
@@ -43,295 +50,233 @@ namespace VRTK
             {
                 return;
             }
-
-            // axis and min/max
-            Vector3 center = (direction == Direction.autodetect) ? bounds.center : transform.position;
-            Gizmos.DrawLine(center, finalMinPoint);
-            Gizmos.DrawLine(center, finalMaxPoint);
+            Gizmos.DrawLine(transform.position, minimumLimit.transform.position);
+            Gizmos.DrawLine(transform.position, maximumLimit.transform.position);
         }
 
         protected override void InitRequiredComponents()
         {
-            InitRigidBody();
-            InitInteractable();
+            DetectSetup();
+            InitRigidbody();
+            InitInteractableObject();
+            InitJoint();
+        }
+
+        private Vector3 CalculateDiff(Vector3 initialPosition, Vector3 givenDirection, float scaleValue, float diffMultiplier, bool addition)
+        {
+            var additionDiff = givenDirection * diffMultiplier;
+
+            var limitDiff = givenDirection * (scaleValue / 2f);
+            if (addition)
+            {
+                limitDiff = initialPosition + limitDiff;
+            }
+            else
+            {
+                limitDiff = initialPosition - limitDiff;
+            }
+
+            var answer = initialPosition - limitDiff;
+
+            if (addition)
+            {
+                answer -= additionDiff;
+            }
+            else
+            {
+                answer += additionDiff;
+            }
+
+            return answer;
         }
 
         protected override bool DetectSetup()
         {
+            if (sliderJointCreated)
+            {
+                if (connectedTo)
+                {
+                    sliderJoint.connectedBody = connectedTo.GetComponent<Rigidbody>();
+                }
+            }
+
             finalDirection = direction;
+
             if (direction == Direction.autodetect)
             {
-                finalDirection = DetectDirection();
-                if (finalDirection == Direction.autodetect)
+                RaycastHit hitRight;
+                RaycastHit hitUp;
+                RaycastHit hitForward;
+
+                bool rightHasHit = Physics.Raycast(transform.position, transform.right, out hitRight);
+                bool upHasHit = Physics.Raycast(transform.position, transform.up, out hitUp);
+                bool forwardHasHit = Physics.Raycast(transform.position, transform.forward, out hitForward);
+
+                Vector3 sliderDiff = transform.localScale / 2f;
+
+                //The right ray has found the min on the right, so max is on the left
+                if (rightHasHit && hitRight.collider.gameObject.Equals(minimumLimit.gameObject))
                 {
-                    return false;
+                    finalDirection = Direction.x;
+                    minimumLimitDiff = CalculateDiff(minimumLimit.transform.localPosition, Vector3.right, minimumLimit.transform.localScale.x, sliderDiff.x, false);
+                    maximumLimitDiff = CalculateDiff(maximumLimit.transform.localPosition, Vector3.right, maximumLimit.transform.localScale.x, sliderDiff.x, true);
+                }
+
+                //The right ray has found the max on the right, so min is on the left
+                if (rightHasHit && hitRight.collider.gameObject.Equals(maximumLimit.gameObject))
+                {
+                    finalDirection = Direction.x;
+                    minimumLimitDiff = CalculateDiff(minimumLimit.transform.localPosition, Vector3.right, minimumLimit.transform.localScale.x, sliderDiff.x, true);
+                    maximumLimitDiff = CalculateDiff(maximumLimit.transform.localPosition, Vector3.right, maximumLimit.transform.localScale.x, sliderDiff.x, false);
+                }
+
+                // the up ray has found the min above, so max is below
+                if (upHasHit && hitUp.collider.gameObject.Equals(minimumLimit.gameObject))
+                {
+                    finalDirection = Direction.y;
+                    minimumLimitDiff = CalculateDiff(minimumLimit.transform.localPosition, Vector3.up, minimumLimit.transform.localScale.y, sliderDiff.y, false);
+                    maximumLimitDiff = CalculateDiff(maximumLimit.transform.localPosition, Vector3.up, maximumLimit.transform.localScale.y, sliderDiff.y, true);
+                }
+
+                //the up ray has found the max above, so the min ix below
+                if (upHasHit && hitUp.collider.gameObject.Equals(maximumLimit.gameObject))
+                {
+                    finalDirection = Direction.y;
+                    minimumLimitDiff = CalculateDiff(minimumLimit.transform.localPosition, Vector3.up, minimumLimit.transform.localScale.y, sliderDiff.y, true);
+                    maximumLimitDiff = CalculateDiff(maximumLimit.transform.localPosition, Vector3.up, maximumLimit.transform.localScale.y, sliderDiff.y, false);
+                }
+
+                //the forward ray has found the min in front, so the max is behind
+                if (forwardHasHit && hitForward.collider.gameObject.Equals(minimumLimit.gameObject))
+                {
+                    finalDirection = Direction.z;
+                    minimumLimitDiff = CalculateDiff(minimumLimit.transform.localPosition, Vector3.forward, minimumLimit.transform.localScale.y, sliderDiff.y, false);
+                    maximumLimitDiff = CalculateDiff(maximumLimit.transform.localPosition, Vector3.forward, maximumLimit.transform.localScale.y, sliderDiff.y, true);
+                }
+
+                //the forward ray has found the max in front, so the min is behind
+                if (forwardHasHit && hitForward.collider.gameObject.Equals(maximumLimit.gameObject))
+                {
+                    finalDirection = Direction.z;
+                    minimumLimitDiff = CalculateDiff(minimumLimit.transform.localPosition, Vector3.forward, minimumLimit.transform.localScale.z, sliderDiff.z, true);
+                    maximumLimitDiff = CalculateDiff(maximumLimit.transform.localPosition, Vector3.forward, maximumLimit.transform.localScale.z, sliderDiff.z, false);
                 }
             }
-            else if (detectMinMax)
-            {
-                if (!DoDetectMinMax(finalDirection))
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                // convert local positions of min/max to world coordinates
-                Vector3 curPos = transform.localPosition;
-                transform.localPosition = minPoint;
-                finalMinPoint = transform.position;
-                transform.localPosition = maxPoint;
-                finalMaxPoint = transform.position;
-                transform.localPosition = curPos;
-            }
-            SetConstraints(finalDirection);
 
             return true;
         }
 
         protected override ControlValueRange RegisterValueRange()
         {
-            return new ControlValueRange() { controlMin = min, controlMax = max };
+            return new ControlValueRange()
+            {
+                controlMin = minimumValue,
+                controlMax = maximumValue
+            };
         }
 
         protected override void HandleUpdate()
         {
-            EnsureSliderInRange();
-
-            value = CalculateValue();
-            SnapToValue(value);
-        }
-
-        private void InitRigidBody()
-        {
-            rb = GetComponent<Rigidbody>();
-            if (rb == null)
+            CalculateValue();
+            if (snapToStep)
             {
-                rb = gameObject.AddComponent<Rigidbody>();
-            }
-            rb.isKinematic = false;
-            rb.useGravity = false;
-            rb.drag = 10; // otherwise slider will continue to move too far on its own
-        }
-
-        private void SetConstraints(Direction direction)
-        {
-            if (!rb)
-            {
-                return;
-            }
-
-            rb.constraints = RigidbodyConstraints.FreezeAll;
-            switch (direction)
-            {
-                case Direction.x:
-                    rb.constraints -= RigidbodyConstraints.FreezePositionX;
-                    break;
-                case Direction.y:
-                    rb.constraints -= RigidbodyConstraints.FreezePositionY;
-                    break;
-                case Direction.z:
-                    rb.constraints -= RigidbodyConstraints.FreezePositionZ;
-                    break;
+                SnapToValue();
             }
         }
 
-        private void InitInteractable()
+        private void InitRigidbody()
         {
-            io = GetComponent<VRTK_InteractableObject>();
-            if (io == null)
+            sliderRigidbody = GetComponent<Rigidbody>();
+            if (sliderRigidbody == null)
             {
-                io = gameObject.AddComponent<VRTK_InteractableObject>();
+                sliderRigidbody = gameObject.AddComponent<Rigidbody>();
             }
-            io.isGrabbable = true;
-            io.grabAttachMechanicScript = gameObject.AddComponent<GrabAttachMechanics.VRTK_TrackObjectGrabAttach>();
-            io.grabAttachMechanicScript.precisionGrab = true;
-            io.secondaryGrabActionScript = gameObject.AddComponent<SecondaryControllerGrabActions.VRTK_SwapControllerGrabAction>();
-            io.stayGrabbedOnTeleport = false;
-        }
+            sliderRigidbody.isKinematic = false;
+            sliderRigidbody.useGravity = false;
+            sliderRigidbody.constraints = RigidbodyConstraints.FreezeRotation;
+            sliderRigidbody.drag = releasedFriction;
 
-        private Direction DetectDirection()
-        {
-            Direction direction = Direction.autodetect;
-            Bounds bounds = VRTK_SharedMethods.GetBounds(transform);
-
-            // shoot rays from the center of the slider, this means the center should be inside the frame to work properly
-            RaycastHit hitForward;
-            RaycastHit hitBack;
-            RaycastHit hitLeft;
-            RaycastHit hitRight;
-            RaycastHit hitUp;
-            RaycastHit hitDown;
-            Physics.Raycast(bounds.center, Vector3.forward, out hitForward, bounds.extents.z * MAX_AUTODETECT_SLIDER_LENGTH, Physics.DefaultRaycastLayers, QueryTriggerInteraction.UseGlobal);
-            Physics.Raycast(bounds.center, Vector3.back, out hitBack, bounds.extents.z * MAX_AUTODETECT_SLIDER_LENGTH, Physics.DefaultRaycastLayers, QueryTriggerInteraction.UseGlobal);
-            Physics.Raycast(bounds.center, Vector3.left, out hitLeft, bounds.extents.x * MAX_AUTODETECT_SLIDER_LENGTH, Physics.DefaultRaycastLayers, QueryTriggerInteraction.UseGlobal);
-            Physics.Raycast(bounds.center, Vector3.right, out hitRight, bounds.extents.x * MAX_AUTODETECT_SLIDER_LENGTH, Physics.DefaultRaycastLayers, QueryTriggerInteraction.UseGlobal);
-            Physics.Raycast(bounds.center, Vector3.up, out hitUp, bounds.extents.y * MAX_AUTODETECT_SLIDER_LENGTH, Physics.DefaultRaycastLayers, QueryTriggerInteraction.UseGlobal);
-            Physics.Raycast(bounds.center, Vector3.down, out hitDown, bounds.extents.y * MAX_AUTODETECT_SLIDER_LENGTH, Physics.DefaultRaycastLayers, QueryTriggerInteraction.UseGlobal);
-
-            // shortest valid ray pair identifies first axis
-            float lengthX = (hitLeft.collider != null && hitRight.collider != null) ? hitLeft.distance + hitRight.distance : float.MaxValue;
-            float lengthY = (hitUp.collider != null && hitDown.collider != null) ? hitUp.distance + hitDown.distance : float.MaxValue;
-            float lengthZ = (hitForward.collider != null && hitBack.collider != null) ? hitForward.distance + hitBack.distance : float.MaxValue;
-
-            if (lengthX < lengthY & lengthX < lengthZ)
+            if (connectedTo)
             {
-                if (lengthY < lengthZ)
+                Rigidbody connectedToRigidbody = connectedTo.GetComponent<Rigidbody>();
+                if (connectedToRigidbody == null)
                 {
-                    direction = Direction.y;
+                    connectedToRigidbody = connectedTo.AddComponent<Rigidbody>();
+                    connectedToRigidbody.useGravity = false;
+                    connectedToRigidbody.isKinematic = true;
                 }
-                else if (lengthZ < lengthY)
-                {
-                    direction = Direction.z;
-                }
-                else
-                { // onset
-                    direction = Direction.x;
-                }
-            }
-            if (lengthY < lengthX & lengthY < lengthZ)
-            {
-                if (lengthX < lengthZ)
-                {
-                    direction = Direction.x;
-                }
-                else if (lengthZ < lengthX)
-                {
-                    direction = Direction.z;
-                }
-                else
-                { // onset
-                    direction = Direction.y;
-                }
-            }
-            if (lengthZ < lengthX & lengthZ < lengthY)
-            {
-                if (lengthX < lengthY)
-                {
-                    direction = Direction.x;
-                }
-                else if (lengthY < lengthX)
-                {
-                    direction = Direction.y;
-                }
-                else
-                { // onset
-                    direction = Direction.z;
-                }
-            }
-
-            if (direction != Direction.autodetect)
-            {
-                if (!DoDetectMinMax(direction))
-                {
-                    direction = Direction.autodetect;
-                }
-            }
-            else
-            {
-                finalMinPoint = transform.position;
-                finalMaxPoint = transform.position;
-            }
-
-            return direction;
-        }
-
-        private bool DoDetectMinMax(Direction direction)
-        {
-            Bounds bounds = VRTK_SharedMethods.GetBounds(transform);
-            Vector3 v = Vector3.zero;
-            float extents = 0;
-
-            switch (direction)
-            {
-                case Direction.x:
-                    v = Vector3.left;
-                    extents = bounds.extents.x;
-                    break;
-                case Direction.y:
-                    v = Vector3.down;
-                    extents = bounds.extents.y;
-                    break;
-                case Direction.z:
-                    v = Vector3.forward;
-                    extents = bounds.extents.z;
-                    break;
-            }
-
-            RaycastHit hit1;
-            RaycastHit hit2;
-            Physics.Raycast(bounds.center, v, out hit1, extents * MAX_AUTODETECT_SLIDER_LENGTH, Physics.DefaultRaycastLayers, QueryTriggerInteraction.UseGlobal);
-            Physics.Raycast(bounds.center, v * -1, out hit2, extents * MAX_AUTODETECT_SLIDER_LENGTH, Physics.DefaultRaycastLayers, QueryTriggerInteraction.UseGlobal);
-
-            if (hit1.collider && hit2.collider)
-            {
-                finalMinPoint = hit1.point;
-                finalMaxPoint = hit2.point;
-
-                // subtract width of slider to reach all values
-                finalMinPoint = finalMinPoint + (finalMaxPoint - finalMinPoint).normalized * extents;
-                finalMaxPoint = finalMaxPoint - (finalMaxPoint - finalMinPoint).normalized * extents;
-
-                return true;
-            }
-            else
-            {
-                finalMinPoint = transform.position;
-                finalMaxPoint = transform.position;
-            }
-
-            return false;
-        }
-
-        private void EnsureSliderInRange()
-        {
-            switch (finalDirection)
-            {
-                case Direction.x:
-                    if (transform.position.x > finalMaxPoint.x)
-                    {
-                        transform.position = finalMaxPoint;
-                    }
-                    else if (transform.position.x < finalMinPoint.x)
-                    {
-                        transform.position = finalMinPoint;
-                    }
-                    break;
-                case Direction.y:
-                    if (transform.position.y > finalMaxPoint.y)
-                    {
-                        transform.position = finalMaxPoint;
-                    }
-                    else if (transform.position.y < finalMinPoint.y)
-                    {
-                        transform.position = finalMinPoint;
-                    }
-                    break;
-                case Direction.z:
-                    if (transform.position.z > finalMaxPoint.z)
-                    {
-                        transform.position = finalMaxPoint;
-                    }
-                    else if (transform.position.z < finalMinPoint.z)
-                    {
-                        transform.position = finalMinPoint;
-                    }
-                    break;
             }
         }
 
-        private float CalculateValue()
+        private void InitInteractableObject()
         {
-            Vector3 center = (direction == Direction.autodetect) ? VRTK_SharedMethods.GetBounds(transform).center : transform.position;
-            float dist1 = Vector3.Distance(finalMinPoint, center);
-            float dist2 = Vector3.Distance(center, finalMaxPoint);
-
-            return Mathf.Round((min + Mathf.Clamp01(dist1 / (dist1 + dist2)) * (max - min)) / stepSize) * stepSize;
+            VRTK_InteractableObject sliderInteractableObject = GetComponent<VRTK_InteractableObject>();
+            if (sliderInteractableObject == null)
+            {
+                sliderInteractableObject = gameObject.AddComponent<VRTK_InteractableObject>();
+            }
+            sliderInteractableObject.isGrabbable = true;
+            sliderInteractableObject.grabAttachMechanicScript = gameObject.AddComponent<GrabAttachMechanics.VRTK_TrackObjectGrabAttach>();
+            sliderInteractableObject.secondaryGrabActionScript = gameObject.AddComponent<SecondaryControllerGrabActions.VRTK_SwapControllerGrabAction>();
+            sliderInteractableObject.grabAttachMechanicScript.precisionGrab = true;
+            sliderInteractableObject.stayGrabbedOnTeleport = false;
         }
 
-        private void SnapToValue(float value)
+        private void InitJoint()
         {
-            transform.position = finalMinPoint + ((value - min) / (max - min)) * (finalMaxPoint - finalMinPoint).normalized * Vector3.Distance(finalMinPoint, finalMaxPoint);
+            sliderJoint = GetComponent<ConfigurableJoint>();
+            if (sliderJoint == null)
+            {
+                sliderJoint = gameObject.AddComponent<ConfigurableJoint>();
+            }
+
+            sliderJoint.xMotion = (finalDirection == Direction.x ? ConfigurableJointMotion.Free : ConfigurableJointMotion.Locked);
+            sliderJoint.yMotion = (finalDirection == Direction.y ? ConfigurableJointMotion.Free : ConfigurableJointMotion.Locked);
+            sliderJoint.zMotion = (finalDirection == Direction.z ? ConfigurableJointMotion.Free : ConfigurableJointMotion.Locked);
+
+            sliderJoint.angularXMotion = ConfigurableJointMotion.Locked;
+            sliderJoint.angularYMotion = ConfigurableJointMotion.Locked;
+            sliderJoint.angularZMotion = ConfigurableJointMotion.Locked;
+
+            ToggleSpring(false);
+            sliderJointCreated = true;
+        }
+
+        private void CalculateValue()
+        {
+            Vector3 minPoint = minimumLimit.transform.localPosition - minimumLimitDiff;
+            Vector3 maxPoint = maximumLimit.transform.localPosition - maximumLimitDiff;
+
+            float maxDistance = Vector3.Distance(minPoint, maxPoint);
+            float currentDistance = Vector3.Distance(minPoint, transform.localPosition);
+
+            float currentValue = Mathf.Round((minimumValue + Mathf.Clamp01(currentDistance / maxDistance) * (maximumValue - minimumValue)) / stepSize) * stepSize;
+
+            float flatValue = currentValue - minimumValue;
+            float controlRange = maximumValue - minimumValue;
+            float actualPosition = (flatValue / controlRange);
+            snapPosition = minPoint + ((maxPoint - minPoint) * actualPosition);
+
+            value = currentValue;
+        }
+
+        private void ToggleSpring(bool state)
+        {
+            JointDrive snapDriver = new JointDrive();
+            snapDriver.positionSpring = (state ? 10000f : 0f);
+            snapDriver.positionDamper = (state ? 10f : 0f);
+            snapDriver.maximumForce = (state ? 100f : 0f);
+
+            sliderJoint.xDrive = snapDriver;
+            sliderJoint.yDrive = snapDriver;
+            sliderJoint.zDrive = snapDriver;
+        }
+
+        private void SnapToValue()
+        {
+            ToggleSpring(true);
+            sliderJoint.targetPosition = snapPosition * -1f;
+            sliderJoint.targetVelocity = Vector3.zero;
         }
     }
 }

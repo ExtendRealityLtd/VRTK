@@ -239,6 +239,10 @@ The sphere collider on the prefab can have the radius adjusted to determine how 
 
 It's also possible to replace the sphere trigger collider with an alternative trigger collider for customised collision detection.
 
+### Inspector Parameters
+
+ * **Is Enabled:** If this is checked then the collider will have it's rigidbody toggled on and off during a collision.
+
 ---
 
 ## Snap Drop Zone (VRTK_SnapDropZone)
@@ -4296,6 +4300,7 @@ All 3D controls extend the `VRTK_Control` abstract class which provides common m
  * [Door](#door-vrtk_door)
  * [Drawer](#drawer-vrtk_drawer)
  * [Knob](#knob-vrtk_knob)
+ * [Wheel](#wheel-vrtk_wheel)
  * [Lever](#lever-vrtk_lever)
  * [Spring Lever](#spring-lever-vrtk_springlever)
  * [Slider](#slider-vrtk_slider)
@@ -4316,10 +4321,26 @@ All 3D controls extend the `VRTK_Control` abstract class which provides a defaul
 ### Class Variables
 
  * `public ValueChangedEvent OnValueChanged` - Emitted when the control is interacted with.
+ * `public enum Direction` - 3D Control Directions
+  * `autodetect` - Attempt to auto detect the axis
+  * `x` - X axis
+  * `y` - Y axis
+  * `z` - Z axis
+
+### Class Events
+
+ * `ValueChanged` - Emitted when the 3D Control value has changed.
 
 ### Unity Events
 
- * `OnValueChanged` - Emitted when the control is interacted with.
+Adding the `VRTK_Control_UnityEvents` component to `VRTK_Control` object allows access to `UnityEvents` that will react identically to the Class Events.
+
+ * `OnValueChanged` - Emits the ValueChanged class event.
+
+### Event Payload
+
+ * `float value` - The current value being reported by the control.
+ * `float normalizedValue` - The normalized value being reported by the control.
 
 ### Class Methods
 
@@ -4386,9 +4407,31 @@ The script will instantiate the required Rigidbody and ConstantForce components 
  * **Activation Distance:** The local distance the button needs to be pushed until a push event is triggered.
  * **Button Strength:** The amount of force needed to push the button down as well as the speed with which it will go back into its original position.
 
+### Class Variables
+
+ * `public enum ButtonDirection` - 3D Control Button Directions
+  * `autodetect` - Attempt to auto detect the axis
+  * `x` - X axis
+  * `y` - Y axis
+  * `z` - Z axis
+  * `negX` - Negative X axis
+  * `negY` - Negative Y axis
+  * `negZ` - Negative Z axis
+
+### Class Events
+
+ * `Pushed` - Emitted when the 3D Button has reached it's activation distance.
+
 ### Unity Events
 
- * `OnPush` - Emitted when the button is successfully pushed.
+Adding the `VRTK_Button_UnityEvents` component to `VRTK_Button` object allows access to `UnityEvents` that will react identically to the Class Events.
+
+ * `OnPushed` - Emits the Pushed class event.
+
+### Event Payload
+
+ * `float value` - The current value being reported by the control.
+ * `float normalizedValue` - The normalized value being reported by the control.
 
 ### Example
 
@@ -4443,7 +4486,10 @@ The script will instantiate the required Rigidbodies, Interactable and HingeJoin
  * **Max Angle:** The maximum opening angle of the door.
  * **Open Inward:** Can the door be pulled to open.
  * **Open Outward:** Can the door be pushed to open.
- * **Snapping:** Keeps the door closed with a slight force. This way the door will not gradually open due to some minor physics effect. Only works if either inward or outward is selected, not both.
+ * **Min Snap Close:** The range at which the door must be to being closed before it snaps shut. Only works if either inward or outward is selected, not both.
+ * **Released Friction:** The amount of friction the door will have whilst swinging when it is not grabbed.
+ * **Grabbed Friction:** The amount of friction the door will have whilst swinging when it is grabbed.
+ * **Handle Interactable Only:** If this is checked then only the door handle is grabbale to operate the door.
 
 ### Example
 
@@ -4472,7 +4518,8 @@ It is possible to supply a third game object which is the root of the contents i
  * **Handle:** The game object for the handle.
  * **Content:** The parent game object for the drawer content elements.
  * **Hide Content:** Makes the content invisible while the drawer is closed.
- * **Snapping:** Keeps the drawer closed with a slight force. This way the drawer will not gradually open due to some minor physics effect.
+ * **Min Snap Close:** If the extension of the drawer is below this percentage then the drawer will snap shut.
+ * **Max Extend:** The maximum percentage of the drawer's total length that the drawer will open to.
 
 ### Example
 
@@ -4503,6 +4550,35 @@ The script will instantiate the required Rigidbody and Interactable components a
 
 ---
 
+## Wheel (VRTK_Wheel)
+ > extends [VRTK_Control](#control-vrtk_control)
+
+### Overview
+
+Attaching the script to a game object will allow the user to interact with it as if it were a spinnable wheel.
+
+The script will instantiate the required Rigidbody and Interactable components automatically in case they do not exist yet.
+
+### Inspector Parameters
+
+ * **Connected To:** An optional game object to which the wheel will be connected. If the game object moves the wheel will follow along.
+ * **Grab Type:** The grab attach mechanic to use. Track Object allows for rotations of the controller, Rotator Track allows for grabbing the wheel and spinning it.
+ * **Detatch Distance:** The maximum distance the grabbing controller is away from the wheel before it is automatically released.
+ * **Minimum Value:** The minimum value the wheel can be set to.
+ * **Maximum Value:** The maximum value the wheel can be set to.
+ * **Step Size:** The increments in which values can change.
+ * **Snap To Step:** If this is checked then when the wheel is released, it will snap to the step rotation.
+ * **Grabbed Friction:** The amount of friction the wheel will have when it is grabbed.
+ * **Released Friction:** The amount of friction the wheel will have when it is released.
+ * **Max Angle:** The maximum angle the wheel has to be turned to reach it's maximum value.
+ * **Lock At Limits:** If this is checked then the wheel cannot be turned beyond the minimum and maximum value.
+
+### Example
+
+`VRTK/Examples/025_Controls_Overview` has a collection of wheels that can be rotated by grabbing with the controller and then rotating the controller in the desired direction.
+
+---
+
 ## Lever (VRTK_Lever)
  > extends [VRTK_Control](#control-vrtk_control)
 
@@ -4519,6 +4595,8 @@ The script will instantiate the required Rigidbody, Interactable and HingeJoint 
  * **Min Angle:** The minimum angle of the lever counted from its initial position.
  * **Max Angle:** The maximum angle of the lever counted from its initial position.
  * **Step Size:** The increments in which lever values can change.
+ * **Released Friction:** The amount of friction the lever will have whilst swinging when it is not grabbed.
+ * **Grabbed Friction:** The amount of friction the lever will have whilst swinging when it is grabbed.
 
 ### Example
 
@@ -4537,7 +4615,10 @@ The script will instantiate the required Rigidbody, Interactable and HingeJoint 
 
 ### Inspector Parameters
 
- * **Spring Strength:** Strength of the spring force that will be applied toward either end of the lever's range.
+ * **Spring Strength:** The strength of the spring force that will be applied upon the lever.
+ * **Spring Damper:** The damper of the spring force that will be applied upon the lever.
+ * **Snap To Nearest Limit:** If this is checked then the spring will snap the lever to the nearest end point (either min or max angle). If it is unchecked, the lever will always snap to the min angle position.
+ * **Always Active:** If this is checked then the spring will always be active even when grabbing the lever.
 
 ---
 
@@ -4552,13 +4633,15 @@ The script will instantiate the required Rigidbody and Interactable components a
 
 ### Inspector Parameters
 
+ * **Connected To:** An optional game object to which the wheel will be connected. If the game object moves the wheel will follow along.
  * **Direction:** The axis on which the slider should move. All other axis will be frozen.
- * **Min:** The minimum value of the slider.
- * **Max:** The maximum value of the slider.
- * **Step Size:** The increments in which slider values can change. The slider supports snapping.
- * **Detect Min Max:** Automatically detect the minimum and maximum positions.
- * **Min Point:** The minimum point on the slider.
- * **Max Point:** The maximum point on the slider.
+ * **Minimum Limit:** The collider to specify the minimum limit of the slider.
+ * **Maximum Limit:** The collider to specify the maximum limit of the slider.
+ * **Minimum Value:** The minimum value of the slider.
+ * **Maximum Value:** The maximum value of the slider.
+ * **Step Size:** The increments in which slider values can change.
+ * **Snap To Step:** If this is checked then when the slider is released, it will snap to the nearest value position.
+ * **Released Friction:** The amount of friction the slider will have when it is released.
 
 ### Example
 

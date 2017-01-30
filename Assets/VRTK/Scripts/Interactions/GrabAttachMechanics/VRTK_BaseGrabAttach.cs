@@ -167,10 +167,13 @@ namespace VRTK.GrabAttachMechanics
 
         protected virtual void ForceReleaseGrab()
         {
-            var grabbingObject = grabbedObjectScript.GetGrabbingObject();
-            if (grabbingObject)
+            if (grabbedObjectScript)
             {
-                grabbingObject.GetComponent<VRTK_InteractGrab>().ForceRelease();
+                var grabbingObject = grabbedObjectScript.GetGrabbingObject();
+                if (grabbingObject)
+                {
+                    grabbingObject.GetComponent<VRTK_InteractGrab>().ForceRelease();
+                }
             }
         }
 

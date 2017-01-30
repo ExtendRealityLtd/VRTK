@@ -16,7 +16,9 @@ namespace VRTK
     {
         public enum LeverDirection
         {
-            x, y, z
+            x,
+            y,
+            z
         }
 
         [Tooltip("An optional game object to which the lever will be connected. If the game object moves the lever will follow along.")]
@@ -29,12 +31,14 @@ namespace VRTK
         public float maxAngle = 130f;
         [Tooltip("The increments in which lever values can change.")]
         public float stepSize = 1f;
+        [Tooltip("The amount of friction the lever will have whilst swinging when it is not grabbed.")]
+        public float releasedFriction = 30f;
+        [Tooltip("The amount of friction the lever will have whilst swinging when it is grabbed.")]
+        public float grabbedFriction = 60f;
 
-        protected HingeJoint hj;
-
-        private Rigidbody rb;
-        private VRTK_InteractableObject io;
-        private bool hjCreated = false;
+        protected HingeJoint leverHingeJoint;
+        protected bool leverHingeJointCreated = false;
+        protected Rigidbody leverRigidbody;
 
         protected override void InitRequiredComponents()
         {
@@ -43,78 +47,44 @@ namespace VRTK
                 VRTK_SharedMethods.CreateColliders(gameObject);
             }
 
-            rb = GetComponent<Rigidbody>();
-            if (rb == null)
-            {
-                rb = gameObject.AddComponent<Rigidbody>();
-                rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
-                rb.angularDrag = 30; // otherwise lever will continue to move too far on its own
-            }
-            rb.isKinematic = false;
-            rb.useGravity = false;
-
-            io = GetComponent<VRTK_InteractableObject>();
-            if (io == null)
-            {
-                io = gameObject.AddComponent<VRTK_InteractableObject>();
-            }
-            io.isGrabbable = true;
-            io.grabAttachMechanicScript = gameObject.AddComponent<GrabAttachMechanics.VRTK_RotatorTrackGrabAttach>();
-            io.grabAttachMechanicScript.precisionGrab = true;
-            io.secondaryGrabActionScript = gameObject.AddComponent<SecondaryControllerGrabActions.VRTK_SwapControllerGrabAction>();
-            io.stayGrabbedOnTeleport = false;
-
-            hj = GetComponent<HingeJoint>();
-            if (hj == null)
-            {
-                hj = gameObject.AddComponent<HingeJoint>();
-                hjCreated = true;
-            }
-
-            if (connectedTo)
-            {
-                Rigidbody rb2 = connectedTo.GetComponent<Rigidbody>();
-                if (rb2 == null)
-                {
-                    rb2 = connectedTo.AddComponent<Rigidbody>();
-                }
-                rb2.useGravity = false;
-            }
+            InitRigidbody();
+            InitInteractableObject();
+            InitHingeJoint();
         }
 
         protected override bool DetectSetup()
         {
-            if (hjCreated)
+            if (leverHingeJointCreated)
             {
                 Bounds bounds = VRTK_SharedMethods.GetBounds(transform, transform);
                 switch (direction)
                 {
                     case LeverDirection.x:
-                        hj.anchor = (bounds.extents.y > bounds.extents.z) ? new Vector3(0, bounds.extents.y / transform.lossyScale.y, 0) : new Vector3(0, 0, bounds.extents.z / transform.lossyScale.z);
+                        leverHingeJoint.anchor = (bounds.extents.y > bounds.extents.z) ? new Vector3(0, bounds.extents.y / transform.lossyScale.y, 0) : new Vector3(0, 0, bounds.extents.z / transform.lossyScale.z);
                         break;
                     case LeverDirection.y:
-                        hj.axis = new Vector3(0, 1, 0);
-                        hj.anchor = (bounds.extents.x > bounds.extents.z) ? new Vector3(bounds.extents.x / transform.lossyScale.x, 0, 0) : new Vector3(0, 0, bounds.extents.z / transform.lossyScale.z);
+                        leverHingeJoint.axis = new Vector3(0, 1, 0);
+                        leverHingeJoint.anchor = (bounds.extents.x > bounds.extents.z) ? new Vector3(bounds.extents.x / transform.lossyScale.x, 0, 0) : new Vector3(0, 0, bounds.extents.z / transform.lossyScale.z);
                         break;
                     case LeverDirection.z:
-                        hj.axis = new Vector3(0, 0, 1);
-                        hj.anchor = (bounds.extents.y > bounds.extents.x) ? new Vector3(0, bounds.extents.y / transform.lossyScale.y, 0) : new Vector3(bounds.extents.x / transform.lossyScale.x, 0);
+                        leverHingeJoint.axis = new Vector3(0, 0, 1);
+                        leverHingeJoint.anchor = (bounds.extents.y > bounds.extents.x) ? new Vector3(0, bounds.extents.y / transform.lossyScale.y, 0) : new Vector3(bounds.extents.x / transform.lossyScale.x, 0);
                         break;
                 }
-                hj.anchor *= -1; // subdirection detection not yet implemented
+                leverHingeJoint.anchor *= -1; // subdirection detection not yet implemented
             }
 
-            if (hj)
+            if (leverHingeJoint)
             {
-                hj.useLimits = true;
-                JointLimits limits = hj.limits;
-                limits.min = minAngle;
-                limits.max = maxAngle;
-                hj.limits = limits;
+                leverHingeJoint.useLimits = true;
+                JointLimits leverJointLimits = leverHingeJoint.limits;
+                leverJointLimits.min = minAngle;
+                leverJointLimits.max = maxAngle;
+                leverHingeJoint.limits = leverJointLimits;
 
                 if (connectedTo)
                 {
-                    hj.connectedBody = connectedTo.GetComponent<Rigidbody>();
+                    leverHingeJoint.connectedBody = connectedTo.GetComponent<Rigidbody>();
                 }
             }
 
@@ -123,7 +93,11 @@ namespace VRTK
 
         protected override ControlValueRange RegisterValueRange()
         {
-            return new ControlValueRange() { controlMin = minAngle, controlMax = maxAngle };
+            return new ControlValueRange()
+            {
+                controlMin = minAngle,
+                controlMax = maxAngle
+            };
         }
 
         protected override void HandleUpdate()
@@ -132,22 +106,82 @@ namespace VRTK
             SnapToValue(value);
         }
 
+        protected virtual void InitRigidbody()
+        {
+            leverRigidbody = GetComponent<Rigidbody>();
+            if (leverRigidbody == null)
+            {
+                leverRigidbody = gameObject.AddComponent<Rigidbody>();
+                leverRigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+                leverRigidbody.angularDrag = releasedFriction; // otherwise lever will continue to move too far on its own
+            }
+            leverRigidbody.isKinematic = false;
+            leverRigidbody.useGravity = false;
+        }
+
+        protected virtual void InitInteractableObject()
+        {
+            VRTK_InteractableObject leverInteractableObject = GetComponent<VRTK_InteractableObject>();
+            if (leverInteractableObject == null)
+            {
+                leverInteractableObject = gameObject.AddComponent<VRTK_InteractableObject>();
+            }
+            leverInteractableObject.isGrabbable = true;
+            leverInteractableObject.grabAttachMechanicScript = gameObject.AddComponent<GrabAttachMechanics.VRTK_RotatorTrackGrabAttach>();
+            leverInteractableObject.secondaryGrabActionScript = gameObject.AddComponent<SecondaryControllerGrabActions.VRTK_SwapControllerGrabAction>();
+            leverInteractableObject.grabAttachMechanicScript.precisionGrab = true;
+            leverInteractableObject.stayGrabbedOnTeleport = false;
+
+            leverInteractableObject.InteractableObjectGrabbed += InteractableObjectGrabbed;
+            leverInteractableObject.InteractableObjectUngrabbed += InteractableObjectUngrabbed;
+        }
+
+        protected virtual void InteractableObjectGrabbed(object sender, InteractableObjectEventArgs e)
+        {
+            leverRigidbody.angularDrag = grabbedFriction;
+        }
+
+        protected virtual void InteractableObjectUngrabbed(object sender, InteractableObjectEventArgs e)
+        {
+            leverRigidbody.angularDrag = releasedFriction;
+        }
+
+        protected virtual void InitHingeJoint()
+        {
+            leverHingeJoint = GetComponent<HingeJoint>();
+            if (leverHingeJoint == null)
+            {
+                leverHingeJoint = gameObject.AddComponent<HingeJoint>();
+                leverHingeJointCreated = true;
+            }
+
+            if (connectedTo)
+            {
+                Rigidbody leverConnectedToRigidbody = connectedTo.GetComponent<Rigidbody>();
+                if (leverConnectedToRigidbody == null)
+                {
+                    leverConnectedToRigidbody = connectedTo.AddComponent<Rigidbody>();
+                }
+                leverConnectedToRigidbody.useGravity = false;
+            }
+        }
+
         private float CalculateValue()
         {
-            return Mathf.Round((hj.angle) / stepSize) * stepSize;
+            return Mathf.Round((leverHingeJoint.angle) / stepSize) * stepSize;
         }
 
         private void SnapToValue(float value)
         {
-            float angle = ((value - minAngle) / (maxAngle - minAngle)) * (hj.limits.max - hj.limits.min);
+            float angle = ((value - minAngle) / (maxAngle - minAngle)) * (leverHingeJoint.limits.max - leverHingeJoint.limits.min);
 
             // TODO: there is no direct setter, one recommendation by Unity staff is to "abuse" min/max which seems the most reliable but not working so far
-            JointLimits oldLimits = hj.limits;
-            JointLimits tempLimits = hj.limits;
+            JointLimits oldLimits = leverHingeJoint.limits;
+            JointLimits tempLimits = leverHingeJoint.limits;
             tempLimits.min = angle;
             tempLimits.max = angle;
-            hj.limits = tempLimits;
-            hj.limits = oldLimits;
+            leverHingeJoint.limits = tempLimits;
+            leverHingeJoint.limits = oldLimits;
         }
     }
 }

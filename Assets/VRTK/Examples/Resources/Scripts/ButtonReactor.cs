@@ -1,18 +1,26 @@
 ﻿namespace VRTK.Examples
 {
     using UnityEngine;
+    using UnityEventHelper;
 
     public class ButtonReactor : MonoBehaviour
     {
         public GameObject go;
         public Transform dispenseLocation;
 
+        private VRTK_Button_UnityEvents buttonEvents;
+
         private void Start()
         {
-            GetComponent<VRTK_Button>().events.OnPush.AddListener(handlePush);
+            buttonEvents = GetComponent<VRTK_Button_UnityEvents>();
+            if (buttonEvents == null)
+            {
+                buttonEvents = gameObject.AddComponent<VRTK_Button_UnityEvents>();
+            }
+            buttonEvents.OnPushed.AddListener(handlePush);
         }
 
-        private void handlePush()
+        private void handlePush(object sender, Control3DEventArgs e)
         {
             Debug.Log("Pushed");
 
