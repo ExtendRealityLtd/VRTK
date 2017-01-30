@@ -149,14 +149,14 @@ namespace VRTK
                     Vector3 rot = Vector3.zero;
                     rot.x += (mouseDiff * handRotationMultiplier).y;
                     rot.y += (mouseDiff * handRotationMultiplier).x;
-                    currentHand.transform.FindChild("Hand").Rotate(rot * Time.deltaTime);
+                    currentHand.transform.Rotate(rot * Time.deltaTime);
                 }
                 else
                 {
                     Vector3 rot = Vector3.zero;
                     rot.z += (mouseDiff * handRotationMultiplier).x;
                     rot.x += (mouseDiff * handRotationMultiplier).y;
-                    currentHand.transform.FindChild("Hand").Rotate(rot * Time.deltaTime);
+                    currentHand.transform.Rotate(rot * Time.deltaTime);
                 }
             }
             else //Position
