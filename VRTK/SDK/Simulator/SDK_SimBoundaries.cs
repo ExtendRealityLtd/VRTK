@@ -47,9 +47,10 @@ namespace VRTK
             {
                 Vector3[] vertices = new Vector3[4];
                 vertices[0] = new Vector3(1, 0, 1);
-                vertices[1] = new Vector3(-1, 0, 1);
-                vertices[2] = new Vector3(1, 0, -1);
-                vertices[3] = new Vector3(-1, 0, -1);
+                vertices[1] = new Vector3(1, 0, -1);
+                vertices[2] = new Vector3(-1, 0, -1);
+                vertices[3] = new Vector3(-1, 0, 1);
+
                 return vertices;
             }
             return null;
