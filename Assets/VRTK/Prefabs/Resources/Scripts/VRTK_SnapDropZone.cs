@@ -678,6 +678,7 @@ namespace VRTK
 
             //Initialise highlighter and set highlight colour
             objectHighlighter = highlightObject.GetComponent<VRTK_BaseHighlighter>();
+            objectHighlighter.unhighlightOnDisable = false;
             objectHighlighter.Initialise(highlightColor);
             objectHighlighter.Highlight(highlightColor);
 

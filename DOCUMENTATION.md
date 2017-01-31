@@ -2665,6 +2665,7 @@ As this is an abstract class, it cannot be applied directly to a game object and
 ### Inspector Parameters
 
  * **Active:** Determines if this highlighter is the active highlighter for the object the component is attached to. Only 1 active highlighter can be applied to a game object.
+ * **Unhighlight On Disable:** Determines if the highlighted object should be unhighlighted when it is disabled.
 
 ### Class Methods
 
