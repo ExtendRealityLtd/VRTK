@@ -58,6 +58,8 @@ namespace VRTK
         public float maxSpeed = 4;
         [Tooltip("The speed in which the play area slows down to a complete stop when the user is no longer pressing the engage button. This deceleration effect can ease any motion sickness that may be suffered.")]
         public float deceleration = 0.1f;
+        [Tooltip("The speed in which the play area slows down to a complete stop when the user is falling.")]
+        public float fallingDeceleration = 0.01f;
         [Tooltip("How the user's movement direction will be determined.  The Gaze method tends to lead to the least motion sickness.  Smart decoupling is still a Work In Progress.")]
         public DirectionalMethod directionMethod = DirectionalMethod.Gaze;
         [Tooltip("The degree threshold that all tracked objects (controllers, headset) must be within to change direction when using the Smart Decoupling Direction Method.")]
@@ -290,7 +292,7 @@ namespace VRTK
             }
             else if (currentSpeed > 0f)
             {
-                currentSpeed -= deceleration;
+                currentSpeed -= (currentlyFalling ? fallingDeceleration : deceleration);
             }
             else
             {
