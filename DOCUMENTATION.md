@@ -989,6 +989,8 @@ The Touchpad Walking script adds a rigidbody and a box collider to the user's po
 
 ### Inspector Parameters
 
+ * **Left Controller:** If this is checked then the left controller touchpad will be enabled to move the play area.
+ * **Right Controller:** If this is checked then the right controller touchpad will be enabled to move the play area.
  * **Max Walk Speed:** The maximum speed the play area will be moved when the touchpad is being touched at the extremes of the axis. If a lower part of the touchpad axis is touched (nearer the centre) then the walk speed is slower.
  * **Deceleration:** The speed in which the play area slows down to a complete stop when the user is no longer touching the touchpad. This deceleration effect can ease any motion sickness that may be suffered.
  * **Move On Button Press:** If a button is defined then movement will only occur when the specified button is being held down and the touchpad axis changes.
@@ -1031,6 +1033,8 @@ Snap rotate and flip direction options can be useful with teleport scripts for s
 
 ### Inspector Parameters
 
+ * **Left Controller:** If this is checked then the left controller touchpad will be enabled for the selected movement types.
+ * **Right Controller:** If this is checked then the right controller touchpad will be enabled for the selected movement types.
  * **Move On Button Press:** If a button is defined then the selected movement will only be performed when the specified button is being held down and the touchpad axis changes.
  * **Movement Multiplier Button:** If the defined movement multiplier button is pressed then the movement will be affected by the axis multiplier value.
  * **Vertical Axis Movement:** Selects the main movement type to be performed when the vertical axis changes occur.
