@@ -427,7 +427,7 @@
             GetSystemSDK().ForceInterleavedReprojectionOn(force);
         }
 
-        private static SDK_BaseSystem GetSystemSDK()
+        public static SDK_BaseSystem GetSystemSDK()
         {
             if (systemSDK == null)
             {
@@ -436,7 +436,7 @@
             return systemSDK;
         }
 
-        private static SDK_BaseHeadset GetHeadsetSDK()
+        public static SDK_BaseHeadset GetHeadsetSDK()
         {
             if (headsetSDK == null)
             {
@@ -445,7 +445,7 @@
             return headsetSDK;
         }
 
-        private static SDK_BaseController GetControllerSDK()
+        public static SDK_BaseController GetControllerSDK()
         {
             if (controllerSDK == null)
             {
@@ -454,7 +454,7 @@
             return controllerSDK;
         }
 
-        private static SDK_BaseBoundaries GetBoundariesSDK()
+        public static SDK_BaseBoundaries GetBoundariesSDK()
         {
             if (boundariesSDK == null)
             {

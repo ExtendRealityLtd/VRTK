@@ -59,6 +59,14 @@ Use the mouse and keyboard to move around both play area and hands and interacti
  * **Hands On Off:** Key used to switch hands On/Off.
  * **Rotation Position:** Key used to switch between positional and rotational movement.
  * **Change Axis:** Key used to switch between X/Y and X/Z axis.
+ * **Trigger Alias:** Key used to simulate trigger button.
+ * **Grip Alias:** Key used to simulate grip button.
+ * **Touchpad Alias:** Key used to simulate touchpad button.
+ * **Button One Alias:** Key used to simulate button one.
+ * **Button Two Alias:** Key used to simulate button two.
+ * **Start Menu Alias:** Key used to simulate start menu button.
+ * **Touch Modifier:** Key used to switch between button touch and button press mode.
+ * **Hair Touch Modifier:** Key used to switch between hair touch mode.
 
 ### Class Methods
 

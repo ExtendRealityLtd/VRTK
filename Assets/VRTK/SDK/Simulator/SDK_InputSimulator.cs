@@ -2,6 +2,7 @@
 namespace VRTK
 {
     using UnityEngine;
+    using System.Collections.Generic;
 
     /// <summary>
     /// The `VRSimulatorCameraRig` prefab is a mock Camera Rig set up that can be used to develop with VRTK without the need for VR Hardware.
@@ -29,7 +30,7 @@ namespace VRTK
         [Tooltip("Adjust player rotation speed.")]
         public float playerRotationMultiplier = 0.5f;
 
-        [Header("Key bindings")]
+        [Header("Operation Key Bindings")]
 
         [Tooltip("Key used to switch between left and righ hand.")]
         public KeyCode changeHands = KeyCode.Tab;
@@ -39,6 +40,24 @@ namespace VRTK
         public KeyCode rotationPosition = KeyCode.LeftShift;
         [Tooltip("Key used to switch between X/Y and X/Z axis.")]
         public KeyCode changeAxis = KeyCode.LeftControl;
+
+        [Header("Controller Key Bindings")]
+        [Tooltip("Key used to simulate trigger button.")]
+        public KeyCode triggerAlias = KeyCode.Mouse1;
+        [Tooltip("Key used to simulate grip button.")]
+        public KeyCode gripAlias = KeyCode.Mouse0;
+        [Tooltip("Key used to simulate touchpad button.")]
+        public KeyCode touchpadAlias = KeyCode.Q;
+        [Tooltip("Key used to simulate button one.")]
+        public KeyCode buttonOneAlias = KeyCode.E;
+        [Tooltip("Key used to simulate button two.")]
+        public KeyCode buttonTwoAlias = KeyCode.R;
+        [Tooltip("Key used to simulate start menu button.")]
+        public KeyCode startMenuAlias = KeyCode.F;
+        [Tooltip("Key used to switch between button touch and button press mode.")]
+        public KeyCode touchModifier = KeyCode.T;
+        [Tooltip("Key used to switch between hair touch mode.")]
+        public KeyCode hairTouchModifier = KeyCode.H;
 
         #endregion
         #region Private fields
@@ -89,6 +108,22 @@ namespace VRTK
             rightController.Selected = true;
             leftController.Selected = false;
             destroyed = false;
+
+#if VRTK_SDK_SIM
+            Dictionary<string, KeyCode> keyMappings = new Dictionary<string, KeyCode>()
+            {
+                {"Trigger", triggerAlias },
+                {"Grip", gripAlias },
+                {"TouchpadPress", touchpadAlias },
+                {"ButtonOne", buttonOneAlias },
+                {"ButtonTwo", buttonTwoAlias },
+                {"StartMenu", startMenuAlias },
+                {"TouchModifier", touchModifier },
+                {"HairTouchModifier", hairTouchModifier }
+            };
+            SDK_SimController controllerSDK = (SDK_SimController)VRTK_SDK_Bridge.GetControllerSDK();
+            controllerSDK.SetKeyMappings(keyMappings);
+#endif
         }
 
         private void OnDestroy()
@@ -149,14 +184,14 @@ namespace VRTK
                     Vector3 rot = Vector3.zero;
                     rot.x += (mouseDiff * handRotationMultiplier).y;
                     rot.y += (mouseDiff * handRotationMultiplier).x;
-                    currentHand.transform.FindChild("Hand").Rotate(rot * Time.deltaTime);
+                    currentHand.transform.Rotate(rot * Time.deltaTime);
                 }
                 else
                 {
                     Vector3 rot = Vector3.zero;
                     rot.z += (mouseDiff * handRotationMultiplier).x;
                     rot.x += (mouseDiff * handRotationMultiplier).y;
-                    currentHand.transform.FindChild("Hand").Rotate(rot * Time.deltaTime);
+                    currentHand.transform.Rotate(rot * Time.deltaTime);
                 }
             }
             else //Position
