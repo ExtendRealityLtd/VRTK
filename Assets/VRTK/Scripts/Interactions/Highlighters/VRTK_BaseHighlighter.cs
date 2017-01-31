@@ -87,5 +87,10 @@ namespace VRTK.Highlighters
 
             return objectHighlighter;
         }
+
+        protected virtual void OnDisable()
+        {
+            Unhighlight();
+        }
     }
 }
