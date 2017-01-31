@@ -56,6 +56,8 @@ namespace VRTK
         public float speedScale = 1;
         [Tooltip("The max speed the user can move in game units. (If 0 or less, max speed is uncapped)")]
         public float maxSpeed = 4;
+        [Tooltip("The speed in which the play area slows down to a complete stop when the user is no longer pressing the engage button. This deceleration effect can ease any motion sickness that may be suffered.")]
+        public float deceleration = 0.1f;
         [Tooltip("How the user's movement direction will be determined.  The Gaze method tends to lead to the least motion sickness.  Smart decoupling is still a Work In Progress.")]
         public DirectionalMethod directionMethod = DirectionalMethod.Gaze;
         [Tooltip("The degree threshold that all tracked objects (controllers, headset) must be within to change direction when using the Smart Decoupling Direction Method.")]
@@ -84,7 +86,7 @@ namespace VRTK
         // Used to determine the direction when using a decoupling method.
         private Vector3 initalGaze;
         // The current move speed of the player. If Move In Place is not active, it will be set to 0.00f.
-        private float curSpeed;
+        private float currentSpeed;
         // The current direction the player is moving. If Move In Place is not active, it will be set to Vector.zero.
         private Vector3 direction;
         // True if Move In Place is currently engaged.
@@ -126,7 +128,7 @@ namespace VRTK
         /// <returns>Returns a float representing the player's current movement speed.</returns>
         public float GetSpeed()
         {
-            return curSpeed;
+            return currentSpeed;
         }
 
         protected virtual void OnEnable()
@@ -137,7 +139,7 @@ namespace VRTK
             initalGaze = Vector3.zero;
             direction = Vector3.zero;
             averagePeriod = 60;
-            curSpeed = 0f;
+            currentSpeed = 0f;
             active = false;
             previousEngageButton = engageButton;
 
@@ -274,7 +276,16 @@ namespace VRTK
                 }
 
                 // Update our current speed.
-                curSpeed = speed;
+                currentSpeed = speed;
+            }
+            else if (currentSpeed > 0f)
+            {
+                currentSpeed -= deceleration;
+            }
+            else
+            {
+                currentSpeed = 0f;
+                direction = Vector3.zero;
             }
 
             foreach (Transform trackedObj in trackedObjects)
@@ -283,7 +294,7 @@ namespace VRTK
                 previousYPositions[trackedObj] = trackedObj.transform.localPosition.y;
             }
 
-            Vector3 movement = (direction * curSpeed) * Time.fixedDeltaTime;
+            Vector3 movement = (direction * currentSpeed) * Time.fixedDeltaTime;
             if (playArea)
             {
                 playArea.position = new Vector3(movement.x + playArea.position.x, playArea.position.y, movement.z + playArea.position.z);
@@ -312,8 +323,6 @@ namespace VRTK
                 movementList[obj].Clear();
             }
             initalGaze = Vector3.zero;
-            direction = Vector3.zero;
-            curSpeed = 0;
 
             active = false;
         }

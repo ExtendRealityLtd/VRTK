@@ -1106,6 +1106,7 @@ Move In Place allows the user to move the play area by calculating the y-movemen
  * **Control Options:** Select which trackables are used to determine movement.
  * **Speed Scale:** Lower to decrease speed, raise to increase.
  * **Max Speed:** The max speed the user can move in game units. (If 0 or less, max speed is uncapped)
+ * **Deceleration:** The speed in which the play area slows down to a complete stop when the user is no longer pressing the engage button. This deceleration effect can ease any motion sickness that may be suffered.
  * **Direction Method:** How the user's movement direction will be determined.  The Gaze method tends to lead to the least motion sickness.  Smart decoupling is still a Work In Progress.
  * **Smart Decouple Threshold:** The degree threshold that all tracked objects (controllers, headset) must be within to change direction when using the Smart Decoupling Direction Method.
  * **Sensitivity:** The maximum amount of movement required to register in the virtual world.  Decreasing this will increase acceleration, and vice versa.
