@@ -44,72 +44,25 @@ namespace VRTK
             SmartDecoupling
         }
 
-        /// <summary>
-        /// If true, the left controller's trackpad will engage Move In Place.
-        /// </summary>
-        public bool LeftController
-        {
-            get { return leftController; }
-            set
-            {
-                leftController = value;
-                SetControllerListeners(controllerLeftHand);
-            }
-        }
-
-        /// <summary>
-        /// If true, the right controller's trackpad will engage Move In Place.
-        /// </summary>
-        public bool RightController
-        {
-            get { return rightController; }
-            set
-            {
-                rightController = value;
-                SetControllerListeners(controllerRightHand);
-            }
-        }
-
-        [Tooltip("If this is checked then the left controller touchpad will be enabled to move the play area. It can also be toggled at runtime.")]
-        [SerializeField]
-        private bool leftController = true;
-        [Tooltip("If this is checked then the right controller touchpad will be enabled to move the play area. It can also be toggled at runtime.")]
-        [SerializeField]
-        private bool rightController = true;
-
+        [Tooltip("If this is checked then the left controller touchpad will be enabled to move the play area.")]
+        public bool leftController = true;
+        [Tooltip("If this is checked then the right controller touchpad will be enabled to move the play area.")]
+        public bool rightController = true;
         [Tooltip("Select which button to hold to engage Move In Place.")]
         public VRTK_ControllerEvents.ButtonAlias engageButton = VRTK_ControllerEvents.ButtonAlias.Touchpad_Press;
-
         [Tooltip("Select which trackables are used to determine movement.")]
-        [SerializeField]
         public ControlOptions controlOptions = ControlOptions.HeadsetAndControllers;
-
-        [SerializeField]
         [Tooltip("Lower to decrease speed, raise to increase.")]
         public float speedScale = 1;
-
-        [SerializeField]
         [Tooltip("The max speed the user can move in game units. (If 0 or less, max speed is uncapped)")]
         public float maxSpeed = 4;
-
-        [SerializeField]
         [Tooltip("How the user's movement direction will be determined.  The Gaze method tends to lead to the least motion sickness.  Smart decoupling is still a Work In Progress.")]
         public DirectionalMethod directionMethod = DirectionalMethod.Gaze;
-
-        [SerializeField]
         [Tooltip("The degree threshold that all tracked objects (controllers, headset) must be within to change direction when using the Smart Decoupling Direction Method.")]
         public float smartDecoupleThreshold = 30f;
-
         // The cap before we stop adding the delta to the movement list. This will help regulate speed.
-        [SerializeField]
         [Tooltip("The maximum amount of movement required to register in the virtual world.  Decreasing this will increase acceleration, and vice versa.")]
         public float sensitivity = 0.02f;
-
-        // The maximum number of updates we should hold to process movements. The higher the number, the slower the acceleration/deceleration & vice versa.
-        private int averagePeriod = 60;
-
-        // Which tracked objects to use to determine amount of movement.
-        private List<Transform> trackedObjects = new List<Transform>();
 
         private Transform playArea;
         private GameObject controllerLeftHand;
@@ -117,24 +70,25 @@ namespace VRTK
         private Transform headset;
         private bool leftSubscribed;
         private bool rightSubscribed;
-        private ControllerInteractionEventHandler engageButtonPressed;
-        private ControllerInteractionEventHandler engageButtonUp;
+        private bool previousLeftControllerState;
+        private bool previousRightControllerState;
+        private VRTK_ControllerEvents.ButtonAlias previousEngageButton;
 
+        // The maximum number of updates we should hold to process movements. The higher the number, the slower the acceleration/deceleration & vice versa.
+        private int averagePeriod;
+        // Which tracked objects to use to determine amount of movement.
+        private List<Transform> trackedObjects;
         // List of all the update's movements over the average period.
-        private Dictionary<Transform, List<float>> movementList = new Dictionary<Transform, List<float>>();
-        private Dictionary<Transform, float> previousYPositions = new Dictionary<Transform, float>();
-
+        private Dictionary<Transform, List<float>> movementList;
+        private Dictionary<Transform, float> previousYPositions;
         // Used to determine the direction when using a decoupling method.
-        private Vector3 initalGaze = Vector3.zero;
-
+        private Vector3 initalGaze;
         // The current move speed of the player. If Move In Place is not active, it will be set to 0.00f.
-        private float curSpeed = 0.00f;
-
+        private float curSpeed;
         // The current direction the player is moving. If Move In Place is not active, it will be set to Vector.zero.
-        private Vector3 direction = new Vector3();
-
+        private Vector3 direction;
         // True if Move In Place is currently engaged.
-        private bool active = false;
+        private bool active;
 
         /// <summary>
         /// Set the control options and modify the trackables to match.
@@ -175,32 +129,29 @@ namespace VRTK
             return curSpeed;
         }
 
-        protected virtual void Awake()
+        protected virtual void OnEnable()
         {
+            trackedObjects = new List<Transform>();
+            movementList = new Dictionary<Transform, List<float>>();
+            previousYPositions = new Dictionary<Transform, float>();
+            initalGaze = Vector3.zero;
+            direction = Vector3.zero;
+            averagePeriod = 60;
+            curSpeed = 0f;
+            active = false;
+            previousEngageButton = engageButton;
+
             controllerLeftHand = VRTK_DeviceFinder.GetControllerLeftHand();
             controllerRightHand = VRTK_DeviceFinder.GetControllerRightHand();
+
+            SetControllerListeners(controllerLeftHand, leftController, ref leftSubscribed);
+            SetControllerListeners(controllerRightHand, rightController, ref rightSubscribed);
+
             headset = VRTK_DeviceFinder.HeadsetTransform();
 
             SetControlOptions(controlOptions);
-        }
 
-        protected virtual void OnEnable()
-        {
-            engageButtonPressed += DoTouchpadDown;
-            engageButtonUp += DoTouchpadUp;
-        }
-
-        protected virtual void OnDisable()
-        {
-            engageButtonPressed -= DoTouchpadDown;
-            engageButtonUp -= DoTouchpadUp;
-        }
-
-        protected virtual void Start()
-        {
             playArea = VRTK_DeviceFinder.PlayAreaTransform();
-            SetControllerListeners(controllerLeftHand);
-            SetControllerListeners(controllerRightHand);
 
             // Initialize the lists.
             foreach (Transform trackedObj in trackedObjects)
@@ -212,6 +163,19 @@ namespace VRTK
             {
                 Debug.LogError("No play area could be found. Have you selected a valid Boundaries SDK in the SDK Manager? If you are unsure, then click the GameObject with the `VRTK_SDKManager` script attached to it in Edit Mode and select a Boundaries SDK from the dropdown.");
             }
+        }
+
+        protected virtual void OnDisable()
+        {
+            SetControllerListeners(controllerLeftHand, leftController, ref leftSubscribed, true);
+            SetControllerListeners(controllerRightHand, rightController, ref rightSubscribed, true);
+        }
+
+        protected virtual void Update()
+        {
+            CheckControllerState(controllerLeftHand, leftController, ref leftSubscribed, ref previousLeftControllerState);
+            CheckControllerState(controllerRightHand, rightController, ref leftSubscribed, ref previousRightControllerState);
+            previousEngageButton = engageButton;
         }
 
         protected virtual void FixedUpdate()
@@ -326,12 +290,21 @@ namespace VRTK
             }
         }
 
-        private void DoTouchpadDown(object sender, ControllerInteractionEventArgs e)
+        protected virtual void CheckControllerState(GameObject controller, bool controllerState, ref bool subscribedState, ref bool previousState)
+        {
+            if (controllerState != previousState || engageButton != previousEngageButton)
+            {
+                SetControllerListeners(controller, controllerState, ref subscribedState);
+            }
+            previousState = controllerState;
+        }
+
+        private void EngageButtonPressed(object sender, ControllerInteractionEventArgs e)
         {
             active = true;
         }
 
-        private void DoTouchpadUp(object sender, ControllerInteractionEventArgs e)
+        private void EngageButtonReleased(object sender, ControllerInteractionEventArgs e)
         {
             // If the button is released, clear all the lists.
             foreach (Transform obj in trackedObjects)
@@ -386,15 +359,12 @@ namespace VRTK
             return new Vector3(vec.x, 0f, vec.z);
         }
 
-        private void SetControllerListeners(GameObject controller)
+        private void SetControllerListeners(GameObject controller, bool controllerState, ref bool subscribedState, bool forceDisabled = false)
         {
-            if (controller && VRTK_DeviceFinder.IsControllerLeftHand(controller))
+            if (controller)
             {
-                ToggleControllerListeners(controller, leftController, ref leftSubscribed);
-            }
-            else if (controller && VRTK_DeviceFinder.IsControllerRightHand(controller))
-            {
-                ToggleControllerListeners(controller, rightController, ref rightSubscribed);
+                bool toggleState = (forceDisabled ? false : controllerState);
+                ToggleControllerListeners(controller, toggleState, ref subscribedState);
             }
         }
 
@@ -403,126 +373,24 @@ namespace VRTK
             var controllerEvent = controller.GetComponent<VRTK_ControllerEvents>();
             if (controllerEvent)
             {
+                //If engage button has changed, then unsubscribe the previous engage button from the events
+                if (engageButton != previousEngageButton && subscribed)
+                {
+                    controllerEvent.UnsubscribeToButtonAliasEvent(previousEngageButton, true, EngageButtonPressed);
+                    controllerEvent.UnsubscribeToButtonAliasEvent(previousEngageButton, false, EngageButtonReleased);
+                    subscribed = false;
+                }
+
                 if (toggle && !subscribed)
                 {
-                    switch (engageButton)
-                    {
-                        case VRTK_ControllerEvents.ButtonAlias.Trigger_Click:
-                            controllerEvent.TriggerClicked += engageButtonPressed;
-                            controllerEvent.TriggerUnclicked += engageButtonUp;
-                            break;
-                        case VRTK_ControllerEvents.ButtonAlias.Trigger_Hairline:
-                            controllerEvent.TriggerHairlineStart += engageButtonPressed;
-                            controllerEvent.TriggerHairlineEnd += engageButtonUp;
-                            break;
-                        case VRTK_ControllerEvents.ButtonAlias.Trigger_Press:
-                            controllerEvent.TriggerPressed += engageButtonPressed;
-                            controllerEvent.TriggerReleased += engageButtonUp;
-                            break;
-                        case VRTK_ControllerEvents.ButtonAlias.Trigger_Touch:
-                            controllerEvent.TriggerTouchStart += engageButtonPressed;
-                            controllerEvent.TriggerTouchEnd += engageButtonUp;
-                            break;
-                        case VRTK_ControllerEvents.ButtonAlias.Grip_Click:
-                            controllerEvent.GripClicked += engageButtonPressed;
-                            controllerEvent.GripUnclicked += engageButtonUp;
-                            break;
-                        case VRTK_ControllerEvents.ButtonAlias.Grip_Hairline:
-                            controllerEvent.GripHairlineStart += engageButtonPressed;
-                            controllerEvent.GripHairlineEnd += engageButtonUp;
-                            break;
-                        case VRTK_ControllerEvents.ButtonAlias.Grip_Press:
-                            controllerEvent.GripPressed += engageButtonPressed;
-                            controllerEvent.GripReleased += engageButtonUp;
-                            break;
-                        case VRTK_ControllerEvents.ButtonAlias.Grip_Touch:
-                            controllerEvent.GripTouchStart += engageButtonPressed;
-                            controllerEvent.GripTouchEnd += engageButtonUp;
-                            break;
-                        case VRTK_ControllerEvents.ButtonAlias.Touchpad_Press:
-                            controllerEvent.TouchpadPressed += engageButtonPressed;
-                            controllerEvent.TouchpadReleased += engageButtonUp;
-                            break;
-                        case VRTK_ControllerEvents.ButtonAlias.Touchpad_Touch:
-                            controllerEvent.TouchpadTouchStart += engageButtonPressed;
-                            controllerEvent.TouchpadTouchEnd += engageButtonUp;
-                            break;
-                        case VRTK_ControllerEvents.ButtonAlias.Button_One_Press:
-                            controllerEvent.ButtonOnePressed += engageButtonPressed;
-                            controllerEvent.ButtonOneReleased += engageButtonUp;
-                            break;
-                        case VRTK_ControllerEvents.ButtonAlias.Button_One_Touch:
-                            controllerEvent.ButtonOneTouchStart += engageButtonPressed;
-                            controllerEvent.ButtonOneTouchEnd += engageButtonUp;
-                            break;
-                    }
+                    controllerEvent.SubscribeToButtonAliasEvent(engageButton, true, EngageButtonPressed);
+                    controllerEvent.SubscribeToButtonAliasEvent(engageButton, false, EngageButtonReleased);
                     subscribed = true;
                 }
                 else if (!toggle && subscribed)
                 {
-                    switch (engageButton)
-                    {
-                        case VRTK_ControllerEvents.ButtonAlias.Trigger_Click:
-                            controllerEvent.TriggerClicked -= engageButtonPressed;
-                            controllerEvent.TriggerUnclicked -= engageButtonUp;
-                            break;
-                        case VRTK_ControllerEvents.ButtonAlias.Trigger_Hairline:
-                            controllerEvent.TriggerHairlineStart -= engageButtonPressed;
-                            controllerEvent.TriggerHairlineEnd -= engageButtonUp;
-                            break;
-                        case VRTK_ControllerEvents.ButtonAlias.Trigger_Press:
-                            controllerEvent.TriggerPressed -= engageButtonPressed;
-                            controllerEvent.TriggerReleased -= engageButtonUp;
-                            break;
-                        case VRTK_ControllerEvents.ButtonAlias.Trigger_Touch:
-                            controllerEvent.TriggerTouchStart -= engageButtonPressed;
-                            controllerEvent.TriggerTouchEnd -= engageButtonUp;
-                            break;
-                        case VRTK_ControllerEvents.ButtonAlias.Grip_Click:
-                            controllerEvent.GripClicked -= engageButtonPressed;
-                            controllerEvent.GripUnclicked -= engageButtonUp;
-                            break;
-                        case VRTK_ControllerEvents.ButtonAlias.Grip_Hairline:
-                            controllerEvent.GripHairlineStart -= engageButtonPressed;
-                            controllerEvent.GripHairlineEnd -= engageButtonUp;
-                            break;
-                        case VRTK_ControllerEvents.ButtonAlias.Grip_Press:
-                            controllerEvent.GripPressed -= engageButtonPressed;
-                            controllerEvent.GripReleased -= engageButtonUp;
-                            break;
-                        case VRTK_ControllerEvents.ButtonAlias.Grip_Touch:
-                            controllerEvent.GripTouchStart -= engageButtonPressed;
-                            controllerEvent.GripTouchEnd -= engageButtonUp;
-                            break;
-                        case VRTK_ControllerEvents.ButtonAlias.Touchpad_Press:
-                            controllerEvent.TouchpadPressed -= engageButtonPressed;
-                            controllerEvent.TouchpadReleased -= engageButtonUp;
-                            break;
-                        case VRTK_ControllerEvents.ButtonAlias.Touchpad_Touch:
-                            controllerEvent.TouchpadTouchStart -= engageButtonPressed;
-                            controllerEvent.TouchpadTouchEnd -= engageButtonUp;
-                            break;
-                        case VRTK_ControllerEvents.ButtonAlias.Button_One_Press:
-                            controllerEvent.ButtonOnePressed -= engageButtonPressed;
-                            controllerEvent.ButtonOneReleased -= engageButtonUp;
-                            break;
-                        case VRTK_ControllerEvents.ButtonAlias.Button_One_Touch:
-                            controllerEvent.ButtonOneTouchStart -= engageButtonPressed;
-                            controllerEvent.ButtonOneTouchEnd -= engageButtonUp;
-                            break;
-                        case VRTK_ControllerEvents.ButtonAlias.Button_Two_Press:
-                            controllerEvent.ButtonTwoPressed -= engageButtonPressed;
-                            controllerEvent.ButtonTwoReleased -= engageButtonUp;
-                            break;
-                        case VRTK_ControllerEvents.ButtonAlias.Button_Two_Touch:
-                            controllerEvent.ButtonTwoTouchStart -= engageButtonPressed;
-                            controllerEvent.ButtonTwoTouchEnd -= engageButtonUp;
-                            break;
-                        case VRTK_ControllerEvents.ButtonAlias.Start_Menu_Press:
-                            controllerEvent.StartMenuPressed -= engageButtonPressed;
-                            controllerEvent.StartMenuReleased -= engageButtonUp;
-                            break;
-                    }
+                    controllerEvent.UnsubscribeToButtonAliasEvent(engageButton, true, EngageButtonPressed);
+                    controllerEvent.UnsubscribeToButtonAliasEvent(engageButton, false, EngageButtonReleased);
                     subscribed = false;
                 }
             }

@@ -1100,6 +1100,8 @@ Move In Place allows the user to move the play area by calculating the y-movemen
 
 ### Inspector Parameters
 
+ * **Left Controller:** If this is checked then the left controller touchpad will be enabled to move the play area.
+ * **Right Controller:** If this is checked then the right controller touchpad will be enabled to move the play area.
  * **Engage Button:** Select which button to hold to engage Move In Place.
  * **Control Options:** Select which trackables are used to determine movement.
  * **Speed Scale:** Lower to decrease speed, raise to increase.
@@ -1119,8 +1121,6 @@ Move In Place allows the user to move the play area by calculating the y-movemen
   * `ControllerRotation` - Player will move in the direction that the controllers are pointing (averaged).
   * `DumbDecoupling` - Player will move in the direction they were first looking when they engaged Move In Place.
   * `SmartDecoupling` - Player will move in the direction they are looking only if their headset point the same direction as their controllers.
- * `public bool LeftController` - If true, the left controller's trackpad will engage Move In Place.
- * `public bool RightController` - If true, the right controller's trackpad will engage Move In Place.
 
 ### Class Methods
 
@@ -1506,6 +1506,32 @@ The AnyButtonPressed method returns true if any of the controller buttons are be
    * `bool` - Is true if the button is being pressed.
 
 The IsButtonPressed method takes a given button alias and returns a boolean whether that given button is currently being pressed or not.
+
+#### SubscribeToButtonAliasEvent/3
+
+  > `public void SubscribeToButtonAliasEvent(ButtonAlias givenButton, bool startEvent, ControllerInteractionEventHandler callbackMethod)`
+
+  * Parameters
+   * `ButtonAlias givenButton` - The ButtonAlias to register the event on.
+   * `bool startEvent` - If this is `true` then the start event related to the button is used (e.g. OnPress). If this is `false` then the end event related to the button is used (e.g. OnRelease).
+   * `ControllerInteractionEventHandler callbackMethod` - The method to subscribe to the event.
+  * Returns
+   * _none_
+
+The SubscribeToButtonAliasEvent method makes it easier to subscribe to a button event on either the start or end action. Upon the event firing, the given callback method is executed.
+
+#### UnsubscribeToButtonAliasEvent/3
+
+  > `public void UnsubscribeToButtonAliasEvent(ButtonAlias givenButton, bool startEvent, ControllerInteractionEventHandler callbackMethod)`
+
+  * Parameters
+   * `ButtonAlias givenButton` - The ButtonAlias to unregister the event on.
+   * `bool startEvent` - If this is `true` then the start event related to the button is used (e.g. OnPress). If this is `false` then the end event related to the button is used (e.g. OnRelease).
+   * `ControllerInteractionEventHandler callbackMethod` - The method to unsubscribe from the event.
+  * Returns
+   * _none_
+
+The UnsubscribeToButtonAliasEvent method makes it easier to unsubscribe to from button event on either the start or end action.
 
 ### Example
 
