@@ -75,6 +75,8 @@ namespace VRTK
         private bool previousLeftControllerState;
         private bool previousRightControllerState;
         private VRTK_ControllerEvents.ButtonAlias previousEngageButton;
+        private VRTK_BodyPhysics bodyPhysics;
+        private bool currentlyFalling;
 
         // The maximum number of updates we should hold to process movements. The higher the number, the slower the acceleration/deceleration & vice versa.
         private int averagePeriod;
@@ -143,6 +145,7 @@ namespace VRTK
             active = false;
             previousEngageButton = engageButton;
 
+            bodyPhysics = GetComponent<VRTK_BodyPhysics>();
             controllerLeftHand = VRTK_DeviceFinder.GetControllerLeftHand();
             controllerRightHand = VRTK_DeviceFinder.GetControllerRightHand();
 
@@ -169,8 +172,14 @@ namespace VRTK
 
         protected virtual void OnDisable()
         {
+            bodyPhysics = null;
             SetControllerListeners(controllerLeftHand, leftController, ref leftSubscribed, true);
             SetControllerListeners(controllerRightHand, rightController, ref rightSubscribed, true);
+
+            controllerLeftHand = null;
+            controllerRightHand = null;
+            headset = null;
+            playArea = null;
         }
 
         protected virtual void Update()
@@ -182,8 +191,9 @@ namespace VRTK
 
         protected virtual void FixedUpdate()
         {
+            HandleFalling();
             // If Move In Place is currently engaged.
-            if (active)
+            if (active && !currentlyFalling)
             {
                 // Initialize the list average.
                 float listAverage = 0;
@@ -308,6 +318,20 @@ namespace VRTK
                 SetControllerListeners(controller, controllerState, ref subscribedState);
             }
             previousState = controllerState;
+        }
+
+        protected virtual void HandleFalling()
+        {
+            if (bodyPhysics && bodyPhysics.IsFalling())
+            {
+                currentlyFalling = true;
+            }
+
+            if (bodyPhysics && !bodyPhysics.IsFalling() && currentlyFalling)
+            {
+                currentlyFalling = false;
+                currentSpeed = 0f;
+            }
         }
 
         private void EngageButtonPressed(object sender, ControllerInteractionEventArgs e)
