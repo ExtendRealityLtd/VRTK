@@ -103,9 +103,6 @@
                         case VRTK_KeyboardLayout.Keytype.Enter:
                             label = "⏎";
                             break;
-                        case VRTK_KeyboardLayout.Keytype.Done:
-                            label = "Done";
-                            break;
                     }
 
                     if (GUILayout.Toggle(selectedRow == r && selectedKey == k, label, "Button"))

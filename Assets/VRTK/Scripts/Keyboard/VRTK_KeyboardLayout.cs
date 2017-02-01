@@ -16,7 +16,7 @@ namespace VRTK
     /// 
     /// Normal keys defining a character that will be typed are "Character" keys and may optionally contain subkeys that may display when the key is held down.
     /// 
-    /// The "Backspace", "Enter", and "Done" keys are special key types.
+    /// The "Backspace" and "Enter" keys are special key types.
     /// 
     /// A "Keyset Modifier" key is used to switch between key sets.
     ///   
@@ -44,14 +44,12 @@ namespace VRTK
         /// <param name="KeysetModifier">A key that switches keysets.</param>
         /// <param name="Backspace">A backspace/delete key.</param>
         /// <param name="Enter">An enter/return key.</param>
-        /// <param name="Done">A done key intended to finish input.</param>
         public enum Keytype
         {
             Character,
             KeysetModifier,
             Backspace,
-            Enter,
-            Done
+            Enter
         }
 
         [Serializable]

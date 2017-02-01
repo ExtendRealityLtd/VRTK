@@ -243,17 +243,6 @@ MonoBehaviour:
         keyset: 1
         subkeys: []
         weight: 1
-    - keys:
-      - character: 32
-        type: 0
-        keyset: 0
-        subkeys: []
-        weight: 5
-      - character: 0
-        type: 4
-        keyset: 0
-        subkeys: []
-        weight: 2
   - name: Uppercase
     rows:
     - keys:
@@ -485,17 +474,6 @@ MonoBehaviour:
         keyset: 0
         subkeys: []
         weight: 1
-    - keys:
-      - character: 32
-        type: 0
-        keyset: 0
-        subkeys: []
-        weight: 5
-      - character: 0
-        type: 4
-        keyset: 0
-        subkeys: []
-        weight: 2
   - name: Symbols
     rows:
     - keys:
@@ -727,15 +705,3 @@ MonoBehaviour:
         keyset: 0
         subkeys: []
         weight: 1
-    - keys:
-      - character: 32
-        type: 0
-        keyset: 0
-        subkeys: []
-        weight: 5
-      - character: 0
-        type: 4
-        keyset: 0
-        subkeys: []
-        weight: 2
-  defaultKeyset: 0
