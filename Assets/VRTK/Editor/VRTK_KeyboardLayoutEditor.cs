@@ -8,7 +8,6 @@
     public class VRTK_KeyboardLayoutEditor : Editor
     {
         SerializedProperty keysets;
-        SerializedProperty defaultKeyset;
 
         protected int selectedKeyset = 0;
         protected int? selectedRow;
@@ -17,7 +16,6 @@
         private void OnEnable()
         {
             keysets = serializedObject.FindProperty("keysets");
-            defaultKeyset = serializedObject.FindProperty("defaultKeyset");
         }
 
         public override void OnInspectorGUI()
