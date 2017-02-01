@@ -997,6 +997,8 @@ The Touchpad Walking script adds a rigidbody and a box collider to the user's po
 
 ### Inspector Parameters
 
+ * **Left Controller:** If this is checked then the left controller touchpad will be enabled to move the play area.
+ * **Right Controller:** If this is checked then the right controller touchpad will be enabled to move the play area.
  * **Max Walk Speed:** The maximum speed the play area will be moved when the touchpad is being touched at the extremes of the axis. If a lower part of the touchpad axis is touched (nearer the centre) then the walk speed is slower.
  * **Deceleration:** The speed in which the play area slows down to a complete stop when the user is no longer touching the touchpad. This deceleration effect can ease any motion sickness that may be suffered.
  * **Move On Button Press:** If a button is defined then movement will only occur when the specified button is being held down and the touchpad axis changes.
@@ -1039,6 +1041,8 @@ Snap rotate and flip direction options can be useful with teleport scripts for s
 
 ### Inspector Parameters
 
+ * **Left Controller:** If this is checked then the left controller touchpad will be enabled for the selected movement types.
+ * **Right Controller:** If this is checked then the right controller touchpad will be enabled for the selected movement types.
  * **Move On Button Press:** If a button is defined then the selected movement will only be performed when the specified button is being held down and the touchpad axis changes.
  * **Movement Multiplier Button:** If the defined movement multiplier button is pressed then the movement will be affected by the axis multiplier value.
  * **Vertical Axis Movement:** Selects the main movement type to be performed when the vertical axis changes occur.
@@ -1104,10 +1108,14 @@ Move In Place allows the user to move the play area by calculating the y-movemen
 
 ### Inspector Parameters
 
+ * **Left Controller:** If this is checked then the left controller touchpad will be enabled to move the play area.
+ * **Right Controller:** If this is checked then the right controller touchpad will be enabled to move the play area.
  * **Engage Button:** Select which button to hold to engage Move In Place.
  * **Control Options:** Select which trackables are used to determine movement.
  * **Speed Scale:** Lower to decrease speed, raise to increase.
  * **Max Speed:** The max speed the user can move in game units. (If 0 or less, max speed is uncapped)
+ * **Deceleration:** The speed in which the play area slows down to a complete stop when the user is no longer pressing the engage button. This deceleration effect can ease any motion sickness that may be suffered.
+ * **Falling Deceleration:** The speed in which the play area slows down to a complete stop when the user is falling.
  * **Direction Method:** How the user's movement direction will be determined.  The Gaze method tends to lead to the least motion sickness.  Smart decoupling is still a Work In Progress.
  * **Smart Decouple Threshold:** The degree threshold that all tracked objects (controllers, headset) must be within to change direction when using the Smart Decoupling Direction Method.
  * **Sensitivity:** The maximum amount of movement required to register in the virtual world.  Decreasing this will increase acceleration, and vice versa.
@@ -1123,8 +1131,6 @@ Move In Place allows the user to move the play area by calculating the y-movemen
   * `ControllerRotation` - Player will move in the direction that the controllers are pointing (averaged).
   * `DumbDecoupling` - Player will move in the direction they were first looking when they engaged Move In Place.
   * `SmartDecoupling` - Player will move in the direction they are looking only if their headset point the same direction as their controllers.
- * `public bool LeftController` - If true, the left controller's trackpad will engage Move In Place.
- * `public bool RightController` - If true, the right controller's trackpad will engage Move In Place.
 
 ### Class Methods
 
@@ -1510,6 +1516,32 @@ The AnyButtonPressed method returns true if any of the controller buttons are be
    * `bool` - Is true if the button is being pressed.
 
 The IsButtonPressed method takes a given button alias and returns a boolean whether that given button is currently being pressed or not.
+
+#### SubscribeToButtonAliasEvent/3
+
+  > `public void SubscribeToButtonAliasEvent(ButtonAlias givenButton, bool startEvent, ControllerInteractionEventHandler callbackMethod)`
+
+  * Parameters
+   * `ButtonAlias givenButton` - The ButtonAlias to register the event on.
+   * `bool startEvent` - If this is `true` then the start event related to the button is used (e.g. OnPress). If this is `false` then the end event related to the button is used (e.g. OnRelease).
+   * `ControllerInteractionEventHandler callbackMethod` - The method to subscribe to the event.
+  * Returns
+   * _none_
+
+The SubscribeToButtonAliasEvent method makes it easier to subscribe to a button event on either the start or end action. Upon the event firing, the given callback method is executed.
+
+#### UnsubscribeToButtonAliasEvent/3
+
+  > `public void UnsubscribeToButtonAliasEvent(ButtonAlias givenButton, bool startEvent, ControllerInteractionEventHandler callbackMethod)`
+
+  * Parameters
+   * `ButtonAlias givenButton` - The ButtonAlias to unregister the event on.
+   * `bool startEvent` - If this is `true` then the start event related to the button is used (e.g. OnPress). If this is `false` then the end event related to the button is used (e.g. OnRelease).
+   * `ControllerInteractionEventHandler callbackMethod` - The method to unsubscribe from the event.
+  * Returns
+   * _none_
+
+The UnsubscribeToButtonAliasEvent method makes it easier to unsubscribe to from button event on either the start or end action.
 
 ### Example
 
