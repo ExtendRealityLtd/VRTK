@@ -16,10 +16,6 @@ namespace VRTK
         [Tooltip("The rotation multiplier to be applied when the modifier button is pressed.")]
         public float rotationMultiplier = 1.5f;
 
-        private Collider centerCollider;
-        private Transform controlledTransform;
-        private Transform playArea;
-
         /// <summary>
         /// The ProcessFixedUpdate method is run for every FixedUpdate on the Touchpad Control script.
         /// </summary>
@@ -39,44 +35,9 @@ namespace VRTK
             }
         }
 
-        protected virtual void OnEnable()
-        {
-            playArea = VRTK_DeviceFinder.PlayAreaTransform();
-        }
-
-        protected virtual void RotateAroundPlayer(GameObject controlledGameObject, float angle)
-        {
-            Vector3 objectCenter = GetObjectCenter(controlledGameObject.transform);
-            Vector3 objectPosition = controlledGameObject.transform.TransformPoint(objectCenter);
-            controlledGameObject.transform.Rotate(Vector3.up, angle);
-            objectPosition -= controlledGameObject.transform.TransformPoint(objectCenter);
-            controlledGameObject.transform.position += objectPosition;
-        }
-
         protected virtual float Rotate(float axis, bool modifierActive)
         {
             return axis * maximumRotationSpeed * Time.deltaTime * (modifierActive ? rotationMultiplier : 1) * 10;
-        }
-
-        protected virtual Vector3 GetObjectCenter(Transform checkObject)
-        {
-            if (centerCollider == null || checkObject != controlledTransform)
-            {
-                controlledTransform = checkObject;
-
-                if (checkObject == playArea)
-                {
-                    CapsuleCollider playAreaCollider = playArea.GetComponent<CapsuleCollider>();
-                    centerCollider = playAreaCollider;
-                    return playAreaCollider.center;
-                }
-                else
-                {
-                    centerCollider = checkObject.GetComponent<Collider>();
-                }
-            }
-
-            return Vector3.zero;
         }
     }
 }

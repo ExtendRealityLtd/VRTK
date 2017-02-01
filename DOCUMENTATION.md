@@ -1282,6 +1282,7 @@ This directory contains scripts that are used to provide different actions when 
  * [Slide Touchpad Control Action](#slide-touchpad-control-action-vrtk_slidetouchpadcontrolaction)
  * [Rotate Touchpad Control Action](#rotate-touchpad-control-action-vrtk_rotatetouchpadcontrolaction)
  * [Snap Rotate Touchpad Control Action](#snap-rotate-touchpad-control-action-vrtk_snaprotatetouchpadcontrolaction)
+ * [Warp Touchpad Control Action](#warp-touchpad-control-action-vrtk_warptouchpadcontrolaction)
 
 ---
 
@@ -1409,6 +1410,44 @@ The effect is a immediate snap rotation to quickly face in a new direction.
  * **Angle Multiplier:** The snap angle multiplier to be applied when the modifier button is pressed.
  * **Snap Delay:** The amount of time required to pass before another snap rotation can be carried out.
  * **Blink Transition Speed:** The speed for the headset to fade out and back in. Having a blink between rotations can reduce nausia.
+
+### Class Methods
+
+#### ProcessFixedUpdate/7
+
+  > `public override void ProcessFixedUpdate(GameObject controlledGameObject, Transform directionDevice, Vector3 axisDirection, float axis, float deadzone, bool currentlyFalling, bool modifierActive)`
+
+  * Parameters
+   * `GameObject controlledGameObject` - The GameObject that is going to be affected.
+   * `Transform directionDevice` - The device that is used for the direction.
+   * `Vector3 axisDirection` - The axis that is being affected from the touchpad.
+   * `float axis` - The value of the current touchpad touch point based across the axis direction.
+   * `float deadzone` - The value of the deadzone based across the axis direction.
+   * `bool currentlyFalling` - Whether the controlled GameObject is currently falling.
+   * `bool modifierActive` - Whether the modifier button is pressed.
+  * Returns
+   * _none_
+
+The ProcessFixedUpdate method is run for every FixedUpdate on the Touchpad Control script.
+
+---
+
+## Warp Touchpad Control Action (VRTK_WarpTouchpadControlAction)
+ > extends [VRTK_BaseTouchpadControlAction](#base-touchpad-control-action-vrtk_basetouchpadcontrolaction)
+
+### Overview
+
+The Warp Touchpad Control Action script is used to warp the controlled GameObject a given distance when changing the touchpad axis.
+
+The effect is a immediate snap to a new position in the given direction.
+
+### Inspector Parameters
+
+ * **Warp Distance:** The distance to warp in the facing direction.
+ * **Warp Multiplier:** The multiplier to be applied to the warp when the modifier button is pressed.
+ * **Warp Delay:** The amount of time required to pass before another warp can be carried out.
+ * **Floor Height Tolerance:** The height different in floor allowed to be a valid warp.
+ * **Blink Transition Speed:** The speed for the headset to fade out and back in. Having a blink between warps can reduce nausia.
 
 ### Class Methods
 

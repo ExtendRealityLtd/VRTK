@@ -20,9 +20,6 @@ namespace VRTK
         [Tooltip("The speed for the headset to fade out and back in. Having a blink between rotations can reduce nausia.")]
         public float blinkTransitionSpeed = 0.6f;
 
-        private Collider centerCollider;
-        private Transform controlledTransform;
-        private Transform playArea;
         private float snapDelayTimer = 0f;
 
         /// <summary>
@@ -42,74 +39,17 @@ namespace VRTK
                 float angle = Rotate(axis, modifierActive);
                 if (angle != 0f)
                 {
-                    Blink();
+                    Blink(blinkTransitionSpeed);
                     RotateAroundPlayer(controlledGameObject, angle);
                 }
             }
         }
 
-        protected virtual void OnEnable()
-        {
-            playArea = VRTK_DeviceFinder.PlayAreaTransform();
-        }
-
-        protected virtual void RotateAroundPlayer(GameObject controlledGameObject, float angle)
-        {
-            Vector3 objectCenter = GetObjectCenter(controlledGameObject.transform);
-            Vector3 objectPosition = controlledGameObject.transform.TransformPoint(objectCenter);
-            controlledGameObject.transform.Rotate(Vector3.up, angle);
-            objectPosition -= controlledGameObject.transform.TransformPoint(objectCenter);
-            controlledGameObject.transform.position += objectPosition;
-        }
-
         protected virtual float Rotate(float axis, bool modifierActive)
         {
             snapDelayTimer = Time.timeSinceLevelLoad + snapDelay;
-            int axisDirection = 0;
-            if (axis < 0)
-            {
-                axisDirection = -1;
-            }
-            else if (axis > 0)
-            {
-                axisDirection = 1;
-            }
-            return (anglePerSnap * (modifierActive ? angleMultiplier : 1)) * axisDirection;
-        }
-
-        protected virtual void Blink()
-        {
-            if (blinkTransitionSpeed > 0f)
-            {
-                VRTK_SDK_Bridge.HeadsetFade(Color.black, 0);
-                Invoke("ReleaseBlink", 0.01f);
-            }
-        }
-
-        protected virtual void ReleaseBlink()
-        {
-            VRTK_SDK_Bridge.HeadsetFade(Color.clear, blinkTransitionSpeed);
-        }
-
-        protected virtual Vector3 GetObjectCenter(Transform checkObject)
-        {
-            if (centerCollider == null || checkObject != controlledTransform)
-            {
-                controlledTransform = checkObject;
-
-                if (checkObject == playArea)
-                {
-                    CapsuleCollider playAreaCollider = playArea.GetComponent<CapsuleCollider>();
-                    centerCollider = playAreaCollider;
-                    return playAreaCollider.center;
-                }
-                else
-                {
-                    centerCollider = checkObject.GetComponent<Collider>();
-                }
-            }
-
-            return Vector3.zero;
+            int directionMultiplier = GetAxisDirection(axis);
+            return (anglePerSnap * (modifierActive ? angleMultiplier : 1)) * directionMultiplier;
         }
     }
 }
