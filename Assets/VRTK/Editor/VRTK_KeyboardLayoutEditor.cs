@@ -114,16 +114,39 @@
                         selectedKey = k;
                     }
                 }
+
+
+                if (GUILayout.Button("+", GUILayout.MinWidth(20), GUILayout.MaxWidth(20)))
+                {
+                    keys.arraySize++;
+                }
+
                 EditorGUILayout.EndHorizontal();
             }
+
+            EditorGUILayout.BeginHorizontal();
+            using (new EditorGUI.DisabledScope(rows.arraySize <= 1))
+            {
+                if (GUILayout.Button("-"))
+                {
+                    run = () => ReduceRows();
+                }
+            }
+            if (GUILayout.Button("+"))
+            {
+                run = () => AddRow();
+            }
+            EditorGUILayout.EndHorizontal();
+
             EditorGUILayout.EndVertical();
 
             // Key editor
             if (selectedRow != null && selectedKey != null)
             {
-                SerializedProperty key = keysets.GetArrayElementAtIndex(selectedKeyset)
+                SerializedProperty keys = keysets.GetArrayElementAtIndex(selectedKeyset)
                         .FindPropertyRelative("rows").GetArrayElementAtIndex(selectedRow ?? -1)
-                        .FindPropertyRelative("keys").GetArrayElementAtIndex(selectedKey ?? -1);
+                        .FindPropertyRelative("keys");
+                SerializedProperty key = keys.GetArrayElementAtIndex(selectedKey ?? -1);
                 SerializedProperty keyType = key.FindPropertyRelative("type");
 
                 EditorGUILayout.BeginVertical("Box");
@@ -167,6 +190,17 @@
 
                 EditorGUILayout.IntSlider(key.FindPropertyRelative("weight"), 1, 5);
 
+                EditorGUILayout.BeginHorizontal();
+                using (new EditorGUI.DisabledScope(keys.arraySize <= 1))
+                {
+                    if (GUILayout.Button("Delete"))
+                    {
+                        run = () => DeleteKey();
+                    }
+                }
+                GUILayout.FlexibleSpace();
+                EditorGUILayout.EndHorizontal();
+
                 EditorGUILayout.EndVertical();
             }
 
@@ -203,6 +237,39 @@
             }
             selectedRow = null;
             selectedKey = null;
+        }
+
+        protected void ReduceRows()
+        {
+            SerializedProperty rows = keysets.GetArrayElementAtIndex(selectedKeyset)
+                            .FindPropertyRelative("rows");
+
+            rows.arraySize--;
+            selectedRow = null;
+            selectedKey = null;
+        }
+
+        protected void AddRow()
+        {
+            SerializedProperty rows = keysets.GetArrayElementAtIndex(selectedKeyset)
+                .FindPropertyRelative("rows");
+
+            rows.arraySize++;
+        }
+
+        protected void DeleteKey()
+        {
+            SerializedProperty keys = keysets.GetArrayElementAtIndex(selectedKeyset)
+                .FindPropertyRelative("rows")
+                .GetArrayElementAtIndex(selectedRow ?? -1)
+                .FindPropertyRelative("keys");
+
+            keys.DeleteArrayElementAtIndex(selectedKey ?? -1);
+            selectedKey--;
+            if (selectedKey == -1)
+            {
+                selectedKey = 0;
+            }
         }
     }
 };
