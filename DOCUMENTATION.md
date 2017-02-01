@@ -1281,6 +1281,7 @@ This directory contains scripts that are used to provide different actions when 
  * [Base Touchpad Control Action](#base-touchpad-control-action-vrtk_basetouchpadcontrolaction)
  * [Slide Touchpad Control Action](#slide-touchpad-control-action-vrtk_slidetouchpadcontrolaction)
  * [Rotate Touchpad Control Action](#rotate-touchpad-control-action-vrtk_rotatetouchpadcontrolaction)
+ * [Snap Rotate Touchpad Control Action](#snap-rotate-touchpad-control-action-vrtk_snaprotatetouchpadcontrolaction)
 
 ---
 
@@ -1371,6 +1372,43 @@ The effect is a smooth rotation to simulate turning.
 
  * **Maximum Rotation Speed:** The maximum speed the controlled object can be rotated based on the position of the touchpad axis.
  * **Rotation Multiplier:** The rotation multiplier to be applied when the modifier button is pressed.
+
+### Class Methods
+
+#### ProcessFixedUpdate/7
+
+  > `public override void ProcessFixedUpdate(GameObject controlledGameObject, Transform directionDevice, Vector3 axisDirection, float axis, float deadzone, bool currentlyFalling, bool modifierActive)`
+
+  * Parameters
+   * `GameObject controlledGameObject` - The GameObject that is going to be affected.
+   * `Transform directionDevice` - The device that is used for the direction.
+   * `Vector3 axisDirection` - The axis that is being affected from the touchpad.
+   * `float axis` - The value of the current touchpad touch point based across the axis direction.
+   * `float deadzone` - The value of the deadzone based across the axis direction.
+   * `bool currentlyFalling` - Whether the controlled GameObject is currently falling.
+   * `bool modifierActive` - Whether the modifier button is pressed.
+  * Returns
+   * _none_
+
+The ProcessFixedUpdate method is run for every FixedUpdate on the Touchpad Control script.
+
+---
+
+## Snap Rotate Touchpad Control Action (VRTK_SnapRotateTouchpadControlAction)
+ > extends [VRTK_BaseTouchpadControlAction](#base-touchpad-control-action-vrtk_basetouchpadcontrolaction)
+
+### Overview
+
+The Snap Rotate Touchpad Control Action script is used to snap rotate the controlled GameObject around the up vector when changing the touchpad axis.
+
+The effect is a immediate snap rotation to quickly face in a new direction.
+
+### Inspector Parameters
+
+ * **Angle Per Snap:** The angle to rotate for each snap.
+ * **Angle Multiplier:** The snap angle multiplier to be applied when the modifier button is pressed.
+ * **Snap Delay:** The amount of time required to pass before another snap rotation can be carried out.
+ * **Blink Transition Speed:** The speed for the headset to fade out and back in. Having a blink between rotations can reduce nausia.
 
 ### Class Methods
 

@@ -98,15 +98,20 @@ namespace VRTK
             CheckDirectionDevice();
             CheckFalling();
             ModifierButtonActive();
-            if (xAxisActionScript && xAxisActionScript.enabled)
+            if (xAxisActionScript && xAxisActionScript.enabled && OutsideDeadzone(touchpadAxis.x, axisDeadzone.x))
             {
                 xAxisActionScript.ProcessFixedUpdate(controlledGameObject, directionDevice, directionDevice.right, touchpadAxis.x, axisDeadzone.x, currentlyFalling, modifierActive);
             }
 
-            if (yAxisActionScript && yAxisActionScript.enabled)
+            if (yAxisActionScript && yAxisActionScript.enabled && OutsideDeadzone(touchpadAxis.y, axisDeadzone.y))
             {
                 yAxisActionScript.ProcessFixedUpdate(controlledGameObject, directionDevice, directionDevice.forward, touchpadAxis.y, axisDeadzone.y, currentlyFalling, modifierActive);
             }
+        }
+
+        protected virtual bool OutsideDeadzone(float axisValue, float deadzoneThreshold)
+        {
+            return (axisValue > deadzoneThreshold || axisValue < -deadzoneThreshold);
         }
 
         protected virtual void CheckSetupControlAction()
