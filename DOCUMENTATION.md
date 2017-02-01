@@ -5,6 +5,7 @@ This file provides documentation on how to use the included prefabs and scripts.
  * [Prefabs](#prefabs-vrtkprefabs)
  * [Pointers](#pointers-vrtkscriptspointers)
  * [Locomotion](#locomotion-vrtkscriptslocomotion)
+  * [Touchpad Control Actions](#touchpad-control-actions-vrtkscriptslocomotiontouchpadcontrolactions)
  * [Interactions](#interactions-vrtkscriptsinteractions)
   * [Highlighters](#highlighters-vrtkscriptsinteractionshighlighters)
   * [Grab Attach Mechanics](#grab-attach-mechanics-vrtkscriptsinteractionsgrabattachmechanics)
@@ -820,6 +821,7 @@ A collection of scripts that provide varying methods of moving the user around t
  * [Dash Teleport](#dash-teleport-vrtk_dashteleport)
  * [Teleport Disable On Headset Collision](#teleport-disable-on-headset-collision-vrtk_teleportdisableonheadsetcollision)
  * [Teleport Disable On Controller Obscured](#teleport-disable-on-controller-obscured-vrtk_teleportdisableoncontrollerobscured)
+ * [Touchpad Control](#touchpad-control-vrtk_touchpadcontrol)
  * [Touchpad Walking](#touchpad-walking-vrtk_touchpadwalking)
  * [Touchpad Movement](#touchpad-movement-vrtk_touchpadmovement)
  * [Move In Place](#move-in-place-vrtk_moveinplace)
@@ -984,6 +986,43 @@ The purpose of the Teleport Disable On Headset Collision script is to detect whe
 ### Overview
 
 The purpose of the Teleport Disable On Controller Obscured script is to detect when the headset does not have a line of sight to the controllers and prevent teleportation from working. This is to ensure that if a user is clipping their controllers through a wall then they cannot teleport to an area beyond the wall.
+
+---
+
+## Touchpad Control (VRTK_TouchpadControl)
+
+### Overview
+
+The ability to control an object with the touchpad based on the position of the finger on the touchpad axis.
+
+The Touchpad Control script forms the stub to allow for pre-defined actions to execute when the touchpad axis changes.
+
+This script is placed on the Script Alias of the Controller that is required to be affected by changes in the touchpad.
+
+If the controlled object is the play area and `VRTK_BodyPhysics` is also available, then additional logic is processed when the user is falling such as preventing the touchpad control from affecting a falling user.
+
+### Inspector Parameters
+
+ * **Primary Activation Button:** An optional button that has to be engaged to allow the touchpad control to activate.
+ * **Action Modifier Button:** An optional button that when engaged will activate the modifier on the touchpad control action.
+ * **Device For Direction:** The direction that will be moved in is the direction of this device.
+ * **X Axis Action Script:** The action to perform when the X axis changes.
+ * **Y Axis Action Script:** The action to perform when the Y axis changes.
+ * **Disable Other Controls On Active:** If this is checked then whenever the touchpad axis on the attached controller is being changed, all other touchpad control scripts on other controllers will be disabled.
+ * **Affect On Falling:** If a `VRTK_BodyPhysics` script is present and this is checked, then the touchpad control will affect the play area whilst it is falling.
+ * **Control Override Object:** An optional game object to apply the touchpad control to. If this is blank then the PlayArea will be controlled.
+
+### Class Variables
+
+ * `public enum DirectionDevices` - Devices for providing direction.
+  * `Headset` - The headset device.
+  * `LeftController` - The left controller device.
+  * `RightController` - The right controller device.
+  * `ControlledObject` - The controlled object.
+
+### Example
+
+`VRTK/Examples/017_CameraRig_TouchpadWalking` has a collection of walls and slopes that can be traversed by the user with the touchpad. There is also an area that can only be traversed if the user is crouching.
 
 ---
 
@@ -1232,6 +1271,89 @@ There is an additional script `VRTK_RoomExtender_PlayAreaGizmo` which can be att
 ### Example
 
 `VRTK/Examples/028_CameraRig_RoomExtender` shows how the RoomExtender script is controlled by a VRTK_RoomExtender_Controller Example script located at both controllers. Pressing the `Touchpad` on the controller activates the Room Extender. The Additional Movement Multiplier is changed based on the touch distance to the centre of the touchpad.
+
+---
+
+# Touchpad Control Actions (VRTK/Scripts/Locomotion/TouchpadControlActions)
+
+This directory contains scripts that are used to provide different actions when using Touchpad Control.
+
+ * [Base Touchpad Control Action](#base-touchpad-control-action-vrtk_basetouchpadcontrolaction)
+ * [Slide Touchpad Control Action](#slide-touchpad-control-action-vrtk_slidetouchpadcontrolaction)
+
+---
+
+## Base Touchpad Control Action (VRTK_BaseTouchpadControlAction)
+
+### Overview
+
+The Base Touchpad Control Action script is an abstract class that all touchpad control action scripts inherit.
+
+As this is an abstract class, it cannot be applied directly to a game object and performs no logic.
+
+### Inspector Parameters
+
+ * **Axis Description:** A helper parameter to easily identify which axis this Touchpad Control Action is for.
+
+### Class Methods
+
+#### ProcessFixedUpdate/7
+
+  > `public abstract void ProcessFixedUpdate(GameObject controlledGameObject, Transform directionDevice, Vector3 axisDirection, float axis, float deadzone, bool currentlyFalling, bool modifierActive);`
+
+  * Parameters
+   * `GameObject controlledGameObject` - The GameObject that is going to be affected.
+   * `Transform directionDevice` - The device that is used for the direction.
+   * `Vector3 axisDirection` - The axis that is being affected from the touchpad.
+   * `float axis` - The value of the current touchpad touch point based across the axis direction.
+   * `float deadzone` - The value of the deadzone based across the axis direction.
+   * `bool currentlyFalling` - Whether the controlled GameObject is currently falling.
+   * `bool modifierActive` - Whether the modifier button is pressed.
+  * Returns
+   * _none_
+
+The ProcessFixedUpdate method is run for every FixedUpdate on the Touchpad Control script.
+
+---
+
+## Slide Touchpad Control Action (VRTK_SlideTouchpadControlAction)
+ > extends [VRTK_BaseTouchpadControlAction](#base-touchpad-control-action-vrtk_basetouchpadcontrolaction)
+
+### Overview
+
+The Slide Touchpad Controll Action script is used to slide the controlled GameObject around the scene when changing the touchpad axis.
+
+The effect is a smooth sliding motion in forward and sideways directions to simulate touchpad walking.
+
+### Inspector Parameters
+
+ * **Maximum Speed:** The maximum speed the controlled object can be moved in based on the position of the touchpad axis.
+ * **Deceleration:** The rate of speed deceleration when the touchpad is no longer being touched.
+ * **Falling Deceleration:** The rate of speed deceleration when the touchpad is no longer being touched and the object is falling.
+ * **Speed Multiplier:** The speed multiplier to be applied when the modifier button is pressed.
+
+### Class Methods
+
+#### ProcessFixedUpdate/7
+
+  > `public override void ProcessFixedUpdate(GameObject controlledGameObject, Transform directionDevice, Vector3 axisDirection, float axis, float deadzone, bool currentlyFalling, bool modifierActive)`
+
+  * Parameters
+   * `GameObject controlledGameObject` - The GameObject that is going to be affected.
+   * `Transform directionDevice` - The device that is used for the direction.
+   * `Vector3 axisDirection` - The axis that is being affected from the touchpad.
+   * `float axis` - The value of the current touchpad touch point based across the axis direction.
+   * `float deadzone` - The value of the deadzone based across the axis direction.
+   * `bool currentlyFalling` - Whether the controlled GameObject is currently falling.
+   * `bool modifierActive` - Whether the modifier button is pressed.
+  * Returns
+   * _none_
+
+The ProcessFixedUpdate method is run for every FixedUpdate on the Touchpad Control script.
+
+### Example
+
+`VRTK/Examples/017_CameraRig_TouchpadWalking` has a collection of walls and slopes that can be traversed by the user with the touchpad. There is also an area that can only be traversed if the user is crouching.
 
 ---
 
