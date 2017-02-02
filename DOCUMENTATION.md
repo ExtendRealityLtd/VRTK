@@ -1025,6 +1025,13 @@ If the controlled object is the play area and `VRTK_BodyPhysics` is also availab
  * `XAxisChanged` - Emitted when the touchpad X Axis Changes.
  * `YAxisChanged` - Emitted when the touchpad Y Axis Changes.
 
+### Unity Events
+
+Adding the `VRTK_TouchpadControl_UnityEvents` component to `VRTK_TouchpadControl` object allows access to `UnityEvents` that will react identically to the Class Events.
+
+ * `OnXAxisChanged` - Emits the XAxisChanged class event.
+ * `OnYAxisChanged` - Emits the YAxisChanged class event.
+
 ### Event Payload
 
  * `GameObject controlledGameObject` - The GameObject that is going to be affected.
