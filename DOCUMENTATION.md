@@ -1384,6 +1384,7 @@ The effect is a immediate snap rotation to quickly face in a new direction.
  * **Angle Multiplier:** The snap angle multiplier to be applied when the modifier button is pressed.
  * **Snap Delay:** The amount of time required to pass before another snap rotation can be carried out.
  * **Blink Transition Speed:** The speed for the headset to fade out and back in. Having a blink between rotations can reduce nausia.
+ * **Axis Threshold:** The threshold the listened axis needs to exceed before the action occurs. This can be used to limit the snap rotate to a single axis direction (e.g. pull down to flip rotate). The threshold is ignored if it is 0.
 
 ### Example
 

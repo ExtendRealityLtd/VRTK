@@ -2,6 +2,7 @@
 namespace VRTK
 {
     using UnityEngine;
+    using System;
 
     /// <summary>
     /// Event Payload
@@ -47,6 +48,7 @@ namespace VRTK
     /// Snap rotate and flip direction options can be useful with teleport scripts for seated experiences and for people using front facing camera setups(Oculus default, PSVR). 
     /// </remarks>
     [RequireComponent(typeof(VRTK_BodyPhysics))]
+    [Obsolete("`VRTK_TouchpadMovement` has been replaced with `VRTK_TouchpadControl`. This script will be removed in a future version of VRTK.")]
     public class VRTK_TouchpadMovement : MonoBehaviour
     {
         /// <summary>
