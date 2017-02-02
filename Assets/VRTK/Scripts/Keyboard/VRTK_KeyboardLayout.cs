@@ -35,6 +35,7 @@ namespace VRTK
         public class Row
         {
             public Key[] keys;
+            public int splitIndex;
         }
 
         /// <summary>

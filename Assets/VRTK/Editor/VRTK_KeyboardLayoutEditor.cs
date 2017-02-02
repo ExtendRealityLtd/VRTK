@@ -12,6 +12,7 @@
         protected int selectedKeyset = 0;
         protected int? selectedRow;
         protected int? selectedKey;
+        protected bool showKeysetDimensionsFoldout = false;
 
         private void OnEnable()
         {
@@ -77,15 +78,48 @@
 
             EditorGUILayout.EndVertical();
 
+            // Keyset dimensions
+            EditorGUILayout.BeginVertical("box");
+            EditorGUI.indentLevel++;
+            showKeysetDimensionsFoldout = EditorGUILayout.Foldout(showKeysetDimensionsFoldout, "Dimensions");
+            EditorGUI.indentLevel--;
+
+            if (showKeysetDimensionsFoldout)
+            {
+                EditorGUILayout.PropertyField(rows.FindPropertyRelative("Array.size"),
+                    new GUIContent("Rows"));
+
+                for (int r = 0; r < rows.arraySize; r++)
+                {
+                    SerializedProperty row = rows.GetArrayElementAtIndex(r);
+                    SerializedProperty rowKeys = row.FindPropertyRelative("keys");
+
+                    GUILayout.Label("Row #" + (r + 1));
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.PropertyField(rowKeys.FindPropertyRelative("Array.size"),
+                        new GUIContent("Keys"));
+                    EditorGUILayout.PropertyField(row.FindPropertyRelative("splitIndex"),
+                        new GUIContent("Split Index", "Index at which row may be split into a left and right section"));
+                    EditorGUI.indentLevel--;
+                }
+            }
+            EditorGUILayout.EndVertical();
+
             // Key editor
             EditorGUILayout.BeginVertical("Box");
             for (int r = 0; r < rows.arraySize; r++)
             {
                 SerializedProperty row = rows.GetArrayElementAtIndex(r);
+                int splitIndex = row.FindPropertyRelative("splitIndex").intValue;
                 SerializedProperty keys = row.FindPropertyRelative("keys");
                 EditorGUILayout.BeginHorizontal();
                 for (int k = 0; k < keys.arraySize; k++)
                 {
+                    if ( k == splitIndex)
+                    {
+                        GUILayout.Space(32);
+                    }
+
                     SerializedProperty key = keys.GetArrayElementAtIndex(k);
                     SerializedProperty keytype = key.FindPropertyRelative("type");
                     string label = "";
@@ -112,28 +146,8 @@
                     }
                 }
 
-
-                if (GUILayout.Button("+", GUILayout.MinWidth(20), GUILayout.MaxWidth(20)))
-                {
-                    keys.arraySize++;
-                }
-
                 EditorGUILayout.EndHorizontal();
             }
-
-            EditorGUILayout.BeginHorizontal();
-            using (new EditorGUI.DisabledScope(rows.arraySize <= 1))
-            {
-                if (GUILayout.Button("-"))
-                {
-                    run = () => ReduceRows();
-                }
-            }
-            if (GUILayout.Button("+"))
-            {
-                run = () => AddRow();
-            }
-            EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.EndVertical();
 
@@ -187,17 +201,6 @@
 
                 EditorGUILayout.IntSlider(key.FindPropertyRelative("weight"), 1, 5);
 
-                EditorGUILayout.BeginHorizontal();
-                using (new EditorGUI.DisabledScope(keys.arraySize <= 1))
-                {
-                    if (GUILayout.Button("Delete"))
-                    {
-                        run = () => DeleteKey();
-                    }
-                }
-                GUILayout.FlexibleSpace();
-                EditorGUILayout.EndHorizontal();
-
                 EditorGUILayout.EndVertical();
             }
 
@@ -235,38 +238,6 @@
             selectedRow = null;
             selectedKey = null;
         }
-
-        protected void ReduceRows()
-        {
-            SerializedProperty rows = keysets.GetArrayElementAtIndex(selectedKeyset)
-                            .FindPropertyRelative("rows");
-
-            rows.arraySize--;
-            selectedRow = null;
-            selectedKey = null;
-        }
-
-        protected void AddRow()
-        {
-            SerializedProperty rows = keysets.GetArrayElementAtIndex(selectedKeyset)
-                .FindPropertyRelative("rows");
-
-            rows.arraySize++;
-        }
-
-        protected void DeleteKey()
-        {
-            SerializedProperty keys = keysets.GetArrayElementAtIndex(selectedKeyset)
-                .FindPropertyRelative("rows")
-                .GetArrayElementAtIndex(selectedRow ?? -1)
-                .FindPropertyRelative("keys");
-
-            keys.DeleteArrayElementAtIndex(selectedKey ?? -1);
-            selectedKey--;
-            if (selectedKey == -1)
-            {
-                selectedKey = 0;
-            }
-        }
+        
     }
 };

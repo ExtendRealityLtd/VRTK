@@ -75,6 +75,7 @@ MonoBehaviour:
         keyset: 0
         subkeys: []
         weight: 1
+      splitIndex: 6
     - keys:
       - character: 113
         type: 0
@@ -126,6 +127,7 @@ MonoBehaviour:
         keyset: 0
         subkeys: []
         weight: 1
+      splitIndex: 5
     - keys:
       - character: 49
         type: 1
@@ -182,6 +184,7 @@ MonoBehaviour:
         keyset: 0
         subkeys: []
         weight: 2
+      splitIndex: 6
     - keys:
       - character: 32
         type: 1
@@ -243,6 +246,7 @@ MonoBehaviour:
         keyset: 1
         subkeys: []
         weight: 1
+      splitIndex: 6
   - name: Uppercase
     rows:
     - keys:
@@ -306,6 +310,7 @@ MonoBehaviour:
         keyset: 0
         subkeys: []
         weight: 1
+      splitIndex: 6
     - keys:
       - character: 81
         type: 0
@@ -357,6 +362,7 @@ MonoBehaviour:
         keyset: 0
         subkeys: []
         weight: 1
+      splitIndex: 5
     - keys:
       - character: 49
         type: 1
@@ -413,6 +419,7 @@ MonoBehaviour:
         keyset: 0
         subkeys: []
         weight: 2
+      splitIndex: 6
     - keys:
       - character: 32
         type: 1
@@ -474,6 +481,7 @@ MonoBehaviour:
         keyset: 0
         subkeys: []
         weight: 1
+      splitIndex: 6
   - name: Symbols
     rows:
     - keys:
@@ -537,6 +545,7 @@ MonoBehaviour:
         keyset: 0
         subkeys: []
         weight: 1
+      splitIndex: 6
     - keys:
       - character: 43
         type: 0
@@ -588,6 +597,7 @@ MonoBehaviour:
         keyset: 0
         subkeys: []
         weight: 1
+      splitIndex: 5
     - keys:
       - character: 49
         type: 1
@@ -644,6 +654,7 @@ MonoBehaviour:
         keyset: 0
         subkeys: []
         weight: 2
+      splitIndex: 6
     - keys:
       - character: 32
         type: 1
@@ -705,3 +716,4 @@ MonoBehaviour:
         keyset: 0
         subkeys: []
         weight: 1
+      splitIndex: 6
