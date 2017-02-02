@@ -997,6 +997,8 @@ The ability to control an object with the touchpad based on the position of the 
 
 The Touchpad Control script forms the stub to allow for pre-defined actions to execute when the touchpad axis changes.
 
+This is enabled by the Touchpad Control script emitting an event each time the X axis and Y Axis on the touchpad change and the corresponding Touchpad Control Action registers with the appropriate axis event. This means that multiple Touchpad Control Actions can be triggered per axis change.
+
 This script is placed on the Script Alias of the Controller that is required to be affected by changes in the touchpad.
 
 If the controlled object is the play area and `VRTK_BodyPhysics` is also available, then additional logic is processed when the user is falling such as preventing the touchpad control from affecting a falling user.
@@ -1006,8 +1008,6 @@ If the controlled object is the play area and `VRTK_BodyPhysics` is also availab
  * **Primary Activation Button:** An optional button that has to be engaged to allow the touchpad control to activate.
  * **Action Modifier Button:** An optional button that when engaged will activate the modifier on the touchpad control action.
  * **Device For Direction:** The direction that will be moved in is the direction of this device.
- * **X Axis Action Script:** The action to perform when the X axis changes.
- * **Y Axis Action Script:** The action to perform when the Y axis changes.
  * **Disable Other Controls On Active:** If this is checked then whenever the touchpad axis on the attached controller is being changed, all other touchpad control scripts on other controllers will be disabled.
  * **Affect On Falling:** If a `VRTK_BodyPhysics` script is present and this is checked, then the touchpad control will affect the play area whilst it is falling.
  * **Control Override Object:** An optional game object to apply the touchpad control to. If this is blank then the PlayArea will be controlled.
@@ -1019,6 +1019,21 @@ If the controlled object is the play area and `VRTK_BodyPhysics` is also availab
   * `LeftController` - The left controller device.
   * `RightController` - The right controller device.
   * `ControlledObject` - The controlled object.
+
+### Class Events
+
+ * `XAxisChanged` - Emitted when the touchpad X Axis Changes.
+ * `YAxisChanged` - Emitted when the touchpad Y Axis Changes.
+
+### Event Payload
+
+ * `GameObject controlledGameObject` - The GameObject that is going to be affected.
+ * `Transform directionDevice` - The device that is used for the direction.
+ * `Vector3 axisDirection` - The axis that is being affected from the touchpad.
+ * `Vector3 axis` - The value of the current touchpad touch point based across the axis direction.
+ * `float deadzone` - The value of the deadzone based across the axis direction.
+ * `bool currentlyFalling` - Whether the controlled GameObject is currently falling.
+ * `bool modifierActive` - Whether the modifier button is pressed.
 
 ### Example
 
@@ -1296,26 +1311,8 @@ As this is an abstract class, it cannot be applied directly to a game object and
 
 ### Inspector Parameters
 
- * **Axis Description:** A helper parameter to easily identify which axis this Touchpad Control Action is for.
-
-### Class Methods
-
-#### ProcessFixedUpdate/7
-
-  > `public abstract void ProcessFixedUpdate(GameObject controlledGameObject, Transform directionDevice, Vector3 axisDirection, float axis, float deadzone, bool currentlyFalling, bool modifierActive);`
-
-  * Parameters
-   * `GameObject controlledGameObject` - The GameObject that is going to be affected.
-   * `Transform directionDevice` - The device that is used for the direction.
-   * `Vector3 axisDirection` - The axis that is being affected from the touchpad.
-   * `float axis` - The value of the current touchpad touch point based across the axis direction.
-   * `float deadzone` - The value of the deadzone based across the axis direction.
-   * `bool currentlyFalling` - Whether the controlled GameObject is currently falling.
-   * `bool modifierActive` - Whether the modifier button is pressed.
-  * Returns
-   * _none_
-
-The ProcessFixedUpdate method is run for every FixedUpdate on the Touchpad Control script.
+ * **Touchpad Control Script:** The Touchpad Control script to receive axis change events from.
+ * **Listen On Axis Change:** Determines which Touchpad Control Axis event to listen to.
 
 ---
 
@@ -1324,7 +1321,7 @@ The ProcessFixedUpdate method is run for every FixedUpdate on the Touchpad Contr
 
 ### Overview
 
-The Slide Touchpad Controll Action script is used to slide the controlled GameObject around the scene when changing the touchpad axis.
+The Slide Touchpad Control Action script is used to slide the controlled GameObject around the scene when changing the touchpad axis.
 
 The effect is a smooth sliding motion in forward and sideways directions to simulate touchpad walking.
 
@@ -1335,28 +1332,11 @@ The effect is a smooth sliding motion in forward and sideways directions to simu
  * **Falling Deceleration:** The rate of speed deceleration when the touchpad is no longer being touched and the object is falling.
  * **Speed Multiplier:** The speed multiplier to be applied when the modifier button is pressed.
 
-### Class Methods
-
-#### ProcessFixedUpdate/7
-
-  > `public override void ProcessFixedUpdate(GameObject controlledGameObject, Transform directionDevice, Vector3 axisDirection, float axis, float deadzone, bool currentlyFalling, bool modifierActive)`
-
-  * Parameters
-   * `GameObject controlledGameObject` - The GameObject that is going to be affected.
-   * `Transform directionDevice` - The device that is used for the direction.
-   * `Vector3 axisDirection` - The axis that is being affected from the touchpad.
-   * `float axis` - The value of the current touchpad touch point based across the axis direction.
-   * `float deadzone` - The value of the deadzone based across the axis direction.
-   * `bool currentlyFalling` - Whether the controlled GameObject is currently falling.
-   * `bool modifierActive` - Whether the modifier button is pressed.
-  * Returns
-   * _none_
-
-The ProcessFixedUpdate method is run for every FixedUpdate on the Touchpad Control script.
-
 ### Example
 
 `VRTK/Examples/017_CameraRig_TouchpadWalking` has a collection of walls and slopes that can be traversed by the user with the touchpad. There is also an area that can only be traversed if the user is crouching.
+
+To enable the Slide Touchpad Control Action, ensure one of the `TouchpadControlOptions` children (located under the Controller script alias) has the `Slide` control script active.
 
 ---
 
@@ -1374,24 +1354,11 @@ The effect is a smooth rotation to simulate turning.
  * **Maximum Rotation Speed:** The maximum speed the controlled object can be rotated based on the position of the touchpad axis.
  * **Rotation Multiplier:** The rotation multiplier to be applied when the modifier button is pressed.
 
-### Class Methods
+### Example
 
-#### ProcessFixedUpdate/7
+`VRTK/Examples/017_CameraRig_TouchpadWalking` has a collection of walls and slopes that can be traversed by the user with the touchpad. There is also an area that can only be traversed if the user is crouching.
 
-  > `public override void ProcessFixedUpdate(GameObject controlledGameObject, Transform directionDevice, Vector3 axisDirection, float axis, float deadzone, bool currentlyFalling, bool modifierActive)`
-
-  * Parameters
-   * `GameObject controlledGameObject` - The GameObject that is going to be affected.
-   * `Transform directionDevice` - The device that is used for the direction.
-   * `Vector3 axisDirection` - The axis that is being affected from the touchpad.
-   * `float axis` - The value of the current touchpad touch point based across the axis direction.
-   * `float deadzone` - The value of the deadzone based across the axis direction.
-   * `bool currentlyFalling` - Whether the controlled GameObject is currently falling.
-   * `bool modifierActive` - Whether the modifier button is pressed.
-  * Returns
-   * _none_
-
-The ProcessFixedUpdate method is run for every FixedUpdate on the Touchpad Control script.
+To enable the Rotate Touchpad Control Action, ensure one of the `TouchpadControlOptions` children (located under the Controller script alias) has the `Rotate` control script active.
 
 ---
 
@@ -1411,24 +1378,11 @@ The effect is a immediate snap rotation to quickly face in a new direction.
  * **Snap Delay:** The amount of time required to pass before another snap rotation can be carried out.
  * **Blink Transition Speed:** The speed for the headset to fade out and back in. Having a blink between rotations can reduce nausia.
 
-### Class Methods
+### Example
 
-#### ProcessFixedUpdate/7
+`VRTK/Examples/017_CameraRig_TouchpadWalking` has a collection of walls and slopes that can be traversed by the user with the touchpad. There is also an area that can only be traversed if the user is crouching.
 
-  > `public override void ProcessFixedUpdate(GameObject controlledGameObject, Transform directionDevice, Vector3 axisDirection, float axis, float deadzone, bool currentlyFalling, bool modifierActive)`
-
-  * Parameters
-   * `GameObject controlledGameObject` - The GameObject that is going to be affected.
-   * `Transform directionDevice` - The device that is used for the direction.
-   * `Vector3 axisDirection` - The axis that is being affected from the touchpad.
-   * `float axis` - The value of the current touchpad touch point based across the axis direction.
-   * `float deadzone` - The value of the deadzone based across the axis direction.
-   * `bool currentlyFalling` - Whether the controlled GameObject is currently falling.
-   * `bool modifierActive` - Whether the modifier button is pressed.
-  * Returns
-   * _none_
-
-The ProcessFixedUpdate method is run for every FixedUpdate on the Touchpad Control script.
+To enable the Snap Rotate Touchpad Control Action, ensure one of the `TouchpadControlOptions` children (located under the Controller script alias) has the `Snap Rotate` control script active.
 
 ---
 
@@ -1449,24 +1403,11 @@ The effect is a immediate snap to a new position in the given direction.
  * **Floor Height Tolerance:** The height different in floor allowed to be a valid warp.
  * **Blink Transition Speed:** The speed for the headset to fade out and back in. Having a blink between warps can reduce nausia.
 
-### Class Methods
+### Example
 
-#### ProcessFixedUpdate/7
+`VRTK/Examples/017_CameraRig_TouchpadWalking` has a collection of walls and slopes that can be traversed by the user with the touchpad. There is also an area that can only be traversed if the user is crouching.
 
-  > `public override void ProcessFixedUpdate(GameObject controlledGameObject, Transform directionDevice, Vector3 axisDirection, float axis, float deadzone, bool currentlyFalling, bool modifierActive)`
-
-  * Parameters
-   * `GameObject controlledGameObject` - The GameObject that is going to be affected.
-   * `Transform directionDevice` - The device that is used for the direction.
-   * `Vector3 axisDirection` - The axis that is being affected from the touchpad.
-   * `float axis` - The value of the current touchpad touch point based across the axis direction.
-   * `float deadzone` - The value of the deadzone based across the axis direction.
-   * `bool currentlyFalling` - Whether the controlled GameObject is currently falling.
-   * `bool modifierActive` - Whether the modifier button is pressed.
-  * Returns
-   * _none_
-
-The ProcessFixedUpdate method is run for every FixedUpdate on the Touchpad Control script.
+To enable the Warp Touchpad Control Action, ensure one of the `TouchpadControlOptions` children (located under the Controller script alias) has the `Warp` control script active.
 
 ---
 

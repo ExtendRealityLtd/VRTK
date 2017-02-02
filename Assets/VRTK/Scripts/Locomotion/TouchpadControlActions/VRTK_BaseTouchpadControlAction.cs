@@ -11,14 +11,16 @@ namespace VRTK
     /// </remarks>
     public abstract class VRTK_BaseTouchpadControlAction : MonoBehaviour
     {
-        public enum AxisDescriptions
+        public enum AxisListeners
         {
-            XAxis,
-            YAxis
+            XAxisChanged,
+            YAxisChanged
         }
 
-        [Tooltip("A helper parameter to easily identify which axis this Touchpad Control Action is for.")]
-        public AxisDescriptions axisDescription;
+        [Tooltip("The Touchpad Control script to receive axis change events from.")]
+        public VRTK_TouchpadControl touchpadControlScript;
+        [Tooltip("Determines which Touchpad Control Axis event to listen to.")]
+        public AxisListeners listenOnAxisChange;
 
         protected Collider centerCollider;
         protected Vector3 colliderCenter = Vector3.zero;
@@ -27,21 +29,44 @@ namespace VRTK
         protected Transform controlledTransform;
         protected Transform playArea;
 
-        /// <summary>
-        /// The ProcessFixedUpdate method is run for every FixedUpdate on the Touchpad Control script.
-        /// </summary>
-        /// <param name="controlledGameObject">The GameObject that is going to be affected.</param>
-        /// <param name="directionDevice">The device that is used for the direction.</param>
-        /// <param name="axisDirection">The axis that is being affected from the touchpad.</param>
-        /// <param name="axis">The value of the current touchpad touch point based across the axis direction.</param>
-        /// <param name="deadzone">The value of the deadzone based across the axis direction.</param>
-        /// <param name="currentlyFalling">Whether the controlled GameObject is currently falling.</param>
-        /// <param name="modifierActive">Whether the modifier button is pressed.</param>
-        public abstract void ProcessFixedUpdate(GameObject controlledGameObject, Transform directionDevice, Vector3 axisDirection, float axis, float deadzone, bool currentlyFalling, bool modifierActive);
+        protected abstract void Process(GameObject controlledGameObject, Transform directionDevice, Vector3 axisDirection, float axis, float deadzone, bool currentlyFalling, bool modifierActive);
 
         protected virtual void OnEnable()
         {
             playArea = VRTK_DeviceFinder.PlayAreaTransform();
+            if (touchpadControlScript)
+            {
+                switch (listenOnAxisChange)
+                {
+                    case AxisListeners.XAxisChanged:
+                        touchpadControlScript.XAxisChanged += AxisChanged;
+                        break;
+                    case AxisListeners.YAxisChanged:
+                        touchpadControlScript.YAxisChanged += AxisChanged;
+                        break;
+                }
+            }
+        }
+
+        protected virtual void OnDisable()
+        {
+            if (touchpadControlScript)
+            {
+                switch (listenOnAxisChange)
+                {
+                    case AxisListeners.XAxisChanged:
+                        touchpadControlScript.XAxisChanged -= AxisChanged;
+                        break;
+                    case AxisListeners.YAxisChanged:
+                        touchpadControlScript.YAxisChanged -= AxisChanged;
+                        break;
+                }
+            }
+        }
+
+        protected virtual void AxisChanged(object sender, TouchpadControlEventArgs e)
+        {
+            Process(e.controlledGameObject, e.directionDevice, e.axisDirection, e.axis, e.deadzone, e.currentlyFalling, e.modifierActive);
         }
 
         protected virtual void RotateAroundPlayer(GameObject controlledGameObject, float angle)

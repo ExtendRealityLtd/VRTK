@@ -4,10 +4,40 @@ namespace VRTK
     using UnityEngine;
 
     /// <summary>
+    /// Event Payload
+    /// </summary>
+    /// <param name="controlledGameObject">The GameObject that is going to be affected.</param>
+    /// <param name="directionDevice">The device that is used for the direction.</param>
+    /// <param name="axisDirection">The axis that is being affected from the touchpad.</param>
+    /// <param name="axis">The value of the current touchpad touch point based across the axis direction.</param>
+    /// <param name="deadzone">The value of the deadzone based across the axis direction.</param>
+    /// <param name="currentlyFalling">Whether the controlled GameObject is currently falling.</param>
+    /// <param name="modifierActive">Whether the modifier button is pressed.</param>
+    public struct TouchpadControlEventArgs
+    {
+        public GameObject controlledGameObject;
+        public Transform directionDevice;
+        public Vector3 axisDirection;
+        public float axis;
+        public float deadzone;
+        public bool currentlyFalling;
+        public bool modifierActive;
+    }
+
+    /// <summary>
+    /// Event Payload
+    /// </summary>
+    /// <param name="sender">this object</param>
+    /// <param name="e"><see cref="TouchpadControlEventArgs"/></param>
+    public delegate void TouchpadControlEventHandler(object sender, TouchpadControlEventArgs e);
+
+    /// <summary>
     /// The ability to control an object with the touchpad based on the position of the finger on the touchpad axis.
     /// </summary>
     /// <remarks>
     /// The Touchpad Control script forms the stub to allow for pre-defined actions to execute when the touchpad axis changes.
+    ///
+    /// This is enabled by the Touchpad Control script emitting an event each time the X axis and Y Axis on the touchpad change and the corresponding Touchpad Control Action registers with the appropriate axis event. This means that multiple Touchpad Control Actions can be triggered per axis change.
     ///
     /// This script is placed on the Script Alias of the Controller that is required to be affected by changes in the touchpad.
     ///
@@ -42,16 +72,22 @@ namespace VRTK
         public DirectionDevices deviceForDirection = DirectionDevices.Headset;
         [Tooltip("Any input on the axis will be ignored if it is within this deadzone threshold. Between `0f` and `1f`.")]
         public Vector2 axisDeadzone = new Vector2(0.2f, 0.2f);
-        [Tooltip("The action to perform when the X axis changes.")]
-        public VRTK_BaseTouchpadControlAction xAxisActionScript;
-        [Tooltip("The action to perform when the Y axis changes.")]
-        public VRTK_BaseTouchpadControlAction yAxisActionScript;
         [Tooltip("If this is checked then whenever the touchpad axis on the attached controller is being changed, all other touchpad control scripts on other controllers will be disabled.")]
         public bool disableOtherControlsOnActive = true;
         [Tooltip("If a `VRTK_BodyPhysics` script is present and this is checked, then the touchpad control will affect the play area whilst it is falling.")]
         public bool affectOnFalling = false;
         [Tooltip("An optional game object to apply the touchpad control to. If this is blank then the PlayArea will be controlled.")]
         public GameObject controlOverrideObject;
+
+        /// <summary>
+        /// Emitted when the touchpad X Axis Changes.
+        /// </summary>
+        public event TouchpadControlEventHandler XAxisChanged;
+
+        /// <summary>
+        /// Emitted when the touchpad Y Axis Changes.
+        /// </summary>
+        public event TouchpadControlEventHandler YAxisChanged;
 
         private VRTK_ControllerEvents controllerEvents;
         private VRTK_BodyPhysics bodyPhysics;
@@ -61,20 +97,39 @@ namespace VRTK
         private Transform directionDevice;
         private DirectionDevices previousDeviceForDirection;
         private Vector2 touchpadAxis;
+        private Vector2 storedTouchpadAxis;
         private bool currentlyFalling = false;
         private bool modifierActive = false;
         private bool touchpadFirstChange;
         private bool otherTouchpadControlEnabledState;
+        private float controlledGameObjectPreviousY = 0f;
+        private float controlledGameObjectPreviousYOffset = 0.01f;
+
+        public virtual void OnXAxisChanged(TouchpadControlEventArgs e)
+        {
+            if (XAxisChanged != null)
+            {
+                XAxisChanged(this, e);
+            }
+        }
+
+        public virtual void OnYAxisChanged(TouchpadControlEventArgs e)
+        {
+            if (YAxisChanged != null)
+            {
+                YAxisChanged(this, e);
+            }
+        }
 
         protected virtual void OnEnable()
         {
             touchpadAxis = Vector2.zero;
+            storedTouchpadAxis = Vector2.zero;
             controllerEvents = GetComponent<VRTK_ControllerEvents>();
             SetControlledObject();
             bodyPhysics = (!controlOverrideObject ? FindObjectOfType<VRTK_BodyPhysics>() : null);
             touchpadFirstChange = true;
 
-            CheckSetupControlAction();
             directionDevice = GetDirectionDevice();
             SetListeners(true);
             otherTouchpadControl = GetOtherControl();
@@ -98,29 +153,34 @@ namespace VRTK
             CheckDirectionDevice();
             CheckFalling();
             ModifierButtonActive();
-            if (xAxisActionScript && xAxisActionScript.enabled && OutsideDeadzone(touchpadAxis.x, axisDeadzone.x))
+            if (OutsideDeadzone(touchpadAxis.x, axisDeadzone.x) || touchpadAxis.x == 0f)
             {
-                xAxisActionScript.ProcessFixedUpdate(controlledGameObject, directionDevice, directionDevice.right, touchpadAxis.x, axisDeadzone.x, currentlyFalling, modifierActive);
+                OnXAxisChanged(SetEventArguements(directionDevice.right, touchpadAxis.x, axisDeadzone.x));
             }
 
-            if (yAxisActionScript && yAxisActionScript.enabled && OutsideDeadzone(touchpadAxis.y, axisDeadzone.y))
+            if (OutsideDeadzone(touchpadAxis.y, axisDeadzone.y) || touchpadAxis.x == 0f)
             {
-                yAxisActionScript.ProcessFixedUpdate(controlledGameObject, directionDevice, directionDevice.forward, touchpadAxis.y, axisDeadzone.y, currentlyFalling, modifierActive);
+                OnYAxisChanged(SetEventArguements(directionDevice.forward, touchpadAxis.y, axisDeadzone.y));
             }
+        }
+
+        protected virtual TouchpadControlEventArgs SetEventArguements(Vector3 axisDirection, float axis, float axisDeadzone)
+        {
+            TouchpadControlEventArgs e;
+            e.controlledGameObject = controlledGameObject;
+            e.directionDevice = directionDevice;
+            e.axisDirection = axisDirection;
+            e.axis = axis;
+            e.deadzone = axisDeadzone;
+            e.currentlyFalling = currentlyFalling;
+            e.modifierActive = modifierActive;
+
+            return e;
         }
 
         protected virtual bool OutsideDeadzone(float axisValue, float deadzoneThreshold)
         {
             return (axisValue > deadzoneThreshold || axisValue < -deadzoneThreshold);
-        }
-
-        protected virtual void CheckSetupControlAction()
-        {
-            if (xAxisActionScript && yAxisActionScript && xAxisActionScript.GetInstanceID() == yAxisActionScript.GetInstanceID())
-            {
-                Debug.LogError("The `X Axis Action Script` and `Y Axis Action Script` cannot be the same script instance. Create seperate scripts for each axis action.");
-                return;
-            }
         }
 
         protected virtual VRTK_TouchpadControl GetOtherControl()
@@ -137,14 +197,19 @@ namespace VRTK
         {
             setControlOverrideObject = controlOverrideObject;
             controlledGameObject = (controlOverrideObject ? controlOverrideObject : VRTK_DeviceFinder.PlayAreaTransform().gameObject);
+            controlledGameObjectPreviousY = controlledGameObject.transform.position.y;
         }
 
         protected virtual void CheckFalling()
         {
-            if (bodyPhysics && bodyPhysics.IsFalling())
+            if (bodyPhysics && bodyPhysics.IsFalling() && ObjectHeightChange())
             {
                 if (!affectOnFalling)
                 {
+                    if (storedTouchpadAxis == Vector2.zero)
+                    {
+                        storedTouchpadAxis = new Vector2(touchpadAxis.x, touchpadAxis.y);
+                    }
                     touchpadAxis = Vector2.zero;
                 }
                 currentlyFalling = true;
@@ -152,9 +217,17 @@ namespace VRTK
 
             if (bodyPhysics && !bodyPhysics.IsFalling() && currentlyFalling)
             {
-                touchpadAxis = Vector2.zero;
+                touchpadAxis = (ValidPrimaryButton() && TouchpadTouched() ? storedTouchpadAxis : Vector2.zero);
+                storedTouchpadAxis = Vector2.zero;
                 currentlyFalling = false;
             }
+        }
+
+        protected virtual bool ObjectHeightChange()
+        {
+            bool heightChanged = ((controlledGameObjectPreviousY - controlledGameObjectPreviousYOffset) > controlledGameObject.transform.position.y);
+            controlledGameObjectPreviousY = controlledGameObject.transform.position.y;
+            return heightChanged;
         }
 
         protected virtual Transform GetDirectionDevice()
@@ -209,6 +282,11 @@ namespace VRTK
         private void ModifierButtonActive()
         {
             modifierActive = (controllerEvents && actionModifierButton != VRTK_ControllerEvents.ButtonAlias.Undefined && controllerEvents.IsButtonPressed(actionModifierButton));
+        }
+
+        private bool TouchpadTouched()
+        {
+            return (controllerEvents && controllerEvents.IsButtonPressed(VRTK_ControllerEvents.ButtonAlias.Touchpad_Touch));
         }
 
         private void TouchpadAxisChanged(object sender, ControllerInteractionEventArgs e)

@@ -9,6 +9,11 @@ namespace VRTK
     /// <remarks>
     /// The effect is a smooth rotation to simulate turning.
     /// </remarks>
+    /// <example>
+    /// `VRTK/Examples/017_CameraRig_TouchpadWalking` has a collection of walls and slopes that can be traversed by the user with the touchpad. There is also an area that can only be traversed if the user is crouching.
+    ///
+    /// To enable the Rotate Touchpad Control Action, ensure one of the `TouchpadControlOptions` children (located under the Controller script alias) has the `Rotate` control script active.
+    /// </example>
     public class VRTK_RotateTouchpadControlAction : VRTK_BaseTouchpadControlAction
     {
         [Tooltip("The maximum speed the controlled object can be rotated based on the position of the touchpad axis.")]
@@ -16,17 +21,7 @@ namespace VRTK
         [Tooltip("The rotation multiplier to be applied when the modifier button is pressed.")]
         public float rotationMultiplier = 1.5f;
 
-        /// <summary>
-        /// The ProcessFixedUpdate method is run for every FixedUpdate on the Touchpad Control script.
-        /// </summary>
-        /// <param name="controlledGameObject">The GameObject that is going to be affected.</param>
-        /// <param name="directionDevice">The device that is used for the direction.</param>
-        /// <param name="axisDirection">The axis that is being affected from the touchpad.</param>
-        /// <param name="axis">The value of the current touchpad touch point based across the axis direction.</param>
-        /// <param name="deadzone">The value of the deadzone based across the axis direction.</param>
-        /// <param name="currentlyFalling">Whether the controlled GameObject is currently falling.</param>
-        /// <param name="modifierActive">Whether the modifier button is pressed.</param>
-        public override void ProcessFixedUpdate(GameObject controlledGameObject, Transform directionDevice, Vector3 axisDirection, float axis, float deadzone, bool currentlyFalling, bool modifierActive)
+        protected override void Process(GameObject controlledGameObject, Transform directionDevice, Vector3 axisDirection, float axis, float deadzone, bool currentlyFalling, bool modifierActive)
         {
             float angle = Rotate(axis, modifierActive);
             if (angle != 0f)

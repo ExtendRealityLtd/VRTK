@@ -4,13 +4,15 @@ namespace VRTK
     using UnityEngine;
 
     /// <summary>
-    /// The Slide Touchpad Controll Action script is used to slide the controlled GameObject around the scene when changing the touchpad axis.
+    /// The Slide Touchpad Control Action script is used to slide the controlled GameObject around the scene when changing the touchpad axis.
     /// </summary>
     /// <remarks>
     /// The effect is a smooth sliding motion in forward and sideways directions to simulate touchpad walking.
     /// </remarks>
     /// <example>
     /// `VRTK/Examples/017_CameraRig_TouchpadWalking` has a collection of walls and slopes that can be traversed by the user with the touchpad. There is also an area that can only be traversed if the user is crouching.
+    ///
+    /// To enable the Slide Touchpad Control Action, ensure one of the `TouchpadControlOptions` children (located under the Controller script alias) has the `Slide` control script active.
     /// </example>
     public class VRTK_SlideTouchpadControlAction : VRTK_BaseTouchpadControlAction
     {
@@ -25,17 +27,7 @@ namespace VRTK
 
         private float currentSpeed = 0f;
 
-        /// <summary>
-        /// The ProcessFixedUpdate method is run for every FixedUpdate on the Touchpad Control script.
-        /// </summary>
-        /// <param name="controlledGameObject">The GameObject that is going to be affected.</param>
-        /// <param name="directionDevice">The device that is used for the direction.</param>
-        /// <param name="axisDirection">The axis that is being affected from the touchpad.</param>
-        /// <param name="axis">The value of the current touchpad touch point based across the axis direction.</param>
-        /// <param name="deadzone">The value of the deadzone based across the axis direction.</param>
-        /// <param name="currentlyFalling">Whether the controlled GameObject is currently falling.</param>
-        /// <param name="modifierActive">Whether the modifier button is pressed.</param>
-        public override void ProcessFixedUpdate(GameObject controlledGameObject, Transform directionDevice, Vector3 axisDirection, float axis, float deadzone, bool currentlyFalling, bool modifierActive)
+        protected override void Process(GameObject controlledGameObject, Transform directionDevice, Vector3 axisDirection, float axis, float deadzone, bool currentlyFalling, bool modifierActive)
         {
             currentSpeed = CalculateSpeed(axis, currentlyFalling, modifierActive);
             Move(controlledGameObject, directionDevice, axisDirection);
