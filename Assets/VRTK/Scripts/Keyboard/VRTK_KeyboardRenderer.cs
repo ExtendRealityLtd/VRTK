@@ -2,6 +2,10 @@
 namespace VRTK
 {
     using UnityEngine;
+    using RKeyLayout = VRTK_RenderableKeyLayout;
+    using RKeyset = VRTK_RenderableKeyLayout.Keyset;
+    using RKeyArea = VRTK_RenderableKeyLayout.KeyArea;
+    using RKey = VRTK_RenderableKeyLayout.Key;
 
     /// <summary>
     /// The Keyboard Renderer script renders a functional keyboard to a UI Canvas
@@ -9,35 +13,15 @@ namespace VRTK
     [ExecuteInEditMode]
     public class VRTK_KeyboardRenderer : MonoBehaviour
     {
-        protected class RenderableKeyboard
-        {
-            public RenderableKeyset[] keysets;
-        }
-
-        protected class RenderableKeyset
-        {
-            public string name;
-            public RenderableRow[] rows;
-        }
-
-        protected class RenderableRow
-        {
-            public Rect rect;
-            public RenderableKey[] keys;
-        }
-
-        protected class RenderableKey
-        {
-            public Rect rect;
-        }
-
-        [Tooltip("Keyboard layout to render to canvas")]
-        public VRTK_KeyboardLayout keyboardLayout;
-
         protected int currentKeyset = 0;
 
         protected virtual void Start()
         {
+            if (GetComponent<VRTK_BaseKeyLayoutCalculator>() == null)
+            {
+                Debug.LogError("VRTK_KeyboardRenderer requires a Key Layout Calculator on the same object.");
+            }
+
             SetupKeyboardUI();
         }
 
@@ -49,6 +33,10 @@ namespace VRTK
             }
         }
 
+        /// <summary>
+        /// Apply hide flags to a game object in the editor so it is not saved
+        /// </summary>
+        /// <param name="obj">The runtime game object</param>
         protected void ProcessRuntimeObject(GameObject obj)
         {
             if (Application.isEditor)
@@ -57,6 +45,10 @@ namespace VRTK
             }
         }
 
+        /// <summary>
+        /// Destroy an object which may be created in the editor using hide flag
+        /// </summary>
+        /// <param name="obj"></param>
         protected void DestroyRuntimeObject(GameObject obj)
         {
             if (Application.isEditor)
@@ -83,15 +75,26 @@ namespace VRTK
 
             Rect containerRect = gameObject.GetComponent<RectTransform>().rect;
 
-            Vector2 rowPivot = Vector2.one * 0.5f;
+            VRTK_BaseKeyLayoutCalculator calculator = GetComponent<VRTK_BaseKeyLayoutCalculator>();
+            if (calculator == null)
+            {
+                return;
+            }
+
+            RKeyLayout layout = calculator.CalculateKeyLayout(containerRect.size);
+            if (layout == null)
+            {
+                Debug.LogWarning(calculator.GetType().Name + " did not return a renderable key layout");
+                return;
+            }
+            
+            Vector2 areaPivot = Vector2.one * 0.5f;
             Vector2 keyPivot = Vector2.one * 0.5f;
-
-            RenderableKeyboard rKeyboard = GenerateRenderableKeyboard(containerRect.size);
-
-            for (int s = 0; s < rKeyboard.keysets.Length; s++)
+            
+            for (int s = 0; s < layout.keysets.Length; s++)
             {
                 // Keyset
-                RenderableKeyset rKeyset = rKeyboard.keysets[s];
+                RKeyset rKeyset = layout.keysets[s];
                 GameObject uiKeyset = new GameObject(rKeyset.name, typeof(RectTransform));
                 ProcessRuntimeObject(uiKeyset);
                 uiKeyset.SetActive(s == 0);
@@ -103,72 +106,28 @@ namespace VRTK
                 keysetTransform.offsetMin = new Vector2(0, 0);
                 keysetTransform.offsetMax = new Vector2(0, 0);
 
-                for (int r = 0; r < rKeyset.rows.Length; r++)
+                foreach (RKeyArea rKeyArea in rKeyset.areas)
                 {
-                    // Row
-                    RenderableRow rRow = rKeyset.rows[r];
-                    GameObject uiRow = new GameObject("KeyboardRow", typeof(RectTransform));
-                    ProcessRuntimeObject(uiRow);
-                    RectTransform rowTransform = uiRow.GetComponent<RectTransform>();
+                    // Area
+                    GameObject uiArea = new GameObject(rKeyArea.name, typeof(RectTransform));
+                    ProcessRuntimeObject(uiArea);
+                    RectTransform rowTransform = uiArea.GetComponent<RectTransform>();
                     rowTransform.SetParent(keysetTransform, false);
-                    rowTransform.pivot = rowPivot;
-                    ApplyRectLayoutToRectTransform(rRow.rect, rowTransform, containerRect.size);
+                    rowTransform.pivot = areaPivot;
+                    ApplyRectLayoutToRectTransform(rKeyArea.rect, rowTransform, containerRect.size);
 
-                    for (int k = 0; k < rRow.keys.Length; k++)
+                    foreach (RKey rKey in rKeyArea.keys)
                     {
                         // Key
-                        RenderableKey rKey = rRow.keys[k];
                         GameObject uiKey = new GameObject("KeyboardKey", typeof(RectTransform));
                         ProcessRuntimeObject(uiKey);
                         RectTransform keyTransform = uiKey.GetComponent<RectTransform>();
                         keyTransform.SetParent(rowTransform, false);
                         keyTransform.pivot = keyPivot;
-                        ApplyRectLayoutToRectTransform(rKey.rect, keyTransform, rRow.rect.size);
-
+                        ApplyRectLayoutToRectTransform(rKey.rect, keyTransform, rKeyArea.rect.size);
                     }
                 }
             }
-        }
-
-        protected RenderableKeyboard GenerateRenderableKeyboard(Vector2 canvasSize)
-        {
-            RenderableKeyboard rKeyboard = new RenderableKeyboard();
-
-            rKeyboard.keysets = new RenderableKeyset[keyboardLayout.keysets.Length];
-            for (int s = 0; s < keyboardLayout.keysets.Length; s++)
-            {
-                // Keyset
-                VRTK_KeyboardLayout.Keyset keyset = keyboardLayout.keysets[s];
-                RenderableKeyset rKeyset = new RenderableKeyset();
-                rKeyboard.keysets[s] = rKeyset;
-                rKeyset.name = keyset.name;
-
-                float rowHeight = canvasSize.y / ((float)keyset.rows.Length);
-
-                rKeyset.rows = new RenderableRow[keyset.rows.Length]; // XXX: Implicit space+done row
-                for (int r = 0; r < keyset.rows.Length; r++)
-                {
-                    // Row
-                    VRTK_KeyboardLayout.Row row = keyset.rows[r];
-                    RenderableRow rRow = new RenderableRow();
-                    rKeyset.rows[r] = rRow;
-                    rRow.rect = new Rect(0, rowHeight * ((float)r), canvasSize.x, rowHeight);
-
-                    float keyWidth = canvasSize.x / ((float)row.keys.Length);
-
-                    rRow.keys = new RenderableKey[row.keys.Length];
-                    for (int k = 0; k < row.keys.Length; k++)
-                    {
-                        // Key
-                        // VRTK_KeyboardLayout.Key key = row.keys[k];
-                        RenderableKey rKey = new RenderableKey();
-                        rRow.keys[k] = rKey;
-                        rKey.rect = new Rect(keyWidth * ((float)k), 0, keyWidth, rowHeight);
-                    }
-                }
-            }
-
-            return rKeyboard;
         }
 
         /// <summary>
