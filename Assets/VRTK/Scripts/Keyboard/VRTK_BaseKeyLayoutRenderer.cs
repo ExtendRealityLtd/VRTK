@@ -20,7 +20,7 @@ namespace VRTK
         {
             if (GetComponent<VRTK_BaseKeyLayoutCalculator>() == null)
             {
-                Debug.LogError(GetType().Name + " requires a Key Layout Calculator on the same object.");
+                Debug.LogError(GetType().Name + " in " + name + " requires a Key Layout Calculator on the same object.");
             }
 
             SetupKeyboardUI();
@@ -77,7 +77,7 @@ namespace VRTK
             RKeyLayout layout = calculator.CalculateKeyLayout(containerSize);
             if (layout == null)
             {
-                Debug.LogWarning(calculator.GetType().Name + " did not return a renderable key layout");
+                Debug.LogWarning(calculator.GetType().Name + " in " + name + " did not return a renderable key layout");
                 return null;
             }
 

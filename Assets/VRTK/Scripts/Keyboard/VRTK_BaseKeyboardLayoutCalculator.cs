@@ -304,7 +304,7 @@ namespace VRTK
         {
             if (keyboardLayout == null)
             {
-                Debug.LogError("Keyboard Layout Calculator requires a Keyboard Layout");
+                Debug.LogError("Keyboard Layout Calculator in " + name + " requires a Keyboard Layout");
                 return null;
             }
 
