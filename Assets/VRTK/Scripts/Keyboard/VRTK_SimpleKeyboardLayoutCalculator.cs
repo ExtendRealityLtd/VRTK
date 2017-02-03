@@ -1,25 +1,20 @@
-﻿// Grid Keyboard Layout Calculator|Keyboard|81041
+﻿// Simple Keyboard Layout Calculator|Keyboard|81041
 namespace VRTK
 {
     using UnityEngine;
-    using KeyboardLayout = VRTK_KeyboardLayout;
-    using KLKeyset = VRTK_KeyboardLayout.Keyset;
-    using KLRow = VRTK_KeyboardLayout.Row;
-    using KLKey = VRTK_KeyboardLayout.Key;
-    using RKeyLayout = VRTK_RenderableKeyLayout;
-    using RKeyset = VRTK_RenderableKeyLayout.Keyset;
-    using RKeyArea = VRTK_RenderableKeyLayout.KeyArea;
     using RKey = VRTK_RenderableKeyLayout.Key;
 
     /// <summary>
-    /// A keyboard layout calculator that lays out keys in a plain grid pattern
+    /// A keyboard layout calculator that lays out keys in evenly spaced rows
     /// </summary>
     /// <remarks>
-    /// The grid keyboard layout calculator lays out keys in a plain evenly spaced grid pattern.
+    /// The simple keyboard layout calculator lays out keys row by row with such that
+    /// keys are evenly sized within their row. If you use the same row count/weight in
+    /// each row then the simple keyboard layout will lay out keys in an evenly spaced grid.
     /// 
     /// Special key weights can be applied to make some keys span multiple columns of the grid.
     /// </remarks>
-    public class VRTK_GridKeyboardLayoutCalculator : VRTK_BaseKeyboardLayoutCalculator
+    public class VRTK_SimpleKeyboardLayoutCalculator : VRTK_BaseKeyboardLayoutCalculator
     {
         [Tooltip("Size of the space between the two halves of the keyboard")]
         public float areaSpacing = 0f;

@@ -1,4 +1,4 @@
-﻿// Keyboard Renderer|Keyboard|81020
+﻿// Canvas Key Layout Renderer|Keyboard|81021
 namespace VRTK
 {
     using UnityEngine;
@@ -8,64 +8,19 @@ namespace VRTK
     using RKey = VRTK_RenderableKeyLayout.Key;
 
     /// <summary>
-    /// The Keyboard Renderer script renders a functional keyboard to a UI Canvas
+    /// The canvas key layout renderer script renders a functional keyboard to a UI Canvas
     /// </summary>
+    /// <remarks>
+    /// A key layout calculator component is required on the same gameobject as the key layout renderer.
+    /// </remarks>
     [ExecuteInEditMode]
-    public class VRTK_KeyboardRenderer : MonoBehaviour
+    public class VRTK_CanvasKeyLayoutRenderer : VRTK_BaseKeyLayoutRenderer
     {
-        protected int currentKeyset = 0;
-
-        protected virtual void Start()
-        {
-            if (GetComponent<VRTK_BaseKeyLayoutCalculator>() == null)
-            {
-                Debug.LogError("VRTK_KeyboardRenderer requires a Key Layout Calculator on the same object.");
-            }
-
-            SetupKeyboardUI();
-        }
-
-        protected virtual void Update()
-        {
-            if (Application.isEditor && !Application.isPlaying)
-            {
-                SetupKeyboardUI();
-            }
-        }
-
-        /// <summary>
-        /// Apply hide flags to a game object in the editor so it is not saved
-        /// </summary>
-        /// <param name="obj">The runtime game object</param>
-        protected void ProcessRuntimeObject(GameObject obj)
-        {
-            if (Application.isEditor)
-            {
-                obj.hideFlags = HideFlags.DontSave;// | HideFlags.NotEditable;
-            }
-        }
-
-        /// <summary>
-        /// Destroy an object which may be created in the editor using hide flag
-        /// </summary>
-        /// <param name="obj"></param>
-        protected void DestroyRuntimeObject(GameObject obj)
-        {
-            if (Application.isEditor)
-            {
-                DestroyImmediate(obj);
-            }
-            else
-            {
-                Destroy(obj);
-            }
-        }
-
         /// <summary>
         /// The SetupKeyboardUI method resets the canvas's children and creates
         /// the canvas objects that make up a rendered keyboard.
         /// </summary>
-        public void SetupKeyboardUI()
+        public override void SetupKeyboardUI()
         {
             // TODO: Better method of finding canvas(es)
             for (int i = transform.childCount - 1; i >= 0; i--)
@@ -75,18 +30,7 @@ namespace VRTK
 
             Rect containerRect = gameObject.GetComponent<RectTransform>().rect;
 
-            VRTK_BaseKeyLayoutCalculator calculator = GetComponent<VRTK_BaseKeyLayoutCalculator>();
-            if (calculator == null)
-            {
-                return;
-            }
-
-            RKeyLayout layout = calculator.CalculateKeyLayout(containerRect.size);
-            if (layout == null)
-            {
-                Debug.LogWarning(calculator.GetType().Name + " did not return a renderable key layout");
-                return;
-            }
+            RKeyLayout layout = CalculateRenderableKeyLayout(containerRect.size);
             
             Vector2 areaPivot = Vector2.one * 0.5f;
             Vector2 keyPivot = Vector2.one * 0.5f;

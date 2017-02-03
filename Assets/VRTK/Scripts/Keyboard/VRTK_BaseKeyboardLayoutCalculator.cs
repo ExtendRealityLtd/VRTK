@@ -36,7 +36,6 @@ namespace VRTK
         {
             private KeyboardLayout keyboardLayout;
             private RKeyLayout rKeyboard;
-            private List<RKeyArea> areas = new List<RKeyArea>();
 
             public RKeyboardBuilder(KeyboardLayout keyboardLayout)
             {
@@ -68,7 +67,7 @@ namespace VRTK
             /// <summary>
             /// Return a renderable keyboard layout once building is finalized
             /// </summary>
-            /// <returns></returns>
+            /// <returns>The RenderableKeyLayout being built</returns>
             public RKeyLayout Commit()
             {
                 return rKeyboard;
