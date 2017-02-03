@@ -105,57 +105,77 @@
             }
             EditorGUILayout.EndVertical();
 
-            // Key editor
-            EditorGUILayout.BeginVertical("Box");
-            for (int r = 0; r < rows.arraySize; r++)
+            // Fix selected key and row index if any edits made it out of bounds
+            if ((selectedRow ?? -1) >= rows.arraySize)
             {
-                SerializedProperty row = rows.GetArrayElementAtIndex(r);
-                int splitIndex = row.FindPropertyRelative("splitIndex").intValue;
-                SerializedProperty keys = row.FindPropertyRelative("keys");
-                EditorGUILayout.BeginHorizontal();
-                for (int k = 0; k < keys.arraySize; k++)
-                {
-                    if ( k == splitIndex)
-                    {
-                        GUILayout.Space(32);
-                    }
-
-                    SerializedProperty key = keys.GetArrayElementAtIndex(k);
-                    SerializedProperty keytype = key.FindPropertyRelative("type");
-                    string label = "";
-                    switch ((VRTK_KeyboardLayout.Keytype)keytype.intValue)
-                    {
-                        case VRTK_KeyboardLayout.Keytype.Character:
-                            label = char.ConvertFromUtf32(key.FindPropertyRelative("character").intValue);
-                            break;
-                        case VRTK_KeyboardLayout.Keytype.KeysetModifier:
-                            label = "#" + key.FindPropertyRelative("keyset").intValue.ToString();
-                            break;
-                        case VRTK_KeyboardLayout.Keytype.Backspace:
-                            label = "Backspace";
-                            break;
-                        case VRTK_KeyboardLayout.Keytype.Enter:
-                            label = "⏎";
-                            break;
-                    }
-
-                    if (GUILayout.Toggle(selectedRow == r && selectedKey == k, label, "Button"))
-                    {
-                        selectedRow = r;
-                        selectedKey = k;
-                    }
-                }
-
-                EditorGUILayout.EndHorizontal();
+                selectedRow = null;
+                selectedKey = null;
             }
 
-            EditorGUILayout.EndVertical();
+            if (selectedRow != null && selectedKey != null)
+            {
+                SerializedProperty rowKeys = rows.GetArrayElementAtIndex(selectedRow ?? -1)
+                    .FindPropertyRelative("keys");
+
+                if ((selectedKey ?? -1) >= rowKeys.arraySize)
+                {
+                    selectedRow = null;
+                    selectedKey = null;
+                }
+            }
+
+            // Key editor
+            if (rows.arraySize != 0)
+            {
+                EditorGUILayout.BeginVertical("box");
+                for (int r = 0; r < rows.arraySize; r++)
+                {
+                    SerializedProperty row = rows.GetArrayElementAtIndex(r);
+                    int splitIndex = row.FindPropertyRelative("splitIndex").intValue;
+                    SerializedProperty keys = row.FindPropertyRelative("keys");
+
+                    EditorGUILayout.BeginHorizontal();
+                    for (int k = 0; k < keys.arraySize; k++)
+                    {
+                        if (k == splitIndex)
+                        {
+                            GUILayout.Space(32);
+                        }
+
+                        SerializedProperty key = keys.GetArrayElementAtIndex(k);
+                        SerializedProperty keytype = key.FindPropertyRelative("type");
+                        string label = "";
+                        switch ((VRTK_KeyboardLayout.Keytype)keytype.intValue)
+                        {
+                            case VRTK_KeyboardLayout.Keytype.Character:
+                                label = char.ConvertFromUtf32(key.FindPropertyRelative("character").intValue);
+                                break;
+                            case VRTK_KeyboardLayout.Keytype.KeysetModifier:
+                                label = "#" + key.FindPropertyRelative("keyset").intValue.ToString();
+                                break;
+                            case VRTK_KeyboardLayout.Keytype.Backspace:
+                                label = "Backspace";
+                                break;
+                            case VRTK_KeyboardLayout.Keytype.Enter:
+                                label = "⏎";
+                                break;
+                        }
+
+                        if (GUILayout.Toggle(selectedRow == r && selectedKey == k, label, "Button"))
+                        {
+                            selectedRow = r;
+                            selectedKey = k;
+                        }
+                    }
+                    EditorGUILayout.EndHorizontal();
+                }
+                EditorGUILayout.EndVertical();
+            }
 
             // Key editor
             if (selectedRow != null && selectedKey != null)
             {
-                SerializedProperty keys = keysets.GetArrayElementAtIndex(selectedKeyset)
-                        .FindPropertyRelative("rows").GetArrayElementAtIndex(selectedRow ?? -1)
+                SerializedProperty keys = rows.GetArrayElementAtIndex(selectedRow ?? -1)
                         .FindPropertyRelative("keys");
                 SerializedProperty key = keys.GetArrayElementAtIndex(selectedKey ?? -1);
                 SerializedProperty keyType = key.FindPropertyRelative("type");
