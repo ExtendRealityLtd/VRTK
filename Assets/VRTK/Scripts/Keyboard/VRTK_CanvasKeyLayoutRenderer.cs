@@ -125,11 +125,22 @@ namespace VRTK
                     {
                         // Key
                         GameObject uiKey = Instantiate<GameObject>(_keyTemplate);
+                        uiKey.name = rKey.name;
                         ProcessRuntimeObject(uiKey);
                         RectTransform keyTransform = uiKey.GetComponent<RectTransform>();
                         keyTransform.SetParent(rowTransform, false);
                         keyTransform.pivot = keyPivot;
                         ApplyRectLayoutToRectTransform(rKey.rect, keyTransform, rKeyArea.rect.size);
+
+                        Button uiKeyButton = uiKey.GetComponentInChildren<Button>();
+                        if ( uiKeyButton != null )
+                        {
+                            Text uiKeyText = uiKeyButton.GetComponentInChildren<Text>();
+                            if ( uiKeyText != null )
+                            {
+                                uiKeyText.text = rKey.label;
+                            }
+                        }
                     }
                 }
             }

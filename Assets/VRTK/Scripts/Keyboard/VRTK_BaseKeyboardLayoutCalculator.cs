@@ -309,6 +309,27 @@ namespace VRTK
             {
                 RKey rKey = new RKey();
 
+                switch(raw.type)
+                {
+                    case KeyboardLayout.Keytype.Character:
+                        rKey.label = rKey.name = raw.character.ToString();
+                        if ( raw.character == ' ' )
+                        {
+                            rKey.name = "Spacebar";
+                        }
+                        break;
+                    case KeyboardLayout.Keytype.KeysetModifier:
+                        rKey.name = "KeysetModifier";
+                        rKey.label = ""; // We do not have enough information to set this now
+                        break;
+                    case KeyboardLayout.Keytype.Backspace:
+                        rKey.label = rKey.name = "Backspace";
+                        break;
+                    case KeyboardLayout.Keytype.Enter:
+                        rKey.label = rKey.name = "Enter";
+                        break;
+                }
+
                 return rKey;
             }
 

@@ -73,6 +73,14 @@ namespace VRTK
         public class Key
         {
             /// <summary>
+            /// The preferred GameObject name for this key
+            /// </summary>
+            public string name;
+            /// <summary>
+            /// The button text for this key
+            /// </summary>
+            public string label;
+            /// <summary>
             /// The rect this key is placed in
             /// </summary>
             public Rect rect;
