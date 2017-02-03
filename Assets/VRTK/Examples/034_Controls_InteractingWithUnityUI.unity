@@ -14446,9 +14446,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   keyboardLayout: {fileID: 11400000, guid: 40a3ac2c651d4584c81d8f9bb6bbceb8, type: 2}
-  areaSpacing: 0
-  rowSpacing: 0
-  keySpacing: 0
+  areaSpacing: 25
+  rowSpacing: 10
+  keySpacing: 10
 --- !u!114 &1643306514
 MonoBehaviour:
   m_ObjectHideFlags: 0
