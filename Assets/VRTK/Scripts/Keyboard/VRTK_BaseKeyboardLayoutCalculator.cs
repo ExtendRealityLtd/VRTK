@@ -86,20 +86,20 @@ namespace VRTK
             /// <summary>
             /// The original KeyboardLayout.Keyset
             /// </summary>
-            public readonly KLKeyset keyset;
+            public readonly KLKeyset raw;
             /// <summary>
             /// The RenderableKeyLayout.Keyset being built
             /// </summary>
-            public readonly RKeyset rKeyset;
+            public readonly RKeyset renderable;
 
             private List<RKeyArea> rAreas = new List<RKeyArea>();
             private List<BKeyArea> bAreas = new List<BKeyArea>();
 
-            public BKeyset(int index, KLKeyset keyset, RKeyset rKeyset)
+            public BKeyset(int index, KLKeyset raw, RKeyset renderable)
             {
                 this.index = index;
-                this.keyset = keyset;
-                this.rKeyset = rKeyset;
+                this.raw = raw;
+                this.renderable = renderable;
             }
 
             /// <summary>
@@ -125,10 +125,10 @@ namespace VRTK
             /// <returns>High-level row builders</returns>
             public BRow[] Rows()
             {
-                BRow[] rows = new BRow[keyset.rows.Length];
-                for (int r = 0; r < keyset.rows.Length; r++)
+                BRow[] rows = new BRow[raw.rows.Length];
+                for (int r = 0; r < raw.rows.Length; r++)
                 {
-                    rows[r] = new BRow(r, keyset.rows[r]);
+                    rows[r] = new BRow(r, raw.rows[r]);
                 }
                 return rows;
             }
@@ -146,7 +146,7 @@ namespace VRTK
                     bArea.Commit();
                 }
 
-                this.rKeyset.areas = rAreas.ToArray();
+                this.renderable.areas = rAreas.ToArray();
             }
         }
 
@@ -158,13 +158,19 @@ namespace VRTK
             /// <summary>
             /// The RenderableKeyLayout.KeyArea being built
             /// </summary>
-            public readonly RKeyArea rKeyArea;
+            public readonly RKeyArea renderable;
 
             private List<RKey> keys = new List<RKey>();
 
-            public BKeyArea(RKeyArea rKeyArea)
+            public Rect rect
             {
-                this.rKeyArea = rKeyArea;
+                get { return renderable.rect; }
+                set { renderable.rect = value; }
+            }
+
+            public BKeyArea(RKeyArea renderable)
+            {
+                this.renderable = renderable;
             }
 
             /// <summary>
@@ -182,7 +188,7 @@ namespace VRTK
             /// <remarks>This is implicitly called by `BKeyset.Commit`</remarks>
             public void Commit()
             {
-                this.rKeyArea.keys = keys.ToArray();
+                this.renderable.keys = keys.ToArray();
             }
         }
 
@@ -198,12 +204,17 @@ namespace VRTK
             /// <summary>
             /// The original KeyboardLayout.Row
             /// </summary>
-            public readonly KLRow row;
+            public readonly KLRow raw;
 
-            public BRow(int index, KLRow row)
+            public int keyCount
+            {
+                get { return raw.keys.Length; }
+            }
+
+            public BRow(int index, KLRow raw)
             {
                 this.index = index;
-                this.row = row;
+                this.raw = raw;
             }
 
             /// <summary>
@@ -212,10 +223,10 @@ namespace VRTK
             /// <returns>High-level key builders</returns>
             public BKey[] Keys()
             {
-                BKey[] keys = new BKey[row.keys.Length];
-                for (int k = 0; k < row.keys.Length; k++)
+                BKey[] keys = new BKey[raw.keys.Length];
+                for (int k = 0; k < raw.keys.Length; k++)
                 {
-                    keys[k] = new BKey(k, k, row.keys[k]);
+                    keys[k] = new BKey(k, k, raw.keys[k]);
                 }
                 return keys;
             }
@@ -226,10 +237,10 @@ namespace VRTK
             /// <returns>High-level key builders</returns>
             public BKey[] LeftKeys()
             {
-                BKey[] keys = new BKey[row.splitIndex];
-                for (int k = 0; k < row.splitIndex; k++)
+                BKey[] keys = new BKey[raw.splitIndex];
+                for (int k = 0; k < raw.splitIndex; k++)
                 {
-                    keys[k] = new BKey(k, k, row.keys[k]);
+                    keys[k] = new BKey(k, k, raw.keys[k]);
                 }
                 return keys;
             }
@@ -240,10 +251,10 @@ namespace VRTK
             /// <returns>High-level key builders</returns>
             public BKey[] RightKeys()
             {
-                BKey[] keys = new BKey[row.keys.Length - row.splitIndex];
-                for (int k = row.splitIndex; k < row.keys.Length; k++)
+                BKey[] keys = new BKey[raw.keys.Length - raw.splitIndex];
+                for (int k = raw.splitIndex; k < raw.keys.Length; k++)
                 {
-                    keys[k - row.splitIndex] = new BKey(k, k - row.splitIndex, row.keys[k]);
+                    keys[k - raw.splitIndex] = new BKey(k, k - raw.splitIndex, raw.keys[k]);
                 }
                 return keys;
             }
@@ -265,13 +276,29 @@ namespace VRTK
             /// <summary>
             /// The original KeyboardLayout.Key
             /// </summary>
-            public readonly KLKey key;
+            public readonly KLKey raw;
 
-            public BKey(int index, int localIndex, KLKey key)
+            public int weight
+            {
+                get
+                {
+                    return raw.weight < 1 ? 1 : raw.weight;
+                }
+            }
+
+            public bool isSpecial
+            {
+                get
+                {
+                    return raw.type != KeyboardLayout.Keytype.Character;
+                }
+            }
+
+            public BKey(int index, int localIndex, KLKey raw)
             {
                 this.index = index;
                 this.localIndex = localIndex;
-                this.key = key;
+                this.raw = raw;
             }
 
             /// <summary>
@@ -283,6 +310,20 @@ namespace VRTK
                 RKey rKey = new RKey();
 
                 return rKey;
+            }
+
+            /// <summary>
+            /// Calculate the total weight of an array of keys
+            /// </summary>
+            /// <param name="keys">Keys to calculate the weight of</param>
+            public static int RowWeight(BKey[] keys)
+            {
+                int weight = 0;
+                foreach (BKey key in keys)
+                {
+                    weight += key.weight;
+                }
+                return weight;
             }
         }
 

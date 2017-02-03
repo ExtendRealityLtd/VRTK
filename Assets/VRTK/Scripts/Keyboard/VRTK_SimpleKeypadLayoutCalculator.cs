@@ -27,7 +27,7 @@ namespace VRTK
         {
             BKeyArea keypad = keyset.KeyArea("Keypad");
             
-            keypad.rKeyArea.rect = new Rect(
+            keypad.rect = new Rect(
                 new Vector2(0, 0),
                 new Vector2(containerSize.x, containerSize.y)
             );
@@ -53,20 +53,14 @@ namespace VRTK
 
         protected virtual void CalculateAreaRowKeys(BKeyArea area, BRow row, BKey[] keys, float y, float keyHeight)
         {
-            // FUTURE: Add a BRrow.rowWeight getter that does this
-            float rowWeight = 0;
-            foreach (BKey key in keys)
-            {
-                rowWeight += Mathf.Max(key.key.weight, 1);
-            }
-
+            float rowWeight = BKey.RowWeight(keys);
             float perKeySpacing = (keySpacing * (float)(rowWeight - 1)) / (float)rowWeight;
-            float keyWidth = (area.rKeyArea.rect.size.x / (float)rowWeight) - perKeySpacing;
+            float keyWidth = (area.rect.size.x / (float)rowWeight) - perKeySpacing;
 
             float x = 0;
             foreach (BKey key in keys)
             {
-                float keyWeight = (float)Mathf.Max(key.key.weight, 1);
+                float keyWeight = (float)key.weight;
                 float width = keyWidth * keyWeight + keySpacing * (keyWeight - 1f);
 
                 RKey rKey = key.Create();

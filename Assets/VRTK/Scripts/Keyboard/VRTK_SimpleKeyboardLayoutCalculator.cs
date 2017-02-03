@@ -26,11 +26,11 @@ namespace VRTK
             BKeyArea rightArea = keyset.KeyArea("Right");
 
             float areaWidth = containerSize.x / 2f - areaSpacing / 2f;
-            leftArea.rKeyArea.rect = new Rect(
+            leftArea.rect = new Rect(
                 new Vector2(0, 0),
                 new Vector2(areaWidth, containerSize.y)
             );
-            rightArea.rKeyArea.rect = new Rect(
+            rightArea.rect = new Rect(
                 new Vector2(areaWidth + areaSpacing, 0),
                 new Vector2(areaWidth, containerSize.y)
             );
