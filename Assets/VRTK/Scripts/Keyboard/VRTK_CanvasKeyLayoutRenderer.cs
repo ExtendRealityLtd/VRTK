@@ -2,13 +2,13 @@
 namespace VRTK
 {
     using UnityEngine;
+    using UnityEngine.UI;
     using RKeyLayout = VRTK_RenderableKeyLayout;
     using RKeyset = VRTK_RenderableKeyLayout.Keyset;
     using RKeyArea = VRTK_RenderableKeyLayout.KeyArea;
     using RKey = VRTK_RenderableKeyLayout.Key;
-
     /// <summary>
-    /// The canvas key layout renderer script renders a functional keyboard to a UI Canvas
+    /// The canvas key layout renderer script renders a functional keyboard to a UI.Canvas
     /// </summary>
     /// <remarks>
     /// A key layout calculator component is required on the same gameobject as the key layout renderer.
@@ -16,6 +16,34 @@ namespace VRTK
     [ExecuteInEditMode]
     public class VRTK_CanvasKeyLayoutRenderer : VRTK_BaseKeyLayoutRenderer
     {
+        /// <summary>
+        /// The prefab to use as the UI.Button for keys
+        /// </summary>
+        /// <remarks>
+        /// Must be or contain a UI.Button with a UI.Text
+        /// 
+        /// A number of properties will be overwritten or modified by the renderer:
+        /// - The template's RectTransform
+        /// - The UI.Button's OnClick
+        /// - The UI.Text's text
+        /// </remarks>
+        [Tooltip("The prefab to use as the UI.Button for keys")]
+        public GameObject keyTemplate;
+        /// <summary>
+        /// An optional prefab to use as the UI.Button for special keys
+        /// </summary>
+        /// <remarks>
+        /// Works the same as `keyTemplate`.
+        /// 
+        /// Can be used to apply different styles for the special keys (Modifiers, Backspace, Enter, Done).
+        /// </remarks>
+        [Tooltip("An optional prefab to use as the UI.Button for special keys")]
+        public GameObject specialKeyTemplate;
+
+        // These are used in place of the public properties so editing them will not change values in the editor
+        protected GameObject _keyTemplate;
+        protected GameObject _specialKeyTemplate;
+
         /// <summary>
         /// The SetupKeyboardUI method resets the canvas's children and creates
         /// the canvas objects that make up a rendered keyboard.
@@ -31,14 +59,43 @@ namespace VRTK
             Rect containerRect = gameObject.GetComponent<RectTransform>().rect;
 
             RKeyLayout layout = CalculateRenderableKeyLayout(containerRect.size);
-            if ( layout == null )
+            if (layout == null)
             {
                 return;
             }
-            
+
+            _keyTemplate = keyTemplate;
+            _specialKeyTemplate = specialKeyTemplate;
+
+            if (_keyTemplate == null)
+            {
+                Debug.LogWarning("Canvas Key Renderer in " + name + " requires a keyTemplate prefab");
+                // Create an empty canvas object so key positions are visible without a key template
+                _keyTemplate = new GameObject("KeyboardKey", typeof(RectTransform));
+                ProcessRuntimeObject(_keyTemplate);
+                _keyTemplate.transform.SetParent(gameObject.transform, false);
+            }
+            else
+            {
+                Button keyTemplateButton = _keyTemplate.GetComponentInChildren<Button>();
+                if (keyTemplateButton == null)
+                {
+                    Debug.LogError("keyTemplate prefab in " + name + " must contain a UI.Button");
+                }
+                else if (keyTemplateButton.GetComponentInChildren<Text>() == null)
+                {
+                    Debug.LogError(name + "'s keyTemplate prefab's UI.Button must contain a UI.Text");
+                }
+            }
+
+            if (_specialKeyTemplate == null)
+            {
+                _specialKeyTemplate = _keyTemplate;
+            }
+
             Vector2 areaPivot = Vector2.one * 0.5f;
             Vector2 keyPivot = Vector2.one * 0.5f;
-            
+
             for (int s = 0; s < layout.keysets.Length; s++)
             {
                 // Keyset
@@ -67,7 +124,7 @@ namespace VRTK
                     foreach (RKey rKey in rKeyArea.keys)
                     {
                         // Key
-                        GameObject uiKey = new GameObject("KeyboardKey", typeof(RectTransform));
+                        GameObject uiKey = Instantiate<GameObject>(_keyTemplate);
                         ProcessRuntimeObject(uiKey);
                         RectTransform keyTransform = uiKey.GetComponent<RectTransform>();
                         keyTransform.SetParent(rowTransform, false);

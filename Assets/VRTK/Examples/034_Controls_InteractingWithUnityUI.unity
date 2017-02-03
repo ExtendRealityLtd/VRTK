@@ -12607,6 +12607,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 354af4c3617714749a6f9daff624be04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  keyTemplate: {fileID: 1277833263711564, guid: ad3ed42acbdc3d1439f37088fe84859d,
+    type: 2}
+  specialKeyTemplate: {fileID: 0}
 --- !u!114 &1511388758
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14552,7 +14555,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 4, y: 1.483}
-  m_SizeDelta: {x: 500, y: 300}
+  m_SizeDelta: {x: 500, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1643306513
 MonoBehaviour:
@@ -14566,9 +14569,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   keyboardLayout: {fileID: 11400000, guid: 40a3ac2c651d4584c81d8f9bb6bbceb8, type: 2}
-  rowSpacing: 10
-  keySpacing: 10
-  areaSpacing: 25
+  rowSpacing: 2
+  keySpacing: 2
+  areaSpacing: 10
 --- !u!114 &1643306514
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14636,6 +14639,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 354af4c3617714749a6f9daff624be04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  keyTemplate: {fileID: 1277833263711564, guid: ad3ed42acbdc3d1439f37088fe84859d,
+    type: 2}
+  specialKeyTemplate: {fileID: 0}
 --- !u!1 &1658564814
 GameObject:
   m_ObjectHideFlags: 0
