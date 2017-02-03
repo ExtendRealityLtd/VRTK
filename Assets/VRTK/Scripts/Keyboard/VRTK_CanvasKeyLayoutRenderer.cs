@@ -31,6 +31,10 @@ namespace VRTK
             Rect containerRect = gameObject.GetComponent<RectTransform>().rect;
 
             RKeyLayout layout = CalculateRenderableKeyLayout(containerRect.size);
+            if ( layout == null )
+            {
+                return;
+            }
             
             Vector2 areaPivot = Vector2.one * 0.5f;
             Vector2 keyPivot = Vector2.one * 0.5f;

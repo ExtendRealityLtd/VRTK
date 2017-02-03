@@ -185,7 +185,7 @@ namespace VRTK
                 this.rKeyArea.keys = keys.ToArray();
             }
         }
-        
+
         /// <summary>
         /// A high-level builder meta class exposing KeyboardLayout.Row instances
         /// </summary>
