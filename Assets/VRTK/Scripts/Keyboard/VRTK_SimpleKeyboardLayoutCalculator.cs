@@ -15,6 +15,12 @@ namespace VRTK
     /// 
     /// Special key weights can be applied to make some keys span multiple columns of the grid.
     /// </remarks>
+    [VRTK_KeyLayoutCalculator(name = "Simple Keyboard Layout", helpList = new string[]
+    {
+        "Uses a KeyboardLayout",
+        "Keys are evenly sized",
+        "Split (left/right) keyboard"
+    })]
     public class VRTK_SimpleKeyboardLayoutCalculator : VRTK_SimpleKeypadLayoutCalculator
     {
         [Tooltip("Size of the space between the two halves of the keyboard")]

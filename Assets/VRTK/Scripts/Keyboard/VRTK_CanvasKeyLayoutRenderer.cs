@@ -15,6 +15,7 @@ namespace VRTK
     /// A key layout calculator component is required on the same gameobject as the key layout renderer.
     /// </remarks>
     [ExecuteInEditMode]
+    [VRTK_KeyLayoutRenderer(name = "Canvas Renderer", help = "Renders to a UI.Canvas")]
     public class VRTK_CanvasKeyLayoutRenderer : VRTK_BaseKeyLayoutRenderer
     {
         /// <summary>

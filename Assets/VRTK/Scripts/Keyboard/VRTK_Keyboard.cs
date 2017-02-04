@@ -22,9 +22,6 @@ namespace VRTK
     /// displaying the keyboard when needed and may position the keyboard relative to a InputField's canvas
     /// or the player.
     /// </remarks>
-    /// TODO: Give VRTK_Keyboard an editor
-    ///       - Next to fixedInputField add some text ("All keyboard input passed to InputField", "Keyboard available for use by keyboard actors")
-    ///       - Add a selector interface to select a key renderer and key layout calculator
     public class VRTK_Keyboard : MonoBehaviour
     {
         [Tooltip("A UI.InputField to send all keyboard info to")]

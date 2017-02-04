@@ -12556,8 +12556,8 @@ GameObject:
   - component: {fileID: 1511388759}
   - component: {fileID: 1511388758}
   - component: {fileID: 1511388761}
-  - component: {fileID: 1511388757}
   - component: {fileID: 1511388756}
+  - component: {fileID: 1511388757}
   m_Layer: 0
   m_Name: AlphanumericKeypad
   m_TagString: Untagged
@@ -14544,8 +14544,8 @@ GameObject:
   - component: {fileID: 1643306515}
   - component: {fileID: 1643306514}
   - component: {fileID: 1643306518}
-  - component: {fileID: 1643306517}
   - component: {fileID: 1643306513}
+  - component: {fileID: 1643306517}
   m_Layer: 0
   m_Name: KeyboardCanvas
   m_TagString: Untagged
