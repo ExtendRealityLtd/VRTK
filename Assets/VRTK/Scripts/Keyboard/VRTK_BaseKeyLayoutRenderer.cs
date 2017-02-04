@@ -2,7 +2,9 @@
 namespace VRTK
 {
     using UnityEngine;
+    using UnityEngine.Events;
     using RKeyLayout = VRTK_RenderableKeyLayout;
+    using RKey = VRTK_RenderableKeyLayout.Key;
 
     /// <summary>
     /// This abstract class is the base class for key layout renderers used to render functional keyboard to a GameObject
@@ -12,12 +14,18 @@ namespace VRTK
     /// 
     /// As this is an abstract class, it cannot be applied directly to a game object and performs no logic.
     /// </remarks>
+    [RequireComponent(typeof(VRTK_Keyboard))]
     public abstract class VRTK_BaseKeyLayoutRenderer : MonoBehaviour
     {
+        protected VRTK_Keyboard keyboard;
         protected int currentKeyset = 0;
+        protected int keysetCount = 0;
+        protected bool isEnterEnabled = true;
 
         protected virtual void Start()
         {
+            keyboard = GetComponent<VRTK_Keyboard>();
+
             if (GetComponent<VRTK_BaseKeyLayoutCalculator>() == null)
             {
                 Debug.LogError(GetType().Name + " in " + name + " requires a Key Layout Calculator on the same object.");
@@ -85,9 +93,52 @@ namespace VRTK
         }
 
         /// <summary>
+        /// Return a UnityAction that can be used as a listener to handle keypresses for a renderable key
+        /// </summary>
+        /// <param name="key">The RenderableKeyLayout.Key to handle a keypress for</param>
+        /// <returns>A UnityAction to use in listeners</returns>
+        protected UnityAction GetKeypressHandler(RKey key)
+        {
+            return new UnityAction(() =>
+            {
+                keyboard.HandleKeypress(key);
+            });
+        }
+
+        /// <summary>
         /// The SetupKeyboardUI method should reset the canvas's children and create
         /// the game objects that make up a rendered keyboard.
         /// </summary>
         public abstract void SetupKeyboardUI();
+
+        /// <summary>
+        /// Changes the currently active keyset
+        /// </summary>
+        /// <param name="keyset">The index of the keyset to switch to</param>
+        public void SetKeyset(int keyset)
+        {
+            if (keysetCount == 0)
+            {
+                Debug.LogError("SetKeyset called on " + name + " before keysets have been rendered");
+                return;
+            }
+
+            if (keyset >= keysetCount)
+            {
+                Debug.LogWarning(name + " does not have a keyset with the index " + keyset);
+                return;
+            }
+
+            currentKeyset = keyset;
+        }
+
+        /// <summary>
+        /// Sets whether enter keys should be enabled or disabled/replaced with a done button.
+        /// </summary>
+        /// <param name="enterEnabled">Is the input field multiline?</param>
+        public void SetEnterEnabled(bool enterEnabled)
+        {
+            isEnterEnabled = enterEnabled;
+        }
     }
 }

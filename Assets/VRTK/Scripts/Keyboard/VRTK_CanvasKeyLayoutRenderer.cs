@@ -3,6 +3,7 @@ namespace VRTK
 {
     using UnityEngine;
     using UnityEngine.UI;
+    using UnityEngine.Events;
     using RKeyLayout = VRTK_RenderableKeyLayout;
     using RKeyset = VRTK_RenderableKeyLayout.Keyset;
     using RKeyArea = VRTK_RenderableKeyLayout.KeyArea;
@@ -133,10 +134,12 @@ namespace VRTK
                         ApplyRectLayoutToRectTransform(rKey.rect, keyTransform, rKeyArea.rect.size);
 
                         Button uiKeyButton = uiKey.GetComponentInChildren<Button>();
-                        if ( uiKeyButton != null )
+                        if (uiKeyButton != null)
                         {
+                            uiKeyButton.onClick.AddListener(GetKeypressHandler(rKey));
+
                             Text uiKeyText = uiKeyButton.GetComponentInChildren<Text>();
-                            if ( uiKeyText != null )
+                            if (uiKeyText != null)
                             {
                                 uiKeyText.text = rKey.label;
                             }
