@@ -601,7 +601,7 @@ MonoBehaviour:
     - keys:
       - character: 49
         type: 1
-        keyset: 2
+        keyset: 0
         subkeys: []
         weight: 1
       - character: 123
@@ -658,7 +658,7 @@ MonoBehaviour:
     - keys:
       - character: 32
         type: 1
-        keyset: 0
+        keyset: 1
         subkeys: []
         weight: 1
       - character: 47
@@ -713,7 +713,7 @@ MonoBehaviour:
         weight: 1
       - character: 32
         type: 1
-        keyset: 0
+        keyset: 1
         subkeys: []
         weight: 1
       splitIndex: 6

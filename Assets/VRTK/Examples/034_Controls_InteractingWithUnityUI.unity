@@ -12611,6 +12611,18 @@ MonoBehaviour:
   keyTemplate: {fileID: 1277833263711564, guid: ad3ed42acbdc3d1439f37088fe84859d,
     type: 2}
   specialKeyTemplate: {fileID: 0}
+  modifierKeyTemplate: {fileID: 1535019424738808, guid: fb5ff3089b70c5b488305749d0155167,
+    type: 2}
+  keysetModifierImages:
+  - inKeyset: -1
+    keyset: 2
+    sourceImage: {fileID: 21300000, guid: 9855604e6dfc5cc4cbf84ab8e26f8b38, type: 3}
+  - inKeyset: 2
+    keyset: 0
+    sourceImage: {fileID: 21300000, guid: fb19db3d395020849bb2e62f2c758458, type: 3}
+  - inKeyset: -1
+    keyset: -1
+    sourceImage: {fileID: 21300000, guid: 32376348e7c373c46831b8f8969f795b, type: 3}
 --- !u!114 &1511388758
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14657,6 +14669,18 @@ MonoBehaviour:
     type: 2}
   specialKeyTemplate: {fileID: 1395222472286046, guid: 8c7c9a34ee59ee2498957fbd97dc2317,
     type: 2}
+  modifierKeyTemplate: {fileID: 1277465563066526, guid: 8fa456e9bead73d4e95a918786212c5e,
+    type: 2}
+  keysetModifierImages:
+  - inKeyset: -1
+    keyset: 2
+    sourceImage: {fileID: 21300000, guid: 230cfe419778c0c41ba2bac3ace04336, type: 3}
+  - inKeyset: 2
+    keyset: 0
+    sourceImage: {fileID: 21300000, guid: 230cfe419778c0c41ba2bac3ace04336, type: 3}
+  - inKeyset: -1
+    keyset: -1
+    sourceImage: {fileID: 21300000, guid: 32376348e7c373c46831b8f8969f795b, type: 3}
 --- !u!114 &1643306518
 MonoBehaviour:
   m_ObjectHideFlags: 0
