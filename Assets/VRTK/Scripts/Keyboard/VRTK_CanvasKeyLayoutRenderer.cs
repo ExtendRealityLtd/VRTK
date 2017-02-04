@@ -93,6 +93,18 @@ namespace VRTK
             {
                 _specialKeyTemplate = _keyTemplate;
             }
+            else
+            {
+                Button keyTemplateButton = _specialKeyTemplate.GetComponentInChildren<Button>();
+                if (keyTemplateButton == null)
+                {
+                    Debug.LogError("specialKeyTemplate prefab in " + name + " must contain a UI.Button");
+                }
+                else if (keyTemplateButton.GetComponentInChildren<Text>() == null)
+                {
+                    Debug.LogError(name + "'s specialKeyTemplate prefab's UI.Button must contain a UI.Text");
+                }
+            }
 
             Vector2 areaPivot = Vector2.one * 0.5f;
             Vector2 keyPivot = Vector2.one * 0.5f;
@@ -125,7 +137,8 @@ namespace VRTK
                     foreach (RKey rKey in rKeyArea.keys)
                     {
                         // Key
-                        GameObject uiKey = Instantiate<GameObject>(_keyTemplate);
+                        GameObject template = GetTemplateForKey(rKey);
+                        GameObject uiKey = Instantiate<GameObject>(template);
                         uiKey.name = rKey.name;
                         ProcessRuntimeObject(uiKey);
                         RectTransform keyTransform = uiKey.GetComponent<RectTransform>();
@@ -147,6 +160,21 @@ namespace VRTK
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Return the most specific key template for a renderable key
+        /// </summary>
+        /// <param name="key">The renderable key</param>
+        /// <returns>The template to use</returns>
+        protected GameObject GetTemplateForKey(RKey key)
+        {
+            if ( key.isSpecial )
+            {
+                return _specialKeyTemplate;
+            }
+
+            return _keyTemplate;
         }
 
         /// <summary>

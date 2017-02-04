@@ -14655,7 +14655,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   keyTemplate: {fileID: 1277833263711564, guid: ad3ed42acbdc3d1439f37088fe84859d,
     type: 2}
-  specialKeyTemplate: {fileID: 0}
+  specialKeyTemplate: {fileID: 1395222472286046, guid: 8c7c9a34ee59ee2498957fbd97dc2317,
+    type: 2}
 --- !u!114 &1643306518
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -114,6 +114,11 @@ namespace VRTK
             /// </summary>
             public int keyset;
 
+            public bool isSpecial
+            {
+                get { return type != Type.Character; }
+            }
+
             public override string ToString()
             {
                 return VRTK_DebugHelpers.ObjectDebugString("Key", new string[]
