@@ -312,6 +312,8 @@ namespace VRTK
                 switch(raw.type)
                 {
                     case KeyboardLayout.Keytype.Character:
+                        rKey.type = RKey.Type.Character;
+                        rKey.character = raw.character;
                         rKey.label = rKey.name = raw.character.ToString();
                         if ( raw.character == ' ' )
                         {
@@ -319,13 +321,17 @@ namespace VRTK
                         }
                         break;
                     case KeyboardLayout.Keytype.KeysetModifier:
+                        rKey.type = RKey.Type.KeysetModifier;
+                        rKey.keyset = raw.keyset;
                         rKey.name = "KeysetModifier";
                         rKey.label = ""; // We do not have enough information to set this now
                         break;
                     case KeyboardLayout.Keytype.Backspace:
+                        rKey.type = RKey.Type.Backspace;
                         rKey.label = rKey.name = "Backspace";
                         break;
                     case KeyboardLayout.Keytype.Enter:
+                        rKey.type = RKey.Type.Enter;
                         rKey.label = rKey.name = "Enter";
                         break;
                 }

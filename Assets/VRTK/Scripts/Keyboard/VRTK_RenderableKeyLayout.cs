@@ -73,6 +73,23 @@ namespace VRTK
         public class Key
         {
             /// <summary>
+            /// Keyboard key type
+            /// </summary>
+            /// <param name="Character">A key with character that should be typed.</param>
+            /// <param name="KeysetModifier">A key that switches keysets.</param>
+            /// <param name="Backspace">A backspace/delete key.</param>
+            /// <param name="Enter">An enter/return key.</param>
+            /// <param name="Done">A done key.</param>
+            public enum Type
+            {
+                Character,
+                KeysetModifier,
+                Backspace,
+                Enter,
+                Done
+            }
+
+            /// <summary>
             /// The preferred GameObject name for this key
             /// </summary>
             public string name;
@@ -84,6 +101,18 @@ namespace VRTK
             /// The rect this key is placed in
             /// </summary>
             public Rect rect;
+            /// <summary>
+            /// The type of this key
+            /// </summary>
+            public Type type;
+            /// <summary>
+            /// The character to type (for type = Character)
+            /// </summary>
+            public char character;
+            /// <summary>
+            /// The keyset to switch to (for type = KeysetModifier)
+            /// </summary>
+            public int keyset;
 
             public override string ToString()
             {
