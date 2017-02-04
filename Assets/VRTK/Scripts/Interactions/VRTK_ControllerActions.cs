@@ -6,6 +6,8 @@ namespace VRTK
     using System.Collections.Generic;
     using Highlighters;
 
+    using Hands = SDK_BaseController.ControllerHand;
+
     [System.Serializable]
     public class VRTK_ControllerModelElementPaths
     {
@@ -63,6 +65,9 @@ namespace VRTK
     /// </example>
     public class VRTK_ControllerActions : MonoBehaviour
     {
+        [Tooltip("The hand of the controller to provide the helper methods for. If this is set to None the game object this script is attached to will be used.")]
+        public Hands trackedHand = Hands.None;
+
         [Tooltip("A collection of strings that determine the path to the controller model sub elements for identifying the model parts at runtime. If the paths are left empty they will default to the model element paths of the selected SDK Bridge.\n\n"
          + "* The available model sub elements are:\n\n"
          + " * `Body Model Path`: The overall shape of the controller.\n"
@@ -123,6 +128,18 @@ namespace VRTK
         }
 
         /// <summary>
+        /// The ControllerAlias property is useful for getting the script alias for the currently set trackedHand.
+        /// </summary>
+        /// <returns>Returns the current script alias GameObject for the currently set trackedHand.
+        public GameObject ControllerAlias 
+        {
+            get 
+            { 
+                return VRTK_DeviceFinder.GetScriptAliasByHand(trackedHand, gameObject); 
+            }
+        }
+
+        /// <summary>
         /// The IsControllerVisible method returns true if the controller is currently visible by whether the renderers on the controller are enabled.
         /// </summary>
         /// <returns>Is true if the controller model has the renderers that are attached to it are enabled.</returns>
@@ -146,7 +163,7 @@ namespace VRTK
             ToggleModelRenderers(modelContainer, state, grabbedChildObject);
 
             controllerVisible = state;
-            var controllerIndex = VRTK_DeviceFinder.GetControllerIndex(gameObject);
+            var controllerIndex = VRTK_DeviceFinder.GetControllerIndex(ControllerAlias);
             if (state)
             {
                 OnControllerModelVisible(SetActionEvent(controllerIndex));
@@ -367,7 +384,7 @@ namespace VRTK
             {
                 CancelHapticPulse();
                 var hapticPulseStrength = Mathf.Clamp(strength, 0f, 1f);
-                VRTK_SDK_Bridge.HapticPulseOnIndex(VRTK_DeviceFinder.GetControllerIndex(gameObject), hapticPulseStrength);
+                VRTK_SDK_Bridge.HapticPulseOnIndex(VRTK_DeviceFinder.GetControllerIndex(ControllerAlias), hapticPulseStrength);
             }
         }
 
@@ -395,14 +412,14 @@ namespace VRTK
         {
             highlighterOptions = new Dictionary<string, object>();
             highlighterOptions.Add("resetMainTexture", true);
-            VRTK_BaseHighlighter objectHighlighter = VRTK_BaseHighlighter.GetActiveHighlighter(gameObject);
+            VRTK_BaseHighlighter objectHighlighter = VRTK_BaseHighlighter.GetActiveHighlighter(ControllerAlias);
 
             if (objectHighlighter == null)
             {
                 objectHighlighter = gameObject.AddComponent<VRTK_MaterialColorSwapHighlighter>();
             }
 
-            var controllerHand = VRTK_DeviceFinder.GetControllerHand(gameObject);
+            var controllerHand = VRTK_DeviceFinder.GetControllerHand(ControllerAlias);
 
             objectHighlighter.Initialise(null, highlighterOptions);
             AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.ButtonOne, controllerHand)), objectHighlighter, elementHighlighterOverrides.buttonOne);
@@ -420,7 +437,7 @@ namespace VRTK
         {
             cachedElements = new Dictionary<string, Transform>();
 
-            var controllerHand = VRTK_DeviceFinder.GetControllerHand(gameObject);
+            var controllerHand = VRTK_DeviceFinder.GetControllerHand(ControllerAlias);
 
             if (modelElementPaths.bodyModelPath.Trim() == "")
             {
@@ -462,7 +479,7 @@ namespace VRTK
 
         protected virtual void OnEnable()
         {
-            modelContainer = (!modelContainer ? VRTK_DeviceFinder.GetModelAliasController(gameObject) : modelContainer);
+            modelContainer = (!modelContainer ? VRTK_DeviceFinder.GetModelAliasController(ControllerAlias) : modelContainer);
             StartCoroutine(WaitForModel());
         }
 
@@ -503,7 +520,7 @@ namespace VRTK
 
             while (duration > 0)
             {
-                VRTK_SDK_Bridge.HapticPulseOnIndex(VRTK_DeviceFinder.GetControllerIndex(gameObject), hapticPulseStrength);
+                VRTK_SDK_Bridge.HapticPulseOnIndex(VRTK_DeviceFinder.GetControllerIndex(ControllerAlias), hapticPulseStrength);
                 yield return new WaitForSeconds(pulseInterval);
                 duration -= pulseInterval;
             }
