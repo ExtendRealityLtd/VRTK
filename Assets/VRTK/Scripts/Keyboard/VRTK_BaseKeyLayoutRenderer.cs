@@ -89,6 +89,8 @@ namespace VRTK
                 return null;
             }
 
+            keysetCount = layout.keysets.Length;
+
             return layout;
         }
 
