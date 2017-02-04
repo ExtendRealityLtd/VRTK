@@ -24,11 +24,7 @@
             cachedPlayArea = GetSDKManagerPlayArea();
             if (cachedPlayArea == null)
             {
-                var ximmerseVRPlayArea = FindObjectOfType<PlayAreaRenderer>();
-                if (ximmerseVRPlayArea)
-                {
-                    cachedPlayArea = ximmerseVRPlayArea.transform;
-                }
+                cachedPlayArea = Ximmerse.VR.VRContext.main.transform;
             }
             return cachedPlayArea;
         }
@@ -55,7 +51,7 @@
         /// <returns>The thickness of the drawn border.</returns>
         public override float GetPlayAreaBorderThickness(GameObject playArea)
         {
-            var area = playArea.GetComponent<PlayAreaRenderer>();
+            var area = playArea.GetComponentInChildren<PlayAreaRenderer>();
             if (area)
             {
                 return area.borderThickness;

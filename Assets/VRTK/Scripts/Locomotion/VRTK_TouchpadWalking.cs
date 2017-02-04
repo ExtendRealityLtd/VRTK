@@ -2,6 +2,7 @@
 namespace VRTK
 {
     using UnityEngine;
+    using System;
 
     /// <summary>
     /// The ability to move the play area around the game world by sliding a finger over the touchpad is achieved using this script.
@@ -12,6 +13,7 @@ namespace VRTK
     /// <example>
     /// `VRTK/Examples/017_CameraRig_TouchpadWalking` has a collection of walls and slopes that can be traversed by the user with the touchpad. There is also an area that can only be traversed if the user is crouching.
     /// </example>
+    [Obsolete("`VRTK_TouchpadWalking` has been replaced with `VRTK_TouchpadControl`. This script will be removed in a future version of VRTK.")]
     public class VRTK_TouchpadWalking : MonoBehaviour
     {
         [Tooltip("If this is checked then the left controller touchpad will be enabled to move the play area.")]
