@@ -14,6 +14,7 @@
 | VR Simulator | Included |
 | SteamVR Unity Asset | [SteamVR Plugin] |
 | Oculus Utilities Unity Package | [Oculus Utilities] |
+| Ximmerse Unity SDK Package | [Ximmerse Unity SDK] |
 
 ## Documentation
 
@@ -97,6 +98,39 @@ if your query has already been answered.
   relevant Linked Objects.
 
 </details>
+</details>
+
+<details><summary>**Instructions for using the Ximmerse Unity SDK**</summary>
+
+ * Download the [Ximmerse Unity SDK] from the Ximmerse SDK Github page.
+ * Import the `XIM01-v2.0.1.unitypackage` into the project.
+ * Drag the `VRCameraRig` prefab from the Ximmerse Unity SDK into the scene.
+	>It is recommened to use "Floor Level" as the Tracking Origin Type, with `VRCameraRig` positon's set to `(0f,0f,0f)`.
+	
+	>You could also use "Eye Level" as the Tracking Origin Type. However, the positons of `VRCameraRig` is recommended to set to `(0f,1.675f,0f)` in this case. 
+	
+	> Please make sure SimplePicker.cs is NOT attached on gameobject "cobra02-L" and "cobra02-R". SimplePicker script is provided by Ximmerse SDK, while having the script on the profab may break VRTK grab functionality. 
+
+ * Change platform to Android.
+ 	>Currently Ximmerse 6DOF tracking is only supported on Android. 3DOF tracking is supported on both iOS and Android. We are getting MFI cert from Apple at the moment.  
+ 
+ * Check that `Virtual Reality Supported` is ticked in the
+ `Edit -> Project Settings -> Player` menu.
+ * Ensure that `Oculus` is added in the `Virtual Reality SDKs` list
+ in the `Edit -> Project Settings -> Player` menu.
+ * Make sure `VRTK_SDK_XIMMERSEVR` is defined in Scripting Define Symbols.
+ * Select the GameObject with the `VRTK_SDKManager` script attached
+ to it.
+ * Select `Ximmerse VR` for each of the SDK Choices.
+ * Config Linked Objects:
+ 	* Actual Boundaries = VRCameraRig
+ 	* Actual Headset = CenterEyeAnchor
+ 	* Actual Left Controller = LeftHandAnchor
+ 	* Actual Right Controller = RightHandAnchor
+ 	* Model Alias Left Controller = _VisibleObject (child of LeftHandAnchor)
+ 	* Model Right Left Controller = _VisibleObject (child of RightHandAnchor)
+
+</details>
 
 ## What's In The Box
 
@@ -121,8 +155,8 @@ A list of the examples can be viewed in [EXAMPLES.md] which includes
 an up to date list of examples showcasing the features of VRTK.
 
 The examples have all been built to work with the [SteamVR Plugin] by
-default, but they can be converted over to using the [Oculus Utilities]
-package by following the instructions for using the Oculus Utilities
+default, but they can be converted over to using the [Oculus Utilities] or [Ximmerse Unity SDK]
+by following the instructions for using the [Oculus Utilities] or [Ximmerse Unity SDK]
 package above.
 
 > *If the examples are not working on first load, click the `[VRTK]`
@@ -161,6 +195,7 @@ Code released under the [MIT License].
 [SteamVR Plugin]: https://www.assetstore.unity3d.com/en/#!/content/32647
 [SteamVR Plugin for Unity3d Github Repo]: https://github.com/ValveSoftware/openvr/tree/master/unity_package/Assets/SteamVR
 [Oculus Utilities]: https://developer3.oculus.com/downloads/game-engines/1.10.0/Oculus_Utilities_for_Unity_5/
+[Ximmerse Unity SDK]: https://github.com/Ximmerse/SDK/tree/master/Unity
 [MIT License]: https://github.com/thestonefox/SteamVR_Unity_Toolkit/blob/master/LICENSE
 [Contribution Document]: https://github.com/thestonefox/SteamVR_Unity_Toolkit/blob/master/CONTRIBUTING.md
 [Made With VRTK Document]: https://github.com/thestonefox/SteamVR_Unity_Toolkit/blob/master/MADEWITHVRTK.md
