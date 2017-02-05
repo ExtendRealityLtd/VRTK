@@ -16,233 +16,233 @@ MonoBehaviour:
     rows:
     - keys:
       - character: 49
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 50
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 51
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 52
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 53
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 54
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 55
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 56
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 57
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 48
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 45
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 0
-        type: 2
+        keyClass: 2
         keyset: 0
         subkeys: []
         weight: 1
       splitIndex: 6
     - keys:
       - character: 113
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 119
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 101
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 114
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 116
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 121
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 117
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 105
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 111
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 112
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       splitIndex: 5
     - keys:
       - character: 49
-        type: 1
+        keyClass: 0
         keyset: 2
         subkeys: []
         weight: 1
       - character: 97
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 115
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 100
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 102
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 103
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 104
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 106
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 107
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 108
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 0
-        type: 3
+        keyClass: 3
         keyset: 0
         subkeys: []
         weight: 2
       splitIndex: 6
     - keys:
       - character: 32
-        type: 1
+        keyClass: 1
         keyset: 1
         subkeys: []
         weight: 1
       - character: 46
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 122
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 120
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 99
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 118
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 98
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 110
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 109
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 63
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 46
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 32
-        type: 1
+        keyClass: 1
         keyset: 1
         subkeys: []
         weight: 1
@@ -251,233 +251,233 @@ MonoBehaviour:
     rows:
     - keys:
       - character: 33
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 64
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 35
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 36
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 37
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 94
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 38
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 42
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 40
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 41
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 95
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 0
-        type: 2
+        keyClass: 2
         keyset: 0
         subkeys: []
         weight: 1
       splitIndex: 6
     - keys:
       - character: 81
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 87
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 69
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 82
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 84
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 89
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 85
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 73
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 79
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 80
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       splitIndex: 5
     - keys:
       - character: 49
-        type: 1
+        keyClass: 0
         keyset: 2
         subkeys: []
         weight: 1
       - character: 65
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 83
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 68
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 70
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 71
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 72
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 74
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 75
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 76
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 0
-        type: 3
+        keyClass: 3
         keyset: 0
         subkeys: []
         weight: 2
       splitIndex: 6
     - keys:
       - character: 32
-        type: 1
+        keyClass: 1
         keyset: 0
         subkeys: []
         weight: 1
       - character: 39
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 90
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 88
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 67
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 86
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 66
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 78
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 77
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 58
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 59
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 32
-        type: 1
+        keyClass: 1
         keyset: 0
         subkeys: []
         weight: 1
@@ -486,233 +486,233 @@ MonoBehaviour:
     rows:
     - keys:
       - character: 33
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 64
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 35
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 36
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 37
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 94
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 38
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 42
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 40
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 41
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 61
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 0
-        type: 2
+        keyClass: 2
         keyset: 0
         subkeys: []
         weight: 1
       splitIndex: 6
     - keys:
       - character: 43
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 163
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 8364
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 36
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 39
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 34
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 126
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 124
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 35
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 92
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       splitIndex: 5
     - keys:
       - character: 49
-        type: 1
+        keyClass: 1
         keyset: 0
         subkeys: []
         weight: 1
       - character: 123
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 125
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 37
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 94
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 60
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 62
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 91
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 93
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 34
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 0
-        type: 3
+        keyClass: 3
         keyset: 0
         subkeys: []
         weight: 2
       splitIndex: 6
     - keys:
       - character: 32
-        type: 1
+        keyClass: 1
         keyset: 1
         subkeys: []
         weight: 1
       - character: 47
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 92
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 123
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 125
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 40
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 41
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 96
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 126
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 47
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 124
-        type: 0
+        keyClass: 0
         keyset: 0
         subkeys: []
         weight: 1
       - character: 32
-        type: 1
+        keyClass: 1
         keyset: 1
         subkeys: []
         weight: 1

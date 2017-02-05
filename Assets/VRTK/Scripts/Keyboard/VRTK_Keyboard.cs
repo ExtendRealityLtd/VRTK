@@ -24,6 +24,46 @@ namespace VRTK
     /// </remarks>
     public class VRTK_Keyboard : MonoBehaviour
     {
+        /// <summary>
+        /// Keyboard key type
+        /// </summary>
+        /// <param name="Character">A key with character that should be typed.</param>
+        /// <param name="KeysetModifier">A key that switches keysets.</param>
+        /// <param name="Backspace">A backspace/delete key.</param>
+        /// <param name="Enter">An enter/return key.</param>
+        /// <param name="Done">A done key.</param>
+        public enum KeyClass
+        {
+            Character,
+            KeysetModifier,
+            Backspace,
+            Enter,
+            Done
+        }
+
+        /// <summary>
+        /// The core interface defining metadata a key requirires for `VRTK_Keyboard` to
+        /// handle key presses for it.
+        /// </summary>
+        public interface IKey
+        {
+            /// <summary>
+            /// Get the class of this key
+            /// </summary>
+            /// <returns></returns>
+            KeyClass GetKeyClass();
+            /// <summary>
+            /// Get the character to type if key class is KeyClass.Character
+            /// </summary>
+            /// <returns>The character to type</returns>
+            char GetCharacter();
+            /// <summary>
+            /// Get the keyset to switch to if key class is KeyClass.Keyset
+            /// </summary>
+            /// <returns>The keyset to switch to</returns>
+            int GetKeyset();
+        }
+
         [Tooltip("A UI.InputField to send all keyboard info to")]
         public InputField fixedInputField;
 
@@ -54,7 +94,7 @@ namespace VRTK
             }
         }
 
-        public void HandleKeypress(RKey key)
+        public void HandleKeypress(IKey key)
         {
             if (input == null)
             {
@@ -63,30 +103,30 @@ namespace VRTK
             }
 
             Event evt;
-            switch (key.type)
+            switch (key.GetKeyClass())
             {
-                case RKey.Type.Character:
+                case KeyClass.Character:
                     evt = new Event();
                     evt.type = EventType.KeyUp;
                     evt.modifiers = EventModifiers.None;
-                    evt.character = key.character;
+                    evt.character = key.GetCharacter();
 
                     input.ProcessEvent(evt);
                     break;
-                case RKey.Type.KeysetModifier:
+                case KeyClass.KeysetModifier:
                     if (layoutRenderer != null)
                     {
-                        layoutRenderer.SetKeyset(key.keyset);
+                        layoutRenderer.SetKeyset(key.GetKeyset());
                     }
                     break;
-                case RKey.Type.Backspace:
+                case KeyClass.Backspace:
                     evt = new Event();
                     evt.modifiers = EventModifiers.None;
                     evt.keyCode = KeyCode.Backspace;
 
                     input.ProcessEvent(evt);
                     break;
-                case RKey.Type.Enter:
+                case KeyClass.Enter:
                     if (input.multiLine)
                     {
                         evt = new Event();
@@ -101,7 +141,7 @@ namespace VRTK
                         Debug.LogWarning("Enter pressed on " + name + " but input field " + input.name + " is single line");
                     }
                     break;
-                case RKey.Type.Done:
+                case KeyClass.Done:
                     // TODO: Done signals should be sent to a KeyboardActor if one is attached
                     //       or some way of submitting an input field using input.DeactivateInputField(); should be done
                     break;

@@ -2,6 +2,9 @@
 namespace VRTK
 {
     using UnityEngine;
+    using KeyClass = VRTK_Keyboard.KeyClass;
+    using IKey = VRTK_Keyboard.IKey;
+    using System;
 
     /// <summary>
     /// A meta keyboard layout with calculated key rectangles
@@ -70,25 +73,8 @@ namespace VRTK
         /// <summary>
         /// A renderable key
         /// </summary>
-        public class Key
+        public class Key : IKey
         {
-            /// <summary>
-            /// Keyboard key type
-            /// </summary>
-            /// <param name="Character">A key with character that should be typed.</param>
-            /// <param name="KeysetModifier">A key that switches keysets.</param>
-            /// <param name="Backspace">A backspace/delete key.</param>
-            /// <param name="Enter">An enter/return key.</param>
-            /// <param name="Done">A done key.</param>
-            public enum Type
-            {
-                Character,
-                KeysetModifier,
-                Backspace,
-                Enter,
-                Done
-            }
-
             /// <summary>
             /// The preferred GameObject name for this key
             /// </summary>
@@ -102,21 +88,21 @@ namespace VRTK
             /// </summary>
             public Rect rect;
             /// <summary>
-            /// The type of this key
+            /// The class of this key
             /// </summary>
-            public Type type;
+            public KeyClass keyClass;
             /// <summary>
-            /// The character to type (for type = Character)
+            /// The character to type (for keyClass = Character)
             /// </summary>
             public char character;
             /// <summary>
-            /// The keyset to switch to (for type = KeysetModifier)
+            /// The keyset to switch to (for keyClass = KeysetModifier)
             /// </summary>
             public int keyset;
 
             public bool isSpecial
             {
-                get { return type != Type.Character; }
+                get { return keyClass != KeyClass.Character; }
             }
 
             public override string ToString()
@@ -125,6 +111,21 @@ namespace VRTK
                 {
                     VRTK_DebugHelpers.PropertyDebugString("rect", rect),
                 });
+            }
+
+            public KeyClass GetKeyClass()
+            {
+                return keyClass;
+            }
+
+            public char GetCharacter()
+            {
+                return character;
+            }
+
+            public int GetKeyset()
+            {
+                return keyset;
             }
         }
 

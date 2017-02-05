@@ -3,6 +3,8 @@ namespace VRTK
 {
     using UnityEngine;
     using System;
+    using KeyClass = VRTK_Keyboard.KeyClass;
+    using IKey = VRTK_Keyboard.IKey;
 
     /// <summary>
     /// The Keyboard Layout script defines a creatable scriptable object defining the keys present on a keyboard rendered by a Keyboard Renderer.
@@ -37,22 +39,7 @@ namespace VRTK
             public Key[] keys;
             public int splitIndex;
         }
-
-        /// <summary>
-        /// Keyboard key type
-        /// </summary>
-        /// <param name="Character">A key with character that should be typed.</param>
-        /// <param name="KeysetModifier">A key that switches keysets.</param>
-        /// <param name="Backspace">A backspace/delete key.</param>
-        /// <param name="Enter">An enter/return key.</param>
-        public enum Keytype
-        {
-            Character,
-            KeysetModifier,
-            Backspace,
-            Enter
-        }
-
+        
         [Serializable]
         public abstract class BaseKey
         {
@@ -60,18 +47,46 @@ namespace VRTK
         }
 
         [Serializable]
-        public class Key : BaseKey
+        public class Key : BaseKey, IKey
         {
-            public Keytype type;
+            public KeyClass keyClass;
             public int keyset;
             public Subkey[] subkeys;
             public int weight = 1;
+
+            public KeyClass GetKeyClass()
+            {
+                return keyClass;
+            }
+
+            public char GetCharacter()
+            {
+                return character;
+            }
+
+            public int GetKeyset()
+            {
+                return keyset;
+            }
         }
 
         [Serializable]
-        public class Subkey : BaseKey
+        public class Subkey : BaseKey, IKey
         {
+            public KeyClass GetKeyClass()
+            {
+                return KeyClass.Character;
+            }
 
+            public char GetCharacter()
+            {
+                return character;
+            }
+
+            public int GetKeyset()
+            {
+                throw new NotImplementedException();
+            }
         }
 
         public Keyset[] keysets = new Keyset[1];

@@ -3,6 +3,7 @@
     using UnityEngine;
     using UnityEditor;
     using System;
+    using KeyClass = VRTK_Keyboard.KeyClass;
 
     [CustomEditor(typeof(VRTK_KeyboardLayout))]
     public class VRTK_KeyboardLayoutEditor : Editor
@@ -143,20 +144,21 @@
                         }
 
                         SerializedProperty key = keys.GetArrayElementAtIndex(k);
-                        SerializedProperty keytype = key.FindPropertyRelative("type");
+                        SerializedProperty keyClass = key.FindPropertyRelative("keyClass");
+                        
                         string label = "";
-                        switch ((VRTK_KeyboardLayout.Keytype)keytype.intValue)
+                        switch ((KeyClass)keyClass.intValue)
                         {
-                            case VRTK_KeyboardLayout.Keytype.Character:
+                            case KeyClass.Character:
                                 label = char.ConvertFromUtf32(key.FindPropertyRelative("character").intValue);
                                 break;
-                            case VRTK_KeyboardLayout.Keytype.KeysetModifier:
+                            case KeyClass.KeysetModifier:
                                 label = "#" + key.FindPropertyRelative("keyset").intValue.ToString();
                                 break;
-                            case VRTK_KeyboardLayout.Keytype.Backspace:
+                            case KeyClass.Backspace:
                                 label = "Backspace";
                                 break;
-                            case VRTK_KeyboardLayout.Keytype.Enter:
+                            case KeyClass.Enter:
                                 label = "⏎";
                                 break;
                         }
@@ -178,15 +180,15 @@
                 SerializedProperty keys = rows.GetArrayElementAtIndex(selectedRow ?? -1)
                         .FindPropertyRelative("keys");
                 SerializedProperty key = keys.GetArrayElementAtIndex(selectedKey ?? -1);
-                SerializedProperty keyType = key.FindPropertyRelative("type");
+                SerializedProperty keyClass = key.FindPropertyRelative("keyClass");
 
                 EditorGUILayout.BeginVertical("Box");
 
-                EditorGUILayout.PropertyField(keyType);
+                EditorGUILayout.PropertyField(keyClass);
 
-                switch ((VRTK_KeyboardLayout.Keytype)keyType.intValue)
+                switch ((KeyClass)keyClass.intValue)
                 {
-                    case VRTK_KeyboardLayout.Keytype.Character:
+                    case KeyClass.Character:
                         EditorGUILayout.PropertyField(key.FindPropertyRelative("character"));
 
                         GUILayout.Label("Subkeys");
@@ -208,7 +210,7 @@
                         GUILayout.FlexibleSpace();
                         EditorGUILayout.EndHorizontal();
                         break;
-                    case VRTK_KeyboardLayout.Keytype.KeysetModifier:
+                    case KeyClass.KeysetModifier:
                         SerializedProperty keyset = key.FindPropertyRelative("keyset");
                         string[] keysetNames = new string[keysets.arraySize];
                         for (int i = 0; i < keysets.arraySize; i++)

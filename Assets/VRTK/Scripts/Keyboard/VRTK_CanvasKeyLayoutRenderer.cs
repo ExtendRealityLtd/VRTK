@@ -5,6 +5,7 @@ namespace VRTK
     using UnityEngine.UI;
     using UnityEngine.Events;
     using System;
+    using KeyClass = VRTK_Keyboard.KeyClass;
     using RKeyLayout = VRTK_RenderableKeyLayout;
     using RKeyset = VRTK_RenderableKeyLayout.Keyset;
     using RKeyArea = VRTK_RenderableKeyLayout.KeyArea;
@@ -233,7 +234,7 @@ namespace VRTK
         /// <returns>The template to use</returns>
         protected GameObject GetTemplateForKey(RKey key)
         {
-            if (key.type == RKey.Type.KeysetModifier)
+            if (key.keyClass == KeyClass.KeysetModifier)
             {
                 return _modifierKeyTemplate;
             }
@@ -248,7 +249,7 @@ namespace VRTK
 
         protected Sprite GetSpriteForKey(int keyset, RKey key)
         {
-            if (key.type == RKey.Type.KeysetModifier)
+            if (key.keyClass == KeyClass.KeysetModifier)
             {
                 foreach (KeysetModifierImage kmi in keysetModifierImages)
                 {

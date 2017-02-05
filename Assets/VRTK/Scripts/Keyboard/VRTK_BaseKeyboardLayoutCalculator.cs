@@ -3,6 +3,7 @@ namespace VRTK
 {
     using UnityEngine;
     using System.Collections.Generic;
+    using KeyClass = VRTK_Keyboard.KeyClass;
     using KeyboardLayout = VRTK_KeyboardLayout;
     using KLKeyset = VRTK_KeyboardLayout.Keyset;
     using KLRow = VRTK_KeyboardLayout.Row;
@@ -290,7 +291,7 @@ namespace VRTK
             {
                 get
                 {
-                    return raw.type != KeyboardLayout.Keytype.Character;
+                    return raw.keyClass != KeyClass.Character;
                 }
             }
 
@@ -309,29 +310,26 @@ namespace VRTK
             {
                 RKey rKey = new RKey();
 
-                switch(raw.type)
+                rKey.keyClass = raw.keyClass;
+                switch (raw.keyClass)
                 {
-                    case KeyboardLayout.Keytype.Character:
-                        rKey.type = RKey.Type.Character;
+                    case KeyClass.Character:
                         rKey.character = raw.character;
                         rKey.label = rKey.name = raw.character.ToString();
-                        if ( raw.character == ' ' )
+                        if (raw.character == ' ')
                         {
                             rKey.name = "Spacebar";
                         }
                         break;
-                    case KeyboardLayout.Keytype.KeysetModifier:
-                        rKey.type = RKey.Type.KeysetModifier;
+                    case KeyClass.KeysetModifier:
                         rKey.keyset = raw.keyset;
                         rKey.name = "KeysetModifier";
                         rKey.label = ""; // We do not have enough information to set this now
                         break;
-                    case KeyboardLayout.Keytype.Backspace:
-                        rKey.type = RKey.Type.Backspace;
+                    case KeyClass.Backspace:
                         rKey.label = rKey.name = "Backspace";
                         break;
-                    case KeyboardLayout.Keytype.Enter:
-                        rKey.type = RKey.Type.Enter;
+                    case KeyClass.Enter:
                         rKey.label = rKey.name = "Enter";
                         break;
                 }
