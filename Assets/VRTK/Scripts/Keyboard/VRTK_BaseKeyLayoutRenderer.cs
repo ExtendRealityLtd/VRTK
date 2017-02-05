@@ -3,8 +3,8 @@ namespace VRTK
 {
     using UnityEngine;
     using UnityEngine.Events;
+    using IKey = VRTK_Keyboard.IKey;
     using RKeyLayout = VRTK_RenderableKeyLayout;
-    using RKey = VRTK_RenderableKeyLayout.Key;
 
     /// <summary>
     /// This abstract class is the base class for key layout renderers used to render functional keyboard to a GameObject
@@ -99,7 +99,7 @@ namespace VRTK
         /// </summary>
         /// <param name="key">The RenderableKeyLayout.Key to handle a keypress for</param>
         /// <returns>A UnityAction to use in listeners</returns>
-        protected UnityAction GetKeypressHandler(RKey key)
+        protected UnityAction GetKeypressHandler(IKey key)
         {
             return new UnityAction(() =>
             {
