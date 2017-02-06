@@ -182,8 +182,8 @@ namespace VRTK.Highlighters
                     highlightModel.GetComponent<MeshFilter>().mesh.CombineMeshes(combine.ToArray(), true, false);
                 } else {
                     highlightModel.GetComponent<MeshFilter>().mesh = copyMesh.mesh;
-                    highlightModel.GetComponent<Renderer>().material = stencilOutline;
                 }
+                highlightModel.GetComponent<Renderer>().material = stencilOutline;
             }
             highlightModel.SetActive(false);
 
