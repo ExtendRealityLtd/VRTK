@@ -83,14 +83,20 @@ namespace VRTK
                 }
             }
 
+            var destinationCanvas = (eventData.pointerEnter ? eventData.pointerEnter.GetComponentInParent<Canvas>() : null);
             if (restrictToOriginalCanvas)
             {
-                var destinationCanvas = (eventData.pointerEnter ? eventData.pointerEnter.GetComponentInParent<Canvas>() : null);
                 if (destinationCanvas && destinationCanvas != startCanvas)
                 {
                     ResetElement();
                     validDragEnd = false;
                 }
+            }
+
+            if(destinationCanvas == null) {
+                //We've been dropped off of a canvas
+                ResetElement();
+                validDragEnd = false;
             }
 
             if (validDragEnd)
