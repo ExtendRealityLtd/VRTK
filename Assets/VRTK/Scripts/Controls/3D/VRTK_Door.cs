@@ -73,7 +73,7 @@ namespace VRTK
             }
             Vector3 firstDirection = Vector3.zero;
             Vector3 secondDirection = Vector3.zero;
-            Vector3 thirdDirection = getThirdDirection(Direction2Axis(finalDirection), secondaryDirection);
+            Vector3 thirdDirection = GetThirdDirection(Direction2Axis(finalDirection), secondaryDirection);
             bool invertGizmos = false;
 
             switch (finalDirection)
@@ -289,7 +289,7 @@ namespace VRTK
             }
             if (doorSnapForceCreated)
             {
-                doorSnapForce.force = getThirdDirection(doorHinge.axis, secondaryDirection) * (subDirection * -5f);
+                doorSnapForce.relativeForce = GetThirdDirection(doorHinge.axis, secondaryDirection) * (subDirection * (-5f * subDirection));
             }
 
             return true;
