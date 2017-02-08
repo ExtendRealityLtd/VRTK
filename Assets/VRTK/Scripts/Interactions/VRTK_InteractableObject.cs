@@ -715,7 +715,7 @@ namespace VRTK
         {
             if (gameObject.activeInHierarchy)
             {
-                transform.parent = previousParent;
+                transform.SetParent(previousParent);
                 forcedDropped = false;
             }
             if (interactableRigidbody)
@@ -962,7 +962,6 @@ namespace VRTK
                 if (touchingObject.activeInHierarchy || forceDisabled)
                 {
                     touchingObject.GetComponent<VRTK_InteractTouch>().ForceStopTouching();
-                    forcedDropped = true;
                 }
             }
         }
@@ -985,7 +984,6 @@ namespace VRTK
             {
                 usingObject.GetComponent<VRTK_InteractTouch>().ForceStopTouching();
                 usingObject.GetComponent<VRTK_InteractUse>().ForceStopUsing();
-                forcedDropped = true;
             }
         }
 
