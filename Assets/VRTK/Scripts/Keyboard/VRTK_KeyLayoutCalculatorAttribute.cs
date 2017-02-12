@@ -13,5 +13,6 @@
         public string name { get; set; }
         public string help { get; set; }
         public string[] helpList { get; set; }
+        public bool requireSource = true;
     }
 }

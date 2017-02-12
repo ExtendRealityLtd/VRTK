@@ -27,9 +27,6 @@ namespace VRTK
     /// </remarks>
     public abstract class VRTK_BaseKeyboardLayoutCalculator : VRTK_BaseKeyLayoutCalculator
     {
-        [Tooltip("Keyboard layout to render")]
-        public VRTK_KeyboardLayout keyboardLayout;
-
         /// <summary>
         /// A high-level builder for renderable keyboard layouts
         /// </summary>
@@ -353,12 +350,31 @@ namespace VRTK
         }
 
         /// <summary>
-        /// Return a Renderable Keyboard Layout builder for the keyboard layout attached to this component
+        /// Return a Renderable Keyboard Layout builder for a key layout from a key layout source attached to the same game object
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Builder instance</returns>
         protected RKeyboardBuilder BuildKeyboard()
         {
-            return new RKeyboardBuilder(keyboardLayout);
+            KeyboardLayout keyboardLayout = GetKeyLayout();
+            if (keyboardLayout != null)
+            {
+                return new RKeyboardBuilder(keyboardLayout);
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Return a `VRTK_KeyboardLayout` from a key layout source attached to the same game object
+        /// </summary>
+        /// <returns></returns>
+        public virtual KeyboardLayout GetKeyLayout()
+        {
+            VRTK_BaseKeyLayoutSource source = GetComponent<VRTK_BaseKeyLayoutSource>();
+            if (source != null)
+            {
+                return source.GetKeyLayout();
+            }
+            return null;
         }
 
         /// <summary>
@@ -368,13 +384,13 @@ namespace VRTK
         /// <returns>The generated renderable key layout</returns>
         public override RKeyLayout CalculateKeyLayout(Vector2 containerSize)
         {
-            if (keyboardLayout == null)
+            RKeyboardBuilder b = BuildKeyboard();
+
+            if (b == null)
             {
                 Debug.LogError("Keyboard Layout Calculator in " + name + " requires a Keyboard Layout");
                 return null;
             }
-
-            RKeyboardBuilder b = BuildKeyboard();
 
             foreach (BKeyset keyset in b.Keysets())
             {

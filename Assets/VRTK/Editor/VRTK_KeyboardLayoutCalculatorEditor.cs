@@ -13,7 +13,7 @@
         {
             VRTK_BaseKeyboardLayoutCalculator calculator = (VRTK_BaseKeyboardLayoutCalculator)target;
 
-            if ( calculator.keyboardLayout == null )
+            if ( calculator.GetKeyLayout() == null )
             {
                 EditorGUILayout.HelpBox("A Keyboard Layout is required", MessageType.Error);
             }

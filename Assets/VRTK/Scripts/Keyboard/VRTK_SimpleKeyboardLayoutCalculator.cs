@@ -15,7 +15,7 @@ namespace VRTK
     /// 
     /// Special key weights can be applied to make some keys span multiple columns of the grid.
     /// </remarks>
-    [VRTK_KeyLayoutCalculator(name = "Simple Keyboard Layout", helpList = new string[]
+    [VRTK_KeyLayoutCalculator(name = "Simple Keyboard Layout", requireSource = true, helpList = new string[]
     {
         "Uses a KeyboardLayout",
         "Keys are evenly sized",

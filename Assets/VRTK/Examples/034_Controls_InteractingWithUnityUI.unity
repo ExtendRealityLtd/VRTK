@@ -12556,8 +12556,9 @@ GameObject:
   - component: {fileID: 1511388759}
   - component: {fileID: 1511388758}
   - component: {fileID: 1511388761}
-  - component: {fileID: 1511388756}
   - component: {fileID: 1511388757}
+  - component: {fileID: 1511388756}
+  - component: {fileID: 1511388762}
   m_Layer: 0
   m_Name: AlphanumericKeypad
   m_TagString: Untagged
@@ -12594,7 +12595,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 801b1ece6c3f67a4c9775d1fbbb617c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  keyboardLayout: {fileID: 11400000, guid: 6ebbf07194af9aa47847f95de481ac02, type: 2}
   rowSpacing: 1
   keySpacing: 1
 --- !u!114 &1511388757
@@ -12691,6 +12691,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fixedInputField: {fileID: 0}
+--- !u!114 &1511388762
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1511388754}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8bbd4b40a1493f4591079bda48c616e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  keyboardLayout: {fileID: 11400000, guid: 6ebbf07194af9aa47847f95de481ac02, type: 2}
 --- !u!1 &1515484007
 GameObject:
   m_ObjectHideFlags: 0
@@ -14556,8 +14568,9 @@ GameObject:
   - component: {fileID: 1643306515}
   - component: {fileID: 1643306514}
   - component: {fileID: 1643306518}
-  - component: {fileID: 1643306513}
   - component: {fileID: 1643306517}
+  - component: {fileID: 1643306513}
+  - component: {fileID: 1643306519}
   m_Layer: 0
   m_Name: KeyboardCanvas
   m_TagString: Untagged
@@ -14594,7 +14607,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e761a95bd1ddbe41b468c70ec113dbc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  keyboardLayout: {fileID: 11400000, guid: 40a3ac2c651d4584c81d8f9bb6bbceb8, type: 2}
   rowSpacing: 2
   keySpacing: 2
   areaSpacing: 10
@@ -14693,6 +14705,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fixedInputField: {fileID: 0}
+--- !u!114 &1643306519
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1643306511}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8bbd4b40a1493f4591079bda48c616e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  keyboardLayout: {fileID: 11400000, guid: 40a3ac2c651d4584c81d8f9bb6bbceb8, type: 2}
 --- !u!1 &1658564814
 GameObject:
   m_ObjectHideFlags: 0
