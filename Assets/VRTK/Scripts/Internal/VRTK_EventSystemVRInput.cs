@@ -108,6 +108,7 @@
                 CheckPointerHoverClick(pointer, results);
                 if (!ValidElement(pointer.pointerEventData.pointerEnter))
                 {
+                    pointer.pointerEventData.pointerEnter = null;
                     return;
                 }
 
