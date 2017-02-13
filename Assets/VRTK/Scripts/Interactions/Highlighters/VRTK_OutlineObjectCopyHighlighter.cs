@@ -21,6 +21,8 @@ namespace VRTK.Highlighters
         public GameObject customOutlineModel;
         [Tooltip("A path to a GameObject to find at runtime, if the GameObject doesn't exist at edit time.")]
         public string customOutlineModelPath = "";
+        [Tooltip("If your mesh has multiple submeshes you wish to highlight, you'll want to check this otherwise only the first mesh will be highlighted")]
+        public bool enableSubmeshHighlight = false;
 
         private Material stencilOutline;
         private GameObject highlightModel;
@@ -163,7 +165,24 @@ namespace VRTK.Highlighters
             var highlightMesh = highlightModel.GetComponent<MeshFilter>();
             if (highlightMesh)
             {
-                highlightModel.GetComponent<MeshFilter>().mesh = copyMesh.mesh;
+                if (enableSubmeshHighlight)
+                {
+                    List<CombineInstance> combine = new List<CombineInstance>();
+
+                    for (int i = 0; i < copyMesh.mesh.subMeshCount; i++)
+                    {
+                        CombineInstance ci = new CombineInstance();
+                        ci.mesh = copyMesh.mesh;
+                        ci.subMeshIndex = i;
+                        ci.transform = copyMesh.transform.localToWorldMatrix;
+                        combine.Add(ci);
+                    }
+
+                    highlightModel.GetComponent<MeshFilter>().mesh = new Mesh();
+                    highlightModel.GetComponent<MeshFilter>().mesh.CombineMeshes(combine.ToArray(), true, false);
+                } else {
+                    highlightModel.GetComponent<MeshFilter>().mesh = copyMesh.mesh;
+                }
                 highlightModel.GetComponent<Renderer>().material = stencilOutline;
             }
             highlightModel.SetActive(false);
