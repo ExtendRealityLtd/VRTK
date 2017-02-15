@@ -90,6 +90,11 @@ namespace VRTK
         public VRTK_ControllerElementHighlighers elementHighlighterOverrides;
 
         /// <summary>
+        /// Emitted when the controller model is available / rendered / initialised for the first time.
+        /// </summary>
+        public event ControllerActionsEventHandler ControllerModelAvailable;
+
+        /// <summary>
         /// Emitted when the controller model is toggled to be visible.
         /// </summary>
         public event ControllerActionsEventHandler ControllerModelVisible;
@@ -105,6 +110,14 @@ namespace VRTK
         private Dictionary<string, Transform> cachedElements;
         private Dictionary<string, object> highlighterOptions;
         private Coroutine hapticLoop;
+
+        public virtual void OnControllerModelAvailable(ControllerActionsEventArgs e)
+        {
+            if (ControllerModelAvailable != null)
+            {
+                ControllerModelAvailable(this, e);
+            }
+        }
 
         public virtual void OnControllerModelVisible(ControllerActionsEventArgs e)
         {
@@ -474,6 +487,10 @@ namespace VRTK
             }
 
             InitaliseHighlighters();
+
+            // fire the event that the controllers are ready now
+            var controllerIndex = VRTK_DeviceFinder.GetControllerIndex(gameObject);
+            OnControllerModelAvailable(SetActionEvent(controllerIndex));
         }
 
         private void AddHighlighterToElement(Transform element, VRTK_BaseHighlighter parentHighlighter, VRTK_BaseHighlighter overrideHighlighter)
