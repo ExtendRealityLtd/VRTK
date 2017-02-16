@@ -4,6 +4,7 @@ This file provides documentation on how to use the included prefabs and scripts.
 
  * [Prefabs](#prefabs-vrtkprefabs)
  * [Pointers](#pointers-vrtkscriptspointers)
+  * [Pointer Renderers](#pointer-renderers-vrtkscriptspointerspointerrenderers)
  * [Locomotion](#locomotion-vrtkscriptslocomotion)
   * [Touchpad Control Actions](#touchpad-control-actions-vrtkscriptslocomotiontouchpadcontrolactions)
  * [Interactions](#interactions-vrtkscriptsinteractions)
@@ -516,9 +517,7 @@ To show / hide a UI panel, you must first pick up the VRTK_InteractableObject an
 A collection of scripts that provide the ability to create pointers and set destination markers in the scene.
 
  * [Destination Marker](#destination-marker-vrtk_destinationmarker)
- * [Base Pointer](#base-pointer-vrtk_basepointer)
- * [Simple Pointer](#simple-pointer-vrtk_simplepointer)
- * [Bezier Pointer](#bezier-pointer-vrtk_bezierpointer)
+ * [Pointer](#pointer-vrtk_pointer)
  * [Play Area Cursor](#play-area-cursor-vrtk_playareacursor)
 
 ---
@@ -596,48 +595,59 @@ The SetHeadsetPositionCompensation method determines whether the offset position
 
 ---
 
-## Base Pointer (VRTK_BasePointer)
+## Pointer (VRTK_Pointer)
  > extends [VRTK_DestinationMarker](#destination-marker-vrtk_destinationmarker)
 
 ### Overview
 
-This abstract class provides any game pointer the ability to know the state of the implemented pointer.
+The VRTK Pointer class forms the basis of being able to emit a pointer from a game object (e.g. controller).
+
+The concept of the pointer is it can be activated and deactivated and used to select elements utilising different button combinations if required.
+
+The Pointer requires a Pointer Renderer which is the visualisation of the pointer in the scene.
+
+A Pointer can also be used to extend the interactions of an interacting object such as a controller. This enables pointers to touch (and highlight), grab and use interactable objects.
+
+The Pointer script does not need to go on a controller game object, but if it's placed on another object then a controller must be provided to determine what activates the pointer.
 
 It extends the `VRTK_DestinationMarker` to allow for destination events to be emitted when the pointer cursor collides with objects.
 
-As this is an abstract class, it cannot be applied directly to a game object and performs no logic.
-
 ### Inspector Parameters
 
- * **Controller:** The controller that will be used to toggle the pointer. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.
- * **Pointer Origin Transform:** A custom transform to use as the origin of the pointer. If no pointer origin transform is provided then the transform the script is attached to is used.
- * **Pointer Material:** The material to use on the rendered version of the pointer. If no material is selected then the default `WorldPointer` material will be used.
- * **Hold Button To Activate:** If this is checked then the pointer beam will be activated on first press of the pointer alias button and will stay active until the pointer alias button is pressed again. The destination set event is emitted when the beam is deactivated on the second button press.
+ * **Pointer Renderer:** The specific renderer to use when the pointer is activated. The renderer also determines how the pointer reaches it's destination (e.g. straight line, bezier curve).
+ * **Activation Button:** The button used to activate/deactivate the pointer.
+ * **Hold Button To Activate:** If this is checked then the Activation Button needs to be continuously held down to keep the pointer active. If this is unchecked then the Activation Button works as a toggle, the first press/release enables the pointer and the second press/release disables the pointer.
+ * **Activation Delay:** The time in seconds to delay the pointer being able to be active again.
+ * **Selection Button:** The button used to execute the select action at the pointer's target position.
+ * **Select On Press:** If this is checked then the pointer selection action is executed when the Selection Button is pressed down. If this is unchecked then the selection action is executed when the Selection Button is released.
  * **Interact With Objects:** If this is checked then the pointer will be an extension of the controller and able to interact with Interactable Objects.
  * **Grab To Pointer Tip:** If `Interact With Objects` is checked and this is checked then when an object is grabbed with the pointer touching it, the object will attach to the pointer tip and not snap to the controller.
- * **Activate Delay:** The time in seconds to delay the pointer beam being able to be active again. Useful for preventing constant teleportation.
- * **Pointer Visibility:** Determines when the pointer beam should be displayed.
- * **Layers To Ignore:** The layers to ignore when raycasting.
-
-### Class Variables
-
- * `public enum pointerVisibilityStates` - States of Pointer Visibility.
-  * `On_When_Active` - Only shows the pointer beam when the Pointer button on the controller is pressed.
-  * `Always_On` - Ensures the pointer beam is always visible but pressing the Pointer button on the controller initiates the destination set event.
-  * `Always_Off` - Ensures the pointer beam is never visible but the destination point is still set and pressing the Pointer button on the controller still initiates the destination set event.
+ * **Controller:** The controller that will be used to toggle the pointer. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.
+ * **Custom Origin:** A custom transform to use as the origin of the pointer. If no pointer origin transform is provided then the transform the script is attached to is used.
 
 ### Class Methods
 
-#### IsActive/0
+#### PointerEnter/1
 
-  > `public virtual bool IsActive()`
+  > `public virtual void PointerEnter(RaycastHit givenHit)`
 
   * Parameters
-   * _none_
+   * `RaycastHit givenHit` - The valid collision.
   * Returns
-   * `bool` - Is true if the pointer is currently active.
+   * _none_
 
-The IsActive method is used to determine if the pointer currently active.
+The PointerEnter method emits a DestinationMarkerEnter event when the pointer enters a valid object.
+
+#### PointerExit/1
+
+  > `public virtual void PointerExit(RaycastHit givenHit)`
+
+  * Parameters
+   * `RaycastHit givenHit` - The previous valid collision.
+  * Returns
+   * _none_
+
+The PointerExit method emits a DestinationMarkerExit event when the pointer leaves a previously entered object.
 
 #### CanActivate/0
 
@@ -646,82 +656,42 @@ The IsActive method is used to determine if the pointer currently active.
   * Parameters
    * _none_
   * Returns
-   * `bool` - Is true if the pointer is able to be activated due to the activation delay timer being zero.
+   * `bool` - Returns true if the pointer can be activated.
 
-The CanActivate method checks to see if the pointer can be activated as long as the activation delay timer is zero.
+The CanActivate method is used to determine if the pointer has passed the activation time limit.
 
-#### ToggleBeam/1
+#### IsPointerActive/0
 
-  > `public virtual void ToggleBeam(bool state)`
+  > `public virtual bool IsPointerActive()`
 
   * Parameters
-   * `bool state` - The state of whether to enable or disable the beam.
+   * _none_
+  * Returns
+   * `bool` - Returns true if the pointer is currently active.
+
+The IsPointerActive method is used to determine if the pointer's current state is active or not.
+
+#### ResetActivationTimer/1
+
+  > `public virtual void ResetActivationTimer(bool forceZero = false)`
+
+  * Parameters
+   * `bool forceZero` - If this is true then the next activation time will be 0.
   * Returns
    * _none_
 
-The ToggleBeam method allows the pointer beam to be toggled on or off via code at runtime. If true is passed as the state then the beam is activated, if false then the beam is deactivated.
+The ResetActivationTimer method is used to reset the pointer activation timer to the next valid activation time.
 
----
+#### Toggle/1
 
-## Simple Pointer (VRTK_SimplePointer)
- > extends [VRTK_BasePointer](#base-pointer-vrtk_basepointer)
+  > `public virtual void Toggle(bool state)`
 
-### Overview
+  * Parameters
+   * `bool state` - If true the pointer will be enabled if possible, if false the pointer will be disabled if possible.
+  * Returns
+   * _none_
 
-The Simple Pointer emits a coloured beam from the end of the object it is attached to and simulates a laser beam.
-
-It can be useful for pointing to objects within a scene and it can also determine the object it is pointing at and the distance the object is from the controller the beam is being emitted from.
-
-The laser beam is activated by default by pressing the `Touchpad` on the linked controller. The event it is listening for is the `AliasPointer` events so the pointer toggle button can be set by changing the `Pointer Toggle` button on the `VRTK_ControllerEvents` script parameters.
-
-### Inspector Parameters
-
- * **Pointer Thickness:** The thickness and length of the beam can also be set on the script as well as the ability to toggle the sphere beam tip that is displayed at the end of the beam (to represent a cursor).
- * **Pointer Length:** The distance the beam will project before stopping.
- * **Show Pointer Tip:** Toggle whether the cursor is shown on the end of the pointer beam.
- * **Custom Pointer Cursor:** A custom Game Object can be applied here to use instead of the default sphere for the pointer cursor.
- * **Pointer Cursor Match Target Normal:** Rotate the pointer cursor to match the normal of the target surface (or the pointer direction if no target was hit).
- * **Pointer Cursor Rescaled Along Distance:** Rescale the pointer cursor proportionally to the distance from this game object (useful when used as a gaze pointer).
-
-### Example
-
-`VRTK/Examples/003_Controller_SimplePointer` shows the simple pointer in action and code examples of how the events are utilised and listened to can be viewed in the script `VRTK/Examples/Resources/Scripts/VRTK_ControllerPointerEvents_ListenerExample.cs`
-
----
-
-## Bezier Pointer (VRTK_BezierPointer)
- > extends [VRTK_BasePointer](#base-pointer-vrtk_basepointer)
-
-### Overview
-
-The Bezier Pointer emits a curved line (made out of game objects) from the end of the attached object to a point on a ground surface (at any height).
-
-It is more useful than the Simple Laser Pointer for traversing objects of various heights as the end point can be curved on top of objects that are not visible to the user.
-
-The laser beam is activated by default by pressing the `Touchpad` on the controller. The event it is listening for is the `AliasPointer` events so the pointer toggle button can be set by changing the `Pointer Toggle` button on the `VRTK_ControllerEvents` script parameters.
-
-> The bezier curve generation code is in another script located at `VRTK/Scripts/Internal/VRTK_CurveGenerator.cs` and was heavily inspired by the tutorial and code from [Catlike Coding](http://catlikecoding.com/unity/tutorials/curves-and-splines/).
-
-### Inspector Parameters
-
- * **Pointer Length:** The length of the projected forward pointer beam, this is basically the distance able to point from the origin position.
- * **Pointer Density:** The number of items to render in the beam bezier curve. A high number here will most likely have a negative impact of game performance due to large number of rendered objects.
- * **Collision Check Frequency:** The number of points along the bezier curve to check for an early beam collision. Useful if the bezier curve is appearing to clip through teleport locations. 0 won't make any checks and it will be capped at `Pointer Density`. The higher the number, the more CPU intensive the checks become.
- * **Beam Curve Offset:** The amount of height offset to apply to the projected beam to generate a smoother curve even when the beam is pointing straight.
- * **Beam Height Limit Angle:** The maximum angle in degrees of the origin before the beam curve height is restricted. A lower angle setting will prevent the beam being projected high into the sky and curving back down.
- * **Rescale Pointer Tracer:** Rescale each pointer tracer element according to the length of the Bezier curve.
- * **Show Pointer Cursor:** A cursor is displayed on the ground at the location the beam ends at, it is useful to see what height the beam end location is, however it can be turned off by toggling this.
- * **Pointer Cursor Radius:** The size of the ground pointer cursor. This number also affects the size of the objects in the bezier curve beam. The larger the radius, the larger the objects will be.
- * **Pointer Cursor Match Target Rotation:** The pointer cursor will be rotated to match the angle of the target surface if this is true, if it is false then the pointer cursor will always be horizontal.
- * **Custom Pointer Tracer:** A custom Game Object can be applied here to use instead of the default sphere for the beam tracer. The custom Game Object will match the rotation of the object attached to.
- * **Custom Pointer Cursor:** A custom Game Object can be applied here to use instead of the default flat cylinder for the pointer cursor.
- * **Valid Teleport Location Object:** A custom Game Object can be applied here to appear only if the teleport is allowed (its material will not be changed ).
-
-### Example
-
-`VRTK/Examples/009_Controller_BezierPointer` is used in conjunction with the Height Adjust Teleporter shows how it is possible to traverse different height objects using the curved pointer without needing to see the top of the object.
-
-`VRTK/Examples/036_Controller_CustomCompoundPointer' shows how to display an object (a teleport beam) only if the teleport location is valid, and can create an animated trail along the tracer curve.
+The Toggle method is used to enable or disable the pointer.
 
 ---
 
@@ -729,7 +699,7 @@ The laser beam is activated by default by pressing the `Touchpad` on the control
 
 ### Overview
 
-The Play Area Cursor is used in conjunction with a Base Pointer script and displays a representation of the play area where the pointer cursor hits.
+The Play Area Cursor is used in conjunction with a Pointer script and displays a representation of the play area where the pointer cursor hits.
 
 ### Inspector Parameters
 
@@ -806,9 +776,213 @@ The SetPlayAreaCursorTransform method is used to update the position of the play
 
 The ToggleState method enables or disables the visibility of the play area cursor.
 
+#### GetPlayAreaContainer/0
+
+  > `public virtual GameObject GetPlayAreaContainer()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `GameObject` - The GameObject that is the container of the play area cursor.
+
+The GetPlayAreaContainer method returns the created game object that holds the play area cursor representation.
+
+#### ToggleVisibility/1
+
+  > `public virtual void ToggleVisibility(bool state)`
+
+  * Parameters
+   * `bool state` - The state of the cursor visibility. True will show the renderers and false will hide the renderers.
+  * Returns
+   * _none_
+
+The ToggleVisibility method enables or disables the play area cursor renderers to allow the cursor to be seen or hidden.
+
 ### Example
 
 `VRTK/Examples/012_Controller_PointerWithAreaCollision` shows how a Bezier Pointer with the Play Area Cursor and Collision Detection enabled can be used to traverse a game area but not allow teleporting into areas where the walls or other objects would fall into the play area space enabling the user to enter walls.
+
+---
+
+# Pointer Renderers (VRTK/Scripts/Pointers/PointerRenderers)
+
+This directory contains scripts that are used to provide different renderers for the VRTK_Pointer.
+
+ * [Base Pointer Renderer](#base-pointer-renderer-vrtk_basepointerrenderer)
+ * [Straight Pointer Renderer](#straight-pointer-renderer-vrtk_straightpointerrenderer)
+ * [Bezier Pointer Renderer](#bezier-pointer-renderer-vrtk_bezierpointerrenderer)
+
+---
+
+## Base Pointer Renderer (VRTK_BasePointerRenderer)
+
+### Overview
+
+The Base Pointer Renderer script is an abstract class that handles the set up and operation of how a pointer renderer works.
+
+As this is an abstract class, it cannot be applied directly to a game object and performs no logic.
+
+### Inspector Parameters
+
+ * **Playarea Cursor:** An optional Play Area Cursor generator to add to the destination position of the pointer tip.
+ * **Layers To Ignore:** The layers for the pointer's raycasts to ignore.
+ * **Valid Collision Color:** The colour to change the pointer materials when the pointer collides with a valid object. Set to `Color.clear` to bypass changing material colour on valid collision.
+ * **Invalid Collision Color:** The colour to change the pointer materials when the pointer is not colliding with anything or with an invalid object. Set to `Color.clear` to bypass changing material colour on invalid collision.
+ * **Tracer Visibility:** Determines when the main tracer of the pointer renderer will be visible.
+ * **Cursor Visibility:** Determines when the cursor/tip of the pointer renderer will be visible.
+
+### Class Variables
+
+ * `public enum VisibilityStates` - States of Pointer Visibility.
+  * `On_When_Active` - Only shows the object when the pointer is active.
+  * `Always_On` - Ensures the object is always.
+  * `Always_Off` - Ensures the object beam is never visible.
+
+### Class Methods
+
+#### InitalizePointer/4
+
+  > `public virtual void InitalizePointer(VRTK_Pointer givenPointer, VRTK_PolicyList givenInvalidListPolicy, float givenNavMeshCheckDistance, bool givenHeadsetPositionCompensation)`
+
+  * Parameters
+   * `VRTK_Pointer givenPointer` - The VRTK_Pointer that is controlling the pointer renderer.
+   * `VRTK_PolicyList givenInvalidListPolicy` - The VRTK_PolicyList for managing valid and invalid pointer locations.
+   * `float givenNavMeshCheckDistance` - The given distance from a nav mesh that the pointer can be to be valid.
+   * `bool givenHeadsetPositionCompensation` - Determines whether the play area cursor will take the headset position within the play area into account when being displayed.
+  * Returns
+   * _none_
+
+The InitalizePointer method is used to set up the state of the pointer renderer.
+
+#### Toggle/2
+
+  > `public virtual void Toggle(bool pointerState, bool actualState)`
+
+  * Parameters
+   * `bool pointerState` - The activation state of the pointer.
+   * `bool actualState` - The actual state of the activation button press.
+  * Returns
+   * _none_
+
+The Toggle Method is used to enable or disable the pointer renderer.
+
+#### UpdateRenderer/0
+
+  > `public virtual void UpdateRenderer()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The UpdateRenderer method is used to run an Update routine on the pointer.
+
+#### GetDestinationHit/0
+
+  > `public virtual RaycastHit GetDestinationHit()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `RaycastHit` - The RaycastHit containing the information where the pointer is hitting.
+
+The GetDestinationHit method is used to get the RaycastHit of the pointer destination.
+
+#### ValidPlayArea/0
+
+  > `public virtual bool ValidPlayArea()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `bool` - Returns true if there is a valid play area and no collisions. Returns false if there is no valid play area or there is but with a collision detected.
+
+The ValidPlayArea method is used to determine if there is a valid play area and if it has had any collisions.
+
+---
+
+## Straight Pointer Renderer (VRTK_StraightPointerRenderer)
+ > extends [VRTK_BasePointerRenderer](#base-pointer-renderer-vrtk_basepointerrenderer)
+
+### Overview
+
+The Straight Pointer Renderer emits a coloured beam from the end of the object it is attached to and simulates a laser beam.
+
+It can be useful for pointing to objects within a scene and it can also determine the object it is pointing at and the distance the object is from the controller the beam is being emitted from.
+
+### Inspector Parameters
+
+ * **Maximum Length:** The maximum length the pointer tracer can reach.
+ * **Scale Factor:** The scale factor to scale the pointer tracer object by.
+ * **Cursor Scale Multiplier:** The scale multiplier to scale the pointer cursor object by in relation to the `Scale Factor`.
+ * **Cursor Match Target Rotation:** The cursor will be rotated to match the angle of the target surface if this is true, if it is false then the pointer cursor will always be horizontal.
+ * **Cursor Distance Rescale:** Rescale the cursor proportionally to the distance from the tracer origin.
+ * **Custom Tracer:** A custom game object to use as the appearance for the pointer tracer. If this is empty then a Box primitive will be created and used.
+ * **Custom Cursor:** A custom game object to use as the appearance for the pointer cursor. If this is empty then a Sphere primitive will be created and used.
+
+### Class Methods
+
+#### UpdateRenderer/0
+
+  > `public override void UpdateRenderer()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The UpdateRenderer method is used to run an Update routine on the pointer.
+
+### Example
+
+`VRTK/Examples/003_Controller_SimplePointer` shows the simple pointer in action and code examples of how the events are utilised and listened to can be viewed in the script `VRTK/Examples/Resources/Scripts/VRTK_ControllerPointerEvents_ListenerExample.cs`
+
+---
+
+## Bezier Pointer Renderer (VRTK_BezierPointerRenderer)
+ > extends [VRTK_BasePointerRenderer](#base-pointer-renderer-vrtk_basepointerrenderer)
+
+### Overview
+
+The Bezier Pointer Renderer emits a curved line (made out of game objects) from the end of the attached object to a point on a ground surface (at any height).
+
+It is more useful than the Simple Pointer Renderer for traversing objects of various heights as the end point can be curved on top of objects that are not visible to the user.
+
+> The bezier curve generation code is in another script located at `VRTK/Scripts/Internal/VRTK_CurveGenerator.cs` and was heavily inspired by the tutorial and code from [Catlike Coding](http://catlikecoding.com/unity/tutorials/curves-and-splines/).
+
+### Inspector Parameters
+
+ * **Maximum Length:** The maximum length of the projected forward beam.
+ * **Tracer Density:** The number of items to render in the bezier curve tracer beam. A high number here will most likely have a negative impact of game performance due to large number of rendered objects.
+ * **Cursor Radius:** The size of the ground cursor. This number also affects the size of the objects in the bezier curve tracer beam. The larger the radius, the larger the objects will be.
+ * **Height Limit Angle:** The maximum angle in degrees of the origin before the beam curve height is restricted. A lower angle setting will prevent the beam being projected high into the sky and curving back down.
+ * **Curve Offset:** The amount of height offset to apply to the projected beam to generate a smoother curve even when the beam is pointing straight.
+ * **Rescale Tracer:** Rescale each tracer element according to the length of the Bezier curve.
+ * **Cursor Match Target Rotation:** The cursor will be rotated to match the angle of the target surface if this is true, if it is false then the pointer cursor will always be horizontal.
+ * **Collision Check Frequency:** The number of points along the bezier curve to check for an early beam collision. Useful if the bezier curve is appearing to clip through teleport locations. 0 won't make any checks and it will be capped at `Pointer Density`. The higher the number, the more CPU intensive the checks become.
+ * **Custom Tracer:** A custom game object to use as the appearance for the pointer tracer. If this is empty then a collection of Sphere primitives will be created and used.
+ * **Custom Cursor:** A custom game object to use as the appearance for the pointer cursor. If this is empty then a Cylinder primitive will be created and used.
+ * **Valid Location Object:** A custom game object can be applied here to appear only if the location is valid.
+ * **Invalid Location Object:** A custom game object can be applied here to appear only if the location is invalid.
+
+### Class Methods
+
+#### UpdateRenderer/0
+
+  > `public override void UpdateRenderer()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The UpdateRenderer method is used to run an Update routine on the pointer.
+
+### Example
+
+`VRTK/Examples/009_Controller_BezierPointer` is used in conjunction with the Height Adjust Teleporter shows how it is possible to traverse different height objects using the curved pointer without needing to see the top of the object.
+
+`VRTK/Examples/036_Controller_CustomCompoundPointer' shows how to display an object (a teleport beam) only if the teleport location is valid, and can create an animated trail along the tracer curve.
 
 ---
 
@@ -822,8 +996,6 @@ A collection of scripts that provide varying methods of moving the user around t
  * [Teleport Disable On Headset Collision](#teleport-disable-on-headset-collision-vrtk_teleportdisableonheadsetcollision)
  * [Teleport Disable On Controller Obscured](#teleport-disable-on-controller-obscured-vrtk_teleportdisableoncontrollerobscured)
  * [Touchpad Control](#touchpad-control-vrtk_touchpadcontrol)
- * [Touchpad Walking](#touchpad-walking-vrtk_touchpadwalking)
- * [Touchpad Movement](#touchpad-movement-vrtk_touchpadmovement)
  * [Move In Place](#move-in-place-vrtk_moveinplace)
  * [Player Climb](#player-climb-vrtk_playerclimb)
  * [Room Extender](#room-extender-vrtk_roomextender)
@@ -1045,117 +1217,6 @@ Adding the `VRTK_TouchpadControl_UnityEvents` component to `VRTK_TouchpadControl
 ### Example
 
 `VRTK/Examples/017_CameraRig_TouchpadWalking` has a collection of walls and slopes that can be traversed by the user with the touchpad. There is also an area that can only be traversed if the user is crouching.
-
----
-
-## Touchpad Walking (VRTK_TouchpadWalking)
-
-### Overview
-
-The ability to move the play area around the game world by sliding a finger over the touchpad is achieved using this script.
-
-The Touchpad Walking script adds a rigidbody and a box collider to the user's position to prevent them from walking through other collidable game objects.
-
-### Inspector Parameters
-
- * **Left Controller:** If this is checked then the left controller touchpad will be enabled to move the play area.
- * **Right Controller:** If this is checked then the right controller touchpad will be enabled to move the play area.
- * **Max Walk Speed:** The maximum speed the play area will be moved when the touchpad is being touched at the extremes of the axis. If a lower part of the touchpad axis is touched (nearer the centre) then the walk speed is slower.
- * **Deceleration:** The speed in which the play area slows down to a complete stop when the user is no longer touching the touchpad. This deceleration effect can ease any motion sickness that may be suffered.
- * **Move On Button Press:** If a button is defined then movement will only occur when the specified button is being held down and the touchpad axis changes.
- * **Device For Direction:** The direction that will be moved in is the direction of this device.
- * **Speed Multiplier Button:** If the defined speed multiplier button is pressed then the current movement speed will be multiplied by the `Speed Multiplier` value.
- * **Speed Multiplier:** The amount to mmultiply the movement speed by if the `Speed Multiplier Button` is pressed.
-
-### Example
-
-`VRTK/Examples/017_CameraRig_TouchpadWalking` has a collection of walls and slopes that can be traversed by the user with the touchpad. There is also an area that can only be traversed if the user is crouching.
-
----
-
-## Touchpad Movement (VRTK_TouchpadMovement)
-
-### Overview
-
-Adds the ability to move and rotate the play area and the player by using the touchpad.
-
-The Touchpad Movement script requires VRTK_BodyPhysics script to be present in one of the scene GameObjects for collision detection.
-
-Vertical axis movement types include:
-- regular smooth sliding (walking)
-- warping, which instantly moves the player forward at a fixed distance
-
-Horizontal axis movement types include:
-- smooth sliding (strafing)
-- smooth rotation
-- snap rotation, which instantly rotates the player at a fixed angle
-- warping, which instantly moves the player sideways (instant strafing)
-
-Additionally it's possible to enable direction flip feature which allows the user to do an instant 180 degree turn by pressing the touchpad down.
-
-It's also possible to define a button to multiply any type of movement (speed, range, angle) when the set button is pressed. Values above one will give a boost effect
-and values below one will do the opposite. All movement values are public properties and can be set from other script at runtime.
-
-Different movement types can be split across the controllers by having one script per hand side and with the desired options.
-Warp and snap rotate options may provide more comfortable experience for some and blink effect can be used to soften the movement.
-Snap rotate and flip direction options can be useful with teleport scripts for seated experiences and for people using front facing camera setups(Oculus default, PSVR).
-
-### Inspector Parameters
-
- * **Left Controller:** If this is checked then the left controller touchpad will be enabled for the selected movement types.
- * **Right Controller:** If this is checked then the right controller touchpad will be enabled for the selected movement types.
- * **Move On Button Press:** If a button is defined then the selected movement will only be performed when the specified button is being held down and the touchpad axis changes.
- * **Movement Multiplier Button:** If the defined movement multiplier button is pressed then the movement will be affected by the axis multiplier value.
- * **Vertical Axis Movement:** Selects the main movement type to be performed when the vertical axis changes occur.
- * **Vertical Deadzone:** Dead zone for the vertical axis. High value recommended for warp movement.
- * **Vertical Multiplier:** Multiplier for the vertical axis movement when the multiplier button is pressed.
- * **Device For Direction:** The direction that will be moved in is the direction of this device.
- * **Flip Direction Enabled:** Enables a secondary action of a direction flip of 180 degrees when the touchpad is pulled downwards.
- * **Flip Deadzone:** Dead zone for the downwards pull. High value recommended.
- * **Flip Delay:** The delay before the next direction flip is allowed to happen.
- * **Flip Blink:** Enables blink on flip.
- * **Horizontal Axis Movement:** Selects the movement type to be performed when the horizontal axis changes occur.
- * **Horizontal Deadzone:** Dead zone for the horizontal axis. High value recommended for snap rotate and warp movement.
- * **Horizontal Multiplier:** Multiplier for the horizontal axis movement when the multiplier button is pressed.
- * **Snap Rotate Delay:** The delay before the next snap rotation is allowed to happen.
- * **Snap Rotate Angle:** The number of degrees to instantly rotate in to the given direction.
- * **Rotate Max Speed:** The maximum speed the play area will be rotated when the touchpad is being touched at the extremes of the axis. If a lower part of the touchpad axis is touched (nearer the centre) then the rotation speed is slower.
- * **Blink Duration Multiplier:** Blink effect duration multiplier for the movement delay, ie. 1.0 means blink transition lasts until the delay has expired and 0.5 means the effect has completed when half of the delay time is done.
- * **Slide Max Speed:** The maximum speed the play area will be moved by sliding when the touchpad is being touched at the extremes of the axis. If a lower part of the touchpad axis is touched (nearer the centre) then the speed is slower.
- * **Slide Deceleration:** The speed in which the play area slows down to a complete stop when the user is no longer touching the touchpad. This deceleration effect can ease any motion sickness that may be suffered.
- * **Warp Delay:** The delay before the next warp is allowed to happen.
- * **Warp Range:** The distance to warp in to the given direction.
- * **Warp Max Altitude Change:** The maximum altitude change allowed for a warp to happen.
-
-### Class Variables
-
- * `public enum VerticalAxisMovement` - Movement types that can be performed by the vertical axis.
-  * `None` - No movement is performed.
-  * `Slide` - Performs smooth movement (walk).
-  * `Warp` - Performs an instant warp movement.
-  * `WarpWithBlink` - Performs an instant warp movement with a blink effect.
- * `public enum HorizontalAxisMovement` - Movement types that can be performed by the horizontal axis.
-  * `None` - No movement is performed.
-  * `Slide` - Performs smooth movement (strafe).
-  * `Rotate` - Performs smooth rotation.
-  * `SnapRotate` - Performs fixed angle rotation.
-  * `SnapRotateWithBlink` - Performs fixed angle rotation with a blink effect.
-  * `Warp` - Performs an instant warp movement.
-  * `WarpWithBlink` - Performs an instant warp movement with a blink effect.
- * `public enum AxisMovementType` - Which type axis movement did occur.
-  * `Warp` - User warped.
-  * `FlipDirection` - User flipped the direction.
-  * `SnapRotate` - User snap rotated.
- * `public enum AxisMovementDirection` - Which direction did the axis movement occur.
-
-### Class Events
-
- * `AxisMovement` - Emitted when a warp, a flip direction or a snap rotate movement has successfully completed.
-
-### Event Payload
-
- * `VRTK_TouchpadMovement.AxisMovementType movementType` - The type of movement for the axis.
- * `VRTK_TouchpadMovement.AxisMovementDirection direction` - The direction of the axis.
 
 ---
 
@@ -1449,8 +1510,6 @@ The script also has a public boolean pressed state for the buttons to allow the 
 
 ### Inspector Parameters
 
- * **Pointer Toggle Button:** The button to use for the action of turning a laser pointer on / off.
- * **Pointer Set Button:** The button to use for the action of setting a destination marker from the cursor position of the pointer.
  * **Grab Toggle Button:** The button to use for the action of grabbing game objects.
  * **Use Toggle Button:** The button to use for the action of using game objects.
  * **Ui Click Button:** The button to use for the action of clicking a UI element.
