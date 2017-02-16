@@ -3593,6 +3593,10 @@ The ProcessFixedUpdate method is run in every FixedUpdate method on the interact
 
 The Climbable Grab Attach script is used to mark the object as a climbable interactable object.
 
+### Inspector Parameters
+
+ * **Use Object Rotation:** Will respect the grabbed climbing object's rotation if it changes dynamically
+
 ### Example
 
 `VRTK/Examples/037_CameraRig_ClimbingFalling` uses this grab attach mechanic for each item that is climbable in the scene.
