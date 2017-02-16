@@ -179,7 +179,7 @@ namespace VRTK.Highlighters
                     }
 
                     highlightMesh.mesh = new Mesh();
-                    highlightMesh.CombineMeshes(combine.ToArray(), true, false);
+                    highlightMesh.mesh.CombineMeshes(combine.ToArray(), true, false);
                 }
                 else
                 {
