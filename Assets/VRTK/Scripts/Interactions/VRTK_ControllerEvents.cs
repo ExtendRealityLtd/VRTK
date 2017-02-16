@@ -1066,6 +1066,7 @@ namespace VRTK
             }
 
             //Trigger Axis
+            currentTriggerAxis.x = (triggerTouched ? currentTriggerAxis.x : 0f);
             if (Vector2ShallowEquals(triggerAxis, currentTriggerAxis))
             {
                 triggerAxisChanged = false;
@@ -1074,7 +1075,6 @@ namespace VRTK
             {
                 OnTriggerAxisChanged(SetButtonEvent(ref triggerAxisChanged, true, currentTriggerAxis.x));
             }
-
 
             //Grip Touched
             if (VRTK_SDK_Bridge.IsGripTouchedDownOnIndex(controllerIndex))
@@ -1131,6 +1131,7 @@ namespace VRTK
             }
 
             //Grip Axis
+            currentGripAxis.x = (gripTouched ? currentGripAxis.x : 0f);
             if (Vector2ShallowEquals(gripAxis, currentGripAxis))
             {
                 gripAxisChanged = false;
@@ -1166,7 +1167,8 @@ namespace VRTK
                 EmitAlias(ButtonAlias.Touchpad_Touch, false, 0f, ref touchpadTouched);
             }
 
-            if (Vector2ShallowEquals(touchpadAxis, currentTouchpadAxis))
+            //Touchpad Axis
+            if (!touchpadTouched || Vector2ShallowEquals(touchpadAxis, currentTouchpadAxis))
             {
                 touchpadAxisChanged = false;
             }
@@ -1240,9 +1242,9 @@ namespace VRTK
             }
 
             // Save current touch and trigger settings to detect next change.
-            touchpadAxis = new Vector2(currentTouchpadAxis.x, currentTouchpadAxis.y);
-            triggerAxis = new Vector2(currentTriggerAxis.x, currentTriggerAxis.y);
-            gripAxis = new Vector2(currentGripAxis.x, currentGripAxis.y);
+            touchpadAxis = (touchpadAxisChanged ? new Vector2(currentTouchpadAxis.x, currentTouchpadAxis.y) : touchpadAxis);
+            triggerAxis = (triggerAxisChanged ? new Vector2(currentTriggerAxis.x, currentTriggerAxis.y) : triggerAxis);
+            gripAxis = (gripAxisChanged ? new Vector2(currentGripAxis.x, currentGripAxis.y) : gripAxis);
 
             hairTriggerDelta = VRTK_SDK_Bridge.GetTriggerHairlineDeltaOnIndex(controllerIndex);
             hairGripDelta = VRTK_SDK_Bridge.GetGripHairlineDeltaOnIndex(controllerIndex);
