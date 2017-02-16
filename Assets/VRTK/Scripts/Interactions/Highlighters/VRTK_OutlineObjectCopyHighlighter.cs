@@ -21,7 +21,7 @@ namespace VRTK.Highlighters
         public GameObject customOutlineModel;
         [Tooltip("A path to a GameObject to find at runtime, if the GameObject doesn't exist at edit time.")]
         public string customOutlineModelPath = "";
-        [Tooltip("If your mesh has multiple submeshes you wish to highlight, you'll want to check this otherwise only the first mesh will be highlighted")]
+        [Tooltip("If the mesh has multiple sub-meshes to highlight then this should be checked, otherwise only the first mesh will be highlighted.")]
         public bool enableSubmeshHighlight = false;
 
         private Material stencilOutline;
@@ -180,7 +180,9 @@ namespace VRTK.Highlighters
 
                     highlightMesh.mesh = new Mesh();
                     highlightMesh.CombineMeshes(combine.ToArray(), true, false);
-                } else {
+                }
+                else
+                {
                     highlightMesh.mesh = copyMesh.mesh;
                 }
 
