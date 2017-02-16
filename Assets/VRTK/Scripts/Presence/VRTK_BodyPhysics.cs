@@ -380,6 +380,8 @@ namespace VRTK
             {
                 bodyCollider.isTrigger = !state;
             }
+
+            currentBodyCollisionsSetting = state;
         }
 
         private void CheckBodyCollisionsSetting()
@@ -388,7 +390,6 @@ namespace VRTK
             {
                 TogglePhysics(enableBodyCollisions);
             }
-            currentBodyCollisionsSetting = enableBodyCollisions;
         }
 
         private void CheckFalling()
