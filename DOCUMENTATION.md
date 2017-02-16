@@ -3100,6 +3100,7 @@ The Outline Object Copy Highlighter works by making a copy of a mesh and adding 
  * **Thickness:** The thickness of the outline effect
  * **Custom Outline Model:** The GameObject to use as the model to outline. If one isn't provided then the first GameObject with a valid Renderer in the current GameObject hierarchy will be used.
  * **Custom Outline Model Path:** A path to a GameObject to find at runtime, if the GameObject doesn't exist at edit time.
+ * **Enable Submesh Highlight:** If the mesh has multiple sub-meshes to highlight then this should be checked, otherwise only the first mesh will be highlighted.
 
 ### Class Methods
 
