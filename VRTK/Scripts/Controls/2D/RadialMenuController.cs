@@ -67,13 +67,13 @@ namespace VRTK
             menu.UnClickButton(currentAngle);
         }
 
-        protected void DoShowMenu(float initialAngle, object sender = null)
+        protected virtual void DoShowMenu(float initialAngle, object sender = null)
         {
             menu.ShowMenu();
             DoChangeAngle(initialAngle); // Needed to register initial touch position before the touchpad axis actually changes
         }
 
-        protected void DoHideMenu(bool force, object sender = null)
+        protected virtual void DoHideMenu(bool force, object sender = null)
         {
             menu.StopTouching();
             menu.HideMenu(force);
