@@ -29,7 +29,6 @@
             if (isMoving)
             {
                 Vector3 movePosition = (isMovingUp ? Vector3.up : Vector3.down) * speed * Time.deltaTime;
-                Debug.Log("MovePos: " + movePosition);
 
                 handle.transform.position += movePosition;
 
@@ -38,8 +37,6 @@
 
                 Vector3 midpoint = ropeTop.transform.position;
                 midpoint.y -= scale.y;
-
-                Debug.Log("Scale: " + scale + "New MidPoint: " + midpoint);
 
                 rope.transform.localScale = scale;
                 rope.transform.position = midpoint;

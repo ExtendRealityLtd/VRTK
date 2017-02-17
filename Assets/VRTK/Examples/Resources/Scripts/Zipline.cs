@@ -20,14 +20,12 @@
         public override void OnInteractableObjectGrabbed(InteractableObjectEventArgs e)
         {
             base.OnInteractableObjectGrabbed(e);
-
             isMoving = true;
         }
 
         protected override void Awake()
         {
             base.Awake();
-
             currentSpeed = downStartSpeed;
         }
 
