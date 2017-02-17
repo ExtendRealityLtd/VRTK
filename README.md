@@ -7,6 +7,8 @@
 [![YouTube](https://img.shields.io/badge/youtube-channel-e52d27.svg)](http://videos.vrtk.io)
 [![Waffle](https://img.shields.io/badge/project-roadmap-blue.svg)](http://tracker.vrtk.io)
 
+[![patreon_logo](https://cloud.githubusercontent.com/assets/1029673/23074410/8c248822-f530-11e6-9156-aeef1262be86.png)](https://www.patreon.com/vrtk)
+
 | Supported SDK | Download Link |
 |---------------|---------------|
 | VR Simulator | Included |
