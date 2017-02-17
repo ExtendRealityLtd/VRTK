@@ -17,7 +17,7 @@
 
             if (togglePointerOnHit)
             {
-                GetComponent<VRTK_UIPointer>().activationMode = VRTK_UIPointer.ActivationMethods.Always_On;
+                GetComponent<VRTK_UIPointer>().activationMode = VRTK_UIPointer.ActivationMethods.AlwaysOn;
             }
 
             //Setup controller event listeners

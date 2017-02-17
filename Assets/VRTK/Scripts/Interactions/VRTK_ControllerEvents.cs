@@ -93,6 +93,7 @@ namespace VRTK
         [Tooltip("The button to use for the action of using game objects.")]
         public ButtonAlias useToggleButton = ButtonAlias.Trigger_Press;
         [Tooltip("The button to use for the action of clicking a UI element.")]
+        [Obsolete("`VRTK_ControllerEvents.uiClickButton` is no longer used in the `VRTK_UIPointer` class. This parameter will be removed in a future version of VRTK.")]
         public ButtonAlias uiClickButton = ButtonAlias.Trigger_Press;
         [Tooltip("The button to use for the action of bringing up an in-game menu.")]
         public ButtonAlias menuToggleButton = ButtonAlias.Button_Two_Press;

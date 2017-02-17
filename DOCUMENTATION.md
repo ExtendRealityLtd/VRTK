@@ -1512,7 +1512,6 @@ The script also has a public boolean pressed state for the buttons to allow the 
 
  * **Grab Toggle Button:** The button to use for the action of grabbing game objects.
  * **Use Toggle Button:** The button to use for the action of using game objects.
- * **Ui Click Button:** The button to use for the action of clicking a UI element.
  * **Menu Toggle Button:** The button to use for the action of bringing up an in-game menu.
  * **Axis Fidelity:** The amount of fidelity in the changes on the axis, which is defaulted to 1. Any number higher than 2 will probably give too sensitive results.
  * **Trigger Click Threshold:** The level on the trigger axis to reach before a click is registered.
@@ -4417,22 +4416,24 @@ The UI pointer is activated via the `Pointer` alias on the `Controller Events` a
 
 ### Inspector Parameters
 
- * **Controller:** The controller that will be used to toggle the pointer. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.
- * **Pointer Origin Transform:** A custom transform to use as the origin of the pointer. If no pointer origin transform is provided then the transform the script is attached to is used.
+ * **Activation Button:** The button used to activate/deactivate the UI raycast for the pointer.
  * **Activation Mode:** Determines when the UI pointer should be active.
+ * **Selection Button:** The button used to execute the select action at the pointer's target position.
  * **Click Method:** Determines when the UI Click event action should happen.
  * **Attempt Click On Deactivate:** Determines whether the UI click action should be triggered when the pointer is deactivated. If the pointer is hovering over a clickable element then it will invoke the click action on that element. Note: Only works with `Click Method =  Click_On_Button_Up`
  * **Click After Hover Duration:** The amount of time the pointer can be over the same UI element before it automatically attempts to click it. 0f means no click attempt will be made.
+ * **Controller:** The controller that will be used to toggle the pointer. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.
+ * **Pointer Origin Transform:** A custom transform to use as the origin of the pointer. If no pointer origin transform is provided then the transform the script is attached to is used.
 
 ### Class Variables
 
  * `public enum ActivationMethods` - Methods of activation.
-  * `Hold_Button` - Only activates the UI Pointer when the Pointer button on the controller is pressed and held down.
-  * `Toggle_Button` - Activates the UI Pointer on the first click of the Pointer button on the controller and it stays active until the Pointer button is clicked again.
-  * `Always_On` - The UI Pointer is always active regardless of whether the Pointer button on the controller is pressed or not.
+  * `HoldButton` - Only activates the UI Pointer when the Pointer button on the controller is pressed and held down.
+  * `ToggleButton` - Activates the UI Pointer on the first click of the Pointer button on the controller and it stays active until the Pointer button is clicked again.
+  * `AlwaysOn` - The UI Pointer is always active regardless of whether the Pointer button on the controller is pressed or not.
  * `public enum ClickMethods` - Methods of when to consider a UI Click action
-  * `Click_On_Button_Up` - Consider a UI Click action has happened when the UI Click alias button is released.
-  * `Click_On_Button_Down` - Consider a UI Click action has happened when the UI Click alias button is pressed.
+  * `ClickOnButtonUp` - Consider a UI Click action has happened when the UI Click alias button is released.
+  * `ClickOnButtonDown` - Consider a UI Click action has happened when the UI Click alias button is pressed.
  * `public GameObject autoActivatingCanvas` - The GameObject of the front trigger activator of the canvas currently being activated by this pointer. Default: `null`
  * `public bool collisionClick` - Determines if the UI Pointer has collided with a valid canvas that has collision click turned on. Default: `false`
 
@@ -4495,6 +4496,17 @@ The RemoveEventSystem resets the Unity EventSystem back to the original state be
    * `bool` - Returns true if the ui pointer should be currently active.
 
 The PointerActive method determines if the ui pointer beam should be active based on whether the pointer alias is being held and whether the Hold Button To Use parameter is checked.
+
+#### SelectionButtonActive/0
+
+  > `public virtual bool SelectionButtonActive()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `bool` - Returns true if the selection button is active.
+
+The SelectionButtonActive method is used to determine if the configured selection button is currently in the active state.
 
 #### ValidClick/2
 
