@@ -389,6 +389,16 @@ namespace VRTK
         }
 
         /// <summary>
+        /// The TriggerHapticAudio method plays an AudioClip as haptics on the controller.
+        /// </summary>
+        /// <param name="clip">The AudioClip to play.</param>
+        /// <param name="strength">The intensity of the rumble of the controller motor. `0` to `1`.</param>
+        public virtual void TriggerHapticAudio(AudioClip clip, float strength)
+        {
+            VRTK_SDK_Bridge.HapticPulseOnIndex(VRTK_DeviceFinder.GetControllerIndex(gameObject), strength);
+        }
+
+        /// <summary>
         /// The InitaliseHighlighters method sets up the highlighters on the controller model.
         /// </summary>
         public virtual void InitaliseHighlighters()

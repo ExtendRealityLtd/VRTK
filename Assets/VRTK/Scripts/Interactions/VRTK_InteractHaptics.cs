@@ -9,6 +9,8 @@ namespace VRTK
     public class VRTK_InteractHaptics : MonoBehaviour
     {
         [Header("Haptics On Touch")]
+        [Tooltip("Optionally select an AudioClip to use as touch haptic.")]
+        public AudioClip audioClipTouch;
         [Tooltip("Denotes how strong the rumble in the controller will be on touch.")]
         [Range(0, 1)]
         public float strengthOnTouch = 0;
@@ -18,6 +20,8 @@ namespace VRTK
         public float intervalOnTouch = minInterval;
 
         [Header("Haptics On Grab")]
+        [Tooltip("Optionally select an AudioClip to use as grab haptic.")]
+        public AudioClip audioClipGrab;
         [Tooltip("Denotes how strong the rumble in the controller will be on grab.")]
         [Range(0, 1)]
         public float strengthOnGrab = 0;
@@ -27,6 +31,8 @@ namespace VRTK
         public float intervalOnGrab = minInterval;
 
         [Header("Haptics On Use")]
+        [Tooltip("Optionally select an AudioClip to use touch as use haptic.")]
+        public AudioClip audioClipUse;
         [Tooltip("Denotes how strong the rumble in the controller will be on use.")]
         [Range(0, 1)]
         public float strengthOnUse = 0;
@@ -43,7 +49,11 @@ namespace VRTK
         /// <param name="controllerActions">The controller to activate the haptic feedback on.</param>
         public virtual void HapticsOnTouch(VRTK_ControllerActions controllerActions)
         {
-            if (strengthOnTouch > 0 && durationOnTouch > 0f)
+            if (audioClipTouch && strengthOnTouch > 0)
+            {
+                TriggerHapticAudio(controllerActions, audioClipTouch, strengthOnTouch);
+            }
+            else if (strengthOnTouch > 0 && durationOnTouch > 0f)
             {
                 TriggerHapticPulse(controllerActions, strengthOnTouch, durationOnTouch, intervalOnTouch);
             }
@@ -55,7 +65,11 @@ namespace VRTK
         /// <param name="controllerActions">The controller to activate the haptic feedback on.</param>
         public virtual void HapticsOnGrab(VRTK_ControllerActions controllerActions)
         {
-            if (strengthOnGrab > 0 && durationOnGrab > 0f)
+            if (audioClipGrab && strengthOnGrab > 0)
+            {
+                TriggerHapticAudio(controllerActions, audioClipGrab, strengthOnGrab);
+            }
+            else if (strengthOnGrab > 0 && durationOnGrab > 0f)
             {
                 TriggerHapticPulse(controllerActions, strengthOnGrab, durationOnGrab, intervalOnGrab);
             }
@@ -67,7 +81,11 @@ namespace VRTK
         /// <param name="controllerActions">The controller to activate the haptic feedback on.</param>
         public virtual void HapticsOnUse(VRTK_ControllerActions controllerActions)
         {
-            if (strengthOnUse > 0 && durationOnUse > 0f)
+            if (audioClipUse && strengthOnUse > 0)
+            {
+                TriggerHapticAudio(controllerActions, audioClipUse, strengthOnUse);
+            }
+            else if (strengthOnUse > 0 && durationOnUse > 0f)
             {
                 TriggerHapticPulse(controllerActions, strengthOnUse, durationOnUse, intervalOnUse);
             }
@@ -86,6 +104,14 @@ namespace VRTK
             if (controllerActions)
             {
                 controllerActions.TriggerHapticPulse(strength, duration, (interval >= minInterval ? interval : minInterval));
+            }
+        }
+
+        private void TriggerHapticAudio(VRTK_ControllerActions controllerActions, AudioClip clip, float strength)
+        {
+            if (controllerActions)
+            {
+                controllerActions.TriggerHapticAudio(clip, strength);
             }
         }
     }

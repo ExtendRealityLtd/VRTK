@@ -7,6 +7,7 @@ namespace VRTK
     using System.Collections.Generic;
     using System.Reflection;
     using Valve.VR;
+    using System.Collections;
 
     /// <summary>
     /// The SteamVR Controller SDK script provides a bridge to SDK methods that deal with the input devices.
@@ -16,6 +17,7 @@ namespace VRTK
         private SteamVR_TrackedObject cachedLeftTrackedObject;
         private SteamVR_TrackedObject cachedRightTrackedObject;
         private ushort maxHapticVibration = 3999;
+        private static int hapticsBufferSize = 8192;
 
         /// <summary>
         /// The ProcessUpdate method enables an SDK to run logic for every Unity Update
@@ -299,6 +301,42 @@ namespace VRTK
                 var convertedStrength = maxHapticVibration * strength;
                 var device = SteamVR_Controller.Input((int)index);
                 device.TriggerHapticPulse((ushort)convertedStrength, EVRButtonId.k_EButton_Axis0);
+            }
+        }
+
+        /// <summary>
+        /// The HapticAudioOnIndex method is used to initiate a haptic audio clip on the tracked object of the given index.
+        /// </summary>
+        /// <param name="index">The index of the tracked object to initiate the haptic audio on.</param>
+        /// <param name="clip">The clip to play on the target object.</param>
+        /// <param name="strength">The intensity of the rumble of the controller motor. `0` to `1`.</param>
+        public override void HapticAudioOnIndex(uint index, AudioClip clip, float strength = 0.5f)
+        {
+            PlayHapticsRoutine(index, clip, strength);
+        }
+
+        private IEnumerator PlayHapticsRoutine(uint index, AudioClip clip, float strength = 0.5f)
+        {
+            float hapticScalar = maxHapticVibration * strength;
+            float[] audioData = new float[hapticsBufferSize];
+            int sampleOffset = -hapticsBufferSize;
+            float startTime = Time.time;
+            float length = clip.length / 1;
+            float endTime = startTime + length;
+            float sampleRate = clip.samples;
+            while (Time.time <= endTime)
+            {
+                var lerpVal = (Time.time - startTime) / length;
+                int sampleIndex = (int)(sampleRate * lerpVal);
+                if (sampleIndex >= sampleOffset + hapticsBufferSize)
+                {
+                    clip.GetData(audioData, sampleIndex);
+                    sampleOffset = sampleIndex;
+                }
+                var currentSample = Mathf.Abs(audioData[sampleIndex - sampleOffset]);
+                var hapticStrength = (ushort)(hapticScalar * currentSample);
+                HapticPulseOnIndex(index, hapticStrength);
+                yield return null;
             }
         }
 
