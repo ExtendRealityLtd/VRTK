@@ -4213,13 +4213,14 @@ Adding the `VRTK_BodyPhysics_UnityEvents` component to `VRTK_BodyPhysics` object
 
 The ArePhysicsEnabled method determines whether the body physics are set to interact with other scene physics objects.
 
-#### ApplyBodyVelocity/2
+#### ApplyBodyVelocity/3
 
-  > `public void ApplyBodyVelocity(Vector3 velocity, bool forcePhysicsOn = false)`
+  > `public void ApplyBodyVelocity(Vector3 velocity, bool forcePhysicsOn = false, bool applyMomentum = false)`
 
   * Parameters
    * `Vector3 velocity` - The velocity to apply.
    * `bool forcePhysicsOn` - If true will toggle the body collision physics back on if enable body collisions is true.
+   * `bool applyMomentum` - If true then the existing momentum of the play area will be applied as a force to the resulting velocity.
   * Returns
    * _none_
 
