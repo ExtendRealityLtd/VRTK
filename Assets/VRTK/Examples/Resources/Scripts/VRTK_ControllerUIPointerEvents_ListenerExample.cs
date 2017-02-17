@@ -17,7 +17,7 @@
 
             if (togglePointerOnHit)
             {
-                GetComponent<VRTK_UIPointer>().activationMode = VRTK_UIPointer.ActivationMethods.Always_On;
+                GetComponent<VRTK_UIPointer>().activationMode = VRTK_UIPointer.ActivationMethods.AlwaysOn;
             }
 
             //Setup controller event listeners
@@ -31,18 +31,18 @@
         private void VRTK_ControllerUIPointerEvents_ListenerExample_UIPointerElementEnter(object sender, UIPointerEventArgs e)
         {
             Debug.Log("UI Pointer entered " + e.currentTarget.name + " on Controller index [" + e.controllerIndex + "] and the state was " + e.isActive);
-            if (togglePointerOnHit && GetComponent<VRTK_SimplePointer>())
+            if (togglePointerOnHit && GetComponent<VRTK_Pointer>())
             {
-                GetComponent<VRTK_SimplePointer>().ToggleBeam(true);
+                GetComponent<VRTK_Pointer>().Toggle(true);
             }
         }
 
         private void VRTK_ControllerUIPointerEvents_ListenerExample_UIPointerElementExit(object sender, UIPointerEventArgs e)
         {
             Debug.Log("UI Pointer exited " + e.previousTarget.name + " on Controller index [" + e.controllerIndex + "] and the state was " + e.isActive);
-            if (togglePointerOnHit && GetComponent<VRTK_SimplePointer>())
+            if (togglePointerOnHit && GetComponent<VRTK_Pointer>())
             {
-                GetComponent<VRTK_SimplePointer>().ToggleBeam(false);
+                GetComponent<VRTK_Pointer>().Toggle(false);
             }
         }
 

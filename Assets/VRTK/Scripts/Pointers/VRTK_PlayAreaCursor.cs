@@ -4,7 +4,7 @@ namespace VRTK
     using UnityEngine;
 
     /// <summary>
-    /// The Play Area Cursor is used in conjunction with a Base Pointer script and displays a representation of the play area where the pointer cursor hits.
+    /// The Play Area Cursor is used in conjunction with a Pointer script and displays a representation of the play area where the pointer cursor hits.
     /// </summary>
     /// <example>
     /// `VRTK/Examples/012_Controller_PointerWithAreaCollision` shows how a Bezier Pointer with the Play Area Cursor and Collision Detection enabled can be used to traverse a game area but not allow teleporting into areas where the walls or other objects would fall into the play area space enabling the user to enter walls.
@@ -28,6 +28,7 @@ namespace VRTK
         private GameObject[] playAreaCursorBoundaries;
         private BoxCollider playAreaCursorCollider;
         private Transform headset;
+        private Renderer[] boundaryRenderers = new Renderer[0];
 
         /// <summary>
         /// The HasCollided method returns the state of whether the play area cursor has currently collided with another valid object.
@@ -66,9 +67,10 @@ namespace VRTK
         /// <param name="color">The colour to update the play area cursor material to.</param>
         public virtual void SetMaterialColor(Color color)
         {
-            foreach (GameObject playAreaCursorBoundary in playAreaCursorBoundaries)
+            for (int i = 0; i < playAreaCursorBoundaries.Length; i++)
             {
-                var paRenderer = playAreaCursorBoundary.GetComponent<Renderer>();
+                GameObject playAreaCursorBoundary = playAreaCursorBoundaries[i];
+                Renderer paRenderer = playAreaCursorBoundary.GetComponent<Renderer>();
 
                 if (paRenderer && paRenderer.material && paRenderer.material.HasProperty("_Color"))
                 {
@@ -93,20 +95,23 @@ namespace VRTK
                 offset = playAreaPos - headsetPos;
             }
 
-            if (playAreaCursor.activeInHierarchy && handlePlayAreaCursorCollisions && headsetOutOfBoundsIsCollision)
+            if (playAreaCursor)
             {
-                var checkPoint = new Vector3(location.x, playAreaCursor.transform.position.y + (playAreaCursor.transform.localScale.y * 2), location.z);
-                if (!playAreaCursorCollider.bounds.Contains(checkPoint))
+                if (playAreaCursor.activeInHierarchy && handlePlayAreaCursorCollisions && headsetOutOfBoundsIsCollision)
                 {
-                    headsetOutOfBounds = true;
+                    var checkPoint = new Vector3(location.x, playAreaCursor.transform.position.y + (playAreaCursor.transform.localScale.y * 2), location.z);
+                    if (!playAreaCursorCollider.bounds.Contains(checkPoint))
+                    {
+                        headsetOutOfBounds = true;
+                    }
+                    else
+                    {
+                        headsetOutOfBounds = false;
+                    }
                 }
-                else
-                {
-                    headsetOutOfBounds = false;
-                }
-            }
 
-            playAreaCursor.transform.position = location + offset;
+                playAreaCursor.transform.position = location + offset;
+            }
         }
 
         /// <summary>
@@ -122,14 +127,34 @@ namespace VRTK
             }
         }
 
-        protected virtual void Awake()
+        /// <summary>
+        /// The GetPlayAreaContainer method returns the created game object that holds the play area cursor representation.
+        /// </summary>
+        /// <returns>The GameObject that is the container of the play area cursor.</returns>
+        public virtual GameObject GetPlayAreaContainer()
         {
-            if (!GetComponent<VRTK_BasePointer>())
+            return playAreaCursor;
+        }
+
+        /// <summary>
+        /// The ToggleVisibility method enables or disables the play area cursor renderers to allow the cursor to be seen or hidden.
+        /// </summary>
+        /// <param name="state">The state of the cursor visibility. True will show the renderers and false will hide the renderers.</param>
+        public virtual void ToggleVisibility(bool state)
+        {
+            if (boundaryRenderers.Length == 0)
             {
-                Debug.LogError("VRTK_PlayAreaCursor requires a VRTK_BasePointer script attached to the same object.");
-                return;
+                boundaryRenderers = playAreaCursor.GetComponentsInChildren<Renderer>();
             }
 
+            for (int i = 0; i < boundaryRenderers.Length; i++)
+            {
+                boundaryRenderers[i].enabled = state;
+            }
+        }
+
+        protected virtual void OnEnable()
+        {
             VRTK_PlayerObject.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.Pointer);
 
             headset = VRTK_DeviceFinder.HeadsetTransform();
@@ -138,7 +163,7 @@ namespace VRTK
             InitPlayAreaCursor();
         }
 
-        protected virtual void Destroy()
+        protected virtual void OnDisable()
         {
             if (playAreaCursor != null)
             {
@@ -259,15 +284,15 @@ namespace VRTK
 
     public class VRTK_PlayAreaCollider : MonoBehaviour
     {
-        private VRTK_PlayAreaCursor parent;
-        private VRTK_PolicyList targetListPolicy;
+        protected VRTK_PlayAreaCursor parent;
+        protected VRTK_PolicyList targetListPolicy;
 
-        public void SetParent(VRTK_PlayAreaCursor setParent)
+        public virtual void SetParent(VRTK_PlayAreaCursor setParent)
         {
             parent = setParent;
         }
 
-        public void SetIgnoreTarget(VRTK_PolicyList list = null)
+        public virtual void SetIgnoreTarget(VRTK_PolicyList list = null)
         {
             targetListPolicy = list;
         }
@@ -288,7 +313,7 @@ namespace VRTK
             }
         }
 
-        private bool ValidTarget(Collider collider)
+        protected virtual bool ValidTarget(Collider collider)
         {
             return (!VRTK_PlayerObject.IsPlayerObject(collider.gameObject) && !(VRTK_PolicyList.Check(collider.gameObject, targetListPolicy)));
         }

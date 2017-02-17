@@ -83,14 +83,17 @@ namespace VRTK
         [Header("Action Alias Buttons")]
 
         [Tooltip("The button to use for the action of turning a laser pointer on / off.")]
+        [Obsolete("`VRTK_ControllerEvents.pointerToggleButton` is no longer used in the new `VRTK_Pointer` class. This parameter will be removed in a future version of VRTK.")]
         public ButtonAlias pointerToggleButton = ButtonAlias.Touchpad_Press;
         [Tooltip("The button to use for the action of setting a destination marker from the cursor position of the pointer.")]
+        [Obsolete("`VRTK_ControllerEvents.pointerSetButton` is no longer used in the new `VRTK_Pointer` class. This parameter will be removed in a future version of VRTK.")]
         public ButtonAlias pointerSetButton = ButtonAlias.Touchpad_Press;
         [Tooltip("The button to use for the action of grabbing game objects.")]
         public ButtonAlias grabToggleButton = ButtonAlias.Grip_Press;
         [Tooltip("The button to use for the action of using game objects.")]
         public ButtonAlias useToggleButton = ButtonAlias.Trigger_Press;
         [Tooltip("The button to use for the action of clicking a UI element.")]
+        [Obsolete("`VRTK_ControllerEvents.uiClickButton` is no longer used in the `VRTK_UIPointer` class. This parameter will be removed in a future version of VRTK.")]
         public ButtonAlias uiClickButton = ButtonAlias.Trigger_Press;
         [Tooltip("The button to use for the action of bringing up an in-game menu.")]
         public ButtonAlias menuToggleButton = ButtonAlias.Button_Two_Press;
