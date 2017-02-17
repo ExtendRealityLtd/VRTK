@@ -71,7 +71,7 @@ namespace VRTK
             InitListeners(false);
         }
 
-        protected virtual void LateUpdate()
+        protected virtual void Update()
         {
             if (isClimbing)
             {
@@ -212,7 +212,7 @@ namespace VRTK
                     }
                 }
 
-                bodyPhysics.ApplyBodyVelocity(velocity, true);
+                bodyPhysics.ApplyBodyVelocity(velocity, true, true);
             }
 
             isClimbing = false;
