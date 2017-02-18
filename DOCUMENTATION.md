@@ -35,6 +35,7 @@ A collection of pre-defined usable prefabs have been included to allow for each 
  * [Snap Drop Zone](#snap-drop-zone-vrtk_snapdropzone)
  * [Radial Menu](#radial-menu-radialmenu)
  * [Independent Radial Menu Controller](#independent-radial-menu-controller-vrtk_independentradialmenucontroller)
+ * [Destination Point](#destination-point-vrtk_destinationpoint)
  * [Console Viewer Canvas](#console-viewer-canvas-vrtk_consoleviewer)
  * [Panel Menu Controller](#panel-menu-controller-panelmenucontroller)
  * [Panel Menu Item Controller](#panel-menu-item-controller-panelmenuitemcontroller)
@@ -409,6 +410,44 @@ To convert the default `RadialMenu` prefab to be independent of the controllers:
  * **Hide After Execution:** If true, after a button is clicked, the RadialMenu will hide.
  * **Offset Multiplier:** How far away from the object the menu should be placed, relative to the size of the RadialMenu.
  * **Rotate Towards:** The object the RadialMenu should face towards. If left empty, it will automatically try to find the Headset Camera.
+
+---
+
+## Destination Point (VRTK_DestinationPoint)
+ > extends [VRTK_DestinationMarker](#destination-marker-vrtk_destinationmarker)
+
+### Overview
+
+The Destination Point allows for a specific scene marker that can be teleported to.
+
+The destination points can provide a useful way of having specific teleport locations in a scene.
+
+The destination points can also have a locked state if the `Enable Teleport` flag is disabled.
+
+### Inspector Parameters
+
+ * **Default Cursor Object:** The GameObject to use to represent the default cursor state.
+ * **Hover Cursor Object:** The GameObject to use to represent the hover cursor state.
+ * **Locked Cursor Object:** The GameObject to use to represent the locked cursor state.
+ * **Snap To Point:** If this is checked then after teleporting, the play area will be snapped to the origin of the destination point. If this is false then it's possible to teleport to anywhere within the destination point collider.
+ * **Hide Pointer Cursor On Hover:** If this is checked, then the pointer cursor will be hidden when a valid destination point is hovered over.
+
+### Class Methods
+
+#### ResetDestinationPoint/0
+
+  > `public virtual void ResetDestinationPoint()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The ResetDestinationPoint resets the destination point back to the default state.
+
+### Example
+
+`044_CameraRig_RestrictedTeleportZones` uses the `VRTK_DestinationPoint` prefab to set up a collection of pre-defined teleport locations.
 
 ---
 
