@@ -231,6 +231,7 @@ namespace VRTK
                     }
                 }
 
+                ToggleRenderer(controllingPointer.IsPointerActive(), false);
                 UpdateDependencies(actualCursor.transform.position);
             }
         }

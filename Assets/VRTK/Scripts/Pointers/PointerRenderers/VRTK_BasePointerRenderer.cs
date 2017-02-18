@@ -15,9 +15,9 @@ namespace VRTK
         /// <summary>
         /// States of Pointer Visibility.
         /// </summary>
-        /// <param name="On_When_Active">Only shows the object when the pointer is active.</param>
-        /// <param name="Always_On">Ensures the object is always.</param>
-        /// <param name="Always_Off">Ensures the object beam is never visible.</param>
+        /// <param name="OnWhenActive">Only shows the object when the pointer is active.</param>
+        /// <param name="AlwaysOn">Ensures the object is always.</param>
+        /// <param name="AlwaysOff">Ensures the object beam is never visible.</param>
         public enum VisibilityStates
         {
             OnWhenActive,
