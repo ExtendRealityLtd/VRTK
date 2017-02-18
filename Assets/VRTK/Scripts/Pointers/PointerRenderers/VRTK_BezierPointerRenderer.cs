@@ -81,6 +81,11 @@ namespace VRTK
         {
             TogglePointerCursor(pointerState, actualState);
             TogglePointerTracer(pointerState, actualState);
+            if (actualState)
+            {
+                ToggleRendererVisibility(actualTracer.gameObject, false);
+                AddVisibleRenderer(actualTracer.gameObject);
+            }
         }
 
         protected override void CreatePointerObjects()
@@ -319,7 +324,7 @@ namespace VRTK
             {
                 TogglePointerTracer(false, false);
             }
-            else if(controllingPointer)
+            else if (controllingPointer)
             {
                 TogglePointerTracer(controllingPointer.IsPointerActive(), controllingPointer.IsPointerActive());
             }
