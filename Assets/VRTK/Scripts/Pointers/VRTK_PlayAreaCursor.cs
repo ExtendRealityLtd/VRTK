@@ -3,6 +3,8 @@ namespace VRTK
 {
     using UnityEngine;
 
+    ///************** DEPRECATED CLASS **************
+
     /// <summary>
     /// The Play Area Cursor is used in conjunction with a Base Pointer script and displays a representation of the play area where the pointer cursor hits.
     /// </summary>
@@ -122,8 +124,14 @@ namespace VRTK
             }
         }
 
+        public void Reset()
+        {
+            Debug.LogWarning("VRTK_PlayAreaCursor is deprecated.");
+        }
+
         protected virtual void Awake()
         {
+            Debug.LogWarning("VRTK_PlayAreaCursor is deprecated.");
             if (!GetComponent<VRTK_BasePointer>())
             {
                 Debug.LogError("VRTK_PlayAreaCursor requires a VRTK_BasePointer script attached to the same object.");

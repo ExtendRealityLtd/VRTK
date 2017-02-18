@@ -3,6 +3,8 @@ namespace VRTK
 {
     using UnityEngine;
 
+    ///************** DEPRECATED CLASS **************
+
     /// <summary>
     /// The Simple Pointer emits a coloured beam from the end of the object it is attached to and simulates a laser beam.
     /// </summary>
@@ -40,6 +42,16 @@ namespace VRTK
         private bool activeEnabled;
         private bool storedBeamState;
         private bool storedTipState;
+
+        public void Reset()
+        {
+            Debug.LogWarning("VRTK_BezierPointer is deprecated.");
+        }
+
+        protected virtual void Awake()
+        {
+            Debug.LogWarning("VRTK_BezierPointer is deprecated.");
+        }
 
         protected override void OnEnable()
         {
