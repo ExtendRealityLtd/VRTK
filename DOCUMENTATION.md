@@ -834,9 +834,9 @@ As this is an abstract class, it cannot be applied directly to a game object and
 ### Class Variables
 
  * `public enum VisibilityStates` - States of Pointer Visibility.
-  * `On_When_Active` - Only shows the object when the pointer is active.
-  * `Always_On` - Ensures the object is always.
-  * `Always_Off` - Ensures the object beam is never visible.
+  * `OnWhenActive` - Only shows the object when the pointer is active.
+  * `AlwaysOn` - Ensures the object is always.
+  * `AlwaysOff` - Ensures the object beam is never visible.
 
 ### Class Methods
 
