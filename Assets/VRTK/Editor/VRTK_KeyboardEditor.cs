@@ -4,7 +4,7 @@
     using UnityEditor;
     using System;
     using System.Collections.Generic;
-    using System.Reflection;
+    using AttributeUtils = VRTK_AttributeUtilities;
 
     [CustomEditor(typeof(VRTK_Keyboard))]
     public class VRTK_KeyboardEditor : Editor
@@ -21,82 +21,17 @@
         {
             fixedInputField = serializedObject.FindProperty("fixedInputField");
 
-            keyLayoutRenderers = GetAttributesFromVRTKClasses<VRTK_KeyLayoutRendererAttribute>();
-            keyLayoutCalculators = GetAttributesFromVRTKClasses<VRTK_KeyLayoutCalculatorAttribute>();
-            keyLayoutSources = GetAttributesFromVRTKClasses<VRTK_KeyLayoutSourceAttribute>();
+            keyLayoutRenderers = AttributeUtils.GetAttributeUsage<VRTK_KeyLayoutRendererAttribute>();
+            keyLayoutCalculators = AttributeUtils.GetAttributeUsage<VRTK_KeyLayoutCalculatorAttribute>();
+            keyLayoutSources = AttributeUtils.GetAttributeUsage<VRTK_KeyLayoutSourceAttribute>();
             customSourceSelectorInstances = new Dictionary<Type, VRTK_BaseKeyboardLayoutSourceSelectorEditor>();
 
             keyLayoutSourceSelectors = new Dictionary<Type, Type>();
-            Dictionary<VRTK_CustomLayoutSourceSelectorAttribute, Type> customLayoutSourceSelectors = GetAttributesFromVRTKClasses<VRTK_CustomLayoutSourceSelectorAttribute>();
+            Dictionary<VRTK_CustomLayoutSourceSelectorAttribute, Type> customLayoutSourceSelectors = AttributeUtils.GetAttributeUsage<VRTK_CustomLayoutSourceSelectorAttribute>();
             foreach (KeyValuePair<VRTK_CustomLayoutSourceSelectorAttribute, Type> customLayoutSourceSelector in customLayoutSourceSelectors)
             {
                 keyLayoutSourceSelectors.Add(customLayoutSourceSelector.Key.sourceType, customLayoutSourceSelector.Value);
             }
-        }
-
-        /// <summary>
-        /// Finds all usage of a VRTK class attribute
-        /// </summary>
-        /// <typeparam name="A">The VRTK class attribute</typeparam>
-        /// <returns>A list of instances of this attribute class</returns>
-        private Dictionary<A, Type> GetAttributesFromVRTKClasses<A>() where A : Attribute
-        {
-            Dictionary<A, Type> attributes = new Dictionary<A, Type>();
-
-            string definedIn = typeof(A).Assembly.GetName().Name;
-            foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
-            {
-                if (assembly.GlobalAssemblyCache)
-                {
-                    continue;
-                }
-
-                if (assembly.GetName().Name != definedIn)
-                {
-                    bool isReferenced = false;
-                    foreach (AssemblyName refAssembly in assembly.GetReferencedAssemblies())
-                    {
-                        if (refAssembly.Name == definedIn)
-                        {
-                            isReferenced = true;
-                            break;
-                        }
-                    }
-
-                    if (!isReferenced)
-                    {
-                        continue;
-                    }
-                }
-
-                foreach (Type type in assembly.GetTypes())
-                {
-                    Attribute attribute = GetAttribute<A>(type);
-                    if (attribute != null)
-                    {
-                        attributes.Add((A)attribute, type);
-                    }
-                }
-            }
-
-            return attributes;
-        }
-
-        /// <summary>
-        /// Returns the Attribute of Type A if the class type has one, null otherwise
-        /// </summary>
-        /// <typeparam name="A">The Attribute type</typeparam>
-        /// <param name="type">The class Type to return attributes from</param>
-        /// <returns>The Attribute of type A</returns>
-        private A GetAttribute<A>(Type type) where A : Attribute
-        {
-            Attribute attribute = null;
-            foreach (Attribute a in type.GetCustomAttributes(typeof(A), true))
-            {
-                attribute = a;
-                break;
-            }
-            return (A)attribute;
         }
 
         /// <summary>
@@ -148,7 +83,7 @@
 
             if (targetRenderer != null)
             {
-                VRTK_KeyLayoutRendererAttribute rendererAttribute = GetAttribute<VRTK_KeyLayoutRendererAttribute>(targetRenderer.GetType());
+                VRTK_KeyLayoutRendererAttribute rendererAttribute = AttributeUtils.GetAttribute<VRTK_KeyLayoutRendererAttribute>(targetRenderer.GetType());
                 if (rendererAttribute != null)
                 {
                     calculatorNeeded = rendererAttribute.requireCalculator;
@@ -181,7 +116,7 @@
             {
                 if (targetCalculator != null)
                 {
-                    VRTK_KeyLayoutCalculatorAttribute calculatorAttribute = GetAttribute<VRTK_KeyLayoutCalculatorAttribute>(targetCalculator.GetType());
+                    VRTK_KeyLayoutCalculatorAttribute calculatorAttribute = AttributeUtils.GetAttribute<VRTK_KeyLayoutCalculatorAttribute>(targetCalculator.GetType());
                     if (calculatorAttribute != null)
                     {
                         sourceNeeded = calculatorAttribute.requireSource;

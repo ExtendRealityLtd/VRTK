@@ -3,10 +3,11 @@
     using UnityEngine;
     using UnityEditor;
     using System;
+    using AttributeUtils = VRTK_AttributeUtilities;
+    using KeyboardLayout = VRTK_KeyboardLayout;
     using RKeyLayout = VRTK_RenderableKeyLayout;
-    using RKeyset = VRTK_RenderableKeyLayout.Keyset;
 
-    [CustomEditor(typeof(VRTK_CanvasKeyLayoutRenderer), true)]
+    [CustomEditor(typeof(VRTK_BaseCanvasKeyLayoutRenderer), true)]
     public class VRTK_CanvasKeyLayoutRendererEditor : Editor
     {
         SerializedProperty keysetModifierImages;
@@ -21,20 +22,37 @@
 
         public override void OnInspectorGUI()
         {
-            VRTK_CanvasKeyLayoutRenderer renderer = (VRTK_CanvasKeyLayoutRenderer)target;
-            RKeyLayout keyLayout = renderer.CalculateRenderableKeyLayout(Vector2.one * 100);
-            keysetNames = keyLayout == null
-                ? null
-                : Array.ConvertAll(keyLayout.keysets, (keyset) => keyset.name);
+            VRTK_BaseCanvasKeyLayoutRenderer renderer = (VRTK_BaseCanvasKeyLayoutRenderer)target;
+            VRTK_KeyLayoutRendererAttribute attribute = AttributeUtils.GetAttribute<VRTK_KeyLayoutRendererAttribute>(target.GetType());
+
+            if ( attribute.requireCalculator )
+            {
+                RKeyLayout keyLayout = renderer.CalculateRenderableKeyLayout(Vector2.one * 100);
+                keysetNames = keyLayout == null
+                    ? null
+                    : Array.ConvertAll(keyLayout.keysets, (keyset) => keyset.name);
+
+                if (keyLayout == null)
+                {
+                    EditorGUILayout.HelpBox("Layout calculator did not return a key layout, editor will not be complete until layout calculator issues are fixed", MessageType.Warning);
+                }
+            }
+            else if ( attribute.requireSource )
+            {
+                KeyboardLayout keyLayout = renderer.GetKeyLayout();
+                keysetNames = keyLayout == null
+                    ? null
+                    : Array.ConvertAll(keyLayout.keysets, (keyset) => keyset.name);
+
+                if (keyLayout == null)
+                {
+                    EditorGUILayout.HelpBox("Layout source did not return a key layout, editor will not be complete until layout source issues are fixed", MessageType.Warning);
+                }
+            }
 
             if (renderer.keyTemplate == null)
             {
                 EditorGUILayout.HelpBox("A Key Template is required", MessageType.Error);
-            }
-
-            if (keyLayout == null)
-            {
-                EditorGUILayout.HelpBox("Layout calculator did not return a key layout, editor will not be complete until layout calculator issues are fixed", MessageType.Warning);
             }
 
             serializedObject.Update();

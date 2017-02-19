@@ -4,13 +4,14 @@ namespace VRTK
     using UnityEngine;
     using UnityEngine.Events;
     using IKey = VRTK_Keyboard.IKey;
+    using KeyboardLayout = VRTK_KeyboardLayout;
     using RKeyLayout = VRTK_RenderableKeyLayout;
 
     /// <summary>
     /// This abstract class is the base class for key layout renderers used to render functional keyboard to a GameObject
     /// </summary>
     /// <remarks>
-    /// A key layout calculator component is required on the same gameobject as the key layout renderer.
+    /// A key layout calculator or source component may be required on the same gameobject as the key layout renderer.
     /// 
     /// As this is an abstract class, it cannot be applied directly to a game object and performs no logic.
     /// </remarks>
@@ -25,12 +26,7 @@ namespace VRTK
         protected virtual void Start()
         {
             keyboard = GetComponent<VRTK_Keyboard>();
-
-            if (GetComponent<VRTK_BaseKeyLayoutCalculator>() == null)
-            {
-                Debug.LogError(GetType().Name + " in " + name + " requires a Key Layout Calculator on the same object.");
-            }
-
+            
             SetupKeyboardUI();
         }
 
@@ -71,6 +67,31 @@ namespace VRTK
         }
 
         /// <summary>
+        /// Get a KeyboardLayout from the KeyLayoutSource attached to this keyboard renderer
+        /// </summary>
+        /// <returns>A KeyboardLayout to render</returns>
+        public KeyboardLayout GetKeyLayout()
+        {
+            VRTK_BaseKeyLayoutSource source = GetComponent<VRTK_BaseKeyLayoutSource>();
+            if (source == null)
+            {
+                return null;
+            }
+
+            KeyboardLayout layout = source.GetKeyLayout();
+
+            if (layout == null)
+            {
+                Debug.LogWarning(source.GetType().Name + " in " + name + " did not return a renderable key layout");
+                return null;
+            }
+
+            keysetCount = layout.keysets.Length;
+
+            return layout;
+        }
+
+        /// <summary>
         /// Get a RenderableKeyLayout from the KeyLayoutCalculator attached to this keyboard renderer
         /// </summary>
         /// <returns>A RenderableKeyLayout to render</returns>
@@ -79,6 +100,7 @@ namespace VRTK
             VRTK_BaseKeyLayoutCalculator calculator = GetComponent<VRTK_BaseKeyLayoutCalculator>();
             if (calculator == null)
             {
+                Debug.LogError(GetType().Name + " in " + name + " requires a Key Layout Calculator on the same object.");
                 return null;
             }
 
