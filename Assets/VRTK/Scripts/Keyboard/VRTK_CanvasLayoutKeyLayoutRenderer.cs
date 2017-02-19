@@ -107,10 +107,7 @@ namespace VRTK
         public override void SetupKeyboardUI()
         {
             // TODO: Better method of finding canvas(es)
-            for (int i = transform.childCount - 1; i >= 0; i--)
-            {
-                DestroyRuntimeObject(transform.GetChild(i).gameObject);
-            }
+            GameObject root = GetRuntimeObjectContainer(gameObject, empty: true);
 
             KeyboardLayout layout = GetKeyLayout();
             if (layout == null)
@@ -131,7 +128,7 @@ namespace VRTK
                 ProcessRuntimeObject(uiKeyset);
                 uiKeyset.SetActive(s == 0);
                 RectTransform keysetTransform = uiKeyset.GetComponent<RectTransform>();
-                keysetTransform.SetParent(gameObject.transform, false);
+                keysetTransform.SetParent(root.transform, false);
                 keysetTransform.pivot = new Vector2(0.5f, 0.5f);
                 keysetTransform.anchorMin = new Vector2(0, 0);
                 keysetTransform.anchorMax = new Vector2(1, 1);

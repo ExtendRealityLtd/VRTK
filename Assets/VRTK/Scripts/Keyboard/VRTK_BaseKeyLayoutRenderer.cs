@@ -18,6 +18,7 @@ namespace VRTK
     [RequireComponent(typeof(VRTK_Keyboard))]
     public abstract class VRTK_BaseKeyLayoutRenderer : MonoBehaviour
     {
+        public const string RUNTIME_OBJECT_CONTAINER_NAME = "__RuntimeObjects__";
         protected VRTK_Keyboard keyboard;
         protected int currentKeyset = 0;
         protected int keysetCount = 0;
@@ -26,7 +27,7 @@ namespace VRTK
         protected virtual void Start()
         {
             keyboard = GetComponent<VRTK_Keyboard>();
-            
+
             SetupKeyboardUI();
         }
 
@@ -64,6 +65,60 @@ namespace VRTK
             {
                 Destroy(obj);
             }
+        }
+
+        /// <summary>
+        /// Return a container to use when inserting runtime objects into a GameObject
+        /// </summary>
+        /// <remarks>
+        /// The runtime object container will use the same transform type as its parent.
+        /// 
+        /// The runtime object container will implicitly be passed to `ProcessRuntimeObject`.
+        /// </remarks>
+        /// <param name="parent">The parent gameobject to return a runtime container for</param>
+        /// <returns>The runtime object container</returns>
+        protected GameObject GetRuntimeObjectContainer(GameObject parent, bool empty = false)
+        {
+            GameObject root = null;
+
+            // Check for a previously created container
+            Transform preexistingRootTransform = parent.transform.Find(RUNTIME_OBJECT_CONTAINER_NAME);
+            if (preexistingRootTransform != null)
+            {
+                root = preexistingRootTransform.gameObject;
+
+                // Purge the container's children if requested
+                if (empty)
+                {
+                    for (int i = root.transform.childCount - 1; i >= 0; i--)
+                    {
+                        DestroyRuntimeObject(root.transform.GetChild(i).gameObject);
+                    }
+                }
+            }
+
+            // Create a new container if it does not exist
+            if (root == null)
+            {
+                root = new GameObject(RUNTIME_OBJECT_CONTAINER_NAME, parent.transform.GetType());
+                root.transform.SetParent(parent.transform, false);
+
+                // Make sure RectTransforms fill their parent
+                RectTransform rootRectTransform = root.transform as RectTransform;
+                if (rootRectTransform != null)
+                {
+                    rootRectTransform.pivot = new Vector2(0.5f, 0.5f);
+                    rootRectTransform.anchorMin = new Vector2(0, 0);
+                    rootRectTransform.anchorMax = new Vector2(1, 1);
+                    rootRectTransform.offsetMin = new Vector2(0, 0);
+                    rootRectTransform.offsetMax = new Vector2(0, 0);
+                }
+
+                // Process the container as a runtime object itself so it does not persist
+                ProcessRuntimeObject(root);
+            }
+
+            return root;
         }
 
         /// <summary>
