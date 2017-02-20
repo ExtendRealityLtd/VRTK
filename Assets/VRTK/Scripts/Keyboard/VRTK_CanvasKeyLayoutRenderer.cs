@@ -2,6 +2,7 @@
 namespace VRTK
 {
     using UnityEngine;
+    using System;
     using System.Collections.Generic;
     using RKeyLayout = VRTK_RenderableKeyLayout;
     using RKeyset = VRTK_RenderableKeyLayout.Keyset;
@@ -18,6 +19,9 @@ namespace VRTK
     [VRTK_KeyLayoutRenderer(name = "Canvas Renderer", help = "Renders to a UI.Canvas using a calculated keyboard layout", requireCalculator = true)]
     public class VRTK_CanvasKeyLayoutRenderer : VRTK_BaseCanvasKeyLayoutRenderer
     {
+        [Tooltip("Canvases to render to. Will use current game object when not set. If size > 1, then size must match the number of key areas created by the attached key layout renderer.")]
+        public RectTransform[] canvases = new RectTransform[0];
+
         protected DrivenRectTransformTracker drivenRuntimeRectTransforms = new DrivenRectTransformTracker();
 
         /// <summary>
@@ -26,15 +30,41 @@ namespace VRTK
         /// </summary>
         public override void SetupKeyboardUI()
         {
-            // TODO: Better method of finding canvas(es)
             drivenRuntimeRectTransforms.Clear();
             keysetObjects = null;
-            GameObject root = GetRuntimeObjectContainer(gameObject, empty: true);
-            drivenRuntimeRectTransforms.Add(this, root.GetComponent<RectTransform>(), DrivenTransformProperties.All);
+            GameObject[] roots = null;
+            if (canvases != null && canvases.Length > 0)
+            {
+                roots = new GameObject[canvases.Length];
+                for (int i = 0; i < canvases.Length; i++)
+                {
+                    if (canvases[i] == null)
+                    {
+                        roots = null;
+                        break;
+                    }
+                    roots[i] = GetRuntimeObjectContainer(canvases[i].gameObject, empty: true);
+                }
+            }
+            if (roots == null && transform is RectTransform)
+            {
+                roots = new GameObject[1];
+                roots[0] = GetRuntimeObjectContainer(gameObject, empty: true);
+            }
+            if (roots == null)
+            {
+                Debug.LogWarning(name + " must be part of a UI.Canvas or have the canvases array set.");
+                return;
+            }
 
-            Rect containerRect = root.GetComponent<RectTransform>().rect;
+            foreach (GameObject root in roots)
+            {
+                drivenRuntimeRectTransforms.Add(this, root.GetComponent<RectTransform>(), DrivenTransformProperties.All);
+            }
 
-            RKeyLayout layout = CalculateRenderableKeyLayout(containerRect.size);
+            Vector2[] containerSizes = Array.ConvertAll(roots,
+                (root) => root.GetComponent<RectTransform>().rect.size);
+            RKeyLayout layout = CalculateRenderableKeyLayout(containerSizes);
             if (layout == null)
             {
                 return;
@@ -50,32 +80,38 @@ namespace VRTK
             {
                 // Keyset
                 RKeyset rKeyset = layout.keysets[s];
-                GameObject uiKeyset = new GameObject(rKeyset.name, typeof(RectTransform));
-                ProcessRuntimeObject(uiKeyset);
-                keysetObjects.Add(uiKeyset, s);
-                CanvasGroup keysetGroup = uiKeyset.AddComponent<CanvasGroup>();
-                keysetGroup.alpha = s == 0 ? 1 : 0;
-                keysetGroup.interactable = s == 0;
-                keysetGroup.blocksRaycasts = s == 0;
-                keysetGroups.Add(keysetGroup, s);
-                RectTransform keysetTransform = uiKeyset.GetComponent<RectTransform>();
-                keysetTransform.SetParent(root.transform, false);
-                keysetTransform.pivot = new Vector2(0.5f, 0.5f);
-                keysetTransform.anchorMin = new Vector2(0, 0);
-                keysetTransform.anchorMax = new Vector2(1, 1);
-                keysetTransform.offsetMin = new Vector2(0, 0);
-                keysetTransform.offsetMax = new Vector2(0, 0);
-                drivenRuntimeRectTransforms.Add(this, keysetTransform, DrivenTransformProperties.All);
+                GameObject[] uiKeysets = new GameObject[roots.Length];
+                for (int r = 0; r < roots.Length; r++)
+                {
+                    GameObject uiKeyset = new GameObject(rKeyset.name, typeof(RectTransform));
+                    uiKeysets[r] = uiKeyset;
+                    ProcessRuntimeObject(uiKeyset);
+                    keysetObjects.Add(uiKeyset, s);
+                    CanvasGroup keysetGroup = uiKeyset.AddComponent<CanvasGroup>();
+                    keysetGroup.alpha = s == 0 ? 1 : 0;
+                    keysetGroup.interactable = s == 0;
+                    keysetGroup.blocksRaycasts = s == 0;
+                    keysetGroups.Add(keysetGroup, s);
+                    RectTransform keysetTransform = uiKeyset.GetComponent<RectTransform>();
+                    keysetTransform.SetParent(roots[r].transform, false);
+                    keysetTransform.pivot = new Vector2(0.5f, 0.5f);
+                    keysetTransform.anchorMin = new Vector2(0, 0);
+                    keysetTransform.anchorMax = new Vector2(1, 1);
+                    keysetTransform.offsetMin = new Vector2(0, 0);
+                    keysetTransform.offsetMax = new Vector2(0, 0);
+                    drivenRuntimeRectTransforms.Add(this, keysetTransform, DrivenTransformProperties.All);
+                }
 
-                foreach (RKeyArea rKeyArea in rKeyset.areas)
+                for (int a = 0; a < rKeyset.areas.Length; a++)
                 {
                     // Area
+                    RKeyArea rKeyArea = rKeyset.areas[a];
                     GameObject uiArea = new GameObject(rKeyArea.name, typeof(RectTransform));
                     ProcessRuntimeObject(uiArea);
                     RectTransform areaTransform = uiArea.GetComponent<RectTransform>();
-                    areaTransform.SetParent(keysetTransform, false);
+                    areaTransform.SetParent(uiKeysets[rKeyArea.container].transform, false);
                     areaTransform.pivot = areaPivot;
-                    ApplyRectLayoutToRectTransform(rKeyArea.rect, areaTransform, containerRect.size);
+                    ApplyRectLayoutToRectTransform(rKeyArea.rect, areaTransform, containerSizes[rKeyArea.container]);
                     drivenRuntimeRectTransforms.Add(GetComponent<VRTK_BaseKeyLayoutCalculator>(), areaTransform,
                         DrivenTransformProperties.AnchoredPosition3D |
                         DrivenTransformProperties.Anchors |

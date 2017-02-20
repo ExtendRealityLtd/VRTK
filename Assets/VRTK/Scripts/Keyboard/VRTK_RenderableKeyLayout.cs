@@ -53,9 +53,13 @@ namespace VRTK
             /// </summary>
             public string name;
             /// <summary>
-            /// The rect this key area is placed in
+            /// The rect placement and size of this key area 
             /// </summary>
             public Rect rect;
+            /// <summary>
+            /// The container this key area is placed in
+            /// </summary>
+            public int container = 0;
             /// <summary>
             /// The keys that belong to this key area
             /// </summary>

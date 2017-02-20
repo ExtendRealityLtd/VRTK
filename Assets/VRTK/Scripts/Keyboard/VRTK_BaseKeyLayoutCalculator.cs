@@ -16,10 +16,10 @@ namespace VRTK
     public abstract class VRTK_BaseKeyLayoutCalculator : MonoBehaviour
     {
         /// <summary>
-        /// Generate a renderable key layout to be rendered into a container (canvas, mesh, ...)
+        /// Generate a renderable key layout to be rendered into containers (canvas, mesh, ...)
         /// </summary>
-        /// <param name="containerSize">The dimensions of the container to render into</param>
+        /// <param name="containerSizes">The dimensions for the containers to render into</param>
         /// <returns>The generated renderable key layout</returns>
-        public abstract VRTK_RenderableKeyLayout CalculateKeyLayout(Vector2 containerSize);
+        public abstract VRTK_RenderableKeyLayout CalculateKeyLayout(Vector2[] containerSizes);
     }
 }

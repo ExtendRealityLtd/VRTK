@@ -27,7 +27,7 @@
 
             if (attribute.requireCalculator)
             {
-                RKeyLayout keyLayout = renderer.CalculateRenderableKeyLayout(Vector2.one * 100);
+                RKeyLayout keyLayout = renderer.CalculateRenderableKeyLayout(new Vector2[] { Vector2.one * 100 });
                 keysetNames = keyLayout == null
                     ? null
                     : Array.ConvertAll(keyLayout.keysets, (keyset) => keyset.name);

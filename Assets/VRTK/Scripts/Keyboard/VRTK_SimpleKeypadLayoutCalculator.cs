@@ -29,9 +29,11 @@ namespace VRTK
         [Tooltip("Side of the horizontal space in between keys")]
         public float keySpacing = 0f;
 
-        protected override void CalculateKeyset(BKeyset keyset, Vector2 containerSize)
+        protected override void CalculateKeyset(BKeyset keyset, Vector2[] containerSizes)
         {
             BKeyArea keypad = keyset.KeyArea("Keypad");
+            // For keypads, ignore all containers but the first
+            Vector2 containerSize = containerSizes[0];
             
             keypad.rect = new Rect(
                 new Vector2(0, 0),

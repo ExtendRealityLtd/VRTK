@@ -152,7 +152,7 @@ namespace VRTK
         /// Get a RenderableKeyLayout from the KeyLayoutCalculator attached to this keyboard renderer
         /// </summary>
         /// <returns>A RenderableKeyLayout to render</returns>
-        public RKeyLayout CalculateRenderableKeyLayout(Vector2 containerSize)
+        public RKeyLayout CalculateRenderableKeyLayout(Vector2[] containerSizes)
         {
             VRTK_BaseKeyLayoutCalculator calculator = GetComponent<VRTK_BaseKeyLayoutCalculator>();
             if (calculator == null)
@@ -161,7 +161,7 @@ namespace VRTK
                 return null;
             }
 
-            RKeyLayout layout = calculator.CalculateKeyLayout(containerSize);
+            RKeyLayout layout = calculator.CalculateKeyLayout(containerSizes);
             if (layout == null)
             {
                 Debug.LogWarning(calculator.GetType().Name + " in " + name + " did not return a renderable key layout");

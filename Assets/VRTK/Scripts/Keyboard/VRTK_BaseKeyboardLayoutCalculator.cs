@@ -106,10 +106,11 @@ namespace VRTK
             /// </summary>
             /// <param name="name">Name to use for this key area</param>
             /// <returns>High-level builder for this key area</returns>
-            public BKeyArea KeyArea(string name)
+            public BKeyArea KeyArea(string name, int container = 0)
             {
                 RKeyArea rKeyArea = new RKeyArea();
                 rKeyArea.name = name;
+                rKeyArea.container = container;
                 rAreas.Add(rKeyArea);
 
                 BKeyArea bKeyArea = new BKeyArea(rKeyArea);
@@ -165,6 +166,12 @@ namespace VRTK
             {
                 get { return renderable.rect; }
                 set { renderable.rect = value; }
+            }
+
+            public int container
+            {
+                get { return renderable.container; }
+                set { renderable.container = value; }
             }
 
             public BKeyArea(RKeyArea renderable)
@@ -357,9 +364,9 @@ namespace VRTK
         /// <summary>
         /// Base Keyboard Layout Calculator implements this to provide the higher-level `CalculateKeyset` builder interface
         /// </summary>
-        /// <param name="containerSize">The dimensions of the container to render into</param>
+        /// <param name="containerSizes">The dimensions for the containers to render into</param>
         /// <returns>The generated renderable key layout</returns>
-        public override RKeyLayout CalculateKeyLayout(Vector2 containerSize)
+        public override RKeyLayout CalculateKeyLayout(Vector2[] containerSizes)
         {
             RKeyboardBuilder b = BuildKeyboard();
 
@@ -371,7 +378,7 @@ namespace VRTK
 
             foreach (BKeyset keyset in b.Keysets())
             {
-                CalculateKeyset(keyset, containerSize);
+                CalculateKeyset(keyset, containerSizes);
             }
 
             return b.Commit();
@@ -381,8 +388,8 @@ namespace VRTK
         /// Keyboard Layout Calculators can override CalculateKeyset to build a keyboard layout using a high level builder
         /// </summary>
         /// <param name="keyset">Keyboard layout keyset builder</param>
-        /// <param name="containerSize">Dimensions of the container</param>
-        protected virtual void CalculateKeyset(BKeyset keyset, Vector2 containerSize)
+        /// <param name="containerSizes">Dimensions of the containers</param>
+        protected virtual void CalculateKeyset(BKeyset keyset, Vector2[] containerSizes)
         {
             throw new System.NotImplementedException(typeof(VRTK_BaseKeyboardLayoutCalculator) + " subclasses must override either the CalculateKeyLayout or CalculateKeyset method");
         }
