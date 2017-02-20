@@ -3,7 +3,6 @@ namespace VRTK
 {
     using UnityEngine;
     using UnityEngine.UI;
-    using RKey = VRTK_RenderableKeyLayout.Key;
 
     /// <summary>
     /// A VR keyboard
@@ -62,6 +61,158 @@ namespace VRTK
             /// </summary>
             /// <returns>The keyset to switch to</returns>
             int GetKeyset();
+        }
+
+        /// <summary>
+        /// An interface describing higher level key metadata 
+        /// </summary>
+        public interface IKeyMeta : IKey
+        {
+            /// <summary>
+            /// Get the preferred GameObject name for this key
+            /// </summary>
+            string GetName();
+
+            /// <summary>
+            /// Get the button text for this key
+            /// </summary>
+            string GetLabel();
+        }
+
+        /// <summary>
+        /// The standard IKeyMeta implementation used to generate and hold key metadata from an IKey
+        /// </summary>
+        public class KeyMeta : IKeyMeta
+        {
+            /// <summary>
+            /// The preferred GameObject name for this key
+            /// </summary>
+            private readonly string name;
+            /// <summary>
+            /// The button text for this key
+            /// </summary>
+            private readonly string label;
+            /// <summary>
+            /// The class of this key
+            /// </summary>
+            private readonly KeyClass keyClass;
+            /// <summary>
+            /// The character to type (for keyClass = Character)
+            /// </summary>
+            private readonly char character;
+            /// <summary>
+            /// The keyset to switch to (for keyClass = KeysetModifier)
+            /// </summary>
+            private readonly int keyset;
+
+            /// <summary>
+            /// Create a basic non-Character non-KeysetModifier key
+            /// </summary>
+            /// <param name="name">The preferred GameObject name for this key</param>
+            /// <param name="label"></param>
+            /// <param name="keyClass">The keyset to switch to (for keyClass = KeysetModifier)</param>
+            public KeyMeta(string name, string label, KeyClass keyClass)
+            {
+                this.name = name;
+                this.label = label;
+                this.keyClass = keyClass;
+            }
+            /// <summary>
+            /// Create a Character key
+            /// </summary>
+            /// <param name="name">The preferred GameObject name for this key</param>
+            /// <param name="label">The button text for this key</param>
+            /// <param name="character">The character to type (for keyClass = Character)</param>
+            public KeyMeta(string name, string label, char character) : this(name, label, KeyClass.Character)
+            {
+                this.character = character;
+            }
+            /// <summary>
+            /// Create a KeysetModifier key
+            /// </summary>
+            /// <param name="name">The preferred GameObject name for this key</param>
+            /// <param name="label">The button text for this key</param>
+            /// <param name="keyset"></param>
+            public KeyMeta(string name, string label, int keyset) : this(name, label, KeyClass.KeysetModifier)
+            {
+                this.keyset = keyset;
+            }
+
+            /// <summary>
+            /// Use an existing key to generate the metadata
+            /// </summary>
+            /// <param name="key">The key to generate metadata for</param>
+            public KeyMeta(IKey key)
+            {
+                keyClass = key.GetKeyClass();
+                switch (keyClass)
+                {
+                    case KeyClass.Character:
+                        character = key.GetCharacter();
+                        label = name = character.ToString();
+                        if (character == ' ')
+                        {
+                            name = "Spacebar";
+                        }
+                        break;
+                    case KeyClass.KeysetModifier:
+                        keyset = key.GetKeyset();
+                        name = "KeysetModifier";
+                        label = ""; // We do not have enough information to set this now
+                        break;
+                    case KeyClass.Backspace:
+                        label = name = "Backspace";
+                        break;
+                    case KeyClass.Enter:
+                        label = name = "Enter";
+                        break;
+                }
+            }
+
+            /// <summary>
+            /// Return an IKeyMeta for an IKey
+            /// </summary>
+            /// <remarks>
+            /// If key already implements IKeyMeta it will be returned.
+            /// 
+            /// Otherwise, a new KeyMeta instance will be created.
+            /// </remarks>
+            /// <param name="key">An IKey key</param>
+            /// <returns>A</returns>
+            public static IKeyMeta FromKey(IKey key)
+            {
+                IKeyMeta keyMeta = key as IKeyMeta;
+                if (keyMeta == null)
+                {
+                    keyMeta = new KeyMeta(key);
+                }
+                return keyMeta;
+            }
+
+            public string GetName()
+            {
+                return name;
+            }
+
+            public string GetLabel()
+            {
+                return label;
+            }
+
+            public KeyClass GetKeyClass()
+            {
+                return keyClass;
+            }
+
+            public char GetCharacter()
+            {
+                return character;
+            }
+
+            public int GetKeyset()
+            {
+                return keyset;
+            }
         }
 
         [Tooltip("A UI.InputField to send all keyboard info to")]

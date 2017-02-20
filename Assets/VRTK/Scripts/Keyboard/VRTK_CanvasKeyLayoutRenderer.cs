@@ -2,9 +2,6 @@
 namespace VRTK
 {
     using UnityEngine;
-    using UnityEngine.UI;
-    using System;
-    using KeyClass = VRTK_Keyboard.KeyClass;
     using RKeyLayout = VRTK_RenderableKeyLayout;
     using RKeyset = VRTK_RenderableKeyLayout.Keyset;
     using RKeyArea = VRTK_RenderableKeyLayout.KeyArea;
@@ -83,7 +80,6 @@ namespace VRTK
                         // Key
                         GameObject template = GetTemplateForKey(rKey);
                         GameObject uiKey = Instantiate<GameObject>(template);
-                        uiKey.name = rKey.name;
                         ProcessRuntimeObject(uiKey);
                         RectTransform keyTransform = uiKey.GetComponent<RectTransform>();
                         keyTransform.SetParent(areaTransform, false);

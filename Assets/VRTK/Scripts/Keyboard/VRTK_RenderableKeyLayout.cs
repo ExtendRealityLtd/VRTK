@@ -4,7 +4,8 @@ namespace VRTK
     using UnityEngine;
     using KeyClass = VRTK_Keyboard.KeyClass;
     using IKey = VRTK_Keyboard.IKey;
-    using System;
+    using IKeyMeta = VRTK_Keyboard.IKeyMeta;
+    using KeyMeta = VRTK_Keyboard.KeyMeta;
 
     /// <summary>
     /// A meta keyboard layout with calculated key rectangles
@@ -59,7 +60,7 @@ namespace VRTK
             /// The keys that belong to this key area
             /// </summary>
             public Key[] keys;
-            
+
             public override string ToString()
             {
                 return VRTK_DebugHelpers.ObjectDebugString("KeyArea", new string[]
@@ -126,6 +127,28 @@ namespace VRTK
             public int GetKeyset()
             {
                 return keyset;
+            }
+
+            /// <summary>
+            /// Copy the metadata from a KeyMeta to this RenderableKey
+            /// </summary>
+            /// <param name="mKey">The key metadata</param>
+            public void ApplyKeyMeta(IKeyMeta mKey)
+            {
+                name = mKey.GetName();
+                label = mKey.GetLabel();
+                keyClass = mKey.GetKeyClass();
+                character = mKey.GetCharacter();
+                keyset = mKey.GetKeyset();
+            }
+
+            /// <summary>
+            /// Copy the metadata from a Key to this RenderableKey
+            /// </summary>
+            /// <param name="mKey">The key</param>
+            public void ApplyKeyMeta(IKey key)
+            {
+                ApplyKeyMeta(new KeyMeta(key));
             }
         }
 

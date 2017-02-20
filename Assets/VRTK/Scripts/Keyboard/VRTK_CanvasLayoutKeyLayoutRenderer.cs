@@ -3,7 +3,6 @@ namespace VRTK
 {
     using UnityEngine;
     using UnityEngine.UI;
-    using System;
     using KeyboardLayout = VRTK_KeyboardLayout;
     using KLKeyset = VRTK_KeyboardLayout.Keyset;
     using KLRow = VRTK_KeyboardLayout.Row;
@@ -81,7 +80,6 @@ namespace VRTK
                         // Key
                         GameObject template = GetTemplateForKey(key);
                         GameObject uiKey = Instantiate<GameObject>(template);
-                        // uiKey.name = key.name;
                         ProcessRuntimeObject(uiKey);
                         RectTransform keyTransform = uiKey.GetComponent<RectTransform>();
                         keyTransform.SetParent(rowTransform, false);

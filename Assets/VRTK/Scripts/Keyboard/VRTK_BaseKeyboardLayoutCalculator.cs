@@ -4,6 +4,7 @@ namespace VRTK
     using UnityEngine;
     using System.Collections.Generic;
     using KeyClass = VRTK_Keyboard.KeyClass;
+    using KeyMeta = VRTK_Keyboard.KeyMeta;
     using KeyboardLayout = VRTK_KeyboardLayout;
     using KLKeyset = VRTK_KeyboardLayout.Keyset;
     using KLRow = VRTK_KeyboardLayout.Row;
@@ -306,31 +307,7 @@ namespace VRTK
             public RKey Create()
             {
                 RKey rKey = new RKey();
-
-                rKey.keyClass = raw.keyClass;
-                switch (raw.keyClass)
-                {
-                    case KeyClass.Character:
-                        rKey.character = raw.character;
-                        rKey.label = rKey.name = raw.character.ToString();
-                        if (raw.character == ' ')
-                        {
-                            rKey.name = "Spacebar";
-                        }
-                        break;
-                    case KeyClass.KeysetModifier:
-                        rKey.keyset = raw.keyset;
-                        rKey.name = "KeysetModifier";
-                        rKey.label = ""; // We do not have enough information to set this now
-                        break;
-                    case KeyClass.Backspace:
-                        rKey.label = rKey.name = "Backspace";
-                        break;
-                    case KeyClass.Enter:
-                        rKey.label = rKey.name = "Enter";
-                        break;
-                }
-
+                rKey.ApplyKeyMeta(raw);
                 return rKey;
             }
 

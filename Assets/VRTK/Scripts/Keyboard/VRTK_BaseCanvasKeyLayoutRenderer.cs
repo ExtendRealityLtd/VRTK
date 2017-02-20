@@ -5,7 +5,8 @@
     using System;
     using KeyClass = VRTK_Keyboard.KeyClass;
     using IKey = VRTK_Keyboard.IKey;
-    using RKey = VRTK_RenderableKeyLayout.Key;
+    using IKeyMeta = VRTK_Keyboard.IKeyMeta;
+    using KeyMeta = VRTK_Keyboard.KeyMeta;
 
     /// <summary>
     /// This abstract class is the base for both key layout renderer implementations that render to a UI.Canvas
@@ -143,7 +144,9 @@
         /// <param name="uiKey">The UI.Button GameObject</param>
         public void ApplyKeySettingsToUIKey(int keyset, IKey key, GameObject uiKey)
         {
-            RKey rKey = key as RKey;
+            IKeyMeta keyMeta = KeyMeta.FromKey(key);
+
+            uiKey.name = keyMeta.GetName();
 
             Button uiKeyButton = uiKey.GetComponentInChildren<Button>();
             if (uiKeyButton != null)
@@ -153,11 +156,7 @@
                 Text uiKeyText = uiKeyButton.GetComponentInChildren<Text>();
                 if (uiKeyText != null)
                 {
-                    if (rKey != null)
-                    {
-                        // FIXME: Should not only be available to rendered keys
-                        uiKeyText.text = rKey.label;
-                    }
+                    uiKeyText.text = keyMeta.GetLabel();
                 }
 
                 Image uiKeyImage = GetComponentExclusivelyInChildren<Image>(uiKeyButton.gameObject);
