@@ -67,7 +67,7 @@ namespace VRTK
         /// </summary>
         public override void UpdateRenderer()
         {
-            if ((controllingPointer && controllingPointer.IsPointerActive()) || tracerVisible || cursorVisible)
+            if ((controllingPointer && controllingPointer.IsPointerActive()) || IsTracerVisible() || IsCursorVisible())
             {
                 Vector3 jointPosition = ProjectForwardBeam();
                 Vector3 downPosition = ProjectDownBeam(jointPosition);
@@ -133,6 +133,16 @@ namespace VRTK
         {
             base.ChangeMaterial(givenColor);
             ChangeMaterialColor(actualCursor, givenColor);
+        }
+
+        protected virtual bool IsTracerVisible()
+        {
+            return (tracerVisibility == VisibilityStates.AlwaysOn || tracerVisible);
+        }
+
+        protected virtual bool IsCursorVisible()
+        {
+            return (cursorVisibility == VisibilityStates.AlwaysOn || cursorVisible);
         }
 
         protected virtual void CreateTracer()

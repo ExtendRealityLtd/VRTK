@@ -905,6 +905,17 @@ The InitalizePointer method is used to set up the state of the pointer renderer.
 
 The Toggle Method is used to enable or disable the pointer renderer.
 
+#### ToggleInteraction/1
+
+  > `public virtual void ToggleInteraction(bool state)`
+
+  * Parameters
+   * `bool state` - If true then the object interactor will be enabled.
+  * Returns
+   * _none_
+
+The ToggleInteraction method is used to enable or disable the controller extension interactions.
+
 #### UpdateRenderer/0
 
   > `public virtual void UpdateRenderer()`
