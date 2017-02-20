@@ -3,6 +3,7 @@ namespace VRTK
 {
     using UnityEngine;
     using UnityEngine.UI;
+    using System.Collections.Generic;
     using KeyboardLayout = VRTK_KeyboardLayout;
     using KLKeyset = VRTK_KeyboardLayout.Keyset;
     using KLRow = VRTK_KeyboardLayout.Row;
@@ -46,6 +47,9 @@ namespace VRTK
 
             SetupTemplates();
 
+            keysetObjects = new Dictionary<GameObject, int>();
+            keysetGroups = new Dictionary<CanvasGroup, int>();
+
             for (int s = 0; s < layout.keysets.Length; s++)
             {
                 // Keyset
@@ -53,7 +57,12 @@ namespace VRTK
                 GameObject uiKeyset = Instantiate<GameObject>(keysetLayoutTemplate.gameObject, root.transform, false);
                 uiKeyset.name = keyset.name;
                 ProcessRuntimeObject(uiKeyset);
-                uiKeyset.SetActive(s == 0);
+                keysetObjects.Add(uiKeyset, s);
+                CanvasGroup keysetGroup = uiKeyset.AddComponent<CanvasGroup>();
+                keysetGroup.alpha = s == 0 ? 1 : 0;
+                keysetGroup.interactable = s == 0;
+                keysetGroup.blocksRaycasts = s == 0;
+                keysetGroups.Add(keysetGroup, s);
                 RectTransform keysetTransform = uiKeyset.GetComponent<RectTransform>();
                 keysetTransform.localRotation = Quaternion.identity;
                 keysetTransform.localScale = Vector3.one;
@@ -102,6 +111,8 @@ namespace VRTK
                     }
                 }
             }
+
+            UpdateActiveKeyset();
         }
 
         protected override void SetupTemplates()

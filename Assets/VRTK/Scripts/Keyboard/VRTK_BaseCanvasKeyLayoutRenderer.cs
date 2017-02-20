@@ -3,11 +3,11 @@
     using UnityEngine;
     using UnityEngine.UI;
     using System;
+    using System.Collections.Generic;
     using KeyClass = VRTK_Keyboard.KeyClass;
     using IKey = VRTK_Keyboard.IKey;
     using IKeyMeta = VRTK_Keyboard.IKeyMeta;
     using KeyMeta = VRTK_Keyboard.KeyMeta;
-
     /// <summary>
     /// This abstract class is the base for both key layout renderer implementations that render to a UI.Canvas
     /// </summary>
@@ -71,6 +71,30 @@
         protected GameObject _modifierKeyTemplate;
 
         protected DrivenRectTransformTracker drivenTemplateRectTransforms = new DrivenRectTransformTracker();
+        protected Dictionary<CanvasGroup, int> keysetGroups;
+
+        /// <summary>
+        /// Update canvas group on keyset objects to change which one is dispalyed
+        /// </summary>
+        protected override void UpdateActiveKeyset()
+        {
+            foreach (KeyValuePair<CanvasGroup, int> keysetGroup in keysetGroups)
+            {
+                bool isActive = keysetGroup.Value == currentKeyset;
+                CanvasGroup group = keysetGroup.Key;
+                group.alpha = isActive ? 1 : 0;
+                group.interactable = isActive;
+                group.blocksRaycasts = isActive;
+
+#if UNITY_EDITOR
+                if (!Application.isPlaying)
+                {
+                    // Disable objects in editor so invisible keys are not selected instead of visible ones
+                    group.gameObject.SetActive(isActive);
+                }
+#endif
+            }
+        }
 
         protected virtual void SetupTemplates()
         {

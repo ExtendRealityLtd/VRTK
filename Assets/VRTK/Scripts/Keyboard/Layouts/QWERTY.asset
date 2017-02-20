@@ -130,7 +130,7 @@ MonoBehaviour:
       splitIndex: 5
     - keys:
       - character: 49
-        keyClass: 0
+        keyClass: 1
         keyset: 2
         subkeys: []
         weight: 1
@@ -365,7 +365,7 @@ MonoBehaviour:
       splitIndex: 5
     - keys:
       - character: 49
-        keyClass: 0
+        keyClass: 1
         keyset: 2
         subkeys: []
         weight: 1

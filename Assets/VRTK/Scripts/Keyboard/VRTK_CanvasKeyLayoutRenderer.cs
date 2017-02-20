@@ -2,6 +2,7 @@
 namespace VRTK
 {
     using UnityEngine;
+    using System.Collections.Generic;
     using RKeyLayout = VRTK_RenderableKeyLayout;
     using RKeyset = VRTK_RenderableKeyLayout.Keyset;
     using RKeyArea = VRTK_RenderableKeyLayout.KeyArea;
@@ -27,6 +28,7 @@ namespace VRTK
         {
             // TODO: Better method of finding canvas(es)
             drivenRuntimeRectTransforms.Clear();
+            keysetObjects = null;
             GameObject root = GetRuntimeObjectContainer(gameObject, empty: true);
             drivenRuntimeRectTransforms.Add(this, root.GetComponent<RectTransform>(), DrivenTransformProperties.All);
 
@@ -41,6 +43,8 @@ namespace VRTK
             SetupTemplates();
 
             Vector2 areaPivot = Vector2.one * 0.5f;
+            keysetObjects = new Dictionary<GameObject, int>();
+            keysetGroups = new Dictionary<CanvasGroup, int>();
 
             for (int s = 0; s < layout.keysets.Length; s++)
             {
@@ -48,7 +52,12 @@ namespace VRTK
                 RKeyset rKeyset = layout.keysets[s];
                 GameObject uiKeyset = new GameObject(rKeyset.name, typeof(RectTransform));
                 ProcessRuntimeObject(uiKeyset);
-                uiKeyset.SetActive(s == 0);
+                keysetObjects.Add(uiKeyset, s);
+                CanvasGroup keysetGroup = uiKeyset.AddComponent<CanvasGroup>();
+                keysetGroup.alpha = s == 0 ? 1 : 0;
+                keysetGroup.interactable = s == 0;
+                keysetGroup.blocksRaycasts = s == 0;
+                keysetGroups.Add(keysetGroup, s);
                 RectTransform keysetTransform = uiKeyset.GetComponent<RectTransform>();
                 keysetTransform.SetParent(root.transform, false);
                 keysetTransform.pivot = new Vector2(0.5f, 0.5f);
@@ -97,6 +106,8 @@ namespace VRTK
                     }
                 }
             }
+
+            UpdateActiveKeyset();
         }
 
         /// <summary>

@@ -3,6 +3,7 @@ namespace VRTK
 {
     using UnityEngine;
     using UnityEngine.Events;
+    using System.Collections.Generic;
     using IKey = VRTK_Keyboard.IKey;
     using KeyboardLayout = VRTK_KeyboardLayout;
     using RKeyLayout = VRTK_RenderableKeyLayout;
@@ -22,6 +23,7 @@ namespace VRTK
         protected VRTK_Keyboard keyboard;
         protected int currentKeyset = 0;
         protected int keysetCount = 0;
+        protected Dictionary<GameObject, int> keysetObjects;
         protected bool isEnterEnabled = true;
 
         protected virtual void Start()
@@ -209,6 +211,18 @@ namespace VRTK
             }
 
             currentKeyset = keyset;
+            UpdateActiveKeyset();
+        }
+
+        /// <summary>
+        /// Update enabled/active on keyset objects to change which one is dispalyed
+        /// </summary>
+        protected virtual void UpdateActiveKeyset()
+        {
+            foreach (KeyValuePair<GameObject, int> keysetObject in keysetObjects)
+            {
+                keysetObject.Key.SetActive(keysetObject.Value == currentKeyset);
+            }
         }
 
         /// <summary>
