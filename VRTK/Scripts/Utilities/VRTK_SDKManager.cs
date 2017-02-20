@@ -18,7 +18,8 @@ namespace VRTK
             None,
             SteamVR,
             OculusVR,
-            Simulator
+            Simulator,
+            LeapMotionController
         }
 
         public Dictionary<SupportedSDKs, VRTK_SDKDetails> sdkDetails = new Dictionary<SupportedSDKs, VRTK_SDKDetails>()
@@ -26,7 +27,8 @@ namespace VRTK
             { SupportedSDKs.None, new VRTK_SDKDetails("", "", "") },
             { SupportedSDKs.SteamVR, new VRTK_SDKDetails("VRTK_SDK_STEAMVR", "SteamVR", "SteamVR") },
             { SupportedSDKs.OculusVR, new VRTK_SDKDetails("VRTK_SDK_OCULUSVR", "OculusVR", "OVRInput") },
-            { SupportedSDKs.Simulator, new VRTK_SDKDetails("VRTK_SDK_SIM", "Simulator", "VRTK_SDKManager") }
+            { SupportedSDKs.Simulator, new VRTK_SDKDetails("VRTK_SDK_SIM", "Simulator", "VRTK_SDKManager") },
+            { SupportedSDKs.LeapMotionController, new VRTK_SDKDetails("VRTK_SDK_LEAPMOTION", "LeapMotionController", "LeapHandController") }
         };
 
         /// <summary>
@@ -142,6 +144,9 @@ namespace VRTK
                     break;
                 case SupportedSDKs.Simulator:
                     returnSDK = ScriptableObject.CreateInstance<SDK_SimController>();
+                    break;
+                case SupportedSDKs.LeapMotionController:
+                    returnSDK = ScriptableObject.CreateInstance<SDK_LeapMotionController>();
                     break;
                 default:
                     Debug.LogError("No valid Controller SDK has been selected. If you're seeing this error in Unity Edit mode, then try selecting the GameObject with the `VRTK_SDKManager` script and selecting a valid Controller SDK from the dropdown list.");
