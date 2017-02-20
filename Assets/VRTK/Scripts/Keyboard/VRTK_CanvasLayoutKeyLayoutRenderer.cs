@@ -23,86 +23,12 @@ namespace VRTK
     [VRTK_KeyLayoutRenderer(name = "Canvas Layout Renderer", help = "Renders to a UI.Canvas using simple Canvas Layout elements", requireSource = true)]
     public class VRTK_CanvasLayoutKeyLayoutRenderer : VRTK_BaseCanvasKeyLayoutRenderer
     {
-        /// <summary>
-        /// A serializable class containing settings to apply to the keysets' UI.VerticalLayoutGroup
-        /// </summary>
-        [Serializable]
-        public class KeysetLayoutGroupSettings
-        {
-            public RectOffset padding;
-            public float spacing;
-            public TextAnchor childAlignment;
-            public bool childControlWidth = true;
-            public bool childControlHeight = true;
-            public bool childForceExpandWidth = true;
-            public bool childForceExpandHeight = true;
-
-            public void Apply(VerticalLayoutGroup layoutGroup)
-            {
-                layoutGroup.padding = padding;
-                layoutGroup.spacing = spacing;
-                layoutGroup.childAlignment = childAlignment;
-                layoutGroup.childControlWidth = childControlWidth;
-                layoutGroup.childControlHeight = childControlHeight;
-                layoutGroup.childForceExpandWidth = childForceExpandWidth;
-                layoutGroup.childForceExpandHeight = childForceExpandHeight;
-            }
-        }
-        /// <summary>
-        /// A serializable class containing settings to apply to the rows' UI.HorizontalLayoutGroup
-        /// </summary>
-        [Serializable]
-        public class RowLayoutGroupSettings
-        {
-            public RectOffset padding;
-            public float spacing;
-            public TextAnchor childAlignment;
-            public bool childControlWidth = true;
-            public bool childControlHeight = true;
-            public bool childForceExpandWidth = true;
-            public bool childForceExpandHeight = true;
-
-            public void Apply(HorizontalLayoutGroup layoutGroup)
-            {
-                layoutGroup.padding = padding;
-                layoutGroup.spacing = spacing;
-                layoutGroup.childAlignment = childAlignment;
-                layoutGroup.childControlWidth = childControlWidth;
-                layoutGroup.childControlHeight = childControlHeight;
-                layoutGroup.childForceExpandWidth = childForceExpandWidth;
-                layoutGroup.childForceExpandHeight = childForceExpandHeight;
-            }
-        }
-        /// <summary>
-        /// A serializable class containing settings to apply to the keys' UI.LayoutElement
-        /// </summary>
-        [Serializable]
-        public class KeyLayoutElementSettings
-        {
-            public float minWidth;
-            public float minHeight;
-            public float preferredWidth;
-            public float preferredHeight;
-            public float flexibleWidth = 1f;
-            public float flexibleHeight = 1f;
-
-            public void Apply(LayoutElement element)
-            {
-                element.minWidth = minWidth;
-                element.minHeight = minHeight;
-                element.preferredWidth = preferredWidth;
-                element.preferredHeight = preferredHeight;
-                element.flexibleWidth = flexibleWidth;
-                element.flexibleHeight = flexibleHeight;
-            }
-        }
-
-        [Tooltip("VerticalGroupLayout settings used by keysets to lay out rows")]
-        public KeysetLayoutGroupSettings keysetLayoutSettings;
-        [Tooltip("HorizontalGroupLayout settings used by rows to lay out keys")]
-        public RowLayoutGroupSettings rowLayoutSettings;
-        [Tooltip("LayoutElement settings used by keys")]
-        public KeyLayoutElementSettings keyLayoutSettings;
+        [Tooltip("VerticalLayoutGroup template used by keysets to lay out rows")]
+        public VerticalLayoutGroup keysetLayoutTemplate;
+        [Tooltip("HorizontalLayoutGroup template used by rows to lay out keys")]
+        public HorizontalLayoutGroup rowLayoutTemplate;
+        [Tooltip("LayoutElement template used by keys")]
+        public LayoutElement keyLayoutTemplate;
 
         public override void SetupKeyboardUI()
         {
@@ -116,37 +42,31 @@ namespace VRTK
             }
 
             SetupTemplates();
-
-            Vector2 rowPivot = Vector2.one * 0.5f;
+            
             Vector2 keyPivot = Vector2.one * 0.5f;
 
             for (int s = 0; s < layout.keysets.Length; s++)
             {
                 // Keyset
                 KLKeyset keyset = layout.keysets[s];
-                GameObject uiKeyset = new GameObject(keyset.name, typeof(RectTransform));
+                GameObject uiKeyset = Instantiate<GameObject>(keysetLayoutTemplate.gameObject, root.transform, false);
+                uiKeyset.name = keyset.name;
                 ProcessRuntimeObject(uiKeyset);
                 uiKeyset.SetActive(s == 0);
                 RectTransform keysetTransform = uiKeyset.GetComponent<RectTransform>();
-                keysetTransform.SetParent(root.transform, false);
                 keysetTransform.pivot = new Vector2(0.5f, 0.5f);
                 keysetTransform.anchorMin = new Vector2(0, 0);
                 keysetTransform.anchorMax = new Vector2(1, 1);
                 keysetTransform.offsetMin = new Vector2(0, 0);
                 keysetTransform.offsetMax = new Vector2(0, 0);
-                VerticalLayoutGroup keysetLayoutGroup = uiKeyset.AddComponent<VerticalLayoutGroup>();
-                keysetLayoutSettings.Apply(keysetLayoutGroup);
 
                 foreach (KLRow row in keyset.rows)
                 {
                     // Area
-                    GameObject uiRow = new GameObject("KeyboardRow", typeof(RectTransform));
+                    GameObject uiRow = Instantiate<GameObject>(rowLayoutTemplate.gameObject, keysetTransform, false);
+                    uiRow.name = "KeyboardRow";
                     ProcessRuntimeObject(uiRow);
                     RectTransform rowTransform = uiRow.GetComponent<RectTransform>();
-                    rowTransform.SetParent(keysetTransform, false);
-                    rowTransform.pivot = rowPivot;
-                    HorizontalLayoutGroup rowLayoutGroup = uiRow.AddComponent<HorizontalLayoutGroup>();
-                    rowLayoutSettings.Apply(rowLayoutGroup);
 
                     foreach (KLKey key in row.keys)
                     {
@@ -160,9 +80,54 @@ namespace VRTK
                         keyTransform.pivot = keyPivot;
                         ApplyKeySettingsToUIKey(s, key, uiKey);
                         LayoutElement keyLayoutElement = uiKey.AddComponent<LayoutElement>();
-                        keyLayoutSettings.Apply(keyLayoutElement);
+                        keyLayoutElement.ignoreLayout = keyLayoutTemplate.ignoreLayout;
+                        keyLayoutElement.minWidth = keyLayoutTemplate.minWidth;
+                        keyLayoutElement.minHeight = keyLayoutTemplate.minHeight;
+                        keyLayoutElement.preferredWidth = keyLayoutTemplate.preferredWidth;
+                        keyLayoutElement.preferredHeight = keyLayoutTemplate.preferredHeight;
+                        keyLayoutElement.flexibleWidth = keyLayoutTemplate.flexibleWidth;
+                        keyLayoutElement.flexibleHeight = keyLayoutTemplate.flexibleHeight;
                     }
                 }
+            }
+        }
+
+        protected override void SetupTemplates()
+        {
+            base.SetupTemplates();
+
+            if (keysetLayoutTemplate == null)
+            {
+                GameObject keysetTemplate = new GameObject("KeysetLayoutTemplate", typeof(RectTransform));
+                keysetTemplate.GetComponent<RectTransform>().pivot = Vector2.one / 2f;
+                keysetTemplate.transform.SetParent(gameObject.transform, false);
+                keysetLayoutTemplate = keysetTemplate.AddComponent<VerticalLayoutGroup>();
+                keysetLayoutTemplate.childControlHeight = true;
+                keysetLayoutTemplate.childControlWidth = true;
+                keysetLayoutTemplate.childForceExpandWidth = true;
+                keysetLayoutTemplate.childForceExpandHeight = true;
+            }
+
+            if (rowLayoutTemplate == null)
+            {
+                GameObject rowTemplate = new GameObject("RowLayoutTemplate", typeof(RectTransform));
+                rowTemplate.GetComponent<RectTransform>().pivot = Vector2.one / 2f;
+                rowTemplate.transform.SetParent(gameObject.transform, false);
+                rowLayoutTemplate = rowTemplate.AddComponent<HorizontalLayoutGroup>();
+                rowLayoutTemplate.childControlHeight = true;
+                rowLayoutTemplate.childControlWidth = true;
+                rowLayoutTemplate.childForceExpandWidth = false;
+                rowLayoutTemplate.childForceExpandHeight = false;
+            }
+
+            if (keyLayoutTemplate == null)
+            {
+                GameObject keyTemplate = new GameObject("KeyLayoutTemplate", typeof(RectTransform));
+                keyTemplate.GetComponent<RectTransform>().pivot = Vector2.one / 2f;
+                keyTemplate.transform.SetParent(gameObject.transform, false);
+                keyLayoutTemplate = keyTemplate.AddComponent<LayoutElement>();
+                keyLayoutTemplate.flexibleWidth = 1f;
+                keyLayoutTemplate.flexibleHeight = 1f;
             }
         }
     }
