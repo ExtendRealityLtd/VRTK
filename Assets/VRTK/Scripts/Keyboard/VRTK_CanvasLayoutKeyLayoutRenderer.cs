@@ -55,6 +55,8 @@ namespace VRTK
                 ProcessRuntimeObject(uiKeyset);
                 uiKeyset.SetActive(s == 0);
                 RectTransform keysetTransform = uiKeyset.GetComponent<RectTransform>();
+                keysetTransform.localRotation = Quaternion.identity;
+                keysetTransform.localScale = Vector3.one;
                 keysetTransform.pivot = new Vector2(0.5f, 0.5f);
                 keysetTransform.anchorMin = new Vector2(0, 0);
                 keysetTransform.anchorMax = new Vector2(1, 1);
@@ -149,6 +151,8 @@ namespace VRTK
             {
                 // All keyset transform properties are set by renderer
                 RectTransform keysetTransform = keysetLayoutTemplate.gameObject.GetComponent<RectTransform>();
+                keysetTransform.localRotation = Quaternion.identity;
+                keysetTransform.localScale = Vector3.one;
                 drivenTemplateRectTransforms.Add(this, keysetTransform, DrivenTransformProperties.All);
 
                 // Row transform is controlled by the keyset template's VerticalLayoutGroup
