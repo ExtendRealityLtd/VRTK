@@ -1,8 +1,51 @@
+# Innoactive Fork of VRTK
+
+This is a private fork of the excellent [Virtual Reality Toolkit][https://github.com/thestonefox/VRTK]
+provided and maintained by [thestonefox][https://github.com/thestonefox].
+
+## Intention
+
+Since VRTK is maintained on Github as an entire Unity project with all of the Unity project structure it
+is difficutl to use the Toolkit as a dropin in existing projects. This fork solves this problem by reducing
+the VRTK repository to the relevant Assets so the VRTK can be included as e.g. a git submodule.
+
+## Updating
+
+Since this fork removed parts of the original files (mainly the Unity project structure), updating this fork
+to include the most recent features and bugfixes of VRTK is **not as straightfoward** as just pulling in
+changes from the original repository.
+
+**If you're not a profound git user, please step aside and let someone with experience handle the issue.**
+
+The steps for updating this fork to the most recent version include:
+
+1. [first-time only] Clone the the original VRTK repository which contains the most recent commits.
+1. Update your copy of VRTK to get the most recent commits by running (`git pull`)
+1. Create a new branch on Innoactive's fork from a time when the changes between this VRTK fork and the
+original repo where still the same (the deletion of the unity project structure can be ignored as a change).
+The easiest way for now is to run
+
+    ```
+    git branch feature/vrtk-update-YYYY-MM-DD ecad13fde783f99b75c07c88ea81b4ebb9122ba7
+    ```
+
+    (this creates a new branch with the specified name from the specified commit)
+1. As soon as the new branch has been checked out, **copy and replace** all files from the original VRTK
+repository's `Assets\VRTK` folder into the fork's `VRTK\` folder.
+1. Create a new commit of the changes à la
+
+    ```
+    git commit -m "Updated VRTK up to commit <original-vrtk-commit-sha>"
+    ```
+1. Finally, we'll rebase all changes that have been made on the fork's master onto our new branch.
+This will essentially re-apply all of the changes which have been solely made on the fork to on topic
+of the updated VRTK features.
+
+# VRTK
+
 ![vrtk logo](https://raw.githubusercontent.com/thestonefox/VRTK/master/Assets/VRTK/Examples/Resources/Images/logos/vrtk-capsule-clear.png)
 > ### VRTK - Virtual Reality Toolkit
 > A productive VR Toolkit for rapidly building VR solutions in Unity3d.
-
-## VRTK has just launched a Kickstarter campaign to fund version 4 and beyond. [Visit the Kickstarter campaign and pledge today! :)](https://www.kickstarter.com/projects/thestonefox/virtual-reality-toolkit-vrtk-version-4-and-beyond)
 
 [![Slack](http://sysdia2.co.uk/badge.svg)](http://invite.vrtk.io)
 [![Twitter Follow](https://img.shields.io/twitter/follow/vr_toolkit.svg?style=flat&label=twitter)](https://twitter.com/VR_Toolkit)
@@ -60,7 +103,7 @@ if your query has already been answered.
   * Button Two: R
 
 </details>
- 
+
 <details><summary>**Instructions for using the SteamVR Unity3d asset**</summary>
 
  * Import the [SteamVR Plugin] from the Unity Asset Store.
