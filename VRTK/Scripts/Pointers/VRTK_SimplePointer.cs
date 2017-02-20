@@ -2,6 +2,7 @@
 namespace VRTK
 {
     using UnityEngine;
+    using System;
 
     /// <summary>
     /// The Simple Pointer emits a coloured beam from the end of the object it is attached to and simulates a laser beam.
@@ -14,6 +15,7 @@ namespace VRTK
     /// <example>
     /// `VRTK/Examples/003_Controller_SimplePointer` shows the simple pointer in action and code examples of how the events are utilised and listened to can be viewed in the script `VRTK/Examples/Resources/Scripts/VRTK_ControllerPointerEvents_ListenerExample.cs`
     /// </example>
+    [Obsolete("`VRTK_SimplePointer` has been replaced with `VRTK_StraightPointerRenderer` attached to a `VRTK_Pointer`. This script will be removed in a future version of VRTK.")]
     public class VRTK_SimplePointer : VRTK_BasePointer
     {
         [Header("Simple Pointer Settings", order = 3)]

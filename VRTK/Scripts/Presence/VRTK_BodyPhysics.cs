@@ -136,6 +136,7 @@ namespace VRTK
         private bool preventSnapToFloor = false;
         private bool generateCollider = false;
         private bool generateRigidbody = false;
+        private Vector3 playAreaVelocity = Vector3.zero;
 
         // Draws a sphere for current standing position and a sphere for current headset position.
         // Set to `true` to view the debug spheres.
@@ -155,7 +156,8 @@ namespace VRTK
         /// </summary>
         /// <param name="velocity">The velocity to apply.</param>
         /// <param name="forcePhysicsOn">If true will toggle the body collision physics back on if enable body collisions is true.</param>
-        public void ApplyBodyVelocity(Vector3 velocity, bool forcePhysicsOn = false)
+        /// <param name="applyMomentum">If true then the existing momentum of the play area will be applied as a force to the resulting velocity.</param>
+        public void ApplyBodyVelocity(Vector3 velocity, bool forcePhysicsOn = false, bool applyMomentum = false)
         {
             if (enableBodyCollisions && forcePhysicsOn)
             {
@@ -164,9 +166,15 @@ namespace VRTK
 
             if (ArePhysicsEnabled())
             {
-                var gravityPush = -0.001f;
-                var appliedGravity = new Vector3(0f, gravityPush, 0f);
+                float gravityPush = -0.001f;
+                Vector3 appliedGravity = new Vector3(0f, gravityPush, 0f);
                 bodyRigidbody.velocity = playArea.TransformVector(velocity) + appliedGravity;
+                if (applyMomentum)
+                {
+                    float rigidBodyMagnitude = bodyRigidbody.velocity.magnitude;
+                    Vector3 appliedMomentum = playAreaVelocity / (rigidBodyMagnitude < 1f ? 1f : rigidBodyMagnitude);
+                    bodyRigidbody.AddRelativeForce(appliedMomentum, ForceMode.VelocityChange);
+                }
                 StartFall(currentValidFloorObject);
             }
         }
@@ -261,6 +269,8 @@ namespace VRTK
             {
                 CheckFalling();
             }
+
+            CalculateVelocity();
 
             lastPlayAreaPosition = (playArea ? playArea.position : Vector3.zero);
 
@@ -370,6 +380,11 @@ namespace VRTK
             return e;
         }
 
+        protected void CalculateVelocity()
+        {
+            playAreaVelocity = (playArea.position - lastPlayAreaPosition) / Time.fixedDeltaTime;
+        }
+
         protected void TogglePhysics(bool state)
         {
             if (bodyRigidbody)
@@ -380,6 +395,8 @@ namespace VRTK
             {
                 bodyCollider.isTrigger = !state;
             }
+
+            currentBodyCollisionsSetting = state;
         }
 
         private void CheckBodyCollisionsSetting()
@@ -388,7 +405,6 @@ namespace VRTK
             {
                 TogglePhysics(enableBodyCollisions);
             }
-            currentBodyCollisionsSetting = enableBodyCollisions;
         }
 
         private void CheckFalling()

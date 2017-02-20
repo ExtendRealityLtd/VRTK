@@ -108,6 +108,7 @@
                 CheckPointerHoverClick(pointer, results);
                 if (!ValidElement(pointer.pointerEventData.pointerEnter))
                 {
+                    pointer.pointerEventData.pointerEnter = null;
                     return;
                 }
 
@@ -167,10 +168,10 @@
         {
             switch (pointer.clickMethod)
             {
-                case VRTK_UIPointer.ClickMethods.Click_On_Button_Up:
+                case VRTK_UIPointer.ClickMethods.ClickOnButtonUp:
                     ClickOnUp(pointer, results);
                     break;
-                case VRTK_UIPointer.ClickMethods.Click_On_Button_Down:
+                case VRTK_UIPointer.ClickMethods.ClickOnButtonDown:
                     ClickOnDown(pointer, results);
                     break;
             }
@@ -253,7 +254,7 @@
 
         private void Drag(VRTK_UIPointer pointer, List<RaycastResult> results)
         {
-            pointer.pointerEventData.dragging = pointer.controller.uiClickPressed && pointer.pointerEventData.delta != Vector2.zero;
+            pointer.pointerEventData.dragging = pointer.SelectionButtonActive() && pointer.pointerEventData.delta != Vector2.zero;
 
             if (pointer.pointerEventData.pointerDrag)
             {

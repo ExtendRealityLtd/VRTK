@@ -14,11 +14,11 @@
         /// <summary>
         /// Emits the ControllerGrabInteractableObject class event.
         /// </summary>
-        public UnityObjectEvent OnControllerGrabInteractableObject;
+        public UnityObjectEvent OnControllerGrabInteractableObject = new UnityObjectEvent();
         /// <summary>
         /// Emits the ControllerUngrabInteractableObject class event.
         /// </summary>
-        public UnityObjectEvent OnControllerUngrabInteractableObject;
+        public UnityObjectEvent OnControllerUngrabInteractableObject = new UnityObjectEvent();
 
         private void SetInteractGrab()
         {

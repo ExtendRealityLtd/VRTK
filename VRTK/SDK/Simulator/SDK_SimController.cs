@@ -26,6 +26,11 @@ namespace VRTK
         protected const string RIGHT_HAND_CONTROLLER_NAME = "RightHand";
         protected const string LEFT_HAND_CONTROLLER_NAME = "LeftHand";
 
+        public virtual void SetKeyMappings(Dictionary<string, KeyCode> givenKeyMappings)
+        {
+            keyMappings = givenKeyMappings;
+        }
+
         /// <summary>
         /// The ProcessUpdate method enables an SDK to run logic for every Unity Update
         /// </summary>

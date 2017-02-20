@@ -361,10 +361,10 @@ namespace VRTK
     public class RadialMenuButton
     {
         public Sprite ButtonIcon;
-        public UnityEvent OnClick;
-        public UnityEvent OnHold;
-        public UnityEvent OnHoverEnter;
-        public UnityEvent OnHoverExit;
+        public UnityEvent OnClick = new UnityEvent();
+        public UnityEvent OnHold = new UnityEvent();
+        public UnityEvent OnHoverEnter = new UnityEvent();
+        public UnityEvent OnHoverExit = new UnityEvent();
     }
 
     public enum ButtonEvent

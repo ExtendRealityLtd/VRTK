@@ -83,14 +83,17 @@ namespace VRTK
         [Header("Action Alias Buttons")]
 
         [Tooltip("The button to use for the action of turning a laser pointer on / off.")]
+        [Obsolete("`VRTK_ControllerEvents.pointerToggleButton` is no longer used in the new `VRTK_Pointer` class. This parameter will be removed in a future version of VRTK.")]
         public ButtonAlias pointerToggleButton = ButtonAlias.Touchpad_Press;
         [Tooltip("The button to use for the action of setting a destination marker from the cursor position of the pointer.")]
+        [Obsolete("`VRTK_ControllerEvents.pointerSetButton` is no longer used in the new `VRTK_Pointer` class. This parameter will be removed in a future version of VRTK.")]
         public ButtonAlias pointerSetButton = ButtonAlias.Touchpad_Press;
         [Tooltip("The button to use for the action of grabbing game objects.")]
         public ButtonAlias grabToggleButton = ButtonAlias.Grip_Press;
         [Tooltip("The button to use for the action of using game objects.")]
         public ButtonAlias useToggleButton = ButtonAlias.Trigger_Press;
         [Tooltip("The button to use for the action of clicking a UI element.")]
+        [Obsolete("`VRTK_ControllerEvents.uiClickButton` is no longer used in the `VRTK_UIPointer` class. This parameter will be removed in a future version of VRTK.")]
         public ButtonAlias uiClickButton = ButtonAlias.Trigger_Press;
         [Tooltip("The button to use for the action of bringing up an in-game menu.")]
         public ButtonAlias menuToggleButton = ButtonAlias.Button_Two_Press;
@@ -945,6 +948,28 @@ namespace VRTK
             return false;
         }
 
+        /// <summary>
+        /// The SubscribeToButtonAliasEvent method makes it easier to subscribe to a button event on either the start or end action. Upon the event firing, the given callback method is executed.
+        /// </summary>
+        /// <param name="givenButton">The ButtonAlias to register the event on.</param>
+        /// <param name="startEvent">If this is `true` then the start event related to the button is used (e.g. OnPress). If this is `false` then the end event related to the button is used (e.g. OnRelease). </param>
+        /// <param name="callbackMethod">The method to subscribe to the event.</param>
+        public void SubscribeToButtonAliasEvent(ButtonAlias givenButton, bool startEvent, ControllerInteractionEventHandler callbackMethod)
+        {
+            ButtonAliasEventSubscription(true, givenButton, startEvent, callbackMethod);
+        }
+
+        /// <summary>
+        /// The UnsubscribeToButtonAliasEvent method makes it easier to unsubscribe to from button event on either the start or end action.
+        /// </summary>
+        /// <param name="givenButton">The ButtonAlias to unregister the event on.</param>
+        /// <param name="startEvent">If this is `true` then the start event related to the button is used (e.g. OnPress). If this is `false` then the end event related to the button is used (e.g. OnRelease). </param>
+        /// <param name="callbackMethod">The method to unsubscribe from the event.</param>
+        public void UnsubscribeToButtonAliasEvent(ButtonAlias givenButton, bool startEvent, ControllerInteractionEventHandler callbackMethod)
+        {
+            ButtonAliasEventSubscription(false, givenButton, startEvent, callbackMethod);
+        }
+
         protected virtual void OnEnable()
         {
             var actualController = VRTK_DeviceFinder.GetActualController(gameObject);
@@ -1044,6 +1069,7 @@ namespace VRTK
             }
 
             //Trigger Axis
+            currentTriggerAxis.x = (triggerTouched ? currentTriggerAxis.x : 0f);
             if (Vector2ShallowEquals(triggerAxis, currentTriggerAxis))
             {
                 triggerAxisChanged = false;
@@ -1052,7 +1078,6 @@ namespace VRTK
             {
                 OnTriggerAxisChanged(SetButtonEvent(ref triggerAxisChanged, true, currentTriggerAxis.x));
             }
-
 
             //Grip Touched
             if (VRTK_SDK_Bridge.IsGripTouchedDownOnIndex(controllerIndex))
@@ -1109,6 +1134,7 @@ namespace VRTK
             }
 
             //Grip Axis
+            currentGripAxis.x = (gripTouched ? currentGripAxis.x : 0f);
             if (Vector2ShallowEquals(gripAxis, currentGripAxis))
             {
                 gripAxisChanged = false;
@@ -1144,7 +1170,8 @@ namespace VRTK
                 EmitAlias(ButtonAlias.Touchpad_Touch, false, 0f, ref touchpadTouched);
             }
 
-            if (Vector2ShallowEquals(touchpadAxis, currentTouchpadAxis))
+            //Touchpad Axis
+            if (!touchpadTouched || Vector2ShallowEquals(touchpadAxis, currentTouchpadAxis))
             {
                 touchpadAxisChanged = false;
             }
@@ -1218,12 +1245,379 @@ namespace VRTK
             }
 
             // Save current touch and trigger settings to detect next change.
-            touchpadAxis = new Vector2(currentTouchpadAxis.x, currentTouchpadAxis.y);
-            triggerAxis = new Vector2(currentTriggerAxis.x, currentTriggerAxis.y);
-            gripAxis = new Vector2(currentGripAxis.x, currentGripAxis.y);
+            touchpadAxis = (touchpadAxisChanged ? new Vector2(currentTouchpadAxis.x, currentTouchpadAxis.y) : touchpadAxis);
+            triggerAxis = (triggerAxisChanged ? new Vector2(currentTriggerAxis.x, currentTriggerAxis.y) : triggerAxis);
+            gripAxis = (gripAxisChanged ? new Vector2(currentGripAxis.x, currentGripAxis.y) : gripAxis);
 
             hairTriggerDelta = VRTK_SDK_Bridge.GetTriggerHairlineDeltaOnIndex(controllerIndex);
             hairGripDelta = VRTK_SDK_Bridge.GetGripHairlineDeltaOnIndex(controllerIndex);
+        }
+
+        protected void ButtonAliasEventSubscription(bool subscribe, ButtonAlias givenButton, bool startEvent, ControllerInteractionEventHandler callbackMethod)
+        {
+            switch (givenButton)
+            {
+                case ButtonAlias.Trigger_Click:
+                    if (subscribe)
+                    {
+                        if (startEvent)
+                        {
+                            TriggerClicked += callbackMethod;
+                        }
+                        else
+                        {
+                            TriggerUnclicked += callbackMethod;
+                        }
+                    }
+                    else
+                    {
+                        if (startEvent)
+                        {
+                            TriggerClicked -= callbackMethod;
+                        }
+                        else
+                        {
+                            TriggerUnclicked -= callbackMethod;
+                        }
+                    }
+                    break;
+                case ButtonAlias.Trigger_Hairline:
+                    if (subscribe)
+                    {
+                        if (startEvent)
+                        {
+                            TriggerHairlineStart += callbackMethod;
+                        }
+                        else
+                        {
+                            TriggerHairlineEnd += callbackMethod;
+                        }
+                    }
+                    else
+                    {
+                        if (startEvent)
+                        {
+                            TriggerHairlineStart -= callbackMethod;
+                        }
+                        else
+                        {
+                            TriggerHairlineEnd -= callbackMethod;
+                        }
+                    }
+                    break;
+                case ButtonAlias.Trigger_Press:
+                    if (subscribe)
+                    {
+                        if (startEvent)
+                        {
+                            TriggerPressed += callbackMethod;
+                        }
+                        else
+                        {
+                            TriggerReleased += callbackMethod;
+                        }
+                    }
+                    else
+                    {
+                        if (startEvent)
+                        {
+                            TriggerPressed -= callbackMethod;
+                        }
+                        else
+                        {
+                            TriggerReleased -= callbackMethod;
+                        }
+                    }
+                    break;
+                case ButtonAlias.Trigger_Touch:
+                    if (subscribe)
+                    {
+                        if (startEvent)
+                        {
+                            TriggerTouchStart += callbackMethod;
+                        }
+                        else
+                        {
+                            TriggerTouchEnd += callbackMethod;
+                        }
+                    }
+                    else
+                    {
+                        if (startEvent)
+                        {
+                            TriggerTouchStart -= callbackMethod;
+                        }
+                        else
+                        {
+                            TriggerTouchEnd -= callbackMethod;
+                        }
+                    }
+                    break;
+                case ButtonAlias.Grip_Click:
+                    if (subscribe)
+                    {
+                        if (startEvent)
+                        {
+                            GripClicked += callbackMethod;
+                        }
+                        else
+                        {
+                            GripUnclicked += callbackMethod;
+                        }
+                    }
+                    else
+                    {
+                        if (startEvent)
+                        {
+                            GripClicked -= callbackMethod;
+                        }
+                        else
+                        {
+                            GripUnclicked -= callbackMethod;
+                        }
+                    }
+                    break;
+                case ButtonAlias.Grip_Hairline:
+                    if (subscribe)
+                    {
+                        if (startEvent)
+                        {
+                            GripHairlineStart += callbackMethod;
+                        }
+                        else
+                        {
+                            GripHairlineEnd += callbackMethod;
+                        }
+                    }
+                    else
+                    {
+                        if (startEvent)
+                        {
+                            GripHairlineStart -= callbackMethod;
+                        }
+                        else
+                        {
+                            GripHairlineEnd -= callbackMethod;
+                        }
+                    }
+                    break;
+                case ButtonAlias.Grip_Press:
+                    if (subscribe)
+                    {
+                        if (startEvent)
+                        {
+                            GripPressed += callbackMethod;
+                        }
+                        else
+                        {
+                            GripReleased += callbackMethod;
+                        }
+                    }
+                    else
+                    {
+                        if (startEvent)
+                        {
+                            GripPressed -= callbackMethod;
+                        }
+                        else
+                        {
+                            GripReleased -= callbackMethod;
+                        }
+                    }
+                    break;
+                case ButtonAlias.Grip_Touch:
+                    if (subscribe)
+                    {
+                        if (startEvent)
+                        {
+                            GripTouchStart += callbackMethod;
+                        }
+                        else
+                        {
+                            GripTouchEnd += callbackMethod;
+                        }
+                    }
+                    else
+                    {
+                        if (startEvent)
+                        {
+                            GripTouchStart -= callbackMethod;
+                        }
+                        else
+                        {
+                            GripTouchEnd -= callbackMethod;
+                        }
+                    }
+                    break;
+                case ButtonAlias.Touchpad_Press:
+                    if (subscribe)
+                    {
+                        if (startEvent)
+                        {
+                            TouchpadPressed += callbackMethod;
+                        }
+                        else
+                        {
+                            TouchpadReleased += callbackMethod;
+                        }
+                    }
+                    else
+                    {
+                        if (startEvent)
+                        {
+                            TouchpadPressed -= callbackMethod;
+                        }
+                        else
+                        {
+                            TouchpadReleased -= callbackMethod;
+                        }
+                    }
+                    break;
+                case ButtonAlias.Touchpad_Touch:
+                    if (subscribe)
+                    {
+                        if (startEvent)
+                        {
+                            TouchpadTouchStart += callbackMethod;
+                        }
+                        else
+                        {
+                            TouchpadTouchEnd += callbackMethod;
+                        }
+                    }
+                    else
+                    {
+                        if (startEvent)
+                        {
+                            TouchpadTouchStart -= callbackMethod;
+                        }
+                        else
+                        {
+                            TouchpadTouchEnd -= callbackMethod;
+                        }
+                    }
+                    break;
+                case ButtonAlias.Button_One_Press:
+                    if (subscribe)
+                    {
+                        if (startEvent)
+                        {
+                            ButtonOnePressed += callbackMethod;
+                        }
+                        else
+                        {
+                            ButtonOneReleased += callbackMethod;
+                        }
+                    }
+                    else
+                    {
+                        if (startEvent)
+                        {
+                            ButtonOnePressed -= callbackMethod;
+                        }
+                        else
+                        {
+                            ButtonOneReleased -= callbackMethod;
+                        }
+                    }
+                    break;
+                case ButtonAlias.Button_One_Touch:
+                    if (subscribe)
+                    {
+                        if (startEvent)
+                        {
+                            ButtonOneTouchStart += callbackMethod;
+                        }
+                        else
+                        {
+                            ButtonOneTouchEnd += callbackMethod;
+                        }
+                    }
+                    else
+                    {
+                        if (startEvent)
+                        {
+                            ButtonOneTouchStart -= callbackMethod;
+                        }
+                        else
+                        {
+                            ButtonOneTouchEnd -= callbackMethod;
+                        }
+                    }
+                    break;
+                case ButtonAlias.Button_Two_Press:
+                    if (subscribe)
+                    {
+                        if (startEvent)
+                        {
+                            ButtonTwoPressed += callbackMethod;
+                        }
+                        else
+                        {
+                            ButtonTwoReleased += callbackMethod;
+                        }
+                    }
+                    else
+                    {
+                        if (startEvent)
+                        {
+                            ButtonTwoPressed -= callbackMethod;
+                        }
+                        else
+                        {
+                            ButtonTwoReleased -= callbackMethod;
+                        }
+                    }
+                    break;
+                case ButtonAlias.Button_Two_Touch:
+                    if (subscribe)
+                    {
+                        if (startEvent)
+                        {
+                            ButtonTwoTouchStart += callbackMethod;
+                        }
+                        else
+                        {
+                            ButtonTwoTouchEnd += callbackMethod;
+                        }
+                    }
+                    else
+                    {
+                        if (startEvent)
+                        {
+                            ButtonTwoTouchStart -= callbackMethod;
+                        }
+                        else
+                        {
+                            ButtonTwoTouchEnd -= callbackMethod;
+                        }
+                    }
+                    break;
+                case ButtonAlias.Start_Menu_Press:
+                    if (subscribe)
+                    {
+                        if (startEvent)
+                        {
+                            StartMenuPressed += callbackMethod;
+                        }
+                        else
+                        {
+                            StartMenuReleased += callbackMethod;
+                        }
+                    }
+                    else
+                    {
+                        if (startEvent)
+                        {
+                            StartMenuPressed -= callbackMethod;
+                        }
+                        else
+                        {
+                            StartMenuReleased -= callbackMethod;
+                        }
+                    }
+                    break;
+            }
         }
 
         private ControllerInteractionEventArgs SetButtonEvent(ref bool buttonBool, bool value, float buttonPressure)

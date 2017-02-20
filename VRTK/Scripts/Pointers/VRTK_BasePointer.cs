@@ -1,7 +1,8 @@
-﻿// Base Pointer|Pointers|10020
+﻿// Base Pointer|Pointers|10021
 namespace VRTK
 {
     using UnityEngine;
+    using System;
 #if UNITY_5_5_OR_NEWER
     using UnityEngine.AI;
 #endif
@@ -14,6 +15,7 @@ namespace VRTK
     ///
     /// As this is an abstract class, it cannot be applied directly to a game object and performs no logic.
     /// </remarks>
+    [Obsolete("`VRTK_BasePointer` has been replaced with `VRTK_Pointer`. This script will be removed in a future version of VRTK.")]
     public abstract class VRTK_BasePointer : VRTK_DestinationMarker
     {
         /// <summary>
@@ -155,6 +157,10 @@ namespace VRTK
         }
 
         protected virtual void Update()
+        {
+        }
+
+        protected virtual void FixedUpdate()
         {
             if (interactWithObjects && objectInteractor && objectInteractor.activeInHierarchy)
             {

@@ -1,4 +1,4 @@
-﻿// Outline Object Copy|Highlighters|40030
+// Outline Object Copy|Highlighters|40030
 namespace VRTK.Highlighters
 {
     using UnityEngine;
@@ -21,6 +21,8 @@ namespace VRTK.Highlighters
         public GameObject customOutlineModel;
         [Tooltip("A path to a GameObject to find at runtime, if the GameObject doesn't exist at edit time.")]
         public string customOutlineModelPath = "";
+        [Tooltip("If the mesh has multiple sub-meshes to highlight then this should be checked, otherwise only the first mesh will be highlighted.")]
+        public bool enableSubmeshHighlight = false;
 
         private Material stencilOutline;
         private GameObject highlightModel;
@@ -145,10 +147,11 @@ namespace VRTK.Highlighters
             }
 
             highlightModel = new GameObject(name + "_HighlightModel");
+            highlightModel.transform.SetParent(copyModel.transform.parent, false);
+            highlightModel.transform.localPosition = copyModel.transform.localPosition;
+            highlightModel.transform.localRotation = copyModel.transform.localRotation;
+            highlightModel.transform.localScale = copyModel.transform.localScale;
             highlightModel.transform.SetParent(transform);
-            highlightModel.transform.position = copyModel.transform.position;
-            highlightModel.transform.rotation = copyModel.transform.rotation;
-            highlightModel.transform.localScale = Vector3.one;
 
             foreach (var component in copyModel.GetComponents<Component>())
             {
@@ -162,7 +165,27 @@ namespace VRTK.Highlighters
             var highlightMesh = highlightModel.GetComponent<MeshFilter>();
             if (highlightMesh)
             {
-                highlightModel.GetComponent<MeshFilter>().mesh = copyMesh.mesh;
+                if (enableSubmeshHighlight)
+                {
+                    List<CombineInstance> combine = new List<CombineInstance>();
+
+                    for (int i = 0; i < copyMesh.mesh.subMeshCount; i++)
+                    {
+                        CombineInstance ci = new CombineInstance();
+                        ci.mesh = copyMesh.mesh;
+                        ci.subMeshIndex = i;
+                        ci.transform = copyMesh.transform.localToWorldMatrix;
+                        combine.Add(ci);
+                    }
+
+                    highlightMesh.mesh = new Mesh();
+                    highlightMesh.mesh.CombineMeshes(combine.ToArray(), true, false);
+                }
+                else
+                {
+                    highlightMesh.mesh = copyMesh.mesh;
+                }
+
                 highlightModel.GetComponent<Renderer>().material = stencilOutline;
             }
             highlightModel.SetActive(false);

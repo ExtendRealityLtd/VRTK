@@ -14,19 +14,19 @@
         /// <summary>
         /// Emits the HeadsetFadeStart class event.
         /// </summary>
-        public UnityObjectEvent OnHeadsetFadeStart;
+        public UnityObjectEvent OnHeadsetFadeStart = new UnityObjectEvent();
         /// <summary>
         /// Emits the HeadsetFadeComplete class event.
         /// </summary>
-        public UnityObjectEvent OnHeadsetFadeComplete;
+        public UnityObjectEvent OnHeadsetFadeComplete = new UnityObjectEvent();
         /// <summary>
         /// Emits the HeadsetUnfadeStart class event.
         /// </summary>
-        public UnityObjectEvent OnHeadsetUnfadeStart;
+        public UnityObjectEvent OnHeadsetUnfadeStart = new UnityObjectEvent();
         /// <summary>
         /// Emits the HeadsetUnfadeComplete class event.
         /// </summary>
-        public UnityObjectEvent OnHeadsetUnfadeComplete;
+        public UnityObjectEvent OnHeadsetUnfadeComplete = new UnityObjectEvent();
 
         private void SetHeadsetFade()
         {

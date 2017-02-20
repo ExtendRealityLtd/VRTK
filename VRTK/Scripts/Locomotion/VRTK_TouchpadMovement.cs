@@ -2,6 +2,7 @@
 namespace VRTK
 {
     using UnityEngine;
+    using System;
 
     /// <summary>
     /// Event Payload
@@ -46,6 +47,8 @@ namespace VRTK
     /// Warp and snap rotate options may provide more comfortable experience for some and blink effect can be used to soften the movement. 
     /// Snap rotate and flip direction options can be useful with teleport scripts for seated experiences and for people using front facing camera setups(Oculus default, PSVR). 
     /// </remarks>
+    [RequireComponent(typeof(VRTK_BodyPhysics))]
+    [Obsolete("`VRTK_TouchpadMovement` has been replaced with `VRTK_TouchpadControl`. This script will be removed in a future version of VRTK.")]
     public class VRTK_TouchpadMovement : MonoBehaviour
     {
         /// <summary>
@@ -114,39 +117,13 @@ namespace VRTK
         /// </summary>
         public event TouchpadMovementAxisEventHandler AxisMovement;
 
-        public bool LeftController
-        {
-            get
-            {
-                return leftController;
-            }
-            set
-            {
-                leftController = value;
-                SetControllerListeners(controllerLeftHand);
-            }
-        }
-
-        public bool RightController
-        {
-            get
-            {
-                return rightController;
-            }
-            set
-            {
-                rightController = value;
-                SetControllerListeners(controllerRightHand);
-            }
-        }
 
         [Header("General settings")]
-        [Tooltip("If this is checked then the left controller touchpad will be enabled for the selected movement types. It can also be toggled at runtime.")]
-        [SerializeField]
-        private bool leftController = true;
-        [Tooltip("If this is checked then the right controller touchpad will be enabled for the selected movement types. It can also be toggled at runtime.")]
-        [SerializeField]
-        private bool rightController = true;
+
+        [Tooltip("If this is checked then the left controller touchpad will be enabled for the selected movement types.")]
+        public bool leftController = true;
+        [Tooltip("If this is checked then the right controller touchpad will be enabled for the selected movement types.")]
+        public bool rightController = true;
         [Tooltip("If a button is defined then the selected movement will only be performed when the specified button is being held down and the touchpad axis changes.")]
         public VRTK_ControllerEvents.ButtonAlias moveOnButtonPress = VRTK_ControllerEvents.ButtonAlias.Undefined;
         [Tooltip("If the defined movement multiplier button is pressed then the movement will be affected by the axis multiplier value.")]
@@ -208,13 +185,13 @@ namespace VRTK
         private GameObject controllerRightHand;
         private Transform playArea;
         private Vector2 touchAxis;
-        private float movementSpeed = 0f;
-        private float strafeSpeed = 0f;
-        private float blinkFadeInTime = 0;
-        private float lastWarp = 0;
-        private float lastFlip = 0;
-        private float lastSnapRotate = 0;
-        private bool multiplyMovement = false;
+        private float movementSpeed;
+        private float strafeSpeed;
+        private float blinkFadeInTime;
+        private float lastWarp;
+        private float lastFlip;
+        private float lastSnapRotate;
+        private bool multiplyMovement;
         private CapsuleCollider bodyCollider;
         private Transform headset;
         private bool leftSubscribed;
@@ -222,6 +199,10 @@ namespace VRTK
         private ControllerInteractionEventHandler touchpadAxisChanged;
         private ControllerInteractionEventHandler touchpadUntouched;
         private VRTK_ControllerEvents controllerEvents;
+        private VRTK_BodyPhysics bodyPhysics;
+        private bool wasFalling;
+        private bool previousLeftControllerState;
+        private bool previousRightControllerState;
 
         protected virtual void Awake()
         {
@@ -242,14 +223,27 @@ namespace VRTK
             {
                 Debug.LogError("No headset could be found. Have you selected a valid Headset SDK in the SDK Manager? If you are unsure, then click the GameObject with the `VRTK_SDKManager` script attached to it in Edit Mode and select a Boundaries SDK from the dropdown.");
             }
+
+            VRTK_PlayerObject.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.CameraRig);
+        }
+
+        protected virtual void OnEnable()
+        {
+            SetControllerListeners(controllerLeftHand, leftController, ref leftSubscribed);
+            SetControllerListeners(controllerRightHand, rightController, ref rightSubscribed);
+            bodyPhysics = GetComponent<VRTK_BodyPhysics>();
+
+            movementSpeed = 0f;
+            strafeSpeed = 0f;
+            blinkFadeInTime = 0f;
+            lastWarp = 0f;
+            lastFlip = 0f;
+            lastSnapRotate = 0f;
+            multiplyMovement = false;
         }
 
         protected virtual void Start()
         {
-            VRTK_PlayerObject.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.CameraRig);
-            SetControllerListeners(controllerLeftHand);
-            SetControllerListeners(controllerRightHand);
-
             bodyCollider = playArea.GetComponent<CapsuleCollider>();
             if (!bodyCollider)
             {
@@ -257,14 +251,25 @@ namespace VRTK
             }
         }
 
+        protected virtual void OnDisable()
+        {
+            SetControllerListeners(controllerLeftHand, leftController, ref leftSubscribed, true);
+            SetControllerListeners(controllerRightHand, rightController, ref rightSubscribed, true);
+            bodyPhysics = null;
+        }
+
         protected virtual void Update()
         {
             multiplyMovement = (controllerEvents && movementMultiplierButton != VRTK_ControllerEvents.ButtonAlias.Undefined && controllerEvents.IsButtonPressed(movementMultiplierButton));
+            CheckControllerState(controllerLeftHand, leftController, ref leftSubscribed, ref previousLeftControllerState);
+            CheckControllerState(controllerRightHand, rightController, ref rightSubscribed, ref previousRightControllerState);
         }
 
         protected virtual void FixedUpdate()
         {
             bool moved = false;
+
+            HandleFalling();
 
             if (horizontalAxisMovement == HorizontalAxisMovement.Slide)
             {
@@ -306,6 +311,32 @@ namespace VRTK
             {
                 Move();
             }
+        }
+
+        protected virtual void HandleFalling()
+        {
+            if (bodyPhysics && bodyPhysics.IsFalling())
+            {
+                touchAxis = Vector2.zero;
+                wasFalling = true;
+            }
+
+            if (bodyPhysics && !bodyPhysics.IsFalling() && wasFalling)
+            {
+                touchAxis = Vector2.zero;
+                wasFalling = false;
+                strafeSpeed = 0f;
+                movementSpeed = 0f;
+            }
+        }
+
+        protected virtual void CheckControllerState(GameObject controller, bool controllerState, ref bool subscribedState, ref bool previousState)
+        {
+            if (controllerState != previousState)
+            {
+                SetControllerListeners(controller, controllerState, ref subscribedState);
+            }
+            previousState = controllerState;
         }
 
         private void DoTouchpadAxisChanged(object sender, ControllerInteractionEventArgs e)
@@ -479,15 +510,12 @@ namespace VRTK
             VRTK_SDK_Bridge.HeadsetFade(Color.clear, blinkFadeInTime);
         }
 
-        private void SetControllerListeners(GameObject controller)
+        private void SetControllerListeners(GameObject controller, bool controllerState, ref bool subscribedState, bool forceDisabled = false)
         {
-            if (controller && VRTK_DeviceFinder.IsControllerLeftHand(controller))
+            if (controller)
             {
-                ToggleControllerListeners(controller, leftController, ref leftSubscribed);
-            }
-            else if (controller && VRTK_DeviceFinder.IsControllerRightHand(controller))
-            {
-                ToggleControllerListeners(controller, rightController, ref rightSubscribed);
+                bool toggleState = (forceDisabled ? false : controllerState);
+                ToggleControllerListeners(controller, toggleState, ref subscribedState);
             }
         }
 

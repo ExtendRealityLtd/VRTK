@@ -91,7 +91,6 @@ namespace VRTK
         public virtual void SetInvalidTarget(VRTK_PolicyList list = null)
         {
             invalidListPolicy = list;
-
         }
 
         /// <summary>

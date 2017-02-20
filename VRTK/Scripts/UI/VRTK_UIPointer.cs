@@ -47,39 +47,51 @@ namespace VRTK
         /// <summary>
         /// Methods of activation.
         /// </summary>
-        /// <param name="Hold_Button">Only activates the UI Pointer when the Pointer button on the controller is pressed and held down.</param>
-        /// <param name="Toggle_Button">Activates the UI Pointer on the first click of the Pointer button on the controller and it stays active until the Pointer button is clicked again.</param>
-        /// <param name="Always_On">The UI Pointer is always active regardless of whether the Pointer button on the controller is pressed or not.</param>
+        /// <param name="HoldButton">Only activates the UI Pointer when the Pointer button on the controller is pressed and held down.</param>
+        /// <param name="ToggleButton">Activates the UI Pointer on the first click of the Pointer button on the controller and it stays active until the Pointer button is clicked again.</param>
+        /// <param name="AlwaysOn">The UI Pointer is always active regardless of whether the Pointer button on the controller is pressed or not.</param>
         public enum ActivationMethods
         {
-            Hold_Button,
-            Toggle_Button,
-            Always_On
+            HoldButton,
+            ToggleButton,
+            AlwaysOn
         }
 
         /// <summary>
         /// Methods of when to consider a UI Click action
         /// </summary>
-        /// <param name="Click_On_Button_Up">Consider a UI Click action has happened when the UI Click alias button is released.</param>
-        /// <param name="Click_On_Button_Down">Consider a UI Click action has happened when the UI Click alias button is pressed.</param>
+        /// <param name="ClickOnButtonUp">Consider a UI Click action has happened when the UI Click alias button is released.</param>
+        /// <param name="ClickOnButtonDown">Consider a UI Click action has happened when the UI Click alias button is pressed.</param>
         public enum ClickMethods
         {
-            Click_On_Button_Up,
-            Click_On_Button_Down
+            ClickOnButtonUp,
+            ClickOnButtonDown
         }
+
+        [Header("Activation Settings")]
+
+        [Tooltip("The button used to activate/deactivate the UI raycast for the pointer.")]
+        public VRTK_ControllerEvents.ButtonAlias activationButton = VRTK_ControllerEvents.ButtonAlias.Touchpad_Press;
+        [Tooltip("Determines when the UI pointer should be active.")]
+        public ActivationMethods activationMode = ActivationMethods.HoldButton;
+
+        [Header("Selection Settings")]
+
+        [Tooltip("The button used to execute the select action at the pointer's target position.")]
+        public VRTK_ControllerEvents.ButtonAlias selectionButton = VRTK_ControllerEvents.ButtonAlias.Trigger_Press;
+        [Tooltip("Determines when the UI Click event action should happen.")]
+        public ClickMethods clickMethod = ClickMethods.ClickOnButtonUp;
+        [Tooltip("Determines whether the UI click action should be triggered when the pointer is deactivated. If the pointer is hovering over a clickable element then it will invoke the click action on that element. Note: Only works with `Click Method =  Click_On_Button_Up`")]
+        public bool attemptClickOnDeactivate = false;
+        [Tooltip("The amount of time the pointer can be over the same UI element before it automatically attempts to click it. 0f means no click attempt will be made.")]
+        public float clickAfterHoverDuration = 0f;
+
+        [Header("Customisation Settings")]
 
         [Tooltip("The controller that will be used to toggle the pointer. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.")]
         public VRTK_ControllerEvents controller;
         [Tooltip("A custom transform to use as the origin of the pointer. If no pointer origin transform is provided then the transform the script is attached to is used.")]
         public Transform pointerOriginTransform = null;
-        [Tooltip("Determines when the UI pointer should be active.")]
-        public ActivationMethods activationMode = ActivationMethods.Hold_Button;
-        [Tooltip("Determines when the UI Click event action should happen.")]
-        public ClickMethods clickMethod = ClickMethods.Click_On_Button_Up;
-        [Tooltip("Determines whether the UI click action should be triggered when the pointer is deactivated. If the pointer is hovering over a clickable element then it will invoke the click action on that element. Note: Only works with `Click Method =  Click_On_Button_Up`")]
-        public bool attemptClickOnDeactivate = false;
-        [Tooltip("The amount of time the pointer can be over the same UI element before it automatically attempts to click it. 0f means no click attempt will be made.")]
-        public float clickAfterHoverDuration = 0f;
 
         [HideInInspector]
         public PointerEventData pointerEventData;
@@ -303,22 +315,22 @@ namespace VRTK
         /// <returns>Returns true if the ui pointer should be currently active.</returns>
         public virtual bool PointerActive()
         {
-            if (activationMode == ActivationMethods.Always_On || autoActivatingCanvas != null)
+            if (activationMode == ActivationMethods.AlwaysOn || autoActivatingCanvas != null)
             {
                 return true;
             }
-            else if (activationMode == ActivationMethods.Hold_Button)
+            else if (activationMode == ActivationMethods.HoldButton)
             {
-                return controller.pointerPressed;
+                return controller.IsButtonPressed(activationButton);
             }
             else
             {
                 pointerClicked = false;
-                if (controller.pointerPressed && !lastPointerPressState)
+                if (controller.IsButtonPressed(activationButton) && !lastPointerPressState)
                 {
                     pointerClicked = true;
                 }
-                lastPointerPressState = controller.pointerPressed;
+                lastPointerPressState = controller.IsButtonPressed(activationButton);
 
                 if (pointerClicked)
                 {
@@ -330,6 +342,15 @@ namespace VRTK
         }
 
         /// <summary>
+        /// The SelectionButtonActive method is used to determine if the configured selection button is currently in the active state.
+        /// </summary>
+        /// <returns>Returns true if the selection button is active.</returns>
+        public virtual bool SelectionButtonActive()
+        {
+            return controller.IsButtonPressed(selectionButton);
+        }
+
+        /// <summary>
         /// The ValidClick method determines if the UI Click button is in a valid state to register a click action.
         /// </summary>
         /// <param name="checkLastClick">If this is true then the last frame's state of the UI Click button is also checked to see if a valid click has happened.</param>
@@ -337,10 +358,9 @@ namespace VRTK
         /// <returns>Returns true if the UI Click button is in a valid state to action a click, returns false if it is not in a valid state.</returns>
         public virtual bool ValidClick(bool checkLastClick, bool lastClickState = false)
         {
-            var controllerClicked = (collisionClick ? collisionClick : controller.uiClickPressed);
+            var controllerClicked = (collisionClick ? collisionClick : SelectionButtonActive());
             var result = (checkLastClick ? controllerClicked && lastPointerClickState == lastClickState : controllerClicked);
             lastPointerClickState = controllerClicked;
-
             return result;
         }
 

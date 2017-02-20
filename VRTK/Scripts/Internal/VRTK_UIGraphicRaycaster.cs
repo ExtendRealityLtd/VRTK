@@ -6,28 +6,22 @@
     using UnityEngine.EventSystems;
     using UnityEngine.UI;
 
+    /// This script allows VRTK to interact cleanly with Unity Canvases.
+    /// It is mostly a duplicate of Unity's default GraphicsRaycaster:
+    /// https://bitbucket.org/Unity-Technologies/ui/src/0155c39e05ca5d7dcc97d9974256ef83bc122586/UnityEngine.UI/UI/Core/GraphicRaycaster.c
+    /// However, it allows for graphics to be hit when they are not in view of a camera.
+    /// Note: Not intended for direct use. VRTK will intelligently replace the default GraphicsRaycaster
+    ///   on canvases with this raycaster.
+
     public class VRTK_UIGraphicRaycaster : GraphicRaycaster
     {
-        public GameObject raycastSource;
-
-        private struct VRGraphic
-        {
-            public Graphic graphic;
-            public float distance;
-            public Vector3 position;
-            public Vector2 pointerPosition;
-        }
-
         private Canvas m_Canvas;
         private Vector2 lastKnownPosition;
-        private int tickCount = 0;
-        private int maxTickCount = 2;
         private const float UI_CONTROL_OFFSET = 0.00001f;
 
         [NonSerialized]
-        private List<VRGraphic> m_RaycastResults = new List<VRGraphic>();
-        [NonSerialized]
-        private static readonly List<VRGraphic> s_SortedGraphics = new List<VRGraphic>();
+        // Use a static to prevent list reallocation. We only need one of these globally (single main thread), and only to hold temporary data
+        private static List<RaycastResult> s_RaycastResults = new List<RaycastResult>();
 
         public override void Raycast(PointerEventData eventData, List<RaycastResult> resultAppendList)
         {
@@ -36,27 +30,20 @@
                 return;
             }
 
-            m_RaycastResults.Clear();
             var ray = new Ray(eventData.pointerCurrentRaycast.worldPosition, eventData.pointerCurrentRaycast.worldNormal);
-            Raycast(canvas, eventCamera, ray, m_RaycastResults);
-            SetNearestRaycast(ref eventData, resultAppendList);
+            Raycast(canvas, eventCamera, ray, ref s_RaycastResults);
+            SetNearestRaycast(ref eventData, ref resultAppendList, ref s_RaycastResults);
+            s_RaycastResults.Clear();
         }
 
-        private void SetNearestRaycast(ref PointerEventData eventData, List<RaycastResult> resultAppendList)
+        //[Pure]
+        private void SetNearestRaycast(ref PointerEventData eventData, ref List<RaycastResult> resultAppendList, ref List<RaycastResult> raycastResults)
         {
             RaycastResult? nearestRaycast = null;
-            for (var index = 0; index < m_RaycastResults.Count; index++)
+            for (var index = 0; index < raycastResults.Count; index++)
             {
-                RaycastResult castResult = new RaycastResult();
-                castResult.gameObject = m_RaycastResults[index].graphic.gameObject;
-                castResult.module = this;
-                castResult.distance = m_RaycastResults[index].distance;
-                castResult.screenPosition = m_RaycastResults[index].pointerPosition;
-                castResult.worldPosition = m_RaycastResults[index].position;
+                RaycastResult castResult = raycastResults[index];
                 castResult.index = resultAppendList.Count;
-                castResult.depth = m_RaycastResults[index].graphic.depth;
-                castResult.sortingLayer = canvas.sortingLayerID;
-                castResult.sortingOrder = canvas.sortingOrder;
                 if (!nearestRaycast.HasValue || castResult.distance < nearestRaycast.Value.distance)
                 {
                     nearestRaycast = castResult;
@@ -67,20 +54,13 @@
             if (nearestRaycast.HasValue)
             {
                 eventData.position = nearestRaycast.Value.screenPosition;
-                if (tickCount == 0)
-                {
-                    eventData.delta = eventData.position - lastKnownPosition;
-                    lastKnownPosition = eventData.position;
-                }
-                tickCount++;
-                if (tickCount >= maxTickCount)
-                {
-                    tickCount = 0;
-                }
+                eventData.delta = eventData.position - lastKnownPosition;
+                lastKnownPosition = eventData.position;
                 eventData.pointerCurrentRaycast = nearestRaycast.Value;
             }
         }
 
+        //[Pure]
         private float GetHitDistance(Ray ray)
         {
             var hitDistance = float.MaxValue;
@@ -112,7 +92,8 @@
             return hitDistance;
         }
 
-        private void Raycast(Canvas canvas, Camera eventCamera, Ray ray, List<VRGraphic> results)
+        //[Pure]
+        private void Raycast(Canvas canvas, Camera eventCamera, Ray ray, ref List<RaycastResult> results)
         {
             var hitDistance = GetHitDistance(ray);
             var canvasGraphics = GraphicRegistry.GetGraphicsForCanvas(canvas);
@@ -127,13 +108,14 @@
 
                 var graphicTransform = graphic.transform;
                 Vector3 graphicForward = graphicTransform.forward;
-                float distance = (Vector3.Dot(graphicForward, graphicTransform.position - ray.origin) / Vector3.Dot(graphicForward, ray.direction));
+                float distance = Vector3.Dot(graphicForward, graphicTransform.position - ray.origin) / Vector3.Dot(graphicForward, ray.direction);
 
                 if (distance < 0)
                 {
                     continue;
                 }
 
+                //Prevents "flickering hover" on items near canvas center.
                 if ((distance - UI_CONTROL_OFFSET) > hitDistance)
                 {
                     continue;
@@ -149,22 +131,21 @@
 
                 if (graphic.Raycast(pointerPosition, eventCamera))
                 {
-                    var vrGraphic = new VRGraphic();
-                    vrGraphic.graphic = graphic;
-                    vrGraphic.position = position;
-                    vrGraphic.distance = distance;
-                    vrGraphic.pointerPosition = pointerPosition;
-                    s_SortedGraphics.Add(vrGraphic);
+                    var result = new RaycastResult() {
+                        gameObject = graphic.gameObject,
+                        module = this,
+                        distance = distance,
+                        screenPosition = pointerPosition,
+                        worldPosition = position,
+                        depth = graphic.depth,
+                        sortingLayer = canvas.sortingLayerID,
+                        sortingOrder = canvas.sortingOrder,
+                    };
+                    results.Add(result);
                 }
             }
 
-            s_SortedGraphics.Sort((g1, g2) => g2.graphic.depth.CompareTo(g1.graphic.depth));
-            for (int i = 0; i < s_SortedGraphics.Count; ++i)
-            {
-                results.Add(s_SortedGraphics[i]);
-            }
-
-            s_SortedGraphics.Clear();
+            results.Sort((g1, g2) => g2.depth.CompareTo(g1.depth));
         }
 
         private Canvas canvas

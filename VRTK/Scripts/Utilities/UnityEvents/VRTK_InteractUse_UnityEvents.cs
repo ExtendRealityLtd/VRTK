@@ -14,11 +14,11 @@
         /// <summary>
         /// Emits the ControllerUseInteractableObject class event.
         /// </summary>
-        public UnityObjectEvent OnControllerUseInteractableObject;
+        public UnityObjectEvent OnControllerUseInteractableObject = new UnityObjectEvent();
         /// <summary>
         /// Emits the ControllerUnuseInteractableObject class event.
         /// </summary>
-        public UnityObjectEvent OnControllerUnuseInteractableObject;
+        public UnityObjectEvent OnControllerUnuseInteractableObject = new UnityObjectEvent();
 
         private void SetInteractUse()
         {
