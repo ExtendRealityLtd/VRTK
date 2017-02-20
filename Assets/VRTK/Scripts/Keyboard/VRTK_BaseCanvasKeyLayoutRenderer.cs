@@ -2,28 +2,17 @@
 {
     using UnityEngine;
     using UnityEngine.UI;
-    using System;
     using System.Collections.Generic;
     using KeyClass = VRTK_Keyboard.KeyClass;
     using IKey = VRTK_Keyboard.IKey;
     using IKeyMeta = VRTK_Keyboard.IKeyMeta;
     using KeyMeta = VRTK_Keyboard.KeyMeta;
+
     /// <summary>
     /// This abstract class is the base for both key layout renderer implementations that render to a UI.Canvas
     /// </summary>
     public abstract class VRTK_BaseCanvasKeyLayoutRenderer : VRTK_BaseKeyLayoutRenderer
     {
-        [Serializable]
-        public class KeysetModifierImage
-        {
-            [Tooltip("Only apply inside this keyset")]
-            public int inKeyset = -1;
-            [Tooltip("Apply to this modifier key")]
-            public int keyset = -1;
-            [Tooltip("Image to apply to the keyset modifier key's UI.Image")]
-            public Sprite sourceImage;
-        }
-
         /// <summary>
         /// The prefab to use as the UI.Button for keys
         /// </summary>
@@ -62,8 +51,8 @@
         /// </remarks>
         [Tooltip("An optional prefab to use as the UI.Button for keyset modifier keys")]
         public GameObject modifierKeyTemplate;
-        [Tooltip("Rule based overrides for keyset modifier key images")]
-        public KeysetModifierImage[] keysetModifierImages;
+        [Tooltip("Sprite set to apply to key images")]
+        public VRTK_KeyLayoutSprites keyLayoutSprites;
 
         // These are used in place of the public properties so editing them will not change values in the editor
         protected GameObject _keyTemplate;
@@ -214,6 +203,7 @@
 
             return _keyTemplate;
         }
+
         /// <summary>
         /// Return the Sprite to use for a key if one is set
         /// </summary>
@@ -222,33 +212,23 @@
         /// <returns>A Sprite instance to use, if one is associated with the key</returns>
         protected Sprite GetSpriteForKey(int keyset, IKey key)
         {
-            if (key.GetKeyClass() == KeyClass.KeysetModifier)
+            if (keyLayoutSprites != null)
             {
-                foreach (KeysetModifierImage kmi in keysetModifierImages)
-                {
-                    if (kmi.inKeyset != -1 && kmi.inKeyset != keyset)
-                    {
-                        continue;
-                    }
-
-                    if (kmi.keyset != -1 && kmi.keyset != key.GetKeyset())
-                    {
-                        continue;
-                    }
-
-                    return kmi.sourceImage;
-                }
+                return keyLayoutSprites.GetSpriteForKey(keyset, key);
             }
 
             return null;
         }
 
         /// <summary>
-        /// 
+        /// Returns the component of Type type in the GameObject's children (excluding the GameObject itself) using depth first search.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="parent"></param>
-        /// <returns></returns>
+        /// <remarks>
+        /// A component is returned only if it is found on an active GameObject.
+        /// </remarks>
+        /// <typeparam name="T">The type of Component to retrieve.</typeparam>
+        /// <param name="parent">The game object to search in</param>
+        /// <returns> A component of the matching type, if found.</returns>
         protected static T GetComponentExclusivelyInChildren<T>(GameObject parent) where T : Component
         {
             foreach (T component in parent.GetComponentsInChildren<T>())

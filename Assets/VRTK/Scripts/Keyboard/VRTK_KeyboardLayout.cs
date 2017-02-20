@@ -23,7 +23,7 @@ namespace VRTK
     /// A "Keyset Modifier" key is used to switch between key sets.
     ///   
     /// </remarks>
-    [CreateAssetMenu(fileName = "KeyboardLayout", menuName = "VRTK/KeyboardLayout")]
+    [CreateAssetMenu(fileName = "KeyboardLayout", menuName = "VRTK/Keyboard Layout")]
     public class VRTK_KeyboardLayout : ScriptableObject
     {
         [Serializable]
