@@ -30,10 +30,14 @@ namespace VRTK
         [Tooltip("LayoutElement template used by keys")]
         public LayoutElement keyLayoutTemplate;
 
+        protected DrivenRectTransformTracker drivenRuntimeRectTransforms = new DrivenRectTransformTracker();
+
         public override void SetupKeyboardUI()
         {
             // TODO: Better method of finding canvas(es)
+            drivenRuntimeRectTransforms.Clear();
             GameObject root = GetRuntimeObjectContainer(gameObject, empty: true);
+            drivenRuntimeRectTransforms.Add(this, root.GetComponent<RectTransform>(), DrivenTransformProperties.All);
 
             KeyboardLayout layout = GetKeyLayout();
             if (layout == null)
@@ -42,8 +46,6 @@ namespace VRTK
             }
 
             SetupTemplates();
-            
-            Vector2 keyPivot = Vector2.one * 0.5f;
 
             for (int s = 0; s < layout.keysets.Length; s++)
             {
@@ -59,14 +61,20 @@ namespace VRTK
                 keysetTransform.anchorMax = new Vector2(1, 1);
                 keysetTransform.offsetMin = new Vector2(0, 0);
                 keysetTransform.offsetMax = new Vector2(0, 0);
+                drivenRuntimeRectTransforms.Add(this, keysetTransform, DrivenTransformProperties.All);
 
                 foreach (KLRow row in keyset.rows)
                 {
-                    // Area
+                    // Row
                     GameObject uiRow = Instantiate<GameObject>(rowLayoutTemplate.gameObject, keysetTransform, false);
                     uiRow.name = "KeyboardRow";
                     ProcessRuntimeObject(uiRow);
                     RectTransform rowTransform = uiRow.GetComponent<RectTransform>();
+                    drivenRuntimeRectTransforms.Add(this, rowTransform,
+                        DrivenTransformProperties.AnchoredPositionZ |
+                        DrivenTransformProperties.Pivot |
+                        DrivenTransformProperties.Rotation |
+                        DrivenTransformProperties.Scale);
 
                     foreach (KLKey key in row.keys)
                     {
@@ -77,7 +85,6 @@ namespace VRTK
                         ProcessRuntimeObject(uiKey);
                         RectTransform keyTransform = uiKey.GetComponent<RectTransform>();
                         keyTransform.SetParent(rowTransform, false);
-                        keyTransform.pivot = keyPivot;
                         ApplyKeySettingsToUIKey(s, key, uiKey);
                         LayoutElement keyLayoutElement = uiKey.AddComponent<LayoutElement>();
                         keyLayoutElement.ignoreLayout = keyLayoutTemplate.ignoreLayout;
@@ -87,6 +94,11 @@ namespace VRTK
                         keyLayoutElement.preferredHeight = keyLayoutTemplate.preferredHeight;
                         keyLayoutElement.flexibleWidth = keyLayoutTemplate.flexibleWidth;
                         keyLayoutElement.flexibleHeight = keyLayoutTemplate.flexibleHeight;
+                        drivenRuntimeRectTransforms.Add(template, keyTransform,
+                            DrivenTransformProperties.AnchoredPositionZ |
+                            DrivenTransformProperties.Pivot |
+                            DrivenTransformProperties.Rotation |
+                            DrivenTransformProperties.Scale);
                     }
                 }
             }
@@ -99,7 +111,12 @@ namespace VRTK
             if (keysetLayoutTemplate == null)
             {
                 GameObject keysetTemplate = new GameObject("KeysetLayoutTemplate", typeof(RectTransform));
-                keysetTemplate.GetComponent<RectTransform>().pivot = Vector2.one / 2f;
+                RectTransform keysetTransform = keysetTemplate.GetComponent<RectTransform>();
+                keysetTransform.pivot = Vector2.one * 0.5f;
+                keysetTransform.anchorMin = new Vector2(0, 0);
+                keysetTransform.anchorMax = new Vector2(1, 1);
+                keysetTransform.offsetMin = new Vector2(0, 0);
+                keysetTransform.offsetMax = new Vector2(0, 0);
                 keysetTemplate.transform.SetParent(gameObject.transform, false);
                 keysetLayoutTemplate = keysetTemplate.AddComponent<VerticalLayoutGroup>();
                 keysetLayoutTemplate.childControlHeight = true;
@@ -111,7 +128,7 @@ namespace VRTK
             if (rowLayoutTemplate == null)
             {
                 GameObject rowTemplate = new GameObject("RowLayoutTemplate", typeof(RectTransform));
-                rowTemplate.GetComponent<RectTransform>().pivot = Vector2.one / 2f;
+                rowTemplate.GetComponent<RectTransform>().pivot = Vector2.one * 0.5f;
                 rowTemplate.transform.SetParent(gameObject.transform, false);
                 rowLayoutTemplate = rowTemplate.AddComponent<HorizontalLayoutGroup>();
                 rowLayoutTemplate.childControlHeight = true;
@@ -123,11 +140,37 @@ namespace VRTK
             if (keyLayoutTemplate == null)
             {
                 GameObject keyTemplate = new GameObject("KeyLayoutTemplate", typeof(RectTransform));
-                keyTemplate.GetComponent<RectTransform>().pivot = Vector2.one / 2f;
+                keyTemplate.GetComponent<RectTransform>().pivot = Vector2.one * 0.5f;
                 keyTemplate.transform.SetParent(gameObject.transform, false);
                 keyLayoutTemplate = keyTemplate.AddComponent<LayoutElement>();
                 keyLayoutTemplate.flexibleWidth = 1f;
                 keyLayoutTemplate.flexibleHeight = 1f;
+            }
+
+            // Register drivers for properties in template rect transforms
+            {
+                // All keyset transform properties are set by renderer
+                RectTransform keysetTransform = keysetLayoutTemplate.gameObject.GetComponent<RectTransform>();
+                drivenTemplateRectTransforms.Add(this, keysetTransform, DrivenTransformProperties.All);
+
+                // Row transform is controlled by the keyset template's VerticalLayoutGroup
+                RectTransform rowTransform = rowLayoutTemplate.gameObject.GetComponent<RectTransform>();
+                drivenTemplateRectTransforms.Add(keysetLayoutTemplate.GetComponent<VerticalLayoutGroup>(), rowTransform,
+                    DrivenTransformProperties.Anchors |
+                    DrivenTransformProperties.AnchoredPosition |
+                    DrivenTransformProperties.SizeDelta);
+
+                // Key transform is controlled by the row template's HorizontalLayoutGroup and the keyTemplate prefab
+                RectTransform keyTransform = keyLayoutTemplate.gameObject.GetComponent<RectTransform>();
+                drivenRuntimeRectTransforms.Add(this, keyTransform,
+                    DrivenTransformProperties.AnchoredPositionZ |
+                    DrivenTransformProperties.Pivot |
+                    DrivenTransformProperties.Rotation |
+                    DrivenTransformProperties.Scale);
+                drivenTemplateRectTransforms.Add(rowLayoutTemplate.GetComponent<HorizontalLayoutGroup>(), keyTransform,
+                    DrivenTransformProperties.Anchors |
+                    DrivenTransformProperties.AnchoredPosition |
+                    DrivenTransformProperties.SizeDelta);
             }
         }
     }

@@ -25,7 +25,7 @@
             VRTK_BaseCanvasKeyLayoutRenderer renderer = (VRTK_BaseCanvasKeyLayoutRenderer)target;
             VRTK_KeyLayoutRendererAttribute attribute = AttributeUtils.GetAttribute<VRTK_KeyLayoutRendererAttribute>(target.GetType());
 
-            if ( attribute.requireCalculator )
+            if (attribute.requireCalculator)
             {
                 RKeyLayout keyLayout = renderer.CalculateRenderableKeyLayout(Vector2.one * 100);
                 keysetNames = keyLayout == null
@@ -37,7 +37,7 @@
                     EditorGUILayout.HelpBox("Layout calculator did not return a key layout, editor will not be complete until layout calculator issues are fixed", MessageType.Warning);
                 }
             }
-            else if ( attribute.requireSource )
+            else if (attribute.requireSource)
             {
                 KeyboardLayout keyLayout = renderer.GetKeyLayout();
                 keysetNames = keyLayout == null

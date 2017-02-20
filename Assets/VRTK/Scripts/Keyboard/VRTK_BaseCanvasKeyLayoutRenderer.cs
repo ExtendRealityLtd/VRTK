@@ -69,8 +69,12 @@
         protected GameObject _specialKeyTemplate;
         protected GameObject _modifierKeyTemplate;
 
+        protected DrivenRectTransformTracker drivenTemplateRectTransforms = new DrivenRectTransformTracker();
+
         protected virtual void SetupTemplates()
         {
+            drivenTemplateRectTransforms.Clear();
+
             _keyTemplate = keyTemplate;
             _specialKeyTemplate = specialKeyTemplate;
             _modifierKeyTemplate = modifierKeyTemplate;
