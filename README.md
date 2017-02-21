@@ -14,6 +14,9 @@
 | VR Simulator | Included |
 | SteamVR Unity Asset | [SteamVR Plugin] |
 | Oculus Utilities Unity Package | [Oculus Utilities] |
+| *Google VR SDK for Unity | [Google VR SDK for Unity]
+
+_*experimental_
 
 ## Documentation
 
@@ -37,66 +40,8 @@ if your query has already been answered.
  * Open `VRTK` within Unity3d.
  * Add the `VRTK_SDKManager` script to a GameObject in the scene.
 
-<details><summary>**Instructions for using the VR Simulator**</summary>
-
- * Drag the `VRSimulatorCameraRig` prefab from the VRTK/Prefabs into the
- scene.
- * Select the GameObject with the `VRTK_SDKManager` script attached
- to it.
-  * Select `Simulator` for each of the SDK Choices.
-  * Click the `Auto Populate Linked Objects` button to find the
-  relevant Linked Objects.
- * Use the Left Alt to switch between mouse look and move a hand.
- * Press Tab to switch between left/right hands.
- * Hold Left Shift to change from translation to rotation for the hands.
- * Hold Left Crtl to switch between X/Y and X/Z axis.
- * All above keys can be remapped using the inspector on the
- `VRSimulatorCameraRig` prefab.
- * Button mapping for the VR control are as follows:
-  * Grip: Left mouse button
-  * Trigger: Right mouse button
-  * Touchpad Press: Q
-  * Button One: E
-  * Button Two: R
-
-</details>
- 
-<details><summary>**Instructions for using the SteamVR Unity3d asset**</summary>
-
- * Import the [SteamVR Plugin] from the Unity Asset Store.
- * Drag the `[CameraRig]` prefab from the SteamVR plugin into the
- scene.
- * Check that `Virtual Reality Supported` is ticked in the
- `Edit -> Project Settings -> Player` menu.
- * Ensure that `OpenVR` is added in the `Virtual Reality SDKs` list
- in the `Edit -> Project Settings -> Player` menu.
- * Select the GameObject with the `VRTK_SDKManager` script attached
- to it.
-  * Select `Steam VR` for each of the SDK Choices.
-  * Click the `Auto Populate Linked Objects` button to find the
-  relevant Linked Objects.
- * Optionally, browse the `Examples` scenes for example usage of the
- scripts.
-
-</details>
-
-<details><summary>**Instructions for using the Oculus Utilities Unity3d package**</summary>
-
- * Download the [Oculus Utilities] from the Oculus developer website.
- * Import the `OculusUtilities.unitypackage` into the project.
- * Drag the `OVRCameraRig` prefab from the Oculus package into the
- scene.
- * Check that `Virtual Reality Supported` is ticked in the
- `Edit -> Project Settings -> Player` menu.
- * Ensure that `Oculus` is added in the `Virtual Reality SDKs` list
- in the `Edit -> Project Settings -> Player` menu.
- * Select the GameObject with the `VRTK_SDKManager` script attached
- to it.
-  * Select `Oculus VR` for each of the SDK Choices.
-  * Click the `Auto Populate Linked Objects` button to find the
-  relevant Linked Objects.
-
-</details>
+For further information about setting up a specific SDK, check out the
+[GETTING_STARTED.md] document.
 
 ## What's In The Box
 
@@ -161,10 +106,12 @@ Code released under the [MIT License].
 [SteamVR Plugin]: https://www.assetstore.unity3d.com/en/#!/content/32647
 [SteamVR Plugin for Unity3d Github Repo]: https://github.com/ValveSoftware/openvr/tree/master/unity_package/Assets/SteamVR
 [Oculus Utilities]: https://developer3.oculus.com/downloads/game-engines/1.10.0/Oculus_Utilities_for_Unity_5/
+[Google VR SDK for Unity]: https://developers.google.com/vr/unity/download
 [MIT License]: https://github.com/thestonefox/SteamVR_Unity_Toolkit/blob/master/LICENSE
 [Contribution Document]: https://github.com/thestonefox/SteamVR_Unity_Toolkit/blob/master/CONTRIBUTING.md
 [Made With VRTK Document]: https://github.com/thestonefox/SteamVR_Unity_Toolkit/blob/master/MADEWITHVRTK.md
 [DOCUMENTATION.md]: https://github.com/thestonefox/SteamVR_Unity_Toolkit/blob/master/DOCUMENTATION.md
+[GETTING_STARTED.md]: https://github.com/thestonefox/SteamVR_Unity_Toolkit/blob/master/GETTING_STARTED.md
 [EXAMPLES.md]: https://github.com/thestonefox/SteamVR_Unity_Toolkit/blob/master/EXAMPLES.md
 [Fork]: http://help.github.com/fork-a-repo/
 [Open a Pull Request]: https://help.github.com/articles/using-pull-requests/

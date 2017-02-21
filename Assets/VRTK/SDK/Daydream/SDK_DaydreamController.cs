@@ -5,6 +5,9 @@ namespace VRTK
     using UnityEngine;
     using System.Collections.Generic;
 
+    /// <summary>
+    /// The Daydream Controller SDK script provides a bridge to SDK methods that deal with the input devices.
+    /// </summary>
     public class SDK_DaydreamController : SDK_FallbackController
     {
         private GameObject controller;
@@ -14,8 +17,11 @@ namespace VRTK
         private Vector3 velocity = Vector3.zero;
         private Vector3 angularVelocity = Vector3.zero;
 
-        //TODO: where should we check that controller is connected? eg if (GvrController.State != GvrConnectionState.Connected) 
-
+        /// <summary>
+        /// The ProcessUpdate method enables an SDK to run logic for every Unity Update
+        /// </summary>
+        /// <param name="index">The index of the controller.</param>
+        /// <param name="options">A dictionary of generic options that can be used to within the update.</param>
         public override void ProcessUpdate(uint index, Dictionary<string, object> options)
         {
             if (controller == null)
@@ -31,12 +37,24 @@ namespace VRTK
             prevRotation = controller.transform.rotation.eulerAngles;
         }
 
+        /// <summary>
+        /// The GetControllerDefaultColliderPath returns the path to the prefab that contains the collider objects for the default controller of this SDK.
+        /// </summary>
+        /// <param name="hand">The controller hand to check for</param>
+        /// <returns>A path to the resource that contains the collider GameObject.</returns>
         public override string GetControllerDefaultColliderPath(ControllerHand hand)
         {
             var returnCollider = "ControllerColliders/Fallback";
             return returnCollider;
         }
 
+        /// <summary>
+        /// The GetControllerElementPath returns the path to the game object that the given controller element for the given hand resides in.
+        /// </summary>
+        /// <param name="element">The controller element to look up.</param>
+        /// <param name="hand">The controller hand to look up.</param>
+        /// <param name="fullPath">Whether to get the initial path or the full path to the element.</param>
+        /// <returns>A string containing the path to the game object that the controller element resides in.</returns>
         public override string GetControllerElementPath(ControllerElements element, ControllerHand hand, bool fullPath = false)
         {
             //TODO: Use Gvr's tooltips or add an attach object ourselves
@@ -57,6 +75,11 @@ namespace VRTK
             }
         }
 
+        /// <summary>
+        /// The GetControllerIndex method returns the index of the given controller.
+        /// </summary>
+        /// <param name="controller">The GameObject containing the controller.</param>
+        /// <returns>The index of the given controller.</returns>
         public override uint GetControllerIndex(GameObject controller)
         {
             uint index = 0;
@@ -76,6 +99,12 @@ namespace VRTK
             return index;
         }
 
+        /// <summary>
+        /// The GetControllerByIndex method returns the GameObject of a controller with a specific index.
+        /// </summary>
+        /// <param name="index">The index of the controller to find.</param>
+        /// <param name="actual">If true it will return the actual controller, if false it will return the script alias controller GameObject.</param>
+        /// <returns>The GameObject of the controller</returns>
         public override GameObject GetControllerByIndex(uint index, bool actual = false)
         {
             switch (index)
@@ -87,14 +116,21 @@ namespace VRTK
             }
         }
 
+        /// <summary>
+        /// The GetControllerOrigin method returns the origin of the given controller.
+        /// </summary>
+        /// <param name="controller">The controller to retrieve the origin from.</param>
+        /// <returns>A Transform containing the origin of the controller.</returns>
         public override Transform GetControllerOrigin(GameObject controller)
         {
             return controller.transform;
         }
 
-        //public override Transform GenerateControllerPointerOrigin(GameObject parent)
-        //public override GameObject GetControllerLeftHand(bool actual = false)
-
+        /// <summary>
+        /// The GetControllerRightHand method returns the GameObject containing the representation of the right hand controller.
+        /// </summary>
+        /// <param name="actual">If true it will return the actual controller, if false it will return the script alias controller GameObject.</param>
+        /// <returns>The GameObject containing the right hand controller.</returns>
         public override GameObject GetControllerRightHand(bool actual = false)
         {
             controller = GetSDKManagerControllerRightHand(actual);
@@ -110,25 +146,42 @@ namespace VRTK
             return controller;
         }
 
-        //public override bool IsControllerLeftHand(GameObject controller)
-        //public override bool IsControllerLeftHand(GameObject controller, bool actual)
-
+        /// <summary>
+        /// The IsControllerRightHand/1 method is used to check if the given controller is the the right hand controller.
+        /// </summary>
+        /// <param name="controller">The GameObject to check.</param>
+        /// <returns>Returns true if the given controller is the right hand controller.</returns>
         public override bool IsControllerRightHand(GameObject controller)
         {
             return true;
         }
 
-
+        /// <summary>
+        /// The IsControllerRightHand/2 method is used to check if the given controller is the the right hand controller.
+        /// </summary>
+        /// <param name="controller">The GameObject to check.</param>
+        /// <param name="actual">If true it will check the actual controller, if false it will check the script alias controller.</param>
+        /// <returns>Returns true if the given controller is the right hand controller.</returns>
         public override bool IsControllerRightHand(GameObject controller, bool actual)
         {
             return true;
         }
 
+        /// <summary>
+        /// The GetControllerModel method returns the model alias for the given GameObject.
+        /// </summary>
+        /// <param name="controller">The GameObject to get the model alias for.</param>
+        /// <returns>The GameObject that has the model alias within it.</returns>
         public override GameObject GetControllerModel(GameObject controller)
         {
             return GetControllerModelFromController(controller);
         }
 
+        /// <summary>
+        /// The GetControllerModel method returns the model alias for the given controller hand.
+        /// </summary>
+        /// <param name="hand">The hand enum of which controller model to retrieve.</param>
+        /// <returns>The GameObject that has the model alias within it.</returns>
         public override GameObject GetControllerModel(ControllerHand hand)
         {
             var model = GetSDKManagerControllerModelForHand(hand);
@@ -139,115 +192,134 @@ namespace VRTK
             return model;
         }
 
+        /// <summary>
+        /// The GetControllerRenderModel method gets the game object that contains the given controller's render model.
+        /// </summary>
+        /// <param name="controller">The GameObject to check.</param>
+        /// <returns>A GameObject containing the object that has a render model for the controller.</returns>
         public override GameObject GetControllerRenderModel(GameObject controller)
         {
             return controller;
         }
 
-        //public override void SetControllerRenderModelWheel(GameObject renderModel, bool state)
-        //public override void HapticPulseOnIndex(uint index, float strength = 0.5f)
-        //public override SDK_ControllerHapticModifiers GetHapticModifiers()
-
+        /// <summary>
+        /// The GetVelocityOnIndex method is used to determine the current velocity of the tracked object on the given index.
+        /// </summary>
+        /// <param name="index">The index of the tracked object to check for.</param>
+        /// <returns>A Vector3 containing the current velocity of the tracked object.</returns>
         public override Vector3 GetVelocityOnIndex(uint index)
         {
             return velocity;
         }
 
+        /// <summary>
+        /// The GetAngularVelocityOnIndex method is used to determine the current angular velocity of the tracked object on the given index.
+        /// </summary>
+        /// <param name="index">The index of the tracked object to check for.</param>
+        /// <returns>A Vector3 containing the current angular velocity of the tracked object.</returns>
         public override Vector3 GetAngularVelocityOnIndex(uint index)
         {
             return angularVelocity;
         }
 
+        /// <summary>
+        /// The GetTouchpadAxisOnIndex method is used to get the current touch position on the controller touchpad.
+        /// </summary>
+        /// <param name="index">The index of the tracked object to check for.</param>
+        /// <returns>A Vector2 containing the current x,y position of where the touchpad is being touched.</returns>
         public override Vector2 GetTouchpadAxisOnIndex(uint index)
         {
             return GvrController.TouchPos;
         }
 
-        //public override Vector2 GetTriggerAxisOnIndex(uint index)
-        //public override Vector2 GetGripAxisOnIndex(uint index)
-        //public override float GetTriggerHairlineDeltaOnIndex(uint index)
-        //public override float GetGripHairlineDeltaOnIndex(uint index)
-        //public override bool IsTriggerPressedOnIndex(uint index)
-        //public override bool IsTriggerPressedDownOnIndex(uint index)
-        //public override bool IsTriggerPressedUpOnIndex(uint index)
-        //public override bool IsTriggerTouchedOnIndex(uint index)
-        //public override bool IsTriggerTouchedDownOnIndex(uint index)
-        //public override bool IsTriggerTouchedUpOnIndex(uint index)
-        //public override bool IsHairTriggerDownOnIndex(uint index)
-        //public override bool IsHairTriggerUpOnIndex(uint index)
-        //public override bool IsGripPressedOnIndex(uint index)
-        //public override bool IsGripPressedDownOnIndex(uint index)
-        //public override bool IsGripPressedUpOnIndex(uint index)
-        //public override bool IsGripTouchedOnIndex(uint index)
-        //public override bool IsGripTouchedDownOnIndex(uint index)
-        //public override bool IsGripTouchedUpOnIndex(uint index)
-        //public override bool IsHairGripDownOnIndex(uint index)
-        //public override bool IsHairGripUpOnIndex(uint index)
-
+        /// <summary>
+        /// The IsTouchpadPressedOnIndex method is used to determine if the controller button is being pressed down continually.
+        /// </summary>
+        /// <param name="index">The index of the tracked object to check for.</param>
+        /// <returns>Returns true if the button is continually being pressed.</returns>
         public override bool IsTouchpadPressedOnIndex(uint index)
         {
             return GvrController.ClickButton;
         }
 
+        /// <summary>
+        /// The IsTouchpadPressedDownOnIndex method is used to determine if the controller button has just been pressed down.
+        /// </summary>
+        /// <param name="index">The index of the tracked object to check for.</param>
+        /// <returns>Returns true if the button has just been pressed down.</returns>
         public override bool IsTouchpadPressedDownOnIndex(uint index)
         {
             return GvrController.ClickButtonDown;
         }
 
+        /// <summary>
+        /// The IsTouchpadPressedUpOnIndex method is used to determine if the controller button has just been released.
+        /// </summary>
+        /// <param name="index">The index of the tracked object to check for.</param>
+        /// <returns>Returns true if the button has just been released.</returns>
         public override bool IsTouchpadPressedUpOnIndex(uint index)
         {
             return GvrController.ClickButtonUp;
         }
 
+        /// <summary>
+        /// The IsTouchpadTouchedOnIndex method is used to determine if the controller button is being touched down continually.
+        /// </summary>
+        /// <param name="index">The index of the tracked object to check for.</param>
+        /// <returns>Returns true if the button is continually being touched.</returns>
         public override bool IsTouchpadTouchedOnIndex(uint index)
         {
             return GvrController.IsTouching;
         }
 
+        /// <summary>
+        /// The IsTouchpadTouchedDownOnIndex method is used to determine if the controller button has just been touched down.
+        /// </summary>
+        /// <param name="index">The index of the tracked object to check for.</param>
+        /// <returns>Returns true if the button has just been touched down.</returns>
         public override bool IsTouchpadTouchedDownOnIndex(uint index)
         {
             return GvrController.TouchDown;
         }
 
+        /// <summary>
+        /// The IsTouchpadTouchedUpOnIndex method is used to determine if the controller button has just been released.
+        /// </summary>
+        /// <param name="index">The index of the tracked object to check for.</param>
+        /// <returns>Returns true if the button has just been released.</returns>
         public override bool IsTouchpadTouchedUpOnIndex(uint index)
         {
             return GvrController.TouchUp;
         }
 
+        /// <summary>
+        /// The IsButtonOnePressedOnIndex method is used to determine if the controller button is being pressed down continually.
+        /// </summary>
+        /// <param name="index">The index of the tracked object to check for.</param>
+        /// <returns>Returns true if the button is continually being pressed.</returns>
         public override bool IsButtonOnePressedOnIndex(uint index)
         {
             return GvrController.AppButton;
         }
 
+        /// <summary>
+        /// The IsButtonOnePressedDownOnIndex method is used to determine if the controller button has just been pressed down.
+        /// </summary>
+        /// <param name="index">The index of the tracked object to check for.</param>
+        /// <returns>Returns true if the button has just been pressed down.</returns>
         public override bool IsButtonOnePressedDownOnIndex(uint index)
         {
             return GvrController.AppButtonDown;
         }
 
+        /// <summary>
+        /// The IsButtonOnePressedUpOnIndex method is used to determine if the controller button has just been released.
+        /// </summary>
+        /// <param name="index">The index of the tracked object to check for.</param>
+        /// <returns>Returns true if the button has just been released.</returns>
         public override bool IsButtonOnePressedUpOnIndex(uint index)
         {
             return GvrController.AppButtonUp;
-        }
-
-        //public override bool IsButtonOneTouchedOnIndex(uint index)
-        //public override bool IsButtonOneTouchedDownOnIndex(uint index)
-        //public override bool IsButtonOneTouchedUpOnIndex(uint index)
-        //public override bool IsButtonTwoPressedOnIndex(uint index)
-        //public override bool IsButtonTwoPressedDownOnIndex(uint index)
-        //public override bool IsButtonTwoPressedUpOnIndex(uint index)
-        //public override bool IsButtonTwoTouchedOnIndex(uint index)
-        //public override bool IsButtonTwoTouchedDownOnIndex(uint index)
-        //public override bool IsButtonTwoTouchedUpOnIndex(uint index)
-        //public override bool IsStartMenuPressedOnIndex(uint index)
-        //public override bool IsStartMenuPressedDownOnIndex(uint index)
-        //public override bool IsStartMenuPressedUpOnIndex(uint index)
-        //public override bool IsStartMenuTouchedOnIndex(uint index)
-        //public override bool IsStartMenuTouchedDownOnIndex(uint index)
-        //public override bool IsStartMenuTouchedUpOnIndex(uint index)
-
-        // Quiet the Awake method in SDK_FallbackController
-        private void Awake()
-        {
         }
     }
 #else

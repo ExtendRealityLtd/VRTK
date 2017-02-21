@@ -5,7 +5,7 @@ namespace VRTK
     using UnityEngine;
 
     /// <summary>
-    /// The Sim Boundaries SDK script provides dummy functions for the play area bounderies.
+    /// The Daydream Boundaries SDK script provides dummy functions for the play area bounderies.
     /// </summary>
     public class SDK_DaydreamBoundaries : SDK_BaseBoundaries
     {

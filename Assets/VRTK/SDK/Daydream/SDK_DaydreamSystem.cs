@@ -2,10 +2,8 @@
 namespace VRTK
 {
 #if VRTK_SDK_DAYDREAM
-    using UnityEngine;
-
     /// <summary>
-    /// The Sim System SDK script provides dummy functions for system functions.
+    /// The Daydream System SDK script provides dummy functions for system functions.
     /// </summary>
     public class SDK_DaydreamSystem : SDK_BaseSystem
     {
@@ -33,7 +31,6 @@ namespace VRTK
         /// <param name="force">If true then Interleaved Reprojection will be forced on, if false it will not be forced on.</param>
         public override void ForceInterleavedReprojectionOn(bool force)
         {
-
         }
     }
 #else
