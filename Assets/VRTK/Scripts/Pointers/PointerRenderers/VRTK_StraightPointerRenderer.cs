@@ -47,7 +47,7 @@ namespace VRTK
         /// </summary>
         public override void UpdateRenderer()
         {
-            if ((controllingPointer && controllingPointer.IsPointerActive()) || tracerVisible || cursorVisible)
+            if ((controllingPointer && controllingPointer.IsPointerActive()) || IsTracerVisible() || IsCursorVisible())
             {
                 float tracerLength = CastRayForward();
                 SetPointerAppearance(tracerLength);
@@ -100,6 +100,16 @@ namespace VRTK
             {
                 objectInteractor.transform.position = actualCursor.transform.position;
             }
+        }
+
+        protected virtual bool IsTracerVisible()
+        {
+            return (tracerVisibility == VisibilityStates.AlwaysOn || tracerVisible);
+        }
+
+        protected virtual bool IsCursorVisible()
+        {
+            return (cursorVisibility == VisibilityStates.AlwaysOn || cursorVisible);
         }
 
         protected virtual void CreateTracer()

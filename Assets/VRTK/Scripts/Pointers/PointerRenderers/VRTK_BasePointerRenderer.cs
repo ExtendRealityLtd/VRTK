@@ -99,9 +99,18 @@ namespace VRTK
                 controllingPointer.ResetActivationTimer();
                 PointerExit(destinationHit);
             }
-            ToggleObjectInteraction(pointerState);
+            ToggleInteraction(pointerState);
             TogglePlayArea(pointerState, actualState);
             ToggleRenderer(pointerState, actualState);
+        }
+
+        /// <summary>
+        /// The ToggleInteraction method is used to enable or disable the controller extension interactions.
+        /// </summary>
+        /// <param name="state">If true then the object interactor will be enabled.</param>
+        public virtual void ToggleInteraction(bool state)
+        {
+            ToggleObjectInteraction(state);
         }
 
         /// <summary>

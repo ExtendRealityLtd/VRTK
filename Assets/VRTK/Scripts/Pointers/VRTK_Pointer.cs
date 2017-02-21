@@ -173,6 +173,11 @@ namespace VRTK
             {
                 pointerRenderer.InitalizePointer(this, invalidListPolicy, navMeshCheckDistance, headsetPositionCompensation);
                 pointerRenderer.UpdateRenderer();
+                if (!IsPointerActive())
+                {
+                    bool interactionState = (pointerRenderer.tracerVisibility == VRTK_BasePointerRenderer.VisibilityStates.AlwaysOn || pointerRenderer.cursorVisibility == VRTK_BasePointerRenderer.VisibilityStates.AlwaysOn);
+                    pointerRenderer.ToggleInteraction(interactionState);
+                }
             }
         }
 
