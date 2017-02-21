@@ -2,6 +2,7 @@
 namespace VRTK
 {
     using UnityEngine;
+    using System;
     using System.Collections.Generic;
 #if UNITY_5_5_OR_NEWER
     using UnityEngine.AI;
@@ -28,12 +29,31 @@ namespace VRTK
             AlwaysOff
         }
 
+        /// <summary>
+        /// Specifies the smoothing to be applied to the pointer.
+        /// </summary>
+        [Serializable]
+        public sealed class PointerOriginSmoothingSettings
+        {
+            [Tooltip("Whether or not to smooth the position of the pointer origin when positioning the pointer tip.")]
+            public bool smoothsPosition;
+            [Tooltip("The maximum allowed distance between the unsmoothed pointer origin and the smoothed pointer origin per frame to use for smoothing.")]
+            public float maxAllowedPerFrameDistanceDifference = 0.003f;
+
+            [Tooltip("Whether or not to smooth the rotation of the pointer origin when positioning the pointer tip.")]
+            public bool smoothsRotation;
+            [Tooltip("The maximum allowed angle between the unsmoothed pointer origin and the smoothed pointer origin per frame to use for smoothing.")]
+            public float maxAllowedPerFrameAngleDifference = 1.5f;
+        }
+
         [Header("General Renderer Settings")]
 
         [Tooltip("An optional Play Area Cursor generator to add to the destination position of the pointer tip.")]
         public VRTK_PlayAreaCursor playareaCursor;
         [Tooltip("The layers for the pointer's raycasts to ignore.")]
         public LayerMask layersToIgnore = Physics.IgnoreRaycastLayer;
+        [Tooltip("Specifies the smoothing to be applied to the pointer origin when positioning the pointer tip.")]
+        public PointerOriginSmoothingSettings pointerOriginSmoothingSettings = new PointerOriginSmoothingSettings();
 
         [Header("General Appearance Settings")]
 
@@ -60,6 +80,8 @@ namespace VRTK
 
         protected GameObject objectInteractor;
         protected GameObject objectInteractorAttachPoint;
+        protected GameObject pointerOriginTransformFollowGameObject;
+        protected VRTK_TransformFollow pointerOriginTransformFollow;
         protected VRTK_InteractGrab controllerGrabScript;
         protected Rigidbody savedAttachPoint;
         protected bool attachedToInteractorAttachPoint = false;
@@ -102,6 +124,17 @@ namespace VRTK
             ToggleInteraction(pointerState);
             TogglePlayArea(pointerState, actualState);
             ToggleRenderer(pointerState, actualState);
+
+            if (pointerOriginTransformFollowGameObject != null && pointerOriginTransformFollowGameObject.activeSelf != pointerState)
+            {
+                UpdatePointerOriginTransformFollow();
+                pointerOriginTransformFollowGameObject.SetActive(pointerState);
+                pointerOriginTransformFollow.enabled = pointerState;
+                if (pointerState)
+                {
+                    pointerOriginTransformFollow.Follow();
+                }
+            }
         }
 
         /// <summary>
@@ -151,6 +184,7 @@ namespace VRTK
             defaultMaterial = Resources.Load("WorldPointer") as Material;
             makeRendererVisible = new List<GameObject>();
             CreatePointerObjects();
+            CreatePointerOriginTransformFollow();
         }
 
         protected virtual void OnDisable()
@@ -161,6 +195,13 @@ namespace VRTK
                 Destroy(objectInteractor);
             }
             controllerGrabScript = null;
+            Destroy(pointerOriginTransformFollowGameObject);
+        }
+
+        protected virtual void OnValidate()
+        {
+            pointerOriginSmoothingSettings.maxAllowedPerFrameDistanceDifference = Mathf.Max(0.0001f, pointerOriginSmoothingSettings.maxAllowedPerFrameDistanceDifference);
+            pointerOriginSmoothingSettings.maxAllowedPerFrameAngleDifference = Mathf.Max(0.0001f, pointerOriginSmoothingSettings.maxAllowedPerFrameAngleDifference);
         }
 
         protected virtual void FixedUpdate()
@@ -168,6 +209,11 @@ namespace VRTK
             if (controllingPointer && controllingPointer.interactWithObjects && objectInteractor && objectInteractor.activeInHierarchy)
             {
                 UpdateObjectInteractor();
+            }
+
+            if (controllingPointer && pointerOriginTransformFollow.isActiveAndEnabled)
+            {
+                UpdatePointerOriginTransformFollow();
             }
         }
 
@@ -206,29 +252,20 @@ namespace VRTK
             objectInteractor.transform.position = destinationHit.point;
         }
 
-        protected virtual Vector3 GetOriginPosition()
+        protected virtual void UpdatePointerOriginTransformFollow()
         {
-            return (controllingPointer.customOrigin ? controllingPointer.customOrigin.position : controllingPointer.transform.position);
+            pointerOriginTransformFollow.gameObjectToFollow = (controllingPointer.customOrigin == null ? transform : controllingPointer.customOrigin).gameObject;
+            pointerOriginTransformFollow.smoothsPosition = pointerOriginSmoothingSettings.smoothsPosition;
+            pointerOriginTransformFollow.maxAllowedPerFrameDistanceDifference = pointerOriginSmoothingSettings.maxAllowedPerFrameDistanceDifference;
+            pointerOriginTransformFollow.smoothsRotation = pointerOriginSmoothingSettings.smoothsRotation;
+            pointerOriginTransformFollow.maxAllowedPerFrameAngleDifference = pointerOriginSmoothingSettings.maxAllowedPerFrameAngleDifference;
         }
 
-        protected virtual Vector3 GetOriginLocalPosition()
+        protected Transform GetOrigin(bool smoothed = true)
         {
-            return (controllingPointer.customOrigin ? controllingPointer.customOrigin.localPosition : Vector3.zero);
-        }
-
-        protected virtual Vector3 GetOriginForward()
-        {
-            return (controllingPointer.customOrigin ? controllingPointer.customOrigin.forward : controllingPointer.transform.forward);
-        }
-
-        protected virtual Quaternion GetOriginRotation()
-        {
-            return (controllingPointer.customOrigin ? controllingPointer.customOrigin.rotation : controllingPointer.transform.rotation);
-        }
-
-        protected virtual Quaternion GetOriginLocalRotation()
-        {
-            return (controllingPointer.customOrigin ? controllingPointer.customOrigin.localRotation : Quaternion.identity);
+            return smoothed
+                ? pointerOriginTransformFollow.gameObjectToChange.transform
+                : (controllingPointer.customOrigin == null ? transform : controllingPointer.customOrigin);
         }
 
         protected virtual void PointerEnter(RaycastHit givenHit)
@@ -426,6 +463,16 @@ namespace VRTK
             {
                 objectInteractor.transform.localScale = scaleAmount;
             }
+        }
+
+        protected virtual void CreatePointerOriginTransformFollow()
+        {
+            pointerOriginTransformFollowGameObject = new GameObject(string.Format("[{0}]BasePointerRenderer_Origin_Smoothed", gameObject.name));
+            pointerOriginTransformFollowGameObject.SetActive(false);
+            pointerOriginTransformFollow = pointerOriginTransformFollowGameObject.AddComponent<VRTK_TransformFollow>();
+            pointerOriginTransformFollow.enabled = false;
+            pointerOriginTransformFollow.gameObjectToChange = pointerOriginTransformFollowGameObject;
+            pointerOriginTransformFollow.followsScale = false;
         }
 
         protected virtual float OverrideBeamLength(float currentLength)

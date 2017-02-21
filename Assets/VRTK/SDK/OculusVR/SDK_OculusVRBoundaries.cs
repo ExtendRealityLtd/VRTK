@@ -102,8 +102,8 @@ namespace VRTK
                 avatarContainer = FindObjectOfType<OvrAvatar>();
                 if (avatarContainer)
                 {
-                    var objectFollow = avatarContainer.gameObject.AddComponent<VRTK_ObjectFollow>();
-                    objectFollow.objectToFollow = GetPlayArea();
+                    var objectFollow = avatarContainer.gameObject.AddComponent<VRTK_TransformFollow>();
+                    objectFollow.gameObjectToFollow = GetPlayArea().gameObject;
                 }
             }
             return avatarContainer;

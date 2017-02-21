@@ -199,9 +199,10 @@ namespace VRTK
 
         protected virtual Vector3 ProjectForwardBeam()
         {
-            float attachedRotation = Vector3.Dot(Vector3.up, transform.forward.normalized);
+            Transform origin = GetOrigin();
+            float attachedRotation = Vector3.Dot(Vector3.up, origin.forward.normalized);
             float calculatedLength = maximumLength;
-            Vector3 useForward = GetOriginForward();
+            Vector3 useForward = origin.forward;
             if ((attachedRotation * 100f) > heightLimitAngle)
             {
                 useForward = new Vector3(useForward.x, fixedForwardBeamForward.y, useForward.z);
@@ -210,11 +211,11 @@ namespace VRTK
             }
             else
             {
-                fixedForwardBeamForward = GetOriginForward();
+                fixedForwardBeamForward = origin.forward;
             }
 
             var actualLength = calculatedLength;
-            Ray pointerRaycast = new Ray(GetOriginPosition(), useForward);
+            Ray pointerRaycast = new Ray(origin.position, useForward);
 
             RaycastHit collidedWith;
             var hasRayHit = Physics.Raycast(pointerRaycast, out collidedWith, calculatedLength, ~layersToIgnore);
@@ -279,7 +280,7 @@ namespace VRTK
                 collisionCheckFrequency = Mathf.Clamp(collisionCheckFrequency, 0, tracerDensity);
                 Vector3[] beamPoints = new Vector3[]
                 {
-                    GetOriginPosition(),
+                    GetOrigin().position,
                     jointPosition + new Vector3(0f, curveOffset, 0f),
                     downPosition,
                     downPosition,
@@ -323,7 +324,7 @@ namespace VRTK
         {
             Vector3[] beamPoints = new Vector3[]
             {
-                GetOriginPosition(),
+                GetOrigin(false).position,
                 jointPosition + new Vector3(0f, curveOffset, 0f),
                 downPosition,
                 downPosition,
