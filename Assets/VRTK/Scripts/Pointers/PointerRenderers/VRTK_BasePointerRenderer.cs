@@ -88,6 +88,9 @@ namespace VRTK
         protected float savedBeamLength = 0f;
         protected List<GameObject> makeRendererVisible;
 
+        protected bool tracerVisible;
+        protected bool cursorVisible;
+
         /// <summary>
         /// The InitalizePointer method is used to set up the state of the pointer renderer.
         /// </summary>
@@ -122,7 +125,6 @@ namespace VRTK
                 PointerExit(destinationHit);
             }
             ToggleInteraction(pointerState);
-            TogglePlayArea(pointerState, actualState);
             ToggleRenderer(pointerState, actualState);
         }
 
@@ -140,9 +142,10 @@ namespace VRTK
         /// </summary>
         public virtual void UpdateRenderer()
         {
-            if (playareaCursor && controllingPointer && controllingPointer.IsPointerActive())
+            if (playareaCursor)
             {
-                playareaCursor.ToggleVisibility((destinationHit.transform != null));
+                playareaCursor.SetHeadsetPositionCompensation(headsetPositionCompensation);
+                playareaCursor.ToggleState(IsCursorVisible());
             }
         }
 
@@ -161,7 +164,34 @@ namespace VRTK
         /// <returns>Returns true if there is a valid play area and no collisions. Returns false if there is no valid play area or there is but with a collision detected.</returns>
         public virtual bool ValidPlayArea()
         {
-            return (!playareaCursor || !playareaCursor.HasCollided());
+            return (!playareaCursor || !playareaCursor.IsActive() || !playareaCursor.HasCollided());
+        }
+
+        /// <summary>
+        /// The IsVisible method determines if the pointer renderer is at all visible by checking the state of the tracer and the cursor.
+        /// </summary>
+        /// <returns>Returns true if either the tracer or cursor renderers are visible. Returns false if none are visible.</returns>
+        public virtual bool IsVisible()
+        {
+            return (IsTracerVisible() || IsCursorVisible());
+        }
+
+        /// <summary>
+        /// The IsTracerVisible method determines if the pointer tracer renderer is visible.
+        /// </summary>
+        /// <returns>Returns true if the tracer renderers are visible.</returns>
+        public virtual bool IsTracerVisible()
+        {
+            return (tracerVisibility == VisibilityStates.AlwaysOn || tracerVisible);
+        }
+
+        /// <summary>
+        /// The IsCursorVisible method determines if the pointer cursor renderer is visible.
+        /// </summary>
+        /// <returns>Returns true if the cursor renderers are visible.</returns>
+        public virtual bool IsCursorVisible()
+        {
+            return (cursorVisibility == VisibilityStates.AlwaysOn || cursorVisible);
         }
 
         protected abstract void CreatePointerObjects();
@@ -282,28 +312,6 @@ namespace VRTK
             return (validNavMeshLocation && destinationHit.transform && !(VRTK_PolicyList.Check(destinationHit.transform.gameObject, invalidListPolicy)));
         }
 
-        protected virtual void TogglePlayArea(bool pointerState, bool actualState)
-        {
-            if (playareaCursor)
-            {
-                playareaCursor.SetHeadsetPositionCompensation(headsetPositionCompensation);
-                playareaCursor.ToggleState(pointerState);
-            }
-
-            if (playareaCursor && pointerState)
-            {
-                if (actualState)
-                {
-                    ToggleRendererVisibility(playareaCursor.GetPlayAreaContainer(), false);
-                    AddVisibleRenderer(playareaCursor.GetPlayAreaContainer());
-                }
-                else
-                {
-                    ToggleRendererVisibility(playareaCursor.GetPlayAreaContainer(), true);
-                }
-            }
-        }
-
         protected virtual void ToggleElement(GameObject givenObject, bool pointerState, bool actualState, VisibilityStates givenVisibility, ref bool currentVisible)
         {
             if (givenObject)
@@ -314,11 +322,12 @@ namespace VRTK
 
                 if (givenVisibility == VisibilityStates.AlwaysOff)
                 {
+                    currentVisible = false;
                     ToggleRendererVisibility(givenObject, false);
                 }
                 else
                 {
-                    if (actualState)
+                    if (actualState && givenVisibility != VisibilityStates.AlwaysOn)
                     {
                         ToggleRendererVisibility(givenObject, false);
                         AddVisibleRenderer(givenObject);
@@ -350,24 +359,30 @@ namespace VRTK
 
         protected virtual void ToggleRendererVisibility(GameObject givenObject, bool state)
         {
-            Renderer[] renderers = givenObject.GetComponentsInChildren<Renderer>();
-            for (int i = 0; i < renderers.Length; i++)
+            if (givenObject)
             {
-                renderers[i].enabled = state;
+                Renderer[] renderers = givenObject.GetComponentsInChildren<Renderer>();
+                for (int i = 0; i < renderers.Length; i++)
+                {
+                    renderers[i].enabled = state;
+                }
             }
         }
 
         protected virtual void SetupMaterialRenderer(GameObject givenObject)
         {
-            var pointerRenderer = givenObject.GetComponent<MeshRenderer>();
-            pointerRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
-            pointerRenderer.receiveShadows = false;
-            pointerRenderer.material = defaultMaterial;
+            if (givenObject)
+            {
+                var pointerRenderer = givenObject.GetComponent<MeshRenderer>();
+                pointerRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+                pointerRenderer.receiveShadows = false;
+                pointerRenderer.material = defaultMaterial;
+            }
         }
 
         protected virtual void ChangeColor(Color givenColor)
         {
-            if ((playareaCursor && playareaCursor.HasCollided()) || !ValidDestination())
+            if ((playareaCursor && playareaCursor.IsActive() && playareaCursor.HasCollided()) || !ValidDestination())
             {
                 givenColor = invalidCollisionColor;
             }

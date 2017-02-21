@@ -59,15 +59,12 @@ namespace VRTK
         protected GameObject actualInvalidLocationObject = null;
         protected Vector3 fixedForwardBeamForward;
 
-        protected bool tracerVisible;
-        protected bool cursorVisible;
-
         /// <summary>
         /// The UpdateRenderer method is used to run an Update routine on the pointer.
         /// </summary>
         public override void UpdateRenderer()
         {
-            if ((controllingPointer && controllingPointer.IsPointerActive()) || IsTracerVisible() || IsCursorVisible())
+            if ((controllingPointer && controllingPointer.IsPointerActive()) || IsVisible())
             {
                 Vector3 jointPosition = ProjectForwardBeam();
                 Vector3 downPosition = ProjectDownBeam(jointPosition);
@@ -81,7 +78,7 @@ namespace VRTK
         {
             TogglePointerCursor(pointerState, actualState);
             TogglePointerTracer(pointerState, actualState);
-            if (actualState)
+            if (actualState && tracerVisibility != VisibilityStates.AlwaysOn)
             {
                 ToggleRendererVisibility(actualTracer.gameObject, false);
                 AddVisibleRenderer(actualTracer.gameObject);
@@ -133,16 +130,6 @@ namespace VRTK
         {
             base.ChangeMaterial(givenColor);
             ChangeMaterialColor(actualCursor, givenColor);
-        }
-
-        protected virtual bool IsTracerVisible()
-        {
-            return (tracerVisibility == VisibilityStates.AlwaysOn || tracerVisible);
-        }
-
-        protected virtual bool IsCursorVisible()
-        {
-            return (cursorVisibility == VisibilityStates.AlwaysOn || cursorVisible);
         }
 
         protected virtual void CreateTracer()
