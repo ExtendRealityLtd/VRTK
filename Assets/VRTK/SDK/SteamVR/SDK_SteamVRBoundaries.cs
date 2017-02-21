@@ -1,14 +1,22 @@
-﻿// SteamVR Boundaries|SDK_SteamVR|004
+﻿// SteamVR Boundaries|SDK_SteamVR|005
 namespace VRTK
 {
-#if VRTK_SDK_STEAMVR
+#if VRTK_DEFINE_SDK_STEAMVR
     using UnityEngine;
+#endif
 
     /// <summary>
     /// The SteamVR Boundaries SDK script provides a bridge to the SteamVR SDK play area.
     /// </summary>
-    public class SDK_SteamVRBoundaries : SDK_BaseBoundaries
+    [SDK_Description(typeof(SDK_SteamVRSystem))]
+    public class SDK_SteamVRBoundaries
+#if VRTK_DEFINE_SDK_STEAMVR
+        : SDK_BaseBoundaries
+#else
+        : SDK_FallbackBoundaries
+#endif
     {
+#if VRTK_DEFINE_SDK_STEAMVR
         /// <summary>
         /// The InitBoundaries method is run on start of scene and can be used to initialse anything on game start.
         /// </summary>
@@ -74,10 +82,6 @@ namespace VRTK
             var area = playArea.GetComponent<SteamVR_PlayArea>();
             return (area.size == SteamVR_PlayArea.Size.Calibrated);
         }
-    }
-#else
-    public class SDK_SteamVRBoundaries : SDK_FallbackBoundaries
-    {
-    }
 #endif
+    }
 }

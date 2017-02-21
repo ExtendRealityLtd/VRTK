@@ -1,20 +1,28 @@
-﻿// OculusVR Boundaries|SDK_OculusVR|004
+﻿// OculusVR Boundaries|SDK_OculusVR|005
 namespace VRTK
 {
-#if VRTK_SDK_OCULUSVR
+#if VRTK_DEFINE_SDK_OCULUSVR
     using UnityEngine;
+#endif
 
     /// <summary>
     /// The OculusVR Boundaries SDK script provides a bridge to the OculusVR SDK play area.
     /// </summary>
-    public class SDK_OculusVRBoundaries : SDK_BaseBoundaries
+    [SDK_Description(typeof(SDK_OculusVRSystem))]
+    public class SDK_OculusVRBoundaries
+#if VRTK_DEFINE_SDK_OCULUSVR
+        : SDK_BaseBoundaries
+#else
+        : SDK_FallbackBoundaries
+#endif
     {
+#if VRTK_DEFINE_SDK_OCULUSVR
         /// <summary>
         /// The InitBoundaries method is run on start of scene and can be used to initialse anything on game start.
         /// </summary>
         public override void InitBoundaries()
         {
-#if VRTK_SDK_OCULUSVR_AVATAR
+#if VRTK_DEFINE_SDK_OCULUSVR_AVATAR
             GetAvatar();
 #endif
         }
@@ -88,7 +96,7 @@ namespace VRTK
             return true;
         }
 
-#if VRTK_SDK_OCULUSVR_AVATAR
+#if VRTK_DEFINE_SDK_OCULUSVR_AVATAR
         private OvrAvatar avatarContainer;
 
         /// <summary>
@@ -109,10 +117,6 @@ namespace VRTK
             return avatarContainer;
         }
 #endif
-    }
-#else
-    public class SDK_OculusVRBoundaries : SDK_FallbackBoundaries
-    {
-    }
 #endif
+    }
 }
