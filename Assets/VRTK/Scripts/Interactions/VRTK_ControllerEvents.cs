@@ -1174,6 +1174,7 @@ namespace VRTK
             if (!touchpadTouched || Vector2ShallowEquals(touchpadAxis, currentTouchpadAxis))
             {
                 touchpadAxisChanged = false;
+                touchpadAxis = Vector2.zero;
             }
             else
             {

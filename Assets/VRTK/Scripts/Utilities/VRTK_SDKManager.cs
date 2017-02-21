@@ -18,6 +18,7 @@ namespace VRTK
             None,
             SteamVR,
             OculusVR,
+            Daydream,
             Simulator,
             GearVR
         }
@@ -27,8 +28,9 @@ namespace VRTK
             { SupportedSDKs.None, new VRTK_SDKDetails("", "", "") },
             { SupportedSDKs.SteamVR, new VRTK_SDKDetails("VRTK_SDK_STEAMVR", "SteamVR", "SteamVR") },
             { SupportedSDKs.OculusVR, new VRTK_SDKDetails("VRTK_SDK_OCULUSVR", "OculusVR", "OVRInput") },
+            { SupportedSDKs.Daydream, new VRTK_SDKDetails("VRTK_SDK_DAYDREAM", "Daydream", "VRTK_SDKManager") }, // JSL: maybe use GVR here?
             { SupportedSDKs.Simulator, new VRTK_SDKDetails("VRTK_SDK_SIM", "Simulator", "VRTK_SDKManager") },
-            { SupportedSDKs.GearVR, new VRTK_SDKDetails("VRTK_SDK_GEARVR", "GearVR", "VRTK_SDKManager") },
+            { SupportedSDKs.GearVR, new VRTK_SDKDetails("VRTK_SDK_GEARVR", "GearVR", "VRTK_SDKManager") }
         };
 
         /// <summary>
@@ -90,6 +92,9 @@ namespace VRTK
                 case SupportedSDKs.OculusVR:
                     returnSDK = ScriptableObject.CreateInstance<SDK_OculusVRSystem>();
                     break;
+                case SupportedSDKs.Daydream:
+                    returnSDK = ScriptableObject.CreateInstance<SDK_DaydreamSystem>();
+                    break;
                 case SupportedSDKs.Simulator:
                     returnSDK = ScriptableObject.CreateInstance<SDK_SimSystem>();
                     break;
@@ -118,6 +123,9 @@ namespace VRTK
                     break;
                 case SupportedSDKs.OculusVR:
                     returnSDK = ScriptableObject.CreateInstance<SDK_OculusVRHeadset>();
+                    break;
+                case SupportedSDKs.Daydream:
+                    returnSDK = ScriptableObject.CreateInstance<SDK_DaydreamHeadset>();
                     break;
                 case SupportedSDKs.Simulator:
                     returnSDK = ScriptableObject.CreateInstance<SDK_SimHeadset>();
@@ -148,6 +156,9 @@ namespace VRTK
                 case SupportedSDKs.OculusVR:
                     returnSDK = ScriptableObject.CreateInstance<SDK_OculusVRController>();
                     break;
+                case SupportedSDKs.Daydream:
+                    returnSDK = ScriptableObject.CreateInstance<SDK_DaydreamController>();
+                    break;
                 case SupportedSDKs.Simulator:
                     returnSDK = ScriptableObject.CreateInstance<SDK_SimController>();
                     break;
@@ -176,6 +187,9 @@ namespace VRTK
                     break;
                 case SupportedSDKs.OculusVR:
                     returnSDK = ScriptableObject.CreateInstance<SDK_OculusVRBoundaries>();
+                    break;
+                case SupportedSDKs.Daydream:
+                    returnSDK = ScriptableObject.CreateInstance<SDK_DaydreamBoundaries>();
                     break;
                 case SupportedSDKs.Simulator:
                     returnSDK = ScriptableObject.CreateInstance<SDK_SimBoundaries>();

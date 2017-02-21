@@ -4,10 +4,6 @@ namespace VRTK
     using UnityEngine;
     using UnityEngine.EventSystems;
     using System.Collections;
-#if UNITY_5_5_OR_NEWER
-    using System.Linq;
-    using System.Reflection;
-#endif
 
     /// <summary>
     /// Event Payload
@@ -143,9 +139,7 @@ namespace VRTK
         private GameObject currentTarget;
 
         private EventSystem cachedEventSystem;
-        private VRTK_EventSystemVRInput cachedEventSystemInput;
-
-        private const string ACTIVATOR_FRONT_TRIGGER_GAMEOBJECT = "UIPointer_Activator_Front_Trigger";
+        private VRTK_VRInputModule cachedVRInputModule;
 
         public virtual void OnUIPointerElementEnter(UIPointerEventArgs e)
         {
@@ -227,8 +221,8 @@ namespace VRTK
         /// The SetEventSystem method is used to set up the global Unity event system for the UI pointer. It also handles disabling the existing Standalone Input Module that exists on the EventSystem and adds a custom VRTK Event System VR Input component that is required for interacting with the UI with VR inputs.
         /// </summary>
         /// <param name="eventSystem">The global Unity event system to be used by the UI pointers.</param>
-        /// <returns>A custom event system input class that is used to detect input from VR pointers.</returns>
-        public virtual VRTK_EventSystemVRInput SetEventSystem(EventSystem eventSystem)
+        /// <returns>A custom input module that is used to detect input from VR pointers.</returns>
+        public virtual VRTK_VRInputModule SetEventSystem(EventSystem eventSystem)
         {
             if (!eventSystem)
             {
@@ -236,77 +230,28 @@ namespace VRTK
                 return null;
             }
 
-            //disable existing standalone input module
-            var standaloneInputModule = eventSystem.gameObject.GetComponent<StandaloneInputModule>();
-            if (standaloneInputModule.enabled)
+            if (!(eventSystem is VRTK_EventSystem))
             {
-                standaloneInputModule.enabled = false;
+                eventSystem = eventSystem.gameObject.AddComponent<VRTK_EventSystem>();
             }
 
-            //if it doesn't already exist, add the custom event system
-            var eventSystemInput = eventSystem.GetComponent<VRTK_EventSystemVRInput>();
-            if (!eventSystemInput)
-            {
-                eventSystemInput = eventSystem.gameObject.AddComponent<VRTK_EventSystemVRInput>();
-                eventSystemInput.Initialise();
-            }
-
-#if UNITY_5_5_OR_NEWER
-            //if it doesn't already exist, add the custom non-pausing event system
-            var nonPausingEventSystem = eventSystem.gameObject.GetComponent<VRTK_NonPausingEventSystem>();
-            if (!nonPausingEventSystem && VRTK_NonPausingEventSystem.EventSystemPausesOnApplicationFocusLost(eventSystem))
-            {
-                eventSystem.enabled = false;
-                nonPausingEventSystem = eventSystem.gameObject.AddComponent<VRTK_NonPausingEventSystem>();
-                nonPausingEventSystem.CopyValuesFrom(eventSystem);
-                VRTK_NonPausingEventSystem.SetEventSystemOfBaseInputModules(nonPausingEventSystem);
-            }
-#endif
-
-            return eventSystemInput;
+            return eventSystem.GetComponent<VRTK_VRInputModule>();
         }
 
         /// <summary>
-        /// The RemoveEventSystem resets the Unity EventSystem back to the original state before the VRTK_EventSystemVRInput was swapped for it.
+        /// The RemoveEventSystem resets the Unity EventSystem back to the original state before the VRTK_VRInputModule was swapped for it.
         /// </summary>
         public virtual void RemoveEventSystem()
         {
-            var eventSystem = FindObjectOfType<EventSystem>();
+            var vrtkEventSystem = FindObjectOfType<VRTK_EventSystem>();
 
-            if (!eventSystem)
+            if (!vrtkEventSystem)
             {
                 Debug.LogError("A VRTK_UIPointer requires an EventSystem");
                 return;
             }
 
-#if UNITY_5_5_OR_NEWER
-            //remove the custom non-pausing event system
-            if (eventSystem is VRTK_NonPausingEventSystem)
-            {
-                var nonPausingEventSystem = eventSystem;
-                eventSystem = eventSystem.gameObject.GetComponent<EventSystem>();
-
-                nonPausingEventSystem.enabled = false;
-                Destroy(nonPausingEventSystem);
-
-                eventSystem.enabled = true;
-                VRTK_NonPausingEventSystem.SetEventSystemOfBaseInputModules(eventSystem);
-            }
-#endif
-
-            //re-enable existing standalone input module
-            var standaloneInputModule = eventSystem.gameObject.GetComponent<StandaloneInputModule>();
-            if (!standaloneInputModule.enabled)
-            {
-                standaloneInputModule.enabled = true;
-            }
-
-            //remove the custom event system
-            var eventSystemInput = eventSystem.GetComponent<VRTK_EventSystemVRInput>();
-            if (eventSystemInput)
-            {
-                Destroy(eventSystemInput);
-            }
+            Destroy(vrtkEventSystem);
         }
 
         /// <summary>
@@ -400,9 +345,9 @@ namespace VRTK
 
         protected virtual void OnDisable()
         {
-            if (cachedEventSystemInput && cachedEventSystemInput.pointers.Contains(this))
+            if (cachedVRInputModule && cachedVRInputModule.pointers.Contains(this))
             {
-                cachedEventSystemInput.pointers.Remove(this);
+                cachedVRInputModule.pointers.Remove(this);
             }
         }
 
@@ -419,12 +364,12 @@ namespace VRTK
                 cachedEventSystem = FindObjectOfType<EventSystem>();
             }
 
-            if (!cachedEventSystemInput)
+            if (!cachedVRInputModule)
             {
-                cachedEventSystemInput = SetEventSystem(cachedEventSystem);
+                cachedVRInputModule = SetEventSystem(cachedEventSystem);
             }
 
-            if (cachedEventSystem && cachedEventSystemInput)
+            if (cachedEventSystem && cachedVRInputModule)
             {
                 if (pointerEventData == null)
                 {
@@ -433,9 +378,9 @@ namespace VRTK
 
                 StartCoroutine(WaitForPointerId());
 
-                if (!cachedEventSystemInput.pointers.Contains(this))
+                if (!cachedVRInputModule.pointers.Contains(this))
                 {
-                    cachedEventSystemInput.pointers.Add(this);
+                    cachedVRInputModule.pointers.Add(this);
                 }
             }
         }
@@ -450,63 +395,5 @@ namespace VRTK
             }
             pointerEventData.pointerId = index;
         }
-
-#if UNITY_5_5_OR_NEWER
-        private sealed class VRTK_NonPausingEventSystem : EventSystem
-        {
-            private const BindingFlags EVENT_SYSTEM_BINDING_FLAGS_PUBLIC = BindingFlags.Instance | BindingFlags.Public;
-            private const BindingFlags EVENT_SYSTEM_BINDING_FLAGS_ALL_ACCESS = EVENT_SYSTEM_BINDING_FLAGS_PUBLIC | BindingFlags.NonPublic;
-            private static readonly FieldInfo BASE_INPUT_MODULE_EVENT_SYSTEM_FIELD = typeof(BaseInputModule).GetField("m_EventSystem", BindingFlags.Instance | BindingFlags.NonPublic);
-            private static readonly FieldInfo[] EVENT_SYSTEM_FIELD_INFOS = typeof(EventSystem).GetFields(EVENT_SYSTEM_BINDING_FLAGS_PUBLIC);
-            private static readonly PropertyInfo[] EVENT_SYSTEM_PROPERTY_INFOS = typeof(EventSystem).GetProperties(EVENT_SYSTEM_BINDING_FLAGS_PUBLIC).Except(new[] { typeof(EventSystem).GetProperty("enabled") }).ToArray();
-
-            public static bool EventSystemPausesOnApplicationFocusLost(EventSystem eventSystem)
-            {
-                return eventSystem.GetType().GetMethod("OnApplicationFocus", EVENT_SYSTEM_BINDING_FLAGS_ALL_ACCESS) != null
-                       && eventSystem.GetType().GetField("m_Paused", EVENT_SYSTEM_BINDING_FLAGS_ALL_ACCESS) != null;
-            }
-
-            public static void SetEventSystemOfBaseInputModules(EventSystem eventSystem)
-            {
-                //BaseInputModule has a private field referencing the current EventSystem
-                //this field is set in BaseInputModule.OnEnable only
-                //it's used in BaseInputModule.OnEnable and BaseInputModule.OnDisable to call EventSystem.UpdateModules
-                //this means we could just disable and enable every enabled BaseInputModule to fix that reference
-                //
-                //but the StandaloneInputModule (which is added by default when adding an EventSystem in the Editor) requires EventSystem
-                //which means we can't correctly destroy the old EventSystem first and then add our own one
-                //we also want to leave the existing EventSystem as is, so it can be used again whenever VRTK_UIPointer.RemoveEventSystem is called
-                var baseInputModules = FindObjectsOfType<BaseInputModule>();
-                for (var index = 0; index < baseInputModules.Length; index++)
-                {
-                    BASE_INPUT_MODULE_EVENT_SYSTEM_FIELD.SetValue(baseInputModules[index], eventSystem);
-                }
-                eventSystem.UpdateModules();
-            }
-
-            public void CopyValuesFrom(EventSystem eventSystem)
-            {
-                for (var index = 0; index < EVENT_SYSTEM_FIELD_INFOS.Length; index++)
-                {
-                    var fieldInfo = EVENT_SYSTEM_FIELD_INFOS[index];
-                    fieldInfo.SetValue(this, fieldInfo.GetValue(eventSystem));
-                }
-
-                for (var index = 0; index < EVENT_SYSTEM_PROPERTY_INFOS.Length; index++)
-                {
-                    var propertyInfo = EVENT_SYSTEM_PROPERTY_INFOS[index];
-                    if (propertyInfo.CanWrite)
-                    {
-                        propertyInfo.SetValue(this, propertyInfo.GetValue(eventSystem, null), null);
-                    }
-                }
-            }
-
-            protected override void OnApplicationFocus(bool hasFocus)
-            {
-                //don't call base implementation because it will set a pause flag for this EventSystem
-            }
-        }
-#endif
     }
 }

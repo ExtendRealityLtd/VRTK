@@ -5,13 +5,19 @@
     using UnityEngine.UI;
     using System.Collections.Generic;
 
-    public class VRTK_EventSystemVRInput : PointerInputModule
+    public class VRTK_VRInputModule : PointerInputModule
     {
         public List<VRTK_UIPointer> pointers = new List<VRTK_UIPointer>();
 
         public void Initialise()
         {
             pointers.Clear();
+        }
+
+        //Needed to allow other regular (non-VR) InputModules in combination with VRTK_EventSystem
+        public override bool IsModuleSupported()
+        {
+            return false;
         }
 
         public override void Process()
