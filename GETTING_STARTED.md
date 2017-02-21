@@ -115,3 +115,8 @@
   * Script Alias Right Controller: `[VRTK]/RightController`
 
 </details>
+
+[SteamVR Plugin]: https://www.assetstore.unity3d.com/en/#!/content/32647
+[SteamVR Plugin for Unity3d Github Repo]: https://github.com/ValveSoftware/openvr/tree/master/unity_package/Assets/SteamVR
+[Oculus Utilities]: https://developer3.oculus.com/downloads/game-engines/1.10.0/Oculus_Utilities_for_Unity_5/
+[Google VR SDK for Unity]: https://developers.google.com/vr/unity/download
