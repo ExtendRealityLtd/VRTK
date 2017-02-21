@@ -124,17 +124,6 @@ namespace VRTK
             ToggleInteraction(pointerState);
             TogglePlayArea(pointerState, actualState);
             ToggleRenderer(pointerState, actualState);
-
-            if (pointerOriginTransformFollowGameObject != null && pointerOriginTransformFollowGameObject.activeSelf != pointerState)
-            {
-                UpdatePointerOriginTransformFollow();
-                pointerOriginTransformFollowGameObject.SetActive(pointerState);
-                pointerOriginTransformFollow.enabled = pointerState;
-                if (pointerState)
-                {
-                    pointerOriginTransformFollow.Follow();
-                }
-            }
         }
 
         /// <summary>
@@ -183,8 +172,8 @@ namespace VRTK
         {
             defaultMaterial = Resources.Load("WorldPointer") as Material;
             makeRendererVisible = new List<GameObject>();
-            CreatePointerObjects();
             CreatePointerOriginTransformFollow();
+            CreatePointerObjects();
         }
 
         protected virtual void OnDisable()
@@ -211,10 +200,7 @@ namespace VRTK
                 UpdateObjectInteractor();
             }
 
-            if (controllingPointer && pointerOriginTransformFollow.isActiveAndEnabled)
-            {
-                UpdatePointerOriginTransformFollow();
-            }
+            UpdatePointerOriginTransformFollow();
         }
 
         protected virtual void ToggleObjectInteraction(bool state)
@@ -255,6 +241,9 @@ namespace VRTK
         protected virtual void UpdatePointerOriginTransformFollow()
         {
             pointerOriginTransformFollow.gameObjectToFollow = (controllingPointer.customOrigin == null ? transform : controllingPointer.customOrigin).gameObject;
+            pointerOriginTransformFollow.enabled = controllingPointer != null;
+            pointerOriginTransformFollowGameObject.SetActive(controllingPointer != null);
+
             pointerOriginTransformFollow.smoothsPosition = pointerOriginSmoothingSettings.smoothsPosition;
             pointerOriginTransformFollow.maxAllowedPerFrameDistanceDifference = pointerOriginSmoothingSettings.maxAllowedPerFrameDistanceDifference;
             pointerOriginTransformFollow.smoothsRotation = pointerOriginSmoothingSettings.smoothsRotation;
@@ -468,7 +457,6 @@ namespace VRTK
         protected virtual void CreatePointerOriginTransformFollow()
         {
             pointerOriginTransformFollowGameObject = new GameObject(string.Format("[{0}]BasePointerRenderer_Origin_Smoothed", gameObject.name));
-            pointerOriginTransformFollowGameObject.SetActive(false);
             pointerOriginTransformFollow = pointerOriginTransformFollowGameObject.AddComponent<VRTK_TransformFollow>();
             pointerOriginTransformFollow.enabled = false;
             pointerOriginTransformFollow.gameObjectToChange = pointerOriginTransformFollowGameObject;
