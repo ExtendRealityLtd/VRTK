@@ -131,6 +131,9 @@ namespace VRTK
 
         protected virtual void ManageDestinationMarkers(bool state)
         {
+            ManageDestinationMarkerListeners(VRTK_DeviceFinder.GetControllerLeftHand(), state);
+            ManageDestinationMarkerListeners(VRTK_DeviceFinder.GetControllerRightHand(), state);
+
             foreach (var destinationMarker in VRTK_ObjectCache.registeredDestinationMarkers)
             {
                 ManageDestinationMarkerListeners(destinationMarker.gameObject, state);
