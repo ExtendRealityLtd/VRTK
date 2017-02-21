@@ -6,7 +6,6 @@ namespace VRTK
 #if UNITY_5_5_OR_NEWER
     using UnityEngine.AI;
 #endif
-    using System;
 
     /// <summary>
     /// This abstract class provides any game pointer the ability to know the state of the implemented pointer.
@@ -32,9 +31,6 @@ namespace VRTK
             Always_Off
         }
 
-        /// <summary>
-        /// Specifies the smoothing to be applied to the pointer.
-        /// </summary>
         [Serializable]
         public sealed class PointerOriginSmoothingSettings
         {

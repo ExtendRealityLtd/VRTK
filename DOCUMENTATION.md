@@ -816,6 +816,17 @@ The SetPlayAreaCursorTransform method is used to update the position of the play
 
 The ToggleState method enables or disables the visibility of the play area cursor.
 
+#### IsActive/0
+
+  > `public virtual bool IsActive()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `bool` - Returns true if the play area cursor GameObject is active.
+
+The IsActive method returns whether the play area cursor game object is active or not.
+
 #### GetPlayAreaContainer/0
 
   > `public virtual GameObject GetPlayAreaContainer()`
@@ -864,6 +875,10 @@ As this is an abstract class, it cannot be applied directly to a game object and
 
 ### Inspector Parameters
 
+ * **Smooths Position:** Whether or not to smooth the position of the pointer origin when positioning the pointer tip.
+ * **Max Allowed Per Frame Distance Difference:** The maximum allowed distance between the unsmoothed pointer origin and the smoothed pointer origin per frame to use for smoothing.
+ * **Smooths Rotation:** Whether or not to smooth the rotation of the pointer origin when positioning the pointer tip.
+ * **Max Allowed Per Frame Angle Difference:** The maximum allowed angle between the unsmoothed pointer origin and the smoothed pointer origin per frame to use for smoothing.
  * **Playarea Cursor:** An optional Play Area Cursor generator to add to the destination position of the pointer tip.
  * **Layers To Ignore:** The layers for the pointer's raycasts to ignore.
  * **Valid Collision Color:** The colour to change the pointer materials when the pointer collides with a valid object. Set to `Color.clear` to bypass changing material colour on valid collision.
@@ -949,6 +964,39 @@ The GetDestinationHit method is used to get the RaycastHit of the pointer destin
    * `bool` - Returns true if there is a valid play area and no collisions. Returns false if there is no valid play area or there is but with a collision detected.
 
 The ValidPlayArea method is used to determine if there is a valid play area and if it has had any collisions.
+
+#### IsVisible/0
+
+  > `public virtual bool IsVisible()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `bool` - Returns true if either the tracer or cursor renderers are visible. Returns false if none are visible.
+
+The IsVisible method determines if the pointer renderer is at all visible by checking the state of the tracer and the cursor.
+
+#### IsTracerVisible/0
+
+  > `public virtual bool IsTracerVisible()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `bool` - Returns true if the tracer renderers are visible.
+
+The IsTracerVisible method determines if the pointer tracer renderer is visible.
+
+#### IsCursorVisible/0
+
+  > `public virtual bool IsCursorVisible()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `bool` - Returns true if the cursor renderers are visible.
+
+The IsCursorVisible method determines if the pointer cursor renderer is visible.
 
 ---
 
@@ -4517,12 +4565,12 @@ Adding the `VRTK_UIPointer_UnityEvents` component to `VRTK_UIPointer` object all
 
 #### SetEventSystem/1
 
-  > `public virtual VRTK_EventSystemVRInput SetEventSystem(EventSystem eventSystem)`
+  > `public virtual VRTK_VRInputModule SetEventSystem(EventSystem eventSystem)`
 
   * Parameters
    * `EventSystem eventSystem` - The global Unity event system to be used by the UI pointers.
   * Returns
-   * `VRTK_EventSystemVRInput` - A custom event system input class that is used to detect input from VR pointers.
+   * `VRTK_VRInputModule` - A custom input module that is used to detect input from VR pointers.
 
 The SetEventSystem method is used to set up the global Unity event system for the UI pointer. It also handles disabling the existing Standalone Input Module that exists on the EventSystem and adds a custom VRTK Event System VR Input component that is required for interacting with the UI with VR inputs.
 
@@ -4535,7 +4583,7 @@ The SetEventSystem method is used to set up the global Unity event system for th
   * Returns
    * _none_
 
-The RemoveEventSystem resets the Unity EventSystem back to the original state before the VRTK_EventSystemVRInput was swapped for it.
+The RemoveEventSystem resets the Unity EventSystem back to the original state before the VRTK_VRInputModule was swapped for it.
 
 #### PointerActive/0
 
@@ -5031,7 +5079,9 @@ A collection of scripts that provide useful functionality to aid the creation pr
  * [Shared Methods](#shared-methods-vrtk_sharedmethods)
  * [Policy List](#policy-list-vrtk_policylist)
  * [Adaptive Quality](#adaptive-quality-vrtk_adaptivequality)
- * [Object Transform Follow](#object-transform-follow-vrtk_objectfollow)
+ * [Object Follow](#object-follow-vrtk_objectfollow)
+ * [Rigidbody Follow](#rigidbody-follow-vrtk_rigidbodyfollow)
+ * [Transform Follow](#transform-follow-vrtk_transformfollow)
  * [Simulating Headset Movement](#simulating-headset-movement-vrtk_simulator)
 
 ---
@@ -5639,18 +5689,84 @@ Eventually when lots of spheres are present the FPS will drop and demonstrate th
 
 ---
 
-## Object Transform Follow (VRTK_ObjectFollow)
+## Object Follow (VRTK_ObjectFollow)
 
 ### Overview
 
-A simple script that when attached to a GameObject will follow the position, scale and rotation of the given Transform.
+Abstract class that allows to change one game object's properties to follow another game object.
 
 ### Inspector Parameters
 
- * **Object To Follow:** A transform of an object to follow the position, scale and rotation of.
- * **Follow Position:** Follow the position of the given object.
- * **Follow Rotation:** Follow the rotation of the given object.
- * **Follow Scale:** Follow the scale of the given object.
+ * **Game Object To Follow:** The game object to follow. The followed property values will be taken from this one.
+ * **Game Object To Change:** The game object to change the property values of. If left empty no game object will be changed.
+ * **Follows Position:** Whether to follow the position of the given game object.
+ * **Smooths Position:** Whether to smooth the position when following `gameObjectToFollow`.
+ * **Max Allowed Per Frame Distance Difference:** The maximum allowed distance between the unsmoothed source and the smoothed target per frame to use for smoothing.
+ * **Follows Rotation:** Whether to follow the rotation of the given game object.
+ * **Smooths Rotation:** Whether to smooth the rotation when following `gameObjectToFollow`.
+ * **Max Allowed Per Frame Angle Difference:** The maximum allowed angle between the unsmoothed source and the smoothed target per frame to use for smoothing.
+ * **Follows Scale:** Whether to follow the scale of the given game object.
+ * **Smooths Scale:** Whether to smooth the scale when following `gameObjectToFollow`.
+ * **Max Allowed Per Frame Size Difference:** The maximum allowed size between the unsmoothed source and the smoothed target per frame to use for smoothing.
+
+### Class Variables
+
+ * `public Vector3 targetPosition { get private set }` - The position that results by following `gameObjectToFollow`.
+ * `public Quaternion targetRotation { get private set }` - The rotation that results by following `gameObjectToFollow`.
+ * `public Vector3 targetScale { get private set }` - The scale that results by following `gameObjectToFollow`.
+
+### Class Methods
+
+#### Follow/0
+
+  > `public void Follow()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+Follow `gameObjectToFollow` using the current settings.
+
+---
+
+## Rigidbody Follow (VRTK_RigidbodyFollow)
+ > extends [VRTK_ObjectFollow](#object-follow-vrtk_objectfollow)
+
+### Overview
+
+Changes one game object's rigidbody to follow another game object's rigidbody.
+
+### Inspector Parameters
+
+ * **Movement Option:** Specifies how to position and rotate the rigidbody.
+
+### Class Variables
+
+ * `public enum MovementOption` - Specifies how to position and rotate the rigidbody.
+  * `Set` - Use  and .
+  * `Move` - Use  and .
+  * `Add` - Use  and .
+
+---
+
+## Transform Follow (VRTK_TransformFollow)
+ > extends [VRTK_ObjectFollow](#object-follow-vrtk_objectfollow)
+
+### Overview
+
+Changes one game object's transform to follow another game object's transform.
+
+### Inspector Parameters
+
+ * **Moment:** The moment at which to follow.
+
+### Class Variables
+
+ * `public enum FollowMoment` - The moment at which to follow.
+  * `OnUpdate` - Follow in the Update method.
+  * `OnLateUpdate` - Follow in the LateUpdate method.
+  * `OnPreRender` - Follow in the OnPreRender method. (This script doesn't have to be attached to a camera.)
 
 ---
 
