@@ -562,7 +562,7 @@ namespace VRTK
         {
             if (obj)
             {
-                foreach (var renderer in obj.GetComponentsInChildren<Renderer>())
+                foreach (var renderer in obj.GetComponentsInChildren<Renderer>(true))
                 {
                     if (renderer.gameObject != grabbedChildObject && (grabbedChildObject == null || !renderer.transform.IsChildOf(grabbedChildObject.transform)))
                     {
@@ -576,7 +576,7 @@ namespace VRTK
         {
             if (obj)
             {
-                foreach (var renderer in obj.GetComponentsInChildren<Renderer>())
+                foreach (var renderer in obj.GetComponentsInChildren<Renderer>(true))
                 {
                     if (alpha < 1f)
                     {
