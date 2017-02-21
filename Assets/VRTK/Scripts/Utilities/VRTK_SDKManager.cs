@@ -18,7 +18,8 @@ namespace VRTK
             None,
             SteamVR,
             OculusVR,
-            Simulator
+            Simulator,
+            GearVR
         }
 
         public Dictionary<SupportedSDKs, VRTK_SDKDetails> sdkDetails = new Dictionary<SupportedSDKs, VRTK_SDKDetails>()
@@ -26,7 +27,8 @@ namespace VRTK
             { SupportedSDKs.None, new VRTK_SDKDetails("", "", "") },
             { SupportedSDKs.SteamVR, new VRTK_SDKDetails("VRTK_SDK_STEAMVR", "SteamVR", "SteamVR") },
             { SupportedSDKs.OculusVR, new VRTK_SDKDetails("VRTK_SDK_OCULUSVR", "OculusVR", "OVRInput") },
-            { SupportedSDKs.Simulator, new VRTK_SDKDetails("VRTK_SDK_SIM", "Simulator", "VRTK_SDKManager") }
+            { SupportedSDKs.Simulator, new VRTK_SDKDetails("VRTK_SDK_SIM", "Simulator", "VRTK_SDKManager") },
+            { SupportedSDKs.GearVR, new VRTK_SDKDetails("VRTK_SDK_GEARVR", "GearVR", "VRTK_SDKManager") },
         };
 
         /// <summary>
@@ -91,6 +93,9 @@ namespace VRTK
                 case SupportedSDKs.Simulator:
                     returnSDK = ScriptableObject.CreateInstance<SDK_SimSystem>();
                     break;
+                case SupportedSDKs.GearVR:
+                    returnSDK = ScriptableObject.CreateInstance<SDK_GearVRSystem>();
+                    break;
                 default:
                     Debug.LogError("No valid System SDK has been selected. If you're seeing this error in Unity Edit mode, then try selecting the GameObject with the `VRTK_SDKManager` script and selecting a valid System SDK from the dropdown list.");
                     returnSDK = ScriptableObject.CreateInstance<SDK_FallbackSystem>();
@@ -116,6 +121,9 @@ namespace VRTK
                     break;
                 case SupportedSDKs.Simulator:
                     returnSDK = ScriptableObject.CreateInstance<SDK_SimHeadset>();
+                    break;
+                case SupportedSDKs.GearVR:
+                    returnSDK = ScriptableObject.CreateInstance<SDK_GearVRHeadset>();
                     break;
                 default:
                     Debug.LogError("No valid Headset SDK has been selected. If you're seeing this error in Unity Edit mode, then try selecting the GameObject with the `VRTK_SDKManager` script and selecting a valid Headset SDK from the dropdown list.");
@@ -143,6 +151,9 @@ namespace VRTK
                 case SupportedSDKs.Simulator:
                     returnSDK = ScriptableObject.CreateInstance<SDK_SimController>();
                     break;
+                case SupportedSDKs.GearVR:
+                    returnSDK = ScriptableObject.CreateInstance<SDK_GearVRController>();
+                    break;
                 default:
                     Debug.LogError("No valid Controller SDK has been selected. If you're seeing this error in Unity Edit mode, then try selecting the GameObject with the `VRTK_SDKManager` script and selecting a valid Controller SDK from the dropdown list.");
                     returnSDK = ScriptableObject.CreateInstance<SDK_FallbackController>();
@@ -168,6 +179,9 @@ namespace VRTK
                     break;
                 case SupportedSDKs.Simulator:
                     returnSDK = ScriptableObject.CreateInstance<SDK_SimBoundaries>();
+                    break;
+                case SupportedSDKs.GearVR:
+                    returnSDK = ScriptableObject.CreateInstance<SDK_GearVRBoundaries>();
                     break;
                 default:
                     Debug.LogError("No valid Boundaries SDK has been selected. If you're seeing this error in Unity Edit mode, then try selecting the GameObject with the `VRTK_SDKManager` script and selecting a valid Boundaries SDK from the dropdown list.");
@@ -198,12 +212,12 @@ namespace VRTK
 
         private void SetupControllers()
         {
-            if (!actualLeftController.GetComponent<VRTK_TrackedController>())
+            if (actualLeftController != null && !actualLeftController.GetComponent<VRTK_TrackedController>())
             {
                 actualLeftController.AddComponent<VRTK_TrackedController>();
             }
 
-            if (!actualRightController.GetComponent<VRTK_TrackedController>())
+            if (actualRightController != null && !actualRightController.GetComponent<VRTK_TrackedController>())
             {
                 actualRightController.AddComponent<VRTK_TrackedController>();
             }
