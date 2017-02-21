@@ -29,7 +29,7 @@ online at [http://docs.vrtk.io](http://docs.vrtk.io).
 
 ## Frequently Asked Questions
 
-If you have an issue or question then check the [FAQ] document to see
+If you have an issue or question then check the [FAQ.md] document to see
 if your query has already been answered.
 
 ## Getting Started
@@ -80,14 +80,14 @@ package above.
 
 Many games and experiences have already been made with VRTK.
 
-Check out the [Made With VRTK Document] to see the full list.
+Check out the [MADEWITHVRTK.md] document to see the full list.
 
 ## Contributing
 
 I would love to get contributions from you! Follow the instructions
 below on how to make pull requests.
 
-For the full contribution guidelines see the [Contribution Document].
+For the full contribution guidelines see the [CONTRIBUTING.md] document.
 
 ## Pull requests
 
@@ -108,11 +108,11 @@ Code released under the [MIT License].
 [Oculus Utilities]: https://developer3.oculus.com/downloads/game-engines/1.10.0/Oculus_Utilities_for_Unity_5/
 [Google VR SDK for Unity]: https://developers.google.com/vr/unity/download
 [MIT License]: https://github.com/thestonefox/SteamVR_Unity_Toolkit/blob/master/LICENSE
-[Contribution Document]: https://github.com/thestonefox/SteamVR_Unity_Toolkit/blob/master/CONTRIBUTING.md
-[Made With VRTK Document]: https://github.com/thestonefox/SteamVR_Unity_Toolkit/blob/master/MADEWITHVRTK.md
+[CONTRIBUTING.md]: https://github.com/thestonefox/SteamVR_Unity_Toolkit/blob/master/CONTRIBUTING.md
+[MADEWITHVRTK.md]: https://github.com/thestonefox/SteamVR_Unity_Toolkit/blob/master/MADEWITHVRTK.md
 [DOCUMENTATION.md]: https://github.com/thestonefox/SteamVR_Unity_Toolkit/blob/master/DOCUMENTATION.md
 [GETTING_STARTED.md]: https://github.com/thestonefox/SteamVR_Unity_Toolkit/blob/master/GETTING_STARTED.md
 [EXAMPLES.md]: https://github.com/thestonefox/SteamVR_Unity_Toolkit/blob/master/EXAMPLES.md
 [Fork]: http://help.github.com/fork-a-repo/
 [Open a Pull Request]: https://help.github.com/articles/using-pull-requests/
-[FAQ]: https://github.com/thestonefox/SteamVR_Unity_Toolkit/blob/master/FAQ.md
+[FAQ.md]: https://github.com/thestonefox/SteamVR_Unity_Toolkit/blob/master/FAQ.md
