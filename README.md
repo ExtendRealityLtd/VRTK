@@ -3,9 +3,10 @@
 > A productive VR Toolkit for rapidly building VR solutions in Unity3d.
 
 [![Slack](http://sysdia2.co.uk/badge.svg)](http://invite.vrtk.io)
+[![Documentation](https://img.shields.io/badge/readme-docs-3484C6.svg)](http://docs.vrtk.io)
 [![Twitter Follow](https://img.shields.io/twitter/follow/vr_toolkit.svg?style=flat&label=twitter)](https://twitter.com/VR_Toolkit)
 [![YouTube](https://img.shields.io/badge/youtube-channel-e52d27.svg)](http://videos.vrtk.io)
-[![Waffle](https://img.shields.io/badge/project-roadmap-blue.svg)](http://tracker.vrtk.io)
+[![Waffle](https://img.shields.io/badge/project-backlog-78bdf2.svg)](http://tracker.vrtk.io)
 
 [![patreon_logo](https://cloud.githubusercontent.com/assets/1029673/23074410/8c248822-f530-11e6-9156-aeef1262be86.png)](https://www.patreon.com/vrtk)
 
