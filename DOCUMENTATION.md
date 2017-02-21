@@ -20,6 +20,7 @@ This file provides documentation on how to use the included prefabs and scripts.
   * [Simulator SDK](#simulator-sdk-vrtksdksimulator)
   * [SteamVR SDK](#steamvr-sdk-vrtksdksteamvr)
   * [OculusVR SDK](#oculusvr-sdk-vrtksdkoculusvr)
+  * [Daydream SDK](#daydream-sdk-vrtksdkdaydream)
 
 ---
 
@@ -10556,6 +10557,508 @@ The IsPlayAreaSizeCalibrated method returns whether the given play area size has
    * `OvrAvatar` - The OvrAvatar script for managing the Oculus Avatar.
 
 The GetAvatar method is used to retrieve the Oculus Avatar object if it exists in the scene. This method is only available if the Oculus Avatar package is installed.
+
+---
+
+# Daydream SDK (VRTK/SDK/Daydream)
+
+The scripts used to utilise the Google VR SDK for Unity SDK.
+
+ * [Daydream System](#daydream-system-sdk_daydreamsystem)
+ * [Daydream Headset](#daydream-headset-sdk_daydreamheadset)
+ * [Daydream Controller](#daydream-controller-sdk_daydreamcontroller)
+ * [Daydream Boundaries](#daydream-boundaries-sdk_daydreamboundaries)
+
+---
+
+## Daydream System (SDK_DaydreamSystem)
+ > extends [SDK_BaseSystem](#base-system-sdk_basesystem)
+
+### Overview
+
+The Daydream System SDK script provides dummy functions for system functions.
+
+### Class Methods
+
+#### IsDisplayOnDesktop/0
+
+  > `public override bool IsDisplayOnDesktop()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `bool` - Returns true if the display is extending the desktop
+
+The IsDisplayOnDesktop method returns true if the display is extending the desktop.
+
+#### ShouldAppRenderWithLowResources/0
+
+  > `public override bool ShouldAppRenderWithLowResources()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `bool` - Returns true if the Unity app should render with low resources.
+
+The ShouldAppRenderWithLowResources method is used to determine if the Unity app should use low resource mode. Typically true when the dashboard is showing.
+
+#### ForceInterleavedReprojectionOn/1
+
+  > `public override void ForceInterleavedReprojectionOn(bool force)`
+
+  * Parameters
+   * `bool force` - If true then Interleaved Reprojection will be forced on, if false it will not be forced on.
+  * Returns
+   * _none_
+
+The ForceInterleavedReprojectionOn method determines whether Interleaved Reprojection should be forced on or off.
+
+---
+
+## Daydream Headset (SDK_DaydreamHeadset)
+ > extends [SDK_BaseHeadset](#base-headset-sdk_baseheadset)
+
+### Overview
+
+The Daydream Headset SDK script  provides dummy functions for the headset.
+
+### Class Methods
+
+#### ProcessUpdate/1
+
+  > `public override void ProcessUpdate(Dictionary<string, object> options)`
+
+  * Parameters
+   * `Dictionary<string, object> options` - A dictionary of generic options that can be used to within the update.
+  * Returns
+   * _none_
+
+The ProcessUpdate method enables an SDK to run logic for every Unity Update
+
+#### GetHeadset/0
+
+  > `public override Transform GetHeadset()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `Transform` - A transform of the object representing the headset in the scene.
+
+The GetHeadset method returns the Transform of the object that is used to represent the headset in the scene.
+
+#### GetHeadsetCamera/0
+
+  > `public override Transform GetHeadsetCamera()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `Transform` - A transform of the object holding the headset camera in the scene.
+
+The GetHeadsetCamera/0 method returns the Transform of the object that is used to hold the headset camera in the scene.
+
+#### GetHeadsetVelocity/0
+
+  > `public override Vector3 GetHeadsetVelocity()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `Vector3` - A Vector3 containing the current velocity of the headset.
+
+The GetHeadsetVelocity method is used to determine the current velocity of the headset.
+
+#### GetHeadsetAngularVelocity/0
+
+  > `public override Vector3 GetHeadsetAngularVelocity()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `Vector3` - A Vector3 containing the current angular velocity of the headset.
+
+The GetHeadsetAngularVelocity method is used to determine the current angular velocity of the headset.
+
+#### HeadsetFade/3
+
+  > `public override void HeadsetFade(Color color, float duration, bool fadeOverlay = false)`
+
+  * Parameters
+   * `Color color` - The colour to fade to.
+   * `float duration` - The amount of time the fade should take to reach the given colour.
+   * `bool fadeOverlay` - Determines whether to use an overlay on the fade.
+  * Returns
+   * _none_
+
+The HeadsetFade method is used to apply a fade to the headset camera to progressively change the colour.
+
+#### HasHeadsetFade/1
+
+  > `public override bool HasHeadsetFade(Transform obj)`
+
+  * Parameters
+   * `Transform obj` - The Transform to check to see if a camera fade is available on.
+  * Returns
+   * `bool` - Returns true if the headset has fade functionality on it.
+
+The HasHeadsetFade method checks to see if the given game object (usually the camera) has the ability to fade the viewpoint.
+
+#### AddHeadsetFade/1
+
+  > `public override void AddHeadsetFade(Transform camera)`
+
+  * Parameters
+   * `Transform camera` - The Transform to with the camera on to add the fade functionality to.
+  * Returns
+   * _none_
+
+The AddHeadsetFade method attempts to add the fade functionality to the game object with the camera on it.
+
+---
+
+## Daydream Controller (SDK_DaydreamController)
+ > extends [SDK_FallbackController](#fallback-controller-sdk_fallbackcontroller)
+
+### Overview
+
+The Daydream Controller SDK script provides a bridge to SDK methods that deal with the input devices.
+
+### Class Methods
+
+#### ProcessUpdate/2
+
+  > `public override void ProcessUpdate(uint index, Dictionary<string, object> options)`
+
+  * Parameters
+   * `uint index` - The index of the controller.
+   * `Dictionary<string, object> options` - A dictionary of generic options that can be used to within the update.
+  * Returns
+   * _none_
+
+The ProcessUpdate method enables an SDK to run logic for every Unity Update
+
+#### GetControllerDefaultColliderPath/1
+
+  > `public override string GetControllerDefaultColliderPath(ControllerHand hand)`
+
+  * Parameters
+   * `ControllerHand hand` - The controller hand to check for
+  * Returns
+   * `string` - A path to the resource that contains the collider GameObject.
+
+The GetControllerDefaultColliderPath returns the path to the prefab that contains the collider objects for the default controller of this SDK.
+
+#### GetControllerElementPath/3
+
+  > `public override string GetControllerElementPath(ControllerElements element, ControllerHand hand, bool fullPath = false)`
+
+  * Parameters
+   * `ControllerElements element` - The controller element to look up.
+   * `ControllerHand hand` - The controller hand to look up.
+   * `bool fullPath` - Whether to get the initial path or the full path to the element.
+  * Returns
+   * `string` - A string containing the path to the game object that the controller element resides in.
+
+The GetControllerElementPath returns the path to the game object that the given controller element for the given hand resides in.
+
+#### GetControllerIndex/1
+
+  > `public override uint GetControllerIndex(GameObject controller)`
+
+  * Parameters
+   * `GameObject controller` - The GameObject containing the controller.
+  * Returns
+   * `uint` - The index of the given controller.
+
+The GetControllerIndex method returns the index of the given controller.
+
+#### GetControllerByIndex/2
+
+  > `public override GameObject GetControllerByIndex(uint index, bool actual = false)`
+
+  * Parameters
+   * `uint index` - The index of the controller to find.
+   * `bool actual` - If true it will return the actual controller, if false it will return the script alias controller GameObject.
+  * Returns
+   * `GameObject` - The GameObject of the controller
+
+The GetControllerByIndex method returns the GameObject of a controller with a specific index.
+
+#### GetControllerOrigin/1
+
+  > `public override Transform GetControllerOrigin(GameObject controller)`
+
+  * Parameters
+   * `GameObject controller` - The controller to retrieve the origin from.
+  * Returns
+   * `Transform` - A Transform containing the origin of the controller.
+
+The GetControllerOrigin method returns the origin of the given controller.
+
+#### GetControllerRightHand/1
+
+  > `public override GameObject GetControllerRightHand(bool actual = false)`
+
+  * Parameters
+   * `bool actual` - If true it will return the actual controller, if false it will return the script alias controller GameObject.
+  * Returns
+   * `GameObject` - The GameObject containing the right hand controller.
+
+The GetControllerRightHand method returns the GameObject containing the representation of the right hand controller.
+
+#### IsControllerRightHand/1
+
+  > `public override bool IsControllerRightHand(GameObject controller)`
+
+  * Parameters
+   * `GameObject controller` - The GameObject to check.
+  * Returns
+   * `bool` - Returns true if the given controller is the right hand controller.
+
+The IsControllerRightHand/1 method is used to check if the given controller is the the right hand controller.
+
+#### IsControllerRightHand/2
+
+  > `public override bool IsControllerRightHand(GameObject controller, bool actual)`
+
+  * Parameters
+   * `GameObject controller` - The GameObject to check.
+   * `bool actual` - If true it will check the actual controller, if false it will check the script alias controller.
+  * Returns
+   * `bool` - Returns true if the given controller is the right hand controller.
+
+The IsControllerRightHand/2 method is used to check if the given controller is the the right hand controller.
+
+#### GetControllerModel/1
+
+  > `public override GameObject GetControllerModel(GameObject controller)`
+
+  * Parameters
+   * `GameObject controller` - The GameObject to get the model alias for.
+  * Returns
+   * `GameObject` - The GameObject that has the model alias within it.
+
+The GetControllerModel method returns the model alias for the given GameObject.
+
+#### GetControllerModel/1
+
+  > `public override GameObject GetControllerModel(ControllerHand hand)`
+
+  * Parameters
+   * `ControllerHand hand` - The hand enum of which controller model to retrieve.
+  * Returns
+   * `GameObject` - The GameObject that has the model alias within it.
+
+The GetControllerModel method returns the model alias for the given controller hand.
+
+#### GetControllerRenderModel/1
+
+  > `public override GameObject GetControllerRenderModel(GameObject controller)`
+
+  * Parameters
+   * `GameObject controller` - The GameObject to check.
+  * Returns
+   * `GameObject` - A GameObject containing the object that has a render model for the controller.
+
+The GetControllerRenderModel method gets the game object that contains the given controller's render model.
+
+#### GetVelocityOnIndex/1
+
+  > `public override Vector3 GetVelocityOnIndex(uint index)`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `Vector3` - A Vector3 containing the current velocity of the tracked object.
+
+The GetVelocityOnIndex method is used to determine the current velocity of the tracked object on the given index.
+
+#### GetAngularVelocityOnIndex/1
+
+  > `public override Vector3 GetAngularVelocityOnIndex(uint index)`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `Vector3` - A Vector3 containing the current angular velocity of the tracked object.
+
+The GetAngularVelocityOnIndex method is used to determine the current angular velocity of the tracked object on the given index.
+
+#### GetTouchpadAxisOnIndex/1
+
+  > `public override Vector2 GetTouchpadAxisOnIndex(uint index)`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `Vector2` - A Vector2 containing the current x,y position of where the touchpad is being touched.
+
+The GetTouchpadAxisOnIndex method is used to get the current touch position on the controller touchpad.
+
+#### IsTouchpadPressedOnIndex/1
+
+  > `public override bool IsTouchpadPressedOnIndex(uint index)`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button is continually being pressed.
+
+The IsTouchpadPressedOnIndex method is used to determine if the controller button is being pressed down continually.
+
+#### IsTouchpadPressedDownOnIndex/1
+
+  > `public override bool IsTouchpadPressedDownOnIndex(uint index)`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button has just been pressed down.
+
+The IsTouchpadPressedDownOnIndex method is used to determine if the controller button has just been pressed down.
+
+#### IsTouchpadPressedUpOnIndex/1
+
+  > `public override bool IsTouchpadPressedUpOnIndex(uint index)`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button has just been released.
+
+The IsTouchpadPressedUpOnIndex method is used to determine if the controller button has just been released.
+
+#### IsTouchpadTouchedOnIndex/1
+
+  > `public override bool IsTouchpadTouchedOnIndex(uint index)`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button is continually being touched.
+
+The IsTouchpadTouchedOnIndex method is used to determine if the controller button is being touched down continually.
+
+#### IsTouchpadTouchedDownOnIndex/1
+
+  > `public override bool IsTouchpadTouchedDownOnIndex(uint index)`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button has just been touched down.
+
+The IsTouchpadTouchedDownOnIndex method is used to determine if the controller button has just been touched down.
+
+#### IsTouchpadTouchedUpOnIndex/1
+
+  > `public override bool IsTouchpadTouchedUpOnIndex(uint index)`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button has just been released.
+
+The IsTouchpadTouchedUpOnIndex method is used to determine if the controller button has just been released.
+
+#### IsButtonOnePressedOnIndex/1
+
+  > `public override bool IsButtonOnePressedOnIndex(uint index)`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button is continually being pressed.
+
+The IsButtonOnePressedOnIndex method is used to determine if the controller button is being pressed down continually.
+
+#### IsButtonOnePressedDownOnIndex/1
+
+  > `public override bool IsButtonOnePressedDownOnIndex(uint index)`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button has just been pressed down.
+
+The IsButtonOnePressedDownOnIndex method is used to determine if the controller button has just been pressed down.
+
+#### IsButtonOnePressedUpOnIndex/1
+
+  > `public override bool IsButtonOnePressedUpOnIndex(uint index)`
+
+  * Parameters
+   * `uint index` - The index of the tracked object to check for.
+  * Returns
+   * `bool` - Returns true if the button has just been released.
+
+The IsButtonOnePressedUpOnIndex method is used to determine if the controller button has just been released.
+
+---
+
+## Daydream Boundaries (SDK_DaydreamBoundaries)
+ > extends [SDK_BaseBoundaries](#base-boundaries-sdk_baseboundaries)
+
+### Overview
+
+The Daydream Boundaries SDK script provides dummy functions for the play area bounderies.
+
+### Class Methods
+
+#### InitBoundaries/0
+
+  > `public override void InitBoundaries()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The InitBoundaries method is run on start of scene and can be used to initialse anything on game start.
+
+#### GetPlayArea/0
+
+  > `public override Transform GetPlayArea()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `Transform` - A transform of the object representing the play area in the scene.
+
+The GetPlayArea method returns the Transform of the object that is used to represent the play area in the scene.
+
+#### GetPlayAreaVertices/1
+
+  > `public override Vector3[] GetPlayAreaVertices(GameObject playArea)`
+
+  * Parameters
+   * `GameObject playArea` - The GameObject containing the play area representation.
+  * Returns
+   * `Vector3[]` - A Vector3 array of the points in the scene that represent the play area boundaries.
+
+The GetPlayAreaVertices method returns the points of the play area boundaries.
+
+#### GetPlayAreaBorderThickness/1
+
+  > `public override float GetPlayAreaBorderThickness(GameObject playArea)`
+
+  * Parameters
+   * `GameObject playArea` - The GameObject containing the play area representation.
+  * Returns
+   * `float` - The thickness of the drawn border.
+
+The GetPlayAreaBorderThickness returns the thickness of the drawn border for the given play area.
+
+#### IsPlayAreaSizeCalibrated/1
+
+  > `public override bool IsPlayAreaSizeCalibrated(GameObject playArea)`
+
+  * Parameters
+   * `GameObject playArea` - The GameObject containing the play area representation.
+  * Returns
+   * `bool` - Returns true if the play area size has been auto calibrated and set by external sensors.
+
+The IsPlayAreaSizeCalibrated method returns whether the given play area size has been auto calibrated by external sensors.
 
 ---
 

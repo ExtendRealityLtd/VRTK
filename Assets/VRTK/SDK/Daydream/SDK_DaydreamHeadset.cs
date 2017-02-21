@@ -6,7 +6,7 @@ namespace VRTK
     using System.Collections.Generic;
 
     /// <summary>
-    /// The Sim Headset SDK script  provides dummy functions for the headset.
+    /// The Daydream Headset SDK script  provides dummy functions for the headset.
     /// </summary>
     public class SDK_DaydreamHeadset : SDK_BaseHeadset
     {
@@ -57,7 +57,6 @@ namespace VRTK
         /// <returns>A Vector3 containing the current velocity of the headset.</returns>
         public override Vector3 GetHeadsetVelocity()
         {
-            //return Camera.main.velocity;
             return Vector3.zero; //has no positional tracking 
         }
 

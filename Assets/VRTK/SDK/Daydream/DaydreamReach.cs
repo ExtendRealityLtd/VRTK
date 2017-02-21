@@ -1,7 +1,7 @@
-﻿namespace VRTK
+﻿#if VRTK_SDK_DAYDREAM
+namespace VRTK
 {
     using UnityEngine;
-    using System.Collections;
 
     /// <summary>
     /// DaydreamReach component uses touchpad to extend controller position out in front of user
@@ -9,10 +9,9 @@
     /// </summary>
     public class DaydreamReach : MonoBehaviour
     {
-        // controller to track, defaults to ./Controller but probably want a Pointer Joint like GvrControllerPointer/Laser
+        [Tooltip("Controller to track, defaults to ./Controller but probably want a Pointer Joint like GvrControllerPointer/Laser")]
         public Transform controller;
-
-        // maximum reach distance from controller origin
+        [Tooltip("Maximum reach distance from controller origin.")]
         public float reachDistance = 0.5f;
 
         private Vector3 positionOrigin;
@@ -79,10 +78,10 @@
                     touch.y = touch.y * 2f - 1f;
                     touch.x = touch.x * 2f - 1f;
                     break;
-                    // todo...
             }
 
             return touch;
         }
     }
 }
+#endif
