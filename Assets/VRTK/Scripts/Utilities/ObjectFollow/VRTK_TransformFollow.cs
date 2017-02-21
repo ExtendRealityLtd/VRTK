@@ -27,7 +27,6 @@
         private Transform transformToChange;
         private bool isListeningToOnPreRender;
 
-
         protected virtual void OnEnable()
         {
             if (gameObjectToFollow == null)
