@@ -37,7 +37,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37429237, g: 0.42147171, b: 0.46712714, a: 1}
+  m_IndirectSpecularColor: {r: 0.18053603, g: 0.2260181, b: 0.30718738, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -210,7 +210,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e1227828337a634aa0ff434d6bbd019, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  touchpadControlScript: {fileID: 202006660}
+  objectControlScript: {fileID: 202006660}
   listenOnAxisChange: 1
   maximumSpeed: 3
   deceleration: 0.1
@@ -227,7 +227,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e1227828337a634aa0ff434d6bbd019, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  touchpadControlScript: {fileID: 202006660}
+  objectControlScript: {fileID: 202006660}
   listenOnAxisChange: 0
   maximumSpeed: 3
   deceleration: 0.1
@@ -274,7 +274,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79201badbabbe254a978b37a86ac828c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  touchpadControlScript: {fileID: 202006660}
+  objectControlScript: {fileID: 202006660}
   listenOnAxisChange: 1
   warpDistance: 1
   warpMultiplier: 2
@@ -292,7 +292,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11c28f695996f534b8a8e4935ae2a651, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  touchpadControlScript: {fileID: 202006660}
+  objectControlScript: {fileID: 202006660}
   listenOnAxisChange: 0
   anglePerSnap: 30
   angleMultiplier: 1.5
@@ -524,13 +524,142 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 018581a6a9040b34d83404b882e892a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  primaryActivationButton: 9
-  actionModifierButton: 10
+  controller: {fileID: 0}
   deviceForDirection: 0
-  axisDeadzone: {x: 0.15, y: 0.15}
   disableOtherControlsOnActive: 1
   affectOnFalling: 0
   controlOverrideObject: {fileID: 0}
+  primaryActivationButton: 9
+  actionModifierButton: 10
+  axisDeadzone: {x: 0.15, y: 0.15}
+--- !u!43 &158976775
+Mesh:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: 
+  serializedVersion: 8
+  m_SubMeshes:
+  - serializedVersion: 2
+    firstByte: 0
+    indexCount: 24
+    topology: 0
+    firstVertex: 0
+    vertexCount: 8
+    localAABB:
+      m_Center: {x: 0, y: 0.01, z: 0}
+      m_Extent: {x: 1.2, y: 0, z: 1.0500002}
+  m_Shapes:
+    vertices: []
+    shapes: []
+    channels: []
+    fullWeights: []
+  m_BindPose: []
+  m_BoneNameHashes: 
+  m_RootBoneNameHash: 0
+  m_MeshCompression: 0
+  m_IsReadable: 1
+  m_KeepVertices: 1
+  m_KeepIndices: 1
+  m_IndexBuffer: 000004000100010004000500010005000200020005000600020006000300030006000700030007000000000007000400
+  m_Skin: []
+  m_VertexData:
+    m_CurrentChannels: 13
+    m_VertexCount: 8
+    m_Channels:
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 3
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 12
+      format: 0
+      dimension: 4
+    - stream: 0
+      offset: 28
+      format: 0
+      dimension: 2
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    m_DataSize: 288
+    _typelessdata: 6766863f0ad7233c696666bf000000000000803f0000803f0000803f0000000000000000676686bf0ad7233c696666bf000000000000803f0000803f0000803f0000803f00000000676686bf0ad7233c6966663f000000000000803f0000803f0000803f00000000000000006766863f0ad7233c6966663f000000000000803f0000803f0000803f0000803f000000009a99993f0ad7233c686686bf000000000000803f0000803f00000000000000000000803f9a9999bf0ad7233c686686bf000000000000803f0000803f000000000000803f0000803f9a9999bf0ad7233c6866863f000000000000803f0000803f00000000000000000000803f9a99993f0ad7233c6866863f000000000000803f0000803f000000000000803f0000803f
+  m_CompressedMesh:
+    m_Vertices:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_UV:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Normals:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Tangents:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Weights:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_NormalSigns:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_TangentSigns:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_FloatColors:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_BoneIndices:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Triangles:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_UVInfo: 0
+  m_LocalAABB:
+    m_Center: {x: 0, y: 0.01, z: 0}
+    m_Extent: {x: 1.2, y: 0, z: 1.0500002}
+  m_MeshUsageFlags: 0
+  m_BakedConvexCollisionMesh: 
+  m_BakedTriangleCollisionMesh: 
+  m_MeshOptimized: 0
 --- !u!1 &202006652
 GameObject:
   m_ObjectHideFlags: 0
@@ -677,13 +806,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 018581a6a9040b34d83404b882e892a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  primaryActivationButton: 9
-  actionModifierButton: 10
+  controller: {fileID: 0}
   deviceForDirection: 0
-  axisDeadzone: {x: 0.15, y: 0.15}
   disableOtherControlsOnActive: 1
   affectOnFalling: 0
   controlOverrideObject: {fileID: 0}
+  primaryActivationButton: 9
+  actionModifierButton: 10
+  axisDeadzone: {x: 0.15, y: 0.15}
 --- !u!1 &267134379
 GameObject:
   m_ObjectHideFlags: 0
@@ -1025,7 +1155,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79201badbabbe254a978b37a86ac828c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  touchpadControlScript: {fileID: 146687113}
+  objectControlScript: {fileID: 146687113}
   listenOnAxisChange: 1
   warpDistance: 1
   warpMultiplier: 2
@@ -1043,41 +1173,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e1227828337a634aa0ff434d6bbd019, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  touchpadControlScript: {fileID: 146687113}
+  objectControlScript: {fileID: 146687113}
   listenOnAxisChange: 0
   maximumSpeed: 3
   deceleration: 0.1
   fallingDeceleration: 0.01
   speedMultiplier: 1.5
---- !u!21 &567245661
-Material:
-  serializedVersion: 6
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_Name: Sprites/Default
-  m_Shader: {fileID: 10753, guid: 0000000000000000f000000000000000, type: 0}
-  m_ShaderKeywords: 
-  m_LightmapFlags: 5
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  m_SavedProperties:
-    serializedVersion: 2
-    m_TexEnvs:
-    - first:
-        name: _MainTex
-      second:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Floats:
-    - first:
-        name: PixelSnap
-      second: 0
-    m_Colors:
-    - first:
-        name: _Color
-      second: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &595461344
 GameObject:
   m_ObjectHideFlags: 0
@@ -1177,7 +1278,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79201badbabbe254a978b37a86ac828c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  touchpadControlScript: {fileID: 146687113}
+  objectControlScript: {fileID: 146687113}
   listenOnAxisChange: 1
   warpDistance: 1
   warpMultiplier: 2
@@ -1195,7 +1296,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79201badbabbe254a978b37a86ac828c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  touchpadControlScript: {fileID: 146687113}
+  objectControlScript: {fileID: 146687113}
   listenOnAxisChange: 0
   warpDistance: 1
   warpMultiplier: 2
@@ -1898,7 +1999,7 @@ MeshFilter:
     type: 2}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1023151202}
-  m_Mesh: {fileID: 1764454482}
+  m_Mesh: {fileID: 158976775}
 --- !u!23 &1023151224
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1913,7 +2014,7 @@ MeshRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_Materials:
-  - {fileID: 567245661}
+  - {fileID: 1539970790}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
@@ -2388,7 +2489,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e1227828337a634aa0ff434d6bbd019, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  touchpadControlScript: {fileID: 146687113}
+  objectControlScript: {fileID: 146687113}
   listenOnAxisChange: 1
   maximumSpeed: 3
   deceleration: 0.1
@@ -2405,7 +2506,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cf039de547880c4d9e49bf7eed59df5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  touchpadControlScript: {fileID: 146687113}
+  objectControlScript: {fileID: 146687113}
   listenOnAxisChange: 0
   maximumRotationSpeed: 3
   rotationMultiplier: 1.5
@@ -2608,7 +2709,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79201badbabbe254a978b37a86ac828c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  touchpadControlScript: {fileID: 202006660}
+  objectControlScript: {fileID: 202006660}
   listenOnAxisChange: 1
   warpDistance: 1
   warpMultiplier: 2
@@ -2626,7 +2727,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e1227828337a634aa0ff434d6bbd019, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  touchpadControlScript: {fileID: 202006660}
+  objectControlScript: {fileID: 202006660}
   listenOnAxisChange: 0
   maximumSpeed: 3
   deceleration: 0.1
@@ -2951,6 +3052,35 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1519789927}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!21 &1539970790
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: Sprites/Default
+  m_Shader: {fileID: 10753, guid: 0000000000000000f000000000000000, type: 0}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 5
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  m_SavedProperties:
+    serializedVersion: 2
+    m_TexEnvs:
+    - first:
+        name: _MainTex
+      second:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - first:
+        name: PixelSnap
+      second: 0
+    m_Colors:
+    - first:
+        name: _Color
+      second: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &1654489343
 GameObject:
   m_ObjectHideFlags: 0
@@ -2992,7 +3122,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79201badbabbe254a978b37a86ac828c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  touchpadControlScript: {fileID: 202006660}
+  objectControlScript: {fileID: 202006660}
   listenOnAxisChange: 1
   warpDistance: 1
   warpMultiplier: 2
@@ -3010,7 +3140,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cf039de547880c4d9e49bf7eed59df5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  touchpadControlScript: {fileID: 202006660}
+  objectControlScript: {fileID: 202006660}
   listenOnAxisChange: 0
   maximumRotationSpeed: 3
   rotationMultiplier: 1.5
@@ -3281,7 +3411,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cf039de547880c4d9e49bf7eed59df5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  touchpadControlScript: {fileID: 202006660}
+  objectControlScript: {fileID: 202006660}
   listenOnAxisChange: 0
   maximumRotationSpeed: 3
   rotationMultiplier: 1.5
@@ -3296,7 +3426,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e1227828337a634aa0ff434d6bbd019, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  touchpadControlScript: {fileID: 202006660}
+  objectControlScript: {fileID: 202006660}
   listenOnAxisChange: 1
   maximumSpeed: 3
   deceleration: 0.1
@@ -3343,7 +3473,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79201badbabbe254a978b37a86ac828c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  touchpadControlScript: {fileID: 146687113}
+  objectControlScript: {fileID: 146687113}
   listenOnAxisChange: 1
   warpDistance: 1
   warpMultiplier: 2
@@ -3361,138 +3491,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cf039de547880c4d9e49bf7eed59df5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  touchpadControlScript: {fileID: 146687113}
+  objectControlScript: {fileID: 146687113}
   listenOnAxisChange: 0
   maximumRotationSpeed: 3
   rotationMultiplier: 1.5
---- !u!43 &1764454482
-Mesh:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_Name: 
-  serializedVersion: 8
-  m_SubMeshes:
-  - serializedVersion: 2
-    firstByte: 0
-    indexCount: 24
-    topology: 0
-    firstVertex: 0
-    vertexCount: 8
-    localAABB:
-      m_Center: {x: 0, y: 0.01, z: 0}
-      m_Extent: {x: 1.2, y: 0, z: 1.0500002}
-  m_Shapes:
-    vertices: []
-    shapes: []
-    channels: []
-    fullWeights: []
-  m_BindPose: []
-  m_BoneNameHashes: 
-  m_RootBoneNameHash: 0
-  m_MeshCompression: 0
-  m_IsReadable: 1
-  m_KeepVertices: 1
-  m_KeepIndices: 1
-  m_IndexBuffer: 000004000100010004000500010005000200020005000600020006000300030006000700030007000000000007000400
-  m_Skin: []
-  m_VertexData:
-    m_CurrentChannels: 13
-    m_VertexCount: 8
-    m_Channels:
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 3
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 12
-      format: 0
-      dimension: 4
-    - stream: 0
-      offset: 28
-      format: 0
-      dimension: 2
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    m_DataSize: 288
-    _typelessdata: 6766863f0ad7233c696666bf000000000000803f0000803f0000803f0000000000000000676686bf0ad7233c696666bf000000000000803f0000803f0000803f0000803f00000000676686bf0ad7233c6966663f000000000000803f0000803f0000803f00000000000000006766863f0ad7233c6966663f000000000000803f0000803f0000803f0000803f000000009a99993f0ad7233c686686bf000000000000803f0000803f00000000000000000000803f9a9999bf0ad7233c686686bf000000000000803f0000803f000000000000803f0000803f9a9999bf0ad7233c6866863f000000000000803f0000803f00000000000000000000803f9a99993f0ad7233c6866863f000000000000803f0000803f000000000000803f0000803f
-  m_CompressedMesh:
-    m_Vertices:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_UV:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Normals:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Tangents:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Weights:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_NormalSigns:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_TangentSigns:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_FloatColors:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_BoneIndices:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Triangles:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_UVInfo: 0
-  m_LocalAABB:
-    m_Center: {x: 0, y: 0.01, z: 0}
-    m_Extent: {x: 1.2, y: 0, z: 1.0500002}
-  m_MeshUsageFlags: 0
-  m_BakedConvexCollisionMesh: 
-  m_BakedTriangleCollisionMesh: 
-  m_MeshOptimized: 0
 --- !u!1 &1842972674
 GameObject:
   m_ObjectHideFlags: 0
@@ -3534,7 +3536,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e1227828337a634aa0ff434d6bbd019, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  touchpadControlScript: {fileID: 146687113}
+  objectControlScript: {fileID: 146687113}
   listenOnAxisChange: 1
   maximumSpeed: 3
   deceleration: 0.1
@@ -3551,7 +3553,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e1227828337a634aa0ff434d6bbd019, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  touchpadControlScript: {fileID: 146687113}
+  objectControlScript: {fileID: 146687113}
   listenOnAxisChange: 0
   maximumSpeed: 3
   deceleration: 0.1
@@ -3637,7 +3639,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e1227828337a634aa0ff434d6bbd019, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  touchpadControlScript: {fileID: 146687113}
+  objectControlScript: {fileID: 146687113}
   listenOnAxisChange: 1
   maximumSpeed: 3
   deceleration: 0.1
@@ -3654,7 +3656,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11c28f695996f534b8a8e4935ae2a651, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  touchpadControlScript: {fileID: 146687113}
+  objectControlScript: {fileID: 146687113}
   listenOnAxisChange: 0
   anglePerSnap: 30
   angleMultiplier: 1.5
@@ -3702,7 +3704,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e1227828337a634aa0ff434d6bbd019, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  touchpadControlScript: {fileID: 202006660}
+  objectControlScript: {fileID: 202006660}
   listenOnAxisChange: 1
   maximumSpeed: 3
   deceleration: 0.1
@@ -3719,7 +3721,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11c28f695996f534b8a8e4935ae2a651, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  touchpadControlScript: {fileID: 202006660}
+  objectControlScript: {fileID: 202006660}
   listenOnAxisChange: 0
   anglePerSnap: 30
   angleMultiplier: 1.5
@@ -3767,7 +3769,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79201badbabbe254a978b37a86ac828c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  touchpadControlScript: {fileID: 202006660}
+  objectControlScript: {fileID: 202006660}
   listenOnAxisChange: 1
   warpDistance: 1
   warpMultiplier: 2
@@ -3785,7 +3787,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79201badbabbe254a978b37a86ac828c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  touchpadControlScript: {fileID: 202006660}
+  objectControlScript: {fileID: 202006660}
   listenOnAxisChange: 0
   warpDistance: 1
   warpMultiplier: 2
@@ -3991,7 +3993,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79201badbabbe254a978b37a86ac828c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  touchpadControlScript: {fileID: 146687113}
+  objectControlScript: {fileID: 146687113}
   listenOnAxisChange: 1
   warpDistance: 1
   warpMultiplier: 2
@@ -4009,7 +4011,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11c28f695996f534b8a8e4935ae2a651, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  touchpadControlScript: {fileID: 146687113}
+  objectControlScript: {fileID: 146687113}
   listenOnAxisChange: 0
   anglePerSnap: 30
   angleMultiplier: 1.5

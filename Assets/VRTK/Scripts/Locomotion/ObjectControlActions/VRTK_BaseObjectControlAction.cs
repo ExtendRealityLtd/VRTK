@@ -1,15 +1,15 @@
-﻿// Base Touchpad Control Action|TouchpadControlActions|25000
+﻿// Base Object Control Action|ObjectControlActions|25000
 namespace VRTK
 {
     using UnityEngine;
 
     /// <summary>
-    /// The Base Touchpad Control Action script is an abstract class that all touchpad control action scripts inherit.
+    /// The Base Object Control Action script is an abstract class that all object control action scripts inherit.
     /// </summary>
     /// <remarks>
     /// As this is an abstract class, it cannot be applied directly to a game object and performs no logic.
     /// </remarks>
-    public abstract class VRTK_BaseTouchpadControlAction : MonoBehaviour
+    public abstract class VRTK_BaseObjectControlAction : MonoBehaviour
     {
         public enum AxisListeners
         {
@@ -17,9 +17,9 @@ namespace VRTK
             YAxisChanged
         }
 
-        [Tooltip("The Touchpad Control script to receive axis change events from.")]
-        public VRTK_TouchpadControl touchpadControlScript;
-        [Tooltip("Determines which Touchpad Control Axis event to listen to.")]
+        [Tooltip("The Object Control script to receive axis change events from.")]
+        public VRTK_ObjectControl objectControlScript;
+        [Tooltip("Determines which Object Control Axis event to listen to.")]
         public AxisListeners listenOnAxisChange;
 
         protected Collider centerCollider;
@@ -34,15 +34,15 @@ namespace VRTK
         protected virtual void OnEnable()
         {
             playArea = VRTK_DeviceFinder.PlayAreaTransform();
-            if (touchpadControlScript)
+            if (objectControlScript)
             {
                 switch (listenOnAxisChange)
                 {
                     case AxisListeners.XAxisChanged:
-                        touchpadControlScript.XAxisChanged += AxisChanged;
+                        objectControlScript.XAxisChanged += AxisChanged;
                         break;
                     case AxisListeners.YAxisChanged:
-                        touchpadControlScript.YAxisChanged += AxisChanged;
+                        objectControlScript.YAxisChanged += AxisChanged;
                         break;
                 }
             }
@@ -50,21 +50,21 @@ namespace VRTK
 
         protected virtual void OnDisable()
         {
-            if (touchpadControlScript)
+            if (objectControlScript)
             {
                 switch (listenOnAxisChange)
                 {
                     case AxisListeners.XAxisChanged:
-                        touchpadControlScript.XAxisChanged -= AxisChanged;
+                        objectControlScript.XAxisChanged -= AxisChanged;
                         break;
                     case AxisListeners.YAxisChanged:
-                        touchpadControlScript.YAxisChanged -= AxisChanged;
+                        objectControlScript.YAxisChanged -= AxisChanged;
                         break;
                 }
             }
         }
 
-        protected virtual void AxisChanged(object sender, TouchpadControlEventArgs e)
+        protected virtual void AxisChanged(object sender, ObjectControlEventArgs e)
         {
             Process(e.controlledGameObject, e.directionDevice, e.axisDirection, e.axis, e.deadzone, e.currentlyFalling, e.modifierActive);
         }
