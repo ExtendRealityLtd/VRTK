@@ -6,7 +6,7 @@ This file provides documentation on how to use the included prefabs and scripts.
  * [Pointers](#pointers-vrtkscriptspointers)
   * [Pointer Renderers](#pointer-renderers-vrtkscriptspointerspointerrenderers)
  * [Locomotion](#locomotion-vrtkscriptslocomotion)
-  * [Touchpad Control Actions](#touchpad-control-actions-vrtkscriptslocomotiontouchpadcontrolactions)
+  * [Object Control Actions](#object-control-actions-vrtkscriptslocomotionobjectcontrolactions)
  * [Interactions](#interactions-vrtkscriptsinteractions)
   * [Highlighters](#highlighters-vrtkscriptsinteractionshighlighters)
   * [Grab Attach Mechanics](#grab-attach-mechanics-vrtkscriptsinteractionsgrabattachmechanics)
@@ -1094,7 +1094,9 @@ A collection of scripts that provide varying methods of moving the user around t
  * [Dash Teleport](#dash-teleport-vrtk_dashteleport)
  * [Teleport Disable On Headset Collision](#teleport-disable-on-headset-collision-vrtk_teleportdisableonheadsetcollision)
  * [Teleport Disable On Controller Obscured](#teleport-disable-on-controller-obscured-vrtk_teleportdisableoncontrollerobscured)
+ * [Object Control](#object-control-vrtk_objectcontrol)
  * [Touchpad Control](#touchpad-control-vrtk_touchpadcontrol)
+ * [Button Control](#button-control-vrtk_buttoncontrol)
  * [Move In Place](#move-in-place-vrtk_moveinplace)
  * [Player Climb](#player-climb-vrtk_playerclimb)
  * [Room Extender](#room-extender-vrtk_roomextender)
@@ -1260,28 +1262,21 @@ The purpose of the Teleport Disable On Controller Obscured script is to detect w
 
 ---
 
-## Touchpad Control (VRTK_TouchpadControl)
+## Object Control (VRTK_ObjectControl)
 
 ### Overview
 
-The ability to control an object with the touchpad based on the position of the finger on the touchpad axis.
+An abstract class to provide a mechanism to control an object based on controller input.
 
-The Touchpad Control script forms the stub to allow for pre-defined actions to execute when the touchpad axis changes.
-
-This is enabled by the Touchpad Control script emitting an event each time the X axis and Y Axis on the touchpad change and the corresponding Touchpad Control Action registers with the appropriate axis event. This means that multiple Touchpad Control Actions can be triggered per axis change.
-
-This script is placed on the Script Alias of the Controller that is required to be affected by changes in the touchpad.
-
-If the controlled object is the play area and `VRTK_BodyPhysics` is also available, then additional logic is processed when the user is falling such as preventing the touchpad control from affecting a falling user.
+As this is an abstract class, it cannot be applied directly to a game object and performs no logic.
 
 ### Inspector Parameters
 
- * **Primary Activation Button:** An optional button that has to be engaged to allow the touchpad control to activate.
- * **Action Modifier Button:** An optional button that when engaged will activate the modifier on the touchpad control action.
+ * **Controller:** The controller to read the controller events from. If this is blank then it will attempt to get a controller events script from the same GameObject.
  * **Device For Direction:** The direction that will be moved in is the direction of this device.
- * **Disable Other Controls On Active:** If this is checked then whenever the touchpad axis on the attached controller is being changed, all other touchpad control scripts on other controllers will be disabled.
- * **Affect On Falling:** If a `VRTK_BodyPhysics` script is present and this is checked, then the touchpad control will affect the play area whilst it is falling.
- * **Control Override Object:** An optional game object to apply the touchpad control to. If this is blank then the PlayArea will be controlled.
+ * **Disable Other Controls On Active:** If this is checked then whenever the axis on the attached controller is being changed, all other object control scripts of the same type on other controllers will be disabled.
+ * **Affect On Falling:** If a `VRTK_BodyPhysics` script is present and this is checked, then the object control will affect the play area whilst it is falling.
+ * **Control Override Object:** An optional game object to apply the object control to. If this is blank then the PlayArea will be controlled.
 
 ### Class Variables
 
@@ -1293,12 +1288,12 @@ If the controlled object is the play area and `VRTK_BodyPhysics` is also availab
 
 ### Class Events
 
- * `XAxisChanged` - Emitted when the touchpad X Axis Changes.
- * `YAxisChanged` - Emitted when the touchpad Y Axis Changes.
+ * `XAxisChanged` - Emitted when the X Axis Changes.
+ * `YAxisChanged` - Emitted when the Y Axis Changes.
 
 ### Unity Events
 
-Adding the `VRTK_TouchpadControl_UnityEvents` component to `VRTK_TouchpadControl` object allows access to `UnityEvents` that will react identically to the Class Events.
+Adding the `VRTK_ObjectControl_UnityEvents` component to `VRTK_ObjectControl` object allows access to `UnityEvents` that will react identically to the Class Events.
 
  * `OnXAxisChanged` - Emits the XAxisChanged class event.
  * `OnYAxisChanged` - Emits the YAxisChanged class event.
@@ -1307,15 +1302,61 @@ Adding the `VRTK_TouchpadControl_UnityEvents` component to `VRTK_TouchpadControl
 
  * `GameObject controlledGameObject` - The GameObject that is going to be affected.
  * `Transform directionDevice` - The device that is used for the direction.
- * `Vector3 axisDirection` - The axis that is being affected from the touchpad.
+ * `Vector3 axisDirection` - The axis that is being affected.
  * `Vector3 axis` - The value of the current touchpad touch point based across the axis direction.
  * `float deadzone` - The value of the deadzone based across the axis direction.
  * `bool currentlyFalling` - Whether the controlled GameObject is currently falling.
  * `bool modifierActive` - Whether the modifier button is pressed.
 
+---
+
+## Touchpad Control (VRTK_TouchpadControl)
+ > extends [VRTK_ObjectControl](#object-control-vrtk_objectcontrol)
+
+### Overview
+
+The ability to control an object with the touchpad based on the position of the finger on the touchpad axis.
+
+The Touchpad Control script forms the stub to allow for pre-defined actions to execute when the touchpad axis changes.
+
+This is enabled by the Touchpad Control script emitting an event each time the X axis and Y Axis on the touchpad change and the corresponding Object Control Action registers with the appropriate axis event. This means that multiple Object Control Actions can be triggered per axis change.
+
+This script is placed on the Script Alias of the Controller that is required to be affected by changes in the touchpad.
+
+If the controlled object is the play area and `VRTK_BodyPhysics` is also available, then additional logic is processed when the user is falling such as preventing the touchpad control from affecting a falling user.
+
+### Inspector Parameters
+
+ * **Primary Activation Button:** An optional button that has to be engaged to allow the touchpad control to activate.
+ * **Action Modifier Button:** An optional button that when engaged will activate the modifier on the touchpad control action.
+
 ### Example
 
 `VRTK/Examples/017_CameraRig_TouchpadWalking` has a collection of walls and slopes that can be traversed by the user with the touchpad. There is also an area that can only be traversed if the user is crouching.
+
+---
+
+## Button Control (VRTK_ButtonControl)
+ > extends [VRTK_ObjectControl](#object-control-vrtk_objectcontrol)
+
+### Overview
+
+The ability to control an object with a button press on a given button to control a specified direction.
+
+The Button Control script forms the stub to allow for pre-defined actions to execute when a button press affects a direction axis.
+
+This is enabled by the Button Control script emitting an event each time the pseudo X axis and pseudo Y Axis are changed by a button press and the corresponding Object Control Action registers with the appropriate axis event. This means that multiple Object Control Actions can be triggered per axis change.
+
+This script is placed on the Script Alias of the Controller that is required to be affected by button presses.
+
+If the controlled object is the play area and `VRTK_BodyPhysics` is also available, then additional logic is processed when the user is falling such as preventing the button control from affecting a falling user.
+
+### Inspector Parameters
+
+ * **Forward Button:** The button to set the y axis to +1.
+ * **Backward Button:** The button to set the y axis to -1.
+ * **Left Button:** The button to set the x axis to -1.
+ * **Right Button:** The button to set the x axis to +1.
 
 ---
 
@@ -1456,85 +1497,85 @@ There is an additional script `VRTK_RoomExtender_PlayAreaGizmo` which can be att
 
 ---
 
-# Touchpad Control Actions (VRTK/Scripts/Locomotion/TouchpadControlActions)
+# Object Control Actions (VRTK/Scripts/Locomotion/ObjectControlActions)
 
-This directory contains scripts that are used to provide different actions when using Touchpad Control.
+This directory contains scripts that are used to provide different actions when using Object Control.
 
- * [Base Touchpad Control Action](#base-touchpad-control-action-vrtk_basetouchpadcontrolaction)
- * [Slide Touchpad Control Action](#slide-touchpad-control-action-vrtk_slidetouchpadcontrolaction)
- * [Rotate Touchpad Control Action](#rotate-touchpad-control-action-vrtk_rotatetouchpadcontrolaction)
- * [Snap Rotate Touchpad Control Action](#snap-rotate-touchpad-control-action-vrtk_snaprotatetouchpadcontrolaction)
- * [Warp Touchpad Control Action](#warp-touchpad-control-action-vrtk_warptouchpadcontrolaction)
+ * [Base Object Control Action](#base-object-control-action-vrtk_baseobjectcontrolaction)
+ * [Slide Object Control Action](#slide-object-control-action-vrtk_slideobjectcontrolaction)
+ * [Rotate Object Control Action](#rotate-object-control-action-vrtk_rotateobjectcontrolaction)
+ * [Snap Rotate Object Control Action](#snap-rotate-object-control-action-vrtk_snaprotateobjectcontrolaction)
+ * [Warp Object Control Action](#warp-object-control-action-vrtk_warpobjectcontrolaction)
 
 ---
 
-## Base Touchpad Control Action (VRTK_BaseTouchpadControlAction)
+## Base Object Control Action (VRTK_BaseObjectControlAction)
 
 ### Overview
 
-The Base Touchpad Control Action script is an abstract class that all touchpad control action scripts inherit.
+The Base Object Control Action script is an abstract class that all object control action scripts inherit.
 
 As this is an abstract class, it cannot be applied directly to a game object and performs no logic.
 
 ### Inspector Parameters
 
- * **Touchpad Control Script:** The Touchpad Control script to receive axis change events from.
- * **Listen On Axis Change:** Determines which Touchpad Control Axis event to listen to.
+ * **Object Control Script:** The Object Control script to receive axis change events from.
+ * **Listen On Axis Change:** Determines which Object Control Axis event to listen to.
 
 ---
 
-## Slide Touchpad Control Action (VRTK_SlideTouchpadControlAction)
- > extends [VRTK_BaseTouchpadControlAction](#base-touchpad-control-action-vrtk_basetouchpadcontrolaction)
+## Slide Object Control Action (VRTK_SlideObjectControlAction)
+ > extends [VRTK_BaseObjectControlAction](#base-object-control-action-vrtk_baseobjectcontrolaction)
 
 ### Overview
 
-The Slide Touchpad Control Action script is used to slide the controlled GameObject around the scene when changing the touchpad axis.
+The Slide Object Control Action script is used to slide the controlled GameObject around the scene when changing the axis.
 
-The effect is a smooth sliding motion in forward and sideways directions to simulate touchpad walking.
+The effect is a smooth sliding motion in forward and sideways directions to simulate walking.
 
 ### Inspector Parameters
 
- * **Maximum Speed:** The maximum speed the controlled object can be moved in based on the position of the touchpad axis.
- * **Deceleration:** The rate of speed deceleration when the touchpad is no longer being touched.
- * **Falling Deceleration:** The rate of speed deceleration when the touchpad is no longer being touched and the object is falling.
+ * **Maximum Speed:** The maximum speed the controlled object can be moved in based on the position of the axis.
+ * **Deceleration:** The rate of speed deceleration when the axis is no longer being changed.
+ * **Falling Deceleration:** The rate of speed deceleration when the axis is no longer being changed and the object is falling.
  * **Speed Multiplier:** The speed multiplier to be applied when the modifier button is pressed.
 
 ### Example
 
 `VRTK/Examples/017_CameraRig_TouchpadWalking` has a collection of walls and slopes that can be traversed by the user with the touchpad. There is also an area that can only be traversed if the user is crouching.
 
-To enable the Slide Touchpad Control Action, ensure one of the `TouchpadControlOptions` children (located under the Controller script alias) has the `Slide` control script active.
+To enable the Slide Object Control Action, ensure one of the `TouchpadControlOptions` children (located under the Controller script alias) has the `Slide` control script active.
 
 ---
 
-## Rotate Touchpad Control Action (VRTK_RotateTouchpadControlAction)
- > extends [VRTK_BaseTouchpadControlAction](#base-touchpad-control-action-vrtk_basetouchpadcontrolaction)
+## Rotate Object Control Action (VRTK_RotateObjectControlAction)
+ > extends [VRTK_BaseObjectControlAction](#base-object-control-action-vrtk_baseobjectcontrolaction)
 
 ### Overview
 
-The Rotate Touchpad Control Action script is used to rotate the controlled GameObject around the up vector when changing the touchpad axis.
+The Rotate Object Control Action script is used to rotate the controlled GameObject around the up vector when changing the axis.
 
 The effect is a smooth rotation to simulate turning.
 
 ### Inspector Parameters
 
- * **Maximum Rotation Speed:** The maximum speed the controlled object can be rotated based on the position of the touchpad axis.
+ * **Maximum Rotation Speed:** The maximum speed the controlled object can be rotated based on the position of the axis.
  * **Rotation Multiplier:** The rotation multiplier to be applied when the modifier button is pressed.
 
 ### Example
 
 `VRTK/Examples/017_CameraRig_TouchpadWalking` has a collection of walls and slopes that can be traversed by the user with the touchpad. There is also an area that can only be traversed if the user is crouching.
 
-To enable the Rotate Touchpad Control Action, ensure one of the `TouchpadControlOptions` children (located under the Controller script alias) has the `Rotate` control script active.
+To enable the Rotate Object Control Action, ensure one of the `TouchpadControlOptions` children (located under the Controller script alias) has the `Rotate` control script active.
 
 ---
 
-## Snap Rotate Touchpad Control Action (VRTK_SnapRotateTouchpadControlAction)
- > extends [VRTK_BaseTouchpadControlAction](#base-touchpad-control-action-vrtk_basetouchpadcontrolaction)
+## Snap Rotate Object Control Action (VRTK_SnapRotateObjectControlAction)
+ > extends [VRTK_BaseObjectControlAction](#base-object-control-action-vrtk_baseobjectcontrolaction)
 
 ### Overview
 
-The Snap Rotate Touchpad Control Action script is used to snap rotate the controlled GameObject around the up vector when changing the touchpad axis.
+The Snap Rotate Object Control Action script is used to snap rotate the controlled GameObject around the up vector when changing the axis.
 
 The effect is a immediate snap rotation to quickly face in a new direction.
 
@@ -1550,16 +1591,16 @@ The effect is a immediate snap rotation to quickly face in a new direction.
 
 `VRTK/Examples/017_CameraRig_TouchpadWalking` has a collection of walls and slopes that can be traversed by the user with the touchpad. There is also an area that can only be traversed if the user is crouching.
 
-To enable the Snap Rotate Touchpad Control Action, ensure one of the `TouchpadControlOptions` children (located under the Controller script alias) has the `Snap Rotate` control script active.
+To enable the Snap Rotate Object Control Action, ensure one of the `TouchpadControlOptions` children (located under the Controller script alias) has the `Snap Rotate` control script active.
 
 ---
 
-## Warp Touchpad Control Action (VRTK_WarpTouchpadControlAction)
- > extends [VRTK_BaseTouchpadControlAction](#base-touchpad-control-action-vrtk_basetouchpadcontrolaction)
+## Warp Object Control Action (VRTK_WarpObjectControlAction)
+ > extends [VRTK_BaseObjectControlAction](#base-object-control-action-vrtk_baseobjectcontrolaction)
 
 ### Overview
 
-The Warp Touchpad Control Action script is used to warp the controlled GameObject a given distance when changing the touchpad axis.
+The Warp Object Control Action script is used to warp the controlled GameObject a given distance when changing the axis.
 
 The effect is a immediate snap to a new position in the given direction.
 
@@ -1575,7 +1616,7 @@ The effect is a immediate snap to a new position in the given direction.
 
 `VRTK/Examples/017_CameraRig_TouchpadWalking` has a collection of walls and slopes that can be traversed by the user with the touchpad. There is also an area that can only be traversed if the user is crouching.
 
-To enable the Warp Touchpad Control Action, ensure one of the `TouchpadControlOptions` children (located under the Controller script alias) has the `Warp` control script active.
+To enable the Warp Object Control Action, ensure one of the `TouchpadControlOptions` children (located under the Controller script alias) has the `Warp` control script active.
 
 ---
 

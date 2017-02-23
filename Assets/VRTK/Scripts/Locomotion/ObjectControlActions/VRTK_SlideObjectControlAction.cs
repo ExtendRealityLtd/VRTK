@@ -1,26 +1,26 @@
-﻿// Slide Touchpad Control Action|TouchpadControlActions|25010
+﻿// Slide Object Control Action|ObjectControlActions|25010
 namespace VRTK
 {
     using UnityEngine;
 
     /// <summary>
-    /// The Slide Touchpad Control Action script is used to slide the controlled GameObject around the scene when changing the touchpad axis.
+    /// The Slide Object Control Action script is used to slide the controlled GameObject around the scene when changing the axis.
     /// </summary>
     /// <remarks>
-    /// The effect is a smooth sliding motion in forward and sideways directions to simulate touchpad walking.
+    /// The effect is a smooth sliding motion in forward and sideways directions to simulate walking.
     /// </remarks>
     /// <example>
     /// `VRTK/Examples/017_CameraRig_TouchpadWalking` has a collection of walls and slopes that can be traversed by the user with the touchpad. There is also an area that can only be traversed if the user is crouching.
     ///
-    /// To enable the Slide Touchpad Control Action, ensure one of the `TouchpadControlOptions` children (located under the Controller script alias) has the `Slide` control script active.
+    /// To enable the Slide Object Control Action, ensure one of the `TouchpadControlOptions` children (located under the Controller script alias) has the `Slide` control script active.
     /// </example>
-    public class VRTK_SlideTouchpadControlAction : VRTK_BaseTouchpadControlAction
+    public class VRTK_SlideObjectControlAction : VRTK_BaseObjectControlAction
     {
-        [Tooltip("The maximum speed the controlled object can be moved in based on the position of the touchpad axis.")]
+        [Tooltip("The maximum speed the controlled object can be moved in based on the position of the axis.")]
         public float maximumSpeed = 3f;
-        [Tooltip("The rate of speed deceleration when the touchpad is no longer being touched.")]
+        [Tooltip("The rate of speed deceleration when the axis is no longer being changed.")]
         public float deceleration = 0.1f;
-        [Tooltip("The rate of speed deceleration when the touchpad is no longer being touched and the object is falling.")]
+        [Tooltip("The rate of speed deceleration when the axis is no longer being changed and the object is falling.")]
         public float fallingDeceleration = 0.01f;
         [Tooltip("The speed multiplier to be applied when the modifier button is pressed.")]
         public float speedMultiplier = 1.5f;
