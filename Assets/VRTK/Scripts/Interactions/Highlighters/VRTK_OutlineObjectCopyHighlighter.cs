@@ -130,7 +130,7 @@ namespace VRTK.Highlighters
 
         protected virtual void ResetHighlighterWithCustomModels()
         {
-            if (customOutlineModels.Length > 0)
+            if (customOutlineModels != null && customOutlineModels.Length > 0)
             {
                 highlightModels = new GameObject[customOutlineModels.Length];
                 for (int i = 0; i < customOutlineModels.Length; i++)
@@ -142,7 +142,7 @@ namespace VRTK.Highlighters
 
         protected virtual void ResetHighlighterWithCustomModelPaths()
         {
-            if (customOutlineModelPaths.Length > 0)
+            if (customOutlineModelPaths != null && customOutlineModelPaths.Length > 0)
             {
                 highlightModels = new GameObject[customOutlineModels.Length];
                 for (int i = 0; i < customOutlineModelPaths.Length; i++)
