@@ -142,25 +142,28 @@ namespace VRTK
 
         protected virtual void ManageDestinationMarkerListeners(GameObject markerMaker, bool register)
         {
-            VRTK_DestinationMarker[] worldMarkers = markerMaker.GetComponentsInChildren<VRTK_DestinationMarker>();
-            for (int i = 0; i < worldMarkers.Length; i++)
+            if (markerMaker)
             {
-                VRTK_DestinationMarker worldMarker = worldMarkers[i];
-                if (worldMarker == this)
+                VRTK_DestinationMarker[] worldMarkers = markerMaker.GetComponentsInChildren<VRTK_DestinationMarker>();
+                for (int i = 0; i < worldMarkers.Length; i++)
                 {
-                    continue;
-                }
-                if (register)
-                {
-                    worldMarker.DestinationMarkerEnter += DoDestinationMarkerEnter;
-                    worldMarker.DestinationMarkerExit += DoDestinationMarkerExit;
-                    worldMarker.DestinationMarkerSet += DoDestinationMarkerSet;
-                }
-                else
-                {
-                    worldMarker.DestinationMarkerEnter -= DoDestinationMarkerEnter;
-                    worldMarker.DestinationMarkerExit -= DoDestinationMarkerExit;
-                    worldMarker.DestinationMarkerSet -= DoDestinationMarkerSet;
+                    VRTK_DestinationMarker worldMarker = worldMarkers[i];
+                    if (worldMarker == this)
+                    {
+                        continue;
+                    }
+                    if (register)
+                    {
+                        worldMarker.DestinationMarkerEnter += DoDestinationMarkerEnter;
+                        worldMarker.DestinationMarkerExit += DoDestinationMarkerExit;
+                        worldMarker.DestinationMarkerSet += DoDestinationMarkerSet;
+                    }
+                    else
+                    {
+                        worldMarker.DestinationMarkerEnter -= DoDestinationMarkerEnter;
+                        worldMarker.DestinationMarkerExit -= DoDestinationMarkerExit;
+                        worldMarker.DestinationMarkerSet -= DoDestinationMarkerSet;
+                    }
                 }
             }
         }
