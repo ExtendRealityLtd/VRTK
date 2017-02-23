@@ -100,6 +100,19 @@ namespace VRTK.Highlighters
             }
         }
 
+        protected virtual void OnEnable()
+        {
+            if (customOutlineModels == null)
+            {
+                customOutlineModels = new GameObject[0];
+            }
+
+            if (customOutlineModelPaths == null)
+            {
+                customOutlineModelPaths = new string[0];
+            }
+        }
+
         protected virtual void OnDestroy()
         {
             if (highlightModels != null)
