@@ -1168,13 +1168,13 @@ namespace VRTK
             {
                 OnTouchpadTouchEnd(SetButtonEvent(ref touchpadTouched, false, 0f));
                 EmitAlias(ButtonAlias.Touchpad_Touch, false, 0f, ref touchpadTouched);
+                touchpadAxis = Vector2.zero;
             }
 
             //Touchpad Axis
             if (!touchpadTouched || Vector2ShallowEquals(touchpadAxis, currentTouchpadAxis))
             {
                 touchpadAxisChanged = false;
-                touchpadAxis = Vector2.zero;
             }
             else
             {
