@@ -26,11 +26,15 @@ namespace VRTK
         protected Dictionary<GameObject, int> keysetObjects;
         protected bool isEnterEnabled = true;
 
-        protected virtual void Start()
+        protected virtual void OnEnable()
         {
             keyboard = GetComponent<VRTK_Keyboard>();
 
             SetupKeyboardUI();
+        }
+
+        protected virtual void OnDisable()
+        {
         }
 
         protected virtual void Update()
@@ -45,11 +49,15 @@ namespace VRTK
         /// Apply hide flags to a game object in the editor so it is not saved
         /// </summary>
         /// <param name="obj">The runtime game object</param>
-        protected void ProcessRuntimeObject(GameObject obj)
+        protected void ProcessRuntimeObject(GameObject obj, bool hide = false)
         {
             if (Application.isEditor)
             {
                 obj.hideFlags = HideFlags.DontSave;// | HideFlags.NotEditable;
+                if (hide)
+                {
+                    obj.hideFlags |= HideFlags.HideInHierarchy;
+                }
             }
         }
 
@@ -79,7 +87,7 @@ namespace VRTK
         /// </remarks>
         /// <param name="parent">The parent gameobject to return a runtime container for</param>
         /// <returns>The runtime object container</returns>
-        protected GameObject GetRuntimeObjectContainer(GameObject parent, bool empty = false)
+        protected GameObject GetRuntimeObjectContainer(GameObject parent, bool empty = false, bool create = true)
         {
             GameObject root = null;
 
@@ -100,9 +108,17 @@ namespace VRTK
             }
 
             // Create a new container if it does not exist
-            if (root == null)
+            if (root == null & create)
             {
-                root = new GameObject(RUNTIME_OBJECT_CONTAINER_NAME, parent.transform.GetType());
+                if (parent.transform.GetType() == typeof(Transform))
+                {
+                    root = new GameObject(RUNTIME_OBJECT_CONTAINER_NAME);
+                }
+                else
+                {
+                    root = new GameObject(RUNTIME_OBJECT_CONTAINER_NAME, parent.transform.GetType());
+                }
+
                 root.transform.SetParent(parent.transform, false);
 
                 // Make sure RectTransforms fill their parent

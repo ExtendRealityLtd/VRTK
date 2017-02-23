@@ -89,19 +89,19 @@
         {
             drivenTemplateRectTransforms.Clear();
 
-            _keyTemplate = keyTemplate;
-            _specialKeyTemplate = specialKeyTemplate;
-            _modifierKeyTemplate = modifierKeyTemplate;
+            _keyTemplate = _keyTemplate != null ? _keyTemplate : keyTemplate;
+            _specialKeyTemplate = _specialKeyTemplate != null ? _specialKeyTemplate : specialKeyTemplate;
+            _modifierKeyTemplate = _modifierKeyTemplate != null ? _modifierKeyTemplate : modifierKeyTemplate;
 
             if (_keyTemplate == null)
             {
                 Debug.LogWarning("Canvas Key Renderer in " + name + " requires a keyTemplate prefab");
                 // Create an empty canvas object so key positions are visible without a key template
                 _keyTemplate = new GameObject("KeyboardKey", typeof(RectTransform));
-                ProcessRuntimeObject(_keyTemplate);
+                ProcessRuntimeObject(_keyTemplate, hide: true);
                 _keyTemplate.transform.SetParent(gameObject.transform, false);
             }
-            else
+            else if (keyTemplate != null)
             {
                 Button keyTemplateButton = _keyTemplate.GetComponentInChildren<Button>();
                 if (keyTemplateButton == null)
@@ -118,7 +118,7 @@
             {
                 _specialKeyTemplate = _keyTemplate;
             }
-            else
+            else if (specialKeyTemplate != null)
             {
                 Button keyTemplateButton = _specialKeyTemplate.GetComponentInChildren<Button>();
                 if (keyTemplateButton == null)
@@ -135,7 +135,7 @@
             {
                 _modifierKeyTemplate = _specialKeyTemplate;
             }
-            else
+            else if (modifierKeyTemplate != null)
             {
                 Button keyTemplateButton = _modifierKeyTemplate.GetComponentInChildren<Button>();
                 if (keyTemplateButton == null)
@@ -145,8 +145,29 @@
                 else if (GetComponentExclusivelyInChildren<Image>(keyTemplateButton.gameObject) == null)
                 {
                     Debug.LogError(name + "'s modifierKeyTemplate prefab's UI.Button must contain a UI.Image");
+                    Debug.Log(_modifierKeyTemplate);
+                    Debug.Log(modifierKeyTemplate);
                 }
             }
+        }
+
+        protected virtual void CleanupTemplates()
+        {
+            // Cleanup dynamically generated key templates
+            if (_keyTemplate != null && keyTemplate == null)
+            {
+                DestroyImmediate(_keyTemplate);
+            }
+
+            _keyTemplate = null;
+            _specialKeyTemplate = null;
+            _modifierKeyTemplate = null;
+        }
+
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+            CleanupTemplates();
         }
 
         /// <summary>

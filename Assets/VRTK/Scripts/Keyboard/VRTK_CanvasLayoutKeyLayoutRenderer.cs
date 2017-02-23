@@ -115,6 +115,18 @@ namespace VRTK
             UpdateActiveKeyset();
         }
 
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+
+            // Cleanup runtime container when disabled
+            GameObject runtimeContainer = GetRuntimeObjectContainer(gameObject, create: false);
+            if (runtimeContainer != null)
+            {
+                DestroyImmediate(runtimeContainer);
+            }
+        }
+
         protected override void SetupTemplates()
         {
             base.SetupTemplates();

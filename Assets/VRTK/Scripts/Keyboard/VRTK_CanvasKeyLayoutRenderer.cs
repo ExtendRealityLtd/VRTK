@@ -146,6 +146,24 @@ namespace VRTK
             UpdateActiveKeyset();
         }
 
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+
+            // Cleanup runtime containers on canvases when disabled
+            for (int i = 0; i < canvases.Length; i++)
+            {
+                if (canvases[i] != null)
+                {
+                    GameObject runtimeObject = GetRuntimeObjectContainer(canvases[i].gameObject, create: false);
+                    if (runtimeObject != null)
+                    {
+                        DestroyImmediate(runtimeObject);
+                    }
+                }
+            }
+        }
+
         /// <summary>
         /// Apply a layout Rect to a RectTransform
         /// </summary>
