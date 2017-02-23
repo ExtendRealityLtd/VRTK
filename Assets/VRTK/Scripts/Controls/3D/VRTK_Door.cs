@@ -289,7 +289,8 @@ namespace VRTK
             }
             if (doorSnapForceCreated)
             {
-                doorSnapForce.relativeForce = GetThirdDirection(doorHinge.axis, secondaryDirection) * (subDirection * (-5f * subDirection));
+                float forceToApply = (-5f * GetDirectionFromJoint());
+                doorSnapForce.relativeForce = GetThirdDirection(doorHinge.axis, secondaryDirection) * (subDirection * forceToApply);
             }
 
             return true;
@@ -308,6 +309,11 @@ namespace VRTK
         {
             value = CalculateValue();
             doorSnapForce.enabled = (openOutward ^ openInward) && Mathf.Abs(value) < (minSnapClose * 100f); // snapping only works for single direction doors so far
+        }
+
+        protected virtual float GetDirectionFromJoint()
+        {
+            return (doorHinge.limits.min < 0f ? -1f : 1f);
         }
 
         private Vector3 Direction2Axis(Direction givenDirection)
