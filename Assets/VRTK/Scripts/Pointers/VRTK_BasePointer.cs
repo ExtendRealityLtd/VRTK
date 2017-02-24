@@ -152,8 +152,7 @@ namespace VRTK
             pointerMaterial = new Material(tmpMaterial);
             pointerMaterial.color = pointerMissColor;
 
-            var fetchedPlayAreaCursor = GetComponent<VRTK_PlayAreaCursor>();
-            playAreaCursor = (fetchedPlayAreaCursor ?? fetchedPlayAreaCursor);
+            playAreaCursor = GetComponent<VRTK_PlayAreaCursor>();
         }
 
         protected override void OnDisable()

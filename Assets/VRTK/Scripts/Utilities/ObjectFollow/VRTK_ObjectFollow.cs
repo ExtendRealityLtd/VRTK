@@ -69,7 +69,7 @@ namespace VRTK
 
         protected virtual void OnEnable()
         {
-            gameObjectToChange = gameObjectToChange ?? gameObject;
+            gameObjectToChange = (gameObjectToChange != null ? gameObjectToChange : gameObject);
         }
 
         protected virtual void OnValidate()

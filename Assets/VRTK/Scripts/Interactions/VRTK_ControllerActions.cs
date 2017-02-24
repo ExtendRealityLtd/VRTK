@@ -188,7 +188,7 @@ namespace VRTK
             var highlighter = element.GetComponent<VRTK_BaseHighlighter>();
             if (highlighter)
             {
-                highlighter.Highlight(highlight ?? Color.white, fadeDuration);
+                highlighter.Highlight((highlight != null ? highlight : Color.white), fadeDuration);
             }
         }
 
@@ -223,7 +223,7 @@ namespace VRTK
             {
                 if (state)
                 {
-                    HighlightControllerElement(element, highlight ?? Color.white, duration);
+                    HighlightControllerElement(element, (highlight != null ? highlight : Color.white), duration);
                 }
                 else
                 {

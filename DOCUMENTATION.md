@@ -5739,7 +5739,7 @@ Abstract class that allows to change one game object's properties to follow anot
 ### Inspector Parameters
 
  * **Game Object To Follow:** The game object to follow. The followed property values will be taken from this one.
- * **Game Object To Change:** The game object to change the property values of. If left empty no game object will be changed.
+ * **Game Object To Change:** The game object to change the property values of. If left empty the game object this script is attached to will be changed.
  * **Follows Position:** Whether to follow the position of the given game object.
  * **Smooths Position:** Whether to smooth the position when following `gameObjectToFollow`.
  * **Max Allowed Per Frame Distance Difference:** The maximum allowed distance between the unsmoothed source and the smoothed target per frame to use for smoothing.

@@ -116,7 +116,7 @@ namespace VRTK
         {
             currentAxis = Vector2.zero;
             storedAxis = Vector2.zero;
-            controllerEvents = (controller ?? GetComponent<VRTK_ControllerEvents>());
+            controllerEvents = (controller != null ? controller : GetComponent<VRTK_ControllerEvents>());
             if (!controllerEvents)
             {
                 Debug.LogError("A `VRTK_ControllerEvents` script is required for the `VRTK_ObjectControl` script to work. Either the `controller` parameter is not set or no `VRTK_ControllerEvents` is attached to this GameObject.");
