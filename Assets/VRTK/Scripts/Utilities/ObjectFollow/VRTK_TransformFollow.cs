@@ -28,19 +28,17 @@ namespace VRTK
         private Transform transformToChange;
         private bool isListeningToOnPreRender;
 
-        protected virtual void OnEnable()
+        protected override void OnEnable()
         {
+            base.OnEnable();
+
             if (gameObjectToFollow == null)
             {
                 return;
             }
 
             transformToFollow = gameObjectToFollow.transform;
-
-            if (gameObjectToChange)
-            {
-                transformToChange = gameObjectToChange.transform;
-            }
+            transformToChange = gameObjectToChange.transform;
 
             if (moment == FollowMoment.OnPreRender)
             {

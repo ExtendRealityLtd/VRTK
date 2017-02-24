@@ -27,19 +27,17 @@ namespace VRTK
         private Rigidbody rigidbodyToFollow;
         private Rigidbody rigidbodyToChange;
 
-        protected virtual void OnEnable()
+        protected override void OnEnable()
         {
+            base.OnEnable();
+
             if (gameObjectToFollow == null)
             {
                 return;
             }
 
             rigidbodyToFollow = gameObjectToFollow.GetComponent<Rigidbody>();
-
-            if (gameObjectToChange)
-            {
-                rigidbodyToChange = gameObjectToChange.GetComponent<Rigidbody>();
-            }
+            rigidbodyToChange = gameObjectToChange.GetComponent<Rigidbody>();
         }
 
         protected virtual void OnDisable()
