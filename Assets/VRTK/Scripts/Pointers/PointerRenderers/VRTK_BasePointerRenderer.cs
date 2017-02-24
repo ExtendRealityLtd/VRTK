@@ -474,7 +474,6 @@ namespace VRTK
             pointerOriginTransformFollowGameObject = new GameObject(string.Format("[{0}]BasePointerRenderer_Origin_Smoothed", gameObject.name));
             pointerOriginTransformFollow = pointerOriginTransformFollowGameObject.AddComponent<VRTK_TransformFollow>();
             pointerOriginTransformFollow.enabled = false;
-            pointerOriginTransformFollow.gameObjectToChange = pointerOriginTransformFollowGameObject;
             pointerOriginTransformFollow.followsScale = false;
         }
 

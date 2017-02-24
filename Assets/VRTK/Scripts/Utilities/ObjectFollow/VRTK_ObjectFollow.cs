@@ -10,7 +10,7 @@ namespace VRTK
     {
         [Tooltip("The game object to follow. The followed property values will be taken from this one.")]
         public GameObject gameObjectToFollow;
-        [Tooltip("The game object to change the property values of. If left empty no game object will be changed.")]
+        [Tooltip("The game object to change the property values of. If left empty the game object this script is attached to will be changed.")]
         public GameObject gameObjectToChange;
 
         [Tooltip("Whether to follow the position of the given game object.")]
@@ -67,6 +67,11 @@ namespace VRTK
             }
         }
 
+        protected virtual void OnEnable()
+        {
+            gameObjectToChange = gameObjectToChange ?? gameObject;
+        }
+
         protected virtual void OnValidate()
         {
             maxAllowedPerFrameDistanceDifference = Mathf.Max(0.0001f, maxAllowedPerFrameDistanceDifference);
@@ -108,11 +113,7 @@ namespace VRTK
             }
 
             targetPosition = newPosition;
-
-            if (gameObjectToChange)
-            {
-                SetPositionOnGameObject(newPosition);
-            }
+            SetPositionOnGameObject(newPosition);
         }
 
         private void FollowRotation()
@@ -131,11 +132,7 @@ namespace VRTK
             }
 
             targetRotation = newRotation;
-
-            if (gameObjectToChange)
-            {
-                SetRotationOnGameObject(newRotation);
-            }
+            SetRotationOnGameObject(newRotation);
         }
 
         private void FollowScale()
@@ -154,11 +151,7 @@ namespace VRTK
             }
 
             targetScale = newScale;
-
-            if (gameObjectToChange)
-            {
-                SetScaleOnGameObject(newScale);
-            }
+            SetScaleOnGameObject(newScale);
         }
     }
 }
