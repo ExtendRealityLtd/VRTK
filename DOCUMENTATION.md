@@ -2214,6 +2214,7 @@ The highlighting of an Interactable Object is defaulted to use the `VRTK_Materia
  * **Disable When Idle:** If this is checked then the interactable object script will be disabled when the object is not being interacted with. This will eliminate the potential number of calls the interactable objects make each frame.
  * **Touch Highlight Color:** The colour to highlight the object when it is touched. This colour will override any globally set colour (for instance on the `VRTK_InteractTouch` script).
  * **Allowed Touch Controllers:** Determines which controller can initiate a touch action.
+ * **Ignored Colliders:** An array of colliders on the object to ignore when being touched.
  * **Is Grabbable:** Determines if the object can be grabbed.
  * **Hold Button To Grab:** If this is checked then the grab button on the controller needs to be continually held down to keep grabbing. If this is unchecked the grab button toggles the grab action with one button press to grab and another to release.
  * **Stay Grabbed On Teleport:** If this is checked then the object will stay grabbed to the controller when a teleport occurs. If it is unchecked then the object will be released when a teleport occurs.
@@ -2610,6 +2611,17 @@ The IsSwappable method returns whether the object can be grabbed with one contro
    * `bool` - Returns true if the obejct has a secondary action, returns false if it has no secondary action or is swappable.
 
 The PerformSecondaryAction method returns whether the object has a secondary action that can be performed when grabbing the object with a secondary controller.
+
+#### ResetIgnoredColliders/0
+
+  > `public virtual void ResetIgnoredColliders()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The ResetIgnoredColliders method is used to clear any stored ignored colliders in case the `Ignored Colliders` array parameter is changed at runtime. This needs to be called manually if changes are made at runtime.
 
 ### Example
 
