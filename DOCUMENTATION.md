@@ -6081,7 +6081,7 @@ The GetControllerIndex method returns the index of the given controller.
    * `uint index` - The index of the controller to find.
    * `bool actual` - If true it will return the actual controller, if false it will return the script alias controller GameObject.
   * Returns
-   * `GameObject` -
+   * `GameObject` - The GameObject of the controller
 
 The GetControllerByIndex method returns the GameObject of a controller with a specific index.
 
@@ -7056,7 +7056,7 @@ The GetControllerIndex method returns the index of the given controller.
    * `uint index` - The index of the controller to find.
    * `bool actual` - If true it will return the actual controller, if false it will return the script alias controller GameObject.
   * Returns
-   * `GameObject` -
+   * `GameObject` - The GameObject of the controller
 
 The GetControllerByIndex method returns the GameObject of a controller with a specific index.
 
@@ -8025,7 +8025,7 @@ The GetControllerIndex method returns the index of the given controller.
    * `uint index` - The index of the controller to find.
    * `bool actual` - If true it will return the actual controller, if false it will return the script alias controller GameObject.
   * Returns
-   * `GameObject` -
+   * `GameObject` - The GameObject of the controller
 
 The GetControllerByIndex method returns the GameObject of a controller with a specific index.
 
@@ -8992,7 +8992,7 @@ The GetControllerIndex method returns the index of the given controller.
    * `uint index` - The index of the controller to find.
    * `bool actual` - If true it will return the actual controller, if false it will return the script alias controller GameObject.
   * Returns
-   * `GameObject` -
+   * `GameObject` - The GameObject of the controller
 
 The GetControllerByIndex method returns the GameObject of a controller with a specific index.
 
@@ -9959,7 +9959,7 @@ The GetControllerIndex method returns the index of the given controller.
    * `uint index` - The index of the controller to find.
    * `bool actual` - If true it will return the actual controller, if false it will return the script alias controller GameObject.
   * Returns
-   * `GameObject` -
+   * `GameObject` - The GameObject of the controller
 
 The GetControllerByIndex method returns the GameObject of a controller with a specific index.
 

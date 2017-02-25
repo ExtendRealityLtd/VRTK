@@ -54,7 +54,7 @@ namespace VRTK
         /// GetTouch gets touch position adjusted coordinates. Abs(x) and abs(y) always 0 to 1
         /// </summary>
         /// <param name="origin">like a numeric keypad, 1= lower left, 2=lower-center, 5=center etc</param>
-        /// <returns></returns>
+        /// <returns>A Vector2 of the touch position.</returns>
         private Vector2 GetTouch(int origin = 5)
         {
             if (!GvrController.IsTouching)
