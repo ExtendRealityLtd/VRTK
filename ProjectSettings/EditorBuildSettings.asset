@@ -91,3 +91,5 @@ EditorBuildSettings:
     path: Assets/VRTK/Examples/042_CameraRig_MoveInPlace.unity
   - enabled: 1
     path: Assets/VRTK/Examples/043_Controller_SecondaryControllerActions.unity
+  - enabled: 1
+    path: Assets/VRTK/Examples/044_CameraRig_RestrictedTeleportZones.unity
