@@ -175,6 +175,7 @@ namespace VRTK
                 isActive = true;
                 ToggleCursor(sender, false);
                 EnablePoint();
+                OnDestinationMarkerEnter(SetDestinationMarkerEvent(0f, e.raycastHit.transform, e.raycastHit, e.raycastHit.transform.position, e.controllerIndex));
             }
         }
 
@@ -185,6 +186,7 @@ namespace VRTK
                 isActive = false;
                 ToggleCursor(sender, true);
                 ResetPoint();
+                OnDestinationMarkerExit(SetDestinationMarkerEvent(0f, e.raycastHit.transform, e.raycastHit, e.raycastHit.transform.position, e.controllerIndex));
             }
         }
 
