@@ -5,13 +5,19 @@
     using UnityEngine.UI;
     using System.Collections.Generic;
 
-    public class VRTK_EventSystemVRInput : PointerInputModule
+    public class VRTK_VRInputModule : PointerInputModule
     {
         public List<VRTK_UIPointer> pointers = new List<VRTK_UIPointer>();
 
         public void Initialise()
         {
             pointers.Clear();
+        }
+
+        //Needed to allow other regular (non-VR) InputModules in combination with VRTK_EventSystem
+        public override bool IsModuleSupported()
+        {
+            return false;
         }
 
         public override void Process()
@@ -108,6 +114,7 @@
                 CheckPointerHoverClick(pointer, results);
                 if (!ValidElement(pointer.pointerEventData.pointerEnter))
                 {
+                    pointer.pointerEventData.pointerEnter = null;
                     return;
                 }
 
@@ -167,10 +174,10 @@
         {
             switch (pointer.clickMethod)
             {
-                case VRTK_UIPointer.ClickMethods.Click_On_Button_Up:
+                case VRTK_UIPointer.ClickMethods.ClickOnButtonUp:
                     ClickOnUp(pointer, results);
                     break;
-                case VRTK_UIPointer.ClickMethods.Click_On_Button_Down:
+                case VRTK_UIPointer.ClickMethods.ClickOnButtonDown:
                     ClickOnDown(pointer, results);
                     break;
             }
@@ -253,7 +260,7 @@
 
         private void Drag(VRTK_UIPointer pointer, List<RaycastResult> results)
         {
-            pointer.pointerEventData.dragging = pointer.controller.uiClickPressed && pointer.pointerEventData.delta != Vector2.zero;
+            pointer.pointerEventData.dragging = pointer.SelectionButtonActive() && pointer.pointerEventData.delta != Vector2.zero;
 
             if (pointer.pointerEventData.pointerDrag)
             {

@@ -83,14 +83,17 @@ namespace VRTK
         [Header("Action Alias Buttons")]
 
         [Tooltip("The button to use for the action of turning a laser pointer on / off.")]
+        [Obsolete("`VRTK_ControllerEvents.pointerToggleButton` is no longer used in the new `VRTK_Pointer` class. This parameter will be removed in a future version of VRTK.")]
         public ButtonAlias pointerToggleButton = ButtonAlias.Touchpad_Press;
         [Tooltip("The button to use for the action of setting a destination marker from the cursor position of the pointer.")]
+        [Obsolete("`VRTK_ControllerEvents.pointerSetButton` is no longer used in the new `VRTK_Pointer` class. This parameter will be removed in a future version of VRTK.")]
         public ButtonAlias pointerSetButton = ButtonAlias.Touchpad_Press;
         [Tooltip("The button to use for the action of grabbing game objects.")]
         public ButtonAlias grabToggleButton = ButtonAlias.Grip_Press;
         [Tooltip("The button to use for the action of using game objects.")]
         public ButtonAlias useToggleButton = ButtonAlias.Trigger_Press;
         [Tooltip("The button to use for the action of clicking a UI element.")]
+        [Obsolete("`VRTK_ControllerEvents.uiClickButton` is no longer used in the `VRTK_UIPointer` class. This parameter will be removed in a future version of VRTK.")]
         public ButtonAlias uiClickButton = ButtonAlias.Trigger_Press;
         [Tooltip("The button to use for the action of bringing up an in-game menu.")]
         public ButtonAlias menuToggleButton = ButtonAlias.Button_Two_Press;
@@ -1066,6 +1069,7 @@ namespace VRTK
             }
 
             //Trigger Axis
+            currentTriggerAxis.x = (triggerTouched ? currentTriggerAxis.x : 0f);
             if (Vector2ShallowEquals(triggerAxis, currentTriggerAxis))
             {
                 triggerAxisChanged = false;
@@ -1074,7 +1078,6 @@ namespace VRTK
             {
                 OnTriggerAxisChanged(SetButtonEvent(ref triggerAxisChanged, true, currentTriggerAxis.x));
             }
-
 
             //Grip Touched
             if (VRTK_SDK_Bridge.IsGripTouchedDownOnIndex(controllerIndex))
@@ -1131,6 +1134,7 @@ namespace VRTK
             }
 
             //Grip Axis
+            currentGripAxis.x = (gripTouched ? currentGripAxis.x : 0f);
             if (Vector2ShallowEquals(gripAxis, currentGripAxis))
             {
                 gripAxisChanged = false;
@@ -1164,9 +1168,11 @@ namespace VRTK
             {
                 OnTouchpadTouchEnd(SetButtonEvent(ref touchpadTouched, false, 0f));
                 EmitAlias(ButtonAlias.Touchpad_Touch, false, 0f, ref touchpadTouched);
+                touchpadAxis = Vector2.zero;
             }
 
-            if (Vector2ShallowEquals(touchpadAxis, currentTouchpadAxis))
+            //Touchpad Axis
+            if (!touchpadTouched || Vector2ShallowEquals(touchpadAxis, currentTouchpadAxis))
             {
                 touchpadAxisChanged = false;
             }
@@ -1240,9 +1246,9 @@ namespace VRTK
             }
 
             // Save current touch and trigger settings to detect next change.
-            touchpadAxis = new Vector2(currentTouchpadAxis.x, currentTouchpadAxis.y);
-            triggerAxis = new Vector2(currentTriggerAxis.x, currentTriggerAxis.y);
-            gripAxis = new Vector2(currentGripAxis.x, currentGripAxis.y);
+            touchpadAxis = (touchpadAxisChanged ? new Vector2(currentTouchpadAxis.x, currentTouchpadAxis.y) : touchpadAxis);
+            triggerAxis = (triggerAxisChanged ? new Vector2(currentTriggerAxis.x, currentTriggerAxis.y) : triggerAxis);
+            gripAxis = (gripAxisChanged ? new Vector2(currentGripAxis.x, currentGripAxis.y) : gripAxis);
 
             hairTriggerDelta = VRTK_SDK_Bridge.GetTriggerHairlineDeltaOnIndex(controllerIndex);
             hairGripDelta = VRTK_SDK_Bridge.GetGripHairlineDeltaOnIndex(controllerIndex);

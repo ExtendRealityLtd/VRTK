@@ -234,7 +234,7 @@ namespace VRTK
             triggerCollider.size = triggerBounds.size;
         }
 
-        protected Vector3 getThirdDirection(Vector3 axis1, Vector3 axis2)
+        protected Vector3 GetThirdDirection(Vector3 axis1, Vector3 axis2)
         {
             bool xTaken = axis1.x != 0 || axis2.x != 0;
             bool yTaken = axis1.y != 0 || axis2.y != 0;

@@ -2,12 +2,13 @@
 > ### VRTK - Virtual Reality Toolkit
 > A productive VR Toolkit for rapidly building VR solutions in Unity3d.
 
-## VRTK has just launched a Kickstarter campaign to fund version 4 and beyond. [Visit the Kickstarter campaign and pledge today! :)](https://www.kickstarter.com/projects/thestonefox/virtual-reality-toolkit-vrtk-version-4-and-beyond)
-
 [![Slack](http://sysdia2.co.uk/badge.svg)](http://invite.vrtk.io)
+[![Documentation](https://img.shields.io/badge/readme-docs-3484C6.svg)](http://docs.vrtk.io)
 [![Twitter Follow](https://img.shields.io/twitter/follow/vr_toolkit.svg?style=flat&label=twitter)](https://twitter.com/VR_Toolkit)
 [![YouTube](https://img.shields.io/badge/youtube-channel-e52d27.svg)](http://videos.vrtk.io)
-[![Waffle](https://img.shields.io/badge/project-roadmap-blue.svg)](http://tracker.vrtk.io)
+[![Waffle](https://img.shields.io/badge/project-backlog-78bdf2.svg)](http://tracker.vrtk.io)
+
+[![patreon_logo](https://cloud.githubusercontent.com/assets/1029673/23074410/8c248822-f530-11e6-9156-aeef1262be86.png)](https://www.patreon.com/vrtk)
 
 | Supported SDK | Download Link |
 |---------------|---------------|
@@ -15,6 +16,9 @@
 | SteamVR Unity Asset | [SteamVR Plugin] |
 | Oculus Utilities Unity Package | [Oculus Utilities] |
 | Ximmerse Unity SDK Package | [Ximmerse Unity SDK] |
+| *Google VR SDK for Unity | [Google VR SDK for Unity]
+
+_*experimental_
 
 ## Documentation
 
@@ -27,7 +31,7 @@ online at [http://docs.vrtk.io](http://docs.vrtk.io).
 
 ## Frequently Asked Questions
 
-If you have an issue or question then check the [FAQ] document to see
+If you have an issue or question then check the [FAQ.md] document to see
 if your query has already been answered.
 
 ## Getting Started
@@ -38,99 +42,9 @@ if your query has already been answered.
  * Open `VRTK` within Unity3d.
  * Add the `VRTK_SDKManager` script to a GameObject in the scene.
 
-<details><summary>**Instructions for using the VR Simulator**</summary>
+For further information about setting up a specific SDK, check out the
+[GETTING_STARTED.md] document.
 
- * Drag the `VRSimulatorCameraRig` prefab from the VRTK/Prefabs into the
- scene.
- * Select the GameObject with the `VRTK_SDKManager` script attached
- to it.
-  * Select `Simulator` for each of the SDK Choices.
-  * Click the `Auto Populate Linked Objects` button to find the
-  relevant Linked Objects.
- * Use the Left Alt to switch between mouse look and move a hand.
- * Press Tab to switch between left/right hands.
- * Hold Left Shift to change from translation to rotation for the hands.
- * Hold Left Crtl to switch between X/Y and X/Z axis.
- * All above keys can be remapped using the inspector on the
- `VRSimulatorCameraRig` prefab.
- * Button mapping for the VR control are as follows:
-  * Grip: Left mouse button
-  * Trigger: Right mouse button
-  * Touchpad Press: Q
-  * Button One: E
-  * Button Two: R
-
-</details>
- 
-<details><summary>**Instructions for using the SteamVR Unity3d asset**</summary>
-
- * Import the [SteamVR Plugin] from the Unity Asset Store.
- * Drag the `[CameraRig]` prefab from the SteamVR plugin into the
- scene.
- * Check that `Virtual Reality Supported` is ticked in the
- `Edit -> Project Settings -> Player` menu.
- * Ensure that `OpenVR` is added in the `Virtual Reality SDKs` list
- in the `Edit -> Project Settings -> Player` menu.
- * Select the GameObject with the `VRTK_SDKManager` script attached
- to it.
-  * Select `Steam VR` for each of the SDK Choices.
-  * Click the `Auto Populate Linked Objects` button to find the
-  relevant Linked Objects.
- * Optionally, browse the `Examples` scenes for example usage of the
- scripts.
-
-</details>
-
-<details><summary>**Instructions for using the Oculus Utilities Unity3d package**</summary>
-
- * Download the [Oculus Utilities] from the Oculus developer website.
- * Import the `OculusUtilities.unitypackage` into the project.
- * Drag the `OVRCameraRig` prefab from the Oculus package into the
- scene.
- * Check that `Virtual Reality Supported` is ticked in the
- `Edit -> Project Settings -> Player` menu.
- * Ensure that `Oculus` is added in the `Virtual Reality SDKs` list
- in the `Edit -> Project Settings -> Player` menu.
- * Select the GameObject with the `VRTK_SDKManager` script attached
- to it.
-  * Select `Oculus VR` for each of the SDK Choices.
-  * Click the `Auto Populate Linked Objects` button to find the
-  relevant Linked Objects.
-
-</details>
-</details>
-
-<details><summary>**Instructions for using the Ximmerse Unity SDK**</summary>
-
- * Download the [Ximmerse Unity SDK] from the Ximmerse SDK Github page.
- * Import the `XIM01-v2.0.1.unitypackage` into the project.
- * Drag the `VRCameraRig` prefab from the Ximmerse Unity SDK into the scene.
-	>It is recommened to use "Floor Level" as the Tracking Origin Type, with `VRCameraRig` positon's set to `(0f,0f,0f)`.
-	
-	>You could also use "Eye Level" as the Tracking Origin Type. However, the positons of `VRCameraRig` is recommended to set to `(0f,1.675f,0f)` in this case. 
-	
-	> Please make sure SimplePicker.cs is NOT attached on gameobject "cobra02-L" and "cobra02-R". SimplePicker script is provided by Ximmerse SDK, while having the script on the profab may break VRTK grab functionality. 
-
- * Change platform to Android.
- 	>Currently Ximmerse 6DOF tracking is only supported on Android. 3DOF tracking is supported on both iOS and Android. We are getting MFI cert from Apple at the moment.  
- 
- * Check that `Virtual Reality Supported` is ticked in the
- `Edit -> Project Settings -> Player` menu.
- * Ensure that `Oculus` is added in the `Virtual Reality SDKs` list
- in the `Edit -> Project Settings -> Player` menu.
- * Make sure `VRTK_SDK_XIMMERSEVR` is defined in Scripting Define Symbols.
- * Select the GameObject with the `VRTK_SDKManager` script attached
- to it.
- * Select `Ximmerse VR` for each of the SDK Choices.
- * Config Linked Objects:
- 	* Actual Boundaries = VRCameraRig
- 	* Actual Headset = CenterEyeAnchor
- 	* Actual Left Controller = LeftHandAnchor
- 	* Actual Right Controller = RightHandAnchor
- 	* Model Alias Left Controller = _VisibleObject (child of LeftHandAnchor)
- 	* Model Right Left Controller = _VisibleObject (child of RightHandAnchor)
-
-</details>
 
 ## What's In The Box
 
@@ -169,14 +83,14 @@ package above.
 
 Many games and experiences have already been made with VRTK.
 
-Check out the [Made With VRTK Document] to see the full list.
+Check out the [MADEWITHVRTK.md] document to see the full list.
 
 ## Contributing
 
 I would love to get contributions from you! Follow the instructions
 below on how to make pull requests.
 
-For the full contribution guidelines see the [Contribution Document].
+For the full contribution guidelines see the [CONTRIBUTING.md] document.
 
 ## Pull requests
 
@@ -196,11 +110,13 @@ Code released under the [MIT License].
 [SteamVR Plugin for Unity3d Github Repo]: https://github.com/ValveSoftware/openvr/tree/master/unity_package/Assets/SteamVR
 [Oculus Utilities]: https://developer3.oculus.com/downloads/game-engines/1.10.0/Oculus_Utilities_for_Unity_5/
 [Ximmerse Unity SDK]: https://github.com/Ximmerse/SDK/tree/master/Unity
+[Google VR SDK for Unity]: https://developers.google.com/vr/unity/download
 [MIT License]: https://github.com/thestonefox/SteamVR_Unity_Toolkit/blob/master/LICENSE
-[Contribution Document]: https://github.com/thestonefox/SteamVR_Unity_Toolkit/blob/master/CONTRIBUTING.md
-[Made With VRTK Document]: https://github.com/thestonefox/SteamVR_Unity_Toolkit/blob/master/MADEWITHVRTK.md
+[CONTRIBUTING.md]: https://github.com/thestonefox/SteamVR_Unity_Toolkit/blob/master/CONTRIBUTING.md
+[MADEWITHVRTK.md]: https://github.com/thestonefox/SteamVR_Unity_Toolkit/blob/master/MADEWITHVRTK.md
 [DOCUMENTATION.md]: https://github.com/thestonefox/SteamVR_Unity_Toolkit/blob/master/DOCUMENTATION.md
+[GETTING_STARTED.md]: https://github.com/thestonefox/SteamVR_Unity_Toolkit/blob/master/GETTING_STARTED.md
 [EXAMPLES.md]: https://github.com/thestonefox/SteamVR_Unity_Toolkit/blob/master/EXAMPLES.md
 [Fork]: http://help.github.com/fork-a-repo/
 [Open a Pull Request]: https://help.github.com/articles/using-pull-requests/
-[FAQ]: https://github.com/thestonefox/SteamVR_Unity_Toolkit/blob/master/FAQ.md
+[FAQ.md]: https://github.com/thestonefox/SteamVR_Unity_Toolkit/blob/master/FAQ.md

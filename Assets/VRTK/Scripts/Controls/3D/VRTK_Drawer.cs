@@ -168,7 +168,7 @@ namespace VRTK
             }
             if (drawerSnapForceCreated)
             {
-                drawerSnapForce.force = getThirdDirection(drawerJoint.axis, drawerJoint.secondaryAxis) * (subDirection * -50f);
+                drawerSnapForce.force = GetThirdDirection(drawerJoint.axis, drawerJoint.secondaryAxis) * (subDirection * -50f);
             }
 
             return true;

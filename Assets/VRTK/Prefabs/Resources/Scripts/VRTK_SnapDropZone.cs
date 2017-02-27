@@ -326,7 +326,7 @@ namespace VRTK
                 if (currentIOCheck && currentIOCheck.GetStoredSnapDropZone() != null && currentIOCheck.GetStoredSnapDropZone() != gameObject)
                 {
                     currentValidSnapObject = null;
-                    if (isHighlighted && highlightObject)
+                    if (isHighlighted && highlightObject && !highlightAlwaysActive)
                     {
                         highlightObject.SetActive(false);
                     }

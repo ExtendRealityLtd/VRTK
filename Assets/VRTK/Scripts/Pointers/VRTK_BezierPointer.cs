@@ -2,6 +2,7 @@
 namespace VRTK
 {
     using UnityEngine;
+    using System;
 
     /// <summary>
     /// The Bezier Pointer emits a curved line (made out of game objects) from the end of the attached object to a point on a ground surface (at any height).
@@ -18,6 +19,7 @@ namespace VRTK
     ///
     /// `VRTK/Examples/036_Controller_CustomCompoundPointer' shows how to display an object (a teleport beam) only if the teleport location is valid, and can create an animated trail along the tracer curve.
     /// </example>
+    [Obsolete("`VRTK_BezierPointer` has been replaced with `VRTK_BezierPointerRenderer` attached to a `VRTK_Pointer`. This script will be removed in a future version of VRTK.")]
     public class VRTK_BezierPointer : VRTK_BasePointer
     {
         [Header("Bezier Pointer Settings", order = 3)]
@@ -178,9 +180,10 @@ namespace VRTK
 
         private Vector3 ProjectForwardBeam()
         {
-            var attachedRotation = Vector3.Dot(Vector3.up, transform.forward.normalized);
+            var origin = GetOrigin();
+            var attachedRotation = Vector3.Dot(Vector3.up, origin.forward.normalized);
             var calculatedLength = pointerLength;
-            var useForward = GetOriginForward();
+            var useForward = origin.forward;
             if ((attachedRotation * 100f) > beamHeightLimitAngle)
             {
                 useForward = new Vector3(useForward.x, fixedForwardBeamForward.y, useForward.z);
@@ -189,11 +192,11 @@ namespace VRTK
             }
             else
             {
-                fixedForwardBeamForward = GetOriginForward();
+                fixedForwardBeamForward = origin.forward;
             }
 
             var actualLength = calculatedLength;
-            Ray pointerRaycast = new Ray(GetOriginPosition(), useForward);
+            Ray pointerRaycast = new Ray(origin.position, useForward);
 
             RaycastHit collidedWith;
             var hasRayHit = Physics.Raycast(pointerRaycast, out collidedWith, calculatedLength, ~layersToIgnore);
@@ -287,7 +290,7 @@ namespace VRTK
                 collisionCheckFrequency = Mathf.Clamp(collisionCheckFrequency, 0, pointerDensity);
                 Vector3[] beamPoints = new Vector3[]
 {
-                GetOriginPosition(),
+                GetOrigin().position,
                 jointPosition + new Vector3(0f, beamCurveOffset, 0f),
                 downPosition,
                 downPosition,
@@ -330,7 +333,7 @@ namespace VRTK
         {
             Vector3[] beamPoints = new Vector3[]
             {
-                GetOriginPosition(),
+                GetOrigin(false).position,
                 jointPosition + new Vector3(0f, beamCurveOffset, 0f),
                 downPosition,
                 downPosition,

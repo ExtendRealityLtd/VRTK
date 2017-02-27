@@ -1,10 +1,10 @@
-﻿// Warp Touchpad Control Action|TouchpadControlActions|25040
+﻿// Warp Object Control Action|ObjectControlActions|25040
 namespace VRTK
 {
     using UnityEngine;
 
     /// <summary>
-    /// The Warp Touchpad Control Action script is used to warp the controlled GameObject a given distance when changing the touchpad axis.
+    /// The Warp Object Control Action script is used to warp the controlled GameObject a given distance when changing the axis.
     /// </summary>
     /// <remarks>
     /// The effect is a immediate snap to a new position in the given direction.
@@ -12,9 +12,9 @@ namespace VRTK
     /// <example>
     /// `VRTK/Examples/017_CameraRig_TouchpadWalking` has a collection of walls and slopes that can be traversed by the user with the touchpad. There is also an area that can only be traversed if the user is crouching.
     ///
-    /// To enable the Warp Touchpad Control Action, ensure one of the `TouchpadControlOptions` children (located under the Controller script alias) has the `Warp` control script active.
+    /// To enable the Warp Object Control Action, ensure one of the `TouchpadControlOptions` children (located under the Controller script alias) has the `Warp` control script active.
     /// </example>
-    public class VRTK_WarpTouchpadControlAction : VRTK_BaseTouchpadControlAction
+    public class VRTK_WarpObjectControlAction : VRTK_BaseObjectControlAction
     {
         [Tooltip("The distance to warp in the facing direction.")]
         public float warpDistance = 1f;

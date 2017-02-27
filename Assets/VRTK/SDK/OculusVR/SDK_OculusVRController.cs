@@ -128,7 +128,7 @@ namespace VRTK
         /// </summary>
         /// <param name="index">The index of the controller to find.</param>
         /// <param name="actual">If true it will return the actual controller, if false it will return the script alias controller GameObject.</param>
-        /// <returns></returns>
+        /// <returns>The GameObject of the controller</returns>
         public override GameObject GetControllerByIndex(uint index, bool actual = false)
         {
             SetTrackedControllerCaches();

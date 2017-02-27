@@ -243,3 +243,7 @@ A scene that demonstrates how the user can move and traverse colliders by either
 ### 043_Controller_SecondaryControllerActions
 
 A scene that demonstrates the ability to grab an object with one controller and scale it by grabbing and pulling with the second controller.
+
+### 044_CameraRig_RestrictedTeleportZones
+
+A scene that uses the `VRTK_DestinationPoint` prefab to set up a collection of pre-defined teleport locations.

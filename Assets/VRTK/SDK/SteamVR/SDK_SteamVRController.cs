@@ -98,7 +98,7 @@ namespace VRTK
         /// </summary>
         /// <param name="index">The index of the controller to find.</param>
         /// <param name="actual">If true it will return the actual controller, if false it will return the script alias controller GameObject.</param>
-        /// <returns></returns>
+        /// <returns>The GameObject of the controller</returns>
         public override GameObject GetControllerByIndex(uint index, bool actual = false)
         {
             SetTrackedControllerCaches();
@@ -824,15 +824,26 @@ namespace VRTK
 
             if (eventClass == null)
             {
-                //SteamVR plugin >= 1.2.0
                 eventClass = executingAssembly.GetType("SteamVR_Events");
                 MethodInfo systemMethod = eventClass.GetMethod("System", BindingFlags.Public | BindingFlags.Static);
-                object steamVREventInstance = systemMethod.Invoke(null, new object[] { "TrackedDeviceRoleChanged" });
+
+                object steamVREventInstance;
+                if (systemMethod.GetParameters()[0].ParameterType == typeof(string))
+                {
+                    //SteamVR plugin == 1.2.0
+                    steamVREventInstance = systemMethod.Invoke(null, new object[] { "TrackedDeviceRoleChanged" });
+                }
+                else
+                {
+                    //SteamVR plugin >= 1.2.1
+                    steamVREventInstance = systemMethod.Invoke(null, new object[] { EVREventType.VREvent_TrackedDeviceRoleChanged });
+                }
+
                 MethodInfo listenMethod = steamVREventInstance.GetType().GetMethod("Listen", BindingFlags.Public | BindingFlags.Instance);
                 Type listenMethodParameterType = listenMethod.GetParameters()[0].ParameterType;
 
                 targetMethod = targetMethod.MakeGenericMethod(listenMethodParameterType.GetGenericArguments()[0]);
-                var targetMethodDelegate = Delegate.CreateDelegate(listenMethodParameterType, this, targetMethod);
+                Delegate targetMethodDelegate = Delegate.CreateDelegate(listenMethodParameterType, this, targetMethod);
                 listenMethod.Invoke(steamVREventInstance, new object[] { targetMethodDelegate });
             }
             else
