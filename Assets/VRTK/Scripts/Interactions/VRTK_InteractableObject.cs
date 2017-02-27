@@ -757,7 +757,7 @@ namespace VRTK
 
         protected virtual void IgnoreColliders(GameObject touchingObject)
         {
-            if (!currentIgnoredColliders.Contains(touchingObject))
+            if (ignoredColliders != null && !currentIgnoredColliders.Contains(touchingObject))
             {
                 bool objectIgnored = false;
                 Collider[] touchingColliders = touchingObject.GetComponentsInChildren<Collider>();
