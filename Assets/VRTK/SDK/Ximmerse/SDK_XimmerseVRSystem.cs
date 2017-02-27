@@ -1,10 +1,11 @@
-﻿namespace VRTK
+﻿// XimmerseVR System|SDK_XimmerseVR|001
+namespace VRTK
 {
-    #if VRTK_SDK_XIMMERSEVR
+#if VRTK_SDK_XIMMERSEVR
     using Ximmerse.InputSystem;
 
     /// <summary>
-    /// The SteamVR System SDK script provides a bridge to the SteamVR SDK.
+    /// The XimmerseVR System SDK script provides a bridge to the XimmerseVR SDK.
     /// </summary>
     public class SDK_XimmerseVRSystem : SDK_BaseSystem
     {
@@ -35,9 +36,9 @@
             
         }
     }
-    #else
-	public class SDK_XimmerseVRSystem : SDK_FallbackSystem
-	{
-	}
-	#endif
+#else
+    public class SDK_XimmerseVRSystem : SDK_FallbackSystem
+    {
+    }
+#endif
 }

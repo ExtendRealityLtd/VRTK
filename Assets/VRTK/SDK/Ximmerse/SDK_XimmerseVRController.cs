@@ -1,11 +1,15 @@
-﻿namespace VRTK
+﻿// XimmerseVR Controller|SDK_XimmerseVR|003
+namespace VRTK
 {
-    #if VRTK_SDK_XIMMERSEVR
+#if VRTK_SDK_XIMMERSEVR
     using System.Collections;
     using System.Collections.Generic;
     using UnityEngine;
     using Ximmerse.InputSystem;
 
+    /// <summary>
+    /// The XimmerseVR Controller SDK script provides a bridge to SDK methods that deal with the input devices.
+    /// </summary>
     public class SDK_XimmerseVRController : SDK_BaseController
     {
         private TrackedObject cachedLeftTrackedObject;
@@ -125,7 +129,7 @@
         /// </summary>
         /// <param name="index">The index of the controller to find.</param>
         /// <param name="actual">If true it will return the actual controller, if false it will return the script alias controller GameObject.</param>
-        /// <returns></returns>
+        /// <returns>The GameObject of the controller</returns>
         public override GameObject GetControllerByIndex(uint index, bool actual = false)
         {
             SetTrackedControllerCaches();
@@ -994,9 +998,9 @@
             return result;
         }
     }
-    #else
-	public class SDK_XimmerseVRController : SDK_FallbackController
-	{
-	}
-	#endif
+#else
+    public class SDK_XimmerseVRController : SDK_FallbackController
+    {
+    }
+#endif
 }

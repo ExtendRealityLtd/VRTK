@@ -15,7 +15,7 @@
 | VR Simulator | Included |
 | SteamVR Unity Asset | [SteamVR Plugin] |
 | Oculus Utilities Unity Package | [Oculus Utilities] |
-| Ximmerse Unity SDK Package | [Ximmerse Unity SDK] |
+| *Ximmerse Unity SDK Package | [Ximmerse Unity SDK] |
 | *Google VR SDK for Unity | [Google VR SDK for Unity]
 
 _*experimental_

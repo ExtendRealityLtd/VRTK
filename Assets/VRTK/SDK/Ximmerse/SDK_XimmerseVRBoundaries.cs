@@ -1,10 +1,11 @@
-﻿namespace VRTK
+﻿// XimmerseVR Boundaries|SDK_XimmerseVR|004
+namespace VRTK
 {
-    #if VRTK_SDK_XIMMERSEVR
+#if VRTK_SDK_XIMMERSEVR
     using UnityEngine;
 
     /// <summary>
-    /// The SteamVR Boundaries SDK script provides a bridge to the SteamVR SDK play area.
+    /// The XimmerseVR Boundaries SDK script provides a bridge to the XimmerseVR SDK play area.
     /// </summary>
     public class SDK_XimmerseVRBoundaries : SDK_BaseBoundaries
     {
@@ -69,8 +70,8 @@
             return true;
         }
     }
-    #else
-	public class SDK_XimmerseVRBoundaries : SDK_FallbackBoundaries
+#else
+    public class SDK_XimmerseVRBoundaries : SDK_FallbackBoundaries
     {
     }
 #endif

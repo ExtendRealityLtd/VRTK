@@ -1,13 +1,14 @@
-﻿namespace VRTK
+﻿// XimmerseVR Headset|SDK_XimmerseVR|002
+namespace VRTK
 {
-    #if VRTK_SDK_XIMMERSEVR
+#if VRTK_SDK_XIMMERSEVR
     using System.Collections.Generic;
     using Ximmerse.InputSystem;
     using Ximmerse.VR;
     using UnityEngine;
 
     /// <summary>
-    /// The SteamVR Headset SDK script provides a bridge to the SteamVR SDK.
+    /// The XimmerseVR Headset SDK script provides a bridge to the XimmerseVR SDK.
     /// </summary>
     public class SDK_XimmerseVRHeadset : SDK_BaseHeadset
     {
@@ -125,9 +126,9 @@
             }
         }
     }
-    #else
-	public class SDK_XimmerseVRHeadset : SDK_FallbackHeadset
-	{
-	}
-	#endif
+#else
+    public class SDK_XimmerseVRHeadset : SDK_FallbackHeadset
+    {
+    }
+#endif
 }
