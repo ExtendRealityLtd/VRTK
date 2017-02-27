@@ -72,6 +72,7 @@ namespace VRTK
             if (controllingPointer)
             {
                 controllingPointer.ResetActivationTimer(true);
+                controllingPointer.ResetSelectionTimer(true);
             }
         }
 

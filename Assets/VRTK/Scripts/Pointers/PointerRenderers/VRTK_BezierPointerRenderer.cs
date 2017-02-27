@@ -78,7 +78,7 @@ namespace VRTK
         {
             TogglePointerCursor(pointerState, actualState);
             TogglePointerTracer(pointerState, actualState);
-            if (actualState && tracerVisibility != VisibilityStates.AlwaysOn)
+            if (actualTracer != null && actualState && tracerVisibility != VisibilityStates.AlwaysOn)
             {
                 ToggleRendererVisibility(actualTracer.gameObject, false);
                 AddVisibleRenderer(actualTracer.gameObject);
@@ -97,6 +97,7 @@ namespace VRTK
             if (controllingPointer)
             {
                 controllingPointer.ResetActivationTimer(true);
+                controllingPointer.ResetSelectionTimer(true);
             }
         }
 
@@ -262,7 +263,7 @@ namespace VRTK
             Vector3 newDownPosition = downPosition;
             Vector3 newJointPosition = jointPosition;
 
-            if (collisionCheckFrequency > 0)
+            if (collisionCheckFrequency > 0 && actualTracer != null)
             {
                 collisionCheckFrequency = Mathf.Clamp(collisionCheckFrequency, 0, tracerDensity);
                 Vector3[] beamPoints = new Vector3[]
@@ -309,22 +310,25 @@ namespace VRTK
 
         protected virtual void DisplayCurvedBeam(Vector3 jointPosition, Vector3 downPosition)
         {
-            Vector3[] beamPoints = new Vector3[]
+            if (actualTracer != null)
             {
+                Vector3[] beamPoints = new Vector3[]
+                {
                 GetOrigin(false).position,
                 jointPosition + new Vector3(0f, curveOffset, 0f),
                 downPosition,
                 downPosition,
-            };
-            var tracerMaterial = (customTracer ? null : defaultMaterial);
-            actualTracer.SetPoints(beamPoints, tracerMaterial, currentColor);
-            if (tracerVisibility == VisibilityStates.AlwaysOff)
-            {
-                TogglePointerTracer(false, false);
-            }
-            else if (controllingPointer)
-            {
-                TogglePointerTracer(controllingPointer.IsPointerActive(), controllingPointer.IsPointerActive());
+                };
+                var tracerMaterial = (customTracer ? null : defaultMaterial);
+                actualTracer.SetPoints(beamPoints, tracerMaterial, currentColor);
+                if (tracerVisibility == VisibilityStates.AlwaysOff)
+                {
+                    TogglePointerTracer(false, false);
+                }
+                else if (controllingPointer)
+                {
+                    TogglePointerTracer(controllingPointer.IsPointerActive(), controllingPointer.IsPointerActive());
+                }
             }
         }
 
@@ -336,7 +340,10 @@ namespace VRTK
         protected virtual void TogglePointerTracer(bool pointerState, bool actualState)
         {
             tracerVisible = (tracerVisibility == VisibilityStates.AlwaysOn ? true : pointerState);
-            actualTracer.TogglePoints(tracerVisible);
+            if (actualTracer != null)
+            {
+                actualTracer.TogglePoints(tracerVisible);
+            }
         }
 
         protected virtual void SetPointerCursor()
@@ -354,11 +361,11 @@ namespace VRTK
                 ChangeColor(validCollisionColor);
                 if (actualValidLocationObject)
                 {
-                    actualValidLocationObject.SetActive(ValidDestination());
+                    actualValidLocationObject.SetActive(ValidDestination() && IsValidCollision());
                 }
                 if (actualInvalidLocationObject)
                 {
-                    actualInvalidLocationObject.SetActive(!ValidDestination());
+                    actualInvalidLocationObject.SetActive(!ValidDestination() || !IsValidCollision());
                 }
             }
             else

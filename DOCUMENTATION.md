@@ -658,9 +658,12 @@ It extends the `VRTK_DestinationMarker` to allow for destination events to be em
  * **Pointer Renderer:** The specific renderer to use when the pointer is activated. The renderer also determines how the pointer reaches it's destination (e.g. straight line, bezier curve).
  * **Activation Button:** The button used to activate/deactivate the pointer.
  * **Hold Button To Activate:** If this is checked then the Activation Button needs to be continuously held down to keep the pointer active. If this is unchecked then the Activation Button works as a toggle, the first press/release enables the pointer and the second press/release disables the pointer.
+ * **Activate On Enable:** If this is checked then the pointer will be toggled on when the script is enabled.
  * **Activation Delay:** The time in seconds to delay the pointer being able to be active again.
  * **Selection Button:** The button used to execute the select action at the pointer's target position.
  * **Select On Press:** If this is checked then the pointer selection action is executed when the Selection Button is pressed down. If this is unchecked then the selection action is executed when the Selection Button is released.
+ * **Selection Delay:** The time in seconds to delay the pointer being able to execute the select action again.
+ * **Select After Hover Duration:** The amount of time the pointer can be over the same collider before it automatically attempts to select it. 0f means no selection attempt will be made.
  * **Interact With Objects:** If this is checked then the pointer will be an extension of the controller and able to interact with Interactable Objects.
  * **Grab To Pointer Tip:** If `Interact With Objects` is checked and this is checked then when an object is grabbed with the pointer touching it, the object will attach to the pointer tip and not snap to the controller.
  * **Controller:** The controller that will be used to toggle the pointer. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.
@@ -701,6 +704,17 @@ The PointerExit method emits a DestinationMarkerExit event when the pointer leav
 
 The CanActivate method is used to determine if the pointer has passed the activation time limit.
 
+#### CanSelect/0
+
+  > `public virtual bool CanSelect()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `bool` - Returns true if the pointer can execute the select action.
+
+The CanSelect method is used to determine if the pointer has passed the selection time limit.
+
 #### IsPointerActive/0
 
   > `public virtual bool IsPointerActive()`
@@ -722,6 +736,17 @@ The IsPointerActive method is used to determine if the pointer's current state i
    * _none_
 
 The ResetActivationTimer method is used to reset the pointer activation timer to the next valid activation time.
+
+#### ResetSelectionTimer/1
+
+  > `public virtual void ResetSelectionTimer(bool forceZero = false)`
+
+  * Parameters
+   * `bool forceZero` - If this is true then the next activation time will be 0.
+  * Returns
+   * _none_
+
+The ResetSelectionTimer method is used to reset the pointer selection timer to the next valid activation time.
 
 #### Toggle/1
 
@@ -998,6 +1023,17 @@ The IsTracerVisible method determines if the pointer tracer renderer is visible.
    * `bool` - Returns true if the cursor renderers are visible.
 
 The IsCursorVisible method determines if the pointer cursor renderer is visible.
+
+#### IsValidCollision/0
+
+  > `public virtual bool IsValidCollision()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `bool` - Returns true if the pointer is in a valid collision, returns false if the pointer is in an invalid collision state.
+
+The IsValidCollision method determines if the pointer is currently in it's valid collision state.
 
 ---
 
