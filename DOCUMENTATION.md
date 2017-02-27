@@ -1692,7 +1692,11 @@ The script also has a public boolean pressed state for the buttons to allow the 
  * **Menu Toggle Button:** The button to use for the action of bringing up an in-game menu.
  * **Axis Fidelity:** The amount of fidelity in the changes on the axis, which is defaulted to 1. Any number higher than 2 will probably give too sensitive results.
  * **Trigger Click Threshold:** The level on the trigger axis to reach before a click is registered.
+ * **Trigger Force Zero Threshold:** The level on the trigger axis to reach before the axis is forced to 0f.
+ * **Trigger Axis Zero On Untouch:** If this is checked then the trigger axis will be forced to 0f when the trigger button reports an untouch event.
  * **Grip Click Threshold:** The level on the grip axis to reach before a click is registered.
+ * **Grip Force Zero Threshold:** The level on the grip axis to reach before the axis is forced to 0f.
+ * **Grip Axis Zero On Untouch:** If this is checked then the grip axis will be forced to 0f when the grip button reports an untouch event.
 
 ### Class Variables
 
