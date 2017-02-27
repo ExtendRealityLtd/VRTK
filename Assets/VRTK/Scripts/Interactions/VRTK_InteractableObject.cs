@@ -74,6 +74,8 @@ namespace VRTK
         public Color touchHighlightColor = Color.clear;
         [Tooltip("Determines which controller can initiate a touch action.")]
         public AllowedController allowedTouchControllers = AllowedController.Both;
+        [Tooltip("An array of colliders on the object to ignore when being touched.")]
+        public Collider[] ignoredColliders;
 
         [Header("Grab Options", order = 2)]
 
@@ -181,6 +183,7 @@ namespace VRTK
         protected bool snappedInSnapDropZone = false;
         protected VRTK_SnapDropZone storedSnapDropZone;
         protected Vector3 previousLocalScale = Vector3.zero;
+        protected List<GameObject> currentIgnoredColliders = new List<GameObject>();
 
         public virtual void OnInteractableObjectTouched(InteractableObjectEventArgs e)
         {
@@ -280,6 +283,7 @@ namespace VRTK
         /// <param name="currentTouchingObject">The game object that is currently touching this object.</param>
         public virtual void StartTouching(GameObject currentTouchingObject)
         {
+            IgnoreColliders(currentTouchingObject);
             if (!touchingObjects.Contains(currentTouchingObject))
             {
                 ToggleEnableState(true);
@@ -634,6 +638,14 @@ namespace VRTK
             return (!GetSecondaryGrabbingObject() && secondaryGrabActionScript ? secondaryGrabActionScript.IsActionable() : false);
         }
 
+        /// <summary>
+        /// The ResetIgnoredColliders method is used to clear any stored ignored colliders in case the `Ignored Colliders` array parameter is changed at runtime. This needs to be called manually if changes are made at runtime.
+        /// </summary>
+        public virtual void ResetIgnoredColliders()
+        {
+            currentIgnoredColliders.Clear();
+        }
+
         protected virtual void Awake()
         {
             interactableRigidbody = GetComponent<Rigidbody>();
@@ -740,6 +752,29 @@ namespace VRTK
                     objectHighlighter = gameObject.AddComponent<VRTK_MaterialColorSwapHighlighter>();
                 }
                 objectHighlighter.Initialise(touchHighlightColor);
+            }
+        }
+
+        protected virtual void IgnoreColliders(GameObject touchingObject)
+        {
+            if (!currentIgnoredColliders.Contains(touchingObject))
+            {
+                Debug.Log("test");
+                bool objectIgnored = false;
+                Collider[] touchingColliders = touchingObject.GetComponentsInChildren<Collider>();
+                for (int i = 0; i < ignoredColliders.Length; i++)
+                {
+                    for (int j = 0; j < touchingColliders.Length; j++)
+                    {
+                        Physics.IgnoreCollision(touchingColliders[j], ignoredColliders[i]);
+                        objectIgnored = true;
+                    }
+                }
+
+                if (objectIgnored)
+                {
+                    currentIgnoredColliders.Add(touchingObject);
+                }
             }
         }
 
