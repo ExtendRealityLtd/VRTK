@@ -13,6 +13,7 @@ A collection of titles that have been made with VRTK.
 | Nock: Hidden Arrow | [Steam Store Page](http://store.steampowered.com/app/525210) |
 | ViveSpray | [Steam Store Page](http://store.steampowered.com/app/494830) |
 | Richie's Plank Experience | [Steam Store Page](http://store.steampowered.com/app/517160) |
+| Oodlescape - The Apocalypse | [Steam Store Page](http://store.steampowered.com/app/587560) |
 | VeeR Pong | [Steam Store Page](http://store.steampowered.com/app/494850) |
 | Emergence Fractal Universe | [Steam Store Page](http://store.steampowered.com/app/500470) |
 | Tower Island: Explore, Discover and Disassemble | [Steam Store Page](http://store.steampowered.com/app/487740) |
