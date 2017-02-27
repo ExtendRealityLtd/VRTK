@@ -97,6 +97,7 @@ namespace VRTK
             if (controllingPointer)
             {
                 controllingPointer.ResetActivationTimer(true);
+                controllingPointer.ResetSelectionTimer(true);
             }
         }
 
@@ -354,11 +355,11 @@ namespace VRTK
                 ChangeColor(validCollisionColor);
                 if (actualValidLocationObject)
                 {
-                    actualValidLocationObject.SetActive(ValidDestination());
+                    actualValidLocationObject.SetActive(ValidDestination() && IsValidCollision());
                 }
                 if (actualInvalidLocationObject)
                 {
-                    actualInvalidLocationObject.SetActive(!ValidDestination());
+                    actualInvalidLocationObject.SetActive(!ValidDestination() || !IsValidCollision());
                 }
             }
             else

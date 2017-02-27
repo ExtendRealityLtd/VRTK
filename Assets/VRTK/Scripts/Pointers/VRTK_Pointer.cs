@@ -39,6 +39,8 @@ namespace VRTK
         public VRTK_ControllerEvents.ButtonAlias selectionButton = VRTK_ControllerEvents.ButtonAlias.Touchpad_Press;
         [Tooltip("If this is checked then the pointer selection action is executed when the Selection Button is pressed down. If this is unchecked then the selection action is executed when the Selection Button is released.")]
         public bool selectOnPress = false;
+        [Tooltip("The time in seconds to delay the pointer being able to execute the select action again.")]
+        public float selectionDelay = 0f;
 
         [Header("Pointer Interaction Settings")]
 
@@ -58,6 +60,7 @@ namespace VRTK
         protected VRTK_ControllerEvents.ButtonAlias subscribedSelectionButton = VRTK_ControllerEvents.ButtonAlias.Undefined;
         protected bool currentSelectOnPress;
         protected float activateDelayTimer;
+        protected float selectDelayTimer;
         protected int currentActivationState;
         protected bool willDeactivate;
         protected bool wasActivated;
@@ -100,6 +103,15 @@ namespace VRTK
         }
 
         /// <summary>
+        /// The CanSelect method is used to determine if the pointer has passed the selection time limit.
+        /// </summary>
+        /// <returns>Returns true if the pointer can execute the select action.</returns>
+        public virtual bool CanSelect()
+        {
+            return (Time.time >= selectDelayTimer);
+        }
+
+        /// <summary>
         /// The IsPointerActive method is used to determine if the pointer's current state is active or not.
         /// </summary>
         /// <returns>Returns true if the pointer is currently active.</returns>
@@ -115,6 +127,15 @@ namespace VRTK
         public virtual void ResetActivationTimer(bool forceZero = false)
         {
             activateDelayTimer = (forceZero ? 0f : Time.time + activationDelay);
+        }
+
+        /// <summary>
+        /// The ResetSelectionTimer method is used to reset the pointer selection timer to the next valid activation time.
+        /// </summary>
+        /// <param name="forceZero">If this is true then the next activation time will be 0.</param>
+        public virtual void ResetSelectionTimer(bool forceZero = false)
+        {
+            selectDelayTimer = (forceZero ? 0f : Time.time + selectionDelay);
         }
 
         /// <summary>
@@ -145,6 +166,7 @@ namespace VRTK
             SetupController();
             SetupRenderer();
             activateDelayTimer = 0f;
+            selectDelayTimer = 0f;
             currentActivationState = 0;
             wasActivated = false;
             willDeactivate = false;
@@ -353,14 +375,15 @@ namespace VRTK
 
         protected virtual void SelectionButtonAction(object sender, ControllerInteractionEventArgs e)
         {
-            if (EnabledPointerRenderer() && (IsPointerActive() || wasActivated))
+            if (EnabledPointerRenderer() && CanSelect() && (IsPointerActive() || wasActivated))
             {
                 wasActivated = false;
                 controllerIndex = e.controllerIndex;
                 RaycastHit destinationHit = pointerRenderer.GetDestinationHit();
                 AttemptUseOnSet(destinationHit.transform);
-                if (destinationHit.transform && IsPointerActive() && pointerRenderer.ValidPlayArea() && !PointerActivatesUseAction(pointerInteractableObject))
+                if (destinationHit.transform && IsPointerActive() && pointerRenderer.ValidPlayArea() && !PointerActivatesUseAction(pointerInteractableObject) && pointerRenderer.IsValidCollision())
                 {
+                    ResetSelectionTimer();
                     OnDestinationMarkerSet(SetDestinationMarkerEvent(destinationHit.distance, destinationHit.transform, destinationHit, destinationHit.point, controllerIndex));
                 }
             }
