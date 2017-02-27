@@ -759,7 +759,6 @@ namespace VRTK
         {
             if (!currentIgnoredColliders.Contains(touchingObject))
             {
-                Debug.Log("test");
                 bool objectIgnored = false;
                 Collider[] touchingColliders = touchingObject.GetComponentsInChildren<Collider>();
                 for (int i = 0; i < ignoredColliders.Length; i++)
