@@ -65,9 +65,11 @@
  * Download the [Ximmerse Unity SDK] from the Ximmerse SDK Github page.
  * Import the `XIM01-v2.0.1.unitypackage` into the project.
  * Drag the `VRCameraRig` prefab from the Ximmerse Unity SDK into the scene.
-  > It is recommened to use "Floor Level" as the Tracking Origin Type, with `VRCameraRig` positon's set to `(0f,0f,0f)`.
-  > "Eye Level" can also be used as the Tracking Origin Type. However, the positons of `VRCameraRig` is recommended to set to `(0f,1.675f,0f)` in this case.
-  > Please make sure SimplePicker.cs is NOT attached on gameobject "cobra02-L" and "cobra02-R". SimplePicker script is provided by Ximmerse SDK, while having the script on the profab may break VRTK grab functionality.
+
+  > * It is recommened to use "Floor Level" as the Tracking Origin Type, with `VRCameraRig` positon's set to `(0f,0f,0f)`.
+  > * "Eye Level" can also be used as the Tracking Origin Type. However, the positons of `VRCameraRig` is recommended to set to `(0f,1.675f,0f)` in this case.
+  > * Please make sure SimplePicker.cs is NOT attached on gameobject "cobra02-L" and "cobra02-R". SimplePicker script is provided by Ximmerse SDK, while having the script on the profab may break VRTK grab functionality.
+
  * Change platform to Android.
   > Currently Ximmerse 6DOF tracking is only supported on Android. 3DOF tracking is supported on both iOS and Android. We are getting MFI cert from Apple at the moment.
  * Check that `Virtual Reality Supported` is ticked in the `Edit -> Project Settings -> Player` menu.
