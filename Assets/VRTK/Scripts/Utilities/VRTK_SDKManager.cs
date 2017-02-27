@@ -18,6 +18,7 @@ namespace VRTK
             None,
             SteamVR,
             OculusVR,
+            XimmerseVR,
             Daydream,
             Simulator
         }
@@ -27,6 +28,7 @@ namespace VRTK
             { SupportedSDKs.None, new VRTK_SDKDetails("", "", "") },
             { SupportedSDKs.SteamVR, new VRTK_SDKDetails("VRTK_SDK_STEAMVR", "SteamVR", "SteamVR") },
             { SupportedSDKs.OculusVR, new VRTK_SDKDetails("VRTK_SDK_OCULUSVR", "OculusVR", "OVRInput") },
+            { SupportedSDKs.XimmerseVR, new VRTK_SDKDetails("VRTK_SDK_XIMMERSEVR", "XimmerseVR", "XimmerseVR") },
             { SupportedSDKs.Daydream, new VRTK_SDKDetails("VRTK_SDK_DAYDREAM", "Daydream", "VRTK_SDKManager") }, // JSL: maybe use GVR here?
             { SupportedSDKs.Simulator, new VRTK_SDKDetails("VRTK_SDK_SIM", "Simulator", "VRTK_SDKManager") }
         };
@@ -68,7 +70,7 @@ namespace VRTK
 
         [Tooltip("A reference to the GameObject that models for the Left Hand Controller.")]
         public GameObject modelAliasLeftController;
-        [Tooltip("A reference to the GameObject that models for the Right Hand Controller")]
+        [Tooltip("A reference to the GameObject that models for the Right Hand Controller.")]
         public GameObject modelAliasRightController;
         [Tooltip("A reference to the GameObject that contains any scripts that apply to the Left Hand Controller.")]
         public GameObject scriptAliasLeftController;
@@ -95,6 +97,9 @@ namespace VRTK
                     break;
                 case SupportedSDKs.Simulator:
                     returnSDK = ScriptableObject.CreateInstance<SDK_SimSystem>();
+                    break;
+                case SupportedSDKs.XimmerseVR:
+                    returnSDK = ScriptableObject.CreateInstance<SDK_XimmerseVRSystem>();
                     break;
                 default:
                     Debug.LogError("No valid System SDK has been selected. If you're seeing this error in Unity Edit mode, then try selecting the GameObject with the `VRTK_SDKManager` script and selecting a valid System SDK from the dropdown list.");
@@ -125,6 +130,9 @@ namespace VRTK
                 case SupportedSDKs.Simulator:
                     returnSDK = ScriptableObject.CreateInstance<SDK_SimHeadset>();
                     break;
+                case SupportedSDKs.XimmerseVR:
+                    returnSDK = ScriptableObject.CreateInstance<SDK_XimmerseVRHeadset>();
+                    break;
                 default:
                     Debug.LogError("No valid Headset SDK has been selected. If you're seeing this error in Unity Edit mode, then try selecting the GameObject with the `VRTK_SDKManager` script and selecting a valid Headset SDK from the dropdown list.");
                     returnSDK = ScriptableObject.CreateInstance<SDK_FallbackHeadset>();
@@ -154,6 +162,9 @@ namespace VRTK
                 case SupportedSDKs.Simulator:
                     returnSDK = ScriptableObject.CreateInstance<SDK_SimController>();
                     break;
+                case SupportedSDKs.XimmerseVR:
+                    returnSDK = ScriptableObject.CreateInstance<SDK_XimmerseVRController>();
+                    break;
                 default:
                     Debug.LogError("No valid Controller SDK has been selected. If you're seeing this error in Unity Edit mode, then try selecting the GameObject with the `VRTK_SDKManager` script and selecting a valid Controller SDK from the dropdown list.");
                     returnSDK = ScriptableObject.CreateInstance<SDK_FallbackController>();
@@ -182,6 +193,9 @@ namespace VRTK
                     break;
                 case SupportedSDKs.Simulator:
                     returnSDK = ScriptableObject.CreateInstance<SDK_SimBoundaries>();
+                    break;
+                case SupportedSDKs.XimmerseVR:
+                    returnSDK = ScriptableObject.CreateInstance<SDK_XimmerseVRBoundaries>();
                     break;
                 default:
                     Debug.LogError("No valid Boundaries SDK has been selected. If you're seeing this error in Unity Edit mode, then try selecting the GameObject with the `VRTK_SDKManager` script and selecting a valid Boundaries SDK from the dropdown list.");
