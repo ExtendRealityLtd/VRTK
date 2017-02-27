@@ -165,6 +165,7 @@
             ProcessSDK(sdkManager, VRTK_SDKManager.SupportedSDKs.SteamVR);
             ProcessSDK(sdkManager, VRTK_SDKManager.SupportedSDKs.OculusVR);
             ProcessSDK(sdkManager, VRTK_SDKManager.SupportedSDKs.Simulator);
+            ProcessSDK(sdkManager, VRTK_SDKManager.SupportedSDKs.GearVR);
         }
 
         private void ProcessSDK(VRTK_SDKManager sdkManager, VRTK_SDKManager.SupportedSDKs supportedSDK)
@@ -184,6 +185,9 @@
             if ((!CheckSDKInstalled(prettyName + message, checkType, false) || (system != supportedSDK && headset != supportedSDK && controller != supportedSDK && boundaries != supportedSDK)) && sdkManager.autoManageScriptDefines)
             {
                 RemoveScriptingDefineSymbol(defineSymbol);
+
+                if (supportedSDK == VRTK_SDKManager.SupportedSDKs.GearVR)
+                    RemoveScriptingDefineSymbol(defineSymbol, BuildTargetGroup.Android);
             }
 
             if (system == supportedSDK || headset == supportedSDK || controller == supportedSDK || boundaries == supportedSDK)
@@ -191,6 +195,9 @@
                 if (CheckSDKInstalled(prettyName + message, checkType, true) && sdkManager.autoManageScriptDefines)
                 {
                     AddScriptingDefineSymbol(defineSymbol);
+
+                    if (supportedSDK == VRTK_SDKManager.SupportedSDKs.GearVR)
+                        AddScriptingDefineSymbol(defineSymbol, BuildTargetGroup.Android);
                 }
             }
 
@@ -231,36 +238,36 @@
             return true;
         }
 
-        private void AddScriptingDefineSymbol(string define)
+        private void AddScriptingDefineSymbol(string define, BuildTargetGroup buildTargetGroup = BuildTargetGroup.Standalone)
         {
             if (define == "")
             {
                 return;
             }
-            string scriptingDefineSymbols = PlayerSettings.GetScriptingDefineSymbolsForGroup(BuildTargetGroup.Standalone);
+            string scriptingDefineSymbols = PlayerSettings.GetScriptingDefineSymbolsForGroup(buildTargetGroup);
             List<string> definesList = new List<string>(scriptingDefineSymbols.Split(';'));
             if (!definesList.Contains(define))
             {
                 definesList.Add(define);
-                Debug.Log("Scripting Define Symbol Added To [Project Settings->Player]: " + define);
+                Debug.Log("Scripting Define Symbol Added To [Project Settings->Player->" + buildTargetGroup + "]: " + define);
             }
-            PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildTargetGroup.Standalone, string.Join(";", definesList.ToArray()));
+            PlayerSettings.SetScriptingDefineSymbolsForGroup(buildTargetGroup, string.Join(";", definesList.ToArray()));
         }
 
-        private void RemoveScriptingDefineSymbol(string define)
+        private void RemoveScriptingDefineSymbol(string define, BuildTargetGroup buildTargetGroup = BuildTargetGroup.Standalone)
         {
             if (define == "")
             {
                 return;
             }
-            string scriptingDefineSymbols = PlayerSettings.GetScriptingDefineSymbolsForGroup(BuildTargetGroup.Standalone);
+            string scriptingDefineSymbols = PlayerSettings.GetScriptingDefineSymbolsForGroup(buildTargetGroup);
             List<string> definesList = new List<string>(scriptingDefineSymbols.Split(';'));
             if (definesList.Contains(define))
             {
                 definesList.Remove(define);
-                Debug.Log("Scripting Define Symbol Removed from [Project Settings->Player]: " + define);
+                Debug.Log("Scripting Define Symbol Removed from [Project Settings->Player->" + buildTargetGroup + "]: " + define);
             }
-            PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildTargetGroup.Standalone, string.Join(";", definesList.ToArray()));
+            PlayerSettings.SetScriptingDefineSymbolsForGroup(buildTargetGroup, string.Join(";", definesList.ToArray()));
         }
 
         private bool TypeExists(string className)
