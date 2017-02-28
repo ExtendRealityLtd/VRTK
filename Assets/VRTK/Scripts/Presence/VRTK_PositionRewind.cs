@@ -18,6 +18,8 @@ namespace VRTK
         public float pushbackDistance = 0.5f;
         [Tooltip("The threshold to determine how low the headset has to be before it is considered the user is crouching. The last good position will only be recorded in a non-crouching position.")]
         public float crouchThreshold = 0.5f;
+        [Tooltip("The threshold to determind how low the headset can be to perform a position rewind. If the headset Y position is lower than this threshold then a rewind won't occur.")]
+        public float crouchRewindThreshold = 0.1f;
 
         private Transform headset;
         private Transform playArea;
@@ -77,15 +79,17 @@ namespace VRTK
                 var floorVariant = 0.005f;
                 if (playArea.position.y > (lastPlayAreaY + floorVariant) || playArea.position.y < (lastPlayAreaY - floorVariant))
                 {
-                    highestHeadsetY = 0f;
+                    highestHeadsetY = crouchThreshold;
                 }
 
-                if (headset.position.y > highestHeadsetY)
+                if (headset.localPosition.y > highestHeadsetY)
                 {
-                    highestHeadsetY = headset.position.y;
+                    highestHeadsetY = headset.localPosition.y;
                 }
 
-                if (headset.position.y > (highestHeadsetY - crouchThreshold))
+                float highestYDiff = highestHeadsetY - crouchThreshold;
+
+                if (headset.localPosition.y > highestYDiff && highestYDiff > crouchThreshold)
                 {
                     lastGoodPositionSet = true;
                     lastGoodStandingPosition = playArea.position;
@@ -114,15 +118,14 @@ namespace VRTK
 
         private void RewindPosition()
         {
-            if (lastGoodPositionSet)
+            if (lastGoodPositionSet && headset.localPosition.y > crouchRewindThreshold)
             {
                 var xReset = playArea.position.x - (headset.position.x - lastGoodHeadsetPosition.x);
                 var zReset = playArea.position.z - (headset.position.z - lastGoodHeadsetPosition.z);
 
                 var currentPosition = new Vector3(headset.position.x, lastGoodStandingPosition.y, headset.position.z);
                 var resetPosition = new Vector3(xReset, lastGoodStandingPosition.y, zReset);
-                var pushbackPosition = (resetPosition - currentPosition).normalized;
-                var finalPosition = resetPosition + (pushbackDistance * pushbackPosition);
+                var finalPosition = currentPosition + (resetPosition - currentPosition).normalized * (Vector3.Distance(resetPosition, currentPosition) + pushbackDistance);
 
                 playArea.position = finalPosition;
                 if (playareaRigidbody)

@@ -4571,6 +4571,7 @@ The Position Rewind script is used to reset the user back to a good known standi
  * **Rewind Delay:** The amount of time from original headset collision until the rewind to the last good known position takes place.
  * **Pushback Distance:** The additional distance to push the play area back upon rewind to prevent being right next to the wall again.
  * **Crouch Threshold:** The threshold to determine how low the headset has to be before it is considered the user is crouching. The last good position will only be recorded in a non-crouching position.
+ * **Crouch Rewind Threshold:** The threshold to determind how low the headset can be to perform a position rewind. If the headset Y position is lower than this threshold then a rewind won't occur.
 
 ### Example
 
