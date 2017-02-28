@@ -876,13 +876,32 @@ namespace VRTK
             var sdkManager = VRTK_SDKManager.instance;
             if (sdkManager != null)
             {
+                var updatePointers = false;
+
                 if (cachedLeftTrackedObject == null && sdkManager.actualLeftController)
                 {
                     cachedLeftTrackedObject = sdkManager.actualLeftController.GetComponent<SteamVR_TrackedObject>();
+                    updatePointers = true;
                 }
                 if (cachedRightTrackedObject == null && sdkManager.actualRightController)
                 {
                     cachedRightTrackedObject = sdkManager.actualRightController.GetComponent<SteamVR_TrackedObject>();
+                    updatePointers = true;
+                }
+
+                if (updatePointers && !VRTK_SharedMethods.IsEditTime())
+                {
+                    VRTK_UIPointer[] pointers = FindObjectsOfType<VRTK_UIPointer>();
+                    for (var i = 0; i < pointers.Length; i++)
+                    {
+                        VRTK_UIPointer pointer = pointers[i];
+                        UnityEngine.EventSystems.PointerEventData pointerEventData = pointer.pointerEventData;
+
+                        if (pointerEventData != null)
+                        {
+                            pointerEventData.pointerId = (int)GetControllerIndex(pointer.controller.gameObject);
+                        }
+                    }
                 }
             }
         }
