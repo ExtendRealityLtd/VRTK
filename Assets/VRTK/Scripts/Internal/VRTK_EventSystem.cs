@@ -11,72 +11,41 @@
         private static readonly PropertyInfo[] EVENT_SYSTEM_PROPERTY_INFOS = typeof(EventSystem).GetProperties(BindingFlags.Public | BindingFlags.Instance).Except(new[] { typeof(EventSystem).GetProperty("enabled") }).ToArray();
         private static readonly FieldInfo BASE_INPUT_MODULE_EVENT_SYSTEM_FIELD_INFO = typeof(BaseInputModule).GetField("m_EventSystem", BindingFlags.NonPublic | BindingFlags.Instance);
 
-        private readonly List<VRTK_VRInputModule> vrInputModules = new List<VRTK_VRInputModule>();
-
-        public void RegisterVRInputModule(VRTK_VRInputModule vrInputModule)
-        {
-            vrInputModules.Add(vrInputModule);
-        }
-
-        public void UnregisterVRInputModule(VRTK_VRInputModule vrInputModule)
-        {
-            vrInputModules.Remove(vrInputModule);
-        }
+        private EventSystem previousEventSystem;
+        private VRTK_VRInputModule vrInputModule;
 
         protected override void OnEnable()
         {
-            EventSystem currentEventSystem = current;
-            if (currentEventSystem == null)
+            previousEventSystem = current;
+            if (previousEventSystem != null)
             {
-                return;
+                previousEventSystem.enabled = false;
+                CopyValuesFrom(previousEventSystem, this);
             }
 
-            currentEventSystem.enabled = false;
-
-            CopyValuesFrom(currentEventSystem, this);
-            Destroy(currentEventSystem);
-
-            var vrInputModule = gameObject.AddComponent<VRTK_VRInputModule>();
-            RegisterVRInputModule(vrInputModule);
-            vrInputModule.Initialise();
-
-            SetEventSystemOfBaseInputModulesTo(this);
-            UpdateModules();
-
+            vrInputModule = gameObject.AddComponent<VRTK_VRInputModule>();
             base.OnEnable();
+            SetEventSystemOfBaseInputModulesTo(this);
         }
 
         protected override void OnDisable()
         {
             base.OnDisable();
+            Destroy(vrInputModule);
 
-            var vrInputModule = GetComponent<VRTK_VRInputModule>();
-            if (vrInputModule)
+            if (previousEventSystem != null)
             {
-                UnregisterVRInputModule(vrInputModule);
-                Destroy(vrInputModule);
+                previousEventSystem.enabled = true;
+                CopyValuesFrom(this, previousEventSystem);
+                SetEventSystemOfBaseInputModulesTo(previousEventSystem);
             }
-
-            enabled = false;
-
-            var eventSystem = gameObject.AddComponent<EventSystem>();
-            CopyValuesFrom(this, eventSystem);
-            Destroy(this);
-
-            SetEventSystemOfBaseInputModulesTo(eventSystem);
-            eventSystem.UpdateModules();
         }
 
         protected override void Update()
         {
             base.Update();
 
-            if (current != this)
-            {
-                return;
-            }
-
-            foreach (VRTK_VRInputModule vrInputModule in vrInputModules)
+            if (current == this)
             {
                 vrInputModule.Process();
             }
@@ -119,6 +88,8 @@
             {
                 BASE_INPUT_MODULE_EVENT_SYSTEM_FIELD_INFO.SetValue(module, eventSystem);
             }
+
+            eventSystem.UpdateModules();
         }
     }
 }
