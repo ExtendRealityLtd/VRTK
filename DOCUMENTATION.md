@@ -935,6 +935,17 @@ As this is an abstract class, it cannot be applied directly to a game object and
 
 The InitalizePointer method is used to set up the state of the pointer renderer.
 
+#### ResetPointerObjects/0
+
+  > `public virtual void ResetPointerObjects()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The ResetPointerObjects method is used to destroy any existing pointer objects and recreate them at runtime.
+
 #### Toggle/2
 
   > `public virtual void Toggle(bool pointerState, bool actualState)`

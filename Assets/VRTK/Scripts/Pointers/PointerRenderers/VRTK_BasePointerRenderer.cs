@@ -113,6 +113,15 @@ namespace VRTK
         }
 
         /// <summary>
+        /// The ResetPointerObjects method is used to destroy any existing pointer objects and recreate them at runtime.
+        /// </summary>
+        public virtual void ResetPointerObjects()
+        {
+            DestroyPointerObjects();
+            CreatePointerObjects();
+        }
+
+        /// <summary>
         /// The Toggle Method is used to enable or disable the pointer renderer.
         /// </summary>
         /// <param name="pointerState">The activation state of the pointer.</param>
