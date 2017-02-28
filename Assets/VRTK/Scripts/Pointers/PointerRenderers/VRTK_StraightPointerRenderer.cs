@@ -26,6 +26,8 @@ namespace VRTK
         public bool cursorMatchTargetRotation = false;
         [Tooltip("Rescale the cursor proportionally to the distance from the tracer origin.")]
         public bool cursorDistanceRescale = false;
+        [Tooltip("The maximum scale the cursor is allowed to reach. This is only used when rescaling the cursor proportionally to the distance from the tracer origin.")]
+        public Vector3 maximumCursorScale = new Vector3(float.PositiveInfinity, float.PositiveInfinity, float.PositiveInfinity);
 
         [Header("Straight Pointer Custom Appearance Settings")]
 
@@ -217,7 +219,7 @@ namespace VRTK
                     if (cursorDistanceRescale)
                     {
                         float collisionDistance = Vector3.Distance(destinationHit.point, origin.position);
-                        actualCursor.transform.localScale = cursorOriginalScale * collisionDistance;
+                        actualCursor.transform.localScale = Vector3.Min(cursorOriginalScale * collisionDistance, maximumCursorScale);
                     }
                 }
                 else
@@ -228,7 +230,7 @@ namespace VRTK
                     }
                     if (cursorDistanceRescale)
                     {
-                        actualCursor.transform.localScale = cursorOriginalScale * tracerLength;
+                        actualCursor.transform.localScale = Vector3.Min(cursorOriginalScale * tracerLength, maximumCursorScale);
                     }
                 }
 
