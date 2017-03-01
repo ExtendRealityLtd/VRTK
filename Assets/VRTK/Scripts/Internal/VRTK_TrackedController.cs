@@ -92,6 +92,7 @@
             }
 
             VRTK_SDK_Bridge.ControllerProcessUpdate(currentIndex);
+            index = currentIndex;
 
             if (aliasController && gameObject.activeInHierarchy && !aliasController.activeSelf)
             {
