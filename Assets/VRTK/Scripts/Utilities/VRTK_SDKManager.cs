@@ -322,6 +322,7 @@ namespace VRTK
             modelAliasRightController = controllerSDK.GetControllerModel(SDK_BaseController.ControllerHand.Right);
         }
 
+#if UNITY_EDITOR
         /// <summary>
         /// Manages (i.e. adds and removes) the scripting define symbols of the <see cref="PlayerSettings"/> for the currently set SDK infos. This method is only available in the editor, so usage of the method needs to be surrounded by `#if UNITY_EDITOR` and `#endif` when used in a type that is also compiled for a standalone build.
         /// </summary>
@@ -428,6 +429,7 @@ namespace VRTK
 
             return changedSymbols;
         }
+#endif
 
         public string[] GetSimplifiedSDKErrorDescriptions()
         {
