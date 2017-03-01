@@ -56,7 +56,14 @@
 
             EditorGUI.BeginDisabledGroup(sdkManager.autoManageScriptDefines);
             const string manageNowDescription = "Manage Now";
-            var manageNowGUIContent = new GUIContent(manageNowDescription, "Manage the scripting define symbols defined by the selected SDKs.");
+            var manageNowGUIContent = new GUIContent(
+                manageNowDescription,
+                "Manage the scripting define symbols defined by the selected SDKs."
+                + (sdkManager.autoManageScriptDefines
+                   ? "\n\nThis button is disabled because the SDK Manager is set up to manage the scripting define symbols automatically."
+                     + " Disable the checkbox on the left to allow managing them manually instead."
+                   : "")
+            );
             if (GUILayout.Button(manageNowGUIContent, GUILayout.MaxHeight(GUI.skin.label.CalcSize(manageNowGUIContent).y)))
             {
                 Undo.RecordObject(sdkManager, manageNowDescription);
