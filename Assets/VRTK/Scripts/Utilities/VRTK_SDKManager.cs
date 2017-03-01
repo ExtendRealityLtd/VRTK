@@ -215,13 +215,6 @@ namespace VRTK
             { typeof(SDK_BaseController), typeof(SDK_FallbackController) }
         };
 
-#if UNITY_EDITOR
-        /// <summary>
-        /// The previously active scene's path. Used to call <see cref="AutoManageScriptingDefineSymbolsAndPopulateObjectReferences"/> when the currently active scene changes. See the static constructor for the usage.
-        /// </summary>
-        private static string PreviousActiveScenePath;
-#endif
-
         [SerializeField]
         private VRTK_SDKInfo cachedSystemSDKInfo = VRTK_SDKInfo.Create<SDK_BaseSystem, SDK_FallbackSystem, SDK_FallbackSystem>();
         [SerializeField]
@@ -476,15 +469,7 @@ namespace VRTK
 
 #if UNITY_EDITOR
             //call AutoManageScriptingDefineSymbolsAndPopulateObjectReferences when the currently active scene changes
-            EditorApplication.hierarchyWindowChanged += () =>
-            {
-                string currentActiveScenePath = SceneManager.GetActiveScene().path;
-                if (currentActiveScenePath != PreviousActiveScenePath)
-                {
-                    PreviousActiveScenePath = currentActiveScenePath;
-                    AutoManageScriptingDefineSymbolsAndPopulateObjectReferences();
-                }
-            };
+            EditorApplication.hierarchyWindowChanged += AutoManageScriptingDefineSymbolsAndPopulateObjectReferences;
 #endif
         }
 
@@ -616,8 +601,6 @@ namespace VRTK
             {
                 instance.PopulateObjectReferences(false);
             }
-
-            PreviousActiveScenePath = SceneManager.GetActiveScene().path;
         }
 
         /// <summary>
