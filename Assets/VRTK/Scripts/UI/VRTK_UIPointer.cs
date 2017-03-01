@@ -3,7 +3,6 @@ namespace VRTK
 {
     using UnityEngine;
     using UnityEngine.EventSystems;
-    using System.Collections;
 
     /// <summary>
     /// Event Payload
@@ -210,7 +209,7 @@ namespace VRTK
         public virtual UIPointerEventArgs SetUIPointerEvent(GameObject currentTarget, GameObject lastTarget = null)
         {
             UIPointerEventArgs e;
-            e.controllerIndex = VRTK_DeviceFinder.GetControllerIndex(controller.gameObject);
+            e.controllerIndex = (controller != null ? VRTK_DeviceFinder.GetControllerIndex(controller.gameObject) : uint.MaxValue);
             e.isActive = PointerActive();
             e.currentTarget = currentTarget;
             e.previousTarget = lastTarget;
@@ -266,16 +265,16 @@ namespace VRTK
             }
             else if (activationMode == ActivationMethods.HoldButton)
             {
-                return controller.IsButtonPressed(activationButton);
+                return (controller != null ? controller.IsButtonPressed(activationButton) : false);
             }
             else
             {
                 pointerClicked = false;
-                if (controller.IsButtonPressed(activationButton) && !lastPointerPressState)
+                if (controller != null && controller.IsButtonPressed(activationButton) && !lastPointerPressState)
                 {
                     pointerClicked = true;
                 }
-                lastPointerPressState = controller.IsButtonPressed(activationButton);
+                lastPointerPressState = (controller != null ? controller.IsButtonPressed(activationButton) : false);
 
                 if (pointerClicked)
                 {
@@ -292,7 +291,7 @@ namespace VRTK
         /// <returns>Returns true if the selection button is active.</returns>
         public virtual bool SelectionButtonActive()
         {
-            return controller.IsButtonPressed(selectionButton);
+            return (controller != null ? controller.IsButtonPressed(selectionButton) : false);
         }
 
         /// <summary>
@@ -331,16 +330,17 @@ namespace VRTK
         {
             pointerOriginTransform = (pointerOriginTransform == null ? VRTK_SDK_Bridge.GenerateControllerPointerOrigin(gameObject) : pointerOriginTransform);
 
-            if (controller == null)
-            {
-                controller = GetComponent<VRTK_ControllerEvents>();
-            }
+            controller = (controller != null ? controller : GetComponent<VRTK_ControllerEvents>());
             ConfigureEventSystem();
             pointerClicked = false;
             lastPointerPressState = false;
             lastPointerClickState = false;
             beamEnabledState = false;
-            controllerRenderModel = VRTK_SDK_Bridge.GetControllerRenderModel(controller.gameObject);
+
+            if (controller != null)
+            {
+                controllerRenderModel = VRTK_SDK_Bridge.GetControllerRenderModel(controller.gameObject);
+            }
         }
 
         protected virtual void OnDisable()
@@ -351,13 +351,21 @@ namespace VRTK
             }
         }
 
-        private void ResetHoverTimer()
+        protected virtual void LateUpdate()
+        {
+            if (controller != null)
+            {
+                pointerEventData.pointerId = (int)VRTK_SDK_Bridge.GetControllerIndex(controller.gameObject);
+            }
+        }
+
+        protected virtual void ResetHoverTimer()
         {
             hoverDurationTimer = 0f;
             canClickOnHover = false;
         }
 
-        private void ConfigureEventSystem()
+        protected virtual void ConfigureEventSystem()
         {
             if (!cachedEventSystem)
             {
@@ -376,24 +384,11 @@ namespace VRTK
                     pointerEventData = new PointerEventData(cachedEventSystem);
                 }
 
-                StartCoroutine(WaitForPointerId());
-
                 if (!cachedVRInputModule.pointers.Contains(this))
                 {
                     cachedVRInputModule.pointers.Add(this);
                 }
             }
-        }
-
-        private IEnumerator WaitForPointerId()
-        {
-            var index = (int)VRTK_SDK_Bridge.GetControllerIndex(controller.gameObject);
-            while (index < 0 || index == int.MaxValue)
-            {
-                index = (int)VRTK_SDK_Bridge.GetControllerIndex(controller.gameObject);
-                yield return null;
-            }
-            pointerEventData.pointerId = index;
         }
     }
 }
