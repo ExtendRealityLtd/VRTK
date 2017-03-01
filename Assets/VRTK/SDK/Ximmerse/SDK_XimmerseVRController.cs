@@ -1,17 +1,24 @@
-﻿// XimmerseVR Controller|SDK_XimmerseVR|003
+﻿// XimmerseVR Controller|SDK_XimmerseVR|004
 namespace VRTK
 {
-#if VRTK_SDK_XIMMERSEVR
-    using System.Collections;
-    using System.Collections.Generic;
+#if VRTK_DEFINE_SDK_XIMMERSEVR
     using UnityEngine;
+    using System.Collections.Generic;
     using Ximmerse.InputSystem;
+#endif
 
     /// <summary>
     /// The XimmerseVR Controller SDK script provides a bridge to SDK methods that deal with the input devices.
     /// </summary>
-    public class SDK_XimmerseVRController : SDK_BaseController
+    [SDK_Description(typeof(SDK_XimmerseVRSystem))]
+    public class SDK_XimmerseVRController
+#if VRTK_DEFINE_SDK_XIMMERSEVR
+        : SDK_BaseController
+#else
+        : SDK_FallbackController
+#endif
     {
+#if VRTK_DEFINE_SDK_XIMMERSEVR
         private TrackedObject cachedLeftTrackedObject;
         private TrackedObject cachedRightTrackedObject;
 
@@ -73,7 +80,7 @@ namespace VRTK
         public override string GetControllerElementPath(ControllerElements element, ControllerHand hand, bool fullPath = false)
         {
             var suffix = (fullPath ? "" : "");
-            var handName = (hand == ControllerHand.Left) ? "cobra02-L" : "cobra02-R"; 
+            var handName = (hand == ControllerHand.Left) ? "cobra02-L" : "cobra02-R";
             var path = handName + "/Dummy";
             switch (element)
             {
@@ -129,7 +136,7 @@ namespace VRTK
         /// </summary>
         /// <param name="index">The index of the controller to find.</param>
         /// <param name="actual">If true it will return the actual controller, if false it will return the script alias controller GameObject.</param>
-        /// <returns>The GameObject of the controller</returns>
+        /// <returns></returns>
         public override GameObject GetControllerByIndex(uint index, bool actual = false)
         {
             SetTrackedControllerCaches();
@@ -296,7 +303,7 @@ namespace VRTK
         /// <param name="state">If true and the render model has a scroll wheen then it will be displayed, if false then the scroll wheel will be hidden.</param>
         public override void SetControllerRenderModelWheel(GameObject renderModel, bool state)
         {
-			
+
         }
 
         /// <summary>
@@ -347,7 +354,7 @@ namespace VRTK
                 return Vector3.zero;
             }
 
-            var device = GetControllerInputByIndex(index); 
+            var device = GetControllerInputByIndex(index);
             if (device == null)
                 return Vector3.zero;
 
@@ -388,7 +395,7 @@ namespace VRTK
             {
                 return Vector2.zero;
             }
-            
+
             var result = device.GetTouchPos() - new Vector2(0.5f, 0.5f);
             result = new Vector2(result.x, -result.y);
 
@@ -939,8 +946,10 @@ namespace VRTK
             }
             var device = GetControllerInputByIndex(index);
             if (device == null)
+            {
                 return false;
-			
+            }
+
             switch (type)
             {
                 case ButtonPressTypes.Press:
@@ -997,10 +1006,6 @@ namespace VRTK
 
             return result;
         }
-    }
-#else
-    public class SDK_XimmerseVRController : SDK_FallbackController
-    {
-    }
 #endif
+    }
 }

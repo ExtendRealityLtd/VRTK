@@ -1,14 +1,22 @@
-﻿// Daydream Boundaries|SDK_Daydream|004
+﻿// Daydream Boundaries|SDK_Daydream|005
 namespace VRTK
 {
-#if VRTK_SDK_DAYDREAM
+#if VRTK_DEFINE_SDK_DAYDREAM
     using UnityEngine;
+#endif
 
     /// <summary>
-    /// The Daydream Boundaries SDK script provides dummy functions for the play area bounderies.
+    /// The Daydream Boundaries SDK script provides dummy functions for the play area boundaries.
     /// </summary>
-    public class SDK_DaydreamBoundaries : SDK_BaseBoundaries
+    [SDK_Description(typeof(SDK_DaydreamSystem))]
+    public class SDK_DaydreamBoundaries
+#if VRTK_DEFINE_SDK_DAYDREAM
+        : SDK_BaseBoundaries
+#else
+        : SDK_FallbackBoundaries
+#endif
     {
+#if VRTK_DEFINE_SDK_DAYDREAM
         private Transform area;
 
         /// <summary>
@@ -79,10 +87,6 @@ namespace VRTK
         {
             return true;
         }
-    }
-#else
-    public class SDK_DaydreamBoundaries : SDK_FallbackBoundaries
-    {
-    }
 #endif
+    }
 }

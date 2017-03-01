@@ -2,60 +2,187 @@
 namespace VRTK
 {
     using UnityEngine;
+#if UNITY_EDITOR
+    using UnityEngine.SceneManagement;
+    using UnityEditor;
+    using UnityEditor.Callbacks;
+#endif
+    using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Linq;
+    using System.Reflection;
 
     /// <summary>
-    /// The SDK Manager script provides configuration of supported SDKs
+    /// The SDK Manager script provides configuration of supported SDKs.
     /// </summary>
-    [ExecuteInEditMode]
     public class VRTK_SDKManager : MonoBehaviour
     {
         /// <summary>
-        /// The supported SDKs
+        /// All found scripting define symbol predicate attributes with associated method info.
         /// </summary>
-        public enum SupportedSDKs
-        {
-            None,
-            SteamVR,
-            OculusVR,
-            XimmerseVR,
-            Daydream,
-            Simulator
-        }
+        public static ReadOnlyCollection<ScriptingDefineSymbolPredicateInfo> AvailableScriptingDefineSymbolPredicateInfos { get; private set; }
 
-        public Dictionary<SupportedSDKs, VRTK_SDKDetails> sdkDetails = new Dictionary<SupportedSDKs, VRTK_SDKDetails>()
-        {
-            { SupportedSDKs.None, new VRTK_SDKDetails("", "", "") },
-            { SupportedSDKs.SteamVR, new VRTK_SDKDetails("VRTK_SDK_STEAMVR", "SteamVR", "SteamVR") },
-            { SupportedSDKs.OculusVR, new VRTK_SDKDetails("VRTK_SDK_OCULUSVR", "OculusVR", "OVRInput") },
-            { SupportedSDKs.XimmerseVR, new VRTK_SDKDetails("VRTK_SDK_XIMMERSEVR", "XimmerseVR", "XimmerseVR") },
-            { SupportedSDKs.Daydream, new VRTK_SDKDetails("VRTK_SDK_DAYDREAM", "Daydream", "VRTK_SDKManager") }, // JSL: maybe use GVR here?
-            { SupportedSDKs.Simulator, new VRTK_SDKDetails("VRTK_SDK_SIM", "Simulator", "VRTK_SDKManager") }
-        };
+        /// <summary>
+        /// All available system SDK infos.
+        /// </summary>
+        public static ReadOnlyCollection<VRTK_SDKInfo> AvailableSystemSDKInfos { get; private set; }
+        /// <summary>
+        /// All available boundaries SDK infos.
+        /// </summary>
+        public static ReadOnlyCollection<VRTK_SDKInfo> AvailableBoundariesSDKInfos { get; private set; }
+        /// <summary>
+        /// All available headset SDK infos.
+        /// </summary>
+        public static ReadOnlyCollection<VRTK_SDKInfo> AvailableHeadsetSDKInfos { get; private set; }
+        /// <summary>
+        /// All available controller SDK infos.
+        /// </summary>
+        public static ReadOnlyCollection<VRTK_SDKInfo> AvailableControllerSDKInfos { get; private set; }
+
+        /// <summary>
+        /// All installed system SDK infos. This is a subset of <see cref="AvailableSystemSDKInfos"/>. It contains only those available SDK infos for which an <see cref="SDK_ScriptingDefineSymbolPredicateAttribute"/> exists that uses the same symbol and whose associated method returns true.
+        /// </summary>
+        public static ReadOnlyCollection<VRTK_SDKInfo> InstalledSystemSDKInfos { get; private set; }
+        /// <summary>
+        /// All installed boundaries SDK infos. This is a subset of <see cref="AvailableBoundariesSDKInfos"/>. It contains only those available SDK infos for which an <see cref="SDK_ScriptingDefineSymbolPredicateAttribute"/> exists that uses the same symbol and whose associated method returns true.
+        /// </summary>
+        public static ReadOnlyCollection<VRTK_SDKInfo> InstalledBoundariesSDKInfos { get; private set; }
+        /// <summary>
+        /// All installed headset SDK infos. This is a subset of <see cref="AvailableHeadsetSDKInfos"/>. It contains only those available SDK infos for which an <see cref="SDK_ScriptingDefineSymbolPredicateAttribute"/> exists that uses the same symbol and whose associated method returns true.
+        /// </summary>
+        public static ReadOnlyCollection<VRTK_SDKInfo> InstalledHeadsetSDKInfos { get; private set; }
+        /// <summary>
+        /// All installed controller SDK infos. This is a subset of <see cref="AvailableControllerSDKInfos"/>. It contains only those available SDK infos for which an <see cref="SDK_ScriptingDefineSymbolPredicateAttribute"/> exists that uses the same symbol and whose associated method returns true.
+        /// </summary>
+        public static ReadOnlyCollection<VRTK_SDKInfo> InstalledControllerSDKInfos { get; private set; }
 
         /// <summary>
         /// The singleton instance to access the SDK Manager variables from.
         /// </summary>
-        public static VRTK_SDKManager instance = null;
-
-        [Header("SDK Selection")]
+        public static VRTK_SDKManager instance;
 
         [Tooltip("If this is true then the instance of the SDK Manager won't be destroyed on every scene load.")]
-        public bool persistOnLoad = false;
+        public bool persistOnLoad;
 
-        [Tooltip("The SDK to use to deal with all system actions.")]
-        public SupportedSDKs systemSDK = SupportedSDKs.None;
-        [Tooltip("The SDK to use to utilise room scale boundaries.")]
-        public SupportedSDKs boundariesSDK = SupportedSDKs.None;
-        [Tooltip("The SDK to use to utilise the VR headset.")]
-        public SupportedSDKs headsetSDK = SupportedSDKs.None;
-        [Tooltip("The SDK to use to utilise the input devices.")]
-        public SupportedSDKs controllerSDK = SupportedSDKs.None;
+        [Tooltip("This determines whether the SDK object references are automatically set to the objects of the selected SDKs. If this is true populating is done whenever the selected SDKs change.")]
+        public bool autoPopulateObjectReferences = true;
 
-        [Tooltip("This determines whether the scripting define symbols required by the selected SDKs are automatically added to the player settings when using the SDK Manager inspector window.")]
+        [Tooltip("This determines whether the scripting define symbols required by the selected SDKs are automatically added to and removed from the player settings. If this is true managing is done whenever the selected SDKs or the current active SDK Manager change in the Editor.")]
         public bool autoManageScriptDefines = true;
 
-        [Header("Linked Objects")]
+        /// <summary>
+        /// The info of the SDK to use to deal with all system actions. By setting this to `null` the fallback SDK will be used.
+        /// </summary>
+        public VRTK_SDKInfo systemSDKInfo
+        {
+            get
+            {
+                return cachedSystemSDKInfo;
+            }
+            set
+            {
+                value = value ?? VRTK_SDKInfo.Create<SDK_BaseSystem, SDK_FallbackSystem, SDK_FallbackSystem>();
+                if (cachedSystemSDKInfo == value)
+                {
+                    return;
+                }
+
+#if UNITY_EDITOR
+                DestroyImmediate(cachedSystemSDK);
+#else
+                Destroy(cachedSystemSDK);
+#endif
+                cachedSystemSDK = null;
+
+                cachedSystemSDKInfo = value;
+                HandleSDKInfoSetter();
+            }
+        }
+        /// <summary>
+        /// The info of the SDK to use to utilize room scale boundaries. By setting this to `null` the fallback SDK will be used.
+        /// </summary>
+        public VRTK_SDKInfo boundariesSDKInfo
+        {
+            get
+            {
+                return cachedBoundariesSDKInfo;
+            }
+            set
+            {
+                value = value ?? VRTK_SDKInfo.Create<SDK_BaseBoundaries, SDK_FallbackBoundaries, SDK_FallbackBoundaries>();
+                if (cachedBoundariesSDKInfo == value)
+                {
+                    return;
+                }
+
+#if UNITY_EDITOR
+                DestroyImmediate(cachedBoundariesSDK);
+#else
+                Destroy(cachedBoundariesSDK);
+#endif
+                cachedBoundariesSDK = null;
+
+                cachedBoundariesSDKInfo = value;
+                HandleSDKInfoSetter();
+            }
+        }
+        /// <summary>
+        /// The info of the SDK to use to utilize the VR headset. By setting this to `null` the fallback SDK will be used.
+        /// </summary>
+        public VRTK_SDKInfo headsetSDKInfo
+        {
+            get
+            {
+                return cachedHeadsetSDKInfo;
+            }
+            set
+            {
+                value = value ?? VRTK_SDKInfo.Create<SDK_BaseHeadset, SDK_FallbackHeadset, SDK_FallbackHeadset>();
+                if (cachedHeadsetSDKInfo == value)
+                {
+                    return;
+                }
+
+#if UNITY_EDITOR
+                DestroyImmediate(cachedHeadsetSDK);
+#else
+                Destroy(cachedHeadsetSDK);
+#endif
+                cachedHeadsetSDK = null;
+
+                cachedHeadsetSDKInfo = value;
+                HandleSDKInfoSetter();
+            }
+        }
+        /// <summary>
+        /// The info of the SDK to use to utilize the input devices. By setting this to `null` the fallback SDK will be used.
+        /// </summary>
+        public VRTK_SDKInfo controllerSDKInfo
+        {
+            get
+            {
+                return cachedControllerSDKInfo;
+            }
+            set
+            {
+                value = value ?? VRTK_SDKInfo.Create<SDK_BaseController, SDK_FallbackController, SDK_FallbackController>();
+                if (cachedControllerSDKInfo == value)
+                {
+                    return;
+                }
+
+#if UNITY_EDITOR
+                DestroyImmediate(cachedControllerSDK);
+#else
+                Destroy(cachedControllerSDK);
+#endif
+                cachedControllerSDK = null;
+
+                cachedControllerSDKInfo = value;
+                HandleSDKInfoSetter();
+            }
+        }
 
         [Tooltip("A reference to the GameObject that is the user's boundary or play area, most likely provided by the SDK's Camera Rig.")]
         public GameObject actualBoundaries;
@@ -78,143 +205,445 @@ namespace VRTK
         public GameObject scriptAliasRightController;
 
         /// <summary>
-        /// The GetSystemSDK method returns the selected system SDK
+        /// Specifies the fallback SDK types for every base SDK type.
         /// </summary>
-        /// <returns>The currently selected System SDK</returns>
+        private static readonly Dictionary<Type, Type> SDKFallbackTypesByBaseType = new Dictionary<Type, Type>
+        {
+            { typeof(SDK_BaseSystem), typeof(SDK_FallbackSystem) },
+            { typeof(SDK_BaseBoundaries), typeof(SDK_FallbackBoundaries) },
+            { typeof(SDK_BaseHeadset), typeof(SDK_FallbackHeadset) },
+            { typeof(SDK_BaseController), typeof(SDK_FallbackController) }
+        };
+
+#if UNITY_EDITOR
+        /// <summary>
+        /// The previously active scene's path. Used to call <see cref="AutoManageScriptingDefineSymbolsAndPopulateObjectReferences"/> when the currently active scene changes. See the static constructor for the usage.
+        /// </summary>
+        private static string PreviousActiveScenePath;
+#endif
+
+        [SerializeField]
+        private VRTK_SDKInfo cachedSystemSDKInfo = VRTK_SDKInfo.Create<SDK_BaseSystem, SDK_FallbackSystem, SDK_FallbackSystem>();
+        [SerializeField]
+        private VRTK_SDKInfo cachedBoundariesSDKInfo = VRTK_SDKInfo.Create<SDK_BaseBoundaries, SDK_FallbackBoundaries, SDK_FallbackBoundaries>();
+        [SerializeField]
+        private VRTK_SDKInfo cachedHeadsetSDKInfo = VRTK_SDKInfo.Create<SDK_BaseHeadset, SDK_FallbackHeadset, SDK_FallbackHeadset>();
+        [SerializeField]
+        private VRTK_SDKInfo cachedControllerSDKInfo = VRTK_SDKInfo.Create<SDK_BaseController, SDK_FallbackController, SDK_FallbackController>();
+
+        private SDK_BaseSystem cachedSystemSDK;
+        private SDK_BaseBoundaries cachedBoundariesSDK;
+        private SDK_BaseHeadset cachedHeadsetSDK;
+        private SDK_BaseController cachedControllerSDK;
+
+        /// <summary>
+        /// The GetSystemSDK method returns the selected system SDK.
+        /// </summary>
+        /// <returns>The currently selected system SDK.</returns>
         public SDK_BaseSystem GetSystemSDK()
         {
-            SDK_BaseSystem returnSDK = null;
-            switch (systemSDK)
+            if (cachedSystemSDK == null)
             {
-                case SupportedSDKs.SteamVR:
-                    returnSDK = ScriptableObject.CreateInstance<SDK_SteamVRSystem>();
-                    break;
-                case SupportedSDKs.OculusVR:
-                    returnSDK = ScriptableObject.CreateInstance<SDK_OculusVRSystem>();
-                    break;
-                case SupportedSDKs.Daydream:
-                    returnSDK = ScriptableObject.CreateInstance<SDK_DaydreamSystem>();
-                    break;
-                case SupportedSDKs.Simulator:
-                    returnSDK = ScriptableObject.CreateInstance<SDK_SimSystem>();
-                    break;
-                case SupportedSDKs.XimmerseVR:
-                    returnSDK = ScriptableObject.CreateInstance<SDK_XimmerseVRSystem>();
-                    break;
-                default:
-                    Debug.LogError("No valid System SDK has been selected. If you're seeing this error in Unity Edit mode, then try selecting the GameObject with the `VRTK_SDKManager` script and selecting a valid System SDK from the dropdown list.");
-                    returnSDK = ScriptableObject.CreateInstance<SDK_FallbackSystem>();
-                    break;
+                HandleSDKGetter<SDK_BaseSystem>("System", systemSDKInfo, InstalledSystemSDKInfos);
+                cachedSystemSDK = (SDK_BaseSystem)ScriptableObject.CreateInstance(systemSDKInfo.type);
             }
-            return returnSDK;
+
+            return cachedSystemSDK;
         }
 
         /// <summary>
-        /// The GetHeadsetSDK method returns the selected headset SDK
+        /// The GetBoundariesSDK method returns the selected boundaries SDK.
         /// </summary>
-        /// <returns>The currently selected Headset SDK</returns>
-        public SDK_BaseHeadset GetHeadsetSDK()
-        {
-            SDK_BaseHeadset returnSDK = null;
-            switch (headsetSDK)
-            {
-                case SupportedSDKs.SteamVR:
-                    returnSDK = ScriptableObject.CreateInstance<SDK_SteamVRHeadset>();
-                    break;
-                case SupportedSDKs.OculusVR:
-                    returnSDK = ScriptableObject.CreateInstance<SDK_OculusVRHeadset>();
-                    break;
-                case SupportedSDKs.Daydream:
-                    returnSDK = ScriptableObject.CreateInstance<SDK_DaydreamHeadset>();
-                    break;
-                case SupportedSDKs.Simulator:
-                    returnSDK = ScriptableObject.CreateInstance<SDK_SimHeadset>();
-                    break;
-                case SupportedSDKs.XimmerseVR:
-                    returnSDK = ScriptableObject.CreateInstance<SDK_XimmerseVRHeadset>();
-                    break;
-                default:
-                    Debug.LogError("No valid Headset SDK has been selected. If you're seeing this error in Unity Edit mode, then try selecting the GameObject with the `VRTK_SDKManager` script and selecting a valid Headset SDK from the dropdown list.");
-                    returnSDK = ScriptableObject.CreateInstance<SDK_FallbackHeadset>();
-                    break;
-            }
-            return returnSDK;
-        }
-
-        /// <summary>
-        /// The GetControllerSDK method returns the selected controller SDK
-        /// </summary>
-        /// <returns>The currently selected Controller SDK</returns>
-        public SDK_BaseController GetControllerSDK()
-        {
-            SDK_BaseController returnSDK = null;
-            switch (controllerSDK)
-            {
-                case SupportedSDKs.SteamVR:
-                    returnSDK = ScriptableObject.CreateInstance<SDK_SteamVRController>();
-                    break;
-                case SupportedSDKs.OculusVR:
-                    returnSDK = ScriptableObject.CreateInstance<SDK_OculusVRController>();
-                    break;
-                case SupportedSDKs.Daydream:
-                    returnSDK = ScriptableObject.CreateInstance<SDK_DaydreamController>();
-                    break;
-                case SupportedSDKs.Simulator:
-                    returnSDK = ScriptableObject.CreateInstance<SDK_SimController>();
-                    break;
-                case SupportedSDKs.XimmerseVR:
-                    returnSDK = ScriptableObject.CreateInstance<SDK_XimmerseVRController>();
-                    break;
-                default:
-                    Debug.LogError("No valid Controller SDK has been selected. If you're seeing this error in Unity Edit mode, then try selecting the GameObject with the `VRTK_SDKManager` script and selecting a valid Controller SDK from the dropdown list.");
-                    returnSDK = ScriptableObject.CreateInstance<SDK_FallbackController>();
-                    break;
-            }
-            return returnSDK;
-        }
-
-        /// <summary>
-        /// The GetBoundariesSDK method returns the selected boundaries SDK
-        /// </summary>
-        /// <returns>The currently selected Boundaries SDK</returns>
+        /// <returns>The currently selected boundaries SDK.</returns>
         public SDK_BaseBoundaries GetBoundariesSDK()
         {
-            SDK_BaseBoundaries returnSDK = null;
-            switch (boundariesSDK)
+            if (cachedBoundariesSDK == null)
             {
-                case SupportedSDKs.SteamVR:
-                    returnSDK = ScriptableObject.CreateInstance<SDK_SteamVRBoundaries>();
-                    break;
-                case SupportedSDKs.OculusVR:
-                    returnSDK = ScriptableObject.CreateInstance<SDK_OculusVRBoundaries>();
-                    break;
-                case SupportedSDKs.Daydream:
-                    returnSDK = ScriptableObject.CreateInstance<SDK_DaydreamBoundaries>();
-                    break;
-                case SupportedSDKs.Simulator:
-                    returnSDK = ScriptableObject.CreateInstance<SDK_SimBoundaries>();
-                    break;
-                case SupportedSDKs.XimmerseVR:
-                    returnSDK = ScriptableObject.CreateInstance<SDK_XimmerseVRBoundaries>();
-                    break;
-                default:
-                    Debug.LogError("No valid Boundaries SDK has been selected. If you're seeing this error in Unity Edit mode, then try selecting the GameObject with the `VRTK_SDKManager` script and selecting a valid Boundaries SDK from the dropdown list.");
-                    returnSDK = ScriptableObject.CreateInstance<SDK_FallbackBoundaries>();
-                    break;
+                HandleSDKGetter<SDK_BaseBoundaries>("Boundaries", boundariesSDKInfo, InstalledBoundariesSDKInfos);
+                cachedBoundariesSDK = (SDK_BaseBoundaries)ScriptableObject.CreateInstance(boundariesSDKInfo.type);
             }
-            return returnSDK;
+
+            return cachedBoundariesSDK;
+        }
+
+        /// <summary>
+        /// The GetHeadsetSDK method returns the selected headset SDK.
+        /// </summary>
+        /// <returns>The currently selected headset SDK.</returns>
+        public SDK_BaseHeadset GetHeadsetSDK()
+        {
+            if (cachedHeadsetSDK == null)
+            {
+                HandleSDKGetter<SDK_BaseHeadset>("Headset", headsetSDKInfo, InstalledHeadsetSDKInfos);
+                cachedHeadsetSDK = (SDK_BaseHeadset)ScriptableObject.CreateInstance(headsetSDKInfo.type);
+            }
+
+            return cachedHeadsetSDK;
+        }
+
+        /// <summary>
+        /// The GetControllerSDK method returns the selected controller SDK.
+        /// </summary>
+        /// <returns>The currently selected controller SDK.</returns>
+        public SDK_BaseController GetControllerSDK()
+        {
+            if (cachedControllerSDK == null)
+            {
+                HandleSDKGetter<SDK_BaseController>("Controller", controllerSDKInfo, InstalledControllerSDKInfos);
+                cachedControllerSDK = (SDK_BaseController)ScriptableObject.CreateInstance(controllerSDKInfo.type);
+            }
+
+            return cachedControllerSDK;
+        }
+
+        /// <summary>
+        /// Populates the object references by using the currently set SDKs.
+        /// </summary>
+        /// <param name="force">Whether to ignore <see cref="autoPopulateObjectReferences"/> while deciding to populate.</param>
+        public void PopulateObjectReferences(bool force)
+        {
+            if (!(force || autoPopulateObjectReferences))
+            {
+                return;
+            }
+
+            SDK_BaseBoundaries boundariesSDK = GetBoundariesSDK();
+            SDK_BaseHeadset headsetSDK = GetHeadsetSDK();
+            SDK_BaseController controllerSDK = GetControllerSDK();
+
+            Transform playAreaTransform = boundariesSDK.GetPlayArea();
+            Transform headsetTransform = headsetSDK.GetHeadset();
+
+            actualBoundaries = playAreaTransform == null ? null : playAreaTransform.gameObject;
+            actualHeadset = headsetTransform == null ? null : headsetTransform.gameObject;
+            actualLeftController = controllerSDK.GetControllerLeftHand(true);
+            actualRightController = controllerSDK.GetControllerRightHand(true);
+            modelAliasLeftController = controllerSDK.GetControllerModel(SDK_BaseController.ControllerHand.Left);
+            modelAliasRightController = controllerSDK.GetControllerModel(SDK_BaseController.ControllerHand.Right);
+        }
+
+        /// <summary>
+        /// Manages (i.e. adds and removes) the scripting define symbols of the <see cref="PlayerSettings"/> for the currently set SDK infos. This method is only available in the editor, so usage of the method needs to be surrounded by `#if UNITY_EDITOR` and `#endif` when used in a type that is also compiled for a standalone build.
+        /// </summary>
+        /// <param name="ignoreAutoManageScriptDefines">Whether to ignore <see cref="autoManageScriptDefines"/> while deciding to manage.</param>
+        /// <param name="ignoreIsActiveAndEnabled">Whether to ignore <see cref="Behaviour.isActiveAndEnabled"/> while deciding to manage.</param>
+        /// <returns>Whether the <see cref="PlayerSettings"/>' scripting define symbols were changed.</returns>
+        public bool ManageScriptingDefineSymbols(bool ignoreAutoManageScriptDefines, bool ignoreIsActiveAndEnabled)
+        {
+            if (!((ignoreAutoManageScriptDefines || autoManageScriptDefines) && (ignoreIsActiveAndEnabled || isActiveAndEnabled)))
+            {
+                return false;
+            }
+
+            //get valid BuildTargetGroups
+            BuildTargetGroup[] targetGroups = Enum.GetValues(typeof(BuildTargetGroup)).Cast<BuildTargetGroup>().Where(group =>
+            {
+                if (group == BuildTargetGroup.Unknown)
+                {
+                    return false;
+                }
+
+                string targetGroupName = Enum.GetName(typeof(BuildTargetGroup), group);
+                FieldInfo targetGroupFieldInfo = typeof(BuildTargetGroup).GetField(targetGroupName, BindingFlags.Public | BindingFlags.Static);
+
+                return targetGroupFieldInfo != null && targetGroupFieldInfo.GetCustomAttributes(typeof(ObsoleteAttribute), false).Length == 0;
+            }).ToArray();
+            var newSymbolsByTargetGroup = new Dictionary<BuildTargetGroup, HashSet<string>>(targetGroups.Length);
+
+            //get current non-removable scripting define symbols
+            foreach (BuildTargetGroup targetGroup in targetGroups)
+            {
+                IEnumerable<string> nonSDKSymbols = PlayerSettings.GetScriptingDefineSymbolsForGroup(targetGroup)
+                    .Split(';')
+                    .Where(symbol => !symbol.StartsWith(SDK_ScriptingDefineSymbolPredicateAttribute.RemovableSymbolPrefix, StringComparison.Ordinal));
+                newSymbolsByTargetGroup[targetGroup] = new HashSet<string>(nonSDKSymbols);
+            }
+
+            //get scripting define symbols for active SDKs and check whether the predicates allow us to add the symbols
+            var activeSymbols = new[] { systemSDKInfo.description.symbol, boundariesSDKInfo.description.symbol, headsetSDKInfo.description.symbol, controllerSDKInfo.description.symbol };
+            foreach (string activeSymbol in activeSymbols)
+            {
+                foreach (ScriptingDefineSymbolPredicateInfo predicateInfo in AvailableScriptingDefineSymbolPredicateInfos)
+                {
+                    MethodInfo methodInfo = predicateInfo.methodInfo;
+                    if (predicateInfo.attribute.symbol != activeSymbol || !(bool)methodInfo.Invoke(null, null))
+                    {
+                        continue;
+                    }
+
+                    //add symbols from all predicate attributes on the method since multiple ones are allowed
+                    var allAttributes = (SDK_ScriptingDefineSymbolPredicateAttribute[])methodInfo.GetCustomAttributes(typeof(SDK_ScriptingDefineSymbolPredicateAttribute), false);
+                    foreach (SDK_ScriptingDefineSymbolPredicateAttribute attribute in allAttributes)
+                    {
+                        BuildTargetGroup buildTargetGroup = attribute.buildTargetGroup;
+                        HashSet<string> newSymbols;
+                        if (!newSymbolsByTargetGroup.TryGetValue(buildTargetGroup, out newSymbols))
+                        {
+                            newSymbols = new HashSet<string>();
+                            newSymbolsByTargetGroup[buildTargetGroup] = newSymbols;
+                        }
+
+                        newSymbols.Add(attribute.symbol);
+                    }
+                }
+            }
+
+            var changedSymbols = false;
+
+            //apply new set of scripting define symbols
+            foreach (KeyValuePair<BuildTargetGroup, HashSet<string>> keyValuePair in newSymbolsByTargetGroup)
+            {
+                BuildTargetGroup targetGroup = keyValuePair.Key;
+                string[] currentSymbols = PlayerSettings.GetScriptingDefineSymbolsForGroup(targetGroup)
+                    .Split(';')
+                    .Distinct()
+                    .OrderBy(symbol => symbol, StringComparer.Ordinal)
+                    .ToArray();
+                string[] newSymbols = keyValuePair.Value.OrderBy(symbol => symbol, StringComparer.Ordinal).ToArray();
+
+                if (currentSymbols.SequenceEqual(newSymbols))
+                {
+                    continue;
+                }
+
+                PlayerSettings.SetScriptingDefineSymbolsForGroup(targetGroup, string.Join(";", newSymbols));
+
+                string[] removedSymbols = currentSymbols.Except(newSymbols).ToArray();
+                if (removedSymbols.Length > 0)
+                {
+                    Debug.Log("Scripting Define Symbols removed from [Project Settings->Player]: " + string.Join(", ", removedSymbols));
+                }
+
+                string[] addedSymbols = newSymbols.Except(currentSymbols).ToArray();
+                if (addedSymbols.Length > 0)
+                {
+                    Debug.Log("Scripting Define Symbols added To [Project Settings->Player]: " + string.Join(", ", addedSymbols));
+                }
+
+                if (!changedSymbols)
+                {
+                    changedSymbols = removedSymbols.Length > 0 || addedSymbols.Length > 0;
+                }
+            }
+
+            return changedSymbols;
+        }
+
+        public string[] GetSimplifiedSDKErrorDescriptions()
+        {
+            var sdkErrorDescriptions = new List<string>();
+
+            var installedSDKInfosList = new[] { InstalledSystemSDKInfos, InstalledBoundariesSDKInfos, InstalledHeadsetSDKInfos, InstalledControllerSDKInfos };
+            var currentSDKInfos = new[] { systemSDKInfo, boundariesSDKInfo, headsetSDKInfo, controllerSDKInfo };
+
+            for (var index = 0; index < installedSDKInfosList.Length; index++)
+            {
+                ReadOnlyCollection<VRTK_SDKInfo> installedSDKInfos = installedSDKInfosList[index];
+                VRTK_SDKInfo currentSDKInfo = currentSDKInfos[index];
+
+                Type baseType = currentSDKInfo.type.BaseType;
+                if (baseType == null)
+                {
+                    continue;
+                }
+
+                string baseName = baseType.Name.Remove(0, typeof(SDK_Base).Name.Length);
+
+                if (!installedSDKInfos.Contains(currentSDKInfo))
+                {
+                    sdkErrorDescriptions.Add(string.Format("The vendor SDK '{0}' is not installed.", currentSDKInfo.description.prettyName));
+                }
+                else if (currentSDKInfo.type == typeof(SDK_FallbackSystem))
+                {
+                    if (currentSDKInfo.originalTypeNameWhenFallbackIsUsed != null)
+                    {
+                        sdkErrorDescriptions.Add(string.Format("The SDK '{0}' doesn't exist anymore. The {1} fallback SDK will be used instead.", currentSDKInfo.originalTypeNameWhenFallbackIsUsed, baseName));
+                    }
+                    else
+                    {
+                        sdkErrorDescriptions.Add("A fallback SDK is used. Make sure to set a real SDK.");
+                    }
+                }
+            }
+
+            return sdkErrorDescriptions.Distinct().ToArray();
+        }
+
+        static VRTK_SDKManager()
+        {
+            PopulateAvailableScriptingDefineSymbolPredicateInfos();
+            PopulateAvailableAndInstalledSDKInfos();
+
+#if UNITY_EDITOR
+            //call AutoManageScriptingDefineSymbolsAndPopulateObjectReferences when the currently active scene changes
+            EditorApplication.hierarchyWindowChanged += () =>
+            {
+                string currentActiveScenePath = SceneManager.GetActiveScene().path;
+                if (currentActiveScenePath != PreviousActiveScenePath)
+                {
+                    PreviousActiveScenePath = currentActiveScenePath;
+                    AutoManageScriptingDefineSymbolsAndPopulateObjectReferences();
+                }
+            };
+#endif
         }
 
         protected virtual void Awake()
         {
             CreateInstance();
-            if (!VRTK_SharedMethods.IsEditTime())
+            SetupHeadset();
+            SetupControllers();
+            GetBoundariesSDK().InitBoundaries();
+        }
+
+        /// <summary>
+        /// Populates <see cref="AvailableScriptingDefineSymbolPredicateInfos"/> with all the available <see cref="SDK_ScriptingDefineSymbolPredicateAttribute"/>s and associated method infos.
+        /// </summary>
+        private static void PopulateAvailableScriptingDefineSymbolPredicateInfos()
+        {
+            var predicateInfos = new List<ScriptingDefineSymbolPredicateInfo>();
+
+            foreach (Type type in typeof(VRTK_SDKManager).Assembly.GetTypes())
             {
-                SetupHeadset();
-                SetupControllers();
-                GetBoundariesSDK().InitBoundaries();
+                for (var index = 0; index < type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static).Length; index++)
+                {
+                    MethodInfo methodInfo = type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static)[index];
+                    var predicateAttributes = (SDK_ScriptingDefineSymbolPredicateAttribute[])methodInfo.GetCustomAttributes(typeof(SDK_ScriptingDefineSymbolPredicateAttribute), false);
+                    if (predicateAttributes.Length == 0)
+                    {
+                        continue;
+                    }
+
+                    if (methodInfo.ReturnType != typeof(bool) || methodInfo.GetParameters().Length != 0)
+                    {
+                        throw new InvalidOperationException(string.Format("The method '{0}' on '{1}' has '{2}' specified but its signature is wrong. The method must take no arguments and return bool.", methodInfo.Name, type, typeof(SDK_ScriptingDefineSymbolPredicateAttribute)));
+                    }
+
+                    predicateInfos.AddRange(predicateAttributes.Select(predicateAttribute => new ScriptingDefineSymbolPredicateInfo(predicateAttribute, methodInfo)));
+                }
+            }
+
+            predicateInfos.Sort((x, y) => string.Compare(x.attribute.symbol, y.attribute.symbol, StringComparison.Ordinal));
+
+            AvailableScriptingDefineSymbolPredicateInfos = predicateInfos.AsReadOnly();
+        }
+
+        /// <summary>
+        /// Populates the various lists of available and installed SDK infos.
+        /// </summary>
+        private static void PopulateAvailableAndInstalledSDKInfos()
+        {
+            List<string> symbolsOfInstalledSDKs = AvailableScriptingDefineSymbolPredicateInfos
+                .Where(predicateInfo => (bool)predicateInfo.methodInfo.Invoke(null, null))
+                .Select(predicateInfo => predicateInfo.attribute.symbol)
+                .ToList();
+
+            var availableSystemSDKInfos = new List<VRTK_SDKInfo>();
+            var availableBoundariesSDKInfos = new List<VRTK_SDKInfo>();
+            var availableHeadsetSDKInfos = new List<VRTK_SDKInfo>();
+            var availableControllerSDKInfos = new List<VRTK_SDKInfo>();
+
+            var installedSystemSDKInfos = new List<VRTK_SDKInfo>();
+            var installedBoundariesSDKInfos = new List<VRTK_SDKInfo>();
+            var installedHeadsetSDKInfos = new List<VRTK_SDKInfo>();
+            var installedControllerSDKInfos = new List<VRTK_SDKInfo>();
+
+            PopulateAvailableAndInstalledSDKInfos<SDK_BaseSystem, SDK_FallbackSystem>(availableSystemSDKInfos, installedSystemSDKInfos, symbolsOfInstalledSDKs);
+            PopulateAvailableAndInstalledSDKInfos<SDK_BaseBoundaries, SDK_FallbackBoundaries>(availableBoundariesSDKInfos, installedBoundariesSDKInfos, symbolsOfInstalledSDKs);
+            PopulateAvailableAndInstalledSDKInfos<SDK_BaseHeadset, SDK_FallbackHeadset>(availableHeadsetSDKInfos, installedHeadsetSDKInfos, symbolsOfInstalledSDKs);
+            PopulateAvailableAndInstalledSDKInfos<SDK_BaseController, SDK_FallbackController>(availableControllerSDKInfos, installedControllerSDKInfos, symbolsOfInstalledSDKs);
+
+            AvailableSystemSDKInfos = availableSystemSDKInfos.AsReadOnly();
+            AvailableBoundariesSDKInfos = availableBoundariesSDKInfos.AsReadOnly();
+            AvailableHeadsetSDKInfos = availableHeadsetSDKInfos.AsReadOnly();
+            AvailableControllerSDKInfos = availableControllerSDKInfos.AsReadOnly();
+
+            InstalledSystemSDKInfos = installedSystemSDKInfos.AsReadOnly();
+            InstalledBoundariesSDKInfos = installedBoundariesSDKInfos.AsReadOnly();
+            InstalledHeadsetSDKInfos = installedHeadsetSDKInfos.AsReadOnly();
+            InstalledControllerSDKInfos = installedControllerSDKInfos.AsReadOnly();
+        }
+
+        /// <summary>
+        /// Populates the lists of available and installed SDK infos for a specific SDK base type.
+        /// </summary>
+        /// <typeparam name="BaseType">The SDK base type of which to populate the lists for. Must be a subclass of <see cref="SDK_Base"/>.</typeparam>
+        /// <typeparam name="FallbackType">The SDK type to fall back on if problems occur. Must be a subclass of <typeparamref name="BaseType"/>.</typeparam>
+        /// <param name="availableSDKInfos">The list of available SDK infos to populate.</param>
+        /// <param name="installedSDKInfos">The list of installed SDK infos to populate.</param>
+        /// <param name="symbolsOfInstalledSDKs">The list of symbols of all the installed SDKs.</param>
+        private static void PopulateAvailableAndInstalledSDKInfos<BaseType, FallbackType>(List<VRTK_SDKInfo> availableSDKInfos, List<VRTK_SDKInfo> installedSDKInfos, ICollection<string> symbolsOfInstalledSDKs) where BaseType : SDK_Base where FallbackType : BaseType
+        {
+            Type baseType = typeof(BaseType);
+            Type fallbackType = SDKFallbackTypesByBaseType[baseType];
+
+            availableSDKInfos.Add(VRTK_SDKInfo.Create<BaseType, FallbackType, FallbackType>());
+            availableSDKInfos.AddRange(baseType.Assembly.GetExportedTypes()
+                .Where(type => type.IsSubclassOf(baseType) && type != fallbackType && !type.IsAbstract)
+                .Select<Type, VRTK_SDKInfo>(VRTK_SDKInfo.Create<BaseType, FallbackType>));
+            availableSDKInfos.Sort((x, y) => x.description.prettyName == "Fallback"
+                ? -1 //the fallback SDK should always be the first SDK in the list
+                : string.Compare(x.description.prettyName, y.description.prettyName, StringComparison.Ordinal));
+
+            installedSDKInfos.AddRange(availableSDKInfos.Where(info =>
+            {
+                string symbol = info.description.symbol;
+                return string.IsNullOrEmpty(symbol) || symbolsOfInstalledSDKs.Contains(symbol);
+            }));
+        }
+
+#if UNITY_EDITOR
+        /// <summary>
+        /// Calls <see cref="ManageScriptingDefineSymbols"/> and <see cref="PopulateObjectReferences"/> (both without forcing) at the appropriate times when in the editor.
+        /// </summary>
+        [DidReloadScripts]
+        private static void AutoManageScriptingDefineSymbolsAndPopulateObjectReferences()
+        {
+            if (EditorApplication.isPlayingOrWillChangePlaymode)
+            {
+                return;
+            }
+
+            RemoveLegacyScriptingDefineSymbols();
+
+            var sdkManager = FindObjectOfType<VRTK_SDKManager>();
+            if (sdkManager)
+            {
+                sdkManager.CreateInstance();
+            }
+
+            if (instance != null && !instance.ManageScriptingDefineSymbols(false, false))
+            {
+                instance.PopulateObjectReferences(false);
+            }
+
+            PreviousActiveScenePath = SceneManager.GetActiveScene().path;
+        }
+
+        /// <summary>
+        /// Removes scripting define symbols used by previous VRTK versions.
+        /// </summary>
+        private static void RemoveLegacyScriptingDefineSymbols()
+        {
+            string[] currentSymbols = PlayerSettings.GetScriptingDefineSymbolsForGroup(BuildTargetGroup.Standalone)
+                .Split(';')
+                .Distinct()
+                .OrderBy(symbol => symbol, StringComparer.Ordinal)
+                .ToArray();
+            string[] newSymbols = currentSymbols.Where(symbol => !symbol.StartsWith("VRTK_SDK_", StringComparison.Ordinal)).ToArray();
+
+            if (!currentSymbols.SequenceEqual(newSymbols))
+            {
+                PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildTargetGroup.Standalone, string.Join(";", newSymbols));
+
+                string[] removedSymbols = currentSymbols.Except(newSymbols).ToArray();
+                if (removedSymbols.Length > 0)
+                {
+                    Debug.Log("Legacy (i.e. used by previous VRTK versions only) Scripting Define Symbols removed from [Project Settings->Player]: " + string.Join(", ", removedSymbols));
+                }
             }
         }
+#endif
 
         private void SetupHeadset()
         {
@@ -226,8 +655,7 @@ namespace VRTK
 
         private void SetupControllers()
         {
-            if (actualLeftController && 
-                !actualLeftController.GetComponent<VRTK_TrackedController>())
+            if (actualLeftController && !actualLeftController.GetComponent<VRTK_TrackedController>())
             {
                 actualLeftController.AddComponent<VRTK_TrackedController>();
             }
@@ -253,30 +681,125 @@ namespace VRTK
             if (instance == null)
             {
                 instance = this;
+
+                string sdkErrorDescriptions = string.Join("\n- ", GetSimplifiedSDKErrorDescriptions());
+                if (!string.IsNullOrEmpty(sdkErrorDescriptions))
+                {
+                    sdkErrorDescriptions = "- " + sdkErrorDescriptions;
+                    Debug.LogError("There are some errors because of the current SDK Manager setup:\n" + sdkErrorDescriptions);
+                }
+
+                if (persistOnLoad && !VRTK_SharedMethods.IsEditTime())
+                {
+                    DontDestroyOnLoad(gameObject);
+                }
             }
             else if (instance != this)
             {
                 Destroy(gameObject);
             }
+        }
 
-            if (persistOnLoad && !VRTK_SharedMethods.IsEditTime())
+        /// <summary>
+        /// Handles the various SDK getters by logging potential errors.
+        /// </summary>
+        /// <typeparam name="BaseType">The SDK base type of which to handle the getter for. Must be a subclass of <see cref="SDK_Base"/>.</typeparam>
+        /// <param name="prettyName">The pretty name of the base SDK to use when logging errors.</param>
+        /// <param name="info">The SDK info of which the SDK getter was called.</param>
+        /// <param name="installedInfos">The installed SDK infos of which the SDK getter was called.</param>
+        private static void HandleSDKGetter<BaseType>(string prettyName, VRTK_SDKInfo info, IEnumerable<VRTK_SDKInfo> installedInfos) where BaseType : SDK_Base
+        {
+            if (VRTK_SharedMethods.IsEditTime())
             {
-                DontDestroyOnLoad(gameObject);
+                return;
+            }
+
+            string sdkErrorDescription = GetSDKErrorDescription<BaseType>(prettyName, info, installedInfos);
+            if (!string.IsNullOrEmpty(sdkErrorDescription))
+            {
+                Debug.LogError(sdkErrorDescription);
             }
         }
-    }
 
-    public class VRTK_SDKDetails
-    {
-        public string defineSymbol;
-        public string prettyName;
-        public string checkType;
-
-        public VRTK_SDKDetails(string givenDefineSymbol, string givenPrettyName, string givenCheckType)
+        /// <summary>
+        /// Handles the various SDK info setters by making sure to automatically manage the scripting define symbols or populate the object references if the SDK Manager is set to do so.
+        /// </summary>
+        private void HandleSDKInfoSetter()
         {
-            defineSymbol = givenDefineSymbol;
-            prettyName = givenPrettyName;
-            checkType = givenCheckType;
+#if UNITY_EDITOR
+            if (!ManageScriptingDefineSymbols(false, false))
+            {
+                PopulateObjectReferences(false);
+            }
+#else
+            PopulateObjectReferences(false);
+#endif
+        }
+
+        /// <summary>
+        /// Returns an error description in case any of these are true for the current SDK info:
+        /// <list type="bullet">
+        /// <item> <description>Its type doesn't exist anymore.</description> </item>
+        /// <item> <description>It's a fallback SDK.</description> </item>
+        /// <item> <description>It doesn't have its scripting define symbols added.</description> </item>
+        /// <item> <description>It's missing its vendor SDK.</description> </item>
+        /// </list>
+        /// </summary>
+        /// <typeparam name="BaseType">The SDK base type of which to return the error description for. Must be a subclass of <see cref="SDK_Base"/>.</typeparam>
+        /// <param name="prettyName">The pretty name of the base SDK to use when returning error descriptions.</param>
+        /// <param name="info">The SDK info of which to return the error description for.</param>
+        /// <param name="installedInfos">The installed SDK infos.</param>
+        /// <returns>An error description if there is one, else <see langword="null"/>.</returns>
+        private static string GetSDKErrorDescription<BaseType>(string prettyName, VRTK_SDKInfo info, IEnumerable<VRTK_SDKInfo> installedInfos) where BaseType : SDK_Base
+        {
+            Type selectedType = info.type;
+            Type baseType = typeof(BaseType);
+            Type fallbackType = SDKFallbackTypesByBaseType[baseType];
+
+            if (selectedType == fallbackType)
+            {
+                return string.Format("The fallback {0} SDK is being used because there is no other {0} SDK set in the SDK Manager.", prettyName);
+            }
+
+            if (!baseType.IsAssignableFrom(selectedType) || fallbackType.IsAssignableFrom(selectedType))
+            {
+                string description = string.Format("The fallback {0} SDK is being used despite being set to '{1}'.", prettyName, selectedType.Name);
+
+                if (installedInfos.Select(installedInfo => installedInfo.type).Contains(selectedType))
+                {
+                    return description + " Its needed scripting define symbols are not added. You can click the GameObject with the `VRTK_SDKManager` script attached to it in Edit Mode and choose to automatically let the manager handle the scripting define symbols.";
+                }
+
+                return description + " The needed vendor SDK isn't installed.";
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// A helper class that simply holds references to both the <see cref="SDK_ScriptingDefineSymbolPredicateAttribute"/> and the method info of the method the attribute is defined on.
+        /// </summary>
+        public sealed class ScriptingDefineSymbolPredicateInfo
+        {
+            /// <summary>
+            /// The predicate attribute.
+            /// </summary>
+            public readonly SDK_ScriptingDefineSymbolPredicateAttribute attribute;
+            /// <summary>
+            /// The method info of the method the attribute is defined on.
+            /// </summary>
+            public readonly MethodInfo methodInfo;
+
+            /// <summary>
+            /// Constructs a new instance with the specified predicate attribute and associated method info.
+            /// </summary>
+            /// <param name="attribute">The predicate attribute.</param>
+            /// <param name="methodInfo">The method info of the method the attribute is defined on.</param>
+            public ScriptingDefineSymbolPredicateInfo(SDK_ScriptingDefineSymbolPredicateAttribute attribute, MethodInfo methodInfo)
+            {
+                this.attribute = attribute;
+                this.methodInfo = methodInfo;
+            }
         }
     }
 }

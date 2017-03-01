@@ -1,15 +1,23 @@
-﻿// Daydream Headset|SDK_Daydream|002
+﻿// Daydream Headset|SDK_Daydream|003
 namespace VRTK
 {
-#if VRTK_SDK_DAYDREAM
+#if VRTK_DEFINE_SDK_DAYDREAM
     using UnityEngine;
     using System.Collections.Generic;
+#endif
 
     /// <summary>
-    /// The Daydream Headset SDK script  provides dummy functions for the headset.
+    /// The Daydream Headset SDK script provides dummy functions for the headset.
     /// </summary>
-    public class SDK_DaydreamHeadset : SDK_BaseHeadset
+    [SDK_Description(typeof(SDK_DaydreamSystem))]
+    public class SDK_DaydreamHeadset
+#if VRTK_DEFINE_SDK_DAYDREAM
+        : SDK_BaseHeadset
+#else
+        : SDK_FallbackHeadset
+#endif
     {
+#if VRTK_DEFINE_SDK_DAYDREAM
         private Quaternion previousHeadsetRotation;
         private Quaternion currentHeadsetRotation;
 
@@ -106,10 +114,6 @@ namespace VRTK
                 camera.gameObject.AddComponent<VRTK_ScreenFade>();
             }
         }
-    }
-#else
-    public class SDK_DaydreamHeadset : SDK_FallbackHeadset
-    {
-    }
 #endif
+    }
 }

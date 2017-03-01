@@ -3,6 +3,9 @@ namespace VRTK
 {
     using UnityEngine;
     using System.Reflection;
+#if UNITY_EDITOR
+    using UnityEditor;
+#endif
 
     /// <summary>
     /// The Shared Methods script is a collection of reusable static methods that are used across a range of different scripts.
@@ -164,7 +167,11 @@ namespace VRTK
         /// <returns>Returns true if Unity is in the Unity Editor and not in play mode.</returns>
         public static bool IsEditTime()
         {
-            return (Application.isEditor && !Application.isPlaying);
+#if UNITY_EDITOR
+            return !EditorApplication.isPlayingOrWillChangePlaymode;
+#else
+            return false;
+#endif
         }
 
         private static float ColorPercent(float value, float percent)

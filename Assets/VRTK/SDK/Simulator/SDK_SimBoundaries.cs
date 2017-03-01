@@ -1,12 +1,12 @@
 ﻿// Simulator Boundaries|SDK_Simulator|004
 namespace VRTK
 {
-#if VRTK_SDK_SIM
     using UnityEngine;
 
     /// <summary>
-    /// The Sim Boundaries SDK script provides dummy functions for the play area bounderies.
+    /// The Sim Boundaries SDK script provides dummy functions for the play area boundaries.
     /// </summary>
+    [SDK_Description(typeof(SDK_SimSystem))]
     public class SDK_SimBoundaries : SDK_BaseBoundaries
     {
         private Transform area;
@@ -75,9 +75,4 @@ namespace VRTK
             return true;
         }
     }
-#else
-    public class SDK_SimBoundaries : SDK_FallbackBoundaries
-    {
-    }
-#endif
 }

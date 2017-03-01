@@ -1,14 +1,22 @@
-﻿// XimmerseVR Boundaries|SDK_XimmerseVR|004
+﻿// XimmerseVR Boundaries|SDK_XimmerseVR|005
 namespace VRTK
 {
-#if VRTK_SDK_XIMMERSEVR
+#if VRTK_DEFINE_SDK_XIMMERSEVR
     using UnityEngine;
+#endif
 
     /// <summary>
     /// The XimmerseVR Boundaries SDK script provides a bridge to the XimmerseVR SDK play area.
     /// </summary>
-    public class SDK_XimmerseVRBoundaries : SDK_BaseBoundaries
+    [SDK_Description(typeof(SDK_XimmerseVRSystem))]
+    public class SDK_XimmerseVRBoundaries
+#if VRTK_DEFINE_SDK_XIMMERSEVR
+        : SDK_BaseBoundaries
+#else
+        : SDK_FallbackBoundaries
+#endif
     {
+#if VRTK_DEFINE_SDK_XIMMERSEVR
         /// <summary>
         /// The InitBoundaries method is run on start of scene and can be used to initialse anything on game start.
         /// </summary>
@@ -69,10 +77,6 @@ namespace VRTK
         {
             return true;
         }
-    }
-#else
-    public class SDK_XimmerseVRBoundaries : SDK_FallbackBoundaries
-    {
-    }
 #endif
+    }
 }

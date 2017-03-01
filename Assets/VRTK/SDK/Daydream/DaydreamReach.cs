@@ -1,4 +1,4 @@
-﻿#if VRTK_SDK_DAYDREAM
+﻿#if VRTK_DEFINE_SDK_DAYDREAM
 namespace VRTK
 {
     using UnityEngine;
