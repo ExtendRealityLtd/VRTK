@@ -32,7 +32,6 @@
                 sdkManager.PopulateObjectReferences(false);
             }
 
-            EditorGUI.BeginDisabledGroup(sdkManager.autoPopulateObjectReferences);
             const string populateNowDescription = "Populate Now";
             var populateNowGUIContent = new GUIContent(populateNowDescription, "Set the SDK object references to the objects of the selected SDKs.");
             if (GUILayout.Button(populateNowGUIContent, GUILayout.MaxHeight(GUI.skin.label.CalcSize(populateNowGUIContent).y)))
@@ -40,7 +39,6 @@
                 Undo.RecordObject(sdkManager, populateNowDescription);
                 sdkManager.PopulateObjectReferences(true);
             }
-            EditorGUI.EndDisabledGroup();
 
             EditorGUILayout.EndHorizontal();
 
