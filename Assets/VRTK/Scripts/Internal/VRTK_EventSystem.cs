@@ -1,6 +1,6 @@
 ﻿namespace VRTK
 {
-    using System.Collections.Generic;
+    using System.Collections;
     using System.Linq;
     using System.Reflection;
     using UnityEngine.EventSystems;
@@ -25,7 +25,7 @@
 
             vrInputModule = gameObject.AddComponent<VRTK_VRInputModule>();
             base.OnEnable();
-            SetEventSystemOfBaseInputModulesTo(this);
+            StartCoroutine(SetEventSystemOfBaseInputModulesAfterFrameDelay(this));
         }
 
         protected override void OnDisable()
@@ -37,7 +37,7 @@
             {
                 previousEventSystem.enabled = true;
                 CopyValuesFrom(this, previousEventSystem);
-                SetEventSystemOfBaseInputModulesTo(previousEventSystem);
+                SetEventSystemOfBaseInputModules(previousEventSystem);
             }
         }
 
@@ -74,16 +74,24 @@
             }
         }
 
-        private static void SetEventSystemOfBaseInputModulesTo(EventSystem eventSystem)
+        private static IEnumerator SetEventSystemOfBaseInputModulesAfterFrameDelay(EventSystem eventSystem)
         {
-            //BaseInputModule has a private field referencing the current EventSystem
-            //this field is set in BaseInputModule.OnEnable only
-            //it's used in BaseInputModule.OnEnable and BaseInputModule.OnDisable to call EventSystem.UpdateModules
-            //this means we could just disable and enable every enabled BaseInputModule to fix that reference
-            //
-            //but the StandaloneInputModule (which is added by default when adding an EventSystem in the Editor) requires EventSystem
-            //which means we can't correctly destroy the old EventSystem first and then add our own one
-            //we also want to leave the existing EventSystem as is, so it can be used again whenever VRTK_UIPointer.RemoveEventSystem is called
+            yield return null;
+            SetEventSystemOfBaseInputModules(eventSystem);
+        }
+        private static void SetEventSystemOfBaseInputModules(EventSystem eventSystem)
+        {
+            /*
+            BaseInputModule has a private field referencing the current EventSystem. That field is set in
+            BaseInputModule.OnEnable only. It's used in BaseInputModule.OnEnable and BaseInputModule.OnDisable
+            to call EventSystem.UpdateModules.
+            This means we could just disable and enable every enabled BaseInputModule to fix that reference.
+
+            But the StandaloneInputModule (which is added by default when adding an EventSystem in the Editor)
+            requires EventSystem. Which means we can't correctly destroy the old EventSystem first and then add
+            our own one.
+            We therefore update that private reference directly here.
+            */
             foreach (BaseInputModule module in FindObjectsOfType<BaseInputModule>())
             {
                 BASE_INPUT_MODULE_EVENT_SYSTEM_FIELD_INFO.SetValue(module, eventSystem);
