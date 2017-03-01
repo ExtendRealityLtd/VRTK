@@ -208,7 +208,11 @@ namespace VRTK
                     velocity = -VRTK_DeviceFinder.GetControllerVelocity(device);
                     if (usePlayerScale)
                     {
-                        velocity = Vector3.Scale(velocity, playArea.localScale);
+                        velocity = playArea.TransformVector(velocity);
+                    }
+                    else
+                    {
+                        velocity = playArea.TransformDirection(velocity);
                     }
                 }
 
