@@ -162,6 +162,19 @@ namespace VRTK
         }
 
         /// <summary>
+        /// The RoundFloat method is used to round a given float to the given decimal places.
+        /// </summary>
+        /// <param name="givenFloat">The float to round.</param>
+        /// <param name="decimalPlaces">The number of decimal places to round to.</param>
+        /// <param name="rawFidelity">If this is true then the decimal places must be given in the decimal multiplier, e.g. 10 for 1dp, 100 for 2dp, etc.</param>
+        /// <returns>The rounded float.</returns>
+        public static float RoundFloat(float givenFloat, int decimalPlaces, bool rawFidelity = false)
+        {
+            float roundBy = (rawFidelity ? decimalPlaces : Mathf.Pow(10.0f, decimalPlaces));
+            return Mathf.Round(givenFloat * roundBy) / roundBy;
+        }
+
+        /// <summary>
         /// The IsEditTime method determines if the state of Unity is in the Unity Editor and the scene is not in play mode.
         /// </summary>
         /// <returns>Returns true if Unity is in the Unity Editor and not in play mode.</returns>

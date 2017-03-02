@@ -82,6 +82,9 @@ namespace VRTK
         public float blinkYThreshold = 0.15f;
         [Tooltip("The amount the `y` position needs to change by between the current floor `y` position and the previous floor `y` position before a change in floor height is considered to have occurred. A higher value here will mean that a `Drop To Floor` will be less likely to happen if the `y` of the floor beneath the user hasn't changed as much as the given threshold.")]
         public float floorHeightTolerance = 0.001f;
+        [Range(1, 10)]
+        [Tooltip("The amount of rounding on the play area Y position to be applied when checking if falling is occuring.")]
+        public int fallCheckPrecision = 5;
 
         /// <summary>
         /// Emitted when a fall begins.
@@ -409,7 +412,7 @@ namespace VRTK
 
         private void CheckFalling()
         {
-            if (isFalling && lastPlayAreaPosition.y == playArea.position.y)
+            if (isFalling && VRTK_SharedMethods.RoundFloat(lastPlayAreaPosition.y, fallCheckPrecision) == VRTK_SharedMethods.RoundFloat(playArea.position.y, fallCheckPrecision))
             {
                 StopFall();
             }
