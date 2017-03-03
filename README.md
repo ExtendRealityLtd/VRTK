@@ -26,7 +26,7 @@ original repo where still the same (the deletion of the unity project structure 
 The easiest way for now is to run
 
     ```
-    git branch feature/vrtk-update-YYYY-MM-DD ecad13fde783f99b75c07c88ea81b4ebb9122ba7
+    git checkout -b feature/vrtk-update-YYYY-MM-DD ecad13fde783f99b75c07c88ea81b4ebb9122ba7
     ```
 
     (this creates a new branch with the specified name from the specified commit)
@@ -35,11 +35,17 @@ repository's `Assets\VRTK` folder into the fork's `VRTK\` folder.
 1. Create a new commit of the changes à la
 
     ```
+    git add .
     git commit -m "Updated VRTK up to commit <original-vrtk-commit-sha>"
     ```
 1. Finally, we'll rebase all changes that have been made on the fork's master onto our new branch.
 This will essentially re-apply all of the changes which have been solely made on the fork to on topic
 of the updated VRTK features.
+
+    ```
+    git rebase -i feature/vrtk-update-YYYY-MM-DD master
+    ```
+    This process might take some time and will require you to fix and conflicts.
 
 # VRTK
 
