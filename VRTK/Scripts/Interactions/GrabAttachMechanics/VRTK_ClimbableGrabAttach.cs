@@ -1,4 +1,6 @@
 ﻿// Climbable Grab Attach|GrabAttachMechanics|50100
+using UnityEngine;
+
 namespace VRTK.GrabAttachMechanics
 {
 
@@ -10,6 +12,10 @@ namespace VRTK.GrabAttachMechanics
     /// </example>
     public class VRTK_ClimbableGrabAttach : VRTK_BaseGrabAttach
     {
+
+        [Tooltip("Will respect the grabbed climbing object's rotation if it changes dynamically")]
+        public bool useObjectRotation = false;
+
         protected override void Initialise()
         {
             tracked = false;

@@ -31,15 +31,14 @@ namespace VRTK
 
         private float minAngle = 0f;
         private float stepSize = 1f;
-        private Rigidbody handleRb;
-        private FixedJoint handleFj;
-        private VRTK_InteractableObject io;
-        private Rigidbody lidRb;
-        private HingeJoint lidHj;
-        private Rigidbody bodyRb;
+        private Rigidbody bodyRigidbody;
+        private Rigidbody handleRigidbody;
+        private FixedJoint handleJoint;
+        private Rigidbody lidRigidbody;
+        private HingeJoint lidJoint;
+        private bool lidJointCreated;
         private Direction finalDirection;
         private float subDirection = 1; // positive or negative can be determined automatically since handle dictates that
-        private bool lidHjCreated;
 
         protected override void OnDrawGizmos()
         {
@@ -129,17 +128,17 @@ namespace VRTK
             {
                 subDirection = -1;
             }
-            if (lidHjCreated)
+            if (lidJointCreated)
             {
-                lidHj.useLimits = true;
-                lidHj.enableCollision = true;
+                lidJoint.useLimits = true;
+                lidJoint.enableCollision = true;
 
-                JointLimits limits = lidHj.limits;
+                JointLimits limits = lidJoint.limits;
                 switch (finalDirection)
                 {
                     case Direction.x:
-                        lidHj.anchor = new Vector3(subDirection * lidBounds.extents.x, 0, 0);
-                        lidHj.axis = new Vector3(0, 0, 1);
+                        lidJoint.anchor = new Vector3(subDirection * lidBounds.extents.x, 0, 0);
+                        lidJoint.axis = new Vector3(0, 0, 1);
                         if (subDirection > 0)
                         {
                             limits.min = -maxAngle;
@@ -152,8 +151,8 @@ namespace VRTK
                         }
                         break;
                     case Direction.y:
-                        lidHj.anchor = new Vector3(0, subDirection * lidBounds.extents.y, 0);
-                        lidHj.axis = new Vector3(0, 1, 0);
+                        lidJoint.anchor = new Vector3(0, subDirection * lidBounds.extents.y, 0);
+                        lidJoint.axis = new Vector3(0, 1, 0);
                         if (subDirection > 0)
                         {
                             limits.min = -maxAngle;
@@ -166,8 +165,8 @@ namespace VRTK
                         }
                         break;
                     case Direction.z:
-                        lidHj.anchor = new Vector3(0, 0, subDirection * lidBounds.extents.z);
-                        lidHj.axis = new Vector3(1, 0, 0);
+                        lidJoint.anchor = new Vector3(0, 0, subDirection * lidBounds.extents.z);
+                        lidJoint.axis = new Vector3(1, 0, 0);
                         if (subDirection < 0)
                         {
                             limits.min = -maxAngle;
@@ -180,15 +179,18 @@ namespace VRTK
                         }
                         break;
                 }
-                lidHj.limits = limits;
+                lidJoint.limits = limits;
             }
-
             return true;
         }
 
         protected override ControlValueRange RegisterValueRange()
         {
-            return new ControlValueRange() { controlMin = lidHj.limits.min, controlMax = lidHj.limits.max };
+            return new ControlValueRange()
+            {
+                controlMin = lidJoint.limits.min,
+                controlMax = lidJoint.limits.max
+            };
         }
 
         protected override void HandleUpdate()
@@ -198,11 +200,11 @@ namespace VRTK
 
         private Direction DetectDirection()
         {
-            Direction direction = Direction.autodetect;
+            Direction returnDirection = Direction.autodetect;
 
             if (!handle)
             {
-                return direction;
+                return returnDirection;
             }
 
             Bounds handleBounds = VRTK_SharedMethods.GetBounds(handle.transform, transform);
@@ -215,53 +217,53 @@ namespace VRTK
 
             if (VRTK_SharedMethods.IsLowest(lengthX, new float[] { lengthZ, lengthNegX, lengthNegZ }))
             {
-                direction = Direction.x;
+                returnDirection = Direction.x;
             }
             else if (VRTK_SharedMethods.IsLowest(lengthNegX, new float[] { lengthX, lengthZ, lengthNegZ }))
             {
-                direction = Direction.x;
+                returnDirection = Direction.x;
             }
             else if (VRTK_SharedMethods.IsLowest(lengthZ, new float[] { lengthX, lengthNegX, lengthNegZ }))
             {
-                direction = Direction.z;
+                returnDirection = Direction.z;
             }
             else if (VRTK_SharedMethods.IsLowest(lengthNegZ, new float[] { lengthX, lengthZ, lengthNegX }))
             {
-                direction = Direction.z;
+                returnDirection = Direction.z;
             }
 
-            return direction;
+            return returnDirection;
         }
 
         private void InitBody()
         {
-            bodyRb = body.GetComponent<Rigidbody>();
-            if (bodyRb == null)
+            bodyRigidbody = body.GetComponent<Rigidbody>();
+            if (bodyRigidbody == null)
             {
-                bodyRb = body.AddComponent<Rigidbody>();
-                bodyRb.isKinematic = true; // otherwise body moves/falls over when lid is moved or fully open
+                bodyRigidbody = body.AddComponent<Rigidbody>();
+                bodyRigidbody.isKinematic = true; // otherwise body moves/falls over when lid is moved or fully open
             }
         }
 
         private void InitLid()
         {
-            lidRb = lid.GetComponent<Rigidbody>();
-            if (lidRb == null)
+            lidRigidbody = lid.GetComponent<Rigidbody>();
+            if (lidRigidbody == null)
             {
-                lidRb = lid.AddComponent<Rigidbody>();
+                lidRigidbody = lid.AddComponent<Rigidbody>();
             }
 
-            lidHj = lid.GetComponent<HingeJoint>();
-            if (lidHj == null)
+            lidJoint = lid.GetComponent<HingeJoint>();
+            if (lidJoint == null)
             {
-                lidHj = lid.AddComponent<HingeJoint>();
-                lidHjCreated = true;
+                lidJoint = lid.AddComponent<HingeJoint>();
+                lidJointCreated = true;
             }
-            lidHj.connectedBody = bodyRb;
+            lidJoint.connectedBody = bodyRigidbody;
 
             if (!handle)
             {
-                CreateIO(lid);
+                CreateInteractableObject(lid);
             }
         }
 
@@ -271,41 +273,41 @@ namespace VRTK
             {
                 return;
             }
-            handleRb = handle.GetComponent<Rigidbody>();
-            if (handleRb == null)
+            handleRigidbody = handle.GetComponent<Rigidbody>();
+            if (handleRigidbody == null)
             {
-                handleRb = handle.AddComponent<Rigidbody>();
+                handleRigidbody = handle.AddComponent<Rigidbody>();
             }
-            handleRb.isKinematic = false;
-            handleRb.useGravity = false;
+            handleRigidbody.isKinematic = false;
+            handleRigidbody.useGravity = false;
 
-            handleFj = handle.GetComponent<FixedJoint>();
-            if (handleFj == null)
+            handleJoint = handle.GetComponent<FixedJoint>();
+            if (handleJoint == null)
             {
-                handleFj = handle.AddComponent<FixedJoint>();
-                handleFj.connectedBody = lidRb;
+                handleJoint = handle.AddComponent<FixedJoint>();
+                handleJoint.connectedBody = lidRigidbody;
             }
 
-            CreateIO(handle);
+            CreateInteractableObject(handle);
         }
 
-        private void CreateIO(GameObject go)
+        private void CreateInteractableObject(GameObject targetGameObject)
         {
-            io = go.GetComponent<VRTK_InteractableObject>();
-            if (io == null)
+            VRTK_InteractableObject targetInteractableObject = targetGameObject.GetComponent<VRTK_InteractableObject>();
+            if (targetInteractableObject == null)
             {
-                io = go.AddComponent<VRTK_InteractableObject>();
+                targetInteractableObject = targetGameObject.AddComponent<VRTK_InteractableObject>();
             }
-            io.isGrabbable = true;
-            io.grabAttachMechanicScript = gameObject.AddComponent<GrabAttachMechanics.VRTK_TrackObjectGrabAttach>();
-            io.grabAttachMechanicScript.precisionGrab = true;
-            io.secondaryGrabActionScript = gameObject.AddComponent<SecondaryControllerGrabActions.VRTK_SwapControllerGrabAction>();
-            io.stayGrabbedOnTeleport = false;
+            targetInteractableObject.isGrabbable = true;
+            targetInteractableObject.grabAttachMechanicScript = gameObject.AddComponent<GrabAttachMechanics.VRTK_TrackObjectGrabAttach>();
+            targetInteractableObject.secondaryGrabActionScript = gameObject.AddComponent<SecondaryControllerGrabActions.VRTK_SwapControllerGrabAction>();
+            targetInteractableObject.grabAttachMechanicScript.precisionGrab = true;
+            targetInteractableObject.stayGrabbedOnTeleport = false;
         }
 
         private float CalculateValue()
         {
-            return Mathf.Round((minAngle + Mathf.Clamp01(Mathf.Abs(lidHj.angle / (lidHj.limits.max - lidHj.limits.min))) * (maxAngle - minAngle)) / stepSize) * stepSize;
+            return (Mathf.Round((minAngle + Mathf.Clamp01(Mathf.Abs(lidJoint.angle / (lidJoint.limits.max - lidJoint.limits.min))) * (maxAngle - minAngle)) / stepSize) * stepSize);
         }
     }
 }

@@ -96,6 +96,8 @@
                 intObj.holdButtonToGrab = holdGrab;
                 intObj.isUsable = useUse;
                 intObj.disableWhenIdle = disableIdle;
+                intObj.grabOverrideButton = VRTK_ControllerEvents.ButtonAlias.Undefined;
+                intObj.useOverrideButton = VRTK_ControllerEvents.ButtonAlias.Undefined;
                 VRTK_BaseGrabAttach grab = go.GetComponent<VRTK_BaseGrabAttach>();
                 if(grab != null)
                 {

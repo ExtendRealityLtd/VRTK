@@ -326,7 +326,7 @@ namespace VRTK
                 if (currentIOCheck && currentIOCheck.GetStoredSnapDropZone() != null && currentIOCheck.GetStoredSnapDropZone() != gameObject)
                 {
                     currentValidSnapObject = null;
-                    if (isHighlighted && highlightObject)
+                    if (isHighlighted && highlightObject && !highlightAlwaysActive)
                     {
                         highlightObject.SetActive(false);
                     }
@@ -678,6 +678,7 @@ namespace VRTK
 
             //Initialise highlighter and set highlight colour
             objectHighlighter = highlightObject.GetComponent<VRTK_BaseHighlighter>();
+            objectHighlighter.unhighlightOnDisable = false;
             objectHighlighter.Initialise(highlightColor);
             objectHighlighter.Highlight(highlightColor);
 
