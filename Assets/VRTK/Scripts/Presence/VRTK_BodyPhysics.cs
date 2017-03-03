@@ -115,6 +115,7 @@ namespace VRTK
         private Transform headset;
         private Rigidbody bodyRigidbody;
         private CapsuleCollider bodyCollider;
+        private VRTK_CollisionTracker collisionTracker;
         private bool currentBodyCollisionsSetting;
         private GameObject currentCollidingObject = null;
         private GameObject currentValidFloorObject = null;
@@ -244,6 +245,12 @@ namespace VRTK
             if (playArea)
             {
                 lastPlayAreaPosition = playArea.position;
+                collisionTracker = playArea.GetComponent<VRTK_CollisionTracker>();
+                if (collisionTracker == null)
+                {
+                    collisionTracker = playArea.gameObject.AddComponent<VRTK_CollisionTracker>();
+                }
+                ManageCollisionListeners(true);
             }
             if (headset)
             {
@@ -258,6 +265,7 @@ namespace VRTK
             base.OnDisable();
             DisableDropToFloor();
             DisableBodyPhysics();
+            ManageCollisionListeners(false);
         }
 
         protected virtual void FixedUpdate()
@@ -326,6 +334,47 @@ namespace VRTK
                 Gizmos.color = Color.red;
                 Gizmos.DrawSphere(new Vector3(currentStandingPosition.x, headset.position.y - 0.3f, currentStandingPosition.y), 0.05f);
             }
+        }
+
+        protected virtual void ManageCollisionListeners(bool state)
+        {
+            if (collisionTracker)
+            {
+                if (state)
+                {
+                    collisionTracker.CollisionEnter += CollisionTracker_CollisionEnter;
+                    collisionTracker.CollisionExit += CollisionTracker_CollisionExit;
+                    collisionTracker.TriggerEnter += CollisionTracker_TriggerEnter;
+                    collisionTracker.TriggerExit += CollisionTracker_TriggerExit;
+                }
+                else
+                {
+                    collisionTracker.CollisionEnter -= CollisionTracker_CollisionEnter;
+                    collisionTracker.CollisionExit -= CollisionTracker_CollisionExit;
+                    collisionTracker.TriggerEnter -= CollisionTracker_TriggerEnter;
+                    collisionTracker.TriggerExit -= CollisionTracker_TriggerExit;
+                }
+            }
+        }
+
+        private void CollisionTracker_TriggerExit(object sender, CollisionTrackerEventArgs e)
+        {
+            OnTriggerExit(e.collider);
+        }
+
+        private void CollisionTracker_TriggerEnter(object sender, CollisionTrackerEventArgs e)
+        {
+            OnTriggerEnter(e.collider);
+        }
+
+        private void CollisionTracker_CollisionExit(object sender, CollisionTrackerEventArgs e)
+        {
+            OnCollisionExit(e.collision);
+        }
+
+        private void CollisionTracker_CollisionEnter(object sender, CollisionTrackerEventArgs e)
+        {
+            OnCollisionEnter(e.collision);
         }
 
         protected void OnStartFalling(BodyPhysicsEventArgs e)
