@@ -104,8 +104,16 @@ namespace VRTK
         public int axisFidelity = 1;
         [Tooltip("The level on the trigger axis to reach before a click is registered.")]
         public float triggerClickThreshold = 1f;
+        [Tooltip("The level on the trigger axis to reach before the axis is forced to 0f.")]
+        public float triggerForceZeroThreshold = 0.01f;
+        [Tooltip("If this is checked then the trigger axis will be forced to 0f when the trigger button reports an untouch event.")]
+        public bool triggerAxisZeroOnUntouch = false;
         [Tooltip("The level on the grip axis to reach before a click is registered.")]
         public float gripClickThreshold = 1f;
+        [Tooltip("The level on the grip axis to reach before the axis is forced to 0f.")]
+        public float gripForceZeroThreshold = 0.01f;
+        [Tooltip("If this is checked then the grip axis will be forced to 0f when the grip button reports an untouch event.")]
+        public bool gripAxisZeroOnUntouch = false;
 
         /// <summary>
         /// This will be true if the trigger is squeezed about half way in.
@@ -1069,7 +1077,7 @@ namespace VRTK
             }
 
             //Trigger Axis
-            currentTriggerAxis.x = (triggerTouched ? currentTriggerAxis.x : 0f);
+            currentTriggerAxis.x = ((!triggerTouched && triggerAxisZeroOnUntouch) || currentTriggerAxis.x < triggerForceZeroThreshold ? 0f : currentTriggerAxis.x);
             if (Vector2ShallowEquals(triggerAxis, currentTriggerAxis))
             {
                 triggerAxisChanged = false;
@@ -1134,7 +1142,7 @@ namespace VRTK
             }
 
             //Grip Axis
-            currentGripAxis.x = (gripTouched ? currentGripAxis.x : 0f);
+            currentGripAxis.x = ((!gripTouched && gripAxisZeroOnUntouch) || currentGripAxis.x < gripForceZeroThreshold ? 0f : currentGripAxis.x);
             if (Vector2ShallowEquals(gripAxis, currentGripAxis))
             {
                 gripAxisChanged = false;
@@ -1168,6 +1176,7 @@ namespace VRTK
             {
                 OnTouchpadTouchEnd(SetButtonEvent(ref touchpadTouched, false, 0f));
                 EmitAlias(ButtonAlias.Touchpad_Touch, false, 0f, ref touchpadTouched);
+                touchpadAxis = Vector2.zero;
             }
 
             //Touchpad Axis

@@ -1,10 +1,10 @@
-﻿// Snap Rotate Touchpad Control Action|TouchpadControlActions|25030
+﻿// Snap Rotate Object Control Action|ObjectControlActions|25030
 namespace VRTK
 {
     using UnityEngine;
 
     /// <summary>
-    /// The Snap Rotate Touchpad Control Action script is used to snap rotate the controlled GameObject around the up vector when changing the touchpad axis.
+    /// The Snap Rotate Object Control Action script is used to snap rotate the controlled GameObject around the up vector when changing the axis.
     /// </summary>
     /// <remarks>
     /// The effect is a immediate snap rotation to quickly face in a new direction.
@@ -12,9 +12,9 @@ namespace VRTK
     /// <example>
     /// `VRTK/Examples/017_CameraRig_TouchpadWalking` has a collection of walls and slopes that can be traversed by the user with the touchpad. There is also an area that can only be traversed if the user is crouching.
     ///
-    /// To enable the Snap Rotate Touchpad Control Action, ensure one of the `TouchpadControlOptions` children (located under the Controller script alias) has the `Snap Rotate` control script active.
+    /// To enable the Snap Rotate Object Control Action, ensure one of the `TouchpadControlOptions` children (located under the Controller script alias) has the `Snap Rotate` control script active.
     /// </example>
-    public class VRTK_SnapRotateTouchpadControlAction : VRTK_BaseTouchpadControlAction
+    public class VRTK_SnapRotateObjectControlAction : VRTK_BaseObjectControlAction
     {
         [Tooltip("The angle to rotate for each snap.")]
         public float anglePerSnap = 30f;

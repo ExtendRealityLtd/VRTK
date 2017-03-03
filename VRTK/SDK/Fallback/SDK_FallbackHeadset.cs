@@ -5,7 +5,7 @@ namespace VRTK
     using System.Collections.Generic;
 
     /// <summary>
-    /// The Fallback System SDK script provides a fallback collection of methods that return null or default Headset values.
+    /// The Fallback Headset SDK script provides a fallback collection of methods that return null or default headset values.
     /// </summary>
     /// <remarks>
     /// This is the fallback class that will just return default values.
@@ -82,11 +82,6 @@ namespace VRTK
         /// <param name="camera">The Transform to with the camera on to add the fade functionality to.</param>
         public override void AddHeadsetFade(Transform camera)
         {
-        }
-
-        private void Awake()
-        {
-            Debug.LogError("Fallback Headset SDK is being used. Have you selected a valid Headset SDK in the SDK Manager? If you are unsure, then click the GameObject with the `VRTK_SDKManager` script attached to it in Edit Mode and select a Headset SDK from the dropdown.");
         }
     }
 }

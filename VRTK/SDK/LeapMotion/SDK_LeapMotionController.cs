@@ -1,17 +1,25 @@
 ﻿// LeapMotion System|SDK_LeapMotion|001
 namespace VRTK
 {
-#if VRTK_SDK_LEAPMOTION
+#if VRTK_DEFINE_SDK_LEAPMOTION
     using UnityEngine;
     using System.Collections.Generic;
     using System;
     using Leap.Unity;
+#endif
 
     /// <summary>
     /// The LeapMotion Controller SDK script provides a bridge to SDK methods that deal with the input devices.
     /// </summary>
-    public class SDK_LeapMotionController : SDK_BaseController
+    [SDK_Description("LeapMotion", SDK_LeapMotionDefines.ScriptingDefineSymbol)]
+    public class SDK_LeapMotionController
+#if VRTK_DEFINE_SDK_LEAPMOTION
+        : SDK_BaseController
+#else
+        : SDK_FallbackController
+#endif
     {
+#if VRTK_DEFINE_SDK_LEAPMOTION
         private const uint leftHandControllerIndex = 0;
         private const uint rightHandControllerIndex = 1;
         private IHandModel leftHand;
@@ -543,10 +551,6 @@ namespace VRTK
             throw new NotImplementedException();
         }
         #endregion Not Applicable
-    }
-#else
-    public class SDK_LeapMotionController : SDK_FallbackController
-    {
-    }
 #endif
+    }
 }

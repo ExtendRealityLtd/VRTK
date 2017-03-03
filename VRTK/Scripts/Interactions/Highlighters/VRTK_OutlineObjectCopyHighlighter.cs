@@ -17,22 +17,22 @@ namespace VRTK.Highlighters
     {
         [Tooltip("The thickness of the outline effect")]
         public float thickness = 1f;
-        [Tooltip("The GameObject to use as the model to outline. If one isn't provided then the first GameObject with a valid Renderer in the current GameObject hierarchy will be used.")]
-        public GameObject customOutlineModel;
+        [Tooltip("The GameObjects to use as the model to outline. If one isn't provided then the first GameObject with a valid Renderer in the current GameObject hierarchy will be used.")]
+        public GameObject[] customOutlineModels;
         [Tooltip("A path to a GameObject to find at runtime, if the GameObject doesn't exist at edit time.")]
-        public string customOutlineModelPath = "";
+        public string[] customOutlineModelPaths;
         [Tooltip("If the mesh has multiple sub-meshes to highlight then this should be checked, otherwise only the first mesh will be highlighted.")]
         public bool enableSubmeshHighlight = false;
 
         private Material stencilOutline;
-        private GameObject highlightModel;
+        private GameObject[] highlightModels;
         private string[] copyComponents = new string[] { "UnityEngine.MeshFilter", "UnityEngine.MeshRenderer" };
 
         /// <summary>
         /// The Initialise method sets up the highlighter for use.
         /// </summary>
         /// <param name="color">Not used.</param>
-        /// <param name="options">A dictionary array containing the highlighter options:\r     * `&lt;'thickness', float&gt;` - Same as `thickness` inspector parameter.\r     * `&lt;'customOutlineModel', GameObject&gt;` - Same as `customOutlineModel` inspector parameter.\r     * `&lt;'customOutlineModelPath', string&gt;` - Same as `customOutlineModelPath` inspector parameter.</param>
+        /// <param name="options">A dictionary array containing the highlighter options:\r     * `&lt;'thickness', float&gt;` - Same as `thickness` inspector parameter.\r     * `&lt;'customOutlineModels', GameObject[]&gt;` - Same as `customOutlineModels` inspector parameter.\r     * `&lt;'customOutlineModelPaths', string[]&gt;` - Same as `customOutlineModelPaths` inspector parameter.</param>
         public override void Initialise(Color? color = null, Dictionary<string, object> options = null)
         {
             usesClonedObject = true;
@@ -51,7 +51,12 @@ namespace VRTK.Highlighters
         public override void ResetHighlighter()
         {
             DeleteExistingHighlightModels();
-            CreateHighlightModel();
+            //First try and use the paths if they have been set
+            ResetHighlighterWithCustomModelPaths();
+            //If the custom models have been set then use these to override any set paths.
+            ResetHighlighterWithCustomModels();
+            //if no highlights set then try falling back
+            ResetHighlightersWithCurrentGameObject();
         }
 
         /// <summary>
@@ -61,12 +66,18 @@ namespace VRTK.Highlighters
         /// <param name="duration">Not used.</param>
         public override void Highlight(Color? color, float duration = 0f)
         {
-            if (highlightModel)
+            if (highlightModels != null && highlightModels.Length > 0)
             {
                 stencilOutline.SetFloat("_Thickness", thickness);
                 stencilOutline.SetColor("_OutlineColor", (Color)color);
 
-                highlightModel.SetActive(true);
+                for (int i = 0; i < highlightModels.Length; i++)
+                {
+                    if (highlightModels[i])
+                    {
+                        highlightModels[i].SetActive(true);
+                    }
+                }
             }
         }
 
@@ -77,19 +88,80 @@ namespace VRTK.Highlighters
         /// <param name="duration">Not used.</param>
         public override void Unhighlight(Color? color = null, float duration = 0f)
         {
-            if (highlightModel)
+            if (highlightModels != null)
             {
-                highlightModel.SetActive(false);
+                for (int i = 0; i < highlightModels.Length; i++)
+                {
+                    if (highlightModels[i])
+                    {
+                        highlightModels[i].SetActive(false);
+                    }
+                }
             }
         }
 
-        private void OnDestroy()
+        protected virtual void OnEnable()
         {
-            Destroy(highlightModel);
+            if (customOutlineModels == null)
+            {
+                customOutlineModels = new GameObject[0];
+            }
+
+            if (customOutlineModelPaths == null)
+            {
+                customOutlineModelPaths = new string[0];
+            }
+        }
+
+        protected virtual void OnDestroy()
+        {
+            if (highlightModels != null)
+            {
+                for (int i = 0; i < highlightModels.Length; i++)
+                {
+                    if (highlightModels[i])
+                    {
+                        Destroy(highlightModels[i]);
+                    }
+                }
+            }
             Destroy(stencilOutline);
         }
 
-        private void SetOptions(Dictionary<string, object> options = null)
+        protected virtual void ResetHighlighterWithCustomModels()
+        {
+            if (customOutlineModels != null && customOutlineModels.Length > 0)
+            {
+                highlightModels = new GameObject[customOutlineModels.Length];
+                for (int i = 0; i < customOutlineModels.Length; i++)
+                {
+                    highlightModels[i] = CreateHighlightModel(customOutlineModels[i], "");
+                }
+            }
+        }
+
+        protected virtual void ResetHighlighterWithCustomModelPaths()
+        {
+            if (customOutlineModelPaths != null && customOutlineModelPaths.Length > 0)
+            {
+                highlightModels = new GameObject[customOutlineModels.Length];
+                for (int i = 0; i < customOutlineModelPaths.Length; i++)
+                {
+                    highlightModels[i] = CreateHighlightModel(null, customOutlineModelPaths[i]);
+                }
+            }
+        }
+
+        protected virtual void ResetHighlightersWithCurrentGameObject()
+        {
+            if (highlightModels == null || highlightModels.Length == 0)
+            {
+                highlightModels = new GameObject[1];
+                highlightModels[0] = CreateHighlightModel(null, "");
+            }
+        }
+
+        protected virtual void SetOptions(Dictionary<string, object> options = null)
         {
             var tmpThickness = GetOption<float>(options, "thickness");
             if (tmpThickness > 0f)
@@ -97,20 +169,20 @@ namespace VRTK.Highlighters
                 thickness = tmpThickness;
             }
 
-            var tmpCustomModel = GetOption<GameObject>(options, "customOutlineModel");
-            if (tmpCustomModel != null)
+            var tmpCustomModels = GetOption<GameObject[]>(options, "customOutlineModels");
+            if (tmpCustomModels != null)
             {
-                customOutlineModel = tmpCustomModel;
+                customOutlineModels = tmpCustomModels;
             }
 
-            var tmpCustomModelPath = GetOption<string>(options, "customOutlineModelPath");
-            if (tmpCustomModelPath != null)
+            var tmpCustomModelPaths = GetOption<string[]>(options, "customOutlineModelPaths");
+            if (tmpCustomModelPaths != null)
             {
-                customOutlineModelPath = tmpCustomModelPath;
+                customOutlineModelPaths = tmpCustomModelPaths;
             }
         }
 
-        private void DeleteExistingHighlightModels()
+        protected virtual void DeleteExistingHighlightModels()
         {
             var existingHighlighterObjects = GetComponentsInChildren<VRTK_PlayerObject>(true);
             for (int i = 0; i < existingHighlighterObjects.Length; i++)
@@ -122,19 +194,19 @@ namespace VRTK.Highlighters
             }
         }
 
-        private void CreateHighlightModel()
+        protected virtual GameObject CreateHighlightModel(GameObject givenOutlineModel, string givenOutlineModelPath)
         {
-            if (customOutlineModel != null)
+            if (givenOutlineModel != null)
             {
-                customOutlineModel = (customOutlineModel.GetComponent<Renderer>() ? customOutlineModel : customOutlineModel.GetComponentInChildren<Renderer>().gameObject);
+                givenOutlineModel = (givenOutlineModel.GetComponent<Renderer>() ? givenOutlineModel : givenOutlineModel.GetComponentInChildren<Renderer>().gameObject);
             }
-            else if (customOutlineModelPath != "")
+            else if (givenOutlineModelPath != "")
             {
-                var getChildModel = transform.FindChild(customOutlineModelPath);
-                customOutlineModel = (getChildModel ? getChildModel.gameObject : null);
+                var getChildModel = transform.FindChild(givenOutlineModelPath);
+                givenOutlineModel = (getChildModel ? getChildModel.gameObject : null);
             }
 
-            GameObject copyModel = customOutlineModel;
+            GameObject copyModel = givenOutlineModel;
             if (copyModel == null)
             {
                 copyModel = (GetComponent<Renderer>() ? gameObject : GetComponentInChildren<Renderer>().gameObject);
@@ -143,10 +215,10 @@ namespace VRTK.Highlighters
             if (copyModel == null)
             {
                 Debug.LogError("No Renderer has been found on the model to add highlighting to");
-                return;
+                return null;
             }
 
-            highlightModel = new GameObject(name + "_HighlightModel");
+            GameObject highlightModel = new GameObject(name + "_HighlightModel");
             highlightModel.transform.SetParent(copyModel.transform.parent, false);
             highlightModel.transform.localPosition = copyModel.transform.localPosition;
             highlightModel.transform.localRotation = copyModel.transform.localRotation;
@@ -191,6 +263,8 @@ namespace VRTK.Highlighters
             highlightModel.SetActive(false);
 
             VRTK_PlayerObject.SetPlayerObject(highlightModel, VRTK_PlayerObject.ObjectTypes.Highlighter);
+
+            return highlightModel;
         }
     }
 }

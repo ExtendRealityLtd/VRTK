@@ -30,6 +30,8 @@ namespace VRTK
         public VRTK_ControllerEvents.ButtonAlias activationButton = VRTK_ControllerEvents.ButtonAlias.Touchpad_Press;
         [Tooltip("If this is checked then the Activation Button needs to be continuously held down to keep the pointer active. If this is unchecked then the Activation Button works as a toggle, the first press/release enables the pointer and the second press/release disables the pointer.")]
         public bool holdButtonToActivate = true;
+        [Tooltip("If this is checked then the pointer will be toggled on when the script is enabled.")]
+        public bool activateOnEnable = false;
         [Tooltip("The time in seconds to delay the pointer being able to be active again.")]
         public float activationDelay = 0f;
 
@@ -39,6 +41,10 @@ namespace VRTK
         public VRTK_ControllerEvents.ButtonAlias selectionButton = VRTK_ControllerEvents.ButtonAlias.Touchpad_Press;
         [Tooltip("If this is checked then the pointer selection action is executed when the Selection Button is pressed down. If this is unchecked then the selection action is executed when the Selection Button is released.")]
         public bool selectOnPress = false;
+        [Tooltip("The time in seconds to delay the pointer being able to execute the select action again.")]
+        public float selectionDelay = 0f;
+        [Tooltip("The amount of time the pointer can be over the same collider before it automatically attempts to select it. 0f means no selection attempt will be made.")]
+        public float selectAfterHoverDuration = 0f;
 
         [Header("Pointer Interaction Settings")]
 
@@ -58,11 +64,15 @@ namespace VRTK
         protected VRTK_ControllerEvents.ButtonAlias subscribedSelectionButton = VRTK_ControllerEvents.ButtonAlias.Undefined;
         protected bool currentSelectOnPress;
         protected float activateDelayTimer;
+        protected float selectDelayTimer;
+        protected float hoverDurationTimer;
         protected int currentActivationState;
         protected bool willDeactivate;
         protected bool wasActivated;
         protected uint controllerIndex;
         protected VRTK_InteractableObject pointerInteractableObject = null;
+        protected Collider currentCollider;
+        protected bool canClickOnHover;
 
         /// <summary>
         /// The PointerEnter method emits a DestinationMarkerEnter event when the pointer enters a valid object.
@@ -72,6 +82,7 @@ namespace VRTK
         {
             if (enabled && givenHit.transform && controllerIndex < uint.MaxValue)
             {
+                SetHoverSelectionTimer(givenHit.collider);
                 OnDestinationMarkerEnter(SetDestinationMarkerEvent(givenHit.distance, givenHit.transform, givenHit, givenHit.point, controllerIndex));
                 StartUseAction(givenHit.transform);
             }
@@ -83,6 +94,7 @@ namespace VRTK
         /// <param name="givenHit">The previous valid collision.</param>
         public virtual void PointerExit(RaycastHit givenHit)
         {
+            ResetHoverSelectionTimer(givenHit.collider);
             if (givenHit.transform && controllerIndex < uint.MaxValue)
             {
                 OnDestinationMarkerExit(SetDestinationMarkerEvent(givenHit.distance, givenHit.transform, givenHit, givenHit.point, controllerIndex));
@@ -97,6 +109,15 @@ namespace VRTK
         public virtual bool CanActivate()
         {
             return (Time.time >= activateDelayTimer);
+        }
+
+        /// <summary>
+        /// The CanSelect method is used to determine if the pointer has passed the selection time limit.
+        /// </summary>
+        /// <returns>Returns true if the pointer can execute the select action.</returns>
+        public virtual bool CanSelect()
+        {
+            return (Time.time >= selectDelayTimer);
         }
 
         /// <summary>
@@ -115,6 +136,15 @@ namespace VRTK
         public virtual void ResetActivationTimer(bool forceZero = false)
         {
             activateDelayTimer = (forceZero ? 0f : Time.time + activationDelay);
+        }
+
+        /// <summary>
+        /// The ResetSelectionTimer method is used to reset the pointer selection timer to the next valid activation time.
+        /// </summary>
+        /// <param name="forceZero">If this is true then the next activation time will be 0.</param>
+        public virtual void ResetSelectionTimer(bool forceZero = false)
+        {
+            selectDelayTimer = (forceZero ? 0f : Time.time + selectionDelay);
         }
 
         /// <summary>
@@ -145,12 +175,19 @@ namespace VRTK
             SetupController();
             SetupRenderer();
             activateDelayTimer = 0f;
+            selectDelayTimer = 0f;
+            hoverDurationTimer = 0f;
             currentActivationState = 0;
             wasActivated = false;
             willDeactivate = false;
+            canClickOnHover = false;
             if (NoPointerRenderer())
             {
                 Debug.LogWarning("The VRTK_Pointer script requires a VRTK_BasePointerRenderer specified as the `Pointer Renderer` parameter.");
+            }
+            if (activateOnEnable)
+            {
+                Toggle(true);
             }
         }
 
@@ -173,6 +210,13 @@ namespace VRTK
             {
                 pointerRenderer.InitalizePointer(this, invalidListPolicy, navMeshCheckDistance, headsetPositionCompensation);
                 pointerRenderer.UpdateRenderer();
+                if (!IsPointerActive())
+                {
+                    bool currentPointerVisibility = pointerRenderer.IsVisible();
+                    pointerRenderer.ToggleInteraction(currentPointerVisibility);
+                }
+
+                CheckHoverSelect();
             }
         }
 
@@ -204,9 +248,9 @@ namespace VRTK
                 SetupController();
             }
 
-            if (controller == null)
+            if (controller == null && (activationButton != VRTK_ControllerEvents.ButtonAlias.Undefined || selectionButton != VRTK_ControllerEvents.ButtonAlias.Undefined))
             {
-                Debug.LogError("VRTK_Pointer requires a Controller that has the VRTK_ControllerEvents script attached to it.");
+                Debug.LogWarning("`VRTK_Pointer` requires a Controller that has the `VRTK_ControllerEvents` script attached to it. To omit this warning, set the `Activation Bubtton` and `Selection Button` to `Undefined`");
             }
         }
 
@@ -348,14 +392,21 @@ namespace VRTK
 
         protected virtual void SelectionButtonAction(object sender, ControllerInteractionEventArgs e)
         {
-            if (EnabledPointerRenderer() && (IsPointerActive() || wasActivated))
+            controllerIndex = e.controllerIndex;
+            ExecuteSelectionButtonAction();
+        }
+
+        protected virtual void ExecuteSelectionButtonAction()
+        {
+            if (EnabledPointerRenderer() && CanSelect() && (IsPointerActive() || wasActivated))
             {
                 wasActivated = false;
-                controllerIndex = e.controllerIndex;
                 RaycastHit destinationHit = pointerRenderer.GetDestinationHit();
                 AttemptUseOnSet(destinationHit.transform);
-                if (destinationHit.transform && IsPointerActive() && pointerRenderer.ValidPlayArea() && !PointerActivatesUseAction(pointerInteractableObject))
+                if (destinationHit.transform && IsPointerActive() && pointerRenderer.ValidPlayArea() && !PointerActivatesUseAction(pointerInteractableObject) && pointerRenderer.IsValidCollision())
                 {
+                    ResetHoverSelectionTimer(destinationHit.collider);
+                    ResetSelectionTimer();
                     OnDestinationMarkerSet(SetDestinationMarkerEvent(destinationHit.distance, destinationHit.transform, destinationHit, destinationHit.point, controllerIndex));
                 }
             }
@@ -424,6 +475,42 @@ namespace VRTK
                         pointerInteractableObject.usingState++;
                     }
                 }
+            }
+        }
+
+        protected virtual void SetHoverSelectionTimer(Collider collider)
+        {
+            if (collider != currentCollider)
+            {
+                hoverDurationTimer = 0f;
+            }
+
+            if (selectAfterHoverDuration > 0f && hoverDurationTimer <= 0f)
+            {
+                canClickOnHover = true;
+                hoverDurationTimer = selectAfterHoverDuration;
+            }
+
+            currentCollider = collider;
+        }
+
+        protected virtual void ResetHoverSelectionTimer(Collider collider)
+        {
+            canClickOnHover = false;
+            hoverDurationTimer = (collider == currentCollider ? 0f : hoverDurationTimer);
+        }
+
+        protected virtual void CheckHoverSelect()
+        {
+            if (hoverDurationTimer > 0f)
+            {
+                hoverDurationTimer -= Time.deltaTime;
+            }
+
+            if (canClickOnHover && hoverDurationTimer <= 0f)
+            {
+                canClickOnHover = false;
+                ExecuteSelectionButtonAction();
             }
         }
     }

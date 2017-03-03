@@ -117,14 +117,14 @@ namespace VRTK
             if (canvas && !canvas.transform.FindChild(CANVAS_DRAGGABLE_PANEL))
             {
                 var draggablePanel = new GameObject(CANVAS_DRAGGABLE_PANEL);
+                draggablePanel.AddComponent<RectTransform>();
+                draggablePanel.AddComponent<Image>().color = Color.clear;
+                draggablePanel.AddComponent<EventTrigger>();
                 draggablePanel.transform.SetParent(canvas.transform);
                 draggablePanel.transform.localPosition = Vector3.zero;
                 draggablePanel.transform.localRotation = Quaternion.identity;
                 draggablePanel.transform.localScale = Vector3.one;
                 draggablePanel.transform.SetAsFirstSibling();
-                draggablePanel.AddComponent<RectTransform>();
-                draggablePanel.AddComponent<Image>().color = Color.clear;
-                draggablePanel.AddComponent<EventTrigger>();
 
                 draggablePanel.GetComponent<RectTransform>().sizeDelta = canvasSize;
             }

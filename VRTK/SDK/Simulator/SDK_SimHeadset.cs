@@ -1,13 +1,13 @@
 ﻿// Simulator Headset|SDK_Simulator|002
 namespace VRTK
 {
-#if VRTK_SDK_SIM
     using UnityEngine;
     using System.Collections.Generic;
 
     /// <summary>
     /// The Sim Headset SDK script  provides dummy functions for the headset.
     /// </summary>
+    [SDK_Description(typeof(SDK_SimSystem))]
     public class SDK_SimHeadset : SDK_BaseHeadset
     {
         private Transform camera;
@@ -142,9 +142,4 @@ namespace VRTK
             lastRot = headset.rotation.eulerAngles;
         }
     }
-#else
-    public class SDK_SimHeadset : SDK_FallbackHeadset
-    {
-    }
-#endif
 }

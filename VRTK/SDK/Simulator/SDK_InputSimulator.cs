@@ -109,21 +109,22 @@ namespace VRTK
             leftController.Selected = false;
             destroyed = false;
 
-#if VRTK_SDK_SIM
-            Dictionary<string, KeyCode> keyMappings = new Dictionary<string, KeyCode>()
+            var controllerSDK = VRTK_SDK_Bridge.GetControllerSDK() as SDK_SimController;
+            if (controllerSDK != null)
             {
-                {"Trigger", triggerAlias },
-                {"Grip", gripAlias },
-                {"TouchpadPress", touchpadAlias },
-                {"ButtonOne", buttonOneAlias },
-                {"ButtonTwo", buttonTwoAlias },
-                {"StartMenu", startMenuAlias },
-                {"TouchModifier", touchModifier },
-                {"HairTouchModifier", hairTouchModifier }
-            };
-            SDK_SimController controllerSDK = (SDK_SimController)VRTK_SDK_Bridge.GetControllerSDK();
-            controllerSDK.SetKeyMappings(keyMappings);
-#endif
+                Dictionary<string, KeyCode> keyMappings = new Dictionary<string, KeyCode>()
+                {
+                    {"Trigger", triggerAlias },
+                    {"Grip", gripAlias },
+                    {"TouchpadPress", touchpadAlias },
+                    {"ButtonOne", buttonOneAlias },
+                    {"ButtonTwo", buttonTwoAlias },
+                    {"StartMenu", startMenuAlias },
+                    {"TouchModifier", touchModifier },
+                    {"HairTouchModifier", hairTouchModifier }
+                };
+                controllerSDK.SetKeyMappings(keyMappings);
+            }
         }
 
         private void OnDestroy()

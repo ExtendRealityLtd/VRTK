@@ -5,7 +5,7 @@ namespace VRTK
     using System.Collections.Generic;
 
     /// <summary>
-    /// The Base Controller SDK script provides a bridge to SDK methods that deal with the input devices.
+    /// The Fallback Controller SDK script provides a fallback collection of methods that return null or default headset values.
     /// </summary>
     /// <remarks>
     /// This is the fallback class that will just return default values.
@@ -58,7 +58,7 @@ namespace VRTK
         /// </summary>
         /// <param name="index">The index of the controller to find.</param>
         /// <param name="actual">If true it will return the actual controller, if false it will return the script alias controller GameObject.</param>
-        /// <returns></returns>
+        /// <returns>The GameObject of the controller</returns>
         public override GameObject GetControllerByIndex(uint index, bool actual = false)
         {
             return null;
@@ -671,11 +671,6 @@ namespace VRTK
         public override bool IsStartMenuTouchedUpOnIndex(uint index)
         {
             return false;
-        }
-
-        private void Awake()
-        {
-            Debug.LogError("Fallback Controller SDK is being used. Have you selected a valid Controller SDK in the SDK Manager? If you are unsure, then click the GameObject with the `VRTK_SDKManager` script attached to it in Edit Mode and select a Controller SDK from the dropdown.");
         }
     }
 }

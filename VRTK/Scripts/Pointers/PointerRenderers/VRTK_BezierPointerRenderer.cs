@@ -59,15 +59,12 @@ namespace VRTK
         protected GameObject actualInvalidLocationObject = null;
         protected Vector3 fixedForwardBeamForward;
 
-        protected bool tracerVisible;
-        protected bool cursorVisible;
-
         /// <summary>
         /// The UpdateRenderer method is used to run an Update routine on the pointer.
         /// </summary>
         public override void UpdateRenderer()
         {
-            if ((controllingPointer && controllingPointer.IsPointerActive()) || tracerVisible || cursorVisible)
+            if ((controllingPointer && controllingPointer.IsPointerActive()) || IsVisible())
             {
                 Vector3 jointPosition = ProjectForwardBeam();
                 Vector3 downPosition = ProjectDownBeam(jointPosition);
@@ -81,7 +78,7 @@ namespace VRTK
         {
             TogglePointerCursor(pointerState, actualState);
             TogglePointerTracer(pointerState, actualState);
-            if (actualState)
+            if (actualTracer != null && actualState && tracerVisibility != VisibilityStates.AlwaysOn)
             {
                 ToggleRendererVisibility(actualTracer.gameObject, false);
                 AddVisibleRenderer(actualTracer.gameObject);
@@ -100,6 +97,7 @@ namespace VRTK
             if (controllingPointer)
             {
                 controllingPointer.ResetActivationTimer(true);
+                controllingPointer.ResetSelectionTimer(true);
             }
         }
 
@@ -189,9 +187,10 @@ namespace VRTK
 
         protected virtual Vector3 ProjectForwardBeam()
         {
-            float attachedRotation = Vector3.Dot(Vector3.up, transform.forward.normalized);
+            Transform origin = GetOrigin();
+            float attachedRotation = Vector3.Dot(Vector3.up, origin.forward.normalized);
             float calculatedLength = maximumLength;
-            Vector3 useForward = GetOriginForward();
+            Vector3 useForward = origin.forward;
             if ((attachedRotation * 100f) > heightLimitAngle)
             {
                 useForward = new Vector3(useForward.x, fixedForwardBeamForward.y, useForward.z);
@@ -200,11 +199,11 @@ namespace VRTK
             }
             else
             {
-                fixedForwardBeamForward = GetOriginForward();
+                fixedForwardBeamForward = origin.forward;
             }
 
             var actualLength = calculatedLength;
-            Ray pointerRaycast = new Ray(GetOriginPosition(), useForward);
+            Ray pointerRaycast = new Ray(origin.position, useForward);
 
             RaycastHit collidedWith;
             var hasRayHit = Physics.Raycast(pointerRaycast, out collidedWith, calculatedLength, ~layersToIgnore);
@@ -264,12 +263,12 @@ namespace VRTK
             Vector3 newDownPosition = downPosition;
             Vector3 newJointPosition = jointPosition;
 
-            if (collisionCheckFrequency > 0)
+            if (collisionCheckFrequency > 0 && actualTracer != null)
             {
                 collisionCheckFrequency = Mathf.Clamp(collisionCheckFrequency, 0, tracerDensity);
                 Vector3[] beamPoints = new Vector3[]
                 {
-                    GetOriginPosition(),
+                    GetOrigin().position,
                     jointPosition + new Vector3(0f, curveOffset, 0f),
                     downPosition,
                     downPosition,
@@ -311,22 +310,25 @@ namespace VRTK
 
         protected virtual void DisplayCurvedBeam(Vector3 jointPosition, Vector3 downPosition)
         {
-            Vector3[] beamPoints = new Vector3[]
+            if (actualTracer != null)
             {
-                GetOriginPosition(),
+                Vector3[] beamPoints = new Vector3[]
+                {
+                GetOrigin(false).position,
                 jointPosition + new Vector3(0f, curveOffset, 0f),
                 downPosition,
                 downPosition,
-            };
-            var tracerMaterial = (customTracer ? null : defaultMaterial);
-            actualTracer.SetPoints(beamPoints, tracerMaterial, currentColor);
-            if (tracerVisibility == VisibilityStates.AlwaysOff)
-            {
-                TogglePointerTracer(false, false);
-            }
-            else if (controllingPointer)
-            {
-                TogglePointerTracer(controllingPointer.IsPointerActive(), controllingPointer.IsPointerActive());
+                };
+                var tracerMaterial = (customTracer ? null : defaultMaterial);
+                actualTracer.SetPoints(beamPoints, tracerMaterial, currentColor);
+                if (tracerVisibility == VisibilityStates.AlwaysOff)
+                {
+                    TogglePointerTracer(false, false);
+                }
+                else if (controllingPointer)
+                {
+                    TogglePointerTracer(controllingPointer.IsPointerActive(), controllingPointer.IsPointerActive());
+                }
             }
         }
 
@@ -338,7 +340,10 @@ namespace VRTK
         protected virtual void TogglePointerTracer(bool pointerState, bool actualState)
         {
             tracerVisible = (tracerVisibility == VisibilityStates.AlwaysOn ? true : pointerState);
-            actualTracer.TogglePoints(tracerVisible);
+            if (actualTracer != null)
+            {
+                actualTracer.TogglePoints(tracerVisible);
+            }
         }
 
         protected virtual void SetPointerCursor()
@@ -356,11 +361,11 @@ namespace VRTK
                 ChangeColor(validCollisionColor);
                 if (actualValidLocationObject)
                 {
-                    actualValidLocationObject.SetActive(ValidDestination());
+                    actualValidLocationObject.SetActive(ValidDestination() && IsValidCollision());
                 }
                 if (actualInvalidLocationObject)
                 {
-                    actualInvalidLocationObject.SetActive(!ValidDestination());
+                    actualInvalidLocationObject.SetActive(!ValidDestination() || !IsValidCollision());
                 }
             }
             else

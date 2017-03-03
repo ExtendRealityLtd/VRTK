@@ -2,6 +2,7 @@
 namespace VRTK
 {
     using UnityEngine;
+    using System;
     using System.Collections.Generic;
 #if UNITY_5_5_OR_NEWER
     using UnityEngine.AI;
@@ -28,12 +29,31 @@ namespace VRTK
             AlwaysOff
         }
 
+        /// <summary>
+        /// Specifies the smoothing to be applied to the pointer.
+        /// </summary>
+        [Serializable]
+        public sealed class PointerOriginSmoothingSettings
+        {
+            [Tooltip("Whether or not to smooth the position of the pointer origin when positioning the pointer tip.")]
+            public bool smoothsPosition;
+            [Tooltip("The maximum allowed distance between the unsmoothed pointer origin and the smoothed pointer origin per frame to use for smoothing.")]
+            public float maxAllowedPerFrameDistanceDifference = 0.003f;
+
+            [Tooltip("Whether or not to smooth the rotation of the pointer origin when positioning the pointer tip.")]
+            public bool smoothsRotation;
+            [Tooltip("The maximum allowed angle between the unsmoothed pointer origin and the smoothed pointer origin per frame to use for smoothing.")]
+            public float maxAllowedPerFrameAngleDifference = 1.5f;
+        }
+
         [Header("General Renderer Settings")]
 
         [Tooltip("An optional Play Area Cursor generator to add to the destination position of the pointer tip.")]
         public VRTK_PlayAreaCursor playareaCursor;
         [Tooltip("The layers for the pointer's raycasts to ignore.")]
         public LayerMask layersToIgnore = Physics.IgnoreRaycastLayer;
+        [Tooltip("Specifies the smoothing to be applied to the pointer origin when positioning the pointer tip.")]
+        public PointerOriginSmoothingSettings pointerOriginSmoothingSettings = new PointerOriginSmoothingSettings();
 
         [Header("General Appearance Settings")]
 
@@ -60,11 +80,16 @@ namespace VRTK
 
         protected GameObject objectInteractor;
         protected GameObject objectInteractorAttachPoint;
+        protected GameObject pointerOriginTransformFollowGameObject;
+        protected VRTK_TransformFollow pointerOriginTransformFollow;
         protected VRTK_InteractGrab controllerGrabScript;
         protected Rigidbody savedAttachPoint;
         protected bool attachedToInteractorAttachPoint = false;
         protected float savedBeamLength = 0f;
         protected List<GameObject> makeRendererVisible;
+
+        protected bool tracerVisible;
+        protected bool cursorVisible;
 
         /// <summary>
         /// The InitalizePointer method is used to set up the state of the pointer renderer.
@@ -88,6 +113,15 @@ namespace VRTK
         }
 
         /// <summary>
+        /// The ResetPointerObjects method is used to destroy any existing pointer objects and recreate them at runtime.
+        /// </summary>
+        public virtual void ResetPointerObjects()
+        {
+            DestroyPointerObjects();
+            CreatePointerObjects();
+        }
+
+        /// <summary>
         /// The Toggle Method is used to enable or disable the pointer renderer.
         /// </summary>
         /// <param name="pointerState">The activation state of the pointer.</param>
@@ -99,9 +133,17 @@ namespace VRTK
                 controllingPointer.ResetActivationTimer();
                 PointerExit(destinationHit);
             }
-            ToggleObjectInteraction(pointerState);
-            TogglePlayArea(pointerState, actualState);
+            ToggleInteraction(pointerState);
             ToggleRenderer(pointerState, actualState);
+        }
+
+        /// <summary>
+        /// The ToggleInteraction method is used to enable or disable the controller extension interactions.
+        /// </summary>
+        /// <param name="state">If true then the object interactor will be enabled.</param>
+        public virtual void ToggleInteraction(bool state)
+        {
+            ToggleObjectInteraction(state);
         }
 
         /// <summary>
@@ -109,9 +151,10 @@ namespace VRTK
         /// </summary>
         public virtual void UpdateRenderer()
         {
-            if (playareaCursor && controllingPointer && controllingPointer.IsPointerActive())
+            if (playareaCursor)
             {
-                playareaCursor.ToggleVisibility((destinationHit.transform != null));
+                playareaCursor.SetHeadsetPositionCompensation(headsetPositionCompensation);
+                playareaCursor.ToggleState(IsCursorVisible());
             }
         }
 
@@ -130,7 +173,43 @@ namespace VRTK
         /// <returns>Returns true if there is a valid play area and no collisions. Returns false if there is no valid play area or there is but with a collision detected.</returns>
         public virtual bool ValidPlayArea()
         {
-            return (!playareaCursor || !playareaCursor.HasCollided());
+            return (!playareaCursor || !playareaCursor.IsActive() || !playareaCursor.HasCollided());
+        }
+
+        /// <summary>
+        /// The IsVisible method determines if the pointer renderer is at all visible by checking the state of the tracer and the cursor.
+        /// </summary>
+        /// <returns>Returns true if either the tracer or cursor renderers are visible. Returns false if none are visible.</returns>
+        public virtual bool IsVisible()
+        {
+            return (IsTracerVisible() || IsCursorVisible());
+        }
+
+        /// <summary>
+        /// The IsTracerVisible method determines if the pointer tracer renderer is visible.
+        /// </summary>
+        /// <returns>Returns true if the tracer renderers are visible.</returns>
+        public virtual bool IsTracerVisible()
+        {
+            return (tracerVisibility == VisibilityStates.AlwaysOn || tracerVisible);
+        }
+
+        /// <summary>
+        /// The IsCursorVisible method determines if the pointer cursor renderer is visible.
+        /// </summary>
+        /// <returns>Returns true if the cursor renderers are visible.</returns>
+        public virtual bool IsCursorVisible()
+        {
+            return (cursorVisibility == VisibilityStates.AlwaysOn || cursorVisible);
+        }
+
+        /// <summary>
+        /// The IsValidCollision method determines if the pointer is currently in it's valid collision state.
+        /// </summary>
+        /// <returns>Returns true if the pointer is in a valid collision, returns false if the pointer is in an invalid collision state.</returns>
+        public virtual bool IsValidCollision()
+        {
+            return (currentColor != invalidCollisionColor);
         }
 
         protected abstract void CreatePointerObjects();
@@ -141,6 +220,7 @@ namespace VRTK
         {
             defaultMaterial = Resources.Load("WorldPointer") as Material;
             makeRendererVisible = new List<GameObject>();
+            CreatePointerOriginTransformFollow();
             CreatePointerObjects();
         }
 
@@ -152,6 +232,13 @@ namespace VRTK
                 Destroy(objectInteractor);
             }
             controllerGrabScript = null;
+            Destroy(pointerOriginTransformFollowGameObject);
+        }
+
+        protected virtual void OnValidate()
+        {
+            pointerOriginSmoothingSettings.maxAllowedPerFrameDistanceDifference = Mathf.Max(0.0001f, pointerOriginSmoothingSettings.maxAllowedPerFrameDistanceDifference);
+            pointerOriginSmoothingSettings.maxAllowedPerFrameAngleDifference = Mathf.Max(0.0001f, pointerOriginSmoothingSettings.maxAllowedPerFrameAngleDifference);
         }
 
         protected virtual void FixedUpdate()
@@ -160,6 +247,8 @@ namespace VRTK
             {
                 UpdateObjectInteractor();
             }
+
+            UpdatePointerOriginTransformFollow();
         }
 
         protected virtual void ToggleObjectInteraction(bool state)
@@ -197,29 +286,23 @@ namespace VRTK
             objectInteractor.transform.position = destinationHit.point;
         }
 
-        protected virtual Vector3 GetOriginPosition()
+        protected virtual void UpdatePointerOriginTransformFollow()
         {
-            return (controllingPointer.customOrigin ? controllingPointer.customOrigin.position : controllingPointer.transform.position);
+            pointerOriginTransformFollow.gameObjectToFollow = (controllingPointer.customOrigin == null ? transform : controllingPointer.customOrigin).gameObject;
+            pointerOriginTransformFollow.enabled = controllingPointer != null;
+            pointerOriginTransformFollowGameObject.SetActive(controllingPointer != null);
+
+            pointerOriginTransformFollow.smoothsPosition = pointerOriginSmoothingSettings.smoothsPosition;
+            pointerOriginTransformFollow.maxAllowedPerFrameDistanceDifference = pointerOriginSmoothingSettings.maxAllowedPerFrameDistanceDifference;
+            pointerOriginTransformFollow.smoothsRotation = pointerOriginSmoothingSettings.smoothsRotation;
+            pointerOriginTransformFollow.maxAllowedPerFrameAngleDifference = pointerOriginSmoothingSettings.maxAllowedPerFrameAngleDifference;
         }
 
-        protected virtual Vector3 GetOriginLocalPosition()
+        protected Transform GetOrigin(bool smoothed = true)
         {
-            return (controllingPointer.customOrigin ? controllingPointer.customOrigin.localPosition : Vector3.zero);
-        }
-
-        protected virtual Vector3 GetOriginForward()
-        {
-            return (controllingPointer.customOrigin ? controllingPointer.customOrigin.forward : controllingPointer.transform.forward);
-        }
-
-        protected virtual Quaternion GetOriginRotation()
-        {
-            return (controllingPointer.customOrigin ? controllingPointer.customOrigin.rotation : controllingPointer.transform.rotation);
-        }
-
-        protected virtual Quaternion GetOriginLocalRotation()
-        {
-            return (controllingPointer.customOrigin ? controllingPointer.customOrigin.localRotation : Quaternion.identity);
+            return smoothed
+                ? pointerOriginTransformFollow.gameObjectToChange.transform
+                : (controllingPointer.customOrigin == null ? transform : controllingPointer.customOrigin);
         }
 
         protected virtual void PointerEnter(RaycastHit givenHit)
@@ -247,28 +330,6 @@ namespace VRTK
             return (validNavMeshLocation && destinationHit.transform && !(VRTK_PolicyList.Check(destinationHit.transform.gameObject, invalidListPolicy)));
         }
 
-        protected virtual void TogglePlayArea(bool pointerState, bool actualState)
-        {
-            if (playareaCursor)
-            {
-                playareaCursor.SetHeadsetPositionCompensation(headsetPositionCompensation);
-                playareaCursor.ToggleState(pointerState);
-            }
-
-            if (playareaCursor && pointerState)
-            {
-                if (actualState)
-                {
-                    ToggleRendererVisibility(playareaCursor.GetPlayAreaContainer(), false);
-                    AddVisibleRenderer(playareaCursor.GetPlayAreaContainer());
-                }
-                else
-                {
-                    ToggleRendererVisibility(playareaCursor.GetPlayAreaContainer(), true);
-                }
-            }
-        }
-
         protected virtual void ToggleElement(GameObject givenObject, bool pointerState, bool actualState, VisibilityStates givenVisibility, ref bool currentVisible)
         {
             if (givenObject)
@@ -279,11 +340,12 @@ namespace VRTK
 
                 if (givenVisibility == VisibilityStates.AlwaysOff)
                 {
+                    currentVisible = false;
                     ToggleRendererVisibility(givenObject, false);
                 }
                 else
                 {
-                    if (actualState)
+                    if (actualState && givenVisibility != VisibilityStates.AlwaysOn)
                     {
                         ToggleRendererVisibility(givenObject, false);
                         AddVisibleRenderer(givenObject);
@@ -315,24 +377,30 @@ namespace VRTK
 
         protected virtual void ToggleRendererVisibility(GameObject givenObject, bool state)
         {
-            Renderer[] renderers = givenObject.GetComponentsInChildren<Renderer>();
-            for (int i = 0; i < renderers.Length; i++)
+            if (givenObject)
             {
-                renderers[i].enabled = state;
+                Renderer[] renderers = givenObject.GetComponentsInChildren<Renderer>();
+                for (int i = 0; i < renderers.Length; i++)
+                {
+                    renderers[i].enabled = state;
+                }
             }
         }
 
         protected virtual void SetupMaterialRenderer(GameObject givenObject)
         {
-            var pointerRenderer = givenObject.GetComponent<MeshRenderer>();
-            pointerRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
-            pointerRenderer.receiveShadows = false;
-            pointerRenderer.material = defaultMaterial;
+            if (givenObject)
+            {
+                var pointerRenderer = givenObject.GetComponent<MeshRenderer>();
+                pointerRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+                pointerRenderer.receiveShadows = false;
+                pointerRenderer.material = defaultMaterial;
+            }
         }
 
         protected virtual void ChangeColor(Color givenColor)
         {
-            if ((playareaCursor && playareaCursor.HasCollided()) || !ValidDestination())
+            if ((playareaCursor && playareaCursor.IsActive() && playareaCursor.HasCollided()) || !ValidDestination() || (controllingPointer && !controllingPointer.CanSelect()))
             {
                 givenColor = invalidCollisionColor;
             }
@@ -417,6 +485,14 @@ namespace VRTK
             {
                 objectInteractor.transform.localScale = scaleAmount;
             }
+        }
+
+        protected virtual void CreatePointerOriginTransformFollow()
+        {
+            pointerOriginTransformFollowGameObject = new GameObject(string.Format("[{0}]BasePointerRenderer_Origin_Smoothed", gameObject.name));
+            pointerOriginTransformFollow = pointerOriginTransformFollowGameObject.AddComponent<VRTK_TransformFollow>();
+            pointerOriginTransformFollow.enabled = false;
+            pointerOriginTransformFollow.followsScale = false;
         }
 
         protected virtual float OverrideBeamLength(float currentLength)

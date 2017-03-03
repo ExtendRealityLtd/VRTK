@@ -26,6 +26,8 @@ namespace VRTK
         public bool cursorMatchTargetRotation = false;
         [Tooltip("Rescale the cursor proportionally to the distance from the tracer origin.")]
         public bool cursorDistanceRescale = false;
+        [Tooltip("The maximum scale the cursor is allowed to reach. This is only used when rescaling the cursor proportionally to the distance from the tracer origin.")]
+        public Vector3 maximumCursorScale = new Vector3(float.PositiveInfinity, float.PositiveInfinity, float.PositiveInfinity);
 
         [Header("Straight Pointer Custom Appearance Settings")]
 
@@ -38,8 +40,6 @@ namespace VRTK
         protected GameObject actualTracer;
         protected GameObject actualCursor;
 
-        protected bool tracerVisible;
-        protected bool cursorVisible;
         protected Vector3 cursorOriginalScale = Vector3.one;
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace VRTK
         /// </summary>
         public override void UpdateRenderer()
         {
-            if ((controllingPointer && controllingPointer.IsPointerActive()) || tracerVisible || cursorVisible)
+            if ((controllingPointer && controllingPointer.IsPointerActive()) || IsVisible())
             {
                 float tracerLength = CastRayForward();
                 SetPointerAppearance(tracerLength);
@@ -74,6 +74,7 @@ namespace VRTK
             if (controllingPointer)
             {
                 controllingPointer.ResetActivationTimer(true);
+                controllingPointer.ResetSelectionTimer(true);
             }
         }
 
@@ -174,7 +175,8 @@ namespace VRTK
 
         protected virtual float CastRayForward()
         {
-            Ray pointerRaycast = new Ray(GetOriginPosition(), GetOriginForward());
+            Transform origin = GetOrigin();
+            Ray pointerRaycast = new Ray(origin.position, origin.forward);
             RaycastHit pointerCollidedWith;
             var rayHit = Physics.Raycast(pointerRaycast, out pointerCollidedWith, maximumLength, ~layersToIgnore);
 
@@ -202,8 +204,9 @@ namespace VRTK
                 actualCursor.transform.localScale = Vector3.one * (scaleFactor * cursorScaleMultiplier);
                 actualCursor.transform.localPosition = new Vector3(0f, 0f, tracerLength);
 
-                actualContainer.transform.position = GetOriginPosition();
-                actualContainer.transform.rotation = GetOriginRotation();
+                Transform origin = GetOrigin();
+                actualContainer.transform.position = origin.position;
+                actualContainer.transform.rotation = origin.rotation;
 
                 ScaleObjectInteractor(actualCursor.transform.localScale * 1.05f);
 
@@ -215,19 +218,19 @@ namespace VRTK
                     }
                     if (cursorDistanceRescale)
                     {
-                        float collisionDistance = Vector3.Distance(destinationHit.point, GetOriginPosition());
-                        actualCursor.transform.localScale = cursorOriginalScale * collisionDistance;
+                        float collisionDistance = Vector3.Distance(destinationHit.point, origin.position);
+                        actualCursor.transform.localScale = Vector3.Min(cursorOriginalScale * collisionDistance, maximumCursorScale);
                     }
                 }
                 else
                 {
                     if (cursorMatchTargetRotation)
                     {
-                        actualCursor.transform.forward = GetOriginForward();
+                        actualCursor.transform.forward = origin.forward;
                     }
                     if (cursorDistanceRescale)
                     {
-                        actualCursor.transform.localScale = cursorOriginalScale * tracerLength;
+                        actualCursor.transform.localScale = Vector3.Min(cursorOriginalScale * tracerLength, maximumCursorScale);
                     }
                 }
 

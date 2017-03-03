@@ -128,6 +128,15 @@ namespace VRTK
         }
 
         /// <summary>
+        /// The IsActive method returns whether the play area cursor game object is active or not.
+        /// </summary>
+        /// <returns>Returns true if the play area cursor GameObject is active.</returns>
+        public virtual bool IsActive()
+        {
+            return playAreaCursor.activeInHierarchy;
+        }
+
+        /// <summary>
         /// The GetPlayAreaContainer method returns the created game object that holds the play area cursor representation.
         /// </summary>
         /// <returns>The GameObject that is the container of the play area cursor.</returns>
@@ -297,9 +306,17 @@ namespace VRTK
             targetListPolicy = list;
         }
 
+        protected virtual void OnDisable()
+        {
+            if (parent)
+            {
+                parent.SetPlayAreaCursorCollision(false);
+            }
+        }
+
         protected virtual void OnTriggerStay(Collider collider)
         {
-            if (parent.enabled && parent.gameObject.activeInHierarchy && ValidTarget(collider))
+            if (parent && parent.enabled && parent.gameObject.activeInHierarchy && ValidTarget(collider))
             {
                 parent.SetPlayAreaCursorCollision(true);
             }
@@ -307,7 +324,7 @@ namespace VRTK
 
         protected virtual void OnTriggerExit(Collider collider)
         {
-            if (ValidTarget(collider))
+            if (parent && ValidTarget(collider))
             {
                 parent.SetPlayAreaCursorCollision(false);
             }

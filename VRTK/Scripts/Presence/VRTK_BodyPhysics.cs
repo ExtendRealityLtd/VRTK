@@ -168,7 +168,7 @@ namespace VRTK
             {
                 float gravityPush = -0.001f;
                 Vector3 appliedGravity = new Vector3(0f, gravityPush, 0f);
-                bodyRigidbody.velocity = playArea.TransformVector(velocity) + appliedGravity;
+                bodyRigidbody.velocity = velocity + appliedGravity;
                 if (applyMomentum)
                 {
                     float rigidBodyMagnitude = bodyRigidbody.velocity.magnitude;
