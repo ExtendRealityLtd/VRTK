@@ -94,15 +94,15 @@ namespace VRTK
 
         private void Awake()
         {
-            rightHand = transform.FindChild("RightHand");
+            rightHand = transform.Find("RightHand");
             rightHand.gameObject.SetActive(false);
-            leftHand = transform.FindChild("LeftHand");
+            leftHand = transform.Find("LeftHand");
             leftHand.gameObject.SetActive(false);
             currentHand = rightHand;
             oldPos = Input.mousePosition;
-            myCamera = transform.FindChild("Camera");
-            leftHand.FindChild("Hand").GetComponent<Renderer>().material.color = Color.red;
-            rightHand.FindChild("Hand").GetComponent<Renderer>().material.color = Color.green;
+            myCamera = transform.Find("Camera");
+            leftHand.Find("Hand").GetComponent<Renderer>().material.color = Color.red;
+            rightHand.Find("Hand").GetComponent<Renderer>().material.color = Color.green;
             rightController = rightHand.GetComponent<SDK_ControllerSim>();
             leftController = leftHand.GetComponent<SDK_ControllerSim>();
             rightController.Selected = true;
