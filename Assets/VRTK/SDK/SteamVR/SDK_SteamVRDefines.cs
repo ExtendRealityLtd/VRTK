@@ -3,7 +3,6 @@ namespace VRTK
 {
     using System;
     using System.Reflection;
-    using Valve.VR;
 
     /// <summary>
     /// Handles all the scripting define symbols for the SteamVR SDK.
@@ -39,7 +38,7 @@ namespace VRTK
                 return false;
             }
 
-            return systemMethodParameters[0].ParameterType == typeof(EVREventType);
+            return systemMethodParameters[0].ParameterType == Type.GetType("Valve.VR.EVREventType");
         }
 
         [SDK_ScriptingDefineSymbolPredicate(ScriptingDefineSymbol, BuildTargetGroupName)]
