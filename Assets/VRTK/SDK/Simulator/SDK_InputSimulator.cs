@@ -41,6 +41,17 @@ namespace VRTK
         [Tooltip("Key used to switch between X/Y and X/Z axis.")]
         public KeyCode changeAxis = KeyCode.LeftControl;
 
+        [Header("Movement Key Bindings")]
+
+        [Tooltip("Key used to move forward.")]
+        public KeyCode moveForward = KeyCode.W;
+        [Tooltip("Key used to move to the left.")]
+        public KeyCode moveLeft = KeyCode.A;
+        [Tooltip("Key used to move backwards.")]
+        public KeyCode moveBackward = KeyCode.S;
+        [Tooltip("Key used to move to the right.")]
+        public KeyCode moveRight = KeyCode.D;
+
         [Header("Controller Key Bindings")]
         [Tooltip("Key used to simulate trigger button.")]
         public KeyCode triggerAlias = KeyCode.Mouse1;
@@ -241,19 +252,19 @@ namespace VRTK
 
         private void UpdatePosition()
         {
-            if (Input.GetKey(KeyCode.W))
+            if (Input.GetKey(moveForward))
             {
                 transform.Translate(transform.forward * Time.deltaTime * playerMoveMultiplier, Space.World);
             }
-            else if (Input.GetKey(KeyCode.S))
+            else if (Input.GetKey(moveBackward))
             {
                 transform.Translate(-transform.forward * Time.deltaTime * playerMoveMultiplier, Space.World);
             }
-            if (Input.GetKey(KeyCode.A))
+            if (Input.GetKey(moveLeft))
             {
                 transform.Translate(-transform.right * Time.deltaTime * playerMoveMultiplier, Space.World);
             }
-            else if (Input.GetKey(KeyCode.D))
+            else if (Input.GetKey(moveRight))
             {
                 transform.Translate(transform.right * Time.deltaTime * playerMoveMultiplier, Space.World);
             }
