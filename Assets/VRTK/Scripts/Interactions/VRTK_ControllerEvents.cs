@@ -4,6 +4,8 @@ namespace VRTK
     using UnityEngine;
     using System;
 
+    using Hands = SDK_BaseController.ControllerHand;
+
     /// <summary>
     /// Event Payload
     /// </summary>
@@ -79,6 +81,9 @@ namespace VRTK
             Button_Two_Press,
             Start_Menu_Press
         }
+
+        [Tooltip("The hand of the controller to propagate events for. If this is set to None the game object this script is attached to will be used.")]
+        public Hands trackedHand = Hands.None;
 
         [Header("Action Alias Buttons")]
 
@@ -831,13 +836,25 @@ namespace VRTK
         }
 
         /// <summary>
+        /// The ControllerAlias property is useful for getting the script alias for the currently set trackedHand.
+        /// </summary>
+        /// <returns>Returns the current script alias GameObject for the currently set trackedHand.
+        public GameObject ControllerAlias 
+        { 
+            get 
+            { 
+                return VRTK_DeviceFinder.GetScriptAliasByHand(trackedHand, gameObject); 
+            } 
+        }
+
+        /// <summary>
         /// The GetVelocity method is useful for getting the current velocity of the physical game controller. This can be useful to determine the speed at which the controller is being swung or the direction it is being moved in.
         /// </summary>
         /// <returns>A 3 dimensional vector containing the current real world physical controller velocity.</returns>
         [Obsolete("`VRTK_ControllerEvents.GetVelocity()` has been replaced with `VRTK_DeviceFinder.GetControllerVelocity(givenController)`. This method will be removed in a future version of VRTK.")]
         public Vector3 GetVelocity()
         {
-            return VRTK_DeviceFinder.GetControllerVelocity(gameObject);
+            return VRTK_DeviceFinder.GetControllerVelocity(ControllerAlias);
         }
 
         /// <summary>
@@ -847,7 +864,7 @@ namespace VRTK
         [Obsolete("`VRTK_ControllerEvents.GetAngularVelocity()` has been replaced with `VRTK_DeviceFinder.GetControllerAngularVelocity(givenController)`. This method will be removed in a future version of VRTK.")]
         public Vector3 GetAngularVelocity()
         {
-            return VRTK_DeviceFinder.GetControllerAngularVelocity(gameObject);
+            return VRTK_DeviceFinder.GetControllerAngularVelocity(ControllerAlias);
         }
 
         /// <summary>
@@ -980,7 +997,7 @@ namespace VRTK
 
         protected virtual void OnEnable()
         {
-            var actualController = VRTK_DeviceFinder.GetActualController(gameObject);
+            var actualController = VRTK_DeviceFinder.GetActualController(ControllerAlias);
             if (actualController)
             {
                 var controllerTracker = actualController.GetComponent<VRTK_TrackedController>();
@@ -996,7 +1013,7 @@ namespace VRTK
         protected virtual void OnDisable()
         {
             Invoke("DisableEvents", 0f);
-            var actualController = VRTK_DeviceFinder.GetActualController(gameObject);
+            var actualController = VRTK_DeviceFinder.GetActualController(ControllerAlias);
             if (actualController)
             {
                 var controllerTracker = actualController.GetComponent<VRTK_TrackedController>();
@@ -1010,7 +1027,7 @@ namespace VRTK
 
         protected virtual void Update()
         {
-            var controllerIndex = VRTK_DeviceFinder.GetControllerIndex(gameObject);
+            var controllerIndex = VRTK_DeviceFinder.GetControllerIndex(ControllerAlias);
 
             //Only continue if the controller index has been set to a sensible number
             if (controllerIndex >= uint.MaxValue)
@@ -1631,7 +1648,7 @@ namespace VRTK
 
         private ControllerInteractionEventArgs SetButtonEvent(ref bool buttonBool, bool value, float buttonPressure)
         {
-            var controllerIndex = VRTK_DeviceFinder.GetControllerIndex(gameObject);
+            var controllerIndex = VRTK_DeviceFinder.GetControllerIndex(ControllerAlias);
             buttonBool = value;
             ControllerInteractionEventArgs e;
             e.controllerIndex = controllerIndex;
@@ -1855,7 +1872,7 @@ namespace VRTK
             gripAxisChanged = false;
             touchpadAxisChanged = false;
 
-            var controllerIndex = VRTK_DeviceFinder.GetControllerIndex(gameObject);
+            var controllerIndex = VRTK_DeviceFinder.GetControllerIndex(ControllerAlias);
 
             if (controllerIndex < uint.MaxValue)
             {

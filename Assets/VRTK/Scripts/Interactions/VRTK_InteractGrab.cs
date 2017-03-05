@@ -26,9 +26,16 @@ namespace VRTK
     ///
     /// `VRTK/Examples/014_Controller_SnappingObjectsOnGrab` demonstrates the different mechanisms for snapping a grabbed object to the controller.
     /// </example>
-    [RequireComponent(typeof(VRTK_InteractTouch)), RequireComponent(typeof(VRTK_ControllerEvents))]
     public class VRTK_InteractGrab : MonoBehaviour
     {
+
+        [Tooltip("The controller events instance to use. If this is left empty the game object this script is attached to will be searched for an instance of VRTK_ControllerEvents.")]
+        public VRTK_ControllerEvents controllerEvents;
+        [Tooltip("The controller actions instance to use. If this is left empty the game object this script is attached to will be searched for an instance of VRTK_ControllerActions.")]
+        public VRTK_ControllerActions controllerActions;
+        [Tooltip("The touch interaction instance to use. If this is left empty the game object this script is attached to will be searched for an instance of VRTK_InteractTouch.")]
+        public VRTK_InteractTouch interactTouch;
+
         [Tooltip("The rigidbody point on the controller model to snap the grabbed object to. If blank it will be set to the SDK default.")]
         public Rigidbody controllerAttachPoint = null;
         [Tooltip("An amount of time between when the grab button is pressed to when the controller is touching something to grab it. For example, if an object is falling at a fast rate, then it is very hard to press the grab button in time to catch the object due to human reaction times. A higher number here will mean the grab button can be pressed before the controller touches the object and when the collision takes place, if the grab button is still being held down then the grab action will be successful.")]
@@ -49,9 +56,6 @@ namespace VRTK
 
         private GameObject grabbedObject = null;
         private bool influencingGrabbedObject = false;
-        private VRTK_InteractTouch interactTouch;
-        private VRTK_ControllerActions controllerActions;
-        private VRTK_ControllerEvents controllerEvents;
         private int grabEnabledState = 0;
         private float grabPrecognitionTimer = 0f;
         private GameObject undroppableGrabbedObject;
@@ -100,9 +104,30 @@ namespace VRTK
 
         protected virtual void Awake()
         {
-            interactTouch = GetComponent<VRTK_InteractTouch>();
-            controllerActions = GetComponent<VRTK_ControllerActions>();
-            controllerEvents = GetComponent<VRTK_ControllerEvents>();
+            if (controllerEvents == null)
+            {
+                controllerEvents = GetComponent<VRTK_ControllerEvents>();
+            }
+            if (controllerEvents == null)
+            {
+                throw new System.Exception("InteractGrab requires a non-null VRTK_ControllerEvents instance. The field controllerEvents isn't set and there was no instance found on gameObject.");
+            }
+            if (controllerActions == null)
+            {
+                controllerActions = GetComponent<VRTK_ControllerActions>();
+            }
+            if (controllerActions == null)
+            {
+                throw new System.Exception("InteractGrab requires non-null VRTK_ControllerActions instance. The field controllerActions isn't set and there was no instance found on gameObject.");
+            }
+            if (interactTouch == null)
+            {
+                interactTouch = GetComponent<VRTK_InteractTouch>();
+            }
+            if (interactTouch == null)
+            {
+                throw new System.Exception("InteractGrab requires non-null VRTK_InteractTouch instance. The field interactTouch isn't set and there was no instance found on gameObject.");
+            }
         }
 
         protected virtual void OnEnable()
@@ -161,7 +186,7 @@ namespace VRTK
 
         private void SetControllerAttachPoint()
         {
-            var modelController = VRTK_DeviceFinder.GetModelAliasController(gameObject);
+            var modelController = VRTK_DeviceFinder.GetModelAliasController(controllerEvents.ControllerAlias);
             //If no attach point has been specified then just use the tip of the controller
             if (modelController && controllerAttachPoint == null)
             {

@@ -23,6 +23,13 @@ namespace VRTK
     [RequireComponent(typeof(VRTK_InteractTouch)), RequireComponent(typeof(VRTK_ControllerEvents))]
     public class VRTK_InteractUse : MonoBehaviour
     {
+        [Tooltip("The controller events instance to use. If this is left empty the game object this script is attached to will be searched for an instance of VRTK_ControllerEvents.")]
+        public VRTK_ControllerEvents controllerEvents;
+        [Tooltip("The controller actions instance to use. If this is left empty the game object this script is attached to will be searched for an instance of VRTK_ControllerActions.")]
+        public VRTK_ControllerActions controllerActions;
+        [Tooltip("The touch interaction instance to use. If this is left empty the game object this script is attached to will be searched for an instance of VRTK_InteractTouch.")]
+        public VRTK_InteractTouch interactTouch;
+
         /// <summary>
         /// Emitted when a valid object starts being used.
         /// </summary>
@@ -33,9 +40,7 @@ namespace VRTK
         public event ObjectInteractEventHandler ControllerUnuseInteractableObject;
 
         private GameObject usingObject = null;
-        private VRTK_InteractTouch interactTouch;
-        private VRTK_ControllerActions controllerActions;
-        private VRTK_ControllerEvents controllerEvents;
+
 
         public virtual void OnControllerUseInteractableObject(ObjectInteractEventArgs e)
         {
@@ -86,9 +91,30 @@ namespace VRTK
 
         protected virtual void Awake()
         {
-            interactTouch = GetComponent<VRTK_InteractTouch>();
-            controllerActions = GetComponent<VRTK_ControllerActions>();
-            controllerEvents = GetComponent<VRTK_ControllerEvents>();
+            if (controllerEvents == null)
+            {
+                controllerEvents = GetComponent<VRTK_ControllerEvents>();
+            }
+            if (controllerEvents == null)
+            {
+                throw new System.Exception("Interactuse requires a non-null VRTK_ControllerEvents instance. The field controllerEvents isn't set and there was no instance found on gameObject.");
+            }
+            if (controllerActions == null)
+            {
+                controllerActions = GetComponent<VRTK_ControllerActions>();
+            }
+            if (controllerActions == null)
+            {
+                throw new System.Exception("InteractUse requires non-null VRTK_ControllerActions instance. The field controllerActions isn't set and there was no instance found on gameObject.");
+            }
+            if (interactTouch == null)
+            {
+                interactTouch = GetComponent<VRTK_InteractTouch>();
+            }
+            if (interactTouch == null)
+            {
+                throw new System.Exception("InteractUse requires non-null VRTK_InteractTouch instance. The field interactTouch isn't set and there was no instance found on gameObject.");
+            }
         }
 
         protected virtual void OnEnable()

@@ -238,6 +238,29 @@ namespace VRTK
         }
 
         /// <summary>
+        /// The GetScriptAliasByHand method will attempt to get the object that contains the scripts for the specified hand.
+        /// </summary>
+        /// <param name="hand">The SDK_BaseController.ControllerHand of the desired script alias.</param>
+        /// <returns>The GameObject that is the alias controller containing the scripts of the desired hand.</returns>
+        public static GameObject GetScriptAliasByHand(SDK_BaseController.ControllerHand hand, GameObject defaultTo)
+        {
+            if (VRTK_SDKManager.instance == null)
+            {
+                return defaultTo;
+            }
+
+            switch (hand)
+            {
+                case SDK_BaseController.ControllerHand.Left:
+                    return VRTK_SDKManager.instance.scriptAliasLeftController;
+                case SDK_BaseController.ControllerHand.Right:
+                    return VRTK_SDKManager.instance.scriptAliasRightController;
+                default:
+                    return defaultTo;
+            }
+        }
+
+        /// <summary>
         /// The GetModelAliasController method will attempt to get the object that contains the model for the controller.
         /// </summary>
         /// <param name="givenController">The GameObject of the controller.</param>
