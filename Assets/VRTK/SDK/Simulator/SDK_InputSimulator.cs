@@ -35,6 +35,8 @@ namespace VRTK
         public bool resetHandsAtSwitch = true;
         [Tooltip("Whether mouse movement always acts as input or requires a button press.")]
         public MouseInputMode mouseMovementInput = MouseInputMode.Always;
+        [Tooltip("Lock the mouse cursor to the game window when the mouse movement key is pressed.")]
+        public bool lockMouseToView = false;
 
         [Header("Adjustments")]
 
@@ -177,6 +179,11 @@ namespace VRTK
                 hintCanvas.SetActive(showControlHints);
             }
 
+            if (mouseMovementInput == MouseInputMode.RequresButtonPress && lockMouseToView)
+            {
+                Cursor.lockState = Input.GetKey(mouseMovementKey) ? CursorLockMode.Locked : CursorLockMode.None;
+            }
+
             if (Input.GetKeyDown(handsOnOff))
             {
                 if (isHand)
@@ -224,7 +231,7 @@ namespace VRTK
 
         private void UpdateHands()
         {
-            Vector3 mouseDiff = Input.mousePosition - oldPos;
+            Vector3 mouseDiff = GetMouseDelta();
 
             if (IsAcceptingMouseInput())
             {
@@ -262,13 +269,11 @@ namespace VRTK
                     }
                 }
             }
-
-            oldPos = Input.mousePosition;
         }
 
         private void UpdateRotation()
         {
-            Vector3 mouseDiff = Input.mousePosition - oldPos;
+            Vector3 mouseDiff = GetMouseDelta();
 
             if (IsAcceptingMouseInput())
             {
@@ -290,8 +295,6 @@ namespace VRTK
                     myCamera.rotation = Quaternion.Euler(rot);
                 }
             }
-
-            oldPos = Input.mousePosition;
         }
 
         private void UpdatePosition()
@@ -410,6 +413,20 @@ namespace VRTK
         private bool IsAcceptingMouseInput()
         {
             return mouseMovementInput == MouseInputMode.Always || Input.GetKey(mouseMovementKey);
+        }
+
+        private Vector3 GetMouseDelta()
+        {
+            if (Cursor.lockState == CursorLockMode.Locked)
+            {
+                return new Vector3(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+            }
+            else
+            {
+                Vector3 mouseDiff = Input.mousePosition - oldPos;
+                oldPos = Input.mousePosition;
+                return mouseDiff;
+            }
         }
     }
 }
