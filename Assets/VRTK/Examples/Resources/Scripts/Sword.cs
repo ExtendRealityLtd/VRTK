@@ -4,10 +4,10 @@
 
     public class Sword : VRTK_InteractableObject
     {
-        private VRTK_ControllerActions controllerActions;
         private float impactMagnifier = 120f;
         private float collisionForce = 0f;
         private float maxCollisionForce = 4000f;
+        private GameObject grabbingController;
 
         public float CollisionForce()
         {
@@ -17,22 +17,29 @@
         public override void Grabbed(GameObject grabbingObject)
         {
             base.Grabbed(grabbingObject);
-            controllerActions = grabbingObject.GetComponent<VRTK_ControllerActions>();
+            grabbingController = grabbingObject;
         }
 
-        protected override void Awake()
+        public override void Ungrabbed(GameObject previousGrabbingObject)
         {
-            base.Awake();
+            base.Ungrabbed(previousGrabbingObject);
+            grabbingController = null;
+        }
+
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            grabbingController = null;
             interactableRigidbody.collisionDetectionMode = CollisionDetectionMode.Continuous;
         }
 
         private void OnCollisionEnter(Collision collision)
         {
-            if (controllerActions && IsGrabbed())
+            if (grabbingController != null && IsGrabbed())
             {
-                collisionForce = VRTK_DeviceFinder.GetControllerVelocity(controllerActions.gameObject).magnitude * impactMagnifier;
+                collisionForce = VRTK_DeviceFinder.GetControllerVelocity(grabbingController).magnitude * impactMagnifier;
                 var hapticStrength = collisionForce / maxCollisionForce;
-                controllerActions.TriggerHapticPulse(hapticStrength, 0.5f, 0.01f);
+                VRTK_SharedMethods.TriggerHapticPulse(VRTK_DeviceFinder.GetControllerIndex(grabbingController), hapticStrength, 0.5f, 0.01f);
             }
             else
             {

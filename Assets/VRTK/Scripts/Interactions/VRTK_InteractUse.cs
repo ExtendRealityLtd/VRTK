@@ -229,7 +229,7 @@ namespace VRTK
                 var doHaptics = usingObject.GetComponentInParent<VRTK_InteractHaptics>();
                 if (doHaptics)
                 {
-                    doHaptics.HapticsOnUse(controllerActions);
+                    doHaptics.HapticsOnUse(VRTK_DeviceFinder.GetControllerIndex(interactTouch.gameObject));
                 }
             }
         }

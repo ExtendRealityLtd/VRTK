@@ -226,11 +226,7 @@ namespace VRTK
         {
             if (interactingObjects.Count > 0)
             {
-                var controllerActions = interactingObjects[0].GetComponent<VRTK_ControllerActions>();
-                if (controllerActions)
-                {
-                    controllerActions.TriggerHapticPulse(strength);
-                }
+                VRTK_SharedMethods.TriggerHapticPulse(VRTK_DeviceFinder.GetControllerIndex(interactingObjects[0]), strength);
             }
         }
         #endregion Event Listeners

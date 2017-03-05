@@ -9,20 +9,17 @@
         public FireExtinguisher_Sprayer sprayer;
 
         private VRTK_ControllerEvents controllerEvents;
-        private VRTK_ControllerActions controllerActions;
 
         public override void StartUsing(GameObject usingObject)
         {
             base.StartUsing(usingObject);
             controllerEvents = usingObject.GetComponent<VRTK_ControllerEvents>();
-            controllerActions = usingObject.GetComponent<VRTK_ControllerActions>();
         }
 
         public override void StopUsing(GameObject previousUsingObject)
         {
             base.StopUsing(previousUsingObject);
             controllerEvents = null;
-            controllerActions = null;
         }
 
         protected override void Update()
@@ -30,9 +27,9 @@
             base.Update();
             if (controllerEvents)
             {
-                var power = controllerEvents.GetTriggerAxis();
+                float power = controllerEvents.GetTriggerAxis();
                 Spray(power);
-                controllerActions.TriggerHapticPulse(power * 0.25f, 0.1f, 0.01f);
+                VRTK_SharedMethods.TriggerHapticPulse(VRTK_DeviceFinder.GetControllerIndex(controllerEvents.gameObject), power * 0.25f, 0.1f, 0.01f);
             }
             else
             {

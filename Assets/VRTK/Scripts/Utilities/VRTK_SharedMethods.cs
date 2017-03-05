@@ -132,7 +132,7 @@ namespace VRTK
         public static Component CloneComponent(Component source, GameObject destination, bool copyProperties = false)
         {
             Component tmpComponent = destination.gameObject.AddComponent(source.GetType());
-            if(copyProperties)
+            if (copyProperties)
             {
                 foreach (PropertyInfo p in source.GetType().GetProperties())
                 {
@@ -185,6 +185,34 @@ namespace VRTK
 #else
             return false;
 #endif
+        }
+
+        /// <summary>
+        /// The TriggerHapticPulse/1 method calls a single haptic pulse call on the controller for a single tick.
+        /// </summary>
+        /// <param name="strength">The intensity of the rumble of the controller motor. `0` to `1`.</param>
+        public static void TriggerHapticPulse(uint controllerIndex, float strength)
+        {
+            var instanceMethods = VRTK_InstanceMethods.instance;
+            if (instanceMethods != null)
+            {
+                instanceMethods.TriggerHapticPulse(controllerIndex, strength);
+            }
+        }
+
+        /// <summary>
+        /// The TriggerHapticPulse/3 method calls a haptic pulse for a specified amount of time rather than just a single tick. Each pulse can be separated by providing a `pulseInterval` to pause between each haptic pulse.
+        /// </summary>
+        /// <param name="strength">The intensity of the rumble of the controller motor. `0` to `1`.</param>
+        /// <param name="duration">The length of time the rumble should continue for.</param>
+        /// <param name="pulseInterval">The interval to wait between each haptic pulse.</param>
+        public static void TriggerHapticPulse(uint controllerIndex, float strength, float duration, float pulseInterval)
+        {
+            var instanceMethods = VRTK_InstanceMethods.instance;
+            if (instanceMethods != null)
+            {
+                instanceMethods.TriggerHapticPulse(controllerIndex, strength, duration, pulseInterval);
+            }
         }
 
         private static float ColorPercent(float value, float percent)

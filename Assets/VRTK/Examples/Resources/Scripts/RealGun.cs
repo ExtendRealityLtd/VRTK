@@ -18,7 +18,6 @@
         private Collider safetySwitchCollider;
 
         private VRTK_ControllerEvents controllerEvents;
-        private VRTK_ControllerActions controllerActions;
 
         private float minTriggerRotation = -10f;
         private float maxTriggerRotation = 45f;
@@ -54,7 +53,6 @@
             base.Grabbed(currentGrabbingObject);
 
             controllerEvents = currentGrabbingObject.GetComponent<VRTK_ControllerEvents>();
-            controllerActions = currentGrabbingObject.GetComponent<VRTK_ControllerActions>();
 
             ToggleSlide(true);
             ToggleSafetySwitch(true);
@@ -90,7 +88,6 @@
             safetySwitch.allowedGrabControllers = AllowedController.Both;
 
             controllerEvents = null;
-            controllerActions = null;
         }
 
         public override void StartUsing(GameObject currentUsingObject)
@@ -100,11 +97,11 @@
             {
                 slide.Fire();
                 FireBullet();
-                controllerActions.TriggerHapticPulse(0.63f, 0.2f, 0.01f);
+                VRTK_SharedMethods.TriggerHapticPulse(VRTK_DeviceFinder.GetControllerIndex(controllerEvents.gameObject), 0.63f, 0.2f, 0.01f);
             }
             else
             {
-                controllerActions.TriggerHapticPulse(0.08f, 0.1f, 0.01f);
+                VRTK_SharedMethods.TriggerHapticPulse(VRTK_DeviceFinder.GetControllerIndex(controllerEvents.gameObject), 0.08f, 0.1f, 0.01f);
             }
         }
 

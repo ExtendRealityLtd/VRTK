@@ -88,10 +88,9 @@ namespace VRTK
 
         protected virtual void AttemptHapticPulse(float strength)
         {
-            var controllerActions = GetComponentInParent<VRTK_ControllerActions>();
-            if (controllerActions)
+            if (events)
             {
-                controllerActions.TriggerHapticPulse(strength);
+                VRTK_SharedMethods.TriggerHapticPulse(VRTK_DeviceFinder.GetControllerIndex(events.gameObject), strength);
             }
         }
 
