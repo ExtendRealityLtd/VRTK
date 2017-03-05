@@ -239,7 +239,7 @@ namespace VRTK
         {
             var colliderInteractableObject = TriggerStart(collider);
 
-            if (touchedObject == null || touchedObject == collider.gameObject)
+            if (touchedObject == null || collider.transform.IsChildOf(touchedObject.transform))
             {
                 triggerIsColliding = true;
             }
