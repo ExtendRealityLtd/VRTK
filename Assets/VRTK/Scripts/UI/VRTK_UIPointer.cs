@@ -355,7 +355,7 @@ namespace VRTK
         {
             if (controller != null)
             {
-                pointerEventData.pointerId = (int)VRTK_SDK_Bridge.GetControllerIndex(controller.gameObject);
+                pointerEventData.pointerId = (int)VRTK_DeviceFinder.GetControllerIndex(controller.gameObject);
             }
         }
 
