@@ -20,7 +20,7 @@ namespace VRTK
         [Header("Button Control Settings")]
 
         [Tooltip("The button to set the y axis to +1.")]
-        public VRTK_ControllerEvents.ButtonAlias forwardButton = VRTK_ControllerEvents.ButtonAlias.Trigger_Press;
+        public VRTK_ControllerEvents.ButtonAlias forwardButton = VRTK_ControllerEvents.ButtonAlias.TriggerPress;
         [Tooltip("The button to set the y axis to -1.")]
         public VRTK_ControllerEvents.ButtonAlias backwardButton = VRTK_ControllerEvents.ButtonAlias.Undefined;
         [Tooltip("The button to set the x axis to -1.")]

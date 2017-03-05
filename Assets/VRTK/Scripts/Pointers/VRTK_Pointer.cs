@@ -27,7 +27,7 @@ namespace VRTK
         [Tooltip("The specific renderer to use when the pointer is activated. The renderer also determines how the pointer reaches it's destination (e.g. straight line, bezier curve).")]
         public VRTK_BasePointerRenderer pointerRenderer;
         [Tooltip("The button used to activate/deactivate the pointer.")]
-        public VRTK_ControllerEvents.ButtonAlias activationButton = VRTK_ControllerEvents.ButtonAlias.Touchpad_Press;
+        public VRTK_ControllerEvents.ButtonAlias activationButton = VRTK_ControllerEvents.ButtonAlias.TouchpadPress;
         [Tooltip("If this is checked then the Activation Button needs to be continuously held down to keep the pointer active. If this is unchecked then the Activation Button works as a toggle, the first press/release enables the pointer and the second press/release disables the pointer.")]
         public bool holdButtonToActivate = true;
         [Tooltip("If this is checked then the pointer will be toggled on when the script is enabled.")]
@@ -38,7 +38,7 @@ namespace VRTK
         [Header("Pointer Selection Settings")]
 
         [Tooltip("The button used to execute the select action at the pointer's target position.")]
-        public VRTK_ControllerEvents.ButtonAlias selectionButton = VRTK_ControllerEvents.ButtonAlias.Touchpad_Press;
+        public VRTK_ControllerEvents.ButtonAlias selectionButton = VRTK_ControllerEvents.ButtonAlias.TouchpadPress;
         [Tooltip("If this is checked then the pointer selection action is executed when the Selection Button is pressed down. If this is unchecked then the selection action is executed when the Selection Button is released.")]
         public bool selectOnPress = false;
         [Tooltip("The time in seconds to delay the pointer being able to execute the select action again.")]

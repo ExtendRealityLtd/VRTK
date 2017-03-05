@@ -22,9 +22,9 @@ namespace VRTK
         [Header("Touchpad Control Settings")]
 
         [Tooltip("An optional button that has to be engaged to allow the touchpad control to activate.")]
-        public VRTK_ControllerEvents.ButtonAlias primaryActivationButton = VRTK_ControllerEvents.ButtonAlias.Touchpad_Touch;
+        public VRTK_ControllerEvents.ButtonAlias primaryActivationButton = VRTK_ControllerEvents.ButtonAlias.TouchpadTouch;
         [Tooltip("An optional button that when engaged will activate the modifier on the touchpad control action.")]
-        public VRTK_ControllerEvents.ButtonAlias actionModifierButton = VRTK_ControllerEvents.ButtonAlias.Touchpad_Press;
+        public VRTK_ControllerEvents.ButtonAlias actionModifierButton = VRTK_ControllerEvents.ButtonAlias.TouchpadPress;
         [Tooltip("Any input on the axis will be ignored if it is within this deadzone threshold. Between `0f` and `1f`.")]
         public Vector2 axisDeadzone = new Vector2(0.2f, 0.2f);
 
@@ -100,7 +100,7 @@ namespace VRTK
 
         protected virtual bool TouchpadTouched()
         {
-            return (controllerEvents && controllerEvents.IsButtonPressed(VRTK_ControllerEvents.ButtonAlias.Touchpad_Touch));
+            return (controllerEvents && controllerEvents.IsButtonPressed(VRTK_ControllerEvents.ButtonAlias.TouchpadTouch));
         }
 
         protected virtual void TouchpadAxisChanged(object sender, ControllerInteractionEventArgs e)

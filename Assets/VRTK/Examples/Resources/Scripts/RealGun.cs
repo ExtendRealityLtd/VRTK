@@ -62,17 +62,17 @@
             //Limit hands grabbing when picked up
             if (VRTK_DeviceFinder.GetControllerHand(currentGrabbingObject) == SDK_BaseController.ControllerHand.Left)
             {
-                allowedTouchControllers = AllowedController.Left_Only;
-                allowedUseControllers = AllowedController.Left_Only;
-                slide.allowedGrabControllers = AllowedController.Right_Only;
-                safetySwitch.allowedGrabControllers = AllowedController.Right_Only;
+                allowedTouchControllers = AllowedController.LeftOnly;
+                allowedUseControllers = AllowedController.LeftOnly;
+                slide.allowedGrabControllers = AllowedController.RightOnly;
+                safetySwitch.allowedGrabControllers = AllowedController.RightOnly;
             }
             else if (VRTK_DeviceFinder.GetControllerHand(currentGrabbingObject) == SDK_BaseController.ControllerHand.Right)
             {
-                allowedTouchControllers = AllowedController.Right_Only;
-                allowedUseControllers = AllowedController.Right_Only;
-                slide.allowedGrabControllers = AllowedController.Left_Only;
-                safetySwitch.allowedGrabControllers = AllowedController.Left_Only;
+                allowedTouchControllers = AllowedController.RightOnly;
+                allowedUseControllers = AllowedController.RightOnly;
+                slide.allowedGrabControllers = AllowedController.LeftOnly;
+                safetySwitch.allowedGrabControllers = AllowedController.LeftOnly;
             }
         }
 

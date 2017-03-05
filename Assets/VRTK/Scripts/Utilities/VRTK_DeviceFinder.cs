@@ -13,13 +13,13 @@ namespace VRTK
         /// Possible devices.
         /// </summary>
         /// <param name="Headset">The headset.</param>
-        /// <param name="Left_Controller">The left hand controller.</param>
-        /// <param name="Right_Controller">The right hand controller.</param>
+        /// <param name="LeftController">The left hand controller.</param>
+        /// <param name="RightController">The right hand controller.</param>
         public enum Devices
         {
             Headset,
-            Left_Controller,
-            Right_Controller,
+            LeftController,
+            RightController,
         }
 
         /// <summary>
@@ -81,9 +81,9 @@ namespace VRTK
             {
                 case Devices.Headset:
                     return HeadsetTransform();
-                case Devices.Left_Controller:
+                case Devices.LeftController:
                     return GetControllerLeftHand().transform;
-                case Devices.Right_Controller:
+                case Devices.RightController:
                     return GetControllerRightHand().transform;
             }
             return null;

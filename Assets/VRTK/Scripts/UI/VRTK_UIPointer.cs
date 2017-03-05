@@ -66,14 +66,14 @@ namespace VRTK
         [Header("Activation Settings")]
 
         [Tooltip("The button used to activate/deactivate the UI raycast for the pointer.")]
-        public VRTK_ControllerEvents.ButtonAlias activationButton = VRTK_ControllerEvents.ButtonAlias.Touchpad_Press;
+        public VRTK_ControllerEvents.ButtonAlias activationButton = VRTK_ControllerEvents.ButtonAlias.TouchpadPress;
         [Tooltip("Determines when the UI pointer should be active.")]
         public ActivationMethods activationMode = ActivationMethods.HoldButton;
 
         [Header("Selection Settings")]
 
         [Tooltip("The button used to execute the select action at the pointer's target position.")]
-        public VRTK_ControllerEvents.ButtonAlias selectionButton = VRTK_ControllerEvents.ButtonAlias.Trigger_Press;
+        public VRTK_ControllerEvents.ButtonAlias selectionButton = VRTK_ControllerEvents.ButtonAlias.TriggerPress;
         [Tooltip("Determines when the UI Click event action should happen.")]
         public ClickMethods clickMethod = ClickMethods.ClickOnButtonUp;
         [Tooltip("Determines whether the UI click action should be triggered when the pointer is deactivated. If the pointer is hovering over a clickable element then it will invoke the click action on that element. Note: Only works with `Click Method =  Click_On_Button_Up`")]

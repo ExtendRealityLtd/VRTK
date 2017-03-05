@@ -47,20 +47,20 @@ namespace VRTK
         /// <summary>
         /// The types of snap on release available.
         /// </summary>
-        /// <param name="Use_Kinematic">Will set the interactable object rigidbody to `isKinematic = true`.</param>
-        /// <param name="Use_Joint">Will attach the interactable object's rigidbody to the provided joint as it's `Connected Body`.</param>
-        /// <param name="Use_Parenting">Will set the SnapDropZone as the interactable object's parent and set it's rigidbody to `isKinematic = true`.</param>
+        /// <param name="UseKinematic">Will set the interactable object rigidbody to `isKinematic = true`.</param>
+        /// <param name="UseJoint">Will attach the interactable object's rigidbody to the provided joint as it's `Connected Body`.</param>
+        /// <param name="UseParenting">Will set the SnapDropZone as the interactable object's parent and set it's rigidbody to `isKinematic = true`.</param>
         public enum SnapTypes
         {
-            Use_Kinematic,
-            Use_Joint,
-            Use_Parenting
+            UseKinematic,
+            UseJoint,
+            UseParenting
         }
 
         [Tooltip("A game object that is used to draw the highlighted destination for within the drop zone. This object will also be created in the Editor for easy placement.")]
         public GameObject highlightObjectPrefab;
         [Tooltip("The Snap Type to apply when a valid interactable object is dropped within the snap zone.")]
-        public SnapTypes snapType = SnapTypes.Use_Kinematic;
+        public SnapTypes snapType = SnapTypes.UseKinematic;
         [Tooltip("The amount of time it takes for the object being snapped to move into the new snapped position, rotation and scale.")]
         public float snapDuration = 0f;
         [Tooltip("If this is checked then the scaled size of the snap drop zone will be applied to the object that is snapped to it.")]
@@ -297,7 +297,7 @@ namespace VRTK
                 GenerateHighlightObject();
 
                 //If a joint is being used but no joint is found then throw a warning in the console
-                if (snapType == SnapTypes.Use_Joint && GetComponent<Joint>() == null)
+                if (snapType == SnapTypes.UseJoint && GetComponent<Joint>() == null)
                 {
                     Debug.LogWarning("A Joint Component is required on the SnapDropZone GameObject called [" + name + "] because the Snap Type is set to `Use Joint`.");
                 }
@@ -471,16 +471,16 @@ namespace VRTK
         {
             switch (snapType)
             {
-                case SnapTypes.Use_Kinematic:
+                case SnapTypes.UseKinematic:
                     ioCheck.SaveCurrentState();
                     ioCheck.isKinematic = true;
                     break;
-                case SnapTypes.Use_Parenting:
+                case SnapTypes.UseParenting:
                     ioCheck.SaveCurrentState();
                     ioCheck.isKinematic = true;
                     ioCheck.transform.SetParent(transform);
                     break;
-                case SnapTypes.Use_Joint:
+                case SnapTypes.UseJoint:
                     SetSnapDropZoneJoint(ioCheck.GetComponent<Rigidbody>());
                     break;
             }

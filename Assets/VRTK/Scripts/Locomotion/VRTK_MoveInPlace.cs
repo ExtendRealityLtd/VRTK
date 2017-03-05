@@ -49,7 +49,7 @@ namespace VRTK
         [Tooltip("If this is checked then the right controller touchpad will be enabled to move the play area.")]
         public bool rightController = true;
         [Tooltip("Select which button to hold to engage Move In Place.")]
-        public VRTK_ControllerEvents.ButtonAlias engageButton = VRTK_ControllerEvents.ButtonAlias.Touchpad_Press;
+        public VRTK_ControllerEvents.ButtonAlias engageButton = VRTK_ControllerEvents.ButtonAlias.TouchpadPress;
         [Tooltip("Select which trackables are used to determine movement.")]
         public ControlOptions controlOptions = ControlOptions.HeadsetAndControllers;
         [Tooltip("Lower to decrease speed, raise to increase.")]

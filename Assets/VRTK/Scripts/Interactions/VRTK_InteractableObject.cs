@@ -43,26 +43,26 @@ namespace VRTK
         /// Allowed controller type.
         /// </summary>
         /// <param name="Both">Both controllers are allowed to interact.</param>
-        /// <param name="Left_Only">Only the left controller is allowed to interact.</param>
-        /// <param name="Right_Only">Only the right controller is allowed to interact.</param>
+        /// <param name="LeftOnly">Only the left controller is allowed to interact.</param>
+        /// <param name="RightOnly">Only the right controller is allowed to interact.</param>
         public enum AllowedController
         {
             Both,
-            Left_Only,
-            Right_Only
+            LeftOnly,
+            RightOnly
         }
 
         /// <summary>
         /// The types of valid situations that the object can be released from grab.
         /// </summary>
-        /// <param name="No_Drop">The object cannot be dropped via the controller</param>
-        /// <param name="Drop_Anywhere">The object can be dropped anywhere in the scene via the controller.</param>
-        /// <param name="Drop_ValidSnapDropZone">The object can only be dropped when it is hovering over a valid snap drop zone.</param>
+        /// <param name="NoDrop">The object cannot be dropped via the controller</param>
+        /// <param name="DropAnywhere">The object can be dropped anywhere in the scene via the controller.</param>
+        /// <param name="DropValidSnapDropZone">The object can only be dropped when it is hovering over a valid snap drop zone.</param>
         public enum ValidDropTypes
         {
-            No_Drop,
-            Drop_Anywhere,
-            Drop_ValidSnapDropZone
+            NoDrop,
+            DropAnywhere,
+            DropValidSnapDropZone
         }
 
         [Tooltip("If this is checked then the interactable object script will be disabled when the object is not being interacted with. This will eliminate the potential number of calls the interactable objects make each frame.")]
@@ -86,7 +86,7 @@ namespace VRTK
         [Tooltip("If this is checked then the object will stay grabbed to the controller when a teleport occurs. If it is unchecked then the object will be released when a teleport occurs.")]
         public bool stayGrabbedOnTeleport = true;
         [Tooltip("Determines in what situation the object can be dropped by the controller grab button.")]
-        public ValidDropTypes validDrop = ValidDropTypes.Drop_Anywhere;
+        public ValidDropTypes validDrop = ValidDropTypes.DropAnywhere;
         [Tooltip("If this is set to `Undefined` then the global grab alias button will grab the object, setting it to any other button will ensure the override button is used to grab this specific interactable object.")]
         public VRTK_ControllerEvents.ButtonAlias grabOverrideButton = VRTK_ControllerEvents.ButtonAlias.Undefined;
         [Tooltip("Determines which controller can initiate a grab action.")]
@@ -495,7 +495,7 @@ namespace VRTK
                 return true;
             }
 
-            var controllerHand = VRTK_DeviceFinder.GetControllerHandType(controllerCheck.ToString().Replace("_Only", ""));
+            var controllerHand = VRTK_DeviceFinder.GetControllerHandType(controllerCheck.ToString().Replace("Only", ""));
             return (VRTK_DeviceFinder.IsControllerOfHand(actualController, controllerHand));
         }
 
@@ -610,11 +610,11 @@ namespace VRTK
         {
             switch (validDrop)
             {
-                case ValidDropTypes.No_Drop:
+                case ValidDropTypes.NoDrop:
                     return false;
-                case ValidDropTypes.Drop_Anywhere:
+                case ValidDropTypes.DropAnywhere:
                     return true;
-                case ValidDropTypes.Drop_ValidSnapDropZone:
+                case ValidDropTypes.DropValidSnapDropZone:
                     return hoveredOverSnapDropZone;
             }
             return false;
@@ -1025,11 +1025,11 @@ namespace VRTK
         {
             switch (storedSnapDropZone.snapType)
             {
-                case VRTK_SnapDropZone.SnapTypes.Use_Kinematic:
-                case VRTK_SnapDropZone.SnapTypes.Use_Parenting:
+                case VRTK_SnapDropZone.SnapTypes.UseKinematic:
+                case VRTK_SnapDropZone.SnapTypes.UseParenting:
                     LoadPreviousState();
                     break;
-                case VRTK_SnapDropZone.SnapTypes.Use_Joint:
+                case VRTK_SnapDropZone.SnapTypes.UseJoint:
                     var snapDropZoneJoint = storedSnapDropZone.GetComponent<Joint>();
                     if (snapDropZoneJoint)
                     {

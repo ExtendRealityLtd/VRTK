@@ -41,18 +41,18 @@ namespace VRTK
         /// <summary>
         /// Options for testing if a play space fall is valid
         /// </summary>
-        /// <param name="No_Restriction">Always drop to nearest floor when the headset is no longer over the current standing object.</param>
-        /// <param name="Left_Controller">Don't drop to nearest floor  if the Left Controller is still over the current standing object even if the headset isn't.</param>
-        /// <param name="Right_Controller">Don't drop to nearest floor  if the Right Controller is still over the current standing object even if the headset isn't.</param>
-        /// <param name="Either_Controller">Don't drop to nearest floor  if Either Controller is still over the current standing object even if the headset isn't.</param>
-        /// <param name="Both_Controllers">Don't drop to nearest floor only if Both Controllers are still over the current standing object even if the headset isn't.</param>
+        /// <param name="NoRestriction">Always drop to nearest floor when the headset is no longer over the current standing object.</param>
+        /// <param name="LeftController">Don't drop to nearest floor  if the Left Controller is still over the current standing object even if the headset isn't.</param>
+        /// <param name="RightController">Don't drop to nearest floor  if the Right Controller is still over the current standing object even if the headset isn't.</param>
+        /// <param name="EitherController">Don't drop to nearest floor  if Either Controller is still over the current standing object even if the headset isn't.</param>
+        /// <param name="BothControllers">Don't drop to nearest floor only if Both Controllers are still over the current standing object even if the headset isn't.</param>
         public enum FallingRestrictors
         {
-            No_Restriction,
-            Left_Controller,
-            Right_Controller,
-            Either_Controller,
-            Both_Controllers,
+            NoRestriction,
+            LeftController,
+            RightController,
+            EitherController,
+            BothControllers,
         }
 
         [Header("Body Collision Settings")]
@@ -75,7 +75,7 @@ namespace VRTK
         [Tooltip("The layers to ignore when raycasting to find floors.")]
         public LayerMask layersToIgnore = Physics.IgnoreRaycastLayer;
         [Tooltip("A check to see if the drop to nearest floor should take place. If the selected restrictor is still over the current floor then the drop to nearest floor will not occur. Works well for being able to lean over ledges and look down. Only works for falling down not teleporting up.")]
-        public FallingRestrictors fallRestriction = FallingRestrictors.No_Restriction;
+        public FallingRestrictors fallRestriction = FallingRestrictors.NoRestriction;
         [Tooltip("When the `y` distance between the floor and the headset exceeds this distance and `Enable Body Collisions` is true then the rigidbody gravity will be used instead of teleport to drop to nearest floor.")]
         public float gravityFallYThreshold = 1.0f;
         [Tooltip("The `y` distance between the floor and the headset that must change before a fade transition is initiated. If the new user location is at a higher distance than the threshold then the headset blink transition will activate on teleport. If the new user location is within the threshold then no blink transition will happen, which is useful for walking up slopes, meshes and terrains to prevent constant blinking.")]
@@ -806,7 +806,7 @@ namespace VRTK
 
         private bool ControllersStillOverPreviousFloor()
         {
-            if (fallRestriction == FallingRestrictors.No_Restriction)
+            if (fallRestriction == FallingRestrictors.NoRestriction)
             {
                 return false;
             }
@@ -818,17 +818,17 @@ namespace VRTK
             var rightCheck = (rightController.activeInHierarchy && Mathf.Abs(ControllerHeightCheck(rightController) - previousY) < controllerDropThreshold);
             var leftCheck = (leftController.activeInHierarchy && Mathf.Abs(ControllerHeightCheck(leftController) - previousY) < controllerDropThreshold);
 
-            if (fallRestriction == FallingRestrictors.Left_Controller)
+            if (fallRestriction == FallingRestrictors.LeftController)
             {
                 rightCheck = false;
             }
 
-            if (fallRestriction == FallingRestrictors.Right_Controller)
+            if (fallRestriction == FallingRestrictors.RightController)
             {
                 leftCheck = false;
             }
 
-            if (fallRestriction == FallingRestrictors.Both_Controllers)
+            if (fallRestriction == FallingRestrictors.BothControllers)
             {
                 return (rightCheck && leftCheck);
             }
