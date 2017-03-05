@@ -36,6 +36,8 @@ namespace VRTK
 
         [Header("Operation Key Bindings")]
 
+        [Tooltip("Key used to toggle control hints on/off.")]
+        public KeyCode toggleControlHints = KeyCode.F1;
         [Tooltip("Key used to switch between left and righ hand.")]
         public KeyCode changeHands = KeyCode.Tab;
         [Tooltip("Key used to switch hands On/Off.")]
@@ -154,6 +156,12 @@ namespace VRTK
 
         private void Update()
         {
+            if (Input.GetKeyDown(toggleControlHints))
+            {
+                showControlHints = !showControlHints;
+                hintCanvas.SetActive(showControlHints);
+            }
+
             if (Input.GetKeyDown(handsOnOff))
             {
                 if (isHand)
