@@ -30,7 +30,7 @@
 
         private bool CanGrab(VRTK_InteractGrab grabbingController)
         {
-            return (grabbingController && grabbingController.GetGrabbedObject() == null && grabbingController.gameObject.GetComponent<VRTK_ControllerEvents>().grabPressed);
+            return (grabbingController && grabbingController.GetGrabbedObject() == null && grabbingController.IsGrabButtonPressed());
         }
 
         private bool NoArrowNotched(GameObject controller)

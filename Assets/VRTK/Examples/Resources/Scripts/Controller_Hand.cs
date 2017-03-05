@@ -22,10 +22,10 @@
 
         private void Start()
         {
-            GetComponentInParent<VRTK_ControllerEvents>().AliasGrabOn += new ControllerInteractionEventHandler(DoGrabOn);
-            GetComponentInParent<VRTK_ControllerEvents>().AliasGrabOff += new ControllerInteractionEventHandler(DoGrabOff);
-            GetComponentInParent<VRTK_ControllerEvents>().AliasUseOn += new ControllerInteractionEventHandler(DoUseOn);
-            GetComponentInParent<VRTK_ControllerEvents>().AliasUseOff += new ControllerInteractionEventHandler(DoUseOff);
+            GetComponentInParent<VRTK_InteractGrab>().ControllerGrabInteractableObject += DoGrabOn;
+            GetComponentInParent<VRTK_InteractGrab>().ControllerUngrabInteractableObject += DoGrabOff;
+            GetComponentInParent<VRTK_InteractUse>().ControllerUseInteractableObject += DoUseOn;
+            GetComponentInParent<VRTK_InteractUse>().ControllerUnuseInteractableObject += DoUseOff;
 
             var handContainer = "ModelPieces";
             pointerFinger = transform.Find(handContainer + "/PointerFingerContainer");
@@ -52,22 +52,22 @@
             givenTransform.localEulerAngles = new Vector3(givenTransform.localEulerAngles.x, givenTransform.localEulerAngles.y * -1, givenTransform.localEulerAngles.z);
         }
 
-        private void DoGrabOn(object sender, ControllerInteractionEventArgs e)
+        private void DoGrabOn(object sender, ObjectInteractEventArgs e)
         {
             targetGripRotation = maxRotation;
         }
 
-        private void DoGrabOff(object sender, ControllerInteractionEventArgs e)
+        private void DoGrabOff(object sender, ObjectInteractEventArgs e)
         {
             targetGripRotation = originalGripRotation;
         }
 
-        private void DoUseOn(object sender, ControllerInteractionEventArgs e)
+        private void DoUseOn(object sender, ObjectInteractEventArgs e)
         {
             targetPointerRotation = maxRotation;
         }
 
-        private void DoUseOff(object sender, ControllerInteractionEventArgs e)
+        private void DoUseOff(object sender, ObjectInteractEventArgs e)
         {
             targetPointerRotation = originalPointerRotation;
         }

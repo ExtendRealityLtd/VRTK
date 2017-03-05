@@ -12,13 +12,13 @@
             var controller = (collider.GetComponent<VRTK_ControllerEvents>() ? collider.GetComponent<VRTK_ControllerEvents>() : collider.GetComponentInParent<VRTK_ControllerEvents>());
             if (controller)
             {
-                if (lastUsePressedState == true && !controller.usePressed)
+                if (lastUsePressedState == true && !controller.triggerPressed)
                 {
                     var distance = Vector3.Distance(transform.position, destination.position);
                     var controllerIndex = VRTK_DeviceFinder.GetControllerIndex(controller.gameObject);
                     OnDestinationMarkerSet(SetDestinationMarkerEvent(distance, destination, new RaycastHit(), destination.position, controllerIndex));
                 }
-                lastUsePressedState = controller.usePressed;
+                lastUsePressedState = controller.triggerPressed;
             }
         }
     }
