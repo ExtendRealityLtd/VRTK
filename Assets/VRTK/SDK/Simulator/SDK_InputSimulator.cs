@@ -2,6 +2,8 @@
 namespace VRTK
 {
     using UnityEngine;
+    using UnityEngine.UI;
+    using System;
     using System.Collections.Generic;
 
     /// <summary>
@@ -14,6 +16,8 @@ namespace VRTK
     {
         #region Public fields
 
+        [Tooltip("Show control information in the upper left corner of the screen.")]
+        public bool showControlHints = true;
         [Tooltip("Hide hands when disabling them.")]
         public bool hideHandsAtSwitch = false;
         [Tooltip("Reset hand position and rotation when enabling them.")]
@@ -74,6 +78,8 @@ namespace VRTK
         #region Private fields
 
         private bool isHand = false;
+        private GameObject hintCanvas;
+        private Text hintText;
         private Transform rightHand;
         private Transform leftHand;
         private Transform currentHand;
@@ -105,6 +111,9 @@ namespace VRTK
 
         private void Awake()
         {
+            hintCanvas = transform.Find("Control Hints").gameObject;
+            hintText = hintCanvas.GetComponentInChildren<Text>();
+            hintCanvas.SetActive(showControlHints);
             rightHand = transform.Find("RightHand");
             rightHand.gameObject.SetActive(false);
             leftHand = transform.Find("LeftHand");
@@ -183,6 +192,11 @@ namespace VRTK
             }
 
             UpdatePosition();
+
+            if (showControlHints)
+            {
+                UpdateHints();
+            }
         }
 
         private void UpdateHands()
@@ -295,6 +309,66 @@ namespace VRTK
                 rightHand.gameObject.SetActive(false);
                 leftHand.gameObject.SetActive(false);
             }
+        }
+
+        private void UpdateHints()
+        {
+            string hints = "";
+            Func<KeyCode, string> key = (k) => "<b>" + k.ToString() + "</b>";
+
+            // WASD Movement
+            string WASD = moveForward.ToString() + moveLeft.ToString() + moveBackward.ToString() + moveRight.ToString();
+            hints += "<b>" + WASD + "</b>: " + "Move Player/Playspace\n";
+
+            if (isHand)
+            {
+                // Controllers
+                hints += "Mode: Controller (" + key(handsOnOff) + ")\n";
+                if (Input.GetKey(rotationPosition))
+                {
+                    hints += "Mouse: Rotation (" + key(rotationPosition) + ")\n";
+                }
+                else
+                {
+                    hints += "Mouse: Position (" + key(rotationPosition) + ")\n";
+                }
+
+                hints += "Controller Hand: " + currentHand.name.Replace("Hand", "") + " (" + key(changeHands) + ")\n";
+
+                string axis = Input.GetKey(changeAxis) ? "X/Y" : "X/Z";
+                hints += "Axis: " + axis + " (" + key(changeAxis) + ")\n";
+
+                // Controller Buttons
+                string pressMode = "Press";
+                if (Input.GetKey(hairTouchModifier))
+                {
+                    pressMode = "Hair Touch";
+                }
+                else if (Input.GetKey(touchModifier))
+                {
+                    pressMode = "Touch";
+                }
+
+                hints += "Button Press Mode Modifiers: Touch (" + key(touchModifier) + "), Hair Touch (" + key(hairTouchModifier) + ")\n";
+
+                hints += "Trigger " + pressMode + ": " + key(triggerAlias) + "\n";
+                hints += "Grip " + pressMode + ": " + key(gripAlias) + "\n";
+                if (!Input.GetKey(hairTouchModifier))
+                {
+                    hints += "Touchpad " + pressMode + ": " + key(touchpadAlias) + "\n";
+                    hints += "Button One " + pressMode + ": " + key(buttonOneAlias) + "\n";
+                    hints += "Button Two " + pressMode + ": " + key(buttonTwoAlias) + "\n";
+                    hints += "Start Menu " + pressMode + ": " + key(startMenuAlias) + "\n";
+                }
+            }
+            else
+            {
+                // HMD Input
+                hints += "Mode: HMD (" + key(handsOnOff) + ")\n";
+                hints += "Mouse: Rotation\n";
+            }
+
+            hintText.text = hints;
         }
     }
 }
