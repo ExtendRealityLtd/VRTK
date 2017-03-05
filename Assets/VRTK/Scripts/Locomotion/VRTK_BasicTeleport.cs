@@ -197,7 +197,7 @@ namespace VRTK
             {
                 var checkPosition = (useHeadsetForPosition ? new Vector3(headset.position.x, position.y, headset.position.z) : position);
                 var terrainHeight = Terrain.activeTerrain.SampleHeight(checkPosition);
-                position.y = (terrainHeight > position.y ? position.y : terrainHeight);
+                position.y = (terrainHeight > position.y ? position.y : Terrain.activeTerrain.GetPosition().y + terrainHeight);
             }
             return position;
         }
