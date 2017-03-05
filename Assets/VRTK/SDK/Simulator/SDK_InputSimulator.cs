@@ -179,9 +179,16 @@ namespace VRTK
                 hintCanvas.SetActive(showControlHints);
             }
 
-            if (mouseMovementInput == MouseInputMode.RequresButtonPress && lockMouseToView)
+            if (mouseMovementInput == MouseInputMode.RequresButtonPress)
             {
-                Cursor.lockState = Input.GetKey(mouseMovementKey) ? CursorLockMode.Locked : CursorLockMode.None;
+                if (lockMouseToView)
+                {
+                    Cursor.lockState = Input.GetKey(mouseMovementKey) ? CursorLockMode.Locked : CursorLockMode.None;
+                }
+                else if (Input.GetKeyDown(mouseMovementKey))
+                {
+                    oldPos = Input.mousePosition;
+                }
             }
 
             if (Input.GetKeyDown(handsOnOff))
