@@ -3,7 +3,6 @@ namespace VRTK
 {
     using UnityEngine;
 #if UNITY_EDITOR
-    using UnityEngine.SceneManagement;
     using UnityEditor;
     using UnityEditor.Callbacks;
 #endif
@@ -60,7 +59,23 @@ namespace VRTK
         /// <summary>
         /// The singleton instance to access the SDK Manager variables from.
         /// </summary>
-        public static VRTK_SDKManager instance;
+        public static VRTK_SDKManager instance
+        {
+            get
+            {
+                if (_instance == null)
+                {
+                    var sdkManager = FindObjectOfType<VRTK_SDKManager>();
+                    if (sdkManager)
+                    {
+                        sdkManager.CreateInstance();
+                    }
+                }
+
+                return _instance;
+            }
+        }
+        private static VRTK_SDKManager _instance;
 
         [Tooltip("If this is true then the instance of the SDK Manager won't be destroyed on every scene load.")]
         public bool persistOnLoad;
@@ -594,12 +609,6 @@ namespace VRTK
 
             RemoveLegacyScriptingDefineSymbols();
 
-            var sdkManager = FindObjectOfType<VRTK_SDKManager>();
-            if (sdkManager)
-            {
-                sdkManager.CreateInstance();
-            }
-
             if (instance != null && !instance.ManageScriptingDefineSymbols(false, false))
             {
                 instance.PopulateObjectReferences(false);
@@ -664,9 +673,9 @@ namespace VRTK
 
         private void CreateInstance()
         {
-            if (instance == null)
+            if (_instance == null)
             {
-                instance = this;
+                _instance = this;
 
                 string sdkErrorDescriptions = string.Join("\n- ", GetSimplifiedSDKErrorDescriptions());
                 if (!string.IsNullOrEmpty(sdkErrorDescriptions))
@@ -680,7 +689,7 @@ namespace VRTK
                     DontDestroyOnLoad(gameObject);
                 }
             }
-            else if (instance != this)
+            else if (_instance != this)
             {
                 Destroy(gameObject);
             }
