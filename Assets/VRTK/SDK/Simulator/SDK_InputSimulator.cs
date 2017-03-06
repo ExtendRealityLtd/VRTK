@@ -2,6 +2,8 @@
 namespace VRTK
 {
     using UnityEngine;
+    using UnityEngine.UI;
+    using System;
     using System.Collections.Generic;
 
     /// <summary>
@@ -12,12 +14,29 @@ namespace VRTK
     /// </remarks>
     public class SDK_InputSimulator : MonoBehaviour
     {
+        /// <summary>
+        /// Mouse input mode types
+        /// </summary>
+        /// <param name="Always">Mouse movement is always treated as mouse input.</param>
+        /// <param name="RequresButtonPress">Mouse movement is only treated as movement when a button is pressed.</param>
+        public enum MouseInputMode
+        {
+            Always,
+            RequresButtonPress
+        }
+
         #region Public fields
 
+        [Tooltip("Show control information in the upper left corner of the screen.")]
+        public bool showControlHints = true;
         [Tooltip("Hide hands when disabling them.")]
         public bool hideHandsAtSwitch = false;
         [Tooltip("Reset hand position and rotation when enabling them.")]
         public bool resetHandsAtSwitch = true;
+        [Tooltip("Whether mouse movement always acts as input or requires a button press.")]
+        public MouseInputMode mouseMovementInput = MouseInputMode.Always;
+        [Tooltip("Lock the mouse cursor to the game window when the mouse movement key is pressed.")]
+        public bool lockMouseToView = false;
 
         [Header("Adjustments")]
 
@@ -32,6 +51,10 @@ namespace VRTK
 
         [Header("Operation Key Bindings")]
 
+        [Tooltip("Key used to enable mouse input if a button press is required.")]
+        public KeyCode mouseMovementKey = KeyCode.Mouse1;
+        [Tooltip("Key used to toggle control hints on/off.")]
+        public KeyCode toggleControlHints = KeyCode.F1;
         [Tooltip("Key used to switch between left and righ hand.")]
         public KeyCode changeHands = KeyCode.Tab;
         [Tooltip("Key used to switch hands On/Off.")]
@@ -40,6 +63,17 @@ namespace VRTK
         public KeyCode rotationPosition = KeyCode.LeftShift;
         [Tooltip("Key used to switch between X/Y and X/Z axis.")]
         public KeyCode changeAxis = KeyCode.LeftControl;
+
+        [Header("Movement Key Bindings")]
+
+        [Tooltip("Key used to move forward.")]
+        public KeyCode moveForward = KeyCode.W;
+        [Tooltip("Key used to move to the left.")]
+        public KeyCode moveLeft = KeyCode.A;
+        [Tooltip("Key used to move backwards.")]
+        public KeyCode moveBackward = KeyCode.S;
+        [Tooltip("Key used to move to the right.")]
+        public KeyCode moveRight = KeyCode.D;
 
         [Header("Controller Key Bindings")]
         [Tooltip("Key used to simulate trigger button.")]
@@ -63,6 +97,8 @@ namespace VRTK
         #region Private fields
 
         private bool isHand = false;
+        private GameObject hintCanvas;
+        private Text hintText;
         private Transform rightHand;
         private Transform leftHand;
         private Transform currentHand;
@@ -94,15 +130,18 @@ namespace VRTK
 
         private void Awake()
         {
-            rightHand = transform.FindChild("RightHand");
+            hintCanvas = transform.Find("Control Hints").gameObject;
+            hintText = hintCanvas.GetComponentInChildren<Text>();
+            hintCanvas.SetActive(showControlHints);
+            rightHand = transform.Find("RightHand");
             rightHand.gameObject.SetActive(false);
-            leftHand = transform.FindChild("LeftHand");
+            leftHand = transform.Find("LeftHand");
             leftHand.gameObject.SetActive(false);
             currentHand = rightHand;
             oldPos = Input.mousePosition;
-            myCamera = transform.FindChild("Camera");
-            leftHand.FindChild("Hand").GetComponent<Renderer>().material.color = Color.red;
-            rightHand.FindChild("Hand").GetComponent<Renderer>().material.color = Color.green;
+            myCamera = transform.Find("Camera");
+            leftHand.Find("Hand").GetComponent<Renderer>().material.color = Color.red;
+            rightHand.Find("Hand").GetComponent<Renderer>().material.color = Color.green;
             rightController = rightHand.GetComponent<SDK_ControllerSim>();
             leftController = leftHand.GetComponent<SDK_ControllerSim>();
             rightController.Selected = true;
@@ -134,6 +173,24 @@ namespace VRTK
 
         private void Update()
         {
+            if (Input.GetKeyDown(toggleControlHints))
+            {
+                showControlHints = !showControlHints;
+                hintCanvas.SetActive(showControlHints);
+            }
+
+            if (mouseMovementInput == MouseInputMode.RequresButtonPress)
+            {
+                if (lockMouseToView)
+                {
+                    Cursor.lockState = Input.GetKey(mouseMovementKey) ? CursorLockMode.Locked : CursorLockMode.None;
+                }
+                else if (Input.GetKeyDown(mouseMovementKey))
+                {
+                    oldPos = Input.mousePosition;
+                }
+            }
+
             if (Input.GetKeyDown(handsOnOff))
             {
                 if (isHand)
@@ -172,88 +229,96 @@ namespace VRTK
             }
 
             UpdatePosition();
+
+            if (showControlHints)
+            {
+                UpdateHints();
+            }
         }
 
         private void UpdateHands()
         {
-            Vector3 mouseDiff = Input.mousePosition - oldPos;
+            Vector3 mouseDiff = GetMouseDelta();
 
-            if (Input.GetKey(rotationPosition)) //Rotation
+            if (IsAcceptingMouseInput())
             {
-                if (Input.GetKey(changeAxis))
+                if (Input.GetKey(rotationPosition)) //Rotation
                 {
-                    Vector3 rot = Vector3.zero;
-                    rot.x += (mouseDiff * handRotationMultiplier).y;
-                    rot.y += (mouseDiff * handRotationMultiplier).x;
-                    currentHand.transform.Rotate(rot * Time.deltaTime);
+                    if (Input.GetKey(changeAxis))
+                    {
+                        Vector3 rot = Vector3.zero;
+                        rot.x += (mouseDiff * handRotationMultiplier).y;
+                        rot.y += (mouseDiff * handRotationMultiplier).x;
+                        currentHand.transform.Rotate(rot * Time.deltaTime);
+                    }
+                    else
+                    {
+                        Vector3 rot = Vector3.zero;
+                        rot.z += (mouseDiff * handRotationMultiplier).x;
+                        rot.x += (mouseDiff * handRotationMultiplier).y;
+                        currentHand.transform.Rotate(rot * Time.deltaTime);
+                    }
                 }
-                else
+                else //Position
                 {
-                    Vector3 rot = Vector3.zero;
-                    rot.z += (mouseDiff * handRotationMultiplier).x;
-                    rot.x += (mouseDiff * handRotationMultiplier).y;
-                    currentHand.transform.Rotate(rot * Time.deltaTime);
+                    if (Input.GetKey(changeAxis))
+                    {
+                        Vector3 pos = Vector3.zero;
+                        pos += mouseDiff * handMoveMultiplier;
+                        currentHand.transform.Translate(pos * Time.deltaTime);
+                    }
+                    else
+                    {
+                        Vector3 pos = Vector3.zero;
+                        pos.x += (mouseDiff * handMoveMultiplier).x;
+                        pos.z += (mouseDiff * handMoveMultiplier).y;
+                        currentHand.transform.Translate(pos * Time.deltaTime);
+                    }
                 }
             }
-            else //Position
-            {
-                if (Input.GetKey(changeAxis))
-                {
-                    Vector3 pos = Vector3.zero;
-                    pos += mouseDiff * handMoveMultiplier;
-                    currentHand.transform.Translate(pos * Time.deltaTime);
-                }
-                else
-                {
-                    Vector3 pos = Vector3.zero;
-                    pos.x += (mouseDiff * handMoveMultiplier).x;
-                    pos.z += (mouseDiff * handMoveMultiplier).y;
-                    currentHand.transform.Translate(pos * Time.deltaTime);
-                }
-            }
-            oldPos = Input.mousePosition;
         }
 
         private void UpdateRotation()
         {
-            Vector3 mouseDiff = Input.mousePosition - oldPos;
+            Vector3 mouseDiff = GetMouseDelta();
 
-            Vector3 rot = transform.rotation.eulerAngles;
-            rot.y += (mouseDiff * playerRotationMultiplier).x;
-            transform.localRotation = Quaternion.Euler(rot);
-
-            rot = myCamera.rotation.eulerAngles;
-
-            if (rot.x > 180)
+            if (IsAcceptingMouseInput())
             {
-                rot.x -= 360;
-            }
+                Vector3 rot = transform.rotation.eulerAngles;
+                rot.y += (mouseDiff * playerRotationMultiplier).x;
+                transform.localRotation = Quaternion.Euler(rot);
 
-            if (rot.x < 80 && rot.x > -80)
-            {
-                rot.x += (mouseDiff * playerRotationMultiplier).y * -1;
-                rot.x = Mathf.Clamp(rot.x, -79, 79);
-                myCamera.rotation = Quaternion.Euler(rot);
-            }
+                rot = myCamera.rotation.eulerAngles;
 
-            oldPos = Input.mousePosition;
+                if (rot.x > 180)
+                {
+                    rot.x -= 360;
+                }
+
+                if (rot.x < 80 && rot.x > -80)
+                {
+                    rot.x += (mouseDiff * playerRotationMultiplier).y * -1;
+                    rot.x = Mathf.Clamp(rot.x, -79, 79);
+                    myCamera.rotation = Quaternion.Euler(rot);
+                }
+            }
         }
 
         private void UpdatePosition()
         {
-            if (Input.GetKey(KeyCode.W))
+            if (Input.GetKey(moveForward))
             {
                 transform.Translate(transform.forward * Time.deltaTime * playerMoveMultiplier, Space.World);
             }
-            else if (Input.GetKey(KeyCode.S))
+            else if (Input.GetKey(moveBackward))
             {
                 transform.Translate(-transform.forward * Time.deltaTime * playerMoveMultiplier, Space.World);
             }
-            if (Input.GetKey(KeyCode.A))
+            if (Input.GetKey(moveLeft))
             {
                 transform.Translate(-transform.right * Time.deltaTime * playerMoveMultiplier, Space.World);
             }
-            else if (Input.GetKey(KeyCode.D))
+            else if (Input.GetKey(moveRight))
             {
                 transform.Translate(transform.right * Time.deltaTime * playerMoveMultiplier, Space.World);
             }
@@ -283,6 +348,91 @@ namespace VRTK
             {
                 rightHand.gameObject.SetActive(false);
                 leftHand.gameObject.SetActive(false);
+            }
+        }
+
+        private void UpdateHints()
+        {
+            string hints = "";
+            Func<KeyCode, string> key = (k) => "<b>" + k.ToString() + "</b>";
+
+            string mouseInputRequires = "";
+            if (mouseMovementInput == MouseInputMode.RequresButtonPress)
+            {
+                mouseInputRequires = " (" + key(mouseMovementKey) + ")";
+            }
+
+            // WASD Movement
+            string WASD = moveForward.ToString() + moveLeft.ToString() + moveBackward.ToString() + moveRight.ToString();
+            hints += "<b>" + WASD + "</b>: " + "Move Player/Playspace\n";
+
+            if (isHand)
+            {
+                // Controllers
+                if (Input.GetKey(rotationPosition))
+                {
+                    hints += "Mouse: Controller Rotation" + mouseInputRequires + "\n";
+                }
+                else
+                {
+                    hints += "Mouse: Controller Position" + mouseInputRequires + "\n";
+                }
+                hints += "Modes: HMD (" + key(handsOnOff) + "), Rotation (" + key(rotationPosition) + ")\n";
+
+                hints += "Controller Hand: " + currentHand.name.Replace("Hand", "") + " (" + key(changeHands) + ")\n";
+
+                string axis = Input.GetKey(changeAxis) ? "X/Y" : "X/Z";
+                hints += "Axis: " + axis + " (" + key(changeAxis) + ")\n";
+
+                // Controller Buttons
+                string pressMode = "Press";
+                if (Input.GetKey(hairTouchModifier))
+                {
+                    pressMode = "Hair Touch";
+                }
+                else if (Input.GetKey(touchModifier))
+                {
+                    pressMode = "Touch";
+                }
+
+                hints += "Button Press Mode Modifiers: Touch (" + key(touchModifier) + "), Hair Touch (" + key(hairTouchModifier) + ")\n";
+
+                hints += "Trigger " + pressMode + ": " + key(triggerAlias) + "\n";
+                hints += "Grip " + pressMode + ": " + key(gripAlias) + "\n";
+                if (!Input.GetKey(hairTouchModifier))
+                {
+                    hints += "Touchpad " + pressMode + ": " + key(touchpadAlias) + "\n";
+                    hints += "Button One " + pressMode + ": " + key(buttonOneAlias) + "\n";
+                    hints += "Button Two " + pressMode + ": " + key(buttonTwoAlias) + "\n";
+                    hints += "Start Menu " + pressMode + ": " + key(startMenuAlias) + "\n";
+                }
+            }
+            else
+            {
+                // HMD Input
+                hints += "Mouse: HMD Rotation" + mouseInputRequires + "\n";
+                hints += "Modes: Controller (" + key(handsOnOff) + ")\n";
+            }
+
+            hintText.text = hints;
+        }
+
+        private bool IsAcceptingMouseInput()
+        {
+            return mouseMovementInput == MouseInputMode.Always || Input.GetKey(mouseMovementKey);
+        }
+
+        private Vector3 GetMouseDelta()
+        {
+            if (Cursor.lockState == CursorLockMode.Locked)
+            {
+                return new Vector3(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+            }
+            else
+            {
+                Vector3 mouseDiff = Input.mousePosition - oldPos;
+                oldPos = Input.mousePosition;
+                return mouseDiff;
             }
         }
     }
