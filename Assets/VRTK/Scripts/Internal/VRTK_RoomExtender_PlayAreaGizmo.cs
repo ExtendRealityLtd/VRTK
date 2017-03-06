@@ -41,8 +41,12 @@
 
         private void DrawWireframe()
         {
-            Vector3[] vertices = (playArea != null ? VRTK_SDK_Bridge.GetPlayAreaVertices(playArea.gameObject) : new Vector3[0]);
+            if (playArea == null || roomExtender == null)
+            {
+                return;
+            }
 
+            var vertices = VRTK_SDK_Bridge.GetPlayAreaVertices(playArea.gameObject);
             if (vertices == null || vertices.Length == 0)
             {
                 return;
