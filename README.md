@@ -20,6 +20,11 @@
 
 _*experimental_
 
+## Thank You
+
+A big thank you to all those who support VRTK via [Patreon]
+A list of supports can be seen in [THANK_YOU_CREDITS.md].
+
 ## Documentation
 
 The documentation for the project can be found within this
@@ -116,7 +121,9 @@ Code released under the [MIT License].
 [MADEWITHVRTK.md]: https://github.com/thestonefox/SteamVR_Unity_Toolkit/blob/master/MADEWITHVRTK.md
 [DOCUMENTATION.md]: https://github.com/thestonefox/SteamVR_Unity_Toolkit/blob/master/DOCUMENTATION.md
 [GETTING_STARTED.md]: https://github.com/thestonefox/SteamVR_Unity_Toolkit/blob/master/GETTING_STARTED.md
+[THANK_YOU_CREDITS.md]: https://github.com/thestonefox/SteamVR_Unity_Toolkit/blob/master/THANK_YOU_CREDITS.md
 [EXAMPLES.md]: https://github.com/thestonefox/SteamVR_Unity_Toolkit/blob/master/EXAMPLES.md
 [Fork]: http://help.github.com/fork-a-repo/
 [Open a Pull Request]: https://help.github.com/articles/using-pull-requests/
 [FAQ.md]: https://github.com/thestonefox/SteamVR_Unity_Toolkit/blob/master/FAQ.md
+[Patreon]: https://www.patreon.com/vrtk
