@@ -22,7 +22,8 @@ _*experimental_
 
 ## Thank You
 
-A big thank you to all those who support VRTK via [Patreon]
+A big thank you to all those who support VRTK via [Patreon].
+
 A list of supports can be seen in [THANK_YOU_CREDITS.md].
 
 ## Documentation
