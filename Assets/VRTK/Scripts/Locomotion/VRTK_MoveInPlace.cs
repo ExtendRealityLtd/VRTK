@@ -44,6 +44,8 @@ namespace VRTK
             SmartDecoupling
         }
 
+        [Header("Control Settings")]
+
         [Tooltip("If this is checked then the left controller touchpad will be enabled to move the play area.")]
         public bool leftController = true;
         [Tooltip("If this is checked then the right controller touchpad will be enabled to move the play area.")]
@@ -52,6 +54,11 @@ namespace VRTK
         public VRTK_ControllerEvents.ButtonAlias engageButton = VRTK_ControllerEvents.ButtonAlias.TouchpadPress;
         [Tooltip("Select which trackables are used to determine movement.")]
         public ControlOptions controlOptions = ControlOptions.HeadsetAndControllers;
+        [Tooltip("How the user's movement direction will be determined.  The Gaze method tends to lead to the least motion sickness.  Smart decoupling is still a Work In Progress.")]
+        public DirectionalMethod directionMethod = DirectionalMethod.Gaze;
+
+        [Header("Speed Settings")]
+
         [Tooltip("Lower to decrease speed, raise to increase.")]
         public float speedScale = 1;
         [Tooltip("The max speed the user can move in game units. (If 0 or less, max speed is uncapped)")]
@@ -60,47 +67,49 @@ namespace VRTK
         public float deceleration = 0.1f;
         [Tooltip("The speed in which the play area slows down to a complete stop when the user is falling.")]
         public float fallingDeceleration = 0.01f;
-        [Tooltip("How the user's movement direction will be determined.  The Gaze method tends to lead to the least motion sickness.  Smart decoupling is still a Work In Progress.")]
-        public DirectionalMethod directionMethod = DirectionalMethod.Gaze;
+
+        [Header("Advanced Settings")]
+
         [Tooltip("The degree threshold that all tracked objects (controllers, headset) must be within to change direction when using the Smart Decoupling Direction Method.")]
         public float smartDecoupleThreshold = 30f;
         // The cap before we stop adding the delta to the movement list. This will help regulate speed.
         [Tooltip("The maximum amount of movement required to register in the virtual world.  Decreasing this will increase acceleration, and vice versa.")]
         public float sensitivity = 0.02f;
 
-        private Transform playArea;
-        private GameObject controllerLeftHand;
-        private GameObject controllerRightHand;
-        private Transform headset;
-        private bool leftSubscribed;
-        private bool rightSubscribed;
-        private bool previousLeftControllerState;
-        private bool previousRightControllerState;
-        private VRTK_ControllerEvents.ButtonAlias previousEngageButton;
-        private VRTK_BodyPhysics bodyPhysics;
-        private bool currentlyFalling;
+        protected Transform playArea;
+        protected GameObject controllerLeftHand;
+        protected GameObject controllerRightHand;
+        protected Transform headset;
+        protected bool leftSubscribed;
+        protected bool rightSubscribed;
+        protected bool previousLeftControllerState;
+        protected bool previousRightControllerState;
+        protected VRTK_ControllerEvents.ButtonAlias previousEngageButton;
+        protected VRTK_BodyPhysics bodyPhysics;
+        protected bool currentlyFalling;
 
         // The maximum number of updates we should hold to process movements. The higher the number, the slower the acceleration/deceleration & vice versa.
-        private int averagePeriod;
+        protected int averagePeriod;
         // Which tracked objects to use to determine amount of movement.
-        private List<Transform> trackedObjects;
+        protected List<Transform> trackedObjects;
         // List of all the update's movements over the average period.
-        private Dictionary<Transform, List<float>> movementList;
-        private Dictionary<Transform, float> previousYPositions;
+        protected Dictionary<Transform, List<float>> movementList;
+        protected Dictionary<Transform, float> previousYPositions;
         // Used to determine the direction when using a decoupling method.
-        private Vector3 initalGaze;
+        protected Vector3 initalGaze;
         // The current move speed of the player. If Move In Place is not active, it will be set to 0.00f.
-        private float currentSpeed;
+        protected float currentSpeed;
         // The current direction the player is moving. If Move In Place is not active, it will be set to Vector.zero.
-        private Vector3 direction;
+        protected Vector3 direction;
+        protected Vector3 previousDirection;
         // True if Move In Place is currently engaged.
-        private bool active;
+        protected bool active;
 
         /// <summary>
         /// Set the control options and modify the trackables to match.
         /// </summary>
         /// <param name="givenControlOptions">The control options to set the current control options to.</param>
-        public void SetControlOptions(ControlOptions givenControlOptions)
+        public virtual void SetControlOptions(ControlOptions givenControlOptions)
         {
             controlOptions = givenControlOptions;
             trackedObjects.Clear();
@@ -121,7 +130,7 @@ namespace VRTK
         /// The GetMovementDirection method will return the direction the player is moving.
         /// </summary>
         /// <returns>Returns a vector representing the player's current movement direction.</returns>
-        public Vector3 GetMovementDirection()
+        public virtual Vector3 GetMovementDirection()
         {
             return direction;
         }
@@ -130,7 +139,7 @@ namespace VRTK
         /// The GetSpeed method will return the current speed the player is moving at.
         /// </summary>
         /// <returns>Returns a float representing the player's current movement speed.</returns>
-        public float GetSpeed()
+        public virtual float GetSpeed()
         {
             return currentSpeed;
         }
@@ -142,6 +151,7 @@ namespace VRTK
             previousYPositions = new Dictionary<Transform, float>();
             initalGaze = Vector3.zero;
             direction = Vector3.zero;
+            previousDirection = Vector3.zero;
             averagePeriod = 60;
             currentSpeed = 0f;
             active = false;
@@ -198,95 +208,9 @@ namespace VRTK
             if (active && !currentlyFalling)
             {
                 // Initialize the list average.
-                float listAverage = 0;
-
-                foreach (Transform trackedObj in trackedObjects)
-                {
-                    // Get the amount of Y movement that's occured since the last update.
-                    float deltaYPostion = Mathf.Abs(previousYPositions[trackedObj] - trackedObj.transform.localPosition.y);
-
-                    // Convenience code.
-                    List<float> trackedObjList = movementList[trackedObj];
-
-                    // Cap off the speed.
-                    if (deltaYPostion > sensitivity)
-                    {
-                        trackedObjList.Add(sensitivity);
-                    }
-                    else
-                    {
-                        trackedObjList.Add(deltaYPostion);
-                    }
-
-                    // Keep our tracking list at m_averagePeriod number of elements.
-                    if (trackedObjList.Count > averagePeriod)
-                    {
-                        trackedObjList.RemoveAt(0);
-                    }
-
-                    // Average out the current tracker's list.
-                    float sum = 0;
-                    foreach (float diffrences in trackedObjList)
-                    {
-                        sum += diffrences;
-                    }
-                    float avg = sum / averagePeriod;
-
-                    // Add the average to the the list average.
-                    listAverage += avg;
-                }
-
-                float speed = ((speedScale * 350) * (listAverage / trackedObjects.Count));
-
-                if (speed > maxSpeed && maxSpeed >= 0)
-                {
-                    speed = maxSpeed;
-                }
-
-                direction = Vector3.zero;
-
-                // If we're doing a decoupling method...
-                if (directionMethod == DirectionalMethod.SmartDecoupling || directionMethod == DirectionalMethod.DumbDecoupling)
-                {
-                    // If we haven't set an inital gaze yet, set it now.
-                    // If we're doing dumb decoupling, this is what we'll be sticking with.
-                    if (initalGaze.Equals(Vector3.zero))
-                    {
-                        initalGaze = new Vector3(headset.forward.x, 0, headset.forward.z);
-                    }
-
-                    // If we're doing smart decoupling, check to see if we want to reset our distance.
-                    if (directionMethod == DirectionalMethod.SmartDecoupling)
-                    {
-                        bool closeEnough = true;
-                        float curXDir = headset.rotation.eulerAngles.y;
-                        if (curXDir <= smartDecoupleThreshold)
-                        {
-                            curXDir += 360;
-                        }
-
-                        closeEnough = closeEnough && (Mathf.Abs(curXDir - controllerLeftHand.transform.rotation.eulerAngles.y) <= smartDecoupleThreshold);
-                        closeEnough = closeEnough && (Mathf.Abs(curXDir - controllerRightHand.transform.rotation.eulerAngles.y) <= smartDecoupleThreshold);
-
-                        // If the controllers and the headset are pointing the same direction (within the threshold) reset the direction the player's moving.
-                        if (closeEnough)
-                        {
-                            initalGaze = new Vector3(headset.forward.x, 0, headset.forward.z);
-                        }
-                    }
-                    direction = initalGaze;
-                }
-                // if we're doing controller rotation movement
-                else if (directionMethod.Equals(DirectionalMethod.ControllerRotation))
-                {
-                    direction = DetermineAverageControllerRotation() * Vector3.forward;
-                }
-                // Otherwise if we're just doing Gaze movement, always set the direction to where we're looking.
-                else if (directionMethod.Equals(DirectionalMethod.Gaze))
-                {
-                    direction = (new Vector3(headset.forward.x, 0, headset.forward.z));
-                }
-
+                float speed = Mathf.Clamp(((speedScale * 350) * (CalculateListAverage() / trackedObjects.Count)), 0f, maxSpeed);
+                previousDirection = direction;
+                direction = SetDirection();
                 // Update our current speed.
                 currentSpeed = speed;
             }
@@ -298,19 +222,11 @@ namespace VRTK
             {
                 currentSpeed = 0f;
                 direction = Vector3.zero;
+                previousDirection = Vector3.zero;
             }
 
-            foreach (Transform trackedObj in trackedObjects)
-            {
-                // Get delta postions and rotations
-                previousYPositions[trackedObj] = trackedObj.transform.localPosition.y;
-            }
-
-            Vector3 movement = (direction * currentSpeed) * Time.fixedDeltaTime;
-            if (playArea)
-            {
-                playArea.position = new Vector3(movement.x + playArea.position.x, playArea.position.y, movement.z + playArea.position.z);
-            }
+            SetDeltaTransformData();
+            MovePlayArea(direction, currentSpeed);
         }
 
         protected virtual void CheckControllerState(GameObject controller, bool controllerState, ref bool subscribedState, ref bool previousState)
@@ -320,6 +236,117 @@ namespace VRTK
                 SetControllerListeners(controller, controllerState, ref subscribedState);
             }
             previousState = controllerState;
+        }
+
+        protected virtual float CalculateListAverage()
+        {
+            float listAverage = 0;
+
+            foreach (Transform trackedObj in trackedObjects)
+            {
+                // Get the amount of Y movement that's occured since the last update.
+                float deltaYPostion = Mathf.Abs(previousYPositions[trackedObj] - trackedObj.transform.localPosition.y);
+
+                // Convenience code.
+                List<float> trackedObjList = movementList[trackedObj];
+
+                // Cap off the speed.
+                if (deltaYPostion > sensitivity)
+                {
+                    trackedObjList.Add(sensitivity);
+                }
+                else
+                {
+                    trackedObjList.Add(deltaYPostion);
+                }
+
+                // Keep our tracking list at m_averagePeriod number of elements.
+                if (trackedObjList.Count > averagePeriod)
+                {
+                    trackedObjList.RemoveAt(0);
+                }
+
+                // Average out the current tracker's list.
+                float sum = 0;
+                foreach (float diffrences in trackedObjList)
+                {
+                    sum += diffrences;
+                }
+                float avg = sum / averagePeriod;
+
+                // Add the average to the the list average.
+                listAverage += avg;
+            }
+
+            return listAverage;
+        }
+
+        protected virtual Vector3 SetDirection()
+        {
+            Vector3 returnDirection = Vector3.zero;
+
+            // If we're doing a decoupling method...
+            if (directionMethod == DirectionalMethod.SmartDecoupling || directionMethod == DirectionalMethod.DumbDecoupling)
+            {
+                // If we haven't set an inital gaze yet, set it now.
+                // If we're doing dumb decoupling, this is what we'll be sticking with.
+                if (initalGaze.Equals(Vector3.zero))
+                {
+                    initalGaze = new Vector3(headset.forward.x, 0, headset.forward.z);
+                }
+
+                // If we're doing smart decoupling, check to see if we want to reset our distance.
+                if (directionMethod == DirectionalMethod.SmartDecoupling)
+                {
+                    bool closeEnough = true;
+                    float curXDir = headset.rotation.eulerAngles.y;
+                    if (curXDir <= smartDecoupleThreshold)
+                    {
+                        curXDir += 360;
+                    }
+
+                    closeEnough = closeEnough && (Mathf.Abs(curXDir - controllerLeftHand.transform.rotation.eulerAngles.y) <= smartDecoupleThreshold);
+                    closeEnough = closeEnough && (Mathf.Abs(curXDir - controllerRightHand.transform.rotation.eulerAngles.y) <= smartDecoupleThreshold);
+
+                    // If the controllers and the headset are pointing the same direction (within the threshold) reset the direction the player's moving.
+                    if (closeEnough)
+                    {
+                        initalGaze = new Vector3(headset.forward.x, 0, headset.forward.z);
+                    }
+                }
+                returnDirection = initalGaze;
+            }
+            // if we're doing controller rotation movement
+            else if (directionMethod.Equals(DirectionalMethod.ControllerRotation))
+            {
+                Vector3 calculatedControllerDirection = DetermineAverageControllerRotation() * Vector3.forward;
+                returnDirection = (Vector3.Angle(previousDirection, calculatedControllerDirection) <= 90f ? calculatedControllerDirection : previousDirection);
+            }
+            // Otherwise if we're just doing Gaze movement, always set the direction to where we're looking.
+            else if (directionMethod.Equals(DirectionalMethod.Gaze))
+            {
+                returnDirection = (new Vector3(headset.forward.x, 0, headset.forward.z));
+            }
+
+            return returnDirection;
+        }
+
+        protected virtual void SetDeltaTransformData()
+        {
+            foreach (Transform trackedObj in trackedObjects)
+            {
+                // Get delta postions and rotations
+                previousYPositions[trackedObj] = trackedObj.transform.localPosition.y;
+            }
+        }
+
+        protected virtual void MovePlayArea(Vector3 moveDirection, float moveSpeed)
+        {
+            Vector3 movement = (moveDirection * moveSpeed) * Time.fixedDeltaTime;
+            if (playArea)
+            {
+                playArea.position = new Vector3(movement.x + playArea.position.x, playArea.position.y, movement.z + playArea.position.z);
+            }
         }
 
         protected virtual void HandleFalling()
@@ -336,12 +363,12 @@ namespace VRTK
             }
         }
 
-        private void EngageButtonPressed(object sender, ControllerInteractionEventArgs e)
+        protected virtual void EngageButtonPressed(object sender, ControllerInteractionEventArgs e)
         {
             active = true;
         }
 
-        private void EngageButtonReleased(object sender, ControllerInteractionEventArgs e)
+        protected virtual void EngageButtonReleased(object sender, ControllerInteractionEventArgs e)
         {
             // If the button is released, clear all the lists.
             foreach (Transform obj in trackedObjects)
@@ -353,7 +380,7 @@ namespace VRTK
             active = false;
         }
 
-        private Quaternion DetermineAverageControllerRotation()
+        protected virtual Quaternion DetermineAverageControllerRotation()
         {
             // Build the average rotation of the controller(s)
             Quaternion newRotation;
@@ -383,18 +410,12 @@ namespace VRTK
         }
 
         // Returns the average of two Quaternions
-        private Quaternion AverageRotation(Quaternion rot1, Quaternion rot2)
+        protected virtual Quaternion AverageRotation(Quaternion rot1, Quaternion rot2)
         {
             return Quaternion.Slerp(rot1, rot2, 0.5f);
         }
 
-        // Returns a Vector3 with only the X and Z components (Y is 0'd)
-        private static Vector3 Vector3XZOnly(Vector3 vec)
-        {
-            return new Vector3(vec.x, 0f, vec.z);
-        }
-
-        private void SetControllerListeners(GameObject controller, bool controllerState, ref bool subscribedState, bool forceDisabled = false)
+        protected virtual void SetControllerListeners(GameObject controller, bool controllerState, ref bool subscribedState, bool forceDisabled = false)
         {
             if (controller)
             {
@@ -403,7 +424,7 @@ namespace VRTK
             }
         }
 
-        private void ToggleControllerListeners(GameObject controller, bool toggle, ref bool subscribed)
+        protected virtual void ToggleControllerListeners(GameObject controller, bool toggle, ref bool subscribed)
         {
             var controllerEvent = controller.GetComponent<VRTK_ControllerEvents>();
             if (controllerEvent)
