@@ -42,6 +42,7 @@ A collection of titles that have been made with VRTK.
 | Ocarina of Vive | [Itch.io Store Page](https://tomcat94.itch.io/ocarina-of-vive-shooting-gallery) |
 | Danc<R | [Itch.io Store Page](https://tomcat94.itch.io/dancr-alpha) |
 | Quantized | [Steam Greenlight Page](https://steamcommunity.com/sharedfiles/filedetails/?id=195344075) |
+| Riley Short: Analog Boy for HTC Vive | [Steam Greenlight Page](http://steamcommunity.com/sharedfiles/filedetails/?id=878866678) |
 | MegaPolice | [Youtube Trailer](https://www.youtube.com/watch?v=d6hCgfMxldY) |
 | Drone Training VR | [Youtube Trailer](https://www.youtube.com/watch?v=A5MFT2JsySc) |
 | The Days After | [Game website](http://www.fivefingerstudios.com/thedaysafter) |
