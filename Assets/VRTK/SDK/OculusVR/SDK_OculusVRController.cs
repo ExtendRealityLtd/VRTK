@@ -18,7 +18,6 @@ namespace VRTK
 #endif
     {
 #if VRTK_DEFINE_SDK_OCULUSVR
-        private bool floorLevelSet = false;
         private SDK_OculusVRBoundaries cachedBoundariesSDK;
         private VRTK_TrackedController cachedLeftController;
         private VRTK_TrackedController cachedRightController;
@@ -265,11 +264,11 @@ namespace VRTK
         /// <returns>The GameObject that has the model alias within it.</returns>
         public override GameObject GetControllerModel(ControllerHand hand)
         {
-            var model = GetSDKManagerControllerModelForHand(hand);
-            if (!model)
+            GameObject model = GetSDKManagerControllerModelForHand(hand);
+            if (model == null)
             {
-                var avatarObject = GetAvatar();
-                var avatarName = (avatarObject ? avatarObject.name : "");
+                GameObject avatarObject = GetAvatar();
+                string avatarName = (avatarObject ? avatarObject.name : "");
                 switch (hand)
                 {
                     case ControllerHand.Left:
@@ -280,7 +279,7 @@ namespace VRTK
                         else
                         {
                             model = GameObject.Find("OVRCameraRig/TrackingSpace/LeftHandAnchor");
-                            model = (model.transform.childCount > 0 ? model.transform.GetChild(0).gameObject : null);
+                            model = (model != null && model.transform.childCount > 0 ? model.transform.GetChild(0).gameObject : null);
                         }
                         break;
                     case ControllerHand.Right:
@@ -291,7 +290,7 @@ namespace VRTK
                         else
                         {
                             model = GameObject.Find("OVRCameraRig/TrackingSpace/RightHandAnchor");
-                            model = (model.transform.childCount > 0 ? model.transform.GetChild(0).gameObject : null);
+                            model = (model != null && model.transform.childCount > 0 ? model.transform.GetChild(0).gameObject : null);
                         }
                         break;
                 }
@@ -905,21 +904,6 @@ namespace VRTK
                 {
                     cachedRightController = sdkManager.actualRightController.GetComponent<VRTK_TrackedController>();
                     cachedRightController.index = 1;
-                }
-            }
-
-            SetFloorLevel();
-        }
-
-        private void SetFloorLevel()
-        {
-            if (!floorLevelSet)
-            {
-                floorLevelSet = true;
-                var ovrManager = FindObjectOfType<OVRManager>();
-                if (ovrManager)
-                {
-                    ovrManager.trackingOriginType = OVRManager.TrackingOrigin.FloorLevel;
                 }
             }
         }
