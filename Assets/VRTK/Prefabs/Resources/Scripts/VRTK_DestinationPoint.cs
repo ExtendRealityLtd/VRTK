@@ -120,7 +120,7 @@ namespace VRTK
             pointRigidbody.useGravity = false;
         }
 
-        private IEnumerator ManageDestinationMarkersAtEndOfFrame()
+        protected virtual IEnumerator ManageDestinationMarkersAtEndOfFrame()
         {
             yield return new WaitForEndOfFrame();
             if (enabled)
@@ -207,7 +207,7 @@ namespace VRTK
             }
         }
 
-        private IEnumerator DoDestinationMarkerSetAtEndOfFrame(DestinationMarkerEventArgs e)
+        protected virtual IEnumerator DoDestinationMarkerSetAtEndOfFrame(DestinationMarkerEventArgs e)
         {
             yield return new WaitForEndOfFrame();
             if (enabled)
@@ -253,6 +253,7 @@ namespace VRTK
 
         protected virtual void ResetPoint()
         {
+            currentDestinationPoint = null;
             ToggleObject(hoverCursorObject, false);
             if (enableTeleport)
             {
