@@ -288,14 +288,18 @@ namespace VRTK
 
         protected virtual void UpdatePointerOriginTransformFollow()
         {
-            pointerOriginTransformFollow.gameObjectToFollow = (controllingPointer.customOrigin == null ? transform : controllingPointer.customOrigin).gameObject;
-            pointerOriginTransformFollow.enabled = controllingPointer != null;
-            pointerOriginTransformFollowGameObject.SetActive(controllingPointer != null);
+            pointerOriginTransformFollow.gameObject.SetActive((controllingPointer != null));
+            if (controllingPointer != null)
+            {
+                pointerOriginTransformFollow.gameObjectToFollow = (controllingPointer.customOrigin == null ? transform : controllingPointer.customOrigin).gameObject;
+                pointerOriginTransformFollow.enabled = controllingPointer != null;
+                pointerOriginTransformFollowGameObject.SetActive(controllingPointer != null);
 
-            pointerOriginTransformFollow.smoothsPosition = pointerOriginSmoothingSettings.smoothsPosition;
-            pointerOriginTransformFollow.maxAllowedPerFrameDistanceDifference = pointerOriginSmoothingSettings.maxAllowedPerFrameDistanceDifference;
-            pointerOriginTransformFollow.smoothsRotation = pointerOriginSmoothingSettings.smoothsRotation;
-            pointerOriginTransformFollow.maxAllowedPerFrameAngleDifference = pointerOriginSmoothingSettings.maxAllowedPerFrameAngleDifference;
+                pointerOriginTransformFollow.smoothsPosition = pointerOriginSmoothingSettings.smoothsPosition;
+                pointerOriginTransformFollow.maxAllowedPerFrameDistanceDifference = pointerOriginSmoothingSettings.maxAllowedPerFrameDistanceDifference;
+                pointerOriginTransformFollow.smoothsRotation = pointerOriginSmoothingSettings.smoothsRotation;
+                pointerOriginTransformFollow.maxAllowedPerFrameAngleDifference = pointerOriginSmoothingSettings.maxAllowedPerFrameAngleDifference;
+            }
         }
 
         protected Transform GetOrigin(bool smoothed = true)
