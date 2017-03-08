@@ -21,26 +21,27 @@ namespace VRTK
         [Tooltip("The threshold to determind how low the headset can be to perform a position rewind. If the headset Y position is lower than this threshold then a rewind won't occur.")]
         public float crouchRewindThreshold = 0.1f;
 
-        private Transform headset;
-        private Transform playArea;
+        protected Transform headset;
+        protected Transform playArea;
         protected Rigidbody playareaRigidbody;
+        protected VRTK_BodyPhysics bodyPhysics;
+        protected VRTK_HeadsetCollision headsetCollision;
 
-        private VRTK_HeadsetCollision headsetCollision;
-
-        private Vector3 lastGoodStandingPosition;
-        private Vector3 lastGoodHeadsetPosition;
-        private float highestHeadsetY;
-        private float lastPlayAreaY;
-        private bool lastGoodPositionSet = false;
-        private bool hasCollided = false;
-        private bool isColliding = false;
-        private float collideTimer = 0f;
+        protected Vector3 lastGoodStandingPosition;
+        protected Vector3 lastGoodHeadsetPosition;
+        protected float highestHeadsetY;
+        protected float lastPlayAreaY;
+        protected bool lastGoodPositionSet = false;
+        protected bool hasCollided = false;
+        protected bool isColliding = false;
+        protected float collideTimer = 0f;
 
         protected virtual void OnEnable()
         {
             lastGoodPositionSet = false;
             headset = VRTK_DeviceFinder.HeadsetTransform();
             playArea = VRTK_DeviceFinder.PlayAreaTransform();
+            bodyPhysics = FindObjectOfType<VRTK_BodyPhysics>();
             playareaRigidbody = playArea.GetComponent<Rigidbody>();
             headsetCollision = GetComponent<VRTK_HeadsetCollision>();
             ManageHeadsetListeners(true);
@@ -100,7 +101,7 @@ namespace VRTK
             }
         }
 
-        private void StartCollision()
+        protected virtual void StartCollision()
         {
             isColliding = true;
             if (!hasCollided && collideTimer <= 0f)
@@ -110,15 +111,20 @@ namespace VRTK
             }
         }
 
-        private void EndCollision()
+        protected virtual void EndCollision()
         {
             isColliding = false;
             hasCollided = false;
         }
 
-        private void RewindPosition()
+        protected virtual bool BodyCollisionsEnabled()
         {
-            if (lastGoodPositionSet && headset.localPosition.y > crouchRewindThreshold)
+            return (bodyPhysics == null || bodyPhysics.enableBodyCollisions);
+        }
+
+        protected virtual void RewindPosition()
+        {
+            if (lastGoodPositionSet && headset.localPosition.y > crouchRewindThreshold && BodyCollisionsEnabled())
             {
                 var xReset = playArea.position.x - (headset.position.x - lastGoodHeadsetPosition.x);
                 var zReset = playArea.position.z - (headset.position.z - lastGoodHeadsetPosition.z);
@@ -136,7 +142,7 @@ namespace VRTK
             }
         }
 
-        private void ManageHeadsetListeners(bool state)
+        protected virtual void ManageHeadsetListeners(bool state)
         {
             if (headsetCollision)
             {
@@ -153,12 +159,12 @@ namespace VRTK
             }
         }
 
-        private void HeadsetCollision_HeadsetCollisionDetect(object sender, HeadsetCollisionEventArgs e)
+        protected virtual void HeadsetCollision_HeadsetCollisionDetect(object sender, HeadsetCollisionEventArgs e)
         {
             StartCollision();
         }
 
-        private void HeadsetCollision_HeadsetCollisionEnded(object sender, HeadsetCollisionEventArgs e)
+        protected virtual void HeadsetCollision_HeadsetCollisionEnded(object sender, HeadsetCollisionEventArgs e)
         {
             EndCollision();
         }
