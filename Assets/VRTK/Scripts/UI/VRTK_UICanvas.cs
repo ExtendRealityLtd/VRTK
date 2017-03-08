@@ -118,6 +118,7 @@ namespace VRTK
             {
                 var draggablePanel = new GameObject(CANVAS_DRAGGABLE_PANEL);
                 draggablePanel.AddComponent<RectTransform>();
+                draggablePanel.AddComponent<LayoutElement>().ignoreLayout = true;
                 draggablePanel.AddComponent<Image>().color = Color.clear;
                 draggablePanel.AddComponent<EventTrigger>();
                 draggablePanel.transform.SetParent(canvas.transform);
