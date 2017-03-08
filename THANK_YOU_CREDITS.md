@@ -41,7 +41,8 @@ A big thank you to the supporters of VRTK via the VRTK Patreon page at https://w
  * Kenneth Lemieux
  * Shawn Pitz
  * Trevor Gibbons
- * Axel Börke
+ * Axel BÃ¶rke
  * Stephen Eisenhauer
  * Aldis Sipolins
  * Matthew Reis
+ * Roland
