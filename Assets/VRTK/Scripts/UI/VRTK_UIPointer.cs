@@ -11,12 +11,14 @@ namespace VRTK
     /// <param name="isActive">The state of whether the UI Pointer is currently active or not.</param>
     /// <param name="currentTarget">The current UI element that the pointer is colliding with.</param>
     /// <param name="previousTarget">The previous UI element that the pointer was colliding with.</param>
+    /// <param name="raycastResult">The raw raycast result of the UI ray collision.</param>
     public struct UIPointerEventArgs
     {
         public uint controllerIndex;
         public bool isActive;
         public GameObject currentTarget;
         public GameObject previousTarget;
+        public RaycastResult raycastResult;
     }
 
     /// <summary>
@@ -131,14 +133,14 @@ namespace VRTK
         /// </summary>
         public event UIPointerEventHandler UIPointerElementDragEnd;
 
-        private bool pointerClicked = false;
-        private bool beamEnabledState = false;
-        private bool lastPointerPressState = false;
-        private bool lastPointerClickState = false;
-        private GameObject currentTarget;
+        protected bool pointerClicked = false;
+        protected bool beamEnabledState = false;
+        protected bool lastPointerPressState = false;
+        protected bool lastPointerClickState = false;
+        protected GameObject currentTarget;
 
-        private EventSystem cachedEventSystem;
-        private VRTK_VRInputModule cachedVRInputModule;
+        protected EventSystem cachedEventSystem;
+        protected VRTK_VRInputModule cachedVRInputModule;
 
         public virtual void OnUIPointerElementEnter(UIPointerEventArgs e)
         {
@@ -206,13 +208,14 @@ namespace VRTK
             }
         }
 
-        public virtual UIPointerEventArgs SetUIPointerEvent(GameObject currentTarget, GameObject lastTarget = null)
+        public virtual UIPointerEventArgs SetUIPointerEvent(RaycastResult currentRaycastResult, GameObject currentTarget, GameObject lastTarget = null)
         {
             UIPointerEventArgs e;
             e.controllerIndex = (controller != null ? VRTK_DeviceFinder.GetControllerIndex(controller.gameObject) : uint.MaxValue);
             e.isActive = PointerActive();
             e.currentTarget = currentTarget;
             e.previousTarget = lastTarget;
+            e.raycastResult = currentRaycastResult;
             return e;
         }
 

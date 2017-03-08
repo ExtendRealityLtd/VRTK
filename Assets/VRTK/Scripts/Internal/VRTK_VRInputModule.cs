@@ -145,7 +145,7 @@
                             selectable.navigation = noNavigation;
                         }
 
-                        pointer.OnUIPointerElementEnter(pointer.SetUIPointerEvent(target, pointer.hoveringElement));
+                        pointer.OnUIPointerElementEnter(pointer.SetUIPointerEvent(result, target, pointer.hoveringElement));
                         pointer.hoveringElement = target;
                         pointer.pointerEventData.pointerCurrentRaycast = result;
                         pointer.pointerEventData.pointerEnter = target;
@@ -156,7 +156,7 @@
                     {
                         if (result.gameObject != pointer.hoveringElement)
                         {
-                            pointer.OnUIPointerElementEnter(pointer.SetUIPointerEvent(result.gameObject, pointer.hoveringElement));
+                            pointer.OnUIPointerElementEnter(pointer.SetUIPointerEvent(result, result.gameObject, pointer.hoveringElement));
                         }
                         pointer.hoveringElement = result.gameObject;
                     }
@@ -164,7 +164,7 @@
 
                 if (pointer.hoveringElement && results.Count == 0)
                 {
-                    pointer.OnUIPointerElementExit(pointer.SetUIPointerEvent(null, pointer.hoveringElement));
+                    pointer.OnUIPointerElementExit(pointer.SetUIPointerEvent(new RaycastResult(), null, pointer.hoveringElement));
                     pointer.hoveringElement = null;
                 }
             }
@@ -248,7 +248,7 @@
                 }
                 else
                 {
-                    pointer.OnUIPointerElementClick(pointer.SetUIPointerEvent(pointer.pointerEventData.pointerPress));
+                    pointer.OnUIPointerElementClick(pointer.SetUIPointerEvent(pointer.pointerEventData.pointerPressRaycast, pointer.pointerEventData.pointerPress));
                     ExecuteEvents.ExecuteHierarchy(pointer.pointerEventData.pointerPress, pointer.pointerEventData, ExecuteEvents.pointerClickHandler);
                     ExecuteEvents.ExecuteHierarchy(pointer.pointerEventData.pointerPress, pointer.pointerEventData, ExecuteEvents.pointerUpHandler);
                     pointer.pointerEventData.pointerPress = null;
