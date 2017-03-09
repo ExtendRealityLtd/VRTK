@@ -23,10 +23,11 @@ namespace VRTK
             return typeof(SDK_OculusVRDefines).Assembly.GetType("OVRInput") != null;
         }
 
+        [SDK_ScriptingDefineSymbolPredicate(ScriptingDefineSymbol, BuildTargetGroupName)]
         [SDK_ScriptingDefineSymbolPredicate(AvatarScriptingDefineSymbol, BuildTargetGroupName)]
         private static bool IsOculusVRAvatarAvailable()
         {
-            return IsOculusVRAvailable() && typeof(SDK_OculusVRDefines).Assembly.GetType("OVRAvatar") != null;
+            return typeof(SDK_OculusVRDefines).Assembly.GetType("OvrAvatar") != null;
         }
     }
 }
