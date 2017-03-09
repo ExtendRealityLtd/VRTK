@@ -171,7 +171,10 @@ namespace VRTK
             {
                 isShown = true;
                 StopCoroutine("TweenMenuScale");
-                StartCoroutine("TweenMenuScale", isShown);
+                if (enabled)
+                {
+                    StartCoroutine("TweenMenuScale", isShown);
+                }
             }
         }
 
@@ -181,7 +184,10 @@ namespace VRTK
             {
                 isShown = false;
                 StopCoroutine("TweenMenuScale");
-                StartCoroutine("TweenMenuScale", isShown);
+                if (enabled)
+                {
+                    StartCoroutine("TweenMenuScale", isShown);
+                }
             }
         }
 
