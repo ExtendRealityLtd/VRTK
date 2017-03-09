@@ -97,7 +97,7 @@ namespace VRTK
             gameObjectToChange.transform.localScale = newScale;
         }
 
-        private void FollowPosition()
+        protected virtual void FollowPosition()
         {
             var positionToFollow = GetPositionToFollow();
             Vector3 newPosition;
@@ -116,7 +116,7 @@ namespace VRTK
             SetPositionOnGameObject(newPosition);
         }
 
-        private void FollowRotation()
+        protected virtual void FollowRotation()
         {
             var rotationToFollow = GetRotationToFollow();
             Quaternion newRotation;
@@ -135,7 +135,7 @@ namespace VRTK
             SetRotationOnGameObject(newRotation);
         }
 
-        private void FollowScale()
+        protected virtual void FollowScale()
         {
             var scaleToFollow = GetScaleToFollow();
             Vector3 newScale;

@@ -397,6 +397,118 @@ The RadialMenu can also be placed inside a `VRTK_InteractableObject` for the Rad
  * **Base Haptic Strength:** The base strength of the haptic pulses when the selected button is changed, or a button is pressed. Set to zero to disable.
  * **Menu Buttons:** The actual GameObjects that make up the radial menu.
 
+### Class Methods
+
+#### HoverButton/1
+
+  > `public virtual void HoverButton(float angle)`
+
+  * Parameters
+   * `float angle` - The angle on the radial menu.
+  * Returns
+   * _none_
+
+The HoverButton method is used to set the button hover at a given angle.
+
+#### ClickButton/1
+
+  > `public virtual void ClickButton(float angle)`
+
+  * Parameters
+   * `float angle` - The angle on the radial menu.
+  * Returns
+   * _none_
+
+The ClickButton method is used to set the button click at a given angle.
+
+#### UnClickButton/1
+
+  > `public virtual void UnClickButton(float angle)`
+
+  * Parameters
+   * `float angle` - The angle on the radial menu.
+  * Returns
+   * _none_
+
+The UnClickButton method is used to set the button unclick at a given angle.
+
+#### ToggleMenu/0
+
+  > `public virtual void ToggleMenu()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The ToggleMenu method is used to show or hide the radial menu.
+
+#### StopTouching/0
+
+  > `public virtual void StopTouching()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The StopTouching method is used to stop touching the menu.
+
+#### ShowMenu/0
+
+  > `public virtual void ShowMenu()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The ShowMenu method is used to show the menu.
+
+#### GetButton/1
+
+  > `public virtual RadialMenuButton GetButton(int id)`
+
+  * Parameters
+   * `int id` - The id of the button to retrieve.
+  * Returns
+   * `RadialMenuButton` - The found radial menu button.
+
+The GetButton method is used to get a button from the menu.
+
+#### HideMenu/1
+
+  > `public virtual void HideMenu(bool force)`
+
+  * Parameters
+   * `bool force` - If true then the menu is always hidden.
+  * Returns
+   * _none_
+
+The HideMenu method is used to hide the menu.
+
+#### RegenerateButtons/0
+
+  > `public void RegenerateButtons()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The RegenerateButtons method creates all the button arcs and populates them with desired icons.
+
+#### AddButton/1
+
+  > `public void AddButton(RadialMenuButton newButton)`
+
+  * Parameters
+   * `RadialMenuButton newButton` - The button to add.
+  * Returns
+   * _none_
+
+The AddButton method is used to add a new button to the menu.
+
 ### Example
 
 `VRTK/Examples/030_Controls_RadialTouchpadMenu` displays a radial menu for each controller. The left controller uses the `Hide On Release` variable, so it will only be visible if the left touchpad is being touched. It also uses the `Execute On Unclick` variable to delay execution until the touchpad button is unclicked. The example scene also contains a demonstration of anchoring the RadialMenu to an interactable cube instead of a controller.
@@ -427,6 +539,19 @@ To convert the default `RadialMenu` prefab to be independent of the controllers:
  * **Hide After Execution:** If true, after a button is clicked, the RadialMenu will hide.
  * **Offset Multiplier:** How far away from the object the menu should be placed, relative to the size of the RadialMenu.
  * **Rotate Towards:** The object the RadialMenu should face towards. If left empty, it will automatically try to find the Headset Camera.
+
+### Class Methods
+
+#### UpdateEventsManager/0
+
+  > `public virtual void UpdateEventsManager()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The UpdateEventsManager method is used to update the events within the menu controller.
 
 ---
 
@@ -533,6 +658,52 @@ To show / hide a UI panel, you must first pick up the VRTK_InteractableObject an
  * **Left Panel Menu Item Controller:** The left PanelMenuItemController, which is triggered by pressing left on the controller touchpad.
  * **Right Panel Menu Item Controller:** The right PanelMenuItemController, which is triggered by pressing right on the controller touchpad.
 
+### Class Methods
+
+#### ToggleMenu/0
+
+  > `public virtual void ToggleMenu()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The ToggleMenu method is used to show or hide the menu.
+
+#### ShowMenu/0
+
+  > `public virtual void ShowMenu()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The ShowMenu method is used to show the menu.
+
+#### HideMenu/1
+
+  > `public virtual void HideMenu(bool force)`
+
+  * Parameters
+   * `bool force` - If true then the menu is always hidden.
+  * Returns
+   * _none_
+
+The HideMenu method is used to hide the menu.
+
+#### HideMenuImmediate/0
+
+  > `public virtual void HideMenuImmediate()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The HideMenuImmediate method is used to immediately hide the menu.
+
 ### Example
 
 `040_Controls_Panel_Menu` contains three basic interactive object examples of the PanelMenu in use.
@@ -561,6 +732,96 @@ To show / hide a UI panel, you must first pick up the VRTK_InteractableObject an
 ### Event Payload
 
  * `GameObject interactableObject` - The GameObject for the interactable object the PanelMenu is attached to.
+
+### Class Methods
+
+#### SetPanelMenuItemEvent/1
+
+  > `public virtual PanelMenuItemControllerEventArgs SetPanelMenuItemEvent(GameObject interactableObject)`
+
+  * Parameters
+   * `GameObject interactableObject` - The object the menu is attached to.
+  * Returns
+   * `PanelMenuItemControllerEventArgs` - The payload for the event.
+
+The SetPanelMenuItemEvent is used to build up the event payload.
+
+#### Show/1
+
+  > `public virtual void Show(GameObject interactableObject)`
+
+  * Parameters
+   * `GameObject interactableObject` - The object the menu is attached to.
+  * Returns
+   * _none_
+
+The Show method is used to show the menu.
+
+#### Hide/1
+
+  > `public virtual void Hide(GameObject interactableObject)`
+
+  * Parameters
+   * `GameObject interactableObject` - The object the menu is attached to.
+  * Returns
+   * _none_
+
+The Hide method is used to show the menu.
+
+#### SwipeLeft/1
+
+  > `public virtual void SwipeLeft(GameObject interactableObject)`
+
+  * Parameters
+   * `GameObject interactableObject` - The object the menu is attached to.
+  * Returns
+   * _none_
+
+The SwipeLeft method is used when the control is swiped left.
+
+#### SwipeRight/1
+
+  > `public virtual void SwipeRight(GameObject interactableObject)`
+
+  * Parameters
+   * `GameObject interactableObject` - The object the menu is attached to.
+  * Returns
+   * _none_
+
+The SwipeRight method is used when the control is swiped right.
+
+#### SwipeTop/1
+
+  > `public virtual void SwipeTop(GameObject interactableObject)`
+
+  * Parameters
+   * `GameObject interactableObject` - The object the menu is attached to.
+  * Returns
+   * _none_
+
+The SwipeTop method is used when the control is swiped up.
+
+#### SwipeBottom/1
+
+  > `public virtual void SwipeBottom(GameObject interactableObject)`
+
+  * Parameters
+   * `GameObject interactableObject` - The object the menu is attached to.
+  * Returns
+   * _none_
+
+The SwipeBottom method is used when the control is swiped down.
+
+#### TriggerPressed/1
+
+  > `public virtual void TriggerPressed(GameObject interactableObject)`
+
+  * Parameters
+   * `GameObject interactableObject` - The object the menu is attached to.
+  * Returns
+   * _none_
+
+The TriggerPressed method is used when the control action button is pressed.
 
 ### Example
 
@@ -1876,7 +2137,7 @@ Adding the `VRTK_ControllerEvents_UnityEvents` component to `VRTK_ControllerEven
 
 #### GetTouchpadAxis/0
 
-  > `public Vector2 GetTouchpadAxis()`
+  > `public virtual Vector2 GetTouchpadAxis()`
 
   * Parameters
    * _none_
@@ -1887,7 +2148,7 @@ The GetTouchpadAxis method returns the coordinates of where the touchpad is bein
 
 #### GetTouchpadAxisAngle/0
 
-  > `public float GetTouchpadAxisAngle()`
+  > `public virtual float GetTouchpadAxisAngle()`
 
   * Parameters
    * _none_
@@ -1898,7 +2159,7 @@ The GetTouchpadAxisAngle method returns the angle of where the touchpad is curre
 
 #### GetTriggerAxis/0
 
-  > `public float GetTriggerAxis()`
+  > `public virtual float GetTriggerAxis()`
 
   * Parameters
    * _none_
@@ -1909,7 +2170,7 @@ The GetTriggerAxis method returns a float that represents how much the trigger i
 
 #### GetGripAxis/0
 
-  > `public float GetGripAxis()`
+  > `public virtual float GetGripAxis()`
 
   * Parameters
    * _none_
@@ -1920,7 +2181,7 @@ The GetGripAxis method returns a float that represents how much the grip is bein
 
 #### GetHairTriggerDelta/0
 
-  > `public float GetHairTriggerDelta()`
+  > `public virtual float GetHairTriggerDelta()`
 
   * Parameters
    * _none_
@@ -1931,7 +2192,7 @@ The GetHairTriggerDelta method returns a float representing the difference in ho
 
 #### GetHairGripDelta/0
 
-  > `public float GetHairGripDelta()`
+  > `public virtual float GetHairGripDelta()`
 
   * Parameters
    * _none_
@@ -1942,7 +2203,7 @@ The GetHairTriggerDelta method returns a float representing the difference in ho
 
 #### AnyButtonPressed/0
 
-  > `public bool AnyButtonPressed()`
+  > `public virtual bool AnyButtonPressed()`
 
   * Parameters
    * _none_
@@ -1953,7 +2214,7 @@ The AnyButtonPressed method returns true if any of the controller buttons are be
 
 #### IsButtonPressed/1
 
-  > `public bool IsButtonPressed(ButtonAlias button)`
+  > `public virtual bool IsButtonPressed(ButtonAlias button)`
 
   * Parameters
    * `ButtonAlias button` - The button to check if it's being pressed.
@@ -1964,7 +2225,7 @@ The IsButtonPressed method takes a given button alias and returns a boolean whet
 
 #### SubscribeToButtonAliasEvent/3
 
-  > `public void SubscribeToButtonAliasEvent(ButtonAlias givenButton, bool startEvent, ControllerInteractionEventHandler callbackMethod)`
+  > `public virtual void SubscribeToButtonAliasEvent(ButtonAlias givenButton, bool startEvent, ControllerInteractionEventHandler callbackMethod)`
 
   * Parameters
    * `ButtonAlias givenButton` - The ButtonAlias to register the event on.
@@ -1977,7 +2238,7 @@ The SubscribeToButtonAliasEvent method makes it easier to subscribe to a button 
 
 #### UnsubscribeToButtonAliasEvent/3
 
-  > `public void UnsubscribeToButtonAliasEvent(ButtonAlias givenButton, bool startEvent, ControllerInteractionEventHandler callbackMethod)`
+  > `public virtual void UnsubscribeToButtonAliasEvent(ButtonAlias givenButton, bool startEvent, ControllerInteractionEventHandler callbackMethod)`
 
   * Parameters
    * `ButtonAlias givenButton` - The ButtonAlias to unregister the event on.
@@ -2045,7 +2306,7 @@ Adding the `VRTK_ControllerActions_UnityEvents` component to `VRTK_ControllerAct
 
 #### IsControllerVisible/0
 
-  > `public bool IsControllerVisible()`
+  > `public virtual bool IsControllerVisible()`
 
   * Parameters
    * _none_
@@ -2308,7 +2569,7 @@ Adding the `VRTK_InteractableObject_UnityEvents` component to `VRTK_Interactable
 
 #### IsTouched/0
 
-  > `public bool IsTouched()`
+  > `public virtual bool IsTouched()`
 
   * Parameters
    * _none_
@@ -2319,7 +2580,7 @@ The IsTouched method is used to determine if the object is currently being touch
 
 #### IsGrabbed/1
 
-  > `public bool IsGrabbed(GameObject grabbedBy = null)`
+  > `public virtual bool IsGrabbed(GameObject grabbedBy = null)`
 
   * Parameters
    * `GameObject grabbedBy` - An optional GameObject to check if the Interactable Object is grabbed by that specific GameObject. Defaults to `null`
@@ -2330,7 +2591,7 @@ The IsGrabbed method is used to determine if the object is currently being grabb
 
 #### IsUsing/1
 
-  > `public bool IsUsing(GameObject usedBy = null)`
+  > `public virtual bool IsUsing(GameObject usedBy = null)`
 
   * Parameters
    * `GameObject usedBy` - An optional GameObject to check if the Interactable Object is used by that specific GameObject. Defaults to `null`
@@ -2462,7 +2723,7 @@ The SaveCurrentState method stores the existing object parent and the object's r
 
 #### GetTouchingObjects/0
 
-  > `public List<GameObject> GetTouchingObjects()`
+  > `public virtual List<GameObject> GetTouchingObjects()`
 
   * Parameters
    * _none_
@@ -2473,7 +2734,7 @@ The GetTouchingObjects method is used to return the collecetion of valid game ob
 
 #### GetGrabbingObject/0
 
-  > `public GameObject GetGrabbingObject()`
+  > `public virtual GameObject GetGrabbingObject()`
 
   * Parameters
    * _none_
@@ -2484,7 +2745,7 @@ The GetGrabbingObject method is used to return the game object that is currently
 
 #### GetSecondaryGrabbingObject/0
 
-  > `public GameObject GetSecondaryGrabbingObject()`
+  > `public virtual GameObject GetSecondaryGrabbingObject()`
 
   * Parameters
    * _none_
@@ -2495,7 +2756,7 @@ The GetSecondaryGrabbingObject method is used to return the game object that is 
 
 #### GetUsingObject/0
 
-  > `public GameObject GetUsingObject()`
+  > `public virtual GameObject GetUsingObject()`
 
   * Parameters
    * _none_
@@ -2540,7 +2801,7 @@ The ForceStopSecondaryGrabInteraction method forces the object to no longer be i
 
 #### RegisterTeleporters/0
 
-  > `public void RegisterTeleporters()`
+  > `public virtual void RegisterTeleporters()`
 
   * Parameters
    * _none_
@@ -2551,7 +2812,7 @@ The RegisterTeleporters method is used to find all objects that have a teleporte
 
 #### UnregisterTeleporters/0
 
-  > `public void UnregisterTeleporters()`
+  > `public virtual void UnregisterTeleporters()`
 
   * Parameters
    * _none_
@@ -2585,7 +2846,7 @@ The ToggleSnapDropZone method is used to set the state of whether the interactab
 
 #### IsInSnapDropZone/0
 
-  > `public bool IsInSnapDropZone()`
+  > `public virtual bool IsInSnapDropZone()`
 
   * Parameters
    * _none_
@@ -2596,7 +2857,7 @@ The IsInSnapDropZone method determines whether the interactable object is curren
 
 #### SetSnapDropZoneHover/1
 
-  > `public void SetSnapDropZoneHover(bool state)`
+  > `public virtual void SetSnapDropZoneHover(bool state)`
 
   * Parameters
    * `bool state` - The state of whether the object is being hovered or not.
@@ -2607,7 +2868,7 @@ The SetSnapDropZoneHover method sets whether the interactable object is currentl
 
 #### GetStoredSnapDropZone/0
 
-  > `public VRTK_SnapDropZone GetStoredSnapDropZone()`
+  > `public virtual VRTK_SnapDropZone GetStoredSnapDropZone()`
 
   * Parameters
    * _none_
@@ -2618,7 +2879,7 @@ The GetStoredSnapDropZone method returns the snap drop zone that the interactabl
 
 #### IsDroppable/0
 
-  > `public bool IsDroppable()`
+  > `public virtual bool IsDroppable()`
 
   * Parameters
    * _none_
@@ -2629,7 +2890,7 @@ The IsDroppable method returns whether the object can be dropped or not in it's 
 
 #### IsSwappable/0
 
-  > `public bool IsSwappable()`
+  > `public virtual bool IsSwappable()`
 
   * Parameters
    * _none_
@@ -2640,7 +2901,7 @@ The IsSwappable method returns whether the object can be grabbed with one contro
 
 #### PerformSecondaryAction/0
 
-  > `public bool PerformSecondaryAction()`
+  > `public virtual bool PerformSecondaryAction()`
 
   * Parameters
    * _none_
@@ -3118,7 +3379,7 @@ It is possible to automatically grab an Interactable Object to a specific contro
 
 #### ClearPreviousClone/0
 
-  > `public void ClearPreviousClone()`
+  > `public virtual void ClearPreviousClone()`
 
   * Parameters
    * _none_
@@ -3473,7 +3734,7 @@ As this is an abstract class, it cannot be applied directly to a game object and
 
 #### IsTracked/0
 
-  > `public bool IsTracked()`
+  > `public virtual bool IsTracked()`
 
   * Parameters
    * _none_
@@ -3484,7 +3745,7 @@ The IsTracked method determines if the grab attach mechanic is a track object ty
 
 #### IsClimbable/0
 
-  > `public bool IsClimbable()`
+  > `public virtual bool IsClimbable()`
 
   * Parameters
    * _none_
@@ -3495,7 +3756,7 @@ The IsClimbable method determines if the grab attach mechanic is a climbable obj
 
 #### IsKinematic/0
 
-  > `public bool IsKinematic()`
+  > `public virtual bool IsKinematic()`
 
   * Parameters
    * _none_
@@ -3926,7 +4187,7 @@ The ResetAction method is used to reset the secondary action when the object is 
 
 #### IsActionable/0
 
-  > `public bool IsActionable()`
+  > `public virtual bool IsActionable()`
 
   * Parameters
    * _none_
@@ -3937,7 +4198,7 @@ The IsActionable method is used to determine if the secondary grab action perfor
 
 #### IsSwappable/0
 
-  > `public bool IsSwappable()`
+  > `public virtual bool IsSwappable()`
 
   * Parameters
    * _none_
@@ -4348,7 +4609,7 @@ Adding the `VRTK_HeadsetControllerAware_UnityEvents` component to `VRTK_HeadsetC
 
 #### LeftControllerObscured/0
 
-  > `public bool LeftControllerObscured()`
+  > `public virtual bool LeftControllerObscured()`
 
   * Parameters
    * _none_
@@ -4359,7 +4620,7 @@ The LeftControllerObscured method returns the state of if the left controller is
 
 #### RightControllerObscured/0
 
-  > `public bool RightControllerObscured()`
+  > `public virtual bool RightControllerObscured()`
 
   * Parameters
    * _none_
@@ -4370,7 +4631,7 @@ The RightControllerObscured method returns the state of if the right controller 
 
 #### LeftControllerGlanced/0
 
-  > `public bool LeftControllerGlanced()`
+  > `public virtual bool LeftControllerGlanced()`
 
   * Parameters
    * _none_
@@ -4381,7 +4642,7 @@ the LeftControllerGlanced method returns the state of if the headset is currentl
 
 #### RightControllerGlanced/0
 
-  > `public bool RightControllerGlanced()`
+  > `public virtual bool RightControllerGlanced()`
 
   * Parameters
    * _none_
@@ -4479,7 +4740,7 @@ Adding the `VRTK_BodyPhysics_UnityEvents` component to `VRTK_BodyPhysics` object
 
 #### ArePhysicsEnabled/0
 
-  > `public bool ArePhysicsEnabled()`
+  > `public virtual bool ArePhysicsEnabled()`
 
   * Parameters
    * _none_
@@ -4490,7 +4751,7 @@ The ArePhysicsEnabled method determines whether the body physics are set to inte
 
 #### ApplyBodyVelocity/3
 
-  > `public void ApplyBodyVelocity(Vector3 velocity, bool forcePhysicsOn = false, bool applyMomentum = false)`
+  > `public virtual void ApplyBodyVelocity(Vector3 velocity, bool forcePhysicsOn = false, bool applyMomentum = false)`
 
   * Parameters
    * `Vector3 velocity` - The velocity to apply.
@@ -4503,7 +4764,7 @@ The ApplyBodyVelocity method applies a given velocity to the rigidbody attached 
 
 #### ToggleOnGround/1
 
-  > `public void ToggleOnGround(bool state)`
+  > `public virtual void ToggleOnGround(bool state)`
 
   * Parameters
    * `bool state` - If true then body physics are set to being on the ground.
@@ -4514,7 +4775,7 @@ The ToggleOnGround method sets whether the body is considered on the ground or n
 
 #### TogglePreventSnapToFloor/1
 
-  > `public void TogglePreventSnapToFloor(bool state)`
+  > `public virtual void TogglePreventSnapToFloor(bool state)`
 
   * Parameters
    * `bool state` - If true the the snap to floor mechanic will not execute.
@@ -4525,7 +4786,7 @@ The PreventSnapToFloor method sets whether the snap to floor mechanic should be 
 
 #### IsFalling/0
 
-  > `public bool IsFalling()`
+  > `public virtual bool IsFalling()`
 
   * Parameters
    * _none_
@@ -4536,7 +4797,7 @@ The IsFalling method returns the falling state of the body.
 
 #### IsMoving/0
 
-  > `public bool IsMoving()`
+  > `public virtual bool IsMoving()`
 
   * Parameters
    * _none_
@@ -4547,7 +4808,7 @@ The IsMoving method returns the moving within play area state of the body.
 
 #### IsLeaning/0
 
-  > `public bool IsLeaning()`
+  > `public virtual bool IsLeaning()`
 
   * Parameters
    * _none_
@@ -4558,7 +4819,7 @@ The IsLeaning method returns the leaning state of the user.
 
 #### OnGround/0
 
-  > `public bool OnGround()`
+  > `public virtual bool OnGround()`
 
   * Parameters
    * _none_
@@ -4867,7 +5128,7 @@ Adding the `VRTK_Control_UnityEvents` component to `VRTK_Control` object allows 
 
 #### GetValue/0
 
-  > `public float GetValue()`
+  > `public virtual float GetValue()`
 
   * Parameters
    * _none_
@@ -4878,7 +5139,7 @@ The GetValue method returns the current value/position/setting of the control de
 
 #### GetNormalizedValue/0
 
-  > `public float GetNormalizedValue()`
+  > `public virtual float GetNormalizedValue()`
 
   * Parameters
    * _none_
@@ -4889,7 +5150,7 @@ The GetNormalizedValue method returns the current value mapped onto a range betw
 
 #### SetContent/2
 
-  > `public void SetContent(GameObject content, bool hideContent)`
+  > `public virtual void SetContent(GameObject content, bool hideContent)`
 
   * Parameters
    * `GameObject content` - The content to be considered within the control.
@@ -4901,7 +5162,7 @@ The SetContent method sets the given game object as the content of the control. 
 
 #### GetContent/0
 
-  > `public GameObject GetContent()`
+  > `public virtual GameObject GetContent()`
 
   * Parameters
    * _none_
@@ -5771,6 +6032,18 @@ The TriggerHapticPulse/1 method calls a single haptic pulse call on the controll
    * _none_
 
 The TriggerHapticPulse/3 method calls a haptic pulse for a specified amount of time rather than just a single tick. Each pulse can be separated by providing a `pulseInterval` to pause between each haptic pulse.
+
+#### Mod/2
+
+  > `public static float Mod(float a, float b)`
+
+  * Parameters
+   * `float a` - The dividend value.
+   * `float b` - The divisor value.
+  * Returns
+   * `float` - The remainder value.
+
+The Mod method is used to find the remainder of the sum a/b.
 
 ---
 

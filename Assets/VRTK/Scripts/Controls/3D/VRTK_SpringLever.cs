@@ -20,8 +20,8 @@ namespace VRTK
         [Tooltip("If this is checked then the spring will always be active even when grabbing the lever.")]
         public bool alwaysActive = false;
 
-        private bool wasTowardZero = true;
-        private bool isGrabbed = false;
+        protected bool wasTowardZero = true;
+        protected bool isGrabbed = false;
 
         /// <summary>
         /// Override the original InitRequiredComponents() to add
@@ -77,7 +77,7 @@ namespace VRTK
         /// Check which direction the lever needs to be pushed in and
         /// switch spring direction as necessary
         /// </summary>
-        private void ApplySpringForce()
+        protected virtual void ApplySpringForce()
         {
             leverHingeJoint.useSpring = (alwaysActive || !isGrabbed);
 

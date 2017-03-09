@@ -58,19 +58,19 @@ namespace VRTK
         /// </summary>
         public event HeadsetControllerAwareEventHandler ControllerGlanceExit;
 
-        private GameObject leftController;
-        private GameObject rightController;
-        private Transform headset;
+        protected GameObject leftController;
+        protected GameObject rightController;
+        protected Transform headset;
 
-        private bool leftControllerObscured = false;
-        private bool rightControllerObscured = false;
-        private bool leftControllerLastState = false;
-        private bool rightControllerLastState = false;
+        protected bool leftControllerObscured = false;
+        protected bool rightControllerObscured = false;
+        protected bool leftControllerLastState = false;
+        protected bool rightControllerLastState = false;
 
-        private bool leftControllerGlance = false;
-        private bool rightControllerGlance = false;
-        private bool leftControllerGlanceLastState = false;
-        private bool rightControllerGlanceLastState = false;
+        protected bool leftControllerGlance = false;
+        protected bool rightControllerGlance = false;
+        protected bool leftControllerGlanceLastState = false;
+        protected bool rightControllerGlanceLastState = false;
 
         public virtual void OnControllerObscured(HeadsetControllerAwareEventArgs e)
         {
@@ -108,7 +108,7 @@ namespace VRTK
         /// The LeftControllerObscured method returns the state of if the left controller is being obscured from the path of the headset.
         /// </summary>
         /// <returns>Returns true if the path between the headset and the controller is obscured.</returns>
-        public bool LeftControllerObscured()
+        public virtual bool LeftControllerObscured()
         {
             return leftControllerObscured;
         }
@@ -117,7 +117,7 @@ namespace VRTK
         /// The RightControllerObscured method returns the state of if the right controller is being obscured from the path of the headset.
         /// </summary>
         /// <returns>Returns true if the path between the headset and the controller is obscured.</returns>
-        public bool RightControllerObscured()
+        public virtual bool RightControllerObscured()
         {
             return rightControllerObscured;
         }
@@ -126,7 +126,7 @@ namespace VRTK
         /// the LeftControllerGlanced method returns the state of if the headset is currently looking at the left controller or not.
         /// </summary>
         /// <returns>Returns true if the headset can currently see the controller within the given radius threshold.</returns>
-        public bool LeftControllerGlanced()
+        public virtual bool LeftControllerGlanced()
         {
             return leftControllerGlance;
         }
@@ -135,7 +135,7 @@ namespace VRTK
         /// the RightControllerGlanced method returns the state of if the headset is currently looking at the right controller or not.
         /// </summary>
         /// <returns>Returns true if the headset can currently see the controller within the given radius threshold.</returns>
-        public bool RightControllerGlanced()
+        public virtual bool RightControllerGlanced()
         {
             return rightControllerGlance;
         }
@@ -170,7 +170,7 @@ namespace VRTK
             CheckHeadsetView(rightController, customRightControllerOrigin, ref rightControllerGlance, ref rightControllerGlanceLastState);
         }
 
-        private HeadsetControllerAwareEventArgs SetHeadsetControllerAwareEvent(RaycastHit raycastHit, uint controllerIndex)
+        protected virtual HeadsetControllerAwareEventArgs SetHeadsetControllerAwareEvent(RaycastHit raycastHit, uint controllerIndex)
         {
             HeadsetControllerAwareEventArgs e;
             e.raycastHit = raycastHit;
@@ -178,7 +178,7 @@ namespace VRTK
             return e;
         }
 
-        private void RayCastToController(GameObject controller, Transform customDestination, ref bool obscured, ref bool lastState)
+        protected virtual void RayCastToController(GameObject controller, Transform customDestination, ref bool obscured, ref bool lastState)
         {
             obscured = false;
             if (controller && controller.gameObject.activeInHierarchy)
@@ -199,7 +199,7 @@ namespace VRTK
             }
         }
 
-        private void ObscuredStateChanged(GameObject controller, bool obscured, RaycastHit hitInfo)
+        protected virtual void ObscuredStateChanged(GameObject controller, bool obscured, RaycastHit hitInfo)
         {
             if (obscured)
             {
@@ -211,7 +211,7 @@ namespace VRTK
             }
         }
 
-        private void CheckHeadsetView(GameObject controller, Transform customDestination, ref bool controllerGlance, ref bool controllerGlanceLastState)
+        protected virtual void CheckHeadsetView(GameObject controller, Transform customDestination, ref bool controllerGlance, ref bool controllerGlanceLastState)
         {
             controllerGlance = false;
             if (controller && controller.gameObject.activeInHierarchy)
@@ -234,7 +234,7 @@ namespace VRTK
             }
         }
 
-        private void GlanceStateChanged(GameObject controller, bool glance)
+        protected virtual void GlanceStateChanged(GameObject controller, bool glance)
         {
             var emptyHit = new RaycastHit();
             if (glance)

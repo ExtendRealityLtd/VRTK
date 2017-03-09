@@ -15,7 +15,7 @@ namespace VRTK
     /// </example>
     public class VRTK_UIDropZone : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
-        private VRTK_UIDraggableItem droppableItem;
+        protected VRTK_UIDraggableItem droppableItem;
 
         public virtual void OnPointerEnter(PointerEventData eventData)
         {

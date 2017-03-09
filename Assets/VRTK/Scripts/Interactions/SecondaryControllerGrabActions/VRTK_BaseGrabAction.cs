@@ -55,7 +55,7 @@ namespace VRTK.SecondaryControllerGrabActions
         /// The IsActionable method is used to determine if the secondary grab action performs an action on grab.
         /// </summary>
         /// <returns>Is true if the secondary grab action does perform an action on secondary grab.</returns>
-        public bool IsActionable()
+        public virtual bool IsActionable()
         {
             return isActionable;
         }
@@ -64,7 +64,7 @@ namespace VRTK.SecondaryControllerGrabActions
         /// The IsSwappable method is used to determine if the secondary grab action allows to swab the grab state to another grabbing object.
         /// </summary>
         /// <returns>Is true if the grab action allows swapping to another grabbing object.</returns>
-        public bool IsSwappable()
+        public virtual bool IsSwappable()
         {
             return isSwappable;
         }

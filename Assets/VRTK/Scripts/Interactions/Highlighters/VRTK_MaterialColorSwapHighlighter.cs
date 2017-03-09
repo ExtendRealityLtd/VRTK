@@ -27,8 +27,8 @@ namespace VRTK.Highlighters
         [Tooltip("A custom material to use on the highlighted object.")]
         public Material customMaterial;
 
-        private Dictionary<string, Material[]> originalSharedRendererMaterials = new Dictionary<string, Material[]>();
-        private Dictionary<string, Material[]> originalRendererMaterials = new Dictionary<string, Material[]>();
+        protected Dictionary<string, Material[]> originalSharedRendererMaterials = new Dictionary<string, Material[]>();
+        protected Dictionary<string, Material[]> originalRendererMaterials = new Dictionary<string, Material[]>();
         protected Dictionary<string, Coroutine> faderRoutines;
         protected bool resetMainTexture = false;
 
@@ -169,7 +169,7 @@ namespace VRTK.Highlighters
             }
         }
 
-        private IEnumerator CycleColor(Material material, Color startColor, Color endColor, float duration)
+        protected virtual IEnumerator CycleColor(Material material, Color startColor, Color endColor, float duration)
         {
             var elapsedTime = 0f;
             while (elapsedTime <= duration)

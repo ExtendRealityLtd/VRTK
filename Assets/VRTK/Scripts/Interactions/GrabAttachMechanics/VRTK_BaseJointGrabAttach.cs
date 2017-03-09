@@ -106,7 +106,7 @@ namespace VRTK.GrabAttachMechanics
             }
         }
 
-        private void SetSnappedObjectPosition(GameObject obj)
+        protected virtual void SetSnappedObjectPosition(GameObject obj)
         {
             if (grabbedSnapHandle == null)
             {
@@ -119,7 +119,7 @@ namespace VRTK.GrabAttachMechanics
             }
         }
 
-        private void SnapObjectToGrabToController(GameObject obj)
+        protected virtual void SnapObjectToGrabToController(GameObject obj)
         {
             if (!precisionGrab)
             {

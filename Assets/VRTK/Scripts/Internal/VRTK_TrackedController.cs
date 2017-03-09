@@ -46,7 +46,7 @@
             }
         }
 
-        private VRTKTrackedControllerEventArgs SetEventPayload(uint previousIndex = uint.MaxValue)
+        protected virtual VRTKTrackedControllerEventArgs SetEventPayload(uint previousIndex = uint.MaxValue)
         {
             VRTKTrackedControllerEventArgs e;
             e.currentIndex = index;
@@ -98,7 +98,7 @@
             }
         }
 
-        private IEnumerator Enable()
+        protected virtual IEnumerator Enable()
         {
             yield return new WaitForEndOfFrame();
 

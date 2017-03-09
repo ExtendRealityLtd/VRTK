@@ -36,10 +36,10 @@ namespace VRTK
         [Tooltip("An optional game object marking the position and rotation at which the camera should be initially placed.")]
         public Transform camStart;
 
-        private Transform headset;
-        private Transform playArea;
-        private Vector3 initialPosition;
-        private Quaternion initialRotation;
+        protected Transform headset;
+        protected Transform playArea;
+        protected Vector3 initialPosition;
+        protected Quaternion initialRotation;
 
         protected virtual void Start()
         {
@@ -115,7 +115,7 @@ namespace VRTK
             playArea.Rotate(rotDir);
         }
 
-        private Vector3 overwriteY(Vector3 vector, float value)
+        protected virtual Vector3 overwriteY(Vector3 vector, float value)
         {
             return new Vector3(vector.x, value, vector.z);
         }

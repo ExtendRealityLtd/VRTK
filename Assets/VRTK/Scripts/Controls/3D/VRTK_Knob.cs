@@ -32,14 +32,14 @@ namespace VRTK
         [Tooltip("The increments in which knob values can change.")]
         public float stepSize = 1f;
 
-        private const float MAX_AUTODETECT_KNOB_WIDTH = 3; // multiple of the knob width
-        private KnobDirection finalDirection;
-        private KnobDirection subDirection;
-        private bool subDirectionFound = false;
-        private Quaternion initialRotation;
-        private Vector3 initialLocalRotation;
-        private ConfigurableJoint knobJoint;
-        private bool knobJointCreated = false;
+        protected const float MAX_AUTODETECT_KNOB_WIDTH = 3; // multiple of the knob width
+        protected KnobDirection finalDirection;
+        protected KnobDirection subDirection;
+        protected bool subDirectionFound = false;
+        protected Quaternion initialRotation;
+        protected Vector3 initialLocalRotation;
+        protected ConfigurableJoint knobJoint;
+        protected bool knobJointCreated = false;
 
         protected override void InitRequiredComponents()
         {
@@ -101,7 +101,7 @@ namespace VRTK
             value = CalculateValue();
         }
 
-        private void InitKnob()
+        protected virtual void InitKnob()
         {
             Rigidbody knobRigidbody = GetComponent<Rigidbody>();
             if (knobRigidbody == null)
@@ -143,7 +143,7 @@ namespace VRTK
             }
         }
 
-        private KnobDirection DetectDirection()
+        protected virtual KnobDirection DetectDirection()
         {
             KnobDirection returnDirection = KnobDirection.x;
             Bounds bounds = VRTK_SharedMethods.GetBounds(transform);
@@ -199,7 +199,7 @@ namespace VRTK
             return returnDirection;
         }
 
-        private float CalculateValue()
+        protected virtual float CalculateValue()
         {
             if (!subDirectionFound)
             {

@@ -20,7 +20,6 @@ namespace VRTK
     /// </remarks>
     public class VRTK_IndependentRadialMenuController : RadialMenuController
     {
-        #region Variables
         [Tooltip("If the RadialMenu is the child of an object with VRTK_InteractableObject attached, this will be automatically obtained. It can also be manually set.")]
         public VRTK_InteractableObject eventsManager;
         [Tooltip("Whether or not the script should dynamically add a SphereCollider to surround the menu.")]
@@ -36,21 +35,20 @@ namespace VRTK
         [Tooltip("The object the RadialMenu should face towards. If left empty, it will automatically try to find the Headset Camera.")]
         public GameObject rotateTowards;
 
-        private List<GameObject> interactingObjects; // Objects (controllers) that are either colliding with the menu or clicking the menu
-        private List<GameObject> collidingObjects; // Just objects that are currently colliding with the menu or its parent
+        protected List<GameObject> interactingObjects; // Objects (controllers) that are either colliding with the menu or clicking the menu
+        protected List<GameObject> collidingObjects; // Just objects that are currently colliding with the menu or its parent
+        protected SphereCollider menuCollider;
+        protected Coroutine disableCoroutine;
+        protected Vector3 desiredColliderCenter;
+        protected Quaternion initialRotation;
+        protected bool isClicked = false;
+        protected bool waitingToDisableCollider = false;
+        protected int counter = 2;
 
-        private SphereCollider menuCollider;
-        private Coroutine disableCoroutine;
-        private Vector3 desiredColliderCenter;
-        private Quaternion initialRotation;
-
-        private bool isClicked = false;
-        private bool waitingToDisableCollider = false;
-        private int counter = 2;
-        #endregion Variables
-
-        #region Init and Unity Methods
-        public void UpdateEventsManager()
+        /// <summary>
+        /// The UpdateEventsManager method is used to update the events within the menu controller.
+        /// </summary>
+        public virtual void UpdateEventsManager()
         {
             VRTK_InteractableObject newEventsManager = transform.GetComponentInParent<VRTK_InteractableObject>();
             if (newEventsManager == null)
@@ -136,6 +134,16 @@ namespace VRTK
             gameObject.SetActive(true);
         }
 
+        protected override void Awake()
+        {
+            menu = GetComponent<RadialMenu>();
+        }
+
+        protected virtual void Start()
+        {
+            Initialize();
+        }
+
         protected override void OnEnable()
         {
             if (eventsManager != null)
@@ -165,9 +173,62 @@ namespace VRTK
                 menu.FireHapticPulse -= AttemptHapticPulse;
             }
         }
-        #endregion Init
 
-        #region Event Listeners
+        protected virtual void Update()
+        {
+            if (rotateTowards == null) // Backup
+            {
+                var headsetCamera = VRTK_DeviceFinder.HeadsetCamera();
+                if (headsetCamera)
+                {
+                    rotateTowards = headsetCamera.gameObject;
+                }
+                else
+                {
+                    Debug.LogWarning("The IndependentRadialMenu could not automatically find an object to rotate towards.");
+                }
+            }
+
+            if (menu.isShown)
+            {
+                if (interactingObjects.Count > 0) // There's not really an event for the controller moving, so just update the position every frame
+                {
+                    DoChangeAngle(CalculateAngle(interactingObjects[0]), this);
+                }
+
+                if (rotateTowards != null)
+                {
+                    transform.rotation = Quaternion.LookRotation((rotateTowards.transform.position - transform.position) * -1, Vector3.up) * initialRotation; // Face the target, but maintain initial rotation
+                }
+            }
+        }
+
+        protected virtual void FixedUpdate()
+        {
+            if (waitingToDisableCollider)
+            {
+                if (counter == 0)
+                {
+                    menuCollider.enabled = false;
+                    waitingToDisableCollider = false;
+
+                    counter = 2;
+                }
+                else
+                {
+                    counter--;
+                }
+            }
+        }
+
+        protected override void AttemptHapticPulse(float strength)
+        {
+            if (interactingObjects.Count > 0)
+            {
+                VRTK_SharedMethods.TriggerHapticPulse(VRTK_DeviceFinder.GetControllerIndex(interactingObjects[0]), strength);
+            }
+        }
+
         protected virtual void ObjectClicked(object sender, InteractableObjectEventArgs e)
         {
             DoClickButton(sender);
@@ -222,17 +283,7 @@ namespace VRTK
             }
         }
 
-        protected override void AttemptHapticPulse(float strength)
-        {
-            if (interactingObjects.Count > 0)
-            {
-                VRTK_SharedMethods.TriggerHapticPulse(VRTK_DeviceFinder.GetControllerIndex(interactingObjects[0]), strength);
-            }
-        }
-        #endregion Event Listeners
-
-        #region Helpers
-        protected float CalculateAngle(GameObject interactingObject)
+        protected virtual float CalculateAngle(GameObject interactingObject)
         {
             Vector3 controllerPosition = interactingObject.transform.position;
 
@@ -251,14 +302,14 @@ namespace VRTK
             return angle;
         }
 
-        private float AngleSigned(Vector3 v1, Vector3 v2, Vector3 n)
+        protected virtual float AngleSigned(Vector3 v1, Vector3 v2, Vector3 n)
         {
             return Mathf.Atan2(
                 Vector3.Dot(n, Vector3.Cross(v1, v2)),
                 Vector3.Dot(v1, v2)) * Mathf.Rad2Deg;
         }
 
-        private void ImmediatelyHideMenu(InteractableObjectEventArgs e)
+        protected virtual void ImmediatelyHideMenu(InteractableObjectEventArgs e)
         {
             ObjectUntouched(this, e);
             if (disableCoroutine != null)
@@ -268,7 +319,7 @@ namespace VRTK
             SetColliderState(false, e); // Don't want to wait for this
         }
 
-        private void SetColliderState(bool state, InteractableObjectEventArgs e)
+        protected virtual void SetColliderState(bool state, InteractableObjectEventArgs e)
         {
             if (addMenuCollider && menuCollider != null)
             {
@@ -309,7 +360,7 @@ namespace VRTK
             }
         }
 
-        private IEnumerator DelayedSetColliderEnabled(bool enabled, float delay, InteractableObjectEventArgs e)
+        protected virtual IEnumerator DelayedSetColliderEnabled(bool enabled, float delay, InteractableObjectEventArgs e)
         {
             yield return new WaitForSeconds(delay);
 
@@ -317,65 +368,5 @@ namespace VRTK
 
             StopCoroutine("delayedSetColliderEnabled");
         }
-        #endregion Helpers
-
-        #region Unity Methods
-        protected override void Awake()
-        {
-            menu = GetComponent<RadialMenu>();
-        }
-
-        protected virtual void Start()
-        {
-            Initialize();
-        }
-
-        protected virtual void Update()
-        {
-            if (rotateTowards == null) // Backup
-            {
-                var headsetCamera = VRTK_DeviceFinder.HeadsetCamera();
-                if (headsetCamera)
-                {
-                    rotateTowards = headsetCamera.gameObject;
-                }
-                else
-                {
-                    Debug.LogWarning("The IndependentRadialMenu could not automatically find an object to rotate towards.");
-                }
-            }
-
-            if (menu.isShown)
-            {
-                if (interactingObjects.Count > 0) // There's not really an event for the controller moving, so just update the position every frame
-                {
-                    DoChangeAngle(CalculateAngle(interactingObjects[0]), this);
-                }
-
-                if (rotateTowards != null)
-                {
-                    transform.rotation = Quaternion.LookRotation((rotateTowards.transform.position - transform.position) * -1, Vector3.up) * initialRotation; // Face the target, but maintain initial rotation
-                }
-            }
-        }
-
-        protected virtual void FixedUpdate()
-        {
-            if (waitingToDisableCollider)
-            {
-                if (counter == 0)
-                {
-                    menuCollider.enabled = false;
-                    waitingToDisableCollider = false;
-
-                    counter = 2;
-                }
-                else
-                {
-                    counter--;
-                }
-            }
-        }
-        #endregion Unity Methods
     }
 }

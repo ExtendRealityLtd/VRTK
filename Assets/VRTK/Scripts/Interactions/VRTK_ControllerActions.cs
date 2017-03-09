@@ -98,11 +98,11 @@ namespace VRTK
         /// </summary>
         public event ControllerActionsEventHandler ControllerModelInvisible;
 
-        private GameObject modelContainer;
-        private bool controllerVisible = true;
-        private bool controllerHighlighted = false;
-        private Dictionary<string, Transform> cachedElements;
-        private Dictionary<string, object> highlighterOptions;
+        protected GameObject modelContainer;
+        protected bool controllerVisible = true;
+        protected bool controllerHighlighted = false;
+        protected Dictionary<string, Transform> cachedElements;
+        protected Dictionary<string, object> highlighterOptions;
 
         public virtual void OnControllerModelVisible(ControllerActionsEventArgs e)
         {
@@ -124,7 +124,7 @@ namespace VRTK
         /// The IsControllerVisible method returns true if the controller is currently visible by whether the renderers on the controller are enabled.
         /// </summary>
         /// <returns>Is true if the controller model has the renderers that are attached to it are enabled.</returns>
-        public bool IsControllerVisible()
+        public virtual bool IsControllerVisible()
         {
             return controllerVisible;
         }
@@ -455,7 +455,7 @@ namespace VRTK
             StartCoroutine(WaitForModel());
         }
 
-        private IEnumerator WaitForModel()
+        protected virtual IEnumerator WaitForModel()
         {
             while (GetElementTransform(modelElementPaths.bodyModelPath) == null)
             {
@@ -465,7 +465,7 @@ namespace VRTK
             InitaliseHighlighters();
         }
 
-        private void AddHighlighterToElement(Transform element, VRTK_BaseHighlighter parentHighlighter, VRTK_BaseHighlighter overrideHighlighter)
+        protected virtual void AddHighlighterToElement(Transform element, VRTK_BaseHighlighter parentHighlighter, VRTK_BaseHighlighter overrideHighlighter)
         {
             if (element)
             {
@@ -475,7 +475,7 @@ namespace VRTK
             }
         }
 
-        private IEnumerator CycleColor(Material material, Color startColor, Color endColor, float duration)
+        protected virtual IEnumerator CycleColor(Material material, Color startColor, Color endColor, float duration)
         {
             var elapsedTime = 0f;
             while (elapsedTime <= duration)
@@ -489,7 +489,7 @@ namespace VRTK
             }
         }
 
-        private Transform GetElementTransform(string path)
+        protected virtual Transform GetElementTransform(string path)
         {
             if (cachedElements == null || path == null)
             {
@@ -508,7 +508,7 @@ namespace VRTK
             return cachedElements[path];
         }
 
-        private void ToggleHighlightAlias(bool state, string transformPath, Color? highlight, float duration = 0f)
+        protected virtual void ToggleHighlightAlias(bool state, string transformPath, Color? highlight, float duration = 0f)
         {
             var element = GetElementTransform(transformPath);
             if (element)
@@ -517,14 +517,14 @@ namespace VRTK
             }
         }
 
-        private ControllerActionsEventArgs SetActionEvent(uint index)
+        protected virtual ControllerActionsEventArgs SetActionEvent(uint index)
         {
             ControllerActionsEventArgs e;
             e.controllerIndex = index;
             return e;
         }
 
-        private void ToggleModelRenderers(GameObject obj, bool state, GameObject grabbedChildObject)
+        protected virtual void ToggleModelRenderers(GameObject obj, bool state, GameObject grabbedChildObject)
         {
             if (obj)
             {
@@ -538,7 +538,7 @@ namespace VRTK
             }
         }
 
-        private void SetModelOpacity(GameObject obj, float alpha)
+        protected virtual void SetModelOpacity(GameObject obj, float alpha)
         {
             if (obj)
             {

@@ -86,7 +86,7 @@ namespace VRTK
             return false;
         }
 
-        private bool ScriptCheck(GameObject obj, bool returnState)
+        protected virtual bool ScriptCheck(GameObject obj, bool returnState)
         {
             foreach (var identifier in identifiers)
             {
@@ -98,7 +98,7 @@ namespace VRTK
             return !returnState;
         }
 
-        private bool TagCheck(GameObject obj, bool returnState)
+        protected virtual bool TagCheck(GameObject obj, bool returnState)
         {
             if (returnState)
             {
@@ -110,7 +110,7 @@ namespace VRTK
             }
         }
 
-        private bool LayerCheck(GameObject obj, bool returnState)
+        protected virtual bool LayerCheck(GameObject obj, bool returnState)
         {
             if (returnState)
             {
@@ -122,7 +122,7 @@ namespace VRTK
             }
         }
 
-        private bool TypeCheck(GameObject obj, bool returnState)
+        protected virtual bool TypeCheck(GameObject obj, bool returnState)
         {
             var selection = 0;
 

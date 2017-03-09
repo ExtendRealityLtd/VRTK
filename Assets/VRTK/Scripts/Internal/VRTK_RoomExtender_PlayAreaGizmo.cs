@@ -9,8 +9,8 @@
         public float wireframeHeight = 2.0f;
         public bool drawWireframeWhenSelectedOnly = false;
 
-        private Transform playArea;
-        private VRTK_RoomExtender roomExtender;
+        protected Transform playArea;
+        protected VRTK_RoomExtender roomExtender;
 
         protected virtual void Awake()
         {
@@ -39,7 +39,7 @@
             }
         }
 
-        private void DrawWireframe()
+        protected virtual void DrawWireframe()
         {
             if (playArea == null || roomExtender == null)
             {

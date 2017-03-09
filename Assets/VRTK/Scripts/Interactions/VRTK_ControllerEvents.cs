@@ -462,12 +462,11 @@ namespace VRTK
         /// </summary>
         public event ControllerInteractionEventHandler ControllerIndexChanged;
 
-        private Vector2 touchpadAxis = Vector2.zero;
-        private Vector2 triggerAxis = Vector2.zero;
-        private Vector2 gripAxis = Vector2.zero;
-
-        private float hairTriggerDelta;
-        private float hairGripDelta;
+        protected Vector2 touchpadAxis = Vector2.zero;
+        protected Vector2 triggerAxis = Vector2.zero;
+        protected Vector2 gripAxis = Vector2.zero;
+        protected float hairTriggerDelta;
+        protected float hairGripDelta;
 
         public virtual void OnTriggerPressed(ControllerInteractionEventArgs e)
         {
@@ -850,7 +849,7 @@ namespace VRTK
         /// </summary>
         /// <returns>A 3 dimensional vector containing the current real world physical controller velocity.</returns>
         [Obsolete("`VRTK_ControllerEvents.GetVelocity()` has been replaced with `VRTK_DeviceFinder.GetControllerVelocity(givenController)`. This method will be removed in a future version of VRTK.")]
-        public Vector3 GetVelocity()
+        public virtual Vector3 GetVelocity()
         {
             return VRTK_DeviceFinder.GetControllerVelocity(gameObject);
         }
@@ -860,7 +859,7 @@ namespace VRTK
         /// </summary>
         /// <returns>A 3 dimensional vector containing the current real world physical controller angular (rotational) velocity.</returns>
         [Obsolete("`VRTK_ControllerEvents.GetAngularVelocity()` has been replaced with `VRTK_DeviceFinder.GetControllerAngularVelocity(givenController)`. This method will be removed in a future version of VRTK.")]
-        public Vector3 GetAngularVelocity()
+        public virtual Vector3 GetAngularVelocity()
         {
             return VRTK_DeviceFinder.GetControllerAngularVelocity(gameObject);
         }
@@ -869,7 +868,7 @@ namespace VRTK
         /// The GetTouchpadAxis method returns the coordinates of where the touchpad is being touched and can be used for directional input via the touchpad. The `x` value is the horizontal touch plane and the `y` value is the vertical touch plane.
         /// </summary>
         /// <returns>A 2 dimensional vector containing the x and y position of where the touchpad is being touched. `(0,0)` to `(1,1)`.</returns>
-        public Vector2 GetTouchpadAxis()
+        public virtual Vector2 GetTouchpadAxis()
         {
             return touchpadAxis;
         }
@@ -878,7 +877,7 @@ namespace VRTK
         /// The GetTouchpadAxisAngle method returns the angle of where the touchpad is currently being touched with the top of the touchpad being 0 degrees and the bottom of the touchpad being 180 degrees.
         /// </summary>
         /// <returns>A float representing the angle of where the touchpad is being touched. `0f` to `360f`.</returns>
-        public float GetTouchpadAxisAngle()
+        public virtual float GetTouchpadAxisAngle()
         {
             return CalculateTouchpadAxisAngle(touchpadAxis);
         }
@@ -887,7 +886,7 @@ namespace VRTK
         /// The GetTriggerAxis method returns a float that represents how much the trigger is being squeezed. This can be useful for using the trigger axis to perform high fidelity tasks or only activating the trigger press once it has exceeded a given press threshold.
         /// </summary>
         /// <returns>A float representing the amount of squeeze that is being applied to the trigger. `0f` to `1f`.</returns>
-        public float GetTriggerAxis()
+        public virtual float GetTriggerAxis()
         {
             return triggerAxis.x;
         }
@@ -896,7 +895,7 @@ namespace VRTK
         /// The GetGripAxis method returns a float that represents how much the grip is being squeezed. This can be useful for using the grip axis to perform high fidelity tasks or only activating the grip press once it has exceeded a given press threshold.
         /// </summary>
         /// <returns>A float representing the amount of squeeze that is being applied to the grip. `0f` to `1f`.</returns>
-        public float GetGripAxis()
+        public virtual float GetGripAxis()
         {
             return gripAxis.x;
         }
@@ -905,7 +904,7 @@ namespace VRTK
         /// The GetHairTriggerDelta method returns a float representing the difference in how much the trigger is being pressed in relation to the hairline threshold start.
         /// </summary>
         /// <returns>A float representing the difference in the trigger pressure from the hairline threshold start to current position.</returns>
-        public float GetHairTriggerDelta()
+        public virtual float GetHairTriggerDelta()
         {
             return hairTriggerDelta;
         }
@@ -914,7 +913,7 @@ namespace VRTK
         /// The GetHairTriggerDelta method returns a float representing the difference in how much the trigger is being pressed in relation to the hairline threshold start.
         /// </summary>
         /// <returns>A float representing the difference in the trigger pressure from the hairline threshold start to current position.</returns>
-        public float GetHairGripDelta()
+        public virtual float GetHairGripDelta()
         {
             return hairGripDelta;
         }
@@ -923,7 +922,7 @@ namespace VRTK
         /// The AnyButtonPressed method returns true if any of the controller buttons are being pressed and this can be useful to determine if an action can be taken whilst the user is using the controller.
         /// </summary>
         /// <returns>Is true if any of the controller buttons are currently being pressed.</returns>
-        public bool AnyButtonPressed()
+        public virtual bool AnyButtonPressed()
         {
             return (triggerPressed || gripPressed || touchpadPressed || buttonOnePressed || buttonTwoPressed || startMenuPressed);
         }
@@ -933,7 +932,7 @@ namespace VRTK
         /// </summary>
         /// <param name="button">The button to check if it's being pressed.</param>
         /// <returns>Is true if the button is being pressed.</returns>
-        public bool IsButtonPressed(ButtonAlias button)
+        public virtual bool IsButtonPressed(ButtonAlias button)
         {
             switch (button)
             {
@@ -977,7 +976,7 @@ namespace VRTK
         /// <param name="givenButton">The ButtonAlias to register the event on.</param>
         /// <param name="startEvent">If this is `true` then the start event related to the button is used (e.g. OnPress). If this is `false` then the end event related to the button is used (e.g. OnRelease). </param>
         /// <param name="callbackMethod">The method to subscribe to the event.</param>
-        public void SubscribeToButtonAliasEvent(ButtonAlias givenButton, bool startEvent, ControllerInteractionEventHandler callbackMethod)
+        public virtual void SubscribeToButtonAliasEvent(ButtonAlias givenButton, bool startEvent, ControllerInteractionEventHandler callbackMethod)
         {
             ButtonAliasEventSubscription(true, givenButton, startEvent, callbackMethod);
         }
@@ -988,7 +987,7 @@ namespace VRTK
         /// <param name="givenButton">The ButtonAlias to unregister the event on.</param>
         /// <param name="startEvent">If this is `true` then the start event related to the button is used (e.g. OnPress). If this is `false` then the end event related to the button is used (e.g. OnRelease). </param>
         /// <param name="callbackMethod">The method to unsubscribe from the event.</param>
-        public void UnsubscribeToButtonAliasEvent(ButtonAlias givenButton, bool startEvent, ControllerInteractionEventHandler callbackMethod)
+        public virtual void UnsubscribeToButtonAliasEvent(ButtonAlias givenButton, bool startEvent, ControllerInteractionEventHandler callbackMethod)
         {
             ButtonAliasEventSubscription(false, givenButton, startEvent, callbackMethod);
         }
@@ -1277,7 +1276,7 @@ namespace VRTK
             hairGripDelta = VRTK_SDK_Bridge.GetGripHairlineDeltaOnIndex(controllerIndex);
         }
 
-        protected void ButtonAliasEventSubscription(bool subscribe, ButtonAlias givenButton, bool startEvent, ControllerInteractionEventHandler callbackMethod)
+        protected virtual void ButtonAliasEventSubscription(bool subscribe, ButtonAlias givenButton, bool startEvent, ControllerInteractionEventHandler callbackMethod)
         {
             switch (givenButton)
             {
@@ -1644,7 +1643,7 @@ namespace VRTK
             }
         }
 
-        private ControllerInteractionEventArgs SetButtonEvent(ref bool buttonBool, bool value, float buttonPressure)
+        protected virtual ControllerInteractionEventArgs SetButtonEvent(ref bool buttonBool, bool value, float buttonPressure)
         {
             var controllerIndex = VRTK_DeviceFinder.GetControllerIndex(gameObject);
             buttonBool = value;
@@ -1656,26 +1655,26 @@ namespace VRTK
             return e;
         }
 
-        private void TrackedControllerEnabled(object sender, VRTKTrackedControllerEventArgs e)
+        protected virtual void TrackedControllerEnabled(object sender, VRTKTrackedControllerEventArgs e)
         {
             var nullBool = false;
             OnControllerEnabled(SetButtonEvent(ref nullBool, true, 0f));
         }
 
-        private void TrackedControllerDisabled(object sender, VRTKTrackedControllerEventArgs e)
+        protected virtual void TrackedControllerDisabled(object sender, VRTKTrackedControllerEventArgs e)
         {
             DisableEvents();
             var nullBool = false;
             OnControllerDisabled(SetButtonEvent(ref nullBool, false, 0f));
         }
 
-        private void TrackedControllerIndexChanged(object sender, VRTKTrackedControllerEventArgs e)
+        protected virtual void TrackedControllerIndexChanged(object sender, VRTKTrackedControllerEventArgs e)
         {
             var nullBool = false;
             OnControllerIndexChanged(SetButtonEvent(ref nullBool, false, 0f));
         }
 
-        private float CalculateTouchpadAxisAngle(Vector2 axis)
+        protected virtual float CalculateTouchpadAxisAngle(Vector2 axis)
         {
             float angle = Mathf.Atan2(axis.y, axis.x) * Mathf.Rad2Deg;
             angle = 90.0f - angle;
@@ -1686,7 +1685,7 @@ namespace VRTK
             return angle;
         }
 
-        private void EmitAlias(ButtonAlias type, bool touchDown, float buttonPressure, ref bool buttonBool)
+        protected virtual void EmitAlias(ButtonAlias type, bool touchDown, float buttonPressure, ref bool buttonBool)
         {
             if (pointerToggleButton == type)
             {
@@ -1767,14 +1766,14 @@ namespace VRTK
             }
         }
 
-        private bool Vector2ShallowEquals(Vector2 vectorA, Vector2 vectorB)
+        protected virtual bool Vector2ShallowEquals(Vector2 vectorA, Vector2 vectorB)
         {
             var distanceVector = vectorA - vectorB;
             return Math.Round(Mathf.Abs(distanceVector.x), axisFidelity, MidpointRounding.AwayFromZero) < float.Epsilon
                    && Math.Round(Mathf.Abs(distanceVector.y), axisFidelity, MidpointRounding.AwayFromZero) < float.Epsilon;
         }
 
-        private void DisableEvents()
+        protected virtual void DisableEvents()
         {
             if (triggerPressed)
             {

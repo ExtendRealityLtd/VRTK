@@ -73,14 +73,14 @@ namespace VRTK
         /// </summary>
         public event Button3DEventHandler Pushed;
 
-        private const float MAX_AUTODETECT_ACTIVATION_LENGTH = 4f; // full hight of button
-        private ButtonDirection finalDirection;
-        private Vector3 restingPosition;
-        private Vector3 activationDir;
-        private Rigidbody buttonRigidbody;
-        private ConfigurableJoint buttonJoint;
-        private ConstantForce buttonForce;
-        private int forceCount = 0;
+        protected const float MAX_AUTODETECT_ACTIVATION_LENGTH = 4f; // full hight of button
+        protected ButtonDirection finalDirection;
+        protected Vector3 restingPosition;
+        protected Vector3 activationDir;
+        protected Rigidbody buttonRigidbody;
+        protected ConfigurableJoint buttonJoint;
+        protected ConstantForce buttonForce;
+        protected int forceCount = 0;
 
         public virtual void OnPushed(Control3DEventArgs e)
         {
@@ -305,7 +305,7 @@ namespace VRTK
             forceCount += 1;
         }
 
-        private ButtonDirection DetectDirection()
+        protected virtual ButtonDirection DetectDirection()
         {
             ButtonDirection returnDirection = ButtonDirection.autodetect;
             Bounds bounds = VRTK_SharedMethods.GetBounds(transform);
@@ -388,7 +388,7 @@ namespace VRTK
             return returnDirection;
         }
 
-        private Vector3 CalculateActivationDir()
+        protected virtual Vector3 CalculateActivationDir()
         {
             Bounds bounds = VRTK_SharedMethods.GetBounds(transform, transform);
 
@@ -459,12 +459,12 @@ namespace VRTK
             return (buttonDirection * (extents + activationDistance));
         }
 
-        private bool ReachedActivationDistance()
+        protected virtual bool ReachedActivationDistance()
         {
             return (Vector3.Distance(transform.position, restingPosition) >= activationDistance);
         }
 
-        private Vector3 GetForceVector()
+        protected virtual Vector3 GetForceVector()
         {
             return (-activationDir.normalized * buttonStrength);
         }

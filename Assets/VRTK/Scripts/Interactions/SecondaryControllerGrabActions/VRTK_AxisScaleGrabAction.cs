@@ -22,9 +22,9 @@ namespace VRTK.SecondaryControllerGrabActions
         [Tooltip("If checked all the axes will be scaled together (unless locked)")]
         public bool uniformScaling = false;
 
-        private Vector3 initialScale;
-        private float initalLength;
-        private float initialScaleFactor;
+        protected Vector3 initialScale;
+        protected float initalLength;
+        protected float initialScaleFactor;
 
         /// <summary>
         /// The Initalise method is used to set up the state of the secondary action when the object is initially grabbed by a secondary controller.
@@ -68,7 +68,7 @@ namespace VRTK.SecondaryControllerGrabActions
             }
         }
 
-        private void ApplyScale(Vector3 newScale)
+        protected virtual void ApplyScale(Vector3 newScale)
         {
             var existingScale = grabbedObject.transform.localScale;
 
@@ -82,7 +82,7 @@ namespace VRTK.SecondaryControllerGrabActions
             }
         }
 
-        private void NonUniformScale()
+        protected virtual void NonUniformScale()
         {
             Vector3 initialRotatedPosition = grabbedObject.transform.rotation * grabbedObject.transform.position;
             Vector3 initialSecondGrabRotatedPosition = grabbedObject.transform.rotation * secondaryInitialGrabPoint.position;
@@ -96,7 +96,7 @@ namespace VRTK.SecondaryControllerGrabActions
             ApplyScale(newScale);
         }
 
-        private void UniformScale()
+        protected virtual void UniformScale()
         {
             float adjustedLength = (grabbedObject.transform.position - secondaryGrabbingObject.transform.position).magnitude;
             float adjustedScale = initialScaleFactor * adjustedLength;
@@ -105,7 +105,7 @@ namespace VRTK.SecondaryControllerGrabActions
             ApplyScale(newScale);
         }
 
-        private float CalculateAxisScale(float centerPosition, float initialPosition, float currentPosition)
+        protected virtual float CalculateAxisScale(float centerPosition, float initialPosition, float currentPosition)
         {
             float distance = currentPosition - initialPosition;
             distance = (centerPosition < initialPosition ? distance : -distance);

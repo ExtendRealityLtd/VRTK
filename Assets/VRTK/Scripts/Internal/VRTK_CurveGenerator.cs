@@ -55,22 +55,22 @@ namespace VRTK
 
     public class VRTK_CurveGenerator : MonoBehaviour
     {
-        private enum BezierControlPointMode
+        public enum BezierControlPointMode
         {
             Free,
             Aligned,
             Mirrored
         }
 
-        private Vector3[] points;
-        private GameObject[] items;
-        private BezierControlPointMode[] modes;
-        private bool loop;
-        private int frequency;
-        private bool customTracer;
-        private bool rescalePointerTracer;
+        protected Vector3[] points;
+        protected GameObject[] items;
+        protected BezierControlPointMode[] modes;
+        protected bool loop;
+        protected int frequency;
+        protected bool customTracer;
+        protected bool rescalePointerTracer;
 
-        public void Create(int setFrequency, float radius, GameObject tracer, bool rescaleTracer = false)
+        public virtual void Create(int setFrequency, float radius, GameObject tracer, bool rescaleTracer = false)
         {
             float circleSize = radius / 8;
 
@@ -88,13 +88,13 @@ namespace VRTK
             rescalePointerTracer = rescaleTracer;
         }
 
-        public void SetPoints(Vector3[] controlPoints, Material material, Color color)
+        public virtual void SetPoints(Vector3[] controlPoints, Material material, Color color)
         {
             PointsInit(controlPoints);
             SetObjects(material, color);
         }
 
-        public Vector3[] GetPoints(Vector3[] controlPoints)
+        public virtual Vector3[] GetPoints(Vector3[] controlPoints)
         {
             PointsInit(controlPoints);
 
@@ -116,12 +116,12 @@ namespace VRTK
             return calculatedPoints;
         }
 
-        public void TogglePoints(bool state)
+        public virtual void TogglePoints(bool state)
         {
             gameObject.SetActive(state);
         }
 
-        private void PointsInit(Vector3[] controlPoints)
+        protected virtual void PointsInit(Vector3[] controlPoints)
         {
             points = controlPoints;
             modes = new BezierControlPointMode[]
@@ -131,7 +131,7 @@ namespace VRTK
             };
         }
 
-        private GameObject CreateSphere()
+        protected virtual GameObject CreateSphere()
         {
             customTracer = false;
             GameObject item = GameObject.CreatePrimitive(PrimitiveType.Sphere);
@@ -142,7 +142,7 @@ namespace VRTK
             return item;
         }
 
-        private bool Loop
+        protected virtual bool Loop
         {
             get
             {
@@ -159,7 +159,7 @@ namespace VRTK
             }
         }
 
-        private int ControlPointCount
+        protected virtual int ControlPointCount
         {
             get
             {
@@ -167,12 +167,12 @@ namespace VRTK
             }
         }
 
-        private Vector3 GetControlPoint(int index)
+        protected virtual Vector3 GetControlPoint(int index)
         {
             return points[index];
         }
 
-        private void SetControlPoint(int index, Vector3 point)
+        protected virtual void SetControlPoint(int index, Vector3 point)
         {
             if (index % 3 == 0)
             {
@@ -213,7 +213,7 @@ namespace VRTK
             EnforceMode(index);
         }
 
-        private void EnforceMode(int index)
+        protected virtual void EnforceMode(int index)
         {
             int modeIndex = (index + 1) / 3;
             BezierControlPointMode mode = modes[modeIndex];
@@ -260,7 +260,7 @@ namespace VRTK
             points[enforcedIndex] = middle + enforcedTangent;
         }
 
-        private int CurveCount
+        protected virtual int CurveCount
         {
             get
             {
@@ -268,7 +268,7 @@ namespace VRTK
             }
         }
 
-        private Vector3 GetPoint(float t)
+        protected virtual Vector3 GetPoint(float t)
         {
             int i;
             if (t >= 1f)
@@ -286,7 +286,7 @@ namespace VRTK
             return transform.TransformPoint(Bezier.GetPoint(points[i], points[i + 1], points[i + 2], points[i + 3], t));
         }
 
-        private void SetObjects(Material material, Color color)
+        protected virtual void SetObjects(Material material, Color color)
         {
             float stepSize = frequency * 1;
             if (Loop || stepSize == 1)
@@ -305,7 +305,7 @@ namespace VRTK
                     items[f].SetActive(false);
                     continue;
                 }
-                setMaterial(items[f], material, color);
+                SetMaterial(items[f], material, color);
 
                 Vector3 position = GetPoint(f * stepSize);
                 items[f].transform.position = position;
@@ -328,7 +328,7 @@ namespace VRTK
             }
         }
 
-        private void setMaterial(GameObject item, Material material, Color color)
+        protected virtual void SetMaterial(GameObject item, Material material, Color color)
         {
             foreach (Renderer mr in item.GetComponentsInChildren<Renderer>())
             {

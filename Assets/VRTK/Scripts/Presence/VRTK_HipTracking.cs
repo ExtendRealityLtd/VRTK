@@ -21,18 +21,11 @@ namespace VRTK
         [Tooltip("Optional Transform to use for calculating which way is 'Up' relative to the player for hip positioning.")]
         public Transform ReferenceUp;
 
-        private Transform playerHead;
+        protected Transform playerHead;
 
-        protected virtual void Awake()
+        protected virtual void OnEnable()
         {
-            if (headOverride != null)
-            {
-                playerHead = headOverride;
-            }
-            else
-            {
-                playerHead = VRTK_DeviceFinder.HeadsetTransform();
-            }
+            playerHead = (headOverride != null ? headOverride : VRTK_DeviceFinder.HeadsetTransform());
         }
 
         protected virtual void Update()
