@@ -15,9 +15,9 @@
 
     public class VRTK_UIGraphicRaycaster : GraphicRaycaster
     {
-        private Canvas m_Canvas;
-        private Vector2 lastKnownPosition;
-        private const float UI_CONTROL_OFFSET = 0.00001f;
+        protected Canvas currentCanvas;
+        protected Vector2 lastKnownPosition;
+        protected const float UI_CONTROL_OFFSET = 0.00001f;
 
         [NonSerialized]
         // Use a static to prevent list reallocation. We only need one of these globally (single main thread), and only to hold temporary data
@@ -37,7 +37,7 @@
         }
 
         //[Pure]
-        private void SetNearestRaycast(ref PointerEventData eventData, ref List<RaycastResult> resultAppendList, ref List<RaycastResult> raycastResults)
+        protected virtual void SetNearestRaycast(ref PointerEventData eventData, ref List<RaycastResult> resultAppendList, ref List<RaycastResult> raycastResults)
         {
             RaycastResult? nearestRaycast = null;
             for (var index = 0; index < raycastResults.Count; index++)
@@ -61,7 +61,7 @@
         }
 
         //[Pure]
-        private float GetHitDistance(Ray ray)
+        protected virtual float GetHitDistance(Ray ray)
         {
             var hitDistance = float.MaxValue;
 
@@ -93,7 +93,7 @@
         }
 
         //[Pure]
-        private void Raycast(Canvas canvas, Camera eventCamera, Ray ray, ref List<RaycastResult> results)
+        protected virtual void Raycast(Canvas canvas, Camera eventCamera, Ray ray, ref List<RaycastResult> results)
         {
             var hitDistance = GetHitDistance(ray);
             var canvasGraphics = GraphicRegistry.GetGraphicsForCanvas(canvas);
@@ -131,7 +131,8 @@
 
                 if (graphic.Raycast(pointerPosition, eventCamera))
                 {
-                    var result = new RaycastResult() {
+                    var result = new RaycastResult()
+                    {
                         gameObject = graphic.gameObject,
                         module = this,
                         distance = distance,
@@ -148,17 +149,17 @@
             results.Sort((g1, g2) => g2.depth.CompareTo(g1.depth));
         }
 
-        private Canvas canvas
+        protected virtual Canvas canvas
         {
             get
             {
-                if (m_Canvas != null)
+                if (currentCanvas != null)
                 {
-                    return m_Canvas;
+                    return currentCanvas;
                 }
 
-                m_Canvas = gameObject.GetComponent<Canvas>();
-                return m_Canvas;
+                currentCanvas = gameObject.GetComponent<Canvas>();
+                return currentCanvas;
             }
         }
     }

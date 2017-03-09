@@ -53,11 +53,11 @@ namespace VRTK
         protected bool adjustYForTerrain = false;
         protected bool enableTeleport = true;
 
-        private float blinkPause = 0f;
-        private float fadeInTime = 0f;
-        private float maxBlinkTransitionSpeed = 1.5f;
-        private float maxBlinkDistance = 33f;
-        private Coroutine initaliseListeners;
+        protected float blinkPause = 0f;
+        protected float fadeInTime = 0f;
+        protected float maxBlinkTransitionSpeed = 1.5f;
+        protected float maxBlinkDistance = 33f;
+        protected Coroutine initaliseListeners;
 
         /// <summary>
         /// The InitDestinationSetListener method is used to register the teleport script to listen to events from the given game object that is used to generate destination markers. Any destination set event emitted by a registered game object will initiate the teleport to the given destination location.
@@ -124,15 +124,12 @@ namespace VRTK
             return (validNavMeshLocation && target && !(VRTK_PolicyList.Check(target.gameObject, targetListPolicy)));
         }
 
-        protected virtual void Awake()
+        protected virtual void OnEnable()
         {
             VRTK_PlayerObject.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.CameraRig);
             headset = VRTK_SharedMethods.AddCameraFade();
             playArea = VRTK_DeviceFinder.PlayAreaTransform();
-        }
 
-        protected virtual void OnEnable()
-        {
             adjustYForTerrain = false;
             enableTeleport = true;
             initaliseListeners = StartCoroutine(InitListenersAtEndOfFrame());
@@ -202,7 +199,7 @@ namespace VRTK
             return position;
         }
 
-        protected void OnTeleporting(object sender, DestinationMarkerEventArgs e)
+        protected virtual void OnTeleporting(object sender, DestinationMarkerEventArgs e)
         {
             if (Teleporting != null)
             {
@@ -210,7 +207,7 @@ namespace VRTK
             }
         }
 
-        protected void OnTeleported(object sender, DestinationMarkerEventArgs e)
+        protected virtual void OnTeleported(object sender, DestinationMarkerEventArgs e)
         {
             if (Teleported != null)
             {
@@ -218,7 +215,7 @@ namespace VRTK
             }
         }
 
-        private void CalculateBlinkDelay(float blinkSpeed, Vector3 newPosition)
+        protected virtual void CalculateBlinkDelay(float blinkSpeed, Vector3 newPosition)
         {
             blinkPause = 0f;
             if (distanceBlinkDelay > 0f)
@@ -229,13 +226,13 @@ namespace VRTK
             }
         }
 
-        private void ReleaseBlink()
+        protected virtual void ReleaseBlink()
         {
             VRTK_SDK_Bridge.HeadsetFade(Color.clear, fadeInTime);
             fadeInTime = 0f;
         }
 
-        private IEnumerator InitListenersAtEndOfFrame()
+        protected virtual IEnumerator InitListenersAtEndOfFrame()
         {
             yield return new WaitForEndOfFrame();
             if (enabled)
@@ -244,7 +241,7 @@ namespace VRTK
             }
         }
 
-        private void InitDestinationMarkerListeners(bool state)
+        protected virtual void InitDestinationMarkerListeners(bool state)
         {
             var leftHand = VRTK_DeviceFinder.GetControllerLeftHand();
             var rightHand = VRTK_DeviceFinder.GetControllerRightHand();

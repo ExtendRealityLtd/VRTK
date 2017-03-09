@@ -55,8 +55,8 @@ namespace VRTK
 
         // The minimum distance for fixed time lerp is determined by the minSpeed and the normalLerpTime
         // If you want to always lerp with a fixed mps speed, set the normalLerpTime to a high value
-        private float minDistanceForNormalLerp;
-        private float lerpTime = 0.1f;
+        protected float minDistanceForNormalLerp;
+        protected float lerpTime = 0.1f;
 
         public virtual void OnWillDashThruObjects(DashTeleportEventArgs e)
         {
@@ -74,9 +74,9 @@ namespace VRTK
             }
         }
 
-        protected override void Awake()
+        protected override void OnEnable()
         {
-            base.Awake();
+            base.OnEnable();
             minDistanceForNormalLerp = minSpeedMps * normalLerpTime; // default values give 5.0f
         }
 
@@ -86,7 +86,7 @@ namespace VRTK
             StartCoroutine(lerpToPosition(targetPosition, target));
         }
 
-        private IEnumerator lerpToPosition(Vector3 targetPosition, Transform target)
+        protected virtual IEnumerator lerpToPosition(Vector3 targetPosition, Transform target)
         {
             enableTeleport = false;
             bool gameObjectInTheWay = false;
@@ -150,7 +150,7 @@ namespace VRTK
             enableTeleport = true;
         }
 
-        private DashTeleportEventArgs SetDashTeleportEvent(RaycastHit[] hits)
+        protected virtual DashTeleportEventArgs SetDashTeleportEvent(RaycastHit[] hits)
         {
             DashTeleportEventArgs e;
             e.hits = hits;

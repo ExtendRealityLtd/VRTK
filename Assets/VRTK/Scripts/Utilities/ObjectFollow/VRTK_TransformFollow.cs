@@ -24,9 +24,9 @@ namespace VRTK
         [Tooltip("The moment at which to follow.")]
         public FollowMoment moment = FollowMoment.OnPreRender;
 
-        private Transform transformToFollow;
-        private Transform transformToChange;
-        private bool isListeningToOnPreRender;
+        protected Transform transformToFollow;
+        protected Transform transformToChange;
+        protected bool isListeningToOnPreRender;
 
         protected override void OnEnable()
         {

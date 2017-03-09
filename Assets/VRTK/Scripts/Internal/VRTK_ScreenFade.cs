@@ -6,11 +6,10 @@
     {
         public static VRTK_ScreenFade instance;
 
-        private Material fadeMaterial = null;
-
-        private Color currentColor = new Color(0f, 0f, 0f, 0f);
-        private Color targetColor = new Color(0f, 0f, 0f, 0f);
-        private Color deltaColor = new Color(0f, 0f, 0f, 0f);
+        protected Material fadeMaterial = null;
+        protected Color currentColor = new Color(0f, 0f, 0f, 0f);
+        protected Color targetColor = new Color(0f, 0f, 0f, 0f);
+        protected Color deltaColor = new Color(0f, 0f, 0f, 0f);
 
         public static void Start(Color newColor, float duration)
         {
@@ -20,7 +19,7 @@
             }
         }
 
-        public void StartFade(Color newColor, float duration)
+        public virtual void StartFade(Color newColor, float duration)
         {
             if (duration > 0.0f)
             {

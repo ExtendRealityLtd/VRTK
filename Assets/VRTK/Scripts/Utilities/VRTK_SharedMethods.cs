@@ -10,7 +10,7 @@ namespace VRTK
     /// <summary>
     /// The Shared Methods script is a collection of reusable static methods that are used across a range of different scripts.
     /// </summary>
-    public class VRTK_SharedMethods : MonoBehaviour
+    public sealed class VRTK_SharedMethods : MonoBehaviour
     {
         /// <summary>
         /// The GetBounds methods returns the bounds of the transform including all children in world space.
@@ -213,6 +213,17 @@ namespace VRTK
             {
                 instanceMethods.TriggerHapticPulse(controllerIndex, strength, duration, pulseInterval);
             }
+        }
+
+        /// <summary>
+        /// The Mod method is used to find the remainder of the sum a/b.
+        /// </summary>
+        /// <param name="a">The dividend value.</param>
+        /// <param name="b">The divisor value.</param>
+        /// <returns>The remainder value.</returns>
+        public static float Mod(float a, float b)
+        {
+            return a - b * Mathf.Floor(a / b);
         }
 
         private static float ColorPercent(float value, float percent)

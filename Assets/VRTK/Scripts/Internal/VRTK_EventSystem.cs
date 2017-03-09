@@ -7,12 +7,12 @@
 
     public class VRTK_EventSystem : EventSystem
     {
+        protected EventSystem previousEventSystem;
+        protected VRTK_VRInputModule vrInputModule;
+
         private static readonly FieldInfo[] EVENT_SYSTEM_FIELD_INFOS = typeof(EventSystem).GetFields(BindingFlags.Public | BindingFlags.Instance);
         private static readonly PropertyInfo[] EVENT_SYSTEM_PROPERTY_INFOS = typeof(EventSystem).GetProperties(BindingFlags.Public | BindingFlags.Instance).Except(new[] { typeof(EventSystem).GetProperty("enabled") }).ToArray();
         private static readonly FieldInfo BASE_INPUT_MODULE_EVENT_SYSTEM_FIELD_INFO = typeof(BaseInputModule).GetField("m_EventSystem", BindingFlags.NonPublic | BindingFlags.Instance);
-
-        private EventSystem previousEventSystem;
-        private VRTK_VRInputModule vrInputModule;
 
         protected override void OnEnable()
         {

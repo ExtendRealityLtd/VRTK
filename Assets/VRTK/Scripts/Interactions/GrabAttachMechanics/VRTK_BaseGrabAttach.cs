@@ -41,7 +41,7 @@ namespace VRTK.GrabAttachMechanics
         /// The IsTracked method determines if the grab attach mechanic is a track object type.
         /// </summary>
         /// <returns>Is true if the mechanic is of type tracked.</returns>
-        public bool IsTracked()
+        public virtual bool IsTracked()
         {
             return tracked;
         }
@@ -50,7 +50,7 @@ namespace VRTK.GrabAttachMechanics
         /// The IsClimbable method determines if the grab attach mechanic is a climbable object type.
         /// </summary>
         /// <returns>Is true if the mechanic is of type climbable.</returns>
-        public bool IsClimbable()
+        public virtual bool IsClimbable()
         {
             return climbable;
         }
@@ -59,7 +59,7 @@ namespace VRTK.GrabAttachMechanics
         /// The IsKinematic method determines if the grab attach mechanic is a kinematic object type.
         /// </summary>
         /// <returns>Is true if the mechanic is of type kinematic.</returns>
-        public bool IsKinematic()
+        public virtual bool IsKinematic()
         {
             return kinematic;
         }
@@ -197,7 +197,7 @@ namespace VRTK.GrabAttachMechanics
             Initialise();
         }
 
-        private void ThrowReleasedObject(Rigidbody objectRigidbody)
+        protected virtual void ThrowReleasedObject(Rigidbody objectRigidbody)
         {
             if (grabbedObjectScript)
             {
@@ -241,7 +241,7 @@ namespace VRTK.GrabAttachMechanics
             }
         }
 
-        private Transform GetSnapHandle(GameObject grabbingObject)
+        protected virtual Transform GetSnapHandle(GameObject grabbingObject)
         {
             if (rightSnapHandle == null && leftSnapHandle != null)
             {
@@ -266,7 +266,7 @@ namespace VRTK.GrabAttachMechanics
             return null;
         }
 
-        private void FlipSnapHandle(Transform snapHandle)
+        protected virtual void FlipSnapHandle(Transform snapHandle)
         {
             if (snapHandle)
             {

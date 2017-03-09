@@ -166,12 +166,12 @@ namespace VRTK
             }
         }
 
-        private float CalculateValue()
+        protected virtual float CalculateValue()
         {
             return Mathf.Round((leverHingeJoint.angle) / stepSize) * stepSize;
         }
 
-        private void SnapToValue(float value)
+        protected virtual void SnapToValue(float value)
         {
             float angle = ((value - minAngle) / (maxAngle - minAngle)) * (leverHingeJoint.limits.max - leverHingeJoint.limits.min);
 

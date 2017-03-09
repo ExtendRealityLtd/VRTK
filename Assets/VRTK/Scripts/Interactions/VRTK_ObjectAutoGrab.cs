@@ -22,12 +22,12 @@ namespace VRTK
         [Tooltip("If `Clone Grabbed Object` is checked and this is checked, then whenever this script is disabled and re-enabled, it will always create a new clone of the object to grab. If this is false then the original cloned object will attempt to be grabbed again. If the original cloned object no longer exists then a new clone will be created.")]
         public bool alwaysCloneOnEnable;
 
-        private VRTK_InteractableObject previousClonedObject = null;
+        protected VRTK_InteractableObject previousClonedObject = null;
 
         /// <summary>
         /// The ClearPreviousClone method resets the previous cloned object to null to ensure when the script is re-enabled that a new cloned object is created, rather than the original clone being grabbed again.
         /// </summary>
-        public void ClearPreviousClone()
+        public virtual void ClearPreviousClone()
         {
             previousClonedObject = null;
         }
@@ -43,7 +43,7 @@ namespace VRTK
             StartCoroutine(AutoGrab());
         }
 
-        private IEnumerator AutoGrab()
+        protected virtual IEnumerator AutoGrab()
         {
             yield return new WaitForEndOfFrame();
 

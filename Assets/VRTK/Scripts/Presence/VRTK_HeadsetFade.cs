@@ -49,9 +49,9 @@ namespace VRTK
         /// </summary>
         public event HeadsetFadeEventHandler HeadsetUnfadeComplete;
 
-        private Transform headset;
-        private bool isTransitioning = false;
-        private bool isFaded = false;
+        protected Transform headset;
+        protected bool isTransitioning = false;
+        protected bool isFaded = false;
 
         public virtual void OnHeadsetFadeStart(HeadsetFadeEventArgs e)
         {
@@ -145,7 +145,7 @@ namespace VRTK
             }
         }
 
-        private HeadsetFadeEventArgs SetHeadsetFadeEvent(Transform currentTransform, float duration)
+        protected virtual HeadsetFadeEventArgs SetHeadsetFadeEvent(Transform currentTransform, float duration)
         {
             HeadsetFadeEventArgs e;
             e.timeTillComplete = duration;
@@ -153,14 +153,14 @@ namespace VRTK
             return e;
         }
 
-        private void FadeComplete()
+        protected virtual void FadeComplete()
         {
             isFaded = true;
             isTransitioning = false;
             OnHeadsetFadeComplete(SetHeadsetFadeEvent(headset, 0f));
         }
 
-        private void UnfadeComplete()
+        protected virtual void UnfadeComplete()
         {
             isFaded = false;
             isTransitioning = false;

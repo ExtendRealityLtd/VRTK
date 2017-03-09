@@ -11,7 +11,7 @@
         /// </summary>
         public static VRTK_InstanceMethods instance = null;
 
-        private Dictionary<uint, Coroutine> hapticLoopCoroutines = new Dictionary<uint, Coroutine>();
+        protected Dictionary<uint, Coroutine> hapticLoopCoroutines = new Dictionary<uint, Coroutine>();
 
         public virtual void TriggerHapticPulse(uint controllerIndex, float strength)
         {
@@ -56,7 +56,7 @@
             }
         }
 
-        private void CancelHapticPulse(uint controllerIndex)
+        protected virtual void CancelHapticPulse(uint controllerIndex)
         {
             if (hapticLoopCoroutines.ContainsKey(controllerIndex) && hapticLoopCoroutines[controllerIndex] != null)
             {
@@ -64,7 +64,7 @@
             }
         }
 
-        private IEnumerator HapticPulse(uint controllerIndex, float duration, float hapticPulseStrength, float pulseInterval)
+        protected virtual IEnumerator HapticPulse(uint controllerIndex, float duration, float hapticPulseStrength, float pulseInterval)
         {
             if (pulseInterval <= 0)
             {

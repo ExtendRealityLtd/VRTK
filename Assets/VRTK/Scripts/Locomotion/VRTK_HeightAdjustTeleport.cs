@@ -41,7 +41,7 @@ namespace VRTK
             return basePosition;
         }
 
-        private float GetTeleportY(Transform target, Vector3 tipPosition)
+        protected virtual float GetTeleportY(Transform target, Vector3 tipPosition)
         {
             var newY = playArea.position.y;
             var heightOffset = 0.1f;

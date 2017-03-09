@@ -20,8 +20,6 @@ namespace VRTK
     /// </example>
     public class PanelMenuController : MonoBehaviour
     {
-        #region Variables
-
         public enum TouchpadPressPosition
         {
             None,
@@ -52,29 +50,82 @@ namespace VRTK
         protected const float SwipeMinDist = 0.2f;
         protected const float SwipeMinVelocity = 4.0f;
 
-        private VRTK_ControllerEvents controllerEvents;
+        protected VRTK_ControllerEvents controllerEvents;
+        protected PanelMenuItemController currentPanelMenuItemController;
+        protected GameObject interactableObject;
+        protected GameObject canvasObject;
+        protected readonly Vector2 xAxis = new Vector2(1, 0);
+        protected readonly Vector2 yAxis = new Vector2(0, 1);
+        protected Vector2 touchStartPosition;
+        protected Vector2 touchEndPosition;
+        protected float touchStartTime;
+        protected float currentAngle;
+        protected bool isTrackingSwipe = false;
+        protected bool isPendingSwipeCheck = false;
+        protected bool isGrabbed = false;
+        protected bool isShown = false;
 
-        private PanelMenuItemController currentPanelMenuItemController;
+        /// <summary>
+        /// The ToggleMenu method is used to show or hide the menu.
+        /// </summary>
+        public virtual void ToggleMenu()
+        {
+            if (isShown)
+            {
+                HideMenu(true);
+            }
+            else
+            {
+                ShowMenu();
+            }
+        }
 
-        private GameObject interactableObject;
-        private GameObject canvasObject;
+        /// <summary>
+        /// The ShowMenu method is used to show the menu.
+        /// </summary>
+        public virtual void ShowMenu()
+        {
+            if (!isShown)
+            {
+                isShown = true;
+                StopCoroutine("TweenMenuScale");
+                if (enabled)
+                {
+                    StartCoroutine("TweenMenuScale", isShown);
+                }
+            }
+        }
 
-        private readonly Vector2 xAxis = new Vector2(1, 0);
-        private readonly Vector2 yAxis = new Vector2(0, 1);
+        /// <summary>
+        /// The HideMenu method is used to hide the menu.
+        /// </summary>
+        /// <param name="force">If true then the menu is always hidden.</param>
+        public virtual void HideMenu(bool force)
+        {
+            if (isShown && force)
+            {
+                isShown = false;
+                StopCoroutine("TweenMenuScale");
+                if (enabled)
+                {
+                    StartCoroutine("TweenMenuScale", isShown);
+                }
+            }
+        }
 
-        private Vector2 touchStartPosition;
-        private Vector2 touchEndPosition;
-        private float touchStartTime;
-        private float currentAngle;
-        private bool isTrackingSwipe = false;
-        private bool isPendingSwipeCheck = false;
-
-        private bool isGrabbed = false;
-        private bool isShown = false;
-
-        #endregion Variables
-
-        #region Unity Methods
+        /// <summary>
+        /// The HideMenuImmediate method is used to immediately hide the menu.
+        /// </summary>
+        public virtual void HideMenuImmediate()
+        {
+            if (currentPanelMenuItemController != null && isShown)
+            {
+                HandlePanelMenuItemControllerVisibility(currentPanelMenuItemController);
+            }
+            transform.localScale = Vector3.zero;
+            canvasObject.transform.localScale = Vector3.zero;
+            isShown = false;
+        }
 
         protected virtual void Awake()
         {
@@ -128,10 +179,6 @@ namespace VRTK
             }
         }
 
-        #endregion Unity Methods
-
-        #region Initialize
-
         protected virtual void Initialize()
         {
             if (Application.isPlaying)
@@ -149,60 +196,7 @@ namespace VRTK
             }
         }
 
-        #endregion Initialize
-
-        #region Interaction
-
-        public void ToggleMenu()
-        {
-            if (isShown)
-            {
-                HideMenu(true);
-            }
-            else
-            {
-                ShowMenu();
-            }
-        }
-
-        public void ShowMenu()
-        {
-            if (!isShown)
-            {
-                isShown = true;
-                StopCoroutine("TweenMenuScale");
-                if (enabled)
-                {
-                    StartCoroutine("TweenMenuScale", isShown);
-                }
-            }
-        }
-
-        public void HideMenu(bool force)
-        {
-            if (isShown && force)
-            {
-                isShown = false;
-                StopCoroutine("TweenMenuScale");
-                if (enabled)
-                {
-                    StartCoroutine("TweenMenuScale", isShown);
-                }
-            }
-        }
-
-        public void HideMenuImmediate()
-        {
-            if (currentPanelMenuItemController != null && isShown)
-            {
-                HandlePanelMenuItemControllerVisibility(currentPanelMenuItemController);
-            }
-            transform.localScale = Vector3.zero;
-            canvasObject.transform.localScale = Vector3.zero;
-            isShown = false;
-        }
-
-        private void BindControllerEvents()
+        protected virtual void BindControllerEvents()
         {
             controllerEvents.TouchpadPressed += new ControllerInteractionEventHandler(DoTouchpadPress);
             controllerEvents.TouchpadTouchStart += new ControllerInteractionEventHandler(DoTouchpadTouched);
@@ -211,7 +205,7 @@ namespace VRTK
             controllerEvents.TriggerPressed += new ControllerInteractionEventHandler(DoTriggerPressed);
         }
 
-        private void UnbindControllerEvents()
+        protected virtual void UnbindControllerEvents()
         {
             controllerEvents.TouchpadPressed -= new ControllerInteractionEventHandler(DoTouchpadPress);
             controllerEvents.TouchpadTouchStart -= new ControllerInteractionEventHandler(DoTouchpadTouched);
@@ -220,7 +214,7 @@ namespace VRTK
             controllerEvents.TriggerPressed -= new ControllerInteractionEventHandler(DoTriggerPressed);
         }
 
-        private void HandlePanelMenuItemControllerVisibility(PanelMenuItemController targetPanelItemController)
+        protected virtual void HandlePanelMenuItemControllerVisibility(PanelMenuItemController targetPanelItemController)
         {
             if (isShown)
             {
@@ -248,7 +242,7 @@ namespace VRTK
             }
         }
 
-        private IEnumerator TweenMenuScale(bool show)
+        protected virtual IEnumerator TweenMenuScale(bool show)
         {
             float targetScale = 0;
             Vector3 direction = -1 * Vector3.one;
@@ -274,11 +268,7 @@ namespace VRTK
             }
         }
 
-        #endregion Interaction
-
-        #region VRTK_InteractableObject Event Listeners
-
-        private void DoInteractableObjectIsGrabbed(object sender, InteractableObjectEventArgs e)
+        protected virtual void DoInteractableObjectIsGrabbed(object sender, InteractableObjectEventArgs e)
         {
             controllerEvents = e.interactingObject.GetComponentInParent<VRTK_ControllerEvents>();
             if (controllerEvents != null)
@@ -288,7 +278,7 @@ namespace VRTK
             isGrabbed = true;
         }
 
-        private void DoInteractableObjectIsUngrabbed(object sender, InteractableObjectEventArgs e)
+        protected virtual void DoInteractableObjectIsUngrabbed(object sender, InteractableObjectEventArgs e)
         {
             isGrabbed = false;
             if (isShown)
@@ -303,11 +293,7 @@ namespace VRTK
             }
         }
 
-        #endregion VRTK_InteractableObject Event Listeners
-
-        #region Controller Listeners
-
-        private void DoTouchpadPress(object sender, ControllerInteractionEventArgs e)
+        protected virtual void DoTouchpadPress(object sender, ControllerInteractionEventArgs e)
         {
             if (isGrabbed)
             {
@@ -345,20 +331,20 @@ namespace VRTK
             }
         }
 
-        private void DoTouchpadTouched(object sender, ControllerInteractionEventArgs e)
+        protected virtual void DoTouchpadTouched(object sender, ControllerInteractionEventArgs e)
         {
             touchStartPosition = new Vector2(e.touchpadAxis.x, e.touchpadAxis.y);
             touchStartTime = Time.time;
             isTrackingSwipe = true;
         }
 
-        private void DoTouchpadUntouched(object sender, ControllerInteractionEventArgs e)
+        protected virtual void DoTouchpadUntouched(object sender, ControllerInteractionEventArgs e)
         {
             isTrackingSwipe = false;
             isPendingSwipeCheck = true;
         }
 
-        private void DoTouchpadAxisChanged(object sender, ControllerInteractionEventArgs e)
+        protected virtual void DoTouchpadAxisChanged(object sender, ControllerInteractionEventArgs e)
         {
             ChangeAngle(CalculateAngle(e));
 
@@ -368,7 +354,7 @@ namespace VRTK
             }
         }
 
-        private void DoTriggerPressed(object sender, ControllerInteractionEventArgs e)
+        protected virtual void DoTriggerPressed(object sender, ControllerInteractionEventArgs e)
         {
             if (isGrabbed)
             {
@@ -376,16 +362,12 @@ namespace VRTK
             }
         }
 
-        #endregion Controller Listeners
-
-        #region Touchpad Actions
-
-        private void ChangeAngle(float angle, object sender = null)
+        protected virtual void ChangeAngle(float angle, object sender = null)
         {
             currentAngle = angle;
         }
 
-        private void CalculateSwipeAction()
+        protected virtual void CalculateSwipeAction()
         {
             isPendingSwipeCheck = false;
 
@@ -425,7 +407,7 @@ namespace VRTK
             }
         }
 
-        private TouchpadPressPosition CalculateTouchpadPressPosition()
+        protected virtual TouchpadPressPosition CalculateTouchpadPressPosition()
         {
             if (CheckAnglePosition(currentAngle, AngleTolerance, 0))
             {
@@ -447,11 +429,7 @@ namespace VRTK
             return TouchpadPressPosition.None;
         }
 
-        #endregion Touchpad Actions
-
-        #region Send Subscriber Actions
-
-        private void OnSwipeLeft()
+        protected virtual void OnSwipeLeft()
         {
             if (currentPanelMenuItemController != null)
             {
@@ -459,7 +437,7 @@ namespace VRTK
             }
         }
 
-        private void OnSwipeRight()
+        protected virtual void OnSwipeRight()
         {
             if (currentPanelMenuItemController != null)
             {
@@ -467,7 +445,7 @@ namespace VRTK
             }
         }
 
-        private void OnSwipeTop()
+        protected virtual void OnSwipeTop()
         {
             if (currentPanelMenuItemController != null)
             {
@@ -475,7 +453,7 @@ namespace VRTK
             }
         }
 
-        private void OnSwipeBottom()
+        protected virtual void OnSwipeBottom()
         {
             if (currentPanelMenuItemController != null)
             {
@@ -483,7 +461,7 @@ namespace VRTK
             }
         }
 
-        private void OnTriggerPressed()
+        protected virtual void OnTriggerPressed()
         {
             if (currentPanelMenuItemController != null)
             {
@@ -491,22 +469,18 @@ namespace VRTK
             }
         }
 
-        #endregion Send Subscriber Actions
-
-        #region Helpers / Utility
-
-        private float CalculateAngle(ControllerInteractionEventArgs e)
+        protected virtual float CalculateAngle(ControllerInteractionEventArgs e)
         {
             return e.touchpadAngle;
         }
 
-        private float NormAngle(float currentDegree, float maxAngle = 360)
+        protected virtual float NormAngle(float currentDegree, float maxAngle = 360)
         {
             if (currentDegree < 0) currentDegree = currentDegree + maxAngle;
             return currentDegree % maxAngle;
         }
 
-        private bool CheckAnglePosition(float currentDegree, float tolerance, float targetDegree)
+        protected virtual bool CheckAnglePosition(float currentDegree, float tolerance, float targetDegree)
         {
             float lowerBound = NormAngle(currentDegree - tolerance);
             float upperBound = NormAngle(currentDegree + tolerance);
@@ -517,7 +491,5 @@ namespace VRTK
             }
             return targetDegree >= lowerBound && targetDegree <= upperBound;
         }
-
-        #endregion Helpers / Utility
     }
 }

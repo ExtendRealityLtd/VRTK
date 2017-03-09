@@ -29,10 +29,10 @@ namespace VRTK
         [Tooltip("The amount of seconds to wait before hiding the controller on use.")]
         public float hideDelayOnUse = 0f;
 
-        private VRTK_ControllerActions storedControllerActions;
-        private GameObject storedCurrentObject;
-        private bool touchControllerShow = true;
-        private bool grabControllerShow = true;
+        protected VRTK_ControllerActions storedControllerActions;
+        protected GameObject storedCurrentObject;
+        protected bool touchControllerShow = true;
+        protected bool grabControllerShow = true;
 
         /// <summary>
         /// The ToggleControllerOnTouch method determines whether the controller should be shown or hidden when touching an interactable object.
@@ -100,7 +100,7 @@ namespace VRTK
             }
         }
 
-        private void ToggleController(bool showController, VRTK_ControllerActions controllerActions, GameObject obj, float touchDelay)
+        protected virtual void ToggleController(bool showController, VRTK_ControllerActions controllerActions, GameObject obj, float touchDelay)
         {
             if (showController)
             {
@@ -114,13 +114,13 @@ namespace VRTK
             }
         }
 
-        private void ShowController(VRTK_ControllerActions controllerActions, GameObject obj)
+        protected virtual void ShowController(VRTK_ControllerActions controllerActions, GameObject obj)
         {
             CancelInvoke("HideController");
             controllerActions.ToggleControllerModel(true, obj);
         }
 
-        private void HideController()
+        protected virtual void HideController()
         {
             if (storedCurrentObject != null)
             {

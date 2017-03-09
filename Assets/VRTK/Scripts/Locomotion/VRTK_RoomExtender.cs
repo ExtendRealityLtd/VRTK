@@ -87,7 +87,7 @@ namespace VRTK
             }
         }
 
-        private void Move(Vector3 movement)
+        protected virtual void Move(Vector3 movement)
         {
             headCirclePosition += movement;
             if (debugTransform)
@@ -101,7 +101,7 @@ namespace VRTK
             }
         }
 
-        private void MoveHeadCircle()
+        protected virtual void MoveHeadCircle()
         {
             //Get the movement of the head relative to the headCircle.
             var circleCenterToHead = new Vector3(movementTransform.localPosition.x - headCirclePosition.x, 0, movementTransform.localPosition.z - headCirclePosition.z);
@@ -117,7 +117,7 @@ namespace VRTK
             }
         }
 
-        private void MoveHeadCircleNonLinearDrift()
+        protected virtual void MoveHeadCircleNonLinearDrift()
         {
             var movement = new Vector3(movementTransform.localPosition.x - headCirclePosition.x, 0, movementTransform.localPosition.z - headCirclePosition.z);
             if (movement.sqrMagnitude > headZoneRadius * headZoneRadius)
@@ -127,7 +127,7 @@ namespace VRTK
             }
         }
 
-        private void UpdateLastMovement()
+        protected virtual void UpdateLastMovement()
         {
             //Save the last movement
             lastMovement = movementTransform.localPosition - lastPosition;

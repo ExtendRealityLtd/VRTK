@@ -31,8 +31,6 @@ namespace VRTK
     /// </example>
     public class PanelMenuItemController : MonoBehaviour
     {
-        #region Variables
-
         /// <summary>
         /// Emitted when the panel menu item is showing.
         /// </summary>
@@ -62,51 +60,6 @@ namespace VRTK
         /// </summary>
         public event PanelMenuItemControllerEventHandler PanelMenuItemTriggerPressed;
 
-        #endregion Variables
-
-        #region Receive PanelMenuController Actions
-
-        public virtual void Show(GameObject interactableObject)
-        {
-            gameObject.SetActive(true);
-            OnPanelMenuItemShowing(SetPanelMenuItemEvent(interactableObject));
-        }
-
-        public virtual void Hide(GameObject interactableObject)
-        {
-            gameObject.SetActive(false);
-            OnPanelMenuItemHiding(SetPanelMenuItemEvent(interactableObject));
-        }
-
-        public virtual void SwipeLeft(GameObject interactableObject)
-        {
-            OnPanelMenuItemSwipeLeft(SetPanelMenuItemEvent(interactableObject));
-        }
-
-        public virtual void SwipeRight(GameObject interactableObject)
-        {
-            OnPanelMenuItemSwipeRight(SetPanelMenuItemEvent(interactableObject));
-        }
-
-        public virtual void SwipeTop(GameObject interactableObject)
-        {
-            OnPanelMenuItemSwipeTop(SetPanelMenuItemEvent(interactableObject));
-        }
-
-        public virtual void SwipeBottom(GameObject interactableObject)
-        {
-            OnPanelMenuItemSwipeBottom(SetPanelMenuItemEvent(interactableObject));
-        }
-
-        public virtual void TriggerPressed(GameObject interactableObject)
-        {
-            OnPanelMenuItemTriggerPressed(SetPanelMenuItemEvent(interactableObject));
-        }
-
-        #endregion Receive PanelMenuController Actions
-
-        #region Send Subscriber Actions
-
         public virtual void OnPanelMenuItemShowing(PanelMenuItemControllerEventArgs e)
         {
             if (PanelMenuItemShowing != null)
@@ -114,6 +67,7 @@ namespace VRTK
                 PanelMenuItemShowing(this, e);
             }
         }
+
         public virtual void OnPanelMenuItemHiding(PanelMenuItemControllerEventArgs e)
         {
             if (PanelMenuItemHiding != null)
@@ -121,6 +75,7 @@ namespace VRTK
                 PanelMenuItemHiding(this, e);
             }
         }
+
         public virtual void OnPanelMenuItemSwipeLeft(PanelMenuItemControllerEventArgs e)
         {
             if (PanelMenuItemSwipeLeft != null)
@@ -153,21 +108,89 @@ namespace VRTK
             }
         }
 
-        private void OnPanelMenuItemTriggerPressed(PanelMenuItemControllerEventArgs e)
-        {
-            if (PanelMenuItemTriggerPressed != null)
-            {
-                PanelMenuItemTriggerPressed(this, e);
-            }
-        }
-
-        public PanelMenuItemControllerEventArgs SetPanelMenuItemEvent(GameObject interactableObject)
+        /// <summary>
+        /// The SetPanelMenuItemEvent is used to build up the event payload.
+        /// </summary>
+        /// <param name="interactableObject">The object the menu is attached to.</param>
+        /// <returns>The payload for the event.</returns>
+        public virtual PanelMenuItemControllerEventArgs SetPanelMenuItemEvent(GameObject interactableObject)
         {
             PanelMenuItemControllerEventArgs e;
             e.interactableObject = interactableObject;
             return e;
         }
 
-        #endregion Send Subscriber Actions
+        /// <summary>
+        /// The Show method is used to show the menu.
+        /// </summary>
+        /// <param name="interactableObject">The object the menu is attached to.</param>
+        public virtual void Show(GameObject interactableObject)
+        {
+            gameObject.SetActive(true);
+            OnPanelMenuItemShowing(SetPanelMenuItemEvent(interactableObject));
+        }
+
+        /// <summary>
+        /// The Hide method is used to show the menu.
+        /// </summary>
+        /// <param name="interactableObject">The object the menu is attached to.</param>
+        public virtual void Hide(GameObject interactableObject)
+        {
+            gameObject.SetActive(false);
+            OnPanelMenuItemHiding(SetPanelMenuItemEvent(interactableObject));
+        }
+
+        /// <summary>
+        /// The SwipeLeft method is used when the control is swiped left.
+        /// </summary>
+        /// <param name="interactableObject">The object the menu is attached to.</param>
+        public virtual void SwipeLeft(GameObject interactableObject)
+        {
+            OnPanelMenuItemSwipeLeft(SetPanelMenuItemEvent(interactableObject));
+        }
+
+        /// <summary>
+        /// The SwipeRight method is used when the control is swiped right.
+        /// </summary>
+        /// <param name="interactableObject">The object the menu is attached to.</param>
+        public virtual void SwipeRight(GameObject interactableObject)
+        {
+            OnPanelMenuItemSwipeRight(SetPanelMenuItemEvent(interactableObject));
+        }
+
+        /// <summary>
+        /// The SwipeTop method is used when the control is swiped up.
+        /// </summary>
+        /// <param name="interactableObject">The object the menu is attached to.</param>
+        public virtual void SwipeTop(GameObject interactableObject)
+        {
+            OnPanelMenuItemSwipeTop(SetPanelMenuItemEvent(interactableObject));
+        }
+
+        /// <summary>
+        /// The SwipeBottom method is used when the control is swiped down.
+        /// </summary>
+        /// <param name="interactableObject">The object the menu is attached to.</param>
+        public virtual void SwipeBottom(GameObject interactableObject)
+        {
+            OnPanelMenuItemSwipeBottom(SetPanelMenuItemEvent(interactableObject));
+        }
+
+        /// <summary>
+        /// The TriggerPressed method is used when the control action button is pressed.
+        /// </summary>
+        /// <param name="interactableObject">The object the menu is attached to.</param>
+        public virtual void TriggerPressed(GameObject interactableObject)
+        {
+            OnPanelMenuItemTriggerPressed(SetPanelMenuItemEvent(interactableObject));
+        }
+
+        protected virtual void OnPanelMenuItemTriggerPressed(PanelMenuItemControllerEventArgs e)
+        {
+            if (PanelMenuItemTriggerPressed != null)
+            {
+                PanelMenuItemTriggerPressed(this, e);
+            }
+        }
     }
 }

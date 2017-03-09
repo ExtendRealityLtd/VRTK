@@ -121,7 +121,7 @@ namespace VRTK
             VRTK_ObjectCache.registeredDestinationMarkers.Remove(this);
         }
 
-        protected DestinationMarkerEventArgs SetDestinationMarkerEvent(float distance, Transform target, RaycastHit raycastHit, Vector3 position, uint controllerIndex, bool forceDestinationPosition = false)
+        protected virtual DestinationMarkerEventArgs SetDestinationMarkerEvent(float distance, Transform target, RaycastHit raycastHit, Vector3 position, uint controllerIndex, bool forceDestinationPosition = false)
         {
             DestinationMarkerEventArgs e;
             e.controllerIndex = controllerIndex;

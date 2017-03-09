@@ -35,7 +35,7 @@ namespace VRTK
         [Tooltip("Denotes interval betweens rumble in the controller on use.")]
         public float intervalOnUse = minInterval;
 
-        private const float minInterval = 0.05f;
+        protected const float minInterval = 0.05f;
 
         /// <summary>
         /// The HapticsOnTouch method triggers the haptic feedback on the given controller for the settings associated with touch.
@@ -81,7 +81,7 @@ namespace VRTK
             }
         }
 
-        private void TriggerHapticPulse(uint controllerIndex, float strength, float duration, float interval)
+        protected virtual void TriggerHapticPulse(uint controllerIndex, float strength, float duration, float interval)
         {
             VRTK_SharedMethods.TriggerHapticPulse(controllerIndex, strength, duration, (interval >= minInterval ? interval : minInterval));
         }

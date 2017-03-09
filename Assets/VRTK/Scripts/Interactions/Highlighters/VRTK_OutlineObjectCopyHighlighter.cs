@@ -24,9 +24,9 @@ namespace VRTK.Highlighters
         [Tooltip("If the mesh has multiple sub-meshes to highlight then this should be checked, otherwise only the first mesh will be highlighted.")]
         public bool enableSubmeshHighlight = false;
 
-        private Material stencilOutline;
-        private GameObject[] highlightModels;
-        private string[] copyComponents = new string[] { "UnityEngine.MeshFilter", "UnityEngine.MeshRenderer" };
+        protected Material stencilOutline;
+        protected GameObject[] highlightModels;
+        protected string[] copyComponents = new string[] { "UnityEngine.MeshFilter", "UnityEngine.MeshRenderer" };
 
         /// <summary>
         /// The Initialise method sets up the highlighter for use.

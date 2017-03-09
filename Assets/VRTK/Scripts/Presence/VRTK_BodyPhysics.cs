@@ -111,46 +111,46 @@ namespace VRTK
         /// </summary>
         public event BodyPhysicsEventHandler StopColliding;
 
-        private Transform playArea;
-        private Transform headset;
-        private Rigidbody bodyRigidbody;
-        private CapsuleCollider bodyCollider;
-        private VRTK_CollisionTracker collisionTracker;
-        private bool currentBodyCollisionsSetting;
-        private GameObject currentCollidingObject = null;
-        private GameObject currentValidFloorObject = null;
+        protected Transform playArea;
+        protected Transform headset;
+        protected Rigidbody bodyRigidbody;
+        protected CapsuleCollider bodyCollider;
+        protected VRTK_CollisionTracker collisionTracker;
+        protected bool currentBodyCollisionsSetting;
+        protected GameObject currentCollidingObject = null;
+        protected GameObject currentValidFloorObject = null;
 
-        private VRTK_BasicTeleport teleporter;
-        private float lastFrameFloorY;
-        private float hitFloorYDelta = 0f;
-        private bool initialFloorDrop = false;
-        private bool resetPhysicsAfterTeleport = false;
-        private bool storedCurrentPhysics = false;
-        private bool retogglePhysicsOnCanFall = false;
-        private bool storedRetogglePhysics;
-        private Vector3 lastPlayAreaPosition = Vector3.zero;
-        private Vector2 currentStandingPosition;
-        private List<Vector2> standingPositionHistory = new List<Vector2>();
-        private float playAreaHeightAdjustment = 0.009f;
+        protected VRTK_BasicTeleport teleporter;
+        protected float lastFrameFloorY;
+        protected float hitFloorYDelta = 0f;
+        protected bool initialFloorDrop = false;
+        protected bool resetPhysicsAfterTeleport = false;
+        protected bool storedCurrentPhysics = false;
+        protected bool retogglePhysicsOnCanFall = false;
+        protected bool storedRetogglePhysics;
+        protected Vector3 lastPlayAreaPosition = Vector3.zero;
+        protected Vector2 currentStandingPosition;
+        protected List<Vector2> standingPositionHistory = new List<Vector2>();
+        protected float playAreaHeightAdjustment = 0.009f;
 
-        private bool isFalling = false;
-        private bool isMoving = false;
-        private bool isLeaning = false;
-        private bool onGround = true;
-        private bool preventSnapToFloor = false;
-        private bool generateCollider = false;
-        private bool generateRigidbody = false;
-        private Vector3 playAreaVelocity = Vector3.zero;
+        protected bool isFalling = false;
+        protected bool isMoving = false;
+        protected bool isLeaning = false;
+        protected bool onGround = true;
+        protected bool preventSnapToFloor = false;
+        protected bool generateCollider = false;
+        protected bool generateRigidbody = false;
+        protected Vector3 playAreaVelocity = Vector3.zero;
 
         // Draws a sphere for current standing position and a sphere for current headset position.
         // Set to `true` to view the debug spheres.
-        private bool drawDebugGizmo = false;
+        protected bool drawDebugGizmo = false;
 
         /// <summary>
         /// The ArePhysicsEnabled method determines whether the body physics are set to interact with other scene physics objects.
         /// </summary>
         /// <returns>Returns true if the body physics will interact with other scene physics objects and false if the body physics will ignore other scene physics objects.</returns>
-        public bool ArePhysicsEnabled()
+        public virtual bool ArePhysicsEnabled()
         {
             return (bodyRigidbody ? !bodyRigidbody.isKinematic : false);
         }
@@ -161,7 +161,7 @@ namespace VRTK
         /// <param name="velocity">The velocity to apply.</param>
         /// <param name="forcePhysicsOn">If true will toggle the body collision physics back on if enable body collisions is true.</param>
         /// <param name="applyMomentum">If true then the existing momentum of the play area will be applied as a force to the resulting velocity.</param>
-        public void ApplyBodyVelocity(Vector3 velocity, bool forcePhysicsOn = false, bool applyMomentum = false)
+        public virtual void ApplyBodyVelocity(Vector3 velocity, bool forcePhysicsOn = false, bool applyMomentum = false)
         {
             if (enableBodyCollisions && forcePhysicsOn)
             {
@@ -187,7 +187,7 @@ namespace VRTK
         /// The ToggleOnGround method sets whether the body is considered on the ground or not.
         /// </summary>
         /// <param name="state">If true then body physics are set to being on the ground.</param>
-        public void ToggleOnGround(bool state)
+        public virtual void ToggleOnGround(bool state)
         {
             onGround = state;
         }
@@ -196,7 +196,7 @@ namespace VRTK
         /// The PreventSnapToFloor method sets whether the snap to floor mechanic should be used.
         /// </summary>
         /// <param name="state">If true the the snap to floor mechanic will not execute.</param>
-        public void TogglePreventSnapToFloor(bool state)
+        public virtual void TogglePreventSnapToFloor(bool state)
         {
             preventSnapToFloor = state;
         }
@@ -205,7 +205,7 @@ namespace VRTK
         /// The IsFalling method returns the falling state of the body.
         /// </summary>
         /// <returns>Returns true if the body is currently falling via gravity or via teleport.</returns>
-        public bool IsFalling()
+        public virtual bool IsFalling()
         {
             return isFalling;
         }
@@ -214,7 +214,7 @@ namespace VRTK
         /// The IsMoving method returns the moving within play area state of the body.
         /// </summary>
         /// <returns>Returns true if the user is currently walking around their play area space.</returns>
-        public bool IsMoving()
+        public virtual bool IsMoving()
         {
             return isMoving;
         }
@@ -223,7 +223,7 @@ namespace VRTK
         /// The IsLeaning method returns the leaning state of the user.
         /// </summary>
         /// <returns>Returns true if the user is considered to be leaning over an object.</returns>
-        public bool IsLeaning()
+        public virtual bool IsLeaning()
         {
             return isLeaning;
         }
@@ -232,7 +232,7 @@ namespace VRTK
         /// The OnGround method returns whether the user is currently standing on the ground or not.
         /// </summary>
         /// <returns>Returns true if the play area is on the ground and false if the play area is in the air.</returns>
-        public bool OnGround()
+        public virtual bool OnGround()
         {
             return onGround;
         }
@@ -357,27 +357,27 @@ namespace VRTK
             }
         }
 
-        private void CollisionTracker_TriggerExit(object sender, CollisionTrackerEventArgs e)
+        protected virtual void CollisionTracker_TriggerExit(object sender, CollisionTrackerEventArgs e)
         {
             OnTriggerExit(e.collider);
         }
 
-        private void CollisionTracker_TriggerEnter(object sender, CollisionTrackerEventArgs e)
+        protected virtual void CollisionTracker_TriggerEnter(object sender, CollisionTrackerEventArgs e)
         {
             OnTriggerEnter(e.collider);
         }
 
-        private void CollisionTracker_CollisionExit(object sender, CollisionTrackerEventArgs e)
+        protected virtual void CollisionTracker_CollisionExit(object sender, CollisionTrackerEventArgs e)
         {
             OnCollisionExit(e.collision);
         }
 
-        private void CollisionTracker_CollisionEnter(object sender, CollisionTrackerEventArgs e)
+        protected virtual void CollisionTracker_CollisionEnter(object sender, CollisionTrackerEventArgs e)
         {
             OnCollisionEnter(e.collision);
         }
 
-        protected void OnStartFalling(BodyPhysicsEventArgs e)
+        protected virtual void OnStartFalling(BodyPhysicsEventArgs e)
         {
             if (StartFalling != null)
             {
@@ -385,7 +385,7 @@ namespace VRTK
             }
         }
 
-        protected void OnStopFalling(BodyPhysicsEventArgs e)
+        protected virtual void OnStopFalling(BodyPhysicsEventArgs e)
         {
             if (StopFalling != null)
             {
@@ -393,7 +393,7 @@ namespace VRTK
             }
         }
 
-        protected void OnStartMoving(BodyPhysicsEventArgs e)
+        protected virtual void OnStartMoving(BodyPhysicsEventArgs e)
         {
             if (StartMoving != null)
             {
@@ -401,7 +401,7 @@ namespace VRTK
             }
         }
 
-        protected void OnStopMoving(BodyPhysicsEventArgs e)
+        protected virtual void OnStopMoving(BodyPhysicsEventArgs e)
         {
             if (StopMoving != null)
             {
@@ -409,7 +409,7 @@ namespace VRTK
             }
         }
 
-        protected void OnStartColliding(BodyPhysicsEventArgs e)
+        protected virtual void OnStartColliding(BodyPhysicsEventArgs e)
         {
             if (StartColliding != null)
             {
@@ -417,7 +417,7 @@ namespace VRTK
             }
         }
 
-        protected void OnStopColliding(BodyPhysicsEventArgs e)
+        protected virtual void OnStopColliding(BodyPhysicsEventArgs e)
         {
             if (StopColliding != null)
             {
@@ -425,19 +425,19 @@ namespace VRTK
             }
         }
 
-        protected BodyPhysicsEventArgs SetBodyPhysicsEvent(GameObject target)
+        protected virtual BodyPhysicsEventArgs SetBodyPhysicsEvent(GameObject target)
         {
             BodyPhysicsEventArgs e;
             e.target = target;
             return e;
         }
 
-        protected void CalculateVelocity()
+        protected virtual void CalculateVelocity()
         {
             playAreaVelocity = (playArea.position - lastPlayAreaPosition) / Time.fixedDeltaTime;
         }
 
-        protected void TogglePhysics(bool state)
+        protected virtual void TogglePhysics(bool state)
         {
             if (bodyRigidbody)
             {
@@ -451,7 +451,7 @@ namespace VRTK
             currentBodyCollisionsSetting = state;
         }
 
-        private void CheckBodyCollisionsSetting()
+        protected virtual void CheckBodyCollisionsSetting()
         {
             if (enableBodyCollisions != currentBodyCollisionsSetting)
             {
@@ -459,7 +459,7 @@ namespace VRTK
             }
         }
 
-        private void CheckFalling()
+        protected virtual void CheckFalling()
         {
             if (isFalling && VRTK_SharedMethods.RoundFloat(lastPlayAreaPosition.y, fallCheckPrecision) == VRTK_SharedMethods.RoundFloat(playArea.position.y, fallCheckPrecision))
             {
@@ -467,7 +467,7 @@ namespace VRTK
             }
         }
 
-        private void SetCurrentStandingPosition()
+        protected virtual void SetCurrentStandingPosition()
         {
             if (playArea && !playArea.transform.position.Equals(lastPlayAreaPosition))
             {
@@ -476,7 +476,7 @@ namespace VRTK
             }
         }
 
-        private void SetIsMoving(Vector2 currentHeadsetPosition)
+        protected virtual void SetIsMoving(Vector2 currentHeadsetPosition)
         {
             var moveDistance = Vector2.Distance(currentHeadsetPosition, currentStandingPosition);
             isMoving = (moveDistance > movementThreshold ? true : false);
@@ -486,7 +486,7 @@ namespace VRTK
             }
         }
 
-        private void CheckLean()
+        protected virtual void CheckLean()
         {
             //Cast a ray down from the current standing position
             Vector3 standingDownRayStartPosition = (headset ? new Vector3(currentStandingPosition.x, headset.position.y, currentStandingPosition.y) : Vector3.zero);
@@ -545,7 +545,7 @@ namespace VRTK
             headset.rotation = storedRotation;
         }
 
-        private void UpdateStandingPosition(Vector2 currentHeadsetPosition)
+        protected virtual void UpdateStandingPosition(Vector2 currentHeadsetPosition)
         {
             standingPositionHistory.Add(currentHeadsetPosition);
 
@@ -566,7 +566,7 @@ namespace VRTK
             }
         }
 
-        private void CheckHeadsetMovement()
+        protected virtual void CheckHeadsetMovement()
         {
             var currentIsMoving = isMoving;
             var currentHeadsetPosition = (headset ? new Vector2(headset.position.x, headset.position.z) : Vector2.zero);
@@ -585,7 +585,7 @@ namespace VRTK
             }
         }
 
-        private void MovementChanged(bool movementState)
+        protected virtual void MovementChanged(bool movementState)
         {
             if (movementState)
             {
@@ -597,7 +597,7 @@ namespace VRTK
             }
         }
 
-        private void EnableDropToFloor()
+        protected virtual void EnableDropToFloor()
         {
             initialFloorDrop = false;
             retogglePhysicsOnCanFall = false;
@@ -608,7 +608,7 @@ namespace VRTK
             }
         }
 
-        private void DisableDropToFloor()
+        protected virtual void DisableDropToFloor()
         {
             if (teleporter)
             {
@@ -616,7 +616,7 @@ namespace VRTK
             }
         }
 
-        private void Teleporter_Teleported(object sender, DestinationMarkerEventArgs e)
+        protected virtual void Teleporter_Teleported(object sender, DestinationMarkerEventArgs e)
         {
             initialFloorDrop = false;
             StopFall();
@@ -626,7 +626,7 @@ namespace VRTK
             }
         }
 
-        private void EnableBodyPhysics()
+        protected virtual void EnableBodyPhysics()
         {
             currentBodyCollisionsSetting = enableBodyCollisions;
 
@@ -635,14 +635,14 @@ namespace VRTK
             InitControllerListeners(VRTK_DeviceFinder.GetControllerRightHand(), true);
         }
 
-        private void DisableBodyPhysics()
+        protected virtual void DisableBodyPhysics()
         {
             DestroyCollider();
             InitControllerListeners(VRTK_DeviceFinder.GetControllerLeftHand(), false);
             InitControllerListeners(VRTK_DeviceFinder.GetControllerRightHand(), false);
         }
 
-        private void CreateCollider()
+        protected virtual void CreateCollider()
         {
             generateCollider = false;
             generateRigidbody = false;
@@ -680,7 +680,7 @@ namespace VRTK
             TogglePhysics(enableBodyCollisions);
         }
 
-        private void DestroyCollider()
+        protected virtual void DestroyCollider()
         {
             if (generateRigidbody)
             {
@@ -693,7 +693,7 @@ namespace VRTK
             }
         }
 
-        private void UpdateCollider()
+        protected virtual void UpdateCollider()
         {
             if (bodyCollider)
             {
@@ -708,7 +708,7 @@ namespace VRTK
             }
         }
 
-        private void InitControllerListeners(GameObject mappedController, bool state)
+        protected virtual void InitControllerListeners(GameObject mappedController, bool state)
         {
             if (mappedController)
             {
@@ -731,7 +731,7 @@ namespace VRTK
             }
         }
 
-        private IEnumerator RestoreCollisions(GameObject obj)
+        protected virtual IEnumerator RestoreCollisions(GameObject obj)
         {
             yield return new WaitForEndOfFrame();
             if (obj)
@@ -744,7 +744,7 @@ namespace VRTK
             }
         }
 
-        private void IgnoreCollisions(Collider[] colliders, bool state)
+        protected virtual void IgnoreCollisions(Collider[] colliders, bool state)
         {
             if (playArea)
             {
@@ -762,7 +762,7 @@ namespace VRTK
             }
         }
 
-        private void OnGrabObject(object sender, ObjectInteractEventArgs e)
+        protected virtual void OnGrabObject(object sender, ObjectInteractEventArgs e)
         {
             if (e.target)
             {
@@ -771,7 +771,7 @@ namespace VRTK
             }
         }
 
-        private void OnUngrabObject(object sender, ObjectInteractEventArgs e)
+        protected virtual void OnUngrabObject(object sender, ObjectInteractEventArgs e)
         {
             if (gameObject.activeInHierarchy && playArea.gameObject.activeInHierarchy)
             {
@@ -779,24 +779,24 @@ namespace VRTK
             }
         }
 
-        private bool FloorIsGrabbedObject(RaycastHit collidedObj)
+        protected virtual bool FloorIsGrabbedObject(RaycastHit collidedObj)
         {
             var obj = collidedObj.transform.GetComponent<VRTK_InteractableObject>();
             return (obj && obj.IsGrabbed());
         }
 
-        private bool FloorHeightChanged(float currentY)
+        protected virtual bool FloorHeightChanged(float currentY)
         {
             var yDelta = Mathf.Abs(currentY - lastFrameFloorY);
             return (yDelta > floorHeightTolerance);
         }
 
-        private bool ValidDrop(bool rayHit, RaycastHit rayCollidedWith, float floorY)
+        protected virtual bool ValidDrop(bool rayHit, RaycastHit rayCollidedWith, float floorY)
         {
             return (rayHit && teleporter && teleporter.ValidLocation(rayCollidedWith.transform, rayCollidedWith.point) && !FloorIsGrabbedObject(rayCollidedWith) && FloorHeightChanged(floorY));
         }
 
-        private float ControllerHeightCheck(GameObject controllerObj)
+        protected virtual float ControllerHeightCheck(GameObject controllerObj)
         {
             Ray ray = new Ray(controllerObj.transform.position, -playArea.up);
             RaycastHit rayCollidedWith;
@@ -804,7 +804,7 @@ namespace VRTK
             return controllerObj.transform.position.y - rayCollidedWith.distance;
         }
 
-        private bool ControllersStillOverPreviousFloor()
+        protected virtual bool ControllersStillOverPreviousFloor()
         {
             if (fallRestriction == FallingRestrictors.NoRestriction)
             {
@@ -836,7 +836,7 @@ namespace VRTK
             return (rightCheck || leftCheck);
         }
 
-        private void SnapToNearestFloor()
+        protected virtual void SnapToNearestFloor()
         {
             if (!preventSnapToFloor && (enableBodyCollisions || enableTeleport) && headset && headset.transform.position.y > playArea.position.y)
             {
@@ -859,12 +859,12 @@ namespace VRTK
             }
         }
 
-        private bool PreventFall(float hitFloorY)
+        protected virtual bool PreventFall(float hitFloorY)
         {
             return (hitFloorY < playArea.position.y && ControllersStillOverPreviousFloor());
         }
 
-        private void HandleFall(float hitFloorY, RaycastHit rayCollidedWith)
+        protected virtual void HandleFall(float hitFloorY, RaycastHit rayCollidedWith)
         {
             if (PreventFall(hitFloorY))
             {
@@ -893,7 +893,7 @@ namespace VRTK
             }
         }
 
-        private void StartFall(GameObject targetFloor)
+        protected virtual void StartFall(GameObject targetFloor)
         {
             isFalling = true;
             isMoving = false;
@@ -902,21 +902,21 @@ namespace VRTK
             OnStartFalling(SetBodyPhysicsEvent(targetFloor));
         }
 
-        private void StopFall()
+        protected virtual void StopFall()
         {
             isFalling = false;
             onGround = true;
             OnStopFalling(SetBodyPhysicsEvent(null));
         }
 
-        private void GravityFall(RaycastHit rayCollidedWith)
+        protected virtual void GravityFall(RaycastHit rayCollidedWith)
         {
             StartFall(rayCollidedWith.collider.gameObject);
             TogglePhysics(true);
             ApplyBodyVelocity(Vector3.zero);
         }
 
-        private void TeleportFall(float floorY, RaycastHit rayCollidedWith)
+        protected virtual void TeleportFall(float floorY, RaycastHit rayCollidedWith)
         {
             StartFall(rayCollidedWith.collider.gameObject);
             var currentFloor = rayCollidedWith.transform.gameObject;

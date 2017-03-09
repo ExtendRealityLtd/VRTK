@@ -24,7 +24,24 @@ namespace VRTK
     [ExecuteInEditMode]
     public class RadialMenu : MonoBehaviour
     {
-        #region Variables
+        [System.Serializable]
+        public class RadialMenuButton
+        {
+            public Sprite ButtonIcon;
+            public UnityEvent OnClick = new UnityEvent();
+            public UnityEvent OnHold = new UnityEvent();
+            public UnityEvent OnHoverEnter = new UnityEvent();
+            public UnityEvent OnHoverExit = new UnityEvent();
+        }
+
+        public enum ButtonEvent
+        {
+            hoverOn,
+            hoverOff,
+            click,
+            unclick
+        }
+
         [Tooltip("An array of Buttons that define the interactive buttons required to be displayed as part of the radial menu.")]
         public List<RadialMenuButton> buttons;
         [Tooltip("The base for each button in the menu, by default set to a dynamic circle arc that will fill up a portion of the menu.")]
@@ -61,112 +78,40 @@ namespace VRTK
         [Tooltip("The actual GameObjects that make up the radial menu.")]
         public List<GameObject> menuButtons;
 
-        private int currentHover = -1;
-        private int currentPress = -1;
-        #endregion
+        protected int currentHover = -1;
+        protected int currentPress = -1;
 
-        #region Unity Methods
-
-        protected virtual void Awake()
-        {
-            if (Application.isPlaying)
-            {
-                if (!isShown)
-                {
-                    transform.localScale = Vector3.zero;
-                }
-                if (generateOnAwake)
-                {
-                    RegenerateButtons();
-                }
-            }
-        }
-
-        protected virtual void Update()
-        {
-            //Keep track of pressed button and constantly invoke Hold event
-            if (currentPress != -1)
-            {
-                buttons[currentPress].OnHold.Invoke();
-            }
-        }
-
-        #endregion
-
-        #region Interaction
-
-        //Turns and Angle and Event type into a button action
-        private void InteractButton(float angle, ButtonEvent evt) //Can't pass ExecuteEvents as parameter? Unity gives error
-        {
-            //Get button ID from angle
-            float buttonAngle = 360f / buttons.Count; //Each button is an arc with this angle
-            angle = mod((angle + -offsetRotation), 360); //Offset the touch coordinate with our offset
-
-            int buttonID = (int)mod(((angle + (buttonAngle / 2f)) / buttonAngle), buttons.Count); //Convert angle into ButtonID (This is the magic)
-            var pointer = new PointerEventData(EventSystem.current); //Create a new EventSystem (UI) Event
-
-            //If we changed buttons while moving, un-hover and un-click the last button we were on
-            if (currentHover != buttonID && currentHover != -1)
-            {
-                ExecuteEvents.Execute(menuButtons[currentHover], pointer, ExecuteEvents.pointerUpHandler);
-                ExecuteEvents.Execute(menuButtons[currentHover], pointer, ExecuteEvents.pointerExitHandler);
-                buttons[currentHover].OnHoverExit.Invoke();
-                if (executeOnUnclick && currentPress != -1)
-                {
-                    ExecuteEvents.Execute(menuButtons[buttonID], pointer, ExecuteEvents.pointerDownHandler);
-                    AttempHapticPulse(baseHapticStrength * 1.666f);
-                }
-            }
-            if (evt == ButtonEvent.click) //Click button if click, and keep track of current press (executes button action)
-            {
-                ExecuteEvents.Execute(menuButtons[buttonID], pointer, ExecuteEvents.pointerDownHandler);
-                currentPress = buttonID;
-                if (!executeOnUnclick)
-                {
-                    buttons[buttonID].OnClick.Invoke();
-                    AttempHapticPulse(baseHapticStrength * 2.5f);
-                }
-            }
-            else if (evt == ButtonEvent.unclick) //Clear press id to stop invoking OnHold method (hide menu)
-            {
-                ExecuteEvents.Execute(menuButtons[buttonID], pointer, ExecuteEvents.pointerUpHandler);
-                currentPress = -1;
-
-                if (executeOnUnclick)
-                {
-                    AttempHapticPulse(baseHapticStrength * 2.5f);
-                    buttons[buttonID].OnClick.Invoke();
-                }
-            }
-            else if (evt == ButtonEvent.hoverOn && currentHover != buttonID) // Show hover UI event (darken button etc). Show menu
-            {
-                ExecuteEvents.Execute(menuButtons[buttonID], pointer, ExecuteEvents.pointerEnterHandler);
-                buttons[buttonID].OnHoverEnter.Invoke();
-                AttempHapticPulse(baseHapticStrength);
-            }
-            currentHover = buttonID; //Set current hover ID, need this to un-hover if selected button changes
-        }
-
-        /*
-        * Public methods to call Interact
-        */
-
-        public void HoverButton(float angle)
+        /// <summary>
+        /// The HoverButton method is used to set the button hover at a given angle.
+        /// </summary>
+        /// <param name="angle">The angle on the radial menu.</param>
+        public virtual void HoverButton(float angle)
         {
             InteractButton(angle, ButtonEvent.hoverOn);
         }
 
-        public void ClickButton(float angle)
+        /// <summary>
+        /// The ClickButton method is used to set the button click at a given angle.
+        /// </summary>
+        /// <param name="angle">The angle on the radial menu.</param>
+        public virtual void ClickButton(float angle)
         {
             InteractButton(angle, ButtonEvent.click);
         }
 
-        public void UnClickButton(float angle)
+        /// <summary>
+        /// The UnClickButton method is used to set the button unclick at a given angle.
+        /// </summary>
+        /// <param name="angle">The angle on the radial menu.</param>
+        public virtual void UnClickButton(float angle)
         {
             InteractButton(angle, ButtonEvent.unclick);
         }
 
-        public void ToggleMenu()
+        /// <summary>
+        /// The ToggleMenu method is used to show or hide the radial menu.
+        /// </summary>
+        public virtual void ToggleMenu()
         {
             if (isShown)
             {
@@ -178,7 +123,10 @@ namespace VRTK
             }
         }
 
-        public void StopTouching()
+        /// <summary>
+        /// The StopTouching method is used to stop touching the menu.
+        /// </summary>
+        public virtual void StopTouching()
         {
             if (currentHover != -1)
             {
@@ -189,10 +137,10 @@ namespace VRTK
             }
         }
 
-        /*
-        * Public methods to Show/Hide menu
-        */
-        public void ShowMenu()
+        /// <summary>
+        /// The ShowMenu method is used to show the menu.
+        /// </summary>
+        public virtual void ShowMenu()
         {
             if (!isShown)
             {
@@ -202,7 +150,12 @@ namespace VRTK
             }
         }
 
-        public RadialMenuButton GetButton(int id)
+        /// <summary>
+        /// The GetButton method is used to get a button from the menu.
+        /// </summary>
+        /// <param name="id">The id of the button to retrieve.</param>
+        /// <returns>The found radial menu button.</returns>
+        public virtual RadialMenuButton GetButton(int id)
         {
             if (id < buttons.Count)
             {
@@ -211,7 +164,11 @@ namespace VRTK
             return null;
         }
 
-        public void HideMenu(bool force)
+        /// <summary>
+        /// The HideMenu method is used to hide the menu.
+        /// </summary>
+        /// <param name="force">If true then the menu is always hidden.</param>
+        public virtual void HideMenu(bool force)
         {
             if (isShown && (hideOnRelease || force))
             {
@@ -221,40 +178,9 @@ namespace VRTK
             }
         }
 
-        //Simple tweening for menu, scales linearly from 0 to 1 and 1 to 0
-        private IEnumerator TweenMenuScale(bool show)
-        {
-            float targetScale = 0;
-            Vector3 Dir = -1 * Vector3.one;
-            if (show)
-            {
-                targetScale = 1;
-                Dir = Vector3.one;
-            }
-            int i = 0; //Sanity check for infinite loops
-            while (i < 250 && ((show && transform.localScale.x < targetScale) || (!show && transform.localScale.x > targetScale)))
-            {
-                transform.localScale += Dir * Time.deltaTime * 4f; //Tweening function - currently 0.25 second linear
-                yield return true;
-                i++;
-            }
-            transform.localScale = Dir * targetScale;
-            StopCoroutine("TweenMenuScale");
-        }
-
-        private void AttempHapticPulse(float strength)
-        {
-            if (strength > 0 && FireHapticPulse != null)
-            {
-                FireHapticPulse(strength);
-            }
-        }
-
-        #endregion
-
-        #region Generation
-
-        //Creates all the button Arcs and populates them with desired icons
+        /// <summary>
+        /// The RegenerateButtons method creates all the button arcs and populates them with desired icons.
+        /// </summary>
         public void RegenerateButtons()
         {
             RemoveAllButtons();
@@ -326,13 +252,122 @@ namespace VRTK
             }
         }
 
+        /// <summary>
+        /// The AddButton method is used to add a new button to the menu.
+        /// </summary>
+        /// <param name="newButton">The button to add.</param>
         public void AddButton(RadialMenuButton newButton)
         {
             buttons.Add(newButton);
             RegenerateButtons();
         }
 
-        private void RemoveAllButtons()
+        protected virtual void Awake()
+        {
+            if (Application.isPlaying)
+            {
+                if (!isShown)
+                {
+                    transform.localScale = Vector3.zero;
+                }
+                if (generateOnAwake)
+                {
+                    RegenerateButtons();
+                }
+            }
+        }
+
+        protected virtual void Update()
+        {
+            //Keep track of pressed button and constantly invoke Hold event
+            if (currentPress != -1)
+            {
+                buttons[currentPress].OnHold.Invoke();
+            }
+        }
+
+        //Turns and Angle and Event type into a button action
+        protected virtual void InteractButton(float angle, ButtonEvent evt) //Can't pass ExecuteEvents as parameter? Unity gives error
+        {
+            //Get button ID from angle
+            float buttonAngle = 360f / buttons.Count; //Each button is an arc with this angle
+            angle = VRTK_SharedMethods.Mod((angle + -offsetRotation), 360); //Offset the touch coordinate with our offset
+
+            int buttonID = (int)VRTK_SharedMethods.Mod(((angle + (buttonAngle / 2f)) / buttonAngle), buttons.Count); //Convert angle into ButtonID (This is the magic)
+            var pointer = new PointerEventData(EventSystem.current); //Create a new EventSystem (UI) Event
+
+            //If we changed buttons while moving, un-hover and un-click the last button we were on
+            if (currentHover != buttonID && currentHover != -1)
+            {
+                ExecuteEvents.Execute(menuButtons[currentHover], pointer, ExecuteEvents.pointerUpHandler);
+                ExecuteEvents.Execute(menuButtons[currentHover], pointer, ExecuteEvents.pointerExitHandler);
+                buttons[currentHover].OnHoverExit.Invoke();
+                if (executeOnUnclick && currentPress != -1)
+                {
+                    ExecuteEvents.Execute(menuButtons[buttonID], pointer, ExecuteEvents.pointerDownHandler);
+                    AttempHapticPulse(baseHapticStrength * 1.666f);
+                }
+            }
+            if (evt == ButtonEvent.click) //Click button if click, and keep track of current press (executes button action)
+            {
+                ExecuteEvents.Execute(menuButtons[buttonID], pointer, ExecuteEvents.pointerDownHandler);
+                currentPress = buttonID;
+                if (!executeOnUnclick)
+                {
+                    buttons[buttonID].OnClick.Invoke();
+                    AttempHapticPulse(baseHapticStrength * 2.5f);
+                }
+            }
+            else if (evt == ButtonEvent.unclick) //Clear press id to stop invoking OnHold method (hide menu)
+            {
+                ExecuteEvents.Execute(menuButtons[buttonID], pointer, ExecuteEvents.pointerUpHandler);
+                currentPress = -1;
+
+                if (executeOnUnclick)
+                {
+                    AttempHapticPulse(baseHapticStrength * 2.5f);
+                    buttons[buttonID].OnClick.Invoke();
+                }
+            }
+            else if (evt == ButtonEvent.hoverOn && currentHover != buttonID) // Show hover UI event (darken button etc). Show menu
+            {
+                ExecuteEvents.Execute(menuButtons[buttonID], pointer, ExecuteEvents.pointerEnterHandler);
+                buttons[buttonID].OnHoverEnter.Invoke();
+                AttempHapticPulse(baseHapticStrength);
+            }
+            currentHover = buttonID; //Set current hover ID, need this to un-hover if selected button changes
+        }
+
+        //Simple tweening for menu, scales linearly from 0 to 1 and 1 to 0
+        protected virtual IEnumerator TweenMenuScale(bool show)
+        {
+            float targetScale = 0;
+            Vector3 Dir = -1 * Vector3.one;
+            if (show)
+            {
+                targetScale = 1;
+                Dir = Vector3.one;
+            }
+            int i = 0; //Sanity check for infinite loops
+            while (i < 250 && ((show && transform.localScale.x < targetScale) || (!show && transform.localScale.x > targetScale)))
+            {
+                transform.localScale += Dir * Time.deltaTime * 4f; //Tweening function - currently 0.25 second linear
+                yield return true;
+                i++;
+            }
+            transform.localScale = Dir * targetScale;
+            StopCoroutine("TweenMenuScale");
+        }
+
+        protected virtual void AttempHapticPulse(float strength)
+        {
+            if (strength > 0 && FireHapticPulse != null)
+            {
+                FireHapticPulse(strength);
+            }
+        }
+
+        protected virtual void RemoveAllButtons()
         {
             if (menuButtons == null)
             {
@@ -344,34 +379,5 @@ namespace VRTK
             }
             menuButtons = new List<GameObject>();
         }
-
-        #endregion
-
-        #region Utility
-
-        private float mod(float a, float b)
-        {
-            return a - b * Mathf.Floor(a / b);
-        }
-
-        #endregion
-    }
-
-    [System.Serializable]
-    public class RadialMenuButton
-    {
-        public Sprite ButtonIcon;
-        public UnityEvent OnClick = new UnityEvent();
-        public UnityEvent OnHold = new UnityEvent();
-        public UnityEvent OnHoverEnter = new UnityEvent();
-        public UnityEvent OnHoverExit = new UnityEvent();
-    }
-
-    public enum ButtonEvent
-    {
-        hoverOn,
-        hoverOff,
-        click,
-        unclick
     }
 }

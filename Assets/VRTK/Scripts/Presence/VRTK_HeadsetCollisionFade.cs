@@ -22,8 +22,8 @@ namespace VRTK
         [Tooltip("The colour to fade the headset to on collision.")]
         public Color fadeColor = Color.black;
 
-        private VRTK_HeadsetCollision headsetCollision;
-        private VRTK_HeadsetFade headsetFade;
+        protected VRTK_HeadsetCollision headsetCollision;
+        protected VRTK_HeadsetFade headsetFade;
 
         protected virtual void OnEnable()
         {
@@ -40,12 +40,12 @@ namespace VRTK
             headsetCollision.HeadsetCollisionEnded -= new HeadsetCollisionEventHandler(OnHeadsetCollisionEnded);
         }
 
-        private void OnHeadsetCollisionDetect(object sender, HeadsetCollisionEventArgs e)
+        protected virtual void OnHeadsetCollisionDetect(object sender, HeadsetCollisionEventArgs e)
         {
             headsetFade.Fade(fadeColor, blinkTransitionSpeed);
         }
 
-        private void OnHeadsetCollisionEnded(object sender, HeadsetCollisionEventArgs e)
+        protected virtual void OnHeadsetCollisionEnded(object sender, HeadsetCollisionEventArgs e)
         {
             headsetFade.Unfade(blinkTransitionSpeed);
         }

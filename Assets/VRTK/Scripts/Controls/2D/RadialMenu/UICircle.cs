@@ -13,13 +13,13 @@ namespace VRTK
         public int segments = 360;
 
         [SerializeField]
-        private Texture m_Texture;
+        protected Texture setTexture;
 
         public override Texture mainTexture
         {
             get
             {
-                return (m_Texture == null ? s_WhiteTexture : m_Texture);
+                return (setTexture == null ? s_WhiteTexture : setTexture);
             }
         }
 
@@ -28,32 +28,18 @@ namespace VRTK
         {
             get
             {
-                return m_Texture;
+                return setTexture;
             }
             set
             {
-                if (m_Texture == value)
+                if (setTexture == value)
                 {
                     return;
                 }
-                m_Texture = value;
+                setTexture = value;
                 SetVerticesDirty();
                 SetMaterialDirty();
             }
-        }
-
-        protected UIVertex[] SetVbo(Vector2[] vertices, Vector2[] uvs)
-        {
-            UIVertex[] vbo = new UIVertex[4];
-            for (int i = 0; i < vertices.Length; i++)
-            {
-                var vert = UIVertex.simpleVert;
-                vert.color = color;
-                vert.position = vertices[i];
-                vert.uv0 = uvs[i];
-                vbo[i] = vert;
-            }
-            return vbo;
         }
 
         [System.Obsolete("Use OnPopulateMesh(VertexHelper vh) instead.")]
@@ -110,6 +96,20 @@ namespace VRTK
         protected virtual void Update()
         {
             thickness = (int)Mathf.Clamp(thickness, 0, rectTransform.rect.width / 2);
+        }
+
+        protected virtual UIVertex[] SetVbo(Vector2[] vertices, Vector2[] uvs)
+        {
+            UIVertex[] vbo = new UIVertex[4];
+            for (int i = 0; i < vertices.Length; i++)
+            {
+                var vert = UIVertex.simpleVert;
+                vert.color = color;
+                vert.position = vertices[i];
+                vert.uv0 = uvs[i];
+                vbo[i] = vert;
+            }
+            return vbo;
         }
     }
 }

@@ -9,8 +9,8 @@ namespace VRTK
         public VRTK_ControllerEvents events;
 
         protected RadialMenu menu;
-        private float currentAngle; //Keep track of angle for when we click
-        private bool touchpadTouched;
+        protected float currentAngle; //Keep track of angle for when we click
+        protected bool touchpadTouched;
 
         protected virtual void Awake()
         {
@@ -57,29 +57,29 @@ namespace VRTK
             menu.FireHapticPulse -= new HapticPulseEventHandler(AttemptHapticPulse);
         }
 
-        protected void DoClickButton(object sender = null) // The optional argument reduces the need for middleman functions in subclasses whose events likely pass object sender
+        protected virtual void DoClickButton(object sender = null) // The optional argument reduces the need for middleman functions in subclasses whose events likely pass object sender
         {
             menu.ClickButton(currentAngle);
         }
 
-        protected void DoUnClickButton(object sender = null)
+        protected virtual void DoUnClickButton(object sender = null)
         {
             menu.UnClickButton(currentAngle);
         }
 
-        protected void DoShowMenu(float initialAngle, object sender = null)
+        protected virtual void DoShowMenu(float initialAngle, object sender = null)
         {
             menu.ShowMenu();
             DoChangeAngle(initialAngle); // Needed to register initial touch position before the touchpad axis actually changes
         }
 
-        protected void DoHideMenu(bool force, object sender = null)
+        protected virtual void DoHideMenu(bool force, object sender = null)
         {
             menu.StopTouching();
             menu.HideMenu(force);
         }
 
-        protected void DoChangeAngle(float angle, object sender = null)
+        protected virtual void DoChangeAngle(float angle, object sender = null)
         {
             currentAngle = angle;
 
@@ -96,30 +96,30 @@ namespace VRTK
 
         #region Private Controller Listeners
 
-        private void DoTouchpadClicked(object sender, ControllerInteractionEventArgs e)
+        protected virtual void DoTouchpadClicked(object sender, ControllerInteractionEventArgs e)
         {
             DoClickButton();
         }
 
-        private void DoTouchpadUnclicked(object sender, ControllerInteractionEventArgs e)
+        protected virtual void DoTouchpadUnclicked(object sender, ControllerInteractionEventArgs e)
         {
             DoUnClickButton();
         }
 
-        private void DoTouchpadTouched(object sender, ControllerInteractionEventArgs e)
+        protected virtual void DoTouchpadTouched(object sender, ControllerInteractionEventArgs e)
         {
             touchpadTouched = true;
             DoShowMenu(CalculateAngle(e));
         }
 
-        private void DoTouchpadUntouched(object sender, ControllerInteractionEventArgs e)
+        protected virtual void DoTouchpadUntouched(object sender, ControllerInteractionEventArgs e)
         {
             touchpadTouched = false;
             DoHideMenu(false);
         }
 
         //Touchpad finger moved position
-        private void DoTouchpadAxisChanged(object sender, ControllerInteractionEventArgs e)
+        protected virtual void DoTouchpadAxisChanged(object sender, ControllerInteractionEventArgs e)
         {
             if (touchpadTouched)
             {
@@ -129,7 +129,7 @@ namespace VRTK
 
         #endregion Private Controller Listeners
 
-        private float CalculateAngle(ControllerInteractionEventArgs e)
+        protected virtual float CalculateAngle(ControllerInteractionEventArgs e)
         {
             return 360 - e.touchpadAngle;
         }

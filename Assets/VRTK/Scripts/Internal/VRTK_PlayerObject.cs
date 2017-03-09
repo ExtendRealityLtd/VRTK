@@ -8,7 +8,7 @@
 namespace VRTK
 {
     using UnityEngine;
-    public class VRTK_PlayerObject : MonoBehaviour
+    public sealed class VRTK_PlayerObject : MonoBehaviour
     {
         public enum ObjectTypes
         {

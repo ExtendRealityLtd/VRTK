@@ -24,8 +24,8 @@ namespace VRTK
         [Tooltip("Specifies how to position and rotate the rigidbody.")]
         public MovementOption movementOption = MovementOption.Set;
 
-        private Rigidbody rigidbodyToFollow;
-        private Rigidbody rigidbodyToChange;
+        protected Rigidbody rigidbodyToFollow;
+        protected Rigidbody rigidbodyToChange;
 
         protected override void OnEnable()
         {

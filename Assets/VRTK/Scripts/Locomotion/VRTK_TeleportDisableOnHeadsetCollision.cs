@@ -9,8 +9,8 @@ namespace VRTK
     /// </summary>
     public class VRTK_TeleportDisableOnHeadsetCollision : MonoBehaviour
     {
-        private VRTK_BasicTeleport basicTeleport;
-        private VRTK_HeadsetCollision headsetCollision;
+        protected VRTK_BasicTeleport basicTeleport;
+        protected VRTK_HeadsetCollision headsetCollision;
 
         protected virtual void OnEnable()
         {
@@ -32,7 +32,7 @@ namespace VRTK
             }
         }
 
-        private IEnumerator EnableAtEndOfFrame()
+        protected virtual IEnumerator EnableAtEndOfFrame()
         {
             if (basicTeleport == null)
             {
@@ -48,12 +48,12 @@ namespace VRTK
             }
         }
 
-        private void DisableTeleport(object sender, HeadsetCollisionEventArgs e)
+        protected virtual void DisableTeleport(object sender, HeadsetCollisionEventArgs e)
         {
             basicTeleport.ToggleTeleportEnabled(false);
         }
 
-        private void EnableTeleport(object sender, HeadsetCollisionEventArgs e)
+        protected virtual void EnableTeleport(object sender, HeadsetCollisionEventArgs e)
         {
             basicTeleport.ToggleTeleportEnabled(true);
         }

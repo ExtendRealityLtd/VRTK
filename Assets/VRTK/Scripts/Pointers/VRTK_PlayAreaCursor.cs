@@ -20,15 +20,15 @@ namespace VRTK
         [Tooltip("A specified VRTK_PolicyList to use to determine whether the play area cursor collisions will be acted upon.")]
         public VRTK_PolicyList targetListPolicy;
 
-        private bool headsetPositionCompensation;
-        private bool playAreaCursorCollided = false;
-        private bool headsetOutOfBounds = false;
-        private Transform playArea;
-        private GameObject playAreaCursor;
-        private GameObject[] playAreaCursorBoundaries;
-        private BoxCollider playAreaCursorCollider;
-        private Transform headset;
-        private Renderer[] boundaryRenderers = new Renderer[0];
+        protected bool headsetPositionCompensation;
+        protected bool playAreaCursorCollided = false;
+        protected bool headsetOutOfBounds = false;
+        protected Transform playArea;
+        protected GameObject playAreaCursor;
+        protected GameObject[] playAreaCursorBoundaries;
+        protected BoxCollider playAreaCursorCollider;
+        protected Transform headset;
+        protected Renderer[] boundaryRenderers = new Renderer[0];
 
         /// <summary>
         /// The HasCollided method returns the state of whether the play area cursor has currently collided with another valid object.
@@ -188,7 +188,7 @@ namespace VRTK
             }
         }
 
-        private void DrawPlayAreaCursorBoundary(int index, float left, float right, float top, float bottom, float thickness, Vector3 localPosition)
+        protected virtual void DrawPlayAreaCursorBoundary(int index, float left, float right, float top, float bottom, float thickness, Vector3 localPosition)
         {
             var playAreaCursorBoundary = GameObject.CreatePrimitive(PrimitiveType.Cube);
             playAreaCursorBoundary.name = string.Format("[{0}]PlayAreaCursorBoundary_" + index, gameObject.name);
@@ -208,7 +208,7 @@ namespace VRTK
             playAreaCursorBoundaries[index] = playAreaCursorBoundary;
         }
 
-        private void InitPlayAreaCursor()
+        protected virtual void InitPlayAreaCursor()
         {
             var btmRightInner = 0;
             var btmLeftInner = 1;
@@ -272,7 +272,7 @@ namespace VRTK
             DrawPlayAreaCursorBoundary(3, cursorDrawVertices[btmLeftOuter].x, cursorDrawVertices[btmLeftInner].x, cursorDrawVertices[topLeftOuter].z, cursorDrawVertices[btmLeftOuter].z, height, new Vector3(-playAreaBoundaryX, heightOffset, 0f));
         }
 
-        private void CreateCursorCollider(GameObject cursor)
+        protected virtual void CreateCursorCollider(GameObject cursor)
         {
             playAreaCursorCollider = cursor.AddComponent<BoxCollider>();
             playAreaCursorCollider.isTrigger = true;
@@ -280,7 +280,7 @@ namespace VRTK
             playAreaCursorCollider.size = new Vector3(1f, 1f, 1f);
         }
 
-        private void UpdateCollider()
+        protected virtual void UpdateCollider()
         {
             var playAreaHeightAdjustment = 1f;
             var newBCYSize = (headset.transform.position.y - playArea.transform.position.y) * 100f;

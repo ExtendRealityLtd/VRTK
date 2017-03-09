@@ -48,7 +48,7 @@ namespace VRTK.GrabAttachMechanics
             base.DestroyJoint(true, true);
         }
 
-        private void CopyCustomJoint()
+        protected virtual void CopyCustomJoint()
         {
             if (customJoint)
             {
