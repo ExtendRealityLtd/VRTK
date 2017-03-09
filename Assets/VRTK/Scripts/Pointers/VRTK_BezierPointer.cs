@@ -4,6 +4,8 @@ namespace VRTK
     using UnityEngine;
     using System;
 
+    ///************** DEPRECATED CLASS **************
+
     /// <summary>
     /// The Bezier Pointer emits a curved line (made out of game objects) from the end of the attached object to a point on a ground surface (at any height).
     /// </summary>
@@ -61,6 +63,16 @@ namespace VRTK
         private Vector3 fixedForwardBeamForward;
         private Vector3 contactNormal;
         private const float BEAM_ADJUST_OFFSET = 0.00001f;
+
+        public void Reset()
+        {
+            Debug.LogWarning("VRTK_BezierPointer is deprecated.");
+        }
+
+        protected virtual void Awake()
+        {
+            Debug.LogWarning("VRTK_BezierPointer is deprecated.");
+        }
 
         protected override void OnEnable()
         {

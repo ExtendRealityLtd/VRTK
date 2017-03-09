@@ -30,6 +30,15 @@ namespace VRTK
         private Transform headset;
         private Renderer[] boundaryRenderers = new Renderer[0];
 
+        public void Reset() {
+            Debug.LogWarning("VRTK_PlayAreaCursor is deprecated.");
+        }
+
+        public void Awake() 
+        {
+            Debug.LogWarning("VRTK_PlayAreaCursor is deprecated.");
+        }
+
         /// <summary>
         /// The HasCollided method returns the state of whether the play area cursor has currently collided with another valid object.
         /// </summary>

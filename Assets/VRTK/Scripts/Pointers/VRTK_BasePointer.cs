@@ -6,6 +6,7 @@ namespace VRTK
 #if UNITY_5_5_OR_NEWER
     using UnityEngine.AI;
 #endif
+    ///************** DEPRECATED CLASS **************
 
     /// <summary>
     /// This abstract class provides any game pointer the ability to know the state of the implemented pointer.
@@ -94,6 +95,10 @@ namespace VRTK
         private GameObject pointerOriginTransformFollowGameObject;
         private VRTK_TransformFollow pointerOriginTransformFollow;
 
+        public void Reset() {
+            Debug.LogWarning("VRTK_BasePointer is deprecated. Please use VRTK_Pointer instead");
+        }
+
         /// <summary>
         /// The IsActive method is used to determine if the pointer currently active.
         /// </summary>
@@ -131,6 +136,7 @@ namespace VRTK
 
         protected virtual void Awake()
         {
+            Debug.LogWarning("VRTK_BasePointer is deprecated. Please use VRTK_Pointer instead");
             VRTK_PlayerObject.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.Pointer);
         }
 
