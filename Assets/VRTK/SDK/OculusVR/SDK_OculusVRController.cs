@@ -47,7 +47,6 @@ namespace VRTK
         /// <param name="options">A dictionary of generic options that can be used to within the update.</param>
         public override void ProcessUpdate(uint index, Dictionary<string, object> options)
         {
-
             if (index < uint.MaxValue)
             {
                 var device = GetTrackedObject(GetControllerByIndex(index));
@@ -126,8 +125,8 @@ namespace VRTK
         /// <returns>The index of the given controller.</returns>
         public override uint GetControllerIndex(GameObject controller)
         {
-            var trackedObject = GetTrackedObject(controller);
-            return (trackedObject ? trackedObject.index : uint.MaxValue);
+            VRTK_TrackedController trackedObject = GetTrackedObject(controller);
+            return (trackedObject != null ? trackedObject.index : uint.MaxValue);
         }
 
         /// <summary>
