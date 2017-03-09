@@ -368,32 +368,28 @@ namespace VRTK
                 newSymbolsByTargetGroup[targetGroup] = new HashSet<string>(nonSDKSymbols);
             }
 
-            //get scripting define symbols for active SDKs and check whether the predicates allow us to add the symbols
-            var activeSymbols = new[] { systemSDKInfo.description.symbol, boundariesSDKInfo.description.symbol, headsetSDKInfo.description.symbol, controllerSDKInfo.description.symbol };
-            foreach (string activeSymbol in activeSymbols)
+            //get scripting define symbols and check whether the predicates allow us to add the symbols
+            foreach (ScriptingDefineSymbolPredicateInfo predicateInfo in AvailableScriptingDefineSymbolPredicateInfos)
             {
-                foreach (ScriptingDefineSymbolPredicateInfo predicateInfo in AvailableScriptingDefineSymbolPredicateInfos)
+                MethodInfo methodInfo = predicateInfo.methodInfo;
+                if (!(bool)methodInfo.Invoke(null, null))
                 {
-                    MethodInfo methodInfo = predicateInfo.methodInfo;
-                    if (predicateInfo.attribute.symbol != activeSymbol || !(bool)methodInfo.Invoke(null, null))
+                    continue;
+                }
+
+                //add symbols from all predicate attributes on the method since multiple ones are allowed
+                var allAttributes = (SDK_ScriptingDefineSymbolPredicateAttribute[])methodInfo.GetCustomAttributes(typeof(SDK_ScriptingDefineSymbolPredicateAttribute), false);
+                foreach (SDK_ScriptingDefineSymbolPredicateAttribute attribute in allAttributes)
+                {
+                    BuildTargetGroup buildTargetGroup = attribute.buildTargetGroup;
+                    HashSet<string> newSymbols;
+                    if (!newSymbolsByTargetGroup.TryGetValue(buildTargetGroup, out newSymbols))
                     {
-                        continue;
+                        newSymbols = new HashSet<string>();
+                        newSymbolsByTargetGroup[buildTargetGroup] = newSymbols;
                     }
 
-                    //add symbols from all predicate attributes on the method since multiple ones are allowed
-                    var allAttributes = (SDK_ScriptingDefineSymbolPredicateAttribute[])methodInfo.GetCustomAttributes(typeof(SDK_ScriptingDefineSymbolPredicateAttribute), false);
-                    foreach (SDK_ScriptingDefineSymbolPredicateAttribute attribute in allAttributes)
-                    {
-                        BuildTargetGroup buildTargetGroup = attribute.buildTargetGroup;
-                        HashSet<string> newSymbols;
-                        if (!newSymbolsByTargetGroup.TryGetValue(buildTargetGroup, out newSymbols))
-                        {
-                            newSymbols = new HashSet<string>();
-                            newSymbolsByTargetGroup[buildTargetGroup] = newSymbols;
-                        }
-
-                        newSymbols.Add(attribute.symbol);
-                    }
+                    newSymbols.Add(attribute.symbol);
                 }
             }
 

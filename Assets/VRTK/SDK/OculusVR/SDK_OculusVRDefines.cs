@@ -26,7 +26,7 @@ namespace VRTK
         [SDK_ScriptingDefineSymbolPredicate(AvatarScriptingDefineSymbol, BuildTargetGroupName)]
         private static bool IsOculusVRAvatarAvailable()
         {
-            return IsOculusVRAvailable() && typeof(SDK_OculusVRDefines).Assembly.GetType("OVRAvatar") != null;
+            return IsOculusVRAvailable() && typeof(SDK_OculusVRDefines).Assembly.GetType("OvrAvatar") != null;
         }
     }
 }
