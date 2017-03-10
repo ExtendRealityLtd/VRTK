@@ -37,8 +37,9 @@ namespace VRTK
 
         private float[] hairTriggerLimit = new float[2];
         private float[] hairGripLimit = new float[2];
-
-        private OVRHapticsClip hapticsProceduralClip = new OVRHapticsClip();
+        
+        private OVRHapticsClip hapticsProceduralClipLeft = new OVRHapticsClip();
+        private OVRHapticsClip hapticsProceduralClipRight = new OVRHapticsClip();
 
         /// <summary>
         /// The ProcessUpdate method enables an SDK to run logic for every Unity Update
@@ -327,14 +328,18 @@ namespace VRTK
             if (index < uint.MaxValue)
             {
                 var controller = GetControllerByIndex(index);
-                hapticsProceduralClip.WriteSample((byte)(strength * byte.MaxValue));
+
                 if (IsControllerLeftHand(controller))
                 {
-                    OVRHaptics.LeftChannel.Preempt(hapticsProceduralClip);
+                    hapticsProceduralClipLeft.Reset();
+                    hapticsProceduralClipLeft.WriteSample((byte)(strength * byte.MaxValue));
+                    OVRHaptics.LeftChannel.Preempt(hapticsProceduralClipLeft);
                 }
                 else if (IsControllerRightHand(controller))
                 {
-                    OVRHaptics.RightChannel.Preempt(hapticsProceduralClip);
+                    hapticsProceduralClipRight.Reset();
+                    hapticsProceduralClipRight.WriteSample((byte)(strength * byte.MaxValue));
+                    OVRHaptics.RightChannel.Preempt(hapticsProceduralClipRight);
                 }
             }
         }
