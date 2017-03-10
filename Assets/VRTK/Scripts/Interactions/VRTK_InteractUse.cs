@@ -120,7 +120,6 @@ namespace VRTK
 
         protected virtual void Update()
         {
-            ManageInteractTouchListener(true);
             ManageUseListener(true);
         }
 

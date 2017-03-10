@@ -141,7 +141,6 @@ namespace VRTK
 
         protected virtual void Update()
         {
-            ManageInteractTouchListener(true);
             ManageGrabListener(true);
             CheckControllerAttachPointSet();
             CreateNonTouchingRigidbody();
