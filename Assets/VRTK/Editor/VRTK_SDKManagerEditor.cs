@@ -105,12 +105,13 @@
             if (EditorGUI.EndChangeCheck())
             {
                 string quicklySelectedSDKName = availableSDKGUIContents[quicklySelectedSDKIndex].text.Replace(SDKNotInstalledDescription, "");
+                Func<VRTK_SDKInfo, bool> predicate = info => info.description.prettyName == quicklySelectedSDKName;
 
                 Undo.RecordObject(sdkManager, "SDK Change (Quick Select)");
-                sdkManager.systemSDKInfo = VRTK_SDKManager.AvailableSystemSDKInfos.First(info => info.description.prettyName == quicklySelectedSDKName);
-                sdkManager.boundariesSDKInfo = VRTK_SDKManager.AvailableBoundariesSDKInfos.First(info => info.description.prettyName == quicklySelectedSDKName);
-                sdkManager.headsetSDKInfo = VRTK_SDKManager.AvailableHeadsetSDKInfos.First(info => info.description.prettyName == quicklySelectedSDKName);
-                sdkManager.controllerSDKInfo = VRTK_SDKManager.AvailableControllerSDKInfos.First(info => info.description.prettyName == quicklySelectedSDKName);
+                sdkManager.systemSDKInfo = VRTK_SDKManager.AvailableSystemSDKInfos.First(predicate);
+                sdkManager.boundariesSDKInfo = VRTK_SDKManager.AvailableBoundariesSDKInfos.First(predicate);
+                sdkManager.headsetSDKInfo = VRTK_SDKManager.AvailableHeadsetSDKInfos.First(predicate);
+                sdkManager.controllerSDKInfo = VRTK_SDKManager.AvailableControllerSDKInfos.First(predicate);
             }
 
             GUIContent[] availableSystemSDKGUIContents = availableSystemSDKNames.Select(guiContentCreator).ToArray();
@@ -158,8 +159,22 @@
 
         private void UndoRedoPerformed()
         {
-            //make sure to manage scripting define symbols in case an SDK change was undone
-            ((VRTK_SDKManager)target).ManageScriptingDefineSymbols(false, false);
+            //make sure to trigger populating the object references in case an SDK change was undone
+            var sdkManager = (VRTK_SDKManager)target;
+            VRTK_SDKInfo systemSDKInfo = sdkManager.systemSDKInfo;
+            VRTK_SDKInfo boundariesSDKInfo = sdkManager.boundariesSDKInfo;
+            VRTK_SDKInfo headsetSDKInfo = sdkManager.headsetSDKInfo;
+            VRTK_SDKInfo controllerSDKInfo = sdkManager.controllerSDKInfo;
+
+            sdkManager.systemSDKInfo = null;
+            sdkManager.boundariesSDKInfo = null;
+            sdkManager.headsetSDKInfo = null;
+            sdkManager.controllerSDKInfo = null;
+
+            sdkManager.systemSDKInfo = systemSDKInfo;
+            sdkManager.boundariesSDKInfo = boundariesSDKInfo;
+            sdkManager.headsetSDKInfo = headsetSDKInfo;
+            sdkManager.controllerSDKInfo = controllerSDKInfo;
         }
 
         #endregion

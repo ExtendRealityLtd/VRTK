@@ -65,6 +65,15 @@ namespace VRTK
         {
         }
 
+        /// <summary>
+        /// Creates a new SDK info by copying an existing one.
+        /// </summary>
+        /// <param name="infoToCopy">The SDK info to copy.</param>
+        public VRTK_SDKInfo(VRTK_SDKInfo infoToCopy)
+        {
+            SetUp(Type.GetType(infoToCopy.baseTypeName), Type.GetType(infoToCopy.fallbackTypeName), infoToCopy.typeName);
+        }
+
         private void SetUp(Type baseType, Type fallbackType, string actualTypeName)
         {
             if (!baseType.IsSubclassOf(typeof(SDK_Base)))
