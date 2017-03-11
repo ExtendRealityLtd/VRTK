@@ -4,6 +4,7 @@ namespace VRTK
     using UnityEngine;
     using UnityEngine.UI;
     using UnityEngine.EventSystems;
+    using System.Collections;
 
     /// <summary>
     /// The UI Canvas is used to denote which World Canvases are interactable by a UI Pointer.
@@ -23,6 +24,7 @@ namespace VRTK
 
         protected BoxCollider canvasBoxCollider;
         protected Rigidbody canvasRigidBody;
+        protected Coroutine draggablePanelCreation;
         protected const string CANVAS_DRAGGABLE_PANEL = "VRTK_UICANVAS_DRAGGABLE_PANEL";
         protected const string ACTIVATOR_FRONT_TRIGGER_GAMEOBJECT = "VRTK_UICANVAS_ACTIVATOR_FRONT_TRIGGER";
 
@@ -108,16 +110,17 @@ namespace VRTK
                 canvasRigidBody.isKinematic = true;
             }
 
-            CreateDraggablePanel(canvas, canvasSize);
+            draggablePanelCreation = StartCoroutine(CreateDraggablePanel(canvas, canvasSize));
             CreateActivator(canvas, canvasSize);
         }
 
-        protected virtual void CreateDraggablePanel(Canvas canvas, Vector2 canvasSize)
+        protected virtual IEnumerator CreateDraggablePanel(Canvas canvas, Vector2 canvasSize)
         {
             if (canvas && !canvas.transform.FindChild(CANVAS_DRAGGABLE_PANEL))
             {
-                var draggablePanel = new GameObject(CANVAS_DRAGGABLE_PANEL);
-                draggablePanel.AddComponent<RectTransform>();
+                yield return null;
+
+                var draggablePanel = new GameObject(CANVAS_DRAGGABLE_PANEL, typeof(RectTransform));
                 draggablePanel.AddComponent<LayoutElement>().ignoreLayout = true;
                 draggablePanel.AddComponent<Image>().color = Color.clear;
                 draggablePanel.AddComponent<EventTrigger>();
@@ -192,6 +195,7 @@ namespace VRTK
                 Destroy(canvasRigidBody);
             }
 
+            StopCoroutine(draggablePanelCreation);
             var draggablePanel = canvas.transform.FindChild(CANVAS_DRAGGABLE_PANEL);
             if (draggablePanel)
             {
