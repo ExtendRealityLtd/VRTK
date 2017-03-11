@@ -315,6 +315,13 @@ namespace VRTK
                 return;
             }
 
+            actualBoundaries = null;
+            actualHeadset = null;
+            actualLeftController = null;
+            actualRightController = null;
+            modelAliasLeftController = null;
+            modelAliasRightController = null;
+
             SDK_BaseBoundaries boundariesSDK = GetBoundariesSDK();
             SDK_BaseHeadset headsetSDK = GetHeadsetSDK();
             SDK_BaseController controllerSDK = GetControllerSDK();
