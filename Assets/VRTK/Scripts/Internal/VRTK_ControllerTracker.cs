@@ -13,6 +13,8 @@
             {
                 trackedController = actualController.GetComponent<VRTK_TrackedController>();
             }
+
+            Update();
         }
 
         protected virtual void Update()
