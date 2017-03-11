@@ -17,7 +17,7 @@
  * Use the Left Alt to switch between mouse look and move a hand.
  * Press Tab to switch between left/right hands.
  * Hold Left Shift to change from translation to rotation for the hands.
- * Hold Left Crtl to switch between X/Y and X/Z axis.
+ * Hold Left Ctrl to switch between X/Y and X/Z axis.
  * All above keys can be remapped using the inspector on the `VRSimulatorCameraRig` prefab.
  * Button mapping for the VR control are as follows:
   * Grip: Left mouse button
