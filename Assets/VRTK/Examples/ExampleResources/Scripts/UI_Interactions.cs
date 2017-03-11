@@ -3,6 +3,7 @@
     using UnityEngine;
     using UnityEngine.EventSystems;
     using UnityEngine.UI;
+    using System.Collections;
 
     public class UI_Interactions : MonoBehaviour
     {
@@ -41,6 +42,13 @@
 
         public void CreateCanvas()
         {
+            StartCoroutine(CreateCanvasOnNextFrame());
+        }
+
+        private IEnumerator CreateCanvasOnNextFrame()
+        {
+            yield return null;
+
             var canvasCount = FindObjectsOfType<Canvas>().Length - EXISTING_CANVAS_COUNT;
             var newCanvasGO = new GameObject("TempCanvas");
             newCanvasGO.layer = 5;
@@ -51,11 +59,9 @@
             canvasRT.localScale = new Vector3(0.005f, 0.005f, 0.005f);
             canvasRT.eulerAngles = new Vector3(0f, 270f, 0f);
 
-            var newButtonGO = new GameObject("TempButton");
+            var newButtonGO = new GameObject("TempButton", typeof(RectTransform));
             newButtonGO.transform.parent = newCanvasGO.transform;
             newButtonGO.layer = 5;
-
-            newButtonGO.AddComponent<RectTransform>();
 
             var buttonRT = newButtonGO.GetComponent<RectTransform>();
             buttonRT.position = new Vector3(0f, 0f, 0f);
@@ -71,11 +77,11 @@
             buttonColourBlock.highlightedColor = Color.red;
             canvasButton.colors = buttonColourBlock;
 
-            var newTextGO = new GameObject("BtnText");
+            var newTextGO = new GameObject("BtnText", typeof(RectTransform));
             newTextGO.transform.parent = newButtonGO.transform;
             newTextGO.layer = 5;
 
-            var textRT = newTextGO.AddComponent<RectTransform>();
+            var textRT = newTextGO.GetComponent<RectTransform>();
             textRT.position = new Vector3(0f, 0f, 0f);
             textRT.anchoredPosition = new Vector3(0f, 0f, 0f);
             textRT.localPosition = new Vector3(0f, 0f, 0f);
