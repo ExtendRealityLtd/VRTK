@@ -27,23 +27,25 @@ namespace VRTK
         protected Rigidbody rigidbodyToFollow;
         protected Rigidbody rigidbodyToChange;
 
-        protected override void OnEnable()
+        protected virtual void OnEnable()
         {
-            base.OnEnable();
-
-            if (gameObjectToFollow == null)
-            {
-                return;
-            }
-
-            rigidbodyToFollow = gameObjectToFollow.GetComponent<Rigidbody>();
-            rigidbodyToChange = gameObjectToChange.GetComponent<Rigidbody>();
+            CacheRigidbodies();
         }
 
         protected virtual void OnDisable()
         {
             rigidbodyToFollow = null;
             rigidbodyToChange = null;
+        }
+
+        protected override void Update()
+        {
+            base.Update();
+
+            if (rigidbodyToFollow == null || rigidbodyToChange == null)
+            {
+                CacheRigidbodies();
+            }
         }
 
         protected virtual void FixedUpdate()
@@ -98,6 +100,17 @@ namespace VRTK
         protected override Vector3 GetScaleToFollow()
         {
             return rigidbodyToFollow.transform.localScale;
+        }
+
+        protected virtual void CacheRigidbodies()
+        {
+            if (gameObjectToFollow == null)
+            {
+                return;
+            }
+
+            rigidbodyToFollow = gameObjectToFollow.GetComponent<Rigidbody>();
+            rigidbodyToChange = gameObjectToChange.GetComponent<Rigidbody>();
         }
     }
 }

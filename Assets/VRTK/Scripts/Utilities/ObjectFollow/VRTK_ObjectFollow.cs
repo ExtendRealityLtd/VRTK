@@ -67,16 +67,16 @@ namespace VRTK
             }
         }
 
-        protected virtual void OnEnable()
-        {
-            gameObjectToChange = (gameObjectToChange != null ? gameObjectToChange : gameObject);
-        }
-
         protected virtual void OnValidate()
         {
             maxAllowedPerFrameDistanceDifference = Mathf.Max(0.0001f, maxAllowedPerFrameDistanceDifference);
             maxAllowedPerFrameAngleDifference = Mathf.Max(0.0001f, maxAllowedPerFrameAngleDifference);
             maxAllowedPerFrameSizeDifference = Mathf.Max(0.0001f, maxAllowedPerFrameSizeDifference);
+        }
+
+        protected virtual void Update()
+        {
+            gameObjectToChange = gameObjectToChange != null ? gameObjectToChange : gameObject;
         }
 
         protected abstract Vector3 GetPositionToFollow();
