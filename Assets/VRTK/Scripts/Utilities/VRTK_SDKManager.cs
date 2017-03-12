@@ -110,8 +110,8 @@ namespace VRTK
 #endif
                 cachedSystemSDK = null;
 
-                cachedSystemSDKInfo = value;
-                HandleSDKInfoSetter();
+                cachedSystemSDKInfo = new VRTK_SDKInfo(value);
+                PopulateObjectReferences(false);
             }
         }
         /// <summary>
@@ -138,8 +138,8 @@ namespace VRTK
 #endif
                 cachedBoundariesSDK = null;
 
-                cachedBoundariesSDKInfo = value;
-                HandleSDKInfoSetter();
+                cachedBoundariesSDKInfo = new VRTK_SDKInfo(value);
+                PopulateObjectReferences(false);
             }
         }
         /// <summary>
@@ -166,8 +166,8 @@ namespace VRTK
 #endif
                 cachedHeadsetSDK = null;
 
-                cachedHeadsetSDKInfo = value;
-                HandleSDKInfoSetter();
+                cachedHeadsetSDKInfo = new VRTK_SDKInfo(value);
+                PopulateObjectReferences(false);
             }
         }
         /// <summary>
@@ -194,8 +194,8 @@ namespace VRTK
 #endif
                 cachedControllerSDK = null;
 
-                cachedControllerSDKInfo = value;
-                HandleSDKInfoSetter();
+                cachedControllerSDKInfo = new VRTK_SDKInfo(value);
+                PopulateObjectReferences(false);
             }
         }
 
@@ -717,21 +717,6 @@ namespace VRTK
             {
                 Debug.LogError(sdkErrorDescription);
             }
-        }
-
-        /// <summary>
-        /// Handles the various SDK info setters by making sure to automatically manage the scripting define symbols or populate the object references if the SDK Manager is set to do so.
-        /// </summary>
-        private void HandleSDKInfoSetter()
-        {
-#if UNITY_EDITOR
-            if (!ManageScriptingDefineSymbols(false, false))
-            {
-                PopulateObjectReferences(false);
-            }
-#else
-            PopulateObjectReferences(false);
-#endif
         }
 
         /// <summary>
