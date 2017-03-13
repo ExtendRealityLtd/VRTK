@@ -2,6 +2,7 @@
 using UnityEditor;
 using System;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 [InitializeOnLoad]
@@ -10,7 +11,7 @@ public class VRTK_UpdatePrompt : EditorWindow
     private const string remoteURL = "https://raw.githubusercontent.com/thestonefox/VRTK/";
     private const string remoteVersionFile = "master/Assets/VRTK/Version.txt";
     private const string remoteChangelogFile = "master/CHANGELOG.md";
-    private const string localVersionFile = "Assets/VRTK/Version.txt";
+    private const string localVersionFile = "/Version.txt";
     private const string pluginURL = "https://www.assetstore.unity3d.com/en/#!/content/64131";
     private const string hideVersionPrompt = "VRTK.HideVersionPrompt.v{0}";
 
@@ -120,7 +121,11 @@ public class VRTK_UpdatePrompt : EditorWindow
 
     private static bool UpdateRequired()
     {
-        versionLocal = File.ReadAllText(localVersionFile);
+        string assetGuid = AssetDatabase.FindAssets(typeof(VRTK_UpdatePrompt).FullName).FirstOrDefault();
+        string path = AssetDatabase.GUIDToAssetPath(assetGuid);
+        path = Path.GetDirectoryName(Path.GetDirectoryName(path));
+
+        versionLocal = File.ReadAllText(path + localVersionFile);
         if (string.IsNullOrEmpty(versionLocal) || string.IsNullOrEmpty(versionReceived) || versionReceived == versionLocal || EditorPrefs.HasKey(string.Format(hideVersionPrompt, versionReceived)))
         {
             return false;
