@@ -138,8 +138,11 @@ namespace VRTK
             rotList = new List<Vector3>();
 
             var headset = GetHeadset();
-            lastPos = headset.position;
-            lastRot = headset.rotation.eulerAngles;
+            if (headset != null)
+            {
+                lastPos = headset.position;
+                lastRot = headset.rotation.eulerAngles;
+            }
         }
     }
 }
