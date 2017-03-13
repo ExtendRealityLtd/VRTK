@@ -13,7 +13,9 @@ public class VRTK_UpdatePrompt : EditorWindow
     private const string remoteChangelogFile = "master/CHANGELOG.md";
     private const string localVersionFile = "/Version.txt";
     private const string pluginURL = "https://www.assetstore.unity3d.com/en/#!/content/64131";
-    private const string hideVersionPrompt = "VRTK.HideVersionPrompt.v{0}";
+    private const string hidePromptKey = "VRTK.HideVersionPrompt.v{0}";
+    private const string lastCheckKey = "VRTK.VersionPromptUpdate";
+    private const int checkUpdateHours = 6;
 
     private static bool versionChecked = false;
     private static WWW versionResource;
@@ -60,7 +62,7 @@ public class VRTK_UpdatePrompt : EditorWindow
         if (EditorGUI.EndChangeCheck())
         {
             hideToggle = hidePromptInFuture;
-            string key = string.Format(hideVersionPrompt, versionReceived);
+            string key = string.Format(hidePromptKey, versionReceived);
             if (hidePromptInFuture)
             {
                 EditorPrefs.SetBool(key, true);
@@ -76,6 +78,18 @@ public class VRTK_UpdatePrompt : EditorWindow
     {
         if (!versionChecked)
         {
+            if (EditorPrefs.HasKey(lastCheckKey))
+            {
+                string lastCheckTicksString = EditorPrefs.GetString(lastCheckKey);
+                var lastCheckDateTime = new DateTime(Convert.ToInt64(lastCheckTicksString));
+
+                if (lastCheckDateTime.AddHours(checkUpdateHours) >= DateTime.UtcNow)
+                {
+                    versionChecked = true;
+                    return;
+                }
+            }
+
             versionResource = (versionResource ?? new WWW(remoteURL + remoteVersionFile));
             if (!versionResource.isDone)
             {
@@ -85,6 +99,7 @@ public class VRTK_UpdatePrompt : EditorWindow
             versionReceived = (ValidURL(versionResource) ? versionResource.text : "");
             versionResource = null;
             versionChecked = true;
+            EditorPrefs.SetString(lastCheckKey, DateTime.UtcNow.Ticks.ToString());
 
             if (UpdateRequired())
             {
@@ -126,7 +141,7 @@ public class VRTK_UpdatePrompt : EditorWindow
         path = Path.GetDirectoryName(Path.GetDirectoryName(path));
 
         versionLocal = File.ReadAllText(path + localVersionFile);
-        if (string.IsNullOrEmpty(versionLocal) || string.IsNullOrEmpty(versionReceived) || versionReceived == versionLocal || EditorPrefs.HasKey(string.Format(hideVersionPrompt, versionReceived)))
+        if (string.IsNullOrEmpty(versionLocal) || string.IsNullOrEmpty(versionReceived) || versionReceived == versionLocal || EditorPrefs.HasKey(string.Format(hidePromptKey, versionReceived)))
         {
             return false;
         }
