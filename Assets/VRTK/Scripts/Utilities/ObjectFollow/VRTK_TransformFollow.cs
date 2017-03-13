@@ -56,9 +56,15 @@ namespace VRTK
         protected Transform transformToFollow;
         protected Transform transformToChange;
 
-        protected virtual void OnEnable()
+        public override void Follow()
         {
             CacheTransforms();
+            base.Follow();
+        }
+
+        protected override void OnEnable()
+        {
+            base.OnEnable();
 
             if (moment == FollowMoment.OnPreRender)
             {
@@ -73,15 +79,8 @@ namespace VRTK
             Camera.onPreRender -= OnCamPreRender;
         }
 
-        protected override void Update()
+        protected void Update()
         {
-            base.Update();
-
-            if (transformToFollow == null || transformToChange == null)
-            {
-                CacheTransforms();
-            }
-
             if (moment == FollowMoment.OnUpdate)
             {
                 Follow();
@@ -127,7 +126,8 @@ namespace VRTK
 
         protected virtual void CacheTransforms()
         {
-            if (gameObjectToFollow == null)
+            if (gameObjectToFollow == null || gameObjectToChange == null
+                || (transformToFollow != null && transformToChange != null))
             {
                 return;
             }

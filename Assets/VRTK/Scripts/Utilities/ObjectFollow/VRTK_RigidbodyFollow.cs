@@ -27,25 +27,16 @@ namespace VRTK
         protected Rigidbody rigidbodyToFollow;
         protected Rigidbody rigidbodyToChange;
 
-        protected virtual void OnEnable()
+        public override void Follow()
         {
             CacheRigidbodies();
+            base.Follow();
         }
 
         protected virtual void OnDisable()
         {
             rigidbodyToFollow = null;
             rigidbodyToChange = null;
-        }
-
-        protected override void Update()
-        {
-            base.Update();
-
-            if (rigidbodyToFollow == null || rigidbodyToChange == null)
-            {
-                CacheRigidbodies();
-            }
         }
 
         protected virtual void FixedUpdate()
@@ -104,7 +95,8 @@ namespace VRTK
 
         protected virtual void CacheRigidbodies()
         {
-            if (gameObjectToFollow == null)
+            if (gameObjectToFollow == null || gameObjectToChange == null
+                || (rigidbodyToFollow != null && rigidbodyToChange != null))
             {
                 return;
             }
