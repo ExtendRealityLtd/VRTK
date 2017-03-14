@@ -222,9 +222,10 @@ namespace VRTK
             blinkPause = 0f;
             if (distanceBlinkDelay > 0f)
             {
+                float minBlink = 0.5f;
                 float distance = Vector3.Distance(playArea.position, newPosition);
-                blinkPause = Mathf.Clamp((distance * blinkTransitionSpeed) / (maxBlinkDistance - distanceBlinkDelay), 0, maxBlinkTransitionSpeed);
-                blinkPause = (blinkSpeed <= 0.25 ? 0f : blinkPause);
+                blinkPause = Mathf.Clamp((distance * blinkTransitionSpeed) / (maxBlinkDistance - distanceBlinkDelay), minBlink, maxBlinkTransitionSpeed);
+                blinkPause = (blinkSpeed <= 0.25 ? minBlink : blinkPause);
             }
         }
 
