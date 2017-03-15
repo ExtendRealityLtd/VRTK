@@ -2,6 +2,8 @@
 namespace VRTK
 {
     using UnityEngine;
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Reflection;
 #if UNITY_EDITOR
     using UnityEditor;
@@ -224,6 +226,42 @@ namespace VRTK
         public static float Mod(float a, float b)
         {
             return a - b * Mathf.Floor(a / b);
+        }
+
+        /// <summary>
+        /// Finds all <see cref="GameObject"/>s with a given name and an ancestor that has a specific component.
+        /// </summary>
+        /// <remarks>
+        /// This method returns active as well as inactive <see cref="GameObject"/>s in the scene. It doesn't return assets.
+        /// For performance reasons it is recommended to not use this function every frame. Cache the result in a member variable at startup instead.
+        /// </remarks>
+        /// <typeparam name="T">The component type that needs to be on an ancestor of the wanted <see cref="GameObject"/>. Must be a subclass of <see cref="Component"/>.</typeparam>
+        /// <param name="gameObjectName">The name of the wanted <see cref="GameObject"/>. If it contains a '/' character, this method traverses the hierarchy like a path name.</param>
+        /// <returns>The <see cref="GameObject"/> with name <paramref name="gameObjectName"/> and an ancestor that has a <typeparamref name="T"/>. If no <see cref="GameObject"/> is found <see langword="null"/> is returned.</returns>
+        public static GameObject FindEvenInactiveGameObject<T>(string gameObjectName = "") where T : Component
+        {
+            IEnumerable<GameObject> gameObjects = Resources.FindObjectsOfTypeAll<T>()
+                                                           .Select(component => component.gameObject);
+
+#if UNITY_EDITOR
+            gameObjects = gameObjects.Where(gameObject => !AssetDatabase.Contains(gameObject));
+#endif
+
+            string[] names = gameObjectName.Split(new[] { '/' }, 2);
+            string firstName = names[0];
+            if (!string.IsNullOrEmpty(firstName))
+            {
+                gameObjects = gameObjects.Where(gameObject => gameObject.name == firstName);
+            }
+
+            string otherNames = names.Length > 1 ? names[1] : null;
+            if (string.IsNullOrEmpty(otherNames))
+            {
+                return gameObjects.FirstOrDefault();
+            }
+
+            return gameObjects.Select(gameObject => gameObject.transform.Find(otherNames).gameObject)
+                              .FirstOrDefault();
         }
 
         private static float ColorPercent(float value, float percent)

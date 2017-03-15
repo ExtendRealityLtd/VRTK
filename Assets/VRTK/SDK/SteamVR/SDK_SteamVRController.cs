@@ -173,7 +173,7 @@ namespace VRTK
             var controller = GetSDKManagerControllerLeftHand(actual);
             if (!controller && actual)
             {
-                controller = GameObject.Find("[CameraRig]/Controller (left)");
+                controller = VRTK_SharedMethods.FindEvenInactiveGameObject<SteamVR_ControllerManager>("/Controller (left)");
             }
             return controller;
         }
@@ -188,7 +188,7 @@ namespace VRTK
             var controller = GetSDKManagerControllerRightHand(actual);
             if (!controller && actual)
             {
-                controller = GameObject.Find("[CameraRig]/Controller (right)");
+                controller = VRTK_SharedMethods.FindEvenInactiveGameObject<SteamVR_ControllerManager>("/Controller (right)");
             }
             return controller;
         }
@@ -255,14 +255,20 @@ namespace VRTK
             var model = GetSDKManagerControllerModelForHand(hand);
             if (!model)
             {
+                GameObject controller = null;
                 switch (hand)
                 {
                     case ControllerHand.Left:
-                        model = GameObject.Find("[CameraRig]/Controller (left)/Model");
+                        controller = GetControllerLeftHand(true);
                         break;
                     case ControllerHand.Right:
-                        model = GameObject.Find("[CameraRig]/Controller (right)/Model");
+                        controller = GetControllerRightHand(true);
                         break;
+                }
+
+                if (controller != null)
+                {
+                    model = controller.transform.Find("Model").gameObject;
                 }
             }
             return model;

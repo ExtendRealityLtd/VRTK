@@ -119,10 +119,10 @@ namespace VRTK
         {
             if (cachedCameraRig == null && !destroyed)
             {
-                cachedCameraRig = GameObject.Find("VRSimulatorCameraRig");
+                cachedCameraRig = VRTK_SharedMethods.FindEvenInactiveGameObject<SDK_InputSimulator>();
                 if (!cachedCameraRig)
                 {
-                    Debug.LogError("No `VRSimulatorCameraRig` GameObject is found in the scene, have you added the `VRTK/Prefabs/VRSimulatorCameraRig` prefab to the scene?");
+                    Debug.LogError("No GameObject with `SDK_InputSimulator` is found in the scene, have you added the `VRTK/Prefabs/VRSimulatorCameraRig` prefab to the scene?");
                 }
             }
             return cachedCameraRig;

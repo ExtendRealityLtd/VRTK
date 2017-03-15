@@ -163,7 +163,7 @@ namespace VRTK
             controller = GetSDKManagerControllerRightHand(actual);
             if ((controller == null) && actual)
             {
-                controller = GameObject.Find("GvrControllerPointer/Controller");
+                controller = VRTK_SharedMethods.FindEvenInactiveGameObject<GvrControllerVisualManager>("/Controller");
             }
             if (controller != null)
             {
@@ -235,7 +235,21 @@ namespace VRTK
             var model = GetSDKManagerControllerModelForHand(hand);
             if (!model)
             {
-                model = GameObject.Find("DaydreamCameraRig/GvrControllerPointer/Controller"); //TODO: CAMERA_RIG constant at top?
+                GameObject controller = null;
+                switch (hand)
+                {
+                    case ControllerHand.Left:
+                        controller = GetControllerLeftHand(true);
+                        break;
+                    case ControllerHand.Right:
+                        controller = GetControllerRightHand(true);
+                        break;
+                }
+
+                if (controller != null)
+                {
+                    model = controller;
+                }
             }
             return model;
         }

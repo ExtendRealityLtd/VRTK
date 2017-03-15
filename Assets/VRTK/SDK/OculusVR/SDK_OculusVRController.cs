@@ -185,7 +185,7 @@ namespace VRTK
             var controller = GetSDKManagerControllerLeftHand(actual);
             if (!controller && actual)
             {
-                controller = GameObject.Find("OVRCameraRig/TrackingSpace/LeftHandAnchor");
+                controller = VRTK_SharedMethods.FindEvenInactiveGameObject<OVRCameraRig>("/TrackingSpace/LeftHandAnchor");
             }
             return controller;
         }
@@ -200,7 +200,7 @@ namespace VRTK
             var controller = GetSDKManagerControllerRightHand(actual);
             if (!controller && actual)
             {
-                controller = GameObject.Find("OVRCameraRig/TrackingSpace/RightHandAnchor");
+                controller = VRTK_SharedMethods.FindEvenInactiveGameObject<OVRCameraRig>("/TrackingSpace/RightHandAnchor");
             }
             return controller;
         }
@@ -268,28 +268,27 @@ namespace VRTK
             if (model == null)
             {
                 GameObject avatarObject = GetAvatar();
-                string avatarName = (avatarObject ? avatarObject.name : "");
                 switch (hand)
                 {
                     case ControllerHand.Left:
-                        if (avatarName != "")
+                        if (avatarObject != null)
                         {
-                            model = GameObject.Find(avatarName + "/controller_left");
+                            model = avatarObject.transform.Find("controller_left").gameObject;
                         }
                         else
                         {
-                            model = GameObject.Find("OVRCameraRig/TrackingSpace/LeftHandAnchor");
+                            model = GetControllerLeftHand(true);
                             model = (model != null && model.transform.childCount > 0 ? model.transform.GetChild(0).gameObject : null);
                         }
                         break;
                     case ControllerHand.Right:
-                        if (avatarName != "")
+                        if (avatarObject != null)
                         {
-                            model = GameObject.Find(avatarName + "/controller_right");
+                            model = avatarObject.transform.Find("controller_right").gameObject;
                         }
                         else
                         {
-                            model = GameObject.Find("OVRCameraRig/TrackingSpace/RightHandAnchor");
+                            model = GetControllerRightHand(true);
                             model = (model != null && model.transform.childCount > 0 ? model.transform.GetChild(0).gameObject : null);
                         }
                         break;
