@@ -49,7 +49,7 @@
             if (EditorGUI.EndChangeCheck())
             {
                 serializedObject.ApplyModifiedProperties();
-                sdkManager.ManageScriptingDefineSymbols(false, false);
+                sdkManager.ManageScriptingDefineSymbols(false, true);
             }
 
             EditorGUI.BeginDisabledGroup(sdkManager.autoManageScriptDefines);
