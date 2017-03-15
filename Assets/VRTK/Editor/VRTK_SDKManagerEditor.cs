@@ -166,14 +166,22 @@
             EditorGUILayout.EndVertical();
 
             EditorGUILayout.BeginVertical("Box");
+            if (sdkManager.autoPopulateObjectReferences)
+            {
+                EditorGUILayout.HelpBox("Some of the following references are disabled because the SDK Manager is set up to automatically populate these. Disable the checkbox above if you need to customize them.", MessageType.Info);
+            }
+
             VRTK_EditorUtilities.AddHeader("Linked Objects", false);
 
+            EditorGUI.BeginDisabledGroup(sdkManager.autoPopulateObjectReferences);
             EditorGUILayout.PropertyField(serializedObject.FindProperty("actualBoundaries"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("actualHeadset"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("actualLeftController"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("actualRightController"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("modelAliasLeftController"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("modelAliasRightController"));
+            EditorGUI.EndDisabledGroup();
+
             EditorGUILayout.PropertyField(serializedObject.FindProperty("scriptAliasLeftController"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("scriptAliasRightController"));
 
