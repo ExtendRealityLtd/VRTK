@@ -48,15 +48,9 @@ namespace VRTK
         /// <param name="options">A dictionary of generic options that can be used to within the update.</param>
         public override void ProcessUpdate(uint index, Dictionary<string, object> options)
         {
-            if (index < uint.MaxValue)
-            {
-                var device = GetTrackedObject(GetControllerByIndex(index));
-                previousControllerRotations[index] = currentControllerRotations[index];
-                currentControllerRotations[index] = device.transform.rotation;
-
-                UpdateHairValues(index, GetTriggerAxisOnIndex(index).x, GetTriggerHairlineDeltaOnIndex(index), ref previousHairTriggerState[index], ref currentHairTriggerState[index], ref hairTriggerLimit[index]);
-                UpdateHairValues(index, GetGripAxisOnIndex(index).x, GetGripHairlineDeltaOnIndex(index), ref previousHairGripState[index], ref currentHairGripState[index], ref hairGripLimit[index]);
-            }
+#if VRTK_DEFINE_OCULUSVR_UTILITIES_1_11_0_OR_OLDER
+            CalculateAngularVelocity(index);
+#endif
         }
 
         /// <summary>
@@ -66,6 +60,9 @@ namespace VRTK
         /// <param name="options">A dictionary of generic options that can be used to within the fixed update.</param>
         public override void ProcessFixedUpdate(uint index, Dictionary<string, object> options)
         {
+#if VRTK_DEFINE_OCULUSVR_UTILITIES_1_12_0_OR_NEWER
+            CalculateAngularVelocity(index);
+#endif
         }
 
         /// <summary>
@@ -894,6 +891,19 @@ namespace VRTK
         public override bool IsStartMenuTouchedUpOnIndex(uint index)
         {
             return false;
+        }
+
+        private void CalculateAngularVelocity(uint index)
+        {
+            if (index < uint.MaxValue)
+            {
+                var device = GetTrackedObject(GetControllerByIndex(index));
+                previousControllerRotations[index] = currentControllerRotations[index];
+                currentControllerRotations[index] = device.transform.rotation;
+
+                UpdateHairValues(index, GetTriggerAxisOnIndex(index).x, GetTriggerHairlineDeltaOnIndex(index), ref previousHairTriggerState[index], ref currentHairTriggerState[index], ref hairTriggerLimit[index]);
+                UpdateHairValues(index, GetGripAxisOnIndex(index).x, GetGripHairlineDeltaOnIndex(index), ref previousHairGripState[index], ref currentHairGripState[index], ref hairGripLimit[index]);
+            }
         }
 
         private void SetTrackedControllerCaches(bool forceRefresh = false)
