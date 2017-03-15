@@ -203,6 +203,9 @@
             VRTK_SDKInfo headsetSDKInfo = sdkManager.headsetSDKInfo;
             VRTK_SDKInfo controllerSDKInfo = sdkManager.controllerSDKInfo;
 
+            bool populatesObjectReferences = sdkManager.autoPopulateObjectReferences;
+            sdkManager.autoPopulateObjectReferences = false;
+
             sdkManager.systemSDKInfo = null;
             sdkManager.boundariesSDKInfo = null;
             sdkManager.headsetSDKInfo = null;
@@ -212,6 +215,13 @@
             sdkManager.boundariesSDKInfo = boundariesSDKInfo;
             sdkManager.headsetSDKInfo = headsetSDKInfo;
             sdkManager.controllerSDKInfo = controllerSDKInfo;
+
+            sdkManager.autoPopulateObjectReferences = populatesObjectReferences;
+
+            if (!sdkManager.ManageScriptingDefineSymbols(false, false))
+            {
+                sdkManager.PopulateObjectReferences(false);
+            }
         }
 
         #endregion
