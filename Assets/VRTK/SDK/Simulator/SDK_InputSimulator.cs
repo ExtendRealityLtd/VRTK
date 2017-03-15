@@ -18,11 +18,11 @@ namespace VRTK
         /// Mouse input mode types
         /// </summary>
         /// <param name="Always">Mouse movement is always treated as mouse input.</param>
-        /// <param name="RequresButtonPress">Mouse movement is only treated as movement when a button is pressed.</param>
+        /// <param name="RequiresButtonPress">Mouse movement is only treated as movement when a button is pressed.</param>
         public enum MouseInputMode
         {
             Always,
-            RequresButtonPress
+            RequiresButtonPress
         }
 
         #region Public fields
@@ -179,7 +179,7 @@ namespace VRTK
                 hintCanvas.SetActive(showControlHints);
             }
 
-            if (mouseMovementInput == MouseInputMode.RequresButtonPress)
+            if (mouseMovementInput == MouseInputMode.RequiresButtonPress)
             {
                 if (lockMouseToView)
                 {
@@ -357,7 +357,7 @@ namespace VRTK
             Func<KeyCode, string> key = (k) => "<b>" + k.ToString() + "</b>";
 
             string mouseInputRequires = "";
-            if (mouseMovementInput == MouseInputMode.RequresButtonPress)
+            if (mouseMovementInput == MouseInputMode.RequiresButtonPress)
             {
                 mouseInputRequires = " (" + key(mouseMovementKey) + ")";
             }
