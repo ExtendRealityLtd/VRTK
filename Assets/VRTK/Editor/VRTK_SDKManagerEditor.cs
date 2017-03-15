@@ -111,6 +111,49 @@
             EditorGUILayout.BeginVertical("Box");
             VRTK_EditorUtilities.AddHeader("SDK Selection", false);
 
+            EditorGUILayout.BeginVertical("Box");
+            VRTK_EditorUtilities.AddHeader(ObjectNames.NicifyVariableName("activeScriptingDefineSymbolsWithoutSDKClasses"), false);
+
+            Func<VRTK_SDKInfo, string> symbolSelector = info => info.description.symbol;
+            var sdkSymbols = new HashSet<string>(
+                VRTK_SDKManager.AvailableSystemSDKInfos.Select(symbolSelector)
+                               .Concat(VRTK_SDKManager.AvailableBoundariesSDKInfos.Select(symbolSelector))
+                               .Concat(VRTK_SDKManager.AvailableHeadsetSDKInfos.Select(symbolSelector))
+                               .Concat(VRTK_SDKManager.AvailableControllerSDKInfos.Select(symbolSelector))
+            );
+            foreach (VRTK_SDKManager.ScriptingDefineSymbolPredicateInfo info in VRTK_SDKManager.AvailableScriptingDefineSymbolPredicateInfos)
+            {
+                string symbol = info.attribute.symbol;
+                if (sdkSymbols.Contains(symbol)
+                    || VRTK_SDKManager.AvailableScriptingDefineSymbolPredicateInfos
+                                      .Except(new[] { info })
+                                      .Any(predicateInfo => predicateInfo.methodInfo == info.methodInfo))
+                {
+                    continue;
+                }
+
+                int index = sdkManager.activeScriptingDefineSymbolsWithoutSDKClasses.FindIndex(attribute => attribute.symbol == symbol);
+                string label = symbol.Remove(0, SDK_ScriptingDefineSymbolPredicateAttribute.RemovableSymbolPrefix.Length);
+
+                EditorGUI.BeginChangeCheck();
+                bool newValue = EditorGUILayout.ToggleLeft(label, index != -1);
+                if (EditorGUI.EndChangeCheck())
+                {
+                    Undo.RecordObject(sdkManager, "Active Symbol Change");
+                    if (newValue)
+                    {
+                        sdkManager.activeScriptingDefineSymbolsWithoutSDKClasses.Add(info.attribute);
+                    }
+                    else
+                    {
+                        sdkManager.activeScriptingDefineSymbolsWithoutSDKClasses.RemoveAt(index);
+                    }
+                    sdkManager.ManageScriptingDefineSymbols(false, true);
+                }
+            }
+
+            EditorGUILayout.EndVertical();
+
             HandleSDKSelection<SDK_BaseSystem>("The SDK to use to deal with all system actions.");
             HandleSDKSelection<SDK_BaseBoundaries>("The SDK to use to utilize room scale boundaries.");
             HandleSDKSelection<SDK_BaseHeadset>("The SDK to use to utilize the VR headset.");
