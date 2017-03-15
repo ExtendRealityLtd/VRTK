@@ -679,6 +679,7 @@ namespace VRTK
             if (_instance == null)
             {
                 _instance = this;
+                VRTK_SDK_Bridge.InvalidateCaches();
 
                 string sdkErrorDescriptions = string.Join("\n- ", GetSimplifiedSDKErrorDescriptions());
                 if (!string.IsNullOrEmpty(sdkErrorDescriptions))

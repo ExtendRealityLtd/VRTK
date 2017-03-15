@@ -3,7 +3,7 @@
     using UnityEngine;
     using System.Collections.Generic;
 
-    public class VRTK_SDK_Bridge
+    public static class VRTK_SDK_Bridge
     {
         private static SDK_BaseSystem systemSDK = null;
         private static SDK_BaseHeadset headsetSDK = null;
@@ -429,38 +429,74 @@
 
         public static SDK_BaseSystem GetSystemSDK()
         {
+            if (VRTK_SDKManager.instance != null)
+            {
+                return VRTK_SDKManager.instance.GetSystemSDK();
+            }
             if (systemSDK == null)
             {
-                systemSDK = (VRTK_SDKManager.instance ? VRTK_SDKManager.instance.GetSystemSDK() : ScriptableObject.CreateInstance<SDK_FallbackSystem>());
+                systemSDK = ScriptableObject.CreateInstance<SDK_FallbackSystem>();
             }
             return systemSDK;
         }
 
         public static SDK_BaseHeadset GetHeadsetSDK()
         {
+            if (VRTK_SDKManager.instance != null)
+            {
+                return VRTK_SDKManager.instance.GetHeadsetSDK();
+            }
             if (headsetSDK == null)
             {
-                headsetSDK = (VRTK_SDKManager.instance ? VRTK_SDKManager.instance.GetHeadsetSDK() : ScriptableObject.CreateInstance<SDK_FallbackHeadset>());
+                headsetSDK = ScriptableObject.CreateInstance<SDK_FallbackHeadset>();
             }
             return headsetSDK;
         }
 
         public static SDK_BaseController GetControllerSDK()
         {
+            if (VRTK_SDKManager.instance != null)
+            {
+                return VRTK_SDKManager.instance.GetControllerSDK();
+            }
             if (controllerSDK == null)
             {
-                controllerSDK = (VRTK_SDKManager.instance ? VRTK_SDKManager.instance.GetControllerSDK() : ScriptableObject.CreateInstance<SDK_FallbackController>());
+                controllerSDK = ScriptableObject.CreateInstance<SDK_FallbackController>();
             }
             return controllerSDK;
         }
 
         public static SDK_BaseBoundaries GetBoundariesSDK()
         {
+            if (VRTK_SDKManager.instance != null)
+            {
+                return VRTK_SDKManager.instance.GetBoundariesSDK();
+            }
             if (boundariesSDK == null)
             {
-                boundariesSDK = (VRTK_SDKManager.instance ? VRTK_SDKManager.instance.GetBoundariesSDK() : ScriptableObject.CreateInstance<SDK_FallbackBoundaries>());
+                boundariesSDK = ScriptableObject.CreateInstance<SDK_FallbackBoundaries>();
             }
             return boundariesSDK;
+        }
+
+        public static void InvalidateCaches()
+        {
+#if UNITY_EDITOR
+            Object.DestroyImmediate(systemSDK);
+            Object.DestroyImmediate(headsetSDK);
+            Object.DestroyImmediate(controllerSDK);
+            Object.DestroyImmediate(boundariesSDK);
+#else
+            Object.Destroy(systemSDK);
+            Object.Destroy(headsetSDK);
+            Object.Destroy(controllerSDK);
+            Object.Destroy(boundariesSDK);
+#endif
+
+            systemSDK = null;
+            headsetSDK = null;
+            controllerSDK = null;
+            boundariesSDK = null;
         }
     }
 }
