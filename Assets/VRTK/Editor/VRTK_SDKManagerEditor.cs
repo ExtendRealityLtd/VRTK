@@ -56,7 +56,7 @@
             const string manageNowDescription = "Manage Now";
             var manageNowGUIContent = new GUIContent(
                 manageNowDescription,
-                "Manage the scripting define symbols defined by the selected SDKs."
+                "Manage the scripting define symbols defined by the installed SDKs."
                 + (sdkManager.autoManageScriptDefines
                    ? "\n\nThis button is disabled because the SDK Manager is set up to manage the scripting define symbols automatically."
                      + " Disable the checkbox on the left to allow managing them manually instead."
