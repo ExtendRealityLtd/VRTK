@@ -71,6 +71,43 @@
 
             EditorGUILayout.EndHorizontal();
 
+            var clearSymbolsGUIContent = new GUIContent(
+                "Clear All Scripting Define Symbols",
+                "Remove all scripting define symbols of VRTK. This is handy if you removed the SDK files from your project but still have"
+                + " the symbols defined which results in compile errors."
+                + "\nIf you have the above checkbox enabled the symbols will be managed automatically after clearing them. Otherwise hit the"
+                + " '" + manageNowDescription + "' button to add the symbols for the currently installed SDKs again."
+            );
+            Color color = GUI.backgroundColor;
+            GUI.backgroundColor = Color.red;
+
+            if (GUILayout.Button(clearSymbolsGUIContent))
+            {
+                //get valid BuildTargetGroups
+                BuildTargetGroup[] targetGroups = Enum.GetValues(typeof(BuildTargetGroup)).Cast<BuildTargetGroup>().Where(group =>
+                {
+                    if (group == BuildTargetGroup.Unknown)
+                    {
+                        return false;
+                    }
+
+                    string targetGroupName = Enum.GetName(typeof(BuildTargetGroup), group);
+                    FieldInfo targetGroupFieldInfo = typeof(BuildTargetGroup).GetField(targetGroupName, BindingFlags.Public | BindingFlags.Static);
+
+                    return targetGroupFieldInfo != null && targetGroupFieldInfo.GetCustomAttributes(typeof(ObsoleteAttribute), false).Length == 0;
+                }).ToArray();
+
+                foreach (BuildTargetGroup targetGroup in targetGroups)
+                {
+                    IEnumerable<string> nonSDKSymbols = PlayerSettings.GetScriptingDefineSymbolsForGroup(targetGroup)
+                        .Split(';')
+                        .Where(symbol => !symbol.StartsWith(SDK_ScriptingDefineSymbolPredicateAttribute.RemovableSymbolPrefix, StringComparison.Ordinal));
+                    PlayerSettings.SetScriptingDefineSymbolsForGroup(targetGroup, string.Join(";", nonSDKSymbols.ToArray()));
+                }
+            }
+
+            GUI.backgroundColor = color;
+
             EditorGUILayout.BeginVertical("Box");
             VRTK_EditorUtilities.AddHeader("SDK Selection", false);
 
