@@ -211,7 +211,10 @@ namespace VRTK
                     Vector3 pos = Vector3.zero;
                     pos += mouseDiff * handMoveMultiplier;
                     currentHand.transform.Translate(pos * Time.deltaTime);
-                }
+                } 
+                // Don't change controller position when touchpad is touched
+                else if (Input.GetKey(touchpadAlias))
+                    ;
                 else
                 {
                     Vector3 pos = Vector3.zero;
