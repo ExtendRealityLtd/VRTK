@@ -78,10 +78,8 @@
                 + "\nIf you have the above checkbox enabled the symbols will be managed automatically after clearing them. Otherwise hit the"
                 + " '" + manageNowDescription + "' button to add the symbols for the currently installed SDKs again."
             );
-            Color color = GUI.backgroundColor;
-            GUI.backgroundColor = Color.red;
 
-            if (GUILayout.Button(clearSymbolsGUIContent))
+            if (GUILayout.Button(clearSymbolsGUIContent, VRTK_EditorUtilities.CreateStyle(GUI.skin.button, Color.white, Color.red)))
             {
                 //get valid BuildTargetGroups
                 BuildTargetGroup[] targetGroups = Enum.GetValues(typeof(BuildTargetGroup)).Cast<BuildTargetGroup>().Where(group =>
@@ -105,8 +103,6 @@
                     PlayerSettings.SetScriptingDefineSymbolsForGroup(targetGroup, string.Join(";", nonSDKSymbols.ToArray()));
                 }
             }
-
-            GUI.backgroundColor = color;
 
             EditorGUILayout.BeginVertical("Box");
             VRTK_EditorUtilities.AddHeader("SDK Selection", false);
@@ -211,7 +207,7 @@
             EditorGUILayout.BeginVertical("Box");
             if (sdkManager.autoPopulateObjectReferences)
             {
-                EditorGUILayout.HelpBox("Some of the following references are disabled because the SDK Manager is set up to automatically populate these. Disable the checkbox above if you need to customize them.", MessageType.Info);
+                EditorGUILayout.HelpBox("The SDK Manager is configured to auto populate object references so some of the following fields are disabled. Uncheck `Auto Populate Object References` above to enable customization of the below fields.", MessageType.Info);
             }
 
             VRTK_EditorUtilities.AddHeader("Linked Objects", false);
