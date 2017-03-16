@@ -371,7 +371,7 @@ namespace VRTK
         /// <returns>A Vector2 containing the current x,y position of where the touchpad is being touched.</returns>
         public override Vector2 GetTouchpadAxisOnIndex(uint index)
         {
-            return Vector2.zero;
+            return Input.mousePosition;
         }
 
         /// <summary>
