@@ -5,6 +5,7 @@ namespace VRTK
     using UnityEngine;
     using System.Collections.Generic;
     using Ximmerse.InputSystem;
+    using Ximmerse.VR;
 #endif
 
     /// <summary>
@@ -190,7 +191,7 @@ namespace VRTK
             var controller = GetSDKManagerControllerLeftHand(actual);
             if (!controller && actual)
             {
-                controller = GameObject.Find("VRCameraRig/TrackingSpace/LeftHandAnchor");
+                controller = VRTK_SharedMethods.FindEvenInactiveGameObject<VRContext>("/TrackingSpace/LeftHandAnchor");
             }
             return controller;
         }
@@ -205,7 +206,7 @@ namespace VRTK
             var controller = GetSDKManagerControllerRightHand(actual);
             if (!controller && actual)
             {
-                controller = GameObject.Find("VRCameraRig/TrackingSpace/RightHandAnchor");
+                controller = VRTK_SharedMethods.FindEvenInactiveGameObject<VRContext>("/TrackingSpace/RightHandAnchor");
             }
             return controller;
         }
@@ -272,14 +273,20 @@ namespace VRTK
             var model = GetSDKManagerControllerModelForHand(hand);
             if (!model)
             {
+                GameObject controller = null;
                 switch (hand)
                 {
                     case ControllerHand.Left:
-                        model = GameObject.Find("VRCameraRig/TrackingSpace/LeftHandAnchor");
+                        controller = GetControllerLeftHand(true);
                         break;
                     case ControllerHand.Right:
-                        model = GameObject.Find("VRCameraRig/TrackingSpace/RightHandAnchor");
+                        controller = GetControllerRightHand(true);
                         break;
+                }
+
+                if (controller != null)
+                {
+                    model = controller;
                 }
             }
             return model;
