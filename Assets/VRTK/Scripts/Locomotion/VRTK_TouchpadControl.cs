@@ -45,7 +45,7 @@ namespace VRTK
                 OnXAxisChanged(SetEventArguements(directionDevice.right, currentAxis.x, axisDeadzone.x));
             }
 
-            if (OutsideDeadzone(currentAxis.y, axisDeadzone.y) || currentAxis.x == 0f)
+            if (OutsideDeadzone(currentAxis.y, axisDeadzone.y) || currentAxis.y == 0f)
             {
                 OnYAxisChanged(SetEventArguements(directionDevice.forward, currentAxis.y, axisDeadzone.y));
             }
