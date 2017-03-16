@@ -4,13 +4,15 @@ namespace VRTK
 #if UNITY_EDITOR
     using UnityEditor;
 #endif
+    using UnityEngine;
     using System;
 
     /// <summary>
     /// Specifies a method to be used as a predicate to allow <see cref="VRTK_SDKManager"/> to automatically add and remove scripting define symbols. Only allowed on <see langword="static"/> methods that take no arguments and return <see cref="bool"/>.
     /// </summary>
+    [Serializable]
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true, Inherited = false)]
-    public sealed class SDK_ScriptingDefineSymbolPredicateAttribute : Attribute
+    public sealed class SDK_ScriptingDefineSymbolPredicateAttribute : Attribute, ISerializationCallbackReceiver
     {
         /// <summary>
         /// The prefix of scripting define symbols that must be used to be able to automatically remove the symbols.
@@ -20,13 +22,21 @@ namespace VRTK
         /// <summary>
         /// The scripting define symbol to conditionally add or remove.
         /// </summary>
-        public readonly string symbol;
+        public string symbol;
+
+        [SerializeField]
+        private string buildTargetGroupName;
 #if UNITY_EDITOR
         /// <summary>
         /// The build target group to use when conditionally adding or removing <see cref="symbol"/>.
         /// </summary>
-        public readonly BuildTargetGroup buildTargetGroup;
+        [NonSerialized]
+        public BuildTargetGroup buildTargetGroup;
 #endif
+
+        private SDK_ScriptingDefineSymbolPredicateAttribute()
+        {
+        }
 
         /// <summary>
         /// Creates a new attribute.
@@ -55,20 +65,46 @@ namespace VRTK
                 throw new ArgumentOutOfRangeException("buildTargetGroupName", buildTargetGroupName, "An empty string isn't allowed.");
             }
 
+            SetBuildTarget(buildTargetGroupName);
+        }
+
+        /// <summary>
+        /// Creates a new attribute by copying an existing one.
+        /// </summary>
+        /// <param name="attributeToCopy">The attribute to copy.</param>
+        public SDK_ScriptingDefineSymbolPredicateAttribute(SDK_ScriptingDefineSymbolPredicateAttribute attributeToCopy)
+        {
+            symbol = attributeToCopy.symbol;
+            SetBuildTarget(attributeToCopy.buildTargetGroupName);
+        }
+
+        public void OnBeforeSerialize()
+        {
+        }
+
+        public void OnAfterDeserialize()
+        {
+            SetBuildTarget(buildTargetGroupName);
+        }
+
+        private void SetBuildTarget(string groupName)
+        {
+            buildTargetGroupName = groupName;
+
 #if UNITY_EDITOR
             Type buildTargetGroupType = typeof(BuildTargetGroup);
             try
             {
-                buildTargetGroup = (BuildTargetGroup)Enum.Parse(buildTargetGroupType, buildTargetGroupName);
+                buildTargetGroup = (BuildTargetGroup)Enum.Parse(buildTargetGroupType, groupName);
             }
             catch (Exception exception)
             {
-                throw new ArgumentOutOfRangeException(string.Format("'{0}' isn't a valid constant name of '{1}'.", buildTargetGroupName, buildTargetGroupType.Name), exception);
+                throw new ArgumentOutOfRangeException(string.Format("'{0}' isn't a valid constant name of '{1}'.", groupName, buildTargetGroupType.Name), exception);
             }
 
             if (buildTargetGroup == BuildTargetGroup.Unknown)
             {
-                throw new ArgumentOutOfRangeException("buildTargetGroupName", buildTargetGroupName, string.Format("The buildTargetGroupName '{0}' isn't allowed.", buildTargetGroupName));
+                throw new ArgumentOutOfRangeException("groupName", groupName, string.Format("The buildTargetGroupName '{0}' isn't allowed.", groupName));
             }
 #endif
         }

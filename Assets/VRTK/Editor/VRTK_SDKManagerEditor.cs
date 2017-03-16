@@ -49,14 +49,14 @@
             if (EditorGUI.EndChangeCheck())
             {
                 serializedObject.ApplyModifiedProperties();
-                sdkManager.ManageScriptingDefineSymbols(false, false);
+                sdkManager.ManageScriptingDefineSymbols(false, true);
             }
 
             EditorGUI.BeginDisabledGroup(sdkManager.autoManageScriptDefines);
             const string manageNowDescription = "Manage Now";
             var manageNowGUIContent = new GUIContent(
                 manageNowDescription,
-                "Manage the scripting define symbols defined by the selected SDKs."
+                "Manage the scripting define symbols defined by the installed SDKs."
                 + (sdkManager.autoManageScriptDefines
                    ? "\n\nThis button is disabled because the SDK Manager is set up to manage the scripting define symbols automatically."
                      + " Disable the checkbox on the left to allow managing them manually instead."
@@ -71,8 +71,88 @@
 
             EditorGUILayout.EndHorizontal();
 
+            var clearSymbolsGUIContent = new GUIContent(
+                "Clear All Scripting Define Symbols",
+                "Remove all scripting define symbols of VRTK. This is handy if you removed the SDK files from your project but still have"
+                + " the symbols defined which results in compile errors."
+                + "\nIf you have the above checkbox enabled the symbols will be managed automatically after clearing them. Otherwise hit the"
+                + " '" + manageNowDescription + "' button to add the symbols for the currently installed SDKs again."
+            );
+            Color color = GUI.backgroundColor;
+            GUI.backgroundColor = Color.red;
+
+            if (GUILayout.Button(clearSymbolsGUIContent))
+            {
+                //get valid BuildTargetGroups
+                BuildTargetGroup[] targetGroups = Enum.GetValues(typeof(BuildTargetGroup)).Cast<BuildTargetGroup>().Where(group =>
+                {
+                    if (group == BuildTargetGroup.Unknown)
+                    {
+                        return false;
+                    }
+
+                    string targetGroupName = Enum.GetName(typeof(BuildTargetGroup), group);
+                    FieldInfo targetGroupFieldInfo = typeof(BuildTargetGroup).GetField(targetGroupName, BindingFlags.Public | BindingFlags.Static);
+
+                    return targetGroupFieldInfo != null && targetGroupFieldInfo.GetCustomAttributes(typeof(ObsoleteAttribute), false).Length == 0;
+                }).ToArray();
+
+                foreach (BuildTargetGroup targetGroup in targetGroups)
+                {
+                    IEnumerable<string> nonSDKSymbols = PlayerSettings.GetScriptingDefineSymbolsForGroup(targetGroup)
+                        .Split(';')
+                        .Where(symbol => !symbol.StartsWith(SDK_ScriptingDefineSymbolPredicateAttribute.RemovableSymbolPrefix, StringComparison.Ordinal));
+                    PlayerSettings.SetScriptingDefineSymbolsForGroup(targetGroup, string.Join(";", nonSDKSymbols.ToArray()));
+                }
+            }
+
+            GUI.backgroundColor = color;
+
             EditorGUILayout.BeginVertical("Box");
             VRTK_EditorUtilities.AddHeader("SDK Selection", false);
+
+            EditorGUILayout.BeginVertical("Box");
+            VRTK_EditorUtilities.AddHeader(ObjectNames.NicifyVariableName("activeScriptingDefineSymbolsWithoutSDKClasses"), false);
+
+            Func<VRTK_SDKInfo, string> symbolSelector = info => info.description.symbol;
+            var sdkSymbols = new HashSet<string>(
+                VRTK_SDKManager.AvailableSystemSDKInfos.Select(symbolSelector)
+                               .Concat(VRTK_SDKManager.AvailableBoundariesSDKInfos.Select(symbolSelector))
+                               .Concat(VRTK_SDKManager.AvailableHeadsetSDKInfos.Select(symbolSelector))
+                               .Concat(VRTK_SDKManager.AvailableControllerSDKInfos.Select(symbolSelector))
+            );
+            foreach (VRTK_SDKManager.ScriptingDefineSymbolPredicateInfo info in VRTK_SDKManager.AvailableScriptingDefineSymbolPredicateInfos)
+            {
+                string symbol = info.attribute.symbol;
+                if (sdkSymbols.Contains(symbol)
+                    || VRTK_SDKManager.AvailableScriptingDefineSymbolPredicateInfos
+                                      .Except(new[] { info })
+                                      .Any(predicateInfo => predicateInfo.methodInfo == info.methodInfo))
+                {
+                    continue;
+                }
+
+                int index = sdkManager.activeScriptingDefineSymbolsWithoutSDKClasses.FindIndex(attribute => attribute.symbol == symbol);
+                string label = symbol.Remove(0, SDK_ScriptingDefineSymbolPredicateAttribute.RemovableSymbolPrefix.Length);
+
+                EditorGUI.BeginChangeCheck();
+                bool newValue = EditorGUILayout.ToggleLeft(label, index != -1);
+                if (EditorGUI.EndChangeCheck())
+                {
+                    Undo.RecordObject(sdkManager, "Active Symbol Change");
+                    if (newValue)
+                    {
+                        sdkManager.activeScriptingDefineSymbolsWithoutSDKClasses.Add(info.attribute);
+                    }
+                    else
+                    {
+                        sdkManager.activeScriptingDefineSymbolsWithoutSDKClasses.RemoveAt(index);
+                    }
+                    sdkManager.ManageScriptingDefineSymbols(false, true);
+                }
+            }
+
+            EditorGUILayout.EndVertical();
 
             HandleSDKSelection<SDK_BaseSystem>("The SDK to use to deal with all system actions.");
             HandleSDKSelection<SDK_BaseBoundaries>("The SDK to use to utilize room scale boundaries.");
@@ -129,14 +209,22 @@
             EditorGUILayout.EndVertical();
 
             EditorGUILayout.BeginVertical("Box");
+            if (sdkManager.autoPopulateObjectReferences)
+            {
+                EditorGUILayout.HelpBox("Some of the following references are disabled because the SDK Manager is set up to automatically populate these. Disable the checkbox above if you need to customize them.", MessageType.Info);
+            }
+
             VRTK_EditorUtilities.AddHeader("Linked Objects", false);
 
+            EditorGUI.BeginDisabledGroup(sdkManager.autoPopulateObjectReferences);
             EditorGUILayout.PropertyField(serializedObject.FindProperty("actualBoundaries"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("actualHeadset"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("actualLeftController"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("actualRightController"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("modelAliasLeftController"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("modelAliasRightController"));
+            EditorGUI.EndDisabledGroup();
+
             EditorGUILayout.PropertyField(serializedObject.FindProperty("scriptAliasLeftController"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("scriptAliasRightController"));
 
@@ -166,6 +254,9 @@
             VRTK_SDKInfo headsetSDKInfo = sdkManager.headsetSDKInfo;
             VRTK_SDKInfo controllerSDKInfo = sdkManager.controllerSDKInfo;
 
+            bool populatesObjectReferences = sdkManager.autoPopulateObjectReferences;
+            sdkManager.autoPopulateObjectReferences = false;
+
             sdkManager.systemSDKInfo = null;
             sdkManager.boundariesSDKInfo = null;
             sdkManager.headsetSDKInfo = null;
@@ -175,6 +266,13 @@
             sdkManager.boundariesSDKInfo = boundariesSDKInfo;
             sdkManager.headsetSDKInfo = headsetSDKInfo;
             sdkManager.controllerSDKInfo = controllerSDKInfo;
+
+            sdkManager.autoPopulateObjectReferences = populatesObjectReferences;
+
+            if (!sdkManager.ManageScriptingDefineSymbols(false, false))
+            {
+                sdkManager.PopulateObjectReferences(false);
+            }
         }
 
         #endregion

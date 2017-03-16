@@ -199,6 +199,11 @@ namespace VRTK
             }
         }
 
+        /// <summary>
+        /// The active (i.e. to be added to the <see cref="PlayerSettings"/>) scripting define symbol predicate attributes that have no associated SDK classes.
+        /// </summary>
+        public List<SDK_ScriptingDefineSymbolPredicateAttribute> activeScriptingDefineSymbolsWithoutSDKClasses;
+
         [Tooltip("A reference to the GameObject that is the user's boundary or play area, most likely provided by the SDK's Camera Rig.")]
         public GameObject actualBoundaries;
         [Tooltip("A reference to the GameObject that contains the VR camera, most likely provided by the SDK's Camera Rig Headset.")]
@@ -375,9 +380,24 @@ namespace VRTK
                 newSymbolsByTargetGroup[targetGroup] = new HashSet<string>(nonSDKSymbols);
             }
 
+            Func<VRTK_SDKInfo, string> symbolSelector = info => info.description.symbol;
+            var sdkSymbols = new HashSet<string>(
+                AvailableSystemSDKInfos.Select(symbolSelector)
+                                       .Concat(AvailableBoundariesSDKInfos.Select(symbolSelector))
+                                       .Concat(AvailableHeadsetSDKInfos.Select(symbolSelector))
+                                       .Concat(AvailableControllerSDKInfos.Select(symbolSelector))
+            );
+            var activeSymbols = new HashSet<string>(activeScriptingDefineSymbolsWithoutSDKClasses.Select(attribute => attribute.symbol));
+
             //get scripting define symbols and check whether the predicates allow us to add the symbols
             foreach (ScriptingDefineSymbolPredicateInfo predicateInfo in AvailableScriptingDefineSymbolPredicateInfos)
             {
+                string symbol = predicateInfo.attribute.symbol;
+                if (!sdkSymbols.Contains(symbol) && !activeSymbols.Contains(symbol))
+                {
+                    continue;
+                }
+
                 MethodInfo methodInfo = predicateInfo.methodInfo;
                 if (!(bool)methodInfo.Invoke(null, null))
                 {
