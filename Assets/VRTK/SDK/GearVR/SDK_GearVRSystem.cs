@@ -1,12 +1,18 @@
 ﻿// GearVR System|SDK_GearVR|001
 namespace VRTK
 {
-#if VRTK_SDK_GEARVR
     /// <summary>
     /// The GearVR System SDK script provides a bridge to the GearVR SDK.
     /// </summary>
-    public class SDK_GearVRSystem : SDK_BaseSystem
+    [SDK_Description("GearVR", SDK_GearVRDefines.ScriptingDefineSymbol)]
+    public class SDK_GearVRSystem
+#if VRTK_DEFINE_SDK_GEARVR
+        : SDK_BaseSystem
+#else
+        : SDK_FallbackSystem
+#endif
     {
+#if VRTK_DEFINE_SDK_GEARVR
         /// <summary>
         /// The IsDisplayOnDesktop method returns true if the display is extending the desktop.
         /// </summary>
@@ -32,10 +38,6 @@ namespace VRTK
         public override void ForceInterleavedReprojectionOn(bool force)
         {
         }
-    }
-#else
-    public class SDK_GearVRSystem : SDK_FallbackSystem
-    {
-    }
 #endif
+    }
 }

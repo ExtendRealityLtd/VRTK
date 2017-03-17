@@ -1,8 +1,9 @@
 ﻿// GearVR Boundaries|SDK_GearVR|004
 namespace VRTK
 {
-#if VRTK_SDK_GEARVR
+#if VRTK_DEFINE_SDK_GEARVR
     using UnityEngine;
+#endif
 
     /// <summary>
     /// The Base Boundaries SDK script provides a bridge to SDK methods that deal with the play area of SDKs that support room scale play spaces.
@@ -10,8 +11,15 @@ namespace VRTK
     /// <remarks>
     /// This is the fallback class that will just return default values.
     /// </remarks>
-    public class SDK_GearVRBoundaries : SDK_BaseBoundaries
+    [SDK_Description(typeof(SDK_GearVRSystem))]
+    public class SDK_GearVRBoundaries
+#if VRTK_DEFINE_SDK_GEARVR
+        : SDK_BaseBoundaries
+#else
+        : SDK_FallbackBoundaries
+#endif
     {
+#if VRTK_DEFINE_SDK_GEARVR
         private Vector3[] cachedBoundaryVertices;
 
         /// <summary>
@@ -28,17 +36,17 @@ namespace VRTK
         public override Transform GetPlayArea()
         {
             cachedPlayArea = GetSDKManagerPlayArea();
-            if (cachedPlayArea == null) 
+            if (cachedPlayArea == null)
             {
                 var mainCamera = Camera.main;
-                if (mainCamera != null) 
+                if (mainCamera != null)
                 {
                     var mainCameraTransform = mainCamera.transform;
-                    if (mainCameraTransform.parent != null) 
+                    if (mainCameraTransform.parent != null)
                     {
                         cachedPlayArea = mainCameraTransform.parent;
                     }
-                    else 
+                    else
                     {
 #if UNITY_EDITOR
                         Debug.LogWarning("In order to allow teleporting to work, the main camera must be under a parent GameObject that can be moved!");
@@ -58,7 +66,7 @@ namespace VRTK
         /// <returns>A Vector3 array of the points in the scene that represent the play area boundaries.</returns>
         public override Vector3[] GetPlayAreaVertices(GameObject playArea)
         {
-            if (cachedBoundaryVertices == null) 
+            if (cachedBoundaryVertices == null)
             {
                 float thickness = 0.1f;
                 Vector3 outerBoundary = new Vector3(1f, 0f, 1f);
@@ -99,10 +107,6 @@ namespace VRTK
         {
             return true;
         }
-    }
-#else
-    public class SDK_GearVRBoundaries : SDK_FallbackBoundaries
-    {
-    }
 #endif
+    }
 }

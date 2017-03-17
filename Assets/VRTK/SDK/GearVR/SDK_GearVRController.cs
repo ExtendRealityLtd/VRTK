@@ -1,37 +1,35 @@
 ﻿// GearVR Controller|SDK_GearVR|003
 namespace VRTK
 {
-#if VRTK_SDK_GEARVR
+#if VRTK_DEFINE_SDK_GEARVR
     using UnityEngine;
     using System.Collections.Generic;
+#endif
 
     /// <summary>
     /// The OculusVR Controller SDK script provides a bridge to SDK methods that deal with the input devices.
     /// </summary>
-    public class SDK_GearVRController : SDK_BaseController
+    [SDK_Description(typeof(SDK_GearVRSystem))]
+    public class SDK_GearVRController
+#if VRTK_DEFINE_SDK_GEARVR
+        : SDK_BaseController
+#else
+        : SDK_FallbackController
+#endif
     {
-        private static readonly string ButtonOneAlias = "Fire1";
-        private static readonly string ButtonTwoAlias = "Cancel";
-
-        private bool touchpadPressed;
-        private bool backButtonPressed;
+#if VRTK_DEFINE_SDK_GEARVR
+        private static readonly string dPadAlias = "Fire1";
+        private static readonly string backButtonAlias = "Cancel";
 
         /// <summary>
         /// The ProcessUpdate method enables an SDK to run logic for every Unity Update
         /// </summary>
         /// <param name="index">The index of the controller.</param>
         /// <param name="options">A dictionary of generic options that can be used to within the update.</param>
+        /// <remarks>Warning! This method is never called for GearVR,
+        /// because it is neither a left nor a right controller.</remarks>
         public override void ProcessUpdate(uint index, Dictionary<string, object> options)
         {
-            if (Input.GetButtonDown(ButtonOneAlias))
-                touchpadPressed = true;
-            else if (Input.GetButtonUp(ButtonOneAlias))
-                touchpadPressed = false;
-
-            if (Input.GetButtonDown(ButtonTwoAlias))
-                backButtonPressed = true;
-            else if (Input.GetButtonUp(ButtonTwoAlias))
-                backButtonPressed = false;
         }
 
         /// <summary>
@@ -53,7 +51,7 @@ namespace VRTK
         /// <returns>A string containing the path to the game object that the controller element resides in.</returns>
         public override string GetControllerElementPath(ControllerElements element, ControllerHand hand, bool fullPath = false)
         {
-            return string.Empty;
+            return null;
         }
 
         /// <summary>
@@ -63,14 +61,18 @@ namespace VRTK
         /// <returns>The index of the given controller.</returns>
         public override uint GetControllerIndex(GameObject controller)
         {
-            uint index = uint.MaxValue;
+            uint index = 0;
 
-            switch (controller.name) 
+            switch (controller.name)
             {
                 case "Camera":
                 case "Main Camera":
                 case "Headset":
                     index = 0;
+                    break;
+                case "RightController":
+                case "LeftController":
+                    index = uint.MaxValue;
                     break;
             }
 
@@ -85,14 +87,15 @@ namespace VRTK
         /// <returns></returns>
         public override GameObject GetControllerByIndex(uint index, bool actual = false)
         {
-            GameObject controller = null;
+            GameObject controller = GetHeadsetController().gameObject;
 
-            if (index == 0)
+            switch (index)
             {
-                controller = VRTK_SDKManager.instance.GetHeadsetSDK().GetHeadset().gameObject;
+                case 0:
+                    return controller;
+                default:
+                    return null;
             }
-
-            return controller;
         }
 
         /// <summary>
@@ -102,7 +105,7 @@ namespace VRTK
         /// <returns>A Transform containing the origin of the controller.</returns>
         public override Transform GetControllerOrigin(GameObject controller)
         {
-            return VRTK_SDKManager.instance.GetHeadsetSDK().GetHeadset();
+            return GetHeadsetController();
         }
 
         /// <summary>
@@ -112,7 +115,7 @@ namespace VRTK
         /// <returns>A generated Transform that contains the custom pointer origin.</returns>
         public override Transform GenerateControllerPointerOrigin(GameObject parent)
         {
-            return null;
+            return GetHeadsetController();
         }
 
         /// <summary>
@@ -184,7 +187,7 @@ namespace VRTK
         /// <returns>The GameObject that has the model alias within it.</returns>
         public override GameObject GetControllerModel(GameObject controller)
         {
-            return GetControllerModelFromController(controller);
+            return null;
         }
 
         /// <summary>
@@ -194,15 +197,7 @@ namespace VRTK
         /// <returns>The GameObject that has the model alias within it.</returns>
         public override GameObject GetControllerModel(ControllerHand hand)
         {
-            var sdkManager = VRTK_SDKManager.instance;
-            if (Application.isPlaying && sdkManager != null) 
-            {
-                return sdkManager.GetHeadsetSDK().GetHeadset().gameObject;
-            }
-            else 
-            {
-                return null;
-            }
+            return null;
         }
 
         /// <summary>
@@ -269,7 +264,10 @@ namespace VRTK
         /// <returns>A Vector2 containing the current x,y position of where the touchpad is being touched.</returns>
         public override Vector2 GetTouchpadAxisOnIndex(uint index)
         {
-            return Input.mousePosition;
+            Vector2 pos = Input.mousePosition;
+            pos.x = pos.x / Screen.width - 0.5f;
+            pos.y = pos.y / Screen.height - 0.5f;
+            return pos;
         }
 
         /// <summary>
@@ -479,7 +477,7 @@ namespace VRTK
         /// <returns>Returns true if the button is continually being pressed.</returns>
         public override bool IsTouchpadPressedOnIndex(uint index)
         {
-            return touchpadPressed;
+            return Input.GetButton(dPadAlias);
         }
 
         /// <summary>
@@ -489,7 +487,7 @@ namespace VRTK
         /// <returns>Returns true if the button has just been pressed down.</returns>
         public override bool IsTouchpadPressedDownOnIndex(uint index)
         {
-            return Input.GetButtonDown(ButtonOneAlias);
+            return Input.GetButtonDown(dPadAlias);
         }
 
         /// <summary>
@@ -499,7 +497,7 @@ namespace VRTK
         /// <returns>Returns true if the button has just been released.</returns>
         public override bool IsTouchpadPressedUpOnIndex(uint index)
         {
-            return Input.GetButtonUp(ButtonOneAlias);
+            return Input.GetButtonUp(dPadAlias);
         }
 
         /// <summary>
@@ -509,7 +507,7 @@ namespace VRTK
         /// <returns>Returns true if the button is continually being touched.</returns>
         public override bool IsTouchpadTouchedOnIndex(uint index)
         {
-            return touchpadPressed;
+            return Input.GetButton(dPadAlias);
         }
 
         /// <summary>
@@ -519,7 +517,7 @@ namespace VRTK
         /// <returns>Returns true if the button has just been touched down.</returns>
         public override bool IsTouchpadTouchedDownOnIndex(uint index)
         {
-            return Input.GetButtonDown(ButtonOneAlias);
+            return Input.GetButtonDown(dPadAlias);
         }
 
         /// <summary>
@@ -529,7 +527,7 @@ namespace VRTK
         /// <returns>Returns true if the button has just been released.</returns>
         public override bool IsTouchpadTouchedUpOnIndex(uint index)
         {
-            return Input.GetButtonUp(ButtonOneAlias);
+            return Input.GetButtonUp(dPadAlias);
         }
 
         /// <summary>
@@ -539,7 +537,7 @@ namespace VRTK
         /// <returns>Returns true if the button is continually being pressed.</returns>
         public override bool IsButtonOnePressedOnIndex(uint index)
         {
-            return touchpadPressed;
+            return Input.GetButton(dPadAlias);
         }
 
         /// <summary>
@@ -549,7 +547,7 @@ namespace VRTK
         /// <returns>Returns true if the button has just been pressed down.</returns>
         public override bool IsButtonOnePressedDownOnIndex(uint index)
         {
-            return Input.GetButtonDown(ButtonOneAlias);
+            return Input.GetButtonDown(dPadAlias);
         }
 
         /// <summary>
@@ -559,7 +557,7 @@ namespace VRTK
         /// <returns>Returns true if the button has just been released.</returns>
         public override bool IsButtonOnePressedUpOnIndex(uint index)
         {
-            return Input.GetButtonUp(ButtonOneAlias);
+            return Input.GetButtonUp(dPadAlias);
         }
 
         /// <summary>
@@ -569,7 +567,7 @@ namespace VRTK
         /// <returns>Returns true if the button is continually being touched.</returns>
         public override bool IsButtonOneTouchedOnIndex(uint index)
         {
-            return touchpadPressed;
+            return Input.GetButton(dPadAlias);
         }
 
         /// <summary>
@@ -579,7 +577,7 @@ namespace VRTK
         /// <returns>Returns true if the button has just been touched down.</returns>
         public override bool IsButtonOneTouchedDownOnIndex(uint index)
         {
-            return Input.GetButtonDown(ButtonOneAlias);
+            return Input.GetButtonDown(dPadAlias);
         }
 
         /// <summary>
@@ -589,7 +587,7 @@ namespace VRTK
         /// <returns>Returns true if the button has just been released.</returns>
         public override bool IsButtonOneTouchedUpOnIndex(uint index)
         {
-            return Input.GetButtonUp(ButtonOneAlias);
+            return Input.GetButtonUp(dPadAlias);
         }
 
         /// <summary>
@@ -599,7 +597,7 @@ namespace VRTK
         /// <returns>Returns true if the button is continually being pressed.</returns>
         public override bool IsButtonTwoPressedOnIndex(uint index)
         {
-            return backButtonPressed;
+            return Input.GetButton(backButtonAlias);
         }
 
         /// <summary>
@@ -609,7 +607,7 @@ namespace VRTK
         /// <returns>Returns true if the button has just been pressed down.</returns>
         public override bool IsButtonTwoPressedDownOnIndex(uint index)
         {
-            return Input.GetButtonDown(ButtonTwoAlias);
+            return Input.GetButtonDown(backButtonAlias);
         }
 
         /// <summary>
@@ -619,7 +617,7 @@ namespace VRTK
         /// <returns>Returns true if the button has just been released.</returns>
         public override bool IsButtonTwoPressedUpOnIndex(uint index)
         {
-            return Input.GetButtonUp(ButtonTwoAlias);
+            return Input.GetButtonUp(backButtonAlias);
         }
 
         /// <summary>
@@ -629,7 +627,7 @@ namespace VRTK
         /// <returns>Returns true if the button is continually being touched.</returns>
         public override bool IsButtonTwoTouchedOnIndex(uint index)
         {
-            return false;
+            return Input.GetButton(backButtonAlias);
         }
 
         /// <summary>
@@ -639,7 +637,7 @@ namespace VRTK
         /// <returns>Returns true if the button has just been touched down.</returns>
         public override bool IsButtonTwoTouchedDownOnIndex(uint index)
         {
-            return Input.GetButtonDown(ButtonTwoAlias);
+            return Input.GetButtonDown(backButtonAlias);
         }
 
         /// <summary>
@@ -649,7 +647,7 @@ namespace VRTK
         /// <returns>Returns true if the button has just been released.</returns>
         public override bool IsButtonTwoTouchedUpOnIndex(uint index)
         {
-            return Input.GetButtonUp(ButtonTwoAlias);
+            return Input.GetButtonUp(backButtonAlias);
         }
 
         /// <summary>
@@ -711,10 +709,11 @@ namespace VRTK
         {
             return false;
         }
-    }
-#else
-    public class SDK_GearVRController : SDK_FallbackController
-    {
-    }
+
+        private Transform GetHeadsetController()
+        {
+            return VRTK_SDKManager.instance.GetHeadsetSDK().GetHeadset();
+        }
 #endif
+    }
 }

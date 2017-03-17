@@ -1,15 +1,23 @@
 ﻿// GearVR Headset|SDK_GearVR|002
 namespace VRTK
 {
-#if VRTK_SDK_GEARVR
+#if VRTK_DEFINE_SDK_GEARVR
     using UnityEngine;
     using System.Collections.Generic;
+#endif
 
     /// <summary>
     /// The GearVR Headset SDK script provides a bridge to the GearVR SDK.
     /// </summary>
-    public class SDK_GearVRHeadset : SDK_BaseHeadset
+    [SDK_Description(typeof(SDK_GearVRSystem))]
+    public class SDK_GearVRHeadset
+#if VRTK_DEFINE_SDK_GEARVR
+        : SDK_BaseHeadset
+#else
+        : SDK_FallbackHeadset
+#endif
     {
+#if VRTK_DEFINE_SDK_GEARVR
         private Quaternion previousHeadsetRotation;
         private Quaternion currentHeadsetRotation;
 
@@ -33,7 +41,7 @@ namespace VRTK
             cachedHeadset = GetSDKManagerHeadset();
             if (cachedHeadset == null)
             {
-                var mainCamera = Camera.main;
+                Camera mainCamera = Camera.main;
                 if (mainCamera != null)
                 {
                     cachedHeadset = mainCamera.transform;
@@ -111,10 +119,6 @@ namespace VRTK
                 camera.gameObject.AddComponent<VRTK_ScreenFade>();
             }
         }
-    }
-#else
-    public class SDK_GearVRHeadset : SDK_FallbackHeadset
-    {
-    }
 #endif
+    }
 }
