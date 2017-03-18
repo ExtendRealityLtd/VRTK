@@ -4,7 +4,7 @@
     using UnityEditor;
     using System;
 
-    public class VRTK_EditorUtilities : MonoBehaviour
+    public static class VRTK_EditorUtilities
     {
         public static GUIContent BuildGUIContent<T>(string fieldName, string displayOverride = null)
         {
