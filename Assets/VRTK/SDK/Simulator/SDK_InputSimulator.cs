@@ -36,7 +36,7 @@ namespace VRTK
         [Tooltip("Whether mouse movement always acts as input or requires a button press.")]
         public MouseInputMode mouseMovementInput = MouseInputMode.Always;
         [Tooltip("Lock the mouse cursor to the game window when the mouse movement key is pressed.")]
-        public bool lockMouseToView = false;
+        public bool lockMouseToView = true;
 
         [Header("Adjustments")]
 
@@ -414,7 +414,7 @@ namespace VRTK
                 hints += "Modes: Controller (" + key(handsOnOff) + ")\n";
             }
 
-            hintText.text = hints;
+            hintText.text = hints.TrimEnd();
         }
 
         private bool IsAcceptingMouseInput()
