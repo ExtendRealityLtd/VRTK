@@ -12,7 +12,7 @@ namespace VRTK
     /// <summary>
     /// The Shared Methods script is a collection of reusable static methods that are used across a range of different scripts.
     /// </summary>
-    public sealed class VRTK_SharedMethods : MonoBehaviour
+    public static class VRTK_SharedMethods
     {
         /// <summary>
         /// The GetBounds methods returns the bounds of the transform including all children in world space.

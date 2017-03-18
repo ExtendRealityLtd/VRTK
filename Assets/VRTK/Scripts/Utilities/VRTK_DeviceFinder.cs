@@ -7,7 +7,7 @@ namespace VRTK
     /// <summary>
     /// The Device Finder offers a collection of static methods that can be called to find common game devices such as the headset or controllers, or used to determine key information about the connected devices.
     /// </summary>
-    public sealed class VRTK_DeviceFinder : MonoBehaviour
+    public static class VRTK_DeviceFinder
     {
         /// <summary>
         /// Possible devices.
