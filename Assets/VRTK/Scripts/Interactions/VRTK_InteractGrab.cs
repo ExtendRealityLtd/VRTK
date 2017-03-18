@@ -361,10 +361,9 @@ namespace VRTK
 
         protected virtual void InitUngrabbedObject(bool applyGrabbingObjectVelocity)
         {
-            var grabbingObject = interactTouch.gameObject;
-
             if (grabbedObject != null)
             {
+                var grabbingObject = interactTouch.gameObject;
                 var grabbedObjectScript = grabbedObject.GetComponent<VRTK_InteractableObject>();
                 if (!influencingGrabbedObject)
                 {
@@ -372,11 +371,12 @@ namespace VRTK
                 }
                 grabbedObjectScript.Ungrabbed(grabbingObject);
                 grabbedObjectScript.ToggleHighlight(false);
+
+                ToggleControllerVisibility(true);
+                OnControllerUngrabInteractableObject(interactTouch.SetControllerInteractEvent(grabbedObject));
             }
 
             CheckInfluencingObjectOnRelease();
-            ToggleControllerVisibility(true);
-            OnControllerUngrabInteractableObject(interactTouch.SetControllerInteractEvent(grabbedObject));
 
             grabEnabledState = 0;
             grabbedObject = null;
