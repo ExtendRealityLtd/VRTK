@@ -86,7 +86,7 @@ Use the mouse and keyboard to move around both play area and hands and interacti
 
  * `public enum MouseInputMode` - Mouse input mode types
   * `Always` - Mouse movement is always treated as mouse input.
-  * `RequresButtonPress` - Mouse movement is only treated as movement when a button is pressed.
+  * `RequiresButtonPress` - Mouse movement is only treated as movement when a button is pressed.
 
 ### Class Methods
 
@@ -5507,6 +5507,7 @@ and the method info of the method the attribute is defined on.
  * `public VRTK_SDKInfo boundariesSDKInfo` - The info of the SDK to use to utilize room scale boundaries. By setting this to `null` the fallback SDK will be used.
  * `public VRTK_SDKInfo headsetSDKInfo` - The info of the SDK to use to utilize the VR headset. By setting this to `null` the fallback SDK will be used.
  * `public VRTK_SDKInfo controllerSDKInfo` - The info of the SDK to use to utilize the input devices. By setting this to `null` the fallback SDK will be used.
+ * `public List<SDK_ScriptingDefineSymbolPredicateAttribute> activeScriptingDefineSymbolsWithoutSDKClasses` - The active (i.e. to be added to the  ) scripting define symbol predicate attributes that have no associated SDK classes.
  * `public readonly SDK_ScriptingDefineSymbolPredicateAttribute attribute` - The predicate attribute.
  * `public readonly MethodInfo methodInfo` - The method info of the method the attribute is defined on.
 
@@ -5636,6 +5637,17 @@ Creates a new SDK info for a type that is known at compile time.
    * `Create<BaseType,` - A newly created instance.
 
 Creates a new SDK info for a type.
+
+#### VRTK_SDKInfo/1
+
+  > `public VRTK_SDKInfo(VRTK_SDKInfo infoToCopy)`
+
+  * Parameters
+   * `VRTK_SDKInfo infoToCopy` - The SDK info to copy.
+  * Returns
+   * _none_
+
+Creates a new SDK info by copying an existing one.
 
 ---
 
@@ -6046,6 +6058,19 @@ The TriggerHapticPulse/3 method calls a haptic pulse for a specified amount of t
 
 The Mod method is used to find the remainder of the sum a/b.
 
+#### FindEvenInactiveGameObject<T>/1
+
+  > `public static GameObject FindEvenInactiveGameObject<T>(string gameObjectName = "") where T : Component`
+
+  * Type Params
+   * `GameObject` - The component type that needs to be on an ancestor of the wanted . Must be a subclass of .
+  * Parameters
+   * `string gameObjectName` - The name of the wanted . If it contains a '/' character, this method traverses the hierarchy like a path name.
+  * Returns
+   * `GameObject` - The  with name  and an ancestor that has a . If no  is found  is returned.
+
+Finds all  s with a given name and an ancestor that has a specific component. This method returns active as well as inactive  s in the scene. It doesn't return assets. For performance reasons it is recommended to not use this function every frame. Cache the result in a member variable at startup instead.
+
 ---
 
 ## Policy List (VRTK_PolicyList)
@@ -6245,7 +6270,7 @@ Abstract class that allows to change one game object's properties to follow anot
 
 #### Follow/0
 
-  > `public void Follow()`
+  > `public virtual void Follow()`
 
   * Parameters
    * _none_
@@ -6282,10 +6307,6 @@ Changes one game object's rigidbody to follow another game object's rigidbody.
 ### Overview
 
 Changes one game object's transform to follow another game object's transform.
-
-### Inspector Parameters
-
- * **Moment:** The moment at which to follow.
 
 ### Class Variables
 
@@ -6393,7 +6414,7 @@ Creates a new attribute by copying from another attribute on a given type.
 ---
 
 ## SDK Scripting Define Symbol Predicate (SDK_ScriptingDefineSymbolPredicateAttribute)
- > extends Attribute
+ > extends Attribute, ISerializationCallbackReceiver
 
 ### Overview
 
@@ -6408,8 +6429,8 @@ methods that take no arguments and return
 ### Class Variables
 
  * `public const string RemovableSymbolPrefix` - The prefix of scripting define symbols that must be used to be able to automatically remove the symbols. Default: `"VRTK_DEFINE_"`
- * `public readonly string symbol` - The scripting define symbol to conditionally add or remove.
- * `public readonly BuildTargetGroup buildTargetGroup` - The build target group to use when conditionally adding or removing  .
+ * `public string symbol` - The scripting define symbol to conditionally add or remove.
+ * `public BuildTargetGroup buildTargetGroup` - The build target group to use when conditionally adding or removing  .
 
 ### Class Methods
 
@@ -6424,6 +6445,17 @@ methods that take no arguments and return
    * _none_
 
 Creates a new attribute.
+
+#### SDK_ScriptingDefineSymbolPredicateAttribute/1
+
+  > `public SDK_ScriptingDefineSymbolPredicateAttribute(SDK_ScriptingDefineSymbolPredicateAttribute attributeToCopy)`
+
+  * Parameters
+   * `SDK_ScriptingDefineSymbolPredicateAttribute attributeToCopy` - The attribute to copy.
+  * Returns
+   * _none_
+
+Creates a new attribute by copying an existing one.
 
 ---
 
@@ -6494,6 +6526,17 @@ This is an abstract class to implement the interface required by all implemented
    * _none_
 
 The ProcessUpdate method enables an SDK to run logic for every Unity Update
+
+#### ProcessFixedUpdate/1
+
+  > `public abstract void ProcessFixedUpdate(Dictionary<string, object> options);`
+
+  * Parameters
+   * `Dictionary<string, object> options` - A dictionary of generic options that can be used to within the fixed update.
+  * Returns
+   * _none_
+
+The ProcessFixedUpdate method enables an SDK to run logic for every Unity FixedUpdate
 
 #### GetHeadset/0
 
@@ -6623,6 +6666,18 @@ This is an abstract class to implement the interface required by all implemented
    * _none_
 
 The ProcessUpdate method enables an SDK to run logic for every Unity Update
+
+#### ProcessFixedUpdate/2
+
+  > `public abstract void ProcessFixedUpdate(uint index, Dictionary<string, object> options);`
+
+  * Parameters
+   * `uint index` - The index of the controller.
+   * `Dictionary<string, object> options` - A dictionary of generic options that can be used to within the fixed update.
+  * Returns
+   * _none_
+
+The ProcessFixedUpdate method enables an SDK to run logic for every Unity FixedUpdate
 
 #### GetControllerDefaultColliderPath/1
 
@@ -7495,6 +7550,17 @@ This is the fallback class that will just return default values.
 
 The ProcessUpdate method enables an SDK to run logic for every Unity Update
 
+#### ProcessFixedUpdate/1
+
+  > `public override void ProcessFixedUpdate(Dictionary<string, object> options)`
+
+  * Parameters
+   * `Dictionary<string, object> options` - A dictionary of generic options that can be used to within the fixed update.
+  * Returns
+   * _none_
+
+The ProcessFixedUpdate method enables an SDK to run logic for every Unity FixedUpdate
+
 #### GetHeadset/0
 
   > `public override Transform GetHeadset()`
@@ -7598,6 +7664,18 @@ This is the fallback class that will just return default values.
    * _none_
 
 The ProcessUpdate method enables an SDK to run logic for every Unity Update
+
+#### ProcessFixedUpdate/2
+
+  > `public override void ProcessFixedUpdate(uint index, Dictionary<string, object> options)`
+
+  * Parameters
+   * `uint index` - The index of the controller.
+   * `Dictionary<string, object> options` - A dictionary of generic options that can be used to within the fixed update.
+  * Returns
+   * _none_
+
+The ProcessFixedUpdate method enables an SDK to run logic for every Unity FixedUpdate
 
 #### GetControllerDefaultColliderPath/1
 
@@ -8466,6 +8544,17 @@ The Sim Headset SDK script  provides dummy functions for the headset.
 
 The ProcessUpdate method enables an SDK to run logic for every Unity Update
 
+#### ProcessFixedUpdate/1
+
+  > `public override void ProcessFixedUpdate(Dictionary<string, object> options)`
+
+  * Parameters
+   * `Dictionary<string, object> options` - A dictionary of generic options that can be used to within the fixed update.
+  * Returns
+   * _none_
+
+The ProcessFixedUpdate method enables an SDK to run logic for every Unity FixedUpdate
+
 #### GetHeadset/0
 
   > `public override Transform GetHeadset()`
@@ -8567,6 +8656,18 @@ The Sim Controller SDK script provides functions to help simulate VR controllers
    * _none_
 
 The ProcessUpdate method enables an SDK to run logic for every Unity Update
+
+#### ProcessFixedUpdate/2
+
+  > `public override void ProcessFixedUpdate(uint index, Dictionary<string, object> options)`
+
+  * Parameters
+   * `uint index` - The index of the controller.
+   * `Dictionary<string, object> options` - A dictionary of generic options that can be used to within the fixed update.
+  * Returns
+   * _none_
+
+The ProcessFixedUpdate method enables an SDK to run logic for every Unity FixedUpdate
 
 #### GetControllerDefaultColliderPath/1
 
@@ -9444,6 +9545,17 @@ The SteamVR Headset SDK script provides a bridge to the SteamVR SDK.
 
 The ProcessUpdate method enables an SDK to run logic for every Unity Update
 
+#### ProcessFixedUpdate/1
+
+  > `public override void ProcessFixedUpdate(Dictionary<string, object> options)`
+
+  * Parameters
+   * `Dictionary<string, object> options` - A dictionary of generic options that can be used to within the fixed update.
+  * Returns
+   * _none_
+
+The ProcessFixedUpdate method enables an SDK to run logic for every Unity FixedUpdate
+
 #### GetHeadset/0
 
   > `public override Transform GetHeadset()`
@@ -9544,6 +9656,18 @@ The SteamVR Controller SDK script provides a bridge to SDK methods that deal wit
    * _none_
 
 The ProcessUpdate method enables an SDK to run logic for every Unity Update
+
+#### ProcessFixedUpdate/2
+
+  > `public override void ProcessFixedUpdate(uint index, Dictionary<string, object> options)`
+
+  * Parameters
+   * `uint index` - The index of the controller.
+   * `Dictionary<string, object> options` - A dictionary of generic options that can be used to within the fixed update.
+  * Returns
+   * _none_
+
+The ProcessFixedUpdate method enables an SDK to run logic for every Unity FixedUpdate
 
 #### GetControllerDefaultColliderPath/1
 
@@ -10421,6 +10545,17 @@ The OculusVR Headset SDK script provides a bridge to the OculusVR SDK.
 
 The ProcessUpdate method enables an SDK to run logic for every Unity Update
 
+#### ProcessFixedUpdate/1
+
+  > `public override void ProcessFixedUpdate(Dictionary<string, object> options)`
+
+  * Parameters
+   * `Dictionary<string, object> options` - A dictionary of generic options that can be used to within the fixed update.
+  * Returns
+   * _none_
+
+The ProcessFixedUpdate method enables an SDK to run logic for every Unity FixedUpdate
+
 #### GetHeadset/0
 
   > `public override Transform GetHeadset()`
@@ -10521,6 +10656,18 @@ The OculusVR Controller SDK script provides a bridge to SDK methods that deal wi
    * _none_
 
 The ProcessUpdate method enables an SDK to run logic for every Unity Update
+
+#### ProcessFixedUpdate/2
+
+  > `public override void ProcessFixedUpdate(uint index, Dictionary<string, object> options)`
+
+  * Parameters
+   * `uint index` - The index of the controller.
+   * `Dictionary<string, object> options` - A dictionary of generic options that can be used to within the fixed update.
+  * Returns
+   * _none_
+
+The ProcessFixedUpdate method enables an SDK to run logic for every Unity FixedUpdate
 
 #### GetControllerDefaultColliderPath/1
 
@@ -11408,6 +11555,17 @@ The Daydream Headset SDK script provides dummy functions for the headset.
 
 The ProcessUpdate method enables an SDK to run logic for every Unity Update
 
+#### ProcessFixedUpdate/1
+
+  > `public override void ProcessFixedUpdate(Dictionary<string, object> options)`
+
+  * Parameters
+   * `Dictionary<string, object> options` - A dictionary of generic options that can be used to within the fixed update.
+  * Returns
+   * _none_
+
+The ProcessFixedUpdate method enables an SDK to run logic for every Unity FixedUpdate
+
 #### GetHeadset/0
 
   > `public override Transform GetHeadset()`
@@ -11508,6 +11666,18 @@ The Daydream Controller SDK script provides a bridge to SDK methods that deal wi
    * _none_
 
 The ProcessUpdate method enables an SDK to run logic for every Unity Update
+
+#### ProcessFixedUpdate/2
+
+  > `public override void ProcessFixedUpdate(uint index, Dictionary<string, object> options)`
+
+  * Parameters
+   * `uint index` - The index of the controller.
+   * `Dictionary<string, object> options` - A dictionary of generic options that can be used to within the fixed update.
+  * Returns
+   * _none_
+
+The ProcessFixedUpdate method enables an SDK to run logic for every Unity FixedUpdate
 
 #### GetControllerDefaultColliderPath/1
 
@@ -12384,6 +12554,17 @@ The XimmerseVR Headset SDK script provides a bridge to the XimmerseVR SDK.
 
 The ProcessUpdate method enables an SDK to run logic for every Unity Update
 
+#### ProcessFixedUpdate/1
+
+  > `public override void ProcessFixedUpdate(Dictionary<string, object> options)`
+
+  * Parameters
+   * `Dictionary<string, object> options` - A dictionary of generic options that can be used to within the fixed update.
+  * Returns
+   * _none_
+
+The ProcessFixedUpdate method enables an SDK to run logic for every Unity FixedUpdate
+
 #### GetHeadsetVelocity/0
 
   > `public override Vector3 GetHeadsetVelocity()`
@@ -12484,6 +12665,18 @@ The XimmerseVR Controller SDK script provides a bridge to SDK methods that deal 
    * _none_
 
 The ProcessUpdate method enables an SDK to run logic for every Unity Update
+
+#### ProcessFixedUpdate/2
+
+  > `public override void ProcessFixedUpdate(uint index, Dictionary<string, object> options)`
+
+  * Parameters
+   * `uint index` - The index of the controller.
+   * `Dictionary<string, object> options` - A dictionary of generic options that can be used to within the fixed update.
+  * Returns
+   * _none_
+
+The ProcessFixedUpdate method enables an SDK to run logic for every Unity FixedUpdate
 
 #### GetControllerDefaultColliderPath/1
 

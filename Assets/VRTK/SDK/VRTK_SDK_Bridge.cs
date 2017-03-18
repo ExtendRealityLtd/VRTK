@@ -20,6 +20,16 @@
             GetControllerSDK().ProcessUpdate(index, options);
         }
 
+        public static void HeadsetProcessFixedUpdate(Dictionary<string, object> options = null)
+        {
+            GetHeadsetSDK().ProcessFixedUpdate(options);
+        }
+
+        public static void ControllerProcessFixedUpdate(uint index, Dictionary<string, object> options = null)
+        {
+            GetControllerSDK().ProcessFixedUpdate(index, options);
+        }
+
         public static string GetControllerDefaultColliderPath(SDK_BaseController.ControllerHand hand)
         {
             return GetControllerSDK().GetControllerDefaultColliderPath(hand);

@@ -41,6 +41,14 @@ namespace VRTK
         }
 
         /// <summary>
+        /// The ProcessFixedUpdate method enables an SDK to run logic for every Unity FixedUpdate
+        /// </summary>
+        /// <param name="options">A dictionary of generic options that can be used to within the fixed update.</param>
+        public override void ProcessFixedUpdate(Dictionary<string, object> options)
+        {
+        }
+
+        /// <summary>
         /// The GetHeadsetVelocity method is used to determine the current velocity of the headset.
         /// </summary>
         /// <returns>A Vector3 containing the current velocity of the headset.</returns>
