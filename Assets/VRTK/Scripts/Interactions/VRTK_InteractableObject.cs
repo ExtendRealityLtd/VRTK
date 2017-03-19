@@ -330,11 +330,11 @@ namespace VRTK
         /// <param name="previousGrabbingObject">The game object that was previously grabbing this object.</param>
         public virtual void Ungrabbed(GameObject previousGrabbingObject)
         {
-            var secondaryGrabbingObject = GetSecondaryGrabbingObject();
+            GameObject secondaryGrabbingObject = GetSecondaryGrabbingObject();
             if (!secondaryGrabbingObject || secondaryGrabbingObject != previousGrabbingObject)
             {
                 SecondaryControllerUngrab(secondaryGrabbingObject);
-                PrimaryControllerUngrab(previousGrabbingObject);
+                PrimaryControllerUngrab(previousGrabbingObject, secondaryGrabbingObject);
             }
             else
             {
@@ -850,15 +850,16 @@ namespace VRTK
             }
         }
 
-        protected virtual void PrimaryControllerUngrab(GameObject previousGrabbingObject)
+        protected virtual void PrimaryControllerUngrab(GameObject previousGrabbingObject, GameObject previousSecondaryGrabbingObject)
         {
             UnpauseCollisions();
             RemoveTrackPoint();
             ResetUseState(previousGrabbingObject);
             grabbingObjects.Clear();
-            if (secondaryGrabActionScript)
+            if (secondaryGrabActionScript != null && previousSecondaryGrabbingObject != null)
             {
                 secondaryGrabActionScript.OnDropAction();
+                previousSecondaryGrabbingObject.GetComponent<VRTK_InteractGrab>().ForceRelease();
             }
             LoadPreviousState();
         }

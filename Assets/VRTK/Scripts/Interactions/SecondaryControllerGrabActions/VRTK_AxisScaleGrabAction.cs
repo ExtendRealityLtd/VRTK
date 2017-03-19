@@ -47,6 +47,7 @@ namespace VRTK.SecondaryControllerGrabActions
         /// </summary>
         public override void ProcessUpdate()
         {
+            base.ProcessUpdate();
             CheckForceStopDistance(ungrabDistance);
         }
 
@@ -55,6 +56,7 @@ namespace VRTK.SecondaryControllerGrabActions
         /// </summary>
         public override void ProcessFixedUpdate()
         {
+            base.ProcessFixedUpdate();
             if (initialised)
             {
                 if (uniformScaling)
@@ -70,7 +72,7 @@ namespace VRTK.SecondaryControllerGrabActions
 
         protected virtual void ApplyScale(Vector3 newScale)
         {
-            var existingScale = grabbedObject.transform.localScale;
+            Vector3 existingScale = grabbedObject.transform.localScale;
 
             float finalScaleX = (lockXAxis ? existingScale.x : newScale.x);
             float finalScaleY = (lockYAxis ? existingScale.y : newScale.y);
