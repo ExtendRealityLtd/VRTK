@@ -79,6 +79,13 @@ namespace VRTK
         public abstract void ProcessUpdate(uint index, Dictionary<string, object> options);
 
         /// <summary>
+        /// The ProcessFixedUpdate method enables an SDK to run logic for every Unity FixedUpdate
+        /// </summary>
+        /// <param name="index">The index of the controller.</param>
+        /// <param name="options">A dictionary of generic options that can be used to within the fixed update.</param>
+        public abstract void ProcessFixedUpdate(uint index, Dictionary<string, object> options);
+
+        /// <summary>
         /// The GetControllerDefaultColliderPath returns the path to the prefab that contains the collider objects for the default controller of this SDK.
         /// </summary>
         /// <param name="hand">The controller hand to check for</param>

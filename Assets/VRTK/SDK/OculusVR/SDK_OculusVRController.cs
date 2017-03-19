@@ -37,7 +37,7 @@ namespace VRTK
 
         private float[] hairTriggerLimit = new float[2];
         private float[] hairGripLimit = new float[2];
-        
+
         private OVRHapticsClip hapticsProceduralClipLeft = new OVRHapticsClip();
         private OVRHapticsClip hapticsProceduralClipRight = new OVRHapticsClip();
 
@@ -57,6 +57,15 @@ namespace VRTK
                 UpdateHairValues(index, GetTriggerAxisOnIndex(index).x, GetTriggerHairlineDeltaOnIndex(index), ref previousHairTriggerState[index], ref currentHairTriggerState[index], ref hairTriggerLimit[index]);
                 UpdateHairValues(index, GetGripAxisOnIndex(index).x, GetGripHairlineDeltaOnIndex(index), ref previousHairGripState[index], ref currentHairGripState[index], ref hairGripLimit[index]);
             }
+        }
+
+        /// <summary>
+        /// The ProcessFixedUpdate method enables an SDK to run logic for every Unity FixedUpdate
+        /// </summary>
+        /// <param name="index">The index of the controller.</param>
+        /// <param name="options">A dictionary of generic options that can be used to within the fixed update.</param>
+        public override void ProcessFixedUpdate(uint index, Dictionary<string, object> options)
+        {
         }
 
         /// <summary>

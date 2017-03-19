@@ -80,6 +80,11 @@
             OnControllerDisabled(SetEventPayload());
         }
 
+        protected virtual void FixedUpdate()
+        {
+            VRTK_SDK_Bridge.ControllerProcessFixedUpdate(index);
+        }
+
         protected virtual void Update()
         {
             uint checkIndex = VRTK_DeviceFinder.GetControllerIndex(gameObject);
