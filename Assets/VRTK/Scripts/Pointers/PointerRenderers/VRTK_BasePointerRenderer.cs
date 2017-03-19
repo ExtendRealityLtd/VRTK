@@ -50,7 +50,11 @@ namespace VRTK
 
         [Tooltip("An optional Play Area Cursor generator to add to the destination position of the pointer tip.")]
         public VRTK_PlayAreaCursor playareaCursor;
-        [Tooltip("The layers for the pointer's raycasts to ignore.")]
+
+        [Tooltip("A custom raycaster to use for the pointer's raycasts to ignore.")]
+        public VRTK_CustomRaycast customRaycast;
+        [Tooltip("**OBSOLETE** The layers for the pointer's raycasts to ignore.")]
+        [Obsolete("`VRTK_BasePointerRenderer.layersToIgnore` is no longer used in the `VRTK_BasePointerRenderer` class. This parameter will be removed in a future version of VRTK.")]
         public LayerMask layersToIgnore = Physics.IgnoreRaycastLayer;
         [Tooltip("Specifies the smoothing to be applied to the pointer origin when positioning the pointer tip.")]
         public PointerOriginSmoothingSettings pointerOriginSmoothingSettings = new PointerOriginSmoothingSettings();
@@ -395,7 +399,7 @@ namespace VRTK
         {
             if (givenObject)
             {
-                var pointerRenderer = givenObject.GetComponent<MeshRenderer>();
+                MeshRenderer pointerRenderer = givenObject.GetComponent<MeshRenderer>();
                 pointerRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
                 pointerRenderer.receiveShadows = false;
                 pointerRenderer.material = defaultMaterial;
@@ -458,11 +462,11 @@ namespace VRTK
             objectInteractor.layer = LayerMask.NameToLayer("Ignore Raycast");
             VRTK_PlayerObject.SetPlayerObject(objectInteractor, VRTK_PlayerObject.ObjectTypes.Pointer);
 
-            var objectInteractorCollider = new GameObject(string.Format("[{0}]BasePointerRenderer_ObjectInteractor_Collider", gameObject.name));
+            GameObject objectInteractorCollider = new GameObject(string.Format("[{0}]BasePointerRenderer_ObjectInteractor_Collider", gameObject.name));
             objectInteractorCollider.transform.SetParent(objectInteractor.transform);
             objectInteractorCollider.transform.localPosition = Vector3.zero;
             objectInteractorCollider.layer = LayerMask.NameToLayer("Ignore Raycast");
-            var tmpCollider = objectInteractorCollider.AddComponent<SphereCollider>();
+            SphereCollider tmpCollider = objectInteractorCollider.AddComponent<SphereCollider>();
             tmpCollider.isTrigger = true;
             VRTK_PlayerObject.SetPlayerObject(objectInteractorCollider, VRTK_PlayerObject.ObjectTypes.Pointer);
 
@@ -472,7 +476,7 @@ namespace VRTK
                 objectInteractorAttachPoint.transform.SetParent(objectInteractor.transform);
                 objectInteractorAttachPoint.transform.localPosition = Vector3.zero;
                 objectInteractorAttachPoint.layer = LayerMask.NameToLayer("Ignore Raycast");
-                var objectInteratorRigidBody = objectInteractorAttachPoint.AddComponent<Rigidbody>();
+                Rigidbody objectInteratorRigidBody = objectInteractorAttachPoint.AddComponent<Rigidbody>();
                 objectInteratorRigidBody.isKinematic = true;
                 objectInteratorRigidBody.freezeRotation = true;
                 objectInteratorRigidBody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;

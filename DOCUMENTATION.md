@@ -1180,7 +1180,7 @@ Specifies the smoothing to be applied to the pointer.
  * **Smooths Rotation:** Whether or not to smooth the rotation of the pointer origin when positioning the pointer tip.
  * **Max Allowed Per Frame Angle Difference:** The maximum allowed angle between the unsmoothed pointer origin and the smoothed pointer origin per frame to use for smoothing.
  * **Playarea Cursor:** An optional Play Area Cursor generator to add to the destination position of the pointer tip.
- * **Layers To Ignore:** The layers for the pointer's raycasts to ignore.
+ * **Custom Raycast:** A custom raycaster to use for the pointer's raycasts to ignore.
  * **Valid Collision Color:** The colour to change the pointer materials when the pointer collides with a valid object. Set to `Color.clear` to bypass changing material colour on valid collision.
  * **Invalid Collision Color:** The colour to change the pointer materials when the pointer is not colliding with anything or with an invalid object. Set to `Color.clear` to bypass changing material colour on invalid collision.
  * **Tracer Visibility:** Determines when the main tracer of the pointer renderer will be visible.
@@ -1516,7 +1516,7 @@ The height adjust teleporter extends the basic teleporter and allows for the y p
 
 ### Inspector Parameters
 
- * **Layers To Ignore:** The layers to ignore when raycasting to find floors.
+ * **Custom Raycast:** A custom raycaster to use when raycasting to find floors.
 
 ### Example
 
@@ -4697,7 +4697,7 @@ To allow for peeking over a ledge and not falling, a fall restiction can happen 
  * **Movement Threshold:** The amount of movement of the headset between the headset's current position and the current standing position to determine if the user is walking in play space and to ignore the body physics collisions if the movement delta is above this threshold.
  * **Standing History Samples:** The maximum number of samples to collect of headset position before determining if the current standing position within the play space has changed.
  * **Lean Y Threshold:** The `y` distance between the headset and the object being leaned over, if object being leaned over is taller than this threshold then the current standing position won't be updated.
- * **Layers To Ignore:** The layers to ignore when raycasting to find floors.
+ * **Custom Raycast:** A custom raycaster to use when raycasting to find floors.
  * **Fall Restriction:** A check to see if the drop to nearest floor should take place. If the selected restrictor is still over the current floor then the drop to nearest floor will not occur. Works well for being able to lean over ledges and look down. Only works for falling down not teleporting up.
  * **Gravity Fall Y Threshold:** When the `y` distance between the floor and the headset exceeds this distance and `Enable Body Collisions` is true then the rigidbody gravity will be used instead of teleport to drop to nearest floor.
  * **Blink Y Threshold:** The `y` distance between the floor and the headset that must change before a fade transition is initiated. If the new user location is at a higher distance than the threshold then the headset blink transition will activate on teleport. If the new user location is within the threshold then no blink transition will happen, which is useful for walking up slopes, meshes and terrains to prevent constant blinking.
@@ -5461,6 +5461,7 @@ A collection of scripts that provide useful functionality to aid the creation pr
  * [Device Finder](#device-finder-vrtk_devicefinder)
  * [Shared Methods](#shared-methods-vrtk_sharedmethods)
  * [Policy List](#policy-list-vrtk_policylist)
+ * [Custom Raycast](#custom-raycast-vrtk_customraycast)
  * [Adaptive Quality](#adaptive-quality-vrtk_adaptivequality)
  * [Object Follow](#object-follow-vrtk_objectfollow)
  * [Rigidbody Follow](#rigidbody-follow-vrtk_rigidbodyfollow)
@@ -6128,6 +6129,53 @@ The Find method performs the set operation to determine if the given game object
    * `bool` - Returns true of the given game object matches the policy list or given string logic.
 
 The Check method is used to check if a game object should be ignored based on a given string or policy list.
+
+---
+
+## Custom Raycast (VRTK_CustomRaycast)
+
+### Overview
+
+A Custom Raycast allows to specify custom options for a Physics.Raycast.
+
+A number of other scripts can utilise a Custom Raycast to further customise the raycasts that the scripts use internally.
+
+For example, the VRTK_BodyPhysics script can be set to ignore trigger colliders when casting to see if it should teleport up or down to the nearest floor.
+
+### Inspector Parameters
+
+ * **Layers To Ignore:** The layers to ignore when raycasting.
+ * **Trigger Interaction:** Determines whether the ray will interact with trigger colliders.
+
+### Class Methods
+
+#### Raycast/5
+
+  > `public static bool Raycast(VRTK_CustomRaycast customCast, Ray ray, out RaycastHit hitData, LayerMask ignoreLayers, float length = Mathf.Infinity)`
+
+  * Parameters
+   * `VRTK_CustomRaycast customCast` - The optional raycast object with customised raycast parameters.
+   * `Ray ray` - The Ray to cast with.
+   * `out RaycastHit hitData` - The raycast hit data.
+   * `LayerMask ignoreLayers` - A layermask of layers to ignore from the raycast.
+   * `float length` - The maximum length of the raycast.
+  * Returns
+   * `bool` - Returns true if the raycast successfully collides with a valid object.
+
+The Raycast method is used to generate a raycast either from the given CustomRaycast object or a default Physics.Raycast.
+
+#### CustomCast/3
+
+  > `public virtual bool CustomCast(Ray ray, out RaycastHit hitData, float length = Mathf.Infinity)`
+
+  * Parameters
+   * `Ray ray` - The Ray to cast with.
+   * `out RaycastHit hitData` - The raycast hit data.
+   * `float length` - The maximum length of the raycast.
+  * Returns
+   * `bool` - Returns true if the raycast successfully collides with a valid object.
+
+The CustomCast method is used to generate a raycast based on the options defined in the CustomRaycast object.
 
 ---
 
