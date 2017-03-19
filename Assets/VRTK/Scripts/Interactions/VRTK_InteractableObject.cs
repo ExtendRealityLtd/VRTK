@@ -438,6 +438,10 @@ namespace VRTK
             if (!IsGrabbed() && !snappedInSnapDropZone)
             {
                 previousParent = transform.parent;
+                if (!IsSwappable())
+                {
+                    previousIsGrabbable = isGrabbable;
+                }
 
                 if (interactableRigidbody)
                 {
