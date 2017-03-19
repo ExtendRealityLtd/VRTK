@@ -1956,6 +1956,7 @@ A collection of scripts that provide the ability to interact with game objects w
  * [Interact Haptics](#interact-haptics-vrtk_interacthaptics)
  * [Interact Controller Appearance](#interact-controller-appearance-vrtk_interactcontrollerappearance)
  * [Object Auto Grab](#object-auto-grab-vrtk_objectautograb)
+ * [Object Touch Auto Interact](#object-touch-auto-interact-vrtk_objecttouchautointeract)
 
 ---
 
@@ -3238,6 +3239,17 @@ The ForceStopUsing method will force the controller to stop using the currently 
 
 The ForceResetUsing will force the controller to stop using the currently touched object but the object will continue with it's existing using action.
 
+#### AttemptUse/0
+
+  > `public virtual void AttemptUse()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The AttemptUse method will attempt to use the currently touched object without needing to press the use button on the controller.
+
 ### Example
 
 `VRTK/Examples/006_Controller_UsingADoor` simulates using a door object to open and close it. It also has a cube on the floor that can be grabbed to show how interactable objects can be usable or grabbable.
@@ -3392,6 +3404,31 @@ The ClearPreviousClone method resets the previous cloned object to null to ensur
 ### Example
 
 `VRTK/Examples/026_Controller_ForceHoldObject` shows how to automatically grab a sword to each controller and also prevents the swords from being dropped so they are permanently attached to the user's controllers.
+
+---
+
+## Object Touch Auto Interact (VRTK_ObjectTouchAutoInteract)
+
+### Overview
+
+The Object Touch Auto Interact script allows grab or use interactions on an object to automatically happen upon touching the interactable object.
+
+### Inspector Parameters
+
+ * **Grab On Touch When:** Determines when a grab on touch should occur.
+ * **Regrab Delay:** After being ungrabbed, another auto grab on touch can only occur after this time.
+ * **Continuous Grab Check:** If this is checked then the grab on touch check will happen every frame and not only on the first touch of the object.
+ * **Use On Touch When:** Determines when a use on touch should occur.
+ * **Reuse Delay:** After being unused, another auto use on touch can only occur after this time.
+ * **Continuous Use Check:** If this is checked then the use on touch check will happen every frame and not only on the first touch of the object.
+ * **Interactable Object:** The interactable object that the auto interaction will occur on. If this is blank then the script must be on the same GameObject as the Interactable Object script.
+
+### Class Variables
+
+ * `public enum AutoInteractions` - Situation when auto interaction can occur.
+  * `Never` - Auto interaction can never occur on touch.
+  * `NoButtonHeld` - Auto interaction will occur on touch even if the specified interaction button is not held down.
+  * `ButtonHeld` - Auto interaction will only occur on touch if the specified interaction button is held down.
 
 ---
 

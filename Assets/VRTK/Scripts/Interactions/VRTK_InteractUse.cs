@@ -103,6 +103,14 @@ namespace VRTK
             }
         }
 
+        /// <summary>
+        /// The AttemptUse method will attempt to use the currently touched object without needing to press the use button on the controller.
+        /// </summary>
+        public virtual void AttemptUse()
+        {
+            AttemptUseObject();
+        }
+
         protected virtual void OnEnable()
         {
             interactTouch = GetComponent<VRTK_InteractTouch>();
@@ -296,9 +304,8 @@ namespace VRTK
             UnuseInteractedObject(true);
         }
 
-        protected virtual void DoStartUseObject(object sender, ControllerInteractionEventArgs e)
+        protected virtual void AttemptUseObject()
         {
-            usePressed = true;
             GameObject touchedObject = interactTouch.GetTouchedObject();
             if (touchedObject == null)
             {
@@ -320,6 +327,12 @@ namespace VRTK
                     SetObjectUsingState(usingObject, GetObjectUsingState(usingObject) + 1);
                 }
             }
+        }
+
+        protected virtual void DoStartUseObject(object sender, ControllerInteractionEventArgs e)
+        {
+            usePressed = true;
+            AttemptUseObject();
         }
 
         protected virtual void DoStopUseObject(object sender, ControllerInteractionEventArgs e)
