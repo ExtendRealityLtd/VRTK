@@ -167,6 +167,7 @@ namespace VRTK
                 CalculateBlinkDelay(blinkTransitionSpeed, newPosition);
                 Blink(blinkTransitionSpeed);
                 SetNewPosition(newPosition, e.target, e.forceDestinationPosition);
+                SetNewRotation(e.destinationRotation);
                 OnTeleported(sender, e);
             }
         }
@@ -174,6 +175,14 @@ namespace VRTK
         protected virtual void SetNewPosition(Vector3 position, Transform target, bool forceDestinationPosition)
         {
             playArea.position = CheckTerrainCollision(position, target, forceDestinationPosition);
+        }
+
+        protected virtual void SetNewRotation(Quaternion? rotation)
+        {
+            if (rotation != null)
+            {
+                playArea.rotation = (Quaternion)rotation;
+            }
         }
 
         protected virtual Vector3 GetNewPosition(Vector3 tipPosition, Transform target, bool returnOriginalPosition)

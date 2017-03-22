@@ -38,6 +38,7 @@ A collection of pre-defined usable prefabs have been included to allow for each 
  * [Radial Menu](#radial-menu-radialmenu)
  * [Independent Radial Menu Controller](#independent-radial-menu-controller-vrtk_independentradialmenucontroller)
  * [Destination Point](#destination-point-vrtk_destinationpoint)
+ * [Pointer Direction Indicator](#pointer-direction-indicator-vrtk_pointerdirectionindicator)
  * [Console Viewer Canvas](#console-viewer-canvas-vrtk_consoleviewer)
  * [Panel Menu Controller](#panel-menu-controller-panelmenucontroller)
  * [Panel Menu Item Controller](#panel-menu-item-controller-panelmenuitemcontroller)
@@ -593,6 +594,58 @@ The ResetDestinationPoint resets the destination point back to the default state
 
 ---
 
+## Pointer Direction Indicator (VRTK_PointerDirectionIndicator)
+
+### Overview
+
+The Pointer Direction Indicator is used to determine a given world rotation that can be used by a Destiantion Marker.
+
+The Pointer Direction Indicator can be attached to a VRTK_Pointer in the `Direction Indicator` parameter and will the be used to send rotation data when the destination marker events are emitted.
+
+This can be useful for rotating the play area upon teleporting to face the user in a new direction without expecting them to physically turn in the play space.
+
+### Inspector Parameters
+
+ * **Include Headset Offset:** If this is checked then the reported rotation will include the offset of the headset rotation in relation to the play area.
+
+### Class Methods
+
+#### Initialize/1
+
+  > `public virtual void Initialize(VRTK_ControllerEvents events)`
+
+  * Parameters
+   * `VRTK_ControllerEvents events` - The Controller Events script that is used to control the direction indicator's rotation.
+  * Returns
+   * _none_
+
+The Initialize method is used to set up the direction indicator.
+
+#### SetPosition/2
+
+  > `public virtual void SetPosition(bool active, Vector3 position)`
+
+  * Parameters
+   * `bool active` - Determines if the direction indicator GameObject should be active or not.
+   * `Vector3 position` - The position to set the direction indicator to.
+  * Returns
+   * _none_
+
+The SetPosition method is used to set the world position of the direction indicator.
+
+#### GetRotation/0
+
+  > `public virtual Quaternion GetRotation()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `Quaternion` - The reported rotation of the direction indicator.
+
+The GetRotation method returns the current reported rotation of the direction indicator.
+
+---
+
 ## Console Viewer Canvas (VRTK_ConsoleViewer)
 
 ### Overview
@@ -871,6 +924,7 @@ Adding the `VRTK_DestinationMarker_UnityEvents` component to `VRTK_DestinationMa
  * `Transform target` - The Transform of the collided destination object.
  * `RaycastHit raycastHit` - The optional RaycastHit generated from when the ray collided.
  * `Vector3 destinationPosition` - The world position of the destination marker.
+ * `Quaternion? destinationRotation` - The world rotation of the destination marker.
  * `bool forceDestinationPosition` - If true then the given destination position should not be altered by anything consuming the payload.
  * `bool enableTeleport` - Whether the destination set event should trigger teleport.
  * `uint controllerIndex` - The optional index of the controller emitting the beam.
@@ -944,6 +998,7 @@ It extends the `VRTK_DestinationMarker` to allow for destination events to be em
  * **Grab To Pointer Tip:** If `Interact With Objects` is checked and this is checked then when an object is grabbed with the pointer touching it, the object will attach to the pointer tip and not snap to the controller.
  * **Controller:** The controller that will be used to toggle the pointer. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.
  * **Custom Origin:** A custom transform to use as the origin of the pointer. If no pointer origin transform is provided then the transform the script is attached to is used.
+ * **Direction Indicator:** A custom VRTK_PointerDirectionIndicator to use to determine the rotation given to the destination set event.
 
 ### Class Methods
 
@@ -1460,6 +1515,7 @@ Adding the `VRTK_BasicTeleport_UnityEvents` component to `VRTK_BasicTeleport` ob
  * `Transform target` - The Transform of the collided destination object.
  * `RaycastHit raycastHit` - The optional RaycastHit generated from when the ray collided.
  * `Vector3 destinationPosition` - The world position of the destination marker.
+ * `Quaternion? destinationRotation` - The world rotation of the destination marker.
  * `bool forceDestinationPosition` - If true then the given destination position should not be altered by anything consuming the payload.
  * `bool enableTeleport` - Whether the destination set event should trigger teleport.
  * `uint controllerIndex` - The optional index of the controller emitting the beam.

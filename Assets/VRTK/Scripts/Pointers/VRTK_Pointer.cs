@@ -59,6 +59,8 @@ namespace VRTK
         public VRTK_ControllerEvents controller;
         [Tooltip("A custom transform to use as the origin of the pointer. If no pointer origin transform is provided then the transform the script is attached to is used.")]
         public Transform customOrigin;
+        [Tooltip("A custom VRTK_PointerDirectionIndicator to use to determine the rotation given to the destination set event.")]
+        public VRTK_PointerDirectionIndicator directionIndicator;
 
         protected VRTK_ControllerEvents.ButtonAlias subscribedActivationButton = VRTK_ControllerEvents.ButtonAlias.Undefined;
         protected VRTK_ControllerEvents.ButtonAlias subscribedSelectionButton = VRTK_ControllerEvents.ButtonAlias.Undefined;
@@ -83,7 +85,7 @@ namespace VRTK
             if (enabled && givenHit.transform && controllerIndex < uint.MaxValue)
             {
                 SetHoverSelectionTimer(givenHit.collider);
-                OnDestinationMarkerEnter(SetDestinationMarkerEvent(givenHit.distance, givenHit.transform, givenHit, givenHit.point, controllerIndex));
+                OnDestinationMarkerEnter(SetDestinationMarkerEvent(givenHit.distance, givenHit.transform, givenHit, givenHit.point, controllerIndex, false, GetCursorRotation()));
                 StartUseAction(givenHit.transform);
             }
         }
@@ -97,7 +99,7 @@ namespace VRTK
             ResetHoverSelectionTimer(givenHit.collider);
             if (givenHit.transform && controllerIndex < uint.MaxValue)
             {
-                OnDestinationMarkerExit(SetDestinationMarkerEvent(givenHit.distance, givenHit.transform, givenHit, givenHit.point, controllerIndex));
+                OnDestinationMarkerExit(SetDestinationMarkerEvent(givenHit.distance, givenHit.transform, givenHit, givenHit.point, controllerIndex, false, GetCursorRotation()));
                 StopUseAction();
             }
         }
@@ -218,6 +220,26 @@ namespace VRTK
 
                 CheckHoverSelect();
             }
+
+            UpdateDirectionIndicator();
+        }
+
+        protected virtual void UpdateDirectionIndicator()
+        {
+            if (directionIndicator != null && pointerRenderer != null)
+            {
+                RaycastHit destinationHit = pointerRenderer.GetDestinationHit();
+                directionIndicator.SetPosition((IsPointerActive() && destinationHit.collider != null), destinationHit.point);
+            }
+        }
+
+        protected virtual Quaternion? GetCursorRotation()
+        {
+            if (directionIndicator != null)
+            {
+                return directionIndicator.GetRotation();
+            }
+            return null;
         }
 
         protected virtual bool EnabledPointerRenderer()
@@ -251,6 +273,11 @@ namespace VRTK
             if (controller == null && (activationButton != VRTK_ControllerEvents.ButtonAlias.Undefined || selectionButton != VRTK_ControllerEvents.ButtonAlias.Undefined))
             {
                 Debug.LogWarning("`VRTK_Pointer` requires a Controller that has the `VRTK_ControllerEvents` script attached to it. To omit this warning, set the `Activation Bubtton` and `Selection Button` to `Undefined`");
+            }
+
+            if (directionIndicator != null)
+            {
+                directionIndicator.Initialize(controller);
             }
         }
 
@@ -407,7 +434,7 @@ namespace VRTK
                 {
                     ResetHoverSelectionTimer(destinationHit.collider);
                     ResetSelectionTimer();
-                    OnDestinationMarkerSet(SetDestinationMarkerEvent(destinationHit.distance, destinationHit.transform, destinationHit, destinationHit.point, controllerIndex));
+                    OnDestinationMarkerSet(SetDestinationMarkerEvent(destinationHit.distance, destinationHit.transform, destinationHit, destinationHit.point, controllerIndex, false, GetCursorRotation()));
                 }
             }
         }
