@@ -27,9 +27,9 @@ namespace VRTK
         /// <param name="options">A dictionary of generic options that can be used to within the update.</param>
         public override void ProcessUpdate(Dictionary<string, object> options)
         {
-            var device = GetHeadset();
-            previousHeadsetRotation = currentHeadsetRotation;
-            currentHeadsetRotation = device.transform.rotation;
+#if VRTK_DEFINE_OCULUSVR_UTILITIES_1_11_0_OR_OLDER
+            CalculateAngularVelocity();
+#endif
         }
 
         /// <summary>
@@ -38,6 +38,9 @@ namespace VRTK
         /// <param name="options">A dictionary of generic options that can be used to within the fixed update.</param>
         public override void ProcessFixedUpdate(Dictionary<string, object> options)
         {
+#if VRTK_DEFINE_OCULUSVR_UTILITIES_1_12_0_OR_NEWER
+            CalculateAngularVelocity();
+#endif
         }
 
         /// <summary>
@@ -74,7 +77,13 @@ namespace VRTK
         /// <returns>A Vector3 containing the current velocity of the headset.</returns>
         public override Vector3 GetHeadsetVelocity()
         {
+#if VRTK_DEFINE_OCULUSVR_UTILITIES_1_11_0_OR_OLDER
             return OVRManager.isHmdPresent ? OVRPlugin.GetEyeVelocity(OVRPlugin.Eye.Left).ToOVRPose().position : Vector3.zero;
+#elif VRTK_DEFINE_OCULUSVR_UTILITIES_1_12_0_OR_NEWER
+            return OVRManager.isHmdPresent ? OVRPlugin.GetNodeVelocity(OVRPlugin.Node.EyeCenter, OVRPlugin.Step.Render).FromFlippedZVector3f() : Vector3.zero;
+#else
+            return Vector3.zero;
+#endif
         }
 
         /// <summary>
@@ -122,6 +131,12 @@ namespace VRTK
             {
                 camera.gameObject.AddComponent<VRTK_ScreenFade>();
             }
+        }
+
+        private void CalculateAngularVelocity()
+        {
+            previousHeadsetRotation = currentHeadsetRotation;
+            currentHeadsetRotation = GetHeadset().transform.rotation;
         }
 #endif
     }
