@@ -70,6 +70,7 @@ namespace VRTK.SecondaryControllerGrabActions
         /// </summary>
         public override void OnDropAction()
         {
+            base.OnDropAction();
             StopRealignOnRelease();
         }
 
@@ -78,6 +79,7 @@ namespace VRTK.SecondaryControllerGrabActions
         /// </summary>
         public override void ProcessUpdate()
         {
+            base.ProcessUpdate();
             CheckForceStopDistance(ungrabDistance);
         }
 
@@ -86,6 +88,7 @@ namespace VRTK.SecondaryControllerGrabActions
         /// </summary>
         public override void ProcessFixedUpdate()
         {
+            base.ProcessFixedUpdate();
             if (initialised)
             {
                 AimObject();

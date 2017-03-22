@@ -371,8 +371,8 @@ namespace VRTK
                 }
                 grabbedObjectScript.Ungrabbed(grabbingObject);
                 grabbedObjectScript.ToggleHighlight(false);
-
                 ToggleControllerVisibility(true);
+
                 OnControllerUngrabInteractableObject(interactTouch.SetControllerInteractEvent(grabbedObject));
             }
 
