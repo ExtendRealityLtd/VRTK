@@ -678,7 +678,7 @@ namespace VRTK
                 actualLeftController.AddComponent<VRTK_TrackedController>();
             }
 
-            if (!actualRightController.GetComponent<VRTK_TrackedController>())
+            if (actualRightController && !actualRightController.GetComponent<VRTK_TrackedController>())
             {
                 actualRightController.AddComponent<VRTK_TrackedController>();
             }
