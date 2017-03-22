@@ -178,7 +178,7 @@ namespace VRTK
             Transform origin = GetOrigin();
             Ray pointerRaycast = new Ray(origin.position, origin.forward);
             RaycastHit pointerCollidedWith;
-            var rayHit = Physics.Raycast(pointerRaycast, out pointerCollidedWith, maximumLength, ~layersToIgnore);
+            bool rayHit = VRTK_CustomRaycast.Raycast(customRaycast, pointerRaycast, out pointerCollidedWith, layersToIgnore, maximumLength);
 
             CheckRayMiss(rayHit, pointerCollidedWith);
             CheckRayHit(rayHit, pointerCollidedWith);
@@ -197,7 +197,7 @@ namespace VRTK
             if (actualContainer)
             {
                 //if the additional decimal isn't added then the beam position glitches
-                var beamPosition = tracerLength / (2f + BEAM_ADJUST_OFFSET);
+                float beamPosition = tracerLength / (2f + BEAM_ADJUST_OFFSET);
 
                 actualTracer.transform.localScale = new Vector3(scaleFactor, scaleFactor, tracerLength);
                 actualTracer.transform.localPosition = Vector3.forward * beamPosition;

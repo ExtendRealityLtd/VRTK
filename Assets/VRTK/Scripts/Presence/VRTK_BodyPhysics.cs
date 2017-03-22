@@ -2,6 +2,7 @@
 namespace VRTK
 {
     using UnityEngine;
+    using System;
     using System.Collections;
     using System.Collections.Generic;
 
@@ -72,7 +73,10 @@ namespace VRTK
 
         [Header("Snap To Floor Settings")]
 
-        [Tooltip("The layers to ignore when raycasting to find floors.")]
+        [Tooltip("A custom raycaster to use when raycasting to find floors.")]
+        public VRTK_CustomRaycast customRaycast;
+        [Tooltip("**OBSOLETE** The layers to ignore when raycasting to find floors.")]
+        [Obsolete("`VRTK_BodyPhysics.layersToIgnore` is no longer used in the `VRTK_BodyPhysics` class. This parameter will be removed in a future version of VRTK.")]
         public LayerMask layersToIgnore = Physics.IgnoreRaycastLayer;
         [Tooltip("A check to see if the drop to nearest floor should take place. If the selected restrictor is still over the current floor then the drop to nearest floor will not occur. Works well for being able to lean over ledges and look down. Only works for falling down not teleporting up.")]
         public FallingRestrictors fallRestriction = FallingRestrictors.NoRestriction;
@@ -471,14 +475,14 @@ namespace VRTK
         {
             if (playArea && !playArea.transform.position.Equals(lastPlayAreaPosition))
             {
-                var playareaDifference = playArea.transform.position - lastPlayAreaPosition;
+                Vector3 playareaDifference = playArea.transform.position - lastPlayAreaPosition;
                 currentStandingPosition = new Vector2(currentStandingPosition.x + playareaDifference.x, currentStandingPosition.y + playareaDifference.z);
             }
         }
 
         protected virtual void SetIsMoving(Vector2 currentHeadsetPosition)
         {
-            var moveDistance = Vector2.Distance(currentHeadsetPosition, currentStandingPosition);
+            float moveDistance = Vector2.Distance(currentHeadsetPosition, currentStandingPosition);
             isMoving = (moveDistance > movementThreshold ? true : false);
             if (playArea && (!playArea.transform.position.Equals(lastPlayAreaPosition) || !onGround))
             {
@@ -493,7 +497,7 @@ namespace VRTK
             Vector3 rayDirection = (playArea ? -playArea.up : Vector3.zero);
             Ray standingDownRay = new Ray(standingDownRayStartPosition, rayDirection);
             RaycastHit standingDownRayCollision;
-            bool standingDownRayHit = Physics.Raycast(standingDownRay, out standingDownRayCollision, Mathf.Infinity, ~layersToIgnore);
+            bool standingDownRayHit = VRTK_CustomRaycast.Raycast(customRaycast, standingDownRay, out standingDownRayCollision, layersToIgnore, Mathf.Infinity);
 
             if (standingDownRayHit)
             {
@@ -507,17 +511,17 @@ namespace VRTK
             }
 
             //reset the headset x rotation so the forward ray is always horizontal regardless of the headset rotation
-            var storedRotation = headset.rotation;
+            Quaternion storedRotation = headset.rotation;
             headset.rotation = new Quaternion(0f, headset.rotation.y, headset.rotation.z, headset.rotation.w);
 
-            var forwardLengthAddition = 0.05f;
-            var forwardLength = bodyCollider.radius + forwardLengthAddition;
+            float forwardLengthAddition = 0.05f;
+            float forwardLength = bodyCollider.radius + forwardLengthAddition;
 
             Ray forwardRay = new Ray(headset.position, headset.forward);
             RaycastHit forwardRayCollision;
 
             // Cast a ray forward just outside the body collider radius to see if anything is blocking your path
-            if (!Physics.Raycast(forwardRay, out forwardRayCollision, forwardLength, ~layersToIgnore))
+            if (!VRTK_CustomRaycast.Raycast(customRaycast, forwardRay, out forwardRayCollision, layersToIgnore, forwardLength))
             {
                 if (standingDownRayHit)
                 {
@@ -526,9 +530,9 @@ namespace VRTK
                     RaycastHit downRayCollision;
 
                     //Cast a ray down from the end of the forward ray position
-                    if (Physics.Raycast(downRay, out downRayCollision, Mathf.Infinity, ~layersToIgnore))
+                    if (VRTK_CustomRaycast.Raycast(customRaycast, downRay, out downRayCollision, layersToIgnore, Mathf.Infinity))
                     {
-                        var distancePrecision = 1000f;
+                        float distancePrecision = 1000f;
                         float rayDownDelta = (Mathf.Round((standingDownRayCollision.distance - downRayCollision.distance) * distancePrecision) / distancePrecision);
                         float playAreaPositionDelta = Mathf.Round(Vector3.Distance(playArea.transform.position, lastPlayAreaPosition) * distancePrecision) / distancePrecision;
 
@@ -553,10 +557,10 @@ namespace VRTK
             {
                 if (!isLeaning && !currentCollidingObject)
                 {
-                    var resetStandingPosition = true;
+                    bool resetStandingPosition = true;
                     for (int i = 0; i < standingHistorySamples; i++)
                     {
-                        var currentDistance = Vector2.Distance(standingPositionHistory[i], standingPositionHistory[standingHistorySamples]);
+                        float currentDistance = Vector2.Distance(standingPositionHistory[i], standingPositionHistory[standingHistorySamples]);
                         resetStandingPosition = (currentDistance <= movementThreshold ? resetStandingPosition : false);
                     }
 
@@ -568,8 +572,8 @@ namespace VRTK
 
         protected virtual void CheckHeadsetMovement()
         {
-            var currentIsMoving = isMoving;
-            var currentHeadsetPosition = (headset ? new Vector2(headset.position.x, headset.position.z) : Vector2.zero);
+            bool currentIsMoving = isMoving;
+            Vector2 currentHeadsetPosition = (headset ? new Vector2(headset.position.x, headset.position.z) : Vector2.zero);
             SetCurrentStandingPosition();
             SetIsMoving(currentHeadsetPosition);
             CheckLean();
@@ -697,8 +701,8 @@ namespace VRTK
         {
             if (bodyCollider)
             {
-                var newpresenceColliderYSize = (headset ? headset.transform.localPosition.y - headsetYOffset : 0f);
-                var newpresenceColliderYCenter = Mathf.Max((newpresenceColliderYSize / 2) + playAreaHeightAdjustment, bodyCollider.radius + playAreaHeightAdjustment);
+                float newpresenceColliderYSize = (headset ? headset.transform.localPosition.y - headsetYOffset : 0f);
+                float newpresenceColliderYCenter = Mathf.Max((newpresenceColliderYSize / 2) + playAreaHeightAdjustment, bodyCollider.radius + playAreaHeightAdjustment);
 
                 if (headset && bodyCollider)
                 {
@@ -714,7 +718,7 @@ namespace VRTK
             {
                 IgnoreCollisions(mappedController.GetComponentsInChildren<Collider>(), true);
 
-                var grabbingController = mappedController.GetComponent<VRTK_InteractGrab>();
+                VRTK_InteractGrab grabbingController = mappedController.GetComponent<VRTK_InteractGrab>();
                 if (grabbingController && ignoreGrabbedCollisions)
                 {
                     if (state)
@@ -736,7 +740,7 @@ namespace VRTK
             yield return new WaitForEndOfFrame();
             if (obj)
             {
-                var objScript = obj.GetComponent<VRTK_InteractableObject>();
+                VRTK_InteractableObject objScript = obj.GetComponent<VRTK_InteractableObject>();
                 if (objScript && !objScript.IsGrabbed())
                 {
                     IgnoreCollisions(obj.GetComponentsInChildren<Collider>(), false);
@@ -748,10 +752,10 @@ namespace VRTK
         {
             if (playArea)
             {
-                var collider = playArea.GetComponent<Collider>();
+                Collider collider = playArea.GetComponent<Collider>();
                 if (collider.gameObject.activeInHierarchy)
                 {
-                    foreach (var controllerCollider in colliders)
+                    foreach (Collider controllerCollider in colliders)
                     {
                         if (controllerCollider.gameObject.activeInHierarchy)
                         {
@@ -781,13 +785,13 @@ namespace VRTK
 
         protected virtual bool FloorIsGrabbedObject(RaycastHit collidedObj)
         {
-            var obj = collidedObj.transform.GetComponent<VRTK_InteractableObject>();
+            VRTK_InteractableObject obj = collidedObj.transform.GetComponent<VRTK_InteractableObject>();
             return (obj && obj.IsGrabbed());
         }
 
         protected virtual bool FloorHeightChanged(float currentY)
         {
-            var yDelta = Mathf.Abs(currentY - lastFrameFloorY);
+            float yDelta = Mathf.Abs(currentY - lastFrameFloorY);
             return (yDelta > floorHeightTolerance);
         }
 
@@ -800,7 +804,7 @@ namespace VRTK
         {
             Ray ray = new Ray(controllerObj.transform.position, -playArea.up);
             RaycastHit rayCollidedWith;
-            Physics.Raycast(ray, out rayCollidedWith, Mathf.Infinity, ~layersToIgnore);
+            VRTK_CustomRaycast.Raycast(customRaycast, ray, out rayCollidedWith, layersToIgnore, Mathf.Infinity);
             return controllerObj.transform.position.y - rayCollidedWith.distance;
         }
 
@@ -811,12 +815,12 @@ namespace VRTK
                 return false;
             }
 
-            var controllerDropThreshold = 0.05f;
-            var rightController = VRTK_DeviceFinder.GetControllerRightHand();
-            var leftController = VRTK_DeviceFinder.GetControllerLeftHand();
-            var previousY = playArea.position.y;
-            var rightCheck = (rightController.activeInHierarchy && Mathf.Abs(ControllerHeightCheck(rightController) - previousY) < controllerDropThreshold);
-            var leftCheck = (leftController.activeInHierarchy && Mathf.Abs(ControllerHeightCheck(leftController) - previousY) < controllerDropThreshold);
+            float controllerDropThreshold = 0.05f;
+            GameObject rightController = VRTK_DeviceFinder.GetControllerRightHand();
+            GameObject leftController = VRTK_DeviceFinder.GetControllerLeftHand();
+            float previousY = playArea.position.y;
+            bool rightCheck = (rightController.activeInHierarchy && Mathf.Abs(ControllerHeightCheck(rightController) - previousY) < controllerDropThreshold);
+            bool leftCheck = (leftController.activeInHierarchy && Mathf.Abs(ControllerHeightCheck(leftController) - previousY) < controllerDropThreshold);
 
             if (fallRestriction == FallingRestrictors.LeftController)
             {
@@ -842,7 +846,7 @@ namespace VRTK
             {
                 Ray ray = new Ray(headset.transform.position, -playArea.up);
                 RaycastHit rayCollidedWith;
-                bool rayHit = Physics.Raycast(ray, out rayCollidedWith, Mathf.Infinity, ~layersToIgnore);
+                bool rayHit = VRTK_CustomRaycast.Raycast(customRaycast, ray, out rayCollidedWith, layersToIgnore, Mathf.Infinity);
                 float hitFloorY = headset.transform.position.y - rayCollidedWith.distance;
                 hitFloorYDelta = playArea.position.y - hitFloorY;
 
@@ -919,9 +923,9 @@ namespace VRTK
         protected virtual void TeleportFall(float floorY, RaycastHit rayCollidedWith)
         {
             StartFall(rayCollidedWith.collider.gameObject);
-            var currentFloor = rayCollidedWith.transform.gameObject;
-            var newPosition = new Vector3(playArea.position.x, floorY, playArea.position.z);
-            var originalblinkTransitionSpeed = teleporter.blinkTransitionSpeed;
+            GameObject currentFloor = rayCollidedWith.transform.gameObject;
+            Vector3 newPosition = new Vector3(playArea.position.x, floorY, playArea.position.z);
+            float originalblinkTransitionSpeed = teleporter.blinkTransitionSpeed;
 
             teleporter.blinkTransitionSpeed = (Mathf.Abs(hitFloorYDelta) > blinkYThreshold ? originalblinkTransitionSpeed : 0f);
             OnDestinationMarkerSet(SetDestinationMarkerEvent(rayCollidedWith.distance, currentFloor.transform, rayCollidedWith, newPosition, uint.MaxValue, true));

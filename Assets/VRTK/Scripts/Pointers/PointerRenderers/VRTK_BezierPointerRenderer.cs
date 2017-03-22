@@ -194,7 +194,7 @@ namespace VRTK
             if ((attachedRotation * 100f) > heightLimitAngle)
             {
                 useForward = new Vector3(useForward.x, fixedForwardBeamForward.y, useForward.z);
-                var controllerRotationOffset = 1f - (attachedRotation - (heightLimitAngle / 100f));
+                float controllerRotationOffset = 1f - (attachedRotation - (heightLimitAngle / 100f));
                 calculatedLength = (maximumLength * controllerRotationOffset) * controllerRotationOffset;
             }
             else
@@ -202,11 +202,11 @@ namespace VRTK
                 fixedForwardBeamForward = origin.forward;
             }
 
-            var actualLength = calculatedLength;
+            float actualLength = calculatedLength;
             Ray pointerRaycast = new Ray(origin.position, useForward);
 
             RaycastHit collidedWith;
-            var hasRayHit = Physics.Raycast(pointerRaycast, out collidedWith, calculatedLength, ~layersToIgnore);
+            bool hasRayHit = VRTK_CustomRaycast.Raycast(customRaycast, pointerRaycast, out collidedWith, layersToIgnore, calculatedLength);
 
             float contactDistance = 0f;
             //reset if beam not hitting or hitting new target
@@ -237,7 +237,7 @@ namespace VRTK
             Ray projectedBeamDownRaycast = new Ray(jointPosition, Vector3.down);
             RaycastHit collidedWith;
 
-            var downRayHit = Physics.Raycast(projectedBeamDownRaycast, out collidedWith, float.PositiveInfinity, ~layersToIgnore);
+            bool downRayHit = VRTK_CustomRaycast.Raycast(customRaycast, projectedBeamDownRaycast, out collidedWith, layersToIgnore, float.PositiveInfinity);
 
             if (!downRayHit || (destinationHit.collider && destinationHit.collider != collidedWith.collider))
             {
@@ -279,21 +279,21 @@ namespace VRTK
 
                 for (int i = 0; i < tracerDensity - checkFrequency; i += checkFrequency)
                 {
-                    var currentPoint = checkPoints[i];
-                    var nextPoint = (i + checkFrequency < checkPoints.Length ? checkPoints[i + checkFrequency] : checkPoints[checkPoints.Length - 1]);
-                    var nextPointDirection = (nextPoint - currentPoint).normalized;
-                    var nextPointDistance = Vector3.Distance(currentPoint, nextPoint);
+                    Vector3 currentPoint = checkPoints[i];
+                    Vector3 nextPoint = (i + checkFrequency < checkPoints.Length ? checkPoints[i + checkFrequency] : checkPoints[checkPoints.Length - 1]);
+                    Vector3 nextPointDirection = (nextPoint - currentPoint).normalized;
+                    float nextPointDistance = Vector3.Distance(currentPoint, nextPoint);
 
                     Ray checkCollisionRay = new Ray(currentPoint, nextPointDirection);
                     RaycastHit checkCollisionHit;
 
-                    if (Physics.Raycast(checkCollisionRay, out checkCollisionHit, nextPointDistance, ~layersToIgnore))
+                    if (VRTK_CustomRaycast.Raycast(customRaycast, checkCollisionRay, out checkCollisionHit, layersToIgnore, nextPointDistance))
                     {
-                        var collisionPoint = checkCollisionRay.GetPoint(checkCollisionHit.distance);
+                        Vector3 collisionPoint = checkCollisionRay.GetPoint(checkCollisionHit.distance);
                         Ray downwardCheckRay = new Ray(collisionPoint + (Vector3.up * 0.01f), Vector3.down);
                         RaycastHit downwardCheckHit;
 
-                        if (Physics.Raycast(downwardCheckRay, out downwardCheckHit, float.PositiveInfinity, ~layersToIgnore))
+                        if (VRTK_CustomRaycast.Raycast(customRaycast, downwardCheckRay, out downwardCheckHit, layersToIgnore, float.PositiveInfinity))
                         {
                             destinationHit = downwardCheckHit;
                             newDownPosition = downwardCheckRay.GetPoint(downwardCheckHit.distance); ;
@@ -319,7 +319,7 @@ namespace VRTK
                 downPosition,
                 downPosition,
                 };
-                var tracerMaterial = (customTracer ? null : defaultMaterial);
+                Material tracerMaterial = (customTracer ? null : defaultMaterial);
                 actualTracer.SetPoints(beamPoints, tracerMaterial, currentColor);
                 if (tracerVisibility == VisibilityStates.AlwaysOff)
                 {
