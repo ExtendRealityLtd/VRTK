@@ -280,7 +280,7 @@ namespace VRTK
         private VRTK_InteractableObject ValidSnapObject(GameObject checkObject, bool grabState)
         {
             var ioCheck = checkObject.GetComponentInParent<VRTK_InteractableObject>();
-            return (ioCheck && ioCheck.IsGrabbed() == grabState && !VRTK_PolicyList.Check(checkObject, validObjectListPolicy) ? ioCheck : null);
+            return (ioCheck != null && ioCheck.IsGrabbed() == grabState && !VRTK_PolicyList.Check(ioCheck.gameObject, validObjectListPolicy) ? ioCheck : null);
         }
 
         private string ObjectPath(string name)
