@@ -574,6 +574,14 @@ The destination points can also have a locked state if the `Enable Teleport` fla
  * **Locked Cursor Object:** The GameObject to use to represent the locked cursor state.
  * **Snap To Point:** If this is checked then after teleporting, the play area will be snapped to the origin of the destination point. If this is false then it's possible to teleport to anywhere within the destination point collider.
  * **Hide Pointer Cursor On Hover:** If this is checked, then the pointer cursor will be hidden when a valid destination point is hovered over.
+ * **Snap To Rotation:** Determines if the play area will be rotated to the rotation of the destination point upon the destination marker being set.
+
+### Class Variables
+
+ * `public enum RotationTypes` - Allowed snap to rotation types.
+  * `NoRotation` - No rotation information will be emitted in the destination set payload.
+  * `RotateWithNoHeadsetOffset` - The destination point's rotation will be emitted without taking into consideration the current headset rotation.
+  * `RotateWithHeadsetOffset` - The destination point's rotation will be emitted and will take into consideration the current headset rotation.
 
 ### Class Methods
 
