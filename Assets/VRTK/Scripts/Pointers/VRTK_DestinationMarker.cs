@@ -10,6 +10,7 @@ namespace VRTK
     /// <param name="target">The Transform of the collided destination object.</param>
     /// <param name="raycastHit">The optional RaycastHit generated from when the ray collided.</param>
     /// <param name="destinationPosition">The world position of the destination marker.</param>
+    /// <param name="destinationRotation">The world rotation of the destination marker.</param>
     /// <param name="forceDestinationPosition">If true then the given destination position should not be altered by anything consuming the payload.</param>
     /// <param name="enableTeleport">Whether the destination set event should trigger teleport.</param>
     /// <param name="controllerIndex">The optional index of the controller emitting the beam.</param>
@@ -19,6 +20,7 @@ namespace VRTK
         public Transform target;
         public RaycastHit raycastHit;
         public Vector3 destinationPosition;
+        public Quaternion? destinationRotation;
         public bool forceDestinationPosition;
         public bool enableTeleport;
         public uint controllerIndex;
@@ -121,7 +123,7 @@ namespace VRTK
             VRTK_ObjectCache.registeredDestinationMarkers.Remove(this);
         }
 
-        protected virtual DestinationMarkerEventArgs SetDestinationMarkerEvent(float distance, Transform target, RaycastHit raycastHit, Vector3 position, uint controllerIndex, bool forceDestinationPosition = false)
+        protected virtual DestinationMarkerEventArgs SetDestinationMarkerEvent(float distance, Transform target, RaycastHit raycastHit, Vector3 position, uint controllerIndex, bool forceDestinationPosition = false, Quaternion? rotation = null)
         {
             DestinationMarkerEventArgs e;
             e.controllerIndex = controllerIndex;
@@ -129,6 +131,7 @@ namespace VRTK
             e.target = target;
             e.raycastHit = raycastHit;
             e.destinationPosition = position;
+            e.destinationRotation = rotation;
             e.enableTeleport = enableTeleport;
             e.forceDestinationPosition = forceDestinationPosition;
             return e;
