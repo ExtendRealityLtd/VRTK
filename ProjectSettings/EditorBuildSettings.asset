@@ -6,7 +6,7 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/VRTK/Examples/001_CameraRig_VR_PlayArea.unity
+    path: Assets/VRTK/Examples/001_CameraRig_VRPlayArea.unity
   - enabled: 1
     path: Assets/VRTK/Examples/002_Controller_Events.unity
   - enabled: 1
@@ -84,7 +84,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/VRTK/Examples/039_CameraRig_AdaptiveQuality.unity
   - enabled: 1
-    path: Assets/VRTK/Examples/040_Controls_Panel_Menu.unity
+    path: Assets/VRTK/Examples/040_Controls_PanelMenu.unity
   - enabled: 1
     path: Assets/VRTK/Examples/041_Controller_ObjectSnappingToDropZones.unity
   - enabled: 1
