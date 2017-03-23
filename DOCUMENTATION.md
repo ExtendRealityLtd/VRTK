@@ -302,6 +302,7 @@ If the `Use Joint` Snap Type is selected then a custom Joint component is requir
  * **Highlight Always Active:** The highlight object will always be displayed when the snap drop zone is available even if a valid item isn't being hovered over.
  * **Valid Object List Policy:** A specified VRTK_PolicyList to use to determine which interactable objects will be snapped to the snap drop zone on release.
  * **Display Drop Zone In Editor:** If this is checked then the drop zone highlight section will be displayed in the scene editor window.
+ * **Default Snapped Object:** The game object to snap into the dropzone when the drop zone is enabled. The game object must be valid in any given policy list to snap.
 
 ### Class Variables
 
