@@ -198,7 +198,7 @@ namespace VRTK
             var instanceMethods = VRTK_InstanceMethods.instance;
             if (instanceMethods != null)
             {
-                instanceMethods.TriggerHapticPulse(controllerIndex, strength);
+                instanceMethods.haptics.TriggerHapticPulse(controllerIndex, strength);
             }
         }
 
@@ -213,7 +213,96 @@ namespace VRTK
             var instanceMethods = VRTK_InstanceMethods.instance;
             if (instanceMethods != null)
             {
-                instanceMethods.TriggerHapticPulse(controllerIndex, strength, duration, pulseInterval);
+                instanceMethods.haptics.TriggerHapticPulse(controllerIndex, strength, duration, pulseInterval);
+            }
+        }
+
+        /// <summary>
+        /// The SetOpacity method allows the opacity of the given GameObject to be changed. A lower alpha value will make the object more transparent, such as `0.5f` will make the controller partially transparent where as `0f` will make the controller completely transparent.
+        /// </summary>
+        /// <param name="model">The GameObject to change the renderer opacity on.</param>
+        /// <param name="alpha">The alpha level to apply to opacity of the controller object. `0f` to `1f`.</param>
+        /// <param name="transitionDuration">The time to transition from the current opacity to the new opacity.</param>
+        public static void SetOpacity(GameObject model, float alpha, float transitionDuration = 0f)
+        {
+            var instanceMethods = VRTK_InstanceMethods.instance;
+            if (instanceMethods != null)
+            {
+                instanceMethods.objectAppearance.SetOpacity(model, alpha, transitionDuration);
+            }
+        }
+
+        /// <summary>
+        /// The SetRendererVisible method turns on renderers of a given GameObject. It can also be provided with an optional model to ignore the render toggle on.
+        /// </summary>
+        /// <param name="model">The GameObject to show the renderers for.</param>
+        /// <param name="ignoredModel">An optional GameObject to ignore the renderer toggle on.</param>
+        public static void SetRendererVisible(GameObject model, GameObject ignoredModel = null)
+        {
+            var instanceMethods = VRTK_InstanceMethods.instance;
+            if (instanceMethods != null)
+            {
+                instanceMethods.objectAppearance.SetRendererVisible(model, ignoredModel);
+            }
+        }
+
+        /// <summary>
+        /// The SetRendererHidden method turns off renderers of a given GameObject. It can also be provided with an optional model to ignore the render toggle on.
+        /// </summary>
+        /// <param name="model">The GameObject to hide the renderers for.</param>
+        /// <param name="ignoredModel">An optional GameObject to ignore the renderer toggle on.</param>
+        public static void SetRendererHidden(GameObject model, GameObject ignoredModel = null)
+        {
+            var instanceMethods = VRTK_InstanceMethods.instance;
+            if (instanceMethods != null)
+            {
+                instanceMethods.objectAppearance.SetRendererHidden(model, ignoredModel);
+            }
+        }
+
+        /// <summary>
+        /// The ToggleRenderer method turns on or off the renderers of a given GameObject. It can also be provided with an optional model to ignore the render toggle of.
+        /// </summary>
+        /// <param name="state">If true then the renderers will be enabled, if false the renderers will be disabled.</param>
+        /// <param name="model">The GameObject to toggle the renderer states of.</param>
+        /// <param name="ignoredModel">An optional GameObject to ignore the renderer toggle on.</param>
+        public static void ToggleRenderer(bool state, GameObject model, GameObject ignoredModel = null)
+        {
+            if (state)
+            {
+                SetRendererVisible(model, ignoredModel);
+            }
+            else
+            {
+                SetRendererHidden(model, ignoredModel);
+            }
+        }
+
+        /// <summary>
+        /// The HighlightObject method calls the Highlight method on the highlighter attached to the given GameObject with the provided colour.
+        /// </summary>
+        /// <param name="model">The GameObject to attempt to call the Highlight on.</param>
+        /// <param name="highlightColor">The colour to highlight to.</param>
+        /// <param name="fadeDuration">The duration in time to fade from the initial colour to the target colour.</param>
+        public static void HighlightObject(GameObject model, Color? highlightColor, float fadeDuration = 0f)
+        {
+            var instanceMethods = VRTK_InstanceMethods.instance;
+            if (instanceMethods != null)
+            {
+                instanceMethods.objectAppearance.HighlightObject(model, highlightColor, fadeDuration);
+            }
+        }
+
+        /// <summary>
+        /// The UnhighlightObject method calls the Unhighlight method on the highlighter attached to the given GameObject.
+        /// </summary>
+        /// <param name="model">The GameObject to attempt to call the Unhighlight on.</param>
+        public static void UnhighlightObject(GameObject model)
+        {
+            var instanceMethods = VRTK_InstanceMethods.instance;
+            if (instanceMethods != null)
+            {
+                instanceMethods.objectAppearance.UnhighlightObject(model);
             }
         }
 

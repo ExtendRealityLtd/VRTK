@@ -5,10 +5,19 @@
     public class VRTK_ControllerAppearance_Example : MonoBehaviour
     {
         public bool highlightBodyOnlyOnCollision = false;
+        public bool pulseTriggerHighlightColor = false;
 
         private VRTK_ControllerTooltips tooltips;
-        private VRTK_ControllerActions actions;
+        private VRTK_ControllerHighlighter highligher;
         private VRTK_ControllerEvents events;
+        private Color highlightColor = Color.yellow;
+        private Color pulseColor = Color.black;
+        private Color currentPulseColor;
+        private float highlightTimer = 0.5f;
+        private float pulseTimer = 0.75f;
+        private float dimOpacity = 0.8f;
+        private float defaultOpacity = 1f;
+        private bool highlighted;
 
         private void Start()
         {
@@ -19,8 +28,10 @@
             }
 
             events = GetComponent<VRTK_ControllerEvents>();
-            actions = GetComponent<VRTK_ControllerActions>();
+            highligher = GetComponent<VRTK_ControllerHighlighter>();
             tooltips = GetComponentInChildren<VRTK_ControllerTooltips>();
+            currentPulseColor = pulseColor;
+            highlighted = false;
 
             //Setup controller event listeners
             events.TriggerPressed += new ControllerInteractionEventHandler(DoTriggerPressed);
@@ -44,120 +55,142 @@
             tooltips.ToggleTips(false);
         }
 
+        private void PulseTrigger()
+        {
+            highligher.HighlightElement(SDK_BaseController.ControllerElements.Trigger, currentPulseColor, pulseTimer);
+            currentPulseColor = (currentPulseColor == pulseColor ? highlightColor : pulseColor);
+        }
+
         private void DoTriggerPressed(object sender, ControllerInteractionEventArgs e)
         {
             tooltips.ToggleTips(true, VRTK_ControllerTooltips.TooltipButtons.TriggerTooltip);
-            actions.ToggleHighlightTrigger(true, Color.yellow, 0.5f);
-            actions.SetControllerOpacity(0.8f);
+            highligher.HighlightElement(SDK_BaseController.ControllerElements.Trigger, highlightColor, (pulseTriggerHighlightColor ? pulseTimer : highlightTimer));
+            if (pulseTriggerHighlightColor)
+            {
+                InvokeRepeating("PulseTrigger", pulseTimer, pulseTimer);
+            }
+            VRTK_SharedMethods.SetOpacity(VRTK_DeviceFinder.GetModelAliasController(events.gameObject), dimOpacity);
         }
 
         private void DoTriggerReleased(object sender, ControllerInteractionEventArgs e)
         {
             tooltips.ToggleTips(false, VRTK_ControllerTooltips.TooltipButtons.TriggerTooltip);
-            actions.ToggleHighlightTrigger(false);
+            highligher.UnhighlightElement(SDK_BaseController.ControllerElements.Trigger);
+            if (pulseTriggerHighlightColor)
+            {
+                CancelInvoke("PulseTrigger");
+            }
             if (!events.AnyButtonPressed())
             {
-                actions.SetControllerOpacity(1f);
+                VRTK_SharedMethods.SetOpacity(VRTK_DeviceFinder.GetModelAliasController(events.gameObject), defaultOpacity);
             }
         }
 
         private void DoButtonOnePressed(object sender, ControllerInteractionEventArgs e)
         {
             tooltips.ToggleTips(true, VRTK_ControllerTooltips.TooltipButtons.ButtonOneTooltip);
-            actions.ToggleHighlightButtonOne(true, Color.yellow, 0.5f);
-            actions.SetControllerOpacity(0.8f);
+            highligher.HighlightElement(SDK_BaseController.ControllerElements.ButtonOne, highlightColor, highlightTimer);
+            VRTK_SharedMethods.SetOpacity(VRTK_DeviceFinder.GetModelAliasController(events.gameObject), dimOpacity);
         }
 
         private void DoButtonOneReleased(object sender, ControllerInteractionEventArgs e)
         {
             tooltips.ToggleTips(false, VRTK_ControllerTooltips.TooltipButtons.ButtonOneTooltip);
-            actions.ToggleHighlightButtonOne(false);
+            highligher.UnhighlightElement(SDK_BaseController.ControllerElements.ButtonOne);
             if (!events.AnyButtonPressed())
             {
-                actions.SetControllerOpacity(1f);
+                VRTK_SharedMethods.SetOpacity(VRTK_DeviceFinder.GetModelAliasController(events.gameObject), defaultOpacity);
             }
         }
 
         private void DoButtonTwoPressed(object sender, ControllerInteractionEventArgs e)
         {
             tooltips.ToggleTips(true, VRTK_ControllerTooltips.TooltipButtons.ButtonTwoTooltip);
-            actions.ToggleHighlightButtonTwo(true, Color.yellow, 0.5f);
-            actions.SetControllerOpacity(0.8f);
+            highligher.HighlightElement(SDK_BaseController.ControllerElements.ButtonTwo, highlightColor, highlightTimer);
+            VRTK_SharedMethods.SetOpacity(VRTK_DeviceFinder.GetModelAliasController(events.gameObject), dimOpacity);
         }
 
         private void DoButtonTwoReleased(object sender, ControllerInteractionEventArgs e)
         {
             tooltips.ToggleTips(false, VRTK_ControllerTooltips.TooltipButtons.ButtonTwoTooltip);
-            actions.ToggleHighlightButtonTwo(false);
+            highligher.UnhighlightElement(SDK_BaseController.ControllerElements.ButtonTwo);
             if (!events.AnyButtonPressed())
             {
-                actions.SetControllerOpacity(1f);
+                VRTK_SharedMethods.SetOpacity(VRTK_DeviceFinder.GetModelAliasController(events.gameObject), defaultOpacity);
             }
         }
 
         private void DoStartMenuPressed(object sender, ControllerInteractionEventArgs e)
         {
             tooltips.ToggleTips(true, VRTK_ControllerTooltips.TooltipButtons.StartMenuTooltip);
-            actions.ToggleHighlightStartMenu(true, Color.yellow, 0.5f);
-            actions.SetControllerOpacity(0.8f);
+            highligher.HighlightElement(SDK_BaseController.ControllerElements.StartMenu, highlightColor, highlightTimer);
+            VRTK_SharedMethods.SetOpacity(VRTK_DeviceFinder.GetModelAliasController(events.gameObject), dimOpacity);
         }
 
         private void DoStartMenuReleased(object sender, ControllerInteractionEventArgs e)
         {
             tooltips.ToggleTips(false, VRTK_ControllerTooltips.TooltipButtons.StartMenuTooltip);
-            actions.ToggleHighlightStartMenu(false);
+            highligher.UnhighlightElement(SDK_BaseController.ControllerElements.StartMenu);
             if (!events.AnyButtonPressed())
             {
-                actions.SetControllerOpacity(1f);
+                VRTK_SharedMethods.SetOpacity(VRTK_DeviceFinder.GetModelAliasController(events.gameObject), defaultOpacity);
             }
         }
 
         private void DoGripPressed(object sender, ControllerInteractionEventArgs e)
         {
             tooltips.ToggleTips(true, VRTK_ControllerTooltips.TooltipButtons.GripTooltip);
-            actions.ToggleHighlightGrip(true, Color.yellow, 0.5f);
-            actions.SetControllerOpacity(0.8f);
+            highligher.HighlightElement(SDK_BaseController.ControllerElements.GripLeft, highlightColor, highlightTimer);
+            highligher.HighlightElement(SDK_BaseController.ControllerElements.GripRight, highlightColor, highlightTimer);
+            VRTK_SharedMethods.SetOpacity(VRTK_DeviceFinder.GetModelAliasController(events.gameObject), dimOpacity);
         }
 
         private void DoGripReleased(object sender, ControllerInteractionEventArgs e)
         {
             tooltips.ToggleTips(false, VRTK_ControllerTooltips.TooltipButtons.GripTooltip);
-            actions.ToggleHighlightGrip(false);
+            highligher.UnhighlightElement(SDK_BaseController.ControllerElements.GripLeft);
+            highligher.UnhighlightElement(SDK_BaseController.ControllerElements.GripRight);
             if (!events.AnyButtonPressed())
             {
-                actions.SetControllerOpacity(1f);
+                VRTK_SharedMethods.SetOpacity(VRTK_DeviceFinder.GetModelAliasController(events.gameObject), defaultOpacity);
             }
         }
 
         private void DoTouchpadPressed(object sender, ControllerInteractionEventArgs e)
         {
             tooltips.ToggleTips(true, VRTK_ControllerTooltips.TooltipButtons.TouchpadTooltip);
-            actions.ToggleHighlightTouchpad(true, Color.yellow, 0.5f);
-            actions.SetControllerOpacity(0.8f);
+            highligher.HighlightElement(SDK_BaseController.ControllerElements.Touchpad, highlightColor, highlightTimer);
+            VRTK_SharedMethods.SetOpacity(VRTK_DeviceFinder.GetModelAliasController(events.gameObject), dimOpacity);
         }
 
         private void DoTouchpadReleased(object sender, ControllerInteractionEventArgs e)
         {
             tooltips.ToggleTips(false, VRTK_ControllerTooltips.TooltipButtons.TouchpadTooltip);
-            actions.ToggleHighlightTouchpad(false);
+            highligher.UnhighlightElement(SDK_BaseController.ControllerElements.Touchpad);
             if (!events.AnyButtonPressed())
             {
-                actions.SetControllerOpacity(1f);
+                VRTK_SharedMethods.SetOpacity(VRTK_DeviceFinder.GetModelAliasController(events.gameObject), defaultOpacity);
             }
         }
 
         private void OnTriggerEnter(Collider collider)
         {
-            if (!VRTK_PlayerObject.IsPlayerObject(collider.gameObject))
+            OnTriggerStay(collider);
+        }
+
+        private void OnTriggerStay(Collider collider)
+        {
+            if (!VRTK_PlayerObject.IsPlayerObject(collider.gameObject) && !highlighted)
             {
                 if (highlightBodyOnlyOnCollision)
                 {
-                    actions.ToggleHighlighBody(true, Color.yellow, 0.4f);
+                    highligher.HighlightElement(SDK_BaseController.ControllerElements.Body, highlightColor, highlightTimer);
                 }
                 else
                 {
-                    actions.ToggleHighlightController(true, Color.yellow, 0.4f);
+                    highligher.HighlightController(highlightColor, highlightTimer);
                 }
+                highlighted = true;
             }
         }
 
@@ -167,12 +200,13 @@
             {
                 if (highlightBodyOnlyOnCollision)
                 {
-                    actions.ToggleHighlighBody(false);
+                    highligher.UnhighlightElement(SDK_BaseController.ControllerElements.Body);
                 }
                 else
                 {
-                    actions.ToggleHighlightController(false);
+                    highligher.UnhighlightController();
                 }
+                highlighted = false;
             }
         }
     }

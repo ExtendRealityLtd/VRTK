@@ -248,6 +248,24 @@ namespace VRTK
         }
 
         /// <summary>
+        /// The GetModelAliasControllerHand method will return the hand that the given model alias GameObject is for.
+        /// </summary>
+        /// <param name="givenObject">The GameObject that may represent a model alias.</param>
+        /// <returns>The enum of the ControllerHand that the given GameObject may represent.</returns>
+        public static SDK_BaseController.ControllerHand GetModelAliasControllerHand(GameObject givenObject)
+        {
+            if (GetModelAliasController(GetControllerLeftHand()) == givenObject)
+            {
+                return SDK_BaseController.ControllerHand.Left;
+            }
+            else if (GetModelAliasController(GetControllerRightHand()) == givenObject)
+            {
+                return SDK_BaseController.ControllerHand.Right;
+            }
+            return SDK_BaseController.ControllerHand.None;
+        }
+
+        /// <summary>
         /// The GetControllerVelocity method is used for getting the current velocity of the physical game controller. This can be useful to determine the speed at which the controller is being swung or the direction it is being moved in.
         /// </summary>
         /// <param name="givenController">The GameObject of the controller.</param>

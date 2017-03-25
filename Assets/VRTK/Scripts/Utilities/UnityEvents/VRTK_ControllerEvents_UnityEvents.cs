@@ -205,6 +205,14 @@
         /// Emits the ControllerIndexChanged class event.
         /// </summary>
         public UnityObjectEvent OnControllerIndexChanged = new UnityObjectEvent();
+        /// <summary>
+        /// Emits the ControllerVisible class event.
+        /// </summary>
+        public UnityObjectEvent OnControllerVisible = new UnityObjectEvent();
+        /// <summary>
+        /// Emits the ControllerHidden class event.
+        /// </summary>
+        public UnityObjectEvent OnControllerHidden = new UnityObjectEvent();
 
         private void SetControllerEvents()
         {
@@ -277,6 +285,9 @@
             ce.ControllerEnabled += ControllerEnabled;
             ce.ControllerDisabled += ControllerDisabled;
             ce.ControllerIndexChanged += ControllerIndexChanged;
+
+            ce.ControllerVisible += ControllerVisible;
+            ce.ControllerHidden += ControllerHidden;
         }
 
         private void TriggerPressed(object o, ControllerInteractionEventArgs e)
@@ -514,6 +525,16 @@
             OnControllerIndexChanged.Invoke(o, e);
         }
 
+        private void ControllerVisible(object o, ControllerInteractionEventArgs e)
+        {
+            OnControllerVisible.Invoke(o, e);
+        }
+
+        private void ControllerHidden(object o, ControllerInteractionEventArgs e)
+        {
+            OnControllerHidden.Invoke(o, e);
+        }
+
         private void OnDisable()
         {
             if (ce == null)
@@ -575,6 +596,9 @@
             ce.ControllerEnabled -= ControllerEnabled;
             ce.ControllerDisabled -= ControllerDisabled;
             ce.ControllerIndexChanged -= ControllerIndexChanged;
+
+            ce.ControllerVisible -= ControllerVisible;
+            ce.ControllerHidden -= ControllerHidden;
         }
     }
 }
