@@ -553,7 +553,7 @@ namespace VRTK
             {
                 //Turn on the highlighter
                 highlightObject.SetActive(state);
-                ioCheck.SetSnapDropZoneHover(state);
+                ioCheck.SetSnapDropZoneHover(this, state);
 
                 willSnap = state;
                 isHighlighted = state;

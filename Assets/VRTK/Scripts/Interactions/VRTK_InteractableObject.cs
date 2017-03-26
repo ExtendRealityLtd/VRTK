@@ -135,6 +135,22 @@ namespace VRTK
         /// Emitted when the other object stops using the current object.
         /// </summary>
         public event InteractableObjectEventHandler InteractableObjectUnused;
+        /// <summary>
+        /// Emitted when the object enters a snap drop zone.
+        /// </summary>
+        public event InteractableObjectEventHandler InteractableObjectEnteredSnapDropZone;
+        /// <summary>
+        /// Emitted when the object exists a snap drop zone.
+        /// </summary>
+        public event InteractableObjectEventHandler InteractableObjectExitedSnapDropZone;
+        /// <summary>
+        /// Emitted when the object gets snapped to a drop zone.
+        /// </summary>
+        public event InteractableObjectEventHandler InteractableObjectSnappedToDropZone;
+        /// <summary>
+        /// Emitted when the object gets unsnapped from a drop zone.
+        /// </summary>
+        public event InteractableObjectEventHandler InteractableObjectUnsnappedFromDropZone;
 
         /// <summary>
         /// The current using state of the object. `0` not being used, `1` being used.
@@ -167,6 +183,7 @@ namespace VRTK
         protected Rigidbody interactableRigidbody;
         protected List<GameObject> touchingObjects = new List<GameObject>();
         protected List<GameObject> grabbingObjects = new List<GameObject>();
+        protected List<GameObject> hoveredSnapObjects = new List<GameObject>();
         protected GameObject usingObject = null;
         protected Transform trackPoint;
         protected bool customTrackPoint = false;
@@ -230,6 +247,38 @@ namespace VRTK
             if (InteractableObjectUnused != null)
             {
                 InteractableObjectUnused(this, e);
+            }
+        }
+
+        public virtual void OnInteractableObjectEnteredSnapDropZone(InteractableObjectEventArgs e)
+        {
+            if (InteractableObjectEnteredSnapDropZone != null)
+            {
+                InteractableObjectEnteredSnapDropZone(this, e);
+            }
+        }
+
+        public virtual void OnInteractableObjectExitedSnapDropZone(InteractableObjectEventArgs e)
+        {
+            if (InteractableObjectExitedSnapDropZone != null)
+            {
+                InteractableObjectExitedSnapDropZone(this, e);
+            }
+        }
+
+        public virtual void OnInteractableObjectSnappedToDropZone(InteractableObjectEventArgs e)
+        {
+            if (InteractableObjectSnappedToDropZone != null)
+            {
+                InteractableObjectSnappedToDropZone(this, e);
+            }
+        }
+
+        public virtual void OnInteractableObjectUnsnappedFromDropZone(InteractableObjectEventArgs e)
+        {
+            if (InteractableObjectUnsnappedFromDropZone != null)
+            {
+                InteractableObjectUnsnappedFromDropZone(this, e);
             }
         }
 
@@ -572,10 +621,12 @@ namespace VRTK
             if (state)
             {
                 storedSnapDropZone = snapDropZone;
+                OnInteractableObjectSnappedToDropZone(SetInteractableObjectEvent(snapDropZone.gameObject));
             }
             else
             {
                 ResetDropSnapType();
+                OnInteractableObjectUnsnappedFromDropZone(SetInteractableObjectEvent(snapDropZone.gameObject));
             }
         }
 
@@ -591,10 +642,27 @@ namespace VRTK
         /// <summary>
         /// The SetSnapDropZoneHover method sets whether the interactable object is currently being hovered over a valid Snap Drop Zone.
         /// </summary>
+        /// <param name="snapDropZone">The Snap Drop Zone object that is being interacted with.</param>
         /// <param name="state">The state of whether the object is being hovered or not.</param>
-        public virtual void SetSnapDropZoneHover(bool state)
+        public virtual void SetSnapDropZoneHover(VRTK_SnapDropZone snapDropZone, bool state)
         {
-            hoveredOverSnapDropZone = state;
+            if (state)
+            {
+                if (!hoveredSnapObjects.Contains(snapDropZone.gameObject))
+                {
+                    hoveredSnapObjects.Add(snapDropZone.gameObject);
+                    OnInteractableObjectEnteredSnapDropZone(SetInteractableObjectEvent(snapDropZone.gameObject));
+                }
+            }
+            else
+            {
+                if (hoveredSnapObjects.Contains(snapDropZone.gameObject))
+                {
+                    hoveredSnapObjects.Remove(snapDropZone.gameObject);
+                    OnInteractableObjectExitedSnapDropZone(SetInteractableObjectEvent(snapDropZone.gameObject));
+                }
+            }
+            hoveredOverSnapDropZone = hoveredSnapObjects.Count > 0;
         }
 
         /// <summary>
