@@ -35,6 +35,22 @@
         /// Emits the InteractableObjectUnused class event.
         /// </summary>
         public UnityObjectEvent OnUnuse = new UnityObjectEvent();
+        /// <summary>
+        /// Emits the InteractableObjectEnteredSnapDropZone class event.
+        /// </summary>
+        public UnityObjectEvent OnEnterSnapDropZone = new UnityObjectEvent();
+        /// <summary>
+        /// Emits the InteractableObjectExitedSnapDropZone class event.
+        /// </summary>
+        public UnityObjectEvent OnExitSnapDropZone = new UnityObjectEvent();
+        /// <summary>
+        /// Emits the InteractableObjectSnappedToDropZone class event.
+        /// </summary>
+        public UnityObjectEvent OnSnapToDropZone = new UnityObjectEvent();
+        /// <summary>
+        /// Emits the InteractableObjectUnsnappedFromDropZone class event.
+        /// </summary>
+        public UnityObjectEvent OnUnsnapFromDropZone = new UnityObjectEvent();
 
         private void SetInteractableObject()
         {
@@ -59,6 +75,10 @@
             io.InteractableObjectUngrabbed += UnGrab;
             io.InteractableObjectUsed += Use;
             io.InteractableObjectUnused += Unuse;
+            io.InteractableObjectEnteredSnapDropZone += EnterSnapDropZone;
+            io.InteractableObjectExitedSnapDropZone += ExitSnapDropZone;
+            io.InteractableObjectSnappedToDropZone += SnapToDropZone;
+            io.InteractableObjectUnsnappedFromDropZone += UnsnapFromDropZone;
         }
 
         private void Touch(object o, InteractableObjectEventArgs e)
@@ -91,6 +111,26 @@
             OnUnuse.Invoke(o, e);
         }
 
+        private void EnterSnapDropZone(object o, InteractableObjectEventArgs e)
+        {
+            OnEnterSnapDropZone.Invoke(o, e);
+        }
+
+        private void ExitSnapDropZone(object o, InteractableObjectEventArgs e)
+        {
+            OnExitSnapDropZone.Invoke(o, e);
+        }
+
+        private void SnapToDropZone(object o, InteractableObjectEventArgs e)
+        {
+            OnSnapToDropZone.Invoke(o, e);
+        }
+
+        private void UnsnapFromDropZone(object o, InteractableObjectEventArgs e)
+        {
+            OnUnsnapFromDropZone.Invoke(o, e);
+        }
+
         private void OnDisable()
         {
             if (io == null)
@@ -104,6 +144,10 @@
             io.InteractableObjectUngrabbed -= UnGrab;
             io.InteractableObjectUsed -= Use;
             io.InteractableObjectUnused -= Unuse;
+            io.InteractableObjectEnteredSnapDropZone -= EnterSnapDropZone;
+            io.InteractableObjectExitedSnapDropZone -= ExitSnapDropZone;
+            io.InteractableObjectSnappedToDropZone -= SnapToDropZone;
+            io.InteractableObjectUnsnappedFromDropZone -= UnsnapFromDropZone;
         }
     }
 }
