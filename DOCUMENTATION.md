@@ -4687,6 +4687,7 @@ The purpose of Headset Controller Aware is to allow the headset to know if somet
  * **Controller Glance Radius:** The radius of the accepted distance from the controller origin point to determine if the controller is being looked at.
  * **Custom Right Controller Origin:** A custom transform to provide the world space position of the right controller.
  * **Custom Left Controller Origin:** A custom transform to provide the world space position of the left controller.
+ * **Custom Raycast:** A custom raycaster to use when raycasting to find controllers.
 
 ### Class Events
 
@@ -6257,7 +6258,7 @@ For example, the VRTK_BodyPhysics script can be set to ignore trigger colliders 
   > `public static bool Raycast(VRTK_CustomRaycast customCast, Ray ray, out RaycastHit hitData, LayerMask ignoreLayers, float length = Mathf.Infinity)`
 
   * Parameters
-   * `VRTK_CustomRaycast customCast` - The optional raycast object with customised raycast parameters.
+   * `VRTK_CustomRaycast customCast` - The optional object with customised cast parameters.
    * `Ray ray` - The Ray to cast with.
    * `out RaycastHit hitData` - The raycast hit data.
    * `LayerMask ignoreLayers` - A layermask of layers to ignore from the raycast.
@@ -6267,9 +6268,24 @@ For example, the VRTK_BodyPhysics script can be set to ignore trigger colliders 
 
 The Raycast method is used to generate a raycast either from the given CustomRaycast object or a default Physics.Raycast.
 
-#### CustomCast/3
+#### Linecast/5
 
-  > `public virtual bool CustomCast(Ray ray, out RaycastHit hitData, float length = Mathf.Infinity)`
+  > `public static bool Linecast(VRTK_CustomRaycast customCast, Vector3 startPosition, Vector3 endPosition, out RaycastHit hitData, LayerMask ignoreLayers)`
+
+  * Parameters
+   * `VRTK_CustomRaycast customCast` - The optional object with customised cast parameters.
+   * `Vector3 startPosition` - The world position to start the linecast from.
+   * `Vector3 endPosition` - The world position to end the linecast at.
+   * `out RaycastHit hitData` - The linecast hit data.
+   * `LayerMask ignoreLayers` - A layermask of layers to ignore from the linecast.
+  * Returns
+   * `bool` - Returns true if the linecast successfully collides with a valid object.
+
+The Linecast method is used to generate a linecast either from the given CustomRaycast object or a default Physics.Linecast.
+
+#### CustomRaycast/3
+
+  > `public virtual bool CustomRaycast(Ray ray, out RaycastHit hitData, float length = Mathf.Infinity)`
 
   * Parameters
    * `Ray ray` - The Ray to cast with.
@@ -6278,7 +6294,20 @@ The Raycast method is used to generate a raycast either from the given CustomRay
   * Returns
    * `bool` - Returns true if the raycast successfully collides with a valid object.
 
-The CustomCast method is used to generate a raycast based on the options defined in the CustomRaycast object.
+The CustomRaycast method is used to generate a raycast based on the options defined in the CustomRaycast object.
+
+#### CustomLinecast/3
+
+  > `public virtual bool CustomLinecast(Vector3 startPosition, Vector3 endPosition, out RaycastHit hitData)`
+
+  * Parameters
+   * `Vector3 startPosition` - The world position to start the linecast from.
+   * `Vector3 endPosition` - The world position to end the linecast at.
+   * `out RaycastHit hitData` - The linecast hit data.
+  * Returns
+   * `bool` - Returns true if the line successfully collides with a valid object.
+
+The CustomLinecast method is used to generate a linecast based on the options defined in the CustomRaycast object.
 
 ---
 

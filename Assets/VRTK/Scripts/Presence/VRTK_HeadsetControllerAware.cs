@@ -39,6 +39,8 @@ namespace VRTK
         public Transform customRightControllerOrigin;
         [Tooltip("A custom transform to provide the world space position of the left controller.")]
         public Transform customLeftControllerOrigin;
+        [Tooltip("A custom raycaster to use when raycasting to find controllers.")]
+        public VRTK_CustomRaycast customRaycast;
 
         /// <summary>
         /// Emitted when the controller is obscured by another object.
@@ -185,7 +187,7 @@ namespace VRTK
             {
                 var destination = (customDestination ? customDestination.position : controller.transform.position);
                 RaycastHit hitInfo;
-                if (Physics.Linecast(headset.position, destination, out hitInfo))
+                if (VRTK_CustomRaycast.Linecast(customRaycast, headset.position, destination, out hitInfo, new LayerMask()))
                 {
                     obscured = true;
                 }
