@@ -2617,6 +2617,10 @@ The highlighting of an Interactable Object is defaulted to use the `VRTK_Materia
  * `InteractableObjectUngrabbed` - Emitted when the other object stops grabbing the current object.
  * `InteractableObjectUsed` - Emitted when another object uses the current object (e.g. a controller).
  * `InteractableObjectUnused` - Emitted when the other object stops using the current object.
+ * `InteractableObjectEnteredSnapDropZone` - Emitted when the object enters a snap drop zone.
+ * `InteractableObjectExitedSnapDropZone` - Emitted when the object exists a snap drop zone.
+ * `InteractableObjectSnappedToDropZone` - Emitted when the object gets snapped to a drop zone.
+ * `InteractableObjectUnsnappedFromDropZone` - Emitted when the object gets unsnapped from a drop zone.
 
 ### Unity Events
 
@@ -2628,6 +2632,10 @@ Adding the `VRTK_InteractableObject_UnityEvents` component to `VRTK_Interactable
  * `OnUngrab` - Emits the InteractableObjectUngrabbed class event.
  * `OnUse` - Emits the InteractableObjectUsed class event.
  * `OnUnuse` - Emits the InteractableObjectUnused class event.
+ * `OnEnterSnapDropZone` - Emits the InteractableObjectEnteredSnapDropZone class event.
+ * `OnExitSnapDropZone` - Emits the InteractableObjectExitedSnapDropZone class event.
+ * `OnSnapToDropZone` - Emits the InteractableObjectSnappedToDropZone class event.
+ * `OnUnsnapFromDropZone` - Emits the InteractableObjectUnsnappedFromDropZone class event.
 
 ### Event Payload
 
@@ -2923,11 +2931,12 @@ The ToggleSnapDropZone method is used to set the state of whether the interactab
 
 The IsInSnapDropZone method determines whether the interactable object is currently snapped to a drop zone.
 
-#### SetSnapDropZoneHover/1
+#### SetSnapDropZoneHover/2
 
-  > `public virtual void SetSnapDropZoneHover(bool state)`
+  > `public virtual void SetSnapDropZoneHover(VRTK_SnapDropZone snapDropZone, bool state)`
 
   * Parameters
+   * `VRTK_SnapDropZone snapDropZone` - The Snap Drop Zone object that is being interacted with.
    * `bool state` - The state of whether the object is being hovered or not.
   * Returns
    * _none_
