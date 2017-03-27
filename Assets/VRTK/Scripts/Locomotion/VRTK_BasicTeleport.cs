@@ -204,7 +204,7 @@ namespace VRTK
             if (adjustYForTerrain && target.GetComponent<Terrain>())
             {
                 var checkPosition = (useHeadsetForPosition ? new Vector3(headset.position.x, position.y, headset.position.z) : position);
-                var terrainHeight = Terrain.activeTerrain.SampleHeight(checkPosition);
+                var terrainHeight = target.GetComponent<Terrain>().SampleHeight(checkPosition) + target.position.y;
                 position.y = (terrainHeight > position.y ? position.y : Terrain.activeTerrain.GetPosition().y + terrainHeight);
             }
             return position;
