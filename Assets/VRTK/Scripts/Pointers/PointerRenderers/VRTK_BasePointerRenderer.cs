@@ -71,7 +71,7 @@ namespace VRTK
         [Tooltip("Determines when the cursor/tip of the pointer renderer will be visible.")]
         public VisibilityStates cursorVisibility = VisibilityStates.OnWhenActive;
 
-        protected const float BEAM_ADJUST_OFFSET = 0.00001f;
+        protected const float BEAM_ADJUST_OFFSET = 0.0001f;
 
         protected VRTK_Pointer controllingPointer;
         protected RaycastHit destinationHit = new RaycastHit();
