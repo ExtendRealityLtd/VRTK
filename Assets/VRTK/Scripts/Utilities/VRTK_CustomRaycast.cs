@@ -35,7 +35,7 @@ namespace VRTK
             }
             else
             {
-                return Physics.Raycast(ray, out hitData, Mathf.Infinity, ~ignoreLayers);
+                return Physics.Raycast(ray, out hitData, length, ~ignoreLayers);
             }
         }
 
@@ -69,7 +69,7 @@ namespace VRTK
         /// <returns>Returns true if the raycast successfully collides with a valid object.</returns>
         public virtual bool CustomRaycast(Ray ray, out RaycastHit hitData, float length = Mathf.Infinity)
         {
-            return Physics.Raycast(ray, out hitData, Mathf.Infinity, ~layersToIgnore, triggerInteraction);
+            return Physics.Raycast(ray, out hitData, length, ~layersToIgnore, triggerInteraction);
         }
 
         /// <summary>
