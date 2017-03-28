@@ -25,7 +25,7 @@ namespace VRTK
     /// </example>
     public class VRTK_BasicTeleport : MonoBehaviour
     {
-        [Header("Base Options")]
+        [Header("Base Settings")]
 
         [Tooltip("The colour to fade to when blinking on teleport.")]
         public Color blinkToColor = Color.black;

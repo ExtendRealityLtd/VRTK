@@ -16,7 +16,7 @@ namespace VRTK
     /// </example>
     public class VRTK_HeightAdjustTeleport : VRTK_BasicTeleport
     {
-        [Header("Height Adjust Options")]
+        [Header("Height Adjust Settings")]
 
         [Tooltip("A custom raycaster to use when raycasting to find floors.")]
         public VRTK_CustomRaycast customRaycast;
