@@ -1113,7 +1113,9 @@ The Play Area Cursor is used in conjunction with a Pointer script and displays a
  * **Handle Play Area Cursor Collisions:** If this is ticked then if the play area cursor is colliding with any other object then the pointer colour will change to the `Pointer Miss Color` and the `DestinationMarkerSet` event will not be triggered, which will prevent teleporting into areas where the play area will collide.
  * **Headset Out Of Bounds Is Collision:** If this is ticked then if the user's headset is outside of the play area cursor bounds then it is considered a collision even if the play area isn't colliding with anything.
  * **Target List Policy:** A specified VRTK_PolicyList to use to determine whether the play area cursor collisions will be acted upon.
- * **Play Area Cursor Prefab:** A custom GameObject to use for the play area cursor representation.
+ * **Use Pointer Color:** If this is checked then the pointer hit/miss colours will also be used to change the colour of the play area cursor when colliding/not colliding.
+ * **Valid Location Object:** A custom GameObject to use for the play area cursor representation for when the location is valid.
+ * **Invalid Location Object:** A custom GameObject to use for the play area cursor representation for when the location is invalid.
 
 ### Class Methods
 
