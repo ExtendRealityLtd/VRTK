@@ -60,22 +60,22 @@ namespace VRTK
         [Tooltip("The transform for the position of the start menu on the controller.")]
         public Transform startMenu;
 
-        private bool triggerInitialised = false;
-        private bool gripInitialised = false;
-        private bool touchpadInitialised = false;
-        private bool buttonOneInitialised = false;
-        private bool buttonTwoInitialised = false;
-        private bool startMenuInitialised = false;
-        private TooltipButtons[] availableButtons;
-        private VRTK_ObjectTooltip[] buttonTooltips;
-        private bool[] tooltipStates;
-        private VRTK_ControllerActions controllerActions;
-        private VRTK_HeadsetControllerAware headsetControllerAware;
+        protected bool triggerInitialised = false;
+        protected bool gripInitialised = false;
+        protected bool touchpadInitialised = false;
+        protected bool buttonOneInitialised = false;
+        protected bool buttonTwoInitialised = false;
+        protected bool startMenuInitialised = false;
+        protected TooltipButtons[] availableButtons;
+        protected VRTK_ObjectTooltip[] buttonTooltips;
+        protected bool[] tooltipStates;
+        protected VRTK_ControllerEvents controllerEvents;
+        protected VRTK_HeadsetControllerAware headsetControllerAware;
 
         /// <summary>
         /// The Reset method reinitalises the tooltips on all of the controller elements.
         /// </summary>
-        public void ResetTooltip()
+        public virtual void ResetTooltip()
         {
             triggerInitialised = false;
             gripInitialised = false;
@@ -90,7 +90,7 @@ namespace VRTK
         /// </summary>
         /// <param name="element">The specific controller element to change the tooltip text on.</param>
         /// <param name="newText">A string containing the text to update the tooltip to display.</param>
-        public void UpdateText(TooltipButtons element, string newText)
+        public virtual void UpdateText(TooltipButtons element, string newText)
         {
             switch (element)
             {
@@ -121,7 +121,7 @@ namespace VRTK
         /// </summary>
         /// <param name="state">The state of whether to display or hide the controller tooltips, true will display and false will hide.</param>
         /// <param name="element">The specific element to hide the tooltip on, if it is `TooltipButtons.None` then it will hide all tooltips. Optional parameter defaults to `TooltipButtons.None`</param>
-        public void ToggleTips(bool state, TooltipButtons element = TooltipButtons.None)
+        public virtual void ToggleTips(bool state, TooltipButtons element = TooltipButtons.None)
         {
             if (element == TooltipButtons.None)
             {
@@ -144,7 +144,7 @@ namespace VRTK
 
         protected virtual void Awake()
         {
-            controllerActions = GetComponentInParent<VRTK_ControllerActions>();
+            controllerEvents = GetComponentInParent<VRTK_ControllerEvents>();
             triggerInitialised = false;
             gripInitialised = false;
             touchpadInitialised = false;
@@ -176,46 +176,49 @@ namespace VRTK
 
         protected virtual void OnEnable()
         {
-            if (controllerActions)
+            if (controllerEvents != null)
             {
-                controllerActions.ControllerModelVisible += new ControllerActionsEventHandler(DoControllerVisible);
-                controllerActions.ControllerModelInvisible += new ControllerActionsEventHandler(DoControllerInvisible);
+                controllerEvents.ControllerVisible += DoControllerVisible;
+                controllerEvents.ControllerHidden += DoControllerInvisible;
             }
 
             headsetControllerAware = FindObjectOfType<VRTK_HeadsetControllerAware>();
             if (headsetControllerAware)
             {
-                headsetControllerAware.ControllerGlanceEnter += new HeadsetControllerAwareEventHandler(DoGlanceEnterController);
-                headsetControllerAware.ControllerGlanceExit += new HeadsetControllerAwareEventHandler(DoGlanceExitController);
+                headsetControllerAware.ControllerGlanceEnter += DoGlanceEnterController;
+                headsetControllerAware.ControllerGlanceExit += DoGlanceExitController;
                 ToggleTips(false);
             }
         }
 
         protected virtual void OnDisable()
         {
-            if (controllerActions)
+            if (controllerEvents != null)
             {
-                controllerActions.ControllerModelVisible -= new ControllerActionsEventHandler(DoControllerVisible);
-                controllerActions.ControllerModelInvisible -= new ControllerActionsEventHandler(DoControllerInvisible);
+                controllerEvents.ControllerVisible -= DoControllerVisible;
+                controllerEvents.ControllerHidden -= DoControllerInvisible;
             }
 
             if (headsetControllerAware)
             {
-                headsetControllerAware.ControllerGlanceEnter -= new HeadsetControllerAwareEventHandler(DoGlanceEnterController);
-                headsetControllerAware.ControllerGlanceExit -= new HeadsetControllerAwareEventHandler(DoGlanceExitController);
+                headsetControllerAware.ControllerGlanceEnter -= DoGlanceEnterController;
+                headsetControllerAware.ControllerGlanceExit -= DoGlanceExitController;
             }
         }
 
         protected virtual void Update()
         {
-            var actualController = VRTK_DeviceFinder.GetActualController(controllerActions.gameObject);
-            if (!TipsInitialised() && actualController && actualController.activeInHierarchy)
+            if (!TipsInitialised() && controllerEvents != null)
             {
-                InitialiseTips();
+                GameObject actualController = VRTK_DeviceFinder.GetActualController(controllerEvents.gameObject);
+                if (actualController && actualController.activeInHierarchy)
+                {
+                    InitialiseTips();
+                }
             }
         }
 
-        private void DoControllerVisible(object sender, ControllerActionsEventArgs e)
+        protected virtual void DoControllerVisible(object sender, ControllerInteractionEventArgs e)
         {
             for (int i = 0; i < availableButtons.Length; i++)
             {
@@ -223,7 +226,7 @@ namespace VRTK
             }
         }
 
-        private void DoControllerInvisible(object sender, ControllerActionsEventArgs e)
+        protected virtual void DoControllerInvisible(object sender, ControllerInteractionEventArgs e)
         {
             for (int i = 1; i < buttonTooltips.Length; i++)
             {
@@ -233,29 +236,35 @@ namespace VRTK
         }
 
 
-        private void DoGlanceEnterController(object sender, HeadsetControllerAwareEventArgs e)
+        protected virtual void DoGlanceEnterController(object sender, HeadsetControllerAwareEventArgs e)
         {
-            var controllerIndex = VRTK_DeviceFinder.GetControllerIndex(controllerActions.gameObject);
-            if (controllerIndex == e.controllerIndex)
+            if (controllerEvents != null)
             {
-                ToggleTips(true);
+                uint controllerIndex = VRTK_DeviceFinder.GetControllerIndex(controllerEvents.gameObject);
+                if (controllerIndex == e.controllerIndex)
+                {
+                    ToggleTips(true);
+                }
             }
         }
 
-        private void DoGlanceExitController(object sender, HeadsetControllerAwareEventArgs e)
+        protected virtual void DoGlanceExitController(object sender, HeadsetControllerAwareEventArgs e)
         {
-            var controllerIndex = VRTK_DeviceFinder.GetControllerIndex(controllerActions.gameObject);
-            if (controllerIndex == e.controllerIndex)
+            if (controllerEvents != null)
             {
-                ToggleTips(false);
+                uint controllerIndex = VRTK_DeviceFinder.GetControllerIndex(controllerEvents.gameObject);
+                if (controllerIndex == e.controllerIndex)
+                {
+                    ToggleTips(false);
+                }
             }
         }
 
-        private void InitialiseTips()
+        protected virtual void InitialiseTips()
         {
-            foreach (var tooltip in GetComponentsInChildren<VRTK_ObjectTooltip>(true))
+            foreach (VRTK_ObjectTooltip tooltip in GetComponentsInChildren<VRTK_ObjectTooltip>(true))
             {
-                var tipText = "";
+                string tipText = "";
                 Transform tipTransform = null;
 
                 switch (tooltip.name.Replace("Tooltip", "").ToLower())
@@ -326,26 +335,26 @@ namespace VRTK
             }
         }
 
-        private bool TipsInitialised()
+        protected virtual bool TipsInitialised()
         {
             return (triggerInitialised && gripInitialised && touchpadInitialised && (buttonOneInitialised || buttonTwoInitialised || startMenuInitialised));
         }
 
-        private Transform GetTransform(Transform setTransform, SDK_BaseController.ControllerElements findElement)
+        protected virtual Transform GetTransform(Transform setTransform, SDK_BaseController.ControllerElements findElement)
         {
             Transform returnTransform = null;
             if (setTransform)
             {
                 returnTransform = setTransform;
             }
-            else
+            else if (controllerEvents != null)
             {
-                var modelController = VRTK_DeviceFinder.GetModelAliasController(controllerActions.gameObject);
+                GameObject modelController = VRTK_DeviceFinder.GetModelAliasController(controllerEvents.gameObject);
 
                 if (modelController && modelController.activeInHierarchy)
                 {
-                    var controllerHand = VRTK_DeviceFinder.GetControllerHand(controllerActions.gameObject);
-                    var elementPath = VRTK_SDK_Bridge.GetControllerElementPath(findElement, controllerHand, true);
+                    SDK_BaseController.ControllerHand controllerHand = VRTK_DeviceFinder.GetControllerHand(controllerEvents.gameObject);
+                    string elementPath = VRTK_SDK_Bridge.GetControllerElementPath(findElement, controllerHand, true);
                     returnTransform = modelController.transform.FindChild(elementPath);
                 }
             }

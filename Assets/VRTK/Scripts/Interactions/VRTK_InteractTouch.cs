@@ -33,7 +33,6 @@ namespace VRTK
     /// <example>
     /// `VRTK/Examples/005_Controller/BasicObjectGrabbing` demonstrates the highlighting of objects that have the `VRTK_InteractableObject` script added to them to show the ability to highlight interactable objects when they are touched by the controllers.
     /// </example>
-    [RequireComponent(typeof(VRTK_ControllerActions))]
     public class VRTK_InteractTouch : MonoBehaviour
     {
         [Tooltip("If a custom rigidbody and collider for the rigidbody are required, then a gameobject containing a rigidbody and collider can be passed into this parameter. If this is empty then the rigidbody and collider will be auto generated at runtime to match the SDK default controller.")]
@@ -59,9 +58,6 @@ namespace VRTK
         protected bool rigidBodyForcedActive = false;
         protected Rigidbody touchRigidBody;
         protected Object defaultColliderPrefab;
-
-        protected VRTK_ControllerEvents controllerEvents;
-        protected VRTK_ControllerActions controllerActions;
 
         public virtual void OnControllerTouchInteractableObject(ObjectInteractEventArgs e)
         {
@@ -199,9 +195,6 @@ namespace VRTK
 
         protected virtual void OnEnable()
         {
-            controllerEvents = GetComponent<VRTK_ControllerEvents>();
-            controllerActions = GetComponent<VRTK_ControllerActions>();
-
             VRTK_PlayerObject.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.Controller);
             triggerRumble = false;
             CreateTouchCollider();
@@ -312,17 +305,18 @@ namespace VRTK
 
         protected virtual void ToggleControllerVisibility(bool visible)
         {
+            GameObject modelContainer = VRTK_DeviceFinder.GetModelAliasController(gameObject);
             if (touchedObject)
             {
-                var controllerAppearanceScript = touchedObject.GetComponentInParent<VRTK_InteractControllerAppearance>();
-                if (controllerAppearanceScript)
+                VRTK_InteractControllerAppearance[] controllerAppearanceScript = touchedObject.GetComponentsInParent<VRTK_InteractControllerAppearance>(true);
+                if (controllerAppearanceScript.Length > 0)
                 {
-                    controllerAppearanceScript.ToggleControllerOnTouch(visible, controllerActions, touchedObject);
+                    controllerAppearanceScript[0].ToggleControllerOnTouch(visible, modelContainer, touchedObject);
                 }
             }
             else if (visible)
             {
-                controllerActions.ToggleControllerModel(true, touchedObject);
+                VRTK_SharedMethods.SetRendererVisible(modelContainer, touchedObject);
             }
         }
 

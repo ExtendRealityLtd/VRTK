@@ -244,6 +244,12 @@ namespace VRTK
         public bool menuPressed = false;
 
         /// <summary>
+        /// This will be true if the controller model alias renderers are visible.
+        /// </summary>
+        [HideInInspector]
+        public bool controllerVisible = true;
+
+        /// <summary>
         /// Emitted when the trigger is squeezed about half way in.
         /// </summary>
         public event ControllerInteractionEventHandler TriggerPressed;
@@ -461,6 +467,15 @@ namespace VRTK
         /// Emitted when the controller index changed.
         /// </summary>
         public event ControllerInteractionEventHandler ControllerIndexChanged;
+
+        /// <summary>
+        /// Emitted when the controller is set to visible.
+        /// </summary>
+        public event ControllerInteractionEventHandler ControllerVisible;
+        /// <summary>
+        /// Emitted when the controller is set to hidden.
+        /// </summary>
+        public event ControllerInteractionEventHandler ControllerHidden;
 
         protected Vector2 touchpadAxis = Vector2.zero;
         protected Vector2 triggerAxis = Vector2.zero;
@@ -844,6 +859,53 @@ namespace VRTK
             }
         }
 
+        public virtual void OnControllerVisible(ControllerInteractionEventArgs e)
+        {
+            controllerVisible = true;
+            if (ControllerVisible != null)
+            {
+                ControllerVisible(this, e);
+            }
+        }
+
+        public virtual void OnControllerHidden(ControllerInteractionEventArgs e)
+        {
+            controllerVisible = false;
+            if (ControllerHidden != null)
+            {
+                ControllerHidden(this, e);
+            }
+        }
+
+        /// <summary>
+        /// The SetControllerEvent/0 method is used to set the Controller Event payload.
+        /// </summary>
+        /// <returns>The payload for a Controller Event.</returns>
+        public virtual ControllerInteractionEventArgs SetControllerEvent()
+        {
+            var nullBool = false;
+            return SetControllerEvent(ref nullBool);
+        }
+
+        /// <summary>
+        /// The SetControllerEvent/3 method is used to set the Controller Event payload.
+        /// </summary>
+        /// <param name="buttonBool">The state of the pressed button if required.</param>
+        /// <param name="value">The value to set the buttonBool reference to.</param>
+        /// <param name="buttonPressure">The pressure of the button pressed if required.</param>
+        /// <returns>The payload for a Controller Event.</returns>
+        public virtual ControllerInteractionEventArgs SetControllerEvent(ref bool buttonBool, bool value = false, float buttonPressure = 0f)
+        {
+            uint controllerIndex = VRTK_DeviceFinder.GetControllerIndex(gameObject);
+            buttonBool = value;
+            ControllerInteractionEventArgs e;
+            e.controllerIndex = controllerIndex;
+            e.buttonPressure = buttonPressure;
+            e.touchpadAxis = VRTK_SDK_Bridge.GetTouchpadAxisOnIndex(controllerIndex);
+            e.touchpadAngle = CalculateTouchpadAxisAngle(e.touchpadAxis);
+            return e;
+        }
+
         /// <summary>
         /// The GetVelocity method is useful for getting the current velocity of the physical game controller. This can be useful to determine the speed at which the controller is being swung or the direction it is being moved in.
         /// </summary>
@@ -1039,54 +1101,54 @@ namespace VRTK
             //Trigger Touched
             if (VRTK_SDK_Bridge.IsTriggerTouchedDownOnIndex(controllerIndex))
             {
-                OnTriggerTouchStart(SetButtonEvent(ref triggerTouched, true, currentTriggerAxis.x));
+                OnTriggerTouchStart(SetControllerEvent(ref triggerTouched, true, currentTriggerAxis.x));
                 EmitAlias(ButtonAlias.TriggerTouch, true, currentTriggerAxis.x, ref triggerTouched);
             }
 
             //Trigger Hairline
             if (VRTK_SDK_Bridge.IsHairTriggerDownOnIndex(controllerIndex))
             {
-                OnTriggerHairlineStart(SetButtonEvent(ref triggerHairlinePressed, true, currentTriggerAxis.x));
+                OnTriggerHairlineStart(SetControllerEvent(ref triggerHairlinePressed, true, currentTriggerAxis.x));
                 EmitAlias(ButtonAlias.TriggerHairline, true, currentTriggerAxis.x, ref triggerHairlinePressed);
             }
 
             //Trigger Pressed
             if (VRTK_SDK_Bridge.IsTriggerPressedDownOnIndex(controllerIndex))
             {
-                OnTriggerPressed(SetButtonEvent(ref triggerPressed, true, currentTriggerAxis.x));
+                OnTriggerPressed(SetControllerEvent(ref triggerPressed, true, currentTriggerAxis.x));
                 EmitAlias(ButtonAlias.TriggerPress, true, currentTriggerAxis.x, ref triggerPressed);
             }
 
             //Trigger Clicked
             if (!triggerClicked && currentTriggerAxis.x >= triggerClickThreshold)
             {
-                OnTriggerClicked(SetButtonEvent(ref triggerClicked, true, currentTriggerAxis.x));
+                OnTriggerClicked(SetControllerEvent(ref triggerClicked, true, currentTriggerAxis.x));
                 EmitAlias(ButtonAlias.TriggerClick, true, currentTriggerAxis.x, ref triggerClicked);
             }
             else if (triggerClicked && currentTriggerAxis.x < triggerClickThreshold)
             {
-                OnTriggerUnclicked(SetButtonEvent(ref triggerClicked, false, 0f));
+                OnTriggerUnclicked(SetControllerEvent(ref triggerClicked, false, 0f));
                 EmitAlias(ButtonAlias.TriggerClick, false, 0f, ref triggerClicked);
             }
 
             // Trigger Pressed end
             if (VRTK_SDK_Bridge.IsTriggerPressedUpOnIndex(controllerIndex))
             {
-                OnTriggerReleased(SetButtonEvent(ref triggerPressed, false, 0f));
+                OnTriggerReleased(SetControllerEvent(ref triggerPressed, false, 0f));
                 EmitAlias(ButtonAlias.TriggerPress, false, 0f, ref triggerPressed);
             }
 
             //Trigger Hairline End
             if (VRTK_SDK_Bridge.IsHairTriggerUpOnIndex(controllerIndex))
             {
-                OnTriggerHairlineEnd(SetButtonEvent(ref triggerHairlinePressed, false, 0f));
+                OnTriggerHairlineEnd(SetControllerEvent(ref triggerHairlinePressed, false, 0f));
                 EmitAlias(ButtonAlias.TriggerHairline, false, 0f, ref triggerHairlinePressed);
             }
 
             //Trigger Touch End
             if (VRTK_SDK_Bridge.IsTriggerTouchedUpOnIndex(controllerIndex))
             {
-                OnTriggerTouchEnd(SetButtonEvent(ref triggerTouched, false, 0f));
+                OnTriggerTouchEnd(SetControllerEvent(ref triggerTouched, false, 0f));
                 EmitAlias(ButtonAlias.TriggerTouch, false, 0f, ref triggerTouched);
             }
 
@@ -1098,60 +1160,60 @@ namespace VRTK
             }
             else
             {
-                OnTriggerAxisChanged(SetButtonEvent(ref triggerAxisChanged, true, currentTriggerAxis.x));
+                OnTriggerAxisChanged(SetControllerEvent(ref triggerAxisChanged, true, currentTriggerAxis.x));
             }
 
             //Grip Touched
             if (VRTK_SDK_Bridge.IsGripTouchedDownOnIndex(controllerIndex))
             {
-                OnGripTouchStart(SetButtonEvent(ref gripTouched, true, currentGripAxis.x));
+                OnGripTouchStart(SetControllerEvent(ref gripTouched, true, currentGripAxis.x));
                 EmitAlias(ButtonAlias.GripTouch, true, currentGripAxis.x, ref gripTouched);
             }
 
             //Grip Hairline
             if (VRTK_SDK_Bridge.IsHairGripDownOnIndex(controllerIndex))
             {
-                OnGripHairlineStart(SetButtonEvent(ref gripHairlinePressed, true, currentGripAxis.x));
+                OnGripHairlineStart(SetControllerEvent(ref gripHairlinePressed, true, currentGripAxis.x));
                 EmitAlias(ButtonAlias.GripHairline, true, currentGripAxis.x, ref gripHairlinePressed);
             }
 
             //Grip Pressed
             if (VRTK_SDK_Bridge.IsGripPressedDownOnIndex(controllerIndex))
             {
-                OnGripPressed(SetButtonEvent(ref gripPressed, true, currentGripAxis.x));
+                OnGripPressed(SetControllerEvent(ref gripPressed, true, currentGripAxis.x));
                 EmitAlias(ButtonAlias.GripPress, true, currentGripAxis.x, ref gripPressed);
             }
 
             //Grip Clicked
             if (!gripClicked && currentGripAxis.x >= gripClickThreshold)
             {
-                OnGripClicked(SetButtonEvent(ref gripClicked, true, currentGripAxis.x));
+                OnGripClicked(SetControllerEvent(ref gripClicked, true, currentGripAxis.x));
                 EmitAlias(ButtonAlias.GripClick, true, currentGripAxis.x, ref gripClicked);
             }
             else if (gripClicked && currentGripAxis.x < gripClickThreshold)
             {
-                OnGripUnclicked(SetButtonEvent(ref gripClicked, false, 0f));
+                OnGripUnclicked(SetControllerEvent(ref gripClicked, false, 0f));
                 EmitAlias(ButtonAlias.GripClick, false, 0f, ref gripClicked);
             }
 
             // Grip Pressed End
             if (VRTK_SDK_Bridge.IsGripPressedUpOnIndex(controllerIndex))
             {
-                OnGripReleased(SetButtonEvent(ref gripPressed, false, 0f));
+                OnGripReleased(SetControllerEvent(ref gripPressed, false, 0f));
                 EmitAlias(ButtonAlias.GripPress, false, 0f, ref gripPressed);
             }
 
             //Grip Hairline End
             if (VRTK_SDK_Bridge.IsHairGripUpOnIndex(controllerIndex))
             {
-                OnGripHairlineEnd(SetButtonEvent(ref gripHairlinePressed, false, 0f));
+                OnGripHairlineEnd(SetControllerEvent(ref gripHairlinePressed, false, 0f));
                 EmitAlias(ButtonAlias.GripHairline, false, 0f, ref gripHairlinePressed);
             }
 
             // Grip Touch End
             if (VRTK_SDK_Bridge.IsGripTouchedUpOnIndex(controllerIndex))
             {
-                OnGripTouchEnd(SetButtonEvent(ref gripTouched, false, 0f));
+                OnGripTouchEnd(SetControllerEvent(ref gripTouched, false, 0f));
                 EmitAlias(ButtonAlias.GripTouch, false, 0f, ref gripTouched);
             }
 
@@ -1163,32 +1225,32 @@ namespace VRTK
             }
             else
             {
-                OnGripAxisChanged(SetButtonEvent(ref gripAxisChanged, true, currentGripAxis.x));
+                OnGripAxisChanged(SetControllerEvent(ref gripAxisChanged, true, currentGripAxis.x));
             }
 
             //Touchpad Touched
             if (VRTK_SDK_Bridge.IsTouchpadTouchedDownOnIndex(controllerIndex))
             {
-                OnTouchpadTouchStart(SetButtonEvent(ref touchpadTouched, true, 1f));
+                OnTouchpadTouchStart(SetControllerEvent(ref touchpadTouched, true, 1f));
                 EmitAlias(ButtonAlias.TouchpadTouch, true, 1f, ref touchpadTouched);
             }
 
             //Touchpad Pressed
             if (VRTK_SDK_Bridge.IsTouchpadPressedDownOnIndex(controllerIndex))
             {
-                OnTouchpadPressed(SetButtonEvent(ref touchpadPressed, true, 1f));
+                OnTouchpadPressed(SetControllerEvent(ref touchpadPressed, true, 1f));
                 EmitAlias(ButtonAlias.TouchpadPress, true, 1f, ref touchpadPressed);
             }
             else if (VRTK_SDK_Bridge.IsTouchpadPressedUpOnIndex(controllerIndex))
             {
-                OnTouchpadReleased(SetButtonEvent(ref touchpadPressed, false, 0f));
+                OnTouchpadReleased(SetControllerEvent(ref touchpadPressed, false, 0f));
                 EmitAlias(ButtonAlias.TouchpadPress, false, 0f, ref touchpadPressed);
             }
 
             //Touchpad Untouched
             if (VRTK_SDK_Bridge.IsTouchpadTouchedUpOnIndex(controllerIndex))
             {
-                OnTouchpadTouchEnd(SetButtonEvent(ref touchpadTouched, false, 0f));
+                OnTouchpadTouchEnd(SetControllerEvent(ref touchpadTouched, false, 0f));
                 EmitAlias(ButtonAlias.TouchpadTouch, false, 0f, ref touchpadTouched);
                 touchpadAxis = Vector2.zero;
             }
@@ -1200,70 +1262,70 @@ namespace VRTK
             }
             else
             {
-                OnTouchpadAxisChanged(SetButtonEvent(ref touchpadAxisChanged, true, 1f));
+                OnTouchpadAxisChanged(SetControllerEvent(ref touchpadAxisChanged, true, 1f));
             }
 
             //ButtonOne Touched
             if (VRTK_SDK_Bridge.IsButtonOneTouchedDownOnIndex(controllerIndex))
             {
-                OnButtonOneTouchStart(SetButtonEvent(ref buttonOneTouched, true, 1f));
+                OnButtonOneTouchStart(SetControllerEvent(ref buttonOneTouched, true, 1f));
                 EmitAlias(ButtonAlias.ButtonOneTouch, true, 1f, ref buttonOneTouched);
             }
 
             //ButtonOne Pressed
             if (VRTK_SDK_Bridge.IsButtonOnePressedDownOnIndex(controllerIndex))
             {
-                OnButtonOnePressed(SetButtonEvent(ref buttonOnePressed, true, 1f));
+                OnButtonOnePressed(SetControllerEvent(ref buttonOnePressed, true, 1f));
                 EmitAlias(ButtonAlias.ButtonOnePress, true, 1f, ref buttonOnePressed);
             }
             else if (VRTK_SDK_Bridge.IsButtonOnePressedUpOnIndex(controllerIndex))
             {
-                OnButtonOneReleased(SetButtonEvent(ref buttonOnePressed, false, 0f));
+                OnButtonOneReleased(SetControllerEvent(ref buttonOnePressed, false, 0f));
                 EmitAlias(ButtonAlias.ButtonOnePress, false, 0f, ref buttonOnePressed);
             }
 
             //ButtonOne Touched End
             if (VRTK_SDK_Bridge.IsButtonOneTouchedUpOnIndex(controllerIndex))
             {
-                OnButtonOneTouchEnd(SetButtonEvent(ref buttonOneTouched, false, 0f));
+                OnButtonOneTouchEnd(SetControllerEvent(ref buttonOneTouched, false, 0f));
                 EmitAlias(ButtonAlias.ButtonOneTouch, false, 0f, ref buttonOneTouched);
             }
 
             //ButtonTwo Touched
             if (VRTK_SDK_Bridge.IsButtonTwoTouchedDownOnIndex(controllerIndex))
             {
-                OnButtonTwoTouchStart(SetButtonEvent(ref buttonTwoTouched, true, 1f));
+                OnButtonTwoTouchStart(SetControllerEvent(ref buttonTwoTouched, true, 1f));
                 EmitAlias(ButtonAlias.ButtonTwoTouch, true, 1f, ref buttonTwoTouched);
             }
 
             //ButtonTwo Pressed
             if (VRTK_SDK_Bridge.IsButtonTwoPressedDownOnIndex(controllerIndex))
             {
-                OnButtonTwoPressed(SetButtonEvent(ref buttonTwoPressed, true, 1f));
+                OnButtonTwoPressed(SetControllerEvent(ref buttonTwoPressed, true, 1f));
                 EmitAlias(ButtonAlias.ButtonTwoPress, true, 1f, ref buttonTwoPressed);
             }
             else if (VRTK_SDK_Bridge.IsButtonTwoPressedUpOnIndex(controllerIndex))
             {
-                OnButtonTwoReleased(SetButtonEvent(ref buttonTwoPressed, false, 0f));
+                OnButtonTwoReleased(SetControllerEvent(ref buttonTwoPressed, false, 0f));
                 EmitAlias(ButtonAlias.ButtonTwoPress, false, 0f, ref buttonTwoPressed);
             }
 
             //ButtonTwo Touched End
             if (VRTK_SDK_Bridge.IsButtonTwoTouchedUpOnIndex(controllerIndex))
             {
-                OnButtonTwoTouchEnd(SetButtonEvent(ref buttonTwoTouched, false, 0f));
+                OnButtonTwoTouchEnd(SetControllerEvent(ref buttonTwoTouched, false, 0f));
                 EmitAlias(ButtonAlias.ButtonTwoTouch, false, 0f, ref buttonTwoTouched);
             }
 
             //StartMenu Pressed
             if (VRTK_SDK_Bridge.IsStartMenuPressedDownOnIndex(controllerIndex))
             {
-                OnStartMenuPressed(SetButtonEvent(ref startMenuPressed, true, 1f));
+                OnStartMenuPressed(SetControllerEvent(ref startMenuPressed, true, 1f));
                 EmitAlias(ButtonAlias.StartMenuPress, true, 1f, ref startMenuPressed);
             }
             else if (VRTK_SDK_Bridge.IsStartMenuPressedUpOnIndex(controllerIndex))
             {
-                OnStartMenuReleased(SetButtonEvent(ref startMenuPressed, false, 0f));
+                OnStartMenuReleased(SetControllerEvent(ref startMenuPressed, false, 0f));
                 EmitAlias(ButtonAlias.StartMenuPress, false, 0f, ref startMenuPressed);
             }
 
@@ -1643,35 +1705,20 @@ namespace VRTK
             }
         }
 
-        protected virtual ControllerInteractionEventArgs SetButtonEvent(ref bool buttonBool, bool value, float buttonPressure)
-        {
-            var controllerIndex = VRTK_DeviceFinder.GetControllerIndex(gameObject);
-            buttonBool = value;
-            ControllerInteractionEventArgs e;
-            e.controllerIndex = controllerIndex;
-            e.buttonPressure = buttonPressure;
-            e.touchpadAxis = VRTK_SDK_Bridge.GetTouchpadAxisOnIndex(controllerIndex);
-            e.touchpadAngle = CalculateTouchpadAxisAngle(e.touchpadAxis);
-            return e;
-        }
-
         protected virtual void TrackedControllerEnabled(object sender, VRTKTrackedControllerEventArgs e)
         {
-            var nullBool = false;
-            OnControllerEnabled(SetButtonEvent(ref nullBool, true, 0f));
+            OnControllerEnabled(SetControllerEvent());
         }
 
         protected virtual void TrackedControllerDisabled(object sender, VRTKTrackedControllerEventArgs e)
         {
             DisableEvents();
-            var nullBool = false;
-            OnControllerDisabled(SetButtonEvent(ref nullBool, false, 0f));
+            OnControllerDisabled(SetControllerEvent());
         }
 
         protected virtual void TrackedControllerIndexChanged(object sender, VRTKTrackedControllerEventArgs e)
         {
-            var nullBool = false;
-            OnControllerIndexChanged(SetButtonEvent(ref nullBool, false, 0f));
+            OnControllerIndexChanged(SetControllerEvent());
         }
 
         protected virtual float CalculateTouchpadAxisAngle(Vector2 axis)
@@ -1692,12 +1739,12 @@ namespace VRTK
                 if (touchDown)
                 {
                     pointerPressed = true;
-                    OnAliasPointerOn(SetButtonEvent(ref buttonBool, true, buttonPressure));
+                    OnAliasPointerOn(SetControllerEvent(ref buttonBool, true, buttonPressure));
                 }
                 else
                 {
                     pointerPressed = false;
-                    OnAliasPointerOff(SetButtonEvent(ref buttonBool, false, buttonPressure));
+                    OnAliasPointerOff(SetControllerEvent(ref buttonBool, false, buttonPressure));
                 }
             }
 
@@ -1705,7 +1752,7 @@ namespace VRTK
             {
                 if (!touchDown)
                 {
-                    OnAliasPointerSet(SetButtonEvent(ref buttonBool, false, buttonPressure));
+                    OnAliasPointerSet(SetControllerEvent(ref buttonBool, false, buttonPressure));
                 }
             }
 
@@ -1714,12 +1761,12 @@ namespace VRTK
                 if (touchDown)
                 {
                     grabPressed = true;
-                    OnAliasGrabOn(SetButtonEvent(ref buttonBool, true, buttonPressure));
+                    OnAliasGrabOn(SetControllerEvent(ref buttonBool, true, buttonPressure));
                 }
                 else
                 {
                     grabPressed = false;
-                    OnAliasGrabOff(SetButtonEvent(ref buttonBool, false, buttonPressure));
+                    OnAliasGrabOff(SetControllerEvent(ref buttonBool, false, buttonPressure));
                 }
             }
 
@@ -1728,12 +1775,12 @@ namespace VRTK
                 if (touchDown)
                 {
                     usePressed = true;
-                    OnAliasUseOn(SetButtonEvent(ref buttonBool, true, buttonPressure));
+                    OnAliasUseOn(SetControllerEvent(ref buttonBool, true, buttonPressure));
                 }
                 else
                 {
                     usePressed = false;
-                    OnAliasUseOff(SetButtonEvent(ref buttonBool, false, buttonPressure));
+                    OnAliasUseOff(SetControllerEvent(ref buttonBool, false, buttonPressure));
                 }
             }
 
@@ -1742,12 +1789,12 @@ namespace VRTK
                 if (touchDown)
                 {
                     uiClickPressed = true;
-                    OnAliasUIClickOn(SetButtonEvent(ref buttonBool, true, buttonPressure));
+                    OnAliasUIClickOn(SetControllerEvent(ref buttonBool, true, buttonPressure));
                 }
                 else
                 {
                     uiClickPressed = false;
-                    OnAliasUIClickOff(SetButtonEvent(ref buttonBool, false, buttonPressure));
+                    OnAliasUIClickOff(SetControllerEvent(ref buttonBool, false, buttonPressure));
                 }
             }
 
@@ -1756,12 +1803,12 @@ namespace VRTK
                 if (touchDown)
                 {
                     menuPressed = true;
-                    OnAliasMenuOn(SetButtonEvent(ref buttonBool, true, buttonPressure));
+                    OnAliasMenuOn(SetControllerEvent(ref buttonBool, true, buttonPressure));
                 }
                 else
                 {
                     menuPressed = false;
-                    OnAliasMenuOff(SetButtonEvent(ref buttonBool, false, buttonPressure));
+                    OnAliasMenuOff(SetControllerEvent(ref buttonBool, false, buttonPressure));
                 }
             }
         }
@@ -1777,91 +1824,91 @@ namespace VRTK
         {
             if (triggerPressed)
             {
-                OnTriggerReleased(SetButtonEvent(ref triggerPressed, false, 0f));
+                OnTriggerReleased(SetControllerEvent(ref triggerPressed, false, 0f));
                 EmitAlias(ButtonAlias.TriggerPress, false, 0f, ref triggerPressed);
             }
 
             if (triggerTouched)
             {
-                OnTriggerTouchEnd(SetButtonEvent(ref triggerTouched, false, 0f));
+                OnTriggerTouchEnd(SetControllerEvent(ref triggerTouched, false, 0f));
                 EmitAlias(ButtonAlias.TriggerTouch, false, 0f, ref triggerTouched);
             }
 
             if (triggerHairlinePressed)
             {
-                OnTriggerHairlineEnd(SetButtonEvent(ref triggerHairlinePressed, false, 0f));
+                OnTriggerHairlineEnd(SetControllerEvent(ref triggerHairlinePressed, false, 0f));
                 EmitAlias(ButtonAlias.TriggerHairline, false, 0f, ref triggerHairlinePressed);
             }
 
             if (triggerClicked)
             {
-                OnTriggerUnclicked(SetButtonEvent(ref triggerClicked, false, 0f));
+                OnTriggerUnclicked(SetControllerEvent(ref triggerClicked, false, 0f));
                 EmitAlias(ButtonAlias.TriggerClick, false, 0f, ref triggerClicked);
             }
 
             if (gripPressed)
             {
-                OnGripReleased(SetButtonEvent(ref gripPressed, false, 0f));
+                OnGripReleased(SetControllerEvent(ref gripPressed, false, 0f));
                 EmitAlias(ButtonAlias.GripPress, false, 0f, ref gripPressed);
             }
 
             if (gripTouched)
             {
-                OnGripTouchEnd(SetButtonEvent(ref gripTouched, false, 0f));
+                OnGripTouchEnd(SetControllerEvent(ref gripTouched, false, 0f));
                 EmitAlias(ButtonAlias.GripTouch, false, 0f, ref gripTouched);
             }
 
             if (gripHairlinePressed)
             {
-                OnGripHairlineEnd(SetButtonEvent(ref gripHairlinePressed, false, 0f));
+                OnGripHairlineEnd(SetControllerEvent(ref gripHairlinePressed, false, 0f));
                 EmitAlias(ButtonAlias.GripHairline, false, 0f, ref gripHairlinePressed);
             }
 
             if (gripClicked)
             {
-                OnGripUnclicked(SetButtonEvent(ref gripClicked, false, 0f));
+                OnGripUnclicked(SetControllerEvent(ref gripClicked, false, 0f));
                 EmitAlias(ButtonAlias.GripClick, false, 0f, ref gripClicked);
             }
 
             if (touchpadPressed)
             {
-                OnTouchpadReleased(SetButtonEvent(ref touchpadPressed, false, 0f));
+                OnTouchpadReleased(SetControllerEvent(ref touchpadPressed, false, 0f));
                 EmitAlias(ButtonAlias.TouchpadPress, false, 0f, ref touchpadPressed);
             }
 
             if (touchpadTouched)
             {
-                OnTouchpadTouchEnd(SetButtonEvent(ref touchpadTouched, false, 0f));
+                OnTouchpadTouchEnd(SetControllerEvent(ref touchpadTouched, false, 0f));
                 EmitAlias(ButtonAlias.TouchpadTouch, false, 0f, ref touchpadTouched);
             }
 
             if (buttonOnePressed)
             {
-                OnButtonOneReleased(SetButtonEvent(ref buttonOnePressed, false, 0f));
+                OnButtonOneReleased(SetControllerEvent(ref buttonOnePressed, false, 0f));
                 EmitAlias(ButtonAlias.ButtonOnePress, false, 0f, ref buttonOnePressed);
             }
 
             if (buttonOneTouched)
             {
-                OnButtonOneTouchEnd(SetButtonEvent(ref buttonOneTouched, false, 0f));
+                OnButtonOneTouchEnd(SetControllerEvent(ref buttonOneTouched, false, 0f));
                 EmitAlias(ButtonAlias.ButtonOneTouch, false, 0f, ref buttonOneTouched);
             }
 
             if (buttonTwoPressed)
             {
-                OnButtonTwoReleased(SetButtonEvent(ref buttonTwoPressed, false, 0f));
+                OnButtonTwoReleased(SetControllerEvent(ref buttonTwoPressed, false, 0f));
                 EmitAlias(ButtonAlias.ButtonTwoPress, false, 0f, ref buttonTwoPressed);
             }
 
             if (buttonTwoTouched)
             {
-                OnButtonTwoTouchEnd(SetButtonEvent(ref buttonTwoTouched, false, 0f));
+                OnButtonTwoTouchEnd(SetControllerEvent(ref buttonTwoTouched, false, 0f));
                 EmitAlias(ButtonAlias.ButtonTwoTouch, false, 0f, ref buttonTwoTouched);
             }
 
             if (startMenuPressed)
             {
-                OnStartMenuReleased(SetButtonEvent(ref startMenuPressed, false, 0f));
+                OnStartMenuReleased(SetControllerEvent(ref startMenuPressed, false, 0f));
                 EmitAlias(ButtonAlias.StartMenuPress, false, 0f, ref startMenuPressed);
             }
 

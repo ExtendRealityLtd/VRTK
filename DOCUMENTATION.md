@@ -215,7 +215,7 @@ There are a number of parameters that can be set on the Prefab which are provide
 
 #### ResetTooltip/0
 
-  > `public void ResetTooltip()`
+  > `public virtual void ResetTooltip()`
 
   * Parameters
    * _none_
@@ -226,7 +226,7 @@ The Reset method reinitalises the tooltips on all of the controller elements.
 
 #### UpdateText/2
 
-  > `public void UpdateText(TooltipButtons element, string newText)`
+  > `public virtual void UpdateText(TooltipButtons element, string newText)`
 
   * Parameters
    * `TooltipButtons element` - The specific controller element to change the tooltip text on.
@@ -238,7 +238,7 @@ The UpdateText method allows the tooltip text on a specific controller element t
 
 #### ToggleTips/2
 
-  > `public void ToggleTips(bool state, TooltipButtons element = TooltipButtons.None)`
+  > `public virtual void ToggleTips(bool state, TooltipButtons element = TooltipButtons.None)`
 
   * Parameters
    * `bool state` - The state of whether to display or hide the controller tooltips, true will display and false will hide.
@@ -2014,7 +2014,7 @@ To enable the Warp Object Control Action, ensure one of the `TouchpadControlOpti
 A collection of scripts that provide the ability to interact with game objects with the controllers.
 
  * [Controller Events](#controller-events-vrtk_controllerevents)
- * [Controller Actions](#controller-actions-vrtk_controlleractions)
+ * [Controller Highlighter](#controller-highlighter-vrtk_controllerhighlighter)
  * [Interactable Object](#interactable-object-vrtk_interactableobject)
  * [Interact Touch](#interact-touch-vrtk_interacttouch)
  * [Interact Grab](#interact-grab-vrtk_interactgrab)
@@ -2091,6 +2091,7 @@ The script also has a public boolean pressed state for the buttons to allow the 
  * `public bool usePressed` - This will be true if the button aliased to the use is held down. Default: `false`
  * `public bool uiClickPressed` - This will be true if the button aliased to the UI click is held down. Default: `false`
  * `public bool menuPressed` - This will be true if the button aliased to the menu is held down. Default: `false`
+ * `public bool controllerVisible` - This will be true if the controller model alias renderers are visible. Default: `true`
 
 ### Class Events
 
@@ -2141,6 +2142,8 @@ The script also has a public boolean pressed state for the buttons to allow the 
  * `ControllerEnabled` - Emitted when the controller is enabled.
  * `ControllerDisabled` - Emitted when the controller is disabled.
  * `ControllerIndexChanged` - Emitted when the controller index changed.
+ * `ControllerVisible` - Emitted when the controller is set to visible.
+ * `ControllerHidden` - Emitted when the controller is set to hidden.
 
 ### Unity Events
 
@@ -2193,6 +2196,8 @@ Adding the `VRTK_ControllerEvents_UnityEvents` component to `VRTK_ControllerEven
  * `OnControllerEnabled` - Emits the ControllerEnabled class event.
  * `OnControllerDisabled` - Emits the ControllerDisabled class event.
  * `OnControllerIndexChanged` - Emits the ControllerIndexChanged class event.
+ * `OnControllerVisible` - Emits the ControllerVisible class event.
+ * `OnControllerHidden` - Emits the ControllerHidden class event.
 
 ### Event Payload
 
@@ -2202,6 +2207,30 @@ Adding the `VRTK_ControllerEvents_UnityEvents` component to `VRTK_ControllerEven
  * `float touchpadAngle` - The rotational position the touchpad is being touched at, 0 being top, 180 being bottom and all other angles accordingly. `0f` to `360f`.
 
 ### Class Methods
+
+#### SetControllerEvent/0
+
+  > `public virtual ControllerInteractionEventArgs SetControllerEvent()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `ControllerInteractionEventArgs` - The payload for a Controller Event.
+
+The SetControllerEvent/0 method is used to set the Controller Event payload.
+
+#### SetControllerEvent/3
+
+  > `public virtual ControllerInteractionEventArgs SetControllerEvent(ref bool buttonBool, bool value = false, float buttonPressure = 0f)`
+
+  * Parameters
+   * `ref bool buttonBool` - The state of the pressed button if required.
+   * `bool value` - The value to set the buttonBool reference to.
+   * `float buttonPressure` - The pressure of the button pressed if required.
+  * Returns
+   * `ControllerInteractionEventArgs` - The payload for a Controller Event.
+
+The SetControllerEvent/3 method is used to set the Controller Event payload.
 
 #### GetTouchpadAxis/0
 
@@ -2323,241 +2352,99 @@ The UnsubscribeToButtonAliasEvent method makes it easier to unsubscribe to from 
 
 ---
 
-## Controller Actions (VRTK_ControllerActions)
+## Controller Highlighter (VRTK_ControllerHighlighter)
 
 ### Overview
 
-The Controller Actions script provides helper methods to deal with common controller actions. It deals with actions that can be done to the controller.
+The Controller Highlighter script provides methods to deal with highlighting controller elements.
 
 The highlighting of the controller is defaulted to use the `VRTK_MaterialColorSwapHighlighter` if no other highlighter is applied to the Object.
 
 ### Inspector Parameters
 
- * **Model Element Paths:** A collection of strings that determine the path to the controller model sub elements for identifying the model parts at runtime. If the paths are left empty they will default to the model element paths of the selected SDK Bridge.
-  * The available model sub elements are:
-    * `Body Model Path`: The overall shape of the controller.
-    * `Trigger Model Path`: The model that represents the trigger button.
-    * `Grip Left Model Path`: The model that represents the left grip button.
-    * `Grip Right Model Path`: The model that represents the right grip button.
-    * `Touchpad Model Path`: The model that represents the touchpad.
-    * `Button One Model Path`: The model that represents button one.
-    * `Button Two Model Path`: The model that represents button two.
-    * `System Menu Model Path`: The model that represents the system menu button.  * `Start Menu Model Path`: The model that represents the start menu button.
- * **Element Highlighter Overrides:** A collection of highlighter overrides for each controller model sub element. If no highlighter override is given then highlighter on the Controller game object is used.
-  * The available model sub elements are:
-    * `Body`: The highlighter to use on the overall shape of the controller.
-    * `Trigger`: The highlighter to use on the trigger button.
-    * `Grip Left`: The highlighter to use on the left grip button.
-    * `Grip Right`: The highlighter to use on the  right grip button.
-    * `Touchpad`: The highlighter to use on the touchpad.
-    * `Button One`: The highlighter to use on button one.
-    * `Button Two`: The highlighter to use on button two.
-    * `System Menu`: The highlighter to use on the system menu button.  * `Start Menu`: The highlighter to use on the start menu button.
-
-### Class Events
-
- * `ControllerModelVisible` - Emitted when the controller model is toggled to be visible.
- * `ControllerModelInvisible` - Emitted when the controller model is toggled to be invisible.
-
-### Unity Events
-
-Adding the `VRTK_ControllerActions_UnityEvents` component to `VRTK_ControllerActions` object allows access to `UnityEvents` that will react identically to the Class Events.
-
- * `OnControllerModelVisible` - Emits the ControllerModelVisible class event.
- * `OnControllerModelInvisible` - Emits the ControllerModelInvisible class event.
-
-### Event Payload
-
- * `uint controllerIndex` - The index of the controller that was used.
+ * **Transition Duration:** The amount of time to take to transition to the set highlight colour.
+ * **Highlight Controller:** The colour to set the entire controller highlight colour to.
+ * **Highlight Body:** The colour to set the body highlight colour to.
+ * **Highlight Trigger:** The colour to set the trigger highlight colour to.
+ * **Highlight Grip:** The colour to set the grip highlight colour to.
+ * **Highlight Touchpad:** The colour to set the touchpad highlight colour to.
+ * **Highlight Button One:** The colour to set the button one highlight colour to.
+ * **Highlight Button Two:** The colour to set the button two highlight colour to.
+ * **Highlight System Menu:** The colour to set the system menu highlight colour to.
+ * **Highlight Start Menu:** The colour to set the start menu highlight colour to.
+ * **Controller Alias:** An optional GameObject to specify which controller to apply the script methods to. If this is left blank then this script is required to be placed on a Controller Alias GameObject.
+ * **Model Container:** An optional GameObject to specifiy where the controller models are. If this is left blank then the Model Alias object will be used.
 
 ### Class Methods
 
-#### IsControllerVisible/0
+#### ConfigureControllerPaths/0
 
-  > `public virtual bool IsControllerVisible()`
-
-  * Parameters
-   * _none_
-  * Returns
-   * `bool` - Is true if the controller model has the renderers that are attached to it are enabled.
-
-The IsControllerVisible method returns true if the controller is currently visible by whether the renderers on the controller are enabled.
-
-#### ToggleControllerModel/2
-
-  > `public virtual void ToggleControllerModel(bool state, GameObject grabbedChildObject)`
-
-  * Parameters
-   * `bool state` - The visibility state to toggle the controller to, `true` will make the controller visible - `false` will hide the controller model.
-   * `GameObject grabbedChildObject` - If an object is being held by the controller then this can be passed through to prevent hiding the grabbed game object as well.
-  * Returns
-   * _none_
-
-The ToggleControllerModel method is used to turn on or off the controller model by enabling or disabling the renderers on the object. It will also work for any custom controllers. It should also not disable any objects being held by the controller if they are a child of the controller object.
-
-#### SetControllerOpacity/1
-
-  > `public virtual void SetControllerOpacity(float alpha)`
-
-  * Parameters
-   * `float alpha` - The alpha level to apply to opacity of the controller object. `0f` to `1f`.
-  * Returns
-   * _none_
-
-The SetControllerOpacity method allows the opacity of the controller model to be changed to make the controller more transparent. A lower alpha value will make the object more transparent, such as `0.5f` will make the controller partially transparent where as `0f` will make the controller completely transparent.
-
-#### HighlightControllerElement/3
-
-  > `public virtual void HighlightControllerElement(GameObject element, Color? highlight, float fadeDuration = 0f)`
-
-  * Parameters
-   * `GameObject element` - The element of the controller to apply the highlight to.
-   * `Color? highlight` - The colour of the highlight.
-   * `float fadeDuration` - The duration of fade from white to the highlight colour. Optional parameter defaults to `0f`.
-  * Returns
-   * _none_
-
-The HighlightControllerElement method allows for an element of the controller to have its colour changed to simulate a highlighting effect of that element on the controller. It's useful for being able to draw a user's attention to a specific button on the controller.
-
-#### UnhighlightControllerElement/1
-
-  > `public virtual void UnhighlightControllerElement(GameObject element)`
-
-  * Parameters
-   * `GameObject element` - The element of the controller to remove the highlight from.
-  * Returns
-   * _none_
-
-The UnhighlightControllerElement method is the inverse of the HighlightControllerElement method and resets the controller element to its original colour.
-
-#### ToggleHighlightControllerElement/4
-
-  > `public virtual void ToggleHighlightControllerElement(bool state, GameObject element, Color? highlight = null, float duration = 0f)`
-
-  * Parameters
-   * `bool state` - The highlight colour state, `true` will enable the highlight on the given element and `false` will remove the highlight from the given element.
-   * `GameObject element` - The element of the controller to apply the highlight to.
-   * `Color? highlight` - The colour of the highlight.
-   * `float duration` - The duration of fade from white to the highlight colour.
-  * Returns
-   * _none_
-
-The ToggleHighlightControllerElement method is a shortcut method that makes it easier to highlight and unhighlight a controller element in a single method rather than using the HighlightControllerElement and UnhighlightControllerElement methods separately.
-
-#### ToggleHighlightTrigger/3
-
-  > `public virtual void ToggleHighlightTrigger(bool state, Color? highlight = null, float duration = 0f)`
-
-  * Parameters
-   * `bool state` - The highlight colour state, `true` will enable the highlight on the trigger and `false` will remove the highlight from the trigger.
-   * `Color? highlight` - The colour to highlight the trigger with.
-   * `float duration` - The duration of fade from white to the highlight colour.
-  * Returns
-   * _none_
-
-The ToggleHighlightTrigger method is a shortcut method that makes it easier to toggle the highlight state of the controller trigger element.
-
-#### ToggleHighlightGrip/3
-
-  > `public virtual void ToggleHighlightGrip(bool state, Color? highlight = null, float duration = 0f)`
-
-  * Parameters
-   * `bool state` - The highlight colour state, `true` will enable the highlight on the grip and `false` will remove the highlight from the grip.
-   * `Color? highlight` - The colour to highlight the grip with.
-   * `float duration` - The duration of fade from white to the highlight colour.
-  * Returns
-   * _none_
-
-The ToggleHighlightGrip method is a shortcut method that makes it easier to toggle the highlight state of the controller grip element.
-
-#### ToggleHighlightTouchpad/3
-
-  > `public virtual void ToggleHighlightTouchpad(bool state, Color? highlight = null, float duration = 0f)`
-
-  * Parameters
-   * `bool state` - The highlight colour state, `true` will enable the highlight on the touchpad and `false` will remove the highlight from the touchpad.
-   * `Color? highlight` - The colour to highlight the touchpad with.
-   * `float duration` - The duration of fade from white to the highlight colour.
-  * Returns
-   * _none_
-
-The ToggleHighlightTouchpad method is a shortcut method that makes it easier to toggle the highlight state of the controller touchpad element.
-
-#### ToggleHighlightButtonOne/3
-
-  > `public virtual void ToggleHighlightButtonOne(bool state, Color? highlight = null, float duration = 0f)`
-
-  * Parameters
-   * `bool state` - The highlight colour state, `true` will enable the highlight on button one and `false` will remove the highlight from button one.
-   * `Color? highlight` - The colour to highlight button one with.
-   * `float duration` - The duration of fade from white to the highlight colour.
-  * Returns
-   * _none_
-
-The ToggleHighlightButtonOne method is a shortcut method that makes it easier to toggle the highlight state of the button one controller element.
-
-#### ToggleHighlightButtonTwo/3
-
-  > `public virtual void ToggleHighlightButtonTwo(bool state, Color? highlight = null, float duration = 0f)`
-
-  * Parameters
-   * `bool state` - The highlight colour state, `true` will enable the highlight on button two and `false` will remove the highlight from button two.
-   * `Color? highlight` - The colour to highlight button two with.
-   * `float duration` - The duration of fade from white to the highlight colour.
-  * Returns
-   * _none_
-
-The ToggleHighlightButtonTwo method is a shortcut method that makes it easier to toggle the highlight state of the button two controller element.
-
-#### ToggleHighlightStartMenu/3
-
-  > `public virtual void ToggleHighlightStartMenu(bool state, Color? highlight = null, float duration = 0f)`
-
-  * Parameters
-   * `bool state` - The highlight colour state, `true` will enable the highlight on the start menu and `false` will remove the highlight from the start menu.
-   * `Color? highlight` - The colour to highlight the start menu with.
-   * `float duration` - The duration of fade from white to the highlight colour.
-  * Returns
-   * _none_
-
-The ToggleHighlightStartMenu method is a shortcut method that makes it easier to toggle the highlight state of the start menu controller element.
-
-#### ToggleHighlighBody/3
-
-  > `public virtual void ToggleHighlighBody(bool state, Color? highlight = null, float duration = 0f)`
-
-  * Parameters
-   * `bool state` - The highlight colour state, `true` will enable the highlight on the body and `false` will remove the highlight from the body.
-   * `Color? highlight` - The colour to highlight the body with.
-   * `float duration` - The duration of fade from white to the highlight colour.
-  * Returns
-   * _none_
-
-The ToggleHighlighBody method is a shortcut method that makes it easier to toggle the highlight state of the controller body element.
-
-#### ToggleHighlightController/3
-
-  > `public virtual void ToggleHighlightController(bool state, Color? highlight = null, float duration = 0f)`
-
-  * Parameters
-   * `bool state` - The highlight colour state, `true` will enable the highlight on the entire controller `false` will remove the highlight from the entire controller.
-   * `Color? highlight` - The colour to highlight the entire controller with.
-   * `float duration` - The duration of fade from white to the highlight colour.
-  * Returns
-   * _none_
-
-The ToggleHighlightController method is a shortcut method that makes it easier to toggle the highlight state of the entire controller.
-
-#### InitaliseHighlighters/0
-
-  > `public virtual void InitaliseHighlighters()`
+  > `public virtual void ConfigureControllerPaths()`
 
   * Parameters
    * _none_
   * Returns
    * _none_
 
-The InitaliseHighlighters method sets up the highlighters on the controller model.
+The ConfigureControllerPaths method is used to set up the model element paths.
+
+#### PopulateHighlighters/0
+
+  > `public virtual void PopulateHighlighters()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The PopulateHighlighters method sets up the highlighters on the controller model.
+
+#### HighlightController/2
+
+  > `public virtual void HighlightController(Color color, float fadeDuration = 0f)`
+
+  * Parameters
+   * `Color color` - The colour to highlight the controller to.
+   * `float fadeDuration` - The duration in time to fade from the initial colour to the target colour.
+  * Returns
+   * _none_
+
+The HighlightController method attempts to highlight all sub models of the controller.
+
+#### UnhighlightController/0
+
+  > `public virtual void UnhighlightController()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The UnhighlightController method attempts to remove the highlight from all sub models of the controller.
+
+#### HighlightElement/3
+
+  > `public virtual void HighlightElement(SDK_BaseController.ControllerElements elementType, Color color, float fadeDuration = 0f)`
+
+  * Parameters
+   * `SDK_BaseController.ControllerElements elementType` - The element type on the controller.
+   * `Color color` - The colour to highlight the controller element to.
+   * `float fadeDuration` - The duration in time to fade from the initial colour to the target colour.
+  * Returns
+   * _none_
+
+The HighlightElement method attempts to highlight a specific controller element.
+
+#### UnhighlightElement/1
+
+  > `public virtual void UnhighlightElement(SDK_BaseController.ControllerElements elementType)`
+
+  * Parameters
+   * `SDK_BaseController.ControllerElements elementType` - The element type on the controller.
+  * Returns
+   * _none_
+
+The UnhighlightElement method attempts to remove the highlight from the specific controller element.
 
 ### Example
 
@@ -3407,12 +3294,12 @@ The Interact Controller Appearance script is attached on the same GameObject as 
 
 #### ToggleControllerOnTouch/3
 
-  > `public virtual void ToggleControllerOnTouch(bool showController, VRTK_ControllerActions controllerActions, GameObject obj)`
+  > `public virtual void ToggleControllerOnTouch(bool showController, GameObject touchingObject, GameObject ignoredObject)`
 
   * Parameters
    * `bool showController` - If true then the controller will attempt to be made visible when no longer touching, if false then the controller will be hidden on touch.
-   * `VRTK_ControllerActions controllerActions` - The controller to apply the visibility state to.
-   * `GameObject obj` - The object that is currently being interacted with by the controller which is passed through to the visibility to prevent the object from being hidden as well.
+   * `GameObject touchingObject` - The touching object to apply the visibility state to.
+   * `GameObject ignoredObject` - The object that is currently being interacted with by the touching object which is passed through to the visibility to prevent the object from being hidden as well.
   * Returns
    * _none_
 
@@ -3420,12 +3307,12 @@ The ToggleControllerOnTouch method determines whether the controller should be s
 
 #### ToggleControllerOnGrab/3
 
-  > `public virtual void ToggleControllerOnGrab(bool showController, VRTK_ControllerActions controllerActions, GameObject obj)`
+  > `public virtual void ToggleControllerOnGrab(bool showController, GameObject grabbingObject, GameObject ignoredObject)`
 
   * Parameters
    * `bool showController` - If true then the controller will attempt to be made visible when no longer grabbing, if false then the controller will be hidden on grab.
-   * `VRTK_ControllerActions controllerActions` - The controller to apply the visibility state to.
-   * `GameObject obj` - The object that is currently being interacted with by the controller which is passed through to the visibility to prevent the object from being hidden as well.
+   * `GameObject grabbingObject` - The grabbing object to apply the visibility state to.
+   * `GameObject ignoredObject` - The object that is currently being interacted with by the grabbing object which is passed through to the visibility to prevent the object from being hidden as well.
   * Returns
    * _none_
 
@@ -3433,12 +3320,12 @@ The ToggleControllerOnGrab method determines whether the controller should be sh
 
 #### ToggleControllerOnUse/3
 
-  > `public virtual void ToggleControllerOnUse(bool showController, VRTK_ControllerActions controllerActions, GameObject obj)`
+  > `public virtual void ToggleControllerOnUse(bool showController, GameObject usingObject, GameObject ignoredObject)`
 
   * Parameters
    * `bool showController` - If true then the controller will attempt to be made visible when no longer using, if false then the controller will be hidden on use.
-   * `VRTK_ControllerActions controllerActions` - The controller to apply the visibility state to.
-   * `GameObject obj` - The object that is currently being interacted with by the controller which is passed through to the visibility to prevent the object from being hidden as well.
+   * `GameObject usingObject` - The using object to apply the visibility state to.
+   * `GameObject ignoredObject` - The object that is currently being interacted with by the using object which is passed through to the visibility to prevent the object from being hidden as well.
   * Returns
    * _none_
 
@@ -3629,7 +3516,7 @@ Due to the way the object material is interacted with, changing the material col
 
 The Draw Call Batching will resume on the original material when the item is no longer highlighted.
 
-This is the default highlighter that is applied to any script that requires a highlighting component (e.g. `VRTK_Interactable_Object` or `VRTK_ControllerActions`).
+This is the default highlighter that is applied to any script that requires a highlighting component (e.g. `VRTK_Interactable_Object`).
 
 ### Inspector Parameters
 
@@ -5942,6 +5829,17 @@ The GetScriptAliasController method will attempt to get the object that contains
 
 The GetModelAliasController method will attempt to get the object that contains the model for the controller.
 
+#### GetModelAliasControllerHand/1
+
+  > `public static SDK_BaseController.ControllerHand GetModelAliasControllerHand(GameObject givenObject)`
+
+  * Parameters
+   * `GameObject givenObject` - The GameObject that may represent a model alias.
+  * Returns
+   * `SDK_BaseController.ControllerHand` - The enum of the ControllerHand that the given GameObject may represent.
+
+The GetModelAliasControllerHand method will return the hand that the given model alias GameObject is for.
+
 #### GetControllerVelocity/1
 
   > `public static Vector3 GetControllerVelocity(GameObject givenController)`
@@ -6159,6 +6057,80 @@ The TriggerHapticPulse/1 method calls a single haptic pulse call on the controll
    * _none_
 
 The TriggerHapticPulse/3 method calls a haptic pulse for a specified amount of time rather than just a single tick. Each pulse can be separated by providing a `pulseInterval` to pause between each haptic pulse.
+
+#### SetOpacity/3
+
+  > `public static void SetOpacity(GameObject model, float alpha, float transitionDuration = 0f)`
+
+  * Parameters
+   * `GameObject model` - The GameObject to change the renderer opacity on.
+   * `float alpha` - The alpha level to apply to opacity of the controller object. `0f` to `1f`.
+   * `float transitionDuration` - The time to transition from the current opacity to the new opacity.
+  * Returns
+   * _none_
+
+The SetOpacity method allows the opacity of the given GameObject to be changed. A lower alpha value will make the object more transparent, such as `0.5f` will make the controller partially transparent where as `0f` will make the controller completely transparent.
+
+#### SetRendererVisible/2
+
+  > `public static void SetRendererVisible(GameObject model, GameObject ignoredModel = null)`
+
+  * Parameters
+   * `GameObject model` - The GameObject to show the renderers for.
+   * `GameObject ignoredModel` - An optional GameObject to ignore the renderer toggle on.
+  * Returns
+   * _none_
+
+The SetRendererVisible method turns on renderers of a given GameObject. It can also be provided with an optional model to ignore the render toggle on.
+
+#### SetRendererHidden/2
+
+  > `public static void SetRendererHidden(GameObject model, GameObject ignoredModel = null)`
+
+  * Parameters
+   * `GameObject model` - The GameObject to hide the renderers for.
+   * `GameObject ignoredModel` - An optional GameObject to ignore the renderer toggle on.
+  * Returns
+   * _none_
+
+The SetRendererHidden method turns off renderers of a given GameObject. It can also be provided with an optional model to ignore the render toggle on.
+
+#### ToggleRenderer/3
+
+  > `public static void ToggleRenderer(bool state, GameObject model, GameObject ignoredModel = null)`
+
+  * Parameters
+   * `bool state` - If true then the renderers will be enabled, if false the renderers will be disabled.
+   * `GameObject model` - The GameObject to toggle the renderer states of.
+   * `GameObject ignoredModel` - An optional GameObject to ignore the renderer toggle on.
+  * Returns
+   * _none_
+
+The ToggleRenderer method turns on or off the renderers of a given GameObject. It can also be provided with an optional model to ignore the render toggle of.
+
+#### HighlightObject/3
+
+  > `public static void HighlightObject(GameObject model, Color? highlightColor, float fadeDuration = 0f)`
+
+  * Parameters
+   * `GameObject model` - The GameObject to attempt to call the Highlight on.
+   * `Color? highlightColor` - The colour to highlight to.
+   * `float fadeDuration` - The duration in time to fade from the initial colour to the target colour.
+  * Returns
+   * _none_
+
+The HighlightObject method calls the Highlight method on the highlighter attached to the given GameObject with the provided colour.
+
+#### UnhighlightObject/1
+
+  > `public static void UnhighlightObject(GameObject model)`
+
+  * Parameters
+   * `GameObject model` - The GameObject to attempt to call the Unhighlight on.
+  * Returns
+   * _none_
+
+The UnhighlightObject method calls the Unhighlight method on the highlighter attached to the given GameObject.
 
 #### Mod/2
 

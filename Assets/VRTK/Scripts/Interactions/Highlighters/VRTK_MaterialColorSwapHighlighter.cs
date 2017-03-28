@@ -13,7 +13,7 @@ namespace VRTK.Highlighters
     ///
     /// The Draw Call Batching will resume on the original material when the item is no longer highlighted.
     ///
-    /// This is the default highlighter that is applied to any script that requires a highlighting component (e.g. `VRTK_Interactable_Object` or `VRTK_ControllerActions`).
+    /// This is the default highlighter that is applied to any script that requires a highlighting component (e.g. `VRTK_Interactable_Object`).
     /// </remarks>
     /// <example>
     /// `VRTK/Examples/005_Controller_BasicObjectGrabbing` demonstrates the solid highlighting on the green cube, red cube and flying saucer when the controller touches it.

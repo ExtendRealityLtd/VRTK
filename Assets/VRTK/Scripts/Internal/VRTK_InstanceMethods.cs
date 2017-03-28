@@ -1,42 +1,16 @@
 ﻿namespace VRTK
 {
     using UnityEngine;
-    using System.Collections;
-    using System.Collections.Generic;
 
     public class VRTK_InstanceMethods : MonoBehaviour
     {
         /// <summary>
-        /// The singleton instance to access the InstanceMethods variables from.
+        /// The singleton instance to set up the InstanceMethods classes.
         /// </summary>
         public static VRTK_InstanceMethods instance = null;
 
-        protected Dictionary<uint, Coroutine> hapticLoopCoroutines = new Dictionary<uint, Coroutine>();
-
-        public virtual void TriggerHapticPulse(uint controllerIndex, float strength)
-        {
-            if (enabled)
-            {
-                CancelHapticPulse(controllerIndex);
-                var hapticPulseStrength = Mathf.Clamp(strength, 0f, 1f);
-                VRTK_SDK_Bridge.HapticPulseOnIndex(controllerIndex, hapticPulseStrength);
-            }
-        }
-
-        public virtual void TriggerHapticPulse(uint controllerIndex, float strength, float duration, float pulseInterval)
-        {
-            if (enabled)
-            {
-                CancelHapticPulse(controllerIndex);
-                var hapticPulseStrength = Mathf.Clamp(strength, 0f, 1f);
-                var hapticModifiers = VRTK_SDK_Bridge.GetHapticModifiers();
-                Coroutine hapticLoop = StartCoroutine(HapticPulse(controllerIndex, duration * hapticModifiers.durationModifier, hapticPulseStrength, pulseInterval * hapticModifiers.intervalModifier));
-                if (!hapticLoopCoroutines.ContainsKey(controllerIndex))
-                {
-                    hapticLoopCoroutines.Add(controllerIndex, hapticLoop);
-                }
-            }
-        }
+        public VRTK_Haptics haptics;
+        public VRTK_ObjectAppearance objectAppearance;
 
         protected virtual void Awake()
         {
@@ -54,29 +28,9 @@
             {
                 DontDestroyOnLoad(gameObject);
             }
-        }
 
-        protected virtual void CancelHapticPulse(uint controllerIndex)
-        {
-            if (hapticLoopCoroutines.ContainsKey(controllerIndex) && hapticLoopCoroutines[controllerIndex] != null)
-            {
-                StopCoroutine(hapticLoopCoroutines[controllerIndex]);
-            }
-        }
-
-        protected virtual IEnumerator HapticPulse(uint controllerIndex, float duration, float hapticPulseStrength, float pulseInterval)
-        {
-            if (pulseInterval <= 0)
-            {
-                yield break;
-            }
-
-            while (duration > 0)
-            {
-                VRTK_SDK_Bridge.HapticPulseOnIndex(controllerIndex, hapticPulseStrength);
-                yield return new WaitForSeconds(pulseInterval);
-                duration -= pulseInterval;
-            }
+            haptics = gameObject.AddComponent<VRTK_Haptics>();
+            objectAppearance = gameObject.AddComponent<VRTK_ObjectAppearance>();
         }
     }
 }
