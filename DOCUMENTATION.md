@@ -144,6 +144,7 @@ There are a number of parameters that can be set on the Prefab which are provide
 
  * **Display Text:** The text that is displayed on the tooltip.
  * **Font Size:** The size of the text that is displayed.
+ * **Container Size:** The size of the tooltip container where `x = width` and `y = height`.
  * **Draw Line From:** An optional transform of where to start drawing the line from. If one is not provided the centre of the tooltip is used for the initial line position.
  * **Draw Line To:** A transform of another object in the scene that a line will be drawn from the tooltip to, this helps denote what the tooltip is in relation to. If no transform is provided and the tooltip is a child of another object, then the parent object's transform will be used as this destination position.
  * **Line Width:** The width of the line drawn between the tooltip and the destination transform.
@@ -1248,6 +1249,7 @@ Specifies the smoothing to be applied to the pointer.
  * **Max Allowed Per Frame Angle Difference:** The maximum allowed angle between the unsmoothed pointer origin and the smoothed pointer origin per frame to use for smoothing.
  * **Playarea Cursor:** An optional Play Area Cursor generator to add to the destination position of the pointer tip.
  * **Custom Raycast:** A custom raycaster to use for the pointer's raycasts to ignore.
+ * **Pointer Origin Smoothing Settings:** Specifies the smoothing to be applied to the pointer origin when positioning the pointer tip.
  * **Valid Collision Color:** The colour to change the pointer materials when the pointer collides with a valid object. Set to `Color.clear` to bypass changing material colour on valid collision.
  * **Invalid Collision Color:** The colour to change the pointer materials when the pointer is not colliding with anything or with an invalid object. Set to `Color.clear` to bypass changing material colour on invalid collision.
  * **Tracer Visibility:** Determines when the main tracer of the pointer renderer will be visible.
@@ -1405,6 +1407,7 @@ It can be useful for pointing to objects within a scene and it can also determin
  * **Cursor Scale Multiplier:** The scale multiplier to scale the pointer cursor object by in relation to the `Scale Factor`.
  * **Cursor Match Target Rotation:** The cursor will be rotated to match the angle of the target surface if this is true, if it is false then the pointer cursor will always be horizontal.
  * **Cursor Distance Rescale:** Rescale the cursor proportionally to the distance from the tracer origin.
+ * **Maximum Cursor Scale:** The maximum scale the cursor is allowed to reach. This is only used when rescaling the cursor proportionally to the distance from the tracer origin.
  * **Custom Tracer:** A custom game object to use as the appearance for the pointer tracer. If this is empty then a Box primitive will be created and used.
  * **Custom Cursor:** A custom game object to use as the appearance for the pointer cursor. If this is empty then a Sphere primitive will be created and used.
 
@@ -1720,6 +1723,7 @@ If the controlled object is the play area and `VRTK_BodyPhysics` is also availab
 
  * **Primary Activation Button:** An optional button that has to be engaged to allow the touchpad control to activate.
  * **Action Modifier Button:** An optional button that when engaged will activate the modifier on the touchpad control action.
+ * **Axis Deadzone:** Any input on the axis will be ignored if it is within this deadzone threshold. Between `0f` and `1f`.
 
 ### Example
 
@@ -2374,6 +2378,8 @@ The highlighting of the controller is defaulted to use the `VRTK_MaterialColorSw
  * **Highlight Button Two:** The colour to set the button two highlight colour to.
  * **Highlight System Menu:** The colour to set the system menu highlight colour to.
  * **Highlight Start Menu:** The colour to set the start menu highlight colour to.
+ * **Model Element Paths:** A collection of strings that determine the path to the controller model sub elements for identifying the model parts at runtime. If the paths are left empty they will default to the model element paths of the selected SDK Bridge.
+ * **Element Highlighter Overrides:** A collection of highlighter overrides for each controller model sub element. If no highlighter override is given then highlighter on the Controller game object is used.
  * **Controller Alias:** An optional GameObject to specify which controller to apply the script methods to. If this is left blank then this script is required to be placed on a Controller Alias GameObject.
  * **Model Container:** An optional GameObject to specifiy where the controller models are. If this is left blank then the Model Alias object will be used.
 
@@ -6181,6 +6187,7 @@ Then in the component that has a Policy List paramter (e.g. BasicTeleporter has 
 
  * **Operation:** The operation to apply on the list of identifiers.
  * **Check Type:** The element type on the game object to check against.
+ * **Identifiers:** A list of identifiers to check for against the given check type (either tag or script).
 
 ### Class Variables
 
@@ -6535,21 +6542,11 @@ Describes a class that represents an SDK. Only allowed on classes that inherit f
 
 ### Class Variables
 
+ * `public static readonly SDK_DescriptionAttribute Fallback` - The description of a fallback SDK. Default: `new SDK_DescriptionAttribute("Fallback", null)`
  * `public readonly string prettyName` - The pretty name of the SDK. Uniquely identifies the SDK.
  * `public readonly string symbol` - The scripting define symbol needed for the SDK. Needs to be the same as  to add and remove the scripting define symbol automatically using  .
 
 ### Class Methods
-
-#### SDK_DescriptionAttribute/0
-
-  > `public static readonly SDK_DescriptionAttribute Fallback = new SDK_DescriptionAttribute("Fallback", null);`
-
-  * Parameters
-   * _none_
-  * Returns
-   * _none_
-
-The description of a fallback SDK.
 
 #### SDK_DescriptionAttribute/2
 
