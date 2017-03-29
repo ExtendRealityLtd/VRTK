@@ -191,7 +191,7 @@ namespace VRTK
             var controller = GetSDKManagerControllerLeftHand(actual);
             if (!controller && actual)
             {
-                controller = VRTK_SharedMethods.FindEvenInactiveGameObject<OVRCameraRig>("/TrackingSpace/LeftHandAnchor");
+                controller = VRTK_SharedMethods.FindEvenInactiveGameObject<OVRCameraRig>("TrackingSpace/LeftHandAnchor");
             }
             return controller;
         }
@@ -206,7 +206,7 @@ namespace VRTK
             var controller = GetSDKManagerControllerRightHand(actual);
             if (!controller && actual)
             {
-                controller = VRTK_SharedMethods.FindEvenInactiveGameObject<OVRCameraRig>("/TrackingSpace/RightHandAnchor");
+                controller = VRTK_SharedMethods.FindEvenInactiveGameObject<OVRCameraRig>("TrackingSpace/RightHandAnchor");
             }
             return controller;
         }

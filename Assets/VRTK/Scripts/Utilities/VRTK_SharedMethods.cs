@@ -2,12 +2,12 @@
 namespace VRTK
 {
     using UnityEngine;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Reflection;
 #if UNITY_EDITOR
     using UnityEditor;
 #endif
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Reflection;
 
     /// <summary>
     /// The Shared Methods script is a collection of reusable static methods that are used across a range of different scripts.
@@ -318,17 +318,23 @@ namespace VRTK
         }
 
         /// <summary>
-        /// Finds all <see cref="GameObject"/>s with a given name and an ancestor that has a specific component.
+        /// Finds the first <see cref="GameObject"/> with a given name and an ancestor that has a specific component.
         /// </summary>
         /// <remarks>
         /// This method returns active as well as inactive <see cref="GameObject"/>s in the scene. It doesn't return assets.
         /// For performance reasons it is recommended to not use this function every frame. Cache the result in a member variable at startup instead.
         /// </remarks>
         /// <typeparam name="T">The component type that needs to be on an ancestor of the wanted <see cref="GameObject"/>. Must be a subclass of <see cref="Component"/>.</typeparam>
-        /// <param name="gameObjectName">The name of the wanted <see cref="GameObject"/>. If it contains a '/' character, this method traverses the hierarchy like a path name.</param>
-        /// <returns>The <see cref="GameObject"/> with name <paramref name="gameObjectName"/> and an ancestor that has a <typeparamref name="T"/>. If no <see cref="GameObject"/> is found <see langword="null"/> is returned.</returns>
-        public static GameObject FindEvenInactiveGameObject<T>(string gameObjectName = "") where T : Component
+        /// <param name="gameObjectName">The name of the wanted <see cref="GameObject"/>. If it contains a '/' character, this method traverses the hierarchy like a path name, beginning on the game object that has a component of type <typeparamref name="T"/>.</param>
+        /// <returns>The <see cref="GameObject"/> with name <paramref name="gameObjectName"/> and an ancestor that has a <typeparamref name="T"/>. If no such <see cref="GameObject"/> is found <see langword="null"/> is returned.</returns>
+        public static GameObject FindEvenInactiveGameObject<T>(string gameObjectName = null) where T : Component
         {
+            if (string.IsNullOrEmpty(gameObjectName))
+            {
+                T foundComponent = FindEvenInactiveComponent<T>();
+                return foundComponent == null ? null : foundComponent.gameObject;
+            }
+
             IEnumerable<GameObject> gameObjects = Resources.FindObjectsOfTypeAll<T>()
                                                            .Select(component => component.gameObject);
 
@@ -336,21 +342,51 @@ namespace VRTK
             gameObjects = gameObjects.Where(gameObject => !AssetDatabase.Contains(gameObject));
 #endif
 
-            string[] names = gameObjectName.Split(new[] { '/' }, 2);
-            string firstName = names[0];
-            if (!string.IsNullOrEmpty(firstName))
-            {
-                gameObjects = gameObjects.Where(gameObject => gameObject.name == firstName);
-            }
+            return gameObjects.Select(gameObject =>
+                              {
+                                  Transform transform = gameObject.transform.Find(gameObjectName);
+                                  return transform == null ? null : transform.gameObject;
+                              })
+                              .FirstOrDefault(gameObject => gameObject != null);
+        }
 
-            string otherNames = names.Length > 1 ? names[1] : null;
-            if (string.IsNullOrEmpty(otherNames))
-            {
-                return gameObjects.FirstOrDefault();
-            }
+        /// <summary>
+        /// Finds all components of a given type.
+        /// </summary>
+        /// <remarks>
+        /// This method returns components from active as well as inactive <see cref="GameObject"/>s in the scene. It doesn't return assets.
+        /// For performance reasons it is recommended to not use this function every frame. Cache the result in a member variable at startup instead.
+        /// </remarks>
+        /// <typeparam name="T">The component type to search for. Must be a subclass of <see cref="Object"/>.</typeparam>
+        /// <returns>All the found components. If no component is found an empty array is returned.</returns>
+        public static T[] FindEvenInactiveComponents<T>() where T : Object
+        {
+            return Resources.FindObjectsOfTypeAll<T>()
+#if UNITY_EDITOR
+                            .Where(@object => !AssetDatabase.Contains(@object))
+                            .ToArray();
+#else
+                ;
+#endif
+        }
 
-            return gameObjects.Select(gameObject => gameObject.transform.Find(otherNames).gameObject)
-                              .FirstOrDefault();
+        /// <summary>
+        /// Finds the first component of a given type.
+        /// </summary>
+        /// <remarks>
+        /// This method returns components from active as well as inactive <see cref="GameObject"/>s in the scene. It doesn't return assets.
+        /// For performance reasons it is recommended to not use this function every frame. Cache the result in a member variable at startup instead.
+        /// </remarks>
+        /// <typeparam name="T">The component type to search for. Must be a subclass of <see cref="Component"/>.</typeparam>
+        /// <returns>The found component. If no component is found <see langword="null"/> is returned.</returns>
+        public static T FindEvenInactiveComponent<T>() where T : Component
+        {
+            return Resources.FindObjectsOfTypeAll<T>()
+#if UNITY_EDITOR
+                            .FirstOrDefault(@object => !AssetDatabase.Contains(@object));
+#else
+                            .FirstOrDefault();
+#endif
         }
 
         private static float ColorPercent(float value, float percent)

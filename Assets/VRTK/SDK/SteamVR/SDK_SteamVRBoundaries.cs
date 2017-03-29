@@ -33,7 +33,7 @@ namespace VRTK
             cachedPlayArea = GetSDKManagerPlayArea();
             if (cachedPlayArea == null)
             {
-                var steamVRPlayArea = FindObjectOfType<SteamVR_PlayArea>();
+                var steamVRPlayArea = VRTK_SharedMethods.FindEvenInactiveComponent<SteamVR_PlayArea>();
                 if (steamVRPlayArea)
                 {
                     cachedPlayArea = steamVRPlayArea.transform;

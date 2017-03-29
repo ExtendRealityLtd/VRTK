@@ -44,9 +44,9 @@ namespace VRTK
             if (cachedHeadset == null)
             {
 #if (UNITY_5_4_OR_NEWER)
-                var foundCamera = FindObjectOfType<SteamVR_Camera>();
+                var foundCamera = VRTK_SharedMethods.FindEvenInactiveComponent<SteamVR_Camera>();
 #else
-                var foundCamera = FindObjectOfType<SteamVR_GameView>();
+                var foundCamera = VRTK_SharedMethods.FindEvenInactiveComponent<SteamVR_GameView>();
 #endif
                 if (foundCamera)
                 {
@@ -65,7 +65,7 @@ namespace VRTK
             cachedHeadsetCamera = GetSDKManagerHeadset();
             if (cachedHeadsetCamera == null)
             {
-                var foundCamera = FindObjectOfType<SteamVR_Camera>();
+                var foundCamera = VRTK_SharedMethods.FindEvenInactiveComponent<SteamVR_Camera>();
                 if (foundCamera)
                 {
                     cachedHeadsetCamera = foundCamera.transform;
