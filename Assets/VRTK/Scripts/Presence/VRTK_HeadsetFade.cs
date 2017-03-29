@@ -134,7 +134,7 @@ namespace VRTK
 
         protected virtual void Start()
         {
-            headset = VRTK_DeviceFinder.HeadsetTransform();
+            headset = VRTK_DeviceFinder.HeadsetCamera();
             isTransitioning = false;
             isFaded = false;
 

@@ -157,7 +157,7 @@ namespace VRTK
             {
                 if (rotateTowards == null)
                 {
-                    rotateTowards = VRTK_DeviceFinder.HeadsetCamera().gameObject;
+                    rotateTowards = VRTK_DeviceFinder.HeadsetTransform().gameObject;
                     if (rotateTowards == null)
                     {
                         VRTK_Logger.Warn(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.COULD_NOT_FIND_OBJECT_FOR_ACTION, new string[] { "PanelMenuController", "an object", "rotate towards"}));

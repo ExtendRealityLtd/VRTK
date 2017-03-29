@@ -178,10 +178,10 @@ namespace VRTK
         {
             if (rotateTowards == null) // Backup
             {
-                var headsetCamera = VRTK_DeviceFinder.HeadsetCamera();
-                if (headsetCamera)
+                var headset = VRTK_DeviceFinder.HeadsetTransform();
+                if (headset)
                 {
-                    rotateTowards = headsetCamera.gameObject;
+                    rotateTowards = headset.gameObject;
                 }
                 else
                 {
