@@ -27,7 +27,7 @@ namespace VRTK.Examples.PanelMenu
             slider = GetComponent<Slider>();
             if (slider == null)
             {
-                Debug.LogWarning("The PanelMenuUISlider could not automatically find the UI Slider component.");
+                VRTK_Logger.Warn(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, new string[] { "PanelMenuUISlider", "Slider", "the same" }));
                 return;
             }
 

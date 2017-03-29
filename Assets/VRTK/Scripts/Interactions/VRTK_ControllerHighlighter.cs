@@ -216,7 +216,7 @@ namespace VRTK
 
             if (controllerAlias == null)
             {
-                Debug.LogError("No Controller Alias GameObject can be found, either specify one in the `Controller Alias` parameter or apply this script to a `Controller Alias` GameObject.");
+                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_NOT_INJECTED, new string[] { "VRTK_ControllerHighlighter", "Controller Alias GameObject", "controllerAlias", "the same" }));
                 return;
             }
 
@@ -428,7 +428,7 @@ namespace VRTK
             {
                 if (!modelContainer)
                 {
-                    Debug.LogError("No model container could be found. Have you selected a valid Controller SDK in the SDK Manager? If you are unsure, then click the GameObject with the `VRTK_SDKManager` script attached to it in Edit Mode and select a Controller SDK from the dropdown.");
+                    VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.SDK_OBJECT_NOT_FOUND, new string[] { "Controller Model", "Controller SDK" }));
                     return null;
                 }
                 cachedElements[path] = modelContainer.transform.Find(path);

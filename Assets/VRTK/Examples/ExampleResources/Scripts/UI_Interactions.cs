@@ -11,22 +11,22 @@
 
         public void Button_Red()
         {
-            Debug.Log("Red Button Clicked");
+            VRTK_Logger.Info("Red Button Clicked");
         }
 
         public void Button_Pink()
         {
-            Debug.Log("Pink Button Clicked");
+            VRTK_Logger.Info("Pink Button Clicked");
         }
 
         public void Toggle(bool state)
         {
-            Debug.Log("The toggle state is " + (state ? "on" : "off"));
+            VRTK_Logger.Info("The toggle state is " + (state ? "on" : "off"));
         }
 
         public void Dropdown(int value)
         {
-            Debug.Log("Dropdown option selected was ID " + value);
+            VRTK_Logger.Info("Dropdown option selected was ID " + value);
         }
 
         public void SetDropText(BaseEventData data)

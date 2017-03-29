@@ -33,7 +33,7 @@
             SetInteractUse();
             if (iu == null)
             {
-                Debug.LogError("The VRTK_InteractUse_UnityEvents script requires to be attached to a GameObject that contains a VRTK_InteractUse script");
+                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, new string[] { "VRTK_InteractUse_UnityEvents", "VRTK_InteractUse", "the same" }));
                 return;
             }
 

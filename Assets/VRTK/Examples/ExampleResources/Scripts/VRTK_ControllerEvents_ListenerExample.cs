@@ -8,7 +8,7 @@
         {
             if (GetComponent<VRTK_ControllerEvents>() == null)
             {
-                Debug.LogError("VRTK_ControllerEvents_ListenerExample is required to be attached to a Controller that has the VRTK_ControllerEvents script attached to it");
+                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, new string[] { "VRTK_ControllerEvents_ListenerExample", "VRTK_ControllerEvents", "the same"}));
                 return;
             }
 
@@ -72,7 +72,7 @@
 
         private void DebugLogger(uint index, string button, string action, ControllerInteractionEventArgs e)
         {
-            Debug.Log("Controller on index '" + index + "' " + button + " has been " + action
+            VRTK_Logger.Info("Controller on index '" + index + "' " + button + " has been " + action
                     + " with a pressure of " + e.buttonPressure + " / trackpad axis at: " + e.touchpadAxis + " (" + e.touchpadAngle + " degrees)");
         }
 

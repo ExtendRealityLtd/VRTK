@@ -31,7 +31,7 @@ namespace VRTK.GrabAttachMechanics
         {
             if (!jointHolder)
             {
-                Debug.LogError("The VRTK_CustomJointGrabAttach script requires a Joint component to be provided to the `Custom Joint` parameter.");
+                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_NOT_INJECTED, new string[] { "VRTK_CustomJointGrabAttach", "Joint", "customJoint", "the same" }));
                 return;
             }
             var storedJoint = jointHolder.GetComponent<Joint>();

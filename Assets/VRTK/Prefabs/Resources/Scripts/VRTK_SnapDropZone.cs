@@ -309,7 +309,7 @@ namespace VRTK
                 //If a joint is being used but no joint is found then throw a warning in the console
                 if (snapType == SnapTypes.UseJoint && GetComponent<Joint>() == null)
                 {
-                    Debug.LogWarning("A Joint Component is required on the SnapDropZone GameObject called [" + name + "] because the Snap Type is set to `Use Joint`.");
+                    VRTK_Logger.Warn(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, new string[] { "SnapDropZone:" + name, "Joint", "the same", " because the `Snap Type` is set to `Use Joint`" }));
                 }
 
                 //Generate the editor highlighter object with the custom material
@@ -507,12 +507,12 @@ namespace VRTK
             var snapDropZoneJoint = GetComponent<Joint>();
             if (snapDropZoneJoint == null)
             {
-                Debug.LogError("No Joint Component was found on the SnapDropZone GameObject yet the Snap Type is set to `Use Joint`. Please manually add a joint to the SnapDropZone GameObject.");
+                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, new string[] { "SnapDropZone:" + name, "Joint", "the same", " because the `Snap Type` is set to `Use Joint`" }));
                 return;
             }
             if (snapTo == null)
             {
-                Debug.LogError("No Rigidbody was found on the Interactbale Object.");
+                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, new string[] { "VRTK_SnapDropZone", "Rigidbody", "the `VRTK_InteractableObject`" }));
                 return;
             }
 

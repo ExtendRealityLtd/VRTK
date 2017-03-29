@@ -488,7 +488,7 @@ namespace VRTK
 
             if (controller == null)
             {
-                Debug.LogError("VRTK_BasePointer requires a Controller that has the VRTK_ControllerEvents script attached to it");
+                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_NOT_INJECTED, new string[] { "VRTK_BasePointer", "VRTK_ControllerEvents", "controller", "the same" }));
             }
         }
 

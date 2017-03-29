@@ -228,7 +228,7 @@ namespace VRTK
         {
             if (!eventSystem)
             {
-                Debug.LogError("A VRTK_UIPointer requires an EventSystem");
+                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_SCENE, new string[] { "VRTK_UIPointer", "EventSystem" }));
                 return null;
             }
 
@@ -249,7 +249,7 @@ namespace VRTK
 
             if (!vrtkEventSystem)
             {
-                Debug.LogError("A VRTK_UIPointer requires an EventSystem");
+                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_SCENE, new string[] { "VRTK_UIPointer", "EventSystem" }));
                 return;
             }
 

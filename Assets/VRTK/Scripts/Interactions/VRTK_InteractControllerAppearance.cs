@@ -96,7 +96,7 @@ namespace VRTK
         {
             if (!GetComponent<VRTK_InteractableObject>())
             {
-                Debug.LogError("The `VRTK_InteractControllerAppearance` script is required to be attached to a GameObject that has the `VRTK_InteractableObject` script also attached to it.");
+                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, new string[] { "VRTK_InteractControllerAppearance", "VRTK_InteractableObject", "the same" }));
             }
         }
 

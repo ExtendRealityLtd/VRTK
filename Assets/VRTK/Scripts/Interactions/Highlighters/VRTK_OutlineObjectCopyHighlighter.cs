@@ -214,7 +214,7 @@ namespace VRTK.Highlighters
 
             if (copyModel == null)
             {
-                Debug.LogError("No Renderer has been found on the model to add highlighting to");
+                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, new string[] { "VRTK_OutlineObjectCopyHighlighter", "Renderer", "the same or child", " to add the highlighter to" }));
                 return null;
             }
 

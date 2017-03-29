@@ -65,7 +65,7 @@
             SetInteractableObject();
             if (io == null)
             {
-                Debug.LogError("The VRTK_InteractableObject_UnityEvents script requires to be attached to a GameObject that contains a VRTK_InteractableObject script");
+                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, new string[] { "VRTK_InteractableObject_UnityEvents", "VRTK_InteractableObject", "the same" }));
                 return;
             }
 

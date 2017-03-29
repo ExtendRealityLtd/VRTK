@@ -38,7 +38,7 @@ namespace VRTK.Examples.PanelMenu
             gridLayoutGroup = GetComponent<GridLayoutGroup>();
             if (gridLayoutGroup == null)
             {
-                Debug.LogWarning("The PanelMenuUIGrid could not automatically find the UI GridLayoutGroup component.");
+                VRTK_Logger.Warn(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, new string[] { "PanelMenuUIGrid", "GridLayoutGroup", "the same" }));
                 return;
             }
 
