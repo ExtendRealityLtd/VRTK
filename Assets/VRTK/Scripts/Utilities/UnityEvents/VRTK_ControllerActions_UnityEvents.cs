@@ -1,44 +1,26 @@
 ﻿namespace VRTK.UnityEventHelper
 {
-    using UnityEngine;
     using UnityEngine.Events;
+    using System;
 
-    [RequireComponent(typeof(VRTK_ControllerActions))]
-    public class VRTK_ControllerActions_UnityEvents : MonoBehaviour
+    public sealed class VRTK_ControllerActions_UnityEvents : VRTK_UnityEvents<VRTK_ControllerActions>
     {
-        private VRTK_ControllerActions ca;
+        [Serializable]
+        public sealed class ControllerActionsEvent : UnityEvent<object, ControllerActionsEventArgs> { }
 
-        [System.Serializable]
-        public class UnityObjectEvent : UnityEvent<object, ControllerActionsEventArgs> { };
+        public ControllerActionsEvent OnControllerModelVisible = new ControllerActionsEvent();
+        public ControllerActionsEvent OnControllerModelInvisible = new ControllerActionsEvent();
 
-        /// <summary>
-        /// Emits the ControllerModelVisible class event.
-        /// </summary>
-        public UnityObjectEvent OnControllerModelVisible = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the ControllerModelInvisible class event.
-        /// </summary>
-        public UnityObjectEvent OnControllerModelInvisible = new UnityObjectEvent();
-
-        private void SetControllerAction()
+        protected override void AddListeners(VRTK_ControllerActions component)
         {
-            if (ca == null)
-            {
-                ca = GetComponent<VRTK_ControllerActions>();
-            }
+            component.ControllerModelVisible += ControllerModelVisible;
+            component.ControllerModelInvisible += ControllerModelInvisible;
         }
 
-        private void OnEnable()
+        protected override void RemoveListeners(VRTK_ControllerActions component)
         {
-            SetControllerAction();
-            if (ca == null)
-            {
-                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, new string[] { "VRTK_ControllerActions_UnityEvents", "VRTK_ControllerActions", "the same" }));
-                return;
-            }
-
-            ca.ControllerModelVisible += ControllerModelVisible;
-            ca.ControllerModelInvisible += ControllerModelInvisible;
+            component.ControllerModelVisible -= ControllerModelVisible;
+            component.ControllerModelInvisible -= ControllerModelInvisible;
         }
 
         private void ControllerModelVisible(object o, ControllerActionsEventArgs e)
@@ -49,17 +31,6 @@
         private void ControllerModelInvisible(object o, ControllerActionsEventArgs e)
         {
             OnControllerModelInvisible.Invoke(o, e);
-        }
-
-        private void OnDisable()
-        {
-            if (ca == null)
-            {
-                return;
-            }
-
-            ca.ControllerModelVisible -= ControllerModelVisible;
-            ca.ControllerModelInvisible -= ControllerModelInvisible;
         }
     }
 }

@@ -1,84 +1,59 @@
 ﻿namespace VRTK.UnityEventHelper
 {
-    using UnityEngine;
     using UnityEngine.Events;
+    using System;
 
-    [RequireComponent(typeof(VRTK_InteractableObject))]
-    public class VRTK_InteractableObject_UnityEvents : MonoBehaviour
+    public sealed class VRTK_InteractableObject_UnityEvents : VRTK_UnityEvents<VRTK_InteractableObject>
     {
-        private VRTK_InteractableObject io;
+        [Serializable]
+        public sealed class InteractableObjectEvent : UnityEvent<object, InteractableObjectEventArgs> { }
 
-        [System.Serializable]
-        public class UnityObjectEvent : UnityEvent<object, InteractableObjectEventArgs> { };
+        public InteractableObjectEvent OnTouch = new InteractableObjectEvent();
+        public InteractableObjectEvent OnUntouch = new InteractableObjectEvent();
 
-        /// <summary>
-        /// Emits the InteractableObjectTouched class event.
-        /// </summary>
-        public UnityObjectEvent OnTouch = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the InteractableObjectUntouched class event.
-        /// </summary>
-        public UnityObjectEvent OnUntouch = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the InteractableObjectGrabbed class event.
-        /// </summary>
-        public UnityObjectEvent OnGrab = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the InteractableObjectUngrabbed class event.
-        /// </summary>
-        public UnityObjectEvent OnUngrab = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the InteractableObjectUsed class event.
-        /// </summary>
-        public UnityObjectEvent OnUse = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the InteractableObjectUnused class event.
-        /// </summary>
-        public UnityObjectEvent OnUnuse = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the InteractableObjectEnteredSnapDropZone class event.
-        /// </summary>
-        public UnityObjectEvent OnEnterSnapDropZone = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the InteractableObjectExitedSnapDropZone class event.
-        /// </summary>
-        public UnityObjectEvent OnExitSnapDropZone = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the InteractableObjectSnappedToDropZone class event.
-        /// </summary>
-        public UnityObjectEvent OnSnapToDropZone = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the InteractableObjectUnsnappedFromDropZone class event.
-        /// </summary>
-        public UnityObjectEvent OnUnsnapFromDropZone = new UnityObjectEvent();
+        public InteractableObjectEvent OnGrab = new InteractableObjectEvent();
+        public InteractableObjectEvent OnUngrab = new InteractableObjectEvent();
 
-        private void SetInteractableObject()
+        public InteractableObjectEvent OnUse = new InteractableObjectEvent();
+        public InteractableObjectEvent OnUnuse = new InteractableObjectEvent();
+
+        public InteractableObjectEvent OnEnterSnapDropZone = new InteractableObjectEvent();
+        public InteractableObjectEvent OnExitSnapDropZone = new InteractableObjectEvent();
+        public InteractableObjectEvent OnSnapToDropZone = new InteractableObjectEvent();
+        public InteractableObjectEvent OnUnsnapFromDropZone = new InteractableObjectEvent();
+
+        protected override void AddListeners(VRTK_InteractableObject component)
         {
-            if (io == null)
-            {
-                io = GetComponent<VRTK_InteractableObject>();
-            }
+            component.InteractableObjectTouched += Touch;
+            component.InteractableObjectUntouched += UnTouch;
+
+            component.InteractableObjectGrabbed += Grab;
+            component.InteractableObjectUngrabbed += UnGrab;
+
+            component.InteractableObjectUsed += Use;
+            component.InteractableObjectUnused += Unuse;
+
+            component.InteractableObjectEnteredSnapDropZone += EnterSnapDropZone;
+            component.InteractableObjectExitedSnapDropZone += ExitSnapDropZone;
+            component.InteractableObjectSnappedToDropZone += SnapToDropZone;
+            component.InteractableObjectUnsnappedFromDropZone += UnsnapFromDropZone;
         }
 
-        private void OnEnable()
+        protected override void RemoveListeners(VRTK_InteractableObject component)
         {
-            SetInteractableObject();
-            if (io == null)
-            {
-                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, new string[] { "VRTK_InteractableObject_UnityEvents", "VRTK_InteractableObject", "the same" }));
-                return;
-            }
+            component.InteractableObjectTouched -= Touch;
+            component.InteractableObjectUntouched -= UnTouch;
 
-            io.InteractableObjectTouched += Touch;
-            io.InteractableObjectUntouched += UnTouch;
-            io.InteractableObjectGrabbed += Grab;
-            io.InteractableObjectUngrabbed += UnGrab;
-            io.InteractableObjectUsed += Use;
-            io.InteractableObjectUnused += Unuse;
-            io.InteractableObjectEnteredSnapDropZone += EnterSnapDropZone;
-            io.InteractableObjectExitedSnapDropZone += ExitSnapDropZone;
-            io.InteractableObjectSnappedToDropZone += SnapToDropZone;
-            io.InteractableObjectUnsnappedFromDropZone += UnsnapFromDropZone;
+            component.InteractableObjectGrabbed -= Grab;
+            component.InteractableObjectUngrabbed -= UnGrab;
+
+            component.InteractableObjectUsed -= Use;
+            component.InteractableObjectUnused -= Unuse;
+
+            component.InteractableObjectEnteredSnapDropZone -= EnterSnapDropZone;
+            component.InteractableObjectExitedSnapDropZone -= ExitSnapDropZone;
+            component.InteractableObjectSnappedToDropZone -= SnapToDropZone;
+            component.InteractableObjectUnsnappedFromDropZone -= UnsnapFromDropZone;
         }
 
         private void Touch(object o, InteractableObjectEventArgs e)
@@ -129,25 +104,6 @@
         private void UnsnapFromDropZone(object o, InteractableObjectEventArgs e)
         {
             OnUnsnapFromDropZone.Invoke(o, e);
-        }
-
-        private void OnDisable()
-        {
-            if (io == null)
-            {
-                return;
-            }
-
-            io.InteractableObjectTouched -= Touch;
-            io.InteractableObjectUntouched -= UnTouch;
-            io.InteractableObjectGrabbed -= Grab;
-            io.InteractableObjectUngrabbed -= UnGrab;
-            io.InteractableObjectUsed -= Use;
-            io.InteractableObjectUnused -= Unuse;
-            io.InteractableObjectEnteredSnapDropZone -= EnterSnapDropZone;
-            io.InteractableObjectExitedSnapDropZone -= ExitSnapDropZone;
-            io.InteractableObjectSnappedToDropZone -= SnapToDropZone;
-            io.InteractableObjectUnsnappedFromDropZone -= UnsnapFromDropZone;
         }
     }
 }

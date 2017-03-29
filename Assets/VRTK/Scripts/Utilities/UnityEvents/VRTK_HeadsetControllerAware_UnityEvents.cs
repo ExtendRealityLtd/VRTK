@@ -1,55 +1,35 @@
 ﻿namespace VRTK.UnityEventHelper
 {
-    using UnityEngine;
     using UnityEngine.Events;
+    using System;
 
-    [RequireComponent(typeof(VRTK_HeadsetControllerAware))]
-    public class VRTK_HeadsetControllerAware_UnityEvents : MonoBehaviour
+    public sealed class VRTK_HeadsetControllerAware_UnityEvents : VRTK_UnityEvents<VRTK_HeadsetControllerAware>
     {
-        private VRTK_HeadsetControllerAware hca;
+        [Serializable]
+        public sealed class HeadsetControllerAwareEvent : UnityEvent<object, HeadsetControllerAwareEventArgs> { }
 
-        [System.Serializable]
-        public class UnityObjectEvent : UnityEvent<object, HeadsetControllerAwareEventArgs> { };
+        public HeadsetControllerAwareEvent OnControllerObscured = new HeadsetControllerAwareEvent();
+        public HeadsetControllerAwareEvent OnControllerUnobscured = new HeadsetControllerAwareEvent();
 
-        /// <summary>
-        /// Emits the ControllerObscured class event.
-        /// </summary>
-        public UnityObjectEvent OnControllerObscured = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the ControllerUnobscured class event.
-        /// </summary>
-        public UnityObjectEvent OnControllerUnobscured = new UnityObjectEvent();
+        public HeadsetControllerAwareEvent OnControllerGlanceEnter = new HeadsetControllerAwareEvent();
+        public HeadsetControllerAwareEvent OnControllerGlanceExit = new HeadsetControllerAwareEvent();
 
-        /// <summary>
-        /// Emits the ControllerGlanceEnter class event.
-        /// </summary>
-        public UnityObjectEvent OnControllerGlanceEnter = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the ControllerGlanceExit class event.
-        /// </summary>
-        public UnityObjectEvent OnControllerGlanceExit = new UnityObjectEvent();
-
-        private void SetHeadsetControllerAware()
+        protected override void AddListeners(VRTK_HeadsetControllerAware component)
         {
-            if (hca == null)
-            {
-                hca = GetComponent<VRTK_HeadsetControllerAware>();
-            }
+            component.ControllerObscured += ControllerObscured;
+            component.ControllerUnobscured += ControllerUnobscured;
+
+            component.ControllerGlanceEnter += ControllerGlanceEnter;
+            component.ControllerGlanceExit += ControllerGlanceExit;
         }
 
-        private void OnEnable()
+        protected override void RemoveListeners(VRTK_HeadsetControllerAware component)
         {
-            SetHeadsetControllerAware();
-            if (hca == null)
-            {
-                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, new string[] { "VRTK_HeadsetControllerAware_UnityEvents", "VRTK_HeadsetControllerAware", "the same" }));
-                return;
-            }
+            component.ControllerObscured -= ControllerObscured;
+            component.ControllerUnobscured -= ControllerUnobscured;
 
-            hca.ControllerObscured += ControllerObscured;
-            hca.ControllerUnobscured += ControllerUnobscured;
-            hca.ControllerGlanceEnter += ControllerGlanceEnter;
-            hca.ControllerGlanceExit += ControllerGlanceExit;
+            component.ControllerGlanceEnter -= ControllerGlanceEnter;
+            component.ControllerGlanceExit -= ControllerGlanceExit;
         }
 
         private void ControllerObscured(object o, HeadsetControllerAwareEventArgs e)
@@ -70,19 +50,6 @@
         private void ControllerGlanceExit(object o, HeadsetControllerAwareEventArgs e)
         {
             OnControllerGlanceExit.Invoke(o, e);
-        }
-
-        private void OnDisable()
-        {
-            if (hca == null)
-            {
-                return;
-            }
-
-            hca.ControllerObscured -= ControllerObscured;
-            hca.ControllerUnobscured -= ControllerUnobscured;
-            hca.ControllerGlanceEnter -= ControllerGlanceEnter;
-            hca.ControllerGlanceExit -= ControllerGlanceExit;
         }
     }
 }

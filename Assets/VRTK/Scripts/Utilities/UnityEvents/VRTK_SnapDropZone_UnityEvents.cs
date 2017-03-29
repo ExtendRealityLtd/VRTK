@@ -1,54 +1,35 @@
 ﻿namespace VRTK.UnityEventHelper
 {
-    using UnityEngine;
     using UnityEngine.Events;
+    using System;
 
-    [RequireComponent(typeof(VRTK_SnapDropZone))]
-    public class VRTK_SnapDropZone_UnityEvents : MonoBehaviour
+    public sealed class VRTK_SnapDropZone_UnityEvents : VRTK_UnityEvents<VRTK_SnapDropZone>
     {
-        private VRTK_SnapDropZone sdz;
+        [Serializable]
+        public sealed class SnapDropZoneEvent : UnityEvent<object, SnapDropZoneEventArgs> { }
 
-        [System.Serializable]
-        public class UnityObjectEvent : UnityEvent<object, SnapDropZoneEventArgs> { };
+        public SnapDropZoneEvent OnObjectEnteredSnapDropZone = new SnapDropZoneEvent();
+        public SnapDropZoneEvent OnObjectExitedSnapDropZone = new SnapDropZoneEvent();
 
-        /// <summary>
-        /// Emits the ObjectEnteredSnapDropZone class event.
-        /// </summary>
-        public UnityObjectEvent OnObjectEnteredSnapDropZone = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the ObjectExitedSnapDropZone class event.
-        /// </summary>
-        public UnityObjectEvent OnObjectExitedSnapDropZone = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the ObjectSnappedToDropZone class event.
-        /// </summary>
-        public UnityObjectEvent OnObjectSnappedToDropZone = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the ObjectUnsnappedFromDropZone class event.
-        /// </summary>
-        public UnityObjectEvent OnObjectUnsnappedFromDropZone = new UnityObjectEvent();
+        public SnapDropZoneEvent OnObjectSnappedToDropZone = new SnapDropZoneEvent();
+        public SnapDropZoneEvent OnObjectUnsnappedFromDropZone = new SnapDropZoneEvent();
 
-        private void SetSnapDropZone()
+        protected override void AddListeners(VRTK_SnapDropZone component)
         {
-            if (sdz == null)
-            {
-                sdz = GetComponent<VRTK_SnapDropZone>();
-            }
+            component.ObjectEnteredSnapDropZone += ObjectEnteredSnapDropZone;
+            component.ObjectExitedSnapDropZone += ObjectExitedSnapDropZone;
+
+            component.ObjectSnappedToDropZone += ObjectSnappedToDropZone;
+            component.ObjectUnsnappedFromDropZone += ObjectUnsnappedFromDropZone;
         }
 
-        private void OnEnable()
+        protected override void RemoveListeners(VRTK_SnapDropZone component)
         {
-            SetSnapDropZone();
-            if (sdz == null)
-            {
-                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, new string[] { "VRTK_SnapDropZone_UnityEvents", "VRTK_SnapDropZone", "the same" }));
-                return;
-            }
+            component.ObjectEnteredSnapDropZone -= ObjectEnteredSnapDropZone;
+            component.ObjectExitedSnapDropZone -= ObjectExitedSnapDropZone;
 
-            sdz.ObjectEnteredSnapDropZone += ObjectEnteredSnapDropZone;
-            sdz.ObjectExitedSnapDropZone += ObjectExitedSnapDropZone;
-            sdz.ObjectSnappedToDropZone += ObjectSnappedToDropZone;
-            sdz.ObjectUnsnappedFromDropZone += ObjectUnsnappedFromDropZone;
+            component.ObjectSnappedToDropZone -= ObjectSnappedToDropZone;
+            component.ObjectUnsnappedFromDropZone -= ObjectUnsnappedFromDropZone;
         }
 
         private void ObjectEnteredSnapDropZone(object o, SnapDropZoneEventArgs e)
@@ -69,19 +50,6 @@
         private void ObjectUnsnappedFromDropZone(object o, SnapDropZoneEventArgs e)
         {
             OnObjectUnsnappedFromDropZone.Invoke(o, e);
-        }
-
-        private void OnDisable()
-        {
-            if (sdz == null)
-            {
-                return;
-            }
-
-            sdz.ObjectEnteredSnapDropZone -= ObjectEnteredSnapDropZone;
-            sdz.ObjectExitedSnapDropZone -= ObjectExitedSnapDropZone;
-            sdz.ObjectSnappedToDropZone -= ObjectSnappedToDropZone;
-            sdz.ObjectUnsnappedFromDropZone -= ObjectUnsnappedFromDropZone;
         }
     }
 }

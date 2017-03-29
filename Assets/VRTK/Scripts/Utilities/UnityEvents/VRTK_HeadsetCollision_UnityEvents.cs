@@ -1,44 +1,26 @@
 ﻿namespace VRTK.UnityEventHelper
 {
-    using UnityEngine;
     using UnityEngine.Events;
+    using System;
 
-    [RequireComponent(typeof(VRTK_HeadsetCollision))]
-    public class VRTK_HeadsetCollision_UnityEvents : MonoBehaviour
+    public sealed class VRTK_HeadsetCollision_UnityEvents : VRTK_UnityEvents<VRTK_HeadsetCollision>
     {
-        private VRTK_HeadsetCollision hc;
+        [Serializable]
+        public sealed class HeadsetCollisionEvent : UnityEvent<object, HeadsetCollisionEventArgs> { }
 
-        [System.Serializable]
-        public class UnityObjectEvent : UnityEvent<object, HeadsetCollisionEventArgs> { };
+        public HeadsetCollisionEvent OnHeadsetCollisionDetect = new HeadsetCollisionEvent();
+        public HeadsetCollisionEvent OnHeadsetCollisionEnded = new HeadsetCollisionEvent();
 
-        /// <summary>
-        /// Emits the HeadsetCollisionDetect class event.
-        /// </summary>
-        public UnityObjectEvent OnHeadsetCollisionDetect = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the HeadsetCollisionEnded class event.
-        /// </summary>
-        public UnityObjectEvent OnHeadsetCollisionEnded = new UnityObjectEvent();
-
-        private void SetHeadsetCollision()
+        protected override void AddListeners(VRTK_HeadsetCollision component)
         {
-            if (hc == null)
-            {
-                hc = GetComponent<VRTK_HeadsetCollision>();
-            }
+            component.HeadsetCollisionDetect += HeadsetCollisionDetect;
+            component.HeadsetCollisionEnded += HeadsetCollisionEnded;
         }
 
-        private void OnEnable()
+        protected override void RemoveListeners(VRTK_HeadsetCollision component)
         {
-            SetHeadsetCollision();
-            if (hc == null)
-            {
-                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, new string[] { "VRTK_HeadsetCollision_UnityEvents", "VRTK_HeadsetCollision", "the same" }));
-                return;
-            }
-
-            hc.HeadsetCollisionDetect += HeadsetCollisionDetect;
-            hc.HeadsetCollisionEnded += HeadsetCollisionEnded;
+            component.HeadsetCollisionDetect -= HeadsetCollisionDetect;
+            component.HeadsetCollisionEnded -= HeadsetCollisionEnded;
         }
 
         private void HeadsetCollisionDetect(object o, HeadsetCollisionEventArgs e)
@@ -49,17 +31,6 @@
         private void HeadsetCollisionEnded(object o, HeadsetCollisionEventArgs e)
         {
             OnHeadsetCollisionEnded.Invoke(o, e);
-        }
-
-        private void OnDisable()
-        {
-            if (hc == null)
-            {
-                return;
-            }
-
-            hc.HeadsetCollisionDetect -= HeadsetCollisionDetect;
-            hc.HeadsetCollisionEnded -= HeadsetCollisionEnded;
         }
     }
 }

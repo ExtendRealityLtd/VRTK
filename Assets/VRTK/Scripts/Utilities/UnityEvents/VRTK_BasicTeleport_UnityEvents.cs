@@ -1,44 +1,26 @@
 ﻿namespace VRTK.UnityEventHelper
 {
-    using UnityEngine;
     using UnityEngine.Events;
+    using System;
 
-    [RequireComponent(typeof(VRTK_BasicTeleport))]
-    public class VRTK_BasicTeleport_UnityEvents : MonoBehaviour
+    public sealed class VRTK_BasicTeleport_UnityEvents : VRTK_UnityEvents<VRTK_BasicTeleport>
     {
-        private VRTK_BasicTeleport bt;
+        [Serializable]
+        public sealed class TeleportEvent : UnityEvent<object, DestinationMarkerEventArgs> { }
 
-        [System.Serializable]
-        public class UnityObjectEvent : UnityEvent<object, DestinationMarkerEventArgs> { };
+        public TeleportEvent OnTeleporting = new TeleportEvent();
+        public TeleportEvent OnTeleported = new TeleportEvent();
 
-        /// <summary>
-        /// Emits the Teleporting class event.
-        /// </summary>
-        public UnityObjectEvent OnTeleporting = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the Teleported class event.
-        /// </summary>
-        public UnityObjectEvent OnTeleported = new UnityObjectEvent();
-
-        private void SetBasicTeleport()
+        protected override void AddListeners(VRTK_BasicTeleport component)
         {
-            if (bt == null)
-            {
-                bt = GetComponent<VRTK_BasicTeleport>();
-            }
+            component.Teleporting += Teleporting;
+            component.Teleported += Teleported;
         }
 
-        private void OnEnable()
+        protected override void RemoveListeners(VRTK_BasicTeleport component)
         {
-            SetBasicTeleport();
-            if (bt == null)
-            {
-                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, new string[] { "VRTK_BasicTeleport_UnityEvents", "VRTK_BasicTeleport", "the same" }));
-                return;
-            }
-
-            bt.Teleporting += Teleporting;
-            bt.Teleported += Teleported;
+            component.Teleporting -= Teleporting;
+            component.Teleported -= Teleported;
         }
 
         private void Teleporting(object o, DestinationMarkerEventArgs e)
@@ -49,17 +31,6 @@
         private void Teleported(object o, DestinationMarkerEventArgs e)
         {
             OnTeleported.Invoke(o, e);
-        }
-
-        private void OnDisable()
-        {
-            if (bt == null)
-            {
-                return;
-            }
-
-            bt.Teleporting -= Teleporting;
-            bt.Teleported -= Teleported;
         }
     }
 }
