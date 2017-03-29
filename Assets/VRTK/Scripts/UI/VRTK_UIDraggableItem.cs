@@ -120,7 +120,7 @@ namespace VRTK
             if (restrictToDropZone && !GetComponentInParent<VRTK_UIDropZone>())
             {
                 enabled = false;
-                Debug.LogError("A VRTK_UIDraggableItem with a `freeDrop = false` is required to be a child of a VRTK_UIDropZone GameObject.");
+                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, new string[] { "VRTK_UIDraggableItem", "VRTK_UIDropZone", "the parent", " if `freeDrop = false`" }));
             }
         }
 

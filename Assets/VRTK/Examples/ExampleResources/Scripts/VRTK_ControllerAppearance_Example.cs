@@ -23,7 +23,7 @@
         {
             if (GetComponent<VRTK_ControllerEvents>() == null)
             {
-                Debug.LogError("VRTK_ControllerEvents_ListenerExample is required to be attached to a Controller that has the VRTK_ControllerEvents script attached to it");
+                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, new string[] { "VRTK_ControllerAppearance_Example", "VRTK_ControllerEvents", "the same" }));
                 return;
             }
 

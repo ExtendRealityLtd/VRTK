@@ -59,7 +59,7 @@ namespace VRTK
                 }
                 else
                 {
-                    Debug.LogWarning("The VRTK_RoomExtender script needs a movementTransform to work.");
+                    VRTK_Logger.Warn(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_SCENE, new string[] { "VRTK_RoomExtender", "Headset Transform" }));
                 }
             }
             playArea = VRTK_DeviceFinder.PlayAreaTransform();

@@ -185,7 +185,7 @@ namespace VRTK
             canClickOnHover = false;
             if (NoPointerRenderer())
             {
-                Debug.LogWarning("The VRTK_Pointer script requires a VRTK_BasePointerRenderer specified as the `Pointer Renderer` parameter.");
+                VRTK_Logger.Warn(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_PARAMETER, new string[] { "VRTK_Pointer", "VRTK_BasePointerRenderer", "Pointer Renderer" }));
             }
             if (activateOnEnable)
             {
@@ -272,7 +272,7 @@ namespace VRTK
 
             if (controller == null && (activationButton != VRTK_ControllerEvents.ButtonAlias.Undefined || selectionButton != VRTK_ControllerEvents.ButtonAlias.Undefined))
             {
-                Debug.LogWarning("`VRTK_Pointer` requires a Controller that has the `VRTK_ControllerEvents` script attached to it. To omit this warning, set the `Activation Bubtton` and `Selection Button` to `Undefined`");
+                VRTK_Logger.Warn(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, new string[] { "VRTK_Pointer", "VRTK_ControllerEvents", "the Controller Alias", ". To omit this warning, set the `Activation Button` and `Selection Button` to `Undefined`" }));
             }
 
             if (directionIndicator != null)
@@ -310,12 +310,12 @@ namespace VRTK
             {
                 if (selectOnPress && holdButtonToActivate)
                 {
-                    Debug.LogWarning("Hold Button To Activate and Select On Press cannot both be checked when using the same button for Activation and Selection. Fixing by setting Select On Press to false.");
+                    VRTK_Logger.Warn("`Hold Button To Activate` and `Select On Press` cannot both be checked when using the same button for Activation and Selection. Fixing by setting `Select On Press` to `false`.");
                 }
 
                 if (!selectOnPress && !holdButtonToActivate)
                 {
-                    Debug.LogWarning("Hold Button To Activate and Select On Press cannot both be unchecked when using the same button for Activation and Selection. Fixing by setting Select On Press to true.");
+                    VRTK_Logger.Warn("`Hold Button To Activate` and `Select On Press` cannot both be unchecked when using the same button for Activation and Selection. Fixing by setting `Select On Press` to `true`.");
                 }
                 selectOnPress = !holdButtonToActivate;
             }

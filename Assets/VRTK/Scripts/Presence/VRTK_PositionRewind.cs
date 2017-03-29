@@ -47,7 +47,7 @@ namespace VRTK
             ManageHeadsetListeners(true);
             if (!playArea)
             {
-                Debug.LogError("No play area could be found. Have you selected a valid Boundaries SDK in the SDK Manager? If you are unsure, then click the GameObject with the `VRTK_SDKManager` script attached to it in Edit Mode and select a Boundaries SDK from the dropdown.");
+                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.SDK_OBJECT_NOT_FOUND, new string[] { "PlayArea", "Boundaries SDK" }));
             }
         }
 

@@ -10,7 +10,7 @@
         {
             if (GetComponent<VRTK_UIPointer>() == null)
             {
-                Debug.LogError("VRTK_ControllerUIPointerEvents_ListenerExample is required to be attached to a Controller that has the VRTK_UIPointer script attached to it");
+                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, new string[] { "VRTK_ControllerUIPointerEvents_ListenerExample", "VRTK_UIPointer", "the Controller Alias" }));
                 return;
             }
 
@@ -29,7 +29,7 @@
 
         private void VRTK_ControllerUIPointerEvents_ListenerExample_UIPointerElementEnter(object sender, UIPointerEventArgs e)
         {
-            Debug.Log("UI Pointer entered " + e.currentTarget.name + " on Controller index [" + e.controllerIndex + "] and the state was " + e.isActive + " ### World Position: " + e.raycastResult.worldPosition);
+            VRTK_Logger.Info("UI Pointer entered " + e.currentTarget.name + " on Controller index [" + e.controllerIndex + "] and the state was " + e.isActive + " ### World Position: " + e.raycastResult.worldPosition);
             if (togglePointerOnHit && GetComponent<VRTK_Pointer>())
             {
                 GetComponent<VRTK_Pointer>().Toggle(true);
@@ -38,7 +38,7 @@
 
         private void VRTK_ControllerUIPointerEvents_ListenerExample_UIPointerElementExit(object sender, UIPointerEventArgs e)
         {
-            Debug.Log("UI Pointer exited " + e.previousTarget.name + " on Controller index [" + e.controllerIndex + "] and the state was " + e.isActive);
+            VRTK_Logger.Info("UI Pointer exited " + e.previousTarget.name + " on Controller index [" + e.controllerIndex + "] and the state was " + e.isActive);
             if (togglePointerOnHit && GetComponent<VRTK_Pointer>())
             {
                 GetComponent<VRTK_Pointer>().Toggle(false);
@@ -47,17 +47,17 @@
 
         private void VRTK_ControllerUIPointerEvents_ListenerExample_UIPointerElementClick(object sender, UIPointerEventArgs e)
         {
-            Debug.Log("UI Pointer clicked " + e.currentTarget.name + " on Controller index [" + e.controllerIndex + "] and the state was " + e.isActive + " ### World Position: " + e.raycastResult.worldPosition);
+            VRTK_Logger.Info("UI Pointer clicked " + e.currentTarget.name + " on Controller index [" + e.controllerIndex + "] and the state was " + e.isActive + " ### World Position: " + e.raycastResult.worldPosition);
         }
 
         private void VRTK_ControllerUIPointerEvents_ListenerExample_UIPointerElementDragStart(object sender, UIPointerEventArgs e)
         {
-            Debug.Log("UI Pointer started dragging " + e.currentTarget.name + " on Controller index [" + e.controllerIndex + "] and the state was " + e.isActive + " ### World Position: " + e.raycastResult.worldPosition);
+            VRTK_Logger.Info("UI Pointer started dragging " + e.currentTarget.name + " on Controller index [" + e.controllerIndex + "] and the state was " + e.isActive + " ### World Position: " + e.raycastResult.worldPosition);
         }
 
         private void VRTK_ControllerUIPointerEvents_ListenerExample_UIPointerElementDragEnd(object sender, UIPointerEventArgs e)
         {
-            Debug.Log("UI Pointer stopped dragging " + e.currentTarget.name + " on Controller index [" + e.controllerIndex + "] and the state was " + e.isActive + " ### World Position: " + e.raycastResult.worldPosition);
+            VRTK_Logger.Info("UI Pointer stopped dragging " + e.currentTarget.name + " on Controller index [" + e.controllerIndex + "] and the state was " + e.isActive + " ### World Position: " + e.raycastResult.worldPosition);
         }
     }
 }

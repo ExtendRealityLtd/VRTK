@@ -33,7 +33,7 @@
             SetDashTeleport();
             if (dt == null)
             {
-                Debug.LogError("The VRTK_DashTeleport_UnityEvents script requires to be attached to a GameObject that contains a VRTK_DashTeleport script");
+                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, new string[] { "VRTK_DashTeleport_UnityEvents", "VRTK_DashTeleport", "the same" }));
                 return;
             }
 

@@ -102,7 +102,7 @@ namespace VRTK
             Type actualType = Type.GetType(actualTypeName);
             if (actualType == null)
             {
-                Debug.LogError(string.Format("The SDK '{0}' doesn't exist anymore. The fallback SDK '{1}' will be used instead.", actualTypeName, fallbackType.Name));
+                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.SDK_NOT_FOUND, new string[] { actualTypeName, fallbackType.Name }));
 
                 type = fallbackType;
                 originalTypeNameWhenFallbackIsUsed = actualTypeName;

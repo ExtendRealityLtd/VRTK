@@ -41,7 +41,7 @@
             SetSnapDropZone();
             if (sdz == null)
             {
-                Debug.LogError("The VRTK_SnapDropZone_UnityEvents script requires to be attached to a GameObject that contains a VRTK_SnapDropZone script");
+                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, new string[] { "VRTK_SnapDropZone_UnityEvents", "VRTK_SnapDropZone", "the same" }));
                 return;
             }
 

@@ -215,13 +215,13 @@ namespace VRTK
             playArea = VRTK_DeviceFinder.PlayAreaTransform();
             if (!playArea)
             {
-                Debug.LogError("No play area could be found. Have you selected a valid Boundaries SDK in the SDK Manager? If you are unsure, then click the GameObject with the `VRTK_SDKManager` script attached to it in Edit Mode and select a Boundaries SDK from the dropdown.");
+                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.SDK_OBJECT_NOT_FOUND, new string[] { "PlayArea", "Boundaries SDK" }));
             }
 
             headset = VRTK_DeviceFinder.HeadsetTransform();
             if (!headset)
             {
-                Debug.LogError("No headset could be found. Have you selected a valid Headset SDK in the SDK Manager? If you are unsure, then click the GameObject with the `VRTK_SDKManager` script attached to it in Edit Mode and select a Boundaries SDK from the dropdown.");
+                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.SDK_OBJECT_NOT_FOUND, new string[] { "HeadsetTransform", "Headset SDK" }));
             }
 
             VRTK_PlayerObject.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.CameraRig);
@@ -244,10 +244,10 @@ namespace VRTK
 
         protected virtual void Start()
         {
-            bodyCollider = playArea.GetComponent<CapsuleCollider>();
+            bodyCollider = playArea.GetComponentInChildren<CapsuleCollider>();
             if (!bodyCollider)
             {
-                Debug.LogError("No body collider could be found in the play area. VRTK_BodyPhysics script is required in one of the scene GameObjects.");
+                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, new string[] { "VRTK_TouchpadMovement", "CapsuleCollider", "the PlayArea" }));
             }
         }
 
