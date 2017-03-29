@@ -44,16 +44,5 @@ namespace VRTK
         /// <param name="playArea">The GameObject containing the play area representation.</param>
         /// <returns>Returns true if the play area size has been auto calibrated and set by external sensors.</returns>
         public abstract bool IsPlayAreaSizeCalibrated(GameObject playArea);
-
-        protected Transform GetSDKManagerPlayArea()
-        {
-            var sdkManager = VRTK_SDKManager.instance;
-            if (sdkManager != null && sdkManager.actualBoundaries != null)
-            {
-                cachedPlayArea = (sdkManager.actualBoundaries ? sdkManager.actualBoundaries.transform : null);
-                return cachedPlayArea;
-            }
-            return null;
-        }
     }
 }

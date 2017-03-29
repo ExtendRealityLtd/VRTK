@@ -30,7 +30,6 @@ namespace VRTK
         /// <returns>A transform of the object representing the play area in the scene.</returns>
         public override Transform GetPlayArea()
         {
-            cachedPlayArea = GetSDKManagerPlayArea();
             if (cachedPlayArea == null)
             {
                 cachedPlayArea = Ximmerse.VR.VRContext.main.transform;

@@ -46,7 +46,6 @@ namespace VRTK
         /// <returns>A transform of the object representing the headset in the scene.</returns>
         public override Transform GetHeadset()
         {
-            cachedHeadset = GetSDKManagerHeadset();
             if (cachedHeadset == null)
             {
                 var foundCamera = Camera.main; //assume native support
