@@ -4705,6 +4705,9 @@ To allow for peeking over a ledge and not falling, a fall restiction can happen 
  * **Movement Threshold:** The amount of movement of the headset between the headset's current position and the current standing position to determine if the user is walking in play space and to ignore the body physics collisions if the movement delta is above this threshold.
  * **Standing History Samples:** The maximum number of samples to collect of headset position before determining if the current standing position within the play space has changed.
  * **Lean Y Threshold:** The `y` distance between the headset and the object being leaned over, if object being leaned over is taller than this threshold then the current standing position won't be updated.
+ * **Step Up Y Offset:** The maximum height to consider when checking if an object can be stepped upon to.
+ * **Step Thickness Multiplier:** The width/depth of the foot collider in relation to the radius of the body collider.
+ * **Step Drop Threshold:** The distance between the current play area Y position and the new stepped up Y position to consider a valid step up. A higher number can help with juddering on slopes or small increases in collider heights.
  * **Custom Raycast:** A custom raycaster to use when raycasting to find floors.
  * **Fall Restriction:** A check to see if the drop to nearest floor should take place. If the selected restrictor is still over the current floor then the drop to nearest floor will not occur. Works well for being able to lean over ledges and look down. Only works for falling down not teleporting up.
  * **Gravity Fall Y Threshold:** When the `y` distance between the floor and the headset exceeds this distance and `Enable Body Collisions` is true then the rigidbody gravity will be used instead of teleport to drop to nearest floor.
