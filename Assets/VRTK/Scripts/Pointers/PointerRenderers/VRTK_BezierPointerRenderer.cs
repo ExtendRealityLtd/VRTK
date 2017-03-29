@@ -20,8 +20,8 @@ namespace VRTK
     {
         [Header("Bezier Pointer Appearance Settings")]
 
-        [Tooltip("The maximum length of the projected forward beam.")]
-        public float maximumLength = 10f;
+        [Tooltip("The maximum length of the projected beam. The x value is the length of the forward beam, the y value is the length of the downward beam.")]
+        public Vector2 maximumLength = new Vector2(10f, float.PositiveInfinity);
         [Tooltip("The number of items to render in the bezier curve tracer beam. A high number here will most likely have a negative impact of game performance due to large number of rendered objects.")]
         public int tracerDensity = 10;
         [Tooltip("The size of the ground cursor. This number also affects the size of the objects in the bezier curve tracer beam. The larger the radius, the larger the objects will be.")]
@@ -189,13 +189,13 @@ namespace VRTK
         {
             Transform origin = GetOrigin();
             float attachedRotation = Vector3.Dot(Vector3.up, origin.forward.normalized);
-            float calculatedLength = maximumLength;
+            float calculatedLength = maximumLength.x;
             Vector3 useForward = origin.forward;
             if ((attachedRotation * 100f) > heightLimitAngle)
             {
                 useForward = new Vector3(useForward.x, fixedForwardBeamForward.y, useForward.z);
                 float controllerRotationOffset = 1f - (attachedRotation - (heightLimitAngle / 100f));
-                calculatedLength = (maximumLength * controllerRotationOffset) * controllerRotationOffset;
+                calculatedLength = (maximumLength.x * controllerRotationOffset) * controllerRotationOffset;
             }
             else
             {
@@ -237,7 +237,7 @@ namespace VRTK
             Ray projectedBeamDownRaycast = new Ray(jointPosition, Vector3.down);
             RaycastHit collidedWith;
 
-            bool downRayHit = VRTK_CustomRaycast.Raycast(customRaycast, projectedBeamDownRaycast, out collidedWith, layersToIgnore, float.PositiveInfinity);
+            bool downRayHit = VRTK_CustomRaycast.Raycast(customRaycast, projectedBeamDownRaycast, out collidedWith, layersToIgnore, maximumLength.y);
 
             if (!downRayHit || (destinationHit.collider && destinationHit.collider != collidedWith.collider))
             {

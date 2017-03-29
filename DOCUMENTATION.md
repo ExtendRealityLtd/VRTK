@@ -1443,7 +1443,7 @@ It is more useful than the Simple Pointer Renderer for traversing objects of var
 
 ### Inspector Parameters
 
- * **Maximum Length:** The maximum length of the projected forward beam.
+ * **Maximum Length:** The maximum length of the projected beam. The x value is the length of the forward beam, the y value is the length of the downward beam.
  * **Tracer Density:** The number of items to render in the bezier curve tracer beam. A high number here will most likely have a negative impact of game performance due to large number of rendered objects.
  * **Cursor Radius:** The size of the ground cursor. This number also affects the size of the objects in the bezier curve tracer beam. The larger the radius, the larger the objects will be.
  * **Height Limit Angle:** The maximum angle in degrees of the origin before the beam curve height is restricted. A lower angle setting will prevent the beam being projected high into the sky and curving back down.
