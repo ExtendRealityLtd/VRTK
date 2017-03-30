@@ -129,7 +129,7 @@
             }
 
             //if it is then attempt to get the controller events script from the script alias
-            if (controllerObject != null)
+            if (controllerObject != null && controllerObject.activeInHierarchy)
             {
                 VRTK_ControllerEvents controllerEvents = controllerObject.GetComponent<VRTK_ControllerEvents>();
                 if (controllerEvents != null)
