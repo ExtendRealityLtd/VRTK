@@ -57,6 +57,10 @@
         protected virtual void OnEnable()
         {
             aliasController = VRTK_DeviceFinder.GetScriptAliasController(gameObject);
+            if (aliasController == null)
+            {
+                aliasController = gameObject;
+            }
 
             if (enableControllerCoroutine != null)
             {
@@ -97,7 +101,7 @@
 
             VRTK_SDK_Bridge.ControllerProcessUpdate(index);
 
-            if (aliasController && gameObject.activeInHierarchy && !aliasController.activeSelf)
+            if (aliasController != null && gameObject.activeInHierarchy && !aliasController.activeSelf)
             {
                 aliasController.SetActive(true);
             }
