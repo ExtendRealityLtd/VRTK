@@ -38,6 +38,8 @@ namespace VRTK
         public GameObject hoverCursorObject;
         [Tooltip("The GameObject to use to represent the locked cursor state.")]
         public GameObject lockedCursorObject;
+        [Tooltip("An optional transform to determine the destination location for the destination marker. This can be useful to offset the destination location from the destination point. If this is left empty then the destiantion point transform will be used.")]
+        public Transform destinationLocation;
         [Tooltip("If this is checked then after teleporting, the play area will be snapped to the origin of the destination point. If this is false then it's possible to teleport to anywhere within the destination point collider.")]
         public bool snapToPoint = true;
         [Tooltip("If this is checked, then the pointer cursor will be hidden when a valid destination point is hovered over.")]
@@ -78,6 +80,7 @@ namespace VRTK
             currentDestinationPoint = null;
             playArea = VRTK_DeviceFinder.PlayAreaTransform();
             headset = VRTK_DeviceFinder.HeadsetTransform();
+            destinationLocation = (destinationLocation != null ? destinationLocation : transform);
         }
 
         protected override void OnDisable()
@@ -216,7 +219,7 @@ namespace VRTK
                 currentDestinationPoint = this;
                 if (snapToPoint)
                 {
-                    e.raycastHit.point = transform.position;
+                    e.raycastHit.point = destinationLocation.position;
                     setDestination = StartCoroutine(DoDestinationMarkerSetAtEndOfFrame(e));
                 }
             }
@@ -231,9 +234,9 @@ namespace VRTK
             yield return new WaitForEndOfFrame();
             if (enabled)
             {
-                e.raycastHit.point = transform.position;
+                e.raycastHit.point = destinationLocation.position;
                 DisablePoint();
-                OnDestinationMarkerSet(SetDestinationMarkerEvent(e.distance, transform, e.raycastHit, transform.position, e.controllerIndex, false, GetRotation()));
+                OnDestinationMarkerSet(SetDestinationMarkerEvent(e.distance, transform, e.raycastHit, destinationLocation.position, e.controllerIndex, false, GetRotation()));
             }
         }
 
@@ -304,7 +307,7 @@ namespace VRTK
             }
 
             float offset = (snapToRotation == RotationTypes.RotateWithHeadsetOffset && playArea != null && headset != null ? playArea.eulerAngles.y - headset.eulerAngles.y : 0f);
-            return Quaternion.Euler(0f, transform.localEulerAngles.y + offset, 0f);
+            return Quaternion.Euler(0f, destinationLocation.localEulerAngles.y + offset, 0f);
         }
     }
 }

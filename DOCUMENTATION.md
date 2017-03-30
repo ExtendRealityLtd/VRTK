@@ -574,6 +574,7 @@ The destination points can also have a locked state if the `Enable Teleport` fla
  * **Default Cursor Object:** The GameObject to use to represent the default cursor state.
  * **Hover Cursor Object:** The GameObject to use to represent the hover cursor state.
  * **Locked Cursor Object:** The GameObject to use to represent the locked cursor state.
+ * **Destination Location:** An optional transform to determine the destination location for the destination marker. This can be useful to offset the destination location from the destination point. If this is left empty then the destiantion point transform will be used.
  * **Snap To Point:** If this is checked then after teleporting, the play area will be snapped to the origin of the destination point. If this is false then it's possible to teleport to anywhere within the destination point collider.
  * **Hide Pointer Cursor On Hover:** If this is checked, then the pointer cursor will be hidden when a valid destination point is hovered over.
  * **Snap To Rotation:** Determines if the play area will be rotated to the rotation of the destination point upon the destination marker being set.
