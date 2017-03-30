@@ -21,6 +21,8 @@ namespace VRTK
 #if VRTK_DEFINE_SDK_STEAMVR
         private SteamVR_TrackedObject cachedLeftTrackedObject;
         private SteamVR_TrackedObject cachedRightTrackedObject;
+        private Dictionary<GameObject, SteamVR_TrackedObject> cachedTrackedObjectsByGameObject = new Dictionary<GameObject, SteamVR_TrackedObject>();
+        private Dictionary<uint, SteamVR_TrackedObject> cachedTrackedObjectsByIndex = new Dictionary<uint, SteamVR_TrackedObject>();
         private ushort maxHapticVibration = 3999;
 
         /// <summary>
@@ -130,6 +132,12 @@ namespace VRTK
                     return (actual ? sdkManager.actualRightController : sdkManager.scriptAliasRightController);
                 }
             }
+
+            if (cachedTrackedObjectsByIndex.ContainsKey(index) && cachedTrackedObjectsByIndex[index] != null)
+            {
+                return cachedTrackedObjectsByIndex[index].gameObject;
+            }
+
             return null;
         }
 
@@ -860,6 +868,8 @@ namespace VRTK
             {
                 cachedLeftTrackedObject = null;
                 cachedRightTrackedObject = null;
+                cachedTrackedObjectsByGameObject.Clear();
+                cachedTrackedObjectsByIndex.Clear();
             }
 
             var sdkManager = VRTK_SDKManager.instance;
@@ -879,17 +889,30 @@ namespace VRTK
         private SteamVR_TrackedObject GetTrackedObject(GameObject controller)
         {
             SetTrackedControllerCaches();
-            SteamVR_TrackedObject trackedObject = null;
 
             if (IsControllerLeftHand(controller))
             {
-                trackedObject = cachedLeftTrackedObject;
+                return cachedLeftTrackedObject;
             }
             else if (IsControllerRightHand(controller))
             {
-                trackedObject = cachedRightTrackedObject;
+                return cachedRightTrackedObject;
             }
-            return trackedObject;
+
+            if (cachedTrackedObjectsByGameObject.ContainsKey(controller) && cachedTrackedObjectsByGameObject[controller] != null)
+            {
+                return cachedTrackedObjectsByGameObject[controller];
+            }
+            else
+            {
+                var trackedObject = controller.GetComponent<SteamVR_TrackedObject>();
+                if (trackedObject != null)
+                {
+                    cachedTrackedObjectsByGameObject.Add(controller, trackedObject);
+                    cachedTrackedObjectsByIndex.Add((uint)trackedObject.index, trackedObject);
+                }
+                return trackedObject;
+            }
         }
 
         private bool IsButtonPressed(uint index, ButtonPressTypes type, ulong button)
