@@ -97,7 +97,8 @@ namespace VRTK
         [Tooltip("**OBSOLETE** The button to use for the action of clicking a UI element.")]
         [Obsolete("`VRTK_ControllerEvents.uiClickButton` is no longer used in the `VRTK_UIPointer` class. This parameter will be removed in a future version of VRTK.")]
         public ButtonAlias uiClickButton = ButtonAlias.TriggerPress;
-        [Tooltip("The button to use for the action of bringing up an in-game menu.")]
+        [Tooltip("**OBSOLETE** The button to use for the action of bringing up an in-game menu.")]
+        [Obsolete("`VRTK_ControllerEvents.menuToggleButton` is no longer used. This parameter will be removed in a future version of VRTK.")]
         public ButtonAlias menuToggleButton = ButtonAlias.ButtonTwoPress;
 
         [Header("Axis Refinement")]
