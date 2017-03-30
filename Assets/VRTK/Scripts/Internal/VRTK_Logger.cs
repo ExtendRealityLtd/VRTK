@@ -1,7 +1,10 @@
 ﻿namespace VRTK
 {
     using UnityEngine;
+    using System;
     using System.Collections.Generic;
+    using System.Text.RegularExpressions;
+    using System.Linq;
 
     public class VRTK_Logger : MonoBehaviour
     {
@@ -33,7 +36,7 @@
 
         public static Dictionary<CommonMessageKeys, string> commonMessages = new Dictionary<CommonMessageKeys, string>()
         {
-            {CommonMessageKeys.NOT_DEFINED, "`{0}` not defined{2}."},
+            {CommonMessageKeys.NOT_DEFINED, "`{0}` not defined{1}."},
             {CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_SCENE, "`{0}` requires the `{1}` component to be available in the scene{2}."},
             {CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, "`{0}` requires the `{1}` component to be attached to {2} GameObject{3}."},
             {CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_PARAMETER, "`{0}` requires a `{1}` component to be specified as the `{2}` parameter{3}."},
@@ -43,6 +46,8 @@
             {CommonMessageKeys.SDK_NOT_FOUND, "The SDK '{0}' doesn't exist anymore. The fallback SDK '{1}' will be used instead." },
             {CommonMessageKeys.SDK_MANAGER_ERRORS, "The current SDK Manager setup is causing the following errors:\n\n{0}" }
         };
+
+        public static Dictionary<CommonMessageKeys, int> commonMessageParts = new Dictionary<CommonMessageKeys, int>();
 
         public LogLevels minLevel = LogLevels.Info;
         public bool throwExceptions = true;
@@ -56,12 +61,36 @@
                 instance.minLevel = LogLevels.Trace;
                 instance.throwExceptions = true;
             }
+
+            if (commonMessageParts.Count != commonMessages.Count)
+            {
+                commonMessageParts.Clear();
+                foreach (KeyValuePair<CommonMessageKeys, string> commonMessage in commonMessages)
+                {
+                    int bitCount = Regex.Matches(commonMessage.Value, @"(?<!\{)\{([0-9]+).*?\}(?!})")
+                                        .Cast<Match>().DefaultIfEmpty()
+                                        .Max(m => m == null ? -1 : int.Parse(m.Groups[1].Value)) + 1;
+                    commonMessageParts.Add(commonMessage.Key, bitCount);
+                }
+            }
         }
 
         public static string GetCommonMessage(CommonMessageKeys messageKey, string[] parameters = null)
         {
+            CreateIfNotExists();
+
             parameters = (parameters == null ? new string[0] : parameters);
-            return (commonMessages.ContainsKey(messageKey) ? string.Format(commonMessages[messageKey], parameters) : "");
+            string returnMessage = "";
+            if (commonMessages.ContainsKey(messageKey))
+            {
+                if (parameters.Length != commonMessageParts[messageKey])
+                {
+                    Array.Resize(ref parameters, commonMessageParts[messageKey]);
+                }
+                returnMessage = string.Format(commonMessages[messageKey], parameters);
+            }
+
+            return returnMessage;
         }
 
         public static void Trace(string message)
