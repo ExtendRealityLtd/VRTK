@@ -89,13 +89,10 @@ namespace VRTK
         /// <param name="obj">The game object to attempt to force touch.</param>
         public virtual void ForceTouch(GameObject obj)
         {
-            if (obj.GetComponent<Collider>())
+            var objCollider = obj.GetComponentInChildren<Collider>();
+            if (objCollider != null)
             {
-                OnTriggerStay(obj.GetComponent<Collider>());
-            }
-            else if (obj.GetComponentInChildren<Collider>())
-            {
-                OnTriggerStay(obj.GetComponentInChildren<Collider>());
+                OnTriggerStay(objCollider);
             }
         }
 
@@ -115,10 +112,10 @@ namespace VRTK
         /// <returns>Is true if the given object is of type `VRTK_InteractableObject`.</returns>
         public virtual bool IsObjectInteractable(GameObject obj)
         {
-            if (obj)
+            if (obj != null)
             {
                 var io = obj.GetComponentInParent<VRTK_InteractableObject>();
-                if (io)
+                if (io != null)
                 {
                     if (io.disableWhenIdle && !io.enabled)
                     {
@@ -137,7 +134,7 @@ namespace VRTK
         /// <param name="forceToggle">Determines if the rigidbody has been forced into it's new state by another script. This can be used to override other non-force settings. Defaults to `false`</param>
         public virtual void ToggleControllerRigidBody(bool state, bool forceToggle = false)
         {
-            if (controllerCollisionDetector && touchRigidBody)
+            if (controllerCollisionDetector != null && touchRigidBody != null)
             {
                 touchRigidBody.isKinematic = !state;
                 rigidBodyForcedActive = forceToggle;
@@ -306,7 +303,7 @@ namespace VRTK
         protected virtual void ToggleControllerVisibility(bool visible)
         {
             GameObject modelContainer = VRTK_DeviceFinder.GetModelAliasController(gameObject);
-            if (touchedObject)
+            if (touchedObject != null)
             {
                 VRTK_InteractControllerAppearance[] controllerAppearanceScript = touchedObject.GetComponentsInParent<VRTK_InteractControllerAppearance>(true);
                 if (controllerAppearanceScript.Length > 0)
@@ -325,7 +322,7 @@ namespace VRTK
             if (!triggerRumble)
             {
                 var doHaptics = touchedObject.GetComponentInParent<VRTK_InteractHaptics>();
-                if (doHaptics)
+                if (doHaptics != null)
                 {
                     triggerRumble = true;
                     doHaptics.HapticsOnTouch(VRTK_DeviceFinder.GetControllerIndex(gameObject));
@@ -342,7 +339,7 @@ namespace VRTK
                 GameObject touchingObject = gameObject;
 
                 //If it's being grabbed by the current touching object then it hasn't stopped being touched.
-                if (touchedObjectScript && touchedObjectScript.GetGrabbingObject() != touchingObject)
+                if (touchedObjectScript != null && touchedObjectScript.GetGrabbingObject() != touchingObject)
                 {
                     StopTouching(touchedObject);
                 }
