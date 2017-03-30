@@ -2914,7 +2914,7 @@ A custom collider can be provided by the Custom Rigidbody Object parameter.
 
 ### Inspector Parameters
 
- * **Custom Rigidbody Object:** If a custom rigidbody and collider for the rigidbody are required, then a gameobject containing a rigidbody and collider can be passed into this parameter. If this is empty then the rigidbody and collider will be auto generated at runtime to match the SDK default controller.
+ * **Custom Collider Container:** An optional GameObject that contains the compound colliders to represent the touching object. If this is empty then the collider will be auto generated at runtime to match the SDK default controller.
 
 ### Class Events
 
