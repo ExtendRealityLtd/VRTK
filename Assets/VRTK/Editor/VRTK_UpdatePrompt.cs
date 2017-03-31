@@ -136,7 +136,7 @@ public class VRTK_UpdatePrompt : EditorWindow
 
     private static bool UpdateRequired()
     {
-        string assetGuid = AssetDatabase.FindAssets(typeof(VRTK_UpdatePrompt).FullName).FirstOrDefault();
+        string assetGuid = AssetDatabase.FindAssets(typeof(VRTK_UpdatePrompt).FullName).First();
         string path = AssetDatabase.GUIDToAssetPath(assetGuid);
         path = Path.GetDirectoryName(Path.GetDirectoryName(path));
 
