@@ -1,44 +1,26 @@
 ﻿namespace VRTK.UnityEventHelper
 {
-    using UnityEngine;
     using UnityEngine.Events;
+    using System;
 
-    [RequireComponent(typeof(VRTK_InteractUse))]
-    public class VRTK_InteractUse_UnityEvents : MonoBehaviour
+    public sealed class VRTK_InteractUse_UnityEvents : VRTK_UnityEvents<VRTK_InteractUse>
     {
-        private VRTK_InteractUse iu;
+        [Serializable]
+        public sealed class ObjectInteractEvent : UnityEvent<object, ObjectInteractEventArgs> { }
 
-        [System.Serializable]
-        public class UnityObjectEvent : UnityEvent<object, ObjectInteractEventArgs> { };
+        public ObjectInteractEvent OnControllerUseInteractableObject = new ObjectInteractEvent();
+        public ObjectInteractEvent OnControllerUnuseInteractableObject = new ObjectInteractEvent();
 
-        /// <summary>
-        /// Emits the ControllerUseInteractableObject class event.
-        /// </summary>
-        public UnityObjectEvent OnControllerUseInteractableObject = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the ControllerUnuseInteractableObject class event.
-        /// </summary>
-        public UnityObjectEvent OnControllerUnuseInteractableObject = new UnityObjectEvent();
-
-        private void SetInteractUse()
+        protected override void AddListeners(VRTK_InteractUse component)
         {
-            if (iu == null)
-            {
-                iu = GetComponent<VRTK_InteractUse>();
-            }
+            component.ControllerUseInteractableObject += ControllerUseInteractableObject;
+            component.ControllerUnuseInteractableObject += ControllerUnuseInteractableObject;
         }
 
-        private void OnEnable()
+        protected override void RemoveListeners(VRTK_InteractUse component)
         {
-            SetInteractUse();
-            if (iu == null)
-            {
-                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, new string[] { "VRTK_InteractUse_UnityEvents", "VRTK_InteractUse", "the same" }));
-                return;
-            }
-
-            iu.ControllerUseInteractableObject += ControllerUseInteractableObject;
-            iu.ControllerUnuseInteractableObject += ControllerUnuseInteractableObject;
+            component.ControllerUseInteractableObject -= ControllerUseInteractableObject;
+            component.ControllerUnuseInteractableObject -= ControllerUnuseInteractableObject;
         }
 
         private void ControllerUseInteractableObject(object o, ObjectInteractEventArgs e)
@@ -49,17 +31,6 @@
         private void ControllerUnuseInteractableObject(object o, ObjectInteractEventArgs e)
         {
             OnControllerUnuseInteractableObject.Invoke(o, e);
-        }
-
-        private void OnDisable()
-        {
-            if (iu == null)
-            {
-                return;
-            }
-
-            iu.ControllerUseInteractableObject -= ControllerUseInteractableObject;
-            iu.ControllerUnuseInteractableObject -= ControllerUnuseInteractableObject;
         }
     }
 }

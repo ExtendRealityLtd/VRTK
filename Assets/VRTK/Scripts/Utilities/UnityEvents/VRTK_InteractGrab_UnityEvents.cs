@@ -1,44 +1,26 @@
 ﻿namespace VRTK.UnityEventHelper
 {
-    using UnityEngine;
     using UnityEngine.Events;
+    using System;
 
-    [RequireComponent(typeof(VRTK_InteractGrab))]
-    public class VRTK_InteractGrab_UnityEvents : MonoBehaviour
+    public sealed class VRTK_InteractGrab_UnityEvents : VRTK_UnityEvents<VRTK_InteractGrab>
     {
-        private VRTK_InteractGrab ig;
+        [Serializable]
+        public sealed class ObjectInteractEvent : UnityEvent<object, ObjectInteractEventArgs> { }
 
-        [System.Serializable]
-        public class UnityObjectEvent : UnityEvent<object, ObjectInteractEventArgs> { };
+        public ObjectInteractEvent OnControllerGrabInteractableObject = new ObjectInteractEvent();
+        public ObjectInteractEvent OnControllerUngrabInteractableObject = new ObjectInteractEvent();
 
-        /// <summary>
-        /// Emits the ControllerGrabInteractableObject class event.
-        /// </summary>
-        public UnityObjectEvent OnControllerGrabInteractableObject = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the ControllerUngrabInteractableObject class event.
-        /// </summary>
-        public UnityObjectEvent OnControllerUngrabInteractableObject = new UnityObjectEvent();
-
-        private void SetInteractGrab()
+        protected override void AddListeners(VRTK_InteractGrab component)
         {
-            if (ig == null)
-            {
-                ig = GetComponent<VRTK_InteractGrab>();
-            }
+            component.ControllerGrabInteractableObject += ControllerGrabInteractableObject;
+            component.ControllerUngrabInteractableObject += ControllerUngrabInteractableObject;
         }
 
-        private void OnEnable()
+        protected override void RemoveListeners(VRTK_InteractGrab component)
         {
-            SetInteractGrab();
-            if (ig == null)
-            {
-                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, new string[] { "VRTK_InteractGrab_UnityEvents", "VRTK_InteractGrab", "the same" }));
-                return;
-            }
-
-            ig.ControllerGrabInteractableObject += ControllerGrabInteractableObject;
-            ig.ControllerUngrabInteractableObject += ControllerUngrabInteractableObject;
+            component.ControllerGrabInteractableObject -= ControllerGrabInteractableObject;
+            component.ControllerUngrabInteractableObject -= ControllerUngrabInteractableObject;
         }
 
         private void ControllerGrabInteractableObject(object o, ObjectInteractEventArgs e)
@@ -49,17 +31,6 @@
         private void ControllerUngrabInteractableObject(object o, ObjectInteractEventArgs e)
         {
             OnControllerUngrabInteractableObject.Invoke(o, e);
-        }
-
-        private void OnDisable()
-        {
-            if (ig == null)
-            {
-                return;
-            }
-
-            ig.ControllerGrabInteractableObject -= ControllerGrabInteractableObject;
-            ig.ControllerUngrabInteractableObject -= ControllerUngrabInteractableObject;
         }
     }
 }

@@ -1,58 +1,35 @@
 ﻿namespace VRTK.UnityEventHelper
 {
-    using UnityEngine;
     using UnityEngine.Events;
+    using System;
 
-    [RequireComponent(typeof(VRTK_UIPointer))]
-    public class VRTK_UIPointer_UnityEvents : MonoBehaviour
+    public sealed class VRTK_UIPointer_UnityEvents : VRTK_UnityEvents<VRTK_UIPointer>
     {
-        private VRTK_UIPointer uip;
+        [Serializable]
+        public sealed class UIPointerEvent : UnityEvent<object, UIPointerEventArgs> { }
 
-        [System.Serializable]
-        public class UnityObjectEvent : UnityEvent<object, UIPointerEventArgs> { };
+        public UIPointerEvent OnUIPointerElementEnter = new UIPointerEvent();
+        public UIPointerEvent OnUIPointerElementExit = new UIPointerEvent();
+        public UIPointerEvent OnUIPointerElementClick = new UIPointerEvent();
+        public UIPointerEvent OnUIPointerElementDragStart = new UIPointerEvent();
+        public UIPointerEvent OnUIPointerElementDragEnd = new UIPointerEvent();
 
-        /// <summary>
-        /// Emits the UIPointerElementEnter class event.
-        /// </summary>
-        public UnityObjectEvent OnUIPointerElementEnter = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the UIPointerElementExit class event.
-        /// </summary>
-        public UnityObjectEvent OnUIPointerElementExit = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the UIPointerElementClick class event.
-        /// </summary>
-        public UnityObjectEvent OnUIPointerElementClick = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the UIPointerElementDragStart class event.
-        /// </summary>
-        public UnityObjectEvent OnUIPointerElementDragStart = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the UIPointerElementDragEnd class event.
-        /// </summary>
-        public UnityObjectEvent OnUIPointerElementDragEnd = new UnityObjectEvent();
-
-        private void SetUIPointer()
+        protected override void AddListeners(VRTK_UIPointer component)
         {
-            if (uip == null)
-            {
-                uip = GetComponent<VRTK_UIPointer>();
-            }
+            component.UIPointerElementEnter += UIPointerElementEnter;
+            component.UIPointerElementExit += UIPointerElementExit;
+            component.UIPointerElementClick += UIPointerElementClick;
+            component.UIPointerElementDragStart += UIPointerElementDragStart;
+            component.UIPointerElementDragEnd += UIPointerElementDragEnd;
         }
 
-        private void OnEnable()
+        protected override void RemoveListeners(VRTK_UIPointer component)
         {
-            SetUIPointer();
-            if (uip == null)
-            {
-                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, new string[] { "VRTK_UIPointer_UnityEvents", "VRTK_UIPointer", "the same" }));
-                return;
-            }
-            uip.UIPointerElementEnter += UIPointerElementEnter;
-            uip.UIPointerElementExit += UIPointerElementExit;
-            uip.UIPointerElementClick += UIPointerElementClick;
-            uip.UIPointerElementDragStart += UIPointerElementDragStart;
-            uip.UIPointerElementDragEnd += UIPointerElementDragEnd;
+            component.UIPointerElementEnter -= UIPointerElementEnter;
+            component.UIPointerElementExit -= UIPointerElementExit;
+            component.UIPointerElementClick -= UIPointerElementClick;
+            component.UIPointerElementDragStart -= UIPointerElementDragStart;
+            component.UIPointerElementDragEnd -= UIPointerElementDragEnd;
         }
 
         private void UIPointerElementEnter(object o, UIPointerEventArgs e)
@@ -78,20 +55,6 @@
         private void UIPointerElementDragEnd(object o, UIPointerEventArgs e)
         {
             OnUIPointerElementDragEnd.Invoke(o, e);
-        }
-
-        private void OnDisable()
-        {
-            if (uip == null)
-            {
-                return;
-            }
-
-            uip.UIPointerElementEnter -= UIPointerElementEnter;
-            uip.UIPointerElementExit -= UIPointerElementExit;
-            uip.UIPointerElementClick -= UIPointerElementClick;
-            uip.UIPointerElementDragStart -= UIPointerElementDragStart;
-            uip.UIPointerElementDragEnd -= UIPointerElementDragEnd;
         }
     }
 }

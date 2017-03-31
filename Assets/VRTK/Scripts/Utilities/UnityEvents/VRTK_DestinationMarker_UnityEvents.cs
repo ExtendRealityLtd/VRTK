@@ -1,49 +1,29 @@
 ﻿namespace VRTK.UnityEventHelper
 {
-    using UnityEngine;
     using UnityEngine.Events;
+    using System;
 
-    [RequireComponent(typeof(VRTK_DestinationMarker))]
-    public class VRTK_DestinationMarker_UnityEvents : MonoBehaviour
+    public sealed class VRTK_DestinationMarker_UnityEvents : VRTK_UnityEvents<VRTK_DestinationMarker>
     {
-        private VRTK_DestinationMarker dm;
+        [Serializable]
+        public sealed class DestinationMarkerEvent : UnityEvent<object, DestinationMarkerEventArgs> { }
 
-        [System.Serializable]
-        public class UnityObjectEvent : UnityEvent<object, DestinationMarkerEventArgs> { };
+        public DestinationMarkerEvent OnDestinationMarkerEnter = new DestinationMarkerEvent();
+        public DestinationMarkerEvent OnDestinationMarkerExit = new DestinationMarkerEvent();
+        public DestinationMarkerEvent OnDestinationMarkerSet = new DestinationMarkerEvent();
 
-        /// <summary>
-        /// Emits the DestinationMarkerEnter class event.
-        /// </summary>
-        public UnityObjectEvent OnDestinationMarkerEnter = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the DestinationMarkerExit class event.
-        /// </summary>
-        public UnityObjectEvent OnDestinationMarkerExit = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the DestinationMarkerSet class event.
-        /// </summary>
-        public UnityObjectEvent OnDestinationMarkerSet = new UnityObjectEvent();
-
-        private void SetDestinationMarker()
+        protected override void AddListeners(VRTK_DestinationMarker component)
         {
-            if (dm == null)
-            {
-                dm = GetComponent<VRTK_DestinationMarker>();
-            }
+            component.DestinationMarkerEnter += DestinationMarkerEnter;
+            component.DestinationMarkerExit += DestinationMarkerExit;
+            component.DestinationMarkerSet += DestinationMarkerSet;
         }
 
-        private void OnEnable()
+        protected override void RemoveListeners(VRTK_DestinationMarker component)
         {
-            SetDestinationMarker();
-            if (dm == null)
-            {
-                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, new string[] { "VRTK_DestinationMarker_UnityEvents", "VRTK_DestinationMarker", "the same" }));
-                return;
-            }
-
-            dm.DestinationMarkerEnter += DestinationMarkerEnter;
-            dm.DestinationMarkerExit += DestinationMarkerExit;
-            dm.DestinationMarkerSet += DestinationMarkerSet;
+            component.DestinationMarkerEnter -= DestinationMarkerEnter;
+            component.DestinationMarkerExit -= DestinationMarkerExit;
+            component.DestinationMarkerSet -= DestinationMarkerSet;
         }
 
         private void DestinationMarkerEnter(object o, DestinationMarkerEventArgs e)
@@ -59,18 +39,6 @@
         private void DestinationMarkerSet(object o, DestinationMarkerEventArgs e)
         {
             OnDestinationMarkerSet.Invoke(o, e);
-        }
-
-        private void OnDisable()
-        {
-            if (dm == null)
-            {
-                return;
-            }
-
-            dm.DestinationMarkerEnter -= DestinationMarkerEnter;
-            dm.DestinationMarkerExit -= DestinationMarkerExit;
-            dm.DestinationMarkerSet -= DestinationMarkerSet;
         }
     }
 }
