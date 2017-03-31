@@ -172,7 +172,7 @@ namespace VRTK
             controller = GetSDKManagerControllerRightHand(actual);
             if ((controller == null) && actual)
             {
-                controller = VRTK_SharedMethods.FindEvenInactiveGameObject<GvrControllerVisualManager>("/Controller");
+                controller = VRTK_SharedMethods.FindEvenInactiveGameObject<GvrControllerVisualManager>("Controller");
             }
             if (controller != null)
             {

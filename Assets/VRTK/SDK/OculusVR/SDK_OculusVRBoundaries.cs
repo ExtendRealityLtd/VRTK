@@ -36,7 +36,7 @@ namespace VRTK
             cachedPlayArea = GetSDKManagerPlayArea();
             if (cachedPlayArea == null)
             {
-                var ovrManager = FindObjectOfType<OVRManager>();
+                var ovrManager = VRTK_SharedMethods.FindEvenInactiveComponent<OVRManager>();
                 if (ovrManager)
                 {
                     cachedPlayArea = ovrManager.transform;
@@ -107,7 +107,7 @@ namespace VRTK
         {
             if (avatarContainer == null)
             {
-                avatarContainer = FindObjectOfType<OvrAvatar>();
+                avatarContainer = VRTK_SharedMethods.FindEvenInactiveComponent<OvrAvatar>();
                 if (avatarContainer != null && avatarContainer.GetComponent<VRTK_TransformFollow>() == null)
                 {
                     var objectFollow = avatarContainer.gameObject.AddComponent<VRTK_TransformFollow>();
