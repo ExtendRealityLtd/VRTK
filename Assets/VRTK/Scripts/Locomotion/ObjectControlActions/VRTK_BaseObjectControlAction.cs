@@ -100,15 +100,26 @@ namespace VRTK
 
                 if (checkObject == playArea)
                 {
-                    CapsuleCollider playAreaCollider = playArea.GetComponent<CapsuleCollider>();
+                    CapsuleCollider playAreaCollider = playArea.GetComponentInChildren<CapsuleCollider>();
                     centerCollider = playAreaCollider;
-                    colliderRadius = playAreaCollider.radius;
-                    colliderHeight = playAreaCollider.height;
-                    colliderCenter = playAreaCollider.center;
+                    if (playAreaCollider != null)
+                    {
+                        colliderRadius = playAreaCollider.radius;
+                        colliderHeight = playAreaCollider.height;
+                        colliderCenter = playAreaCollider.center;
+                    }
+                    else
+                    {
+                        VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, new string[] { "PlayArea", "CapsuleCollider", "the same or child"}));
+                    }
                 }
                 else
                 {
-                    centerCollider = checkObject.GetComponent<Collider>();
+                    centerCollider = checkObject.GetComponentInChildren<Collider>();
+                    if (centerCollider == null)
+                    {
+                        VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, new string[] { "CheckObject", "Collider", "the same or child" }));
+                    }
                     colliderRadius = 0.1f;
                     colliderHeight = 0.1f;
                 }
