@@ -24,8 +24,6 @@ namespace VRTK
         /// </summary>
         public string symbol;
 
-        [SerializeField]
-        private string buildTargetGroupName;
 #if UNITY_EDITOR
         /// <summary>
         /// The build target group to use when conditionally adding or removing <see cref="symbol"/>.
@@ -33,6 +31,8 @@ namespace VRTK
         [NonSerialized]
         public BuildTargetGroup buildTargetGroup;
 #endif
+        [SerializeField]
+        private string buildTargetGroupName;
 
         private SDK_ScriptingDefineSymbolPredicateAttribute()
         {
@@ -104,7 +104,7 @@ namespace VRTK
 
             if (buildTargetGroup == BuildTargetGroup.Unknown)
             {
-                throw new ArgumentOutOfRangeException("groupName", groupName, string.Format("The buildTargetGroupName '{0}' isn't allowed.", groupName));
+                throw new ArgumentOutOfRangeException("groupName", groupName, string.Format("'{0}' isn't allowed.", groupName));
             }
 #endif
         }
