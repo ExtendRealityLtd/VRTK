@@ -56,7 +56,10 @@
         {
             if (instance == null)
             {
-                GameObject loggerObject = new GameObject("[VRTK_Logger]");
+                GameObject loggerObject = new GameObject("[VRTK_Logger]")
+                {
+                    hideFlags = HideFlags.DontSaveInEditor | HideFlags.HideInHierarchy
+                };
                 instance = loggerObject.AddComponent<VRTK_Logger>();
                 instance.minLevel = LogLevels.Trace;
                 instance.throwExceptions = true;
@@ -164,12 +167,12 @@
             if (instance == null)
             {
                 instance = this;
+                DontDestroyOnLoad(gameObject);
             }
             else if (instance != this)
             {
                 Destroy(gameObject);
             }
-            DontDestroyOnLoad(gameObject);
         }
     }
 }
