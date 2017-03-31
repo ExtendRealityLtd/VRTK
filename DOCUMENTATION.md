@@ -323,10 +323,7 @@ If the `Use Joint` Snap Type is selected then a custom Joint component is requir
 
 Adding the `VRTK_SnapDropZone_UnityEvents` component to `VRTK_SnapDropZone` object allows access to `UnityEvents` that will react identically to the Class Events.
 
- * `OnObjectEnteredSnapDropZone` - Emits the ObjectEnteredSnapDropZone class event.
- * `OnObjectExitedSnapDropZone` - Emits the ObjectExitedSnapDropZone class event.
- * `OnObjectSnappedToDropZone` - Emits the ObjectSnappedToDropZone class event.
- * `OnObjectUnsnappedFromDropZone` - Emits the ObjectUnsnappedFromDropZone class event.
+ * All C# delegate events are mapped to a Unity Event with the `On` prefix. e.g. `MyEvent` -> `OnMyEvent`.
 
 ### Event Payload
 
@@ -925,9 +922,7 @@ It is utilised by the `VRTK_BasePointer` for dealing with pointer events when th
 
 Adding the `VRTK_DestinationMarker_UnityEvents` component to `VRTK_DestinationMarker` object allows access to `UnityEvents` that will react identically to the Class Events.
 
- * `OnDestinationMarkerEnter` - Emits the DestinationMarkerEnter class event.
- * `OnDestinationMarkerExit` - Emits the DestinationMarkerExit class event.
- * `OnDestinationMarkerSet` - Emits the DestinationMarkerSet class event.
+ * All C# delegate events are mapped to a Unity Event with the `On` prefix. e.g. `MyEvent` -> `OnMyEvent`.
 
 ### Event Payload
 
@@ -1522,8 +1517,7 @@ The y position is never altered so the basic teleporter cannot be used to move u
 
 Adding the `VRTK_BasicTeleport_UnityEvents` component to `VRTK_BasicTeleport` object allows access to `UnityEvents` that will react identically to the Class Events.
 
- * `OnTeleporting` - Emits the Teleporting class event.
- * `OnTeleported` - Emits the Teleported class event.
+ * All C# delegate events are mapped to a Unity Event with the `On` prefix. e.g. `MyEvent` -> `OnMyEvent`.
 
 ### Event Payload
 
@@ -1628,8 +1622,7 @@ The minimum distance for the fixed time dash is determined by the minSpeed and n
 
 Adding the `VRTK_DashTeleport_UnityEvents` component to `VRTK_DashTeleport` object allows access to `UnityEvents` that will react identically to the Class Events.
 
- * `OnWillDashThruObjects` - Emits the WillDashThruObjects class event.
- * `OnDashedThruObjects` - Emits the DashedThruObjects class event.
+ * All C# delegate events are mapped to a Unity Event with the `On` prefix. e.g. `MyEvent` -> `OnMyEvent`.
 
 ### Event Payload
 
@@ -1690,8 +1683,7 @@ As this is an abstract class, it cannot be applied directly to a game object and
 
 Adding the `VRTK_ObjectControl_UnityEvents` component to `VRTK_ObjectControl` object allows access to `UnityEvents` that will react identically to the Class Events.
 
- * `OnXAxisChanged` - Emits the XAxisChanged class event.
- * `OnYAxisChanged` - Emits the YAxisChanged class event.
+ * All C# delegate events are mapped to a Unity Event with the `On` prefix. e.g. `MyEvent` -> `OnMyEvent`.
 
 ### Event Payload
 
@@ -1850,8 +1842,7 @@ The Player Climb allows player movement based on grabbing of `VRTK_InteractableO
 
 Adding the `VRTK_PlayerClimb_UnityEvents` component to `VRTK_PlayerClimb` object allows access to `UnityEvents` that will react identically to the Class Events.
 
- * `OnPlayerClimbStarted` - Emits the PlayerClimbStarted class event.
- * `OnPlayerClimbEnded` - Emits the PlayerClimbEnded class event.
+ * All C# delegate events are mapped to a Unity Event with the `On` prefix. e.g. `MyEvent` -> `OnMyEvent`.
 
 ### Event Payload
 
@@ -2155,55 +2146,7 @@ The script also has a public boolean pressed state for the buttons to allow the 
 
 Adding the `VRTK_ControllerEvents_UnityEvents` component to `VRTK_ControllerEvents` object allows access to `UnityEvents` that will react identically to the Class Events.
 
- * `OnTriggerPressed` - Emits the TriggerPressed class event.
- * `OnTriggerReleased` - Emits the TriggerReleased class event.
- * `OnTriggerTouchStart` - Emits the TriggerTouchStart class event.
- * `OnTriggerTouchEnd` - Emits the TriggerTouchEnd class event.
- * `OnTriggerHairlineStart` - Emits the TriggerHairlineStart class event.
- * `OnTriggerHairlineEnd` - Emits the TriggerHairlineEnd class event.
- * `OnTriggerClicked` - Emits the TriggerClicked class event.
- * `OnTriggerUnclicked` - Emits the TriggerUnclicked class event.
- * `OnTriggerAxisChanged` - Emits the TriggerAxisChanged class event.
- * `OnGripPressed` - Emits the GripPressed class event.
- * `OnGripReleased` - Emits the GripReleased class event.
- * `OnGripTouchStart` - Emits the GripTouchStart class event.
- * `OnGripTouchEnd` - Emits the GripTouchEnd class event.
- * `OnGripHairlineStart` - Emits the GripHairlineStart class event.
- * `OnGripHairlineEnd` - Emits the GripHairlineEnd class event.
- * `OnGripClicked` - Emits the GripClicked class event.
- * `OnGripUnclicked` - Emits the GripUnclicked class event.
- * `OnGripAxisChanged` - Emits the GripAxisChanged class event.
- * `OnTouchpadPressed` - Emits the TouchpadPressed class event.
- * `OnTouchpadReleased` - Emits the TouchpadReleased class event.
- * `OnTouchpadTouchStart` - Emits the TouchpadTouchStart class event.
- * `OnTouchpadTouchEnd` - Emits the TouchpadTouchEnd class event.
- * `OnTouchpadAxisChanged` - Emits the TouchpadAxisChanged class event.
- * `OnButtonOnePressed` - Emits the ButtonOnePressed class event.
- * `OnButtonOneReleased` - Emits the ButtonOneReleased class event.
- * `OnButtonOneTouchStart` - Emits the ButtonOneTouchStart class event.
- * `OnButtonOneTouchEnd` - Emits the ButtonOneTouchEnd class event.
- * `OnButtonTwoPressed` - Emits the ButtonTwoPressed class event.
- * `OnButtonTwoReleased` - Emits the ButtonTwoReleased class event.
- * `OnButtonTwoTouchStart` - Emits the ButtonTwoTouchStart class event.
- * `OnButtonTwoTouchEnd` - Emits the ButtonTwoTouchEnd class event.
- * `OnStartMenuPressed` - Emits the StartMenuPressed class event.
- * `OnStartMenuReleased` - Emits the StartMenuReleased class event.
- * `OnAliasPointerOn` - Emits the AliasPointerOn class event.
- * `OnAliasPointerOff` - Emits the AliasPointerOff class event.
- * `OnAliasPointerSet` - Emits the AliasPointerSet class event.
- * `OnAliasGrabOn` - Emits the AliasGrabOn class event.
- * `OnAliasGrabOff` - Emits the AliasGrabOff class event.
- * `OnAliasUseOn` - Emits the AliasUseOn class event.
- * `OnAliasUseOff` - Emits the AliasUseOff class event.
- * `OnAliasUIClickOn` - Emits the AliasMenuOn class event.
- * `OnAliasUIClickOff` - Emits the AliasMenuOff class event.
- * `OnAliasMenuOn` - Emits the AliasUIClickOn class event.
- * `OnAliasMenuOff` - Emits the AliasUIClickOff class event.
- * `OnControllerEnabled` - Emits the ControllerEnabled class event.
- * `OnControllerDisabled` - Emits the ControllerDisabled class event.
- * `OnControllerIndexChanged` - Emits the ControllerIndexChanged class event.
- * `OnControllerVisible` - Emits the ControllerVisible class event.
- * `OnControllerHidden` - Emits the ControllerHidden class event.
+ * All C# delegate events are mapped to a Unity Event with the `On` prefix. e.g. `MyEvent` -> `OnMyEvent`.
 
 ### Event Payload
 
@@ -2521,16 +2464,7 @@ The highlighting of an Interactable Object is defaulted to use the `VRTK_Materia
 
 Adding the `VRTK_InteractableObject_UnityEvents` component to `VRTK_InteractableObject` object allows access to `UnityEvents` that will react identically to the Class Events.
 
- * `OnTouch` - Emits the InteractableObjectTouched class event.
- * `OnUntouch` - Emits the InteractableObjectUntouched class event.
- * `OnGrab` - Emits the InteractableObjectGrabbed class event.
- * `OnUngrab` - Emits the InteractableObjectUngrabbed class event.
- * `OnUse` - Emits the InteractableObjectUsed class event.
- * `OnUnuse` - Emits the InteractableObjectUnused class event.
- * `OnEnterSnapDropZone` - Emits the InteractableObjectEnteredSnapDropZone class event.
- * `OnExitSnapDropZone` - Emits the InteractableObjectExitedSnapDropZone class event.
- * `OnSnapToDropZone` - Emits the InteractableObjectSnappedToDropZone class event.
- * `OnUnsnapFromDropZone` - Emits the InteractableObjectUnsnappedFromDropZone class event.
+ * All C# delegate events are mapped to a Unity Event with the `On` prefix. e.g. `MyEvent` -> `OnMyEvent`.
 
 ### Event Payload
 
@@ -2924,8 +2858,7 @@ A custom collider can be provided by the Custom Rigidbody Object parameter.
 
 Adding the `VRTK_InteractTouch_UnityEvents` component to `VRTK_InteractTouch` object allows access to `UnityEvents` that will react identically to the Class Events.
 
- * `OnControllerTouchInteractableObject` - Emits the ControllerTouchInteractableObject class event.
- * `OnControllerUntouchInteractableObject` - Emits the ControllerUntouchInteractableObject class event.
+ * All C# delegate events are mapped to a Unity Event with the `On` prefix. e.g. `MyEvent` -> `OnMyEvent`.
 
 ### Event Payload
 
@@ -3066,8 +2999,7 @@ The interactable objects require a collider to activate the trigger and a rigidb
 
 Adding the `VRTK_InteractGrab_UnityEvents` component to `VRTK_InteractGrab` object allows access to `UnityEvents` that will react identically to the Class Events.
 
- * `OnControllerGrabInteractableObject` - Emits the ControllerGrabInteractableObject class event.
- * `OnControllerUngrabInteractableObject` - Emits the ControllerUngrabInteractableObject class event.
+ * All C# delegate events are mapped to a Unity Event with the `On` prefix. e.g. `MyEvent` -> `OnMyEvent`.
 
 ### Event Payload
 
@@ -3160,8 +3092,7 @@ If a valid interactable object is usable then pressing the set `Use` button on t
 
 Adding the `VRTK_InteractUse_UnityEvents` component to `VRTK_InteractUse` object allows access to `UnityEvents` that will react identically to the Class Events.
 
- * `OnControllerUseInteractableObject` - Emits the ControllerUseInteractableObject class event.
- * `OnControllerUnuseInteractableObject` - Emits the ControllerUnuseInteractableObject class event.
+ * All C# delegate events are mapped to a Unity Event with the `On` prefix. e.g. `MyEvent` -> `OnMyEvent`.
 
 ### Event Payload
 
@@ -4455,8 +4386,7 @@ The Headset Collision script will automatically create a script on the headset t
 
 Adding the `VRTK_HeadsetCollision_UnityEvents` component to `VRTK_HeadsetCollision` object allows access to `UnityEvents` that will react identically to the Class Events.
 
- * `OnHeadsetCollisionDetect` - Emits the HeadsetCollisionDetect class event.
- * `OnHeadsetCollisionEnded` - Emits the HeadsetCollisionEnded class event.
+ * All C# delegate events are mapped to a Unity Event with the `On` prefix. e.g. `MyEvent` -> `OnMyEvent`.
 
 ### Event Payload
 
@@ -4501,10 +4431,7 @@ The `Fade` and `Unfade` methods can only be called via another script and this H
 
 Adding the `VRTK_HeadsetFade_UnityEvents` component to `VRTK_HeadsetFade` object allows access to `UnityEvents` that will react identically to the Class Events.
 
- * `OnHeadsetFadeStart` - Emits the HeadsetFadeStart class event.
- * `OnHeadsetFadeComplete` - Emits the HeadsetFadeComplete class event.
- * `OnHeadsetUnfadeStart` - Emits the HeadsetUnfadeStart class event.
- * `OnHeadsetUnfadeComplete` - Emits the HeadsetUnfadeComplete class event.
+ * All C# delegate events are mapped to a Unity Event with the `On` prefix. e.g. `MyEvent` -> `OnMyEvent`.
 
 ### Event Payload
 
@@ -4611,10 +4538,7 @@ The purpose of Headset Controller Aware is to allow the headset to know if somet
 
 Adding the `VRTK_HeadsetControllerAware_UnityEvents` component to `VRTK_HeadsetControllerAware` object allows access to `UnityEvents` that will react identically to the Class Events.
 
- * `OnControllerObscured` - Emits the ControllerObscured class event.
- * `OnControllerUnobscured` - Emits the ControllerUnobscured class event.
- * `OnControllerGlanceEnter` - Emits the ControllerGlanceEnter class event.
- * `OnControllerGlanceExit` - Emits the ControllerGlanceExit class event.
+ * All C# delegate events are mapped to a Unity Event with the `On` prefix. e.g. `MyEvent` -> `OnMyEvent`.
 
 ### Event Payload
 
@@ -4744,12 +4668,7 @@ To allow for peeking over a ledge and not falling, a fall restiction can happen 
 
 Adding the `VRTK_BodyPhysics_UnityEvents` component to `VRTK_BodyPhysics` object allows access to `UnityEvents` that will react identically to the Class Events.
 
- * `OnStartFalling` - Emits the StartFalling class event.
- * `OnStopFalling` - Emits the StopFalling class event.
- * `OnStartMoving` - Emits the StartMoving class event.
- * `OnStopMoving` - Emits the StopMoving class event.
- * `OnStartColliding` - Emits the StartColliding class event.
- * `OnStopColliding` - Emits the StopColliding class event.
+ * All C# delegate events are mapped to a Unity Event with the `On` prefix. e.g. `MyEvent` -> `OnMyEvent`.
 
 ### Event Payload
 
@@ -4947,11 +4866,7 @@ The UI pointer is activated via the `Pointer` alias on the `Controller Events` a
 
 Adding the `VRTK_UIPointer_UnityEvents` component to `VRTK_UIPointer` object allows access to `UnityEvents` that will react identically to the Class Events.
 
- * `OnUIPointerElementEnter` - Emits the UIPointerElementEnter class event.
- * `OnUIPointerElementExit` - Emits the UIPointerElementExit class event.
- * `OnUIPointerElementClick` - Emits the UIPointerElementClick class event.
- * `OnUIPointerElementDragStart` - Emits the UIPointerElementDragStart class event.
- * `OnUIPointerElementDragEnd` - Emits the UIPointerElementDragEnd class event.
+ * All C# delegate events are mapped to a Unity Event with the `On` prefix. e.g. `MyEvent` -> `OnMyEvent`.
 
 ### Event Payload
 
@@ -5136,7 +5051,7 @@ All 3D controls extend the `VRTK_Control` abstract class which provides a defaul
 
 Adding the `VRTK_Control_UnityEvents` component to `VRTK_Control` object allows access to `UnityEvents` that will react identically to the Class Events.
 
- * `OnValueChanged` - Emits the ValueChanged class event.
+ * All C# delegate events are mapped to a Unity Event with the `On` prefix. e.g. `MyEvent` -> `OnMyEvent`.
 
 ### Event Payload
 
@@ -5227,7 +5142,7 @@ The script will instantiate the required Rigidbody and ConstantForce components 
 
 Adding the `VRTK_Button_UnityEvents` component to `VRTK_Button` object allows access to `UnityEvents` that will react identically to the Class Events.
 
- * `OnPushed` - Emits the Pushed class event.
+ * All C# delegate events are mapped to a Unity Event with the `On` prefix. e.g. `MyEvent` -> `OnMyEvent`.
 
 ### Event Payload
 
@@ -6164,16 +6079,42 @@ The Mod method is used to find the remainder of the sum a/b.
 
 #### FindEvenInactiveGameObject<T>/1
 
-  > `public static GameObject FindEvenInactiveGameObject<T>(string gameObjectName = "") where T : Component`
+  > `public static GameObject FindEvenInactiveGameObject<T>(string gameObjectName = null) where T : Component`
 
   * Type Params
    * `GameObject` - The component type that needs to be on an ancestor of the wanted . Must be a subclass of .
   * Parameters
-   * `string gameObjectName` - The name of the wanted . If it contains a '/' character, this method traverses the hierarchy like a path name.
+   * `string gameObjectName` - The name of the wanted . If it contains a '/' character, this method traverses the hierarchy like a path name, beginning on the game object that has a component of type .
   * Returns
-   * `GameObject` - The  with name  and an ancestor that has a . If no  is found  is returned.
+   * `GameObject` - The  with name  and an ancestor that has a . If no such  is found  is returned.
 
-Finds all  s with a given name and an ancestor that has a specific component. This method returns active as well as inactive  s in the scene. It doesn't return assets. For performance reasons it is recommended to not use this function every frame. Cache the result in a member variable at startup instead.
+Finds the first  with a given name and an ancestor that has a specific component. This method returns active as well as inactive  s in the scene. It doesn't return assets. For performance reasons it is recommended to not use this function every frame. Cache the result in a member variable at startup instead.
+
+#### FindEvenInactiveComponents<T>/0
+
+  > `public static T[] FindEvenInactiveComponents<T>() where T : Object`
+
+  * Type Params
+   * `T[]` - The component type to search for. Must be a subclass of .
+  * Parameters
+   * _none_
+  * Returns
+   * `T[]` - All the found components. If no component is found an empty array is returned.
+
+Finds all components of a given type. This method returns components from active as well as inactive  s in the scene. It doesn't return assets. For performance reasons it is recommended to not use this function every frame. Cache the result in a member variable at startup instead.
+
+#### FindEvenInactiveComponent<T>/0
+
+  > `public static T FindEvenInactiveComponent<T>() where T : Component`
+
+  * Type Params
+   * `T` - The component type to search for. Must be a subclass of .
+  * Parameters
+   * _none_
+  * Returns
+   * `T` - The found component. If no component is found  is returned.
+
+Finds the first component of a given type. This method returns components from active as well as inactive  s in the scene. It doesn't return assets. For performance reasons it is recommended to not use this function every frame. Cache the result in a member variable at startup instead.
 
 ---
 

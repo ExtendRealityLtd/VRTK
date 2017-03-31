@@ -28,9 +28,6 @@ namespace VRTK
         [Obsolete("`VRTK_Control.ButtonEvents` has been replaced with delegate events. `VRTK_Button_UnityEvents` is now required to access Unity events. This method will be removed in a future version of VRTK.")]
         public class ButtonEvents
         {
-            /// <summary>
-            /// Emitted when the button is successfully pushed.
-            /// </summary>
             public UnityEvent OnPush;
         }
 
