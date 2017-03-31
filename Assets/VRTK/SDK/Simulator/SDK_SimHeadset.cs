@@ -137,7 +137,10 @@ namespace VRTK
         /// <param name="camera">The Transform to with the camera on to add the fade functionality to.</param>
         public override void AddHeadsetFade(Transform camera)
         {
-
+            if (camera && !camera.GetComponent<VRTK_ScreenFade>())
+            {
+                camera.gameObject.AddComponent<VRTK_ScreenFade>();
+            }
         }
 
         private void Awake()
