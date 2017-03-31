@@ -68,16 +68,7 @@ namespace VRTK
         /// <returns>A transform of the object holding the headset camera in the scene.</returns>
         public override Transform GetHeadsetCamera()
         {
-            if (camera == null)
-            {
-                GameObject simPlayer = SDK_InputSimulator.FindInScene();
-                if (simPlayer)
-                {
-                    camera = simPlayer.transform.FindChild("Camera");
-                }
-            }
-
-            return camera;
+            return GetHeadset();
         }
 
         /// <summary>
