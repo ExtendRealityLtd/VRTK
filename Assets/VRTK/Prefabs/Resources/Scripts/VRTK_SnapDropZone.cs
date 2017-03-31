@@ -41,7 +41,6 @@ namespace VRTK
     /// `VRTK/Examples/041_Controller_ObjectSnappingToDropZones` uses the `VRTK_SnapDropZone` prefab to set up pre-determined snap zones for a range of objects and demonstrates how only objects of certain types can be snapped into certain areas.
     /// </example>
     [ExecuteInEditMode]
-    [RequireComponent(typeof(Rigidbody))]
     public class VRTK_SnapDropZone : MonoBehaviour
     {
         /// <summary>
