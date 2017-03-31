@@ -10,7 +10,8 @@ namespace VRTK
     [SDK_Description(typeof(SDK_SimSystem))]
     public class SDK_SimController : SDK_BaseController
     {
-        private SimControllers controllers;
+        private SDK_ControllerSim rightController;
+        private SDK_ControllerSim leftController;
         private Dictionary<string, KeyCode> keyMappings = new Dictionary<string, KeyCode>()
         {
             {"Trigger", KeyCode.Mouse1 },
@@ -126,9 +127,9 @@ namespace VRTK
             switch (index)
             {
                 case 1:
-                    return controllers.rightHand.gameObject;
+                    return rightController.gameObject;
                 case 2:
-                    return controllers.leftHand.gameObject;
+                    return leftController.gameObject;
                 default:
                     return null;
             }
@@ -343,9 +344,9 @@ namespace VRTK
             switch (index)
             {
                 case 1:
-                    return controllers.rightController.GetVelocity();
+                    return rightController.GetVelocity();
                 case 2:
-                    return controllers.leftController.GetVelocity();
+                    return leftController.GetVelocity();
                 default:
                     return Vector3.zero;
             }
@@ -361,9 +362,9 @@ namespace VRTK
             switch (index)
             {
                 case 1:
-                    return controllers.rightController.GetAngularVelocity();
+                    return rightController.GetAngularVelocity();
                 case 2:
-                    return controllers.leftController.GetAngularVelocity();
+                    return leftController.GetAngularVelocity();
                 default:
                     return Vector3.zero;
             }
@@ -843,7 +844,12 @@ namespace VRTK
 
         private void OnEnable()
         {
-            controllers = new SimControllers();
+            GameObject simPlayer = SDK_InputSimulator.FindInScene();
+            if (simPlayer != null)
+            {
+                rightController = simPlayer.transform.FindChild(RIGHT_HAND_CONTROLLER_NAME).GetComponent<SDK_ControllerSim>();
+                leftController = simPlayer.transform.FindChild(LEFT_HAND_CONTROLLER_NAME).GetComponent<SDK_ControllerSim>();
+            }
         }
 
         /// <summary>
@@ -907,14 +913,14 @@ namespace VRTK
 
             if (index == 1)
             {
-                if (!controllers.rightController.Selected)
+                if (!rightController.Selected)
                 {
                     return false;
                 }
             }
             else if (index == 2)
             {
-                if (!controllers.leftController.Selected)
+                if (!leftController.Selected)
                 {
                     return false;
                 }
@@ -934,25 +940,6 @@ namespace VRTK
                     return Input.GetKeyUp(button);
             }
             return false;
-        }
-
-        private class SimControllers
-        {
-            public Transform rightHand;
-            public Transform leftHand;
-            public SDK_ControllerSim rightController;
-            public SDK_ControllerSim leftController;
-            public SimControllers()
-            {
-                GameObject simPlayer = SDK_InputSimulator.FindInScene();
-                if (simPlayer)
-                {
-                    rightHand = simPlayer.transform.FindChild(RIGHT_HAND_CONTROLLER_NAME);
-                    leftHand = simPlayer.transform.FindChild(LEFT_HAND_CONTROLLER_NAME);
-                    rightController = rightHand.GetComponent<SDK_ControllerSim>();
-                    leftController = leftHand.GetComponent<SDK_ControllerSim>();
-                }
-            }
         }
     }
 }
