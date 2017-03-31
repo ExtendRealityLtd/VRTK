@@ -38,6 +38,7 @@ A collection of titles that have been made with VRTK.
 | Percussive VR | [Steam Store Page](http://store.steampowered.com/app/536370) |
 | Beach Bowling Dream VR | [Steam Store Page](http://store.steampowered.com/app/557960) |
 | Welcome Home, Love | [Steam Store Page](http://store.steampowered.com/app/553050) |
+| Fort Awesome | [Steam Store Page](http://store.steampowered.com/app/594120) |
 | Coinvault | [Itch.io Store Page](https://ldvr.itch.io/ldvrs-coinvault-for-the-vive) |
 | VR Explosive Kitten Toss | [Itch.io Store Page](https://ldvr.itch.io/ldvrs-kitten-toss) |
 | Zika VR | [Itch.io Store Page](https://ldvr.itch.io/ldvr-presents-zika-vr) |
