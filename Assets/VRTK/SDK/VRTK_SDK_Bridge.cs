@@ -422,6 +422,16 @@
             return GetBoundariesSDK().IsPlayAreaSizeCalibrated(playArea);
         }
 
+        public static bool GetDrawAtRuntime()
+        {
+            return GetBoundariesSDK().GetDrawAtRuntime();
+        }
+
+        public static void SetDrawAtRuntime(bool value)
+        {
+            GetBoundariesSDK().SetDrawAtRuntime(value);
+        }
+
         public static bool IsDisplayOnDesktop()
         {
             return GetSystemSDK().IsDisplayOnDesktop();

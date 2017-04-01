@@ -3001,11 +3001,6 @@ Adding the `VRTK_InteractGrab_UnityEvents` component to `VRTK_InteractGrab` obje
 
  * All C# delegate events are mapped to a Unity Event with the `On` prefix. e.g. `MyEvent` -> `OnMyEvent`.
 
-### Event Payload
-
- * `uint controllerIndex` - The index of the controller doing the interaction.
- * `GameObject target` - The GameObject of the interactable object that is being interacted with by the controller.
-
 ### Class Methods
 
 #### IsGrabButtonPressed/0
@@ -3093,11 +3088,6 @@ If a valid interactable object is usable then pressing the set `Use` button on t
 Adding the `VRTK_InteractUse_UnityEvents` component to `VRTK_InteractUse` object allows access to `UnityEvents` that will react identically to the Class Events.
 
  * All C# delegate events are mapped to a Unity Event with the `On` prefix. e.g. `MyEvent` -> `OnMyEvent`.
-
-### Event Payload
-
- * `uint controllerIndex` - The index of the controller doing the interaction.
- * `GameObject target` - The GameObject of the interactable object that is being interacted with by the controller.
 
 ### Class Methods
 
@@ -7580,6 +7570,28 @@ The GetPlayAreaBorderThickness returns the thickness of the drawn border for the
 
 The IsPlayAreaSizeCalibrated method returns whether the given play area size has been auto calibrated by external sensors.
 
+#### GetDrawAtRuntime/0
+
+  > `public abstract bool GetDrawAtRuntime();`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `bool` - Returns true if the drawn border is being displayed.
+
+The GetDrawAtRuntime method returns whether the given play area drawn border is being displayed.
+
+#### SetDrawAtRuntime/1
+
+  > `public abstract void SetDrawAtRuntime(bool value);`
+
+  * Parameters
+   * `bool value` - The state of whether the drawn border should be displayed or not.
+  * Returns
+   * _none_
+
+The SetDrawAtRuntime method sets whether the given play area drawn border should be displayed at runtime.
+
 ---
 
 # Fallback SDK (VRTK/SDK/Fallback)
@@ -8578,6 +8590,28 @@ The GetPlayAreaBorderThickness returns the thickness of the drawn border for the
 
 The IsPlayAreaSizeCalibrated method returns whether the given play area size has been auto calibrated by external sensors.
 
+#### GetDrawAtRuntime/0
+
+  > `public override bool GetDrawAtRuntime()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `bool` - Returns true if the drawn border is being displayed.
+
+The GetDrawAtRuntime method returns whether the given play area drawn border is being displayed.
+
+#### SetDrawAtRuntime/1
+
+  > `public override void SetDrawAtRuntime(bool value)`
+
+  * Parameters
+   * `bool value` - The state of whether the drawn border should be displayed or not.
+  * Returns
+   * _none_
+
+The SetDrawAtRuntime method sets whether the given play area drawn border should be displayed at runtime.
+
 ---
 
 # Simulator SDK (VRTK/SDK/Simulator)
@@ -9567,6 +9601,28 @@ The GetPlayAreaBorderThickness returns the thickness of the drawn border for the
    * `bool` - Returns true if the play area size has been auto calibrated and set by external sensors.
 
 The IsPlayAreaSizeCalibrated method returns whether the given play area size has been auto calibrated by external sensors.
+
+#### GetDrawAtRuntime/0
+
+  > `public override bool GetDrawAtRuntime()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `bool` - Returns true if the drawn border is being displayed.
+
+The GetDrawAtRuntime method returns whether the given play area drawn border is being displayed.
+
+#### SetDrawAtRuntime/1
+
+  > `public override void SetDrawAtRuntime(bool value)`
+
+  * Parameters
+   * `bool value` - The state of whether the drawn border should be displayed or not.
+  * Returns
+   * _none_
+
+The SetDrawAtRuntime method sets whether the given play area drawn border should be displayed at runtime.
 
 ---
 
@@ -10567,6 +10623,28 @@ The GetPlayAreaBorderThickness returns the thickness of the drawn border for the
 
 The IsPlayAreaSizeCalibrated method returns whether the given play area size has been auto calibrated by external sensors.
 
+#### GetDrawAtRuntime/0
+
+  > `public override bool GetDrawAtRuntime()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `bool` - Returns true if the drawn border is being displayed.
+
+The GetDrawAtRuntime method returns whether the given play area drawn border is being displayed.
+
+#### SetDrawAtRuntime/1
+
+  > `public override void SetDrawAtRuntime(bool value)`
+
+  * Parameters
+   * `bool value` - The state of whether the drawn border should be displayed or not.
+  * Returns
+   * _none_
+
+The SetDrawAtRuntime method sets whether the given play area drawn border should be displayed at runtime.
+
 ---
 
 # OculusVR SDK (VRTK/SDK/OculusVR)
@@ -11566,6 +11644,28 @@ The GetPlayAreaBorderThickness returns the thickness of the drawn border for the
    * `bool` - Returns true if the play area size has been auto calibrated and set by external sensors.
 
 The IsPlayAreaSizeCalibrated method returns whether the given play area size has been auto calibrated by external sensors.
+
+#### GetDrawAtRuntime/0
+
+  > `public override bool GetDrawAtRuntime()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `bool` - Returns true if the drawn border is being displayed.
+
+The GetDrawAtRuntime method returns whether the given play area drawn border is being displayed.
+
+#### SetDrawAtRuntime/1
+
+  > `public override void SetDrawAtRuntime(bool value)`
+
+  * Parameters
+   * `bool value` - The state of whether the drawn border should be displayed or not.
+  * Returns
+   * _none_
+
+The SetDrawAtRuntime method sets whether the given play area drawn border should be displayed at runtime.
 
 #### GetAvatar/0
 
@@ -12577,6 +12677,28 @@ The GetPlayAreaBorderThickness returns the thickness of the drawn border for the
 
 The IsPlayAreaSizeCalibrated method returns whether the given play area size has been auto calibrated by external sensors.
 
+#### GetDrawAtRuntime/0
+
+  > `public override bool GetDrawAtRuntime()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `bool` - Returns true if the drawn border is being displayed.
+
+The GetDrawAtRuntime method returns whether the given play area drawn border is being displayed.
+
+#### SetDrawAtRuntime/1
+
+  > `public override void SetDrawAtRuntime(bool value)`
+
+  * Parameters
+   * `bool value` - The state of whether the drawn border should be displayed or not.
+  * Returns
+   * _none_
+
+The SetDrawAtRuntime method sets whether the given play area drawn border should be displayed at runtime.
+
 ---
 
 # XimmerseVR SDK (VRTK/SDK/Ximmerse)
@@ -13575,6 +13697,28 @@ The GetPlayAreaBorderThickness returns the thickness of the drawn border for the
    * `bool` - Returns true if the play area size has been auto calibrated and set by external sensors.
 
 The IsPlayAreaSizeCalibrated method returns whether the given play area size has been auto calibrated by external sensors.
+
+#### GetDrawAtRuntime/0
+
+  > `public override bool GetDrawAtRuntime()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `bool` - Returns true if the drawn border is being displayed.
+
+The GetDrawAtRuntime method returns whether the given play area drawn border is being displayed.
+
+#### SetDrawAtRuntime/1
+
+  > `public override void SetDrawAtRuntime(bool value)`
+
+  * Parameters
+   * `bool value` - The state of whether the drawn border should be displayed or not.
+  * Returns
+   * _none_
+
+The SetDrawAtRuntime method sets whether the given play area drawn border should be displayed at runtime.
 
 ---
 
