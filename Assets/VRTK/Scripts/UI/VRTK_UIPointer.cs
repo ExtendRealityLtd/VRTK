@@ -113,6 +113,23 @@ namespace VRTK
         public bool collisionClick = false;
 
         /// <summary>
+        /// Emitted when the UI activation button is pressed.
+        /// </summary>
+        public event ControllerInteractionEventHandler ActivationButtonPressed;
+        /// <summary>
+        /// Emitted when the UI activation button is released.
+        /// </summary>
+        public event ControllerInteractionEventHandler ActivationButtonReleased;
+        /// <summary>
+        /// Emitted when the UI selection button is pressed.
+        /// </summary>
+        public event ControllerInteractionEventHandler SelectionButtonPressed;
+        /// <summary>
+        /// Emitted when the UI selection button is released.
+        /// </summary>
+        public event ControllerInteractionEventHandler SelectionButtonReleased;
+
+        /// <summary>
         /// Emitted when the UI Pointer is colliding with a valid UI element.
         /// </summary>
         public event UIPointerEventHandler UIPointerElementEnter;
@@ -208,6 +225,38 @@ namespace VRTK
             }
         }
 
+        public virtual void OnActivationButtonPressed(ControllerInteractionEventArgs e)
+        {
+            if (ActivationButtonPressed != null)
+            {
+                ActivationButtonPressed(this, e);
+            }
+        }
+
+        public virtual void OnActivationButtonReleased(ControllerInteractionEventArgs e)
+        {
+            if (ActivationButtonReleased != null)
+            {
+                ActivationButtonReleased(this, e);
+            }
+        }
+
+        public virtual void OnSelectionButtonPressed(ControllerInteractionEventArgs e)
+        {
+            if (SelectionButtonPressed != null)
+            {
+                SelectionButtonPressed(this, e);
+            }
+        }
+
+        public virtual void OnSelectionButtonReleased(ControllerInteractionEventArgs e)
+        {
+            if (SelectionButtonReleased != null)
+            {
+                SelectionButtonReleased(this, e);
+            }
+        }
+
         public virtual UIPointerEventArgs SetUIPointerEvent(RaycastResult currentRaycastResult, GameObject currentTarget, GameObject lastTarget = null)
         {
             UIPointerEventArgs e;
@@ -268,12 +317,12 @@ namespace VRTK
             }
             else if (activationMode == ActivationMethods.HoldButton)
             {
-                return (controller != null ? controller.IsButtonPressed(activationButton) : false);
+                return IsActivationButtonPressed();
             }
             else
             {
                 pointerClicked = false;
-                if (controller != null && controller.IsButtonPressed(activationButton) && !lastPointerPressState)
+                if (IsActivationButtonPressed() && !lastPointerPressState)
                 {
                     pointerClicked = true;
                 }
@@ -289,10 +338,19 @@ namespace VRTK
         }
 
         /// <summary>
-        /// The SelectionButtonActive method is used to determine if the configured selection button is currently in the active state.
+        /// The IsActivationButtonPressed method is used to determine if the configured activation button is currently in the active state.
+        /// </summary>
+        /// <returns>Returns true if the activation button is active.</returns>
+        public virtual bool IsActivationButtonPressed()
+        {
+            return (controller != null ? controller.IsButtonPressed(activationButton) : false);
+        }
+
+        /// <summary>
+        /// The IsSelectionButtonPressed method is used to determine if the configured selection button is currently in the active state.
         /// </summary>
         /// <returns>Returns true if the selection button is active.</returns>
-        public virtual bool SelectionButtonActive()
+        public virtual bool IsSelectionButtonPressed()
         {
             return (controller != null ? controller.IsButtonPressed(selectionButton) : false);
         }
@@ -305,7 +363,7 @@ namespace VRTK
         /// <returns>Returns true if the UI Click button is in a valid state to action a click, returns false if it is not in a valid state.</returns>
         public virtual bool ValidClick(bool checkLastClick, bool lastClickState = false)
         {
-            var controllerClicked = (collisionClick ? collisionClick : SelectionButtonActive());
+            var controllerClicked = (collisionClick ? collisionClick : IsSelectionButtonPressed());
             var result = (checkLastClick ? controllerClicked && lastPointerClickState == lastClickState : controllerClicked);
             lastPointerClickState = controllerClicked;
             return result;
@@ -343,6 +401,10 @@ namespace VRTK
             if (controller != null)
             {
                 controllerRenderModel = VRTK_SDK_Bridge.GetControllerRenderModel(controller.gameObject);
+                controller.SubscribeToButtonAliasEvent(activationButton, true, DoActivationButtonPressed);
+                controller.SubscribeToButtonAliasEvent(activationButton, false, DoActivationButtonReleased);
+                controller.SubscribeToButtonAliasEvent(selectionButton, true, DoSelectionButtonPressed);
+                controller.SubscribeToButtonAliasEvent(selectionButton, false, DoSelectionButtonReleased);
             }
         }
 
@@ -352,6 +414,14 @@ namespace VRTK
             {
                 cachedVRInputModule.pointers.Remove(this);
             }
+
+            if (controller != null)
+            {
+                controller.UnsubscribeToButtonAliasEvent(activationButton, true, DoActivationButtonPressed);
+                controller.UnsubscribeToButtonAliasEvent(activationButton, false, DoActivationButtonReleased);
+                controller.UnsubscribeToButtonAliasEvent(selectionButton, true, DoSelectionButtonPressed);
+                controller.UnsubscribeToButtonAliasEvent(selectionButton, false, DoSelectionButtonReleased);
+            }
         }
 
         protected virtual void LateUpdate()
@@ -360,6 +430,26 @@ namespace VRTK
             {
                 pointerEventData.pointerId = (int)VRTK_DeviceFinder.GetControllerIndex(controller.gameObject);
             }
+        }
+
+        protected virtual void DoActivationButtonPressed(object sender, ControllerInteractionEventArgs e)
+        {
+            OnActivationButtonPressed(controller.SetControllerEvent());
+        }
+
+        protected virtual void DoActivationButtonReleased(object sender, ControllerInteractionEventArgs e)
+        {
+            OnActivationButtonReleased(controller.SetControllerEvent());
+        }
+
+        protected virtual void DoSelectionButtonPressed(object sender, ControllerInteractionEventArgs e)
+        {
+            OnSelectionButtonPressed(controller.SetControllerEvent());
+        }
+
+        protected virtual void DoSelectionButtonReleased(object sender, ControllerInteractionEventArgs e)
+        {
+            OnSelectionButtonReleased(controller.SetControllerEvent());
         }
 
         protected virtual void ResetHoverTimer()

@@ -49,6 +49,15 @@ namespace VRTK
         public VRTK_InteractTouch interactTouch;
 
         /// <summary>
+        /// Emitted when the grab button is pressed.
+        /// </summary>
+        public event ControllerInteractionEventHandler GrabButtonPressed;
+        /// <summary>
+        /// Emitted when the grab button is released.
+        /// </summary>
+        public event ControllerInteractionEventHandler GrabButtonReleased;
+
+        /// <summary>
         /// Emitted when a valid object is grabbed.
         /// </summary>
         public event ObjectInteractEventHandler ControllerGrabInteractableObject;
@@ -80,6 +89,22 @@ namespace VRTK
             if (ControllerUngrabInteractableObject != null)
             {
                 ControllerUngrabInteractableObject(this, e);
+            }
+        }
+
+        public virtual void OnGrabButtonPressed(ControllerInteractionEventArgs e)
+        {
+            if (GrabButtonPressed != null)
+            {
+                GrabButtonPressed(this, e);
+            }
+        }
+
+        public virtual void OnGrabButtonReleased(ControllerInteractionEventArgs e)
+        {
+            if (GrabButtonReleased != null)
+            {
+                GrabButtonReleased(this, e);
             }
         }
 
@@ -479,14 +504,14 @@ namespace VRTK
 
         protected virtual void DoGrabObject(object sender, ControllerInteractionEventArgs e)
         {
-            grabPressed = true;
+            OnGrabButtonPressed(controllerEvents.SetControllerEvent(ref grabPressed, true));
             AttemptGrabObject();
         }
 
         protected virtual void DoReleaseObject(object sender, ControllerInteractionEventArgs e)
         {
             AttemptReleaseObject();
-            grabPressed = false;
+            OnGrabButtonReleased(controllerEvents.SetControllerEvent(ref grabPressed, false));
         }
 
         protected virtual void CheckControllerAttachPointSet()

@@ -37,6 +37,15 @@ namespace VRTK
         public VRTK_InteractGrab interactGrab;
 
         /// <summary>
+        /// Emitted when the use toggle alias button is pressed.
+        /// </summary>
+        public event ControllerInteractionEventHandler UseButtonPressed;
+        /// <summary>
+        /// Emitted when the use toggle alias button is released.
+        /// </summary>
+        public event ControllerInteractionEventHandler UseButtonReleased;
+
+        /// <summary>
         /// Emitted when a valid object starts being used.
         /// </summary>
         public event ObjectInteractEventHandler ControllerUseInteractableObject;
@@ -64,6 +73,22 @@ namespace VRTK
             if (ControllerUnuseInteractableObject != null)
             {
                 ControllerUnuseInteractableObject(this, e);
+            }
+        }
+
+        public virtual void OnUseButtonPressed(ControllerInteractionEventArgs e)
+        {
+            if (UseButtonPressed != null)
+            {
+                UseButtonPressed(this, e);
+            }
+        }
+
+        public virtual void OnUseButtonReleased(ControllerInteractionEventArgs e)
+        {
+            if (UseButtonReleased != null)
+            {
+                UseButtonReleased(this, e);
             }
         }
 
@@ -340,7 +365,7 @@ namespace VRTK
 
         protected virtual void DoStartUseObject(object sender, ControllerInteractionEventArgs e)
         {
-            usePressed = true;
+            OnUseButtonPressed(controllerEvents.SetControllerEvent(ref usePressed, true));
             AttemptUseObject();
         }
 
@@ -350,7 +375,7 @@ namespace VRTK
             {
                 StopUsing();
             }
-            usePressed = false;
+            OnUseButtonReleased(controllerEvents.SetControllerEvent(ref usePressed, false));
         }
     }
 }

@@ -218,30 +218,31 @@ namespace VRTK
         /// This will be true if the button aliased to the pointer is held down.
         /// </summary>
         [HideInInspector]
-        [Obsolete("`VRTK_ControllerEvents.pointerPressed` is no longer used. This parameter will be removed in a future version of VRTK.")]
+        [Obsolete("`VRTK_ControllerEvents.pointerPressed` is no longer used, use `VRTK_Pointer.IsActivationButtonPressed()` instead. This parameter will be removed in a future version of VRTK.")]
         public bool pointerPressed = false;
         /// <summary>
         /// This will be true if the button aliased to the grab is held down.
         /// </summary>
         [HideInInspector]
-        [Obsolete("`VRTK_ControllerEvents.grabPressed` is no longer used. This parameter will be removed in a future version of VRTK.")]
+        [Obsolete("`VRTK_ControllerEvents.grabPressed` is no longer used, use `VRTK_InteractGrab.IsGrabButtonPressed()` instead. This parameter will be removed in a future version of VRTK.")]
         public bool grabPressed = false;
         /// <summary>
         /// This will be true if the button aliased to the use is held down.
         /// </summary>
         [HideInInspector]
-        [Obsolete("`VRTK_ControllerEvents.usePressed` is no longer used. This parameter will be removed in a future version of VRTK.")]
+        [Obsolete("`VRTK_ControllerEvents.usePressed` is no longer used, use `VRTK_InteractUse.IsUseButtonPressed()` instead. This parameter will be removed in a future version of VRTK.")]
         public bool usePressed = false;
         /// <summary>
         /// This will be true if the button aliased to the UI click is held down.
         /// </summary>
         [HideInInspector]
-        [Obsolete("`VRTK_ControllerEvents.uiClickPressed` is no longer used. This parameter will be removed in a future version of VRTK.")]
+        [Obsolete("`VRTK_ControllerEvents.uiClickPressed` is no longer used, use `VRTK_UIPointer.IsSelectionButtonPressed()` instead. This parameter will be removed in a future version of VRTK.")]
         public bool uiClickPressed = false;
         /// <summary>
         /// This will be true if the button aliased to the menu is held down.
         /// </summary>
         [HideInInspector]
+        [Obsolete("`VRTK_ControllerEvents.menuPressed` is no longer used, use `VRTK_ControllerEvents.buttonTwoPressed` instead. This parameter will be removed in a future version of VRTK.")]
         public bool menuPressed = false;
 
         /// <summary>
@@ -401,61 +402,61 @@ namespace VRTK
         /// <summary>
         /// Emitted when the pointer toggle alias button is pressed.
         /// </summary>
-        [Obsolete("`VRTK_ControllerEvents.AliasPointerOn` is no longer used. This parameter will be removed in a future version of VRTK.")]
+        [Obsolete("`VRTK_ControllerEvents.AliasPointerOn` has been replaced with `VRTK_Pointer.ActivationButtonPressed`. This parameter will be removed in a future version of VRTK.")]
         public event ControllerInteractionEventHandler AliasPointerOn;
         /// <summary>
         /// Emitted when the pointer toggle alias button is released.
         /// </summary>
-        [Obsolete("`VRTK_ControllerEvents.AliasPointerOff` is no longer used. This parameter will be removed in a future version of VRTK.")]
+        [Obsolete("`VRTK_ControllerEvents.AliasPointerOff` has been replaced with `VRTK_Pointer.ActivationButtonReleased`. This parameter will be removed in a future version of VRTK.")]
         public event ControllerInteractionEventHandler AliasPointerOff;
         /// <summary>
         /// Emitted when the pointer set alias button is released.
         /// </summary>
-        [Obsolete("`VRTK_ControllerEvents.AliasPointerSet` is no longer used. This parameter will be removed in a future version of VRTK.")]
+        [Obsolete("`VRTK_ControllerEvents.AliasPointerSet` has been replaced with `VRTK_Pointer.SelectionButtonReleased`. This parameter will be removed in a future version of VRTK.")]
         public event ControllerInteractionEventHandler AliasPointerSet;
 
         /// <summary>
         /// Emitted when the grab toggle alias button is pressed.
         /// </summary>
-        [Obsolete("`VRTK_ControllerEvents.AliasGrabOn` is no longer used. This parameter will be removed in a future version of VRTK.")]
+        [Obsolete("`VRTK_ControllerEvents.AliasGrabOn` has been replaced with `VRTK_InteractGrab.GrabButtonPressed`. This parameter will be removed in a future version of VRTK.")]
         public event ControllerInteractionEventHandler AliasGrabOn;
         /// <summary>
         /// Emitted when the grab toggle alias button is released.
         /// </summary>
-        [Obsolete("`VRTK_ControllerEvents.AliasGrabOff` is no longer used. This parameter will be removed in a future version of VRTK.")]
+        [Obsolete("`VRTK_ControllerEvents.AliasGrabOff` has been replaced with `VRTK_InteractGrab.GrabButtonReleased`. This parameter will be removed in a future version of VRTK.")]
         public event ControllerInteractionEventHandler AliasGrabOff;
 
         /// <summary>
         /// Emitted when the use toggle alias button is pressed.
         /// </summary>
-        [Obsolete("`VRTK_ControllerEvents.AliasUseOn` is no longer used. This parameter will be removed in a future version of VRTK.")]
+        [Obsolete("`VRTK_ControllerEvents.AliasUseOn` has been replaced with `VRTK_InteractUse.UseButtonPressed`. This parameter will be removed in a future version of VRTK.")]
         public event ControllerInteractionEventHandler AliasUseOn;
         /// <summary>
         /// Emitted when the use toggle alias button is released.
         /// </summary>
-        [Obsolete("`VRTK_ControllerEvents.AliasUseOff` is no longer used. This parameter will be removed in a future version of VRTK.")]
+        [Obsolete("`VRTK_ControllerEvents.AliasUseOff` has been replaced with `VRTK_InteractUse.UseButtonReleased`. This parameter will be removed in a future version of VRTK.")]
         public event ControllerInteractionEventHandler AliasUseOff;
 
         /// <summary>
         /// Emitted when the menu toggle alias button is pressed.
         /// </summary>
-        [Obsolete("`VRTK_ControllerEvents.AliasMenuOn` is no longer used. This parameter will be removed in a future version of VRTK.")]
+        [Obsolete("`VRTK_ControllerEvents.AliasMenuOn` is no longer used, use `VRTK_ControllerEvents.ButtonTwoPressed` instead. This parameter will be removed in a future version of VRTK.")]
         public event ControllerInteractionEventHandler AliasMenuOn;
         /// <summary>
         /// Emitted when the menu toggle alias button is released.
         /// </summary>
-        [Obsolete("`VRTK_ControllerEvents.AliasMenuOff` is no longer used. This parameter will be removed in a future version of VRTK.")]
+        [Obsolete("`VRTK_ControllerEvents.AliasMenuOff` is no longer used, use `VRTK_ControllerEvents.ButtonTwoReleased` instead. This parameter will be removed in a future version of VRTK.")]
         public event ControllerInteractionEventHandler AliasMenuOff;
 
         /// <summary>
         /// Emitted when the UI click alias button is pressed.
         /// </summary>
-        [Obsolete("`VRTK_ControllerEvents.AliasUIClickOn` is no longer used. This parameter will be removed in a future version of VRTK.")]
+        [Obsolete("`VRTK_ControllerEvents.AliasUIClickOn` has been replaced with `VRTK_UIPointer.SelectionButtonPressed`. This parameter will be removed in a future version of VRTK.")]
         public event ControllerInteractionEventHandler AliasUIClickOn;
         /// <summary>
         /// Emitted when the UI click alias button is released.
         /// </summary>
-        [Obsolete("`VRTK_ControllerEvents.AliasUIClickOff` is no longer used. This parameter will be removed in a future version of VRTK.")]
+        [Obsolete("`VRTK_ControllerEvents.AliasUIClickOff` has been replaced with `VRTK_UIPointer.SelectionButtonReleased`. This parameter will be removed in a future version of VRTK.")]
         public event ControllerInteractionEventHandler AliasUIClickOff;
 
         /// <summary>
@@ -750,6 +751,7 @@ namespace VRTK
             }
         }
 
+        [Obsolete("`VRTK_ControllerEvents.OnAliasPointerOn` has been replaced with `VRTK_Pointer.OnActivationButtonPressed`. This method will be removed in a future version of VRTK.")]
         public virtual void OnAliasPointerOn(ControllerInteractionEventArgs e)
         {
             if (AliasPointerOn != null)
@@ -758,6 +760,7 @@ namespace VRTK
             }
         }
 
+        [Obsolete("`VRTK_ControllerEvents.OnAliasPointerOff` has been replaced with `VRTK_Pointer.OnActivationButtonReleased`. This method will be removed in a future version of VRTK.")]
         public virtual void OnAliasPointerOff(ControllerInteractionEventArgs e)
         {
             if (AliasPointerOff != null)
@@ -766,6 +769,7 @@ namespace VRTK
             }
         }
 
+        [Obsolete("`VRTK_ControllerEvents.OnAliasPointerSet` has been replaced with `VRTK_Pointer.OnSelectionButtonReleased`. This method will be removed in a future version of VRTK.")]
         public virtual void OnAliasPointerSet(ControllerInteractionEventArgs e)
         {
             if (AliasPointerSet != null)
@@ -774,6 +778,7 @@ namespace VRTK
             }
         }
 
+        [Obsolete("`VRTK_ControllerEvents.OnAliasGrabOn` has been replaced with `VRTK_InteractGrab.OnGrabButtonPressed`. This method will be removed in a future version of VRTK.")]
         public virtual void OnAliasGrabOn(ControllerInteractionEventArgs e)
         {
             if (AliasGrabOn != null)
@@ -782,6 +787,7 @@ namespace VRTK
             }
         }
 
+        [Obsolete("`VRTK_ControllerEvents.OnAliasGrabOff` has been replaced with `VRTK_InteractGrab.OnGrabButtonReleased`. This method will be removed in a future version of VRTK.")]
         public virtual void OnAliasGrabOff(ControllerInteractionEventArgs e)
         {
             if (AliasGrabOff != null)
@@ -790,6 +796,7 @@ namespace VRTK
             }
         }
 
+        [Obsolete("`VRTK_ControllerEvents.OnAliasUseOn` has been replaced with `VRTK_InteractUse.OnUseButtonPressed`. This method will be removed in a future version of VRTK.")]
         public virtual void OnAliasUseOn(ControllerInteractionEventArgs e)
         {
             if (AliasUseOn != null)
@@ -798,6 +805,7 @@ namespace VRTK
             }
         }
 
+        [Obsolete("`VRTK_ControllerEvents.OnAliasUseOff` has been replaced with `VRTK_InteractUse.OnUseButtonReleased`. This method will be removed in a future version of VRTK.")]
         public virtual void OnAliasUseOff(ControllerInteractionEventArgs e)
         {
             if (AliasUseOff != null)
@@ -806,6 +814,7 @@ namespace VRTK
             }
         }
 
+        [Obsolete("`VRTK_ControllerEvents.OnAliasUIClickOn` has been replaced with `VRTK_UIPointer.OnSelectionButtonPressed`. This method will be removed in a future version of VRTK.")]
         public virtual void OnAliasUIClickOn(ControllerInteractionEventArgs e)
         {
             if (AliasUIClickOn != null)
@@ -814,6 +823,7 @@ namespace VRTK
             }
         }
 
+        [Obsolete("`VRTK_ControllerEvents.OnAliasUIClickOff` has been replaced with `VRTK_UIPointer.OnSelectionButtonReleased`. This method will be removed in a future version of VRTK.")]
         public virtual void OnAliasUIClickOff(ControllerInteractionEventArgs e)
         {
             if (AliasUIClickOff != null)
@@ -822,6 +832,7 @@ namespace VRTK
             }
         }
 
+        [Obsolete("`VRTK_ControllerEvents.OnAliasMenuOn` has been replaced with `VRTK_ControllerEvents.OnButtonTwoPressed`. This method will be removed in a future version of VRTK.")]
         public virtual void OnAliasMenuOn(ControllerInteractionEventArgs e)
         {
             if (AliasMenuOn != null)
@@ -830,6 +841,7 @@ namespace VRTK
             }
         }
 
+        [Obsolete("`VRTK_ControllerEvents.OnAliasMenuOff` has been replaced with `VRTK_ControllerEvents.OnButtonTwoReleased`. This method will be removed in a future version of VRTK.")]
         public virtual void OnAliasMenuOff(ControllerInteractionEventArgs e)
         {
             if (AliasMenuOff != null)
