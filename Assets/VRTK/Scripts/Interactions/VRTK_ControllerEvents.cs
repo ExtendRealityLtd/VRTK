@@ -82,23 +82,23 @@ namespace VRTK
 
         [Header("Action Alias Buttons")]
 
-        [Tooltip("**OBSOLETE** The button to use for the action of turning a laser pointer on / off.")]
-        [Obsolete("`VRTK_ControllerEvents.pointerToggleButton` is no longer used in the new `VRTK_Pointer` class. This parameter will be removed in a future version of VRTK.")]
+        [Tooltip("**OBSOLETE [use VRTK_Pointer.activationButton]** The button to use for the action of turning a laser pointer on / off.")]
+        [Obsolete("`VRTK_ControllerEvents.pointerToggleButton` is no longer used in the new `VRTK_Pointer` class, use `VRTK_Pointer.activationButton` instead. This parameter will be removed in a future version of VRTK.")]
         public ButtonAlias pointerToggleButton = ButtonAlias.TouchpadPress;
-        [Tooltip("**OBSOLETE** The button to use for the action of setting a destination marker from the cursor position of the pointer.")]
-        [Obsolete("`VRTK_ControllerEvents.pointerSetButton` is no longer used in the new `VRTK_Pointer` class. This parameter will be removed in a future version of VRTK.")]
+        [Tooltip("**OBSOLETE [use VRTK_Pointer.selectionButton]** The button to use for the action of setting a destination marker from the cursor position of the pointer.")]
+        [Obsolete("`VRTK_ControllerEvents.pointerSetButton` is no longer used in the new `VRTK_Pointer` class, use `VRTK_Pointer.selectionButton` instead. This parameter will be removed in a future version of VRTK.")]
         public ButtonAlias pointerSetButton = ButtonAlias.TouchpadPress;
-        [Tooltip("**OBSOLETE** The button to use for the action of grabbing game objects.")]
-        [Obsolete("`VRTK_ControllerEvents.grabToggleButton` is no longer used in the `VRTK_InteractGrab` class. This parameter will be removed in a future version of VRTK.")]
+        [Tooltip("**OBSOLETE [use VRTK_InteractGrab.grabButton]** The button to use for the action of grabbing game objects.")]
+        [Obsolete("`VRTK_ControllerEvents.grabToggleButton` is no longer used in the `VRTK_InteractGrab` class, use `VRTK_InteractGrab.grabButton` instead. This parameter will be removed in a future version of VRTK.")]
         public ButtonAlias grabToggleButton = ButtonAlias.GripPress;
-        [Tooltip("**OBSOLETE** The button to use for the action of using game objects.")]
-        [Obsolete("`VRTK_ControllerEvents.useToggleButton` is no longer used in the `VRTK_InteractUse` class. This parameter will be removed in a future version of VRTK.")]
+        [Tooltip("**OBSOLETE [use VRTK_InteractUse.useButton]** The button to use for the action of using game objects.")]
+        [Obsolete("`VRTK_ControllerEvents.useToggleButton` is no longer used in the `VRTK_InteractUse` class, use `VRTK_InteractUse.useButton` instead. This parameter will be removed in a future version of VRTK.")]
         public ButtonAlias useToggleButton = ButtonAlias.TriggerPress;
-        [Tooltip("**OBSOLETE** The button to use for the action of clicking a UI element.")]
-        [Obsolete("`VRTK_ControllerEvents.uiClickButton` is no longer used in the `VRTK_UIPointer` class. This parameter will be removed in a future version of VRTK.")]
+        [Tooltip("**OBSOLETE [use VRTK_UIPointer.selectionButton]** The button to use for the action of clicking a UI element.")]
+        [Obsolete("`VRTK_ControllerEvents.uiClickButton` is no longer used in the `VRTK_UIPointer` class, use `VRTK_UIPointer.selectionButton` instead. This parameter will be removed in a future version of VRTK.")]
         public ButtonAlias uiClickButton = ButtonAlias.TriggerPress;
-        [Tooltip("**OBSOLETE** The button to use for the action of bringing up an in-game menu.")]
-        [Obsolete("`VRTK_ControllerEvents.menuToggleButton` is no longer used. This parameter will be removed in a future version of VRTK.")]
+        [Tooltip("**OBSOLETE [use VRTK_ControllerEvents.buttonTwoPressed]** The button to use for the action of bringing up an in-game menu.")]
+        [Obsolete("`VRTK_ControllerEvents.menuToggleButton` is no longer used, use `VRTK_ControllerEvents.buttonTwoPressed` instead. This parameter will be removed in a future version of VRTK.")]
         public ButtonAlias menuToggleButton = ButtonAlias.ButtonTwoPress;
 
         [Header("Axis Refinement")]
@@ -439,10 +439,12 @@ namespace VRTK
         /// <summary>
         /// Emitted when the menu toggle alias button is pressed.
         /// </summary>
+        [Obsolete("`VRTK_ControllerEvents.AliasMenuOn` is no longer used. This parameter will be removed in a future version of VRTK.")]
         public event ControllerInteractionEventHandler AliasMenuOn;
         /// <summary>
         /// Emitted when the menu toggle alias button is released.
         /// </summary>
+        [Obsolete("`VRTK_ControllerEvents.AliasMenuOff` is no longer used. This parameter will be removed in a future version of VRTK.")]
         public event ControllerInteractionEventHandler AliasMenuOff;
 
         /// <summary>
