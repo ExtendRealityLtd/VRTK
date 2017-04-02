@@ -71,16 +71,5 @@ namespace VRTK
         /// </summary>
         /// <param name="camera">The Transform to with the camera on to add the fade functionality to.</param>
         public abstract void AddHeadsetFade(Transform camera);
-
-        protected Transform GetSDKManagerHeadset()
-        {
-            var sdkManager = VRTK_SDKManager.instance;
-            if (sdkManager != null && sdkManager.actualHeadset != null)
-            {
-                cachedHeadset = (sdkManager.actualHeadset ? sdkManager.actualHeadset.transform : null);
-                return cachedHeadset;
-            }
-            return null;
-        }
     }
 }

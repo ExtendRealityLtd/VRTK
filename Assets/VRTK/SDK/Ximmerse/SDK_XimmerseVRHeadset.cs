@@ -75,7 +75,6 @@ namespace VRTK
         /// <returns>A transform of the object representing the headset in the scene.</returns>
         public override Transform GetHeadset()
         {
-            cachedHeadset = GetSDKManagerHeadset();
             if (cachedHeadset == null)
             {
                 var foundCamera = VRTK_SharedMethods.FindEvenInactiveComponent<TrackedHead>();
@@ -93,7 +92,6 @@ namespace VRTK
         /// <returns>A transform of the object holding the headset camera in the scene.</returns>
         public override Transform GetHeadsetCamera()
         {
-            cachedHeadsetCamera = GetSDKManagerHeadset();
             if (cachedHeadsetCamera == null)
             {
                 var foundCamera = VRContext.GetAnchor(VRNode.CenterEye);
