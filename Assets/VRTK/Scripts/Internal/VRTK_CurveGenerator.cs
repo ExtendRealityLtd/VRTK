@@ -69,20 +69,48 @@ namespace VRTK
         protected int frequency;
         protected bool customTracer;
         protected bool rescalePointerTracer;
+        protected GameObject tracerLineRenderer;
+        protected LineRenderer customLineRenderer;
+        protected bool lineRendererAndItem;
 
         public virtual void Create(int setFrequency, float radius, GameObject tracer, bool rescaleTracer = false)
         {
             float circleSize = radius / 8;
 
             frequency = setFrequency;
-            items = new GameObject[frequency];
-            for (int f = 0; f < items.Length; f++)
+            customLineRenderer = (tracer != null ? tracer.GetComponent<LineRenderer>() : null);
+            lineRendererAndItem = (customLineRenderer != null && tracer.GetComponentInChildren<MeshFilter>());
+            if (customLineRenderer != null)
             {
-                customTracer = true;
-                items[f] = (tracer ? Instantiate(tracer) : CreateSphere());
-                items[f].transform.parent = transform;
-                items[f].layer = LayerMask.NameToLayer("Ignore Raycast");
-                items[f].transform.localScale = new Vector3(circleSize, circleSize, circleSize);
+                tracerLineRenderer = Instantiate(tracer);
+                tracerLineRenderer.name = name + "_LineRenderer";
+                for (int i = 0; i < tracerLineRenderer.transform.childCount; i++)
+                {
+                    Destroy(tracerLineRenderer.transform.GetChild(i).gameObject);
+                }
+                customLineRenderer = tracerLineRenderer.GetComponent<LineRenderer>();
+#if UNITY_5_5_OR_NEWER
+                customLineRenderer.numPositions = frequency;
+#else
+                customLineRenderer.SetVertexCount(frequency);
+#endif
+            }
+
+            if (customLineRenderer == null || lineRendererAndItem)
+            {
+                items = new GameObject[frequency];
+                for (int f = 0; f < items.Length; f++)
+                {
+                    customTracer = true;
+                    items[f] = (tracer != null ? Instantiate(tracer) : CreateSphere());
+                    items[f].transform.SetParent(transform);
+                    items[f].layer = LayerMask.NameToLayer("Ignore Raycast");
+                    items[f].transform.localScale = new Vector3(circleSize, circleSize, circleSize);
+                    if (customLineRenderer != null)
+                    {
+                        Destroy(items[f].GetComponent<LineRenderer>());
+                    }
+                }
             }
 
             rescalePointerTracer = rescaleTracer;
@@ -119,6 +147,10 @@ namespace VRTK
         public virtual void TogglePoints(bool state)
         {
             gameObject.SetActive(state);
+            if (tracerLineRenderer != null)
+            {
+                tracerLineRenderer.SetActive(state);
+            }
         }
 
         protected virtual void PointsInit(Vector3[] controlPoints)
@@ -298,37 +330,56 @@ namespace VRTK
                 stepSize = 1f / (stepSize - 1);
             }
 
+            SetPointData(material, color, stepSize);
+        }
+
+        protected virtual void SetPointData(Material material, Color color, float stepSize)
+        {
             for (int f = 0; f < frequency; f++)
             {
-                if (customTracer && (f == (frequency - 1)))
-                {
-                    items[f].SetActive(false);
-                    continue;
-                }
-                SetMaterial(items[f], material, color);
-
                 Vector3 position = GetPoint(f * stepSize);
-                items[f].transform.position = position;
 
-                Vector3 nextPosition = GetPoint((f + 1) * stepSize);
-                Vector3 offset = nextPosition - position;
-                Vector3 lookPosition = offset.normalized;
-                if (lookPosition != Vector3.zero)
+                if (customLineRenderer != null)
                 {
-                    items[f].transform.rotation = Quaternion.LookRotation(lookPosition);
+                    customLineRenderer.SetPosition(f, position);
+                    SetMaterial(customLineRenderer.sharedMaterial, color);
+                }
 
-                    // rescale the custom tracer according to the length of the beam
-                    if (rescalePointerTracer)
-                    {
-                        Vector3 scl = items[f].transform.localScale;
-                        scl.z = offset.magnitude / 2f; // (assuming a center-based scaling)
-                        items[f].transform.localScale = scl;
-                    }
+                if (customLineRenderer == null || lineRendererAndItem)
+                {
+                    SetItemPosition(f, position, material, color, stepSize);
                 }
             }
         }
 
-        protected virtual void SetMaterial(GameObject item, Material material, Color color)
+        protected virtual void SetItemPosition(int currentIndex, Vector3 setPosition, Material material, Color color, float stepSize)
+        {
+            if (customTracer && (currentIndex == (frequency - 1)))
+            {
+                items[currentIndex].SetActive(false);
+                return;
+            }
+            SetItemMaterial(items[currentIndex], material, color);
+            items[currentIndex].transform.position = setPosition;
+
+            Vector3 nextPosition = GetPoint((currentIndex + 1) * stepSize);
+            Vector3 offset = nextPosition - setPosition;
+            Vector3 lookPosition = offset.normalized;
+            if (lookPosition != Vector3.zero)
+            {
+                items[currentIndex].transform.rotation = Quaternion.LookRotation(lookPosition);
+
+                // rescale the custom tracer according to the length of the beam
+                if (rescalePointerTracer)
+                {
+                    Vector3 scl = items[currentIndex].transform.localScale;
+                    scl.z = offset.magnitude / 2f; // (assuming a center-based scaling)
+                    items[currentIndex].transform.localScale = scl;
+                }
+            }
+        }
+
+        protected virtual void SetItemMaterial(GameObject item, Material material, Color color)
         {
             foreach (Renderer mr in item.GetComponentsInChildren<Renderer>())
             {
@@ -337,19 +388,24 @@ namespace VRTK
                     mr.material = material;
                 }
 
-                if (mr.material)
+                SetMaterial(mr.material, color);
+            }
+        }
+
+        protected virtual void SetMaterial(Material material, Color color)
+        {
+            if (material != null)
+            {
+                material.EnableKeyword("_EMISSION");
+
+                if (material.HasProperty("_Color"))
                 {
-                    mr.material.EnableKeyword("_EMISSION");
+                    material.color = color;
+                }
 
-                    if (mr.material.HasProperty("_Color"))
-                    {
-                        mr.material.color = color;
-                    }
-
-                    if (mr.material.HasProperty("_EmissionColor"))
-                    {
-                        mr.material.SetColor("_EmissionColor", VRTK_SharedMethods.ColorDarken(color, 50));
-                    }
+                if (material.HasProperty("_EmissionColor"))
+                {
+                    material.SetColor("_EmissionColor", VRTK_SharedMethods.ColorDarken(color, 50));
                 }
             }
         }
