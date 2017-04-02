@@ -49,7 +49,7 @@
 
         public static Dictionary<CommonMessageKeys, int> commonMessageParts = new Dictionary<CommonMessageKeys, int>();
 
-        public LogLevels minLevel = LogLevels.Info;
+        public LogLevels minLevel = LogLevels.Trace;
         public bool throwExceptions = true;
 
         public static void CreateIfNotExists()
@@ -61,8 +61,6 @@
                     hideFlags = HideFlags.DontSaveInEditor | HideFlags.HideInHierarchy
                 };
                 instance = loggerObject.AddComponent<VRTK_Logger>();
-                instance.minLevel = LogLevels.Trace;
-                instance.throwExceptions = true;
             }
 
             if (commonMessageParts.Count != commonMessages.Count)
