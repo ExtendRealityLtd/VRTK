@@ -54,7 +54,7 @@ namespace VRTK
             playArea = VRTK_DeviceFinder.PlayAreaTransform();
             if (!headset)
             {
-                VRTK_Logger.Warn(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_SCENE, new string[] { "VRTK_Simulator", "Headset Camera", ". Simulator deactivated." }));
+                VRTK_Logger.Warn(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_SCENE, "VRTK_Simulator", "Headset Camera", ". Simulator deactivated."));
                 enabled = false;
                 return;
             }

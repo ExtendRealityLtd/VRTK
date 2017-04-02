@@ -119,7 +119,7 @@ namespace VRTK
             controllerEvents = (controller != null ? controller : GetComponent<VRTK_ControllerEvents>());
             if (!controllerEvents)
             {
-                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_NOT_INJECTED, new string[] { "VRTK_ObjectControl", "VRTK_ControllerEvents", "controller", "the same" }));
+                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_NOT_INJECTED, "VRTK_ObjectControl", "VRTK_ControllerEvents", "controller", "the same"));
                 return;
             }
             SetControlledObject();

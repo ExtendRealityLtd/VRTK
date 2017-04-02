@@ -488,7 +488,7 @@ namespace VRTK
 
             if (controller == null)
             {
-                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_NOT_INJECTED, new string[] { "VRTK_BasePointer", "VRTK_ControllerEvents", "controller", "the same" }));
+                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_NOT_INJECTED, "VRTK_BasePointer", "VRTK_ControllerEvents", "controller", "the same"));
             }
         }
 

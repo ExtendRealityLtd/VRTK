@@ -53,7 +53,7 @@ namespace VRTK
             VRTK_InteractableObject newEventsManager = transform.GetComponentInParent<VRTK_InteractableObject>();
             if (newEventsManager == null)
             {
-                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_NOT_INJECTED, new string[] { "VRTK_IndependentRadialMenuController", "VRTK_InteractableObject", "eventsManager", "the parent" }));
+                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_NOT_INJECTED, "VRTK_IndependentRadialMenuController", "VRTK_InteractableObject", "eventsManager", "the parent"));
                 return;
             }
             else if (newEventsManager != eventsManager) // Changed managers
@@ -185,7 +185,7 @@ namespace VRTK
                 }
                 else
                 {
-                    VRTK_Logger.Warn(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.COULD_NOT_FIND_OBJECT_FOR_ACTION, new string[] { "IndependentRadialMenu", "an object", "rotate towards" }));
+                    VRTK_Logger.Warn(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.COULD_NOT_FIND_OBJECT_FOR_ACTION, "IndependentRadialMenu", "an object", "rotate towards"));
                 }
             }
 

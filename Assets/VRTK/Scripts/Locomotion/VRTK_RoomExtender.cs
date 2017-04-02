@@ -59,7 +59,7 @@ namespace VRTK
                 }
                 else
                 {
-                    VRTK_Logger.Warn(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_SCENE, new string[] { "VRTK_RoomExtender", "Headset Transform" }));
+                    VRTK_Logger.Warn(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_SCENE, "VRTK_RoomExtender", "Headset Transform"));
                 }
             }
             playArea = VRTK_DeviceFinder.PlayAreaTransform();

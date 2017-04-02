@@ -78,11 +78,10 @@
             }
         }
 
-        public static string GetCommonMessage(CommonMessageKeys messageKey, string[] parameters = null)
+        public static string GetCommonMessage(CommonMessageKeys messageKey, params object[] parameters)
         {
             CreateIfNotExists();
 
-            parameters = (parameters == null ? new string[0] : parameters);
             string returnMessage = "";
             if (commonMessages.ContainsKey(messageKey))
             {

@@ -215,13 +215,13 @@ namespace VRTK
             playArea = VRTK_DeviceFinder.PlayAreaTransform();
             if (!playArea)
             {
-                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.SDK_OBJECT_NOT_FOUND, new string[] { "PlayArea", "Boundaries SDK" }));
+                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.SDK_OBJECT_NOT_FOUND, "PlayArea", "Boundaries SDK"));
             }
 
             headset = VRTK_DeviceFinder.HeadsetTransform();
             if (!headset)
             {
-                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.SDK_OBJECT_NOT_FOUND, new string[] { "HeadsetTransform", "Headset SDK" }));
+                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.SDK_OBJECT_NOT_FOUND, "HeadsetTransform", "Headset SDK"));
             }
 
             VRTK_PlayerObject.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.CameraRig);
@@ -247,7 +247,7 @@ namespace VRTK
             bodyCollider = playArea.GetComponentInChildren<CapsuleCollider>();
             if (!bodyCollider)
             {
-                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, new string[] { "VRTK_TouchpadMovement", "CapsuleCollider", "the PlayArea" }));
+                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, "VRTK_TouchpadMovement", "CapsuleCollider", "the PlayArea"));
             }
         }
 
