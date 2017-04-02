@@ -11,7 +11,7 @@
         {
             if (GetComponent<VRTK_ControllerEvents>() == null)
             {
-                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, new string[] { "Sphere_Spawner", "VRTK_ControllerEvents", "the same" }));
+                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, "Sphere_Spawner", "VRTK_ControllerEvents", "the same"));
                 return;
             }
 

@@ -23,7 +23,7 @@
         {
             if (GetComponent<VRTK_ControllerEvents>() == null)
             {
-                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, new string[] { "VRTK_ControllerAppearance_Example", "VRTK_ControllerEvents", "the same" }));
+                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, "VRTK_ControllerAppearance_Example", "VRTK_ControllerEvents", "the same"));
                 return;
             }
 

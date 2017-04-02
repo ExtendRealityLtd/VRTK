@@ -31,7 +31,7 @@ namespace VRTK
         {
             if (events == null)
             {
-                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_NOT_INJECTED, new string[] { "RadialMenuController", "VRTK_ControllerEvents", "events", "the parent" }));
+                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_NOT_INJECTED, "RadialMenuController", "VRTK_ControllerEvents", "events", "the parent"));
                 return;
             }
             else

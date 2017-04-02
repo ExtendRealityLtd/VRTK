@@ -68,7 +68,7 @@ namespace VRTK
 
             if (!canvas || canvas.renderMode != RenderMode.WorldSpace)
             {
-                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, new string[] { "VRTK_UICanvas", "Canvas", "the same", " that is set to `Render Mode = World Space`" }));
+                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, "VRTK_UICanvas", "Canvas", "the same", " that is set to `Render Mode = World Space`"));
                 return;
             }
 

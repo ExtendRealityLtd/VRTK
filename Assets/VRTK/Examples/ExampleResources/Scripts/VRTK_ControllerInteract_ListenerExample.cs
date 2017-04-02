@@ -8,7 +8,7 @@
         {
             if (GetComponent<VRTK_InteractTouch>() == null || GetComponent<VRTK_InteractGrab>() == null)
             {
-                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, new string[] { "VRTK_ControllerInteract_ListenerExample", "VRTK_InteractTouch and VRTK_InteractGrab", "the Controller Alias" }));
+                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, "VRTK_ControllerInteract_ListenerExample", "VRTK_InteractTouch and VRTK_InteractGrab", "the Controller Alias"));
                 return;
             }
 

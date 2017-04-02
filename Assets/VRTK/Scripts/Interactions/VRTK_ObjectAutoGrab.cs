@@ -58,17 +58,17 @@ namespace VRTK
 
             if (interactTouch == null)
             {
-                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_NOT_INJECTED, new string[] { "VRTK_ObjectAutoGrab", "VRTK_InteractTouch", "interactTouch", "the same or parent" }));
+                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_NOT_INJECTED, "VRTK_ObjectAutoGrab", "VRTK_InteractTouch", "interactTouch", "the same or parent"));
             }
 
             if (interactGrab == null)
             {
-                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_NOT_INJECTED, new string[] { "VRTK_ObjectAutoGrab", "VRTK_InteractGrab", "interactGrab", "the same or parent" }));
+                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_NOT_INJECTED, "VRTK_ObjectAutoGrab", "VRTK_InteractGrab", "interactGrab", "the same or parent"));
             }
 
             if (objectToGrab == null)
             {
-                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.NOT_DEFINED, new string[] { "objectToGrab" }));
+                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.NOT_DEFINED, "objectToGrab"));
                 yield break;
             }
 

@@ -96,7 +96,7 @@ namespace VRTK
         {
             if (!GetComponent<VRTK_InteractableObject>())
             {
-                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, new string[] { "VRTK_InteractControllerAppearance", "VRTK_InteractableObject", "the same" }));
+                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, "VRTK_InteractControllerAppearance", "VRTK_InteractableObject", "the same"));
             }
         }
 

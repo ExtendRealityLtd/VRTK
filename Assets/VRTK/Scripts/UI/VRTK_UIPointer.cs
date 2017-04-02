@@ -228,7 +228,7 @@ namespace VRTK
         {
             if (!eventSystem)
             {
-                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_SCENE, new string[] { "VRTK_UIPointer", "EventSystem" }));
+                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_SCENE, "VRTK_UIPointer", "EventSystem"));
                 return null;
             }
 
@@ -249,7 +249,7 @@ namespace VRTK
 
             if (!vrtkEventSystem)
             {
-                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_SCENE, new string[] { "VRTK_UIPointer", "EventSystem" }));
+                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_SCENE, "VRTK_UIPointer", "EventSystem"));
                 return;
             }
 

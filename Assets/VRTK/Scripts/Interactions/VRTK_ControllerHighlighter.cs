@@ -216,7 +216,7 @@ namespace VRTK
 
             if (controllerAlias == null)
             {
-                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_NOT_INJECTED, new string[] { "VRTK_ControllerHighlighter", "Controller Alias GameObject", "controllerAlias", "the same" }));
+                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_NOT_INJECTED, "VRTK_ControllerHighlighter", "Controller Alias GameObject", "controllerAlias", "the same"));
                 return;
             }
 
@@ -428,7 +428,7 @@ namespace VRTK
             {
                 if (!modelContainer)
                 {
-                    VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.SDK_OBJECT_NOT_FOUND, new string[] { "Controller Model", "Controller SDK" }));
+                    VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.SDK_OBJECT_NOT_FOUND, "Controller Model", "Controller SDK"));
                     return null;
                 }
                 cachedElements[path] = modelContainer.transform.Find(path);

@@ -110,7 +110,7 @@ namespace VRTK
                     }
                     else
                     {
-                        VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, new string[] { "PlayArea", "CapsuleCollider", "the same or child"}));
+                        VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, "PlayArea", "CapsuleCollider", "the same or child"));
                     }
                 }
                 else
@@ -118,7 +118,7 @@ namespace VRTK
                     centerCollider = checkObject.GetComponentInChildren<Collider>();
                     if (centerCollider == null)
                     {
-                        VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, new string[] { "CheckObject", "Collider", "the same or child" }));
+                        VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, "CheckObject", "Collider", "the same or child"));
                     }
                     colliderRadius = 0.1f;
                     colliderHeight = 0.1f;
