@@ -6479,6 +6479,7 @@ Changes one game object's transform to follow another game object's transform.
   * `OnUpdate` - Follow in the Update method.
   * `OnLateUpdate` - Follow in the LateUpdate method.
   * `OnPreRender` - Follow in the OnPreRender method. (This script doesn't have to be attached to a camera.)
+  * `OnPreCull` - Follow in the OnPreCull method. (This script doesn't have to be attached to a camera.)
 
 ---
 
