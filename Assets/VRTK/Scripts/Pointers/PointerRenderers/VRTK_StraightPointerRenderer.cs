@@ -64,7 +64,7 @@ namespace VRTK
 
         protected override void CreatePointerObjects()
         {
-            actualContainer = new GameObject(string.Format("[{0}]StraightPointerRenderer_Container", gameObject.name));
+            actualContainer = new GameObject(VRTK_SharedMethods.GenerateVRTKObjectName(true, gameObject.name, "StraightPointerRenderer_Container"));
             actualContainer.transform.localPosition = Vector3.zero;
             VRTK_PlayerObject.SetPlayerObject(actualContainer, VRTK_PlayerObject.ObjectTypes.Pointer);
 
@@ -119,7 +119,7 @@ namespace VRTK
                 SetupMaterialRenderer(actualTracer);
             }
 
-            actualTracer.transform.name = string.Format("[{0}]StraightPointerRenderer_Tracer", gameObject.name);
+            actualTracer.transform.name = VRTK_SharedMethods.GenerateVRTKObjectName(true, gameObject.name, "StraightPointerRenderer_Tracer");
             actualTracer.transform.SetParent(actualContainer.transform);
 
             VRTK_PlayerObject.SetPlayerObject(actualTracer, VRTK_PlayerObject.ObjectTypes.Pointer);
@@ -143,7 +143,7 @@ namespace VRTK
             }
 
             cursorOriginalScale = actualCursor.transform.localScale;
-            actualCursor.transform.name = string.Format("[{0}]StraightPointerRenderer_Cursor", gameObject.name);
+            actualCursor.transform.name = VRTK_SharedMethods.GenerateVRTKObjectName(true, gameObject.name, "StraightPointerRenderer_Cursor");
             actualCursor.transform.SetParent(actualContainer.transform);
             VRTK_PlayerObject.SetPlayerObject(actualCursor, VRTK_PlayerObject.ObjectTypes.Pointer);
         }

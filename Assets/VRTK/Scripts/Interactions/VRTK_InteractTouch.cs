@@ -429,7 +429,7 @@ namespace VRTK
                 controllerCollisionDetector = Instantiate(defaultColliderPrefab, transform.position, transform.rotation) as GameObject;
                 controllerCollisionDetector.transform.SetParent(transform);
                 controllerCollisionDetector.transform.localScale = transform.localScale;
-                controllerCollisionDetector.name = "VRTK_ControllerCollidersContainer";
+                controllerCollisionDetector.name = VRTK_SharedMethods.GenerateVRTKObjectName(true, "Controller", "CollidersContainer");
                 destroyColliderOnDisable = true;
             }
             else

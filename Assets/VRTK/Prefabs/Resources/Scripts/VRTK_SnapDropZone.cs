@@ -570,14 +570,14 @@ namespace VRTK
             }
         }
 
-        protected virtual void CopyObject(GameObject objectBlueprint, ref GameObject clonedObject, string name)
+        protected virtual void CopyObject(GameObject objectBlueprint, ref GameObject clonedObject, string givenName)
         {
             GenerateContainer();
             Vector3 saveScale = transform.localScale;
             transform.localScale = Vector3.one;
 
             clonedObject = Instantiate(objectBlueprint, highlightContainer.transform) as GameObject;
-            clonedObject.name = name;
+            clonedObject.name = givenName;
 
             //default position of new highlight object
             clonedObject.transform.localPosition = Vector3.zero;

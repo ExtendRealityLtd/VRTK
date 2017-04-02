@@ -56,7 +56,7 @@
         {
             if (instance == null)
             {
-                GameObject loggerObject = new GameObject("[VRTK_Logger]")
+                GameObject loggerObject = new GameObject(VRTK_SharedMethods.GenerateVRTKObjectName(true, "Logger"))
                 {
                     hideFlags = HideFlags.DontSaveInEditor | HideFlags.HideInHierarchy
                 };

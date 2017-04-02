@@ -87,7 +87,7 @@ namespace VRTK
 
         protected override void CreatePointerObjects()
         {
-            actualContainer = new GameObject(string.Format("[{0}]BezierPointerRenderer_Container", gameObject.name));
+            actualContainer = new GameObject(VRTK_SharedMethods.GenerateVRTKObjectName(true, gameObject.name, "BezierPointerRenderer_Container"));
             VRTK_PlayerObject.SetPlayerObject(actualContainer, VRTK_PlayerObject.ObjectTypes.Pointer);
             actualContainer.SetActive(false);
 
@@ -159,7 +159,7 @@ namespace VRTK
             if (validLocationObject != null)
             {
                 actualValidLocationObject = Instantiate(validLocationObject);
-                actualValidLocationObject.name = string.Format("[{0}]BezierPointerRenderer_ValidLocation", gameObject.name);
+                actualValidLocationObject.name = VRTK_SharedMethods.GenerateVRTKObjectName(true, gameObject.name, "BezierPointerRenderer_ValidLocation");
                 actualValidLocationObject.transform.SetParent(actualCursor.transform);
                 actualValidLocationObject.layer = LayerMask.NameToLayer("Ignore Raycast");
                 actualValidLocationObject.SetActive(false);
@@ -168,7 +168,7 @@ namespace VRTK
             if (invalidLocationObject != null)
             {
                 actualInvalidLocationObject = Instantiate(invalidLocationObject);
-                actualInvalidLocationObject.name = string.Format("[{0}]BezierPointerRenderer_InvalidLocation", gameObject.name);
+                actualInvalidLocationObject.name = VRTK_SharedMethods.GenerateVRTKObjectName(true, gameObject.name, "BezierPointerRenderer_InvalidLocation");
                 actualInvalidLocationObject.transform.SetParent(actualCursor.transform);
                 actualInvalidLocationObject.layer = LayerMask.NameToLayer("Ignore Raycast");
                 actualInvalidLocationObject.SetActive(false);
@@ -179,7 +179,7 @@ namespace VRTK
         {
             actualCursor = (customCursor ? Instantiate(customCursor) : CreateCursorObject());
             CreateCursorLocations();
-            actualCursor.name = string.Format("[{0}]BezierPointerRenderer_Cursor", gameObject.name);
+            actualCursor.name = VRTK_SharedMethods.GenerateVRTKObjectName(true, gameObject.name, "BezierPointerRenderer_Cursor");
             VRTK_PlayerObject.SetPlayerObject(actualCursor, VRTK_PlayerObject.ObjectTypes.Pointer);
             actualCursor.layer = LayerMask.NameToLayer("Ignore Raycast");
             actualCursor.SetActive(false);

@@ -157,8 +157,9 @@ namespace VRTK
         protected bool generateCollider = false;
         protected bool generateRigidbody = false;
         protected Vector3 playAreaVelocity = Vector3.zero;
-        protected const string BODY_COLLIDER_CONTAINER_NAME = "VRTK_BodyColliderContainer";
-        protected const string FOOT_COLLIDER_CONTAINER_NAME = "VRTK_FootColliderContainer";
+        protected string footColliderContainerNameCheck;
+        protected const string BODY_COLLIDER_CONTAINER_NAME = "BodyColliderContainer";
+        protected const string FOOT_COLLIDER_CONTAINER_NAME = "FootColliderContainer";
 
         // Draws a sphere for current standing position and a sphere for current headset position.
         // Set to `true` to view the debug spheres.
@@ -274,6 +275,7 @@ namespace VRTK
             {
                 currentStandingPosition = new Vector2(headset.position.x, headset.position.z);
             }
+            footColliderContainerNameCheck = VRTK_SharedMethods.GenerateVRTKObjectName(true, FOOT_COLLIDER_CONTAINER_NAME);
             EnableDropToFloor();
             EnableBodyPhysics();
         }
@@ -667,7 +669,7 @@ namespace VRTK
 
         protected virtual void CheckStepUpCollision(Collision collision)
         {
-            if (footCollider != null && collision.contacts.Length > 0 && collision.contacts[0].thisCollider.transform.name == FOOT_COLLIDER_CONTAINER_NAME)
+            if (footCollider != null && collision.contacts.Length > 0 && collision.contacts[0].thisCollider.transform.name == footColliderContainerNameCheck)
             {
                 float stepYIncrement = 0.55f;
                 float boxCastHeight = 0.01f;
@@ -697,7 +699,7 @@ namespace VRTK
 
         protected virtual GameObject CreateColliderContainer(string name, Transform parent)
         {
-            GameObject generatedContainer = new GameObject(name);
+            GameObject generatedContainer = new GameObject(VRTK_SharedMethods.GenerateVRTKObjectName(true, name));
             generatedContainer.transform.SetParent(parent);
             generatedContainer.transform.localPosition = Vector3.zero;
             generatedContainer.transform.localRotation = Quaternion.identity;
