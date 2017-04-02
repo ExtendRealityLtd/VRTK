@@ -45,7 +45,7 @@ namespace VRTK
          + " * `Button Two Model Path`: The model that represents button two.\n"
          + " * `System Menu Model Path`: The model that represents the system menu button."
          + " * `Start Menu Model Path`: The model that represents the start menu button.")]
-        [Obsolete("`VRTK_ControllerActions.modelElementPaths` will be removed in a future version of VRTK.")]
+        [Obsolete("`VRTK_ControllerActions.modelElementPaths` has been replaced with `VRTK_ControllerHighlighter.modelElementPaths`, it will be removed in a future version of VRTK.")]
         public VRTK_ControllerModelElementPaths modelElementPaths;
 
         [Tooltip("A collection of highlighter overrides for each controller model sub element. If no highlighter override is given then highlighter on the Controller game object is used.\n\n"
@@ -59,7 +59,7 @@ namespace VRTK
          + " * `Button Two`: The highlighter to use on button two.\n"
          + " * `System Menu`: The highlighter to use on the system menu button."
          + " * `Start Menu`: The highlighter to use on the start menu button.")]
-        [Obsolete("`VRTK_ControllerActions.elementHighlighterOverrides` will be removed in a future version of VRTK.")]
+        [Obsolete("`VRTK_ControllerActions.elementHighlighterOverrides` has been replaced with `VRTK_ControllerHighlighter.elementHighlighterOverrides`, it will be removed in a future version of VRTK.")]
         public VRTK_ControllerElementHighlighters elementHighlighterOverrides;
 
         /// <summary>
@@ -190,7 +190,7 @@ namespace VRTK
         /// <param name="element">The element of the controller to apply the highlight to.</param>
         /// <param name="highlight">The colour of the highlight.</param>
         /// <param name="duration">The duration of fade from white to the highlight colour.</param>
-        [Obsolete("`VRTK_ControllerActions.ToggleHighlightControllerElement(state, element, highlight, duration)` will be removed in a future version of VRTK.")]
+        [Obsolete("`VRTK_ControllerActions.ToggleHighlightControllerElement(state, element, highlight, duration)` has been replaced with `VRTK_ControllerHighlighter.HighlightElement(elementType, color, fadeDuration)/UnhighlightElement(elementType)`. This method will be removed in a future version of VRTK.")]
         public virtual void ToggleHighlightControllerElement(bool state, GameObject element, Color? highlight = null, float duration = 0f)
         {
             if (element)

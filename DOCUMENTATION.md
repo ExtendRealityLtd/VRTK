@@ -1006,7 +1006,42 @@ It extends the `VRTK_DestinationMarker` to allow for destination events to be em
  * **Custom Origin:** A custom transform to use as the origin of the pointer. If no pointer origin transform is provided then the transform the script is attached to is used.
  * **Direction Indicator:** A custom VRTK_PointerDirectionIndicator to use to determine the rotation given to the destination set event.
 
+### Class Events
+
+ * `ActivationButtonPressed` - Emitted when the pointer activation button is pressed.
+ * `ActivationButtonReleased` - Emitted when the pointer activation button is released.
+ * `SelectionButtonPressed` - Emitted when the pointer selection button is pressed.
+ * `SelectionButtonReleased` - Emitted when the pointer selection button is released.
+
+### Unity Events
+
+Adding the `VRTK_Pointer_UnityEvents` component to `VRTK_Pointer` object allows access to `UnityEvents` that will react identically to the Class Events.
+
+ * All C# delegate events are mapped to a Unity Event with the `On` prefix. e.g. `MyEvent` -> `OnMyEvent`.
+
 ### Class Methods
+
+#### IsActivationButtonPressed/0
+
+  > `public virtual bool IsActivationButtonPressed()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `bool` - Returns true if the activationButton is being pressed.
+
+The IsActivationButtonPressed method returns whether the configured activation button is being pressed.
+
+#### IsSelectionButtonPressed/0
+
+  > `public virtual bool IsSelectionButtonPressed()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `bool` - Returns true if the selectionButton is being pressed.
+
+The IsSelectionButtonPressed method returns whether the configured activation button is being pressed.
 
 #### PointerEnter/1
 
@@ -2992,6 +3027,8 @@ The interactable objects require a collider to activate the trigger and a rigidb
 
 ### Class Events
 
+ * `GrabButtonPressed` - Emitted when the grab button is pressed.
+ * `GrabButtonReleased` - Emitted when the grab button is released.
  * `ControllerGrabInteractableObject` - Emitted when a valid object is grabbed.
  * `ControllerUngrabInteractableObject` - Emitted when a valid object is released from being grabbed.
 
@@ -3000,11 +3037,6 @@ The interactable objects require a collider to activate the trigger and a rigidb
 Adding the `VRTK_InteractGrab_UnityEvents` component to `VRTK_InteractGrab` object allows access to `UnityEvents` that will react identically to the Class Events.
 
  * All C# delegate events are mapped to a Unity Event with the `On` prefix. e.g. `MyEvent` -> `OnMyEvent`.
-
-### Event Payload
-
- * `uint controllerIndex` - The index of the controller doing the interaction.
- * `GameObject target` - The GameObject of the interactable object that is being interacted with by the controller.
 
 ### Class Methods
 
@@ -3085,6 +3117,8 @@ If a valid interactable object is usable then pressing the set `Use` button on t
 
 ### Class Events
 
+ * `UseButtonPressed` - Emitted when the use toggle alias button is pressed.
+ * `UseButtonReleased` - Emitted when the use toggle alias button is released.
  * `ControllerUseInteractableObject` - Emitted when a valid object starts being used.
  * `ControllerUnuseInteractableObject` - Emitted when a valid object stops being used.
 
@@ -3093,11 +3127,6 @@ If a valid interactable object is usable then pressing the set `Use` button on t
 Adding the `VRTK_InteractUse_UnityEvents` component to `VRTK_InteractUse` object allows access to `UnityEvents` that will react identically to the Class Events.
 
  * All C# delegate events are mapped to a Unity Event with the `On` prefix. e.g. `MyEvent` -> `OnMyEvent`.
-
-### Event Payload
-
- * `uint controllerIndex` - The index of the controller doing the interaction.
- * `GameObject target` - The GameObject of the interactable object that is being interacted with by the controller.
 
 ### Class Methods
 
@@ -4856,6 +4885,10 @@ The UI pointer is activated via the `Pointer` alias on the `Controller Events` a
 
 ### Class Events
 
+ * `ActivationButtonPressed` - Emitted when the UI activation button is pressed.
+ * `ActivationButtonReleased` - Emitted when the UI activation button is released.
+ * `SelectionButtonPressed` - Emitted when the UI selection button is pressed.
+ * `SelectionButtonReleased` - Emitted when the UI selection button is released.
  * `UIPointerElementEnter` - Emitted when the UI Pointer is colliding with a valid UI element.
  * `UIPointerElementExit` - Emitted when the UI Pointer is no longer colliding with any valid UI elements.
  * `UIPointerElementClick` - Emitted when the UI Pointer has clicked the currently collided UI element.
@@ -4911,16 +4944,27 @@ The RemoveEventSystem resets the Unity EventSystem back to the original state be
 
 The PointerActive method determines if the ui pointer beam should be active based on whether the pointer alias is being held and whether the Hold Button To Use parameter is checked.
 
-#### SelectionButtonActive/0
+#### IsActivationButtonPressed/0
 
-  > `public virtual bool SelectionButtonActive()`
+  > `public virtual bool IsActivationButtonPressed()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `bool` - Returns true if the activation button is active.
+
+The IsActivationButtonPressed method is used to determine if the configured activation button is currently in the active state.
+
+#### IsSelectionButtonPressed/0
+
+  > `public virtual bool IsSelectionButtonPressed()`
 
   * Parameters
    * _none_
   * Returns
    * `bool` - Returns true if the selection button is active.
 
-The SelectionButtonActive method is used to determine if the configured selection button is currently in the active state.
+The IsSelectionButtonPressed method is used to determine if the configured selection button is currently in the active state.
 
 #### ValidClick/2
 

@@ -62,6 +62,24 @@ namespace VRTK
         [Tooltip("A custom VRTK_PointerDirectionIndicator to use to determine the rotation given to the destination set event.")]
         public VRTK_PointerDirectionIndicator directionIndicator;
 
+        /// <summary>
+        /// Emitted when the pointer activation button is pressed.
+        /// </summary>
+        public event ControllerInteractionEventHandler ActivationButtonPressed;
+        /// <summary>
+        /// Emitted when the pointer activation button is released.
+        /// </summary>
+        public event ControllerInteractionEventHandler ActivationButtonReleased;
+        /// <summary>
+        /// Emitted when the pointer selection button is pressed.
+        /// </summary>
+        public event ControllerInteractionEventHandler SelectionButtonPressed;
+        /// <summary>
+        /// Emitted when the pointer selection button is released.
+        /// </summary>
+        public event ControllerInteractionEventHandler SelectionButtonReleased;
+
+
         protected VRTK_ControllerEvents.ButtonAlias subscribedActivationButton = VRTK_ControllerEvents.ButtonAlias.Undefined;
         protected VRTK_ControllerEvents.ButtonAlias subscribedSelectionButton = VRTK_ControllerEvents.ButtonAlias.Undefined;
         protected bool currentSelectOnPress;
@@ -75,6 +93,58 @@ namespace VRTK
         protected VRTK_InteractableObject pointerInteractableObject = null;
         protected Collider currentCollider;
         protected bool canClickOnHover;
+        protected bool activationButtonPressed;
+        protected bool selectionButtonPressed;
+
+        public virtual void OnActivationButtonPressed(ControllerInteractionEventArgs e)
+        {
+            if (ActivationButtonPressed != null)
+            {
+                ActivationButtonPressed(this, e);
+            }
+        }
+
+        public virtual void OnActivationButtonReleased(ControllerInteractionEventArgs e)
+        {
+            if (ActivationButtonReleased != null)
+            {
+                ActivationButtonReleased(this, e);
+            }
+        }
+
+        public virtual void OnSelectionButtonPressed(ControllerInteractionEventArgs e)
+        {
+            if (SelectionButtonPressed != null)
+            {
+                SelectionButtonPressed(this, e);
+            }
+        }
+
+        public virtual void OnSelectionButtonReleased(ControllerInteractionEventArgs e)
+        {
+            if (SelectionButtonReleased != null)
+            {
+                SelectionButtonReleased(this, e);
+            }
+        }
+
+        /// <summary>
+        /// The IsActivationButtonPressed method returns whether the configured activation button is being pressed.
+        /// </summary>
+        /// <returns>Returns true if the activationButton is being pressed.</returns>
+        public virtual bool IsActivationButtonPressed()
+        {
+            return activationButtonPressed;
+        }
+
+        /// <summary>
+        /// The IsSelectionButtonPressed method returns whether the configured activation button is being pressed.
+        /// </summary>
+        /// <returns>Returns true if the selectionButton is being pressed.</returns>
+        public virtual bool IsSelectionButtonPressed()
+        {
+            return selectionButtonPressed;
+        }
 
         /// <summary>
         /// The PointerEnter method emits a DestinationMarkerEnter event when the pointer enters a valid object.
@@ -356,8 +426,8 @@ namespace VRTK
 
             if (controller)
             {
-                controller.SubscribeToButtonAliasEvent(activationButton, true, ActivationButtonPressed);
-                controller.SubscribeToButtonAliasEvent(activationButton, false, ActivationButtonReleased);
+                controller.SubscribeToButtonAliasEvent(activationButton, true, DoActivationButtonPressed);
+                controller.SubscribeToButtonAliasEvent(activationButton, false, DoActivationButtonReleased);
                 subscribedActivationButton = activationButton;
             }
         }
@@ -366,14 +436,15 @@ namespace VRTK
         {
             if (controller && subscribedActivationButton != VRTK_ControllerEvents.ButtonAlias.Undefined)
             {
-                controller.UnsubscribeToButtonAliasEvent(subscribedActivationButton, true, ActivationButtonPressed);
-                controller.UnsubscribeToButtonAliasEvent(subscribedActivationButton, false, ActivationButtonReleased);
+                controller.UnsubscribeToButtonAliasEvent(subscribedActivationButton, true, DoActivationButtonPressed);
+                controller.UnsubscribeToButtonAliasEvent(subscribedActivationButton, false, DoActivationButtonReleased);
                 subscribedActivationButton = VRTK_ControllerEvents.ButtonAlias.Undefined;
             }
         }
 
-        protected virtual void ActivationButtonPressed(object sender, ControllerInteractionEventArgs e)
+        protected virtual void DoActivationButtonPressed(object sender, ControllerInteractionEventArgs e)
         {
+            OnActivationButtonPressed(controller.SetControllerEvent(ref activationButtonPressed, true));
             if (EnabledPointerRenderer())
             {
                 controllerIndex = e.controllerIndex;
@@ -381,7 +452,7 @@ namespace VRTK
             }
         }
 
-        protected virtual void ActivationButtonReleased(object sender, ControllerInteractionEventArgs e)
+        protected virtual void DoActivationButtonReleased(object sender, ControllerInteractionEventArgs e)
         {
             if (EnabledPointerRenderer())
             {
@@ -391,6 +462,7 @@ namespace VRTK
                     Toggle(false);
                 }
             }
+            OnActivationButtonReleased(controller.SetControllerEvent(ref activationButtonPressed, false));
         }
 
         protected virtual void SubscribeSelectionButton()
@@ -402,6 +474,8 @@ namespace VRTK
 
             if (controller)
             {
+                controller.SubscribeToButtonAliasEvent(selectionButton, true, DoSelectionButtonPressed);
+                controller.SubscribeToButtonAliasEvent(selectionButton, false, DoSelectionButtonReleased);
                 controller.SubscribeToButtonAliasEvent(selectionButton, selectOnPress, SelectionButtonAction);
                 subscribedSelectionButton = selectionButton;
                 currentSelectOnPress = selectOnPress;
@@ -412,9 +486,21 @@ namespace VRTK
         {
             if (controller && subscribedSelectionButton != VRTK_ControllerEvents.ButtonAlias.Undefined)
             {
+                controller.UnsubscribeToButtonAliasEvent(selectionButton, true, DoSelectionButtonPressed);
+                controller.UnsubscribeToButtonAliasEvent(selectionButton, false, DoSelectionButtonReleased);
                 controller.UnsubscribeToButtonAliasEvent(subscribedSelectionButton, currentSelectOnPress, SelectionButtonAction);
                 subscribedSelectionButton = VRTK_ControllerEvents.ButtonAlias.Undefined;
             }
+        }
+
+        protected virtual void DoSelectionButtonPressed(object sender, ControllerInteractionEventArgs e)
+        {
+            OnSelectionButtonPressed(controller.SetControllerEvent(ref selectionButtonPressed, true));
+        }
+
+        protected virtual void DoSelectionButtonReleased(object sender, ControllerInteractionEventArgs e)
+        {
+            OnSelectionButtonReleased(controller.SetControllerEvent(ref selectionButtonPressed, false));
         }
 
         protected virtual void SelectionButtonAction(object sender, ControllerInteractionEventArgs e)
