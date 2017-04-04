@@ -56,7 +56,7 @@ namespace VRTK.GrabAttachMechanics
                 jointHolder.transform.SetParent(transform);
                 jointHolder.AddComponent<Rigidbody>().isKinematic = true;
                 VRTK_SharedMethods.CloneComponent(customJoint, jointHolder, true);
-                jointHolder.name = "JointHolder";
+                jointHolder.name = VRTK_SharedMethods.GenerateVRTKObjectName(true, "JointHolder");
                 jointHolder.SetActive(false);
                 Destroy(customJoint);
                 customJoint = jointHolder.GetComponent<Joint>();

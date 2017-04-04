@@ -124,7 +124,7 @@ namespace VRTK
         {
             if (!headsetColliderContainer)
             {
-                headsetColliderContainer = new GameObject("VRTK_HeadsetColliderContainer");
+                headsetColliderContainer = new GameObject(VRTK_SharedMethods.GenerateVRTKObjectName(true, "HeadsetColliderContainer"));
                 headsetColliderContainer.transform.position = Vector3.zero;
                 headsetColliderContainer.transform.localRotation = headset.localRotation;
                 headsetColliderContainer.transform.localScale = Vector3.one;

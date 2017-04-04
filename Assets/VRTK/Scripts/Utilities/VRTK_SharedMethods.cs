@@ -389,6 +389,26 @@ namespace VRTK
 #endif
         }
 
+        /// <summary>
+        /// The GenerateVRTKObjectName method is used to create a standard name string for any VRTK generated object.
+        /// </summary>
+        /// <param name="autoGen">An additiona [AUTOGEN] prefix will be added if this is true.</param>
+        /// <param name="replacements">A collection of parameters to add to the generated name.</param>
+        /// <returns>The generated name string.</returns>
+        public static string GenerateVRTKObjectName(bool autoGen, params object[] replacements)
+        {
+            string toFormat = "[VRTK]";
+            if (autoGen)
+            {
+                toFormat += "[AUTOGEN]";
+            }
+            for (int i = 0; i < replacements.Length; i++)
+            {
+                toFormat += "[{" + i + "}]";
+            }
+            return string.Format(toFormat, replacements);
+        }
+
         private static float ColorPercent(float value, float percent)
         {
             percent = Mathf.Clamp(percent, 0f, 100f);

@@ -51,7 +51,7 @@ namespace VRTK.GrabAttachMechanics
             Transform trackPoint = null;
             if (precisionGrab)
             {
-                trackPoint = new GameObject(string.Format("[{0}]TrackObject_PrecisionSnap_AttachPoint", currentGrabbedObject.name)).transform;
+                trackPoint = new GameObject(VRTK_SharedMethods.GenerateVRTKObjectName(true, currentGrabbedObject.name, "TrackObject", "PrecisionSnap", "AttachPoint")).transform;
                 trackPoint.parent = currentGrabbingObject.transform;
                 SetTrackPointOrientation(ref trackPoint, currentGrabbedObject.transform, controllerPoint);
                 customTrackPoint = true;

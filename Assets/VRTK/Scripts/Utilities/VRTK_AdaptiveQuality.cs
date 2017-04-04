@@ -682,7 +682,7 @@ namespace VRTK
 #endif
                 mesh.UploadMeshData(true);
 
-                debugVisualizationQuad = new GameObject("AdaptiveQualityDebugVisualizationQuad");
+                debugVisualizationQuad = new GameObject(VRTK_SharedMethods.GenerateVRTKObjectName(true, "AdaptiveQualityDebugVisualizationQuad"));
                 if (VRTK_SDKManager.instance)
                 {
                     debugVisualizationQuad.transform.parent = VRTK_DeviceFinder.HeadsetTransform();

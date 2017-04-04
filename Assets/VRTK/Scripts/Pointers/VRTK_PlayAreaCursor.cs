@@ -272,7 +272,7 @@ namespace VRTK
 
         protected virtual string GeneratePlayAreaCursorName()
         {
-            return string.Format("[{0}]PlayAreaCursor", gameObject.name);
+            return VRTK_SharedMethods.GenerateVRTKObjectName(true, gameObject.name, "PlayAreaCursor");
         }
 
         protected virtual void GeneratePlayAreaCursorFromPrefab(Vector3[] cursorDrawVertices)
@@ -289,13 +289,13 @@ namespace VRTK
             float height = 0.01f;
 
             playAreaCursorValidChild = Instantiate(validLocationObject);
-            playAreaCursorValidChild.name = "ValidArea";
+            playAreaCursorValidChild.name = VRTK_SharedMethods.GenerateVRTKObjectName(true, "ValidArea");
             playAreaCursorValidChild.transform.SetParent(playAreaCursor.transform);
 
             if (invalidLocationObject != null)
             {
                 playAreaCursorInvalidChild = Instantiate(invalidLocationObject);
-                playAreaCursorInvalidChild.name = "InvalidArea";
+                playAreaCursorInvalidChild.name = VRTK_SharedMethods.GenerateVRTKObjectName(true, "InvalidArea");
                 playAreaCursorInvalidChild.transform.SetParent(playAreaCursor.transform);
             }
 
@@ -346,7 +346,7 @@ namespace VRTK
         protected virtual void DrawPlayAreaCursorBoundary(int index, float left, float right, float top, float bottom, float thickness, Vector3 localPosition)
         {
             GameObject playAreaCursorBoundary = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            playAreaCursorBoundary.name = string.Format("[{0}]PlayAreaCursorBoundary_" + index, gameObject.name);
+            playAreaCursorBoundary.name = VRTK_SharedMethods.GenerateVRTKObjectName(true, gameObject.name, "PlayAreaCursorBoundary", index);
             VRTK_PlayerObject.SetPlayerObject(playAreaCursorBoundary, VRTK_PlayerObject.ObjectTypes.Pointer);
 
             float width = (right - left) / 1.065f;

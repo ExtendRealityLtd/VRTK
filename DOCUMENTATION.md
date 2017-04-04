@@ -6160,6 +6160,18 @@ Finds all components of a given type. This method returns components from active
 
 Finds the first component of a given type. This method returns components from active as well as inactive  s in the scene. It doesn't return assets. For performance reasons it is recommended to not use this function every frame. Cache the result in a member variable at startup instead.
 
+#### GenerateVRTKObjectName/2
+
+  > `public static string GenerateVRTKObjectName(bool autoGen, params object[] replacements)`
+
+  * Parameters
+   * `bool autoGen` - An additiona [AUTOGEN] prefix will be added if this is true.
+   * `params object[] replacements` - A collection of parameters to add to the generated name.
+  * Returns
+   * `string` - The generated name string.
+
+The GenerateVRTKObjectName method is used to create a standard name string for any VRTK generated object.
+
 ---
 
 ## Policy List (VRTK_PolicyList)

@@ -968,7 +968,7 @@ namespace VRTK
 
         protected virtual Transform CreateAttachPoint(string namePrefix, string nameSuffix, Transform origin)
         {
-            var attachPoint = new GameObject(string.Format("[{0}][{1}]_Controller_AttachPoint", namePrefix, nameSuffix)).transform;
+            var attachPoint = new GameObject(VRTK_SharedMethods.GenerateVRTKObjectName(true, namePrefix, nameSuffix, "Controller", "AttachPoint")).transform;
             attachPoint.parent = transform;
             attachPoint.position = origin.position;
             attachPoint.rotation = origin.rotation;

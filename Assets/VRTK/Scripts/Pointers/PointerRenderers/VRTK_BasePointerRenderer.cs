@@ -456,13 +456,13 @@ namespace VRTK
 
         protected virtual void CreateObjectInteractor()
         {
-            objectInteractor = new GameObject(string.Format("[{0}]BasePointerRenderer_ObjectInteractor_Container", gameObject.name));
+            objectInteractor = new GameObject(VRTK_SharedMethods.GenerateVRTKObjectName(true, gameObject.name, "BasePointerRenderer_ObjectInteractor_Container"));
             objectInteractor.transform.SetParent(controllingPointer.controller.transform);
             objectInteractor.transform.localPosition = Vector3.zero;
             objectInteractor.layer = LayerMask.NameToLayer("Ignore Raycast");
             VRTK_PlayerObject.SetPlayerObject(objectInteractor, VRTK_PlayerObject.ObjectTypes.Pointer);
 
-            GameObject objectInteractorCollider = new GameObject(string.Format("[{0}]BasePointerRenderer_ObjectInteractor_Collider", gameObject.name));
+            GameObject objectInteractorCollider = new GameObject(VRTK_SharedMethods.GenerateVRTKObjectName(true, gameObject.name, "BasePointerRenderer_ObjectInteractor_Collider"));
             objectInteractorCollider.transform.SetParent(objectInteractor.transform);
             objectInteractorCollider.transform.localPosition = Vector3.zero;
             objectInteractorCollider.layer = LayerMask.NameToLayer("Ignore Raycast");
@@ -472,7 +472,7 @@ namespace VRTK
 
             if (controllingPointer.grabToPointerTip)
             {
-                objectInteractorAttachPoint = new GameObject(string.Format("[{0}]BasePointerRenderer_ObjectInteractor_AttachPoint", gameObject.name));
+                objectInteractorAttachPoint = new GameObject(VRTK_SharedMethods.GenerateVRTKObjectName(true, gameObject.name, "BasePointerRenderer_ObjectInteractor_AttachPoint"));
                 objectInteractorAttachPoint.transform.SetParent(objectInteractor.transform);
                 objectInteractorAttachPoint.transform.localPosition = Vector3.zero;
                 objectInteractorAttachPoint.layer = LayerMask.NameToLayer("Ignore Raycast");
@@ -497,7 +497,7 @@ namespace VRTK
 
         protected virtual void CreatePointerOriginTransformFollow()
         {
-            pointerOriginTransformFollowGameObject = new GameObject(string.Format("[{0}]BasePointerRenderer_Origin_Smoothed", gameObject.name));
+            pointerOriginTransformFollowGameObject = new GameObject(VRTK_SharedMethods.GenerateVRTKObjectName(true, gameObject.name, "BasePointerRenderer_Origin_Smoothed"));
             pointerOriginTransformFollow = pointerOriginTransformFollowGameObject.AddComponent<VRTK_TransformFollow>();
             pointerOriginTransformFollow.enabled = false;
             pointerOriginTransformFollow.followsScale = false;
