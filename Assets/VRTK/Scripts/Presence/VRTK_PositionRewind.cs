@@ -7,11 +7,13 @@ namespace VRTK
     /// The Position Rewind script is used to reset the user back to a good known standing position upon receiving a headset collision event.
     /// </summary>
     /// <example>
-    /// /// `VRTK/Examples/017_CameraRig_TouchpadWalking` has the position rewind script to reset the user's position if they walk into objects.
+    /// `VRTK/Examples/017_CameraRig_TouchpadWalking` has the position rewind script to reset the user's position if they walk into objects.
     /// </example>
     [RequireComponent(typeof(VRTK_HeadsetCollision))]
     public class VRTK_PositionRewind : MonoBehaviour
     {
+        [Header("Rewind Settings")]
+
         [Tooltip("The amount of time from original headset collision until the rewind to the last good known position takes place.")]
         public float rewindDelay = 0.5f;
         [Tooltip("The additional distance to push the play area back upon rewind to prevent being right next to the wall again.")]
@@ -21,11 +23,15 @@ namespace VRTK
         [Tooltip("The threshold to determind how low the headset can be to perform a position rewind. If the headset Y position is lower than this threshold then a rewind won't occur.")]
         public float crouchRewindThreshold = 0.1f;
 
+        [Header("Custom Settings")]
+
+        [Tooltip("The VRTK Body Physics script to use for the collisions and rigidbodies. If this is left blank then the first Body Physics script found in the scene will be used.")]
+        public VRTK_BodyPhysics bodyPhysics;
+        [Tooltip("The VRTK Headset Collision script to use to determine if the headset is colliding. If this is left blank then the script will need to be applied to the same GameObject.")]
+        public VRTK_HeadsetCollision headsetCollision;
+
         protected Transform headset;
         protected Transform playArea;
-        protected Rigidbody playareaRigidbody;
-        protected VRTK_BodyPhysics bodyPhysics;
-        protected VRTK_HeadsetCollision headsetCollision;
 
         protected Vector3 lastGoodStandingPosition;
         protected Vector3 lastGoodHeadsetPosition;
@@ -34,6 +40,7 @@ namespace VRTK
         protected bool lastGoodPositionSet = false;
         protected bool hasCollided = false;
         protected bool isColliding = false;
+        protected bool isRewinding = false;
         protected float collideTimer = 0f;
 
         protected virtual void OnEnable()
@@ -41,14 +48,14 @@ namespace VRTK
             lastGoodPositionSet = false;
             headset = VRTK_DeviceFinder.HeadsetTransform();
             playArea = VRTK_DeviceFinder.PlayAreaTransform();
-            bodyPhysics = FindObjectOfType<VRTK_BodyPhysics>();
-            playareaRigidbody = playArea.GetComponent<Rigidbody>();
-            headsetCollision = GetComponent<VRTK_HeadsetCollision>();
-            ManageHeadsetListeners(true);
-            if (!playArea)
+            if (playArea == null)
             {
                 VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.SDK_OBJECT_NOT_FOUND, "PlayArea", "Boundaries SDK"));
             }
+
+            bodyPhysics = (bodyPhysics != null ? bodyPhysics : FindObjectOfType<VRTK_BodyPhysics>());
+            headsetCollision = (headsetCollision != null ? headsetCollision : GetComponentInChildren<VRTK_HeadsetCollision>());
+            ManageHeadsetListeners(true);
         }
 
         protected virtual void OnDisable()
@@ -75,9 +82,9 @@ namespace VRTK
 
         protected virtual void FixedUpdate()
         {
-            if (!isColliding && playArea)
+            if (!isColliding && playArea != null)
             {
-                var floorVariant = 0.005f;
+                float floorVariant = 0.005f;
                 if (playArea.position.y > (lastPlayAreaY + floorVariant) || playArea.position.y < (lastPlayAreaY - floorVariant))
                 {
                     highestHeadsetY = crouchThreshold;
@@ -115,6 +122,7 @@ namespace VRTK
         {
             isColliding = false;
             hasCollided = false;
+            isRewinding = false;
         }
 
         protected virtual bool BodyCollisionsEnabled()
@@ -124,27 +132,23 @@ namespace VRTK
 
         protected virtual void RewindPosition()
         {
-            if (lastGoodPositionSet && headset.localPosition.y > crouchRewindThreshold && BodyCollisionsEnabled())
+            if (!isRewinding && playArea != null & lastGoodPositionSet && headset.localPosition.y > crouchRewindThreshold && BodyCollisionsEnabled())
             {
-                var xReset = playArea.position.x - (headset.position.x - lastGoodHeadsetPosition.x);
-                var zReset = playArea.position.z - (headset.position.z - lastGoodHeadsetPosition.z);
-
-                var currentPosition = new Vector3(headset.position.x, lastGoodStandingPosition.y, headset.position.z);
-                var resetPosition = new Vector3(xReset, lastGoodStandingPosition.y, zReset);
-                var finalPosition = currentPosition + (resetPosition - currentPosition).normalized * (Vector3.Distance(resetPosition, currentPosition) + pushbackDistance);
-
-                playArea.position = finalPosition;
-                if (playareaRigidbody)
+                isRewinding = true;
+                Vector3 rewindDirection = lastGoodHeadsetPosition - headset.position;
+                float rewindDistance = Vector2.Distance(new Vector2(headset.position.x, headset.position.z), new Vector2(lastGoodHeadsetPosition.x, lastGoodHeadsetPosition.z));
+                playArea.Translate(rewindDirection.normalized * (rewindDistance + pushbackDistance));
+                playArea.position = new Vector3(playArea.position.x, lastGoodStandingPosition.y, playArea.position.z);
+                if (bodyPhysics != null)
                 {
-                    playareaRigidbody.velocity = Vector3.zero;
-                    playareaRigidbody.angularVelocity = Vector3.zero;
+                    bodyPhysics.ResetVelocities();
                 }
             }
         }
 
         protected virtual void ManageHeadsetListeners(bool state)
         {
-            if (headsetCollision)
+            if (headsetCollision != null)
             {
                 if (state)
                 {

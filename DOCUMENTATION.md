@@ -4819,6 +4819,17 @@ The GetVelocity method returns the velocity of the body physics rigidbody.
 
 The GetAngularVelocity method returns the angular velocity of the body physics rigidbody.
 
+#### ResetVelocities/0
+
+  > `public virtual void ResetVelocities()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The ResetVelocities method sets the rigidbody velocity and angular velocity to zero to stop the Play Area rigidbody from continuing to move if it has a velocity already.
+
 ### Example
 
 `VRTK/Examples/017_CameraRig_TouchpadWalking` has a collection of walls and slopes that can be traversed by the user with the touchpad but the user cannot pass through the objects as they are collidable and the rigidbody physics won't allow the intersection to occur.
@@ -4837,6 +4848,8 @@ The Position Rewind script is used to reset the user back to a good known standi
  * **Pushback Distance:** The additional distance to push the play area back upon rewind to prevent being right next to the wall again.
  * **Crouch Threshold:** The threshold to determine how low the headset has to be before it is considered the user is crouching. The last good position will only be recorded in a non-crouching position.
  * **Crouch Rewind Threshold:** The threshold to determind how low the headset can be to perform a position rewind. If the headset Y position is lower than this threshold then a rewind won't occur.
+ * **Body Physics:** The VRTK Body Physics script to use for the collisions and rigidbodies. If this is left blank then the first Body Physics script found in the scene will be used.
+ * **Headset Collision:** The VRTK Headset Collision script to use to determine if the headset is colliding. If this is left blank then the script will need to be applied to the same GameObject.
 
 ### Example
 

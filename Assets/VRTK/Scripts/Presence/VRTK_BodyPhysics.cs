@@ -276,6 +276,15 @@ namespace VRTK
             return (bodyRigidbody != null ? bodyRigidbody.angularVelocity : Vector3.zero);
         }
 
+        /// <summary>
+        /// The ResetVelocities method sets the rigidbody velocity and angular velocity to zero to stop the Play Area rigidbody from continuing to move if it has a velocity already.
+        /// </summary>
+        public virtual void ResetVelocities()
+        {
+            bodyRigidbody.velocity = Vector3.zero;
+            bodyRigidbody.angularVelocity = Vector3.zero;
+        }
+
         protected override void OnEnable()
         {
             base.OnEnable();
