@@ -43,16 +43,21 @@ namespace VRTK
         /// <returns>A Vector3 array of the points in the scene that represent the play area boundaries.</returns>
         public override Vector3[] GetPlayAreaVertices(GameObject playArea)
         {
-            if (area)
-            {
-                Vector3[] vertices = new Vector3[4];
-                vertices[0] = new Vector3(1, 0, 1);
-                vertices[1] = new Vector3(-1, 0, 1);
-                vertices[2] = new Vector3(1, 0, -1);
-                vertices[3] = new Vector3(-1, 0, -1);
-                return vertices;
-            }
-            return null;
+            float inner = 0.9f;
+            float outer = 1f;
+
+            Vector3[] vertices = new Vector3[8];
+            vertices[0] = new Vector3(inner, 0f, -inner);
+            vertices[1] = new Vector3(-inner, 0f, -inner);
+            vertices[2] = new Vector3(-inner, 0f, inner);
+            vertices[3] = new Vector3(inner, 0f, inner);
+
+            vertices[4] = new Vector3(outer, 0f, -outer);
+            vertices[5] = new Vector3(-outer, 0f, -outer);
+            vertices[6] = new Vector3(-outer, 0f, outer);
+            vertices[7] = new Vector3(outer, 0f, outer);
+
+            return vertices;
         }
 
         /// <summary>

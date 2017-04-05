@@ -55,16 +55,6 @@ namespace VRTK
         /// <returns>A Vector3 array of the points in the scene that represent the play area boundaries.</returns>
         public override Vector3[] GetPlayAreaVertices(GameObject playArea)
         {
-            if (area)
-            {
-                // taken from SDK_Simulator, is this a valid size? does bounds even make sense in non-positionaly tracked HMD?
-                Vector3[] vertices = new Vector3[4];
-                vertices[0] = new Vector3(1, 0, 1);
-                vertices[1] = new Vector3(-1, 0, 1);
-                vertices[2] = new Vector3(1, 0, -1);
-                vertices[3] = new Vector3(-1, 0, -1);
-                return vertices;
-            }
             return null;
         }
 

@@ -73,7 +73,7 @@ namespace VRTK
 
                 return vertices;
             }
-            return new Vector3[0];
+            return null;
         }
 
         /// <summary>
