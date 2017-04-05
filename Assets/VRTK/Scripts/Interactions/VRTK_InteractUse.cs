@@ -152,12 +152,14 @@ namespace VRTK
             }
 
             ManageUseListener(true);
+            ManageInteractTouchListener(true);
         }
 
         protected virtual void OnDisable()
         {
             ForceStopUsing();
             ManageUseListener(false);
+            ManageInteractTouchListener(false);
         }
 
         protected virtual void Update()
