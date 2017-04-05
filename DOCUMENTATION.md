@@ -4532,6 +4532,7 @@ The Headset Collision Fade uses a composition of the Headset Collision and Heads
 
 ### Inspector Parameters
 
+ * **Time Till Fade:** The amount of time to wait until a fade occurs.
  * **Blink Transition Speed:** The fade blink speed on collision.
  * **Fade Color:** The colour to fade the headset to on collision.
 
