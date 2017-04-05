@@ -201,6 +201,7 @@ namespace VRTK
         protected VRTK_SnapDropZone storedSnapDropZone;
         protected Vector3 previousLocalScale = Vector3.zero;
         protected List<GameObject> currentIgnoredColliders = new List<GameObject>();
+        protected bool startDisabled = false;
 
         public virtual void OnInteractableObjectTouched(InteractableObjectEventArgs e)
         {
@@ -728,6 +729,7 @@ namespace VRTK
 
             if (disableWhenIdle && enabled)
             {
+                startDisabled = true;
                 enabled = false;
             }
         }
@@ -742,6 +744,7 @@ namespace VRTK
                 LoadPreviousState();
             }
             forcedDropped = false;
+            startDisabled = false;
         }
 
         protected virtual void OnDisable()
@@ -754,8 +757,11 @@ namespace VRTK
                 objectHighlighter = null;
             }
 
-            forceDisabled = true;
-            ForceStopInteracting();
+            if (!startDisabled)
+            {
+                forceDisabled = true;
+                ForceStopInteracting();
+            }
         }
 
         protected virtual void FixedUpdate()
