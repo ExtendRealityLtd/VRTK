@@ -4795,6 +4795,28 @@ The IsLeaning method returns the leaning state of the user.
 
 The OnGround method returns whether the user is currently standing on the ground or not.
 
+#### GetVelocity/0
+
+  > `public virtual Vector3 GetVelocity()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `Vector3` - The velocity of the body physics rigidbody.
+
+The GetVelocity method returns the velocity of the body physics rigidbody.
+
+#### GetAngularVelocity/0
+
+  > `public virtual Vector3 GetAngularVelocity()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `Vector3` - The angular velocity of the body physics rigidbody.
+
+The GetAngularVelocity method returns the angular velocity of the body physics rigidbody.
+
 ### Example
 
 `VRTK/Examples/017_CameraRig_TouchpadWalking` has a collection of walls and slopes that can be traversed by the user with the touchpad but the user cannot pass through the objects as they are collidable and the rigidbody physics won't allow the intersection to occur.

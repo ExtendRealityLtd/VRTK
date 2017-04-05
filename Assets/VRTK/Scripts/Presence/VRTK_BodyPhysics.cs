@@ -256,6 +256,24 @@ namespace VRTK
             return onGround;
         }
 
+        /// <summary>
+        /// The GetVelocity method returns the velocity of the body physics rigidbody.
+        /// </summary>
+        /// <returns>The velocity of the body physics rigidbody.</returns>
+        public virtual Vector3 GetVelocity()
+        {
+            return (bodyRigidbody != null ? bodyRigidbody.velocity : Vector3.zero);
+        }
+
+        /// <summary>
+        /// The GetAngularVelocity method returns the angular velocity of the body physics rigidbody.
+        /// </summary>
+        /// <returns>The angular velocity of the body physics rigidbody.</returns>
+        public virtual Vector3 GetAngularVelocity()
+        {
+            return (bodyRigidbody != null ? bodyRigidbody.angularVelocity : Vector3.zero);
+        }
+
         protected override void OnEnable()
         {
             base.OnEnable();
