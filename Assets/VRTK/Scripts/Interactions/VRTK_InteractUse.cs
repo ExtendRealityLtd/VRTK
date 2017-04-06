@@ -157,7 +157,7 @@ namespace VRTK
 
         protected virtual void OnDisable()
         {
-            ForceStopUsing();
+            ForceResetUsing();
             ManageUseListener(false);
             ManageInteractTouchListener(false);
         }
