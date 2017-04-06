@@ -89,7 +89,7 @@ namespace VRTK
                     Destroy(tracerLineRenderer.transform.GetChild(i).gameObject);
                 }
                 customLineRenderer = tracerLineRenderer.GetComponent<LineRenderer>();
-#if UNITY_5_5_OR_NEWER
+#if UNITY_5_5
                 customLineRenderer.numPositions = frequency;
 #elif UNITY_5_6_OR_NEWER
                 customLineRenderer.positionCount = frequency;
