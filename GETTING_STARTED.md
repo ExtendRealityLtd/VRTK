@@ -50,6 +50,7 @@
  * Download the [Oculus Utilities] from the Oculus developer website.
  * Import the `OculusUtilities.unitypackage` into the project.
  * Drag the `OVRCameraRig` prefab from the Oculus package into the scene.
+ * On the `OVRCameraRig` copy in the scene find the `OVRManager` and set its `Tracking Origin Type` to `Floor Level`.
  * Check that `Virtual Reality Supported` is ticked in the `Edit -> Project Settings -> Player` menu.
  * Ensure that `Oculus` is added in the `Virtual Reality SDKs` list in the `Edit -> Project Settings -> Player` menu.
  * Select the GameObject with the `VRTK_SDKManager` script attached to it.
