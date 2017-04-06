@@ -4532,6 +4532,7 @@ The Headset Collision Fade uses a composition of the Headset Collision and Heads
 
 ### Inspector Parameters
 
+ * **Time Till Fade:** The amount of time to wait until a fade occurs.
  * **Blink Transition Speed:** The fade blink speed on collision.
  * **Fade Color:** The colour to fade the headset to on collision.
 
@@ -4663,6 +4664,7 @@ To allow for peeking over a ledge and not falling, a fall restiction can happen 
  * **Ignore Grabbed Collisions:** If this is checked then any items that are grabbed with the controller will not collide with the body collider. This is very useful if the user is required to grab and wield objects because if the collider was active they would bounce off the collider.
  * **Headset Y Offset:** The collider which is created for the user is set at a height from the user's headset position. If the collider is required to be lower to allow for room between the play area collider and the headset then this offset value will shorten the height of the generated collider.
  * **Movement Threshold:** The amount of movement of the headset between the headset's current position and the current standing position to determine if the user is walking in play space and to ignore the body physics collisions if the movement delta is above this threshold.
+ * **Play Area Movement Threshold:** The amount of movement of the play area between the play area's current position and the previous position to determine if the user is moving play space.
  * **Standing History Samples:** The maximum number of samples to collect of headset position before determining if the current standing position within the play space has changed.
  * **Lean Y Threshold:** The `y` distance between the headset and the object being leaned over, if object being leaned over is taller than this threshold then the current standing position won't be updated.
  * **Step Up Y Offset:** The maximum height to consider when checking if an object can be stepped upon to.
@@ -4817,6 +4819,17 @@ The GetVelocity method returns the velocity of the body physics rigidbody.
 
 The GetAngularVelocity method returns the angular velocity of the body physics rigidbody.
 
+#### ResetVelocities/0
+
+  > `public virtual void ResetVelocities()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The ResetVelocities method sets the rigidbody velocity and angular velocity to zero to stop the Play Area rigidbody from continuing to move if it has a velocity already.
+
 ### Example
 
 `VRTK/Examples/017_CameraRig_TouchpadWalking` has a collection of walls and slopes that can be traversed by the user with the touchpad but the user cannot pass through the objects as they are collidable and the rigidbody physics won't allow the intersection to occur.
@@ -4835,6 +4848,8 @@ The Position Rewind script is used to reset the user back to a good known standi
  * **Pushback Distance:** The additional distance to push the play area back upon rewind to prevent being right next to the wall again.
  * **Crouch Threshold:** The threshold to determine how low the headset has to be before it is considered the user is crouching. The last good position will only be recorded in a non-crouching position.
  * **Crouch Rewind Threshold:** The threshold to determind how low the headset can be to perform a position rewind. If the headset Y position is lower than this threshold then a rewind won't occur.
+ * **Body Physics:** The VRTK Body Physics script to use for the collisions and rigidbodies. If this is left blank then the first Body Physics script found in the scene will be used.
+ * **Headset Collision:** The VRTK Headset Collision script to use to determine if the headset is colliding. If this is left blank then the script will need to be applied to the same GameObject.
 
 ### Example
 

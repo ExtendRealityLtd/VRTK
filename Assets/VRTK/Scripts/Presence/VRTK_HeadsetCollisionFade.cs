@@ -17,6 +17,8 @@ namespace VRTK
     [RequireComponent(typeof(VRTK_HeadsetCollision)), RequireComponent(typeof(VRTK_HeadsetFade))]
     public class VRTK_HeadsetCollisionFade : MonoBehaviour
     {
+        [Tooltip("The amount of time to wait until a fade occurs.")]
+        public float timeTillFade = 0f;
         [Tooltip("The fade blink speed on collision.")]
         public float blinkTransitionSpeed = 0.1f;
         [Tooltip("The colour to fade the headset to on collision.")]
@@ -42,12 +44,18 @@ namespace VRTK
 
         protected virtual void OnHeadsetCollisionDetect(object sender, HeadsetCollisionEventArgs e)
         {
-            headsetFade.Fade(fadeColor, blinkTransitionSpeed);
+            Invoke("StartFade", timeTillFade);
         }
 
         protected virtual void OnHeadsetCollisionEnded(object sender, HeadsetCollisionEventArgs e)
         {
+            CancelInvoke("StartFade");
             headsetFade.Unfade(blinkTransitionSpeed);
+        }
+
+        protected virtual void StartFade()
+        {
+            headsetFade.Fade(fadeColor, blinkTransitionSpeed);
         }
     }
 }
