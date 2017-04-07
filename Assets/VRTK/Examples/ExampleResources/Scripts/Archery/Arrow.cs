@@ -72,11 +72,11 @@
         private void RecreateNotch()
         {
             //swap the arrow holder to be the parent again
-            arrowHolder.transform.parent = null;
+            arrowHolder.transform.SetParent(null);
             arrowHolder.SetActive(true);
 
             //make the arrow a child of the holder again
-            transform.parent = arrowHolder.transform;
+            transform.SetParent(arrowHolder.transform);
 
             //reset the state of the rigidbodies and colliders
             GetComponent<Rigidbody>().isKinematic = true;

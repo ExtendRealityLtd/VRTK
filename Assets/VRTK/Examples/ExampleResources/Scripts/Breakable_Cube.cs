@@ -48,7 +48,7 @@
 
         private void ExplodeFace(Transform face, float force)
         {
-            face.transform.parent = null;
+            face.transform.SetParent(null);
             Rigidbody rb = face.gameObject.AddComponent<Rigidbody>();
             rb.isKinematic = false;
             rb.useGravity = true;

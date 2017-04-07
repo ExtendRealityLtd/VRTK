@@ -70,7 +70,7 @@ namespace VRTK.GrabAttachMechanics
             {
                 SetSnappedObjectPosition(obj);
             }
-            obj.transform.parent = controllerAttachPoint.transform;
+            obj.transform.SetParent(controllerAttachPoint.transform);
         }
     }
 }

@@ -330,7 +330,7 @@ namespace VRTK
             float height = 0.01f;
 
             playAreaCursor = new GameObject(GeneratePlayAreaCursorName());
-            playAreaCursor.transform.parent = null;
+            playAreaCursor.transform.SetParent(null);
             playAreaCursor.transform.localScale = new Vector3(width, height, length);
 
             float playAreaBoundaryX = playArea.transform.localScale.x / 2;
@@ -357,7 +357,7 @@ namespace VRTK
             Destroy(playAreaCursorBoundary.GetComponent<BoxCollider>());
             playAreaCursorBoundary.layer = LayerMask.NameToLayer("Ignore Raycast");
 
-            playAreaCursorBoundary.transform.parent = playAreaCursor.transform;
+            playAreaCursorBoundary.transform.SetParent(playAreaCursor.transform);
             playAreaCursorBoundary.transform.localPosition = localPosition;
 
             playAreaCursorBoundaries[index] = playAreaCursorBoundary;

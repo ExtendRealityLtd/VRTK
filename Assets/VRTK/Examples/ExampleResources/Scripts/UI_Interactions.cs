@@ -60,7 +60,7 @@
             canvasRT.eulerAngles = new Vector3(0f, 270f, 0f);
 
             var newButtonGO = new GameObject("TempButton", typeof(RectTransform));
-            newButtonGO.transform.parent = newCanvasGO.transform;
+            newButtonGO.transform.SetParent(newCanvasGO.transform);
             newButtonGO.layer = 5;
 
             var buttonRT = newButtonGO.GetComponent<RectTransform>();
@@ -78,7 +78,7 @@
             canvasButton.colors = buttonColourBlock;
 
             var newTextGO = new GameObject("BtnText", typeof(RectTransform));
-            newTextGO.transform.parent = newButtonGO.transform;
+            newTextGO.transform.SetParent(newButtonGO.transform);
             newTextGO.layer = 5;
 
             var textRT = newTextGO.GetComponent<RectTransform>();

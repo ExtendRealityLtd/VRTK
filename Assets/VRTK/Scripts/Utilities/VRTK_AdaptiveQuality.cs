@@ -685,7 +685,7 @@ namespace VRTK
                 debugVisualizationQuad = new GameObject(VRTK_SharedMethods.GenerateVRTKObjectName(true, "AdaptiveQualityDebugVisualizationQuad"));
                 if (VRTK_SDKManager.instance)
                 {
-                    debugVisualizationQuad.transform.parent = VRTK_DeviceFinder.HeadsetTransform();
+                    debugVisualizationQuad.transform.SetParent(VRTK_DeviceFinder.HeadsetTransform());
                 }
                 debugVisualizationQuad.transform.localPosition = Vector3.forward;
                 debugVisualizationQuad.transform.localRotation = Quaternion.identity;

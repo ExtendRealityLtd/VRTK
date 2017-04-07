@@ -20,7 +20,7 @@
             if (handle != null && obj != null && handle.aim.IsHeld() && obj.IsGrabbed())
             {
                 handle.nockSide = collider.transform;
-                arrow.transform.parent = handle.arrowNockingPoint;
+                arrow.transform.SetParent(handle.arrowNockingPoint);
 
                 CopyNotchToArrow();
 
