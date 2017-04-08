@@ -123,7 +123,6 @@ namespace VRTK
         [Tooltip("The render viewport scale level to override the current one with.")]
         [NonSerialized]
         public int overrideRenderViewportScaleLevel;
-
         #endregion
 
         #region Public readonly fields & properties
