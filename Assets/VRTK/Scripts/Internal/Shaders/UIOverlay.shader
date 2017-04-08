@@ -1,4 +1,4 @@
-﻿UNITY_SHADER_NO_UPGRADE
+﻿// UNITY_SHADER_NO_UPGRADE
 Shader "UI/Overlay"
 {
 	Properties
@@ -42,7 +42,7 @@ Shader "UI/Overlay"
 			Lighting Off
 			ZWrite Off
 			ZTest[unity_GUIZTestMode]
-			Offset - 1, -1
+			Offset -1, -1
 			Blend SrcAlpha OneMinusSrcAlpha
 			ColorMask[_ColorMask]
 
