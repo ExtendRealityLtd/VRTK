@@ -24,6 +24,13 @@ namespace VRTK
         /// </summary>
         public override void InitBoundaries()
         {
+#if UNITY_5_6_OR_NEWER
+            Transform headsetCamera = VRTK_DeviceFinder.HeadsetCamera();
+            if (headsetCamera != null && headsetCamera.GetComponent<SteamVR_UpdatePoses>() == null)
+            {
+                headsetCamera.gameObject.AddComponent<SteamVR_UpdatePoses>();
+            }
+#endif
         }
 
         /// <summary>
@@ -124,5 +131,5 @@ namespace VRTK
             return cachedSteamVRPlayArea;
         }
 #endif
-    }
+        }
 }
