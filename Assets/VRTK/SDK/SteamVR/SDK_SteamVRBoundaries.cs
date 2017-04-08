@@ -131,5 +131,5 @@ namespace VRTK
             return cachedSteamVRPlayArea;
         }
 #endif
-        }
+    }
 }
