@@ -220,7 +220,7 @@ namespace VRTK
 
         protected virtual void OnEnable()
         {
-            if (defaultSnappedObject != null)
+            if (!VRTK_SharedMethods.IsEditTime() && Application.isPlaying && defaultSnappedObject != null)
             {
                 ForceSnap(defaultSnappedObject);
             }
