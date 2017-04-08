@@ -6209,6 +6209,17 @@ Finds the first component of a given type. This method returns components from a
 
 The GenerateVRTKObjectName method is used to create a standard name string for any VRTK generated object.
 
+#### GetGPUTimeLastFrame/0
+
+  > `public static float GetGPUTimeLastFrame()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `float` - The total GPU time utilized last frame as measured by the VR subsystem.
+
+The GetGPUTimeLastFrame retrieves the time spent by the GPU last frame, in seconds, as reported by the VR SDK.
+
 ---
 
 ## Policy List (VRTK_PolicyList)

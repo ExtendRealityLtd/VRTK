@@ -8,6 +8,7 @@ namespace VRTK
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
+    using UnityEngine.VR;
 
     /// <summary>
     /// The Shared Methods script is a collection of reusable static methods that are used across a range of different scripts.
@@ -407,6 +408,24 @@ namespace VRTK
                 toFormat += "[{" + i + "}]";
             }
             return string.Format(toFormat, replacements);
+        }
+
+        /// <summary>
+        /// The GetGPUTimeLastFrame retrieves the time spent by the GPU last frame, in seconds, as reported by the VR SDK.
+        /// </summary>
+        /// <returns>The total GPU time utilized last frame as measured by the VR subsystem.</returns>
+        public static float GetGPUTimeLastFrame()
+        {
+#if UNITY_5_6_OR_NEWER
+            float gpuTimeLastFrame;
+            if (VRStats.TryGetGPUTimeLastFrame(out gpuTimeLastFrame))
+            {
+                return gpuTimeLastFrame;
+            }
+            return 0f;
+#else
+            return VRStats.gpuTimeLastFrame;
+#endif
         }
 
         private static float ColorPercent(float value, float percent)
