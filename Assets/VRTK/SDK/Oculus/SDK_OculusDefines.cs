@@ -1,27 +1,27 @@
-﻿// OculusVR Defines|SDK_OculusVR|001
+﻿// Oculus Defines|SDK_Oculus|001
 namespace VRTK
 {
     using System;
     using System.Reflection;
 
     /// <summary>
-    /// Handles all the scripting define symbols for the OculusVR and Avatar SDKs.
+    /// Handles all the scripting define symbols for the Oculus and Avatar SDKs.
     /// </summary>
-    public static class SDK_OculusVRDefines
+    public static class SDK_OculusDefines
     {
         /// <summary>
-        /// The scripting define symbol for the OculusVR SDK.
+        /// The scripting define symbol for the Oculus SDK.
         /// </summary>
-        public const string ScriptingDefineSymbol = SDK_ScriptingDefineSymbolPredicateAttribute.RemovableSymbolPrefix + "SDK_OCULUSVR";
+        public const string ScriptingDefineSymbol = SDK_ScriptingDefineSymbolPredicateAttribute.RemovableSymbolPrefix + "SDK_OCULUS";
         /// <summary>
-        /// The scripting define symbol for the OculusVR Avatar SDK.
+        /// The scripting define symbol for the Oculus Avatar SDK.
         /// </summary>
-        public const string AvatarScriptingDefineSymbol = SDK_ScriptingDefineSymbolPredicateAttribute.RemovableSymbolPrefix + "SDK_OCULUSVR_AVATAR";
+        public const string AvatarScriptingDefineSymbol = SDK_ScriptingDefineSymbolPredicateAttribute.RemovableSymbolPrefix + "SDK_OCULUS_AVATAR";
 
         private const string BuildTargetGroupName = "Standalone";
 
         [SDK_ScriptingDefineSymbolPredicate(ScriptingDefineSymbol, BuildTargetGroupName)]
-        [SDK_ScriptingDefineSymbolPredicate(SDK_ScriptingDefineSymbolPredicateAttribute.RemovableSymbolPrefix + "OCULUSVR_UTILITIES_1_12_0_OR_NEWER", BuildTargetGroupName)]
+        [SDK_ScriptingDefineSymbolPredicate(SDK_ScriptingDefineSymbolPredicateAttribute.RemovableSymbolPrefix + "OCULUS_UTILITIES_1_12_0_OR_NEWER", BuildTargetGroupName)]
         private static bool IsUtilitiesVersion1120OrNewer()
         {
             Version wrapperVersion = GetOculusWrapperVersion();
@@ -29,7 +29,7 @@ namespace VRTK
         }
 
         [SDK_ScriptingDefineSymbolPredicate(ScriptingDefineSymbol, BuildTargetGroupName)]
-        [SDK_ScriptingDefineSymbolPredicate(SDK_ScriptingDefineSymbolPredicateAttribute.RemovableSymbolPrefix + "OCULUSVR_UTILITIES_1_11_0_OR_OLDER", BuildTargetGroupName)]
+        [SDK_ScriptingDefineSymbolPredicate(SDK_ScriptingDefineSymbolPredicateAttribute.RemovableSymbolPrefix + "OCULUS_UTILITIES_1_11_0_OR_OLDER", BuildTargetGroupName)]
         private static bool IsUtilitiesVersion1110OrOlder()
         {
             Version wrapperVersion = GetOculusWrapperVersion();
@@ -40,12 +40,12 @@ namespace VRTK
         private static bool IsAvatarAvailable()
         {
             return (IsUtilitiesVersion1120OrNewer() || IsUtilitiesVersion1110OrOlder())
-                   && typeof(SDK_OculusVRDefines).Assembly.GetType("OvrAvatar") != null;
+                   && typeof(SDK_OculusDefines).Assembly.GetType("OvrAvatar") != null;
         }
 
         private static Version GetOculusWrapperVersion()
         {
-            Type pluginClass = typeof(SDK_OculusVRDefines).Assembly.GetType("OVRPlugin");
+            Type pluginClass = typeof(SDK_OculusDefines).Assembly.GetType("OVRPlugin");
             if (pluginClass == null)
             {
                 return null;
@@ -63,7 +63,7 @@ namespace VRTK
 
         private static Version GetOculusRuntimeVersion()
         {
-            Type pluginClass = typeof(SDK_OculusVRDefines).Assembly.GetType("OVRPlugin");
+            Type pluginClass = typeof(SDK_OculusDefines).Assembly.GetType("OVRPlugin");
             if (pluginClass == null)
             {
                 return null;

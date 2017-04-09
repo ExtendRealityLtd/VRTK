@@ -1,22 +1,24 @@
-﻿// XimmerseVR Boundaries|SDK_XimmerseVR|005
+﻿// Ximmerse Boundaries|SDK_Ximmerse|005
 namespace VRTK
 {
-#if VRTK_DEFINE_SDK_XIMMERSEVR
+#if VRTK_DEFINE_SDK_XIMMERSE
     using UnityEngine;
+    using Ximmerse.VR;
 #endif
 
     /// <summary>
-    /// The XimmerseVR Boundaries SDK script provides a bridge to the XimmerseVR SDK play area.
+    /// The Ximmerse Boundaries SDK script provides a bridge to the Ximmerse SDK play area.
     /// </summary>
-    [SDK_Description(typeof(SDK_XimmerseVRSystem))]
-    public class SDK_XimmerseVRBoundaries
-#if VRTK_DEFINE_SDK_XIMMERSEVR
+    [SDK_Description(typeof(SDK_XimmerseSystem))]
+    [SDK_Description(typeof(SDK_XimmerseSystem), 1)]
+    public class SDK_XimmerseBoundaries
+#if VRTK_DEFINE_SDK_XIMMERSE
         : SDK_BaseBoundaries
 #else
         : SDK_FallbackBoundaries
 #endif
     {
-#if VRTK_DEFINE_SDK_XIMMERSEVR
+#if VRTK_DEFINE_SDK_XIMMERSE
         /// <summary>
         /// The InitBoundaries method is run on start of scene and can be used to initialse anything on game start.
         /// </summary>
@@ -33,7 +35,12 @@ namespace VRTK
             cachedPlayArea = GetSDKManagerPlayArea();
             if (cachedPlayArea == null)
             {
-                cachedPlayArea = Ximmerse.VR.VRContext.main.transform;
+                VRContext vrContext = VRTK_SharedMethods.FindEvenInactiveComponent<VRContext>();
+                if (Application.isPlaying)
+                {
+                    vrContext.InitVRContext();
+                }
+                cachedPlayArea = vrContext.transform;
             }
             return cachedPlayArea;
         }

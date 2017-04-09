@@ -80,7 +80,6 @@ namespace VRTK
         /// </summary>
         public event ControllerInteractionEventHandler SelectionButtonReleased;
 
-
         protected VRTK_ControllerEvents.ButtonAlias subscribedActivationButton = VRTK_ControllerEvents.ButtonAlias.Undefined;
         protected VRTK_ControllerEvents.ButtonAlias subscribedSelectionButton = VRTK_ControllerEvents.ButtonAlias.Undefined;
         protected bool currentSelectOnPress;
@@ -97,6 +96,7 @@ namespace VRTK
         protected bool activationButtonPressed;
         protected bool selectionButtonPressed;
         protected bool attemptControllerSetup;
+        protected Transform originalCustomOrigin;
 
         public virtual void OnActivationButtonPressed(ControllerInteractionEventArgs e)
         {
@@ -249,6 +249,12 @@ namespace VRTK
             }
         }
 
+        protected virtual void Awake()
+        {
+            originalCustomOrigin = customOrigin;
+            VRTK_SDKManager.instance.AddBehaviourToToggleOnLoadedSetupChange(this);
+        }
+
         protected override void OnEnable()
         {
             base.OnEnable();
@@ -268,6 +274,11 @@ namespace VRTK
             UnsubscribeSelectionButton();
         }
 
+        protected virtual void OnDestroy()
+        {
+            VRTK_SDKManager.instance.RemoveBehaviourToToggleOnLoadedSetupChange(this);
+        }
+
         protected virtual void Update()
         {
             AttemptControllerSetup();
@@ -278,7 +289,7 @@ namespace VRTK
 
         protected virtual void SetDefaultValues()
         {
-            customOrigin = (customOrigin == null ? VRTK_SDK_Bridge.GenerateControllerPointerOrigin(gameObject) : customOrigin);
+            customOrigin = (originalCustomOrigin == null ? VRTK_SDK_Bridge.GenerateControllerPointerOrigin(gameObject) : originalCustomOrigin);
             SetupRenderer();
             activateDelayTimer = 0f;
             selectDelayTimer = 0f;

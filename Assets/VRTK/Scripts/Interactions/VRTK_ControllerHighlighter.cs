@@ -62,6 +62,7 @@ namespace VRTK
         protected Dictionary<string, Transform> cachedElements;
         protected Dictionary<string, object> highlighterOptions;
         protected Coroutine initHighlightersRoutine;
+        protected GameObject originalControllerAlias;
 
         protected Color lastHighlightController;
         protected Color lastHighlightBody;
@@ -206,12 +207,19 @@ namespace VRTK
             }
         }
 
+        protected virtual void Awake()
+        {
+            originalControllerAlias = controllerAlias;
+            VRTK_SDKManager.instance.AddBehaviourToToggleOnLoadedSetupChange(this);
+        }
+
         protected virtual void OnEnable()
         {
+            controllerAlias = originalControllerAlias;
             if (controllerAlias == null)
             {
-                VRTK_ControllerTracker controllerTracker = GetComponentInParent<VRTK_ControllerTracker>();
-                controllerAlias = (controllerTracker != null ? controllerTracker.gameObject : null);
+                VRTK_TrackedController trackedController = GetComponentInParent<VRTK_TrackedController>();
+                controllerAlias = (trackedController != null ? trackedController.gameObject : null);
             }
 
             if (controllerAlias == null)
@@ -231,6 +239,11 @@ namespace VRTK
             {
                 StopCoroutine(initHighlightersRoutine);
             }
+        }
+
+        protected virtual void OnDestroy()
+        {
+            VRTK_SDKManager.instance.RemoveBehaviourToToggleOnLoadedSetupChange(this);
         }
 
         protected virtual void Update()

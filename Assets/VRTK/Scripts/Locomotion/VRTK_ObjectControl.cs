@@ -112,6 +112,11 @@ namespace VRTK
         protected abstract bool IsInAction();
         protected abstract void SetListeners(bool state);
 
+        protected virtual void Awake()
+        {
+            VRTK_SDKManager.instance.AddBehaviourToToggleOnLoadedSetupChange(this);
+        }
+
         protected virtual void OnEnable()
         {
             currentAxis = Vector2.zero;
@@ -133,6 +138,11 @@ namespace VRTK
         protected virtual void OnDisable()
         {
             SetListeners(false);
+        }
+
+        protected virtual void OnDestroy()
+        {
+            VRTK_SDKManager.instance.RemoveBehaviourToToggleOnLoadedSetupChange(this);
         }
 
         protected virtual void Update()

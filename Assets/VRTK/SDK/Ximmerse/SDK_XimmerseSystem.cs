@@ -1,18 +1,19 @@
-﻿// OculusVR System|SDK_OculusVR|002
+﻿// Ximmerse System|SDK_Ximmerse|002
 namespace VRTK
 {
     /// <summary>
-    /// The OculusVR System SDK script provides a bridge to the OculusVR SDK.
+    /// The Ximmerse System SDK script provides a bridge to the Ximmerse SDK.
     /// </summary>
-    [SDK_Description("OculusVR", SDK_OculusVRDefines.ScriptingDefineSymbol)]
-    public class SDK_OculusVRSystem
-#if VRTK_DEFINE_SDK_OCULUSVR
+    [SDK_Description("Ximmerse (Oculus)", SDK_XimmerseDefines.ScriptingDefineSymbol, "Oculus", "Standalone")]
+    [SDK_Description("Ximmerse (Daydream)", SDK_XimmerseDefines.ScriptingDefineSymbol, "Daydream", "Android", 1)]
+    public class SDK_XimmerseSystem
+#if VRTK_DEFINE_SDK_XIMMERSE
         : SDK_BaseSystem
 #else
         : SDK_FallbackSystem
 #endif
     {
-#if VRTK_DEFINE_SDK_OCULUSVR
+#if VRTK_DEFINE_SDK_XIMMERSE
         /// <summary>
         /// The IsDisplayOnDesktop method returns true if the display is extending the desktop.
         /// </summary>
@@ -28,7 +29,7 @@ namespace VRTK
         /// <returns>Returns true if the Unity app should render with low resources.</returns>
         public override bool ShouldAppRenderWithLowResources()
         {
-            return false;
+            return true;
         }
 
         /// <summary>

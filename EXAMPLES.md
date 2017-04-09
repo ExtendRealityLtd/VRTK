@@ -2,11 +2,14 @@
 
 This directory contains Unity3d scenes that demonstrate the scripts and prefabs being used in the game world to create desired functionality.
 
-The examples have all been built to work with the SteamVR Plugin by default, but they can be converted over to using the Oculus Utilities package by following the instructions for using the Oculus Utilities package in the README.md.
+> *VRTK offers a VR Simulator that works without any third party SDK, but VR device support requires a supported VR SDK to be imported into the Unity project.*
 
-There is also a `/Resources/Scripts` directory within the `VRTK/Examples` directory that contains helper scripts utilised by the example scenes to highlight certain functionality (such as event listeners). These example scripts are not required for real world usage.
+The example scenes support all the VRTK supported VR SDKs. To make use of VR devices (besides the included VR Simulator) import the needed third party VR SDK into the project.
 
-> *If the examples are not working on first load, click the `[VRTK]` GameObject in the scene hierarchy to ensure the SDK Manager editor script successfully sets up the project and scene.*
+For further information about setting up a specific SDK and using VRTK in your own project, check out the
+[GETTING_STARTED.md](https://github.com/thestonefox/VRTK/blob/master/GETTING_STARTED.md) document.
+
+There is also a `/ExampleResources/Scripts` directory within the `VRTK/Examples` directory that contains helper scripts utilised by the example scenes to highlight certain functionality (such as event listeners). These example scripts are not required for real world usage.
 
 ## Current Examples
 

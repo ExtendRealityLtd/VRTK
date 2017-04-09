@@ -297,6 +297,11 @@ namespace VRTK
             StopFall();
         }
 
+        protected virtual void Awake()
+        {
+            VRTK_SDKManager.instance.AddBehaviourToToggleOnLoadedSetupChange(this);
+        }
+
         protected override void OnEnable()
         {
             base.OnEnable();
@@ -314,6 +319,11 @@ namespace VRTK
             DisableDropToFloor();
             DisableBodyPhysics();
             ManageCollisionListeners(false);
+        }
+
+        protected virtual void OnDestroy()
+        {
+            VRTK_SDKManager.instance.RemoveBehaviourToToggleOnLoadedSetupChange(this);
         }
 
         protected virtual void FixedUpdate()

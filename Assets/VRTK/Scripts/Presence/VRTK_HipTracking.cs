@@ -24,9 +24,19 @@ namespace VRTK
 
         protected Transform playerHead;
 
+        protected virtual void Awake()
+        {
+            VRTK_SDKManager.instance.AddBehaviourToToggleOnLoadedSetupChange(this);
+        }
+
         protected virtual void OnEnable()
         {
             playerHead = (headOverride != null ? headOverride : VRTK_DeviceFinder.HeadsetTransform());
+        }
+
+        protected virtual void OnDestroy()
+        {
+            VRTK_SDKManager.instance.RemoveBehaviourToToggleOnLoadedSetupChange(this);
         }
 
         protected virtual void Update()

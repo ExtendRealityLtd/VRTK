@@ -1,24 +1,24 @@
-﻿// OculusVR Controller|SDK_OculusVR|004
+﻿// Oculus Controller|SDK_Oculus|004
 namespace VRTK
 {
-#if VRTK_DEFINE_SDK_OCULUSVR
+#if VRTK_DEFINE_SDK_OCULUS
     using UnityEngine;
     using System.Collections.Generic;
 #endif
 
     /// <summary>
-    /// The OculusVR Controller SDK script provides a bridge to SDK methods that deal with the input devices.
+    /// The Oculus Controller SDK script provides a bridge to SDK methods that deal with the input devices.
     /// </summary>
-    [SDK_Description(typeof(SDK_OculusVRSystem))]
-    public class SDK_OculusVRController
-#if VRTK_DEFINE_SDK_OCULUSVR
+    [SDK_Description(typeof(SDK_OculusSystem))]
+    public class SDK_OculusController
+#if VRTK_DEFINE_SDK_OCULUS
         : SDK_BaseController
 #else
         : SDK_FallbackController
 #endif
     {
-#if VRTK_DEFINE_SDK_OCULUSVR
-        protected SDK_OculusVRBoundaries cachedBoundariesSDK;
+#if VRTK_DEFINE_SDK_OCULUS
+        protected SDK_OculusBoundaries cachedBoundariesSDK;
         protected VRTK_TrackedController cachedLeftController;
         protected VRTK_TrackedController cachedRightController;
         protected OVRInput.Controller[] touchControllers = new OVRInput.Controller[] { OVRInput.Controller.LTouch, OVRInput.Controller.RTouch };
@@ -48,7 +48,7 @@ namespace VRTK
         /// <param name="options">A dictionary of generic options that can be used to within the update.</param>
         public override void ProcessUpdate(VRTK_ControllerReference controllerReference, Dictionary<string, object> options)
         {
-#if VRTK_DEFINE_OCULUSVR_UTILITIES_1_11_0_OR_OLDER
+#if VRTK_DEFINE_OCULUS_UTILITIES_1_11_0_OR_OLDER
             CalculateAngularVelocity(controllerReference);
 #endif
         }
@@ -60,7 +60,7 @@ namespace VRTK
         /// <param name="options">A dictionary of generic options that can be used to within the fixed update.</param>
         public override void ProcessFixedUpdate(VRTK_ControllerReference controllerReference, Dictionary<string, object> options)
         {
-#if VRTK_DEFINE_OCULUSVR_UTILITIES_1_12_0_OR_NEWER
+#if VRTK_DEFINE_OCULUS_UTILITIES_1_12_0_OR_NEWER
             CalculateAngularVelocity(controllerReference);
 #endif
         }
@@ -150,12 +150,12 @@ namespace VRTK
             {
                 if (cachedLeftController != null && cachedLeftController.index == index)
                 {
-                    return (actual ? sdkManager.actualLeftController : sdkManager.scriptAliasLeftController);
+                    return (actual ? sdkManager.loadedSetup.actualLeftController : sdkManager.scriptAliasLeftController);
                 }
 
                 if (cachedRightController != null && cachedRightController.index == index)
                 {
-                    return (actual ? sdkManager.actualRightController : sdkManager.scriptAliasRightController);
+                    return (actual ? sdkManager.loadedSetup.actualRightController : sdkManager.scriptAliasRightController);
                 }
             }
             return null;
@@ -550,6 +550,11 @@ namespace VRTK
             {
                 uint index = VRTK_ControllerReference.GetRealIndex(controllerReference);
                 VRTK_TrackedController device = GetTrackedObject(controllerReference.actual);
+                if (device == null)
+                {
+                    return;
+                }
+
                 previousControllerRotations[index] = currentControllerRotations[index];
                 currentControllerRotations[index] = device.transform.rotation;
 
@@ -569,15 +574,21 @@ namespace VRTK
             VRTK_SDKManager sdkManager = VRTK_SDKManager.instance;
             if (sdkManager != null)
             {
-                if (cachedLeftController == null && sdkManager.actualLeftController)
+                if (cachedLeftController == null && sdkManager.loadedSetup.actualLeftController)
                 {
-                    cachedLeftController = sdkManager.actualLeftController.GetComponent<VRTK_TrackedController>();
-                    cachedLeftController.index = 0;
+                    cachedLeftController = sdkManager.loadedSetup.actualLeftController.GetComponent<VRTK_TrackedController>();
+                    if (cachedLeftController != null)
+                    {
+                        cachedLeftController.index = 0;
+                    }
                 }
-                if (cachedRightController == null && sdkManager.actualRightController)
+                if (cachedRightController == null && sdkManager.loadedSetup.actualRightController)
                 {
-                    cachedRightController = sdkManager.actualRightController.GetComponent<VRTK_TrackedController>();
-                    cachedRightController.index = 1;
+                    cachedRightController = sdkManager.loadedSetup.actualRightController.GetComponent<VRTK_TrackedController>();
+                    if (cachedRightController != null)
+                    {
+                        cachedRightController.index = 1;
+                    }
                 }
             }
         }
@@ -670,11 +681,11 @@ namespace VRTK
             hairLimit = (currentState ? Mathf.Max(hairLimit, value) : Mathf.Min(hairLimit, value));
         }
 
-        protected virtual SDK_OculusVRBoundaries GetBoundariesSDK()
+        protected virtual SDK_OculusBoundaries GetBoundariesSDK()
         {
             if (cachedBoundariesSDK == null)
             {
-                cachedBoundariesSDK = (VRTK_SDKManager.instance ? VRTK_SDKManager.instance.GetBoundariesSDK() : CreateInstance<SDK_OculusVRBoundaries>()) as SDK_OculusVRBoundaries;
+                cachedBoundariesSDK = (VRTK_SDKManager.instance ? VRTK_SDKManager.instance.loadedSetup.boundariesSDK : CreateInstance<SDK_OculusBoundaries>()) as SDK_OculusBoundaries;
             }
 
             return cachedBoundariesSDK;
@@ -683,7 +694,7 @@ namespace VRTK
         protected virtual bool HasAvatar(bool controllersAreVisible = true)
         {
             GetBoundariesSDK();
-#if VRTK_DEFINE_SDK_OCULUSVR_AVATAR
+#if VRTK_DEFINE_SDK_OCULUS_AVATAR
             if (cachedBoundariesSDK != null)
             {
                 OvrAvatar avatar = cachedBoundariesSDK.GetAvatar();
@@ -696,7 +707,7 @@ namespace VRTK
         protected virtual GameObject GetAvatar()
         {
             GetBoundariesSDK();
-#if VRTK_DEFINE_SDK_OCULUSVR_AVATAR
+#if VRTK_DEFINE_SDK_OCULUS_AVATAR
             if (cachedBoundariesSDK != null)
             {
                 OvrAvatar avatar = cachedBoundariesSDK.GetAvatar();

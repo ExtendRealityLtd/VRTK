@@ -2,6 +2,7 @@
 namespace VRTK
 {
     using UnityEngine;
+    using UnityEngine.SceneManagement;
 #if UNITY_EDITOR
     using UnityEditor;
 #endif
@@ -386,8 +387,10 @@ namespace VRTK
                 return foundComponent == null ? null : foundComponent.gameObject;
             }
 
+            Scene activeScene = SceneManager.GetActiveScene();
             IEnumerable<GameObject> gameObjects = Resources.FindObjectsOfTypeAll<T>()
-                                                           .Select(component => component.gameObject);
+                                                           .Select(component => component.gameObject)
+                                                           .Where(gameObject => gameObject.scene == activeScene);
 
 #if UNITY_EDITOR
             gameObjects = gameObjects.Where(gameObject => !AssetDatabase.Contains(gameObject));
@@ -408,11 +411,13 @@ namespace VRTK
         /// This method returns components from active as well as inactive <see cref="GameObject"/>s in the scene. It doesn't return assets.
         /// For performance reasons it is recommended to not use this function every frame. Cache the result in a member variable at startup instead.
         /// </remarks>
-        /// <typeparam name="T">The component type to search for. Must be a subclass of <see cref="Object"/>.</typeparam>
+        /// <typeparam name="T">The component type to search for. Must be a subclass of <see cref="Component"/>.</typeparam>
         /// <returns>All the found components. If no component is found an empty array is returned.</returns>
-        public static T[] FindEvenInactiveComponents<T>() where T : UnityEngine.Object
+        public static T[] FindEvenInactiveComponents<T>() where T : Component
         {
+            Scene activeScene = SceneManager.GetActiveScene();
             return Resources.FindObjectsOfTypeAll<T>()
+                            .Where(@object => @object.gameObject.scene == activeScene)
 #if UNITY_EDITOR
                             .Where(@object => !AssetDatabase.Contains(@object))
                             .ToArray();
@@ -432,7 +437,9 @@ namespace VRTK
         /// <returns>The found component. If no component is found <see langword="null"/> is returned.</returns>
         public static T FindEvenInactiveComponent<T>() where T : Component
         {
+            Scene activeScene = SceneManager.GetActiveScene();
             return Resources.FindObjectsOfTypeAll<T>()
+                            .Where(@object => @object.gameObject.scene == activeScene)
 #if UNITY_EDITOR
                             .FirstOrDefault(@object => !AssetDatabase.Contains(@object));
 #else

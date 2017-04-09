@@ -3,7 +3,9 @@ namespace VRTK
 {
 #if VRTK_DEFINE_SDK_STEAMVR
     using UnityEngine;
+    using System;
     using System.Collections.Generic;
+    using System.Reflection;
     using Valve.VR;
 #endif
 
@@ -24,6 +26,29 @@ namespace VRTK
         protected Dictionary<GameObject, SteamVR_TrackedObject> cachedTrackedObjectsByGameObject = new Dictionary<GameObject, SteamVR_TrackedObject>();
         protected Dictionary<uint, SteamVR_TrackedObject> cachedTrackedObjectsByIndex = new Dictionary<uint, SteamVR_TrackedObject>();
         protected ushort maxHapticVibration = 3999;
+
+        /// <summary>
+        /// This method is called just after unloading the <see cref="VRTK_SDKSetup"/> that's using this SDK.
+        /// </summary>
+        /// <param name="setup">The SDK Setup which is using this SDK.</param>
+        public override void OnAfterSetupUnload(VRTK_SDKSetup setup)
+        {
+            base.OnAfterSetupUnload(setup);
+
+            SteamVR_ControllerManager controllerManager = setup.actualLeftController.transform.parent.GetComponent<SteamVR_ControllerManager>();
+            FieldInfo connectedField = typeof(SteamVR_ControllerManager).GetField(
+                "connected",
+                BindingFlags.NonPublic | BindingFlags.Instance
+            );
+            if (connectedField == null)
+            {
+                return;
+            }
+
+            bool[] connected = (bool[])connectedField.GetValue(controllerManager);
+            Array.Clear(connected, 0, connected.Length);
+            connectedField.SetValue(controllerManager, connected);
+        }
 
         /// <summary>
         /// The ProcessUpdate method enables an SDK to run logic for every Unity Update
@@ -126,12 +151,12 @@ namespace VRTK
                 {
                     if (cachedLeftTrackedObject != null && (uint)cachedLeftTrackedObject.index == index)
                     {
-                        return (actual ? sdkManager.actualLeftController : sdkManager.scriptAliasLeftController);
+                        return (actual ? sdkManager.loadedSetup.actualLeftController : sdkManager.scriptAliasLeftController);
                     }
 
                     if (cachedRightTrackedObject != null && (uint)cachedRightTrackedObject.index == index)
                     {
-                        return (actual ? sdkManager.actualRightController : sdkManager.scriptAliasRightController);
+                        return (actual ? sdkManager.loadedSetup.actualRightController : sdkManager.scriptAliasRightController);
                     }
                 }
 
@@ -504,13 +529,13 @@ namespace VRTK
             VRTK_SDKManager sdkManager = VRTK_SDKManager.instance;
             if (sdkManager != null)
             {
-                if (cachedLeftTrackedObject == null && sdkManager.actualLeftController)
+                if (cachedLeftTrackedObject == null && sdkManager.loadedSetup.actualLeftController)
                 {
-                    cachedLeftTrackedObject = sdkManager.actualLeftController.GetComponent<SteamVR_TrackedObject>();
+                    cachedLeftTrackedObject = sdkManager.loadedSetup.actualLeftController.GetComponent<SteamVR_TrackedObject>();
                 }
-                if (cachedRightTrackedObject == null && sdkManager.actualRightController)
+                if (cachedRightTrackedObject == null && sdkManager.loadedSetup.actualRightController)
                 {
-                    cachedRightTrackedObject = sdkManager.actualRightController.GetComponent<SteamVR_TrackedObject>();
+                    cachedRightTrackedObject = sdkManager.loadedSetup.actualRightController.GetComponent<SteamVR_TrackedObject>();
                 }
             }
         }

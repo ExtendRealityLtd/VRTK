@@ -130,6 +130,11 @@ namespace VRTK
 
         private void Awake()
         {
+            VRTK_SDKManager.instance.AddBehaviourToToggleOnLoadedSetupChange(this);
+        }
+
+        private void OnEnable()
+        {
             hintCanvas = transform.Find("Control Hints").gameObject;
             hintText = hintCanvas.GetComponentInChildren<Text>();
             hintCanvas.SetActive(showControlHints);
@@ -168,6 +173,7 @@ namespace VRTK
 
         private void OnDestroy()
         {
+            VRTK_SDKManager.instance.RemoveBehaviourToToggleOnLoadedSetupChange(this);
             destroyed = true;
         }
 

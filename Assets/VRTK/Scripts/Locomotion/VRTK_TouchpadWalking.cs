@@ -53,6 +53,11 @@ namespace VRTK
 
         protected virtual void Awake()
         {
+            VRTK_SDKManager.instance.AddBehaviourToToggleOnLoadedSetupChange(this);
+        }
+
+        protected virtual void OnEnable()
+        {
             touchpadAxisChanged = new ControllerInteractionEventHandler(DoTouchpadAxisChanged);
             touchpadUntouched = new ControllerInteractionEventHandler(DoTouchpadTouchEnd);
             playArea = VRTK_DeviceFinder.PlayAreaTransform();
@@ -64,10 +69,7 @@ namespace VRTK
             }
 
             VRTK_PlayerObject.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.CameraRig);
-        }
 
-        protected virtual void OnEnable()
-        {
             SetControllerListeners(controllerLeftHand, leftController, ref leftSubscribed);
             SetControllerListeners(controllerRightHand, rightController, ref rightSubscribed);
             bodyPhysics = GetComponent<VRTK_BodyPhysics>();
@@ -81,6 +83,11 @@ namespace VRTK
             SetControllerListeners(controllerLeftHand, leftController, ref leftSubscribed, true);
             SetControllerListeners(controllerRightHand, rightController, ref rightSubscribed, true);
             bodyPhysics = null;
+        }
+
+        protected virtual void OnDestroy()
+        {
+            VRTK_SDKManager.instance.RemoveBehaviourToToggleOnLoadedSetupChange(this);
         }
 
         protected virtual void Update()
