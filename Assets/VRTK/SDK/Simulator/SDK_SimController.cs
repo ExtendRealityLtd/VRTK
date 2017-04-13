@@ -99,21 +99,15 @@ namespace VRTK
         /// <returns>The index of the given controller.</returns>
         public override uint GetControllerIndex(GameObject controller)
         {
-            uint index = 0;
-
-            switch (controller.name)
+            if (CheckActualOrScriptAliasControllerIsRightHand(controller))
             {
-                case "Camera":
-                    index = 0;
-                    break;
-                case "RightController":
-                    index = 1;
-                    break;
-                case "LeftController":
-                    index = 2;
-                    break;
+                return 1;
             }
-            return index;
+            if (CheckActualOrScriptAliasControllerIsLeftHand(controller))
+            {
+                return 2;
+            }
+            return uint.MaxValue;
         }
 
         /// <summary>
