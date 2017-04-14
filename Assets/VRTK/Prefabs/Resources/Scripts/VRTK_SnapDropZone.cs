@@ -277,10 +277,10 @@ namespace VRTK
             }
         }
 
-        protected virtual VRTK_InteractableObject ValidSnapObject(GameObject checkObject, bool grabState)
+        protected virtual VRTK_InteractableObject ValidSnapObject(GameObject checkObject, bool grabState, bool checkGrabState = true)
         {
             var ioCheck = checkObject.GetComponentInParent<VRTK_InteractableObject>();
-            return (ioCheck != null && ioCheck.IsGrabbed() == grabState && !VRTK_PolicyList.Check(ioCheck.gameObject, validObjectListPolicy) ? ioCheck : null);
+            return (ioCheck != null && (!checkGrabState || ioCheck.IsGrabbed() == grabState) && !VRTK_PolicyList.Check(ioCheck.gameObject, validObjectListPolicy) ? ioCheck : null);
         }
 
         protected virtual string ObjectPath(string name)
@@ -563,10 +563,10 @@ namespace VRTK
 
         protected virtual void ToggleHighlight(Collider collider, bool state)
         {
-            VRTK_InteractableObject ioCheck = ValidSnapObject(collider.gameObject, true);
+            VRTK_InteractableObject ioCheck = ValidSnapObject(collider.gameObject, true, state);
             if (highlightObject != null && ioCheck != null)
             {
-                //Turn on the highlighter
+                //Toggle the highlighter state
                 highlightObject.SetActive(state);
                 ioCheck.SetSnapDropZoneHover(this, state);
 
