@@ -205,7 +205,7 @@ namespace VRTK
         {
             HandleFalling();
             // If Move In Place is currently engaged.
-            if (active && !currentlyFalling)
+            if (MovementActivated() && !currentlyFalling)
             {
                 // Initialize the list average.
                 float speed = Mathf.Clamp(((speedScale * 350) * (CalculateListAverage() / trackedObjects.Count)), 0f, maxSpeed);
@@ -227,6 +227,11 @@ namespace VRTK
 
             SetDeltaTransformData();
             MovePlayArea(direction, currentSpeed);
+        }
+
+        protected virtual bool MovementActivated()
+        {
+            return (active || engageButton == VRTK_ControllerEvents.ButtonAlias.Undefined);
         }
 
         protected virtual void CheckControllerState(GameObject controller, bool controllerState, ref bool subscribedState, ref bool previousState)
