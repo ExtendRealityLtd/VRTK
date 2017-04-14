@@ -481,6 +481,11 @@ namespace VRTK
 
         private void UpdateRenderScale()
         {
+            if (allRenderScales.Count == 0)
+            {
+                return;
+            }
+
             if (!scaleRenderViewport)
             {
                 renderViewportScaleSetting.currentValue = defaultRenderViewportScaleLevel;
