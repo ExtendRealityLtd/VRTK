@@ -253,6 +253,11 @@ namespace VRTK
             {
                 ToggleHighlight(collider, false);
             }
+
+            if (currentSnappedObject == collider.gameObject)
+            {
+                ForceUnsnap();
+            }
         }
 
         protected virtual void OnTriggerStay(Collider collider)
