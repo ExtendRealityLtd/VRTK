@@ -101,6 +101,7 @@ namespace VRTK
         protected VRTK_BaseHighlighter objectHighlighter;
         protected bool willSnap = false;
         protected bool isSnapped = false;
+        protected bool wasSnapped = false;
         protected bool isHighlighted = false;
         protected Coroutine transitionInPlace;
         protected bool originalJointCollisionState = false;
@@ -447,11 +448,13 @@ namespace VRTK
 
             //Force reset isSnapped if the item is grabbed but isSnapped is still true
             isSnapped = (isSnapped && ioCheck && ioCheck.IsGrabbed() ? false : isSnapped);
+            wasSnapped = false;
         }
 
         protected virtual void UnsnapObject()
         {
             isSnapped = false;
+            wasSnapped = true;
             currentSnappedObject = null;
             ResetSnapDropZoneJoint();
             if (transitionInPlace != null)
@@ -580,7 +583,10 @@ namespace VRTK
 
                 if (state)
                 {
-                    OnObjectEnteredSnapDropZone(SetSnapDropZoneEvent(collider.gameObject));
+                    if (currentValidSnapObject != collider.gameObject || wasSnapped)
+                    {
+                        OnObjectEnteredSnapDropZone(SetSnapDropZoneEvent(collider.gameObject));
+                    }
                     currentValidSnapObject = collider.gameObject;
                 }
                 else
