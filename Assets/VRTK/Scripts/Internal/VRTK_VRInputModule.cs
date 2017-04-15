@@ -235,6 +235,7 @@
             {
                 if (!ValidElement(pointer.pointerEventData.pointerPress))
                 {
+                    pointer.pointerEventData.pointerPress = null;
                     return true;
                 }
 
@@ -266,6 +267,7 @@
             {
                 if (!ValidElement(pointer.pointerEventData.pointerDrag))
                 {
+                    pointer.pointerEventData.pointerDrag = null;
                     return;
                 }
 
