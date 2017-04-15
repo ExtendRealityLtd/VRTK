@@ -36,12 +36,18 @@ namespace VRTK
         /// <param name="ControllerRotation">Player will move in the direction that the controllers are pointing (averaged).</param>
         /// <param name="DumbDecoupling">Player will move in the direction they were first looking when they engaged Move In Place.</param>
         /// <param name="SmartDecoupling">Player will move in the direction they are looking only if their headset point the same direction as their controllers.</param>
+        /// <param name="EngageControllerRotationOnly">Player will move in the direction that the controller with the engage button pressed is pointing.</param>
+        /// <param name="LeftControllerRotationOnly">Player will move in the direction that the left controller is pointing.</param>
+        /// <param name="RightControllerRotationOnly">Player will move in the direction that the right controller is pointing.</param>
         public enum DirectionalMethod
         {
             Gaze,
             ControllerRotation,
             DumbDecoupling,
-            SmartDecoupling
+            SmartDecoupling,
+            EngageControllerRotationOnly,
+            LeftControllerRotationOnly,
+            RightControllerRotationOnly
         }
 
         [Header("Control Settings")]
@@ -79,6 +85,7 @@ namespace VRTK
         protected Transform playArea;
         protected GameObject controllerLeftHand;
         protected GameObject controllerRightHand;
+        protected GameObject engagedController;
         protected Transform headset;
         protected bool leftSubscribed;
         protected bool rightSubscribed;
@@ -205,7 +212,7 @@ namespace VRTK
         {
             HandleFalling();
             // If Move In Place is currently engaged.
-            if (active && !currentlyFalling)
+            if (MovementActivated() && !currentlyFalling)
             {
                 // Initialize the list average.
                 float speed = Mathf.Clamp(((speedScale * 350) * (CalculateListAverage() / trackedObjects.Count)), 0f, maxSpeed);
@@ -227,6 +234,11 @@ namespace VRTK
 
             SetDeltaTransformData();
             MovePlayArea(direction, currentSpeed);
+        }
+
+        protected virtual bool MovementActivated()
+        {
+            return (active || engageButton == VRTK_ControllerEvents.ButtonAlias.Undefined);
         }
 
         protected virtual void CheckControllerState(GameObject controller, bool controllerState, ref bool subscribedState, ref bool previousState)
@@ -320,7 +332,25 @@ namespace VRTK
             else if (directionMethod.Equals(DirectionalMethod.ControllerRotation))
             {
                 Vector3 calculatedControllerDirection = DetermineAverageControllerRotation() * Vector3.forward;
-                returnDirection = (Vector3.Angle(previousDirection, calculatedControllerDirection) <= 90f ? calculatedControllerDirection : previousDirection);
+                returnDirection = CalculateControllerRotationDirection(calculatedControllerDirection);
+            }
+            // if we're doing left controller only rotation movement
+            else if (directionMethod.Equals(DirectionalMethod.LeftControllerRotationOnly))
+            {
+                Vector3 calculatedControllerDirection = (controllerLeftHand != null ? controllerLeftHand.transform.rotation : Quaternion.identity) * Vector3.forward;
+                returnDirection = CalculateControllerRotationDirection(calculatedControllerDirection);
+            }
+            // if we're doing right controller only rotation movement
+            else if (directionMethod.Equals(DirectionalMethod.RightControllerRotationOnly))
+            {
+                Vector3 calculatedControllerDirection = (controllerRightHand != null ? controllerRightHand.transform.rotation : Quaternion.identity) * Vector3.forward;
+                returnDirection = CalculateControllerRotationDirection(calculatedControllerDirection);
+            }
+            // if we're doing engaged controller only rotation movement
+            else if (directionMethod.Equals(DirectionalMethod.EngageControllerRotationOnly))
+            {
+                Vector3 calculatedControllerDirection = (engagedController != null ? engagedController.transform.rotation : Quaternion.identity) * Vector3.forward;
+                returnDirection = CalculateControllerRotationDirection(calculatedControllerDirection);
             }
             // Otherwise if we're just doing Gaze movement, always set the direction to where we're looking.
             else if (directionMethod.Equals(DirectionalMethod.Gaze))
@@ -329,6 +359,11 @@ namespace VRTK
             }
 
             return returnDirection;
+        }
+
+        protected virtual Vector3 CalculateControllerRotationDirection(Vector3 calculatedControllerDirection)
+        {
+            return (Vector3.Angle(previousDirection, calculatedControllerDirection) <= 90f ? calculatedControllerDirection : previousDirection);
         }
 
         protected virtual void SetDeltaTransformData()
@@ -365,6 +400,7 @@ namespace VRTK
 
         protected virtual void EngageButtonPressed(object sender, ControllerInteractionEventArgs e)
         {
+            engagedController = VRTK_DeviceFinder.GetControllerByIndex(e.controllerIndex, false);
             active = true;
         }
 
@@ -378,6 +414,7 @@ namespace VRTK
             initalGaze = Vector3.zero;
 
             active = false;
+            engagedController = null;
         }
 
         protected virtual Quaternion DetermineAverageControllerRotation()

@@ -1816,6 +1816,9 @@ Move In Place allows the user to move the play area by calculating the y-movemen
   * `ControllerRotation` - Player will move in the direction that the controllers are pointing (averaged).
   * `DumbDecoupling` - Player will move in the direction they were first looking when they engaged Move In Place.
   * `SmartDecoupling` - Player will move in the direction they are looking only if their headset point the same direction as their controllers.
+  * `EngageControllerRotationOnly` - Player will move in the direction that the controller with the engage button pressed is pointing.
+  * `LeftControllerRotationOnly` - Player will move in the direction that the left controller is pointing.
+  * `RightControllerRotationOnly` - Player will move in the direction that the right controller is pointing.
 
 ### Class Methods
 
