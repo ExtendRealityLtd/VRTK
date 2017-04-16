@@ -364,6 +364,28 @@ the ForceSnap method attempts to automatically attach a valid game object to the
 
 The ForceUnsnap method attempts to automatically remove the current snapped game object from the snap drop zone.
 
+#### ValidSnappableObjectIsHovering/0
+
+  > `public virtual bool ValidSnappableObjectIsHovering()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `bool` - Returns true if a valid object is currently in the snap drop zone area.
+
+The ValidSnappableObjectIsHovering method determines if any valid objects are currently hovering in the snap drop zone area.
+
+#### IsObjectHovering/1
+
+  > `public virtual bool IsObjectHovering(GameObject checkObject)`
+
+  * Parameters
+   * `GameObject checkObject` - The GameObject to check to see if it's hovering in the snap drop zone area.
+  * Returns
+   * `bool` - Returns true if the given GameObject is hovering (but not snapped) in the snap drop zone area.
+
+The IsObjectHovering method determines if the given GameObject is currently howvering (but not snapped) in the snap drop zone area.
+
 ### Example
 
 `VRTK/Examples/041_Controller_ObjectSnappingToDropZones` uses the `VRTK_SnapDropZone` prefab to set up pre-determined snap zones for a range of objects and demonstrates how only objects of certain types can be snapped into certain areas.
