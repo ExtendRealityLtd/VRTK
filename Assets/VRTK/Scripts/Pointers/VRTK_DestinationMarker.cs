@@ -46,13 +46,16 @@ namespace VRTK
         public bool enableTeleport = true;
 
         /// <summary>
-        /// Emitted when a collision with another game object has occurred.
+        /// Emitted when a collision with another collider has first occurred.
         /// </summary>
         public event DestinationMarkerEventHandler DestinationMarkerEnter;
         /// <summary>
-        /// Emitted when the collision with the other game object finishes.
+        /// Emitted when the collision with the other collider ends.
         /// </summary>
         public event DestinationMarkerEventHandler DestinationMarkerExit;
+        /// Emitted when a collision the existing collider is continuing.
+        /// </summary>
+        public event DestinationMarkerEventHandler DestinationMarkerHover;
         /// <summary>
         /// Emitted when the destination marker is active in the scene to determine the last destination position (useful for selecting and teleporting).
         /// </summary>
@@ -61,12 +64,20 @@ namespace VRTK
         protected VRTK_PolicyList invalidListPolicy;
         protected float navMeshCheckDistance;
         protected bool headsetPositionCompensation;
+        protected bool forceHoverOnRepeatedEnter = true;
+        protected Collider existingCollider;
 
         public virtual void OnDestinationMarkerEnter(DestinationMarkerEventArgs e)
         {
-            if (DestinationMarkerEnter != null)
+            if (DestinationMarkerEnter != null && (!forceHoverOnRepeatedEnter || (e.raycastHit.collider != existingCollider)))
             {
+                existingCollider = e.raycastHit.collider;
                 DestinationMarkerEnter(this, e);
+            }
+
+            if (forceHoverOnRepeatedEnter && e.raycastHit.collider == existingCollider)
+            {
+                OnDestinationMarkerHover(e);
             }
         }
 
@@ -75,6 +86,15 @@ namespace VRTK
             if (DestinationMarkerExit != null)
             {
                 DestinationMarkerExit(this, e);
+                existingCollider = null;
+            }
+        }
+
+        public virtual void OnDestinationMarkerHover(DestinationMarkerEventArgs e)
+        {
+            if (DestinationMarkerHover != null)
+            {
+                DestinationMarkerHover(this, e);
             }
         }
 
@@ -111,6 +131,15 @@ namespace VRTK
         public virtual void SetHeadsetPositionCompensation(bool state)
         {
             headsetPositionCompensation = state;
+        }
+
+        /// <summary>
+        /// The SetForceHoverOnRepeatedEnter method is used to set whether the Enter event will forciably call the Hover event if the existing colliding object is the same as it was the previous enter call.
+        /// </summary>
+        /// <param name="state">The state of whether to force the hover on or off.</param>
+        public virtual void SetForceHoverOnRepeatedEnter(bool state)
+        {
+            forceHoverOnRepeatedEnter = state;
         }
 
         protected virtual void OnEnable()
