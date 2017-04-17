@@ -14,6 +14,7 @@ namespace VRTK.GrabAttachMechanics
     /// <example>
     /// `VRTK/Examples/023_Controller_ChildOfControllerOnGrab` uses this grab attach mechanic for the bow and the arrow.
     /// </example>
+    [AddComponentMenu("VRTK/Scripts/Interactions/Grab Attach Mechanics/VRTK_ChildOfControllerGrabAttach")]
     public class VRTK_ChildOfControllerGrabAttach : VRTK_BaseGrabAttach
     {
         /// <summary>

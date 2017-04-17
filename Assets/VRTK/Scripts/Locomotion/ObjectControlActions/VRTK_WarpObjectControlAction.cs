@@ -14,6 +14,7 @@ namespace VRTK
     ///
     /// To enable the Warp Object Control Action, ensure one of the `TouchpadControlOptions` children (located under the Controller script alias) has the `Warp` control script active.
     /// </example>
+    [AddComponentMenu("VRTK/Scripts/Locomotion/Object Control Actions/VRTK_WarpObjectControlAction")]
     public class VRTK_WarpObjectControlAction : VRTK_BaseObjectControlAction
     {
         [Tooltip("The distance to warp in the facing direction.")]

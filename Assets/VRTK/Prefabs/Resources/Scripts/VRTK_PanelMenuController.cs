@@ -18,7 +18,7 @@ namespace VRTK
     /// <example>
     /// `040_Controls_Panel_Menu` contains three basic interactive object examples of the PanelMenu in use.
     /// </example>
-    public class PanelMenuController : MonoBehaviour
+    public class VRTK_PanelMenuController : MonoBehaviour
     {
         public enum TouchpadPressPosition
         {
@@ -34,13 +34,13 @@ namespace VRTK
         [Tooltip("The scale multiplier, which relates to the scale of parent interactable object.")]
         public float zoomScaleMultiplier = 1f;
         [Tooltip("The top PanelMenuItemController, which is triggered by pressing up on the controller touchpad.")]
-        public PanelMenuItemController topPanelMenuItemController;
+        public VRTK_PanelMenuItemController topPanelMenuItemController;
         [Tooltip("The bottom PanelMenuItemController, which is triggered by pressing down on the controller touchpad.")]
-        public PanelMenuItemController bottomPanelMenuItemController;
+        public VRTK_PanelMenuItemController bottomPanelMenuItemController;
         [Tooltip("The left PanelMenuItemController, which is triggered by pressing left on the controller touchpad.")]
-        public PanelMenuItemController leftPanelMenuItemController;
+        public VRTK_PanelMenuItemController leftPanelMenuItemController;
         [Tooltip("The right PanelMenuItemController, which is triggered by pressing right on the controller touchpad.")]
-        public PanelMenuItemController rightPanelMenuItemController;
+        public VRTK_PanelMenuItemController rightPanelMenuItemController;
 
         // Relates to scale of canvas on panel items.
         protected const float CanvasScaleSize = 0.001f;
@@ -51,7 +51,7 @@ namespace VRTK
         protected const float SwipeMinVelocity = 4.0f;
 
         protected VRTK_ControllerEvents controllerEvents;
-        protected PanelMenuItemController currentPanelMenuItemController;
+        protected VRTK_PanelMenuItemController currentPanelMenuItemController;
         protected GameObject interactableObject;
         protected GameObject canvasObject;
         protected readonly Vector2 xAxis = new Vector2(1, 0);
@@ -214,7 +214,7 @@ namespace VRTK
             controllerEvents.TriggerPressed -= new ControllerInteractionEventHandler(DoTriggerPressed);
         }
 
-        protected virtual void HandlePanelMenuItemControllerVisibility(PanelMenuItemController targetPanelItemController)
+        protected virtual void HandlePanelMenuItemControllerVisibility(VRTK_PanelMenuItemController targetPanelItemController)
         {
             if (isShown)
             {

@@ -20,6 +20,7 @@ namespace VRTK
     ///
     /// It extends the `VRTK_DestinationMarker` to allow for destination events to be emitted when the pointer cursor collides with objects.
     /// </remarks>
+    [AddComponentMenu("VRTK/Scripts/Pointers/VRTK_Pointer")]
     public class VRTK_Pointer : VRTK_DestinationMarker
     {
         [Header("Pointer Activation Settings")]

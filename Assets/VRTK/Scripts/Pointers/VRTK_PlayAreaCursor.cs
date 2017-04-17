@@ -9,6 +9,7 @@ namespace VRTK
     /// <example>
     /// `VRTK/Examples/012_Controller_PointerWithAreaCollision` shows how a Bezier Pointer with the Play Area Cursor and Collision Detection enabled can be used to traverse a game area but not allow teleporting into areas where the walls or other objects would fall into the play area space enabling the user to enter walls.
     /// </example>
+    [AddComponentMenu("VRTK/Scripts/Pointers/VRTK_PlayAreaCursor")]
     public class VRTK_PlayAreaCursor : MonoBehaviour
     {
         [Tooltip("Determines the size of the play area cursor and collider. If the values are left as zero then the Play Area Cursor will be sized to the calibrated Play Area space.")]

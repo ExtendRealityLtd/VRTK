@@ -13,6 +13,7 @@ namespace VRTK
     /// <example>
     /// `VRTK/Examples/034_Controls_InteractingWithUnityUI` demonstrates a collection of UI Drop Zones.
     /// </example>
+    [AddComponentMenu("VRTK/Scripts/UI/VRTK_UIDropZone")]
     public class VRTK_UIDropZone : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         protected VRTK_UIDraggableItem droppableItem;

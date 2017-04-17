@@ -18,7 +18,7 @@ namespace VRTK
     ///   * Verify that `Is Usable` and `Hold Button to Use` are both checked.
     ///   * Attach `VRTK_InteractTouch` and `VRTK_InteractUse` scripts to the controllers.
     /// </remarks>
-    public class VRTK_IndependentRadialMenuController : RadialMenuController
+    public class VRTK_IndependentRadialMenuController : VRTK_RadialMenuController
     {
         [Tooltip("If the RadialMenu is the child of an object with VRTK_InteractableObject attached, this will be automatically obtained. It can also be manually set.")]
         public VRTK_InteractableObject eventsManager;
@@ -136,7 +136,7 @@ namespace VRTK
 
         protected override void Awake()
         {
-            menu = GetComponent<RadialMenu>();
+            menu = GetComponent<VRTK_RadialMenu>();
         }
 
         protected virtual void Start()

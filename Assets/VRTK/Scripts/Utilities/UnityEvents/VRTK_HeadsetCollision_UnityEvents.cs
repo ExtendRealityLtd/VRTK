@@ -1,8 +1,10 @@
 ﻿namespace VRTK.UnityEventHelper
 {
+    using UnityEngine;
     using UnityEngine.Events;
     using System;
 
+    [AddComponentMenu("VRTK/Scripts/Utilities/Unity Events/VRTK_HeadsetCollision_UnityEvents")]
     public sealed class VRTK_HeadsetCollision_UnityEvents : VRTK_UnityEvents<VRTK_HeadsetCollision>
     {
         [Serializable]

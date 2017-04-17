@@ -12,6 +12,7 @@ namespace VRTK
     /// <example>
     /// `VRTK/Examples/025_Controls_Overview` has a selection of sliders at various angles with different step values to demonstrate their usage.
     /// </example>
+    [AddComponentMenu("VRTK/Scripts/Controls/3D/VRTK_Slider")]
     public class VRTK_Slider : VRTK_Control
     {
         [Tooltip("An optional game object to which the wheel will be connected. If the game object moves the wheel will follow along.")]

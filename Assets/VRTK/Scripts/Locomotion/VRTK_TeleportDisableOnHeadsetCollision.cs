@@ -7,6 +7,7 @@ namespace VRTK
     /// <summary>
     /// The purpose of the Teleport Disable On Headset Collision script is to detect when the headset is colliding with a valid object and prevent teleportation from working. This is to ensure that if a user is clipping their head into a wall then they cannot teleport to an area beyond the wall.
     /// </summary>
+    [AddComponentMenu("VRTK/Scripts/Locomotion/VRTK_TeleportDisableOnHeadsetCollision")]
     public class VRTK_TeleportDisableOnHeadsetCollision : MonoBehaviour
     {
         protected VRTK_BasicTeleport basicTeleport;

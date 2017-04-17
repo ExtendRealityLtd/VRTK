@@ -1,8 +1,10 @@
 ﻿namespace VRTK.UnityEventHelper
 {
+    using UnityEngine;
     using UnityEngine.Events;
     using System;
 
+    [AddComponentMenu("VRTK/Scripts/Utilities/Unity Events/VRTK_DestinationMarker_UnityEvents")]
     public sealed class VRTK_DestinationMarker_UnityEvents : VRTK_UnityEvents<VRTK_DestinationMarker>
     {
         [Serializable]

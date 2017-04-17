@@ -10,6 +10,7 @@ namespace VRTK
     /// The Hip Tracking script is placed on an empty GameObject which will be positioned at the estimated hip position.
     /// </remarks>
 
+    [AddComponentMenu("VRTK/Scripts/Presence/VRTK_HipTracking")]
     public class VRTK_HipTracking : MonoBehaviour
     {
         [Tooltip("Distance underneath Player Head for hips to reside.")]

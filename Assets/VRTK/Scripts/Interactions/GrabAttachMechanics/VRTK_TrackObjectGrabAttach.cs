@@ -12,6 +12,7 @@ namespace VRTK.GrabAttachMechanics
     /// <example>
     /// `VRTK/Examples/021_Controller_GrabbingObjectsWithJoints` demonstrates this grab attach mechanic on the Chest handle and Fire Extinguisher body.
     /// </example>
+    [AddComponentMenu("VRTK/Scripts/Interactions/Grab Attach Mechanics/VRTK_TrackObjectGrabAttach")]
     public class VRTK_TrackObjectGrabAttach : VRTK_BaseGrabAttach
     {
         [Header("Track Options", order = 2)]

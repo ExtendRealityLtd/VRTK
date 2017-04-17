@@ -35,13 +35,14 @@ A collection of pre-defined usable prefabs have been included to allow for each 
  * [Controller Tooltips](#controller-tooltips-vrtk_controllertooltips)
  * [Controller Rigidbody Activator](#controller-rigidbody-activator-vrtk_controllerrigidbodyactivator)
  * [Snap Drop Zone](#snap-drop-zone-vrtk_snapdropzone)
- * [Radial Menu](#radial-menu-radialmenu)
+ * [Radial Menu](#radial-menu-vrtk_radialmenu)
+ * [Radial Menu Controller](#radial-menu-controller-vrtk_radialmenucontroller)
  * [Independent Radial Menu Controller](#independent-radial-menu-controller-vrtk_independentradialmenucontroller)
  * [Destination Point](#destination-point-vrtk_destinationpoint)
  * [Pointer Direction Indicator](#pointer-direction-indicator-vrtk_pointerdirectionindicator)
  * [Console Viewer Canvas](#console-viewer-canvas-vrtk_consoleviewer)
- * [Panel Menu Controller](#panel-menu-controller-panelmenucontroller)
- * [Panel Menu Item Controller](#panel-menu-item-controller-panelmenuitemcontroller)
+ * [Panel Menu Controller](#panel-menu-controller-vrtk_panelmenucontroller)
+ * [Panel Menu Item Controller](#panel-menu-item-controller-vrtk_panelmenuitemcontroller)
 
 ---
 
@@ -392,7 +393,7 @@ The IsObjectHovering method determines if the given GameObject is currently howv
 
 ---
 
-## Radial Menu (RadialMenu)
+## Radial Menu (VRTK_RadialMenu)
 
 ### Overview
 
@@ -537,8 +538,28 @@ The AddButton method is used to add a new button to the menu.
 
 ---
 
+## Radial Menu Controller (VRTK_RadialMenuController)
+
+### Overview
+
+This adds a UI element into the world space that can be dropped into a Controller object and used to create and use Radial Menus from the touchpad.
+
+If the RadialMenu is placed inside a controller, it will automatically find a `VRTK_ControllerEvents` in its parent to use at the input. However, a `VRTK_ControllerEvents` can be defined explicitly by setting the `Events` parameter of the `Radial Menu Controller` script also attached to the prefab.
+
+The RadialMenu can also be placed inside a `VRTK_InteractableObject` for the RadialMenu to be anchored to a world object instead of the controller. The `Events Manager` parameter will automatically be set if the RadialMenu is a child of an InteractableObject, but it can also be set manually in the inspector. Additionally, for the RadialMenu to be anchored in the world, the `RadialMenuController` script in the prefab must be replaced with `VRTK_IndependentRadialMenuController`. See the script information for further details on making the RadialMenu independent of the controllers.
+
+### Inspector Parameters
+
+ * **Events:** The controller to listen to the controller events on.
+
+### Example
+
+`VRTK/Examples/030_Controls_RadialTouchpadMenu` displays a radial menu for each controller. The left controller uses the `Hide On Release` variable, so it will only be visible if the left touchpad is being touched. It also uses the `Execute On Unclick` variable to delay execution until the touchpad button is unclicked. The example scene also contains a demonstration of anchoring the RadialMenu to an interactable cube instead of a controller.
+
+---
+
 ## Independent Radial Menu Controller (VRTK_IndependentRadialMenuController)
- > extends RadialMenuController
+ > extends [VRTK_RadialMenuController](#radial-menu-controller-vrtk_radialmenucontroller)
 
 ### Overview
 
@@ -719,7 +740,7 @@ The ClearLog method clears the current log view of all messages
 
 ---
 
-## Panel Menu Controller (PanelMenuController)
+## Panel Menu Controller (VRTK_PanelMenuController)
 
 ### Overview
 
@@ -793,7 +814,7 @@ The HideMenuImmediate method is used to immediately hide the menu.
 
 ---
 
-## Panel Menu Item Controller (PanelMenuItemController)
+## Panel Menu Item Controller (VRTK_PanelMenuItemController)
 
 ### Overview
 

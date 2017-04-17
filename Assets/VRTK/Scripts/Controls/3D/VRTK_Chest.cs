@@ -12,6 +12,7 @@ namespace VRTK
     /// <example>
     /// `VRTK/Examples/025_Controls_Overview` shows a chest that can be open and closed, it also displays the current opening angle of the chest.
     /// </example>
+    [AddComponentMenu("VRTK/Scripts/Controls/3D/VRTK_Chest")]
     public class VRTK_Chest : VRTK_Control
     {
         [Tooltip("The axis on which the chest should open. All other axis will be frozen.")]

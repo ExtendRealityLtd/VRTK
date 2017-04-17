@@ -11,6 +11,7 @@ namespace VRTK
     ///
     /// For example, the VRTK_BodyPhysics script can be set to ignore trigger colliders when casting to see if it should teleport up or down to the nearest floor.
     /// </remarks>
+    [AddComponentMenu("VRTK/Scripts/Utilities/VRTK_CustomRaycast")]
     public class VRTK_CustomRaycast : MonoBehaviour
     {
         [Tooltip("The layers to ignore when raycasting.")]

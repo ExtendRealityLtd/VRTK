@@ -14,6 +14,7 @@ namespace VRTK
     /// <example>
     /// `VRTK/Examples/025_Controls_Overview` shows a selection of door types, from a normal door and trapdoor, to a door with a cat-flap in the middle.
     /// </example>
+    [AddComponentMenu("VRTK/Scripts/Controls/3D/VRTK_Door")]
     public class VRTK_Door : VRTK_Control
     {
         [Tooltip("The axis on which the door should open.")]

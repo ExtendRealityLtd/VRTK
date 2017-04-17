@@ -6,6 +6,7 @@ namespace VRTK
     /// <summary>
     /// The Interact Haptics script is attached on the same GameObject as an Interactable Object script and provides controller haptics on touch, grab and use of the object.
     /// </summary>
+    [AddComponentMenu("VRTK/Scripts/Interactions/VRTK_InteractHaptics")]
     public class VRTK_InteractHaptics : MonoBehaviour
     {
         [Header("Haptics On Touch")]

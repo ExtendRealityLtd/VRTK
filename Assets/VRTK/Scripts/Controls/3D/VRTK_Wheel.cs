@@ -13,6 +13,7 @@ namespace VRTK
     /// <example>
     /// `VRTK/Examples/025_Controls_Overview` has a collection of wheels that can be rotated by grabbing with the controller and then rotating the controller in the desired direction.
     /// </example>
+    [AddComponentMenu("VRTK/Scripts/Controls/3D/VRTK_Wheel")]
     public class VRTK_Wheel : VRTK_Control
     {
         public enum GrabTypes

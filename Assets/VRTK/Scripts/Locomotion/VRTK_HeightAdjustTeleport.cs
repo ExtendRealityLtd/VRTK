@@ -14,6 +14,7 @@ namespace VRTK
     ///
     /// `VRTK/Examples/020_CameraRig_MeshTeleporting` shows how the teleportation of a user can also traverse mesh colliders.
     /// </example>
+    [AddComponentMenu("VRTK/Scripts/Locomotion/VRTK_HeightAdjustTeleport")]
     public class VRTK_HeightAdjustTeleport : VRTK_BasicTeleport
     {
         [Header("Height Adjust Settings")]

@@ -18,6 +18,7 @@ namespace VRTK
     ///
     /// Then in the component that has a Policy List paramter (e.g. BasicTeleporter has `Target List Policy`) simply select the list that has been created and defined.
     /// </remarks>
+    [AddComponentMenu("VRTK/Scripts/Utilities/VRTK_PolicyList")]
     public class VRTK_PolicyList : MonoBehaviour
     {
         /// <summary>

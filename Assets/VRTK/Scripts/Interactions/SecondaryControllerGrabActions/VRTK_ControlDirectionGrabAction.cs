@@ -15,6 +15,7 @@ namespace VRTK.SecondaryControllerGrabActions
     /// <example>
     /// `VRTK/Examples/043_Controller_SecondaryControllerActions` demonstrates the ability to grab an object with one controller and control their direction with the second controller.
     /// </example>
+    [AddComponentMenu("VRTK/Scripts/Interactions/Secondary Controller Grab Actions/VRTK_ControlDirectionGrabAction")]
     public class VRTK_ControlDirectionGrabAction : VRTK_BaseGrabAction
     {
         [Tooltip("The distance the secondary controller must move away from the original grab position before the secondary controller auto ungrabs the object.")]

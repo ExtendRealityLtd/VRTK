@@ -15,6 +15,7 @@ namespace VRTK.Highlighters
     ///
     /// The Draw Call Batching will resume on the original material when the item is no longer highlighted.
     /// </remarks>
+    [AddComponentMenu("VRTK/Scripts/Interactions/Highlighters/VRTK_MaterialPropertyBlockColorSwapHighlighter")]
     public class VRTK_MaterialPropertyBlockColorSwapHighlighter : VRTK_MaterialColorSwapHighlighter
     {
         protected Dictionary<string, MaterialPropertyBlock> originalMaterialPropertyBlocks = new Dictionary<string, MaterialPropertyBlock>();

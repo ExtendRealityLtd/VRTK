@@ -10,6 +10,7 @@ namespace VRTK
     /// <example>
     /// `VRTK/Examples/008_Controller_UsingAGrabbedObject` shows that the controller can be hidden when touching, grabbing and using an object.
     /// </example>
+    [AddComponentMenu("VRTK/Scripts/Interactions/VRTK_InteractControllerAppearance")]
     public class VRTK_InteractControllerAppearance : MonoBehaviour
     {
         [Header("Touch Visibility")]

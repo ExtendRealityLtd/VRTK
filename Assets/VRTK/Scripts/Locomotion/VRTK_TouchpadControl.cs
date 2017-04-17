@@ -17,6 +17,7 @@ namespace VRTK
     /// <example>
     /// `VRTK/Examples/017_CameraRig_TouchpadWalking` has a collection of walls and slopes that can be traversed by the user with the touchpad. There is also an area that can only be traversed if the user is crouching.
     /// </example>
+    [AddComponentMenu("VRTK/Scripts/Locomotion/VRTK_TouchpadControl")]
     public class VRTK_TouchpadControl : VRTK_ObjectControl
     {
         [Header("Touchpad Control Settings")]

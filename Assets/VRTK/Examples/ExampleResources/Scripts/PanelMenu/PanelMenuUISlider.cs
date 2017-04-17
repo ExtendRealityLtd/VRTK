@@ -31,8 +31,8 @@ namespace VRTK.Examples.PanelMenu
                 return;
             }
 
-            GetComponentInParent<PanelMenuItemController>().PanelMenuItemSwipeLeft += new PanelMenuItemControllerEventHandler(OnPanelMenuItemSwipeLeft);
-            GetComponentInParent<PanelMenuItemController>().PanelMenuItemSwipeRight += new PanelMenuItemControllerEventHandler(OnPanelMenuItemSwipeRight);
+            GetComponentInParent<VRTK_PanelMenuItemController>().PanelMenuItemSwipeLeft += new PanelMenuItemControllerEventHandler(OnPanelMenuItemSwipeLeft);
+            GetComponentInParent<VRTK_PanelMenuItemController>().PanelMenuItemSwipeRight += new PanelMenuItemControllerEventHandler(OnPanelMenuItemSwipeRight);
         }
 
         #endregion Unity Methods

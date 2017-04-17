@@ -30,6 +30,7 @@ namespace VRTK
     /// <example>
     /// `VRTK/Examples/011_Camera_HeadSetCollisionFading` has collidable walls around the play area and if the user puts their head into any of the walls then the headset will fade to black.
     /// </example>
+    [AddComponentMenu("VRTK/Scripts/Presence/VRTK_HeadsetFade")]
     public class VRTK_HeadsetFade : MonoBehaviour
     {
         /// <summary>

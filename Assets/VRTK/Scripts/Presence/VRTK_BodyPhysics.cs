@@ -37,6 +37,7 @@ namespace VRTK
     /// <example>
     /// `VRTK/Examples/017_CameraRig_TouchpadWalking` has a collection of walls and slopes that can be traversed by the user with the touchpad but the user cannot pass through the objects as they are collidable and the rigidbody physics won't allow the intersection to occur.
     /// </example>
+    [AddComponentMenu("VRTK/Scripts/Presence/VRTK_BodyPhysics")]
     public class VRTK_BodyPhysics : VRTK_DestinationMarker
     {
         /// <summary>

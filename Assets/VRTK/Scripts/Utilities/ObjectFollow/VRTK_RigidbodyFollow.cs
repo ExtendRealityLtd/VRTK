@@ -6,6 +6,7 @@ namespace VRTK
     /// <summary>
     /// Changes one game object's rigidbody to follow another game object's rigidbody.
     /// </summary>
+    [AddComponentMenu("VRTK/Scripts/Utilities/Object Follow/VRTK_RigidbodyFollow")]
     public class VRTK_RigidbodyFollow : VRTK_ObjectFollow
     {
         /// <summary>

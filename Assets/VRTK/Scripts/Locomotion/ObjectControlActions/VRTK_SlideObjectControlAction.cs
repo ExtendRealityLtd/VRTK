@@ -14,6 +14,7 @@ namespace VRTK
     ///
     /// To enable the Slide Object Control Action, ensure one of the `TouchpadControlOptions` children (located under the Controller script alias) has the `Slide` control script active.
     /// </example>
+    [AddComponentMenu("VRTK/Scripts/Locomotion/Object Control Actions/VRTK_SlideObjectControlAction")]
     public class VRTK_SlideObjectControlAction : VRTK_BaseObjectControlAction
     {
         [Tooltip("The maximum speed the controlled object can be moved in based on the position of the axis.")]
