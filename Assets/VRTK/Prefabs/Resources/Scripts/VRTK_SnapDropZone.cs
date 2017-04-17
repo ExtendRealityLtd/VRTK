@@ -3,6 +3,7 @@ namespace VRTK
 {
     using UnityEngine;
     using System.Collections;
+    using System.Collections.Generic;
     using Highlighters;
 
     /// <summary>
@@ -96,7 +97,7 @@ namespace VRTK
         protected GameObject highlightContainer;
         protected GameObject highlightObject;
         protected GameObject highlightEditorObject = null;
-        protected GameObject currentValidSnapObject = null;
+        protected List<GameObject> currentValidSnapObjects = new List<GameObject>();
         protected GameObject currentSnappedObject = null;
         protected VRTK_BaseHighlighter objectHighlighter;
         protected bool willSnap = false;
@@ -203,6 +204,25 @@ namespace VRTK
             }
         }
 
+        /// <summary>
+        /// The ValidSnappableObjectIsHovering method determines if any valid objects are currently hovering in the snap drop zone area.
+        /// </summary>
+        /// <returns>Returns true if a valid object is currently in the snap drop zone area.</returns>
+        public virtual bool ValidSnappableObjectIsHovering()
+        {
+            return currentValidSnapObjects.Count > 0;
+        }
+
+        /// <summary>
+        /// The IsObjectHovering method determines if the given GameObject is currently howvering (but not snapped) in the snap drop zone area.
+        /// </summary>
+        /// <param name="checkObject">The GameObject to check to see if it's hovering in the snap drop zone area.</param>
+        /// <returns>Returns true if the given GameObject is hovering (but not snapped) in the snap drop zone area.</returns>
+        public virtual bool IsObjectHovering(GameObject checkObject)
+        {
+            return currentValidSnapObjects.Contains(checkObject);
+        }
+
         protected virtual void Awake()
         {
             if (Application.isPlaying)
@@ -240,8 +260,8 @@ namespace VRTK
 
         protected virtual void OnTriggerEnter(Collider collider)
         {
-            //if there is no current valid snappable object and the zone isn't being snapped then attempt to highlight
-            if (!isSnapped && currentValidSnapObject == null)
+            //if there is no current valid snapped object and the zone then attempt to highlight
+            if (!isSnapped)
             {
                 ToggleHighlight(collider, true);
             }
@@ -250,7 +270,7 @@ namespace VRTK
         protected virtual void OnTriggerExit(Collider collider)
         {
             //if the current valid snapped object is the collider leaving the trigger then attempt to turn off the highlighter
-            if (currentValidSnapObject == collider.gameObject)
+            if (IsObjectHovering(collider.gameObject))
             {
                 ToggleHighlight(collider, false);
             }
@@ -264,13 +284,13 @@ namespace VRTK
         protected virtual void OnTriggerStay(Collider collider)
         {
             //Do sanity check to see if there should be a snappable object
-            if (!isSnapped && currentValidSnapObject == null && ValidSnapObject(collider.gameObject, true))
+            if (!isSnapped && ValidSnapObject(collider.gameObject, true))
             {
-                currentValidSnapObject = collider.gameObject;
+                AddCurrentValidSnapObject(collider.gameObject);
             }
 
             //if the current colliding object is the valid snappable object then we can snap
-            if (currentValidSnapObject == collider.gameObject)
+            if (IsObjectHovering(collider.gameObject))
             {
                 //If it isn't snapped then force the highlighter back on
                 if (!isSnapped)
@@ -350,13 +370,13 @@ namespace VRTK
         protected virtual void CheckCurrentValidSnapObjectStillValid()
         {
             //If there is a current valid snap object
-            if (currentValidSnapObject != null)
+            for (int i = 0; i < currentValidSnapObjects.Count; i++)
             {
-                var currentIOCheck = currentValidSnapObject.GetComponentInParent<VRTK_InteractableObject>();
+                var currentIOCheck = currentValidSnapObjects[i].GetComponentInParent<VRTK_InteractableObject>();
                 //and the interactbale object associated with it has been snapped to another zone, then unset the current valid snap object
                 if (currentIOCheck != null && currentIOCheck.GetStoredSnapDropZone() != null && currentIOCheck.GetStoredSnapDropZone() != gameObject)
                 {
-                    currentValidSnapObject = null;
+                    RemoveCurrentValidSnapObject(currentValidSnapObjects[i]);
                     if (isHighlighted && highlightObject != null && !highlightAlwaysActive)
                     {
                         highlightObject.SetActive(false);
@@ -554,11 +574,27 @@ namespace VRTK
             }
         }
 
+        protected virtual void AddCurrentValidSnapObject(GameObject givenObject)
+        {
+            if (!currentValidSnapObjects.Contains(givenObject))
+            {
+                currentValidSnapObjects.Add(givenObject);
+            }
+        }
+
+        protected virtual void RemoveCurrentValidSnapObject(GameObject givenObject)
+        {
+            if (currentValidSnapObjects.Contains(givenObject))
+            {
+                currentValidSnapObjects.Remove(givenObject);
+            }
+        }
+
         protected virtual void AttemptForceSnap(GameObject objectToSnap)
         {
             //force snap settings on
             willSnap = true;
-            currentValidSnapObject = objectToSnap;
+            AddCurrentValidSnapObject(objectToSnap);
             //Force touch one of the object's colliders on this trigger collider
             OnTriggerStay(objectToSnap.GetComponentInChildren<Collider>());
         }
@@ -583,16 +619,16 @@ namespace VRTK
 
                 if (state)
                 {
-                    if (currentValidSnapObject != collider.gameObject || wasSnapped)
+                    if (!IsObjectHovering(collider.gameObject) || wasSnapped)
                     {
                         OnObjectEnteredSnapDropZone(SetSnapDropZoneEvent(collider.gameObject));
                     }
-                    currentValidSnapObject = collider.gameObject;
+                    AddCurrentValidSnapObject(collider.gameObject);
                 }
                 else
                 {
                     OnObjectExitedSnapDropZone(SetSnapDropZoneEvent(collider.gameObject));
-                    currentValidSnapObject = null;
+                    RemoveCurrentValidSnapObject(collider.gameObject);
                 }
             }
         }
