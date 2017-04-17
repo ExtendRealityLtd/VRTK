@@ -148,7 +148,7 @@ namespace VRTK
         }
 
         /// <summary>
-        /// The PointerEnter method emits a DestinationMarkerEnter event when the pointer enters a valid object.
+        /// The PointerEnter method emits a DestinationMarkerEnter event when the pointer first enters a valid object, it emits a DestinationMarkerHover for every following frame that the pointer stays over the valid object.
         /// </summary>
         /// <param name="givenHit">The valid collision.</param>
         public virtual void PointerEnter(RaycastHit givenHit)
@@ -156,7 +156,15 @@ namespace VRTK
             if (enabled && givenHit.transform != null && controllerIndex < uint.MaxValue)
             {
                 SetHoverSelectionTimer(givenHit.collider);
-                OnDestinationMarkerEnter(SetDestinationMarkerEvent(givenHit.distance, givenHit.transform, givenHit, givenHit.point, controllerIndex, false, GetCursorRotation()));
+                DestinationMarkerEventArgs destinationEventArgs = SetDestinationMarkerEvent(givenHit.distance, givenHit.transform, givenHit, givenHit.point, controllerIndex, false, GetCursorRotation());
+                if (pointerRenderer != null && givenHit.collider != pointerRenderer.GetDestinationHit().collider)
+                {
+                    OnDestinationMarkerEnter(destinationEventArgs);
+                }
+                else
+                {
+                    OnDestinationMarkerHover(destinationEventArgs);
+                }
                 StartUseAction(givenHit.transform);
             }
         }

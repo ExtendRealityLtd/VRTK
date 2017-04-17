@@ -10,12 +10,14 @@
 
         public DestinationMarkerEvent OnDestinationMarkerEnter = new DestinationMarkerEvent();
         public DestinationMarkerEvent OnDestinationMarkerExit = new DestinationMarkerEvent();
+        public DestinationMarkerEvent OnDestinationMarkerHover = new DestinationMarkerEvent();
         public DestinationMarkerEvent OnDestinationMarkerSet = new DestinationMarkerEvent();
 
         protected override void AddListeners(VRTK_DestinationMarker component)
         {
             component.DestinationMarkerEnter += DestinationMarkerEnter;
             component.DestinationMarkerExit += DestinationMarkerExit;
+            component.DestinationMarkerHover += DestinationMarkerHover;
             component.DestinationMarkerSet += DestinationMarkerSet;
         }
 
@@ -23,6 +25,7 @@
         {
             component.DestinationMarkerEnter -= DestinationMarkerEnter;
             component.DestinationMarkerExit -= DestinationMarkerExit;
+            component.DestinationMarkerHover -= DestinationMarkerHover;
             component.DestinationMarkerSet -= DestinationMarkerSet;
         }
 
@@ -34,6 +37,11 @@
         private void DestinationMarkerExit(object o, DestinationMarkerEventArgs e)
         {
             OnDestinationMarkerExit.Invoke(o, e);
+        }
+
+        private void DestinationMarkerHover(object o, DestinationMarkerEventArgs e)
+        {
+            OnDestinationMarkerHover.Invoke(o, e);
         }
 
         private void DestinationMarkerSet(object o, DestinationMarkerEventArgs e)

@@ -4,6 +4,8 @@
 
     public class VRTK_ControllerPointerEvents_ListenerExample : MonoBehaviour
     {
+        public bool showHoverState = false;
+
         private void Start()
         {
             if (GetComponent<VRTK_DestinationMarker>() == null)
@@ -14,6 +16,10 @@
 
             //Setup controller event listeners
             GetComponent<VRTK_DestinationMarker>().DestinationMarkerEnter += new DestinationMarkerEventHandler(DoPointerIn);
+            if (showHoverState)
+            {
+                GetComponent<VRTK_DestinationMarker>().DestinationMarkerHover += new DestinationMarkerEventHandler(DoPointerHover);
+            }
             GetComponent<VRTK_DestinationMarker>().DestinationMarkerExit += new DestinationMarkerEventHandler(DoPointerOut);
             GetComponent<VRTK_DestinationMarker>().DestinationMarkerSet += new DestinationMarkerEventHandler(DoPointerDestinationSet);
         }
@@ -33,6 +39,11 @@
         private void DoPointerOut(object sender, DestinationMarkerEventArgs e)
         {
             DebugLogger(e.controllerIndex, "POINTER OUT", e.target, e.raycastHit, e.distance, e.destinationPosition);
+        }
+
+        private void DoPointerHover(object sender, DestinationMarkerEventArgs e)
+        {
+            DebugLogger(e.controllerIndex, "POINTER HOVER", e.target, e.raycastHit, e.distance, e.destinationPosition);
         }
 
         private void DoPointerDestinationSet(object sender, DestinationMarkerEventArgs e)

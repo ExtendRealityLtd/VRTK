@@ -936,8 +936,8 @@ It is utilised by the `VRTK_BasePointer` for dealing with pointer events when th
 
 ### Class Events
 
- * `DestinationMarkerEnter` - Emitted when a collision with another game object has occurred.
- * `DestinationMarkerExit` - Emitted when the collision with the other game object finishes.
+ * `DestinationMarkerEnter` - Emitted when a collision with another collider has first occurred.
+ * `DestinationMarkerExit` - Emitted when the collision with the other collider ends.
  * `DestinationMarkerSet` - Emitted when the destination marker is active in the scene to determine the last destination position (useful for selecting and teleporting).
 
 ### Unity Events
@@ -991,6 +991,17 @@ The SetNavMeshCheckDistance method sets the max distance the destination marker 
    * _none_
 
 The SetHeadsetPositionCompensation method determines whether the offset position of the headset from the centre of the play area should be taken into consideration when setting the destination marker. If `true` then it will take the offset position into consideration.
+
+#### SetForceHoverOnRepeatedEnter/1
+
+  > `public virtual void SetForceHoverOnRepeatedEnter(bool state)`
+
+  * Parameters
+   * `bool state` - The state of whether to force the hover on or off.
+  * Returns
+   * _none_
+
+The SetForceHoverOnRepeatedEnter method is used to set whether the Enter event will forciably call the Hover event if the existing colliding object is the same as it was the previous enter call.
 
 ---
 
@@ -1074,7 +1085,7 @@ The IsSelectionButtonPressed method returns whether the configured activation bu
   * Returns
    * _none_
 
-The PointerEnter method emits a DestinationMarkerEnter event when the pointer enters a valid object.
+The PointerEnter method emits a DestinationMarkerEnter event when the pointer first enters a valid object, it emits a DestinationMarkerHover for every following frame that the pointer stays over the valid object.
 
 #### PointerExit/1
 
