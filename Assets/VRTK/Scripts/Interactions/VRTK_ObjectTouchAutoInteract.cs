@@ -7,6 +7,7 @@ namespace VRTK
     /// <summary>
     /// The Object Touch Auto Interact script allows grab or use interactions on an object to automatically happen upon touching the interactable object.
     /// </summary>
+    [AddComponentMenu("VRTK/Scripts/Interactions/VRTK_ObjectTouchAutoInteract")]
     public class VRTK_ObjectTouchAutoInteract : MonoBehaviour
     {
         /// <summary>

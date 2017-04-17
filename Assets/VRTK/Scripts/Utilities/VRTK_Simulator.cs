@@ -11,6 +11,7 @@ namespace VRTK
     ///
     /// Supported movements are: forward, backward, strafe left, strafe right, turn left, turn right, up, down.
     /// </remarks>
+    [AddComponentMenu("VRTK/Scripts/Utilities/VRTK_Simulator")]
     public class VRTK_Simulator : MonoBehaviour
     {
         [System.Serializable]

@@ -16,6 +16,7 @@ namespace VRTK
     ///
     /// `VRTK/Examples/036_Controller_CustomCompoundPointer' shows how to display an object (a teleport beam) only if the teleport location is valid, and can create an animated trail along the tracer curve.
     /// </example>
+    [AddComponentMenu("VRTK/Scripts/Pointers/Pointer Renderers/VRTK_BezierPointerRenderer")]
     public class VRTK_BezierPointerRenderer : VRTK_BasePointerRenderer
     {
         [Header("Bezier Pointer Appearance Settings")]

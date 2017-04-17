@@ -20,6 +20,7 @@ namespace VRTK.Highlighters
     ///
     /// `VRTK/Examples/035_Controller_OpacityAndHighlighting` demonstrates the solid highlighting if the right controller collides with the green box or if any of the buttons are pressed.
     /// </example>
+    [AddComponentMenu("VRTK/Scripts/Interactions/Highlighters/VRTK_MaterialColorSwapHighlighter")]
     public class VRTK_MaterialColorSwapHighlighter : VRTK_BaseHighlighter
     {
         [Tooltip("The emission colour of the texture will be the highlight colour but this percent darker.")]

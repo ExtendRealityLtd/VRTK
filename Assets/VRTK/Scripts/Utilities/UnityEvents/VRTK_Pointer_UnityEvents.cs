@@ -1,5 +1,8 @@
 ﻿namespace VRTK.UnityEventHelper
 {
+    using UnityEngine;
+
+    [AddComponentMenu("VRTK/Scripts/Utilities/Unity Events/VRTK_Pointer_UnityEvents")]
     public sealed class VRTK_Pointer_UnityEvents : VRTK_UnityEvents<VRTK_Pointer>
     {
         public VRTK_ControllerEvents_UnityEvents.ControllerInteractionEvent OnActivationButtonPressed = new VRTK_ControllerEvents_UnityEvents.ControllerInteractionEvent();

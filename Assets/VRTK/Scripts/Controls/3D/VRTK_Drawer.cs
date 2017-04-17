@@ -16,6 +16,7 @@ namespace VRTK
     /// <example>
     /// `VRTK/Examples/025_Controls_Overview` shows a drawer with contents that can be opened and closed freely and the contents can be removed from the drawer.
     /// </example>
+    [AddComponentMenu("VRTK/Scripts/Controls/3D/VRTK_Drawer")]
     public class VRTK_Drawer : VRTK_Control
     {
         [Tooltip("An optional game object to which the drawer will be connected. If the game object moves the drawer will follow along.")]

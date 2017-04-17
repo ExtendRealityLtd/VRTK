@@ -15,6 +15,7 @@ namespace VRTK
     ///
     /// If the controlled object is the play area and `VRTK_BodyPhysics` is also available, then additional logic is processed when the user is falling such as preventing the button control from affecting a falling user.
     /// </remarks>
+    [AddComponentMenu("VRTK/Scripts/Locomotion/VRTK_ButtonControl")]
     public class VRTK_ButtonControl : VRTK_ObjectControl
     {
         [Header("Button Control Settings")]

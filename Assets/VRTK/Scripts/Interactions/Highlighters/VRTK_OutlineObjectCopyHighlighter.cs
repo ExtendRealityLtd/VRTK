@@ -13,6 +13,7 @@ namespace VRTK.Highlighters
     ///
     /// `VRTK/Examples/035_Controller_OpacityAndHighlighting` demonstrates the outline highlighting if the left controller collides with the green box.
     /// </example>
+    [AddComponentMenu("VRTK/Scripts/Interactions/Highlighters/VRTK_OutlineObjectCopyHighlighter")]
     public class VRTK_OutlineObjectCopyHighlighter : VRTK_BaseHighlighter
     {
         [Tooltip("The thickness of the outline effect")]

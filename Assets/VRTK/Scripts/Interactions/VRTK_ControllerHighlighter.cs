@@ -15,6 +15,7 @@ namespace VRTK
     /// <example>
     /// `VRTK/Examples/035_Controller_OpacityAndHighlighting` demonstrates the ability to change the opacity of a controller model and to highlight specific elements of a controller such as the buttons or even the entire controller model.
     /// </example>
+    [AddComponentMenu("VRTK/Scripts/Interactions/VRTK_ControllerHighlighter")]
     public class VRTK_ControllerHighlighter : MonoBehaviour
     {
         [Header("General Settings")]

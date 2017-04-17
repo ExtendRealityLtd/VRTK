@@ -12,6 +12,7 @@ namespace VRTK
     /// <example>
     /// `VRTK/Examples/003_Controller_SimplePointer` shows the simple pointer in action and code examples of how the events are utilised and listened to can be viewed in the script `VRTK/Examples/Resources/Scripts/VRTK_ControllerPointerEvents_ListenerExample.cs`
     /// </example>
+    [AddComponentMenu("VRTK/Scripts/Pointers/Pointer Renderers/VRTK_StraightPointerRenderer")]
     public class VRTK_StraightPointerRenderer : VRTK_BasePointerRenderer
     {
         [Header("Straight Pointer Appearance Settings")]

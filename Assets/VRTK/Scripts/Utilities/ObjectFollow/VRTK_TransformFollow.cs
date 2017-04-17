@@ -6,6 +6,7 @@ namespace VRTK
     /// <summary>
     /// Changes one game object's transform to follow another game object's transform.
     /// </summary>
+    [AddComponentMenu("VRTK/Scripts/Utilities/Object Follow/VRTK_TransformFollow")]
     public class VRTK_TransformFollow : VRTK_ObjectFollow
     {
         /// <summary>

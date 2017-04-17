@@ -39,6 +39,7 @@ namespace VRTK
     /// <example>
     /// `VRTK/Examples/034_Controls_InteractingWithUnityUI` uses the `VRTK_UIPointer` script on the right Controller to allow for the interaction with Unity UI elements using a Simple Pointer beam. The left Controller controls a Simple Pointer on the headset to demonstrate gaze interaction with Unity UI elements.
     /// </example>
+    [AddComponentMenu("VRTK/Scripts/UI/VRTK_UIPointer")]
     public class VRTK_UIPointer : MonoBehaviour
     {
         /// <summary>

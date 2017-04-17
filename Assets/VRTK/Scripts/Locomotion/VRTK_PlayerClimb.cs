@@ -29,6 +29,7 @@ namespace VRTK
     /// `VRTK/Examples/037_CameraRig_ClimbingFalling` shows how to set up a scene with player climbing. There are many different examples showing how the same system can be used in unique ways.
     /// </example>
     [RequireComponent(typeof(VRTK_BodyPhysics))]
+    [AddComponentMenu("VRTK/Scripts/Locomotion/VRTK_PlayerClimb")]
     public class VRTK_PlayerClimb : MonoBehaviour
     {
         [Tooltip("Will scale movement up and down based on the player transform's scale.")]

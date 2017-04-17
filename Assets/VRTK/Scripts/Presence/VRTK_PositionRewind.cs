@@ -10,6 +10,7 @@ namespace VRTK
     /// `VRTK/Examples/017_CameraRig_TouchpadWalking` has the position rewind script to reset the user's position if they walk into objects.
     /// </example>
     [RequireComponent(typeof(VRTK_HeadsetCollision))]
+    [AddComponentMenu("VRTK/Scripts/Presence/VRTK_PositionRewind")]
     public class VRTK_PositionRewind : MonoBehaviour
     {
         [Header("Rewind Settings")]

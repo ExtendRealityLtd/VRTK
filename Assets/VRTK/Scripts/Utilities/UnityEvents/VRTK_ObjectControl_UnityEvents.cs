@@ -1,8 +1,10 @@
 ﻿namespace VRTK.UnityEventHelper
 {
+    using UnityEngine;
     using UnityEngine.Events;
     using System;
 
+    [AddComponentMenu("VRTK/Scripts/Utilities/Unity Events/VRTK_ObjectControl_UnityEvents")]
     public sealed class VRTK_ObjectControl_UnityEvents : VRTK_UnityEvents<VRTK_ObjectControl>
     {
         [Serializable]

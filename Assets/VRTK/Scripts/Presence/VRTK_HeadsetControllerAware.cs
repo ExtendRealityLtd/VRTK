@@ -27,6 +27,7 @@ namespace VRTK
     /// <example>
     /// `VRTK/Examples/029_Controller_Tooltips` displays tooltips that have been added to the controllers and are only visible when the controller is being looked at.
     /// </example>
+    [AddComponentMenu("VRTK/Scripts/Presence/VRTK_HeadsetControllerAware")]
     public class VRTK_HeadsetControllerAware : MonoBehaviour
     {
         [Tooltip("If this is checked then the left controller will be checked if items obscure it's path from the headset.")]

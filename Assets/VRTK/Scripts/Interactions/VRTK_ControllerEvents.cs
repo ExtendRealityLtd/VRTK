@@ -39,6 +39,7 @@ namespace VRTK
     /// <example>
     /// `VRTK/Examples/002_Controller_Events` shows how the events are utilised and listened to. The accompanying example script can be viewed in `VRTK/Examples/Resources/Scripts/VRTK_ControllerEvents_ListenerExample.cs`.
     /// </example>
+    [AddComponentMenu("VRTK/Scripts/Interactions/VRTK_ControllerEvents")]
     public class VRTK_ControllerEvents : MonoBehaviour
     {
         /// <summary>

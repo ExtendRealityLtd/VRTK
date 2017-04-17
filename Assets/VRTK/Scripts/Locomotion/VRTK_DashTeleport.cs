@@ -31,6 +31,7 @@ namespace VRTK
     /// <example>
     /// `SteamVR_Unity_Toolkit/Examples/038_CameraRig_DashTeleport` shows how to turn off the mesh renderers of objects that are in the way during the dash.
     /// </example>
+    [AddComponentMenu("VRTK/Scripts/Locomotion/VRTK_DashTeleport")]
     public class VRTK_DashTeleport : VRTK_HeightAdjustTeleport
     {
         [Header("Dash Settings")]

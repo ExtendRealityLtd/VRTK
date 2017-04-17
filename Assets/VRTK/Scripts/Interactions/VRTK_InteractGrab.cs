@@ -26,6 +26,7 @@ namespace VRTK
     ///
     /// `VRTK/Examples/014_Controller_SnappingObjectsOnGrab` demonstrates the different mechanisms for snapping a grabbed object to the controller.
     /// </example>
+    [AddComponentMenu("VRTK/Scripts/Interactions/VRTK_InteractGrab")]
     public class VRTK_InteractGrab : MonoBehaviour
     {
         [Header("Grab Settings")]

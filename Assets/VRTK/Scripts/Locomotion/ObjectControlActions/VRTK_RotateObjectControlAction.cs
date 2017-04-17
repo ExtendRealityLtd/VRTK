@@ -14,6 +14,7 @@ namespace VRTK
     ///
     /// To enable the Rotate Object Control Action, ensure one of the `TouchpadControlOptions` children (located under the Controller script alias) has the `Rotate` control script active.
     /// </example>
+    [AddComponentMenu("VRTK/Scripts/Locomotion/Object Control Actions/VRTK_RotateObjectControlAction")]
     public class VRTK_RotateObjectControlAction : VRTK_BaseObjectControlAction
     {
         [Tooltip("The maximum speed the controlled object can be rotated based on the position of the axis.")]

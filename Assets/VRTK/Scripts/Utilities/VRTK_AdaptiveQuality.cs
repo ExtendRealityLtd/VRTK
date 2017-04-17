@@ -59,6 +59,7 @@ namespace VRTK
     /// Pressing the trigger generates a new sphere and pressing the touchpad generates ten new spheres.
     /// Eventually when lots of spheres are present the FPS will drop and demonstrate the script.
     /// </example>
+    [AddComponentMenu("VRTK/Scripts/Utilities/VRTK_AdaptiveQuality")]
     public sealed class VRTK_AdaptiveQuality : MonoBehaviour
     {
         #region Public fields

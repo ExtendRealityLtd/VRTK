@@ -15,6 +15,7 @@ namespace VRTK
     /// <summary>
     /// The SDK Manager script provides configuration of supported SDKs.
     /// </summary>
+    [AddComponentMenu("VRTK/Scripts/Utilities/VRTK_SDKManager")]
     public class VRTK_SDKManager : MonoBehaviour
     {
         /// <summary>

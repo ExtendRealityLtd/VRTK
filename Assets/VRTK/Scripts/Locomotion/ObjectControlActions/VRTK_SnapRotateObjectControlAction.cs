@@ -14,6 +14,7 @@ namespace VRTK
     ///
     /// To enable the Snap Rotate Object Control Action, ensure one of the `TouchpadControlOptions` children (located under the Controller script alias) has the `Snap Rotate` control script active.
     /// </example>
+    [AddComponentMenu("VRTK/Scripts/Locomotion/Object Control Actions/VRTK_SnapRotateObjectControlAction")]
     public class VRTK_SnapRotateObjectControlAction : VRTK_BaseObjectControlAction
     {
         [Tooltip("The angle to rotate for each snap.")]
