@@ -29,7 +29,7 @@ namespace VRTK
     /// <example>
     /// `040_Controls_Panel_Menu` contains three basic interactive object examples of the PanelMenu in use.
     /// </example>
-    public class PanelMenuItemController : MonoBehaviour
+    public class VRTK_PanelMenuItemController : MonoBehaviour
     {
         /// <summary>
         /// Emitted when the panel menu item is showing.

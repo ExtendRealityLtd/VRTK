@@ -22,7 +22,7 @@ namespace VRTK
     /// `VRTK/Examples/030_Controls_RadialTouchpadMenu` displays a radial menu for each controller. The left controller uses the `Hide On Release` variable, so it will only be visible if the left touchpad is being touched. It also uses the `Execute On Unclick` variable to delay execution until the touchpad button is unclicked. The example scene also contains a demonstration of anchoring the RadialMenu to an interactable cube instead of a controller.
     /// </example>
     [ExecuteInEditMode]
-    public class RadialMenu : MonoBehaviour
+    public class VRTK_RadialMenu : MonoBehaviour
     {
         [System.Serializable]
         public class RadialMenuButton

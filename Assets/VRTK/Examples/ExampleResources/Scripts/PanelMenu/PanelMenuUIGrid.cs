@@ -42,11 +42,11 @@ namespace VRTK.Examples.PanelMenu
                 return;
             }
 
-            GetComponentInParent<PanelMenuItemController>().PanelMenuItemSwipeTop += new PanelMenuItemControllerEventHandler(OnPanelMenuItemSwipeTop);
-            GetComponentInParent<PanelMenuItemController>().PanelMenuItemSwipeBottom += new PanelMenuItemControllerEventHandler(OnPanelMenuItemSwipeBottom);
-            GetComponentInParent<PanelMenuItemController>().PanelMenuItemSwipeLeft += new PanelMenuItemControllerEventHandler(OnPanelMenuItemSwipeLeft);
-            GetComponentInParent<PanelMenuItemController>().PanelMenuItemSwipeRight += new PanelMenuItemControllerEventHandler(OnPanelMenuItemSwipeRight);
-            GetComponentInParent<PanelMenuItemController>().PanelMenuItemTriggerPressed += new PanelMenuItemControllerEventHandler(OnPanelMenuItemTriggerPressed);
+            GetComponentInParent<VRTK_PanelMenuItemController>().PanelMenuItemSwipeTop += new PanelMenuItemControllerEventHandler(OnPanelMenuItemSwipeTop);
+            GetComponentInParent<VRTK_PanelMenuItemController>().PanelMenuItemSwipeBottom += new PanelMenuItemControllerEventHandler(OnPanelMenuItemSwipeBottom);
+            GetComponentInParent<VRTK_PanelMenuItemController>().PanelMenuItemSwipeLeft += new PanelMenuItemControllerEventHandler(OnPanelMenuItemSwipeLeft);
+            GetComponentInParent<VRTK_PanelMenuItemController>().PanelMenuItemSwipeRight += new PanelMenuItemControllerEventHandler(OnPanelMenuItemSwipeRight);
+            GetComponentInParent<VRTK_PanelMenuItemController>().PanelMenuItemTriggerPressed += new PanelMenuItemControllerEventHandler(OnPanelMenuItemTriggerPressed);
 
             SetGridLayoutItemSelectedState(selectedIndex);
         }
