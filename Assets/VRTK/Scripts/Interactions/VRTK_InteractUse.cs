@@ -58,6 +58,7 @@ namespace VRTK
         protected VRTK_ControllerEvents.ButtonAlias subscribedUseButton = VRTK_ControllerEvents.ButtonAlias.Undefined;
         protected VRTK_ControllerEvents.ButtonAlias savedUseButton = VRTK_ControllerEvents.ButtonAlias.Undefined;
         protected bool usePressed;
+        protected VRTK_ControllerReference controllerReference;
 
         protected GameObject usingObject = null;
 
@@ -151,6 +152,8 @@ namespace VRTK
             {
                 VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_NOT_INJECTED, "VRTK_InteractUse", "VRTK_InteractTouch", "interactTouch", "the same or parent"));
             }
+
+            controllerReference = VRTK_ControllerReference.GetControllerReference(interactTouch.gameObject);
 
             ManageUseListener(true);
             ManageInteractTouchListener(true);
@@ -273,20 +276,19 @@ namespace VRTK
                 var doHaptics = usingObject.GetComponentInParent<VRTK_InteractHaptics>();
                 if (doHaptics != null)
                 {
-                    doHaptics.HapticsOnUse(VRTK_DeviceFinder.GetControllerIndex(interactTouch.gameObject));
+                    doHaptics.HapticsOnUse(controllerReference);
                 }
             }
         }
 
         protected virtual void ToggleControllerVisibility(bool visible)
         {
-            GameObject modelContainer = VRTK_DeviceFinder.GetModelAliasController(interactTouch.gameObject);
             if (usingObject != null)
             {
                 VRTK_InteractControllerAppearance[] controllerAppearanceScript = usingObject.GetComponentsInParent<VRTK_InteractControllerAppearance>(true);
                 if (controllerAppearanceScript.Length > 0)
                 {
-                    controllerAppearanceScript[0].ToggleControllerOnUse(visible, modelContainer, usingObject);
+                    controllerAppearanceScript[0].ToggleControllerOnUse(visible, controllerReference.model, usingObject);
                 }
             }
         }
@@ -298,13 +300,13 @@ namespace VRTK
                 usingObject = touchedObject;
                 var usingObjectScript = usingObject.GetComponent<VRTK_InteractableObject>();
 
-                if (!usingObjectScript.IsValidInteractableController(interactTouch.gameObject, usingObjectScript.allowedUseControllers))
+                if (!usingObjectScript.IsValidInteractableController(controllerReference.scriptAlias, usingObjectScript.allowedUseControllers))
                 {
                     usingObject = null;
                     return;
                 }
 
-                usingObjectScript.StartUsing(interactTouch.gameObject);
+                usingObjectScript.StartUsing(controllerReference.scriptAlias);
                 ToggleControllerVisibility(false);
                 AttemptHaptics();
                 OnControllerUseInteractableObject(interactTouch.SetControllerInteractEvent(usingObject));
@@ -318,7 +320,7 @@ namespace VRTK
                 var usingObjectCheck = usingObject.GetComponent<VRTK_InteractableObject>();
                 if (usingObjectCheck != null && completeStop)
                 {
-                    usingObjectCheck.StopUsing(interactTouch.gameObject);
+                    usingObjectCheck.StopUsing(controllerReference.scriptAlias);
                 }
                 ToggleControllerVisibility(true);
                 OnControllerUnuseInteractableObject(interactTouch.SetControllerInteractEvent(usingObject));

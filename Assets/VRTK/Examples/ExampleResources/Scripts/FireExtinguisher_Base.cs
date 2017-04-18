@@ -29,7 +29,7 @@
             {
                 float power = controllerEvents.GetTriggerAxis();
                 Spray(power);
-                VRTK_SharedMethods.TriggerHapticPulse(VRTK_DeviceFinder.GetControllerIndex(controllerEvents.gameObject), power * 0.25f, 0.1f, 0.01f);
+                VRTK_SharedMethods.TriggerHapticPulse(VRTK_ControllerReference.GetControllerReference(controllerEvents.gameObject), power * 0.25f, 0.1f, 0.01f);
             }
             else
             {

@@ -6,7 +6,7 @@
     public class SceneChanger : MonoBehaviour
     {
         private bool canPress;
-        private uint controllerIndex;
+        private VRTK_ControllerReference controllerReference;
 
         private void Awake()
         {
@@ -17,11 +17,14 @@
 
         private bool ForwardPressed()
         {
-            if (controllerIndex >= uint.MaxValue)
+            if (!VRTK_ControllerReference.IsValid(controllerReference))
             {
                 return false;
             }
-            if (canPress && VRTK_SDK_Bridge.IsTriggerPressedOnIndex(controllerIndex) && VRTK_SDK_Bridge.IsGripPressedOnIndex(controllerIndex) && VRTK_SDK_Bridge.IsTouchpadPressedOnIndex(controllerIndex))
+            if (canPress &&
+                VRTK_SDK_Bridge.GetControllerButtonState(SDK_BaseController.ButtonTypes.Trigger, SDK_BaseController.ButtonPressTypes.Press, controllerReference) &&
+                VRTK_SDK_Bridge.GetControllerButtonState(SDK_BaseController.ButtonTypes.Grip, SDK_BaseController.ButtonPressTypes.Press, controllerReference) &&
+                VRTK_SDK_Bridge.GetControllerButtonState(SDK_BaseController.ButtonTypes.Touchpad, SDK_BaseController.ButtonPressTypes.Press, controllerReference))
             {
                 return true;
             }
@@ -30,12 +33,15 @@
 
         private bool BackPressed()
         {
-            if (controllerIndex >= uint.MaxValue)
+            if (!VRTK_ControllerReference.IsValid(controllerReference))
             {
                 return false;
             }
 
-            if (canPress && VRTK_SDK_Bridge.IsTriggerPressedOnIndex(controllerIndex) && VRTK_SDK_Bridge.IsGripPressedOnIndex(controllerIndex) && VRTK_SDK_Bridge.IsButtonTwoPressedOnIndex(controllerIndex))
+            if (canPress &&
+                VRTK_SDK_Bridge.GetControllerButtonState(SDK_BaseController.ButtonTypes.Trigger, SDK_BaseController.ButtonPressTypes.Press, controllerReference) &&
+                VRTK_SDK_Bridge.GetControllerButtonState(SDK_BaseController.ButtonTypes.Grip, SDK_BaseController.ButtonPressTypes.Press, controllerReference) &&
+                VRTK_SDK_Bridge.GetControllerButtonState(SDK_BaseController.ButtonTypes.ButtonTwo, SDK_BaseController.ButtonPressTypes.Press, controllerReference))
             {
                 return true;
             }
@@ -49,11 +55,11 @@
 
         private void Update()
         {
-            var rightHand = VRTK_DeviceFinder.GetControllerRightHand(true);
-            controllerIndex = VRTK_DeviceFinder.GetControllerIndex(rightHand);
+            GameObject rightHand = VRTK_DeviceFinder.GetControllerRightHand(true);
+            controllerReference = VRTK_ControllerReference.GetControllerReference(rightHand);
             if (ForwardPressed() || Input.GetKeyUp(KeyCode.Space))
             {
-                var nextSceneIndex = SceneManager.GetActiveScene().buildIndex + 1;
+                int nextSceneIndex = SceneManager.GetActiveScene().buildIndex + 1;
                 if (nextSceneIndex >= SceneManager.sceneCountInBuildSettings)
                 {
                     nextSceneIndex = 0;
@@ -63,7 +69,7 @@
 
             if (BackPressed() || Input.GetKeyUp(KeyCode.Backspace))
             {
-                var previousSceneIndex = SceneManager.GetActiveScene().buildIndex - 1;
+                int previousSceneIndex = SceneManager.GetActiveScene().buildIndex - 1;
                 if (previousSceneIndex < 0)
                 {
                     previousSceneIndex = SceneManager.sceneCountInBuildSettings - 1;

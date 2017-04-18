@@ -1088,7 +1088,7 @@ namespace VRTK
             Vector3 newPosition = new Vector3(playArea.position.x, floorY, playArea.position.z);
             float originalblinkTransitionSpeed = teleporter.blinkTransitionSpeed;
             teleporter.blinkTransitionSpeed = (Mathf.Abs(hitFloorYDelta) > blinkYThreshold ? originalblinkTransitionSpeed : 0f);
-            OnDestinationMarkerSet(SetDestinationMarkerEvent(rayCollidedWith.distance, currentFloor.transform, rayCollidedWith, newPosition, uint.MaxValue, true, null));
+            OnDestinationMarkerSet(SetDestinationMarkerEvent(rayCollidedWith.distance, currentFloor.transform, rayCollidedWith, newPosition, null, true, null));
             teleporter.blinkTransitionSpeed = originalblinkTransitionSpeed;
 
             resetPhysicsAfterTeleport = true;

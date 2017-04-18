@@ -78,182 +78,182 @@
 
         private void DoTriggerPressed(object sender, ControllerInteractionEventArgs e)
         {
-            DebugLogger(e.controllerIndex, "TRIGGER", "pressed", e);
+            DebugLogger(VRTK_ControllerReference.GetRealIndex(e.controllerReference), "TRIGGER", "pressed", e);
         }
 
         private void DoTriggerReleased(object sender, ControllerInteractionEventArgs e)
         {
-            DebugLogger(e.controllerIndex, "TRIGGER", "released", e);
+            DebugLogger(VRTK_ControllerReference.GetRealIndex(e.controllerReference), "TRIGGER", "released", e);
         }
 
         private void DoTriggerTouchStart(object sender, ControllerInteractionEventArgs e)
         {
-            DebugLogger(e.controllerIndex, "TRIGGER", "touched", e);
+            DebugLogger(VRTK_ControllerReference.GetRealIndex(e.controllerReference), "TRIGGER", "touched", e);
         }
 
         private void DoTriggerTouchEnd(object sender, ControllerInteractionEventArgs e)
         {
-            DebugLogger(e.controllerIndex, "TRIGGER", "untouched", e);
+            DebugLogger(VRTK_ControllerReference.GetRealIndex(e.controllerReference), "TRIGGER", "untouched", e);
         }
 
         private void DoTriggerHairlineStart(object sender, ControllerInteractionEventArgs e)
         {
-            DebugLogger(e.controllerIndex, "TRIGGER", "hairline start", e);
+            DebugLogger(VRTK_ControllerReference.GetRealIndex(e.controllerReference), "TRIGGER", "hairline start", e);
         }
 
         private void DoTriggerHairlineEnd(object sender, ControllerInteractionEventArgs e)
         {
-            DebugLogger(e.controllerIndex, "TRIGGER", "hairline end", e);
+            DebugLogger(VRTK_ControllerReference.GetRealIndex(e.controllerReference), "TRIGGER", "hairline end", e);
         }
 
         private void DoTriggerClicked(object sender, ControllerInteractionEventArgs e)
         {
-            DebugLogger(e.controllerIndex, "TRIGGER", "clicked", e);
+            DebugLogger(VRTK_ControllerReference.GetRealIndex(e.controllerReference), "TRIGGER", "clicked", e);
         }
 
         private void DoTriggerUnclicked(object sender, ControllerInteractionEventArgs e)
         {
-            DebugLogger(e.controllerIndex, "TRIGGER", "unclicked", e);
+            DebugLogger(VRTK_ControllerReference.GetRealIndex(e.controllerReference), "TRIGGER", "unclicked", e);
         }
 
         private void DoTriggerAxisChanged(object sender, ControllerInteractionEventArgs e)
         {
-            DebugLogger(e.controllerIndex, "TRIGGER", "axis changed", e);
+            DebugLogger(VRTK_ControllerReference.GetRealIndex(e.controllerReference), "TRIGGER", "axis changed", e);
         }
 
         private void DoGripPressed(object sender, ControllerInteractionEventArgs e)
         {
-            DebugLogger(e.controllerIndex, "GRIP", "pressed", e);
+            DebugLogger(VRTK_ControllerReference.GetRealIndex(e.controllerReference), "GRIP", "pressed", e);
         }
 
         private void DoGripReleased(object sender, ControllerInteractionEventArgs e)
         {
-            DebugLogger(e.controllerIndex, "GRIP", "released", e);
+            DebugLogger(VRTK_ControllerReference.GetRealIndex(e.controllerReference), "GRIP", "released", e);
         }
 
         private void DoGripTouchStart(object sender, ControllerInteractionEventArgs e)
         {
-            DebugLogger(e.controllerIndex, "GRIP", "touched", e);
+            DebugLogger(VRTK_ControllerReference.GetRealIndex(e.controllerReference), "GRIP", "touched", e);
         }
 
         private void DoGripTouchEnd(object sender, ControllerInteractionEventArgs e)
         {
-            DebugLogger(e.controllerIndex, "GRIP", "untouched", e);
+            DebugLogger(VRTK_ControllerReference.GetRealIndex(e.controllerReference), "GRIP", "untouched", e);
         }
 
         private void DoGripHairlineStart(object sender, ControllerInteractionEventArgs e)
         {
-            DebugLogger(e.controllerIndex, "GRIP", "hairline start", e);
+            DebugLogger(VRTK_ControllerReference.GetRealIndex(e.controllerReference), "GRIP", "hairline start", e);
         }
 
         private void DoGripHairlineEnd(object sender, ControllerInteractionEventArgs e)
         {
-            DebugLogger(e.controllerIndex, "GRIP", "hairline end", e);
+            DebugLogger(VRTK_ControllerReference.GetRealIndex(e.controllerReference), "GRIP", "hairline end", e);
         }
 
         private void DoGripClicked(object sender, ControllerInteractionEventArgs e)
         {
-            DebugLogger(e.controllerIndex, "GRIP", "clicked", e);
+            DebugLogger(VRTK_ControllerReference.GetRealIndex(e.controllerReference), "GRIP", "clicked", e);
         }
 
         private void DoGripUnclicked(object sender, ControllerInteractionEventArgs e)
         {
-            DebugLogger(e.controllerIndex, "GRIP", "unclicked", e);
+            DebugLogger(VRTK_ControllerReference.GetRealIndex(e.controllerReference), "GRIP", "unclicked", e);
         }
 
         private void DoGripAxisChanged(object sender, ControllerInteractionEventArgs e)
         {
-            DebugLogger(e.controllerIndex, "GRIP", "axis changed", e);
+            DebugLogger(VRTK_ControllerReference.GetRealIndex(e.controllerReference), "GRIP", "axis changed", e);
         }
 
         private void DoTouchpadPressed(object sender, ControllerInteractionEventArgs e)
         {
-            DebugLogger(e.controllerIndex, "TOUCHPAD", "pressed down", e);
+            DebugLogger(VRTK_ControllerReference.GetRealIndex(e.controllerReference), "TOUCHPAD", "pressed down", e);
         }
 
         private void DoTouchpadReleased(object sender, ControllerInteractionEventArgs e)
         {
-            DebugLogger(e.controllerIndex, "TOUCHPAD", "released", e);
+            DebugLogger(VRTK_ControllerReference.GetRealIndex(e.controllerReference), "TOUCHPAD", "released", e);
         }
 
         private void DoTouchpadTouchStart(object sender, ControllerInteractionEventArgs e)
         {
-            DebugLogger(e.controllerIndex, "TOUCHPAD", "touched", e);
+            DebugLogger(VRTK_ControllerReference.GetRealIndex(e.controllerReference), "TOUCHPAD", "touched", e);
         }
 
         private void DoTouchpadTouchEnd(object sender, ControllerInteractionEventArgs e)
         {
-            DebugLogger(e.controllerIndex, "TOUCHPAD", "untouched", e);
+            DebugLogger(VRTK_ControllerReference.GetRealIndex(e.controllerReference), "TOUCHPAD", "untouched", e);
         }
 
         private void DoTouchpadAxisChanged(object sender, ControllerInteractionEventArgs e)
         {
-            DebugLogger(e.controllerIndex, "TOUCHPAD", "axis changed", e);
+            DebugLogger(VRTK_ControllerReference.GetRealIndex(e.controllerReference), "TOUCHPAD", "axis changed", e);
         }
 
         private void DoButtonOnePressed(object sender, ControllerInteractionEventArgs e)
         {
-            DebugLogger(e.controllerIndex, "BUTTON ONE", "pressed down", e);
+            DebugLogger(VRTK_ControllerReference.GetRealIndex(e.controllerReference), "BUTTON ONE", "pressed down", e);
         }
 
         private void DoButtonOneReleased(object sender, ControllerInteractionEventArgs e)
         {
-            DebugLogger(e.controllerIndex, "BUTTON ONE", "released", e);
+            DebugLogger(VRTK_ControllerReference.GetRealIndex(e.controllerReference), "BUTTON ONE", "released", e);
         }
 
         private void DoButtonOneTouchStart(object sender, ControllerInteractionEventArgs e)
         {
-            DebugLogger(e.controllerIndex, "BUTTON ONE", "touched", e);
+            DebugLogger(VRTK_ControllerReference.GetRealIndex(e.controllerReference), "BUTTON ONE", "touched", e);
         }
 
         private void DoButtonOneTouchEnd(object sender, ControllerInteractionEventArgs e)
         {
-            DebugLogger(e.controllerIndex, "BUTTON ONE", "untouched", e);
+            DebugLogger(VRTK_ControllerReference.GetRealIndex(e.controllerReference), "BUTTON ONE", "untouched", e);
         }
 
         private void DoButtonTwoPressed(object sender, ControllerInteractionEventArgs e)
         {
-            DebugLogger(e.controllerIndex, "BUTTON TWO", "pressed down", e);
+            DebugLogger(VRTK_ControllerReference.GetRealIndex(e.controllerReference), "BUTTON TWO", "pressed down", e);
         }
 
         private void DoButtonTwoReleased(object sender, ControllerInteractionEventArgs e)
         {
-            DebugLogger(e.controllerIndex, "BUTTON TWO", "released", e);
+            DebugLogger(VRTK_ControllerReference.GetRealIndex(e.controllerReference), "BUTTON TWO", "released", e);
         }
 
         private void DoButtonTwoTouchStart(object sender, ControllerInteractionEventArgs e)
         {
-            DebugLogger(e.controllerIndex, "BUTTON TWO", "touched", e);
+            DebugLogger(VRTK_ControllerReference.GetRealIndex(e.controllerReference), "BUTTON TWO", "touched", e);
         }
 
         private void DoButtonTwoTouchEnd(object sender, ControllerInteractionEventArgs e)
         {
-            DebugLogger(e.controllerIndex, "BUTTON TWO", "untouched", e);
+            DebugLogger(VRTK_ControllerReference.GetRealIndex(e.controllerReference), "BUTTON TWO", "untouched", e);
         }
 
         private void DoStartMenuPressed(object sender, ControllerInteractionEventArgs e)
         {
-            DebugLogger(e.controllerIndex, "START MENU", "pressed down", e);
+            DebugLogger(VRTK_ControllerReference.GetRealIndex(e.controllerReference), "START MENU", "pressed down", e);
         }
 
         private void DoStartMenuReleased(object sender, ControllerInteractionEventArgs e)
         {
-            DebugLogger(e.controllerIndex, "START MENU", "released", e);
+            DebugLogger(VRTK_ControllerReference.GetRealIndex(e.controllerReference), "START MENU", "released", e);
         }
 
         private void DoControllerEnabled(object sender, ControllerInteractionEventArgs e)
         {
-            DebugLogger(e.controllerIndex, "CONTROLLER STATE", "ENABLED", e);
+            DebugLogger(VRTK_ControllerReference.GetRealIndex(e.controllerReference), "CONTROLLER STATE", "ENABLED", e);
         }
 
         private void DoControllerDisabled(object sender, ControllerInteractionEventArgs e)
         {
-            DebugLogger(e.controllerIndex, "CONTROLLER STATE", "DISABLED", e);
+            DebugLogger(VRTK_ControllerReference.GetRealIndex(e.controllerReference), "CONTROLLER STATE", "DISABLED", e);
         }
 
         private void DoControllerIndexChanged(object sender, ControllerInteractionEventArgs e)
         {
-            DebugLogger(e.controllerIndex, "CONTROLLER STATE", "INDEX CHANGED", e);
+            DebugLogger(VRTK_ControllerReference.GetRealIndex(e.controllerReference), "CONTROLLER STATE", "INDEX CHANGED", e);
         }
     }
 }

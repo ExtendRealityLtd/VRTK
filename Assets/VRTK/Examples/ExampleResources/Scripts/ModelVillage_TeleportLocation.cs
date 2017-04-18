@@ -9,14 +9,14 @@
 
         private void OnTriggerStay(Collider collider)
         {
-            var controller = (collider.GetComponent<VRTK_ControllerEvents>() ? collider.GetComponent<VRTK_ControllerEvents>() : collider.GetComponentInParent<VRTK_ControllerEvents>());
-            if (controller)
+            VRTK_ControllerEvents controller = (collider.GetComponent<VRTK_ControllerEvents>() ? collider.GetComponent<VRTK_ControllerEvents>() : collider.GetComponentInParent<VRTK_ControllerEvents>());
+            if (controller != null)
             {
                 if (lastUsePressedState == true && !controller.triggerPressed)
                 {
-                    var distance = Vector3.Distance(transform.position, destination.position);
-                    var controllerIndex = VRTK_DeviceFinder.GetControllerIndex(controller.gameObject);
-                    OnDestinationMarkerSet(SetDestinationMarkerEvent(distance, destination, new RaycastHit(), destination.position, controllerIndex));
+                    float distance = Vector3.Distance(transform.position, destination.position);
+                    VRTK_ControllerReference controllerReference = VRTK_ControllerReference.GetControllerReference(controller.gameObject);
+                    OnDestinationMarkerSet(SetDestinationMarkerEvent(distance, destination, new RaycastHit(), destination.position, controllerReference));
                 }
                 lastUsePressedState = controller.triggerPressed;
             }

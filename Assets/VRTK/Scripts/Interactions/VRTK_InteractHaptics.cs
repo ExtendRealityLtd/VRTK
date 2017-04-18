@@ -2,6 +2,7 @@
 namespace VRTK
 {
     using UnityEngine;
+    using System;
 
     /// <summary>
     /// The Interact Haptics script is attached on the same GameObject as an Interactable Object script and provides controller haptics on touch, grab and use of the object.
@@ -42,11 +43,21 @@ namespace VRTK
         /// The HapticsOnTouch method triggers the haptic feedback on the given controller for the settings associated with touch.
         /// </summary>
         /// <param name="controllerIndex">The controller index to activate the haptic feedback on.</param>
+        [Obsolete("`VRTK_InteractHaptics.HapticsOnTouch(controllerIndex)` has been replaced with `VRTK_InteractHaptics.HapticsOnTouch(controllerReference)`. This method will be removed in a future version of VRTK.")]
         public virtual void HapticsOnTouch(uint controllerIndex)
+        {
+            HapticsOnTouch(VRTK_ControllerReference.GetControllerReference(controllerIndex));
+        }
+
+        /// <summary>
+        /// The HapticsOnTouch method triggers the haptic feedback on the given controller for the settings associated with touch.
+        /// </summary>
+        /// <param name="controllerReference">The reference to the controller to activate the haptic feedback on.</param>
+        public virtual void HapticsOnTouch(VRTK_ControllerReference controllerReference)
         {
             if (strengthOnTouch > 0 && durationOnTouch > 0f)
             {
-                TriggerHapticPulse(controllerIndex, strengthOnTouch, durationOnTouch, intervalOnTouch);
+                TriggerHapticPulse(controllerReference, strengthOnTouch, durationOnTouch, intervalOnTouch);
             }
         }
 
@@ -54,11 +65,21 @@ namespace VRTK
         /// The HapticsOnGrab method triggers the haptic feedback on the given controller for the settings associated with grab.
         /// </summary>
         /// <param name="controllerIndex">The controller index to activate the haptic feedback on.</param>
+        [Obsolete("`VRTK_InteractHaptics.HapticsOnGrab(controllerIndex)` has been replaced with `VRTK_InteractHaptics.HapticsOnGrab(controllerReference)`. This method will be removed in a future version of VRTK.")]
         public virtual void HapticsOnGrab(uint controllerIndex)
+        {
+            HapticsOnGrab(VRTK_ControllerReference.GetControllerReference(controllerIndex));
+        }
+
+        /// <summary>
+        /// The HapticsOnGrab method triggers the haptic feedback on the given controller for the settings associated with grab.
+        /// </summary>
+        /// <param name="controllerReference">The reference to the controller to activate the haptic feedback on.</param>
+        public virtual void HapticsOnGrab(VRTK_ControllerReference controllerReference)
         {
             if (strengthOnGrab > 0 && durationOnGrab > 0f)
             {
-                TriggerHapticPulse(controllerIndex, strengthOnGrab, durationOnGrab, intervalOnGrab);
+                TriggerHapticPulse(controllerReference, strengthOnGrab, durationOnGrab, intervalOnGrab);
             }
         }
 
@@ -66,11 +87,21 @@ namespace VRTK
         /// The HapticsOnUse method triggers the haptic feedback on the given controller for the settings associated with use.
         /// </summary>
         /// <param name="controllerIndex">The controller index to activate the haptic feedback on.</param>
+        [Obsolete("`VRTK_InteractHaptics.HapticsOnUse(controllerIndex)` has been replaced with `VRTK_InteractHaptics.HapticsOnUse(controllerReference)`. This method will be removed in a future version of VRTK.")]
         public virtual void HapticsOnUse(uint controllerIndex)
+        {
+            HapticsOnUse(VRTK_ControllerReference.GetControllerReference(controllerIndex));
+        }
+
+        /// <summary>
+        /// The HapticsOnUse method triggers the haptic feedback on the given controller for the settings associated with use.
+        /// </summary>
+        /// <param name="controllerReference">The reference to the controller to activate the haptic feedback on.</param>
+        public virtual void HapticsOnUse(VRTK_ControllerReference controllerReference)
         {
             if (strengthOnUse > 0 && durationOnUse > 0f)
             {
-                TriggerHapticPulse(controllerIndex, strengthOnUse, durationOnUse, intervalOnUse);
+                TriggerHapticPulse(controllerReference, strengthOnUse, durationOnUse, intervalOnUse);
             }
         }
 
@@ -82,9 +113,9 @@ namespace VRTK
             }
         }
 
-        protected virtual void TriggerHapticPulse(uint controllerIndex, float strength, float duration, float interval)
+        protected virtual void TriggerHapticPulse(VRTK_ControllerReference controllerReference, float strength, float duration, float interval)
         {
-            VRTK_SharedMethods.TriggerHapticPulse(controllerIndex, strength, duration, (interval >= minInterval ? interval : minInterval));
+            VRTK_SharedMethods.TriggerHapticPulse(controllerReference, strength, duration, (interval >= minInterval ? interval : minInterval));
         }
     }
 }

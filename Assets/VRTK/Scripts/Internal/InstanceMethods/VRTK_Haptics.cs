@@ -1,35 +1,48 @@
 ﻿namespace VRTK
 {
     using UnityEngine;
+    using System;
     using System.Collections;
     using System.Collections.Generic;
 
     public class VRTK_Haptics : MonoBehaviour
     {
-        protected Dictionary<uint, Coroutine> hapticLoopCoroutines = new Dictionary<uint, Coroutine>();
+        protected Dictionary<VRTK_ControllerReference, Coroutine> hapticLoopCoroutines = new Dictionary<VRTK_ControllerReference, Coroutine>();
 
+        [Obsolete("`VRTK_Haptics.TriggerHapticPulse(controllerIndex, strength)` has been replaced with `VRTK_Haptics.TriggerHapticPulse(controllerReference, strength)`. This method will be removed in a future version of VRTK.")]
         public virtual void TriggerHapticPulse(uint controllerIndex, float strength)
         {
-            CancelCurrentHapticPulse(controllerIndex);
-            var hapticPulseStrength = Mathf.Clamp(strength, 0f, 1f);
-            VRTK_SDK_Bridge.HapticPulseOnIndex(controllerIndex, hapticPulseStrength);
+            TriggerHapticPulse(VRTK_ControllerReference.GetControllerReference(controllerIndex), strength);
         }
 
+        public virtual void TriggerHapticPulse(VRTK_ControllerReference controllerReference, float strength)
+        {
+            CancelCurrentHapticPulse(controllerReference);
+            var hapticPulseStrength = Mathf.Clamp(strength, 0f, 1f);
+            VRTK_SDK_Bridge.HapticPulse(controllerReference, hapticPulseStrength);
+        }
+
+        [Obsolete("`VRTK_Haptics.TriggerHapticPulse(controllerIndex, strength, duration, pulseInterval)` has been replaced with `VRTK_Haptics.TriggerHapticPulse(controllerReference, strength, duration, pulseInterval)`. This method will be removed in a future version of VRTK.")]
         public virtual void TriggerHapticPulse(uint controllerIndex, float strength, float duration, float pulseInterval)
         {
-            CancelCurrentHapticPulse(controllerIndex);
-            var hapticPulseStrength = Mathf.Clamp(strength, 0f, 1f);
-            var hapticModifiers = VRTK_SDK_Bridge.GetHapticModifiers();
-            Coroutine hapticLoop = StartCoroutine(HapticPulse(controllerIndex, duration * hapticModifiers.durationModifier, hapticPulseStrength, pulseInterval * hapticModifiers.intervalModifier));
-            if (!hapticLoopCoroutines.ContainsKey(controllerIndex))
-            {
-                hapticLoopCoroutines.Add(controllerIndex, hapticLoop);
-            }
+            TriggerHapticPulse(VRTK_ControllerReference.GetControllerReference(controllerIndex), strength, duration, pulseInterval);
         }
 
-        public virtual void CancelHapticPulse(uint controllerIndex)
+        public virtual void TriggerHapticPulse(VRTK_ControllerReference controllerReference, float strength, float duration, float pulseInterval)
         {
-            CancelCurrentHapticPulse(controllerIndex);
+            CancelCurrentHapticPulse(controllerReference);
+            var hapticPulseStrength = Mathf.Clamp(strength, 0f, 1f);
+            var hapticModifiers = VRTK_SDK_Bridge.GetHapticModifiers();
+            Coroutine hapticLoop = StartCoroutine(HapticPulse(controllerReference, duration * hapticModifiers.durationModifier, hapticPulseStrength, pulseInterval * hapticModifiers.intervalModifier));
+            if (!hapticLoopCoroutines.ContainsKey(controllerReference))
+            {
+                hapticLoopCoroutines.Add(controllerReference, hapticLoop);
+            }
+        }
+        
+        public virtual void CancelHapticPulse(VRTK_ControllerReference controllerReference)
+        {
+            CancelCurrentHapticPulse(controllerReference);
         }
 
         protected virtual void OnDisable()
@@ -38,16 +51,16 @@
             hapticLoopCoroutines.Clear();
         }
 
-        protected virtual void CancelCurrentHapticPulse(uint controllerIndex)
+        protected virtual void CancelCurrentHapticPulse(VRTK_ControllerReference controllerReference)
         {
-            if (hapticLoopCoroutines.ContainsKey(controllerIndex) && hapticLoopCoroutines[controllerIndex] != null)
+            if (hapticLoopCoroutines.ContainsKey(controllerReference) && hapticLoopCoroutines[controllerReference] != null)
             {
-                StopCoroutine(hapticLoopCoroutines[controllerIndex]);
-                hapticLoopCoroutines.Remove(controllerIndex);
+                StopCoroutine(hapticLoopCoroutines[controllerReference]);
+                hapticLoopCoroutines.Remove(controllerReference);
             }
         }
 
-        protected virtual IEnumerator HapticPulse(uint controllerIndex, float duration, float hapticPulseStrength, float pulseInterval)
+        protected virtual IEnumerator HapticPulse(VRTK_ControllerReference controllerReference, float duration, float hapticPulseStrength, float pulseInterval)
         {
             if (pulseInterval <= 0)
             {
@@ -56,7 +69,7 @@
 
             while (duration > 0)
             {
-                VRTK_SDK_Bridge.HapticPulseOnIndex(controllerIndex, hapticPulseStrength);
+                VRTK_SDK_Bridge.HapticPulse(controllerReference, hapticPulseStrength);
                 yield return new WaitForSeconds(pulseInterval);
                 duration -= pulseInterval;
             }
