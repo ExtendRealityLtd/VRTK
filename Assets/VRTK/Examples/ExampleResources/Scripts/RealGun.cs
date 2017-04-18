@@ -97,11 +97,11 @@
             {
                 slide.Fire();
                 FireBullet();
-                VRTK_SharedMethods.TriggerHapticPulse(VRTK_DeviceFinder.GetControllerIndex(controllerEvents.gameObject), 0.63f, 0.2f, 0.01f);
+                VRTK_SharedMethods.TriggerHapticPulse(VRTK_ControllerReference.GetControllerReference(controllerEvents.gameObject), 0.63f, 0.2f, 0.01f);
             }
             else
             {
-                VRTK_SharedMethods.TriggerHapticPulse(VRTK_DeviceFinder.GetControllerIndex(controllerEvents.gameObject), 0.08f, 0.1f, 0.01f);
+                VRTK_SharedMethods.TriggerHapticPulse(VRTK_ControllerReference.GetControllerReference(controllerEvents.gameObject), 0.08f, 0.1f, 0.01f);
             }
         }
 

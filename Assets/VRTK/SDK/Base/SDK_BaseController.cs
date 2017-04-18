@@ -13,6 +13,29 @@ namespace VRTK
     public abstract class SDK_BaseController : SDK_Base
     {
         /// <summary>
+        /// Types of buttons on a controller
+        /// </summary>
+        /// <param name="ButtonOne">Button One on the controller.</param>
+        /// <param name="ButtonTwo">Button Two on the controller.</param>
+        /// <param name="Grip">Grip on the controller.</param>
+        /// <param name="GripHairline">Grip Hairline on the controller.</param>
+        /// <param name="StartMenu">Start Menu on the controller.</param>
+        /// <param name="Trigger">Trigger on the controller.</param>
+        /// <param name="TriggerHairline">Trigger Hairline on the controller.</param>
+        /// <param name="Touchpad">Touchpad on the controller.</param>
+        public enum ButtonTypes
+        {
+            ButtonOne,
+            ButtonTwo,
+            Grip,
+            GripHairline,
+            StartMenu,
+            Trigger,
+            TriggerHairline,
+            Touchpad,
+        }
+
+        /// <summary>
         /// Concepts of controller button press
         /// </summary>
         /// <param name="Press">The button is currently being pressed.</param>
@@ -74,16 +97,16 @@ namespace VRTK
         /// <summary>
         /// The ProcessUpdate method enables an SDK to run logic for every Unity Update
         /// </summary>
-        /// <param name="index">The index of the controller.</param>
+        /// <param name="controllerReference">The reference for the controller.</param>
         /// <param name="options">A dictionary of generic options that can be used to within the update.</param>
-        public abstract void ProcessUpdate(uint index, Dictionary<string, object> options);
+        public abstract void ProcessUpdate(VRTK_ControllerReference controllerReference, Dictionary<string, object> options);
 
         /// <summary>
         /// The ProcessFixedUpdate method enables an SDK to run logic for every Unity FixedUpdate
         /// </summary>
-        /// <param name="index">The index of the controller.</param>
+        /// <param name="controllerReference">The reference for the controller.</param>
         /// <param name="options">A dictionary of generic options that can be used to within the fixed update.</param>
-        public abstract void ProcessFixedUpdate(uint index, Dictionary<string, object> options);
+        public abstract void ProcessFixedUpdate(VRTK_ControllerReference controllerReference, Dictionary<string, object> options);
 
         /// <summary>
         /// The GetControllerDefaultColliderPath returns the path to the prefab that contains the collider objects for the default controller of this SDK.
@@ -119,9 +142,9 @@ namespace VRTK
         /// <summary>
         /// The GetControllerOrigin method returns the origin of the given controller.
         /// </summary>
-        /// <param name="controller">The controller to retrieve the origin from.</param>
+        /// <param name="controllerReference">The reference to the controller to retrieve the origin from.</param>
         /// <returns>A Transform containing the origin of the controller.</returns>
-        public abstract Transform GetControllerOrigin(GameObject controller);
+        public abstract Transform GetControllerOrigin(VRTK_ControllerReference controllerReference);
 
         /// <summary>
         /// The GenerateControllerPointerOrigin method can create a custom pointer origin Transform to represent the pointer position and forward.
@@ -181,7 +204,6 @@ namespace VRTK
         /// <returns>The GameObject that has the model alias within it.</returns>
         public abstract GameObject GetControllerModel(GameObject controller);
 
-
         /// <summary>
         /// The GetControllerModel method returns the model alias for the given controller hand.
         /// </summary>
@@ -190,11 +212,33 @@ namespace VRTK
         public abstract GameObject GetControllerModel(ControllerHand hand);
 
         /// <summary>
+        /// The GetControllerModelHand method returns the hand for the given controller model GameObject.
+        /// </summary>
+        /// <param name="controllerModel">The controller model GameObject to get the hand for.</param>
+        /// <returns>The hand enum for which the given controller model is for.</returns>
+        public virtual ControllerHand GetControllerModelHand(GameObject controllerModel)
+        {
+            VRTK_SDKManager sdkManager = VRTK_SDKManager.instance;
+            if (sdkManager != null)
+            {
+                if (controllerModel == sdkManager.modelAliasLeftController)
+                {
+                    return ControllerHand.Left;
+                }
+                else if (controllerModel == sdkManager.modelAliasRightController)
+                {
+                    return ControllerHand.Right;
+                }
+            }
+            return ControllerHand.None;
+        }
+
+        /// <summary>
         /// The GetControllerRenderModel method gets the game object that contains the given controller's render model.
         /// </summary>
-        /// <param name="controller">The GameObject to check.</param>
+        /// <param name="controllerReference">The reference to the controller to check.</param>
         /// <returns>A GameObject containing the object that has a render model for the controller.</returns>
-        public abstract GameObject GetControllerRenderModel(GameObject controller);
+        public abstract GameObject GetControllerRenderModel(VRTK_ControllerReference controllerReference);
 
         /// <summary>
         /// The SetControllerRenderModelWheel method sets the state of the scroll wheel on the controller render model.
@@ -204,11 +248,11 @@ namespace VRTK
         public abstract void SetControllerRenderModelWheel(GameObject renderModel, bool state);
 
         /// <summary>
-        /// The HapticPulseOnIndex method is used to initiate a simple haptic pulse on the tracked object of the given index.
+        /// The HapticPulse method is used to initiate a simple haptic pulse on the tracked object of the given index.
         /// </summary>
-        /// <param name="index">The index of the tracked object to initiate the haptic pulse on.</param>
+        /// <param name="controllerReference">The reference to the tracked object to initiate the haptic pulse on.</param>
         /// <param name="strength">The intensity of the rumble of the controller motor. `0` to `1`.</param>
-        public abstract void HapticPulseOnIndex(uint index, float strength = 0.5f);
+        public abstract void HapticPulse(VRTK_ControllerReference controllerReference, float strength = 0.5f);
 
         /// <summary>
         /// The GetHapticModifiers method is used to return modifiers for the duration and interval if the SDK handles it slightly differently.
@@ -217,337 +261,47 @@ namespace VRTK
         public abstract SDK_ControllerHapticModifiers GetHapticModifiers();
 
         /// <summary>
-        /// The GetVelocityOnIndex method is used to determine the current velocity of the tracked object on the given index.
+        /// The GetVelocity method is used to determine the current velocity of the tracked object on the given controller reference.
         /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
+        /// <param name="controllerReference">The reference to the tracked object to check for.</param>
         /// <returns>A Vector3 containing the current velocity of the tracked object.</returns>
-        public abstract Vector3 GetVelocityOnIndex(uint index);
+        public abstract Vector3 GetVelocity(VRTK_ControllerReference controllerReference);
 
         /// <summary>
-        /// The GetAngularVelocityOnIndex method is used to determine the current angular velocity of the tracked object on the given index.
+        /// The GetAngularVelocity method is used to determine the current angular velocity of the tracked object on the given controller reference.
         /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
+        /// <param name="controllerReference">The reference to the tracked object to check for.</param>
         /// <returns>A Vector3 containing the current angular velocity of the tracked object.</returns>
-        public abstract Vector3 GetAngularVelocityOnIndex(uint index);
+        public abstract Vector3 GetAngularVelocity(VRTK_ControllerReference controllerReference);
 
         /// <summary>
-        /// The GetTouchpadAxisOnIndex method is used to get the current touch position on the controller touchpad.
+        /// The GetButtonAxis method retrieves the current X/Y axis values for the given button type on the given controller reference.
         /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>A Vector2 containing the current x,y position of where the touchpad is being touched.</returns>
-        public abstract Vector2 GetTouchpadAxisOnIndex(uint index);
+        /// <param name="buttonType">The type of button to check for the axis on.</param>
+        /// <param name="controllerReference">The reference to the controller to check the button axis on.</param>
+        /// <returns>A Vector2 of the X/Y values of the button axis. If no axis values exist for the given button, then a Vector2.Zero is returned.</returns>
+        public abstract Vector2 GetButtonAxis(ButtonTypes buttonType, VRTK_ControllerReference controllerReference);
 
         /// <summary>
-        /// The GetTriggerAxisOnIndex method is used to get the current trigger position on the controller.
+        /// The GetButtonHairlineDelta method is used to get the difference between the current button press and the previous frame button press.
         /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>A Vector2 containing the current position of the trigger.</returns>
-        public abstract Vector2 GetTriggerAxisOnIndex(uint index);
+        /// <param name="buttonType">The type of button to get the hairline delta for.</param>
+        /// <param name="controllerReference">The reference to the controller to get the hairline delta for.</param>
+        /// <returns>The delta between the button presses.</returns>
+        public abstract float GetButtonHairlineDelta(ButtonTypes buttonType, VRTK_ControllerReference controllerReference);
 
         /// <summary>
-        /// The GetGripAxisOnIndex method is used to get the current grip position on the controller.
+        /// The GetControllerButtonState method is used to determine if the given controller button for the given press type on the given controller reference is currently taking place.
         /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>A Vector2 containing the current position of the grip.</returns>
-        public abstract Vector2 GetGripAxisOnIndex(uint index);
+        /// <param name="buttonType">The type of button to check for the state of.</param>
+        /// <param name="pressType">The button state to check for.</param>
+        /// <param name="controllerReference">The reference to the controller to check the button state on.</param>
+        /// <returns>Returns true if the given button is in the state of the given press type on the given controller reference.</returns>
+        public abstract bool GetControllerButtonState(ButtonTypes buttonType, ButtonPressTypes pressType, VRTK_ControllerReference controllerReference);
 
-        /// <summary>
-        /// The GetTriggerHairlineDeltaOnIndex method is used to get the difference between the current trigger press and the previous frame trigger press.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>The delta between the trigger presses.</returns>
-        public abstract float GetTriggerHairlineDeltaOnIndex(uint index);
-
-        /// <summary>
-        /// The GetGripHairlineDeltaOnIndex method is used to get the difference between the current grip press and the previous frame grip press.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>The delta between the grip presses.</returns>
-        public abstract float GetGripHairlineDeltaOnIndex(uint index);
-
-        /// <summary>
-        /// The IsTriggerPressedOnIndex method is used to determine if the controller button is being pressed down continually.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button is continually being pressed.</returns>
-        public abstract bool IsTriggerPressedOnIndex(uint index);
-
-        /// <summary>
-        /// The IsTriggerPressedDownOnIndex method is used to determine if the controller button has just been pressed down.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button has just been pressed down.</returns>
-        public abstract bool IsTriggerPressedDownOnIndex(uint index);
-
-        /// <summary>
-        /// The IsTriggerPressedUpOnIndex method is used to determine if the controller button has just been released.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button has just been released.</returns>
-        public abstract bool IsTriggerPressedUpOnIndex(uint index);
-
-        /// <summary>
-        /// The IsTriggerTouchedOnIndex method is used to determine if the controller button is being touched down continually.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button is continually being touched.</returns>
-        public abstract bool IsTriggerTouchedOnIndex(uint index);
-
-        /// <summary>
-        /// The IsTriggerTouchedDownOnIndex method is used to determine if the controller button has just been touched down.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button has just been touched down.</returns>
-        public abstract bool IsTriggerTouchedDownOnIndex(uint index);
-
-        /// <summary>
-        /// The IsTriggerTouchedUpOnIndex method is used to determine if the controller button has just been released.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button has just been released.</returns>
-        public abstract bool IsTriggerTouchedUpOnIndex(uint index);
-
-        /// <summary>
-        /// The IsHairTriggerDownOnIndex method is used to determine if the controller button has passed it's press threshold.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button has passed it's press threshold.</returns>
-        public abstract bool IsHairTriggerDownOnIndex(uint index);
-
-        /// <summary>
-        /// The IsHairTriggerUpOnIndex method is used to determine if the controller button has been released from it's press threshold.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button has just been released from it's press threshold.</returns>
-        public abstract bool IsHairTriggerUpOnIndex(uint index);
-
-        /// <summary>
-        /// The IsGripPressedOnIndex method is used to determine if the controller button is being pressed down continually.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button is continually being pressed.</returns>
-        public abstract bool IsGripPressedOnIndex(uint index);
-
-        /// <summary>
-        /// The IsGripPressedDownOnIndex method is used to determine if the controller button has just been pressed down.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button has just been pressed down.</returns>
-        public abstract bool IsGripPressedDownOnIndex(uint index);
-
-        /// <summary>
-        /// The IsGripPressedUpOnIndex method is used to determine if the controller button has just been released.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button has just been released.</returns>
-        public abstract bool IsGripPressedUpOnIndex(uint index);
-
-        /// <summary>
-        /// The IsGripTouchedOnIndex method is used to determine if the controller button is being touched down continually.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button is continually being touched.</returns>
-        public abstract bool IsGripTouchedOnIndex(uint index);
-
-        /// <summary>
-        /// The IsGripTouchedDownOnIndex method is used to determine if the controller button has just been touched down.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button has just been touched down.</returns>
-        public abstract bool IsGripTouchedDownOnIndex(uint index);
-
-        /// <summary>
-        /// The IsGripTouchedUpOnIndex method is used to determine if the controller button has just been released.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button has just been released.</returns>
-        public abstract bool IsGripTouchedUpOnIndex(uint index);
-
-        /// <summary>
-        /// The IsHairGripDownOnIndex method is used to determine if the controller button has passed it's press threshold.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button has passed it's press threshold.</returns>
-        public abstract bool IsHairGripDownOnIndex(uint index);
-
-        /// <summary>
-        /// The IsHairGripUpOnIndex method is used to determine if the controller button has been released from it's press threshold.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button has just been released from it's press threshold.</returns>
-        public abstract bool IsHairGripUpOnIndex(uint index);
-
-        /// <summary>
-        /// The IsTouchpadPressedOnIndex method is used to determine if the controller button is being pressed down continually.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button is continually being pressed.</returns>
-        public abstract bool IsTouchpadPressedOnIndex(uint index);
-
-        /// <summary>
-        /// The IsTouchpadPressedDownOnIndex method is used to determine if the controller button has just been pressed down.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button has just been pressed down.</returns>
-        public abstract bool IsTouchpadPressedDownOnIndex(uint index);
-
-        /// <summary>
-        /// The IsTouchpadPressedUpOnIndex method is used to determine if the controller button has just been released.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button has just been released.</returns>
-        public abstract bool IsTouchpadPressedUpOnIndex(uint index);
-
-        /// <summary>
-        /// The IsTouchpadTouchedOnIndex method is used to determine if the controller button is being touched down continually.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button is continually being touched.</returns>
-        public abstract bool IsTouchpadTouchedOnIndex(uint index);
-
-        /// <summary>
-        /// The IsTouchpadTouchedDownOnIndex method is used to determine if the controller button has just been touched down.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button has just been touched down.</returns>
-        public abstract bool IsTouchpadTouchedDownOnIndex(uint index);
-
-        /// <summary>
-        /// The IsTouchpadTouchedUpOnIndex method is used to determine if the controller button has just been released.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button has just been released.</returns>
-        public abstract bool IsTouchpadTouchedUpOnIndex(uint index);
-
-        /// <summary>
-        /// The IsButtonOnePressedOnIndex method is used to determine if the controller button is being pressed down continually.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button is continually being pressed.</returns>
-        public abstract bool IsButtonOnePressedOnIndex(uint index);
-
-        /// <summary>
-        /// The IsButtonOnePressedDownOnIndex method is used to determine if the controller button has just been pressed down.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button has just been pressed down.</returns>
-        public abstract bool IsButtonOnePressedDownOnIndex(uint index);
-
-        /// <summary>
-        /// The IsButtonOnePressedUpOnIndex method is used to determine if the controller button has just been released.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button has just been released.</returns>
-        public abstract bool IsButtonOnePressedUpOnIndex(uint index);
-
-        /// <summary>
-        /// The IsButtonOneTouchedOnIndex method is used to determine if the controller button is being touched down continually.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button is continually being touched.</returns>
-        public abstract bool IsButtonOneTouchedOnIndex(uint index);
-
-        /// <summary>
-        /// The IsButtonOneTouchedDownOnIndex method is used to determine if the controller button has just been touched down.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button has just been touched down.</returns>
-        public abstract bool IsButtonOneTouchedDownOnIndex(uint index);
-
-        /// <summary>
-        /// The IsButtonOneTouchedUpOnIndex method is used to determine if the controller button has just been released.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button has just been released.</returns>
-        public abstract bool IsButtonOneTouchedUpOnIndex(uint index);
-
-        /// <summary>
-        /// The IsButtonTwoPressedOnIndex method is used to determine if the controller button is being pressed down continually.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button is continually being pressed.</returns>
-        public abstract bool IsButtonTwoPressedOnIndex(uint index);
-
-        /// <summary>
-        /// The IsButtonTwoPressedDownOnIndex method is used to determine if the controller button has just been pressed down.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button has just been pressed down.</returns>
-        public abstract bool IsButtonTwoPressedDownOnIndex(uint index);
-
-        /// <summary>
-        /// The IsButtonTwoPressedUpOnIndex method is used to determine if the controller button has just been released.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button has just been released.</returns>
-        public abstract bool IsButtonTwoPressedUpOnIndex(uint index);
-
-        /// <summary>
-        /// The IsButtonTwoTouchedOnIndex method is used to determine if the controller button is being touched down continually.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button is continually being touched.</returns>
-        public abstract bool IsButtonTwoTouchedOnIndex(uint index);
-
-        /// <summary>
-        /// The IsButtonTwoTouchedDownOnIndex method is used to determine if the controller button has just been touched down.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button has just been touched down.</returns>
-        public abstract bool IsButtonTwoTouchedDownOnIndex(uint index);
-
-        /// <summary>
-        /// The IsButtonTwoTouchedUpOnIndex method is used to determine if the controller button has just been released.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button has just been released.</returns>
-        public abstract bool IsButtonTwoTouchedUpOnIndex(uint index);
-
-        /// <summary>
-        /// The IsStartMenuPressedOnIndex method is used to determine if the controller button is being pressed down continually.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button is continually being pressed.</returns>
-        public abstract bool IsStartMenuPressedOnIndex(uint index);
-
-        /// <summary>
-        /// The IsStartMenuPressedDownOnIndex method is used to determine if the controller button has just been pressed down.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button has just been pressed down.</returns>
-        public abstract bool IsStartMenuPressedDownOnIndex(uint index);
-
-        /// <summary>
-        /// The IsStartMenuPressedUpOnIndex method is used to determine if the controller button has just been released.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button has just been released.</returns>
-        public abstract bool IsStartMenuPressedUpOnIndex(uint index);
-
-        /// <summary>
-        /// The IsStartMenuTouchedOnIndex method is used to determine if the controller button is being touched down continually.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button is continually being touched.</returns>
-        public abstract bool IsStartMenuTouchedOnIndex(uint index);
-
-        /// <summary>
-        /// The IsStartMenuTouchedDownOnIndex method is used to determine if the controller button has just been touched down.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button has just been touched down.</returns>
-        public abstract bool IsStartMenuTouchedDownOnIndex(uint index);
-
-        /// <summary>
-        /// The IsStartMenuTouchedUpOnIndex method is used to determine if the controller button has just been released.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button has just been released.</returns>
-        public abstract bool IsStartMenuTouchedUpOnIndex(uint index);
-
-        protected GameObject GetSDKManagerControllerLeftHand(bool actual = false)
+        protected virtual GameObject GetSDKManagerControllerLeftHand(bool actual = false)
         {
-            var sdkManager = VRTK_SDKManager.instance;
+            VRTK_SDKManager sdkManager = VRTK_SDKManager.instance;
             if (sdkManager != null)
             {
                 return (actual ? sdkManager.actualLeftController : sdkManager.scriptAliasLeftController);
@@ -555,9 +309,9 @@ namespace VRTK
             return null;
         }
 
-        protected GameObject GetSDKManagerControllerRightHand(bool actual = false)
+        protected virtual GameObject GetSDKManagerControllerRightHand(bool actual = false)
         {
-            var sdkManager = VRTK_SDKManager.instance;
+            VRTK_SDKManager sdkManager = VRTK_SDKManager.instance;
             if (sdkManager != null)
             {
                 return (actual ? sdkManager.actualRightController : sdkManager.scriptAliasRightController);
@@ -565,44 +319,44 @@ namespace VRTK
             return null;
         }
 
-        protected bool CheckActualOrScriptAliasControllerIsLeftHand(GameObject controller)
+        protected virtual bool CheckActualOrScriptAliasControllerIsLeftHand(GameObject controller)
         {
             return (IsControllerLeftHand(controller, true) || IsControllerLeftHand(controller, false));
         }
 
-        protected bool CheckActualOrScriptAliasControllerIsRightHand(GameObject controller)
+        protected virtual bool CheckActualOrScriptAliasControllerIsRightHand(GameObject controller)
         {
             return (IsControllerRightHand(controller, true) || IsControllerRightHand(controller, false));
         }
 
-        protected bool CheckControllerLeftHand(GameObject controller, bool actual)
+        protected virtual bool CheckControllerLeftHand(GameObject controller, bool actual)
         {
-            var sdkManager = VRTK_SDKManager.instance;
-            if (sdkManager != null && controller)
+            VRTK_SDKManager sdkManager = VRTK_SDKManager.instance;
+            if (sdkManager != null && controller != null)
             {
                 return (actual ? controller.Equals(sdkManager.actualLeftController) : controller.Equals(sdkManager.scriptAliasLeftController));
             }
             return false;
         }
 
-        protected bool CheckControllerRightHand(GameObject controller, bool actual)
+        protected virtual bool CheckControllerRightHand(GameObject controller, bool actual)
         {
-            var sdkManager = VRTK_SDKManager.instance;
-            if (sdkManager != null && controller)
+            VRTK_SDKManager sdkManager = VRTK_SDKManager.instance;
+            if (sdkManager != null && controller != null)
             {
                 return (actual ? controller.Equals(sdkManager.actualRightController) : controller.Equals(sdkManager.scriptAliasRightController));
             }
             return false;
         }
 
-        protected GameObject GetControllerModelFromController(GameObject controller)
+        protected virtual GameObject GetControllerModelFromController(GameObject controller)
         {
             return GetControllerModel(VRTK_DeviceFinder.GetControllerHand(controller));
         }
 
-        protected GameObject GetSDKManagerControllerModelForHand(ControllerHand hand)
+        protected virtual GameObject GetSDKManagerControllerModelForHand(ControllerHand hand)
         {
-            var sdkManager = VRTK_SDKManager.instance;
+            VRTK_SDKManager sdkManager = VRTK_SDKManager.instance;
             if (sdkManager != null)
             {
                 switch (hand)
@@ -616,10 +370,10 @@ namespace VRTK
             return null;
         }
 
-        protected GameObject GetActualController(GameObject controller)
+        protected virtual GameObject GetActualController(GameObject controller)
         {
             GameObject returnController = null;
-            var sdkManager = VRTK_SDKManager.instance;
+            VRTK_SDKManager sdkManager = VRTK_SDKManager.instance;
             if (sdkManager != null)
             {
                 if (IsControllerLeftHand(controller))
