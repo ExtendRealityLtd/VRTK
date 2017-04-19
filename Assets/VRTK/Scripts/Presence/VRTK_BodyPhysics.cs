@@ -169,6 +169,8 @@ namespace VRTK
         protected string footColliderContainerNameCheck;
         protected const string BODY_COLLIDER_CONTAINER_NAME = "BodyColliderContainer";
         protected const string FOOT_COLLIDER_CONTAINER_NAME = "FootColliderContainer";
+        protected bool enableBodyCollisionsStartingValue;
+        protected float fallMinTime;
 
         // Draws a sphere for current standing position and a sphere for current headset position.
         // Set to `true` to view the debug spheres.
@@ -286,12 +288,21 @@ namespace VRTK
             bodyRigidbody.angularVelocity = Vector3.zero;
         }
 
+        /// <summary>
+        /// The ResetFalling method force stops any falling states and conditions that might be set on this object.
+        /// </summary>
+        public virtual void ResetFalling()
+        {
+            StopFall();
+        }
+
         protected override void OnEnable()
         {
             base.OnEnable();
             SetupPlayArea();
             SetupHeadset();
             footColliderContainerNameCheck = VRTK_SharedMethods.GenerateVRTKObjectName(true, FOOT_COLLIDER_CONTAINER_NAME);
+            enableBodyCollisionsStartingValue = enableBodyCollisions;
             EnableDropToFloor();
             EnableBodyPhysics();
         }
@@ -529,7 +540,7 @@ namespace VRTK
 
         protected virtual void CheckFalling()
         {
-            if (isFalling && VRTK_SharedMethods.RoundFloat(lastPlayAreaPosition.y, fallCheckPrecision) == VRTK_SharedMethods.RoundFloat(playArea.position.y, fallCheckPrecision))
+            if (isFalling && fallMinTime < Time.time && VRTK_SharedMethods.RoundFloat(lastPlayAreaPosition.y, fallCheckPrecision) == VRTK_SharedMethods.RoundFloat(playArea.position.y, fallCheckPrecision))
             {
                 StopFall();
             }
@@ -1035,14 +1046,22 @@ namespace VRTK
             isMoving = false;
             isLeaning = false;
             onGround = false;
+            fallMinTime = Time.time + (Time.fixedDeltaTime * 3.0f); // Wait at least 3 fixed update frames before declaring falling finished 
             OnStartFalling(SetBodyPhysicsEvent(targetFloor));
         }
 
         protected virtual void StopFall()
         {
+            bool wasFalling = isFalling;
+
             isFalling = false;
             onGround = true;
-            OnStopFalling(SetBodyPhysicsEvent(null));
+            enableBodyCollisions = enableBodyCollisionsStartingValue;
+
+            if (wasFalling)
+            {
+                OnStopFalling(SetBodyPhysicsEvent(null));
+            }
         }
 
         protected virtual void GravityFall(RaycastHit rayCollidedWith)
