@@ -43,6 +43,7 @@ A collection of titles that have been made with VRTK.
 | Fort Awesome | [Steam Store Page](http://store.steampowered.com/app/594120) |
 | Chainless | [Steam Store Page](http://store.steampowered.com/app/589680) |
 | 994 W 24th | [Steam Store Page](http://store.steampowered.com/app/536050) |
+| Colourise | [Steam Store Page](http://store.steampowered.com/app/576820) |
 
 ## Oculus Home
 
