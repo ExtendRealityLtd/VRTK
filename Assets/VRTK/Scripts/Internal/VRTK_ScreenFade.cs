@@ -55,6 +55,7 @@
 
             if (currentColor.a > 0 && fadeMaterial)
             {
+                currentColor.a = (currentColor.a > 0.98f ? 1f : currentColor.a);
                 fadeMaterial.color = currentColor;
                 fadeMaterial.SetPass(0);
                 GL.PushMatrix();
