@@ -453,15 +453,11 @@ namespace VRTK
 
         protected virtual void CreateTouchRigidBody()
         {
-            touchRigidBody = GetComponent<Rigidbody>();
-            if (touchRigidBody == null)
-            {
-                touchRigidBody = gameObject.AddComponent<Rigidbody>();
-                touchRigidBody.isKinematic = true;
-                touchRigidBody.useGravity = false;
-                touchRigidBody.constraints = RigidbodyConstraints.FreezeAll;
-                touchRigidBody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
-            }
+            touchRigidBody = (GetComponent<Rigidbody>() ? GetComponent<Rigidbody>() : gameObject.AddComponent<Rigidbody>());
+            touchRigidBody.isKinematic = true;
+            touchRigidBody.useGravity = false;
+            touchRigidBody.constraints = RigidbodyConstraints.FreezeAll;
+            touchRigidBody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
         }
     }
 }
