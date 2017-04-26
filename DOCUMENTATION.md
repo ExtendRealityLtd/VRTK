@@ -6140,6 +6140,17 @@ The TriggerHapticPulse/1 method calls a single haptic pulse call on the controll
 
 The TriggerHapticPulse/3 method calls a haptic pulse for a specified amount of time rather than just a single tick. Each pulse can be separated by providing a `pulseInterval` to pause between each haptic pulse.
 
+#### CancelHapticPulse/1
+
+  > `public static void CancelHapticPulse(uint controllerIndex)`
+
+  * Parameters
+   * `uint controllerIndex` - The controller index to activate the haptic feedback on.
+  * Returns
+   * _none_
+
+The CancelHapticPulse method cancels the existing running haptic pulse on the given controller index.
+
 #### SetOpacity/3
 
   > `public static void SetOpacity(GameObject model, float alpha, float transitionDuration = 0f)`

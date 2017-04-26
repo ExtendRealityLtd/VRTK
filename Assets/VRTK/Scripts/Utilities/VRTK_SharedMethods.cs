@@ -219,6 +219,19 @@ namespace VRTK
         }
 
         /// <summary>
+        /// The CancelHapticPulse method cancels the existing running haptic pulse on the given controller index.
+        /// </summary>
+        /// <param name="controllerIndex">The controller index to activate the haptic feedback on.</param>
+        public static void CancelHapticPulse(uint controllerIndex)
+        {
+            var instanceMethods = VRTK_InstanceMethods.instance;
+            if (instanceMethods != null)
+            {
+                instanceMethods.haptics.CancelHapticPulse(controllerIndex);
+            }
+        }
+
+        /// <summary>
         /// The SetOpacity method allows the opacity of the given GameObject to be changed. A lower alpha value will make the object more transparent, such as `0.5f` will make the controller partially transparent where as `0f` will make the controller completely transparent.
         /// </summary>
         /// <param name="model">The GameObject to change the renderer opacity on.</param>
