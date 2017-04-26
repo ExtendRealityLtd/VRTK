@@ -178,6 +178,7 @@ namespace VRTK
 
         protected virtual void Grab(GameObject currentGrabbingController, uint controllerIndex, GameObject target)
         {
+            bodyPhysics.ResetFalling();
             bodyPhysics.TogglePreventSnapToFloor(true);
             bodyPhysics.enableBodyCollisions = false;
             bodyPhysics.ToggleOnGround(false);
