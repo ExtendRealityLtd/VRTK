@@ -163,27 +163,44 @@ namespace VRTK
         {
             if (enableTeleport && ValidLocation(e.target, e.destinationPosition) && e.enableTeleport)
             {
-                OnTeleporting(sender, e);
+                StartTeleport(sender, e);
                 Vector3 newPosition = GetNewPosition(e.destinationPosition, e.target, e.forceDestinationPosition);
                 CalculateBlinkDelay(blinkTransitionSpeed, newPosition);
                 Blink(blinkTransitionSpeed);
-                SetNewPosition(newPosition, e.target, e.forceDestinationPosition);
-                SetNewRotation(e.destinationRotation);
-                OnTeleported(sender, e);
+                Vector3 updatedPosition = SetNewPosition(newPosition, e.target, e.forceDestinationPosition);
+                Quaternion updatedRotation = SetNewRotation(e.destinationRotation);
+                ProcessOrientation(sender, e, updatedPosition, updatedRotation);
+                EndTeleport(sender, e);
             }
         }
 
-        protected virtual void SetNewPosition(Vector3 position, Transform target, bool forceDestinationPosition)
+        protected virtual void StartTeleport(object sender, DestinationMarkerEventArgs e)
         {
-            playArea.position = CheckTerrainCollision(position, target, forceDestinationPosition);
+            OnTeleporting(sender, e);
         }
 
-        protected virtual void SetNewRotation(Quaternion? rotation)
+        protected virtual void ProcessOrientation(object sender, DestinationMarkerEventArgs e, Vector3 updatedPosition, Quaternion updatedRotation)
+        {
+        }
+
+        protected virtual void EndTeleport(object sender, DestinationMarkerEventArgs e)
+        {
+            OnTeleported(sender, e);
+        }
+
+        protected virtual Vector3 SetNewPosition(Vector3 position, Transform target, bool forceDestinationPosition)
+        {
+            playArea.position = CheckTerrainCollision(position, target, forceDestinationPosition);
+            return playArea.position;
+        }
+
+        protected virtual Quaternion SetNewRotation(Quaternion? rotation)
         {
             if (rotation != null)
             {
                 playArea.rotation = (Quaternion)rotation;
             }
+            return playArea.rotation;
         }
 
         protected virtual Vector3 GetNewPosition(Vector3 tipPosition, Transform target, bool returnOriginalPosition)

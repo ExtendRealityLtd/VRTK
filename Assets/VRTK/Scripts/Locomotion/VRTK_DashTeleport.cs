@@ -83,13 +83,26 @@ namespace VRTK
             minDistanceForNormalLerp = minSpeedMps * normalLerpTime; // default values give 5.0f
         }
 
-        protected override void SetNewPosition(Vector3 position, Transform target, bool forceDestinationPosition)
+        protected override Vector3 SetNewPosition(Vector3 position, Transform target, bool forceDestinationPosition)
         {
-            Vector3 targetPosition = CheckTerrainCollision(position, target, forceDestinationPosition);
-            StartCoroutine(lerpToPosition(targetPosition, target));
+            return CheckTerrainCollision(position, target, forceDestinationPosition);
         }
 
-        protected virtual IEnumerator lerpToPosition(Vector3 targetPosition, Transform target)
+        protected override void StartTeleport(object sender, DestinationMarkerEventArgs e)
+        {
+            base.StartTeleport(sender, e);
+        }
+
+        protected override void ProcessOrientation(object sender, DestinationMarkerEventArgs e, Vector3 newPosition, Quaternion newRotation)
+        {
+            StartCoroutine(lerpToPosition(sender, e, newPosition));
+        }
+
+        protected override void EndTeleport(object sender, DestinationMarkerEventArgs e)
+        {
+        }
+
+        protected virtual IEnumerator lerpToPosition(object sender, DestinationMarkerEventArgs e, Vector3 targetPosition)
         {
             enableTeleport = false;
             bool gameObjectInTheWay = false;
@@ -107,7 +120,7 @@ namespace VRTK
 
             foreach (RaycastHit hit in allHits)
             {
-                gameObjectInTheWay = hit.collider.gameObject != target.gameObject ? true : false;
+                gameObjectInTheWay = (hit.collider.gameObject != e.target.gameObject ? true : false);
             }
 
             if (gameObjectInTheWay)
@@ -149,6 +162,7 @@ namespace VRTK
                 OnDashedThruObjects(SetDashTeleportEvent(allHits));
             }
 
+            base.EndTeleport(sender, e);
             gameObjectInTheWay = false;
             enableTeleport = true;
         }
