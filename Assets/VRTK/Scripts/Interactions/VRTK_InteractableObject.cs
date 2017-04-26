@@ -627,6 +627,7 @@ namespace VRTK
             }
             else
             {
+                interactableRigidbody.WakeUp();
                 ResetDropSnapType();
                 OnInteractableObjectUnsnappedFromDropZone(SetInteractableObjectEvent(snapDropZone.gameObject));
             }

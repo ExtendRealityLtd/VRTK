@@ -175,7 +175,7 @@ namespace VRTK
         /// <param name="objectToSnap">The GameObject to attempt to snap.</param>
         public virtual void ForceSnap(GameObject objectToSnap)
         {
-            var ioCheck = objectToSnap.GetComponentInParent<VRTK_InteractableObject>();
+            VRTK_InteractableObject ioCheck = objectToSnap.GetComponentInParent<VRTK_InteractableObject>();
             if (ioCheck != null)
             {
                 ioCheck.SaveCurrentState();
@@ -200,7 +200,10 @@ namespace VRTK
             if (isSnapped && currentSnappedObject != null)
             {
                 VRTK_InteractableObject ioCheck = ValidSnapObject(currentSnappedObject, false);
-                ioCheck.ToggleSnapDropZone(this, false);
+                if (ioCheck != null)
+                {
+                    ioCheck.ToggleSnapDropZone(this, false);
+                }
             }
         }
 
