@@ -154,7 +154,7 @@ namespace VRTK
         /// <param name="givenHit">The valid collision.</param>
         public virtual void PointerEnter(RaycastHit givenHit)
         {
-            if (enabled && givenHit.transform != null && controllerReference.IsValid())
+            if (enabled && givenHit.transform != null && controllerReference != null && controllerReference.IsValid())
             {
                 SetHoverSelectionTimer(givenHit.collider);
                 DestinationMarkerEventArgs destinationEventArgs = SetDestinationMarkerEvent(givenHit.distance, givenHit.transform, givenHit, givenHit.point, controllerReference, false, GetCursorRotation());
@@ -177,7 +177,7 @@ namespace VRTK
         public virtual void PointerExit(RaycastHit givenHit)
         {
             ResetHoverSelectionTimer(givenHit.collider);
-            if (givenHit.transform != null && controllerReference.IsValid())
+            if (givenHit.transform != null && controllerReference != null && controllerReference.IsValid())
             {
                 OnDestinationMarkerExit(SetDestinationMarkerEvent(givenHit.distance, givenHit.transform, givenHit, givenHit.point, controllerReference, false, GetCursorRotation()));
                 StopUseAction();
