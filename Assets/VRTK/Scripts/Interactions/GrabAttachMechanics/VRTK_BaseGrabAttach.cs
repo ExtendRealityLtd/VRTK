@@ -170,9 +170,13 @@ namespace VRTK.GrabAttachMechanics
             if (grabbedObjectScript)
             {
                 GameObject grabbingObject = grabbedObjectScript.GetGrabbingObject();
-                if (grabbingObject != null)
+                if (grabbingObject)
                 {
-                    grabbingObject.GetComponent<VRTK_InteractGrab>().ForceRelease();
+                    VRTK_InteractGrab interactGrabScript = grabbingObject.GetComponent<VRTK_InteractGrab>();
+                    if (interactGrabScript != null)
+                    {
+                        interactGrabScript.ForceRelease();
+                    }
                 }
             }
         }
@@ -205,34 +209,37 @@ namespace VRTK.GrabAttachMechanics
                 if (controllerReference.IsValid())
                 {
                     VRTK_InteractGrab grabbingObjectScript = controllerReference.scriptAlias.GetComponent<VRTK_InteractGrab>();
-                    Transform origin = VRTK_DeviceFinder.GetControllerOrigin(controllerReference);
-
-                    Vector3 velocity = VRTK_DeviceFinder.GetControllerVelocity(controllerReference);
-                    Vector3 angularVelocity = VRTK_DeviceFinder.GetControllerAngularVelocity(controllerReference);
-                    float grabbingObjectThrowMultiplier = grabbingObjectScript.throwMultiplier;
-
-                    if (origin != null)
+                    if (grabbingObjectScript)
                     {
-                        objectRigidbody.velocity = origin.TransformVector(velocity) * (grabbingObjectThrowMultiplier * throwMultiplier);
-                        objectRigidbody.angularVelocity = origin.TransformDirection(angularVelocity);
-                    }
-                    else
-                    {
-                        objectRigidbody.velocity = velocity * (grabbingObjectThrowMultiplier * throwMultiplier);
-                        objectRigidbody.angularVelocity = angularVelocity;
-                    }
+                        Transform origin = VRTK_DeviceFinder.GetControllerOrigin(controllerReference);
 
-                    if (throwVelocityWithAttachDistance)
-                    {
-                        Collider rigidbodyCollider = objectRigidbody.GetComponentInChildren<Collider>();
-                        if (rigidbodyCollider != null)
+                        Vector3 velocity = VRTK_DeviceFinder.GetControllerVelocity(controllerReference);
+                        Vector3 angularVelocity = VRTK_DeviceFinder.GetControllerAngularVelocity(controllerReference);
+                        float grabbingObjectThrowMultiplier = grabbingObjectScript.throwMultiplier;
+
+                        if (origin != null)
                         {
-                            Vector3 collisionCenter = rigidbodyCollider.bounds.center;
-                            objectRigidbody.velocity = objectRigidbody.GetPointVelocity(collisionCenter + (collisionCenter - transform.position));
+                            objectRigidbody.velocity = origin.TransformVector(velocity) * (grabbingObjectThrowMultiplier * throwMultiplier);
+                            objectRigidbody.angularVelocity = origin.TransformDirection(angularVelocity);
                         }
                         else
                         {
-                            objectRigidbody.velocity = objectRigidbody.GetPointVelocity(objectRigidbody.position + (objectRigidbody.position - transform.position));
+                            objectRigidbody.velocity = velocity * (grabbingObjectThrowMultiplier * throwMultiplier);
+                            objectRigidbody.angularVelocity = angularVelocity;
+                        }
+
+                        if (throwVelocityWithAttachDistance)
+                        {
+                            Collider rigidbodyCollider = objectRigidbody.GetComponentInChildren<Collider>();
+                            if (rigidbodyCollider != null)
+                            {
+                                Vector3 collisionCenter = rigidbodyCollider.bounds.center;
+                                objectRigidbody.velocity = objectRigidbody.GetPointVelocity(collisionCenter + (collisionCenter - transform.position));
+                            }
+                            else
+                            {
+                                objectRigidbody.velocity = objectRigidbody.GetPointVelocity(objectRigidbody.position + (objectRigidbody.position - transform.position));
+                            }
                         }
                     }
                 }
