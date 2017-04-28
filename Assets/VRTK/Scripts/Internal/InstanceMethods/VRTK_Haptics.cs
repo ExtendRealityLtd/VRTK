@@ -34,10 +34,8 @@
 
         protected virtual void OnDisable()
         {
-            foreach (KeyValuePair<uint, Coroutine> hapticLoopCoroutine in hapticLoopCoroutines)
-            {
-                CancelCurrentHapticPulse(hapticLoopCoroutine.Key);
-            }
+            StopAllCoroutines();
+            hapticLoopCoroutines.Clear();
         }
 
         protected virtual void CancelCurrentHapticPulse(uint controllerIndex)
