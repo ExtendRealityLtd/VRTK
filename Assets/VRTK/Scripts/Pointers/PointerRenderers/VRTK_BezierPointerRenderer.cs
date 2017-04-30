@@ -19,6 +19,7 @@ namespace VRTK
     [AddComponentMenu("VRTK/Scripts/Pointers/Pointer Renderers/VRTK_BezierPointerRenderer")]
     public class VRTK_BezierPointerRenderer : VRTK_BasePointerRenderer
     {
+#pragma warning disable 0618
         [Header("Bezier Pointer Appearance Settings")]
 
         [Tooltip("The maximum length of the projected beam. The x value is the length of the forward beam, the y value is the length of the downward beam.")]
@@ -375,5 +376,6 @@ namespace VRTK
                 ChangeColor(invalidCollisionColor);
             }
         }
+#pragma warning restore 0618
     }
 }

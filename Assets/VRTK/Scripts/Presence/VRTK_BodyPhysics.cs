@@ -40,6 +40,7 @@ namespace VRTK
     [AddComponentMenu("VRTK/Scripts/Presence/VRTK_BodyPhysics")]
     public class VRTK_BodyPhysics : VRTK_DestinationMarker
     {
+#pragma warning disable 0618
         /// <summary>
         /// Options for testing if a play space fall is valid
         /// </summary>
@@ -1093,5 +1094,6 @@ namespace VRTK
                 bodyRigidbody.AddRelativeForce(appliedMomentum, ForceMode.VelocityChange);
             }
         }
+#pragma warning restore 0618
     }
 }

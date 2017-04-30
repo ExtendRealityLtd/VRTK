@@ -42,6 +42,7 @@ namespace VRTK
     [AddComponentMenu("VRTK/Scripts/Interactions/VRTK_ControllerEvents")]
     public class VRTK_ControllerEvents : MonoBehaviour
     {
+#pragma warning disable 0618
         /// <summary>
         /// Button types
         /// </summary>
@@ -1948,5 +1949,6 @@ namespace VRTK
                 hairGripDelta = VRTK_SDK_Bridge.GetGripHairlineDeltaOnIndex(controllerIndex);
             }
         }
+#pragma warning restore 0618
     }
 }

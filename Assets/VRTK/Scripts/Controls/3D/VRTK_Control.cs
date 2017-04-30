@@ -29,6 +29,7 @@ namespace VRTK
     [ExecuteInEditMode]
     public abstract class VRTK_Control : MonoBehaviour
     {
+#pragma warning disable 0618
         [Serializable]
         [Obsolete("`VRTK_Control.ValueChangedEvent` has been replaced with delegate events. `VRTK_Control_UnityEvents` is now required to access Unity events. This method will be removed in a future version of VRTK.")]
         public class ValueChangedEvent : UnityEvent<float, float> { }
@@ -270,5 +271,6 @@ namespace VRTK
                 io.enabled = value > MIN_OPENING_DISTANCE;
             }
         }
+#pragma warning restore 0618
     }
 }
