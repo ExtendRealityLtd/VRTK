@@ -17,6 +17,7 @@ namespace VRTK
     [AddComponentMenu("VRTK/Scripts/Locomotion/VRTK_HeightAdjustTeleport")]
     public class VRTK_HeightAdjustTeleport : VRTK_BasicTeleport
     {
+#pragma warning disable 0618
         [Header("Height Adjust Settings")]
 
         [Tooltip("A custom raycaster to use when raycasting to find floors.")]
@@ -60,5 +61,6 @@ namespace VRTK
             }
             return newY;
         }
+#pragma warning restore 0618
     }
 }

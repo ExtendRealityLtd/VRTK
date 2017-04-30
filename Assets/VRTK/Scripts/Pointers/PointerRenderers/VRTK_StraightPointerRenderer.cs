@@ -15,6 +15,7 @@ namespace VRTK
     [AddComponentMenu("VRTK/Scripts/Pointers/Pointer Renderers/VRTK_StraightPointerRenderer")]
     public class VRTK_StraightPointerRenderer : VRTK_BasePointerRenderer
     {
+#pragma warning disable 0618
         [Header("Straight Pointer Appearance Settings")]
 
         [Tooltip("The maximum length the pointer tracer can reach.")]
@@ -239,5 +240,6 @@ namespace VRTK
                 UpdateDependencies(actualCursor.transform.position);
             }
         }
+#pragma warning restore 0618
     }
 }

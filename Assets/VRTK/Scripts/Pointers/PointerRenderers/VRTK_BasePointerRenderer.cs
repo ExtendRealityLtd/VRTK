@@ -16,6 +16,7 @@ namespace VRTK
     /// </remarks>
     public abstract class VRTK_BasePointerRenderer : MonoBehaviour
     {
+#pragma warning disable 0618
         /// <summary>
         /// States of Pointer Visibility.
         /// </summary>
@@ -525,5 +526,6 @@ namespace VRTK
                 playareaCursor.SetPlayAreaCursorTransform(location);
             }
         }
+#pragma warning restore 0618
     }
 }

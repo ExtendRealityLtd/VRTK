@@ -7,6 +7,7 @@
     [AddComponentMenu("VRTK/Scripts/Utilities/Unity Events/VRTK_ControllerEvents_UnityEvents")]
     public sealed class VRTK_ControllerEvents_UnityEvents : VRTK_UnityEvents<VRTK_ControllerEvents>
     {
+#pragma warning disable 0618
         [Serializable]
         public sealed class ControllerInteractionEvent : UnityEvent<object, ControllerInteractionEventArgs> { }
 
@@ -434,5 +435,6 @@
         {
             OnControllerHidden.Invoke(o, e);
         }
+#pragma warning restore 0618
     }
 }

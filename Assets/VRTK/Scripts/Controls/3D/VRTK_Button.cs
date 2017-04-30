@@ -24,7 +24,7 @@ namespace VRTK
     [AddComponentMenu("VRTK/Scripts/Controls/3D/VRTK_Button")]
     public class VRTK_Button : VRTK_Control
     {
-
+#pragma warning disable 0618
         [Serializable]
         [Obsolete("`VRTK_Control.ButtonEvents` has been replaced with delegate events. `VRTK_Button_UnityEvents` is now required to access Unity events. This method will be removed in a future version of VRTK.")]
         public class ButtonEvents
@@ -466,5 +466,6 @@ namespace VRTK
         {
             return (-activationDir.normalized * buttonStrength);
         }
+#pragma warning restore 0618
     }
 }
