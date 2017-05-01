@@ -1748,10 +1748,10 @@ namespace VRTK
             return angle;
         }
 
+#pragma warning disable 0618
         /// <obsolete>
         /// This is an obsolete method that will be removed in a future version
         /// </obsolete>
-#pragma warning disable 0618
         protected virtual void EmitAlias(ButtonAlias type, bool touchDown, float buttonPressure, ref bool buttonBool)
         {
             if (pointerToggleButton == type)

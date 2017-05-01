@@ -4,6 +4,7 @@ namespace VRTK
     using UnityEngine;
     using System;
 
+#pragma warning disable 0618
     /// <summary>
     /// Event Payload
     /// </summary>
@@ -11,18 +12,17 @@ namespace VRTK
     /// <param name="direction">The direction of the axis.</param>
     public struct TouchpadMovementAxisEventArgs
     {
-#pragma warning disable 0618
         public VRTK_TouchpadMovement.AxisMovementType movementType;
         public VRTK_TouchpadMovement.AxisMovementDirection direction;
-#pragma warning restore 0618
     }
+#pragma warning restore 0618
 
+#pragma warning disable 0618
     /// <summary>
     /// Event Payload
     /// </summary>
     /// <param name="sender">this object</param>
     /// <param name="e"><see cref="TouchpadMovementAxisEventArgs"/></param>
-#pragma warning disable 0618
     public delegate void TouchpadMovementAxisEventHandler(VRTK_TouchpadMovement sender, TouchpadMovementAxisEventArgs e);
 #pragma warning restore 0618
 
