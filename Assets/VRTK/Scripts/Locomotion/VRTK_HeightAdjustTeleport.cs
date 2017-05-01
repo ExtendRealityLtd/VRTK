@@ -54,7 +54,9 @@ namespace VRTK
             Vector3 rayStartPositionOffset = Vector3.up * heightOffset;
             Ray ray = new Ray(tipPosition + rayStartPositionOffset, -playArea.up);
             RaycastHit rayCollidedWith;
+#pragma warning disable 0618
             if (target && VRTK_CustomRaycast.Raycast(customRaycast, ray, out rayCollidedWith, layersToIgnore, Mathf.Infinity))
+#pragma warning restore 0618
             {
                 newY = (tipPosition.y - rayCollidedWith.distance) + heightOffset;
             }
