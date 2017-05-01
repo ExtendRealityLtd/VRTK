@@ -109,6 +109,7 @@
             component.StartMenuPressed += StartMenuPressed;
             component.StartMenuReleased += StartMenuReleased;
 
+#pragma warning disable 0618
             component.AliasPointerOn += AliasPointerOn;
             component.AliasPointerOff += AliasPointerOff;
             component.AliasPointerSet += AliasPointerSet;
@@ -120,6 +121,7 @@
             component.AliasUIClickOff += AliasUIClickOff;
             component.AliasMenuOn += AliasMenuOn;
             component.AliasMenuOff += AliasMenuOff;
+#pragma warning restore 0618
 
             component.ControllerEnabled += ControllerEnabled;
             component.ControllerDisabled += ControllerDisabled;
@@ -170,6 +172,7 @@
             component.StartMenuPressed -= StartMenuPressed;
             component.StartMenuReleased -= StartMenuReleased;
 
+#pragma warning disable 0618
             component.AliasPointerOn -= AliasPointerOn;
             component.AliasPointerOff -= AliasPointerOff;
             component.AliasPointerSet -= AliasPointerSet;
@@ -181,6 +184,7 @@
             component.AliasUIClickOff -= AliasUIClickOff;
             component.AliasMenuOn -= AliasMenuOn;
             component.AliasMenuOff -= AliasMenuOff;
+#pragma warning restore 0618
 
             component.ControllerEnabled -= ControllerEnabled;
             component.ControllerDisabled -= ControllerDisabled;

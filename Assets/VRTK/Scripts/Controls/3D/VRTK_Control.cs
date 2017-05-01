@@ -182,7 +182,9 @@ namespace VRTK
                     /// <obsolete>
                     /// This is an obsolete call that will be removed in a future version
                     /// </obsolete>
+#pragma warning disable 0618
                     defaultEvents.OnValueChanged.Invoke(GetValue(), GetNormalizedValue());
+#pragma warning restore 0618
 
                     OnValueChanged(SetControlEvent());
                 }
