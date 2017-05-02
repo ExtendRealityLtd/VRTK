@@ -29,6 +29,8 @@ namespace VRTK
             StartMenuTooltip
         }
 
+        [Header("Button Text Settings")]
+
         [Tooltip("The text to display for the trigger button action.")]
         public string triggerText;
         [Tooltip("The text to display for the grip button action.")]
@@ -41,12 +43,18 @@ namespace VRTK
         public string buttonTwoText;
         [Tooltip("The text to display for the start menu action.")]
         public string startMenuText;
+
+        [Header("Tooltip Colour Settings")]
+
         [Tooltip("The colour to use for the tooltip background container.")]
         public Color tipBackgroundColor = Color.black;
         [Tooltip("The colour to use for the text within the tooltip.")]
         public Color tipTextColor = Color.white;
         [Tooltip("The colour to use for the line between the tooltip and the relevant controller button.")]
         public Color tipLineColor = Color.black;
+
+        [Header("Button Transform Settings")]
+
         [Tooltip("The transform for the position of the trigger button on the controller.")]
         public Transform trigger;
         [Tooltip("The transform for the position of the grip button on the controller.")]
@@ -60,6 +68,15 @@ namespace VRTK
         [Tooltip("The transform for the position of the start menu on the controller.")]
         public Transform startMenu;
 
+        [Header("Custom Settings")]
+
+        [Tooltip("The controller to read the controller events from. If this is blank then it will attempt to get a controller events script from the same or parent GameObject.")]
+        public VRTK_ControllerEvents controllerEvents;
+        [Tooltip("The headset controller aware script to use to see if the headset is looking at the controller. If this is blank then it will attempt to get a controller events script from the same or parent GameObject.")]
+        public VRTK_HeadsetControllerAware headsetControllerAware;
+        [Tooltip("If this is checked then the tooltips will be hidden when the headset is not looking at the controller.")]
+        public bool hideWhenNotInView = true;
+
         protected bool triggerInitialised = false;
         protected bool gripInitialised = false;
         protected bool touchpadInitialised = false;
@@ -69,8 +86,6 @@ namespace VRTK
         protected TooltipButtons[] availableButtons;
         protected VRTK_ObjectTooltip[] buttonTooltips;
         protected bool[] tooltipStates;
-        protected VRTK_ControllerEvents controllerEvents;
-        protected VRTK_HeadsetControllerAware headsetControllerAware;
 
         /// <summary>
         /// The Reset method reinitalises the tooltips on all of the controller elements.
@@ -144,7 +159,7 @@ namespace VRTK
 
         protected virtual void Awake()
         {
-            controllerEvents = GetComponentInParent<VRTK_ControllerEvents>();
+            controllerEvents = (controllerEvents != null ? controllerEvents : GetComponentInParent<VRTK_ControllerEvents>());
             triggerInitialised = false;
             gripInitialised = false;
             touchpadInitialised = false;
@@ -182,8 +197,8 @@ namespace VRTK
                 controllerEvents.ControllerHidden += DoControllerInvisible;
             }
 
-            headsetControllerAware = FindObjectOfType<VRTK_HeadsetControllerAware>();
-            if (headsetControllerAware)
+            headsetControllerAware = (headsetControllerAware != null ? headsetControllerAware : FindObjectOfType<VRTK_HeadsetControllerAware>());
+            if (headsetControllerAware != null)
             {
                 headsetControllerAware.ControllerGlanceEnter += DoGlanceEnterController;
                 headsetControllerAware.ControllerGlanceExit += DoGlanceExitController;
@@ -199,7 +214,7 @@ namespace VRTK
                 controllerEvents.ControllerHidden -= DoControllerInvisible;
             }
 
-            if (headsetControllerAware)
+            if (headsetControllerAware != null)
             {
                 headsetControllerAware.ControllerGlanceEnter -= DoGlanceEnterController;
                 headsetControllerAware.ControllerGlanceExit -= DoGlanceExitController;
@@ -238,7 +253,7 @@ namespace VRTK
 
         protected virtual void DoGlanceEnterController(object sender, HeadsetControllerAwareEventArgs e)
         {
-            if (controllerEvents != null)
+            if (controllerEvents != null && hideWhenNotInView)
             {
                 uint controllerIndex = VRTK_DeviceFinder.GetControllerIndex(controllerEvents.gameObject);
                 if (controllerIndex == e.controllerIndex)
@@ -250,7 +265,7 @@ namespace VRTK
 
         protected virtual void DoGlanceExitController(object sender, HeadsetControllerAwareEventArgs e)
         {
-            if (controllerEvents != null)
+            if (controllerEvents != null && hideWhenNotInView)
             {
                 uint controllerIndex = VRTK_DeviceFinder.GetControllerIndex(controllerEvents.gameObject);
                 if (controllerIndex == e.controllerIndex)
@@ -343,7 +358,7 @@ namespace VRTK
         protected virtual Transform GetTransform(Transform setTransform, SDK_BaseController.ControllerElements findElement)
         {
             Transform returnTransform = null;
-            if (setTransform)
+            if (setTransform != null)
             {
                 returnTransform = setTransform;
             }
@@ -351,7 +366,7 @@ namespace VRTK
             {
                 GameObject modelController = VRTK_DeviceFinder.GetModelAliasController(controllerEvents.gameObject);
 
-                if (modelController && modelController.activeInHierarchy)
+                if (modelController != null && modelController.activeInHierarchy)
                 {
                     SDK_BaseController.ControllerHand controllerHand = VRTK_DeviceFinder.GetControllerHand(controllerEvents.gameObject);
                     string elementPath = VRTK_SDK_Bridge.GetControllerElementPath(findElement, controllerHand, true);

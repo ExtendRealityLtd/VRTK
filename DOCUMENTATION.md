@@ -212,6 +212,9 @@ There are a number of parameters that can be set on the Prefab which are provide
  * **Button One:** The transform for the position of button one on the controller.
  * **Button Two:** The transform for the position of button two on the controller.
  * **Start Menu:** The transform for the position of the start menu on the controller.
+ * **Controller Events:** The controller to read the controller events from. If this is blank then it will attempt to get a controller events script from the same or parent GameObject.
+ * **Headset Controller Aware:** The headset controller aware script to use to see if the headset is looking at the controller. If this is blank then it will attempt to get a controller events script from the same or parent GameObject.
+ * **Hide When Not In View:** If this is checked then the tooltips will be hidden when the headset is not looking at the controller.
 
 ### Class Methods
 
