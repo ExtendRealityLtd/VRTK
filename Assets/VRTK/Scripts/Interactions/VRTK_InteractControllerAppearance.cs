@@ -14,18 +14,21 @@ namespace VRTK
     public class VRTK_InteractControllerAppearance : MonoBehaviour
     {
         [Header("Touch Visibility")]
+
         [Tooltip("Hides the controller model when a valid touch occurs.")]
         public bool hideControllerOnTouch = false;
         [Tooltip("The amount of seconds to wait before hiding the controller on touch.")]
         public float hideDelayOnTouch = 0f;
 
         [Header("Grab Visibility")]
+
         [Tooltip("Hides the controller model when a valid grab occurs.")]
         public bool hideControllerOnGrab = false;
         [Tooltip("The amount of seconds to wait before hiding the controller on grab.")]
         public float hideDelayOnGrab = 0f;
 
         [Header("Use Visibility")]
+
         [Tooltip("Hides the controller model when a valid use occurs.")]
         public bool hideControllerOnUse = false;
         [Tooltip("The amount of seconds to wait before hiding the controller on use.")]

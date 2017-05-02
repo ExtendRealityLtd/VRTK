@@ -102,6 +102,8 @@ namespace VRTK
         [Range(1, 10)]
         [Tooltip("The amount of rounding on the play area Y position to be applied when checking if falling is occuring.")]
         public int fallCheckPrecision = 5;
+        [Tooltip("The VRTK Teleport script to use when snapping to floor. If this is left blank then a Teleport script will need to be applied to the same GameObject.")]
+        public VRTK_BasicTeleport teleporter;
 
         /// <summary>
         /// Emitted when a fall begins.
@@ -139,7 +141,6 @@ namespace VRTK
         protected GameObject currentCollidingObject = null;
         protected GameObject currentValidFloorObject = null;
 
-        protected VRTK_BasicTeleport teleporter;
         protected float lastFrameFloorY;
         protected float hitFloorYDelta = 0f;
         protected bool initialFloorDrop = false;
@@ -688,10 +689,10 @@ namespace VRTK
         {
             initialFloorDrop = false;
             retogglePhysicsOnCanFall = false;
-            teleporter = GetComponent<VRTK_BasicTeleport>();
+            teleporter = (teleporter != null ? teleporter : GetComponentInChildren<VRTK_BasicTeleport>());
             if (teleporter != null)
             {
-                teleporter.Teleported += Teleporter_Teleported;
+                teleporter.Teleported += Teleported;
             }
         }
 
@@ -699,11 +700,11 @@ namespace VRTK
         {
             if (teleporter != null)
             {
-                teleporter.Teleported -= Teleporter_Teleported;
+                teleporter.Teleported -= Teleported;
             }
         }
 
-        protected virtual void Teleporter_Teleported(object sender, DestinationMarkerEventArgs e)
+        protected virtual void Teleported(object sender, DestinationMarkerEventArgs e)
         {
             initialFloorDrop = false;
             StopFall();

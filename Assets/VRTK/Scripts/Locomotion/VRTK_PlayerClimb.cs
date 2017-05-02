@@ -32,8 +32,17 @@ namespace VRTK
     [AddComponentMenu("VRTK/Scripts/Locomotion/VRTK_PlayerClimb")]
     public class VRTK_PlayerClimb : MonoBehaviour
     {
+        [Header("Climb Settings")]
+
         [Tooltip("Will scale movement up and down based on the player transform's scale.")]
         public bool usePlayerScale = true;
+
+        [Header("Custom Settings")]
+
+        [Tooltip("The VRTK Body Physics script to use for dealing with climbing and falling. If this is left blank then the script will need to be applied to the same GameObject.")]
+        public VRTK_BodyPhysics bodyPhysics;
+        [Tooltip("The VRTK Teleport script to use when snapping to nearest floor on release. If this is left blank then a Teleport script will need to be applied to the same GameObject.")]
+        public VRTK_BasicTeleport teleporter;
 
         /// <summary>
         /// Emitted when player climbing has started.
@@ -51,18 +60,14 @@ namespace VRTK
         protected GameObject grabbingController;
         protected GameObject climbingObject;
         protected Quaternion climbingObjectLastRotation;
-        protected VRTK_BodyPhysics bodyPhysics;
         protected bool isClimbing;
         protected bool useGrabbedObjectRotation;
 
-        protected virtual void Awake()
-        {
-            playArea = VRTK_DeviceFinder.PlayAreaTransform();
-            bodyPhysics = GetComponent<VRTK_BodyPhysics>();
-        }
-
         protected virtual void OnEnable()
         {
+            playArea = VRTK_DeviceFinder.PlayAreaTransform();
+            bodyPhysics = (bodyPhysics != null ? bodyPhysics : GetComponentInChildren<VRTK_BodyPhysics>());
+            teleporter = (teleporter != null ? teleporter : GetComponentInChildren<VRTK_BasicTeleport>());
             InitListeners(true);
         }
 
@@ -127,16 +132,15 @@ namespace VRTK
 
         protected virtual void InitTeleportListener(bool state)
         {
-            var teleportComponent = GetComponent<VRTK_BasicTeleport>();
-            if (teleportComponent)
+            if (teleporter != null)
             {
                 if (state)
                 {
-                    teleportComponent.Teleporting += new TeleportEventHandler(OnTeleport);
+                    teleporter.Teleporting += new TeleportEventHandler(OnTeleport);
                 }
                 else
                 {
-                    teleportComponent.Teleporting -= new TeleportEventHandler(OnTeleport);
+                    teleporter.Teleporting -= new TeleportEventHandler(OnTeleport);
                 }
             }
         }

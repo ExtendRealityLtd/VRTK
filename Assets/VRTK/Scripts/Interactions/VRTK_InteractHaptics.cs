@@ -10,6 +10,7 @@ namespace VRTK
     public class VRTK_InteractHaptics : MonoBehaviour
     {
         [Header("Haptics On Touch")]
+
         [Tooltip("Denotes how strong the rumble in the controller will be on touch.")]
         [Range(0, 1)]
         public float strengthOnTouch = 0;
@@ -19,6 +20,7 @@ namespace VRTK
         public float intervalOnTouch = minInterval;
 
         [Header("Haptics On Grab")]
+
         [Tooltip("Denotes how strong the rumble in the controller will be on grab.")]
         [Range(0, 1)]
         public float strengthOnGrab = 0;
@@ -28,6 +30,7 @@ namespace VRTK
         public float intervalOnGrab = minInterval;
 
         [Header("Haptics On Use")]
+
         [Tooltip("Denotes how strong the rumble in the controller will be on use.")]
         [Range(0, 1)]
         public float strengthOnUse = 0;
