@@ -1,0 +1,1 @@
+Get the full version of the PSVR SDK here https://ps4.siedev.net/forums/nodejump/1613525
