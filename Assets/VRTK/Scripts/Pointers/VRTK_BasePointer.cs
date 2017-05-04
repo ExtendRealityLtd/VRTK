@@ -428,14 +428,42 @@ namespace VRTK
             objectInteractor.layer = LayerMask.NameToLayer("Ignore Raycast");
             VRTK_PlayerObject.SetPlayerObject(objectInteractor, VRTK_PlayerObject.ObjectTypes.Pointer);
 
-            var objectInteractorCollider = new GameObject(string.Format("[{0}]BasePointer_ObjectInteractor_Collider", gameObject.name));
+            CreateObjectInteractorCollider();
+
+            float objectInteractorScale = 0.025f;
+            objectInteractor.transform.localScale = Vector3.one * objectInteractorScale;
+            objectInteractor.SetActive(false);
+        }
+
+        protected virtual void CreateObjectInteractorCollider()
+        {
+            GameObject objectInteractorCollider = new GameObject(string.Format("[{0}]BasePointer_ObjectInteractor_Collider", gameObject.name));
             objectInteractorCollider.transform.SetParent(objectInteractor.transform);
             objectInteractorCollider.transform.localPosition = Vector3.zero;
             objectInteractorCollider.layer = LayerMask.NameToLayer("Ignore Raycast");
-            var tmpCollider = objectInteractorCollider.AddComponent<SphereCollider>();
-            tmpCollider.isTrigger = true;
             VRTK_PlayerObject.SetPlayerObject(objectInteractorCollider, VRTK_PlayerObject.ObjectTypes.Pointer);
 
+            CreateActualTipCollider(objectInteractorCollider);
+            SetupGrabToPointerTip();
+        }
+
+        protected virtual void CreateActualTipCollider(GameObject target)
+        {
+            int colliderAxis = 2; // 2 is z axis
+            float colliderHeight = 1.5f;
+            float colliderRadius = 0.6f;
+            float colliderForwardOffset = 2.5f;
+
+            CapsuleCollider tmpCollider = target.AddComponent<CapsuleCollider>();
+            tmpCollider.isTrigger = true;
+            tmpCollider.direction = colliderAxis;
+            tmpCollider.height = colliderHeight;
+            tmpCollider.radius = colliderRadius;
+            tmpCollider.center = Vector3.forward * (tmpCollider.height / colliderForwardOffset);
+        }
+
+        protected virtual void SetupGrabToPointerTip()
+        {
             if (grabToPointerTip)
             {
                 objectInteractorAttachPoint = new GameObject(string.Format("[{0}]BasePointer_ObjectInteractor_AttachPoint", gameObject.name));
@@ -448,10 +476,6 @@ namespace VRTK
                 objectInteratorRigidBody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
                 VRTK_PlayerObject.SetPlayerObject(objectInteractorAttachPoint, VRTK_PlayerObject.ObjectTypes.Pointer);
             }
-
-            var objectInteractorScale = 0.025f;
-            objectInteractor.transform.localScale = new Vector3(objectInteractorScale, objectInteractorScale, objectInteractorScale);
-            objectInteractor.SetActive(false);
         }
 
         protected virtual void CreatePointerOriginTransformFollow()
