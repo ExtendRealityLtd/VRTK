@@ -37,7 +37,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37429237, g: 0.42147171, b: 0.46712714, a: 1}
+  m_IndirectSpecularColor: {r: 0.18053603, g: 0.2260181, b: 0.30718738, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -99,7 +99,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 106315679}
   - 114: {fileID: 106315683}
-  - 114: {fileID: 106315682}
   - 114: {fileID: 106315681}
   - 114: {fileID: 106315680}
   m_Layer: 0
@@ -134,6 +133,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65eb64f0f2fd6d64faddbcf5d7d3bdbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  useButton: 3
 --- !u!114 &106315681
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -146,37 +146,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   customRigidbodyObject: {fileID: 0}
---- !u!114 &106315682
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 106315678}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d45c8d32f1d960d4498790bb3961fc52, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  modelElementPaths:
-    bodyModelPath: 
-    triggerModelPath: 
-    leftGripModelPath: 
-    rightGripModelPath: 
-    touchpadModelPath: 
-    buttonOneModelPath: 
-    buttonTwoModelPath: 
-    systemMenuModelPath: 
-    startMenuModelPath: 
-  elementHighlighterOverrides:
-    body: {fileID: 0}
-    trigger: {fileID: 0}
-    gripLeft: {fileID: 0}
-    gripRight: {fileID: 0}
-    touchpad: {fileID: 0}
-    buttonOne: {fileID: 0}
-    buttonTwo: {fileID: 0}
-    systemMenu: {fileID: 0}
-    startMenu: {fileID: 0}
 --- !u!114 &106315683
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -196,7 +165,11 @@ MonoBehaviour:
   menuToggleButton: 14
   axisFidelity: 1
   triggerClickThreshold: 1
+  triggerForceZeroThreshold: 0.01
+  triggerAxisZeroOnUntouch: 0
   gripClickThreshold: 1
+  gripForceZeroThreshold: 0.01
+  gripAxisZeroOnUntouch: 0
   triggerPressed: 0
   triggerTouched: 0
   triggerHairlinePressed: 0
@@ -220,6 +193,36 @@ MonoBehaviour:
   usePressed: 0
   uiClickPressed: 0
   menuPressed: 0
+  controllerVisible: 1
+--- !u!21 &112753001
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: Sprites/Default
+  m_Shader: {fileID: 10753, guid: 0000000000000000f000000000000000, type: 0}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 5
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  m_SavedProperties:
+    serializedVersion: 2
+    m_TexEnvs:
+    - first:
+        name: _MainTex
+      second:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - first:
+        name: PixelSnap
+      second: 0
+    m_Colors:
+    - first:
+        name: _Color
+      second: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &149736850
 GameObject:
   m_ObjectHideFlags: 0
@@ -299,35 +302,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2023571378}
   m_RootOrder: 1
---- !u!21 &273033975
-Material:
-  serializedVersion: 6
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_Name: Sprites/Default
-  m_Shader: {fileID: 10753, guid: 0000000000000000f000000000000000, type: 0}
-  m_ShaderKeywords: 
-  m_LightmapFlags: 5
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  m_SavedProperties:
-    serializedVersion: 2
-    m_TexEnvs:
-    - first:
-        name: _MainTex
-      second:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Floats:
-    - first:
-        name: PixelSnap
-      second: 0
-    m_Colors:
-    - first:
-        name: _Color
-      second: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &374737846
 GameObject:
   m_ObjectHideFlags: 0
@@ -649,7 +623,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 708505807}
   - 114: {fileID: 708505811}
-  - 114: {fileID: 708505810}
   - 114: {fileID: 708505809}
   - 114: {fileID: 708505808}
   m_Layer: 0
@@ -684,6 +657,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65eb64f0f2fd6d64faddbcf5d7d3bdbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  useButton: 3
 --- !u!114 &708505809
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -696,37 +670,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   customRigidbodyObject: {fileID: 0}
---- !u!114 &708505810
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 708505806}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d45c8d32f1d960d4498790bb3961fc52, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  modelElementPaths:
-    bodyModelPath: 
-    triggerModelPath: 
-    leftGripModelPath: 
-    rightGripModelPath: 
-    touchpadModelPath: 
-    buttonOneModelPath: 
-    buttonTwoModelPath: 
-    systemMenuModelPath: 
-    startMenuModelPath: 
-  elementHighlighterOverrides:
-    body: {fileID: 0}
-    trigger: {fileID: 0}
-    gripLeft: {fileID: 0}
-    gripRight: {fileID: 0}
-    touchpad: {fileID: 0}
-    buttonOne: {fileID: 0}
-    buttonTwo: {fileID: 0}
-    systemMenu: {fileID: 0}
-    startMenu: {fileID: 0}
 --- !u!114 &708505811
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -746,7 +689,11 @@ MonoBehaviour:
   menuToggleButton: 14
   axisFidelity: 1
   triggerClickThreshold: 1
+  triggerForceZeroThreshold: 0.01
+  triggerAxisZeroOnUntouch: 0
   gripClickThreshold: 1
+  gripForceZeroThreshold: 0.01
+  gripAxisZeroOnUntouch: 0
   triggerPressed: 0
   triggerTouched: 0
   triggerHairlinePressed: 0
@@ -770,6 +717,7 @@ MonoBehaviour:
   usePressed: 0
   uiClickPressed: 0
   menuPressed: 0
+  controllerVisible: 1
 --- !u!1 &734656374
 GameObject:
   m_ObjectHideFlags: 0
@@ -903,11 +851,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   persistOnLoad: 0
-  systemSDK: 1
-  boundariesSDK: 1
-  headsetSDK: 1
-  controllerSDK: 1
+  autoPopulateObjectReferences: 1
   autoManageScriptDefines: 1
+  activeScriptingDefineSymbolsWithoutSDKClasses: []
   actualBoundaries: {fileID: 815778966}
   actualHeadset: {fileID: 734656374}
   actualLeftController: {fileID: 2115991708}
@@ -916,6 +862,22 @@ MonoBehaviour:
   modelAliasRightController: {fileID: 1757825998}
   scriptAliasLeftController: {fileID: 106315678}
   scriptAliasRightController: {fileID: 708505806}
+  cachedSystemSDKInfo:
+    baseTypeName: VRTK.SDK_BaseSystem
+    fallbackTypeName: VRTK.SDK_FallbackSystem
+    typeName: VRTK.SDK_SteamVRSystem
+  cachedBoundariesSDKInfo:
+    baseTypeName: VRTK.SDK_BaseBoundaries
+    fallbackTypeName: VRTK.SDK_FallbackBoundaries
+    typeName: VRTK.SDK_SteamVRBoundaries
+  cachedHeadsetSDKInfo:
+    baseTypeName: VRTK.SDK_BaseHeadset
+    fallbackTypeName: VRTK.SDK_FallbackHeadset
+    typeName: VRTK.SDK_SteamVRHeadset
+  cachedControllerSDKInfo:
+    baseTypeName: VRTK.SDK_BaseController
+    fallbackTypeName: VRTK.SDK_FallbackController
+    typeName: VRTK.SDK_SteamVRController
 --- !u!1 &815778966
 GameObject:
   m_ObjectHideFlags: 0
@@ -954,14 +916,14 @@ MonoBehaviour:
   size: 2
   color: {r: 0, g: 1, b: 1, a: 1}
   vertices:
-  - {x: 1.5, y: 0.01, z: 1.125}
   - {x: 1.5, y: 0.01, z: -1.125}
   - {x: -1.5, y: 0.01, z: -1.125}
   - {x: -1.5, y: 0.01, z: 1.125}
-  - {x: 1.65, y: 0.01, z: 1.275}
+  - {x: 1.5, y: 0.01, z: 1.125}
   - {x: 1.65, y: 0.01, z: -1.275}
   - {x: -1.65, y: 0.01, z: -1.275}
   - {x: -1.65, y: 0.01, z: 1.275}
+  - {x: 1.65, y: 0.01, z: 1.275}
 --- !u!33 &815778968
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -969,7 +931,7 @@ MeshFilter:
     type: 2}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 815778966}
-  m_Mesh: {fileID: 1292764093}
+  m_Mesh: {fileID: 1504907280}
 --- !u!23 &815778969
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -984,7 +946,7 @@ MeshRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_Materials:
-  - {fileID: 273033975}
+  - {fileID: 112753001}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
@@ -1172,7 +1134,47 @@ MonoBehaviour:
   index: -1
   origin: {fileID: 0}
   isValid: 0
---- !u!43 &1292764093
+--- !u!1 &1449190156
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1449190157}
+  - 114: {fileID: 1449190158}
+  m_Layer: 0
+  m_Name: '##Scene Changer##'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1449190157
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1449190156}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 9.2653475, y: -12.729746, z: -33.865685}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Children: []
+  m_Father: {fileID: 789504487}
+  m_RootOrder: 0
+--- !u!114 &1449190158
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1449190156}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c63141da60241d14394f8f3b547531f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!43 &1504907280
 Mesh:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
@@ -1240,7 +1242,7 @@ Mesh:
       format: 0
       dimension: 0
     m_DataSize: 288
-    _typelessdata: 0000c03f0ad7233c0000903f000000000000803f0000803f0000803f00000000000000000000c03f0ad7233c000090bf000000000000803f0000803f0000803f0000803f000000000000c0bf0ad7233c000090bf000000000000803f0000803f0000803f00000000000000000000c0bf0ad7233c0000903f000000000000803f0000803f0000803f0000803f000000003333d33f0ad7233c3333a33f000000000000803f0000803f00000000000000000000803f3333d33f0ad7233c3333a3bf000000000000803f0000803f000000000000803f0000803f3333d3bf0ad7233c3333a3bf000000000000803f0000803f00000000000000000000803f3333d3bf0ad7233c3333a33f000000000000803f0000803f000000000000803f0000803f
+    _typelessdata: 0000c03f0ad7233c000090bf000000000000803f0000803f0000803f00000000000000000000c0bf0ad7233c000090bf000000000000803f0000803f0000803f0000803f000000000000c0bf0ad7233c0000903f000000000000803f0000803f0000803f00000000000000000000c03f0ad7233c0000903f000000000000803f0000803f0000803f0000803f000000003333d33f0ad7233c3333a3bf000000000000803f0000803f00000000000000000000803f3333d3bf0ad7233c3333a3bf000000000000803f0000803f000000000000803f0000803f3333d3bf0ad7233c3333a33f000000000000803f0000803f00000000000000000000803f3333d33f0ad7233c3333a33f000000000000803f0000803f000000000000803f0000803f
   m_CompressedMesh:
     m_Vertices:
       m_NumItems: 0
@@ -1300,46 +1302,6 @@ Mesh:
   m_BakedConvexCollisionMesh: 
   m_BakedTriangleCollisionMesh: 
   m_MeshOptimized: 0
---- !u!1 &1449190156
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 1449190157}
-  - 114: {fileID: 1449190158}
-  m_Layer: 0
-  m_Name: '##Scene Changer##'
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1449190157
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1449190156}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 9.2653475, y: -12.729746, z: -33.865685}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_Children: []
-  m_Father: {fileID: 789504487}
-  m_RootOrder: 0
---- !u!114 &1449190158
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1449190156}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c63141da60241d14394f8f3b547531f0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1570480412
 GameObject:
   m_ObjectHideFlags: 0
@@ -1373,11 +1335,12 @@ MonoBehaviour:
   disableWhenIdle: 1
   touchHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   allowedTouchControllers: 0
+  ignoredColliders: []
   isGrabbable: 0
   holdButtonToGrab: 1
   stayGrabbedOnTeleport: 1
   validDrop: 1
-  grabOverrideButton: 8
+  grabOverrideButton: 0
   allowedGrabControllers: 0
   grabAttachMechanicScript: {fileID: 0}
   secondaryGrabActionScript: {fileID: 0}
@@ -1385,7 +1348,7 @@ MonoBehaviour:
   holdButtonToUse: 1
   useOnlyIfGrabbed: 0
   pointerActivatesUseAction: 0
-  useOverrideButton: 8
+  useOverrideButton: 0
   allowedUseControllers: 0
   usingState: 0
 --- !u!23 &1570480414

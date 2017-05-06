@@ -20,9 +20,32 @@ namespace VRTK
     ///
     /// `VRTK/Examples/008_Controller_UsingAGrabbedObject` shows that objects can be grabbed with one button and used with another (e.g. firing a gun).
     /// </example>
-    [RequireComponent(typeof(VRTK_InteractTouch)), RequireComponent(typeof(VRTK_ControllerEvents))]
+    [AddComponentMenu("VRTK/Scripts/Interactions/VRTK_InteractUse")]
     public class VRTK_InteractUse : MonoBehaviour
     {
+        [Header("Use Settings")]
+
+        [Tooltip("The button used to use/unuse a touched object.")]
+        public VRTK_ControllerEvents.ButtonAlias useButton = VRTK_ControllerEvents.ButtonAlias.TriggerPress;
+
+        [Header("Custom Settings")]
+
+        [Tooltip("The controller to listen for the events on. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.")]
+        public VRTK_ControllerEvents controllerEvents;
+        [Tooltip("The Interact Touch to listen for touches on. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.")]
+        public VRTK_InteractTouch interactTouch;
+        [Tooltip("The Interact Grab to listen for grab actions on. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.")]
+        public VRTK_InteractGrab interactGrab;
+
+        /// <summary>
+        /// Emitted when the use toggle alias button is pressed.
+        /// </summary>
+        public event ControllerInteractionEventHandler UseButtonPressed;
+        /// <summary>
+        /// Emitted when the use toggle alias button is released.
+        /// </summary>
+        public event ControllerInteractionEventHandler UseButtonReleased;
+
         /// <summary>
         /// Emitted when a valid object starts being used.
         /// </summary>
@@ -32,10 +55,11 @@ namespace VRTK
         /// </summary>
         public event ObjectInteractEventHandler ControllerUnuseInteractableObject;
 
-        private GameObject usingObject = null;
-        private VRTK_InteractTouch interactTouch;
-        private VRTK_ControllerActions controllerActions;
-        private VRTK_ControllerEvents controllerEvents;
+        protected VRTK_ControllerEvents.ButtonAlias subscribedUseButton = VRTK_ControllerEvents.ButtonAlias.Undefined;
+        protected VRTK_ControllerEvents.ButtonAlias savedUseButton = VRTK_ControllerEvents.ButtonAlias.Undefined;
+        protected bool usePressed;
+
+        protected GameObject usingObject = null;
 
         public virtual void OnControllerUseInteractableObject(ObjectInteractEventArgs e)
         {
@@ -53,11 +77,36 @@ namespace VRTK
             }
         }
 
+        public virtual void OnUseButtonPressed(ControllerInteractionEventArgs e)
+        {
+            if (UseButtonPressed != null)
+            {
+                UseButtonPressed(this, e);
+            }
+        }
+
+        public virtual void OnUseButtonReleased(ControllerInteractionEventArgs e)
+        {
+            if (UseButtonReleased != null)
+            {
+                UseButtonReleased(this, e);
+            }
+        }
+
+        /// <summary>
+        /// The IsUsebuttonPressed method determines whether the current use alias button is being pressed down.
+        /// </summary>
+        /// <returns>Returns true if the use alias button is being held down.</returns>
+        public virtual bool IsUseButtonPressed()
+        {
+            return usePressed;
+        }
+
         /// <summary>
         /// The GetUsingObject method returns the current object being used by the controller.
         /// </summary>
         /// <returns>The game object of what is currently being used by this controller.</returns>
-        public GameObject GetUsingObject()
+        public virtual GameObject GetUsingObject()
         {
             return usingObject;
         }
@@ -65,7 +114,7 @@ namespace VRTK
         /// <summary>
         /// The ForceStopUsing method will force the controller to stop using the currently touched object and will also stop the object's using action.
         /// </summary>
-        public void ForceStopUsing()
+        public virtual void ForceStopUsing()
         {
             if (usingObject != null)
             {
@@ -76,7 +125,7 @@ namespace VRTK
         /// <summary>
         /// The ForceResetUsing will force the controller to stop using the currently touched object but the object will continue with it's existing using action.
         /// </summary>
-        public void ForceResetUsing()
+        public virtual void ForceResetUsing()
         {
             if (usingObject != null)
             {
@@ -84,47 +133,120 @@ namespace VRTK
             }
         }
 
-        protected virtual void Awake()
+        /// <summary>
+        /// The AttemptUse method will attempt to use the currently touched object without needing to press the use button on the controller.
+        /// </summary>
+        public virtual void AttemptUse()
         {
-            interactTouch = GetComponent<VRTK_InteractTouch>();
-            controllerActions = GetComponent<VRTK_ControllerActions>();
-            controllerEvents = GetComponent<VRTK_ControllerEvents>();
+            AttemptUseObject();
         }
 
         protected virtual void OnEnable()
         {
-            controllerEvents.AliasUseOn += new ControllerInteractionEventHandler(DoStartUseObject);
-            controllerEvents.AliasUseOff += new ControllerInteractionEventHandler(DoStopUseObject);
+            controllerEvents = (controllerEvents != null ? controllerEvents : GetComponentInParent<VRTK_ControllerEvents>());
+            interactTouch = (interactTouch != null ? interactTouch : GetComponentInParent<VRTK_InteractTouch>());
+            interactGrab = (interactGrab != null ? interactGrab : GetComponentInParent<VRTK_InteractGrab>());
+
+            if (interactTouch == null)
+            {
+                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_NOT_INJECTED, "VRTK_InteractUse", "VRTK_InteractTouch", "interactTouch", "the same or parent"));
+            }
+
+            ManageUseListener(true);
+            ManageInteractTouchListener(true);
         }
 
         protected virtual void OnDisable()
         {
-            ForceStopUsing();
-            controllerEvents.AliasUseOn -= new ControllerInteractionEventHandler(DoStartUseObject);
-            controllerEvents.AliasUseOff -= new ControllerInteractionEventHandler(DoStopUseObject);
+            ForceResetUsing();
+            ManageUseListener(false);
+            ManageInteractTouchListener(false);
         }
 
-        private bool IsObjectUsable(GameObject obj)
+        protected virtual void Update()
+        {
+            ManageUseListener(true);
+        }
+
+        protected virtual void ManageInteractTouchListener(bool state)
+        {
+            if (interactTouch != null && !state)
+            {
+                interactTouch.ControllerTouchInteractableObject -= ControllerTouchInteractableObject;
+                interactTouch.ControllerUntouchInteractableObject -= ControllerUntouchInteractableObject;
+            }
+
+            if (interactTouch != null && state)
+            {
+                interactTouch.ControllerTouchInteractableObject += ControllerTouchInteractableObject;
+                interactTouch.ControllerUntouchInteractableObject += ControllerUntouchInteractableObject;
+            }
+        }
+
+        protected virtual void ControllerTouchInteractableObject(object sender, ObjectInteractEventArgs e)
+        {
+            if (e.target != null)
+            {
+                VRTK_InteractableObject touchedObjectScript = e.target.GetComponent<VRTK_InteractableObject>();
+                if (touchedObjectScript != null && touchedObjectScript.useOverrideButton != VRTK_ControllerEvents.ButtonAlias.Undefined)
+                {
+                    savedUseButton = subscribedUseButton;
+                    useButton = touchedObjectScript.useOverrideButton;
+                }
+            }
+        }
+
+        protected virtual void ControllerUntouchInteractableObject(object sender, ObjectInteractEventArgs e)
+        {
+            if (e.target != null)
+            {
+                VRTK_InteractableObject touchedObjectScript = e.target.GetComponent<VRTK_InteractableObject>();
+                if (touchedObjectScript != null && !touchedObjectScript.IsUsing() && savedUseButton != VRTK_ControllerEvents.ButtonAlias.Undefined)
+                {
+                    useButton = savedUseButton;
+                    savedUseButton = VRTK_ControllerEvents.ButtonAlias.Undefined;
+                }
+            }
+        }
+
+        protected virtual void ManageUseListener(bool state)
+        {
+            if (controllerEvents != null && subscribedUseButton != VRTK_ControllerEvents.ButtonAlias.Undefined && (!state || !useButton.Equals(subscribedUseButton)))
+            {
+                controllerEvents.UnsubscribeToButtonAliasEvent(subscribedUseButton, true, DoStartUseObject);
+                controllerEvents.UnsubscribeToButtonAliasEvent(subscribedUseButton, false, DoStopUseObject);
+                subscribedUseButton = VRTK_ControllerEvents.ButtonAlias.Undefined;
+            }
+
+            if (controllerEvents != null && state && useButton != VRTK_ControllerEvents.ButtonAlias.Undefined && !useButton.Equals(subscribedUseButton))
+            {
+                controllerEvents.SubscribeToButtonAliasEvent(useButton, true, DoStartUseObject);
+                controllerEvents.SubscribeToButtonAliasEvent(useButton, false, DoStopUseObject);
+                subscribedUseButton = useButton;
+            }
+        }
+
+        protected virtual bool IsObjectUsable(GameObject obj)
         {
             return (interactTouch.IsObjectInteractable(obj) && obj.GetComponent<VRTK_InteractableObject>().isUsable);
         }
 
-        private bool IsObjectHoldOnUse(GameObject obj)
+        protected virtual bool IsObjectHoldOnUse(GameObject obj)
         {
-            if (obj)
+            if (obj != null)
             {
                 var objScript = obj.GetComponent<VRTK_InteractableObject>();
-                return (objScript && objScript.holdButtonToUse);
+                return (objScript != null && objScript.holdButtonToUse);
             }
             return false;
         }
 
-        private int GetObjectUsingState(GameObject obj)
+        protected virtual int GetObjectUsingState(GameObject obj)
         {
-            if (obj)
+            if (obj != null)
             {
                 var objScript = obj.GetComponent<VRTK_InteractableObject>();
-                if (objScript)
+                if (objScript != null)
                 {
                     return objScript.usingState;
                 }
@@ -132,70 +254,71 @@ namespace VRTK
             return 0;
         }
 
-        private void SetObjectUsingState(GameObject obj, int value)
+        protected virtual void SetObjectUsingState(GameObject obj, int value)
         {
-            if (obj)
+            if (obj != null)
             {
                 var objScript = obj.GetComponent<VRTK_InteractableObject>();
-                if (objScript)
+                if (objScript != null)
                 {
                     objScript.usingState = value;
                 }
             }
         }
 
-		private void AttemptHaptics()
-		{
-			if (usingObject) 
-			{ 
-				var doHaptics = usingObject.GetComponentInParent<VRTK_InteractHaptics>();
-				if (doHaptics)
-				{
-					doHaptics.HapticsOnUse(controllerActions);
-				}
-			}
-        }
-
-        private void ToggleControllerVisibility(bool visible)
+        protected virtual void AttemptHaptics()
         {
-            if (usingObject)
+            if (usingObject != null)
             {
-                var controllerAppearanceScript = usingObject.GetComponentInParent<VRTK_InteractControllerAppearance>();
-                if (controllerAppearanceScript)
+                var doHaptics = usingObject.GetComponentInParent<VRTK_InteractHaptics>();
+                if (doHaptics != null)
                 {
-                    controllerAppearanceScript.ToggleControllerOnUse(visible, controllerActions, usingObject);
+                    doHaptics.HapticsOnUse(VRTK_DeviceFinder.GetControllerIndex(interactTouch.gameObject));
                 }
             }
         }
 
-        private void UseInteractedObject(GameObject touchedObject)
+        protected virtual void ToggleControllerVisibility(bool visible)
+        {
+            GameObject modelContainer = VRTK_DeviceFinder.GetModelAliasController(interactTouch.gameObject);
+            if (usingObject != null)
+            {
+                VRTK_InteractControllerAppearance[] controllerAppearanceScript = usingObject.GetComponentsInParent<VRTK_InteractControllerAppearance>(true);
+                if (controllerAppearanceScript.Length > 0)
+                {
+                    controllerAppearanceScript[0].ToggleControllerOnUse(visible, modelContainer, usingObject);
+                }
+            }
+        }
+
+        protected virtual void UseInteractedObject(GameObject touchedObject)
         {
             if ((usingObject == null || usingObject != touchedObject) && IsObjectUsable(touchedObject))
             {
                 usingObject = touchedObject;
                 var usingObjectScript = usingObject.GetComponent<VRTK_InteractableObject>();
 
-                if (!usingObjectScript.IsValidInteractableController(gameObject, usingObjectScript.allowedUseControllers))
+                if (!usingObjectScript.IsValidInteractableController(interactTouch.gameObject, usingObjectScript.allowedUseControllers))
                 {
                     usingObject = null;
                     return;
                 }
 
-                usingObjectScript.StartUsing(gameObject);
+                usingObjectScript.StartUsing(interactTouch.gameObject);
                 ToggleControllerVisibility(false);
                 AttemptHaptics();
                 OnControllerUseInteractableObject(interactTouch.SetControllerInteractEvent(usingObject));
             }
         }
 
-        private void UnuseInteractedObject(bool completeStop)
+        protected virtual void UnuseInteractedObject(bool completeStop)
         {
             if (usingObject != null)
             {
                 var usingObjectCheck = usingObject.GetComponent<VRTK_InteractableObject>();
-                if (usingObjectCheck && completeStop)
+                if (usingObjectCheck != null && completeStop)
                 {
-                    usingObjectCheck.StopUsing(gameObject);
+                    usingObjectCheck.StopUsing(interactTouch.gameObject);
                 }
                 ToggleControllerVisibility(true);
                 OnControllerUnuseInteractableObject(interactTouch.SetControllerInteractEvent(usingObject));
@@ -203,23 +326,22 @@ namespace VRTK
             }
         }
 
-        private GameObject GetFromGrab()
+        protected virtual GameObject GetFromGrab()
         {
-            var grabScript = GetComponent<VRTK_InteractGrab>();
-            if (grabScript)
+            if (interactGrab != null)
             {
-                return grabScript.GetGrabbedObject();
+                return interactGrab.GetGrabbedObject();
             }
             return null;
         }
 
-        private void StopUsing()
+        protected virtual void StopUsing()
         {
             SetObjectUsingState(usingObject, 0);
             UnuseInteractedObject(true);
         }
 
-        private void DoStartUseObject(object sender, ControllerInteractionEventArgs e)
+        protected virtual void AttemptUseObject()
         {
             GameObject touchedObject = interactTouch.GetTouchedObject();
             if (touchedObject == null)
@@ -237,19 +359,26 @@ namespace VRTK
                 }
 
                 UseInteractedObject(touchedObject);
-                if (usingObject && !IsObjectHoldOnUse(usingObject))
+                if (usingObject != null && !IsObjectHoldOnUse(usingObject))
                 {
                     SetObjectUsingState(usingObject, GetObjectUsingState(usingObject) + 1);
                 }
             }
         }
 
-        private void DoStopUseObject(object sender, ControllerInteractionEventArgs e)
+        protected virtual void DoStartUseObject(object sender, ControllerInteractionEventArgs e)
+        {
+            OnUseButtonPressed(controllerEvents.SetControllerEvent(ref usePressed, true));
+            AttemptUseObject();
+        }
+
+        protected virtual void DoStopUseObject(object sender, ControllerInteractionEventArgs e)
         {
             if (IsObjectHoldOnUse(usingObject) || GetObjectUsingState(usingObject) >= 2)
             {
                 StopUsing();
             }
+            OnUseButtonReleased(controllerEvents.SetControllerEvent(ref usePressed, false));
         }
     }
 }

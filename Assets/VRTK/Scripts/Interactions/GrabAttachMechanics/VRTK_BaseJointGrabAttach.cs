@@ -66,7 +66,7 @@ namespace VRTK.GrabAttachMechanics
 
         protected override Rigidbody ReleaseFromController(bool applyGrabbingObjectVelocity)
         {
-            if(controllerAttachJoint)
+            if (controllerAttachJoint)
             {
                 var jointRigidbody = controllerAttachJoint.GetComponent<Rigidbody>();
                 DestroyJoint(destroyImmediatelyOnThrow, applyGrabbingObjectVelocity);
@@ -89,7 +89,7 @@ namespace VRTK.GrabAttachMechanics
                 givenJoint.anchor = obj.transform.InverseTransformPoint(controllerAttachPoint.position);
             }
             controllerAttachJoint = givenJoint;
-            controllerAttachJoint.breakForce = (grabbedObjectScript.IsDroppable() ? controllerAttachJoint.breakForce : Mathf.Infinity);
+            controllerAttachJoint.breakForce = (!grabbedObjectScript.IsDroppable() || grabbedObjectScript.validDrop == VRTK_InteractableObject.ValidDropTypes.DropValidSnapDropZone ? Mathf.Infinity : controllerAttachJoint.breakForce);
             controllerAttachJoint.connectedBody = controllerAttachPoint;
         }
 
@@ -106,7 +106,7 @@ namespace VRTK.GrabAttachMechanics
             }
         }
 
-        private void SetSnappedObjectPosition(GameObject obj)
+        protected virtual void SetSnappedObjectPosition(GameObject obj)
         {
             if (grabbedSnapHandle == null)
             {
@@ -119,7 +119,7 @@ namespace VRTK.GrabAttachMechanics
             }
         }
 
-        private void SnapObjectToGrabToController(GameObject obj)
+        protected virtual void SnapObjectToGrabToController(GameObject obj)
         {
             if (!precisionGrab)
             {

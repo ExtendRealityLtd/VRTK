@@ -2,281 +2,196 @@
 {
     using UnityEngine;
     using UnityEngine.Events;
+    using System;
 
-    [RequireComponent(typeof(VRTK_ControllerEvents))]
-    public class VRTK_ControllerEvents_UnityEvents : MonoBehaviour
+    [AddComponentMenu("VRTK/Scripts/Utilities/Unity Events/VRTK_ControllerEvents_UnityEvents")]
+    public sealed class VRTK_ControllerEvents_UnityEvents : VRTK_UnityEvents<VRTK_ControllerEvents>
     {
-        private VRTK_ControllerEvents ce;
+        [Serializable]
+        public sealed class ControllerInteractionEvent : UnityEvent<object, ControllerInteractionEventArgs> { }
 
-        [System.Serializable]
-        public class UnityObjectEvent : UnityEvent<object, ControllerInteractionEventArgs> { };
+        public ControllerInteractionEvent OnTriggerPressed = new ControllerInteractionEvent();
+        public ControllerInteractionEvent OnTriggerReleased = new ControllerInteractionEvent();
+        public ControllerInteractionEvent OnTriggerTouchStart = new ControllerInteractionEvent();
+        public ControllerInteractionEvent OnTriggerTouchEnd = new ControllerInteractionEvent();
+        public ControllerInteractionEvent OnTriggerHairlineStart = new ControllerInteractionEvent();
+        public ControllerInteractionEvent OnTriggerHairlineEnd = new ControllerInteractionEvent();
+        public ControllerInteractionEvent OnTriggerClicked = new ControllerInteractionEvent();
+        public ControllerInteractionEvent OnTriggerUnclicked = new ControllerInteractionEvent();
+        public ControllerInteractionEvent OnTriggerAxisChanged = new ControllerInteractionEvent();
 
-        /// <summary>
-        /// Emits the TriggerPressed class event.
-        /// </summary>
-        public UnityObjectEvent OnTriggerPressed = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the TriggerReleased class event.
-        /// </summary>
-        public UnityObjectEvent OnTriggerReleased = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the TriggerTouchStart class event.
-        /// </summary>
-        public UnityObjectEvent OnTriggerTouchStart = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the TriggerTouchEnd class event.
-        /// </summary>
-        public UnityObjectEvent OnTriggerTouchEnd = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the TriggerHairlineStart class event.
-        /// </summary>
-        public UnityObjectEvent OnTriggerHairlineStart = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the TriggerHairlineEnd class event.
-        /// </summary>
-        public UnityObjectEvent OnTriggerHairlineEnd = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the TriggerClicked class event.
-        /// </summary>
-        public UnityObjectEvent OnTriggerClicked = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the TriggerUnclicked class event.
-        /// </summary>
-        public UnityObjectEvent OnTriggerUnclicked = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the TriggerAxisChanged class event.
-        /// </summary>
-        public UnityObjectEvent OnTriggerAxisChanged = new UnityObjectEvent();
+        public ControllerInteractionEvent OnGripPressed = new ControllerInteractionEvent();
+        public ControllerInteractionEvent OnGripReleased = new ControllerInteractionEvent();
+        public ControllerInteractionEvent OnGripTouchStart = new ControllerInteractionEvent();
+        public ControllerInteractionEvent OnGripTouchEnd = new ControllerInteractionEvent();
+        public ControllerInteractionEvent OnGripHairlineStart = new ControllerInteractionEvent();
+        public ControllerInteractionEvent OnGripHairlineEnd = new ControllerInteractionEvent();
+        public ControllerInteractionEvent OnGripClicked = new ControllerInteractionEvent();
+        public ControllerInteractionEvent OnGripUnclicked = new ControllerInteractionEvent();
+        public ControllerInteractionEvent OnGripAxisChanged = new ControllerInteractionEvent();
 
-        /// <summary>
-        /// Emits the GripPressed class event.
-        /// </summary>
-        public UnityObjectEvent OnGripPressed = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the GripReleased class event.
-        /// </summary>
-        public UnityObjectEvent OnGripReleased = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the GripTouchStart class event.
-        /// </summary>
-        public UnityObjectEvent OnGripTouchStart = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the GripTouchEnd class event.
-        /// </summary>
-        public UnityObjectEvent OnGripTouchEnd = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the GripHairlineStart class event.
-        /// </summary>
-        public UnityObjectEvent OnGripHairlineStart = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the GripHairlineEnd class event.
-        /// </summary>
-        public UnityObjectEvent OnGripHairlineEnd = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the GripClicked class event.
-        /// </summary>
-        public UnityObjectEvent OnGripClicked = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the GripUnclicked class event.
-        /// </summary>
-        public UnityObjectEvent OnGripUnclicked = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the GripAxisChanged class event.
-        /// </summary>
-        public UnityObjectEvent OnGripAxisChanged = new UnityObjectEvent();
+        public ControllerInteractionEvent OnTouchpadPressed = new ControllerInteractionEvent();
+        public ControllerInteractionEvent OnTouchpadReleased = new ControllerInteractionEvent();
+        public ControllerInteractionEvent OnTouchpadTouchStart = new ControllerInteractionEvent();
+        public ControllerInteractionEvent OnTouchpadTouchEnd = new ControllerInteractionEvent();
+        public ControllerInteractionEvent OnTouchpadAxisChanged = new ControllerInteractionEvent();
 
-        /// <summary>
-        /// Emits the TouchpadPressed class event.
-        /// </summary>
-        public UnityObjectEvent OnTouchpadPressed = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the TouchpadReleased class event.
-        /// </summary>
-        public UnityObjectEvent OnTouchpadReleased = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the TouchpadTouchStart class event.
-        /// </summary>
-        public UnityObjectEvent OnTouchpadTouchStart = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the TouchpadTouchEnd class event.
-        /// </summary>
-        public UnityObjectEvent OnTouchpadTouchEnd = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the TouchpadAxisChanged class event.
-        /// </summary>
-        public UnityObjectEvent OnTouchpadAxisChanged = new UnityObjectEvent();
+        public ControllerInteractionEvent OnButtonOnePressed = new ControllerInteractionEvent();
+        public ControllerInteractionEvent OnButtonOneReleased = new ControllerInteractionEvent();
+        public ControllerInteractionEvent OnButtonOneTouchStart = new ControllerInteractionEvent();
+        public ControllerInteractionEvent OnButtonOneTouchEnd = new ControllerInteractionEvent();
 
-        /// <summary>
-        /// Emits the ButtonOnePressed class event.
-        /// </summary>
-        public UnityObjectEvent OnButtonOnePressed = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the ButtonOneReleased class event.
-        /// </summary>
-        public UnityObjectEvent OnButtonOneReleased = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the ButtonOneTouchStart class event.
-        /// </summary>
-        public UnityObjectEvent OnButtonOneTouchStart = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the ButtonOneTouchEnd class event.
-        /// </summary>
-        public UnityObjectEvent OnButtonOneTouchEnd = new UnityObjectEvent();
+        public ControllerInteractionEvent OnButtonTwoPressed = new ControllerInteractionEvent();
+        public ControllerInteractionEvent OnButtonTwoReleased = new ControllerInteractionEvent();
+        public ControllerInteractionEvent OnButtonTwoTouchStart = new ControllerInteractionEvent();
+        public ControllerInteractionEvent OnButtonTwoTouchEnd = new ControllerInteractionEvent();
 
-        /// <summary>
-        /// Emits the ButtonTwoPressed class event.
-        /// </summary>
-        public UnityObjectEvent OnButtonTwoPressed = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the ButtonTwoReleased class event.
-        /// </summary>
-        public UnityObjectEvent OnButtonTwoReleased = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the ButtonTwoTouchStart class event.
-        /// </summary>
-        public UnityObjectEvent OnButtonTwoTouchStart = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the ButtonTwoTouchEnd class event.
-        /// </summary>
-        public UnityObjectEvent OnButtonTwoTouchEnd = new UnityObjectEvent();
+        public ControllerInteractionEvent OnStartMenuPressed = new ControllerInteractionEvent();
+        public ControllerInteractionEvent OnStartMenuReleased = new ControllerInteractionEvent();
 
-        /// <summary>
-        /// Emits the StartMenuPressed class event.
-        /// </summary>
-        public UnityObjectEvent OnStartMenuPressed = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the StartMenuReleased class event.
-        /// </summary>
-        public UnityObjectEvent OnStartMenuReleased = new UnityObjectEvent();
+        public ControllerInteractionEvent OnAliasPointerOn = new ControllerInteractionEvent();
+        public ControllerInteractionEvent OnAliasPointerOff = new ControllerInteractionEvent();
+        public ControllerInteractionEvent OnAliasPointerSet = new ControllerInteractionEvent();
+        public ControllerInteractionEvent OnAliasGrabOn = new ControllerInteractionEvent();
+        public ControllerInteractionEvent OnAliasGrabOff = new ControllerInteractionEvent();
+        public ControllerInteractionEvent OnAliasUseOn = new ControllerInteractionEvent();
+        public ControllerInteractionEvent OnAliasUseOff = new ControllerInteractionEvent();
+        public ControllerInteractionEvent OnAliasUIClickOn = new ControllerInteractionEvent();
+        public ControllerInteractionEvent OnAliasUIClickOff = new ControllerInteractionEvent();
+        public ControllerInteractionEvent OnAliasMenuOn = new ControllerInteractionEvent();
+        public ControllerInteractionEvent OnAliasMenuOff = new ControllerInteractionEvent();
 
-        /// <summary>
-        /// Emits the AliasPointerOn class event.
-        /// </summary>
-        public UnityObjectEvent OnAliasPointerOn = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the AliasPointerOff class event.
-        /// </summary>
-        public UnityObjectEvent OnAliasPointerOff = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the AliasPointerSet class event.
-        /// </summary>
-        public UnityObjectEvent OnAliasPointerSet = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the AliasGrabOn class event.
-        /// </summary>
-        public UnityObjectEvent OnAliasGrabOn = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the AliasGrabOff class event.
-        /// </summary>
-        public UnityObjectEvent OnAliasGrabOff = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the AliasUseOn class event.
-        /// </summary>
-        public UnityObjectEvent OnAliasUseOn = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the AliasUseOff class event.
-        /// </summary>
-        public UnityObjectEvent OnAliasUseOff = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the AliasMenuOn class event.
-        /// </summary>
-        public UnityObjectEvent OnAliasUIClickOn = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the AliasMenuOff class event.
-        /// </summary>
-        public UnityObjectEvent OnAliasUIClickOff = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the AliasUIClickOn class event.
-        /// </summary>
-        public UnityObjectEvent OnAliasMenuOn = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the AliasUIClickOff class event.
-        /// </summary>
-        public UnityObjectEvent OnAliasMenuOff = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the ControllerEnabled class event.
-        /// </summary>
-        public UnityObjectEvent OnControllerEnabled = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the ControllerDisabled class event.
-        /// </summary>
-        public UnityObjectEvent OnControllerDisabled = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the ControllerIndexChanged class event.
-        /// </summary>
-        public UnityObjectEvent OnControllerIndexChanged = new UnityObjectEvent();
+        public ControllerInteractionEvent OnControllerEnabled = new ControllerInteractionEvent();
+        public ControllerInteractionEvent OnControllerDisabled = new ControllerInteractionEvent();
+        public ControllerInteractionEvent OnControllerIndexChanged = new ControllerInteractionEvent();
 
-        private void SetControllerEvents()
+        public ControllerInteractionEvent OnControllerVisible = new ControllerInteractionEvent();
+        public ControllerInteractionEvent OnControllerHidden = new ControllerInteractionEvent();
+
+        protected override void AddListeners(VRTK_ControllerEvents component)
         {
-            if (ce == null)
-            {
-                ce = GetComponent<VRTK_ControllerEvents>();
-            }
+            component.TriggerPressed += TriggerPressed;
+            component.TriggerReleased += TriggerReleased;
+            component.TriggerTouchStart += TriggerTouchStart;
+            component.TriggerTouchEnd += TriggerTouchEnd;
+            component.TriggerHairlineStart += TriggerHairlineStart;
+            component.TriggerHairlineEnd += TriggerHairlineEnd;
+            component.TriggerClicked += TriggerClicked;
+            component.TriggerUnclicked += TriggerUnclicked;
+            component.TriggerAxisChanged += TriggerAxisChanged;
+
+            component.GripPressed += GripPressed;
+            component.GripReleased += GripReleased;
+            component.GripTouchStart += GripTouchStart;
+            component.GripTouchEnd += GripTouchEnd;
+            component.GripHairlineStart += GripHairlineStart;
+            component.GripHairlineEnd += GripHairlineEnd;
+            component.GripClicked += GripClicked;
+            component.GripUnclicked += GripUnclicked;
+            component.GripAxisChanged += GripAxisChanged;
+
+            component.TouchpadPressed += TouchpadPressed;
+            component.TouchpadReleased += TouchpadReleased;
+            component.TouchpadTouchStart += TouchpadTouchStart;
+            component.TouchpadTouchEnd += TouchpadTouchEnd;
+            component.TouchpadAxisChanged += TouchpadAxisChanged;
+
+            component.ButtonOnePressed += ButtonOnePressed;
+            component.ButtonOneReleased += ButtonOneReleased;
+            component.ButtonOneTouchStart += ButtonOneTouchStart;
+            component.ButtonOneTouchEnd += ButtonOneTouchEnd;
+
+            component.ButtonTwoPressed += ButtonTwoPressed;
+            component.ButtonTwoReleased += ButtonTwoReleased;
+            component.ButtonTwoTouchStart += ButtonTwoTouchStart;
+            component.ButtonTwoTouchEnd += ButtonTwoTouchEnd;
+
+            component.StartMenuPressed += StartMenuPressed;
+            component.StartMenuReleased += StartMenuReleased;
+
+#pragma warning disable 0618
+            component.AliasPointerOn += AliasPointerOn;
+            component.AliasPointerOff += AliasPointerOff;
+            component.AliasPointerSet += AliasPointerSet;
+            component.AliasGrabOn += AliasGrabOn;
+            component.AliasGrabOff += AliasGrabOff;
+            component.AliasUseOn += AliasUseOn;
+            component.AliasUseOff += AliasUseOff;
+            component.AliasUIClickOn += AliasUIClickOn;
+            component.AliasUIClickOff += AliasUIClickOff;
+            component.AliasMenuOn += AliasMenuOn;
+            component.AliasMenuOff += AliasMenuOff;
+#pragma warning restore 0618
+
+            component.ControllerEnabled += ControllerEnabled;
+            component.ControllerDisabled += ControllerDisabled;
+            component.ControllerIndexChanged += ControllerIndexChanged;
+
+            component.ControllerVisible += ControllerVisible;
+            component.ControllerHidden += ControllerHidden;
         }
 
-        private void OnEnable()
+        protected override void RemoveListeners(VRTK_ControllerEvents component)
         {
-            SetControllerEvents();
-            if (ce == null)
-            {
-                Debug.LogError("The VRTK_ControllerEvents_UnityEvents script requires to be attached to a GameObject that contains a VRTK_ControllerEvents script");
-                return;
-            }
+            component.TriggerPressed -= TriggerPressed;
+            component.TriggerReleased -= TriggerReleased;
+            component.TriggerTouchStart -= TriggerTouchStart;
+            component.TriggerTouchEnd -= TriggerTouchEnd;
+            component.TriggerHairlineStart -= TriggerHairlineStart;
+            component.TriggerHairlineEnd -= TriggerHairlineEnd;
+            component.TriggerClicked -= TriggerClicked;
+            component.TriggerUnclicked -= TriggerUnclicked;
+            component.TriggerAxisChanged -= TriggerAxisChanged;
 
-            ce.TriggerPressed += TriggerPressed;
-            ce.TriggerReleased += TriggerReleased;
-            ce.TriggerTouchStart += TriggerTouchStart;
-            ce.TriggerTouchEnd += TriggerTouchEnd;
-            ce.TriggerHairlineStart += TriggerHairlineStart;
-            ce.TriggerHairlineEnd += TriggerHairlineEnd;
-            ce.TriggerClicked += TriggerClicked;
-            ce.TriggerUnclicked += TriggerUnclicked;
-            ce.TriggerAxisChanged += TriggerAxisChanged;
+            component.GripPressed -= GripPressed;
+            component.GripReleased -= GripReleased;
+            component.GripTouchStart -= GripTouchStart;
+            component.GripTouchEnd -= GripTouchEnd;
+            component.GripHairlineStart -= GripHairlineStart;
+            component.GripHairlineEnd -= GripHairlineEnd;
+            component.GripClicked -= GripClicked;
+            component.GripUnclicked -= GripUnclicked;
+            component.GripAxisChanged -= GripAxisChanged;
 
-            ce.GripPressed += GripPressed;
-            ce.GripReleased += GripReleased;
-            ce.GripTouchStart += GripTouchStart;
-            ce.GripTouchEnd += GripTouchEnd;
-            ce.GripHairlineStart += GripHairlineStart;
-            ce.GripHairlineEnd += GripHairlineEnd;
-            ce.GripClicked += GripClicked;
-            ce.GripUnclicked += GripUnclicked;
-            ce.GripAxisChanged += GripAxisChanged;
+            component.TouchpadPressed -= TouchpadPressed;
+            component.TouchpadReleased -= TouchpadReleased;
+            component.TouchpadTouchStart -= TouchpadTouchStart;
+            component.TouchpadTouchEnd -= TouchpadTouchEnd;
+            component.TouchpadAxisChanged -= TouchpadAxisChanged;
 
-            ce.TouchpadPressed += TouchpadPressed;
-            ce.TouchpadReleased += TouchpadReleased;
-            ce.TouchpadTouchStart += TouchpadTouchStart;
-            ce.TouchpadTouchEnd += TouchpadTouchEnd;
-            ce.TouchpadAxisChanged += TouchpadAxisChanged;
+            component.ButtonOnePressed -= ButtonOnePressed;
+            component.ButtonOneReleased -= ButtonOneReleased;
+            component.ButtonOneTouchStart -= ButtonOneTouchStart;
+            component.ButtonOneTouchEnd -= ButtonOneTouchEnd;
 
-            ce.ButtonOnePressed += ButtonOnePressed;
-            ce.ButtonOneReleased += ButtonOneReleased;
-            ce.ButtonOneTouchStart += ButtonOneTouchStart;
-            ce.ButtonOneTouchEnd += ButtonOneTouchEnd;
+            component.ButtonTwoPressed -= ButtonTwoPressed;
+            component.ButtonTwoReleased -= ButtonTwoReleased;
+            component.ButtonTwoTouchStart -= ButtonTwoTouchStart;
+            component.ButtonTwoTouchEnd -= ButtonTwoTouchEnd;
 
-            ce.ButtonTwoPressed += ButtonTwoPressed;
-            ce.ButtonTwoReleased += ButtonTwoReleased;
-            ce.ButtonTwoTouchStart += ButtonTwoTouchStart;
-            ce.ButtonTwoTouchEnd += ButtonTwoTouchEnd;
+            component.StartMenuPressed -= StartMenuPressed;
+            component.StartMenuReleased -= StartMenuReleased;
 
-            ce.StartMenuPressed += StartMenuPressed;
-            ce.StartMenuReleased += StartMenuReleased;
+#pragma warning disable 0618
+            component.AliasPointerOn -= AliasPointerOn;
+            component.AliasPointerOff -= AliasPointerOff;
+            component.AliasPointerSet -= AliasPointerSet;
+            component.AliasGrabOn -= AliasGrabOn;
+            component.AliasGrabOff -= AliasGrabOff;
+            component.AliasUseOn -= AliasUseOn;
+            component.AliasUseOff -= AliasUseOff;
+            component.AliasUIClickOn -= AliasUIClickOn;
+            component.AliasUIClickOff -= AliasUIClickOff;
+            component.AliasMenuOn -= AliasMenuOn;
+            component.AliasMenuOff -= AliasMenuOff;
+#pragma warning restore 0618
 
-            ce.AliasPointerOn += AliasPointerOn;
-            ce.AliasPointerOff += AliasPointerOff;
-            ce.AliasPointerSet += AliasPointerSet;
-            ce.AliasGrabOn += AliasGrabOn;
-            ce.AliasGrabOff += AliasGrabOff;
-            ce.AliasUseOn += AliasUseOn;
-            ce.AliasUseOff += AliasUseOff;
-            ce.AliasUIClickOn += AliasUIClickOn;
-            ce.AliasUIClickOff += AliasUIClickOff;
-            ce.AliasMenuOn += AliasMenuOn;
-            ce.AliasMenuOff += AliasMenuOff;
+            component.ControllerEnabled -= ControllerEnabled;
+            component.ControllerDisabled -= ControllerDisabled;
+            component.ControllerIndexChanged -= ControllerIndexChanged;
 
-            ce.ControllerEnabled += ControllerEnabled;
-            ce.ControllerDisabled += ControllerDisabled;
-            ce.ControllerIndexChanged += ControllerIndexChanged;
+            component.ControllerVisible -= ControllerVisible;
+            component.ControllerHidden -= ControllerHidden;
         }
 
         private void TriggerPressed(object o, ControllerInteractionEventArgs e)
@@ -514,67 +429,14 @@
             OnControllerIndexChanged.Invoke(o, e);
         }
 
-        private void OnDisable()
+        private void ControllerVisible(object o, ControllerInteractionEventArgs e)
         {
-            if (ce == null)
-            {
-                return;
-            }
+            OnControllerVisible.Invoke(o, e);
+        }
 
-            ce.TriggerPressed -= TriggerPressed;
-            ce.TriggerReleased -= TriggerReleased;
-            ce.TriggerTouchStart -= TriggerTouchStart;
-            ce.TriggerTouchEnd -= TriggerTouchEnd;
-            ce.TriggerHairlineStart -= TriggerHairlineStart;
-            ce.TriggerHairlineEnd -= TriggerHairlineEnd;
-            ce.TriggerClicked -= TriggerClicked;
-            ce.TriggerUnclicked -= TriggerUnclicked;
-            ce.TriggerAxisChanged -= TriggerAxisChanged;
-
-            ce.GripPressed -= GripPressed;
-            ce.GripReleased -= GripReleased;
-            ce.GripTouchStart -= GripTouchStart;
-            ce.GripTouchEnd -= GripTouchEnd;
-            ce.GripHairlineStart -= GripHairlineStart;
-            ce.GripHairlineEnd -= GripHairlineEnd;
-            ce.GripClicked -= GripClicked;
-            ce.GripUnclicked -= GripUnclicked;
-            ce.GripAxisChanged -= GripAxisChanged;
-
-            ce.TouchpadPressed -= TouchpadPressed;
-            ce.TouchpadReleased -= TouchpadReleased;
-            ce.TouchpadTouchStart -= TouchpadTouchStart;
-            ce.TouchpadTouchEnd -= TouchpadTouchEnd;
-            ce.TouchpadAxisChanged -= TouchpadAxisChanged;
-
-            ce.ButtonOnePressed -= ButtonOnePressed;
-            ce.ButtonOneReleased -= ButtonOneReleased;
-            ce.ButtonOneTouchStart -= ButtonOneTouchStart;
-            ce.ButtonOneTouchEnd -= ButtonOneTouchEnd;
-
-            ce.ButtonTwoPressed -= ButtonTwoPressed;
-            ce.ButtonTwoReleased -= ButtonTwoReleased;
-            ce.ButtonTwoTouchStart -= ButtonTwoTouchStart;
-            ce.ButtonTwoTouchEnd -= ButtonTwoTouchEnd;
-
-            ce.StartMenuPressed -= StartMenuPressed;
-            ce.StartMenuReleased -= StartMenuReleased;
-
-            ce.AliasPointerOn -= AliasPointerOn;
-            ce.AliasPointerOff -= AliasPointerOff;
-            ce.AliasPointerSet -= AliasPointerSet;
-            ce.AliasGrabOn -= AliasGrabOn;
-            ce.AliasGrabOff -= AliasGrabOff;
-            ce.AliasUseOn -= AliasUseOn;
-            ce.AliasUseOff -= AliasUseOff;
-            ce.AliasUIClickOn -= AliasUIClickOn;
-            ce.AliasUIClickOff -= AliasUIClickOff;
-            ce.AliasMenuOn -= AliasMenuOn;
-            ce.AliasMenuOff -= AliasMenuOff;
-
-            ce.ControllerEnabled -= ControllerEnabled;
-            ce.ControllerDisabled -= ControllerDisabled;
-            ce.ControllerIndexChanged -= ControllerIndexChanged;
+        private void ControllerHidden(object o, ControllerInteractionEventArgs e)
+        {
+            OnControllerHidden.Invoke(o, e);
         }
     }
 }

@@ -88,14 +88,12 @@ namespace VRTK
         protected VRTK_ControllerRigidbodyActivator autoTriggerVolume;
 
         protected float value;
-
-        private static Color COLOR_OK = Color.yellow;
-        private static Color COLOR_ERROR = new Color(1, 0, 0, 0.9f);
-        private const float MIN_OPENING_DISTANCE = 20f; // percentage how far open something needs to be in order to activate it
-
-        private ControlValueRange valueRange;
-        private GameObject controlContent;
-        private bool hideControlContent = false;
+        protected static Color COLOR_OK = Color.yellow;
+        protected static Color COLOR_ERROR = new Color(1, 0, 0, 0.9f);
+        protected const float MIN_OPENING_DISTANCE = 20f; // percentage how far open something needs to be in order to activate it
+        protected ControlValueRange valueRange;
+        protected GameObject controlContent;
+        protected bool hideControlContent = false;
 
         public virtual void OnValueChanged(Control3DEventArgs e)
         {
@@ -109,7 +107,7 @@ namespace VRTK
         /// The GetValue method returns the current value/position/setting of the control depending on the control that is extending this abstract class.
         /// </summary>
         /// <returns>The current value of the control.</returns>
-        public float GetValue()
+        public virtual float GetValue()
         {
             return value;
         }
@@ -118,7 +116,7 @@ namespace VRTK
         /// The GetNormalizedValue method returns the current value mapped onto a range between 0 and 100.
         /// </summary>
         /// <returns>The current normalized value of the control.</returns>
-        public float GetNormalizedValue()
+        public virtual float GetNormalizedValue()
         {
             return Mathf.Abs(Mathf.Round((value - valueRange.controlMin) / (valueRange.controlMax - valueRange.controlMin) * 100));
         }
@@ -128,7 +126,7 @@ namespace VRTK
         /// </summary>
         /// <param name="content">The content to be considered within the control.</param>
         /// <param name="hideContent">When true the content will be hidden in addition to being non-interactable in case the control is fully closed.</param>
-        public void SetContent(GameObject content, bool hideContent)
+        public virtual void SetContent(GameObject content, bool hideContent)
         {
             controlContent = content;
             hideControlContent = hideContent;
@@ -138,7 +136,7 @@ namespace VRTK
         /// The GetContent method returns the current game object of the control's content.
         /// </summary>
         /// <returns>The currently stored content for the control.</returns>
-        public GameObject GetContent()
+        public virtual GameObject GetContent()
         {
             return controlContent;
         }
@@ -181,10 +179,12 @@ namespace VRTK
                 {
                     HandleInteractables();
 
+#pragma warning disable 0618
                     /// <obsolete>
                     /// This is an obsolete call that will be removed in a future version
                     /// </obsolete>
                     defaultEvents.OnValueChanged.Invoke(GetValue(), GetNormalizedValue());
+#pragma warning restore 0618
 
                     OnValueChanged(SetControlEvent());
                 }
@@ -254,7 +254,7 @@ namespace VRTK
             }
         }
 
-        private void HandleInteractables()
+        protected virtual void HandleInteractables()
         {
             if (controlContent == null)
             {

@@ -2,53 +2,36 @@
 {
     using UnityEngine;
     using UnityEngine.Events;
+    using System;
 
-    [RequireComponent(typeof(VRTK_HeadsetFade))]
-    public class VRTK_HeadsetFade_UnityEvents : MonoBehaviour
+    [AddComponentMenu("VRTK/Scripts/Utilities/Unity Events/VRTK_HeadsetFade_UnityEvents")]
+    public sealed class VRTK_HeadsetFade_UnityEvents : VRTK_UnityEvents<VRTK_HeadsetFade>
     {
-        private VRTK_HeadsetFade hf;
+        [Serializable]
+        public sealed class HeadsetFadeEvent : UnityEvent<object, HeadsetFadeEventArgs> { }
 
-        [System.Serializable]
-        public class UnityObjectEvent : UnityEvent<object, HeadsetFadeEventArgs> { };
+        public HeadsetFadeEvent OnHeadsetFadeStart = new HeadsetFadeEvent();
+        public HeadsetFadeEvent OnHeadsetFadeComplete = new HeadsetFadeEvent();
 
-        /// <summary>
-        /// Emits the HeadsetFadeStart class event.
-        /// </summary>
-        public UnityObjectEvent OnHeadsetFadeStart = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the HeadsetFadeComplete class event.
-        /// </summary>
-        public UnityObjectEvent OnHeadsetFadeComplete = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the HeadsetUnfadeStart class event.
-        /// </summary>
-        public UnityObjectEvent OnHeadsetUnfadeStart = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the HeadsetUnfadeComplete class event.
-        /// </summary>
-        public UnityObjectEvent OnHeadsetUnfadeComplete = new UnityObjectEvent();
+        public HeadsetFadeEvent OnHeadsetUnfadeStart = new HeadsetFadeEvent();
+        public HeadsetFadeEvent OnHeadsetUnfadeComplete = new HeadsetFadeEvent();
 
-        private void SetHeadsetFade()
+        protected override void AddListeners(VRTK_HeadsetFade component)
         {
-            if (hf == null)
-            {
-                hf = GetComponent<VRTK_HeadsetFade>();
-            }
+            component.HeadsetFadeStart += HeadsetFadeStart;
+            component.HeadsetFadeComplete += HeadsetFadeComplete;
+
+            component.HeadsetUnfadeStart += HeadsetUnfadeStart;
+            component.HeadsetUnfadeComplete += HeadsetUnfadeComplete;
         }
 
-        private void OnEnable()
+        protected override void RemoveListeners(VRTK_HeadsetFade component)
         {
-            SetHeadsetFade();
-            if (hf == null)
-            {
-                Debug.LogError("The VRTK_HeadsetFade_UnityEvents script requires to be attached to a GameObject that contains a VRTK_HeadsetFade script");
-                return;
-            }
+            component.HeadsetFadeStart -= HeadsetFadeStart;
+            component.HeadsetFadeComplete -= HeadsetFadeComplete;
 
-            hf.HeadsetFadeStart += HeadsetFadeStart;
-            hf.HeadsetFadeComplete += HeadsetFadeComplete;
-            hf.HeadsetUnfadeStart += HeadsetUnfadeStart;
-            hf.HeadsetUnfadeComplete += HeadsetUnfadeComplete;
+            component.HeadsetUnfadeStart -= HeadsetUnfadeStart;
+            component.HeadsetUnfadeComplete -= HeadsetUnfadeComplete;
         }
 
         private void HeadsetFadeStart(object o, HeadsetFadeEventArgs e)
@@ -69,19 +52,6 @@
         private void HeadsetUnfadeComplete(object o, HeadsetFadeEventArgs e)
         {
             OnHeadsetUnfadeComplete.Invoke(o, e);
-        }
-
-        private void OnDisable()
-        {
-            if (hf == null)
-            {
-                return;
-            }
-
-            hf.HeadsetFadeStart -= HeadsetFadeStart;
-            hf.HeadsetFadeComplete -= HeadsetFadeComplete;
-            hf.HeadsetUnfadeStart -= HeadsetUnfadeStart;
-            hf.HeadsetUnfadeComplete -= HeadsetUnfadeComplete;
         }
     }
 }

@@ -1,21 +1,29 @@
-﻿// SteamVR Controller|SDK_SteamVR|003
+﻿// SteamVR Controller|SDK_SteamVR|004
 namespace VRTK
 {
-#if VRTK_SDK_STEAMVR
+#if VRTK_DEFINE_SDK_STEAMVR
     using UnityEngine;
-    using System;
     using System.Collections.Generic;
-    using System.Reflection;
     using Valve.VR;
     using System.Collections;
+#endif
 
     /// <summary>
     /// The SteamVR Controller SDK script provides a bridge to SDK methods that deal with the input devices.
     /// </summary>
-    public class SDK_SteamVRController : SDK_BaseController
+    [SDK_Description(typeof(SDK_SteamVRSystem))]
+    public class SDK_SteamVRController
+#if VRTK_DEFINE_SDK_STEAMVR
+        : SDK_BaseController
+#else
+        : SDK_FallbackController
+#endif
     {
+#if VRTK_DEFINE_SDK_STEAMVR
         private SteamVR_TrackedObject cachedLeftTrackedObject;
         private SteamVR_TrackedObject cachedRightTrackedObject;
+        private Dictionary<GameObject, SteamVR_TrackedObject> cachedTrackedObjectsByGameObject = new Dictionary<GameObject, SteamVR_TrackedObject>();
+        private Dictionary<uint, SteamVR_TrackedObject> cachedTrackedObjectsByIndex = new Dictionary<uint, SteamVR_TrackedObject>();
         private ushort maxHapticVibration = 3999;
         private static int hapticsBufferSize = 8192;
 
@@ -25,6 +33,15 @@ namespace VRTK
         /// <param name="index">The index of the controller.</param>
         /// <param name="options">A dictionary of generic options that can be used to within the update.</param>
         public override void ProcessUpdate(uint index, Dictionary<string, object> options)
+        {
+        }
+
+        /// <summary>
+        /// The ProcessFixedUpdate method enables an SDK to run logic for every Unity FixedUpdate
+        /// </summary>
+        /// <param name="index">The index of the controller.</param>
+        /// <param name="options">A dictionary of generic options that can be used to within the fixed update.</param>
+        public override void ProcessFixedUpdate(uint index, Dictionary<string, object> options)
         {
         }
 
@@ -100,7 +117,7 @@ namespace VRTK
         /// </summary>
         /// <param name="index">The index of the controller to find.</param>
         /// <param name="actual">If true it will return the actual controller, if false it will return the script alias controller GameObject.</param>
-        /// <returns></returns>
+        /// <returns>The GameObject of the controller</returns>
         public override GameObject GetControllerByIndex(uint index, bool actual = false)
         {
             SetTrackedControllerCaches();
@@ -117,6 +134,12 @@ namespace VRTK
                     return (actual ? sdkManager.actualRightController : sdkManager.scriptAliasRightController);
                 }
             }
+
+            if (cachedTrackedObjectsByIndex.ContainsKey(index) && cachedTrackedObjectsByIndex[index] != null)
+            {
+                return cachedTrackedObjectsByIndex[index].gameObject;
+            }
+
             return null;
         }
 
@@ -169,7 +192,7 @@ namespace VRTK
             var controller = GetSDKManagerControllerLeftHand(actual);
             if (!controller && actual)
             {
-                controller = GameObject.Find("[CameraRig]/Controller (left)");
+                controller = VRTK_SharedMethods.FindEvenInactiveGameObject<SteamVR_ControllerManager>("Controller (left)");
             }
             return controller;
         }
@@ -184,7 +207,7 @@ namespace VRTK
             var controller = GetSDKManagerControllerRightHand(actual);
             if (!controller && actual)
             {
-                controller = GameObject.Find("[CameraRig]/Controller (right)");
+                controller = VRTK_SharedMethods.FindEvenInactiveGameObject<SteamVR_ControllerManager>("Controller (right)");
             }
             return controller;
         }
@@ -251,14 +274,20 @@ namespace VRTK
             var model = GetSDKManagerControllerModelForHand(hand);
             if (!model)
             {
+                GameObject controller = null;
                 switch (hand)
                 {
                     case ControllerHand.Left:
-                        model = GameObject.Find("[CameraRig]/Controller (left)/Model");
+                        controller = GetControllerLeftHand(true);
                         break;
                     case ControllerHand.Right:
-                        model = GameObject.Find("[CameraRig]/Controller (right)/Model");
+                        controller = GetControllerRightHand(true);
                         break;
+                }
+
+                if (controller != null)
+                {
+                    model = controller.transform.Find("Model").gameObject;
                 }
             }
             return model;
@@ -856,34 +885,13 @@ namespace VRTK
 
         private void Awake()
         {
-            Assembly executingAssembly = Assembly.GetExecutingAssembly();
-            Type eventClass = executingAssembly.GetType("SteamVR_Utils").GetNestedType("Event");
-            MethodInfo targetMethod = typeof(SDK_SteamVRController).GetMethod("OnTrackedDeviceRoleChanged", BindingFlags.NonPublic | BindingFlags.Instance);
-
-            if (eventClass == null)
-            {
-                //SteamVR plugin >= 1.2.0
-                eventClass = executingAssembly.GetType("SteamVR_Events");
-                MethodInfo systemMethod = eventClass.GetMethod("System", BindingFlags.Public | BindingFlags.Static);
-                object steamVREventInstance = systemMethod.Invoke(null, new object[] { "TrackedDeviceRoleChanged" });
-                MethodInfo listenMethod = steamVREventInstance.GetType().GetMethod("Listen", BindingFlags.Public | BindingFlags.Instance);
-                Type listenMethodParameterType = listenMethod.GetParameters()[0].ParameterType;
-
-                targetMethod = targetMethod.MakeGenericMethod(listenMethodParameterType.GetGenericArguments()[0]);
-                var targetMethodDelegate = Delegate.CreateDelegate(listenMethodParameterType, this, targetMethod);
-                listenMethod.Invoke(steamVREventInstance, new object[] { targetMethodDelegate });
-            }
-            else
-            {
-                //SteamVR plugin < 1.2.0
-                MethodInfo listenMethod = eventClass.GetMethod("Listen", BindingFlags.Public | BindingFlags.Static);
-                Type listenMethodParameterType = listenMethod.GetParameters()[1].ParameterType;
-
-                targetMethod = targetMethod.MakeGenericMethod(listenMethodParameterType.GetMethod("Invoke").GetParameters()[0].ParameterType);
-                Delegate targetMethodDelegate = Delegate.CreateDelegate(listenMethodParameterType, this, targetMethod);
-                listenMethod.Invoke(null, new object[] { "TrackedDeviceRoleChanged", targetMethodDelegate });
-            }
-
+#if VRTK_DEFINE_STEAMVR_PLUGIN_1_1_1_OR_OLDER
+            SteamVR_Utils.Event.Listen("TrackedDeviceRoleChanged", OnTrackedDeviceRoleChanged);
+#elif VRTK_DEFINE_STEAMVR_PLUGIN_1_2_0
+            SteamVR_Events.System("TrackedDeviceRoleChanged").Listen(OnTrackedDeviceRoleChanged);
+#elif VRTK_DEFINE_STEAMVR_PLUGIN_1_2_1_OR_NEWER
+            SteamVR_Events.System(EVREventType.VREvent_TrackedDeviceRoleChanged).Listen(OnTrackedDeviceRoleChanged);
+#endif
             SetTrackedControllerCaches(true);
         }
 
@@ -898,6 +906,8 @@ namespace VRTK
             {
                 cachedLeftTrackedObject = null;
                 cachedRightTrackedObject = null;
+                cachedTrackedObjectsByGameObject.Clear();
+                cachedTrackedObjectsByIndex.Clear();
             }
 
             var sdkManager = VRTK_SDKManager.instance;
@@ -917,17 +927,30 @@ namespace VRTK
         private SteamVR_TrackedObject GetTrackedObject(GameObject controller)
         {
             SetTrackedControllerCaches();
-            SteamVR_TrackedObject trackedObject = null;
 
             if (IsControllerLeftHand(controller))
             {
-                trackedObject = cachedLeftTrackedObject;
+                return cachedLeftTrackedObject;
             }
             else if (IsControllerRightHand(controller))
             {
-                trackedObject = cachedRightTrackedObject;
+                return cachedRightTrackedObject;
             }
-            return trackedObject;
+
+            if (cachedTrackedObjectsByGameObject.ContainsKey(controller) && cachedTrackedObjectsByGameObject[controller] != null)
+            {
+                return cachedTrackedObjectsByGameObject[controller];
+            }
+            else
+            {
+                var trackedObject = controller.GetComponent<SteamVR_TrackedObject>();
+                if (trackedObject != null)
+                {
+                    cachedTrackedObjectsByGameObject.Add(controller, trackedObject);
+                    cachedTrackedObjectsByIndex.Add((uint)trackedObject.index, trackedObject);
+                }
+                return trackedObject;
+            }
         }
 
         private bool IsButtonPressed(uint index, ButtonPressTypes type, ulong button)
@@ -1028,10 +1051,6 @@ namespace VRTK
             }
             return null;
         }
-    }
-#else
-    public class SDK_SteamVRController : SDK_FallbackController
-    {
-    }
 #endif
+    }
 }

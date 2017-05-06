@@ -12,6 +12,7 @@ namespace VRTK
     /// <example>
     /// `VRTK/Examples/025_Controls_Overview` shows a chest that can be open and closed, it also displays the current opening angle of the chest.
     /// </example>
+    [AddComponentMenu("VRTK/Scripts/Controls/3D/VRTK_Chest")]
     public class VRTK_Chest : VRTK_Control
     {
         [Tooltip("The axis on which the chest should open. All other axis will be frozen.")]
@@ -29,16 +30,16 @@ namespace VRTK
         [Tooltip("The maximum opening angle of the chest.")]
         public float maxAngle = 160f;
 
-        private float minAngle = 0f;
-        private float stepSize = 1f;
-        private Rigidbody bodyRigidbody;
-        private Rigidbody handleRigidbody;
-        private FixedJoint handleJoint;
-        private Rigidbody lidRigidbody;
-        private HingeJoint lidJoint;
-        private bool lidJointCreated;
-        private Direction finalDirection;
-        private float subDirection = 1; // positive or negative can be determined automatically since handle dictates that
+        protected float minAngle = 0f;
+        protected float stepSize = 1f;
+        protected Rigidbody bodyRigidbody;
+        protected Rigidbody handleRigidbody;
+        protected FixedJoint handleJoint;
+        protected Rigidbody lidRigidbody;
+        protected HingeJoint lidJoint;
+        protected bool lidJointCreated;
+        protected Direction finalDirection;
+        protected float subDirection = 1; // positive or negative can be determined automatically since handle dictates that
 
         protected override void OnDrawGizmos()
         {
@@ -198,7 +199,7 @@ namespace VRTK
             value = CalculateValue();
         }
 
-        private Direction DetectDirection()
+        protected virtual Direction DetectDirection()
         {
             Direction returnDirection = Direction.autodetect;
 
@@ -235,7 +236,7 @@ namespace VRTK
             return returnDirection;
         }
 
-        private void InitBody()
+        protected virtual void InitBody()
         {
             bodyRigidbody = body.GetComponent<Rigidbody>();
             if (bodyRigidbody == null)
@@ -245,7 +246,7 @@ namespace VRTK
             }
         }
 
-        private void InitLid()
+        protected virtual void InitLid()
         {
             lidRigidbody = lid.GetComponent<Rigidbody>();
             if (lidRigidbody == null)
@@ -267,7 +268,7 @@ namespace VRTK
             }
         }
 
-        private void InitHandle()
+        protected virtual void InitHandle()
         {
             if (!handle)
             {
@@ -291,7 +292,7 @@ namespace VRTK
             CreateInteractableObject(handle);
         }
 
-        private void CreateInteractableObject(GameObject targetGameObject)
+        protected virtual void CreateInteractableObject(GameObject targetGameObject)
         {
             VRTK_InteractableObject targetInteractableObject = targetGameObject.GetComponent<VRTK_InteractableObject>();
             if (targetInteractableObject == null)
@@ -305,7 +306,7 @@ namespace VRTK
             targetInteractableObject.stayGrabbedOnTeleport = false;
         }
 
-        private float CalculateValue()
+        protected virtual float CalculateValue()
         {
             return (Mathf.Round((minAngle + Mathf.Clamp01(Mathf.Abs(lidJoint.angle / (lidJoint.limits.max - lidJoint.limits.min))) * (maxAngle - minAngle)) / stepSize) * stepSize);
         }

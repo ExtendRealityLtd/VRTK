@@ -8,7 +8,7 @@
 namespace VRTK
 {
     using UnityEngine;
-    public class VRTK_PlayerObject : MonoBehaviour
+    public sealed class VRTK_PlayerObject : MonoBehaviour
     {
         public enum ObjectTypes
         {
@@ -30,11 +30,12 @@ namespace VRTK
         /// <param name="objType">The type of player object that is to be assigned.</param>
         public static void SetPlayerObject(GameObject obj, ObjectTypes objType)
         {
-            if (!obj.GetComponent<VRTK_PlayerObject>())
+            var currentPlayerObject = obj.GetComponent<VRTK_PlayerObject>();
+            if (currentPlayerObject == null)
             {
-                var playerObject = obj.AddComponent<VRTK_PlayerObject>();
-                playerObject.objectType = objType;
+                currentPlayerObject = obj.AddComponent<VRTK_PlayerObject>();
             }
+            currentPlayerObject.objectType = objType;
         }
 
         /// <summary>

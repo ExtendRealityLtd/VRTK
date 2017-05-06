@@ -1,12 +1,10 @@
 ﻿// Simulator System|SDK_Simulator|001
 namespace VRTK
 {
-#if VRTK_SDK_SIM
-    using UnityEngine;
-
     /// <summary>
     /// The Sim System SDK script provides dummy functions for system functions.
     /// </summary>
+    [SDK_Description("Simulator", null)]
     public class SDK_SimSystem : SDK_BaseSystem
     {
         /// <summary>
@@ -36,9 +34,4 @@ namespace VRTK
 
         }
     }
-#else
-    public class SDK_SimSystem : SDK_FallbackSystem
-    {
-    }
-#endif
 }

@@ -13,13 +13,14 @@ namespace VRTK.Highlighters
     ///
     /// The Draw Call Batching will resume on the original material when the item is no longer highlighted.
     ///
-    /// This is the default highlighter that is applied to any script that requires a highlighting component (e.g. `VRTK_Interactable_Object` or `VRTK_ControllerActions`).
+    /// This is the default highlighter that is applied to any script that requires a highlighting component (e.g. `VRTK_Interactable_Object`).
     /// </remarks>
     /// <example>
     /// `VRTK/Examples/005_Controller_BasicObjectGrabbing` demonstrates the solid highlighting on the green cube, red cube and flying saucer when the controller touches it.
     ///
     /// `VRTK/Examples/035_Controller_OpacityAndHighlighting` demonstrates the solid highlighting if the right controller collides with the green box or if any of the buttons are pressed.
     /// </example>
+    [AddComponentMenu("VRTK/Scripts/Interactions/Highlighters/VRTK_MaterialColorSwapHighlighter")]
     public class VRTK_MaterialColorSwapHighlighter : VRTK_BaseHighlighter
     {
         [Tooltip("The emission colour of the texture will be the highlight colour but this percent darker.")]
@@ -27,8 +28,8 @@ namespace VRTK.Highlighters
         [Tooltip("A custom material to use on the highlighted object.")]
         public Material customMaterial;
 
-        private Dictionary<string, Material[]> originalSharedRendererMaterials = new Dictionary<string, Material[]>();
-        private Dictionary<string, Material[]> originalRendererMaterials = new Dictionary<string, Material[]>();
+        protected Dictionary<string, Material[]> originalSharedRendererMaterials = new Dictionary<string, Material[]>();
+        protected Dictionary<string, Material[]> originalRendererMaterials = new Dictionary<string, Material[]>();
         protected Dictionary<string, Coroutine> faderRoutines;
         protected bool resetMainTexture = false;
 
@@ -169,7 +170,7 @@ namespace VRTK.Highlighters
             }
         }
 
-        private IEnumerator CycleColor(Material material, Color startColor, Color endColor, float duration)
+        protected virtual IEnumerator CycleColor(Material material, Color startColor, Color endColor, float duration)
         {
             var elapsedTime = 0f;
             while (elapsedTime <= duration)

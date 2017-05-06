@@ -6,6 +6,7 @@ namespace VRTK
     /// <summary>
     /// The Interact Haptics script is attached on the same GameObject as an Interactable Object script and provides controller haptics on touch, grab and use of the object.
     /// </summary>
+    [AddComponentMenu("VRTK/Scripts/Interactions/VRTK_InteractHaptics")]
     public class VRTK_InteractHaptics : MonoBehaviour
     {
         [Header("Haptics On Touch")]
@@ -41,53 +42,53 @@ namespace VRTK
         [Tooltip("Denotes interval betweens rumble in the controller on use.")]
         public float intervalOnUse = minInterval;
 
-        private const float minInterval = 0.05f;
+        protected const float minInterval = 0.05f;
 
         /// <summary>
         /// The HapticsOnTouch method triggers the haptic feedback on the given controller for the settings associated with touch.
         /// </summary>
-        /// <param name="controllerActions">The controller to activate the haptic feedback on.</param>
-        public virtual void HapticsOnTouch(VRTK_ControllerActions controllerActions)
+        /// <param name="controllerIndex">The controller index to activate the haptic feedback on.</param>
+        public virtual void HapticsOnTouch(uint controllerIndex)
         {
             if (audioClipTouch && strengthOnTouch > 0)
             {
-                TriggerHapticAudio(controllerActions, audioClipTouch, strengthOnTouch);
+                TriggerHapticAudio(controllerIndex, audioClipTouch, strengthOnTouch);
             }
             else if (strengthOnTouch > 0 && durationOnTouch > 0f)
             {
-                TriggerHapticPulse(controllerActions, strengthOnTouch, durationOnTouch, intervalOnTouch);
+                TriggerHapticPulse(controllerIndex, strengthOnTouch, durationOnTouch, intervalOnTouch);
             }
         }
 
         /// <summary>
         /// The HapticsOnGrab method triggers the haptic feedback on the given controller for the settings associated with grab.
         /// </summary>
-        /// <param name="controllerActions">The controller to activate the haptic feedback on.</param>
-        public virtual void HapticsOnGrab(VRTK_ControllerActions controllerActions)
+        /// <param name="controllerIndex">The controller index to activate the haptic feedback on.</param>
+        public virtual void HapticsOnGrab(uint controllerIndex)
         {
             if (audioClipGrab && strengthOnGrab > 0)
             {
-                TriggerHapticAudio(controllerActions, audioClipGrab, strengthOnGrab);
+                TriggerHapticAudio(controllerIndex, audioClipGrab, strengthOnGrab);
             }
             else if (strengthOnGrab > 0 && durationOnGrab > 0f)
             {
-                TriggerHapticPulse(controllerActions, strengthOnGrab, durationOnGrab, intervalOnGrab);
+                TriggerHapticPulse(controllerIndex, strengthOnGrab, durationOnGrab, intervalOnGrab);
             }
         }
 
         /// <summary>
         /// The HapticsOnUse method triggers the haptic feedback on the given controller for the settings associated with use.
         /// </summary>
-        /// <param name="controllerActions">The controller to activate the haptic feedback on.</param>
-        public virtual void HapticsOnUse(VRTK_ControllerActions controllerActions)
+        /// <param name="controllerIndex">The controller index to activate the haptic feedback on.</param>
+        public virtual void HapticsOnUse(uint controllerIndex)
         {
             if (audioClipUse && strengthOnUse > 0)
             {
-                TriggerHapticAudio(controllerActions, audioClipUse, strengthOnUse);
+                TriggerHapticAudio(controllerIndex, audioClipUse, strengthOnUse);
             }
             else if (strengthOnUse > 0 && durationOnUse > 0f)
             {
-                TriggerHapticPulse(controllerActions, strengthOnUse, durationOnUse, intervalOnUse);
+                TriggerHapticPulse(controllerIndex, strengthOnUse, durationOnUse, intervalOnUse);
             }
         }
 
@@ -95,24 +96,18 @@ namespace VRTK
         {
             if (!GetComponent<VRTK_InteractableObject>())
             {
-                Debug.LogError("The `VRTK_InteractHaptics` script is required to be attached to a GameObject that has the `VRTK_InteractableObject` script also attached to it.");
+                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, "VRTK_InteractHaptics", "VRTK_InteractableObject", "the same"));
             }
         }
 
-        private void TriggerHapticPulse(VRTK_ControllerActions controllerActions, float strength, float duration, float interval)
+        protected virtual void TriggerHapticPulse(uint controllerIndex, float strength, float duration, float interval)
         {
-            if (controllerActions)
-            {
-                controllerActions.TriggerHapticPulse(strength, duration, (interval >= minInterval ? interval : minInterval));
-            }
+            VRTK_SharedMethods.TriggerHapticPulse(controllerIndex, strength, duration, (interval >= minInterval ? interval : minInterval));
         }
 
-        private void TriggerHapticAudio(VRTK_ControllerActions controllerActions, AudioClip clip, float strength)
+        private void TriggerHapticAudio(uint controllerIndex, AudioClip clip, float strength)
         {
-            if (controllerActions)
-            {
-                controllerActions.TriggerHapticAudio(clip, strength);
-            }
+            VRTK_SharedMethods.TriggerHapticAudio(controllerIndex, clip, strength);
         }
     }
 }

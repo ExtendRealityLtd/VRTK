@@ -59,6 +59,7 @@ namespace VRTK
     /// Pressing the trigger generates a new sphere and pressing the touchpad generates ten new spheres.
     /// Eventually when lots of spheres are present the FPS will drop and demonstrate the script.
     /// </example>
+    [AddComponentMenu("VRTK/Scripts/Utilities/VRTK_AdaptiveQuality")]
     public sealed class VRTK_AdaptiveQuality : MonoBehaviour
     {
         #region Public fields
@@ -123,7 +124,6 @@ namespace VRTK
         [Tooltip("The render viewport scale level to override the current one with.")]
         [NonSerialized]
         public int overrideRenderViewportScaleLevel;
-
         #endregion
 
         #region Public readonly fields & properties
@@ -482,6 +482,11 @@ namespace VRTK
 
         private void UpdateRenderScale()
         {
+            if (allRenderScales.Count == 0)
+            {
+                return;
+            }
+
             if (!scaleRenderViewport)
             {
                 renderViewportScaleSetting.currentValue = defaultRenderViewportScaleLevel;
@@ -682,10 +687,10 @@ namespace VRTK
 #endif
                 mesh.UploadMeshData(true);
 
-                debugVisualizationQuad = new GameObject("AdaptiveQualityDebugVisualizationQuad");
+                debugVisualizationQuad = new GameObject(VRTK_SharedMethods.GenerateVRTKObjectName(true, "AdaptiveQualityDebugVisualizationQuad"));
                 if (VRTK_SDKManager.instance)
                 {
-                    debugVisualizationQuad.transform.parent = VRTK_DeviceFinder.HeadsetTransform();
+                    debugVisualizationQuad.transform.SetParent(VRTK_DeviceFinder.HeadsetTransform());
                 }
                 debugVisualizationQuad.transform.localPosition = Vector3.forward;
                 debugVisualizationQuad.transform.localRotation = Quaternion.identity;
@@ -710,9 +715,7 @@ namespace VRTK
                 return;
             }
 
-            int lastFrameIsInBudget = interleavedReprojectionEnabled || VRStats.gpuTimeLastFrame > singleFrameDurationInMilliseconds
-                                      ? 0
-                                      : 1;
+            int lastFrameIsInBudget = (interleavedReprojectionEnabled || VRTK_SharedMethods.GetGPUTimeLastFrame() > singleFrameDurationInMilliseconds ? 0 : 1);
 
             debugVisualizationQuadMaterial.SetInt(ShaderPropertyIDs.RenderScaleLevelsCount, allRenderScales.Count);
             debugVisualizationQuadMaterial.SetInt(ShaderPropertyIDs.DefaultRenderViewportScaleLevel, defaultRenderViewportScaleLevel);
@@ -801,7 +804,7 @@ namespace VRTK
             public void SaveCurrentFrameTiming()
             {
                 bufferIndex = (bufferIndex + 1) % buffer.Length;
-                buffer[bufferIndex] = VRStats.gpuTimeLastFrame;
+                buffer[bufferIndex] = VRTK_SharedMethods.GetGPUTimeLastFrame();
             }
 
             public float GetFrameTiming(int framesAgo)

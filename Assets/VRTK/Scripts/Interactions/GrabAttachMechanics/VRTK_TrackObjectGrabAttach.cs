@@ -12,6 +12,7 @@ namespace VRTK.GrabAttachMechanics
     /// <example>
     /// `VRTK/Examples/021_Controller_GrabbingObjectsWithJoints` demonstrates this grab attach mechanic on the Chest handle and Fire Extinguisher body.
     /// </example>
+    [AddComponentMenu("VRTK/Scripts/Interactions/Grab Attach Mechanics/VRTK_TrackObjectGrabAttach")]
     public class VRTK_TrackObjectGrabAttach : VRTK_BaseGrabAttach
     {
         [Header("Track Options", order = 2)]
@@ -51,7 +52,7 @@ namespace VRTK.GrabAttachMechanics
             Transform trackPoint = null;
             if (precisionGrab)
             {
-                trackPoint = new GameObject(string.Format("[{0}]TrackObject_PrecisionSnap_AttachPoint", currentGrabbedObject.name)).transform;
+                trackPoint = new GameObject(VRTK_SharedMethods.GenerateVRTKObjectName(true, currentGrabbedObject.name, "TrackObject", "PrecisionSnap", "AttachPoint")).transform;
                 trackPoint.parent = currentGrabbingObject.transform;
                 SetTrackPointOrientation(ref trackPoint, currentGrabbedObject.transform, controllerPoint);
                 customTrackPoint = true;

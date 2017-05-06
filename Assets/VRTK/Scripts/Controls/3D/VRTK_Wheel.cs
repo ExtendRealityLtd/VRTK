@@ -13,6 +13,7 @@ namespace VRTK
     /// <example>
     /// `VRTK/Examples/025_Controls_Overview` has a collection of wheels that can be rotated by grabbing with the controller and then rotating the controller in the desired direction.
     /// </example>
+    [AddComponentMenu("VRTK/Scripts/Controls/3D/VRTK_Wheel")]
     public class VRTK_Wheel : VRTK_Control
     {
         public enum GrabTypes
@@ -48,13 +49,12 @@ namespace VRTK
         protected float angularVelocityLimit = 150f;
         protected float springStrengthValue = 150f;
         protected float springDamperValue = 5f;
-
-        private Quaternion initialLocalRotation;
-        private Rigidbody wheelRigidbody;
-        private HingeJoint wheelHinge;
-        private bool wheelHingeCreated = false;
-        private bool initialValueCalculated = false;
-        private float springAngle;
+        protected Quaternion initialLocalRotation;
+        protected Rigidbody wheelRigidbody;
+        protected HingeJoint wheelHinge;
+        protected bool wheelHingeCreated = false;
+        protected bool initialValueCalculated = false;
+        protected float springAngle;
 
         protected override void InitRequiredComponents()
         {
@@ -97,14 +97,14 @@ namespace VRTK
             }
         }
 
-        private void InitWheel()
+        protected virtual void InitWheel()
         {
             SetupRigidbody();
             SetupHinge();
             SetupInteractableObject();
         }
 
-        private void SetupRigidbody()
+        protected virtual void SetupRigidbody()
         {
             wheelRigidbody = GetComponent<Rigidbody>();
             if (wheelRigidbody == null)
@@ -127,7 +127,7 @@ namespace VRTK
             }
         }
 
-        private void SetupHinge()
+        protected virtual void SetupHinge()
         {
             wheelHinge = GetComponent<HingeJoint>();
             if (wheelHinge == null)
@@ -139,7 +139,7 @@ namespace VRTK
             SetupHingeRestrictions();
         }
 
-        private void SetupHingeRestrictions()
+        protected virtual void SetupHingeRestrictions()
         {
             var minJointLimit = 0f;
             var maxJointLimit = maxAngle;
@@ -177,7 +177,7 @@ namespace VRTK
             }
         }
 
-        private void ConfigureHingeSpring()
+        protected virtual void ConfigureHingeSpring()
         {
             JointSpring snapSpring = new JointSpring();
             snapSpring.spring = springStrengthValue;
@@ -186,7 +186,7 @@ namespace VRTK
             wheelHinge.spring = snapSpring;
         }
 
-        private void SetupInteractableObject()
+        protected virtual void SetupInteractableObject()
         {
             VRTK_InteractableObject wheelInteractableObject = GetComponent<VRTK_InteractableObject>();
             if (wheelInteractableObject == null)
@@ -223,13 +223,13 @@ namespace VRTK
             wheelInteractableObject.InteractableObjectUngrabbed += WheelInteractableObjectUngrabbed;
         }
 
-        private void WheelInteractableObjectGrabbed(object sender, InteractableObjectEventArgs e)
+        protected virtual void WheelInteractableObjectGrabbed(object sender, InteractableObjectEventArgs e)
         {
             wheelRigidbody.angularDrag = grabbedFriction;
             wheelHinge.useSpring = false;
         }
 
-        private void WheelInteractableObjectUngrabbed(object sender, InteractableObjectEventArgs e)
+        protected virtual void WheelInteractableObjectUngrabbed(object sender, InteractableObjectEventArgs e)
         {
             wheelRigidbody.angularDrag = releasedFriction;
             if (snapToStep)
@@ -239,7 +239,7 @@ namespace VRTK
             }
         }
 
-        private void CalculateValue()
+        protected virtual void CalculateValue()
         {
             ControlValueRange controlValueRange = RegisterValueRange();
             float angle;

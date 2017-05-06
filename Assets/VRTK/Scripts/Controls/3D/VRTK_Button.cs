@@ -21,6 +21,7 @@ namespace VRTK
     /// <example>
     /// `VRTK/Examples/025_Controls_Overview` shows a collection of pressable buttons that are interacted with by activating the rigidbody on the controller by pressing the grab button without grabbing an object.
     /// </example>
+    [AddComponentMenu("VRTK/Scripts/Controls/3D/VRTK_Button")]
     public class VRTK_Button : VRTK_Control
     {
 
@@ -28,9 +29,6 @@ namespace VRTK
         [Obsolete("`VRTK_Control.ButtonEvents` has been replaced with delegate events. `VRTK_Button_UnityEvents` is now required to access Unity events. This method will be removed in a future version of VRTK.")]
         public class ButtonEvents
         {
-            /// <summary>
-            /// Emitted when the button is successfully pushed.
-            /// </summary>
             public UnityEvent OnPush;
         }
 
@@ -73,14 +71,14 @@ namespace VRTK
         /// </summary>
         public event Button3DEventHandler Pushed;
 
-        private const float MAX_AUTODETECT_ACTIVATION_LENGTH = 4f; // full hight of button
-        private ButtonDirection finalDirection;
-        private Vector3 restingPosition;
-        private Vector3 activationDir;
-        private Rigidbody buttonRigidbody;
-        private ConfigurableJoint buttonJoint;
-        private ConstantForce buttonForce;
-        private int forceCount = 0;
+        protected const float MAX_AUTODETECT_ACTIVATION_LENGTH = 4f; // full hight of button
+        protected ButtonDirection finalDirection;
+        protected Vector3 restingPosition;
+        protected Vector3 activationDir;
+        protected Rigidbody buttonRigidbody;
+        protected ConfigurableJoint buttonJoint;
+        protected ConstantForce buttonForce;
+        protected int forceCount = 0;
 
         public virtual void OnPushed(Control3DEventArgs e)
         {
@@ -271,10 +269,12 @@ namespace VRTK
                 {
                     value = 1;
 
+#pragma warning disable 0618
                     /// <obsolete>
                     /// This is an obsolete call that will be removed in a future version
                     /// </obsolete>
                     events.OnPush.Invoke();
+#pragma warning restore 0618
 
                     OnPushed(SetControlEvent());
                 }
@@ -305,7 +305,7 @@ namespace VRTK
             forceCount += 1;
         }
 
-        private ButtonDirection DetectDirection()
+        protected virtual ButtonDirection DetectDirection()
         {
             ButtonDirection returnDirection = ButtonDirection.autodetect;
             Bounds bounds = VRTK_SharedMethods.GetBounds(transform);
@@ -388,7 +388,7 @@ namespace VRTK
             return returnDirection;
         }
 
-        private Vector3 CalculateActivationDir()
+        protected virtual Vector3 CalculateActivationDir()
         {
             Bounds bounds = VRTK_SharedMethods.GetBounds(transform, transform);
 
@@ -459,12 +459,12 @@ namespace VRTK
             return (buttonDirection * (extents + activationDistance));
         }
 
-        private bool ReachedActivationDistance()
+        protected virtual bool ReachedActivationDistance()
         {
             return (Vector3.Distance(transform.position, restingPosition) >= activationDistance);
         }
 
-        private Vector3 GetForceVector()
+        protected virtual Vector3 GetForceVector()
         {
             return (-activationDir.normalized * buttonStrength);
         }

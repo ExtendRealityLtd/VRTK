@@ -23,10 +23,13 @@ namespace VRTK
     /// <example>
     /// `VRTK/Examples/004_CameraRig_BasicTeleport` uses the `VRTK_SimplePointer` script on the Controllers to initiate a laser pointer by pressing the `Touchpad` on the controller and when the laser pointer is deactivated (release the `Touchpad`) then the user is teleported to the location of the laser pointer tip as this is where the pointer destination marker position is set to.
     /// </example>
+    [AddComponentMenu("VRTK/Scripts/Locomotion/VRTK_BasicTeleport")]
     public class VRTK_BasicTeleport : MonoBehaviour
     {
-        [Header("Base Options")]
+        [Header("Base Settings")]
 
+        [Tooltip("The colour to fade to when blinking on teleport.")]
+        public Color blinkToColor = Color.black;
         [Tooltip("The fade blink speed can be changed on the basic teleport script to provide a customised teleport experience. Setting the speed to 0 will mean no fade blink effect is present.")]
         public float blinkTransitionSpeed = 0.6f;
         [Tooltip("A range between 0 and 32 that determines how long the blink transition will stay blacked out depending on the distance being teleported. A value of 0 will not delay the teleport blink effect over any distance, a value of 32 will delay the teleport blink fade in even when the distance teleported is very close to the original position. This can be used to simulate time taking longer to pass the further a user teleports. A value of 16 provides a decent basis to simulate this to the user.")]
@@ -53,11 +56,11 @@ namespace VRTK
         protected bool adjustYForTerrain = false;
         protected bool enableTeleport = true;
 
-        private float blinkPause = 0f;
-        private float fadeInTime = 0f;
-        private float maxBlinkTransitionSpeed = 1.5f;
-        private float maxBlinkDistance = 33f;
-        private Coroutine initaliseListeners;
+        protected float blinkPause = 0f;
+        protected float fadeInTime = 0f;
+        protected float maxBlinkTransitionSpeed = 1.5f;
+        protected float maxBlinkDistance = 33f;
+        protected Coroutine initaliseListeners;
 
         /// <summary>
         /// The InitDestinationSetListener method is used to register the teleport script to listen to events from the given game object that is used to generate destination markers. Any destination set event emitted by a registered game object will initiate the teleport to the given destination location.
@@ -68,8 +71,10 @@ namespace VRTK
         {
             if (markerMaker)
             {
-                foreach (var worldMarker in markerMaker.GetComponentsInChildren<VRTK_DestinationMarker>())
+                VRTK_DestinationMarker[] worldMarkers = markerMaker.GetComponentsInChildren<VRTK_DestinationMarker>();
+                for (int i = 0; i < worldMarkers.Length; i++)
                 {
+                    VRTK_DestinationMarker worldMarker = worldMarkers[i];
                     if (register)
                     {
                         worldMarker.DestinationMarkerSet += new DestinationMarkerEventHandler(DoTeleport);
@@ -122,15 +127,12 @@ namespace VRTK
             return (validNavMeshLocation && target && !(VRTK_PolicyList.Check(target.gameObject, targetListPolicy)));
         }
 
-        protected virtual void Awake()
+        protected virtual void OnEnable()
         {
             VRTK_PlayerObject.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.CameraRig);
             headset = VRTK_SharedMethods.AddCameraFade();
             playArea = VRTK_DeviceFinder.PlayAreaTransform();
-        }
 
-        protected virtual void OnEnable()
-        {
             adjustYForTerrain = false;
             enableTeleport = true;
             initaliseListeners = StartCoroutine(InitListenersAtEndOfFrame());
@@ -152,7 +154,7 @@ namespace VRTK
             fadeInTime = transitionSpeed;
             if (transitionSpeed > 0f)
             {
-                VRTK_SDK_Bridge.HeadsetFade(Color.black, 0);
+                VRTK_SDK_Bridge.HeadsetFade(blinkToColor, 0);
             }
             Invoke("ReleaseBlink", blinkPause);
         }
@@ -161,18 +163,44 @@ namespace VRTK
         {
             if (enableTeleport && ValidLocation(e.target, e.destinationPosition) && e.enableTeleport)
             {
-                OnTeleporting(sender, e);
+                StartTeleport(sender, e);
                 Vector3 newPosition = GetNewPosition(e.destinationPosition, e.target, e.forceDestinationPosition);
                 CalculateBlinkDelay(blinkTransitionSpeed, newPosition);
                 Blink(blinkTransitionSpeed);
-                SetNewPosition(newPosition, e.target, e.forceDestinationPosition);
-                OnTeleported(sender, e);
+                Vector3 updatedPosition = SetNewPosition(newPosition, e.target, e.forceDestinationPosition);
+                Quaternion updatedRotation = SetNewRotation(e.destinationRotation);
+                ProcessOrientation(sender, e, updatedPosition, updatedRotation);
+                EndTeleport(sender, e);
             }
         }
 
-        protected virtual void SetNewPosition(Vector3 position, Transform target, bool forceDestinationPosition)
+        protected virtual void StartTeleport(object sender, DestinationMarkerEventArgs e)
+        {
+            OnTeleporting(sender, e);
+        }
+
+        protected virtual void ProcessOrientation(object sender, DestinationMarkerEventArgs e, Vector3 updatedPosition, Quaternion updatedRotation)
+        {
+        }
+
+        protected virtual void EndTeleport(object sender, DestinationMarkerEventArgs e)
+        {
+            OnTeleported(sender, e);
+        }
+
+        protected virtual Vector3 SetNewPosition(Vector3 position, Transform target, bool forceDestinationPosition)
         {
             playArea.position = CheckTerrainCollision(position, target, forceDestinationPosition);
+            return playArea.position;
+        }
+
+        protected virtual Quaternion SetNewRotation(Quaternion? rotation)
+        {
+            if (rotation != null)
+            {
+                playArea.rotation = (Quaternion)rotation;
+            }
+            return playArea.rotation;
         }
 
         protected virtual Vector3 GetNewPosition(Vector3 tipPosition, Transform target, bool returnOriginalPosition)
@@ -191,16 +219,17 @@ namespace VRTK
 
         protected virtual Vector3 CheckTerrainCollision(Vector3 position, Transform target, bool useHeadsetForPosition)
         {
-            if (adjustYForTerrain && target.GetComponent<Terrain>())
+            Terrain targetTerrain = target.GetComponent<Terrain>();
+            if (adjustYForTerrain && targetTerrain != null)
             {
-                var checkPosition = (useHeadsetForPosition ? new Vector3(headset.position.x, position.y, headset.position.z) : position);
-                var terrainHeight = Terrain.activeTerrain.SampleHeight(checkPosition);
-                position.y = (terrainHeight > position.y ? position.y : terrainHeight);
+                Vector3 checkPosition = (useHeadsetForPosition ? new Vector3(headset.position.x, position.y, headset.position.z) : position);
+                float terrainHeight = targetTerrain.SampleHeight(checkPosition);
+                position.y = (terrainHeight > position.y ? position.y : targetTerrain.GetPosition().y + terrainHeight);
             }
             return position;
         }
 
-        protected void OnTeleporting(object sender, DestinationMarkerEventArgs e)
+        protected virtual void OnTeleporting(object sender, DestinationMarkerEventArgs e)
         {
             if (Teleporting != null)
             {
@@ -208,7 +237,7 @@ namespace VRTK
             }
         }
 
-        protected void OnTeleported(object sender, DestinationMarkerEventArgs e)
+        protected virtual void OnTeleported(object sender, DestinationMarkerEventArgs e)
         {
             if (Teleported != null)
             {
@@ -216,24 +245,25 @@ namespace VRTK
             }
         }
 
-        private void CalculateBlinkDelay(float blinkSpeed, Vector3 newPosition)
+        protected virtual void CalculateBlinkDelay(float blinkSpeed, Vector3 newPosition)
         {
             blinkPause = 0f;
             if (distanceBlinkDelay > 0f)
             {
+                float minBlink = 0.5f;
                 float distance = Vector3.Distance(playArea.position, newPosition);
-                blinkPause = Mathf.Clamp((distance * blinkTransitionSpeed) / (maxBlinkDistance - distanceBlinkDelay), 0, maxBlinkTransitionSpeed);
-                blinkPause = (blinkSpeed <= 0.25 ? 0f : blinkPause);
+                blinkPause = Mathf.Clamp((distance * blinkTransitionSpeed) / (maxBlinkDistance - distanceBlinkDelay), minBlink, maxBlinkTransitionSpeed);
+                blinkPause = (blinkSpeed <= 0.25 ? minBlink : blinkPause);
             }
         }
 
-        private void ReleaseBlink()
+        protected virtual void ReleaseBlink()
         {
             VRTK_SDK_Bridge.HeadsetFade(Color.clear, fadeInTime);
             fadeInTime = 0f;
         }
 
-        private IEnumerator InitListenersAtEndOfFrame()
+        protected virtual IEnumerator InitListenersAtEndOfFrame()
         {
             yield return new WaitForEndOfFrame();
             if (enabled)
@@ -242,15 +272,14 @@ namespace VRTK
             }
         }
 
-        private void InitDestinationMarkerListeners(bool state)
+        protected virtual void InitDestinationMarkerListeners(bool state)
         {
-            var leftHand = VRTK_DeviceFinder.GetControllerLeftHand();
-            var rightHand = VRTK_DeviceFinder.GetControllerRightHand();
+            GameObject leftHand = VRTK_DeviceFinder.GetControllerLeftHand();
+            GameObject rightHand = VRTK_DeviceFinder.GetControllerRightHand();
 
             InitDestinationSetListener(leftHand, state);
-            InitDestinationSetListener(rightHand, state)
-;
-            foreach (var destinationMarker in VRTK_ObjectCache.registeredDestinationMarkers)
+            InitDestinationSetListener(rightHand, state);
+            foreach (VRTK_DestinationMarker destinationMarker in VRTK_ObjectCache.registeredDestinationMarkers)
             {
                 if (destinationMarker.gameObject != leftHand && destinationMarker.gameObject != rightHand)
                 {

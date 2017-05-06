@@ -1,20 +1,28 @@
-﻿// OculusVR Boundaries|SDK_OculusVR|004
+﻿// OculusVR Boundaries|SDK_OculusVR|005
 namespace VRTK
 {
-#if VRTK_SDK_OCULUSVR
+#if VRTK_DEFINE_SDK_OCULUSVR
     using UnityEngine;
+#endif
 
     /// <summary>
     /// The OculusVR Boundaries SDK script provides a bridge to the OculusVR SDK play area.
     /// </summary>
-    public class SDK_OculusVRBoundaries : SDK_BaseBoundaries
+    [SDK_Description(typeof(SDK_OculusVRSystem))]
+    public class SDK_OculusVRBoundaries
+#if VRTK_DEFINE_SDK_OCULUSVR
+        : SDK_BaseBoundaries
+#else
+        : SDK_FallbackBoundaries
+#endif
     {
+#if VRTK_DEFINE_SDK_OCULUSVR
         /// <summary>
         /// The InitBoundaries method is run on start of scene and can be used to initialse anything on game start.
         /// </summary>
         public override void InitBoundaries()
         {
-#if VRTK_SDK_OCULUSVR_AVATAR
+#if VRTK_DEFINE_SDK_OCULUSVR_AVATAR
             GetAvatar();
 #endif
         }
@@ -28,7 +36,7 @@ namespace VRTK
             cachedPlayArea = GetSDKManagerPlayArea();
             if (cachedPlayArea == null)
             {
-                var ovrManager = FindObjectOfType<OVRManager>();
+                var ovrManager = VRTK_SharedMethods.FindEvenInactiveComponent<OVRManager>();
                 if (ovrManager)
                 {
                     cachedPlayArea = ovrManager.transform;
@@ -65,7 +73,7 @@ namespace VRTK
 
                 return vertices;
             }
-            return new Vector3[0];
+            return null;
         }
 
         /// <summary>
@@ -88,7 +96,24 @@ namespace VRTK
             return true;
         }
 
-#if VRTK_SDK_OCULUSVR_AVATAR
+        /// <summary>
+        /// The GetDrawAtRuntime method returns whether the given play area drawn border is being displayed.
+        /// </summary>
+        /// <returns>Returns true if the drawn border is being displayed.</returns>
+        public override bool GetDrawAtRuntime()
+        {
+            return false;
+        }
+
+        /// <summary>
+        /// The SetDrawAtRuntime method sets whether the given play area drawn border should be displayed at runtime.
+        /// </summary>
+        /// <param name="value">The state of whether the drawn border should be displayed or not.</param>
+        public override void SetDrawAtRuntime(bool value)
+        {
+        }
+
+#if VRTK_DEFINE_SDK_OCULUSVR_AVATAR
         private OvrAvatar avatarContainer;
 
         /// <summary>
@@ -99,20 +124,16 @@ namespace VRTK
         {
             if (avatarContainer == null)
             {
-                avatarContainer = FindObjectOfType<OvrAvatar>();
-                if (avatarContainer)
+                avatarContainer = VRTK_SharedMethods.FindEvenInactiveComponent<OvrAvatar>();
+                if (avatarContainer != null && avatarContainer.GetComponent<VRTK_TransformFollow>() == null)
                 {
-                    var objectFollow = avatarContainer.gameObject.AddComponent<VRTK_ObjectFollow>();
-                    objectFollow.objectToFollow = GetPlayArea();
+                    var objectFollow = avatarContainer.gameObject.AddComponent<VRTK_TransformFollow>();
+                    objectFollow.gameObjectToFollow = GetPlayArea().gameObject;
                 }
             }
             return avatarContainer;
         }
 #endif
-    }
-#else
-    public class SDK_OculusVRBoundaries : SDK_FallbackBoundaries
-    {
-    }
 #endif
+    }
 }

@@ -4,15 +4,13 @@
 
     public class VRTK_ControllerTracker : MonoBehaviour
     {
-        private VRTK_TrackedController trackedController;
+        protected VRTK_TrackedController trackedController;
 
         protected virtual void OnEnable()
         {
-            var actualController = VRTK_DeviceFinder.GetActualController(gameObject);
-            if (actualController)
-            {
-                trackedController = actualController.GetComponent<VRTK_TrackedController>();
-            }
+            GameObject actualController = VRTK_DeviceFinder.GetActualController(gameObject);
+            trackedController = (actualController != null ? actualController.GetComponent<VRTK_TrackedController>() : GetComponent<VRTK_TrackedController>());
+            Update();
         }
 
         protected virtual void Update()

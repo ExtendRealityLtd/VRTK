@@ -14,6 +14,7 @@ namespace VRTK
     /// `VRTK/Examples/034_Controls_InteractingWithUnityUI` demonstrates a collection of UI elements that are draggable
     /// </example>
     [RequireComponent(typeof(CanvasGroup))]
+    [AddComponentMenu("VRTK/Scripts/UI/VRTK_UIDraggableItem")]
     public class VRTK_UIDraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
         [Tooltip("If checked then the UI element can only be dropped in valid a VRTK_UIDropZone object and must start as a child of a VRTK_UIDropZone object. If unchecked then the UI element can be dropped anywhere on the canvas.")]
@@ -29,13 +30,13 @@ namespace VRTK
         [HideInInspector]
         public GameObject validDropZone;
 
-        private RectTransform dragTransform;
-        private Vector3 startPosition;
-        private Quaternion startRotation;
-        private GameObject startDropZone;
-        private Transform startParent;
-        private Canvas startCanvas;
-        private CanvasGroup canvasGroup;
+        protected RectTransform dragTransform;
+        protected Vector3 startPosition;
+        protected Quaternion startRotation;
+        protected GameObject startDropZone;
+        protected Transform startParent;
+        protected Canvas startCanvas;
+        protected CanvasGroup canvasGroup;
 
         public virtual void OnBeginDrag(PointerEventData eventData)
         {
@@ -55,7 +56,7 @@ namespace VRTK
             var pointer = GetPointer(eventData);
             if (pointer)
             {
-                pointer.OnUIPointerElementDragStart(pointer.SetUIPointerEvent(gameObject));
+                pointer.OnUIPointerElementDragStart(pointer.SetUIPointerEvent(pointer.pointerEventData.pointerPressRaycast, gameObject));
             }
         }
 
@@ -93,7 +94,8 @@ namespace VRTK
                 }
             }
 
-            if(destinationCanvas == null) {
+            if (destinationCanvas == null)
+            {
                 //We've been dropped off of a canvas
                 ResetElement();
                 validDragEnd = false;
@@ -104,7 +106,7 @@ namespace VRTK
                 var pointer = GetPointer(eventData);
                 if (pointer)
                 {
-                    pointer.OnUIPointerElementDragEnd(pointer.SetUIPointerEvent(gameObject));
+                    pointer.OnUIPointerElementDragEnd(pointer.SetUIPointerEvent(pointer.pointerEventData.pointerPressRaycast, gameObject));
                 }
             }
 
@@ -119,17 +121,17 @@ namespace VRTK
             if (restrictToDropZone && !GetComponentInParent<VRTK_UIDropZone>())
             {
                 enabled = false;
-                Debug.LogError("A VRTK_UIDraggableItem with a `freeDrop = false` is required to be a child of a VRTK_UIDropZone GameObject.");
+                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, "VRTK_UIDraggableItem", "VRTK_UIDropZone", "the parent", " if `freeDrop = false`"));
             }
         }
 
-        private VRTK_UIPointer GetPointer(PointerEventData eventData)
+        protected virtual VRTK_UIPointer GetPointer(PointerEventData eventData)
         {
             var controller = VRTK_DeviceFinder.GetControllerByIndex((uint)eventData.pointerId, false);
             return (controller ? controller.GetComponent<VRTK_UIPointer>() : null);
         }
 
-        private void SetDragPosition(PointerEventData eventData)
+        protected virtual void SetDragPosition(PointerEventData eventData)
         {
             if (eventData.pointerEnter != null && eventData.pointerEnter.transform as RectTransform != null)
             {
@@ -144,7 +146,7 @@ namespace VRTK
             }
         }
 
-        private void ResetElement()
+        protected virtual void ResetElement()
         {
             transform.position = startPosition;
             transform.rotation = startRotation;

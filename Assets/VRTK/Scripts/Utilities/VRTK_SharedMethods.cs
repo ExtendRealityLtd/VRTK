@@ -2,12 +2,18 @@
 namespace VRTK
 {
     using UnityEngine;
+#if UNITY_EDITOR
+    using UnityEditor;
+#endif
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Reflection;
+    using UnityEngine.VR;
 
     /// <summary>
     /// The Shared Methods script is a collection of reusable static methods that are used across a range of different scripts.
     /// </summary>
-    public class VRTK_SharedMethods : MonoBehaviour
+    public static class VRTK_SharedMethods
     {
         /// <summary>
         /// The GetBounds methods returns the bounds of the transform including all children in world space.
@@ -129,7 +135,7 @@ namespace VRTK
         public static Component CloneComponent(Component source, GameObject destination, bool copyProperties = false)
         {
             Component tmpComponent = destination.gameObject.AddComponent(source.GetType());
-            if(copyProperties)
+            if (copyProperties)
             {
                 foreach (PropertyInfo p in source.GetType().GetProperties())
                 {
@@ -159,12 +165,294 @@ namespace VRTK
         }
 
         /// <summary>
+        /// The RoundFloat method is used to round a given float to the given decimal places.
+        /// </summary>
+        /// <param name="givenFloat">The float to round.</param>
+        /// <param name="decimalPlaces">The number of decimal places to round to.</param>
+        /// <param name="rawFidelity">If this is true then the decimal places must be given in the decimal multiplier, e.g. 10 for 1dp, 100 for 2dp, etc.</param>
+        /// <returns>The rounded float.</returns>
+        public static float RoundFloat(float givenFloat, int decimalPlaces, bool rawFidelity = false)
+        {
+            float roundBy = (rawFidelity ? decimalPlaces : Mathf.Pow(10.0f, decimalPlaces));
+            return Mathf.Round(givenFloat * roundBy) / roundBy;
+        }
+
+        /// <summary>
         /// The IsEditTime method determines if the state of Unity is in the Unity Editor and the scene is not in play mode.
         /// </summary>
         /// <returns>Returns true if Unity is in the Unity Editor and not in play mode.</returns>
         public static bool IsEditTime()
         {
-            return (Application.isEditor && !Application.isPlaying);
+#if UNITY_EDITOR
+            return !EditorApplication.isPlayingOrWillChangePlaymode;
+#else
+            return false;
+#endif
+        }
+
+        /// <summary>
+        /// The TriggerHapticPulse/1 method calls a single haptic pulse call on the controller for a single tick.
+        /// </summary>
+        /// <param name="strength">The intensity of the rumble of the controller motor. `0` to `1`.</param>
+        public static void TriggerHapticPulse(uint controllerIndex, float strength)
+        {
+            var instanceMethods = VRTK_InstanceMethods.instance;
+            if (instanceMethods != null)
+            {
+                instanceMethods.haptics.TriggerHapticPulse(controllerIndex, strength);
+            }
+        }
+
+        /// <summary>
+        /// The TriggerHapticPulse/3 method calls a haptic pulse for a specified amount of time rather than just a single tick. Each pulse can be separated by providing a `pulseInterval` to pause between each haptic pulse.
+        /// </summary>
+        /// <param name="strength">The intensity of the rumble of the controller motor. `0` to `1`.</param>
+        /// <param name="duration">The length of time the rumble should continue for.</param>
+        /// <param name="pulseInterval">The interval to wait between each haptic pulse.</param>
+        public static void TriggerHapticPulse(uint controllerIndex, float strength, float duration, float pulseInterval)
+        {
+            var instanceMethods = VRTK_InstanceMethods.instance;
+            if (instanceMethods != null)
+            {
+                instanceMethods.haptics.TriggerHapticPulse(controllerIndex, strength, duration, pulseInterval);
+            }
+        }
+
+        /// <summary>
+        /// The CancelHapticPulse method cancels the existing running haptic pulse on the given controller index.
+        /// </summary>
+        /// <param name="controllerIndex">The controller index to activate the haptic feedback on.</param>
+        public static void CancelHapticPulse(uint controllerIndex)
+        {
+            var instanceMethods = VRTK_InstanceMethods.instance;
+            if (instanceMethods != null)
+            {
+                instanceMethods.haptics.CancelHapticPulse(controllerIndex);
+            }
+        }
+
+         /// <summary>
+        /// The TriggerHapticAudio method plays an AudioClip as haptics on the controller.
+        /// </summary>
+        /// <param name="clip">The AudioClip to play.</param>
+        /// <param name="strength">The intensity of the rumble of the controller motor. `0` to `1`.</param>
+        public static void TriggerHapticAudio(uint controllerIndex, AudioClip clip, float strength)
+        {
+            var instanceMethods = VRTK_InstanceMethods.instance;
+            if (instanceMethods != null)
+            {
+                instanceMethods.haptics.TriggerHapticAudio(controllerIndex, clip, strength);
+            }
+        }
+
+        /// <summary>
+        /// The SetOpacity method allows the opacity of the given GameObject to be changed. A lower alpha value will make the object more transparent, such as `0.5f` will make the controller partially transparent where as `0f` will make the controller completely transparent.
+        /// </summary>
+        /// <param name="model">The GameObject to change the renderer opacity on.</param>
+        /// <param name="alpha">The alpha level to apply to opacity of the controller object. `0f` to `1f`.</param>
+        /// <param name="transitionDuration">The time to transition from the current opacity to the new opacity.</param>
+        public static void SetOpacity(GameObject model, float alpha, float transitionDuration = 0f)
+        {
+            var instanceMethods = VRTK_InstanceMethods.instance;
+            if (instanceMethods != null)
+            {
+                instanceMethods.objectAppearance.SetOpacity(model, alpha, transitionDuration);
+            }
+        }
+
+        /// <summary>
+        /// The SetRendererVisible method turns on renderers of a given GameObject. It can also be provided with an optional model to ignore the render toggle on.
+        /// </summary>
+        /// <param name="model">The GameObject to show the renderers for.</param>
+        /// <param name="ignoredModel">An optional GameObject to ignore the renderer toggle on.</param>
+        public static void SetRendererVisible(GameObject model, GameObject ignoredModel = null)
+        {
+            var instanceMethods = VRTK_InstanceMethods.instance;
+            if (instanceMethods != null)
+            {
+                instanceMethods.objectAppearance.SetRendererVisible(model, ignoredModel);
+            }
+        }
+
+        /// <summary>
+        /// The SetRendererHidden method turns off renderers of a given GameObject. It can also be provided with an optional model to ignore the render toggle on.
+        /// </summary>
+        /// <param name="model">The GameObject to hide the renderers for.</param>
+        /// <param name="ignoredModel">An optional GameObject to ignore the renderer toggle on.</param>
+        public static void SetRendererHidden(GameObject model, GameObject ignoredModel = null)
+        {
+            var instanceMethods = VRTK_InstanceMethods.instance;
+            if (instanceMethods != null)
+            {
+                instanceMethods.objectAppearance.SetRendererHidden(model, ignoredModel);
+            }
+        }
+
+        /// <summary>
+        /// The ToggleRenderer method turns on or off the renderers of a given GameObject. It can also be provided with an optional model to ignore the render toggle of.
+        /// </summary>
+        /// <param name="state">If true then the renderers will be enabled, if false the renderers will be disabled.</param>
+        /// <param name="model">The GameObject to toggle the renderer states of.</param>
+        /// <param name="ignoredModel">An optional GameObject to ignore the renderer toggle on.</param>
+        public static void ToggleRenderer(bool state, GameObject model, GameObject ignoredModel = null)
+        {
+            if (state)
+            {
+                SetRendererVisible(model, ignoredModel);
+            }
+            else
+            {
+                SetRendererHidden(model, ignoredModel);
+            }
+        }
+
+        /// <summary>
+        /// The HighlightObject method calls the Highlight method on the highlighter attached to the given GameObject with the provided colour.
+        /// </summary>
+        /// <param name="model">The GameObject to attempt to call the Highlight on.</param>
+        /// <param name="highlightColor">The colour to highlight to.</param>
+        /// <param name="fadeDuration">The duration in time to fade from the initial colour to the target colour.</param>
+        public static void HighlightObject(GameObject model, Color? highlightColor, float fadeDuration = 0f)
+        {
+            var instanceMethods = VRTK_InstanceMethods.instance;
+            if (instanceMethods != null)
+            {
+                instanceMethods.objectAppearance.HighlightObject(model, highlightColor, fadeDuration);
+            }
+        }
+
+        /// <summary>
+        /// The UnhighlightObject method calls the Unhighlight method on the highlighter attached to the given GameObject.
+        /// </summary>
+        /// <param name="model">The GameObject to attempt to call the Unhighlight on.</param>
+        public static void UnhighlightObject(GameObject model)
+        {
+            var instanceMethods = VRTK_InstanceMethods.instance;
+            if (instanceMethods != null)
+            {
+                instanceMethods.objectAppearance.UnhighlightObject(model);
+            }
+        }
+
+        /// <summary>
+        /// The Mod method is used to find the remainder of the sum a/b.
+        /// </summary>
+        /// <param name="a">The dividend value.</param>
+        /// <param name="b">The divisor value.</param>
+        /// <returns>The remainder value.</returns>
+        public static float Mod(float a, float b)
+        {
+            return a - b * Mathf.Floor(a / b);
+        }
+
+        /// <summary>
+        /// Finds the first <see cref="GameObject"/> with a given name and an ancestor that has a specific component.
+        /// </summary>
+        /// <remarks>
+        /// This method returns active as well as inactive <see cref="GameObject"/>s in the scene. It doesn't return assets.
+        /// For performance reasons it is recommended to not use this function every frame. Cache the result in a member variable at startup instead.
+        /// </remarks>
+        /// <typeparam name="T">The component type that needs to be on an ancestor of the wanted <see cref="GameObject"/>. Must be a subclass of <see cref="Component"/>.</typeparam>
+        /// <param name="gameObjectName">The name of the wanted <see cref="GameObject"/>. If it contains a '/' character, this method traverses the hierarchy like a path name, beginning on the game object that has a component of type <typeparamref name="T"/>.</param>
+        /// <returns>The <see cref="GameObject"/> with name <paramref name="gameObjectName"/> and an ancestor that has a <typeparamref name="T"/>. If no such <see cref="GameObject"/> is found <see langword="null"/> is returned.</returns>
+        public static GameObject FindEvenInactiveGameObject<T>(string gameObjectName = null) where T : Component
+        {
+            if (string.IsNullOrEmpty(gameObjectName))
+            {
+                T foundComponent = FindEvenInactiveComponent<T>();
+                return foundComponent == null ? null : foundComponent.gameObject;
+            }
+
+            IEnumerable<GameObject> gameObjects = Resources.FindObjectsOfTypeAll<T>()
+                                                           .Select(component => component.gameObject);
+
+#if UNITY_EDITOR
+            gameObjects = gameObjects.Where(gameObject => !AssetDatabase.Contains(gameObject));
+#endif
+
+            return gameObjects.Select(gameObject =>
+                              {
+                                  Transform transform = gameObject.transform.Find(gameObjectName);
+                                  return transform == null ? null : transform.gameObject;
+                              })
+                              .FirstOrDefault(gameObject => gameObject != null);
+        }
+
+        /// <summary>
+        /// Finds all components of a given type.
+        /// </summary>
+        /// <remarks>
+        /// This method returns components from active as well as inactive <see cref="GameObject"/>s in the scene. It doesn't return assets.
+        /// For performance reasons it is recommended to not use this function every frame. Cache the result in a member variable at startup instead.
+        /// </remarks>
+        /// <typeparam name="T">The component type to search for. Must be a subclass of <see cref="Object"/>.</typeparam>
+        /// <returns>All the found components. If no component is found an empty array is returned.</returns>
+        public static T[] FindEvenInactiveComponents<T>() where T : Object
+        {
+            return Resources.FindObjectsOfTypeAll<T>()
+#if UNITY_EDITOR
+                            .Where(@object => !AssetDatabase.Contains(@object))
+                            .ToArray();
+#else
+                ;
+#endif
+        }
+
+        /// <summary>
+        /// Finds the first component of a given type.
+        /// </summary>
+        /// <remarks>
+        /// This method returns components from active as well as inactive <see cref="GameObject"/>s in the scene. It doesn't return assets.
+        /// For performance reasons it is recommended to not use this function every frame. Cache the result in a member variable at startup instead.
+        /// </remarks>
+        /// <typeparam name="T">The component type to search for. Must be a subclass of <see cref="Component"/>.</typeparam>
+        /// <returns>The found component. If no component is found <see langword="null"/> is returned.</returns>
+        public static T FindEvenInactiveComponent<T>() where T : Component
+        {
+            return Resources.FindObjectsOfTypeAll<T>()
+#if UNITY_EDITOR
+                            .FirstOrDefault(@object => !AssetDatabase.Contains(@object));
+#else
+                            .FirstOrDefault();
+#endif
+        }
+
+        /// <summary>
+        /// The GenerateVRTKObjectName method is used to create a standard name string for any VRTK generated object.
+        /// </summary>
+        /// <param name="autoGen">An additiona [AUTOGEN] prefix will be added if this is true.</param>
+        /// <param name="replacements">A collection of parameters to add to the generated name.</param>
+        /// <returns>The generated name string.</returns>
+        public static string GenerateVRTKObjectName(bool autoGen, params object[] replacements)
+        {
+            string toFormat = "[VRTK]";
+            if (autoGen)
+            {
+                toFormat += "[AUTOGEN]";
+            }
+            for (int i = 0; i < replacements.Length; i++)
+            {
+                toFormat += "[{" + i + "}]";
+            }
+            return string.Format(toFormat, replacements);
+        }
+
+        /// <summary>
+        /// The GetGPUTimeLastFrame retrieves the time spent by the GPU last frame, in seconds, as reported by the VR SDK.
+        /// </summary>
+        /// <returns>The total GPU time utilized last frame as measured by the VR subsystem.</returns>
+        public static float GetGPUTimeLastFrame()
+        {
+#if UNITY_5_6_OR_NEWER
+            float gpuTimeLastFrame;
+            if (VRStats.TryGetGPUTimeLastFrame(out gpuTimeLastFrame))
+            {
+                return gpuTimeLastFrame;
+            }
+            return 0f;
+#else
+            return VRStats.gpuTimeLastFrame;
+#endif
         }
 
         private static float ColorPercent(float value, float percent)

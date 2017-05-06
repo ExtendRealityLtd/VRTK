@@ -2,43 +2,27 @@
 {
     using UnityEngine;
     using UnityEngine.Events;
+    using System;
 
-    [RequireComponent(typeof(VRTK_DashTeleport))]
-    public class VRTK_DashTeleport_UnityEvents : MonoBehaviour
+    [AddComponentMenu("VRTK/Scripts/Utilities/Unity Events/VRTK_DashTeleport_UnityEvents")]
+    public sealed class VRTK_DashTeleport_UnityEvents : VRTK_UnityEvents<VRTK_DashTeleport>
     {
-        private VRTK_DashTeleport dt;
+        [Serializable]
+        public sealed class DashTeleportEvent : UnityEvent<object, DashTeleportEventArgs> { }
 
-        [System.Serializable]
-        public class UnityObjectEvent : UnityEvent<object, DashTeleportEventArgs> { };
+        public DashTeleportEvent OnWillDashThruObjects = new DashTeleportEvent();
+        public DashTeleportEvent OnDashedThruObjects = new DashTeleportEvent();
 
-        /// <summary>
-        /// Emits the WillDashThruObjects class event.
-        /// </summary>
-        public UnityObjectEvent OnWillDashThruObjects = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the DashedThruObjects class event.
-        /// </summary>
-        public UnityObjectEvent OnDashedThruObjects = new UnityObjectEvent();
-
-        private void SetDashTeleport()
+        protected override void AddListeners(VRTK_DashTeleport component)
         {
-            if (dt == null)
-            {
-                dt = GetComponent<VRTK_DashTeleport>();
-            }
+            component.WillDashThruObjects += WillDashThruObjects;
+            component.DashedThruObjects += DashedThruObjects;
         }
 
-        private void OnEnable()
+        protected override void RemoveListeners(VRTK_DashTeleport component)
         {
-            SetDashTeleport();
-            if (dt == null)
-            {
-                Debug.LogError("The VRTK_DashTeleport_UnityEvents script requires to be attached to a GameObject that contains a VRTK_DashTeleport script");
-                return;
-            }
-
-            dt.WillDashThruObjects += WillDashThruObjects;
-            dt.DashedThruObjects += DashedThruObjects;
+            component.WillDashThruObjects -= WillDashThruObjects;
+            component.DashedThruObjects -= DashedThruObjects;
         }
 
         private void WillDashThruObjects(object o, DashTeleportEventArgs e)
@@ -49,17 +33,6 @@
         private void DashedThruObjects(object o, DashTeleportEventArgs e)
         {
             OnDashedThruObjects.Invoke(o, e);
-        }
-
-        private void OnDisable()
-        {
-            if (dt == null)
-            {
-                return;
-            }
-
-            dt.WillDashThruObjects -= WillDashThruObjects;
-            dt.DashedThruObjects -= DashedThruObjects;
         }
     }
 }

@@ -1,20 +1,36 @@
-﻿// SteamVR Headset|SDK_SteamVR|002
+﻿// SteamVR Headset|SDK_SteamVR|003
 namespace VRTK
 {
-#if VRTK_SDK_STEAMVR
+#if VRTK_DEFINE_SDK_STEAMVR
     using UnityEngine;
     using System.Collections.Generic;
+#endif
 
     /// <summary>
     /// The SteamVR Headset SDK script provides a bridge to the SteamVR SDK.
     /// </summary>
-    public class SDK_SteamVRHeadset : SDK_BaseHeadset
+    [SDK_Description(typeof(SDK_SteamVRSystem))]
+    public class SDK_SteamVRHeadset
+#if VRTK_DEFINE_SDK_STEAMVR
+        : SDK_BaseHeadset
+#else
+        : SDK_FallbackHeadset
+#endif
     {
+#if VRTK_DEFINE_SDK_STEAMVR
         /// <summary>
         /// The ProcessUpdate method enables an SDK to run logic for every Unity Update
         /// </summary>
         /// <param name="options">A dictionary of generic options that can be used to within the update.</param>
         public override void ProcessUpdate(Dictionary<string, object> options)
+        {
+        }
+
+        /// <summary>
+        /// The ProcessFixedUpdate method enables an SDK to run logic for every Unity FixedUpdate
+        /// </summary>
+        /// <param name="options">A dictionary of generic options that can be used to within the fixed update.</param>
+        public override void ProcessFixedUpdate(Dictionary<string, object> options)
         {
         }
 
@@ -28,9 +44,9 @@ namespace VRTK
             if (cachedHeadset == null)
             {
 #if (UNITY_5_4_OR_NEWER)
-                var foundCamera = FindObjectOfType<SteamVR_Camera>();
+                var foundCamera = VRTK_SharedMethods.FindEvenInactiveComponent<SteamVR_Camera>();
 #else
-                var foundCamera = FindObjectOfType<SteamVR_GameView>();
+                var foundCamera = VRTK_SharedMethods.FindEvenInactiveComponent<SteamVR_GameView>();
 #endif
                 if (foundCamera)
                 {
@@ -49,7 +65,7 @@ namespace VRTK
             cachedHeadsetCamera = GetSDKManagerHeadset();
             if (cachedHeadsetCamera == null)
             {
-                var foundCamera = FindObjectOfType<SteamVR_Camera>();
+                var foundCamera = VRTK_SharedMethods.FindEvenInactiveComponent<SteamVR_Camera>();
                 if (foundCamera)
                 {
                     cachedHeadsetCamera = foundCamera.transform;
@@ -112,10 +128,6 @@ namespace VRTK
                 camera.gameObject.AddComponent<SteamVR_Fade>();
             }
         }
-    }
-#else
-    public class SDK_SteamVRHeadset : SDK_FallbackHeadset
-    {
-    }
 #endif
+    }
 }

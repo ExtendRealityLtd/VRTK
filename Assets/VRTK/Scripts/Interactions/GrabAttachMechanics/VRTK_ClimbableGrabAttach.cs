@@ -10,6 +10,7 @@ namespace VRTK.GrabAttachMechanics
     /// <example>
     /// `VRTK/Examples/037_CameraRig_ClimbingFalling` uses this grab attach mechanic for each item that is climbable in the scene.
     /// </example>
+    [AddComponentMenu("VRTK/Scripts/Interactions/Grab Attach Mechanics/VRTK_ClimbableGrabAttach")]
     public class VRTK_ClimbableGrabAttach : VRTK_BaseGrabAttach
     {
 

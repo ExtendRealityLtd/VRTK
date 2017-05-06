@@ -12,6 +12,7 @@ namespace VRTK
     /// <example>
     /// `VRTK/Examples/025_Controls_Overview` has a couple of levers that can be grabbed and moved. One lever is horizontal and the other is vertical.
     /// </example>
+    [AddComponentMenu("VRTK/Scripts/Controls/3D/VRTK_Lever")]
     public class VRTK_Lever : VRTK_Control
     {
         public enum LeverDirection
@@ -166,12 +167,12 @@ namespace VRTK
             }
         }
 
-        private float CalculateValue()
+        protected virtual float CalculateValue()
         {
             return Mathf.Round((leverHingeJoint.angle) / stepSize) * stepSize;
         }
 
-        private void SnapToValue(float value)
+        protected virtual void SnapToValue(float value)
         {
             float angle = ((value - minAngle) / (maxAngle - minAngle)) * (leverHingeJoint.limits.max - leverHingeJoint.limits.min);
 

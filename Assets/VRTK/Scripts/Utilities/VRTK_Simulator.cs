@@ -11,6 +11,7 @@ namespace VRTK
     ///
     /// Supported movements are: forward, backward, strafe left, strafe right, turn left, turn right, up, down.
     /// </remarks>
+    [AddComponentMenu("VRTK/Scripts/Utilities/VRTK_Simulator")]
     public class VRTK_Simulator : MonoBehaviour
     {
         [System.Serializable]
@@ -36,10 +37,10 @@ namespace VRTK
         [Tooltip("An optional game object marking the position and rotation at which the camera should be initially placed.")]
         public Transform camStart;
 
-        private Transform headset;
-        private Transform playArea;
-        private Vector3 initialPosition;
-        private Quaternion initialRotation;
+        protected Transform headset;
+        protected Transform playArea;
+        protected Vector3 initialPosition;
+        protected Quaternion initialRotation;
 
         protected virtual void Start()
         {
@@ -54,7 +55,7 @@ namespace VRTK
             playArea = VRTK_DeviceFinder.PlayAreaTransform();
             if (!headset)
             {
-                Debug.LogWarning("Could not find camera. Simulator deactivated.");
+                VRTK_Logger.Warn(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_SCENE, "VRTK_Simulator", "Headset Camera", ". Simulator deactivated."));
                 enabled = false;
                 return;
             }
@@ -115,7 +116,7 @@ namespace VRTK
             playArea.Rotate(rotDir);
         }
 
-        private Vector3 overwriteY(Vector3 vector, float value)
+        protected virtual Vector3 overwriteY(Vector3 vector, float value)
         {
             return new Vector3(vector.x, value, vector.z);
         }

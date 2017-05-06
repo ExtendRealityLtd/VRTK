@@ -2,43 +2,27 @@
 {
     using UnityEngine;
     using UnityEngine.Events;
+    using System;
 
-    [RequireComponent(typeof(VRTK_InteractTouch))]
-    public class VRTK_InteractTouch_UnityEvents : MonoBehaviour
+    [AddComponentMenu("VRTK/Scripts/Utilities/Unity Events/VRTK_InteractTouch_UnityEvents")]
+    public sealed class VRTK_InteractTouch_UnityEvents : VRTK_UnityEvents<VRTK_InteractTouch>
     {
-        private VRTK_InteractTouch it;
+        [Serializable]
+        public sealed class ObjectInteractEvent : UnityEvent<object, ObjectInteractEventArgs> { }
 
-        [System.Serializable]
-        public class UnityObjectEvent : UnityEvent<object, ObjectInteractEventArgs> { };
+        public ObjectInteractEvent OnControllerTouchInteractableObject = new ObjectInteractEvent();
+        public ObjectInteractEvent OnControllerUntouchInteractableObject = new ObjectInteractEvent();
 
-        /// <summary>
-        /// Emits the ControllerTouchInteractableObject class event.
-        /// </summary>
-        public UnityObjectEvent OnControllerTouchInteractableObject = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the ControllerUntouchInteractableObject class event.
-        /// </summary>
-        public UnityObjectEvent OnControllerUntouchInteractableObject = new UnityObjectEvent();
-
-        private void SetInteractTouch()
+        protected override void AddListeners(VRTK_InteractTouch component)
         {
-            if (it == null)
-            {
-                it = GetComponent<VRTK_InteractTouch>();
-            }
+            component.ControllerTouchInteractableObject += ControllerTouchInteractableObject;
+            component.ControllerUntouchInteractableObject += ControllerUntouchInteractableObject;
         }
 
-        private void OnEnable()
+        protected override void RemoveListeners(VRTK_InteractTouch component)
         {
-            SetInteractTouch();
-            if (it == null)
-            {
-                Debug.LogError("The VRTK_InteractTouch_UnityEvents script requires to be attached to a GameObject that contains a VRTK_InteractTouch script");
-                return;
-            }
-
-            it.ControllerTouchInteractableObject += ControllerTouchInteractableObject;
-            it.ControllerUntouchInteractableObject += ControllerUntouchInteractableObject;
+            component.ControllerTouchInteractableObject -= ControllerTouchInteractableObject;
+            component.ControllerUntouchInteractableObject -= ControllerUntouchInteractableObject;
         }
 
         private void ControllerTouchInteractableObject(object o, ObjectInteractEventArgs e)
@@ -49,17 +33,6 @@
         private void ControllerUntouchInteractableObject(object o, ObjectInteractEventArgs e)
         {
             OnControllerUntouchInteractableObject.Invoke(o, e);
-        }
-
-        private void OnDisable()
-        {
-            if (it == null)
-            {
-                return;
-            }
-
-            it.ControllerTouchInteractableObject -= ControllerTouchInteractableObject;
-            it.ControllerUntouchInteractableObject -= ControllerUntouchInteractableObject;
         }
     }
 }

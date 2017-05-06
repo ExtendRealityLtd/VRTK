@@ -2,43 +2,33 @@
 {
     using UnityEngine;
     using UnityEngine.Events;
+    using System;
 
-    [RequireComponent(typeof(VRTK_InteractGrab))]
-    public class VRTK_InteractGrab_UnityEvents : MonoBehaviour
+    [AddComponentMenu("VRTK/Scripts/Utilities/Unity Events/VRTK_InteractGrab_UnityEvents")]
+    public sealed class VRTK_InteractGrab_UnityEvents : VRTK_UnityEvents<VRTK_InteractGrab>
     {
-        private VRTK_InteractGrab ig;
+        [Serializable]
+        public sealed class ObjectInteractEvent : UnityEvent<object, ObjectInteractEventArgs> { }
 
-        [System.Serializable]
-        public class UnityObjectEvent : UnityEvent<object, ObjectInteractEventArgs> { };
+        public ObjectInteractEvent OnControllerGrabInteractableObject = new ObjectInteractEvent();
+        public ObjectInteractEvent OnControllerUngrabInteractableObject = new ObjectInteractEvent();
+        public VRTK_ControllerEvents_UnityEvents.ControllerInteractionEvent OnGrabButtonPressed = new VRTK_ControllerEvents_UnityEvents.ControllerInteractionEvent();
+        public VRTK_ControllerEvents_UnityEvents.ControllerInteractionEvent OnGrabButtonReleased = new VRTK_ControllerEvents_UnityEvents.ControllerInteractionEvent();
 
-        /// <summary>
-        /// Emits the ControllerGrabInteractableObject class event.
-        /// </summary>
-        public UnityObjectEvent OnControllerGrabInteractableObject = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the ControllerUngrabInteractableObject class event.
-        /// </summary>
-        public UnityObjectEvent OnControllerUngrabInteractableObject = new UnityObjectEvent();
-
-        private void SetInteractGrab()
+        protected override void AddListeners(VRTK_InteractGrab component)
         {
-            if (ig == null)
-            {
-                ig = GetComponent<VRTK_InteractGrab>();
-            }
+            component.ControllerGrabInteractableObject += ControllerGrabInteractableObject;
+            component.ControllerUngrabInteractableObject += ControllerUngrabInteractableObject;
+            component.GrabButtonPressed += GrabButtonPressed;
+            component.GrabButtonReleased += GrabButtonReleased;
         }
 
-        private void OnEnable()
+        protected override void RemoveListeners(VRTK_InteractGrab component)
         {
-            SetInteractGrab();
-            if (ig == null)
-            {
-                Debug.LogError("The VRTK_InteractGrab_UnityEvents script requires to be attached to a GameObject that contains a VRTK_InteractGrab script");
-                return;
-            }
-
-            ig.ControllerGrabInteractableObject += ControllerGrabInteractableObject;
-            ig.ControllerUngrabInteractableObject += ControllerUngrabInteractableObject;
+            component.ControllerGrabInteractableObject -= ControllerGrabInteractableObject;
+            component.ControllerUngrabInteractableObject -= ControllerUngrabInteractableObject;
+            component.GrabButtonPressed -= GrabButtonPressed;
+            component.GrabButtonReleased -= GrabButtonReleased;
         }
 
         private void ControllerGrabInteractableObject(object o, ObjectInteractEventArgs e)
@@ -51,15 +41,14 @@
             OnControllerUngrabInteractableObject.Invoke(o, e);
         }
 
-        private void OnDisable()
+        private void GrabButtonPressed(object o, ControllerInteractionEventArgs e)
         {
-            if (ig == null)
-            {
-                return;
-            }
+            OnGrabButtonPressed.Invoke(o, e);
+        }
 
-            ig.ControllerGrabInteractableObject -= ControllerGrabInteractableObject;
-            ig.ControllerUngrabInteractableObject -= ControllerUngrabInteractableObject;
+        private void GrabButtonReleased(object o, ControllerInteractionEventArgs e)
+        {
+            OnGrabButtonReleased.Invoke(o, e);
         }
     }
 }

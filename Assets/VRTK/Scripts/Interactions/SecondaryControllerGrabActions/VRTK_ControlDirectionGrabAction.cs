@@ -15,6 +15,7 @@ namespace VRTK.SecondaryControllerGrabActions
     /// <example>
     /// `VRTK/Examples/043_Controller_SecondaryControllerActions` demonstrates the ability to grab an object with one controller and control their direction with the second controller.
     /// </example>
+    [AddComponentMenu("VRTK/Scripts/Interactions/Secondary Controller Grab Actions/VRTK_ControlDirectionGrabAction")]
     public class VRTK_ControlDirectionGrabAction : VRTK_BaseGrabAction
     {
         [Tooltip("The distance the secondary controller must move away from the original grab position before the secondary controller auto ungrabs the object.")]
@@ -24,10 +25,10 @@ namespace VRTK.SecondaryControllerGrabActions
         [Tooltip("Prevent the secondary controller rotating the grabbed object through it's z-axis.")]
         public bool lockZRotation = true;
 
-        private Vector3 initialPosition;
-        private Quaternion initialRotation;
-        private Quaternion releaseRotation;
-        private Coroutine snappingOnRelease;
+        protected Vector3 initialPosition;
+        protected Quaternion initialRotation;
+        protected Quaternion releaseRotation;
+        protected Coroutine snappingOnRelease;
 
         /// <summary>
         /// The Initalise method is used to set up the state of the secondary action when the object is initially grabbed by a secondary controller.
@@ -70,6 +71,7 @@ namespace VRTK.SecondaryControllerGrabActions
         /// </summary>
         public override void OnDropAction()
         {
+            base.OnDropAction();
             StopRealignOnRelease();
         }
 
@@ -78,6 +80,7 @@ namespace VRTK.SecondaryControllerGrabActions
         /// </summary>
         public override void ProcessUpdate()
         {
+            base.ProcessUpdate();
             CheckForceStopDistance(ungrabDistance);
         }
 
@@ -86,13 +89,14 @@ namespace VRTK.SecondaryControllerGrabActions
         /// </summary>
         public override void ProcessFixedUpdate()
         {
+            base.ProcessFixedUpdate();
             if (initialised)
             {
                 AimObject();
             }
         }
 
-        private void StopRealignOnRelease()
+        protected virtual void StopRealignOnRelease()
         {
             if (snappingOnRelease != null)
             {
@@ -101,7 +105,7 @@ namespace VRTK.SecondaryControllerGrabActions
             snappingOnRelease = null;
         }
 
-        private IEnumerator RealignOnRelease()
+        protected virtual IEnumerator RealignOnRelease()
         {
             var elapsedTime = 0f;
 
@@ -115,7 +119,7 @@ namespace VRTK.SecondaryControllerGrabActions
             transform.localPosition = initialPosition;
         }
 
-        private void AimObject()
+        protected virtual void AimObject()
         {
             if (lockZRotation)
             {
@@ -132,7 +136,7 @@ namespace VRTK.SecondaryControllerGrabActions
             }
         }
 
-        private void ZLockedAim()
+        protected virtual void ZLockedAim()
         {
             Vector3 forward = (secondaryGrabbingObject.transform.position - primaryGrabbingObject.transform.position).normalized;
 

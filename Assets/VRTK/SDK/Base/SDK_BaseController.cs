@@ -1,4 +1,4 @@
-﻿// Base Controller|SDK_Base|003
+﻿// Base Controller|SDK_Base|006
 namespace VRTK
 {
     using UnityEngine;
@@ -10,7 +10,7 @@ namespace VRTK
     /// <remarks>
     /// This is an abstract class to implement the interface required by all implemented SDKs.
     /// </remarks>
-    public abstract class SDK_BaseController : ScriptableObject
+    public abstract class SDK_BaseController : SDK_Base
     {
         /// <summary>
         /// Concepts of controller button press
@@ -79,6 +79,13 @@ namespace VRTK
         public abstract void ProcessUpdate(uint index, Dictionary<string, object> options);
 
         /// <summary>
+        /// The ProcessFixedUpdate method enables an SDK to run logic for every Unity FixedUpdate
+        /// </summary>
+        /// <param name="index">The index of the controller.</param>
+        /// <param name="options">A dictionary of generic options that can be used to within the fixed update.</param>
+        public abstract void ProcessFixedUpdate(uint index, Dictionary<string, object> options);
+
+        /// <summary>
         /// The GetControllerDefaultColliderPath returns the path to the prefab that contains the collider objects for the default controller of this SDK.
         /// </summary>
         /// <param name="hand">The controller hand to check for</param>
@@ -106,7 +113,7 @@ namespace VRTK
         /// </summary>
         /// <param name="index">The index of the controller to find.</param>
         /// <param name="actual">If true it will return the actual controller, if false it will return the script alias controller GameObject.</param>
-        /// <returns></returns>
+        /// <returns>The GameObject of the controller</returns>
         public abstract GameObject GetControllerByIndex(uint index, bool actual = false);
 
         /// <summary>

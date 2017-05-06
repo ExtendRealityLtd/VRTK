@@ -7,19 +7,19 @@ namespace VRTK
     /// <summary>
     /// The Device Finder offers a collection of static methods that can be called to find common game devices such as the headset or controllers, or used to determine key information about the connected devices.
     /// </summary>
-    public class VRTK_DeviceFinder : MonoBehaviour
+    public static class VRTK_DeviceFinder
     {
         /// <summary>
         /// Possible devices.
         /// </summary>
         /// <param name="Headset">The headset.</param>
-        /// <param name="Left_Controller">The left hand controller.</param>
-        /// <param name="Right_Controller">The right hand controller.</param>
+        /// <param name="LeftController">The left hand controller.</param>
+        /// <param name="RightController">The right hand controller.</param>
         public enum Devices
         {
             Headset,
-            Left_Controller,
-            Right_Controller,
+            LeftController,
+            RightController,
         }
 
         /// <summary>
@@ -81,9 +81,9 @@ namespace VRTK
             {
                 case Devices.Headset:
                     return HeadsetTransform();
-                case Devices.Left_Controller:
+                case Devices.LeftController:
                     return GetControllerLeftHand().transform;
-                case Devices.Right_Controller:
+                case Devices.RightController:
                     return GetControllerRightHand().transform;
             }
             return null;
@@ -245,6 +245,24 @@ namespace VRTK
         public static GameObject GetModelAliasController(GameObject givenController)
         {
             return VRTK_SDK_Bridge.GetControllerModel(givenController);
+        }
+
+        /// <summary>
+        /// The GetModelAliasControllerHand method will return the hand that the given model alias GameObject is for.
+        /// </summary>
+        /// <param name="givenObject">The GameObject that may represent a model alias.</param>
+        /// <returns>The enum of the ControllerHand that the given GameObject may represent.</returns>
+        public static SDK_BaseController.ControllerHand GetModelAliasControllerHand(GameObject givenObject)
+        {
+            if (GetModelAliasController(GetControllerLeftHand()) == givenObject)
+            {
+                return SDK_BaseController.ControllerHand.Left;
+            }
+            else if (GetModelAliasController(GetControllerRightHand()) == givenObject)
+            {
+                return SDK_BaseController.ControllerHand.Right;
+            }
+            return SDK_BaseController.ControllerHand.None;
         }
 
         /// <summary>

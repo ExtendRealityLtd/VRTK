@@ -10,7 +10,7 @@ There is also a `/Resources/Scripts` directory within the `VRTK/Examples` direct
 
 ## Current Examples
 
-### 001_CameraRig_VR_PlayArea
+### 001_CameraRig_VRPlayArea
 
 A simple scene showing the `[CameraRig]` prefab usage.
 
@@ -228,7 +228,7 @@ A scene that shows the teleporting behaviour and also demonstrates a way to use 
 
 A scene displays the frames per second in the centre of the headset view. The debug visualization of this script is displayed near the top edge of the headset view. Pressing the trigger generates a new sphere and pressing the touchpad generates ten new spheres. Eventually when lots of spheres are present the FPS will drop and demonstrate the script.
 
-### 040_Controls_Panel_Menu
+### 040_Controls_PanelMenu
 
 A scene that demonstrates how to attach interactable panel prefabs to game objects to provide additional settings.
 
@@ -243,3 +243,7 @@ A scene that demonstrates how the user can move and traverse colliders by either
 ### 043_Controller_SecondaryControllerActions
 
 A scene that demonstrates the ability to grab an object with one controller and scale it by grabbing and pulling with the second controller.
+
+### 044_CameraRig_RestrictedTeleportZones
+
+A scene that uses the `VRTK_DestinationPoint` prefab to set up a collection of pre-defined teleport locations.

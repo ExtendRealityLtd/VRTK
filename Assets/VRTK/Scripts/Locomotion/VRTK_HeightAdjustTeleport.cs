@@ -2,6 +2,7 @@
 namespace VRTK
 {
     using UnityEngine;
+    using System;
 
     /// <summary>
     /// The height adjust teleporter extends the basic teleporter and allows for the y position of the user's position to be altered based on whether the teleport location is on top of another object.
@@ -13,11 +14,15 @@ namespace VRTK
     ///
     /// `VRTK/Examples/020_CameraRig_MeshTeleporting` shows how the teleportation of a user can also traverse mesh colliders.
     /// </example>
+    [AddComponentMenu("VRTK/Scripts/Locomotion/VRTK_HeightAdjustTeleport")]
     public class VRTK_HeightAdjustTeleport : VRTK_BasicTeleport
     {
-        [Header("Height Adjust Options")]
+        [Header("Height Adjust Settings")]
 
-        [Tooltip("The layers to ignore when raycasting to find floors.")]
+        [Tooltip("A custom raycaster to use when raycasting to find floors.")]
+        public VRTK_CustomRaycast customRaycast;
+        [Tooltip("**OBSOLETE [Use customRaycast]** The layers to ignore when raycasting to find floors.")]
+        [Obsolete("`VRTK_HeightAdjustTeleport.layersToIgnore` is no longer used in the `VRTK_HeightAdjustTeleport` class, use the `customRaycast` parameter instead. This parameter will be removed in a future version of VRTK.")]
         public LayerMask layersToIgnore = Physics.IgnoreRaycastLayer;
 
         protected override void OnEnable()
@@ -41,15 +46,17 @@ namespace VRTK
             return basePosition;
         }
 
-        private float GetTeleportY(Transform target, Vector3 tipPosition)
+        protected virtual float GetTeleportY(Transform target, Vector3 tipPosition)
         {
-            var newY = playArea.position.y;
-            var heightOffset = 0.1f;
+            float newY = playArea.position.y;
+            float heightOffset = 0.1f;
             //Check to see if the tip is on top of an object
-            var rayStartPositionOffset = Vector3.up * heightOffset;
-            var ray = new Ray(tipPosition + rayStartPositionOffset, -playArea.up);
+            Vector3 rayStartPositionOffset = Vector3.up * heightOffset;
+            Ray ray = new Ray(tipPosition + rayStartPositionOffset, -playArea.up);
             RaycastHit rayCollidedWith;
-            if (target && Physics.Raycast(ray, out rayCollidedWith, Mathf.Infinity, ~layersToIgnore))
+#pragma warning disable 0618
+            if (target && VRTK_CustomRaycast.Raycast(customRaycast, ray, out rayCollidedWith, layersToIgnore, Mathf.Infinity))
+#pragma warning restore 0618
             {
                 newY = (tipPosition.y - rayCollidedWith.distance) + heightOffset;
             }

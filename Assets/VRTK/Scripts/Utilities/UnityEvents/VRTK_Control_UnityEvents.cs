@@ -2,53 +2,29 @@
 {
     using UnityEngine;
     using UnityEngine.Events;
+    using System;
 
-    [RequireComponent(typeof(VRTK_Control))]
-    public class VRTK_Control_UnityEvents : MonoBehaviour
+    [AddComponentMenu("VRTK/Scripts/Utilities/Unity Events/VRTK_Control_UnityEvents")]
+    public sealed class VRTK_Control_UnityEvents : VRTK_UnityEvents<VRTK_Control>
     {
-        private VRTK_Control c3d;
+        [Serializable]
+        public sealed class Control3DEvent : UnityEvent<object, Control3DEventArgs> { }
 
-        [System.Serializable]
-        public class UnityObjectEvent : UnityEvent<object, Control3DEventArgs> { };
+        public Control3DEvent OnValueChanged = new Control3DEvent();
 
-        /// <summary>
-        /// Emits the ValueChanged class event.
-        /// </summary>
-        public UnityObjectEvent OnValueChanged = new UnityObjectEvent();
-
-        private void SetControl3D()
+        protected override void AddListeners(VRTK_Control component)
         {
-            if (c3d == null)
-            {
-                c3d = GetComponent<VRTK_Control>();
-            }
+            component.ValueChanged += ValueChanged;
         }
 
-        private void OnEnable()
+        protected override void RemoveListeners(VRTK_Control component)
         {
-            SetControl3D();
-            if (c3d == null)
-            {
-                Debug.LogError("The VRTK_Control_UnityEvents script requires to be attached to a GameObject that contains a VRTK_Control script");
-                return;
-            }
-
-            c3d.ValueChanged += ValueChanged;
+            component.ValueChanged -= ValueChanged;
         }
 
         private void ValueChanged(object o, Control3DEventArgs e)
         {
             OnValueChanged.Invoke(o, e);
-        }
-
-        private void OnDisable()
-        {
-            if (c3d == null)
-            {
-                return;
-            }
-
-            c3d.ValueChanged -= ValueChanged;
         }
     }
 }

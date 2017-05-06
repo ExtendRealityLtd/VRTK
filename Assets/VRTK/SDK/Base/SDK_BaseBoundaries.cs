@@ -1,4 +1,4 @@
-﻿// Base Boundaries|SDK_Base|004
+﻿// Base Boundaries|SDK_Base|007
 namespace VRTK
 {
     using UnityEngine;
@@ -9,7 +9,7 @@ namespace VRTK
     /// <remarks>
     /// This is an abstract class to implement the interface required by all implemented SDKs.
     /// </remarks>
-    public abstract class SDK_BaseBoundaries : ScriptableObject
+    public abstract class SDK_BaseBoundaries : SDK_Base
     {
         protected Transform cachedPlayArea;
 
@@ -44,6 +44,18 @@ namespace VRTK
         /// <param name="playArea">The GameObject containing the play area representation.</param>
         /// <returns>Returns true if the play area size has been auto calibrated and set by external sensors.</returns>
         public abstract bool IsPlayAreaSizeCalibrated(GameObject playArea);
+
+        /// <summary>
+        /// The GetDrawAtRuntime method returns whether the given play area drawn border is being displayed.
+        /// </summary>
+        /// <returns>Returns true if the drawn border is being displayed.</returns>
+        public abstract bool GetDrawAtRuntime();
+
+        /// <summary>
+        /// The SetDrawAtRuntime method sets whether the given play area drawn border should be displayed at runtime.
+        /// </summary>
+        /// <param name="value">The state of whether the drawn border should be displayed or not.</param>
+        public abstract void SetDrawAtRuntime(bool value);
 
         protected Transform GetSDKManagerPlayArea()
         {

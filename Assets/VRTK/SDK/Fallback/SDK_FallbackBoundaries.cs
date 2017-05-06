@@ -4,7 +4,7 @@ namespace VRTK
     using UnityEngine;
 
     /// <summary>
-    /// The Base Boundaries SDK script provides a bridge to SDK methods that deal with the play area of SDKs that support room scale play spaces.
+    /// The Fallback Boundaries SDK script provides a fallback collection of methods that return null or default headset values.
     /// </summary>
     /// <remarks>
     /// This is the fallback class that will just return default values.
@@ -34,17 +34,7 @@ namespace VRTK
         /// <returns>A Vector3 array of the points in the scene that represent the play area boundaries.</returns>
         public override Vector3[] GetPlayAreaVertices(GameObject playArea)
         {
-            return new Vector3[8]
-            {
-                Vector3.zero,
-                Vector3.zero,
-                Vector3.zero,
-                Vector3.zero,
-                Vector3.zero,
-                Vector3.zero,
-                Vector3.zero,
-                Vector3.zero
-            };
+            return null;
         }
 
         /// <summary>
@@ -67,9 +57,21 @@ namespace VRTK
             return false;
         }
 
-        private void Awake()
+        /// <summary>
+        /// The GetDrawAtRuntime method returns whether the given play area drawn border is being displayed.
+        /// </summary>
+        /// <returns>Returns true if the drawn border is being displayed.</returns>
+        public override bool GetDrawAtRuntime()
         {
-            Debug.LogError("Fallback Boundaries SDK is being used. Have you selected a valid Boundaries SDK in the SDK Manager? If you are unsure, then click the GameObject with the `VRTK_SDKManager` script attached to it in Edit Mode and select a Boundaries SDK from the dropdown.");
+            return false;
+        }
+
+        /// <summary>
+        /// The SetDrawAtRuntime method sets whether the given play area drawn border should be displayed at runtime.
+        /// </summary>
+        /// <param name="value">The state of whether the drawn border should be displayed or not.</param>
+        public override void SetDrawAtRuntime(bool value)
+        {
         }
     }
 }

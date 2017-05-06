@@ -30,6 +30,7 @@ namespace VRTK
     /// <example>
     /// `VRTK/Examples/011_Camera_HeadSetCollisionFading` has collidable walls around the play area and if the user puts their head into any of the walls then the headset will fade to black.
     /// </example>
+    [AddComponentMenu("VRTK/Scripts/Presence/VRTK_HeadsetCollision")]
     public class VRTK_HeadsetCollision : MonoBehaviour
     {
         [Tooltip("The radius of the auto generated sphere collider for detecting collisions on the headset.")]
@@ -57,11 +58,11 @@ namespace VRTK
         [HideInInspector]
         public Collider collidingWith = null;
 
-        private Transform headset;
-        private VRTK_HeadsetCollider headsetColliderScript;
-        private GameObject headsetColliderContainer;
-        private bool generateCollider = false;
-        private bool generateRigidbody = false;
+        protected Transform headset;
+        protected VRTK_HeadsetCollider headsetColliderScript;
+        protected GameObject headsetColliderContainer;
+        protected bool generateCollider = false;
+        protected bool generateRigidbody = false;
 
         public virtual void OnHeadsetCollisionDetect(HeadsetCollisionEventArgs e)
         {
@@ -120,11 +121,11 @@ namespace VRTK
             }
         }
 
-        private void CreateHeadsetColliderContainer()
+        protected virtual void CreateHeadsetColliderContainer()
         {
             if (!headsetColliderContainer)
             {
-                headsetColliderContainer = new GameObject("VRTK_HeadsetColliderContainer");
+                headsetColliderContainer = new GameObject(VRTK_SharedMethods.GenerateVRTKObjectName(true, "HeadsetColliderContainer"));
                 headsetColliderContainer.transform.position = Vector3.zero;
                 headsetColliderContainer.transform.localRotation = headset.localRotation;
                 headsetColliderContainer.transform.localScale = Vector3.one;
@@ -132,7 +133,7 @@ namespace VRTK
             }
         }
 
-        private void SetupHeadset()
+        protected virtual void SetupHeadset()
         {
             var headsetRigidbody = headset.GetComponentInChildren<Rigidbody>();
             if (!headsetRigidbody)
@@ -165,7 +166,7 @@ namespace VRTK
             }
         }
 
-        private void TearDownHeadset()
+        protected virtual void TearDownHeadset()
         {
             if (generateCollider)
             {
@@ -188,20 +189,20 @@ namespace VRTK
 
     public class VRTK_HeadsetCollider : MonoBehaviour
     {
-        private VRTK_HeadsetCollision parent;
-        private VRTK_PolicyList targetListPolicy;
+        protected VRTK_HeadsetCollision parent;
+        protected VRTK_PolicyList targetListPolicy;
 
-        public void SetParent(GameObject setParent)
+        public virtual void SetParent(GameObject setParent)
         {
             parent = setParent.GetComponent<VRTK_HeadsetCollision>();
         }
 
-        public void SetIgnoreTarget(VRTK_PolicyList list = null)
+        public virtual void SetIgnoreTarget(VRTK_PolicyList list = null)
         {
             targetListPolicy = list;
         }
 
-        public void EndCollision(Collider collider)
+        public virtual void EndCollision(Collider collider)
         {
             if (!collider || !VRTK_PlayerObject.IsPlayerObject(collider.gameObject))
             {
@@ -234,7 +235,7 @@ namespace VRTK
             }
         }
 
-        private HeadsetCollisionEventArgs SetHeadsetCollisionEvent(Collider collider, Transform currentTransform)
+        protected virtual HeadsetCollisionEventArgs SetHeadsetCollisionEvent(Collider collider, Transform currentTransform)
         {
             HeadsetCollisionEventArgs e;
             e.collider = collider;
@@ -242,7 +243,7 @@ namespace VRTK
             return e;
         }
 
-        private bool ValidTarget(Transform target)
+        protected virtual bool ValidTarget(Transform target)
         {
             return (target && !(VRTK_PolicyList.Check(target.gameObject, targetListPolicy)));
         }

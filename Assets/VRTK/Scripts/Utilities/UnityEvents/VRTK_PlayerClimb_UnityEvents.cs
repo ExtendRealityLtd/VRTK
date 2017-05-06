@@ -2,43 +2,27 @@
 {
     using UnityEngine;
     using UnityEngine.Events;
+    using System;
 
-    [RequireComponent(typeof(VRTK_PlayerClimb))]
-    public class VRTK_PlayerClimb_UnityEvents : MonoBehaviour
+    [AddComponentMenu("VRTK/Scripts/Utilities/Unity Events/VRTK_PlayerClimb_UnityEvents")]
+    public sealed class VRTK_PlayerClimb_UnityEvents : VRTK_UnityEvents<VRTK_PlayerClimb>
     {
-        private VRTK_PlayerClimb pc;
+        [Serializable]
+        public sealed class PlayerClimbEvent : UnityEvent<object, PlayerClimbEventArgs> { }
 
-        [System.Serializable]
-        public class UnityObjectEvent : UnityEvent<object, PlayerClimbEventArgs> { };
+        public PlayerClimbEvent OnPlayerClimbStarted = new PlayerClimbEvent();
+        public PlayerClimbEvent OnPlayerClimbEnded = new PlayerClimbEvent();
 
-        /// <summary>
-        /// Emits the PlayerClimbStarted class event.
-        /// </summary>
-        public UnityObjectEvent OnPlayerClimbStarted = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the PlayerClimbEnded class event.
-        /// </summary>
-        public UnityObjectEvent OnPlayerClimbEnded = new UnityObjectEvent();
-
-        private void SetPlayerClimb()
+        protected override void AddListeners(VRTK_PlayerClimb component)
         {
-            if (pc == null)
-            {
-                pc = GetComponent<VRTK_PlayerClimb>();
-            }
+            component.PlayerClimbStarted += PlayerClimbStarted;
+            component.PlayerClimbEnded += PlayerClimbEnded;
         }
 
-        private void OnEnable()
+        protected override void RemoveListeners(VRTK_PlayerClimb component)
         {
-            SetPlayerClimb();
-            if (pc == null)
-            {
-                Debug.LogError("The VRTK_PlayerClimb_UnityEvents script requires to be attached to a GameObject that contains a VRTK_PlayerClimb script");
-                return;
-            }
-
-            pc.PlayerClimbStarted += PlayerClimbStarted;
-            pc.PlayerClimbEnded += PlayerClimbEnded;
+            component.PlayerClimbStarted -= PlayerClimbStarted;
+            component.PlayerClimbEnded -= PlayerClimbEnded;
         }
 
         private void PlayerClimbStarted(object o, PlayerClimbEventArgs e)
@@ -49,17 +33,6 @@
         private void PlayerClimbEnded(object o, PlayerClimbEventArgs e)
         {
             OnPlayerClimbEnded.Invoke(o, e);
-        }
-
-        private void OnDisable()
-        {
-            if (pc == null)
-            {
-                return;
-            }
-
-            pc.PlayerClimbStarted -= PlayerClimbStarted;
-            pc.PlayerClimbEnded -= PlayerClimbEnded;
         }
     }
 }

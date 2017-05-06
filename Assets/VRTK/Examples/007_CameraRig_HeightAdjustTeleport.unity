@@ -37,7 +37,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37429237, g: 0.42147171, b: 0.46712714, a: 1}
+  m_IndirectSpecularColor: {r: 0.18053603, g: 0.2260181, b: 0.30718738, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -336,7 +336,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 115554530}
   - 114: {fileID: 115554535}
-  - 114: {fileID: 115554533}
+  - 114: {fileID: 115554536}
   - 114: {fileID: 115554534}
   - 114: {fileID: 115554532}
   - 114: {fileID: 115554531}
@@ -371,10 +371,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 947b27445602ed640b885db7e667dfc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  controllerAttachPoint: {fileID: 0}
+  grabButton: 7
   grabPrecognition: 0
   throwMultiplier: 1
   createRigidBodyWhenNotTouching: 0
+  controllerAttachPoint: {fileID: 0}
 --- !u!114 &115554532
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -387,37 +388,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   customRigidbodyObject: {fileID: 0}
---- !u!114 &115554533
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 115554529}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d45c8d32f1d960d4498790bb3961fc52, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  modelElementPaths:
-    bodyModelPath: 
-    triggerModelPath: 
-    leftGripModelPath: 
-    rightGripModelPath: 
-    touchpadModelPath: 
-    buttonOneModelPath: 
-    buttonTwoModelPath: 
-    systemMenuModelPath: 
-    startMenuModelPath: 
-  elementHighlighterOverrides:
-    body: {fileID: 0}
-    trigger: {fileID: 0}
-    gripLeft: {fileID: 0}
-    gripRight: {fileID: 0}
-    touchpad: {fileID: 0}
-    buttonOne: {fileID: 0}
-    buttonTwo: {fileID: 0}
-    systemMenu: {fileID: 0}
-    startMenu: {fileID: 0}
 --- !u!114 &115554534
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -426,29 +396,31 @@ MonoBehaviour:
   m_GameObject: {fileID: 115554529}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 408a45c3d6ea5804fa3bcaaaf8251ab5, type: 3}
+  m_Script: {fileID: 11500000, guid: 7fc65878c7102524bb8c2bcfbefff497, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableTeleport: 1
-  controller: {fileID: 0}
-  pointerOriginTransform: {fileID: 0}
-  pointerMaterial: {fileID: 0}
-  pointerHitColor: {r: 0, g: 0.5, b: 0, a: 1}
-  pointerMissColor: {r: 0.8, g: 0, b: 0, a: 1}
-  holdButtonToActivate: 1
-  interactWithObjects: 0
-  grabToPointerTip: 0
-  activateDelay: 0
-  pointerVisibility: 0
+  playareaCursor: {fileID: 0}
+  customRaycast: {fileID: 0}
   layersToIgnore:
     serializedVersion: 2
     m_Bits: 4
-  pointerThickness: 0.002
-  pointerLength: 100
-  showPointerTip: 1
-  customPointerCursor: {fileID: 0}
-  pointerCursorMatchTargetNormal: 0
-  pointerCursorRescaledAlongDistance: 0
+  pointerOriginSmoothingSettings:
+    smoothsPosition: 0
+    maxAllowedPerFrameDistanceDifference: 0.003
+    smoothsRotation: 0
+    maxAllowedPerFrameAngleDifference: 1.5
+  validCollisionColor: {r: 0, g: 0.49803922, b: 0, a: 1}
+  invalidCollisionColor: {r: 0.8, g: 0, b: 0, a: 1}
+  tracerVisibility: 0
+  cursorVisibility: 0
+  maximumLength: 100
+  scaleFactor: 0.002
+  cursorScaleMultiplier: 25
+  cursorMatchTargetRotation: 0
+  cursorDistanceRescale: 0
+  maximumCursorScale: {x: Infinity, y: Infinity, z: Infinity}
+  customTracer: {fileID: 0}
+  customCursor: {fileID: 0}
 --- !u!114 &115554535
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -468,7 +440,11 @@ MonoBehaviour:
   menuToggleButton: 14
   axisFidelity: 1
   triggerClickThreshold: 1
+  triggerForceZeroThreshold: 0.01
+  triggerAxisZeroOnUntouch: 0
   gripClickThreshold: 1
+  gripForceZeroThreshold: 0.01
+  gripAxisZeroOnUntouch: 0
   triggerPressed: 0
   triggerTouched: 0
   triggerHairlinePressed: 0
@@ -492,6 +468,33 @@ MonoBehaviour:
   usePressed: 0
   uiClickPressed: 0
   menuPressed: 0
+  controllerVisible: 1
+--- !u!114 &115554536
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 115554529}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ec704cceb26f6f49b6c900fc83d8d18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enableTeleport: 1
+  pointerRenderer: {fileID: 115554534}
+  activationButton: 10
+  holdButtonToActivate: 1
+  activateOnEnable: 0
+  activationDelay: 0
+  selectionButton: 10
+  selectOnPress: 0
+  selectionDelay: 0
+  selectAfterHoverDuration: 0
+  interactWithObjects: 0
+  grabToPointerTip: 0
+  controller: {fileID: 0}
+  customOrigin: {fileID: 0}
+  directionIndicator: {fileID: 0}
 --- !u!1 &120580731
 GameObject:
   m_ObjectHideFlags: 0
@@ -501,7 +504,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 120580732}
   - 114: {fileID: 120580737}
-  - 114: {fileID: 120580735}
+  - 114: {fileID: 120580738}
   - 114: {fileID: 120580736}
   - 114: {fileID: 120580734}
   - 114: {fileID: 120580733}
@@ -536,10 +539,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 947b27445602ed640b885db7e667dfc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  controllerAttachPoint: {fileID: 0}
+  grabButton: 7
   grabPrecognition: 0
   throwMultiplier: 1
   createRigidBodyWhenNotTouching: 0
+  controllerAttachPoint: {fileID: 0}
 --- !u!114 &120580734
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -552,37 +556,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   customRigidbodyObject: {fileID: 0}
---- !u!114 &120580735
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 120580731}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d45c8d32f1d960d4498790bb3961fc52, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  modelElementPaths:
-    bodyModelPath: 
-    triggerModelPath: 
-    leftGripModelPath: 
-    rightGripModelPath: 
-    touchpadModelPath: 
-    buttonOneModelPath: 
-    buttonTwoModelPath: 
-    systemMenuModelPath: 
-    startMenuModelPath: 
-  elementHighlighterOverrides:
-    body: {fileID: 0}
-    trigger: {fileID: 0}
-    gripLeft: {fileID: 0}
-    gripRight: {fileID: 0}
-    touchpad: {fileID: 0}
-    buttonOne: {fileID: 0}
-    buttonTwo: {fileID: 0}
-    systemMenu: {fileID: 0}
-    startMenu: {fileID: 0}
 --- !u!114 &120580736
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -591,29 +564,31 @@ MonoBehaviour:
   m_GameObject: {fileID: 120580731}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 408a45c3d6ea5804fa3bcaaaf8251ab5, type: 3}
+  m_Script: {fileID: 11500000, guid: 7fc65878c7102524bb8c2bcfbefff497, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableTeleport: 1
-  controller: {fileID: 0}
-  pointerOriginTransform: {fileID: 0}
-  pointerMaterial: {fileID: 0}
-  pointerHitColor: {r: 0, g: 0.5, b: 0, a: 1}
-  pointerMissColor: {r: 0.8, g: 0, b: 0, a: 1}
-  holdButtonToActivate: 1
-  interactWithObjects: 0
-  grabToPointerTip: 0
-  activateDelay: 0
-  pointerVisibility: 0
+  playareaCursor: {fileID: 0}
+  customRaycast: {fileID: 0}
   layersToIgnore:
     serializedVersion: 2
     m_Bits: 4
-  pointerThickness: 0.002
-  pointerLength: 100
-  showPointerTip: 1
-  customPointerCursor: {fileID: 0}
-  pointerCursorMatchTargetNormal: 0
-  pointerCursorRescaledAlongDistance: 0
+  pointerOriginSmoothingSettings:
+    smoothsPosition: 0
+    maxAllowedPerFrameDistanceDifference: 0.003
+    smoothsRotation: 0
+    maxAllowedPerFrameAngleDifference: 1.5
+  validCollisionColor: {r: 0, g: 0.49803922, b: 0, a: 1}
+  invalidCollisionColor: {r: 0.8, g: 0, b: 0, a: 1}
+  tracerVisibility: 0
+  cursorVisibility: 0
+  maximumLength: 100
+  scaleFactor: 0.002
+  cursorScaleMultiplier: 25
+  cursorMatchTargetRotation: 0
+  cursorDistanceRescale: 0
+  maximumCursorScale: {x: Infinity, y: Infinity, z: Infinity}
+  customTracer: {fileID: 0}
+  customCursor: {fileID: 0}
 --- !u!114 &120580737
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -633,7 +608,11 @@ MonoBehaviour:
   menuToggleButton: 14
   axisFidelity: 1
   triggerClickThreshold: 1
+  triggerForceZeroThreshold: 0.01
+  triggerAxisZeroOnUntouch: 0
   gripClickThreshold: 1
+  gripForceZeroThreshold: 0.01
+  gripAxisZeroOnUntouch: 0
   triggerPressed: 0
   triggerTouched: 0
   triggerHairlinePressed: 0
@@ -657,134 +636,33 @@ MonoBehaviour:
   usePressed: 0
   uiClickPressed: 0
   menuPressed: 0
---- !u!43 &131419819
-Mesh:
+  controllerVisible: 1
+--- !u!114 &120580738
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 120580731}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ec704cceb26f6f49b6c900fc83d8d18, type: 3}
   m_Name: 
-  serializedVersion: 8
-  m_SubMeshes:
-  - serializedVersion: 2
-    firstByte: 0
-    indexCount: 24
-    topology: 0
-    firstVertex: 0
-    vertexCount: 8
-    localAABB:
-      m_Center: {x: 0, y: 0.01, z: 0}
-      m_Extent: {x: 0.65, y: 0, z: 0.65}
-  m_Shapes:
-    vertices: []
-    shapes: []
-    channels: []
-    fullWeights: []
-  m_BindPose: []
-  m_BoneNameHashes: 
-  m_RootBoneNameHash: 0
-  m_MeshCompression: 0
-  m_IsReadable: 1
-  m_KeepVertices: 1
-  m_KeepIndices: 1
-  m_IndexBuffer: 000004000100010004000500010005000200020005000600020006000300030006000700030007000000000007000400
-  m_Skin: []
-  m_VertexData:
-    m_CurrentChannels: 13
-    m_VertexCount: 8
-    m_Channels:
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 3
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 12
-      format: 0
-      dimension: 4
-    - stream: 0
-      offset: 28
-      format: 0
-      dimension: 2
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    m_DataSize: 288
-    _typelessdata: 0000003f0ad7233c000000bf000000000000803f0000803f0000803f0000000000000000000000bf0ad7233c000000bf000000000000803f0000803f0000803f0000803f00000000000000bf0ad7233c0000003f000000000000803f0000803f0000803f00000000000000000000003f0ad7233c0000003f000000000000803f0000803f0000803f0000803f000000006666263f0ad7233c666626bf000000000000803f0000803f00000000000000000000803f666626bf0ad7233c666626bf000000000000803f0000803f000000000000803f0000803f666626bf0ad7233c6666263f000000000000803f0000803f00000000000000000000803f6666263f0ad7233c6666263f000000000000803f0000803f000000000000803f0000803f
-  m_CompressedMesh:
-    m_Vertices:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_UV:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Normals:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Tangents:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Weights:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_NormalSigns:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_TangentSigns:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_FloatColors:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_BoneIndices:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Triangles:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_UVInfo: 0
-  m_LocalAABB:
-    m_Center: {x: 0, y: 0.01, z: 0}
-    m_Extent: {x: 0.65, y: 0, z: 0.65}
-  m_MeshUsageFlags: 0
-  m_BakedConvexCollisionMesh: 
-  m_BakedTriangleCollisionMesh: 
-  m_MeshOptimized: 0
+  m_EditorClassIdentifier: 
+  enableTeleport: 1
+  pointerRenderer: {fileID: 120580736}
+  activationButton: 10
+  holdButtonToActivate: 1
+  activateOnEnable: 0
+  activationDelay: 0
+  selectionButton: 10
+  selectOnPress: 0
+  selectionDelay: 0
+  selectAfterHoverDuration: 0
+  interactWithObjects: 0
+  grabToPointerTip: 0
+  controller: {fileID: 0}
+  customOrigin: {fileID: 0}
+  directionIndicator: {fileID: 0}
 --- !u!1 &271068340
 GameObject:
   m_ObjectHideFlags: 0
@@ -834,6 +712,7 @@ MonoBehaviour:
   disableWhenIdle: 1
   touchHighlightColor: {r: 1, g: 1, b: 0, a: 0}
   allowedTouchControllers: 0
+  ignoredColliders: []
   isGrabbable: 1
   holdButtonToGrab: 1
   stayGrabbedOnTeleport: 1
@@ -930,6 +809,8 @@ MonoBehaviour:
   throwMultiplier: 1
   onGrabCollisionDelay: 0
   detachDistance: 1
+  velocityLimit: Infinity
+  angularVelocityLimit: Infinity
 --- !u!114 &271068348
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1169,14 +1050,14 @@ MonoBehaviour:
   size: 0
   color: {r: 0, g: 1, b: 1, a: 1}
   vertices:
-  - {x: 0.5, y: 0.01, z: -0.5}
-  - {x: -0.5, y: 0.01, z: -0.5}
-  - {x: -0.5, y: 0.01, z: 0.5}
-  - {x: 0.5, y: 0.01, z: 0.5}
-  - {x: 0.65, y: 0.01, z: -0.65}
-  - {x: -0.65, y: 0.01, z: -0.65}
-  - {x: -0.65, y: 0.01, z: 0.65}
-  - {x: 0.65, y: 0.01, z: 0.65}
+  - {x: 1.0500001, y: 0.01, z: -0.90000015}
+  - {x: -1.0500001, y: 0.01, z: -0.90000015}
+  - {x: -1.0500001, y: 0.01, z: 0.90000015}
+  - {x: 1.0500001, y: 0.01, z: 0.90000015}
+  - {x: 1.2, y: 0.01, z: -1.0500002}
+  - {x: -1.2, y: 0.01, z: -1.0500002}
+  - {x: -1.2, y: 0.01, z: 1.0500002}
+  - {x: 1.2, y: 0.01, z: 1.0500002}
 --- !u!33 &335626801
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1184,7 +1065,7 @@ MeshFilter:
     type: 2}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 335626791}
-  m_Mesh: {fileID: 131419819}
+  m_Mesh: {fileID: 892851282}
 --- !u!23 &335626802
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1199,7 +1080,7 @@ MeshRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_Materials:
-  - {fileID: 2004669908}
+  - {fileID: 998394079}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
@@ -1487,7 +1368,7 @@ Transform:
   m_PrefabParentObject: {fileID: 413432, guid: 4d293c8e162f3874b982baadd71153d2, type: 2}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 611690974}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1789,6 +1670,134 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 884550209}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!43 &892851282
+Mesh:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: 
+  serializedVersion: 8
+  m_SubMeshes:
+  - serializedVersion: 2
+    firstByte: 0
+    indexCount: 24
+    topology: 0
+    firstVertex: 0
+    vertexCount: 8
+    localAABB:
+      m_Center: {x: 0, y: 0.01, z: 0}
+      m_Extent: {x: 1.2, y: 0, z: 1.0500002}
+  m_Shapes:
+    vertices: []
+    shapes: []
+    channels: []
+    fullWeights: []
+  m_BindPose: []
+  m_BoneNameHashes: 
+  m_RootBoneNameHash: 0
+  m_MeshCompression: 0
+  m_IsReadable: 1
+  m_KeepVertices: 1
+  m_KeepIndices: 1
+  m_IndexBuffer: 000004000100010004000500010005000200020005000600020006000300030006000700030007000000000007000400
+  m_Skin: []
+  m_VertexData:
+    m_CurrentChannels: 13
+    m_VertexCount: 8
+    m_Channels:
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 3
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 12
+      format: 0
+      dimension: 4
+    - stream: 0
+      offset: 28
+      format: 0
+      dimension: 2
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    m_DataSize: 288
+    _typelessdata: 6766863f0ad7233c696666bf000000000000803f0000803f0000803f0000000000000000676686bf0ad7233c696666bf000000000000803f0000803f0000803f0000803f00000000676686bf0ad7233c6966663f000000000000803f0000803f0000803f00000000000000006766863f0ad7233c6966663f000000000000803f0000803f0000803f0000803f000000009a99993f0ad7233c686686bf000000000000803f0000803f00000000000000000000803f9a9999bf0ad7233c686686bf000000000000803f0000803f000000000000803f0000803f9a9999bf0ad7233c6866863f000000000000803f0000803f00000000000000000000803f9a99993f0ad7233c6866863f000000000000803f0000803f000000000000803f0000803f
+  m_CompressedMesh:
+    m_Vertices:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_UV:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Normals:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Tangents:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Weights:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_NormalSigns:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_TangentSigns:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_FloatColors:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_BoneIndices:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Triangles:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_UVInfo: 0
+  m_LocalAABB:
+    m_Center: {x: 0, y: 0.01, z: 0}
+    m_Extent: {x: 1.2, y: 0, z: 1.0500002}
+  m_MeshUsageFlags: 0
+  m_BakedConvexCollisionMesh: 
+  m_BakedTriangleCollisionMesh: 
+  m_MeshOptimized: 0
 --- !u!1 &925347782
 GameObject:
   m_ObjectHideFlags: 0
@@ -1868,6 +1877,35 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 925347782}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!21 &998394079
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: Sprites/Default
+  m_Shader: {fileID: 10753, guid: 0000000000000000f000000000000000, type: 0}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 5
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  m_SavedProperties:
+    serializedVersion: 2
+    m_TexEnvs:
+    - first:
+        name: _MainTex
+      second:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - first:
+        name: PixelSnap
+      second: 0
+    m_Colors:
+    - first:
+        name: _Color
+      second: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &1135670851
 GameObject:
   m_ObjectHideFlags: 0
@@ -2585,11 +2623,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   persistOnLoad: 0
-  systemSDK: 1
-  boundariesSDK: 1
-  headsetSDK: 1
-  controllerSDK: 1
+  autoPopulateObjectReferences: 1
   autoManageScriptDefines: 1
+  activeScriptingDefineSymbolsWithoutSDKClasses: []
   actualBoundaries: {fileID: 335626791}
   actualHeadset: {fileID: 611690974}
   actualLeftController: {fileID: 335626793}
@@ -2598,6 +2634,22 @@ MonoBehaviour:
   modelAliasRightController: {fileID: 1758747365}
   scriptAliasLeftController: {fileID: 115554529}
   scriptAliasRightController: {fileID: 120580731}
+  cachedSystemSDKInfo:
+    baseTypeName: VRTK.SDK_BaseSystem
+    fallbackTypeName: VRTK.SDK_FallbackSystem
+    typeName: VRTK.SDK_SteamVRSystem
+  cachedBoundariesSDKInfo:
+    baseTypeName: VRTK.SDK_BaseBoundaries
+    fallbackTypeName: VRTK.SDK_FallbackBoundaries
+    typeName: VRTK.SDK_SteamVRBoundaries
+  cachedHeadsetSDKInfo:
+    baseTypeName: VRTK.SDK_BaseHeadset
+    fallbackTypeName: VRTK.SDK_FallbackHeadset
+    typeName: VRTK.SDK_SteamVRHeadset
+  cachedControllerSDKInfo:
+    baseTypeName: VRTK.SDK_BaseController
+    fallbackTypeName: VRTK.SDK_FallbackController
+    typeName: VRTK.SDK_SteamVRController
 --- !u!1 &1758747365
 GameObject:
   m_ObjectHideFlags: 0
@@ -2835,35 +2887,6 @@ Transform:
   - {fileID: 925347783}
   m_Father: {fileID: 0}
   m_RootOrder: 2
---- !u!21 &2004669908
-Material:
-  serializedVersion: 6
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_Name: Sprites/Default
-  m_Shader: {fileID: 10753, guid: 0000000000000000f000000000000000, type: 0}
-  m_ShaderKeywords: 
-  m_LightmapFlags: 5
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  m_SavedProperties:
-    serializedVersion: 2
-    m_TexEnvs:
-    - first:
-        name: _MainTex
-      second:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Floats:
-    - first:
-        name: PixelSnap
-      second: 0
-    m_Colors:
-    - first:
-        name: _Color
-      second: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &2022943003
 GameObject:
   m_ObjectHideFlags: 0
@@ -3047,11 +3070,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 377ced3493c4e1842a5b1c23f56519db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  blinkToColor: {r: 0, g: 0, b: 0, a: 1}
   blinkTransitionSpeed: 0.6
   distanceBlinkDelay: 0
   headsetPositionCompensation: 1
   targetListPolicy: {fileID: 2030441407}
   navMeshLimitDistance: 0
+  customRaycast: {fileID: 0}
   layersToIgnore:
     serializedVersion: 2
     m_Bits: 4
@@ -3073,6 +3098,7 @@ MonoBehaviour:
   movementThreshold: 0.0015
   standingHistorySamples: 5
   leanYThreshold: 0.5
+  customRaycast: {fileID: 0}
   layersToIgnore:
     serializedVersion: 2
     m_Bits: 4
@@ -3080,6 +3106,7 @@ MonoBehaviour:
   gravityFallYThreshold: 1
   blinkYThreshold: 0.15
   floorHeightTolerance: 0.001
+  fallCheckPrecision: 5
 --- !u!1 &2123877843
 GameObject:
   m_ObjectHideFlags: 0

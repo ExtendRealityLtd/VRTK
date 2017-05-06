@@ -55,46 +55,76 @@ namespace VRTK
 
     public class VRTK_CurveGenerator : MonoBehaviour
     {
-        private enum BezierControlPointMode
+        public enum BezierControlPointMode
         {
             Free,
             Aligned,
             Mirrored
         }
 
-        private Vector3[] points;
-        private GameObject[] items;
-        private BezierControlPointMode[] modes;
-        private bool loop;
-        private int frequency;
-        private bool customTracer;
-        private bool rescalePointerTracer;
+        protected Vector3[] points;
+        protected GameObject[] items;
+        protected BezierControlPointMode[] modes;
+        protected bool loop;
+        protected int frequency;
+        protected bool customTracer;
+        protected bool rescalePointerTracer;
+        protected GameObject tracerLineRenderer;
+        protected LineRenderer customLineRenderer;
+        protected bool lineRendererAndItem;
 
-        public void Create(int setFrequency, float radius, GameObject tracer, bool rescaleTracer = false)
+        public virtual void Create(int setFrequency, float radius, GameObject tracer, bool rescaleTracer = false)
         {
             float circleSize = radius / 8;
 
             frequency = setFrequency;
-            items = new GameObject[frequency];
-            for (int f = 0; f < items.Length; f++)
+            customLineRenderer = (tracer != null ? tracer.GetComponent<LineRenderer>() : null);
+            lineRendererAndItem = (customLineRenderer != null && tracer.GetComponentInChildren<MeshFilter>());
+            if (customLineRenderer != null)
             {
-                customTracer = true;
-                items[f] = (tracer ? Instantiate(tracer) : CreateSphere());
-                items[f].transform.parent = transform;
-                items[f].layer = LayerMask.NameToLayer("Ignore Raycast");
-                items[f].transform.localScale = new Vector3(circleSize, circleSize, circleSize);
+                tracerLineRenderer = Instantiate(tracer);
+                tracerLineRenderer.name = VRTK_SharedMethods.GenerateVRTKObjectName(true, name, "LineRenderer");
+                for (int i = 0; i < tracerLineRenderer.transform.childCount; i++)
+                {
+                    Destroy(tracerLineRenderer.transform.GetChild(i).gameObject);
+                }
+                customLineRenderer = tracerLineRenderer.GetComponent<LineRenderer>();
+#if UNITY_5_5
+                customLineRenderer.numPositions = frequency;
+#elif UNITY_5_6_OR_NEWER
+                customLineRenderer.positionCount = frequency;
+#else
+                customLineRenderer.SetVertexCount(frequency);
+#endif
+            }
+
+            if (customLineRenderer == null || lineRendererAndItem)
+            {
+                items = new GameObject[frequency];
+                for (int f = 0; f < items.Length; f++)
+                {
+                    customTracer = true;
+                    items[f] = (tracer != null ? Instantiate(tracer) : CreateSphere());
+                    items[f].transform.SetParent(transform);
+                    items[f].layer = LayerMask.NameToLayer("Ignore Raycast");
+                    items[f].transform.localScale = new Vector3(circleSize, circleSize, circleSize);
+                    if (customLineRenderer != null)
+                    {
+                        Destroy(items[f].GetComponent<LineRenderer>());
+                    }
+                }
             }
 
             rescalePointerTracer = rescaleTracer;
         }
 
-        public void SetPoints(Vector3[] controlPoints, Material material, Color color)
+        public virtual void SetPoints(Vector3[] controlPoints, Material material, Color color)
         {
             PointsInit(controlPoints);
             SetObjects(material, color);
         }
 
-        public Vector3[] GetPoints(Vector3[] controlPoints)
+        public virtual Vector3[] GetPoints(Vector3[] controlPoints)
         {
             PointsInit(controlPoints);
 
@@ -116,12 +146,16 @@ namespace VRTK
             return calculatedPoints;
         }
 
-        public void TogglePoints(bool state)
+        public virtual void TogglePoints(bool state)
         {
             gameObject.SetActive(state);
+            if (tracerLineRenderer != null)
+            {
+                tracerLineRenderer.SetActive(state);
+            }
         }
 
-        private void PointsInit(Vector3[] controlPoints)
+        protected virtual void PointsInit(Vector3[] controlPoints)
         {
             points = controlPoints;
             modes = new BezierControlPointMode[]
@@ -131,10 +165,11 @@ namespace VRTK
             };
         }
 
-        private GameObject CreateSphere()
+        protected virtual GameObject CreateSphere()
         {
             customTracer = false;
             GameObject item = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            item.name = VRTK_SharedMethods.GenerateVRTKObjectName(true, "Sphere");
             Destroy(item.GetComponent<SphereCollider>());
             item.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
             item.GetComponent<MeshRenderer>().receiveShadows = false;
@@ -142,7 +177,7 @@ namespace VRTK
             return item;
         }
 
-        private bool Loop
+        protected virtual bool Loop
         {
             get
             {
@@ -159,7 +194,7 @@ namespace VRTK
             }
         }
 
-        private int ControlPointCount
+        protected virtual int ControlPointCount
         {
             get
             {
@@ -167,12 +202,12 @@ namespace VRTK
             }
         }
 
-        private Vector3 GetControlPoint(int index)
+        protected virtual Vector3 GetControlPoint(int index)
         {
             return points[index];
         }
 
-        private void SetControlPoint(int index, Vector3 point)
+        protected virtual void SetControlPoint(int index, Vector3 point)
         {
             if (index % 3 == 0)
             {
@@ -213,7 +248,7 @@ namespace VRTK
             EnforceMode(index);
         }
 
-        private void EnforceMode(int index)
+        protected virtual void EnforceMode(int index)
         {
             int modeIndex = (index + 1) / 3;
             BezierControlPointMode mode = modes[modeIndex];
@@ -260,7 +295,7 @@ namespace VRTK
             points[enforcedIndex] = middle + enforcedTangent;
         }
 
-        private int CurveCount
+        protected virtual int CurveCount
         {
             get
             {
@@ -268,7 +303,7 @@ namespace VRTK
             }
         }
 
-        private Vector3 GetPoint(float t)
+        protected virtual Vector3 GetPoint(float t)
         {
             int i;
             if (t >= 1f)
@@ -286,7 +321,7 @@ namespace VRTK
             return transform.TransformPoint(Bezier.GetPoint(points[i], points[i + 1], points[i + 2], points[i + 3], t));
         }
 
-        private void SetObjects(Material material, Color color)
+        protected virtual void SetObjects(Material material, Color color)
         {
             float stepSize = frequency * 1;
             if (Loop || stepSize == 1)
@@ -298,37 +333,56 @@ namespace VRTK
                 stepSize = 1f / (stepSize - 1);
             }
 
+            SetPointData(material, color, stepSize);
+        }
+
+        protected virtual void SetPointData(Material material, Color color, float stepSize)
+        {
             for (int f = 0; f < frequency; f++)
             {
-                if (customTracer && (f == (frequency - 1)))
-                {
-                    items[f].SetActive(false);
-                    continue;
-                }
-                setMaterial(items[f], material, color);
-
                 Vector3 position = GetPoint(f * stepSize);
-                items[f].transform.position = position;
 
-                Vector3 nextPosition = GetPoint((f + 1) * stepSize);
-                Vector3 offset = nextPosition - position;
-                Vector3 lookPosition = offset.normalized;
-                if (lookPosition != Vector3.zero)
+                if (customLineRenderer != null)
                 {
-                    items[f].transform.rotation = Quaternion.LookRotation(lookPosition);
+                    customLineRenderer.SetPosition(f, position);
+                    SetMaterial(customLineRenderer.sharedMaterial, color);
+                }
 
-                    // rescale the custom tracer according to the length of the beam
-                    if (rescalePointerTracer)
-                    {
-                        Vector3 scl = items[f].transform.localScale;
-                        scl.z = offset.magnitude / 2f; // (assuming a center-based scaling)
-                        items[f].transform.localScale = scl;
-                    }
+                if (customLineRenderer == null || lineRendererAndItem)
+                {
+                    SetItemPosition(f, position, material, color, stepSize);
                 }
             }
         }
 
-        private void setMaterial(GameObject item, Material material, Color color)
+        protected virtual void SetItemPosition(int currentIndex, Vector3 setPosition, Material material, Color color, float stepSize)
+        {
+            if (customTracer && (currentIndex == (frequency - 1)))
+            {
+                items[currentIndex].SetActive(false);
+                return;
+            }
+            SetItemMaterial(items[currentIndex], material, color);
+            items[currentIndex].transform.position = setPosition;
+
+            Vector3 nextPosition = GetPoint((currentIndex + 1) * stepSize);
+            Vector3 offset = nextPosition - setPosition;
+            Vector3 lookPosition = offset.normalized;
+            if (lookPosition != Vector3.zero)
+            {
+                items[currentIndex].transform.rotation = Quaternion.LookRotation(lookPosition);
+
+                // rescale the custom tracer according to the length of the beam
+                if (rescalePointerTracer)
+                {
+                    Vector3 scl = items[currentIndex].transform.localScale;
+                    scl.z = offset.magnitude / 2f; // (assuming a center-based scaling)
+                    items[currentIndex].transform.localScale = scl;
+                }
+            }
+        }
+
+        protected virtual void SetItemMaterial(GameObject item, Material material, Color color)
         {
             foreach (Renderer mr in item.GetComponentsInChildren<Renderer>())
             {
@@ -337,19 +391,24 @@ namespace VRTK
                     mr.material = material;
                 }
 
-                if (mr.material)
+                SetMaterial(mr.material, color);
+            }
+        }
+
+        protected virtual void SetMaterial(Material material, Color color)
+        {
+            if (material != null)
+            {
+                material.EnableKeyword("_EMISSION");
+
+                if (material.HasProperty("_Color"))
                 {
-                    mr.material.EnableKeyword("_EMISSION");
+                    material.color = color;
+                }
 
-                    if (mr.material.HasProperty("_Color"))
-                    {
-                        mr.material.color = color;
-                    }
-
-                    if (mr.material.HasProperty("_EmissionColor"))
-                    {
-                        mr.material.SetColor("_EmissionColor", VRTK_SharedMethods.ColorDarken(color, 50));
-                    }
+                if (material.HasProperty("_EmissionColor"))
+                {
+                    material.SetColor("_EmissionColor", VRTK_SharedMethods.ColorDarken(color, 50));
                 }
             }
         }

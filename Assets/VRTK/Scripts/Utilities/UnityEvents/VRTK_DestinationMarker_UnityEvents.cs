@@ -2,48 +2,33 @@
 {
     using UnityEngine;
     using UnityEngine.Events;
+    using System;
 
-    [RequireComponent(typeof(VRTK_DestinationMarker))]
-    public class VRTK_DestinationMarker_UnityEvents : MonoBehaviour
+    [AddComponentMenu("VRTK/Scripts/Utilities/Unity Events/VRTK_DestinationMarker_UnityEvents")]
+    public sealed class VRTK_DestinationMarker_UnityEvents : VRTK_UnityEvents<VRTK_DestinationMarker>
     {
-        private VRTK_DestinationMarker dm;
+        [Serializable]
+        public sealed class DestinationMarkerEvent : UnityEvent<object, DestinationMarkerEventArgs> { }
 
-        [System.Serializable]
-        public class UnityObjectEvent : UnityEvent<object, DestinationMarkerEventArgs> { };
+        public DestinationMarkerEvent OnDestinationMarkerEnter = new DestinationMarkerEvent();
+        public DestinationMarkerEvent OnDestinationMarkerExit = new DestinationMarkerEvent();
+        public DestinationMarkerEvent OnDestinationMarkerHover = new DestinationMarkerEvent();
+        public DestinationMarkerEvent OnDestinationMarkerSet = new DestinationMarkerEvent();
 
-        /// <summary>
-        /// Emits the DestinationMarkerEnter class event.
-        /// </summary>
-        public UnityObjectEvent OnDestinationMarkerEnter = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the DestinationMarkerExit class event.
-        /// </summary>
-        public UnityObjectEvent OnDestinationMarkerExit = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the DestinationMarkerSet class event.
-        /// </summary>
-        public UnityObjectEvent OnDestinationMarkerSet = new UnityObjectEvent();
-
-        private void SetDestinationMarker()
+        protected override void AddListeners(VRTK_DestinationMarker component)
         {
-            if (dm == null)
-            {
-                dm = GetComponent<VRTK_DestinationMarker>();
-            }
+            component.DestinationMarkerEnter += DestinationMarkerEnter;
+            component.DestinationMarkerExit += DestinationMarkerExit;
+            component.DestinationMarkerHover += DestinationMarkerHover;
+            component.DestinationMarkerSet += DestinationMarkerSet;
         }
 
-        private void OnEnable()
+        protected override void RemoveListeners(VRTK_DestinationMarker component)
         {
-            SetDestinationMarker();
-            if (dm == null)
-            {
-                Debug.LogError("The VRTK_DestinationMarker_UnityEvents script requires to be attached to a GameObject that contains a VRTK_DestinationMarker script");
-                return;
-            }
-
-            dm.DestinationMarkerEnter += DestinationMarkerEnter;
-            dm.DestinationMarkerExit += DestinationMarkerExit;
-            dm.DestinationMarkerSet += DestinationMarkerSet;
+            component.DestinationMarkerEnter -= DestinationMarkerEnter;
+            component.DestinationMarkerExit -= DestinationMarkerExit;
+            component.DestinationMarkerHover -= DestinationMarkerHover;
+            component.DestinationMarkerSet -= DestinationMarkerSet;
         }
 
         private void DestinationMarkerEnter(object o, DestinationMarkerEventArgs e)
@@ -56,21 +41,14 @@
             OnDestinationMarkerExit.Invoke(o, e);
         }
 
+        private void DestinationMarkerHover(object o, DestinationMarkerEventArgs e)
+        {
+            OnDestinationMarkerHover.Invoke(o, e);
+        }
+
         private void DestinationMarkerSet(object o, DestinationMarkerEventArgs e)
         {
             OnDestinationMarkerSet.Invoke(o, e);
-        }
-
-        private void OnDisable()
-        {
-            if (dm == null)
-            {
-                return;
-            }
-
-            dm.DestinationMarkerEnter -= DestinationMarkerEnter;
-            dm.DestinationMarkerExit -= DestinationMarkerExit;
-            dm.DestinationMarkerSet -= DestinationMarkerSet;
         }
     }
 }

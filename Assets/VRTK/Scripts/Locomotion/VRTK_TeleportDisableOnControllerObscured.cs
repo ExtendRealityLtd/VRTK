@@ -8,10 +8,11 @@ namespace VRTK
     /// The purpose of the Teleport Disable On Controller Obscured script is to detect when the headset does not have a line of sight to the controllers and prevent teleportation from working. This is to ensure that if a user is clipping their controllers through a wall then they cannot teleport to an area beyond the wall.
     /// </summary>
     [RequireComponent(typeof(VRTK_HeadsetControllerAware))]
+    [AddComponentMenu("VRTK/Scripts/Locomotion/VRTK_TeleportDisableOnControllerObscured")]
     public class VRTK_TeleportDisableOnControllerObscured : MonoBehaviour
     {
-        private VRTK_BasicTeleport basicTeleport;
-        private VRTK_HeadsetControllerAware headset;
+        protected VRTK_BasicTeleport basicTeleport;
+        protected VRTK_HeadsetControllerAware headset;
 
         protected virtual void OnEnable()
         {
@@ -33,7 +34,7 @@ namespace VRTK
             }
         }
 
-        private IEnumerator EnableAtEndOfFrame()
+        protected virtual IEnumerator EnableAtEndOfFrame()
         {
             if (basicTeleport == null)
             {
@@ -49,12 +50,12 @@ namespace VRTK
             }
         }
 
-        private void DisableTeleport(object sender, HeadsetControllerAwareEventArgs e)
+        protected virtual void DisableTeleport(object sender, HeadsetControllerAwareEventArgs e)
         {
             basicTeleport.ToggleTeleportEnabled(false);
         }
 
-        private void EnableTeleport(object sender, HeadsetControllerAwareEventArgs e)
+        protected virtual void EnableTeleport(object sender, HeadsetControllerAwareEventArgs e)
         {
             basicTeleport.ToggleTeleportEnabled(true);
         }

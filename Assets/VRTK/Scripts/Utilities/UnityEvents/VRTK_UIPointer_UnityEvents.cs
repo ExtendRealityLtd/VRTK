@@ -2,57 +2,48 @@
 {
     using UnityEngine;
     using UnityEngine.Events;
+    using System;
 
-    [RequireComponent(typeof(VRTK_UIPointer))]
-    public class VRTK_UIPointer_UnityEvents : MonoBehaviour
+    [AddComponentMenu("VRTK/Scripts/Utilities/Unity Events/VRTK_UIPointer_UnityEvents")]
+    public sealed class VRTK_UIPointer_UnityEvents : VRTK_UnityEvents<VRTK_UIPointer>
     {
-        private VRTK_UIPointer uip;
+        [Serializable]
+        public sealed class UIPointerEvent : UnityEvent<object, UIPointerEventArgs> { }
 
-        [System.Serializable]
-        public class UnityObjectEvent : UnityEvent<object, UIPointerEventArgs> { };
+        public UIPointerEvent OnUIPointerElementEnter = new UIPointerEvent();
+        public UIPointerEvent OnUIPointerElementExit = new UIPointerEvent();
+        public UIPointerEvent OnUIPointerElementClick = new UIPointerEvent();
+        public UIPointerEvent OnUIPointerElementDragStart = new UIPointerEvent();
+        public UIPointerEvent OnUIPointerElementDragEnd = new UIPointerEvent();
+        public VRTK_ControllerEvents_UnityEvents.ControllerInteractionEvent OnActivationButtonPressed = new VRTK_ControllerEvents_UnityEvents.ControllerInteractionEvent();
+        public VRTK_ControllerEvents_UnityEvents.ControllerInteractionEvent OnActivationButtonReleased = new VRTK_ControllerEvents_UnityEvents.ControllerInteractionEvent();
+        public VRTK_ControllerEvents_UnityEvents.ControllerInteractionEvent OnSelectionButtonPressed = new VRTK_ControllerEvents_UnityEvents.ControllerInteractionEvent();
+        public VRTK_ControllerEvents_UnityEvents.ControllerInteractionEvent OnSelectionButtonReleased = new VRTK_ControllerEvents_UnityEvents.ControllerInteractionEvent();
 
-        /// <summary>
-        /// Emits the UIPointerElementEnter class event.
-        /// </summary>
-        public UnityObjectEvent OnUIPointerElementEnter = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the UIPointerElementExit class event.
-        /// </summary>
-        public UnityObjectEvent OnUIPointerElementExit = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the UIPointerElementClick class event.
-        /// </summary>
-        public UnityObjectEvent OnUIPointerElementClick = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the UIPointerElementDragStart class event.
-        /// </summary>
-        public UnityObjectEvent OnUIPointerElementDragStart = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the UIPointerElementDragEnd class event.
-        /// </summary>
-        public UnityObjectEvent OnUIPointerElementDragEnd = new UnityObjectEvent();
-
-        private void SetUIPointer()
+        protected override void AddListeners(VRTK_UIPointer component)
         {
-            if (uip == null)
-            {
-                uip = GetComponent<VRTK_UIPointer>();
-            }
+            component.UIPointerElementEnter += UIPointerElementEnter;
+            component.UIPointerElementExit += UIPointerElementExit;
+            component.UIPointerElementClick += UIPointerElementClick;
+            component.UIPointerElementDragStart += UIPointerElementDragStart;
+            component.UIPointerElementDragEnd += UIPointerElementDragEnd;
+            component.ActivationButtonPressed += ActivationButtonPressed;
+            component.ActivationButtonReleased += ActivationButtonReleased;
+            component.SelectionButtonPressed += SelectionButtonPressed;
+            component.SelectionButtonReleased += SelectionButtonReleased;
         }
 
-        private void OnEnable()
+        protected override void RemoveListeners(VRTK_UIPointer component)
         {
-            SetUIPointer();
-            if (uip == null)
-            {
-                Debug.LogError("The VRTK_UIPointer_UnityEvents script requires to be attached to a GameObject that contains a VRTK_UIPointer script");
-                return;
-            }
-            uip.UIPointerElementEnter += UIPointerElementEnter;
-            uip.UIPointerElementExit += UIPointerElementExit;
-            uip.UIPointerElementClick += UIPointerElementClick;
-            uip.UIPointerElementDragStart += UIPointerElementDragStart;
-            uip.UIPointerElementDragEnd += UIPointerElementDragEnd;
+            component.UIPointerElementEnter -= UIPointerElementEnter;
+            component.UIPointerElementExit -= UIPointerElementExit;
+            component.UIPointerElementClick -= UIPointerElementClick;
+            component.UIPointerElementDragStart -= UIPointerElementDragStart;
+            component.UIPointerElementDragEnd -= UIPointerElementDragEnd;
+            component.ActivationButtonPressed -= ActivationButtonPressed;
+            component.ActivationButtonReleased -= ActivationButtonReleased;
+            component.SelectionButtonPressed -= SelectionButtonPressed;
+            component.SelectionButtonReleased -= SelectionButtonReleased;
         }
 
         private void UIPointerElementEnter(object o, UIPointerEventArgs e)
@@ -80,18 +71,24 @@
             OnUIPointerElementDragEnd.Invoke(o, e);
         }
 
-        private void OnDisable()
+        private void ActivationButtonPressed(object o, ControllerInteractionEventArgs e)
         {
-            if (uip == null)
-            {
-                return;
-            }
+            OnActivationButtonPressed.Invoke(o, e);
+        }
 
-            uip.UIPointerElementEnter -= UIPointerElementEnter;
-            uip.UIPointerElementExit -= UIPointerElementExit;
-            uip.UIPointerElementClick -= UIPointerElementClick;
-            uip.UIPointerElementDragStart -= UIPointerElementDragStart;
-            uip.UIPointerElementDragEnd -= UIPointerElementDragEnd;
+        private void ActivationButtonReleased(object o, ControllerInteractionEventArgs e)
+        {
+            OnActivationButtonReleased.Invoke(o, e);
+        }
+
+        private void SelectionButtonPressed(object o, ControllerInteractionEventArgs e)
+        {
+            OnSelectionButtonPressed.Invoke(o, e);
+        }
+
+        private void SelectionButtonReleased(object o, ControllerInteractionEventArgs e)
+        {
+            OnSelectionButtonReleased.Invoke(o, e);
         }
     }
 }

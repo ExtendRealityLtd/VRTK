@@ -30,6 +30,7 @@ namespace VRTK
     /// <example>
     /// `VRTK/Examples/011_Camera_HeadSetCollisionFading` has collidable walls around the play area and if the user puts their head into any of the walls then the headset will fade to black.
     /// </example>
+    [AddComponentMenu("VRTK/Scripts/Presence/VRTK_HeadsetFade")]
     public class VRTK_HeadsetFade : MonoBehaviour
     {
         /// <summary>
@@ -49,9 +50,9 @@ namespace VRTK
         /// </summary>
         public event HeadsetFadeEventHandler HeadsetUnfadeComplete;
 
-        private Transform headset;
-        private bool isTransitioning = false;
-        private bool isFaded = false;
+        protected Transform headset;
+        protected bool isTransitioning = false;
+        protected bool isFaded = false;
 
         public virtual void OnHeadsetFadeStart(HeadsetFadeEventArgs e)
         {
@@ -134,18 +135,18 @@ namespace VRTK
 
         protected virtual void Start()
         {
-            headset = VRTK_DeviceFinder.HeadsetTransform();
+            headset = VRTK_DeviceFinder.HeadsetCamera();
             isTransitioning = false;
             isFaded = false;
 
             VRTK_SharedMethods.AddCameraFade();
             if (!VRTK_SDK_Bridge.HasHeadsetFade(headset))
             {
-                Debug.LogWarning("This 'VRTK_HeadsetFade' script needs a compatible fade script on the camera game object.");
+                VRTK_Logger.Warn(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, "VRTK_HeadsetFade", "compatible fade", "Camera"));
             }
         }
 
-        private HeadsetFadeEventArgs SetHeadsetFadeEvent(Transform currentTransform, float duration)
+        protected virtual HeadsetFadeEventArgs SetHeadsetFadeEvent(Transform currentTransform, float duration)
         {
             HeadsetFadeEventArgs e;
             e.timeTillComplete = duration;
@@ -153,14 +154,14 @@ namespace VRTK
             return e;
         }
 
-        private void FadeComplete()
+        protected virtual void FadeComplete()
         {
             isFaded = true;
             isTransitioning = false;
             OnHeadsetFadeComplete(SetHeadsetFadeEvent(headset, 0f));
         }
 
-        private void UnfadeComplete()
+        protected virtual void UnfadeComplete()
         {
             isFaded = false;
             isTransitioning = false;

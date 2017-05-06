@@ -12,6 +12,7 @@ namespace VRTK
     /// <example>
     /// `VRTK/Examples/025_Controls_Overview` has a selection of sliders at various angles with different step values to demonstrate their usage.
     /// </example>
+    [AddComponentMenu("VRTK/Scripts/Controls/3D/VRTK_Slider")]
     public class VRTK_Slider : VRTK_Control
     {
         [Tooltip("An optional game object to which the wheel will be connected. If the game object moves the wheel will follow along.")]
@@ -33,15 +34,13 @@ namespace VRTK
         [Tooltip("The amount of friction the slider will have when it is released.")]
         public float releasedFriction = 50f;
 
-        private Direction finalDirection;
-        private Rigidbody sliderRigidbody;
-        private ConfigurableJoint sliderJoint;
-        private bool sliderJointCreated = false;
-
-        private Vector3 minimumLimitDiff;
-        private Vector3 maximumLimitDiff;
-
-        private Vector3 snapPosition;
+        protected Direction finalDirection;
+        protected Rigidbody sliderRigidbody;
+        protected ConfigurableJoint sliderJoint;
+        protected bool sliderJointCreated = false;
+        protected Vector3 minimumLimitDiff;
+        protected Vector3 maximumLimitDiff;
+        protected Vector3 snapPosition;
 
         protected override void OnDrawGizmos()
         {
@@ -60,34 +59,6 @@ namespace VRTK
             InitRigidbody();
             InitInteractableObject();
             InitJoint();
-        }
-
-        private Vector3 CalculateDiff(Vector3 initialPosition, Vector3 givenDirection, float scaleValue, float diffMultiplier, bool addition)
-        {
-            var additionDiff = givenDirection * diffMultiplier;
-
-            var limitDiff = givenDirection * (scaleValue / 2f);
-            if (addition)
-            {
-                limitDiff = initialPosition + limitDiff;
-            }
-            else
-            {
-                limitDiff = initialPosition - limitDiff;
-            }
-
-            var answer = initialPosition - limitDiff;
-
-            if (addition)
-            {
-                answer -= additionDiff;
-            }
-            else
-            {
-                answer += additionDiff;
-            }
-
-            return answer;
         }
 
         protected override bool DetectSetup()
@@ -184,7 +155,35 @@ namespace VRTK
             }
         }
 
-        private void InitRigidbody()
+        protected virtual Vector3 CalculateDiff(Vector3 initialPosition, Vector3 givenDirection, float scaleValue, float diffMultiplier, bool addition)
+        {
+            var additionDiff = givenDirection * diffMultiplier;
+
+            var limitDiff = givenDirection * (scaleValue / 2f);
+            if (addition)
+            {
+                limitDiff = initialPosition + limitDiff;
+            }
+            else
+            {
+                limitDiff = initialPosition - limitDiff;
+            }
+
+            var answer = initialPosition - limitDiff;
+
+            if (addition)
+            {
+                answer -= additionDiff;
+            }
+            else
+            {
+                answer += additionDiff;
+            }
+
+            return answer;
+        }
+
+        protected virtual void InitRigidbody()
         {
             sliderRigidbody = GetComponent<Rigidbody>();
             if (sliderRigidbody == null)
@@ -208,7 +207,7 @@ namespace VRTK
             }
         }
 
-        private void InitInteractableObject()
+        protected virtual void InitInteractableObject()
         {
             VRTK_InteractableObject sliderInteractableObject = GetComponent<VRTK_InteractableObject>();
             if (sliderInteractableObject == null)
@@ -222,7 +221,7 @@ namespace VRTK
             sliderInteractableObject.stayGrabbedOnTeleport = false;
         }
 
-        private void InitJoint()
+        protected virtual void InitJoint()
         {
             sliderJoint = GetComponent<ConfigurableJoint>();
             if (sliderJoint == null)
@@ -242,7 +241,7 @@ namespace VRTK
             sliderJointCreated = true;
         }
 
-        private void CalculateValue()
+        protected virtual void CalculateValue()
         {
             Vector3 minPoint = minimumLimit.transform.localPosition - minimumLimitDiff;
             Vector3 maxPoint = maximumLimit.transform.localPosition - maximumLimitDiff;
@@ -260,7 +259,7 @@ namespace VRTK
             value = currentValue;
         }
 
-        private void ToggleSpring(bool state)
+        protected virtual void ToggleSpring(bool state)
         {
             JointDrive snapDriver = new JointDrive();
             snapDriver.positionSpring = (state ? 10000f : 0f);
@@ -272,7 +271,7 @@ namespace VRTK
             sliderJoint.zDrive = snapDriver;
         }
 
-        private void SnapToValue()
+        protected virtual void SnapToValue()
         {
             ToggleSpring(true);
             sliderJoint.targetPosition = snapPosition * -1f;

@@ -16,6 +16,7 @@ namespace VRTK
     /// <example>
     /// `VRTK/Examples/025_Controls_Overview` shows a drawer with contents that can be opened and closed freely and the contents can be removed from the drawer.
     /// </example>
+    [AddComponentMenu("VRTK/Scripts/Controls/3D/VRTK_Drawer")]
     public class VRTK_Drawer : VRTK_Control
     {
         [Tooltip("An optional game object to which the drawer will be connected. If the game object moves the drawer will follow along.")]
@@ -37,18 +38,18 @@ namespace VRTK
         [Range(0f, 1f)]
         public float maxExtend = 1f;
 
-        private Rigidbody drawerRigidbody;
-        private Rigidbody handleRigidbody;
-        private FixedJoint handleFixedJoint;
-        private ConfigurableJoint drawerJoint;
-        private VRTK_InteractableObject drawerInteractableObject;
-        private ConstantForce drawerSnapForce;
-        private Direction finalDirection;
-        private float subDirection = 1; // positive or negative can be determined automatically since handle dictates that
-        private float pullDistance = 0f;
-        private Vector3 initialPosition;
-        private bool drawerJointCreated = false;
-        private bool drawerSnapForceCreated = false;
+        protected Rigidbody drawerRigidbody;
+        protected Rigidbody handleRigidbody;
+        protected FixedJoint handleFixedJoint;
+        protected ConfigurableJoint drawerJoint;
+        protected VRTK_InteractableObject drawerInteractableObject;
+        protected ConstantForce drawerSnapForce;
+        protected Direction finalDirection;
+        protected float subDirection = 1; // positive or negative can be determined automatically since handle dictates that
+        protected float pullDistance = 0f;
+        protected Vector3 initialPosition;
+        protected bool drawerJointCreated = false;
+        protected bool drawerSnapForceCreated = false;
 
         protected override void OnDrawGizmos()
         {
@@ -194,7 +195,7 @@ namespace VRTK
             }
         }
 
-        private void InitBody()
+        protected virtual void InitBody()
         {
             drawerRigidbody = GetComponent<Rigidbody>();
             if (drawerRigidbody == null)
@@ -243,7 +244,7 @@ namespace VRTK
             }
         }
 
-        private void InitHandle()
+        protected virtual void InitHandle()
         {
             handleRigidbody = GetHandle().GetComponent<Rigidbody>();
             if (handleRigidbody == null)
@@ -261,7 +262,7 @@ namespace VRTK
             }
         }
 
-        private Direction DetectDirection()
+        protected virtual Direction DetectDirection()
         {
             Direction returnDirection = Direction.autodetect;
 
@@ -303,17 +304,17 @@ namespace VRTK
             return returnDirection;
         }
 
-        private float CalculateValue()
+        protected virtual float CalculateValue()
         {
             return (Mathf.Round((transform.position - initialPosition).magnitude / pullDistance * 100));
         }
 
-        private GameObject GetBody()
+        protected virtual GameObject GetBody()
         {
             return (body ? body : gameObject);
         }
 
-        private GameObject GetHandle()
+        protected virtual GameObject GetHandle()
         {
             return (handle ? handle : gameObject);
         }

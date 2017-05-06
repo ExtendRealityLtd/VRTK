@@ -1,44 +1,26 @@
 ﻿namespace VRTK.UnityEventHelper
 {
-    using UnityEngine;
     using UnityEngine.Events;
-
-    [RequireComponent(typeof(VRTK_ControllerActions))]
-    public class VRTK_ControllerActions_UnityEvents : MonoBehaviour
+    using System;
+#pragma warning disable 0618
+    public sealed class VRTK_ControllerActions_UnityEvents : VRTK_UnityEvents<VRTK_ControllerActions>
     {
-        private VRTK_ControllerActions ca;
+        [Serializable]
+        public sealed class ControllerActionsEvent : UnityEvent<object, ControllerActionsEventArgs> { }
 
-        [System.Serializable]
-        public class UnityObjectEvent : UnityEvent<object, ControllerActionsEventArgs> { };
+        public ControllerActionsEvent OnControllerModelVisible = new ControllerActionsEvent();
+        public ControllerActionsEvent OnControllerModelInvisible = new ControllerActionsEvent();
 
-        /// <summary>
-        /// Emits the ControllerModelVisible class event.
-        /// </summary>
-        public UnityObjectEvent OnControllerModelVisible = new UnityObjectEvent();
-        /// <summary>
-        /// Emits the ControllerModelInvisible class event.
-        /// </summary>
-        public UnityObjectEvent OnControllerModelInvisible = new UnityObjectEvent();
-
-        private void SetControllerAction()
+        protected override void AddListeners(VRTK_ControllerActions component)
         {
-            if (ca == null)
-            {
-                ca = GetComponent<VRTK_ControllerActions>();
-            }
+            component.ControllerModelVisible += ControllerModelVisible;
+            component.ControllerModelInvisible += ControllerModelInvisible;
         }
 
-        private void OnEnable()
+        protected override void RemoveListeners(VRTK_ControllerActions component)
         {
-            SetControllerAction();
-            if (ca == null)
-            {
-                Debug.LogError("The VRTK_ControllerActions_UnityEvents script requires to be attached to a GameObject that contains a VRTK_ControllerActions script");
-                return;
-            }
-
-            ca.ControllerModelVisible += ControllerModelVisible;
-            ca.ControllerModelInvisible += ControllerModelInvisible;
+            component.ControllerModelVisible -= ControllerModelVisible;
+            component.ControllerModelInvisible -= ControllerModelInvisible;
         }
 
         private void ControllerModelVisible(object o, ControllerActionsEventArgs e)
@@ -50,16 +32,6 @@
         {
             OnControllerModelInvisible.Invoke(o, e);
         }
-
-        private void OnDisable()
-        {
-            if (ca == null)
-            {
-                return;
-            }
-
-            ca.ControllerModelVisible -= ControllerModelVisible;
-            ca.ControllerModelInvisible -= ControllerModelInvisible;
-        }
     }
+#pragma warning restore 0618
 }

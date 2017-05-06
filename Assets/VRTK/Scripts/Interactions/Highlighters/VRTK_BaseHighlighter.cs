@@ -36,8 +36,8 @@ namespace VRTK.Highlighters
         /// </summary>
         /// <param name="color">An optional colour to highlight the game object to. The highlight colour may already have been set in the `Initialise` method so may not be required here.</param>
         /// <param name="duration">An optional duration of how long before the highlight has occured. It can be used by highlighters to fade the colour if possible.</param>
-
         public abstract void Highlight(Color? color = null, float duration = 0f);
+
         /// <summary>
         /// The Unhighlight method is used to initiate the logic that returns an object back to it's original appearance.
         /// </summary>
