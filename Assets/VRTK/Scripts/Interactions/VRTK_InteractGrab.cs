@@ -76,6 +76,13 @@ namespace VRTK
         protected int grabEnabledState = 0;
         protected float grabPrecognitionTimer = 0f;
         protected GameObject undroppableGrabbedObject;
+        protected VRTK_ControllerReference controllerReference
+        {
+            get
+            {
+                return VRTK_ControllerReference.GetControllerReference((interactTouch != null ? interactTouch.gameObject : null));
+            }
+        }
 
         public virtual void OnControllerGrabInteractableObject(ObjectInteractEventArgs e)
         {
@@ -265,12 +272,11 @@ namespace VRTK
 
         protected virtual void SetControllerAttachPoint()
         {
-            GameObject modelController = VRTK_DeviceFinder.GetModelAliasController(interactTouch.gameObject);
             //If no attach point has been specified then just use the tip of the controller
-            if (modelController != null && controllerAttachPoint == null)
+            if (controllerReference.model != null && controllerAttachPoint == null)
             {
                 //attempt to find the attach point on the controller
-                Transform defaultAttachPoint = modelController.transform.Find(VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.AttachPoint, VRTK_DeviceFinder.GetControllerHand(interactTouch.gameObject)));
+                Transform defaultAttachPoint = controllerReference.model.transform.Find(VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.AttachPoint, VRTK_DeviceFinder.GetControllerHand(interactTouch.gameObject)));
                 if (defaultAttachPoint != null)
                 {
                     controllerAttachPoint = defaultAttachPoint.GetComponent<Rigidbody>();
@@ -315,18 +321,17 @@ namespace VRTK
 
         protected virtual void ToggleControllerVisibility(bool visible)
         {
-            GameObject modelContainer = VRTK_DeviceFinder.GetModelAliasController(interactTouch.gameObject);
             if (grabbedObject != null)
             {
                 VRTK_InteractControllerAppearance[] controllerAppearanceScript = grabbedObject.GetComponentsInParent<VRTK_InteractControllerAppearance>(true);
                 if (controllerAppearanceScript.Length > 0)
                 {
-                    controllerAppearanceScript[0].ToggleControllerOnGrab(visible, modelContainer, grabbedObject);
+                    controllerAppearanceScript[0].ToggleControllerOnGrab(visible, controllerReference.model, grabbedObject);
                 }
             }
             else if (visible)
             {
-                VRTK_SharedMethods.SetRendererVisible(modelContainer, grabbedObject);
+                VRTK_SharedMethods.SetRendererVisible(controllerReference.model, grabbedObject);
             }
         }
 
@@ -344,7 +349,7 @@ namespace VRTK
 
         protected virtual void InitPrimaryGrab(VRTK_InteractableObject currentGrabbedObject)
         {
-            GameObject grabbingObject = interactTouch.gameObject;
+            GameObject grabbingObject = controllerReference.scriptAlias;
 
             if (!currentGrabbedObject.IsValidInteractableController(grabbingObject, currentGrabbedObject.allowedGrabControllers))
             {
@@ -366,7 +371,7 @@ namespace VRTK
 
         protected virtual void InitSecondaryGrab(VRTK_InteractableObject currentGrabbedObject)
         {
-            GameObject grabbingObject = interactTouch.gameObject;
+            GameObject grabbingObject = controllerReference.scriptAlias;
 
             if (!currentGrabbedObject.IsValidInteractableController(grabbingObject, currentGrabbedObject.allowedGrabControllers))
             {
@@ -394,7 +399,7 @@ namespace VRTK
         {
             if (grabbedObject != null)
             {
-                GameObject grabbingObject = interactTouch.gameObject;
+                GameObject grabbingObject = controllerReference.scriptAlias;
                 var grabbedObjectScript = grabbedObject.GetComponent<VRTK_InteractableObject>();
                 if (!influencingGrabbedObject)
                 {
@@ -446,9 +451,9 @@ namespace VRTK
             if (grabbedObject != null && initialGrabAttempt)
             {
                 var doHaptics = grabbedObject.GetComponentInParent<VRTK_InteractHaptics>();
-                if (doHaptics)
+                if (doHaptics != null)
                 {
-                    doHaptics.HapticsOnGrab(VRTK_DeviceFinder.GetControllerIndex(interactTouch.gameObject));
+                    doHaptics.HapticsOnGrab(controllerReference);
                 }
             }
         }
@@ -476,7 +481,7 @@ namespace VRTK
 
         protected virtual bool IsValidGrabAttempt(GameObject objectToGrab)
         {
-            GameObject grabbingObject = interactTouch.gameObject;
+            GameObject grabbingObject = controllerReference.scriptAlias;
             bool initialGrabAttempt = false;
             var objectToGrabScript = objectToGrab.GetComponent<VRTK_InteractableObject>();
             if (grabbedObject == null && interactTouch != null && IsObjectGrabbable(interactTouch.GetTouchedObject()) && objectToGrabScript && objectToGrabScript.grabAttachMechanicScript.ValidGrab(controllerAttachPoint))

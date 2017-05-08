@@ -114,7 +114,7 @@ namespace VRTK
             }
 
             bool validNavMeshLocation = false;
-            if (target)
+            if (target != null)
             {
                 NavMeshHit hit;
                 validNavMeshLocation = NavMesh.SamplePosition(destinationPosition, out hit, navMeshLimitDistance, NavMesh.AllAreas);
@@ -124,7 +124,36 @@ namespace VRTK
                 validNavMeshLocation = true;
             }
 
-            return (validNavMeshLocation && target && !(VRTK_PolicyList.Check(target.gameObject, targetListPolicy)));
+            return (validNavMeshLocation && target != null && !(VRTK_PolicyList.Check(target.gameObject, targetListPolicy)));
+        }
+
+        /// <summary>
+        /// The ForceTeleport/1 method forces the teleport to update position without needing to listen for a Destination Marker event.
+        /// </summary>
+        /// <param name="teleportArgs">The pseudo Destination Marker event for the teleport action.</param>
+        public virtual void ForceTeleport(DestinationMarkerEventArgs teleportArgs)
+        {
+            DoTeleport(this, teleportArgs);
+        }
+
+        /// <summary>
+        /// The ForceTeleport/3 method forces the teleport to update position without needing to listen for a Destination Marker event.
+        ///  It will build a destination marker out of the provided parameters.
+        /// </summary>
+        /// <param name="target">The Transform of the destination object.</param>
+        /// <param name="destinationPosition">The world position to teleport to.</param>
+        /// <param name="destinationRotation">The world rotation to teleport to.</param>
+        public virtual void ForceTeleport(Transform target, Vector3 destinationPosition, Quaternion? destinationRotation = null)
+        {
+            DestinationMarkerEventArgs teleportArgs = new DestinationMarkerEventArgs();
+            teleportArgs.distance = Vector3.Distance(new Vector3(headset.position.x, playArea.position.y, headset.position.z), destinationPosition);
+            teleportArgs.target = target;
+            teleportArgs.raycastHit = new RaycastHit();
+            teleportArgs.destinationPosition = destinationPosition;
+            teleportArgs.destinationRotation = destinationRotation;
+            teleportArgs.forceDestinationPosition = false;
+            teleportArgs.enableTeleport = true;
+            ForceTeleport(teleportArgs);
         }
 
         protected virtual void OnEnable()

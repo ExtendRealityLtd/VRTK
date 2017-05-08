@@ -36,7 +36,8 @@ namespace VRTK
             OculusRift,
             OculusRiftCV1,
             Vive,
-            ViveMV
+            ViveMV,
+            ViveDVT
         }
 
         /// <summary>
@@ -65,9 +66,20 @@ namespace VRTK
         /// </summary>
         /// <param name="controller">The GameObject to get the origin for.</param>
         /// <returns>The transform of the controller origin or if an origin is not set then the transform parent.</returns>
+        [System.Obsolete("`VRTK_DeviceFinder.GetControllerOrigin(controller)` has been replaced with `VRTK_DeviceFinder.GetControllerOrigin(controllerReference)`. This method will be removed in a future version of VRTK.")]
         public static Transform GetControllerOrigin(GameObject controller)
         {
-            return VRTK_SDK_Bridge.GetControllerOrigin(controller);
+            return GetControllerOrigin(VRTK_ControllerReference.GetControllerReference(controller));
+        }
+
+        /// <summary>
+        /// The GetControllerOrigin method is used to find the controller's origin.
+        /// </summary>
+        /// <param name="controllerReference">The reference to the controller to get the origin for.</param>
+        /// <returns>The transform of the controller origin or if an origin is not set then the transform parent.</returns>
+        public static Transform GetControllerOrigin(VRTK_ControllerReference controllerReference)
+        {
+            return VRTK_SDK_Bridge.GetControllerOrigin(controllerReference);
         }
 
         /// <summary>
@@ -270,10 +282,20 @@ namespace VRTK
         /// </summary>
         /// <param name="givenController">The GameObject of the controller.</param>
         /// <returns>A 3 dimensional vector containing the current real world physical controller velocity.</returns>
+        [System.Obsolete("`VRTK_DeviceFinder.GetControllerVelocity(givenController)` has been replaced with `VRTK_DeviceFinder.GetControllerVelocity(controllerReference)`. This method will be removed in a future version of VRTK.")]
         public static Vector3 GetControllerVelocity(GameObject givenController)
         {
-            var controllerIndex = GetControllerIndex(givenController);
-            return VRTK_SDK_Bridge.GetVelocityOnIndex(controllerIndex);
+            return GetControllerVelocity(VRTK_ControllerReference.GetControllerReference(givenController));
+        }
+
+        /// <summary>
+        /// The GetControllerVelocity method is used for getting the current velocity of the physical game controller. This can be useful to determine the speed at which the controller is being swung or the direction it is being moved in.
+        /// </summary>
+        /// <param name="controllerReference">The reference to the controller.</param>
+        /// <returns>A 3 dimensional vector containing the current real world physical controller velocity.</returns>
+        public static Vector3 GetControllerVelocity(VRTK_ControllerReference controllerReference)
+        {
+            return VRTK_SDK_Bridge.GetControllerVelocity(controllerReference);
         }
 
         /// <summary>
@@ -281,10 +303,20 @@ namespace VRTK
         /// </summary>
         /// <param name="givenController">The GameObject of the controller.</param>
         /// <returns>A 3 dimensional vector containing the current real world physical controller angular (rotational) velocity.</returns>
+        [System.Obsolete("`VRTK_DeviceFinder.GetControllerAngularVelocity(givenController)` has been replaced with `VRTK_DeviceFinder.GetControllerAngularVelocity(controllerReference)`. This method will be removed in a future version of VRTK.")]
         public static Vector3 GetControllerAngularVelocity(GameObject givenController)
         {
-            var controllerIndex = GetControllerIndex(givenController);
-            return VRTK_SDK_Bridge.GetAngularVelocityOnIndex(controllerIndex);
+            return GetControllerAngularVelocity(VRTK_ControllerReference.GetControllerReference(givenController));
+        }
+
+        /// <summary>
+        /// The GetControllerAngularVelocity method is used for getting the current rotational velocity of the physical game controller. This can be useful for determining which way the controller is being rotated and at what speed the rotation is occurring.
+        /// </summary>
+        /// <param name="controllerReference">The reference to the controller.</param>
+        /// <returns>A 3 dimensional vector containing the current real world physical controller angular (rotational) velocity.</returns>
+        public static Vector3 GetControllerAngularVelocity(VRTK_ControllerReference controllerReference)
+        {
+            return VRTK_SDK_Bridge.GetControllerAngularVelocity(controllerReference);
         }
 
         /// <summary>
@@ -340,7 +372,33 @@ namespace VRTK
                 case "Vive MV":
                     returnValue = (summary ? Headsets.Vive : Headsets.ViveMV);
                     break;
+                case "Vive DVT":
+                    returnValue = (summary ? Headsets.Vive : Headsets.ViveDVT);
+                    break;
             }
+
+            if (returnValue == Headsets.Unknown)
+            {
+                VRTK_Logger.Warn(
+                    string.Format("Your headset is of type '{0}' which VRTK doesn't know about yet. Please report this headset type to the maintainers of VRTK."
+                                  + (summary ? " Falling back to a slower check to summarize the headset type now." : ""),
+                                  checkValue)
+                );
+
+                if (summary)
+                {
+                    checkValue = checkValue.ToLowerInvariant();
+                    if (checkValue.Contains("rift"))
+                    {
+                        return Headsets.OculusRift;
+                    }
+                    if (checkValue.Contains("vive"))
+                    {
+                        return Headsets.Vive;
+                    }
+                }
+            }
+
             return returnValue;
         }
 
