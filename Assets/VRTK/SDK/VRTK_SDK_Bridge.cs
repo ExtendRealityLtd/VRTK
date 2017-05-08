@@ -169,6 +169,11 @@
             return GetControllerSDK().GetAngularVelocity(controllerReference);
         }
 
+        public static bool IsTouchpadStatic(bool isTouched, Vector2 currentAxisValues, Vector2 previousAxisValues, int compareFidelity)
+        {
+            return GetControllerSDK().IsTouchpadStatic(isTouched, currentAxisValues, previousAxisValues, compareFidelity);
+        }
+
         public static Vector2 GetControllerAxis(SDK_BaseController.ButtonTypes buttonType, VRTK_ControllerReference controllerReference)
         {
             return GetControllerSDK().GetButtonAxis(buttonType, controllerReference);

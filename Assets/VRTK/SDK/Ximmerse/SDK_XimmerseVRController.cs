@@ -401,6 +401,18 @@ namespace VRTK
         }
 
         /// <summary>
+        /// The IsTouchpadStatic method is used to determine if the touchpad is currently not being moved.
+        /// </summary>
+        /// <param name="currentAxisValues"></param>
+        /// <param name="previousAxisValues"></param>
+        /// <param name="compareFidelity"></param>
+        /// <returns>Returns true if the touchpad is not currently being touched or moved.</returns>
+        public override bool IsTouchpadStatic(bool isTouched, Vector2 currentAxisValues, Vector2 previousAxisValues, int compareFidelity)
+        {
+            return (!isTouched || VRTK_SharedMethods.Vector2ShallowCompare(currentAxisValues, previousAxisValues, compareFidelity));
+        }
+
+        /// <summary>
         /// The GetButtonAxis method retrieves the current X/Y axis values for the given button type on the given controller reference.
         /// </summary>
         /// <param name="buttonType">The type of button to check for the axis on.</param>

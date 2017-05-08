@@ -5,6 +5,7 @@ namespace VRTK
 #if UNITY_EDITOR
     using UnityEditor;
 #endif
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
@@ -161,7 +162,7 @@ namespace VRTK
         /// <returns>The new colour with the darken applied.</returns>
         public static Color ColorDarken(Color color, float percent)
         {
-            return new Color(ColorPercent(color.r, percent), ColorPercent(color.g, percent), ColorPercent(color.b, percent), color.a);
+            return new Color(NumberPercent(color.r, percent), NumberPercent(color.g, percent), NumberPercent(color.b, percent), color.a);
         }
 
         /// <summary>
@@ -409,7 +410,7 @@ namespace VRTK
         /// </remarks>
         /// <typeparam name="T">The component type to search for. Must be a subclass of <see cref="Object"/>.</typeparam>
         /// <returns>All the found components. If no component is found an empty array is returned.</returns>
-        public static T[] FindEvenInactiveComponents<T>() where T : Object
+        public static T[] FindEvenInactiveComponents<T>() where T : UnityEngine.Object
         {
             return Resources.FindObjectsOfTypeAll<T>()
 #if UNITY_EDITOR
@@ -477,7 +478,27 @@ namespace VRTK
 #endif
         }
 
-        private static float ColorPercent(float value, float percent)
+        /// <summary>
+        /// The Vector2ShallowCompare method compares two given Vector2 objects based on the given fidelity, which is the equivalent of comparing rounded Vector2 elements to determine if the Vector2 elements are equal.
+        /// </summary>
+        /// <param name="vectorA">The Vector2 to compare against.</param>
+        /// <param name="vectorB">The Vector2 to compare with</param>
+        /// <param name="compareFidelity">The number of decimal places to use when doing the comparison on the float elements within the Vector2.</param>
+        /// <returns>Returns true if the given Vector2 objects match based on the given fidelity.</returns>
+        public static bool Vector2ShallowCompare(Vector2 vectorA, Vector2 vectorB, int compareFidelity)
+        {
+            var distanceVector = vectorA - vectorB;
+            return (Math.Round(Mathf.Abs(distanceVector.x), compareFidelity, MidpointRounding.AwayFromZero) < float.Epsilon &&
+                    Math.Round(Mathf.Abs(distanceVector.y), compareFidelity, MidpointRounding.AwayFromZero) < float.Epsilon);
+        }
+
+        /// <summary>
+        /// The NumberPercent method is used to determine the percentage of a given value.
+        /// </summary>
+        /// <param name="value">The value to determine the percentage from</param>
+        /// <param name="percent">The percentage to find within the given value.</param>
+        /// <returns>A float containing the percentage value based on the given input.</returns>
+        public static float NumberPercent(float value, float percent)
         {
             percent = Mathf.Clamp(percent, 0f, 100f);
             return (percent == 0f ? value : (value - (percent / 100f)));
