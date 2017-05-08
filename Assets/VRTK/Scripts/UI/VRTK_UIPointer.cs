@@ -159,7 +159,13 @@ namespace VRTK
         protected bool lastPointerPressState = false;
         protected bool lastPointerClickState = false;
         protected GameObject currentTarget;
-        protected VRTK_ControllerReference controllerReference;
+        protected VRTK_ControllerReference controllerReference
+        {
+            get
+            {
+                return VRTK_ControllerReference.GetControllerReference((controller != null ? controller.gameObject : null));
+            }
+        }
 
         protected EventSystem cachedEventSystem;
         protected VRTK_VRInputModule cachedVRInputModule;
@@ -408,8 +414,6 @@ namespace VRTK
 
             if (controller != null)
             {
-                controllerReference = VRTK_ControllerReference.GetControllerReference(controller.gameObject);
-                controllerRenderModel = VRTK_SDK_Bridge.GetControllerRenderModel(controllerReference);
                 controller.SubscribeToButtonAliasEvent(activationButton, true, DoActivationButtonPressed);
                 controller.SubscribeToButtonAliasEvent(activationButton, false, DoActivationButtonReleased);
                 controller.SubscribeToButtonAliasEvent(selectionButton, true, DoSelectionButtonPressed);
@@ -437,8 +441,11 @@ namespace VRTK
         {
             if (controller != null)
             {
-                controllerReference = VRTK_ControllerReference.GetControllerReference(controller.gameObject);
                 pointerEventData.pointerId = (int)VRTK_ControllerReference.GetRealIndex(controllerReference);
+            }
+            if (controllerRenderModel == null && VRTK_ControllerReference.IsValid(controllerReference))
+            {
+                controllerRenderModel = VRTK_SDK_Bridge.GetControllerRenderModel(controllerReference);
             }
         }
 

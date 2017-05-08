@@ -62,7 +62,13 @@ namespace VRTK
         protected bool rigidBodyForcedActive = false;
         protected Rigidbody touchRigidBody;
         protected Object defaultColliderPrefab;
-        protected VRTK_ControllerReference controllerReference;
+        protected VRTK_ControllerReference controllerReference
+        {
+            get
+            {
+                return VRTK_ControllerReference.GetControllerReference(gameObject);
+            }
+        }
 
         public virtual void OnControllerTouchInteractableObject(ObjectInteractEventArgs e)
         {
@@ -202,7 +208,6 @@ namespace VRTK
         {
             VRTK_PlayerObject.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.Controller);
             triggerRumble = false;
-            controllerReference = VRTK_ControllerReference.GetControllerReference(gameObject);
             CreateTouchCollider();
             CreateTouchRigidBody();
         }

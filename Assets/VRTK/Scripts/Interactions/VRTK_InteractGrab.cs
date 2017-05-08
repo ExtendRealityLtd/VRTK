@@ -76,7 +76,13 @@ namespace VRTK
         protected int grabEnabledState = 0;
         protected float grabPrecognitionTimer = 0f;
         protected GameObject undroppableGrabbedObject;
-        protected VRTK_ControllerReference controllerReference;
+        protected VRTK_ControllerReference controllerReference
+        {
+            get
+            {
+                return VRTK_ControllerReference.GetControllerReference((interactTouch != null ? interactTouch.gameObject : null));
+            }
+        }
 
         public virtual void OnControllerGrabInteractableObject(ObjectInteractEventArgs e)
         {
@@ -154,8 +160,6 @@ namespace VRTK
             {
                 VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_NOT_INJECTED, "VRTK_InteractGrab", "VRTK_InteractTouch", "interactTouch", "the same or parent"));
             }
-
-            controllerReference = VRTK_ControllerReference.GetControllerReference(interactTouch.gameObject);
 
             RegrabUndroppableObject();
             ManageGrabListener(true);

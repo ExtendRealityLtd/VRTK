@@ -58,7 +58,13 @@ namespace VRTK
         protected VRTK_ControllerEvents.ButtonAlias subscribedUseButton = VRTK_ControllerEvents.ButtonAlias.Undefined;
         protected VRTK_ControllerEvents.ButtonAlias savedUseButton = VRTK_ControllerEvents.ButtonAlias.Undefined;
         protected bool usePressed;
-        protected VRTK_ControllerReference controllerReference;
+        protected VRTK_ControllerReference controllerReference
+        {
+            get
+            {
+                return VRTK_ControllerReference.GetControllerReference((interactTouch != null ? interactTouch.gameObject : null));
+            }
+        }
 
         protected GameObject usingObject = null;
 
@@ -152,8 +158,6 @@ namespace VRTK
             {
                 VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_NOT_INJECTED, "VRTK_InteractUse", "VRTK_InteractTouch", "interactTouch", "the same or parent"));
             }
-
-            controllerReference = VRTK_ControllerReference.GetControllerReference(interactTouch.gameObject);
 
             ManageUseListener(true);
             ManageInteractTouchListener(true);
