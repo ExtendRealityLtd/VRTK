@@ -1659,6 +1659,30 @@ The ToggleTeleportEnabled method is used to determine whether the teleporter wil
 
 The ValidLocation method determines if the given target is a location that can be teleported to
 
+#### ForceTeleport/1
+
+  > `public virtual void ForceTeleport(DestinationMarkerEventArgs teleportArgs)`
+
+  * Parameters
+   * `DestinationMarkerEventArgs teleportArgs` - The pseudo Destination Marker event for the teleport action.
+  * Returns
+   * _none_
+
+The ForceTeleport/1 method forces the teleport to update position without needing to listen for a Destination Marker event.
+
+#### ForceTeleport/3
+
+  > `public virtual void ForceTeleport(Transform target, Vector3 destinationPosition, Quaternion? destinationRotation = null)`
+
+  * Parameters
+   * `Transform target` - The Transform of the destination object.
+   * `Vector3 destinationPosition` - The world position to teleport to.
+   * `Quaternion? destinationRotation` - The world rotation to teleport to.
+  * Returns
+   * _none_
+
+The ForceTeleport/3 method forces the teleport to update position without needing to listen for a Destination Marker event. It will build a destination marker out of the provided parameters.
+
 ### Example
 
 `VRTK/Examples/004_CameraRig_BasicTeleport` uses the `VRTK_SimplePointer` script on the Controllers to initiate a laser pointer by pressing the `Touchpad` on the controller and when the laser pointer is deactivated (release the `Touchpad`) then the user is teleported to the location of the laser pointer tip as this is where the pointer destination marker position is set to.
