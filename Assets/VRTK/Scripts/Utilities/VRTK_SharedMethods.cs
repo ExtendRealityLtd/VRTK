@@ -268,6 +268,20 @@ namespace VRTK
             }
         }
 
+         /// <summary>
+        /// The TriggerHapticAudio method plays an AudioClip as haptics on the controller.
+        /// </summary>
+        /// <param name="clip">The AudioClip to play.</param>
+        /// <param name="strength">The intensity of the rumble of the controller motor. `0` to `1`.</param>
+        public static void TriggerHapticAudio(uint controllerIndex, AudioClip clip, float strength)
+        {
+            var instanceMethods = VRTK_InstanceMethods.instance;
+            if (instanceMethods != null)
+            {
+                instanceMethods.haptics.TriggerHapticAudio(controllerIndex, clip, strength);
+            }
+        }
+
         /// <summary>
         /// The SetOpacity method allows the opacity of the given GameObject to be changed. A lower alpha value will make the object more transparent, such as `0.5f` will make the controller partially transparent where as `0f` will make the controller completely transparent.
         /// </summary>

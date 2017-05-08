@@ -6,6 +6,7 @@ namespace VRTK
     using System.Collections.Generic;
     using Valve.VR;
     using System.Collections;
+#endif
 
     /// <summary>
     /// The SteamVR Controller SDK script provides a bridge to SDK methods that deal with the input devices.
@@ -18,6 +19,8 @@ namespace VRTK
         : SDK_FallbackController
 #endif
     {
+#if VRTK_DEFINE_SDK_STEAMVR
+
         protected SteamVR_TrackedObject cachedLeftTrackedObject;
         protected SteamVR_TrackedObject cachedRightTrackedObject;
         protected Dictionary<GameObject, SteamVR_TrackedObject> cachedTrackedObjectsByGameObject = new Dictionary<GameObject, SteamVR_TrackedObject>();

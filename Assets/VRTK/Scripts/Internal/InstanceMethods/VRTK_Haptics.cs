@@ -45,6 +45,13 @@
             CancelCurrentHapticPulse(controllerReference);
         }
 
+        public virtual void TriggerHapticAudio(uint controllerIndex, AudioClip clip, float strength)
+        {
+            CancelCurrentHapticPulse(controllerIndex);
+            var hapticPulseStrength = Mathf.Clamp(strength, 0f, 1f);
+            VRTK_SDK_Bridge.HapticAudioOnIndex(controllerIndex, clip, hapticPulseStrength);
+        }
+
         protected virtual void OnDisable()
         {
             StopAllCoroutines();

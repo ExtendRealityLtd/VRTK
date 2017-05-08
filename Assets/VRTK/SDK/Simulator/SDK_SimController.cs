@@ -291,6 +291,17 @@ namespace VRTK
         }
 
         /// <summary>
+        /// The HapticAudioOnIndex method is used to initiate a haptic audio clip on the tracked object of the given index.
+        /// </summary>
+        /// <param name="index">The index of the tracked object to initiate the haptic audio on.</param>
+        /// <param name="clip">The clip to play on the target object.</param>
+        /// <param name="strength">The intensity of the rumble of the controller motor. `0` to `1`.</param>
+        public override void HapticAudioOnIndex(uint index, AudioClip clip, float strength = 0.5f)
+        {
+            
+        }
+
+        /// <summary>
         /// The GetHapticModifiers method is used to return modifiers for the duration and interval if the SDK handles it slightly differently.
         /// </summary>
         /// <returns>An SDK_ControllerHapticModifiers object with a given `durationModifier` and an `intervalModifier`.</returns>

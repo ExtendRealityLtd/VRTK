@@ -63,7 +63,7 @@ namespace VRTK
         {
             if (audioClipTouch && strengthOnTouch > 0)
             {
-                TriggerHapticAudio(controllerActions, audioClipTouch, strengthOnTouch);
+                TriggerHapticAudio(controllerReference, audioClipTouch, strengthOnTouch);
             }
             else if (strengthOnTouch > 0 && durationOnTouch > 0f)
             {
@@ -89,7 +89,7 @@ namespace VRTK
         {
             if (audioClipGrab && strengthOnGrab > 0)
             {
-                TriggerHapticAudio(controllerActions, audioClipGrab, strengthOnGrab);
+                TriggerHapticAudio(controllerReference, audioClipGrab, strengthOnGrab);
             }
             else if (strengthOnGrab > 0 && durationOnGrab > 0f)
             {
@@ -115,7 +115,7 @@ namespace VRTK
         {
             if (audioClipUse && strengthOnUse > 0)
             {
-                TriggerHapticAudio(controllerActions, audioClipUse, strengthOnUse);
+                TriggerHapticAudio(controllerReference, audioClipUse, strengthOnUse);
             }
             else if (strengthOnUse > 0 && durationOnUse > 0f)
             {
@@ -136,12 +136,9 @@ namespace VRTK
             VRTK_SharedMethods.TriggerHapticPulse(controllerReference, strength, duration, (interval >= minInterval ? interval : minInterval));
         }
 
-        private void TriggerHapticAudio(VRTK_ControllerActions controllerActions, AudioClip clip, float strength)
+        private void TriggerHapticAudio(uint controllerIndex, AudioClip clip, float strength)
         {
-            if (controllerActions)
-            {
-                controllerActions.TriggerHapticAudio(clip, strength);
-            }
+            VRTK_SharedMethods.TriggerHapticAudio(controllerIndex, clip, strength);
         }
     }
 }
