@@ -36,7 +36,8 @@ namespace VRTK
             OculusRift,
             OculusRiftCV1,
             Vive,
-            ViveMV
+            ViveMV,
+            ViveDVT
         }
 
         /// <summary>
@@ -371,7 +372,33 @@ namespace VRTK
                 case "Vive MV":
                     returnValue = (summary ? Headsets.Vive : Headsets.ViveMV);
                     break;
+                case "Vive DVT":
+                    returnValue = (summary ? Headsets.Vive : Headsets.ViveDVT);
+                    break;
             }
+
+            if (returnValue == Headsets.Unknown)
+            {
+                VRTK_Logger.Warn(
+                    string.Format("Your headset is of type '{0}' which VRTK doesn't know about yet. Please report this headset type to the maintainers of VRTK."
+                                  + (summary ? " Falling back to a slower check to summarize the headset type now." : ""),
+                                  checkValue)
+                );
+
+                if (summary)
+                {
+                    checkValue = checkValue.ToLowerInvariant();
+                    if (checkValue.Contains("rift"))
+                    {
+                        return Headsets.OculusRift;
+                    }
+                    if (checkValue.Contains("vive"))
+                    {
+                        return Headsets.Vive;
+                    }
+                }
+            }
+
             return returnValue;
         }
 
