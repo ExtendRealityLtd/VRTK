@@ -19,8 +19,8 @@
         public event VRTKTrackedControllerEventHandler ControllerDisabled;
         public event VRTKTrackedControllerEventHandler ControllerIndexChanged;
 
-        private Coroutine enableControllerCoroutine = null;
-        private GameObject aliasController;
+        protected Coroutine enableControllerCoroutine = null;
+        protected GameObject aliasController;
 
         public virtual void OnControllerEnabled(VRTKTrackedControllerEventArgs e)
         {
@@ -86,7 +86,7 @@
 
         protected virtual void FixedUpdate()
         {
-            VRTK_SDK_Bridge.ControllerProcessFixedUpdate(index);
+            VRTK_SDK_Bridge.ControllerProcessFixedUpdate(VRTK_ControllerReference.GetControllerReference(index));
         }
 
         protected virtual void Update()
@@ -95,11 +95,10 @@
             if (index < uint.MaxValue && checkIndex != index)
             {
                 uint previousIndex = index;
-                index = checkIndex;
                 OnControllerIndexChanged(SetEventPayload(previousIndex));
             }
 
-            VRTK_SDK_Bridge.ControllerProcessUpdate(index);
+            VRTK_SDK_Bridge.ControllerProcessUpdate(VRTK_ControllerReference.GetControllerReference(index));
 
             if (aliasController != null && gameObject.activeInHierarchy && !aliasController.activeSelf)
             {

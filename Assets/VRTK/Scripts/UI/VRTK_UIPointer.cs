@@ -7,14 +7,17 @@ namespace VRTK
     /// <summary>
     /// Event Payload
     /// </summary>
-    /// <param name="controllerIndex">The index of the controller that was used.</param>
+    /// <param name="controllerIndex">**OBSOLETE** The index of the controller that was used.</param>
+    /// <param name="controllerReference">The reference to the controller that was used.</param>
     /// <param name="isActive">The state of whether the UI Pointer is currently active or not.</param>
     /// <param name="currentTarget">The current UI element that the pointer is colliding with.</param>
     /// <param name="previousTarget">The previous UI element that the pointer was colliding with.</param>
     /// <param name="raycastResult">The raw raycast result of the UI ray collision.</param>
     public struct UIPointerEventArgs
     {
+        [System.Obsolete("`UIPointerEventArgs.controllerIndex` has been replaced with `UIPointerEventArgs.controllerReference`. This parameter will be removed in a future version of VRTK.")]
         public uint controllerIndex;
+        public VRTK_ControllerReference controllerReference;
         public bool isActive;
         public GameObject currentTarget;
         public GameObject previousTarget;
@@ -156,6 +159,7 @@ namespace VRTK
         protected bool lastPointerPressState = false;
         protected bool lastPointerClickState = false;
         protected GameObject currentTarget;
+        protected VRTK_ControllerReference controllerReference;
 
         protected EventSystem cachedEventSystem;
         protected VRTK_VRInputModule cachedVRInputModule;
@@ -261,7 +265,10 @@ namespace VRTK
         public virtual UIPointerEventArgs SetUIPointerEvent(RaycastResult currentRaycastResult, GameObject currentTarget, GameObject lastTarget = null)
         {
             UIPointerEventArgs e;
-            e.controllerIndex = (controller != null ? VRTK_DeviceFinder.GetControllerIndex(controller.gameObject) : uint.MaxValue);
+#pragma warning disable 0618
+            e.controllerIndex = VRTK_ControllerReference.GetRealIndex(controllerReference);
+#pragma warning restore 0618
+            e.controllerReference = controllerReference;
             e.isActive = PointerActive();
             e.currentTarget = currentTarget;
             e.previousTarget = lastTarget;
@@ -401,7 +408,8 @@ namespace VRTK
 
             if (controller != null)
             {
-                controllerRenderModel = VRTK_SDK_Bridge.GetControllerRenderModel(controller.gameObject);
+                controllerReference = VRTK_ControllerReference.GetControllerReference(controller.gameObject);
+                controllerRenderModel = VRTK_SDK_Bridge.GetControllerRenderModel(controllerReference);
                 controller.SubscribeToButtonAliasEvent(activationButton, true, DoActivationButtonPressed);
                 controller.SubscribeToButtonAliasEvent(activationButton, false, DoActivationButtonReleased);
                 controller.SubscribeToButtonAliasEvent(selectionButton, true, DoSelectionButtonPressed);
@@ -429,7 +437,8 @@ namespace VRTK
         {
             if (controller != null)
             {
-                pointerEventData.pointerId = (int)VRTK_DeviceFinder.GetControllerIndex(controller.gameObject);
+                controllerReference = VRTK_ControllerReference.GetControllerReference(controller.gameObject);
+                pointerEventData.pointerId = (int)VRTK_ControllerReference.GetRealIndex(controllerReference);
             }
         }
 

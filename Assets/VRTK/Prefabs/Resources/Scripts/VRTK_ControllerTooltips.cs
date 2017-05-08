@@ -240,8 +240,8 @@ namespace VRTK
         {
             if (controllerEvents != null)
             {
-                uint controllerIndex = VRTK_DeviceFinder.GetControllerIndex(controllerEvents.gameObject);
-                if (controllerIndex == e.controllerIndex)
+                VRTK_ControllerReference checkControllerReference = VRTK_ControllerReference.GetControllerReference(controllerEvents.gameObject);
+                if (checkControllerReference == e.controllerReference)
                 {
                     ToggleTips(true);
                 }
@@ -252,8 +252,8 @@ namespace VRTK
         {
             if (controllerEvents != null)
             {
-                uint controllerIndex = VRTK_DeviceFinder.GetControllerIndex(controllerEvents.gameObject);
-                if (controllerIndex == e.controllerIndex)
+                VRTK_ControllerReference checkControllerReference = VRTK_ControllerReference.GetControllerReference(controllerEvents.gameObject);
+                if (checkControllerReference == e.controllerReference)
                 {
                     ToggleTips(false);
                 }

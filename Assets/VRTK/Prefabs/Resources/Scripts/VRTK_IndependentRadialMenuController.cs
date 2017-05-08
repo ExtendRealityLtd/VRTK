@@ -225,7 +225,7 @@ namespace VRTK
         {
             if (interactingObjects.Count > 0)
             {
-                VRTK_SharedMethods.TriggerHapticPulse(VRTK_DeviceFinder.GetControllerIndex(interactingObjects[0]), strength);
+                VRTK_SharedMethods.TriggerHapticPulse(VRTK_ControllerReference.GetControllerReference(interactingObjects[0]), strength);
             }
         }
 

@@ -13,7 +13,8 @@ namespace VRTK
     /// <param name="destinationRotation">The world rotation of the destination marker.</param>
     /// <param name="forceDestinationPosition">If true then the given destination position should not be altered by anything consuming the payload.</param>
     /// <param name="enableTeleport">Whether the destination set event should trigger teleport.</param>
-    /// <param name="controllerIndex">The optional index of the controller emitting the beam.</param>
+    /// <param name="controllerIndex">**OBSOLETE** The optional index of the controller controlling the destination marker.</param>
+    /// <param name="controllerReference">The optional reference to the controller controlling the destination marker.</param>
     public struct DestinationMarkerEventArgs
     {
         public float distance;
@@ -23,7 +24,9 @@ namespace VRTK
         public Quaternion? destinationRotation;
         public bool forceDestinationPosition;
         public bool enableTeleport;
+        [System.Obsolete("`DestinationMarkerEventArgs.controllerIndex` has been replaced with `DestinationMarkerEventArgs.controllerReference`. This parameter will be removed in a future version of VRTK.")]
         public uint controllerIndex;
+        public VRTK_ControllerReference controllerReference;
     }
 
     /// <summary>
@@ -152,10 +155,13 @@ namespace VRTK
             VRTK_ObjectCache.registeredDestinationMarkers.Remove(this);
         }
 
-        protected virtual DestinationMarkerEventArgs SetDestinationMarkerEvent(float distance, Transform target, RaycastHit raycastHit, Vector3 position, uint controllerIndex, bool forceDestinationPosition = false, Quaternion? rotation = null)
+        protected virtual DestinationMarkerEventArgs SetDestinationMarkerEvent(float distance, Transform target, RaycastHit raycastHit, Vector3 position, VRTK_ControllerReference controllerReference, bool forceDestinationPosition = false, Quaternion? rotation = null)
         {
             DestinationMarkerEventArgs e;
-            e.controllerIndex = controllerIndex;
+#pragma warning disable 0618
+            e.controllerIndex = VRTK_ControllerReference.GetRealIndex(controllerReference);
+#pragma warning restore 0618
+            e.controllerReference = controllerReference;
             e.distance = distance;
             e.target = target;
             e.raycastHit = raycastHit;

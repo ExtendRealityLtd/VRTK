@@ -86,7 +86,7 @@ namespace VRTK
         protected Transform playArea;
         protected GameObject controllerLeftHand;
         protected GameObject controllerRightHand;
-        protected GameObject engagedController;
+        protected VRTK_ControllerReference engagedController;
         protected Transform headset;
         protected bool leftSubscribed;
         protected bool rightSubscribed;
@@ -350,7 +350,7 @@ namespace VRTK
             // if we're doing engaged controller only rotation movement
             else if (directionMethod.Equals(DirectionalMethod.EngageControllerRotationOnly))
             {
-                Vector3 calculatedControllerDirection = (engagedController != null ? engagedController.transform.rotation : Quaternion.identity) * Vector3.forward;
+                Vector3 calculatedControllerDirection = (engagedController != null ? engagedController.scriptAlias.transform.rotation : Quaternion.identity) * Vector3.forward;
                 returnDirection = CalculateControllerRotationDirection(calculatedControllerDirection);
             }
             // Otherwise if we're just doing Gaze movement, always set the direction to where we're looking.
@@ -401,7 +401,7 @@ namespace VRTK
 
         protected virtual void EngageButtonPressed(object sender, ControllerInteractionEventArgs e)
         {
-            engagedController = VRTK_DeviceFinder.GetControllerByIndex(e.controllerIndex, false);
+            engagedController = e.controllerReference;
             active = true;
         }
 
