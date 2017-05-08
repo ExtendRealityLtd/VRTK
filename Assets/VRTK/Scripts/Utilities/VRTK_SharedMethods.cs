@@ -273,12 +273,12 @@ namespace VRTK
         /// </summary>
         /// <param name="clip">The AudioClip to play.</param>
         /// <param name="strength">The intensity of the rumble of the controller motor. `0` to `1`.</param>
-        public static void TriggerHapticAudio(uint controllerIndex, AudioClip clip, float strength)
+        public static void TriggerHapticAudio(VRTK_ControllerReference controllerReference, AudioClip clip, float strength)
         {
             var instanceMethods = VRTK_InstanceMethods.instance;
             if (instanceMethods != null)
             {
-                instanceMethods.haptics.TriggerHapticAudio(controllerIndex, clip, strength);
+                instanceMethods.haptics.TriggerHapticAudio(controllerReference, clip, strength);
             }
         }
 

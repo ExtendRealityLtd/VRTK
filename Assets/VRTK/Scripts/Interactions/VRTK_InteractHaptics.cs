@@ -136,9 +136,9 @@ namespace VRTK
             VRTK_SharedMethods.TriggerHapticPulse(controllerReference, strength, duration, (interval >= minInterval ? interval : minInterval));
         }
 
-        private void TriggerHapticAudio(uint controllerIndex, AudioClip clip, float strength)
+        private void TriggerHapticAudio(VRTK_ControllerReference controllerReference, AudioClip clip, float strength)
         {
-            VRTK_SharedMethods.TriggerHapticAudio(controllerIndex, clip, strength);
+            VRTK_SharedMethods.TriggerHapticAudio(controllerReference, clip, strength);
         }
     }
 }

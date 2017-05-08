@@ -142,9 +142,9 @@
             GetControllerSDK().HapticPulse(controllerReference, strength);
         }
 
-        public static void HapticAudioOnIndex(uint index, AudioClip clip, float strength = 0.5f)
+        public static void HapticAudioOnIndex(VRTK_ControllerReference controllerReference, AudioClip clip, float strength = 0.5f)
         {
-            GetControllerSDK().HapticAudioOnIndex(index, clip, strength);
+            GetControllerSDK().HapticAudioOnIndex(controllerReference, clip, strength);
         }
 
         public static SDK_ControllerHapticModifiers GetHapticModifiers()
