@@ -1924,6 +1924,8 @@ The Player Climb allows player movement based on grabbing of `VRTK_InteractableO
 ### Inspector Parameters
 
  * **Use Player Scale:** Will scale movement up and down based on the player transform's scale.
+ * **Body Physics:** The VRTK Body Physics script to use for dealing with climbing and falling. If this is left blank then the script will need to be applied to the same GameObject.
+ * **Teleporter:** The VRTK Teleport script to use when snapping to nearest floor on release. If this is left blank then a Teleport script will need to be applied to the same GameObject.
 
 ### Class Events
 
@@ -4592,6 +4594,8 @@ The Headset Collision Fade uses a composition of the Headset Collision and Heads
  * **Time Till Fade:** The amount of time to wait until a fade occurs.
  * **Blink Transition Speed:** The fade blink speed on collision.
  * **Fade Color:** The colour to fade the headset to on collision.
+ * **Headset Collision:** The VRTK Headset Collision script to use when determining headset collisions. If this is left blank then the script will need to be applied to the same GameObject.
+ * **Headset Fade:** The VRTK Headset Fade script to use when fading the headset. If this is left blank then the script will need to be applied to the same GameObject.
 
 ### Example
 
@@ -4733,6 +4737,7 @@ To allow for peeking over a ledge and not falling, a fall restiction can happen 
  * **Blink Y Threshold:** The `y` distance between the floor and the headset that must change before a fade transition is initiated. If the new user location is at a higher distance than the threshold then the headset blink transition will activate on teleport. If the new user location is within the threshold then no blink transition will happen, which is useful for walking up slopes, meshes and terrains to prevent constant blinking.
  * **Floor Height Tolerance:** The amount the `y` position needs to change by between the current floor `y` position and the previous floor `y` position before a change in floor height is considered to have occurred. A higher value here will mean that a `Drop To Floor` will be less likely to happen if the `y` of the floor beneath the user hasn't changed as much as the given threshold.
  * **Fall Check Precision:** The amount of rounding on the play area Y position to be applied when checking if falling is occuring.
+ * **Teleporter:** The VRTK Teleport script to use when snapping to floor. If this is left blank then a Teleport script will need to be applied to the same GameObject.
 
 ### Class Variables
 
