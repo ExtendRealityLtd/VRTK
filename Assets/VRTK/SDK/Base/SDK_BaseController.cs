@@ -219,7 +219,7 @@ namespace VRTK
         public virtual ControllerHand GetControllerModelHand(GameObject controllerModel)
         {
             VRTK_SDKManager sdkManager = VRTK_SDKManager.instance;
-            if (sdkManager != null)
+            if (sdkManager != null && sdkManager.loadedSetup != null)
             {
                 if (controllerModel == sdkManager.loadedSetup.modelAliasLeftController)
                 {
