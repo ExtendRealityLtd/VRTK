@@ -5590,6 +5590,7 @@ A collection of scripts that provide useful functionality to aid the creation pr
  * [Object Follow](#object-follow-vrtk_objectfollow)
  * [Rigidbody Follow](#rigidbody-follow-vrtk_rigidbodyfollow)
  * [Transform Follow](#transform-follow-vrtk_transformfollow)
+ * [SDK Object Alias](#sdk-object-alias-vrtk_sdkobjectalias)
  * [Simulating Headset Movement](#simulating-headset-movement-vrtk_simulator)
 
 ---
@@ -6783,6 +6784,24 @@ Changes one game object's transform to follow another game object's transform.
   * `OnLateUpdate` - Follow in the LateUpdate method.
   * `OnPreRender` - Follow in the OnPreRender method. (This script doesn't have to be attached to a camera.)
   * `OnPreCull` - Follow in the OnPreCull method. (This script doesn't have to be attached to a camera.)
+
+---
+
+## SDK Object Alias (VRTK_SDKObjectAlias)
+
+### Overview
+
+The GameObject that the SDK Object Alias script is applied to will become a child of the selected SDK Object.
+
+### Inspector Parameters
+
+ * **Sdk Object:** The specific SDK Object to child this GameObject to.
+
+### Class Variables
+
+ * `public enum SDKObject` - Valid SDK Objects
+  * `Boundary` - The main camera rig/play area object that defines the player boundary.
+  * `Headset` - The main headset camera defines the player head.
 
 ---
 
