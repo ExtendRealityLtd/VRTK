@@ -16,11 +16,6 @@ namespace VRTK
     /// </summary>
     public sealed class VRTK_SDKSetup : MonoBehaviour
     {
-        /// <summary>
-        /// The event handler for load and unload events of <see cref="VRTK_SDKSetup"/>s.
-        /// </summary>
-        /// <param name="sender">The <see cref="VRTK_SDKManager"/> that loaded or unloaded <paramref name="setup"/>.</param>
-        /// <param name="setup">The SDK Setup that was loaded or unloaded.</param>
         public delegate void LoadEventHandler(VRTK_SDKManager sender, VRTK_SDKSetup setup);
 
         [Tooltip("Determines whether the SDK object references are automatically set to the objects of the selected SDKs. If this is true populating is done whenever the selected SDKs change.")]
@@ -40,13 +35,7 @@ namespace VRTK
         [Tooltip("A reference to the GameObject that models for the Right Hand Controller.")]
         public GameObject modelAliasRightController;
 
-        /// <summary>
-        /// The event invoked whenever this Setup is loaded.
-        /// </summary>
         public event LoadEventHandler Loaded;
-        /// <summary>
-        /// The event invoked whenever this Setup is unloaded.
-        /// </summary>
         public event LoadEventHandler Unloaded;
 
         /// <summary>

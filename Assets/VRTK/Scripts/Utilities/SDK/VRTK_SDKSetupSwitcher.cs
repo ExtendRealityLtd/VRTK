@@ -8,7 +8,7 @@ namespace VRTK
     using System.Collections.Generic;
 
     /// <summary>
-    /// The SDK Setup Switcher adds a GUI overlay to allow switching the loaded <see cref="VRTK_SDKSetup"/> of the the current <see cref="VRTK_SDKManager"/>.
+    /// The SDK Setup Switcher adds a GUI overlay to allow switching the loaded VRTK_SDKSetup of the the current VRTK_SDKManager.
     /// </summary>
     /// <remarks>
     /// Use the `SDKSetupSwitcher` prefab to use this.

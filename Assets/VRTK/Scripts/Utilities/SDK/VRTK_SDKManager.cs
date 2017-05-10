@@ -35,7 +35,7 @@ namespace VRTK
             public readonly MethodInfo methodInfo;
 
             /// <summary>
-            /// Constructs a new instance with the specified predicate attribute and associated method info.
+            /// Event Payload. Constructs a new instance with the specified predicate attribute and associated method info.
             /// </summary>
             /// <param name="attribute">The predicate attribute.</param>
             /// <param name="methodInfo">The method info of the method the attribute is defined on.</param>
@@ -47,21 +47,15 @@ namespace VRTK
         }
 
         /// <summary>
-        /// The arguments describing a change of the loaded <see cref="VRTK_SDKSetup"/>.
+        /// Event Payload
         /// </summary>
+        /// <param name="previousSetup">The previous loaded Setup. <see langword="null"/> if no previous Setup was loaded.</param>
+        /// <param name="currentSetup">The current loaded Setup. <see langword="null"/> if no Setup is loaded anymore. See <see cref="errorMessage"/> to check whether this is <see langword="null"/> because of an error.</param>
+        /// <param name="errorMessage">Explains why loading a list of Setups wasn't successful if <see cref="currentSetup"/> is <see langword="null"/> and an error occurred. <see langword="null"/> if no error occurred.</param>
         public struct LoadedSetupChangeEventArgs
         {
-            /// <summary>
-            /// The previous loaded Setup. <see langword="null"/> if no previous Setup was loaded.
-            /// </summary>
             public readonly VRTK_SDKSetup previousSetup;
-            /// <summary>
-            /// The current loaded Setup. <see langword="null"/> if no Setup is loaded anymore. See <see cref="errorMessage"/> to check whether this is <see langword="null"/> because of an error.
-            /// </summary>
             public readonly VRTK_SDKSetup currentSetup;
-            /// <summary>
-            /// Explains why loading a list of Setups wasn't successful if <see cref="currentSetup"/> is <see langword="null"/> and an error occurred. <see langword="null"/> if no error occurred.
-            /// </summary>
             public readonly string errorMessage;
 
             public LoadedSetupChangeEventArgs(VRTK_SDKSetup previousSetup, VRTK_SDKSetup currentSetup, string errorMessage)
@@ -73,10 +67,10 @@ namespace VRTK
         }
 
         /// <summary>
-        /// The event handler for changes of the loaded <see cref="VRTK_SDKSetup"/>.
+        /// Event Payload
         /// </summary>
-        /// <param name="sender">The SDK Manager whose loaded SDK Setup changed.</param>
-        /// <param name="e">The event arguments. See <see cref="LoadedSetupChangeEventArgs"/>.</param>
+        /// <param name="sender">this object</param>
+        /// <param name="e"><see cref="LoadedSetupChangeEventArgs"/></param>
         public delegate void LoadedSetupChangeEventHandler(VRTK_SDKManager sender, LoadedSetupChangeEventArgs e);
 
         /// <summary>

@@ -4,24 +4,24 @@ This file provides documentation on how to use the included prefabs and scripts.
 
  * [Prefabs](#prefabs-vrtkprefabs)
  * [Pointers](#pointers-vrtkscriptspointers)
-  * [Pointer Renderers](#pointer-renderers-vrtkscriptspointerspointerrenderers)
+   * [Pointer Renderers](#pointer-renderers-vrtkscriptspointerspointerrenderers)
  * [Locomotion](#locomotion-vrtkscriptslocomotion)
-  * [Object Control Actions](#object-control-actions-vrtkscriptslocomotionobjectcontrolactions)
+   * [Object Control Actions](#object-control-actions-vrtkscriptslocomotionobjectcontrolactions)
  * [Interactions](#interactions-vrtkscriptsinteractions)
-  * [Highlighters](#highlighters-vrtkscriptsinteractionshighlighters)
-  * [Grab Attach Mechanics](#grab-attach-mechanics-vrtkscriptsinteractionsgrabattachmechanics)
-  * [Secondary Controller Grab Actions](#secondary-controller-grab-actions-vrtkscriptsinteractionssecondarycontrollergrabactions)
+   * [Highlighters](#highlighters-vrtkscriptsinteractionshighlighters)
+   * [Grab Attach Mechanics](#grab-attach-mechanics-vrtkscriptsinteractionsgrabattachmechanics)
+   * [Secondary Controller Grab Actions](#secondary-controller-grab-actions-vrtkscriptsinteractionssecondarycontrollergrabactions)
  * [Presence](#presence-vrtkscriptspresence)
  * [UI](#ui-vrtkscriptsui)
  * [3D Controls](#3d-controls-vrtkscriptscontrols3d)
  * [Utilities](#utilities-vrtkscriptsutilities)
  * [Base SDK](#base-sdk-vrtksdkbase)
-  * [Fallback SDK](#fallback-sdk-vrtksdkfallback)
-  * [Simulator SDK](#simulator-sdk-vrtksdksimulator)
-  * [SteamVR SDK](#steamvr-sdk-vrtksdksteamvr)
-  * [OculusVR SDK](#oculusvr-sdk-vrtksdkoculusvr)
-  * [Daydream SDK](#daydream-sdk-vrtksdkdaydream)
-  * [XimmerseVR SDK](#ximmersevr-sdk-vrtksdkximmerse)
+   * [Fallback SDK](#fallback-sdk-vrtksdkfallback)
+   * [Simulator SDK](#simulator-sdk-vrtksdksimulator)
+   * [SteamVR SDK](#steamvr-sdk-vrtksdksteamvr)
+   * [Oculus SDK](#oculus-sdk-vrtksdkoculus)
+   * [Daydream SDK](#daydream-sdk-vrtksdkdaydream)
+   * [Ximmerse SDK](#ximmerse-sdk-vrtksdkximmerse)
 
 ---
 
@@ -5579,6 +5579,8 @@ The script will use the boundaries of the control to determine if it is in or ou
 A collection of scripts that provide useful functionality to aid the creation process.
 
  * [SDK Manager](#sdk-manager-scriptingdefinesymbolpredicateinfo)
+ * [SDK Setup Switcher](#sdk-setup-switcher-vrtk_sdksetupswitcher)
+ * [SDK Setup](#sdk-setup-vrtk_sdksetup)
  * [SDK Info](#sdk-info-vrtk_sdkinfo)
  * [Device Finder](#device-finder-vrtk_devicefinder)
  * [Shared Methods](#shared-methods-vrtk_sharedmethods)
@@ -5603,20 +5605,19 @@ and the method info of the method the attribute is defined on.
 ### Inspector Parameters
 
  * **Persist On Load:** If this is true then the instance of the SDK Manager won't be destroyed on every scene load.
- * **Auto Populate Object References:** This determines whether the SDK object references are automatically set to the objects of the selected SDKs. If this is true populating is done whenever the selected SDKs change.
- * **Auto Manage Script Defines:** This determines whether the scripting define symbols required by the selected SDKs are automatically added to and removed from the player settings. If this is true managing is done whenever the selected SDKs or the current active SDK Manager change in the Editor.
- * **Actual Boundaries:** A reference to the GameObject that is the user's boundary or play area, most likely provided by the SDK's Camera Rig.
- * **Actual Headset:** A reference to the GameObject that contains the VR camera, most likely provided by the SDK's Camera Rig Headset.
- * **Actual Left Controller:** A reference to the GameObject that contains the SDK Left Hand Controller.
- * **Actual Right Controller:** A reference to the GameObject that contains the SDK Right Hand Controller.
- * **Model Alias Left Controller:** A reference to the GameObject that models for the Left Hand Controller.
- * **Model Alias Right Controller:** A reference to the GameObject that models for the Right Hand Controller.
+ * **Auto Manage Script Defines:** Determines whether the scripting define symbols required by the installed SDKs are automatically added to and removed from the player settings.
  * **Script Alias Left Controller:** A reference to the GameObject that contains any scripts that apply to the Left Hand Controller.
  * **Script Alias Right Controller:** A reference to the GameObject that contains any scripts that apply to the Right Hand Controller.
+ * **Auto Manage VR Settings:** Determines whether the VR settings of the Player Settings are automatically adjusted to allow for all the used SDKs in the SDK Setups list below.
+ * **Auto Load Setup:** Determines whether the SDK Setups list below is used whenever the SDK Manager is enabled. The first loadable Setup is then loaded.
+ * **Setups:** The list of SDK Setups to choose from.
 
 ### Class Variables
 
+ * `public readonly SDK_ScriptingDefineSymbolPredicateAttribute attribute` - The predicate attribute.
+ * `public readonly MethodInfo methodInfo` - The method info of the method the attribute is defined on.
  * `public static ReadOnlyCollection<ScriptingDefineSymbolPredicateInfo> AvailableScriptingDefineSymbolPredicateInfos { get private set }` - All found scripting define symbol predicate attributes with associated method info.
+ * `public static readonly Dictionary<Type, Type> SDKFallbackTypesByBaseType` - Specifies the fallback SDK types for every base SDK type. Default: `new Dictionary<Type, Type>`
  * `public static ReadOnlyCollection<VRTK_SDKInfo> AvailableSystemSDKInfos { get private set }` - All available system SDK infos.
  * `public static ReadOnlyCollection<VRTK_SDKInfo> AvailableBoundariesSDKInfos { get private set }` - All available boundaries SDK infos.
  * `public static ReadOnlyCollection<VRTK_SDKInfo> AvailableHeadsetSDKInfos { get private set }` - All available headset SDK infos.
@@ -5626,70 +5627,39 @@ and the method info of the method the attribute is defined on.
  * `public static ReadOnlyCollection<VRTK_SDKInfo> InstalledHeadsetSDKInfos { get private set }` - All installed headset SDK infos. This is a subset of  . It contains only those available SDK infos for which an  exists that uses the same symbol and whose associated method returns true.
  * `public static ReadOnlyCollection<VRTK_SDKInfo> InstalledControllerSDKInfos { get private set }` - All installed controller SDK infos. This is a subset of  . It contains only those available SDK infos for which an  exists that uses the same symbol and whose associated method returns true.
  * `public static VRTK_SDKManager instance` - The singleton instance to access the SDK Manager variables from.
- * `public VRTK_SDKInfo systemSDKInfo` - The info of the SDK to use to deal with all system actions. By setting this to `null` the fallback SDK will be used.
- * `public VRTK_SDKInfo boundariesSDKInfo` - The info of the SDK to use to utilize room scale boundaries. By setting this to `null` the fallback SDK will be used.
- * `public VRTK_SDKInfo headsetSDKInfo` - The info of the SDK to use to utilize the VR headset. By setting this to `null` the fallback SDK will be used.
- * `public VRTK_SDKInfo controllerSDKInfo` - The info of the SDK to use to utilize the input devices. By setting this to `null` the fallback SDK will be used.
- * `public List<SDK_ScriptingDefineSymbolPredicateAttribute> activeScriptingDefineSymbolsWithoutSDKClasses` - The active (i.e. to be added to the  ) scripting define symbol predicate attributes that have no associated SDK classes.
- * `public readonly SDK_ScriptingDefineSymbolPredicateAttribute attribute` - The predicate attribute.
- * `public readonly MethodInfo methodInfo` - The method info of the method the attribute is defined on.
+ * `public List<SDK_ScriptingDefineSymbolPredicateAttribute> activeScriptingDefineSymbolsWithoutSDKClasses` - The active (i.e. to be added to the  ) scripting define symbol predicate attributes that have no associated SDK classes. Default: `new List<SDK_ScriptingDefineSymbolPredicateAttribute>()`
+ * `public VRTK_SDKSetup loadedSetup { get private set }` - The loaded SDK Setup.  if no setup is currently loaded.
+ * `public ReadOnlyCollection<Behaviour> behavioursToToggleOnLoadedSetupChange { get private set }` - All behaviours that need toggling whenever  changes.
+
+### Class Events
+
+ * `LoadedSetupChanged` - The event invoked whenever the loaded SDK Setup changes.
+
+### Unity Events
+
+Adding the `VRTK_SDKManager_UnityEvents` component to `VRTK_SDKManager` object allows access to `UnityEvents` that will react identically to the Class Events.
+
+ * All C# delegate events are mapped to a Unity Event with the `On` prefix. e.g. `MyEvent` -> `OnMyEvent`.
+
+### Event Payload
+
+ * `VRTK_SDKSetup previousSetup` - The previous loaded Setup.  if no previous Setup was loaded.
+ * `VRTK_SDKSetup currentSetup` - The current loaded Setup.  if no Setup is loaded anymore. See  to check whether this is  because of an error.
+ * `string errorMessage` - Explains why loading a list of Setups wasn't successful if  is  and an error occurred.  if no error occurred.
 
 ### Class Methods
 
-#### GetSystemSDK/0
+#### ScriptingDefineSymbolPredicateInfo/2
 
-  > `public SDK_BaseSystem GetSystemSDK()`
-
-  * Parameters
-   * _none_
-  * Returns
-   * `SDK_BaseSystem` - The currently selected system SDK.
-
-The GetSystemSDK method returns the selected system SDK.
-
-#### GetBoundariesSDK/0
-
-  > `public SDK_BaseBoundaries GetBoundariesSDK()`
+  > `public ScriptingDefineSymbolPredicateInfo(SDK_ScriptingDefineSymbolPredicateAttribute attribute, MethodInfo methodInfo)`
 
   * Parameters
-   * _none_
-  * Returns
-   * `SDK_BaseBoundaries` - The currently selected boundaries SDK.
-
-The GetBoundariesSDK method returns the selected boundaries SDK.
-
-#### GetHeadsetSDK/0
-
-  > `public SDK_BaseHeadset GetHeadsetSDK()`
-
-  * Parameters
-   * _none_
-  * Returns
-   * `SDK_BaseHeadset` - The currently selected headset SDK.
-
-The GetHeadsetSDK method returns the selected headset SDK.
-
-#### GetControllerSDK/0
-
-  > `public SDK_BaseController GetControllerSDK()`
-
-  * Parameters
-   * _none_
-  * Returns
-   * `SDK_BaseController` - The currently selected controller SDK.
-
-The GetControllerSDK method returns the selected controller SDK.
-
-#### PopulateObjectReferences/1
-
-  > `public void PopulateObjectReferences(bool force)`
-
-  * Parameters
-   * `bool force` - Whether to ignore  while deciding to populate.
+   * `SDK_ScriptingDefineSymbolPredicateAttribute attribute` - The predicate attribute.
+   * `MethodInfo methodInfo` - The method info of the method the attribute is defined on.
   * Returns
    * _none_
 
-Populates the object references by using the currently set SDKs.
+Event Payload. Constructs a new instance with the specified predicate attribute and associated method info.
 
 #### ManageScriptingDefineSymbols/2
 
@@ -5703,17 +5673,144 @@ Populates the object references by using the currently set SDKs.
 
 Manages (i.e. adds and removes) the scripting define symbols of the  for the currently set SDK infos. This method is only available in the editor, so usage of the method needs to be surrounded by `#if UNITY_EDITOR` and `#endif` when used in a type that is also compiled for a standalone build.
 
-#### ScriptingDefineSymbolPredicateInfo/2
+#### ManageVRSettings/1
 
-  > `public ScriptingDefineSymbolPredicateInfo(SDK_ScriptingDefineSymbolPredicateAttribute attribute, MethodInfo methodInfo)`
+  > `public void ManageVRSettings(bool force)`
 
   * Parameters
-   * `SDK_ScriptingDefineSymbolPredicateAttribute attribute` - The predicate attribute.
-   * `MethodInfo methodInfo` - The method info of the method the attribute is defined on.
+   * `bool force` - Whether to ignore  while deciding to manage.
   * Returns
    * _none_
 
-Constructs a new instance with the specified predicate attribute and associated method info.
+Manages (i.e. adds and removes) the VR SDKs of the  for the currently set SDK infos. This method is only available in the editor, so usage of the method needs to be surrounded by `#if UNITY_EDITOR` and `#endif` when used in a type that is also compiled for a standalone build.
+
+#### AddBehaviourToToggleOnLoadedSetupChange/1
+
+  > `public void AddBehaviourToToggleOnLoadedSetupChange(Behaviour behaviour)`
+
+  * Parameters
+   * `Behaviour behaviour` - The behaviour to add.
+  * Returns
+   * _none_
+
+Adds a behaviour to the list of behaviours to toggle when  changes.
+
+#### RemoveBehaviourToToggleOnLoadedSetupChange/1
+
+  > `public void RemoveBehaviourToToggleOnLoadedSetupChange(Behaviour behaviour)`
+
+  * Parameters
+   * `Behaviour behaviour` - The behaviour to remove.
+  * Returns
+   * _none_
+
+Removes a behaviour of the list of behaviours to toggle when  changes.
+
+#### TryLoadSDKSetup/3
+
+  > `public void TryLoadSDKSetup(int startIndex, bool tryToReinitialize, params VRTK_SDKSetup[] sdkSetups)`
+
+  * Parameters
+   * `int startIndex` - The index of the  to start the loading with.
+   * `bool tryToReinitialize` - Whether or not to retry initializing and using the currently set but unusable VR Device.
+   * `params VRTK_SDKSetup[] sdkSetups` - The list to try to load a  from.
+  * Returns
+   * _none_
+
+Tries to load a valid  from a list. The first loadable  in the list will be loaded. Will fall back to disable VR if none of the provided Setups is useable.
+
+#### SetLoadedSDKSetupToPopulateObjectReferences/1
+
+  > `public void SetLoadedSDKSetupToPopulateObjectReferences(VRTK_SDKSetup setup)`
+
+  * Parameters
+   * `VRTK_SDKSetup setup` - The SDK Setup to set as the loaded SDK.
+  * Returns
+   * _none_
+
+Sets a given  as the loaded SDK Setup to be able to use it when populating object references in the SDK Setup. This method should only be called when not playing as it's only for populating the object references. This method is only available in the editor, so usage of the method needs to be surrounded by `#if UNITY_EDITOR` and `#endif` when used in a type that is also compiled for a standalone build.
+
+#### UnloadSDKSetup/1
+
+  > `public void UnloadSDKSetup(bool disableVR = true)`
+
+  * Parameters
+   * `bool disableVR` - Whether to disable VR altogether after unloading the SDK Setup.
+  * Returns
+   * _none_
+
+Unloads the currently loaded  , if there is one.
+
+---
+
+## SDK Setup Switcher (VRTK_SDKSetupSwitcher)
+
+### Overview
+
+The SDK Setup Switcher adds a GUI overlay to allow switching the loaded VRTK_SDKSetup of the the current VRTK_SDKManager.
+
+Use the `SDKSetupSwitcher` prefab to use this.
+
+---
+
+## SDK Setup (VRTK_SDKSetup)
+
+### Overview
+
+The SDK Setup describes a list of SDKs and game objects to use.
+
+### Inspector Parameters
+
+ * **Auto Populate Object References:** Determines whether the SDK object references are automatically set to the objects of the selected SDKs. If this is true populating is done whenever the selected SDKs change.
+ * **Actual Boundaries:** A reference to the GameObject that is the user's boundary or play area, most likely provided by the SDK's Camera Rig.
+ * **Actual Headset:** A reference to the GameObject that contains the VR camera, most likely provided by the SDK's Camera Rig Headset.
+ * **Actual Left Controller:** A reference to the GameObject that contains the SDK Left Hand Controller.
+ * **Actual Right Controller:** A reference to the GameObject that contains the SDK Right Hand Controller.
+ * **Model Alias Left Controller:** A reference to the GameObject that models for the Left Hand Controller.
+ * **Model Alias Right Controller:** A reference to the GameObject that models for the Right Hand Controller.
+
+### Class Variables
+
+ * `public VRTK_SDKInfo systemSDKInfo` - The info of the SDK to use to deal with all system actions. By setting this to  the fallback SDK will be used.
+ * `public VRTK_SDKInfo boundariesSDKInfo` - The info of the SDK to use to utilize room scale boundaries. By setting this to  the fallback SDK will be used.
+ * `public VRTK_SDKInfo headsetSDKInfo` - The info of the SDK to use to utilize the VR headset. By setting this to  the fallback SDK will be used.
+ * `public VRTK_SDKInfo controllerSDKInfo` - The info of the SDK to use to utilize the input devices. By setting this to  the fallback SDK will be used.
+ * `public SDK_BaseSystem systemSDK` - The selected system SDK.
+ * `public SDK_BaseBoundaries boundariesSDK` - The selected boundaries SDK.
+ * `public SDK_BaseHeadset headsetSDK` - The selected headset SDK.
+ * `public SDK_BaseController controllerSDK` - The selected controller SDK.
+ * `public string[] usedVRDeviceNames` - The VR device names used by the currently selected SDKs.
+ * `public bool isValid` - Whether it's possible to use the Setup. See  for more info.
+
+### Unity Events
+
+Adding the `VRTK_SDKSetup_UnityEvents` component to `VRTK_SDKSetup` object allows access to `UnityEvents` that will react identically to the Class Events.
+
+ * All C# delegate events are mapped to a Unity Event with the `On` prefix. e.g. `MyEvent` -> `OnMyEvent`.
+
+### Class Methods
+
+#### PopulateObjectReferences/1
+
+  > `public void PopulateObjectReferences(bool force)`
+
+  * Parameters
+   * `bool force` - Whether to ignore  while deciding to populate.
+  * Returns
+   * _none_
+
+Populates the object references by using the currently set SDKs.
+
+#### GetSimplifiedErrorDescriptions/0
+
+  > `public string[] GetSimplifiedErrorDescriptions()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `string[]` - An array of all the error descriptions. Returns an empty array if no errors are found.
+
+Checks the setup for errors and creates an array of error descriptions. The returned error descriptions handle the following cases for the current SDK infos:  * Its type doesn't exist anymore.  * It's a fallback SDK.  * It doesn't have its scripting define symbols added.  * It's missing its vendor SDK.Additionally the current SDK infos are checked whether they use multiple VR Devices.
 
 ---
 
@@ -5734,7 +5831,7 @@ Holds all the info necessary to describe an SDK.
 
 #### ActualType>/0
 
-  > `public static VRTK_SDKInfo Create<BaseType, FallbackType, ActualType>() where BaseType : SDK_Base where FallbackType : BaseType where ActualType : BaseType`
+  > `public static VRTK_SDKInfo[] Create<BaseType, FallbackType, ActualType>() where BaseType : SDK_Base where FallbackType : BaseType where ActualType : BaseType`
 
   * Type Params
    * `FallbackType,` - The SDK base type. Must be a subclass of .
@@ -5743,13 +5840,13 @@ Holds all the info necessary to describe an SDK.
   * Parameters
    * _none_
   * Returns
-   * `FallbackType,` - A newly created instance.
+   * `FallbackType,` - Multiple newly created instances.
 
-Creates a new SDK info for a type that is known at compile time.
+Creates new SDK infos for a type that is known at compile time.
 
 #### FallbackType>/1
 
-  > `public static VRTK_SDKInfo Create<BaseType, FallbackType>(Type actualType) where BaseType : SDK_Base where FallbackType : BaseType`
+  > `public static VRTK_SDKInfo[] Create<BaseType, FallbackType>(Type actualType) where BaseType : SDK_Base where FallbackType : BaseType`
 
   * Type Params
    * `Create<BaseType,` - The SDK base type. Must be a subclass of .
@@ -5757,9 +5854,9 @@ Creates a new SDK info for a type that is known at compile time.
   * Parameters
    * `Type actualType` - The SDK type to use. Must be a subclass of .
   * Returns
-   * `Create<BaseType,` - A newly created instance.
+   * `Create<BaseType,` - Multiple newly created instances.
 
-Creates a new SDK info for a type.
+Creates new SDK infos for a type.
 
 #### VRTK_SDKInfo/1
 
@@ -6294,7 +6391,7 @@ Finds the first  with a given name and an ancestor that has a specific component
 
 #### FindEvenInactiveComponents<T>/0
 
-  > `public static T[] FindEvenInactiveComponents<T>() where T : UnityEngine.Object`
+  > `public static T[] FindEvenInactiveComponents<T>() where T : Component`
 
   * Type Params
    * `T[]` - The component type to search for. Must be a subclass of .
@@ -6731,6 +6828,52 @@ Abstract superclass that defines that a particular class is an SDK.
 
 This is an abstract class to mark all different SDK endpoints with. This is used to allow for type safety when talking about 'an SDK' instead of one of the different endpoints (System, Boundaries, Headset, Controller).
 
+### Class Methods
+
+#### OnBeforeSetupLoad/1
+
+  > `public virtual void OnBeforeSetupLoad(VRTK_SDKSetup setup)`
+
+  * Parameters
+   * `VRTK_SDKSetup setup` - The SDK Setup which is using this SDK.
+  * Returns
+   * _none_
+
+This method is called just before loading the  that's using this SDK.
+
+#### OnAfterSetupLoad/1
+
+  > `public virtual void OnAfterSetupLoad(VRTK_SDKSetup setup)`
+
+  * Parameters
+   * `VRTK_SDKSetup setup` - The SDK Setup which is using this SDK.
+  * Returns
+   * _none_
+
+This method is called just after loading the  that's using this SDK.
+
+#### OnBeforeSetupUnload/1
+
+  > `public virtual void OnBeforeSetupUnload(VRTK_SDKSetup setup)`
+
+  * Parameters
+   * `VRTK_SDKSetup setup` - The SDK Setup which is using this SDK.
+  * Returns
+   * _none_
+
+This method is called just before unloading the  that's using this SDK.
+
+#### OnAfterSetupUnload/1
+
+  > `public virtual void OnAfterSetupUnload(VRTK_SDKSetup setup)`
+
+  * Parameters
+   * `VRTK_SDKSetup setup` - The SDK Setup which is using this SDK.
+  * Returns
+   * _none_
+
+This method is called just after unloading the  that's using this SDK.
+
 ---
 
 ## SDK Description (SDK_DescriptionAttribute)
@@ -6744,30 +6887,37 @@ Describes a class that represents an SDK. Only allowed on classes that inherit f
 
 ### Class Variables
 
- * `public static readonly SDK_DescriptionAttribute Fallback` - The description of a fallback SDK. Default: `new SDK_DescriptionAttribute("Fallback", null)`
  * `public readonly string prettyName` - The pretty name of the SDK. Uniquely identifies the SDK.
  * `public readonly string symbol` - The scripting define symbol needed for the SDK. Needs to be the same as  to add and remove the scripting define symbol automatically using  .
+ * `public readonly string vrDeviceName` - The name of the VR Device to load.
+ * `public readonly int index` - The index of this attribute, in case there are multiple on the same target.
+ * `public BuildTargetGroup buildTargetGroup` - The build target group this SDK is for.
+ * `public bool describesFallbackSDK` - Whether this description describes a fallback SDK.
 
 ### Class Methods
 
-#### SDK_DescriptionAttribute/2
+#### SDK_DescriptionAttribute/5
 
-  > `public SDK_DescriptionAttribute(string prettyName, string symbol)`
+  > `public SDK_DescriptionAttribute(string prettyName, string symbol, string vrDeviceName, string buildTargetGroupName, int index = 0)`
 
   * Parameters
    * `string prettyName` - The pretty name of the SDK. Uniquely identifies the SDK.  and  aren't allowed.
    * `string symbol` - The scripting define symbol needed for the SDK. Needs to be the same as  to add and remove the scripting define symbol automatically using .  and  are allowed.
+   * `string vrDeviceName` - The name of the VR Device to load. Set to  or  if no VR Device is needed.
+   * `string buildTargetGroupName` - The name of a constant of . "",  and  are not allowed.
+   * `int index` - The index of this attribute, in case there are multiple on the same target.
   * Returns
    * _none_
 
 Creates a new attribute.
 
-#### SDK_DescriptionAttribute/1
+#### SDK_DescriptionAttribute/2
 
-  > `public SDK_DescriptionAttribute(Type typeToCopyExistingDescriptionFrom)`
+  > `public SDK_DescriptionAttribute(Type typeToCopyExistingDescriptionFrom, int index = 0)`
 
   * Parameters
    * `Type typeToCopyExistingDescriptionFrom` - The type to copy the existing  from.  is not allowed.
+   * `int index` - The index of the description to copy from the the existing .
   * Returns
    * _none_
 
@@ -8758,6 +8908,17 @@ The SteamVR Controller SDK script provides a bridge to SDK methods that deal wit
 
 ### Class Methods
 
+#### OnAfterSetupUnload/1
+
+  > `public override void OnAfterSetupUnload(VRTK_SDKSetup setup)`
+
+  * Parameters
+   * `VRTK_SDKSetup setup` - The SDK Setup which is using this SDK.
+  * Returns
+   * _none_
+
+This method is called just after unloading the  that's using this SDK.
+
 #### ProcessUpdate/2
 
   > `public override void ProcessUpdate(VRTK_ControllerReference controllerReference, Dictionary<string, object> options)`
@@ -9148,36 +9309,36 @@ The SetDrawAtRuntime method sets whether the given play area drawn border should
 
 ---
 
-# OculusVR SDK (VRTK/SDK/OculusVR)
+# Oculus SDK (VRTK/SDK/Oculus)
 
 The scripts used to utilise the Oculus Utilities Unity Package SDK.
 
- * [OculusVR Defines](#oculusvr-defines-sdk_oculusvrdefines)
- * [OculusVR System](#oculusvr-system-sdk_oculusvrsystem)
- * [OculusVR Headset](#oculusvr-headset-sdk_oculusvrheadset)
- * [OculusVR Controller](#oculusvr-controller-sdk_oculusvrcontroller)
- * [OculusVR Boundaries](#oculusvr-boundaries-sdk_oculusvrboundaries)
+ * [Oculus Defines](#oculus-defines-sdk_oculusdefines)
+ * [Oculus System](#oculus-system-sdk_oculussystem)
+ * [Oculus Headset](#oculus-headset-sdk_oculusheadset)
+ * [Oculus Controller](#oculus-controller-sdk_oculuscontroller)
+ * [Oculus Boundaries](#oculus-boundaries-sdk_oculusboundaries)
 
 ---
 
-## OculusVR Defines (SDK_OculusVRDefines)
+## Oculus Defines (SDK_OculusDefines)
 
 ### Overview
 
-Handles all the scripting define symbols for the OculusVR and Avatar SDKs.
+Handles all the scripting define symbols for the Oculus and Avatar SDKs.
 
 ### Class Variables
 
- * `public const string ScriptingDefineSymbol` - The scripting define symbol for the OculusVR SDK. Default: `SDK_ScriptingDefineSymbolPredicateAttribute.RemovableSymbolPrefix + "SDK_OCULUSVR"`
- * `public const string AvatarScriptingDefineSymbol` - The scripting define symbol for the OculusVR Avatar SDK. Default: `SDK_ScriptingDefineSymbolPredicateAttribute.RemovableSymbolPrefix + "SDK_OCULUSVR_AVATAR"`
+ * `public const string ScriptingDefineSymbol` - The scripting define symbol for the Oculus SDK. Default: `SDK_ScriptingDefineSymbolPredicateAttribute.RemovableSymbolPrefix + "SDK_OCULUS"`
+ * `public const string AvatarScriptingDefineSymbol` - The scripting define symbol for the Oculus Avatar SDK. Default: `SDK_ScriptingDefineSymbolPredicateAttribute.RemovableSymbolPrefix + "SDK_OCULUS_AVATAR"`
 
 ---
 
-## OculusVR System (SDK_OculusVRSystem)
+## Oculus System (SDK_OculusSystem)
 
 ### Overview
 
-The OculusVR System SDK script provides a bridge to the OculusVR SDK.
+The Oculus System SDK script provides a bridge to the Oculus SDK.
 
 ### Class Methods
 
@@ -9216,11 +9377,11 @@ The ForceInterleavedReprojectionOn method determines whether Interleaved Reproje
 
 ---
 
-## OculusVR Headset (SDK_OculusVRHeadset)
+## Oculus Headset (SDK_OculusHeadset)
 
 ### Overview
 
-The OculusVR Headset SDK script provides a bridge to the OculusVR SDK.
+The Oculus Headset SDK script provides a bridge to the Oculus SDK.
 
 ### Class Methods
 
@@ -9327,11 +9488,11 @@ The AddHeadsetFade method attempts to add the fade functionality to the game obj
 
 ---
 
-## OculusVR Controller (SDK_OculusVRController)
+## Oculus Controller (SDK_OculusController)
 
 ### Overview
 
-The OculusVR Controller SDK script provides a bridge to SDK methods that deal with the input devices.
+The Oculus Controller SDK script provides a bridge to SDK methods that deal with the input devices.
 
 ### Class Methods
 
@@ -9638,11 +9799,11 @@ The GetControllerButtonState method is used to determine if the given controller
 
 ---
 
-## OculusVR Boundaries (SDK_OculusVRBoundaries)
+## Oculus Boundaries (SDK_OculusBoundaries)
 
 ### Overview
 
-The OculusVR Boundaries SDK script provides a bridge to the OculusVR SDK play area.
+The Oculus Boundaries SDK script provides a bridge to the Oculus SDK play area.
 
 ### Class Methods
 
@@ -10312,35 +10473,35 @@ The SetDrawAtRuntime method sets whether the given play area drawn border should
 
 ---
 
-# XimmerseVR SDK (VRTK/SDK/Ximmerse)
+# Ximmerse SDK (VRTK/SDK/Ximmerse)
 
 The scripts used to utilise the Ximmerse SDK for Unity.
 
- * [XimmerseVR Defines](#ximmersevr-defines-sdk_ximmersevrdefines)
- * [XimmerseVR System](#ximmersevr-system-sdk_ximmersevrsystem)
- * [XimmerseVR Headset](#ximmersevr-headset-sdk_ximmersevrheadset)
- * [XimmerseVR Controller](#ximmersevr-controller-sdk_ximmersevrcontroller)
- * [XimmerseVR Boundaries](#ximmersevr-boundaries-sdk_ximmersevrboundaries)
+ * [Ximmerse Defines](#ximmerse-defines-sdk_ximmersedefines)
+ * [Ximmerse System](#ximmerse-system-sdk_ximmersesystem)
+ * [Ximmerse Headset](#ximmerse-headset-sdk_ximmerseheadset)
+ * [Ximmerse Controller](#ximmerse-controller-sdk_ximmersecontroller)
+ * [Ximmerse Boundaries](#ximmerse-boundaries-sdk_ximmerseboundaries)
 
 ---
 
-## XimmerseVR Defines (SDK_XimmerseVRDefines)
+## Ximmerse Defines (SDK_XimmerseDefines)
 
 ### Overview
 
-Handles all the scripting define symbols for the XimmerseVR SDK.
+Handles all the scripting define symbols for the Ximmerse SDK.
 
 ### Class Variables
 
- * `public const string ScriptingDefineSymbol` - The scripting define symbol for the XimmerseVR SDK. Default: `SDK_ScriptingDefineSymbolPredicateAttribute.RemovableSymbolPrefix + "SDK_XIMMERSEVR"`
+ * `public const string ScriptingDefineSymbol` - The scripting define symbol for the Ximmerse SDK. Default: `SDK_ScriptingDefineSymbolPredicateAttribute.RemovableSymbolPrefix + "SDK_XIMMERSE"`
 
 ---
 
-## XimmerseVR System (SDK_XimmerseVRSystem)
+## Ximmerse System (SDK_XimmerseSystem)
 
 ### Overview
 
-The XimmerseVR System SDK script provides a bridge to the XimmerseVR SDK.
+The Ximmerse System SDK script provides a bridge to the Ximmerse SDK.
 
 ### Class Methods
 
@@ -10379,11 +10540,11 @@ The ForceInterleavedReprojectionOn method determines whether Interleaved Reproje
 
 ---
 
-## XimmerseVR Headset (SDK_XimmerseVRHeadset)
+## Ximmerse Headset (SDK_XimmerseHeadset)
 
 ### Overview
 
-The XimmerseVR Headset SDK script provides a bridge to the XimmerseVR SDK.
+The Ximmerse Headset SDK script provides a bridge to the Ximmerse SDK.
 
 ### Class Methods
 
@@ -10490,11 +10651,11 @@ The AddHeadsetFade method attempts to add the fade functionality to the game obj
 
 ---
 
-## XimmerseVR Controller (SDK_XimmerseVRController)
+## Ximmerse Controller (SDK_XimmerseController)
 
 ### Overview
 
-The XimmerseVR Controller SDK script provides a bridge to SDK methods that deal with the input devices.
+The Ximmerse Controller SDK script provides a bridge to SDK methods that deal with the input devices.
 
 ### Class Methods
 
@@ -10801,11 +10962,11 @@ The GetControllerButtonState method is used to determine if the given controller
 
 ---
 
-## XimmerseVR Boundaries (SDK_XimmerseVRBoundaries)
+## Ximmerse Boundaries (SDK_XimmerseBoundaries)
 
 ### Overview
 
-The XimmerseVR Boundaries SDK script provides a bridge to the XimmerseVR SDK play area.
+The Ximmerse Boundaries SDK script provides a bridge to the Ximmerse SDK play area.
 
 ### Class Methods
 
