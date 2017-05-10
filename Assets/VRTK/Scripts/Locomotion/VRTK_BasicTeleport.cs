@@ -156,6 +156,11 @@ namespace VRTK
             ForceTeleport(teleportArgs);
         }
 
+        protected virtual void Awake()
+        {
+            VRTK_SDKManager.instance.AddBehaviourToToggleOnLoadedSetupChange(this);
+        }
+
         protected virtual void OnEnable()
         {
             VRTK_PlayerObject.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.CameraRig);
@@ -176,6 +181,11 @@ namespace VRTK
             }
             InitDestinationMarkerListeners(false);
             VRTK_ObjectCache.registeredTeleporters.Remove(this);
+        }
+
+        protected virtual void OnDestroy()
+        {
+            VRTK_SDKManager.instance.RemoveBehaviourToToggleOnLoadedSetupChange(this);
         }
 
         protected virtual void Blink(float transitionSpeed)

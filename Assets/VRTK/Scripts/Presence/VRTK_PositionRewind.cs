@@ -58,6 +58,11 @@ namespace VRTK
         protected bool isRewinding = false;
         protected float collideTimer = 0f;
 
+        protected virtual void Awake()
+        {
+            VRTK_SDKManager.instance.AddBehaviourToToggleOnLoadedSetupChange(this);
+        }
+
         protected virtual void OnEnable()
         {
             lastGoodPositionSet = false;
@@ -76,6 +81,11 @@ namespace VRTK
         protected virtual void OnDisable()
         {
             ManageListeners(false);
+        }
+
+        protected virtual void OnDestroy()
+        {
+            VRTK_SDKManager.instance.RemoveBehaviourToToggleOnLoadedSetupChange(this);
         }
 
         protected virtual void Update()

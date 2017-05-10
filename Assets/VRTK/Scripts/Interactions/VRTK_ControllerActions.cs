@@ -344,9 +344,14 @@ namespace VRTK
             controllerHighlighter.PopulateHighlighters();
         }
 
+        protected virtual void Awake()
+        {
+            VRTK_SDKManager.instance.AddBehaviourToToggleOnLoadedSetupChange(this);
+        }
+
         protected virtual void OnEnable()
         {
-            modelContainer = (!modelContainer ? VRTK_DeviceFinder.GetModelAliasController(gameObject) : modelContainer);
+            modelContainer = VRTK_DeviceFinder.GetModelAliasController(gameObject);
 
             generateControllerHighlighter = false;
             VRTK_ControllerHighlighter existingControllerHighlighter = GetComponent<VRTK_ControllerHighlighter>();
@@ -370,6 +375,11 @@ namespace VRTK
             {
                 Destroy(controllerHighlighter);
             }
+        }
+
+        protected virtual void OnDestroy()
+        {
+            VRTK_SDKManager.instance.RemoveBehaviourToToggleOnLoadedSetupChange(this);
         }
 
         protected virtual void ToggleElementHighlight(bool state, SDK_BaseController.ControllerElements elementType, Color? color, float fadeDuration = 0f)

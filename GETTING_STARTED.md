@@ -1,138 +1,116 @@
 # Getting Started
 
-> *VRTK requires a supported VR SDK to be imported into your Unity3d Project.*
+> *VRTK offers a VR Simulator that works without any third party SDK, but VR device support requires a supported VR SDK to be imported into the Unity project.*
 
- * Clone this repository `git clone https://github.com/thestonefox/VRTK.git`.
- * Open `VRTK` within Unity3d.
- * Add the `VRTK_SDKManager` script to a GameObject in the scene.
+## Using the example project & scenes
 
-## VR Simulator
- 
+* Download or clone this repository.
+* Open the folder in Unity to load the project.
+* Have a look at the included example scenes.
+
+The example scenes support all the VRTK supported VR SDKs. To make use of VR devices (besides the included VR Simulator) import the needed third party VR SDK into the project.
+
+## Using VRTK in your own project
+
+* Download or clone this repository.
+* Import the `Assets/VRTK` folder into your Unity project.
+* Add the `VRTK_SDKManager` script to a GameObject in the scene.
+
+The SDK Manager handles setting up everything to use the various supported SDKs via `VRTK_SDKSetup`s. To use a VR SDK the following steps are needed:
+
+* Download and import the SDK into the project.
+* Create a new empty game object.
+  * Add `VRTK_SDKSetup` to it.
+  * Add the VR SDK's game objects (e.g. the Camera Rig) as children.
+  * On the SDK Setup set the `SDK Selection` to the respective VR SDK.
+  * Make sure all the `Object References` are set correctly by `Auto Populate` or set them manually.
+* On the SDK Manager under `Setups` add a new slot and select the SDK Setup for that slot.
+
+Repeat the steps above to add additional SDK Setups to the SDK Manager.
+
+If the `Auto Load` setting on the SDK Manager is enabled the SDK Setups are automatically loaded in the order they appear in the list:
+* The first Setup that is usable (i.e. initializable without errors and the HMD is connected) will be used.
+* If a Setup can't be used the next one will be tried instead.
+* If no Setup is usable VR support is disabled.
+
+The SDK Manager allows switching the used SDK Setup at runtime. To add a simple overlay GUI to do so add the `SDKSetupSwitcher` prefab from `VRTK/Prefabs` to the scene.
+
+Read the rest of this document for more detailed instructions on how to set up and use the supported VR SDKs.
+
+### VR Simulator
+
 <details><summary>**Instructions for using the VR Simulator**</summary>
 
- * Drag the `VRSimulatorCameraRig` prefab from the VRTK/Prefabs into the scene.
- * Select the GameObject with the `VRTK_SDKManager` script attached to it.
-  * Select `Simulator` for each of the SDK Choices.
-  * Click the `Auto Populate Linked Objects` button to find the relevant Linked Objects.
- * Use the Left Alt to switch between mouse look and move a hand.
- * Press Tab to switch between left/right hands.
- * Hold Left Shift to change from translation to rotation for the hands.
- * Hold Left Ctrl to switch between X/Y and X/Z axis.
- * All above keys can be remapped using the inspector on the `VRSimulatorCameraRig` prefab.
- * Button mapping for the VR control are as follows:
-  * Grip: Left mouse button
-  * Trigger: Right mouse button
-  * Touchpad Press: Q
-  * Button One: E
-  * Button Two: R
-
-</details>
- 
-## SteamVR Unity Asset
-
-<details><summary>**Instructions for using the SteamVR Unity3d asset**</summary>
-
- * Import the [SteamVR Plugin] from the Unity Asset Store.
- * Drag the `[CameraRig]` prefab from the SteamVR plugin into the scene.
- * Check that `Virtual Reality Supported` is ticked in the `Edit -> Project Settings -> Player` menu.
- * Ensure that `OpenVR` is added in the `Virtual Reality SDKs` list in the `Edit -> Project Settings -> Player` menu.
- * Select the GameObject with the `VRTK_SDKManager` script attached to it.
-  * Select `Steam VR` for each of the SDK Choices.
-  * Click the `Auto Populate Linked Objects` button to find the relevant Linked Objects.
- * Optionally, browse the `Examples` scenes for example usage of the scripts.
+* Follow the initial steps above by adding the `VRSimulatorCameraRig` prefab from `VRTK/Prefabs` as a child of the SDK Setup game object.
+* Use the Left Alt to switch between mouse look and move a hand.
+* Press Tab to switch between left/right hands.
+* Hold Left Shift to change from translation to rotation for the hands.
+* Hold Left Ctrl to switch between X/Y and X/Z axis.
+* Additional button mappings can be found on `SDK_InputSimulator` on the prefab.
+* All button mappings can be remapped using the inspector on the prefab.
 
 </details>
 
-## Oculus Utilities Unity Package
+### SteamVR
 
-<details><summary>**Instructions for using the Oculus Utilities Unity3d package**</summary>
+<details><summary>**Instructions for using SteamVR**</summary>
 
- * Download the [Oculus Utilities] from the Oculus developer website.
- * Import the `OculusUtilities.unitypackage` into the project.
- * Drag the `OVRCameraRig` prefab from the Oculus package into the scene.
- * On the `OVRCameraRig` copy in the scene find the `OVRManager` and set its `Tracking Origin Type` to `Floor Level`.
- * Check that `Virtual Reality Supported` is ticked in the `Edit -> Project Settings -> Player` menu.
- * Ensure that `Oculus` is added in the `Virtual Reality SDKs` list in the `Edit -> Project Settings -> Player` menu.
- * Select the GameObject with the `VRTK_SDKManager` script attached to it.
-  * Select `Oculus VR` for each of the SDK Choices.
-  * Click the `Auto Populate Linked Objects` button to find the relevant Linked Objects.
+* Import the [SteamVR Plugin] from the Unity Asset Store.
+* Follow the initial steps above by adding the `[CameraRig]` prefab from the plugin as a child of the SDK Setup game object.
 
 </details>
 
-## XimmerseSDK for Unity *(experimental)*
+### Oculus
 
-<details><summary>**Instructions for using the Ximmerse Unity SDK**</summary>
+<details><summary>**Instructions for using Oculus Utilities**</summary>
 
- * Download the [Ximmerse Unity SDK] from the Ximmerse SDK Github page.
- * Import the `XIM01-v2.0.1.unitypackage` into the project.
- * Drag the `VRCameraRig` prefab from the Ximmerse Unity SDK into the scene.
-
-  > * It is recommened to use "Floor Level" as the Tracking Origin Type, with `VRCameraRig` positon's set to `(0f,0f,0f)`.
-  > * "Eye Level" can also be used as the Tracking Origin Type. However, the positons of `VRCameraRig` is recommended to set to `(0f,1.675f,0f)` in this case.
-  > * Please make sure SimplePicker.cs is NOT attached on gameobject "cobra02-L" and "cobra02-R". SimplePicker script is provided by Ximmerse SDK, while having the script on the profab may break VRTK grab functionality.
-
- * Change platform to Android.
-  > Currently Ximmerse 6DOF tracking is only supported on Android. 3DOF tracking is supported on both iOS and Android. We are getting MFI cert from Apple at the moment.
- * Check that `Virtual Reality Supported` is ticked in the `Edit -> Project Settings -> Player` menu.
- * Ensure that `Oculus` is added in the `Virtual Reality SDKs` list in the `Edit -> Project Settings -> Player` menu.
- * Make sure `VRTK_SDK_XIMMERSEVR` is defined in Scripting Define Symbols.
- * Select the GameObject with the `VRTK_SDKManager` script attached to it.
- * Select `Ximmerse VR` for each of the SDK Choices.
- * Config Linked Objects:
-  * Actual Boundaries = VRCameraRig
-  * Actual Headset = CenterEyeAnchor
-  * Actual Left Controller = LeftHandAnchor
-  * Actual Right Controller = RightHandAnchor
-  * Model Alias Left Controller = _VisibleObject (child of LeftHandAnchor)
-  * Model Right Left Controller = _VisibleObject (child of RightHandAnchor)
+* Download the [Oculus Utilities] from the Oculus developer website.
+* Import the `.unitypackage`.
+* Follow the initial steps above by adding the `OVRCameraRig` prefab from the Utilities as a child of the SDK Setup game object.
+* On the `OVRCameraRig` in the scene find the `OVRManager` and set its `Tracking Origin Type` to `Floor Level`.
 
 </details>
 
-## Google VR SDK for Unity *(experimental)*
+### Ximmerse *(experimental)*
 
-<details><summary>**Instructions for using the Google VR SDK for Unity**</summary>
+<details><summary>**Instructions for using Ximmerse**</summary>
 
- * Open a new or existing project in Unity (5.4.2f2-GVR13 or other version with Daydream integration).
- * Import asset package GoogleVRForUnity you downloaded from Google.
- * Build Settings:
-  * Target platform: `Android`
- * Player settings:
-  * Virtual Reality Supported > Daydream
-  * API Level: `Nougat`
+* Download the [Ximmerse Unity SDK] from the Ximmerse SDK Github page.
+* Import the `.unitypackage`.
+* Follow the initial steps above by adding the `VRCameraRig` prefab from the SDK as a child of the SDK Setup game object.
+  * It is recommened to use `Floor Level` as the `Tracking Origin Type`, with the position of `VRCameraRig` set to `(0f, 0f, 0f)`. `Eye Level` can also be used, in this case it is recommended to set the position to `(0f, 1.675f, 0f)`.
+  * Make sure `SimplePicker` is **not** attached to any of the game objects `cobra02-L` and `cobra02-R`. `SimplePicker` is provided by the Ximmerse SDK but using the script may break VRTK's grab functionality.
+* Switch the build settings in `File > Build Settings...` to `Android`.
+
+> Currently Ximmerse 6DOF tracking is only supported on Android. 3DOF tracking is supported on both iOS and Android. Ximmerse are getting MFI certification from Apple at the moment.
+
+</details>
+
+### Daydream *(experimental)*
+
+<details><summary>**Instructions for using Daydream**</summary>
+
+* Open a new or existing project in Unity that offers Daydream integration.
+* Download the [Google VR SDK] from the Google developer website.
+* Import the `.unitypackage`.
+* Switch the build settings in `File > Build Settings...` to `Android`.
+* In `Edit > Project Settings > Player` set the following:
+  * API Level to `Nougat`.
   * Bundle Identifier and other settings for use with Android.
- * In Hierarchy, create empty GameObject named `DaydreamCameraRig`.
-  * Move or create a Camera as child of `DaydreamCameraRig`, reset its transform `position: 0,0,0`.
-  * Add `GvrControllerPointer` prefab from `Assets/GoogleVR/Prefabs/UI`.
-  * Add `GvrControllerMain` prefab from `Assets/GoogleVR/Prefabs/Controller/`.
-  * Add `GvrViewerMain` prefab (enables view in editor play mode).
- * Disable Daydream's native pointer tools.
-  * Camera object, disable or remove GvrPointerPhysicsRaycaster component (if present).
-  * GvrControllerPointer/Laser, disable or delete.
+* In the `Hierarchy` window, create a new empty GameObject named `DaydreamCameraRig`.
+* Add the following as children of `DaydreamCameraRig`:
+  * A new `Camera`.
+  * The `GvrControllerPointer` prefab from `GoogleVR/Prefabs/UI`.
+  * The `GvrControllerMain` prefab from `GoogleVR/Prefabs/Controller`.
+  * The `GvrViewerMain` prefab from `GoogleVR/Prefabs` (enables the view in editor play mode).
+* Disable Daydream's native pointer tools by removing or disabling `DaydreamCameraRig/GvrControllerPointer/Laser`.
+* Follow the initial steps above by adding the `DaydreamCameraRig` object as a child of the SDK Setup game object.
 
-### Setup VRTK Components
- * In Hierarchy, create an empty GameObject named `[VRTK]`.
- * Add component `VRTK_SDKManager`
- * Add a child empty GameObject named `RightController`.
-  *  > Note: Daydream supports only one controller, LeftController will not be used. If present, can be disabled or deleted.
- * SDK Selection
-  * In Inspector, choose Quick Select SDK: Daydream
-  * In Player Settings, ensure Scripting Define Symbols: `VRTK_SDK_DAYDREAM`
- * Linked Objects:
-  * Click `Auto Populate Linked Objects`, that should set:
-    * Actual Boundaries: `DaydreamCameraRig`
-    * Actual Headset: `DaydreamCameraRig/Camera`
-    * Actual Left Controller: `empty`
-    * Actual Right Controller: `DaydreamCameraRig/GvrControllerPointer/Controller`
- * Controler Aliases:
-  * Model Alias Left Controller: `empty`
-  * Model Alias Right Controller: `DaydreamCameraRig/GvrControllerPoints/Controller`
-  * Script Alias Left Controller: `empty`
-  * Script Alias Right Controller: `[VRTK]/RightController`
+> Note: Daydream supports only one controller, the left scripting alias controller of VRTK will not be used.
 
 </details>
 
 [SteamVR Plugin]: https://www.assetstore.unity3d.com/en/#!/content/32647
-[SteamVR Plugin for Unity3d Github Repo]: https://github.com/ValveSoftware/openvr/tree/master/unity_package/Assets/SteamVR
 [Oculus Utilities]: https://developer3.oculus.com/downloads/game-engines/1.10.0/Oculus_Utilities_for_Unity_5/
-[Google VR SDK for Unity]: https://developers.google.com/vr/unity/download
 [Ximmerse Unity SDK]: https://github.com/Ximmerse/SDK/tree/master/Unity
+[Google VR SDK]: https://developers.google.com/vr/unity/download

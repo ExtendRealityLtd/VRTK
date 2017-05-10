@@ -1,8 +1,9 @@
-﻿// SDK Info|Utilities|90011
+﻿// SDK Info|Utilities|90013
 namespace VRTK
 {
     using UnityEngine;
     using System;
+    using System.Collections.Generic;
     using System.Linq;
 
     /// <summary>
@@ -30,35 +31,48 @@ namespace VRTK
         private string fallbackTypeName;
         [SerializeField]
         private string typeName;
+        [SerializeField]
+        private int descriptionIndex;
 
         /// <summary>
-        /// Creates a new SDK info for a type that is known at compile time.
+        /// Creates new SDK infos for a type that is known at compile time.
         /// </summary>
         /// <typeparam name="BaseType">The SDK base type. Must be a subclass of <see cref="SDK_Base"/>.</typeparam>
         /// <typeparam name="FallbackType">The SDK type to fall back on if problems occur. Must be a subclass of <typeparamref name="BaseType"/>.</typeparam>
         /// <typeparam name="ActualType">The SDK type to use. Must be a subclass of <typeparamref name="BaseType"/>.</typeparam>
-        /// <returns>A newly created instance.</returns>
-        public static VRTK_SDKInfo Create<BaseType, FallbackType, ActualType>() where BaseType : SDK_Base where FallbackType : BaseType where ActualType : BaseType
+        /// <returns>Multiple newly created instances.</returns>
+        public static VRTK_SDKInfo[] Create<BaseType, FallbackType, ActualType>() where BaseType : SDK_Base where FallbackType : BaseType where ActualType : BaseType
         {
-            var sdkInfo = new VRTK_SDKInfo();
-            sdkInfo.SetUp(typeof(BaseType), typeof(FallbackType), typeof(ActualType).FullName);
-
-            return sdkInfo;
+            return Create<BaseType, FallbackType>(typeof(ActualType));
         }
 
         /// <summary>
-        /// Creates a new SDK info for a type.
+        /// Creates new SDK infos for a type.
         /// </summary>
         /// <typeparam name="BaseType">The SDK base type. Must be a subclass of <see cref="SDK_Base"/>.</typeparam>
         /// <typeparam name="FallbackType">The SDK type to fall back on if problems occur. Must be a subclass of <typeparamref name="BaseType"/>.</typeparam>
         /// <param name="actualType">The SDK type to use. Must be a subclass of <typeparamref name="BaseType"/>.</param>
-        /// <returns>A newly created instance.</returns>
-        public static VRTK_SDKInfo Create<BaseType, FallbackType>(Type actualType) where BaseType : SDK_Base where FallbackType : BaseType
+        /// <returns>Multiple newly created instances.</returns>
+        public static VRTK_SDKInfo[] Create<BaseType, FallbackType>(Type actualType) where BaseType : SDK_Base where FallbackType : BaseType
         {
-            var sdkInfo = new VRTK_SDKInfo();
-            sdkInfo.SetUp(typeof(BaseType), typeof(FallbackType), actualType.FullName);
+            string actualTypeName = actualType.FullName;
 
-            return sdkInfo;
+            SDK_DescriptionAttribute[] descriptions = SDK_DescriptionAttribute.GetDescriptions(actualType);
+            if (descriptions.Length == 0)
+            {
+                VRTK_Logger.Fatal(string.Format("'{0}' doesn't specify any SDK descriptions via '{1}'.", actualTypeName, typeof(SDK_DescriptionAttribute).Name));
+                return new VRTK_SDKInfo[0];
+            }
+
+            List<VRTK_SDKInfo> sdkInfos = new List<VRTK_SDKInfo>(descriptions.Length);
+            foreach (SDK_DescriptionAttribute description in descriptions)
+            {
+                VRTK_SDKInfo sdkInfo = new VRTK_SDKInfo();
+                sdkInfo.SetUp(typeof(BaseType), typeof(FallbackType), actualTypeName, description.index);
+                sdkInfos.Add(sdkInfo);
+            }
+
+            return sdkInfos.ToArray();
         }
 
         private VRTK_SDKInfo()
@@ -71,19 +85,26 @@ namespace VRTK
         /// <param name="infoToCopy">The SDK info to copy.</param>
         public VRTK_SDKInfo(VRTK_SDKInfo infoToCopy)
         {
-            SetUp(Type.GetType(infoToCopy.baseTypeName), Type.GetType(infoToCopy.fallbackTypeName), infoToCopy.typeName);
+            SetUp(Type.GetType(infoToCopy.baseTypeName),
+                  Type.GetType(infoToCopy.fallbackTypeName),
+                  infoToCopy.typeName,
+                  infoToCopy.descriptionIndex);
         }
 
-        private void SetUp(Type baseType, Type fallbackType, string actualTypeName)
+        private void SetUp(Type baseType, Type fallbackType, string actualTypeName, int descriptionIndex)
         {
+            if (baseType == null || fallbackType == null)
+                return;
             if (!baseType.IsSubclassOf(typeof(SDK_Base)))
             {
-                throw new ArgumentOutOfRangeException("baseType", baseType, string.Format("'{0}' is not a subclass of the SDK base type '{1}'.", baseType.Name, typeof(SDK_Base).Name));
+                VRTK_Logger.Fatal(new ArgumentOutOfRangeException("baseType", baseType, string.Format("'{0}' is not a subclass of the SDK base type '{1}'.", baseType.Name, typeof(SDK_Base).Name)));
+                return;
             }
 
             if (!fallbackType.IsSubclassOf(baseType))
             {
-                throw new ArgumentOutOfRangeException("fallbackType", fallbackType, string.Format("'{0}' is not a subclass of the SDK base type '{1}'.", fallbackType.Name, baseType.Name));
+                VRTK_Logger.Fatal(new ArgumentOutOfRangeException("fallbackType", fallbackType, string.Format("'{0}' is not a subclass of the SDK base type '{1}'.", fallbackType.Name, baseType.Name)));
+                return;
             }
 
             baseTypeName = baseType.FullName;
@@ -94,7 +115,8 @@ namespace VRTK
             {
                 type = fallbackType;
                 originalTypeNameWhenFallbackIsUsed = null;
-                description = SDK_DescriptionAttribute.Fallback;
+                this.descriptionIndex = -1;
+                description = new SDK_DescriptionAttribute(typeof(SDK_FallbackSystem));
 
                 return;
             }
@@ -102,40 +124,33 @@ namespace VRTK
             Type actualType = Type.GetType(actualTypeName);
             if (actualType == null)
             {
-                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.SDK_NOT_FOUND, new string[] { actualTypeName, fallbackType.Name }));
-
                 type = fallbackType;
                 originalTypeNameWhenFallbackIsUsed = actualTypeName;
-                description = SDK_DescriptionAttribute.Fallback;
+                this.descriptionIndex = -1;
+                description = new SDK_DescriptionAttribute(typeof(SDK_FallbackSystem));
+
+                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.SDK_NOT_FOUND, actualTypeName, fallbackType.Name));
 
                 return;
             }
 
             if (!actualType.IsSubclassOf(baseType))
             {
-                throw new ArgumentOutOfRangeException("actualTypeName", actualTypeName, string.Format("'{0}' is not a subclass of the SDK base type '{1}'.", actualTypeName, baseType.Name));
-            }
-
-            string fallbackNamespace = typeof(SDK_FallbackSystem).Namespace;
-            string fallbackNamePrefix = typeof(SDK_FallbackSystem).Name.Replace("System", "");
-            if (actualType.Namespace == fallbackNamespace && actualType.Name.StartsWith(fallbackNamePrefix, StringComparison.Ordinal))
-            {
-                type = actualType;
-                originalTypeNameWhenFallbackIsUsed = null;
-                description = SDK_DescriptionAttribute.Fallback;
-
+                VRTK_Logger.Fatal(new ArgumentOutOfRangeException("actualTypeName", actualTypeName, string.Format("'{0}' is not a subclass of the SDK base type '{1}'.", actualTypeName, baseType.Name)));
                 return;
             }
 
-            var actualDescription = (SDK_DescriptionAttribute)actualType.GetCustomAttributes(typeof(SDK_DescriptionAttribute), false).FirstOrDefault();
-            if (actualDescription == null)
+            SDK_DescriptionAttribute[] descriptions = SDK_DescriptionAttribute.GetDescriptions(actualType);
+            if (descriptions.Length <= descriptionIndex)
             {
-                throw new ArgumentException(string.Format("'{0}' doesn't specify an SDK description via '{1}'.", actualTypeName, typeof(SDK_DescriptionAttribute).Name), "actualTypeName");
+                VRTK_Logger.Fatal(new ArgumentOutOfRangeException("descriptionIndex", descriptionIndex, string.Format("'{0}' has no '{1}' at that index.", actualTypeName, typeof(SDK_DescriptionAttribute).Name)));
+                return;
             }
 
             type = actualType;
             originalTypeNameWhenFallbackIsUsed = null;
-            description = actualDescription;
+            this.descriptionIndex = descriptionIndex;
+            description = descriptions[descriptionIndex];
         }
 
         #region ISerializationCallbackReceiver
@@ -146,32 +161,27 @@ namespace VRTK
 
         public void OnAfterDeserialize()
         {
-            SetUp(Type.GetType(baseTypeName), Type.GetType(fallbackTypeName), typeName);
+            SetUp(Type.GetType(baseTypeName), Type.GetType(fallbackTypeName), typeName, descriptionIndex);
         }
 
         #endregion
 
-        #region Equality via type
+        #region Equality via type and descriptionIndex
 
         public override bool Equals(object obj)
         {
-            var other = obj as VRTK_SDKInfo;
+            VRTK_SDKInfo other = obj as VRTK_SDKInfo;
             if ((object)other == null)
             {
                 return false;
             }
 
-            return type == other.type;
+            return this == other;
         }
 
         public bool Equals(VRTK_SDKInfo other)
         {
-            if ((object)other == null)
-            {
-                return false;
-            }
-
-            return type == other.type;
+            return this == other;
         }
 
         public override int GetHashCode()
@@ -191,7 +201,7 @@ namespace VRTK
                 return false;
             }
 
-            return x.type == y.type;
+            return x.type == y.type && x.descriptionIndex == y.descriptionIndex;
         }
 
         public static bool operator !=(VRTK_SDKInfo x, VRTK_SDKInfo y)

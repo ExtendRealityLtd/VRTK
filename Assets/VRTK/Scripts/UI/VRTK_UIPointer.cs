@@ -169,6 +169,7 @@ namespace VRTK
 
         protected EventSystem cachedEventSystem;
         protected VRTK_VRInputModule cachedVRInputModule;
+        protected Transform originalPointerOriginTransform;
 
         public virtual void OnUIPointerElementEnter(UIPointerEventArgs e)
         {
@@ -401,9 +402,15 @@ namespace VRTK
             return (pointerOriginTransform ? pointerOriginTransform.forward : transform.forward);
         }
 
+        protected virtual void Awake()
+        {
+            originalPointerOriginTransform = pointerOriginTransform;
+            VRTK_SDKManager.instance.AddBehaviourToToggleOnLoadedSetupChange(this);
+        }
+
         protected virtual void OnEnable()
         {
-            pointerOriginTransform = (pointerOriginTransform == null ? VRTK_SDK_Bridge.GenerateControllerPointerOrigin(gameObject) : pointerOriginTransform);
+            pointerOriginTransform = (originalPointerOriginTransform == null ? VRTK_SDK_Bridge.GenerateControllerPointerOrigin(gameObject) : originalPointerOriginTransform);
 
             controller = (controller != null ? controller : GetComponent<VRTK_ControllerEvents>());
             ConfigureEventSystem();
@@ -435,6 +442,11 @@ namespace VRTK
                 controller.UnsubscribeToButtonAliasEvent(selectionButton, true, DoSelectionButtonPressed);
                 controller.UnsubscribeToButtonAliasEvent(selectionButton, false, DoSelectionButtonReleased);
             }
+        }
+
+        protected virtual void OnDestroy()
+        {
+            VRTK_SDKManager.instance.RemoveBehaviourToToggleOnLoadedSetupChange(this);
         }
 
         protected virtual void LateUpdate()

@@ -11,5 +11,40 @@ namespace VRTK
     /// </remarks>
     public abstract class SDK_Base : ScriptableObject
     {
+        /// <summary>
+        /// This method is called just before loading the <see cref="VRTK_SDKSetup"/> that's using this SDK.
+        /// </summary>
+        /// <param name="setup">The SDK Setup which is using this SDK.</param>
+        public virtual void OnBeforeSetupLoad(VRTK_SDKSetup setup)
+        {
+
+        }
+
+        /// <summary>
+        /// This method is called just after loading the <see cref="VRTK_SDKSetup"/> that's using this SDK.
+        /// </summary>
+        /// <param name="setup">The SDK Setup which is using this SDK.</param>
+        public virtual void OnAfterSetupLoad(VRTK_SDKSetup setup)
+        {
+
+        }
+
+        /// <summary>
+        /// This method is called just before unloading the <see cref="VRTK_SDKSetup"/> that's using this SDK.
+        /// </summary>
+        /// <param name="setup">The SDK Setup which is using this SDK.</param>
+        public virtual void OnBeforeSetupUnload(VRTK_SDKSetup setup)
+        {
+
+        }
+
+        /// <summary>
+        /// This method is called just after unloading the <see cref="VRTK_SDKSetup"/> that's using this SDK.
+        /// </summary>
+        /// <param name="setup">The SDK Setup which is using this SDK.</param>
+        public virtual void OnAfterSetupUnload(VRTK_SDKSetup setup)
+        {
+
+        }
     }
 }

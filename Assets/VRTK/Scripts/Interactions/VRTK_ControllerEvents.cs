@@ -1076,6 +1076,11 @@ namespace VRTK
             ButtonAliasEventSubscription(false, givenButton, startEvent, callbackMethod);
         }
 
+        protected virtual void Awake()
+        {
+            VRTK_SDKManager.instance.AddBehaviourToToggleOnLoadedSetupChange(this);
+        }
+
         protected virtual void OnEnable()
         {
             var actualController = VRTK_DeviceFinder.GetActualController(gameObject);
@@ -1104,6 +1109,11 @@ namespace VRTK
                     controllerTracker.ControllerDisabled -= TrackedControllerDisabled;
                 }
             }
+        }
+
+        protected virtual void OnDestroy()
+        {
+            VRTK_SDKManager.instance.RemoveBehaviourToToggleOnLoadedSetupChange(this);
         }
 
         protected virtual void Update()

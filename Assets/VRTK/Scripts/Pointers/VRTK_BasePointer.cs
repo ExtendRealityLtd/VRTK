@@ -93,6 +93,7 @@ namespace VRTK
         private VRTK_InteractGrab controllerGrabScript;
         private GameObject pointerOriginTransformFollowGameObject;
         private VRTK_TransformFollow pointerOriginTransformFollow;
+        private Transform originalPointerOriginTransform;
 
         /// <summary>
         /// The IsActive method is used to determine if the pointer currently active.
@@ -132,13 +133,16 @@ namespace VRTK
         protected virtual void Awake()
         {
             VRTK_PlayerObject.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.Pointer);
+            originalPointerOriginTransform = pointerOriginTransform;
+
+            VRTK_SDKManager.instance.AddBehaviourToToggleOnLoadedSetupChange(this);
         }
 
         protected override void OnEnable()
         {
             base.OnEnable();
 
-            pointerOriginTransform = (pointerOriginTransform == null ? VRTK_SDK_Bridge.GenerateControllerPointerOrigin(gameObject) : pointerOriginTransform);
+            pointerOriginTransform = (originalPointerOriginTransform == null ? VRTK_SDK_Bridge.GenerateControllerPointerOrigin(gameObject) : originalPointerOriginTransform);
 
             AttemptSetController();
             CreatePointerOriginTransformFollow();
@@ -153,6 +157,11 @@ namespace VRTK
             pointerMaterial.color = pointerMissColor;
 
             playAreaCursor = GetComponent<VRTK_PlayAreaCursor>();
+        }
+
+        protected virtual void Start()
+        {
+            SetupController();
         }
 
         protected override void OnDisable()
@@ -170,9 +179,9 @@ namespace VRTK
             Destroy(pointerOriginTransformFollowGameObject);
         }
 
-        protected virtual void Start()
+        protected virtual void OnDestroy()
         {
-            SetupController();
+            VRTK_SDKManager.instance.RemoveBehaviourToToggleOnLoadedSetupChange(this);
         }
 
         protected virtual void Update()

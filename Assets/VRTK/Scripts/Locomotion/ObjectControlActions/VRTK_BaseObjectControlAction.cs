@@ -31,6 +31,11 @@ namespace VRTK
 
         protected abstract void Process(GameObject controlledGameObject, Transform directionDevice, Vector3 axisDirection, float axis, float deadzone, bool currentlyFalling, bool modifierActive);
 
+        protected virtual void Awake()
+        {
+            VRTK_SDKManager.instance.AddBehaviourToToggleOnLoadedSetupChange(this);
+        }
+
         protected virtual void OnEnable()
         {
             playArea = VRTK_DeviceFinder.PlayAreaTransform();
@@ -62,6 +67,11 @@ namespace VRTK
                         break;
                 }
             }
+        }
+
+        protected virtual void OnDestroy()
+        {
+            VRTK_SDKManager.instance.RemoveBehaviourToToggleOnLoadedSetupChange(this);
         }
 
         protected virtual void AxisChanged(object sender, ObjectControlEventArgs e)

@@ -1,7 +1,7 @@
-﻿// XimmerseVR Headset|SDK_XimmerseVR|003
+﻿// Ximmerse Headset|SDK_Ximmerse|003
 namespace VRTK
 {
-#if VRTK_DEFINE_SDK_XIMMERSEVR
+#if VRTK_DEFINE_SDK_XIMMERSE
     using UnityEngine;
     using System.Collections.Generic;
     using Ximmerse.InputSystem;
@@ -9,17 +9,18 @@ namespace VRTK
 #endif
 
     /// <summary>
-    /// The XimmerseVR Headset SDK script provides a bridge to the XimmerseVR SDK.
+    /// The Ximmerse Headset SDK script provides a bridge to the Ximmerse SDK.
     /// </summary>
-    [SDK_Description(typeof(SDK_XimmerseVRSystem))]
-    public class SDK_XimmerseVRHeadset
-#if VRTK_DEFINE_SDK_XIMMERSEVR
+    [SDK_Description(typeof(SDK_XimmerseSystem))]
+    [SDK_Description(typeof(SDK_XimmerseSystem), 1)]
+    public class SDK_XimmerseHeadset
+#if VRTK_DEFINE_SDK_XIMMERSE
         : SDK_BaseHeadset
 #else
         : SDK_FallbackHeadset
 #endif
     {
-#if VRTK_DEFINE_SDK_XIMMERSEVR
+#if VRTK_DEFINE_SDK_XIMMERSE
         private Quaternion previousHeadsetRotation;
         private Quaternion currentHeadsetRotation;
 
@@ -78,10 +79,10 @@ namespace VRTK
             cachedHeadset = GetSDKManagerHeadset();
             if (cachedHeadset == null)
             {
-                var foundCamera = VRTK_SharedMethods.FindEvenInactiveComponent<TrackedHead>();
-                if (foundCamera)
+                var foundHeadset = VRTK_SharedMethods.FindEvenInactiveGameObject<VRContext>("TrackingSpace/CenterEyeAnchor");
+                if (foundHeadset)
                 {
-                    cachedHeadset = foundCamera.transform;
+                    cachedHeadset = foundHeadset.transform;
                 }
             }
             return cachedHeadset;

@@ -160,12 +160,7 @@ namespace VRTK
         protected virtual void Awake()
         {
             controllerEvents = (controllerEvents != null ? controllerEvents : GetComponentInParent<VRTK_ControllerEvents>());
-            triggerInitialised = false;
-            gripInitialised = false;
-            touchpadInitialised = false;
-            buttonOneInitialised = false;
-            buttonTwoInitialised = false;
-            startMenuInitialised = false;
+            ResetTooltip();
 
             availableButtons = new TooltipButtons[]
             {
@@ -186,18 +181,21 @@ namespace VRTK
                 buttonTooltips[i] = transform.FindChild(availableButtons[i].ToString()).GetComponent<VRTK_ObjectTooltip>();
             }
 
-            InitialiseTips();
+            headsetControllerAware = (headsetControllerAware != null ? headsetControllerAware : FindObjectOfType<VRTK_HeadsetControllerAware>());
+
+            VRTK_SDKManager.instance.AddBehaviourToToggleOnLoadedSetupChange(this);
         }
 
         protected virtual void OnEnable()
         {
+            InitialiseTips();
+
             if (controllerEvents != null)
             {
                 controllerEvents.ControllerVisible += DoControllerVisible;
                 controllerEvents.ControllerHidden += DoControllerInvisible;
             }
 
-            headsetControllerAware = (headsetControllerAware != null ? headsetControllerAware : FindObjectOfType<VRTK_HeadsetControllerAware>());
             if (headsetControllerAware != null)
             {
                 headsetControllerAware.ControllerGlanceEnter += DoGlanceEnterController;
@@ -219,6 +217,11 @@ namespace VRTK
                 headsetControllerAware.ControllerGlanceEnter -= DoGlanceEnterController;
                 headsetControllerAware.ControllerGlanceExit -= DoGlanceExitController;
             }
+        }
+
+        protected virtual void OnDestroy()
+        {
+            VRTK_SDKManager.instance.RemoveBehaviourToToggleOnLoadedSetupChange(this);
         }
 
         protected virtual void Update()

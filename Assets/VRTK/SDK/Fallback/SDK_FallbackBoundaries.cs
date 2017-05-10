@@ -9,6 +9,7 @@ namespace VRTK
     /// <remarks>
     /// This is the fallback class that will just return default values.
     /// </remarks>
+    [SDK_Description(typeof(SDK_FallbackSystem))]
     public class SDK_FallbackBoundaries : SDK_BaseBoundaries
     {
         /// <summary>

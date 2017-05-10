@@ -4,7 +4,7 @@ namespace VRTK
     /// <summary>
     /// The Daydream System SDK script provides dummy functions for system functions.
     /// </summary>
-    [SDK_Description("Daydream", SDK_DaydreamDefines.ScriptingDefineSymbol)]
+    [SDK_Description("Daydream", SDK_DaydreamDefines.ScriptingDefineSymbol, "Daydream", "Android")]
     public class SDK_DaydreamSystem
 #if VRTK_DEFINE_SDK_DAYDREAM
         : SDK_BaseSystem

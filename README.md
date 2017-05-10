@@ -13,10 +13,10 @@
 | Supported SDK | Download Link |
 |---------------|---------------|
 | VR Simulator | Included |
-| SteamVR Unity Asset | [SteamVR Plugin] |
-| Oculus Utilities Unity Package | [Oculus Utilities] |
-| *Ximmerse Unity SDK Package | [Ximmerse Unity SDK] |
-| *Google VR SDK for Unity | [Google VR SDK for Unity]
+| SteamVR | [SteamVR Plugin] |
+| Oculus | [Oculus Utilities] |
+| *Ximmerse | [Ximmerse Unity SDK] |
+| *Daydream | [Google VR SDK for Unity]
 
 _*experimental_
 
@@ -42,13 +42,15 @@ if your query has already been answered.
 
 ## Getting Started
 
-> *VRTK requires a supported VR SDK to be imported into your Unity3d Project.*
+> *VRTK offers a VR Simulator that works without any third party SDK, but VR device support requires a supported VR SDK to be imported into the Unity project.*
 
- * Clone this repository `git clone https://github.com/thestonefox/VRTK.git`.
- * Open `VRTK` within Unity3d.
- * Add the `VRTK_SDKManager` script to a GameObject in the scene.
+* Download or clone this repository.
+* Open the folder in Unity to load the project.
+* Have a look at the included example scenes.
 
-For further information about setting up a specific SDK, check out the
+The example scenes support all the VRTK supported VR SDKs. To make use of VR devices (besides the included VR Simulator) import the needed third party VR SDK into the project.
+
+For further information about setting up a specific SDK and using VRTK in your own project, check out the
 [GETTING_STARTED.md] document.
 
 
@@ -74,14 +76,7 @@ understanding the different aspects of VRTK.
 A list of the examples can be viewed in [EXAMPLES.md] which includes
 an up to date list of examples showcasing the features of VRTK.
 
-The examples have all been built to work with the [SteamVR Plugin] by
-default, but they can be converted over to using the [Oculus Utilities] or [Ximmerse Unity SDK]
-by following the instructions for using the [Oculus Utilities] or [Ximmerse Unity SDK]
-package above.
-
-> *If the examples are not working on first load, click the `[VRTK]`
-> GameObject in the scene hierarchy to ensure the SDK Manager editor
-> script successfully sets up the project and scene.*
+The example scenes support all the VRTK supported VR SDKs. To make use of VR devices (besides the included VR Simulator) import the needed third party VR SDK into the project.
 
 ## Made With VRTK
 

@@ -8,7 +8,7 @@ namespace VRTK
     /// <summary>
     /// The SteamVR System SDK script provides a bridge to the SteamVR SDK.
     /// </summary>
-    [SDK_Description("SteamVR", SDK_SteamVRDefines.ScriptingDefineSymbol)]
+    [SDK_Description("SteamVR", SDK_SteamVRDefines.ScriptingDefineSymbol, "OpenVR", "Standalone")]
     public class SDK_SteamVRSystem
 #if VRTK_DEFINE_SDK_STEAMVR
         : SDK_BaseSystem
