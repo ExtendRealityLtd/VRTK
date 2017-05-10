@@ -64,6 +64,7 @@
                 {
                     nextSceneIndex = 0;
                 }
+                VRTK_SDKManager.instance.UnloadSDKSetup();
                 SceneManager.LoadScene(nextSceneIndex);
             }
 
@@ -74,6 +75,7 @@
                 {
                     previousSceneIndex = SceneManager.sceneCountInBuildSettings - 1;
                 }
+                VRTK_SDKManager.instance.UnloadSDKSetup();
                 SceneManager.LoadScene(previousSceneIndex);
             }
         }
