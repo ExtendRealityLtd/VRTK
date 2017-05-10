@@ -4944,12 +4944,20 @@ The Position Rewind script is used to reset the user back to a good known standi
 
 ### Inspector Parameters
 
+ * **Collision Detector:** The colliders to determine if a collision has occured for the rewind to be actioned.
  * **Rewind Delay:** The amount of time from original headset collision until the rewind to the last good known position takes place.
  * **Pushback Distance:** The additional distance to push the play area back upon rewind to prevent being right next to the wall again.
  * **Crouch Threshold:** The threshold to determine how low the headset has to be before it is considered the user is crouching. The last good position will only be recorded in a non-crouching position.
  * **Crouch Rewind Threshold:** The threshold to determind how low the headset can be to perform a position rewind. If the headset Y position is lower than this threshold then a rewind won't occur.
  * **Body Physics:** The VRTK Body Physics script to use for the collisions and rigidbodies. If this is left blank then the first Body Physics script found in the scene will be used.
  * **Headset Collision:** The VRTK Headset Collision script to use to determine if the headset is colliding. If this is left blank then the script will need to be applied to the same GameObject.
+
+### Class Variables
+
+ * `public enum CollisionDetectors` - Valid collision detectors.
+  * `HeadsetOnly` - Listen for collisions on the headset collider only.
+  * `BodyOnly` - Listen for collisions on the body physics collider only.
+  * `HeadsetAndBody` - Listen for collisions on both the headset collider and body physics collider.
 
 ### Example
 

@@ -9,12 +9,26 @@ namespace VRTK
     /// <example>
     /// `VRTK/Examples/017_CameraRig_TouchpadWalking` has the position rewind script to reset the user's position if they walk into objects.
     /// </example>
-    [RequireComponent(typeof(VRTK_HeadsetCollision))]
     [AddComponentMenu("VRTK/Scripts/Presence/VRTK_PositionRewind")]
     public class VRTK_PositionRewind : MonoBehaviour
     {
+        /// <summary>
+        /// Valid collision detectors.
+        /// </summary>
+        /// <param name="HeadsetOnly">Listen for collisions on the headset collider only.</param>
+        /// <param name="BodyOnly">Listen for collisions on the body physics collider only.</param>
+        /// <param name="HeadsetAndBody">Listen for collisions on both the headset collider and body physics collider.</param>
+        public enum CollisionDetectors
+        {
+            HeadsetOnly,
+            BodyOnly,
+            HeadsetAndBody
+        }
+
         [Header("Rewind Settings")]
 
+        [Tooltip("The colliders to determine if a collision has occured for the rewind to be actioned.")]
+        public CollisionDetectors collisionDetector = CollisionDetectors.HeadsetOnly;
         [Tooltip("The amount of time from original headset collision until the rewind to the last good known position takes place.")]
         public float rewindDelay = 0.5f;
         [Tooltip("The additional distance to push the play area back upon rewind to prevent being right next to the wall again.")]
@@ -56,12 +70,12 @@ namespace VRTK
 
             bodyPhysics = (bodyPhysics != null ? bodyPhysics : FindObjectOfType<VRTK_BodyPhysics>());
             headsetCollision = (headsetCollision != null ? headsetCollision : GetComponentInChildren<VRTK_HeadsetCollision>());
-            ManageHeadsetListeners(true);
+            ManageListeners(true);
         }
 
         protected virtual void OnDisable()
         {
-            ManageHeadsetListeners(false);
+            ManageListeners(false);
         }
 
         protected virtual void Update()
@@ -81,31 +95,35 @@ namespace VRTK
             }
         }
 
+        protected virtual bool CrouchThresholdReached()
+        {
+            float floorVariant = 0.005f;
+            return (playArea.position.y > (lastPlayAreaY + floorVariant) || playArea.position.y < (lastPlayAreaY - floorVariant));
+        }
+
+        protected virtual void SetHighestHeadsetY()
+        {
+            highestHeadsetY = (CrouchThresholdReached() ? crouchThreshold : (headset.localPosition.y > highestHeadsetY) ? headset.localPosition.y : highestHeadsetY);
+        }
+
+        protected virtual void UpdateLastGoodPosition()
+        {
+            float highestYDiff = highestHeadsetY - crouchThreshold;
+            if (headset.localPosition.y > highestYDiff && highestYDiff > crouchThreshold)
+            {
+                lastGoodPositionSet = true;
+                lastGoodStandingPosition = playArea.position;
+                lastGoodHeadsetPosition = headset.position;
+            }
+            lastPlayAreaY = playArea.position.y;
+        }
+
         protected virtual void FixedUpdate()
         {
             if (!isColliding && playArea != null)
             {
-                float floorVariant = 0.005f;
-                if (playArea.position.y > (lastPlayAreaY + floorVariant) || playArea.position.y < (lastPlayAreaY - floorVariant))
-                {
-                    highestHeadsetY = crouchThreshold;
-                }
-
-                if (headset.localPosition.y > highestHeadsetY)
-                {
-                    highestHeadsetY = headset.localPosition.y;
-                }
-
-                float highestYDiff = highestHeadsetY - crouchThreshold;
-
-                if (headset.localPosition.y > highestYDiff && highestYDiff > crouchThreshold)
-                {
-                    lastGoodPositionSet = true;
-                    lastGoodStandingPosition = playArea.position;
-                    lastGoodHeadsetPosition = headset.position;
-                }
-
-                lastPlayAreaY = playArea.position.y;
+                SetHighestHeadsetY();
+                UpdateLastGoodPosition();
             }
         }
 
@@ -131,9 +149,14 @@ namespace VRTK
             return (bodyPhysics == null || bodyPhysics.enableBodyCollisions);
         }
 
+        protected virtual bool CanRewind()
+        {
+            return (!isRewinding && playArea != null & lastGoodPositionSet && headset.localPosition.y > crouchRewindThreshold && BodyCollisionsEnabled());
+        }
+
         protected virtual void RewindPosition()
         {
-            if (!isRewinding && playArea != null & lastGoodPositionSet && headset.localPosition.y > crouchRewindThreshold && BodyCollisionsEnabled())
+            if (CanRewind())
             {
                 isRewinding = true;
                 Vector3 rewindDirection = lastGoodHeadsetPosition - headset.position;
@@ -147,29 +170,62 @@ namespace VRTK
             }
         }
 
-        protected virtual void ManageHeadsetListeners(bool state)
+        protected virtual bool HeadsetListen()
         {
-            if (headsetCollision != null)
+            return (collisionDetector == CollisionDetectors.HeadsetAndBody || collisionDetector == CollisionDetectors.HeadsetOnly);
+        }
+
+        protected virtual bool BodyListen()
+        {
+            return (collisionDetector == CollisionDetectors.HeadsetAndBody || collisionDetector == CollisionDetectors.BodyOnly);
+        }
+
+        protected virtual void ManageListeners(bool state)
+        {
+            if (state)
             {
-                if (state)
+                if (headsetCollision != null && HeadsetListen())
                 {
-                    headsetCollision.HeadsetCollisionDetect += HeadsetCollision_HeadsetCollisionDetect;
-                    headsetCollision.HeadsetCollisionEnded += HeadsetCollision_HeadsetCollisionEnded;
+                    headsetCollision.HeadsetCollisionDetect += HeadsetCollisionDetect;
+                    headsetCollision.HeadsetCollisionEnded += HeadsetCollisionEnded;
                 }
-                else
+                if (bodyPhysics != null && BodyListen())
                 {
-                    headsetCollision.HeadsetCollisionDetect -= HeadsetCollision_HeadsetCollisionDetect;
-                    headsetCollision.HeadsetCollisionEnded -= HeadsetCollision_HeadsetCollisionEnded;
+                    bodyPhysics.StartColliding += StartColliding;
+                    bodyPhysics.StopColliding += StopColliding;
+                }
+            }
+            else
+            {
+                if (headsetCollision != null && HeadsetListen())
+                {
+                    headsetCollision.HeadsetCollisionDetect -= HeadsetCollisionDetect;
+                    headsetCollision.HeadsetCollisionEnded -= HeadsetCollisionEnded;
+                }
+                if (bodyPhysics != null && BodyListen())
+                {
+                    bodyPhysics.StartColliding -= StartColliding;
+                    bodyPhysics.StopColliding -= StopColliding;
                 }
             }
         }
 
-        protected virtual void HeadsetCollision_HeadsetCollisionDetect(object sender, HeadsetCollisionEventArgs e)
+        private void StartColliding(object sender, BodyPhysicsEventArgs e)
         {
             StartCollision();
         }
 
-        protected virtual void HeadsetCollision_HeadsetCollisionEnded(object sender, HeadsetCollisionEventArgs e)
+        private void StopColliding(object sender, BodyPhysicsEventArgs e)
+        {
+            EndCollision();
+        }
+
+        protected virtual void HeadsetCollisionDetect(object sender, HeadsetCollisionEventArgs e)
+        {
+            StartCollision();
+        }
+
+        protected virtual void HeadsetCollisionEnded(object sender, HeadsetCollisionEventArgs e)
         {
             EndCollision();
         }
