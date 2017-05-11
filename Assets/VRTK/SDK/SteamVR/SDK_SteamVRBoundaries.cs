@@ -31,6 +31,11 @@ namespace VRTK
                 headsetCamera.gameObject.AddComponent<SteamVR_UpdatePoses>();
             }
 #endif
+            SteamVR_PlayArea area = GetCachedSteamVRPlayArea();
+            if (area != null)
+            {
+                area.BuildMesh();
+            }
         }
 
         /// <summary>
@@ -62,7 +67,7 @@ namespace VRTK
             SteamVR_PlayArea area = GetCachedSteamVRPlayArea();
             if (area != null)
             {
-                return area.vertices;
+                return ProcessVertices(area.vertices);
             }
             return null;
         }
@@ -129,6 +134,24 @@ namespace VRTK
             }
 
             return cachedSteamVRPlayArea;
+        }
+
+        protected virtual Vector3[] ProcessVertices(Vector3[] vertices)
+        {
+            //If there aren't enough vertices or the play area is calibrated then just return
+            if (vertices.Length < 8 || IsPlayAreaSizeCalibrated(null))
+            {
+                return vertices;
+            }
+
+            //Go through the existing vertices and swap them around so they're in the correct expected location
+            Vector3[] modifiedVertices = new Vector3[8];
+            int[] verticeIndexes = new int[] { 3, 0, 1, 2, 7, 4, 5, 6 };
+            for (int i = 0; i < modifiedVertices.Length; i++)
+            {
+                modifiedVertices[i] = vertices[verticeIndexes[i]];
+            }
+            return modifiedVertices;
         }
 #endif
     }
