@@ -1,4 +1,4 @@
-﻿// Interactable Object|Interactions|30030
+﻿// Interactable Object|Interactions|30080
 namespace VRTK
 {
     using UnityEngine;

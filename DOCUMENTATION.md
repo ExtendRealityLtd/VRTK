@@ -2134,12 +2134,14 @@ A collection of scripts that provide the ability to interact with game objects w
 
  * [Controller Events](#controller-events-vrtk_controllerevents)
  * [Controller Highlighter](#controller-highlighter-vrtk_controllerhighlighter)
- * [Interactable Object](#interactable-object-vrtk_interactableobject)
+ * [Controller Haptics](#controller-haptics-vrtk_controllerhaptics)
+ * [Interact Controller Appearance](#interact-controller-appearance-vrtk_interactcontrollerappearance)
  * [Interact Touch](#interact-touch-vrtk_interacttouch)
  * [Interact Grab](#interact-grab-vrtk_interactgrab)
  * [Interact Use](#interact-use-vrtk_interactuse)
+ * [Interactable Object](#interactable-object-vrtk_interactableobject)
+ * [Object Appearance](#object-appearance-vrtk_objectappearance)
  * [Interact Haptics](#interact-haptics-vrtk_interacthaptics)
- * [Interact Controller Appearance](#interact-controller-appearance-vrtk_interactcontrollerappearance)
  * [Object Auto Grab](#object-auto-grab-vrtk_objectautograb)
  * [Object Touch Auto Interact](#object-touch-auto-interact-vrtk_objecttouchautointeract)
 
@@ -2521,6 +2523,438 @@ The UnhighlightElement method attempts to remove the highlight from the specific
 ### Example
 
 `VRTK/Examples/035_Controller_OpacityAndHighlighting` demonstrates the ability to change the opacity of a controller model and to highlight specific elements of a controller such as the buttons or even the entire controller model.
+
+---
+
+## Controller Haptics (VRTK_ControllerHaptics)
+
+### Overview
+
+The Controller Haptics scripts are a collection of static methods for calling haptic functions on a given controller.
+
+### Class Methods
+
+#### TriggerHapticPulse/2
+
+  > `public static void TriggerHapticPulse(VRTK_ControllerReference controllerReference, float strength)`
+
+  * Parameters
+   * `VRTK_ControllerReference controllerReference` - The reference to the controller to activate the haptic feedback on.
+   * `float strength` - The intensity of the rumble of the controller motor. `0` to `1`.
+  * Returns
+   * _none_
+
+The TriggerHapticPulse/2 method calls a single haptic pulse call on the controller for a single tick.
+
+#### TriggerHapticPulse/4
+
+  > `public static void TriggerHapticPulse(VRTK_ControllerReference controllerReference, float strength, float duration, float pulseInterval)`
+
+  * Parameters
+   * `VRTK_ControllerReference controllerReference` - The reference to the controller to activate the haptic feedback on.
+   * `float strength` - The intensity of the rumble of the controller motor. `0` to `1`.
+   * `float duration` - The length of time the rumble should continue for.
+   * `float pulseInterval` - The interval to wait between each haptic pulse.
+  * Returns
+   * _none_
+
+The TriggerHapticPulse/4 method calls a haptic pulse for a specified amount of time rather than just a single tick. Each pulse can be separated by providing a `pulseInterval` to pause between each haptic pulse.
+
+#### CancelHapticPulse/1
+
+  > `public static void CancelHapticPulse(VRTK_ControllerReference controllerReference)`
+
+  * Parameters
+   * `VRTK_ControllerReference controllerReference` - The reference to the controller to cancel the haptic feedback on.
+  * Returns
+   * _none_
+
+The CancelHapticPulse method cancels the existing running haptic pulse on the given controller index.
+
+---
+
+## Interact Controller Appearance (VRTK_InteractControllerAppearance)
+
+### Overview
+
+The Interact Controller Appearance script is attached on the same GameObject as an Interactable Object script and is used to determine whether the controller model should be visible or hidden on touch, grab or use.
+
+### Inspector Parameters
+
+ * **Hide Controller On Touch:** Hides the controller model when a valid touch occurs.
+ * **Hide Delay On Touch:** The amount of seconds to wait before hiding the controller on touch.
+ * **Hide Controller On Grab:** Hides the controller model when a valid grab occurs.
+ * **Hide Delay On Grab:** The amount of seconds to wait before hiding the controller on grab.
+ * **Hide Controller On Use:** Hides the controller model when a valid use occurs.
+ * **Hide Delay On Use:** The amount of seconds to wait before hiding the controller on use.
+
+### Class Methods
+
+#### ToggleControllerOnTouch/3
+
+  > `public virtual void ToggleControllerOnTouch(bool showController, GameObject touchingObject, GameObject ignoredObject)`
+
+  * Parameters
+   * `bool showController` - If true then the controller will attempt to be made visible when no longer touching, if false then the controller will be hidden on touch.
+   * `GameObject touchingObject` - The touching object to apply the visibility state to.
+   * `GameObject ignoredObject` - The object that is currently being interacted with by the touching object which is passed through to the visibility to prevent the object from being hidden as well.
+  * Returns
+   * _none_
+
+The ToggleControllerOnTouch method determines whether the controller should be shown or hidden when touching an interactable object.
+
+#### ToggleControllerOnGrab/3
+
+  > `public virtual void ToggleControllerOnGrab(bool showController, GameObject grabbingObject, GameObject ignoredObject)`
+
+  * Parameters
+   * `bool showController` - If true then the controller will attempt to be made visible when no longer grabbing, if false then the controller will be hidden on grab.
+   * `GameObject grabbingObject` - The grabbing object to apply the visibility state to.
+   * `GameObject ignoredObject` - The object that is currently being interacted with by the grabbing object which is passed through to the visibility to prevent the object from being hidden as well.
+  * Returns
+   * _none_
+
+The ToggleControllerOnGrab method determines whether the controller should be shown or hidden when grabbing an interactable object.
+
+#### ToggleControllerOnUse/3
+
+  > `public virtual void ToggleControllerOnUse(bool showController, GameObject usingObject, GameObject ignoredObject)`
+
+  * Parameters
+   * `bool showController` - If true then the controller will attempt to be made visible when no longer using, if false then the controller will be hidden on use.
+   * `GameObject usingObject` - The using object to apply the visibility state to.
+   * `GameObject ignoredObject` - The object that is currently being interacted with by the using object which is passed through to the visibility to prevent the object from being hidden as well.
+  * Returns
+   * _none_
+
+The ToggleControllerOnUse method determines whether the controller should be shown or hidden when using an interactable object.
+
+### Example
+
+`VRTK/Examples/008_Controller_UsingAGrabbedObject` shows that the controller can be hidden when touching, grabbing and using an object.
+
+---
+
+## Interact Touch (VRTK_InteractTouch)
+
+### Overview
+
+The Interact Touch script is usually applied to a Controller and provides a collider to know when the controller is touching something.
+
+Colliders are created for the controller and by default the selected controller SDK will have a set of colliders for the given default controller of that SDK.
+
+A custom collider can be provided by the Custom Rigidbody Object parameter.
+
+### Inspector Parameters
+
+ * **Custom Collider Container:** An optional GameObject that contains the compound colliders to represent the touching object. If this is empty then the collider will be auto generated at runtime to match the SDK default controller.
+
+### Class Events
+
+ * `ControllerTouchInteractableObject` - Emitted when a valid object is touched.
+ * `ControllerUntouchInteractableObject` - Emitted when a valid object is no longer being touched.
+
+### Unity Events
+
+Adding the `VRTK_InteractTouch_UnityEvents` component to `VRTK_InteractTouch` object allows access to `UnityEvents` that will react identically to the Class Events.
+
+ * All C# delegate events are mapped to a Unity Event with the `On` prefix. e.g. `MyEvent` -> `OnMyEvent`.
+
+### Event Payload
+
+ * `VRTK_ControllerReference controllerReference` - The reference to the controller doing the interaction.
+ * `GameObject target` - The GameObject of the interactable object that is being interacted with by the controller.
+
+### Class Methods
+
+#### ForceTouch/1
+
+  > `public virtual void ForceTouch(GameObject obj)`
+
+  * Parameters
+   * `GameObject obj` - The game object to attempt to force touch.
+  * Returns
+   * _none_
+
+The ForceTouch method will attempt to force the controller to touch the given game object. This is useful if an object that isn't being touched is required to be grabbed or used as the controller doesn't physically have to be touching it to be forced to interact with it.
+
+#### GetTouchedObject/0
+
+  > `public virtual GameObject GetTouchedObject()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `GameObject` - The game object of what is currently being touched by this controller.
+
+The GetTouchedObject method returns the current object being touched by the controller.
+
+#### IsObjectInteractable/1
+
+  > `public virtual bool IsObjectInteractable(GameObject obj)`
+
+  * Parameters
+   * `GameObject obj` - The game object to check to see if it's interactable.
+  * Returns
+   * `bool` - Is true if the given object is of type `VRTK_InteractableObject`.
+
+The IsObjectInteractable method is used to check if a given game object is of type `VRTK_InteractableObject` and whether the object is enabled.
+
+#### ToggleControllerRigidBody/2
+
+  > `public virtual void ToggleControllerRigidBody(bool state, bool forceToggle = false)`
+
+  * Parameters
+   * `bool state` - The state of whether the rigidbody is on or off. `true` toggles the rigidbody on and `false` turns it off.
+   * `bool forceToggle` - Determines if the rigidbody has been forced into it's new state by another script. This can be used to override other non-force settings. Defaults to `false`
+  * Returns
+   * _none_
+
+The ToggleControllerRigidBody method toggles the controller's rigidbody's ability to detect collisions. If it is true then the controller rigidbody will collide with other collidable game objects.
+
+#### IsRigidBodyActive/0
+
+  > `public virtual bool IsRigidBodyActive()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `bool` - Is true if the rigidbody on the controller is currently active and able to affect other scene rigidbodies.
+
+The IsRigidBodyActive method checks to see if the rigidbody on the controller object is active and can affect other rigidbodies in the scene.
+
+#### IsRigidBodyForcedActive/0
+
+  > `public virtual bool IsRigidBodyForcedActive()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `bool` - Is true if the rigidbody is active and has been forced into the active state.
+
+The IsRigidBodyForcedActive method checks to see if the rigidbody on the controller object has been forced into the active state.
+
+#### ForceStopTouching/0
+
+  > `public virtual void ForceStopTouching()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The ForceStopTouching method will stop the controller from touching an object even if the controller is physically touching the object still.
+
+#### ControllerColliders/0
+
+  > `public virtual Collider[] ControllerColliders()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `Collider[]` - An array of colliders that are associated with the controller.
+
+The ControllerColliders method retrieves all of the associated colliders on the controller.
+
+### Example
+
+`VRTK/Examples/005_Controller/BasicObjectGrabbing` demonstrates the highlighting of objects that have the `VRTK_InteractableObject` script added to them to show the ability to highlight interactable objects when they are touched by the controllers.
+
+---
+
+## Interact Grab (VRTK_InteractGrab)
+
+### Overview
+
+The Interact Grab script is attached to a Controller object and requires the `VRTK_ControllerEvents` script to be attached as it uses this for listening to the controller button events for grabbing and releasing interactable game objects.
+
+It listens for the `AliasGrabOn` and `AliasGrabOff` events to determine when an object should be grabbed and should be released.
+
+The Controller object also requires the `VRTK_InteractTouch` script to be attached to it as this is used to determine when an interactable object is being touched. Only valid touched objects can be grabbed.
+
+An object can be grabbed if the Controller touches a game object which contains the `VRTK_InteractableObject` script and has the flag `isGrabbable` set to `true`.
+
+If a valid interactable object is grabbable then pressing the set `Grab` button on the Controller (default is `Grip`) will grab and snap the object to the controller and will not release it until the `Grab` button is released.
+
+When the Controller `Grab` button is released, if the interactable game object is grabbable then it will be propelled in the direction and at the velocity the controller was at, which can simulate object throwing.
+
+The interactable objects require a collider to activate the trigger and a rigidbody to pick them up and move them around the game world.
+
+### Inspector Parameters
+
+ * **Grab Button:** The button used to grab/release a touched object.
+ * **Grab Precognition:** An amount of time between when the grab button is pressed to when the controller is touching something to grab it. For example, if an object is falling at a fast rate, then it is very hard to press the grab button in time to catch the object due to human reaction times. A higher number here will mean the grab button can be pressed before the controller touches the object and when the collision takes place, if the grab button is still being held down then the grab action will be successful.
+ * **Throw Multiplier:** An amount to multiply the velocity of any objects being thrown. This can be useful when scaling up the play area to simulate being able to throw items further.
+ * **Create Rigid Body When Not Touching:** If this is checked and the controller is not touching an Interactable Object when the grab button is pressed then a rigid body is added to the controller to allow the controller to push other rigid body objects around.
+ * **Controller Attach Point:** The rigidbody point on the controller model to snap the grabbed object to. If blank it will be set to the SDK default.
+ * **Controller Events:** The controller to listen for the events on. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.
+ * **Interact Touch:** The Interact Touch to listen for touches on. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.
+
+### Class Events
+
+ * `GrabButtonPressed` - Emitted when the grab button is pressed.
+ * `GrabButtonReleased` - Emitted when the grab button is released.
+ * `ControllerGrabInteractableObject` - Emitted when a valid object is grabbed.
+ * `ControllerUngrabInteractableObject` - Emitted when a valid object is released from being grabbed.
+
+### Unity Events
+
+Adding the `VRTK_InteractGrab_UnityEvents` component to `VRTK_InteractGrab` object allows access to `UnityEvents` that will react identically to the Class Events.
+
+ * All C# delegate events are mapped to a Unity Event with the `On` prefix. e.g. `MyEvent` -> `OnMyEvent`.
+
+### Class Methods
+
+#### IsGrabButtonPressed/0
+
+  > `public virtual bool IsGrabButtonPressed()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `bool` - Returns true if the grab alias button is being held down.
+
+The IsGrabButtonPressed method determines whether the current grab alias button is being pressed down.
+
+#### ForceRelease/1
+
+  > `public virtual void ForceRelease(bool applyGrabbingObjectVelocity = false)`
+
+  * Parameters
+   * `bool applyGrabbingObjectVelocity` - If this is true then upon releasing the object any velocity on the grabbing object will be applied to the object to essentiall throw it. Defaults to `false`.
+  * Returns
+   * _none_
+
+The ForceRelease method will force the controller to stop grabbing the currently grabbed object.
+
+#### AttemptGrab/0
+
+  > `public virtual void AttemptGrab()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The AttemptGrab method will attempt to grab the currently touched object without needing to press the grab button on the controller.
+
+#### GetGrabbedObject/0
+
+  > `public virtual GameObject GetGrabbedObject()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `GameObject` - The game object of what is currently being grabbed by this controller.
+
+The GetGrabbedObject method returns the current object being grabbed by the controller.
+
+### Example
+
+`VRTK/Examples/005_Controller/BasicObjectGrabbing` demonstrates the grabbing of interactable objects that have the `VRTK_InteractableObject` script attached to them. The objects can be picked up and thrown around.
+
+`VRTK/Examples/013_Controller_UsingAndGrabbingMultipleObjects` demonstrates that each controller can grab and use objects independently and objects can also be toggled to their use state simultaneously.
+
+`VRTK/Examples/014_Controller_SnappingObjectsOnGrab` demonstrates the different mechanisms for snapping a grabbed object to the controller.
+
+---
+
+## Interact Use (VRTK_InteractUse)
+
+### Overview
+
+The Interact Use script is attached to a Controller object and requires the `VRTK_ControllerEvents` script to be attached as it uses this for listening to the controller button events for using and stop using interactable game objects.
+
+It listens for the `AliasUseOn` and `AliasUseOff` events to determine when an object should be used and should stop using.
+
+The Controller object also requires the `VRTK_InteractTouch` script to be attached to it as this is used to determine when an interactable object is being touched. Only valid touched objects can be used.
+
+An object can be used if the Controller touches a game object which contains the `VRTK_InteractableObject` script and has the flag `isUsable` set to `true`.
+
+If a valid interactable object is usable then pressing the set `Use` button on the Controller (default is `Trigger`) will call the `StartUsing` method on the touched interactable object.
+
+### Inspector Parameters
+
+ * **Use Button:** The button used to use/unuse a touched object.
+ * **Controller Events:** The controller to listen for the events on. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.
+ * **Interact Touch:** The Interact Touch to listen for touches on. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.
+ * **Interact Grab:** The Interact Grab to listen for grab actions on. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.
+
+### Class Events
+
+ * `UseButtonPressed` - Emitted when the use toggle alias button is pressed.
+ * `UseButtonReleased` - Emitted when the use toggle alias button is released.
+ * `ControllerUseInteractableObject` - Emitted when a valid object starts being used.
+ * `ControllerUnuseInteractableObject` - Emitted when a valid object stops being used.
+
+### Unity Events
+
+Adding the `VRTK_InteractUse_UnityEvents` component to `VRTK_InteractUse` object allows access to `UnityEvents` that will react identically to the Class Events.
+
+ * All C# delegate events are mapped to a Unity Event with the `On` prefix. e.g. `MyEvent` -> `OnMyEvent`.
+
+### Class Methods
+
+#### IsUseButtonPressed/0
+
+  > `public virtual bool IsUseButtonPressed()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `bool` - Returns true if the use alias button is being held down.
+
+The IsUsebuttonPressed method determines whether the current use alias button is being pressed down.
+
+#### GetUsingObject/0
+
+  > `public virtual GameObject GetUsingObject()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `GameObject` - The game object of what is currently being used by this controller.
+
+The GetUsingObject method returns the current object being used by the controller.
+
+#### ForceStopUsing/0
+
+  > `public virtual void ForceStopUsing()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The ForceStopUsing method will force the controller to stop using the currently touched object and will also stop the object's using action.
+
+#### ForceResetUsing/0
+
+  > `public virtual void ForceResetUsing()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The ForceResetUsing will force the controller to stop using the currently touched object but the object will continue with it's existing using action.
+
+#### AttemptUse/0
+
+  > `public virtual void AttemptUse()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The AttemptUse method will attempt to use the currently touched object without needing to press the use button on the controller.
+
+### Example
+
+`VRTK/Examples/006_Controller_UsingADoor` simulates using a door object to open and close it. It also has a cube on the floor that can be grabbed to show how interactable objects can be usable or grabbable.
+
+`VRTK/Examples/008_Controller_UsingAGrabbedObject` shows that objects can be grabbed with one button and used with another (e.g. firing a gun).
 
 ---
 
@@ -2956,326 +3390,89 @@ The ResetIgnoredColliders method is used to clear any stored ignored colliders i
 
 ---
 
-## Interact Touch (VRTK_InteractTouch)
+## Object Appearance (VRTK_ObjectAppearance)
 
 ### Overview
 
-The Interact Touch script is usually applied to a Controller and provides a collider to know when the controller is touching something.
+The Object Appearance script provides a collection of static methods for controlling the appearance of a GameObject.
 
-Colliders are created for the controller and by default the selected controller SDK will have a set of colliders for the given default controller of that SDK.
-
-A custom collider can be provided by the Custom Rigidbody Object parameter.
-
-### Inspector Parameters
-
- * **Custom Collider Container:** An optional GameObject that contains the compound colliders to represent the touching object. If this is empty then the collider will be auto generated at runtime to match the SDK default controller.
-
-### Class Events
-
- * `ControllerTouchInteractableObject` - Emitted when a valid object is touched.
- * `ControllerUntouchInteractableObject` - Emitted when a valid object is no longer being touched.
-
-### Unity Events
-
-Adding the `VRTK_InteractTouch_UnityEvents` component to `VRTK_InteractTouch` object allows access to `UnityEvents` that will react identically to the Class Events.
-
- * All C# delegate events are mapped to a Unity Event with the `On` prefix. e.g. `MyEvent` -> `OnMyEvent`.
-
-### Event Payload
-
- * `VRTK_ControllerReference controllerReference` - The reference to the controller doing the interaction.
- * `GameObject target` - The GameObject of the interactable object that is being interacted with by the controller.
+The GameObject can have it's opacity changed, or it's renderers toggled, or highlighters toggled.
 
 ### Class Methods
 
-#### ForceTouch/1
+#### SetOpacity/3
 
-  > `public virtual void ForceTouch(GameObject obj)`
+  > `public static void SetOpacity(GameObject model, float alpha, float transitionDuration = 0f)`
 
   * Parameters
-   * `GameObject obj` - The game object to attempt to force touch.
+   * `GameObject model` - The GameObject to change the renderer opacity on.
+   * `float alpha` - The alpha level to apply to opacity of the controller object. `0f` to `1f`.
+   * `float transitionDuration` - The time to transition from the current opacity to the new opacity.
   * Returns
    * _none_
 
-The ForceTouch method will attempt to force the controller to touch the given game object. This is useful if an object that isn't being touched is required to be grabbed or used as the controller doesn't physically have to be touching it to be forced to interact with it.
+The SetOpacity method allows the opacity of the given GameObject to be changed. A lower alpha value will make the object more transparent, such as `0.5f` will make the controller partially transparent where as `0f` will make the controller completely transparent.
 
-#### GetTouchedObject/0
+#### SetRendererVisible/2
 
-  > `public virtual GameObject GetTouchedObject()`
-
-  * Parameters
-   * _none_
-  * Returns
-   * `GameObject` - The game object of what is currently being touched by this controller.
-
-The GetTouchedObject method returns the current object being touched by the controller.
-
-#### IsObjectInteractable/1
-
-  > `public virtual bool IsObjectInteractable(GameObject obj)`
+  > `public static void SetRendererVisible(GameObject model, GameObject ignoredModel = null)`
 
   * Parameters
-   * `GameObject obj` - The game object to check to see if it's interactable.
-  * Returns
-   * `bool` - Is true if the given object is of type `VRTK_InteractableObject`.
-
-The IsObjectInteractable method is used to check if a given game object is of type `VRTK_InteractableObject` and whether the object is enabled.
-
-#### ToggleControllerRigidBody/2
-
-  > `public virtual void ToggleControllerRigidBody(bool state, bool forceToggle = false)`
-
-  * Parameters
-   * `bool state` - The state of whether the rigidbody is on or off. `true` toggles the rigidbody on and `false` turns it off.
-   * `bool forceToggle` - Determines if the rigidbody has been forced into it's new state by another script. This can be used to override other non-force settings. Defaults to `false`
+   * `GameObject model` - The GameObject to show the renderers for.
+   * `GameObject ignoredModel` - An optional GameObject to ignore the renderer toggle on.
   * Returns
    * _none_
 
-The ToggleControllerRigidBody method toggles the controller's rigidbody's ability to detect collisions. If it is true then the controller rigidbody will collide with other collidable game objects.
+The SetRendererVisible method turns on renderers of a given GameObject. It can also be provided with an optional model to ignore the render toggle on.
 
-#### IsRigidBodyActive/0
+#### SetRendererHidden/2
 
-  > `public virtual bool IsRigidBodyActive()`
-
-  * Parameters
-   * _none_
-  * Returns
-   * `bool` - Is true if the rigidbody on the controller is currently active and able to affect other scene rigidbodies.
-
-The IsRigidBodyActive method checks to see if the rigidbody on the controller object is active and can affect other rigidbodies in the scene.
-
-#### IsRigidBodyForcedActive/0
-
-  > `public virtual bool IsRigidBodyForcedActive()`
+  > `public static void SetRendererHidden(GameObject model, GameObject ignoredModel = null)`
 
   * Parameters
-   * _none_
-  * Returns
-   * `bool` - Is true if the rigidbody is active and has been forced into the active state.
-
-The IsRigidBodyForcedActive method checks to see if the rigidbody on the controller object has been forced into the active state.
-
-#### ForceStopTouching/0
-
-  > `public virtual void ForceStopTouching()`
-
-  * Parameters
-   * _none_
+   * `GameObject model` - The GameObject to hide the renderers for.
+   * `GameObject ignoredModel` - An optional GameObject to ignore the renderer toggle on.
   * Returns
    * _none_
 
-The ForceStopTouching method will stop the controller from touching an object even if the controller is physically touching the object still.
+The SetRendererHidden method turns off renderers of a given GameObject. It can also be provided with an optional model to ignore the render toggle on.
 
-#### ControllerColliders/0
+#### ToggleRenderer/3
 
-  > `public virtual Collider[] ControllerColliders()`
-
-  * Parameters
-   * _none_
-  * Returns
-   * `Collider[]` - An array of colliders that are associated with the controller.
-
-The ControllerColliders method retrieves all of the associated colliders on the controller.
-
-### Example
-
-`VRTK/Examples/005_Controller/BasicObjectGrabbing` demonstrates the highlighting of objects that have the `VRTK_InteractableObject` script added to them to show the ability to highlight interactable objects when they are touched by the controllers.
-
----
-
-## Interact Grab (VRTK_InteractGrab)
-
-### Overview
-
-The Interact Grab script is attached to a Controller object and requires the `VRTK_ControllerEvents` script to be attached as it uses this for listening to the controller button events for grabbing and releasing interactable game objects.
-
-It listens for the `AliasGrabOn` and `AliasGrabOff` events to determine when an object should be grabbed and should be released.
-
-The Controller object also requires the `VRTK_InteractTouch` script to be attached to it as this is used to determine when an interactable object is being touched. Only valid touched objects can be grabbed.
-
-An object can be grabbed if the Controller touches a game object which contains the `VRTK_InteractableObject` script and has the flag `isGrabbable` set to `true`.
-
-If a valid interactable object is grabbable then pressing the set `Grab` button on the Controller (default is `Grip`) will grab and snap the object to the controller and will not release it until the `Grab` button is released.
-
-When the Controller `Grab` button is released, if the interactable game object is grabbable then it will be propelled in the direction and at the velocity the controller was at, which can simulate object throwing.
-
-The interactable objects require a collider to activate the trigger and a rigidbody to pick them up and move them around the game world.
-
-### Inspector Parameters
-
- * **Grab Button:** The button used to grab/release a touched object.
- * **Grab Precognition:** An amount of time between when the grab button is pressed to when the controller is touching something to grab it. For example, if an object is falling at a fast rate, then it is very hard to press the grab button in time to catch the object due to human reaction times. A higher number here will mean the grab button can be pressed before the controller touches the object and when the collision takes place, if the grab button is still being held down then the grab action will be successful.
- * **Throw Multiplier:** An amount to multiply the velocity of any objects being thrown. This can be useful when scaling up the play area to simulate being able to throw items further.
- * **Create Rigid Body When Not Touching:** If this is checked and the controller is not touching an Interactable Object when the grab button is pressed then a rigid body is added to the controller to allow the controller to push other rigid body objects around.
- * **Controller Attach Point:** The rigidbody point on the controller model to snap the grabbed object to. If blank it will be set to the SDK default.
- * **Controller Events:** The controller to listen for the events on. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.
- * **Interact Touch:** The Interact Touch to listen for touches on. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.
-
-### Class Events
-
- * `GrabButtonPressed` - Emitted when the grab button is pressed.
- * `GrabButtonReleased` - Emitted when the grab button is released.
- * `ControllerGrabInteractableObject` - Emitted when a valid object is grabbed.
- * `ControllerUngrabInteractableObject` - Emitted when a valid object is released from being grabbed.
-
-### Unity Events
-
-Adding the `VRTK_InteractGrab_UnityEvents` component to `VRTK_InteractGrab` object allows access to `UnityEvents` that will react identically to the Class Events.
-
- * All C# delegate events are mapped to a Unity Event with the `On` prefix. e.g. `MyEvent` -> `OnMyEvent`.
-
-### Class Methods
-
-#### IsGrabButtonPressed/0
-
-  > `public virtual bool IsGrabButtonPressed()`
+  > `public static void ToggleRenderer(bool state, GameObject model, GameObject ignoredModel = null)`
 
   * Parameters
-   * _none_
-  * Returns
-   * `bool` - Returns true if the grab alias button is being held down.
-
-The IsGrabButtonPressed method determines whether the current grab alias button is being pressed down.
-
-#### ForceRelease/1
-
-  > `public virtual void ForceRelease(bool applyGrabbingObjectVelocity = false)`
-
-  * Parameters
-   * `bool applyGrabbingObjectVelocity` - If this is true then upon releasing the object any velocity on the grabbing object will be applied to the object to essentiall throw it. Defaults to `false`.
+   * `bool state` - If true then the renderers will be enabled, if false the renderers will be disabled.
+   * `GameObject model` - The GameObject to toggle the renderer states of.
+   * `GameObject ignoredModel` - An optional GameObject to ignore the renderer toggle on.
   * Returns
    * _none_
 
-The ForceRelease method will force the controller to stop grabbing the currently grabbed object.
+The ToggleRenderer method turns on or off the renderers of a given GameObject. It can also be provided with an optional model to ignore the render toggle of.
 
-#### AttemptGrab/0
+#### HighlightObject/3
 
-  > `public virtual void AttemptGrab()`
+  > `public static void HighlightObject(GameObject model, Color? highlightColor, float fadeDuration = 0f)`
 
   * Parameters
-   * _none_
+   * `GameObject model` - The GameObject to attempt to call the Highlight on.
+   * `Color? highlightColor` - The colour to highlight to.
+   * `float fadeDuration` - The duration in time to fade from the initial colour to the target colour.
   * Returns
    * _none_
 
-The AttemptGrab method will attempt to grab the currently touched object without needing to press the grab button on the controller.
+The HighlightObject method calls the Highlight method on the highlighter attached to the given GameObject with the provided colour.
 
-#### GetGrabbedObject/0
+#### UnhighlightObject/1
 
-  > `public virtual GameObject GetGrabbedObject()`
-
-  * Parameters
-   * _none_
-  * Returns
-   * `GameObject` - The game object of what is currently being grabbed by this controller.
-
-The GetGrabbedObject method returns the current object being grabbed by the controller.
-
-### Example
-
-`VRTK/Examples/005_Controller/BasicObjectGrabbing` demonstrates the grabbing of interactable objects that have the `VRTK_InteractableObject` script attached to them. The objects can be picked up and thrown around.
-
-`VRTK/Examples/013_Controller_UsingAndGrabbingMultipleObjects` demonstrates that each controller can grab and use objects independently and objects can also be toggled to their use state simultaneously.
-
-`VRTK/Examples/014_Controller_SnappingObjectsOnGrab` demonstrates the different mechanisms for snapping a grabbed object to the controller.
-
----
-
-## Interact Use (VRTK_InteractUse)
-
-### Overview
-
-The Interact Use script is attached to a Controller object and requires the `VRTK_ControllerEvents` script to be attached as it uses this for listening to the controller button events for using and stop using interactable game objects.
-
-It listens for the `AliasUseOn` and `AliasUseOff` events to determine when an object should be used and should stop using.
-
-The Controller object also requires the `VRTK_InteractTouch` script to be attached to it as this is used to determine when an interactable object is being touched. Only valid touched objects can be used.
-
-An object can be used if the Controller touches a game object which contains the `VRTK_InteractableObject` script and has the flag `isUsable` set to `true`.
-
-If a valid interactable object is usable then pressing the set `Use` button on the Controller (default is `Trigger`) will call the `StartUsing` method on the touched interactable object.
-
-### Inspector Parameters
-
- * **Use Button:** The button used to use/unuse a touched object.
- * **Controller Events:** The controller to listen for the events on. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.
- * **Interact Touch:** The Interact Touch to listen for touches on. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.
- * **Interact Grab:** The Interact Grab to listen for grab actions on. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.
-
-### Class Events
-
- * `UseButtonPressed` - Emitted when the use toggle alias button is pressed.
- * `UseButtonReleased` - Emitted when the use toggle alias button is released.
- * `ControllerUseInteractableObject` - Emitted when a valid object starts being used.
- * `ControllerUnuseInteractableObject` - Emitted when a valid object stops being used.
-
-### Unity Events
-
-Adding the `VRTK_InteractUse_UnityEvents` component to `VRTK_InteractUse` object allows access to `UnityEvents` that will react identically to the Class Events.
-
- * All C# delegate events are mapped to a Unity Event with the `On` prefix. e.g. `MyEvent` -> `OnMyEvent`.
-
-### Class Methods
-
-#### IsUseButtonPressed/0
-
-  > `public virtual bool IsUseButtonPressed()`
+  > `public static void UnhighlightObject(GameObject model)`
 
   * Parameters
-   * _none_
-  * Returns
-   * `bool` - Returns true if the use alias button is being held down.
-
-The IsUsebuttonPressed method determines whether the current use alias button is being pressed down.
-
-#### GetUsingObject/0
-
-  > `public virtual GameObject GetUsingObject()`
-
-  * Parameters
-   * _none_
-  * Returns
-   * `GameObject` - The game object of what is currently being used by this controller.
-
-The GetUsingObject method returns the current object being used by the controller.
-
-#### ForceStopUsing/0
-
-  > `public virtual void ForceStopUsing()`
-
-  * Parameters
-   * _none_
+   * `GameObject model` - The GameObject to attempt to call the Unhighlight on.
   * Returns
    * _none_
 
-The ForceStopUsing method will force the controller to stop using the currently touched object and will also stop the object's using action.
-
-#### ForceResetUsing/0
-
-  > `public virtual void ForceResetUsing()`
-
-  * Parameters
-   * _none_
-  * Returns
-   * _none_
-
-The ForceResetUsing will force the controller to stop using the currently touched object but the object will continue with it's existing using action.
-
-#### AttemptUse/0
-
-  > `public virtual void AttemptUse()`
-
-  * Parameters
-   * _none_
-  * Returns
-   * _none_
-
-The AttemptUse method will attempt to use the currently touched object without needing to press the use button on the controller.
-
-### Example
-
-`VRTK/Examples/006_Controller_UsingADoor` simulates using a door object to open and close it. It also has a cube on the floor that can be grabbed to show how interactable objects can be usable or grabbable.
-
-`VRTK/Examples/008_Controller_UsingAGrabbedObject` shows that objects can be grabbed with one button and used with another (e.g. firing a gun).
+The UnhighlightObject method calls the Unhighlight method on the highlighter attached to the given GameObject.
 
 ---
 
@@ -3331,68 +3528,6 @@ The HapticsOnGrab method triggers the haptic feedback on the given controller fo
    * _none_
 
 The HapticsOnUse method triggers the haptic feedback on the given controller for the settings associated with use.
-
----
-
-## Interact Controller Appearance (VRTK_InteractControllerAppearance)
-
-### Overview
-
-The Interact Controller Appearance script is attached on the same GameObject as an Interactable Object script and is used to determine whether the controller model should be visible or hidden on touch, grab or use.
-
-### Inspector Parameters
-
- * **Hide Controller On Touch:** Hides the controller model when a valid touch occurs.
- * **Hide Delay On Touch:** The amount of seconds to wait before hiding the controller on touch.
- * **Hide Controller On Grab:** Hides the controller model when a valid grab occurs.
- * **Hide Delay On Grab:** The amount of seconds to wait before hiding the controller on grab.
- * **Hide Controller On Use:** Hides the controller model when a valid use occurs.
- * **Hide Delay On Use:** The amount of seconds to wait before hiding the controller on use.
-
-### Class Methods
-
-#### ToggleControllerOnTouch/3
-
-  > `public virtual void ToggleControllerOnTouch(bool showController, GameObject touchingObject, GameObject ignoredObject)`
-
-  * Parameters
-   * `bool showController` - If true then the controller will attempt to be made visible when no longer touching, if false then the controller will be hidden on touch.
-   * `GameObject touchingObject` - The touching object to apply the visibility state to.
-   * `GameObject ignoredObject` - The object that is currently being interacted with by the touching object which is passed through to the visibility to prevent the object from being hidden as well.
-  * Returns
-   * _none_
-
-The ToggleControllerOnTouch method determines whether the controller should be shown or hidden when touching an interactable object.
-
-#### ToggleControllerOnGrab/3
-
-  > `public virtual void ToggleControllerOnGrab(bool showController, GameObject grabbingObject, GameObject ignoredObject)`
-
-  * Parameters
-   * `bool showController` - If true then the controller will attempt to be made visible when no longer grabbing, if false then the controller will be hidden on grab.
-   * `GameObject grabbingObject` - The grabbing object to apply the visibility state to.
-   * `GameObject ignoredObject` - The object that is currently being interacted with by the grabbing object which is passed through to the visibility to prevent the object from being hidden as well.
-  * Returns
-   * _none_
-
-The ToggleControllerOnGrab method determines whether the controller should be shown or hidden when grabbing an interactable object.
-
-#### ToggleControllerOnUse/3
-
-  > `public virtual void ToggleControllerOnUse(bool showController, GameObject usingObject, GameObject ignoredObject)`
-
-  * Parameters
-   * `bool showController` - If true then the controller will attempt to be made visible when no longer using, if false then the controller will be hidden on use.
-   * `GameObject usingObject` - The using object to apply the visibility state to.
-   * `GameObject ignoredObject` - The object that is currently being interacted with by the using object which is passed through to the visibility to prevent the object from being hidden as well.
-  * Returns
-   * _none_
-
-The ToggleControllerOnUse method determines whether the controller should be shown or hidden when using an interactable object.
-
-### Example
-
-`VRTK/Examples/008_Controller_UsingAGrabbedObject` shows that the controller can be hidden when touching, grabbing and using an object.
 
 ---
 
@@ -6253,117 +6388,6 @@ The RoundFloat method is used to round a given float to the given decimal places
    * `bool` - Returns true if Unity is in the Unity Editor and not in play mode.
 
 The IsEditTime method determines if the state of Unity is in the Unity Editor and the scene is not in play mode.
-
-#### TriggerHapticPulse/2
-
-  > `public static void TriggerHapticPulse(VRTK_ControllerReference controllerReference, float strength)`
-
-  * Parameters
-   * `VRTK_ControllerReference controllerReference` - The reference to the controller to activate the haptic feedback on.
-   * `float strength` - The intensity of the rumble of the controller motor. `0` to `1`.
-  * Returns
-   * _none_
-
-The TriggerHapticPulse/1 method calls a single haptic pulse call on the controller for a single tick.
-
-#### TriggerHapticPulse/4
-
-  > `public static void TriggerHapticPulse(VRTK_ControllerReference controllerReference, float strength, float duration, float pulseInterval)`
-
-  * Parameters
-   * `VRTK_ControllerReference controllerReference` - The reference to the controller to activate the haptic feedback on.
-   * `float strength` - The intensity of the rumble of the controller motor. `0` to `1`.
-   * `float duration` - The length of time the rumble should continue for.
-   * `float pulseInterval` - The interval to wait between each haptic pulse.
-  * Returns
-   * _none_
-
-The TriggerHapticPulse/3 method calls a haptic pulse for a specified amount of time rather than just a single tick. Each pulse can be separated by providing a `pulseInterval` to pause between each haptic pulse.
-
-#### CancelHapticPulse/1
-
-  > `public static void CancelHapticPulse(VRTK_ControllerReference controllerReference)`
-
-  * Parameters
-   * `VRTK_ControllerReference controllerReference` - The reference to the controller to cancel the haptic feedback on.
-  * Returns
-   * _none_
-
-The CancelHapticPulse method cancels the existing running haptic pulse on the given controller index.
-
-#### SetOpacity/3
-
-  > `public static void SetOpacity(GameObject model, float alpha, float transitionDuration = 0f)`
-
-  * Parameters
-   * `GameObject model` - The GameObject to change the renderer opacity on.
-   * `float alpha` - The alpha level to apply to opacity of the controller object. `0f` to `1f`.
-   * `float transitionDuration` - The time to transition from the current opacity to the new opacity.
-  * Returns
-   * _none_
-
-The SetOpacity method allows the opacity of the given GameObject to be changed. A lower alpha value will make the object more transparent, such as `0.5f` will make the controller partially transparent where as `0f` will make the controller completely transparent.
-
-#### SetRendererVisible/2
-
-  > `public static void SetRendererVisible(GameObject model, GameObject ignoredModel = null)`
-
-  * Parameters
-   * `GameObject model` - The GameObject to show the renderers for.
-   * `GameObject ignoredModel` - An optional GameObject to ignore the renderer toggle on.
-  * Returns
-   * _none_
-
-The SetRendererVisible method turns on renderers of a given GameObject. It can also be provided with an optional model to ignore the render toggle on.
-
-#### SetRendererHidden/2
-
-  > `public static void SetRendererHidden(GameObject model, GameObject ignoredModel = null)`
-
-  * Parameters
-   * `GameObject model` - The GameObject to hide the renderers for.
-   * `GameObject ignoredModel` - An optional GameObject to ignore the renderer toggle on.
-  * Returns
-   * _none_
-
-The SetRendererHidden method turns off renderers of a given GameObject. It can also be provided with an optional model to ignore the render toggle on.
-
-#### ToggleRenderer/3
-
-  > `public static void ToggleRenderer(bool state, GameObject model, GameObject ignoredModel = null)`
-
-  * Parameters
-   * `bool state` - If true then the renderers will be enabled, if false the renderers will be disabled.
-   * `GameObject model` - The GameObject to toggle the renderer states of.
-   * `GameObject ignoredModel` - An optional GameObject to ignore the renderer toggle on.
-  * Returns
-   * _none_
-
-The ToggleRenderer method turns on or off the renderers of a given GameObject. It can also be provided with an optional model to ignore the render toggle of.
-
-#### HighlightObject/3
-
-  > `public static void HighlightObject(GameObject model, Color? highlightColor, float fadeDuration = 0f)`
-
-  * Parameters
-   * `GameObject model` - The GameObject to attempt to call the Highlight on.
-   * `Color? highlightColor` - The colour to highlight to.
-   * `float fadeDuration` - The duration in time to fade from the initial colour to the target colour.
-  * Returns
-   * _none_
-
-The HighlightObject method calls the Highlight method on the highlighter attached to the given GameObject with the provided colour.
-
-#### UnhighlightObject/1
-
-  > `public static void UnhighlightObject(GameObject model)`
-
-  * Parameters
-   * `GameObject model` - The GameObject to attempt to call the Unhighlight on.
-  * Returns
-   * _none_
-
-The UnhighlightObject method calls the Unhighlight method on the highlighter attached to the given GameObject.
 
 #### Mod/2
 

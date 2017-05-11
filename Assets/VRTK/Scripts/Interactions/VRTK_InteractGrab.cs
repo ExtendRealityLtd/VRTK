@@ -1,4 +1,4 @@
-﻿// Interact Grab|Interactions|30050
+﻿// Interact Grab|Interactions|30060
 namespace VRTK
 {
     using UnityEngine;
@@ -342,7 +342,7 @@ namespace VRTK
             }
             else if (visible)
             {
-                VRTK_SharedMethods.SetRendererVisible(controllerReference.model, grabbedObject);
+                VRTK_ObjectAppearance.SetRendererVisible(controllerReference.model, grabbedObject);
             }
         }
 

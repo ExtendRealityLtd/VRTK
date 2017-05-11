@@ -39,7 +39,7 @@ namespace VRTK
             VRTK_SDKManager.instance.RemoveBehaviourToToggleOnLoadedSetupChange(this);
         }
 
-        protected virtual void Update()
+        protected virtual void LateUpdate()
         {
             if (playerHead == null)
             {

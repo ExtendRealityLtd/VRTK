@@ -1,4 +1,4 @@
-﻿// Interact Controller Appearance|Interactions|30080
+﻿// Interact Controller Appearance|Interactions|30040
 namespace VRTK
 {
     using UnityEngine;
@@ -130,13 +130,13 @@ namespace VRTK
             {
                 StopCoroutine(hideControllerRoutine);
             }
-            VRTK_SharedMethods.SetRendererVisible(interactingObject, ignoredObject);
+            VRTK_ObjectAppearance.SetRendererVisible(interactingObject, ignoredObject);
         }
 
         protected virtual IEnumerator HideController(GameObject interactingObject, GameObject ignoredObject, float delayTime)
         {
             yield return new WaitForSeconds(delayTime);
-            VRTK_SharedMethods.SetRendererHidden(interactingObject, ignoredObject);
+            VRTK_ObjectAppearance.SetRendererHidden(interactingObject, ignoredObject);
         }
     }
 }

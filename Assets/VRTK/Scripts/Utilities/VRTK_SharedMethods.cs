@@ -197,24 +197,10 @@ namespace VRTK
         /// </summary>
         /// <param name="controllerIndex">The controller index to activate the haptic feedback on.</param>
         /// <param name="strength">The intensity of the rumble of the controller motor. `0` to `1`.</param>
-        [System.Obsolete("`VRTK_SharedMethods.TriggerHapticPulse(controllerIndex, strength)` has been replaced with `VRTK_SharedMethods.TriggerHapticPulse(controllerReference, strength)`. This method will be removed in a future version of VRTK.")]
+        [Obsolete("`VRTK_SharedMethods.TriggerHapticPulse(controllerIndex, strength)` has been replaced with `VRTK_ControllerHaptics.TriggerHapticPulse(controllerReference, strength)`. This method will be removed in a future version of VRTK.")]
         public static void TriggerHapticPulse(uint controllerIndex, float strength)
         {
-            TriggerHapticPulse(VRTK_ControllerReference.GetControllerReference(controllerIndex), strength);
-        }
-
-        /// <summary>
-        /// The TriggerHapticPulse/1 method calls a single haptic pulse call on the controller for a single tick.
-        /// </summary>
-        /// <param name="controllerReference">The reference to the controller to activate the haptic feedback on.</param>
-        /// <param name="strength">The intensity of the rumble of the controller motor. `0` to `1`.</param>
-        public static void TriggerHapticPulse(VRTK_ControllerReference controllerReference, float strength)
-        {
-            var instanceMethods = VRTK_InstanceMethods.instance;
-            if (instanceMethods != null)
-            {
-                instanceMethods.haptics.TriggerHapticPulse(controllerReference, strength);
-            }
+            VRTK_ControllerHaptics.TriggerHapticPulse(VRTK_ControllerReference.GetControllerReference(controllerIndex), strength);
         }
 
         /// <summary>
@@ -224,49 +210,20 @@ namespace VRTK
         /// <param name="strength">The intensity of the rumble of the controller motor. `0` to `1`.</param>
         /// <param name="duration">The length of time the rumble should continue for.</param>
         /// <param name="pulseInterval">The interval to wait between each haptic pulse.</param>
-        [System.Obsolete("`VRTK_SharedMethods.TriggerHapticPulse(controllerIndex, strength, duration, pulseInterval)` has been replaced with `VRTK_SharedMethods.TriggerHapticPulse(controllerReference, strength, duration, pulseInterval)`. This method will be removed in a future version of VRTK.")]
+        [Obsolete("`VRTK_SharedMethods.TriggerHapticPulse(controllerIndex, strength, duration, pulseInterval)` has been replaced with `VRTK_ControllerHaptics.TriggerHapticPulse(controllerReference, strength, duration, pulseInterval)`. This method will be removed in a future version of VRTK.")]
         public static void TriggerHapticPulse(uint controllerIndex, float strength, float duration, float pulseInterval)
         {
-            TriggerHapticPulse(VRTK_ControllerReference.GetControllerReference(controllerIndex), strength, duration, pulseInterval);
-        }
-
-        /// <summary>
-        /// The TriggerHapticPulse/3 method calls a haptic pulse for a specified amount of time rather than just a single tick. Each pulse can be separated by providing a `pulseInterval` to pause between each haptic pulse.
-        /// </summary>
-        /// <param name="controllerReference">The reference to the controller to activate the haptic feedback on.</param>
-        /// <param name="strength">The intensity of the rumble of the controller motor. `0` to `1`.</param>
-        /// <param name="duration">The length of time the rumble should continue for.</param>
-        /// <param name="pulseInterval">The interval to wait between each haptic pulse.</param>
-        public static void TriggerHapticPulse(VRTK_ControllerReference controllerReference, float strength, float duration, float pulseInterval)
-        {
-            var instanceMethods = VRTK_InstanceMethods.instance;
-            if (instanceMethods != null)
-            {
-                instanceMethods.haptics.TriggerHapticPulse(controllerReference, strength, duration, pulseInterval);
-            }
+            VRTK_ControllerHaptics.TriggerHapticPulse(VRTK_ControllerReference.GetControllerReference(controllerIndex), strength, duration, pulseInterval);
         }
 
         /// <summary>
         /// The CancelHapticPulse method cancels the existing running haptic pulse on the given controller index.
         /// </summary>
         /// <param name="controllerIndex">The controller index to cancel the haptic feedback on.</param>
-        [System.Obsolete("`VRTK_SharedMethods.CancelHapticPulse(controllerIndex)` has been replaced with `VRTK_SharedMethods.CancelHapticPulse(controllerReference)`. This method will be removed in a future version of VRTK.")]
+        [Obsolete("`VRTK_SharedMethods.CancelHapticPulse(controllerIndex)` has been replaced with `VRTK_SharedMethods.CancelHapticPulse(controllerReference)`. This method will be removed in a future version of VRTK.")]
         public static void CancelHapticPulse(uint controllerIndex)
         {
-            CancelHapticPulse(VRTK_ControllerReference.GetControllerReference(controllerIndex));
-        }
-
-        /// <summary>
-        /// The CancelHapticPulse method cancels the existing running haptic pulse on the given controller index.
-        /// </summary>
-        /// <param name="controllerReference">The reference to the controller to cancel the haptic feedback on.</param>
-        public static void CancelHapticPulse(VRTK_ControllerReference controllerReference)
-        {
-            var instanceMethods = VRTK_InstanceMethods.instance;
-            if (instanceMethods != null)
-            {
-                instanceMethods.haptics.CancelHapticPulse(controllerReference);
-            }
+            VRTK_ControllerHaptics.CancelHapticPulse(VRTK_ControllerReference.GetControllerReference(controllerIndex));
         }
 
         /// <summary>
@@ -275,13 +232,10 @@ namespace VRTK
         /// <param name="model">The GameObject to change the renderer opacity on.</param>
         /// <param name="alpha">The alpha level to apply to opacity of the controller object. `0f` to `1f`.</param>
         /// <param name="transitionDuration">The time to transition from the current opacity to the new opacity.</param>
+        [Obsolete("`VRTK_SharedMethods.SetOpacity(model, alpha, transitionDuration)` has been replaced with `VRTK_ObjectAppearance.SetOpacity(model, alpha, transitionDuration)`. This method will be removed in a future version of VRTK.")]
         public static void SetOpacity(GameObject model, float alpha, float transitionDuration = 0f)
         {
-            var instanceMethods = VRTK_InstanceMethods.instance;
-            if (instanceMethods != null)
-            {
-                instanceMethods.objectAppearance.SetOpacity(model, alpha, transitionDuration);
-            }
+            VRTK_ObjectAppearance.SetOpacity(model, alpha, transitionDuration);
         }
 
         /// <summary>
@@ -289,13 +243,10 @@ namespace VRTK
         /// </summary>
         /// <param name="model">The GameObject to show the renderers for.</param>
         /// <param name="ignoredModel">An optional GameObject to ignore the renderer toggle on.</param>
+        [Obsolete("`VRTK_SharedMethods.SetRendererVisible(model, ignoredModel)` has been replaced with `VRTK_ObjectAppearance.SetRendererVisible(model, ignoredModel)`. This method will be removed in a future version of VRTK.")]
         public static void SetRendererVisible(GameObject model, GameObject ignoredModel = null)
         {
-            var instanceMethods = VRTK_InstanceMethods.instance;
-            if (instanceMethods != null)
-            {
-                instanceMethods.objectAppearance.SetRendererVisible(model, ignoredModel);
-            }
+            VRTK_ObjectAppearance.SetRendererVisible(model, ignoredModel);
         }
 
         /// <summary>
@@ -303,13 +254,10 @@ namespace VRTK
         /// </summary>
         /// <param name="model">The GameObject to hide the renderers for.</param>
         /// <param name="ignoredModel">An optional GameObject to ignore the renderer toggle on.</param>
+        [Obsolete("`VRTK_SharedMethods.SetRendererHidden(model, ignoredModel)` has been replaced with `VRTK_ObjectAppearance.SetRendererHidden(model, ignoredModel)`. This method will be removed in a future version of VRTK.")]
         public static void SetRendererHidden(GameObject model, GameObject ignoredModel = null)
         {
-            var instanceMethods = VRTK_InstanceMethods.instance;
-            if (instanceMethods != null)
-            {
-                instanceMethods.objectAppearance.SetRendererHidden(model, ignoredModel);
-            }
+            VRTK_ObjectAppearance.SetRendererHidden(model, ignoredModel);
         }
 
         /// <summary>
@@ -318,16 +266,10 @@ namespace VRTK
         /// <param name="state">If true then the renderers will be enabled, if false the renderers will be disabled.</param>
         /// <param name="model">The GameObject to toggle the renderer states of.</param>
         /// <param name="ignoredModel">An optional GameObject to ignore the renderer toggle on.</param>
+        [Obsolete("`VRTK_SharedMethods.ToggleRenderer(state, model, ignoredModel)` has been replaced with `VRTK_ObjectAppearance.ToggleRenderer(state, model, ignoredModel)`. This method will be removed in a future version of VRTK.")]
         public static void ToggleRenderer(bool state, GameObject model, GameObject ignoredModel = null)
         {
-            if (state)
-            {
-                SetRendererVisible(model, ignoredModel);
-            }
-            else
-            {
-                SetRendererHidden(model, ignoredModel);
-            }
+            VRTK_ObjectAppearance.ToggleRenderer(state, model, ignoredModel);
         }
 
         /// <summary>
@@ -336,26 +278,20 @@ namespace VRTK
         /// <param name="model">The GameObject to attempt to call the Highlight on.</param>
         /// <param name="highlightColor">The colour to highlight to.</param>
         /// <param name="fadeDuration">The duration in time to fade from the initial colour to the target colour.</param>
+        [Obsolete("`VRTK_SharedMethods.HighlightObject(model, highlightColor, fadeDuration)` has been replaced with `VRTK_ObjectAppearance.HighlightObject(model, highlightColor, fadeDuration)`. This method will be removed in a future version of VRTK.")]
         public static void HighlightObject(GameObject model, Color? highlightColor, float fadeDuration = 0f)
         {
-            var instanceMethods = VRTK_InstanceMethods.instance;
-            if (instanceMethods != null)
-            {
-                instanceMethods.objectAppearance.HighlightObject(model, highlightColor, fadeDuration);
-            }
+            VRTK_ObjectAppearance.HighlightObject(model, highlightColor, fadeDuration);
         }
 
         /// <summary>
         /// The UnhighlightObject method calls the Unhighlight method on the highlighter attached to the given GameObject.
         /// </summary>
         /// <param name="model">The GameObject to attempt to call the Unhighlight on.</param>
+        [Obsolete("`VRTK_SharedMethods.UnhighlightObject(model)` has been replaced with `VRTK_ObjectAppearance.UnhighlightObject(model)`. This method will be removed in a future version of VRTK.")]
         public static void UnhighlightObject(GameObject model)
         {
-            var instanceMethods = VRTK_InstanceMethods.instance;
-            if (instanceMethods != null)
-            {
-                instanceMethods.objectAppearance.UnhighlightObject(model);
-            }
+            VRTK_ObjectAppearance.UnhighlightObject(model);
         }
 
         /// <summary>
