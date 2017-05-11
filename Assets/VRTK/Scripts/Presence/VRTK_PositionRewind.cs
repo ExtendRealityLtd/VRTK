@@ -37,6 +37,8 @@ namespace VRTK
         public float crouchThreshold = 0.5f;
         [Tooltip("The threshold to determind how low the headset can be to perform a position rewind. If the headset Y position is lower than this threshold then a rewind won't occur.")]
         public float crouchRewindThreshold = 0.1f;
+        [Tooltip("A specified VRTK_PolicyList to use to determine whether any objects will be acted upon by the Position Rewind.")]
+        public VRTK_PolicyList targetListPolicy;
 
         [Header("Custom Settings")]
 
@@ -137,13 +139,16 @@ namespace VRTK
             }
         }
 
-        protected virtual void StartCollision()
+        protected virtual void StartCollision(GameObject target)
         {
-            isColliding = true;
-            if (!hasCollided && collideTimer <= 0f)
+            if (!VRTK_PolicyList.Check(target, targetListPolicy))
             {
-                hasCollided = true;
-                collideTimer = rewindDelay;
+                isColliding = true;
+                if (!hasCollided && collideTimer <= 0f)
+                {
+                    hasCollided = true;
+                    collideTimer = rewindDelay;
+                }
             }
         }
 
@@ -222,7 +227,7 @@ namespace VRTK
 
         private void StartColliding(object sender, BodyPhysicsEventArgs e)
         {
-            StartCollision();
+            StartCollision(e.target);
         }
 
         private void StopColliding(object sender, BodyPhysicsEventArgs e)
@@ -232,7 +237,7 @@ namespace VRTK
 
         protected virtual void HeadsetCollisionDetect(object sender, HeadsetCollisionEventArgs e)
         {
-            StartCollision();
+            StartCollision(e.collider.gameObject);
         }
 
         protected virtual void HeadsetCollisionEnded(object sender, HeadsetCollisionEventArgs e)
