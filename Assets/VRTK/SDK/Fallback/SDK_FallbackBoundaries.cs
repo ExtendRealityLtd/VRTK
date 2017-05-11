@@ -31,9 +31,8 @@ namespace VRTK
         /// <summary>
         /// The GetPlayAreaVertices method returns the points of the play area boundaries.
         /// </summary>
-        /// <param name="playArea">The GameObject containing the play area representation.</param>
         /// <returns>A Vector3 array of the points in the scene that represent the play area boundaries.</returns>
-        public override Vector3[] GetPlayAreaVertices(GameObject playArea)
+        public override Vector3[] GetPlayAreaVertices()
         {
             return null;
         }
@@ -41,9 +40,8 @@ namespace VRTK
         /// <summary>
         /// The GetPlayAreaBorderThickness returns the thickness of the drawn border for the given play area.
         /// </summary>
-        /// <param name="playArea">The GameObject containing the play area representation.</param>
         /// <returns>The thickness of the drawn border.</returns>
-        public override float GetPlayAreaBorderThickness(GameObject playArea)
+        public override float GetPlayAreaBorderThickness()
         {
             return 0f;
         }
@@ -51,9 +49,8 @@ namespace VRTK
         /// <summary>
         /// The IsPlayAreaSizeCalibrated method returns whether the given play area size has been auto calibrated by external sensors.
         /// </summary>
-        /// <param name="playArea">The GameObject containing the play area representation.</param>
         /// <returns>Returns true if the play area size has been auto calibrated and set by external sensors.</returns>
-        public override bool IsPlayAreaSizeCalibrated(GameObject playArea)
+        public override bool IsPlayAreaSizeCalibrated()
         {
             return false;
         }

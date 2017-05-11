@@ -60,9 +60,8 @@ namespace VRTK
         /// <summary>
         /// The GetPlayAreaVertices method returns the points of the play area boundaries.
         /// </summary>
-        /// <param name="playArea">The GameObject containing the play area representation.</param>
         /// <returns>A Vector3 array of the points in the scene that represent the play area boundaries.</returns>
-        public override Vector3[] GetPlayAreaVertices(GameObject playArea)
+        public override Vector3[] GetPlayAreaVertices()
         {
             SteamVR_PlayArea area = GetCachedSteamVRPlayArea();
             if (area != null)
@@ -75,9 +74,8 @@ namespace VRTK
         /// <summary>
         /// The GetPlayAreaBorderThickness returns the thickness of the drawn border for the given play area.
         /// </summary>
-        /// <param name="playArea">The GameObject containing the play area representation.</param>
         /// <returns>The thickness of the drawn border.</returns>
-        public override float GetPlayAreaBorderThickness(GameObject playArea)
+        public override float GetPlayAreaBorderThickness()
         {
             SteamVR_PlayArea area = GetCachedSteamVRPlayArea();
             if (area != null)
@@ -90,9 +88,8 @@ namespace VRTK
         /// <summary>
         /// The IsPlayAreaSizeCalibrated method returns whether the given play area size has been auto calibrated by external sensors.
         /// </summary>
-        /// <param name="playArea">The GameObject containing the play area representation.</param>
         /// <returns>Returns true if the play area size has been auto calibrated and set by external sensors.</returns>
-        public override bool IsPlayAreaSizeCalibrated(GameObject playArea)
+        public override bool IsPlayAreaSizeCalibrated()
         {
             SteamVR_PlayArea area = GetCachedSteamVRPlayArea();
             return (area != null && area.size == SteamVR_PlayArea.Size.Calibrated);
@@ -139,7 +136,7 @@ namespace VRTK
         protected virtual Vector3[] ProcessVertices(Vector3[] vertices)
         {
             //If there aren't enough vertices or the play area is calibrated then just return
-            if (vertices.Length < 8 || IsPlayAreaSizeCalibrated(null))
+            if (vertices.Length < 8 || IsPlayAreaSizeCalibrated())
             {
                 return vertices;
             }
