@@ -1,4 +1,4 @@
-﻿// Controller Highlighter|Interactions|30021
+﻿// Controller Highlighter|Interactions|30020
 namespace VRTK
 {
     using UnityEngine;
@@ -181,7 +181,7 @@ namespace VRTK
             Transform element = GetElementTransform(GetPathForControllerElement(elementType));
             if (element != null)
             {
-                VRTK_SharedMethods.HighlightObject(element.gameObject, color, fadeDuration);
+                VRTK_ObjectAppearance.HighlightObject(element.gameObject, color, fadeDuration);
                 SetColourParameter(elementType, color);
             }
         }
@@ -197,7 +197,7 @@ namespace VRTK
                 Transform element = GetElementTransform(GetPathForControllerElement(elementType));
                 if (element != null)
                 {
-                    VRTK_SharedMethods.UnhighlightObject(element.gameObject);
+                    VRTK_ObjectAppearance.UnhighlightObject(element.gameObject);
                     SetColourParameter(elementType, Color.clear);
                 }
             }
@@ -456,11 +456,11 @@ namespace VRTK
             {
                 if (state)
                 {
-                    VRTK_SharedMethods.HighlightObject(element.gameObject, (highlight != null ? highlight : Color.white), duration);
+                    VRTK_ObjectAppearance.HighlightObject(element.gameObject, (highlight != null ? highlight : Color.white), duration);
                 }
                 else
                 {
-                    VRTK_SharedMethods.UnhighlightObject(element.gameObject);
+                    VRTK_ObjectAppearance.UnhighlightObject(element.gameObject);
                 }
             }
         }

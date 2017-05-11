@@ -1,4 +1,4 @@
-﻿// Object Touch Auto Interact|Interactions|30094
+﻿// Object Touch Auto Interact|Interactions|30120
 namespace VRTK
 {
     using UnityEngine;

@@ -1,4 +1,4 @@
-﻿// Interact Touch|Interactions|30040
+﻿// Interact Touch|Interactions|30050
 namespace VRTK
 {
     using UnityEngine;
@@ -334,7 +334,7 @@ namespace VRTK
             }
             else if (visible)
             {
-                VRTK_SharedMethods.SetRendererVisible(modelContainer, touchedObject);
+                VRTK_ObjectAppearance.SetRendererVisible(modelContainer, touchedObject);
             }
         }
 

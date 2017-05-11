@@ -69,7 +69,7 @@
             {
                 InvokeRepeating("PulseTrigger", pulseTimer, pulseTimer);
             }
-            VRTK_SharedMethods.SetOpacity(VRTK_DeviceFinder.GetModelAliasController(events.gameObject), dimOpacity);
+            VRTK_ObjectAppearance.SetOpacity(VRTK_DeviceFinder.GetModelAliasController(events.gameObject), dimOpacity);
         }
 
         private void DoTriggerReleased(object sender, ControllerInteractionEventArgs e)
@@ -82,7 +82,7 @@
             }
             if (!events.AnyButtonPressed())
             {
-                VRTK_SharedMethods.SetOpacity(VRTK_DeviceFinder.GetModelAliasController(events.gameObject), defaultOpacity);
+                VRTK_ObjectAppearance.SetOpacity(VRTK_DeviceFinder.GetModelAliasController(events.gameObject), defaultOpacity);
             }
         }
 
@@ -90,7 +90,7 @@
         {
             tooltips.ToggleTips(true, VRTK_ControllerTooltips.TooltipButtons.ButtonOneTooltip);
             highligher.HighlightElement(SDK_BaseController.ControllerElements.ButtonOne, highlightColor, highlightTimer);
-            VRTK_SharedMethods.SetOpacity(VRTK_DeviceFinder.GetModelAliasController(events.gameObject), dimOpacity);
+            VRTK_ObjectAppearance.SetOpacity(VRTK_DeviceFinder.GetModelAliasController(events.gameObject), dimOpacity);
         }
 
         private void DoButtonOneReleased(object sender, ControllerInteractionEventArgs e)
@@ -99,7 +99,7 @@
             highligher.UnhighlightElement(SDK_BaseController.ControllerElements.ButtonOne);
             if (!events.AnyButtonPressed())
             {
-                VRTK_SharedMethods.SetOpacity(VRTK_DeviceFinder.GetModelAliasController(events.gameObject), defaultOpacity);
+                VRTK_ObjectAppearance.SetOpacity(VRTK_DeviceFinder.GetModelAliasController(events.gameObject), defaultOpacity);
             }
         }
 
@@ -107,7 +107,7 @@
         {
             tooltips.ToggleTips(true, VRTK_ControllerTooltips.TooltipButtons.ButtonTwoTooltip);
             highligher.HighlightElement(SDK_BaseController.ControllerElements.ButtonTwo, highlightColor, highlightTimer);
-            VRTK_SharedMethods.SetOpacity(VRTK_DeviceFinder.GetModelAliasController(events.gameObject), dimOpacity);
+            VRTK_ObjectAppearance.SetOpacity(VRTK_DeviceFinder.GetModelAliasController(events.gameObject), dimOpacity);
         }
 
         private void DoButtonTwoReleased(object sender, ControllerInteractionEventArgs e)
@@ -116,7 +116,7 @@
             highligher.UnhighlightElement(SDK_BaseController.ControllerElements.ButtonTwo);
             if (!events.AnyButtonPressed())
             {
-                VRTK_SharedMethods.SetOpacity(VRTK_DeviceFinder.GetModelAliasController(events.gameObject), defaultOpacity);
+                VRTK_ObjectAppearance.SetOpacity(VRTK_DeviceFinder.GetModelAliasController(events.gameObject), defaultOpacity);
             }
         }
 
@@ -124,7 +124,7 @@
         {
             tooltips.ToggleTips(true, VRTK_ControllerTooltips.TooltipButtons.StartMenuTooltip);
             highligher.HighlightElement(SDK_BaseController.ControllerElements.StartMenu, highlightColor, highlightTimer);
-            VRTK_SharedMethods.SetOpacity(VRTK_DeviceFinder.GetModelAliasController(events.gameObject), dimOpacity);
+            VRTK_ObjectAppearance.SetOpacity(VRTK_DeviceFinder.GetModelAliasController(events.gameObject), dimOpacity);
         }
 
         private void DoStartMenuReleased(object sender, ControllerInteractionEventArgs e)
@@ -133,7 +133,7 @@
             highligher.UnhighlightElement(SDK_BaseController.ControllerElements.StartMenu);
             if (!events.AnyButtonPressed())
             {
-                VRTK_SharedMethods.SetOpacity(VRTK_DeviceFinder.GetModelAliasController(events.gameObject), defaultOpacity);
+                VRTK_ObjectAppearance.SetOpacity(VRTK_DeviceFinder.GetModelAliasController(events.gameObject), defaultOpacity);
             }
         }
 
@@ -142,7 +142,7 @@
             tooltips.ToggleTips(true, VRTK_ControllerTooltips.TooltipButtons.GripTooltip);
             highligher.HighlightElement(SDK_BaseController.ControllerElements.GripLeft, highlightColor, highlightTimer);
             highligher.HighlightElement(SDK_BaseController.ControllerElements.GripRight, highlightColor, highlightTimer);
-            VRTK_SharedMethods.SetOpacity(VRTK_DeviceFinder.GetModelAliasController(events.gameObject), dimOpacity);
+            VRTK_ObjectAppearance.SetOpacity(VRTK_DeviceFinder.GetModelAliasController(events.gameObject), dimOpacity);
         }
 
         private void DoGripReleased(object sender, ControllerInteractionEventArgs e)
@@ -152,7 +152,7 @@
             highligher.UnhighlightElement(SDK_BaseController.ControllerElements.GripRight);
             if (!events.AnyButtonPressed())
             {
-                VRTK_SharedMethods.SetOpacity(VRTK_DeviceFinder.GetModelAliasController(events.gameObject), defaultOpacity);
+                VRTK_ObjectAppearance.SetOpacity(VRTK_DeviceFinder.GetModelAliasController(events.gameObject), defaultOpacity);
             }
         }
 
@@ -160,7 +160,7 @@
         {
             tooltips.ToggleTips(true, VRTK_ControllerTooltips.TooltipButtons.TouchpadTooltip);
             highligher.HighlightElement(SDK_BaseController.ControllerElements.Touchpad, highlightColor, highlightTimer);
-            VRTK_SharedMethods.SetOpacity(VRTK_DeviceFinder.GetModelAliasController(events.gameObject), dimOpacity);
+            VRTK_ObjectAppearance.SetOpacity(VRTK_DeviceFinder.GetModelAliasController(events.gameObject), dimOpacity);
         }
 
         private void DoTouchpadReleased(object sender, ControllerInteractionEventArgs e)
@@ -169,7 +169,7 @@
             highligher.UnhighlightElement(SDK_BaseController.ControllerElements.Touchpad);
             if (!events.AnyButtonPressed())
             {
-                VRTK_SharedMethods.SetOpacity(VRTK_DeviceFinder.GetModelAliasController(events.gameObject), defaultOpacity);
+                VRTK_ObjectAppearance.SetOpacity(VRTK_DeviceFinder.GetModelAliasController(events.gameObject), defaultOpacity);
             }
         }
 

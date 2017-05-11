@@ -1,4 +1,4 @@
-﻿// Interact Haptics|Interactions|30070
+﻿// Interact Haptics|Interactions|30100
 namespace VRTK
 {
     using UnityEngine;
@@ -118,7 +118,7 @@ namespace VRTK
 
         protected virtual void TriggerHapticPulse(VRTK_ControllerReference controllerReference, float strength, float duration, float interval)
         {
-            VRTK_SharedMethods.TriggerHapticPulse(controllerReference, strength, duration, (interval >= minInterval ? interval : minInterval));
+            VRTK_ControllerHaptics.TriggerHapticPulse(controllerReference, strength, duration, (interval >= minInterval ? interval : minInterval));
         }
     }
 }

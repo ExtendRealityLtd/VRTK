@@ -534,11 +534,6 @@ namespace VRTK
 
             CreateInstance();
 
-            if (gameObject.GetComponent<VRTK_InstanceMethods>() == null)
-            {
-                gameObject.AddComponent<VRTK_InstanceMethods>();
-            }
-
             if (autoLoadSetup)
             {
                 int index = 0;
