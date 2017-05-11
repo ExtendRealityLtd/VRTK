@@ -81,6 +81,10 @@ namespace VRTK
         protected VRTK_ObjectTooltip[] buttonTooltips;
         protected bool[] tooltipStates;
 
+        protected float retryInitCounter = 0.1f;
+        protected int retryInitMaxTries = 5;
+        protected int retryInitCurrentTries = 0;
+
         /// <summary>
         /// The Reset method reinitalises the tooltips on all of the controller elements.
         /// </summary>
@@ -149,6 +153,7 @@ namespace VRTK
         protected virtual void Awake()
         {
             VRTK_SDKManager.instance.AddBehaviourToToggleOnLoadedSetupChange(this);
+            InitButtonsArray();
         }
 
         protected virtual void OnEnable()
@@ -200,6 +205,8 @@ namespace VRTK
             {
                 buttonTooltips[i] = transform.FindChild(availableButtons[i].ToString()).GetComponent<VRTK_ObjectTooltip>();
             }
+
+            retryInitCurrentTries = retryInitMaxTries;
         }
 
         protected virtual void InitListeners()
@@ -276,6 +283,7 @@ namespace VRTK
 
         protected virtual void InitialiseTips()
         {
+            bool initComplete = false;
             VRTK_ObjectTooltip[] tooltips = GetComponentsInChildren<VRTK_ObjectTooltip>(true);
             for (int i = 0; i < tooltips.Length; i++)
             {
@@ -311,6 +319,8 @@ namespace VRTK
                         break;
                 }
 
+                initComplete = (tipTransform != null);
+
                 tooltip.displayText = tipText;
                 tooltip.drawLineTo = tipTransform;
 
@@ -320,10 +330,17 @@ namespace VRTK
 
                 tooltip.ResetTooltip();
 
-                if (tipText.Trim().Length == 0)
+                if (tipTransform == null || tipText.Trim().Length == 0)
                 {
                     tooltip.gameObject.SetActive(false);
                 }
+            }
+
+            if (!initComplete && retryInitCurrentTries > 0)
+            {
+                retryInitCurrentTries--;
+                Invoke("ResetTooltip", retryInitCounter);
+                return;
             }
 
             if (!hideWhenNotInView)
@@ -347,7 +364,7 @@ namespace VRTK
                 {
                     SDK_BaseController.ControllerHand controllerHand = VRTK_DeviceFinder.GetControllerHand(controllerEvents.gameObject);
                     string elementPath = VRTK_SDK_Bridge.GetControllerElementPath(findElement, controllerHand, true);
-                    returnTransform = modelController.transform.FindChild(elementPath);
+                    returnTransform = (elementPath != null ? modelController.transform.FindChild(elementPath) : null);
                 }
             }
 
