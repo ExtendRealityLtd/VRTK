@@ -420,10 +420,8 @@ namespace VRTK
                             .Where(@object => @object.gameObject.scene == activeScene)
 #if UNITY_EDITOR
                             .Where(@object => !AssetDatabase.Contains(@object))
-                            .ToArray();
-#else
-                ;
 #endif
+                            .ToArray();
         }
 
         /// <summary>
