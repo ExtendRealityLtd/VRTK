@@ -7542,34 +7542,34 @@ The InitBoundaries method is run on start of scene and can be used to initialse 
 
 The GetPlayArea method returns the Transform of the object that is used to represent the play area in the scene.
 
-#### GetPlayAreaVertices/1
+#### GetPlayAreaVertices/0
 
-  > `public abstract Vector3[] GetPlayAreaVertices(GameObject playArea);`
+  > `public abstract Vector3[] GetPlayAreaVertices();`
 
   * Parameters
-   * `GameObject playArea` - The GameObject containing the play area representation.
+   * _none_
   * Returns
    * `Vector3[]` - A Vector3 array of the points in the scene that represent the play area boundaries.
 
 The GetPlayAreaVertices method returns the points of the play area boundaries.
 
-#### GetPlayAreaBorderThickness/1
+#### GetPlayAreaBorderThickness/0
 
-  > `public abstract float GetPlayAreaBorderThickness(GameObject playArea);`
+  > `public abstract float GetPlayAreaBorderThickness();`
 
   * Parameters
-   * `GameObject playArea` - The GameObject containing the play area representation.
+   * _none_
   * Returns
    * `float` - The thickness of the drawn border.
 
 The GetPlayAreaBorderThickness returns the thickness of the drawn border for the given play area.
 
-#### IsPlayAreaSizeCalibrated/1
+#### IsPlayAreaSizeCalibrated/0
 
-  > `public abstract bool IsPlayAreaSizeCalibrated(GameObject playArea);`
+  > `public abstract bool IsPlayAreaSizeCalibrated();`
 
   * Parameters
-   * `GameObject playArea` - The GameObject containing the play area representation.
+   * _none_
   * Returns
    * `bool` - Returns true if the play area size has been auto calibrated and set by external sensors.
 
@@ -8117,34 +8117,34 @@ The InitBoundaries method is run on start of scene and can be used to initialse 
 
 The GetPlayArea method returns the Transform of the object that is used to represent the play area in the scene.
 
-#### GetPlayAreaVertices/1
+#### GetPlayAreaVertices/0
 
-  > `public override Vector3[] GetPlayAreaVertices(GameObject playArea)`
+  > `public override Vector3[] GetPlayAreaVertices()`
 
   * Parameters
-   * `GameObject playArea` - The GameObject containing the play area representation.
+   * _none_
   * Returns
    * `Vector3[]` - A Vector3 array of the points in the scene that represent the play area boundaries.
 
 The GetPlayAreaVertices method returns the points of the play area boundaries.
 
-#### GetPlayAreaBorderThickness/1
+#### GetPlayAreaBorderThickness/0
 
-  > `public override float GetPlayAreaBorderThickness(GameObject playArea)`
+  > `public override float GetPlayAreaBorderThickness()`
 
   * Parameters
-   * `GameObject playArea` - The GameObject containing the play area representation.
+   * _none_
   * Returns
    * `float` - The thickness of the drawn border.
 
 The GetPlayAreaBorderThickness returns the thickness of the drawn border for the given play area.
 
-#### IsPlayAreaSizeCalibrated/1
+#### IsPlayAreaSizeCalibrated/0
 
-  > `public override bool IsPlayAreaSizeCalibrated(GameObject playArea)`
+  > `public override bool IsPlayAreaSizeCalibrated()`
 
   * Parameters
-   * `GameObject playArea` - The GameObject containing the play area representation.
+   * _none_
   * Returns
    * `bool` - Returns true if the play area size has been auto calibrated and set by external sensors.
 
@@ -8684,34 +8684,34 @@ The InitBoundaries method is run on start of scene and can be used to initialse 
 
 The GetPlayArea method returns the Transform of the object that is used to represent the play area in the scene.
 
-#### GetPlayAreaVertices/1
+#### GetPlayAreaVertices/0
 
-  > `public override Vector3[] GetPlayAreaVertices(GameObject playArea)`
+  > `public override Vector3[] GetPlayAreaVertices()`
 
   * Parameters
-   * `GameObject playArea` - The GameObject containing the play area representation.
+   * _none_
   * Returns
    * `Vector3[]` - A Vector3 array of the points in the scene that represent the play area boundaries.
 
 The GetPlayAreaVertices method returns the points of the play area boundaries.
 
-#### GetPlayAreaBorderThickness/1
+#### GetPlayAreaBorderThickness/0
 
-  > `public override float GetPlayAreaBorderThickness(GameObject playArea)`
+  > `public override float GetPlayAreaBorderThickness()`
 
   * Parameters
-   * `GameObject playArea` - The GameObject containing the play area representation.
+   * _none_
   * Returns
    * `float` - The thickness of the drawn border.
 
 The GetPlayAreaBorderThickness returns the thickness of the drawn border for the given play area.
 
-#### IsPlayAreaSizeCalibrated/1
+#### IsPlayAreaSizeCalibrated/0
 
-  > `public override bool IsPlayAreaSizeCalibrated(GameObject playArea)`
+  > `public override bool IsPlayAreaSizeCalibrated()`
 
   * Parameters
-   * `GameObject playArea` - The GameObject containing the play area representation.
+   * _none_
   * Returns
    * `bool` - Returns true if the play area size has been auto calibrated and set by external sensors.
 
@@ -9271,34 +9271,34 @@ The InitBoundaries method is run on start of scene and can be used to initialse 
 
 The GetPlayArea method returns the Transform of the object that is used to represent the play area in the scene.
 
-#### GetPlayAreaVertices/1
+#### GetPlayAreaVertices/0
 
-  > `public override Vector3[] GetPlayAreaVertices(GameObject playArea)`
+  > `public override Vector3[] GetPlayAreaVertices()`
 
   * Parameters
-   * `GameObject playArea` - The GameObject containing the play area representation.
+   * _none_
   * Returns
    * `Vector3[]` - A Vector3 array of the points in the scene that represent the play area boundaries.
 
 The GetPlayAreaVertices method returns the points of the play area boundaries.
 
-#### GetPlayAreaBorderThickness/1
+#### GetPlayAreaBorderThickness/0
 
-  > `public override float GetPlayAreaBorderThickness(GameObject playArea)`
+  > `public override float GetPlayAreaBorderThickness()`
 
   * Parameters
-   * `GameObject playArea` - The GameObject containing the play area representation.
+   * _none_
   * Returns
    * `float` - The thickness of the drawn border.
 
 The GetPlayAreaBorderThickness returns the thickness of the drawn border for the given play area.
 
-#### IsPlayAreaSizeCalibrated/1
+#### IsPlayAreaSizeCalibrated/0
 
-  > `public override bool IsPlayAreaSizeCalibrated(GameObject playArea)`
+  > `public override bool IsPlayAreaSizeCalibrated()`
 
   * Parameters
-   * `GameObject playArea` - The GameObject containing the play area representation.
+   * _none_
   * Returns
    * `bool` - Returns true if the play area size has been auto calibrated and set by external sensors.
 
@@ -9848,34 +9848,34 @@ The InitBoundaries method is run on start of scene and can be used to initialse 
 
 The GetPlayArea method returns the Transform of the object that is used to represent the play area in the scene.
 
-#### GetPlayAreaVertices/1
+#### GetPlayAreaVertices/0
 
-  > `public override Vector3[] GetPlayAreaVertices(GameObject playArea)`
+  > `public override Vector3[] GetPlayAreaVertices()`
 
   * Parameters
-   * `GameObject playArea` - The GameObject containing the play area representation.
+   * _none_
   * Returns
    * `Vector3[]` - A Vector3 array of the points in the scene that represent the play area boundaries.
 
 The GetPlayAreaVertices method returns the points of the play area boundaries.
 
-#### GetPlayAreaBorderThickness/1
+#### GetPlayAreaBorderThickness/0
 
-  > `public override float GetPlayAreaBorderThickness(GameObject playArea)`
+  > `public override float GetPlayAreaBorderThickness()`
 
   * Parameters
-   * `GameObject playArea` - The GameObject containing the play area representation.
+   * _none_
   * Returns
    * `float` - The thickness of the drawn border.
 
 The GetPlayAreaBorderThickness returns the thickness of the drawn border for the given play area.
 
-#### IsPlayAreaSizeCalibrated/1
+#### IsPlayAreaSizeCalibrated/0
 
-  > `public override bool IsPlayAreaSizeCalibrated(GameObject playArea)`
+  > `public override bool IsPlayAreaSizeCalibrated()`
 
   * Parameters
-   * `GameObject playArea` - The GameObject containing the play area representation.
+   * _none_
   * Returns
    * `bool` - Returns true if the play area size has been auto calibrated and set by external sensors.
 
@@ -10435,34 +10435,34 @@ The InitBoundaries method is run on start of scene and can be used to initialse 
 
 The GetPlayArea method returns the Transform of the object that is used to represent the play area in the scene.
 
-#### GetPlayAreaVertices/1
+#### GetPlayAreaVertices/0
 
-  > `public override Vector3[] GetPlayAreaVertices(GameObject playArea)`
+  > `public override Vector3[] GetPlayAreaVertices()`
 
   * Parameters
-   * `GameObject playArea` - The GameObject containing the play area representation.
+   * _none_
   * Returns
    * `Vector3[]` - A Vector3 array of the points in the scene that represent the play area boundaries.
 
 The GetPlayAreaVertices method returns the points of the play area boundaries.
 
-#### GetPlayAreaBorderThickness/1
+#### GetPlayAreaBorderThickness/0
 
-  > `public override float GetPlayAreaBorderThickness(GameObject playArea)`
+  > `public override float GetPlayAreaBorderThickness()`
 
   * Parameters
-   * `GameObject playArea` - The GameObject containing the play area representation.
+   * _none_
   * Returns
    * `float` - The thickness of the drawn border.
 
 The GetPlayAreaBorderThickness returns the thickness of the drawn border for the given play area.
 
-#### IsPlayAreaSizeCalibrated/1
+#### IsPlayAreaSizeCalibrated/0
 
-  > `public override bool IsPlayAreaSizeCalibrated(GameObject playArea)`
+  > `public override bool IsPlayAreaSizeCalibrated()`
 
   * Parameters
-   * `GameObject playArea` - The GameObject containing the play area representation.
+   * _none_
   * Returns
    * `bool` - Returns true if the play area size has been auto calibrated and set by external sensors.
 
@@ -11011,34 +11011,34 @@ The InitBoundaries method is run on start of scene and can be used to initialse 
 
 The GetPlayArea method returns the Transform of the object that is used to represent the play area in the scene.
 
-#### GetPlayAreaVertices/1
+#### GetPlayAreaVertices/0
 
-  > `public override Vector3[] GetPlayAreaVertices(GameObject playArea)`
+  > `public override Vector3[] GetPlayAreaVertices()`
 
   * Parameters
-   * `GameObject playArea` - The GameObject containing the play area representation.
+   * _none_
   * Returns
    * `Vector3[]` - A Vector3 array of the points in the scene that represent the play area boundaries.
 
 The GetPlayAreaVertices method returns the points of the play area boundaries.
 
-#### GetPlayAreaBorderThickness/1
+#### GetPlayAreaBorderThickness/0
 
-  > `public override float GetPlayAreaBorderThickness(GameObject playArea)`
+  > `public override float GetPlayAreaBorderThickness()`
 
   * Parameters
-   * `GameObject playArea` - The GameObject containing the play area representation.
+   * _none_
   * Returns
    * `float` - The thickness of the drawn border.
 
 The GetPlayAreaBorderThickness returns the thickness of the drawn border for the given play area.
 
-#### IsPlayAreaSizeCalibrated/1
+#### IsPlayAreaSizeCalibrated/0
 
-  > `public override bool IsPlayAreaSizeCalibrated(GameObject playArea)`
+  > `public override bool IsPlayAreaSizeCalibrated()`
 
   * Parameters
-   * `GameObject playArea` - The GameObject containing the play area representation.
+   * _none_
   * Returns
    * `bool` - Returns true if the play area size has been auto calibrated and set by external sensors.
 

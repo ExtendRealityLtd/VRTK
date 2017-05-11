@@ -56,7 +56,7 @@
                 return;
             }
 
-            var vertices = VRTK_SDK_Bridge.GetPlayAreaVertices(playArea.gameObject);
+            var vertices = VRTK_SDK_Bridge.GetPlayAreaVertices();
             if (vertices == null || vertices.Length == 0)
             {
                 return;

@@ -527,19 +527,19 @@
             return GetBoundariesSDK().GetPlayArea();
         }
 
-        public static Vector3[] GetPlayAreaVertices(GameObject playArea)
+        public static Vector3[] GetPlayAreaVertices()
         {
-            return GetBoundariesSDK().GetPlayAreaVertices(playArea);
+            return GetBoundariesSDK().GetPlayAreaVertices();
         }
 
-        public static float GetPlayAreaBorderThickness(GameObject playArea)
+        public static float GetPlayAreaBorderThickness()
         {
-            return GetBoundariesSDK().GetPlayAreaBorderThickness(playArea);
+            return GetBoundariesSDK().GetPlayAreaBorderThickness();
         }
 
-        public static bool IsPlayAreaSizeCalibrated(GameObject playArea)
+        public static bool IsPlayAreaSizeCalibrated()
         {
-            return GetBoundariesSDK().IsPlayAreaSizeCalibrated(playArea);
+            return GetBoundariesSDK().IsPlayAreaSizeCalibrated();
         }
 
         public static bool GetDrawAtRuntime()
