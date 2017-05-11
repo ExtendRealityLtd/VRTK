@@ -768,6 +768,7 @@ namespace VRTK
             }));
         }
 
+#if UNITY_EDITOR
         private static BuildTargetGroup[] GetValidBuildTargetGroups()
         {
             return Enum.GetValues(typeof(BuildTargetGroup)).Cast<BuildTargetGroup>().Where(group =>
@@ -784,7 +785,6 @@ namespace VRTK
             }).ToArray();
         }
 
-#if UNITY_EDITOR
         /// <summary>
         /// Calls <see cref="ManageScriptingDefineSymbols"/> and <see cref="ManageVRSettings"/> (both without forcing) at the appropriate times when in the editor.
         /// </summary>
