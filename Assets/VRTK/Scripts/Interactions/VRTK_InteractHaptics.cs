@@ -12,6 +12,8 @@ namespace VRTK
     {
         [Header("Haptics On Touch")]
 
+        [Tooltip("Denotes the audio clip to use to rumble the controller on touch.")]
+        public AudioClip clipOnTouch;
         [Tooltip("Denotes how strong the rumble in the controller will be on touch.")]
         [Range(0, 1)]
         public float strengthOnTouch = 0;
@@ -22,6 +24,8 @@ namespace VRTK
 
         [Header("Haptics On Grab")]
 
+        [Tooltip("Denotes the audio clip to use to rumble the controller on grab.")]
+        public AudioClip clipOnGrab;
         [Tooltip("Denotes how strong the rumble in the controller will be on grab.")]
         [Range(0, 1)]
         public float strengthOnGrab = 0;
@@ -32,6 +36,8 @@ namespace VRTK
 
         [Header("Haptics On Use")]
 
+        [Tooltip("Denotes the audio clip to use to rumble the controller on use.")]
+        public AudioClip clipOnUse;
         [Tooltip("Denotes how strong the rumble in the controller will be on use.")]
         [Range(0, 1)]
         public float strengthOnUse = 0;
@@ -58,7 +64,11 @@ namespace VRTK
         /// <param name="controllerReference">The reference to the controller to activate the haptic feedback on.</param>
         public virtual void HapticsOnTouch(VRTK_ControllerReference controllerReference)
         {
-            if (strengthOnTouch > 0 && durationOnTouch > 0f)
+            if (clipOnTouch != null)
+            {
+                VRTK_ControllerHaptics.TriggerHapticPulse(controllerReference, clipOnTouch);
+            }
+            else if (strengthOnTouch > 0 && durationOnTouch > 0f)
             {
                 TriggerHapticPulse(controllerReference, strengthOnTouch, durationOnTouch, intervalOnTouch);
             }
@@ -80,7 +90,11 @@ namespace VRTK
         /// <param name="controllerReference">The reference to the controller to activate the haptic feedback on.</param>
         public virtual void HapticsOnGrab(VRTK_ControllerReference controllerReference)
         {
-            if (strengthOnGrab > 0 && durationOnGrab > 0f)
+            if (clipOnGrab != null)
+            {
+                VRTK_ControllerHaptics.TriggerHapticPulse(controllerReference, clipOnGrab);
+            }
+            else if (strengthOnGrab > 0 && durationOnGrab > 0f)
             {
                 TriggerHapticPulse(controllerReference, strengthOnGrab, durationOnGrab, intervalOnGrab);
             }
@@ -102,7 +116,11 @@ namespace VRTK
         /// <param name="controllerReference">The reference to the controller to activate the haptic feedback on.</param>
         public virtual void HapticsOnUse(VRTK_ControllerReference controllerReference)
         {
-            if (strengthOnUse > 0 && durationOnUse > 0f)
+            if (clipOnUse != null)
+            {
+                VRTK_ControllerHaptics.TriggerHapticPulse(controllerReference, clipOnUse);
+            }
+            else if (strengthOnUse > 0 && durationOnUse > 0f)
             {
                 TriggerHapticPulse(controllerReference, strengthOnUse, durationOnUse, intervalOnUse);
             }

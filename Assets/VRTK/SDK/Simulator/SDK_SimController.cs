@@ -282,12 +282,23 @@ namespace VRTK
         }
 
         /// <summary>
-        /// The HapticPulse method is used to initiate a simple haptic pulse on the tracked object of the given index.
+        /// The HapticPulse/2 method is used to initiate a simple haptic pulse on the tracked object of the given controller reference.
         /// </summary>
         /// <param name="controllerReference">The reference to the tracked object to initiate the haptic pulse on.</param>
         /// <param name="strength">The intensity of the rumble of the controller motor. `0` to `1`.</param>
         public override void HapticPulse(VRTK_ControllerReference controllerReference, float strength = 0.5f)
         {
+        }
+
+        /// <summary>
+        /// The HapticPulse/2 method is used to initiate a haptic pulse based on an audio clip on the tracked object of the given controller reference.
+        /// </summary>
+        /// <param name="controllerReference">The reference to the tracked object to initiate the haptic pulse on.</param>
+        /// <param name="clip">The audio clip to use for the haptic pattern.</param>
+        public override bool HapticPulse(VRTK_ControllerReference controllerReference, AudioClip clip)
+        {
+            //Return true so it just always prevents doing a fallback routine.
+            return true;
         }
 
         /// <summary>

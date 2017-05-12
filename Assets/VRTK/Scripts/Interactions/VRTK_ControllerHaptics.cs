@@ -44,6 +44,20 @@ namespace VRTK
         }
 
         /// <summary>
+        /// The TriggerHapticPulse/2 method calls a haptic pulse based on a given audio clip.
+        /// </summary>
+        /// <param name="controllerReference">The reference to the controller to activate the haptic feedback on.</param>
+        /// <param name="clip">The audio clip to use for the haptic pattern.</param>
+        public static void TriggerHapticPulse(VRTK_ControllerReference controllerReference, AudioClip clip)
+        {
+            SetupInstance();
+            if (instance != null)
+            {
+                instance.InternalTriggerHapticPulse(controllerReference, clip);
+            }
+        }
+
+        /// <summary>
         /// The CancelHapticPulse method cancels the existing running haptic pulse on the given controller index.
         /// </summary>
         /// <param name="controllerReference">The reference to the controller to cancel the haptic feedback on.</param>
@@ -73,19 +87,33 @@ namespace VRTK
         protected virtual void InternalTriggerHapticPulse(VRTK_ControllerReference controllerReference, float strength)
         {
             InternalCancelHapticPulse(controllerReference);
-            var hapticPulseStrength = Mathf.Clamp(strength, 0f, 1f);
+            float hapticPulseStrength = Mathf.Clamp(strength, 0f, 1f);
             VRTK_SDK_Bridge.HapticPulse(controllerReference, hapticPulseStrength);
         }
 
         protected virtual void InternalTriggerHapticPulse(VRTK_ControllerReference controllerReference, float strength, float duration, float pulseInterval)
         {
             InternalCancelHapticPulse(controllerReference);
-            var hapticPulseStrength = Mathf.Clamp(strength, 0f, 1f);
-            var hapticModifiers = VRTK_SDK_Bridge.GetHapticModifiers();
-            Coroutine hapticLoop = StartCoroutine(HapticPulse(controllerReference, duration * hapticModifiers.durationModifier, hapticPulseStrength, pulseInterval * hapticModifiers.intervalModifier));
+            float hapticPulseStrength = Mathf.Clamp(strength, 0f, 1f);
+            SDK_ControllerHapticModifiers hapticModifiers = VRTK_SDK_Bridge.GetHapticModifiers();
+            Coroutine hapticLoop = StartCoroutine(SimpleHapticPulseRoutine(controllerReference, duration * hapticModifiers.durationModifier, hapticPulseStrength, pulseInterval * hapticModifiers.intervalModifier));
             if (!hapticLoopCoroutines.ContainsKey(controllerReference))
             {
                 hapticLoopCoroutines.Add(controllerReference, hapticLoop);
+            }
+        }
+
+        protected virtual void InternalTriggerHapticPulse(VRTK_ControllerReference controllerReference, AudioClip clip)
+        {
+            InternalCancelHapticPulse(controllerReference);
+            if (!VRTK_SDK_Bridge.HapticPulse(controllerReference, clip))
+            {
+                //If the SDK Bridge doesn't support audio clips then defer to a local version
+                Coroutine hapticLoop = StartCoroutine(AudioClipHapticsRoutine(controllerReference, clip));
+                if (!hapticLoopCoroutines.ContainsKey(controllerReference))
+                {
+                    hapticLoopCoroutines.Add(controllerReference, hapticLoop);
+                }
             }
         }
 
@@ -98,7 +126,7 @@ namespace VRTK
             }
         }
 
-        protected virtual IEnumerator HapticPulse(VRTK_ControllerReference controllerReference, float duration, float hapticPulseStrength, float pulseInterval)
+        protected virtual IEnumerator SimpleHapticPulseRoutine(VRTK_ControllerReference controllerReference, float duration, float hapticPulseStrength, float pulseInterval)
         {
             if (pulseInterval <= 0)
             {
@@ -110,6 +138,32 @@ namespace VRTK
                 VRTK_SDK_Bridge.HapticPulse(controllerReference, hapticPulseStrength);
                 yield return new WaitForSeconds(pulseInterval);
                 duration -= pulseInterval;
+            }
+        }
+
+        protected virtual IEnumerator AudioClipHapticsRoutine(VRTK_ControllerReference controllerReference, AudioClip clip)
+        {
+            SDK_ControllerHapticModifiers hapticModifiers = VRTK_SDK_Bridge.GetHapticModifiers();
+            float hapticScalar = hapticModifiers.maxHapticVibration;
+            float[] audioData = new float[hapticModifiers.hapticsBufferSize];
+            int sampleOffset = -hapticModifiers.hapticsBufferSize;
+            float startTime = Time.time;
+            float length = clip.length / 1;
+            float endTime = startTime + length;
+            float sampleRate = clip.samples;
+            while (Time.time <= endTime)
+            {
+                float lerpVal = (Time.time - startTime) / length;
+                int sampleIndex = (int)(sampleRate * lerpVal);
+                if (sampleIndex >= sampleOffset + hapticModifiers.hapticsBufferSize)
+                {
+                    clip.GetData(audioData, sampleIndex);
+                    sampleOffset = sampleIndex;
+                }
+                float currentSample = Mathf.Abs(audioData[sampleIndex - sampleOffset]);
+                ushort hapticStrength = (ushort)(hapticScalar * currentSample);
+                VRTK_SDK_Bridge.HapticPulse(controllerReference, hapticStrength);
+                yield return null;
             }
         }
     }
