@@ -207,7 +207,7 @@ namespace VRTK
             }
 
             //get valid BuildTargetGroups
-            BuildTargetGroup[] targetGroups = GetValidBuildTargetGroups();
+            BuildTargetGroup[] targetGroups = VRTK_SharedMethods.GetValidBuildTargetGroups();
             Dictionary<BuildTargetGroup, HashSet<string>> newSymbolsByTargetGroup = new Dictionary<BuildTargetGroup, HashSet<string>>(targetGroups.Length);
 
             //get current non-removable scripting define symbols
@@ -332,7 +332,7 @@ namespace VRTK
                                                   .Except(new[] { "None" })
                                                   .ToArray());
 
-            foreach (BuildTargetGroup targetGroup in GetValidBuildTargetGroups())
+            foreach (BuildTargetGroup targetGroup in VRTK_SharedMethods.GetValidBuildTargetGroups())
             {
                 string[] deviceNames;
                 deviceNamesByTargetGroup.TryGetValue(targetGroup, out deviceNames);
@@ -764,22 +764,6 @@ namespace VRTK
         }
 
 #if UNITY_EDITOR
-        private static BuildTargetGroup[] GetValidBuildTargetGroups()
-        {
-            return Enum.GetValues(typeof(BuildTargetGroup)).Cast<BuildTargetGroup>().Where(group =>
-            {
-                if (group == BuildTargetGroup.Unknown)
-                {
-                    return false;
-                }
-
-                string targetGroupName = Enum.GetName(typeof(BuildTargetGroup), group);
-                FieldInfo targetGroupFieldInfo = typeof(BuildTargetGroup).GetField(targetGroupName, BindingFlags.Public | BindingFlags.Static);
-
-                return targetGroupFieldInfo != null && targetGroupFieldInfo.GetCustomAttributes(typeof(ObsoleteAttribute), false).Length == 0;
-            }).ToArray();
-        }
-
         /// <summary>
         /// Calls <see cref="ManageScriptingDefineSymbols"/> and <see cref="ManageVRSettings"/> (both without forcing) at the appropriate times when in the editor.
         /// </summary>
