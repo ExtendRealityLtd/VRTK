@@ -546,9 +546,24 @@ namespace VRTK
                         setups,
                         setup => setup.usedVRDeviceNames.Contains(VRSettings.loadedDeviceName)
                     );
-                    index = index == -1 ? 0 : index;
+                }
+                else
+                {
+                    // If '-vrmode none' was used try to load the respective SDK Setup
+                    string[] commandLineArgs = Environment.GetCommandLineArgs();
+                    int commandLineArgIndex = Array.IndexOf(commandLineArgs, "-vrmode", 1);
+                    if (commandLineArgIndex != -1
+                        && commandLineArgIndex + 1 < commandLineArgs.Length
+                        && commandLineArgs[commandLineArgIndex + 1].ToLowerInvariant() == "none")
+                    {
+                        index = Array.FindIndex(
+                            setups,
+                            setup => setup.usedVRDeviceNames.All(vrDeviceName => vrDeviceName == "None")
+                        );
+                    }
                 }
 
+                index = index == -1 ? 0 : index;
                 TryLoadSDKSetup(index, false, setups.ToArray());
             }
         }
