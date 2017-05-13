@@ -14,10 +14,12 @@ namespace VRTK
     {
         [Tooltip("Determines the size of the play area cursor and collider. If the values are left as zero then the Play Area Cursor will be sized to the calibrated Play Area space.")]
         public Vector2 playAreaCursorDimensions = Vector2.zero;
-        [Tooltip("If this is ticked then if the play area cursor is colliding with any other object then the pointer colour will change to the `Pointer Miss Color` and the `DestinationMarkerSet` event will not be triggered, which will prevent teleporting into areas where the play area will collide.")]
+        [Tooltip("If this is checked then if the play area cursor is colliding with any other object then the pointer colour will change to the `Pointer Miss Color` and the `DestinationMarkerSet` event will not be triggered, which will prevent teleporting into areas where the play area will collide.")]
         public bool handlePlayAreaCursorCollisions = false;
-        [Tooltip("If this is ticked then if the user's headset is outside of the play area cursor bounds then it is considered a collision even if the play area isn't colliding with anything.")]
+        [Tooltip("If this is checked then if the user's headset is outside of the play area cursor bounds then it is considered a collision even if the play area isn't colliding with anything.")]
         public bool headsetOutOfBoundsIsCollision = false;
+        [Tooltip("If this is checked then the play area cursor will be displayed when the location is invalid.")]
+        public bool displayOnInvalidLocation = true;
         [Tooltip("A specified VRTK_PolicyList to use to determine whether the play area cursor collisions will be acted upon.")]
         public VRTK_PolicyList targetListPolicy;
 
@@ -85,10 +87,13 @@ namespace VRTK
         /// The SetMaterialColor method sets the current material colour on the play area cursor.
         /// </summary>
         /// <param name="color">The colour to update the play area cursor material to.</param>
-        public virtual void SetMaterialColor(Color color)
+        /// <param name="validity">Determines if the colour being set is based from a valid location or invalid location.</param>
+        public virtual void SetMaterialColor(Color color, bool validity)
         {
             if (validLocationObject == null)
             {
+                ToggleVisibility(!(!validity && !displayOnInvalidLocation));
+
                 if (usePointerColor)
                 {
                     for (int i = 0; i < playAreaCursorBoundaries.Length; i++)
@@ -277,7 +282,7 @@ namespace VRTK
             }
             if (playAreaCursorInvalidChild != null)
             {
-                playAreaCursorInvalidChild.SetActive(!state);
+                playAreaCursorInvalidChild.SetActive((displayOnInvalidLocation ? !state : false));
             }
         }
 

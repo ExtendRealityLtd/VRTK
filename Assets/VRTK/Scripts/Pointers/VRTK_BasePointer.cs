@@ -400,7 +400,7 @@ namespace VRTK
         {
             if (playAreaCursor)
             {
-                playAreaCursor.SetMaterialColor(color);
+                playAreaCursor.SetMaterialColor(color, true);
             }
         }
 

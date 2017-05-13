@@ -424,7 +424,7 @@ namespace VRTK
         {
             if (playareaCursor)
             {
-                playareaCursor.SetMaterialColor(givenColor);
+                playareaCursor.SetMaterialColor(givenColor, IsValidCollision());
             }
         }
 
