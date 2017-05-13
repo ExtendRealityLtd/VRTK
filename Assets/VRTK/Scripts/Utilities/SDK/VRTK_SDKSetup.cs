@@ -278,6 +278,10 @@ namespace VRTK
 #endif
             VRTK_SDK_Bridge.InvalidateCaches();
 
+#if UNITY_EDITOR
+            Undo.RecordObject(this, "Populate Object References");
+#endif
+
             actualBoundaries = null;
             actualHeadset = null;
             actualLeftController = null;
