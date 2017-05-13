@@ -142,6 +142,11 @@
             GetControllerSDK().HapticPulse(controllerReference, strength);
         }
 
+        public static bool HapticPulse(VRTK_ControllerReference controllerReference, AudioClip clip)
+        {
+            return GetControllerSDK().HapticPulse(controllerReference, clip);
+        }
+
         public static SDK_ControllerHapticModifiers GetHapticModifiers()
         {
             return GetControllerSDK().GetHapticModifiers();

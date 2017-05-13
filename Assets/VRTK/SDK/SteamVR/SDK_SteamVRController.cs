@@ -345,7 +345,7 @@ namespace VRTK
         }
 
         /// <summary>
-        /// The HapticPulse method is used to initiate a simple haptic pulse on the tracked object of the given index.
+        /// The HapticPulse/2 method is used to initiate a simple haptic pulse on the tracked object of the given controller reference.
         /// </summary>
         /// <param name="controllerReference">The reference to the tracked object to initiate the haptic pulse on.</param>
         /// <param name="strength">The intensity of the rumble of the controller motor. `0` to `1`.</param>
@@ -361,12 +361,25 @@ namespace VRTK
         }
 
         /// <summary>
+        /// The HapticPulse/2 method is used to initiate a haptic pulse based on an audio clip on the tracked object of the given controller reference.
+        /// </summary>
+        /// <param name="controllerReference">The reference to the tracked object to initiate the haptic pulse on.</param>
+        /// <param name="clip">The audio clip to use for the haptic pattern.</param>
+        public override bool HapticPulse(VRTK_ControllerReference controllerReference, AudioClip clip)
+        {
+            //SteamVR doesn't support audio haptics so return false to do a fallback.
+            return false;
+        }
+
+        /// <summary>
         /// The GetHapticModifiers method is used to return modifiers for the duration and interval if the SDK handles it slightly differently.
         /// </summary>
         /// <returns>An SDK_ControllerHapticModifiers object with a given `durationModifier` and an `intervalModifier`.</returns>
         public override SDK_ControllerHapticModifiers GetHapticModifiers()
         {
-            return new SDK_ControllerHapticModifiers();
+            SDK_ControllerHapticModifiers modifiers = new SDK_ControllerHapticModifiers();
+            modifiers.maxHapticVibration = maxHapticVibration;
+            return modifiers;
         }
 
         /// <summary>

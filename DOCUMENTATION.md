@@ -2560,6 +2560,18 @@ The TriggerHapticPulse/2 method calls a single haptic pulse call on the controll
 
 The TriggerHapticPulse/4 method calls a haptic pulse for a specified amount of time rather than just a single tick. Each pulse can be separated by providing a `pulseInterval` to pause between each haptic pulse.
 
+#### TriggerHapticPulse/2
+
+  > `public static void TriggerHapticPulse(VRTK_ControllerReference controllerReference, AudioClip clip)`
+
+  * Parameters
+   * `VRTK_ControllerReference controllerReference` - The reference to the controller to activate the haptic feedback on.
+   * `AudioClip clip` - The audio clip to use for the haptic pattern.
+  * Returns
+   * _none_
+
+The TriggerHapticPulse/2 method calls a haptic pulse based on a given audio clip.
+
 #### CancelHapticPulse/1
 
   > `public static void CancelHapticPulse(VRTK_ControllerReference controllerReference)`
@@ -3484,12 +3496,15 @@ The Interact Haptics script is attached on the same GameObject as an Interactabl
 
 ### Inspector Parameters
 
+ * **Clip On Touch:** Denotes the audio clip to use to rumble the controller on touch.
  * **Strength On Touch:** Denotes how strong the rumble in the controller will be on touch.
  * **Duration On Touch:** Denotes how long the rumble in the controller will last on touch.
  * **Interval On Touch:** Denotes interval betweens rumble in the controller on touch.
+ * **Clip On Grab:** Denotes the audio clip to use to rumble the controller on grab.
  * **Strength On Grab:** Denotes how strong the rumble in the controller will be on grab.
  * **Duration On Grab:** Denotes how long the rumble in the controller will last on grab.
  * **Interval On Grab:** Denotes interval betweens rumble in the controller on grab.
+ * **Clip On Use:** Denotes the audio clip to use to rumble the controller on use.
  * **Strength On Use:** Denotes how strong the rumble in the controller will be on use.
  * **Duration On Use:** Denotes how long the rumble in the controller will last on use.
  * **Interval On Use:** Denotes interval betweens rumble in the controller on use.
@@ -7447,7 +7462,19 @@ The SetControllerRenderModelWheel method sets the state of the scroll wheel on t
   * Returns
    * _none_
 
-The HapticPulse method is used to initiate a simple haptic pulse on the tracked object of the given index.
+The HapticPulse/2 method is used to initiate a simple haptic pulse on the tracked object of the given controller reference.
+
+#### HapticPulse/2
+
+  > `public abstract bool HapticPulse(VRTK_ControllerReference controllerReference, AudioClip clip);`
+
+  * Parameters
+   * `VRTK_ControllerReference controllerReference` - The reference to the tracked object to initiate the haptic pulse on.
+   * `AudioClip clip` - The audio clip to use for the haptic pattern.
+  * Returns
+   * _none_
+
+The HapticPulse/2 method is used to initiate a haptic pulse based on an audio clip on the tracked object of the given controller reference.
 
 #### GetHapticModifiers/0
 
@@ -8022,7 +8049,19 @@ The SetControllerRenderModelWheel method sets the state of the scroll wheel on t
   * Returns
    * _none_
 
-The HapticPulse method is used to initiate a simple haptic pulse on the tracked object of the given index.
+The HapticPulse/2 method is used to initiate a simple haptic pulse on the tracked object of the given controller reference.
+
+#### HapticPulse/2
+
+  > `public override bool HapticPulse(VRTK_ControllerReference controllerReference, AudioClip clip)`
+
+  * Parameters
+   * `VRTK_ControllerReference controllerReference` - The reference to the tracked object to initiate the haptic pulse on.
+   * `AudioClip clip` - The audio clip to use for the haptic pattern.
+  * Returns
+   * _none_
+
+The HapticPulse/2 method is used to initiate a haptic pulse based on an audio clip on the tracked object of the given controller reference.
 
 #### GetHapticModifiers/0
 
@@ -8591,7 +8630,19 @@ The SetControllerRenderModelWheel method sets the state of the scroll wheel on t
   * Returns
    * _none_
 
-The HapticPulse method is used to initiate a simple haptic pulse on the tracked object of the given index.
+The HapticPulse/2 method is used to initiate a simple haptic pulse on the tracked object of the given controller reference.
+
+#### HapticPulse/2
+
+  > `public override bool HapticPulse(VRTK_ControllerReference controllerReference, AudioClip clip)`
+
+  * Parameters
+   * `VRTK_ControllerReference controllerReference` - The reference to the tracked object to initiate the haptic pulse on.
+   * `AudioClip clip` - The audio clip to use for the haptic pattern.
+  * Returns
+   * _none_
+
+The HapticPulse/2 method is used to initiate a haptic pulse based on an audio clip on the tracked object of the given controller reference.
 
 #### GetHapticModifiers/0
 
@@ -9179,7 +9230,19 @@ The SetControllerRenderModelWheel method sets the state of the scroll wheel on t
   * Returns
    * _none_
 
-The HapticPulse method is used to initiate a simple haptic pulse on the tracked object of the given index.
+The HapticPulse/2 method is used to initiate a simple haptic pulse on the tracked object of the given controller reference.
+
+#### HapticPulse/2
+
+  > `public override bool HapticPulse(VRTK_ControllerReference controllerReference, AudioClip clip)`
+
+  * Parameters
+   * `VRTK_ControllerReference controllerReference` - The reference to the tracked object to initiate the haptic pulse on.
+   * `AudioClip clip` - The audio clip to use for the haptic pattern.
+  * Returns
+   * _none_
+
+The HapticPulse/2 method is used to initiate a haptic pulse based on an audio clip on the tracked object of the given controller reference.
 
 #### GetHapticModifiers/0
 
@@ -9540,6 +9603,17 @@ The Oculus Controller SDK script provides a bridge to SDK methods that deal with
 
 ### Class Methods
 
+#### OnAfterSetupLoad/1
+
+  > `public override void OnAfterSetupLoad(VRTK_SDKSetup setup)`
+
+  * Parameters
+   * `VRTK_SDKSetup setup` - The SDK Setup which is using this SDK.
+  * Returns
+   * _none_
+
+This method is called just after loading the  that's using this SDK.
+
 #### ProcessUpdate/2
 
   > `public override void ProcessUpdate(VRTK_ControllerReference controllerReference, Dictionary<string, object> options)`
@@ -9756,7 +9830,19 @@ The SetControllerRenderModelWheel method sets the state of the scroll wheel on t
   * Returns
    * _none_
 
-The HapticPulse method is used to initiate a simple haptic pulse on the tracked object of the given index.
+The HapticPulse/2 method is used to initiate a simple haptic pulse on the tracked object of the given controller reference.
+
+#### HapticPulse/2
+
+  > `public override bool HapticPulse(VRTK_ControllerReference controllerReference, AudioClip clip)`
+
+  * Parameters
+   * `VRTK_ControllerReference controllerReference` - The reference to the tracked object to initiate the haptic pulse on.
+   * `AudioClip clip` - The audio clip to use for the haptic pattern.
+  * Returns
+   * _none_
+
+The HapticPulse/2 method is used to initiate a haptic pulse based on an audio clip on the tracked object of the given controller reference.
 
 #### GetHapticModifiers/0
 
@@ -10343,7 +10429,19 @@ The SetControllerRenderModelWheel method sets the state of the scroll wheel on t
   * Returns
    * _none_
 
-The HapticPulse method is used to initiate a simple haptic pulse on the tracked object of the given index.
+The HapticPulse/2 method is used to initiate a simple haptic pulse on the tracked object of the given controller reference.
+
+#### HapticPulse/2
+
+  > `public override bool HapticPulse(VRTK_ControllerReference controllerReference, AudioClip clip)`
+
+  * Parameters
+   * `VRTK_ControllerReference controllerReference` - The reference to the tracked object to initiate the haptic pulse on.
+   * `AudioClip clip` - The audio clip to use for the haptic pattern.
+  * Returns
+   * _none_
+
+The HapticPulse/2 method is used to initiate a haptic pulse based on an audio clip on the tracked object of the given controller reference.
 
 #### GetHapticModifiers/0
 
@@ -10919,7 +11017,19 @@ The SetControllerRenderModelWheel method sets the state of the scroll wheel on t
   * Returns
    * _none_
 
-The HapticPulse method is used to initiate a simple haptic pulse on the tracked object of the given index.
+The HapticPulse/2 method is used to initiate a simple haptic pulse on the tracked object of the given controller reference.
+
+#### HapticPulse/2
+
+  > `public override bool HapticPulse(VRTK_ControllerReference controllerReference, AudioClip clip)`
+
+  * Parameters
+   * `VRTK_ControllerReference controllerReference` - The reference to the tracked object to initiate the haptic pulse on.
+   * `AudioClip clip` - The audio clip to use for the haptic pattern.
+  * Returns
+   * _none_
+
+The HapticPulse/2 method is used to initiate a haptic pulse based on an audio clip on the tracked object of the given controller reference.
 
 #### GetHapticModifiers/0
 
