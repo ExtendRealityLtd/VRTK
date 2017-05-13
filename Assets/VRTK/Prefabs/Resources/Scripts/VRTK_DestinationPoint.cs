@@ -130,7 +130,7 @@ namespace VRTK
         {
             pointCollider = GetComponentInChildren<Collider>();
             createdCollider = false;
-            if (!pointCollider)
+            if (pointCollider == null)
             {
                 pointCollider = gameObject.AddComponent<SphereCollider>();
                 createdCollider = true;
@@ -143,7 +143,7 @@ namespace VRTK
         {
             pointRigidbody = GetComponent<Rigidbody>();
             createdRigidbody = false;
-            if (!pointRigidbody)
+            if (pointRigidbody == null)
             {
                 pointRigidbody = gameObject.AddComponent<Rigidbody>();
                 createdRigidbody = true;
@@ -174,7 +174,7 @@ namespace VRTK
 
         protected virtual void ManageDestinationMarkerListeners(GameObject markerMaker, bool register)
         {
-            if (markerMaker)
+            if (markerMaker != null)
             {
                 VRTK_DestinationMarker[] worldMarkers = markerMaker.GetComponentsInChildren<VRTK_DestinationMarker>();
                 for (int i = 0; i < worldMarkers.Length; i++)
@@ -303,7 +303,7 @@ namespace VRTK
 
         protected virtual void ToggleObject(GameObject givenObject, bool state)
         {
-            if (givenObject)
+            if (givenObject != null)
             {
                 givenObject.SetActive(state);
             }
