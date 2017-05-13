@@ -40,8 +40,8 @@
         {
             VRTK_ObjectSetup window = (VRTK_ObjectSetup)EditorWindow.GetWindow(typeof(VRTK_ObjectSetup));
             
-            window.minSize = new Vector2( 300f, 300f );
-            window.maxSize = new Vector2( 400f, 300f );
+            window.minSize = new Vector2( 300f, 370f );
+            window.maxSize = new Vector2( 400f, 400f );
             
             window.autoRepaintOnSceneChange = true;
             window.titleContent.text = "Setup Object";
