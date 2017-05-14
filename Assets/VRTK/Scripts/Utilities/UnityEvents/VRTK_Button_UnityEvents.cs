@@ -11,20 +11,28 @@
         public sealed class Button3DEvent : UnityEvent<object, Control3DEventArgs> { }
 
         public Button3DEvent OnPushed = new Button3DEvent();
+        public Button3DEvent OnReleased = new Button3DEvent();
 
         protected override void AddListeners(VRTK_Button component)
         {
             component.Pushed += Pushed;
+            component.Released += Released;
         }
 
         protected override void RemoveListeners(VRTK_Button component)
         {
             component.Pushed -= Pushed;
+            component.Released -= Released;
         }
 
         private void Pushed(object o, Control3DEventArgs e)
         {
             OnPushed.Invoke(o, e);
+        }
+
+        public void Released(object o, Control3DEventArgs e)
+        {
+            OnReleased.Invoke(o, e);
         }
     }
 }
