@@ -33,14 +33,15 @@
         private bool disableIdle = true;
         private bool addrb = true;
         private bool addHaptics = true;
+        private bool addPhysicsAudio = false;
         private Color touchColor = Color.clear;
 
         [MenuItem("Window/VRTK/Setup Interactable Object")]
         private static void Init()
         {
             VRTK_ObjectSetup window = (VRTK_ObjectSetup)EditorWindow.GetWindow(typeof(VRTK_ObjectSetup));
-            
-            window.minSize = new Vector2( 300f, 370f );
+
+            window.minSize = new Vector2( 300f, 380f );
             window.maxSize = new Vector2( 400f, 400f );
             
             window.autoRepaintOnSceneChange = true;
@@ -73,6 +74,7 @@
             disableIdle = EditorGUILayout.Toggle("Disable On Idle", disableIdle);
             addrb = EditorGUILayout.Toggle("Add RigidBody", addrb);
             addHaptics = EditorGUILayout.Toggle("Add Haptics", addHaptics);
+            addPhysicsAudio = EditorGUILayout.Toggle("Add Physics Audio", addPhysicsAudio);
             EditorGUILayout.Space();
 
             if(GUILayout.Button("Setup selected object", GUILayout.Height(40)))
@@ -166,6 +168,14 @@
                     if(haptics == null)
                     {
                         go.AddComponent<VRTK_InteractHaptics>();
+                    }
+                }
+                if(addPhysicsAudio)
+                {
+                    VRTK_InteractAudio audio = go.GetComponent<VRTK_InteractAudio>();
+                    if(audio == null)
+                    {
+                        go.AddComponent<VRTK_InteractAudio>();
                     }
                 }
             }
