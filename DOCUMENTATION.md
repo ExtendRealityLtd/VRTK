@@ -3382,7 +3382,7 @@ The IsSwappable method returns whether the object can be grabbed with one contro
   * Parameters
    * _none_
   * Returns
-   * `bool` - Returns true if the obejct has a secondary action, returns false if it has no secondary action or is swappable.
+   * `bool` - Returns true if the object has a secondary action, returns false if it has no secondary action or is swappable.
 
 The PerformSecondaryAction method returns whether the object has a secondary action that can be performed when grabbing the object with a secondary controller.
 

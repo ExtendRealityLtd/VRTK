@@ -294,7 +294,7 @@ namespace VRTK
 
                     if (controllerAttachPoint == null)
                     {
-                        var autoGenRB = defaultAttachPoint.gameObject.AddComponent<Rigidbody>();
+                        Rigidbody autoGenRB = defaultAttachPoint.gameObject.AddComponent<Rigidbody>();
                         autoGenRB.isKinematic = true;
                         controllerAttachPoint = autoGenRB;
                     }
@@ -304,7 +304,7 @@ namespace VRTK
 
         protected virtual bool IsObjectGrabbable(GameObject obj)
         {
-            var objScript = obj.GetComponent<VRTK_InteractableObject>();
+            VRTK_InteractableObject objScript = obj.GetComponent<VRTK_InteractableObject>();
             return (interactTouch.IsObjectInteractable(obj) && objScript != null && (objScript.isGrabbable || objScript.PerformSecondaryAction()));
         }
 
@@ -312,7 +312,7 @@ namespace VRTK
         {
             if (obj != null)
             {
-                var objScript = obj.GetComponent<VRTK_InteractableObject>();
+                VRTK_InteractableObject objScript = obj.GetComponent<VRTK_InteractableObject>();
                 return (objScript && objScript.holdButtonToGrab);
             }
             return false;
@@ -351,7 +351,7 @@ namespace VRTK
             grabbedObject = interactTouch.GetTouchedObject();
             if (grabbedObject != null)
             {
-                var grabbedObjectScript = grabbedObject.GetComponent<VRTK_InteractableObject>();
+                VRTK_InteractableObject grabbedObjectScript = grabbedObject.GetComponent<VRTK_InteractableObject>();
                 ChooseGrabSequence(grabbedObjectScript);
                 ToggleControllerVisibility(false);
                 OnControllerGrabInteractableObject(interactTouch.SetControllerInteractEvent(grabbedObject));
@@ -411,7 +411,7 @@ namespace VRTK
             if (grabbedObject != null)
             {
                 GameObject grabbingObject = controllerReference.scriptAlias;
-                var grabbedObjectScript = grabbedObject.GetComponent<VRTK_InteractableObject>();
+                VRTK_InteractableObject grabbedObjectScript = grabbedObject.GetComponent<VRTK_InteractableObject>();
                 if (!influencingGrabbedObject)
                 {
                     grabbedObjectScript.grabAttachMechanicScript.StopGrab(applyGrabbingObjectVelocity);
@@ -451,7 +451,7 @@ namespace VRTK
         {
             if (grabbedObject != null)
             {
-                var grabbedObjectScript = grabbedObject.GetComponent<VRTK_InteractableObject>();
+                VRTK_InteractableObject grabbedObjectScript = grabbedObject.GetComponent<VRTK_InteractableObject>();
                 return (grabbedObjectScript && !grabbedObjectScript.IsDroppable() ? grabbedObject : null);
             }
             return null;
@@ -461,7 +461,7 @@ namespace VRTK
         {
             if (grabbedObject != null && initialGrabAttempt)
             {
-                var doHaptics = grabbedObject.GetComponentInParent<VRTK_InteractHaptics>();
+                VRTK_InteractHaptics doHaptics = grabbedObject.GetComponentInParent<VRTK_InteractHaptics>();
                 if (doHaptics != null)
                 {
                     doHaptics.HapticsOnGrab(controllerReference);
@@ -494,7 +494,7 @@ namespace VRTK
         {
             GameObject grabbingObject = controllerReference.scriptAlias;
             bool initialGrabAttempt = false;
-            var objectToGrabScript = objectToGrab.GetComponent<VRTK_InteractableObject>();
+            VRTK_InteractableObject objectToGrabScript = objectToGrab.GetComponent<VRTK_InteractableObject>();
             if (grabbedObject == null && interactTouch != null && IsObjectGrabbable(interactTouch.GetTouchedObject()) && objectToGrabScript && objectToGrabScript.grabAttachMechanicScript.ValidGrab(controllerAttachPoint))
             {
                 InitGrabbedObject();
