@@ -152,12 +152,13 @@ There are a number of parameters that can be set on the Prefab which are provide
  * **Font Color:** The colour to use for the text on the tooltip.
  * **Container Color:** The colour to use for the background container of the tooltip.
  * **Line Color:** The colour to use for the line drawn between the tooltip and the destination transform.
+ * **Always Face Headset:** If this is checked then the tooltip will be rotated so it always face the headset.
 
 ### Class Methods
 
 #### ResetTooltip/0
 
-  > `public void ResetTooltip()`
+  > `public virtual void ResetTooltip()`
 
   * Parameters
    * _none_
@@ -168,7 +169,7 @@ The ResetTooltip method resets the tooltip back to its initial state.
 
 #### UpdateText/1
 
-  > `public void UpdateText(string newText)`
+  > `public virtual void UpdateText(string newText)`
 
   * Parameters
    * `string newText` - A string containing the text to update the tooltip to display.
