@@ -226,6 +226,24 @@ namespace VRTK
             return currentValidSnapObjects.Contains(checkObject);
         }
 
+        /// <summary>
+        /// The GetHoveringObjects method returns a List of valid GameObjects that are currently hovering (but not snapped) in the snap drop zone area.
+        /// </summary>
+        /// <returns>The List of valid GameObjects that are hovering (but not snapped) in the snap drop zone area.</returns>
+        public virtual List<GameObject> GetHoveringObjects()
+        {
+            return currentValidSnapObjects;
+        }
+
+        /// <summary>
+        /// The GetCurrentSnappedObejct method returns the GameObject that is currently snapped in the snap drop zone area.
+        /// </summary>
+        /// <returns>The GameObject that is currently snapped in the snap drop zone area.</returns>
+        public virtual GameObject GetCurrentSnappedObject()
+        {
+            return currentSnappedObject;
+        }
+
         protected virtual void Awake()
         {
             if (Application.isPlaying)

@@ -391,6 +391,28 @@ The ValidSnappableObjectIsHovering method determines if any valid objects are cu
 
 The IsObjectHovering method determines if the given GameObject is currently howvering (but not snapped) in the snap drop zone area.
 
+#### GetHoveringObjects/0
+
+  > `public virtual List<GameObject> GetHoveringObjects()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `List<GameObject>` - The List of valid GameObjects that are hovering (but not snapped) in the snap drop zone area.
+
+The GetHoveringObjects method returns a List of valid GameObjects that are currently hovering (but not snapped) in the snap drop zone area.
+
+#### GetCurrentSnappedObject/0
+
+  > `public virtual GameObject GetCurrentSnappedObject()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `GameObject` - The GameObject that is currently snapped in the snap drop zone area.
+
+The GetCurrentSnappedObejct method returns the GameObject that is currently snapped in the snap drop zone area.
+
 ### Example
 
 `VRTK/Examples/041_Controller_ObjectSnappingToDropZones` uses the `VRTK_SnapDropZone` prefab to set up pre-determined snap zones for a range of objects and demonstrates how only objects of certain types can be snapped into certain areas.
