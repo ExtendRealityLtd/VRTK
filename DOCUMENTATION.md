@@ -5479,7 +5479,8 @@ The script will instantiate the required Rigidbody and ConstantForce components 
 
 ### Class Events
 
- * `Pushed` - Emitted when the 3D Button has reached it's activation distance.
+ * `Pushed` - Emitted when the 3D Button has reached its activation distance.
+ * `Released` - Emitted when the 3D Button's position has become less than activation distance after being pressed.
 
 ### Unity Events
 
