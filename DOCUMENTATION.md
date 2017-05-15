@@ -1200,8 +1200,9 @@ The Play Area Cursor is used in conjunction with a Pointer script and displays a
 ### Inspector Parameters
 
  * **Play Area Cursor Dimensions:** Determines the size of the play area cursor and collider. If the values are left as zero then the Play Area Cursor will be sized to the calibrated Play Area space.
- * **Handle Play Area Cursor Collisions:** If this is ticked then if the play area cursor is colliding with any other object then the pointer colour will change to the `Pointer Miss Color` and the `DestinationMarkerSet` event will not be triggered, which will prevent teleporting into areas where the play area will collide.
- * **Headset Out Of Bounds Is Collision:** If this is ticked then if the user's headset is outside of the play area cursor bounds then it is considered a collision even if the play area isn't colliding with anything.
+ * **Handle Play Area Cursor Collisions:** If this is checked then if the play area cursor is colliding with any other object then the pointer colour will change to the `Pointer Miss Color` and the `DestinationMarkerSet` event will not be triggered, which will prevent teleporting into areas where the play area will collide.
+ * **Headset Out Of Bounds Is Collision:** If this is checked then if the user's headset is outside of the play area cursor bounds then it is considered a collision even if the play area isn't colliding with anything.
+ * **Display On Invalid Location:** If this is checked then the play area cursor will be displayed when the location is invalid.
  * **Target List Policy:** A specified VRTK_PolicyList to use to determine whether the play area cursor collisions will be acted upon.
  * **Use Pointer Color:** If this is checked then the pointer hit/miss colours will also be used to change the colour of the play area cursor when colliding/not colliding.
  * **Valid Location Object:** A custom GameObject to use for the play area cursor representation for when the location is valid.
@@ -1242,12 +1243,13 @@ The SetHeadsetPositionCompensation method determines whether the offset position
 
 The SetPlayAreaCursorCollision method determines whether play area collisions should be taken into consideration with the play area cursor.
 
-#### SetMaterialColor/1
+#### SetMaterialColor/2
 
-  > `public virtual void SetMaterialColor(Color color)`
+  > `public virtual void SetMaterialColor(Color color, bool validity)`
 
   * Parameters
    * `Color color` - The colour to update the play area cursor material to.
+   * `bool validity` - Determines if the colour being set is based from a valid location or invalid location.
   * Returns
    * _none_
 
