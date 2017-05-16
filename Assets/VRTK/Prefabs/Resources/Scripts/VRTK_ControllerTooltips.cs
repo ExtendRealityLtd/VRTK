@@ -76,13 +76,15 @@ namespace VRTK
         public VRTK_HeadsetControllerAware headsetControllerAware;
         [Tooltip("If this is checked then the tooltips will be hidden when the headset is not looking at the controller.")]
         public bool hideWhenNotInView = true;
+        [Tooltip("The total number of initialisation attempts to make when waiting for the button transforms to initialise.")]
+        public int retryInitMaxTries = 10;
+        [Tooltip("The amount of seconds to wait before re-attempting to initialise the controller tooltips if the button transforms have not been initialised yet.")]
+        public float retryInitCounter = 0.1f;
 
         protected TooltipButtons[] availableButtons;
         protected VRTK_ObjectTooltip[] buttonTooltips;
         protected bool[] tooltipStates;
 
-        protected float retryInitCounter = 0.1f;
-        protected int retryInitMaxTries = 5;
         protected int retryInitCurrentTries = 0;
 
         /// <summary>
