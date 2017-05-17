@@ -103,7 +103,7 @@ namespace VRTK
         private Transform leftHand;
         private Transform currentHand;
         private Vector3 oldPos;
-        private Transform myCamera;
+        private Transform neck;
         private SDK_ControllerSim rightController;
         private SDK_ControllerSim leftController;
         private static GameObject cachedCameraRig;
@@ -144,7 +144,7 @@ namespace VRTK
             leftHand.gameObject.SetActive(false);
             currentHand = rightHand;
             oldPos = Input.mousePosition;
-            myCamera = transform.Find("Camera");
+            neck = transform.Find("Neck");
             leftHand.Find("Hand").GetComponent<Renderer>().material.color = Color.red;
             rightHand.Find("Hand").GetComponent<Renderer>().material.color = Color.green;
             rightController = rightHand.GetComponent<SDK_ControllerSim>();
@@ -290,11 +290,11 @@ namespace VRTK
 
             if (IsAcceptingMouseInput())
             {
-                Vector3 rot = transform.rotation.eulerAngles;
+                Vector3 rot = transform.localRotation.eulerAngles;
                 rot.y += (mouseDiff * playerRotationMultiplier).x;
                 transform.localRotation = Quaternion.Euler(rot);
 
-                rot = myCamera.rotation.eulerAngles;
+                rot = neck.rotation.eulerAngles;
 
                 if (rot.x > 180)
                 {
@@ -305,7 +305,7 @@ namespace VRTK
                 {
                     rot.x += (mouseDiff * playerRotationMultiplier).y * -1;
                     rot.x = Mathf.Clamp(rot.x, -79, 79);
-                    myCamera.rotation = Quaternion.Euler(rot);
+                    neck.rotation = Quaternion.Euler(rot);
                 }
             }
         }
