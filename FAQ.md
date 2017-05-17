@@ -6,6 +6,9 @@ Alternatively, if you have any general setup issues or other questions relating 
 
 ## Troubleshooting
 
+### How can I get my environment information?
+  > To give more info when you need help make sure to use the `Window > VRTK > Support Info` window to copy and paste your info in here!
+
 ### I'm using Unity 5.6 and SteamVR but I cannot see my controllers in any of the example scenes.
   > This is a bug with SteamVR and Unity 5.6 so you will need to add the `SteamVR_UpdatePoses` script to the main camera (which is at `[CameraRig]->Camera (head)->Camera(eye)` for the Vive controllers to show up and track correctly. (Ref: https://steamcommunity.com/app/358720/discussions/0/133258092242841297/) - Also, this is automatically fixed by VRTK in the latest GitHub master version.
 
@@ -31,13 +34,13 @@ Alternatively, if you have any general setup issues or other questions relating 
   > The [GitHub master version](https://github.com/thestonefox/VRTK) of VRTK is always the most up to date version with more features and bug fixes, however it is not as stable as the [GitHub releases](https://github.com/thestonefox/VRTK/releases) or the [Unity Asset Store version](https://www.assetstore.unity3d.com/en/#!/content/64131). It is recommended that to keep up to date with the latest features, the [GitHub master version](https://github.com/thestonefox/VRTK) is used.
 
 ### How can I use VRTK with the Unity SteamVR Plugin?
-  > Watch [Getting Started with SteamVR](https://www.youtube.com/watch?v=TPO2MsDnE5E) or read the [GETTING_STARTED.md](https://github.com/thestonefox/VRTK/blob/master/GETTING_STARTED.md) guide.
+  > Watch [Getting Started with SteamVR](https://www.youtube.com/watch?v=tyFV9oBReqg) or read the [GETTING_STARTED.md](https://github.com/thestonefox/VRTK/blob/master/GETTING_STARTED.md) guide.
 
 ### How can I use VRTK with the Oculus Utilities for Unity?
-  > Watch [Getting Started with Oculus SDK](https://www.youtube.com/watch?v=MQ0G5RLu4aA) or read the [GETTING_STARTED.md](https://github.com/thestonefox/VRTK/blob/master/GETTING_STARTED.md) guide.
+  > Watch [Getting Started with Oculus SDK](https://www.youtube.com/watch?v=psPVNddjgGw) or read the [GETTING_STARTED.md](https://github.com/thestonefox/VRTK/blob/master/GETTING_STARTED.md) guide.
 
 ### How can I implement Oculus Avatar Unity package with VRTK?
-  > Watch [Getting Started with Oculus Avatar](https://www.youtube.com/watch?v=g4ZN1gRWP0o)
+  > Watch [Getting Started with Oculus Avatar](https://www.youtube.com/watch?v=N7F0KqgNrAk)
 
 ### How do I upgrade from version 2.2.1 to version 3?
   > Watch [Road to Version 3.0](https://www.youtube.com/watch?v=tMz04CqAYjw)
@@ -58,6 +61,9 @@ Alternatively, if you have any general setup issues or other questions relating 
 
 ### Which grab mechanic should I be using?
   > Watch [Grab attach mechanics](https://www.youtube.com/watch?v=KPJBFpl2bPI)
+  
+### How can I remove the VRTK gizmo icons?
+  > The VRTK icons in the Unity Editor can be disabled or resized via Unity's Gizmo menu in the top right corner of the Scene window. Alternatively you can also just delete the icons from your copy of VRTK.
 
 ## General
 
