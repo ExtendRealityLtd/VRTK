@@ -1379,6 +1379,17 @@ Specifies the smoothing to be applied to the pointer.
 
 ### Class Methods
 
+#### GetPointerObjects/0
+
+  > `public abstract GameObject[] GetPointerObjects();`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `GameObject[]` - An array of pointer auto generated GameObjects.
+
+The GetPointerObjects returns an array of the auto generated GameObjects associated with the pointer.
+
 #### InitalizePointer/4
 
   > `public virtual void InitalizePointer(VRTK_Pointer givenPointer, VRTK_PolicyList givenInvalidListPolicy, float givenNavMeshCheckDistance, bool givenHeadsetPositionCompensation)`
@@ -1504,6 +1515,18 @@ The IsCursorVisible method determines if the pointer cursor renderer is visible.
 
 The IsValidCollision method determines if the pointer is currently in it's valid collision state.
 
+#### GetObjectInteractor/0
+
+  > `public virtual GameObject GetObjectInteractor()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `GameObject` - The auto generated object interactor GameObject.
+   * `GameObject` -
+
+The GetObjectInteractor method returns the auto generated GameObject that acts as the controller extension for interacting with objects.
+
 ---
 
 ## Straight Pointer Renderer (VRTK_StraightPointerRenderer)
@@ -1538,6 +1561,17 @@ It can be useful for pointing to objects within a scene and it can also determin
    * _none_
 
 The UpdateRenderer method is used to run an Update routine on the pointer.
+
+#### GetPointerObjects/0
+
+  > `public override GameObject[] GetPointerObjects()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `GameObject[]` - An array of pointer auto generated GameObjects.
+
+The GetPointerObjects returns an array of the auto generated GameObjects associated with the pointer.
 
 ### Example
 
@@ -1583,6 +1617,17 @@ It is more useful than the Simple Pointer Renderer for traversing objects of var
    * _none_
 
 The UpdateRenderer method is used to run an Update routine on the pointer.
+
+#### GetPointerObjects/0
+
+  > `public override GameObject[] GetPointerObjects()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `GameObject[]` - An array of pointer auto generated GameObjects.
+
+The GetPointerObjects returns an array of the auto generated GameObjects associated with the pointer.
 
 ### Example
 
@@ -4698,6 +4743,17 @@ Adding the `VRTK_HeadsetCollision_UnityEvents` component to `VRTK_HeadsetCollisi
 
 The IsColliding method is used to determine if the headset is currently colliding with a valid game object and returns true if it is and false if it is not colliding with anything or an invalid game object.
 
+#### GetHeadsetColliderContainer/0
+
+  > `public virtual GameObject GetHeadsetColliderContainer()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `GameObject` - The auto generated headset collider GameObject.
+
+The GetHeadsetColliderContainer method returns the auto generated GameObject that contains the headset collider.
+
 ### Example
 
 `VRTK/Examples/011_Camera_HeadSetCollisionFading` has collidable walls around the play area and if the user puts their head into any of the walls then the headset will fade to black.
@@ -5106,6 +5162,18 @@ The ResetVelocities method sets the rigidbody velocity and angular velocity to z
    * _none_
 
 The ResetFalling method force stops any falling states and conditions that might be set on this object.
+
+#### GetBodyColliderContainer/0
+
+  > `public virtual GameObject GetBodyColliderContainer()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `GameObject` - The auto generated body collider GameObject.
+   * `GameObject` -
+
+The GetBodyColliderContainer method returns the auto generated GameObject that contains the body colliders.
 
 ### Example
 

@@ -297,6 +297,16 @@ namespace VRTK
             StopFall();
         }
 
+        /// <summary>
+        /// The GetBodyColliderContainer method returns the auto generated GameObject that contains the body colliders.
+        /// </summary>
+        /// <returns>The auto generated body collider GameObject.</returns>
+        /// <returns></returns>
+        public virtual GameObject GetBodyColliderContainer()
+        {
+            return bodyColliderContainer;
+        }
+
         protected virtual void Awake()
         {
             VRTK_SDKManager.instance.AddBehaviourToToggleOnLoadedSetupChange(this);

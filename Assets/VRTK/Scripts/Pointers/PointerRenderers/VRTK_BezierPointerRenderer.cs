@@ -75,6 +75,15 @@ namespace VRTK
             base.UpdateRenderer();
         }
 
+        /// <summary>
+        /// The GetPointerObjects returns an array of the auto generated GameObjects associated with the pointer.
+        /// </summary>
+        /// <returns>An array of pointer auto generated GameObjects.</returns>
+        public override GameObject[] GetPointerObjects()
+        {
+            return new GameObject[] { actualContainer, actualCursor };
+        }
+
         protected override void ToggleRenderer(bool pointerState, bool actualState)
         {
             TogglePointerCursor(pointerState, actualState);

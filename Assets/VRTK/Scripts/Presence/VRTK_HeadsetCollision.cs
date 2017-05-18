@@ -89,6 +89,15 @@ namespace VRTK
             return headsetColliding;
         }
 
+        /// <summary>
+        /// The GetHeadsetColliderContainer method returns the auto generated GameObject that contains the headset collider.
+        /// </summary>
+        /// <returns>The auto generated headset collider GameObject.</returns>
+        public virtual GameObject GetHeadsetColliderContainer()
+        {
+            return headsetColliderContainer;
+        }
+
         protected virtual void Awake()
         {
             VRTK_SDKManager.instance.AddBehaviourToToggleOnLoadedSetupChange(this);
@@ -98,7 +107,7 @@ namespace VRTK
         {
             VRTK_ObjectCache.registeredHeadsetCollider = this;
             headset = VRTK_DeviceFinder.HeadsetTransform();
-            if (headset)
+            if (headset != null)
             {
                 headsetColliding = false;
                 SetupHeadset();
@@ -108,7 +117,7 @@ namespace VRTK
 
         protected virtual void OnDisable()
         {
-            if (headset)
+            if (headset != null)
             {
                 headsetColliderScript.EndCollision(collidingWith);
                 VRTK_ObjectCache.registeredHeadsetCollider = null;
@@ -123,7 +132,7 @@ namespace VRTK
 
         protected virtual void Update()
         {
-            if (headsetColliderContainer && headsetColliderContainer.transform.parent != headset)
+            if (headsetColliderContainer != null && headsetColliderContainer.transform.parent != headset)
             {
                 headsetColliderContainer.transform.SetParent(headset);
                 headsetColliderContainer.transform.localPosition = Vector3.zero;
@@ -133,7 +142,7 @@ namespace VRTK
 
         protected virtual void CreateHeadsetColliderContainer()
         {
-            if (!headsetColliderContainer)
+            if (headsetColliderContainer == null)
             {
                 headsetColliderContainer = new GameObject(VRTK_SharedMethods.GenerateVRTKObjectName(true, "HeadsetColliderContainer"));
                 headsetColliderContainer.transform.position = Vector3.zero;
@@ -145,8 +154,8 @@ namespace VRTK
 
         protected virtual void SetupHeadset()
         {
-            var headsetRigidbody = headset.GetComponentInChildren<Rigidbody>();
-            if (!headsetRigidbody)
+            Rigidbody headsetRigidbody = headset.GetComponentInChildren<Rigidbody>();
+            if (headsetRigidbody == null)
             {
                 CreateHeadsetColliderContainer();
                 headsetRigidbody = headsetColliderContainer.AddComponent<Rigidbody>();
@@ -156,20 +165,20 @@ namespace VRTK
             headsetRigidbody.isKinematic = true;
             headsetRigidbody.useGravity = false;
 
-            var headsetCollider = headset.GetComponentInChildren<Collider>();
-            if (!headsetCollider)
+            Collider headsetCollider = headset.GetComponentInChildren<Collider>();
+            if (headsetCollider == null)
             {
                 CreateHeadsetColliderContainer();
-                var newCollider = headsetColliderContainer.gameObject.AddComponent<SphereCollider>();
+                SphereCollider newCollider = headsetColliderContainer.gameObject.AddComponent<SphereCollider>();
                 newCollider.radius = colliderRadius;
                 headsetCollider = newCollider;
                 generateCollider = true;
             }
             headsetCollider.isTrigger = true;
 
-            if (!headsetColliderScript)
+            if (headsetColliderScript == null)
             {
-                var attachTo = (headsetColliderContainer ? headsetColliderContainer : headset.gameObject);
+                GameObject attachTo = (headsetColliderContainer ? headsetColliderContainer : headset.gameObject);
                 headsetColliderScript = attachTo.AddComponent<VRTK_HeadsetCollider>();
                 headsetColliderScript.SetParent(gameObject);
                 headsetColliderScript.SetIgnoreTarget(targetListPolicy);
@@ -186,11 +195,11 @@ namespace VRTK
             {
                 Destroy(headset.gameObject.GetComponent<Rigidbody>());
             }
-            if (headsetColliderScript)
+            if (headsetColliderScript != null)
             {
                 Destroy(headsetColliderScript);
             }
-            if (headsetColliderContainer)
+            if (headsetColliderContainer != null)
             {
                 Destroy(headsetColliderContainer);
             }
@@ -214,7 +223,7 @@ namespace VRTK
 
         public virtual void EndCollision(Collider collider)
         {
-            if (!collider || !VRTK_PlayerObject.IsPlayerObject(collider.gameObject))
+            if (collider == null || !VRTK_PlayerObject.IsPlayerObject(collider.gameObject))
             {
                 parent.headsetColliding = false;
                 parent.collidingWith = null;
@@ -239,7 +248,7 @@ namespace VRTK
 
         protected virtual void Update()
         {
-            if (parent.headsetColliding && (!parent.collidingWith || !parent.collidingWith.gameObject.activeInHierarchy))
+            if (parent.headsetColliding && (parent.collidingWith == null || !parent.collidingWith.gameObject.activeInHierarchy))
             {
                 EndCollision(parent.collidingWith);
             }
@@ -255,7 +264,7 @@ namespace VRTK
 
         protected virtual bool ValidTarget(Transform target)
         {
-            return (target && !(VRTK_PolicyList.Check(target.gameObject, targetListPolicy)));
+            return (target != null && !(VRTK_PolicyList.Check(target.gameObject, targetListPolicy)));
         }
     }
 }

@@ -96,6 +96,12 @@ namespace VRTK
         protected bool cursorVisible;
 
         /// <summary>
+        /// The GetPointerObjects returns an array of the auto generated GameObjects associated with the pointer.
+        /// </summary>
+        /// <returns>An array of pointer auto generated GameObjects.</returns>
+        public abstract GameObject[] GetPointerObjects();
+
+        /// <summary>
         /// The InitalizePointer method is used to set up the state of the pointer renderer.
         /// </summary>
         /// <param name="givenPointer">The VRTK_Pointer that is controlling the pointer renderer.</param>
@@ -214,6 +220,16 @@ namespace VRTK
         public virtual bool IsValidCollision()
         {
             return (currentColor != invalidCollisionColor);
+        }
+
+        /// <summary>
+        /// The GetObjectInteractor method returns the auto generated GameObject that acts as the controller extension for interacting with objects.
+        /// </summary>
+        /// <returns>The auto generated object interactor GameObject.</returns>
+        /// <returns></returns>
+        public virtual GameObject GetObjectInteractor()
+        {
+            return objectInteractor;
         }
 
         protected abstract void CreatePointerObjects();
