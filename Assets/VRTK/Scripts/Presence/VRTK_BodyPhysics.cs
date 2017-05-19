@@ -63,6 +63,8 @@ namespace VRTK
         public bool enableBodyCollisions = true;
         [Tooltip("If this is checked then any items that are grabbed with the controller will not collide with the body collider. This is very useful if the user is required to grab and wield objects because if the collider was active they would bounce off the collider.")]
         public bool ignoreGrabbedCollisions = true;
+        [Tooltip("An array of GameObjects that will not collide with the body collider.")]
+        public GameObject[] ignoreCollisionsWith;
         [Tooltip("The collider which is created for the user is set at a height from the user's headset position. If the collider is required to be lower to allow for room between the play area collider and the headset then this offset value will shorten the height of the generated collider.")]
         public float headsetYOffset = 0.2f;
         [Tooltip("The amount of movement of the headset between the headset's current position and the current standing position to determine if the user is walking in play space and to ignore the body physics collisions if the movement delta is above this threshold.")]
@@ -102,6 +104,9 @@ namespace VRTK
         [Range(1, 10)]
         [Tooltip("The amount of rounding on the play area Y position to be applied when checking if falling is occuring.")]
         public int fallCheckPrecision = 5;
+
+        [Header("Custom Settings")]
+
         [Tooltip("The VRTK Teleport script to use when snapping to floor. If this is left blank then a Teleport script will need to be applied to the same GameObject.")]
         public VRTK_BasicTeleport teleporter;
 
@@ -172,6 +177,7 @@ namespace VRTK
         protected const string FOOT_COLLIDER_CONTAINER_NAME = "FootColliderContainer";
         protected bool enableBodyCollisionsStartingValue;
         protected float fallMinTime;
+        protected List<GameObject> ignoreCollisionsOnGameObjects = new List<GameObject>();
 
         // Draws a sphere for current standing position and a sphere for current headset position.
         // Set to `true` to view the debug spheres.
@@ -307,6 +313,27 @@ namespace VRTK
             return bodyColliderContainer;
         }
 
+        /// <summary>
+        /// The ResetIgnoredCollisions method is used to clear any stored ignored colliders in case the `Ignore Collisions On` array parameter is changed at runtime. This needs to be called manually if changes are made at runtime.
+        /// </summary>
+        public virtual void ResetIgnoredCollisions()
+        {
+            //Go through all the existing set up ignored colliders and reset their collision state
+            for (int i = 0; i < ignoreCollisionsOnGameObjects.Count; i++)
+            {
+                if (ignoreCollisionsOnGameObjects[i] != null)
+                {
+                    Collider[] objectColliders = ignoreCollisionsOnGameObjects[i].GetComponentsInChildren<Collider>();
+                    for (int j = 0; j < objectColliders.Length; j++)
+                    {
+                        ManagePhysicsCollider(objectColliders[j], false);
+                    }
+                }
+            }
+
+            ignoreCollisionsOnGameObjects.Clear();
+        }
+
         protected virtual void Awake()
         {
             VRTK_SDKManager.instance.AddBehaviourToToggleOnLoadedSetupChange(this);
@@ -321,6 +348,7 @@ namespace VRTK
             enableBodyCollisionsStartingValue = enableBodyCollisions;
             EnableDropToFloor();
             EnableBodyPhysics();
+            SetupIgnoredCollisions();
         }
 
         protected override void OnDisable()
@@ -329,6 +357,7 @@ namespace VRTK
             DisableDropToFloor();
             DisableBodyPhysics();
             ManageCollisionListeners(false);
+            ResetIgnoredCollisions();
         }
 
         protected virtual void OnDestroy()
@@ -748,6 +777,31 @@ namespace VRTK
             DestroyCollider();
             InitControllerListeners(VRTK_DeviceFinder.GetControllerLeftHand(), false);
             InitControllerListeners(VRTK_DeviceFinder.GetControllerRightHand(), false);
+        }
+
+        protected virtual void SetupIgnoredCollisions()
+        {
+            ResetIgnoredCollisions();
+
+            for (int i = 0; i < ignoreCollisionsWith.Length; i++)
+            {
+                Collider[] objectColliders = ignoreCollisionsWith[i].GetComponentsInChildren<Collider>();
+                for (int j = 0; j < objectColliders.Length; j++)
+                {
+                    ManagePhysicsCollider(objectColliders[j], true);
+                }
+
+                if (objectColliders.Length > 0)
+                {
+                    ignoreCollisionsOnGameObjects.Add(ignoreCollisionsWith[i]);
+                }
+            }
+        }
+
+        protected virtual void ManagePhysicsCollider(Collider collider, bool state)
+        {
+            Physics.IgnoreCollision(bodyCollider, collider, state);
+            Physics.IgnoreCollision(footCollider, collider, state);
         }
 
         protected virtual void CheckStepUpCollision(Collision collision)

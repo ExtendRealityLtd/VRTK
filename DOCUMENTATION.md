@@ -4983,6 +4983,7 @@ To allow for peeking over a ledge and not falling, a fall restiction can happen 
 
  * **Enable Body Collisions:** If checked then the body collider and rigidbody will be used to check for rigidbody collisions.
  * **Ignore Grabbed Collisions:** If this is checked then any items that are grabbed with the controller will not collide with the body collider. This is very useful if the user is required to grab and wield objects because if the collider was active they would bounce off the collider.
+ * **Ignore Collisions With:** An array of GameObjects that will not collide with the body collider.
  * **Headset Y Offset:** The collider which is created for the user is set at a height from the user's headset position. If the collider is required to be lower to allow for room between the play area collider and the headset then this offset value will shorten the height of the generated collider.
  * **Movement Threshold:** The amount of movement of the headset between the headset's current position and the current standing position to determine if the user is walking in play space and to ignore the body physics collisions if the movement delta is above this threshold.
  * **Play Area Movement Threshold:** The amount of movement of the play area between the play area's current position and the previous position to determine if the user is moving play space.
@@ -5174,6 +5175,17 @@ The ResetFalling method force stops any falling states and conditions that might
    * `GameObject` -
 
 The GetBodyColliderContainer method returns the auto generated GameObject that contains the body colliders.
+
+#### ResetIgnoredCollisions/0
+
+  > `public virtual void ResetIgnoredCollisions()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The ResetIgnoredCollisions method is used to clear any stored ignored colliders in case the `Ignore Collisions On` array parameter is changed at runtime. This needs to be called manually if changes are made at runtime.
 
 ### Example
 
