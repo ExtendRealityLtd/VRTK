@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using UnityEditor;
@@ -59,6 +60,7 @@ namespace VRTK
                 () =>
                 {
                     Append("Unity", InternalEditorUtility.GetFullUnityVersion());
+                    Append("VRTK", VRTK_Defines.CurrentVersion + " (may not be correct if source is GitHub)");
 
                     Type steamVRUpdateType = editorAssembly.GetType("SteamVR_Update");
                     if (steamVRUpdateType != null)
@@ -138,7 +140,12 @@ namespace VRTK
                 {
                     foreach (BuildTargetGroup targetGroup in VRTK_SharedMethods.GetValidBuildTargetGroups())
                     {
-                        string symbols = PlayerSettings.GetScriptingDefineSymbolsForGroup(targetGroup);
+                        string symbols = string.Join(
+                            ";",
+                            PlayerSettings.GetScriptingDefineSymbolsForGroup(targetGroup)
+                                          .Split(';')
+                                          .Where(symbol => !symbol.StartsWith(VRTK_Defines.VersionScriptingDefineSymbolPrefix, StringComparison.Ordinal))
+                                          .ToArray());
                         if (!string.IsNullOrEmpty(symbols))
                         {
                             Append(targetGroup, symbols);
