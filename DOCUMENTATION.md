@@ -1742,14 +1742,15 @@ The ValidLocation method determines if the given target is a location that can b
 
 The ForceTeleport/1 method forces the teleport to update position without needing to listen for a Destination Marker event.
 
-#### ForceTeleport/3
+#### ForceTeleport/4
 
-  > `public virtual void ForceTeleport(Transform target, Vector3 destinationPosition, Quaternion? destinationRotation = null)`
+  > `public virtual void ForceTeleport(Transform target, Vector3 destinationPosition, Quaternion? destinationRotation = null, bool forceDestinationPosition = false)`
 
   * Parameters
    * `Transform target` - The Transform of the destination object.
    * `Vector3 destinationPosition` - The world position to teleport to.
    * `Quaternion? destinationRotation` - The world rotation to teleport to.
+   * `bool forceDestinationPosition` - If true then the given destination position should not be altered by anything consuming the payload.
   * Returns
    * _none_
 
