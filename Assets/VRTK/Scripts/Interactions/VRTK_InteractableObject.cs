@@ -718,6 +718,21 @@ namespace VRTK
         /// </summary>
         public virtual void ResetIgnoredColliders()
         {
+            //Go through all the existing set up ignored colliders and reset their collision state
+            for (int x = 0; x < currentIgnoredColliders.Count; x++)
+            {
+                if (currentIgnoredColliders[x] != null)
+                {
+                    Collider[] touchingColliders = currentIgnoredColliders[x].GetComponentsInChildren<Collider>();
+                    for (int i = 0; i < ignoredColliders.Length; i++)
+                    {
+                        for (int j = 0; j < touchingColliders.Length; j++)
+                        {
+                            Physics.IgnoreCollision(touchingColliders[j], ignoredColliders[i], false);
+                        }
+                    }
+                }
+            }
             currentIgnoredColliders.Clear();
         }
 
