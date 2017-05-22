@@ -49,8 +49,8 @@
                         GUI.color = new Color(previousColor.r, previousColor.g, previousColor.b, 0.5f);
                     }
 
-                    GUIContent unloadButtonGUIContent = new GUIContent("Unload", "TODO: Tooltip");
-                    GUIContent loadButtonGUIContent = new GUIContent("Load", "TODO: Tooltip");
+                    GUIContent unloadButtonGUIContent = new GUIContent("Unload", "Unload this SDK Setup.");
+                    GUIContent loadButtonGUIContent = new GUIContent("Load", "Try to load this SDK Setup.");
                     float buttonGUIContentWidth = Mathf.Max(
                         GUI.skin.button.CalcSize(unloadButtonGUIContent).x,
                         GUI.skin.button.CalcSize(loadButtonGUIContent).x
