@@ -6,10 +6,12 @@
     public class SDK_ControllerSim : MonoBehaviour
     {
         private Vector3 lastPos;
-        private Vector3 lastRot;
+        private Quaternion lastRot;
         private List<Vector3> posList;
         private List<Vector3> rotList;
         private bool selected;
+        private float magnitude;
+        private Vector3 axis;
 
         public bool Selected
         {
@@ -50,23 +52,25 @@
             posList = new List<Vector3>();
             rotList = new List<Vector3>();
             lastPos = transform.position;
-            lastRot = transform.rotation.eulerAngles;
+            lastRot = transform.rotation;
         }
 
         private void Update()
         {
             posList.Add((transform.position - lastPos) / Time.deltaTime);
-            if (posList.Count > 10)
+            if (posList.Count > 4)
             {
                 posList.RemoveAt(0);
             }
-            rotList.Add((Quaternion.FromToRotation(lastRot, transform.rotation.eulerAngles)).eulerAngles / Time.deltaTime);
-            if (rotList.Count > 10)
+            Quaternion deltaRotation = transform.rotation * Quaternion.Inverse (lastRot);
+            deltaRotation.ToAngleAxis(out magnitude, out axis);
+            rotList.Add((axis * magnitude));
+            if (rotList.Count > 4)
             {
                 rotList.RemoveAt(0);
             }
             lastPos = transform.position;
-            lastRot = transform.rotation.eulerAngles;
+            lastRot = transform.rotation;
         }
     }
 }

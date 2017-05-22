@@ -12,9 +12,11 @@ namespace VRTK
     {
         private Transform camera;
         private Vector3 lastPos;
-        private Vector3 lastRot;
+        private Quaternion lastRot;
         private List<Vector3> posList;
         private List<Vector3> rotList;
+        private float magnitude;
+        private Vector3 axis;
 
         /// <summary>
         /// The ProcessUpdate method enables an SDK to run logic for every Unity Update
@@ -23,17 +25,19 @@ namespace VRTK
         public override void ProcessUpdate(Dictionary<string, object> options)
         {
             posList.Add((camera.position - lastPos) / Time.deltaTime);
-            if (posList.Count > 10)
+            if (posList.Count > 4)
             {
                 posList.RemoveAt(0);
             }
-            rotList.Add((Quaternion.FromToRotation(lastRot, camera.rotation.eulerAngles)).eulerAngles / Time.deltaTime);
-            if (rotList.Count > 10)
+            Quaternion deltaRotation = camera.rotation * Quaternion.Inverse (lastRot);
+            deltaRotation.ToAngleAxis(out magnitude, out axis);
+            rotList.Add((axis * magnitude));
+            if (rotList.Count > 4)
             {
                 rotList.RemoveAt(0);
             }
             lastPos = camera.position;
-            lastRot = camera.rotation.eulerAngles;
+            lastRot = camera.rotation;
         }
 
         /// <summary>
@@ -143,7 +147,7 @@ namespace VRTK
             if (headset != null)
             {
                 lastPos = headset.position;
-                lastRot = headset.rotation.eulerAngles;
+                lastRot = headset.rotation;
             }
         }
     }
