@@ -143,7 +143,8 @@ namespace VRTK
         /// <param name="target">The Transform of the destination object.</param>
         /// <param name="destinationPosition">The world position to teleport to.</param>
         /// <param name="destinationRotation">The world rotation to teleport to.</param>
-        public virtual void ForceTeleport(Transform target, Vector3 destinationPosition, Quaternion? destinationRotation = null)
+        /// <param name="forceDestinationPosition">If true then the given destination position should not be altered by anything consuming the payload.</param>
+        public virtual void ForceTeleport(Transform target, Vector3 destinationPosition, Quaternion? destinationRotation = null, bool forceDestinationPosition = false)
         {
             DestinationMarkerEventArgs teleportArgs = new DestinationMarkerEventArgs();
             teleportArgs.distance = Vector3.Distance(new Vector3(headset.position.x, playArea.position.y, headset.position.z), destinationPosition);
@@ -151,7 +152,7 @@ namespace VRTK
             teleportArgs.raycastHit = new RaycastHit();
             teleportArgs.destinationPosition = destinationPosition;
             teleportArgs.destinationRotation = destinationRotation;
-            teleportArgs.forceDestinationPosition = false;
+            teleportArgs.forceDestinationPosition = forceDestinationPosition;
             teleportArgs.enableTeleport = true;
             ForceTeleport(teleportArgs);
         }
