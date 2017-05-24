@@ -122,6 +122,7 @@ namespace VRTK
             else
             {
                 actualTracer = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                actualTracer.transform.localScale = Vector3.zero;
                 actualTracer.GetComponent<BoxCollider>().isTrigger = true;
                 actualTracer.AddComponent<Rigidbody>().isKinematic = true;
                 actualTracer.layer = LayerMask.NameToLayer("Ignore Raycast");
