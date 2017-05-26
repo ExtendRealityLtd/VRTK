@@ -115,7 +115,7 @@ namespace VRTK
             navMeshCheckDistance = givenNavMeshCheckDistance;
             headsetPositionCompensation = givenHeadsetPositionCompensation;
 
-            if (controllingPointer && controllingPointer.interactWithObjects && controllingPointer.controller && !objectInteractor)
+            if (controllingPointer != null && controllingPointer.interactWithObjects && controllingPointer.controller && !objectInteractor)
             {
                 controllerGrabScript = controllingPointer.controller.GetComponent<VRTK_InteractGrab>();
                 CreateObjectInteractor();
@@ -138,11 +138,16 @@ namespace VRTK
         /// <param name="actualState">The actual state of the activation button press.</param>
         public virtual void Toggle(bool pointerState, bool actualState)
         {
-            if (controllingPointer && !pointerState)
+            if (pointerState)
+            {
+                destinationHit = new RaycastHit();
+            }
+            else if (controllingPointer != null)
             {
                 controllingPointer.ResetActivationTimer();
                 PointerExit(destinationHit);
             }
+
             ToggleInteraction(pointerState);
             ToggleRenderer(pointerState, actualState);
         }
@@ -161,7 +166,7 @@ namespace VRTK
         /// </summary>
         public virtual void UpdateRenderer()
         {
-            if (playareaCursor)
+            if (playareaCursor != null)
             {
                 playareaCursor.SetHeadsetPositionCompensation(headsetPositionCompensation);
                 playareaCursor.ToggleState(IsCursorVisible());
@@ -183,7 +188,7 @@ namespace VRTK
         /// <returns>Returns true if there is a valid play area and no collisions. Returns false if there is no valid play area or there is but with a collision detected.</returns>
         public virtual bool ValidPlayArea()
         {
-            return (!playareaCursor || !playareaCursor.IsActive() || !playareaCursor.HasCollided());
+            return (playareaCursor == null || !playareaCursor.IsActive() || !playareaCursor.HasCollided());
         }
 
         /// <summary>
@@ -247,7 +252,7 @@ namespace VRTK
         protected virtual void OnDisable()
         {
             DestroyPointerObjects();
-            if (objectInteractor)
+            if (objectInteractor != null)
             {
                 Destroy(objectInteractor);
             }
@@ -263,7 +268,7 @@ namespace VRTK
 
         protected virtual void FixedUpdate()
         {
-            if (controllingPointer && controllingPointer.interactWithObjects && objectInteractor && objectInteractor.activeInHierarchy)
+            if (controllingPointer != null && controllingPointer.interactWithObjects && objectInteractor != null && objectInteractor.activeInHierarchy)
             {
                 UpdateObjectInteractor();
             }
@@ -273,16 +278,16 @@ namespace VRTK
 
         protected virtual void ToggleObjectInteraction(bool state)
         {
-            if (controllingPointer && controllingPointer.interactWithObjects)
+            if (controllingPointer != null && controllingPointer.interactWithObjects)
             {
-                if (state && controllingPointer.grabToPointerTip && controllerGrabScript && objectInteractorAttachPoint)
+                if (state && controllingPointer.grabToPointerTip && controllerGrabScript != null && objectInteractorAttachPoint != null)
                 {
                     savedAttachPoint = controllerGrabScript.controllerAttachPoint;
                     controllerGrabScript.controllerAttachPoint = objectInteractorAttachPoint.GetComponent<Rigidbody>();
                     attachedToInteractorAttachPoint = true;
                 }
 
-                if (!state && controllingPointer.grabToPointerTip && controllerGrabScript)
+                if (!state && controllingPointer.grabToPointerTip && controllerGrabScript != null)
                 {
                     if (attachedToInteractorAttachPoint)
                     {
@@ -294,7 +299,7 @@ namespace VRTK
                     savedBeamLength = 0f;
                 }
 
-                if (objectInteractor)
+                if (objectInteractor != null)
                 {
                     objectInteractor.SetActive(state);
                 }
@@ -342,7 +347,7 @@ namespace VRTK
         protected virtual bool ValidDestination()
         {
             bool validNavMeshLocation = false;
-            if (destinationHit.transform)
+            if (destinationHit.transform != null)
             {
                 NavMeshHit hit;
                 validNavMeshLocation = NavMesh.SamplePosition(destinationHit.point, out hit, navMeshCheckDistance, NavMesh.AllAreas);
@@ -356,7 +361,7 @@ namespace VRTK
 
         protected virtual void ToggleElement(GameObject givenObject, bool pointerState, bool actualState, VisibilityStates givenVisibility, ref bool currentVisible)
         {
-            if (givenObject)
+            if (givenObject != null)
             {
                 currentVisible = (givenVisibility == VisibilityStates.AlwaysOn ? true : pointerState);
 
@@ -401,7 +406,7 @@ namespace VRTK
 
         protected virtual void ToggleRendererVisibility(GameObject givenObject, bool state)
         {
-            if (givenObject)
+            if (givenObject != null)
             {
                 Renderer[] renderers = givenObject.GetComponentsInChildren<Renderer>();
                 for (int i = 0; i < renderers.Length; i++)
@@ -413,7 +418,7 @@ namespace VRTK
 
         protected virtual void SetupMaterialRenderer(GameObject givenObject)
         {
-            if (givenObject)
+            if (givenObject != null)
             {
                 MeshRenderer pointerRenderer = givenObject.GetComponent<MeshRenderer>();
                 pointerRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
@@ -424,7 +429,7 @@ namespace VRTK
 
         protected virtual void ChangeColor(Color givenColor)
         {
-            if ((playareaCursor && playareaCursor.IsActive() && playareaCursor.HasCollided()) || !ValidDestination() || (controllingPointer && !controllingPointer.CanSelect()))
+            if ((playareaCursor != null && playareaCursor.IsActive() && playareaCursor.HasCollided()) || !ValidDestination() || (controllingPointer != null && !controllingPointer.CanSelect()))
             {
                 givenColor = invalidCollisionColor;
             }
@@ -438,7 +443,7 @@ namespace VRTK
 
         protected virtual void ChangeMaterial(Color givenColor)
         {
-            if (playareaCursor)
+            if (playareaCursor != null)
             {
                 playareaCursor.SetMaterialColor(givenColor, IsValidCollision());
             }
@@ -446,13 +451,13 @@ namespace VRTK
 
         protected virtual void ChangeMaterialColor(GameObject givenObject, Color givenColor)
         {
-            if (givenObject)
+            if (givenObject != null)
             {
                 Renderer[] foundRenderers = givenObject.GetComponentsInChildren<Renderer>();
                 for (int i = 0; i < foundRenderers.Length; i++)
                 {
                     Renderer foundRenderer = foundRenderers[i];
-                    if (foundRenderer.material)
+                    if (foundRenderer.material != null)
                     {
                         foundRenderer.material.EnableKeyword("_EMISSION");
 
@@ -505,7 +510,7 @@ namespace VRTK
 
         protected virtual void ScaleObjectInteractor(Vector3 scaleAmount)
         {
-            if (objectInteractor)
+            if (objectInteractor != null)
             {
                 objectInteractor.transform.localScale = scaleAmount;
             }
@@ -521,12 +526,12 @@ namespace VRTK
 
         protected virtual float OverrideBeamLength(float currentLength)
         {
-            if (!controllerGrabScript || !controllerGrabScript.GetGrabbedObject())
+            if (controllerGrabScript == null || !controllerGrabScript.GetGrabbedObject())
             {
                 savedBeamLength = 0f;
             }
 
-            if (controllingPointer && controllingPointer.interactWithObjects && controllingPointer.grabToPointerTip && attachedToInteractorAttachPoint && controllerGrabScript && controllerGrabScript.GetGrabbedObject())
+            if (controllingPointer != null && controllingPointer.interactWithObjects && controllingPointer.grabToPointerTip && attachedToInteractorAttachPoint && controllerGrabScript != null && controllerGrabScript.GetGrabbedObject())
             {
                 savedBeamLength = (savedBeamLength == 0f ? currentLength : savedBeamLength);
                 return savedBeamLength;
@@ -536,7 +541,7 @@ namespace VRTK
 
         protected virtual void UpdateDependencies(Vector3 location)
         {
-            if (playareaCursor)
+            if (playareaCursor != null)
             {
                 playareaCursor.SetPlayAreaCursorTransform(location);
             }
