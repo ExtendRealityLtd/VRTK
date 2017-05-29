@@ -67,9 +67,9 @@ namespace VRTK
                 { LogType.Log, infoMessage },
                 { LogType.Warning, warningMessage }
             };
-            scrollWindow = transform.FindChild("Panel/Scroll View").GetComponent<ScrollRect>();
-            consoleRect = transform.FindChild("Panel/Scroll View/Viewport/Content").GetComponent<RectTransform>();
-            consoleOutput = transform.FindChild("Panel/Scroll View/Viewport/Content/ConsoleOutput").GetComponent<Text>();
+            scrollWindow = transform.Find("Panel/Scroll View").GetComponent<ScrollRect>();
+            consoleRect = transform.Find("Panel/Scroll View/Viewport/Content").GetComponent<RectTransform>();
+            consoleOutput = transform.Find("Panel/Scroll View/Viewport/Content/ConsoleOutput").GetComponent<Text>();
 
             consoleOutput.fontSize = fontSize;
             ClearLog();

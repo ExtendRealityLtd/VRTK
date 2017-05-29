@@ -55,7 +55,7 @@
             if (beamActive)
             {
                 Color bladeColor = Color.Lerp(activeColor, targetColor, Mathf.PingPong(Time.time, 1));
-                blade.transform.FindChild("Beam").GetComponent<MeshRenderer>().material.color = bladeColor;
+                blade.transform.Find("Beam").GetComponent<MeshRenderer>().material.color = bladeColor;
 
                 if (bladeColor == targetColor)
                 {

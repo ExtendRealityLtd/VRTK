@@ -203,7 +203,7 @@ namespace VRTK.Highlighters
             }
             else if (givenOutlineModelPath != "")
             {
-                var getChildModel = transform.FindChild(givenOutlineModelPath);
+                var getChildModel = transform.Find(givenOutlineModelPath);
                 givenOutlineModel = (getChildModel ? getChildModel.gameObject : null);
             }
 

@@ -91,15 +91,15 @@ namespace VRTK
 
         protected virtual void SetContainer()
         {
-            transform.FindChild("TooltipCanvas").GetComponent<RectTransform>().sizeDelta = containerSize;
-            Transform tmpContainer = transform.FindChild("TooltipCanvas/UIContainer");
+            transform.Find("TooltipCanvas").GetComponent<RectTransform>().sizeDelta = containerSize;
+            Transform tmpContainer = transform.Find("TooltipCanvas/UIContainer");
             tmpContainer.GetComponent<RectTransform>().sizeDelta = containerSize;
             tmpContainer.GetComponent<Image>().color = containerColor;
         }
 
         protected virtual void SetText(string name)
         {
-            Text tmpText = transform.FindChild("TooltipCanvas/" + name).GetComponent<Text>();
+            Text tmpText = transform.Find("TooltipCanvas/" + name).GetComponent<Text>();
             tmpText.material = Resources.Load("UIText") as Material;
             tmpText.text = displayText.Replace("\\n", "\n");
             tmpText.color = fontColor;
@@ -108,7 +108,7 @@ namespace VRTK
 
         protected virtual void SetLine()
         {
-            line = transform.FindChild("Line").GetComponent<LineRenderer>();
+            line = transform.Find("Line").GetComponent<LineRenderer>();
             line.material = Resources.Load("TooltipLine") as Material;
             line.material.color = lineColor;
 #if UNITY_5_5_OR_NEWER
