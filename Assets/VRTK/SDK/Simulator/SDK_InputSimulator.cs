@@ -48,6 +48,8 @@ namespace VRTK
         public float playerMoveMultiplier = 5;
         [Tooltip("Adjust player rotation speed.")]
         public float playerRotationMultiplier = 0.5f;
+        [Tooltip("Adjust player sprint speed.")]
+        public float playerSprintMultiplier = 2;
 
         [Header("Operation Key Bindings")]
 
@@ -63,6 +65,12 @@ namespace VRTK
         public KeyCode rotationPosition = KeyCode.LeftShift;
         [Tooltip("Key used to switch between X/Y and X/Z axis.")]
         public KeyCode changeAxis = KeyCode.LeftControl;
+        [Tooltip("Key used to distance pickup with left hand.")]
+        public KeyCode distancePickupLeft = KeyCode.Mouse0;
+        [Tooltip("Key used to distance pickup with right hand.")]
+        public KeyCode distancePickupRight = KeyCode.Mouse1;
+        [Tooltip("Key used to enable distance pickup.")]
+        public KeyCode distancePickupModifier = KeyCode.LeftControl;
 
         [Header("Movement Key Bindings")]
 
@@ -74,6 +82,8 @@ namespace VRTK
         public KeyCode moveBackward = KeyCode.S;
         [Tooltip("Key used to move to the right.")]
         public KeyCode moveRight = KeyCode.D;
+        [Tooltip("Key used to sprint.")]
+        public KeyCode sprint = KeyCode.LeftShift;
 
         [Header("Controller Key Bindings")]
         [Tooltip("Key used to simulate trigger button.")]
@@ -108,6 +118,8 @@ namespace VRTK
         private SDK_ControllerSim leftController;
         private static GameObject cachedCameraRig;
         private static bool destroyed = false;
+        private float sprintMultiplier = 1;
+        private GameObject crossHairPanel;
 
         #endregion
 
@@ -135,7 +147,8 @@ namespace VRTK
 
         private void OnEnable()
         {
-            hintCanvas = transform.Find("Control Hints").gameObject;
+            hintCanvas = transform.Find("Canvas/Control Hints").gameObject;
+            crossHairPanel = transform.Find("Canvas/CrosshairPanel").gameObject;
             hintText = hintCanvas.GetComponentInChildren<Text>();
             hintCanvas.SetActive(showControlHints);
             rightHand = transform.Find("RightHand");
@@ -169,6 +182,9 @@ namespace VRTK
                 };
                 controllerSDK.SetKeyMappings(keyMappings);
             }
+            rightHand.gameObject.SetActive(true);
+            leftHand.gameObject.SetActive(true);
+            crossHairPanel.SetActive(false);
         }
 
         private void OnDestroy()
@@ -232,6 +248,30 @@ namespace VRTK
             else
             {
                 UpdateRotation();
+                if(Input.GetKeyDown(distancePickupRight) && Input.GetKey(distancePickupModifier))
+                {
+                    TryPickup(true);
+                }
+                else if(Input.GetKeyDown(distancePickupLeft) && Input.GetKey(distancePickupModifier))
+                {
+                    TryPickup(false);
+                }
+                if(Input.GetKey(sprint))
+                {
+                    sprintMultiplier = playerSprintMultiplier;
+                }
+                else
+                {
+                    sprintMultiplier = 1;
+                }
+                if(Input.GetKeyDown(distancePickupModifier))
+                {
+                    crossHairPanel.SetActive(true);
+                }
+                else if(Input.GetKeyUp(distancePickupModifier))
+                {
+                    crossHairPanel.SetActive(false);
+                }
             }
 
             UpdatePosition();
@@ -239,6 +279,34 @@ namespace VRTK
             if (showControlHints)
             {
                 UpdateHints();
+            }
+        }
+
+        private void TryPickup(bool rightHand)
+        {
+            Ray screenRay = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
+            RaycastHit hit;
+            if(Physics.Raycast(screenRay, out hit))
+            {
+                VRTK_InteractableObject io = hit.collider.gameObject.GetComponent<VRTK_InteractableObject>();
+                if(io)
+                {
+                    GameObject hand;
+                    if(rightHand)
+                    {
+                        hand = VRTK_DeviceFinder.GetControllerRightHand();
+                    }
+                    else
+                    {
+                        hand = VRTK_DeviceFinder.GetControllerLeftHand();
+                    }
+                    VRTK_InteractGrab grab = hand.GetComponent<VRTK_InteractGrab>();
+                    if(grab.GetGrabbedObject() == null)
+                    {
+                        hand.GetComponent<VRTK_InteractTouch>().ForceTouch(hit.collider.gameObject);
+                        grab.AttemptGrab();
+                    }
+                }
             }
         }
 
@@ -312,21 +380,22 @@ namespace VRTK
 
         private void UpdatePosition()
         {
+            float moveMod = Time.deltaTime * playerMoveMultiplier * sprintMultiplier;
             if (Input.GetKey(moveForward))
             {
-                transform.Translate(transform.forward * Time.deltaTime * playerMoveMultiplier, Space.World);
+                transform.Translate(transform.forward * moveMod, Space.World);
             }
             else if (Input.GetKey(moveBackward))
             {
-                transform.Translate(-transform.forward * Time.deltaTime * playerMoveMultiplier, Space.World);
+                transform.Translate(-transform.forward * moveMod, Space.World);
             }
             if (Input.GetKey(moveLeft))
             {
-                transform.Translate(-transform.right * Time.deltaTime * playerMoveMultiplier, Space.World);
+                transform.Translate(-transform.right * moveMod, Space.World);
             }
             else if (Input.GetKey(moveRight))
             {
-                transform.Translate(transform.right * Time.deltaTime * playerMoveMultiplier, Space.World);
+                transform.Translate(transform.right * moveMod, Space.World);
             }
         }
 
