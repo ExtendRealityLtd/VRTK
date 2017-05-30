@@ -75,6 +75,10 @@ namespace VRTK
         public int standingHistorySamples = 5;
         [Tooltip("The `y` distance between the headset and the object being leaned over, if object being leaned over is taller than this threshold then the current standing position won't be updated.")]
         public float leanYThreshold = 0.5f;
+        [Tooltip("A GameObject containing a Capsule Collider used as a custom body collider.")]
+        public GameObject customBodyCollider;
+        [Tooltip("A GameObject containing a Capsule Collider used as a custom feet collider.")]
+        public GameObject customFootCollider;
 
         [Header("Step Settings")]
 
@@ -138,7 +142,6 @@ namespace VRTK
         protected Transform playArea;
         protected Transform headset;
         protected Rigidbody bodyRigidbody;
-        protected GameObject bodyColliderContainer;
         protected CapsuleCollider bodyCollider;
         protected CapsuleCollider footCollider;
         protected VRTK_CollisionTracker collisionTracker;
@@ -310,7 +313,7 @@ namespace VRTK
         /// <returns></returns>
         public virtual GameObject GetBodyColliderContainer()
         {
-            return bodyColliderContainer;
+            return customBodyCollider;
         }
 
         /// <summary>
@@ -869,22 +872,44 @@ namespace VRTK
                 bodyRigidbody.freezeRotation = true;
             }
 
-            if (bodyColliderContainer == null)
+            if (customBodyCollider == null)
             {
                 generateCollider = true;
-                bodyColliderContainer = CreateColliderContainer(BODY_COLLIDER_CONTAINER_NAME, playArea);
+                customBodyCollider = CreateColliderContainer(BODY_COLLIDER_CONTAINER_NAME, playArea);
 
-                bodyCollider = bodyColliderContainer.AddComponent<CapsuleCollider>();
+                bodyCollider = customBodyCollider.AddComponent<CapsuleCollider>();
                 bodyCollider.radius = bodyRadius;
 
+                customBodyCollider.gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
+            }
+            else
+            {
+                customBodyCollider.transform.SetParent(playArea);
+                bodyCollider = customBodyCollider.GetComponent<CapsuleCollider>();
+                VRTK_PlayerObject.SetPlayerObject(customBodyCollider, VRTK_PlayerObject.ObjectTypes.Collider);
+                if(!bodyCollider)
+                {
+                    bodyCollider = customBodyCollider.AddComponent<CapsuleCollider>();
+                    bodyCollider.radius = bodyRadius;
+                }
+            }
+            if (customFootCollider == null)
+            {
                 if (CalculateStepUpYOffset() > 0f)
                 {
-                    GameObject footColliderContainer = CreateColliderContainer(FOOT_COLLIDER_CONTAINER_NAME, bodyColliderContainer.transform);
-                    footCollider = footColliderContainer.AddComponent<CapsuleCollider>();
+                    customFootCollider = CreateColliderContainer(FOOT_COLLIDER_CONTAINER_NAME, customBodyCollider.transform);
+                    footCollider = customFootCollider.AddComponent<CapsuleCollider>();
                 }
-
-                bodyColliderContainer.gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
-                VRTK_PlayerObject.SetPlayerObject(bodyColliderContainer, VRTK_PlayerObject.ObjectTypes.Collider);
+            }
+            else
+            {
+                customFootCollider.transform.SetParent(customBodyCollider.transform);
+                footCollider = customFootCollider.GetComponent<CapsuleCollider>();
+                VRTK_PlayerObject.SetPlayerObject(customBodyCollider, VRTK_PlayerObject.ObjectTypes.Collider);
+                if(!footCollider)
+                {
+                    footCollider = customFootCollider.AddComponent<CapsuleCollider>();
+                }
             }
 
             if (playArea.gameObject.layer == 0)
@@ -903,13 +928,13 @@ namespace VRTK
 
             if (generateCollider)
             {
-                Destroy(bodyColliderContainer);
+                Destroy(customBodyCollider);
             }
         }
 
         protected virtual void UpdateCollider()
         {
-            if (bodyColliderContainer != null && headset != null)
+            if (customBodyCollider != null && headset != null)
             {
                 float newpresenceColliderYSize = (headset ? headset.transform.localPosition.y - (headsetYOffset + CalculateStepUpYOffset()) : 0f);
                 float newpresenceColliderYCenter = Mathf.Max((newpresenceColliderYSize * 0.5f) + CalculateStepUpYOffset() + playAreaHeightAdjustment, bodyCollider.radius + playAreaHeightAdjustment);
@@ -970,9 +995,9 @@ namespace VRTK
 
         protected virtual void IgnoreCollisions(Collider[] colliders, bool state)
         {
-            if (bodyColliderContainer != null)
+            if (customBodyCollider != null)
             {
-                Collider[] playareaColliders = bodyColliderContainer.GetComponentsInChildren<Collider>();
+                Collider[] playareaColliders = customBodyCollider.GetComponentsInChildren<Collider>();
                 for (int i = 0; i < playareaColliders.Length; i++)
                 {
                     Collider collider = playareaColliders[i];
