@@ -6,7 +6,7 @@ using UnityEngine.VR;
 namespace VRTK
 {
     /// <summary>
-    /// Creates the bounds for the player. 
+    ///     Creates the bounds for the player.
     /// </summary>
     public partial class SDK_PlayStationFrustum : MonoBehaviour
     {
@@ -17,6 +17,7 @@ namespace VRTK
         public Transform frustumTransform;
         private Vector3 hmdPositionRaw;
         private Quaternion hmdRotationUnity, hmdRotationRaw;
+        private bool poorDeviceTracking;
         public float safeDistance = 0.1f;
         public Color showColor, hideColor;
 
@@ -26,6 +27,11 @@ namespace VRTK
         }
 
         public bool ShowFrustum { get; set; }
+
+        public void SetDeviceFrustrum(bool poorQuality)
+        {
+            poorDeviceTracking = poorQuality;
+        }
 
         private void Awake()
         {

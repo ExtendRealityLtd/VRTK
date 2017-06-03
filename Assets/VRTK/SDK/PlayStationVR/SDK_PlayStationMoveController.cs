@@ -5,7 +5,8 @@ using UnityEngine;
 namespace VRTK
 {
     /// <summary>
-    ///  The PlayStation Move Controller SDK script provides functions to map the move controllers buttons and get the controllers position.
+    ///     The PlayStation Move Controller SDK script provides functions to map the move controllers buttons and get the
+    ///     controllers position.
     /// </summary>
     public partial class SDK_PlayStationMoveController : MonoBehaviour
     {
@@ -35,11 +36,13 @@ namespace VRTK
         #endregion
 
         [HideInInspector] public bool ActiveController = true;
-
-
         public Controller ControllerType;
-
         [HideInInspector] public bool IsTracked;
+        private Vector3 lastPos;
+        private Vector3 lastRot;
+        private List<Vector3> posList;
+        private List<Vector3> rotList;
+        private Transform velocityTracker;
 
         private Dictionary<PlayStationKeys, int> keyMappings = new Dictionary<PlayStationKeys, int>
         {
@@ -52,41 +55,48 @@ namespace VRTK
             {PlayStationKeys.Square, (int) PlayStationKeys.Square}
         };
 
-        private Vector3 lastPos;
-        private Vector3 lastRot;
-        private List<Vector3> posList;
-        private List<Vector3> rotList;
    
+
         public Vector3 GetVelocity()
         {
-#if UNITY_PS4 && !UNITY_EDITOR
-          return DeviceVelocity();
-#endif
+            CreateVelocityTracker();
+            if (velocityTracker == null)
+            {
+                velocityTracker = transform.GetComponentInChildren<VRTK_InteractGrab>().controllerAttachPoint.transform;
+            }
+
             Vector3 velocity = Vector3.zero;
             foreach (Vector3 vel in posList)
             {
                 velocity += vel;
             }
             velocity /= posList.Count;
-            return velocity;
+
+            return velocityTracker.InverseTransformDirection(velocity * (velocity.magnitude / 3));
         }
 
         public Vector3 GetAngularVelocity()
         {
-#if UNITY_PS4
-            return DeviceAngularVelocity();
-#endif
+            CreateVelocityTracker();
+            if (velocityTracker == null)
+            {
+                velocityTracker = transform.GetComponentInChildren<VRTK_InteractGrab>().controllerAttachPoint.transform;
+            }
             Vector3 angularVelocity = Vector3.zero;
             foreach (Vector3 vel in rotList)
             {
                 angularVelocity += vel;
             }
             angularVelocity /= rotList.Count;
-            return angularVelocity;
+            angularVelocity *= .0001f;
+
+
+            return velocityTracker.InverseTransformDirection(angularVelocity);
         }
 
+
         /// <summary>
-        /// Set the key mapping to be different than the default
+        ///     Set the key mapping to be different than the default
         /// </summary>
         /// <param name="mapping"> new key mapping</param>
         public void SetKeyMappings(Dictionary<PlayStationKeys, KeyCode> mapping)
@@ -100,8 +110,9 @@ namespace VRTK
                 }
             }
         }
+
         /// <summary>
-        /// change a specific key to a different input code
+        ///     change a specific key to a different input code
         /// </summary>
         /// <param name="key"> PlayStation Key to change</param>
         /// <param name="inputKey"> input to replace it with </param>
@@ -111,7 +122,7 @@ namespace VRTK
         }
 
         /// <summary>
-        /// Adds the stick id to the playstation key and returns a UnityEngine KeyCode
+        ///     Adds the stick id to the playstation key and returns a UnityEngine KeyCode
         /// </summary>
         /// <param name="key"> The key Playstation key that you want returned for this controller </param>
         /// <returns></returns>
@@ -121,7 +132,7 @@ namespace VRTK
         }
 
         /// <summary>
-        /// Get the Stick KeyCode ID for this controller. Add this to the PlayStationKey to get the UnityEngine KeyCode
+        ///     Get the Stick KeyCode ID for this controller. Add this to the PlayStationKey to get the UnityEngine KeyCode
         /// </summary>
         /// <returns> Controller KeyCode</returns>
         public int GetStickId()
@@ -140,6 +151,19 @@ namespace VRTK
             }
         }
 
+        private void CreateVelocityTracker()
+        {
+            if (velocityTracker == null)
+            {
+                return;
+            }
+            VRTK_InteractGrab grabController = transform.GetComponentInChildren<VRTK_InteractGrab>();
+            velocityTracker = new GameObject("Velocity Tracker").transform;
+            velocityTracker.parent = grabController.transform;
+            velocityTracker.localEulerAngles = Vector3.zero;
+            velocityTracker.position = grabController.controllerAttachPoint.position;
+        }
+
         private void Awake()
         {
             posList = new List<Vector3>();
@@ -147,9 +171,10 @@ namespace VRTK
             lastPos = transform.position;
             lastRot = transform.rotation.eulerAngles;
 
+            gameObject.SetActive(false);
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
 #if UNITY_PS4
             UpdateMoveTransforms();

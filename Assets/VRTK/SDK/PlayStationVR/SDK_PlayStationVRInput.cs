@@ -21,6 +21,7 @@ namespace VRTK
         private SDK_PlayStationMoveController leftController;
         private static GameObject cachedCameraRig;
         private GameObject hintCanvas;
+
         #endregion
 
         /// <summary>
@@ -48,9 +49,10 @@ namespace VRTK
 
         private void Start()
         {
+    
             SDK_PlayStationMoveController[] controllers = FindInScene()
                 .GetComponentsInChildren<SDK_PlayStationMoveController>(true);
-            myCamera = transform.GetComponentInChildren<Camera>().transform;
+            myCamera = Camera.main.transform;
             foreach (SDK_PlayStationMoveController controller in controllers)
             {
                 switch (controller.ControllerType)
@@ -82,10 +84,14 @@ namespace VRTK
 
         private void Update()
         {
+#if UNITY_PS4
+            UpdateTrackingInput();
+#endif
 #if UNITY_EDITOR
             UpdateSimulator();
 #endif
         }
+
 
 
 
