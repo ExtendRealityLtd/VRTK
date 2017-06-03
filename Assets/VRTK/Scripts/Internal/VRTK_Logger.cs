@@ -54,6 +54,9 @@
 
         public static void CreateIfNotExists()
         {
+#if UNITY_PS4 && !UNITY_EDITOR
+             return;
+#endif
             if (instance == null)
             {
                 GameObject loggerObject = new GameObject("[VRTK_Logger]")
@@ -78,6 +81,9 @@
 
         public static string GetCommonMessage(CommonMessageKeys messageKey, params object[] parameters)
         {
+#if UNITY_PS4 && !UNITY_EDITOR
+             return "";
+#endif
             CreateIfNotExists();
 
             string returnMessage = "";
@@ -95,31 +101,57 @@
 
         public static void Trace(string message)
         {
+#if UNITY_PS4 && !UNITY_EDITOR
+             return;
+#endif
             Log(LogLevels.Trace, message);
         }
 
         public static void Debug(string message)
         {
+
+#if UNITY_PS4 && !UNITY_EDITOR
+                   UnityEngine.Debug.Log(message);
+             return;
+#endif
             Log(LogLevels.Debug, message);
         }
 
         public static void Info(string message)
         {
+#if UNITY_PS4 && !UNITY_EDITOR
+             UnityEngine.Debug.Log(message);
+             return;
+#endif
             Log(LogLevels.Info, message);
         }
 
         public static void Warn(string message)
         {
+
+#if UNITY_PS4 && !UNITY_EDITOR
+           UnityEngine.Debug.LogWarning(message);
+             return;
+#endif
             Log(LogLevels.Warn, message);
         }
 
         public static void Error(string message)
         {
+
+#if UNITY_PS4 && !UNITY_EDITOR
+            UnityEngine.Debug.LogError(message);
+             return;
+#endif
             Log(LogLevels.Error, message);
         }
 
         public static void Fatal(string message)
         {
+#if UNITY_PS4 && !UNITY_EDITOR
+             UnityEngine.Debug.LogError(message);
+             return;
+#endif
             Log(LogLevels.Fatal, message);
         }
 
@@ -127,6 +159,10 @@
         {
 #if VRTK_NO_LOGGING
             return;
+#endif
+#if UNITY_PS4 && !UNITY_EDITOR
+          UnityEngine.Debug.Log(message);
+             return;
 #endif
             CreateIfNotExists();
 
