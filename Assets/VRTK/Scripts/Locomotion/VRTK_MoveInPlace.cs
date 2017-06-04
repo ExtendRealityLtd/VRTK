@@ -439,7 +439,7 @@ namespace VRTK
                 newRotation = AverageRotation(controllerLeftHand.transform.rotation, controllerRightHand.transform.rotation);
             }
             // Left controller only
-            else if (controllerRightHand != null && controllerRightHand == null)
+            else if (controllerLeftHand != null && controllerRightHand == null)
             {
                 newRotation = controllerLeftHand.transform.rotation;
             }
