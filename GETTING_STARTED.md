@@ -111,6 +111,6 @@ Read the rest of this document for more detailed instructions on how to set up a
 </details>
 
 [SteamVR Plugin]: https://www.assetstore.unity3d.com/en/#!/content/32647
-[Oculus Utilities]: https://developer3.oculus.com/downloads/game-engines/1.10.0/Oculus_Utilities_for_Unity_5/
+[Oculus Utilities]: https://developer.oculus.com/downloads/package/oculus-utilities-for-unity-5/
 [Ximmerse Unity SDK]: https://github.com/Ximmerse/SDK/tree/master/Unity
 [Google VR SDK]: https://developers.google.com/vr/unity/download
