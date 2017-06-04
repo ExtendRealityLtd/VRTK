@@ -111,13 +111,13 @@
             bullet = transform.Find("Bullet").gameObject;
             bullet.SetActive(false);
 
-            trigger = transform.FindChild("TriggerHolder").gameObject;
+            trigger = transform.Find("TriggerHolder").gameObject;
 
-            slide = transform.FindChild("Slide").GetComponent<RealGun_Slide>();
+            slide = transform.Find("Slide").GetComponent<RealGun_Slide>();
             slideRigidbody = slide.GetComponent<Rigidbody>();
             slideCollider = slide.GetComponent<Collider>();
 
-            safetySwitch = transform.FindChild("SafetySwitch").GetComponent<RealGun_SafetySwitch>();
+            safetySwitch = transform.Find("SafetySwitch").GetComponent<RealGun_SafetySwitch>();
             safetySwitchRigidbody = safetySwitch.GetComponent<Rigidbody>();
             safetySwitchCollider = safetySwitch.GetComponent<Collider>();
         }

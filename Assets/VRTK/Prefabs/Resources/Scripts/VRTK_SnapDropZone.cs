@@ -163,7 +163,7 @@ namespace VRTK
                 DeleteHighlightObject();
             }
             //Always remove editor highlight object at runtime
-            ChooseDestroyType(transform.FindChild(ObjectPath(HIGHLIGHT_EDITOR_OBJECT_NAME)));
+            ChooseDestroyType(transform.Find(ObjectPath(HIGHLIGHT_EDITOR_OBJECT_NAME)));
             highlightEditorObject = null;
 
             GenerateObjects();
@@ -410,26 +410,26 @@ namespace VRTK
         {
             if (highlightEditorObject == null)
             {
-                Transform forceFindHighlightEditorObject = transform.FindChild(ObjectPath(HIGHLIGHT_EDITOR_OBJECT_NAME));
+                Transform forceFindHighlightEditorObject = transform.Find(ObjectPath(HIGHLIGHT_EDITOR_OBJECT_NAME));
                 highlightEditorObject = (forceFindHighlightEditorObject ? forceFindHighlightEditorObject.gameObject : null);
             }
 
             if (highlightObject == null)
             {
-                Transform forceFindHighlightObject = transform.FindChild(ObjectPath(HIGHLIGHT_OBJECT_NAME));
+                Transform forceFindHighlightObject = transform.Find(ObjectPath(HIGHLIGHT_OBJECT_NAME));
                 highlightObject = (forceFindHighlightObject ? forceFindHighlightObject.gameObject : null);
             }
 
             if (highlightContainer == null)
             {
-                Transform forceFindHighlightContainer = transform.FindChild(HIGHLIGHT_CONTAINER_NAME);
+                Transform forceFindHighlightContainer = transform.Find(HIGHLIGHT_CONTAINER_NAME);
                 highlightContainer = (forceFindHighlightContainer ? forceFindHighlightContainer.gameObject : null);
             }
         }
 
         protected virtual void GenerateContainer()
         {
-            if (highlightContainer == null || transform.FindChild(HIGHLIGHT_CONTAINER_NAME) == null)
+            if (highlightContainer == null || transform.Find(HIGHLIGHT_CONTAINER_NAME) == null)
             {
                 highlightContainer = new GameObject(HIGHLIGHT_CONTAINER_NAME);
                 highlightContainer.transform.SetParent(transform);
@@ -441,7 +441,7 @@ namespace VRTK
 
         protected virtual void SetContainer()
         {
-            Transform findContainer = transform.FindChild(HIGHLIGHT_CONTAINER_NAME);
+            Transform findContainer = transform.Find(HIGHLIGHT_CONTAINER_NAME);
             if (findContainer != null)
             {
                 highlightContainer = findContainer.gameObject;
@@ -674,13 +674,13 @@ namespace VRTK
         protected virtual void GenerateHighlightObject()
         {
             //If there is a given highlight prefab and no existing highlight object then create a new highlight object
-            if (highlightObjectPrefab != null && highlightObject == null && transform.FindChild(ObjectPath(HIGHLIGHT_OBJECT_NAME)) == null)
+            if (highlightObjectPrefab != null && highlightObject == null && transform.Find(ObjectPath(HIGHLIGHT_OBJECT_NAME)) == null)
             {
                 CopyObject(highlightObjectPrefab, ref highlightObject, HIGHLIGHT_OBJECT_NAME);
             }
 
             //if highlight object exists but not in the variable then force grab it
-            Transform checkForChild = transform.FindChild(ObjectPath(HIGHLIGHT_OBJECT_NAME));
+            Transform checkForChild = transform.Find(ObjectPath(HIGHLIGHT_OBJECT_NAME));
             if (checkForChild != null && highlightObject == null)
             {
                 highlightObject = checkForChild.gameObject;
@@ -701,7 +701,7 @@ namespace VRTK
 
         protected virtual void DeleteHighlightObject()
         {
-            ChooseDestroyType(transform.FindChild(HIGHLIGHT_CONTAINER_NAME));
+            ChooseDestroyType(transform.Find(HIGHLIGHT_CONTAINER_NAME));
             highlightContainer = null;
             highlightObject = null;
             objectHighlighter = null;
@@ -709,7 +709,7 @@ namespace VRTK
 
         protected virtual void GenerateEditorHighlightObject()
         {
-            if (highlightObject != null && highlightEditorObject == null && transform.FindChild(ObjectPath(HIGHLIGHT_EDITOR_OBJECT_NAME)) == null)
+            if (highlightObject != null && highlightEditorObject == null && transform.Find(ObjectPath(HIGHLIGHT_EDITOR_OBJECT_NAME)) == null)
             {
                 CopyObject(highlightObject, ref highlightEditorObject, HIGHLIGHT_EDITOR_OBJECT_NAME);
                 foreach (Renderer renderer in highlightEditorObject.GetComponentsInChildren<Renderer>())

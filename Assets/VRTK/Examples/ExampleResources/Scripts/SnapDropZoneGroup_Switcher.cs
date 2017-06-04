@@ -9,8 +9,8 @@
 
         private void Start()
         {
-            cubeZone = transform.FindChild("Cube_SnapDropZone").gameObject;
-            sphereZone = transform.FindChild("Sphere_SnapDropZone").gameObject;
+            cubeZone = transform.Find("Cube_SnapDropZone").gameObject;
+            sphereZone = transform.Find("Sphere_SnapDropZone").gameObject;
 
             cubeZone.GetComponent<VRTK_SnapDropZone>().ObjectEnteredSnapDropZone += new SnapDropZoneEventHandler(DoCubeZoneSnapped);
             cubeZone.GetComponent<VRTK_SnapDropZone>().ObjectSnappedToDropZone += new SnapDropZoneEventHandler(DoCubeZoneSnapped);
