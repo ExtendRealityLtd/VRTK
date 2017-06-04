@@ -27,8 +27,9 @@ namespace VRTK
         /// <param name="hitData">The raycast hit data.</param>
         /// <param name="ignoreLayers">A layermask of layers to ignore from the raycast.</param>
         /// <param name="length">The maximum length of the raycast.</param>
+        /// <param name="affectTriggers">Determines the trigger interaction level of the cast.</param>
         /// <returns>Returns true if the raycast successfully collides with a valid object.</returns>
-        public static bool Raycast(VRTK_CustomRaycast customCast, Ray ray, out RaycastHit hitData, LayerMask ignoreLayers, float length = Mathf.Infinity)
+        public static bool Raycast(VRTK_CustomRaycast customCast, Ray ray, out RaycastHit hitData, LayerMask ignoreLayers, float length = Mathf.Infinity, QueryTriggerInteraction affectTriggers = QueryTriggerInteraction.UseGlobal)
         {
             if (customCast != null)
             {
@@ -36,7 +37,7 @@ namespace VRTK
             }
             else
             {
-                return Physics.Raycast(ray, out hitData, length, ~ignoreLayers);
+                return Physics.Raycast(ray, out hitData, length, ~ignoreLayers, affectTriggers);
             }
         }
 
@@ -48,8 +49,9 @@ namespace VRTK
         /// <param name="endPosition">The world position to end the linecast at.</param>
         /// <param name="hitData">The linecast hit data.</param>
         /// <param name="ignoreLayers">A layermask of layers to ignore from the linecast.</param>
+        /// <param name="affectTriggers">Determines the trigger interaction level of the cast.</param>
         /// <returns>Returns true if the linecast successfully collides with a valid object.</returns>
-        public static bool Linecast(VRTK_CustomRaycast customCast, Vector3 startPosition, Vector3 endPosition, out RaycastHit hitData, LayerMask ignoreLayers)
+        public static bool Linecast(VRTK_CustomRaycast customCast, Vector3 startPosition, Vector3 endPosition, out RaycastHit hitData, LayerMask ignoreLayers, QueryTriggerInteraction affectTriggers = QueryTriggerInteraction.UseGlobal)
         {
             if (customCast != null)
             {
@@ -57,7 +59,7 @@ namespace VRTK
             }
             else
             {
-                return Physics.Linecast(startPosition, endPosition, out hitData);
+                return Physics.Linecast(startPosition, endPosition, out hitData, ~ignoreLayers, affectTriggers);
             }
         }
 
@@ -82,7 +84,7 @@ namespace VRTK
         /// <returns>Returns true if the line successfully collides with a valid object.</returns>
         public virtual bool CustomLinecast(Vector3 startPosition, Vector3 endPosition, out RaycastHit hitData)
         {
-            return Physics.Linecast(startPosition, endPosition, out hitData, ~layersToIgnore);
+            return Physics.Linecast(startPosition, endPosition, out hitData, ~layersToIgnore, triggerInteraction);
         }
     }
 }

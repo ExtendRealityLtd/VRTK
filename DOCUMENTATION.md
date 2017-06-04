@@ -6692,9 +6692,9 @@ For example, the VRTK_BodyPhysics script can be set to ignore trigger colliders 
 
 ### Class Methods
 
-#### Raycast/5
+#### Raycast/6
 
-  > `public static bool Raycast(VRTK_CustomRaycast customCast, Ray ray, out RaycastHit hitData, LayerMask ignoreLayers, float length = Mathf.Infinity)`
+  > `public static bool Raycast(VRTK_CustomRaycast customCast, Ray ray, out RaycastHit hitData, LayerMask ignoreLayers, float length = Mathf.Infinity, QueryTriggerInteraction affectTriggers = QueryTriggerInteraction.UseGlobal)`
 
   * Parameters
    * `VRTK_CustomRaycast customCast` - The optional object with customised cast parameters.
@@ -6702,14 +6702,15 @@ For example, the VRTK_BodyPhysics script can be set to ignore trigger colliders 
    * `out RaycastHit hitData` - The raycast hit data.
    * `LayerMask ignoreLayers` - A layermask of layers to ignore from the raycast.
    * `float length` - The maximum length of the raycast.
+   * `QueryTriggerInteraction affectTriggers` - Determines the trigger interaction level of the cast.
   * Returns
    * `bool` - Returns true if the raycast successfully collides with a valid object.
 
 The Raycast method is used to generate a raycast either from the given CustomRaycast object or a default Physics.Raycast.
 
-#### Linecast/5
+#### Linecast/6
 
-  > `public static bool Linecast(VRTK_CustomRaycast customCast, Vector3 startPosition, Vector3 endPosition, out RaycastHit hitData, LayerMask ignoreLayers)`
+  > `public static bool Linecast(VRTK_CustomRaycast customCast, Vector3 startPosition, Vector3 endPosition, out RaycastHit hitData, LayerMask ignoreLayers, QueryTriggerInteraction affectTriggers = QueryTriggerInteraction.UseGlobal)`
 
   * Parameters
    * `VRTK_CustomRaycast customCast` - The optional object with customised cast parameters.
@@ -6717,6 +6718,7 @@ The Raycast method is used to generate a raycast either from the given CustomRay
    * `Vector3 endPosition` - The world position to end the linecast at.
    * `out RaycastHit hitData` - The linecast hit data.
    * `LayerMask ignoreLayers` - A layermask of layers to ignore from the linecast.
+   * `QueryTriggerInteraction affectTriggers` - Determines the trigger interaction level of the cast.
   * Returns
    * `bool` - Returns true if the linecast successfully collides with a valid object.
 

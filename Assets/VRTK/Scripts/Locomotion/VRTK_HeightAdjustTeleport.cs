@@ -62,7 +62,7 @@ namespace VRTK
             Ray ray = new Ray(tipPosition + rayStartPositionOffset, -playArea.up);
             RaycastHit rayCollidedWith;
 #pragma warning disable 0618
-            if (target && VRTK_CustomRaycast.Raycast(customRaycast, ray, out rayCollidedWith, layersToIgnore, Mathf.Infinity))
+            if (target != null && VRTK_CustomRaycast.Raycast(customRaycast, ray, out rayCollidedWith, layersToIgnore, Mathf.Infinity, QueryTriggerInteraction.Ignore))
 #pragma warning restore 0618
             {
                 newY = (tipPosition.y - rayCollidedWith.distance) + heightOffset;

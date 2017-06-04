@@ -204,7 +204,7 @@ namespace VRTK
             {
                 var destination = (customDestination ? customDestination.position : controller.transform.position);
                 RaycastHit hitInfo;
-                if (VRTK_CustomRaycast.Linecast(customRaycast, headset.position, destination, out hitInfo, new LayerMask()))
+                if (VRTK_CustomRaycast.Linecast(customRaycast, headset.position, destination, out hitInfo, new LayerMask(), QueryTriggerInteraction.Ignore))
                 {
                     obscured = true;
                 }
