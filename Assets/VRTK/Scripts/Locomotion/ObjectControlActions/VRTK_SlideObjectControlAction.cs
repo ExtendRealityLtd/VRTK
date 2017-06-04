@@ -79,6 +79,8 @@ namespace VRTK
             if (directionDevice && directionDevice.gameObject.activeInHierarchy && controlledGameObject.activeInHierarchy)
             {
                 float storeYPosition = controlledGameObject.transform.position.y;
+                axisDirection.y *= 0.1f;
+                axisDirection.Normalize();
                 Vector3 updatedPosition = axisDirection * currentSpeed * Time.deltaTime;
                 controlledGameObject.transform.position += updatedPosition;
                 controlledGameObject.transform.position = new Vector3(controlledGameObject.transform.position.x, storeYPosition, controlledGameObject.transform.position.z);
