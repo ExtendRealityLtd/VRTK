@@ -1771,6 +1771,7 @@ The height adjust teleporter extends the basic teleporter and allows for the y p
 
 ### Inspector Parameters
 
+ * **Snap To Nearest Floor:** If this is checked, then the teleported Y position will snap to the nearest available below floor. If it is unchecked, then the teleported Y position will be where ever the destination Y position is.
  * **Custom Raycast:** A custom raycaster to use when raycasting to find floors.
 
 ### Example

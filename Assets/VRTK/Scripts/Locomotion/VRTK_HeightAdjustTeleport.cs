@@ -19,6 +19,8 @@ namespace VRTK
     {
         [Header("Height Adjust Settings")]
 
+        [Tooltip("If this is checked, then the teleported Y position will snap to the nearest available below floor. If it is unchecked, then the teleported Y position will be where ever the destination Y position is.")]
+        public bool snapToNearestFloor = true;
         [Tooltip("A custom raycaster to use when raycasting to find floors.")]
         public VRTK_CustomRaycast customRaycast;
         [Tooltip("**OBSOLETE [Use customRaycast]** The layers to ignore when raycasting to find floors.")]
@@ -48,6 +50,11 @@ namespace VRTK
 
         protected virtual float GetTeleportY(Transform target, Vector3 tipPosition)
         {
+            if (!snapToNearestFloor)
+            {
+                return tipPosition.y;
+            }
+
             float newY = playArea.position.y;
             float heightOffset = 0.1f;
             //Check to see if the tip is on top of an object
