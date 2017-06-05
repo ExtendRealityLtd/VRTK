@@ -5078,6 +5078,17 @@ The ToggleOnGround method sets whether the body is considered on the ground or n
 
 The PreventSnapToFloor method sets whether the snap to floor mechanic should be used.
 
+#### ForceSnapToFloor/0
+
+  > `public virtual void ForceSnapToFloor()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The ForceSnapToFloor method disables the prevent snap to floor and forces the snap to nearest floor action.
+
 #### IsFalling/0
 
   > `public virtual bool IsFalling()`

@@ -233,6 +233,15 @@ namespace VRTK
         }
 
         /// <summary>
+        /// The ForceSnapToFloor method disables the prevent snap to floor and forces the snap to nearest floor action.
+        /// </summary>
+        public virtual void ForceSnapToFloor()
+        {
+            TogglePreventSnapToFloor(false);
+            SnapToNearestFloor();
+        }
+
+        /// <summary>
         /// The IsFalling method returns the falling state of the body.
         /// </summary>
         /// <returns>Returns true if the body is currently falling via gravity or via teleport.</returns>
@@ -377,7 +386,7 @@ namespace VRTK
 
         protected virtual void OnCollisionEnter(Collision collision)
         {
-            if (!VRTK_PlayerObject.IsPlayerObject(collision.gameObject) && currentValidFloorObject != null && !currentValidFloorObject.Equals(collision.gameObject))
+            if (CheckValidCollision(collision.gameObject))
             {
                 CheckStepUpCollision(collision);
                 currentCollidingObject = collision.gameObject;
@@ -387,7 +396,7 @@ namespace VRTK
 
         protected virtual void OnTriggerEnter(Collider collider)
         {
-            if (!VRTK_PlayerObject.IsPlayerObject(collider.gameObject) && currentValidFloorObject != null && !currentValidFloorObject.Equals(collider.gameObject))
+            if (CheckValidCollision(collider.gameObject))
             {
                 currentCollidingObject = collider.gameObject;
                 OnStartColliding(SetBodyPhysicsEvent(currentCollidingObject));
@@ -397,7 +406,7 @@ namespace VRTK
 
         protected virtual void OnCollisionExit(Collision collision)
         {
-            if (currentCollidingObject != null && currentCollidingObject.Equals(collision.gameObject))
+            if (CheckExistingCollision(collision.gameObject))
             {
                 OnStopColliding(SetBodyPhysicsEvent(currentCollidingObject));
                 currentCollidingObject = null;
@@ -406,7 +415,7 @@ namespace VRTK
 
         protected virtual void OnTriggerExit(Collider collider)
         {
-            if (currentCollidingObject != null && currentCollidingObject.Equals(collider.gameObject))
+            if (CheckExistingCollision(collider.gameObject))
             {
                 OnStopColliding(SetBodyPhysicsEvent(currentCollidingObject));
                 currentCollidingObject = null;
@@ -422,6 +431,16 @@ namespace VRTK
                 Gizmos.color = Color.red;
                 Gizmos.DrawSphere(new Vector3(currentStandingPosition.x, headset.position.y - 0.3f, currentStandingPosition.y), 0.05f);
             }
+        }
+
+        protected virtual bool CheckValidCollision(GameObject checkObject)
+        {
+            return (!VRTK_PlayerObject.IsPlayerObject(checkObject) && (!onGround || (currentValidFloorObject != null && !currentValidFloorObject.Equals(checkObject))));
+        }
+
+        protected virtual bool CheckExistingCollision(GameObject checkObject)
+        {
+            return (currentCollidingObject != null && currentCollidingObject.Equals(checkObject));
         }
 
         protected virtual void SetupPlayArea()
@@ -1073,7 +1092,7 @@ namespace VRTK
 
         protected virtual void SnapToNearestFloor()
         {
-            if (!preventSnapToFloor && (enableBodyCollisions || enableTeleport) && headset && headset.transform.position.y > playArea.position.y)
+            if (!preventSnapToFloor && (enableBodyCollisions || enableTeleport) && headset != null && headset.transform.position.y > playArea.position.y)
             {
                 Ray ray = new Ray(headset.transform.position, -playArea.up);
                 RaycastHit rayCollidedWith;

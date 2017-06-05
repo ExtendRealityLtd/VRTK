@@ -164,7 +164,10 @@ namespace VRTK
 
         protected virtual void OnTeleport(object sender, DestinationMarkerEventArgs e)
         {
-            Ungrab(false, e.controllerReference, e.target.gameObject);
+            if (isClimbing)
+            {
+                Ungrab(false, e.controllerReference, e.target.gameObject);
+            }
         }
 
         protected virtual Vector3 GetScaledLocalPosition(Transform objTransform)
@@ -218,7 +221,8 @@ namespace VRTK
 
         protected virtual void Ungrab(bool carryMomentum, VRTK_ControllerReference controllerReference, GameObject target)
         {
-            bodyPhysics.TogglePreventSnapToFloor(false);
+            isClimbing = false;
+            bodyPhysics.ForceSnapToFloor();
             bodyPhysics.enableBodyCollisions = true;
 
             if (carryMomentum)
@@ -241,7 +245,6 @@ namespace VRTK
                 bodyPhysics.ApplyBodyVelocity(velocity, true, true);
             }
 
-            isClimbing = false;
             grabbingController = null;
             climbingObject = null;
 
