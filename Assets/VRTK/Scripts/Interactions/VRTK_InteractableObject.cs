@@ -724,11 +724,14 @@ namespace VRTK
                 if (currentIgnoredColliders[x] != null)
                 {
                     Collider[] touchingColliders = currentIgnoredColliders[x].GetComponentsInChildren<Collider>();
-                    for (int i = 0; i < ignoredColliders.Length; i++)
+                    if (ignoredColliders != null)
                     {
-                        for (int j = 0; j < touchingColliders.Length; j++)
+                        for (int i = 0; i < ignoredColliders.Length; i++)
                         {
-                            Physics.IgnoreCollision(touchingColliders[j], ignoredColliders[i], false);
+                            for (int j = 0; j < touchingColliders.Length; j++)
+                            {
+                                Physics.IgnoreCollision(touchingColliders[j], ignoredColliders[i], false);
+                            }
                         }
                     }
                 }

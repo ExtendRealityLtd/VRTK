@@ -117,7 +117,7 @@ namespace VRTK
 
         protected virtual void OnDisable()
         {
-            if (headset != null)
+            if (headset != null && headsetColliderScript != null)
             {
                 headsetColliderScript.EndCollision(collidingWith);
                 VRTK_ObjectCache.registeredHeadsetCollider = null;

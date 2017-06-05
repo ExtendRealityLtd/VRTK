@@ -782,6 +782,10 @@ namespace VRTK
         protected virtual void SetupIgnoredCollisions()
         {
             ResetIgnoredCollisions();
+            if (ignoreCollisionsWith == null)
+            {
+                return;
+            }
 
             for (int i = 0; i < ignoreCollisionsWith.Length; i++)
             {
