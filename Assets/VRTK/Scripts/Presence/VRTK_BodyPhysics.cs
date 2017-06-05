@@ -323,6 +323,15 @@ namespace VRTK
         }
 
         /// <summary>
+        /// The GetCurrentCollidingObject method returns the object that the body physics colliders are currently colliding with.
+        /// </summary>
+        /// <returns>The GameObject that is colliding with the body physics colliders.</returns>
+        public virtual GameObject GetCurrentCollidingObject()
+        {
+            return currentCollidingObject;
+        }
+
+        /// <summary>
         /// The ResetIgnoredCollisions method is used to clear any stored ignored colliders in case the `Ignore Collisions On` array parameter is changed at runtime. This needs to be called manually if changes are made at runtime.
         /// </summary>
         public virtual void ResetIgnoredCollisions()

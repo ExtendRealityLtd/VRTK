@@ -60,6 +60,36 @@ namespace VRTK
         protected bool isRewinding = false;
         protected float collideTimer = 0f;
 
+        /// <summary>
+        /// The SetLastGoodPosition method stores the current valid play area and headset position.
+        /// </summary>
+        public virtual void SetLastGoodPosition()
+        {
+            if (playArea != null && headset != null)
+            {
+                lastGoodPositionSet = true;
+                lastGoodStandingPosition = playArea.position;
+                lastGoodHeadsetPosition = headset.position;
+            }
+        }
+
+        /// <summary>
+        /// The RewindPosition method resets the play area position to the last known good position of the play area.
+        /// </summary>
+        public virtual void RewindPosition()
+        {
+            if (lastGoodStandingPosition != null && headset != null)
+            {
+                Vector3 resetVector = lastGoodHeadsetPosition - headset.position;
+                Vector3 moveOffset = resetVector.normalized * pushbackDistance;
+                playArea.position += resetVector + moveOffset;
+                if (bodyPhysics != null)
+                {
+                    bodyPhysics.ResetVelocities();
+                }
+            }
+        }
+
         protected virtual void Awake()
         {
             VRTK_SDKManager.instance.AddBehaviourToToggleOnLoadedSetupChange(this);
@@ -102,7 +132,7 @@ namespace VRTK
                 {
                     collideTimer = 0f;
                     isColliding = false;
-                    RewindPosition();
+                    DoPositionRewind();
                 }
             }
         }
@@ -123,9 +153,7 @@ namespace VRTK
             float highestYDiff = highestHeadsetY - crouchThreshold;
             if (headset.localPosition.y > highestYDiff && highestYDiff > crouchThreshold)
             {
-                lastGoodPositionSet = true;
-                lastGoodStandingPosition = playArea.position;
-                lastGoodHeadsetPosition = headset.position;
+                SetLastGoodPosition();
             }
             lastPlayAreaY = playArea.position.y;
         }
@@ -169,19 +197,12 @@ namespace VRTK
             return (!isRewinding && playArea != null & lastGoodPositionSet && headset.localPosition.y > crouchRewindThreshold && BodyCollisionsEnabled());
         }
 
-        protected virtual void RewindPosition()
+        protected virtual void DoPositionRewind()
         {
             if (CanRewind())
             {
                 isRewinding = true;
-                Vector3 rewindDirection = lastGoodHeadsetPosition - headset.position;
-                float rewindDistance = Vector2.Distance(new Vector2(headset.position.x, headset.position.z), new Vector2(lastGoodHeadsetPosition.x, lastGoodHeadsetPosition.z));
-                playArea.Translate(rewindDirection.normalized * (rewindDistance + pushbackDistance));
-                playArea.position = new Vector3(playArea.position.x, lastGoodStandingPosition.y, playArea.position.z);
-                if (bodyPhysics != null)
-                {
-                    bodyPhysics.ResetVelocities();
-                }
+                RewindPosition();
             }
         }
 
