@@ -184,6 +184,7 @@ namespace VRTK
         /// </summary>
         public ReadOnlyCollection<Behaviour> behavioursToToggleOnLoadedSetupChange { get; private set; }
         private List<Behaviour> _behavioursToToggleOnLoadedSetupChange = new List<Behaviour>();
+        private Dictionary<Behaviour, bool> _behavioursInitialState = new Dictionary<Behaviour, bool>();
 
         /// <summary>
         /// The event invoked whenever the loaded SDK Setup changes.
@@ -365,6 +366,7 @@ namespace VRTK
             if (!_behavioursToToggleOnLoadedSetupChange.Contains(behaviour))
             {
                 _behavioursToToggleOnLoadedSetupChange.Add(behaviour);
+                _behavioursInitialState.Add(behaviour, behaviour.enabled);
             }
 
             if (loadedSetup == null && behaviour.enabled)
@@ -671,7 +673,7 @@ namespace VRTK
 
             foreach (Behaviour behaviour in listCopy)
             {
-                behaviour.enabled = state;
+                behaviour.enabled = (state && _behavioursInitialState.ContainsKey(behaviour) ? _behavioursInitialState[behaviour] : state);
             }
         }
 
