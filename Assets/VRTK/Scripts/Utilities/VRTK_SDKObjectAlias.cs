@@ -44,7 +44,10 @@ namespace VRTK
 
         protected virtual void LoadedSetupChanged(VRTK_SDKManager sender, VRTK_SDKManager.LoadedSetupChangeEventArgs e)
         {
-            ChildToSDKObject();
+            if (sdkManager != null)
+            {
+                ChildToSDKObject();
+            }
         }
 
         protected virtual void ChildToSDKObject()
