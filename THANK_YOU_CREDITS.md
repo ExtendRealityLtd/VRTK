@@ -2,6 +2,7 @@
 
 A big thank you to the supporters of VRTK via the VRTK Patreon page at https://www.patreon.com/vrtk
 
+ * **Luke Chadwick** *[Professional Sponsor]*
  * Mark Bradley
  * TreeFortress Games
  * BinaryLegend 
@@ -10,7 +11,6 @@ A big thank you to the supporters of VRTK via the VRTK Patreon page at https://w
  * Matt Ostgard
  * cognitiveVR 
  * Adam Salmi
- * Tim Lobes
  * Tanner Ochel
  * Agatha Yu
  * Aldis Sipolins
@@ -18,18 +18,22 @@ A big thank you to the supporters of VRTK via the VRTK Patreon page at https://w
  * Carl Wolsey
  * Stephen Eisenhauer
  * Daniel Shimmyo
+ * Chris Ross
  * Jedrzej Jonasz
  * Jonathan Linowes
  * jamie hurt
+ * Tim Lobes
  * Thomas Kildren
  * Devon Grandahl
  * Victor Lew
  * Jeff Canavan
  * Eric Vander Wal
  * Francis Sutton
+ * Grayson Deitering
  * TigerLily 
  * Roland 
  * Hgulgen 
+ * Michal VRoblewski
  * Chris Kirby
  * Trevor Gibbons
  * ManBearPig 
@@ -44,17 +48,16 @@ A big thank you to the supporters of VRTK via the VRTK Patreon page at https://w
  * David Erosa
  * Juho Salonen
  * Casual Immersions Entertainment
- * Joshuha Owen
  * Jarrell Norwood
  * Steve Weintraut
  * Stephen Elkins
  * David 
  * Matthew Boynton
  * Jason Halbach
+ * Bartek Tułodziecki
  * Kyle Mausser
- * Niklas DennerstÃ¥hl
+ * Niklas Dennerståhl
  * Luke Pierson
- * Shawn Pitz
  * Balazs Faludi
  * Tuukka Takala
  * Will Lingard
