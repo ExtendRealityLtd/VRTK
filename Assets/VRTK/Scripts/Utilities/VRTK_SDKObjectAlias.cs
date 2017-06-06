@@ -26,7 +26,7 @@ namespace VRTK
 
         protected virtual void OnEnable()
         {
-            VRTK_SDKManager sdkManager = VRTK_SDKManager.instance;
+            sdkManager = VRTK_SDKManager.instance;
             if (sdkManager != null)
             {
                 sdkManager.LoadedSetupChanged += LoadedSetupChanged;
