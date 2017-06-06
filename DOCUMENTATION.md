@@ -2027,6 +2027,8 @@ The Player Climb allows player movement based on grabbing of `VRTK_InteractableO
  * **Use Player Scale:** Will scale movement up and down based on the player transform's scale.
  * **Body Physics:** The VRTK Body Physics script to use for dealing with climbing and falling. If this is left blank then the script will need to be applied to the same GameObject.
  * **Teleporter:** The VRTK Teleport script to use when snapping to nearest floor on release. If this is left blank then a Teleport script will need to be applied to the same GameObject.
+ * **Headset Collision:** The VRTK Headset Collision script to use for determining if the user is climbing inside a collidable object. If this is left blank then the script will need to be applied to the same GameObject.
+ * **Position Rewind:** The VRTK Position Rewind script to use for dealing resetting invalid positions. If this is left blank then the script will need to be applied to the same GameObject.
 
 ### Class Events
 
@@ -5078,6 +5080,17 @@ The ToggleOnGround method sets whether the body is considered on the ground or n
 
 The PreventSnapToFloor method sets whether the snap to floor mechanic should be used.
 
+#### ForceSnapToFloor/0
+
+  > `public virtual void ForceSnapToFloor()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The ForceSnapToFloor method disables the prevent snap to floor and forces the snap to nearest floor action.
+
 #### IsFalling/0
 
   > `public virtual bool IsFalling()`
@@ -5178,6 +5191,17 @@ The ResetFalling method force stops any falling states and conditions that might
 
 The GetBodyColliderContainer method returns the auto generated GameObject that contains the body colliders.
 
+#### GetCurrentCollidingObject/0
+
+  > `public virtual GameObject GetCurrentCollidingObject()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `GameObject` - The GameObject that is colliding with the body physics colliders.
+
+The GetCurrentCollidingObject method returns the object that the body physics colliders are currently colliding with.
+
 #### ResetIgnoredCollisions/0
 
   > `public virtual void ResetIgnoredCollisions()`
@@ -5218,6 +5242,30 @@ The Position Rewind script is used to reset the user back to a good known standi
   * `HeadsetOnly` - Listen for collisions on the headset collider only.
   * `BodyOnly` - Listen for collisions on the body physics collider only.
   * `HeadsetAndBody` - Listen for collisions on both the headset collider and body physics collider.
+
+### Class Methods
+
+#### SetLastGoodPosition/0
+
+  > `public virtual void SetLastGoodPosition()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The SetLastGoodPosition method stores the current valid play area and headset position.
+
+#### RewindPosition/0
+
+  > `public virtual void RewindPosition()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The RewindPosition method resets the play area position to the last known good position of the play area.
 
 ### Example
 
