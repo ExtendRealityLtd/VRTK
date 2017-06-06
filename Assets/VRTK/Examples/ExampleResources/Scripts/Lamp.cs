@@ -4,13 +4,13 @@
 
     public class Lamp : VRTK_InteractableObject
     {
-        public override void Grabbed(GameObject grabbingObject)
+        public override void Grabbed(VRTK_InteractGrab grabbingObject)
         {
             base.Grabbed(grabbingObject);
             ToggleKinematics(false);
         }
 
-        public override void Ungrabbed(GameObject previousGrabbingObject)
+        public override void Ungrabbed(VRTK_InteractGrab previousGrabbingObject)
         {
             base.Ungrabbed(previousGrabbingObject);
             ToggleKinematics(true);

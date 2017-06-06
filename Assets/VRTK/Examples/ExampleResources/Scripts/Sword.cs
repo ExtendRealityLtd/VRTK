@@ -14,13 +14,13 @@
             return collisionForce;
         }
 
-        public override void Grabbed(GameObject grabbingObject)
+        public override void Grabbed(VRTK_InteractGrab grabbingObject)
         {
             base.Grabbed(grabbingObject);
-            controllerReference = VRTK_ControllerReference.GetControllerReference(grabbingObject);
+            controllerReference = VRTK_ControllerReference.GetControllerReference(grabbingObject.controllerEvents.gameObject);
         }
 
-        public override void Ungrabbed(GameObject previousGrabbingObject)
+        public override void Ungrabbed(VRTK_InteractGrab previousGrabbingObject)
         {
             base.Ungrabbed(previousGrabbingObject);
             controllerReference = null;

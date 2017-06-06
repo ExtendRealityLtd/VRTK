@@ -78,7 +78,7 @@ namespace VRTK
         /// </summary>
         public virtual void RewindPosition()
         {
-            if (lastGoodStandingPosition != null && headset != null)
+            if (headset != null)
             {
                 Vector3 resetVector = lastGoodHeadsetPosition - headset.position;
                 Vector3 moveOffset = resetVector.normalized * pushbackDistance;

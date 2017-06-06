@@ -259,7 +259,6 @@ namespace VRTK
             {
                 touchedObject = colliderInteractableObject;
                 var touchedObjectScript = touchedObject.GetComponent<VRTK_InteractableObject>();
-                GameObject touchingObject = gameObject;
 
                 //If this controller is not allowed to touch this interactable object then clean up touch and return before initiating a touch.
                 if (!touchedObjectScript.IsValidInteractableController(gameObject, touchedObjectScript.allowedTouchControllers))
@@ -272,7 +271,7 @@ namespace VRTK
                 touchedObjectScript.ToggleHighlight(true);
                 ToggleControllerVisibility(false);
                 CheckRumbleController(touchedObjectScript);
-                touchedObjectScript.StartTouching(touchingObject);
+                touchedObjectScript.StartTouching(this);
 
                 OnControllerTouchInteractableObject(SetControllerInteractEvent(touchedObject));
             }
@@ -397,9 +396,8 @@ namespace VRTK
         {
             if (IsObjectInteractable(untouched))
             {
-                GameObject touchingObject = gameObject;
                 var untouchedObjectScript = untouched.GetComponent<VRTK_InteractableObject>();
-                untouchedObjectScript.StopTouching(touchingObject);
+                untouchedObjectScript.StopTouching(this);
                 if (!untouchedObjectScript.IsTouched())
                 {
                     untouchedObjectScript.ToggleHighlight(false);

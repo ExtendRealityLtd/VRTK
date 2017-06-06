@@ -2,9 +2,6 @@
 namespace VRTK
 {
     using UnityEngine;
-#if UNITY_5_5_OR_NEWER
-    using UnityEngine.AI;
-#endif
 
     /// <summary>
     /// The VRTK Pointer class forms the basis of being able to emit a pointer from a game object (e.g. controller).
@@ -97,6 +94,7 @@ namespace VRTK
         protected bool selectionButtonPressed;
         protected bool attemptControllerSetup;
         protected Transform originalCustomOrigin;
+        protected VRTK_InteractUse cachedInteractUse;
 
         public virtual void OnActivationButtonPressed(ControllerInteractionEventArgs e)
         {
@@ -389,12 +387,25 @@ namespace VRTK
                 return false;
             }
 
+            GetInteractUse();
+            SetupDirectionIndicator();
+
+            return true;
+        }
+
+        protected virtual void GetInteractUse()
+        {
+            //First check to see if there is a VRTK_InteractUse on the pointer itself, if not then fall back to the controller
+            VRTK_InteractUse selfUseCheck = GetComponentInChildren<VRTK_InteractUse>();
+            cachedInteractUse = (selfUseCheck != null ? selfUseCheck : controller.GetComponentInChildren<VRTK_InteractUse>());
+        }
+
+        protected virtual void SetupDirectionIndicator()
+        {
             if (directionIndicator != null)
             {
                 directionIndicator.Initialize(controller);
             }
-
-            return true;
         }
 
         protected virtual void SetupController()
@@ -601,18 +612,18 @@ namespace VRTK
             pointerInteractableObject = target.GetComponent<VRTK_InteractableObject>();
             bool cannotUseBecauseNotGrabbed = (pointerInteractableObject && pointerInteractableObject.useOnlyIfGrabbed && !pointerInteractableObject.IsGrabbed());
 
-            if (PointerActivatesUseAction(pointerInteractableObject) && pointerInteractableObject.holdButtonToUse && !cannotUseBecauseNotGrabbed && pointerInteractableObject.usingState == 0)
+            if (cachedInteractUse != null && PointerActivatesUseAction(pointerInteractableObject) && pointerInteractableObject.holdButtonToUse && !cannotUseBecauseNotGrabbed && pointerInteractableObject.usingState == 0)
             {
-                pointerInteractableObject.StartUsing(controller.gameObject);
+                pointerInteractableObject.StartUsing(cachedInteractUse);
                 pointerInteractableObject.usingState++;
             }
         }
 
         protected virtual void StopUseAction()
         {
-            if (PointerActivatesUseAction(pointerInteractableObject) && pointerInteractableObject.holdButtonToUse && pointerInteractableObject.IsUsing())
+            if (cachedInteractUse != null && PointerActivatesUseAction(pointerInteractableObject) && pointerInteractableObject.holdButtonToUse && pointerInteractableObject.IsUsing())
             {
-                pointerInteractableObject.StopUsing(controller.gameObject);
+                pointerInteractableObject.StopUsing(cachedInteractUse);
                 pointerInteractableObject.usingState = 0;
             }
         }
@@ -623,14 +634,14 @@ namespace VRTK
             {
                 if (PointerActivatesUseAction(pointerInteractableObject))
                 {
-                    if (pointerInteractableObject.IsUsing())
+                    if (cachedInteractUse != null && pointerInteractableObject.IsUsing())
                     {
-                        pointerInteractableObject.StopUsing(controller.gameObject);
+                        pointerInteractableObject.StopUsing(cachedInteractUse);
                         pointerInteractableObject.usingState = 0;
                     }
-                    else if (!pointerInteractableObject.holdButtonToUse)
+                    else if (cachedInteractUse != null && !pointerInteractableObject.holdButtonToUse)
                     {
-                        pointerInteractableObject.StartUsing(controller.gameObject);
+                        pointerInteractableObject.StartUsing(cachedInteractUse);
                         pointerInteractableObject.usingState++;
                     }
                 }
