@@ -47,9 +47,17 @@ namespace VRTK
         public event ControllerInteractionEventHandler UseButtonReleased;
 
         /// <summary>
+        /// Emitted when a use of a valid object is started.
+        /// </summary>
+        public event ObjectInteractEventHandler ControllerStartUseInteractableObject;
+        /// <summary>
         /// Emitted when a valid object starts being used.
         /// </summary>
         public event ObjectInteractEventHandler ControllerUseInteractableObject;
+        /// <summary>
+        /// Emitted when a unuse of a valid object is started.
+        /// </summary>
+        public event ObjectInteractEventHandler ControllerStartUnuseInteractableObject;
         /// <summary>
         /// Emitted when a valid object stops being used.
         /// </summary>
@@ -68,11 +76,27 @@ namespace VRTK
 
         protected GameObject usingObject = null;
 
+        public virtual void OnControllerStartUseInteractableObject(ObjectInteractEventArgs e)
+        {
+            if (ControllerStartUseInteractableObject != null)
+            {
+                ControllerStartUseInteractableObject(this, e);
+            }
+        }
+
         public virtual void OnControllerUseInteractableObject(ObjectInteractEventArgs e)
         {
             if (ControllerUseInteractableObject != null)
             {
                 ControllerUseInteractableObject(this, e);
+            }
+        }
+
+        public virtual void OnControllerStartUnuseInteractableObject(ObjectInteractEventArgs e)
+        {
+            if (ControllerStartUnuseInteractableObject != null)
+            {
+                ControllerStartUnuseInteractableObject(this, e);
             }
         }
 
@@ -242,7 +266,7 @@ namespace VRTK
         {
             if (obj != null)
             {
-                var objScript = obj.GetComponent<VRTK_InteractableObject>();
+                VRTK_InteractableObject objScript = obj.GetComponent<VRTK_InteractableObject>();
                 return (objScript != null && objScript.holdButtonToUse);
             }
             return false;
@@ -252,7 +276,7 @@ namespace VRTK
         {
             if (obj != null)
             {
-                var objScript = obj.GetComponent<VRTK_InteractableObject>();
+                VRTK_InteractableObject objScript = obj.GetComponent<VRTK_InteractableObject>();
                 if (objScript != null)
                 {
                     return objScript.usingState;
@@ -265,7 +289,7 @@ namespace VRTK
         {
             if (obj != null)
             {
-                var objScript = obj.GetComponent<VRTK_InteractableObject>();
+                VRTK_InteractableObject objScript = obj.GetComponent<VRTK_InteractableObject>();
                 if (objScript != null)
                 {
                     objScript.usingState = value;
@@ -277,7 +301,7 @@ namespace VRTK
         {
             if (usingObject != null)
             {
-                var doHaptics = usingObject.GetComponentInParent<VRTK_InteractHaptics>();
+                VRTK_InteractHaptics doHaptics = usingObject.GetComponentInParent<VRTK_InteractHaptics>();
                 if (doHaptics != null)
                 {
                     doHaptics.HapticsOnUse(controllerReference);
@@ -302,7 +326,8 @@ namespace VRTK
             if ((usingObject == null || usingObject != touchedObject) && IsObjectUsable(touchedObject))
             {
                 usingObject = touchedObject;
-                var usingObjectScript = usingObject.GetComponent<VRTK_InteractableObject>();
+                OnControllerStartUseInteractableObject(interactTouch.SetControllerInteractEvent(usingObject));
+                VRTK_InteractableObject usingObjectScript = usingObject.GetComponent<VRTK_InteractableObject>();
 
                 if (!usingObjectScript.IsValidInteractableController(controllerReference.scriptAlias, usingObjectScript.allowedUseControllers))
                 {
@@ -321,7 +346,8 @@ namespace VRTK
         {
             if (usingObject != null)
             {
-                var usingObjectCheck = usingObject.GetComponent<VRTK_InteractableObject>();
+                OnControllerStartUnuseInteractableObject(interactTouch.SetControllerInteractEvent(usingObject));
+                VRTK_InteractableObject usingObjectCheck = usingObject.GetComponent<VRTK_InteractableObject>();
                 if (usingObjectCheck != null && completeStop)
                 {
                     usingObjectCheck.StopUsing(controllerReference.scriptAlias);
@@ -357,7 +383,7 @@ namespace VRTK
 
             if (touchedObject != null && interactTouch.IsObjectInteractable(touchedObject))
             {
-                var interactableObjectScript = touchedObject.GetComponent<VRTK_InteractableObject>();
+                VRTK_InteractableObject interactableObjectScript = touchedObject.GetComponent<VRTK_InteractableObject>();
 
                 if (interactableObjectScript.useOnlyIfGrabbed && !interactableObjectScript.IsGrabbed())
                 {

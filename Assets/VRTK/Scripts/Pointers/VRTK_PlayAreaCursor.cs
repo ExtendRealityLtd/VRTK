@@ -4,6 +4,22 @@ namespace VRTK
     using UnityEngine;
 
     /// <summary>
+    /// Event Payload
+    /// </summary>
+    /// <param name="collidedWith">The collider that is/was being collided with.</param>
+    public struct PlayAreaCursorEventArgs
+    {
+        public Collider collider;
+    }
+
+    /// <summary>
+    /// Event Payload
+    /// </summary>
+    /// <param name="sender">this object</param>
+    /// <param name="e"><see cref="PlayAreaCursorEventArgs"/></param>
+    public delegate void PlayAreaCursorEventHandler(object sender, PlayAreaCursorEventArgs e);
+
+    /// <summary>
     /// The Play Area Cursor is used in conjunction with a Pointer script and displays a representation of the play area where the pointer cursor hits.
     /// </summary>
     /// <example>
@@ -31,6 +47,15 @@ namespace VRTK
         [Tooltip("A custom GameObject to use for the play area cursor representation for when the location is invalid.")]
         public GameObject invalidLocationObject;
 
+        /// <summary>
+        /// Emitted when the play area collides with another object.
+        /// </summary>
+        public event PlayAreaCursorEventHandler PlayAreaCursorStartCollision;
+        /// <summary>
+        /// Emitted when the play area stops colliding with another object.
+        /// </summary>
+        public event PlayAreaCursorEventHandler PlayAreaCursorEndCollision;
+
         protected bool headsetPositionCompensation;
         protected bool playAreaCursorCollided = false;
         protected bool headsetOutOfBounds = false;
@@ -51,6 +76,22 @@ namespace VRTK
         protected int btmLeftOuter = 5;
         protected int topLeftOuter = 6;
         protected int topRightOuter = 7;
+
+        public virtual void OnPlayAreaCursorStartCollision(PlayAreaCursorEventArgs e)
+        {
+            if (PlayAreaCursorStartCollision != null)
+            {
+                PlayAreaCursorStartCollision(this, e);
+            }
+        }
+
+        public virtual void OnPlayAreaCursorEndCollision(PlayAreaCursorEventArgs e)
+        {
+            if (PlayAreaCursorEndCollision != null)
+            {
+                PlayAreaCursorEndCollision(this, e);
+            }
+        }
 
         /// <summary>
         /// The HasCollided method returns the state of whether the play area cursor has currently collided with another valid object.
@@ -74,12 +115,14 @@ namespace VRTK
         /// The SetPlayAreaCursorCollision method determines whether play area collisions should be taken into consideration with the play area cursor.
         /// </summary>
         /// <param name="state">The state of whether to check for play area collisions.</param>
-        public virtual void SetPlayAreaCursorCollision(bool state)
+        /// <param name="collider">The state of whether to check for play area collisions.</param>
+        public virtual void SetPlayAreaCursorCollision(bool state, Collider collider = null)
         {
             playAreaCursorCollided = false;
             if (handlePlayAreaCursorCollisions)
             {
                 playAreaCursorCollided = (!enabled ? false : state);
+                EmitEvent(collider);
             }
         }
 
@@ -226,6 +269,28 @@ namespace VRTK
             if (enabled && IsActive())
             {
                 UpdateCollider();
+            }
+        }
+
+        protected virtual PlayAreaCursorEventArgs SetEventPayload(Collider collider)
+        {
+            PlayAreaCursorEventArgs e;
+            e.collider = collider;
+            return e;
+        }
+
+        protected virtual void EmitEvent(Collider collider)
+        {
+            if (collider != null)
+            {
+                if (playAreaCursorCollided)
+                {
+                    OnPlayAreaCursorStartCollision(SetEventPayload(collider));
+                }
+                else
+                {
+                    OnPlayAreaCursorEndCollision(SetEventPayload(collider));
+                }
             }
         }
 
@@ -415,7 +480,7 @@ namespace VRTK
 
         protected virtual void OnDisable()
         {
-            if (parent)
+            if (parent != null)
             {
                 parent.SetPlayAreaCursorCollision(false);
             }
@@ -423,17 +488,17 @@ namespace VRTK
 
         protected virtual void OnTriggerStay(Collider collider)
         {
-            if (parent && parent.enabled && parent.gameObject.activeInHierarchy && ValidTarget(collider))
+            if (parent != null && parent.enabled && parent.gameObject.activeInHierarchy && ValidTarget(collider))
             {
-                parent.SetPlayAreaCursorCollision(true);
+                parent.SetPlayAreaCursorCollision(true, collider);
             }
         }
 
         protected virtual void OnTriggerExit(Collider collider)
         {
-            if (parent && ValidTarget(collider))
+            if (parent != null && ValidTarget(collider))
             {
-                parent.SetPlayAreaCursorCollision(false);
+                parent.SetPlayAreaCursorCollision(false, collider);
             }
         }
 

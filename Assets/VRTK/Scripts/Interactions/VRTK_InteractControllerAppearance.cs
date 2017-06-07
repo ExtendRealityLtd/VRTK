@@ -5,6 +5,24 @@ namespace VRTK
     using System.Collections;
 
     /// <summary>
+    /// Event Payload
+    /// </summary>
+    /// <param name="interactingObject">The object that is interacting.</param>
+    /// <param name="ignoredObject">The object that is being ignored.</param>
+    public struct InteractControllerAppearanceEventArgs
+    {
+        public GameObject interactingObject;
+        public GameObject ignoredObject;
+    }
+
+    /// <summary>
+    /// Event Payload
+    /// </summary>
+    /// <param name="sender">this object</param>
+    /// <param name="e"><see cref="InteractControllerAppearanceEventArgs"/></param>
+    public delegate void InteractControllerAppearanceEventHandler(object sender, InteractControllerAppearanceEventArgs e);
+
+    /// <summary>
     /// The Interact Controller Appearance script is attached on the same GameObject as an Interactable Object script and is used to determine whether the controller model should be visible or hidden on touch, grab or use.
     /// </summary>
     /// <example>
@@ -34,9 +52,106 @@ namespace VRTK
         [Tooltip("The amount of seconds to wait before hiding the controller on use.")]
         public float hideDelayOnUse = 0f;
 
+        /// <summary>
+        /// Emitted when the interacting object is hidden.
+        /// </summary>
+        public event InteractControllerAppearanceEventHandler ControllerHidden;
+        /// <summary>
+        /// Emitted when the interacting object is shown.
+        /// </summary>
+        public event InteractControllerAppearanceEventHandler ControllerVisible;
+        /// <summary>
+        /// Emitted when the interacting object is hidden on touch.
+        /// </summary>
+        public event InteractControllerAppearanceEventHandler HiddenOnTouch;
+        /// <summary>
+        /// Emitted when the interacting object is shown on untouch.
+        /// </summary>
+        public event InteractControllerAppearanceEventHandler VisibleOnTouch;
+        /// <summary>
+        /// Emitted when the interacting object is hidden on grab.
+        /// </summary>
+        public event InteractControllerAppearanceEventHandler HiddenOnGrab;
+        /// <summary>
+        /// Emitted when the interacting object is shown on ungrab.
+        /// </summary>
+        public event InteractControllerAppearanceEventHandler VisibleOnGrab;
+        /// <summary>
+        /// Emitted when the interacting object is hidden on use.
+        /// </summary>
+        public event InteractControllerAppearanceEventHandler HiddenOnUse;
+        /// <summary>
+        /// Emitted when the interacting object is shown on unuse.
+        /// </summary>
+        public event InteractControllerAppearanceEventHandler VisibleOnUse;
+
         protected bool touchControllerShow = true;
         protected bool grabControllerShow = true;
         protected Coroutine hideControllerRoutine;
+
+        public virtual void OnControllerHidden(InteractControllerAppearanceEventArgs e)
+        {
+            if (ControllerHidden != null)
+            {
+                ControllerHidden(this, e);
+            }
+        }
+
+        public virtual void OnControllerVisible(InteractControllerAppearanceEventArgs e)
+        {
+            if (ControllerVisible != null)
+            {
+                ControllerVisible(this, e);
+            }
+        }
+
+        public virtual void OnHiddenOnTouch(InteractControllerAppearanceEventArgs e)
+        {
+            if (HiddenOnTouch != null)
+            {
+                HiddenOnTouch(this, e);
+            }
+        }
+
+        public virtual void OnVisibleOnTouch(InteractControllerAppearanceEventArgs e)
+        {
+            if (VisibleOnTouch != null)
+            {
+                VisibleOnTouch(this, e);
+            }
+        }
+
+        public virtual void OnHiddenOnGrab(InteractControllerAppearanceEventArgs e)
+        {
+            if (HiddenOnGrab != null)
+            {
+                HiddenOnGrab(this, e);
+            }
+        }
+
+        public virtual void OnVisibleOnGrab(InteractControllerAppearanceEventArgs e)
+        {
+            if (VisibleOnGrab != null)
+            {
+                VisibleOnGrab(this, e);
+            }
+        }
+
+        public virtual void OnHiddenOnUse(InteractControllerAppearanceEventArgs e)
+        {
+            if (HiddenOnUse != null)
+            {
+                HiddenOnUse(this, e);
+            }
+        }
+
+        public virtual void OnVisibleOnUse(InteractControllerAppearanceEventArgs e)
+        {
+            if (VisibleOnUse != null)
+            {
+                VisibleOnUse(this, e);
+            }
+        }
 
         /// <summary>
         /// The ToggleControllerOnTouch method determines whether the controller should be shown or hidden when touching an interactable object.
@@ -50,6 +165,15 @@ namespace VRTK
             {
                 touchControllerShow = showController;
                 ToggleController(showController, touchingObject, ignoredObject, hideDelayOnTouch);
+
+                if (showController)
+                {
+                    OnVisibleOnTouch(SetEventPayload(touchingObject, ignoredObject));
+                }
+                else
+                {
+                    OnHiddenOnTouch(SetEventPayload(touchingObject, ignoredObject));
+                }
             }
         }
 
@@ -72,6 +196,15 @@ namespace VRTK
                 }
                 grabControllerShow = showController;
                 ToggleController(showController, grabbingObject, ignoredObject, hideDelayOnGrab);
+
+                if (showController)
+                {
+                    OnVisibleOnGrab(SetEventPayload(grabbingObject, ignoredObject));
+                }
+                else
+                {
+                    OnHiddenOnGrab(SetEventPayload(grabbingObject, ignoredObject));
+                }
             }
         }
 
@@ -93,6 +226,15 @@ namespace VRTK
                     return;
                 }
                 ToggleController(showController, usingObject, ignoredObject, hideDelayOnUse);
+
+                if (showController)
+                {
+                    OnVisibleOnUse(SetEventPayload(usingObject, ignoredObject));
+                }
+                else
+                {
+                    OnHiddenOnUse(SetEventPayload(usingObject, ignoredObject));
+                }
             }
         }
 
@@ -131,12 +273,22 @@ namespace VRTK
                 StopCoroutine(hideControllerRoutine);
             }
             VRTK_ObjectAppearance.SetRendererVisible(interactingObject, ignoredObject);
+            OnControllerVisible(SetEventPayload(interactingObject, ignoredObject));
         }
 
         protected virtual IEnumerator HideController(GameObject interactingObject, GameObject ignoredObject, float delayTime)
         {
             yield return new WaitForSeconds(delayTime);
             VRTK_ObjectAppearance.SetRendererHidden(interactingObject, ignoredObject);
+            OnControllerHidden(SetEventPayload(interactingObject, ignoredObject));
+        }
+
+        protected virtual InteractControllerAppearanceEventArgs SetEventPayload(GameObject interactingObject, GameObject ignroedObject)
+        {
+            InteractControllerAppearanceEventArgs e;
+            e.interactingObject = interactingObject;
+            e.ignoredObject = ignroedObject;
+            return e;
         }
     }
 }

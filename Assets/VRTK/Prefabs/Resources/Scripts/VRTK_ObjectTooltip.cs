@@ -5,6 +5,22 @@ namespace VRTK
     using UnityEngine.UI;
 
     /// <summary>
+    /// Event Payload
+    /// </summary>
+    /// <param name="newText">The optional new text that is given to the tooltip.</param>
+    public struct ObjectTooltipEventArgs
+    {
+        public string newText;
+    }
+
+    /// <summary>
+    /// Event Payload
+    /// </summary>
+    /// <param name="sender">this object</param>
+    /// <param name="e"><see cref="ObjectTooltipEventArgs"/></param>
+    public delegate void ObjectTooltipEventHandler(object sender, ObjectTooltipEventArgs e);
+
+    /// <summary>
     /// This adds a UI element into the World Space that can be used to provide additional information about an object by providing a piece of text with a line drawn to a destination point.
     /// </summary>
     /// <remarks>
@@ -36,8 +52,33 @@ namespace VRTK
         [Tooltip("If this is checked then the tooltip will be rotated so it always face the headset.")]
         public bool alwaysFaceHeadset = false;
 
+        /// <summary>
+        /// Emitted when the object tooltip is reset.
+        /// </summary>
+        public event ObjectTooltipEventHandler ObjectTooltipReset;
+        /// <summary>
+        /// Emitted when the object tooltip text is updated.
+        /// </summary>
+        public event ObjectTooltipEventHandler ObjectTooltipTextUpdated;
+
         protected LineRenderer line;
         protected Transform headset;
+
+        public virtual void OnObjectTooltipReset(ObjectTooltipEventArgs e)
+        {
+            if (ObjectTooltipReset != null)
+            {
+                ObjectTooltipReset(this, e);
+            }
+        }
+
+        public virtual void OnObjectTooltipTextUpdated(ObjectTooltipEventArgs e)
+        {
+            if (ObjectTooltipTextUpdated != null)
+            {
+                ObjectTooltipTextUpdated(this, e);
+            }
+        }
 
         /// <summary>
         /// The ResetTooltip method resets the tooltip back to its initial state.
@@ -52,6 +93,7 @@ namespace VRTK
             {
                 drawLineTo = transform.parent;
             }
+            OnObjectTooltipReset(SetEventPayload());
         }
 
         /// <summary>
@@ -61,6 +103,7 @@ namespace VRTK
         public virtual void UpdateText(string newText)
         {
             displayText = newText;
+            OnObjectTooltipTextUpdated(SetEventPayload(newText));
             ResetTooltip();
         }
 
@@ -87,6 +130,13 @@ namespace VRTK
             {
                 transform.LookAt(headset);
             }
+        }
+
+        protected virtual ObjectTooltipEventArgs SetEventPayload(string newText = "")
+        {
+            ObjectTooltipEventArgs e;
+            e.newText = newText;
+            return e;
         }
 
         protected virtual void SetContainer()

@@ -154,6 +154,21 @@ There are a number of parameters that can be set on the Prefab which are provide
  * **Line Color:** The colour to use for the line drawn between the tooltip and the destination transform.
  * **Always Face Headset:** If this is checked then the tooltip will be rotated so it always face the headset.
 
+### Class Events
+
+ * `ObjectTooltipReset` - Emitted when the object tooltip is reset.
+ * `ObjectTooltipTextUpdated` - Emitted when the object tooltip text is updated.
+
+### Unity Events
+
+Adding the `VRTK_ObjectTooltip_UnityEvents` component to `VRTK_ObjectTooltip` object allows access to `UnityEvents` that will react identically to the Class Events.
+
+ * All C# delegate events are mapped to a Unity Event with the `On` prefix. e.g. `MyEvent` -> `OnMyEvent`.
+
+### Event Payload
+
+ * `string newText` - The optional new text that is given to the tooltip.
+
 ### Class Methods
 
 #### ResetTooltip/0
@@ -219,6 +234,21 @@ There are a number of parameters that can be set on the Prefab which are provide
  * **Retry Init Max Tries:** The total number of initialisation attempts to make when waiting for the button transforms to initialise.
  * **Retry Init Counter:** The amount of seconds to wait before re-attempting to initialise the controller tooltips if the button transforms have not been initialised yet.
 
+### Class Events
+
+ * `ControllerTooltipOn` - Emitted when the controller tooltip is turned on.
+ * `ControllerTooltipOff` - Emitted when the controller tooltip is turned off.
+
+### Unity Events
+
+Adding the `VRTK_ControllerTooltips_UnityEvents` component to `VRTK_ControllerTooltips` object allows access to `UnityEvents` that will react identically to the Class Events.
+
+ * All C# delegate events are mapped to a Unity Event with the `On` prefix. e.g. `MyEvent` -> `OnMyEvent`.
+
+### Event Payload
+
+ * `VRTK_ControllerTooltips.TooltipButtons element` - The tooltip element being affected.
+
 ### Class Methods
 
 #### ResetTooltip/0
@@ -279,6 +309,21 @@ It's also possible to replace the sphere trigger collider with an alternative tr
 ### Inspector Parameters
 
  * **Is Enabled:** If this is checked then the collider will have it's rigidbody toggled on and off during a collision.
+
+### Class Events
+
+ * `ControllerRigidbodyOn` - Emitted when the controller rigidbody is turned on.
+ * `ControllerRigidbodyOff` - Emitted when the controller rigidbody is turned off.
+
+### Unity Events
+
+Adding the `VRTK_ControllerRigidbodyActivator_UnityEvents` component to `VRTK_ControllerRigidbodyActivator` object allows access to `UnityEvents` that will react identically to the Class Events.
+
+ * All C# delegate events are mapped to a Unity Event with the `On` prefix. e.g. `MyEvent` -> `OnMyEvent`.
+
+### Event Payload
+
+ * ` interactingObject` - The object that touching the activator.
 
 ---
 
@@ -654,6 +699,20 @@ The destination points can also have a locked state if the `Enable Teleport` fla
   * `RotateWithNoHeadsetOffset` - The destination point's rotation will be emitted without taking into consideration the current headset rotation.
   * `RotateWithHeadsetOffset` - The destination point's rotation will be emitted and will take into consideration the current headset rotation.
 
+### Class Events
+
+ * `DestinationPointEnabled` - Emitted when the destination point is enabled.
+ * `DestinationPointDisabled` - Emitted when the destination point is disabled.
+ * `DestinationPointLocked` - Emitted when the destination point is locked.
+ * `DestinationPointUnlocked` - Emitted when the destination point is unlocked.
+ * `DestinationPointReset` - Emitted when the destination point is reset.
+
+### Unity Events
+
+Adding the `VRTK_DestinationPoint_UnityEvents` component to `VRTK_DestinationPoint` object allows access to `UnityEvents` that will react identically to the Class Events.
+
+ * All C# delegate events are mapped to a Unity Event with the `On` prefix. e.g. `MyEvent` -> `OnMyEvent`.
+
 ### Class Methods
 
 #### ResetDestinationPoint/0
@@ -686,6 +745,16 @@ This can be useful for rotating the play area upon teleporting to face the user 
 ### Inspector Parameters
 
  * **Include Headset Offset:** If this is checked then the reported rotation will include the offset of the headset rotation in relation to the play area.
+
+### Class Events
+
+ * `PointerDirectionIndicatorPositionSet` - Emitted when the object tooltip is reset.
+
+### Unity Events
+
+Adding the `VRTK_PointerDirectionIndicator_UnityEvents` component to `VRTK_PointerDirectionIndicator` object allows access to `UnityEvents` that will react identically to the Class Events.
+
+ * All C# delegate events are mapped to a Unity Event with the `On` prefix. e.g. `MyEvent` -> `OnMyEvent`.
 
 ### Class Methods
 
@@ -1232,6 +1301,21 @@ The Play Area Cursor is used in conjunction with a Pointer script and displays a
  * **Valid Location Object:** A custom GameObject to use for the play area cursor representation for when the location is valid.
  * **Invalid Location Object:** A custom GameObject to use for the play area cursor representation for when the location is invalid.
 
+### Class Events
+
+ * `PlayAreaCursorStartCollision` - Emitted when the play area collides with another object.
+ * `PlayAreaCursorEndCollision` - Emitted when the play area stops colliding with another object.
+
+### Unity Events
+
+Adding the `VRTK_PlayAreaCursor_UnityEvents` component to `VRTK_PlayAreaCursor` object allows access to `UnityEvents` that will react identically to the Class Events.
+
+ * All C# delegate events are mapped to a Unity Event with the `On` prefix. e.g. `MyEvent` -> `OnMyEvent`.
+
+### Event Payload
+
+ * ` collidedWith` - The collider that is/was being collided with.
+
 ### Class Methods
 
 #### HasCollided/0
@@ -1256,12 +1340,13 @@ The HasCollided method returns the state of whether the play area cursor has cur
 
 The SetHeadsetPositionCompensation method determines whether the offset position of the headset from the centre of the play area should be taken into consideration when setting the destination marker. If `true` then it will take the offset position into consideration.
 
-#### SetPlayAreaCursorCollision/1
+#### SetPlayAreaCursorCollision/2
 
-  > `public virtual void SetPlayAreaCursorCollision(bool state)`
+  > `public virtual void SetPlayAreaCursorCollision(bool state, Collider collider = null)`
 
   * Parameters
    * `bool state` - The state of whether to check for play area collisions.
+   * `Collider collider` - The state of whether to check for play area collisions.
   * Returns
    * _none_
 
@@ -2676,6 +2761,28 @@ The Interact Controller Appearance script is attached on the same GameObject as 
  * **Hide Controller On Use:** Hides the controller model when a valid use occurs.
  * **Hide Delay On Use:** The amount of seconds to wait before hiding the controller on use.
 
+### Class Events
+
+ * `ControllerHidden` - Emitted when the interacting object is hidden.
+ * `ControllerVisible` - Emitted when the interacting object is shown.
+ * `HiddenOnTouch` - Emitted when the interacting object is hidden on touch.
+ * `VisibleOnTouch` - Emitted when the interacting object is shown on untouch.
+ * `HiddenOnGrab` - Emitted when the interacting object is hidden on grab.
+ * `VisibleOnGrab` - Emitted when the interacting object is shown on ungrab.
+ * `HiddenOnUse` - Emitted when the interacting object is hidden on use.
+ * `VisibleOnUse` - Emitted when the interacting object is shown on unuse.
+
+### Unity Events
+
+Adding the `VRTK_InteractControllerAppearance_UnityEvents` component to `VRTK_InteractControllerAppearance` object allows access to `UnityEvents` that will react identically to the Class Events.
+
+ * All C# delegate events are mapped to a Unity Event with the `On` prefix. e.g. `MyEvent` -> `OnMyEvent`.
+
+### Event Payload
+
+ * `GameObject interactingObject` - The object that is interacting.
+ * `GameObject ignoredObject` - The object that is being ignored.
+
 ### Class Methods
 
 #### ToggleControllerOnTouch/3
@@ -2739,8 +2846,12 @@ A custom collider can be provided by the Custom Rigidbody Object parameter.
 
 ### Class Events
 
+ * `ControllerStartTouchInteractableObject` - Emitted when the touch of a valid object has started.
  * `ControllerTouchInteractableObject` - Emitted when a valid object is touched.
+ * `ControllerStartUntouchInteractableObject` - Emitted when the untouch of a valid object has started.
  * `ControllerUntouchInteractableObject` - Emitted when a valid object is no longer being touched.
+ * `ControllerRigidbodyActivated` - Emitted when the controller rigidbody is activated.
+ * `ControllerRigidbodyDeactivated` - Emitted when the controller rigidbody is deactivated.
 
 ### Unity Events
 
@@ -2882,7 +2993,9 @@ The interactable objects require a collider to activate the trigger and a rigidb
 
  * `GrabButtonPressed` - Emitted when the grab button is pressed.
  * `GrabButtonReleased` - Emitted when the grab button is released.
+ * `ControllerStartGrabInteractableObject` - Emitted when a grab of a valid object is started.
  * `ControllerGrabInteractableObject` - Emitted when a valid object is grabbed.
+ * `ControllerStartUngrabInteractableObject` - Emitted when a ungrab of a valid object is started.
  * `ControllerUngrabInteractableObject` - Emitted when a valid object is released from being grabbed.
 
 ### Unity Events
@@ -2972,7 +3085,9 @@ If a valid interactable object is usable then pressing the set `Use` button on t
 
  * `UseButtonPressed` - Emitted when the use toggle alias button is pressed.
  * `UseButtonReleased` - Emitted when the use toggle alias button is released.
+ * `ControllerStartUseInteractableObject` - Emitted when a use of a valid object is started.
  * `ControllerUseInteractableObject` - Emitted when a valid object starts being used.
+ * `ControllerStartUnuseInteractableObject` - Emitted when a unuse of a valid object is started.
  * `ControllerUnuseInteractableObject` - Emitted when a valid object stops being used.
 
 ### Unity Events
@@ -3585,6 +3700,22 @@ The Interact Haptics script is attached on the same GameObject as an Interactabl
  * **Duration On Use:** Denotes how long the rumble in the controller will last on use.
  * **Interval On Use:** Denotes interval betweens rumble in the controller on use.
 
+### Class Events
+
+ * `InteractHapticsTouched` - Emitted when the haptics are from a touch.
+ * `InteractHapticsGrabbed` - Emitted when the haptics are from a grab.
+ * `InteractHapticsUsed` - Emitted when the haptics are from a use.
+
+### Unity Events
+
+Adding the `VRTK_InteractHaptics_UnityEvents` component to `VRTK_InteractHaptics` object allows access to `UnityEvents` that will react identically to the Class Events.
+
+ * All C# delegate events are mapped to a Unity Event with the `On` prefix. e.g. `MyEvent` -> `OnMyEvent`.
+
+### Event Payload
+
+ * `VRTK_ControllerReference controllerReference` - The reference to the controller to perform haptics on.
+
 ### Class Methods
 
 #### HapticsOnTouch/1
@@ -3636,6 +3767,16 @@ It is possible to automatically grab an Interactable Object to a specific contro
  * **Always Clone On Enable:** If `Clone Grabbed Object` is checked and this is checked, then whenever this script is disabled and re-enabled, it will always create a new clone of the object to grab. If this is false then the original cloned object will attempt to be grabbed again. If the original cloned object no longer exists then a new clone will be created.
  * **Interact Touch:** The Interact Touch to listen for touches on. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.
  * **Interact Grab:** The Interact Grab to listen for grab actions on. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.
+
+### Class Events
+
+ * `ObjectAutoGrabCompleted` - Emitted when the object auto grab has completed successfully.
+
+### Unity Events
+
+Adding the `VRTK_ObjectAutoGrab_UnityEvents` component to `VRTK_ObjectAutoGrab` object allows access to `UnityEvents` that will react identically to the Class Events.
+
+ * All C# delegate events are mapped to a Unity Event with the `On` prefix. e.g. `MyEvent` -> `OnMyEvent`.
 
 ### Class Methods
 
@@ -5019,9 +5160,13 @@ To allow for peeking over a ledge and not falling, a fall restiction can happen 
  * `StartFalling` - Emitted when a fall begins.
  * `StopFalling` - Emitted when a fall ends.
  * `StartMoving` - Emitted when movement in the play area begins.
- * `StopMoving` - Emitted when movement in the play area ends
- * `StartColliding` - Emitted when the body collider starts colliding with another game object
- * `StopColliding` - Emitted when the body collider stops colliding with another game object
+ * `StopMoving` - Emitted when movement in the play area ends.
+ * `StartColliding` - Emitted when the body collider starts colliding with another game object.
+ * `StopColliding` - Emitted when the body collider stops colliding with another game object.
+ * `StartLeaning` - Emitted when the body collider starts leaning over another game object.
+ * `StopLeaning` - Emitted when the body collider stops leaning over another game object.
+ * `StartTouchingGround` - Emitted when the body collider starts touching the ground.
+ * `StopTouchingGround` - Emitted when the body collider stops touching the ground.
 
 ### Unity Events
 
@@ -5245,6 +5390,21 @@ The Position Rewind script is used to reset the user back to a good known standi
   * `HeadsetOnly` - Listen for collisions on the headset collider only.
   * `BodyOnly` - Listen for collisions on the body physics collider only.
   * `HeadsetAndBody` - Listen for collisions on both the headset collider and body physics collider.
+
+### Class Events
+
+ * `PositionRewindToSafe` - Emitted when the draggable item is successfully dropped.
+
+### Unity Events
+
+Adding the `VRTK_PositionRewind_UnityEvents` component to `VRTK_PositionRewind` object allows access to `UnityEvents` that will react identically to the Class Events.
+
+ * All C# delegate events are mapped to a Unity Event with the `On` prefix. e.g. `MyEvent` -> `OnMyEvent`.
+
+### Event Payload
+
+ * `Vector3 collidedPosition` - The position of the play area when it collded.
+ * `Vector3 resetPosition` - The position of the play area when it has been rewinded to a safe position.
 
 ### Class Methods
 
@@ -5480,6 +5640,21 @@ If a UI Draggable item is set to `Restrict To Drop Zone = true` then the UI Drag
 ### Class Variables
 
  * `public GameObject validDropZone` - The current valid drop zone the dragged element is hovering over.
+
+### Class Events
+
+ * `DraggableItemDropped` - Emitted when the draggable item is successfully dropped.
+ * `DraggableItemReset` - Emitted when the draggable item is reset.
+
+### Unity Events
+
+Adding the `VRTK_UIDraggableItem_UnityEvents` component to `VRTK_UIDraggableItem` object allows access to `UnityEvents` that will react identically to the Class Events.
+
+ * All C# delegate events are mapped to a Unity Event with the `On` prefix. e.g. `MyEvent` -> `OnMyEvent`.
+
+### Event Payload
+
+ * `GameObject target` - The target the item is dragged onto.
 
 ### Example
 

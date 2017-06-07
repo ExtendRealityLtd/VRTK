@@ -59,9 +59,17 @@ namespace VRTK
         public event ControllerInteractionEventHandler GrabButtonReleased;
 
         /// <summary>
+        /// Emitted when a grab of a valid object is started.
+        /// </summary>
+        public event ObjectInteractEventHandler ControllerStartGrabInteractableObject;
+        /// <summary>
         /// Emitted when a valid object is grabbed.
         /// </summary>
         public event ObjectInteractEventHandler ControllerGrabInteractableObject;
+        /// <summary>
+        /// Emitted when a ungrab of a valid object is started.
+        /// </summary>
+        public event ObjectInteractEventHandler ControllerStartUngrabInteractableObject;
         /// <summary>
         /// Emitted when a valid object is released from being grabbed.
         /// </summary>
@@ -85,11 +93,27 @@ namespace VRTK
             }
         }
 
+        public virtual void OnControllerStartGrabInteractableObject(ObjectInteractEventArgs e)
+        {
+            if (ControllerStartGrabInteractableObject != null)
+            {
+                ControllerStartGrabInteractableObject(this, e);
+            }
+        }
+
         public virtual void OnControllerGrabInteractableObject(ObjectInteractEventArgs e)
         {
             if (ControllerGrabInteractableObject != null)
             {
                 ControllerGrabInteractableObject(this, e);
+            }
+        }
+
+        public virtual void OnControllerStartUngrabInteractableObject(ObjectInteractEventArgs e)
+        {
+            if (ControllerStartUngrabInteractableObject != null)
+            {
+                ControllerStartUngrabInteractableObject(this, e);
             }
         }
 
@@ -351,6 +375,7 @@ namespace VRTK
             grabbedObject = interactTouch.GetTouchedObject();
             if (grabbedObject != null)
             {
+                OnControllerStartGrabInteractableObject(interactTouch.SetControllerInteractEvent(grabbedObject));
                 VRTK_InteractableObject grabbedObjectScript = grabbedObject.GetComponent<VRTK_InteractableObject>();
                 ChooseGrabSequence(grabbedObjectScript);
                 ToggleControllerVisibility(false);
@@ -410,6 +435,7 @@ namespace VRTK
         {
             if (grabbedObject != null)
             {
+                OnControllerStartUngrabInteractableObject(interactTouch.SetControllerInteractEvent(grabbedObject));
                 GameObject grabbingObject = controllerReference.scriptAlias;
                 VRTK_InteractableObject grabbedObjectScript = grabbedObject.GetComponent<VRTK_InteractableObject>();
                 if (!influencingGrabbedObject)

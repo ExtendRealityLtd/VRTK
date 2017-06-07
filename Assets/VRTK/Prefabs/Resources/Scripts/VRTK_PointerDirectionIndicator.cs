@@ -4,6 +4,12 @@ namespace VRTK
     using UnityEngine;
 
     /// <summary>
+    /// Event Payload
+    /// </summary>
+    /// <param name="sender">this object</param>
+    public delegate void PointerDirectionIndicatorEventHandler(object sender);
+
+    /// <summary>
     /// The Pointer Direction Indicator is used to determine a given world rotation that can be used by a Destiantion Marker.
     /// </summary>
     /// <remarks>
@@ -16,9 +22,22 @@ namespace VRTK
         [Tooltip("If this is checked then the reported rotation will include the offset of the headset rotation in relation to the play area.")]
         public bool includeHeadsetOffset = true;
 
+        /// <summary>
+        /// Emitted when the object tooltip is reset.
+        /// </summary>
+        public event PointerDirectionIndicatorEventHandler PointerDirectionIndicatorPositionSet;
+
         protected VRTK_ControllerEvents controllerEvents;
         protected Transform playArea;
         protected Transform headset;
+
+        public virtual void OnPointerDirectionIndicatorPositionSet()
+        {
+            if (PointerDirectionIndicatorPositionSet != null)
+            {
+                PointerDirectionIndicatorPositionSet(this);
+            }
+        }
 
         /// <summary>
         /// The Initialize method is used to set up the direction indicator.
@@ -40,6 +59,7 @@ namespace VRTK
         {
             transform.position = position;
             gameObject.SetActive(active);
+            OnPointerDirectionIndicatorPositionSet();
         }
 
         /// <summary>
