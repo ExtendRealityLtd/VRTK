@@ -4710,6 +4710,7 @@ The Headset Collision script will automatically create a script on the headset t
 
 ### Inspector Parameters
 
+ * **Ignore Trigger Colliders:** If this is checked then the headset collision will ignore colliders set to `Is Trigger = true`.
  * **Collider Radius:** The radius of the auto generated sphere collider for detecting collisions on the headset.
  * **Target List Policy:** A specified VRTK_PolicyList to use to determine whether any objects will be acted upon by the Headset Collision.
 
@@ -5031,6 +5032,7 @@ Adding the `VRTK_BodyPhysics_UnityEvents` component to `VRTK_BodyPhysics` object
 ### Event Payload
 
  * `GameObject target` - The target the event is dealing with.
+ * `Collider collider` - An optional collider that the body physics is colliding with.
 
 ### Class Methods
 
@@ -5228,6 +5230,7 @@ The Position Rewind script is used to reset the user back to a good known standi
 ### Inspector Parameters
 
  * **Collision Detector:** The colliders to determine if a collision has occured for the rewind to be actioned.
+ * **Ignore Trigger Colliders:** If this is checked then the collision detector will ignore colliders set to `Is Trigger = true`.
  * **Rewind Delay:** The amount of time from original headset collision until the rewind to the last good known position takes place.
  * **Pushback Distance:** The additional distance to push the play area back upon rewind to prevent being right next to the wall again.
  * **Crouch Threshold:** The threshold to determine how low the headset has to be before it is considered the user is crouching. The last good position will only be recorded in a non-crouching position.

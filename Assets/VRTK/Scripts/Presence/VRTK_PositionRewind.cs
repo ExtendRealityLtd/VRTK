@@ -29,6 +29,8 @@ namespace VRTK
 
         [Tooltip("The colliders to determine if a collision has occured for the rewind to be actioned.")]
         public CollisionDetectors collisionDetector = CollisionDetectors.HeadsetOnly;
+        [Tooltip("If this is checked then the collision detector will ignore colliders set to `Is Trigger = true`.")]
+        public bool ignoreTriggerColliders = false;
         [Tooltip("The amount of time from original headset collision until the rewind to the last good known position takes place.")]
         public float rewindDelay = 0.5f;
         [Tooltip("The additional distance to push the play area back upon rewind to prevent being right next to the wall again.")]
@@ -167,8 +169,13 @@ namespace VRTK
             }
         }
 
-        protected virtual void StartCollision(GameObject target)
+        protected virtual void StartCollision(GameObject target, Collider collider)
         {
+            if (ignoreTriggerColliders && collider.isTrigger)
+            {
+                return;
+            }
+
             if (!VRTK_PolicyList.Check(target, targetListPolicy))
             {
                 isColliding = true;
@@ -180,8 +187,13 @@ namespace VRTK
             }
         }
 
-        protected virtual void EndCollision()
+        protected virtual void EndCollision(Collider collider)
         {
+            if (ignoreTriggerColliders && collider != null && collider.isTrigger)
+            {
+                return;
+            }
+
             isColliding = false;
             hasCollided = false;
             isRewinding = false;
@@ -248,22 +260,22 @@ namespace VRTK
 
         private void StartColliding(object sender, BodyPhysicsEventArgs e)
         {
-            StartCollision(e.target);
+            StartCollision(e.target, e.collider);
         }
 
         private void StopColliding(object sender, BodyPhysicsEventArgs e)
         {
-            EndCollision();
+            EndCollision(e.collider);
         }
 
         protected virtual void HeadsetCollisionDetect(object sender, HeadsetCollisionEventArgs e)
         {
-            StartCollision(e.collider.gameObject);
+            StartCollision(e.collider.gameObject, e.collider);
         }
 
         protected virtual void HeadsetCollisionEnded(object sender, HeadsetCollisionEventArgs e)
         {
-            EndCollision();
+            EndCollision(e.collider);
         }
     }
 }
