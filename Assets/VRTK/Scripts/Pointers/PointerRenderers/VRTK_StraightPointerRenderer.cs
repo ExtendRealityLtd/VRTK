@@ -176,8 +176,10 @@ namespace VRTK
         {
             if (rayHit)
             {
-                PointerEnter(pointerCollidedWith);
-
+                if (pointerCollidedWith.collider && pointerCollidedWith.collider != destinationHit.collider)
+                {
+                    PointerEnter(pointerCollidedWith);
+                }
                 destinationHit = pointerCollidedWith;
                 ChangeColor(validCollisionColor);
             }
