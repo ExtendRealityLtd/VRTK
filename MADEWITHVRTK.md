@@ -44,6 +44,7 @@ A collection of titles that have been made with VRTK.
 | Chainless | [Steam Store Page](http://store.steampowered.com/app/589680) |
 | 994 W 24th | [Steam Store Page](http://store.steampowered.com/app/536050) |
 | Colourise | [Steam Store Page](http://store.steampowered.com/app/576820) |
+| Jack Spriggan | [Steam Store Page](http://store.steampowered.com/app/620660) |
 
 ## Oculus Home
 
