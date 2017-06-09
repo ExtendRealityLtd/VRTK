@@ -354,6 +354,22 @@ namespace VRTK
             ignoreCollisionsOnGameObjects.Clear();
         }
 
+        /// <summary>
+        /// The SweepCollision method tests to see if a collision will occur with the body collider in a given direction and distance.
+        /// </summary>
+        /// <param name="direction">The direction to test for the potential collision.</param>
+        /// <param name="maxDistance">The maximum distance to check for a potential collision.</param>
+        /// <returns>Returns true if a collision will occur on the given direction over the given maxium distance. Returns false if there is no collision about to happen.</returns>
+        public virtual bool SweepCollision(Vector3 direction, float maxDistance)
+        {
+            Vector3 point1 = (bodyCollider.transform.position + bodyCollider.center) + (Vector3.up * ((bodyCollider.height * 0.5f) - bodyCollider.radius));
+            Vector3 point2 = (bodyCollider.transform.position + bodyCollider.center) - (Vector3.up * ((bodyCollider.height * 0.5f) - bodyCollider.radius));
+            RaycastHit collisionHit;
+#pragma warning disable 0618
+            return VRTK_CustomRaycast.CapsuleCast(customRaycast, point1, point2, bodyCollider.radius, direction, maxDistance, out collisionHit, layersToIgnore, QueryTriggerInteraction.Ignore);
+#pragma warning restore 0618
+        }
+
         protected virtual void Awake()
         {
             VRTK_SDKManager.instance.AddBehaviourToToggleOnLoadedSetupChange(this);

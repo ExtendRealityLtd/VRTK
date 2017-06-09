@@ -17,6 +17,8 @@ namespace VRTK
     [AddComponentMenu("VRTK/Scripts/Locomotion/Object Control Actions/VRTK_WarpObjectControlAction")]
     public class VRTK_WarpObjectControlAction : VRTK_BaseObjectControlAction
     {
+        [Header("Warp Settings")]
+
         [Tooltip("The distance to warp in the facing direction.")]
         public float warpDistance = 1f;
         [Tooltip("The multiplier to be applied to the warp when the modifier button is pressed.")]
@@ -28,8 +30,13 @@ namespace VRTK
         [Tooltip("The speed for the headset to fade out and back in. Having a blink between warps can reduce nausia.")]
         public float blinkTransitionSpeed = 0.6f;
 
-        private float warpDelayTimer = 0f;
-        private Transform headset;
+        [Header("Custom Settings")]
+
+        [Tooltip("An optional Body Physics script to check for potential collisions in the moving direction. If any potential collision is found then the move will not take place. This can help reduce collision tunnelling.")]
+        public VRTK_BodyPhysics bodyPhysics;
+
+        protected float warpDelayTimer = 0f;
+        protected Transform headset;
 
         protected override void Process(GameObject controlledGameObject, Transform directionDevice, Vector3 axisDirection, float axis, float deadzone, bool currentlyFalling, bool modifierActive)
         {
@@ -73,9 +80,11 @@ namespace VRTK
                 Vector3 finalPosition = targetPosition - objectPosition + controlledGameObject.transform.position;
 
                 warpDelayTimer = Time.timeSinceLevelLoad + warpDelay;
-                controlledGameObject.transform.position = finalPosition;
-
-                Blink(blinkTransitionSpeed);
+                if (CanMove(bodyPhysics, controlledGameObject.transform.position, finalPosition))
+                {
+                    controlledGameObject.transform.position = finalPosition;
+                    Blink(blinkTransitionSpeed);
+                }
             }
         }
     }
