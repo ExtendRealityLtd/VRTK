@@ -10,9 +10,11 @@ namespace VRTK
     /// Event Payload
     /// </summary>
     /// <param name="target">The target the event is dealing with.</param>
+    /// <param name="collider">An optional collider that the body physics is colliding with.</param>
     public struct BodyPhysicsEventArgs
     {
         public GameObject target;
+        public Collider collider;
     }
 
     /// <summary>
@@ -399,7 +401,7 @@ namespace VRTK
             {
                 CheckStepUpCollision(collision);
                 currentCollidingObject = collision.gameObject;
-                OnStartColliding(SetBodyPhysicsEvent(currentCollidingObject));
+                OnStartColliding(SetBodyPhysicsEvent(currentCollidingObject, collision.collider));
             }
         }
 
@@ -408,7 +410,7 @@ namespace VRTK
             if (CheckValidCollision(collider.gameObject))
             {
                 currentCollidingObject = collider.gameObject;
-                OnStartColliding(SetBodyPhysicsEvent(currentCollidingObject));
+                OnStartColliding(SetBodyPhysicsEvent(currentCollidingObject, collider));
             }
 
         }
@@ -417,7 +419,7 @@ namespace VRTK
         {
             if (CheckExistingCollision(collision.gameObject))
             {
-                OnStopColliding(SetBodyPhysicsEvent(currentCollidingObject));
+                OnStopColliding(SetBodyPhysicsEvent(currentCollidingObject, collision.collider));
                 currentCollidingObject = null;
             }
         }
@@ -426,7 +428,7 @@ namespace VRTK
         {
             if (CheckExistingCollision(collider.gameObject))
             {
-                OnStopColliding(SetBodyPhysicsEvent(currentCollidingObject));
+                OnStopColliding(SetBodyPhysicsEvent(currentCollidingObject, collider));
                 currentCollidingObject = null;
             }
         }
@@ -565,10 +567,11 @@ namespace VRTK
             }
         }
 
-        protected virtual BodyPhysicsEventArgs SetBodyPhysicsEvent(GameObject target)
+        protected virtual BodyPhysicsEventArgs SetBodyPhysicsEvent(GameObject target, Collider collider)
         {
             BodyPhysicsEventArgs e;
             e.target = target;
+            e.collider = collider;
             return e;
         }
 
@@ -754,11 +757,11 @@ namespace VRTK
         {
             if (movementState)
             {
-                OnStartMoving(SetBodyPhysicsEvent(null));
+                OnStartMoving(SetBodyPhysicsEvent(null, null));
             }
             else
             {
-                OnStopMoving(SetBodyPhysicsEvent(null));
+                OnStopMoving(SetBodyPhysicsEvent(null, null));
             }
         }
 
@@ -1164,7 +1167,7 @@ namespace VRTK
             isLeaning = false;
             onGround = false;
             fallMinTime = Time.time + (Time.fixedDeltaTime * 3.0f); // Wait at least 3 fixed update frames before declaring falling finished 
-            OnStartFalling(SetBodyPhysicsEvent(targetFloor));
+            OnStartFalling(SetBodyPhysicsEvent(targetFloor, null));
         }
 
         protected virtual void StopFall()
@@ -1177,7 +1180,7 @@ namespace VRTK
 
             if (wasFalling)
             {
-                OnStopFalling(SetBodyPhysicsEvent(null));
+                OnStopFalling(SetBodyPhysicsEvent(null, null));
             }
         }
 

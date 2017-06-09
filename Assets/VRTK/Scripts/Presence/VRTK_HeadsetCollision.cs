@@ -33,6 +33,8 @@ namespace VRTK
     [AddComponentMenu("VRTK/Scripts/Presence/VRTK_HeadsetCollision")]
     public class VRTK_HeadsetCollision : MonoBehaviour
     {
+        [Tooltip("If this is checked then the headset collision will ignore colliders set to `Is Trigger = true`.")]
+        public bool ignoreTriggerColliders = false;
         [Tooltip("The radius of the auto generated sphere collider for detecting collisions on the headset.")]
         public float colliderRadius = 0.1f;
         [Tooltip("A specified VRTK_PolicyList to use to determine whether any objects will be acted upon by the Headset Collision.")]
@@ -233,6 +235,11 @@ namespace VRTK
 
         protected virtual void OnTriggerStay(Collider collider)
         {
+            if (parent.ignoreTriggerColliders && collider != null && collider.isTrigger)
+            {
+                return;
+            }
+
             if (enabled && !VRTK_PlayerObject.IsPlayerObject(collider.gameObject) && ValidTarget(collider.transform))
             {
                 parent.headsetColliding = true;
@@ -243,6 +250,11 @@ namespace VRTK
 
         protected virtual void OnTriggerExit(Collider collider)
         {
+            if (parent.ignoreTriggerColliders && collider != null && collider.isTrigger)
+            {
+                return;
+            }
+
             EndCollision(collider);
         }
 
