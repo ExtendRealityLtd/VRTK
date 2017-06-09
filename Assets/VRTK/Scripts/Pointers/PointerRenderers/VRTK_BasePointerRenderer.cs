@@ -504,7 +504,7 @@ namespace VRTK
                 VRTK_PlayerObject.SetPlayerObject(objectInteractorAttachPoint, VRTK_PlayerObject.ObjectTypes.Pointer);
             }
 
-            ScaleObjectInteractor(Vector3.one * 0.025f);
+            ScaleObjectInteractor(Vector3.one);
             objectInteractor.SetActive(false);
         }
 
@@ -512,7 +512,7 @@ namespace VRTK
         {
             if (objectInteractor != null)
             {
-                objectInteractor.transform.localScale = scaleAmount;
+                VRTK_SharedMethods.SetGlobalScale(transform, scaleAmount);
             }
         }
 

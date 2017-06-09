@@ -6665,6 +6665,18 @@ The Vector2ShallowCompare method compares two given Vector2 objects based on the
 
 The NumberPercent method is used to determine the percentage of a given value.
 
+#### SetGlobalScale/2
+
+  > `public static void SetGlobalScale(this Transform transform, Vector3 globalScale)`
+
+  * Parameters
+   * `this Transform transform` - The reference to the transform to scale.
+   * `Vector3 globalScale` - A Vector3 of a global scale to apply to the given transform.
+  * Returns
+   * _none_
+
+The SetGlobalScale method is used to set a transform scale based on a global scale instead of a local scale.
+
 ---
 
 ## Policy List (VRTK_PolicyList)
