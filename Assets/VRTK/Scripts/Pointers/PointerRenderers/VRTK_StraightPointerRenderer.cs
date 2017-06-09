@@ -220,7 +220,8 @@ namespace VRTK
                 actualContainer.transform.position = origin.position;
                 actualContainer.transform.rotation = origin.rotation;
 
-                ScaleObjectInteractor(actualCursor.transform.localScale * 1.05f);
+                float objectInteractorScaleIncrease = 1.05f;
+                ScaleObjectInteractor(actualCursor.transform.lossyScale * objectInteractorScaleIncrease);
 
                 if (destinationHit.transform)
                 {
