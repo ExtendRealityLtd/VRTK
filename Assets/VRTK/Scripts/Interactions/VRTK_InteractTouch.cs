@@ -43,13 +43,29 @@ namespace VRTK
         public GameObject customColliderContainer;
 
         /// <summary>
+        /// Emitted when the touch of a valid object has started.
+        /// </summary>
+        public event ObjectInteractEventHandler ControllerStartTouchInteractableObject;
+        /// <summary>
         /// Emitted when a valid object is touched.
         /// </summary>
         public event ObjectInteractEventHandler ControllerTouchInteractableObject;
         /// <summary>
+        /// Emitted when the untouch of a valid object has started.
+        /// </summary>
+        public event ObjectInteractEventHandler ControllerStartUntouchInteractableObject;
+        /// <summary>
         /// Emitted when a valid object is no longer being touched.
         /// </summary>
         public event ObjectInteractEventHandler ControllerUntouchInteractableObject;
+        /// <summary>
+        /// Emitted when the controller rigidbody is activated.
+        /// </summary>
+        public event ObjectInteractEventHandler ControllerRigidbodyActivated;
+        /// <summary>
+        /// Emitted when the controller rigidbody is deactivated.
+        /// </summary>
+        public event ObjectInteractEventHandler ControllerRigidbodyDeactivated;
 
         protected GameObject touchedObject = null;
         protected List<Collider> touchedObjectColliders = new List<Collider>();
@@ -70,6 +86,14 @@ namespace VRTK
             }
         }
 
+        public virtual void OnControllerStartTouchInteractableObject(ObjectInteractEventArgs e)
+        {
+            if (ControllerStartTouchInteractableObject != null)
+            {
+                ControllerStartTouchInteractableObject(this, e);
+            }
+        }
+
         public virtual void OnControllerTouchInteractableObject(ObjectInteractEventArgs e)
         {
             if (ControllerTouchInteractableObject != null)
@@ -78,11 +102,35 @@ namespace VRTK
             }
         }
 
+        public virtual void OnControllerStartUntouchInteractableObject(ObjectInteractEventArgs e)
+        {
+            if (ControllerStartUntouchInteractableObject != null)
+            {
+                ControllerStartUntouchInteractableObject(this, e);
+            }
+        }
+
         public virtual void OnControllerUntouchInteractableObject(ObjectInteractEventArgs e)
         {
             if (ControllerUntouchInteractableObject != null)
             {
                 ControllerUntouchInteractableObject(this, e);
+            }
+        }
+
+        public virtual void OnControllerRigidbodyActivated(ObjectInteractEventArgs e)
+        {
+            if (ControllerRigidbodyActivated != null)
+            {
+                ControllerRigidbodyActivated(this, e);
+            }
+        }
+
+        public virtual void OnControllerRigidbodyDeactivated(ObjectInteractEventArgs e)
+        {
+            if (ControllerRigidbodyDeactivated != null)
+            {
+                ControllerRigidbodyDeactivated(this, e);
             }
         }
 
@@ -103,7 +151,7 @@ namespace VRTK
         /// <param name="obj">The game object to attempt to force touch.</param>
         public virtual void ForceTouch(GameObject obj)
         {
-            var objCollider = obj.GetComponentInChildren<Collider>();
+            Collider objCollider = obj.GetComponentInChildren<Collider>();
             if (objCollider != null)
             {
                 OnTriggerStay(objCollider);
@@ -128,7 +176,7 @@ namespace VRTK
         {
             if (obj != null)
             {
-                var io = obj.GetComponentInParent<VRTK_InteractableObject>();
+                VRTK_InteractableObject io = obj.GetComponentInParent<VRTK_InteractableObject>();
                 if (io != null)
                 {
                     if (io.disableWhenIdle && !io.enabled)
@@ -152,10 +200,11 @@ namespace VRTK
             {
                 touchRigidBody.isKinematic = !state;
                 rigidBodyForcedActive = forceToggle;
-                foreach (var collider in controllerCollisionDetector.GetComponentsInChildren<Collider>())
+                foreach (Collider collider in controllerCollisionDetector.GetComponentsInChildren<Collider>())
                 {
                     collider.isTrigger = !state;
                 }
+                EmitControllerRigidbodyEvent(state);
             }
         }
 
@@ -258,7 +307,7 @@ namespace VRTK
             if (touchedObject == null && colliderInteractableObject && IsObjectInteractable(collider.gameObject))
             {
                 touchedObject = colliderInteractableObject;
-                var touchedObjectScript = touchedObject.GetComponent<VRTK_InteractableObject>();
+                VRTK_InteractableObject touchedObjectScript = touchedObject.GetComponent<VRTK_InteractableObject>();
                 GameObject touchingObject = gameObject;
 
                 //If this controller is not allowed to touch this interactable object then clean up touch and return before initiating a touch.
@@ -267,6 +316,7 @@ namespace VRTK
                     CleanupEndTouch();
                     return;
                 }
+                OnControllerStartTouchInteractableObject(SetControllerInteractEvent(touchedObject));
                 StoreTouchedObjectColliders(collider);
 
                 touchedObjectScript.ToggleHighlight(true);
@@ -298,7 +348,7 @@ namespace VRTK
 
         protected virtual GameObject GetColliderInteractableObject(Collider collider)
         {
-            var checkIO = collider.GetComponentInParent<VRTK_InteractableObject>();
+            VRTK_InteractableObject checkIO = collider.GetComponentInParent<VRTK_InteractableObject>();
             return (checkIO ? checkIO.gameObject : null);
         }
 
@@ -314,7 +364,7 @@ namespace VRTK
         {
             touchedObjectColliders.Clear();
             touchedObjectActiveColliders.Clear();
-            foreach (var touchedObjectCollider in touchedObject.GetComponentsInChildren<Collider>())
+            foreach (Collider touchedObjectCollider in touchedObject.GetComponentsInChildren<Collider>())
             {
                 touchedObjectColliders.Add(touchedObjectCollider);
             }
@@ -342,7 +392,7 @@ namespace VRTK
         {
             if (!triggerRumble)
             {
-                var doHaptics = touchedObject.GetComponentInParent<VRTK_InteractHaptics>();
+                VRTK_InteractHaptics doHaptics = touchedObject.GetComponentInParent<VRTK_InteractHaptics>();
                 if (doHaptics != null)
                 {
                     triggerRumble = true;
@@ -356,7 +406,7 @@ namespace VRTK
         {
             if (touchedObject != null)
             {
-                var touchedObjectScript = touchedObject.GetComponent<VRTK_InteractableObject>();
+                VRTK_InteractableObject touchedObjectScript = touchedObject.GetComponent<VRTK_InteractableObject>();
                 GameObject touchingObject = gameObject;
 
                 //If it's being grabbed by the current touching object then it hasn't stopped being touched.
@@ -395,10 +445,11 @@ namespace VRTK
 
         protected virtual void StopTouching(GameObject untouched)
         {
+            OnControllerStartUntouchInteractableObject(SetControllerInteractEvent(untouched));
             if (IsObjectInteractable(untouched))
             {
                 GameObject touchingObject = gameObject;
-                var untouchedObjectScript = untouched.GetComponent<VRTK_InteractableObject>();
+                VRTK_InteractableObject untouchedObjectScript = untouched.GetComponent<VRTK_InteractableObject>();
                 untouchedObjectScript.StopTouching(touchingObject);
                 if (!untouchedObjectScript.IsTouched())
                 {
@@ -428,7 +479,7 @@ namespace VRTK
 
         protected virtual bool CustomRigidBodyIsChild()
         {
-            foreach (var childTransform in GetComponentsInChildren<Transform>())
+            foreach (Transform childTransform in GetComponentsInChildren<Transform>())
             {
                 if (childTransform != transform && childTransform == customColliderContainer.transform)
                 {
@@ -478,6 +529,18 @@ namespace VRTK
             touchRigidBody.useGravity = false;
             touchRigidBody.constraints = RigidbodyConstraints.FreezeAll;
             touchRigidBody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+        }
+
+        protected virtual void EmitControllerRigidbodyEvent(bool state)
+        {
+            if (state)
+            {
+                OnControllerRigidbodyActivated(SetControllerInteractEvent(null));
+            }
+            else
+            {
+                OnControllerRigidbodyDeactivated(SetControllerInteractEvent(null));
+            }
         }
     }
 }

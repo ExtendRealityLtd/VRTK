@@ -5,6 +5,12 @@ namespace VRTK
     using System.Collections;
 
     /// <summary>
+    /// Event Payload
+    /// </summary>
+    /// <param name="sender">this object</param>
+    public delegate void ObjectAutoGrabEventHandler(object sender);
+
+    /// <summary>
     /// It is possible to automatically grab an Interactable Object to a specific controller by applying the Object Auto Grab script to the controller that the object should be grabbed by default.
     /// </summary>
     /// <example>
@@ -29,7 +35,20 @@ namespace VRTK
         [Tooltip("The Interact Grab to listen for grab actions on. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.")]
         public VRTK_InteractGrab interactGrab;
 
+        /// <summary>
+        /// Emitted when the object auto grab has completed successfully.
+        /// </summary>
+        public event ObjectAutoGrabEventHandler ObjectAutoGrabCompleted;
+
         protected VRTK_InteractableObject previousClonedObject = null;
+
+        public virtual void OnObjectAutoGrabCompleted()
+        {
+            if (ObjectAutoGrabCompleted != null)
+            {
+                ObjectAutoGrabCompleted(this);
+            }
+        }
 
         /// <summary>
         /// The ClearPreviousClone method resets the previous cloned object to null to ensure when the script is re-enabled that a new cloned object is created, rather than the original clone being grabbed again.
@@ -112,6 +131,7 @@ namespace VRTK
                     interactTouch.ForceStopTouching();
                     interactTouch.ForceTouch(grabbableObject.gameObject);
                     interactGrab.AttemptGrab();
+                    OnObjectAutoGrabCompleted();
                 }
             }
             objectToGrab.disableWhenIdle = grabbableObjectDisableState;

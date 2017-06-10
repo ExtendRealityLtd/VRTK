@@ -5,6 +5,12 @@ namespace VRTK
     using System.Collections;
 
     /// <summary>
+    /// Event Payload
+    /// </summary>
+    /// <param name="sender">this object</param>
+    public delegate void DestinationPointEventHandler(object sender);
+
+    /// <summary>
     /// The Destination Point allows for a specific scene marker that can be teleported to.
     /// </summary>
     /// <remarks>
@@ -49,6 +55,27 @@ namespace VRTK
 
         public static VRTK_DestinationPoint currentDestinationPoint;
 
+        /// <summary>
+        /// Emitted when the destination point is enabled.
+        /// </summary>
+        public event DestinationPointEventHandler DestinationPointEnabled;
+        /// <summary>
+        /// Emitted when the destination point is disabled.
+        /// </summary>
+        public event DestinationPointEventHandler DestinationPointDisabled;
+        /// <summary>
+        /// Emitted when the destination point is locked.
+        /// </summary>
+        public event DestinationPointEventHandler DestinationPointLocked;
+        /// <summary>
+        /// Emitted when the destination point is unlocked.
+        /// </summary>
+        public event DestinationPointEventHandler DestinationPointUnlocked;
+        /// <summary>
+        /// Emitted when the destination point is reset.
+        /// </summary>
+        public event DestinationPointEventHandler DestinationPointReset;
+
         protected Collider pointCollider;
         protected bool createdCollider;
         protected Rigidbody pointRigidbody;
@@ -60,6 +87,46 @@ namespace VRTK
         protected bool currentTeleportState;
         protected Transform playArea;
         protected Transform headset;
+
+        public virtual void OnDestinationPointEnabled()
+        {
+            if (DestinationPointEnabled != null)
+            {
+                DestinationPointEnabled(this);
+            }
+        }
+
+        public virtual void OnDestinationPointDisabled()
+        {
+            if (DestinationPointDisabled != null)
+            {
+                DestinationPointDisabled(this);
+            }
+        }
+
+        public virtual void OnDestinationPointLocked()
+        {
+            if (DestinationPointLocked != null)
+            {
+                DestinationPointLocked(this);
+            }
+        }
+
+        public virtual void OnDestinationPointUnlocked()
+        {
+            if (DestinationPointUnlocked != null)
+            {
+                DestinationPointUnlocked(this);
+            }
+        }
+
+        public virtual void OnDestinationPointReset()
+        {
+            if (DestinationPointReset != null)
+            {
+                DestinationPointReset(this);
+            }
+        }
 
         /// <summary>
         /// The ResetDestinationPoint resets the destination point back to the default state.
@@ -273,6 +340,7 @@ namespace VRTK
             ToggleObject(lockedCursorObject, false);
             ToggleObject(defaultCursorObject, false);
             ToggleObject(hoverCursorObject, true);
+            OnDestinationPointEnabled();
         }
 
         protected virtual void DisablePoint()
@@ -281,6 +349,7 @@ namespace VRTK
             ToggleObject(lockedCursorObject, false);
             ToggleObject(defaultCursorObject, false);
             ToggleObject(hoverCursorObject, false);
+            OnDestinationPointDisabled();
         }
 
         protected virtual void ResetPoint()
@@ -292,13 +361,16 @@ namespace VRTK
                 pointCollider.enabled = true;
                 ToggleObject(defaultCursorObject, true);
                 ToggleObject(lockedCursorObject, false);
+                OnDestinationPointUnlocked();
             }
             else
             {
                 pointCollider.enabled = false;
                 ToggleObject(lockedCursorObject, true);
                 ToggleObject(defaultCursorObject, false);
+                OnDestinationPointLocked();
             }
+            OnDestinationPointReset();
         }
 
         protected virtual void ToggleObject(GameObject givenObject, bool state)

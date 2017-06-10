@@ -125,17 +125,33 @@ namespace VRTK
         /// </summary>
         public event BodyPhysicsEventHandler StartMoving;
         /// <summary>
-        /// Emitted when movement in the play area ends
+        /// Emitted when movement in the play area ends.
         /// </summary>
         public event BodyPhysicsEventHandler StopMoving;
         /// <summary>
-        /// Emitted when the body collider starts colliding with another game object
+        /// Emitted when the body collider starts colliding with another game object.
         /// </summary>
         public event BodyPhysicsEventHandler StartColliding;
         /// <summary>
-        /// Emitted when the body collider stops colliding with another game object
+        /// Emitted when the body collider stops colliding with another game object.
         /// </summary>
         public event BodyPhysicsEventHandler StopColliding;
+        /// <summary>
+        /// Emitted when the body collider starts leaning over another game object.
+        /// </summary>
+        public event BodyPhysicsEventHandler StartLeaning;
+        /// <summary>
+        /// Emitted when the body collider stops leaning over another game object.
+        /// </summary>
+        public event BodyPhysicsEventHandler StopLeaning;
+        /// <summary>
+        /// Emitted when the body collider starts touching the ground.
+        /// </summary>
+        public event BodyPhysicsEventHandler StartTouchingGround;
+        /// <summary>
+        /// Emitted when the body collider stops touching the ground.
+        /// </summary>
+        public event BodyPhysicsEventHandler StopTouchingGround;
 
         protected Transform playArea;
         protected Transform headset;
@@ -223,6 +239,14 @@ namespace VRTK
         public virtual void ToggleOnGround(bool state)
         {
             onGround = state;
+            if (onGround)
+            {
+                OnStartTouchingGround(SetBodyPhysicsEvent(currentValidFloorObject, null));
+            }
+            else
+            {
+                OnStopTouchingGround(SetBodyPhysicsEvent(null, null));
+            }
         }
 
         /// <summary>
@@ -567,6 +591,38 @@ namespace VRTK
             }
         }
 
+        protected virtual void OnStartLeaning(BodyPhysicsEventArgs e)
+        {
+            if (StartLeaning != null)
+            {
+                StartLeaning(this, e);
+            }
+        }
+
+        protected virtual void OnStopLeaning(BodyPhysicsEventArgs e)
+        {
+            if (StopLeaning != null)
+            {
+                StopLeaning(this, e);
+            }
+        }
+
+        protected virtual void OnStartTouchingGround(BodyPhysicsEventArgs e)
+        {
+            if (StartTouchingGround != null)
+            {
+                StartTouchingGround(this, e);
+            }
+        }
+
+        protected virtual void OnStopTouchingGround(BodyPhysicsEventArgs e)
+        {
+            if (StopTouchingGround != null)
+            {
+                StopTouchingGround(this, e);
+            }
+        }
+
         protected virtual BodyPhysicsEventArgs SetBodyPhysicsEvent(GameObject target, Collider collider)
         {
             BodyPhysicsEventArgs e;
@@ -711,6 +767,14 @@ namespace VRTK
 
                 //If the item your standing over is too high to walk on top of then allow leaning over it.
                 isLeaning = (onGround && rayDownDelta > leanYThreshold ? true : false);
+                if (isLeaning)
+                {
+                    OnStartLeaning(SetBodyPhysicsEvent(downRayCollision.collider.gameObject, downRayCollision.collider));
+                }
+                else
+                {
+                    OnStopLeaning(SetBodyPhysicsEvent(null, null));
+                }
             }
         }
 
@@ -1162,6 +1226,14 @@ namespace VRTK
 
         protected virtual void StartFall(GameObject targetFloor)
         {
+            if (IsLeaning())
+            {
+                OnStopLeaning(SetBodyPhysicsEvent(null, null));
+            }
+            if (OnGround())
+            {
+                OnStopTouchingGround(SetBodyPhysicsEvent(null, null));
+            }
             isFalling = true;
             isMoving = false;
             isLeaning = false;
@@ -1173,7 +1245,10 @@ namespace VRTK
         protected virtual void StopFall()
         {
             bool wasFalling = isFalling;
-
+            if (!OnGround())
+            {
+                OnStartTouchingGround(SetBodyPhysicsEvent(currentValidFloorObject, null));
+            }
             isFalling = false;
             onGround = true;
             enableBodyCollisions = enableBodyCollisionsStartingValue;
