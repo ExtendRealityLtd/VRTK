@@ -572,7 +572,10 @@ namespace VRTK
 
         private void OnDisable()
         {
-            UnloadSDKSetup();
+            if (_instance == this && !persistOnLoad)
+            {
+                UnloadSDKSetup();
+            }
         }
 
         private void CreateInstance()
