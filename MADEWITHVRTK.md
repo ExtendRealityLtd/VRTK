@@ -45,6 +45,7 @@ A collection of titles that have been made with VRTK.
 | 994 W 24th | [Steam Store Page](http://store.steampowered.com/app/536050) |
 | Colourise | [Steam Store Page](http://store.steampowered.com/app/576820) |
 | Jack Spriggan | [Steam Store Page](http://store.steampowered.com/app/620660) |
+| Booper, Get Home! | [Steam Store Page](http://store.steampowered.com/app/631670) |
 
 ## Oculus Home
 
@@ -75,5 +76,5 @@ A collection of titles that have been made with VRTK.
 |-------------------------------------------------|-------------------------------------------------------------------------------------------|
 | MegaPolice | [Youtube Trailer](https://www.youtube.com/watch?v=d6hCgfMxldY) |
 | Drone Training VR | [Youtube Trailer](https://www.youtube.com/watch?v=A5MFT2JsySc) |
-| The Days After | [Game website](http://www.fivefingerstudios.com/thedaysafter) |
+| The Days After | [Website](http://www.fivefingerstudios.com/thedaysafter) |
 | ArcaidVR | [Website](http://www.arcaidvr.com) |
