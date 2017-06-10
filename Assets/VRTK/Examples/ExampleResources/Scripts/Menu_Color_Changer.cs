@@ -6,7 +6,7 @@
     {
         public Color newMenuColor = Color.black;
 
-        public override void StartUsing(GameObject usingObject)
+        public override void StartUsing(VRTK_InteractUse usingObject)
         {
             base.StartUsing(usingObject);
             transform.parent.gameObject.GetComponent<Menu_Container_Object_Colors>().SetSelectedColor(newMenuColor);
@@ -23,7 +23,7 @@
         {
             foreach (Menu_Color_Changer menuColorChanger in FindObjectsOfType<Menu_Color_Changer>())
             {
-                menuColorChanger.StopUsing(null);
+                menuColorChanger.StopUsing();
             }
         }
     }

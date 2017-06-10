@@ -8,7 +8,7 @@
         private float bulletSpeed = 1000f;
         private float bulletLife = 5f;
 
-        public override void StartUsing(GameObject usingObject)
+        public override void StartUsing(VRTK_InteractUse usingObject)
         {
             base.StartUsing(usingObject);
             FireBullet();
