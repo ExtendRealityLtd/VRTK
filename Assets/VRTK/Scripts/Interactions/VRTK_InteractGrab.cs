@@ -521,7 +521,7 @@ namespace VRTK
             GameObject grabbingObject = controllerReference.scriptAlias;
             bool initialGrabAttempt = false;
             VRTK_InteractableObject objectToGrabScript = objectToGrab.GetComponent<VRTK_InteractableObject>();
-            if (grabbedObject == null && interactTouch != null && IsObjectGrabbable(interactTouch.GetTouchedObject()) && objectToGrabScript && objectToGrabScript.grabAttachMechanicScript.ValidGrab(controllerAttachPoint))
+            if (grabbedObject == null && interactTouch != null && IsObjectGrabbable(interactTouch.GetTouchedObject()) && objectToGrabScript && objectToGrabScript.grabAttachMechanicScript && objectToGrabScript.grabAttachMechanicScript.ValidGrab(controllerAttachPoint))
             {
                 InitGrabbedObject();
                 if (!influencingGrabbedObject)
