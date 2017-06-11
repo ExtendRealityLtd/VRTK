@@ -17,6 +17,8 @@ namespace VRTK
     [AddComponentMenu("VRTK/Scripts/Locomotion/Object Control Actions/VRTK_SlideObjectControlAction")]
     public class VRTK_SlideObjectControlAction : VRTK_BaseObjectControlAction
     {
+        [Header("Slide Settings")]
+
         [Tooltip("The maximum speed the controlled object can be moved in based on the position of the axis.")]
         public float maximumSpeed = 3f;
         [Tooltip("The rate of speed deceleration when the axis is no longer being changed.")]
@@ -26,7 +28,12 @@ namespace VRTK
         [Tooltip("The speed multiplier to be applied when the modifier button is pressed.")]
         public float speedMultiplier = 1.5f;
 
-        private float currentSpeed = 0f;
+        [Header("Custom Settings")]
+
+        [Tooltip("An optional Body Physics script to check for potential collisions in the moving direction. If any potential collision is found then the move will not take place. This can help reduce collision tunnelling.")]
+        public VRTK_BodyPhysics bodyPhysics;
+
+        protected float currentSpeed = 0f;
 
         protected override void Process(GameObject controlledGameObject, Transform directionDevice, Vector3 axisDirection, float axis, float deadzone, bool currentlyFalling, bool modifierActive)
         {
@@ -80,8 +87,13 @@ namespace VRTK
             {
                 float storeYPosition = controlledGameObject.transform.position.y;
                 Vector3 updatedPosition = axisDirection * currentSpeed * Time.deltaTime;
-                controlledGameObject.transform.position += updatedPosition;
-                controlledGameObject.transform.position = new Vector3(controlledGameObject.transform.position.x, storeYPosition, controlledGameObject.transform.position.z);
+                Vector3 finalPosition = controlledGameObject.transform.position + updatedPosition;
+                finalPosition = new Vector3(finalPosition.x, storeYPosition, finalPosition.z);
+
+                if (CanMove(bodyPhysics, controlledGameObject.transform.position, finalPosition))
+                {
+                    controlledGameObject.transform.position = finalPosition;
+                }
             }
         }
     }

@@ -2029,7 +2029,7 @@ If the controlled object is the play area and `VRTK_BodyPhysics` is also availab
 
 Move In Place allows the user to move the play area by calculating the y-movement of the user's headset and/or controllers. The user is propelled forward the more they are moving. This simulates moving in game by moving in real life.
 
-> This locomotion method is based on Immersive Movement, originally created by Highsight.
+> This locomotion method is based on Immersive Movement, originally created by Highsight. Thanks to KJack (author of Arm Swinger) for additional work.
 
 ### Inspector Parameters
 
@@ -2044,6 +2044,7 @@ Move In Place allows the user to move the play area by calculating the y-movemen
  * **Falling Deceleration:** The speed in which the play area slows down to a complete stop when the user is falling.
  * **Smart Decouple Threshold:** The degree threshold that all tracked objects (controllers, headset) must be within to change direction when using the Smart Decoupling Direction Method.
  * **Sensitivity:** The maximum amount of movement required to register in the virtual world.  Decreasing this will increase acceleration, and vice versa.
+ * **Body Physics:** An optional Body Physics script to check for potential collisions in the moving direction. If any potential collision is found then the move will not take place. This can help reduce collision tunnelling.
 
 ### Class Variables
 
@@ -2208,6 +2209,7 @@ The effect is a smooth sliding motion in forward and sideways directions to simu
  * **Deceleration:** The rate of speed deceleration when the axis is no longer being changed.
  * **Falling Deceleration:** The rate of speed deceleration when the axis is no longer being changed and the object is falling.
  * **Speed Multiplier:** The speed multiplier to be applied when the modifier button is pressed.
+ * **Body Physics:** An optional Body Physics script to check for potential collisions in the moving direction. If any potential collision is found then the move will not take place. This can help reduce collision tunnelling.
 
 ### Example
 
@@ -2280,6 +2282,7 @@ The effect is a immediate snap to a new position in the given direction.
  * **Warp Delay:** The amount of time required to pass before another warp can be carried out.
  * **Floor Height Tolerance:** The height different in floor allowed to be a valid warp.
  * **Blink Transition Speed:** The speed for the headset to fade out and back in. Having a blink between warps can reduce nausia.
+ * **Body Physics:** An optional Body Physics script to check for potential collisions in the moving direction. If any potential collision is found then the move will not take place. This can help reduce collision tunnelling.
 
 ### Example
 
@@ -5374,6 +5377,18 @@ The GetCurrentCollidingObject method returns the object that the body physics co
 
 The ResetIgnoredCollisions method is used to clear any stored ignored colliders in case the `Ignore Collisions On` array parameter is changed at runtime. This needs to be called manually if changes are made at runtime.
 
+#### SweepCollision/2
+
+  > `public virtual bool SweepCollision(Vector3 direction, float maxDistance)`
+
+  * Parameters
+   * `Vector3 direction` - The direction to test for the potential collision.
+   * `float maxDistance` - The maximum distance to check for a potential collision.
+  * Returns
+   * `bool` - Returns true if a collision will occur on the given direction over the given maxium distance. Returns false if there is no collision about to happen.
+
+The SweepCollision method tests to see if a collision will occur with the body collider in a given direction and distance.
+
 ### Example
 
 `VRTK/Examples/017_CameraRig_TouchpadWalking` has a collection of walls and slopes that can be traversed by the user with the touchpad but the user cannot pass through the objects as they are collidable and the rigidbody physics won't allow the intersection to occur.
@@ -6976,6 +6991,25 @@ The Raycast method is used to generate a raycast either from the given CustomRay
 
 The Linecast method is used to generate a linecast either from the given CustomRaycast object or a default Physics.Linecast.
 
+#### CapsuleCast/9
+
+  > `public static bool CapsuleCast(VRTK_CustomRaycast customCast, Vector3 point1, Vector3 point2, float radius, Vector3 direction, float maxDistance, out RaycastHit hitData, LayerMask ignoreLayers, QueryTriggerInteraction affectTriggers = QueryTriggerInteraction.UseGlobal)`
+
+  * Parameters
+   * `VRTK_CustomRaycast customCast` - The optional object with customised cast parameters.
+   * `Vector3 point1` - The center of the sphere at the start of the capsule.
+   * `Vector3 point2` - The center of the sphere at the end of the capsule.
+   * `float radius` - The radius of the capsule.
+   * `Vector3 direction` - The direction into which to sweep the capsule.
+   * `float maxDistance` - The max length of the sweep.
+   * `out RaycastHit hitData` - The linecast hit data.
+   * `LayerMask ignoreLayers` - A layermask of layers to ignore from the linecast.
+   * `QueryTriggerInteraction affectTriggers` - Determines the trigger interaction level of the cast.
+  * Returns
+   * `bool` - Returns true if the linecast successfully collides with a valid object.
+
+The CapsuleCast method is used to generate a linecast either from the given CustomRaycast object or a default Physics.Linecast.
+
 #### CustomRaycast/3
 
   > `public virtual bool CustomRaycast(Ray ray, out RaycastHit hitData, float length = Mathf.Infinity)`
@@ -7001,6 +7035,22 @@ The CustomRaycast method is used to generate a raycast based on the options defi
    * `bool` - Returns true if the line successfully collides with a valid object.
 
 The CustomLinecast method is used to generate a linecast based on the options defined in the CustomRaycast object.
+
+#### CustomCapsuleCast/6
+
+  > `public virtual bool CustomCapsuleCast(Vector3 point1, Vector3 point2, float radius, Vector3 direction, float maxDistance, out RaycastHit hitData)`
+
+  * Parameters
+   * `Vector3 point1` - The center of the sphere at the start of the capsule.
+   * `Vector3 point2` - The center of the sphere at the end of the capsule.
+   * `float radius` - The radius of the capsule.
+   * `Vector3 direction` - The direction into which to sweep the capsule.
+   * `float maxDistance` - The max length of the sweep.
+   * `out RaycastHit hitData` - The capsulecast hit data.
+  * Returns
+   * `bool` - Returns true if the capsule successfully collides with a valid object.
+
+The CustomCapsuleCast method is used to generate a capsulecast based on the options defined in the CustomRaycast object.
 
 ---
 

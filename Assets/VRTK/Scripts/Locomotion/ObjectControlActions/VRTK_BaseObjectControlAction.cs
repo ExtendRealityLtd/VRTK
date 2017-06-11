@@ -152,5 +152,17 @@ namespace VRTK
 
             return axisDirection;
         }
+
+        protected virtual bool CanMove(VRTK_BodyPhysics givenBodyPhysics, Vector3 currentPosition, Vector3 proposedPosition)
+        {
+            if (givenBodyPhysics == null)
+            {
+                return true;
+            }
+
+            Vector3 proposedDirection = (proposedPosition - currentPosition).normalized;
+            float distance = Vector3.Distance(currentPosition, proposedPosition);
+            return !givenBodyPhysics.SweepCollision(proposedDirection, distance);
+        }
     }
 }
