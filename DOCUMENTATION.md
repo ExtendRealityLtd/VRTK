@@ -5145,6 +5145,8 @@ To allow for peeking over a ledge and not falling, a fall restiction can happen 
  * **Floor Height Tolerance:** The amount the `y` position needs to change by between the current floor `y` position and the previous floor `y` position before a change in floor height is considered to have occurred. A higher value here will mean that a `Drop To Floor` will be less likely to happen if the `y` of the floor beneath the user hasn't changed as much as the given threshold.
  * **Fall Check Precision:** The amount of rounding on the play area Y position to be applied when checking if falling is occuring.
  * **Teleporter:** The VRTK Teleport script to use when snapping to floor. If this is left blank then a Teleport script will need to be applied to the same GameObject.
+ * **Custom Body Collider Container:** A GameObject to represent a custom body collider container. It should contain a collider component that will be used for detecting body collisions. If one isn't provided then it will be auto generated.
+ * **Custom Foot Collider Container:** A GameObject to represent a custom foot collider container. It should contain a collider component that will be used for detecting step collisions. If one isn't provided then it will be auto generated.
 
 ### Class Variables
 
@@ -5337,6 +5339,18 @@ The ResetFalling method force stops any falling states and conditions that might
    * `GameObject` -
 
 The GetBodyColliderContainer method returns the auto generated GameObject that contains the body colliders.
+
+#### GetFootColliderContainer/0
+
+  > `public virtual GameObject GetFootColliderContainer()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `GameObject` - The auto generated foot collider GameObject.
+   * `GameObject` -
+
+The GetFootColliderContainer method returns the auto generated GameObject that contains the foot colliders.
 
 #### GetCurrentCollidingObject/0
 

@@ -111,6 +111,10 @@ namespace VRTK
 
         [Tooltip("The VRTK Teleport script to use when snapping to floor. If this is left blank then a Teleport script will need to be applied to the same GameObject.")]
         public VRTK_BasicTeleport teleporter;
+        [Tooltip("A GameObject to represent a custom body collider container. It should contain a collider component that will be used for detecting body collisions. If one isn't provided then it will be auto generated.")]
+        public GameObject customBodyColliderContainer;
+        [Tooltip("A GameObject to represent a custom foot collider container. It should contain a collider component that will be used for detecting step collisions. If one isn't provided then it will be auto generated.")]
+        public GameObject customFootColliderContainer;
 
         /// <summary>
         /// Emitted when a fall begins.
@@ -157,8 +161,11 @@ namespace VRTK
         protected Transform headset;
         protected Rigidbody bodyRigidbody;
         protected GameObject bodyColliderContainer;
+        protected GameObject footColliderContainer;
+
         protected CapsuleCollider bodyCollider;
         protected CapsuleCollider footCollider;
+
         protected VRTK_CollisionTracker collisionTracker;
         protected bool currentBodyCollisionsSetting;
         protected GameObject currentCollidingObject = null;
@@ -187,7 +194,6 @@ namespace VRTK
         protected bool isLeaning = false;
         protected bool onGround = true;
         protected bool preventSnapToFloor = false;
-        protected bool generateCollider = false;
         protected bool generateRigidbody = false;
         protected Vector3 playAreaVelocity = Vector3.zero;
         protected string footColliderContainerNameCheck;
@@ -346,6 +352,16 @@ namespace VRTK
         public virtual GameObject GetBodyColliderContainer()
         {
             return bodyColliderContainer;
+        }
+
+        /// <summary>
+        /// The GetFootColliderContainer method returns the auto generated GameObject that contains the foot colliders.
+        /// </summary>
+        /// <returns>The auto generated foot collider GameObject.</returns>
+        /// <returns></returns>
+        public virtual GameObject GetFootColliderContainer()
+        {
+            return footColliderContainer;
         }
 
         /// <summary>
@@ -705,43 +721,46 @@ namespace VRTK
 
         protected virtual void CheckLean()
         {
-            //Cast a ray down from the current standing position
-            Vector3 standingDownRayStartPosition = (headset != null ? new Vector3(currentStandingPosition.x, headset.position.y, currentStandingPosition.y) : Vector3.zero);
-            Vector3 rayDirection = (playArea != null ? -playArea.up : Vector3.zero);
-            Ray standingDownRay = new Ray(standingDownRayStartPosition, rayDirection);
-            RaycastHit standingDownRayCollision;
+            if (bodyCollider != null)
+            {
+                //Cast a ray down from the current standing position
+                Vector3 standingDownRayStartPosition = (headset != null ? new Vector3(currentStandingPosition.x, headset.position.y, currentStandingPosition.y) : Vector3.zero);
+                Vector3 rayDirection = (playArea != null ? -playArea.up : Vector3.zero);
+                Ray standingDownRay = new Ray(standingDownRayStartPosition, rayDirection);
+                RaycastHit standingDownRayCollision;
 
-            //Determine the current valid floor that the user is standing over
+                //Determine the current valid floor that the user is standing over
 #pragma warning disable 0618
-            currentValidFloorObject = (VRTK_CustomRaycast.Raycast(customRaycast, standingDownRay, out standingDownRayCollision, layersToIgnore, Mathf.Infinity, QueryTriggerInteraction.Ignore) ? standingDownRayCollision.collider.gameObject : null);
+                currentValidFloorObject = (VRTK_CustomRaycast.Raycast(customRaycast, standingDownRay, out standingDownRayCollision, layersToIgnore, Mathf.Infinity, QueryTriggerInteraction.Ignore) ? standingDownRayCollision.collider.gameObject : null);
 #pragma warning restore 0618
 
-            //Don't bother checking for lean if body collisions are disabled
-            if (headset == null || playArea == null || !enableBodyCollisions)
-            {
-                return;
-            }
+                //Don't bother checking for lean if body collisions are disabled
+                if (headset == null || playArea == null || !enableBodyCollisions)
+                {
+                    return;
+                }
 
-            //reset the headset x rotation so the forward ray is always horizontal regardless of the headset rotation
-            Quaternion storedRotation = headset.rotation;
-            headset.rotation = new Quaternion(0f, headset.rotation.y, headset.rotation.z, headset.rotation.w);
+                //reset the headset x rotation so the forward ray is always horizontal regardless of the headset rotation
+                Quaternion storedRotation = headset.rotation;
+                headset.rotation = new Quaternion(0f, headset.rotation.y, headset.rotation.z, headset.rotation.w);
 
-            Ray forwardRay = new Ray(headset.position, headset.forward);
-            RaycastHit forwardRayCollision;
-            //Determine the maximum forward distance to cast the forward ray
-            float forwardLength = bodyCollider.radius + leanForwardLengthAddition;
+                Ray forwardRay = new Ray(headset.position, headset.forward);
+                RaycastHit forwardRayCollision;
+                //Determine the maximum forward distance to cast the forward ray
+                float forwardLength = bodyCollider.radius + leanForwardLengthAddition;
 
-            // Cast a ray forward just outside the body collider radius to see if anything is blocking your path
-            // If nothing is blocking your path and you're currently standing over a valid floor
+                // Cast a ray forward just outside the body collider radius to see if anything is blocking your path
+                // If nothing is blocking your path and you're currently standing over a valid floor
 #pragma warning disable 0618
-            if (!VRTK_CustomRaycast.Raycast(customRaycast, forwardRay, out forwardRayCollision, layersToIgnore, forwardLength, QueryTriggerInteraction.Ignore) && currentValidFloorObject != null)
+                if (!VRTK_CustomRaycast.Raycast(customRaycast, forwardRay, out forwardRayCollision, layersToIgnore, forwardLength, QueryTriggerInteraction.Ignore) && currentValidFloorObject != null)
 #pragma warning restore 0618
-            {
-                CalculateLean(standingDownRayStartPosition, forwardLength, standingDownRayCollision.distance);
-            }
+                {
+                    CalculateLean(standingDownRayStartPosition, forwardLength, standingDownRayCollision.distance);
+                }
 
-            //put the headset rotation back
-            headset.rotation = storedRotation;
+                //put the headset rotation back
+                headset.rotation = storedRotation;
+            }
         }
 
         protected virtual void CalculateLean(Vector3 startPosition, float forwardLength, float originalRayDistance)
@@ -905,7 +924,7 @@ namespace VRTK
 
         protected virtual void CheckStepUpCollision(Collision collision)
         {
-            if (footCollider != null && collision.contacts.Length > 0 && collision.contacts[0].thisCollider.transform.name == footColliderContainerNameCheck)
+            if (bodyCollider != null && footCollider != null && collision.contacts.Length > 0 && collision.contacts[0].thisCollider.transform.name == footColliderContainerNameCheck)
             {
                 float stepYIncrement = 0.55f;
                 float boxCastHeight = 0.01f;
@@ -947,9 +966,80 @@ namespace VRTK
             return generatedContainer;
         }
 
+        protected virtual GameObject InstantiateColliderContainer(GameObject objectToClone, string name, Transform parent)
+        {
+            GameObject generatedContainer = Instantiate(objectToClone, parent);
+            generatedContainer.name = VRTK_SharedMethods.GenerateVRTKObjectName(true, name);
+            VRTK_PlayerObject.SetPlayerObject(generatedContainer, VRTK_PlayerObject.ObjectTypes.Collider);
+
+            return generatedContainer;
+        }
+
+        protected virtual void GenerateRigidbody()
+        {
+            bodyRigidbody = playArea.GetComponent<Rigidbody>();
+            if (bodyRigidbody == null)
+            {
+                generateRigidbody = true;
+                bodyRigidbody = playArea.gameObject.AddComponent<Rigidbody>();
+                bodyRigidbody.mass = bodyMass;
+                bodyRigidbody.freezeRotation = true;
+            }
+        }
+
+        protected virtual CapsuleCollider GenerateCapsuleCollider(GameObject parent, float setRadius)
+        {
+            CapsuleCollider foundCollider = parent.GetComponent<CapsuleCollider>();
+            if (foundCollider == null)
+            {
+                foundCollider = parent.AddComponent<CapsuleCollider>();
+                foundCollider.radius = setRadius;
+            }
+
+            return foundCollider;
+        }
+
+        protected virtual void GenerateBodyCollider()
+        {
+            if (bodyColliderContainer == null)
+            {
+                if (customBodyColliderContainer != null)
+                {
+                    bodyColliderContainer = InstantiateColliderContainer(customBodyColliderContainer, BODY_COLLIDER_CONTAINER_NAME, playArea);
+                    bodyCollider = bodyColliderContainer.GetComponent<CapsuleCollider>();
+                }
+                else
+                {
+                    bodyColliderContainer = CreateColliderContainer(BODY_COLLIDER_CONTAINER_NAME, playArea);
+                    bodyColliderContainer.gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
+                }
+
+                bodyCollider = GenerateCapsuleCollider(bodyColliderContainer, bodyRadius);
+
+                GenerateFootCollider();
+            }
+        }
+
+        protected virtual void GenerateFootCollider()
+        {
+            if (CalculateStepUpYOffset() > 0f)
+            {
+                if (customFootColliderContainer != null)
+                {
+                    footColliderContainer = InstantiateColliderContainer(customFootColliderContainer, FOOT_COLLIDER_CONTAINER_NAME, bodyColliderContainer.transform);
+                }
+                else
+                {
+                    footColliderContainer = CreateColliderContainer(FOOT_COLLIDER_CONTAINER_NAME, bodyColliderContainer.transform);
+                    footColliderContainer.gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
+                }
+
+                footCollider = GenerateCapsuleCollider(footColliderContainer, 0f);
+            }
+        }
+
         protected virtual void CreateCollider()
         {
-            generateCollider = false;
             generateRigidbody = false;
 
             if (playArea == null)
@@ -959,32 +1049,9 @@ namespace VRTK
             }
 
             VRTK_PlayerObject.SetPlayerObject(playArea.gameObject, VRTK_PlayerObject.ObjectTypes.CameraRig);
-            bodyRigidbody = playArea.GetComponent<Rigidbody>();
-            if (bodyRigidbody == null)
-            {
-                generateRigidbody = true;
-                bodyRigidbody = playArea.gameObject.AddComponent<Rigidbody>();
-                bodyRigidbody.mass = bodyMass;
-                bodyRigidbody.freezeRotation = true;
-            }
 
-            if (bodyColliderContainer == null)
-            {
-                generateCollider = true;
-                bodyColliderContainer = CreateColliderContainer(BODY_COLLIDER_CONTAINER_NAME, playArea);
-
-                bodyCollider = bodyColliderContainer.AddComponent<CapsuleCollider>();
-                bodyCollider.radius = bodyRadius;
-
-                if (CalculateStepUpYOffset() > 0f)
-                {
-                    GameObject footColliderContainer = CreateColliderContainer(FOOT_COLLIDER_CONTAINER_NAME, bodyColliderContainer.transform);
-                    footCollider = footColliderContainer.AddComponent<CapsuleCollider>();
-                }
-
-                bodyColliderContainer.gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
-                VRTK_PlayerObject.SetPlayerObject(bodyColliderContainer, VRTK_PlayerObject.ObjectTypes.Collider);
-            }
+            GenerateRigidbody();
+            GenerateBodyCollider();
 
             if (playArea.gameObject.layer == 0)
             {
@@ -995,12 +1062,12 @@ namespace VRTK
 
         protected virtual void DestroyCollider()
         {
-            if (generateRigidbody)
+            if (generateRigidbody && bodyRigidbody != null)
             {
                 Destroy(bodyRigidbody);
             }
 
-            if (generateCollider)
+            if (bodyColliderContainer != null)
             {
                 Destroy(bodyColliderContainer);
             }
@@ -1008,7 +1075,7 @@ namespace VRTK
 
         protected virtual void UpdateCollider()
         {
-            if (bodyColliderContainer != null && headset != null)
+            if (bodyCollider != null && headset != null)
             {
                 float newpresenceColliderYSize = (headset ? headset.transform.localPosition.y - (headsetYOffset + CalculateStepUpYOffset()) : 0f);
                 float newpresenceColliderYCenter = Mathf.Max((newpresenceColliderYSize * 0.5f) + CalculateStepUpYOffset() + playAreaHeightAdjustment, bodyCollider.radius + playAreaHeightAdjustment);
