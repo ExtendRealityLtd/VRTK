@@ -2,6 +2,7 @@
 namespace VRTK
 {
     using UnityEngine;
+    using System;
     using System.Collections;
     using System.Collections.Generic;
     using Highlighters;
@@ -185,7 +186,7 @@ namespace VRTK
         protected List<GameObject> touchingObjects = new List<GameObject>();
         protected List<GameObject> grabbingObjects = new List<GameObject>();
         protected List<GameObject> hoveredSnapObjects = new List<GameObject>();
-        protected GameObject usingObject = null;
+        protected VRTK_InteractUse usingObject = null;
         protected Transform trackPoint;
         protected bool customTrackPoint = false;
         protected Transform primaryControllerAttachPoint;
@@ -321,9 +322,9 @@ namespace VRTK
         /// <returns>Returns `true` if the object is currently being used.</returns>
         public virtual bool IsUsing(GameObject usedBy = null)
         {
-            if (usingObject && usedBy != null)
+            if (usingObject != null && usedBy != null)
             {
-                return (usingObject == usedBy);
+                return (usingObject.gameObject == usedBy);
             }
             return (usingObject != null);
         }
@@ -331,91 +332,160 @@ namespace VRTK
         /// <summary>
         /// The StartTouching method is called automatically when the object is touched initially. It is also a virtual method to allow for overriding in inherited classes.
         /// </summary>
-        /// <param name="currentTouchingObject">The game object that is currently touching this object.</param>
+        /// <param name="currentTouchingObject">The object that is currently touching this object.</param>
+        [Obsolete("`VRTK_InteractableObject.StartTouching(GameObject currentTouchingObject)` has been replaced with `VRTK_InteractableObject.StartTouching(VRTK_InteractTouch currentTouchingObject)`. This method will be removed in a future version of VRTK.")]
         public virtual void StartTouching(GameObject currentTouchingObject)
         {
-            IgnoreColliders(currentTouchingObject);
-            if (!touchingObjects.Contains(currentTouchingObject))
+            StartTouching((currentTouchingObject != null ? currentTouchingObject.GetComponent<VRTK_InteractTouch>() : null));
+        }
+
+        /// <summary>
+        /// The StartTouching method is called automatically when the object is touched initially. It is also a virtual method to allow for overriding in inherited classes.
+        /// </summary>
+        /// <param name="currentTouchingObject">The object that is currently touching this object.</param>
+        public virtual void StartTouching(VRTK_InteractTouch currentTouchingObject = null)
+        {
+            GameObject currentTouchingGameObject = (currentTouchingObject != null ? currentTouchingObject.gameObject : null);
+            if (currentTouchingGameObject != null)
             {
-                ToggleEnableState(true);
-                touchingObjects.Add(currentTouchingObject);
-                OnInteractableObjectTouched(SetInteractableObjectEvent(currentTouchingObject));
+                IgnoreColliders(currentTouchingGameObject);
+                if (!touchingObjects.Contains(currentTouchingGameObject))
+                {
+                    ToggleEnableState(true);
+                    touchingObjects.Add(currentTouchingGameObject);
+                    OnInteractableObjectTouched(SetInteractableObjectEvent(currentTouchingGameObject));
+                }
             }
         }
 
         /// <summary>
         /// The StopTouching method is called automatically when the object has stopped being touched. It is also a virtual method to allow for overriding in inherited classes.
         /// </summary>
-        /// <param name="previousTouchingObject">The game object that was previously touching this object.</param>
+        /// <param name="previousTouchingObject">The object that was previously touching this object.</param>
+        [Obsolete("`VRTK_InteractableObject.StopTouching(GameObject previousTouchingObject)` has been replaced with `VRTK_InteractableObject.StopTouching(VRTK_InteractTouch previousTouchingObject)`. This method will be removed in a future version of VRTK.")]
         public virtual void StopTouching(GameObject previousTouchingObject)
         {
-            if (touchingObjects.Contains(previousTouchingObject))
+            StopTouching((previousTouchingObject != null ? previousTouchingObject.GetComponent<VRTK_InteractTouch>() : null));
+        }
+
+        /// <summary>
+        /// The StopTouching method is called automatically when the object has stopped being touched. It is also a virtual method to allow for overriding in inherited classes.
+        /// </summary>
+        /// <param name="previousTouchingObject">The object that was previously touching this object.</param>
+        public virtual void StopTouching(VRTK_InteractTouch previousTouchingObject = null)
+        {
+            GameObject previousTouchingGameObject = (previousTouchingObject != null ? previousTouchingObject.gameObject : null);
+            if (previousTouchingGameObject != null && touchingObjects.Contains(previousTouchingGameObject))
             {
-                ResetUseState(previousTouchingObject);
-                OnInteractableObjectUntouched(SetInteractableObjectEvent(previousTouchingObject));
-                touchingObjects.Remove(previousTouchingObject);
+                ResetUseState(previousTouchingGameObject);
+                OnInteractableObjectUntouched(SetInteractableObjectEvent(previousTouchingGameObject));
+                touchingObjects.Remove(previousTouchingGameObject);
             }
         }
 
         /// <summary>
         /// The Grabbed method is called automatically when the object is grabbed initially. It is also a virtual method to allow for overriding in inherited classes.
         /// </summary>
-        /// <param name="currentGrabbingObject">The game object that is currently grabbing this object.</param>
+        /// <param name="currentGrabbingObject">The object that is currently grabbing this object.</param>
+        [Obsolete("`VRTK_InteractableObject.Grabbed(GameObject currentGrabbingObject)` has been replaced with `VRTK_InteractableObject.Grabbed(VRTK_InteractGrab currentGrabbingObject)`. This method will be removed in a future version of VRTK.")]
         public virtual void Grabbed(GameObject currentGrabbingObject)
         {
+            Grabbed((currentGrabbingObject != null ? currentGrabbingObject.GetComponent<VRTK_InteractGrab>() : null));
+        }
+
+        /// <summary>
+        /// The Grabbed method is called automatically when the object is grabbed initially. It is also a virtual method to allow for overriding in inherited classes.
+        /// </summary>
+        /// <param name="currentGrabbingObject">The object that is currently grabbing this object.</param>
+        public virtual void Grabbed(VRTK_InteractGrab currentGrabbingObject = null)
+        {
+            GameObject currentGrabbingGameObject = (currentGrabbingObject != null ? currentGrabbingObject.gameObject : null);
             ToggleEnableState(true);
             if (!IsGrabbed() || IsSwappable())
             {
-                PrimaryControllerGrab(currentGrabbingObject);
+                PrimaryControllerGrab(currentGrabbingGameObject);
             }
             else
             {
-                SecondaryControllerGrab(currentGrabbingObject);
+                SecondaryControllerGrab(currentGrabbingGameObject);
             }
-            OnInteractableObjectGrabbed(SetInteractableObjectEvent(currentGrabbingObject));
+            OnInteractableObjectGrabbed(SetInteractableObjectEvent(currentGrabbingGameObject));
         }
 
         /// <summary>
         /// The Ungrabbed method is called automatically when the object has stopped being grabbed. It is also a virtual method to allow for overriding in inherited classes.
         /// </summary>
-        /// <param name="previousGrabbingObject">The game object that was previously grabbing this object.</param>
+        /// <param name="previousGrabbingObject">The object that was previously grabbing this object.</param>
+        [Obsolete("`VRTK_InteractableObject.Ungrabbed(GameObject previousGrabbingObject)` has been replaced with `VRTK_InteractableObject.Ungrabbed(VRTK_InteractGrab previousGrabbingObject)`. This method will be removed in a future version of VRTK.")]
         public virtual void Ungrabbed(GameObject previousGrabbingObject)
         {
+            Ungrabbed((previousGrabbingObject != null ? previousGrabbingObject.GetComponent<VRTK_InteractGrab>() : null));
+        }
+
+        /// <summary>
+        /// The Ungrabbed method is called automatically when the object has stopped being grabbed. It is also a virtual method to allow for overriding in inherited classes.
+        /// </summary>
+        /// <param name="previousGrabbingObject">The object that was previously grabbing this object.</param>
+        public virtual void Ungrabbed(VRTK_InteractGrab previousGrabbingObject = null)
+        {
+            GameObject previousGrabbingGameObject = (previousGrabbingObject != null ? previousGrabbingObject.gameObject : null);
             GameObject secondaryGrabbingObject = GetSecondaryGrabbingObject();
-            if (!secondaryGrabbingObject || secondaryGrabbingObject != previousGrabbingObject)
+            if (!secondaryGrabbingObject || secondaryGrabbingObject != previousGrabbingGameObject)
             {
                 SecondaryControllerUngrab(secondaryGrabbingObject);
-                PrimaryControllerUngrab(previousGrabbingObject, secondaryGrabbingObject);
+                PrimaryControllerUngrab(previousGrabbingGameObject, secondaryGrabbingObject);
             }
             else
             {
-                SecondaryControllerUngrab(previousGrabbingObject);
+                SecondaryControllerUngrab(previousGrabbingGameObject);
             }
-            OnInteractableObjectUngrabbed(SetInteractableObjectEvent(previousGrabbingObject));
+            OnInteractableObjectUngrabbed(SetInteractableObjectEvent(previousGrabbingGameObject));
         }
 
         /// <summary>
         /// The StartUsing method is called automatically when the object is used initially. It is also a virtual method to allow for overriding in inherited classes.
         /// </summary>
-        /// <param name="currentUsingObject">The game object that is currently using this object.</param>
+        /// <param name="currentUsingObject">The object that is currently using this object.</param>
+        [Obsolete("`VRTK_InteractableObject.StartUsing(GameObject currentUsingObject)` has been replaced with `VRTK_InteractableObject.StartUsing(VRTK_InteractUse currentUsingObject)`. This method will be removed in a future version of VRTK.")]
         public virtual void StartUsing(GameObject currentUsingObject)
         {
+            StartUsing((currentUsingObject != null ? currentUsingObject.GetComponent<VRTK_InteractUse>() : null));
+        }
+
+        /// <summary>
+        /// The StartUsing method is called automatically when the object is used initially. It is also a virtual method to allow for overriding in inherited classes.
+        /// </summary>
+        /// <param name="currentUsingObject">The object that is currently using this object.</param>
+        public virtual void StartUsing(VRTK_InteractUse currentUsingObject = null)
+        {
+            GameObject currentUsingGameObject = (currentUsingObject != null ? currentUsingObject.gameObject : null);
             ToggleEnableState(true);
-            if (IsUsing() && !IsUsing(currentUsingObject))
+            if (IsUsing() && !IsUsing(currentUsingGameObject))
             {
                 ResetUsingObject();
             }
-            OnInteractableObjectUsed(SetInteractableObjectEvent(currentUsingObject));
+            OnInteractableObjectUsed(SetInteractableObjectEvent(currentUsingGameObject));
             usingObject = currentUsingObject;
         }
 
         /// <summary>
         /// The StopUsing method is called automatically when the object has stopped being used. It is also a virtual method to allow for overriding in inherited classes.
         /// </summary>
-        /// <param name="previousUsingObject">The game object that was previously using this object.</param>
+        /// <param name="previousUsingObject">The object that was previously using this object.</param>
+        [Obsolete("`VRTK_InteractableObject.StopUsing(GameObject previousUsingObject)` has been replaced with `VRTK_InteractableObject.StopUsing(VRTK_InteractUse previousUsingObject)`. This method will be removed in a future version of VRTK.")]
         public virtual void StopUsing(GameObject previousUsingObject)
         {
-            OnInteractableObjectUnused(SetInteractableObjectEvent(previousUsingObject));
+            StopUsing((previousUsingObject != null ? previousUsingObject.GetComponent<VRTK_InteractUse>() : null));
+        }
+
+        /// <summary>
+        /// The StopUsing method is called automatically when the object has stopped being used. It is also a virtual method to allow for overriding in inherited classes.
+        /// </summary>
+        /// <param name="previousUsingObject">The object that was previously using this object.</param>
+        public virtual void StopUsing(VRTK_InteractUse previousUsingObject = null)
+        {
+            GameObject previousUsingGameObject = (previousUsingObject != null ? previousUsingObject.gameObject : null);
+            OnInteractableObjectUnused(SetInteractableObjectEvent(previousUsingGameObject));
             ResetUsingObject();
             usingState = 0;
             usingObject = null;
@@ -529,10 +599,19 @@ namespace VRTK
         }
 
         /// <summary>
-        /// The GetUsingObject method is used to return the game object that is currently using this object.
+        /// The GetUsingObject method is used to return the GameObject that is currently using this object.
         /// </summary>
-        /// <returns>The game object of what is using the current object.</returns>
+        /// <returns>The GameObject of what is using the current object.</returns>
         public virtual GameObject GetUsingObject()
+        {
+            return usingObject.gameObject;
+        }
+
+        /// <summary>
+        /// The GetUsingScript method is used to return the InteractUse script that is currently using this object.
+        /// </summary>
+        /// <returns>The InteractUse script of the object that is using the current object.</returns>
+        public virtual VRTK_InteractUse GetUsingScript()
         {
             return usingObject;
         }
@@ -1118,7 +1197,7 @@ namespace VRTK
 
         protected virtual void StopUsingInteractions()
         {
-            if (usingObject != null && (usingObject.activeInHierarchy || forceDisabled))
+            if (usingObject != null && (usingObject.gameObject.activeInHierarchy || forceDisabled))
             {
                 usingObject.GetComponent<VRTK_InteractTouch>().ForceStopTouching();
                 usingObject.GetComponent<VRTK_InteractUse>().ForceStopUsing();

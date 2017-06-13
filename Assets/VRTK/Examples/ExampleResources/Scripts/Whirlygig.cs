@@ -7,13 +7,13 @@
         float spinSpeed = 0f;
         Transform rotator;
 
-        public override void StartUsing(GameObject usingObject)
+        public override void StartUsing(VRTK_InteractUse usingObject)
         {
             base.StartUsing(usingObject);
             spinSpeed = 360f;
         }
 
-        public override void StopUsing(GameObject usingObject)
+        public override void StopUsing(VRTK_InteractUse usingObject)
         {
             base.StopUsing(usingObject);
             spinSpeed = 0f;

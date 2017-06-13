@@ -19,7 +19,7 @@
             gameObject.GetComponent<MeshRenderer>().material.color = color;
         }
 
-        public override void StartUsing(GameObject usingObject)
+        public override void StartUsing(VRTK_InteractUse usingObject)
         {
             base.StartUsing(usingObject);
 
@@ -47,7 +47,7 @@
         {
             foreach (Menu_Object_Spawner menuObjectSpawner in FindObjectsOfType<Menu_Object_Spawner>())
             {
-                menuObjectSpawner.StopUsing(null);
+                menuObjectSpawner.StopUsing();
             }
         }
     }

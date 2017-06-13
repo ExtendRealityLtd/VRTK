@@ -390,12 +390,10 @@ namespace VRTK
 
         protected virtual void InitPrimaryGrab(VRTK_InteractableObject currentGrabbedObject)
         {
-            GameObject grabbingObject = controllerReference.scriptAlias;
-
-            if (!currentGrabbedObject.IsValidInteractableController(grabbingObject, currentGrabbedObject.allowedGrabControllers))
+            if (!currentGrabbedObject.IsValidInteractableController(gameObject, currentGrabbedObject.allowedGrabControllers))
             {
                 grabbedObject = null;
-                if (interactTouch != null && currentGrabbedObject.IsGrabbed(grabbingObject))
+                if (interactTouch != null && currentGrabbedObject.IsGrabbed(gameObject))
                 {
                     interactTouch.ForceStopTouching();
                 }
@@ -404,7 +402,7 @@ namespace VRTK
 
             influencingGrabbedObject = false;
             currentGrabbedObject.SaveCurrentState();
-            currentGrabbedObject.Grabbed(grabbingObject);
+            currentGrabbedObject.Grabbed(this);
             currentGrabbedObject.ZeroVelocity();
             currentGrabbedObject.ToggleHighlight(false);
             currentGrabbedObject.isKinematic = false;
@@ -412,18 +410,16 @@ namespace VRTK
 
         protected virtual void InitSecondaryGrab(VRTK_InteractableObject currentGrabbedObject)
         {
-            GameObject grabbingObject = controllerReference.scriptAlias;
-
-            if (!currentGrabbedObject.IsValidInteractableController(grabbingObject, currentGrabbedObject.allowedGrabControllers))
+            if (!currentGrabbedObject.IsValidInteractableController(gameObject, currentGrabbedObject.allowedGrabControllers))
             {
                 grabbedObject = null;
                 influencingGrabbedObject = false;
-                currentGrabbedObject.Ungrabbed(grabbingObject);
+                currentGrabbedObject.Ungrabbed(this);
                 return;
             }
 
             influencingGrabbedObject = true;
-            currentGrabbedObject.Grabbed(grabbingObject);
+            currentGrabbedObject.Grabbed(this);
         }
 
         protected virtual void CheckInfluencingObjectOnRelease()
@@ -441,7 +437,6 @@ namespace VRTK
             if (grabbedObject != null && interactTouch != null)
             {
                 OnControllerStartUngrabInteractableObject(interactTouch.SetControllerInteractEvent(grabbedObject));
-                GameObject grabbingObject = controllerReference.scriptAlias;
                 VRTK_InteractableObject grabbedObjectScript = grabbedObject.GetComponent<VRTK_InteractableObject>();
                 if (grabbedObjectScript != null)
                 {
@@ -449,7 +444,7 @@ namespace VRTK
                     {
                         grabbedObjectScript.grabAttachMechanicScript.StopGrab(applyGrabbingObjectVelocity);
                     }
-                    grabbedObjectScript.Ungrabbed(grabbingObject);
+                    grabbedObjectScript.Ungrabbed(this);
                     grabbedObjectScript.ToggleHighlight(false);
                     ToggleControllerVisibility(true);
 
@@ -531,7 +526,6 @@ namespace VRTK
 
         protected virtual bool IsValidGrabAttempt(GameObject objectToGrab)
         {
-            GameObject grabbingObject = controllerReference.scriptAlias;
             bool initialGrabAttempt = false;
             VRTK_InteractableObject objectToGrabScript = (objectToGrab != null ? objectToGrab.GetComponent<VRTK_InteractableObject>() : null);
             if (grabbedObject == null && interactTouch != null && IsObjectGrabbable(interactTouch.GetTouchedObject()) && ScriptValidGrab(objectToGrabScript))
@@ -539,7 +533,7 @@ namespace VRTK
                 InitGrabbedObject();
                 if (!influencingGrabbedObject)
                 {
-                    initialGrabAttempt = objectToGrabScript.grabAttachMechanicScript.StartGrab(grabbingObject, grabbedObject, controllerAttachPoint);
+                    initialGrabAttempt = objectToGrabScript.grabAttachMechanicScript.StartGrab(gameObject, grabbedObject, controllerAttachPoint);
                 }
             }
             return initialGrabAttempt;
