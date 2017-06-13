@@ -47,12 +47,14 @@ A collection of titles that have been made with VRTK.
 | Jack Spriggan | [Steam Store Page](http://store.steampowered.com/app/620660) |
 | Booper, Get Home! | [Steam Store Page](http://store.steampowered.com/app/631670) |
 | Phantasma VR | [Steam Store Page](http://store.steampowered.com/app/608870) |
+| Power Solitaire VR | [Steam Store Page](http://store.steampowered.com/app/584850) |
 
 ## Oculus Home
 
 | Name | Link |
 |-------------------------------------------------|-------------------------------------------------------------------------------------------|
 | Dungeon Chess | [Oculus Home Store Page](https://www.oculus.com/experiences/rift/1201154329997563) |
+| Power Solitaire VR | [Oculus Home Store Page](https://www.oculus.com/experiences/rift/1119889274794166) |
 
 ## Itch.io
 
