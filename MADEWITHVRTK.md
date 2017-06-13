@@ -46,6 +46,7 @@ A collection of titles that have been made with VRTK.
 | Colourise | [Steam Store Page](http://store.steampowered.com/app/576820) |
 | Jack Spriggan | [Steam Store Page](http://store.steampowered.com/app/620660) |
 | Booper, Get Home! | [Steam Store Page](http://store.steampowered.com/app/631670) |
+| Phantasma VR | [Steam Store Page](http://store.steampowered.com/app/608870) |
 
 ## Oculus Home
 
