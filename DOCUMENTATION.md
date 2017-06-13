@@ -6124,6 +6124,7 @@ A collection of scripts that provide useful functionality to aid the creation pr
  * [Rigidbody Follow](#rigidbody-follow-vrtk_rigidbodyfollow)
  * [Transform Follow](#transform-follow-vrtk_transformfollow)
  * [SDK Object Alias](#sdk-object-alias-vrtk_sdkobjectalias)
+ * [SDK Transform Modify](#sdk-transform-modify-vrtk_sdktransformmodify)
  * [Simulating Headset Movement](#simulating-headset-movement-vrtk_simulator)
 
 ---
@@ -6425,6 +6426,17 @@ The Device Finder offers a collection of static methods that can be called to fi
   * `ViveMV` - A specific version of the HTC Vive headset, the first consumer version.
 
 ### Class Methods
+
+#### GetCurrentControllerType/0
+
+  > `public static SDK_BaseController.ControllerType GetCurrentControllerType()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `SDK_BaseController.ControllerType` - The ControllerType based on the SDK and headset being used.
+
+The GetCurrentControllerType method returns the current used ControllerType based on the SDK and headset being used.
 
 #### GetControllerIndex/1
 
@@ -7276,6 +7288,24 @@ The GameObject that the SDK Object Alias script is applied to will become a chil
 
 ---
 
+## SDK Transform Modify (VRTK_SDKTransformModify)
+
+### Overview
+
+The SDK Transform Modify can be used to change a transform orientation at runtime based on the currently used SDK or SDK controller.
+
+### Inspector Parameters
+
+ * **Loaded SDK Setup:** An optional SDK Setup to use to determine when to modify the transform.
+ * **Controller Type:** An optional SDK controller type to use to determine when to modify the transform.
+ * **Position:** The new local position to change the transform to.
+ * **Rotation:** The new local rotation in eular angles to change the transform to.
+ * **Scale:** The new local scale to change the transform to.
+ * **Target:** The target transform to modify on enable. If this is left blank then the transform the script is attached to will be used.
+ * **Sdk Overrides:** A collection of SDK Transform overrides to change the given target transform for each specified SDK.
+
+---
+
 ## Simulating Headset Movement (VRTK_Simulator)
 
 ### Overview
@@ -7663,6 +7693,15 @@ This is an abstract class to implement the interface required by all implemented
   * `None` - No hand is assigned.
   * `Left` - The left hand is assigned.
   * `Right` - The right hand is assigned.
+ * `public enum ControllerType` - SDK Controller types.
+  * `Undefined` - No controller type.
+  * `Custom` - A custom controller type.
+  * `Simulator_Hand` - The Simulator default hand controller.
+  * `SteamVR_ViveWand` - The HTC Vive wand controller for SteamVR.
+  * `SteamVR_OculusTouch` - The Oculus Touch controller for SteamVR.
+  * `Oculus_OculusTouch` - The Oculus Touch controller for Oculus Utilities.
+  * `Daydream_Controller` - The Daydream controller for Google Daydream SDK.
+  * `Ximmerse_Flip` - The Flip controller for Ximmerse SDK.
 
 ### Class Methods
 
@@ -7689,6 +7728,17 @@ The ProcessUpdate method enables an SDK to run logic for every Unity Update
    * _none_
 
 The ProcessFixedUpdate method enables an SDK to run logic for every Unity FixedUpdate
+
+#### GetCurrentControllerType/0
+
+  > `public abstract ControllerType GetCurrentControllerType();`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `ControllerType` - The ControllerType based on the SDK and headset being used.
+
+The GetCurrentControllerType method returns the current used ControllerType based on the SDK and headset being used.
 
 #### GetControllerDefaultColliderPath/1
 
@@ -8288,6 +8338,17 @@ The ProcessUpdate method enables an SDK to run logic for every Unity Update
 
 The ProcessFixedUpdate method enables an SDK to run logic for every Unity FixedUpdate
 
+#### GetCurrentControllerType/0
+
+  > `public override ControllerType GetCurrentControllerType()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `ControllerType` - The ControllerType based on the SDK and headset being used.
+
+The GetCurrentControllerType method returns the current used ControllerType based on the SDK and headset being used.
+
 #### GetControllerDefaultColliderPath/1
 
   > `public override string GetControllerDefaultColliderPath(ControllerHand hand)`
@@ -8868,6 +8929,17 @@ The ProcessUpdate method enables an SDK to run logic for every Unity Update
    * _none_
 
 The ProcessFixedUpdate method enables an SDK to run logic for every Unity FixedUpdate
+
+#### GetCurrentControllerType/0
+
+  > `public override ControllerType GetCurrentControllerType()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `ControllerType` - The ControllerType based on the SDK and headset being used.
+
+The GetCurrentControllerType method returns the current used ControllerType based on the SDK and headset being used.
 
 #### GetControllerDefaultColliderPath/1
 
@@ -9469,6 +9541,17 @@ The ProcessUpdate method enables an SDK to run logic for every Unity Update
 
 The ProcessFixedUpdate method enables an SDK to run logic for every Unity FixedUpdate
 
+#### GetCurrentControllerType/0
+
+  > `public override ControllerType GetCurrentControllerType()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `ControllerType` - The ControllerType based on the SDK and headset being used.
+
+The GetCurrentControllerType method returns the current used ControllerType based on the SDK and headset being used.
+
 #### GetControllerDefaultColliderPath/1
 
   > `public override string GetControllerDefaultColliderPath(ControllerHand hand)`
@@ -10069,6 +10152,17 @@ The ProcessUpdate method enables an SDK to run logic for every Unity Update
 
 The ProcessFixedUpdate method enables an SDK to run logic for every Unity FixedUpdate
 
+#### GetCurrentControllerType/0
+
+  > `public override ControllerType GetCurrentControllerType()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `ControllerType` - The ControllerType based on the SDK and headset being used.
+
+The GetCurrentControllerType method returns the current used ControllerType based on the SDK and headset being used.
+
 #### GetControllerDefaultColliderPath/1
 
   > `public override string GetControllerDefaultColliderPath(ControllerHand hand)`
@@ -10668,6 +10762,17 @@ The ProcessUpdate method enables an SDK to run logic for every Unity Update
 
 The ProcessFixedUpdate method enables an SDK to run logic for every Unity FixedUpdate
 
+#### GetCurrentControllerType/0
+
+  > `public override ControllerType GetCurrentControllerType()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `ControllerType` - The ControllerType based on the SDK and headset being used.
+
+The GetCurrentControllerType method returns the current used ControllerType based on the SDK and headset being used.
+
 #### GetControllerDefaultColliderPath/1
 
   > `public override string GetControllerDefaultColliderPath(ControllerHand hand)`
@@ -11255,6 +11360,17 @@ The ProcessUpdate method enables an SDK to run logic for every Unity Update
    * _none_
 
 The ProcessFixedUpdate method enables an SDK to run logic for every Unity FixedUpdate
+
+#### GetCurrentControllerType/0
+
+  > `public override ControllerType GetCurrentControllerType()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `ControllerType` - The ControllerType based on the SDK and headset being used.
+
+The GetCurrentControllerType method returns the current used ControllerType based on the SDK and headset being used.
 
 #### GetControllerDefaultColliderPath/1
 
