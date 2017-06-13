@@ -111,7 +111,7 @@ namespace VRTK
         /// </summary>
         public virtual void RewindPosition()
         {
-            if (lastGoodStandingPosition != null && headset != null)
+            if (headset != null)
             {
                 Vector3 storedPosition = playArea.position;
                 Vector3 resetVector = lastGoodHeadsetPosition - headset.position;
