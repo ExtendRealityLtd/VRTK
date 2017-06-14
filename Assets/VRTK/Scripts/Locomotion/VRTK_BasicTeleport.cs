@@ -69,7 +69,7 @@ namespace VRTK
         /// <param name="register">Determines whether to register or unregister the listeners.</param>
         public virtual void InitDestinationSetListener(GameObject markerMaker, bool register)
         {
-            if (markerMaker)
+            if (markerMaker != null)
             {
                 VRTK_DestinationMarker[] worldMarkers = markerMaker.GetComponentsInChildren<VRTK_DestinationMarker>();
                 for (int i = 0; i < worldMarkers.Length; i++)
@@ -78,7 +78,10 @@ namespace VRTK
                     if (register)
                     {
                         worldMarker.DestinationMarkerSet += new DestinationMarkerEventHandler(DoTeleport);
-                        worldMarker.SetInvalidTarget(targetListPolicy);
+                        if (worldMarker.targetListPolicy == null)
+                        {
+                            worldMarker.targetListPolicy = targetListPolicy;
+                        }
                         worldMarker.SetNavMeshCheckDistance(navMeshLimitDistance);
                         worldMarker.SetHeadsetPositionCompensation(headsetPositionCompensation);
                     }
