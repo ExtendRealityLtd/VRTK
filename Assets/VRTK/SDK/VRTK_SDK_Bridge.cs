@@ -22,6 +22,11 @@
             GetControllerSDK().ProcessFixedUpdate(controllerReference, options);
         }
 
+        public static SDK_BaseController.ControllerType GetCurrentControllerType()
+        {
+            return GetControllerSDK().GetCurrentControllerType();
+        }
+
         public static string GetControllerDefaultColliderPath(SDK_BaseController.ControllerHand hand)
         {
             return GetControllerSDK().GetControllerDefaultColliderPath(hand);

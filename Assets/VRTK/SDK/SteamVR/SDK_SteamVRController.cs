@@ -69,6 +69,22 @@ namespace VRTK
         }
 
         /// <summary>
+        /// The GetCurrentControllerType method returns the current used ControllerType based on the SDK and headset being used.
+        /// </summary>
+        /// <returns>The ControllerType based on the SDK and headset being used.</returns>
+        public override ControllerType GetCurrentControllerType()
+        {
+            switch (VRTK_DeviceFinder.GetHeadsetType(true))
+            {
+                case VRTK_DeviceFinder.Headsets.Vive:
+                    return ControllerType.SteamVR_ViveWand;
+                case VRTK_DeviceFinder.Headsets.OculusRift:
+                    return ControllerType.SteamVR_OculusTouch;
+            }
+            return ControllerType.Custom;
+        }
+
+        /// <summary>
         /// The GetControllerDefaultColliderPath returns the path to the prefab that contains the collider objects for the default controller of this SDK.
         /// </summary>
         /// <param name="hand">The controller hand to check for</param>
