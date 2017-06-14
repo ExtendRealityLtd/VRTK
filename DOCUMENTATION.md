@@ -1153,7 +1153,8 @@ It extends the `VRTK_DestinationMarker` to allow for destination events to be em
  * **Select After Hover Duration:** The amount of time the pointer can be over the same collider before it automatically attempts to select it. 0f means no selection attempt will be made.
  * **Interact With Objects:** If this is checked then the pointer will be an extension of the controller and able to interact with Interactable Objects.
  * **Grab To Pointer Tip:** If `Interact With Objects` is checked and this is checked then when an object is grabbed with the pointer touching it, the object will attach to the pointer tip and not snap to the controller.
- * **Controller:** The controller that will be used to toggle the pointer. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.
+ * **Controller:** An optional controller that will be used to toggle the pointer. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.
+ * **Interact Use:** An optional InteractUse script that will be used when using interactable objects with pointer. If this is left blank then it will attempt to get the InteractUse script from the same GameObject and if it cannot find one then it will attempt to get it from the attached controller.
  * **Custom Origin:** A custom transform to use as the origin of the pointer. If no pointer origin transform is provided then the transform the script is attached to is used.
  * **Direction Indicator:** A custom VRTK_PointerDirectionIndicator to use to determine the rotation given to the destination set event.
 
@@ -3268,10 +3269,10 @@ The IsUsing method is used to determine if the object is currently being used.
 
 #### StartTouching/1
 
-  > `public virtual void StartTouching(GameObject currentTouchingObject)`
+  > `public virtual void StartTouching(VRTK_InteractTouch currentTouchingObject = null)`
 
   * Parameters
-   * `GameObject currentTouchingObject` - The game object that is currently touching this object.
+   * `VRTK_InteractTouch currentTouchingObject` - The object that is currently touching this object.
   * Returns
    * _none_
 
@@ -3279,10 +3280,10 @@ The StartTouching method is called automatically when the object is touched init
 
 #### StopTouching/1
 
-  > `public virtual void StopTouching(GameObject previousTouchingObject)`
+  > `public virtual void StopTouching(VRTK_InteractTouch previousTouchingObject = null)`
 
   * Parameters
-   * `GameObject previousTouchingObject` - The game object that was previously touching this object.
+   * `VRTK_InteractTouch previousTouchingObject` - The object that was previously touching this object.
   * Returns
    * _none_
 
@@ -3290,10 +3291,10 @@ The StopTouching method is called automatically when the object has stopped bein
 
 #### Grabbed/1
 
-  > `public virtual void Grabbed(GameObject currentGrabbingObject)`
+  > `public virtual void Grabbed(VRTK_InteractGrab currentGrabbingObject = null)`
 
   * Parameters
-   * `GameObject currentGrabbingObject` - The game object that is currently grabbing this object.
+   * `VRTK_InteractGrab currentGrabbingObject` - The object that is currently grabbing this object.
   * Returns
    * _none_
 
@@ -3301,10 +3302,10 @@ The Grabbed method is called automatically when the object is grabbed initially.
 
 #### Ungrabbed/1
 
-  > `public virtual void Ungrabbed(GameObject previousGrabbingObject)`
+  > `public virtual void Ungrabbed(VRTK_InteractGrab previousGrabbingObject = null)`
 
   * Parameters
-   * `GameObject previousGrabbingObject` - The game object that was previously grabbing this object.
+   * `VRTK_InteractGrab previousGrabbingObject` - The object that was previously grabbing this object.
   * Returns
    * _none_
 
@@ -3312,10 +3313,10 @@ The Ungrabbed method is called automatically when the object has stopped being g
 
 #### StartUsing/1
 
-  > `public virtual void StartUsing(GameObject currentUsingObject)`
+  > `public virtual void StartUsing(VRTK_InteractUse currentUsingObject = null)`
 
   * Parameters
-   * `GameObject currentUsingObject` - The game object that is currently using this object.
+   * `VRTK_InteractUse currentUsingObject` - The object that is currently using this object.
   * Returns
    * _none_
 
@@ -3323,10 +3324,10 @@ The StartUsing method is called automatically when the object is used initially.
 
 #### StopUsing/1
 
-  > `public virtual void StopUsing(GameObject previousUsingObject)`
+  > `public virtual void StopUsing(VRTK_InteractUse previousUsingObject = null)`
 
   * Parameters
-   * `GameObject previousUsingObject` - The game object that was previously using this object.
+   * `VRTK_InteractUse previousUsingObject` - The object that was previously using this object.
   * Returns
    * _none_
 
@@ -3427,9 +3428,20 @@ The GetSecondaryGrabbingObject method is used to return the game object that is 
   * Parameters
    * _none_
   * Returns
-   * `GameObject` - The game object of what is using the current object.
+   * `GameObject` - The GameObject of what is using the current object.
 
-The GetUsingObject method is used to return the game object that is currently using this object.
+The GetUsingObject method is used to return the GameObject that is currently using this object.
+
+#### GetUsingScript/0
+
+  > `public virtual VRTK_InteractUse GetUsingScript()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `VRTK_InteractUse` - The InteractUse script of the object that is using the current object.
+
+The GetUsingScript method is used to return the InteractUse script that is currently using this object.
 
 #### IsValidInteractableController/2
 

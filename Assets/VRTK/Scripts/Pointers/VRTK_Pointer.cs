@@ -2,9 +2,6 @@
 namespace VRTK
 {
     using UnityEngine;
-#if UNITY_5_5_OR_NEWER
-    using UnityEngine.AI;
-#endif
 
     /// <summary>
     /// The VRTK Pointer class forms the basis of being able to emit a pointer from a game object (e.g. controller).
@@ -56,8 +53,10 @@ namespace VRTK
 
         [Header("Pointer Customisation Settings")]
 
-        [Tooltip("The controller that will be used to toggle the pointer. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.")]
+        [Tooltip("An optional controller that will be used to toggle the pointer. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.")]
         public VRTK_ControllerEvents controller;
+        [Tooltip("An optional InteractUse script that will be used when using interactable objects with pointer. If this is left blank then it will attempt to get the InteractUse script from the same GameObject and if it cannot find one then it will attempt to get it from the attached controller.")]
+        public VRTK_InteractUse interactUse;
         [Tooltip("A custom transform to use as the origin of the pointer. If no pointer origin transform is provided then the transform the script is attached to is used.")]
         public Transform customOrigin;
         [Tooltip("A custom VRTK_PointerDirectionIndicator to use to determine the rotation given to the destination set event.")]
@@ -389,12 +388,24 @@ namespace VRTK
                 return false;
             }
 
+            GetInteractUse();
+            SetupDirectionIndicator();
+
+            return true;
+        }
+
+        protected virtual void GetInteractUse()
+        {
+            interactUse = (interactUse != null ? interactUse : GetComponentInChildren<VRTK_InteractUse>());
+            interactUse = (interactUse == null && controller != null ? controller.GetComponentInChildren<VRTK_InteractUse>() : interactUse);
+        }
+
+        protected virtual void SetupDirectionIndicator()
+        {
             if (directionIndicator != null)
             {
                 directionIndicator.Initialize(controller);
             }
-
-            return true;
         }
 
         protected virtual void SetupController()
@@ -593,7 +604,7 @@ namespace VRTK
 
         protected virtual bool PointerActivatesUseAction(VRTK_InteractableObject givenInteractableObject)
         {
-            return (givenInteractableObject != null && givenInteractableObject.pointerActivatesUseAction && givenInteractableObject.IsValidInteractableController(controller.gameObject, givenInteractableObject.allowedUseControllers));
+            return (givenInteractableObject != null && givenInteractableObject.pointerActivatesUseAction && (!ControllerRequired() || givenInteractableObject.IsValidInteractableController(controller.gameObject, givenInteractableObject.allowedUseControllers)));
         }
 
         protected virtual void StartUseAction(Transform target)
@@ -601,38 +612,35 @@ namespace VRTK
             pointerInteractableObject = target.GetComponent<VRTK_InteractableObject>();
             bool cannotUseBecauseNotGrabbed = (pointerInteractableObject && pointerInteractableObject.useOnlyIfGrabbed && !pointerInteractableObject.IsGrabbed());
 
-            if (PointerActivatesUseAction(pointerInteractableObject) && pointerInteractableObject.holdButtonToUse && !cannotUseBecauseNotGrabbed && pointerInteractableObject.usingState == 0)
+            if (interactUse != null && PointerActivatesUseAction(pointerInteractableObject) && pointerInteractableObject.holdButtonToUse && !cannotUseBecauseNotGrabbed && pointerInteractableObject.usingState == 0)
             {
-                pointerInteractableObject.StartUsing(controller.gameObject);
+                pointerInteractableObject.StartUsing(interactUse);
                 pointerInteractableObject.usingState++;
             }
         }
 
         protected virtual void StopUseAction()
         {
-            if (PointerActivatesUseAction(pointerInteractableObject) && pointerInteractableObject.holdButtonToUse && pointerInteractableObject.IsUsing())
+            if (interactUse != null && PointerActivatesUseAction(pointerInteractableObject) && pointerInteractableObject.holdButtonToUse && pointerInteractableObject.IsUsing())
             {
-                pointerInteractableObject.StopUsing(controller.gameObject);
+                pointerInteractableObject.StopUsing(interactUse);
                 pointerInteractableObject.usingState = 0;
             }
         }
 
         protected virtual void AttemptUseOnSet(Transform target)
         {
-            if (pointerInteractableObject != null && target != null)
+            if (pointerInteractableObject != null && target != null && interactUse != null && PointerActivatesUseAction(pointerInteractableObject))
             {
-                if (PointerActivatesUseAction(pointerInteractableObject))
+                if (pointerInteractableObject.IsUsing())
                 {
-                    if (pointerInteractableObject.IsUsing())
-                    {
-                        pointerInteractableObject.StopUsing(controller.gameObject);
-                        pointerInteractableObject.usingState = 0;
-                    }
-                    else if (!pointerInteractableObject.holdButtonToUse)
-                    {
-                        pointerInteractableObject.StartUsing(controller.gameObject);
-                        pointerInteractableObject.usingState++;
-                    }
+                    pointerInteractableObject.StopUsing(interactUse);
+                    pointerInteractableObject.usingState = 0;
+                }
+                else if (!pointerInteractableObject.holdButtonToUse)
+                {
+                    pointerInteractableObject.StartUsing(interactUse);
+                    pointerInteractableObject.usingState++;
                 }
             }
         }

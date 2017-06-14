@@ -332,13 +332,13 @@ namespace VRTK
 
                 if (usingObjectScript != null)
                 {
-                    if (!usingObjectScript.IsValidInteractableController(controllerReference.scriptAlias, usingObjectScript.allowedUseControllers))
+                    if (!usingObjectScript.IsValidInteractableController(gameObject, usingObjectScript.allowedUseControllers))
                     {
                         usingObject = null;
                         return;
                     }
 
-                    usingObjectScript.StartUsing(controllerReference.scriptAlias);
+                    usingObjectScript.StartUsing(this);
                     ToggleControllerVisibility(false);
                     AttemptHaptics();
                     OnControllerUseInteractableObject(interactTouch.SetControllerInteractEvent(usingObject));
@@ -354,7 +354,7 @@ namespace VRTK
                 VRTK_InteractableObject usingObjectCheck = usingObject.GetComponent<VRTK_InteractableObject>();
                 if (usingObjectCheck != null && completeStop)
                 {
-                    usingObjectCheck.StopUsing(controllerReference.scriptAlias);
+                    usingObjectCheck.StopUsing(this);
                 }
                 ToggleControllerVisibility(true);
                 OnControllerUnuseInteractableObject(interactTouch.SetControllerInteractEvent(usingObject));

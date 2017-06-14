@@ -10,13 +10,13 @@
 
         private VRTK_ControllerEvents controllerEvents;
 
-        public override void StartUsing(GameObject usingObject)
+        public override void StartUsing(VRTK_InteractUse usingObject)
         {
             base.StartUsing(usingObject);
             controllerEvents = usingObject.GetComponent<VRTK_ControllerEvents>();
         }
 
-        public override void StopUsing(GameObject previousUsingObject)
+        public override void StopUsing(VRTK_InteractUse previousUsingObject)
         {
             base.StopUsing(previousUsingObject);
             controllerEvents = null;
