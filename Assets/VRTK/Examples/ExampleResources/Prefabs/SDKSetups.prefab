@@ -2035,7 +2035,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000014262144886}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4000011921798948}
@@ -2310,7 +2310,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000010709762058}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.5, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4000013711330020}
@@ -6058,10 +6058,11 @@ MonoBehaviour:
   queueAhead: 1
   useRecommendedMSAALevel: 0
   enableAdaptiveResolution: 0
-  maxRenderScale: 1
   minRenderScale: 0.7
+  maxRenderScale: 1
   _trackingOriginType: 1
   usePositionTracking: 1
+  useRotationTracking: 1
   useIPDInPositionTracking: 1
   resetTrackerOnLoad: 0
 --- !u!114 &114000013429635022
@@ -6318,6 +6319,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   usePerEyeCameras: 0
+  useFixedUpdateForTracking: 0
 --- !u!114 &114000014223286676
 MonoBehaviour:
   m_ObjectHideFlags: 1

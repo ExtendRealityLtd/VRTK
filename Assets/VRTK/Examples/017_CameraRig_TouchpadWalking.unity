@@ -100,15 +100,15 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4000011368645488, guid: 41c0760bd81dd084283814f0c432b466, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -4.81
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4000011368645488, guid: 41c0760bd81dd084283814f0c432b466, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4000011368645488, guid: 41c0760bd81dd084283814f0c432b466, type: 2}
       propertyPath: m_LocalPosition.z
-      value: -0.83
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4000011368645488, guid: 41c0760bd81dd084283814f0c432b466, type: 2}
       propertyPath: m_LocalRotation.x
@@ -142,6 +142,36 @@ Prefab:
       propertyPath: m_LocalPosition.z
       value: 0.83
       objectReference: {fileID: 0}
+    - target: {fileID: 114000010315091656, guid: 41c0760bd81dd084283814f0c432b466,
+        type: 2}
+      propertyPath: actualBoundaries
+      value: 
+      objectReference: {fileID: 35832362}
+    - target: {fileID: 114000010315091656, guid: 41c0760bd81dd084283814f0c432b466,
+        type: 2}
+      propertyPath: actualHeadset
+      value: 
+      objectReference: {fileID: 35832365}
+    - target: {fileID: 114000010315091656, guid: 41c0760bd81dd084283814f0c432b466,
+        type: 2}
+      propertyPath: actualLeftController
+      value: 
+      objectReference: {fileID: 35832364}
+    - target: {fileID: 114000010315091656, guid: 41c0760bd81dd084283814f0c432b466,
+        type: 2}
+      propertyPath: actualRightController
+      value: 
+      objectReference: {fileID: 35832363}
+    - target: {fileID: 114000010315091656, guid: 41c0760bd81dd084283814f0c432b466,
+        type: 2}
+      propertyPath: modelAliasLeftController
+      value: 
+      objectReference: {fileID: 35832361}
+    - target: {fileID: 114000010315091656, guid: 41c0760bd81dd084283814f0c432b466,
+        type: 2}
+      propertyPath: modelAliasRightController
+      value: 
+      objectReference: {fileID: 35832360}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 41c0760bd81dd084283814f0c432b466, type: 2}
   m_IsPrefabParent: 0
@@ -180,6 +210,36 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 35832353}
   m_Script: {fileID: 11500000, guid: eeda6d41317f444b900e374895f14e95, type: 3}
+--- !u!1 &35832360 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1846200688178366, guid: 41c0760bd81dd084283814f0c432b466,
+    type: 2}
+  m_PrefabInternal: {fileID: 35832353}
+--- !u!1 &35832361 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1297872528131846, guid: 41c0760bd81dd084283814f0c432b466,
+    type: 2}
+  m_PrefabInternal: {fileID: 35832353}
+--- !u!1 &35832362 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1000012704122952, guid: 41c0760bd81dd084283814f0c432b466,
+    type: 2}
+  m_PrefabInternal: {fileID: 35832353}
+--- !u!1 &35832363 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1000012404417072, guid: 41c0760bd81dd084283814f0c432b466,
+    type: 2}
+  m_PrefabInternal: {fileID: 35832353}
+--- !u!1 &35832364 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1000012074436610, guid: 41c0760bd81dd084283814f0c432b466,
+    type: 2}
+  m_PrefabInternal: {fileID: 35832353}
+--- !u!1 &35832365 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1000013428897076, guid: 41c0760bd81dd084283814f0c432b466,
+    type: 2}
+  m_PrefabInternal: {fileID: 35832353}
 --- !u!1 &51027536
 GameObject:
   m_ObjectHideFlags: 0
@@ -308,6 +368,7 @@ MonoBehaviour:
   deceleration: 0.1
   fallingDeceleration: 0.01
   speedMultiplier: 1.5
+  bodyPhysics: {fileID: 0}
 --- !u!114 &58768452
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -325,6 +386,7 @@ MonoBehaviour:
   deceleration: 0.1
   fallingDeceleration: 0.01
   speedMultiplier: 1.5
+  bodyPhysics: {fileID: 0}
 --- !u!1 &63906191
 GameObject:
   m_ObjectHideFlags: 0
@@ -373,6 +435,7 @@ MonoBehaviour:
   warpDelay: 0.5
   floorHeightTolerance: 1
   blinkTransitionSpeed: 0.6
+  bodyPhysics: {fileID: 0}
 --- !u!114 &63906194
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -502,8 +565,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1437563318}
-  m_Father: {fileID: 595461345}
-  m_RootOrder: 4
+  m_Father: {fileID: 1088929173}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &146687107
 MonoBehaviour:
@@ -632,8 +695,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 267134380}
-  m_Father: {fileID: 595461345}
-  m_RootOrder: 5
+  m_Father: {fileID: 1088929173}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &202006654
 MonoBehaviour:
@@ -1008,6 +1071,7 @@ MonoBehaviour:
   warpDelay: 0.5
   floorHeightTolerance: 1
   blinkTransitionSpeed: 0.6
+  bodyPhysics: {fileID: 0}
 --- !u!114 &558308556
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1025,6 +1089,7 @@ MonoBehaviour:
   deceleration: 0.1
   fallingDeceleration: 0.01
   speedMultiplier: 1.5
+  bodyPhysics: {fileID: 0}
 --- !u!1 &595461344
 GameObject:
   m_ObjectHideFlags: 0
@@ -1035,7 +1100,7 @@ GameObject:
   - component: {fileID: 595461345}
   - component: {fileID: 595461346}
   m_Layer: 0
-  m_Name: '[VRTK]'
+  m_Name: '[VRTK_SDKManager]'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1053,10 +1118,6 @@ Transform:
   m_Children:
   - {fileID: 35832355}
   - {fileID: 1420055186}
-  - {fileID: 818107833}
-  - {fileID: 1665733686}
-  - {fileID: 146687106}
-  - {fileID: 202006653}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1134,6 +1195,7 @@ MonoBehaviour:
   warpDelay: 0.5
   floorHeightTolerance: 1
   blinkTransitionSpeed: 0.6
+  bodyPhysics: {fileID: 0}
 --- !u!114 &675370635
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1152,6 +1214,7 @@ MonoBehaviour:
   warpDelay: 0.5
   floorHeightTolerance: 1
   blinkTransitionSpeed: 0.6
+  bodyPhysics: {fileID: 0}
 --- !u!1 &678749675
 GameObject:
   m_ObjectHideFlags: 0
@@ -1337,11 +1400,11 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 818107832}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 9.2653475, y: -12.729746, z: -33.865685}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 595461345}
-  m_RootOrder: 2
+  m_Father: {fileID: 1862006217}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &818107834
 MonoBehaviour:
@@ -1838,6 +1901,37 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1050828534}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1088929172
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1088929173}
+  m_Layer: 0
+  m_Name: '[VRTK_Scripts]'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1088929173
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1088929172}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1665733686}
+  - {fileID: 146687106}
+  - {fileID: 202006653}
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1135670851
 GameObject:
   m_ObjectHideFlags: 0
@@ -2001,6 +2095,7 @@ MonoBehaviour:
   deceleration: 0.1
   fallingDeceleration: 0.01
   speedMultiplier: 1.5
+  bodyPhysics: {fileID: 0}
 --- !u!114 &1150037486
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2226,6 +2321,7 @@ MonoBehaviour:
   warpDelay: 0.5
   floorHeightTolerance: 1
   blinkTransitionSpeed: 0.6
+  bodyPhysics: {fileID: 0}
 --- !u!114 &1383646740
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2243,6 +2339,7 @@ MonoBehaviour:
   deceleration: 0.1
   fallingDeceleration: 0.01
   speedMultiplier: 1.5
+  bodyPhysics: {fileID: 0}
 --- !u!1 &1387858999
 GameObject:
   m_ObjectHideFlags: 0
@@ -2344,7 +2441,7 @@ Prefab:
     - target: {fileID: 224000013127654674, guid: d46cf6b1ad9d84a48ae7548a2a6b41b3,
         type: 2}
       propertyPath: m_LocalPosition.z
-      value: -0.83
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224000013127654674, guid: d46cf6b1ad9d84a48ae7548a2a6b41b3,
         type: 2}
@@ -2374,12 +2471,12 @@ Prefab:
     - target: {fileID: 224000013127654674, guid: d46cf6b1ad9d84a48ae7548a2a6b41b3,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: -4.81
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224000013127654674, guid: d46cf6b1ad9d84a48ae7548a2a6b41b3,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224000013127654674, guid: d46cf6b1ad9d84a48ae7548a2a6b41b3,
         type: 2}
@@ -2424,17 +2521,17 @@ Prefab:
     - target: {fileID: 224000013127654674, guid: d46cf6b1ad9d84a48ae7548a2a6b41b3,
         type: 2}
       propertyPath: m_LocalScale.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224000013127654674, guid: d46cf6b1ad9d84a48ae7548a2a6b41b3,
         type: 2}
       propertyPath: m_LocalScale.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224000013127654674, guid: d46cf6b1ad9d84a48ae7548a2a6b41b3,
         type: 2}
       propertyPath: m_LocalScale.z
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224000012326194302, guid: d46cf6b1ad9d84a48ae7548a2a6b41b3,
         type: 2}
@@ -2989,6 +3086,7 @@ MonoBehaviour:
   warpDelay: 0.5
   floorHeightTolerance: 1
   blinkTransitionSpeed: 0.6
+  bodyPhysics: {fileID: 0}
 --- !u!114 &1654489346
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3032,12 +3130,12 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1665733685}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 595461345}
-  m_RootOrder: 3
+  m_Father: {fileID: 1088929173}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1665733687
 MonoBehaviour:
@@ -3077,6 +3175,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 057015237f68bd74d9c6c6c28ea347e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ignoreTriggerColliders: 0
   colliderRadius: 0.1
   targetListPolicy: {fileID: 0}
   headsetColliding: 0
@@ -3113,6 +3212,7 @@ MonoBehaviour:
   headsetPositionCompensation: 1
   targetListPolicy: {fileID: 1665733690}
   navMeshLimitDistance: 0
+  snapToNearestFloor: 1
   customRaycast: {fileID: 0}
   layersToIgnore:
     serializedVersion: 2
@@ -3131,6 +3231,7 @@ MonoBehaviour:
   enableTeleport: 1
   enableBodyCollisions: 1
   ignoreGrabbedCollisions: 1
+  ignoreCollisionsWith: []
   headsetYOffset: 0.2
   movementThreshold: 0.0015
   playAreaMovementThreshold: 0.00075
@@ -3149,6 +3250,8 @@ MonoBehaviour:
   floorHeightTolerance: 0.001
   fallCheckPrecision: 5
   teleporter: {fileID: 0}
+  customBodyColliderContainer: {fileID: 0}
+  customFootColliderContainer: {fileID: 0}
 --- !u!114 &1665733694
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3161,6 +3264,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   collisionDetector: 0
+  ignoreTriggerColliders: 0
   rewindDelay: 0.5
   pushbackDistance: 0.5
   crouchThreshold: 0.5
@@ -3311,6 +3415,7 @@ MonoBehaviour:
   deceleration: 0.1
   fallingDeceleration: 0.01
   speedMultiplier: 1.5
+  bodyPhysics: {fileID: 0}
 --- !u!1 &1725682350
 GameObject:
   m_ObjectHideFlags: 0
@@ -3359,6 +3464,7 @@ MonoBehaviour:
   warpDelay: 0.5
   floorHeightTolerance: 1
   blinkTransitionSpeed: 0.6
+  bodyPhysics: {fileID: 0}
 --- !u!114 &1725682353
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3421,6 +3527,7 @@ MonoBehaviour:
   deceleration: 0.1
   fallingDeceleration: 0.01
   speedMultiplier: 1.5
+  bodyPhysics: {fileID: 0}
 --- !u!114 &1842972677
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3438,6 +3545,36 @@ MonoBehaviour:
   deceleration: 0.1
   fallingDeceleration: 0.01
   speedMultiplier: 1.5
+  bodyPhysics: {fileID: 0}
+--- !u!1 &1862006216
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1862006217}
+  m_Layer: 0
+  m_Name: '[ExampleSceneScripts]'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1862006217
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1862006216}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 818107833}
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1907973908
 GameObject:
   m_ObjectHideFlags: 0
@@ -3524,6 +3661,7 @@ MonoBehaviour:
   deceleration: 0.1
   fallingDeceleration: 0.01
   speedMultiplier: 1.5
+  bodyPhysics: {fileID: 0}
 --- !u!114 &1913117364
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3589,6 +3727,7 @@ MonoBehaviour:
   deceleration: 0.1
   fallingDeceleration: 0.01
   speedMultiplier: 1.5
+  bodyPhysics: {fileID: 0}
 --- !u!114 &1913963097
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3655,6 +3794,7 @@ MonoBehaviour:
   warpDelay: 0.5
   floorHeightTolerance: 1
   blinkTransitionSpeed: 0.6
+  bodyPhysics: {fileID: 0}
 --- !u!114 &1957207989
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3673,6 +3813,7 @@ MonoBehaviour:
   warpDelay: 0.5
   floorHeightTolerance: 1
   blinkTransitionSpeed: 0.6
+  bodyPhysics: {fileID: 0}
 --- !u!1 &2004032046
 GameObject:
   m_ObjectHideFlags: 0
@@ -3883,6 +4024,7 @@ MonoBehaviour:
   warpDelay: 0.5
   floorHeightTolerance: 1
   blinkTransitionSpeed: 0.6
+  bodyPhysics: {fileID: 0}
 --- !u!114 &2090022823
 MonoBehaviour:
   m_ObjectHideFlags: 0
