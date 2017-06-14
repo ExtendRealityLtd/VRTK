@@ -65,16 +65,21 @@ Use the mouse and keyboard to move around both play area and hands and interacti
  * **Hand Rotation Multiplier:** Adjust hand rotation speed.
  * **Player Move Multiplier:** Adjust player movement speed.
  * **Player Rotation Multiplier:** Adjust player rotation speed.
+ * **Player Sprint Multiplier:** Adjust player sprint speed.
  * **Mouse Movement Key:** Key used to enable mouse input if a button press is required.
  * **Toggle Control Hints:** Key used to toggle control hints on/off.
  * **Change Hands:** Key used to switch between left and righ hand.
  * **Hands On Off:** Key used to switch hands On/Off.
  * **Rotation Position:** Key used to switch between positional and rotational movement.
  * **Change Axis:** Key used to switch between X/Y and X/Z axis.
+ * **Distance Pickup Left:** Key used to distance pickup with left hand.
+ * **Distance Pickup Right:** Key used to distance pickup with right hand.
+ * **Distance Pickup Modifier:** Key used to enable distance pickup.
  * **Move Forward:** Key used to move forward.
  * **Move Left:** Key used to move to the left.
  * **Move Backward:** Key used to move backwards.
  * **Move Right:** Key used to move to the right.
+ * **Sprint:** Key used to sprint.
  * **Trigger Alias:** Key used to simulate trigger button.
  * **Grip Alias:** Key used to simulate grip button.
  * **Touchpad Alias:** Key used to simulate touchpad button.
