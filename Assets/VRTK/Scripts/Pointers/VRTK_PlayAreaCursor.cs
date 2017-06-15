@@ -28,6 +28,10 @@ namespace VRTK
     [AddComponentMenu("VRTK/Scripts/Pointers/VRTK_PlayAreaCursor")]
     public class VRTK_PlayAreaCursor : MonoBehaviour
     {
+        [Header("Appearance Settings")]
+
+        [Tooltip("If this is checked then the pointer valid/invalid colours will also be used to change the colour of the play area cursor when colliding/not colliding.")]
+        public bool usePointerColor = true;
         [Tooltip("Determines the size of the play area cursor and collider. If the values are left as zero then the Play Area Cursor will be sized to the calibrated Play Area space.")]
         public Vector2 playAreaCursorDimensions = Vector2.zero;
         [Tooltip("If this is checked then if the play area cursor is colliding with any other object then the pointer colour will change to the `Pointer Miss Color` and the `DestinationMarkerSet` event will not be triggered, which will prevent teleporting into areas where the play area will collide.")]
@@ -40,8 +44,7 @@ namespace VRTK
         public VRTK_PolicyList targetListPolicy;
 
         [Header("Custom Settings")]
-        [Tooltip("If this is checked then the pointer hit/miss colours will also be used to change the colour of the play area cursor when colliding/not colliding.")]
-        public bool usePointerColor = true;
+
         [Tooltip("A custom GameObject to use for the play area cursor representation for when the location is valid.")]
         public GameObject validLocationObject;
         [Tooltip("A custom GameObject to use for the play area cursor representation for when the location is invalid.")]

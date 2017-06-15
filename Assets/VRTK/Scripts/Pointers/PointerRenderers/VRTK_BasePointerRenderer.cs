@@ -439,11 +439,11 @@ namespace VRTK
             if (givenColor != Color.clear)
             {
                 currentColor = givenColor;
-                ChangeMaterial(givenColor);
             }
 
             if (previousColor != currentColor)
             {
+                ChangeMaterial(givenColor);
                 EmitStateEvent();
             }
         }
@@ -468,6 +468,11 @@ namespace VRTK
             if (playareaCursor != null)
             {
                 playareaCursor.SetMaterialColor(givenColor, IsValidCollision());
+            }
+
+            if (controllingPointer != null && controllingPointer.directionIndicator != null)
+            {
+                controllingPointer.directionIndicator.SetMaterialColor(givenColor, IsValidCollision());
             }
         }
 

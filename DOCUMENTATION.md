@@ -750,6 +750,8 @@ This can be useful for rotating the play area upon teleporting to face the user 
 ### Inspector Parameters
 
  * **Include Headset Offset:** If this is checked then the reported rotation will include the offset of the headset rotation in relation to the play area.
+ * **Display On Invalid Location:** If this is checked then the direction indicator will be displayed when the location is invalid.
+ * **Use Pointer Color:** If this is checked then the pointer valid/invalid colours will also be used to change the colour of the direction indicator.
 
 ### Class Events
 
@@ -796,6 +798,18 @@ The SetPosition method is used to set the world position of the direction indica
    * `Quaternion` - The reported rotation of the direction indicator.
 
 The GetRotation method returns the current reported rotation of the direction indicator.
+
+#### SetMaterialColor/2
+
+  > `public virtual void SetMaterialColor(Color color, bool validity)`
+
+  * Parameters
+   * `Color color` - The colour to update the direction indicatormaterial to.
+   * `bool validity` - Determines if the colour being set is based from a valid location or invalid location.
+  * Returns
+   * _none_
+
+The SetMaterialColor method sets the current material colour on the direction indicator.
 
 ---
 
@@ -1301,12 +1315,12 @@ The Play Area Cursor is used in conjunction with a Pointer script and displays a
 
 ### Inspector Parameters
 
+ * **Use Pointer Color:** If this is checked then the pointer valid/invalid colours will also be used to change the colour of the play area cursor when colliding/not colliding.
  * **Play Area Cursor Dimensions:** Determines the size of the play area cursor and collider. If the values are left as zero then the Play Area Cursor will be sized to the calibrated Play Area space.
  * **Handle Play Area Cursor Collisions:** If this is checked then if the play area cursor is colliding with any other object then the pointer colour will change to the `Pointer Miss Color` and the `DestinationMarkerSet` event will not be triggered, which will prevent teleporting into areas where the play area will collide.
  * **Headset Out Of Bounds Is Collision:** If this is checked then if the user's headset is outside of the play area cursor bounds then it is considered a collision even if the play area isn't colliding with anything.
  * **Display On Invalid Location:** If this is checked then the play area cursor will be displayed when the location is invalid.
  * **Target List Policy:** A specified VRTK_PolicyList to use to determine whether the play area cursor collisions will be acted upon.
- * **Use Pointer Color:** If this is checked then the pointer hit/miss colours will also be used to change the colour of the play area cursor when colliding/not colliding.
  * **Valid Location Object:** A custom GameObject to use for the play area cursor representation for when the location is valid.
  * **Invalid Location Object:** A custom GameObject to use for the play area cursor representation for when the location is invalid.
 
