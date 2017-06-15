@@ -36,6 +36,8 @@ namespace VRTK
         protected VRTK_ControllerEvents controllerEvents;
         protected Transform playArea;
         protected Transform headset;
+        protected GameObject validLocation;
+        protected GameObject invalidLocation;
 
         public virtual void OnPointerDirectionIndicatorPositionSet()
         {
@@ -85,15 +87,13 @@ namespace VRTK
         /// <param name="validity">Determines if the colour being set is based from a valid location or invalid location.</param>
         public virtual void SetMaterialColor(Color color, bool validity)
         {
-            if (!displayOnInvalidLocation)
-            {
-                VRTK_ObjectAppearance.ToggleRenderer(validity, gameObject);
-            }
+            validLocation.SetActive(validity);
+            invalidLocation.SetActive((displayOnInvalidLocation ? !validity : validity));
 
-            if(usePointerColor)
+            if (usePointerColor)
             {
                 Renderer[] renderers = GetComponentsInChildren<Renderer>();
-                for(int i = 0; i < renderers.Length; i++)
+                for (int i = 0; i < renderers.Length; i++)
                 {
                     renderers[i].material.color = color;
                 }
@@ -102,6 +102,8 @@ namespace VRTK
 
         protected virtual void Awake()
         {
+            validLocation = transform.Find("ValidLocation").gameObject;
+            invalidLocation = transform.Find("InvalidLocation").gameObject;
             gameObject.SetActive(false);
         }
 
