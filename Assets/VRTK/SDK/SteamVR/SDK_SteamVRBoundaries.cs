@@ -24,7 +24,7 @@ namespace VRTK
         /// </summary>
         public override void InitBoundaries()
         {
-#if UNITY_5_6_OR_NEWER
+#if UNITY_5_6
             Transform headsetCamera = VRTK_DeviceFinder.HeadsetCamera();
             if (headsetCamera != null && headsetCamera.GetComponent<SteamVR_UpdatePoses>() == null)
             {
