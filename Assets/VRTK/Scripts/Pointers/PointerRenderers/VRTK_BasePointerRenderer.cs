@@ -76,6 +76,7 @@ namespace VRTK
         protected VRTK_Pointer controllingPointer;
         protected RaycastHit destinationHit = new RaycastHit();
         protected Material defaultMaterial;
+        protected Color previousColor;
         protected Color currentColor;
 
         protected VRTK_PolicyList invalidListPolicy;
@@ -429,6 +430,7 @@ namespace VRTK
 
         protected virtual void ChangeColor(Color givenColor)
         {
+            previousColor = currentColor;
             if ((playareaCursor != null && playareaCursor.IsActive() && playareaCursor.HasCollided()) || !ValidDestination() || (controllingPointer != null && !controllingPointer.CanSelect()))
             {
                 givenColor = invalidCollisionColor;
@@ -438,6 +440,26 @@ namespace VRTK
             {
                 currentColor = givenColor;
                 ChangeMaterial(givenColor);
+            }
+
+            if (previousColor != currentColor)
+            {
+                EmitStateEvent();
+            }
+        }
+
+        protected virtual void EmitStateEvent()
+        {
+            if (controllingPointer != null)
+            {
+                if (IsValidCollision())
+                {
+                    controllingPointer.OnPointerStateValid();
+                }
+                else
+                {
+                    controllingPointer.OnPointerStateInvalid();
+                }
             }
         }
 

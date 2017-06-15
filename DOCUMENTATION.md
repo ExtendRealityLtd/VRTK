@@ -1159,6 +1159,8 @@ It extends the `VRTK_DestinationMarker` to allow for destination events to be em
  * `ActivationButtonReleased` - Emitted when the pointer activation button is released.
  * `SelectionButtonPressed` - Emitted when the pointer selection button is pressed.
  * `SelectionButtonReleased` - Emitted when the pointer selection button is released.
+ * `PointerStateValid` - Emitted when the pointer is in a valid state.
+ * `PointerStateInvalid` - Emitted when the pointer is in an invalid state.
 
 ### Unity Events
 
@@ -1277,6 +1279,17 @@ The ResetSelectionTimer method is used to reset the pointer selection timer to t
    * _none_
 
 The Toggle method is used to enable or disable the pointer.
+
+#### IsStateValid/0
+
+  > `public virtual bool IsStateValid()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `bool` - Returns true if the pointer is in the valid state (showing the valid colour), returns false if the pointer is in the invalid state (showing the invalid colour).
+
+The IsStateValid method is used to determine if the pointer is currently in a valid state (i.e. on it's valid colour).
 
 ---
 

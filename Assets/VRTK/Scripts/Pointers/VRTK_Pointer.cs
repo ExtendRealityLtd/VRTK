@@ -78,6 +78,14 @@ namespace VRTK
         /// Emitted when the pointer selection button is released.
         /// </summary>
         public event ControllerInteractionEventHandler SelectionButtonReleased;
+        /// <summary>
+        /// Emitted when the pointer is in a valid state.
+        /// </summary>
+        public event DestinationMarkerEventHandler PointerStateValid;
+        /// <summary>
+        /// Emitted when the pointer is in an invalid state.
+        /// </summary>
+        public event DestinationMarkerEventHandler PointerStateInvalid;
 
         protected VRTK_ControllerEvents.ButtonAlias subscribedActivationButton = VRTK_ControllerEvents.ButtonAlias.Undefined;
         protected VRTK_ControllerEvents.ButtonAlias subscribedSelectionButton = VRTK_ControllerEvents.ButtonAlias.Undefined;
@@ -126,6 +134,22 @@ namespace VRTK
             if (SelectionButtonReleased != null)
             {
                 SelectionButtonReleased(this, e);
+            }
+        }
+
+        public virtual void OnPointerStateValid()
+        {
+            if (PointerStateValid != null)
+            {
+                PointerStateValid(this, GetStateEventPayload());
+            }
+        }
+
+        public virtual void OnPointerStateInvalid()
+        {
+            if (PointerStateInvalid != null)
+            {
+                PointerStateInvalid(this, GetStateEventPayload());
             }
         }
 
@@ -246,6 +270,15 @@ namespace VRTK
             {
                 StopUseAction();
             }
+        }
+
+        /// <summary>
+        /// The IsStateValid method is used to determine if the pointer is currently in a valid state (i.e. on it's valid colour).
+        /// </summary>
+        /// <returns>Returns true if the pointer is in the valid state (showing the valid colour), returns false if the pointer is in the invalid state (showing the invalid colour).</returns>
+        public virtual bool IsStateValid()
+        {
+            return (EnabledPointerRenderer() && pointerRenderer.IsValidCollision());
         }
 
         protected virtual void Awake()
@@ -571,13 +604,13 @@ namespace VRTK
             if (EnabledPointerRenderer() && CanSelect() && (IsPointerActive() || wasActivated))
             {
                 wasActivated = false;
-                RaycastHit destinationHit = pointerRenderer.GetDestinationHit();
-                AttemptUseOnSet(destinationHit.transform);
-                if (destinationHit.transform && IsPointerActive() && pointerRenderer.ValidPlayArea() && !PointerActivatesUseAction(pointerInteractableObject) && pointerRenderer.IsValidCollision())
+                RaycastHit pointerRendererDestinationHit = pointerRenderer.GetDestinationHit();
+                AttemptUseOnSet(pointerRendererDestinationHit.transform);
+                if (pointerRendererDestinationHit.transform && IsPointerActive() && pointerRenderer.ValidPlayArea() && !PointerActivatesUseAction(pointerInteractableObject) && pointerRenderer.IsValidCollision())
                 {
-                    ResetHoverSelectionTimer(destinationHit.collider);
+                    ResetHoverSelectionTimer(pointerRendererDestinationHit.collider);
                     ResetSelectionTimer();
-                    OnDestinationMarkerSet(SetDestinationMarkerEvent(destinationHit.distance, destinationHit.transform, destinationHit, destinationHit.point, controllerReference, false, GetCursorRotation()));
+                    OnDestinationMarkerSet(SetDestinationMarkerEvent(pointerRendererDestinationHit.distance, pointerRendererDestinationHit.transform, pointerRendererDestinationHit, pointerRendererDestinationHit.point, controllerReference, false, GetCursorRotation()));
                 }
             }
         }
@@ -679,6 +712,17 @@ namespace VRTK
                 canClickOnHover = false;
                 ExecuteSelectionButtonAction();
             }
+        }
+
+        protected virtual DestinationMarkerEventArgs GetStateEventPayload()
+        {
+            DestinationMarkerEventArgs eventPayload = new DestinationMarkerEventArgs();
+            if (EnabledPointerRenderer())
+            {
+                RaycastHit pointerRendererDestinationHit = pointerRenderer.GetDestinationHit();
+                eventPayload = SetDestinationMarkerEvent(pointerRendererDestinationHit.distance, pointerRendererDestinationHit.transform, pointerRendererDestinationHit, pointerRendererDestinationHit.point, controllerReference, false, GetCursorRotation());
+            }
+            return eventPayload;
         }
     }
 }
