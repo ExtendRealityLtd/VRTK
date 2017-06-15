@@ -101,7 +101,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 4000010033549378}
   m_Layer: 0
-  m_Name: lockedCUrsor
+  m_Name: lockedCursor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
