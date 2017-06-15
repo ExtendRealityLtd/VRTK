@@ -1165,7 +1165,6 @@ It extends the `VRTK_DestinationMarker` to allow for destination events to be em
  * **Controller:** An optional controller that will be used to toggle the pointer. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.
  * **Interact Use:** An optional InteractUse script that will be used when using interactable objects with pointer. If this is left blank then it will attempt to get the InteractUse script from the same GameObject and if it cannot find one then it will attempt to get it from the attached controller.
  * **Custom Origin:** A custom transform to use as the origin of the pointer. If no pointer origin transform is provided then the transform the script is attached to is used.
- * **Direction Indicator:** A custom VRTK_PointerDirectionIndicator to use to determine the rotation given to the destination set event.
 
 ### Class Events
 
@@ -1471,6 +1470,7 @@ Specifies the smoothing to be applied to the pointer.
  * **Smooths Rotation:** Whether or not to smooth the rotation of the pointer origin when positioning the pointer tip.
  * **Max Allowed Per Frame Angle Difference:** The maximum allowed angle between the unsmoothed pointer origin and the smoothed pointer origin per frame to use for smoothing.
  * **Playarea Cursor:** An optional Play Area Cursor generator to add to the destination position of the pointer tip.
+ * **Direction Indicator:** A custom VRTK_PointerDirectionIndicator to use to determine the rotation given to the destination set event.
  * **Custom Raycast:** A custom raycaster to use for the pointer's raycasts to ignore.
  * **Pointer Origin Smoothing Settings:** Specifies the smoothing to be applied to the pointer origin when positioning the pointer tip.
  * **Valid Collision Color:** The colour to change the pointer materials when the pointer collides with a valid object. Set to `Color.clear` to bypass changing material colour on valid collision.

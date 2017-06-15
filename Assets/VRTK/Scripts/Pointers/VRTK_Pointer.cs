@@ -59,8 +59,6 @@ namespace VRTK
         public VRTK_InteractUse interactUse;
         [Tooltip("A custom transform to use as the origin of the pointer. If no pointer origin transform is provided then the transform the script is attached to is used.")]
         public Transform customOrigin;
-        [Tooltip("A custom VRTK_PointerDirectionIndicator to use to determine the rotation given to the destination set event.")]
-        public VRTK_PointerDirectionIndicator directionIndicator;
 
         /// <summary>
         /// Emitted when the pointer activation button is pressed.
@@ -316,7 +314,6 @@ namespace VRTK
             AttemptControllerSetup();
             CheckButtonSubscriptions();
             HandleEnabledPointer();
-            UpdateDirectionIndicator();
         }
 
         protected virtual void SetDefaultValues()
@@ -365,20 +362,11 @@ namespace VRTK
             }
         }
 
-        protected virtual void UpdateDirectionIndicator()
-        {
-            if (directionIndicator != null && pointerRenderer != null)
-            {
-                RaycastHit destinationHit = pointerRenderer.GetDestinationHit();
-                directionIndicator.SetPosition((IsPointerActive() && destinationHit.collider != null), destinationHit.point);
-            }
-        }
-
         protected virtual Quaternion? GetCursorRotation()
         {
-            if (directionIndicator != null)
+            if (EnabledPointerRenderer() && pointerRenderer.directionIndicator != null)
             {
-                return directionIndicator.GetRotation();
+                return pointerRenderer.directionIndicator.GetRotation();
             }
             return null;
         }
@@ -422,7 +410,6 @@ namespace VRTK
             }
 
             GetInteractUse();
-            SetupDirectionIndicator();
 
             return true;
         }
@@ -431,14 +418,6 @@ namespace VRTK
         {
             interactUse = (interactUse != null ? interactUse : GetComponentInChildren<VRTK_InteractUse>());
             interactUse = (interactUse == null && controller != null ? controller.GetComponentInChildren<VRTK_InteractUse>() : interactUse);
-        }
-
-        protected virtual void SetupDirectionIndicator()
-        {
-            if (directionIndicator != null)
-            {
-                directionIndicator.Initialize(controller);
-            }
         }
 
         protected virtual void SetupController()

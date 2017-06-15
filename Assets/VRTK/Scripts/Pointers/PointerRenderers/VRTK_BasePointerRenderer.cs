@@ -46,10 +46,14 @@ namespace VRTK
             public float maxAllowedPerFrameAngleDifference = 1.5f;
         }
 
-        [Header("General Renderer Settings")]
+        [Header("Renderer Supplement Settings")]
 
         [Tooltip("An optional Play Area Cursor generator to add to the destination position of the pointer tip.")]
         public VRTK_PlayAreaCursor playareaCursor;
+        [Tooltip("A custom VRTK_PointerDirectionIndicator to use to determine the rotation given to the destination set event.")]
+        public VRTK_PointerDirectionIndicator directionIndicator;
+
+        [Header("General Renderer Settings")]
 
         [Tooltip("A custom raycaster to use for the pointer's raycasts to ignore.")]
         public VRTK_CustomRaycast customRaycast;
@@ -121,6 +125,7 @@ namespace VRTK
                 controllerGrabScript = controllingPointer.controller.GetComponent<VRTK_InteractGrab>();
                 CreateObjectInteractor();
             }
+            SetupDirectionIndicator();
         }
 
         /// <summary>
@@ -171,6 +176,11 @@ namespace VRTK
             {
                 playareaCursor.SetHeadsetPositionCompensation(headsetPositionCompensation);
                 playareaCursor.ToggleState(IsCursorVisible());
+            }
+
+            if (directionIndicator != null)
+            {
+                UpdateDirectionIndicator();
             }
         }
 
@@ -470,9 +480,9 @@ namespace VRTK
                 playareaCursor.SetMaterialColor(givenColor, IsValidCollision());
             }
 
-            if (controllingPointer != null && controllingPointer.directionIndicator != null)
+            if (directionIndicator != null)
             {
-                controllingPointer.directionIndicator.SetMaterialColor(givenColor, IsValidCollision());
+                directionIndicator.SetMaterialColor(givenColor, IsValidCollision());
             }
         }
 
@@ -572,6 +582,20 @@ namespace VRTK
             {
                 playareaCursor.SetPlayAreaCursorTransform(location);
             }
+        }
+
+        protected virtual void SetupDirectionIndicator()
+        {
+            if (directionIndicator != null && controllingPointer != null && controllingPointer.controller != null)
+            {
+                directionIndicator.Initialize(controllingPointer.controller);
+            }
+        }
+
+        protected virtual void UpdateDirectionIndicator()
+        {
+            RaycastHit destinationHit = GetDestinationHit();
+            directionIndicator.SetPosition((controllingPointer.IsPointerActive() && destinationHit.collider != null), destinationHit.point);
         }
     }
 }
