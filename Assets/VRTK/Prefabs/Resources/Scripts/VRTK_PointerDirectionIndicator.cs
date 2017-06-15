@@ -28,6 +28,9 @@ namespace VRTK
         [Tooltip("If this is checked then the pointer valid/invalid colours will also be used to change the colour of the direction indicator.")]
         public bool usePointerColor = false;
 
+        [HideInInspector]
+        public bool isActive = true;
+
         /// <summary>
         /// Emitted when the object tooltip is reset.
         /// </summary>
@@ -66,7 +69,7 @@ namespace VRTK
         public virtual void SetPosition(bool active, Vector3 position)
         {
             transform.position = position;
-            gameObject.SetActive(active);
+            gameObject.SetActive((isActive && active));
             OnPointerDirectionIndicatorPositionSet();
         }
 

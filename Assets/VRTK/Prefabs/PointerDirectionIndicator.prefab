@@ -377,3 +377,4 @@ MonoBehaviour:
   includeHeadsetOffset: 1
   displayOnInvalidLocation: 1
   usePointerColor: 0
+  isActive: 1
