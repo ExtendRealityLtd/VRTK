@@ -65,6 +65,8 @@ namespace VRTK
         public float snapDuration = 0f;
         [Tooltip("If this is checked then the scaled size of the snap drop zone will be applied to the object that is snapped to it.")]
         public bool applyScalingOnSnap = false;
+        [Tooltip("If this is checked then when the snapped object is unsnapped from the drop zone, a clone of the unsnapped object will be snapped back into the drop zone.")]
+        public bool cloneNewOnUnsnap = false;
         [Tooltip("The colour to use when showing the snap zone is active.")]
         public Color highlightColor;
         [Tooltip("The highlight object will always be displayed when the snap drop zone is available even if a valid item isn't being hovered over.")]
@@ -99,6 +101,8 @@ namespace VRTK
         protected GameObject highlightEditorObject = null;
         protected List<GameObject> currentValidSnapObjects = new List<GameObject>();
         protected GameObject currentSnappedObject = null;
+        protected GameObject objectToClone = null;
+        protected bool[] clonedObjectColliderStates = new bool[0];
         protected VRTK_BaseHighlighter objectHighlighter;
         protected bool willSnap = false;
         protected bool isSnapped = false;
@@ -480,6 +484,10 @@ namespace VRTK
 
                     isSnapped = true;
                     currentSnappedObject = ioCheck.gameObject;
+                    if (cloneNewOnUnsnap)
+                    {
+                        CreatePermanentClone();
+                    }
 
                     transitionInPlace = StartCoroutine(UpdateTransformDimensions(ioCheck, highlightContainer, newLocalScale, snapDuration));
 
@@ -492,15 +500,71 @@ namespace VRTK
             wasSnapped = false;
         }
 
+        protected virtual void CreatePermanentClone()
+        {
+            VRTK_BaseHighlighter currentSnappedObjectHighlighter = currentSnappedObject.GetComponent<VRTK_BaseHighlighter>();
+            if (currentSnappedObjectHighlighter != null)
+            {
+                currentSnappedObjectHighlighter.Unhighlight();
+            }
+            objectToClone = Instantiate(currentSnappedObject);
+            Collider[] clonedObjectStates = currentSnappedObject.GetComponentsInChildren<Collider>();
+            clonedObjectColliderStates = new bool[clonedObjectStates.Length];
+            for (int i = 0; i < clonedObjectStates.Length; i++)
+            {
+                Collider clonedObjectColliderState = clonedObjectStates[i];
+                clonedObjectColliderStates[i] = clonedObjectColliderState.isTrigger;
+                clonedObjectColliderState.isTrigger = true;
+            }
+            objectToClone.SetActive(false);
+        }
+
+        protected virtual void ResetPermanentCloneColliders(GameObject objectToReset)
+        {
+            if (objectToReset != null && clonedObjectColliderStates.Length > 0)
+            {
+                Collider[] clonedObjectStates = objectToReset.GetComponentsInChildren<Collider>();
+                for (int i = 0; i < clonedObjectStates.Length; i++)
+                {
+                    Collider clonedObjectColliderState = clonedObjectStates[i];
+                    if (clonedObjectColliderStates.Length > i)
+                    {
+                        clonedObjectColliderState.isTrigger = clonedObjectColliderStates[i];
+                    }
+                }
+            }
+        }
+
+        protected virtual void ResnapPermanentClone()
+        {
+            if (objectToClone != null)
+            {
+                float savedSnapDuration = snapDuration;
+                snapDuration = 0f;
+                objectToClone.SetActive(true);
+                ResetPermanentCloneColliders(objectToClone);
+                ForceSnap(objectToClone);
+                snapDuration = savedSnapDuration;
+            }
+        }
+
         protected virtual void UnsnapObject()
         {
+            ResetPermanentCloneColliders(currentSnappedObject);
+
             isSnapped = false;
             wasSnapped = true;
             currentSnappedObject = null;
             ResetSnapDropZoneJoint();
+
             if (transitionInPlace != null)
             {
                 StopCoroutine(transitionInPlace);
+            }
+
+            if (cloneNewOnUnsnap)
+            {
+                ResnapPermanentClone();
             }
         }
 

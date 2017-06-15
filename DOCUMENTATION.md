@@ -356,6 +356,7 @@ If the `Use Joint` Snap Type is selected then a custom Joint component is requir
  * **Snap Type:** The Snap Type to apply when a valid interactable object is dropped within the snap zone.
  * **Snap Duration:** The amount of time it takes for the object being snapped to move into the new snapped position, rotation and scale.
  * **Apply Scaling On Snap:** If this is checked then the scaled size of the snap drop zone will be applied to the object that is snapped to it.
+ * **Clone New On Unsnap:** If this is checked then when the snapped object is unsnapped from the drop zone, a clone of the unsnapped object will be snapped back into the drop zone.
  * **Highlight Color:** The colour to use when showing the snap zone is active.
  * **Highlight Always Active:** The highlight object will always be displayed when the snap drop zone is available even if a valid item isn't being hovered over.
  * **Valid Object List Policy:** A specified VRTK_PolicyList to use to determine which interactable objects will be snapped to the snap drop zone on release.
