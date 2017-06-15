@@ -116,7 +116,7 @@ namespace VRTK
                     climbingObjectLastRotation = climbingObject.transform.rotation;
                 }
 
-                if (!IsHeadsetColliding())
+                if (positionRewind != null && !IsHeadsetColliding())
                 {
                     positionRewind.SetLastGoodPosition();
                 }
@@ -233,7 +233,7 @@ namespace VRTK
         protected virtual void Ungrab(bool carryMomentum, VRTK_ControllerReference controllerReference, GameObject target)
         {
             isClimbing = false;
-            if (IsHeadsetColliding())
+            if (positionRewind != null && IsHeadsetColliding())
             {
                 positionRewind.RewindPosition();
             }
