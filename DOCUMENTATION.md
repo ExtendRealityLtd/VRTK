@@ -1056,6 +1056,7 @@ It is utilised by the `VRTK_BasePointer` for dealing with pointer events when th
 ### Inspector Parameters
 
  * **Enable Teleport:** If this is checked then the teleport flag is set to true in the Destination Set event so teleport scripts will know whether to action the new destination.
+ * **Target List Policy:** A specified VRTK_PolicyList to use to determine whether destination targets will be considered valid or invalid.
 
 ### Class Events
 
@@ -1081,17 +1082,6 @@ Adding the `VRTK_DestinationMarker_UnityEvents` component to `VRTK_DestinationMa
  * `VRTK_ControllerReference controllerReference` - The optional reference to the controller controlling the destination marker.
 
 ### Class Methods
-
-#### SetInvalidTarget/1
-
-  > `public virtual void SetInvalidTarget(VRTK_PolicyList list = null)`
-
-  * Parameters
-   * `VRTK_PolicyList list` - The Tag Or Script list policy to check the set operation on.
-  * Returns
-   * _none_
-
-The SetInvalidTarget method is used to set objects that contain the given tag or class matching the name as invalid destination targets. It accepts a VRTK_PolicyList for a custom level of policy management.
 
 #### SetNavMeshCheckDistance/1
 

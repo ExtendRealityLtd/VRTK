@@ -115,7 +115,7 @@ namespace VRTK
             navMeshCheckDistance = givenNavMeshCheckDistance;
             headsetPositionCompensation = givenHeadsetPositionCompensation;
 
-            if (controllingPointer != null && controllingPointer.interactWithObjects && controllingPointer.controller && !objectInteractor)
+            if (controllingPointer != null && controllingPointer.interactWithObjects && controllingPointer.controller != null && objectInteractor == null)
             {
                 controllerGrabScript = controllingPointer.controller.GetComponent<VRTK_InteractGrab>();
                 CreateObjectInteractor();
@@ -356,7 +356,7 @@ namespace VRTK
             {
                 validNavMeshLocation = true;
             }
-            return (validNavMeshLocation && destinationHit.transform && !(VRTK_PolicyList.Check(destinationHit.transform.gameObject, invalidListPolicy)));
+            return (validNavMeshLocation && destinationHit.collider != null && !(VRTK_PolicyList.Check(destinationHit.collider.gameObject, invalidListPolicy)));
         }
 
         protected virtual void ToggleElement(GameObject givenObject, bool pointerState, bool actualState, VisibilityStates givenVisibility, ref bool currentVisible)

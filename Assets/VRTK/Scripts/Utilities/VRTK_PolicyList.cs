@@ -80,7 +80,7 @@ namespace VRTK
         /// <returns>Returns true of the given game object matches the policy list or given string logic.</returns>
         public static bool Check(GameObject obj, VRTK_PolicyList list)
         {
-            if (list)
+            if (list != null)
             {
                 return list.Find(obj);
             }
@@ -89,9 +89,9 @@ namespace VRTK
 
         protected virtual bool ScriptCheck(GameObject obj, bool returnState)
         {
-            foreach (var identifier in identifiers)
+            for(int i = 0; i < identifiers.Count; i++)
             {
-                if (obj.GetComponent(identifier))
+                if (obj.GetComponent(identifiers[i]))
                 {
                     return returnState;
                 }
