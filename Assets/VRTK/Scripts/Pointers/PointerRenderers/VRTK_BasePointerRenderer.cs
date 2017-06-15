@@ -439,6 +439,7 @@ namespace VRTK
                 currentColor = givenColor;
                 ChangeMaterial(givenColor);
             }
+            controllingPointer.directionIndicator.SetColor(currentColor);
         }
 
         protected virtual void ChangeMaterial(Color givenColor)

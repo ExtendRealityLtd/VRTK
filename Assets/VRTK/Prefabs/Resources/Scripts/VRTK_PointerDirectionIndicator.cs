@@ -63,6 +63,18 @@ namespace VRTK
         }
 
         /// <summary>
+        /// The SetColor method is used to set the color for the direction indicator to match the custom pointer cursor.
+        /// </summary>
+        /// <param name="color">The color to assign.</param>
+        public virtual void SetColor(Color color)
+        {
+            foreach(Renderer rend in GetComponentsInChildren<Renderer>())
+            {
+                rend.material.color = color;
+            }
+        }
+
+        /// <summary>
         /// The GetRotation method returns the current reported rotation of the direction indicator.
         /// </summary>
         /// <returns>The reported rotation of the direction indicator.</returns>
