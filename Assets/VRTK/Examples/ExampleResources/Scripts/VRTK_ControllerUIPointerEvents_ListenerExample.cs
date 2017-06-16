@@ -30,7 +30,7 @@
         private void VRTK_ControllerUIPointerEvents_ListenerExample_UIPointerElementEnter(object sender, UIPointerEventArgs e)
         {
             VRTK_Logger.Info("UI Pointer entered " + e.currentTarget.name + " on Controller index [" + VRTK_ControllerReference.GetRealIndex(e.controllerReference) + "] and the state was " + e.isActive + " ### World Position: " + e.raycastResult.worldPosition);
-            if (togglePointerOnHit && GetComponent<VRTK_Pointer>())
+            if (togglePointerOnHit && GetComponent<VRTK_Pointer>() && !GetComponent<VRTK_Pointer>().IsPointerActive())
             {
                 GetComponent<VRTK_Pointer>().Toggle(true);
             }
