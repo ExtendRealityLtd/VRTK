@@ -234,7 +234,7 @@ namespace VRTK
         /// <param name="state">If true the pointer will be enabled if possible, if false the pointer will be disabled if possible.</param>
         public virtual void Toggle(bool state)
         {
-            if (!CanActivate() || NoPointerRenderer() || CanActivateOnToggleButton(state))
+            if (!CanActivate() || NoPointerRenderer() || CanActivateOnToggleButton(state) || (state && IsPointerActive()) || (!state && !IsPointerActive()))
             {
                 return;
             }
