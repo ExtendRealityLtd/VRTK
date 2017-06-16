@@ -19,8 +19,17 @@ namespace VRTK
     /// </remarks>
     public class VRTK_PointerDirectionIndicator : MonoBehaviour
     {
+        [Header("Appearance Settings")]
+
         [Tooltip("If this is checked then the reported rotation will include the offset of the headset rotation in relation to the play area.")]
         public bool includeHeadsetOffset = true;
+        [Tooltip("If this is checked then the direction indicator will be displayed when the location is invalid.")]
+        public bool displayOnInvalidLocation = true;
+        [Tooltip("If this is checked then the pointer valid/invalid colours will also be used to change the colour of the direction indicator.")]
+        public bool usePointerColor = false;
+
+        [HideInInspector]
+        public bool isActive = true;
 
         /// <summary>
         /// Emitted when the object tooltip is reset.
@@ -30,6 +39,8 @@ namespace VRTK
         protected VRTK_ControllerEvents controllerEvents;
         protected Transform playArea;
         protected Transform headset;
+        protected GameObject validLocation;
+        protected GameObject invalidLocation;
 
         public virtual void OnPointerDirectionIndicatorPositionSet()
         {
@@ -58,7 +69,7 @@ namespace VRTK
         public virtual void SetPosition(bool active, Vector3 position)
         {
             transform.position = position;
-            gameObject.SetActive(active);
+            gameObject.SetActive((isActive && active));
             OnPointerDirectionIndicatorPositionSet();
         }
 
@@ -72,8 +83,30 @@ namespace VRTK
             return Quaternion.Euler(0f, transform.localEulerAngles.y + offset, 0f);
         }
 
+        /// <summary>
+        /// The SetMaterialColor method sets the current material colour on the direction indicator.
+        /// </summary>
+        /// <param name="color">The colour to update the direction indicatormaterial to.</param>
+        /// <param name="validity">Determines if the colour being set is based from a valid location or invalid location.</param>
+        public virtual void SetMaterialColor(Color color, bool validity)
+        {
+            validLocation.SetActive(validity);
+            invalidLocation.SetActive((displayOnInvalidLocation ? !validity : validity));
+
+            if (usePointerColor)
+            {
+                Renderer[] renderers = GetComponentsInChildren<Renderer>();
+                for (int i = 0; i < renderers.Length; i++)
+                {
+                    renderers[i].material.color = color;
+                }
+            }
+        }
+
         protected virtual void Awake()
         {
+            validLocation = transform.Find("ValidLocation").gameObject;
+            invalidLocation = transform.Find("InvalidLocation").gameObject;
             gameObject.SetActive(false);
         }
 
