@@ -180,6 +180,24 @@ namespace VRTK
         }
 
         /// <summary>
+        /// The GetTypeUnknownAssembly method is used to find a Type without knowing the exact assembly it is in.
+        /// </summary>
+        /// <param name="typeName">The name of the type to get.</param>
+        /// <returns>The Type, or null if none is found.</returns>
+        public static Type GetTypeUnknownAssembly(string typeName)
+        {
+            var type = Type.GetType(typeName);
+            if (type != null) return type;
+            foreach (var a in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                type = a.GetType(typeName);
+                if (type != null)
+                    return type;
+            }
+            return null;
+        }
+
+        /// <summary>
         /// The IsEditTime method determines if the state of Unity is in the Unity Editor and the scene is not in play mode.
         /// </summary>
         /// <returns>Returns true if Unity is in the Unity Editor and not in play mode.</returns>
