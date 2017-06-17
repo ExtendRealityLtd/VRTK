@@ -202,6 +202,8 @@ namespace VRTK
         protected bool enableBodyCollisionsStartingValue;
         protected float fallMinTime;
         protected List<GameObject> ignoreCollisionsOnGameObjects = new List<GameObject>();
+        protected Transform cachedGrabbedObjectTransform = null;
+        protected VRTK_InteractableObject cachedGrabbedObject;
 
         // Draws a sphere for current standing position and a sphere for current headset position.
         // Set to `true` to view the debug spheres.
@@ -1192,8 +1194,12 @@ namespace VRTK
 
         protected virtual bool FloorIsGrabbedObject(RaycastHit collidedObj)
         {
-            VRTK_InteractableObject obj = collidedObj.transform.GetComponent<VRTK_InteractableObject>();
-            return (obj != null && obj.IsGrabbed());
+            if (cachedGrabbedObjectTransform != collidedObj.transform)
+            {
+                cachedGrabbedObjectTransform = collidedObj.transform;
+                cachedGrabbedObject = collidedObj.transform.GetComponent<VRTK_InteractableObject>();
+            }
+            return (cachedGrabbedObject != null && cachedGrabbedObject.IsGrabbed());
         }
 
         protected virtual bool FloorHeightChanged(float currentY)
