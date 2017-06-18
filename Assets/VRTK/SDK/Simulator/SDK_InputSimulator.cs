@@ -438,19 +438,21 @@ namespace VRTK
             }
 
             // WASD Movement
-            string WASD = moveForward.ToString() + moveLeft.ToString() + moveBackward.ToString() + moveRight.ToString();
-            hints += "<b>" + WASD + "</b>: " + "Move Player/Playspace\n";
+            string movementKeys = moveForward.ToString() + moveLeft.ToString() + moveBackward.ToString() + moveRight.ToString();
+            hints += "Toggle Control Hints: " + key(toggleControlHints) + "\n\n";
+            hints += "Move Player/Playspace: <b>" + movementKeys + "</b>\n";
+            hints += "Sprint Modifier: (" + key(sprint) + ")\n\n";
 
             if (isHand)
             {
                 // Controllers
                 if (Input.GetKey(rotationPosition))
                 {
-                    hints += "Mouse: Controller Rotation" + mouseInputRequires + "\n";
+                    hints += "Mouse: <b>Controller Rotation" + mouseInputRequires + "</b>\n";
                 }
                 else
                 {
-                    hints += "Mouse: Controller Position" + mouseInputRequires + "\n";
+                    hints += "Mouse: <b>Controller Position" + mouseInputRequires + "</b>\n";
                 }
                 hints += "Modes: HMD (" + key(handsOnOff) + "), Rotation (" + key(rotationPosition) + ")\n";
 
@@ -470,7 +472,7 @@ namespace VRTK
                     pressMode = "Touch";
                 }
 
-                hints += "Button Press Mode Modifiers: Touch (" + key(touchModifier) + "), Hair Touch (" + key(hairTouchModifier) + ")\n";
+                hints += "\nButton Press Mode Modifiers: Touch (" + key(touchModifier) + "), Hair Touch (" + key(hairTouchModifier) + ")\n";
 
                 hints += "Trigger " + pressMode + ": " + key(triggerAlias) + "\n";
                 hints += "Grip " + pressMode + ": " + key(gripAlias) + "\n";
@@ -485,8 +487,11 @@ namespace VRTK
             else
             {
                 // HMD Input
-                hints += "Mouse: HMD Rotation" + mouseInputRequires + "\n";
+                hints += "Mouse: <b>HMD Rotation" + mouseInputRequires + "</b>\n";
                 hints += "Modes: Controller (" + key(handsOnOff) + ")\n";
+                hints += "Distance Pickup Modifier: (" + key(distancePickupModifier) + ")\n";
+                hints += "Distance Pickup Left Hand: (" + key(distancePickupLeft) + ")\n";
+                hints += "Distance Pickup Right Hand: (" + key(distancePickupRight) + ")\n";
             }
 
             hintText.text = hints.TrimEnd();
