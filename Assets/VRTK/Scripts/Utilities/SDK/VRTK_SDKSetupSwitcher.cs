@@ -133,7 +133,7 @@ namespace VRTK
                 chooseNoneButton.SetActive(true);
 
                 chooseNoneButton.GetComponent<Button>().onClick.AddListener(
-                    () => sdkManager.UnloadSDKSetup()
+                    () => sdkManager.UnloadSDKSetup(true)
                 );
 
                 chooseButtonGameObjects.Add(chooseNoneButton);

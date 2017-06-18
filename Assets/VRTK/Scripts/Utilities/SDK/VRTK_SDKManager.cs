@@ -385,6 +385,43 @@ namespace VRTK
         }
 
         /// <summary>
+        /// Tries to load a valid <see cref="VRTK_SDKSetup"/> from <see cref="setups"/>.
+        /// </summary>
+        public void TryLoadSDKSetupFromList()
+        {
+            int index = 0;
+
+            if (VRSettings.enabled)
+            {
+                // Use the SDK Setup for the current VR Device if it's working already
+                // (may be due to command line argument '-vrmode')
+                index = Array.FindIndex(
+                    setups,
+                    setup => setup.usedVRDeviceNames.Contains(VRSettings.loadedDeviceName)
+                );
+            }
+            else
+            {
+                // If '-vrmode none' was used try to load the respective SDK Setup
+                string[] commandLineArgs = Environment.GetCommandLineArgs();
+                int commandLineArgIndex = Array.IndexOf(commandLineArgs, "-vrmode", 1);
+                if (VRSettings.loadedDeviceName == "None"
+                    || (commandLineArgIndex != -1
+                        && commandLineArgIndex + 1 < commandLineArgs.Length
+                        && commandLineArgs[commandLineArgIndex + 1].ToLowerInvariant() == "none"))
+                {
+                    index = Array.FindIndex(
+                        setups,
+                        setup => setup.usedVRDeviceNames.All(vrDeviceName => vrDeviceName == "None")
+                    );
+                }
+            }
+
+            index = index == -1 ? 0 : index;
+            TryLoadSDKSetup(index, false, setups.ToArray());
+        }
+
+        /// <summary>
         /// Tries to load a valid <see cref="VRTK_SDKSetup"/> from a list.
         /// </summary>
         /// <remarks>
@@ -492,7 +529,7 @@ namespace VRTK
         /// Unloads the currently loaded <see cref="VRTK_SDKSetup"/>, if there is one.
         /// </summary>
         /// <param name="disableVR">Whether to disable VR altogether after unloading the SDK Setup.</param>
-        public void UnloadSDKSetup(bool disableVR = true)
+        public void UnloadSDKSetup(bool disableVR = false)
         {
             if (loadedSetup != null)
             {
@@ -538,35 +575,7 @@ namespace VRTK
 
             if (autoLoadSetup)
             {
-                int index = 0;
-
-                if (VRSettings.enabled)
-                {
-                    // Use the SDK Setup for the current VR Device if it's working already
-                    // (may be due to command line argument '-vrmode')
-                    index = Array.FindIndex(
-                        setups,
-                        setup => setup.usedVRDeviceNames.Contains(VRSettings.loadedDeviceName)
-                    );
-                }
-                else
-                {
-                    // If '-vrmode none' was used try to load the respective SDK Setup
-                    string[] commandLineArgs = Environment.GetCommandLineArgs();
-                    int commandLineArgIndex = Array.IndexOf(commandLineArgs, "-vrmode", 1);
-                    if (commandLineArgIndex != -1
-                        && commandLineArgIndex + 1 < commandLineArgs.Length
-                        && commandLineArgs[commandLineArgIndex + 1].ToLowerInvariant() == "none")
-                    {
-                        index = Array.FindIndex(
-                            setups,
-                            setup => setup.usedVRDeviceNames.All(vrDeviceName => vrDeviceName == "None")
-                        );
-                    }
-                }
-
-                index = index == -1 ? 0 : index;
-                TryLoadSDKSetup(index, false, setups.ToArray());
+                TryLoadSDKSetupFromList();
             }
         }
 

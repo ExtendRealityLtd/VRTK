@@ -15,7 +15,7 @@
             DynamicGI.UpdateEnvironment();
         }
 
-        private bool ForwardPressed()
+        private bool IsForwardPressed()
         {
             if (!VRTK_ControllerReference.IsValid(controllerReference))
             {
@@ -31,7 +31,7 @@
             return false;
         }
 
-        private bool BackPressed()
+        private bool IsBackPressed()
         {
             if (!VRTK_ControllerReference.IsValid(controllerReference))
             {
@@ -57,27 +57,29 @@
         {
             GameObject rightHand = VRTK_DeviceFinder.GetControllerRightHand(true);
             controllerReference = VRTK_ControllerReference.GetControllerReference(rightHand);
-            if (ForwardPressed() || Input.GetKeyUp(KeyCode.Space))
+
+            int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+            int nextSceneIndex = currentSceneIndex;
+
+            if (IsForwardPressed() || Input.GetKeyUp(KeyCode.Space))
             {
-                int nextSceneIndex = SceneManager.GetActiveScene().buildIndex + 1;
+                nextSceneIndex++;
                 if (nextSceneIndex >= SceneManager.sceneCountInBuildSettings)
-                {
                     nextSceneIndex = 0;
-                }
-                VRTK_SDKManager.instance.UnloadSDKSetup();
-                SceneManager.LoadScene(nextSceneIndex);
+            }
+            else if (IsBackPressed() || Input.GetKeyUp(KeyCode.Backspace))
+            {
+                nextSceneIndex--;
+                if (nextSceneIndex < 0)
+                    nextSceneIndex = SceneManager.sceneCountInBuildSettings - 1;
             }
 
-            if (BackPressed() || Input.GetKeyUp(KeyCode.Backspace))
+            if (nextSceneIndex == currentSceneIndex)
             {
-                int previousSceneIndex = SceneManager.GetActiveScene().buildIndex - 1;
-                if (previousSceneIndex < 0)
-                {
-                    previousSceneIndex = SceneManager.sceneCountInBuildSettings - 1;
-                }
-                VRTK_SDKManager.instance.UnloadSDKSetup();
-                SceneManager.LoadScene(previousSceneIndex);
+                return;
             }
+
+            SceneManager.LoadScene(nextSceneIndex);
         }
     }
 }
