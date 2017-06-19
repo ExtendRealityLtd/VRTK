@@ -39,29 +39,24 @@ namespace VRTK
         protected float framesTime;
         protected Canvas canvas;
         protected Text text;
+        protected VRTK_SDKManager sdkManager;
 
         protected virtual void OnEnable()
         {
-            VRTK_SDKManager sdkManager = VRTK_SDKManager.instance;
+            sdkManager = VRTK_SDKManager.instance;
             if (sdkManager != null)
             {
                 sdkManager.LoadedSetupChanged += LoadedSetupChanged;
             }
+            InitCanvas();
+        }
 
-            canvas = transform.GetComponentInParent<Canvas>();
-            text = GetComponent<Text>();
-
-            if (canvas != null)
+        protected virtual void OnDisable()
+        {
+            if (sdkManager != null && !gameObject.activeSelf)
             {
-                canvas.planeDistance = 0.5f;
+                sdkManager.LoadedSetupChanged -= LoadedSetupChanged;
             }
-
-            if (text != null)
-            {
-                text.fontSize = fontSize;
-                text.transform.localPosition = position;
-            }
-            SetCanvasCamera();
         }
 
         protected virtual void Update()
@@ -93,6 +88,24 @@ namespace VRTK
 
         protected virtual void LoadedSetupChanged(VRTK_SDKManager sender, VRTK_SDKManager.LoadedSetupChangeEventArgs e)
         {
+            SetCanvasCamera();
+        }
+
+        protected virtual void InitCanvas()
+        {
+            canvas = transform.GetComponentInParent<Canvas>();
+            text = GetComponent<Text>();
+
+            if (canvas != null)
+            {
+                canvas.planeDistance = 0.5f;
+            }
+
+            if (text != null)
+            {
+                text.fontSize = fontSize;
+                text.transform.localPosition = position;
+            }
             SetCanvasCamera();
         }
 
