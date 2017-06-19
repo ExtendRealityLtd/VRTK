@@ -36,7 +36,7 @@ namespace VRTK
 
         protected virtual void OnDisable()
         {
-            if (sdkManager != null)
+            if (sdkManager != null && !gameObject.activeSelf)
             {
                 sdkManager.LoadedSetupChanged -= LoadedSetupChanged;
             }
