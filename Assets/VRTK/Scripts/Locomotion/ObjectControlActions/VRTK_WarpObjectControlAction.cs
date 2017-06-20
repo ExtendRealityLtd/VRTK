@@ -40,7 +40,7 @@ namespace VRTK
 
         protected override void Process(GameObject controlledGameObject, Transform directionDevice, Vector3 axisDirection, float axis, float deadzone, bool currentlyFalling, bool modifierActive)
         {
-            if (warpDelayTimer < Time.timeSinceLevelLoad && axis != 0f)
+            if (warpDelayTimer < Time.time && axis != 0f)
             {
                 Warp(controlledGameObject, directionDevice, axisDirection, axis, modifierActive);
             }
@@ -79,7 +79,7 @@ namespace VRTK
                 targetPosition.y = warpRaycastHit.point.y + (colliderHeight / 2f);
                 Vector3 finalPosition = targetPosition - objectPosition + controlledGameObject.transform.position;
 
-                warpDelayTimer = Time.timeSinceLevelLoad + warpDelay;
+                warpDelayTimer = Time.time + warpDelay;
                 if (CanMove(bodyPhysics, controlledGameObject.transform.position, finalPosition))
                 {
                     controlledGameObject.transform.position = finalPosition;
