@@ -40,6 +40,8 @@ namespace VRTK
             ViveDVT
         }
 
+        private static string cachedHeadsetType = "";
+
         /// <summary>
         /// The GetCurrentControllerType method returns the current used ControllerType based on the SDK and headset being used.
         /// </summary>
@@ -365,6 +367,14 @@ namespace VRTK
         }
 
         /// <summary>
+        /// The ResetHeadsetTypeCache resets the cache holding the current headset type value.
+        /// </summary>
+        public static void ResetHeadsetTypeCache()
+        {
+            cachedHeadsetType = "";
+        }
+
+        /// <summary>
         /// The GetHeadsetType method returns the type of headset connected to the computer.
         /// </summary>
         /// <param name="summary">If this is true, then the generic name for the headset is returned not including the version type (e.g. OculusRift will be returned for DK2 and CV1).</param>
@@ -372,17 +382,16 @@ namespace VRTK
         public static Headsets GetHeadsetType(bool summary = false)
         {
             Headsets returnValue = Headsets.Unknown;
-            string checkValue = VRDevice.model;
-            switch (checkValue)
+            cachedHeadsetType = (cachedHeadsetType == "" ? VRDevice.model.Replace(" ", "").Replace(".", "").ToLowerInvariant() : cachedHeadsetType);
+            switch (cachedHeadsetType)
             {
-                case "Oculus Rift CV1":
+                case "oculusriftcv1":
                     returnValue = (summary ? Headsets.OculusRift : Headsets.OculusRiftCV1);
                     break;
-                case "Vive MV":
-                case "Vive MV.":
+                case "vivemv":
                     returnValue = (summary ? Headsets.Vive : Headsets.ViveMV);
                     break;
-                case "Vive DVT":
+                case "vivedvt":
                     returnValue = (summary ? Headsets.Vive : Headsets.ViveDVT);
                     break;
             }
@@ -392,17 +401,16 @@ namespace VRTK
                 VRTK_Logger.Warn(
                     string.Format("Your headset is of type '{0}' which VRTK doesn't know about yet. Please report this headset type to the maintainers of VRTK."
                                   + (summary ? " Falling back to a slower check to summarize the headset type now." : ""),
-                                  checkValue)
+                                  cachedHeadsetType)
                 );
 
                 if (summary)
                 {
-                    checkValue = checkValue.ToLowerInvariant();
-                    if (checkValue.Contains("rift"))
+                    if (cachedHeadsetType.Contains("rift"))
                     {
                         return Headsets.OculusRift;
                     }
-                    if (checkValue.Contains("vive"))
+                    if (cachedHeadsetType.Contains("vive"))
                     {
                         return Headsets.Vive;
                     }
