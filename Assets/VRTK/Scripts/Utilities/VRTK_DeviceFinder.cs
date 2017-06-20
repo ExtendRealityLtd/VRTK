@@ -379,6 +379,7 @@ namespace VRTK
                     returnValue = (summary ? Headsets.OculusRift : Headsets.OculusRiftCV1);
                     break;
                 case "Vive MV":
+                case "Vive MV.":
                     returnValue = (summary ? Headsets.Vive : Headsets.ViveMV);
                     break;
                 case "Vive DVT":
