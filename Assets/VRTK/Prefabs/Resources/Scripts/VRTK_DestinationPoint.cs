@@ -152,7 +152,6 @@ namespace VRTK
             initaliseListeners = StartCoroutine(ManageDestinationMarkersAtEndOfFrame());
             ResetPoint();
             currentTeleportState = enableTeleport;
-            currentDestinationPoint = null;
             playArea = VRTK_DeviceFinder.PlayAreaTransform();
             headset = VRTK_DeviceFinder.HeadsetTransform();
             destinationLocation = (destinationLocation != null ? destinationLocation : transform);
@@ -307,6 +306,11 @@ namespace VRTK
             {
                 ResetPoint();
             }
+            else if (currentDestinationPoint != null && e.raycastHit.transform != currentDestinationPoint.transform)
+            {
+                currentDestinationPoint = null;
+                ResetPoint();
+            }
         }
 
         protected virtual IEnumerator DoDestinationMarkerSetAtEndOfFrame(DestinationMarkerEventArgs e)
@@ -384,7 +388,11 @@ namespace VRTK
 
         protected virtual void ResetPoint()
         {
-            currentDestinationPoint = null;
+            if (snapToPoint && currentDestinationPoint == this)
+            {
+                return;
+            }
+
             ToggleObject(hoverCursorObject, false);
             if (enableTeleport)
             {
