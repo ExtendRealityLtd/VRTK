@@ -6690,6 +6690,17 @@ The HeadsetTransform method is used to retrieve the transform for the VR Headset
 
 The HeadsetCamera method is used to retrieve the transform for the VR Camera in the scene.
 
+#### ResetHeadsetTypeCache/0
+
+  > `public static void ResetHeadsetTypeCache()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The ResetHeadsetTypeCache resets the cache holding the current headset type value.
+
 #### GetHeadsetType/1
 
   > `public static Headsets GetHeadsetType(bool summary = false)`
