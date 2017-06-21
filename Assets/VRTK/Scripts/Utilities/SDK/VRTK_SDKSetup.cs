@@ -480,7 +480,7 @@ namespace VRTK
 
         private void SetupHeadset()
         {
-            if (!actualHeadset.GetComponent<VRTK_TrackedHeadset>())
+            if (actualHeadset != null && !actualHeadset.GetComponent<VRTK_TrackedHeadset>())
             {
                 actualHeadset.AddComponent<VRTK_TrackedHeadset>();
             }
