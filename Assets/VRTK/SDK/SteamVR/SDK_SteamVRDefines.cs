@@ -38,7 +38,7 @@ namespace VRTK
                 return false;
             }
 
-            return systemMethodParameters[0].ParameterType == Type.GetType("Valve.VR.EVREventType");
+            return systemMethodParameters[0].ParameterType == VRTK_SharedMethods.GetTypeUnknownAssembly("Valve.VR.EVREventType");
         }
 
         [SDK_ScriptingDefineSymbolPredicate(ScriptingDefineSymbol, BuildTargetGroupName)]
