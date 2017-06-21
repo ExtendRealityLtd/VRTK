@@ -40,12 +40,12 @@ namespace VRTK
         private static bool IsAvatarAvailable()
         {
             return (IsUtilitiesVersion1120OrNewer() || IsUtilitiesVersion1110OrOlder())
-                   && typeof(SDK_OculusDefines).Assembly.GetType("OvrAvatar") != null;
+                   && VRTK_SharedMethods.GetTypeUnknownAssembly("OvrAvatar") != null;
         }
 
         private static Version GetOculusWrapperVersion()
         {
-            Type pluginClass = typeof(SDK_OculusDefines).Assembly.GetType("OVRPlugin");
+            Type pluginClass = VRTK_SharedMethods.GetTypeUnknownAssembly("OVRPlugin");
             if (pluginClass == null)
             {
                 return null;
@@ -63,7 +63,7 @@ namespace VRTK
 
         private static Version GetOculusRuntimeVersion()
         {
-            Type pluginClass = typeof(SDK_OculusDefines).Assembly.GetType("OVRPlugin");
+            Type pluginClass = VRTK_SharedMethods.GetTypeUnknownAssembly("OVRPlugin");
             if (pluginClass == null)
             {
                 return null;
