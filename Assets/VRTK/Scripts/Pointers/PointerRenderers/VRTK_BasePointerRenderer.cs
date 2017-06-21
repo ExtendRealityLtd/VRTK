@@ -449,11 +449,11 @@ namespace VRTK
             if (givenColor != Color.clear)
             {
                 currentColor = givenColor;
+                ChangeMaterial(givenColor);
             }
 
             if (previousColor != currentColor)
             {
-                ChangeMaterial(givenColor);
                 EmitStateEvent();
             }
         }
