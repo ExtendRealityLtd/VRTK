@@ -79,10 +79,7 @@ namespace VRTK.GrabAttachMechanics
 
         protected virtual void OnJointBreak(float force)
         {
-			if (controllerAttachJoint == null)
-			{
-				ForceReleaseGrab();
-			}
+            ForceReleaseGrab();
         }
 
         protected virtual void CreateJoint(GameObject obj)
