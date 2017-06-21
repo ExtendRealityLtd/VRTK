@@ -6940,6 +6940,17 @@ The NumberPercent method is used to determine the percentage of a given value.
 
 The SetGlobalScale method is used to set a transform scale based on a global scale instead of a local scale.
 
+#### GetTypeUnknownAssembly/1
+
+  > `public static Type GetTypeUnknownAssembly(string typeName)`
+
+  * Parameters
+   * `string typeName` - The name of the type to get.
+  * Returns
+   * `Type` - The Type, or null if none is found.
+
+The GetTypeUnknownAssembly method is used to find a Type without knowing the exact assembly it is in.
+
 ---
 
 ## Policy List (VRTK_PolicyList)

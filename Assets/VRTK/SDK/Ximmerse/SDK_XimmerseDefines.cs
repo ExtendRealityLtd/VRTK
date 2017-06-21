@@ -15,7 +15,7 @@ namespace VRTK
         [SDK_ScriptingDefineSymbolPredicate(ScriptingDefineSymbol, "Android")]
         private static bool IsXimmerseAvailable()
         {
-            return typeof(SDK_XimmerseDefines).Assembly.GetType("Ximmerse.InputSystem.XDevicePlugin") != null;
+            return VRTK_SharedMethods.GetTypeUnknownAssembly("Ximmerse.InputSystem.XDevicePlugin") != null;
         }
     }
 }

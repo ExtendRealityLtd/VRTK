@@ -456,6 +456,29 @@ namespace VRTK
             transform.localScale = new Vector3(globalScale.x / transform.lossyScale.x, globalScale.y / transform.lossyScale.y, globalScale.z / transform.lossyScale.z);
         }
 
+        /// <summary>
+        /// The GetTypeUnknownAssembly method is used to find a Type without knowing the exact assembly it is in.
+        /// </summary>
+        /// <param name="typeName">The name of the type to get.</param>
+        /// <returns>The Type, or null if none is found.</returns>
+        public static Type GetTypeUnknownAssembly(string typeName)
+        {
+            Type type = Type.GetType(typeName);
+            if (type != null)
+            {
+                return type;
+            }
+            foreach (Assembly a in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                type = a.GetType(typeName);
+                if (type != null)
+                {
+                    return type;
+                }
+            }
+            return null;
+        }
+
 #if UNITY_EDITOR
         public static BuildTargetGroup[] GetValidBuildTargetGroups()
         {
