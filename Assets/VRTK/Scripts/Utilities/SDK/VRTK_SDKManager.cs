@@ -178,6 +178,7 @@ namespace VRTK
         /// The loaded SDK Setup. <see langword="null"/> if no setup is currently loaded.
         /// </summary>
         public VRTK_SDKSetup loadedSetup { get; private set; }
+        private static HashSet<VRTK_SDKInfo> _previouslyUsedSetupInfos = new HashSet<VRTK_SDKInfo>();
 
         /// <summary>
         /// All behaviours that need toggling whenever <see cref="loadedSetup"/> changes.
@@ -387,11 +388,25 @@ namespace VRTK
         /// <summary>
         /// Tries to load a valid <see cref="VRTK_SDKSetup"/> from <see cref="setups"/>.
         /// </summary>
-        public void TryLoadSDKSetupFromList()
+        public void TryLoadSDKSetupFromList(bool tryUseLastLoadedSetup = true)
         {
             int index = 0;
 
-            if (VRSettings.enabled)
+            if (tryUseLastLoadedSetup && _previouslyUsedSetupInfos.Count > 0)
+            {
+                index = Array.FindIndex(
+                    setups,
+                    setup => _previouslyUsedSetupInfos.SetEquals(
+                        new[]
+                        {
+                            setup.systemSDKInfo,
+                            setup.boundariesSDKInfo,
+                            setup.headsetSDKInfo,
+                            setup.controllerSDKInfo
+                        })
+                );
+            }
+            else if (VRSettings.enabled)
             {
                 // Use the SDK Setup for the current VR Device if it's working already
                 // (may be due to command line argument '-vrmode')
@@ -553,6 +568,20 @@ namespace VRTK
             if (previousLoadedSetup != null)
             {
                 OnLoadedSetupChanged(new LoadedSetupChangeEventArgs(previousLoadedSetup, null, null));
+            }
+
+            _previouslyUsedSetupInfos.Clear();
+            if (previousLoadedSetup != null)
+            {
+                _previouslyUsedSetupInfos.UnionWith(
+                    new[]
+                    {
+                        previousLoadedSetup.systemSDKInfo,
+                        previousLoadedSetup.boundariesSDKInfo,
+                        previousLoadedSetup.headsetSDKInfo,
+                        previousLoadedSetup.controllerSDKInfo
+                    }
+                );
             }
         }
 
