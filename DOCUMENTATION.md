@@ -6260,6 +6260,17 @@ Adds a behaviour to the list of behaviours to toggle when  changes.
 
 Removes a behaviour of the list of behaviours to toggle when  changes.
 
+#### TryLoadSDKSetupFromList/1
+
+  > `public void TryLoadSDKSetupFromList(bool tryUseLastLoadedSetup = true)`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+Tries to load a valid  from  .
+
 #### TryLoadSDKSetup/3
 
   > `public void TryLoadSDKSetup(int startIndex, bool tryToReinitialize, params VRTK_SDKSetup[] sdkSetups)`
@@ -6286,7 +6297,7 @@ Sets a given  as the loaded SDK Setup to be able to use it when populating objec
 
 #### UnloadSDKSetup/1
 
-  > `public void UnloadSDKSetup(bool disableVR = true)`
+  > `public void UnloadSDKSetup(bool disableVR = false)`
 
   * Parameters
    * `bool disableVR` - Whether to disable VR altogether after unloading the SDK Setup.
