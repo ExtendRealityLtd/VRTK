@@ -395,6 +395,11 @@ namespace VRTK
             }
         }
 
+        private void OnEnable()
+        {
+            PopulateObjectReferences(false);
+        }
+
 #if UNITY_EDITOR
         static VRTK_SDKSetup()
         {
