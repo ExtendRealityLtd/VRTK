@@ -235,7 +235,10 @@ namespace VRTK
 
             for (int i = 0; i < boundaryRenderers.Length; i++)
             {
-                boundaryRenderers[i].enabled = state;
+                if (boundaryRenderers[i] != null)
+                {
+                    boundaryRenderers[i].enabled = state;
+                }
             }
         }
 
