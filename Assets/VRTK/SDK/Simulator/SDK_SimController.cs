@@ -10,8 +10,8 @@ namespace VRTK
     [SDK_Description(typeof(SDK_SimSystem))]
     public class SDK_SimController : SDK_BaseController
     {
-        protected SDK_ControllerSim rightController;
-        protected SDK_ControllerSim leftController;
+        protected SDK_ControllerSim rightController = new SDK_ControllerSim();
+        protected SDK_ControllerSim leftController = new SDK_ControllerSim();
         protected Dictionary<string, KeyCode> keyMappings = new Dictionary<string, KeyCode>()
         {
             {"Trigger", KeyCode.Mouse1 },

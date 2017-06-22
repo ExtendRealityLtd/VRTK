@@ -11,10 +11,10 @@ namespace VRTK
     public class SDK_SimHeadset : SDK_BaseHeadset
     {
         private Transform camera;
-        private Vector3 lastPos;
-        private Quaternion lastRot;
-        private List<Vector3> posList;
-        private List<Vector3> rotList;
+        private Vector3 lastPos = new Vector3();
+        private Quaternion lastRot = new Quaternion();
+        private List<Vector3> posList = new List<Vector3>();
+        private List<Vector3> rotList = new List<Vector3>();
         private float magnitude;
         private Vector3 axis;
 
@@ -24,20 +24,23 @@ namespace VRTK
         /// <param name="options">A dictionary of generic options that can be used to within the update.</param>
         public override void ProcessUpdate(Dictionary<string, object> options)
         {
-            posList.Add((camera.position - lastPos) / Time.deltaTime);
-            if (posList.Count > 4)
+            if (camera != null)
             {
-                posList.RemoveAt(0);
+                posList.Add((camera.position - lastPos) / Time.deltaTime);
+                if (posList.Count > 4)
+                {
+                    posList.RemoveAt(0);
+                }
+                Quaternion deltaRotation = camera.rotation * Quaternion.Inverse(lastRot);
+                deltaRotation.ToAngleAxis(out magnitude, out axis);
+                rotList.Add((axis * magnitude));
+                if (rotList.Count > 4)
+                {
+                    rotList.RemoveAt(0);
+                }
+                lastPos = camera.position;
+                lastRot = camera.rotation;
             }
-            Quaternion deltaRotation = camera.rotation * Quaternion.Inverse (lastRot);
-            deltaRotation.ToAngleAxis(out magnitude, out axis);
-            rotList.Add((axis * magnitude));
-            if (rotList.Count > 4)
-            {
-                rotList.RemoveAt(0);
-            }
-            lastPos = camera.position;
-            lastRot = camera.rotation;
         }
 
         /// <summary>

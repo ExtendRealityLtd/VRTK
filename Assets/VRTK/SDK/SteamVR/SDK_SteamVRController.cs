@@ -463,6 +463,8 @@ namespace VRTK
                     return device.GetAxis();
                 case ButtonTypes.Trigger:
                     return device.GetAxis(EVRButtonId.k_EButton_SteamVR_Trigger);
+                case ButtonTypes.Grip:
+                    return device.GetAxis(EVRButtonId.k_EButton_Axis2);
             }
             return Vector2.zero;
         }
