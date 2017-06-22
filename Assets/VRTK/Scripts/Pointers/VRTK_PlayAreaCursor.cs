@@ -312,6 +312,18 @@ namespace VRTK
             }
             else
             {
+                if (cursorDrawVertices == null || cursorDrawVertices.Length < 8)
+                {
+                    cursorDrawVertices = new Vector3[] {
+                        new Vector3(0.8f, 0f, -0.8f),
+                        new Vector3(-0.8f, 0f, -0.8f),
+                        new Vector3(-0.8f, 0f, 0.8f),
+                        new Vector3(0.8f, 0f, 0.8f),
+                        new Vector3(1f, 0f, -1f),
+                        new Vector3(-1f, 0f, -1f),
+                        new Vector3(-1f, 0f, 1f),
+                        new Vector3(1f, 0f, 1f) };
+                }
                 GeneratePlayAreaCursor(cursorDrawVertices);
             }
 
