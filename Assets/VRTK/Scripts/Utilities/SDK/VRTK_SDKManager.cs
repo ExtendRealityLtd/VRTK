@@ -178,6 +178,7 @@ namespace VRTK
         /// The loaded SDK Setup. <see langword="null"/> if no setup is currently loaded.
         /// </summary>
         public VRTK_SDKSetup loadedSetup { get; private set; }
+        private static HashSet<VRTK_SDKInfo> _previouslyUsedSetupInfos = new HashSet<VRTK_SDKInfo>();
 
         /// <summary>
         /// All behaviours that need toggling whenever <see cref="loadedSetup"/> changes.
@@ -385,6 +386,57 @@ namespace VRTK
         }
 
         /// <summary>
+        /// Tries to load a valid <see cref="VRTK_SDKSetup"/> from <see cref="setups"/>.
+        /// </summary>
+        public void TryLoadSDKSetupFromList(bool tryUseLastLoadedSetup = true)
+        {
+            int index = 0;
+
+            if (tryUseLastLoadedSetup && _previouslyUsedSetupInfos.Count > 0)
+            {
+                index = Array.FindIndex(
+                    setups,
+                    setup => _previouslyUsedSetupInfos.SetEquals(
+                        new[]
+                        {
+                            setup.systemSDKInfo,
+                            setup.boundariesSDKInfo,
+                            setup.headsetSDKInfo,
+                            setup.controllerSDKInfo
+                        })
+                );
+            }
+            else if (VRSettings.enabled)
+            {
+                // Use the SDK Setup for the current VR Device if it's working already
+                // (may be due to command line argument '-vrmode')
+                index = Array.FindIndex(
+                    setups,
+                    setup => setup.usedVRDeviceNames.Contains(VRSettings.loadedDeviceName)
+                );
+            }
+            else
+            {
+                // If '-vrmode none' was used try to load the respective SDK Setup
+                string[] commandLineArgs = Environment.GetCommandLineArgs();
+                int commandLineArgIndex = Array.IndexOf(commandLineArgs, "-vrmode", 1);
+                if (VRSettings.loadedDeviceName == "None"
+                    || (commandLineArgIndex != -1
+                        && commandLineArgIndex + 1 < commandLineArgs.Length
+                        && commandLineArgs[commandLineArgIndex + 1].ToLowerInvariant() == "none"))
+                {
+                    index = Array.FindIndex(
+                        setups,
+                        setup => setup.usedVRDeviceNames.All(vrDeviceName => vrDeviceName == "None")
+                    );
+                }
+            }
+
+            index = index == -1 ? 0 : index;
+            TryLoadSDKSetup(index, false, setups.ToArray());
+        }
+
+        /// <summary>
         /// Tries to load a valid <see cref="VRTK_SDKSetup"/> from a list.
         /// </summary>
         /// <remarks>
@@ -492,7 +544,7 @@ namespace VRTK
         /// Unloads the currently loaded <see cref="VRTK_SDKSetup"/>, if there is one.
         /// </summary>
         /// <param name="disableVR">Whether to disable VR altogether after unloading the SDK Setup.</param>
-        public void UnloadSDKSetup(bool disableVR = true)
+        public void UnloadSDKSetup(bool disableVR = false)
         {
             if (loadedSetup != null)
             {
@@ -517,6 +569,20 @@ namespace VRTK
             {
                 OnLoadedSetupChanged(new LoadedSetupChangeEventArgs(previousLoadedSetup, null, null));
             }
+
+            _previouslyUsedSetupInfos.Clear();
+            if (previousLoadedSetup != null)
+            {
+                _previouslyUsedSetupInfos.UnionWith(
+                    new[]
+                    {
+                        previousLoadedSetup.systemSDKInfo,
+                        previousLoadedSetup.boundariesSDKInfo,
+                        previousLoadedSetup.headsetSDKInfo,
+                        previousLoadedSetup.controllerSDKInfo
+                    }
+                );
+            }
         }
 
         static VRTK_SDKManager()
@@ -538,35 +604,7 @@ namespace VRTK
 
             if (autoLoadSetup)
             {
-                int index = 0;
-
-                if (VRSettings.enabled)
-                {
-                    // Use the SDK Setup for the current VR Device if it's working already
-                    // (may be due to command line argument '-vrmode')
-                    index = Array.FindIndex(
-                        setups,
-                        setup => setup.usedVRDeviceNames.Contains(VRSettings.loadedDeviceName)
-                    );
-                }
-                else
-                {
-                    // If '-vrmode none' was used try to load the respective SDK Setup
-                    string[] commandLineArgs = Environment.GetCommandLineArgs();
-                    int commandLineArgIndex = Array.IndexOf(commandLineArgs, "-vrmode", 1);
-                    if (commandLineArgIndex != -1
-                        && commandLineArgIndex + 1 < commandLineArgs.Length
-                        && commandLineArgs[commandLineArgIndex + 1].ToLowerInvariant() == "none")
-                    {
-                        index = Array.FindIndex(
-                            setups,
-                            setup => setup.usedVRDeviceNames.All(vrDeviceName => vrDeviceName == "None")
-                        );
-                    }
-                }
-
-                index = index == -1 ? 0 : index;
-                TryLoadSDKSetup(index, false, setups.ToArray());
+                TryLoadSDKSetupFromList();
             }
         }
 
