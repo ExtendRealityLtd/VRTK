@@ -50,7 +50,7 @@ namespace VRTK
 
         protected virtual float GetTeleportY(Transform target, Vector3 tipPosition)
         {
-            if (!snapToNearestFloor)
+            if (!snapToNearestFloor || !ValidRigObjects())
             {
                 return tipPosition.y;
             }

@@ -95,7 +95,10 @@ namespace VRTK
 
         protected override void ProcessOrientation(object sender, DestinationMarkerEventArgs e, Vector3 newPosition, Quaternion newRotation)
         {
-            StartCoroutine(lerpToPosition(sender, e, newPosition));
+            if (ValidRigObjects())
+            {
+                StartCoroutine(lerpToPosition(sender, e, newPosition));
+            }
         }
 
         protected override void EndTeleport(object sender, DestinationMarkerEventArgs e)
