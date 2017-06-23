@@ -3,6 +3,7 @@ namespace VRTK
 {
     using UnityEngine;
     using System.Collections;
+    using System;
 #if UNITY_5_5_OR_NEWER
     using UnityEngine.AI;
 #endif
@@ -39,7 +40,11 @@ namespace VRTK
         public bool headsetPositionCompensation = true;
         [Tooltip("A specified VRTK_PolicyList to use to determine whether destination targets will be acted upon by the Teleporter.")]
         public VRTK_PolicyList targetListPolicy;
-        [Tooltip("The max distance the teleport destination can be outside the nav mesh to be considered valid. If a value of `0` is given then the nav mesh restrictions will be ignored.")]
+        [Tooltip("An optional NavMeshData object that will be utilised for limiting the teleport to within any scene NavMesh.")]
+        public VRTK_NavMeshData navMeshData;
+
+        [HideInInspector]
+        [Obsolete("`VRTK_BasicTeleport.navMeshLimitDistance` is no longer used, use `VRTK_BasicTeleport.processNavMesh` instead. This parameter will be removed in a future version of VRTK.")]
         public float navMeshLimitDistance = 0f;
 
         /// <summary>
@@ -82,7 +87,7 @@ namespace VRTK
                         {
                             worldMarker.targetListPolicy = targetListPolicy;
                         }
-                        worldMarker.SetNavMeshCheckDistance(navMeshLimitDistance);
+                        worldMarker.SetNavMeshData(navMeshData);
                         worldMarker.SetHeadsetPositionCompensation(headsetPositionCompensation);
                     }
                     else
@@ -117,12 +122,15 @@ namespace VRTK
             }
 
             bool validNavMeshLocation = false;
-            if (target != null)
+            if (navMeshData != null)
             {
-                NavMeshHit hit;
-                validNavMeshLocation = NavMesh.SamplePosition(destinationPosition, out hit, navMeshLimitDistance, NavMesh.AllAreas);
+                if (target != null)
+                {
+                    NavMeshHit hit;
+                    validNavMeshLocation = NavMesh.SamplePosition(destinationPosition, out hit, navMeshData.distanceLimit, navMeshData.validAreas);
+                }
             }
-            if (navMeshLimitDistance == 0f)
+            else
             {
                 validNavMeshLocation = true;
             }

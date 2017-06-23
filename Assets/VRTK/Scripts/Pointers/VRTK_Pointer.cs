@@ -351,7 +351,7 @@ namespace VRTK
         {
             if (EnabledPointerRenderer())
             {
-                pointerRenderer.InitalizePointer(this, targetListPolicy, navMeshCheckDistance, headsetPositionCompensation);
+                pointerRenderer.InitalizePointer(this, targetListPolicy, navmeshData, headsetPositionCompensation);
                 pointerRenderer.UpdateRenderer();
                 if (!IsPointerActive())
                 {
@@ -434,7 +434,7 @@ namespace VRTK
         {
             if (EnabledPointerRenderer())
             {
-                pointerRenderer.InitalizePointer(this, targetListPolicy, navMeshCheckDistance, headsetPositionCompensation);
+                pointerRenderer.InitalizePointer(this, targetListPolicy, navmeshData, headsetPositionCompensation);
             }
         }
 

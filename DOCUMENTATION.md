@@ -1099,16 +1099,16 @@ Adding the `VRTK_DestinationMarker_UnityEvents` component to `VRTK_DestinationMa
 
 ### Class Methods
 
-#### SetNavMeshCheckDistance/1
+#### SetNavMeshData/1
 
-  > `public virtual void SetNavMeshCheckDistance(float distance)`
+  > `public virtual void SetNavMeshData(VRTK_NavMeshData givenData)`
 
   * Parameters
-   * `float distance` - The max distance the nav mesh can be from the sample point to be valid.
+   * `VRTK_NavMeshData givenData` - The NavMeshData object that contains the NavMesh restriction settings.
   * Returns
    * _none_
 
-The SetNavMeshCheckDistance method sets the max distance the destination marker position can be from the edge of a nav mesh to be considered a valid destination.
+The SetNavMeshData method is used to limit the destination marker to the scene NavMesh based on the settings in the given NavMeshData object.
 
 #### SetHeadsetPositionCompensation/1
 
@@ -1502,12 +1502,12 @@ The GetPointerObjects returns an array of the auto generated GameObjects associa
 
 #### InitalizePointer/4
 
-  > `public virtual void InitalizePointer(VRTK_Pointer givenPointer, VRTK_PolicyList givenInvalidListPolicy, float givenNavMeshCheckDistance, bool givenHeadsetPositionCompensation)`
+  > `public virtual void InitalizePointer(VRTK_Pointer givenPointer, VRTK_PolicyList givenInvalidListPolicy, VRTK_NavMeshData givenNavMeshData, bool givenHeadsetPositionCompensation)`
 
   * Parameters
    * `VRTK_Pointer givenPointer` - The VRTK_Pointer that is controlling the pointer renderer.
    * `VRTK_PolicyList givenInvalidListPolicy` - The VRTK_PolicyList for managing valid and invalid pointer locations.
-   * `float givenNavMeshCheckDistance` - The given distance from a nav mesh that the pointer can be to be valid.
+   * `VRTK_NavMeshData givenNavMeshData` - The NavMeshData object that contains the Nav Mesh restriction options.
    * `bool givenHeadsetPositionCompensation` - Determines whether the play area cursor will take the headset position within the play area into account when being displayed.
   * Returns
    * _none_
@@ -1780,7 +1780,7 @@ The y position is never altered so the basic teleporter cannot be used to move u
  * **Distance Blink Delay:** A range between 0 and 32 that determines how long the blink transition will stay blacked out depending on the distance being teleported. A value of 0 will not delay the teleport blink effect over any distance, a value of 32 will delay the teleport blink fade in even when the distance teleported is very close to the original position. This can be used to simulate time taking longer to pass the further a user teleports. A value of 16 provides a decent basis to simulate this to the user.
  * **Headset Position Compensation:** If this is checked then the teleported location will be the position of the headset within the play area. If it is unchecked then the teleported location will always be the centre of the play area even if the headset position is not in the centre of the play area.
  * **Target List Policy:** A specified VRTK_PolicyList to use to determine whether destination targets will be acted upon by the Teleporter.
- * **Nav Mesh Limit Distance:** The max distance the teleport destination can be outside the nav mesh to be considered valid. If a value of `0` is given then the nav mesh restrictions will be ignored.
+ * **Nav Mesh Data:** An optional NavMeshData object that will be utilised for limiting the teleport to within any scene NavMesh.
 
 ### Class Events
 
