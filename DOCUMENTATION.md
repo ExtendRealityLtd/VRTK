@@ -1841,20 +1841,20 @@ The ToggleTeleportEnabled method is used to determine whether the teleporter wil
 
 The ValidLocation method determines if the given target is a location that can be teleported to
 
-#### ForceTeleport/1
+#### Teleport/1
 
-  > `public virtual void ForceTeleport(DestinationMarkerEventArgs teleportArgs)`
+  > `public virtual void Teleport(DestinationMarkerEventArgs teleportArgs)`
 
   * Parameters
    * `DestinationMarkerEventArgs teleportArgs` - The pseudo Destination Marker event for the teleport action.
   * Returns
    * _none_
 
-The ForceTeleport/1 method forces the teleport to update position without needing to listen for a Destination Marker event.
+The Teleport/1 method calls the teleport to update position without needing to listen for a Destination Marker event.
 
-#### ForceTeleport/4
+#### Teleport/4
 
-  > `public virtual void ForceTeleport(Transform target, Vector3 destinationPosition, Quaternion? destinationRotation = null, bool forceDestinationPosition = false)`
+  > `public virtual void Teleport(Transform target, Vector3 destinationPosition, Quaternion? destinationRotation = null, bool forceDestinationPosition = false)`
 
   * Parameters
    * `Transform target` - The Transform of the destination object.
@@ -1864,7 +1864,19 @@ The ForceTeleport/1 method forces the teleport to update position without needin
   * Returns
    * _none_
 
-The ForceTeleport/3 method forces the teleport to update position without needing to listen for a Destination Marker event. It will build a destination marker out of the provided parameters.
+The Teleport/4 method calls the teleport to update position without needing to listen for a Destination Marker event. It will build a destination marker out of the provided parameters.
+
+#### ForceTeleport/2
+
+  > `public virtual void ForceTeleport(Vector3 destinationPosition, Quaternion? destinationRotation = null)`
+
+  * Parameters
+   * `Vector3 destinationPosition` - The world position to teleport to.
+   * `Quaternion? destinationRotation` - The world rotation to teleport to.
+  * Returns
+   * _none_
+
+The ForceTeleport method forces the position to update to a given destination and ignores any target checking or floor adjustment.
 
 ### Example
 
