@@ -10,8 +10,8 @@ namespace VRTK
     [SDK_Description(typeof(SDK_SimSystem))]
     public class SDK_SimController : SDK_BaseController
     {
-        protected SDK_ControllerSim rightController = new SDK_ControllerSim();
-        protected SDK_ControllerSim leftController = new SDK_ControllerSim();
+        protected SDK_ControllerSim rightController;
+        protected SDK_ControllerSim leftController;
         protected Dictionary<string, KeyCode> keyMappings = new Dictionary<string, KeyCode>()
         {
             {"Trigger", KeyCode.Mouse1 },
@@ -131,9 +131,9 @@ namespace VRTK
             switch (index)
             {
                 case 1:
-                    return (sdkManager != null && !actual ? sdkManager.scriptAliasRightController : rightController.gameObject);
+                    return (sdkManager != null && !actual ? sdkManager.scriptAliasRightController : (rightController != null ? rightController.gameObject : null));
                 case 2:
-                    return (sdkManager != null && !actual ? sdkManager.scriptAliasLeftController : leftController.gameObject);
+                    return (sdkManager != null && !actual ? sdkManager.scriptAliasLeftController : (leftController != null ? leftController.gameObject : null));
                 default:
                     return null;
             }
@@ -330,9 +330,9 @@ namespace VRTK
             switch (index)
             {
                 case 1:
-                    return rightController.GetVelocity();
+                    return (rightController != null ? rightController.GetVelocity() : Vector3.zero);
                 case 2:
-                    return leftController.GetVelocity();
+                    return (leftController != null ? leftController.GetVelocity() : Vector3.zero);
                 default:
                     return Vector3.zero;
             }
@@ -349,9 +349,9 @@ namespace VRTK
             switch (index)
             {
                 case 1:
-                    return rightController.GetAngularVelocity();
+                    return (rightController != null ? rightController.GetAngularVelocity() : Vector3.zero);
                 case 2:
-                    return leftController.GetAngularVelocity();
+                    return (leftController != null ? leftController.GetAngularVelocity() : Vector3.zero);
                 default:
                     return Vector3.zero;
             }
@@ -528,14 +528,14 @@ namespace VRTK
 
             if (index == 1)
             {
-                if (!rightController.Selected)
+                if (rightController != null && !rightController.Selected)
                 {
                     return false;
                 }
             }
             else if (index == 2)
             {
-                if (!leftController.Selected)
+                if (leftController != null && !leftController.Selected)
                 {
                     return false;
                 }
