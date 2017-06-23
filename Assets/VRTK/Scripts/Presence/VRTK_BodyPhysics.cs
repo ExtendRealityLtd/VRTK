@@ -92,9 +92,6 @@ namespace VRTK
 
         [Tooltip("A custom raycaster to use when raycasting to find floors.")]
         public VRTK_CustomRaycast customRaycast;
-        [Tooltip("**OBSOLETE [Use customRaycast]** The layers to ignore when raycasting to find floors.")]
-        [Obsolete("`VRTK_BodyPhysics.layersToIgnore` is no longer used in the `VRTK_BodyPhysics` class, use the `customRaycast` parameter instead. This parameter will be removed in a future version of VRTK.")]
-        public LayerMask layersToIgnore = Physics.IgnoreRaycastLayer;
         [Tooltip("A check to see if the drop to nearest floor should take place. If the selected restrictor is still over the current floor then the drop to nearest floor will not occur. Works well for being able to lean over ledges and look down. Only works for falling down not teleporting up.")]
         public FallingRestrictors fallRestriction = FallingRestrictors.NoRestriction;
         [Tooltip("When the `y` distance between the floor and the headset exceeds this distance and `Enable Body Collisions` is true then the rigidbody gravity will be used instead of teleport to drop to nearest floor.")]
@@ -407,9 +404,7 @@ namespace VRTK
             Vector3 point1 = (bodyCollider.transform.position + bodyCollider.center) + (Vector3.up * ((bodyCollider.height * 0.5f) - bodyCollider.radius));
             Vector3 point2 = (bodyCollider.transform.position + bodyCollider.center) - (Vector3.up * ((bodyCollider.height * 0.5f) - bodyCollider.radius));
             RaycastHit collisionHit;
-#pragma warning disable 0618
-            return VRTK_CustomRaycast.CapsuleCast(customRaycast, point1, point2, bodyCollider.radius, direction, maxDistance, out collisionHit, layersToIgnore, QueryTriggerInteraction.Ignore);
-#pragma warning restore 0618
+            return VRTK_CustomRaycast.CapsuleCast(customRaycast, point1, point2, bodyCollider.radius, direction, maxDistance, out collisionHit, new LayerMask(), QueryTriggerInteraction.Ignore);
         }
 
         protected virtual void Awake()
@@ -748,9 +743,7 @@ namespace VRTK
                 RaycastHit standingDownRayCollision;
 
                 //Determine the current valid floor that the user is standing over
-#pragma warning disable 0618
-                currentValidFloorObject = (VRTK_CustomRaycast.Raycast(customRaycast, standingDownRay, out standingDownRayCollision, layersToIgnore, Mathf.Infinity, QueryTriggerInteraction.Ignore) ? standingDownRayCollision.collider.gameObject : null);
-#pragma warning restore 0618
+                currentValidFloorObject = (VRTK_CustomRaycast.Raycast(customRaycast, standingDownRay, out standingDownRayCollision, new LayerMask(), Mathf.Infinity, QueryTriggerInteraction.Ignore) ? standingDownRayCollision.collider.gameObject : null);
 
                 //Don't bother checking for lean if body collisions are disabled
                 if (headset == null || playArea == null || !enableBodyCollisions)
@@ -769,9 +762,7 @@ namespace VRTK
 
                 // Cast a ray forward just outside the body collider radius to see if anything is blocking your path
                 // If nothing is blocking your path and you're currently standing over a valid floor
-#pragma warning disable 0618
-                if (!VRTK_CustomRaycast.Raycast(customRaycast, forwardRay, out forwardRayCollision, layersToIgnore, forwardLength, QueryTriggerInteraction.Ignore) && currentValidFloorObject != null)
-#pragma warning restore 0618
+                if (!VRTK_CustomRaycast.Raycast(customRaycast, forwardRay, out forwardRayCollision, new LayerMask(), forwardLength, QueryTriggerInteraction.Ignore) && currentValidFloorObject != null)
                 {
                     CalculateLean(standingDownRayStartPosition, forwardLength, standingDownRayCollision.distance);
                 }
@@ -791,9 +782,7 @@ namespace VRTK
             RaycastHit downRayCollision;
 
             //Cast a ray down from the end of the forward ray position
-#pragma warning disable 0618
-            if (VRTK_CustomRaycast.Raycast(customRaycast, downRay, out downRayCollision, layersToIgnore, Mathf.Infinity, QueryTriggerInteraction.Ignore))
-#pragma warning restore 0618
+            if (VRTK_CustomRaycast.Raycast(customRaycast, downRay, out downRayCollision, new LayerMask(), Mathf.Infinity, QueryTriggerInteraction.Ignore))
             {
                 //Determine the difference between the original down ray and the projected forward a bit downray
                 float rayDownDelta = VRTK_SharedMethods.RoundFloat(originalRayDistance - downRayCollision.distance, decimalPrecision);
@@ -1217,9 +1206,7 @@ namespace VRTK
         {
             Ray ray = new Ray(controllerObj.transform.position, -playArea.up);
             RaycastHit rayCollidedWith;
-#pragma warning disable 0618
-            VRTK_CustomRaycast.Raycast(customRaycast, ray, out rayCollidedWith, layersToIgnore, Mathf.Infinity, QueryTriggerInteraction.Ignore);
-#pragma warning restore 0618
+            VRTK_CustomRaycast.Raycast(customRaycast, ray, out rayCollidedWith, new LayerMask(), Mathf.Infinity, QueryTriggerInteraction.Ignore);
             return controllerObj.transform.position.y - rayCollidedWith.distance;
         }
 
@@ -1261,9 +1248,7 @@ namespace VRTK
             {
                 Ray ray = new Ray(headset.transform.position, -playArea.up);
                 RaycastHit rayCollidedWith;
-#pragma warning disable 0618
-                bool rayHit = VRTK_CustomRaycast.Raycast(customRaycast, ray, out rayCollidedWith, layersToIgnore, Mathf.Infinity, QueryTriggerInteraction.Ignore);
-#pragma warning restore 0618
+                bool rayHit = VRTK_CustomRaycast.Raycast(customRaycast, ray, out rayCollidedWith, new LayerMask(), Mathf.Infinity, QueryTriggerInteraction.Ignore);
                 hitFloorYDelta = playArea.position.y - rayCollidedWith.point.y;
 
                 if (initialFloorDrop && (ValidDrop(rayHit, rayCollidedWith, rayCollidedWith.point.y) || retogglePhysicsOnCanFall))

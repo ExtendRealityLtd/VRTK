@@ -2,8 +2,6 @@
 namespace VRTK
 {
     using UnityEngine;
-    using UnityEngine.Events;
-    using System;
 
     /// <summary>
     /// Event Payload
@@ -24,14 +22,6 @@ namespace VRTK
     [AddComponentMenu("VRTK/Scripts/Controls/3D/VRTK_Button")]
     public class VRTK_Button : VRTK_Control
     {
-
-        [Serializable]
-        [Obsolete("`VRTK_Control.ButtonEvents` has been replaced with delegate events. `VRTK_Button_UnityEvents` is now required to access Unity events. This method will be removed in a future version of VRTK.")]
-        public class ButtonEvents
-        {
-            public UnityEvent OnPush;
-        }
-
         /// <summary>
         /// 3D Control Button Directions
         /// </summary>
@@ -61,10 +51,6 @@ namespace VRTK
         public float activationDistance = 1.0f;
         [Tooltip("The amount of force needed to push the button down as well as the speed with which it will go back into its original position.")]
         public float buttonStrength = 5.0f;
-
-        [Tooltip("The events specific to the button control. This parameter is deprecated and will be removed in a future version of VRTK.")]
-        [Obsolete("`VRTK_Control.events` has been replaced with delegate events. `VRTK_Button_UnityEvents` is now required to access Unity events. This method will be removed in a future version of VRTK.")]
-        public ButtonEvents events;
 
         /// <summary>
         /// Emitted when the 3D Button has reached its activation distance.
@@ -281,14 +267,6 @@ namespace VRTK
                 if (oldState == 0)
                 {
                     value = 1;
-
-#pragma warning disable 0618
-                    /// <obsolete>
-                    /// This is an obsolete call that will be removed in a future version
-                    /// </obsolete>
-                    events.OnPush.Invoke();
-#pragma warning restore 0618
-
                     OnPushed(SetControlEvent());
                 }
             }

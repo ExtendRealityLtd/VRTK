@@ -7,7 +7,6 @@ namespace VRTK
     /// <summary>
     /// Event Payload
     /// </summary>
-    /// <param name="controllerIndex">**OBSOLETE** The index of the controller that was used.</param>
     /// <param name="controllerReference">The reference to the controller that was used.</param>
     /// <param name="isActive">The state of whether the UI Pointer is currently active or not.</param>
     /// <param name="currentTarget">The current UI element that the pointer is colliding with.</param>
@@ -15,8 +14,6 @@ namespace VRTK
     /// <param name="raycastResult">The raw raycast result of the UI ray collision.</param>
     public struct UIPointerEventArgs
     {
-        [System.Obsolete("`UIPointerEventArgs.controllerIndex` has been replaced with `UIPointerEventArgs.controllerReference`. This parameter will be removed in a future version of VRTK.")]
-        public uint controllerIndex;
         public VRTK_ControllerReference controllerReference;
         public bool isActive;
         public GameObject currentTarget;
@@ -272,9 +269,6 @@ namespace VRTK
         public virtual UIPointerEventArgs SetUIPointerEvent(RaycastResult currentRaycastResult, GameObject currentTarget, GameObject lastTarget = null)
         {
             UIPointerEventArgs e;
-#pragma warning disable 0618
-            e.controllerIndex = VRTK_ControllerReference.GetRealIndex(controllerReference);
-#pragma warning restore 0618
             e.controllerReference = controllerReference;
             e.isActive = PointerActive();
             e.currentTarget = currentTarget;

@@ -47,12 +47,6 @@
             return GetControllerSDK().GetControllerByIndex(index, actual);
         }
 
-        [System.Obsolete("`VRTK_SDK_Bridge.GetControllerOrigin(controller)` has been replaced with `VRTK_SDK_Bridge.GetControllerOrigin(controllerReference)`. This method will be removed in a future version of VRTK.")]
-        public static Transform GetControllerOrigin(GameObject controller)
-        {
-            return GetControllerOrigin(VRTK_ControllerReference.GetControllerReference(controller));
-        }
-
         public static Transform GetControllerOrigin(VRTK_ControllerReference controllerReference)
         {
             return GetControllerSDK().GetControllerOrigin(controllerReference);
@@ -120,12 +114,6 @@
             return GetControllerSDK().GetControllerModel(hand);
         }
 
-        [System.Obsolete("`VRTK_SDK_Bridge.GetControllerRenderModel(controller)` has been replaced with `VRTK_SDK_Bridge.GetControllerRenderModel(controllerReference)`. This method will be removed in a future version of VRTK.")]
-        public static GameObject GetControllerRenderModel(GameObject controller)
-        {
-            return GetControllerRenderModel(VRTK_ControllerReference.GetControllerReference(controller));
-        }
-
         public static GameObject GetControllerRenderModel(VRTK_ControllerReference controllerReference)
         {
             return GetControllerSDK().GetControllerRenderModel(controllerReference);
@@ -134,12 +122,6 @@
         public static void SetControllerRenderModelWheel(GameObject renderModel, bool state)
         {
             GetControllerSDK().SetControllerRenderModelWheel(renderModel, state);
-        }
-
-        [System.Obsolete("`VRTK_SDK_Bridge.HapticPulseOnIndex(index, strength)` has been replaced with `VRTK_SDK_Bridge.HapticPulse(controllerReference, strength)`. This method will be removed in a future version of VRTK.")]
-        public static void HapticPulseOnIndex(uint index, float strength = 0.5f)
-        {
-            HapticPulse(VRTK_ControllerReference.GetControllerReference(index), strength);
         }
 
         public static void HapticPulse(VRTK_ControllerReference controllerReference, float strength = 0.5f)
@@ -157,21 +139,9 @@
             return GetControllerSDK().GetHapticModifiers();
         }
 
-        [System.Obsolete("`VRTK_SDK_Bridge.GetVelocityOnIndex(index)` has been replaced with `VRTK_SDK_Bridge.GetControllerVelocity(controllerReference)`. This method will be removed in a future version of VRTK.")]
-        public static Vector3 GetVelocityOnIndex(uint index)
-        {
-            return GetControllerVelocity(VRTK_ControllerReference.GetControllerReference(index));
-        }
-
         public static Vector3 GetControllerVelocity(VRTK_ControllerReference controllerReference)
         {
             return GetControllerSDK().GetVelocity(controllerReference);
-        }
-
-        [System.Obsolete("`VRTK_SDK_Bridge.GetAngularVelocityOnIndex(index)` has been replaced with `VRTK_SDK_Bridge.GetControllerAngularVelocity(controllerReference)`. This method will be removed in a future version of VRTK.")]
-        public static Vector3 GetAngularVelocityOnIndex(uint index)
-        {
-            return GetControllerAngularVelocity(VRTK_ControllerReference.GetControllerReference(index));
         }
 
         public static Vector3 GetControllerAngularVelocity(VRTK_ControllerReference controllerReference)
@@ -197,286 +167,6 @@
         public static bool GetControllerButtonState(SDK_BaseController.ButtonTypes buttonType, SDK_BaseController.ButtonPressTypes pressType, VRTK_ControllerReference controllerReference)
         {
             return GetControllerSDK().GetControllerButtonState(buttonType, pressType, controllerReference);
-        }
-
-        [System.Obsolete("`VRTK_SDK_Bridge.GetTouchpadAxisOnIndex(index)` has been replaced with `VRTK_SDK_Bridge.GetControllerAxis(buttonType, controllerReference)`. This method will be removed in a future version of VRTK.")]
-        public static Vector2 GetTouchpadAxisOnIndex(uint index)
-        {
-            return GetControllerAxis(SDK_BaseController.ButtonTypes.Touchpad, VRTK_ControllerReference.GetControllerReference(index));
-        }
-
-        [System.Obsolete("`VRTK_SDK_Bridge.GetTriggerAxisOnIndex(index)` has been replaced with `VRTK_SDK_Bridge.GetControllerAxis(buttonType, controllerReference)`. This method will be removed in a future version of VRTK.")]
-        public static Vector2 GetTriggerAxisOnIndex(uint index)
-        {
-            return GetControllerAxis(SDK_BaseController.ButtonTypes.Trigger, VRTK_ControllerReference.GetControllerReference(index));
-        }
-
-        [System.Obsolete("`VRTK_SDK_Bridge.GetGripAxisOnIndex(index)` has been replaced with `VRTK_SDK_Bridge.GetControllerAxis(buttonType, controllerReference)`. This method will be removed in a future version of VRTK.")]
-        public static Vector2 GetGripAxisOnIndex(uint index)
-        {
-            return GetControllerAxis(SDK_BaseController.ButtonTypes.Grip, VRTK_ControllerReference.GetControllerReference(index));
-        }
-
-        [System.Obsolete("`VRTK_SDK_Bridge.GetTriggerHairlineDeltaOnIndex(index)` has been replaced with `VRTK_SDK_Bridge.GetControllerHairlineDelta(buttonType, controllerReference)`. This method will be removed in a future version of VRTK.")]
-        public static float GetTriggerHairlineDeltaOnIndex(uint index)
-        {
-            return GetControllerHairlineDelta(SDK_BaseController.ButtonTypes.TriggerHairline, VRTK_ControllerReference.GetControllerReference(index));
-        }
-
-        [System.Obsolete("`VRTK_SDK_Bridge.GetGripHairlineDeltaOnIndex(index)` has been replaced with `VRTK_SDK_Bridge.GetControllerHairlineDelta(buttonType, controllerReference)`. This method will be removed in a future version of VRTK.")]
-        public static float GetGripHairlineDeltaOnIndex(uint index)
-        {
-            return GetControllerHairlineDelta(SDK_BaseController.ButtonTypes.GripHairline, VRTK_ControllerReference.GetControllerReference(index));
-        }
-
-        //Trigger
-        [System.Obsolete("`VRTK_SDK_Bridge.IsTriggerPressedOnIndex(index)` has been replaced with `VRTK_SDK_Bridge.GetControllerButtonState(buttonType, pressType, controllerReference)`. This method will be removed in a future version of VRTK.")]
-        public static bool IsTriggerPressedOnIndex(uint index)
-        {
-            return GetControllerButtonState(SDK_BaseController.ButtonTypes.Trigger, SDK_BaseController.ButtonPressTypes.Press, VRTK_ControllerReference.GetControllerReference(index));
-        }
-
-        [System.Obsolete("`VRTK_SDK_Bridge.IsTriggerPressedDownOnIndex(index)` has been replaced with `VRTK_SDK_Bridge.GetControllerButtonState(buttonType, pressType, controllerReference)`. This method will be removed in a future version of VRTK.")]
-        public static bool IsTriggerPressedDownOnIndex(uint index)
-        {
-            return GetControllerButtonState(SDK_BaseController.ButtonTypes.Trigger, SDK_BaseController.ButtonPressTypes.PressDown, VRTK_ControllerReference.GetControllerReference(index));
-        }
-
-        [System.Obsolete("`VRTK_SDK_Bridge.IsTriggerPressedUpOnIndex(index)` has been replaced with `VRTK_SDK_Bridge.GetControllerButtonState(buttonType, pressType, controllerReference)`. This method will be removed in a future version of VRTK.")]
-        public static bool IsTriggerPressedUpOnIndex(uint index)
-        {
-            return GetControllerButtonState(SDK_BaseController.ButtonTypes.Trigger, SDK_BaseController.ButtonPressTypes.PressUp, VRTK_ControllerReference.GetControllerReference(index));
-        }
-
-        [System.Obsolete("`VRTK_SDK_Bridge.IsTriggerTouchedOnIndex(index)` has been replaced with `VRTK_SDK_Bridge.GetControllerButtonState(buttonType, pressType, controllerReference)`. This method will be removed in a future version of VRTK.")]
-        public static bool IsTriggerTouchedOnIndex(uint index)
-        {
-            return GetControllerButtonState(SDK_BaseController.ButtonTypes.Trigger, SDK_BaseController.ButtonPressTypes.Touch, VRTK_ControllerReference.GetControllerReference(index));
-        }
-
-        [System.Obsolete("`VRTK_SDK_Bridge.IsTriggerTouchedDownOnIndex(index)` has been replaced with `VRTK_SDK_Bridge.GetControllerButtonState(buttonType, pressType, controllerReference)`. This method will be removed in a future version of VRTK.")]
-        public static bool IsTriggerTouchedDownOnIndex(uint index)
-        {
-            return GetControllerButtonState(SDK_BaseController.ButtonTypes.Trigger, SDK_BaseController.ButtonPressTypes.TouchDown, VRTK_ControllerReference.GetControllerReference(index));
-        }
-
-        [System.Obsolete("`VRTK_SDK_Bridge.IsTriggerTouchedUpOnIndex(index)` has been replaced with `VRTK_SDK_Bridge.GetControllerButtonState(buttonType, pressType, controllerReference)`. This method will be removed in a future version of VRTK.")]
-        public static bool IsTriggerTouchedUpOnIndex(uint index)
-        {
-            return GetControllerButtonState(SDK_BaseController.ButtonTypes.Trigger, SDK_BaseController.ButtonPressTypes.TouchUp, VRTK_ControllerReference.GetControllerReference(index));
-        }
-
-        [System.Obsolete("`VRTK_SDK_Bridge.IsHairTriggerDownOnIndex(index)` has been replaced with `VRTK_SDK_Bridge.GetControllerButtonState(buttonType, pressType, controllerReference)`. This method will be removed in a future version of VRTK.")]
-        public static bool IsHairTriggerDownOnIndex(uint index)
-        {
-            return GetControllerButtonState(SDK_BaseController.ButtonTypes.TriggerHairline, SDK_BaseController.ButtonPressTypes.PressDown, VRTK_ControllerReference.GetControllerReference(index));
-        }
-
-        [System.Obsolete("`VRTK_SDK_Bridge.IsHairTriggerUpOnIndex(index)` has been replaced with `VRTK_SDK_Bridge.GetControllerButtonState(buttonType, pressType, controllerReference)`. This method will be removed in a future version of VRTK.")]
-        public static bool IsHairTriggerUpOnIndex(uint index)
-        {
-            return GetControllerButtonState(SDK_BaseController.ButtonTypes.TriggerHairline, SDK_BaseController.ButtonPressTypes.PressUp, VRTK_ControllerReference.GetControllerReference(index));
-        }
-
-        //Grip
-        [System.Obsolete("`VRTK_SDK_Bridge.IsGripPressedOnIndex(index)` has been replaced with `VRTK_SDK_Bridge.GetControllerButtonState(buttonType, pressType, controllerReference)`. This method will be removed in a future version of VRTK.")]
-        public static bool IsGripPressedOnIndex(uint index)
-        {
-            return GetControllerButtonState(SDK_BaseController.ButtonTypes.Grip, SDK_BaseController.ButtonPressTypes.Press, VRTK_ControllerReference.GetControllerReference(index));
-        }
-
-        [System.Obsolete("`VRTK_SDK_Bridge.IsGripPressedDownOnIndex(index)` has been replaced with `VRTK_SDK_Bridge.GetControllerButtonState(buttonType, pressType, controllerReference)`. This method will be removed in a future version of VRTK.")]
-        public static bool IsGripPressedDownOnIndex(uint index)
-        {
-            return GetControllerButtonState(SDK_BaseController.ButtonTypes.Grip, SDK_BaseController.ButtonPressTypes.PressDown, VRTK_ControllerReference.GetControllerReference(index));
-        }
-
-        [System.Obsolete("`VRTK_SDK_Bridge.IsGripPressedUpOnIndex(index)` has been replaced with `VRTK_SDK_Bridge.GetControllerButtonState(buttonType, pressType, controllerReference)`. This method will be removed in a future version of VRTK.")]
-        public static bool IsGripPressedUpOnIndex(uint index)
-        {
-            return GetControllerButtonState(SDK_BaseController.ButtonTypes.Grip, SDK_BaseController.ButtonPressTypes.PressUp, VRTK_ControllerReference.GetControllerReference(index));
-        }
-
-        [System.Obsolete("`VRTK_SDK_Bridge.IsGripTouchedOnIndex(index)` has been replaced with `VRTK_SDK_Bridge.GetControllerButtonState(buttonType, pressType, controllerReference)`. This method will be removed in a future version of VRTK.")]
-        public static bool IsGripTouchedOnIndex(uint index)
-        {
-            return GetControllerButtonState(SDK_BaseController.ButtonTypes.Grip, SDK_BaseController.ButtonPressTypes.Touch, VRTK_ControllerReference.GetControllerReference(index));
-        }
-
-        [System.Obsolete("`VRTK_SDK_Bridge.IsGripTouchedDownOnIndex(index)` has been replaced with `VRTK_SDK_Bridge.GetControllerButtonState(buttonType, pressType, controllerReference)`. This method will be removed in a future version of VRTK.")]
-        public static bool IsGripTouchedDownOnIndex(uint index)
-        {
-            return GetControllerButtonState(SDK_BaseController.ButtonTypes.Grip, SDK_BaseController.ButtonPressTypes.TouchDown, VRTK_ControllerReference.GetControllerReference(index));
-        }
-
-        [System.Obsolete("`VRTK_SDK_Bridge.IsGripTouchedUpOnIndex(index)` has been replaced with `VRTK_SDK_Bridge.GetControllerButtonState(buttonType, pressType, controllerReference)`. This method will be removed in a future version of VRTK.")]
-        public static bool IsGripTouchedUpOnIndex(uint index)
-        {
-            return GetControllerButtonState(SDK_BaseController.ButtonTypes.Grip, SDK_BaseController.ButtonPressTypes.TouchUp, VRTK_ControllerReference.GetControllerReference(index));
-        }
-
-        [System.Obsolete("`VRTK_SDK_Bridge.IsHairGripDownOnIndex(index)` has been replaced with `VRTK_SDK_Bridge.GetControllerButtonState(buttonType, pressType, controllerReference)`. This method will be removed in a future version of VRTK.")]
-        public static bool IsHairGripDownOnIndex(uint index)
-        {
-            return GetControllerButtonState(SDK_BaseController.ButtonTypes.GripHairline, SDK_BaseController.ButtonPressTypes.PressDown, VRTK_ControllerReference.GetControllerReference(index));
-        }
-
-        [System.Obsolete("`VRTK_SDK_Bridge.IsHairGripUpOnIndex(index)` has been replaced with `VRTK_SDK_Bridge.GetControllerButtonState(buttonType, pressType, controllerReference)`. This method will be removed in a future version of VRTK.")]
-        public static bool IsHairGripUpOnIndex(uint index)
-        {
-            return GetControllerButtonState(SDK_BaseController.ButtonTypes.GripHairline, SDK_BaseController.ButtonPressTypes.PressUp, VRTK_ControllerReference.GetControllerReference(index));
-        }
-
-        //Touchpad
-
-        [System.Obsolete("`VRTK_SDK_Bridge.IsTouchpadPressedOnIndex(index)` has been replaced with `VRTK_SDK_Bridge.GetControllerButtonState(buttonType, pressType, controllerReference)`. This method will be removed in a future version of VRTK.")]
-        public static bool IsTouchpadPressedOnIndex(uint index)
-        {
-            return GetControllerButtonState(SDK_BaseController.ButtonTypes.Touchpad, SDK_BaseController.ButtonPressTypes.Press, VRTK_ControllerReference.GetControllerReference(index));
-        }
-
-        [System.Obsolete("`VRTK_SDK_Bridge.IsTouchpadPressedDownOnIndex(index)` has been replaced with `VRTK_SDK_Bridge.GetControllerButtonState(buttonType, pressType, controllerReference)`. This method will be removed in a future version of VRTK.")]
-        public static bool IsTouchpadPressedDownOnIndex(uint index)
-        {
-            return GetControllerButtonState(SDK_BaseController.ButtonTypes.Touchpad, SDK_BaseController.ButtonPressTypes.PressDown, VRTK_ControllerReference.GetControllerReference(index));
-        }
-
-        [System.Obsolete("`VRTK_SDK_Bridge.IsTouchpadPressedUpOnIndex(index)` has been replaced with `VRTK_SDK_Bridge.GetControllerButtonState(buttonType, pressType, controllerReference)`. This method will be removed in a future version of VRTK.")]
-        public static bool IsTouchpadPressedUpOnIndex(uint index)
-        {
-            return GetControllerButtonState(SDK_BaseController.ButtonTypes.Touchpad, SDK_BaseController.ButtonPressTypes.PressUp, VRTK_ControllerReference.GetControllerReference(index));
-        }
-
-        [System.Obsolete("`VRTK_SDK_Bridge.IsTouchpadTouchedOnIndex(index)` has been replaced with `VRTK_SDK_Bridge.GetControllerButtonState(buttonType, pressType, controllerReference)`. This method will be removed in a future version of VRTK.")]
-        public static bool IsTouchpadTouchedOnIndex(uint index)
-        {
-            return GetControllerButtonState(SDK_BaseController.ButtonTypes.Touchpad, SDK_BaseController.ButtonPressTypes.Touch, VRTK_ControllerReference.GetControllerReference(index));
-        }
-
-        [System.Obsolete("`VRTK_SDK_Bridge.IsTouchpadTouchedDownOnIndex(index)` has been replaced with `VRTK_SDK_Bridge.GetControllerButtonState(buttonType, pressType, controllerReference)`. This method will be removed in a future version of VRTK.")]
-        public static bool IsTouchpadTouchedDownOnIndex(uint index)
-        {
-            return GetControllerButtonState(SDK_BaseController.ButtonTypes.Touchpad, SDK_BaseController.ButtonPressTypes.TouchDown, VRTK_ControllerReference.GetControllerReference(index));
-        }
-
-        [System.Obsolete("`VRTK_SDK_Bridge.IsTouchpadTouchedUpOnIndex(index)` has been replaced with `VRTK_SDK_Bridge.GetControllerButtonState(buttonType, pressType, controllerReference)`. This method will be removed in a future version of VRTK.")]
-        public static bool IsTouchpadTouchedUpOnIndex(uint index)
-        {
-            return GetControllerButtonState(SDK_BaseController.ButtonTypes.Touchpad, SDK_BaseController.ButtonPressTypes.TouchUp, VRTK_ControllerReference.GetControllerReference(index));
-        }
-
-        //ButtonOne
-
-        [System.Obsolete("`VRTK_SDK_Bridge.IsButtonOnePressedOnIndex(index)` has been replaced with `VRTK_SDK_Bridge.GetControllerButtonState(buttonType, pressType, controllerReference)`. This method will be removed in a future version of VRTK.")]
-        public static bool IsButtonOnePressedOnIndex(uint index)
-        {
-            return GetControllerButtonState(SDK_BaseController.ButtonTypes.ButtonOne, SDK_BaseController.ButtonPressTypes.Press, VRTK_ControllerReference.GetControllerReference(index));
-        }
-
-        [System.Obsolete("`VRTK_SDK_Bridge.IsButtonOnePressedDownOnIndex(index)` has been replaced with `VRTK_SDK_Bridge.GetControllerButtonState(buttonType, pressType, controllerReference)`. This method will be removed in a future version of VRTK.")]
-        public static bool IsButtonOnePressedDownOnIndex(uint index)
-        {
-            return GetControllerButtonState(SDK_BaseController.ButtonTypes.ButtonOne, SDK_BaseController.ButtonPressTypes.PressDown, VRTK_ControllerReference.GetControllerReference(index));
-        }
-
-        [System.Obsolete("`VRTK_SDK_Bridge.IsButtonOnePressedUpOnIndex(index)` has been replaced with `VRTK_SDK_Bridge.GetControllerButtonState(buttonType, pressType, controllerReference)`. This method will be removed in a future version of VRTK.")]
-        public static bool IsButtonOnePressedUpOnIndex(uint index)
-        {
-            return GetControllerButtonState(SDK_BaseController.ButtonTypes.ButtonOne, SDK_BaseController.ButtonPressTypes.PressUp, VRTK_ControllerReference.GetControllerReference(index));
-        }
-
-        [System.Obsolete("`VRTK_SDK_Bridge.IsButtonOneTouchedOnIndex(index)` has been replaced with `VRTK_SDK_Bridge.GetControllerButtonState(buttonType, pressType, controllerReference)`. This method will be removed in a future version of VRTK.")]
-        public static bool IsButtonOneTouchedOnIndex(uint index)
-        {
-            return GetControllerButtonState(SDK_BaseController.ButtonTypes.ButtonOne, SDK_BaseController.ButtonPressTypes.Touch, VRTK_ControllerReference.GetControllerReference(index));
-        }
-
-        [System.Obsolete("`VRTK_SDK_Bridge.IsButtonOneTouchedDownOnIndex(index)` has been replaced with `VRTK_SDK_Bridge.GetControllerButtonState(buttonType, pressType, controllerReference)`. This method will be removed in a future version of VRTK.")]
-        public static bool IsButtonOneTouchedDownOnIndex(uint index)
-        {
-            return GetControllerButtonState(SDK_BaseController.ButtonTypes.ButtonOne, SDK_BaseController.ButtonPressTypes.TouchDown, VRTK_ControllerReference.GetControllerReference(index));
-        }
-
-        [System.Obsolete("`VRTK_SDK_Bridge.IsButtonOneTouchedUpOnIndex(index)` has been replaced with `VRTK_SDK_Bridge.GetControllerButtonState(buttonType, pressType, controllerReference)`. This method will be removed in a future version of VRTK.")]
-        public static bool IsButtonOneTouchedUpOnIndex(uint index)
-        {
-            return GetControllerButtonState(SDK_BaseController.ButtonTypes.ButtonOne, SDK_BaseController.ButtonPressTypes.TouchUp, VRTK_ControllerReference.GetControllerReference(index));
-        }
-
-        //ButtonTwo
-
-        [System.Obsolete("`VRTK_SDK_Bridge.IsButtonTwoPressedOnIndex(index)` has been replaced with `VRTK_SDK_Bridge.GetControllerButtonState(buttonType, pressType, controllerReference)`. This method will be removed in a future version of VRTK.")]
-        public static bool IsButtonTwoPressedOnIndex(uint index)
-        {
-            return GetControllerButtonState(SDK_BaseController.ButtonTypes.ButtonTwo, SDK_BaseController.ButtonPressTypes.Press, VRTK_ControllerReference.GetControllerReference(index));
-        }
-
-        [System.Obsolete("`VRTK_SDK_Bridge.IsButtonTwoPressedDownOnIndex(index)` has been replaced with `VRTK_SDK_Bridge.GetControllerButtonState(buttonType, pressType, controllerReference)`. This method will be removed in a future version of VRTK.")]
-        public static bool IsButtonTwoPressedDownOnIndex(uint index)
-        {
-            return GetControllerButtonState(SDK_BaseController.ButtonTypes.ButtonTwo, SDK_BaseController.ButtonPressTypes.PressDown, VRTK_ControllerReference.GetControllerReference(index));
-        }
-
-        [System.Obsolete("`VRTK_SDK_Bridge.IsButtonTwoPressedUpOnIndex(index)` has been replaced with `VRTK_SDK_Bridge.GetControllerButtonState(buttonType, pressType, controllerReference)`. This method will be removed in a future version of VRTK.")]
-        public static bool IsButtonTwoPressedUpOnIndex(uint index)
-        {
-            return GetControllerButtonState(SDK_BaseController.ButtonTypes.ButtonTwo, SDK_BaseController.ButtonPressTypes.PressUp, VRTK_ControllerReference.GetControllerReference(index));
-        }
-
-        [System.Obsolete("`VRTK_SDK_Bridge.IsButtonTwoTouchedOnIndex(index)` has been replaced with `VRTK_SDK_Bridge.GetControllerButtonState(buttonType, pressType, controllerReference)`. This method will be removed in a future version of VRTK.")]
-        public static bool IsButtonTwoTouchedOnIndex(uint index)
-        {
-            return GetControllerButtonState(SDK_BaseController.ButtonTypes.ButtonTwo, SDK_BaseController.ButtonPressTypes.Touch, VRTK_ControllerReference.GetControllerReference(index));
-        }
-
-        [System.Obsolete("`VRTK_SDK_Bridge.IsButtonTwoTouchedDownOnIndex(index)` has been replaced with `VRTK_SDK_Bridge.GetControllerButtonState(buttonType, pressType, controllerReference)`. This method will be removed in a future version of VRTK.")]
-        public static bool IsButtonTwoTouchedDownOnIndex(uint index)
-        {
-            return GetControllerButtonState(SDK_BaseController.ButtonTypes.ButtonTwo, SDK_BaseController.ButtonPressTypes.TouchDown, VRTK_ControllerReference.GetControllerReference(index));
-        }
-
-        [System.Obsolete("`VRTK_SDK_Bridge.IsButtonTwoTouchedUpOnIndex(index)` has been replaced with `VRTK_SDK_Bridge.GetControllerButtonState(buttonType, pressType, controllerReference)`. This method will be removed in a future version of VRTK.")]
-        public static bool IsButtonTwoTouchedUpOnIndex(uint index)
-        {
-            return GetControllerButtonState(SDK_BaseController.ButtonTypes.ButtonTwo, SDK_BaseController.ButtonPressTypes.TouchUp, VRTK_ControllerReference.GetControllerReference(index));
-        }
-
-        //StartMenu
-
-        [System.Obsolete("`VRTK_SDK_Bridge.IsStartMenuPressedOnIndex(index)` has been replaced with `VRTK_SDK_Bridge.GetControllerButtonState(buttonType, pressType, controllerReference)`. This method will be removed in a future version of VRTK.")]
-        public static bool IsStartMenuPressedOnIndex(uint index)
-        {
-            return GetControllerButtonState(SDK_BaseController.ButtonTypes.StartMenu, SDK_BaseController.ButtonPressTypes.Press, VRTK_ControllerReference.GetControllerReference(index));
-        }
-
-        [System.Obsolete("`VRTK_SDK_Bridge.IsStartMenuPressedDownOnIndex(index)` has been replaced with `VRTK_SDK_Bridge.GetControllerButtonState(buttonType, pressType, controllerReference)`. This method will be removed in a future version of VRTK.")]
-        public static bool IsStartMenuPressedDownOnIndex(uint index)
-        {
-            return GetControllerButtonState(SDK_BaseController.ButtonTypes.StartMenu, SDK_BaseController.ButtonPressTypes.PressDown, VRTK_ControllerReference.GetControllerReference(index));
-        }
-
-        [System.Obsolete("`VRTK_SDK_Bridge.IsStartMenuPressedUpOnIndex(index)` has been replaced with `VRTK_SDK_Bridge.GetControllerButtonState(buttonType, pressType, controllerReference)`. This method will be removed in a future version of VRTK.")]
-        public static bool IsStartMenuPressedUpOnIndex(uint index)
-        {
-            return GetControllerButtonState(SDK_BaseController.ButtonTypes.StartMenu, SDK_BaseController.ButtonPressTypes.PressUp, VRTK_ControllerReference.GetControllerReference(index));
-        }
-
-        [System.Obsolete("`VRTK_SDK_Bridge.IsStartMenuTouchedOnIndex(index)` has been replaced with `VRTK_SDK_Bridge.GetControllerButtonState(buttonType, pressType, controllerReference)`. This method will be removed in a future version of VRTK.")]
-        public static bool IsStartMenuTouchedOnIndex(uint index)
-        {
-            return GetControllerButtonState(SDK_BaseController.ButtonTypes.StartMenu, SDK_BaseController.ButtonPressTypes.Touch, VRTK_ControllerReference.GetControllerReference(index));
-        }
-
-        [System.Obsolete("`VRTK_SDK_Bridge.IsStartMenuTouchedDownOnIndex(index)` has been replaced with `VRTK_SDK_Bridge.GetControllerButtonState(buttonType, pressType, controllerReference)`. This method will be removed in a future version of VRTK.")]
-        public static bool IsStartMenuTouchedDownOnIndex(uint index)
-        {
-            return GetControllerButtonState(SDK_BaseController.ButtonTypes.StartMenu, SDK_BaseController.ButtonPressTypes.TouchDown, VRTK_ControllerReference.GetControllerReference(index));
-        }
-
-        [System.Obsolete("`VRTK_SDK_Bridge.IsStartMenuTouchedUpOnIndex(index)` has been replaced with `VRTK_SDK_Bridge.GetControllerButtonState(buttonType, pressType, controllerReference)`. This method will be removed in a future version of VRTK.")]
-        public static bool IsStartMenuTouchedUpOnIndex(uint index)
-        {
-            return GetControllerButtonState(SDK_BaseController.ButtonTypes.StartMenu, SDK_BaseController.ButtonPressTypes.TouchUp, VRTK_ControllerReference.GetControllerReference(index));
         }
 
         #endregion
