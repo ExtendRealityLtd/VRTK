@@ -127,6 +127,7 @@ namespace VRTK
         /// <returns>The GameObject of the controller</returns>
         public override GameObject GetControllerByIndex(uint index, bool actual = false)
         {
+            SetupPlayer();
             VRTK_SDKManager sdkManager = VRTK_SDKManager.instance;
             switch (index)
             {
@@ -146,7 +147,7 @@ namespace VRTK
         /// <returns>A Transform containing the origin of the controller.</returns>
         public override Transform GetControllerOrigin(VRTK_ControllerReference controllerReference)
         {
-            return controllerReference.actual.transform;
+            return (controllerReference != null && controllerReference.actual != null ? controllerReference.actual.transform : null);
         }
 
         /// <summary>
@@ -326,6 +327,7 @@ namespace VRTK
         /// <returns>A Vector3 containing the current velocity of the tracked object.</returns>
         public override Vector3 GetVelocity(VRTK_ControllerReference controllerReference)
         {
+            SetupPlayer();
             uint index = VRTK_ControllerReference.GetRealIndex(controllerReference);
             switch (index)
             {
@@ -345,6 +347,7 @@ namespace VRTK
         /// <returns>A Vector3 containing the current angular velocity of the tracked object.</returns>
         public override Vector3 GetAngularVelocity(VRTK_ControllerReference controllerReference)
         {
+            SetupPlayer();
             uint index = VRTK_ControllerReference.GetRealIndex(controllerReference);
             switch (index)
             {
@@ -423,11 +426,19 @@ namespace VRTK
 
         protected virtual void OnEnable()
         {
-            GameObject simPlayer = SDK_InputSimulator.FindInScene();
-            if (simPlayer != null)
+            SetupPlayer();
+        }
+
+        protected virtual void SetupPlayer()
+        {
+            if (rightController == null || leftController == null)
             {
-                rightController = simPlayer.transform.Find(RIGHT_HAND_CONTROLLER_NAME).GetComponent<SDK_ControllerSim>();
-                leftController = simPlayer.transform.Find(LEFT_HAND_CONTROLLER_NAME).GetComponent<SDK_ControllerSim>();
+                GameObject simPlayer = SDK_InputSimulator.FindInScene();
+                if (simPlayer != null)
+                {
+                    rightController = (rightController == null ? simPlayer.transform.Find(RIGHT_HAND_CONTROLLER_NAME).GetComponent<SDK_ControllerSim>() : rightController);
+                    leftController = (leftController == null ? simPlayer.transform.Find(LEFT_HAND_CONTROLLER_NAME).GetComponent<SDK_ControllerSim>() : leftController);
+                }
             }
         }
 
@@ -521,6 +532,7 @@ namespace VRTK
         /// <returns>Returns true if the button is being pressed.</returns>
         protected virtual bool IsButtonPressed(uint index, ButtonPressTypes type, KeyCode button)
         {
+            SetupPlayer();
             if (index >= uint.MaxValue)
             {
                 return false;
@@ -528,14 +540,14 @@ namespace VRTK
 
             if (index == 1)
             {
-                if (rightController != null && !rightController.Selected)
+                if (!rightController.Selected)
                 {
                     return false;
                 }
             }
             else if (index == 2)
             {
-                if (leftController != null && !leftController.Selected)
+                if (!leftController.Selected)
                 {
                     return false;
                 }
