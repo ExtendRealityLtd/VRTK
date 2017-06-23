@@ -2,39 +2,49 @@
 
 We are keen for developers to contribute to open source projects to
 keep them great!
+
 Whilst every effort is made to provide features that will assist a wide
 range of development cases, it is inevitable that we will not cater for
 all situations.
-Therefore, if you feel that your custom solution is very general and
-would assist other developers then by all means, we would love to
-review your contribution.
 
-There are, however, a few guidelines that we need contributors to
-follow, so that we can have a chance of keeping on top things.
+Therefore, if you feel that your custom solution is generic and
+would assist other developers then we would love to review your
+contribution.
+
+There are however, a few guidelines that we need contributors to
+follow so that we can have a chance of keeping on top things.
 
 ## Getting Started
-  * Make sure you have a GitHub account
+  * Make sure you have a GitHub account.
   * Create a new issue on the GitHub repository, providing one does
-  not already exist
+  not already exist.
    * Clearly describe the issue including steps to reproduce when it
-   is a bug
+   is a bug (fill out the issue template).
    * Make sure you fill in the earliest version that you know has
-   the issue
-  * Fork the repository on GitHub
+   the issue.
+  * Fork the repository on GitHub.
 
 ## Making Changes
 
-  * Create a topic branch from where you want to base your work
-   * This is usually the master branch
-   * Only target release branches if you are certain your fix must be
-   on that branch
-   * Name branches with the type of issue you are fixing;
-   `feat`, `chore`, `docs`
-   * Please avoid working directly on the master branch
+  * Create a topic branch from where you want to base your work.
+   * If you're fixing a bug then target the `master` branch.
+   * If you're creating a new feature then target the next release
+   branch. The current next release branch is `3.3.0-alpha`.
+   * Name your branch with the type of issue you are fixing;
+   `feat`, `chore`, `docs`.
+   * Please avoid working directly on your master branch.
   * Make sure you set the `Asset Serialization` mode in
-  `Unity->Edit->Project Settings->Editor` to `Force Text`
-  * Make commits of logical units
-  * Make sure your commit messages are in the proper format
+  `Unity->Edit->Project Settings->Editor` to `Force Text`.
+  * Make commits of logical units.
+  * Make sure your commit messages are in the proper format.
+
+Following the above method will ensure that all bug fixes are pushed
+to the `master` branch while all new features will be pushed to the
+relevant next release branch. This means that patch releases are
+much easier to do as the `master` branch will only contain bug fixes
+so will be used to fork into new patch releases. Then master will be
+rebased into the relevant next release branch so the next release also
+contains the updated bug fixes in the previous patch release.
 
 ## Coding Conventions
 
@@ -175,14 +185,14 @@ be entered in the following format:
 
 The type must be one of the following:
 
-  * feat: A new feature
-  * fix: A bug fix
-  * docs: Documentation only changes
-  * refactor: A code change that neither fixes a bug or adds a feature
-  * perf: A code change that improves performance
-  * test: Adding missing tests
+  * feat: A new feature.
+  * fix: A bug fix.
+  * docs: Documentation only changes.
+  * refactor: A code change that neither fixes a bug or adds a feature.
+  * perf: A code change that improves performance.
+  * test: Adding missing tests.
   * chore: Changes to the build process or auxiliary tools or
-  libraries such as documentation generation
+  libraries such as documentation generation.
 
 ### Scope
 
@@ -194,10 +204,10 @@ such as, `Controller`, `Interaction`, `Locomotion`, etc...
 The subject contains succinct description of the change:
 
   * use the imperative, present tense: "change" not "changed" nor
-  "changes"
-  * don't capitalize first letter, unless naming something,
-  such as `Bootstrap`
-  * no dot (.) at the end of the subject line
+  "changes".
+  * don't capitalize first letter, unless naming something, such as
+  `Bootstrap`.
+  * no dot (.) at the end of the subject line.
 
 ### Body
 
@@ -226,7 +236,11 @@ previous commit hashes is actively encouraged if they are relevant.
 
 ## Submitting Changes
   * Push your changes to your topic branch in your repository.
-  * Submit a pull request to the repository
-  `thestonefox/VRTK`.
+  * Submit a pull request to the repository `thestonefox/VRTK`.
+   * If you're submitting a bug fix pull request then target the
+   repository `master` branch.
+   * If you're submitting a new feature pull request then target
+   the next release branch in the repository. The current next release
+   branch is `3.3.0-alpha`.
   * The core team will aim to look at the pull request as soon as
   possible and provide feedback where required.
