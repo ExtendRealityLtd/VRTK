@@ -152,7 +152,8 @@ namespace VRTK
         }
         private static VRTK_SDKManager _instance;
 
-        [Tooltip("If this is true then the instance of the SDK Manager won't be destroyed on every scene load.")]
+        [Tooltip("**OBSOLETE. STOP USING THIS ASAP!** If this is true then the instance of the SDK Manager won't be destroyed on every scene load.")]
+        [Obsolete("`VRTK_SDKManager.persistOnLoad` has been deprecated and will be removed in a future version of VRTK. See https://github.com/thestonefox/VRTK/issues/1316 for details.")]
         public bool persistOnLoad;
 
         [Tooltip("Determines whether the scripting define symbols required by the installed SDKs are automatically added to and removed from the player settings.")]
@@ -610,7 +611,9 @@ namespace VRTK
 
         private void OnDisable()
         {
+#pragma warning disable 618
             if (_instance == this && !persistOnLoad)
+#pragma warning restore 618
             {
                 UnloadSDKSetup();
             }
@@ -623,7 +626,9 @@ namespace VRTK
                 _instance = this;
                 VRTK_SDK_Bridge.InvalidateCaches();
 
+#pragma warning disable 618
                 if (persistOnLoad && Application.isPlaying)
+#pragma warning restore 618
                 {
                     DontDestroyOnLoad(gameObject);
                 }
