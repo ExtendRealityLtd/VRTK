@@ -401,7 +401,7 @@ namespace VRTK
                 return;
             }
 
-            if (!hideWhenNotInView)
+            if (headsetControllerAware == null || !hideWhenNotInView)
             {
                 ToggleTips(true);
             }
