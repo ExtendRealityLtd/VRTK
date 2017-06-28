@@ -20,7 +20,7 @@ namespace VRTK
         [SDK_ScriptingDefineSymbolPredicate(SDK_ScriptingDefineSymbolPredicateAttribute.RemovableSymbolPrefix + "STEAMVR_PLUGIN_1_2_1_OR_NEWER", BuildTargetGroupName)]
         private static bool IsPluginVersion121OrNewer()
         {
-            Type eventClass = typeof(SDK_SteamVRDefines).Assembly.GetType("SteamVR_Events");
+            Type eventClass = VRTK_SharedMethods.GetTypeUnknownAssembly("SteamVR_Events");
             if (eventClass == null)
             {
                 return false;
@@ -38,14 +38,14 @@ namespace VRTK
                 return false;
             }
 
-            return systemMethodParameters[0].ParameterType == Type.GetType("Valve.VR.EVREventType");
+            return systemMethodParameters[0].ParameterType == VRTK_SharedMethods.GetTypeUnknownAssembly("Valve.VR.EVREventType");
         }
 
         [SDK_ScriptingDefineSymbolPredicate(ScriptingDefineSymbol, BuildTargetGroupName)]
         [SDK_ScriptingDefineSymbolPredicate(SDK_ScriptingDefineSymbolPredicateAttribute.RemovableSymbolPrefix + "STEAMVR_PLUGIN_1_2_0", BuildTargetGroupName)]
         private static bool IsPluginVersion120()
         {
-            Type eventClass = typeof(SDK_SteamVRDefines).Assembly.GetType("SteamVR_Events");
+            Type eventClass = VRTK_SharedMethods.GetTypeUnknownAssembly("SteamVR_Events");
             if (eventClass == null)
             {
                 return false;
@@ -70,7 +70,7 @@ namespace VRTK
         [SDK_ScriptingDefineSymbolPredicate(SDK_ScriptingDefineSymbolPredicateAttribute.RemovableSymbolPrefix + "STEAMVR_PLUGIN_1_1_1_OR_OLDER", BuildTargetGroupName)]
         private static bool IsPluginVersion111OrOlder()
         {
-            Type utilsClass = typeof(SDK_SteamVRDefines).Assembly.GetType("SteamVR_Utils");
+            Type utilsClass = VRTK_SharedMethods.GetTypeUnknownAssembly("SteamVR_Utils");
             if (utilsClass == null)
             {
                 return false;

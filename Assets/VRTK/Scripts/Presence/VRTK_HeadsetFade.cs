@@ -133,7 +133,12 @@ namespace VRTK
             Invoke("UnfadeComplete", duration);
         }
 
-        protected virtual void Start()
+        protected virtual void Awake()
+        {
+            VRTK_SDKManager.instance.AddBehaviourToToggleOnLoadedSetupChange(this);
+        }
+
+        protected virtual void OnEnable()
         {
             headset = VRTK_DeviceFinder.HeadsetCamera();
             isTransitioning = false;
@@ -144,6 +149,11 @@ namespace VRTK
             {
                 VRTK_Logger.Warn(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, "VRTK_HeadsetFade", "compatible fade", "Camera"));
             }
+        }
+
+        protected virtual void OnDestroy()
+        {
+            VRTK_SDKManager.instance.RemoveBehaviourToToggleOnLoadedSetupChange(this);
         }
 
         protected virtual HeadsetFadeEventArgs SetHeadsetFadeEvent(Transform currentTransform, float duration)

@@ -1,87 +1,187 @@
-﻿using UnityEngine;
-using UnityEditor;
-using System;
-using System.IO;
+﻿using System;
 using System.Linq;
 using System.Text.RegularExpressions;
+using UnityEditor;
+using UnityEditorInternal;
+using UnityEngine;
+using VRTK;
 
 [InitializeOnLoad]
-public class VRTK_UpdatePrompt : EditorWindow
+public sealed class VRTK_UpdatePrompt : EditorWindow
 {
-    private const string remoteURL = "https://raw.githubusercontent.com/thestonefox/VRTK/";
-    private const string remoteVersionFile = "master/Assets/VRTK/Version.txt";
-    private const string remoteChangelogFile = "master/CHANGELOG.md";
-    private const string localVersionFile = "/Version.txt";
-    private const string pluginURL = "https://www.assetstore.unity3d.com/en/#!/content/64131";
-    private const string hidePromptKey = "VRTK.HideVersionPrompt.v{0}";
+    [Serializable]
+    private sealed class LatestRelease
+    {
+        [NonSerialized]
+        public Version version;
+        [NonSerialized]
+        public DateTime publishedDateTime;
+
+#pragma warning disable 649
+        public string html_url;
+        public string tag_name;
+        public string name;
+        public string published_at;
+        public string zipball_url;
+        public string body;
+#pragma warning restore 649
+
+        public static LatestRelease CreateFromJSON(string json)
+        {
+            LatestRelease latestRelease = JsonUtility.FromJson<LatestRelease>(json);
+            latestRelease.version = new Version(latestRelease.tag_name);
+            latestRelease.publishedDateTime = DateTime.Parse(latestRelease.published_at);
+
+            latestRelease.body = latestRelease.body.Trim();
+            latestRelease.body = Regex.Replace(latestRelease.body, @"(.*\*{2}.*\*{2}\n)", "\n$1");
+
+            return latestRelease;
+        }
+    }
+
+    private const string remoteURL = "https://api.github.com/repos/thestonefox/vrtk/releases/latest";
+    private const string assetStoreURL = "/content/64131";
+    private const string hidePromptKeyFormat = "VRTK.HideVersionPrompt.v{0}";
     private const string lastCheckKey = "VRTK.VersionPromptUpdate";
     private const int checkUpdateHours = 6;
 
-    private static bool versionChecked = false;
+    private static bool isManualCheck;
+    private static bool versionChecked;
     private static WWW versionResource;
-    private static WWW changelogResource;
-    private static string versionReceived;
-    private static string changelogReceived;
-    private static string versionLocal;
+    private static LatestRelease latestRelease;
     private static VRTK_UpdatePrompt promptWindow;
 
     private Vector2 scrollPosition;
-    private bool hideToggle;
+    private Vector2 changelogScrollPosition;
+    private bool isChangelogFoldOut = true;
 
     static VRTK_UpdatePrompt()
     {
-        EditorApplication.update += Update;
+        EditorApplication.update += CheckForUpdate;
     }
 
     public void OnGUI()
     {
-        EditorGUILayout.HelpBox("A new version of VRTK is available.", MessageType.Warning);
-
-        scrollPosition = GUILayout.BeginScrollView(scrollPosition);
-
-        GUILayout.Label("Current version: " + versionLocal);
-        GUILayout.Label("New version: " + versionReceived);
-
-        if (changelogReceived != null && changelogReceived.Trim() != "")
+        using (GUILayout.ScrollViewScope scrollViewScope = new GUILayout.ScrollViewScope(scrollPosition))
         {
-            GUILayout.Label("Changelog :");
-            EditorGUILayout.HelpBox(changelogReceived.Trim().Replace("\n## ", "\n\n## ").Replace("\n * **", "\n\n * **"), MessageType.None);
-        }
+            scrollPosition = scrollViewScope.scrollPosition;
 
-        GUILayout.EndScrollView();
-
-        GUILayout.FlexibleSpace();
-
-        if (GUILayout.Button("Get Latest Version"))
-        {
-            Application.OpenURL(pluginURL);
-        }
-
-        EditorGUI.BeginChangeCheck();
-        bool hidePromptInFuture = GUILayout.Toggle(hideToggle, "Do not prompt for this version again.");
-        if (EditorGUI.EndChangeCheck())
-        {
-            hideToggle = hidePromptInFuture;
-            string key = string.Format(hidePromptKey, versionReceived);
-            if (hidePromptInFuture)
+            if (versionResource != null && !versionResource.isDone)
             {
-                EditorPrefs.SetBool(key, true);
+                EditorGUILayout.HelpBox("Checking for updates...", MessageType.Info);
+                return;
             }
-            else
+
+            if (latestRelease == null)
             {
-                EditorPrefs.DeleteKey(key);
+                EditorGUILayout.HelpBox("There was a problem checking for updates.", MessageType.Error);
+                DrawCheckAgainButton();
+
+                return;
+            }
+
+            string newVersionName = latestRelease.name == string.Format("Version {0}", latestRelease.version)
+                                        ? string.Empty
+                                        : string.Format(" \"{0}\"", latestRelease.name);
+            bool isUpToDate = VRTK_Defines.CurrentVersion >= latestRelease.version;
+
+            EditorGUILayout.HelpBox(
+                string.Format(
+                    "{0}.\n\nInstalled Version: {1}\nAvailable version: {2}{3} (published on {4})",
+                    isUpToDate ? "Already up to date" : "A new version of VRTK is available",
+                    VRTK_Defines.CurrentVersion,
+                    latestRelease.version,
+                    newVersionName,
+                    latestRelease.publishedDateTime.ToLocalTime()),
+                isUpToDate ? MessageType.Info : MessageType.Warning);
+
+            DrawCheckAgainButton();
+
+            isChangelogFoldOut = EditorGUILayout.Foldout(isChangelogFoldOut, "Changelog", true);
+            if (isChangelogFoldOut)
+            {
+                using (GUILayout.ScrollViewScope changelogScrollViewScope = new GUILayout.ScrollViewScope(changelogScrollPosition))
+                {
+                    changelogScrollPosition = changelogScrollViewScope.scrollPosition;
+
+                    if (GUILayout.Button("View on GitHub"))
+                    {
+                        Application.OpenURL(latestRelease.html_url);
+                    }
+
+                    EditorGUILayout.HelpBox(latestRelease.body, MessageType.None);
+                }
+            }
+
+            if (isUpToDate)
+            {
+                return;
+            }
+
+            GUILayout.FlexibleSpace();
+
+            VRTK_EditorUtilities.AddHeader("Get Latest Version");
+            using (new EditorGUILayout.HorizontalScope())
+            {
+                if (GUILayout.Button("From Asset Store"))
+                {
+                    AssetStore.Open(assetStoreURL);
+                    Close();
+                }
+                if (GUILayout.Button("From GitHub"))
+                {
+                    Application.OpenURL(latestRelease.zipball_url);
+                }
+            }
+
+            using (EditorGUI.ChangeCheckScope changeCheckScope = new EditorGUI.ChangeCheckScope())
+            {
+                string key = string.Format(hidePromptKeyFormat, latestRelease.version);
+                bool hideToggle = EditorPrefs.HasKey(key);
+
+                hideToggle = GUILayout.Toggle(hideToggle, "Do not prompt for this version again.");
+
+                if (changeCheckScope.changed)
+                {
+                    if (hideToggle)
+                    {
+                        EditorPrefs.SetBool(key, true);
+                    }
+                    else
+                    {
+                        EditorPrefs.DeleteKey(key);
+                    }
+                }
             }
         }
     }
 
-    private static void Update()
+    private static void DrawCheckAgainButton()
     {
-        if (!versionChecked)
+        if (GUILayout.Button("Check again"))
         {
+            CheckManually();
+        }
+    }
+
+    private static void CheckForUpdate()
+    {
+        if (isManualCheck)
+        {
+            ShowWindow();
+        }
+        else
+        {
+            if (versionChecked)
+            {
+                EditorApplication.update -= CheckForUpdate;
+                return;
+            }
+
             if (EditorPrefs.HasKey(lastCheckKey))
             {
                 string lastCheckTicksString = EditorPrefs.GetString(lastCheckKey);
-                var lastCheckDateTime = new DateTime(Convert.ToInt64(lastCheckTicksString));
+                DateTime lastCheckDateTime = new DateTime(Convert.ToInt64(lastCheckTicksString));
 
                 if (lastCheckDateTime.AddHours(checkUpdateHours) >= DateTime.UtcNow)
                 {
@@ -89,85 +189,68 @@ public class VRTK_UpdatePrompt : EditorWindow
                     return;
                 }
             }
-
-            versionResource = (versionResource ?? new WWW(remoteURL + remoteVersionFile));
-            if (!versionResource.isDone)
-            {
-                return;
-            }
-
-            versionReceived = (ValidURL(versionResource) ? versionResource.text : "");
-            versionResource = null;
-            versionChecked = true;
-            EditorPrefs.SetString(lastCheckKey, DateTime.UtcNow.Ticks.ToString());
-
-            if (UpdateRequired())
-            {
-                changelogResource = new WWW(remoteURL + remoteChangelogFile);
-                promptWindow = GetWindow<VRTK_UpdatePrompt>(true);
-                promptWindow.minSize = new Vector2(640, 480);
-                promptWindow.titleContent = new GUIContent("VRTK Update");
-            }
         }
 
-        if (changelogResource != null)
+        versionResource = versionResource == null ? new WWW(remoteURL) : versionResource;
+        if (!versionResource.isDone)
         {
-            if (!changelogResource.isDone)
-            {
-                return;
-            }
-
-            changelogReceived = (ValidURL(changelogResource) ? ParseChangelog(changelogResource.text) : "");
-
-            changelogResource = null;
-
-            if (changelogReceived != "")
-            {
-                promptWindow.Repaint();
-            }
+            return;
         }
-        EditorApplication.update -= Update;
+
+        EditorApplication.update -= CheckForUpdate;
+
+        if (string.IsNullOrEmpty(versionResource.error))
+        {
+            latestRelease = LatestRelease.CreateFromJSON(versionResource.text);
+        }
+
+        versionResource.Dispose();
+        versionResource = null;
+        versionChecked = true;
+        EditorPrefs.SetString(lastCheckKey, DateTime.UtcNow.Ticks.ToString());
+
+        // Clean up the existing hidePromptKeys (except the one for the current version)
+        new[] { VRTK_Defines.CurrentVersion }
+            .Concat(VRTK_Defines.PreviousVersions)
+            .Where(version => latestRelease == null || version != latestRelease.version)
+            .Select(version => string.Format(hidePromptKeyFormat, version))
+            .Where(EditorPrefs.HasKey)
+            .ToList()
+            .ForEach(EditorPrefs.DeleteKey);
+
+        if (!isManualCheck
+            && latestRelease != null
+            && (VRTK_Defines.CurrentVersion >= latestRelease.version
+                || EditorPrefs.HasKey(string.Format(hidePromptKeyFormat, latestRelease.version))))
+        {
+            return;
+        }
+
+        ShowWindow();
+        isManualCheck = false;
     }
 
-    private static bool ValidURL(WWW resource)
+    private static void ShowWindow()
     {
-        return (string.IsNullOrEmpty(resource.error) && !Regex.IsMatch(resource.text, "404 not found", RegexOptions.IgnoreCase));
-    }
-
-    private static bool UpdateRequired()
-    {
-        string assetGuid = AssetDatabase.FindAssets(typeof(VRTK_UpdatePrompt).FullName).First();
-        string path = AssetDatabase.GUIDToAssetPath(assetGuid);
-        path = Path.GetDirectoryName(Path.GetDirectoryName(path));
-
-        versionLocal = File.ReadAllText(path + localVersionFile);
-        if (string.IsNullOrEmpty(versionLocal) || string.IsNullOrEmpty(versionReceived) || versionReceived == versionLocal || EditorPrefs.HasKey(string.Format(hidePromptKey, versionReceived)))
+        if (promptWindow != null)
         {
-            return false;
+            promptWindow.ShowUtility();
+            promptWindow.Repaint();
+            return;
         }
 
-        return (ParseVersion(versionReceived) > ParseVersion(versionLocal));
+        promptWindow = GetWindow<VRTK_UpdatePrompt>(true);
+        promptWindow.titleContent = new GUIContent("VRTK Update");
     }
 
-    private static int ParseVersion(string versionText)
+    [MenuItem("Window/VRTK/Check for Updates")]
+    private static void CheckManually()
     {
-        string[] versionBits = versionText.Trim().Split('.');
-        string formattedVersion = "";
-        foreach (string versionBit in versionBits)
-        {
-            formattedVersion += versionBit.PadLeft(3, '0');
-        }
-        return int.Parse(formattedVersion);
-    }
+        isManualCheck = true;
 
-    protected static string ParseChangelog(string fullChangelog)
-    {
-        string[] changelogBits = fullChangelog.Trim().Split(new string[] { "\n# " }, StringSplitOptions.RemoveEmptyEntries);
-        if (changelogBits.Length < 1)
+        if (versionResource == null)
         {
-            return "";
+            EditorApplication.update += CheckForUpdate;
         }
-
-        return changelogBits[1];
     }
 }

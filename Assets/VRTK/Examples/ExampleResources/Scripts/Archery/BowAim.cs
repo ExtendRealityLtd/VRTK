@@ -163,8 +163,8 @@
 
             if (!currentPull.ToString("F2").Equals(previousPull.ToString("F2")))
             {
-                VRTK_SharedMethods.TriggerHapticPulse(VRTK_DeviceFinder.GetControllerIndex(holdControl.gameObject), bowVibration);
-                VRTK_SharedMethods.TriggerHapticPulse(VRTK_DeviceFinder.GetControllerIndex(stringControl.gameObject), stringVibration);
+                VRTK_ControllerHaptics.TriggerHapticPulse(VRTK_ControllerReference.GetControllerReference(holdControl.gameObject), bowVibration);
+                VRTK_ControllerHaptics.TriggerHapticPulse(VRTK_ControllerReference.GetControllerReference(stringControl.gameObject), stringVibration);
             }
             previousPull = currentPull;
         }

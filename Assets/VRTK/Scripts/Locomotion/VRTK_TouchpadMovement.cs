@@ -4,6 +4,7 @@ namespace VRTK
     using UnityEngine;
     using System;
 
+#pragma warning disable 0618
     /// <summary>
     /// Event Payload
     /// </summary>
@@ -14,13 +15,16 @@ namespace VRTK
         public VRTK_TouchpadMovement.AxisMovementType movementType;
         public VRTK_TouchpadMovement.AxisMovementDirection direction;
     }
+#pragma warning restore 0618
 
+#pragma warning disable 0618
     /// <summary>
     /// Event Payload
     /// </summary>
     /// <param name="sender">this object</param>
     /// <param name="e"><see cref="TouchpadMovementAxisEventArgs"/></param>
     public delegate void TouchpadMovementAxisEventHandler(VRTK_TouchpadMovement sender, TouchpadMovementAxisEventArgs e);
+#pragma warning restore 0618
 
     /// <summary>
     /// Adds the ability to move and rotate the play area and the player by using the touchpad. 
@@ -206,6 +210,11 @@ namespace VRTK
 
         protected virtual void Awake()
         {
+            VRTK_SDKManager.instance.AddBehaviourToToggleOnLoadedSetupChange(this);
+        }
+
+        protected virtual void OnEnable()
+        {
             touchpadAxisChanged = new ControllerInteractionEventHandler(DoTouchpadAxisChanged);
             touchpadUntouched = new ControllerInteractionEventHandler(DoTouchpadTouchEnd);
 
@@ -225,10 +234,7 @@ namespace VRTK
             }
 
             VRTK_PlayerObject.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.CameraRig);
-        }
 
-        protected virtual void OnEnable()
-        {
             SetControllerListeners(controllerLeftHand, leftController, ref leftSubscribed);
             SetControllerListeners(controllerRightHand, rightController, ref rightSubscribed);
             bodyPhysics = GetComponent<VRTK_BodyPhysics>();
@@ -240,10 +246,7 @@ namespace VRTK
             lastFlip = 0f;
             lastSnapRotate = 0f;
             multiplyMovement = false;
-        }
 
-        protected virtual void Start()
-        {
             bodyCollider = playArea.GetComponentInChildren<CapsuleCollider>();
             if (!bodyCollider)
             {
@@ -256,6 +259,11 @@ namespace VRTK
             SetControllerListeners(controllerLeftHand, leftController, ref leftSubscribed, true);
             SetControllerListeners(controllerRightHand, rightController, ref rightSubscribed, true);
             bodyPhysics = null;
+        }
+
+        protected virtual void OnDestroy()
+        {
+            VRTK_SDKManager.instance.RemoveBehaviourToToggleOnLoadedSetupChange(this);
         }
 
         protected virtual void Update()

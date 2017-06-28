@@ -31,6 +31,11 @@ namespace VRTK
 
         protected abstract void Process(GameObject controlledGameObject, Transform directionDevice, Vector3 axisDirection, float axis, float deadzone, bool currentlyFalling, bool modifierActive);
 
+        protected virtual void Awake()
+        {
+            VRTK_SDKManager.instance.AddBehaviourToToggleOnLoadedSetupChange(this);
+        }
+
         protected virtual void OnEnable()
         {
             playArea = VRTK_DeviceFinder.PlayAreaTransform();
@@ -62,6 +67,11 @@ namespace VRTK
                         break;
                 }
             }
+        }
+
+        protected virtual void OnDestroy()
+        {
+            VRTK_SDKManager.instance.RemoveBehaviourToToggleOnLoadedSetupChange(this);
         }
 
         protected virtual void AxisChanged(object sender, ObjectControlEventArgs e)
@@ -141,6 +151,18 @@ namespace VRTK
             }
 
             return axisDirection;
+        }
+
+        protected virtual bool CanMove(VRTK_BodyPhysics givenBodyPhysics, Vector3 currentPosition, Vector3 proposedPosition)
+        {
+            if (givenBodyPhysics == null)
+            {
+                return true;
+            }
+
+            Vector3 proposedDirection = (proposedPosition - currentPosition).normalized;
+            float distance = Vector3.Distance(currentPosition, proposedPosition);
+            return !givenBodyPhysics.SweepCollision(proposedDirection, distance);
         }
     }
 }

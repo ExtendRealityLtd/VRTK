@@ -14,6 +14,11 @@
 
         protected virtual void Awake()
         {
+            VRTK_SDKManager.instance.AddBehaviourToToggleOnLoadedSetupChange(this);
+        }
+
+        protected virtual void OnEnable()
+        {
             playArea = VRTK_DeviceFinder.PlayAreaTransform();
             roomExtender = FindObjectOfType<VRTK_RoomExtender>();
             if (playArea == null || roomExtender == null)
@@ -21,6 +26,11 @@
                 VRTK_Logger.Warn(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, "VRTK_RoomExtender_PlayAreaGizmo", "PlayArea or VRTK_RoomExtender", "an active"));
                 return;
             }
+        }
+
+        protected virtual void OnDestroy()
+        {
+            VRTK_SDKManager.instance.RemoveBehaviourToToggleOnLoadedSetupChange(this);
         }
 
         protected virtual void OnDrawGizmos()
@@ -46,7 +56,7 @@
                 return;
             }
 
-            var vertices = VRTK_SDK_Bridge.GetPlayAreaVertices(playArea.gameObject);
+            var vertices = VRTK_SDK_Bridge.GetPlayAreaVertices();
             if (vertices == null || vertices.Length == 0)
             {
                 return;

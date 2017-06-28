@@ -27,23 +27,20 @@ namespace VRTK
         /// <summary>
         /// The GetPlayAreaVertices method returns the points of the play area boundaries.
         /// </summary>
-        /// <param name="playArea">The GameObject containing the play area representation.</param>
         /// <returns>A Vector3 array of the points in the scene that represent the play area boundaries.</returns>
-        public abstract Vector3[] GetPlayAreaVertices(GameObject playArea);
+        public abstract Vector3[] GetPlayAreaVertices();
 
         /// <summary>
         /// The GetPlayAreaBorderThickness returns the thickness of the drawn border for the given play area.
         /// </summary>
-        /// <param name="playArea">The GameObject containing the play area representation.</param>
         /// <returns>The thickness of the drawn border.</returns>
-        public abstract float GetPlayAreaBorderThickness(GameObject playArea);
+        public abstract float GetPlayAreaBorderThickness();
 
         /// <summary>
         /// The IsPlayAreaSizeCalibrated method returns whether the given play area size has been auto calibrated by external sensors.
         /// </summary>
-        /// <param name="playArea">The GameObject containing the play area representation.</param>
         /// <returns>Returns true if the play area size has been auto calibrated and set by external sensors.</returns>
-        public abstract bool IsPlayAreaSizeCalibrated(GameObject playArea);
+        public abstract bool IsPlayAreaSizeCalibrated();
 
         /// <summary>
         /// The GetDrawAtRuntime method returns whether the given play area drawn border is being displayed.
@@ -60,9 +57,9 @@ namespace VRTK
         protected Transform GetSDKManagerPlayArea()
         {
             var sdkManager = VRTK_SDKManager.instance;
-            if (sdkManager != null && sdkManager.actualBoundaries != null)
+            if (sdkManager != null && sdkManager.loadedSetup.actualBoundaries != null)
             {
-                cachedPlayArea = (sdkManager.actualBoundaries ? sdkManager.actualBoundaries.transform : null);
+                cachedPlayArea = (sdkManager.loadedSetup.actualBoundaries ? sdkManager.loadedSetup.actualBoundaries.transform : null);
                 return cachedPlayArea;
             }
             return null;

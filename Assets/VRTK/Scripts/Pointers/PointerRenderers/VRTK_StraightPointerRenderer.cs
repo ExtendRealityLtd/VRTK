@@ -57,6 +57,15 @@ namespace VRTK
             base.UpdateRenderer();
         }
 
+        /// <summary>
+        /// The GetPointerObjects returns an array of the auto generated GameObjects associated with the pointer.
+        /// </summary>
+        /// <returns>An array of pointer auto generated GameObjects.</returns>
+        public override GameObject[] GetPointerObjects()
+        {
+            return new GameObject[] { actualContainer, actualCursor, actualTracer };
+        }
+
         protected override void ToggleRenderer(bool pointerState, bool actualState)
         {
             ToggleElement(actualTracer, pointerState, actualState, tracerVisibility, ref tracerVisible);
@@ -179,7 +188,9 @@ namespace VRTK
             Transform origin = GetOrigin();
             Ray pointerRaycast = new Ray(origin.position, origin.forward);
             RaycastHit pointerCollidedWith;
+#pragma warning disable 0618
             bool rayHit = VRTK_CustomRaycast.Raycast(customRaycast, pointerRaycast, out pointerCollidedWith, layersToIgnore, maximumLength);
+#pragma warning restore 0618
 
             CheckRayMiss(rayHit, pointerCollidedWith);
             CheckRayHit(rayHit, pointerCollidedWith);
@@ -209,7 +220,8 @@ namespace VRTK
                 actualContainer.transform.position = origin.position;
                 actualContainer.transform.rotation = origin.rotation;
 
-                ScaleObjectInteractor(actualCursor.transform.localScale * 1.05f);
+                float objectInteractorScaleIncrease = 1.05f;
+                ScaleObjectInteractor(actualCursor.transform.lossyScale * objectInteractorScaleIncrease);
 
                 if (destinationHit.transform)
                 {

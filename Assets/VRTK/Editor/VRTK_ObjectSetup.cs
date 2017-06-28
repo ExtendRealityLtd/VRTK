@@ -40,8 +40,8 @@
         {
             VRTK_ObjectSetup window = (VRTK_ObjectSetup)EditorWindow.GetWindow(typeof(VRTK_ObjectSetup));
             
-            window.minSize = new Vector2( 300f, 300f );
-            window.maxSize = new Vector2( 400f, 300f );
+            window.minSize = new Vector2( 300f, 370f );
+            window.maxSize = new Vector2( 400f, 400f );
             
             window.autoRepaintOnSceneChange = true;
             window.titleContent.text = "Setup Object";
@@ -75,7 +75,7 @@
             addHaptics = EditorGUILayout.Toggle("Add Haptics", addHaptics);
             EditorGUILayout.Space();
 
-            if(GUILayout.Button("Setup selected object", GUILayout.Height(40)))
+            if(GUILayout.Button("Setup selected object(s)", GUILayout.Height(40)))
             {
                 SetupObject();
             }
@@ -83,9 +83,10 @@
 
         private void SetupObject()
         {
-            GameObject go = Selection.activeGameObject;
-            if(go)
+            Transform[] transforms = Selection.transforms;
+            foreach(Transform transform in transforms)
             {
+                GameObject go = transform.gameObject;
                 VRTK_InteractableObject intObj = go.GetComponent<VRTK_InteractableObject>();
                 if(intObj == null)
                 {

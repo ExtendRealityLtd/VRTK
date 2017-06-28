@@ -65,6 +65,8 @@ namespace VRTK
         public float snapDuration = 0f;
         [Tooltip("If this is checked then the scaled size of the snap drop zone will be applied to the object that is snapped to it.")]
         public bool applyScalingOnSnap = false;
+        [Tooltip("If this is checked then when the snapped object is unsnapped from the drop zone, a clone of the unsnapped object will be snapped back into the drop zone.")]
+        public bool cloneNewOnUnsnap = false;
         [Tooltip("The colour to use when showing the snap zone is active.")]
         public Color highlightColor;
         [Tooltip("The highlight object will always be displayed when the snap drop zone is available even if a valid item isn't being hovered over.")]
@@ -99,6 +101,8 @@ namespace VRTK
         protected GameObject highlightEditorObject = null;
         protected List<GameObject> currentValidSnapObjects = new List<GameObject>();
         protected GameObject currentSnappedObject = null;
+        protected GameObject objectToClone = null;
+        protected bool[] clonedObjectColliderStates = new bool[0];
         protected VRTK_BaseHighlighter objectHighlighter;
         protected bool willSnap = false;
         protected bool isSnapped = false;
@@ -163,7 +167,7 @@ namespace VRTK
                 DeleteHighlightObject();
             }
             //Always remove editor highlight object at runtime
-            ChooseDestroyType(transform.FindChild(ObjectPath(HIGHLIGHT_EDITOR_OBJECT_NAME)));
+            ChooseDestroyType(transform.Find(ObjectPath(HIGHLIGHT_EDITOR_OBJECT_NAME)));
             highlightEditorObject = null;
 
             GenerateObjects();
@@ -175,7 +179,7 @@ namespace VRTK
         /// <param name="objectToSnap">The GameObject to attempt to snap.</param>
         public virtual void ForceSnap(GameObject objectToSnap)
         {
-            var ioCheck = objectToSnap.GetComponentInParent<VRTK_InteractableObject>();
+            VRTK_InteractableObject ioCheck = objectToSnap.GetComponentInParent<VRTK_InteractableObject>();
             if (ioCheck != null)
             {
                 ioCheck.SaveCurrentState();
@@ -200,7 +204,10 @@ namespace VRTK
             if (isSnapped && currentSnappedObject != null)
             {
                 VRTK_InteractableObject ioCheck = ValidSnapObject(currentSnappedObject, false);
-                ioCheck.ToggleSnapDropZone(this, false);
+                if (ioCheck != null)
+                {
+                    ioCheck.ToggleSnapDropZone(this, false);
+                }
             }
         }
 
@@ -221,6 +228,24 @@ namespace VRTK
         public virtual bool IsObjectHovering(GameObject checkObject)
         {
             return currentValidSnapObjects.Contains(checkObject);
+        }
+
+        /// <summary>
+        /// The GetHoveringObjects method returns a List of valid GameObjects that are currently hovering (but not snapped) in the snap drop zone area.
+        /// </summary>
+        /// <returns>The List of valid GameObjects that are hovering (but not snapped) in the snap drop zone area.</returns>
+        public virtual List<GameObject> GetHoveringObjects()
+        {
+            return currentValidSnapObjects;
+        }
+
+        /// <summary>
+        /// The GetCurrentSnappedObejct method returns the GameObject that is currently snapped in the snap drop zone area.
+        /// </summary>
+        /// <returns>The GameObject that is currently snapped in the snap drop zone area.</returns>
+        public virtual GameObject GetCurrentSnappedObject()
+        {
+            return currentSnappedObject;
         }
 
         protected virtual void Awake()
@@ -389,26 +414,26 @@ namespace VRTK
         {
             if (highlightEditorObject == null)
             {
-                Transform forceFindHighlightEditorObject = transform.FindChild(ObjectPath(HIGHLIGHT_EDITOR_OBJECT_NAME));
+                Transform forceFindHighlightEditorObject = transform.Find(ObjectPath(HIGHLIGHT_EDITOR_OBJECT_NAME));
                 highlightEditorObject = (forceFindHighlightEditorObject ? forceFindHighlightEditorObject.gameObject : null);
             }
 
             if (highlightObject == null)
             {
-                Transform forceFindHighlightObject = transform.FindChild(ObjectPath(HIGHLIGHT_OBJECT_NAME));
+                Transform forceFindHighlightObject = transform.Find(ObjectPath(HIGHLIGHT_OBJECT_NAME));
                 highlightObject = (forceFindHighlightObject ? forceFindHighlightObject.gameObject : null);
             }
 
             if (highlightContainer == null)
             {
-                Transform forceFindHighlightContainer = transform.FindChild(HIGHLIGHT_CONTAINER_NAME);
+                Transform forceFindHighlightContainer = transform.Find(HIGHLIGHT_CONTAINER_NAME);
                 highlightContainer = (forceFindHighlightContainer ? forceFindHighlightContainer.gameObject : null);
             }
         }
 
         protected virtual void GenerateContainer()
         {
-            if (highlightContainer == null || transform.FindChild(HIGHLIGHT_CONTAINER_NAME) == null)
+            if (highlightContainer == null || transform.Find(HIGHLIGHT_CONTAINER_NAME) == null)
             {
                 highlightContainer = new GameObject(HIGHLIGHT_CONTAINER_NAME);
                 highlightContainer.transform.SetParent(transform);
@@ -420,7 +445,7 @@ namespace VRTK
 
         protected virtual void SetContainer()
         {
-            Transform findContainer = transform.FindChild(HIGHLIGHT_CONTAINER_NAME);
+            Transform findContainer = transform.Find(HIGHLIGHT_CONTAINER_NAME);
             if (findContainer != null)
             {
                 highlightContainer = findContainer.gameObject;
@@ -459,6 +484,10 @@ namespace VRTK
 
                     isSnapped = true;
                     currentSnappedObject = ioCheck.gameObject;
+                    if (cloneNewOnUnsnap)
+                    {
+                        CreatePermanentClone();
+                    }
 
                     transitionInPlace = StartCoroutine(UpdateTransformDimensions(ioCheck, highlightContainer, newLocalScale, snapDuration));
 
@@ -471,15 +500,71 @@ namespace VRTK
             wasSnapped = false;
         }
 
+        protected virtual void CreatePermanentClone()
+        {
+            VRTK_BaseHighlighter currentSnappedObjectHighlighter = currentSnappedObject.GetComponent<VRTK_BaseHighlighter>();
+            if (currentSnappedObjectHighlighter != null)
+            {
+                currentSnappedObjectHighlighter.Unhighlight();
+            }
+            objectToClone = Instantiate(currentSnappedObject);
+            Collider[] clonedObjectStates = currentSnappedObject.GetComponentsInChildren<Collider>();
+            clonedObjectColliderStates = new bool[clonedObjectStates.Length];
+            for (int i = 0; i < clonedObjectStates.Length; i++)
+            {
+                Collider clonedObjectColliderState = clonedObjectStates[i];
+                clonedObjectColliderStates[i] = clonedObjectColliderState.isTrigger;
+                clonedObjectColliderState.isTrigger = true;
+            }
+            objectToClone.SetActive(false);
+        }
+
+        protected virtual void ResetPermanentCloneColliders(GameObject objectToReset)
+        {
+            if (objectToReset != null && clonedObjectColliderStates.Length > 0)
+            {
+                Collider[] clonedObjectStates = objectToReset.GetComponentsInChildren<Collider>();
+                for (int i = 0; i < clonedObjectStates.Length; i++)
+                {
+                    Collider clonedObjectColliderState = clonedObjectStates[i];
+                    if (clonedObjectColliderStates.Length > i)
+                    {
+                        clonedObjectColliderState.isTrigger = clonedObjectColliderStates[i];
+                    }
+                }
+            }
+        }
+
+        protected virtual void ResnapPermanentClone()
+        {
+            if (objectToClone != null)
+            {
+                float savedSnapDuration = snapDuration;
+                snapDuration = 0f;
+                objectToClone.SetActive(true);
+                ResetPermanentCloneColliders(objectToClone);
+                ForceSnap(objectToClone);
+                snapDuration = savedSnapDuration;
+            }
+        }
+
         protected virtual void UnsnapObject()
         {
+            ResetPermanentCloneColliders(currentSnappedObject);
+
             isSnapped = false;
             wasSnapped = true;
             currentSnappedObject = null;
             ResetSnapDropZoneJoint();
+
             if (transitionInPlace != null)
             {
                 StopCoroutine(transitionInPlace);
+            }
+
+            if (cloneNewOnUnsnap)
+            {
+                ResnapPermanentClone();
             }
         }
 
@@ -653,13 +738,13 @@ namespace VRTK
         protected virtual void GenerateHighlightObject()
         {
             //If there is a given highlight prefab and no existing highlight object then create a new highlight object
-            if (highlightObjectPrefab != null && highlightObject == null && transform.FindChild(ObjectPath(HIGHLIGHT_OBJECT_NAME)) == null)
+            if (highlightObjectPrefab != null && highlightObject == null && transform.Find(ObjectPath(HIGHLIGHT_OBJECT_NAME)) == null)
             {
                 CopyObject(highlightObjectPrefab, ref highlightObject, HIGHLIGHT_OBJECT_NAME);
             }
 
             //if highlight object exists but not in the variable then force grab it
-            Transform checkForChild = transform.FindChild(ObjectPath(HIGHLIGHT_OBJECT_NAME));
+            Transform checkForChild = transform.Find(ObjectPath(HIGHLIGHT_OBJECT_NAME));
             if (checkForChild != null && highlightObject == null)
             {
                 highlightObject = checkForChild.gameObject;
@@ -680,7 +765,7 @@ namespace VRTK
 
         protected virtual void DeleteHighlightObject()
         {
-            ChooseDestroyType(transform.FindChild(HIGHLIGHT_CONTAINER_NAME));
+            ChooseDestroyType(transform.Find(HIGHLIGHT_CONTAINER_NAME));
             highlightContainer = null;
             highlightObject = null;
             objectHighlighter = null;
@@ -688,7 +773,7 @@ namespace VRTK
 
         protected virtual void GenerateEditorHighlightObject()
         {
-            if (highlightObject != null && highlightEditorObject == null && transform.FindChild(ObjectPath(HIGHLIGHT_EDITOR_OBJECT_NAME)) == null)
+            if (highlightObject != null && highlightEditorObject == null && transform.Find(ObjectPath(HIGHLIGHT_EDITOR_OBJECT_NAME)) == null)
             {
                 CopyObject(highlightObject, ref highlightEditorObject, HIGHLIGHT_EDITOR_OBJECT_NAME);
                 foreach (Renderer renderer in highlightEditorObject.GetComponentsInChildren<Renderer>())

@@ -32,16 +32,24 @@
             EditorGUILayout.LabelField(header, EditorStyles.boldLabel);
         }
 
-        public static GUIStyle CreateStyle(GUIStyle styleType, Color contentColor, Color backgroundColor)
+        public static void DrawUsingDestructiveStyle(GUIStyle styleToCopy, Action<GUIStyle> drawAction)
         {
-            GUIStyle generatedStyle = new GUIStyle(styleType);
-            generatedStyle.normal.textColor = contentColor;
-            Texture2D backgroundTexture = new Texture2D(1, 1);
-            backgroundTexture.SetPixel(1, 1, backgroundColor);
-            backgroundTexture.Apply();
-            generatedStyle.normal.background = backgroundTexture;
+            Color previousBackgroundColor = GUI.backgroundColor;
+            GUIStyle destructiveButtonStyle = new GUIStyle(styleToCopy)
+            {
+                normal =
+                {
+                    textColor = Color.white
+                },
+                active =
+                {
+                    textColor = Color.white
+                }
+            };
 
-            return generatedStyle;
+            GUI.backgroundColor = Color.red;
+            drawAction(destructiveButtonStyle);
+            GUI.backgroundColor = previousBackgroundColor;
         }
     }
 }

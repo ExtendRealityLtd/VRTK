@@ -16,7 +16,7 @@
         private Vector3 defaultRotation;
         private Vector3 openRotation;
 
-        public override void StartUsing(GameObject usingObject)
+        public override void StartUsing(VRTK_InteractUse usingObject)
         {
             base.StartUsing(usingObject);
             SetDoorRotation(usingObject.transform.position);

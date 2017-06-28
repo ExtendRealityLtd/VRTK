@@ -37,12 +37,23 @@
         {
             if (VRTK_DeviceFinder.IsControllerLeftHand(controller))
             {
-                bow = VRTK_DeviceFinder.GetControllerRightHand(true).GetComponentInChildren<BowAim>();
+                GameObject controllerRightHand = VRTK_DeviceFinder.GetControllerRightHand(true);
+                bow = controllerRightHand.GetComponentInChildren<BowAim>();
+                if (bow == null)
+                {
+                    bow = VRTK_DeviceFinder.GetModelAliasController(controllerRightHand).GetComponentInChildren<BowAim>();
+                }
             }
             else if (VRTK_DeviceFinder.IsControllerRightHand(controller))
             {
-                bow = VRTK_DeviceFinder.GetControllerLeftHand(true).GetComponentInChildren<BowAim>();
+                GameObject controllerLeftHand = VRTK_DeviceFinder.GetControllerLeftHand(true);
+                bow = controllerLeftHand.GetComponentInChildren<BowAim>();
+                if (bow == null)
+                {
+                    bow = VRTK_DeviceFinder.GetModelAliasController(controllerLeftHand).GetComponentInChildren<BowAim>();
+                }
             }
+
             return (bow == null || !bow.HasArrow());
         }
     }

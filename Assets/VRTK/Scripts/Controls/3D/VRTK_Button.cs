@@ -67,9 +67,14 @@ namespace VRTK
         public ButtonEvents events;
 
         /// <summary>
-        /// Emitted when the 3D Button has reached it's activation distance.
+        /// Emitted when the 3D Button has reached its activation distance.
         /// </summary>
         public event Button3DEventHandler Pushed;
+
+        /// <summary>
+        /// Emitted when the 3D Button's position has become less than activation distance after being pressed.
+        /// </summary>
+        public event Button3DEventHandler Released;
 
         protected const float MAX_AUTODETECT_ACTIVATION_LENGTH = 4f; // full hight of button
         protected ButtonDirection finalDirection;
@@ -85,6 +90,14 @@ namespace VRTK
             if (Pushed != null)
             {
                 Pushed(this, e);
+            }
+        }
+
+        public virtual void OnReleased(Control3DEventArgs e)
+        {
+            if (Released != null)
+            {
+                Released(this, e);
             }
         }
 
@@ -269,17 +282,23 @@ namespace VRTK
                 {
                     value = 1;
 
+#pragma warning disable 0618
                     /// <obsolete>
                     /// This is an obsolete call that will be removed in a future version
                     /// </obsolete>
                     events.OnPush.Invoke();
+#pragma warning restore 0618
 
                     OnPushed(SetControlEvent());
                 }
             }
             else
             {
-                value = 0;
+                if(oldState == 1)
+                {
+                    value = 0;
+                    OnReleased(SetControlEvent());
+                }
             }
         }
 

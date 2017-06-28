@@ -76,7 +76,7 @@ namespace VRTK
         protected float pointerContactDistance = 0f;
         protected Transform pointerContactTarget = null;
         protected RaycastHit pointerContactRaycastHit = new RaycastHit();
-        protected uint controllerIndex;
+        protected VRTK_ControllerReference controllerReference;
         protected VRTK_PlayAreaCursor playAreaCursor;
         protected Color currentPointerColor;
         protected GameObject objectInteractor;
@@ -93,6 +93,7 @@ namespace VRTK
         private VRTK_InteractGrab controllerGrabScript;
         private GameObject pointerOriginTransformFollowGameObject;
         private VRTK_TransformFollow pointerOriginTransformFollow;
+        private Transform originalPointerOriginTransform;
 
         /// <summary>
         /// The IsActive method is used to determine if the pointer currently active.
@@ -118,27 +119,30 @@ namespace VRTK
         /// <param name="state">The state of whether to enable or disable the beam.</param>
         public virtual void ToggleBeam(bool state)
         {
-            var index = (controller ? VRTK_DeviceFinder.GetControllerIndex(controller.gameObject) : uint.MaxValue);
+            VRTK_ControllerReference givenControllerReference = (controller != null ? VRTK_ControllerReference.GetControllerReference(controller.gameObject) : null);
             if (state)
             {
-                TurnOnBeam(index);
+                TurnOnBeam(givenControllerReference);
             }
             else
             {
-                TurnOffBeam(index);
+                TurnOffBeam(givenControllerReference);
             }
         }
 
         protected virtual void Awake()
         {
             VRTK_PlayerObject.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.Pointer);
+            originalPointerOriginTransform = pointerOriginTransform;
+
+            VRTK_SDKManager.instance.AddBehaviourToToggleOnLoadedSetupChange(this);
         }
 
         protected override void OnEnable()
         {
             base.OnEnable();
 
-            pointerOriginTransform = (pointerOriginTransform == null ? VRTK_SDK_Bridge.GenerateControllerPointerOrigin(gameObject) : pointerOriginTransform);
+            pointerOriginTransform = (originalPointerOriginTransform == null ? VRTK_SDK_Bridge.GenerateControllerPointerOrigin(gameObject) : originalPointerOriginTransform);
 
             AttemptSetController();
             CreatePointerOriginTransformFollow();
@@ -153,6 +157,11 @@ namespace VRTK
             pointerMaterial.color = pointerMissColor;
 
             playAreaCursor = GetComponent<VRTK_PlayAreaCursor>();
+        }
+
+        protected virtual void Start()
+        {
+            SetupController();
         }
 
         protected override void OnDisable()
@@ -170,9 +179,9 @@ namespace VRTK
             Destroy(pointerOriginTransformFollowGameObject);
         }
 
-        protected virtual void Start()
+        protected virtual void OnDestroy()
         {
-            SetupController();
+            VRTK_SDKManager.instance.RemoveBehaviourToToggleOnLoadedSetupChange(this);
         }
 
         protected virtual void Update()
@@ -250,12 +259,12 @@ namespace VRTK
 
         protected virtual void EnablePointerBeam(object sender, ControllerInteractionEventArgs e)
         {
-            TurnOnBeam(e.controllerIndex);
+            TurnOnBeam(e.controllerReference);
         }
 
         protected virtual void DisablePointerBeam(object sender, ControllerInteractionEventArgs e)
         {
-            TurnOffBeam(e.controllerIndex);
+            TurnOffBeam(e.controllerReference);
         }
 
         protected virtual void SetPointerDestination(object sender, ControllerInteractionEventArgs e)
@@ -270,7 +279,7 @@ namespace VRTK
                 return;
             }
 
-            OnDestinationMarkerEnter(SetDestinationMarkerEvent(pointerContactDistance, pointerContactTarget, pointerContactRaycastHit, destinationPosition, controllerIndex));
+            OnDestinationMarkerEnter(SetDestinationMarkerEvent(pointerContactDistance, pointerContactTarget, pointerContactRaycastHit, destinationPosition, controllerReference));
             StartUseAction(pointerContactTarget);
         }
 
@@ -281,7 +290,7 @@ namespace VRTK
                 return;
             }
 
-            OnDestinationMarkerExit(SetDestinationMarkerEvent(pointerContactDistance, pointerContactTarget, pointerContactRaycastHit, destinationPosition, controllerIndex));
+            OnDestinationMarkerExit(SetDestinationMarkerEvent(pointerContactDistance, pointerContactTarget, pointerContactRaycastHit, destinationPosition, controllerReference));
             StopUseAction();
         }
 
@@ -311,7 +320,7 @@ namespace VRTK
 
             if ((!playAreaCursor || !playAreaCursor.HasCollided()) && !PointerActivatesUseAction(interactableObject))
             {
-                OnDestinationMarkerSet(SetDestinationMarkerEvent(pointerContactDistance, pointerContactTarget, pointerContactRaycastHit, destinationPosition, controllerIndex));
+                OnDestinationMarkerSet(SetDestinationMarkerEvent(pointerContactDistance, pointerContactTarget, pointerContactRaycastHit, destinationPosition, controllerReference));
             }
 
             if (!isActive)
@@ -391,7 +400,7 @@ namespace VRTK
         {
             if (playAreaCursor)
             {
-                playAreaCursor.SetMaterialColor(color);
+                playAreaCursor.SetMaterialColor(color, true);
             }
         }
 
@@ -417,7 +426,7 @@ namespace VRTK
             {
                 validNavMeshLocation = true;
             }
-            return (validNavMeshLocation && target && !(VRTK_PolicyList.Check(target.gameObject, invalidListPolicy)));
+            return (validNavMeshLocation && target && !(VRTK_PolicyList.Check(target.gameObject, targetListPolicy)));
         }
 
         protected virtual void CreateObjectInteractor()
@@ -539,7 +548,7 @@ namespace VRTK
             }
         }
 
-        private void TurnOnBeam(uint index)
+        private void TurnOnBeam(VRTK_ControllerReference givenControllerReference)
         {
             beamEnabledState++;
             if (enabled && !isActive && CanActivate())
@@ -548,7 +557,7 @@ namespace VRTK
                 {
                     playAreaCursor.SetPlayAreaCursorCollision(false);
                 }
-                controllerIndex = index;
+                controllerReference = givenControllerReference;
                 TogglePointer(true);
                 isActive = true;
                 destinationSetActive = true;
@@ -561,11 +570,11 @@ namespace VRTK
             }
         }
 
-        private void TurnOffBeam(uint index)
+        private void TurnOffBeam(VRTK_ControllerReference givenControllerReference)
         {
             if (enabled && isActive && (holdButtonToActivate || (!holdButtonToActivate && beamEnabledState >= 2)))
             {
-                controllerIndex = index;
+                controllerReference = givenControllerReference;
                 DisableBeam();
             }
         }

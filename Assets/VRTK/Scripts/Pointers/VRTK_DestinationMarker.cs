@@ -2,6 +2,7 @@
 namespace VRTK
 {
     using UnityEngine;
+    using System;
 
     /// <summary>
     /// Event Payload
@@ -13,7 +14,8 @@ namespace VRTK
     /// <param name="destinationRotation">The world rotation of the destination marker.</param>
     /// <param name="forceDestinationPosition">If true then the given destination position should not be altered by anything consuming the payload.</param>
     /// <param name="enableTeleport">Whether the destination set event should trigger teleport.</param>
-    /// <param name="controllerIndex">The optional index of the controller emitting the beam.</param>
+    /// <param name="controllerIndex">**OBSOLETE** The optional index of the controller controlling the destination marker.</param>
+    /// <param name="controllerReference">The optional reference to the controller controlling the destination marker.</param>
     public struct DestinationMarkerEventArgs
     {
         public float distance;
@@ -23,7 +25,9 @@ namespace VRTK
         public Quaternion? destinationRotation;
         public bool forceDestinationPosition;
         public bool enableTeleport;
+        [Obsolete("`DestinationMarkerEventArgs.controllerIndex` has been replaced with `DestinationMarkerEventArgs.controllerReference`. This parameter will be removed in a future version of VRTK.")]
         public uint controllerIndex;
+        public VRTK_ControllerReference controllerReference;
     }
 
     /// <summary>
@@ -42,8 +46,11 @@ namespace VRTK
     public abstract class VRTK_DestinationMarker : MonoBehaviour
     {
         [Header("Destination Marker Settings", order = 1)]
+
         [Tooltip("If this is checked then the teleport flag is set to true in the Destination Set event so teleport scripts will know whether to action the new destination.")]
         public bool enableTeleport = true;
+        [Tooltip("A specified VRTK_PolicyList to use to determine whether destination targets will be considered valid or invalid.")]
+        public VRTK_PolicyList targetListPolicy;
 
         /// <summary>
         /// Emitted when a collision with another collider has first occurred.
@@ -61,7 +68,6 @@ namespace VRTK
         /// </summary>
         public event DestinationMarkerEventHandler DestinationMarkerSet;
 
-        protected VRTK_PolicyList invalidListPolicy;
         protected float navMeshCheckDistance;
         protected bool headsetPositionCompensation;
         protected bool forceHoverOnRepeatedEnter = true;
@@ -110,9 +116,10 @@ namespace VRTK
         /// The SetInvalidTarget method is used to set objects that contain the given tag or class matching the name as invalid destination targets. It accepts a VRTK_PolicyList for a custom level of policy management.
         /// </summary>
         /// <param name="list">The Tag Or Script list policy to check the set operation on.</param>
+        [Obsolete("`DestinationMarkerEventArgs.SetInvalidTarget(list)` has been replaced with the public variable `DestinationMarkerEventArgs.targetListPolicy`. This method will be removed in a future version of VRTK.")]
         public virtual void SetInvalidTarget(VRTK_PolicyList list = null)
         {
-            invalidListPolicy = list;
+            targetListPolicy = list;
         }
 
         /// <summary>
@@ -152,10 +159,13 @@ namespace VRTK
             VRTK_ObjectCache.registeredDestinationMarkers.Remove(this);
         }
 
-        protected virtual DestinationMarkerEventArgs SetDestinationMarkerEvent(float distance, Transform target, RaycastHit raycastHit, Vector3 position, uint controllerIndex, bool forceDestinationPosition = false, Quaternion? rotation = null)
+        protected virtual DestinationMarkerEventArgs SetDestinationMarkerEvent(float distance, Transform target, RaycastHit raycastHit, Vector3 position, VRTK_ControllerReference controllerReference, bool forceDestinationPosition = false, Quaternion? rotation = null)
         {
             DestinationMarkerEventArgs e;
-            e.controllerIndex = controllerIndex;
+#pragma warning disable 0618
+            e.controllerIndex = VRTK_ControllerReference.GetRealIndex(controllerReference);
+#pragma warning restore 0618
+            e.controllerReference = controllerReference;
             e.distance = distance;
             e.target = target;
             e.raycastHit = raycastHit;

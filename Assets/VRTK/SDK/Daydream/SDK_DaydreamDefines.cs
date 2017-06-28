@@ -14,7 +14,7 @@ namespace VRTK
         [SDK_ScriptingDefineSymbolPredicate(ScriptingDefineSymbol, "Android")]
         private static bool IsDaydreamAvailable()
         {
-            return typeof(SDK_DaydreamDefines).Assembly.GetType("GvrController") != null;
+            return VRTK_SharedMethods.GetTypeUnknownAssembly("GvrController") != null;
         }
     }
 }

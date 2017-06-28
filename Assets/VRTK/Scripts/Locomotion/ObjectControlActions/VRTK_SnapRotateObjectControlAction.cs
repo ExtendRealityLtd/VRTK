@@ -29,11 +29,11 @@ namespace VRTK
         [Tooltip("The threshold the listened axis needs to exceed before the action occurs. This can be used to limit the snap rotate to a single axis direction (e.g. pull down to flip rotate). The threshold is ignored if it is 0.")]
         public float axisThreshold = 0f;
 
-        private float snapDelayTimer = 0f;
+        protected float snapDelayTimer = 0f;
 
         protected override void Process(GameObject controlledGameObject, Transform directionDevice, Vector3 axisDirection, float axis, float deadzone, bool currentlyFalling, bool modifierActive)
         {
-            if (snapDelayTimer < Time.timeSinceLevelLoad && ValidThreshold(axis))
+            if (snapDelayTimer < Time.time && ValidThreshold(axis))
             {
                 float angle = Rotate(axis, modifierActive);
                 if (angle != 0f)
@@ -51,7 +51,7 @@ namespace VRTK
 
         protected virtual float Rotate(float axis, bool modifierActive)
         {
-            snapDelayTimer = Time.timeSinceLevelLoad + snapDelay;
+            snapDelayTimer = Time.time + snapDelay;
             int directionMultiplier = GetAxisDirection(axis);
             return (anglePerSnap * (modifierActive ? angleMultiplier : 1)) * directionMultiplier;
         }

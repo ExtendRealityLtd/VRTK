@@ -7,39 +7,39 @@
         private float impactMagnifier = 120f;
         private float collisionForce = 0f;
         private float maxCollisionForce = 4000f;
-        private GameObject grabbingController;
+        private VRTK_ControllerReference controllerReference;
 
         public float CollisionForce()
         {
             return collisionForce;
         }
 
-        public override void Grabbed(GameObject grabbingObject)
+        public override void Grabbed(VRTK_InteractGrab grabbingObject)
         {
             base.Grabbed(grabbingObject);
-            grabbingController = grabbingObject;
+            controllerReference = VRTK_ControllerReference.GetControllerReference(grabbingObject.controllerEvents.gameObject);
         }
 
-        public override void Ungrabbed(GameObject previousGrabbingObject)
+        public override void Ungrabbed(VRTK_InteractGrab previousGrabbingObject)
         {
             base.Ungrabbed(previousGrabbingObject);
-            grabbingController = null;
+            controllerReference = null;
         }
 
         protected override void OnEnable()
         {
             base.OnEnable();
-            grabbingController = null;
+            controllerReference = null;
             interactableRigidbody.collisionDetectionMode = CollisionDetectionMode.Continuous;
         }
 
         private void OnCollisionEnter(Collision collision)
         {
-            if (grabbingController != null && IsGrabbed())
+            if (VRTK_ControllerReference.IsValid(controllerReference) && IsGrabbed())
             {
-                collisionForce = VRTK_DeviceFinder.GetControllerVelocity(grabbingController).magnitude * impactMagnifier;
+                collisionForce = VRTK_DeviceFinder.GetControllerVelocity(controllerReference).magnitude * impactMagnifier;
                 var hapticStrength = collisionForce / maxCollisionForce;
-                VRTK_SharedMethods.TriggerHapticPulse(VRTK_DeviceFinder.GetControllerIndex(grabbingController), hapticStrength, 0.5f, 0.01f);
+                VRTK_ControllerHaptics.TriggerHapticPulse(controllerReference, hapticStrength, 0.5f, 0.01f);
             }
             else
             {

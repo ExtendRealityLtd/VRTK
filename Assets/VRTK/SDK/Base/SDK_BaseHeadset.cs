@@ -75,9 +75,9 @@ namespace VRTK
         protected Transform GetSDKManagerHeadset()
         {
             var sdkManager = VRTK_SDKManager.instance;
-            if (sdkManager != null && sdkManager.actualHeadset != null)
+            if (sdkManager != null && sdkManager.loadedSetup.actualHeadset != null)
             {
-                cachedHeadset = (sdkManager.actualHeadset ? sdkManager.actualHeadset.transform : null);
+                cachedHeadset = (sdkManager.loadedSetup.actualHeadset ? sdkManager.loadedSetup.actualHeadset.transform : null);
                 return cachedHeadset;
             }
             return null;

@@ -5,6 +5,22 @@ namespace VRTK
     using UnityEngine.UI;
 
     /// <summary>
+    /// Event Payload
+    /// </summary>
+    /// <param name="newText">The optional new text that is given to the tooltip.</param>
+    public struct ObjectTooltipEventArgs
+    {
+        public string newText;
+    }
+
+    /// <summary>
+    /// Event Payload
+    /// </summary>
+    /// <param name="sender">this object</param>
+    /// <param name="e"><see cref="ObjectTooltipEventArgs"/></param>
+    public delegate void ObjectTooltipEventHandler(object sender, ObjectTooltipEventArgs e);
+
+    /// <summary>
     /// This adds a UI element into the World Space that can be used to provide additional information about an object by providing a piece of text with a line drawn to a destination point.
     /// </summary>
     /// <remarks>
@@ -33,13 +49,41 @@ namespace VRTK
         public Color containerColor = Color.black;
         [Tooltip("The colour to use for the line drawn between the tooltip and the destination transform.")]
         public Color lineColor = Color.black;
+        [Tooltip("If this is checked then the tooltip will be rotated so it always face the headset.")]
+        public bool alwaysFaceHeadset = false;
 
-        private LineRenderer line;
+        /// <summary>
+        /// Emitted when the object tooltip is reset.
+        /// </summary>
+        public event ObjectTooltipEventHandler ObjectTooltipReset;
+        /// <summary>
+        /// Emitted when the object tooltip text is updated.
+        /// </summary>
+        public event ObjectTooltipEventHandler ObjectTooltipTextUpdated;
+
+        protected LineRenderer line;
+        protected Transform headset;
+
+        public virtual void OnObjectTooltipReset(ObjectTooltipEventArgs e)
+        {
+            if (ObjectTooltipReset != null)
+            {
+                ObjectTooltipReset(this, e);
+            }
+        }
+
+        public virtual void OnObjectTooltipTextUpdated(ObjectTooltipEventArgs e)
+        {
+            if (ObjectTooltipTextUpdated != null)
+            {
+                ObjectTooltipTextUpdated(this, e);
+            }
+        }
 
         /// <summary>
         /// The ResetTooltip method resets the tooltip back to its initial state.
         /// </summary>
-        public void ResetTooltip()
+        public virtual void ResetTooltip()
         {
             SetContainer();
             SetText("UITextFront");
@@ -49,48 +93,72 @@ namespace VRTK
             {
                 drawLineTo = transform.parent;
             }
+            OnObjectTooltipReset(SetEventPayload());
         }
 
         /// <summary>
         /// The UpdateText method allows the tooltip text to be updated at runtime.
         /// </summary>
         /// <param name="newText">A string containing the text to update the tooltip to display.</param>
-        public void UpdateText(string newText)
+        public virtual void UpdateText(string newText)
         {
             displayText = newText;
+            OnObjectTooltipTextUpdated(SetEventPayload(newText));
             ResetTooltip();
         }
 
-        protected virtual void Start()
+        protected virtual void Awake()
+        {
+            VRTK_SDKManager.instance.AddBehaviourToToggleOnLoadedSetupChange(this);
+        }
+
+        protected virtual void OnEnable()
         {
             ResetTooltip();
+            headset = VRTK_DeviceFinder.HeadsetTransform();
+        }
+
+        protected virtual void OnDestroy()
+        {
+            VRTK_SDKManager.instance.RemoveBehaviourToToggleOnLoadedSetupChange(this);
         }
 
         protected virtual void Update()
         {
             DrawLine();
+            if (alwaysFaceHeadset)
+            {
+                transform.LookAt(headset);
+            }
         }
 
-        private void SetContainer()
+        protected virtual ObjectTooltipEventArgs SetEventPayload(string newText = "")
         {
-            transform.FindChild("TooltipCanvas").GetComponent<RectTransform>().sizeDelta = containerSize;
-            var tmpContainer = transform.FindChild("TooltipCanvas/UIContainer");
+            ObjectTooltipEventArgs e;
+            e.newText = newText;
+            return e;
+        }
+
+        protected virtual void SetContainer()
+        {
+            transform.Find("TooltipCanvas").GetComponent<RectTransform>().sizeDelta = containerSize;
+            Transform tmpContainer = transform.Find("TooltipCanvas/UIContainer");
             tmpContainer.GetComponent<RectTransform>().sizeDelta = containerSize;
             tmpContainer.GetComponent<Image>().color = containerColor;
         }
 
-        private void SetText(string name)
+        protected virtual void SetText(string name)
         {
-            var tmpText = transform.FindChild("TooltipCanvas/" + name).GetComponent<Text>();
+            Text tmpText = transform.Find("TooltipCanvas/" + name).GetComponent<Text>();
             tmpText.material = Resources.Load("UIText") as Material;
             tmpText.text = displayText.Replace("\\n", "\n");
             tmpText.color = fontColor;
             tmpText.fontSize = fontSize;
         }
 
-        private void SetLine()
+        protected virtual void SetLine()
         {
-            line = transform.FindChild("Line").GetComponent<LineRenderer>();
+            line = transform.Find("Line").GetComponent<LineRenderer>();
             line.material = Resources.Load("TooltipLine") as Material;
             line.material.color = lineColor;
 #if UNITY_5_5_OR_NEWER
@@ -108,9 +176,9 @@ namespace VRTK
             }
         }
 
-        private void DrawLine()
+        protected virtual void DrawLine()
         {
-            if (drawLineTo)
+            if (drawLineTo != null)
             {
                 line.SetPosition(0, drawLineFrom.position);
                 line.SetPosition(1, drawLineTo.position);

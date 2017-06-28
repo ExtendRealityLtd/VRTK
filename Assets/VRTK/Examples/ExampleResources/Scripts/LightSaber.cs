@@ -14,7 +14,7 @@
         private Color targetColor;
         private Color[] bladePhaseColors;
 
-        public override void StartUsing(GameObject usingObject)
+        public override void StartUsing(VRTK_InteractUse usingObject)
         {
             base.StartUsing(usingObject);
             beamExtendSpeed = 5f;
@@ -23,7 +23,7 @@
             targetColor = bladePhaseColors[1];
         }
 
-        public override void StopUsing(GameObject usingObject)
+        public override void StopUsing(VRTK_InteractUse usingObject)
         {
             base.StopUsing(usingObject);
             beamExtendSpeed = -5f;
@@ -55,7 +55,7 @@
             if (beamActive)
             {
                 Color bladeColor = Color.Lerp(activeColor, targetColor, Mathf.PingPong(Time.time, 1));
-                blade.transform.FindChild("Beam").GetComponent<MeshRenderer>().material.color = bladeColor;
+                blade.transform.Find("Beam").GetComponent<MeshRenderer>().material.color = bladeColor;
 
                 if (bladeColor == targetColor)
                 {

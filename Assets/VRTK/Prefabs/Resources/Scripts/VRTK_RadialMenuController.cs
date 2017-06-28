@@ -102,7 +102,7 @@ namespace VRTK
         {
             if (events)
             {
-                VRTK_SharedMethods.TriggerHapticPulse(VRTK_DeviceFinder.GetControllerIndex(events.gameObject), strength);
+                VRTK_ControllerHaptics.TriggerHapticPulse(VRTK_ControllerReference.GetControllerReference(events.gameObject), strength);
             }
         }
 

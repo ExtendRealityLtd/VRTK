@@ -69,7 +69,7 @@ namespace VRTK
         /// <param name="register">Determines whether to register or unregister the listeners.</param>
         public virtual void InitDestinationSetListener(GameObject markerMaker, bool register)
         {
-            if (markerMaker)
+            if (markerMaker != null)
             {
                 VRTK_DestinationMarker[] worldMarkers = markerMaker.GetComponentsInChildren<VRTK_DestinationMarker>();
                 for (int i = 0; i < worldMarkers.Length; i++)
@@ -78,7 +78,10 @@ namespace VRTK
                     if (register)
                     {
                         worldMarker.DestinationMarkerSet += new DestinationMarkerEventHandler(DoTeleport);
-                        worldMarker.SetInvalidTarget(targetListPolicy);
+                        if (worldMarker.targetListPolicy == null)
+                        {
+                            worldMarker.targetListPolicy = targetListPolicy;
+                        }
                         worldMarker.SetNavMeshCheckDistance(navMeshLimitDistance);
                         worldMarker.SetHeadsetPositionCompensation(headsetPositionCompensation);
                     }
@@ -114,7 +117,7 @@ namespace VRTK
             }
 
             bool validNavMeshLocation = false;
-            if (target)
+            if (target != null)
             {
                 NavMeshHit hit;
                 validNavMeshLocation = NavMesh.SamplePosition(destinationPosition, out hit, navMeshLimitDistance, NavMesh.AllAreas);
@@ -124,7 +127,55 @@ namespace VRTK
                 validNavMeshLocation = true;
             }
 
-            return (validNavMeshLocation && target && !(VRTK_PolicyList.Check(target.gameObject, targetListPolicy)));
+            return (validNavMeshLocation && target != null && !(VRTK_PolicyList.Check(target.gameObject, targetListPolicy)));
+        }
+
+        /// <summary>
+        /// The Teleport/1 method calls the teleport to update position without needing to listen for a Destination Marker event.
+        /// </summary>
+        /// <param name="teleportArgs">The pseudo Destination Marker event for the teleport action.</param>
+        public virtual void Teleport(DestinationMarkerEventArgs teleportArgs)
+        {
+            DoTeleport(this, teleportArgs);
+        }
+
+        /// <summary>
+        /// The Teleport/4 method calls the teleport to update position without needing to listen for a Destination Marker event.
+        ///  It will build a destination marker out of the provided parameters.
+        /// </summary>
+        /// <param name="target">The Transform of the destination object.</param>
+        /// <param name="destinationPosition">The world position to teleport to.</param>
+        /// <param name="destinationRotation">The world rotation to teleport to.</param>
+        /// <param name="forceDestinationPosition">If true then the given destination position should not be altered by anything consuming the payload.</param>
+        public virtual void Teleport(Transform target, Vector3 destinationPosition, Quaternion? destinationRotation = null, bool forceDestinationPosition = false)
+        {
+            DestinationMarkerEventArgs teleportArgs = BuildTeleportArgs(target, destinationPosition, destinationRotation, forceDestinationPosition);
+            Teleport(teleportArgs);
+        }
+
+        /// <summary>
+        /// The ForceTeleport method forces the position to update to a given destination and ignores any target checking or floor adjustment.
+        /// </summary>
+        /// <param name="destinationPosition">The world position to teleport to.</param>
+        /// <param name="destinationRotation">The world rotation to teleport to.</param>
+        public virtual void ForceTeleport(Vector3 destinationPosition, Quaternion? destinationRotation = null)
+        {
+            DestinationMarkerEventArgs teleportArgs = BuildTeleportArgs(null, destinationPosition, destinationRotation);
+            StartTeleport(this, teleportArgs);
+            CalculateBlinkDelay(blinkTransitionSpeed, destinationPosition);
+            Blink(blinkTransitionSpeed);
+            if (ValidRigObjects())
+            {
+                playArea.position = destinationPosition;
+            }
+            Quaternion updatedRotation = SetNewRotation(destinationRotation);
+            ProcessOrientation(this, teleportArgs, destinationPosition, updatedRotation);
+            EndTeleport(this, teleportArgs);
+        }
+
+        protected virtual void Awake()
+        {
+            VRTK_SDKManager.instance.AddBehaviourToToggleOnLoadedSetupChange(this);
         }
 
         protected virtual void OnEnable()
@@ -149,6 +200,11 @@ namespace VRTK
             VRTK_ObjectCache.registeredTeleporters.Remove(this);
         }
 
+        protected virtual void OnDestroy()
+        {
+            VRTK_SDKManager.instance.RemoveBehaviourToToggleOnLoadedSetupChange(this);
+        }
+
         protected virtual void Blink(float transitionSpeed)
         {
             fadeInTime = transitionSpeed;
@@ -159,31 +215,84 @@ namespace VRTK
             Invoke("ReleaseBlink", blinkPause);
         }
 
+        protected virtual DestinationMarkerEventArgs BuildTeleportArgs(Transform target, Vector3 destinationPosition, Quaternion? destinationRotation = null, bool forceDestinationPosition = false)
+        {
+            DestinationMarkerEventArgs teleportArgs = new DestinationMarkerEventArgs();
+            teleportArgs.distance = (ValidRigObjects() ? Vector3.Distance(new Vector3(headset.position.x, playArea.position.y, headset.position.z), destinationPosition) : 0f);
+            teleportArgs.target = target;
+            teleportArgs.raycastHit = new RaycastHit();
+            teleportArgs.destinationPosition = destinationPosition;
+            teleportArgs.destinationRotation = destinationRotation;
+            teleportArgs.forceDestinationPosition = forceDestinationPosition;
+            teleportArgs.enableTeleport = true;
+            return teleportArgs;
+        }
+
+        protected virtual bool ValidRigObjects()
+        {
+            if (headset == null)
+            {
+                VRTK_Logger.Warn(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_SCENE, "VRTK_BasicTeleport", "rig headset", ". Are you trying to access the headset before the SDK Manager has initialised it?"));
+                return false;
+            }
+            if (playArea == null)
+            {
+                VRTK_Logger.Warn(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_SCENE, "VRTK_BasicTeleport", "rig boundaries", ". Are you trying to access the boundaries before the SDK Manager has initialised it?"));
+                return false;
+            }
+            return true;
+        }
+
         protected virtual void DoTeleport(object sender, DestinationMarkerEventArgs e)
         {
             if (enableTeleport && ValidLocation(e.target, e.destinationPosition) && e.enableTeleport)
             {
-                OnTeleporting(sender, e);
+                StartTeleport(sender, e);
                 Vector3 newPosition = GetNewPosition(e.destinationPosition, e.target, e.forceDestinationPosition);
                 CalculateBlinkDelay(blinkTransitionSpeed, newPosition);
                 Blink(blinkTransitionSpeed);
-                SetNewPosition(newPosition, e.target, e.forceDestinationPosition);
-                SetNewRotation(e.destinationRotation);
-                OnTeleported(sender, e);
+                Vector3 updatedPosition = SetNewPosition(newPosition, e.target, e.forceDestinationPosition);
+                Quaternion updatedRotation = SetNewRotation(e.destinationRotation);
+                ProcessOrientation(sender, e, updatedPosition, updatedRotation);
+                EndTeleport(sender, e);
             }
         }
 
-        protected virtual void SetNewPosition(Vector3 position, Transform target, bool forceDestinationPosition)
+        protected virtual void StartTeleport(object sender, DestinationMarkerEventArgs e)
         {
-            playArea.position = CheckTerrainCollision(position, target, forceDestinationPosition);
+            OnTeleporting(sender, e);
         }
 
-        protected virtual void SetNewRotation(Quaternion? rotation)
+        protected virtual void ProcessOrientation(object sender, DestinationMarkerEventArgs e, Vector3 updatedPosition, Quaternion updatedRotation)
         {
-            if (rotation != null)
+        }
+
+        protected virtual void EndTeleport(object sender, DestinationMarkerEventArgs e)
+        {
+            OnTeleported(sender, e);
+        }
+
+        protected virtual Vector3 SetNewPosition(Vector3 position, Transform target, bool forceDestinationPosition)
+        {
+            if (ValidRigObjects())
             {
-                playArea.rotation = (Quaternion)rotation;
+                playArea.position = CheckTerrainCollision(position, target, forceDestinationPosition);
+                return playArea.position;
             }
+            return Vector3.zero;
+        }
+
+        protected virtual Quaternion SetNewRotation(Quaternion? rotation)
+        {
+            if (ValidRigObjects())
+            {
+                if (rotation != null)
+                {
+                    playArea.rotation = (Quaternion)rotation;
+                }
+                return playArea.rotation;
+            }
+            return Quaternion.identity;
         }
 
         protected virtual Vector3 GetNewPosition(Vector3 tipPosition, Transform target, bool returnOriginalPosition)
@@ -193,9 +302,16 @@ namespace VRTK
                 return tipPosition;
             }
 
-            float newX = (headsetPositionCompensation ? (tipPosition.x - (headset.position.x - playArea.position.x)) : tipPosition.x);
-            float newY = playArea.position.y;
-            float newZ = (headsetPositionCompensation ? (tipPosition.z - (headset.position.z - playArea.position.z)) : tipPosition.z);
+            float newX = 0f;
+            float newY = 0f;
+            float newZ = 0f;
+
+            if (ValidRigObjects())
+            {
+                newX = (headsetPositionCompensation ? (tipPosition.x - (headset.position.x - playArea.position.x)) : tipPosition.x);
+                newY = playArea.position.y;
+                newZ = (headsetPositionCompensation ? (tipPosition.z - (headset.position.z - playArea.position.z)) : tipPosition.z);
+            }
 
             return new Vector3(newX, newY, newZ);
         }
@@ -205,7 +321,7 @@ namespace VRTK
             Terrain targetTerrain = target.GetComponent<Terrain>();
             if (adjustYForTerrain && targetTerrain != null)
             {
-                Vector3 checkPosition = (useHeadsetForPosition ? new Vector3(headset.position.x, position.y, headset.position.z) : position);
+                Vector3 checkPosition = (useHeadsetForPosition && ValidRigObjects() ? new Vector3(headset.position.x, position.y, headset.position.z) : position);
                 float terrainHeight = targetTerrain.SampleHeight(checkPosition);
                 position.y = (terrainHeight > position.y ? position.y : targetTerrain.GetPosition().y + terrainHeight);
             }
@@ -234,7 +350,7 @@ namespace VRTK
             if (distanceBlinkDelay > 0f)
             {
                 float minBlink = 0.5f;
-                float distance = Vector3.Distance(playArea.position, newPosition);
+                float distance = (ValidRigObjects() ? Vector3.Distance(playArea.position, newPosition) : 0f);
                 blinkPause = Mathf.Clamp((distance * blinkTransitionSpeed) / (maxBlinkDistance - distanceBlinkDelay), minBlink, maxBlinkTransitionSpeed);
                 blinkPause = (blinkSpeed <= 0.25 ? minBlink : blinkPause);
             }

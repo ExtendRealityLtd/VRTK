@@ -11,7 +11,7 @@ namespace VRTK
     /// <summary>
     /// The LeapMotion Controller SDK script provides a bridge to SDK methods that deal with the input devices.
     /// </summary>
-    [SDK_Description("LeapMotion", SDK_LeapMotionDefines.ScriptingDefineSymbol)]
+    [SDK_Description("LeapMotion", SDK_LeapMotionDefines.ScriptingDefineSymbol, null, "Standalone")]
     public class SDK_LeapMotionController
 #if VRTK_DEFINE_SDK_LEAPMOTION
         : SDK_BaseController

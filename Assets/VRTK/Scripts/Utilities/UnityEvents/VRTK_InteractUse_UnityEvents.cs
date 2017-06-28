@@ -10,14 +10,18 @@
         [Serializable]
         public sealed class ObjectInteractEvent : UnityEvent<object, ObjectInteractEventArgs> { }
 
+        public ObjectInteractEvent OnControllerStartUseInteractableObject = new ObjectInteractEvent();
         public ObjectInteractEvent OnControllerUseInteractableObject = new ObjectInteractEvent();
+        public ObjectInteractEvent OnControllerStartUnuseInteractableObject = new ObjectInteractEvent();
         public ObjectInteractEvent OnControllerUnuseInteractableObject = new ObjectInteractEvent();
         public VRTK_ControllerEvents_UnityEvents.ControllerInteractionEvent OnUseButtonPressed = new VRTK_ControllerEvents_UnityEvents.ControllerInteractionEvent();
         public VRTK_ControllerEvents_UnityEvents.ControllerInteractionEvent OnUseButtonReleased = new VRTK_ControllerEvents_UnityEvents.ControllerInteractionEvent();
 
         protected override void AddListeners(VRTK_InteractUse component)
         {
+            component.ControllerStartUseInteractableObject += ControllerStartUseInteractableObject;
             component.ControllerUseInteractableObject += ControllerUseInteractableObject;
+            component.ControllerStartUnuseInteractableObject += ControllerStartUnuseInteractableObject;
             component.ControllerUnuseInteractableObject += ControllerUnuseInteractableObject;
             component.UseButtonPressed += UseButtonPressed;
             component.UseButtonReleased += UseButtonReleased;
@@ -25,15 +29,27 @@
 
         protected override void RemoveListeners(VRTK_InteractUse component)
         {
+            component.ControllerStartUseInteractableObject -= ControllerStartUseInteractableObject;
             component.ControllerUseInteractableObject -= ControllerUseInteractableObject;
+            component.ControllerStartUnuseInteractableObject -= ControllerStartUnuseInteractableObject;
             component.ControllerUnuseInteractableObject -= ControllerUnuseInteractableObject;
             component.UseButtonPressed -= UseButtonPressed;
             component.UseButtonReleased -= UseButtonReleased;
         }
 
+        private void ControllerStartUseInteractableObject(object o, ObjectInteractEventArgs e)
+        {
+            OnControllerStartUseInteractableObject.Invoke(o, e);
+        }
+
         private void ControllerUseInteractableObject(object o, ObjectInteractEventArgs e)
         {
             OnControllerUseInteractableObject.Invoke(o, e);
+        }
+
+        private void ControllerStartUnuseInteractableObject(object o, ObjectInteractEventArgs e)
+        {
+            OnControllerStartUnuseInteractableObject.Invoke(o, e);
         }
 
         private void ControllerUnuseInteractableObject(object o, ObjectInteractEventArgs e)

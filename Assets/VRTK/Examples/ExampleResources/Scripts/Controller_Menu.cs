@@ -32,19 +32,25 @@
             {
                 InitMenu();
             }
-            clonedMenuObject.SetActive(true);
-            menuActive = true;
+            if (clonedMenuObject != null)
+            {
+                clonedMenuObject.SetActive(true);
+                menuActive = true;
+            }
         }
 
         private void DoMenuOff(object sender, ControllerInteractionEventArgs e)
         {
-            clonedMenuObject.SetActive(false);
-            menuActive = false;
+            if (clonedMenuObject != null)
+            {
+                clonedMenuObject.SetActive(false);
+                menuActive = false;
+            }
         }
 
         private void Update()
         {
-            if (menuActive)
+            if (clonedMenuObject != null && menuActive)
             {
                 clonedMenuObject.transform.rotation = transform.rotation;
                 clonedMenuObject.transform.position = transform.position;

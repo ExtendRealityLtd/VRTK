@@ -9,7 +9,7 @@
 
         private void Start()
         {
-            arrow = transform.FindChild("Arrow").gameObject;
+            arrow = transform.Find("Arrow").gameObject;
             obj = GetComponent<VRTK_InteractableObject>();
         }
 

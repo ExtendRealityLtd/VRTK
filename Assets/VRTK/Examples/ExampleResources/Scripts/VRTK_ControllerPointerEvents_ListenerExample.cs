@@ -33,22 +33,22 @@
 
         private void DoPointerIn(object sender, DestinationMarkerEventArgs e)
         {
-            DebugLogger(e.controllerIndex, "POINTER IN", e.target, e.raycastHit, e.distance, e.destinationPosition);
+            DebugLogger(VRTK_ControllerReference.GetRealIndex(e.controllerReference), "POINTER IN", e.target, e.raycastHit, e.distance, e.destinationPosition);
         }
 
         private void DoPointerOut(object sender, DestinationMarkerEventArgs e)
         {
-            DebugLogger(e.controllerIndex, "POINTER OUT", e.target, e.raycastHit, e.distance, e.destinationPosition);
+            DebugLogger(VRTK_ControllerReference.GetRealIndex(e.controllerReference), "POINTER OUT", e.target, e.raycastHit, e.distance, e.destinationPosition);
         }
 
         private void DoPointerHover(object sender, DestinationMarkerEventArgs e)
         {
-            DebugLogger(e.controllerIndex, "POINTER HOVER", e.target, e.raycastHit, e.distance, e.destinationPosition);
+            DebugLogger(VRTK_ControllerReference.GetRealIndex(e.controllerReference), "POINTER HOVER", e.target, e.raycastHit, e.distance, e.destinationPosition);
         }
 
         private void DoPointerDestinationSet(object sender, DestinationMarkerEventArgs e)
         {
-            DebugLogger(e.controllerIndex, "POINTER DESTINATION", e.target, e.raycastHit, e.distance, e.destinationPosition);
+            DebugLogger(VRTK_ControllerReference.GetRealIndex(e.controllerReference), "POINTER DESTINATION", e.target, e.raycastHit, e.distance, e.destinationPosition);
         }
     }
 }

@@ -8,12 +8,11 @@ namespace VRTK
     /// Move In Place allows the user to move the play area by calculating the y-movement of the user's headset and/or controllers. The user is propelled forward the more they are moving. This simulates moving in game by moving in real life.
     /// </summary>
     /// <remarks>
-    ///   > This locomotion method is based on Immersive Movement, originally created by Highsight.
+    ///   > This locomotion method is based on Immersive Movement, originally created by Highsight. Thanks to KJack (author of Arm Swinger) for additional work.
     /// </remarks>
     /// <example>
     /// `VRTK/Examples/042_CameraRig_MoveInPlace` demonstrates how the user can move and traverse colliders by either swinging the controllers in a walking fashion or by running on the spot utilisng the head bob for movement.
     /// </example>
-    [RequireComponent(typeof(VRTK_BodyPhysics))]
     [AddComponentMenu("VRTK/Scripts/Locomotion/VRTK_MoveInPlace")]
     public class VRTK_MoveInPlace : MonoBehaviour
     {
@@ -83,17 +82,20 @@ namespace VRTK
         [Tooltip("The maximum amount of movement required to register in the virtual world.  Decreasing this will increase acceleration, and vice versa.")]
         public float sensitivity = 0.02f;
 
+        [Header("Custom Settings")]
+        [Tooltip("An optional Body Physics script to check for potential collisions in the moving direction. If any potential collision is found then the move will not take place. This can help reduce collision tunnelling.")]
+        public VRTK_BodyPhysics bodyPhysics;
+
         protected Transform playArea;
         protected GameObject controllerLeftHand;
         protected GameObject controllerRightHand;
-        protected GameObject engagedController;
+        protected VRTK_ControllerReference engagedController;
         protected Transform headset;
         protected bool leftSubscribed;
         protected bool rightSubscribed;
         protected bool previousLeftControllerState;
         protected bool previousRightControllerState;
         protected VRTK_ControllerEvents.ButtonAlias previousEngageButton;
-        protected VRTK_BodyPhysics bodyPhysics;
         protected bool currentlyFalling;
 
         // The maximum number of updates we should hold to process movements. The higher the number, the slower the acceleration/deceleration & vice versa.
@@ -122,13 +124,13 @@ namespace VRTK
             controlOptions = givenControlOptions;
             trackedObjects.Clear();
 
-            if (controllerLeftHand && controllerRightHand && (controlOptions.Equals(ControlOptions.HeadsetAndControllers) || controlOptions.Equals(ControlOptions.ControllersOnly)))
+            if (controllerLeftHand != null && controllerRightHand != null && (controlOptions.Equals(ControlOptions.HeadsetAndControllers) || controlOptions.Equals(ControlOptions.ControllersOnly)))
             {
                 trackedObjects.Add(VRTK_DeviceFinder.GetActualController(controllerLeftHand).transform);
                 trackedObjects.Add(VRTK_DeviceFinder.GetActualController(controllerRightHand).transform);
             }
 
-            if (headset && (controlOptions.Equals(ControlOptions.HeadsetAndControllers) || controlOptions.Equals(ControlOptions.HeadsetOnly)))
+            if (headset != null && (controlOptions.Equals(ControlOptions.HeadsetAndControllers) || controlOptions.Equals(ControlOptions.HeadsetOnly)))
             {
                 trackedObjects.Add(headset.transform);
             }
@@ -152,6 +154,11 @@ namespace VRTK
             return currentSpeed;
         }
 
+        protected virtual void Awake()
+        {
+            VRTK_SDKManager.instance.AddBehaviourToToggleOnLoadedSetupChange(this);
+        }
+
         protected virtual void OnEnable()
         {
             trackedObjects = new List<Transform>();
@@ -165,7 +172,7 @@ namespace VRTK
             active = false;
             previousEngageButton = engageButton;
 
-            bodyPhysics = GetComponent<VRTK_BodyPhysics>();
+            bodyPhysics = (bodyPhysics != null ? bodyPhysics : GetComponentInChildren<VRTK_BodyPhysics>());
             controllerLeftHand = VRTK_DeviceFinder.GetControllerLeftHand();
             controllerRightHand = VRTK_DeviceFinder.GetControllerRightHand();
 
@@ -179,12 +186,13 @@ namespace VRTK
             playArea = VRTK_DeviceFinder.PlayAreaTransform();
 
             // Initialize the lists.
-            foreach (Transform trackedObj in trackedObjects)
+            for (int i = 0; i < trackedObjects.Count; i++)
             {
+                Transform trackedObj = trackedObjects[i];
                 movementList.Add(trackedObj, new List<float>());
                 previousYPositions.Add(trackedObj, trackedObj.transform.localPosition.y);
             }
-            if (!playArea)
+            if (playArea == null)
             {
                 VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.SDK_OBJECT_NOT_FOUND, "PlayArea", "Boundaries SDK"));
             }
@@ -192,7 +200,6 @@ namespace VRTK
 
         protected virtual void OnDisable()
         {
-            bodyPhysics = null;
             SetControllerListeners(controllerLeftHand, leftController, ref leftSubscribed, true);
             SetControllerListeners(controllerRightHand, rightController, ref rightSubscribed, true);
 
@@ -200,6 +207,11 @@ namespace VRTK
             controllerRightHand = null;
             headset = null;
             playArea = null;
+        }
+
+        protected virtual void OnDestroy()
+        {
+            VRTK_SDKManager.instance.RemoveBehaviourToToggleOnLoadedSetupChange(this);
         }
 
         protected virtual void Update()
@@ -255,8 +267,9 @@ namespace VRTK
         {
             float listAverage = 0;
 
-            foreach (Transform trackedObj in trackedObjects)
+            for (int i = 0; i < trackedObjects.Count; i++)
             {
+                Transform trackedObj = trackedObjects[i];
                 // Get the amount of Y movement that's occured since the last update.
                 float deltaYPostion = Mathf.Abs(previousYPositions[trackedObj] - trackedObj.transform.localPosition.y);
 
@@ -281,8 +294,9 @@ namespace VRTK
 
                 // Average out the current tracker's list.
                 float sum = 0;
-                foreach (float diffrences in trackedObjList)
+                for (int j = 0; j < trackedObjList.Count; j++)
                 {
+                    float diffrences = trackedObjList[j];
                     sum += diffrences;
                 }
                 float avg = sum / averagePeriod;
@@ -350,7 +364,7 @@ namespace VRTK
             // if we're doing engaged controller only rotation movement
             else if (directionMethod.Equals(DirectionalMethod.EngageControllerRotationOnly))
             {
-                Vector3 calculatedControllerDirection = (engagedController != null ? engagedController.transform.rotation : Quaternion.identity) * Vector3.forward;
+                Vector3 calculatedControllerDirection = (engagedController != null ? engagedController.scriptAlias.transform.rotation : Quaternion.identity) * Vector3.forward;
                 returnDirection = CalculateControllerRotationDirection(calculatedControllerDirection);
             }
             // Otherwise if we're just doing Gaze movement, always set the direction to where we're looking.
@@ -369,8 +383,9 @@ namespace VRTK
 
         protected virtual void SetDeltaTransformData()
         {
-            foreach (Transform trackedObj in trackedObjects)
+            for (int i = 0; i < trackedObjects.Count; i++)
             {
+                Transform trackedObj = trackedObjects[i];
                 // Get delta postions and rotations
                 previousYPositions[trackedObj] = trackedObj.transform.localPosition.y;
             }
@@ -379,20 +394,33 @@ namespace VRTK
         protected virtual void MovePlayArea(Vector3 moveDirection, float moveSpeed)
         {
             Vector3 movement = (moveDirection * moveSpeed) * Time.fixedDeltaTime;
-            if (playArea)
+            Vector3 finalPosition = new Vector3(movement.x + playArea.position.x, playArea.position.y, movement.z + playArea.position.z);
+            if (playArea != null && CanMove(bodyPhysics, playArea.position, finalPosition))
             {
-                playArea.position = new Vector3(movement.x + playArea.position.x, playArea.position.y, movement.z + playArea.position.z);
+                playArea.position = finalPosition;
             }
+        }
+
+        protected virtual bool CanMove(VRTK_BodyPhysics givenBodyPhysics, Vector3 currentPosition, Vector3 proposedPosition)
+        {
+            if (givenBodyPhysics == null)
+            {
+                return true;
+            }
+
+            Vector3 proposedDirection = (proposedPosition - currentPosition).normalized;
+            float distance = Vector3.Distance(currentPosition, proposedPosition);
+            return !givenBodyPhysics.SweepCollision(proposedDirection, distance);
         }
 
         protected virtual void HandleFalling()
         {
-            if (bodyPhysics && bodyPhysics.IsFalling())
+            if (bodyPhysics != null && bodyPhysics.IsFalling())
             {
                 currentlyFalling = true;
             }
 
-            if (bodyPhysics && !bodyPhysics.IsFalling() && currentlyFalling)
+            if (bodyPhysics != null && !bodyPhysics.IsFalling() && currentlyFalling)
             {
                 currentlyFalling = false;
                 currentSpeed = 0f;
@@ -401,16 +429,17 @@ namespace VRTK
 
         protected virtual void EngageButtonPressed(object sender, ControllerInteractionEventArgs e)
         {
-            engagedController = VRTK_DeviceFinder.GetControllerByIndex(e.controllerIndex, false);
+            engagedController = e.controllerReference;
             active = true;
         }
 
         protected virtual void EngageButtonReleased(object sender, ControllerInteractionEventArgs e)
         {
             // If the button is released, clear all the lists.
-            foreach (Transform obj in trackedObjects)
+            for (int i = 0; i < trackedObjects.Count; i++)
             {
-                movementList[obj].Clear();
+                Transform trackedObj = trackedObjects[i];
+                movementList[trackedObj].Clear();
             }
             initalGaze = Vector3.zero;
 
@@ -429,7 +458,7 @@ namespace VRTK
                 newRotation = AverageRotation(controllerLeftHand.transform.rotation, controllerRightHand.transform.rotation);
             }
             // Left controller only
-            else if (controllerRightHand != null && controllerRightHand == null)
+            else if (controllerLeftHand != null && controllerRightHand == null)
             {
                 newRotation = controllerLeftHand.transform.rotation;
             }
@@ -455,7 +484,7 @@ namespace VRTK
 
         protected virtual void SetControllerListeners(GameObject controller, bool controllerState, ref bool subscribedState, bool forceDisabled = false)
         {
-            if (controller)
+            if (controller != null)
             {
                 bool toggleState = (forceDisabled ? false : controllerState);
                 ToggleControllerListeners(controller, toggleState, ref subscribedState);
@@ -464,8 +493,8 @@ namespace VRTK
 
         protected virtual void ToggleControllerListeners(GameObject controller, bool toggle, ref bool subscribed)
         {
-            var controllerEvent = controller.GetComponent<VRTK_ControllerEvents>();
-            if (controllerEvent)
+            VRTK_ControllerEvents controllerEvent = controller.GetComponent<VRTK_ControllerEvents>();
+            if (controllerEvent != null)
             {
                 //If engage button has changed, then unsubscribe the previous engage button from the events
                 if (engageButton != previousEngageButton && subscribed)

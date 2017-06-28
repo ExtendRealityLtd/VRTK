@@ -13,10 +13,10 @@
 | Supported SDK | Download Link |
 |---------------|---------------|
 | VR Simulator | Included |
-| SteamVR Unity Asset | [SteamVR Plugin] |
-| Oculus Utilities Unity Package | [Oculus Utilities] |
-| *Ximmerse Unity SDK Package | [Ximmerse Unity SDK] |
-| *Google VR SDK for Unity | [Google VR SDK for Unity]
+| SteamVR | [SteamVR Plugin] |
+| Oculus | [Oculus Utilities] |
+| *Ximmerse | [Ximmerse Unity SDK] |
+| *Daydream | [Google VR SDK for Unity]
 
 _*experimental_
 
@@ -42,13 +42,15 @@ if your query has already been answered.
 
 ## Getting Started
 
-> *VRTK requires a supported VR SDK to be imported into your Unity3d Project.*
+> *VRTK offers a VR Simulator that works without any third party SDK, but VR device support requires a supported VR SDK to be imported into the Unity project.*
 
- * Clone this repository `git clone https://github.com/thestonefox/VRTK.git`.
- * Open `VRTK` within Unity3d.
- * Add the `VRTK_SDKManager` script to a GameObject in the scene.
+* Download or clone this repository.
+* Open the folder in Unity to load the project.
+* Have a look at the included example scenes.
 
-For further information about setting up a specific SDK, check out the
+The example scenes support all the VRTK supported VR SDKs. To make use of VR devices (besides the included VR Simulator) import the needed third party VR SDK into the project.
+
+For further information about setting up a specific SDK and using VRTK in your own project, check out the
 [GETTING_STARTED.md] document.
 
 
@@ -74,18 +76,11 @@ understanding the different aspects of VRTK.
 A list of the examples can be viewed in [EXAMPLES.md] which includes
 an up to date list of examples showcasing the features of VRTK.
 
-The examples have all been built to work with the [SteamVR Plugin] by
-default, but they can be converted over to using the [Oculus Utilities] or [Ximmerse Unity SDK]
-by following the instructions for using the [Oculus Utilities] or [Ximmerse Unity SDK]
-package above.
-
-> *If the examples are not working on first load, click the `[VRTK]`
-> GameObject in the scene hierarchy to ensure the SDK Manager editor
-> script successfully sets up the project and scene.*
+The example scenes support all the VRTK supported VR SDKs. To make use of VR devices (besides the included VR Simulator) import the needed third party VR SDK into the project.
 
 ## Made With VRTK
 
-[![image](https://cloud.githubusercontent.com/assets/1029673/21553226/210e291a-cdff-11e6-8639-91a3dddb1555.png)](http://store.steampowered.com/app/489380) [![image](https://cloud.githubusercontent.com/assets/1029673/21553234/2d105e4a-cdff-11e6-95a2-7dfdf7519e17.png)](http://store.steampowered.com/app/488760) [![image](https://cloud.githubusercontent.com/assets/1029673/21553257/5c17bf30-cdff-11e6-98ab-a017bc5cd00d.png)](http://store.steampowered.com/app/494830) [![image](https://cloud.githubusercontent.com/assets/1029673/21553262/6d82afd2-cdff-11e6-8400-882989a6252c.png)](http://store.steampowered.com/app/391640) [![image](https://cloud.githubusercontent.com/assets/1029673/21553270/7b8808f2-cdff-11e6-9adb-1e20fe557ae0.png)](http://store.steampowered.com/app/525680) [![image](https://cloud.githubusercontent.com/assets/1029673/21553293/9eef3e32-cdff-11e6-8dc7-f4a3866ac386.png)](http://store.steampowered.com/app/550360) [![image](https://cloud.githubusercontent.com/assets/1029673/21553635/3acbed36-ce01-11e6-80cd-4fe8d28d6b38.png)](http://store.steampowered.com/app/475520) [![image](https://cloud.githubusercontent.com/assets/1029673/21553649/53ded8d8-ce01-11e6-8314-d33a873db745.png)](http://store.steampowered.com/app/510410) [![image](https://cloud.githubusercontent.com/assets/1029673/21553655/63e21e0c-ce01-11e6-90b0-477b14af993f.png)](http://store.steampowered.com/app/499760) [![image](https://cloud.githubusercontent.com/assets/1029673/21553665/713938ce-ce01-11e6-84f3-40db254292f1.png)](http://store.steampowered.com/app/548560) [![image](https://cloud.githubusercontent.com/assets/1029673/21553680/908ae95c-ce01-11e6-989f-68c38160d528.png)](http://store.steampowered.com/app/511370) [![image](https://cloud.githubusercontent.com/assets/1029673/21553683/a0afb84e-ce01-11e6-9450-aaca567f7fc8.png)](http://store.steampowered.com/app/472720)
+[![image](https://cloud.githubusercontent.com/assets/1029673/21553226/210e291a-cdff-11e6-8639-91a3dddb1555.png)](http://store.steampowered.com/app/489380) [![image](https://cloud.githubusercontent.com/assets/1029673/21553234/2d105e4a-cdff-11e6-95a2-7dfdf7519e17.png)](http://store.steampowered.com/app/488760) [![image](https://cloud.githubusercontent.com/assets/1029673/21553257/5c17bf30-cdff-11e6-98ab-a017bc5cd00d.png)](http://store.steampowered.com/app/494830) [![image](https://cloud.githubusercontent.com/assets/1029673/21553262/6d82afd2-cdff-11e6-8400-882989a6252c.png)](http://store.steampowered.com/app/391640) [![image](https://cloud.githubusercontent.com/assets/1029673/21553270/7b8808f2-cdff-11e6-9adb-1e20fe557ae0.png)](http://store.steampowered.com/app/525680) [![image](https://cloud.githubusercontent.com/assets/1029673/21553293/9eef3e32-cdff-11e6-8dc7-f4a3866ac386.png)](http://store.steampowered.com/app/550360) [![image](https://user-images.githubusercontent.com/1029673/27344044-dc29bb78-55dc-11e7-80b6-a1524cb3ca14.png)](http://store.steampowered.com/app/584850) [![image](https://cloud.githubusercontent.com/assets/1029673/21553649/53ded8d8-ce01-11e6-8314-d33a873db745.png)](http://store.steampowered.com/app/510410) [![image](https://cloud.githubusercontent.com/assets/1029673/21553655/63e21e0c-ce01-11e6-90b0-477b14af993f.png)](http://store.steampowered.com/app/499760) [![image](https://cloud.githubusercontent.com/assets/1029673/21553665/713938ce-ce01-11e6-84f3-40db254292f1.png)](http://store.steampowered.com/app/548560) [![image](https://cloud.githubusercontent.com/assets/1029673/21553680/908ae95c-ce01-11e6-989f-68c38160d528.png)](http://store.steampowered.com/app/511370) [![image](https://cloud.githubusercontent.com/assets/1029673/21553683/a0afb84e-ce01-11e6-9450-aaca567f7fc8.png)](http://store.steampowered.com/app/472720)
 
 Many games and experiences have already been made with VRTK.
 
@@ -114,7 +109,7 @@ Code released under the [MIT License].
 
 [SteamVR Plugin]: https://www.assetstore.unity3d.com/en/#!/content/32647
 [SteamVR Plugin for Unity3d Github Repo]: https://github.com/ValveSoftware/openvr/tree/master/unity_package/Assets/SteamVR
-[Oculus Utilities]: https://developer3.oculus.com/downloads/game-engines/1.10.0/Oculus_Utilities_for_Unity_5/
+[Oculus Utilities]: https://developer.oculus.com/downloads/package/oculus-utilities-for-unity-5/
 [Ximmerse Unity SDK]: https://github.com/Ximmerse/SDK/tree/master/Unity
 [Google VR SDK for Unity]: https://developers.google.com/vr/unity/download
 [MIT License]: https://github.com/thestonefox/SteamVR_Unity_Toolkit/blob/master/LICENSE

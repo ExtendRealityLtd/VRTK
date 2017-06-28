@@ -1,4 +1,4 @@
-﻿// Controller Highlighter|Interactions|30021
+﻿// Controller Highlighter|Interactions|30020
 namespace VRTK
 {
     using UnityEngine;
@@ -62,6 +62,7 @@ namespace VRTK
         protected Dictionary<string, Transform> cachedElements;
         protected Dictionary<string, object> highlighterOptions;
         protected Coroutine initHighlightersRoutine;
+        protected GameObject originalControllerAlias;
 
         protected Color lastHighlightController;
         protected Color lastHighlightBody;
@@ -180,7 +181,7 @@ namespace VRTK
             Transform element = GetElementTransform(GetPathForControllerElement(elementType));
             if (element != null)
             {
-                VRTK_SharedMethods.HighlightObject(element.gameObject, color, fadeDuration);
+                VRTK_ObjectAppearance.HighlightObject(element.gameObject, color, fadeDuration);
                 SetColourParameter(elementType, color);
             }
         }
@@ -196,7 +197,7 @@ namespace VRTK
                 Transform element = GetElementTransform(GetPathForControllerElement(elementType));
                 if (element != null)
                 {
-                    VRTK_SharedMethods.UnhighlightObject(element.gameObject);
+                    VRTK_ObjectAppearance.UnhighlightObject(element.gameObject);
                     SetColourParameter(elementType, Color.clear);
                 }
             }
@@ -206,12 +207,19 @@ namespace VRTK
             }
         }
 
+        protected virtual void Awake()
+        {
+            originalControllerAlias = controllerAlias;
+            VRTK_SDKManager.instance.AddBehaviourToToggleOnLoadedSetupChange(this);
+        }
+
         protected virtual void OnEnable()
         {
+            controllerAlias = originalControllerAlias;
             if (controllerAlias == null)
             {
-                VRTK_ControllerTracker controllerTracker = GetComponentInParent<VRTK_ControllerTracker>();
-                controllerAlias = (controllerTracker != null ? controllerTracker.gameObject : null);
+                VRTK_TrackedController trackedController = GetComponentInParent<VRTK_TrackedController>();
+                controllerAlias = (trackedController != null ? trackedController.gameObject : null);
             }
 
             if (controllerAlias == null)
@@ -231,6 +239,11 @@ namespace VRTK
             {
                 StopCoroutine(initHighlightersRoutine);
             }
+        }
+
+        protected virtual void OnDestroy()
+        {
+            VRTK_SDKManager.instance.RemoveBehaviourToToggleOnLoadedSetupChange(this);
         }
 
         protected virtual void Update()
@@ -443,11 +456,11 @@ namespace VRTK
             {
                 if (state)
                 {
-                    VRTK_SharedMethods.HighlightObject(element.gameObject, (highlight != null ? highlight : Color.white), duration);
+                    VRTK_ObjectAppearance.HighlightObject(element.gameObject, (highlight != null ? highlight : Color.white), duration);
                 }
                 else
                 {
-                    VRTK_SharedMethods.UnhighlightObject(element.gameObject);
+                    VRTK_ObjectAppearance.UnhighlightObject(element.gameObject);
                 }
             }
         }

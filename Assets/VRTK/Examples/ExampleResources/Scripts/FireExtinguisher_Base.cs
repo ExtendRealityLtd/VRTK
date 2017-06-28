@@ -10,13 +10,13 @@
 
         private VRTK_ControllerEvents controllerEvents;
 
-        public override void StartUsing(GameObject usingObject)
+        public override void StartUsing(VRTK_InteractUse usingObject)
         {
             base.StartUsing(usingObject);
             controllerEvents = usingObject.GetComponent<VRTK_ControllerEvents>();
         }
 
-        public override void StopUsing(GameObject previousUsingObject)
+        public override void StopUsing(VRTK_InteractUse previousUsingObject)
         {
             base.StopUsing(previousUsingObject);
             controllerEvents = null;
@@ -29,7 +29,7 @@
             {
                 float power = controllerEvents.GetTriggerAxis();
                 Spray(power);
-                VRTK_SharedMethods.TriggerHapticPulse(VRTK_DeviceFinder.GetControllerIndex(controllerEvents.gameObject), power * 0.25f, 0.1f, 0.01f);
+                VRTK_ControllerHaptics.TriggerHapticPulse(VRTK_ControllerReference.GetControllerReference(controllerEvents.gameObject), power * 0.25f, 0.1f, 0.01f);
             }
             else
             {

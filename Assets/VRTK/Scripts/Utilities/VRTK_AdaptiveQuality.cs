@@ -290,6 +290,11 @@ namespace VRTK
 
         #region MonoBehaviour methods
 
+        private void Awake()
+        {
+            VRTK_SDKManager.instance.AddBehaviourToToggleOnLoadedSetupChange(this);
+        }
+
         private void OnEnable()
         {
             Camera.onPreCull += OnCameraPreCull;
@@ -311,6 +316,11 @@ namespace VRTK
         {
             Camera.onPreCull -= OnCameraPreCull;
             SetRenderScale(1.0f, 1.0f);
+        }
+
+        private void OnDestroy()
+        {
+            VRTK_SDKManager.instance.RemoveBehaviourToToggleOnLoadedSetupChange(this);
         }
 
         private void OnValidate()
@@ -688,10 +698,7 @@ namespace VRTK
                 mesh.UploadMeshData(true);
 
                 debugVisualizationQuad = new GameObject(VRTK_SharedMethods.GenerateVRTKObjectName(true, "AdaptiveQualityDebugVisualizationQuad"));
-                if (VRTK_SDKManager.instance)
-                {
-                    debugVisualizationQuad.transform.SetParent(VRTK_DeviceFinder.HeadsetTransform());
-                }
+                debugVisualizationQuad.transform.parent = VRTK_DeviceFinder.HeadsetTransform();
                 debugVisualizationQuad.transform.localPosition = Vector3.forward;
                 debugVisualizationQuad.transform.localRotation = Quaternion.identity;
                 debugVisualizationQuad.AddComponent<MeshFilter>().mesh = mesh;

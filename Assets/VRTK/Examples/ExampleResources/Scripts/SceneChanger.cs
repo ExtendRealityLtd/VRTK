@@ -6,7 +6,7 @@
     public class SceneChanger : MonoBehaviour
     {
         private bool canPress;
-        private uint controllerIndex;
+        private VRTK_ControllerReference controllerReference;
 
         private void Awake()
         {
@@ -15,27 +15,33 @@
             DynamicGI.UpdateEnvironment();
         }
 
-        private bool ForwardPressed()
+        private bool IsForwardPressed()
         {
-            if (controllerIndex >= uint.MaxValue)
+            if (!VRTK_ControllerReference.IsValid(controllerReference))
             {
                 return false;
             }
-            if (canPress && VRTK_SDK_Bridge.IsTriggerPressedOnIndex(controllerIndex) && VRTK_SDK_Bridge.IsGripPressedOnIndex(controllerIndex) && VRTK_SDK_Bridge.IsTouchpadPressedOnIndex(controllerIndex))
+            if (canPress &&
+                VRTK_SDK_Bridge.GetControllerButtonState(SDK_BaseController.ButtonTypes.Trigger, SDK_BaseController.ButtonPressTypes.Press, controllerReference) &&
+                VRTK_SDK_Bridge.GetControllerButtonState(SDK_BaseController.ButtonTypes.Grip, SDK_BaseController.ButtonPressTypes.Press, controllerReference) &&
+                VRTK_SDK_Bridge.GetControllerButtonState(SDK_BaseController.ButtonTypes.Touchpad, SDK_BaseController.ButtonPressTypes.Press, controllerReference))
             {
                 return true;
             }
             return false;
         }
 
-        private bool BackPressed()
+        private bool IsBackPressed()
         {
-            if (controllerIndex >= uint.MaxValue)
+            if (!VRTK_ControllerReference.IsValid(controllerReference))
             {
                 return false;
             }
 
-            if (canPress && VRTK_SDK_Bridge.IsTriggerPressedOnIndex(controllerIndex) && VRTK_SDK_Bridge.IsGripPressedOnIndex(controllerIndex) && VRTK_SDK_Bridge.IsButtonTwoPressedOnIndex(controllerIndex))
+            if (canPress &&
+                VRTK_SDK_Bridge.GetControllerButtonState(SDK_BaseController.ButtonTypes.Trigger, SDK_BaseController.ButtonPressTypes.Press, controllerReference) &&
+                VRTK_SDK_Bridge.GetControllerButtonState(SDK_BaseController.ButtonTypes.Grip, SDK_BaseController.ButtonPressTypes.Press, controllerReference) &&
+                VRTK_SDK_Bridge.GetControllerButtonState(SDK_BaseController.ButtonTypes.ButtonTwo, SDK_BaseController.ButtonPressTypes.Press, controllerReference))
             {
                 return true;
             }
@@ -49,27 +55,31 @@
 
         private void Update()
         {
-            var rightHand = VRTK_DeviceFinder.GetControllerRightHand(true);
-            controllerIndex = VRTK_DeviceFinder.GetControllerIndex(rightHand);
-            if (ForwardPressed() || Input.GetKeyUp(KeyCode.Space))
+            GameObject rightHand = VRTK_DeviceFinder.GetControllerRightHand(true);
+            controllerReference = VRTK_ControllerReference.GetControllerReference(rightHand);
+
+            int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+            int nextSceneIndex = currentSceneIndex;
+
+            if (IsForwardPressed() || Input.GetKeyUp(KeyCode.Space))
             {
-                var nextSceneIndex = SceneManager.GetActiveScene().buildIndex + 1;
+                nextSceneIndex++;
                 if (nextSceneIndex >= SceneManager.sceneCountInBuildSettings)
-                {
                     nextSceneIndex = 0;
-                }
-                SceneManager.LoadScene(nextSceneIndex);
+            }
+            else if (IsBackPressed() || Input.GetKeyUp(KeyCode.Backspace))
+            {
+                nextSceneIndex--;
+                if (nextSceneIndex < 0)
+                    nextSceneIndex = SceneManager.sceneCountInBuildSettings - 1;
             }
 
-            if (BackPressed() || Input.GetKeyUp(KeyCode.Backspace))
+            if (nextSceneIndex == currentSceneIndex)
             {
-                var previousSceneIndex = SceneManager.GetActiveScene().buildIndex - 1;
-                if (previousSceneIndex < 0)
-                {
-                    previousSceneIndex = SceneManager.sceneCountInBuildSettings - 1;
-                }
-                SceneManager.LoadScene(previousSceneIndex);
+                return;
             }
+
+            SceneManager.LoadScene(nextSceneIndex);
         }
     }
 }

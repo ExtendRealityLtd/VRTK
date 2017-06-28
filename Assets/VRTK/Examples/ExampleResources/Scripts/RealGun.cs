@@ -48,7 +48,7 @@
             ToggleCollision(safetySwitchRigidbody, safetySwitchCollider, state);
         }
 
-        public override void Grabbed(GameObject currentGrabbingObject)
+        public override void Grabbed(VRTK_InteractGrab currentGrabbingObject)
         {
             base.Grabbed(currentGrabbingObject);
 
@@ -58,14 +58,14 @@
             ToggleSafetySwitch(true);
 
             //Limit hands grabbing when picked up
-            if (VRTK_DeviceFinder.GetControllerHand(currentGrabbingObject) == SDK_BaseController.ControllerHand.Left)
+            if (VRTK_DeviceFinder.GetControllerHand(currentGrabbingObject.controllerEvents.gameObject) == SDK_BaseController.ControllerHand.Left)
             {
                 allowedTouchControllers = AllowedController.LeftOnly;
                 allowedUseControllers = AllowedController.LeftOnly;
                 slide.allowedGrabControllers = AllowedController.RightOnly;
                 safetySwitch.allowedGrabControllers = AllowedController.RightOnly;
             }
-            else if (VRTK_DeviceFinder.GetControllerHand(currentGrabbingObject) == SDK_BaseController.ControllerHand.Right)
+            else if (VRTK_DeviceFinder.GetControllerHand(currentGrabbingObject.controllerEvents.gameObject) == SDK_BaseController.ControllerHand.Right)
             {
                 allowedTouchControllers = AllowedController.RightOnly;
                 allowedUseControllers = AllowedController.RightOnly;
@@ -74,7 +74,7 @@
             }
         }
 
-        public override void Ungrabbed(GameObject previousGrabbingObject)
+        public override void Ungrabbed(VRTK_InteractGrab previousGrabbingObject)
         {
             base.Ungrabbed(previousGrabbingObject);
 
@@ -90,18 +90,18 @@
             controllerEvents = null;
         }
 
-        public override void StartUsing(GameObject currentUsingObject)
+        public override void StartUsing(VRTK_InteractUse currentUsingObject)
         {
             base.StartUsing(currentUsingObject);
             if (safetySwitch.safetyOff)
             {
                 slide.Fire();
                 FireBullet();
-                VRTK_SharedMethods.TriggerHapticPulse(VRTK_DeviceFinder.GetControllerIndex(controllerEvents.gameObject), 0.63f, 0.2f, 0.01f);
+                VRTK_ControllerHaptics.TriggerHapticPulse(VRTK_ControllerReference.GetControllerReference(controllerEvents.gameObject), 0.63f, 0.2f, 0.01f);
             }
             else
             {
-                VRTK_SharedMethods.TriggerHapticPulse(VRTK_DeviceFinder.GetControllerIndex(controllerEvents.gameObject), 0.08f, 0.1f, 0.01f);
+                VRTK_ControllerHaptics.TriggerHapticPulse(VRTK_ControllerReference.GetControllerReference(controllerEvents.gameObject), 0.08f, 0.1f, 0.01f);
             }
         }
 
@@ -111,13 +111,13 @@
             bullet = transform.Find("Bullet").gameObject;
             bullet.SetActive(false);
 
-            trigger = transform.FindChild("TriggerHolder").gameObject;
+            trigger = transform.Find("TriggerHolder").gameObject;
 
-            slide = transform.FindChild("Slide").GetComponent<RealGun_Slide>();
+            slide = transform.Find("Slide").GetComponent<RealGun_Slide>();
             slideRigidbody = slide.GetComponent<Rigidbody>();
             slideCollider = slide.GetComponent<Collider>();
 
-            safetySwitch = transform.FindChild("SafetySwitch").GetComponent<RealGun_SafetySwitch>();
+            safetySwitch = transform.Find("SafetySwitch").GetComponent<RealGun_SafetySwitch>();
             safetySwitchRigidbody = safetySwitch.GetComponent<Rigidbody>();
             safetySwitchCollider = safetySwitch.GetComponent<Collider>();
         }

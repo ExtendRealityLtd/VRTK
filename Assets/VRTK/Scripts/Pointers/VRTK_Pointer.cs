@@ -2,9 +2,6 @@
 namespace VRTK
 {
     using UnityEngine;
-#if UNITY_5_5_OR_NEWER
-    using UnityEngine.AI;
-#endif
 
     /// <summary>
     /// The VRTK Pointer class forms the basis of being able to emit a pointer from a game object (e.g. controller).
@@ -56,12 +53,12 @@ namespace VRTK
 
         [Header("Pointer Customisation Settings")]
 
-        [Tooltip("The controller that will be used to toggle the pointer. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.")]
+        [Tooltip("An optional controller that will be used to toggle the pointer. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.")]
         public VRTK_ControllerEvents controller;
+        [Tooltip("An optional InteractUse script that will be used when using interactable objects with pointer. If this is left blank then it will attempt to get the InteractUse script from the same GameObject and if it cannot find one then it will attempt to get it from the attached controller.")]
+        public VRTK_InteractUse interactUse;
         [Tooltip("A custom transform to use as the origin of the pointer. If no pointer origin transform is provided then the transform the script is attached to is used.")]
         public Transform customOrigin;
-        [Tooltip("A custom VRTK_PointerDirectionIndicator to use to determine the rotation given to the destination set event.")]
-        public VRTK_PointerDirectionIndicator directionIndicator;
 
         /// <summary>
         /// Emitted when the pointer activation button is pressed.
@@ -79,7 +76,14 @@ namespace VRTK
         /// Emitted when the pointer selection button is released.
         /// </summary>
         public event ControllerInteractionEventHandler SelectionButtonReleased;
-
+        /// <summary>
+        /// Emitted when the pointer is in a valid state.
+        /// </summary>
+        public event DestinationMarkerEventHandler PointerStateValid;
+        /// <summary>
+        /// Emitted when the pointer is in an invalid state.
+        /// </summary>
+        public event DestinationMarkerEventHandler PointerStateInvalid;
 
         protected VRTK_ControllerEvents.ButtonAlias subscribedActivationButton = VRTK_ControllerEvents.ButtonAlias.Undefined;
         protected VRTK_ControllerEvents.ButtonAlias subscribedSelectionButton = VRTK_ControllerEvents.ButtonAlias.Undefined;
@@ -90,13 +94,14 @@ namespace VRTK
         protected int currentActivationState;
         protected bool willDeactivate;
         protected bool wasActivated;
-        protected uint controllerIndex;
+        protected VRTK_ControllerReference controllerReference;
         protected VRTK_InteractableObject pointerInteractableObject = null;
         protected Collider currentCollider;
         protected bool canClickOnHover;
         protected bool activationButtonPressed;
         protected bool selectionButtonPressed;
         protected bool attemptControllerSetup;
+        protected Transform originalCustomOrigin;
 
         public virtual void OnActivationButtonPressed(ControllerInteractionEventArgs e)
         {
@@ -130,6 +135,22 @@ namespace VRTK
             }
         }
 
+        public virtual void OnPointerStateValid()
+        {
+            if (PointerStateValid != null)
+            {
+                PointerStateValid(this, GetStateEventPayload());
+            }
+        }
+
+        public virtual void OnPointerStateInvalid()
+        {
+            if (PointerStateInvalid != null)
+            {
+                PointerStateInvalid(this, GetStateEventPayload());
+            }
+        }
+
         /// <summary>
         /// The IsActivationButtonPressed method returns whether the configured activation button is being pressed.
         /// </summary>
@@ -154,10 +175,10 @@ namespace VRTK
         /// <param name="givenHit">The valid collision.</param>
         public virtual void PointerEnter(RaycastHit givenHit)
         {
-            if (enabled && givenHit.transform != null && controllerIndex < uint.MaxValue)
+            if (enabled && givenHit.transform != null && (!ControllerRequired() || VRTK_ControllerReference.IsValid(controllerReference)))
             {
                 SetHoverSelectionTimer(givenHit.collider);
-                DestinationMarkerEventArgs destinationEventArgs = SetDestinationMarkerEvent(givenHit.distance, givenHit.transform, givenHit, givenHit.point, controllerIndex, false, GetCursorRotation());
+                DestinationMarkerEventArgs destinationEventArgs = SetDestinationMarkerEvent(givenHit.distance, givenHit.transform, givenHit, givenHit.point, controllerReference, false, GetCursorRotation());
                 if (pointerRenderer != null && givenHit.collider != pointerRenderer.GetDestinationHit().collider)
                 {
                     OnDestinationMarkerEnter(destinationEventArgs);
@@ -177,9 +198,9 @@ namespace VRTK
         public virtual void PointerExit(RaycastHit givenHit)
         {
             ResetHoverSelectionTimer(givenHit.collider);
-            if (givenHit.transform != null && controllerIndex < uint.MaxValue)
+            if (givenHit.transform != null && (!ControllerRequired() || VRTK_ControllerReference.IsValid(controllerReference)))
             {
-                OnDestinationMarkerExit(SetDestinationMarkerEvent(givenHit.distance, givenHit.transform, givenHit, givenHit.point, controllerIndex, false, GetCursorRotation()));
+                OnDestinationMarkerExit(SetDestinationMarkerEvent(givenHit.distance, givenHit.transform, givenHit, givenHit.point, controllerReference, false, GetCursorRotation()));
                 StopUseAction();
             }
         }
@@ -235,7 +256,7 @@ namespace VRTK
         /// <param name="state">If true the pointer will be enabled if possible, if false the pointer will be disabled if possible.</param>
         public virtual void Toggle(bool state)
         {
-            if (!CanActivate() || NoPointerRenderer() || CanActivateOnToggleButton(state))
+            if (!CanActivate() || NoPointerRenderer() || CanActivateOnToggleButton(state) || (state && IsPointerActive()) || (!state && !IsPointerActive()))
             {
                 return;
             }
@@ -247,6 +268,21 @@ namespace VRTK
             {
                 StopUseAction();
             }
+        }
+
+        /// <summary>
+        /// The IsStateValid method is used to determine if the pointer is currently in a valid state (i.e. on it's valid colour).
+        /// </summary>
+        /// <returns>Returns true if the pointer is in the valid state (showing the valid colour), returns false if the pointer is in the invalid state (showing the invalid colour).</returns>
+        public virtual bool IsStateValid()
+        {
+            return (EnabledPointerRenderer() && pointerRenderer.IsValidCollision());
+        }
+
+        protected virtual void Awake()
+        {
+            originalCustomOrigin = customOrigin;
+            VRTK_SDKManager.instance.AddBehaviourToToggleOnLoadedSetupChange(this);
         }
 
         protected override void OnEnable()
@@ -268,17 +304,21 @@ namespace VRTK
             UnsubscribeSelectionButton();
         }
 
+        protected virtual void OnDestroy()
+        {
+            VRTK_SDKManager.instance.RemoveBehaviourToToggleOnLoadedSetupChange(this);
+        }
+
         protected virtual void Update()
         {
             AttemptControllerSetup();
             CheckButtonSubscriptions();
             HandleEnabledPointer();
-            UpdateDirectionIndicator();
         }
 
         protected virtual void SetDefaultValues()
         {
-            customOrigin = (customOrigin == null ? VRTK_SDK_Bridge.GenerateControllerPointerOrigin(gameObject) : customOrigin);
+            customOrigin = (originalCustomOrigin == null ? VRTK_SDK_Bridge.GenerateControllerPointerOrigin(gameObject) : originalCustomOrigin);
             SetupRenderer();
             activateDelayTimer = 0f;
             selectDelayTimer = 0f;
@@ -311,7 +351,7 @@ namespace VRTK
         {
             if (EnabledPointerRenderer())
             {
-                pointerRenderer.InitalizePointer(this, invalidListPolicy, navMeshCheckDistance, headsetPositionCompensation);
+                pointerRenderer.InitalizePointer(this, targetListPolicy, navMeshCheckDistance, headsetPositionCompensation);
                 pointerRenderer.UpdateRenderer();
                 if (!IsPointerActive())
                 {
@@ -322,20 +362,11 @@ namespace VRTK
             }
         }
 
-        protected virtual void UpdateDirectionIndicator()
-        {
-            if (directionIndicator != null && pointerRenderer != null)
-            {
-                RaycastHit destinationHit = pointerRenderer.GetDestinationHit();
-                directionIndicator.SetPosition((IsPointerActive() && destinationHit.collider != null), destinationHit.point);
-            }
-        }
-
         protected virtual Quaternion? GetCursorRotation()
         {
-            if (directionIndicator != null)
+            if (EnabledPointerRenderer() && pointerRenderer.directionIndicator != null)
             {
-                return directionIndicator.GetRotation();
+                return pointerRenderer.directionIndicator.GetRotation();
             }
             return null;
         }
@@ -378,12 +409,15 @@ namespace VRTK
                 return false;
             }
 
-            if (directionIndicator != null)
-            {
-                directionIndicator.Initialize(controller);
-            }
+            GetInteractUse();
 
             return true;
+        }
+
+        protected virtual void GetInteractUse()
+        {
+            interactUse = (interactUse != null ? interactUse : GetComponentInChildren<VRTK_InteractUse>());
+            interactUse = (interactUse == null && controller != null ? controller.GetComponentInChildren<VRTK_InteractUse>() : interactUse);
         }
 
         protected virtual void SetupController()
@@ -400,7 +434,7 @@ namespace VRTK
         {
             if (EnabledPointerRenderer())
             {
-                pointerRenderer.InitalizePointer(this, invalidListPolicy, navMeshCheckDistance, headsetPositionCompensation);
+                pointerRenderer.InitalizePointer(this, targetListPolicy, navMeshCheckDistance, headsetPositionCompensation);
             }
         }
 
@@ -482,7 +516,7 @@ namespace VRTK
             OnActivationButtonPressed(controller.SetControllerEvent(ref activationButtonPressed, true));
             if (EnabledPointerRenderer())
             {
-                controllerIndex = e.controllerIndex;
+                controllerReference = e.controllerReference;
                 Toggle(true);
             }
         }
@@ -491,7 +525,7 @@ namespace VRTK
         {
             if (EnabledPointerRenderer())
             {
-                controllerIndex = e.controllerIndex;
+                controllerReference = e.controllerReference;
                 if (IsPointerActive())
                 {
                     Toggle(false);
@@ -540,7 +574,7 @@ namespace VRTK
 
         protected virtual void SelectionButtonAction(object sender, ControllerInteractionEventArgs e)
         {
-            controllerIndex = e.controllerIndex;
+            controllerReference = e.controllerReference;
             ExecuteSelectionButtonAction();
         }
 
@@ -549,13 +583,13 @@ namespace VRTK
             if (EnabledPointerRenderer() && CanSelect() && (IsPointerActive() || wasActivated))
             {
                 wasActivated = false;
-                RaycastHit destinationHit = pointerRenderer.GetDestinationHit();
-                AttemptUseOnSet(destinationHit.transform);
-                if (destinationHit.transform && IsPointerActive() && pointerRenderer.ValidPlayArea() && !PointerActivatesUseAction(pointerInteractableObject) && pointerRenderer.IsValidCollision())
+                RaycastHit pointerRendererDestinationHit = pointerRenderer.GetDestinationHit();
+                AttemptUseOnSet(pointerRendererDestinationHit.transform);
+                if (pointerRendererDestinationHit.transform && IsPointerActive() && pointerRenderer.ValidPlayArea() && !PointerActivatesUseAction(pointerInteractableObject) && pointerRenderer.IsValidCollision())
                 {
-                    ResetHoverSelectionTimer(destinationHit.collider);
+                    ResetHoverSelectionTimer(pointerRendererDestinationHit.collider);
                     ResetSelectionTimer();
-                    OnDestinationMarkerSet(SetDestinationMarkerEvent(destinationHit.distance, destinationHit.transform, destinationHit, destinationHit.point, controllerIndex, false, GetCursorRotation()));
+                    OnDestinationMarkerSet(SetDestinationMarkerEvent(pointerRendererDestinationHit.distance, pointerRendererDestinationHit.transform, pointerRendererDestinationHit, pointerRendererDestinationHit.point, controllerReference, false, GetCursorRotation()));
                 }
             }
         }
@@ -582,7 +616,7 @@ namespace VRTK
 
         protected virtual bool PointerActivatesUseAction(VRTK_InteractableObject givenInteractableObject)
         {
-            return (givenInteractableObject != null && givenInteractableObject.pointerActivatesUseAction && givenInteractableObject.IsValidInteractableController(controller.gameObject, givenInteractableObject.allowedUseControllers));
+            return (givenInteractableObject != null && givenInteractableObject.pointerActivatesUseAction && (!ControllerRequired() || givenInteractableObject.IsValidInteractableController(controller.gameObject, givenInteractableObject.allowedUseControllers)));
         }
 
         protected virtual void StartUseAction(Transform target)
@@ -590,38 +624,35 @@ namespace VRTK
             pointerInteractableObject = target.GetComponent<VRTK_InteractableObject>();
             bool cannotUseBecauseNotGrabbed = (pointerInteractableObject && pointerInteractableObject.useOnlyIfGrabbed && !pointerInteractableObject.IsGrabbed());
 
-            if (PointerActivatesUseAction(pointerInteractableObject) && pointerInteractableObject.holdButtonToUse && !cannotUseBecauseNotGrabbed && pointerInteractableObject.usingState == 0)
+            if (interactUse != null && PointerActivatesUseAction(pointerInteractableObject) && pointerInteractableObject.holdButtonToUse && !cannotUseBecauseNotGrabbed && pointerInteractableObject.usingState == 0)
             {
-                pointerInteractableObject.StartUsing(controller.gameObject);
+                pointerInteractableObject.StartUsing(interactUse);
                 pointerInteractableObject.usingState++;
             }
         }
 
         protected virtual void StopUseAction()
         {
-            if (PointerActivatesUseAction(pointerInteractableObject) && pointerInteractableObject.holdButtonToUse && pointerInteractableObject.IsUsing())
+            if (interactUse != null && PointerActivatesUseAction(pointerInteractableObject) && pointerInteractableObject.holdButtonToUse && pointerInteractableObject.IsUsing())
             {
-                pointerInteractableObject.StopUsing(controller.gameObject);
+                pointerInteractableObject.StopUsing(interactUse);
                 pointerInteractableObject.usingState = 0;
             }
         }
 
         protected virtual void AttemptUseOnSet(Transform target)
         {
-            if (pointerInteractableObject != null && target != null)
+            if (pointerInteractableObject != null && target != null && interactUse != null && PointerActivatesUseAction(pointerInteractableObject))
             {
-                if (PointerActivatesUseAction(pointerInteractableObject))
+                if (pointerInteractableObject.IsUsing())
                 {
-                    if (pointerInteractableObject.IsUsing())
-                    {
-                        pointerInteractableObject.StopUsing(controller.gameObject);
-                        pointerInteractableObject.usingState = 0;
-                    }
-                    else if (!pointerInteractableObject.holdButtonToUse)
-                    {
-                        pointerInteractableObject.StartUsing(controller.gameObject);
-                        pointerInteractableObject.usingState++;
-                    }
+                    pointerInteractableObject.StopUsing(interactUse);
+                    pointerInteractableObject.usingState = 0;
+                }
+                else if (!pointerInteractableObject.holdButtonToUse)
+                {
+                    pointerInteractableObject.StartUsing(interactUse);
+                    pointerInteractableObject.usingState++;
                 }
             }
         }
@@ -660,6 +691,17 @@ namespace VRTK
                 canClickOnHover = false;
                 ExecuteSelectionButtonAction();
             }
+        }
+
+        protected virtual DestinationMarkerEventArgs GetStateEventPayload()
+        {
+            DestinationMarkerEventArgs eventPayload = new DestinationMarkerEventArgs();
+            if (EnabledPointerRenderer())
+            {
+                RaycastHit pointerRendererDestinationHit = pointerRenderer.GetDestinationHit();
+                eventPayload = SetDestinationMarkerEvent(pointerRendererDestinationHit.distance, pointerRendererDestinationHit.transform, pointerRendererDestinationHit, pointerRendererDestinationHit.point, controllerReference, false, GetCursorRotation());
+            }
+            return eventPayload;
         }
     }
 }

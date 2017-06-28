@@ -9,7 +9,7 @@
         private float offAngle = 40f;
         private Vector3 fixedPosition;
 
-        public override void StartUsing(GameObject currentUsingObject)
+        public override void StartUsing(VRTK_InteractUse currentUsingObject)
         {
             base.StartUsing(currentUsingObject);
             SetSafety(!safetyOff);

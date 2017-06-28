@@ -2,7 +2,7 @@
 {
     using UnityEngine.Events;
     using System;
-
+#pragma warning disable 0618
     public sealed class VRTK_ControllerActions_UnityEvents : VRTK_UnityEvents<VRTK_ControllerActions>
     {
         [Serializable]
@@ -33,4 +33,5 @@
             OnControllerModelInvisible.Invoke(o, e);
         }
     }
+#pragma warning restore 0618
 }

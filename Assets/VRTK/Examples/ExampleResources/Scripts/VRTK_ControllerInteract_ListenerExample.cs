@@ -28,7 +28,7 @@
         {
             if (e.target)
             {
-                DebugLogger(e.controllerIndex, "TOUCHING", e.target);
+                DebugLogger(VRTK_ControllerReference.GetRealIndex(e.controllerReference), "TOUCHING", e.target);
             }
         }
 
@@ -36,7 +36,7 @@
         {
             if (e.target)
             {
-                DebugLogger(e.controllerIndex, "NO LONGER TOUCHING", e.target);
+                DebugLogger(VRTK_ControllerReference.GetRealIndex(e.controllerReference), "NO LONGER TOUCHING", e.target);
             }
         }
 
@@ -44,7 +44,7 @@
         {
             if (e.target)
             {
-                DebugLogger(e.controllerIndex, "GRABBING", e.target);
+                DebugLogger(VRTK_ControllerReference.GetRealIndex(e.controllerReference), "GRABBING", e.target);
             }
         }
 
@@ -52,7 +52,7 @@
         {
             if (e.target)
             {
-                DebugLogger(e.controllerIndex, "NO LONGER GRABBING", e.target);
+                DebugLogger(VRTK_ControllerReference.GetRealIndex(e.controllerReference), "NO LONGER GRABBING", e.target);
             }
         }
     }

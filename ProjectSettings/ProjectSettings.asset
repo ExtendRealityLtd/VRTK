@@ -221,8 +221,7 @@ PlayerSettings:
   m_BuildTargetVRSettings:
   - m_BuildTarget: Android
     m_Enabled: 0
-    m_Devices:
-    - Oculus
+    m_Devices: []
   - m_BuildTarget: Metro
     m_Enabled: 0
     m_Devices: []
@@ -234,8 +233,7 @@ PlayerSettings:
     m_Devices: []
   - m_BuildTarget: PS4
     m_Enabled: 0
-    m_Devices:
-    - PlayStationVR
+    m_Devices: []
   - m_BuildTarget: PSM
     m_Enabled: 0
     m_Devices: []
@@ -246,9 +244,8 @@ PlayerSettings:
     m_Enabled: 0
     m_Devices: []
   - m_BuildTarget: Standalone
-    m_Enabled: 1
-    m_Devices:
-    - OpenVR
+    m_Enabled: 0
+    m_Devices: []
   - m_BuildTarget: Tizen
     m_Enabled: 0
     m_Devices: []
@@ -441,7 +438,7 @@ PlayerSettings:
   webGLUseWasm: 0
   webGLCompressionFormat: 1
   scriptingDefineSymbols:
-    1: VRTK_DEFINE_SDK_STEAMVR;VRTK_DEFINE_STEAMVR_PLUGIN_1_2_1_OR_NEWER
+    1: 
   platformArchitecture:
     iOS: 2
     tvOS: 1

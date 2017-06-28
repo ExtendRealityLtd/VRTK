@@ -137,6 +137,7 @@ namespace VRTK
         protected override void Awake()
         {
             menu = GetComponent<VRTK_RadialMenu>();
+            VRTK_SDKManager.instance.AddBehaviourToToggleOnLoadedSetupChange(this);
         }
 
         protected virtual void Start()
@@ -172,6 +173,11 @@ namespace VRTK
 
                 menu.FireHapticPulse -= AttemptHapticPulse;
             }
+        }
+
+        protected virtual void OnDestroy()
+        {
+            VRTK_SDKManager.instance.RemoveBehaviourToToggleOnLoadedSetupChange(this);
         }
 
         protected virtual void Update()
@@ -225,7 +231,7 @@ namespace VRTK
         {
             if (interactingObjects.Count > 0)
             {
-                VRTK_SharedMethods.TriggerHapticPulse(VRTK_DeviceFinder.GetControllerIndex(interactingObjects[0]), strength);
+                VRTK_ControllerHaptics.TriggerHapticPulse(VRTK_ControllerReference.GetControllerReference(interactingObjects[0]), strength);
             }
         }
 

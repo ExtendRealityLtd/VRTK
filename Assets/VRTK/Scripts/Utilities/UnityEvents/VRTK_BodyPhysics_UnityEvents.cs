@@ -19,6 +19,12 @@
         public BodyPhysicsEvent OnStartColliding = new BodyPhysicsEvent();
         public BodyPhysicsEvent OnStopColliding = new BodyPhysicsEvent();
 
+        public BodyPhysicsEvent OnStartLeaning = new BodyPhysicsEvent();
+        public BodyPhysicsEvent OnStopLeaning = new BodyPhysicsEvent();
+
+        public BodyPhysicsEvent OnStartTouchingGround = new BodyPhysicsEvent();
+        public BodyPhysicsEvent OnStopTouchingGround = new BodyPhysicsEvent();
+
         protected override void AddListeners(VRTK_BodyPhysics component)
         {
             component.StartFalling += StartFalling;
@@ -29,6 +35,12 @@
 
             component.StartColliding += StartColliding;
             component.StopColliding += StopColliding;
+
+            component.StartLeaning += StartLeaning;
+            component.StopLeaning += StopLeaning;
+
+            component.StartTouchingGround += StartTouchingGround;
+            component.StopTouchingGround += StopTouchingGround;
         }
 
         protected override void RemoveListeners(VRTK_BodyPhysics component)
@@ -41,6 +53,12 @@
 
             component.StartColliding -= StartColliding;
             component.StopColliding -= StopColliding;
+
+            component.StartLeaning -= StartLeaning;
+            component.StopLeaning -= StopLeaning;
+
+            component.StartTouchingGround -= StartTouchingGround;
+            component.StopTouchingGround -= StopTouchingGround;
         }
 
         private void StartFalling(object o, BodyPhysicsEventArgs e)
@@ -71,6 +89,26 @@
         private void StopColliding(object o, BodyPhysicsEventArgs e)
         {
             OnStopColliding.Invoke(o, e);
+        }
+
+        private void StartLeaning(object o, BodyPhysicsEventArgs e)
+        {
+            OnStartLeaning.Invoke(o, e);
+        }
+
+        private void StopLeaning(object o, BodyPhysicsEventArgs e)
+        {
+            OnStopLeaning.Invoke(o, e);
+        }
+
+        private void StartTouchingGround(object o, BodyPhysicsEventArgs e)
+        {
+            OnStartTouchingGround.Invoke(o, e);
+        }
+
+        private void StopTouchingGround(object o, BodyPhysicsEventArgs e)
+        {
+            OnStopTouchingGround.Invoke(o, e);
         }
     }
 }
