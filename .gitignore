@@ -48,3 +48,7 @@ sysinfo.txt
 .DS_Store
 *.swp
 StyleCop*
+
+# Allow including VRTK as a submodule
+/*.meta
+/ProjectSettings/*.meta

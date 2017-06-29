@@ -63,6 +63,11 @@ namespace VRTK
         public VRTK_ControllerElementHighlighters elementHighlighterOverrides;
 
         /// <summary>
+        /// Emitted when the controller model is available / rendered / initialised for the first time.
+        /// </summary>
+        public event ControllerActionsEventHandler ControllerModelAvailable;
+
+        /// <summary>
         /// Emitted when the controller model is toggled to be visible.
         /// </summary>
         [Obsolete("`VRTK_ControllerActions.ControllerModelVisible` has been replaced with `VRTK_ControllerEvents.ControllerVisible`. This method will be removed in a future version of VRTK.")]
@@ -85,6 +90,18 @@ namespace VRTK
             if (ControllerModelVisible != null)
             {
                 ControllerModelVisible(this, e);
+            }
+
+            // fire the event that the controllers are ready now
+            var controllerIndex = VRTK_DeviceFinder.GetControllerIndex(gameObject);
+            OnControllerModelAvailable(SetActionEvent(controllerIndex));
+        }
+
+        public virtual void OnControllerModelAvailable(ControllerActionsEventArgs e)
+        {
+            if (ControllerModelAvailable != null)
+            {
+                ControllerModelAvailable(this, e);
             }
         }
 

@@ -157,7 +157,7 @@ namespace VRTK
         /// <returns>A generated Transform that contains the custom pointer origin.</returns>
         public override Transform GenerateControllerPointerOrigin(GameObject parent)
         {
-            return null;
+            return parent.transform;
         }
 
         /// <summary>

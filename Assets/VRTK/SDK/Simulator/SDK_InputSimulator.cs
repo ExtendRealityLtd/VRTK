@@ -118,6 +118,7 @@ namespace VRTK
         private SDK_ControllerSim leftController;
         private static GameObject cachedCameraRig;
         private static bool destroyed = false;
+        private static bool isFocused = false;
         private float sprintMultiplier = 1;
         private GameObject crossHairPanel;
 
@@ -193,6 +194,11 @@ namespace VRTK
             destroyed = true;
         }
 
+        private void OnApplicationFocus(bool focus)
+        {
+            isFocused = focus;
+        }
+
         private void Update()
         {
             if (Input.GetKeyDown(toggleControlHints))
@@ -241,44 +247,48 @@ namespace VRTK
                 }
             }
 
-            if (isHand)
+            // only update if focused
+            if (isFocused)
             {
-                UpdateHands();
-            }
-            else
-            {
-                UpdateRotation();
-                if(Input.GetKeyDown(distancePickupRight) && Input.GetKey(distancePickupModifier))
+                if (isHand)
                 {
-                    TryPickup(true);
-                }
-                else if(Input.GetKeyDown(distancePickupLeft) && Input.GetKey(distancePickupModifier))
-                {
-                    TryPickup(false);
-                }
-                if(Input.GetKey(sprint))
-                {
-                    sprintMultiplier = playerSprintMultiplier;
+                    UpdateHands();
                 }
                 else
                 {
-                    sprintMultiplier = 1;
+                    UpdateRotation();
+                    if(Input.GetKeyDown(distancePickupRight) && Input.GetKey(distancePickupModifier))
+                    {
+                        TryPickup(true);
+                    }
+                    else if(Input.GetKeyDown(distancePickupLeft) && Input.GetKey(distancePickupModifier))
+                    {
+                        TryPickup(false);
+                    }
+                    if(Input.GetKey(sprint))
+                    {
+                        sprintMultiplier = playerSprintMultiplier;
+                    }
+                    else
+                    {
+                        sprintMultiplier = 1;
+                    }
+                    if(Input.GetKeyDown(distancePickupModifier))
+                    {
+                        crossHairPanel.SetActive(true);
+                    }
+                    else if(Input.GetKeyUp(distancePickupModifier))
+                    {
+                        crossHairPanel.SetActive(false);
+                    }
                 }
-                if(Input.GetKeyDown(distancePickupModifier))
-                {
-                    crossHairPanel.SetActive(true);
-                }
-                else if(Input.GetKeyUp(distancePickupModifier))
-                {
-                    crossHairPanel.SetActive(false);
-                }
-            }
 
-            UpdatePosition();
+                UpdatePosition();
 
-            if (showControlHints)
-            {
-                UpdateHints();
+                if (showControlHints)
+                {
+                    UpdateHints();
+                }
             }
         }
 
@@ -340,6 +350,10 @@ namespace VRTK
                         Vector3 pos = Vector3.zero;
                         pos += mouseDiff * handMoveMultiplier;
                         currentHand.transform.Translate(pos * Time.deltaTime);
+                    }
+                    else if (Input.GetKey(touchpadAlias))
+                    {
+                        // Don't change controller position when touchpad is touched
                     }
                     else
                     {
