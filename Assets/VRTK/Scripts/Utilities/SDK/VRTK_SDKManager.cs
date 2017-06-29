@@ -706,14 +706,23 @@ namespace VRTK
 
         private void ToggleBehaviours(bool state)
         {
-            IEnumerable<Behaviour> listCopy = _behavioursToToggleOnLoadedSetupChange.ToList();
+            List<Behaviour> listCopy = _behavioursToToggleOnLoadedSetupChange.ToList();
             if (!state)
             {
-                listCopy = listCopy.Reverse();
+                listCopy.Reverse();
             }
 
-            foreach (Behaviour behaviour in listCopy)
+            for (int index = 0; index < listCopy.Count; index++)
             {
+                Behaviour behaviour = listCopy[index];
+                if (behaviour == null)
+                {
+                    VRTK_Logger.Error(string.Format("A behaviour to toggle has been destroyed. Have you forgot the corresponding call `VRTK_SDKManager.instance.RemoveBehaviourToToggleOnLoadedSetupChange(this)` in the `OnDestroy` method of `{0}`?", behaviour.GetType()));
+                    _behavioursToToggleOnLoadedSetupChange.RemoveAt(state ? index : _behavioursToToggleOnLoadedSetupChange.Count - 1 - index);
+
+                    continue;
+                }
+
                 behaviour.enabled = (state && _behavioursInitialState.ContainsKey(behaviour) ? _behavioursInitialState[behaviour] : state);
             }
         }
