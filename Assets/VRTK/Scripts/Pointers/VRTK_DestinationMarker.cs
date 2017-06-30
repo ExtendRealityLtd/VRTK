@@ -2,6 +2,7 @@
 namespace VRTK
 {
     using UnityEngine;
+    using System;
 
     /// <summary>
     /// Event Payload
