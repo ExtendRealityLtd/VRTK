@@ -3,22 +3,23 @@
     using UnityEngine;
     using UnityEditor;
     using System;
+    using System.Reflection;
 
     public static class VRTK_EditorUtilities
     {
         public static GUIContent BuildGUIContent<T>(string fieldName, string displayOverride = null)
         {
-            var displayName = (displayOverride != null ? displayOverride : ObjectNames.NicifyVariableName(fieldName));
-            var fieldInfo = typeof(T).GetField(fieldName);
-            var tooltipAttribute = (TooltipAttribute)Attribute.GetCustomAttribute(fieldInfo, typeof(TooltipAttribute));
+            string displayName = (displayOverride != null ? displayOverride : ObjectNames.NicifyVariableName(fieldName));
+            FieldInfo fieldInfo = typeof(T).GetField(fieldName);
+            TooltipAttribute tooltipAttribute = (TooltipAttribute)Attribute.GetCustomAttribute(fieldInfo, typeof(TooltipAttribute));
             return (tooltipAttribute == null ? new GUIContent(displayName) : new GUIContent(displayName, tooltipAttribute.tooltip));
         }
 
         public static void AddHeader<T>(string fieldName, string displayOverride = null)
         {
-            var displayName = (displayOverride != null ? displayOverride : ObjectNames.NicifyVariableName(fieldName));
-            var fieldInfo = typeof(T).GetField(fieldName);
-            var headerAttribute = (HeaderAttribute)Attribute.GetCustomAttribute(fieldInfo, typeof(HeaderAttribute));
+            string displayName = (displayOverride != null ? displayOverride : ObjectNames.NicifyVariableName(fieldName));
+            FieldInfo fieldInfo = typeof(T).GetField(fieldName);
+            HeaderAttribute headerAttribute = (HeaderAttribute)Attribute.GetCustomAttribute(fieldInfo, typeof(HeaderAttribute));
             AddHeader(headerAttribute == null ? displayName : headerAttribute.header);
         }
 

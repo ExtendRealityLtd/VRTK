@@ -81,7 +81,7 @@ namespace VRTK
         protected Color currentColor;
 
         protected VRTK_PolicyList invalidListPolicy;
-        protected float navMeshCheckDistance;
+        protected VRTK_NavMeshData navMeshData;
         protected bool headsetPositionCompensation;
 
         protected GameObject objectInteractor;
@@ -110,11 +110,26 @@ namespace VRTK
         /// <param name="givenInvalidListPolicy">The VRTK_PolicyList for managing valid and invalid pointer locations.</param>
         /// <param name="givenNavMeshCheckDistance">The given distance from a nav mesh that the pointer can be to be valid.</param>
         /// <param name="givenHeadsetPositionCompensation">Determines whether the play area cursor will take the headset position within the play area into account when being displayed.</param>
+        [Obsolete("`VRTK_BasePointerRenderer.InitalizePointer(givenPointer, givenInvalidListPolicy, givenNavMeshCheckDistance, givenHeadsetPositionCompensation)` has been replaced with the method `VRTK_BasePointerRenderer.InitalizePointer(givenPointer, givenInvalidListPolicy, givenNavMeshData, givenHeadsetPositionCompensation)`. This method will be removed in a future version of VRTK.")]
         public virtual void InitalizePointer(VRTK_Pointer givenPointer, VRTK_PolicyList givenInvalidListPolicy, float givenNavMeshCheckDistance, bool givenHeadsetPositionCompensation)
+        {
+            VRTK_NavMeshData givenData = gameObject.AddComponent<VRTK_NavMeshData>();
+            givenData.distanceLimit = givenNavMeshCheckDistance;
+            InitalizePointer(givenPointer, givenInvalidListPolicy, givenData, givenHeadsetPositionCompensation);
+        }
+
+        /// <summary>
+        /// The InitalizePointer method is used to set up the state of the pointer renderer.
+        /// </summary>
+        /// <param name="givenPointer">The VRTK_Pointer that is controlling the pointer renderer.</param>
+        /// <param name="givenInvalidListPolicy">The VRTK_PolicyList for managing valid and invalid pointer locations.</param>
+        /// <param name="givenNavMeshData">The NavMeshData object that contains the Nav Mesh restriction options.</param>
+        /// <param name="givenHeadsetPositionCompensation">Determines whether the play area cursor will take the headset position within the play area into account when being displayed.</param>
+        public virtual void InitalizePointer(VRTK_Pointer givenPointer, VRTK_PolicyList givenInvalidListPolicy, VRTK_NavMeshData givenNavMeshData, bool givenHeadsetPositionCompensation)
         {
             controllingPointer = givenPointer;
             invalidListPolicy = givenInvalidListPolicy;
-            navMeshCheckDistance = givenNavMeshCheckDistance;
+            navMeshData = givenNavMeshData;
             headsetPositionCompensation = givenHeadsetPositionCompensation;
 
             if (controllingPointer != null && controllingPointer.interactWithObjects && controllingPointer.controller != null && objectInteractor == null)
@@ -355,12 +370,15 @@ namespace VRTK
         protected virtual bool ValidDestination()
         {
             bool validNavMeshLocation = false;
-            if (destinationHit.transform != null)
+            if (navMeshData != null)
             {
-                NavMeshHit hit;
-                validNavMeshLocation = NavMesh.SamplePosition(destinationHit.point, out hit, navMeshCheckDistance, NavMesh.AllAreas);
+                if (destinationHit.transform != null)
+                {
+                    NavMeshHit hit;
+                    validNavMeshLocation = NavMesh.SamplePosition(destinationHit.point, out hit, navMeshData.distanceLimit, navMeshData.validAreas);
+                }
             }
-            if (navMeshCheckDistance == 0f)
+            else
             {
                 validNavMeshLocation = true;
             }
