@@ -2,8 +2,6 @@
 namespace VRTK
 {
     using UnityEngine;
-    using UnityEngine.Events;
-    using System;
 
     /// <summary>
     /// Event Payload
@@ -29,20 +27,6 @@ namespace VRTK
     [ExecuteInEditMode]
     public abstract class VRTK_Control : MonoBehaviour
     {
-        [Serializable]
-        [Obsolete("`VRTK_Control.ValueChangedEvent` has been replaced with delegate events. `VRTK_Control_UnityEvents` is now required to access Unity events. This method will be removed in a future version of VRTK.")]
-        public class ValueChangedEvent : UnityEvent<float, float> { }
-
-        [Serializable]
-        [Obsolete("`VRTK_Control.DefaultControlEvents` has been replaced with delegate events. `VRTK_Control_UnityEvents` is now required to access Unity events. This method will be removed in a future version of VRTK.")]
-        public class DefaultControlEvents
-        {
-            /// <summary>
-            /// Emitted when the control is interacted with.
-            /// </summary>
-            public ValueChangedEvent OnValueChanged;
-        }
-
         /// <summary>
         /// The ControlValueRange struct provides a way for each inherited control to support value normalization.
         /// </summary>
@@ -66,10 +50,6 @@ namespace VRTK
             y,
             z
         }
-
-        [Tooltip("The default events for the control. This parameter is deprecated and will be removed in a future version of VRTK.")]
-        [Obsolete("`VRTK_Control.defaultEvents` has been replaced with delegate events. `VRTK_Control_UnityEvents` is now required to access Unity events. This method will be removed in a future version of VRTK.")]
-        public DefaultControlEvents defaultEvents;
 
         [Tooltip("If active the control will react to the controller without the need to push the grab button.")]
         public bool interactWithoutGrab = false;
@@ -178,14 +158,6 @@ namespace VRTK
                 if (value != oldValue)
                 {
                     HandleInteractables();
-
-#pragma warning disable 0618
-                    /// <obsolete>
-                    /// This is an obsolete call that will be removed in a future version
-                    /// </obsolete>
-                    defaultEvents.OnValueChanged.Invoke(GetValue(), GetNormalizedValue());
-#pragma warning restore 0618
-
                     OnValueChanged(SetControlEvent());
                 }
             }

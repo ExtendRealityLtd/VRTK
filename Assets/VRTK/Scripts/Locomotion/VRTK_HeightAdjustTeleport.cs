@@ -2,7 +2,6 @@
 namespace VRTK
 {
     using UnityEngine;
-    using System;
 
     /// <summary>
     /// The height adjust teleporter extends the basic teleporter and allows for the y position of the user's position to be altered based on whether the teleport location is on top of another object.
@@ -23,9 +22,6 @@ namespace VRTK
         public bool snapToNearestFloor = true;
         [Tooltip("A custom raycaster to use when raycasting to find floors.")]
         public VRTK_CustomRaycast customRaycast;
-        [Tooltip("**OBSOLETE [Use customRaycast]** The layers to ignore when raycasting to find floors.")]
-        [Obsolete("`VRTK_HeightAdjustTeleport.layersToIgnore` is no longer used in the `VRTK_HeightAdjustTeleport` class, use the `customRaycast` parameter instead. This parameter will be removed in a future version of VRTK.")]
-        public LayerMask layersToIgnore = Physics.IgnoreRaycastLayer;
 
         protected override void OnEnable()
         {
@@ -61,9 +57,7 @@ namespace VRTK
             Vector3 rayStartPositionOffset = Vector3.up * heightOffset;
             Ray ray = new Ray(tipPosition + rayStartPositionOffset, -playArea.up);
             RaycastHit rayCollidedWith;
-#pragma warning disable 0618
-            if (target != null && VRTK_CustomRaycast.Raycast(customRaycast, ray, out rayCollidedWith, layersToIgnore, Mathf.Infinity, QueryTriggerInteraction.Ignore))
-#pragma warning restore 0618
+            if (target != null && VRTK_CustomRaycast.Raycast(customRaycast, ray, out rayCollidedWith, new LayerMask(), Mathf.Infinity, QueryTriggerInteraction.Ignore))
             {
                 newY = (tipPosition.y - rayCollidedWith.distance) + heightOffset;
             }

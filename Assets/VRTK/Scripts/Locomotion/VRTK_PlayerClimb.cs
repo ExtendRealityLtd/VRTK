@@ -7,13 +7,10 @@ namespace VRTK
     /// <summary>
     /// Event Payload
     /// </summary>
-    /// <param name="controllerIndex">**OBSOLETE** The index of the controller doing the interaction.</param>
     /// <param name="controllerReference">The reference to the controller doing the interaction.</param>
     /// <param name="target">The GameObject of the interactable object that is being interacted with by the controller.</param>
     public struct PlayerClimbEventArgs
     {
-        [System.Obsolete("`PlayerClimbEventArgs.controllerIndex` has been replaced with `PlayerClimbEventArgs.controllerReference`. This parameter will be removed in a future version of VRTK.")]
-        public uint controllerIndex;
         public VRTK_ControllerReference controllerReference;
         public GameObject target;
     }
@@ -142,9 +139,6 @@ namespace VRTK
         protected virtual PlayerClimbEventArgs SetPlayerClimbEvent(VRTK_ControllerReference controllerReference, GameObject target)
         {
             PlayerClimbEventArgs e;
-#pragma warning disable 0618
-            e.controllerIndex = VRTK_ControllerReference.GetRealIndex(controllerReference);
-#pragma warning restore 0618
             e.controllerReference = controllerReference;
             e.target = target;
             return e;

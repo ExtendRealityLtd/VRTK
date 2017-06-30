@@ -7,13 +7,10 @@ namespace VRTK
     /// <summary>
     /// Event Payload
     /// </summary>
-    /// <param name="controllerIndex">**OBSOLETE** The index of the controller doing the interaction.</param>
     /// <param name="controllerReference">The reference to the controller doing the interaction.</param>
     /// <param name="target">The GameObject of the interactable object that is being interacted with by the controller.</param>
     public struct ObjectInteractEventArgs
     {
-        [System.Obsolete("`ObjectInteractEventArgs.controllerIndex` has been replaced with `ObjectInteractEventArgs.controllerReference`. This parameter will be removed in a future version of VRTK.")]
-        public uint controllerIndex;
         public VRTK_ControllerReference controllerReference;
         public GameObject target;
     }
@@ -137,9 +134,6 @@ namespace VRTK
         public virtual ObjectInteractEventArgs SetControllerInteractEvent(GameObject target)
         {
             ObjectInteractEventArgs e;
-#pragma warning disable 0618
-            e.controllerIndex = VRTK_ControllerReference.GetRealIndex(controllerReference);
-#pragma warning restore 0618
             e.controllerReference = controllerReference;
             e.target = target;
             return e;

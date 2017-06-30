@@ -7,13 +7,10 @@ namespace VRTK
     /// Event Payload
     /// </summary>
     /// <param name="raycastHit">The Raycast Hit struct of item that is obscuring the path to the controller.</param>
-    /// <param name="controllerIndex">**OBSOLETE** The index of the controller that is being or has been obscured or being or has been glanced.</param>
     /// <param name="controllerReference">The reference to the controller that is being or has been obscured or being or has been glanced.</param>
     public struct HeadsetControllerAwareEventArgs
     {
         public RaycastHit raycastHit;
-        [System.Obsolete("`HeadsetControllerAwareEventArgs.controllerIndex` has been replaced with `HeadsetControllerAwareEventArgs.controllerReference`. This parameter will be removed in a future version of VRTK.")]
-        public uint controllerIndex;
         public VRTK_ControllerReference controllerReference;
     }
 
@@ -190,9 +187,6 @@ namespace VRTK
         {
             HeadsetControllerAwareEventArgs e;
             e.raycastHit = raycastHit;
-#pragma warning disable 0618
-            e.controllerIndex = VRTK_ControllerReference.GetRealIndex(controllerReference);
-#pragma warning restore 0618
             e.controllerReference = controllerReference;
             return e;
         }
