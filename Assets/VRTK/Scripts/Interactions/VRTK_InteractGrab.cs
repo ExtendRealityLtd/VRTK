@@ -2,6 +2,7 @@
 namespace VRTK
 {
     using UnityEngine;
+    using System.Collections;
 
     /// <summary>
     /// The Interact Grab script is attached to a Controller object and requires the `VRTK_ControllerEvents` script to be attached as it uses this for listening to the controller button events for grabbing and releasing interactable game objects.
@@ -85,6 +86,7 @@ namespace VRTK
         protected float grabPrecognitionTimer = 0f;
         protected GameObject undroppableGrabbedObject;
         protected Rigidbody originalControllerAttachPoint;
+        protected Coroutine attemptSetCurrentControllerAttachPoint;
         protected VRTK_ControllerReference controllerReference
         {
             get
@@ -194,15 +196,28 @@ namespace VRTK
             RegrabUndroppableObject();
             ManageGrabListener(true);
             ManageInteractTouchListener(true);
+            if (controllerEvents != null)
+            {
+                controllerEvents.ControllerIndexChanged += ControllerIndexChanged;
+            }
             SetControllerAttachPoint();
         }
 
         protected virtual void OnDisable()
         {
+            if (attemptSetCurrentControllerAttachPoint != null)
+            {
+                StopCoroutine(attemptSetCurrentControllerAttachPoint);
+                attemptSetCurrentControllerAttachPoint = null;
+            }
             SetUndroppableObject();
             ForceRelease();
             ManageGrabListener(false);
             ManageInteractTouchListener(false);
+            if (controllerEvents != null)
+            {
+                controllerEvents.ControllerIndexChanged -= ControllerIndexChanged;
+            }
         }
 
         protected virtual void OnDestroy()
@@ -216,6 +231,11 @@ namespace VRTK
             CheckControllerAttachPointSet();
             CreateNonTouchingRigidbody();
             CheckPrecognitionGrab();
+        }
+
+        protected virtual void ControllerIndexChanged(object sender, ControllerInteractionEventArgs e)
+        {
+            SetControllerAttachPoint();
         }
 
         protected virtual void ManageInteractTouchListener(bool state)
@@ -316,17 +336,33 @@ namespace VRTK
             if (controllerReference.model != null && originalControllerAttachPoint == null)
             {
                 //attempt to find the attach point on the controller
-                Transform defaultAttachPoint = controllerReference.model.transform.Find(VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.AttachPoint, VRTK_DeviceFinder.GetControllerHand(interactTouch.gameObject)));
-                if (defaultAttachPoint != null)
-                {
-                    controllerAttachPoint = defaultAttachPoint.GetComponent<Rigidbody>();
+                SDK_BaseController.ControllerHand handType = VRTK_DeviceFinder.GetControllerHand(interactTouch.gameObject);
+                string elementPath = VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.AttachPoint, handType);
+                attemptSetCurrentControllerAttachPoint = StartCoroutine(SetCurrentControllerAttachPoint(elementPath, 10, 0.1f));
+            }
+        }
 
-                    if (controllerAttachPoint == null)
-                    {
-                        Rigidbody autoGenRB = defaultAttachPoint.gameObject.AddComponent<Rigidbody>();
-                        autoGenRB.isKinematic = true;
-                        controllerAttachPoint = autoGenRB;
-                    }
+        protected virtual IEnumerator SetCurrentControllerAttachPoint(string searchPath, int attempts, float delay)
+        {
+            WaitForSeconds delayInstruction = new WaitForSeconds(delay);
+            Transform defaultAttachPoint = controllerReference.model.transform.Find(searchPath);
+
+            while (defaultAttachPoint == null && attempts > 0)
+            {
+                defaultAttachPoint = controllerReference.model.transform.Find(searchPath);
+                attempts--;
+                yield return delayInstruction;
+            }
+
+            if (defaultAttachPoint != null)
+            {
+                controllerAttachPoint = defaultAttachPoint.GetComponent<Rigidbody>();
+
+                if (controllerAttachPoint == null)
+                {
+                    Rigidbody autoGenRB = defaultAttachPoint.gameObject.AddComponent<Rigidbody>();
+                    autoGenRB.isKinematic = true;
+                    controllerAttachPoint = autoGenRB;
                 }
             }
         }
