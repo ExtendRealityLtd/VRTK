@@ -6170,7 +6170,6 @@ and the method info of the method the attribute is defined on.
 
 ### Inspector Parameters
 
- * **Persist On Load:** If this is true then the instance of the SDK Manager won't be destroyed on every scene load.
  * **Auto Manage Script Defines:** Determines whether the scripting define symbols required by the installed SDKs are automatically added to and removed from the player settings.
  * **Script Alias Left Controller:** A reference to the GameObject that contains any scripts that apply to the Left Hand Controller.
  * **Script Alias Right Controller:** A reference to the GameObject that contains any scripts that apply to the Right Hand Controller.
