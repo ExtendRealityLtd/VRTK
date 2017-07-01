@@ -397,7 +397,12 @@ namespace VRTK
 
         private void OnEnable()
         {
-            PopulateObjectReferences(false);
+#pragma warning disable 618
+            if (!VRTK_SDKManager.instance.persistOnLoad)
+#pragma warning restore 618
+            {
+                PopulateObjectReferences(false);
+            }
         }
 
 #if UNITY_EDITOR
