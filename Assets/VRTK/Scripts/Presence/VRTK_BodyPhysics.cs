@@ -1095,7 +1095,7 @@ namespace VRTK
         {
             if (bodyCollider != null && headset != null)
             {
-                float newpresenceColliderYSize = (headset ? headset.transform.localPosition.y - (headsetYOffset + CalculateStepUpYOffset()) : 0f);
+                float newpresenceColliderYSize = (headset.position.y - playArea.position.y) - (headsetYOffset + CalculateStepUpYOffset());
                 float newpresenceColliderYCenter = Mathf.Max((newpresenceColliderYSize * 0.5f) + CalculateStepUpYOffset() + playAreaHeightAdjustment, bodyCollider.radius + playAreaHeightAdjustment);
 
                 bodyCollider.height = Mathf.Max(newpresenceColliderYSize, bodyCollider.radius);
