@@ -11,12 +11,11 @@ namespace VRTK
     public delegate void HapticPulseEventHandler(float strength);
 
     /// <summary>
-    /// This adds a UI element into the world space that can be dropped into a Controller object and used to create and use Radial Menus from the touchpad.
+    /// Provides a UI element into the world space that can be dropped into a Controller GameObject and used to create and use Radial Menus from the touchpad.
     /// </summary>
     /// <remarks>
-    /// If the RadialMenu is placed inside a controller, it will automatically find a `VRTK_ControllerEvents` in its parent to use at the input. However, a `VRTK_ControllerEvents` can be defined explicitly by setting the `Events` parameter of the `Radial Menu Controller` script also attached to the prefab.
-    ///
-    /// The RadialMenu can also be placed inside a `VRTK_InteractableObject` for the RadialMenu to be anchored to a world object instead of the controller. The `Events Manager` parameter will automatically be set if the RadialMenu is a child of an InteractableObject, but it can also be set manually in the inspector. Additionally, for the RadialMenu to be anchored in the world, the `RadialMenuController` script in the prefab must be replaced with `VRTK_IndependentRadialMenuController`. See the script information for further details on making the RadialMenu independent of the controllers.
+    /// **Prefab Usage:**
+    ///  * Place the `VRTK/Prefabs/RadialMenu` prefab as a child of a Controller script alias GameObject.
     /// </remarks>
     /// <example>
     /// `VRTK/Examples/030_Controls_RadialTouchpadMenu` displays a radial menu for each controller. The left controller uses the `Hide On Release` variable, so it will only be visible if the left touchpad is being touched. It also uses the `Execute On Unclick` variable to delay execution until the touchpad button is unclicked. The example scene also contains a demonstration of anchoring the RadialMenu to an interactable cube instead of a controller.
@@ -130,7 +129,7 @@ namespace VRTK
         {
             if (currentHover != -1)
             {
-                var pointer = new PointerEventData(EventSystem.current);
+                PointerEventData pointer = new PointerEventData(EventSystem.current);
                 ExecuteEvents.Execute(menuButtons[currentHover], pointer, ExecuteEvents.pointerExitHandler);
                 buttons[currentHover].OnHoverExit.Invoke();
                 currentHover = -1;
@@ -294,7 +293,7 @@ namespace VRTK
             angle = VRTK_SharedMethods.Mod((angle + -offsetRotation), 360); //Offset the touch coordinate with our offset
 
             int buttonID = (int)VRTK_SharedMethods.Mod(((angle + (buttonAngle / 2f)) / buttonAngle), buttons.Count); //Convert angle into ButtonID (This is the magic)
-            var pointer = new PointerEventData(EventSystem.current); //Create a new EventSystem (UI) Event
+            PointerEventData pointer = new PointerEventData(EventSystem.current); //Create a new EventSystem (UI) Event
 
             //If we changed buttons while moving, un-hover and un-click the last button we were on
             if (currentHover != buttonID && currentHover != -1)

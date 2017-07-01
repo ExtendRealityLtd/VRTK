@@ -23,20 +23,15 @@ namespace VRTK
     public delegate void SnapDropZoneEventHandler(object sender, SnapDropZoneEventArgs e);
 
     /// <summary>
-    /// This sets up a predefined zone where an existing interactable object can be dropped and upon dropping it snaps to the set snap drop zone transform position, rotation and scale.
+    /// Provides a predefined zone where a valid interactable object can be dropped and upon dropping it snaps to the set snap drop zone transform position, rotation and scale.
     /// </summary>
     /// <remarks>
-    /// The position, rotation and scale of the `SnapDropZone` Game Object will be used to determine the final position of the dropped interactable object if it is dropped within the drop zone collider volume.
-    ///
-    /// The provided Highlight Object Prefab is used to create the highlighting object (also within the Editor for easy placement) and by default the standard Material Color Swap highlighter is used.
-    ///
-    /// An alternative highlighter can also be added to the `SnapDropZone` Game Object and this new highlighter component will be used to show the interactable object position on release.
-    ///
-    /// The prefab is a pre-built game object that contains a default trigger collider (Sphere Collider) and a kinematic rigidbody (to ensure collisions occur).
-    ///
-    /// If an alternative collider is required, then the default Sphere Collider can be removed and another collider added.
-    ///
-    /// If the `Use Joint` Snap Type is selected then a custom Joint component is required to be added to the `SnapDropZone` Game Object and upon release the interactable object's rigidbody will be linked to this joint as the `Connected Body`.
+    /// **Prefab Usage:**
+    ///  * Place the `VRTK/Prefabs/SnapDropZone` prefab into the scene hierarchy.
+    ///  * Provide the SnapDropZone with an optional `Highlight Object Prefab` to generate an object outline in the scene that determines the final position, rotation and scale of the snapped object.
+    ///  * If no `VRTK_BaseHighlighter` derivative is applied to the SnapDropZone then the default MaterialColorSwap Highlighter will be used.
+    ///  * The collision zone that activates the SnapDropZone is a `Sphere Collider` by default but can be amended or replaced on the SnapDropZone GameObject.
+    ///  * If the `Use Joint` Snap Type is selected then a custom Joint component is required to be added to the `SnapDropZone` Game Object and upon release the interactable object's rigidbody will be linked to this joint as the `Connected Body`.
     /// </remarks>
     /// <example>
     /// `VRTK/Examples/041_Controller_ObjectSnappingToDropZones` uses the `VRTK_SnapDropZone` prefab to set up pre-determined snap zones for a range of objects and demonstrates how only objects of certain types can be snapped into certain areas.
@@ -330,7 +325,7 @@ namespace VRTK
 
         protected virtual VRTK_InteractableObject ValidSnapObject(GameObject checkObject, bool grabState, bool checkGrabState = true)
         {
-            var ioCheck = checkObject.GetComponentInParent<VRTK_InteractableObject>();
+            VRTK_InteractableObject ioCheck = checkObject.GetComponentInParent<VRTK_InteractableObject>();
             return (ioCheck != null && (!checkGrabState || ioCheck.IsGrabbed() == grabState) && !VRTK_PolicyList.Check(ioCheck.gameObject, validObjectListPolicy) ? ioCheck : null);
         }
 
@@ -397,7 +392,7 @@ namespace VRTK
             //If there is a current valid snap object
             for (int i = 0; i < currentValidSnapObjects.Count; i++)
             {
-                var currentIOCheck = currentValidSnapObjects[i].GetComponentInParent<VRTK_InteractableObject>();
+                VRTK_InteractableObject currentIOCheck = currentValidSnapObjects[i].GetComponentInParent<VRTK_InteractableObject>();
                 //and the interactbale object associated with it has been snapped to another zone, then unset the current valid snap object
                 if (currentIOCheck != null && currentIOCheck.GetStoredSnapDropZone() != null && currentIOCheck.GetStoredSnapDropZone() != gameObject)
                 {
@@ -632,7 +627,7 @@ namespace VRTK
 
         protected virtual void SetSnapDropZoneJoint(Rigidbody snapTo)
         {
-            var snapDropZoneJoint = GetComponent<Joint>();
+            Joint snapDropZoneJoint = GetComponent<Joint>();
             if (snapDropZoneJoint == null)
             {
                 VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, "SnapDropZone:" + name, "Joint", "the same", " because the `Snap Type` is set to `Use Joint`"));
@@ -652,7 +647,7 @@ namespace VRTK
 
         protected virtual void ResetSnapDropZoneJoint()
         {
-            var snapDropZoneJoint = GetComponent<Joint>();
+            Joint snapDropZoneJoint = GetComponent<Joint>();
             if (snapDropZoneJoint != null)
             {
                 snapDropZoneJoint.enableCollision = originalJointCollisionState;
@@ -776,9 +771,10 @@ namespace VRTK
             if (highlightObject != null && highlightEditorObject == null && transform.Find(ObjectPath(HIGHLIGHT_EDITOR_OBJECT_NAME)) == null)
             {
                 CopyObject(highlightObject, ref highlightEditorObject, HIGHLIGHT_EDITOR_OBJECT_NAME);
-                foreach (Renderer renderer in highlightEditorObject.GetComponentsInChildren<Renderer>())
+                Renderer[] childRenderers = highlightEditorObject.GetComponentsInChildren<Renderer>();
+                for (int i = 0; i < childRenderers.Length; i++)
                 {
-                    renderer.material = Resources.Load("SnapDropZoneEditorObject") as Material;
+                    childRenderers[i].material = Resources.Load("SnapDropZoneEditorObject") as Material;
                 }
                 highlightEditorObject.SetActive(true);
             }
@@ -787,7 +783,7 @@ namespace VRTK
         protected virtual void CleanHighlightObject(GameObject objectToClean)
         {
             //If the highlight object has any child snap zones, then force delete these
-            var deleteSnapZones = objectToClean.GetComponentsInChildren<VRTK_SnapDropZone>(true);
+            VRTK_SnapDropZone[] deleteSnapZones = objectToClean.GetComponentsInChildren<VRTK_SnapDropZone>(true);
             for (int i = 0; i < deleteSnapZones.Length; i++)
             {
                 ChooseDestroyType(deleteSnapZones[i].gameObject);
@@ -797,17 +793,17 @@ namespace VRTK
             string[] validComponents = new string[] { "Transform", "MeshFilter", "MeshRenderer", "SkinnedMeshRenderer", "VRTK_GameObjectLinker" };
 
             //go through all of the components on the highlighted object and delete any components that aren't in the valid component list
-            var components = objectToClean.GetComponentsInChildren<Component>(true);
+            Component[] components = objectToClean.GetComponentsInChildren<Component>(true);
             for (int i = 0; i < components.Length; i++)
             {
                 Component component = components[i];
-                var valid = false;
+                bool valid = false;
 
                 //Loop through each valid component and check to see if this component is valid
-                foreach (string validComponent in validComponents)
+                for (int j = 0; j < validComponents.Length; j++)
                 {
                     //if it's a valid component then break the check
-                    if (component.GetType().ToString().Contains("." + validComponent))
+                    if (component.GetType().ToString().Contains("." + validComponents[j]))
                     {
                         valid = true;
                         break;
@@ -847,11 +843,12 @@ namespace VRTK
             //if the object highlighter is using a cloned object then disable the created highlight object's renderers
             if (objectHighlighter.UsesClonedObject())
             {
-                foreach (Renderer renderer in GetComponentsInChildren<Renderer>(true))
+                Renderer[] childRenderers = highlightEditorObject.GetComponentsInChildren<Renderer>();
+                for (int i = 0; i < childRenderers.Length; i++)
                 {
-                    if (!VRTK_PlayerObject.IsPlayerObject(renderer.gameObject, VRTK_PlayerObject.ObjectTypes.Highlighter))
+                    if (!VRTK_PlayerObject.IsPlayerObject(childRenderers[i].gameObject, VRTK_PlayerObject.ObjectTypes.Highlighter))
                     {
-                        renderer.enabled = false;
+                        childRenderers[i].enabled = false;
                     }
                 }
             }

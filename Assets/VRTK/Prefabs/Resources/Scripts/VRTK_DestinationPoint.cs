@@ -11,12 +11,13 @@ namespace VRTK
     public delegate void DestinationPointEventHandler(object sender);
 
     /// <summary>
-    /// The Destination Point allows for a specific scene marker that can be teleported to.
+    /// Allows for a specific scene marker or specific area within the scene that can be teleported to.
     /// </summary>
     /// <remarks>
-    /// The destination points can provide a useful way of having specific teleport locations in a scene.
-    ///
-    /// The destination points can also have a locked state if the `Enable Teleport` flag is disabled.
+    /// **Prefab Usage:**
+    ///  * Place the `VRTK/Prefabs/DestinationPoint` prefab at the desired location within the scene.
+    ///  * Uncheck the `Enable Teleport` checkbox to lock the destination point and prevent teleporting to it.
+    ///  * Uncheck the `Snap To Point` checkbox to provide a destination area rather than a specific point to teleport to.
     /// </remarks>
     /// <example>
     /// `044_CameraRig_RestrictedTeleportZones` uses the `VRTK_DestinationPoint` prefab to set up a collection of pre-defined teleport locations.
