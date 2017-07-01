@@ -57,26 +57,7 @@ namespace VRTK
                 return null;
             }
 
-            var version = (Version)versionField.GetValue(null);
-            return version;
-        }
-
-        private static Version GetOculusRuntimeVersion()
-        {
-            Type pluginClass = VRTK_SharedMethods.GetTypeUnknownAssembly("OVRPlugin");
-            if (pluginClass == null)
-            {
-                return null;
-            }
-
-            PropertyInfo versionProperty = pluginClass.GetProperty("version", BindingFlags.Public | BindingFlags.Static);
-            if (versionProperty == null)
-            {
-                return null;
-            }
-
-            var version = (Version)versionProperty.GetGetMethod().Invoke(null, null);
-            return version;
+            return (Version)versionField.GetValue(null);
         }
     }
 }
