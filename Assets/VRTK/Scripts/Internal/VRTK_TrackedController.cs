@@ -22,7 +22,7 @@
 
         public virtual void OnControllerEnabled(VRTKTrackedControllerEventArgs e)
         {
-            if (index < uint.MaxValue && ControllerEnabled != null)
+            if (ControllerEnabled != null)
             {
                 ControllerEnabled(this, e);
             }
@@ -30,7 +30,7 @@
 
         public virtual void OnControllerDisabled(VRTKTrackedControllerEventArgs e)
         {
-            if (index < uint.MaxValue && ControllerDisabled != null)
+            if (ControllerDisabled != null)
             {
                 ControllerDisabled(this, e);
             }
@@ -38,7 +38,7 @@
 
         public virtual void OnControllerIndexChanged(VRTKTrackedControllerEventArgs e)
         {
-            if (index < uint.MaxValue && ControllerIndexChanged != null)
+            if (ControllerIndexChanged != null)
             {
                 ControllerIndexChanged(this, e);
             }
@@ -87,9 +87,10 @@
         protected virtual void Update()
         {
             uint checkIndex = VRTK_DeviceFinder.GetControllerIndex(gameObject);
-            if (index < uint.MaxValue && checkIndex != index)
+            if (checkIndex != index)
             {
                 uint previousIndex = index;
+                index = checkIndex;
                 OnControllerIndexChanged(SetEventPayload(previousIndex));
             }
 

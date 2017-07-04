@@ -7,6 +7,7 @@ A big thank you to the supporters of VRTK via the VRTK Patreon page at https://w
  * TreeFortress Games
  * BinaryLegend 
  * Eric 
+ * Tuukka Takala
  * Mcdoogleh 
  * Matt Ostgard
  * cognitiveVR 
@@ -23,6 +24,7 @@ A big thank you to the supporters of VRTK via the VRTK Patreon page at https://w
  * Jonathan Linowes
  * jamie hurt
  * Tim Lobes
+ * Chris Tuminello
  * Thomas Kildren
  * Devon Grandahl
  * Victor Lew
@@ -30,9 +32,9 @@ A big thank you to the supporters of VRTK via the VRTK Patreon page at https://w
  * Eric Vander Wal
  * Francis Sutton
  * Grayson Deitering
+ * mori 
  * TigerLily 
  * Roland 
- * Hgulgen 
  * Michal VRoblewski
  * Chris Kirby
  * Trevor Gibbons
@@ -53,14 +55,11 @@ A big thank you to the supporters of VRTK via the VRTK Patreon page at https://w
  * Stephen Elkins
  * David 
  * Matthew Boynton
- * Jason Halbach
  * Bartek Tułodziecki
  * Kyle Mausser
  * Niklas Dennerståhl
  * Luke Pierson
  * Balazs Faludi
- * Tuukka Takala
  * Will Lingard
  * Joe Ferguson
- * Matthew Reis
  * Adam Tannir
