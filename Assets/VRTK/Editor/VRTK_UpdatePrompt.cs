@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEditor;
@@ -16,6 +17,8 @@ public sealed class VRTK_UpdatePrompt : EditorWindow
         public Version version;
         [NonSerialized]
         public DateTime publishedDateTime;
+        [NonSerialized]
+        public List<string> changelogPages;
 
 #pragma warning disable 649
         public string html_url;
@@ -32,8 +35,37 @@ public sealed class VRTK_UpdatePrompt : EditorWindow
             latestRelease.version = new Version(latestRelease.tag_name);
             latestRelease.publishedDateTime = DateTime.Parse(latestRelease.published_at);
 
-            latestRelease.body = latestRelease.body.Trim();
-            latestRelease.body = Regex.Replace(latestRelease.body, @"(.*\*{2}.*\*{2}\n)", "\n$1");
+            string changelog = latestRelease.body;
+            latestRelease.body = null;
+
+            changelog = Regex.Replace(changelog, @"(?<!(\r\n){2}) \*.*\*{2}(.*)\*{2}", "\n<size=13>$2</size>");
+            changelog = Regex.Replace(changelog, @"(\r\n){2} \*.*\*{2}(.*)\*{2}", "\n\n<size=13>$2</size>");
+            changelog = new Regex(@"(#+)\s?(.*)\b").Replace(
+                changelog,
+                match => string.Format(
+                    "<size={0}>{1}</size>",
+                    30 - match.Groups[1].Value.Length * 6,
+                    match.Groups[2].Value
+                )
+            );
+            changelog = changelog.Replace("  *", "*");
+
+            // Each char gets turned into two triangles and the mesh vertices limit is 2^16.
+            // Let's use another 100 to be on the safe side.
+            const int textLengthLimit = 65536 / 4 - 100;
+            latestRelease.changelogPages = new List<string>((int)Mathf.Ceil(changelog.Length / (float)textLengthLimit));
+
+            while (changelog.Length > 0)
+            {
+                int lastIndexOf = changelog.LastIndexOf("\n", Math.Min(changelog.Length, textLengthLimit), StringComparison.Ordinal);
+                if (lastIndexOf == -1)
+                {
+                    lastIndexOf = changelog.Length;
+                }
+
+                latestRelease.changelogPages.Add(changelog.Substring(0, lastIndexOf));
+                changelog = changelog.Substring(lastIndexOf).TrimStart('\n', '\r');
+            }
 
             return latestRelease;
         }
@@ -51,9 +83,11 @@ public sealed class VRTK_UpdatePrompt : EditorWindow
     private static LatestRelease latestRelease;
     private static VRTK_UpdatePrompt promptWindow;
 
-    private Vector2 scrollPosition;
-    private Vector2 changelogScrollPosition;
-    private bool isChangelogFoldOut = true;
+    private static Vector2 scrollPosition;
+    private static Vector2 changelogScrollPosition;
+    private static float changelogWidth;
+    private static int changelogPageIndex;
+    private static bool isChangelogFoldOut = true;
 
     static VRTK_UpdatePrompt()
     {
@@ -100,16 +134,49 @@ public sealed class VRTK_UpdatePrompt : EditorWindow
             isChangelogFoldOut = EditorGUILayout.Foldout(isChangelogFoldOut, "Changelog", true);
             if (isChangelogFoldOut)
             {
-                using (GUILayout.ScrollViewScope changelogScrollViewScope = new GUILayout.ScrollViewScope(changelogScrollPosition))
+                using (new EditorGUILayout.HorizontalScope())
                 {
-                    changelogScrollPosition = changelogScrollViewScope.scrollPosition;
+                    GUILayout.Space(10);
 
-                    if (GUILayout.Button("View on GitHub"))
+                    using (new EditorGUILayout.VerticalScope())
                     {
-                        Application.OpenURL(latestRelease.html_url);
-                    }
+                        VRTK_EditorUtilities.DrawScrollableSelectableLabel(
+                            ref changelogScrollPosition,
+                            ref changelogWidth,
+                            latestRelease.changelogPages[changelogPageIndex],
+                            new GUIStyle(EditorStyles.textArea)
+                            {
+                                richText = true
+                            });
 
-                    EditorGUILayout.HelpBox(latestRelease.body, MessageType.None);
+                        if (latestRelease.changelogPages.Count > 0)
+                        {
+                            using (new EditorGUILayout.HorizontalScope())
+                            {
+                                using (new EditorGUI.DisabledGroupScope(changelogPageIndex == 0))
+                                {
+                                    if (GUILayout.Button("Previous Page"))
+                                    {
+                                        changelogPageIndex = Math.Max(0, --changelogPageIndex);
+                                        changelogScrollPosition = Vector3.zero;
+                                    }
+                                }
+                                using (new EditorGUI.DisabledGroupScope(changelogPageIndex == latestRelease.changelogPages.Count - 1))
+                                {
+                                    if (GUILayout.Button("Next Page"))
+                                    {
+                                        changelogPageIndex = Math.Min(latestRelease.changelogPages.Count - 1, ++changelogPageIndex);
+                                        changelogScrollPosition = Vector3.zero;
+                                    }
+                                }
+                            }
+                        }
+
+                        if (GUILayout.Button("View on GitHub"))
+                        {
+                            Application.OpenURL(latestRelease.html_url);
+                        }
+                    }
                 }
             }
 
@@ -166,6 +233,10 @@ public sealed class VRTK_UpdatePrompt : EditorWindow
 
     private static void CheckForUpdate()
     {
+        changelogScrollPosition = Vector3.zero;
+        changelogWidth = 0;
+        changelogPageIndex = 0;
+
         if (isManualCheck)
         {
             ShowWindow();
