@@ -51,5 +51,21 @@
             drawAction(destructiveButtonStyle);
             GUI.backgroundColor = previousBackgroundColor;
         }
+
+        public static void DrawScrollableSelectableLabel(ref Vector2 scrollPosition, ref float width, string text, GUIStyle style)
+        {
+            using (EditorGUILayout.ScrollViewScope scrollViewScope = new EditorGUILayout.ScrollViewScope(scrollPosition))
+            {
+                scrollPosition = scrollViewScope.scrollPosition;
+
+                float textHeight = style.CalcHeight(new GUIContent(text), width);
+                EditorGUILayout.SelectableLabel(text, style, GUILayout.MinHeight(textHeight));
+
+                if (Event.current.type == EventType.Repaint)
+                {
+                    width = GUILayoutUtility.GetLastRect().width;
+                }
+            }
+        }
     }
 }
