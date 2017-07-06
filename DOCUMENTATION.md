@@ -31,6 +31,7 @@ A collection of pre-defined usable prefabs have been included to allow for each 
 
  * [VR Simulator](#vr-simulator-sdk_inputsimulator)
  * [Frames Per Second Canvas](#frames-per-second-canvas-vrtk_framespersecondviewer)
+ * [Desktop Camera](#desktop-camera-vrtk_desktopcamera)
  * [Object Tooltip](#object-tooltip-vrtk_objecttooltip)
  * [Controller Tooltips](#controller-tooltips-vrtk_controllertooltips)
  * [Controller Rigidbody Activator](#controller-rigidbody-activator-vrtk_controllerrigidbodyactivator)
@@ -135,6 +136,23 @@ This script is pretty much a copy and paste from the script at: http://talesfrom
 ### Example
 
 `VRTK/Examples/018_CameraRig_FramesPerSecondCounter` displays the frames per second in the centre of the headset view. Pressing the trigger generates a new sphere and pressing the touchpad generates ten new spheres. Eventually when lots of spheres are present the FPS will drop and demonstrate the prefab.
+
+---
+
+## Desktop Camera (VRTK_DesktopCamera)
+
+### Overview
+
+Allows rendering a separate camera that is shown on the desktop only, without changing what's seen in VR headsets.
+
+To use the prefab, it simply needs to be placed into the scene.
+
+### Inspector Parameters
+
+ * **Desktop Camera:** The camera to use for the desktop view. If left blank the camera on the game object this script is attached to or any of its children will be used.
+ * **Follow Script:** The follow script to use for following the headset. If left blank the follow script on the game object this script is attached to or any of its children will be used.
+ * **Headset Image:** The optional image to render the headset's view into. Can be left blank.
+ * **Headset Render Texture:** The optional render texture to render the headset's view into. Can be left blank. If this is blank and `headsetImage` is set a default render texture will be created.
 
 ---
 
@@ -2407,11 +2425,6 @@ The script also has a public boolean pressed state for the buttons to allow the 
  * `public bool buttonTwoPressed` - This will be true if button two is held down. Default: `false`
  * `public bool buttonTwoTouched` - This will be true if button two is being touched. Default: `false`
  * `public bool startMenuPressed` - This will be true if start menu is held down. Default: `false`
- * `public bool pointerPressed` - This will be true if the button aliased to the pointer is held down. Default: `false`
- * `public bool grabPressed` - This will be true if the button aliased to the grab is held down. Default: `false`
- * `public bool usePressed` - This will be true if the button aliased to the use is held down. Default: `false`
- * `public bool uiClickPressed` - This will be true if the button aliased to the UI click is held down. Default: `false`
- * `public bool menuPressed` - This will be true if the button aliased to the menu is held down. Default: `false`
  * `public bool controllerVisible` - This will be true if the controller model alias renderers are visible. Default: `true`
 
 ### Class Events
@@ -2449,17 +2462,6 @@ The script also has a public boolean pressed state for the buttons to allow the 
  * `ButtonTwoReleased` - Emitted when button two is released.
  * `StartMenuPressed` - Emitted when start menu is pressed.
  * `StartMenuReleased` - Emitted when start menu is released.
- * `AliasPointerOn` - Emitted when the pointer toggle alias button is pressed.
- * `AliasPointerOff` - Emitted when the pointer toggle alias button is released.
- * `AliasPointerSet` - Emitted when the pointer set alias button is released.
- * `AliasGrabOn` - Emitted when the grab toggle alias button is pressed.
- * `AliasGrabOff` - Emitted when the grab toggle alias button is released.
- * `AliasUseOn` - Emitted when the use toggle alias button is pressed.
- * `AliasUseOff` - Emitted when the use toggle alias button is released.
- * `AliasMenuOn` - Emitted when the menu toggle alias button is pressed.
- * `AliasMenuOff` - Emitted when the menu toggle alias button is released.
- * `AliasUIClickOn` - Emitted when the UI click alias button is pressed.
- * `AliasUIClickOff` - Emitted when the UI click alias button is released.
  * `ControllerEnabled` - Emitted when the controller is enabled.
  * `ControllerDisabled` - Emitted when the controller is disabled.
  * `ControllerIndexChanged` - Emitted when the controller index changed.
@@ -5788,7 +5790,6 @@ All 3D controls extend the `VRTK_Control` abstract class which provides a defaul
 
 ### Class Variables
 
- * `public ValueChangedEvent OnValueChanged` - Emitted when the control is interacted with.
  * `public enum Direction` - 3D Control Directions
   * `autodetect` - Attempt to auto detect the axis
   * `x` - X axis
