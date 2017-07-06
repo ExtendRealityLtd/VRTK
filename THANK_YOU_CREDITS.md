@@ -2,7 +2,13 @@
 
 A big thank you to the supporters of VRTK via the VRTK Patreon page at https://www.patreon.com/vrtk
 
- * **Luke Chadwick** *[Professional Sponsor]*
+### Professional Sponsors
+
+[![image](https://user-images.githubusercontent.com/1029673/27898738-28f0e226-621f-11e7-9fdb-8618d85ba372.png)](https://www.realestate.com.au) 
+
+### Name List
+
+ * **realestate.co.au - Luke Chadwick** *[Professional Sponsor]*
  * Mark Bradley
  * TreeFortress Games
  * BinaryLegend 

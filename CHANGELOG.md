@@ -1,5 +1,28 @@
 # Changelog
 
+# 3.2.1
+
+## Bug Fixes
+
+ *  **ControllerTooptips**
+    * enable tips if no HeadsetAware script is found (eebe8ea66ebb2f88d37008c14393db4e325eebd3)
+ *  **Interaction**
+    * correctly set attach point when switching sdk (877c3286fd042ed2be3910d92d0d73ae6af76f82)
+ *  **Internal**
+    * emit tracked controller index change events (a740146297b948a25cbc5f50f29f110729117df2)
+ *  **Presence**
+    * calculate collider height based on global positions (5497c6cc2f42abb1305bff2ff9b68cd08d89ff95)
+ *  **SDK**
+    * SteamVR SDK Setup unusable in build (5f24681f4c4bea15c1eae34743cb9d89e3057c25)
+    * support SteamVR plugin 1.2.2 (bbdd9f92460111278a05267cb2b049ef76e89e8e)
+ *  **SDKManager**
+    * deprecate persist on load setting (63adb7ed32367bfaa3a68b34b22cec0e8eb1e8da)
+    * handle null Behaviour (d8ead58936179595005613da8267faf1c62eb2bf)
+ *  **SDKSetupSwitcher**
+    * recognize SDKSetup camera (21ae3d3dcd2f6aa576df428efa8e6bc30cb1d243)
+ *  **UpdatePrompt**
+    * long changelog error (dbb3f7a599c2ec28fb00aba0ba1a12dbc9e13480)
+
 # 3.2.0
 
 ## Breaking Changes

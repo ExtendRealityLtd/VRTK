@@ -26,6 +26,12 @@ A big thank you to all those who support VRTK via [Patreon].
 
 A list of supports can be seen in [THANK_YOU_CREDITS.md].
 
+### Professional Sponsors
+
+An extra special thank you to our professional sponsors via [Patreon].
+
+[![image](https://user-images.githubusercontent.com/1029673/27898738-28f0e226-621f-11e7-9fdb-8618d85ba372.png)](https://www.realestate.com.au) 
+
 ## Documentation
 
 The documentation for the project can be found within this
