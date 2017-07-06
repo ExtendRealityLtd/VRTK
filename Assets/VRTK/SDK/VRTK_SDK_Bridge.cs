@@ -159,6 +159,11 @@
             return GetControllerSDK().GetButtonAxis(buttonType, controllerReference);
         }
 
+        public static float GetControllerSenseAxis(SDK_BaseController.ButtonTypes buttonType, VRTK_ControllerReference controllerReference)
+        {
+            return GetControllerSDK().GetButtonSenseAxis(buttonType, controllerReference);
+        }
+
         public static float GetControllerHairlineDelta(SDK_BaseController.ButtonTypes buttonType, VRTK_ControllerReference controllerReference)
         {
             return GetControllerSDK().GetButtonHairlineDelta(buttonType, controllerReference);

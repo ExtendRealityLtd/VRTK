@@ -83,6 +83,10 @@ namespace VRTK
         protected SDK_BaseController.ControllerElements[] systemMenuElements = new SDK_BaseController.ControllerElements[] { SDK_BaseController.ControllerElements.SystemMenu };
         protected SDK_BaseController.ControllerElements[] startMenuElements = new SDK_BaseController.ControllerElements[] { SDK_BaseController.ControllerElements.StartMenu };
 
+        protected Coroutine attemptGetControllerPathsRoutine;
+        protected int findControllerAttempts = 25;
+        protected float findControllerAttemptsDelay = 0.1f;
+
         /// <summary>
         /// The ConfigureControllerPaths method is used to set up the model element paths.
         /// </summary>
@@ -107,6 +111,8 @@ namespace VRTK
         {
             highlighterOptions = new Dictionary<string, object>();
             highlighterOptions.Add("resetMainTexture", true);
+
+            SDK_BaseController.ControllerHand controllerHand = VRTK_DeviceFinder.GetControllerHand(controllerAlias);
             VRTK_BaseHighlighter objectHighlighter = VRTK_BaseHighlighter.GetActiveHighlighter(controllerAlias);
 
             if (objectHighlighter == null)
@@ -114,9 +120,8 @@ namespace VRTK
                 objectHighlighter = controllerAlias.AddComponent<VRTK_MaterialColorSwapHighlighter>();
             }
 
-            SDK_BaseController.ControllerHand controllerHand = VRTK_DeviceFinder.GetControllerHand(controllerAlias);
-
             objectHighlighter.Initialise(null, highlighterOptions);
+
             AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.ButtonOne, controllerHand)), objectHighlighter, elementHighlighterOverrides.buttonOne);
             AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.ButtonTwo, controllerHand)), objectHighlighter, elementHighlighterOverrides.buttonTwo);
             AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.Body, controllerHand)), objectHighlighter, elementHighlighterOverrides.body);
@@ -228,9 +233,7 @@ namespace VRTK
                 return;
             }
 
-            ConfigureControllerPaths();
-            modelContainer = (modelContainer != null ? modelContainer : VRTK_DeviceFinder.GetModelAliasController(controllerAlias));
-            initHighlightersRoutine = StartCoroutine(WaitForModel());
+            attemptGetControllerPathsRoutine = StartCoroutine(AttemptGetControllerPaths(findControllerAttempts, findControllerAttemptsDelay));
         }
 
         protected virtual void OnDisable()
@@ -238,6 +241,13 @@ namespace VRTK
             if (initHighlightersRoutine != null)
             {
                 StopCoroutine(initHighlightersRoutine);
+                initHighlightersRoutine = null;
+            }
+
+            if (attemptGetControllerPathsRoutine != null)
+            {
+                StopCoroutine(attemptGetControllerPathsRoutine);
+                attemptGetControllerPathsRoutine = null;
             }
         }
 
@@ -377,6 +387,22 @@ namespace VRTK
             }
         }
 
+        protected virtual IEnumerator AttemptGetControllerPaths(int attempts, float delay)
+        {
+            WaitForSeconds delayInstruction = new WaitForSeconds(delay);
+            SDK_BaseController.ControllerType controllerType = VRTK_SDK_Bridge.GetCurrentControllerType();
+            while (controllerType == SDK_BaseController.ControllerType.Undefined && attempts > 0)
+            {
+                controllerType = VRTK_SDK_Bridge.GetCurrentControllerType();
+                attempts--;
+                yield return delayInstruction;
+            }
+
+            ConfigureControllerPaths();
+            modelContainer = (modelContainer != null ? modelContainer : VRTK_DeviceFinder.GetModelAliasController(controllerAlias));
+            initHighlightersRoutine = StartCoroutine(WaitForModel());
+        }
+
         protected virtual IEnumerator WaitForModel()
         {
             while (GetElementTransform(modelElementPaths.bodyModelPath) == null)
@@ -444,6 +470,7 @@ namespace VRTK
                     VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.SDK_OBJECT_NOT_FOUND, "Controller Model", "Controller SDK"));
                     return null;
                 }
+
                 cachedElements[path] = modelContainer.transform.Find(path);
             }
             return cachedElements[path];

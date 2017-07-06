@@ -4,6 +4,7 @@ namespace VRTK
 #if VRTK_DEFINE_SDK_STEAMVR
     using UnityEngine;
     using System.Collections.Generic;
+    using System.Text;
     using Valve.VR;
 #if !VRTK_DEFINE_STEAMVR_PLUGIN_1_2_2_OR_NEWER
     using System;
@@ -81,7 +82,7 @@ namespace VRTK
             switch (VRTK_DeviceFinder.GetHeadsetType(true))
             {
                 case VRTK_DeviceFinder.Headsets.Vive:
-                    return ControllerType.SteamVR_ViveWand;
+                    return GetSteamVRControllerType();
                 case VRTK_DeviceFinder.Headsets.OculusRift:
                     return ControllerType.SteamVR_OculusTouch;
             }
@@ -102,7 +103,15 @@ namespace VRTK
                     returnCollider = (hand == ControllerHand.Left ? "ControllerColliders/SteamVROculusTouch_Left" : "ControllerColliders/SteamVROculusTouch_Right");
                     break;
                 case VRTK_DeviceFinder.Headsets.Vive:
-                    returnCollider = "ControllerColliders/HTCVive";
+                    switch (GetCurrentControllerType())
+                    {
+                        case ControllerType.SteamVR_ValveKnuckles:
+                            returnCollider = (hand == ControllerHand.Left ? "ControllerColliders/ValveKnuckles_Left" : "ControllerColliders/ValveKnuckles_Right");
+                            break;
+                        case ControllerType.SteamVR_ViveWand:
+                            returnCollider = "ControllerColliders/HTCVive";
+                            break;
+                    }
                     break;
             }
             return returnCollider;
@@ -474,6 +483,37 @@ namespace VRTK
         }
 
         /// <summary>
+        /// The GetButtonSenseAxis method retrieves the current sense axis value for the given button type on the given controller reference.
+        /// </summary>
+        /// <param name="buttonType">The type of button to check for the sense axis on.</param>
+        /// <param name="controllerReference">The reference to the controller to check the sense axis on.</param>
+        /// <returns>The current sense axis value.</returns>
+        public override float GetButtonSenseAxis(ButtonTypes buttonType, VRTK_ControllerReference controllerReference)
+        {
+            uint index = VRTK_ControllerReference.GetRealIndex(controllerReference);
+            if (index >= OpenVR.k_unTrackedDeviceIndexInvalid)
+            {
+                return 0f;
+            }
+
+            SteamVR_Controller.Device device = SteamVR_Controller.Input((int)index);
+            switch (buttonType)
+            {
+                case ButtonTypes.Trigger:
+                    return device.GetAxis(EVRButtonId.k_EButton_Axis3).x;
+                case ButtonTypes.Grip:
+                    return device.GetAxis(EVRButtonId.k_EButton_Axis2).x;
+                case ButtonTypes.MiddleFinger:
+                    return device.GetAxis(EVRButtonId.k_EButton_Axis3).y;
+                case ButtonTypes.RingFinger:
+                    return device.GetAxis(EVRButtonId.k_EButton_Axis4).x;
+                case ButtonTypes.PinkyFinger:
+                    return device.GetAxis(EVRButtonId.k_EButton_Axis4).y;
+            }
+            return 0f;
+        }
+
+        /// <summary>
         /// The GetButtonHairlineDelta method is used to get the difference between the current button press and the previous frame button press.
         /// </summary>
         /// <param name="buttonType">The type of button to get the hairline delta for.</param>
@@ -641,7 +681,14 @@ namespace VRTK
             switch (VRTK_DeviceFinder.GetHeadsetType(true))
             {
                 case VRTK_DeviceFinder.Headsets.Vive:
-                    return (forceHand == ControllerHand.Left ? "lgrip" : "rgrip") + suffix;
+                    switch(GetCurrentControllerType())
+                    {
+                        case ControllerType.SteamVR_ViveWand:
+                            return (forceHand == ControllerHand.Left ? "lgrip" : "rgrip") + suffix;
+                        case ControllerType.SteamVR_ValveKnuckles:
+                            return "button_b" + suffix;
+                    }
+                    return null;
                 case VRTK_DeviceFinder.Headsets.OculusRift:
                     return "grip" + suffix;
             }
@@ -706,6 +753,51 @@ namespace VRTK
                     return (hand == ControllerHand.Left ? "enter_button" : "home_button") + suffix;
             }
             return null;
+        }
+
+        protected virtual ControllerType GetSteamVRControllerType()
+        {
+            VRTK_ControllerReference leftHand = VRTK_ControllerReference.GetControllerReference(GetControllerLeftHand());
+            VRTK_ControllerReference rightHand = VRTK_ControllerReference.GetControllerReference(GetControllerRightHand());
+
+            if (!VRTK_ControllerReference.IsValid(leftHand) && !VRTK_ControllerReference.IsValid(rightHand))
+            {
+                return ControllerType.Undefined;
+            }
+
+            uint checkIndex = (VRTK_ControllerReference.IsValid(rightHand) ? rightHand.index : leftHand.index);
+            string controllerType = GetRenderModelName(checkIndex).ToLower();
+            if (controllerType.Contains("knuckles"))
+            {
+                return ControllerType.SteamVR_ValveKnuckles;
+            }
+            else if (controllerType.Contains("vive"))
+            {
+                return ControllerType.SteamVR_ViveWand;
+            }
+            return ControllerType.Undefined;
+        }
+
+        protected virtual string GetRenderModelName(uint index)
+        {
+            CVRSystem system = OpenVR.System;
+            if (system == null)
+            {
+                return "";
+            }
+
+            ETrackedPropertyError error = ETrackedPropertyError.TrackedProp_Success;
+            uint capacity = system.GetStringTrackedDeviceProperty(index, ETrackedDeviceProperty.Prop_RenderModelName_String, null, 0, ref error);
+            if (capacity <= 1)
+            {
+                VRTK_Logger.Warn("Failed to get render model name for tracked object " + index);
+                return "";
+            }
+
+            StringBuilder buffer = new StringBuilder((int)capacity);
+            system.GetStringTrackedDeviceProperty(index, ETrackedDeviceProperty.Prop_RenderModelName_String, buffer, capacity, ref error);
+
+            return buffer.ToString();
         }
 #endif
     }

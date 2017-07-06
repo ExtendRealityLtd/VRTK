@@ -87,6 +87,9 @@ namespace VRTK
         protected GameObject undroppableGrabbedObject;
         protected Rigidbody originalControllerAttachPoint;
         protected Coroutine attemptSetCurrentControllerAttachPoint;
+        protected int findControllerAttempts = 25;
+        protected float findControllerAttemptsDelay = 0.1f;
+
         protected VRTK_ControllerReference controllerReference
         {
             get
@@ -338,7 +341,7 @@ namespace VRTK
                 //attempt to find the attach point on the controller
                 SDK_BaseController.ControllerHand handType = VRTK_DeviceFinder.GetControllerHand(interactTouch.gameObject);
                 string elementPath = VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.AttachPoint, handType);
-                attemptSetCurrentControllerAttachPoint = StartCoroutine(SetCurrentControllerAttachPoint(elementPath, 10, 0.1f));
+                attemptSetCurrentControllerAttachPoint = StartCoroutine(SetCurrentControllerAttachPoint(elementPath, findControllerAttempts, findControllerAttemptsDelay));
             }
         }
 

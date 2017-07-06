@@ -109,6 +109,7 @@ namespace VRTK
         protected TooltipButtons[] availableButtons;
         protected VRTK_ObjectTooltip[] buttonTooltips;
         protected bool[] tooltipStates;
+        protected bool overallState = true;
 
         protected int retryInitCurrentTries = 0;
 
@@ -176,6 +177,7 @@ namespace VRTK
         {
             if (element == TooltipButtons.None)
             {
+                overallState = state;
                 for (int i = 1; i < buttonTooltips.Length; i++)
                 {
                     if (buttonTooltips[i].displayText.Length > 0)
@@ -403,7 +405,7 @@ namespace VRTK
 
             if (headsetControllerAware == null || !hideWhenNotInView)
             {
-                ToggleTips(true);
+                ToggleTips(overallState);
             }
         }
 

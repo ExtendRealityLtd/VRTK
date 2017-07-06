@@ -25,6 +25,8 @@ namespace VRTK
         protected OVRInput.RawAxis2D[] touchpads = new OVRInput.RawAxis2D[] { OVRInput.RawAxis2D.LThumbstick, OVRInput.RawAxis2D.RThumbstick };
         protected OVRInput.RawAxis1D[] triggers = new OVRInput.RawAxis1D[] { OVRInput.RawAxis1D.LIndexTrigger, OVRInput.RawAxis1D.RIndexTrigger };
         protected OVRInput.RawAxis1D[] grips = new OVRInput.RawAxis1D[] { OVRInput.RawAxis1D.LHandTrigger, OVRInput.RawAxis1D.RHandTrigger };
+        protected OVRInput.RawNearTouch[] triggerSense = new OVRInput.RawNearTouch[] { OVRInput.RawNearTouch.LIndexTrigger, OVRInput.RawNearTouch.RIndexTrigger };
+        protected OVRInput.RawNearTouch[] touchpadSense = new OVRInput.RawNearTouch[] { OVRInput.RawNearTouch.LThumbButtons, OVRInput.RawNearTouch.RThumbButtons };
 
         protected Quaternion[] previousControllerRotations = new Quaternion[2];
         protected Quaternion[] currentControllerRotations = new Quaternion[2];
@@ -487,6 +489,36 @@ namespace VRTK
         }
 
         /// <summary>
+        /// The GetButtonSenseAxis method retrieves the current sense axis value for the given button type on the given controller reference.
+        /// </summary>
+        /// <param name="buttonType">The type of button to check for the sense axis on.</param>
+        /// <param name="controllerReference">The reference to the controller to check the sense axis on.</param>
+        /// <returns>The current sense axis value.</returns>
+        public override float GetButtonSenseAxis(ButtonTypes buttonType, VRTK_ControllerReference controllerReference)
+        {
+            if (!VRTK_ControllerReference.IsValid(controllerReference))
+            {
+                return 0f;
+            }
+            bool senseResult = false;
+            uint index = VRTK_ControllerReference.GetRealIndex(controllerReference);
+            VRTK_TrackedController device = GetTrackedObject(controllerReference.actual);
+            if (device != null)
+            {
+                switch (buttonType)
+                {
+                    case ButtonTypes.Touchpad:
+                        senseResult = OVRInput.Get(touchpadSense[index], touchControllers[index]);
+                        break;
+                    case ButtonTypes.Trigger:
+                        senseResult = OVRInput.Get(triggerSense[index], touchControllers[index]);
+                        break;
+                }
+            }
+            return (senseResult ? 1f : 0f);
+        }
+
+        /// <summary>
         /// The GetButtonHairlineDelta method is used to get the difference between the current button press and the previous frame button press.
         /// </summary>
         /// <param name="buttonType">The type of button to get the hairline delta for.</param>
@@ -749,7 +781,7 @@ namespace VRTK
             if (cachedBoundariesSDK != null)
             {
                 OvrAvatar avatar = cachedBoundariesSDK.GetAvatar();
-                return (avatar && controllersAreVisible && avatar.StartWithControllers);
+                return (avatar != null && controllersAreVisible && avatar.StartWithControllers);
             }
 #endif
             return false;

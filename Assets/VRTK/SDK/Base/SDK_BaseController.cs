@@ -23,6 +23,9 @@ namespace VRTK
         /// <param name="Trigger">Trigger on the controller.</param>
         /// <param name="TriggerHairline">Trigger Hairline on the controller.</param>
         /// <param name="Touchpad">Touchpad on the controller.</param>
+        /// <param name="MiddleFinger">Middle Finger on the controller.</param>
+        /// <param name="RingFinger">Ring Finger on the controller.</param>
+        /// <param name="PinkyFinger">Pinky Finger on the controller.</param>
         public enum ButtonTypes
         {
             ButtonOne,
@@ -33,6 +36,9 @@ namespace VRTK
             Trigger,
             TriggerHairline,
             Touchpad,
+            MiddleFinger,
+            RingFinger,
+            PinkyFinger
         }
 
         /// <summary>
@@ -105,6 +111,7 @@ namespace VRTK
         /// <param name="Oculus_OculusTouch">The Oculus Touch controller for Oculus Utilities.</param>
         /// <param name="Daydream_Controller">The Daydream controller for Google Daydream SDK.</param>
         /// <param name="Ximmerse_Flip">The Flip controller for Ximmerse SDK.</param>
+        /// <param name="SteamVR_ValveKnuckles">The Valve Knuckles controller for SteamVR.</param>
         public enum ControllerType
         {
             Undefined,
@@ -114,7 +121,8 @@ namespace VRTK
             SteamVR_OculusTouch,
             Oculus_OculusTouch,
             Daydream_Controller,
-            Ximmerse_Flip
+            Ximmerse_Flip,
+            SteamVR_ValveKnuckles
         }
 
         /// <summary>
@@ -326,6 +334,14 @@ namespace VRTK
         /// <param name="controllerReference">The reference to the controller to check the button axis on.</param>
         /// <returns>A Vector2 of the X/Y values of the button axis. If no axis values exist for the given button, then a Vector2.Zero is returned.</returns>
         public abstract Vector2 GetButtonAxis(ButtonTypes buttonType, VRTK_ControllerReference controllerReference);
+
+        /// <summary>
+        /// The GetButtonSenseAxis method retrieves the current sense axis value for the given button type on the given controller reference.
+        /// </summary>
+        /// <param name="buttonType">The type of button to check for the sense axis on.</param>
+        /// <param name="controllerReference">The reference to the controller to check the sense axis on.</param>
+        /// <returns>The current sense axis value.</returns>
+        public abstract float GetButtonSenseAxis(ButtonTypes buttonType, VRTK_ControllerReference controllerReference);
 
         /// <summary>
         /// The GetButtonHairlineDelta method is used to get the difference between the current button press and the previous frame button press.

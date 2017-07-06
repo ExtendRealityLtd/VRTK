@@ -472,8 +472,18 @@ namespace VRTK
                     }
                     break;
             }
-
             return Vector2.zero;
+        }
+
+        /// <summary>
+        /// The GetButtonSenseAxis method retrieves the current sense axis value for the given button type on the given controller reference.
+        /// </summary>
+        /// <param name="buttonType">The type of button to check for the sense axis on.</param>
+        /// <param name="controllerReference">The reference to the controller to check the sense axis on.</param>
+        /// <returns>The current sense axis value.</returns>
+        public override float GetButtonSenseAxis(ButtonTypes buttonType, VRTK_ControllerReference controllerReference)
+        {
+            return 0f;
         }
 
         /// <summary>
