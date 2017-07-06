@@ -55,16 +55,26 @@ public sealed class VRTK_UpdatePrompt : EditorWindow
             const int textLengthLimit = 65536 / 4 - 100;
             latestRelease.changelogPages = new List<string>((int)Mathf.Ceil(changelog.Length / (float)textLengthLimit));
 
-            while (changelog.Length > 0)
+            while (true)
             {
-                int lastIndexOf = changelog.LastIndexOf("\n", Math.Min(changelog.Length, textLengthLimit), StringComparison.Ordinal);
-                if (lastIndexOf == -1)
+                if (changelog.Length > textLengthLimit)
                 {
-                    lastIndexOf = changelog.Length;
-                }
+                    int startIndex = Math.Min(changelog.Length, textLengthLimit);
+                    int lastIndexOf = changelog.LastIndexOf("\n", startIndex, StringComparison.Ordinal);
 
-                latestRelease.changelogPages.Add(changelog.Substring(0, lastIndexOf));
-                changelog = changelog.Substring(lastIndexOf).TrimStart('\n', '\r');
+                    if (lastIndexOf == -1)
+                    {
+                        lastIndexOf = startIndex;
+                    }
+
+                    latestRelease.changelogPages.Add(changelog.Substring(0, lastIndexOf));
+                    changelog = changelog.Substring(lastIndexOf).TrimStart('\n', '\r');
+                }
+                else
+                {
+                    latestRelease.changelogPages.Add(changelog);
+                    break;
+                }
             }
 
             return latestRelease;
