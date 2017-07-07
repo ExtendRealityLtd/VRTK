@@ -2,6 +2,7 @@
 namespace VRTK
 {
     using UnityEngine;
+    using System.Collections;
     using System.Collections.Generic;
 
     /// <summary>
@@ -74,7 +75,10 @@ namespace VRTK
         protected bool triggerWasColliding = false;
         protected bool rigidBodyForcedActive = false;
         protected Rigidbody touchRigidBody;
-        protected Object defaultColliderPrefab;
+        protected Coroutine attemptCreateColliderRoutine;
+        protected int findControllerAttempts = 25;
+        protected float findControllerAttemptsDelay = 0.1f;
+
         protected VRTK_ControllerReference controllerReference
         {
             get
@@ -249,12 +253,9 @@ namespace VRTK
         protected virtual void OnEnable()
         {
             destroyColliderOnDisable = false;
-            SDK_BaseController.ControllerHand controllerHand = VRTK_DeviceFinder.GetControllerHand(gameObject);
-            defaultColliderPrefab = Resources.Load(VRTK_SDK_Bridge.GetControllerDefaultColliderPath(controllerHand));
-
             VRTK_PlayerObject.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.Controller);
             triggerRumble = false;
-            CreateTouchCollider();
+            attemptCreateColliderRoutine = StartCoroutine(AttemptCreateCollider(findControllerAttempts, findControllerAttemptsDelay));
             CreateTouchRigidBody();
         }
 
@@ -262,6 +263,11 @@ namespace VRTK
         {
             ForceStopTouching();
             DestroyTouchCollider();
+            if (attemptCreateColliderRoutine != null)
+            {
+                StopCoroutine(attemptCreateColliderRoutine);
+                attemptCreateColliderRoutine = null;
+            }
         }
 
         protected virtual void OnDestroy()
@@ -488,8 +494,25 @@ namespace VRTK
             return false;
         }
 
+        protected virtual IEnumerator AttemptCreateCollider(int attempts, float delay)
+        {
+            WaitForSeconds delayInstruction = new WaitForSeconds(delay);
+            SDK_BaseController.ControllerType controllerType = VRTK_SDK_Bridge.GetCurrentControllerType();
+            while (controllerType == SDK_BaseController.ControllerType.Undefined && attempts > 0)
+            {
+                controllerType = VRTK_SDK_Bridge.GetCurrentControllerType();
+                attempts--;
+                yield return delayInstruction;
+            }
+
+            CreateTouchCollider();
+        }
+
         protected virtual void CreateTouchCollider()
         {
+            SDK_BaseController.ControllerHand controllerHand = VRTK_DeviceFinder.GetControllerHand(gameObject);
+            Object defaultColliderPrefab = Resources.Load(VRTK_SDK_Bridge.GetControllerDefaultColliderPath(controllerHand));
+
             if (customColliderContainer == null)
             {
                 if (defaultColliderPrefab == null)

@@ -2381,6 +2381,8 @@ The script also has a public boolean pressed state for the buttons to allow the 
 ### Inspector Parameters
 
  * **Axis Fidelity:** The amount of fidelity in the changes on the axis, which is defaulted to 1. Any number higher than 2 will probably give too sensitive results.
+ * **Sense Axis Force Zero Threshold:** The level on a sense axis to reach before the sense axis is forced to 0f
+ * **Sense Axis Press Threshold:** The amount of pressure required to be applied to a sense button before considering the sense button pressed.
  * **Trigger Click Threshold:** The level on the trigger axis to reach before a click is registered.
  * **Trigger Force Zero Threshold:** The level on the trigger axis to reach before the axis is forced to 0f.
  * **Trigger Axis Zero On Untouch:** If this is checked then the trigger axis will be forced to 0f when the trigger button reports an untouch event.
@@ -2407,11 +2409,17 @@ The script also has a public boolean pressed state for the buttons to allow the 
   * `ButtonTwoTouch` - The button one is touched.
   * `ButtonTwoPress` - The button one is pressed.
   * `StartMenuPress` - The button one is pressed.
+  * `TouchpadSense` - The touchpad sense touch is active.
+  * `TriggerSense` - The trigger sense touch is active.
+  * `MiddleFingerSense` - The middle finger sense touch is active.
+  * `RingFingerSense` - The ring finger sense touch is active.
+  * `PinkyFingerSense` - The pinky finger sense touch is active.
  * `public bool triggerPressed` - This will be true if the trigger is squeezed about half way in. Default: `false`
  * `public bool triggerTouched` - This will be true if the trigger is squeezed a small amount. Default: `false`
  * `public bool triggerHairlinePressed` - This will be true if the trigger is squeezed a small amount more from any previous squeeze on the trigger. Default: `false`
  * `public bool triggerClicked` - This will be true if the trigger is squeezed all the way down. Default: `false`
  * `public bool triggerAxisChanged` - This will be true if the trigger has been squeezed more or less. Default: `false`
+ * `public bool triggerSenseAxisChanged` - This will be true if the trigger sense is being touched more or less. Default: `false`
  * `public bool gripPressed` - This will be true if the grip is squeezed about half way in. Default: `false`
  * `public bool gripTouched` - This will be true if the grip is touched. Default: `false`
  * `public bool gripHairlinePressed` - This will be true if the grip is squeezed a small amount more from any previous squeeze on the grip. Default: `false`
@@ -2420,11 +2428,15 @@ The script also has a public boolean pressed state for the buttons to allow the 
  * `public bool touchpadPressed` - This will be true if the touchpad is held down. Default: `false`
  * `public bool touchpadTouched` - This will be true if the touchpad is being touched. Default: `false`
  * `public bool touchpadAxisChanged` - This will be true if the touchpad touch position has changed. Default: `false`
+ * `public bool touchpadSenseAxisChanged` - This will be true if the touchpad sense is being touched more or less. Default: `false`
  * `public bool buttonOnePressed` - This will be true if button one is held down. Default: `false`
  * `public bool buttonOneTouched` - This will be true if button one is being touched. Default: `false`
  * `public bool buttonTwoPressed` - This will be true if button two is held down. Default: `false`
  * `public bool buttonTwoTouched` - This will be true if button two is being touched. Default: `false`
  * `public bool startMenuPressed` - This will be true if start menu is held down. Default: `false`
+ * `public bool middleFingerSenseAxisChanged` - This will be true if the middle finger sense is being touched more or less. Default: `false`
+ * `public bool ringFingerSenseAxisChanged` - This will be true if the ring finger sense is being touched more or less. Default: `false`
+ * `public bool pinkyFingerSenseAxisChanged` - This will be true if the pinky finger sense is being touched more or less. Default: `false`
  * `public bool controllerVisible` - This will be true if the controller model alias renderers are visible. Default: `true`
 
 ### Class Events
@@ -2438,6 +2450,7 @@ The script also has a public boolean pressed state for the buttons to allow the 
  * `TriggerClicked` - Emitted when the trigger is squeezed all the way down.
  * `TriggerUnclicked` - Emitted when the trigger is no longer being held all the way down.
  * `TriggerAxisChanged` - Emitted when the amount of squeeze on the trigger changes.
+ * `TriggerSenseAxisChanged` - Emitted when the amount of touch on the trigger sense changes.
  * `GripPressed` - Emitted when the grip is squeezed about half way in.
  * `GripReleased` - Emitted when the grip is released under half way.
  * `GripTouchStart` - Emitted when the grip is squeezed a small amount.
@@ -2452,6 +2465,7 @@ The script also has a public boolean pressed state for the buttons to allow the 
  * `TouchpadTouchStart` - Emitted when the touchpad is touched (without pressing down to click).
  * `TouchpadTouchEnd` - Emitted when the touchpad is no longer being touched.
  * `TouchpadAxisChanged` - Emitted when the touchpad is being touched in a different location.
+ * `TouchpadSenseAxisChanged` - Emitted when the amount of touch on the touchpad sense changes.
  * `ButtonOneTouchStart` - Emitted when button one is touched.
  * `ButtonOneTouchEnd` - Emitted when button one is no longer being touched.
  * `ButtonOnePressed` - Emitted when button one is pressed.
@@ -2462,6 +2476,9 @@ The script also has a public boolean pressed state for the buttons to allow the 
  * `ButtonTwoReleased` - Emitted when button two is released.
  * `StartMenuPressed` - Emitted when start menu is pressed.
  * `StartMenuReleased` - Emitted when start menu is released.
+ * `MiddleFingerSenseAxisChanged` - Emitted when the amount of touch on the middle finger sense changes.
+ * `RingFingerSenseAxisChanged` - Emitted when the amount of touch on the ring finger sense changes.
+ * `PinkyFingerSenseAxisChanged` - Emitted when the amount of touch on the pinky finger sense changes.
  * `ControllerEnabled` - Emitted when the controller is enabled.
  * `ControllerDisabled` - Emitted when the controller is disabled.
  * `ControllerIndexChanged` - Emitted when the controller index changed.
@@ -2572,6 +2589,61 @@ The GetHairTriggerDelta method returns a float representing the difference in ho
    * `float` - A float representing the difference in the trigger pressure from the hairline threshold start to current position.
 
 The GetHairTriggerDelta method returns a float representing the difference in how much the trigger is being pressed in relation to the hairline threshold start.
+
+#### GetTouchpadSenseAxis/0
+
+  > `public virtual float GetTouchpadSenseAxis()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `float` - A float representing how much the touch sensor is being touched.
+
+The GetTouchpadSenseAxis method returns a float representing how much of the touch sensor is being touched.
+
+#### GetTriggerSenseAxis/0
+
+  > `public virtual float GetTriggerSenseAxis()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `float` - A float representing how much the touch sensor is being touched.
+
+The GetTriggerSenseAxis method returns a float representing how much of the touch sensor is being touched.
+
+#### GetMiddleFingerSenseAxis/0
+
+  > `public virtual float GetMiddleFingerSenseAxis()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `float` - A float representing how much the touch sensor is being touched.
+
+The GetMiddleFingerSenseAxis method returns a float representing how much of the touch sensor is being touched.
+
+#### GetRingFingerSenseAxis/0
+
+  > `public virtual float GetRingFingerSenseAxis()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `float` - A float representing how much the touch sensor is being touched.
+
+The GetRingFingerSenseAxis method returns a float representing how much of the touch sensor is being touched.
+
+#### GetPinkyFingerSenseAxis/0
+
+  > `public virtual float GetPinkyFingerSenseAxis()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `float` - A float representing how much the touch sensor is being touched.
+
+The GetPinkyFingerSenseAxis method returns a float representing how much of the touch sensor is being touched.
 
 #### AnyButtonPressed/0
 
@@ -7735,6 +7807,9 @@ This is an abstract class to implement the interface required by all implemented
   * `Trigger` - Trigger on the controller.
   * `TriggerHairline` - Trigger Hairline on the controller.
   * `Touchpad` - Touchpad on the controller.
+  * `MiddleFinger` - Middle Finger on the controller.
+  * `RingFinger` - Ring Finger on the controller.
+  * `PinkyFinger` - Pinky Finger on the controller.
  * `public enum ButtonPressTypes` - Concepts of controller button press
   * `Press` - The button is currently being pressed.
   * `PressDown` - The button has just been pressed down.
@@ -7766,6 +7841,7 @@ This is an abstract class to implement the interface required by all implemented
   * `Oculus_OculusTouch` - The Oculus Touch controller for Oculus Utilities.
   * `Daydream_Controller` - The Daydream controller for Google Daydream SDK.
   * `Ximmerse_Flip` - The Flip controller for Ximmerse SDK.
+  * `SteamVR_ValveKnuckles` - The Valve Knuckles controller for SteamVR.
 
 ### Class Methods
 
@@ -8078,6 +8154,18 @@ The IsTouchpadStatic method is used to determine if the touchpad is currently no
    * `Vector2` - A Vector2 of the X/Y values of the button axis. If no axis values exist for the given button, then a Vector2.Zero is returned.
 
 The GetButtonAxis method retrieves the current X/Y axis values for the given button type on the given controller reference.
+
+#### GetButtonSenseAxis/2
+
+  > `public abstract float GetButtonSenseAxis(ButtonTypes buttonType, VRTK_ControllerReference controllerReference);`
+
+  * Parameters
+   * `ButtonTypes buttonType` - The type of button to check for the sense axis on.
+   * `VRTK_ControllerReference controllerReference` - The reference to the controller to check the sense axis on.
+  * Returns
+   * `float` - The current sense axis value.
+
+The GetButtonSenseAxis method retrieves the current sense axis value for the given button type on the given controller reference.
 
 #### GetButtonHairlineDelta/2
 
@@ -8677,6 +8765,18 @@ The IsTouchpadStatic method is used to determine if the touchpad is currently no
 
 The GetButtonAxis method retrieves the current X/Y axis values for the given button type on the given controller reference.
 
+#### GetButtonSenseAxis/2
+
+  > `public override float GetButtonSenseAxis(ButtonTypes buttonType, VRTK_ControllerReference controllerReference)`
+
+  * Parameters
+   * `ButtonTypes buttonType` - The type of button to check for the sense axis on.
+   * `VRTK_ControllerReference controllerReference` - The reference to the controller to check the sense axis on.
+  * Returns
+   * `float` - The current sense axis value.
+
+The GetButtonSenseAxis method retrieves the current sense axis value for the given button type on the given controller reference.
+
 #### GetButtonHairlineDelta/2
 
   > `public override float GetButtonHairlineDelta(ButtonTypes buttonType, VRTK_ControllerReference controllerReference)`
@@ -9268,6 +9368,18 @@ The IsTouchpadStatic method is used to determine if the touchpad is currently no
    * `Vector2` - A Vector2 of the X/Y values of the button axis. If no axis values exist for the given button, then a Vector2.Zero is returned.
 
 The GetButtonAxis method retrieves the current X/Y axis values for the given button type on the given controller reference.
+
+#### GetButtonSenseAxis/2
+
+  > `public override float GetButtonSenseAxis(ButtonTypes buttonType, VRTK_ControllerReference controllerReference)`
+
+  * Parameters
+   * `ButtonTypes buttonType` - The type of button to check for the sense axis on.
+   * `VRTK_ControllerReference controllerReference` - The reference to the controller to check the sense axis on.
+  * Returns
+   * `float` - The current sense axis value.
+
+The GetButtonSenseAxis method retrieves the current sense axis value for the given button type on the given controller reference.
 
 #### GetButtonHairlineDelta/2
 
@@ -9880,6 +9992,18 @@ The IsTouchpadStatic method is used to determine if the touchpad is currently no
 
 The GetButtonAxis method retrieves the current X/Y axis values for the given button type on the given controller reference.
 
+#### GetButtonSenseAxis/2
+
+  > `public override float GetButtonSenseAxis(ButtonTypes buttonType, VRTK_ControllerReference controllerReference)`
+
+  * Parameters
+   * `ButtonTypes buttonType` - The type of button to check for the sense axis on.
+   * `VRTK_ControllerReference controllerReference` - The reference to the controller to check the sense axis on.
+  * Returns
+   * `float` - The current sense axis value.
+
+The GetButtonSenseAxis method retrieves the current sense axis value for the given button type on the given controller reference.
+
 #### GetButtonHairlineDelta/2
 
   > `public override float GetButtonHairlineDelta(ButtonTypes buttonType, VRTK_ControllerReference controllerReference)`
@@ -10491,6 +10615,18 @@ The IsTouchpadStatic method is used to determine if the touchpad is currently no
 
 The GetButtonAxis method retrieves the current X/Y axis values for the given button type on the given controller reference.
 
+#### GetButtonSenseAxis/2
+
+  > `public override float GetButtonSenseAxis(ButtonTypes buttonType, VRTK_ControllerReference controllerReference)`
+
+  * Parameters
+   * `ButtonTypes buttonType` - The type of button to check for the sense axis on.
+   * `VRTK_ControllerReference controllerReference` - The reference to the controller to check the sense axis on.
+  * Returns
+   * `float` - The current sense axis value.
+
+The GetButtonSenseAxis method retrieves the current sense axis value for the given button type on the given controller reference.
+
 #### GetButtonHairlineDelta/2
 
   > `public override float GetButtonHairlineDelta(ButtonTypes buttonType, VRTK_ControllerReference controllerReference)`
@@ -11101,6 +11237,18 @@ The IsTouchpadStatic method is used to determine if the touchpad is currently no
 
 The GetButtonAxis method retrieves the current X/Y axis values for the given button type on the given controller reference.
 
+#### GetButtonSenseAxis/2
+
+  > `public override float GetButtonSenseAxis(ButtonTypes buttonType, VRTK_ControllerReference controllerReference)`
+
+  * Parameters
+   * `ButtonTypes buttonType` - The type of button to check for the sense axis on.
+   * `VRTK_ControllerReference controllerReference` - The reference to the controller to check the sense axis on.
+  * Returns
+   * `float` - The current sense axis value.
+
+The GetButtonSenseAxis method retrieves the current sense axis value for the given button type on the given controller reference.
+
 #### GetButtonHairlineDelta/2
 
   > `public override float GetButtonHairlineDelta(ButtonTypes buttonType, VRTK_ControllerReference controllerReference)`
@@ -11699,6 +11847,18 @@ The IsTouchpadStatic method is used to determine if the touchpad is currently no
    * `Vector2` - A Vector2 of the X/Y values of the button axis. If no axis values exist for the given button, then a Vector2.Zero is returned.
 
 The GetButtonAxis method retrieves the current X/Y axis values for the given button type on the given controller reference.
+
+#### GetButtonSenseAxis/2
+
+  > `public override float GetButtonSenseAxis(ButtonTypes buttonType, VRTK_ControllerReference controllerReference)`
+
+  * Parameters
+   * `ButtonTypes buttonType` - The type of button to check for the sense axis on.
+   * `VRTK_ControllerReference controllerReference` - The reference to the controller to check the sense axis on.
+  * Returns
+   * `float` - The current sense axis value.
+
+The GetButtonSenseAxis method retrieves the current sense axis value for the given button type on the given controller reference.
 
 #### GetButtonHairlineDelta/2
 
