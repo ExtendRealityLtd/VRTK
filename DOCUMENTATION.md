@@ -716,6 +716,7 @@ The destination points can also have a locked state if the `Enable Teleport` fla
  * **Hide Pointer Cursor On Hover:** If this is checked, then the pointer cursor will be hidden when a valid destination point is hovered over.
  * **Hide Direction Indicator On Hover:** If this is checked, then the pointer direction indicator will be hidden when a valid destination point is hovered over. A pointer direction indicator will always be hidden if snap to rotation is set.
  * **Snap To Rotation:** Determines if the play area will be rotated to the rotation of the destination point upon the destination marker being set.
+ * **Teleporter:** The scene teleporter that is used. If this is not specified then it will be auto looked up in the scene.
 
 ### Class Variables
 
@@ -1895,6 +1896,29 @@ The Teleport/4 method calls the teleport to update position without needing to l
    * _none_
 
 The ForceTeleport method forces the position to update to a given destination and ignores any target checking or floor adjustment.
+
+#### SetActualTeleportDestination/2
+
+  > `public virtual void SetActualTeleportDestination(Vector3 actualPosition, Quaternion? actualRotation)`
+
+  * Parameters
+   * `Vector3 actualPosition` - The actual position that the teleport event should use as the final location.
+   * `Quaternion? actualRotation` - The actual rotation that the teleport event should use as the final location.
+  * Returns
+   * _none_
+
+The SetActualTeleportDestination method forces the destination of a teleport event to the given Vector3.
+
+#### ResetActualTeleportDestination/0
+
+  > `public virtual void ResetActualTeleportDestination()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * _none_
+
+The ResetActualTeleportDestination method removes any previous forced destination position that was set by the SetActualTeleportDestination method.
 
 ### Example
 
