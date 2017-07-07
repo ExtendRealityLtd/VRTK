@@ -372,7 +372,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4000013858448892}
   - component: {fileID: 114000010035616626}
-  - component: {fileID: 114177628815396416}
   m_Layer: 0
   m_Name: Simulator
   m_TagString: Untagged
@@ -6515,17 +6514,6 @@ MonoBehaviour:
       PublicKeyToken=null
   LeftHandCustomPose: {fileID: 0}
   RightHandCustomPose: {fileID: 0}
---- !u!114 &114177628815396416
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010728847870}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c731730425e54447ae6bfcc41d6fe585, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114220405095341134
 MonoBehaviour:
   m_ObjectHideFlags: 1
