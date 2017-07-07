@@ -60,6 +60,7 @@ namespace VRTK
         // If you want to always lerp with a fixed mps speed, set the normalLerpTime to a high value
         protected float minDistanceForNormalLerp;
         protected float lerpTime = 0.1f;
+        protected Coroutine attemptLerpRoutine;
 
         public virtual void OnWillDashThruObjects(DashTeleportEventArgs e)
         {
@@ -80,7 +81,17 @@ namespace VRTK
         protected override void OnEnable()
         {
             base.OnEnable();
-            minDistanceForNormalLerp = minSpeedMps * normalLerpTime; // default values give 5.0f
+            minDistanceForNormalLerp = minSpeedMps * normalLerpTime;
+        }
+
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+            if (attemptLerpRoutine != null)
+            {
+                StopCoroutine(attemptLerpRoutine);
+                attemptLerpRoutine = null;
+            }
         }
 
         protected override Vector3 SetNewPosition(Vector3 position, Transform target, bool forceDestinationPosition)
@@ -88,16 +99,27 @@ namespace VRTK
             return CheckTerrainCollision(position, target, forceDestinationPosition);
         }
 
+        protected override Quaternion SetNewRotation(Quaternion? rotation)
+        {
+            if (ValidRigObjects())
+            {
+                return (rotation != null ? (Quaternion)rotation : playArea.rotation);
+            }
+            return Quaternion.identity;
+        }
+
         protected override void StartTeleport(object sender, DestinationMarkerEventArgs e)
         {
             base.StartTeleport(sender, e);
         }
 
-        protected override void ProcessOrientation(object sender, DestinationMarkerEventArgs e, Vector3 newPosition, Quaternion newRotation)
+        protected override void ProcessOrientation(object sender, DestinationMarkerEventArgs e, Vector3 updatedPosition, Quaternion updatedRotation)
         {
             if (ValidRigObjects())
             {
-                StartCoroutine(lerpToPosition(sender, e, newPosition));
+                Vector3 startPosition = new Vector3(playArea.position.x, playArea.position.y, playArea.position.z);
+                Quaternion startRotation = new Quaternion(playArea.rotation.x, playArea.rotation.y, playArea.rotation.z, playArea.rotation.w);
+                attemptLerpRoutine = StartCoroutine(lerpToPosition(sender, e, startPosition, updatedPosition, startRotation, updatedRotation));
             }
         }
 
@@ -105,7 +127,7 @@ namespace VRTK
         {
         }
 
-        protected virtual IEnumerator lerpToPosition(object sender, DestinationMarkerEventArgs e, Vector3 targetPosition)
+        protected virtual IEnumerator lerpToPosition(object sender, DestinationMarkerEventArgs e, Vector3 startPosition, Vector3 targetPosition, Quaternion startRotation, Quaternion targetRotation)
         {
             enableTeleport = false;
             bool gameObjectInTheWay = false;
@@ -121,9 +143,9 @@ namespace VRTK
             float maxDistance = Vector3.Distance(playArea.position, targetPosition - direction * 0.5f);
             RaycastHit[] allHits = Physics.CapsuleCastAll(bottomPoint, topPoint, capsuleRadius, direction, maxDistance);
 
-            foreach (RaycastHit hit in allHits)
+            for (int i = 0; i < allHits.Length; i++)
             {
-                gameObjectInTheWay = (hit.collider.gameObject != e.target.gameObject ? true : false);
+                gameObjectInTheWay = (allHits[i].collider.gameObject != e.target.gameObject ? true : false);
             }
 
             if (gameObjectInTheWay)
@@ -131,34 +153,23 @@ namespace VRTK
                 OnWillDashThruObjects(SetDashTeleportEvent(allHits));
             }
 
-            if (maxDistance >= minDistanceForNormalLerp)
-            {
-                lerpTime = normalLerpTime; // fixed time for all bigger dashes
-            }
-            else
-            {
-                lerpTime = (1f / minSpeedMps) * maxDistance; // clamped to speed for small dashes
-            }
+            lerpTime = (maxDistance >= minDistanceForNormalLerp ? normalLerpTime : (1f / minSpeedMps) * maxDistance);
 
-            Vector3 startPosition = new Vector3(playArea.position.x, playArea.position.y, playArea.position.z);
-            float elapsedTime = 0;
-            float t = 0;
+            float elapsedTime = 0f;
+            float currentLerpedTime = 0f;
+            WaitForEndOfFrame delayInstruction = new WaitForEndOfFrame();
 
-            while (t < 1)
+            while (currentLerpedTime < 1f)
             {
-                playArea.position = Vector3.Lerp(startPosition, targetPosition, t);
+                playArea.position = Vector3.Lerp(startPosition, targetPosition, currentLerpedTime);
+                playArea.rotation = Quaternion.Lerp(startRotation, targetRotation, currentLerpedTime);
                 elapsedTime += Time.deltaTime;
-                t = elapsedTime / lerpTime;
-                if (t > 1)
-                {
-                    if (playArea.position != targetPosition)
-                    {
-                        playArea.position = targetPosition;
-                    }
-                    t = 1;
-                }
-                yield return new WaitForEndOfFrame();
+                currentLerpedTime = elapsedTime / lerpTime;
+                yield return delayInstruction;
             }
+
+            playArea.position = targetPosition;
+            playArea.rotation = targetRotation;
 
             if (gameObjectInTheWay)
             {

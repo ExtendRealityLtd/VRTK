@@ -66,6 +66,9 @@ namespace VRTK
         protected float maxBlinkTransitionSpeed = 1.5f;
         protected float maxBlinkDistance = 33f;
         protected Coroutine initaliseListeners;
+        protected bool useGivenForcedPosition = false;
+        protected Vector3 givenForcedPosition = Vector3.zero;
+        protected Quaternion? givenForcedRotation = null;
 
         /// <summary>
         /// The InitDestinationSetListener method is used to register the teleport script to listen to events from the given game object that is used to generate destination markers. Any destination set event emitted by a registered game object will initiate the teleport to the given destination location.
@@ -181,6 +184,26 @@ namespace VRTK
             EndTeleport(this, teleportArgs);
         }
 
+        /// <summary>
+        /// The SetActualTeleportDestination method forces the destination of a teleport event to the given Vector3.
+        /// </summary>
+        /// <param name="actualPosition">The actual position that the teleport event should use as the final location.</param>
+        /// <param name="actualRotation">The actual rotation that the teleport event should use as the final location.</param>
+        public virtual void SetActualTeleportDestination(Vector3 actualPosition, Quaternion? actualRotation)
+        {
+            useGivenForcedPosition = true;
+            givenForcedPosition = actualPosition;
+            givenForcedRotation = actualRotation;
+        }
+
+        /// <summary>
+        /// The ResetActualTeleportDestination method removes any previous forced destination position that was set by the SetActualTeleportDestination method.
+        /// </summary>
+        public virtual void ResetActualTeleportDestination()
+        {
+            useGivenForcedPosition = false;
+        }
+
         protected virtual void Awake()
         {
             VRTK_SDKManager.instance.AddBehaviourToToggleOnLoadedSetupChange(this);
@@ -255,6 +278,12 @@ namespace VRTK
         {
             if (enableTeleport && ValidLocation(e.target, e.destinationPosition) && e.enableTeleport)
             {
+                if (useGivenForcedPosition)
+                {
+                    e.destinationPosition = givenForcedPosition;
+                    e.destinationRotation = (givenForcedRotation != null ? givenForcedRotation : e.destinationRotation);
+                    ResetActualTeleportDestination();
+                }
                 StartTeleport(sender, e);
                 Vector3 newPosition = GetNewPosition(e.destinationPosition, e.target, e.forceDestinationPosition);
                 CalculateBlinkDelay(blinkTransitionSpeed, newPosition);
@@ -386,8 +415,9 @@ namespace VRTK
 
             InitDestinationSetListener(leftHand, state);
             InitDestinationSetListener(rightHand, state);
-            foreach (VRTK_DestinationMarker destinationMarker in VRTK_ObjectCache.registeredDestinationMarkers)
+            for (int i = 0; i < VRTK_ObjectCache.registeredDestinationMarkers.Count; i++)
             {
+                VRTK_DestinationMarker destinationMarker = VRTK_ObjectCache.registeredDestinationMarkers[i];
                 if (destinationMarker.gameObject != leftHand && destinationMarker.gameObject != rightHand)
                 {
                     InitDestinationSetListener(destinationMarker.gameObject, state);

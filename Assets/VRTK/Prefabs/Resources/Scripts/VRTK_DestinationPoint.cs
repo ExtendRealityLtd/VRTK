@@ -55,6 +55,11 @@ namespace VRTK
         [Tooltip("Determines if the play area will be rotated to the rotation of the destination point upon the destination marker being set.")]
         public RotationTypes snapToRotation = RotationTypes.NoRotation;
 
+        [Header("Custom Settings")]
+
+        [Tooltip("The scene teleporter that is used. If this is not specified then it will be auto looked up in the scene.")]
+        public VRTK_BasicTeleport teleporter;
+
         public static VRTK_DestinationPoint currentDestinationPoint;
 
         /// <summary>
@@ -86,7 +91,6 @@ namespace VRTK
         protected bool isActive;
         protected VRTK_BasePointerRenderer.VisibilityStates storedCursorState;
         protected bool storedDirectionIndicatorState;
-        protected Coroutine setDestination;
         protected bool currentTeleportState;
         protected Transform playArea;
         protected Transform headset;
@@ -165,10 +169,6 @@ namespace VRTK
                 StopCoroutine(initaliseListeners);
             }
 
-            if (setDestination != null)
-            {
-                StopCoroutine(setDestination);
-            }
             ManageDestinationMarkers(false);
             if (createdCollider)
             {
@@ -228,6 +228,7 @@ namespace VRTK
             {
                 ManageDestinationMarkers(true);
             }
+            teleporter = (teleporter == null && VRTK_ObjectCache.registeredTeleporters.Count > 0 ? VRTK_ObjectCache.registeredTeleporters[0] : teleporter);
         }
 
         protected virtual void ManageDestinationMarkers(bool state)
@@ -235,8 +236,9 @@ namespace VRTK
             ManageDestinationMarkerListeners(VRTK_DeviceFinder.GetControllerLeftHand(), state);
             ManageDestinationMarkerListeners(VRTK_DeviceFinder.GetControllerRightHand(), state);
 
-            foreach (var destinationMarker in VRTK_ObjectCache.registeredDestinationMarkers)
+            for (int i = 0; i < VRTK_ObjectCache.registeredDestinationMarkers.Count; i++)
             {
+                VRTK_DestinationMarker destinationMarker = VRTK_ObjectCache.registeredDestinationMarkers[i];
                 ManageDestinationMarkerListeners(destinationMarker.gameObject, state);
             }
         }
@@ -276,6 +278,10 @@ namespace VRTK
                 isActive = true;
                 ToggleCursor(sender, false);
                 EnablePoint();
+                if (snapToPoint && teleporter != null)
+                {
+                    teleporter.SetActualTeleportDestination(destinationLocation.position, GetRotation());
+                }
                 OnDestinationMarkerEnter(SetDestinationMarkerEvent(0f, e.raycastHit.transform, e.raycastHit, e.raycastHit.transform.position, e.controllerReference, false, GetRotation()));
             }
         }
@@ -287,6 +293,10 @@ namespace VRTK
                 isActive = false;
                 ToggleCursor(sender, true);
                 ResetPoint();
+                if (snapToPoint && teleporter != null)
+                {
+                    teleporter.ResetActualTeleportDestination();
+                }
                 OnDestinationMarkerExit(SetDestinationMarkerEvent(0f, e.raycastHit.transform, e.raycastHit, e.raycastHit.transform.position, e.controllerReference, false, GetRotation()));
             }
         }
@@ -298,8 +308,11 @@ namespace VRTK
                 currentDestinationPoint = this;
                 if (snapToPoint)
                 {
-                    e.raycastHit.point = destinationLocation.position;
-                    setDestination = StartCoroutine(DoDestinationMarkerSetAtEndOfFrame(e));
+                    if (teleporter != null)
+                    {
+                        teleporter.SetActualTeleportDestination(destinationLocation.position, GetRotation());
+                    }
+                    DisablePoint();
                 }
             }
             else if (currentDestinationPoint != this)
@@ -310,17 +323,6 @@ namespace VRTK
             {
                 currentDestinationPoint = null;
                 ResetPoint();
-            }
-        }
-
-        protected virtual IEnumerator DoDestinationMarkerSetAtEndOfFrame(DestinationMarkerEventArgs e)
-        {
-            yield return new WaitForEndOfFrame();
-            if (enabled)
-            {
-                e.raycastHit.point = destinationLocation.position;
-                DisablePoint();
-                OnDestinationMarkerSet(SetDestinationMarkerEvent(e.distance, transform, e.raycastHit, destinationLocation.position, e.controllerReference, false, GetRotation()));
             }
         }
 
