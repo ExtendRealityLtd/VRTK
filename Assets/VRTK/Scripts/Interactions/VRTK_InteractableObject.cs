@@ -113,6 +113,7 @@ namespace VRTK
         [Tooltip("Determines which controller can initiate a use action.")]
         public AllowedController allowedUseControllers = AllowedController.Both;
 
+        #region Interaction Events
         /// <summary>
         /// Emitted when another object touches the current object.
         /// </summary>
@@ -153,6 +154,7 @@ namespace VRTK
         /// Emitted when the object gets unsnapped from a drop zone.
         /// </summary>
         public event InteractableObjectEventHandler InteractableObjectUnsnappedFromDropZone;
+        #endregion Interaction Events
 
         /// <summary>
         /// The current using state of the object. `0` not being used, `1` being used.
@@ -167,7 +169,7 @@ namespace VRTK
         {
             get
             {
-                if (interactableRigidbody)
+                if (ValidRigidbody())
                 {
                     return interactableRigidbody.isKinematic;
                 }
@@ -175,7 +177,7 @@ namespace VRTK
             }
             set
             {
-                if (interactableRigidbody)
+                if (ValidRigidbody())
                 {
                     interactableRigidbody.isKinematic = value;
                 }
@@ -204,7 +206,9 @@ namespace VRTK
         protected Vector3 previousLocalScale = Vector3.zero;
         protected List<GameObject> currentIgnoredColliders = new List<GameObject>();
         protected bool startDisabled = false;
+        protected bool requiresRigidbody = true;
 
+        #region Event methods
         public virtual void OnInteractableObjectTouched(InteractableObjectEventArgs e)
         {
             if (InteractableObjectTouched != null)
@@ -284,6 +288,7 @@ namespace VRTK
                 InteractableObjectUnsnappedFromDropZone(this, e);
             }
         }
+        #endregion Event methods
 
         public InteractableObjectEventArgs SetInteractableObjectEvent(GameObject interactingObject)
         {
@@ -531,9 +536,10 @@ namespace VRTK
         {
             if (delay > 0f)
             {
-                foreach (Rigidbody rb in GetComponentsInChildren<Rigidbody>())
+                Rigidbody[] childRigidbodies = GetComponentsInChildren<Rigidbody>();
+                for (int i = 0; i < childRigidbodies.Length; i++)
                 {
-                    rb.detectCollisions = false;
+                    childRigidbodies[i].detectCollisions = false;
                 }
                 Invoke("UnpauseCollisions", delay);
             }
@@ -544,7 +550,7 @@ namespace VRTK
         /// </summary>
         public virtual void ZeroVelocity()
         {
-            if (interactableRigidbody)
+            if (ValidRigidbody())
             {
                 interactableRigidbody.velocity = Vector3.zero;
                 interactableRigidbody.angularVelocity = Vector3.zero;
@@ -564,7 +570,7 @@ namespace VRTK
                     previousIsGrabbable = isGrabbable;
                 }
 
-                if (interactableRigidbody)
+                if (ValidRigidbody())
                 {
                     previousKinematicState = interactableRigidbody.isKinematic;
                 }
@@ -676,8 +682,9 @@ namespace VRTK
         /// </summary>
         public virtual void UnregisterTeleporters()
         {
-            foreach (VRTK_BasicTeleport teleporter in VRTK_ObjectCache.registeredTeleporters)
+            for (int i = 0; i < VRTK_ObjectCache.registeredTeleporters.Count; i++)
             {
+                VRTK_BasicTeleport teleporter = VRTK_ObjectCache.registeredTeleporters[i];
                 teleporter.Teleporting -= new TeleportEventHandler(OnTeleporting);
                 teleporter.Teleported -= new TeleportEventHandler(OnTeleported);
             }
@@ -706,7 +713,10 @@ namespace VRTK
             }
             else
             {
-                interactableRigidbody.WakeUp();
+                if (ValidRigidbody())
+                {
+                    interactableRigidbody.WakeUp();
+                }
                 ResetDropSnapType();
                 OnInteractableObjectUnsnappedFromDropZone(SetInteractableObjectEvent(snapDropZone.gameObject));
             }
@@ -820,12 +830,6 @@ namespace VRTK
 
         protected virtual void Awake()
         {
-            interactableRigidbody = GetComponent<Rigidbody>();
-            if (interactableRigidbody != null)
-            {
-                interactableRigidbody.maxAngularVelocity = float.MaxValue;
-            }
-
             if (disableWhenIdle && enabled && IsIdle())
             {
                 startDisabled = true;
@@ -835,6 +839,11 @@ namespace VRTK
 
         protected virtual void OnEnable()
         {
+            if (ValidRigidbody())
+            {
+                interactableRigidbody.maxAngularVelocity = float.MaxValue;
+            }
+
             InitialiseHighlighter();
             RegisterTeleporters();
             forceDisabled = false;
@@ -918,7 +927,7 @@ namespace VRTK
                 transform.SetParent(previousParent);
                 forcedDropped = false;
             }
-            if (interactableRigidbody != null)
+            if (ValidRigidbody())
             {
                 interactableRigidbody.isKinematic = previousKinematicState;
             }
@@ -926,6 +935,15 @@ namespace VRTK
             {
                 isGrabbable = previousIsGrabbable;
             }
+        }
+
+        protected virtual bool ValidRigidbody()
+        {
+            if (interactableRigidbody == null && requiresRigidbody)
+            {
+                interactableRigidbody = GetComponent<Rigidbody>();
+            }
+            return (interactableRigidbody != null);
         }
 
         protected virtual void InitialiseHighlighter()
@@ -978,12 +996,13 @@ namespace VRTK
             if (isGrabbable && grabAttachMechanicScript == null)
             {
                 VRTK_BaseGrabAttach setGrabMechanic = GetComponent<VRTK_BaseGrabAttach>();
-                if (!setGrabMechanic)
+                if (setGrabMechanic == null)
                 {
                     setGrabMechanic = gameObject.AddComponent<VRTK_FixedJointGrabAttach>();
                 }
                 grabAttachMechanicScript = setGrabMechanic;
             }
+            requiresRigidbody = (grabAttachMechanicScript != null && !grabAttachMechanicScript.IsClimbable());
         }
 
         protected virtual void AttemptSetSecondaryGrabAction()
@@ -1141,8 +1160,9 @@ namespace VRTK
         protected virtual IEnumerator RegisterTeleportersAtEndOfFrame()
         {
             yield return new WaitForEndOfFrame();
-            foreach (VRTK_BasicTeleport teleporter in VRTK_ObjectCache.registeredTeleporters)
+            for (int i = 0; i < VRTK_ObjectCache.registeredTeleporters.Count; i++)
             {
+                VRTK_BasicTeleport teleporter = VRTK_ObjectCache.registeredTeleporters[i];
                 teleporter.Teleporting += new TeleportEventHandler(OnTeleporting);
                 teleporter.Teleported += new TeleportEventHandler(OnTeleported);
             }
