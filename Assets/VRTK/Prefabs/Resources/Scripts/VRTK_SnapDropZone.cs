@@ -182,17 +182,12 @@ namespace VRTK
             VRTK_InteractableObject ioCheck = objectToSnap.GetComponentInParent<VRTK_InteractableObject>();
             if (ioCheck != null)
             {
-                ioCheck.SaveCurrentState();
                 StopCoroutine("AttemptForceSnapAtEndOfFrame");
                 if (ioCheck.IsGrabbed())
                 {
                     ioCheck.ForceStopInteracting();
-                    StartCoroutine(AttemptForceSnapAtEndOfFrame(objectToSnap));
                 }
-                else
-                {
-                    AttemptForceSnap(objectToSnap);
-                }
+                StartCoroutine(AttemptForceSnapAtEndOfFrame(ioCheck));
             }
         }
 
@@ -684,10 +679,11 @@ namespace VRTK
             OnTriggerStay(objectToSnap.GetComponentInChildren<Collider>());
         }
 
-        protected virtual IEnumerator AttemptForceSnapAtEndOfFrame(GameObject objectToSnap)
+        protected virtual IEnumerator AttemptForceSnapAtEndOfFrame(VRTK_InteractableObject objectToSnap)
         {
             yield return new WaitForEndOfFrame();
-            AttemptForceSnap(objectToSnap);
+            objectToSnap.SaveCurrentState();
+            AttemptForceSnap(objectToSnap.gameObject);
         }
 
         protected virtual void ToggleHighlight(Collider collider, bool state)
