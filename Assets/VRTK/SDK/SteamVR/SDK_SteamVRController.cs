@@ -477,7 +477,14 @@ namespace VRTK
                 case ButtonTypes.Trigger:
                     return device.GetAxis(EVRButtonId.k_EButton_SteamVR_Trigger);
                 case ButtonTypes.Grip:
-                    return device.GetAxis(EVRButtonId.k_EButton_Axis2);
+                    switch (GetCurrentControllerType())
+                    {
+                        case ControllerType.SteamVR_OculusTouch:
+                        case ControllerType.SteamVR_ValveKnuckles:
+                            return device.GetAxis(EVRButtonId.k_EButton_Axis2);
+                        default:
+                            return new Vector2((GetControllerButtonState(buttonType, ButtonPressTypes.Press, controllerReference) ? 1f : 0f), 0f);
+                    }
             }
             return Vector2.zero;
         }
@@ -681,7 +688,7 @@ namespace VRTK
             switch (VRTK_DeviceFinder.GetHeadsetType(true))
             {
                 case VRTK_DeviceFinder.Headsets.Vive:
-                    switch(GetCurrentControllerType())
+                    switch (GetCurrentControllerType())
                     {
                         case ControllerType.SteamVR_ViveWand:
                             return (forceHand == ControllerHand.Left ? "lgrip" : "rgrip") + suffix;

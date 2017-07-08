@@ -44,6 +44,7 @@ A collection of pre-defined usable prefabs have been included to allow for each 
  * [Console Viewer Canvas](#console-viewer-canvas-vrtk_consoleviewer)
  * [Panel Menu Controller](#panel-menu-controller-vrtk_panelmenucontroller)
  * [Panel Menu Item Controller](#panel-menu-item-controller-vrtk_panelmenuitemcontroller)
+ * [Avatar Hand Controller](#avatar-hand-controller-vrtk_avatarhandcontroller)
 
 ---
 
@@ -1067,6 +1068,63 @@ The TriggerPressed method is used when the control action button is pressed.
 ### Example
 
 `040_Controls_Panel_Menu` contains three basic interactive object examples of the PanelMenu in use.
+
+---
+
+## Avatar Hand Controller (VRTK_AvatarHandController)
+
+### Overview
+
+Provides a custom controller hand model with psuedo finger functionality.
+
+**Prefab Usage:**
+* Place the `VRTK/Prefabs/AvatarHands/VRTK_BasicHand` prefab as a child of either the left or right script alias.
+* If the prefab is being used in the left hand then check the `Mirror Model` parameter.
+* By default, the avatar hand controller will detect which controller is connected and represent it accordingly.
+* Optionally, use SDKTransformModify scripts to adjust the hand orientation based on different controller types.
+
+### Inspector Parameters
+
+ * **Ignore All Overrides:** Determines whether to ignore all of the given overrides on an Interaction event.
+ * **State Value:** Sets the Animation parameter for the interaction type and can be used to change the Idle pose based on interaction type.
+ * **Apply Thumb Override:** Determines when to apply the given thumb override.
+ * **Thumb Override:** The axis override for the thumb on an Interact Touch event. Will only be applicable if the thumb button state is not touched.
+ * **Apply Index Override:** Determines when to apply the given index finger override.
+ * **Index Override:** The axis override for the index finger on an Interact Touch event. Will only be applicable if the index finger button state is not touched.
+ * **Apply Middle Override:** Determines when to apply the given middle finger override.
+ * **Middle Override:** The axis override for the middle finger on an Interact Touch event. Will only be applicable if the middle finger button state is not touched.
+ * **Apply Ring Override:** Determines when to apply the given ring finger override.
+ * **Ring Override:** The axis override for the ring finger on an Interact Touch event. Will only be applicable if the ring finger button state is not touched.
+ * **Apply Pinky Override:** Determines when to apply the given pinky finger override.
+ * **Pinky Override:** The axis override for the pinky finger on an Interact Touch event.  Will only be applicable if the pinky finger button state is not touched.
+ * **Controller Type:** The controller type to use for default finger settings.
+ * **Set Fingers For Controller Type:** Determines whether the Finger and State settings are auto set based on the connected controller type.
+ * **Mirror Model:** If this is checked then the model will be mirrored, tick this if the avatar hand is for the left hand controller.
+ * **Animation Snap Speed:** The speed in which a finger will transition to it's destination position if the finger state is `Digital`.
+ * **Thumb Button:** The button alias to control the thumb if the thumb state is `Digital`.
+ * **Index Button:** The button alias to control the index finger if the index finger state is `Digital`.
+ * **Middle Button:** The button alias to control the middle finger if the middle finger state is `Digital`.
+ * **Ring Button:** The button alias to control the ring finger if the ring finger state is `Digital`.
+ * **Pinky Button:** The button alias to control the pinky finger if the pinky finger state is `Digital`.
+ * **Three Finger Button:** The button alias to control the middle, ring and pinky finger if the three finger state is `Digital`.
+ * **Thumb Axis Button:** The button type to listen for axis changes to control the thumb.
+ * **Index Axis Button:** The button type to listen for axis changes to control the index finger.
+ * **Middle Axis Button:** The button type to listen for axis changes to control the middle finger.
+ * **Ring Axis Button:** The button type to listen for axis changes to control the ring finger.
+ * **Pinky Axis Button:** The button type to listen for axis changes to control the pinky finger.
+ * **Three Finger Axis Button:** The button type to listen for axis changes to control the middle, ring and pinky finger.
+ * **Thumb State:** The Axis Type to utilise when dealing with the thumb state. Not all controllers support all axis types on all of the available buttons.
+ * **Touch Overrides:** Finger axis overrides on an Interact Touch event.
+ * **Grab Overrides:** Finger axis overrides on an Interact Grab event.
+ * **Use Overrides:** Finger axis overrides on an Interact Use event.
+ * **Controller Events:** The controller to listen for the events on. If this is left blank as it will be auto populated by finding the Controller Events script on the parent GameObject.
+ * **Interact Touch:** An optional Interact Touch to listen for touch events on. If this is left blank as it will attempt to be auto populated by finding the Interact Touch script on the parent GameObject.
+ * **Interact Grab:** An optional Interact Grab to listen for grab events on. If this is left blank as it will attempt to be auto populated by finding the Interact Grab script on the parent GameObject.
+ * **Interact Use:** An optional Interact Use to listen for use events on. If this is left blank as it will attempt to be auto populated by finding the Interact Use script on the parent GameObject.
+
+### Example
+
+`032_Controller_CustomControllerModel` uses the `VRTK_BasicHand` prefab to display custom avatar hands for the left and right controller.
 
 ---
 
@@ -2438,6 +2496,10 @@ The script also has a public boolean pressed state for the buttons to allow the 
   * `MiddleFingerSense` - The middle finger sense touch is active.
   * `RingFingerSense` - The ring finger sense touch is active.
   * `PinkyFingerSense` - The pinky finger sense touch is active.
+ * `public enum AxisType` - Axis Types
+  * `Digital` - A digital axis with a binary result of 0f not pressed or 1f is pressed.
+  * `Axis` - An analog axis ranging from no squeeze at 0f to full squeeze at 1f.
+  * `SenseAxis` - A cap sens axis ranging from not near at 0f to touching at 1f.
  * `public bool triggerPressed` - This will be true if the trigger is squeezed about half way in. Default: `false`
  * `public bool triggerTouched` - This will be true if the trigger is squeezed a small amount. Default: `false`
  * `public bool triggerHairlinePressed` - This will be true if the trigger is squeezed a small amount more from any previous squeeze on the trigger. Default: `false`
@@ -2716,6 +2778,32 @@ The SubscribeToButtonAliasEvent method makes it easier to subscribe to a button 
    * _none_
 
 The UnsubscribeToButtonAliasEvent method makes it easier to unsubscribe to from button event on either the start or end action.
+
+#### SubscribeToAxisAliasEvent/3
+
+  > `public virtual void SubscribeToAxisAliasEvent(SDK_BaseController.ButtonTypes buttonType, AxisType axisType, ControllerInteractionEventHandler callbackMethod)`
+
+  * Parameters
+   * `SDK_BaseController.ButtonTypes buttonType` - The button to listen for axis changes on.
+   * `AxisType axisType` - The type of axis change to listen for.
+   * `ControllerInteractionEventHandler callbackMethod` - The method to subscribe to the event.
+  * Returns
+   * _none_
+
+The SubscribeToAxisAliasEvent method makes it easier to subscribe to axis changes on a given button for a given axis type.
+
+#### UnsubscribeToAxisAliasEvent/3
+
+  > `public virtual void UnsubscribeToAxisAliasEvent(SDK_BaseController.ButtonTypes buttonType, AxisType axisType, ControllerInteractionEventHandler callbackMethod)`
+
+  * Parameters
+   * `SDK_BaseController.ButtonTypes buttonType` - The button to unregister for axis changes on.
+   * `AxisType axisType` - The type of axis change to unregister on.
+   * `ControllerInteractionEventHandler callbackMethod` - The method to unsubscribe from the event.
+  * Returns
+   * _none_
+
+The UnsubscribeToAxisAliasEvent method makes it easier to unsubscribe from axis changes on a given button for a given axis type.
 
 ### Example
 

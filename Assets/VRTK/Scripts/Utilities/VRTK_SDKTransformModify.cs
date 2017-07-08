@@ -3,6 +3,7 @@ namespace VRTK
 {
     using UnityEngine;
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -10,6 +11,7 @@ namespace VRTK
     public class VRTK_SDKTransformModifiers
     {
         [Header("SDK settings")]
+
         [Tooltip("An optional SDK Setup to use to determine when to modify the transform.")]
         public VRTK_SDKSetup loadedSDKSetup;
         [Tooltip("An optional SDK controller type to use to determine when to modify the transform.")]
@@ -36,6 +38,9 @@ namespace VRTK
         public List<VRTK_SDKTransformModifiers> sdkOverrides = new List<VRTK_SDKTransformModifiers>();
 
         protected VRTK_SDKManager sdkManager;
+        protected int findControllerAttempts = 25;
+        protected float findControllerAttemptsDelay = 0.1f;
+        protected Coroutine attemptFindControllerModel;
 
         protected virtual void OnEnable()
         {
@@ -46,7 +51,7 @@ namespace VRTK
                 sdkManager.LoadedSetupChanged += LoadedSetupChanged;
                 if (sdkManager.loadedSetup != null)
                 {
-                    UpdateTransform();
+                    FindController();
                 }
             }
         }
@@ -57,10 +62,38 @@ namespace VRTK
             {
                 sdkManager.LoadedSetupChanged -= LoadedSetupChanged;
             }
+
+            if (attemptFindControllerModel != null)
+            {
+                StopCoroutine(attemptFindControllerModel);
+                attemptFindControllerModel = null;
+            }
         }
 
         protected virtual void LoadedSetupChanged(VRTK_SDKManager sender, VRTK_SDKManager.LoadedSetupChangeEventArgs e)
         {
+            FindController();
+        }
+
+        protected virtual void FindController()
+        {
+            if (gameObject.activeInHierarchy)
+            {
+                attemptFindControllerModel = StartCoroutine(AttemptFindController(findControllerAttempts, findControllerAttemptsDelay));
+            }
+        }
+
+        protected virtual IEnumerator AttemptFindController(int attempts, float delay)
+        {
+            WaitForSeconds delayInstruction = new WaitForSeconds(delay);
+            SDK_BaseController.ControllerType controllerType = VRTK_DeviceFinder.GetCurrentControllerType();
+
+            while (controllerType == SDK_BaseController.ControllerType.Undefined && attempts > 0)
+            {
+                controllerType = VRTK_DeviceFinder.GetCurrentControllerType();
+                attempts--;
+                yield return delayInstruction;
+            }
             UpdateTransform();
         }
 
