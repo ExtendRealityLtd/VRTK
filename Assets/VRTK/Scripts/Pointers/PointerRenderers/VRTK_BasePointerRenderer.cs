@@ -96,6 +96,7 @@ namespace VRTK
 
         protected bool tracerVisible;
         protected bool cursorVisible;
+        protected LayerMask defaultIgnoreLayer = Physics.IgnoreRaycastLayer;
 
         /// <summary>
         /// The GetPointerObjects returns an array of the auto generated GameObjects associated with the pointer.
