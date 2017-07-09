@@ -18,7 +18,6 @@
         private float dimOpacity = 0.8f;
         private float defaultOpacity = 1f;
         private bool highlighted;
-        private bool tooltipEnabled = false;
 
         private void OnEnable()
         {
