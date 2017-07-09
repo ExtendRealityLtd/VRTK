@@ -188,7 +188,7 @@ namespace VRTK
             Transform origin = GetOrigin();
             Ray pointerRaycast = new Ray(origin.position, origin.forward);
             RaycastHit pointerCollidedWith;
-            bool rayHit = VRTK_CustomRaycast.Raycast(customRaycast, pointerRaycast, out pointerCollidedWith, new LayerMask(), maximumLength);
+            bool rayHit = VRTK_CustomRaycast.Raycast(customRaycast, pointerRaycast, out pointerCollidedWith, defaultIgnoreLayer, maximumLength);
 
             CheckRayMiss(rayHit, pointerCollidedWith);
             CheckRayHit(rayHit, pointerCollidedWith);
