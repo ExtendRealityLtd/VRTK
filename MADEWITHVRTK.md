@@ -48,7 +48,8 @@ A collection of titles that have been made with VRTK.
 | Booper, Get Home! | [Steam Store Page](http://store.steampowered.com/app/631670) |
 | Phantasma VR | [Steam Store Page](http://store.steampowered.com/app/608870) |
 | Power Solitaire VR | [Steam Store Page](http://store.steampowered.com/app/584850) |
-| Lost Legends: The Pharaoh's Tomb| [Steam Store Page](http://store.steampowered.com/app/652830) |
+| Lost Legends: The Pharaoh's Tomb | [Steam Store Page](http://store.steampowered.com/app/652830) |
+| Uphill Skiing | [Steam Store Page](http://store.steampowered.com/app/646380) |
 
 ## Oculus Home
 
