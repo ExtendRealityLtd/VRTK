@@ -60,5 +60,51 @@ namespace VRTK
             }
             return vbo;
         }
+
+        protected override void OnPopulateMesh(VertexHelper vh)
+        {
+            float outer = -rectTransform.pivot.x * rectTransform.rect.width;
+            float inner = -rectTransform.pivot.x * rectTransform.rect.width + thickness;
+            vh.Clear();
+
+            Vector2 prevX = Vector2.zero;
+            Vector2 prevY = Vector2.zero;
+            Vector2 uv0 = new Vector2(0, 0);
+            Vector2 uv1 = new Vector2(0, 1);
+            Vector2 uv2 = new Vector2(1, 1);
+            Vector2 uv3 = new Vector2(1, 0);
+            Vector2 pos0;
+            Vector2 pos1;
+            Vector2 pos2;
+            Vector2 pos3;
+            float f = (fillPercent / 100f);
+            float degrees = 360f / segments;
+            int fa = (int)((segments + 1) * f);
+            for (int i = -1 - (fa / 2); i < fa / 2 + 1; i++)
+            {
+                float rad = Mathf.Deg2Rad * (i * degrees);
+                float c = Mathf.Cos(rad);
+                float s = Mathf.Sin(rad);
+                uv0 = new Vector2(0, 1);
+                uv1 = new Vector2(1, 1);
+                uv2 = new Vector2(1, 0);
+                uv3 = new Vector2(0, 0);
+                pos0 = prevX;
+                pos1 = new Vector2(outer * c, outer * s);
+                if (fill)
+                {
+                    pos2 = Vector2.zero;
+                    pos3 = Vector2.zero;
+                }
+                else
+                {
+                    pos2 = new Vector2(inner * c, inner * s);
+                    pos3 = prevY;
+                }
+                prevX = pos1;
+                prevY = pos2;
+                vh.AddUIVertexQuad(SetVbo(new[] { pos0, pos1, pos2, pos3 }, new[] { uv0, uv1, uv2, uv3 }));
+            }
+        }
     }
 }
