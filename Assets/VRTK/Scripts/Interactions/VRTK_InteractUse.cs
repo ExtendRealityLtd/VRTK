@@ -354,7 +354,7 @@ namespace VRTK
                 VRTK_InteractableObject usingObjectCheck = usingObject.GetComponent<VRTK_InteractableObject>();
                 if (usingObjectCheck != null && completeStop)
                 {
-                    usingObjectCheck.StopUsing(this);
+                    usingObjectCheck.StopUsing(this, false);
                 }
                 ToggleControllerVisibility(true);
                 OnControllerUnuseInteractableObject(interactTouch.SetControllerInteractEvent(usingObject));

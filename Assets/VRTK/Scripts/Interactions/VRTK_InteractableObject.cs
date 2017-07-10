@@ -421,11 +421,15 @@ namespace VRTK
         /// The StopUsing method is called automatically when the object has stopped being used. It is also a virtual method to allow for overriding in inherited classes.
         /// </summary>
         /// <param name="previousUsingObject">The object that was previously using this object.</param>
-        public virtual void StopUsing(VRTK_InteractUse previousUsingObject = null)
+        /// <param name="resetUsingObjectState">Resets the using object state to reset it's using action.</param>
+        public virtual void StopUsing(VRTK_InteractUse previousUsingObject = null, bool resetUsingObjectState = true)
         {
             GameObject previousUsingGameObject = (previousUsingObject != null ? previousUsingObject.gameObject : null);
             OnInteractableObjectUnused(SetInteractableObjectEvent(previousUsingGameObject));
-            ResetUsingObject();
+            if (resetUsingObjectState)
+            {
+                ResetUsingObject();
+            }
             usingState = 0;
             usingObject = null;
         }

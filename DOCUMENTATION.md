@@ -3456,12 +3456,13 @@ The Ungrabbed method is called automatically when the object has stopped being g
 
 The StartUsing method is called automatically when the object is used initially. It is also a virtual method to allow for overriding in inherited classes.
 
-#### StopUsing/1
+#### StopUsing/2
 
-  > `public virtual void StopUsing(VRTK_InteractUse previousUsingObject = null)`
+  > `public virtual void StopUsing(VRTK_InteractUse previousUsingObject = null, bool resetUsingObjectState = true)`
 
   * Parameters
    * `VRTK_InteractUse previousUsingObject` - The object that was previously using this object.
+   * `bool resetUsingObjectState` - Resets the using object state to reset it's using action.
   * Returns
    * _none_
 
