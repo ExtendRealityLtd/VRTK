@@ -432,37 +432,39 @@
 
             private static void FixOpenAndUnsavedScenes()
             {
-                for (int index = 0; index < EditorSceneManager.loadedSceneCount; index++)
-                {
-                    Scene scene = SceneManager.GetSceneAt(index);
-                    if (scene.isLoaded && scene.isDirty)
-                    {
-                        VRTK_SDKSetup[] setups = FindObjectsOfType<VRTK_SDKSetup>();
-                        foreach (VRTK_SDKSetup setup in setups)
-                        {
-                            setup.gameObject.SetActive(false);
-                        }
 
-                        if (setups.Length != 0)
-                        {
-                            string infoMessage = string.Format("The following game objects have been set inactive to allow for SDK loading and switching using the SDK Setups on them:\n{0}", string.Join(", ", setups.Select(setup => setup.name).ToArray()));
-                            if (EditorApplication.isPlayingOrWillChangePlaymode)
-                            {
+                List<VRTK_SDKSetup> setups = Enumerable.Range(0, EditorSceneManager.loadedSceneCount)
+                                                       .SelectMany(sceneIndex => SceneManager.GetSceneAt(sceneIndex).GetRootGameObjects())
+                                                       .SelectMany(rootObject => rootObject.GetComponentsInChildren<VRTK_SDKManager>())
+                                                       .Select(manager => manager.setups.Where(setup => setup != null).ToArray())
+                                                       .Where(sdkSetups => sdkSetups.Length > 1)
+                                                       .SelectMany(sdkSetups => sdkSetups)
+                                                       .Where(setup => setup.gameObject.activeSelf)
+                                                       .ToList();
+                if (setups.Count == 0)
+                {
+                    return;
+                }
+
+                setups.ForEach(setup => setup.gameObject.SetActive(false));
+
+                string infoMessage = string.Format(
+                    "The following game objects have been set inactive to allow for SDK loading and switching using the SDK Setups on them:\n{0}",
+                    string.Join(", ", setups.Select(setup => setup.name).ToArray()));
+                if (EditorApplication.isPlayingOrWillChangePlaymode)
+                {
 #if UNITY_5_6_OR_NEWER
-                                SessionState.SetString(
+                    SessionState.SetString(
 #else
-                                EditorPrefs.SetString(
+                    EditorPrefs.SetString(
 #endif
-                                    PreferencesKey,
-                                    infoMessage
-                                );
-                            }
-                            else
-                            {
-                                VRTK_Logger.Info(infoMessage);
-                            }
-                        }
-                    }
+                        PreferencesKey,
+                        infoMessage
+                    );
+                }
+                else
+                {
+                    VRTK_Logger.Info(infoMessage);
                 }
             }
         }
