@@ -15,6 +15,7 @@
 | Oculus | [Oculus Utilities] |
 | *Ximmerse | [Ximmerse Unity SDK] |
 | *Daydream | [Google VR SDK for Unity]
+| *HyperealVR | [Hypereal VR Unity Plugin]
 
 _*experimental_
 
@@ -119,6 +120,7 @@ Code released under the [MIT License].
 [Oculus Utilities]: https://developer.oculus.com/downloads/package/oculus-utilities-for-unity-5/
 [Ximmerse Unity SDK]: https://github.com/Ximmerse/SDK/tree/master/Unity
 [Google VR SDK for Unity]: https://developers.google.com/vr/unity/download
+[Hypereal VR Unity Plugin]: https://www.hypereal.com/#/developer/resource/download
 [MIT License]: https://github.com/thestonefox/SteamVR_Unity_Toolkit/blob/master/LICENSE
 [CONTRIBUTING.md]: https://github.com/thestonefox/SteamVR_Unity_Toolkit/blob/master/CONTRIBUTING.md
 [MADEWITHVRTK.md]: https://github.com/thestonefox/SteamVR_Unity_Toolkit/blob/master/MADEWITHVRTK.md
