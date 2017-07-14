@@ -661,8 +661,8 @@ namespace VRTK
                 UnloadSDKSetup();
 
                 const string errorMessage = "No SDK Setup from the provided list could be loaded.";
-                VRTK_Logger.Error(errorMessage);
                 OnLoadedSetupChanged(new LoadedSetupChangeEventArgs(previousLoadedSetup, null, errorMessage));
+                VRTK_Logger.Error(errorMessage);
 
                 yield break;
             }
@@ -696,8 +696,8 @@ namespace VRTK
                     UnloadSDKSetup();
 
                     errorMessage += " There are no other Setups in the provided list to try.";
-                    VRTK_Logger.Error(errorMessage);
                     OnLoadedSetupChanged(new LoadedSetupChangeEventArgs(previousLoadedSetup, null, errorMessage));
+                    VRTK_Logger.Error(errorMessage);
 
                     yield break;
                 }
