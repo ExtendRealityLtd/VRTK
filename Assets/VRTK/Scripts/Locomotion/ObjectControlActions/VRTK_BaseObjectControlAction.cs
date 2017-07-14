@@ -28,6 +28,7 @@ namespace VRTK
         protected float colliderHeight = 0f;
         protected Transform controlledTransform;
         protected Transform playArea;
+        protected VRTK_BodyPhysics internalBodyPhysics;
 
         protected abstract void Process(GameObject controlledGameObject, Transform directionDevice, Vector3 axisDirection, float axis, float deadzone, bool currentlyFalling, bool modifierActive);
 
@@ -51,6 +52,7 @@ namespace VRTK
                         break;
                 }
             }
+            internalBodyPhysics = (internalBodyPhysics == null ? VRTK_SharedMethods.FindEvenInactiveComponent<VRTK_BodyPhysics>() : internalBodyPhysics);
         }
 
         protected virtual void OnDisable()
@@ -110,15 +112,22 @@ namespace VRTK
 
                 if (checkObject == playArea)
                 {
-                    CapsuleCollider playAreaCollider = playArea.GetComponentInChildren<CapsuleCollider>();
-                    centerCollider = playAreaCollider;
-                    if (playAreaCollider != null)
+                    bool centerColliderSet = false;
+
+                    if (internalBodyPhysics != null && internalBodyPhysics.GetBodyColliderContainer() != null)
                     {
-                        colliderRadius = playAreaCollider.radius;
-                        colliderHeight = playAreaCollider.height;
-                        colliderCenter = playAreaCollider.center;
+                        CapsuleCollider playAreaCollider = internalBodyPhysics.GetBodyColliderContainer().GetComponent<CapsuleCollider>();
+                        centerCollider = playAreaCollider;
+                        if (playAreaCollider != null)
+                        {
+                            centerColliderSet = true;
+                            colliderRadius = playAreaCollider.radius;
+                            colliderHeight = playAreaCollider.height;
+                            colliderCenter = playAreaCollider.center;
+                        }
                     }
-                    else
+
+                    if (!centerColliderSet)
                     {
                         VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, "PlayArea", "CapsuleCollider", "the same or child"));
                     }

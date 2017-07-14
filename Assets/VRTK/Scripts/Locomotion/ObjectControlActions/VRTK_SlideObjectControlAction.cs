@@ -41,6 +41,12 @@ namespace VRTK
             Move(controlledGameObject, directionDevice, axisDirection);
         }
 
+        protected override void OnEnable()
+        {
+            internalBodyPhysics = bodyPhysics;
+            base.OnEnable();
+        }
+
         protected virtual float CalculateSpeed(float inputValue, bool currentlyFalling, bool modifierActive)
         {
             float speed = currentSpeed;
