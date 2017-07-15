@@ -61,6 +61,7 @@ namespace VRTK
         protected float minDistanceForNormalLerp;
         protected float lerpTime = 0.1f;
         protected Coroutine attemptLerpRoutine;
+        protected GameObject destinationHandler;
 
         public virtual void OnWillDashThruObjects(DashTeleportEventArgs e)
         {
@@ -82,6 +83,10 @@ namespace VRTK
         {
             base.OnEnable();
             minDistanceForNormalLerp = minSpeedMps * normalLerpTime;
+            if (destinationHandler == null)
+            {
+                destinationHandler = new GameObject(VRTK_SharedMethods.GenerateVRTKObjectName(true, "DashDestinationHandler"));
+            }
         }
 
         protected override void OnDisable()
@@ -91,6 +96,10 @@ namespace VRTK
             {
                 StopCoroutine(attemptLerpRoutine);
                 attemptLerpRoutine = null;
+            }
+            if (destinationHandler != null)
+            {
+                Destroy(destinationHandler);
             }
         }
 
@@ -113,14 +122,35 @@ namespace VRTK
             base.StartTeleport(sender, e);
         }
 
-        protected override void ProcessOrientation(object sender, DestinationMarkerEventArgs e, Vector3 updatedPosition, Quaternion updatedRotation)
+        protected override void ProcessOrientation(object sender, DestinationMarkerEventArgs e, Vector3 targetPosition, Quaternion targetRotation)
         {
             if (ValidRigObjects())
             {
+                Vector3 finalPosition = CalculateOffsetPosition(targetPosition, targetRotation);
+
+                // Initiate the teleport
                 Vector3 startPosition = new Vector3(playArea.position.x, playArea.position.y, playArea.position.z);
                 Quaternion startRotation = new Quaternion(playArea.rotation.x, playArea.rotation.y, playArea.rotation.z, playArea.rotation.w);
-                attemptLerpRoutine = StartCoroutine(lerpToPosition(sender, e, startPosition, updatedPosition, startRotation, updatedRotation));
+                attemptLerpRoutine = StartCoroutine(lerpToPosition(sender, e, startPosition, finalPosition, startRotation, targetRotation));
             }
+        }
+
+        protected virtual Vector3 CalculateOffsetPosition(Vector3 targetPosition, Quaternion targetRotation)
+        {
+            // Determine player offset from playArea
+            Vector3 playerOffset = playArea.InverseTransformPoint(headset.position);
+            playerOffset.y = 0;
+            playerOffset.Normalize();
+            // Determine where player will end up with no rotation compared to with desired rotation
+            destinationHandler.transform.position = targetPosition;
+            destinationHandler.transform.rotation = playArea.rotation;
+
+            Vector3 playerPreRotationPos = destinationHandler.transform.TransformPoint(playerOffset);
+            destinationHandler.transform.rotation = targetRotation;
+            Vector3 playerPostRotationPos = destinationHandler.transform.TransformPoint(playerOffset);
+
+            // Adjust target position based on player displacement from rotation
+            return targetPosition + (playerPreRotationPos - playerPostRotationPos);
         }
 
         protected override void EndTeleport(object sender, DestinationMarkerEventArgs e)
