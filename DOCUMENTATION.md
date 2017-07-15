@@ -6193,7 +6193,7 @@ and the method info of the method the attribute is defined on.
  * `public static ReadOnlyCollection<VRTK_SDKInfo> InstalledControllerSDKInfos { get private set }` - All installed controller SDK infos. This is a subset of  . It contains only those available SDK infos for which an  exists that uses the same symbol and whose associated method returns true.
  * `public static VRTK_SDKManager instance` - The singleton instance to access the SDK Manager variables from.
  * `public List<SDK_ScriptingDefineSymbolPredicateAttribute> activeScriptingDefineSymbolsWithoutSDKClasses` - The active (i.e. to be added to the  ) scripting define symbol predicate attributes that have no associated SDK classes. Default: `new List<SDK_ScriptingDefineSymbolPredicateAttribute>()`
- * `public VRTK_SDKSetup loadedSetup { get private set }` - The loaded SDK Setup.  if no setup is currently loaded.
+ * `public VRTK_SDKSetup loadedSetup` - The loaded SDK Setup.  if no setup is currently loaded.
  * `public ReadOnlyCollection<Behaviour> behavioursToToggleOnLoadedSetupChange { get private set }` - All behaviours that need toggling whenever  changes.
 
 ### Class Events
