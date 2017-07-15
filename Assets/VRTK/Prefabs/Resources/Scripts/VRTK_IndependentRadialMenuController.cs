@@ -6,18 +6,20 @@ namespace VRTK
     using System.Collections;
 
     /// <summary>
-    /// This script inherited from `RadialMenuController` and therefore can be used instead of `RadialMenuController` to allow the RadialMenu to be anchored to any object, not just a controller. The RadialMenu will show when a controller is near the object and the buttons can be clicked with the `Use Alias` button. The menu also automatically rotates towards the user.
+    /// Allows the RadialMenu to be anchored to any object, not just a controller.
     /// </summary>
     /// <remarks>
-    /// To convert the default `RadialMenu` prefab to be independent of the controllers:
-    ///
-    ///   * Make the `RadialMenu` a child of an object other than a controller.
-    ///   * Position and scale the menu by adjusting the transform of the `RadialMenu` empty.
-    ///   * Replace `RadialMenuController` with `VRTK_IndependentRadialMenuController`.
-    ///   * Ensure the parent object has the `VRTK_InteractableObject` script.
-    ///   * Verify that `Is Usable` and `Hold Button to Use` are both checked.
-    ///   * Attach `VRTK_InteractTouch` and `VRTK_InteractUse` scripts to the controllers.
+    /// **Prefab Usage:**
+    ///  * Place the `VRTK/Prefabs/RadialMenu` prefab as a child of the GameObject to associate the Radial Menu with.
+    ///  * Position and scale the menu by adjusting the transform of the `RadialMenu` empty.
+    ///  * Replace `VRTK_RadialMenuController` with `VRTK_IndependentRadialMenuController` that is located on the `RadialMenu/RadialMenuUI/Panel` GameObject.
+    ///  * Ensure the parent object has the `VRTK_InteractableObject` script.
+    ///  * Verify that `Is Usable` and `Hold Button to Use` are both checked on the `VRTK_InteractableObject`.
+    ///  * Attach `VRTK_InteractTouch` and `VRTK_InteractUse` scripts to the objects that will activate the Radial Menu (e.g. the Controllers).
     /// </remarks>
+    /// <example>
+    /// `VRTK/Examples/030_Controls_RadialTouchpadMenu` displays a radial menu for each controller. The left controller uses the `Hide On Release` variable, so it will only be visible if the left touchpad is being touched. It also uses the `Execute On Unclick` variable to delay execution until the touchpad button is unclicked. The example scene also contains a demonstration of anchoring the RadialMenu to an interactable cube instead of a controller.
+    /// </example>
     public class VRTK_IndependentRadialMenuController : VRTK_RadialMenuController
     {
         [Tooltip("If the RadialMenu is the child of an object with VRTK_InteractableObject attached, this will be automatically obtained. It can also be manually set.")]

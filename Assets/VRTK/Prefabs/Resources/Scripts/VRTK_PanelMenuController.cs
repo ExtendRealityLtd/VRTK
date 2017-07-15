@@ -5,15 +5,14 @@ namespace VRTK
     using UnityEngine;
 
     /// <summary>
-    /// Purpose: top-level controller class to handle the display of up to four child PanelMenuItemController items which are displayed as a canvas UI panel.
+    /// Adds a top-level controller to handle the display of up to four child PanelMenuItemController items which are displayed as a canvas UI panel.
     /// </summary>
     /// <remarks>
-    /// This script should be attached to a VRTK_InteractableObject > first child GameObject [PanelMenuController].
-    /// The [PanelMenuController] must have a child GameObject [panel items container].
-    /// The [panel items container] must have a Canvas component.
-    /// A [panel items container] can have up to four child GameObject, each of these contains the UI for a panel that can be displayed by [PanelMenuController].
-    /// They also have the [PanelMenuItemController] script attached to them. The [PanelMenuItemController] script intercepts the controller events sent from this [PanelMenuController] and passes them onto additional custom event subscriber scripts, which then carry out the required custom UI actions.
-    /// To show / hide a UI panel, you must first pick up the VRTK_InteractableObject and then by pressing the touchpad top/bottom/left/right you can open/close the child UI panel that has been assigned via the Unity Editor panel. Button type UI actions are handled by a trigger press when the panel is open.
+    /// **Prefab Usage:**
+    ///  * Place the `VRTK/Prefabs/PanelMenu` prefab as a child of the `VRTK_InteractableObject` the panel menu is for.
+    ///  * Optionally remove the panel control menu item child GameObjects if they are not required, e.g. `PanelTopControls`.
+    ///  * Set the panel menu item controllers on the `VRTK_PanelMenuController` script to determine which panel control menu items are available.
+    ///  * The available panel control menu items can be activated by pressing the corresponding direction on the touchpad.
     /// </remarks>
     /// <example>
     /// `040_Controls_Panel_Menu` contains three basic interactive object examples of the PanelMenu in use.

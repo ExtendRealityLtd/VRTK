@@ -21,10 +21,12 @@ namespace VRTK
     public delegate void ObjectTooltipEventHandler(object sender, ObjectTooltipEventArgs e);
 
     /// <summary>
-    /// This adds a UI element into the World Space that can be used to provide additional information about an object by providing a piece of text with a line drawn to a destination point.
+    /// Adds a World Space Canvas that can be used to provide additional information about an object by providing a piece of text with a line drawn to a destination point.
     /// </summary>
     /// <remarks>
-    /// There are a number of parameters that can be set on the Prefab which are provided by the `VRTK_ObjectTooltip` script which is applied to the prefab.
+    /// **Prefab Usage:**
+    ///  * Place the `VRTK/Prefabs/ObjectTooltip` prefab into the scene hierarchy, preferably as a child of the GameObject it is associated with.
+    ///  * Set the `Draw Line To` option to the Transform component of the GameObject the Tooltip will be assoicated with.
     /// </remarks>
     /// <example>
     /// `VRTK/Examples/029_Controller_Tooltips` displays two cubes that have an object tooltip added to them along with tooltips that have been added to the controllers.
