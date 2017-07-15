@@ -565,7 +565,7 @@ namespace VRTK
         {
             if (objectInteractor != null)
             {
-                VRTK_SharedMethods.SetGlobalScale(transform, scaleAmount);
+                VRTK_SharedMethods.SetGlobalScale(objectInteractor.transform, scaleAmount);
             }
         }
 

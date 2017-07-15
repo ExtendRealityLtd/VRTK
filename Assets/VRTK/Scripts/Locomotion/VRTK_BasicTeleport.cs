@@ -173,13 +173,13 @@ namespace VRTK
         {
             DestinationMarkerEventArgs teleportArgs = BuildTeleportArgs(null, destinationPosition, destinationRotation);
             StartTeleport(this, teleportArgs);
+            Quaternion updatedRotation = SetNewRotation(destinationRotation);
             CalculateBlinkDelay(blinkTransitionSpeed, destinationPosition);
             Blink(blinkTransitionSpeed);
             if (ValidRigObjects())
             {
                 playArea.position = destinationPosition;
             }
-            Quaternion updatedRotation = SetNewRotation(destinationRotation);
             ProcessOrientation(this, teleportArgs, destinationPosition, updatedRotation);
             EndTeleport(this, teleportArgs);
         }
@@ -285,11 +285,11 @@ namespace VRTK
                     ResetActualTeleportDestination();
                 }
                 StartTeleport(sender, e);
+                Quaternion updatedRotation = SetNewRotation(e.destinationRotation);
                 Vector3 newPosition = GetNewPosition(e.destinationPosition, e.target, e.forceDestinationPosition);
                 CalculateBlinkDelay(blinkTransitionSpeed, newPosition);
                 Blink(blinkTransitionSpeed);
                 Vector3 updatedPosition = SetNewPosition(newPosition, e.target, e.forceDestinationPosition);
-                Quaternion updatedRotation = SetNewRotation(e.destinationRotation);
                 ProcessOrientation(sender, e, updatedPosition, updatedRotation);
                 EndTeleport(sender, e);
             }
