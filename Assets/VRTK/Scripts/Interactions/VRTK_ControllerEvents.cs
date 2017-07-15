@@ -90,6 +90,19 @@ namespace VRTK
             PinkyFingerSense
         }
 
+        /// <summary>
+        /// Axis Types
+        /// </summary>
+        /// <param name="Digital">A digital axis with a binary result of 0f not pressed or 1f is pressed.</param>
+        /// <param name="Axis">An analog axis ranging from no squeeze at 0f to full squeeze at 1f.</param>
+        /// <param name="SenseAxis">A cap sens axis ranging from not near at 0f to touching at 1f.</param>
+        public enum AxisType
+        {
+            Digital,
+            Axis,
+            SenseAxis
+        }
+
         [Header("Axis Refinement")]
 
         [Tooltip("The amount of fidelity in the changes on the axis, which is defaulted to 1. Any number higher than 2 will probably give too sensitive results.")]
@@ -1077,6 +1090,28 @@ namespace VRTK
         {
             ButtonAliasEventSubscription(false, givenButton, startEvent, callbackMethod);
         }
+
+        /// <summary>
+        /// The SubscribeToAxisAliasEvent method makes it easier to subscribe to axis changes on a given button for a given axis type.
+        /// </summary>
+        /// <param name="buttonType">The button to listen for axis changes on.</param>
+        /// <param name="axisType">The type of axis change to listen for.</param>
+        /// <param name="callbackMethod">The method to subscribe to the event.</param>
+        public virtual void SubscribeToAxisAliasEvent(SDK_BaseController.ButtonTypes buttonType, AxisType axisType, ControllerInteractionEventHandler callbackMethod)
+        {
+            AxisAliasEventSubscription(true, buttonType, axisType, callbackMethod);
+        }
+
+        /// <summary>
+        /// The UnsubscribeToAxisAliasEvent method makes it easier to unsubscribe from axis changes on a given button for a given axis type.
+        /// </summary>
+        /// <param name="buttonType">The button to unregister for axis changes on.</param>
+        /// <param name="axisType">The type of axis change to unregister on.</param>
+        /// <param name="callbackMethod">The method to unsubscribe from the event.</param>
+        public virtual void UnsubscribeToAxisAliasEvent(SDK_BaseController.ButtonTypes buttonType, AxisType axisType, ControllerInteractionEventHandler callbackMethod)
+        {
+            AxisAliasEventSubscription(false, buttonType, axisType, callbackMethod);
+        }
         #endregion subscription managers
 
         #region MonoBehaviour methods
@@ -1208,7 +1243,7 @@ namespace VRTK
             }
 
             //Trigger Sense Axis
-            if(VRTK_SharedMethods.RoundFloat(triggerSenseAxis, axisFidelity) == VRTK_SharedMethods.RoundFloat(currentTriggerSenseAxis, axisFidelity))
+            if (VRTK_SharedMethods.RoundFloat(triggerSenseAxis, axisFidelity) == VRTK_SharedMethods.RoundFloat(currentTriggerSenseAxis, axisFidelity))
             {
                 triggerSenseAxisChanged = false;
             }
@@ -1805,6 +1840,123 @@ namespace VRTK
                         {
                             StartMenuReleased -= callbackMethod;
                         }
+                    }
+                    break;
+            }
+        }
+
+        protected virtual void AxisAliasEventSubscription(bool subscribe, SDK_BaseController.ButtonTypes buttonType, AxisType axisType, ControllerInteractionEventHandler callbackMethod)
+        {
+            switch (buttonType)
+            {
+                case SDK_BaseController.ButtonTypes.Trigger:
+                    switch (axisType)
+                    {
+                        case AxisType.Axis:
+                            if (subscribe)
+                            {
+                                TriggerAxisChanged += callbackMethod;
+                            }
+                            else
+                            {
+                                TriggerAxisChanged -= callbackMethod;
+                            }
+                            break;
+                        case AxisType.SenseAxis:
+                            if (subscribe)
+                            {
+                                TriggerSenseAxisChanged += callbackMethod;
+                            }
+                            else
+                            {
+                                TriggerSenseAxisChanged -= callbackMethod;
+                            }
+                            break;
+                    }
+                    break;
+                case SDK_BaseController.ButtonTypes.Grip:
+                    switch (axisType)
+                    {
+                        case AxisType.Axis:
+                            if (subscribe)
+                            {
+                                GripAxisChanged += callbackMethod;
+                            }
+                            else
+                            {
+                                GripAxisChanged -= callbackMethod;
+                            }
+                            break;
+                    }
+                    break;
+                case SDK_BaseController.ButtonTypes.Touchpad:
+                    switch (axisType)
+                    {
+                        case AxisType.Axis:
+                            if (subscribe)
+                            {
+                                TouchpadAxisChanged += callbackMethod;
+                            }
+                            else
+                            {
+                                TouchpadAxisChanged -= callbackMethod;
+                            }
+                            break;
+                        case AxisType.SenseAxis:
+                            if (subscribe)
+                            {
+                                TouchpadSenseAxisChanged += callbackMethod;
+                            }
+                            else
+                            {
+                                TouchpadSenseAxisChanged -= callbackMethod;
+                            }
+                            break;
+                    }
+                    break;
+                case SDK_BaseController.ButtonTypes.MiddleFinger:
+                    switch (axisType)
+                    {
+                        case AxisType.SenseAxis:
+                            if (subscribe)
+                            {
+                                MiddleFingerSenseAxisChanged += callbackMethod;
+                            }
+                            else
+                            {
+                                MiddleFingerSenseAxisChanged -= callbackMethod;
+                            }
+                            break;
+                    }
+                    break;
+                case SDK_BaseController.ButtonTypes.RingFinger:
+                    switch (axisType)
+                    {
+                        case AxisType.SenseAxis:
+                            if (subscribe)
+                            {
+                                RingFingerSenseAxisChanged += callbackMethod;
+                            }
+                            else
+                            {
+                                RingFingerSenseAxisChanged -= callbackMethod;
+                            }
+                            break;
+                    }
+                    break;
+                case SDK_BaseController.ButtonTypes.PinkyFinger:
+                    switch (axisType)
+                    {
+                        case AxisType.SenseAxis:
+                            if (subscribe)
+                            {
+                                PinkyFingerSenseAxisChanged += callbackMethod;
+                            }
+                            else
+                            {
+                                PinkyFingerSenseAxisChanged -= callbackMethod;
+                            }
+                            break;
                     }
                     break;
             }

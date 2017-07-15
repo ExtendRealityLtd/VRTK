@@ -1,0 +1,985 @@
+fileFormatVersion: 2
+guid: 9fbd4cfd43766cc4cbcb915ceafe52a9
+timeCreated: 1499671701
+licenseType: Pro
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: Armature
+    100002: Bone_Arm_root
+    100004: Bone_Index_Finger_1
+    100006: Bone_Index_Finger_2
+    100008: Bone_Index_Finger_3
+    100010: Bone_Index_Finger_3_end
+    100012: Bone_Index_Finger_Knuckle
+    100014: Bone_Index_Palm_Root
+    100016: Bone_Index_Palm_Root_2nd
+    100018: Bone_Index_Palm_root_3rd
+    100020: Bone_Middle_Finger_1
+    100022: Bone_Middle_Finger_2
+    100024: Bone_Middle_Finger_3
+    100026: Bone_Middle_Finger_3_end
+    100028: Bone_Middle_Finger_Knuckle
+    100030: Bone_Middle_Palm_2nd
+    100032: Bone_Middle_Palm_Root
+    100034: Bone_Midle_Palm_1st
+    100036: Bone_Palm_Pinkie_Root
+    100038: Bone_Palm_Root
+    100040: Bone_Pinkie_Finger_1
+    100042: Bone_Pinkie_Finger_2
+    100044: Bone_Pinkie_Finger_3
+    100046: Bone_Pinkie_Finger_3_end
+    100048: Bone_Pinkie_Finger_Knuckle
+    100050: Bone_Pinkie_Root_1st
+    100052: Bone_Ring_Finger_1
+    100054: Bone_Ring_Finger_2
+    100056: Bone_Ring_Finger_3
+    100058: Bone_Ring_Finger_3_end
+    100060: Bone_Ring_Knuckle
+    100062: Bone_Ring_Palm_1st
+    100064: Bone_Ring_Palm_2nd
+    100066: Bone_Ring_Palm_Root
+    100068: Bone_Thumb_Finger_1
+    100070: Bone_Thumb_Finger_2
+    100072: Bone_Thumb_Finger_3
+    100074: Bone_Thumb_Finger_3_end
+    100076: Bone_Thumb_Finger_Knuckle
+    100078: Bone_Thumb_Palm_Root
+    100080: Bone_Thumb_Root_1st
+    100082: Bone_Wrist
+    100084: VRTK_BasicHand
+    100086: //RootNode
+    400000: Armature
+    400002: Bone_Arm_root
+    400004: Bone_Index_Finger_1
+    400006: Bone_Index_Finger_2
+    400008: Bone_Index_Finger_3
+    400010: Bone_Index_Finger_3_end
+    400012: Bone_Index_Finger_Knuckle
+    400014: Bone_Index_Palm_Root
+    400016: Bone_Index_Palm_Root_2nd
+    400018: Bone_Index_Palm_root_3rd
+    400020: Bone_Middle_Finger_1
+    400022: Bone_Middle_Finger_2
+    400024: Bone_Middle_Finger_3
+    400026: Bone_Middle_Finger_3_end
+    400028: Bone_Middle_Finger_Knuckle
+    400030: Bone_Middle_Palm_2nd
+    400032: Bone_Middle_Palm_Root
+    400034: Bone_Midle_Palm_1st
+    400036: Bone_Palm_Pinkie_Root
+    400038: Bone_Palm_Root
+    400040: Bone_Pinkie_Finger_1
+    400042: Bone_Pinkie_Finger_2
+    400044: Bone_Pinkie_Finger_3
+    400046: Bone_Pinkie_Finger_3_end
+    400048: Bone_Pinkie_Finger_Knuckle
+    400050: Bone_Pinkie_Root_1st
+    400052: Bone_Ring_Finger_1
+    400054: Bone_Ring_Finger_2
+    400056: Bone_Ring_Finger_3
+    400058: Bone_Ring_Finger_3_end
+    400060: Bone_Ring_Knuckle
+    400062: Bone_Ring_Palm_1st
+    400064: Bone_Ring_Palm_2nd
+    400066: Bone_Ring_Palm_Root
+    400068: Bone_Thumb_Finger_1
+    400070: Bone_Thumb_Finger_2
+    400072: Bone_Thumb_Finger_3
+    400074: Bone_Thumb_Finger_3_end
+    400076: Bone_Thumb_Finger_Knuckle
+    400078: Bone_Thumb_Palm_Root
+    400080: Bone_Thumb_Root_1st
+    400082: Bone_Wrist
+    400084: VRTK_BasicHand
+    400086: //RootNode
+    4300000: VRTK_BasicHand
+    7400000: Main_Armature
+    7400002: Hand_Idle
+    7400004: Hand_Thumb
+    7400006: Hand_Index
+    7400008: Hand_Middle
+    7400010: Hand_Ring
+    7400012: Hand_Pinky
+    9500000: //RootNode
+    13700000: VRTK_BasicHand
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Main_Armature
+      takeName: Armature|ArmatureAction.001
+      firstFrame: 0
+      lastFrame: 190
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Armature
+        weight: 1
+      - path: Armature/Bone_Arm_root
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Pinkie_Root
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Pinkie_Root/Bone_Pinkie_Root_1st
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Pinkie_Root/Bone_Pinkie_Root_1st/Bone_Pinkie_Finger_Knuckle
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Pinkie_Root/Bone_Pinkie_Root_1st/Bone_Pinkie_Finger_Knuckle/Bone_Pinkie_Finger_1
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Pinkie_Root/Bone_Pinkie_Root_1st/Bone_Pinkie_Finger_Knuckle/Bone_Pinkie_Finger_1/Bone_Pinkie_Finger_2
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Pinkie_Root/Bone_Pinkie_Root_1st/Bone_Pinkie_Finger_Knuckle/Bone_Pinkie_Finger_1/Bone_Pinkie_Finger_2/Bone_Pinkie_Finger_3
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Pinkie_Root/Bone_Pinkie_Root_1st/Bone_Pinkie_Finger_Knuckle/Bone_Pinkie_Finger_1/Bone_Pinkie_Finger_2/Bone_Pinkie_Finger_3/Bone_Pinkie_Finger_3_end
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Index_Palm_Root
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Index_Palm_Root/Bone_Index_Palm_Root_2nd
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Index_Palm_Root/Bone_Index_Palm_Root_2nd/Bone_Index_Palm_root_3rd
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Index_Palm_Root/Bone_Index_Palm_Root_2nd/Bone_Index_Palm_root_3rd/Bone_Index_Finger_Knuckle
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Index_Palm_Root/Bone_Index_Palm_Root_2nd/Bone_Index_Palm_root_3rd/Bone_Index_Finger_Knuckle/Bone_Index_Finger_1
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Index_Palm_Root/Bone_Index_Palm_Root_2nd/Bone_Index_Palm_root_3rd/Bone_Index_Finger_Knuckle/Bone_Index_Finger_1/Bone_Index_Finger_2
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Index_Palm_Root/Bone_Index_Palm_Root_2nd/Bone_Index_Palm_root_3rd/Bone_Index_Finger_Knuckle/Bone_Index_Finger_1/Bone_Index_Finger_2/Bone_Index_Finger_3
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Index_Palm_Root/Bone_Index_Palm_Root_2nd/Bone_Index_Palm_root_3rd/Bone_Index_Finger_Knuckle/Bone_Index_Finger_1/Bone_Index_Finger_2/Bone_Index_Finger_3/Bone_Index_Finger_3_end
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Middle_Palm_Root
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Middle_Palm_Root/Bone_Midle_Palm_1st
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Middle_Palm_Root/Bone_Midle_Palm_1st/Bone_Middle_Palm_2nd
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Middle_Palm_Root/Bone_Midle_Palm_1st/Bone_Middle_Palm_2nd/Bone_Middle_Finger_Knuckle
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Middle_Palm_Root/Bone_Midle_Palm_1st/Bone_Middle_Palm_2nd/Bone_Middle_Finger_Knuckle/Bone_Middle_Finger_1
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Middle_Palm_Root/Bone_Midle_Palm_1st/Bone_Middle_Palm_2nd/Bone_Middle_Finger_Knuckle/Bone_Middle_Finger_1/Bone_Middle_Finger_2
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Middle_Palm_Root/Bone_Midle_Palm_1st/Bone_Middle_Palm_2nd/Bone_Middle_Finger_Knuckle/Bone_Middle_Finger_1/Bone_Middle_Finger_2/Bone_Middle_Finger_3
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Middle_Palm_Root/Bone_Midle_Palm_1st/Bone_Middle_Palm_2nd/Bone_Middle_Finger_Knuckle/Bone_Middle_Finger_1/Bone_Middle_Finger_2/Bone_Middle_Finger_3/Bone_Middle_Finger_3_end
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Ring_Palm_Root
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Ring_Palm_Root/Bone_Ring_Palm_1st
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Ring_Palm_Root/Bone_Ring_Palm_1st/Bone_Ring_Palm_2nd
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Ring_Palm_Root/Bone_Ring_Palm_1st/Bone_Ring_Palm_2nd/Bone_Ring_Knuckle
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Ring_Palm_Root/Bone_Ring_Palm_1st/Bone_Ring_Palm_2nd/Bone_Ring_Knuckle/Bone_Ring_Finger_1
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Ring_Palm_Root/Bone_Ring_Palm_1st/Bone_Ring_Palm_2nd/Bone_Ring_Knuckle/Bone_Ring_Finger_1/Bone_Ring_Finger_2
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Ring_Palm_Root/Bone_Ring_Palm_1st/Bone_Ring_Palm_2nd/Bone_Ring_Knuckle/Bone_Ring_Finger_1/Bone_Ring_Finger_2/Bone_Ring_Finger_3
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Ring_Palm_Root/Bone_Ring_Palm_1st/Bone_Ring_Palm_2nd/Bone_Ring_Knuckle/Bone_Ring_Finger_1/Bone_Ring_Finger_2/Bone_Ring_Finger_3/Bone_Ring_Finger_3_end
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Thumb_Palm_Root
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Thumb_Palm_Root/Bone_Thumb_Root_1st
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Thumb_Palm_Root/Bone_Thumb_Root_1st/Bone_Thumb_Finger_Knuckle
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Thumb_Palm_Root/Bone_Thumb_Root_1st/Bone_Thumb_Finger_Knuckle/Bone_Thumb_Finger_1
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Thumb_Palm_Root/Bone_Thumb_Root_1st/Bone_Thumb_Finger_Knuckle/Bone_Thumb_Finger_1/Bone_Thumb_Finger_2
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Thumb_Palm_Root/Bone_Thumb_Root_1st/Bone_Thumb_Finger_Knuckle/Bone_Thumb_Finger_1/Bone_Thumb_Finger_2/Bone_Thumb_Finger_3
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Thumb_Palm_Root/Bone_Thumb_Root_1st/Bone_Thumb_Finger_Knuckle/Bone_Thumb_Finger_1/Bone_Thumb_Finger_2/Bone_Thumb_Finger_3/Bone_Thumb_Finger_3_end
+        weight: 1
+      - path: VRTK_BasicHand
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Hand_Idle
+      takeName: Armature|ArmatureAction.001
+      firstFrame: 189
+      lastFrame: 190
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Armature
+        weight: 1
+      - path: Armature/Bone_Arm_root
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Pinkie_Root
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Pinkie_Root/Bone_Pinkie_Root_1st
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Pinkie_Root/Bone_Pinkie_Root_1st/Bone_Pinkie_Finger_Knuckle
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Pinkie_Root/Bone_Pinkie_Root_1st/Bone_Pinkie_Finger_Knuckle/Bone_Pinkie_Finger_1
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Pinkie_Root/Bone_Pinkie_Root_1st/Bone_Pinkie_Finger_Knuckle/Bone_Pinkie_Finger_1/Bone_Pinkie_Finger_2
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Pinkie_Root/Bone_Pinkie_Root_1st/Bone_Pinkie_Finger_Knuckle/Bone_Pinkie_Finger_1/Bone_Pinkie_Finger_2/Bone_Pinkie_Finger_3
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Pinkie_Root/Bone_Pinkie_Root_1st/Bone_Pinkie_Finger_Knuckle/Bone_Pinkie_Finger_1/Bone_Pinkie_Finger_2/Bone_Pinkie_Finger_3/Bone_Pinkie_Finger_3_end
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Index_Palm_Root
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Index_Palm_Root/Bone_Index_Palm_Root_2nd
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Index_Palm_Root/Bone_Index_Palm_Root_2nd/Bone_Index_Palm_root_3rd
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Index_Palm_Root/Bone_Index_Palm_Root_2nd/Bone_Index_Palm_root_3rd/Bone_Index_Finger_Knuckle
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Index_Palm_Root/Bone_Index_Palm_Root_2nd/Bone_Index_Palm_root_3rd/Bone_Index_Finger_Knuckle/Bone_Index_Finger_1
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Index_Palm_Root/Bone_Index_Palm_Root_2nd/Bone_Index_Palm_root_3rd/Bone_Index_Finger_Knuckle/Bone_Index_Finger_1/Bone_Index_Finger_2
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Index_Palm_Root/Bone_Index_Palm_Root_2nd/Bone_Index_Palm_root_3rd/Bone_Index_Finger_Knuckle/Bone_Index_Finger_1/Bone_Index_Finger_2/Bone_Index_Finger_3
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Index_Palm_Root/Bone_Index_Palm_Root_2nd/Bone_Index_Palm_root_3rd/Bone_Index_Finger_Knuckle/Bone_Index_Finger_1/Bone_Index_Finger_2/Bone_Index_Finger_3/Bone_Index_Finger_3_end
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Middle_Palm_Root
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Middle_Palm_Root/Bone_Midle_Palm_1st
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Middle_Palm_Root/Bone_Midle_Palm_1st/Bone_Middle_Palm_2nd
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Middle_Palm_Root/Bone_Midle_Palm_1st/Bone_Middle_Palm_2nd/Bone_Middle_Finger_Knuckle
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Middle_Palm_Root/Bone_Midle_Palm_1st/Bone_Middle_Palm_2nd/Bone_Middle_Finger_Knuckle/Bone_Middle_Finger_1
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Middle_Palm_Root/Bone_Midle_Palm_1st/Bone_Middle_Palm_2nd/Bone_Middle_Finger_Knuckle/Bone_Middle_Finger_1/Bone_Middle_Finger_2
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Middle_Palm_Root/Bone_Midle_Palm_1st/Bone_Middle_Palm_2nd/Bone_Middle_Finger_Knuckle/Bone_Middle_Finger_1/Bone_Middle_Finger_2/Bone_Middle_Finger_3
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Middle_Palm_Root/Bone_Midle_Palm_1st/Bone_Middle_Palm_2nd/Bone_Middle_Finger_Knuckle/Bone_Middle_Finger_1/Bone_Middle_Finger_2/Bone_Middle_Finger_3/Bone_Middle_Finger_3_end
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Ring_Palm_Root
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Ring_Palm_Root/Bone_Ring_Palm_1st
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Ring_Palm_Root/Bone_Ring_Palm_1st/Bone_Ring_Palm_2nd
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Ring_Palm_Root/Bone_Ring_Palm_1st/Bone_Ring_Palm_2nd/Bone_Ring_Knuckle
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Ring_Palm_Root/Bone_Ring_Palm_1st/Bone_Ring_Palm_2nd/Bone_Ring_Knuckle/Bone_Ring_Finger_1
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Ring_Palm_Root/Bone_Ring_Palm_1st/Bone_Ring_Palm_2nd/Bone_Ring_Knuckle/Bone_Ring_Finger_1/Bone_Ring_Finger_2
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Ring_Palm_Root/Bone_Ring_Palm_1st/Bone_Ring_Palm_2nd/Bone_Ring_Knuckle/Bone_Ring_Finger_1/Bone_Ring_Finger_2/Bone_Ring_Finger_3
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Ring_Palm_Root/Bone_Ring_Palm_1st/Bone_Ring_Palm_2nd/Bone_Ring_Knuckle/Bone_Ring_Finger_1/Bone_Ring_Finger_2/Bone_Ring_Finger_3/Bone_Ring_Finger_3_end
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Thumb_Palm_Root
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Thumb_Palm_Root/Bone_Thumb_Root_1st
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Thumb_Palm_Root/Bone_Thumb_Root_1st/Bone_Thumb_Finger_Knuckle
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Thumb_Palm_Root/Bone_Thumb_Root_1st/Bone_Thumb_Finger_Knuckle/Bone_Thumb_Finger_1
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Thumb_Palm_Root/Bone_Thumb_Root_1st/Bone_Thumb_Finger_Knuckle/Bone_Thumb_Finger_1/Bone_Thumb_Finger_2
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Thumb_Palm_Root/Bone_Thumb_Root_1st/Bone_Thumb_Finger_Knuckle/Bone_Thumb_Finger_1/Bone_Thumb_Finger_2/Bone_Thumb_Finger_3
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Thumb_Palm_Root/Bone_Thumb_Root_1st/Bone_Thumb_Finger_Knuckle/Bone_Thumb_Finger_1/Bone_Thumb_Finger_2/Bone_Thumb_Finger_3/Bone_Thumb_Finger_3_end
+        weight: 1
+      - path: VRTK_BasicHand
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Hand_Thumb
+      takeName: Armature|ArmatureAction.001
+      firstFrame: 23
+      lastFrame: 24
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Armature
+        weight: 1
+      - path: Armature/Bone_Arm_root
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Pinkie_Root
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Pinkie_Root/Bone_Pinkie_Root_1st
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Pinkie_Root/Bone_Pinkie_Root_1st/Bone_Pinkie_Finger_Knuckle
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Pinkie_Root/Bone_Pinkie_Root_1st/Bone_Pinkie_Finger_Knuckle/Bone_Pinkie_Finger_1
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Pinkie_Root/Bone_Pinkie_Root_1st/Bone_Pinkie_Finger_Knuckle/Bone_Pinkie_Finger_1/Bone_Pinkie_Finger_2
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Pinkie_Root/Bone_Pinkie_Root_1st/Bone_Pinkie_Finger_Knuckle/Bone_Pinkie_Finger_1/Bone_Pinkie_Finger_2/Bone_Pinkie_Finger_3
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Pinkie_Root/Bone_Pinkie_Root_1st/Bone_Pinkie_Finger_Knuckle/Bone_Pinkie_Finger_1/Bone_Pinkie_Finger_2/Bone_Pinkie_Finger_3/Bone_Pinkie_Finger_3_end
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Index_Palm_Root
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Index_Palm_Root/Bone_Index_Palm_Root_2nd
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Index_Palm_Root/Bone_Index_Palm_Root_2nd/Bone_Index_Palm_root_3rd
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Index_Palm_Root/Bone_Index_Palm_Root_2nd/Bone_Index_Palm_root_3rd/Bone_Index_Finger_Knuckle
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Index_Palm_Root/Bone_Index_Palm_Root_2nd/Bone_Index_Palm_root_3rd/Bone_Index_Finger_Knuckle/Bone_Index_Finger_1
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Index_Palm_Root/Bone_Index_Palm_Root_2nd/Bone_Index_Palm_root_3rd/Bone_Index_Finger_Knuckle/Bone_Index_Finger_1/Bone_Index_Finger_2
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Index_Palm_Root/Bone_Index_Palm_Root_2nd/Bone_Index_Palm_root_3rd/Bone_Index_Finger_Knuckle/Bone_Index_Finger_1/Bone_Index_Finger_2/Bone_Index_Finger_3
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Index_Palm_Root/Bone_Index_Palm_Root_2nd/Bone_Index_Palm_root_3rd/Bone_Index_Finger_Knuckle/Bone_Index_Finger_1/Bone_Index_Finger_2/Bone_Index_Finger_3/Bone_Index_Finger_3_end
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Middle_Palm_Root
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Middle_Palm_Root/Bone_Midle_Palm_1st
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Middle_Palm_Root/Bone_Midle_Palm_1st/Bone_Middle_Palm_2nd
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Middle_Palm_Root/Bone_Midle_Palm_1st/Bone_Middle_Palm_2nd/Bone_Middle_Finger_Knuckle
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Middle_Palm_Root/Bone_Midle_Palm_1st/Bone_Middle_Palm_2nd/Bone_Middle_Finger_Knuckle/Bone_Middle_Finger_1
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Middle_Palm_Root/Bone_Midle_Palm_1st/Bone_Middle_Palm_2nd/Bone_Middle_Finger_Knuckle/Bone_Middle_Finger_1/Bone_Middle_Finger_2
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Middle_Palm_Root/Bone_Midle_Palm_1st/Bone_Middle_Palm_2nd/Bone_Middle_Finger_Knuckle/Bone_Middle_Finger_1/Bone_Middle_Finger_2/Bone_Middle_Finger_3
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Middle_Palm_Root/Bone_Midle_Palm_1st/Bone_Middle_Palm_2nd/Bone_Middle_Finger_Knuckle/Bone_Middle_Finger_1/Bone_Middle_Finger_2/Bone_Middle_Finger_3/Bone_Middle_Finger_3_end
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Ring_Palm_Root
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Ring_Palm_Root/Bone_Ring_Palm_1st
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Ring_Palm_Root/Bone_Ring_Palm_1st/Bone_Ring_Palm_2nd
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Ring_Palm_Root/Bone_Ring_Palm_1st/Bone_Ring_Palm_2nd/Bone_Ring_Knuckle
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Ring_Palm_Root/Bone_Ring_Palm_1st/Bone_Ring_Palm_2nd/Bone_Ring_Knuckle/Bone_Ring_Finger_1
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Ring_Palm_Root/Bone_Ring_Palm_1st/Bone_Ring_Palm_2nd/Bone_Ring_Knuckle/Bone_Ring_Finger_1/Bone_Ring_Finger_2
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Ring_Palm_Root/Bone_Ring_Palm_1st/Bone_Ring_Palm_2nd/Bone_Ring_Knuckle/Bone_Ring_Finger_1/Bone_Ring_Finger_2/Bone_Ring_Finger_3
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Ring_Palm_Root/Bone_Ring_Palm_1st/Bone_Ring_Palm_2nd/Bone_Ring_Knuckle/Bone_Ring_Finger_1/Bone_Ring_Finger_2/Bone_Ring_Finger_3/Bone_Ring_Finger_3_end
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Thumb_Palm_Root
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Thumb_Palm_Root/Bone_Thumb_Root_1st
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Thumb_Palm_Root/Bone_Thumb_Root_1st/Bone_Thumb_Finger_Knuckle
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Thumb_Palm_Root/Bone_Thumb_Root_1st/Bone_Thumb_Finger_Knuckle/Bone_Thumb_Finger_1
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Thumb_Palm_Root/Bone_Thumb_Root_1st/Bone_Thumb_Finger_Knuckle/Bone_Thumb_Finger_1/Bone_Thumb_Finger_2
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Thumb_Palm_Root/Bone_Thumb_Root_1st/Bone_Thumb_Finger_Knuckle/Bone_Thumb_Finger_1/Bone_Thumb_Finger_2/Bone_Thumb_Finger_3
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Thumb_Palm_Root/Bone_Thumb_Root_1st/Bone_Thumb_Finger_Knuckle/Bone_Thumb_Finger_1/Bone_Thumb_Finger_2/Bone_Thumb_Finger_3/Bone_Thumb_Finger_3_end
+        weight: 1
+      - path: VRTK_BasicHand
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Hand_Index
+      takeName: Armature|ArmatureAction.001
+      firstFrame: 64
+      lastFrame: 65
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Armature
+        weight: 1
+      - path: Armature/Bone_Arm_root
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Pinkie_Root
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Pinkie_Root/Bone_Pinkie_Root_1st
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Pinkie_Root/Bone_Pinkie_Root_1st/Bone_Pinkie_Finger_Knuckle
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Pinkie_Root/Bone_Pinkie_Root_1st/Bone_Pinkie_Finger_Knuckle/Bone_Pinkie_Finger_1
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Pinkie_Root/Bone_Pinkie_Root_1st/Bone_Pinkie_Finger_Knuckle/Bone_Pinkie_Finger_1/Bone_Pinkie_Finger_2
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Pinkie_Root/Bone_Pinkie_Root_1st/Bone_Pinkie_Finger_Knuckle/Bone_Pinkie_Finger_1/Bone_Pinkie_Finger_2/Bone_Pinkie_Finger_3
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Pinkie_Root/Bone_Pinkie_Root_1st/Bone_Pinkie_Finger_Knuckle/Bone_Pinkie_Finger_1/Bone_Pinkie_Finger_2/Bone_Pinkie_Finger_3/Bone_Pinkie_Finger_3_end
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Index_Palm_Root
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Index_Palm_Root/Bone_Index_Palm_Root_2nd
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Index_Palm_Root/Bone_Index_Palm_Root_2nd/Bone_Index_Palm_root_3rd
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Index_Palm_Root/Bone_Index_Palm_Root_2nd/Bone_Index_Palm_root_3rd/Bone_Index_Finger_Knuckle
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Index_Palm_Root/Bone_Index_Palm_Root_2nd/Bone_Index_Palm_root_3rd/Bone_Index_Finger_Knuckle/Bone_Index_Finger_1
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Index_Palm_Root/Bone_Index_Palm_Root_2nd/Bone_Index_Palm_root_3rd/Bone_Index_Finger_Knuckle/Bone_Index_Finger_1/Bone_Index_Finger_2
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Index_Palm_Root/Bone_Index_Palm_Root_2nd/Bone_Index_Palm_root_3rd/Bone_Index_Finger_Knuckle/Bone_Index_Finger_1/Bone_Index_Finger_2/Bone_Index_Finger_3
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Index_Palm_Root/Bone_Index_Palm_Root_2nd/Bone_Index_Palm_root_3rd/Bone_Index_Finger_Knuckle/Bone_Index_Finger_1/Bone_Index_Finger_2/Bone_Index_Finger_3/Bone_Index_Finger_3_end
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Middle_Palm_Root
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Middle_Palm_Root/Bone_Midle_Palm_1st
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Middle_Palm_Root/Bone_Midle_Palm_1st/Bone_Middle_Palm_2nd
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Middle_Palm_Root/Bone_Midle_Palm_1st/Bone_Middle_Palm_2nd/Bone_Middle_Finger_Knuckle
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Middle_Palm_Root/Bone_Midle_Palm_1st/Bone_Middle_Palm_2nd/Bone_Middle_Finger_Knuckle/Bone_Middle_Finger_1
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Middle_Palm_Root/Bone_Midle_Palm_1st/Bone_Middle_Palm_2nd/Bone_Middle_Finger_Knuckle/Bone_Middle_Finger_1/Bone_Middle_Finger_2
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Middle_Palm_Root/Bone_Midle_Palm_1st/Bone_Middle_Palm_2nd/Bone_Middle_Finger_Knuckle/Bone_Middle_Finger_1/Bone_Middle_Finger_2/Bone_Middle_Finger_3
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Middle_Palm_Root/Bone_Midle_Palm_1st/Bone_Middle_Palm_2nd/Bone_Middle_Finger_Knuckle/Bone_Middle_Finger_1/Bone_Middle_Finger_2/Bone_Middle_Finger_3/Bone_Middle_Finger_3_end
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Ring_Palm_Root
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Ring_Palm_Root/Bone_Ring_Palm_1st
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Ring_Palm_Root/Bone_Ring_Palm_1st/Bone_Ring_Palm_2nd
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Ring_Palm_Root/Bone_Ring_Palm_1st/Bone_Ring_Palm_2nd/Bone_Ring_Knuckle
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Ring_Palm_Root/Bone_Ring_Palm_1st/Bone_Ring_Palm_2nd/Bone_Ring_Knuckle/Bone_Ring_Finger_1
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Ring_Palm_Root/Bone_Ring_Palm_1st/Bone_Ring_Palm_2nd/Bone_Ring_Knuckle/Bone_Ring_Finger_1/Bone_Ring_Finger_2
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Ring_Palm_Root/Bone_Ring_Palm_1st/Bone_Ring_Palm_2nd/Bone_Ring_Knuckle/Bone_Ring_Finger_1/Bone_Ring_Finger_2/Bone_Ring_Finger_3
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Ring_Palm_Root/Bone_Ring_Palm_1st/Bone_Ring_Palm_2nd/Bone_Ring_Knuckle/Bone_Ring_Finger_1/Bone_Ring_Finger_2/Bone_Ring_Finger_3/Bone_Ring_Finger_3_end
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Thumb_Palm_Root
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Thumb_Palm_Root/Bone_Thumb_Root_1st
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Thumb_Palm_Root/Bone_Thumb_Root_1st/Bone_Thumb_Finger_Knuckle
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Thumb_Palm_Root/Bone_Thumb_Root_1st/Bone_Thumb_Finger_Knuckle/Bone_Thumb_Finger_1
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Thumb_Palm_Root/Bone_Thumb_Root_1st/Bone_Thumb_Finger_Knuckle/Bone_Thumb_Finger_1/Bone_Thumb_Finger_2
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Thumb_Palm_Root/Bone_Thumb_Root_1st/Bone_Thumb_Finger_Knuckle/Bone_Thumb_Finger_1/Bone_Thumb_Finger_2/Bone_Thumb_Finger_3
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Thumb_Palm_Root/Bone_Thumb_Root_1st/Bone_Thumb_Finger_Knuckle/Bone_Thumb_Finger_1/Bone_Thumb_Finger_2/Bone_Thumb_Finger_3/Bone_Thumb_Finger_3_end
+        weight: 1
+      - path: VRTK_BasicHand
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Hand_Middle
+      takeName: Armature|ArmatureAction.001
+      firstFrame: 94
+      lastFrame: 95
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Armature
+        weight: 1
+      - path: Armature/Bone_Arm_root
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Pinkie_Root
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Pinkie_Root/Bone_Pinkie_Root_1st
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Pinkie_Root/Bone_Pinkie_Root_1st/Bone_Pinkie_Finger_Knuckle
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Pinkie_Root/Bone_Pinkie_Root_1st/Bone_Pinkie_Finger_Knuckle/Bone_Pinkie_Finger_1
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Pinkie_Root/Bone_Pinkie_Root_1st/Bone_Pinkie_Finger_Knuckle/Bone_Pinkie_Finger_1/Bone_Pinkie_Finger_2
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Pinkie_Root/Bone_Pinkie_Root_1st/Bone_Pinkie_Finger_Knuckle/Bone_Pinkie_Finger_1/Bone_Pinkie_Finger_2/Bone_Pinkie_Finger_3
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Pinkie_Root/Bone_Pinkie_Root_1st/Bone_Pinkie_Finger_Knuckle/Bone_Pinkie_Finger_1/Bone_Pinkie_Finger_2/Bone_Pinkie_Finger_3/Bone_Pinkie_Finger_3_end
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Index_Palm_Root
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Index_Palm_Root/Bone_Index_Palm_Root_2nd
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Index_Palm_Root/Bone_Index_Palm_Root_2nd/Bone_Index_Palm_root_3rd
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Index_Palm_Root/Bone_Index_Palm_Root_2nd/Bone_Index_Palm_root_3rd/Bone_Index_Finger_Knuckle
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Index_Palm_Root/Bone_Index_Palm_Root_2nd/Bone_Index_Palm_root_3rd/Bone_Index_Finger_Knuckle/Bone_Index_Finger_1
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Index_Palm_Root/Bone_Index_Palm_Root_2nd/Bone_Index_Palm_root_3rd/Bone_Index_Finger_Knuckle/Bone_Index_Finger_1/Bone_Index_Finger_2
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Index_Palm_Root/Bone_Index_Palm_Root_2nd/Bone_Index_Palm_root_3rd/Bone_Index_Finger_Knuckle/Bone_Index_Finger_1/Bone_Index_Finger_2/Bone_Index_Finger_3
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Index_Palm_Root/Bone_Index_Palm_Root_2nd/Bone_Index_Palm_root_3rd/Bone_Index_Finger_Knuckle/Bone_Index_Finger_1/Bone_Index_Finger_2/Bone_Index_Finger_3/Bone_Index_Finger_3_end
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Middle_Palm_Root
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Middle_Palm_Root/Bone_Midle_Palm_1st
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Middle_Palm_Root/Bone_Midle_Palm_1st/Bone_Middle_Palm_2nd
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Middle_Palm_Root/Bone_Midle_Palm_1st/Bone_Middle_Palm_2nd/Bone_Middle_Finger_Knuckle
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Middle_Palm_Root/Bone_Midle_Palm_1st/Bone_Middle_Palm_2nd/Bone_Middle_Finger_Knuckle/Bone_Middle_Finger_1
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Middle_Palm_Root/Bone_Midle_Palm_1st/Bone_Middle_Palm_2nd/Bone_Middle_Finger_Knuckle/Bone_Middle_Finger_1/Bone_Middle_Finger_2
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Middle_Palm_Root/Bone_Midle_Palm_1st/Bone_Middle_Palm_2nd/Bone_Middle_Finger_Knuckle/Bone_Middle_Finger_1/Bone_Middle_Finger_2/Bone_Middle_Finger_3
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Middle_Palm_Root/Bone_Midle_Palm_1st/Bone_Middle_Palm_2nd/Bone_Middle_Finger_Knuckle/Bone_Middle_Finger_1/Bone_Middle_Finger_2/Bone_Middle_Finger_3/Bone_Middle_Finger_3_end
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Ring_Palm_Root
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Ring_Palm_Root/Bone_Ring_Palm_1st
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Ring_Palm_Root/Bone_Ring_Palm_1st/Bone_Ring_Palm_2nd
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Ring_Palm_Root/Bone_Ring_Palm_1st/Bone_Ring_Palm_2nd/Bone_Ring_Knuckle
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Ring_Palm_Root/Bone_Ring_Palm_1st/Bone_Ring_Palm_2nd/Bone_Ring_Knuckle/Bone_Ring_Finger_1
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Ring_Palm_Root/Bone_Ring_Palm_1st/Bone_Ring_Palm_2nd/Bone_Ring_Knuckle/Bone_Ring_Finger_1/Bone_Ring_Finger_2
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Ring_Palm_Root/Bone_Ring_Palm_1st/Bone_Ring_Palm_2nd/Bone_Ring_Knuckle/Bone_Ring_Finger_1/Bone_Ring_Finger_2/Bone_Ring_Finger_3
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Ring_Palm_Root/Bone_Ring_Palm_1st/Bone_Ring_Palm_2nd/Bone_Ring_Knuckle/Bone_Ring_Finger_1/Bone_Ring_Finger_2/Bone_Ring_Finger_3/Bone_Ring_Finger_3_end
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Thumb_Palm_Root
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Thumb_Palm_Root/Bone_Thumb_Root_1st
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Thumb_Palm_Root/Bone_Thumb_Root_1st/Bone_Thumb_Finger_Knuckle
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Thumb_Palm_Root/Bone_Thumb_Root_1st/Bone_Thumb_Finger_Knuckle/Bone_Thumb_Finger_1
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Thumb_Palm_Root/Bone_Thumb_Root_1st/Bone_Thumb_Finger_Knuckle/Bone_Thumb_Finger_1/Bone_Thumb_Finger_2
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Thumb_Palm_Root/Bone_Thumb_Root_1st/Bone_Thumb_Finger_Knuckle/Bone_Thumb_Finger_1/Bone_Thumb_Finger_2/Bone_Thumb_Finger_3
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Thumb_Palm_Root/Bone_Thumb_Root_1st/Bone_Thumb_Finger_Knuckle/Bone_Thumb_Finger_1/Bone_Thumb_Finger_2/Bone_Thumb_Finger_3/Bone_Thumb_Finger_3_end
+        weight: 1
+      - path: VRTK_BasicHand
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Hand_Ring
+      takeName: Armature|ArmatureAction.001
+      firstFrame: 119
+      lastFrame: 120
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Armature
+        weight: 1
+      - path: Armature/Bone_Arm_root
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Pinkie_Root
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Pinkie_Root/Bone_Pinkie_Root_1st
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Pinkie_Root/Bone_Pinkie_Root_1st/Bone_Pinkie_Finger_Knuckle
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Pinkie_Root/Bone_Pinkie_Root_1st/Bone_Pinkie_Finger_Knuckle/Bone_Pinkie_Finger_1
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Pinkie_Root/Bone_Pinkie_Root_1st/Bone_Pinkie_Finger_Knuckle/Bone_Pinkie_Finger_1/Bone_Pinkie_Finger_2
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Pinkie_Root/Bone_Pinkie_Root_1st/Bone_Pinkie_Finger_Knuckle/Bone_Pinkie_Finger_1/Bone_Pinkie_Finger_2/Bone_Pinkie_Finger_3
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Pinkie_Root/Bone_Pinkie_Root_1st/Bone_Pinkie_Finger_Knuckle/Bone_Pinkie_Finger_1/Bone_Pinkie_Finger_2/Bone_Pinkie_Finger_3/Bone_Pinkie_Finger_3_end
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Index_Palm_Root
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Index_Palm_Root/Bone_Index_Palm_Root_2nd
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Index_Palm_Root/Bone_Index_Palm_Root_2nd/Bone_Index_Palm_root_3rd
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Index_Palm_Root/Bone_Index_Palm_Root_2nd/Bone_Index_Palm_root_3rd/Bone_Index_Finger_Knuckle
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Index_Palm_Root/Bone_Index_Palm_Root_2nd/Bone_Index_Palm_root_3rd/Bone_Index_Finger_Knuckle/Bone_Index_Finger_1
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Index_Palm_Root/Bone_Index_Palm_Root_2nd/Bone_Index_Palm_root_3rd/Bone_Index_Finger_Knuckle/Bone_Index_Finger_1/Bone_Index_Finger_2
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Index_Palm_Root/Bone_Index_Palm_Root_2nd/Bone_Index_Palm_root_3rd/Bone_Index_Finger_Knuckle/Bone_Index_Finger_1/Bone_Index_Finger_2/Bone_Index_Finger_3
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Index_Palm_Root/Bone_Index_Palm_Root_2nd/Bone_Index_Palm_root_3rd/Bone_Index_Finger_Knuckle/Bone_Index_Finger_1/Bone_Index_Finger_2/Bone_Index_Finger_3/Bone_Index_Finger_3_end
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Middle_Palm_Root
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Middle_Palm_Root/Bone_Midle_Palm_1st
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Middle_Palm_Root/Bone_Midle_Palm_1st/Bone_Middle_Palm_2nd
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Middle_Palm_Root/Bone_Midle_Palm_1st/Bone_Middle_Palm_2nd/Bone_Middle_Finger_Knuckle
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Middle_Palm_Root/Bone_Midle_Palm_1st/Bone_Middle_Palm_2nd/Bone_Middle_Finger_Knuckle/Bone_Middle_Finger_1
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Middle_Palm_Root/Bone_Midle_Palm_1st/Bone_Middle_Palm_2nd/Bone_Middle_Finger_Knuckle/Bone_Middle_Finger_1/Bone_Middle_Finger_2
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Middle_Palm_Root/Bone_Midle_Palm_1st/Bone_Middle_Palm_2nd/Bone_Middle_Finger_Knuckle/Bone_Middle_Finger_1/Bone_Middle_Finger_2/Bone_Middle_Finger_3
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Middle_Palm_Root/Bone_Midle_Palm_1st/Bone_Middle_Palm_2nd/Bone_Middle_Finger_Knuckle/Bone_Middle_Finger_1/Bone_Middle_Finger_2/Bone_Middle_Finger_3/Bone_Middle_Finger_3_end
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Ring_Palm_Root
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Ring_Palm_Root/Bone_Ring_Palm_1st
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Ring_Palm_Root/Bone_Ring_Palm_1st/Bone_Ring_Palm_2nd
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Ring_Palm_Root/Bone_Ring_Palm_1st/Bone_Ring_Palm_2nd/Bone_Ring_Knuckle
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Ring_Palm_Root/Bone_Ring_Palm_1st/Bone_Ring_Palm_2nd/Bone_Ring_Knuckle/Bone_Ring_Finger_1
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Ring_Palm_Root/Bone_Ring_Palm_1st/Bone_Ring_Palm_2nd/Bone_Ring_Knuckle/Bone_Ring_Finger_1/Bone_Ring_Finger_2
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Ring_Palm_Root/Bone_Ring_Palm_1st/Bone_Ring_Palm_2nd/Bone_Ring_Knuckle/Bone_Ring_Finger_1/Bone_Ring_Finger_2/Bone_Ring_Finger_3
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Ring_Palm_Root/Bone_Ring_Palm_1st/Bone_Ring_Palm_2nd/Bone_Ring_Knuckle/Bone_Ring_Finger_1/Bone_Ring_Finger_2/Bone_Ring_Finger_3/Bone_Ring_Finger_3_end
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Thumb_Palm_Root
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Thumb_Palm_Root/Bone_Thumb_Root_1st
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Thumb_Palm_Root/Bone_Thumb_Root_1st/Bone_Thumb_Finger_Knuckle
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Thumb_Palm_Root/Bone_Thumb_Root_1st/Bone_Thumb_Finger_Knuckle/Bone_Thumb_Finger_1
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Thumb_Palm_Root/Bone_Thumb_Root_1st/Bone_Thumb_Finger_Knuckle/Bone_Thumb_Finger_1/Bone_Thumb_Finger_2
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Thumb_Palm_Root/Bone_Thumb_Root_1st/Bone_Thumb_Finger_Knuckle/Bone_Thumb_Finger_1/Bone_Thumb_Finger_2/Bone_Thumb_Finger_3
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Thumb_Palm_Root/Bone_Thumb_Root_1st/Bone_Thumb_Finger_Knuckle/Bone_Thumb_Finger_1/Bone_Thumb_Finger_2/Bone_Thumb_Finger_3/Bone_Thumb_Finger_3_end
+        weight: 1
+      - path: VRTK_BasicHand
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Hand_Pinky
+      takeName: Armature|ArmatureAction.001
+      firstFrame: 159
+      lastFrame: 160
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Armature
+        weight: 1
+      - path: Armature/Bone_Arm_root
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Pinkie_Root
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Pinkie_Root/Bone_Pinkie_Root_1st
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Pinkie_Root/Bone_Pinkie_Root_1st/Bone_Pinkie_Finger_Knuckle
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Pinkie_Root/Bone_Pinkie_Root_1st/Bone_Pinkie_Finger_Knuckle/Bone_Pinkie_Finger_1
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Pinkie_Root/Bone_Pinkie_Root_1st/Bone_Pinkie_Finger_Knuckle/Bone_Pinkie_Finger_1/Bone_Pinkie_Finger_2
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Pinkie_Root/Bone_Pinkie_Root_1st/Bone_Pinkie_Finger_Knuckle/Bone_Pinkie_Finger_1/Bone_Pinkie_Finger_2/Bone_Pinkie_Finger_3
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Pinkie_Root/Bone_Pinkie_Root_1st/Bone_Pinkie_Finger_Knuckle/Bone_Pinkie_Finger_1/Bone_Pinkie_Finger_2/Bone_Pinkie_Finger_3/Bone_Pinkie_Finger_3_end
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Index_Palm_Root
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Index_Palm_Root/Bone_Index_Palm_Root_2nd
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Index_Palm_Root/Bone_Index_Palm_Root_2nd/Bone_Index_Palm_root_3rd
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Index_Palm_Root/Bone_Index_Palm_Root_2nd/Bone_Index_Palm_root_3rd/Bone_Index_Finger_Knuckle
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Index_Palm_Root/Bone_Index_Palm_Root_2nd/Bone_Index_Palm_root_3rd/Bone_Index_Finger_Knuckle/Bone_Index_Finger_1
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Index_Palm_Root/Bone_Index_Palm_Root_2nd/Bone_Index_Palm_root_3rd/Bone_Index_Finger_Knuckle/Bone_Index_Finger_1/Bone_Index_Finger_2
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Index_Palm_Root/Bone_Index_Palm_Root_2nd/Bone_Index_Palm_root_3rd/Bone_Index_Finger_Knuckle/Bone_Index_Finger_1/Bone_Index_Finger_2/Bone_Index_Finger_3
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Index_Palm_Root/Bone_Index_Palm_Root_2nd/Bone_Index_Palm_root_3rd/Bone_Index_Finger_Knuckle/Bone_Index_Finger_1/Bone_Index_Finger_2/Bone_Index_Finger_3/Bone_Index_Finger_3_end
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Middle_Palm_Root
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Middle_Palm_Root/Bone_Midle_Palm_1st
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Middle_Palm_Root/Bone_Midle_Palm_1st/Bone_Middle_Palm_2nd
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Middle_Palm_Root/Bone_Midle_Palm_1st/Bone_Middle_Palm_2nd/Bone_Middle_Finger_Knuckle
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Middle_Palm_Root/Bone_Midle_Palm_1st/Bone_Middle_Palm_2nd/Bone_Middle_Finger_Knuckle/Bone_Middle_Finger_1
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Middle_Palm_Root/Bone_Midle_Palm_1st/Bone_Middle_Palm_2nd/Bone_Middle_Finger_Knuckle/Bone_Middle_Finger_1/Bone_Middle_Finger_2
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Middle_Palm_Root/Bone_Midle_Palm_1st/Bone_Middle_Palm_2nd/Bone_Middle_Finger_Knuckle/Bone_Middle_Finger_1/Bone_Middle_Finger_2/Bone_Middle_Finger_3
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Middle_Palm_Root/Bone_Midle_Palm_1st/Bone_Middle_Palm_2nd/Bone_Middle_Finger_Knuckle/Bone_Middle_Finger_1/Bone_Middle_Finger_2/Bone_Middle_Finger_3/Bone_Middle_Finger_3_end
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Ring_Palm_Root
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Ring_Palm_Root/Bone_Ring_Palm_1st
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Ring_Palm_Root/Bone_Ring_Palm_1st/Bone_Ring_Palm_2nd
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Ring_Palm_Root/Bone_Ring_Palm_1st/Bone_Ring_Palm_2nd/Bone_Ring_Knuckle
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Ring_Palm_Root/Bone_Ring_Palm_1st/Bone_Ring_Palm_2nd/Bone_Ring_Knuckle/Bone_Ring_Finger_1
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Ring_Palm_Root/Bone_Ring_Palm_1st/Bone_Ring_Palm_2nd/Bone_Ring_Knuckle/Bone_Ring_Finger_1/Bone_Ring_Finger_2
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Ring_Palm_Root/Bone_Ring_Palm_1st/Bone_Ring_Palm_2nd/Bone_Ring_Knuckle/Bone_Ring_Finger_1/Bone_Ring_Finger_2/Bone_Ring_Finger_3
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Palm_Root/Bone_Ring_Palm_Root/Bone_Ring_Palm_1st/Bone_Ring_Palm_2nd/Bone_Ring_Knuckle/Bone_Ring_Finger_1/Bone_Ring_Finger_2/Bone_Ring_Finger_3/Bone_Ring_Finger_3_end
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Thumb_Palm_Root
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Thumb_Palm_Root/Bone_Thumb_Root_1st
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Thumb_Palm_Root/Bone_Thumb_Root_1st/Bone_Thumb_Finger_Knuckle
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Thumb_Palm_Root/Bone_Thumb_Root_1st/Bone_Thumb_Finger_Knuckle/Bone_Thumb_Finger_1
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Thumb_Palm_Root/Bone_Thumb_Root_1st/Bone_Thumb_Finger_Knuckle/Bone_Thumb_Finger_1/Bone_Thumb_Finger_2
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Thumb_Palm_Root/Bone_Thumb_Root_1st/Bone_Thumb_Finger_Knuckle/Bone_Thumb_Finger_1/Bone_Thumb_Finger_2/Bone_Thumb_Finger_3
+        weight: 1
+      - path: Armature/Bone_Arm_root/Bone_Wrist/Bone_Thumb_Palm_Root/Bone_Thumb_Root_1st/Bone_Thumb_Finger_Knuckle/Bone_Thumb_Finger_1/Bone_Thumb_Finger_2/Bone_Thumb_Finger_3/Bone_Thumb_Finger_3_end
+        weight: 1
+      - path: VRTK_BasicHand
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
