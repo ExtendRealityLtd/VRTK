@@ -540,14 +540,14 @@ namespace VRTK
 
             if (index == 1)
             {
-                if (!rightController.Selected)
+                if (rightController == null || !rightController.Selected)
                 {
                     return false;
                 }
             }
             else if (index == 2)
             {
-                if (!leftController.Selected)
+                if (leftController == null || !leftController.Selected)
                 {
                     return false;
                 }
