@@ -61,7 +61,6 @@ namespace VRTK
         protected bool controllerHighlighted = false;
         protected Dictionary<string, Transform> cachedElements;
         protected Dictionary<string, object> highlighterOptions;
-        protected Coroutine initHighlightersRoutine;
         protected GameObject originalControllerAlias;
 
         protected Color lastHighlightController;
@@ -83,9 +82,7 @@ namespace VRTK
         protected SDK_BaseController.ControllerElements[] systemMenuElements = new SDK_BaseController.ControllerElements[] { SDK_BaseController.ControllerElements.SystemMenu };
         protected SDK_BaseController.ControllerElements[] startMenuElements = new SDK_BaseController.ControllerElements[] { SDK_BaseController.ControllerElements.StartMenu };
 
-        protected Coroutine attemptGetControllerPathsRoutine;
-        protected int findControllerAttempts = 25;
-        protected float findControllerAttemptsDelay = 0.1f;
+        protected VRTK_TrackedController trackedController;
 
         /// <summary>
         /// The ConfigureControllerPaths method is used to set up the model element paths.
@@ -223,7 +220,7 @@ namespace VRTK
             controllerAlias = originalControllerAlias;
             if (controllerAlias == null)
             {
-                VRTK_TrackedController trackedController = GetComponentInParent<VRTK_TrackedController>();
+                trackedController = GetComponentInParent<VRTK_TrackedController>();
                 controllerAlias = (trackedController != null ? trackedController.gameObject : null);
             }
 
@@ -233,21 +230,17 @@ namespace VRTK
                 return;
             }
 
-            attemptGetControllerPathsRoutine = StartCoroutine(AttemptGetControllerPaths(findControllerAttempts, findControllerAttemptsDelay));
+            if (trackedController != null)
+            {
+                trackedController.ControllerModelAvailable += DoControllerModelAvailable;
+            }
         }
 
         protected virtual void OnDisable()
         {
-            if (initHighlightersRoutine != null)
+            if (trackedController != null)
             {
-                StopCoroutine(initHighlightersRoutine);
-                initHighlightersRoutine = null;
-            }
-
-            if (attemptGetControllerPathsRoutine != null)
-            {
-                StopCoroutine(attemptGetControllerPathsRoutine);
-                attemptGetControllerPathsRoutine = null;
+                trackedController.ControllerModelAvailable -= DoControllerModelAvailable;
             }
         }
 
@@ -267,6 +260,14 @@ namespace VRTK
             ToggleHighlightState(highlightButtonTwo, ref lastHighlightButtonTwo, buttonTwoElements);
             ToggleHighlightState(highlightSystemMenu, ref lastHighlightSystemMenu, systemMenuElements);
             ToggleHighlightState(highlightStartMenu, ref lastHighlightStartMenu, startMenuElements);
+        }
+
+        protected virtual void DoControllerModelAvailable(object sender, VRTKTrackedControllerEventArgs e)
+        {
+            ConfigureControllerPaths();
+            modelContainer = (modelContainer != null ? modelContainer : VRTK_DeviceFinder.GetModelAliasController(controllerAlias));
+            PopulateHighlighters();
+            ResetLastHighlights();
         }
 
         protected virtual void ResetLastHighlights()
@@ -385,32 +386,6 @@ namespace VRTK
                 }
                 lastColorState = currentColor;
             }
-        }
-
-        protected virtual IEnumerator AttemptGetControllerPaths(int attempts, float delay)
-        {
-            WaitForSeconds delayInstruction = new WaitForSeconds(delay);
-            SDK_BaseController.ControllerType controllerType = VRTK_SDK_Bridge.GetCurrentControllerType();
-            while (controllerType == SDK_BaseController.ControllerType.Undefined && attempts > 0)
-            {
-                controllerType = VRTK_SDK_Bridge.GetCurrentControllerType();
-                attempts--;
-                yield return delayInstruction;
-            }
-
-            ConfigureControllerPaths();
-            modelContainer = (modelContainer != null ? modelContainer : VRTK_DeviceFinder.GetModelAliasController(controllerAlias));
-            initHighlightersRoutine = StartCoroutine(WaitForModel());
-        }
-
-        protected virtual IEnumerator WaitForModel()
-        {
-            while (GetElementTransform(modelElementPaths.bodyModelPath) == null)
-            {
-                yield return null;
-            }
-            PopulateHighlighters();
-            ResetLastHighlights();
         }
 
         protected virtual void AddHighlighterToElement(Transform element, VRTK_BaseHighlighter parentHighlighter, VRTK_BaseHighlighter overrideHighlighter)

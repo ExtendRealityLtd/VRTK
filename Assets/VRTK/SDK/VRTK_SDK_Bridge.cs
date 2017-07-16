@@ -22,9 +22,9 @@
             GetControllerSDK().ProcessFixedUpdate(controllerReference, options);
         }
 
-        public static SDK_BaseController.ControllerType GetCurrentControllerType()
+        public static SDK_BaseController.ControllerType GetCurrentControllerType(VRTK_ControllerReference controllerReference = null)
         {
-            return GetControllerSDK().GetCurrentControllerType();
+            return GetControllerSDK().GetCurrentControllerType(controllerReference);
         }
 
         public static string GetControllerDefaultColliderPath(SDK_BaseController.ControllerHand hand)
@@ -99,19 +99,24 @@
             return GetControllerSDK().IsControllerRightHand(controller, actual);
         }
 
+        public static bool WaitForControllerModel(SDK_BaseController.ControllerHand hand)
+        {
+            return GetControllerSDK().WaitForControllerModel(hand);
+        }
+
         public static GameObject GetControllerModel(GameObject controller)
         {
             return GetControllerSDK().GetControllerModel(controller);
         }
 
-        public static SDK_BaseController.ControllerHand GetControllerModelHand(GameObject controllerModel)
-        {
-            return GetControllerSDK().GetControllerModelHand(controllerModel);
-        }
-
         public static GameObject GetControllerModel(SDK_BaseController.ControllerHand hand)
         {
             return GetControllerSDK().GetControllerModel(hand);
+        }
+
+        public static SDK_BaseController.ControllerHand GetControllerModelHand(GameObject controllerModel)
+        {
+            return GetControllerSDK().GetControllerModelHand(controllerModel);
         }
 
         public static GameObject GetControllerRenderModel(VRTK_ControllerReference controllerReference)

@@ -4,6 +4,13 @@ namespace VRTK
     using UnityEngine;
     using System.Collections.Generic;
 
+    public struct VRTKSDKBaseControllerEventArgs
+    {
+        public VRTK_ControllerReference controllerReference;
+    }
+
+    public delegate void VRTKSDKBaseControllerEventHandler(object sender, VRTKSDKBaseControllerEventArgs e);
+
     /// <summary>
     /// The Base Controller SDK script provides a bridge to SDK methods that deal with the input devices.
     /// </summary>
@@ -133,6 +140,12 @@ namespace VRTK
             Oculus_GearVRController
         }
 
+        public event VRTKSDKBaseControllerEventHandler LeftControllerModelReady;
+        public event VRTKSDKBaseControllerEventHandler RightControllerModelReady;
+
+        protected Transform defaultSDKLeftControllerModel = null;
+        protected Transform defaultSDKRightControllerModel = null;
+
         /// <summary>
         /// The ProcessUpdate method enables an SDK to run logic for every Unity Update
         /// </summary>
@@ -150,8 +163,9 @@ namespace VRTK
         /// <summary>
         /// The GetCurrentControllerType method returns the current used ControllerType based on the SDK and headset being used.
         /// </summary>
+        /// <param name="controllerReference">The reference to the controller to get type of.</param>
         /// <returns>The ControllerType based on the SDK and headset being used.</returns>
-        public abstract ControllerType GetCurrentControllerType();
+        public abstract ControllerType GetCurrentControllerType(VRTK_ControllerReference controllerReference = null);
 
         /// <summary>
         /// The GetControllerDefaultColliderPath returns the path to the prefab that contains the collider objects for the default controller of this SDK.
@@ -241,6 +255,13 @@ namespace VRTK
         /// <param name="actual">If true it will check the actual controller, if false it will check the script alias controller.</param>
         /// <returns>Returns true if the given controller is the right hand controller.</returns>
         public abstract bool IsControllerRightHand(GameObject controller, bool actual);
+
+        /// <summary>
+        /// The WaitForControllerModel method determines whether the controller model for the given hand requires waiting to load in on scene start.
+        /// </summary>
+        /// <param name="hand">The hand to determine if the controller model will be ready for.</param>
+        /// <returns>Returns true if the controller model requires loading in at runtime and therefore needs waiting for. Returns false if the controller model will be available at start.</returns>
+        public abstract bool WaitForControllerModel(ControllerHand hand);
 
         /// <summary>
         /// The GetControllerModel method returns the model alias for the given GameObject.
@@ -455,6 +476,46 @@ namespace VRTK
                 }
             }
             return returnController;
+        }
+
+        protected virtual void OnControllerModelReady(ControllerHand hand, VRTK_ControllerReference controllerReference)
+        {
+            VRTKSDKBaseControllerEventArgs e;
+            e.controllerReference = controllerReference;
+
+            switch (hand)
+            {
+                case ControllerHand.Left:
+                    if (LeftControllerModelReady != null)
+                    {
+                        LeftControllerModelReady(this, e);
+                    }
+                    break;
+                case ControllerHand.Right:
+                    if (RightControllerModelReady != null)
+                    {
+                        RightControllerModelReady(this, e);
+                    }
+                    break;
+            }
+        }
+
+        protected virtual bool ShouldWaitForControllerModel(ControllerHand hand, bool ignoreChildCount)
+        {
+            //If the default model isn't set or the current controller model isn't the default controller model, then don't bother waiting for the model to stream in.
+            switch (hand)
+            {
+                case ControllerHand.Left:
+                    return IsDefaultControllerModel(defaultSDKLeftControllerModel, GetControllerModel(ControllerHand.Left), ignoreChildCount);
+                case ControllerHand.Right:
+                    return IsDefaultControllerModel(defaultSDKRightControllerModel, GetControllerModel(ControllerHand.Right), ignoreChildCount);
+            }
+            return false;
+        }
+
+        protected virtual bool IsDefaultControllerModel(Transform givenDefault, GameObject givenActual, bool ignoreChildCount)
+        {
+            return (givenDefault != null && givenActual == givenDefault.gameObject && givenActual != null && (ignoreChildCount || givenActual.transform.childCount == 0));
         }
     }
 

@@ -89,8 +89,9 @@ namespace VRTK
         /// <summary>
         /// The GetCurrentControllerType method returns the current used ControllerType based on the SDK and headset being used.
         /// </summary>
+        /// <param name="controllerReference">The reference to the controller to get type of.</param>
         /// <returns>The ControllerType based on the SDK and headset being used.</returns>
-        public override ControllerType GetCurrentControllerType()
+        public override ControllerType GetCurrentControllerType(VRTK_ControllerReference controllerReference = null)
         {
             switch (OVRInput.GetActiveController())
             {
@@ -297,6 +298,21 @@ namespace VRTK
         public override bool IsControllerRightHand(GameObject controller, bool actual)
         {
             return CheckControllerRightHand(controller, actual);
+        }
+
+        /// <summary>
+        /// The WaitForControllerModel method determines whether the controller model for the given hand requires waiting to load in on scene start.
+        /// </summary>
+        /// <param name="hand">The hand to determine if the controller model will be ready for.</param>
+        /// <returns>Returns true if the controller model requires loading in at runtime and therefore needs waiting for. Returns false if the controller model will be available at start.</returns>
+        public override bool WaitForControllerModel(ControllerHand hand)
+        {
+            //If Oculus avatar isn't being used or the default model isn't set or the current controller model isn't the default controller model, then don't bother waiting for the model to stream in.
+            if (HasAvatar())
+            {
+                return ShouldWaitForControllerModel(hand, false);
+            }
+            return false;
         }
 
         /// <summary>
@@ -637,6 +653,42 @@ namespace VRTK
                     return IsButtonPressed(index, pressType, OVRInput.Button.Start);
             }
             return false;
+        }
+
+        protected virtual void Awake()
+        {
+            GameObject avatarObject = GetAvatar();
+            if (avatarObject != null)
+            {
+                defaultSDKLeftControllerModel = avatarObject.transform.Find("controller_left");
+                defaultSDKRightControllerModel = avatarObject.transform.Find("controller_right");
+            }
+            RegisterAvatarEvents();
+        }
+
+        protected virtual void RegisterAvatarEvents()
+        {
+            if (HasAvatar())
+            {
+                GetBoundariesSDK();
+#if VRTK_DEFINE_SDK_OCULUS_AVATAR
+                if (cachedBoundariesSDK != null)
+                {
+                    OvrAvatar avatar = cachedBoundariesSDK.GetAvatar();
+                    bool isDefaultModel = (defaultSDKLeftControllerModel != null && defaultSDKRightControllerModel != null && GetControllerModel(ControllerHand.Left) == defaultSDKLeftControllerModel.gameObject && GetControllerModel(ControllerHand.Right) == defaultSDKRightControllerModel.gameObject);
+                    if (avatar != null && isDefaultModel)
+                    {
+                        avatar.AssetsDoneLoading.AddListener(BothControllersReady);
+                    }
+                }
+#endif
+            }
+        }
+
+        protected virtual void BothControllersReady()
+        {
+            OnControllerModelReady(ControllerHand.Left, VRTK_ControllerReference.GetControllerReference((uint)0));
+            OnControllerModelReady(ControllerHand.Right, VRTK_ControllerReference.GetControllerReference((uint)1));
         }
 
         protected virtual void CalculateAngularVelocity(VRTK_ControllerReference controllerReference)

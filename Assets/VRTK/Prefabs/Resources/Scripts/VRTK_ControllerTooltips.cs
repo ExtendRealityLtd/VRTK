@@ -92,8 +92,13 @@ namespace VRTK
         public VRTK_HeadsetControllerAware headsetControllerAware;
         [Tooltip("If this is checked then the tooltips will be hidden when the headset is not looking at the controller.")]
         public bool hideWhenNotInView = true;
+
+        [HideInInspector]
+        [System.Obsolete("`VRTK_ControllerTooltips.retryInitMaxTries` has been deprecated as tooltip initialisation now uses the `VRTK_TrackedController.ControllerModelAvailable` event.")]
         [Tooltip("The total number of initialisation attempts to make when waiting for the button transforms to initialise.")]
         public int retryInitMaxTries = 10;
+        [HideInInspector]
+        [System.Obsolete("`VRTK_ControllerTooltips.retryInitCounter` has been deprecated as tooltip initialisation now uses the `VRTK_TrackedController.ControllerModelAvailable` event.")]
         [Tooltip("The amount of seconds to wait before re-attempting to initialise the controller tooltips if the button transforms have not been initialised yet.")]
         public float retryInitCounter = 0.1f;
 
@@ -106,12 +111,11 @@ namespace VRTK
         /// </summary>
         public event ControllerTooltipsEventHandler ControllerTooltipOff;
 
-        protected bool overallState = true;
         protected TooltipButtons[] availableButtons = new TooltipButtons[0];
         protected VRTK_ObjectTooltip[] buttonTooltips = new VRTK_ObjectTooltip[0];
         protected bool[] tooltipStates = new bool[0];
-
-        protected int retryInitCurrentTries = 0;
+        protected bool overallState = true;
+        protected VRTK_TrackedController trackedController;
 
         public virtual void OnControllerTooltipOn(ControllerTooltipsEventArgs e)
         {
@@ -217,6 +221,11 @@ namespace VRTK
                 controllerEvents.ControllerEnabled -= DoControllerEnabled;
                 controllerEvents.ControllerVisible -= DoControllerVisible;
                 controllerEvents.ControllerHidden -= DoControllerInvisible;
+                controllerEvents.ControllerModelAvailable -= DoControllerModelAvailable;
+            }
+            else if (trackedController != null)
+            {
+                trackedController.ControllerModelAvailable -= TrackedControllerDoControllerModelAvailable;
             }
 
             if (headsetControllerAware != null)
@@ -265,8 +274,6 @@ namespace VRTK
             {
                 buttonTooltips[i] = transform.Find(availableButtons[i].ToString()).GetComponent<VRTK_ObjectTooltip>();
             }
-
-            retryInitCurrentTries = retryInitMaxTries;
         }
 
         protected virtual void InitListeners()
@@ -276,6 +283,15 @@ namespace VRTK
                 controllerEvents.ControllerEnabled += DoControllerEnabled;
                 controllerEvents.ControllerVisible += DoControllerVisible;
                 controllerEvents.ControllerHidden += DoControllerInvisible;
+                controllerEvents.ControllerModelAvailable += DoControllerModelAvailable;
+            }
+            else
+            {
+                trackedController = GetComponentInParent<VRTK_TrackedController>();
+                if (trackedController != null)
+                {
+                    trackedController.ControllerModelAvailable += TrackedControllerDoControllerModelAvailable;
+                }
             }
 
             headsetControllerAware = (headsetControllerAware != null ? headsetControllerAware : FindObjectOfType<VRTK_HeadsetControllerAware>());
@@ -316,6 +332,16 @@ namespace VRTK
             ToggleTips(false);
         }
 
+        protected virtual void DoControllerModelAvailable(object sender, ControllerInteractionEventArgs e)
+        {
+            ResetTooltip();
+        }
+
+
+        protected virtual void TrackedControllerDoControllerModelAvailable(object sender, VRTKTrackedControllerEventArgs e)
+        {
+            ResetTooltip();
+        }
 
         protected virtual void DoGlanceEnterController(object sender, HeadsetControllerAwareEventArgs e)
         {
@@ -394,13 +420,6 @@ namespace VRTK
                 {
                     tooltip.gameObject.SetActive(false);
                 }
-            }
-
-            if (!initComplete && retryInitCurrentTries > 0)
-            {
-                retryInitCurrentTries--;
-                Invoke("ResetTooltip", retryInitCounter);
-                return;
             }
 
             if (headsetControllerAware == null || !hideWhenNotInView)
