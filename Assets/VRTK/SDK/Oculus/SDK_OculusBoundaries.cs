@@ -9,6 +9,7 @@ namespace VRTK
     /// The Oculus Boundaries SDK script provides a bridge to the Oculus SDK play area.
     /// </summary>
     [SDK_Description(typeof(SDK_OculusSystem))]
+    [SDK_Description(typeof(SDK_OculusSystem), 1)]
     public class SDK_OculusBoundaries
 #if VRTK_DEFINE_SDK_OCULUS
         : SDK_BaseBoundaries
