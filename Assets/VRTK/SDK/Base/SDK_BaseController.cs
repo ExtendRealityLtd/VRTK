@@ -112,6 +112,10 @@ namespace VRTK
         /// <param name="Daydream_Controller">The Daydream controller for Google Daydream SDK.</param>
         /// <param name="Ximmerse_Flip">The Flip controller for Ximmerse SDK.</param>
         /// <param name="SteamVR_ValveKnuckles">The Valve Knuckles controller for SteamVR.</param>
+        /// <param name="Oculus_OculusGamepad">The Oculus Gamepad for Oculus Utilities.</param>
+        /// <param name="Oculus_OculusRemote">The Oculus Remote for Oculus Utilities.</param>
+        /// <param name="Oculus_GearVRHMD">The Oculus GearVR HMD controls for Oculus Utilities.</param>
+        /// <param name="Oculus_GearVRController">The Oculus GearVR controller for Oculus Utilities.</param>
         public enum ControllerType
         {
             Undefined,
@@ -122,7 +126,11 @@ namespace VRTK
             Oculus_OculusTouch,
             Daydream_Controller,
             Ximmerse_Flip,
-            SteamVR_ValveKnuckles
+            SteamVR_ValveKnuckles,
+            Oculus_OculusGamepad,
+            Oculus_OculusRemote,
+            Oculus_GearVRHMD,
+            Oculus_GearVRController
         }
 
         /// <summary>

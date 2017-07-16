@@ -7955,6 +7955,10 @@ This is an abstract class to implement the interface required by all implemented
   * `Daydream_Controller` - The Daydream controller for Google Daydream SDK.
   * `Ximmerse_Flip` - The Flip controller for Ximmerse SDK.
   * `SteamVR_ValveKnuckles` - The Valve Knuckles controller for SteamVR.
+  * `Oculus_OculusGamepad` - The Oculus Gamepad for Oculus Utilities.
+  * `Oculus_OculusRemote` - The Oculus Remote for Oculus Utilities.
+  * `Oculus_GearVRHMD` - The Oculus GearVR HMD controls for Oculus Utilities.
+  * `Oculus_GearVRController` - The Oculus GearVR controller for Oculus Utilities.
 
 ### Class Methods
 
