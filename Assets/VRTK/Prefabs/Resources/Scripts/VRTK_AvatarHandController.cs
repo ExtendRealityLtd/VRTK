@@ -190,6 +190,8 @@ namespace VRTK
         protected SDK_BaseController.ButtonTypes savedPinkyAxisButtonState;
         protected SDK_BaseController.ButtonTypes savedThreeFingerAxisButtonState;
 
+        protected VRTK_ControllerReference controllerReference;
+
         #endregion Protected class variables
 
         #region MonoBehaviour methods
@@ -200,6 +202,8 @@ namespace VRTK
             interactTouch = (interactTouch != null ? interactTouch : GetComponentInParent<VRTK_InteractTouch>());
             interactGrab = (interactGrab != null ? interactGrab : GetComponentInParent<VRTK_InteractGrab>());
             interactUse = (interactUse != null ? interactUse : GetComponentInParent<VRTK_InteractUse>());
+
+            controllerReference = VRTK_ControllerReference.GetControllerReference(controllerEvents.gameObject);
         }
 
         protected virtual void OnDisable()
@@ -577,7 +581,7 @@ namespace VRTK
 
         protected virtual void DetectController()
         {
-            controllerType = VRTK_DeviceFinder.GetCurrentControllerType();
+            controllerType = VRTK_DeviceFinder.GetCurrentControllerType(controllerReference);
             if (controllerType != SDK_BaseController.ControllerType.Undefined)
             {
                 if (setFingersForControllerType)

@@ -76,13 +76,14 @@ namespace VRTK
         /// <summary>
         /// The GetCurrentControllerType method returns the current used ControllerType based on the SDK and headset being used.
         /// </summary>
+        /// <param name="controllerReference">The reference to the controller to get type of.</param>
         /// <returns>The ControllerType based on the SDK and headset being used.</returns>
-        public override ControllerType GetCurrentControllerType()
+        public override ControllerType GetCurrentControllerType(VRTK_ControllerReference controllerReference = null)
         {
             switch (VRTK_DeviceFinder.GetHeadsetType(true))
             {
                 case VRTK_DeviceFinder.Headsets.Vive:
-                    return GetSteamVRControllerType();
+                    return GetSteamVRControllerType(controllerReference);
                 case VRTK_DeviceFinder.Headsets.OculusRift:
                     return ControllerType.SteamVR_OculusTouch;
             }
@@ -763,17 +764,26 @@ namespace VRTK
             return null;
         }
 
-        protected virtual ControllerType GetSteamVRControllerType()
+        protected virtual ControllerType GetSteamVRControllerType(VRTK_ControllerReference controllerReference)
         {
-            VRTK_ControllerReference leftHand = VRTK_ControllerReference.GetControllerReference(GetControllerLeftHand());
-            VRTK_ControllerReference rightHand = VRTK_ControllerReference.GetControllerReference(GetControllerRightHand());
-
-            if (!VRTK_ControllerReference.IsValid(leftHand) && !VRTK_ControllerReference.IsValid(rightHand))
+            uint checkIndex;
+            if (VRTK_ControllerReference.IsValid(controllerReference))
             {
-                return ControllerType.Undefined;
+                checkIndex = controllerReference.index;
+            }
+            else
+            {
+                VRTK_ControllerReference leftHand = VRTK_ControllerReference.GetControllerReference(GetControllerLeftHand());
+                VRTK_ControllerReference rightHand = VRTK_ControllerReference.GetControllerReference(GetControllerRightHand());
+
+                if (!VRTK_ControllerReference.IsValid(leftHand) && !VRTK_ControllerReference.IsValid(rightHand))
+                {
+                    return ControllerType.Undefined;
+                }
+
+                checkIndex = (VRTK_ControllerReference.IsValid(rightHand) ? rightHand.index : leftHand.index);
             }
 
-            uint checkIndex = (VRTK_ControllerReference.IsValid(rightHand) ? rightHand.index : leftHand.index);
             string controllerType = GetRenderModelName(checkIndex).ToLower();
             if (controllerType.Contains("knuckles"))
             {

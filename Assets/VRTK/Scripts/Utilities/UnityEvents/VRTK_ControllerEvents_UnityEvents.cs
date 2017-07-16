@@ -64,6 +64,7 @@
         public ControllerInteractionEvent OnControllerEnabled = new ControllerInteractionEvent();
         public ControllerInteractionEvent OnControllerDisabled = new ControllerInteractionEvent();
         public ControllerInteractionEvent OnControllerIndexChanged = new ControllerInteractionEvent();
+        public ControllerInteractionEvent OnControllerTypeAvailable = new ControllerInteractionEvent();
 
         public ControllerInteractionEvent OnControllerVisible = new ControllerInteractionEvent();
         public ControllerInteractionEvent OnControllerHidden = new ControllerInteractionEvent();
@@ -112,6 +113,7 @@
             component.ControllerEnabled += ControllerEnabled;
             component.ControllerDisabled += ControllerDisabled;
             component.ControllerIndexChanged += ControllerIndexChanged;
+            component.ControllerTypeAvailable += ControllerTypeAvailable;
 
             component.ControllerVisible += ControllerVisible;
             component.ControllerHidden += ControllerHidden;
@@ -161,6 +163,7 @@
             component.ControllerEnabled -= ControllerEnabled;
             component.ControllerDisabled -= ControllerDisabled;
             component.ControllerIndexChanged -= ControllerIndexChanged;
+            component.ControllerTypeAvailable -= ControllerTypeAvailable;
 
             component.ControllerVisible -= ControllerVisible;
             component.ControllerHidden -= ControllerHidden;
@@ -399,6 +402,11 @@
         private void ControllerIndexChanged(object o, ControllerInteractionEventArgs e)
         {
             OnControllerIndexChanged.Invoke(o, e);
+        }
+
+        private void ControllerTypeAvailable(object o, ControllerInteractionEventArgs e)
+        {
+            OnControllerTypeAvailable.Invoke(o, e);
         }
 
         private void ControllerVisible(object o, ControllerInteractionEventArgs e)

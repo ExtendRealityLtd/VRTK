@@ -1,6 +1,7 @@
 ﻿namespace VRTK
 {
     using UnityEngine;
+    using System.Collections;
 
     public struct VRTKTrackedControllerEventArgs
     {
@@ -17,8 +18,15 @@
         public event VRTKTrackedControllerEventHandler ControllerEnabled;
         public event VRTKTrackedControllerEventHandler ControllerDisabled;
         public event VRTKTrackedControllerEventHandler ControllerIndexChanged;
+        public event VRTKTrackedControllerEventHandler ControllerTypeAvailable;
 
         protected GameObject aliasController;
+        protected Coroutine attemptFindControllerTypeRoutine;
+        protected Coroutine attemptEmitFoundControllerTypeRoutine;
+        protected int findControllerTypeAttempts = 30;
+        protected float findControllerTypeAttemptsDelay = 0.1f;
+        protected SDK_BaseController.ControllerType controllerType = SDK_BaseController.ControllerType.Undefined;
+        protected float controllerModelInitTime = 0.5f;
 
         public virtual void OnControllerEnabled(VRTKTrackedControllerEventArgs e)
         {
@@ -44,6 +52,19 @@
             }
         }
 
+        public virtual void OnControllerTypeAvailable(VRTKTrackedControllerEventArgs e)
+        {
+            if (ControllerTypeAvailable != null)
+            {
+                ControllerTypeAvailable(this, e);
+            }
+        }
+
+        public virtual SDK_BaseController.ControllerType GetControllerType()
+        {
+            return controllerType;
+        }
+
         protected virtual VRTKTrackedControllerEventArgs SetEventPayload(uint previousIndex = uint.MaxValue)
         {
             VRTKTrackedControllerEventArgs e;
@@ -67,10 +88,21 @@
 
             index = VRTK_DeviceFinder.GetControllerIndex(gameObject);
             OnControllerEnabled(SetEventPayload());
+            attemptFindControllerTypeRoutine = StartCoroutine(AttemptFindControllerType(findControllerTypeAttempts, findControllerTypeAttemptsDelay));
         }
 
         protected virtual void OnDisable()
         {
+            if (attemptFindControllerTypeRoutine != null)
+            {
+                StopCoroutine(attemptFindControllerTypeRoutine);
+            }
+
+            if (attemptEmitFoundControllerTypeRoutine != null)
+            {
+                StopCoroutine(attemptEmitFoundControllerTypeRoutine);
+            }
+
             OnControllerDisabled(SetEventPayload());
         }
 
@@ -100,6 +132,30 @@
             {
                 aliasController.SetActive(true);
             }
+        }
+
+        protected virtual IEnumerator AttemptFindControllerType(int attempts, float delay)
+        {
+            WaitForSeconds delayInstruction = new WaitForSeconds(delay);
+            controllerType = VRTK_DeviceFinder.GetCurrentControllerType(VRTK_ControllerReference.GetControllerReference(index));
+            while (controllerType == SDK_BaseController.ControllerType.Undefined && attempts > 0)
+            {
+                controllerType = VRTK_DeviceFinder.GetCurrentControllerType(VRTK_ControllerReference.GetControllerReference(index));
+                attempts--;
+                yield return delayInstruction;
+            }
+
+            if (controllerType != SDK_BaseController.ControllerType.Undefined)
+            {
+                attemptEmitFoundControllerTypeRoutine = StartCoroutine(EmitControllerTypeAvailableAfterPause());
+            }
+        }
+
+        protected virtual IEnumerator EmitControllerTypeAvailableAfterPause()
+        {
+            //pause for a short time to allow models to prep
+            yield return new WaitForSeconds(controllerModelInitTime);
+            OnControllerTypeAvailable(SetEventPayload());
         }
     }
 }
