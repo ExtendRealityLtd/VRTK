@@ -13,7 +13,7 @@ namespace VRTK
     /// The Pointer Direction Indicator is used to determine a given world rotation that can be used by a Destiantion Marker.
     /// </summary>
     /// <remarks>
-    /// The Pointer Direction Indicator can be attached to a VRTK_Pointer in the `Direction Indicator` parameter and will the be used to send rotation data when the destination marker events are emitted.
+    /// The Pointer Direction Indicator can be attached to a VRTK_BasePointerRenderer in the `Direction Indicator` parameter and will the be used to send rotation data when the destination marker events are emitted.
     ///
     /// This can be useful for rotating the play area upon teleporting to face the user in a new direction without expecting them to physically turn in the play space.
     /// </remarks>

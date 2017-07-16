@@ -10,6 +10,7 @@ namespace VRTK
     /// The Oculus Controller SDK script provides a bridge to SDK methods that deal with the input devices.
     /// </summary>
     [SDK_Description(typeof(SDK_OculusSystem))]
+    [SDK_Description(typeof(SDK_OculusSystem), 1)]
     public class SDK_OculusController
 #if VRTK_DEFINE_SDK_OCULUS
         : SDK_BaseController

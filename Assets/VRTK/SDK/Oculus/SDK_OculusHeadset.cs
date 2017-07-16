@@ -10,6 +10,7 @@ namespace VRTK
     /// The Oculus Headset SDK script provides a bridge to the Oculus SDK.
     /// </summary>
     [SDK_Description(typeof(SDK_OculusSystem))]
+    [SDK_Description(typeof(SDK_OculusSystem), 1)]
     public class SDK_OculusHeadset
 #if VRTK_DEFINE_SDK_OCULUS
         : SDK_BaseHeadset

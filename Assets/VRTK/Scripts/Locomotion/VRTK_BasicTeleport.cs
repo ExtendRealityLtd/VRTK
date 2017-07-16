@@ -174,13 +174,14 @@ namespace VRTK
             DestinationMarkerEventArgs teleportArgs = BuildTeleportArgs(null, destinationPosition, destinationRotation);
             StartTeleport(this, teleportArgs);
             Quaternion updatedRotation = SetNewRotation(destinationRotation);
-            CalculateBlinkDelay(blinkTransitionSpeed, destinationPosition);
+            Vector3 finalDestination = GetCompensatedPosition(destinationPosition, destinationPosition);
+            CalculateBlinkDelay(blinkTransitionSpeed, finalDestination);
             Blink(blinkTransitionSpeed);
             if (ValidRigObjects())
             {
-                playArea.position = destinationPosition;
+                playArea.position = finalDestination;
             }
-            ProcessOrientation(this, teleportArgs, destinationPosition, updatedRotation);
+            ProcessOrientation(this, teleportArgs, finalDestination, updatedRotation);
             EndTeleport(this, teleportArgs);
         }
 
@@ -339,15 +340,20 @@ namespace VRTK
                 return tipPosition;
             }
 
+            return GetCompensatedPosition(tipPosition, playArea.position);
+        }
+
+        protected virtual Vector3 GetCompensatedPosition(Vector3 givenPosition, Vector3 defaultPosition)
+        {
             float newX = 0f;
             float newY = 0f;
             float newZ = 0f;
 
             if (ValidRigObjects())
             {
-                newX = (headsetPositionCompensation ? (tipPosition.x - (headset.position.x - playArea.position.x)) : tipPosition.x);
-                newY = playArea.position.y;
-                newZ = (headsetPositionCompensation ? (tipPosition.z - (headset.position.z - playArea.position.z)) : tipPosition.z);
+                newX = (headsetPositionCompensation ? (givenPosition.x - (headset.position.x - playArea.position.x)) : givenPosition.x);
+                newY = defaultPosition.y;
+                newZ = (headsetPositionCompensation ? (givenPosition.z - (headset.position.z - playArea.position.z)) : givenPosition.z);
             }
 
             return new Vector3(newX, newY, newZ);
