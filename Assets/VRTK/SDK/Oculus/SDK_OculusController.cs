@@ -22,8 +22,8 @@ namespace VRTK
         protected SDK_OculusBoundaries cachedBoundariesSDK;
         protected VRTK_TrackedController cachedLeftController;
         protected VRTK_TrackedController cachedRightController;
-        protected OVRInput.Controller[] touchControllers = new OVRInput.Controller[] { OVRInput.Controller.LTouch, OVRInput.Controller.RTouch };
-        protected OVRInput.RawAxis2D[] touchpads = new OVRInput.RawAxis2D[] { OVRInput.RawAxis2D.LThumbstick, OVRInput.RawAxis2D.RThumbstick };
+        protected OVRInput.RawAxis2D[] thumbsticks = new OVRInput.RawAxis2D[] { OVRInput.RawAxis2D.LThumbstick, OVRInput.RawAxis2D.RThumbstick };
+        protected OVRInput.RawAxis2D[] touchpads = new OVRInput.RawAxis2D[] { OVRInput.RawAxis2D.LTouchpad, OVRInput.RawAxis2D.RTouchpad };
         protected OVRInput.RawAxis1D[] triggers = new OVRInput.RawAxis1D[] { OVRInput.RawAxis1D.LIndexTrigger, OVRInput.RawAxis1D.RIndexTrigger };
         protected OVRInput.RawAxis1D[] grips = new OVRInput.RawAxis1D[] { OVRInput.RawAxis1D.LHandTrigger, OVRInput.RawAxis1D.RHandTrigger };
         protected OVRInput.RawNearTouch[] triggerSense = new OVRInput.RawNearTouch[] { OVRInput.RawNearTouch.LIndexTrigger, OVRInput.RawNearTouch.RIndexTrigger };
@@ -92,7 +92,23 @@ namespace VRTK
         /// <returns>The ControllerType based on the SDK and headset being used.</returns>
         public override ControllerType GetCurrentControllerType()
         {
-            return ControllerType.Oculus_OculusTouch;
+            switch (OVRInput.GetActiveController())
+            {
+                case OVRInput.Controller.LTouch:
+                case OVRInput.Controller.RTouch:
+                case OVRInput.Controller.Touch:
+                    return ControllerType.Oculus_OculusTouch;
+                case OVRInput.Controller.Remote:
+                    return ControllerType.Oculus_OculusRemote;
+                case OVRInput.Controller.Gamepad:
+                    return ControllerType.Oculus_OculusGamepad;
+                case OVRInput.Controller.Touchpad:
+                    return ControllerType.Oculus_GearVRHMD;
+                case OVRInput.Controller.LTrackedRemote:
+                case OVRInput.Controller.RTrackedRemote:
+                    return ControllerType.Oculus_GearVRController;
+            }
+            return ControllerType.Undefined;
         }
 
         /// <summary>
@@ -102,7 +118,7 @@ namespace VRTK
         /// <returns>A path to the resource that contains the collider GameObject.</returns>
         public override string GetControllerDefaultColliderPath(ControllerHand hand)
         {
-            if (HasAvatar())
+            if (HasAvatar() && GetCurrentControllerType() == ControllerType.Oculus_OculusTouch)
             {
                 return "ControllerColliders/OculusTouch_" + hand.ToString();
             }
@@ -119,7 +135,7 @@ namespace VRTK
         /// <returns>A string containing the path to the game object that the controller element resides in.</returns>
         public override string GetControllerElementPath(ControllerElements element, ControllerHand hand, bool fullPath = false)
         {
-            if (GetAvatar() != null)
+            if (GetAvatar() != null && GetCurrentControllerType() == ControllerType.Oculus_OculusTouch)
             {
                 string suffix = (fullPath ? "" : "");
                 string parent = "controller_" + (hand == ControllerHand.Left ? "left" : "right") + "_renderPart_0";
@@ -427,8 +443,8 @@ namespace VRTK
             {
                 return Vector3.zero;
             }
-            VRTK_TrackedController device = GetTrackedObject(controllerReference.actual);
-            return OVRInput.GetLocalControllerVelocity(touchControllers[device.index]);
+            OVRInput.Controller controllerMask = GetControllerMask(controllerReference.index);
+            return OVRInput.GetLocalControllerVelocity(controllerMask);
         }
 
         /// <summary>
@@ -472,20 +488,18 @@ namespace VRTK
             {
                 return Vector2.zero;
             }
-            uint index = VRTK_ControllerReference.GetRealIndex(controllerReference);
-            VRTK_TrackedController device = GetTrackedObject(controllerReference.actual);
-            if (device != null)
+            OVRInput.Controller controllerMask = GetControllerMask(controllerReference.index);
+
+            switch (buttonType)
             {
-                switch (buttonType)
-                {
-                    case ButtonTypes.Touchpad:
-                        return OVRInput.Get(touchpads[index], touchControllers[index]);
-                    case ButtonTypes.Trigger:
-                        return new Vector2(OVRInput.Get(triggers[index], touchControllers[index]), 0f);
-                    case ButtonTypes.Grip:
-                        return new Vector2(OVRInput.Get(grips[index], touchControllers[index]), 0f);
-                }
+                case ButtonTypes.Touchpad:
+                    return OVRInput.Get(GetTouchpadAxisMask(controllerReference.index), controllerMask);
+                case ButtonTypes.Trigger:
+                    return new Vector2(OVRInput.Get(triggers[controllerReference.index], controllerMask), 0f);
+                case ButtonTypes.Grip:
+                    return new Vector2(OVRInput.Get(grips[controllerReference.index], controllerMask), 0f);
             }
+
             return Vector2.zero;
         }
 
@@ -502,19 +516,16 @@ namespace VRTK
                 return 0f;
             }
             bool senseResult = false;
-            uint index = VRTK_ControllerReference.GetRealIndex(controllerReference);
-            VRTK_TrackedController device = GetTrackedObject(controllerReference.actual);
-            if (device != null)
+            OVRInput.Controller controllerMask = GetControllerMask(controllerReference.index);
+
+            switch (buttonType)
             {
-                switch (buttonType)
-                {
-                    case ButtonTypes.Touchpad:
-                        senseResult = OVRInput.Get(touchpadSense[index], touchControllers[index]);
-                        break;
-                    case ButtonTypes.Trigger:
-                        senseResult = OVRInput.Get(triggerSense[index], touchControllers[index]);
-                        break;
-                }
+                case ButtonTypes.Touchpad:
+                    senseResult = OVRInput.Get(touchpadSense[controllerReference.index], controllerMask);
+                    break;
+                case ButtonTypes.Trigger:
+                    senseResult = OVRInput.Get(triggerSense[controllerReference.index], controllerMask);
+                    break;
             }
             return (senseResult ? 1f : 0f);
         }
@@ -589,11 +600,11 @@ namespace VRTK
                         case ButtonPressTypes.Press:
                         case ButtonPressTypes.PressDown:
                         case ButtonPressTypes.PressUp:
-                            return IsButtonPressed(index, pressType, OVRInput.Button.PrimaryThumbstick);
+                            return IsButtonPressed(index, pressType, GetTouchpadButtonMask());
                         case ButtonPressTypes.Touch:
                         case ButtonPressTypes.TouchDown:
                         case ButtonPressTypes.TouchUp:
-                            return IsButtonPressed(index, pressType, OVRInput.Touch.PrimaryThumbstick);
+                            return IsButtonPressed(index, pressType, GetTouchpadTouchMask());
                     }
                     break;
                 case ButtonTypes.ButtonOne:
@@ -703,15 +714,15 @@ namespace VRTK
             VRTK_TrackedController device = GetTrackedObject(GetControllerByIndex(index));
             if (device != null)
             {
-                OVRInput.Controller controller = touchControllers[index];
+                OVRInput.Controller controllerMask = GetControllerMask(device.index);
                 switch (type)
                 {
                     case ButtonPressTypes.Press:
-                        return OVRInput.Get(button, controller);
+                        return OVRInput.Get(button, controllerMask);
                     case ButtonPressTypes.PressDown:
-                        return OVRInput.GetDown(button, controller);
+                        return OVRInput.GetDown(button, controllerMask);
                     case ButtonPressTypes.PressUp:
-                        return OVRInput.GetUp(button, controller);
+                        return OVRInput.GetUp(button, controllerMask);
                 }
             }
 
@@ -728,19 +739,72 @@ namespace VRTK
             VRTK_TrackedController device = GetTrackedObject(GetControllerByIndex(index));
             if (device != null)
             {
-                OVRInput.Controller controller = touchControllers[index];
+                OVRInput.Controller controllerMask = GetControllerMask(device.index);
                 switch (type)
                 {
                     case ButtonPressTypes.Touch:
-                        return OVRInput.Get(button, controller);
+                        return OVRInput.Get(button, controllerMask);
                     case ButtonPressTypes.TouchDown:
-                        return OVRInput.GetDown(button, controller);
+                        return OVRInput.GetDown(button, controllerMask);
                     case ButtonPressTypes.TouchUp:
-                        return OVRInput.GetUp(button, controller);
+                        return OVRInput.GetUp(button, controllerMask);
                 }
             }
 
             return false;
+        }
+
+        protected virtual OVRInput.Controller GetControllerMask(uint index)
+        {
+            OVRInput.Controller activeControllerType = OVRInput.GetActiveController();
+
+            switch (activeControllerType)
+            {
+                case OVRInput.Controller.LTouch:
+                    return (index == 0 ? OVRInput.Controller.LTouch : OVRInput.Controller.None);
+                case OVRInput.Controller.RTouch:
+                    return (index == 1 ? OVRInput.Controller.RTouch : OVRInput.Controller.None);
+                case OVRInput.Controller.LTrackedRemote:
+                    return (index == 0 ? OVRInput.Controller.LTrackedRemote : OVRInput.Controller.None);
+                case OVRInput.Controller.RTrackedRemote:
+                    return (index == 1 ? OVRInput.Controller.RTrackedRemote : OVRInput.Controller.None);
+                case OVRInput.Controller.Touchpad:
+                    return (index == 1 ? OVRInput.Controller.Touchpad : OVRInput.Controller.None);
+            }
+            return activeControllerType;
+        }
+
+        protected virtual OVRInput.RawAxis2D GetTouchpadAxisMask(uint index)
+        {
+            switch (GetCurrentControllerType())
+            {
+                case ControllerType.Oculus_OculusTouch:
+                case ControllerType.Oculus_OculusGamepad:
+                    return thumbsticks[index];
+            }
+            return touchpads[index];
+        }
+
+        protected virtual OVRInput.Touch GetTouchpadTouchMask()
+        {
+            switch (GetCurrentControllerType())
+            {
+                case ControllerType.Oculus_OculusTouch:
+                case ControllerType.Oculus_OculusGamepad:
+                    return OVRInput.Touch.PrimaryThumbstick;
+            }
+            return OVRInput.Touch.PrimaryTouchpad;
+        }
+
+        protected virtual OVRInput.Button GetTouchpadButtonMask()
+        {
+            switch (GetCurrentControllerType())
+            {
+                case ControllerType.Oculus_OculusTouch:
+                case ControllerType.Oculus_OculusGamepad:
+                    return OVRInput.Button.PrimaryThumbstick;
+            }
+            return OVRInput.Button.PrimaryTouchpad;
         }
 
         protected virtual void UpdateHairValues(uint index, float axisValue, float hairDelta, ref bool previousState, ref bool currentState, ref float hairLimit)
