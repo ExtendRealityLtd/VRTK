@@ -14,6 +14,7 @@ namespace VRTK.GrabAttachMechanics
     /// <example>
     /// `VRTK/Examples/021_Controller_GrabbingObjectsWithJoints` demonstrates this grab attach mechanic on the Lamp object in the scene.
     /// </example>
+    [AddComponentMenu("VRTK/Scripts/Interactions/Grab Attach Mechanics/VRTK_CustomJointGrabAttach")]
     public class VRTK_CustomJointGrabAttach : VRTK_BaseJointGrabAttach
     {
         [Tooltip("The joint to use for the grab attach joint.")]
@@ -31,7 +32,7 @@ namespace VRTK.GrabAttachMechanics
         {
             if (!jointHolder)
             {
-                Debug.LogError("The VRTK_CustomJointGrabAttach script requires a Joint component to be provided to the `Custom Joint` parameter.");
+                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_NOT_INJECTED, "VRTK_CustomJointGrabAttach", "Joint", "customJoint", "the same"));
                 return;
             }
             var storedJoint = jointHolder.GetComponent<Joint>();
@@ -48,7 +49,7 @@ namespace VRTK.GrabAttachMechanics
             base.DestroyJoint(true, true);
         }
 
-        private void CopyCustomJoint()
+        protected virtual void CopyCustomJoint()
         {
             if (customJoint)
             {
@@ -56,7 +57,7 @@ namespace VRTK.GrabAttachMechanics
                 jointHolder.transform.SetParent(transform);
                 jointHolder.AddComponent<Rigidbody>().isKinematic = true;
                 VRTK_SharedMethods.CloneComponent(customJoint, jointHolder, true);
-                jointHolder.name = "JointHolder";
+                jointHolder.name = VRTK_SharedMethods.GenerateVRTKObjectName(true, "JointHolder");
                 jointHolder.SetActive(false);
                 Destroy(customJoint);
                 customJoint = jointHolder.GetComponent<Joint>();

@@ -16,6 +16,7 @@ namespace VRTK
     /// <example>
     /// `VRTK/Examples/025_Controls_Overview` shows a drawer with contents that can be opened and closed freely and the contents can be removed from the drawer.
     /// </example>
+    [AddComponentMenu("VRTK/Scripts/Controls/3D/VRTK_Drawer")]
     public class VRTK_Drawer : VRTK_Control
     {
         [Tooltip("An optional game object to which the drawer will be connected. If the game object moves the drawer will follow along.")]
@@ -30,21 +31,25 @@ namespace VRTK
         public GameObject content;
         [Tooltip("Makes the content invisible while the drawer is closed.")]
         public bool hideContent = true;
-        [Tooltip("Keeps the drawer closed with a slight force. This way the drawer will not gradually open due to some minor physics effect.")]
-        public bool snapping = false;
+        [Tooltip("If the extension of the drawer is below this percentage then the drawer will snap shut.")]
+        [Range(0, 1)]
+        public float minSnapClose = 1;
+        [Tooltip("The maximum percentage of the drawer's total length that the drawer will open to.")]
+        [Range(0f, 1f)]
+        public float maxExtend = 1f;
 
-        private Rigidbody rb;
-        private Rigidbody handleRb;
-        private FixedJoint handleFj;
-        private ConfigurableJoint cj;
-        private VRTK_InteractableObject io;
-        private ConstantForce cf;
-        private Direction finalDirection;
-        private float subDirection = 1; // positive or negative can be determined automatically since handle dictates that
-        private float pullDistance = 0f;
-        private Vector3 initialPosition;
-        private bool cjCreated = false;
-        private bool cfCreated = false;
+        protected Rigidbody drawerRigidbody;
+        protected Rigidbody handleRigidbody;
+        protected FixedJoint handleFixedJoint;
+        protected ConfigurableJoint drawerJoint;
+        protected VRTK_InteractableObject drawerInteractableObject;
+        protected ConstantForce drawerSnapForce;
+        protected Direction finalDirection;
+        protected float subDirection = 1; // positive or negative can be determined automatically since handle dictates that
+        protected float pullDistance = 0f;
+        protected Vector3 initialPosition;
+        protected bool drawerJointCreated = false;
+        protected bool drawerSnapForceCreated = false;
 
         protected override void OnDrawGizmos()
         {
@@ -55,24 +60,24 @@ namespace VRTK
             }
 
             // show opening direction
-            Bounds handleBounds = VRTK_SharedMethods.GetBounds(getHandle().transform, getHandle().transform);
+            Bounds handleBounds = VRTK_SharedMethods.GetBounds(GetHandle().transform, GetHandle().transform);
             float length = handleBounds.extents.y * ((handle) ? 5f : 1f);
             Vector3 point = handleBounds.center;
             switch (finalDirection)
             {
                 case Direction.x:
-                    point -= transform.right.normalized * length * subDirection;
+                    point -= transform.right.normalized * (length * subDirection);
                     break;
                 case Direction.y:
-                    point -= transform.up.normalized * length * subDirection;
+                    point -= transform.up.normalized * (length * subDirection);
                     break;
                 case Direction.z:
-                    point -= transform.forward.normalized * length * subDirection;
+                    point -= transform.forward.normalized * (length * subDirection);
                     break;
             }
 
             Gizmos.DrawLine(handleBounds.center, point);
-            Gizmos.DrawSphere(point, length / 8f);
+            Gizmos.DrawSphere(point, length / 4f);
         }
 
         protected override void InitRequiredComponents()
@@ -87,15 +92,16 @@ namespace VRTK
 
         protected override bool DetectSetup()
         {
-            finalDirection = (direction == Direction.autodetect) ? DetectDirection() : direction;
+            finalDirection = (direction == Direction.autodetect ? DetectDirection() : direction);
             if (finalDirection == Direction.autodetect)
             {
                 return false;
             }
 
             // determin sub-direction depending on handle
-            Bounds handleBounds = VRTK_SharedMethods.GetBounds(getHandle().transform, transform);
-            Bounds bodyBounds = VRTK_SharedMethods.GetBounds(getBody().transform, transform);
+            Bounds handleBounds = VRTK_SharedMethods.GetBounds(GetHandle().transform, transform);
+            Bounds bodyBounds = VRTK_SharedMethods.GetBounds(GetBody().transform, transform);
+
             switch (finalDirection)
             {
                 case Direction.x:
@@ -121,49 +127,49 @@ namespace VRTK
                 }
             }
 
-            if (cjCreated)
+            if (drawerJointCreated)
             {
-                cj.xMotion = ConfigurableJointMotion.Locked;
-                cj.yMotion = ConfigurableJointMotion.Locked;
-                cj.zMotion = ConfigurableJointMotion.Locked;
+                drawerJoint.xMotion = ConfigurableJointMotion.Locked;
+                drawerJoint.yMotion = ConfigurableJointMotion.Locked;
+                drawerJoint.zMotion = ConfigurableJointMotion.Locked;
 
                 switch (finalDirection)
                 {
                     case Direction.x:
-                        cj.axis = Vector3.right;
-                        cj.xMotion = ConfigurableJointMotion.Limited;
+                        drawerJoint.axis = Vector3.right;
+                        drawerJoint.xMotion = ConfigurableJointMotion.Limited;
                         break;
                     case Direction.y:
-                        cj.axis = Vector3.up;
-                        cj.yMotion = ConfigurableJointMotion.Limited;
+                        drawerJoint.axis = Vector3.up;
+                        drawerJoint.yMotion = ConfigurableJointMotion.Limited;
                         break;
                     case Direction.z:
-                        cj.axis = Vector3.forward;
-                        cj.zMotion = ConfigurableJointMotion.Limited;
+                        drawerJoint.axis = Vector3.forward;
+                        drawerJoint.zMotion = ConfigurableJointMotion.Limited;
                         break;
                 }
-                cj.anchor = cj.axis * (-subDirection * pullDistance);
+                drawerJoint.anchor = drawerJoint.axis * (-subDirection * pullDistance);
             }
-            if (cj)
+            if (drawerJoint)
             {
-                cj.angularXMotion = ConfigurableJointMotion.Locked;
-                cj.angularYMotion = ConfigurableJointMotion.Locked;
-                cj.angularZMotion = ConfigurableJointMotion.Locked;
+                drawerJoint.angularXMotion = ConfigurableJointMotion.Locked;
+                drawerJoint.angularYMotion = ConfigurableJointMotion.Locked;
+                drawerJoint.angularZMotion = ConfigurableJointMotion.Locked;
 
-                pullDistance *= 1.8f; // don't let it pull out completely
+                pullDistance *= (maxExtend * 1.8f); // don't let it pull out completely
 
-                SoftJointLimit limit = cj.linearLimit;
-                limit.limit = pullDistance;
-                cj.linearLimit = limit;
+                SoftJointLimit drawerJointLimit = drawerJoint.linearLimit;
+                drawerJointLimit.limit = pullDistance;
+                drawerJoint.linearLimit = drawerJointLimit;
 
                 if (connectedTo)
                 {
-                    cj.connectedBody = connectedTo.GetComponent<Rigidbody>();
+                    drawerJoint.connectedBody = connectedTo.GetComponent<Rigidbody>();
                 }
             }
-            if (cfCreated)
+            if (drawerSnapForceCreated)
             {
-                cf.relativeForce = getThirdDirection(cj.axis, cj.secondaryAxis) * subDirection * -10f;
+                drawerSnapForce.force = GetThirdDirection(drawerJoint.axis, drawerJoint.secondaryAxis) * (subDirection * -50f);
             }
 
             return true;
@@ -171,88 +177,97 @@ namespace VRTK
 
         protected override ControlValueRange RegisterValueRange()
         {
-            return new ControlValueRange() { controlMin = 0, controlMax = 100 };
+            return new ControlValueRange()
+            {
+                controlMin = 0,
+                controlMax = 100
+            };
         }
 
         protected override void HandleUpdate()
         {
             value = CalculateValue();
-            cf.enabled = snapping && Mathf.Abs(value) < 2f;
+            bool withinSnapLimit = (Mathf.Abs(value) < minSnapClose * 100f);
+            drawerSnapForce.enabled = withinSnapLimit;
+            if (autoTriggerVolume)
+            {
+                autoTriggerVolume.isEnabled = !withinSnapLimit;
+            }
         }
 
-        private void InitBody()
+        protected virtual void InitBody()
         {
-            rb = GetComponent<Rigidbody>();
-            if (rb == null)
+            drawerRigidbody = GetComponent<Rigidbody>();
+            if (drawerRigidbody == null)
             {
-                rb = gameObject.AddComponent<Rigidbody>();
-                rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
+                drawerRigidbody = gameObject.AddComponent<Rigidbody>();
+                drawerRigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
             }
-            rb.isKinematic = false;
+            drawerRigidbody.isKinematic = false;
 
-            io = GetComponent<VRTK_InteractableObject>();
-            if (io == null)
+            drawerInteractableObject = GetComponent<VRTK_InteractableObject>();
+            if (drawerInteractableObject == null)
             {
-                io = gameObject.AddComponent<VRTK_InteractableObject>();
+                drawerInteractableObject = gameObject.AddComponent<VRTK_InteractableObject>();
             }
 
-            io.isGrabbable = true;
-            io.grabAttachMechanicScript = gameObject.AddComponent<GrabAttachMechanics.VRTK_SpringJointGrabAttach>();
-            io.grabAttachMechanicScript.precisionGrab = true;
-            io.secondaryGrabActionScript = gameObject.AddComponent<SecondaryControllerGrabActions.VRTK_SwapControllerGrabAction>();
-            io.stayGrabbedOnTeleport = false;
+            drawerInteractableObject.isGrabbable = true;
+            drawerInteractableObject.grabAttachMechanicScript = gameObject.AddComponent<GrabAttachMechanics.VRTK_SpringJointGrabAttach>();
+            drawerInteractableObject.grabAttachMechanicScript.precisionGrab = true;
+            drawerInteractableObject.secondaryGrabActionScript = gameObject.AddComponent<SecondaryControllerGrabActions.VRTK_SwapControllerGrabAction>();
+            drawerInteractableObject.stayGrabbedOnTeleport = false;
 
             if (connectedTo)
             {
-                Rigidbody rb2 = connectedTo.GetComponent<Rigidbody>();
-                if (rb2 == null)
+                Rigidbody drawerConnectedToRigidbody = connectedTo.GetComponent<Rigidbody>();
+                if (drawerConnectedToRigidbody == null)
                 {
-                    rb2 = connectedTo.AddComponent<Rigidbody>();
-                    rb2.useGravity = false;
-                    rb2.isKinematic = true;
+                    drawerConnectedToRigidbody = connectedTo.AddComponent<Rigidbody>();
+                    drawerConnectedToRigidbody.useGravity = false;
+                    drawerConnectedToRigidbody.isKinematic = true;
                 }
             }
 
-            cj = GetComponent<ConfigurableJoint>();
-            if (cj == null)
+            drawerJoint = GetComponent<ConfigurableJoint>();
+            if (drawerJoint == null)
             {
-                cj = gameObject.AddComponent<ConfigurableJoint>();
-                cjCreated = true;
+                drawerJoint = gameObject.AddComponent<ConfigurableJoint>();
+                drawerJointCreated = true;
             }
 
-            cf = GetComponent<ConstantForce>();
-            if (cf == null)
+            drawerSnapForce = GetComponent<ConstantForce>();
+            if (drawerSnapForce == null)
             {
-                cf = gameObject.AddComponent<ConstantForce>();
-                cf.enabled = false;
-                cfCreated = true;
-            }
-        }
-
-        private void InitHandle()
-        {
-            handleRb = getHandle().GetComponent<Rigidbody>();
-            if (handleRb == null)
-            {
-                handleRb = getHandle().AddComponent<Rigidbody>();
-            }
-            handleRb.isKinematic = false;
-            handleRb.useGravity = false;
-
-            handleFj = getHandle().GetComponent<FixedJoint>();
-            if (handleFj == null)
-            {
-                handleFj = getHandle().AddComponent<FixedJoint>();
-                handleFj.connectedBody = rb;
+                drawerSnapForce = gameObject.AddComponent<ConstantForce>();
+                drawerSnapForce.enabled = false;
+                drawerSnapForceCreated = true;
             }
         }
 
-        private Direction DetectDirection()
+        protected virtual void InitHandle()
         {
-            Direction direction = Direction.autodetect;
+            handleRigidbody = GetHandle().GetComponent<Rigidbody>();
+            if (handleRigidbody == null)
+            {
+                handleRigidbody = GetHandle().AddComponent<Rigidbody>();
+            }
+            handleRigidbody.isKinematic = false;
+            handleRigidbody.useGravity = false;
 
-            Bounds handleBounds = VRTK_SharedMethods.GetBounds(getHandle().transform, transform);
-            Bounds bodyBounds = VRTK_SharedMethods.GetBounds(getBody().transform, transform);
+            handleFixedJoint = GetHandle().GetComponent<FixedJoint>();
+            if (handleFixedJoint == null)
+            {
+                handleFixedJoint = GetHandle().AddComponent<FixedJoint>();
+                handleFixedJoint.connectedBody = drawerRigidbody;
+            }
+        }
+
+        protected virtual Direction DetectDirection()
+        {
+            Direction returnDirection = Direction.autodetect;
+
+            Bounds handleBounds = VRTK_SharedMethods.GetBounds(GetHandle().transform, transform);
+            Bounds bodyBounds = VRTK_SharedMethods.GetBounds(GetBody().transform, transform);
 
             float lengthX = Mathf.Abs(handleBounds.center.x - (bodyBounds.center.x + bodyBounds.extents.x));
             float lengthY = Mathf.Abs(handleBounds.center.y - (bodyBounds.center.y + bodyBounds.extents.y));
@@ -263,45 +278,45 @@ namespace VRTK
 
             if (VRTK_SharedMethods.IsLowest(lengthX, new float[] { lengthY, lengthZ, lengthNegX, lengthNegY, lengthNegZ }))
             {
-                direction = Direction.x;
+                returnDirection = Direction.x;
             }
             else if (VRTK_SharedMethods.IsLowest(lengthNegX, new float[] { lengthX, lengthY, lengthZ, lengthNegY, lengthNegZ }))
             {
-                direction = Direction.x;
+                returnDirection = Direction.x;
             }
             else if (VRTK_SharedMethods.IsLowest(lengthY, new float[] { lengthX, lengthZ, lengthNegX, lengthNegY, lengthNegZ }))
             {
-                direction = Direction.y;
+                returnDirection = Direction.y;
             }
             else if (VRTK_SharedMethods.IsLowest(lengthNegY, new float[] { lengthX, lengthY, lengthZ, lengthNegX, lengthNegZ }))
             {
-                direction = Direction.y;
+                returnDirection = Direction.y;
             }
             else if (VRTK_SharedMethods.IsLowest(lengthZ, new float[] { lengthX, lengthY, lengthNegX, lengthNegY, lengthNegZ }))
             {
-                direction = Direction.z;
+                returnDirection = Direction.z;
             }
             else if (VRTK_SharedMethods.IsLowest(lengthNegZ, new float[] { lengthX, lengthY, lengthZ, lengthNegY, lengthNegX }))
             {
-                direction = Direction.z;
+                returnDirection = Direction.z;
             }
 
-            return direction;
+            return returnDirection;
         }
 
-        private float CalculateValue()
+        protected virtual float CalculateValue()
         {
-            return Mathf.Round((transform.position - initialPosition).magnitude / pullDistance * 100);
+            return (Mathf.Round((transform.position - initialPosition).magnitude / pullDistance * 100));
         }
 
-        private GameObject getBody()
+        protected virtual GameObject GetBody()
         {
-            return (body) ? body : gameObject;
+            return (body ? body : gameObject);
         }
 
-        private GameObject getHandle()
+        protected virtual GameObject GetHandle()
         {
-            return (handle) ? handle : gameObject;
+            return (handle ? handle : gameObject);
         }
     }
 }

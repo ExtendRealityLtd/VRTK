@@ -1,14 +1,22 @@
-﻿// SteamVR System|SDK_SteamVR|001
+﻿// SteamVR System|SDK_SteamVR|002
 namespace VRTK
 {
-#if VRTK_SDK_STEAMVR
+#if VRTK_DEFINE_SDK_STEAMVR
     using Valve.VR;
+#endif
 
     /// <summary>
     /// The SteamVR System SDK script provides a bridge to the SteamVR SDK.
     /// </summary>
-    public class SDK_SteamVRSystem : SDK_BaseSystem
+    [SDK_Description("SteamVR", SDK_SteamVRDefines.ScriptingDefineSymbol, "OpenVR", "Standalone")]
+    public class SDK_SteamVRSystem
+#if VRTK_DEFINE_SDK_STEAMVR
+        : SDK_BaseSystem
+#else
+        : SDK_FallbackSystem
+#endif
     {
+#if VRTK_DEFINE_SDK_STEAMVR
         /// <summary>
         /// The IsDisplayOnDesktop method returns true if the display is extending the desktop.
         /// </summary>
@@ -38,10 +46,6 @@ namespace VRTK
                 OpenVR.Compositor.ForceInterleavedReprojectionOn(force);
             }
         }
-    }
-#else
-    public class SDK_SteamVRSystem : SDK_FallbackSystem
-    {
-    }
 #endif
+    }
 }

@@ -18,6 +18,7 @@ namespace VRTK
     ///
     /// Then in the component that has a Policy List paramter (e.g. BasicTeleporter has `Target List Policy`) simply select the list that has been created and defined.
     /// </remarks>
+    [AddComponentMenu("VRTK/Scripts/Utilities/VRTK_PolicyList")]
     public class VRTK_PolicyList : MonoBehaviour
     {
         /// <summary>
@@ -59,7 +60,7 @@ namespace VRTK
         /// </remarks>
         /// <param name="obj">The game object to check if it has a tag or script that is listed in the identifiers list.</param>
         /// <returns>If the operation is `Ignore` and the game object is matched by an identifier from the list then it returns true. If the operation is `Include` and the game object is not matched by an identifier from the list then it returns true.</returns>
-        public bool Find(GameObject obj)
+        public virtual bool Find(GameObject obj)
         {
             if (operation == OperationTypes.Ignore)
             {
@@ -86,7 +87,7 @@ namespace VRTK
             return false;
         }
 
-        private bool ScriptCheck(GameObject obj, bool returnState)
+        protected virtual bool ScriptCheck(GameObject obj, bool returnState)
         {
             foreach (var identifier in identifiers)
             {
@@ -98,7 +99,7 @@ namespace VRTK
             return !returnState;
         }
 
-        private bool TagCheck(GameObject obj, bool returnState)
+        protected virtual bool TagCheck(GameObject obj, bool returnState)
         {
             if (returnState)
             {
@@ -110,7 +111,7 @@ namespace VRTK
             }
         }
 
-        private bool LayerCheck(GameObject obj, bool returnState)
+        protected virtual bool LayerCheck(GameObject obj, bool returnState)
         {
             if (returnState)
             {
@@ -122,7 +123,7 @@ namespace VRTK
             }
         }
 
-        private bool TypeCheck(GameObject obj, bool returnState)
+        protected virtual bool TypeCheck(GameObject obj, bool returnState)
         {
             var selection = 0;
 

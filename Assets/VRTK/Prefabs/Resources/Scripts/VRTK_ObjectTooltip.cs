@@ -33,13 +33,16 @@ namespace VRTK
         public Color containerColor = Color.black;
         [Tooltip("The colour to use for the line drawn between the tooltip and the destination transform.")]
         public Color lineColor = Color.black;
+        [Tooltip("If this is checked then the tooltip will be rotated so it always face the headset.")]
+        public bool alwaysFaceHeadset = false;
 
-        private LineRenderer line;
+        protected LineRenderer line;
+        protected Transform headset;
 
         /// <summary>
         /// The ResetTooltip method resets the tooltip back to its initial state.
         /// </summary>
-        public void ResetTooltip()
+        public virtual void ResetTooltip()
         {
             SetContainer();
             SetText("UITextFront");
@@ -55,59 +58,81 @@ namespace VRTK
         /// The UpdateText method allows the tooltip text to be updated at runtime.
         /// </summary>
         /// <param name="newText">A string containing the text to update the tooltip to display.</param>
-        public void UpdateText(string newText)
+        public virtual void UpdateText(string newText)
         {
             displayText = newText;
             ResetTooltip();
         }
 
-        private void Start()
+        protected virtual void Awake()
         {
-            ResetTooltip();
+            VRTK_SDKManager.instance.AddBehaviourToToggleOnLoadedSetupChange(this);
         }
 
-        private void SetContainer()
+        protected virtual void OnEnable()
         {
-            transform.FindChild("TooltipCanvas").GetComponent<RectTransform>().sizeDelta = containerSize;
-            var tmpContainer = transform.FindChild("TooltipCanvas/UIContainer");
+            ResetTooltip();
+            headset = VRTK_DeviceFinder.HeadsetTransform();
+        }
+
+        protected virtual void OnDestroy()
+        {
+            VRTK_SDKManager.instance.RemoveBehaviourToToggleOnLoadedSetupChange(this);
+        }
+
+        protected virtual void Update()
+        {
+            DrawLine();
+            if (alwaysFaceHeadset)
+            {
+                transform.LookAt(headset);
+            }
+        }
+
+        protected virtual void SetContainer()
+        {
+            transform.Find("TooltipCanvas").GetComponent<RectTransform>().sizeDelta = containerSize;
+            Transform tmpContainer = transform.Find("TooltipCanvas/UIContainer");
             tmpContainer.GetComponent<RectTransform>().sizeDelta = containerSize;
             tmpContainer.GetComponent<Image>().color = containerColor;
         }
 
-        private void SetText(string name)
+        protected virtual void SetText(string name)
         {
-            var tmpText = transform.FindChild("TooltipCanvas/" + name).GetComponent<Text>();
+            Text tmpText = transform.Find("TooltipCanvas/" + name).GetComponent<Text>();
             tmpText.material = Resources.Load("UIText") as Material;
             tmpText.text = displayText.Replace("\\n", "\n");
             tmpText.color = fontColor;
             tmpText.fontSize = fontSize;
         }
 
-        private void SetLine()
+        protected virtual void SetLine()
         {
-            line = transform.FindChild("Line").GetComponent<LineRenderer>();
+            line = transform.Find("Line").GetComponent<LineRenderer>();
             line.material = Resources.Load("TooltipLine") as Material;
             line.material.color = lineColor;
+#if UNITY_5_5_OR_NEWER
+            line.startColor = lineColor;
+            line.endColor = lineColor;
+            line.startWidth = lineWidth;
+            line.endWidth = lineWidth;
+#else
             line.SetColors(lineColor, lineColor);
             line.SetWidth(lineWidth, lineWidth);
+#endif
             if (drawLineFrom == null)
             {
                 drawLineFrom = transform;
             }
         }
 
-        private void DrawLine()
+        protected virtual void DrawLine()
         {
-            if (drawLineTo)
+            if (drawLineTo != null)
             {
                 line.SetPosition(0, drawLineFrom.position);
                 line.SetPosition(1, drawLineTo.position);
             }
-        }
-
-        private void Update()
-        {
-            DrawLine();
         }
     }
 }

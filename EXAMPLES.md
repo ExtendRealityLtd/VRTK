@@ -2,15 +2,18 @@
 
 This directory contains Unity3d scenes that demonstrate the scripts and prefabs being used in the game world to create desired functionality.
 
-The examples have all been built to work with the SteamVR Plugin by default, but they can be converted over to using the Oculus Utilities package by following the instructions for using the Oculus Utilities package in the README.md.
+> *VRTK offers a VR Simulator that works without any third party SDK, but VR device support requires a supported VR SDK to be imported into the Unity project.*
 
-There is also a `/Resources/Scripts` directory within the `VRTK/Examples` directory that contains helper scripts utilised by the example scenes to highlight certain functionality (such as event listeners). These example scripts are not required for real world usage.
+The example scenes support all the VRTK supported VR SDKs. To make use of VR devices (besides the included VR Simulator) import the needed third party VR SDK into the project.
 
-> *If the examples are not working on first load, click the `[VRTK]` GameObject in the scene hierarchy to ensure the SDK Manager editor script successfully sets up the project and scene.*
+For further information about setting up a specific SDK and using VRTK in your own project, check out the
+[GETTING_STARTED.md](https://github.com/thestonefox/VRTK/blob/master/GETTING_STARTED.md) document.
+
+There is also a `/ExampleResources/Scripts` directory within the `VRTK/Examples` directory that contains helper scripts utilised by the example scenes to highlight certain functionality (such as event listeners). These example scripts are not required for real world usage.
 
 ## Current Examples
 
-### 001_CameraRig_VR_PlayArea
+### 001_CameraRig_VRPlayArea
 
 A simple scene showing the `[CameraRig]` prefab usage.
 
@@ -228,7 +231,7 @@ A scene that shows the teleporting behaviour and also demonstrates a way to use 
 
 A scene displays the frames per second in the centre of the headset view. The debug visualization of this script is displayed near the top edge of the headset view. Pressing the trigger generates a new sphere and pressing the touchpad generates ten new spheres. Eventually when lots of spheres are present the FPS will drop and demonstrate the script.
 
-### 040_Controls_Panel_Menu
+### 040_Controls_PanelMenu
 
 A scene that demonstrates how to attach interactable panel prefabs to game objects to provide additional settings.
 
@@ -243,3 +246,7 @@ A scene that demonstrates how the user can move and traverse colliders by either
 ### 043_Controller_SecondaryControllerActions
 
 A scene that demonstrates the ability to grab an object with one controller and scale it by grabbing and pulling with the second controller.
+
+### 044_CameraRig_RestrictedTeleportZones
+
+A scene that uses the `VRTK_DestinationPoint` prefab to set up a collection of pre-defined teleport locations.

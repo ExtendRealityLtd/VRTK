@@ -15,6 +15,7 @@ namespace VRTK.SecondaryControllerGrabActions
     /// <example>
     /// `VRTK/Examples/043_Controller_SecondaryControllerActions` demonstrates the ability to grab an object with one controller and control their direction with the second controller.
     /// </example>
+    [AddComponentMenu("VRTK/Scripts/Interactions/Secondary Controller Grab Actions/VRTK_ControlDirectionGrabAction")]
     public class VRTK_ControlDirectionGrabAction : VRTK_BaseGrabAction
     {
         [Tooltip("The distance the secondary controller must move away from the original grab position before the secondary controller auto ungrabs the object.")]
@@ -24,10 +25,10 @@ namespace VRTK.SecondaryControllerGrabActions
         [Tooltip("Prevent the secondary controller rotating the grabbed object through it's z-axis.")]
         public bool lockZRotation = true;
 
-        private Vector3 initialPosition;
-        private Quaternion initialRotation;
-        private Quaternion releaseRotation;
-        private Coroutine snappingOnRelease;
+        protected Vector3 initialPosition;
+        protected Quaternion initialRotation;
+        protected Quaternion releaseRotation;
+        protected Coroutine snappingOnRelease;
 
         /// <summary>
         /// The Initalise method is used to set up the state of the secondary action when the object is initially grabbed by a secondary controller.
@@ -70,6 +71,7 @@ namespace VRTK.SecondaryControllerGrabActions
         /// </summary>
         public override void OnDropAction()
         {
+            base.OnDropAction();
             StopRealignOnRelease();
         }
 
@@ -78,6 +80,7 @@ namespace VRTK.SecondaryControllerGrabActions
         /// </summary>
         public override void ProcessUpdate()
         {
+            base.ProcessUpdate();
             CheckForceStopDistance(ungrabDistance);
         }
 
@@ -86,13 +89,14 @@ namespace VRTK.SecondaryControllerGrabActions
         /// </summary>
         public override void ProcessFixedUpdate()
         {
+            base.ProcessFixedUpdate();
             if (initialised)
             {
                 AimObject();
             }
         }
 
-        private void StopRealignOnRelease()
+        protected virtual void StopRealignOnRelease()
         {
             if (snappingOnRelease != null)
             {
@@ -101,7 +105,7 @@ namespace VRTK.SecondaryControllerGrabActions
             snappingOnRelease = null;
         }
 
-        private IEnumerator RealignOnRelease()
+        protected virtual IEnumerator RealignOnRelease()
         {
             var elapsedTime = 0f;
 
@@ -115,21 +119,71 @@ namespace VRTK.SecondaryControllerGrabActions
             transform.localPosition = initialPosition;
         }
 
-        private void AimObject()
+        protected virtual void AimObject()
         {
-            var existingEularAngles = transform.rotation.eulerAngles;
-            transform.rotation = Quaternion.LookRotation(secondaryGrabbingObject.transform.position - primaryGrabbingObject.transform.position, secondaryGrabbingObject.transform.TransformDirection(Vector3.forward));
-
             if (lockZRotation)
             {
-                existingEularAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, existingEularAngles.z);
-                transform.rotation = Quaternion.Euler(existingEularAngles);
+                ZLockedAim();
+            }
+            else
+            {
+                transform.rotation = Quaternion.LookRotation(secondaryGrabbingObject.transform.position - primaryGrabbingObject.transform.position, secondaryGrabbingObject.transform.TransformDirection(Vector3.forward));
             }
 
             if (grabbedObject.grabAttachMechanicScript.precisionGrab)
             {
                 transform.Translate(primaryGrabbingObject.controllerAttachPoint.transform.position - primaryInitialGrabPoint.position, Space.World);
             }
+        }
+
+        protected virtual void ZLockedAim()
+        {
+            Vector3 forward = (secondaryGrabbingObject.transform.position - primaryGrabbingObject.transform.position).normalized;
+
+            // calculate rightLocked rotation
+            Quaternion rightLocked = Quaternion.LookRotation(forward, Vector3.Cross(-primaryGrabbingObject.transform.right, forward).normalized);
+
+            // delta from current rotation to the rightLocked rotation
+            Quaternion rightLockedDelta = Quaternion.Inverse(grabbedObject.transform.rotation) * rightLocked;
+
+            float rightLockedAngle;
+            Vector3 rightLockedAxis;
+
+            // forward direction and roll
+            rightLockedDelta.ToAngleAxis(out rightLockedAngle, out rightLockedAxis);
+
+            if (rightLockedAngle > 180f)
+            {
+                // remap ranges from 0-360 to -180 to 180
+                rightLockedAngle -= 360f;
+            }
+
+            // make any negative values into positive values;
+            rightLockedAngle = Mathf.Abs(rightLockedAngle);
+
+            // calculate upLocked rotation
+            Quaternion upLocked = Quaternion.LookRotation(forward, primaryGrabbingObject.transform.forward);
+
+            // delta from current rotation to the upLocked rotation
+            Quaternion upLockedDelta = Quaternion.Inverse(grabbedObject.transform.rotation) * upLocked;
+
+            float upLockedAngle;
+            Vector3 upLockedAxis;
+
+            // forward direction and roll
+            upLockedDelta.ToAngleAxis(out upLockedAngle, out upLockedAxis);
+
+            // remap ranges from 0-360 to -180 to 180
+            if (upLockedAngle > 180f)
+            {
+                upLockedAngle -= 360f;
+            }
+
+            // make any negative values into positive values;
+            upLockedAngle = Mathf.Abs(upLockedAngle);
+
+            // assign the one that involves less change to roll
+            grabbedObject.transform.rotation = (upLockedAngle < rightLockedAngle ? upLocked : rightLocked);
         }
     }
 }

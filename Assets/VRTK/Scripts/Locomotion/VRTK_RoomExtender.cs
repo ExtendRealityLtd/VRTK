@@ -1,4 +1,4 @@
-// Room Extender|Locomotion|20090
+﻿// Room Extender|Locomotion|20130
 namespace VRTK
 {
     using UnityEngine;
@@ -12,6 +12,7 @@ namespace VRTK
     /// <example>
     /// `VRTK/Examples/028_CameraRig_RoomExtender` shows how the RoomExtender script is controlled by a VRTK_RoomExtender_Controller Example script located at both controllers. Pressing the `Touchpad` on the controller activates the Room Extender. The Additional Movement Multiplier is changed based on the touch distance to the centre of the touchpad.
     /// </example>
+    [AddComponentMenu("VRTK/Scripts/Locomotion/VRTK_RoomExtender")]
     public class VRTK_RoomExtender : MonoBehaviour
     {
         /// <summary>
@@ -49,18 +50,17 @@ namespace VRTK
         protected Vector3 lastPosition;
         protected Vector3 lastMovement;
 
-        private void Start()
+        protected virtual void Awake()
         {
+            VRTK_SDKManager.instance.AddBehaviourToToggleOnLoadedSetupChange(this);
+        }
+
+        protected virtual void OnEnable()
+        {
+            movementTransform = VRTK_DeviceFinder.HeadsetTransform();
             if (movementTransform == null)
             {
-                if (VRTK_DeviceFinder.HeadsetTransform() != null)
-                {
-                    movementTransform = VRTK_DeviceFinder.HeadsetTransform();
-                }
-                else
-                {
-                    Debug.LogWarning("The VRTK_RoomExtender script needs a movementTransform to work.");
-                }
+                VRTK_Logger.Warn(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_SCENE, "VRTK_RoomExtender", "Headset Transform"));
             }
             playArea = VRTK_DeviceFinder.PlayAreaTransform();
             additionalMovementEnabled = !additionalMovementEnabledOnButtonPress;
@@ -72,7 +72,12 @@ namespace VRTK
             lastPosition = movementTransform.localPosition;
         }
 
-        private void Update()
+        protected virtual void OnDestroy()
+        {
+            VRTK_SDKManager.instance.RemoveBehaviourToToggleOnLoadedSetupChange(this);
+        }
+
+        protected virtual void Update()
         {
             switch (movementFunction)
             {
@@ -87,7 +92,7 @@ namespace VRTK
             }
         }
 
-        private void Move(Vector3 movement)
+        protected virtual void Move(Vector3 movement)
         {
             headCirclePosition += movement;
             if (debugTransform)
@@ -101,7 +106,7 @@ namespace VRTK
             }
         }
 
-        private void MoveHeadCircle()
+        protected virtual void MoveHeadCircle()
         {
             //Get the movement of the head relative to the headCircle.
             var circleCenterToHead = new Vector3(movementTransform.localPosition.x - headCirclePosition.x, 0, movementTransform.localPosition.z - headCirclePosition.z);
@@ -117,7 +122,7 @@ namespace VRTK
             }
         }
 
-        private void MoveHeadCircleNonLinearDrift()
+        protected virtual void MoveHeadCircleNonLinearDrift()
         {
             var movement = new Vector3(movementTransform.localPosition.x - headCirclePosition.x, 0, movementTransform.localPosition.z - headCirclePosition.z);
             if (movement.sqrMagnitude > headZoneRadius * headZoneRadius)
@@ -127,7 +132,7 @@ namespace VRTK
             }
         }
 
-        private void UpdateLastMovement()
+        protected virtual void UpdateLastMovement()
         {
             //Save the last movement
             lastMovement = movementTransform.localPosition - lastPosition;

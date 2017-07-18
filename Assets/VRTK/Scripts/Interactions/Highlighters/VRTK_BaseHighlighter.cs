@@ -14,6 +14,8 @@ namespace VRTK.Highlighters
     {
         [Tooltip("Determines if this highlighter is the active highlighter for the object the component is attached to. Only 1 active highlighter can be applied to a game object.")]
         public bool active = true;
+        [Tooltip("Determines if the highlighted object should be unhighlighted when it is disabled.")]
+        public bool unhighlightOnDisable = true;
 
         protected bool usesClonedObject = false;
 
@@ -34,8 +36,8 @@ namespace VRTK.Highlighters
         /// </summary>
         /// <param name="color">An optional colour to highlight the game object to. The highlight colour may already have been set in the `Initialise` method so may not be required here.</param>
         /// <param name="duration">An optional duration of how long before the highlight has occured. It can be used by highlighters to fade the colour if possible.</param>
-
         public abstract void Highlight(Color? color = null, float duration = 0f);
+
         /// <summary>
         /// The Unhighlight method is used to initiate the logic that returns an object back to it's original appearance.
         /// </summary>
@@ -86,6 +88,14 @@ namespace VRTK.Highlighters
             }
 
             return objectHighlighter;
+        }
+
+        protected virtual void OnDisable()
+        {
+            if (unhighlightOnDisable)
+            {
+                Unhighlight();
+            }
         }
     }
 }

@@ -4,7 +4,7 @@
     using UnityEditor;
     using System;
 
-    public class VRTK_EditorUtilities : MonoBehaviour
+    public static class VRTK_EditorUtilities
     {
         public static GUIContent BuildGUIContent<T>(string fieldName, string displayOverride = null)
         {
@@ -22,10 +22,34 @@
             AddHeader(headerAttribute == null ? displayName : headerAttribute.header);
         }
 
-        public static void AddHeader(string header)
+        public static void AddHeader(string header, bool spaceBeforeHeader = true)
         {
-            EditorGUILayout.Space();
+            if (spaceBeforeHeader)
+            {
+                EditorGUILayout.Space();
+            }
+
             EditorGUILayout.LabelField(header, EditorStyles.boldLabel);
+        }
+
+        public static void DrawUsingDestructiveStyle(GUIStyle styleToCopy, Action<GUIStyle> drawAction)
+        {
+            Color previousBackgroundColor = GUI.backgroundColor;
+            GUIStyle destructiveButtonStyle = new GUIStyle(styleToCopy)
+            {
+                normal =
+                {
+                    textColor = Color.white
+                },
+                active =
+                {
+                    textColor = Color.white
+                }
+            };
+
+            GUI.backgroundColor = Color.red;
+            drawAction(destructiveButtonStyle);
+            GUI.backgroundColor = previousBackgroundColor;
         }
     }
 }

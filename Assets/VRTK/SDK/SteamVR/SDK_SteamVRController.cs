@@ -1,36 +1,91 @@
-﻿// SteamVR Controller|SDK_SteamVR|003
+﻿// SteamVR Controller|SDK_SteamVR|004
 namespace VRTK
 {
-#if VRTK_SDK_STEAMVR
+#if VRTK_DEFINE_SDK_STEAMVR
     using UnityEngine;
+    using System;
     using System.Collections.Generic;
+    using System.Reflection;
     using Valve.VR;
+#endif
 
     /// <summary>
     /// The SteamVR Controller SDK script provides a bridge to SDK methods that deal with the input devices.
     /// </summary>
-    public class SDK_SteamVRController : SDK_BaseController
+    [SDK_Description(typeof(SDK_SteamVRSystem))]
+    public class SDK_SteamVRController
+#if VRTK_DEFINE_SDK_STEAMVR
+        : SDK_BaseController
+#else
+        : SDK_FallbackController
+#endif
     {
-        private SteamVR_TrackedObject cachedLeftTrackedObject;
-        private SteamVR_TrackedObject cachedRightTrackedObject;
-        private ushort maxHapticVibration = 3999;
+#if VRTK_DEFINE_SDK_STEAMVR
+        protected SteamVR_TrackedObject cachedLeftTrackedObject;
+        protected SteamVR_TrackedObject cachedRightTrackedObject;
+        protected Dictionary<GameObject, SteamVR_TrackedObject> cachedTrackedObjectsByGameObject = new Dictionary<GameObject, SteamVR_TrackedObject>();
+        protected Dictionary<uint, SteamVR_TrackedObject> cachedTrackedObjectsByIndex = new Dictionary<uint, SteamVR_TrackedObject>();
+        protected ushort maxHapticVibration = 3999;
+
+        /// <summary>
+        /// This method is called just after unloading the <see cref="VRTK_SDKSetup"/> that's using this SDK.
+        /// </summary>
+        /// <param name="setup">The SDK Setup which is using this SDK.</param>
+        public override void OnAfterSetupUnload(VRTK_SDKSetup setup)
+        {
+            base.OnAfterSetupUnload(setup);
+
+            SteamVR_ControllerManager controllerManager = setup.actualLeftController.transform.parent.GetComponent<SteamVR_ControllerManager>();
+            FieldInfo connectedField = typeof(SteamVR_ControllerManager).GetField(
+                "connected",
+                BindingFlags.NonPublic | BindingFlags.Instance
+            );
+            if (connectedField == null)
+            {
+                return;
+            }
+
+            bool[] connected = (bool[])connectedField.GetValue(controllerManager);
+            Array.Clear(connected, 0, connected.Length);
+            connectedField.SetValue(controllerManager, connected);
+        }
 
         /// <summary>
         /// The ProcessUpdate method enables an SDK to run logic for every Unity Update
         /// </summary>
-        /// <param name="index">The index of the controller.</param>
+        /// <param name="controllerReference">The reference for the controller.</param>
         /// <param name="options">A dictionary of generic options that can be used to within the update.</param>
-        public override void ProcessUpdate(uint index, Dictionary<string, object> options)
+        public override void ProcessUpdate(VRTK_ControllerReference controllerReference, Dictionary<string, object> options)
+        {
+        }
+
+        /// <summary>
+        /// The ProcessFixedUpdate method enables an SDK to run logic for every Unity FixedUpdate
+        /// </summary>
+        /// <param name="controllerReference">The reference for the controller.</param>
+        /// <param name="options">A dictionary of generic options that can be used to within the fixed update.</param>
+        public override void ProcessFixedUpdate(VRTK_ControllerReference controllerReference, Dictionary<string, object> options)
         {
         }
 
         /// <summary>
         /// The GetControllerDefaultColliderPath returns the path to the prefab that contains the collider objects for the default controller of this SDK.
         /// </summary>
+        /// <param name="hand">The controller hand to check for</param>
         /// <returns>A path to the resource that contains the collider GameObject.</returns>
-        public override string GetControllerDefaultColliderPath()
+        public override string GetControllerDefaultColliderPath(ControllerHand hand)
         {
-            return "ControllerColliders/HTCVive";
+            string returnCollider = "ControllerColliders/Fallback";
+            switch (VRTK_DeviceFinder.GetHeadsetType(true))
+            {
+                case VRTK_DeviceFinder.Headsets.OculusRift:
+                    returnCollider = (hand == ControllerHand.Left ? "ControllerColliders/SteamVROculusTouch_Left" : "ControllerColliders/SteamVROculusTouch_Right");
+                    break;
+                case VRTK_DeviceFinder.Headsets.Vive:
+                    returnCollider = "ControllerColliders/HTCVive";
+                    break;
+            }
+            return returnCollider;
         }
 
         /// <summary>
@@ -42,7 +97,7 @@ namespace VRTK
         /// <returns>A string containing the path to the game object that the controller element resides in.</returns>
         public override string GetControllerElementPath(ControllerElements element, ControllerHand hand, bool fullPath = false)
         {
-            var suffix = (fullPath ? "/attach" : "");
+            string suffix = (fullPath ? "/attach" : "");
             switch (element)
             {
                 case ControllerElements.AttachPoint:
@@ -50,15 +105,19 @@ namespace VRTK
                 case ControllerElements.Trigger:
                     return "trigger" + suffix;
                 case ControllerElements.GripLeft:
-                    return "lgrip" + suffix;
+                    return GetControllerGripPath(hand, suffix, ControllerHand.Left);
                 case ControllerElements.GripRight:
-                    return "rgrip" + suffix;
+                    return GetControllerGripPath(hand, suffix, ControllerHand.Right);
                 case ControllerElements.Touchpad:
-                    return "trackpad" + suffix;
+                    return GetControllerTouchpadPath(hand, suffix);
                 case ControllerElements.ButtonOne:
-                    return "button" + suffix;
+                    return GetControllerButtonOnePath(hand, suffix);
+                case ControllerElements.ButtonTwo:
+                    return GetControllerButtonTwoPath(hand, suffix);
                 case ControllerElements.SystemMenu:
-                    return "sys_button" + suffix;
+                    return GetControllerSystemMenuPath(hand, suffix);
+                case ControllerElements.StartMenu:
+                    return GetControllerStartMenuPath(hand, suffix);
                 case ControllerElements.Body:
                     return "body";
             }
@@ -72,8 +131,8 @@ namespace VRTK
         /// <returns>The index of the given controller.</returns>
         public override uint GetControllerIndex(GameObject controller)
         {
-            var trackedObject = GetTrackedObject(controller);
-            return (trackedObject ? (uint)trackedObject.index : uint.MaxValue);
+            SteamVR_TrackedObject trackedObject = GetTrackedObject(controller);
+            return (trackedObject != null ? (uint)trackedObject.index : uint.MaxValue);
         }
 
         /// <summary>
@@ -81,37 +140,46 @@ namespace VRTK
         /// </summary>
         /// <param name="index">The index of the controller to find.</param>
         /// <param name="actual">If true it will return the actual controller, if false it will return the script alias controller GameObject.</param>
-        /// <returns></returns>
+        /// <returns>The GameObject of the controller</returns>
         public override GameObject GetControllerByIndex(uint index, bool actual = false)
         {
             SetTrackedControllerCaches();
-            var sdkManager = VRTK_SDKManager.instance;
-            if (sdkManager != null)
+            if (index < uint.MaxValue)
             {
-                if (cachedLeftTrackedObject != null && (uint)cachedLeftTrackedObject.index == index)
+                VRTK_SDKManager sdkManager = VRTK_SDKManager.instance;
+                if (sdkManager != null)
                 {
-                    return (actual ? sdkManager.actualLeftController : sdkManager.scriptAliasLeftController);
+                    if (cachedLeftTrackedObject != null && (uint)cachedLeftTrackedObject.index == index)
+                    {
+                        return (actual ? sdkManager.loadedSetup.actualLeftController : sdkManager.scriptAliasLeftController);
+                    }
+
+                    if (cachedRightTrackedObject != null && (uint)cachedRightTrackedObject.index == index)
+                    {
+                        return (actual ? sdkManager.loadedSetup.actualRightController : sdkManager.scriptAliasRightController);
+                    }
                 }
 
-                if (cachedRightTrackedObject != null && (uint)cachedRightTrackedObject.index == index)
+                if (cachedTrackedObjectsByIndex.ContainsKey(index) && cachedTrackedObjectsByIndex[index] != null)
                 {
-                    return (actual ? sdkManager.actualRightController : sdkManager.scriptAliasRightController);
+                    return cachedTrackedObjectsByIndex[index].gameObject;
                 }
             }
+
             return null;
         }
 
         /// <summary>
         /// The GetControllerOrigin method returns the origin of the given controller.
         /// </summary>
-        /// <param name="controller">The controller to retrieve the origin from.</param>
+        /// <param name="controllerReference">The reference to the controller to retrieve the origin from.</param>
         /// <returns>A Transform containing the origin of the controller.</returns>
-        public override Transform GetControllerOrigin(GameObject controller)
+        public override Transform GetControllerOrigin(VRTK_ControllerReference controllerReference)
         {
-            var trackedObject = GetTrackedObject(controller);
-            if (trackedObject)
+            SteamVR_TrackedObject trackedObject = GetTrackedObject(controllerReference.actual);
+            if (trackedObject != null)
             {
-                return trackedObject.origin ? trackedObject.origin : trackedObject.transform.parent;
+                return (trackedObject.origin != null ? trackedObject.origin : trackedObject.transform.parent);
             }
 
             return null;
@@ -120,9 +188,23 @@ namespace VRTK
         /// <summary>
         /// The GenerateControllerPointerOrigin method can create a custom pointer origin Transform to represent the pointer position and forward.
         /// </summary>
+        /// <param name="parent">The GameObject that the origin will become parent of. If it is a controller then it will also be used to determine the hand if required.</param>
         /// <returns>A generated Transform that contains the custom pointer origin.</returns>
-        public override Transform GenerateControllerPointerOrigin()
+        public override Transform GenerateControllerPointerOrigin(GameObject parent)
         {
+            switch (VRTK_DeviceFinder.GetHeadsetType(true))
+            {
+                case VRTK_DeviceFinder.Headsets.OculusRift:
+                    if (IsControllerLeftHand(parent) || IsControllerRightHand(parent))
+                    {
+                        GameObject generatedOrigin = new GameObject(parent.name + " _CustomPointerOrigin");
+                        generatedOrigin.transform.SetParent(parent.transform);
+                        generatedOrigin.transform.localEulerAngles = new Vector3(40f, 0f, 0f);
+                        generatedOrigin.transform.localPosition = new Vector3((IsControllerLeftHand(parent) ? 0.0081f : -0.0081f), -0.0273f, -0.0311f);
+                        return generatedOrigin.transform;
+                    }
+                    break;
+            }
             return null;
         }
 
@@ -133,10 +215,10 @@ namespace VRTK
         /// <returns>The GameObject containing the left hand controller.</returns>
         public override GameObject GetControllerLeftHand(bool actual = false)
         {
-            var controller = GetSDKManagerControllerLeftHand(actual);
-            if (!controller && actual)
+            GameObject controller = GetSDKManagerControllerLeftHand(actual);
+            if (controller == null && actual)
             {
-                controller = GameObject.Find("[CameraRig]/Controller (left)");
+                controller = VRTK_SharedMethods.FindEvenInactiveGameObject<SteamVR_ControllerManager>("Controller (left)");
             }
             return controller;
         }
@@ -148,10 +230,10 @@ namespace VRTK
         /// <returns>The GameObject containing the right hand controller.</returns>
         public override GameObject GetControllerRightHand(bool actual = false)
         {
-            var controller = GetSDKManagerControllerRightHand(actual);
-            if (!controller && actual)
+            GameObject controller = GetSDKManagerControllerRightHand(actual);
+            if (controller == null && actual)
             {
-                controller = GameObject.Find("[CameraRig]/Controller (right)");
+                controller = VRTK_SharedMethods.FindEvenInactiveGameObject<SteamVR_ControllerManager>("Controller (right)");
             }
             return controller;
         }
@@ -215,17 +297,23 @@ namespace VRTK
         /// <returns>The GameObject that has the model alias within it.</returns>
         public override GameObject GetControllerModel(ControllerHand hand)
         {
-            var model = GetSDKManagerControllerModelForHand(hand);
-            if (!model)
+            GameObject model = GetSDKManagerControllerModelForHand(hand);
+            if (model == null)
             {
+                GameObject controller = null;
                 switch (hand)
                 {
                     case ControllerHand.Left:
-                        model = GameObject.Find("[CameraRig]/Controller (left)/Model");
+                        controller = GetControllerLeftHand(true);
                         break;
                     case ControllerHand.Right:
-                        model = GameObject.Find("[CameraRig]/Controller (right)/Model");
+                        controller = GetControllerRightHand(true);
                         break;
+                }
+
+                if (controller != null)
+                {
+                    model = controller.transform.Find("Model").gameObject;
                 }
             }
             return model;
@@ -234,12 +322,12 @@ namespace VRTK
         /// <summary>
         /// The GetControllerRenderModel method gets the game object that contains the given controller's render model.
         /// </summary>
-        /// <param name="controller">The GameObject to check.</param>
+        /// <param name="controllerReference">The reference to the controller to check.</param>
         /// <returns>A GameObject containing the object that has a render model for the controller.</returns>
-        public override GameObject GetControllerRenderModel(GameObject controller)
+        public override GameObject GetControllerRenderModel(VRTK_ControllerReference controllerReference)
         {
-            var renderModel = (controller.GetComponent<SteamVR_RenderModel>() ? controller.GetComponent<SteamVR_RenderModel>() : controller.GetComponentInChildren<SteamVR_RenderModel>());
-            return (renderModel ? renderModel.gameObject : null);
+            SteamVR_RenderModel renderModel = controllerReference.actual.GetComponentInChildren<SteamVR_RenderModel>();
+            return (renderModel != null ? renderModel.gameObject : null);
         }
 
         /// <summary>
@@ -249,26 +337,38 @@ namespace VRTK
         /// <param name="state">If true and the render model has a scroll wheen then it will be displayed, if false then the scroll wheel will be hidden.</param>
         public override void SetControllerRenderModelWheel(GameObject renderModel, bool state)
         {
-            var model = renderModel.GetComponent<SteamVR_RenderModel>();
-            if (model)
+            SteamVR_RenderModel model = renderModel.GetComponent<SteamVR_RenderModel>();
+            if (model != null)
             {
                 model.controllerModeState.bScrollWheelVisible = state;
             }
         }
 
         /// <summary>
-        /// The HapticPulseOnIndex method is used to initiate a simple haptic pulse on the tracked object of the given index.
+        /// The HapticPulse/2 method is used to initiate a simple haptic pulse on the tracked object of the given controller reference.
         /// </summary>
-        /// <param name="index">The index of the tracked object to initiate the haptic pulse on.</param>
+        /// <param name="controllerReference">The reference to the tracked object to initiate the haptic pulse on.</param>
         /// <param name="strength">The intensity of the rumble of the controller motor. `0` to `1`.</param>
-        public override void HapticPulseOnIndex(uint index, float strength = 0.5f)
+        public override void HapticPulse(VRTK_ControllerReference controllerReference, float strength = 0.5f)
         {
-            if (index < uint.MaxValue)
+            uint index = VRTK_ControllerReference.GetRealIndex(controllerReference);
+            if (index < OpenVR.k_unTrackedDeviceIndexInvalid)
             {
-                var convertedStrength = maxHapticVibration * strength;
-                var device = SteamVR_Controller.Input((int)index);
+                float convertedStrength = maxHapticVibration * strength;
+                SteamVR_Controller.Device device = SteamVR_Controller.Input((int)index);
                 device.TriggerHapticPulse((ushort)convertedStrength, EVRButtonId.k_EButton_Axis0);
             }
+        }
+
+        /// <summary>
+        /// The HapticPulse/2 method is used to initiate a haptic pulse based on an audio clip on the tracked object of the given controller reference.
+        /// </summary>
+        /// <param name="controllerReference">The reference to the tracked object to initiate the haptic pulse on.</param>
+        /// <param name="clip">The audio clip to use for the haptic pattern.</param>
+        public override bool HapticPulse(VRTK_ControllerReference controllerReference, AudioClip clip)
+        {
+            //SteamVR doesn't support audio haptics so return false to do a fallback.
+            return false;
         }
 
         /// <summary>
@@ -277,512 +377,223 @@ namespace VRTK
         /// <returns>An SDK_ControllerHapticModifiers object with a given `durationModifier` and an `intervalModifier`.</returns>
         public override SDK_ControllerHapticModifiers GetHapticModifiers()
         {
-            return new SDK_ControllerHapticModifiers();
+            SDK_ControllerHapticModifiers modifiers = new SDK_ControllerHapticModifiers();
+            modifiers.maxHapticVibration = maxHapticVibration;
+            return modifiers;
         }
 
         /// <summary>
-        /// The GetVelocityOnIndex method is used to determine the current velocity of the tracked object on the given index.
+        /// The GetVelocity method is used to determine the current velocity of the tracked object on the given controller reference.
         /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
+        /// <param name="controllerReference">The reference to the tracked object to check for.</param>
         /// <returns>A Vector3 containing the current velocity of the tracked object.</returns>
-        public override Vector3 GetVelocityOnIndex(uint index)
+        public override Vector3 GetVelocity(VRTK_ControllerReference controllerReference)
         {
-            if (index >= uint.MaxValue)
+            uint index = VRTK_ControllerReference.GetRealIndex(controllerReference);
+            if (index <= (uint)SteamVR_TrackedObject.EIndex.Hmd || index >= OpenVR.k_unTrackedDeviceIndexInvalid)
             {
                 return Vector3.zero;
             }
-            var device = SteamVR_Controller.Input((int)index);
+            SteamVR_Controller.Device device = SteamVR_Controller.Input((int)index);
             return device.velocity;
         }
 
         /// <summary>
-        /// The GetAngularVelocityOnIndex method is used to determine the current angular velocity of the tracked object on the given index.
+        /// The GetAngularVelocity method is used to determine the current angular velocity of the tracked object on the given controller reference.
         /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
+        /// <param name="controllerReference">The reference to the tracked object to check for.</param>
         /// <returns>A Vector3 containing the current angular velocity of the tracked object.</returns>
-        public override Vector3 GetAngularVelocityOnIndex(uint index)
+        public override Vector3 GetAngularVelocity(VRTK_ControllerReference controllerReference)
         {
-            if (index >= uint.MaxValue)
+            uint index = VRTK_ControllerReference.GetRealIndex(controllerReference);
+            if (index <= (uint)SteamVR_TrackedObject.EIndex.Hmd || index >= OpenVR.k_unTrackedDeviceIndexInvalid)
             {
                 return Vector3.zero;
             }
-            var device = SteamVR_Controller.Input((int)index);
+            SteamVR_Controller.Device device = SteamVR_Controller.Input((int)index);
             return device.angularVelocity;
         }
 
         /// <summary>
-        /// The GetTouchpadAxisOnIndex method is used to get the current touch position on the controller touchpad.
+        /// The IsTouchpadStatic method is used to determine if the touchpad is currently not being moved.
         /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>A Vector2 containing the current x,y position of where the touchpad is being touched.</returns>
-        public override Vector2 GetTouchpadAxisOnIndex(uint index)
+        /// <param name="currentAxisValues"></param>
+        /// <param name="previousAxisValues"></param>
+        /// <param name="compareFidelity"></param>
+        /// <returns>Returns true if the touchpad is not currently being touched or moved.</returns>
+        public override bool IsTouchpadStatic(bool isTouched, Vector2 currentAxisValues, Vector2 previousAxisValues, int compareFidelity)
         {
-            if (index >= uint.MaxValue)
-            {
-                return Vector2.zero;
-            }
-            var device = SteamVR_Controller.Input((int)index);
-            return device.GetAxis();
+            return (!isTouched || VRTK_SharedMethods.Vector2ShallowCompare(currentAxisValues, previousAxisValues, compareFidelity));
         }
 
         /// <summary>
-        /// The GetTriggerAxisOnIndex method is used to get the current trigger position on the controller.
+        /// The GetButtonAxis method retrieves the current X/Y axis values for the given button type on the given controller reference.
         /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>A Vector2 containing the current position of the trigger.</returns>
-        public override Vector2 GetTriggerAxisOnIndex(uint index)
+        /// <param name="buttonType">The type of button to check for the axis on.</param>
+        /// <param name="controllerReference">The reference to the controller to check the button axis on.</param>
+        /// <returns>A Vector2 of the X/Y values of the button axis. If no axis values exist for the given button, then a Vector2.Zero is returned.</returns>
+        public override Vector2 GetButtonAxis(ButtonTypes buttonType, VRTK_ControllerReference controllerReference)
         {
-            if (index >= uint.MaxValue)
+            uint index = VRTK_ControllerReference.GetRealIndex(controllerReference);
+            if (index >= OpenVR.k_unTrackedDeviceIndexInvalid)
             {
                 return Vector2.zero;
             }
-            var device = SteamVR_Controller.Input((int)index);
-            return device.GetAxis(EVRButtonId.k_EButton_SteamVR_Trigger);
-        }
 
-        /// <summary>
-        /// The GetGripAxisOnIndex method is used to get the current grip position on the controller.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>A Vector2 containing the current position of the grip.</returns>
-        public override Vector2 GetGripAxisOnIndex(uint index)
-        {
+            SteamVR_Controller.Device device = SteamVR_Controller.Input((int)index);
+            switch (buttonType)
+            {
+                case ButtonTypes.Touchpad:
+                    return device.GetAxis();
+                case ButtonTypes.Trigger:
+                    return device.GetAxis(EVRButtonId.k_EButton_SteamVR_Trigger);
+            }
             return Vector2.zero;
         }
 
         /// <summary>
-        /// The GetTriggerHairlineDeltaOnIndex method is used to get the difference between the current trigger press and the previous frame trigger press.
+        /// The GetButtonHairlineDelta method is used to get the difference between the current button press and the previous frame button press.
         /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>The delta between the trigger presses.</returns>
-        public override float GetTriggerHairlineDeltaOnIndex(uint index)
+        /// <param name="buttonType">The type of button to get the hairline delta for.</param>
+        /// <param name="controllerReference">The reference to the controller to get the hairline delta for.</param>
+        /// <returns>The delta between the button presses.</returns>
+        public override float GetButtonHairlineDelta(ButtonTypes buttonType, VRTK_ControllerReference controllerReference)
         {
-            if (index >= uint.MaxValue)
+            uint index = VRTK_ControllerReference.GetRealIndex(controllerReference);
+            if (index >= OpenVR.k_unTrackedDeviceIndexInvalid)
             {
                 return 0f;
             }
-            var device = SteamVR_Controller.Input((int)index);
-            return device.hairTriggerDelta;
+            SteamVR_Controller.Device device = SteamVR_Controller.Input((int)index);
+
+            return (buttonType == ButtonTypes.Trigger || buttonType == ButtonTypes.TriggerHairline ? device.hairTriggerDelta : 0f);
         }
 
         /// <summary>
-        /// The GetGripHairlineDeltaOnIndex method is used to get the difference between the current grip press and the previous frame grip press.
+        /// The GetControllerButtonState method is used to determine if the given controller button for the given press type on the given controller reference is currently taking place.
         /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>The delta between the grip presses.</returns>
-        public override float GetGripHairlineDeltaOnIndex(uint index)
+        /// <param name="buttonType">The type of button to check for the state of.</param>
+        /// <param name="pressType">The button state to check for.</param>
+        /// <param name="controllerReference">The reference to the controller to check the button state on.</param>
+        /// <returns>Returns true if the given button is in the state of the given press type on the given controller reference.</returns>
+        public override bool GetControllerButtonState(ButtonTypes buttonType, ButtonPressTypes pressType, VRTK_ControllerReference controllerReference)
         {
-            return 0f;
-        }
-
-        /// <summary>
-        /// The IsTriggerPressedOnIndex method is used to determine if the controller button is being pressed down continually.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button is continually being pressed.</returns>
-        public override bool IsTriggerPressedOnIndex(uint index)
-        {
-            return IsButtonPressed(index, ButtonPressTypes.Press, SteamVR_Controller.ButtonMask.Trigger);
-        }
-
-        /// <summary>
-        /// The IsTriggerPressedDownOnIndex method is used to determine if the controller button has just been pressed down.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button has just been pressed down.</returns>
-        public override bool IsTriggerPressedDownOnIndex(uint index)
-        {
-            return IsButtonPressed(index, ButtonPressTypes.PressDown, SteamVR_Controller.ButtonMask.Trigger);
-        }
-
-        /// <summary>
-        /// The IsTriggerPressedUpOnIndex method is used to determine if the controller button has just been released.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button has just been released.</returns>
-        public override bool IsTriggerPressedUpOnIndex(uint index)
-        {
-            return IsButtonPressed(index, ButtonPressTypes.PressUp, SteamVR_Controller.ButtonMask.Trigger);
-        }
-
-        /// <summary>
-        /// The IsTriggerTouchedOnIndex method is used to determine if the controller button is being touched down continually.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button is continually being touched.</returns>
-        public override bool IsTriggerTouchedOnIndex(uint index)
-        {
-            return IsButtonPressed(index, ButtonPressTypes.Touch, SteamVR_Controller.ButtonMask.Trigger);
-        }
-
-        /// <summary>
-        /// The IsTriggerTouchedDownOnIndex method is used to determine if the controller button has just been touched down.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button has just been touched down.</returns>
-        public override bool IsTriggerTouchedDownOnIndex(uint index)
-        {
-            return IsButtonPressed(index, ButtonPressTypes.TouchDown, SteamVR_Controller.ButtonMask.Trigger);
-        }
-
-        /// <summary>
-        /// The IsTriggerTouchedUpOnIndex method is used to determine if the controller button has just been released.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button has just been released.</returns>
-        public override bool IsTriggerTouchedUpOnIndex(uint index)
-        {
-            return IsButtonPressed(index, ButtonPressTypes.TouchUp, SteamVR_Controller.ButtonMask.Trigger);
-        }
-
-        /// <summary>
-        /// The IsHairTriggerDownOnIndex method is used to determine if the controller button has passed it's press threshold.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button has passed it's press threshold.</returns>
-        public override bool IsHairTriggerDownOnIndex(uint index)
-        {
-            if (index >= uint.MaxValue)
+            uint index = VRTK_ControllerReference.GetRealIndex(controllerReference);
+            if (index >= OpenVR.k_unTrackedDeviceIndexInvalid)
             {
                 return false;
             }
-            var device = SteamVR_Controller.Input((int)index);
-            return device.GetHairTriggerDown();
-        }
 
-        /// <summary>
-        /// The IsHairTriggerUpOnIndex method is used to determine if the controller button has been released from it's press threshold.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button has just been released from it's press threshold.</returns>
-        public override bool IsHairTriggerUpOnIndex(uint index)
-        {
-            if (index >= uint.MaxValue)
+            switch (buttonType)
             {
-                return false;
+                case ButtonTypes.Trigger:
+                    return IsButtonPressed(index, pressType, SteamVR_Controller.ButtonMask.Trigger);
+                case ButtonTypes.TriggerHairline:
+                    if (pressType == ButtonPressTypes.PressDown)
+                    {
+                        return SteamVR_Controller.Input((int)index).GetHairTriggerDown();
+                    }
+                    else if (pressType == ButtonPressTypes.PressUp)
+                    {
+                        return SteamVR_Controller.Input((int)index).GetHairTriggerUp();
+                    }
+                    break;
+                case ButtonTypes.Grip:
+                    return IsButtonPressed(index, pressType, SteamVR_Controller.ButtonMask.Grip);
+                case ButtonTypes.Touchpad:
+                    return IsButtonPressed(index, pressType, SteamVR_Controller.ButtonMask.Touchpad);
+                case ButtonTypes.ButtonOne:
+                    return IsButtonPressed(index, pressType, (1ul << (int)EVRButtonId.k_EButton_A));
+                case ButtonTypes.ButtonTwo:
+                    return IsButtonPressed(index, pressType, SteamVR_Controller.ButtonMask.ApplicationMenu);
+                case ButtonTypes.StartMenu:
+                    return IsButtonPressed(index, pressType, SteamVR_Controller.ButtonMask.System);
             }
-            var device = SteamVR_Controller.Input((int)index);
-            return device.GetHairTriggerUp();
-        }
-
-        /// <summary>
-        /// The IsGripPressedOnIndex method is used to determine if the controller button is being pressed down continually.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button is continually being pressed.</returns>
-        public override bool IsGripPressedOnIndex(uint index)
-        {
-            return IsButtonPressed(index, ButtonPressTypes.Press, SteamVR_Controller.ButtonMask.Grip);
-        }
-
-        /// <summary>
-        /// The IsGripPressedDownOnIndex method is used to determine if the controller button has just been pressed down.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button has just been pressed down.</returns>
-        public override bool IsGripPressedDownOnIndex(uint index)
-        {
-            return IsButtonPressed(index, ButtonPressTypes.PressDown, SteamVR_Controller.ButtonMask.Grip);
-        }
-
-        /// <summary>
-        /// The IsGripPressedUpOnIndex method is used to determine if the controller button has just been released.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button has just been released.</returns>
-        public override bool IsGripPressedUpOnIndex(uint index)
-        {
-            return IsButtonPressed(index, ButtonPressTypes.PressUp, SteamVR_Controller.ButtonMask.Grip);
-        }
-
-        /// <summary>
-        /// The IsGripTouchedOnIndex method is used to determine if the controller button is being touched down continually.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button is continually being touched.</returns>
-        public override bool IsGripTouchedOnIndex(uint index)
-        {
-            return IsButtonPressed(index, ButtonPressTypes.Touch, SteamVR_Controller.ButtonMask.Grip);
-        }
-
-        /// <summary>
-        /// The IsGripTouchedDownOnIndex method is used to determine if the controller button has just been touched down.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button has just been touched down.</returns>
-        public override bool IsGripTouchedDownOnIndex(uint index)
-        {
-            return IsButtonPressed(index, ButtonPressTypes.TouchDown, SteamVR_Controller.ButtonMask.Grip);
-        }
-
-        /// <summary>
-        /// The IsGripTouchedUpOnIndex method is used to determine if the controller button has just been released.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button has just been released.</returns>
-        public override bool IsGripTouchedUpOnIndex(uint index)
-        {
-            return IsButtonPressed(index, ButtonPressTypes.TouchUp, SteamVR_Controller.ButtonMask.Grip);
-        }
-
-
-        /// <summary>
-        /// The IsHairGripDownOnIndex method is used to determine if the controller button has passed it's press threshold.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button has passed it's press threshold.</returns>
-        public override bool IsHairGripDownOnIndex(uint index)
-        {
             return false;
         }
 
-        /// <summary>
-        /// The IsHairGripUpOnIndex method is used to determine if the controller button has been released from it's press threshold.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button has just been released from it's press threshold.</returns>
-        public override bool IsHairGripUpOnIndex(uint index)
+        protected virtual void Awake()
         {
-            return false;
-        }
-
-        /// <summary>
-        /// The IsTouchpadPressedOnIndex method is used to determine if the controller button is being pressed down continually.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button is continually being pressed.</returns>
-        public override bool IsTouchpadPressedOnIndex(uint index)
-        {
-            return IsButtonPressed(index, ButtonPressTypes.Press, SteamVR_Controller.ButtonMask.Touchpad);
-        }
-
-        /// <summary>
-        /// The IsTouchpadPressedDownOnIndex method is used to determine if the controller button has just been pressed down.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button has just been pressed down.</returns>
-        public override bool IsTouchpadPressedDownOnIndex(uint index)
-        {
-            return IsButtonPressed(index, ButtonPressTypes.PressDown, SteamVR_Controller.ButtonMask.Touchpad);
-        }
-
-        /// <summary>
-        /// The IsTouchpadPressedUpOnIndex method is used to determine if the controller button has just been released.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button has just been released.</returns>
-        public override bool IsTouchpadPressedUpOnIndex(uint index)
-        {
-            return IsButtonPressed(index, ButtonPressTypes.PressUp, SteamVR_Controller.ButtonMask.Touchpad);
-        }
-
-        /// <summary>
-        /// The IsTouchpadTouchedOnIndex method is used to determine if the controller button is being touched down continually.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button is continually being touched.</returns>
-        public override bool IsTouchpadTouchedOnIndex(uint index)
-        {
-            return IsButtonPressed(index, ButtonPressTypes.Touch, SteamVR_Controller.ButtonMask.Touchpad);
-        }
-
-        /// <summary>
-        /// The IsTouchpadTouchedDownOnIndex method is used to determine if the controller button has just been touched down.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button has just been touched down.</returns>
-        public override bool IsTouchpadTouchedDownOnIndex(uint index)
-        {
-            return IsButtonPressed(index, ButtonPressTypes.TouchDown, SteamVR_Controller.ButtonMask.Touchpad);
-        }
-
-        /// <summary>
-        /// The IsTouchpadTouchedUpOnIndex method is used to determine if the controller button has just been released.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button has just been released.</returns>
-        public override bool IsTouchpadTouchedUpOnIndex(uint index)
-        {
-            return IsButtonPressed(index, ButtonPressTypes.TouchUp, SteamVR_Controller.ButtonMask.Touchpad);
-        }
-
-        /// <summary>
-        /// The IsButtonOnePressedOnIndex method is used to determine if the controller button is being pressed down continually.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button is continually being pressed.</returns>
-        public override bool IsButtonOnePressedOnIndex(uint index)
-        {
-            return IsButtonPressed(index, ButtonPressTypes.Press, SteamVR_Controller.ButtonMask.ApplicationMenu);
-        }
-
-        /// <summary>
-        /// The IsButtonOnePressedDownOnIndex method is used to determine if the controller button has just been pressed down.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button has just been pressed down.</returns>
-        public override bool IsButtonOnePressedDownOnIndex(uint index)
-        {
-            return IsButtonPressed(index, ButtonPressTypes.PressDown, SteamVR_Controller.ButtonMask.ApplicationMenu);
-        }
-
-        /// <summary>
-        /// The IsButtonOnePressedUpOnIndex method is used to determine if the controller button has just been released.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button has just been released.</returns>
-        public override bool IsButtonOnePressedUpOnIndex(uint index)
-        {
-            return IsButtonPressed(index, ButtonPressTypes.PressUp, SteamVR_Controller.ButtonMask.ApplicationMenu);
-        }
-
-        /// <summary>
-        /// The IsButtonOneTouchedOnIndex method is used to determine if the controller button is being touched down continually.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button is continually being touched.</returns>
-        public override bool IsButtonOneTouchedOnIndex(uint index)
-        {
-            return IsButtonPressed(index, ButtonPressTypes.Touch, SteamVR_Controller.ButtonMask.ApplicationMenu);
-        }
-
-        /// <summary>
-        /// The IsButtonOneTouchedDownOnIndex method is used to determine if the controller button has just been touched down.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button has just been touched down.</returns>
-        public override bool IsButtonOneTouchedDownOnIndex(uint index)
-        {
-            return IsButtonPressed(index, ButtonPressTypes.TouchDown, SteamVR_Controller.ButtonMask.ApplicationMenu);
-        }
-
-        /// <summary>
-        /// The IsButtonOneTouchedUpOnIndex method is used to determine if the controller button has just been released.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button has just been released.</returns>
-        public override bool IsButtonOneTouchedUpOnIndex(uint index)
-        {
-            return IsButtonPressed(index, ButtonPressTypes.TouchUp, SteamVR_Controller.ButtonMask.ApplicationMenu);
-        }
-
-        /// <summary>
-        /// The IsButtonTwoPressedOnIndex method is used to determine if the controller button is being pressed down continually.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button is continually being pressed.</returns>
-        public override bool IsButtonTwoPressedOnIndex(uint index)
-        {
-            return IsButtonPressed(index, ButtonPressTypes.Press, SteamVR_Controller.ButtonMask.ApplicationMenu);
-        }
-
-        /// <summary>
-        /// The IsButtonTwoPressedDownOnIndex method is used to determine if the controller button has just been pressed down.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button has just been pressed down.</returns>
-        public override bool IsButtonTwoPressedDownOnIndex(uint index)
-        {
-            return IsButtonPressed(index, ButtonPressTypes.PressDown, SteamVR_Controller.ButtonMask.ApplicationMenu);
-        }
-
-        /// <summary>
-        /// The IsButtonTwoPressedUpOnIndex method is used to determine if the controller button has just been released.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button has just been released.</returns>
-        public override bool IsButtonTwoPressedUpOnIndex(uint index)
-        {
-            return IsButtonPressed(index, ButtonPressTypes.PressUp, SteamVR_Controller.ButtonMask.ApplicationMenu);
-        }
-
-        /// <summary>
-        /// The IsButtonTwoTouchedOnIndex method is used to determine if the controller button is being touched down continually.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button is continually being touched.</returns>
-        public override bool IsButtonTwoTouchedOnIndex(uint index)
-        {
-            return IsButtonPressed(index, ButtonPressTypes.Touch, SteamVR_Controller.ButtonMask.ApplicationMenu);
-        }
-
-        /// <summary>
-        /// The IsButtonTwoTouchedDownOnIndex method is used to determine if the controller button has just been touched down.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button has just been touched down.</returns>
-        public override bool IsButtonTwoTouchedDownOnIndex(uint index)
-        {
-            return IsButtonPressed(index, ButtonPressTypes.TouchDown, SteamVR_Controller.ButtonMask.ApplicationMenu);
-        }
-
-        /// <summary>
-        /// The IsButtonTwoTouchedUpOnIndex method is used to determine if the controller button has just been released.
-        /// </summary>
-        /// <param name="index">The index of the tracked object to check for.</param>
-        /// <returns>Returns true if the button has just been released.</returns>
-        public override bool IsButtonTwoTouchedUpOnIndex(uint index)
-        {
-            return IsButtonPressed(index, ButtonPressTypes.TouchUp, SteamVR_Controller.ButtonMask.ApplicationMenu);
-        }
-
-        [RuntimeInitializeOnLoadMethod]
-        private void Initialise()
-        {
+#if VRTK_DEFINE_STEAMVR_PLUGIN_1_1_1_OR_OLDER
             SteamVR_Utils.Event.Listen("TrackedDeviceRoleChanged", OnTrackedDeviceRoleChanged);
+#elif VRTK_DEFINE_STEAMVR_PLUGIN_1_2_0
+            SteamVR_Events.System("TrackedDeviceRoleChanged").Listen(OnTrackedDeviceRoleChanged);
+#elif VRTK_DEFINE_STEAMVR_PLUGIN_1_2_1_OR_NEWER
+            SteamVR_Events.System(EVREventType.VREvent_TrackedDeviceRoleChanged).Listen(OnTrackedDeviceRoleChanged);
+#endif
             SetTrackedControllerCaches(true);
         }
 
-        private void OnTrackedDeviceRoleChanged(params object[] args)
+        protected virtual void OnTrackedDeviceRoleChanged<T>(T ignoredArgument)
         {
             SetTrackedControllerCaches(true);
         }
 
-        private void SetTrackedControllerCaches(bool forceRefresh = false)
+        protected virtual void SetTrackedControllerCaches(bool forceRefresh = false)
         {
             if (forceRefresh)
             {
                 cachedLeftTrackedObject = null;
                 cachedRightTrackedObject = null;
+                cachedTrackedObjectsByGameObject.Clear();
+                cachedTrackedObjectsByIndex.Clear();
             }
 
-            var sdkManager = VRTK_SDKManager.instance;
+            VRTK_SDKManager sdkManager = VRTK_SDKManager.instance;
             if (sdkManager != null)
             {
-                if (cachedLeftTrackedObject == null && sdkManager.actualLeftController)
+                if (cachedLeftTrackedObject == null && sdkManager.loadedSetup.actualLeftController)
                 {
-                    cachedLeftTrackedObject = sdkManager.actualLeftController.GetComponent<SteamVR_TrackedObject>();
+                    cachedLeftTrackedObject = sdkManager.loadedSetup.actualLeftController.GetComponent<SteamVR_TrackedObject>();
                 }
-                if (cachedRightTrackedObject == null && sdkManager.actualRightController)
+                if (cachedRightTrackedObject == null && sdkManager.loadedSetup.actualRightController)
                 {
-                    cachedRightTrackedObject = sdkManager.actualRightController.GetComponent<SteamVR_TrackedObject>();
+                    cachedRightTrackedObject = sdkManager.loadedSetup.actualRightController.GetComponent<SteamVR_TrackedObject>();
                 }
             }
         }
 
-        private SteamVR_TrackedObject GetTrackedObject(GameObject controller)
+        protected virtual SteamVR_TrackedObject GetTrackedObject(GameObject controller)
         {
             SetTrackedControllerCaches();
-            SteamVR_TrackedObject trackedObject = null;
 
             if (IsControllerLeftHand(controller))
             {
-                trackedObject = cachedLeftTrackedObject;
+                return cachedLeftTrackedObject;
             }
             else if (IsControllerRightHand(controller))
             {
-                trackedObject = cachedRightTrackedObject;
+                return cachedRightTrackedObject;
             }
-            return trackedObject;
+
+            if (controller == null)
+            {
+                return null;
+            }
+
+            if (cachedTrackedObjectsByGameObject.ContainsKey(controller) && cachedTrackedObjectsByGameObject[controller] != null)
+            {
+                return cachedTrackedObjectsByGameObject[controller];
+            }
+            else
+            {
+                SteamVR_TrackedObject trackedObject = controller.GetComponent<SteamVR_TrackedObject>();
+                if (trackedObject != null)
+                {
+                    cachedTrackedObjectsByGameObject.Add(controller, trackedObject);
+                    cachedTrackedObjectsByIndex.Add((uint)trackedObject.index, trackedObject);
+                }
+                return trackedObject;
+            }
         }
 
-        private bool IsButtonPressed(uint index, ButtonPressTypes type, ulong button)
+        protected virtual bool IsButtonPressed(uint index, ButtonPressTypes type, ulong button)
         {
-            if (index >= uint.MaxValue)
+            if (index >= OpenVR.k_unTrackedDeviceIndexInvalid)
             {
                 return false;
             }
-            var device = SteamVR_Controller.Input((int)index);
+            SteamVR_Controller.Device device = SteamVR_Controller.Input((int)index);
 
             switch (type)
             {
@@ -802,10 +613,78 @@ namespace VRTK
 
             return false;
         }
-    }
-#else
-    public class SDK_SteamVRController : SDK_FallbackController
-    {
-    }
+
+        protected virtual string GetControllerGripPath(ControllerHand hand, string suffix, ControllerHand forceHand)
+        {
+            switch (VRTK_DeviceFinder.GetHeadsetType(true))
+            {
+                case VRTK_DeviceFinder.Headsets.Vive:
+                    return (forceHand == ControllerHand.Left ? "lgrip" : "rgrip") + suffix;
+                case VRTK_DeviceFinder.Headsets.OculusRift:
+                    return "grip" + suffix;
+            }
+            return null;
+        }
+
+        protected virtual string GetControllerTouchpadPath(ControllerHand hand, string suffix)
+        {
+            switch (VRTK_DeviceFinder.GetHeadsetType(true))
+            {
+                case VRTK_DeviceFinder.Headsets.Vive:
+                    return "trackpad" + suffix;
+                case VRTK_DeviceFinder.Headsets.OculusRift:
+                    return "thumbstick" + suffix;
+            }
+            return null;
+        }
+
+        protected virtual string GetControllerButtonOnePath(ControllerHand hand, string suffix)
+        {
+            switch (VRTK_DeviceFinder.GetHeadsetType(true))
+            {
+                case VRTK_DeviceFinder.Headsets.Vive:
+                    return null;
+                case VRTK_DeviceFinder.Headsets.OculusRift:
+                    return (hand == ControllerHand.Left ? "x_button" : "a_button") + suffix;
+            }
+            return null;
+        }
+
+        protected virtual string GetControllerButtonTwoPath(ControllerHand hand, string suffix)
+        {
+            switch (VRTK_DeviceFinder.GetHeadsetType(true))
+            {
+                case VRTK_DeviceFinder.Headsets.Vive:
+                    return "button" + suffix;
+                case VRTK_DeviceFinder.Headsets.OculusRift:
+                    return (hand == ControllerHand.Left ? "y_button" : "b_button") + suffix;
+            }
+            return null;
+        }
+
+        protected virtual string GetControllerSystemMenuPath(ControllerHand hand, string suffix)
+        {
+            switch (VRTK_DeviceFinder.GetHeadsetType(true))
+            {
+                case VRTK_DeviceFinder.Headsets.Vive:
+                    return "sys_button" + suffix;
+                case VRTK_DeviceFinder.Headsets.OculusRift:
+                    return (hand == ControllerHand.Left ? "enter_button" : "home_button") + suffix;
+            }
+            return null;
+        }
+
+        protected virtual string GetControllerStartMenuPath(ControllerHand hand, string suffix)
+        {
+            switch (VRTK_DeviceFinder.GetHeadsetType(true))
+            {
+                case VRTK_DeviceFinder.Headsets.Vive:
+                    return null;
+                case VRTK_DeviceFinder.Headsets.OculusRift:
+                    return (hand == ControllerHand.Left ? "enter_button" : "home_button") + suffix;
+            }
+            return null;
+        }
 #endif
+    }
 }

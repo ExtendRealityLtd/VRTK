@@ -1,15 +1,13 @@
-﻿// Base System|SDK_Base|001
+﻿// Base System|SDK_Base|004
 namespace VRTK
 {
-    using UnityEngine;
-
     /// <summary>
     /// The Base System SDK script provides a bridge to core system SDK methods.
     /// </summary>
     /// <remarks>
     /// This is an abstract class to implement the interface required by all implemented SDKs.
     /// </remarks>
-    public abstract class SDK_BaseSystem : ScriptableObject
+    public abstract class SDK_BaseSystem : SDK_Base
     {
         /// <summary>
         /// The IsDisplayOnDesktop method returns true if the display is extending the desktop.

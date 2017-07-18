@@ -10,6 +10,7 @@ namespace VRTK
     /// The Hip Tracking script is placed on an empty GameObject which will be positioned at the estimated hip position.
     /// </remarks>
 
+    [AddComponentMenu("VRTK/Scripts/Presence/VRTK_HipTracking")]
     public class VRTK_HipTracking : MonoBehaviour
     {
         [Tooltip("Distance underneath Player Head for hips to reside.")]
@@ -21,21 +22,24 @@ namespace VRTK
         [Tooltip("Optional Transform to use for calculating which way is 'Up' relative to the player for hip positioning.")]
         public Transform ReferenceUp;
 
-        private Transform playerHead;
+        protected Transform playerHead;
 
-        private void Awake()
+        protected virtual void Awake()
         {
-            if (headOverride != null)
-            {
-                playerHead = headOverride;
-            }
-            else
-            {
-                playerHead = VRTK_DeviceFinder.HeadsetTransform();
-            }
+            VRTK_SDKManager.instance.AddBehaviourToToggleOnLoadedSetupChange(this);
         }
 
-        private void Update()
+        protected virtual void OnEnable()
+        {
+            playerHead = (headOverride != null ? headOverride : VRTK_DeviceFinder.HeadsetTransform());
+        }
+
+        protected virtual void OnDestroy()
+        {
+            VRTK_SDKManager.instance.RemoveBehaviourToToggleOnLoadedSetupChange(this);
+        }
+
+        protected virtual void LateUpdate()
         {
             if (playerHead == null)
             {

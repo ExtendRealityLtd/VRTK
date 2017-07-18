@@ -17,12 +17,15 @@ namespace VRTK
     /// </remarks>
     public class VRTK_ControllerRigidbodyActivator : MonoBehaviour
     {
-        private void OnTriggerEnter(Collider collider)
+        [Tooltip("If this is checked then the collider will have it's rigidbody toggled on and off during a collision.")]
+        public bool isEnabled = true;
+
+        protected virtual void OnTriggerEnter(Collider collider)
         {
             ToggleRigidbody(collider, true);
         }
 
-        private void OnTriggerExit(Collider collider)
+        protected virtual void OnTriggerExit(Collider collider)
         {
             ToggleRigidbody(collider, false);
         }
@@ -30,7 +33,7 @@ namespace VRTK
         private void ToggleRigidbody(Collider collider, bool state)
         {
             var touch = collider.GetComponentInParent<VRTK_InteractTouch>();
-            if (touch)
+            if (touch && (isEnabled || !state))
             {
                 touch.ToggleControllerRigidBody(state, state);
             }

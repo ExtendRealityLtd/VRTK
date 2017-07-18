@@ -1,7 +1,6 @@
 ﻿namespace VRTK
 {
     using UnityEngine;
-    using System.Collections;
 
     public struct VRTKTrackedControllerEventArgs
     {
@@ -13,19 +12,17 @@
 
     public class VRTK_TrackedController : MonoBehaviour
     {
-        public uint index;
+        public uint index = uint.MaxValue;
 
         public event VRTKTrackedControllerEventHandler ControllerEnabled;
         public event VRTKTrackedControllerEventHandler ControllerDisabled;
         public event VRTKTrackedControllerEventHandler ControllerIndexChanged;
 
-        private uint currentIndex = uint.MaxValue;
-        private Coroutine enableControllerCoroutine = null;
-        private GameObject aliasController;
+        protected GameObject aliasController;
 
         public virtual void OnControllerEnabled(VRTKTrackedControllerEventArgs e)
         {
-            if (currentIndex < uint.MaxValue && ControllerEnabled != null)
+            if (index < uint.MaxValue && ControllerEnabled != null)
             {
                 ControllerEnabled(this, e);
             }
@@ -33,7 +30,7 @@
 
         public virtual void OnControllerDisabled(VRTKTrackedControllerEventArgs e)
         {
-            if (currentIndex < uint.MaxValue && ControllerDisabled != null)
+            if (index < uint.MaxValue && ControllerDisabled != null)
             {
                 ControllerDisabled(this, e);
             }
@@ -41,70 +38,64 @@
 
         public virtual void OnControllerIndexChanged(VRTKTrackedControllerEventArgs e)
         {
-            if (currentIndex < uint.MaxValue && ControllerIndexChanged != null)
+            if (index < uint.MaxValue && ControllerIndexChanged != null)
             {
                 ControllerIndexChanged(this, e);
             }
         }
 
-        private VRTKTrackedControllerEventArgs SetEventPayload(uint previousIndex = uint.MaxValue)
+        protected virtual VRTKTrackedControllerEventArgs SetEventPayload(uint previousIndex = uint.MaxValue)
         {
             VRTKTrackedControllerEventArgs e;
-            e.currentIndex = currentIndex;
+            e.currentIndex = index;
             e.previousIndex = previousIndex;
             return e;
         }
 
-        private void OnEnable()
+        protected virtual void Awake()
+        {
+            VRTK_SDKManager.instance.AddBehaviourToToggleOnLoadedSetupChange(this);
+        }
+
+        protected virtual void OnEnable()
         {
             aliasController = VRTK_DeviceFinder.GetScriptAliasController(gameObject);
-
-            if (enableControllerCoroutine != null)
+            if (aliasController == null)
             {
-                StopCoroutine(enableControllerCoroutine);
-            }
-            enableControllerCoroutine = StartCoroutine(Enable());
-        }
-
-        private void OnDisable()
-        {
-            Invoke("Disable", 0f);
-        }
-
-        private IEnumerator Enable()
-        {
-            yield return new WaitForEndOfFrame();
-
-            while (!gameObject.activeInHierarchy)
-            {
-                yield return null;
+                aliasController = gameObject;
             }
 
-            currentIndex = VRTK_DeviceFinder.GetControllerIndex(gameObject);
+            index = VRTK_DeviceFinder.GetControllerIndex(gameObject);
             OnControllerEnabled(SetEventPayload());
         }
 
-        private void Disable()
+        protected virtual void OnDisable()
         {
-            if (enableControllerCoroutine != null)
-            {
-                StopCoroutine(enableControllerCoroutine);
-            }
-
             OnControllerDisabled(SetEventPayload());
         }
 
-        private void Update()
+        protected virtual void OnDestroy()
         {
-            var checkIndex = VRTK_DeviceFinder.GetControllerIndex(gameObject);
-            if (currentIndex < uint.MaxValue && checkIndex != currentIndex)
+            VRTK_SDKManager.instance.RemoveBehaviourToToggleOnLoadedSetupChange(this);
+        }
+
+        protected virtual void FixedUpdate()
+        {
+            VRTK_SDK_Bridge.ControllerProcessFixedUpdate(VRTK_ControllerReference.GetControllerReference(index));
+        }
+
+        protected virtual void Update()
+        {
+            uint checkIndex = VRTK_DeviceFinder.GetControllerIndex(gameObject);
+            if (index < uint.MaxValue && checkIndex != index)
             {
-                var previousIndex = currentIndex;
-                currentIndex = checkIndex;
+                uint previousIndex = index;
                 OnControllerIndexChanged(SetEventPayload(previousIndex));
             }
 
-            if (aliasController && gameObject.activeInHierarchy && !aliasController.activeSelf)
+            VRTK_SDK_Bridge.ControllerProcessUpdate(VRTK_ControllerReference.GetControllerReference(index));
+
+            if (aliasController != null && gameObject.activeInHierarchy && !aliasController.activeSelf)
             {
                 aliasController.SetActive(true);
             }

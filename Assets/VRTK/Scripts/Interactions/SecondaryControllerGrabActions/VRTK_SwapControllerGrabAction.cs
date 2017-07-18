@@ -9,9 +9,10 @@ namespace VRTK.SecondaryControllerGrabActions
     /// <example>
     /// `VRTK/Examples/005_Controller_BasicObjectGrabbing` demonstrates the ability to swap objects between controllers on grab.
     /// </example>
+    [AddComponentMenu("VRTK/Scripts/Interactions/Secondary Controller Grab Actions/VRTK_SwapControllerGrabAction")]
     public class VRTK_SwapControllerGrabAction : VRTK_BaseGrabAction
     {
-        private void Awake()
+        protected virtual void Awake()
         {
             isActionable = false;
             isSwappable = true;

@@ -1,7 +1,8 @@
-﻿// Touchpad Walking|Locomotion|20060
+﻿// Touchpad Walking|Locomotion|20090
 namespace VRTK
 {
     using UnityEngine;
+    using System;
 
     /// <summary>
     /// The ability to move the play area around the game world by sliding a finger over the touchpad is achieved using this script.
@@ -12,34 +13,13 @@ namespace VRTK
     /// <example>
     /// `VRTK/Examples/017_CameraRig_TouchpadWalking` has a collection of walls and slopes that can be traversed by the user with the touchpad. There is also an area that can only be traversed if the user is crouching.
     /// </example>
+    [Obsolete("`VRTK_TouchpadWalking` has been replaced with `VRTK_TouchpadControl`. This script will be removed in a future version of VRTK.")]
     public class VRTK_TouchpadWalking : MonoBehaviour
     {
-        public bool LeftController
-        {
-            get { return leftController; }
-            set
-            {
-                leftController = value;
-                SetControllerListeners(controllerLeftHand);
-            }
-        }
-
-        public bool RightController
-        {
-            get { return rightController; }
-            set
-            {
-                rightController = value;
-                SetControllerListeners(controllerRightHand);
-            }
-        }
-
-        [Tooltip("If this is checked then the left controller touchpad will be enabled to move the play area. It can also be toggled at runtime.")]
-        [SerializeField]
-        private bool leftController = true;
-        [Tooltip("If this is checked then the right controller touchpad will be enabled to move the play area. It can also be toggled at runtime.")]
-        [SerializeField]
-        private bool rightController = true;
+        [Tooltip("If this is checked then the left controller touchpad will be enabled to move the play area.")]
+        public bool leftController = true;
+        [Tooltip("If this is checked then the right controller touchpad will be enabled to move the play area.")]
+        public bool rightController = true;
 
         [Tooltip("The maximum speed the play area will be moved when the touchpad is being touched at the extremes of the axis. If a lower part of the touchpad axis is touched (nearer the centre) then the walk speed is slower.")]
         public float maxWalkSpeed = 3f;
@@ -49,48 +29,125 @@ namespace VRTK
         public VRTK_ControllerEvents.ButtonAlias moveOnButtonPress = VRTK_ControllerEvents.ButtonAlias.Undefined;
         [Tooltip("The direction that will be moved in is the direction of this device.")]
         public VRTK_DeviceFinder.Devices deviceForDirection = VRTK_DeviceFinder.Devices.Headset;
+        [Tooltip("If the defined speed multiplier button is pressed then the current movement speed will be multiplied by the `Speed Multiplier` value.")]
+        public VRTK_ControllerEvents.ButtonAlias speedMultiplierButton = VRTK_ControllerEvents.ButtonAlias.Undefined;
+        [Tooltip("The amount to mmultiply the movement speed by if the `Speed Multiplier Button` is pressed.")]
+        public float speedMultiplier = 1f;
 
         private GameObject controllerLeftHand;
         private GameObject controllerRightHand;
         private Transform playArea;
         private Vector2 touchAxis;
-        private float movementSpeed = 0f;
-        private float strafeSpeed = 0f;
+        private float movementSpeed;
+        private float strafeSpeed;
         private bool leftSubscribed;
         private bool rightSubscribed;
         private ControllerInteractionEventHandler touchpadAxisChanged;
         private ControllerInteractionEventHandler touchpadUntouched;
+        private bool multiplySpeed;
+        private VRTK_ControllerEvents controllerEvents;
+        private VRTK_BodyPhysics bodyPhysics;
+        private bool wasFalling;
+        private bool previousLeftControllerState;
+        private bool previousRightControllerState;
 
-        private void Awake()
+        protected virtual void Awake()
+        {
+            VRTK_SDKManager.instance.AddBehaviourToToggleOnLoadedSetupChange(this);
+        }
+
+        protected virtual void OnEnable()
         {
             touchpadAxisChanged = new ControllerInteractionEventHandler(DoTouchpadAxisChanged);
             touchpadUntouched = new ControllerInteractionEventHandler(DoTouchpadTouchEnd);
             playArea = VRTK_DeviceFinder.PlayAreaTransform();
             controllerLeftHand = VRTK_DeviceFinder.GetControllerLeftHand();
             controllerRightHand = VRTK_DeviceFinder.GetControllerRightHand();
+            if (!playArea)
+            {
+                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.SDK_OBJECT_NOT_FOUND, "PlayArea", "Boundaries SDK"));
+            }
+
+            VRTK_PlayerObject.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.CameraRig);
+
+            SetControllerListeners(controllerLeftHand, leftController, ref leftSubscribed);
+            SetControllerListeners(controllerRightHand, rightController, ref rightSubscribed);
+            bodyPhysics = GetComponent<VRTK_BodyPhysics>();
+            movementSpeed = 0f;
+            strafeSpeed = 0f;
+            multiplySpeed = false;
         }
 
-        private void Start()
+        protected virtual void OnDisable()
         {
-            VRTK_PlayerObject.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.CameraRig);
-            SetControllerListeners(controllerLeftHand);
-            SetControllerListeners(controllerRightHand);
+            SetControllerListeners(controllerLeftHand, leftController, ref leftSubscribed, true);
+            SetControllerListeners(controllerRightHand, rightController, ref rightSubscribed, true);
+            bodyPhysics = null;
+        }
+
+        protected virtual void OnDestroy()
+        {
+            VRTK_SDKManager.instance.RemoveBehaviourToToggleOnLoadedSetupChange(this);
+        }
+
+        protected virtual void Update()
+        {
+            multiplySpeed = (controllerEvents && speedMultiplierButton != VRTK_ControllerEvents.ButtonAlias.Undefined && controllerEvents.IsButtonPressed(speedMultiplierButton));
+            CheckControllerState(controllerLeftHand, leftController, ref leftSubscribed, ref previousLeftControllerState);
+            CheckControllerState(controllerRightHand, rightController, ref rightSubscribed, ref previousRightControllerState);
+        }
+
+        protected virtual void FixedUpdate()
+        {
+            HandleFalling();
+            CalculateSpeed(ref movementSpeed, touchAxis.y);
+            CalculateSpeed(ref strafeSpeed, touchAxis.x);
+            Move();
+        }
+
+        protected virtual void HandleFalling()
+        {
+            if (bodyPhysics && bodyPhysics.IsFalling())
+            {
+                touchAxis = Vector2.zero;
+                wasFalling = true;
+            }
+
+            if (bodyPhysics && !bodyPhysics.IsFalling() && wasFalling)
+            {
+                touchAxis = Vector2.zero;
+                wasFalling = false;
+                strafeSpeed = 0f;
+                movementSpeed = 0f;
+            }
+        }
+
+        protected virtual void CheckControllerState(GameObject controller, bool controllerState, ref bool subscribedState, ref bool previousState)
+        {
+            if (controllerState != previousState)
+            {
+                SetControllerListeners(controller, controllerState, ref subscribedState);
+            }
+            previousState = controllerState;
         }
 
         private void DoTouchpadAxisChanged(object sender, ControllerInteractionEventArgs e)
         {
-            var controllerEvents = (VRTK_ControllerEvents)sender;
+            controllerEvents = (VRTK_ControllerEvents)sender;
             if (moveOnButtonPress != VRTK_ControllerEvents.ButtonAlias.Undefined && !controllerEvents.IsButtonPressed(moveOnButtonPress))
             {
                 touchAxis = Vector2.zero;
+                controllerEvents = null;
                 return;
             }
+
             touchAxis = e.touchpadAxis;
         }
 
         private void DoTouchpadTouchEnd(object sender, ControllerInteractionEventArgs e)
         {
             touchAxis = Vector2.zero;
+            controllerEvents = null;
         }
 
         private void CalculateSpeed(ref float speed, float inputValue)
@@ -98,6 +155,7 @@ namespace VRTK
             if (inputValue != 0f)
             {
                 speed = (maxWalkSpeed * inputValue);
+                speed = (multiplySpeed ? speed * speedMultiplier : speed);
             }
             else
             {
@@ -130,29 +188,22 @@ namespace VRTK
         private void Move()
         {
             var deviceDirector = VRTK_DeviceFinder.DeviceTransform(deviceForDirection);
-            var movement = deviceDirector.forward * movementSpeed * Time.deltaTime;
-            var strafe = deviceDirector.right * strafeSpeed * Time.deltaTime;
-            float fixY = playArea.position.y;
-            playArea.position += (movement + strafe);
-            playArea.position = new Vector3(playArea.position.x, fixY, playArea.position.z);
-        }
-
-        private void FixedUpdate()
-        {
-            CalculateSpeed(ref movementSpeed, touchAxis.y);
-            CalculateSpeed(ref strafeSpeed, touchAxis.x);
-            Move();
-        }
-
-        private void SetControllerListeners(GameObject controller)
-        {
-            if (controller && VRTK_DeviceFinder.IsControllerLeftHand(controller))
+            if (deviceDirector)
             {
-                ToggleControllerListeners(controller, leftController, ref leftSubscribed);
+                var movement = deviceDirector.forward * movementSpeed * Time.deltaTime;
+                var strafe = deviceDirector.right * strafeSpeed * Time.deltaTime;
+                float fixY = playArea.position.y;
+                playArea.position += (movement + strafe);
+                playArea.position = new Vector3(playArea.position.x, fixY, playArea.position.z);
             }
-            else if (controller && VRTK_DeviceFinder.IsControllerRightHand(controller))
+        }
+
+        private void SetControllerListeners(GameObject controller, bool controllerState, ref bool subscribedState, bool forceDisabled = false)
+        {
+            if (controller)
             {
-                ToggleControllerListeners(controller, rightController, ref rightSubscribed);
+                bool toggleState = (forceDisabled ? false : controllerState);
+                ToggleControllerListeners(controller, toggleState, ref subscribedState);
             }
         }
 

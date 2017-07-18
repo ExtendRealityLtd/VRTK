@@ -9,6 +9,7 @@ namespace VRTK.GrabAttachMechanics
     /// <example>
     /// `VRTK/Examples/021_Controller_GrabbingObjectsWithJoints` demonstrates this grab attach mechanic on the Drawer object in the scene.
     /// </example>
+    [AddComponentMenu("VRTK/Scripts/Interactions/Grab Attach Mechanics/VRTK_SpringJointGrabAttach")]
     public class VRTK_SpringJointGrabAttach : VRTK_BaseJointGrabAttach
     {
         [Tooltip("Maximum force the joint can withstand before breaking. Infinity means unbreakable.")]

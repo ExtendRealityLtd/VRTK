@@ -12,12 +12,19 @@ namespace VRTK.GrabAttachMechanics
     /// <example>
     /// `VRTK/Examples/021_Controller_GrabbingObjectsWithJoints` demonstrates this grab attach mechanic on the Chest handle and Fire Extinguisher body.
     /// </example>
+    [AddComponentMenu("VRTK/Scripts/Interactions/Grab Attach Mechanics/VRTK_TrackObjectGrabAttach")]
     public class VRTK_TrackObjectGrabAttach : VRTK_BaseGrabAttach
     {
         [Header("Track Options", order = 2)]
 
         [Tooltip("The maximum distance the grabbing controller is away from the object before it is automatically dropped.")]
         public float detachDistance = 1f;
+        [Tooltip("The maximum amount of velocity magnitude that can be applied to the object. Lowering this can prevent physics glitches if objects are moving too fast.")]
+        public float velocityLimit = float.PositiveInfinity;
+        [Tooltip("The maximum amount of angular velocity magnitude that can be applied to the object. Lowering this can prevent physics glitches if objects are moving too fast.")]
+        public float angularVelocityLimit = float.PositiveInfinity;
+
+        protected bool isReleasable = true;
 
         /// <summary>
         /// The StopGrab method ends the grab of the current object and cleans up the state.
@@ -25,7 +32,10 @@ namespace VRTK.GrabAttachMechanics
         /// <param name="applyGrabbingObjectVelocity">If true will apply the current velocity of the grabbing object to the grabbed object on release.</param>
         public override void StopGrab(bool applyGrabbingObjectVelocity)
         {
-            ReleaseObject(applyGrabbingObjectVelocity);
+            if (isReleasable)
+            {
+                ReleaseObject(applyGrabbingObjectVelocity);
+            }
             base.StopGrab(applyGrabbingObjectVelocity);
         }
 
@@ -42,7 +52,7 @@ namespace VRTK.GrabAttachMechanics
             Transform trackPoint = null;
             if (precisionGrab)
             {
-                trackPoint = new GameObject(string.Format("[{0}]TrackObject_PrecisionSnap_AttachPoint", currentGrabbedObject.name)).transform;
+                trackPoint = new GameObject(VRTK_SharedMethods.GenerateVRTKObjectName(true, currentGrabbedObject.name, "TrackObject", "PrecisionSnap", "AttachPoint")).transform;
                 trackPoint.parent = currentGrabbingObject.transform;
                 SetTrackPointOrientation(ref trackPoint, currentGrabbedObject.transform, controllerPoint);
                 customTrackPoint = true;
@@ -74,23 +84,17 @@ namespace VRTK.GrabAttachMechanics
         /// </summary>
         public override void ProcessFixedUpdate()
         {
+            if (!grabbedObject)
+            {
+                return;
+            }
+
             float maxDistanceDelta = 10f;
+            Vector3 positionDelta = trackPoint.position - (grabbedSnapHandle != null ? grabbedSnapHandle.position : grabbedObject.transform.position);
+            Quaternion rotationDelta = trackPoint.rotation * Quaternion.Inverse((grabbedSnapHandle != null ? grabbedSnapHandle.rotation : grabbedObject.transform.rotation));
+
             float angle;
             Vector3 axis;
-            Vector3 positionDelta;
-            Quaternion rotationDelta;
-
-            if (grabbedSnapHandle != null)
-            {
-                rotationDelta = trackPoint.rotation * Quaternion.Inverse(grabbedSnapHandle.rotation);
-                positionDelta = trackPoint.position - grabbedSnapHandle.position;
-            }
-            else
-            {
-                rotationDelta = trackPoint.rotation * Quaternion.Inverse(grabbedObject.transform.rotation);
-                positionDelta = trackPoint.position - grabbedObject.transform.position;
-            }
-
             rotationDelta.ToAngleAxis(out angle, out axis);
 
             angle = ((angle > 180) ? angle -= 360 : angle);
@@ -98,11 +102,20 @@ namespace VRTK.GrabAttachMechanics
             if (angle != 0)
             {
                 Vector3 angularTarget = angle * axis;
-                grabbedObjectRigidBody.angularVelocity = Vector3.MoveTowards(grabbedObjectRigidBody.angularVelocity, angularTarget, maxDistanceDelta);
+                Vector3 calculatedAngularVelocity = Vector3.MoveTowards(grabbedObjectRigidBody.angularVelocity, angularTarget, maxDistanceDelta);
+                if (angularVelocityLimit == float.PositiveInfinity || calculatedAngularVelocity.sqrMagnitude < angularVelocityLimit)
+                {
+                    grabbedObjectRigidBody.angularVelocity = calculatedAngularVelocity;
+                }
             }
 
             Vector3 velocityTarget = positionDelta / Time.fixedDeltaTime;
-            grabbedObjectRigidBody.velocity = Vector3.MoveTowards(grabbedObjectRigidBody.velocity, velocityTarget, maxDistanceDelta);
+            Vector3 calculatedVelocity = Vector3.MoveTowards(grabbedObjectRigidBody.velocity, velocityTarget, maxDistanceDelta);
+
+            if (velocityLimit == float.PositiveInfinity || calculatedVelocity.sqrMagnitude < velocityLimit)
+            {
+                grabbedObjectRigidBody.velocity = calculatedVelocity;
+            }
         }
 
         protected override void Initialise()

@@ -4,6 +4,7 @@ namespace VRTK
     using UnityEngine;
     using UnityEngine.UI;
     using UnityEngine.EventSystems;
+    using System.Collections;
 
     /// <summary>
     /// The UI Canvas is used to denote which World Canvases are interactable by a UI Pointer.
@@ -14,6 +15,7 @@ namespace VRTK
     /// <example>
     /// `VRTK/Examples/034_Controls_InteractingWithUnityUI` uses the `VRTK_UICanvas` script on two of the canvases to show how the UI Pointer can interact with them.
     /// </example>
+    [AddComponentMenu("VRTK/Scripts/UI/VRTK_UICanvas")]
     public class VRTK_UICanvas : MonoBehaviour
     {
         [Tooltip("Determines if a UI Click action should happen when a UI Pointer game object collides with this canvas.")]
@@ -21,37 +23,58 @@ namespace VRTK
         [Tooltip("Determines if a UI Pointer will be auto activated if a UI Pointer game object comes within the given distance of this canvas. If a value of `0` is given then no auto activation will occur.")]
         public float autoActivateWithinDistance = 0f;
 
-        private BoxCollider canvasBoxCollider;
-        private Rigidbody canvasRigidBody;
-        private const string CANVAS_DRAGGABLE_PANEL = "VRTK_UICANVAS_DRAGGABLE_PANEL";
-        private const string ACTIVATOR_FRONT_TRIGGER_GAMEOBJECT = "VRTK_UICANVAS_ACTIVATOR_FRONT_TRIGGER";
+        protected BoxCollider canvasBoxCollider;
+        protected Rigidbody canvasRigidBody;
+        protected Coroutine draggablePanelCreation;
+        protected const string CANVAS_DRAGGABLE_PANEL = "VRTK_UICANVAS_DRAGGABLE_PANEL";
+        protected const string ACTIVATOR_FRONT_TRIGGER_GAMEOBJECT = "VRTK_UICANVAS_ACTIVATOR_FRONT_TRIGGER";
 
-        private void OnEnable()
+        protected virtual void OnEnable()
         {
             SetupCanvas();
         }
 
-        private void OnDisable()
+        protected virtual void OnDisable()
         {
             RemoveCanvas();
         }
 
-        private void OnDestroy()
+        protected virtual void OnDestroy()
         {
             RemoveCanvas();
         }
 
-        private void SetupCanvas()
+        protected virtual void OnTriggerEnter(Collider collider)
+        {
+            var colliderCheck = collider.GetComponentInParent<VRTK_PlayerObject>();
+            var pointerCheck = collider.GetComponentInParent<VRTK_UIPointer>();
+            if (pointerCheck && colliderCheck && colliderCheck.objectType == VRTK_PlayerObject.ObjectTypes.Collider)
+            {
+                pointerCheck.collisionClick = (clickOnPointerCollision ? true : false);
+            }
+        }
+
+        protected virtual void OnTriggerExit(Collider collider)
+        {
+            var pointerCheck = collider.GetComponentInParent<VRTK_UIPointer>();
+            if (pointerCheck)
+            {
+                pointerCheck.collisionClick = false;
+            }
+        }
+
+        protected virtual void SetupCanvas()
         {
             var canvas = GetComponent<Canvas>();
 
             if (!canvas || canvas.renderMode != RenderMode.WorldSpace)
             {
-                Debug.LogError("A VRTK_UICanvas requires to be placed on a Canvas that is set to `Render Mode = World Space`.");
+                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, "VRTK_UICanvas", "Canvas", "the same", " that is set to `Render Mode = World Space`"));
                 return;
             }
 
-            var canvasSize = canvas.GetComponent<RectTransform>().sizeDelta;
+            var canvasRectTransform = canvas.GetComponent<RectTransform>();
+            var canvasSize = canvasRectTransform.sizeDelta;
             //copy public params then disable existing graphic raycaster
             var defaultRaycaster = canvas.gameObject.GetComponent<GraphicRaycaster>();
             var customRaycaster = canvas.gameObject.GetComponent<VRTK_UIGraphicRaycaster>();
@@ -72,9 +95,13 @@ namespace VRTK
             //add a box collider and background image to ensure the rays always hit
             if (!canvas.gameObject.GetComponent<BoxCollider>())
             {
+                Vector2 pivot = canvasRectTransform.pivot;
+                float zSize = 0.1f;
+                float zScale = zSize / canvasRectTransform.localScale.z;
+
                 canvasBoxCollider = canvas.gameObject.AddComponent<BoxCollider>();
-                canvasBoxCollider.size = new Vector3(canvasSize.x, canvasSize.y, 10f);
-                canvasBoxCollider.center = new Vector3(0f, 0f, 5f);
+                canvasBoxCollider.size = new Vector3(canvasSize.x, canvasSize.y, zScale);
+                canvasBoxCollider.center = new Vector3(canvasSize.x / 2 - canvasSize.x * pivot.x, canvasSize.y / 2 - canvasSize.y * pivot.y, zScale / 2f);
                 canvasBoxCollider.isTrigger = true;
             }
 
@@ -84,41 +111,46 @@ namespace VRTK
                 canvasRigidBody.isKinematic = true;
             }
 
-            CreateDraggablePanel(canvas, canvasSize);
+            draggablePanelCreation = StartCoroutine(CreateDraggablePanel(canvas, canvasSize));
             CreateActivator(canvas, canvasSize);
         }
 
-        private void CreateDraggablePanel(Canvas canvas, Vector2 canvasSize)
+        protected virtual IEnumerator CreateDraggablePanel(Canvas canvas, Vector2 canvasSize)
         {
-            if (canvas && !canvas.transform.FindChild(CANVAS_DRAGGABLE_PANEL))
+            if (canvas && !canvas.transform.Find(CANVAS_DRAGGABLE_PANEL))
             {
-                var draggablePanel = new GameObject(CANVAS_DRAGGABLE_PANEL);
+                yield return null;
+
+                var draggablePanel = new GameObject(CANVAS_DRAGGABLE_PANEL, typeof(RectTransform));
+                draggablePanel.AddComponent<LayoutElement>().ignoreLayout = true;
+                draggablePanel.AddComponent<Image>().color = Color.clear;
+                draggablePanel.AddComponent<EventTrigger>();
                 draggablePanel.transform.SetParent(canvas.transform);
                 draggablePanel.transform.localPosition = Vector3.zero;
                 draggablePanel.transform.localRotation = Quaternion.identity;
                 draggablePanel.transform.localScale = Vector3.one;
                 draggablePanel.transform.SetAsFirstSibling();
-                draggablePanel.AddComponent<RectTransform>();
-                draggablePanel.AddComponent<Image>().color = Color.clear;
-                draggablePanel.AddComponent<EventTrigger>();
 
                 draggablePanel.GetComponent<RectTransform>().sizeDelta = canvasSize;
             }
         }
 
-        private void CreateActivator(Canvas canvas, Vector2 canvasSize)
+        protected virtual void CreateActivator(Canvas canvas, Vector2 canvasSize)
         {
             //if autoActivateWithinDistance is greater than 0 then create the front collider sub object
-            if (autoActivateWithinDistance > 0f && canvas && !canvas.transform.FindChild(ACTIVATOR_FRONT_TRIGGER_GAMEOBJECT))
+            if (autoActivateWithinDistance > 0f && canvas && !canvas.transform.Find(ACTIVATOR_FRONT_TRIGGER_GAMEOBJECT))
             {
+                var canvasRectTransform = canvas.GetComponent<RectTransform>();
+                Vector2 pivot = canvasRectTransform.pivot;
+
                 var frontTrigger = new GameObject(ACTIVATOR_FRONT_TRIGGER_GAMEOBJECT);
                 frontTrigger.transform.SetParent(canvas.transform);
                 frontTrigger.transform.SetAsFirstSibling();
-                frontTrigger.transform.localPosition = Vector3.zero;
+                frontTrigger.transform.localPosition = new Vector3(canvasSize.x / 2 - canvasSize.x * pivot.x, canvasSize.y / 2 - canvasSize.y * pivot.y);
                 frontTrigger.transform.localRotation = Quaternion.identity;
                 frontTrigger.transform.localScale = Vector3.one;
 
-                var actualActivationDistance = autoActivateWithinDistance * 10f;
+                var actualActivationDistance = autoActivateWithinDistance / canvasRectTransform.localScale.z;
                 var frontTriggerBoxCollider = frontTrigger.AddComponent<BoxCollider>();
                 frontTriggerBoxCollider.isTrigger = true;
                 frontTriggerBoxCollider.size = new Vector3(canvasSize.x, canvasSize.y, actualActivationDistance);
@@ -130,7 +162,7 @@ namespace VRTK
             }
         }
 
-        private void RemoveCanvas()
+        protected virtual void RemoveCanvas()
         {
             var canvas = GetComponent<Canvas>();
 
@@ -164,42 +196,24 @@ namespace VRTK
                 Destroy(canvasRigidBody);
             }
 
-            var draggablePanel = canvas.transform.FindChild(CANVAS_DRAGGABLE_PANEL);
+            StopCoroutine(draggablePanelCreation);
+            var draggablePanel = canvas.transform.Find(CANVAS_DRAGGABLE_PANEL);
             if (draggablePanel)
             {
                 Destroy(draggablePanel.gameObject);
             }
 
-            var frontTrigger = canvas.transform.FindChild(ACTIVATOR_FRONT_TRIGGER_GAMEOBJECT);
+            var frontTrigger = canvas.transform.Find(ACTIVATOR_FRONT_TRIGGER_GAMEOBJECT);
             if (frontTrigger)
             {
                 Destroy(frontTrigger.gameObject);
-            }
-        }
-
-        private void OnTriggerEnter(Collider collider)
-        {
-            var colliderCheck = collider.GetComponentInParent<VRTK_PlayerObject>();
-            var pointerCheck = collider.GetComponentInParent<VRTK_UIPointer>();
-            if (pointerCheck && colliderCheck && colliderCheck.objectType == VRTK_PlayerObject.ObjectTypes.Collider)
-            {
-                pointerCheck.collisionClick = (clickOnPointerCollision ? true : false);
-            }
-        }
-
-        private void OnTriggerExit(Collider collider)
-        {
-            var pointerCheck = collider.GetComponentInParent<VRTK_UIPointer>();
-            if (pointerCheck)
-            {
-                pointerCheck.collisionClick = false;
             }
         }
     }
 
     public class VRTK_UIPointerAutoActivator : MonoBehaviour
     {
-        private void OnTriggerEnter(Collider collider)
+        protected virtual void OnTriggerEnter(Collider collider)
         {
             var colliderCheck = collider.GetComponentInParent<VRTK_PlayerObject>();
             var pointerCheck = collider.GetComponentInParent<VRTK_UIPointer>();
@@ -209,7 +223,7 @@ namespace VRTK
             }
         }
 
-        private void OnTriggerExit(Collider collider)
+        protected virtual void OnTriggerExit(Collider collider)
         {
             var pointerCheck = collider.GetComponentInParent<VRTK_UIPointer>();
             if (pointerCheck && pointerCheck.autoActivatingCanvas == gameObject)

@@ -59,6 +59,7 @@ namespace VRTK
     /// Pressing the trigger generates a new sphere and pressing the touchpad generates ten new spheres.
     /// Eventually when lots of spheres are present the FPS will drop and demonstrate the script.
     /// </example>
+    [AddComponentMenu("VRTK/Scripts/Utilities/VRTK_AdaptiveQuality")]
     public sealed class VRTK_AdaptiveQuality : MonoBehaviour
     {
         #region Public fields
@@ -123,7 +124,6 @@ namespace VRTK
         [Tooltip("The render viewport scale level to override the current one with.")]
         [NonSerialized]
         public int overrideRenderViewportScaleLevel;
-
         #endregion
 
         #region Public readonly fields & properties
@@ -290,6 +290,11 @@ namespace VRTK
 
         #region MonoBehaviour methods
 
+        private void Awake()
+        {
+            VRTK_SDKManager.instance.AddBehaviourToToggleOnLoadedSetupChange(this);
+        }
+
         private void OnEnable()
         {
             Camera.onPreCull += OnCameraPreCull;
@@ -305,16 +310,17 @@ namespace VRTK
             {
                 OnValidate();
             }
-
-            CreateOrDestroyDebugVisualization();
         }
 
         private void OnDisable()
         {
             Camera.onPreCull -= OnCameraPreCull;
-
-            CreateOrDestroyDebugVisualization();
             SetRenderScale(1.0f, 1.0f);
+        }
+
+        private void OnDestroy()
+        {
+            VRTK_SDKManager.instance.RemoveBehaviourToToggleOnLoadedSetupChange(this);
         }
 
         private void OnValidate()
@@ -324,14 +330,13 @@ namespace VRTK
             maximumRenderTargetDimension = Mathf.Max(2, maximumRenderTargetDimension);
             renderScaleFillRateStepSizeInPercent = Mathf.Max(1, renderScaleFillRateStepSizeInPercent);
             msaaLevel = msaaLevel == 1 ? 0 : Mathf.Clamp(Mathf.ClosestPowerOfTwo(msaaLevel), 0, 8);
-
-            CreateOrDestroyDebugVisualization();
         }
 
         private void Update()
         {
             HandleKeyPresses();
             UpdateRenderScaleLevels();
+            CreateOrDestroyDebugVisualization();
             UpdateDebugVisualization();
 
             timing.SaveCurrentFrameTiming();
@@ -396,7 +401,6 @@ namespace VRTK
                         break;
                     case CommandLineArguments.DrawDebugVisualization:
                         drawDebugVisualization = true;
-                        CreateOrDestroyDebugVisualization();
                         break;
                     case CommandLineArguments.MSAALevel:
                         msaaLevel = int.Parse(nextArgument);
@@ -415,7 +419,6 @@ namespace VRTK
             if (Input.GetKeyDown(KeyboardShortcuts.ToggleDrawDebugVisualization))
             {
                 drawDebugVisualization = !drawDebugVisualization;
-                CreateOrDestroyDebugVisualization();
             }
             else if (Input.GetKeyDown(KeyboardShortcuts.ToggleOverrideRenderScale))
             {
@@ -489,6 +492,11 @@ namespace VRTK
 
         private void UpdateRenderScale()
         {
+            if (allRenderScales.Count == 0)
+            {
+                return;
+            }
+
             if (!scaleRenderViewport)
             {
                 renderViewportScaleSetting.currentValue = defaultRenderViewportScaleLevel;
@@ -684,10 +692,12 @@ namespace VRTK
                         },
                     triangles = new[] { 0, 1, 2, 0, 2, 3 }
                 };
+#if !UNITY_5_5_OR_NEWER
                 mesh.Optimize();
+#endif
                 mesh.UploadMeshData(true);
 
-                debugVisualizationQuad = new GameObject("AdaptiveQualityDebugVisualizationQuad");
+                debugVisualizationQuad = new GameObject(VRTK_SharedMethods.GenerateVRTKObjectName(true, "AdaptiveQualityDebugVisualizationQuad"));
                 debugVisualizationQuad.transform.parent = VRTK_DeviceFinder.HeadsetTransform();
                 debugVisualizationQuad.transform.localPosition = Vector3.forward;
                 debugVisualizationQuad.transform.localRotation = Quaternion.identity;
@@ -712,9 +722,7 @@ namespace VRTK
                 return;
             }
 
-            int lastFrameIsInBudget = interleavedReprojectionEnabled || VRStats.gpuTimeLastFrame > singleFrameDurationInMilliseconds
-                                      ? 0
-                                      : 1;
+            int lastFrameIsInBudget = (interleavedReprojectionEnabled || VRTK_SharedMethods.GetGPUTimeLastFrame() > singleFrameDurationInMilliseconds ? 0 : 1);
 
             debugVisualizationQuadMaterial.SetInt(ShaderPropertyIDs.RenderScaleLevelsCount, allRenderScales.Count);
             debugVisualizationQuadMaterial.SetInt(ShaderPropertyIDs.DefaultRenderViewportScaleLevel, defaultRenderViewportScaleLevel);
@@ -803,7 +811,7 @@ namespace VRTK
             public void SaveCurrentFrameTiming()
             {
                 bufferIndex = (bufferIndex + 1) % buffer.Length;
-                buffer[bufferIndex] = VRStats.gpuTimeLastFrame;
+                buffer[bufferIndex] = VRTK_SharedMethods.GetGPUTimeLastFrame();
             }
 
             public float GetFrameTiming(int framesAgo)

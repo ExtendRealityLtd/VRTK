@@ -2,6 +2,7 @@
 namespace VRTK
 {
     using UnityEngine;
+    using System;
 
     /// <summary>
     /// The Simple Pointer emits a coloured beam from the end of the object it is attached to and simulates a laser beam.
@@ -14,6 +15,7 @@ namespace VRTK
     /// <example>
     /// `VRTK/Examples/003_Controller_SimplePointer` shows the simple pointer in action and code examples of how the events are utilised and listened to can be viewed in the script `VRTK/Examples/Resources/Scripts/VRTK_ControllerPointerEvents_ListenerExample.cs`
     /// </example>
+    [Obsolete("`VRTK_SimplePointer` has been replaced with `VRTK_StraightPointerRenderer` attached to a `VRTK_Pointer`. This script will be removed in a future version of VRTK.")]
     public class VRTK_SimplePointer : VRTK_BasePointer
     {
         [Header("Simple Pointer Settings", order = 3)]
@@ -37,6 +39,9 @@ namespace VRTK
         private GameObject pointerTip;
         private Vector3 pointerTipScale = new Vector3(0.05f, 0.05f, 0.05f);
         private Vector3 pointerCursorOriginalScale = Vector3.one;
+        private bool activeEnabled;
+        private bool storedBeamState;
+        private bool storedTipState;
 
         protected override void OnEnable()
         {
@@ -58,7 +63,8 @@ namespace VRTK
             base.Update();
             if (pointerBeam && pointerBeam.activeSelf)
             {
-                Ray pointerRaycast = new Ray(GetOriginPosition(), GetOriginForward());
+                var origin = GetOrigin();
+                Ray pointerRaycast = new Ray(origin.position, origin.forward);
                 RaycastHit pointerCollidedWith;
                 var rayHit = Physics.Raycast(pointerRaycast, out pointerCollidedWith, pointerLength, ~layersToIgnore);
                 var pointerBeamLength = GetPointerBeamLength(rayHit, pointerCollidedWith);
@@ -71,7 +77,7 @@ namespace VRTK
                     }
                     if (pointerCursorRescaledAlongDistance)
                     {
-                        float collisionDistance = Vector3.Distance(pointerCollidedWith.point, GetOriginPosition());
+                        float collisionDistance = Vector3.Distance(pointerCollidedWith.point, origin.position);
                         pointerTip.transform.localScale = pointerCursorOriginalScale * collisionDistance;
                     }
                 }
@@ -79,12 +85,19 @@ namespace VRTK
                 {
                     if (pointerCursorMatchTargetNormal)
                     {
-                        pointerTip.transform.forward = GetOriginForward();
+                        pointerTip.transform.forward = origin.forward;
                     }
                     if (pointerCursorRescaledAlongDistance)
                     {
                         pointerTip.transform.localScale = pointerCursorOriginalScale * pointerBeamLength;
                     }
+                }
+
+                if (activeEnabled)
+                {
+                    activeEnabled = false;
+                    pointerBeam.GetComponentInChildren<Renderer>().enabled = storedBeamState;
+                    pointerTip.GetComponentInChildren<Renderer>().enabled = storedTipState;
                 }
             }
         }
@@ -144,10 +157,7 @@ namespace VRTK
 
             base.InitPointer();
 
-            if (showPointerTip && objectInteractor)
-            {
-                objectInteractor.transform.localScale = pointerTip.transform.localScale * 1.05f;
-            }
+            ResizeObjectInteractor();
 
             SetPointerTransform(pointerLength, pointerThickness);
             TogglePointer(false);
@@ -176,9 +186,30 @@ namespace VRTK
                 pointerTip.SetActive(tipState);
             }
 
-            if (pointerBeam && pointerBeam.GetComponent<Renderer>() && pointerVisibility == pointerVisibilityStates.Always_Off)
+            if (pointerBeam && pointerBeam.GetComponentInChildren<Renderer>() && pointerVisibility == pointerVisibilityStates.Always_Off)
             {
-                pointerBeam.GetComponent<Renderer>().enabled = false;
+                pointerBeam.GetComponentInChildren<Renderer>().enabled = false;
+            }
+
+            activeEnabled = state;
+
+            if (activeEnabled)
+            {
+                storedBeamState = pointerBeam.GetComponentInChildren<Renderer>().enabled;
+                storedTipState = pointerTip.GetComponentInChildren<Renderer>().enabled;
+
+                pointerBeam.GetComponentInChildren<Renderer>().enabled = false;
+                pointerTip.GetComponentInChildren<Renderer>().enabled = false;
+            }
+
+            ResizeObjectInteractor();
+        }
+
+        private void ResizeObjectInteractor()
+        {
+            if (showPointerTip && pointerTip && objectInteractor)
+            {
+                objectInteractor.transform.localScale = pointerTip.transform.localScale * 1.05f;
             }
         }
 
@@ -186,15 +217,15 @@ namespace VRTK
         {
             //if the additional decimal isn't added then the beam position glitches
             var beamPosition = setLength / (2 + 0.00001f);
+            Transform smoothedOrigin = GetOrigin();
 
             pointerBeam.transform.localScale = new Vector3(setThicknes, setThicknes, setLength);
             pointerBeam.transform.localPosition = new Vector3(0f, 0f, beamPosition);
-            pointerTip.transform.localPosition = new Vector3(0f, 0f, setLength - (pointerTip.transform.localScale.z / 2));
 
-            pointerHolder.transform.localPosition = GetOriginLocalPosition();
-            pointerHolder.transform.localRotation = GetOriginLocalRotation();
-            pointerHolder.transform.position = transform.position;
-            pointerHolder.transform.rotation = transform.rotation;
+            pointerHolder.transform.position = GetOrigin(false).position;
+            pointerTip.transform.position = smoothedOrigin.position + smoothedOrigin.forward * (setLength - (pointerTip.transform.localScale.z / 2));
+            pointerHolder.transform.LookAt(pointerTip.transform);
+
             base.UpdateDependencies(pointerTip.transform.position);
         }
 

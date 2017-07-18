@@ -12,8 +12,19 @@ namespace VRTK.GrabAttachMechanics
     /// <example>
     /// `VRTK/Examples/021_Controller_GrabbingObjectsWithJoints` demonstrates this grab attach mechanic on the Wheel and Door objects in the scene.
     /// </example>
+    [AddComponentMenu("VRTK/Scripts/Interactions/Grab Attach Mechanics/VRTK_RotatorTrackGrabAttach")]
     public class VRTK_RotatorTrackGrabAttach : VRTK_TrackObjectGrabAttach
     {
+        /// <summary>
+        /// The StopGrab method ends the grab of the current object and cleans up the state.
+        /// </summary>
+        /// <param name="applyGrabbingObjectVelocity">If true will apply the current velocity of the grabbing object to the grabbed object on release.</param>
+        public override void StopGrab(bool applyGrabbingObjectVelocity)
+        {
+            isReleasable = false;
+            base.StopGrab(applyGrabbingObjectVelocity);
+        }
+
         /// <summary>
         /// The ProcessFixedUpdate method is run in every FixedUpdate method on the interactable object. It applies a force to the grabbed object to move it in the direction of the grabbing object.
         /// </summary>

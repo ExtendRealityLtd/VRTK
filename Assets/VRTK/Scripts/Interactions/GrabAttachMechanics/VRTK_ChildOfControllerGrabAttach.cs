@@ -14,6 +14,7 @@ namespace VRTK.GrabAttachMechanics
     /// <example>
     /// `VRTK/Examples/023_Controller_ChildOfControllerOnGrab` uses this grab attach mechanic for the bow and the arrow.
     /// </example>
+    [AddComponentMenu("VRTK/Scripts/Interactions/Grab Attach Mechanics/VRTK_ChildOfControllerGrabAttach")]
     public class VRTK_ChildOfControllerGrabAttach : VRTK_BaseGrabAttach
     {
         /// <summary>
@@ -51,7 +52,7 @@ namespace VRTK.GrabAttachMechanics
             kinematic = true;
         }
 
-        private void SetSnappedObjectPosition(GameObject obj)
+        protected virtual void SetSnappedObjectPosition(GameObject obj)
         {
             if (grabbedSnapHandle == null)
             {
@@ -64,13 +65,13 @@ namespace VRTK.GrabAttachMechanics
             }
         }
 
-        private void SnapObjectToGrabToController(GameObject obj)
+        protected virtual void SnapObjectToGrabToController(GameObject obj)
         {
             if (!precisionGrab)
             {
                 SetSnappedObjectPosition(obj);
             }
-            obj.transform.parent = controllerAttachPoint.transform;
+            obj.transform.SetParent(controllerAttachPoint.transform);
         }
     }
 }
