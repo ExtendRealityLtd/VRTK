@@ -21,7 +21,9 @@ namespace VRTK
             TrackObject,
             RotatorTrack
         }
-
+       
+        [Tooltip("The axis for wheel rotation.")]
+        public Vector3 rotationAxis = Vector3.up;
         [Tooltip("An optional game object to which the wheel will be connected. If the game object moves the wheel will follow along.")]
         public GameObject connectedTo;
         [Tooltip("The grab attach mechanic to use. Track Object allows for rotations of the controller, Rotator Track allows for grabbing the wheel and spinning it.")]
@@ -66,8 +68,8 @@ namespace VRTK
         {
             if (wheelHingeCreated)
             {
-                wheelHinge.anchor = Vector3.up;
-                wheelHinge.axis = Vector3.up;
+                wheelHinge.anchor = rotationAxis;
+                wheelHinge.axis = rotationAxis;
 
                 if (connectedTo)
                 {
