@@ -522,7 +522,7 @@ namespace VRTK
 
         protected virtual bool ValidTarget(Collider collider)
         {
-            return (!VRTK_PlayerObject.IsPlayerObject(collider.gameObject) && !(VRTK_PolicyList.Check(collider.gameObject, targetListPolicy)));
+            return (!collider.isTrigger && !VRTK_PlayerObject.IsPlayerObject(collider.gameObject) && !(VRTK_PolicyList.Check(collider.gameObject, targetListPolicy)));
         }
     }
 }
