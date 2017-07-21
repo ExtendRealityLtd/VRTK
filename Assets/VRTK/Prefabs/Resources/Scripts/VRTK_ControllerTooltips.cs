@@ -106,9 +106,9 @@ namespace VRTK
         /// </summary>
         public event ControllerTooltipsEventHandler ControllerTooltipOff;
 
-        protected TooltipButtons[] availableButtons;
-        protected VRTK_ObjectTooltip[] buttonTooltips;
-        protected bool[] tooltipStates;
+        protected TooltipButtons[] availableButtons = new TooltipButtons[0];
+        protected VRTK_ObjectTooltip[] buttonTooltips = new VRTK_ObjectTooltip[0];
+        protected bool[] tooltipStates = new bool[0];
 
         protected int retryInitCurrentTries = 0;
 
