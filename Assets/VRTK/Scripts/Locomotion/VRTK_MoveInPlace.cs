@@ -217,7 +217,7 @@ namespace VRTK
         protected virtual void Update()
         {
             CheckControllerState(controllerLeftHand, leftController, ref leftSubscribed, ref previousLeftControllerState);
-            CheckControllerState(controllerRightHand, rightController, ref leftSubscribed, ref previousRightControllerState);
+            CheckControllerState(controllerRightHand, rightController, ref rightSubscribed, ref previousRightControllerState);
             previousEngageButton = engageButton;
         }
 
