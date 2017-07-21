@@ -714,7 +714,7 @@ namespace VRTK
             VRTK_TrackedController device = GetTrackedObject(GetControllerByIndex(index));
             if (device != null)
             {
-                OVRInput.Controller controllerMask = GetControllerMask(device.index);
+                OVRInput.Controller controllerMask = GetControllerMask(index);
                 switch (type)
                 {
                     case ButtonPressTypes.Press:
@@ -739,7 +739,7 @@ namespace VRTK
             VRTK_TrackedController device = GetTrackedObject(GetControllerByIndex(index));
             if (device != null)
             {
-                OVRInput.Controller controllerMask = GetControllerMask(device.index);
+                OVRInput.Controller controllerMask = GetControllerMask(index);
                 switch (type)
                 {
                     case ButtonPressTypes.Touch:
@@ -760,6 +760,8 @@ namespace VRTK
 
             switch (activeControllerType)
             {
+                case OVRInput.Controller.Touch:
+                    return (index == 0 ? OVRInput.Controller.LTouch : (index == 1 ? OVRInput.Controller.RTouch : OVRInput.Controller.None));
                 case OVRInput.Controller.LTouch:
                     return (index == 0 ? OVRInput.Controller.LTouch : OVRInput.Controller.None);
                 case OVRInput.Controller.RTouch:
