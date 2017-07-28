@@ -70,6 +70,15 @@ namespace VRTK
         protected bool isClimbing;
         protected bool useGrabbedObjectRotation;
 
+        /// <summary>
+        /// The IsClimbing method will return if the player is currently climbing or not.
+        /// </summary>
+        /// <returns>Returns a bool representing if the player is climbing.</returns>
+        public virtual bool IsClimbing()
+        {
+            return isClimbing;
+        }
+
         protected virtual void Awake()
         {
             bodyPhysics = (bodyPhysics != null ? bodyPhysics : GetComponentInChildren<VRTK_BodyPhysics>());
