@@ -1235,6 +1235,10 @@ namespace VRTK
                     {
                         snapDropZoneJoint.connectedBody = null;
                     }
+                    if (interactableRigidbody != null) //If it has a rigidbody make sure we did not mess up its Kinematic State
+                    {
+                        interactableRigidbody.isKinematic = previousKinematicState;
+                    }
                     break;
             }
 
