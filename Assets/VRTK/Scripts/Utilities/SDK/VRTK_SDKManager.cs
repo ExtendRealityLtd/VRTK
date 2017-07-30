@@ -518,7 +518,7 @@ namespace VRTK
             bool isDeviceAlreadyLoaded = sdkSetups[0].usedVRDeviceNames.Contains(loadedDeviceName);
             if (!isDeviceAlreadyLoaded)
             {
-                if (!tryToReinitialize && !VRSettings.enabled && !string.IsNullOrEmpty(loadedDeviceName))
+                if (!tryToReinitialize && !VRSettings.enabled && loadedDeviceName != "None")
                 {
                     sdkSetups = sdkSetups.Where(setup => !setup.usedVRDeviceNames.Contains(loadedDeviceName))
                                          .ToArray();
