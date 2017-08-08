@@ -112,7 +112,7 @@ namespace VRTK
 
         protected virtual void Update()
         {
-            if (controllerEvents != null)
+            if (controllerEvents != null && controllerEvents.touchpadTouched && controllerEvents.GetTouchpadAxis() != Vector2.zero)
             {
                 float touchpadAngle = controllerEvents.GetTouchpadAxisAngle();
                 float angle = ((touchpadAngle > 180) ? touchpadAngle -= 360 : touchpadAngle) + headset.eulerAngles.y;
