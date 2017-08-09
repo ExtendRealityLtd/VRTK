@@ -402,8 +402,8 @@ namespace VRTK
         /// <returns>Returns true if a collision will occur on the given direction over the given maxium distance. Returns false if there is no collision about to happen.</returns>
         public virtual bool SweepCollision(Vector3 direction, float maxDistance)
         {
-            Vector3 point1 = (bodyCollider.transform.position + bodyCollider.center) + (Vector3.up * ((bodyCollider.height * 0.5f) - bodyCollider.radius));
-            Vector3 point2 = (bodyCollider.transform.position + bodyCollider.center) - (Vector3.up * ((bodyCollider.height * 0.5f) - bodyCollider.radius));
+            Vector3 point1 = bodyCollider.transform.parent.TransformPoint(bodyCollider.transform.localPosition + (bodyCollider.center)) + (Vector3.up * ((bodyCollider.height * 0.5f) - bodyCollider.radius));
+            Vector3 point2 = bodyCollider.transform.parent.TransformPoint(bodyCollider.transform.localPosition + (bodyCollider.center)) - (Vector3.up * ((bodyCollider.height * 0.5f) - bodyCollider.radius));
             RaycastHit collisionHit;
             return VRTK_CustomRaycast.CapsuleCast(customRaycast, point1, point2, bodyCollider.radius, direction, maxDistance, out collisionHit, defaultIgnoreLayer, QueryTriggerInteraction.Ignore);
         }
