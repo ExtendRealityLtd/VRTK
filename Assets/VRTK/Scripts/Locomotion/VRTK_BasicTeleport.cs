@@ -301,7 +301,7 @@ namespace VRTK
             OnTeleporting(sender, e);
         }
 
-        protected virtual void ProcessOrientation(object sender, DestinationMarkerEventArgs e, Vector3 updatedPosition, Quaternion updatedRotation)
+        protected virtual void ProcessOrientation(object sender, DestinationMarkerEventArgs e, Vector3 targetPosition, Quaternion targetRotation)
         {
         }
 
