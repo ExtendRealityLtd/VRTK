@@ -113,14 +113,26 @@ namespace VRTK
             base.StartTeleport(sender, e);
         }
 
-        protected override void ProcessOrientation(object sender, DestinationMarkerEventArgs e, Vector3 updatedPosition, Quaternion updatedRotation)
+        protected override void ProcessOrientation(object sender, DestinationMarkerEventArgs e, Vector3 targetPosition, Quaternion targetRotation)
         {
             if (ValidRigObjects())
             {
-                Vector3 startPosition = new Vector3(playArea.position.x, playArea.position.y, playArea.position.z);
-                Quaternion startRotation = new Quaternion(playArea.rotation.x, playArea.rotation.y, playArea.rotation.z, playArea.rotation.w);
-                attemptLerpRoutine = StartCoroutine(lerpToPosition(sender, e, startPosition, updatedPosition, startRotation, updatedRotation));
+                Vector3 finalPosition = CalculateOffsetPosition(targetPosition, targetRotation);
+                attemptLerpRoutine = StartCoroutine(lerpToPosition(sender, e, playArea.position, finalPosition, playArea.rotation, targetRotation));
             }
+        }
+
+        protected virtual Vector3 CalculateOffsetPosition(Vector3 targetPosition, Quaternion targetRotation)
+        {
+            if (!headsetPositionCompensation)
+            {
+                return targetPosition;
+            }
+
+            Vector3 playerOffset = new Vector3(headset.position.x - playArea.position.x, 0, headset.position.z - playArea.position.z);
+            Quaternion relativeRotation = Quaternion.Inverse(playArea.rotation) * targetRotation;
+            Vector3 adjustedOffset = relativeRotation * playerOffset;
+            return targetPosition - (adjustedOffset - playerOffset);
         }
 
         protected override void EndTeleport(object sender, DestinationMarkerEventArgs e)
