@@ -57,8 +57,9 @@ namespace VRTK
         /// <summary>
         /// The GetCurrentControllerType method returns the current used ControllerType based on the SDK and headset being used.
         /// </summary>
+        /// <param name="controllerReference">The reference to the controller to get type of.</param>
         /// <returns>The ControllerType based on the SDK and headset being used.</returns>
-        public override ControllerType GetCurrentControllerType()
+        public override ControllerType GetCurrentControllerType(VRTK_ControllerReference controllerReference = null)
         {
             return ControllerType.Daydream_Controller;
         }

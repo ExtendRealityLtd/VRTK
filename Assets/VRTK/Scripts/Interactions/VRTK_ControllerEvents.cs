@@ -480,6 +480,10 @@ namespace VRTK
         /// Emitted when the controller index changed.
         /// </summary>
         public event ControllerInteractionEventHandler ControllerIndexChanged;
+        /// <summary>
+        /// Emitted when the controller type becomes available.
+        /// </summary>
+        public event ControllerInteractionEventHandler ControllerTypeAvailable;
 
         /// <summary>
         /// Emitted when the controller is set to visible.
@@ -503,6 +507,7 @@ namespace VRTK
         protected float pinkyFingerSenseAxis = 0f;
         protected float hairTriggerDelta;
         protected float hairGripDelta;
+        protected VRTK_TrackedController trackedController;
 
         #region event methods
 
@@ -849,6 +854,14 @@ namespace VRTK
             }
         }
 
+        public virtual void OnControllerTypeAvailable(ControllerInteractionEventArgs e)
+        {
+            if (ControllerTypeAvailable != null)
+            {
+                ControllerTypeAvailable(this, e);
+            }
+        }
+
         public virtual void OnControllerVisible(ControllerInteractionEventArgs e)
         {
             controllerVisible = true;
@@ -876,7 +889,7 @@ namespace VRTK
         /// <returns>The payload for a Controller Event.</returns>
         public virtual ControllerInteractionEventArgs SetControllerEvent()
         {
-            var nullBool = false;
+            bool nullBool = false;
             return SetControllerEvent(ref nullBool);
         }
 
@@ -897,6 +910,15 @@ namespace VRTK
             e.touchpadAxis = VRTK_SDK_Bridge.GetControllerAxis(SDK_BaseController.ButtonTypes.Touchpad, controllerReference);
             e.touchpadAngle = CalculateTouchpadAxisAngle(e.touchpadAxis);
             return e;
+        }
+
+        /// <summary>
+        /// The GetControllerType method is a shortcut to retrieve the current controller type the controller events is attached to.
+        /// </summary>
+        /// <returns>The type of controller that the controller events is attached to.</returns>
+        public virtual SDK_BaseController.ControllerType GetControllerType()
+        {
+            return (trackedController != null ? trackedController.GetControllerType() : SDK_BaseController.ControllerType.Undefined);
         }
 
         #region axis getters
@@ -1122,15 +1144,16 @@ namespace VRTK
 
         protected virtual void OnEnable()
         {
-            var actualController = VRTK_DeviceFinder.GetActualController(gameObject);
-            if (actualController)
+            GameObject actualController = VRTK_DeviceFinder.GetActualController(gameObject);
+            if (actualController != null)
             {
-                var controllerTracker = actualController.GetComponent<VRTK_TrackedController>();
-                if (controllerTracker)
+                trackedController = actualController.GetComponentInParent<VRTK_TrackedController>();
+                if (trackedController != null)
                 {
-                    controllerTracker.ControllerEnabled += TrackedControllerEnabled;
-                    controllerTracker.ControllerDisabled += TrackedControllerDisabled;
-                    controllerTracker.ControllerIndexChanged += TrackedControllerIndexChanged;
+                    trackedController.ControllerEnabled += TrackedControllerEnabled;
+                    trackedController.ControllerDisabled += TrackedControllerDisabled;
+                    trackedController.ControllerIndexChanged += TrackedControllerIndexChanged;
+                    trackedController.ControllerTypeAvailable += TrackedControllerTypeAvailable;
                 }
             }
         }
@@ -1138,14 +1161,15 @@ namespace VRTK
         protected virtual void OnDisable()
         {
             Invoke("DisableEvents", 0f);
-            var actualController = VRTK_DeviceFinder.GetActualController(gameObject);
-            if (actualController)
+            GameObject actualController = VRTK_DeviceFinder.GetActualController(gameObject);
+            if (actualController != null)
             {
-                var controllerTracker = actualController.GetComponent<VRTK_TrackedController>();
-                if (controllerTracker)
+                if (trackedController != null)
                 {
-                    controllerTracker.ControllerEnabled -= TrackedControllerEnabled;
-                    controllerTracker.ControllerDisabled -= TrackedControllerDisabled;
+                    trackedController.ControllerEnabled -= TrackedControllerEnabled;
+                    trackedController.ControllerDisabled -= TrackedControllerDisabled;
+                    trackedController.ControllerIndexChanged -= TrackedControllerIndexChanged;
+                    trackedController.ControllerTypeAvailable -= TrackedControllerTypeAvailable;
                 }
             }
         }
@@ -1976,6 +2000,11 @@ namespace VRTK
         protected virtual void TrackedControllerIndexChanged(object sender, VRTKTrackedControllerEventArgs e)
         {
             OnControllerIndexChanged(SetControllerEvent());
+        }
+
+        protected virtual void TrackedControllerTypeAvailable(object sender, VRTKTrackedControllerEventArgs e)
+        {
+            OnControllerTypeAvailable(SetControllerEvent());
         }
 
         protected virtual float CalculateTouchpadAxisAngle(Vector2 axis)

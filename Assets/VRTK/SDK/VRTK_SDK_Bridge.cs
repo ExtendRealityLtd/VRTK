@@ -22,9 +22,9 @@
             GetControllerSDK().ProcessFixedUpdate(controllerReference, options);
         }
 
-        public static SDK_BaseController.ControllerType GetCurrentControllerType()
+        public static SDK_BaseController.ControllerType GetCurrentControllerType(VRTK_ControllerReference controllerReference = null)
         {
-            return GetControllerSDK().GetCurrentControllerType();
+            return GetControllerSDK().GetCurrentControllerType(controllerReference);
         }
 
         public static string GetControllerDefaultColliderPath(SDK_BaseController.ControllerHand hand)
