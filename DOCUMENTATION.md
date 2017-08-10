@@ -774,6 +774,13 @@ This can be useful for rotating the play area upon teleporting to face the user 
  * **Include Headset Offset:** If this is checked then the reported rotation will include the offset of the headset rotation in relation to the play area.
  * **Display On Invalid Location:** If this is checked then the direction indicator will be displayed when the location is invalid.
  * **Use Pointer Color:** If this is checked then the pointer valid/invalid colours will also be used to change the colour of the direction indicator.
+ * **Indicator Visibility:** Determines when the direction indicator will be visible.
+
+### Class Variables
+
+ * `public enum VisibilityState` - States of Direction Indicator Visibility.
+  * `OnWhenPointerActive` - Only shows the direction indicator when the pointer is active.
+  * `AlwaysOnWithPointerCursor` - Only shows the direction indicator when the pointer cursor is visible or if the cursor is hidden and the pointer is active.
 
 ### Class Events
 

@@ -19,6 +19,17 @@ namespace VRTK
     /// </remarks>
     public class VRTK_PointerDirectionIndicator : MonoBehaviour
     {
+        /// <summary>
+        /// States of Direction Indicator Visibility.
+        /// </summary>
+        /// <param name="OnWhenPointerActive">Only shows the direction indicator when the pointer is active.</param>
+        /// <param name="AlwaysOnWithPointerCursor">Only shows the direction indicator when the pointer cursor is visible or if the cursor is hidden and the pointer is active.</param>
+        public enum VisibilityState
+        {
+            OnWhenPointerActive,
+            AlwaysOnWithPointerCursor
+        }
+
         [Header("Appearance Settings")]
 
         [Tooltip("If this is checked then the reported rotation will include the offset of the headset rotation in relation to the play area.")]
@@ -27,6 +38,8 @@ namespace VRTK
         public bool displayOnInvalidLocation = true;
         [Tooltip("If this is checked then the pointer valid/invalid colours will also be used to change the colour of the direction indicator.")]
         public bool usePointerColor = false;
+        [Tooltip("Determines when the direction indicator will be visible.")]
+        public VisibilityState indicatorVisibility = VisibilityState.OnWhenPointerActive;
 
         [HideInInspector]
         public bool isActive = true;
