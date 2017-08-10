@@ -1838,6 +1838,7 @@ A collection of scripts that provide varying methods of moving the user around t
  * [Button Control](#button-control-vrtk_buttoncontrol)
  * [Move In Place](#move-in-place-vrtk_moveinplace)
  * [Player Climb](#player-climb-vrtk_playerclimb)
+ * [Slingshot Jump](#slingshot-jump-vrtk_slingshotjump)
  * [Room Extender](#room-extender-vrtk_roomextender)
 
 ---
@@ -2269,9 +2270,94 @@ Adding the `VRTK_PlayerClimb_UnityEvents` component to `VRTK_PlayerClimb` object
  * `VRTK_ControllerReference controllerReference` - The reference to the controller doing the interaction.
  * `GameObject target` - The GameObject of the interactable object that is being interacted with by the controller.
 
+### Class Methods
+
+#### IsClimbing/0
+
+  > `public virtual bool IsClimbing()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `bool` - Returns a bool representing if the player is climbing.
+
+The IsClimbing method will return if the player is currently climbing or not.
+
 ### Example
 
 `VRTK/Examples/037_CameraRig_ClimbingFalling` shows how to set up a scene with player climbing. There are many different examples showing how the same system can be used in unique ways.
+
+---
+
+## Slingshot Jump (VRTK_SlingshotJump)
+
+### Overview
+
+Slingshot Jump allows player jumping based on the direction and amount pulled back of each controller. This slingshots the player in defined direction and speed.
+
+### Inspector Parameters
+
+ * **Release Window Time:** How close together the trigger releases have to be to initiate a jump.
+ * **Velocity Multiplier:** Multiplier that increases the jump strength.
+ * **Velocity Max:** The maximum velocity a jump can be.
+
+### Class Events
+
+ * `SlingshotJumped` - Emitted when a slingshot jump occurs
+
+### Event Payload
+
+ * `GameObject target` - The GameObject of the interactable object that is being interacted with by the controller.
+
+### Class Methods
+
+#### GetActivationButton/0
+
+  > `public virtual VRTK_ControllerEvents.ButtonAlias GetActivationButton()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `VRTK_ControllerEvents.ButtonAlias` - Returns the button used for slingshot activation.
+
+The SetActivationButton method gets the button used to activate a slingshot jump.
+
+#### SetActivationButton/1
+
+  > `public virtual void SetActivationButton(VRTK_ControllerEvents.ButtonAlias button)`
+
+  * Parameters
+   * `VRTK_ControllerEvents.ButtonAlias button` - The controller button to use to activate the jump.
+  * Returns
+   * _none_
+
+The SetActivationButton method sets the button used to activate a slingshot jump.
+
+#### GetCancelButton/0
+
+  > `public virtual VRTK_ControllerEvents.ButtonAlias GetCancelButton()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `VRTK_ControllerEvents.ButtonAlias` - Returns the button used to cancel a slingshot jump.
+
+The GetCancelButton method gets the button used to cancel a slingshot jump.
+
+#### SetCancelButton/1
+
+  > `public virtual void SetCancelButton(VRTK_ControllerEvents.ButtonAlias button)`
+
+  * Parameters
+   * `VRTK_ControllerEvents.ButtonAlias button` - The controller button to use to cancel the jump.
+  * Returns
+   * _none_
+
+The SetCancelButton method sets the button used to cancel a slingshot jump.
+
+### Example
+
+`VRTK/Examples/037_CameraRig_ClimbingFalling` shows how to set up a scene with slingshot jumping. This script just needs to be added to the PlayArea object and the requested forces and buttons set.
 
 ---
 

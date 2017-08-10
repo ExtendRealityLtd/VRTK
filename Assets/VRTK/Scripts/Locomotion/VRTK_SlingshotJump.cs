@@ -1,8 +1,6 @@
-﻿// Slingshot Jump|Locomotion|20120
+﻿// Slingshot Jump|Locomotion|20121
 namespace VRTK
 {
-    using System;
-    using GrabAttachMechanics;
     using UnityEngine;
 
     /// <summary>
@@ -18,7 +16,7 @@ namespace VRTK
     /// Event Payload
     /// </summary>
     /// <param name="sender">this object</param>
-    /// <param name="e"><see cref="PlayerClimbEventArgs"/></param>
+    /// <param name="e"><see cref="SlingshotJumpEventArgs"/></param>
     public delegate void SlingshotJumpEventHandler(object sender, SlingshotJumpEventArgs e);
 
     /// <summary>
@@ -44,7 +42,7 @@ namespace VRTK
         protected VRTK_ControllerEvents.ButtonAlias cancelButton = VRTK_ControllerEvents.ButtonAlias.Undefined;
         [Tooltip("This button will start the sling shot move.")]
         [SerializeField]
-        protected VRTK_ControllerEvents.ButtonAlias activationButton =  VRTK_ControllerEvents.ButtonAlias.TriggerPress;
+        protected VRTK_ControllerEvents.ButtonAlias activationButton = VRTK_ControllerEvents.ButtonAlias.GripPress;
         [Tooltip("The VRTK_BodyPhysics object used on the player. If the script is being applied onto an object that already has a VRTK_BodyPhysics component, this parameter can be left blank as it will be auto populated by the script at runtime.")]
         [SerializeField]
         protected VRTK_BodyPhysics bodyPhysics;
@@ -148,17 +146,17 @@ namespace VRTK
             {
                 leftIsAiming = true;
                 leftStartAimPosition = playArea.InverseTransformPoint(leftControllerEvents.gameObject.transform.position);
-            } 
+            }
         }
 
         protected virtual void RightButtonPressed(object sender, ControllerInteractionEventArgs e)
         {
-             // Check for new right aim
+            // Check for new right aim
             if (!rightIsAiming && !IsClimbing())
             {
                 rightIsAiming = true;
                 rightStartAimPosition = playArea.InverseTransformPoint(rightControllerEvents.gameObject.transform.position);
-            } 
+            }
         }
 
         protected virtual void LeftButtonReleased(object sender, ControllerInteractionEventArgs e)
@@ -212,16 +210,16 @@ namespace VRTK
         {
             if (leftButtonReleased && rightButtonReleased && !bodyPhysics.IsFalling())
             {
-                Vector3 leftDir = leftStartAimPosition-leftReleasePosition;
-                Vector3 rightDir = rightStartAimPosition-rightReleasePosition;
+                Vector3 leftDir = leftStartAimPosition - leftReleasePosition;
+                Vector3 rightDir = rightStartAimPosition - rightReleasePosition;
                 Vector3 localJumpDir = leftDir + rightDir;
                 Vector3 worldJumpDir = playArea.transform.TransformVector(localJumpDir);
                 Vector3 jumpVector = worldJumpDir * velocityMultiplier;
-                
+
                 if (jumpVector.magnitude > velocityMax)
                 {
                     jumpVector = jumpVector.normalized * velocityMax;
-                } 
+                }
 
                 bodyPhysics.ApplyBodyVelocity(jumpVector, true, true);
 
@@ -255,7 +253,7 @@ namespace VRTK
         protected void InitTeleportListener(bool state)
         {
             VRTK_BasicTeleport teleportComponent = GetComponent<VRTK_BasicTeleport>();
-            if (teleportComponent!= null)
+            if (teleportComponent != null)
             {
                 if (state == true)
                 {
@@ -270,12 +268,13 @@ namespace VRTK
 
         protected void InitControllerListeners(bool state)
         {
-            InitControllerListener(state,  VRTK_DeviceFinder.GetControllerLeftHand(), ref leftControllerEvents, ref leftControllerGrab, LeftButtonPressed, LeftButtonReleased);
+            InitControllerListener(state, VRTK_DeviceFinder.GetControllerLeftHand(), ref leftControllerEvents, ref leftControllerGrab, LeftButtonPressed, LeftButtonReleased);
             InitControllerListener(state, VRTK_DeviceFinder.GetControllerRightHand(), ref rightControllerEvents, ref rightControllerGrab, RightButtonPressed, RightButtonReleased);
         }
 
         protected void InitControllerListener(bool state, GameObject controller, ref VRTK_ControllerEvents events, ref VRTK_InteractGrab grab,
-            ControllerInteractionEventHandler triggerPressed, ControllerInteractionEventHandler triggerReleased) {
+            ControllerInteractionEventHandler triggerPressed, ControllerInteractionEventHandler triggerReleased)
+        {
             if (controller != null)
             {
                 events = controller.GetComponent<VRTK_ControllerEvents>();
