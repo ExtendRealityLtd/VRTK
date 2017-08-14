@@ -34,8 +34,9 @@ namespace VRTK
         /// <summary>
         /// The GetCurrentControllerType method returns the current used ControllerType based on the SDK and headset being used.
         /// </summary>
+        /// <param name="controllerReference">The reference to the controller to get type of.</param>
         /// <returns>The ControllerType based on the SDK and headset being used.</returns>
-        public override ControllerType GetCurrentControllerType()
+        public override ControllerType GetCurrentControllerType(VRTK_ControllerReference controllerReference = null)
         {
             return ControllerType.Undefined;
         }
@@ -161,6 +162,16 @@ namespace VRTK
         /// <param name="actual">If true it will check the actual controller, if false it will check the script alias controller.</param>
         /// <returns>Returns true if the given controller is the right hand controller.</returns>
         public override bool IsControllerRightHand(GameObject controller, bool actual)
+        {
+            return false;
+        }
+
+        /// <summary>
+        /// The WaitForControllerModel method determines whether the controller model for the given hand requires waiting to load in on scene start.
+        /// </summary>
+        /// <param name="hand">The hand to determine if the controller model will be ready for.</param>
+        /// <returns>Returns true if the controller model requires loading in at runtime and therefore needs waiting for. Returns false if the controller model will be available at start.</returns>
+        public override bool WaitForControllerModel(ControllerHand hand)
         {
             return false;
         }

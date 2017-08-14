@@ -42,6 +42,28 @@ namespace VRTK
         protected float findControllerAttemptsDelay = 0.1f;
         protected Coroutine attemptFindControllerModel;
 
+        /// <summary>
+        /// The UpdateTransform method updates the Transform data on the current GameObject for the specified settings.
+        /// </summary>
+        /// <param name="controllerReference">An optional reference to the controller to update the transform with.</param>
+        public virtual void UpdateTransform(VRTK_ControllerReference controllerReference = null)
+        {
+            if (target == null)
+            {
+                return;
+            }
+
+            VRTK_SDKTransformModifiers selectedModifier = GetSelectedModifier(controllerReference);
+
+            //If a modifier is found then change the transform
+            if (selectedModifier != null)
+            {
+                target.localPosition = selectedModifier.position;
+                target.localEulerAngles = selectedModifier.rotation;
+                target.localScale = selectedModifier.scale;
+            }
+        }
+
         protected virtual void OnEnable()
         {
             target = (target != null ? target : transform);
@@ -67,6 +89,14 @@ namespace VRTK
             {
                 StopCoroutine(attemptFindControllerModel);
                 attemptFindControllerModel = null;
+            }
+        }
+
+        protected virtual void OnDestroy()
+        {
+            if (sdkManager != null)
+            {
+                sdkManager.LoadedSetupChanged -= LoadedSetupChanged;
             }
         }
 
@@ -97,7 +127,7 @@ namespace VRTK
             UpdateTransform();
         }
 
-        protected virtual VRTK_SDKTransformModifiers GetSelectedModifier()
+        protected virtual VRTK_SDKTransformModifiers GetSelectedModifier(VRTK_ControllerReference controllerReference)
         {
             //attempt to find by the overall SDK set up to start with
             VRTK_SDKTransformModifiers selectedModifier = sdkOverrides.FirstOrDefault(item => item.loadedSDKSetup == sdkManager.loadedSetup);
@@ -105,28 +135,10 @@ namespace VRTK
             //If no sdk set up is found or it is null then try and find by the SDK controller
             if (selectedModifier == null)
             {
-                SDK_BaseController.ControllerType currentController = VRTK_DeviceFinder.GetCurrentControllerType();
+                SDK_BaseController.ControllerType currentController = VRTK_DeviceFinder.GetCurrentControllerType(controllerReference);
                 selectedModifier = sdkOverrides.FirstOrDefault(item => item.controllerType == currentController);
             }
             return selectedModifier;
-        }
-
-        protected virtual void UpdateTransform()
-        {
-            if (target == null)
-            {
-                return;
-            }
-
-            VRTK_SDKTransformModifiers selectedModifier = GetSelectedModifier();
-
-            //If a modifier is found then change the transform
-            if (selectedModifier != null)
-            {
-                target.localPosition = selectedModifier.position;
-                target.localEulerAngles = selectedModifier.rotation;
-                target.localScale = selectedModifier.scale;
-            }
         }
     }
 }

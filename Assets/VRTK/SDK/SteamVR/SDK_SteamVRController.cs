@@ -6,6 +6,7 @@ namespace VRTK
     using System.Collections.Generic;
     using System.Text;
     using Valve.VR;
+    using System;
 #if !VRTK_DEFINE_STEAMVR_PLUGIN_1_2_2_OR_NEWER
     using System;
     using System.Reflection;
@@ -76,13 +77,14 @@ namespace VRTK
         /// <summary>
         /// The GetCurrentControllerType method returns the current used ControllerType based on the SDK and headset being used.
         /// </summary>
+        /// <param name="controllerReference">The reference to the controller to get type of.</param>
         /// <returns>The ControllerType based on the SDK and headset being used.</returns>
-        public override ControllerType GetCurrentControllerType()
+        public override ControllerType GetCurrentControllerType(VRTK_ControllerReference controllerReference = null)
         {
             switch (VRTK_DeviceFinder.GetHeadsetType(true))
             {
                 case VRTK_DeviceFinder.Headsets.Vive:
-                    return GetSteamVRControllerType();
+                    return GetSteamVRControllerType(controllerReference);
                 case VRTK_DeviceFinder.Headsets.OculusRift:
                     return ControllerType.SteamVR_OculusTouch;
             }
@@ -310,6 +312,16 @@ namespace VRTK
         }
 
         /// <summary>
+        /// The WaitForControllerModel method determines whether the controller model for the given hand requires waiting to load in on scene start.
+        /// </summary>
+        /// <param name="hand">The hand to determine if the controller model will be ready for.</param>
+        /// <returns>Returns true if the controller model requires loading in at runtime and therefore needs waiting for. Returns false if the controller model will be available at start.</returns>
+        public override bool WaitForControllerModel(ControllerHand hand)
+        {
+            return ShouldWaitForControllerModel(hand, false);
+        }
+
+        /// <summary>
         /// The GetControllerModel method returns the model alias for the given GameObject.
         /// </summary>
         /// <param name="controller">The GameObject to get the model alias for.</param>
@@ -334,16 +346,12 @@ namespace VRTK
                 {
                     case ControllerHand.Left:
                         controller = GetControllerLeftHand(true);
+                        model = (defaultSDKLeftControllerModel != null ? defaultSDKLeftControllerModel.gameObject : null);
                         break;
                     case ControllerHand.Right:
                         controller = GetControllerRightHand(true);
+                        model = (defaultSDKRightControllerModel != null ? defaultSDKRightControllerModel.gameObject : null);
                         break;
-                }
-
-                if (controller != null)
-                {
-                    Transform foundModel = controller.transform.Find("Model");
-                    model = (foundModel != null ? foundModel.gameObject : null);
                 }
             }
             return model;
@@ -584,19 +592,45 @@ namespace VRTK
 
         protected virtual void Awake()
         {
+            defaultSDKLeftControllerModel = (GetControllerLeftHand(true) != null ? GetControllerLeftHand(true).transform.Find("Model") : null);
+            defaultSDKRightControllerModel = (GetControllerRightHand(true) != null ? GetControllerRightHand(true).transform.Find("Model") : null);
+
 #if VRTK_DEFINE_STEAMVR_PLUGIN_1_1_1_OR_OLDER
             SteamVR_Utils.Event.Listen("TrackedDeviceRoleChanged", OnTrackedDeviceRoleChanged);
+            SteamVR_Utils.Event.Listen("render_model_loaded", OnRenderModelLoaded);
 #elif VRTK_DEFINE_STEAMVR_PLUGIN_1_2_0
             SteamVR_Events.System("TrackedDeviceRoleChanged").Listen(OnTrackedDeviceRoleChanged);
+            SteamVR_Events.RenderModelLoaded.Listen(OnRenderModelLoaded);
 #elif VRTK_DEFINE_STEAMVR_PLUGIN_1_2_1_OR_NEWER
             SteamVR_Events.System(EVREventType.VREvent_TrackedDeviceRoleChanged).Listen(OnTrackedDeviceRoleChanged);
+            SteamVR_Events.RenderModelLoaded.Listen(OnRenderModelLoaded);
 #endif
+
             SetTrackedControllerCaches(true);
         }
 
         protected virtual void OnTrackedDeviceRoleChanged<T>(T ignoredArgument)
         {
             SetTrackedControllerCaches(true);
+        }
+
+        protected virtual void OnRenderModelLoaded(SteamVR_RenderModel givenControllerRenderModel, bool successfullyLoaded)
+        {
+            if (successfullyLoaded)
+            {
+                SteamVR_RenderModel leftControllerRenderModel = (GetControllerLeftHand(true) != null ? GetControllerLeftHand(true).GetComponentInChildren<SteamVR_RenderModel>() : null);
+                SteamVR_RenderModel rightControllerRenderModel = (GetControllerRightHand(true) != null ? GetControllerRightHand(true).GetComponentInChildren<SteamVR_RenderModel>() : null);
+                ControllerHand selectedHand = ControllerHand.None;
+                if (givenControllerRenderModel == leftControllerRenderModel)
+                {
+                    selectedHand = ControllerHand.Left;
+                }
+                else if (givenControllerRenderModel == rightControllerRenderModel)
+                {
+                    selectedHand = ControllerHand.Right;
+                }
+                OnControllerModelReady(selectedHand, VRTK_ControllerReference.GetControllerReference((uint)givenControllerRenderModel.index));
+            }
         }
 
         protected virtual void SetTrackedControllerCaches(bool forceRefresh = false)
@@ -763,17 +797,26 @@ namespace VRTK
             return null;
         }
 
-        protected virtual ControllerType GetSteamVRControllerType()
+        protected virtual ControllerType GetSteamVRControllerType(VRTK_ControllerReference controllerReference)
         {
-            VRTK_ControllerReference leftHand = VRTK_ControllerReference.GetControllerReference(GetControllerLeftHand());
-            VRTK_ControllerReference rightHand = VRTK_ControllerReference.GetControllerReference(GetControllerRightHand());
-
-            if (!VRTK_ControllerReference.IsValid(leftHand) && !VRTK_ControllerReference.IsValid(rightHand))
+            uint checkIndex;
+            if (VRTK_ControllerReference.IsValid(controllerReference))
             {
-                return ControllerType.Undefined;
+                checkIndex = controllerReference.index;
+            }
+            else
+            {
+                VRTK_ControllerReference leftHand = VRTK_ControllerReference.GetControllerReference(GetControllerLeftHand());
+                VRTK_ControllerReference rightHand = VRTK_ControllerReference.GetControllerReference(GetControllerRightHand());
+
+                if (!VRTK_ControllerReference.IsValid(leftHand) && !VRTK_ControllerReference.IsValid(rightHand))
+                {
+                    return ControllerType.Undefined;
+                }
+
+                checkIndex = (VRTK_ControllerReference.IsValid(rightHand) ? rightHand.index : leftHand.index);
             }
 
-            uint checkIndex = (VRTK_ControllerReference.IsValid(rightHand) ? rightHand.index : leftHand.index);
             string controllerType = GetRenderModelName(checkIndex).ToLower();
             if (controllerType.Contains("knuckles"))
             {

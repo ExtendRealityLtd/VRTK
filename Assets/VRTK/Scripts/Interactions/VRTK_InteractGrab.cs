@@ -86,9 +86,6 @@ namespace VRTK
         protected float grabPrecognitionTimer = 0f;
         protected GameObject undroppableGrabbedObject;
         protected Rigidbody originalControllerAttachPoint;
-        protected Coroutine attemptSetCurrentControllerAttachPoint;
-        protected int findControllerAttempts = 25;
-        protected float findControllerAttemptsDelay = 0.1f;
 
         protected VRTK_ControllerReference controllerReference
         {
@@ -201,25 +198,22 @@ namespace VRTK
             ManageInteractTouchListener(true);
             if (controllerEvents != null)
             {
-                controllerEvents.ControllerIndexChanged += ControllerIndexChanged;
+                controllerEvents.ControllerIndexChanged += DoControllerModelUpdate;
+                controllerEvents.ControllerModelAvailable += DoControllerModelUpdate;
             }
             SetControllerAttachPoint();
         }
 
         protected virtual void OnDisable()
         {
-            if (attemptSetCurrentControllerAttachPoint != null)
-            {
-                StopCoroutine(attemptSetCurrentControllerAttachPoint);
-                attemptSetCurrentControllerAttachPoint = null;
-            }
             SetUndroppableObject();
             ForceRelease();
             ManageGrabListener(false);
             ManageInteractTouchListener(false);
             if (controllerEvents != null)
             {
-                controllerEvents.ControllerIndexChanged -= ControllerIndexChanged;
+                controllerEvents.ControllerIndexChanged -= DoControllerModelUpdate;
+                controllerEvents.ControllerModelAvailable -= DoControllerModelUpdate;
             }
         }
 
@@ -236,7 +230,7 @@ namespace VRTK
             CheckPrecognitionGrab();
         }
 
-        protected virtual void ControllerIndexChanged(object sender, ControllerInteractionEventArgs e)
+        protected virtual void DoControllerModelUpdate(object sender, ControllerInteractionEventArgs e)
         {
             SetControllerAttachPoint();
         }
@@ -341,31 +335,18 @@ namespace VRTK
                 //attempt to find the attach point on the controller
                 SDK_BaseController.ControllerHand handType = VRTK_DeviceFinder.GetControllerHand(interactTouch.gameObject);
                 string elementPath = VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.AttachPoint, handType);
-                attemptSetCurrentControllerAttachPoint = StartCoroutine(SetCurrentControllerAttachPoint(elementPath, findControllerAttempts, findControllerAttemptsDelay));
-            }
-        }
+                Transform defaultAttachPoint = controllerReference.model.transform.Find(elementPath);
 
-        protected virtual IEnumerator SetCurrentControllerAttachPoint(string searchPath, int attempts, float delay)
-        {
-            WaitForSeconds delayInstruction = new WaitForSeconds(delay);
-            Transform defaultAttachPoint = controllerReference.model.transform.Find(searchPath);
-
-            while (defaultAttachPoint == null && attempts > 0)
-            {
-                defaultAttachPoint = controllerReference.model.transform.Find(searchPath);
-                attempts--;
-                yield return delayInstruction;
-            }
-
-            if (defaultAttachPoint != null)
-            {
-                controllerAttachPoint = defaultAttachPoint.GetComponent<Rigidbody>();
-
-                if (controllerAttachPoint == null)
+                if (defaultAttachPoint != null)
                 {
-                    Rigidbody autoGenRB = defaultAttachPoint.gameObject.AddComponent<Rigidbody>();
-                    autoGenRB.isKinematic = true;
-                    controllerAttachPoint = autoGenRB;
+                    controllerAttachPoint = defaultAttachPoint.GetComponent<Rigidbody>();
+
+                    if (controllerAttachPoint == null)
+                    {
+                        Rigidbody autoGenRB = defaultAttachPoint.gameObject.AddComponent<Rigidbody>();
+                        autoGenRB.isKinematic = true;
+                        controllerAttachPoint = autoGenRB;
+                    }
                 }
             }
         }

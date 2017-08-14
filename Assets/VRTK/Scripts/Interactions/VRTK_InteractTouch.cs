@@ -2,7 +2,6 @@
 namespace VRTK
 {
     using UnityEngine;
-    using System.Collections;
     using System.Collections.Generic;
 
     /// <summary>
@@ -75,9 +74,7 @@ namespace VRTK
         protected bool triggerWasColliding = false;
         protected bool rigidBodyForcedActive = false;
         protected Rigidbody touchRigidBody;
-        protected Coroutine attemptCreateColliderRoutine;
-        protected int findControllerAttempts = 25;
-        protected float findControllerAttemptsDelay = 0.1f;
+        protected VRTK_TrackedController trackedController;
 
         protected VRTK_ControllerReference controllerReference
         {
@@ -245,6 +242,15 @@ namespace VRTK
             return (controllerCollisionDetector != null && controllerCollisionDetector.GetComponents<Collider>().Length > 0 ? controllerCollisionDetector.GetComponents<Collider>() : controllerCollisionDetector.GetComponentsInChildren<Collider>());
         }
 
+        /// <summary>
+        /// The GetControllerType method is a shortcut to retrieve the current controller type the interact touch is attached to.
+        /// </summary>
+        /// <returns>The type of controller that the interact touch is attached to.</returns>
+        public virtual SDK_BaseController.ControllerType GetControllerType()
+        {
+            return (trackedController != null ? trackedController.GetControllerType() : SDK_BaseController.ControllerType.Undefined);
+        }
+
         protected virtual void Awake()
         {
             VRTK_SDKManager.instance.AddBehaviourToToggleOnLoadedSetupChange(this);
@@ -255,18 +261,21 @@ namespace VRTK
             destroyColliderOnDisable = false;
             VRTK_PlayerObject.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.Controller);
             triggerRumble = false;
-            attemptCreateColliderRoutine = StartCoroutine(AttemptCreateCollider(findControllerAttempts, findControllerAttemptsDelay));
             CreateTouchRigidBody();
+            trackedController = GetComponentInParent<VRTK_TrackedController>();
+            if(trackedController != null)
+            {
+                trackedController.ControllerModelAvailable += DoControllerModelAvailable;
+            }
         }
 
         protected virtual void OnDisable()
         {
             ForceStopTouching();
             DestroyTouchCollider();
-            if (attemptCreateColliderRoutine != null)
+            if (trackedController != null)
             {
-                StopCoroutine(attemptCreateColliderRoutine);
-                attemptCreateColliderRoutine = null;
+                trackedController.ControllerModelAvailable -= DoControllerModelAvailable;
             }
         }
 
@@ -345,6 +354,11 @@ namespace VRTK
             {
                 CheckStopTouching();
             }
+        }
+
+        protected virtual void DoControllerModelAvailable(object sender, VRTKTrackedControllerEventArgs e)
+        {
+            CreateTouchCollider();
         }
 
         protected virtual GameObject GetColliderInteractableObject(Collider collider)
@@ -492,20 +506,6 @@ namespace VRTK
                 }
             }
             return false;
-        }
-
-        protected virtual IEnumerator AttemptCreateCollider(int attempts, float delay)
-        {
-            WaitForSeconds delayInstruction = new WaitForSeconds(delay);
-            SDK_BaseController.ControllerType controllerType = VRTK_SDK_Bridge.GetCurrentControllerType();
-            while (controllerType == SDK_BaseController.ControllerType.Undefined && attempts > 0)
-            {
-                controllerType = VRTK_SDK_Bridge.GetCurrentControllerType();
-                attempts--;
-                yield return delayInstruction;
-            }
-
-            CreateTouchCollider();
         }
 
         protected virtual void CreateTouchCollider()
