@@ -30,6 +30,10 @@ namespace VRTK
             AlwaysOnWithPointerCursor
         }
 
+        [Header("Control Settings")]
+        [Tooltip("The touchpad axis needs to be above this deadzone for it to register as a valid touchpad angle.")]
+        public Vector2 touchpadDeadzone = Vector2.zero;
+
         [Header("Appearance Settings")]
 
         [Tooltip("If this is checked then the reported rotation will include the offset of the headset rotation in relation to the play area.")]
@@ -125,12 +129,17 @@ namespace VRTK
 
         protected virtual void Update()
         {
-            if (controllerEvents != null && controllerEvents.touchpadTouched && controllerEvents.GetTouchpadAxis() != Vector2.zero)
+            if (controllerEvents != null && controllerEvents.touchpadTouched && !InsideDeadzone(controllerEvents.GetTouchpadAxis()))
             {
                 float touchpadAngle = controllerEvents.GetTouchpadAxisAngle();
                 float angle = ((touchpadAngle > 180) ? touchpadAngle -= 360 : touchpadAngle) + headset.eulerAngles.y;
                 transform.localEulerAngles = new Vector3(0f, angle, 0f);
             }
+        }
+
+        protected virtual bool InsideDeadzone(Vector2 currentAxis)
+        {
+            return (currentAxis == Vector2.zero || (Mathf.Abs(currentAxis.x) <= touchpadDeadzone.x && Mathf.Abs(currentAxis.y) <= touchpadDeadzone.y));
         }
     }
 }

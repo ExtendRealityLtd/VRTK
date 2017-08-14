@@ -771,6 +771,7 @@ This can be useful for rotating the play area upon teleporting to face the user 
 
 ### Inspector Parameters
 
+ * **Touchpad Deadzone:** The touchpad axis needs to be above this deadzone for it to register as a valid touchpad angle.
  * **Include Headset Offset:** If this is checked then the reported rotation will include the offset of the headset rotation in relation to the play area.
  * **Display On Invalid Location:** If this is checked then the direction indicator will be displayed when the location is invalid.
  * **Use Pointer Color:** If this is checked then the pointer valid/invalid colours will also be used to change the colour of the direction indicator.
