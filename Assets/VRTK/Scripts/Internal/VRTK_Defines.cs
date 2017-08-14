@@ -12,7 +12,7 @@ namespace VRTK
         /// <summary>
         /// The current version of VRTK.
         /// </summary>
-        public static readonly Version CurrentVersion = new Version(3, 2, 1);
+        public static readonly Version CurrentVersion = new Version(3, 3, 0);
 
         /// <summary>
         /// The previously known versions of VRTK.
@@ -20,7 +20,8 @@ namespace VRTK
         public static readonly Version[] PreviousVersions =
         {
             new Version(3, 1, 0),
-            new Version(3, 2, 0)
+            new Version(3, 2, 0),
+            new Version(3, 2, 1),
         };
 
         /// <summary>
