@@ -3873,6 +3873,17 @@ The SetSnapDropZoneHover method sets whether the interactable object is currentl
 
 The GetStoredSnapDropZone method returns the snap drop zone that the interactable object is currently snapped to.
 
+#### IsHoveredOverSnapDropZone/0
+
+  > `public virtual bool IsHoveredOverSnapDropZone()`
+
+  * Parameters
+   * _none_
+  * Returns
+   * `bool` - Returns true if the interactable object is currently hovering over a snap drop zone.
+
+The IsHoveredOverSnapDropZone method returns whether the interactable object is currently hovering over a snap drop zone.
+
 #### IsDroppable/0
 
   > `public virtual bool IsDroppable()`
