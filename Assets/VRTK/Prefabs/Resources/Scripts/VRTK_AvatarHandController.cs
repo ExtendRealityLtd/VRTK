@@ -214,7 +214,7 @@ namespace VRTK
             {
                 if (fingerAnimationRoutine[i] != null)
                 {
-                    fingerAnimationRoutine = null;
+                    fingerAnimationRoutine[i] = null;
                 }
             }
         }
