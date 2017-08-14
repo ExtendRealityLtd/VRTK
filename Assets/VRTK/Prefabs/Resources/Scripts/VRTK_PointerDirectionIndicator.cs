@@ -19,6 +19,21 @@ namespace VRTK
     /// </remarks>
     public class VRTK_PointerDirectionIndicator : MonoBehaviour
     {
+        /// <summary>
+        /// States of Direction Indicator Visibility.
+        /// </summary>
+        /// <param name="OnWhenPointerActive">Only shows the direction indicator when the pointer is active.</param>
+        /// <param name="AlwaysOnWithPointerCursor">Only shows the direction indicator when the pointer cursor is visible or if the cursor is hidden and the pointer is active.</param>
+        public enum VisibilityState
+        {
+            OnWhenPointerActive,
+            AlwaysOnWithPointerCursor
+        }
+
+        [Header("Control Settings")]
+        [Tooltip("The touchpad axis needs to be above this deadzone for it to register as a valid touchpad angle.")]
+        public Vector2 touchpadDeadzone = Vector2.zero;
+
         [Header("Appearance Settings")]
 
         [Tooltip("If this is checked then the reported rotation will include the offset of the headset rotation in relation to the play area.")]
@@ -27,6 +42,8 @@ namespace VRTK
         public bool displayOnInvalidLocation = true;
         [Tooltip("If this is checked then the pointer valid/invalid colours will also be used to change the colour of the direction indicator.")]
         public bool usePointerColor = false;
+        [Tooltip("Determines when the direction indicator will be visible.")]
+        public VisibilityState indicatorVisibility = VisibilityState.OnWhenPointerActive;
 
         [HideInInspector]
         public bool isActive = true;
@@ -112,12 +129,17 @@ namespace VRTK
 
         protected virtual void Update()
         {
-            if (controllerEvents != null && controllerEvents.touchpadTouched && controllerEvents.GetTouchpadAxis() != Vector2.zero)
+            if (controllerEvents != null && controllerEvents.touchpadTouched && !InsideDeadzone(controllerEvents.GetTouchpadAxis()))
             {
                 float touchpadAngle = controllerEvents.GetTouchpadAxisAngle();
                 float angle = ((touchpadAngle > 180) ? touchpadAngle -= 360 : touchpadAngle) + headset.eulerAngles.y;
                 transform.localEulerAngles = new Vector3(0f, angle, 0f);
             }
+        }
+
+        protected virtual bool InsideDeadzone(Vector2 currentAxis)
+        {
+            return (currentAxis == Vector2.zero || (Mathf.Abs(currentAxis.x) <= touchpadDeadzone.x && Mathf.Abs(currentAxis.y) <= touchpadDeadzone.y));
         }
     }
 }
