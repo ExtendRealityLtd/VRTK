@@ -360,7 +360,12 @@ namespace VRTK
         {
             if (highlightAlwaysActive && !isSnapped && !isHighlighted)
             {
-                highlightObject.SetActive(true);
+                SetHighlightObjectActive(true);
+            }
+
+            if (!highlightAlwaysActive && isHighlighted && !ValidSnappableObjectIsHovering())
+            {
+                SetHighlightObjectActive(false);
             }
         }
 
@@ -404,7 +409,7 @@ namespace VRTK
                     RemoveCurrentValidSnapObject(currentIOCheck);
                     if (isHighlighted && highlightObject != null && !highlightAlwaysActive)
                     {
-                        highlightObject.SetActive(false);
+                        SetHighlightObjectActive(false);
                     }
                 }
             }
@@ -473,7 +478,7 @@ namespace VRTK
                     if (highlightObject != null)
                     {
                         //Turn off the drop zone highlighter
-                        highlightObject.SetActive(false);
+                        SetHighlightObjectActive(false);
                     }
 
                     Vector3 newLocalScale = GetNewLocalScale(ioCheck);
@@ -729,11 +734,10 @@ namespace VRTK
             if (highlightObject != null && ioCheck != null)
             {
                 //Toggle the highlighter state
-                highlightObject.SetActive(state);
+                SetHighlightObjectActive(state);
                 ioCheck.SetSnapDropZoneHover(this, state);
 
                 willSnap = state;
-                isHighlighted = state;
 
                 if (state)
                 {
@@ -789,11 +793,17 @@ namespace VRTK
                 DeleteHighlightObject();
             }
 
+            SetHighlightObjectActive(false);
+            SetContainer();
+        }
+
+        protected virtual void SetHighlightObjectActive(bool state)
+        {
             if (highlightObject != null)
             {
-                highlightObject.SetActive(false);
+                highlightObject.SetActive(state);
+                isHighlighted = state;
             }
-            SetContainer();
         }
 
         protected virtual void DeleteHighlightObject()
