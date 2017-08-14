@@ -692,7 +692,7 @@ namespace VRTK
                     OnInteractableObjectExitedSnapDropZone(SetInteractableObjectEvent(snapDropZone.gameObject));
                 }
             }
-            hoveredOverSnapDropZone = hoveredSnapObjects.Count > 0;
+            hoveredOverSnapDropZone = (hoveredSnapObjects.Count > 0);
         }
 
         /// <summary>
@@ -702,6 +702,15 @@ namespace VRTK
         public virtual VRTK_SnapDropZone GetStoredSnapDropZone()
         {
             return storedSnapDropZone;
+        }
+
+        /// <summary>
+        /// The IsHoveredOverSnapDropZone method returns whether the interactable object is currently hovering over a snap drop zone.
+        /// </summary>
+        /// <returns>Returns true if the interactable object is currently hovering over a snap drop zone.</returns>
+        public virtual bool IsHoveredOverSnapDropZone()
+        {
+            return hoveredOverSnapDropZone;
         }
 
         /// <summary>
