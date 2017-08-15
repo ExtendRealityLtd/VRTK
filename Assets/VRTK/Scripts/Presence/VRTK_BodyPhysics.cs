@@ -108,10 +108,12 @@ namespace VRTK
 
         [Tooltip("The VRTK Teleport script to use when snapping to floor. If this is left blank then a Teleport script will need to be applied to the same GameObject.")]
         public VRTK_BasicTeleport teleporter;
+        [Tooltip("A custom Rigidbody to apply to the play area. If one is not provided, then if an existing rigidbody is found on the play area GameObject it will be used, otherwise a default one will be created.")]
+        public Rigidbody customPlayAreaRigidbody = null;
         [Tooltip("A GameObject to represent a custom body collider container. It should contain a collider component that will be used for detecting body collisions. If one isn't provided then it will be auto generated.")]
-        public GameObject customBodyColliderContainer;
+        public GameObject customBodyColliderContainer = null;
         [Tooltip("A GameObject to represent a custom foot collider container. It should contain a collider component that will be used for detecting step collisions. If one isn't provided then it will be auto generated.")]
-        public GameObject customFootColliderContainer;
+        public GameObject customFootColliderContainer = null;
 
         /// <summary>
         /// Emitted when a fall begins.
@@ -985,13 +987,42 @@ namespace VRTK
 
         protected virtual void GenerateRigidbody()
         {
-            bodyRigidbody = playArea.GetComponent<Rigidbody>();
-            if (bodyRigidbody == null)
+            if (customPlayAreaRigidbody != null)
+            {
+                HasExistingRigidbody();
+                bodyRigidbody.mass = customPlayAreaRigidbody.mass;
+                bodyRigidbody.drag = customPlayAreaRigidbody.drag;
+                bodyRigidbody.angularDrag = customPlayAreaRigidbody.angularDrag;
+                bodyRigidbody.useGravity = customPlayAreaRigidbody.useGravity;
+                bodyRigidbody.isKinematic = customPlayAreaRigidbody.isKinematic;
+                bodyRigidbody.interpolation = customPlayAreaRigidbody.interpolation;
+                bodyRigidbody.collisionDetectionMode = customPlayAreaRigidbody.collisionDetectionMode;
+                bodyRigidbody.constraints = customPlayAreaRigidbody.constraints;
+            }
+            else
+            {
+                if (!HasExistingRigidbody())
+                {
+                    bodyRigidbody.mass = bodyMass;
+                    bodyRigidbody.freezeRotation = true;
+                }
+            }
+        }
+
+        protected virtual bool HasExistingRigidbody()
+        {
+            Rigidbody existingRigidbody = playArea.GetComponent<Rigidbody>();
+            if (existingRigidbody != null)
+            {
+                generateRigidbody = false;
+                bodyRigidbody = existingRigidbody;
+                return true;
+            }
+            else
             {
                 generateRigidbody = true;
                 bodyRigidbody = playArea.gameObject.AddComponent<Rigidbody>();
-                bodyRigidbody.mass = bodyMass;
-                bodyRigidbody.freezeRotation = true;
+                return false;
             }
         }
 
