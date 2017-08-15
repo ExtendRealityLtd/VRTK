@@ -71,10 +71,7 @@ namespace VRTK
             if (sdkManager != null)
             {
                 sdkManager.LoadedSetupChanged += LoadedSetupChanged;
-                if (sdkManager.loadedSetup != null)
-                {
-                    FindController();
-                }
+                FindController();
             }
         }
 
@@ -107,7 +104,7 @@ namespace VRTK
 
         protected virtual void FindController()
         {
-            if (gameObject.activeInHierarchy)
+            if (sdkManager != null && sdkManager.loadedSetup != null && gameObject.activeInHierarchy)
             {
                 attemptFindControllerModel = StartCoroutine(AttemptFindController(findControllerAttempts, findControllerAttemptsDelay));
             }
