@@ -5511,6 +5511,7 @@ To allow for peeking over a ledge and not falling, a fall restiction can happen 
  * **Floor Height Tolerance:** The amount the `y` position needs to change by between the current floor `y` position and the previous floor `y` position before a change in floor height is considered to have occurred. A higher value here will mean that a `Drop To Floor` will be less likely to happen if the `y` of the floor beneath the user hasn't changed as much as the given threshold.
  * **Fall Check Precision:** The amount of rounding on the play area Y position to be applied when checking if falling is occuring.
  * **Teleporter:** The VRTK Teleport script to use when snapping to floor. If this is left blank then a Teleport script will need to be applied to the same GameObject.
+ * **Custom Play Area Rigidbody:** A custom Rigidbody to apply to the play area. If one is not provided, then if an existing rigidbody is found on the play area GameObject it will be used, otherwise a default one will be created.
  * **Custom Body Collider Container:** A GameObject to represent a custom body collider container. It should contain a collider component that will be used for detecting body collisions. If one isn't provided then it will be auto generated.
  * **Custom Foot Collider Container:** A GameObject to represent a custom foot collider container. It should contain a collider component that will be used for detecting step collisions. If one isn't provided then it will be auto generated.
 
@@ -5522,6 +5523,7 @@ To allow for peeking over a ledge and not falling, a fall restiction can happen 
   * `RightController` - Don't drop to nearest floor  if the Right Controller is still over the current standing object even if the headset isn't.
   * `EitherController` - Don't drop to nearest floor  if Either Controller is still over the current standing object even if the headset isn't.
   * `BothControllers` - Don't drop to nearest floor only if Both Controllers are still over the current standing object even if the headset isn't.
+  * `AlwaysRestrict` - Never drop to nearest floor when the headset is no longer over the current standing object.
 
 ### Class Events
 
