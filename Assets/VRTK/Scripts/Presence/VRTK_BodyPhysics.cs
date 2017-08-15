@@ -50,6 +50,7 @@ namespace VRTK
         /// <param name="RightController">Don't drop to nearest floor  if the Right Controller is still over the current standing object even if the headset isn't.</param>
         /// <param name="EitherController">Don't drop to nearest floor  if Either Controller is still over the current standing object even if the headset isn't.</param>
         /// <param name="BothControllers">Don't drop to nearest floor only if Both Controllers are still over the current standing object even if the headset isn't.</param>
+        /// <param name="AlwaysRestrict">Never drop to nearest floor when the headset is no longer over the current standing object.</param>
         public enum FallingRestrictors
         {
             NoRestriction,
@@ -57,6 +58,7 @@ namespace VRTK
             RightController,
             EitherController,
             BothControllers,
+            AlwaysRestrict
         }
 
         [Header("Body Collision Settings")]
@@ -1247,6 +1249,10 @@ namespace VRTK
             if (fallRestriction == FallingRestrictors.NoRestriction)
             {
                 return false;
+            }
+            if (fallRestriction == FallingRestrictors.AlwaysRestrict)
+            {
+                return true;
             }
 
             float controllerDropThreshold = 0.05f;

@@ -5523,6 +5523,7 @@ To allow for peeking over a ledge and not falling, a fall restiction can happen 
   * `RightController` - Don't drop to nearest floor  if the Right Controller is still over the current standing object even if the headset isn't.
   * `EitherController` - Don't drop to nearest floor  if Either Controller is still over the current standing object even if the headset isn't.
   * `BothControllers` - Don't drop to nearest floor only if Both Controllers are still over the current standing object even if the headset isn't.
+  * `AlwaysRestrict` - Never drop to nearest floor when the headset is no longer over the current standing object.
 
 ### Class Events
 
