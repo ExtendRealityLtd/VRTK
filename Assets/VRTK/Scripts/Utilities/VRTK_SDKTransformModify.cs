@@ -61,7 +61,10 @@ namespace VRTK
 
         protected virtual void LoadedSetupChanged(VRTK_SDKManager sender, VRTK_SDKManager.LoadedSetupChangeEventArgs e)
         {
-            UpdateTransform();
+            if (sdkManager != null && gameObject.activeInHierarchy)
+            {
+                UpdateTransform();
+            }
         }
 
         protected virtual VRTK_SDKTransformModifiers GetSelectedModifier()

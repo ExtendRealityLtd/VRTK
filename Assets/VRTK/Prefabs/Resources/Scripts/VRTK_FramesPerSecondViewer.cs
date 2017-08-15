@@ -88,7 +88,10 @@ namespace VRTK
 
         protected virtual void LoadedSetupChanged(VRTK_SDKManager sender, VRTK_SDKManager.LoadedSetupChangeEventArgs e)
         {
-            SetCanvasCamera();
+            if (sdkManager != null && gameObject.activeInHierarchy)
+            {
+                SetCanvasCamera();
+            }
         }
 
         protected virtual void InitCanvas()
