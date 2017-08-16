@@ -6472,7 +6472,6 @@ A collection of scripts that provide useful functionality to aid the creation pr
  * [Transform Follow](#transform-follow-vrtk_transformfollow)
  * [SDK Object Alias](#sdk-object-alias-vrtk_sdkobjectalias)
  * [SDK Transform Modify](#sdk-transform-modify-vrtk_sdktransformmodify)
- * [Simulating Headset Movement](#simulating-headset-movement-vrtk_simulator)
 
 ---
 
@@ -7695,25 +7694,6 @@ The SDK Transform Modify can be used to change a transform orientation at runtim
    * _none_
 
 The UpdateTransform method updates the Transform data on the current GameObject for the specified settings.
-
----
-
-## Simulating Headset Movement (VRTK_Simulator)
-
-### Overview
-
-To test a scene it is often necessary to use the headset to move to a location. This increases turn-around times and can become cumbersome.
-
-The simulator allows navigating through the scene using the keyboard instead, without the need to put on the headset. One can then move around (also through walls) while looking at the monitor and still use the controllers to interact.
-
-Supported movements are: forward, backward, strafe left, strafe right, turn left, turn right, up, down.
-
-### Inspector Parameters
-
- * **Keys:** Per default the keys on the left-hand side of the keyboard are used (WASD). They can be individually set as needed. The reset key brings the camera to its initial location.
- * **Only In Editor:** Typically the simulator should be turned off when not testing anymore. This option will do this automatically when outside the editor.
- * **Step Size:** Depending on the scale of the world the step size can be defined to increase or decrease movement speed.
- * **Cam Start:** An optional game object marking the position and rotation at which the camera should be initially placed.
 
 ---
 
