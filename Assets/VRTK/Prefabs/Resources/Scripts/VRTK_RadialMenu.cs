@@ -130,7 +130,7 @@ namespace VRTK
         {
             if (currentHover != -1)
             {
-                var pointer = new PointerEventData(EventSystem.current);
+                PointerEventData pointer = new PointerEventData(EventSystem.current);
                 ExecuteEvents.Execute(menuButtons[currentHover], pointer, ExecuteEvents.pointerExitHandler);
                 buttons[currentHover].OnHoverExit.Invoke();
                 currentHover = -1;
@@ -294,7 +294,7 @@ namespace VRTK
             angle = VRTK_SharedMethods.Mod((angle + -offsetRotation), 360); //Offset the touch coordinate with our offset
 
             int buttonID = (int)VRTK_SharedMethods.Mod(((angle + (buttonAngle / 2f)) / buttonAngle), buttons.Count); //Convert angle into ButtonID (This is the magic)
-            var pointer = new PointerEventData(EventSystem.current); //Create a new EventSystem (UI) Event
+            PointerEventData pointer = new PointerEventData(EventSystem.current); //Create a new EventSystem (UI) Event
 
             //If we changed buttons while moving, un-hover and un-click the last button we were on
             if (currentHover != buttonID && currentHover != -1)
