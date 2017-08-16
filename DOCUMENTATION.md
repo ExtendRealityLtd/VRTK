@@ -836,7 +836,7 @@ It's also recommended to use the Simple Pointer and UI Pointer on a controller t
 
 #### SetCollapse/1
 
-  > `public void SetCollapse(bool state)`
+  > `public virtual void SetCollapse(bool state)`
 
   * Parameters
    * `bool state` - The state of whether to collapse the output messages, true will collapse and false will not collapse.
@@ -847,7 +847,7 @@ The SetCollapse method determines whether the console will collapse same message
 
 #### ClearLog/0
 
-  > `public void ClearLog()`
+  > `public virtual void ClearLog()`
 
   * Parameters
    * _none_
