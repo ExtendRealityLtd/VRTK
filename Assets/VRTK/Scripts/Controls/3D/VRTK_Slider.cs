@@ -86,7 +86,7 @@ namespace VRTK
                 Vector3 sliderDiff = transform.localScale / 2f;
 
                 //The right ray has found the min on the right, so max is on the left
-                if (rightHasHit && hitRight.collider.gameObject.Equals(minimumLimit.gameObject))
+                if (rightHasHit && hitRight.collider.gameObject == minimumLimit.gameObject)
                 {
                     finalDirection = Direction.x;
                     minimumLimitDiff = CalculateDiff(minimumLimit.transform.localPosition, Vector3.right, minimumLimit.transform.localScale.x, sliderDiff.x, false);
@@ -94,7 +94,7 @@ namespace VRTK
                 }
 
                 //The right ray has found the max on the right, so min is on the left
-                if (rightHasHit && hitRight.collider.gameObject.Equals(maximumLimit.gameObject))
+                if (rightHasHit && hitRight.collider.gameObject == maximumLimit.gameObject)
                 {
                     finalDirection = Direction.x;
                     minimumLimitDiff = CalculateDiff(minimumLimit.transform.localPosition, Vector3.right, minimumLimit.transform.localScale.x, sliderDiff.x, true);
@@ -102,7 +102,7 @@ namespace VRTK
                 }
 
                 // the up ray has found the min above, so max is below
-                if (upHasHit && hitUp.collider.gameObject.Equals(minimumLimit.gameObject))
+                if (upHasHit && hitUp.collider.gameObject == minimumLimit.gameObject)
                 {
                     finalDirection = Direction.y;
                     minimumLimitDiff = CalculateDiff(minimumLimit.transform.localPosition, Vector3.up, minimumLimit.transform.localScale.y, sliderDiff.y, false);
@@ -110,7 +110,7 @@ namespace VRTK
                 }
 
                 //the up ray has found the max above, so the min ix below
-                if (upHasHit && hitUp.collider.gameObject.Equals(maximumLimit.gameObject))
+                if (upHasHit && hitUp.collider.gameObject == maximumLimit.gameObject)
                 {
                     finalDirection = Direction.y;
                     minimumLimitDiff = CalculateDiff(minimumLimit.transform.localPosition, Vector3.up, minimumLimit.transform.localScale.y, sliderDiff.y, true);
@@ -118,7 +118,7 @@ namespace VRTK
                 }
 
                 //the forward ray has found the min in front, so the max is behind
-                if (forwardHasHit && hitForward.collider.gameObject.Equals(minimumLimit.gameObject))
+                if (forwardHasHit && hitForward.collider.gameObject == minimumLimit.gameObject)
                 {
                     finalDirection = Direction.z;
                     minimumLimitDiff = CalculateDiff(minimumLimit.transform.localPosition, Vector3.forward, minimumLimit.transform.localScale.y, sliderDiff.y, false);
@@ -126,7 +126,7 @@ namespace VRTK
                 }
 
                 //the forward ray has found the max in front, so the min is behind
-                if (forwardHasHit && hitForward.collider.gameObject.Equals(maximumLimit.gameObject))
+                if (forwardHasHit && hitForward.collider.gameObject == maximumLimit.gameObject)
                 {
                     finalDirection = Direction.z;
                     minimumLimitDiff = CalculateDiff(minimumLimit.transform.localPosition, Vector3.forward, minimumLimit.transform.localScale.z, sliderDiff.z, true);

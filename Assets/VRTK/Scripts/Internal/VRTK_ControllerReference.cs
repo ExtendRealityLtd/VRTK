@@ -160,7 +160,7 @@
             {
                 return false;
             }
-            return (index.Equals(other.index));
+            return (index == other.index);
         }
 
         protected virtual GameObject GetValidObjectFromIndex()

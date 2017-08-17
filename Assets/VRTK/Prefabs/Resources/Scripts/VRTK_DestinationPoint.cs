@@ -326,7 +326,7 @@ namespace VRTK
 
         protected virtual void ToggleCursor(object sender, bool state)
         {
-            if ((hidePointerCursorOnHover || hideDirectionIndicatorOnHover) && sender.GetType().Equals(typeof(VRTK_Pointer)))
+            if ((hidePointerCursorOnHover || hideDirectionIndicatorOnHover) && sender.GetType() == typeof(VRTK_Pointer))
             {
                 VRTK_Pointer pointer = (VRTK_Pointer)sender;
                 if (pointer != null && pointer.pointerRenderer != null)
