@@ -4,7 +4,7 @@ namespace VRTK
     /// <summary>
     /// The Sim System SDK script provides dummy functions for system functions.
     /// </summary>
-    [SDK_Description("Simulator", null, null, "Standalone")]
+    [SDK_Description("Simulator (Standalone)", null, null, "Standalone")]
     public class SDK_SimSystem : SDK_BaseSystem
     {
         /// <summary>

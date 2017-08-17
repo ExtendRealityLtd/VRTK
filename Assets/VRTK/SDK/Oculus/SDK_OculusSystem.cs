@@ -4,8 +4,8 @@ namespace VRTK
     /// <summary>
     /// The Oculus System SDK script provides a bridge to the Oculus SDK.
     /// </summary>
-    [SDK_Description("Oculus (Rift)", SDK_OculusDefines.ScriptingDefineSymbol, "Oculus", "Standalone")]
-    [SDK_Description("Oculus (GearVR)", SDK_OculusDefines.ScriptingDefineSymbol, "Oculus", "Android", 1)]
+    [SDK_Description("Oculus Rift (Standalone:Oculus)", SDK_OculusDefines.ScriptingDefineSymbol, "Oculus", "Standalone")]
+    [SDK_Description("GearVR (Android:Oculus)", SDK_OculusDefines.ScriptingDefineSymbol, "Oculus", "Android", 1)]
     public class SDK_OculusSystem
 #if VRTK_DEFINE_SDK_OCULUS
         : SDK_BaseSystem

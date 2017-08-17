@@ -8,7 +8,7 @@ namespace VRTK
     /// <summary>
     /// The HyperealVR System SDK script provides a bridge to the HyperealVR SDK.
     /// </summary>
-    [SDK_Description("HyperealVR", SDK_HyperealVRDefines.ScriptingDefineSymbol, null, "Standalone")]
+    [SDK_Description("HyperealVR (Standalone)", SDK_HyperealVRDefines.ScriptingDefineSymbol, null, "Standalone")]
     public class SDK_HyperealVRSystem
 #if VRTK_DEFINE_SDK_HYPEREALVR
         : SDK_BaseSystem

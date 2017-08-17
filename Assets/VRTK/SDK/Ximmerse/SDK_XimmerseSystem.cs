@@ -4,8 +4,8 @@ namespace VRTK
     /// <summary>
     /// The Ximmerse System SDK script provides a bridge to the Ximmerse SDK.
     /// </summary>
-    [SDK_Description("Ximmerse (Oculus)", SDK_XimmerseDefines.ScriptingDefineSymbol, "Oculus", "Standalone")]
-    [SDK_Description("Ximmerse (Daydream)", SDK_XimmerseDefines.ScriptingDefineSymbol, "Daydream", "Android", 1)]
+    [SDK_Description("Ximmerse (Standalone:Oculus)", SDK_XimmerseDefines.ScriptingDefineSymbol, "Oculus", "Standalone")]
+    [SDK_Description("Ximmerse (Android:Daydream)", SDK_XimmerseDefines.ScriptingDefineSymbol, "Daydream", "Android", 1)]
     public class SDK_XimmerseSystem
 #if VRTK_DEFINE_SDK_XIMMERSE
         : SDK_BaseSystem
