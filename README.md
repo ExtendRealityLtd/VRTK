@@ -10,7 +10,8 @@
 
 | Supported SDK | Download Link |
 |---------------|---------------|
-| VR Simulator | Included |
+| UnityEngine.VR | _Core Unity3d library_ |
+| VR Simulator | _Included_ |
 | SteamVR | [SteamVR Plugin] |
 | Oculus | [Oculus Utilities] |
 | *Ximmerse | [Ximmerse Unity SDK] |
