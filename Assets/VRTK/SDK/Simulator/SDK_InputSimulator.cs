@@ -1,4 +1,4 @@
-﻿// VR Simulator|Prefabs|0005
+﻿// VR Simulator CameraRig|Prefabs|0005
 namespace VRTK
 {
     using UnityEngine;
@@ -7,7 +7,7 @@ namespace VRTK
     using System.Collections.Generic;
 
     /// <summary>
-    /// The `VRSimulatorCameraRig` prefab is a mock Camera Rig set up that can be used to develop with VRTK without the need for VR Hardware.
+    /// The `[VRSimulator_CameraRig]` prefab is a mock Camera Rig set up that can be used to develop with VRTK without the need for VR Hardware.
     /// </summary>
     /// <remarks>
     /// Use the mouse and keyboard to move around both play area and hands and interacting with objects without the need of a hmd or VR controls.
@@ -124,9 +124,9 @@ namespace VRTK
         #endregion
 
         /// <summary>
-        /// The FindInScene method is used to find the `VRSimulatorCameraRig` GameObject within the current scene.
+        /// The FindInScene method is used to find the `[VRSimulator_CameraRig]` GameObject within the current scene.
         /// </summary>
-        /// <returns>Returns the found `VRSimulatorCameraRig` GameObject if it is found. If it is not found then it prints a debug log error.</returns>
+        /// <returns>Returns the found `[VRSimulator_CameraRig]` GameObject if it is found. If it is not found then it prints a debug log error.</returns>
         public static GameObject FindInScene()
         {
             if (cachedCameraRig == null && !destroyed)
@@ -134,7 +134,7 @@ namespace VRTK
                 cachedCameraRig = VRTK_SharedMethods.FindEvenInactiveGameObject<SDK_InputSimulator>();
                 if (!cachedCameraRig)
                 {
-                    VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_SCENE, "VRSimulatorCameraRig", "SDK_InputSimulator", ". check that the `VRTK/Prefabs/VRSimulatorCameraRig` prefab been added to the scene."));
+                    VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_SCENE, "[VRSimulator_CameraRig]", "SDK_InputSimulator", ". check that the `VRTK/Prefabs/CameraRigs/[VRSimulator_CameraRig]` prefab been added to the scene."));
                 }
             }
             return cachedCameraRig;

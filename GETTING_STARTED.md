@@ -41,7 +41,7 @@ Read the rest of this document for more detailed instructions on how to set up a
 
 <details><summary>**Instructions for using the built in Unity3d VR support**</summary>
 
-* Follow the initial steps above by adding the `[UnityBase_CameraRig]` prefab from `VRTK/Prefabs` as a child of the SDK Setup game object.
+* Follow the initial steps above by adding the `[UnityBase_CameraRig]` prefab from `VRTK/Prefabs/CameraRigs` as a child of the SDK Setup game object.
 * The Unity Input Manager must also be configured to utilise the axes on the VR controller.
 * Open up the Unity Input Manager tab `Edit -> Project Settings -> Input`.
 * Increase the size of the `Axes` array to the number of required new axes (usually increase by 8, 2 for trigger, 2 for grip and 4 for touchpad [x,y] which is for both hands).
@@ -54,7 +54,7 @@ Read the rest of this document for more detailed instructions on how to set up a
 
 <details><summary>**Instructions for using the VR Simulator**</summary>
 
-* Follow the initial steps above by adding the `VRSimulatorCameraRig` prefab from `VRTK/Prefabs` as a child of the SDK Setup game object.
+* Follow the initial steps above by adding the `[VRSimulator_CameraRig]` prefab from `VRTK/Prefabs/CameraRigs` as a child of the SDK Setup game object.
 * Use the Left Alt to switch between mouse look and move a hand.
 * Press Tab to switch between left/right hands.
 * Hold Left Shift to change from translation to rotation for the hands.

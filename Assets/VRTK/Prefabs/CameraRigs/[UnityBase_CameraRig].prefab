@@ -352,6 +352,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb11f5366d9c17040b6a0ed716e36353, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lockPhysicsUpdateRateToRenderFrequency: 1
 --- !u!114 &114587272099147506
 MonoBehaviour:
   m_ObjectHideFlags: 1
