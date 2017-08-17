@@ -106,7 +106,7 @@ namespace VRTK
         protected Dictionary<Transform, List<float>> movementList;
         protected Dictionary<Transform, float> previousYPositions;
         // Used to determine the direction when using a decoupling method.
-        protected Vector3 initalGaze;
+        protected Vector3 initialGaze;
         // The current move speed of the player. If Move In Place is not active, it will be set to 0.00f.
         protected float currentSpeed;
         // The current direction the player is moving. If Move In Place is not active, it will be set to Vector.zero.
@@ -124,13 +124,13 @@ namespace VRTK
             controlOptions = givenControlOptions;
             trackedObjects.Clear();
 
-            if (controllerLeftHand != null && controllerRightHand != null && (controlOptions.Equals(ControlOptions.HeadsetAndControllers) || controlOptions.Equals(ControlOptions.ControllersOnly)))
+            if (controllerLeftHand != null && controllerRightHand != null && (controlOptions == ControlOptions.HeadsetAndControllers || controlOptions == ControlOptions.ControllersOnly))
             {
                 trackedObjects.Add(VRTK_DeviceFinder.GetActualController(controllerLeftHand).transform);
                 trackedObjects.Add(VRTK_DeviceFinder.GetActualController(controllerRightHand).transform);
             }
 
-            if (headset != null && (controlOptions.Equals(ControlOptions.HeadsetAndControllers) || controlOptions.Equals(ControlOptions.HeadsetOnly)))
+            if (headset != null && (controlOptions == ControlOptions.HeadsetAndControllers || controlOptions == ControlOptions.HeadsetOnly))
             {
                 trackedObjects.Add(headset.transform);
             }
@@ -164,7 +164,7 @@ namespace VRTK
             trackedObjects = new List<Transform>();
             movementList = new Dictionary<Transform, List<float>>();
             previousYPositions = new Dictionary<Transform, float>();
-            initalGaze = Vector3.zero;
+            initialGaze = Vector3.zero;
             direction = Vector3.zero;
             previousDirection = Vector3.zero;
             averagePeriod = 60;
@@ -310,70 +310,55 @@ namespace VRTK
 
         protected virtual Vector3 SetDirection()
         {
-            Vector3 returnDirection = Vector3.zero;
-
-            // If we're doing a decoupling method...
-            if (directionMethod == DirectionalMethod.SmartDecoupling || directionMethod == DirectionalMethod.DumbDecoupling)
+            switch (directionMethod)
             {
-                // If we haven't set an inital gaze yet, set it now.
-                // If we're doing dumb decoupling, this is what we'll be sticking with.
-                if (initalGaze.Equals(Vector3.zero))
+                case DirectionalMethod.SmartDecoupling:
+                case DirectionalMethod.DumbDecoupling:
+                    return CalculateCouplingDirection();
+                case DirectionalMethod.ControllerRotation:
+                    return CalculateControllerRotationDirection(DetermineAverageControllerRotation() * Vector3.forward);
+                case DirectionalMethod.LeftControllerRotationOnly:
+                    return CalculateControllerRotationDirection((controllerLeftHand != null ? controllerLeftHand.transform.rotation : Quaternion.identity) * Vector3.forward);
+                case DirectionalMethod.RightControllerRotationOnly:
+                    return CalculateControllerRotationDirection((controllerRightHand != null ? controllerRightHand.transform.rotation : Quaternion.identity) * Vector3.forward);
+                case DirectionalMethod.EngageControllerRotationOnly:
+                    return CalculateControllerRotationDirection((engagedController != null ? engagedController.scriptAlias.transform.rotation : Quaternion.identity) * Vector3.forward);
+                case DirectionalMethod.Gaze:
+                    return new Vector3(headset.forward.x, 0, headset.forward.z);
+            }
+
+            return Vector2.zero;
+        }
+
+        protected virtual Vector3 CalculateCouplingDirection()
+        {
+            // If we haven't set an inital gaze yet, set it now.
+            // If we're doing dumb decoupling, this is what we'll be sticking with.
+            if (initialGaze == Vector3.zero)
+            {
+                initialGaze = new Vector3(headset.forward.x, 0, headset.forward.z);
+            }
+
+            // If we're doing smart decoupling, check to see if we want to reset our distance.
+            if (directionMethod == DirectionalMethod.SmartDecoupling)
+            {
+                bool closeEnough = true;
+                float curXDir = headset.rotation.eulerAngles.y;
+                if (curXDir <= smartDecoupleThreshold)
                 {
-                    initalGaze = new Vector3(headset.forward.x, 0, headset.forward.z);
+                    curXDir += 360;
                 }
 
-                // If we're doing smart decoupling, check to see if we want to reset our distance.
-                if (directionMethod == DirectionalMethod.SmartDecoupling)
+                closeEnough = closeEnough && (Mathf.Abs(curXDir - controllerLeftHand.transform.rotation.eulerAngles.y) <= smartDecoupleThreshold);
+                closeEnough = closeEnough && (Mathf.Abs(curXDir - controllerRightHand.transform.rotation.eulerAngles.y) <= smartDecoupleThreshold);
+
+                // If the controllers and the headset are pointing the same direction (within the threshold) reset the direction the player's moving.
+                if (closeEnough)
                 {
-                    bool closeEnough = true;
-                    float curXDir = headset.rotation.eulerAngles.y;
-                    if (curXDir <= smartDecoupleThreshold)
-                    {
-                        curXDir += 360;
-                    }
-
-                    closeEnough = closeEnough && (Mathf.Abs(curXDir - controllerLeftHand.transform.rotation.eulerAngles.y) <= smartDecoupleThreshold);
-                    closeEnough = closeEnough && (Mathf.Abs(curXDir - controllerRightHand.transform.rotation.eulerAngles.y) <= smartDecoupleThreshold);
-
-                    // If the controllers and the headset are pointing the same direction (within the threshold) reset the direction the player's moving.
-                    if (closeEnough)
-                    {
-                        initalGaze = new Vector3(headset.forward.x, 0, headset.forward.z);
-                    }
+                    initialGaze = new Vector3(headset.forward.x, 0, headset.forward.z);
                 }
-                returnDirection = initalGaze;
             }
-            // if we're doing controller rotation movement
-            else if (directionMethod.Equals(DirectionalMethod.ControllerRotation))
-            {
-                Vector3 calculatedControllerDirection = DetermineAverageControllerRotation() * Vector3.forward;
-                returnDirection = CalculateControllerRotationDirection(calculatedControllerDirection);
-            }
-            // if we're doing left controller only rotation movement
-            else if (directionMethod.Equals(DirectionalMethod.LeftControllerRotationOnly))
-            {
-                Vector3 calculatedControllerDirection = (controllerLeftHand != null ? controllerLeftHand.transform.rotation : Quaternion.identity) * Vector3.forward;
-                returnDirection = CalculateControllerRotationDirection(calculatedControllerDirection);
-            }
-            // if we're doing right controller only rotation movement
-            else if (directionMethod.Equals(DirectionalMethod.RightControllerRotationOnly))
-            {
-                Vector3 calculatedControllerDirection = (controllerRightHand != null ? controllerRightHand.transform.rotation : Quaternion.identity) * Vector3.forward;
-                returnDirection = CalculateControllerRotationDirection(calculatedControllerDirection);
-            }
-            // if we're doing engaged controller only rotation movement
-            else if (directionMethod.Equals(DirectionalMethod.EngageControllerRotationOnly))
-            {
-                Vector3 calculatedControllerDirection = (engagedController != null ? engagedController.scriptAlias.transform.rotation : Quaternion.identity) * Vector3.forward;
-                returnDirection = CalculateControllerRotationDirection(calculatedControllerDirection);
-            }
-            // Otherwise if we're just doing Gaze movement, always set the direction to where we're looking.
-            else if (directionMethod.Equals(DirectionalMethod.Gaze))
-            {
-                returnDirection = (new Vector3(headset.forward.x, 0, headset.forward.z));
-            }
-
-            return returnDirection;
+            return initialGaze;
         }
 
         protected virtual Vector3 CalculateControllerRotationDirection(Vector3 calculatedControllerDirection)
@@ -441,7 +426,7 @@ namespace VRTK
                 Transform trackedObj = trackedObjects[i];
                 movementList[trackedObj].Clear();
             }
-            initalGaze = Vector3.zero;
+            initialGaze = Vector3.zero;
 
             active = false;
             engagedController = null;

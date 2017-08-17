@@ -278,14 +278,14 @@ namespace VRTK
 
         protected virtual void ManageGrabListener(bool state)
         {
-            if (controllerEvents != null && subscribedGrabButton != VRTK_ControllerEvents.ButtonAlias.Undefined && (!state || !grabButton.Equals(subscribedGrabButton)))
+            if (controllerEvents != null && subscribedGrabButton != VRTK_ControllerEvents.ButtonAlias.Undefined && (!state || grabButton != subscribedGrabButton))
             {
                 controllerEvents.UnsubscribeToButtonAliasEvent(subscribedGrabButton, true, DoGrabObject);
                 controllerEvents.UnsubscribeToButtonAliasEvent(subscribedGrabButton, false, DoReleaseObject);
                 subscribedGrabButton = VRTK_ControllerEvents.ButtonAlias.Undefined;
             }
 
-            if (controllerEvents != null && state && grabButton != VRTK_ControllerEvents.ButtonAlias.Undefined && !grabButton.Equals(subscribedGrabButton))
+            if (controllerEvents != null && state && grabButton != VRTK_ControllerEvents.ButtonAlias.Undefined && grabButton != subscribedGrabButton)
             {
                 controllerEvents.SubscribeToButtonAliasEvent(grabButton, true, DoGrabObject);
                 controllerEvents.SubscribeToButtonAliasEvent(grabButton, false, DoReleaseObject);

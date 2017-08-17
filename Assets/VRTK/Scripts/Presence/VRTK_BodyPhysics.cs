@@ -504,12 +504,12 @@ namespace VRTK
 
         protected virtual bool CheckValidCollision(GameObject checkObject)
         {
-            return (!VRTK_PlayerObject.IsPlayerObject(checkObject) && (!onGround || (currentValidFloorObject != null && !currentValidFloorObject.Equals(checkObject))));
+            return (!VRTK_PlayerObject.IsPlayerObject(checkObject) && (!onGround || (currentValidFloorObject != null && currentValidFloorObject != checkObject)));
         }
 
         protected virtual bool CheckExistingCollision(GameObject checkObject)
         {
-            return (currentCollidingObject != null && currentCollidingObject.Equals(checkObject));
+            return (currentCollidingObject != null && currentCollidingObject == checkObject);
         }
 
         protected virtual void SetupPlayArea()
@@ -719,7 +719,7 @@ namespace VRTK
 
         protected virtual void SetCurrentStandingPosition()
         {
-            if (playArea != null && !playArea.transform.position.Equals(lastPlayAreaPosition))
+            if (playArea != null && playArea.transform.position != lastPlayAreaPosition)
             {
                 Vector3 playareaDifference = playArea.transform.position - lastPlayAreaPosition;
                 currentStandingPosition = new Vector2(currentStandingPosition.x + playareaDifference.x, currentStandingPosition.y + playareaDifference.z);

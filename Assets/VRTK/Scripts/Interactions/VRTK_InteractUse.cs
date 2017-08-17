@@ -242,14 +242,14 @@ namespace VRTK
 
         protected virtual void ManageUseListener(bool state)
         {
-            if (controllerEvents != null && subscribedUseButton != VRTK_ControllerEvents.ButtonAlias.Undefined && (!state || !useButton.Equals(subscribedUseButton)))
+            if (controllerEvents != null && subscribedUseButton != VRTK_ControllerEvents.ButtonAlias.Undefined && (!state || useButton != subscribedUseButton))
             {
                 controllerEvents.UnsubscribeToButtonAliasEvent(subscribedUseButton, true, DoStartUseObject);
                 controllerEvents.UnsubscribeToButtonAliasEvent(subscribedUseButton, false, DoStopUseObject);
                 subscribedUseButton = VRTK_ControllerEvents.ButtonAlias.Undefined;
             }
 
-            if (controllerEvents != null && state && useButton != VRTK_ControllerEvents.ButtonAlias.Undefined && !useButton.Equals(subscribedUseButton))
+            if (controllerEvents != null && state && useButton != VRTK_ControllerEvents.ButtonAlias.Undefined && useButton != subscribedUseButton)
             {
                 controllerEvents.SubscribeToButtonAliasEvent(useButton, true, DoStartUseObject);
                 controllerEvents.SubscribeToButtonAliasEvent(useButton, false, DoStopUseObject);

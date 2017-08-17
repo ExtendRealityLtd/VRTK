@@ -424,7 +424,7 @@ namespace VRTK
             VRTK_SDKManager sdkManager = VRTK_SDKManager.instance;
             if (sdkManager != null && controller != null)
             {
-                return (actual ? controller.Equals(sdkManager.loadedSetup.actualLeftController) : controller.Equals(sdkManager.scriptAliasLeftController));
+                return (actual ? controller == sdkManager.loadedSetup.actualLeftController : controller == sdkManager.scriptAliasLeftController);
             }
             return false;
         }
@@ -434,7 +434,7 @@ namespace VRTK
             VRTK_SDKManager sdkManager = VRTK_SDKManager.instance;
             if (sdkManager != null && controller != null)
             {
-                return (actual ? controller.Equals(sdkManager.loadedSetup.actualRightController) : controller.Equals(sdkManager.scriptAliasRightController));
+                return (actual ? controller == sdkManager.loadedSetup.actualRightController : controller == sdkManager.scriptAliasRightController);
             }
             return false;
         }
