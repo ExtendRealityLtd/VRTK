@@ -32,7 +32,7 @@ This file provides documentation on how to use the included prefabs and scripts.
 A collection of pre-defined usable prefabs have been included to allow for each drag-and-drop set up of common elements.
 
  * [Unity SDK CameraRig](#unity-sdk-camerarig-sdk_unitycamerarig)
- * [VR Simulator](#vr-simulator-sdk_inputsimulator)
+ * [VR Simulator CameraRig](#vr-simulator-camerarig-sdk_inputsimulator)
  * [Frames Per Second Canvas](#frames-per-second-canvas-vrtk_framespersecondviewer)
  * [Desktop Camera](#desktop-camera-vrtk_desktopcamera)
  * [Object Tooltip](#object-tooltip-vrtk_objecttooltip)
@@ -65,11 +65,11 @@ The Unity CameraRig also utilises the Unity Controller Tracker and Headset Track
 
 ---
 
-## VR Simulator (SDK_InputSimulator)
+## VR Simulator CameraRig (SDK_InputSimulator)
 
 ### Overview
 
-The `VRSimulatorCameraRig` prefab is a mock Camera Rig set up that can be used to develop with VRTK without the need for VR Hardware.
+The `[VRSimulator_CameraRig]` prefab is a mock Camera Rig set up that can be used to develop with VRTK without the need for VR Hardware.
 
 Use the mouse and keyboard to move around both play area and hands and interacting with objects without the need of a hmd or VR controls.
 
@@ -123,9 +123,9 @@ Use the mouse and keyboard to move around both play area and hands and interacti
   * Parameters
    * _none_
   * Returns
-   * `GameObject` - Returns the found `VRSimulatorCameraRig` GameObject if it is found. If it is not found then it prints a debug log error.
+   * `GameObject` - Returns the found `[VRSimulator_CameraRig]` GameObject if it is found. If it is not found then it prints a debug log error.
 
-The FindInScene method is used to find the `VRSimulatorCameraRig` GameObject within the current scene.
+The FindInScene method is used to find the `[VRSimulator_CameraRig]` GameObject within the current scene.
 
 ---
 
