@@ -20,7 +20,7 @@ namespace VRTK
         {
             if (controller == null)
             {
-                controller = transform.FindChild("Controller");
+                controller = transform.Find("Controller");
             }
             positionOrigin = transform.position;
         }

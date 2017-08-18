@@ -11,6 +11,7 @@ namespace VRTK
     [SDK_Description(typeof(SDK_UnitySystem), 2)]
     [SDK_Description(typeof(SDK_UnitySystem), 3)]
     [SDK_Description(typeof(SDK_UnitySystem), 4)]
+    [SDK_Description(typeof(SDK_UnitySystem), 5)]
     public class SDK_UnityBoundaries : SDK_BaseBoundaries
     {
         /// <summary>
