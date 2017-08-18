@@ -69,6 +69,10 @@ namespace VRTK
         public float speedScale = 1;
         [Tooltip("The max speed the user can move in game units. (If 0 or less, max speed is uncapped)")]
         public float maxSpeed = 4;
+        [Tooltip("The min calculated movement speed required before the user moves in game units.")]
+        public float minSpeed = 0f;
+        [Tooltip("The amount of drag applied to movement. Increasing this helps add jerkiness.")]
+        public float drag = 0.0f;
         [Tooltip("The speed in which the play area slows down to a complete stop when the user is no longer pressing the engage button. This deceleration effect can ease any motion sickness that may be suffered.")]
         public float deceleration = 0.1f;
         [Tooltip("The speed in which the play area slows down to a complete stop when the user is falling.")]
@@ -231,8 +235,28 @@ namespace VRTK
                 float speed = Mathf.Clamp(((speedScale * 350) * (CalculateListAverage() / trackedObjects.Count)), 0f, maxSpeed);
                 previousDirection = direction;
                 direction = SetDirection();
-                // Update our current speed.
-                currentSpeed = speed;
+
+                if (currentSpeed - speed > 0) 
+                {
+                    // we must be decelerating, so apply drag
+                    float decelSpeed = Mathf.Clamp( currentSpeed - ( drag * maxSpeed ), 0f, maxSpeed);
+                    currentSpeed = (speed < decelSpeed ? speed : decelSpeed );
+                } 
+                else 
+                {
+                    // We are accelerating, so apply movespeed cutoff
+                    if (speed < minSpeed)
+                    {
+                        currentSpeed = 0f;
+                        direction = Vector3.zero;
+                        previousDirection = Vector3.zero;
+                    }
+                    else
+                    {
+                        currentSpeed = speed;
+                    }
+                }
+
             }
             else if (currentSpeed > 0f)
             {
