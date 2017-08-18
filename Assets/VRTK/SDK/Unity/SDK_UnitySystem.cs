@@ -6,9 +6,10 @@ namespace VRTK
     /// </summary>
     [SDK_Description("Unity (Standalone:Oculus)", null, "Oculus", "Standalone")]
     [SDK_Description("Unity (Standalone:OpenVR)", null, "OpenVR", "Standalone", 1)]
-    [SDK_Description("Unity (Android:Daydream)", null, "Daydream", "Android", 2)]
-    [SDK_Description("Unity (Android:Oculus)", null, "Oculus", "Android", 3)]
-    [SDK_Description("Unity (Android:OpenVR)", null, "OpenVR", "Android", 4)]
+    [SDK_Description("Unity (Android:Cardboard)", null, "Cardboard", "Android", 2)]
+    [SDK_Description("Unity (Android:Daydream)", null, "Daydream", "Android", 3)]
+    [SDK_Description("Unity (Android:Oculus)", null, "Oculus", "Android", 4)]
+    [SDK_Description("Unity (Android:OpenVR)", null, "OpenVR", "Android", 5)]
     public class SDK_UnitySystem : SDK_BaseSystem
     {
         /// <summary>
