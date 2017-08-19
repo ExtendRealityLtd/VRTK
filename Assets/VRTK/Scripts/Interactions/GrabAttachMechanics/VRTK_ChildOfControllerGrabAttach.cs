@@ -50,6 +50,7 @@ namespace VRTK.GrabAttachMechanics
             tracked = false;
             climbable = false;
             kinematic = true;
+            lerpable = true;
         }
 
         protected virtual void SetSnappedObjectPosition(GameObject obj)

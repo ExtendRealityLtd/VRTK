@@ -97,6 +97,10 @@ namespace VRTK
         public VRTK_BaseGrabAttach grabAttachMechanicScript;
         [Tooltip("The script to utilise when processing the secondary controller action on a secondary grab attempt. If one isn't provided then the first Secondary Controller Grab Action script on the GameObject will be used, if one is not found then no action will be taken on secondary grab.")]
         public VRTK_BaseGrabAction secondaryGrabActionScript;
+        [Tooltip("The lerp script to use when grabbing the object. If one isn't assigned then at runtime will get a lerp script attached to the object, if it exists.")]
+        public VRTK_ObjectLerp grabObjectLerpScript;
+        [Tooltip("Determines if the lerp transform on grab is currently active. Depends on there being a lerp script also attached or assigned to the object.")]
+        public bool lerpTransformOnGrab = false;
 
         [Header("Use Options", order = 3)]
 
@@ -204,6 +208,7 @@ namespace VRTK
         protected Vector3 previousLocalScale = Vector3.zero;
         protected List<GameObject> currentIgnoredColliders = new List<GameObject>();
         protected bool startDisabled = false;
+        protected bool objectLerpInProgress = false;
 
         public virtual void OnInteractableObjectTouched(InteractableObjectEventArgs e)
         {
@@ -823,6 +828,29 @@ namespace VRTK
             currentIgnoredColliders.Clear();
         }
 
+        public virtual bool IsLerpTransformOnGrab()
+        {
+            return lerpTransformOnGrab && (grabObjectLerpScript != null)
+                && (grabAttachMechanicScript != null && grabAttachMechanicScript.IsLerpable());
+        }
+
+        public virtual bool IsObjectLerpInProgress()
+        {
+            return objectLerpInProgress;
+        }
+
+        public virtual void StartLerpTransformOnGrab(GameObject grabbingObject, Transform originTransform, Transform targetTransform)
+        {
+            grabbingObjects.Add(grabbingObject);
+            Transform snapHandle = GetSnapHandle(grabbingObject);
+            grabObjectLerpScript.StartObjectTranslation(originTransform, targetTransform, snapHandle);
+        }
+
+        public virtual void StartLerpTransformOnUnGrab()
+        {
+            grabObjectLerpScript.CancelObjectTranslation();
+        }
+
         protected virtual void Awake()
         {
             interactableRigidbody = GetComponent<Rigidbody>();
@@ -842,6 +870,7 @@ namespace VRTK
         {
             InitialiseHighlighter();
             RegisterTeleporters();
+            InitialiseLerpOnGrab();
             forceDisabled = false;
             if (forcedDropped)
             {
@@ -860,6 +889,8 @@ namespace VRTK
                 Destroy(objectHighlighter);
                 objectHighlighter = null;
             }
+
+            UninitialiseLerpOnGrab();
 
             if (!startDisabled)
             {
@@ -905,7 +936,8 @@ namespace VRTK
         /// <returns>whether or not the script is currently idle</returns>
         protected virtual bool IsIdle()
         {
-            return !IsTouched() && !IsGrabbed() && !IsUsing();
+            return !IsTouched() && !IsGrabbed() && !IsUsing()
+                && !IsObjectLerpInProgress();
         }
 
         protected virtual void LateUpdate()
@@ -997,6 +1029,16 @@ namespace VRTK
             {
                 secondaryGrabActionScript = GetComponent<VRTK_BaseGrabAction>();
             }
+        }
+
+        protected virtual Transform GetSnapHandle(GameObject grabbingObject)
+        {
+            Transform snapHandle = null;
+            if (isGrabbable && grabAttachMechanicScript != null)
+            {
+                snapHandle = grabAttachMechanicScript.GetSnapHandle(grabbingObject);
+            }
+            return snapHandle;
         }
 
         protected virtual void ForceReleaseGrab()
@@ -1257,6 +1299,73 @@ namespace VRTK
                     usingObjectScript.ForceResetUsing();
                 }
             }
+        }
+
+        protected virtual void InitialiseLerpOnGrab()
+        {
+            if (grabObjectLerpScript == null)
+            {
+                grabObjectLerpScript = GetComponent<VRTK_ObjectLerp>();
+            }
+
+            if (grabObjectLerpScript != null)
+            {
+                StartCoroutine(BindObjectLerpEventsAtEndOfFrame());
+            }
+        }
+
+        protected virtual void UninitialiseLerpOnGrab()
+        {
+            if (grabObjectLerpScript != null)
+            {
+                UnbindObjectLerpEvents();
+            }
+        }
+
+        protected virtual IEnumerator BindObjectLerpEventsAtEndOfFrame()
+        {
+            yield return new WaitForEndOfFrame();
+            grabObjectLerpScript.ObjectLerpStartTranslation += new ObjectLerpEventHandler(DoObjectLerpStartTranslation);
+            grabObjectLerpScript.ObjectLerpCompletedTranslation += new ObjectLerpEventHandler(DoObjectLerpCompletedTranslation);
+            grabObjectLerpScript.ObjectLerpCancelledTranslation += new ObjectLerpEventHandler(DoObjectLerpCancelledTranslation);
+        }
+
+        protected virtual void UnbindObjectLerpEvents()
+        {
+            grabObjectLerpScript.ObjectLerpStartTranslation -= new ObjectLerpEventHandler(DoObjectLerpStartTranslation);
+            grabObjectLerpScript.ObjectLerpCompletedTranslation -= new ObjectLerpEventHandler(DoObjectLerpCompletedTranslation);
+            grabObjectLerpScript.ObjectLerpCancelledTranslation -= new ObjectLerpEventHandler(DoObjectLerpCancelledTranslation);
+        }
+
+        protected virtual void DoObjectLerpStartTranslation(object sender, ObjectLerpEventArgs e)
+        {
+            objectLerpInProgress = true;
+        }
+
+        protected virtual void DoObjectLerpCompletedTranslation(object sender, ObjectLerpEventArgs e)
+        {
+            objectLerpInProgress = false;
+            GameObject grabbingObject;
+
+            if (grabbingObjects.Count > 1 && IsGrabbed(grabbingObjects[0]))
+            {
+                grabbingObject = grabbingObjects[1];
+            }
+            else
+            {
+                grabbingObject = grabbingObjects[0];
+            }
+
+            if (grabbingObject != null)
+            {
+                grabbingObjects.Remove(grabbingObject);
+                grabbingObject.GetComponent<VRTK_InteractGrab>().AttemptGrab(true);
+            }
+        }
+
+        protected virtual void DoObjectLerpCancelledTranslation(object sender, ObjectLerpEventArgs e)
+        {
+            objectLerpInProgress = false;
         }
     }
 }

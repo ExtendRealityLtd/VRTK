@@ -164,9 +164,9 @@ namespace VRTK
         /// <summary>
         /// The AttemptGrab method will attempt to grab the currently touched object without needing to press the grab button on the controller.
         /// </summary>
-        public virtual void AttemptGrab()
+        public virtual void AttemptGrab(bool forceGrabImmediate = false)
         {
-            AttemptGrabObject();
+            AttemptGrabObject(forceGrabImmediate);
         }
 
         /// <summary>
@@ -534,12 +534,12 @@ namespace VRTK
             }
         }
 
-        protected virtual void AttemptGrabObject()
+        protected virtual void AttemptGrabObject(bool forceGrabImmediate = false)
         {
             GameObject objectToGrab = GetGrabbableObject();
             if (objectToGrab != null)
             {
-                PerformGrabAttempt(objectToGrab);
+                PerformGrabAttempt(objectToGrab, forceGrabImmediate);
             }
             else
             {
@@ -547,10 +547,10 @@ namespace VRTK
             }
         }
 
-        protected virtual void PerformGrabAttempt(GameObject objectToGrab)
+        protected virtual void PerformGrabAttempt(GameObject objectToGrab, bool forceGrabImmediate = false)
         {
             IncrementGrabState();
-            bool initialGrabAttempt = IsValidGrabAttempt(objectToGrab);
+            bool initialGrabAttempt = IsValidGrabAttempt(objectToGrab, forceGrabImmediate);
             undroppableGrabbedObject = GetUndroppableObject();
             AttemptHaptics(initialGrabAttempt);
         }
@@ -560,16 +560,23 @@ namespace VRTK
             return (objectToGrabScript != null && objectToGrabScript.grabAttachMechanicScript != null && objectToGrabScript.grabAttachMechanicScript.ValidGrab(controllerAttachPoint));
         }
 
-        protected virtual bool IsValidGrabAttempt(GameObject objectToGrab)
+        protected virtual bool IsValidGrabAttempt(GameObject objectToGrab, bool forceGrabImmediate = false)
         {
             bool initialGrabAttempt = false;
             VRTK_InteractableObject objectToGrabScript = (objectToGrab != null ? objectToGrab.GetComponent<VRTK_InteractableObject>() : null);
             if (grabbedObject == null && interactTouch != null && IsObjectGrabbable(interactTouch.GetTouchedObject()) && ScriptValidGrab(objectToGrabScript))
             {
-                InitGrabbedObject();
-                if (!influencingGrabbedObject)
+                if (!forceGrabImmediate && !objectToGrabScript.IsObjectLerpInProgress() && objectToGrabScript.IsLerpTransformOnGrab())
                 {
-                    initialGrabAttempt = objectToGrabScript.grabAttachMechanicScript.StartGrab(gameObject, grabbedObject, controllerAttachPoint);
+                    objectToGrabScript.StartLerpTransformOnGrab(gameObject, objectToGrab.transform, controllerAttachPoint.transform);
+                }
+                else
+                {
+                    InitGrabbedObject();
+                    if (!influencingGrabbedObject)
+                    {
+                        initialGrabAttempt = objectToGrabScript.grabAttachMechanicScript.StartGrab(gameObject, grabbedObject, controllerAttachPoint);
+                    }
                 }
             }
             return initialGrabAttempt;
