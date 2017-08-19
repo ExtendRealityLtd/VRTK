@@ -1,76 +1,39 @@
 ﻿namespace VRTK
 {
     using UnityEngine;
-    using System.Collections.Generic;
 
     public class SDK_ControllerSim : MonoBehaviour
     {
-        private Vector3 lastPos;
-        private Quaternion lastRot;
-        private List<Vector3> posList;
-        private List<Vector3> rotList;
-        private bool selected;
-        private float magnitude;
-        private Vector3 axis;
+        [HideInInspector]
+        public bool selected;
 
-        public bool Selected
-        {
-            get
-            {
-                return selected;
-            }
-            set
-            {
-                selected = value;
-            }
-        }
+        protected VRTK_VelocityEstimator cachedVelocityEstimator;
+        protected float magnitude;
+        protected Vector3 axis;
 
         public Vector3 GetVelocity()
         {
-            Vector3 velocity = Vector3.zero;
-            foreach (Vector3 vel in posList)
-            {
-                velocity += vel;
-            }
-            velocity /= posList.Count;
-            return velocity;
+            SetCaches();
+            return cachedVelocityEstimator.GetVelocityEstimate();
         }
 
         public Vector3 GetAngularVelocity()
         {
-            Vector3 angularVelocity = Vector3.zero;
-            foreach (Vector3 vel in rotList)
-            {
-                angularVelocity += vel;
-            }
-            angularVelocity /= rotList.Count;
-            return angularVelocity;
+            SetCaches();
+            return cachedVelocityEstimator.GetAngularVelocityEstimate();
         }
 
-        private void Awake()
+        protected virtual void OnEnable()
         {
-            posList = new List<Vector3>();
-            rotList = new List<Vector3>();
-            lastPos = transform.position;
-            lastRot = transform.rotation;
+            SetCaches();
         }
 
-        private void Update()
+        protected virtual void SetCaches()
         {
-            posList.Add((transform.position - lastPos) / Time.deltaTime);
-            if (posList.Count > 4)
+            if (cachedVelocityEstimator == null)
             {
-                posList.RemoveAt(0);
+                cachedVelocityEstimator = (GetComponent<VRTK_VelocityEstimator>() != null ? GetComponent<VRTK_VelocityEstimator>() : gameObject.AddComponent<VRTK_VelocityEstimator>());
             }
-            Quaternion deltaRotation = transform.rotation * Quaternion.Inverse (lastRot);
-            deltaRotation.ToAngleAxis(out magnitude, out axis);
-            rotList.Add((axis * magnitude));
-            if (rotList.Count > 4)
-            {
-                rotList.RemoveAt(0);
-            }
-            lastPos = transform.position;
-            lastRot = transform.rotation;
         }
     }
 }

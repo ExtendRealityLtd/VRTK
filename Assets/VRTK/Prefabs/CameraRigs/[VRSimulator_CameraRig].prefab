@@ -121,6 +121,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4785912219063470}
   - component: {fileID: 114958942473040718}
+  - component: {fileID: 114958935205051422}
   m_Layer: 0
   m_Name: RightHand
   m_TagString: Untagged
@@ -171,6 +172,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4716504459820004}
   - component: {fileID: 114831679945522418}
+  - component: {fileID: 114742272730030878}
   m_Layer: 0
   m_Name: LeftHand
   m_TagString: Untagged
@@ -190,6 +192,7 @@ GameObject:
   - component: {fileID: 124920560473924958}
   - component: {fileID: 92720707650180770}
   - component: {fileID: 81297943231765820}
+  - component: {fileID: 114942668017546108}
   m_Layer: 0
   m_Name: Camera
   m_TagString: MainCamera
@@ -804,6 +807,20 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: Control Hints
+--- !u!114 &114742272730030878
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1538727058887424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b32642724c1719444826991e4ff8fccd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  autoStartSampling: 1
+  velocityAverageFrames: 5
+  angularVelocityAverageFrames: 10
 --- !u!114 &114831679945522418
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -837,6 +854,20 @@ MonoBehaviour:
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 1
   m_ChildControlHeight: 1
+--- !u!114 &114942668017546108
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1587602180963074}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b32642724c1719444826991e4ff8fccd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  autoStartSampling: 1
+  velocityAverageFrames: 5
+  angularVelocityAverageFrames: 10
 --- !u!114 &114942784453735160
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -853,6 +884,20 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &114958935205051422
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1391022766006510}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b32642724c1719444826991e4ff8fccd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  autoStartSampling: 1
+  velocityAverageFrames: 5
+  angularVelocityAverageFrames: 10
 --- !u!114 &114958942473040718
 MonoBehaviour:
   m_ObjectHideFlags: 1
