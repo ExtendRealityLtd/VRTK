@@ -137,8 +137,8 @@ namespace VRTK
         {
             currentSampleCount = 0;
 
-            Vector3 previousPosition = transform.position;
-            Quaternion previousRotation = transform.rotation;
+            Vector3 previousPosition = transform.localPosition;
+            Quaternion previousRotation = transform.localRotation;
             while (true)
             {
                 yield return new WaitForEndOfFrame();
@@ -149,8 +149,8 @@ namespace VRTK
                 int w = currentSampleCount % angularVelocitySamples.Length;
                 currentSampleCount++;
 
-                velocitySamples[v] = velocityFactor * (transform.position - previousPosition);
-                Quaternion deltaRotation = transform.rotation * Quaternion.Inverse(previousRotation);
+                velocitySamples[v] = velocityFactor * (transform.localPosition - previousPosition);
+                Quaternion deltaRotation = transform.localRotation * Quaternion.Inverse(previousRotation);
 
                 float theta = 2.0f * Mathf.Acos(Mathf.Clamp(deltaRotation.w, -1.0f, 1.0f));
                 if (theta > Mathf.PI)
@@ -166,8 +166,8 @@ namespace VRTK
 
                 angularVelocitySamples[w] = angularVelocity;
 
-                previousPosition = transform.position;
-                previousRotation = transform.rotation;
+                previousPosition = transform.localPosition;
+                previousRotation = transform.localRotation;
             }
         }
     }
