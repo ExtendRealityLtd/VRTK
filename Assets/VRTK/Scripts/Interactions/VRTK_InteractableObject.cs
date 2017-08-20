@@ -113,6 +113,14 @@ namespace VRTK
         public AllowedController allowedUseControllers = AllowedController.Both;
 
         /// <summary>
+        /// Emitted when the object script is enabled;
+        /// </summary>
+        public event InteractableObjectEventHandler InteractableObjectEnabled;
+        /// <summary>
+        /// Emitted when the object script is disabled;
+        /// </summary>
+        public event InteractableObjectEventHandler InteractableObjectDisabled;
+        /// <summary>
         /// Emitted when another object touches the current object.
         /// </summary>
         public event InteractableObjectEventHandler InteractableObjectTouched;
@@ -203,6 +211,22 @@ namespace VRTK
         protected Vector3 previousLocalScale = Vector3.zero;
         protected List<GameObject> currentIgnoredColliders = new List<GameObject>();
         protected bool startDisabled = false;
+
+        public virtual void OnInteractableObjectEnabled(InteractableObjectEventArgs e)
+        {
+            if (InteractableObjectEnabled != null)
+            {
+                InteractableObjectEnabled(this, e);
+            }
+        }
+
+        public virtual void OnInteractableObjectDisabled(InteractableObjectEventArgs e)
+        {
+            if (InteractableObjectDisabled != null)
+            {
+                InteractableObjectDisabled(this, e);
+            }
+        }
 
         public virtual void OnInteractableObjectTouched(InteractableObjectEventArgs e)
         {
@@ -801,6 +825,7 @@ namespace VRTK
             }
             forcedDropped = false;
             startDisabled = false;
+            OnInteractableObjectEnabled(SetInteractableObjectEvent(null));
         }
 
         protected virtual void OnDisable()
@@ -818,6 +843,7 @@ namespace VRTK
                 forceDisabled = true;
                 ForceStopInteracting();
             }
+            OnInteractableObjectDisabled(SetInteractableObjectEvent(null));
         }
 
         protected virtual void FixedUpdate()

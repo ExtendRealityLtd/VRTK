@@ -2,6 +2,7 @@
 namespace VRTK
 {
     using UnityEngine;
+    using System;
     using System.Collections;
 
     /// <summary>
@@ -9,6 +10,7 @@ namespace VRTK
     /// </summary>
     /// <param name="interactingObject">The object that is interacting.</param>
     /// <param name="ignoredObject">The object that is being ignored.</param>
+    [Obsolete("`InteractControllerAppearanceEventArgs` will be removed in a future version of VRTK.")]
     public struct InteractControllerAppearanceEventArgs
     {
         public GameObject interactingObject;
@@ -20,6 +22,7 @@ namespace VRTK
     /// </summary>
     /// <param name="sender">this object</param>
     /// <param name="e"><see cref="InteractControllerAppearanceEventArgs"/></param>
+    [Obsolete("`InteractControllerAppearanceEventHandler` will be removed in a future version of VRTK.")]
     public delegate void InteractControllerAppearanceEventHandler(object sender, InteractControllerAppearanceEventArgs e);
 
     /// <summary>
@@ -29,6 +32,7 @@ namespace VRTK
     /// `VRTK/Examples/008_Controller_UsingAGrabbedObject` shows that the controller can be hidden when touching, grabbing and using an object.
     /// </example>
     [AddComponentMenu("VRTK/Scripts/Interactions/VRTK_InteractControllerAppearance")]
+    [Obsolete("`VRTK_InteractControllerAppearance` has been replaced with `VRTK_InteractObjectAppearance`. This script will be removed in a future version of VRTK.")]
     public class VRTK_InteractControllerAppearance : MonoBehaviour
     {
         [Header("Touch Visibility")]

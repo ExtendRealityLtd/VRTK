@@ -314,7 +314,10 @@ namespace VRTK
         {
             if (usingObject != null)
             {
+                ///[Obsolete]
+#pragma warning disable 0618
                 VRTK_InteractControllerAppearance[] controllerAppearanceScript = usingObject.GetComponentsInParent<VRTK_InteractControllerAppearance>(true);
+#pragma warning restore 0618
                 if (controllerAppearanceScript.Length > 0)
                 {
                     controllerAppearanceScript[0].ToggleControllerOnUse(visible, controllerReference.model, usingObject);

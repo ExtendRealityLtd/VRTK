@@ -263,7 +263,7 @@ namespace VRTK
             triggerRumble = false;
             CreateTouchRigidBody();
             trackedController = GetComponentInParent<VRTK_TrackedController>();
-            if(trackedController != null)
+            if (trackedController != null)
             {
                 trackedController.ControllerModelAvailable += DoControllerModelAvailable;
             }
@@ -392,7 +392,10 @@ namespace VRTK
             GameObject modelContainer = VRTK_DeviceFinder.GetModelAliasController(gameObject);
             if (touchedObject != null)
             {
+                ///[Obsolete]
+#pragma warning disable 0618
                 VRTK_InteractControllerAppearance[] controllerAppearanceScript = touchedObject.GetComponentsInParent<VRTK_InteractControllerAppearance>(true);
+#pragma warning restore 0618
                 if (controllerAppearanceScript.Length > 0)
                 {
                     controllerAppearanceScript[0].ToggleControllerOnTouch(visible, modelContainer, touchedObject);

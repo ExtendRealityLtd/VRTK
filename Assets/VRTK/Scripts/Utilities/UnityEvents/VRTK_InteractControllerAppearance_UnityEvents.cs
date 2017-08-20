@@ -4,7 +4,9 @@
     using UnityEngine.Events;
     using System;
 
+#pragma warning disable 0618
     [AddComponentMenu("VRTK/Scripts/Utilities/Unity Events/VRTK_InteractControllerAppearance_UnityEvents")]
+    [Obsolete("`VRTK_InteractControllerAppearance_UnityEvents` has been replaced with `VRTK_InteractObjectAppearance_UnityEvents`. This script will be removed in a future version of VRTK.")]
     public sealed class VRTK_InteractControllerAppearance_UnityEvents : VRTK_UnityEvents<VRTK_InteractControllerAppearance>
     {
         [Serializable]
@@ -83,4 +85,5 @@
             OnVisibleOnUse.Invoke(o, e);
         }
     }
+#pragma warning restore 0618
 }
