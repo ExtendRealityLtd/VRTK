@@ -103,8 +103,11 @@ For the full contribution guidelines see the [CONTRIBUTING.md] document.
 ## Pull requests
 
  1. [Fork] the project, clone your fork, and configure the remotes.
- 2. Create a new topic branch (from `master`) to contain your feature,
- chore, or fix.
+    1. If you're submitting a bug fix or refactor pull request then
+    target the repository `master` branch.
+    2. If you're submitting a new feature or enhancement that changes
+    functionality then target the next release branch in the
+    repository (which is currently `3.3.0-alpha`).
  3. Commit your changes in logical units.
  4. Make sure all the example scenes are still working.
  5. Push your topic branch up to your fork.
