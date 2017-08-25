@@ -79,6 +79,29 @@ namespace VRTK
         }
 
         /// <summary>
+        /// The IsRendererVisible method is used to check if a given GameObject is visible in the scene by any of it's child renderers being enabled.
+        /// </summary>
+        /// <param name="model">The GameObject to check for visibility on.</param>
+        /// <param name="ignoredModel">A GameObject to ignore when doing the visibility check.</param>
+        /// <returns>Returns true if any of the child renderers are enabled, returns false if all child renderers are disabled.</returns>
+        public static bool IsRendererVisible(GameObject model, GameObject ignoredModel = null)
+        {
+            if (model != null)
+            {
+                Renderer[] renderers = model.GetComponentsInChildren<Renderer>(true);
+                for (int i = 0; i < renderers.Length; i++)
+                {
+                    Renderer renderer = renderers[i];
+                    if (renderer.gameObject != ignoredModel && (ignoredModel == null || !renderer.transform.IsChildOf(ignoredModel.transform)) && renderer.enabled)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
         /// The HighlightObject method calls the Highlight method on the highlighter attached to the given GameObject with the provided colour.
         /// </summary>
         /// <param name="model">The GameObject to attempt to call the Highlight on.</param>

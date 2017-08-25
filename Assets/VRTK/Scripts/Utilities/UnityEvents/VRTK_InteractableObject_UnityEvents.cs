@@ -10,6 +10,9 @@
         [Serializable]
         public sealed class InteractableObjectEvent : UnityEvent<object, InteractableObjectEventArgs> { }
 
+        public InteractableObjectEvent OnEnable = new InteractableObjectEvent();
+        public InteractableObjectEvent OnDisable = new InteractableObjectEvent();
+
         public InteractableObjectEvent OnTouch = new InteractableObjectEvent();
         public InteractableObjectEvent OnUntouch = new InteractableObjectEvent();
 
@@ -26,6 +29,9 @@
 
         protected override void AddListeners(VRTK_InteractableObject component)
         {
+            component.InteractableObjectEnabled += Enable;
+            component.InteractableObjectDisabled += Disable;
+
             component.InteractableObjectTouched += Touch;
             component.InteractableObjectUntouched += UnTouch;
 
@@ -43,6 +49,9 @@
 
         protected override void RemoveListeners(VRTK_InteractableObject component)
         {
+            component.InteractableObjectEnabled -= Enable;
+            component.InteractableObjectDisabled -= Disable;
+
             component.InteractableObjectTouched -= Touch;
             component.InteractableObjectUntouched -= UnTouch;
 
@@ -56,6 +65,16 @@
             component.InteractableObjectExitedSnapDropZone -= ExitSnapDropZone;
             component.InteractableObjectSnappedToDropZone -= SnapToDropZone;
             component.InteractableObjectUnsnappedFromDropZone -= UnsnapFromDropZone;
+        }
+
+        private void Enable(object o, InteractableObjectEventArgs e)
+        {
+            OnEnable.Invoke(o, e);
+        }
+
+        private void Disable(object o, InteractableObjectEventArgs e)
+        {
+            OnDisable.Invoke(o, e);
         }
 
         private void Touch(object o, InteractableObjectEventArgs e)

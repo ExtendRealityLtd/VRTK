@@ -383,7 +383,10 @@ namespace VRTK
         {
             if (grabbedObject != null)
             {
+                ///[Obsolete]
+#pragma warning disable 0618
                 VRTK_InteractControllerAppearance[] controllerAppearanceScript = grabbedObject.GetComponentsInParent<VRTK_InteractControllerAppearance>(true);
+#pragma warning restore 0618
                 if (controllerAppearanceScript.Length > 0)
                 {
                     controllerAppearanceScript[0].ToggleControllerOnGrab(visible, controllerReference.model, grabbedObject);

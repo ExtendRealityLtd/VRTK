@@ -2547,7 +2547,7 @@ A collection of scripts that provide the ability to interact with game objects w
  * [Controller Events](#controller-events-vrtk_controllerevents)
  * [Controller Highlighter](#controller-highlighter-vrtk_controllerhighlighter)
  * [Controller Haptics](#controller-haptics-vrtk_controllerhaptics)
- * [Interact Controller Appearance](#interact-controller-appearance-vrtk_interactcontrollerappearance)
+ * [Interact Object Appearance](#interact-object-appearance-vrtk_interactobjectappearance)
  * [Interact Touch](#interact-touch-vrtk_interacttouch)
  * [Interact Grab](#interact-grab-vrtk_interactgrab)
  * [Interact Use](#interact-use-vrtk_interactuse)
@@ -3095,83 +3095,70 @@ The CancelHapticPulse method cancels the existing running haptic pulse on the gi
 
 ---
 
-## Interact Controller Appearance (VRTK_InteractControllerAppearance)
+## Interact Object Appearance (VRTK_InteractObjectAppearance)
 
 ### Overview
 
-The Interact Controller Appearance script is attached on the same GameObject as an Interactable Object script and is used to determine whether the controller model should be visible or hidden on touch, grab or use.
+The Interact Object Appearance script is used to determine whether the `Object To Affect` should be visible or hidden by default or on touch, grab or use.
+
+The `Object To Affect` can be the object that is causing the interaction (touch/grab/use) and is usually the controller. So this script can be used to hide the controller on interaction.
 
 ### Inspector Parameters
 
- * **Hide Controller On Touch:** Hides the controller model when a valid touch occurs.
- * **Hide Delay On Touch:** The amount of seconds to wait before hiding the controller on touch.
- * **Hide Controller On Grab:** Hides the controller model when a valid grab occurs.
- * **Hide Delay On Grab:** The amount of seconds to wait before hiding the controller on grab.
- * **Hide Controller On Use:** Hides the controller model when a valid use occurs.
- * **Hide Delay On Use:** The amount of seconds to wait before hiding the controller on use.
+ * **Object To Affect:** The GameObject to affect the appearance of. If this is null then then the interacting object will be used (usually the controller).
+ * **Game Object Active By Default:** If this is checked then the `Object To Affect` will be an active GameObject when the script is enabled. If it's unchecked then it will be disabled. This only takes effect if `Affect Interacting Object` is unticked.
+ * **Renderer Visible By Default:** If this is checked then the `Object To Affect` will have visible renderers when the script is enabled. If it's unchecked then it will have it's renderers disabled. This only takes effect if `Affect Interacting Object` is unticked.
+ * **Game Object Active On Touch:** If this is checked then the `Object To Affect` will be an active GameObject when the `Object To Monitor` is touched. If it's unchecked then it will be disabled on touch.
+ * **Renderer Visible On Touch:** If this is checked then the `Object To Affect` will have visible renderers when the `Object To Monitor` is touched. If it's unchecked then it will have it's renderers disabled on touch.
+ * **Touch Appearance Delay:** The amount of time to wait before the touch appearance settings are applied after the touch event.
+ * **Untouch Appearance Delay:** The amount of time to wait before the previous appearance settings are applied after the untouch event.
+ * **Valid Touch Interacting Object:** Determines what type of interacting object will affect the appearance of the `Object To Affect` after the touch/untouch event.
+ * **Game Object Active On Grab:** If this is checked then the `Object To Affect` will be an active GameObject when the `Object To Monitor` is grabbed. If it's unchecked then it will be disabled on grab.
+ * **Renderer Visible On Grab:** If this is checked then the `Object To Affect` will have visible renderers when the `Object To Monitor` is grabbed. If it's unchecked then it will have it's renderers disabled on grab.
+ * **Grab Appearance Delay:** The amount of time to wait before the grab appearance settings are applied after the grab event.
+ * **Ungrab Appearance Delay:** The amount of time to wait before the previous appearance settings are applied after the ungrab event.
+ * **Valid Grab Interacting Object:** Determines what type of interacting object will affect the appearance of the `Object To Affect` after the grab/ungrab event.
+ * **Game Object Active On Use:** If this is checked then the `Object To Affect` will be an active GameObject when the `Object To Monitor` is used. If it's unchecked then it will be disabled on use.
+ * **Renderer Visible On Use:** If this is checked then the `Object To Affect` will have visible renderers when the `Object To Monitor` is used. If it's unchecked then it will have it's renderers disabled on use.
+ * **Use Appearance Delay:** The amount of time to wait before the use appearance settings are applied after the use event.
+ * **Unuse Appearance Delay:** The amount of time to wait before the previous appearance settings are applied after the unuse event.
+ * **Valid Use Interacting Object:** Determines what type of interacting object will affect the appearance of the `Object To Affect` after the use/unuse event.
+
+### Class Variables
+
+ * `public enum InteractionType` - The interaction type.
+  * `None` - No interaction has affected the object appearance.
+  * `Touch` - The touch interaction has affected the object appearance.
+  * `Untouch` - The untouch interaction has affected the object appearance.
+  * `Grab` - The grab interaction has affected the object appearance.
+  * `Ungrab` - The ungrab interaction has affected the object appearance.
+  * `Use` - The use interaction has affected the object appearance.
+  * `Unuse` - The unuse interaction has affected the object appearance.
+ * `public enum ValidInteractingObject` - The valid interacting object.
+  * `Anything` - Any GameObject is considered a valid interacting object.
+  * `EitherController` - Only a game controller is considered a valid interacting objcet.
+  * `NeitherController` - Any GameObject except a game controller is considered a valid interacting object.
+  * `LeftControllerOnly` - Only the left game controller is considered a valid interacting objcet.
+  * `RightControllerOnly` - Only the right game controller is considered a valid interacting objcet.
 
 ### Class Events
 
- * `ControllerHidden` - Emitted when the interacting object is hidden.
- * `ControllerVisible` - Emitted when the interacting object is shown.
- * `HiddenOnTouch` - Emitted when the interacting object is hidden on touch.
- * `VisibleOnTouch` - Emitted when the interacting object is shown on untouch.
- * `HiddenOnGrab` - Emitted when the interacting object is hidden on grab.
- * `VisibleOnGrab` - Emitted when the interacting object is shown on ungrab.
- * `HiddenOnUse` - Emitted when the interacting object is hidden on use.
- * `VisibleOnUse` - Emitted when the interacting object is shown on unuse.
+ * `GameObjectEnabled` - Emitted when the GameObject on the `Object To Affect` is enabled.
+ * `GameObjectDisabled` - Emitted when the GameObject on the `Object To Affect` is disabled.
+ * `RenderersEnabled` - Emitted when the Renderers on the `Object To Affect` are enabled.
+ * `RenderersDisabled` - Emitted when the Renderers on the `Object To Affect` are disabled.
 
 ### Unity Events
 
-Adding the `VRTK_InteractControllerAppearance_UnityEvents` component to `VRTK_InteractControllerAppearance` object allows access to `UnityEvents` that will react identically to the Class Events.
+Adding the `VRTK_InteractObjectAppearance_UnityEvents` component to `VRTK_InteractObjectAppearance` object allows access to `UnityEvents` that will react identically to the Class Events.
 
  * All C# delegate events are mapped to a Unity Event with the `On` prefix. e.g. `MyEvent` -> `OnMyEvent`.
 
 ### Event Payload
 
- * `GameObject interactingObject` - The object that is interacting.
- * `GameObject ignoredObject` - The object that is being ignored.
-
-### Class Methods
-
-#### ToggleControllerOnTouch/3
-
-  > `public virtual void ToggleControllerOnTouch(bool showController, GameObject touchingObject, GameObject ignoredObject)`
-
-  * Parameters
-   * `bool showController` - If true then the controller will attempt to be made visible when no longer touching, if false then the controller will be hidden on touch.
-   * `GameObject touchingObject` - The touching object to apply the visibility state to.
-   * `GameObject ignoredObject` - The object that is currently being interacted with by the touching object which is passed through to the visibility to prevent the object from being hidden as well.
-  * Returns
-   * _none_
-
-The ToggleControllerOnTouch method determines whether the controller should be shown or hidden when touching an interactable object.
-
-#### ToggleControllerOnGrab/3
-
-  > `public virtual void ToggleControllerOnGrab(bool showController, GameObject grabbingObject, GameObject ignoredObject)`
-
-  * Parameters
-   * `bool showController` - If true then the controller will attempt to be made visible when no longer grabbing, if false then the controller will be hidden on grab.
-   * `GameObject grabbingObject` - The grabbing object to apply the visibility state to.
-   * `GameObject ignoredObject` - The object that is currently being interacted with by the grabbing object which is passed through to the visibility to prevent the object from being hidden as well.
-  * Returns
-   * _none_
-
-The ToggleControllerOnGrab method determines whether the controller should be shown or hidden when grabbing an interactable object.
-
-#### ToggleControllerOnUse/3
-
-  > `public virtual void ToggleControllerOnUse(bool showController, GameObject usingObject, GameObject ignoredObject)`
-
-  * Parameters
-   * `bool showController` - If true then the controller will attempt to be made visible when no longer using, if false then the controller will be hidden on use.
-   * `GameObject usingObject` - The using object to apply the visibility state to.
-   * `GameObject ignoredObject` - The object that is currently being interacted with by the using object which is passed through to the visibility to prevent the object from being hidden as well.
-  * Returns
-   * _none_
-
-The ToggleControllerOnUse method determines whether the controller should be shown or hidden when using an interactable object.
+ * `GameObject affectingObject` - The object that is being affected.
+ * `VRTK_InteractableObject monitoringObject` - The interactable object that is being monitored.
+ * `VRTK_InteractObjectAppearance.InteractionType interactionType` - The type of interaction initiating the event.
 
 ### Example
 
@@ -3567,6 +3554,8 @@ The highlighting of an Interactable Object is defaulted to use the `VRTK_Materia
 
 ### Class Events
 
+ * `InteractableObjectEnabled` - Emitted when the object script is enabled;
+ * `InteractableObjectDisabled` - Emitted when the object script is disabled;
  * `InteractableObjectTouched` - Emitted when another object touches the current object.
  * `InteractableObjectUntouched` - Emitted when the other object stops touching the current object.
  * `InteractableObjectGrabbed` - Emitted when another object grabs the current object (e.g. a controller).
@@ -4035,6 +4024,18 @@ The SetRendererHidden method turns off renderers of a given GameObject. It can a
    * _none_
 
 The ToggleRenderer method turns on or off the renderers of a given GameObject. It can also be provided with an optional model to ignore the render toggle of.
+
+#### IsRendererVisible/2
+
+  > `public static bool IsRendererVisible(GameObject model, GameObject ignoredModel = null)`
+
+  * Parameters
+   * `GameObject model` - The GameObject to check for visibility on.
+   * `GameObject ignoredModel` - A GameObject to ignore when doing the visibility check.
+  * Returns
+   * `bool` - Returns true if any of the child renderers are enabled, returns false if all child renderers are disabled.
+
+The IsRendererVisible method is used to check if a given GameObject is visible in the scene by any of it's child renderers being enabled.
 
 #### HighlightObject/3
 
