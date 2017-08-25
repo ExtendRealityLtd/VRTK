@@ -542,11 +542,11 @@ namespace VRTK
                         case ButtonPressTypes.Press:
                         case ButtonPressTypes.PressDown:
                         case ButtonPressTypes.PressUp:
-                            return IsAxisButtonPress(controllerReference, buttonType, pressType);
+                            return (IsMouseAliasPress(isRightController, buttonType, pressType) || IsAxisButtonPress(controllerReference, buttonType, pressType));
                     }
                     break;
                 case ButtonTypes.Grip:
-                    return IsAxisButtonPress(controllerReference, buttonType, pressType);
+                    return (IsMouseAliasPress(isRightController, buttonType, pressType) || IsAxisButtonPress(controllerReference, buttonType, pressType));
                 case ButtonTypes.Touchpad:
                     return IsButtonPressed(pressType, touchButton, pressButton);
                 case ButtonTypes.ButtonOne:
@@ -555,6 +555,35 @@ namespace VRTK
                     return IsButtonPressed(pressType, touchButton, pressButton);
                 case ButtonTypes.StartMenu:
                     return IsButtonPressed(pressType, touchButton, pressButton);
+            }
+            return false;
+        }
+
+        protected virtual bool IsMouseAliasPress(bool validController, ButtonTypes buttonType, ButtonPressTypes pressType)
+        {
+            if (validController)
+            {
+                switch (buttonType)
+                {
+                    case ButtonTypes.Trigger:
+                        return MousePressType(pressType, 0);
+                    case ButtonTypes.Grip:
+                        return MousePressType(pressType, 1);
+                }
+            }
+            return false;
+        }
+
+        protected virtual bool MousePressType(ButtonPressTypes pressType, int buttonIndex)
+        {
+            switch (pressType)
+            {
+                case ButtonPressTypes.Press:
+                    return Input.GetMouseButton(buttonIndex);
+                case ButtonPressTypes.PressDown:
+                    return Input.GetMouseButtonDown(buttonIndex);
+                case ButtonPressTypes.PressUp:
+                    return Input.GetMouseButtonUp(buttonIndex);
             }
             return false;
         }
@@ -714,7 +743,7 @@ namespace VRTK
         protected virtual void SetCachedControllerType(string givenType)
         {
             givenType = givenType.ToLower();
-            if(givenType.Contains("openvr controller"))
+            if (givenType.Contains("openvr controller"))
             {
                 switch (VRTK_DeviceFinder.GetHeadsetType(true))
                 {
