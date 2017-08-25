@@ -19,8 +19,7 @@ namespace VRTK
 #endif
     {
 #if VRTK_DEFINE_SDK_OCULUS
-        private Quaternion previousHeadsetRotation;
-        private Quaternion currentHeadsetRotation;
+        protected VRTK_VelocityEstimator cachedHeadsetVelocityEstimator;
 
         /// <summary>
         /// The ProcessUpdate method enables an SDK to run logic for every Unity Update
@@ -28,9 +27,6 @@ namespace VRTK
         /// <param name="options">A dictionary of generic options that can be used to within the update.</param>
         public override void ProcessUpdate(Dictionary<string, object> options)
         {
-#if VRTK_DEFINE_OCULUS_UTILITIES_1_11_0_OR_OLDER
-            CalculateAngularVelocity();
-#endif
         }
 
         /// <summary>
@@ -39,9 +35,6 @@ namespace VRTK
         /// <param name="options">A dictionary of generic options that can be used to within the fixed update.</param>
         public override void ProcessFixedUpdate(Dictionary<string, object> options)
         {
-#if VRTK_DEFINE_OCULUS_UTILITIES_1_12_0_OR_NEWER
-            CalculateAngularVelocity();
-#endif
         }
 
         /// <summary>
@@ -93,8 +86,8 @@ namespace VRTK
         /// <returns>A Vector3 containing the current angular velocity of the headset.</returns>
         public override Vector3 GetHeadsetAngularVelocity()
         {
-            var deltaRotation = currentHeadsetRotation * Quaternion.Inverse(previousHeadsetRotation);
-            return new Vector3(Mathf.DeltaAngle(0, deltaRotation.eulerAngles.x), Mathf.DeltaAngle(0, deltaRotation.eulerAngles.y), Mathf.DeltaAngle(0, deltaRotation.eulerAngles.z));
+            SetHeadsetCaches();
+            return cachedHeadsetVelocityEstimator.GetAngularVelocityEstimate();
         }
 
         /// <summary>
@@ -134,10 +127,13 @@ namespace VRTK
             }
         }
 
-        private void CalculateAngularVelocity()
+        protected virtual void SetHeadsetCaches()
         {
-            previousHeadsetRotation = currentHeadsetRotation;
-            currentHeadsetRotation = GetHeadset().transform.rotation;
+            Transform currentHeadset = GetHeadset();
+            if (cachedHeadsetVelocityEstimator == null && currentHeadset != null)
+            {
+                cachedHeadsetVelocityEstimator = (currentHeadset.GetComponent<VRTK_VelocityEstimator>() != null ? currentHeadset.GetComponent<VRTK_VelocityEstimator>() : currentHeadset.gameObject.AddComponent<VRTK_VelocityEstimator>());
+            }
         }
 #endif
     }

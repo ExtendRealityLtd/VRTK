@@ -162,8 +162,8 @@ namespace VRTK
             rightHand.Find("Hand").GetComponent<Renderer>().material.color = Color.green;
             rightController = rightHand.GetComponent<SDK_ControllerSim>();
             leftController = leftHand.GetComponent<SDK_ControllerSim>();
-            rightController.Selected = true;
-            leftController.Selected = false;
+            rightController.selected = true;
+            leftController.selected = false;
             destroyed = false;
 
             var controllerSDK = VRTK_SDK_Bridge.GetControllerSDK() as SDK_SimController;
@@ -230,14 +230,14 @@ namespace VRTK
                 if (currentHand.name == "LeftHand")
                 {
                     currentHand = rightHand;
-                    rightController.Selected = true;
-                    leftController.Selected = false;
+                    rightController.selected = true;
+                    leftController.selected = false;
                 }
                 else
                 {
                     currentHand = leftHand;
-                    rightController.Selected = false;
-                    leftController.Selected = true;
+                    rightController.selected = false;
+                    leftController.selected = true;
                 }
             }
 
@@ -248,15 +248,15 @@ namespace VRTK
             else
             {
                 UpdateRotation();
-                if(Input.GetKeyDown(distancePickupRight) && Input.GetKey(distancePickupModifier))
+                if (Input.GetKeyDown(distancePickupRight) && Input.GetKey(distancePickupModifier))
                 {
                     TryPickup(true);
                 }
-                else if(Input.GetKeyDown(distancePickupLeft) && Input.GetKey(distancePickupModifier))
+                else if (Input.GetKeyDown(distancePickupLeft) && Input.GetKey(distancePickupModifier))
                 {
                     TryPickup(false);
                 }
-                if(Input.GetKey(sprint))
+                if (Input.GetKey(sprint))
                 {
                     sprintMultiplier = playerSprintMultiplier;
                 }
@@ -264,11 +264,11 @@ namespace VRTK
                 {
                     sprintMultiplier = 1;
                 }
-                if(Input.GetKeyDown(distancePickupModifier))
+                if (Input.GetKeyDown(distancePickupModifier))
                 {
                     crossHairPanel.SetActive(true);
                 }
-                else if(Input.GetKeyUp(distancePickupModifier))
+                else if (Input.GetKeyUp(distancePickupModifier))
                 {
                     crossHairPanel.SetActive(false);
                 }
@@ -286,13 +286,13 @@ namespace VRTK
         {
             Ray screenRay = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
             RaycastHit hit;
-            if(Physics.Raycast(screenRay, out hit))
+            if (Physics.Raycast(screenRay, out hit))
             {
                 VRTK_InteractableObject io = hit.collider.gameObject.GetComponent<VRTK_InteractableObject>();
-                if(io)
+                if (io)
                 {
                     GameObject hand;
-                    if(rightHand)
+                    if (rightHand)
                     {
                         hand = VRTK_DeviceFinder.GetControllerRightHand();
                     }
@@ -301,7 +301,7 @@ namespace VRTK
                         hand = VRTK_DeviceFinder.GetControllerLeftHand();
                     }
                     VRTK_InteractGrab grab = hand.GetComponent<VRTK_InteractGrab>();
-                    if(grab.GetGrabbedObject() == null)
+                    if (grab.GetGrabbedObject() == null)
                     {
                         hand.GetComponent<VRTK_InteractTouch>().ForceTouch(hit.collider.gameObject);
                         grab.AttemptGrab();

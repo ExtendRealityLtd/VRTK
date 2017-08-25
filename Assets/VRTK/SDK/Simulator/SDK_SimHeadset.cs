@@ -11,10 +11,7 @@ namespace VRTK
     public class SDK_SimHeadset : SDK_BaseHeadset
     {
         private Transform camera;
-        private Vector3 lastPos = new Vector3();
-        private Quaternion lastRot = new Quaternion();
-        private List<Vector3> posList = new List<Vector3>();
-        private List<Vector3> rotList = new List<Vector3>();
+        protected VRTK_VelocityEstimator cachedHeadsetVelocityEstimator;
         private float magnitude;
         private Vector3 axis;
 
@@ -24,23 +21,6 @@ namespace VRTK
         /// <param name="options">A dictionary of generic options that can be used to within the update.</param>
         public override void ProcessUpdate(Dictionary<string, object> options)
         {
-            if (camera != null)
-            {
-                posList.Add((camera.position - lastPos) / Time.deltaTime);
-                if (posList.Count > 4)
-                {
-                    posList.RemoveAt(0);
-                }
-                Quaternion deltaRotation = camera.rotation * Quaternion.Inverse(lastRot);
-                deltaRotation.ToAngleAxis(out magnitude, out axis);
-                rotList.Add((axis * magnitude));
-                if (rotList.Count > 4)
-                {
-                    rotList.RemoveAt(0);
-                }
-                lastPos = camera.position;
-                lastRot = camera.rotation;
-            }
         }
 
         /// <summary>
@@ -84,13 +64,8 @@ namespace VRTK
         /// <returns>A Vector3 containing the current velocity of the headset.</returns>
         public override Vector3 GetHeadsetVelocity()
         {
-            Vector3 velocity = Vector3.zero;
-            foreach (Vector3 vel in posList)
-            {
-                velocity += vel;
-            }
-            velocity /= posList.Count;
-            return velocity;
+            SetHeadsetCaches();
+            return cachedHeadsetVelocityEstimator.GetVelocityEstimate();
         }
 
         /// <summary>
@@ -99,13 +74,8 @@ namespace VRTK
         /// <returns>A Vector3 containing the current angular velocity of the headset.</returns>
         public override Vector3 GetHeadsetAngularVelocity()
         {
-            Vector3 angularVelocity = Vector3.zero;
-            foreach (Vector3 vel in rotList)
-            {
-                angularVelocity += vel;
-            }
-            angularVelocity /= rotList.Count;
-            return angularVelocity;
+            SetHeadsetCaches();
+            return cachedHeadsetVelocityEstimator.GetAngularVelocityEstimate();
         }
 
         /// <summary>
@@ -141,16 +111,17 @@ namespace VRTK
             }
         }
 
-        private void Awake()
+        protected virtual void OnEnable()
         {
-            posList = new List<Vector3>();
-            rotList = new List<Vector3>();
+            SetHeadsetCaches();
+        }
 
-            var headset = GetHeadset();
-            if (headset != null)
+        protected virtual void SetHeadsetCaches()
+        {
+            Transform currentHeadset = GetHeadset();
+            if (cachedHeadsetVelocityEstimator == null && currentHeadset != null)
             {
-                lastPos = headset.position;
-                lastRot = headset.rotation;
+                cachedHeadsetVelocityEstimator = (currentHeadset.GetComponent<VRTK_VelocityEstimator>() != null ? currentHeadset.GetComponent<VRTK_VelocityEstimator>() : currentHeadset.gameObject.AddComponent<VRTK_VelocityEstimator>());
             }
         }
     }
