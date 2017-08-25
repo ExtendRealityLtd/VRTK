@@ -237,10 +237,10 @@ previous commit hashes is actively encouraged if they are relevant.
 ## Submitting Changes
   * Push your changes to your topic branch in your repository.
   * Submit a pull request to the repository `thestonefox/VRTK`.
-   * If you're submitting a bug fix pull request then target the
-   repository `master` branch.
-   * If you're submitting a new feature pull request then target
-   the next release branch in the repository. The current next release
-   branch is `3.3.0-alpha`.
+    * If you're submitting a bug fix pull request then target the
+    repository `master` branch.
+    * If you're submitting a new feature pull request then target
+    the next release branch in the repository. The current next release
+    branch is `3.3.0-alpha`.
   * The core team will aim to look at the pull request as soon as
   possible and provide feedback where required.
