@@ -362,19 +362,22 @@ namespace VRTK
 
         protected virtual bool IsValidInteractingObject(GameObject givenObject, ValidInteractingObject givenInteractingObjectValidType)
         {
-            VRTK_ControllerReference controllerReference = VRTK_ControllerReference.GetControllerReference(givenObject);
-            switch (givenInteractingObjectValidType)
+            if (gameObject.activeInHierarchy)
             {
-                case ValidInteractingObject.Anything:
-                    return true;
-                case ValidInteractingObject.EitherController:
-                    return VRTK_ControllerReference.IsValid(controllerReference);
-                case ValidInteractingObject.NeitherController:
-                    return !VRTK_ControllerReference.IsValid(controllerReference);
-                case ValidInteractingObject.LeftControllerOnly:
-                    return (VRTK_ControllerReference.IsValid(controllerReference) && controllerReference.hand == SDK_BaseController.ControllerHand.Left);
-                case ValidInteractingObject.RightControllerOnly:
-                    return (VRTK_ControllerReference.IsValid(controllerReference) && controllerReference.hand == SDK_BaseController.ControllerHand.Right);
+                VRTK_ControllerReference controllerReference = VRTK_ControllerReference.GetControllerReference(givenObject);
+                switch (givenInteractingObjectValidType)
+                {
+                    case ValidInteractingObject.Anything:
+                        return true;
+                    case ValidInteractingObject.EitherController:
+                        return VRTK_ControllerReference.IsValid(controllerReference);
+                    case ValidInteractingObject.NeitherController:
+                        return !VRTK_ControllerReference.IsValid(controllerReference);
+                    case ValidInteractingObject.LeftControllerOnly:
+                        return (VRTK_ControllerReference.IsValid(controllerReference) && controllerReference.hand == SDK_BaseController.ControllerHand.Left);
+                    case ValidInteractingObject.RightControllerOnly:
+                        return (VRTK_ControllerReference.IsValid(controllerReference) && controllerReference.hand == SDK_BaseController.ControllerHand.Right);
+                }
             }
             return false;
         }
