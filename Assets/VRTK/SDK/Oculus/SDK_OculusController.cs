@@ -29,8 +29,8 @@ namespace VRTK
         protected OVRInput.RawNearTouch[] triggerSense = new OVRInput.RawNearTouch[] { OVRInput.RawNearTouch.LIndexTrigger, OVRInput.RawNearTouch.RIndexTrigger };
         protected OVRInput.RawNearTouch[] touchpadSense = new OVRInput.RawNearTouch[] { OVRInput.RawNearTouch.LThumbButtons, OVRInput.RawNearTouch.RThumbButtons };
 
-        protected Quaternion[] previousControllerRotations = new Quaternion[2];
-        protected Quaternion[] currentControllerRotations = new Quaternion[2];
+        protected VRTK_VelocityEstimator cachedLeftVelocityEstimator;
+        protected VRTK_VelocityEstimator cachedRightVelocityEstimator;
 
         protected bool[] previousHairTriggerState = new bool[2];
         protected bool[] currentHairTriggerState = new bool[2];
@@ -69,9 +69,7 @@ namespace VRTK
         /// <param name="options">A dictionary of generic options that can be used to within the update.</param>
         public override void ProcessUpdate(VRTK_ControllerReference controllerReference, Dictionary<string, object> options)
         {
-#if VRTK_DEFINE_OCULUS_UTILITIES_1_11_0_OR_OLDER
-            CalculateAngularVelocity(controllerReference);
-#endif
+            ProcessControllerUpdate(controllerReference);
         }
 
         /// <summary>
@@ -81,9 +79,6 @@ namespace VRTK
         /// <param name="options">A dictionary of generic options that can be used to within the fixed update.</param>
         public override void ProcessFixedUpdate(VRTK_ControllerReference controllerReference, Dictionary<string, object> options)
         {
-#if VRTK_DEFINE_OCULUS_UTILITIES_1_12_0_OR_NEWER
-            CalculateAngularVelocity(controllerReference);
-#endif
         }
 
         /// <summary>
@@ -455,12 +450,13 @@ namespace VRTK
         /// <returns>A Vector3 containing the current velocity of the tracked object.</returns>
         public override Vector3 GetVelocity(VRTK_ControllerReference controllerReference)
         {
-            if (!VRTK_ControllerReference.IsValid(controllerReference))
+            if (VRTK_ControllerReference.IsValid(controllerReference))
             {
-                return Vector3.zero;
+                OVRInput.Controller controllerMask = GetControllerMask(controllerReference.index);
+                return OVRInput.GetLocalControllerVelocity(controllerMask);
             }
-            OVRInput.Controller controllerMask = GetControllerMask(controllerReference.index);
-            return OVRInput.GetLocalControllerVelocity(controllerMask);
+
+            return Vector3.zero;
         }
 
         /// <summary>
@@ -470,14 +466,18 @@ namespace VRTK
         /// <returns>A Vector3 containing the current angular velocity of the tracked object.</returns>
         public override Vector3 GetAngularVelocity(VRTK_ControllerReference controllerReference)
         {
-            if (!VRTK_ControllerReference.IsValid(controllerReference))
+            if (VRTK_ControllerReference.IsValid(controllerReference))
             {
-                return Vector3.zero;
+                if (controllerReference.hand == ControllerHand.Left && cachedLeftVelocityEstimator != null)
+                {
+                    return cachedLeftVelocityEstimator.GetAngularVelocityEstimate();
+                }
+                else if (controllerReference.hand == ControllerHand.Right && cachedRightVelocityEstimator != null)
+                {
+                    return cachedRightVelocityEstimator.GetAngularVelocityEstimate();
+                }
             }
-
-            uint index = VRTK_ControllerReference.GetRealIndex(controllerReference);
-            Quaternion deltaRotation = currentControllerRotations[index] * Quaternion.Inverse(previousControllerRotations[index]);
-            return new Vector3(Mathf.DeltaAngle(0, deltaRotation.eulerAngles.x), Mathf.DeltaAngle(0, deltaRotation.eulerAngles.y), Mathf.DeltaAngle(0, deltaRotation.eulerAngles.z));
+            return Vector3.zero;
         }
 
         /// <summary>
@@ -691,7 +691,7 @@ namespace VRTK
             OnControllerModelReady(ControllerHand.Right, VRTK_ControllerReference.GetControllerReference((uint)1));
         }
 
-        protected virtual void CalculateAngularVelocity(VRTK_ControllerReference controllerReference)
+        protected virtual void ProcessControllerUpdate(VRTK_ControllerReference controllerReference)
         {
             if (VRTK_ControllerReference.IsValid(controllerReference))
             {
@@ -701,9 +701,6 @@ namespace VRTK
                 {
                     return;
                 }
-
-                previousControllerRotations[index] = currentControllerRotations[index];
-                currentControllerRotations[index] = device.transform.rotation;
 
                 UpdateHairValues(index, GetButtonAxis(ButtonTypes.Trigger, controllerReference).x, GetButtonHairlineDelta(ButtonTypes.Trigger, controllerReference), ref previousHairTriggerState[index], ref currentHairTriggerState[index], ref hairTriggerLimit[index]);
                 UpdateHairValues(index, GetButtonAxis(ButtonTypes.Grip, controllerReference).x, GetButtonHairlineDelta(ButtonTypes.Grip, controllerReference), ref previousHairGripState[index], ref currentHairGripState[index], ref hairGripLimit[index]);
@@ -727,6 +724,7 @@ namespace VRTK
                     if (cachedLeftController != null)
                     {
                         cachedLeftController.index = 0;
+                        cachedLeftVelocityEstimator = (cachedLeftController.GetComponent<VRTK_VelocityEstimator>() != null ? cachedLeftController.GetComponent<VRTK_VelocityEstimator>() : cachedLeftController.gameObject.AddComponent<VRTK_VelocityEstimator>());
                     }
                 }
                 if (cachedRightController == null && sdkManager.loadedSetup.actualRightController)
@@ -735,6 +733,7 @@ namespace VRTK
                     if (cachedRightController != null)
                     {
                         cachedRightController.index = 1;
+                        cachedRightVelocityEstimator = (cachedRightController.GetComponent<VRTK_VelocityEstimator>() != null ? cachedRightController.GetComponent<VRTK_VelocityEstimator>() : cachedRightController.gameObject.AddComponent<VRTK_VelocityEstimator>());
                     }
                 }
             }
