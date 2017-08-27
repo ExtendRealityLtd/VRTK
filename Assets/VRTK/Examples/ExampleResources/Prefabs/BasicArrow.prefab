@@ -569,7 +569,17 @@ MonoBehaviour:
   - loadedSDKSetup: {fileID: 0}
     controllerType: 5
     position: {x: 0, y: 0, z: 0}
-    rotation: {x: -10, y: 0, z: 0}
+    rotation: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+  - loadedSDKSetup: {fileID: 0}
+    controllerType: 4
+    position: {x: 0, y: 0, z: 0}
+    rotation: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+  - loadedSDKSetup: {fileID: 0}
+    controllerType: 8
+    position: {x: 0, y: 0, z: 0}
+    rotation: {x: 0, y: 0, z: 0}
     scale: {x: 1, y: 1, z: 1}
 --- !u!114 &114827010251282088
 MonoBehaviour:
@@ -588,10 +598,16 @@ MonoBehaviour:
   rendererVisibleByDefault: 1
   gameObjectActiveOnTouch: 1
   rendererVisibleOnTouch: 1
-  touchTransitionDelay: 0
+  touchAppearanceDelay: 0
+  untouchAppearanceDelay: 0
+  validTouchInteractingObject: 0
   gameObjectActiveOnGrab: 1
   rendererVisibleOnGrab: 0
-  grabTransitionDelay: 0
+  grabAppearanceDelay: 0
+  ungrabAppearanceDelay: 0
+  validGrabInteractingObject: 0
   gameObjectActiveOnUse: 1
   rendererVisibleOnUse: 0
-  useTransitionDelay: 0
+  useAppearanceDelay: 0
+  unuseAppearanceDelay: 0
+  validUseInteractingObject: 0

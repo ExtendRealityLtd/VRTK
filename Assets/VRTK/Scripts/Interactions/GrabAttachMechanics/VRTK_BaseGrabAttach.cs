@@ -111,6 +111,7 @@ namespace VRTK.GrabAttachMechanics
             grabbedObjectRigidBody = grabbedObject.GetComponent<Rigidbody>();
             controllerAttachPoint = givenControllerAttachPoint;
             grabbedSnapHandle = GetSnapHandle(grabbingObject);
+            ProcessSDKTransformModify(VRTK_ControllerReference.GetControllerReference(grabbingObject));
 
             grabbedObjectScript.PauseCollisions(onGrabCollisionDelay);
             return true;
@@ -190,12 +191,6 @@ namespace VRTK.GrabAttachMechanics
             }
         }
 
-        protected virtual void FlipSnapHandles()
-        {
-            FlipSnapHandle(rightSnapHandle);
-            FlipSnapHandle(leftSnapHandle);
-        }
-
         protected virtual void Awake()
         {
             Initialise();
@@ -271,11 +266,15 @@ namespace VRTK.GrabAttachMechanics
             return null;
         }
 
-        protected virtual void FlipSnapHandle(Transform snapHandle)
+        protected virtual void ProcessSDKTransformModify(VRTK_ControllerReference controllerReference)
         {
-            if (snapHandle != null)
+            if (VRTK_ControllerReference.IsValid(controllerReference))
             {
-                snapHandle.localRotation = Quaternion.Inverse(snapHandle.localRotation);
+                VRTK_SDKTransformModify transformModify = grabbedObject.GetComponentInChildren<VRTK_SDKTransformModify>();
+                if (transformModify != null)
+                {
+                    transformModify.UpdateTransform(controllerReference);
+                }
             }
         }
     }
