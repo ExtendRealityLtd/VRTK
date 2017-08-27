@@ -123,7 +123,6 @@ namespace VRTK.GrabAttachMechanics
             tracked = true;
             climbable = false;
             kinematic = false;
-            FlipSnapHandles();
         }
 
         protected virtual void SetTrackPointOrientation(ref Transform trackPoint, Transform currentGrabbedObject, Transform controllerPoint)

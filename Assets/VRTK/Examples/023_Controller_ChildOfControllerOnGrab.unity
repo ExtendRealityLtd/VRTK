@@ -305,6 +305,11 @@ Prefab:
       propertyPath: sdkOverrides.Array.data[0].position.x
       value: -0.1
       objectReference: {fileID: 0}
+    - target: {fileID: 114168288636444296, guid: da23bdf76745c6c4f9258cd40e3d4859,
+        type: 2}
+      propertyPath: sdkOverrides.Array.data[0].rotation.x
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: da23bdf76745c6c4f9258cd40e3d4859, type: 2}
   m_IsPrefabParent: 0
@@ -3938,13 +3943,19 @@ MonoBehaviour:
   rendererVisibleByDefault: 1
   gameObjectActiveOnTouch: 1
   rendererVisibleOnTouch: 1
-  touchTransitionDelay: 0
+  touchAppearanceDelay: 0
+  untouchAppearanceDelay: 0
+  validTouchInteractingObject: 0
   gameObjectActiveOnGrab: 1
   rendererVisibleOnGrab: 0
-  grabTransitionDelay: 0
+  grabAppearanceDelay: 0
+  ungrabAppearanceDelay: 0
+  validGrabInteractingObject: 0
   gameObjectActiveOnUse: 1
   rendererVisibleOnUse: 0
-  useTransitionDelay: 0
+  useAppearanceDelay: 0
+  unuseAppearanceDelay: 0
+  validUseInteractingObject: 0
 --- !u!114 &1334892814
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4930,13 +4941,13 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1805510855}
-  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071067}
+  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1334892811}
   m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!114 &1805510857
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4953,7 +4964,17 @@ MonoBehaviour:
   - loadedSDKSetup: {fileID: 0}
     controllerType: 5
     position: {x: 0, y: 0, z: 0}
-    rotation: {x: 40, y: 0, z: 0}
+    rotation: {x: -30, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+  - loadedSDKSetup: {fileID: 0}
+    controllerType: 4
+    position: {x: 0, y: 0, z: 0}
+    rotation: {x: -30, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+  - loadedSDKSetup: {fileID: 0}
+    controllerType: 8
+    position: {x: 0, y: 0, z: 0}
+    rotation: {x: -70, y: 0, z: 0}
     scale: {x: 1, y: 1, z: 1}
 --- !u!1001 &1836648638
 Prefab:
