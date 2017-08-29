@@ -53,6 +53,7 @@ A collection of titles that have been made with VRTK.
 | CloudCity VR | [Steam Store Page](http://store.steampowered.com/app/662950) |
 | Unknown Fate | [Steam Store Page](http://store.steampowered.com/app/510390) |
 | Disco Destruction | [Steam Store Page](http://store.steampowered.com/app/677380) |
+| SteamHammerVR - The Rogue Apprentice | [Steam Store Page](http://store.steampowered.com/app/517460) |
 
 ## Oculus Home
 
