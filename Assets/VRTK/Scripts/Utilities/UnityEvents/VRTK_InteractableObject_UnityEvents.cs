@@ -10,8 +10,8 @@
         [Serializable]
         public sealed class InteractableObjectEvent : UnityEvent<object, InteractableObjectEventArgs> { }
 
-        public InteractableObjectEvent OnEnable = new InteractableObjectEvent();
-        public InteractableObjectEvent OnDisable = new InteractableObjectEvent();
+        public InteractableObjectEvent OnObjectEnable = new InteractableObjectEvent();
+        public InteractableObjectEvent OnObjectDisable = new InteractableObjectEvent();
 
         public InteractableObjectEvent OnTouch = new InteractableObjectEvent();
         public InteractableObjectEvent OnUntouch = new InteractableObjectEvent();
@@ -69,12 +69,12 @@
 
         private void Enable(object o, InteractableObjectEventArgs e)
         {
-            OnEnable.Invoke(o, e);
+            OnObjectEnable.Invoke(o, e);
         }
 
         private void Disable(object o, InteractableObjectEventArgs e)
         {
-            OnDisable.Invoke(o, e);
+            OnObjectDisable.Invoke(o, e);
         }
 
         private void Touch(object o, InteractableObjectEventArgs e)
