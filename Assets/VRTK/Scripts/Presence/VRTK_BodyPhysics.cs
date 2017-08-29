@@ -204,6 +204,7 @@ namespace VRTK
         protected List<GameObject> ignoreCollisionsOnGameObjects = new List<GameObject>();
         protected Transform cachedGrabbedObjectTransform = null;
         protected VRTK_InteractableObject cachedGrabbedObject;
+        protected Coroutine restoreCollisionsRoutine;
 
         // Draws a sphere for current standing position and a sphere for current headset position.
         // Set to `true` to view the debug spheres.
@@ -1179,7 +1180,10 @@ namespace VRTK
         {
             if (e.target != null)
             {
-                StopCoroutine("RestoreCollisions");
+                if (restoreCollisionsRoutine != null)
+                {
+                    StopCoroutine(restoreCollisionsRoutine);
+                }
                 IgnoreCollisions(e.target.GetComponentsInChildren<Collider>(), true);
             }
         }
@@ -1188,7 +1192,7 @@ namespace VRTK
         {
             if (gameObject.activeInHierarchy && playArea.gameObject.activeInHierarchy)
             {
-                StartCoroutine(RestoreCollisions(e.target));
+                restoreCollisionsRoutine = StartCoroutine(RestoreCollisions(e.target));
             }
         }
 

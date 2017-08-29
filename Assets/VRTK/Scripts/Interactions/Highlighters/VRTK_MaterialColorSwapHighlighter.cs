@@ -83,16 +83,18 @@ namespace VRTK.Highlighters
 
             if (faderRoutines != null)
             {
-                foreach (var fadeRoutine in faderRoutines)
+                foreach (KeyValuePair<string, Coroutine> fadeRoutine in faderRoutines)
                 {
                     StopCoroutine(fadeRoutine.Value);
                 }
                 faderRoutines.Clear();
             }
 
-            foreach (Renderer renderer in GetComponentsInChildren<Renderer>(true))
+            Renderer[] renderers = GetComponentsInChildren<Renderer>(true);
+            for (int i = 0; i < renderers.Length; i++)
             {
-                var objectReference = renderer.gameObject.GetInstanceID().ToString();
+                Renderer renderer = renderers[i];
+                string objectReference = renderer.gameObject.GetInstanceID().ToString();
                 if (!originalRendererMaterials.ContainsKey(objectReference))
                 {
                     continue;
@@ -107,9 +109,11 @@ namespace VRTK.Highlighters
         {
             originalSharedRendererMaterials.Clear();
             originalRendererMaterials.Clear();
-            foreach (Renderer renderer in GetComponentsInChildren<Renderer>(true))
+            Renderer[] renderers = GetComponentsInChildren<Renderer>(true);
+            for (int i = 0; i < renderers.Length; i++)
             {
-                var objectReference = renderer.gameObject.GetInstanceID().ToString();
+                Renderer renderer = renderers[i];
+                string objectReference = renderer.gameObject.GetInstanceID().ToString();
                 originalSharedRendererMaterials[objectReference] = renderer.sharedMaterials;
                 originalRendererMaterials[objectReference] = renderer.materials;
                 renderer.sharedMaterials = originalSharedRendererMaterials[objectReference];
@@ -118,20 +122,22 @@ namespace VRTK.Highlighters
 
         protected virtual void ChangeToHighlightColor(Color color, float duration = 0f)
         {
-            foreach (Renderer renderer in GetComponentsInChildren<Renderer>(true))
+            Renderer[] renderers = GetComponentsInChildren<Renderer>(true);
+            for (int j = 0; j < renderers.Length; j++)
             {
-                var swapCustomMaterials = new Material[renderer.materials.Length];
+                Renderer renderer = renderers[j];
+                Material[] swapCustomMaterials = new Material[renderer.materials.Length];
 
                 for (int i = 0; i < renderer.materials.Length; i++)
                 {
-                    var material = renderer.materials[i];
-                    if (customMaterial)
+                    Material material = renderer.materials[i];
+                    if (customMaterial != null)
                     {
                         material = customMaterial;
                         swapCustomMaterials[i] = material;
                     }
 
-                    var faderRoutineID = material.GetInstanceID().ToString();
+                    string faderRoutineID = material.GetInstanceID().ToString();
 
                     if (faderRoutines.ContainsKey(faderRoutineID) && faderRoutines[faderRoutineID] != null)
                     {
@@ -163,7 +169,7 @@ namespace VRTK.Highlighters
                     }
                 }
 
-                if (customMaterial)
+                if (customMaterial != null)
                 {
                     renderer.materials = swapCustomMaterials;
                 }
@@ -172,7 +178,7 @@ namespace VRTK.Highlighters
 
         protected virtual IEnumerator CycleColor(Material material, Color startColor, Color endColor, float duration)
         {
-            var elapsedTime = 0f;
+            float elapsedTime = 0f;
             while (elapsedTime <= duration)
             {
                 elapsedTime += Time.deltaTime;

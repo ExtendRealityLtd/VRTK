@@ -64,6 +64,7 @@ namespace VRTK
         protected bool isPendingSwipeCheck = false;
         protected bool isGrabbed = false;
         protected bool isShown = false;
+        protected Coroutine tweenMenuScaleRoutine;
 
         /// <summary>
         /// The ToggleMenu method is used to show or hide the menu.
@@ -88,11 +89,7 @@ namespace VRTK
             if (!isShown)
             {
                 isShown = true;
-                StopCoroutine("TweenMenuScale");
-                if (enabled)
-                {
-                    StartCoroutine("TweenMenuScale", isShown);
-                }
+                InitTweenMenuScale(isShown);
             }
         }
 
@@ -105,11 +102,7 @@ namespace VRTK
             if (isShown && force)
             {
                 isShown = false;
-                StopCoroutine("TweenMenuScale");
-                if (enabled)
-                {
-                    StartCoroutine("TweenMenuScale", isShown);
-                }
+                InitTweenMenuScale(isShown);
             }
         }
 
@@ -248,6 +241,18 @@ namespace VRTK
             }
         }
 
+        protected virtual void InitTweenMenuScale(bool show)
+        {
+            if (tweenMenuScaleRoutine != null)
+            {
+                StopCoroutine(tweenMenuScaleRoutine);
+            }
+            if (enabled)
+            {
+                tweenMenuScaleRoutine = StartCoroutine(TweenMenuScale(show));
+            }
+        }
+
         protected virtual IEnumerator TweenMenuScale(bool show)
         {
             float targetScale = 0;
@@ -266,7 +271,6 @@ namespace VRTK
                 i++;
             }
             transform.localScale = direction * targetScale;
-            StopCoroutine("TweenMenuScale");
 
             if (!show)
             {
@@ -303,7 +307,7 @@ namespace VRTK
         {
             if (isGrabbed)
             {
-                var pressPosition = CalculateTouchpadPressPosition();
+                TouchpadPressPosition pressPosition = CalculateTouchpadPressPosition();
                 switch (pressPosition)
                 {
                     case TouchpadPressPosition.Top:

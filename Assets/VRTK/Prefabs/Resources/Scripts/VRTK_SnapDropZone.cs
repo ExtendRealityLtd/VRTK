@@ -109,7 +109,8 @@ namespace VRTK
         protected bool isSnapped = false;
         protected bool wasSnapped = false;
         protected bool isHighlighted = false;
-        protected Coroutine transitionInPlace;
+        protected Coroutine transitionInPlaceRoutine;
+        protected Coroutine attemptTransitionAtEndOfFrameRoutine;
         protected bool originalJointCollisionState = false;
         protected VRTK_InteractableObject cachedCheckObject;
 
@@ -184,12 +185,17 @@ namespace VRTK
             VRTK_InteractableObject ioCheck = objectToSnap.GetComponentInParent<VRTK_InteractableObject>();
             if (ioCheck != null)
             {
-                StopCoroutine("AttemptForceSnapAtEndOfFrame");
+                if (attemptTransitionAtEndOfFrameRoutine != null)
+                {
+                    StopCoroutine(attemptTransitionAtEndOfFrameRoutine);
+                }
+
                 if (ioCheck.IsGrabbed())
                 {
                     ioCheck.ForceStopInteracting();
                 }
-                StartCoroutine(AttemptForceSnapAtEndOfFrame(ioCheck));
+
+                attemptTransitionAtEndOfFrameRoutine = StartCoroutine(AttemptForceSnapAtEndOfFrame(ioCheck));
             }
         }
 
@@ -266,6 +272,19 @@ namespace VRTK
             if (!VRTK_SharedMethods.IsEditTime() && Application.isPlaying && defaultSnappedObject != null)
             {
                 ForceSnap(defaultSnappedObject);
+            }
+        }
+
+        protected virtual void OnDisable()
+        {
+            if (transitionInPlaceRoutine != null)
+            {
+                StopCoroutine(transitionInPlaceRoutine);
+            }
+
+            if (attemptTransitionAtEndOfFrameRoutine != null)
+            {
+                StopCoroutine(attemptTransitionAtEndOfFrameRoutine);
             }
         }
 
@@ -482,9 +501,9 @@ namespace VRTK
                     }
 
                     Vector3 newLocalScale = GetNewLocalScale(ioCheck);
-                    if (transitionInPlace != null)
+                    if (transitionInPlaceRoutine != null)
                     {
-                        StopCoroutine(transitionInPlace);
+                        StopCoroutine(transitionInPlaceRoutine);
                     }
 
                     isSnapped = true;
@@ -494,7 +513,7 @@ namespace VRTK
                         CreatePermanentClone();
                     }
 
-                    transitionInPlace = StartCoroutine(UpdateTransformDimensions(ioCheck, highlightContainer, newLocalScale, snapDuration));
+                    transitionInPlaceRoutine = StartCoroutine(UpdateTransformDimensions(ioCheck, highlightContainer, newLocalScale, snapDuration));
 
                     ioCheck.ToggleSnapDropZone(this, true);
                 }
@@ -562,9 +581,9 @@ namespace VRTK
             currentSnappedObject = null;
             ResetSnapDropZoneJoint();
 
-            if (transitionInPlace != null)
+            if (transitionInPlaceRoutine != null)
             {
-                StopCoroutine(transitionInPlace);
+                StopCoroutine(transitionInPlaceRoutine);
             }
 
             if (cloneNewOnUnsnap)
