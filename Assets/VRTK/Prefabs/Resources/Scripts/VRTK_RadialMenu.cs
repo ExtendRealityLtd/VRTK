@@ -80,6 +80,7 @@ namespace VRTK
 
         protected int currentHover = -1;
         protected int currentPress = -1;
+        protected Coroutine tweenMenuScaleRoutine;
 
         /// <summary>
         /// The HoverButton method is used to set the button hover at a given angle.
@@ -145,8 +146,7 @@ namespace VRTK
             if (!isShown)
             {
                 isShown = true;
-                StopCoroutine("TweenMenuScale");
-                StartCoroutine("TweenMenuScale", isShown);
+                InitTweenMenuScale(isShown);
             }
         }
 
@@ -173,8 +173,7 @@ namespace VRTK
             if (isShown && (hideOnRelease || force))
             {
                 isShown = false;
-                StopCoroutine("TweenMenuScale");
-                StartCoroutine("TweenMenuScale", isShown);
+                InitTweenMenuScale(isShown);
             }
         }
 
@@ -338,6 +337,16 @@ namespace VRTK
             currentHover = buttonID; //Set current hover ID, need this to un-hover if selected button changes
         }
 
+
+        protected virtual void InitTweenMenuScale(bool isShown)
+        {
+            if (tweenMenuScaleRoutine != null)
+            {
+                StopCoroutine(tweenMenuScaleRoutine);
+            }
+            tweenMenuScaleRoutine = StartCoroutine(TweenMenuScale(isShown));
+        }
+
         //Simple tweening for menu, scales linearly from 0 to 1 and 1 to 0
         protected virtual IEnumerator TweenMenuScale(bool show)
         {
@@ -356,7 +365,6 @@ namespace VRTK
                 i++;
             }
             transform.localScale = Dir * targetScale;
-            StopCoroutine("TweenMenuScale");
         }
 
         protected virtual void AttempHapticPulse(float strength)

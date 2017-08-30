@@ -169,8 +169,10 @@ namespace VRTK
         {
             if (model != null)
             {
-                foreach (Renderer renderer in model.GetComponentsInChildren<Renderer>(true))
+                Renderer[] renderers = model.GetComponentsInChildren<Renderer>(true);
+                for (int i = 0; i < renderers.Length; i++)
                 {
+                    Renderer renderer = renderers[i];
                     if (renderer.gameObject != ignoredModel && (ignoredModel == null || !renderer.transform.IsChildOf(ignoredModel.transform)))
                     {
                         renderer.enabled = true;
@@ -185,8 +187,10 @@ namespace VRTK
         {
             if (model != null)
             {
-                foreach (Renderer renderer in model.GetComponentsInChildren<Renderer>(true))
+                Renderer[] renderers = model.GetComponentsInChildren<Renderer>(true);
+                for (int i = 0; i < renderers.Length; i++)
                 {
+                    Renderer renderer = renderers[i];
                     if (renderer.gameObject != ignoredModel && (ignoredModel == null || !renderer.transform.IsChildOf(ignoredModel.transform)))
                     {
                         renderer.enabled = false;
@@ -253,8 +257,10 @@ namespace VRTK
             if (model != null)
             {
                 alpha = Mathf.Clamp(alpha, 0f, 1f);
-                foreach (Renderer renderer in model.GetComponentsInChildren<Renderer>(true))
+                Renderer[] renderers = model.GetComponentsInChildren<Renderer>(true);
+                for (int i = 0; i < renderers.Length; i++)
                 {
+                    Renderer renderer = renderers[i];
                     if (alpha < 1f)
                     {
                         renderer.material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);

@@ -48,16 +48,18 @@ namespace VRTK.Highlighters
 
             if (faderRoutines != null)
             {
-                foreach (var fadeRoutine in faderRoutines)
+                foreach (KeyValuePair<string, Coroutine> fadeRoutine in faderRoutines)
                 {
                     StopCoroutine(fadeRoutine.Value);
                 }
                 faderRoutines.Clear();
             }
 
-            foreach (Renderer renderer in GetComponentsInChildren<Renderer>(true))
+            Renderer[] renderers = GetComponentsInChildren<Renderer>(true);
+            for (int i = 0; i < renderers.Length; i++)
             {
-                var objectReference = renderer.gameObject.GetInstanceID().ToString();
+                Renderer renderer = renderers[i];
+                string objectReference = renderer.gameObject.GetInstanceID().ToString();
                 if (!originalMaterialPropertyBlocks.ContainsKey(objectReference))
                 {
                     continue;
@@ -71,9 +73,11 @@ namespace VRTK.Highlighters
         {
             originalMaterialPropertyBlocks.Clear();
             highlightMaterialPropertyBlocks.Clear();
-            foreach (Renderer renderer in GetComponentsInChildren<Renderer>(true))
+            Renderer[] renderers = GetComponentsInChildren<Renderer>(true);
+            for (int i = 0; i < renderers.Length; i++)
             {
-                var objectReference = renderer.gameObject.GetInstanceID().ToString();
+                Renderer renderer = renderers[i];
+                string objectReference = renderer.gameObject.GetInstanceID().ToString();
                 originalMaterialPropertyBlocks[objectReference] = new MaterialPropertyBlock();
                 renderer.GetPropertyBlock(originalMaterialPropertyBlocks[objectReference]);
                 highlightMaterialPropertyBlocks[objectReference] = new MaterialPropertyBlock();
@@ -82,9 +86,11 @@ namespace VRTK.Highlighters
 
         protected override void ChangeToHighlightColor(Color color, float duration = 0f)
         {
-            foreach (Renderer renderer in GetComponentsInChildren<Renderer>(true))
+            Renderer[] renderers = GetComponentsInChildren<Renderer>(true);
+            for (int i = 0; i < renderers.Length; i++)
             {
-                var objectReference = renderer.gameObject.GetInstanceID().ToString();
+                Renderer renderer = renderers[i];
+                string objectReference = renderer.gameObject.GetInstanceID().ToString();
                 if (!originalMaterialPropertyBlocks.ContainsKey(objectReference))
                 {
                     continue;
@@ -96,7 +102,7 @@ namespace VRTK.Highlighters
                     faderRoutines.Remove(objectReference);
                 }
 
-                var highlightMaterialPropertyBlock = highlightMaterialPropertyBlocks[objectReference];
+                MaterialPropertyBlock highlightMaterialPropertyBlock = highlightMaterialPropertyBlocks[objectReference];
                 renderer.GetPropertyBlock(highlightMaterialPropertyBlock);
                 if (resetMainTexture)
                 {
@@ -118,7 +124,7 @@ namespace VRTK.Highlighters
 
         protected virtual IEnumerator CycleColor(Renderer renderer, MaterialPropertyBlock highlightMaterialPropertyBlock, Color endColor, float duration)
         {
-            var elapsedTime = 0f;
+            float elapsedTime = 0f;
             while (elapsedTime <= duration)
             {
                 elapsedTime += Time.deltaTime;
