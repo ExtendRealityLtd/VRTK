@@ -19,6 +19,8 @@
 
 Attempt to recreate the issue in a VRTK example scene and provide steps to reproduce in a clear text step by step list. Include code samples, errors and stacktraces if appropriate.
 
+  > Do not upload custom projects with custom code to demonstrate the issue.
+
 ### Expected behavior
 
 Briefly describe what you expect should happen
