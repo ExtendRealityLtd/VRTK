@@ -1,6 +1,6 @@
-# Introduction
+# API Documentation
 
-This file provides documentation on how to use the included prefabs and scripts.
+This file describes all of the public methods, variables and events utilised by the VRTK prefabs and scripts.
 
  * [Prefabs](#prefabs-vrtkprefabs)
  * [Pointers](#pointers-vrtkscriptspointers)
