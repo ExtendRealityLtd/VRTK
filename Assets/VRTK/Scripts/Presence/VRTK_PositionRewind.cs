@@ -33,13 +33,19 @@ namespace VRTK
         /// <summary>
         /// Valid collision detectors.
         /// </summary>
-        /// <param name="HeadsetOnly">Listen for collisions on the headset collider only.</param>
-        /// <param name="BodyOnly">Listen for collisions on the body physics collider only.</param>
-        /// <param name="HeadsetAndBody">Listen for collisions on both the headset collider and body physics collider.</param>
         public enum CollisionDetectors
         {
+            /// <summary>
+            /// Listen for collisions on the headset collider only.
+            /// </summary>
             HeadsetOnly,
+            /// <summary>
+            /// Listen for collisions on the body physics collider only.
+            /// </summary>
             BodyOnly,
+            /// <summary>
+            /// Listen for collisions on both the headset collider and body physics collider.
+            /// </summary>
             HeadsetAndBody
         }
 

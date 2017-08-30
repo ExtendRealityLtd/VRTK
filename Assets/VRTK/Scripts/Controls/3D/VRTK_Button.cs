@@ -25,21 +25,35 @@ namespace VRTK
         /// <summary>
         /// 3D Control Button Directions
         /// </summary>
-        /// <param name="autodetect">Attempt to auto detect the axis</param>
-        /// <param name="x">X axis</param>
-        /// <param name="y">Y axis</param>
-        /// <param name="z">Z axis</param>
-        /// <param name="negX">Negative X axis</param>
-        /// <param name="negY">Negative Y axis</param>
-        /// <param name="negZ">Negative Z axis</param>
         public enum ButtonDirection
         {
+            /// <summary>
+            /// Attempt to auto detect the axis.
+            /// </summary>
             autodetect,
+            /// <summary>
+            /// The world x direction.
+            /// </summary>
             x,
+            /// <summary>
+            /// The world y direction.
+            /// </summary>
             y,
+            /// <summary>
+            /// The world z direction.
+            /// </summary>
             z,
+            /// <summary>
+            /// The world negative x direction.
+            /// </summary>
             negX,
+            /// <summary>
+            /// The world negative y direction.
+            /// </summary>
             negY,
+            /// <summary>
+            /// The world negative z direction.
+            /// </summary>
             negZ
         }
 

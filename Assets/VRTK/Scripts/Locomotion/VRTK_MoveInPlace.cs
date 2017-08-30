@@ -19,34 +19,54 @@ namespace VRTK
         /// <summary>
         /// Options for testing if a play space fall is valid.
         /// </summary>
-        /// <param name="HeadsetAndControllers">Track both headset and controllers for movement calculations.</param>
-        /// <param name="ControllersOnly">Track only the controllers for movement calculations.</param>
-        /// <param name="HeadsetOnly">Track only headset for movement caluclations.</param>
         public enum ControlOptions
         {
+            /// <summary>
+            /// Track both headset and controllers for movement calculations.
+            /// </summary>
             HeadsetAndControllers,
+            /// <summary>
+            /// Track only the controllers for movement calculations.
+            /// </summary>
             ControllersOnly,
+            /// <summary>
+            /// Track only headset for movement caluclations.
+            /// </summary>
             HeadsetOnly,
         }
 
         /// <summary>
         /// Options for which method is used to determine player direction while moving.
         /// </summary>
-        /// <param name="Gaze">Player will always move in the direction they are currently looking.</param>
-        /// <param name="ControllerRotation">Player will move in the direction that the controllers are pointing (averaged).</param>
-        /// <param name="DumbDecoupling">Player will move in the direction they were first looking when they engaged Move In Place.</param>
-        /// <param name="SmartDecoupling">Player will move in the direction they are looking only if their headset point the same direction as their controllers.</param>
-        /// <param name="EngageControllerRotationOnly">Player will move in the direction that the controller with the engage button pressed is pointing.</param>
-        /// <param name="LeftControllerRotationOnly">Player will move in the direction that the left controller is pointing.</param>
-        /// <param name="RightControllerRotationOnly">Player will move in the direction that the right controller is pointing.</param>
         public enum DirectionalMethod
         {
+            /// <summary>
+            /// Player will always move in the direction they are currently looking.
+            /// </summary>
             Gaze,
+            /// <summary>
+            /// Player will move in the direction that the controllers are pointing (averaged).
+            /// </summary>
             ControllerRotation,
+            /// <summary>
+            /// Player will move in the direction they were first looking when they engaged Move In Place.
+            /// </summary>
             DumbDecoupling,
+            /// <summary>
+            /// Player will move in the direction they are looking only if their headset point the same direction as their controllers.
+            /// </summary>
             SmartDecoupling,
+            /// <summary>
+            /// Player will move in the direction that the controller with the engage button pressed is pointing.
+            /// </summary>
             EngageControllerRotationOnly,
+            /// <summary>
+            /// Player will move in the direction that the left controller is pointing.
+            /// </summary>
             LeftControllerRotationOnly,
+            /// <summary>
+            /// Player will move in the direction that the right controller is pointing.
+            /// </summary>
             RightControllerRotationOnly
         }
 

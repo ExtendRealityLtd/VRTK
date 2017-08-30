@@ -8,7 +8,7 @@ namespace VRTK
     using System.Linq;
 
     /// <summary>
-    /// Describes a class that represents an SDK. Only allowed on classes that inherit from <see cref="SDK_Base"/>.
+    /// Describes a class that represents an SDK. Only allowed on classes that inherit from SDK_Base.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = false)]
     public sealed class SDK_DescriptionAttribute : Attribute
@@ -18,7 +18,7 @@ namespace VRTK
         /// </summary>
         public readonly string prettyName;
         /// <summary>
-        /// The scripting define symbol needed for the SDK. Needs to be the same as <see cref="SDK_ScriptingDefineSymbolPredicateAttribute.symbol"/> to add and remove the scripting define symbol automatically using <see cref="VRTK_SDKManager"/>.
+        /// The scripting define symbol needed for the SDK. Needs to be the same as `SDK_ScriptingDefineSymbolPredicateAttribute.symbol` to add and remove the scripting define symbol automatically using VRTK_SDKManager.
         /// </summary>
         public readonly string symbol;
         /// <summary>
@@ -51,10 +51,10 @@ namespace VRTK
         /// <summary>
         /// Creates a new attribute.
         /// </summary>
-        /// <param name="prettyName">The pretty name of the SDK. Uniquely identifies the SDK. <see langword="null"/> and <see cref="string.Empty"/> aren't allowed.</param>
-        /// <param name="symbol">The scripting define symbol needed for the SDK. Needs to be the same as <see cref="SDK_ScriptingDefineSymbolPredicateAttribute.symbol"/> to add and remove the scripting define symbol automatically using <see cref="VRTK_SDKManager"/>. <see langword="null"/> and <see cref="string.Empty"/> are allowed.</param>
-        /// <param name="vrDeviceName">The name of the VR Device to load. Set to <see langword="null"/> or <see cref="string.Empty"/> if no VR Device is needed.</param>
-        /// <param name="buildTargetGroupName">The name of a constant of <see cref="BuildTargetGroup"/>. "<see cref="BuildTargetGroup.Unknown"/>", <see langword="null"/> and <see cref="string.Empty"/> are not allowed.</param>
+        /// <param name="prettyName">The pretty name of the SDK. Uniquely identifies the SDK. `null` and `string.Empty` aren't allowed.</param>
+        /// <param name="symbol">The scripting define symbol needed for the SDK. Needs to be the same as `SDK_ScriptingDefineSymbolPredicateAttribute.symbol` to add and remove the scripting define symbol automatically using VRTK_SDKManager. `null` and `string.Empty` are allowed.</param>
+        /// <param name="vrDeviceName">The name of the VR Device to load. Set to `null` or `string.Empty` if no VR Device is needed.</param>
+        /// <param name="buildTargetGroupName">The name of a constant of `BuildTargetGroup`. `BuildTargetGroup.Unknown`, `null` and `string.Empty` are not allowed.</param>
         /// <param name="index">The index of this attribute, in case there are multiple on the same target.</param>
         public SDK_DescriptionAttribute(string prettyName, string symbol, string vrDeviceName, string buildTargetGroupName, int index = 0)
         {
@@ -102,8 +102,8 @@ namespace VRTK
         /// <summary>
         /// Creates a new attribute by copying from another attribute on a given type.
         /// </summary>
-        /// <param name="typeToCopyExistingDescriptionFrom">The type to copy the existing <see cref="SDK_DescriptionAttribute"/> from. <see langword="null"/> is not allowed.</param>
-        /// <param name="index">The index of the description to copy from the the existing <see cref="SDK_DescriptionAttribute"/>.</param>
+        /// <param name="typeToCopyExistingDescriptionFrom">The type to copy the existing SDK_DescriptionAttribute from. `null` is not allowed.</param>
+        /// <param name="index">The index of the description to copy from the the existing SDK_DescriptionAttribute.</param>
         public SDK_DescriptionAttribute(Type typeToCopyExistingDescriptionFrom, int index = 0)
         {
             if (typeToCopyExistingDescriptionFrom == null)

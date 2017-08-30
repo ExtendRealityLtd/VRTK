@@ -24,11 +24,15 @@ namespace VRTK
         /// <summary>
         /// States of Direction Indicator Visibility.
         /// </summary>
-        /// <param name="OnWhenPointerActive">Only shows the direction indicator when the pointer is active.</param>
-        /// <param name="AlwaysOnWithPointerCursor">Only shows the direction indicator when the pointer cursor is visible or if the cursor is hidden and the pointer is active.</param>
         public enum VisibilityState
         {
+            /// <summary>
+            /// Only shows the direction indicator when the pointer is active.
+            /// </summary>
             OnWhenPointerActive,
+            /// <summary>
+            /// Only shows the direction indicator when the pointer cursor is visible or if the cursor is hidden and the pointer is active.
+            /// </summary>
             AlwaysOnWithPointerCursor
         }
 

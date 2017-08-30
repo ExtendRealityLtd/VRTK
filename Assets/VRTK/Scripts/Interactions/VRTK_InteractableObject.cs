@@ -43,26 +43,38 @@ namespace VRTK
         /// <summary>
         /// Allowed controller type.
         /// </summary>
-        /// <param name="Both">Both controllers are allowed to interact.</param>
-        /// <param name="LeftOnly">Only the left controller is allowed to interact.</param>
-        /// <param name="RightOnly">Only the right controller is allowed to interact.</param>
         public enum AllowedController
         {
+            /// <summary>
+            /// Both controllers are allowed to interact.
+            /// </summary>
             Both,
+            /// <summary>
+            /// Only the left controller is allowed to interact.
+            /// </summary>
             LeftOnly,
+            /// <summary>
+            /// Only the right controller is allowed to interact.
+            /// </summary>
             RightOnly
         }
 
         /// <summary>
         /// The types of valid situations that the object can be released from grab.
         /// </summary>
-        /// <param name="NoDrop">The object cannot be dropped via the controller</param>
-        /// <param name="DropAnywhere">The object can be dropped anywhere in the scene via the controller.</param>
-        /// <param name="DropValidSnapDropZone">The object can only be dropped when it is hovering over a valid snap drop zone.</param>
         public enum ValidDropTypes
         {
+            /// <summary>
+            /// The object cannot be dropped via the controller.
+            /// </summary>
             NoDrop,
+            /// <summary>
+            /// The object can be dropped anywhere in the scene via the controller.
+            /// </summary>
             DropAnywhere,
+            /// <summary>
+            /// The object can only be dropped when it is hovering over a valid snap drop zone.
+            /// </summary>
             DropValidSnapDropZone
         }
 

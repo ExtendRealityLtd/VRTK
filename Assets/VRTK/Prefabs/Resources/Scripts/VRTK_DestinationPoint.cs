@@ -27,13 +27,19 @@ namespace VRTK
         /// <summary>
         /// Allowed snap to rotation types.
         /// </summary>
-        /// <param name="NoRotation">No rotation information will be emitted in the destination set payload.</param>
-        /// <param name="RotateWithNoHeadsetOffset">The destination point's rotation will be emitted without taking into consideration the current headset rotation.</param>
-        /// <param name="RotateWithHeadsetOffset">The destination point's rotation will be emitted and will take into consideration the current headset rotation.</param>
         public enum RotationTypes
         {
+            /// <summary>
+            /// No rotation information will be emitted in the destination set payload.
+            /// </summary>
             NoRotation,
+            /// <summary>
+            /// The destination point's rotation will be emitted without taking into consideration the current headset rotation.
+            /// </summary>
             RotateWithNoHeadsetOffset,
+            /// <summary>
+            /// The destination point's rotation will be emitted and will take into consideration the current headset rotation.
+            /// </summary>
             RotateWithHeadsetOffset
         }
 

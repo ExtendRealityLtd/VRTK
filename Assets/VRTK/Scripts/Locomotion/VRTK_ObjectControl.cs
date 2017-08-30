@@ -42,15 +42,23 @@ namespace VRTK
         /// <summary>
         /// Devices for providing direction.
         /// </summary>
-        /// <param name="Headset">The headset device.</param>
-        /// <param name="LeftController">The left controller device.</param>
-        /// <param name="RightController">The right controller device.</param>
-        /// <param name="ControlledObject">The controlled object.</param>
         public enum DirectionDevices
         {
+            /// <summary>
+            /// The headset device.
+            /// </summary>
             Headset,
+            /// <summary>
+            /// The left controller device.
+            /// </summary>
             LeftController,
+            /// <summary>
+            /// The right controller device.
+            /// </summary>
             RightController,
+            /// <summary>
+            /// The controlled object.
+            /// </summary>
             ControlledObject
         }
 

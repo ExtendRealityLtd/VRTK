@@ -39,15 +39,23 @@ namespace VRTK
         /// <summary>
         /// 3D Control Directions
         /// </summary>
-        /// <param name="autodetect">Attempt to auto detect the axis</param>
-        /// <param name="x">X axis</param>
-        /// <param name="y">Y axis</param>
-        /// <param name="z">Z axis</param>
         public enum Direction
         {
+            /// <summary>
+            /// Attempt to auto detect the axis.
+            /// </summary>
             autodetect,
+            /// <summary>
+            /// The world x direction.
+            /// </summary>
             x,
+            /// <summary>
+            /// The world y direction.
+            /// </summary>
             y,
+            /// <summary>
+            /// The world z direction.
+            /// </summary>
             z
         }
 

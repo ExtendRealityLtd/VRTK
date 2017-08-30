@@ -16,9 +16,18 @@ namespace VRTK
     [AddComponentMenu("VRTK/Scripts/Controls/3D/VRTK_Wheel")]
     public class VRTK_Wheel : VRTK_Control
     {
+        /// <summary>
+        /// The grab attach mechanic to use.
+        /// </summary>
         public enum GrabTypes
         {
+            /// <summary>
+            /// Utilise the track object grab mechanic.
+            /// </summary>
             TrackObject,
+            /// <summary>
+            /// Utilise the rotator track grab mechanic.
+            /// </summary>
             RotatorTrack
         }
 

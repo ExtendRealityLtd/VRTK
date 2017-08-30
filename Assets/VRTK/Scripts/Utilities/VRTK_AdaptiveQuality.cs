@@ -75,23 +75,23 @@ namespace VRTK
         public bool drawDebugVisualization;
 
         [Tooltip("Toggles whether to allow keyboard shortcuts to control this script.\n\n"
-                 + "* The supported shortcuts are:\n"
-                 + " * `Shift+F1`: Toggle debug visualization on/off\n"
-                 + " * `Shift+F2`: Toggle usage of override render scale on/off\n"
-                 + " * `Shift+F3`: Decrease override render scale level\n"
-                 + " * `Shift+F4`: Increase override render scale level")]
+                 + " * The supported shortcuts are:\n"
+                 + "  * `Shift+F1`: Toggle debug visualization on/off\n"
+                 + "  * `Shift+F2`: Toggle usage of override render scale on/off\n"
+                 + "  * `Shift+F3`: Decrease override render scale level\n"
+                 + "  * `Shift+F4`: Increase override render scale level")]
         public bool allowKeyboardShortcuts = true;
 
         [Tooltip("Toggles whether to allow command line arguments to control this script at startup of the standalone build.\n\n"
-                 + "* The supported command line arguments all begin with '-' and are:\n"
-                 + " * `-noaq`: Disable adaptive quality\n"
-                 + " * `-aqminscale X`: Set minimum render scale to X\n"
-                 + " * `-aqmaxscale X`: Set maximum render scale to X\n"
-                 + " * `-aqmaxres X`: Set maximum render target dimension to X\n"
-                 + " * `-aqfillratestep X`: Set render scale fill rate step size in percent to X (X from 1 to 100)\n"
-                 + " * `-aqoverride X`: Set override render scale level to X\n"
-                 + " * `-vrdebug`: Enable debug visualization\n"
-                 + " * `-msaa X`: Set MSAA level to X")]
+                 + " * The supported command line arguments all begin with '-' and are:\n"
+                 + "  * `-noaq`: Disable adaptive quality\n"
+                 + "  * `-aqminscale X`: Set minimum render scale to X\n"
+                 + "  * `-aqmaxscale X`: Set maximum render scale to X\n"
+                 + "  * `-aqmaxres X`: Set maximum render target dimension to X\n"
+                 + "  * `-aqfillratestep X`: Set render scale fill rate step size in percent to X (X from 1 to 100)\n"
+                 + "  * `-aqoverride X`: Set override render scale level to X\n"
+                 + "  * `-vrdebug`: Enable debug visualization\n"
+                 + "  * `-msaa X`: Set MSAA level to X")]
         public bool allowCommandLineArguments = true;
 
         [Tooltip("The MSAA level to use.")]

@@ -29,8 +29,6 @@ namespace VRTK
     /// The Controller Events script deals with events that the game controller is sending out.
     /// </summary>
     /// <remarks>
-    /// The Controller Events script requires the Controller Mapper script on the same GameObject and provides event listeners for every button press on the controller (excluding the System Menu button as this cannot be overridden and is always used by Steam).
-    ///
     /// When a controller button is pressed, the script emits an event to denote that the button has been pressed which allows other scripts to listen for this event without needing to implement any controller logic. When a controller button is released, the script also emits an event denoting that the button has been released.
     ///
     /// The script also has a public boolean pressed state for the buttons to allow the script to be queried by other scripts to check if a button is being held down.
@@ -44,62 +42,110 @@ namespace VRTK
         /// <summary>
         /// Button types
         /// </summary>
-        /// <param name="Undefined">No button specified</param>
-        /// <param name="TriggerHairline">The trigger is squeezed past the current hairline threshold.</param>
-        /// <param name="TriggerTouch">The trigger is squeezed a small amount.</param>
-        /// <param name="TriggerPress">The trigger is squeezed about half way in.</param>
-        /// <param name="TriggerClick">The trigger is squeezed all the way down.</param>
-        /// <param name="GripHairline">The grip is squeezed past the current hairline threshold.</param>
-        /// <param name="GripTouch">The grip button is touched.</param>
-        /// <param name="GripPress">The grip button is pressed.</param>
-        /// <param name="GripClick">The grip button is pressed all the way down.</param>
-        /// <param name="TouchpadTouch">The touchpad is touched (without pressing down to click).</param>
-        /// <param name="TouchpadPress">The touchpad is pressed (to the point of hearing a click).</param>
-        /// <param name="ButtonOneTouch">The button one is touched.</param>
-        /// <param name="ButtonOnePress">The button one is pressed.</param>
-        /// <param name="ButtonTwoTouch">The button one is touched.</param>
-        /// <param name="ButtonTwoPress">The button one is pressed.</param>
-        /// <param name="StartMenuPress">The button one is pressed.</param>
-        /// <param name="TouchpadSense">The touchpad sense touch is active.</param>
-        /// <param name="TriggerSense">The trigger sense touch is active.</param>
-        /// <param name="MiddleFingerSense">The middle finger sense touch is active.</param>
-        /// <param name="RingFingerSense">The ring finger sense touch is active.</param>
-        /// <param name="PinkyFingerSense">The pinky finger sense touch is active.</param>
         public enum ButtonAlias
         {
+            /// <summary>
+            /// No button specified.
+            /// </summary>
             Undefined,
+            /// <summary>
+            /// The trigger is squeezed past the current hairline threshold.
+            /// </summary>
             TriggerHairline,
+            /// <summary>
+            /// The trigger is squeezed a small amount.
+            /// </summary>
             TriggerTouch,
+            /// <summary>
+            /// The trigger is squeezed about half way in.
+            /// </summary>
             TriggerPress,
+            /// <summary>
+            /// The trigger is squeezed all the way down.
+            /// </summary>
             TriggerClick,
+            /// <summary>
+            /// The grip is squeezed past the current hairline threshold.
+            /// </summary>
             GripHairline,
+            /// <summary>
+            /// The grip button is touched.
+            /// </summary>
             GripTouch,
+            /// <summary>
+            /// The grip button is pressed.
+            /// </summary>
             GripPress,
+            /// <summary>
+            /// The grip button is pressed all the way down.
+            /// </summary>
             GripClick,
+            /// <summary>
+            /// The touchpad is touched (without pressing down to click).
+            /// </summary>
             TouchpadTouch,
+            /// <summary>
+            /// The touchpad is pressed (to the point of hearing a click).
+            /// </summary>
             TouchpadPress,
+            /// <summary>
+            /// The button one is touched.
+            /// </summary>
             ButtonOneTouch,
+            /// <summary>
+            /// The button one is pressed.
+            /// </summary>
             ButtonOnePress,
+            /// <summary>
+            /// The button two is touched.
+            /// </summary>
             ButtonTwoTouch,
+            /// <summary>
+            /// The button two is pressed.
+            /// </summary>
             ButtonTwoPress,
+            /// <summary>
+            /// The start menu is pressed.
+            /// </summary>
             StartMenuPress,
+            /// <summary>
+            /// The touchpad sense touch is active.
+            /// </summary>
             TouchpadSense,
+            /// <summary>
+            /// The trigger sense touch is active.
+            /// </summary>
             TriggerSense,
+            /// <summary>
+            /// The middle finger sense touch is active.
+            /// </summary>
             MiddleFingerSense,
+            /// <summary>
+            /// The ring finger sense touch is active.
+            /// </summary>
             RingFingerSense,
+            /// <summary>
+            /// The pinky finger sense touch is active.
+            /// </summary>
             PinkyFingerSense
         }
 
         /// <summary>
         /// Axis Types
         /// </summary>
-        /// <param name="Digital">A digital axis with a binary result of 0f not pressed or 1f is pressed.</param>
-        /// <param name="Axis">An analog axis ranging from no squeeze at 0f to full squeeze at 1f.</param>
-        /// <param name="SenseAxis">A cap sens axis ranging from not near at 0f to touching at 1f.</param>
         public enum AxisType
         {
+            /// <summary>
+            /// A digital axis with a binary result of 0f not pressed or 1f is pressed.
+            /// </summary>
             Digital,
+            /// <summary>
+            /// An analog axis ranging from no squeeze at 0f to full squeeze at 1f.
+            /// </summary>
             Axis,
+            /// <summary>
+            /// A cap sens axis ranging from not near at 0f to touching at 1f.
+            /// </summary>
             SenseAxis
         }
 

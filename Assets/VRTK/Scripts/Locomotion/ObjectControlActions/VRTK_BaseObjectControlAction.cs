@@ -11,9 +11,18 @@ namespace VRTK
     /// </remarks>
     public abstract class VRTK_BaseObjectControlAction : MonoBehaviour
     {
+        /// <summary>
+        /// The axis to listen to changes on.
+        /// </summary>
         public enum AxisListeners
         {
+            /// <summary>
+            /// Listen for changes on the horizontal X axis.
+            /// </summary>
             XAxisChanged,
+            /// <summary>
+            /// Listen for changes on the vertical y axis.
+            /// </summary>
             YAxisChanged
         }
 

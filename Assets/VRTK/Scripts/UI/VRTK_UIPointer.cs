@@ -45,24 +45,34 @@ namespace VRTK
         /// <summary>
         /// Methods of activation.
         /// </summary>
-        /// <param name="HoldButton">Only activates the UI Pointer when the Pointer button on the controller is pressed and held down.</param>
-        /// <param name="ToggleButton">Activates the UI Pointer on the first click of the Pointer button on the controller and it stays active until the Pointer button is clicked again.</param>
-        /// <param name="AlwaysOn">The UI Pointer is always active regardless of whether the Pointer button on the controller is pressed or not.</param>
         public enum ActivationMethods
         {
+            /// <summary>
+            /// Only activates the UI Pointer when the Pointer button on the controller is pressed and held down.
+            /// </summary>
             HoldButton,
+            /// <summary>
+            /// Activates the UI Pointer on the first click of the Pointer button on the controller and it stays active until the Pointer button is clicked again.
+            /// </summary>
             ToggleButton,
+            /// <summary>
+            /// The UI Pointer is always active regardless of whether the Pointer button on the controller is pressed or not.
+            /// </summary>
             AlwaysOn
         }
 
         /// <summary>
         /// Methods of when to consider a UI Click action
         /// </summary>
-        /// <param name="ClickOnButtonUp">Consider a UI Click action has happened when the UI Click alias button is released.</param>
-        /// <param name="ClickOnButtonDown">Consider a UI Click action has happened when the UI Click alias button is pressed.</param>
         public enum ClickMethods
         {
+            /// <summary>
+            /// Consider a UI Click action has happened when the UI Click alias button is released.
+            /// </summary>
             ClickOnButtonUp,
+            /// <summary>
+            /// Consider a UI Click action has happened when the UI Click alias button is pressed.
+            /// </summary>
             ClickOnButtonDown
         }
 

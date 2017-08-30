@@ -16,12 +16,12 @@ namespace VRTK
     using System.Reflection;
 
     /// <summary>
-    /// The SDK Manager script provides configuration of supported SDKs and manages a list of <see cref="VRTK_SDKSetup"/>s to use.
+    /// The SDK Manager script provides configuration of supported SDKs and manages a list of VRTK_SDKSetups to use.
     /// </summary>
     public sealed class VRTK_SDKManager : MonoBehaviour
     {
         /// <summary>
-        /// A helper class that simply holds references to both the <see cref="SDK_ScriptingDefineSymbolPredicateAttribute"/> and the method info of the method the attribute is defined on.
+        /// A helper class that simply holds references to both the SDK_ScriptingDefineSymbolPredicateAttribute and the method info of the method the attribute is defined on.
         /// </summary>
         public sealed class ScriptingDefineSymbolPredicateInfo
         {
@@ -49,9 +49,9 @@ namespace VRTK
         /// <summary>
         /// Event Payload
         /// </summary>
-        /// <param name="previousSetup">The previous loaded Setup. <see langword="null"/> if no previous Setup was loaded.</param>
-        /// <param name="currentSetup">The current loaded Setup. <see langword="null"/> if no Setup is loaded anymore. See <see cref="errorMessage"/> to check whether this is <see langword="null"/> because of an error.</param>
-        /// <param name="errorMessage">Explains why loading a list of Setups wasn't successful if <see cref="currentSetup"/> is <see langword="null"/> and an error occurred. <see langword="null"/> if no error occurred.</param>
+        /// <param name="previousSetup">The previous loaded Setup. `null` if no previous Setup was loaded.</param>
+        /// <param name="currentSetup">The current loaded Setup. `null` if no Setup is loaded anymore. See `errorMessage` to check whether this is `null` because of an error.</param>
+        /// <param name="errorMessage">Explains why loading a list of Setups wasn't successful if `currentSetup` is `null` and an error occurred. `null` if no error occurred.</param>
         public struct LoadedSetupChangeEventArgs
         {
             public readonly VRTK_SDKSetup previousSetup;
@@ -107,26 +107,26 @@ namespace VRTK
         public static ReadOnlyCollection<VRTK_SDKInfo> AvailableControllerSDKInfos { get; private set; }
 
         /// <summary>
-        /// All installed system SDK infos. This is a subset of <see cref="AvailableSystemSDKInfos"/>.
-        /// It contains only those available SDK infos for which an <see cref="SDK_ScriptingDefineSymbolPredicateAttribute"/> exists that
+        /// All installed system SDK infos. This is a subset of `AvailableSystemSDKInfos`.
+        /// It contains only those available SDK infos for which an SDK_ScriptingDefineSymbolPredicateAttribute exists that
         /// uses the same symbol and whose associated method returns true.
         /// </summary>
         public static ReadOnlyCollection<VRTK_SDKInfo> InstalledSystemSDKInfos { get; private set; }
         /// <summary>
-        /// All installed boundaries SDK infos. This is a subset of <see cref="AvailableBoundariesSDKInfos"/>.
-        /// It contains only those available SDK infos for which an <see cref="SDK_ScriptingDefineSymbolPredicateAttribute"/> exists
+        /// All installed boundaries SDK infos. This is a subset of `AvailableBoundariesSDKInfos`.
+        /// It contains only those available SDK infos for which an SDK_ScriptingDefineSymbolPredicateAttribute exists
         /// that uses the same symbol and whose associated method returns true.
         /// </summary>
         public static ReadOnlyCollection<VRTK_SDKInfo> InstalledBoundariesSDKInfos { get; private set; }
         /// <summary>
-        /// All installed headset SDK infos. This is a subset of <see cref="AvailableHeadsetSDKInfos"/>.
-        /// It contains only those available SDK infos for which an <see cref="SDK_ScriptingDefineSymbolPredicateAttribute"/> exists
+        /// All installed headset SDK infos. This is a subset of `AvailableHeadsetSDKInfos`.
+        /// It contains only those available SDK infos for which an SDK_ScriptingDefineSymbolPredicateAttribute exists
         /// that uses the same symbol and whose associated method returns true.
         /// </summary>
         public static ReadOnlyCollection<VRTK_SDKInfo> InstalledHeadsetSDKInfos { get; private set; }
         /// <summary>
-        /// All installed controller SDK infos. This is a subset of <see cref="AvailableControllerSDKInfos"/>.
-        /// It contains only those available SDK infos for which an <see cref="SDK_ScriptingDefineSymbolPredicateAttribute"/> exists
+        /// All installed controller SDK infos. This is a subset of `AvailableControllerSDKInfos`.
+        /// It contains only those available SDK infos for which an SDK_ScriptingDefineSymbolPredicateAttribute exists
         /// that uses the same symbol and whose associated method returns true.
         /// </summary>
         public static ReadOnlyCollection<VRTK_SDKInfo> InstalledControllerSDKInfos { get; private set; }
@@ -160,7 +160,7 @@ namespace VRTK
         public bool autoManageScriptDefines = true;
 
         /// <summary>
-        /// The active (i.e. to be added to the <see cref="PlayerSettings"/>) scripting define symbol predicate attributes that have no associated SDK classes.
+        /// The active (i.e. to be added to the PlayerSettings) scripting define symbol predicate attributes that have no associated SDK classes.
         /// </summary>
         public List<SDK_ScriptingDefineSymbolPredicateAttribute> activeScriptingDefineSymbolsWithoutSDKClasses = new List<SDK_ScriptingDefineSymbolPredicateAttribute>();
 
@@ -176,7 +176,7 @@ namespace VRTK
         [Tooltip("The list of SDK Setups to choose from.")]
         public VRTK_SDKSetup[] setups = new VRTK_SDKSetup[0];
         /// <summary>
-        /// The loaded SDK Setup. <see langword="null"/> if no setup is currently loaded.
+        /// The loaded SDK Setup. `null` if no setup is currently loaded.
         /// </summary>
         public VRTK_SDKSetup loadedSetup
         {
@@ -195,7 +195,7 @@ namespace VRTK
         private static HashSet<VRTK_SDKInfo> _previouslyUsedSetupInfos = new HashSet<VRTK_SDKInfo>();
 
         /// <summary>
-        /// All behaviours that need toggling whenever <see cref="loadedSetup"/> changes.
+        /// All behaviours that need toggling whenever `loadedSetup` changes.
         /// </summary>
         public ReadOnlyCollection<Behaviour> behavioursToToggleOnLoadedSetupChange { get; private set; }
         private List<Behaviour> _behavioursToToggleOnLoadedSetupChange = new List<Behaviour>();
@@ -208,13 +208,13 @@ namespace VRTK
 
 #if UNITY_EDITOR
         /// <summary>
-        /// Manages (i.e. adds and removes) the scripting define symbols of the <see cref="PlayerSettings"/> for the currently set SDK infos.
+        /// Manages (i.e. adds and removes) the scripting define symbols of the PlayerSettings for the currently set SDK infos.
         /// This method is only available in the editor, so usage of the method needs to be surrounded by `#if UNITY_EDITOR` and `#endif` when used
         /// in a type that is also compiled for a standalone build.
         /// </summary>
-        /// <param name="ignoreAutoManageScriptDefines">Whether to ignore <see cref="autoManageScriptDefines"/> while deciding to manage.</param>
-        /// <param name="ignoreIsActiveAndEnabled">Whether to ignore <see cref="Behaviour.isActiveAndEnabled"/> while deciding to manage.</param>
-        /// <returns>Whether the <see cref="PlayerSettings"/>' scripting define symbols were changed.</returns>
+        /// <param name="ignoreAutoManageScriptDefines">Whether to ignore `autoManageScriptDefines` while deciding to manage.</param>
+        /// <param name="ignoreIsActiveAndEnabled">Whether to ignore `Behaviour.isActiveAndEnabled` while deciding to manage.</param>
+        /// <returns>Whether the PlayerSettings' scripting define symbols were changed.</returns>
         public bool ManageScriptingDefineSymbols(bool ignoreAutoManageScriptDefines, bool ignoreIsActiveAndEnabled)
         {
             if (!((ignoreAutoManageScriptDefines || autoManageScriptDefines) && (ignoreIsActiveAndEnabled || isActiveAndEnabled)))
@@ -323,11 +323,11 @@ namespace VRTK
         }
 
         /// <summary>
-        /// Manages (i.e. adds and removes) the VR SDKs of the <see cref="PlayerSettings"/> for the currently set SDK infos.
+        /// Manages (i.e. adds and removes) the VR SDKs of the PlayerSettings for the currently set SDK infos.
         /// This method is only available in the editor, so usage of the method needs to be surrounded by `#if UNITY_EDITOR` and `#endif` when used
         /// in a type that is also compiled for a standalone build.
         /// </summary>
-        /// <param name="force">Whether to ignore <see cref="autoManageVRSettings"/> while deciding to manage.</param>
+        /// <param name="force">Whether to ignore `autoManageVRSettings` while deciding to manage.</param>
         public void ManageVRSettings(bool force)
         {
             if (EditorApplication.isPlayingOrWillChangePlaymode || !(force || autoManageVRSettings))
@@ -391,7 +391,7 @@ namespace VRTK
 #endif
 
         /// <summary>
-        /// Adds a behaviour to the list of behaviours to toggle when <see cref="loadedSetup"/> changes.
+        /// Adds a behaviour to the list of behaviours to toggle when `loadedSetup` changes.
         /// </summary>
         /// <param name="behaviour">The behaviour to add.</param>
         public void AddBehaviourToToggleOnLoadedSetupChange(Behaviour behaviour)
@@ -409,7 +409,7 @@ namespace VRTK
         }
 
         /// <summary>
-        /// Removes a behaviour of the list of behaviours to toggle when <see cref="loadedSetup"/> changes.
+        /// Removes a behaviour of the list of behaviours to toggle when `loadedSetup` changes.
         /// </summary>
         /// <param name="behaviour">The behaviour to remove.</param>
         public void RemoveBehaviourToToggleOnLoadedSetupChange(Behaviour behaviour)
@@ -418,7 +418,7 @@ namespace VRTK
         }
 
         /// <summary>
-        /// Tries to load a valid <see cref="VRTK_SDKSetup"/> from <see cref="setups"/>.
+        /// Tries to load a valid VRTK_SDKSetup from setups.
         /// </summary>
         public void TryLoadSDKSetupFromList(bool tryUseLastLoadedSetup = true)
         {
@@ -469,14 +469,14 @@ namespace VRTK
         }
 
         /// <summary>
-        /// Tries to load a valid <see cref="VRTK_SDKSetup"/> from a list.
+        /// Tries to load a valid VRTK_SDKSetup from a list.
         /// </summary>
         /// <remarks>
-        /// The first loadable <see cref="VRTK_SDKSetup"/> in the list will be loaded. Will fall back to disable VR if none of the provided Setups is useable.
+        /// The first loadable VRTK_SDKSetup in the list will be loaded. Will fall back to disable VR if none of the provided Setups is useable.
         /// </remarks>
-        /// <param name="startIndex">The index of the <see cref="VRTK_SDKSetup"/> to start the loading with.</param>
+        /// <param name="startIndex">The index of the VRTK_SDKSetup to start the loading with.</param>
         /// <param name="tryToReinitialize">Whether or not to retry initializing and using the currently set but unusable VR Device.</param>
-        /// <param name="sdkSetups">The list to try to load a <see cref="VRTK_SDKSetup"/> from.</param>
+        /// <param name="sdkSetups">The list to try to load a VRTK_SDKSetup from.</param>
         public void TryLoadSDKSetup(int startIndex, bool tryToReinitialize, params VRTK_SDKSetup[] sdkSetups)
         {
             if (sdkSetups.Length == 0)
@@ -554,7 +554,7 @@ namespace VRTK
 
 #if UNITY_EDITOR
         /// <summary>
-        /// Sets a given <see cref="VRTK_SDKSetup"/> as the loaded SDK Setup to be able to use it when populating object references in the SDK Setup.
+        /// Sets a given VRTK_SDKSetup as the loaded SDK Setup to be able to use it when populating object references in the SDK Setup.
         /// This method should only be called when not playing as it's only for populating the object references.
         /// This method is only available in the editor, so usage of the method needs to be surrounded by `#if UNITY_EDITOR` and `#endif` when used
         /// in a type that is also compiled for a standalone build.
@@ -573,7 +573,7 @@ namespace VRTK
 #endif
 
         /// <summary>
-        /// Unloads the currently loaded <see cref="VRTK_SDKSetup"/>, if there is one.
+        /// Unloads the currently loaded VRTK_SDKSetup, if there is one.
         /// </summary>
         /// <param name="disableVR">Whether to disable VR altogether after unloading the SDK Setup.</param>
         public void UnloadSDKSetup(bool disableVR = false)
@@ -764,7 +764,7 @@ namespace VRTK
         }
 
         /// <summary>
-        /// Populates <see cref="AvailableScriptingDefineSymbolPredicateInfos"/> with all the available <see cref="SDK_ScriptingDefineSymbolPredicateAttribute"/>s and associated method infos.
+        /// Populates `AvailableScriptingDefineSymbolPredicateInfos` with all the available SDK_ScriptingDefineSymbolPredicateAttributes and associated method infos.
         /// </summary>
         private static void PopulateAvailableScriptingDefineSymbolPredicateInfos()
         {
@@ -838,8 +838,8 @@ namespace VRTK
         /// <summary>
         /// Populates the lists of available and installed SDK infos for a specific SDK base type.
         /// </summary>
-        /// <typeparam name="BaseType">The SDK base type of which to populate the lists for. Must be a subclass of <see cref="SDK_Base"/>.</typeparam>
-        /// <typeparam name="FallbackType">The SDK type to fall back on if problems occur. Must be a subclass of <typeparamref name="BaseType"/>.</typeparam>
+        /// <typeparam name="BaseType">The SDK base type of which to populate the lists for. Must be a subclass of `SDK_Base`.</typeparam>
+        /// <typeparam name="FallbackType">The SDK type to fall back on if problems occur. Must be a subclass of `BaseType`.</typeparam>
         /// <param name="availableSDKInfos">The list of available SDK infos to populate.</param>
         /// <param name="installedSDKInfos">The list of installed SDK infos to populate.</param>
         /// <param name="symbolsOfInstalledSDKs">The list of symbols of all the installed SDKs.</param>
@@ -868,7 +868,7 @@ namespace VRTK
 
 #if UNITY_EDITOR
         /// <summary>
-        /// Calls <see cref="ManageScriptingDefineSymbols"/> and <see cref="ManageVRSettings"/> (both without forcing) at the appropriate times when in the editor.
+        /// Calls `ManageScriptingDefineSymbols` and `ManageVRSettings` (both without forcing) at the appropriate times when in the editor.
         /// </summary>
         [DidReloadScripts(1)]
         private static void AutoManageScriptingDefineSymbolsAndManageVRSettings()

@@ -13,13 +13,19 @@ namespace VRTK
         /// <summary>
         /// Situation when auto interaction can occur.
         /// </summary>
-        /// <param name="Never">Auto interaction can never occur on touch.</param>
-        /// <param name="NoButtonHeld">Auto interaction will occur on touch even if the specified interaction button is not held down.</param>
-        /// <param name="ButtonHeld">Auto interaction will only occur on touch if the specified interaction button is held down.</param>
         public enum AutoInteractions
         {
+            /// <summary>
+            /// Auto interaction can never occur on touch.
+            /// </summary>
             Never,
+            /// <summary>
+            /// Auto interaction will occur on touch even if the specified interaction button is not held down.
+            /// </summary>
             NoButtonHeld,
+            /// <summary>
+            /// Auto interaction will only occur on touch if the specified interaction button is held down.
+            /// </summary>
             ButtonHeld
         }
 

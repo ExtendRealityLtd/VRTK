@@ -12,13 +12,19 @@ namespace VRTK
         /// <summary>
         /// Specifies how to position and rotate the rigidbody.
         /// </summary>
-        /// <param name="Set">Use <see cref="Rigidbody.position"/> and <see cref="Rigidbody.rotation"/>.</param>
-        /// <param name="Move">Use <see cref="Rigidbody.MovePosition"/> and <see cref="Rigidbody.MoveRotation"/>.</param>
-        /// <param name="Add">Use <see cref="Rigidbody.AddForce(Vector3)"/> and <see cref="Rigidbody.AddTorque(Vector3)"/>.</param>
         public enum MovementOption
         {
+            /// <summary>
+            /// Use Rigidbody.position and Rigidbody.rotation.
+            /// </summary>
             Set,
+            /// <summary>
+            /// Use Rigidbody.MovePosition and Rigidbody.MoveRotation.
+            /// </summary>
             Move,
+            /// <summary>
+            /// Use Rigidbody.AddForce(Vector3) and Rigidbody.AddTorque(Vector3).
+            /// </summary>
             Add
         }
 

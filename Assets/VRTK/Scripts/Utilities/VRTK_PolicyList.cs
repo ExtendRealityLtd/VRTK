@@ -24,24 +24,34 @@ namespace VRTK
         /// <summary>
         /// The operation to apply on the list of identifiers.
         /// </summary>
-        /// <param name="Ignore">Will ignore any game objects that contain either a tag or script component that is included in the identifiers list.</param>
-        /// <param name="Include">Will only include game objects that contain either a tag or script component that is included in the identifiers list.</param>
         public enum OperationTypes
         {
+            /// <summary>
+            /// Will ignore any game objects that contain either a tag or script component that is included in the identifiers list.
+            /// </summary>
             Ignore,
+            /// <summary>
+            /// Will only include game objects that contain either a tag or script component that is included in the identifiers list.
+            /// </summary>
             Include
         }
 
         /// <summary>
         /// The types of element that can be checked against.
         /// </summary>
-        /// <param name="Tag">The tag applied to the game object.</param>
-        /// <param name="Script">A script component added to the game object.</param>
-        /// <param name="Layer">A layer applied to the game object.</param>
         public enum CheckTypes
         {
+            /// <summary>
+            /// The tag applied to the game object.
+            /// </summary>
             Tag = 1,
+            /// <summary>
+            /// A script component added to the game object.
+            /// </summary>
             Script = 2,
+            /// <summary>
+            /// A layer applied to the game object.
+            /// </summary>
             Layer = 4
         }
 
