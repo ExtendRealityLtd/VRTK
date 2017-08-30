@@ -74,7 +74,7 @@ namespace VRTK.Highlighters
 
                 for (int i = 0; i < highlightModels.Length; i++)
                 {
-                    if (highlightModels[i])
+                    if (highlightModels[i] != null)
                     {
                         highlightModels[i].SetActive(true);
                     }
@@ -93,7 +93,7 @@ namespace VRTK.Highlighters
             {
                 for (int i = 0; i < highlightModels.Length; i++)
                 {
-                    if (highlightModels[i])
+                    if (highlightModels[i] != null)
                     {
                         highlightModels[i].SetActive(false);
                     }
@@ -120,7 +120,7 @@ namespace VRTK.Highlighters
             {
                 for (int i = 0; i < highlightModels.Length; i++)
                 {
-                    if (highlightModels[i])
+                    if (highlightModels[i] != null)
                     {
                         Destroy(highlightModels[i]);
                     }
@@ -164,19 +164,19 @@ namespace VRTK.Highlighters
 
         protected virtual void SetOptions(Dictionary<string, object> options = null)
         {
-            var tmpThickness = GetOption<float>(options, "thickness");
+            float tmpThickness = GetOption<float>(options, "thickness");
             if (tmpThickness > 0f)
             {
                 thickness = tmpThickness;
             }
 
-            var tmpCustomModels = GetOption<GameObject[]>(options, "customOutlineModels");
+            GameObject[] tmpCustomModels = GetOption<GameObject[]>(options, "customOutlineModels");
             if (tmpCustomModels != null)
             {
                 customOutlineModels = tmpCustomModels;
             }
 
-            var tmpCustomModelPaths = GetOption<string[]>(options, "customOutlineModelPaths");
+            string[] tmpCustomModelPaths = GetOption<string[]>(options, "customOutlineModelPaths");
             if (tmpCustomModelPaths != null)
             {
                 customOutlineModelPaths = tmpCustomModelPaths;
@@ -185,7 +185,7 @@ namespace VRTK.Highlighters
 
         protected virtual void DeleteExistingHighlightModels()
         {
-            var existingHighlighterObjects = GetComponentsInChildren<VRTK_PlayerObject>(true);
+            VRTK_PlayerObject[] existingHighlighterObjects = GetComponentsInChildren<VRTK_PlayerObject>(true);
             for (int i = 0; i < existingHighlighterObjects.Length; i++)
             {
                 if (existingHighlighterObjects[i].objectType == VRTK_PlayerObject.ObjectTypes.Highlighter)
@@ -203,7 +203,7 @@ namespace VRTK.Highlighters
             }
             else if (givenOutlineModelPath != "")
             {
-                var getChildModel = transform.Find(givenOutlineModelPath);
+                Transform getChildModel = transform.Find(givenOutlineModelPath);
                 givenOutlineModel = (getChildModel ? getChildModel.gameObject : null);
             }
 
@@ -226,17 +226,19 @@ namespace VRTK.Highlighters
             highlightModel.transform.localScale = copyModel.transform.localScale;
             highlightModel.transform.SetParent(transform);
 
-            foreach (var component in copyModel.GetComponents<Component>())
+            Component[] copyModelComponents = copyModel.GetComponents<Component>();
+            for (int i = 0; i < copyModelComponents.Length; i++)
             {
-                if (Array.IndexOf(copyComponents, component.GetType().ToString()) >= 0)
+                Component copyModelComponent = copyModelComponents[i];
+                if (Array.IndexOf(copyComponents, copyModelComponent.GetType().ToString()) >= 0)
                 {
-                    VRTK_SharedMethods.CloneComponent(component, highlightModel);
+                    VRTK_SharedMethods.CloneComponent(copyModelComponent, highlightModel);
                 }
             }
 
-            var copyMesh = copyModel.GetComponent<MeshFilter>();
-            var highlightMesh = highlightModel.GetComponent<MeshFilter>();
-            if (highlightMesh)
+            MeshFilter copyMesh = copyModel.GetComponent<MeshFilter>();
+            MeshFilter highlightMesh = highlightModel.GetComponent<MeshFilter>();
+            if (highlightMesh != null)
             {
                 if (enableSubmeshHighlight)
                 {

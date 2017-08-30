@@ -65,7 +65,7 @@ namespace VRTK
         {
             if (sliderJointCreated)
             {
-                if (connectedTo)
+                if (connectedTo != null)
                 {
                     sliderJoint.connectedBody = connectedTo.GetComponent<Rigidbody>();
                 }
@@ -157,9 +157,9 @@ namespace VRTK
 
         protected virtual Vector3 CalculateDiff(Vector3 initialPosition, Vector3 givenDirection, float scaleValue, float diffMultiplier, bool addition)
         {
-            var additionDiff = givenDirection * diffMultiplier;
+            Vector3 additionDiff = givenDirection * diffMultiplier;
 
-            var limitDiff = givenDirection * (scaleValue / 2f);
+            Vector3 limitDiff = givenDirection * (scaleValue / 2f);
             if (addition)
             {
                 limitDiff = initialPosition + limitDiff;
@@ -169,7 +169,7 @@ namespace VRTK
                 limitDiff = initialPosition - limitDiff;
             }
 
-            var answer = initialPosition - limitDiff;
+            Vector3 answer = initialPosition - limitDiff;
 
             if (addition)
             {
@@ -195,7 +195,7 @@ namespace VRTK
             sliderRigidbody.constraints = RigidbodyConstraints.FreezeRotation;
             sliderRigidbody.drag = releasedFriction;
 
-            if (connectedTo)
+            if (connectedTo != null)
             {
                 Rigidbody connectedToRigidbody = connectedTo.GetComponent<Rigidbody>();
                 if (connectedToRigidbody == null)

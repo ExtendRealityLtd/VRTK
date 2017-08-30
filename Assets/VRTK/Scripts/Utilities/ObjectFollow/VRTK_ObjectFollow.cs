@@ -104,12 +104,12 @@ namespace VRTK
 
         protected virtual void FollowPosition()
         {
-            var positionToFollow = GetPositionToFollow();
+            Vector3 positionToFollow = GetPositionToFollow();
             Vector3 newPosition;
 
             if (smoothsPosition)
             {
-                var alpha = Mathf.Clamp01(Vector3.Distance(targetPosition, positionToFollow) / maxAllowedPerFrameDistanceDifference);
+                float alpha = Mathf.Clamp01(Vector3.Distance(targetPosition, positionToFollow) / maxAllowedPerFrameDistanceDifference);
                 newPosition = Vector3.Lerp(targetPosition, positionToFollow, alpha);
             }
             else
@@ -123,12 +123,12 @@ namespace VRTK
 
         protected virtual void FollowRotation()
         {
-            var rotationToFollow = GetRotationToFollow();
+            Quaternion rotationToFollow = GetRotationToFollow();
             Quaternion newRotation;
 
             if (smoothsRotation)
             {
-                var alpha = Mathf.Clamp01(Quaternion.Angle(targetRotation, rotationToFollow) / maxAllowedPerFrameAngleDifference);
+                float alpha = Mathf.Clamp01(Quaternion.Angle(targetRotation, rotationToFollow) / maxAllowedPerFrameAngleDifference);
                 newRotation = Quaternion.Lerp(targetRotation, rotationToFollow, alpha);
             }
             else
@@ -142,12 +142,12 @@ namespace VRTK
 
         protected virtual void FollowScale()
         {
-            var scaleToFollow = GetScaleToFollow();
+            Vector3 scaleToFollow = GetScaleToFollow();
             Vector3 newScale;
 
             if (smoothsScale)
             {
-                var alpha = Mathf.Clamp01(Vector3.Distance(targetScale, scaleToFollow) / maxAllowedPerFrameSizeDifference);
+                float alpha = Mathf.Clamp01(Vector3.Distance(targetScale, scaleToFollow) / maxAllowedPerFrameSizeDifference);
                 newScale = Vector3.Lerp(targetScale, scaleToFollow, alpha);
             }
             else

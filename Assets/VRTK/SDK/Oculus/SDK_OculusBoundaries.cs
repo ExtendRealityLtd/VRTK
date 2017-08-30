@@ -37,8 +37,8 @@ namespace VRTK
             cachedPlayArea = GetSDKManagerPlayArea();
             if (cachedPlayArea == null)
             {
-                var ovrManager = VRTK_SharedMethods.FindEvenInactiveComponent<OVRManager>();
-                if (ovrManager)
+                OVRManager ovrManager = VRTK_SharedMethods.FindEvenInactiveComponent<OVRManager>();
+                if (ovrManager != null)
                 {
                     cachedPlayArea = ovrManager.transform;
                 }
@@ -53,13 +53,13 @@ namespace VRTK
         /// <returns>A Vector3 array of the points in the scene that represent the play area boundaries.</returns>
         public override Vector3[] GetPlayAreaVertices()
         {
-            var area = new OVRBoundary();
+            OVRBoundary area = new OVRBoundary();
             if (area.GetConfigured())
             {
-                var outerBoundary = area.GetDimensions(OVRBoundary.BoundaryType.OuterBoundary);
-                var thickness = 0.1f;
+                Vector3 outerBoundary = area.GetDimensions(OVRBoundary.BoundaryType.OuterBoundary);
+                float thickness = 0.1f;
 
-                var vertices = new Vector3[8];
+                Vector3[] vertices = new Vector3[8];
 
                 vertices[0] = new Vector3(outerBoundary.x - thickness, 0f, outerBoundary.z - thickness);
                 vertices[1] = new Vector3(0f + thickness, 0f, outerBoundary.z - thickness);
@@ -125,7 +125,7 @@ namespace VRTK
                 avatarContainer = VRTK_SharedMethods.FindEvenInactiveComponent<OvrAvatar>();
                 if (avatarContainer != null && avatarContainer.GetComponent<VRTK_TransformFollow>() == null)
                 {
-                    var objectFollow = avatarContainer.gameObject.AddComponent<VRTK_TransformFollow>();
+                    VRTK_TransformFollow objectFollow = avatarContainer.gameObject.AddComponent<VRTK_TransformFollow>();
                     objectFollow.gameObjectToFollow = GetPlayArea().gameObject;
                 }
             }

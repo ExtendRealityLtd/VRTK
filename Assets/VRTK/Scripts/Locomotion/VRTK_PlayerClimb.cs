@@ -188,27 +188,27 @@ namespace VRTK
         {
             if (usePlayerScale)
             {
-                return playArea.localRotation * Vector3.Scale(objTransform.localPosition, playArea.localScale);
+                return (playArea.localRotation * Vector3.Scale(objTransform.localPosition, playArea.localScale));
             }
 
-            return playArea.localRotation * objTransform.localPosition;
+            return (playArea.localRotation * objTransform.localPosition);
         }
 
         protected virtual void OnGrabObject(object sender, ObjectInteractEventArgs e)
         {
             if (IsClimbableObject(e.target))
             {
-                var controller = ((VRTK_InteractGrab)sender).gameObject;
-                var actualController = VRTK_DeviceFinder.GetActualController(controller);
+                GameObject controller = ((VRTK_InteractGrab)sender).gameObject;
+                GameObject actualController = VRTK_DeviceFinder.GetActualController(controller);
                 Grab(actualController, e.controllerReference, e.target);
             }
         }
 
         protected virtual void OnUngrabObject(object sender, ObjectInteractEventArgs e)
         {
-            var controller = ((VRTK_InteractGrab)sender).gameObject;
-            var actualController = VRTK_DeviceFinder.GetActualController(controller);
-            if (e.target && IsClimbableObject(e.target) && IsActiveClimbingController(actualController))
+            GameObject controller = ((VRTK_InteractGrab)sender).gameObject;
+            GameObject actualController = VRTK_DeviceFinder.GetActualController(controller);
+            if (e.target != null && IsClimbableObject(e.target) && IsActiveClimbingController(actualController))
             {
                 Ungrab(true, e.controllerReference, e.target);
             }
@@ -280,16 +280,16 @@ namespace VRTK
 
         protected virtual bool IsClimbableObject(GameObject obj)
         {
-            var interactObject = obj.GetComponent<VRTK_InteractableObject>();
-            return (interactObject && interactObject.grabAttachMechanicScript && interactObject.grabAttachMechanicScript.IsClimbable());
+            VRTK_InteractableObject interactObject = obj.GetComponent<VRTK_InteractableObject>();
+            return (interactObject != null && interactObject.grabAttachMechanicScript && interactObject.grabAttachMechanicScript.IsClimbable());
         }
 
         protected virtual void InitControllerListeners(GameObject controller, bool state)
         {
-            if (controller)
+            if (controller != null)
             {
-                var grabScript = controller.GetComponent<VRTK_InteractGrab>();
-                if (grabScript)
+                VRTK_InteractGrab grabScript = controller.GetComponent<VRTK_InteractGrab>();
+                if (grabScript != null)
                 {
                     if (state)
                     {

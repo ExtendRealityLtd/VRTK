@@ -164,11 +164,11 @@ namespace VRTK
         /// <param name="location">The location where to draw the play area cursor.</param>
         public virtual void SetPlayAreaCursorTransform(Vector3 location)
         {
-            var offset = Vector3.zero;
+            Vector3 offset = Vector3.zero;
             if (headsetPositionCompensation)
             {
-                var playAreaPos = new Vector3(playArea.transform.position.x, 0f, playArea.transform.position.z);
-                var headsetPos = new Vector3(headset.position.x, 0f, headset.position.z);
+                Vector3 playAreaPos = new Vector3(playArea.transform.position.x, 0f, playArea.transform.position.z);
+                Vector3 headsetPos = new Vector3(headset.position.x, 0f, headset.position.z);
                 offset = playAreaPos - headsetPos;
             }
 
@@ -176,7 +176,7 @@ namespace VRTK
             {
                 if (playAreaCursor.activeInHierarchy && handlePlayAreaCursorCollisions && headsetOutOfBoundsIsCollision)
                 {
-                    var checkPoint = new Vector3(location.x, playAreaCursor.transform.position.y + (playAreaCursor.transform.localScale.y * 2), location.z);
+                    Vector3 checkPoint = new Vector3(location.x, playAreaCursor.transform.position.y + (playAreaCursor.transform.localScale.y * 2), location.z);
                     if (!playAreaCursorCollider.bounds.Contains(checkPoint))
                     {
                         headsetOutOfBounds = true;
@@ -346,13 +346,13 @@ namespace VRTK
 
         protected virtual void SetCursorColor(GameObject cursorObject, Color color)
         {
-            Renderer paRenderer = cursorObject.GetComponentInChildren<Renderer>();
+            Renderer playareaRenderer = cursorObject.GetComponentInChildren<Renderer>();
 
-            if (paRenderer && paRenderer.material && paRenderer.material.HasProperty("_Color"))
+            if (playareaRenderer != null && playareaRenderer.material && playareaRenderer.material.HasProperty("_Color"))
             {
-                paRenderer.material.color = color;
-                paRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
-                paRenderer.receiveShadows = false;
+                playareaRenderer.material.color = color;
+                playareaRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+                playareaRenderer.receiveShadows = false;
             }
         }
 
@@ -411,7 +411,7 @@ namespace VRTK
         {
             if (playAreaCursorDimensions != Vector2.zero)
             {
-                var customAreaPadding = VRTK_SDK_Bridge.GetPlayAreaBorderThickness();
+                float customAreaPadding = VRTK_SDK_Bridge.GetPlayAreaBorderThickness();
 
                 cursorDrawVertices[btmRightOuter] = new Vector3(playAreaCursorDimensions.x / 2, 0f, (playAreaCursorDimensions.y / 2) * -1);
                 cursorDrawVertices[btmLeftOuter] = new Vector3((playAreaCursorDimensions.x / 2) * -1, 0f, (playAreaCursorDimensions.y / 2) * -1);
@@ -472,9 +472,9 @@ namespace VRTK
 
         protected virtual void UpdateCollider()
         {
-            var playAreaHeightAdjustment = 1f;
-            var newBCYSize = (headset.transform.position.y - playArea.transform.position.y) * 100f;
-            var newBCYCenter = (newBCYSize != 0 ? (newBCYSize / 2) + playAreaHeightAdjustment : 0);
+            float playAreaHeightAdjustment = 1f;
+            float newBCYSize = (headset.transform.position.y - playArea.transform.position.y) * 100f;
+            float newBCYCenter = (newBCYSize != 0 ? (newBCYSize / 2) + playAreaHeightAdjustment : 0);
 
             playAreaCursorCollider.size = new Vector3(playAreaCursorCollider.size.x, newBCYSize, playAreaCursorCollider.size.z);
             playAreaCursorCollider.center = new Vector3(playAreaCursorCollider.center.x, newBCYCenter, playAreaCursorCollider.center.z);

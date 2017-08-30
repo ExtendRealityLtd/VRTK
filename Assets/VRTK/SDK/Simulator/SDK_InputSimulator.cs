@@ -166,7 +166,7 @@ namespace VRTK
             leftController.selected = false;
             destroyed = false;
 
-            var controllerSDK = VRTK_SDK_Bridge.GetControllerSDK() as SDK_SimController;
+            SDK_SimController controllerSDK = VRTK_SDK_Bridge.GetControllerSDK() as SDK_SimController;
             if (controllerSDK != null)
             {
                 Dictionary<string, KeyCode> keyMappings = new Dictionary<string, KeyCode>()
@@ -289,7 +289,7 @@ namespace VRTK
             if (Physics.Raycast(screenRay, out hit))
             {
                 VRTK_InteractableObject io = hit.collider.gameObject.GetComponent<VRTK_InteractableObject>();
-                if (io)
+                if (io != null)
                 {
                     GameObject hand;
                     if (rightHand)

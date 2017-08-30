@@ -141,9 +141,9 @@ namespace VRTK
 
         protected virtual void SetupHingeRestrictions()
         {
-            var minJointLimit = 0f;
-            var maxJointLimit = maxAngle;
-            var limitOffset = maxAngle - 180f;
+            float minJointLimit = 0f;
+            float maxJointLimit = maxAngle;
+            float limitOffset = maxAngle - 180f;
 
             if (limitOffset > 0f)
             {

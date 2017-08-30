@@ -64,7 +64,7 @@ namespace VRTK
             }
             playArea = VRTK_DeviceFinder.PlayAreaTransform();
             additionalMovementEnabled = !additionalMovementEnabledOnButtonPress;
-            if (debugTransform)
+            if (debugTransform != null)
             {
                 debugTransform.localScale = new Vector3(headZoneRadius * 2, 0.01f, headZoneRadius * 2);
             }
@@ -95,7 +95,7 @@ namespace VRTK
         protected virtual void Move(Vector3 movement)
         {
             headCirclePosition += movement;
-            if (debugTransform)
+            if (debugTransform != null)
             {
                 debugTransform.localPosition = new Vector3(headCirclePosition.x, debugTransform.localPosition.y, headCirclePosition.z);
             }
@@ -109,7 +109,7 @@ namespace VRTK
         protected virtual void MoveHeadCircle()
         {
             //Get the movement of the head relative to the headCircle.
-            var circleCenterToHead = new Vector3(movementTransform.localPosition.x - headCirclePosition.x, 0, movementTransform.localPosition.z - headCirclePosition.z);
+            Vector3 circleCenterToHead = new Vector3(movementTransform.localPosition.x - headCirclePosition.x, 0, movementTransform.localPosition.z - headCirclePosition.z);
 
             //Get the direction of the head movement.
             UpdateLastMovement();
@@ -124,10 +124,10 @@ namespace VRTK
 
         protected virtual void MoveHeadCircleNonLinearDrift()
         {
-            var movement = new Vector3(movementTransform.localPosition.x - headCirclePosition.x, 0, movementTransform.localPosition.z - headCirclePosition.z);
+            Vector3 movement = new Vector3(movementTransform.localPosition.x - headCirclePosition.x, 0, movementTransform.localPosition.z - headCirclePosition.z);
             if (movement.sqrMagnitude > headZoneRadius * headZoneRadius)
             {
-                var deltaMovement = movement.normalized * (movement.magnitude - headZoneRadius);
+                Vector3 deltaMovement = movement.normalized * (movement.magnitude - headZoneRadius);
                 Move(deltaMovement);
             }
         }

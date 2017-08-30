@@ -20,10 +20,10 @@ namespace VRTK
 
         public virtual void OnPointerEnter(PointerEventData eventData)
         {
-            if (eventData.pointerDrag)
+            if (eventData.pointerDrag != null)
             {
-                var dragItem = eventData.pointerDrag.GetComponent<VRTK_UIDraggableItem>();
-                if (dragItem && dragItem.restrictToDropZone)
+                VRTK_UIDraggableItem dragItem = eventData.pointerDrag.GetComponent<VRTK_UIDraggableItem>();
+                if (dragItem != null && dragItem.restrictToDropZone)
                 {
                     dragItem.validDropZone = gameObject;
                     droppableItem = dragItem;
@@ -33,7 +33,7 @@ namespace VRTK
 
         public virtual void OnPointerExit(PointerEventData eventData)
         {
-            if (droppableItem)
+            if (droppableItem != null)
             {
                 droppableItem.validDropZone = null;
             }

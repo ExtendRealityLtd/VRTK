@@ -44,11 +44,11 @@ namespace VRTK
             if (cachedHeadset == null)
             {
 #if (UNITY_5_4_OR_NEWER)
-                var foundCamera = VRTK_SharedMethods.FindEvenInactiveComponent<SteamVR_Camera>();
+                SteamVR_Camera foundCamera = VRTK_SharedMethods.FindEvenInactiveComponent<SteamVR_Camera>();
 #else
-                var foundCamera = VRTK_SharedMethods.FindEvenInactiveComponent<SteamVR_GameView>();
+                SteamVR_GameView foundCamera = VRTK_SharedMethods.FindEvenInactiveComponent<SteamVR_GameView>();
 #endif
-                if (foundCamera)
+                if (foundCamera != null)
                 {
                     cachedHeadset = foundCamera.transform;
                 }
@@ -65,8 +65,8 @@ namespace VRTK
             cachedHeadsetCamera = GetSDKManagerHeadset();
             if (cachedHeadsetCamera == null)
             {
-                var foundCamera = VRTK_SharedMethods.FindEvenInactiveComponent<SteamVR_Camera>();
-                if (foundCamera)
+                SteamVR_Camera foundCamera = VRTK_SharedMethods.FindEvenInactiveComponent<SteamVR_Camera>();
+                if (foundCamera != null)
                 {
                     cachedHeadsetCamera = foundCamera.transform;
                 }
@@ -110,7 +110,7 @@ namespace VRTK
         /// <returns>Returns true if the headset has fade functionality on it.</returns>
         public override bool HasHeadsetFade(Transform obj)
         {
-            if (obj.GetComponentInChildren<SteamVR_Fade>())
+            if (obj.GetComponentInChildren<SteamVR_Fade>() != null)
             {
                 return true;
             }
@@ -123,7 +123,7 @@ namespace VRTK
         /// <param name="camera">The Transform to with the camera on to add the fade functionality to.</param>
         public override void AddHeadsetFade(Transform camera)
         {
-            if (camera && !camera.GetComponent<SteamVR_Fade>())
+            if (camera != null && camera.GetComponent<SteamVR_Fade>() == null)
             {
                 camera.gameObject.AddComponent<SteamVR_Fade>();
             }

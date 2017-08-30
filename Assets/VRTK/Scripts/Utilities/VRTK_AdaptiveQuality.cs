@@ -244,14 +244,14 @@ namespace VRTK
         /// </returns>
         public override string ToString()
         {
-            var stringBuilder = new StringBuilder("Adaptive Quality\n");
+            StringBuilder stringBuilder = new StringBuilder("Adaptive Quality\n");
             stringBuilder.AppendLine("Render Scale:");
             stringBuilder.AppendLine("Level - Resolution - Multiplier");
 
             for (int index = 0; index < allRenderScales.Count; index++)
             {
                 float renderScale = allRenderScales[index];
-                var renderTargetResolution = RenderTargetResolutionForRenderScale(renderScale);
+                Vector2 renderTargetResolution = RenderTargetResolutionForRenderScale(renderScale);
 
                 stringBuilder.AppendFormat(
                     "{0, 3} {1, 5}x{2, -5} {3, -8}",
@@ -371,7 +371,7 @@ namespace VRTK
                 return;
             }
 
-            var commandLineArguments = Environment.GetCommandLineArgs();
+            string[] commandLineArguments = Environment.GetCommandLineArgs();
 
             for (int index = 0; index < commandLineArguments.Length; index++)
             {
@@ -672,7 +672,7 @@ namespace VRTK
 
             if (enabled && drawDebugVisualization && debugVisualizationQuad == null)
             {
-                var mesh = new Mesh
+                Mesh mesh = new Mesh
                 {
                     vertices =
                         new[]

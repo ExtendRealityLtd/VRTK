@@ -27,11 +27,13 @@ namespace VRTK
             if (contentInteractableObject == null)
             {
                 // treat as parent and assign to all children
-                foreach (var childIo in GetComponentsInChildren<VRTK_InteractableObject>())
+                VRTK_InteractableObject[] foundObjects = GetComponentsInChildren<VRTK_InteractableObject>();
+                for (int i = 0; i < foundObjects.Length; i++)
                 {
-                    if (childIo.GetComponent<VRTK_ContentHandler>() == null)
+                    VRTK_InteractableObject foundIO = foundObjects[i];
+                    if (foundIO.GetComponent<VRTK_ContentHandler>() == null)
                     {
-                        VRTK_ContentHandler childContentHandler = childIo.gameObject.AddComponent<VRTK_ContentHandler>();
+                        VRTK_ContentHandler childContentHandler = foundIO.gameObject.AddComponent<VRTK_ContentHandler>();
                         childContentHandler.control = control;
                         childContentHandler.inside = inside;
                         childContentHandler.outside = outside;
