@@ -18,11 +18,15 @@ namespace VRTK
         /// <summary>
         /// Movement methods.
         /// </summary>
-        /// <param name="Nonlinear">Moves the head with a non-linear drift movement.</param>
-        /// <param name="LinearDirect">Moves the headset in a direct linear movement.</param>
         public enum MovementFunction
         {
+            /// <summary>
+            /// Moves the head with a non-linear drift movement.
+            /// </summary>
             Nonlinear,
+            /// <summary>
+            /// Moves the headset in a direct linear movement.
+            /// </summary>
             LinearDirect
         }
 

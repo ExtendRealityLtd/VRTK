@@ -17,11 +17,15 @@ namespace VRTK
         /// <summary>
         /// Mouse input mode types
         /// </summary>
-        /// <param name="Always">Mouse movement is always treated as mouse input.</param>
-        /// <param name="RequiresButtonPress">Mouse movement is only treated as movement when a button is pressed.</param>
         public enum MouseInputMode
         {
+            /// <summary>
+            /// Mouse movement is always treated as mouse input.
+            /// </summary>
             Always,
+            /// <summary>
+            /// Mouse movement is only treated as movement when a button is pressed.
+            /// </summary>
             RequiresButtonPress
         }
 

@@ -39,7 +39,7 @@ namespace VRTK
         public event LoadEventHandler Unloaded;
 
         /// <summary>
-        /// The info of the SDK to use to deal with all system actions. By setting this to <see langword="null"/> the fallback SDK will be used.
+        /// The info of the SDK to use to deal with all system actions. By setting this to `null` the fallback SDK will be used.
         /// </summary>
         public VRTK_SDKInfo systemSDKInfo
         {
@@ -67,7 +67,7 @@ namespace VRTK
             }
         }
         /// <summary>
-        /// The info of the SDK to use to utilize room scale boundaries. By setting this to <see langword="null"/> the fallback SDK will be used.
+        /// The info of the SDK to use to utilize room scale boundaries. By setting this to `null` the fallback SDK will be used.
         /// </summary>
         public VRTK_SDKInfo boundariesSDKInfo
         {
@@ -95,7 +95,7 @@ namespace VRTK
             }
         }
         /// <summary>
-        /// The info of the SDK to use to utilize the VR headset. By setting this to <see langword="null"/> the fallback SDK will be used.
+        /// The info of the SDK to use to utilize the VR headset. By setting this to `null` the fallback SDK will be used.
         /// </summary>
         public VRTK_SDKInfo headsetSDKInfo
         {
@@ -123,7 +123,7 @@ namespace VRTK
             }
         }
         /// <summary>
-        /// The info of the SDK to use to utilize the input devices. By setting this to <see langword="null"/> the fallback SDK will be used.
+        /// The info of the SDK to use to utilize the input devices. By setting this to `null` the fallback SDK will be used.
         /// </summary>
         public VRTK_SDKInfo controllerSDKInfo
         {
@@ -235,7 +235,7 @@ namespace VRTK
         }
 
         /// <summary>
-        /// Whether it's possible to use the Setup. See <see cref="GetSimplifiedErrorDescriptions"/> for more info.
+        /// Whether it's possible to use the Setup. See `GetSimplifiedErrorDescriptions` for more info.
         /// </summary>
         public bool isValid
         {
@@ -262,7 +262,7 @@ namespace VRTK
         /// <summary>
         /// Populates the object references by using the currently set SDKs.
         /// </summary>
-        /// <param name="force">Whether to ignore <see cref="autoPopulateObjectReferences"/> while deciding to populate.</param>
+        /// <param name="force">Whether to ignore `autoPopulateObjectReferences` while deciding to populate.</param>
         public void PopulateObjectReferences(bool force)
         {
             if (!(force || autoPopulateObjectReferences))
@@ -430,7 +430,7 @@ namespace VRTK
         /// <summary>
         /// Handles the various SDK getters by logging potential errors.
         /// </summary>
-        /// <typeparam name="BaseType">The SDK base type of which to handle the getter for. Must be a subclass of <see cref="SDK_Base"/>.</typeparam>
+        /// <typeparam name="BaseType">The SDK base type of which to handle the getter for. Must be a subclass of SDK_Base.</typeparam>
         /// <param name="prettyName">The pretty name of the base SDK to use when logging errors.</param>
         /// <param name="info">The SDK info of which the SDK getter was called.</param>
         /// <param name="installedInfos">The installed SDK infos of which the SDK getter was called.</param>
@@ -457,11 +457,11 @@ namespace VRTK
         /// <item> <description>It's missing its vendor SDK.</description> </item>
         /// </list>
         /// </summary>
-        /// <typeparam name="BaseType">The SDK base type of which to return the error description for. Must be a subclass of <see cref="SDK_Base"/>.</typeparam>
+        /// <typeparam name="BaseType">The SDK base type of which to return the error description for. Must be a subclass of SDK_Base.</typeparam>
         /// <param name="prettyName">The pretty name of the base SDK to use when returning error descriptions.</param>
         /// <param name="info">The SDK info of which to return the error description for.</param>
         /// <param name="installedInfos">The installed SDK infos.</param>
-        /// <returns>An error description if there is one, else <see langword="null"/>.</returns>
+        /// <returns>An error description if there is one, else `null`.</returns>
         private static string GetSDKErrorDescription<BaseType>(string prettyName, VRTK_SDKInfo info, IEnumerable<VRTK_SDKInfo> installedInfos) where BaseType : SDK_Base
         {
             Type selectedType = info.type;

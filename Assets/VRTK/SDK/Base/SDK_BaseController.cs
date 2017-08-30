@@ -22,121 +22,207 @@ namespace VRTK
         /// <summary>
         /// Types of buttons on a controller
         /// </summary>
-        /// <param name="ButtonOne">Button One on the controller.</param>
-        /// <param name="ButtonTwo">Button Two on the controller.</param>
-        /// <param name="Grip">Grip on the controller.</param>
-        /// <param name="GripHairline">Grip Hairline on the controller.</param>
-        /// <param name="StartMenu">Start Menu on the controller.</param>
-        /// <param name="Trigger">Trigger on the controller.</param>
-        /// <param name="TriggerHairline">Trigger Hairline on the controller.</param>
-        /// <param name="Touchpad">Touchpad on the controller.</param>
-        /// <param name="MiddleFinger">Middle Finger on the controller.</param>
-        /// <param name="RingFinger">Ring Finger on the controller.</param>
-        /// <param name="PinkyFinger">Pinky Finger on the controller.</param>
         public enum ButtonTypes
         {
+            /// <summary>
+            /// Button One on the controller.
+            /// </summary>
             ButtonOne,
+            /// <summary>
+            /// Button Two on the controller.
+            /// </summary>
             ButtonTwo,
+            /// <summary>
+            /// Grip on the controller.
+            /// </summary>
             Grip,
+            /// <summary>
+            /// Grip Hairline on the controller.
+            /// </summary>
             GripHairline,
+            /// <summary>
+            /// Start Menu on the controller.
+            /// </summary>
             StartMenu,
+            /// <summary>
+            /// Trigger on the controller.
+            /// </summary>
             Trigger,
+            /// <summary>
+            /// Trigger Hairline on the controller.
+            /// </summary>
             TriggerHairline,
+            /// <summary>
+            /// Touchpad on the controller.
+            /// </summary>
             Touchpad,
+            /// <summary>
+            /// Middle Finger on the controller.
+            /// </summary>
             MiddleFinger,
+            /// <summary>
+            /// Ring Finger on the controller.
+            /// </summary>
             RingFinger,
+            /// <summary>
+            /// Pinky Finger on the controller.
+            /// </summary>
             PinkyFinger
         }
 
         /// <summary>
         /// Concepts of controller button press
         /// </summary>
-        /// <param name="Press">The button is currently being pressed.</param>
-        /// <param name="PressDown">The button has just been pressed down.</param>
-        /// <param name="PressUp">The button has just been released.</param>
-        /// <param name="Touch">The button is currently being touched.</param>
-        /// <param name="TouchDown">The button has just been touched.</param>
-        /// <param name="TouchUp">The button is no longer being touched.</param>
         public enum ButtonPressTypes
         {
+            /// <summary>
+            /// The button is currently being pressed.
+            /// </summary>
             Press,
+            /// <summary>
+            /// The button has just been pressed down.
+            /// </summary>
             PressDown,
+            /// <summary>
+            /// The button has just been released.
+            /// </summary>
             PressUp,
+            /// <summary>
+            /// The button is currently being touched.
+            /// </summary>
             Touch,
+            /// <summary>
+            /// The button has just been touched.
+            /// </summary>
             TouchDown,
+            /// <summary>
+            /// The button is no longer being touched.
+            /// </summary>
             TouchUp
         }
 
         /// <summary>
         /// The elements of a generic controller
         /// </summary>
-        /// <param name="AttachPoint">The default point on the controller to attach grabbed objects to.</param>
-        /// <param name="Trigger">The trigger button.</param>
-        /// <param name="GripLeft">The left part of the grip button collection.</param>
-        /// <param name="GripRight">The right part of the grip button collection.</param>
-        /// <param name="Touchpad">The touch pad/stick.</param>
-        /// <param name="ButtonOne">The first generic button.</param>
-        /// <param name="ButtonTwo">The second generic button.</param>
-        /// <param name="SystemMenu">The system menu button.</param>
-        /// <param name="Body">The encompassing mesh of the controller body.</param>
-        /// <param name="StartMenu">The start menu button.</param>
         public enum ControllerElements
         {
+            /// <summary>
+            /// The default point on the controller to attach grabbed objects to.
+            /// </summary>
             AttachPoint,
+            /// <summary>
+            /// The trigger button.
+            /// </summary>
             Trigger,
+            /// <summary>
+            /// The left part of the grip button collection.
+            /// </summary>
             GripLeft,
+            /// <summary>
+            /// The right part of the grip button collection.
+            /// </summary>
             GripRight,
+            /// <summary>
+            /// The touch pad/stick.
+            /// </summary>
             Touchpad,
+            /// <summary>
+            /// The first generic button.
+            /// </summary>
             ButtonOne,
+            /// <summary>
+            /// The second generic button.
+            /// </summary>
             ButtonTwo,
+            /// <summary>
+            /// The system menu button.
+            /// </summary>
             SystemMenu,
+            /// <summary>
+            /// The encompassing mesh of the controller body.
+            /// </summary>
             Body,
+            /// <summary>
+            /// The start menu button.
+            /// </summary>
             StartMenu
         }
 
         /// <summary>
         /// Controller hand reference.
         /// </summary>
-        /// <param name="None">No hand is assigned.</param>
-        /// <param name="Left">The left hand is assigned.</param>
-        /// <param name="Right">The right hand is assigned.</param>
         public enum ControllerHand
         {
+            /// <summary>
+            /// No hand is assigned.
+            /// </summary>
             None,
+            /// <summary>
+            /// The left hand is assigned.
+            /// </summary>
             Left,
+            /// <summary>
+            /// The right hand is assigned.
+            /// </summary>
             Right
         }
 
         /// <summary>
         /// SDK Controller types.
         /// </summary>
-        /// <param name="Undefined">No controller type.</param>
-        /// <param name="Custom">A custom controller type.</param>
-        /// <param name="Simulator_Hand">The Simulator default hand controller.</param>
-        /// <param name="SteamVR_ViveWand">The HTC Vive wand controller for SteamVR.</param>
-        /// <param name="SteamVR_OculusTouch">The Oculus Touch controller for SteamVR.</param>
-        /// <param name="Oculus_OculusTouch">The Oculus Touch controller for Oculus Utilities.</param>
-        /// <param name="Daydream_Controller">The Daydream controller for Google Daydream SDK.</param>
-        /// <param name="Ximmerse_Flip">The Flip controller for Ximmerse SDK.</param>
-        /// <param name="SteamVR_ValveKnuckles">The Valve Knuckles controller for SteamVR.</param>
-        /// <param name="Oculus_OculusGamepad">The Oculus Gamepad for Oculus Utilities.</param>
-        /// <param name="Oculus_OculusRemote">The Oculus Remote for Oculus Utilities.</param>
-        /// <param name="Oculus_GearVRHMD">The Oculus GearVR HMD controls for Oculus Utilities.</param>
-        /// <param name="Oculus_GearVRController">The Oculus GearVR controller for Oculus Utilities.</param>
         public enum ControllerType
         {
+            /// <summary>
+            /// No controller type.
+            /// </summary>
             Undefined,
+            /// <summary>
+            /// A custom controller type.
+            /// </summary>
             Custom,
+            /// <summary>
+            /// The Simulator default hand controller.
+            /// </summary>
             Simulator_Hand,
+            /// <summary>
+            /// The HTC Vive wand controller for SteamVR.
+            /// </summary>
             SteamVR_ViveWand,
+            /// <summary>
+            /// The Oculus Touch controller for SteamVR.
+            /// </summary>
             SteamVR_OculusTouch,
+            /// <summary>
+            /// The Oculus Touch controller for Oculus Utilities.
+            /// </summary>
             Oculus_OculusTouch,
+            /// <summary>
+            /// The Daydream controller for Google Daydream SDK.
+            /// </summary>
             Daydream_Controller,
+            /// <summary>
+            /// The Flip controller for Ximmerse SDK.
+            /// </summary>
             Ximmerse_Flip,
+            /// <summary>
+            /// The Valve Knuckles controller for SteamVR.
+            /// </summary>
             SteamVR_ValveKnuckles,
+            /// <summary>
+            /// The Oculus Gamepad for Oculus Utilities.
+            /// </summary>
             Oculus_OculusGamepad,
+            /// <summary>
+            /// The Oculus Remote for Oculus Utilities.
+            /// </summary>
             Oculus_OculusRemote,
+            /// <summary>
+            /// The Oculus GearVR HMD controls for Oculus Utilities.
+            /// </summary>
             Oculus_GearVRHMD,
+            /// <summary>
+            /// The Oculus GearVR controller for Oculus Utilities.
+            /// </summary>
             Oculus_GearVRController
         }
 

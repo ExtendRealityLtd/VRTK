@@ -11,11 +11,15 @@ namespace VRTK
         /// <summary>
         /// Valid SDK Objects
         /// </summary>
-        /// <param name="Boundary">The main camera rig/play area object that defines the player boundary.</param>
-        /// <param name="Headset">The main headset camera defines the player head.</param>
         public enum SDKObject
         {
+            /// <summary>
+            /// The main camera rig/play area object that defines the player boundary.
+            /// </summary>
             Boundary,
+            /// <summary>
+            /// The main headset camera defines the player head.
+            /// </summary>
             Headset
         }
 

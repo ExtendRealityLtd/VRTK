@@ -42,13 +42,19 @@ namespace VRTK
         /// <summary>
         /// The types of snap on release available.
         /// </summary>
-        /// <param name="UseKinematic">Will set the interactable object rigidbody to `isKinematic = true`.</param>
-        /// <param name="UseJoint">Will attach the interactable object's rigidbody to the provided joint as it's `Connected Body`.</param>
-        /// <param name="UseParenting">Will set the SnapDropZone as the interactable object's parent and set it's rigidbody to `isKinematic = true`.</param>
         public enum SnapTypes
         {
+            /// <summary>
+            /// Will set the interactable object rigidbody to `isKinematic = true`.
+            /// </summary>
             UseKinematic,
+            /// <summary>
+            /// Will attach the interactable object's rigidbody to the provided joint as it's `Connected Body`.
+            /// </summary>
             UseJoint,
+            /// <summary>
+            /// Will set the SnapDropZone as the interactable object's parent and set it's rigidbody to `isKinematic = true`.
+            /// </summary>
             UseParenting
         }
 

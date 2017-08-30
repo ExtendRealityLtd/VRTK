@@ -33,7 +33,7 @@ namespace VRTK
 
 #if !VRTK_DEFINE_STEAMVR_PLUGIN_1_2_2_OR_NEWER
         /// <summary>
-        /// This method is called just after unloading the <see cref="VRTK_SDKSetup"/> that's using this SDK.
+        /// This method is called just after unloading the VRTK_SDKSetup that's using this SDK.
         /// </summary>
         /// <param name="setup">The SDK Setup which is using this SDK.</param>
         public override void OnAfterSetupUnload(VRTK_SDKSetup setup)

@@ -45,7 +45,7 @@ namespace VRTK
         protected OVRHapticsClip hapticsProceduralClipRight;
 
         /// <summary>
-        /// This method is called just after loading the <see cref="VRTK_SDKSetup"/> that's using this SDK.
+        /// This method is called just after loading the VRTK_SDKSetup that's using this SDK.
         /// </summary>
         /// <param name="setup">The SDK Setup which is using this SDK.</param>
         public override void OnAfterSetupLoad(VRTK_SDKSetup setup)

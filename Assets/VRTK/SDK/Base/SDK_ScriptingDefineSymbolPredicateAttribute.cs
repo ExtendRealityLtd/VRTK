@@ -8,7 +8,7 @@ namespace VRTK
     using System;
 
     /// <summary>
-    /// Specifies a method to be used as a predicate to allow <see cref="VRTK_SDKManager"/> to automatically add and remove scripting define symbols. Only allowed on <see langword="static"/> methods that take no arguments and return <see cref="bool"/>.
+    /// Specifies a method to be used as a predicate to allow VRTK_SDKManager to automatically add and remove scripting define symbols. Only allowed on static methods that take no arguments and return a `bool`.
     /// </summary>
     [Serializable]
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true, Inherited = false)]
@@ -26,7 +26,7 @@ namespace VRTK
 
 #if UNITY_EDITOR
         /// <summary>
-        /// The build target group to use when conditionally adding or removing <see cref="symbol"/>.
+        /// The build target group to use when conditionally adding or removing symbol.
         /// </summary>
         [NonSerialized]
         public BuildTargetGroup buildTargetGroup;
@@ -41,8 +41,8 @@ namespace VRTK
         /// <summary>
         /// Creates a new attribute.
         /// </summary>
-        /// <param name="symbol">The scripting define symbol to conditionally add or remove. Needs to start with <see cref="RemovableSymbolPrefix"/> to be able to automatically remove the symbol. <see langword="null"/> and <see cref="string.Empty"/> aren't allowed.</param>
-        /// <param name="buildTargetGroupName">The name of a constant of <see cref="BuildTargetGroup"/>. <see cref="BuildTargetGroup.Unknown"/>, <see langword="null"/> and <see cref="string.Empty"/> aren't allowed.</param>
+        /// <param name="symbol">The scripting define symbol to conditionally add or remove. Needs to start with `RemovableSymbolPrefix` to be able to automatically remove the symbol. `null` and `string.Empty` are not allowed.</param>
+        /// <param name="buildTargetGroupName">The name of a constant of `BuildTargetGroup`. `BuildTargetGroup.Unknown`, `null` and `string.Empty` are not allowed.</param>
         public SDK_ScriptingDefineSymbolPredicateAttribute(string symbol, string buildTargetGroupName)
         {
             if (symbol == null)

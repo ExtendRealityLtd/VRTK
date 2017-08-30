@@ -10,14 +10,38 @@ namespace VRTK
     using UnityEngine;
     public sealed class VRTK_PlayerObject : MonoBehaviour
     {
+        /// <summary>
+        /// The type of object associated to the player.
+        /// </summary>
         public enum ObjectTypes
         {
+            /// <summary>
+            /// No defined object.
+            /// </summary>
             Null,
+            /// <summary>
+            /// The object that represents the VR camera rig.
+            /// </summary>
             CameraRig,
+            /// <summary>
+            /// The object that represents the VR headset.
+            /// </summary>
             Headset,
+            /// <summary>
+            /// An object that represents a VR controller.
+            /// </summary>
             Controller,
+            /// <summary>
+            /// An object that represents a player generated pointer.
+            /// </summary>
             Pointer,
+            /// <summary>
+            /// An object that represents a player generated highlighter.
+            /// </summary>
             Highlighter,
+            /// <summary>
+            /// An object that represents a player collider.
+            /// </summary>
             Collider
         }
 

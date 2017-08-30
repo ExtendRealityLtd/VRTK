@@ -12,31 +12,50 @@ namespace VRTK
         /// <summary>
         /// Possible devices.
         /// </summary>
-        /// <param name="Headset">The headset.</param>
-        /// <param name="LeftController">The left hand controller.</param>
-        /// <param name="RightController">The right hand controller.</param>
         public enum Devices
         {
+            /// <summary>
+            /// The headset.
+            /// </summary>
             Headset,
+            /// <summary>
+            /// The left hand controller.
+            /// </summary>
             LeftController,
+            /// <summary>
+            /// The right hand controller.
+            /// </summary>
             RightController,
         }
 
         /// <summary>
         /// Possible headsets
         /// </summary>
-        /// <param name="Unknown">An unknown headset.</param>
-        /// <param name="OculusRift">A summary of all Oculus Rift headset versions.</param>
-        /// <param name="OculusRiftCV1">A specific version of the Oculus Rift headset, the Consumer Version 1.</param>
-        /// <param name="Vive">A summary of all HTC Vive headset versions.</param>
-        /// <param name="ViveMV">A specific version of the HTC Vive headset, the first consumer version.</param>
         public enum Headsets
         {
+            /// <summary>
+            /// An unknown headset.
+            /// </summary>
             Unknown,
+            /// <summary>
+            /// A summary of all Oculus Rift headset versions.
+            /// </summary>
             OculusRift,
+            /// <summary>
+            /// A specific version of the Oculus Rift headset, the Consumer Version 1.
+            /// </summary>
             OculusRiftCV1,
+            /// <summary>
+            /// A summary of all HTC Vive headset versions.
+            /// </summary>
             Vive,
+            /// <summary>
+            /// A specific version of the HTC Vive headset, the first consumer version.
+            /// </summary>
             ViveMV,
+            /// <summary>
+            /// A specific version of the HTC Vive headset, the first consumer version.
+            /// </summary>
             ViveDVT
         }
 

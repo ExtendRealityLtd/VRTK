@@ -12,15 +12,23 @@ namespace VRTK
         /// <summary>
         /// The moment at which to follow.
         /// </summary>
-        /// <param name="OnUpdate">Follow in the Update method.</param>
-        /// <param name="OnLateUpdate">Follow in the LateUpdate method.</param>
-        /// <param name="OnPreRender">Follow in the OnPreRender method. (This script doesn't have to be attached to a camera.)</param>
-        /// <param name="OnPreCull">Follow in the OnPreCull method. (This script doesn't have to be attached to a camera.)</param>
         public enum FollowMoment
         {
+            /// <summary>
+            /// Follow in the Update method.
+            /// </summary>
             OnUpdate,
+            /// <summary>
+            /// Follow in the LateUpdate method.
+            /// </summary>
             OnLateUpdate,
+            /// <summary>
+            /// Follow in the OnPreRender method. (This script doesn't have to be attached to a camera).
+            /// </summary>
             OnPreRender,
+            /// <summary>
+            /// Follow in the OnPreCull method. (This script doesn't have to be attached to a camera).
+            /// </summary>
             OnPreCull
         }
 

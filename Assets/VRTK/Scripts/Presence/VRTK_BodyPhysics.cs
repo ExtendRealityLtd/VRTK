@@ -45,19 +45,31 @@ namespace VRTK
         /// <summary>
         /// Options for testing if a play space fall is valid
         /// </summary>
-        /// <param name="NoRestriction">Always drop to nearest floor when the headset is no longer over the current standing object.</param>
-        /// <param name="LeftController">Don't drop to nearest floor  if the Left Controller is still over the current standing object even if the headset isn't.</param>
-        /// <param name="RightController">Don't drop to nearest floor  if the Right Controller is still over the current standing object even if the headset isn't.</param>
-        /// <param name="EitherController">Don't drop to nearest floor  if Either Controller is still over the current standing object even if the headset isn't.</param>
-        /// <param name="BothControllers">Don't drop to nearest floor only if Both Controllers are still over the current standing object even if the headset isn't.</param>
-        /// <param name="AlwaysRestrict">Never drop to nearest floor when the headset is no longer over the current standing object.</param>
         public enum FallingRestrictors
         {
+            /// <summary>
+            /// Always drop to nearest floor when the headset is no longer over the current standing object.
+            /// </summary>
             NoRestriction,
+            /// <summary>
+            /// Don't drop to nearest floor  if the Left Controller is still over the current standing object even if the headset isn't.
+            /// </summary>
             LeftController,
+            /// <summary>
+            /// Don't drop to nearest floor  if the Right Controller is still over the current standing object even if the headset isn't.
+            /// </summary>
             RightController,
+            /// <summary>
+            /// Don't drop to nearest floor  if Either Controller is still over the current standing object even if the headset isn't.
+            /// </summary>
             EitherController,
+            /// <summary>
+            /// Don't drop to nearest floor only if Both Controllers are still over the current standing object even if the headset isn't.
+            /// </summary>
             BothControllers,
+            /// <summary>
+            /// Never drop to nearest floor when the headset is no longer over the current standing object.
+            /// </summary>
             AlwaysRestrict
         }
 

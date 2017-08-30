@@ -8,13 +8,34 @@ namespace VRTK
     [Serializable]
     public sealed class AxisOverrides
     {
+        /// <summary>
+        /// Determine when to apply the override.
+        /// </summary>
         public enum ApplyOverrideType
         {
+            /// <summary>
+            /// Never apply the override.
+            /// </summary>
             Never,
+            /// <summary>
+            /// Always apply the override.
+            /// </summary>
             Always,
+            /// <summary>
+            /// Only apply the override when the state is set to digital.
+            /// </summary>
             DigitalState,
+            /// <summary>
+            /// Only apply the override when the state is set to axis.
+            /// </summary>
             AxisState,
+            /// <summary>
+            /// Only apply the override when the state is set to sense axis.
+            /// </summary>
             SenseAxisState,
+            /// <summary>
+            /// Only apply the override when the state is set to axis or sense axis.
+            /// </summary>
             AxisAndSenseAxisState
         }
 

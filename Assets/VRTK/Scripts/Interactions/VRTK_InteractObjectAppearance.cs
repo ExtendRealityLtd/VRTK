@@ -41,38 +41,62 @@ namespace VRTK
         /// <summary>
         /// The interaction type.
         /// </summary>
-        /// <param name="None">No interaction has affected the object appearance.</param>
-        /// <param name="Touch">The touch interaction has affected the object appearance.</param>
-        /// <param name="Untouch">The untouch interaction has affected the object appearance.</param>
-        /// <param name="Grab">The grab interaction has affected the object appearance.</param>
-        /// <param name="Ungrab">The ungrab interaction has affected the object appearance.</param>
-        /// <param name="Use">The use interaction has affected the object appearance.</param>
-        /// <param name="Unuse">The unuse interaction has affected the object appearance.</param>
         public enum InteractionType
         {
+            /// <summary>
+            /// No interaction has affected the object appearance.
+            /// </summary>
             None,
+            /// <summary>
+            /// The touch interaction has affected the object appearance.
+            /// </summary>
             Touch,
+            /// <summary>
+            /// The untouch interaction has affected the object appearance.
+            /// </summary>
             Untouch,
+            /// <summary>
+            /// The grab interaction has affected the object appearance.
+            /// </summary>
             Grab,
+            /// <summary>
+            /// The ungrab interaction has affected the object appearance.
+            /// </summary>
             Ungrab,
+            /// <summary>
+            /// The use interaction has affected the object appearance.
+            /// </summary>
             Use,
+            /// <summary>
+            /// The unuse interaction has affected the object appearance.
+            /// </summary>
             Unuse
         }
 
         /// <summary>
         /// The valid interacting object.
         /// </summary>
-        /// <param name="Anything">Any GameObject is considered a valid interacting object.</param>
-        /// <param name="EitherController">Only a game controller is considered a valid interacting objcet.</param>
-        /// <param name="NeitherController">Any GameObject except a game controller is considered a valid interacting object.</param>
-        /// <param name="LeftControllerOnly">Only the left game controller is considered a valid interacting objcet.</param>
-        /// <param name="RightControllerOnly">Only the right game controller is considered a valid interacting objcet.</param>
         public enum ValidInteractingObject
         {
+            /// <summary>
+            /// Any GameObject is considered a valid interacting object.
+            /// </summary>
             Anything,
+            /// <summary>
+            /// Only a game controller is considered a valid interacting objcet.
+            /// </summary>
             EitherController,
+            /// <summary>
+            /// Any GameObject except a game controller is considered a valid interacting object.
+            /// </summary>
             NeitherController,
+            /// <summary>
+            /// Only the left game controller is considered a valid interacting objcet.
+            /// </summary>
             LeftControllerOnly,
+            /// <summary>
+            /// Only the right game controller is considered a valid interacting objcet.
+            /// </summary>
             RightControllerOnly
         }
 

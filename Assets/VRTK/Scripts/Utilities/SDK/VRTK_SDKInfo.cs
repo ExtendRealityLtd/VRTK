@@ -37,9 +37,9 @@ namespace VRTK
         /// <summary>
         /// Creates new SDK infos for a type that is known at compile time.
         /// </summary>
-        /// <typeparam name="BaseType">The SDK base type. Must be a subclass of <see cref="SDK_Base"/>.</typeparam>
-        /// <typeparam name="FallbackType">The SDK type to fall back on if problems occur. Must be a subclass of <typeparamref name="BaseType"/>.</typeparam>
-        /// <typeparam name="ActualType">The SDK type to use. Must be a subclass of <typeparamref name="BaseType"/>.</typeparam>
+        /// <typeparam name="BaseType">The SDK base type. Must be a subclass of SDK_Base.</typeparam>
+        /// <typeparam name="FallbackType">The SDK type to fall back on if problems occur. Must be a subclass of `BaseType`.</typeparam>
+        /// <typeparam name="ActualType">The SDK type to use. Must be a subclass of `BaseType`.</typeparam>
         /// <returns>Multiple newly created instances.</returns>
         public static VRTK_SDKInfo[] Create<BaseType, FallbackType, ActualType>() where BaseType : SDK_Base where FallbackType : BaseType where ActualType : BaseType
         {
@@ -49,9 +49,9 @@ namespace VRTK
         /// <summary>
         /// Creates new SDK infos for a type.
         /// </summary>
-        /// <typeparam name="BaseType">The SDK base type. Must be a subclass of <see cref="SDK_Base"/>.</typeparam>
-        /// <typeparam name="FallbackType">The SDK type to fall back on if problems occur. Must be a subclass of <typeparamref name="BaseType"/>.</typeparam>
-        /// <param name="actualType">The SDK type to use. Must be a subclass of <typeparamref name="BaseType"/>.</param>
+        /// <typeparam name="BaseType">The SDK base type. Must be a subclass of SDK_Base.</typeparam>
+        /// <typeparam name="FallbackType">The SDK type to fall back on if problems occur. Must be a subclass of `BaseType.</typeparam>
+        /// <param name="actualType">The SDK type to use. Must be a subclass of `BaseType.</param>
         /// <returns>Multiple newly created instances.</returns>
         public static VRTK_SDKInfo[] Create<BaseType, FallbackType>(Type actualType) where BaseType : SDK_Base where FallbackType : BaseType
         {

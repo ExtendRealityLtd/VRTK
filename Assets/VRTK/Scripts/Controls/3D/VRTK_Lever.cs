@@ -15,10 +15,22 @@ namespace VRTK
     [AddComponentMenu("VRTK/Scripts/Controls/3D/VRTK_Lever")]
     public class VRTK_Lever : VRTK_Control
     {
+        /// <summary>
+        /// The direction of the lever.
+        /// </summary>
         public enum LeverDirection
         {
+            /// <summary>
+            /// The world x direction.
+            /// </summary>
             x,
+            /// <summary>
+            /// The world y direction.
+            /// </summary>
             y,
+            /// <summary>
+            /// The world z direction.
+            /// </summary>
             z
         }
 

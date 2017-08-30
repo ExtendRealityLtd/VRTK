@@ -211,15 +211,15 @@ namespace VRTK
         }
 
         /// <summary>
-        /// Finds the first <see cref="GameObject"/> with a given name and an ancestor that has a specific component.
+        /// Finds the first GameObject with a given name and an ancestor that has a specific component.
         /// </summary>
         /// <remarks>
-        /// This method returns active as well as inactive <see cref="GameObject"/>s in the scene. It doesn't return assets.
+        /// This method returns active as well as inactive GameObjects in the scene. It doesn't return assets.
         /// For performance reasons it is recommended to not use this function every frame. Cache the result in a member variable at startup instead.
         /// </remarks>
-        /// <typeparam name="T">The component type that needs to be on an ancestor of the wanted <see cref="GameObject"/>. Must be a subclass of <see cref="Component"/>.</typeparam>
-        /// <param name="gameObjectName">The name of the wanted <see cref="GameObject"/>. If it contains a '/' character, this method traverses the hierarchy like a path name, beginning on the game object that has a component of type <typeparamref name="T"/>.</param>
-        /// <returns>The <see cref="GameObject"/> with name <paramref name="gameObjectName"/> and an ancestor that has a <typeparamref name="T"/>. If no such <see cref="GameObject"/> is found <see langword="null"/> is returned.</returns>
+        /// <typeparam name="T">The component type that needs to be on an ancestor of the wanted GameObject. Must be a subclass of `Component`.</typeparam>
+        /// <param name="gameObjectName">The name of the wanted GameObject. If it contains a '/' character, this method traverses the hierarchy like a path name, beginning on the game object that has a component of type `T`.</param>
+        /// <returns>The GameObject with name `gameObjectName` and an ancestor that has a `T`. If no such GameObject is found then `null` is returned.</returns>
         public static GameObject FindEvenInactiveGameObject<T>(string gameObjectName = null) where T : Component
         {
             if (string.IsNullOrEmpty(gameObjectName))
@@ -249,10 +249,10 @@ namespace VRTK
         /// Finds all components of a given type.
         /// </summary>
         /// <remarks>
-        /// This method returns components from active as well as inactive <see cref="GameObject"/>s in the scene. It doesn't return assets.
+        /// This method returns components from active as well as inactive GameObjects in the scene. It doesn't return assets.
         /// For performance reasons it is recommended to not use this function every frame. Cache the result in a member variable at startup instead.
         /// </remarks>
-        /// <typeparam name="T">The component type to search for. Must be a subclass of <see cref="Component"/>.</typeparam>
+        /// <typeparam name="T">The component type to search for. Must be a subclass of `Component`.</typeparam>
         /// <returns>All the found components. If no component is found an empty array is returned.</returns>
         public static T[] FindEvenInactiveComponents<T>() where T : Component
         {
@@ -269,11 +269,11 @@ namespace VRTK
         /// Finds the first component of a given type.
         /// </summary>
         /// <remarks>
-        /// This method returns components from active as well as inactive <see cref="GameObject"/>s in the scene. It doesn't return assets.
+        /// This method returns components from active as well as inactive GameObjects in the scene. It doesn't return assets.
         /// For performance reasons it is recommended to not use this function every frame. Cache the result in a member variable at startup instead.
         /// </remarks>
-        /// <typeparam name="T">The component type to search for. Must be a subclass of <see cref="Component"/>.</typeparam>
-        /// <returns>The found component. If no component is found <see langword="null"/> is returned.</returns>
+        /// <typeparam name="T">The component type to search for. Must be a subclass of `Component`.</typeparam>
+        /// <returns>The found component. If no component is found `null` is returned.</returns>
         public static T FindEvenInactiveComponent<T>() where T : Component
         {
             Scene activeScene = SceneManager.GetActiveScene();
