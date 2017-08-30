@@ -10,12 +10,14 @@ namespace VRTK
     public delegate void PointerDirectionIndicatorEventHandler(object sender);
 
     /// <summary>
-    /// The Pointer Direction Indicator is used to determine a given world rotation that can be used by a Destiantion Marker.
+    /// Adds a Pointer Direction Indicator to a pointer renderer and determines a given world rotation that can be used by a Destiantion Marker.
     /// </summary>
     /// <remarks>
-    /// The Pointer Direction Indicator can be attached to a VRTK_BasePointerRenderer in the `Direction Indicator` parameter and will the be used to send rotation data when the destination marker events are emitted.
+    /// **Prefab Usage:**
+    ///  * Place the `VRTK/Prefabs/PointerDirectionIndicator` prefab into the scene hierarchy.
+    ///  * Attach the `PointerDirectionIndicator` scene GameObejct to the `Direction Indicator` inspector parameter on a `VRTK_BasePointerRenderer` component.
     ///
-    /// This can be useful for rotating the play area upon teleporting to face the user in a new direction without expecting them to physically turn in the play space.
+    ///   > This can be useful for rotating the play area upon teleporting to face the user in a new direction without expecting them to physically turn in the play space.
     /// </remarks>
     public class VRTK_PointerDirectionIndicator : MonoBehaviour
     {

@@ -8,10 +8,13 @@ namespace VRTK
     using System.Linq;
 
     /// <summary>
-    /// This canvas adds the unity console log to a world game object. To use the prefab, it simply needs to be placed into the scene and it will be visible in world space. It's also possible to child it to other objects such as the controller so it can track where the user is.
+    /// Adds an in-scene representation of the Unity console on a world space canvas.
     /// </summary>
     /// <remarks>
-    /// It's also recommended to use the Simple Pointer and UI Pointer on a controller to interact with the Console Viewer Canvas as it has a scrollable text area, a button to clear the log and a checkbox to toggle whether the log messages are collapsed.
+    /// **Prefab Usage:**
+    ///  * Place the `VRTK/Prefabs/ConsoleViewerCanvas` prefab into the scene hierarchy.
+    ///
+    ///   > It is also possible to interact with the `ConsoleViewerCanvas` with a `VRTK_UIPointer`.
     /// </remarks>
     public class VRTK_ConsoleViewer : MonoBehaviour
     {

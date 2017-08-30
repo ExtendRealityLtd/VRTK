@@ -133,13 +133,12 @@ The FindInScene method is used to find the `[VRSimulator_CameraRig]` GameObject 
 
 ### Overview
 
-This canvas adds a frames per second text element to the headset. To use the prefab it must be placed into the scene then the headset camera needs attaching to the canvas:
+Provides a frames per second text element to the HMD view. To use the prefab it must be placed into the scene then the headset camera needs attaching to the canvas:
 
-* Select `FramesPerSecondCanvas` object from the scene objects
-* Find the `Canvas` component
-* Set the `Render Camera` parameter to the camera used by the VR Headset (e.g. SteamVR: [CameraRig]-> Camera(Head) -> Camera(eye)])
+**Prefab Usage:**
+* Place the `VRTK/Prefabs/FramesPerSecondCanvas` prefab in the scene hierarchy.
 
-This script is pretty much a copy and paste from the script at: http://talesfromtherift.com/vr-fps-counter/ So all credit to Peter Koch for his work. Twitter: @peterept
+> This script is largely based on the script at: http://talesfromtherift.com/vr-fps-counter/ So all credit to Peter Koch for his work. Twitter: @peterept
 
 ### Inspector Parameters
 
@@ -163,7 +162,8 @@ This script is pretty much a copy and paste from the script at: http://talesfrom
 
 Allows rendering a separate camera that is shown on the desktop only, without changing what's seen in VR headsets.
 
-To use the prefab, it simply needs to be placed into the scene.
+**Prefab Usage:**
+* Place the `VRTK/Prefabs/DesktopCamera` prefab in the scene.
 
 ### Inspector Parameters
 
@@ -178,9 +178,11 @@ To use the prefab, it simply needs to be placed into the scene.
 
 ### Overview
 
-This adds a UI element into the World Space that can be used to provide additional information about an object by providing a piece of text with a line drawn to a destination point.
+Adds a World Space Canvas that can be used to provide additional information about an object by providing a piece of text with a line drawn to a destination point.
 
-There are a number of parameters that can be set on the Prefab which are provided by the `VRTK_ObjectTooltip` script which is applied to the prefab.
+**Prefab Usage:**
+* Place the `VRTK/Prefabs/ObjectTooltip` prefab into the scene hierarchy, preferably as a child of the GameObject it is associated with.
+* Set the `Draw Line To` option to the Transform component of the GameObject the Tooltip will be assoicated with.
 
 ### Inspector Parameters
 
@@ -244,13 +246,14 @@ The UpdateText method allows the tooltip text to be updated at runtime.
 
 ### Overview
 
-This adds a collection of Object Tooltips to the Controller that give information on what the main controller buttons may do. To add the prefab, it just needs to be added as a child of the relevant alias controller GameObject.
+Adds a collection of Object Tooltips to the Controller providing information to what the controller buttons may do.
 
-If the transforms for the buttons are not provided, then the script will attempt to find the attach transforms on the default controller model.
+**Prefab Usage:**
+* Place the `VRTK/Prefabs/ControllerTooltips` prefab as a child of the relevant controller script alias GameObject in the scene hierarchy.
+* If no `Button Transform Settings` are provided in the inspector at Edit time then the button transforms will attempt to be set to the transforms of the current SDK default controller model.
+* If one of the `Button Text Settings` text options are not provided, then the tooltip for that specific button will be hidden.
 
-If no text is provided for one of the elements then the tooltip for that element will be set to disabled.
-
-There are a number of parameters that can be set on the Prefab which are provided by the `VRTK_ControllerTooltips` script which is applied to the prefab.
+> There are a number of parameters that can be set on the Prefab which are provided by the `VRTK_ControllerTooltips` script which is applied to the prefab.
 
 ### Inspector Parameters
 
@@ -337,15 +340,13 @@ The ToggleTips method will display the controller tooltips if the state is `true
 
 ### Overview
 
-This adds a simple trigger collider volume that when a controller enters will enable the rigidbody on the controller.
+Provides a simple trigger collider volume that when a controller enters will enable the rigidbody on the controller.
 
-The prefab game object should be placed in the scene where another interactable game object (such as a button control) is located to turn the controller rigidbody on at the appropriate time for interaction with the control without needing to manually activate by pressing the grab.
+**Prefab Usage:**
+* Place the `VRTK/Prefabs/ControllerRigidbodyActivator` prefab in the scene at the location where the controller rigidbody should be automatically activated.
+* The prefab contains a default sphere collider to determine ths collision, this collider component can be customised in the inspector or can be replaced with another collider component (set to `Is Trigger`).
 
-If the prefab is placed as a child of the target interactable game object then the collider volume on the prefab will trigger collisions on the interactable object.
-
-The sphere collider on the prefab can have the radius adjusted to determine how close the controller needs to be to the object before the rigidbody is activated.
-
-It's also possible to replace the sphere trigger collider with an alternative trigger collider for customised collision detection.
+> If the prefab is placed as a child of the target interactable game object then the collider volume on the prefab will trigger collisions on the interactable object.
 
 ### Inspector Parameters
 
@@ -372,19 +373,14 @@ Adding the `VRTK_ControllerRigidbodyActivator_UnityEvents` component to `VRTK_Co
 
 ### Overview
 
-This sets up a predefined zone where an existing interactable object can be dropped and upon dropping it snaps to the set snap drop zone transform position, rotation and scale.
+Provides a predefined zone where a valid interactable object can be dropped and upon dropping it snaps to the set snap drop zone transform position, rotation and scale.
 
-The position, rotation and scale of the `SnapDropZone` Game Object will be used to determine the final position of the dropped interactable object if it is dropped within the drop zone collider volume.
-
-The provided Highlight Object Prefab is used to create the highlighting object (also within the Editor for easy placement) and by default the standard Material Color Swap highlighter is used.
-
-An alternative highlighter can also be added to the `SnapDropZone` Game Object and this new highlighter component will be used to show the interactable object position on release.
-
-The prefab is a pre-built game object that contains a default trigger collider (Sphere Collider) and a kinematic rigidbody (to ensure collisions occur).
-
-If an alternative collider is required, then the default Sphere Collider can be removed and another collider added.
-
-If the `Use Joint` Snap Type is selected then a custom Joint component is required to be added to the `SnapDropZone` Game Object and upon release the interactable object's rigidbody will be linked to this joint as the `Connected Body`.
+**Prefab Usage:**
+* Place the `VRTK/Prefabs/SnapDropZone` prefab into the scene hierarchy.
+* Provide the SnapDropZone with an optional `Highlight Object Prefab` to generate an object outline in the scene that determines the final position, rotation and scale of the snapped object.
+* If no `VRTK_BaseHighlighter` derivative is applied to the SnapDropZone then the default MaterialColorSwap Highlighter will be used.
+* The collision zone that activates the SnapDropZone is a `Sphere Collider` by default but can be amended or replaced on the SnapDropZone GameObject.
+* If the `Use Joint` Snap Type is selected then a custom Joint component is required to be added to the `SnapDropZone` Game Object and upon release the interactable object's rigidbody will be linked to this joint as the `Connected Body`.
 
 ### Inspector Parameters
 
@@ -512,11 +508,10 @@ The GetCurrentSnappedObejct method returns the GameObject that is currently snap
 
 ### Overview
 
-This adds a UI element into the world space that can be dropped into a Controller object and used to create and use Radial Menus from the touchpad.
+Provides a UI element into the world space that can be dropped into a Controller GameObject and used to create and use Radial Menus from the touchpad.
 
-If the RadialMenu is placed inside a controller, it will automatically find a `VRTK_ControllerEvents` in its parent to use at the input. However, a `VRTK_ControllerEvents` can be defined explicitly by setting the `Events` parameter of the `Radial Menu Controller` script also attached to the prefab.
-
-The RadialMenu can also be placed inside a `VRTK_InteractableObject` for the RadialMenu to be anchored to a world object instead of the controller. The `Events Manager` parameter will automatically be set if the RadialMenu is a child of an InteractableObject, but it can also be set manually in the inspector. Additionally, for the RadialMenu to be anchored in the world, the `RadialMenuController` script in the prefab must be replaced with `VRTK_IndependentRadialMenuController`. See the script information for further details on making the RadialMenu independent of the controllers.
+**Prefab Usage:**
+* Place the `VRTK/Prefabs/RadialMenu` prefab as a child of a Controller script alias GameObject.
 
 ### Inspector Parameters
 
@@ -657,11 +652,10 @@ The AddButton method is used to add a new button to the menu.
 
 ### Overview
 
-This adds a UI element into the world space that can be dropped into a Controller object and used to create and use Radial Menus from the touchpad.
+Allows the RadialMenu to be anchored to controller object.
 
-If the RadialMenu is placed inside a controller, it will automatically find a `VRTK_ControllerEvents` in its parent to use at the input. However, a `VRTK_ControllerEvents` can be defined explicitly by setting the `Events` parameter of the `Radial Menu Controller` script also attached to the prefab.
-
-The RadialMenu can also be placed inside a `VRTK_InteractableObject` for the RadialMenu to be anchored to a world object instead of the controller. The `Events Manager` parameter will automatically be set if the RadialMenu is a child of an InteractableObject, but it can also be set manually in the inspector. Additionally, for the RadialMenu to be anchored in the world, the `RadialMenuController` script in the prefab must be replaced with `VRTK_IndependentRadialMenuController`. See the script information for further details on making the RadialMenu independent of the controllers.
+* Place the `VRTK/Prefabs/RadialMenu` prefab as a child of a Controller script alias GameObject.
+* The Radial Menu should automatically find the `VRTK_ControllerEvents` component in the parent hierarchy, if one is not found but required then the `Events` parameter on the `VRTK_RadialMenuController` script can be populated.
 
 ### Inspector Parameters
 
@@ -678,16 +672,15 @@ The RadialMenu can also be placed inside a `VRTK_InteractableObject` for the Rad
 
 ### Overview
 
-This script inherited from `RadialMenuController` and therefore can be used instead of `RadialMenuController` to allow the RadialMenu to be anchored to any object, not just a controller. The RadialMenu will show when a controller is near the object and the buttons can be clicked with the `Use Alias` button. The menu also automatically rotates towards the user.
+Allows the RadialMenu to be anchored to any object, not just a controller.
 
-To convert the default `RadialMenu` prefab to be independent of the controllers:
-
-* Make the `RadialMenu` a child of an object other than a controller.
+**Prefab Usage:**
+* Place the `VRTK/Prefabs/RadialMenu` prefab as a child of the GameObject to associate the Radial Menu with.
 * Position and scale the menu by adjusting the transform of the `RadialMenu` empty.
-* Replace `RadialMenuController` with `VRTK_IndependentRadialMenuController`.
+* Replace `VRTK_RadialMenuController` with `VRTK_IndependentRadialMenuController` that is located on the `RadialMenu/RadialMenuUI/Panel` GameObject.
 * Ensure the parent object has the `VRTK_InteractableObject` script.
-* Verify that `Is Usable` and `Hold Button to Use` are both checked.
-* Attach `VRTK_InteractTouch` and `VRTK_InteractUse` scripts to the controllers.
+* Verify that `Is Usable` and `Hold Button to Use` are both checked on the `VRTK_InteractableObject`.
+* Attach `VRTK_InteractTouch` and `VRTK_InteractUse` scripts to the objects that will activate the Radial Menu (e.g. the Controllers).
 
 ### Inspector Parameters
 
@@ -711,6 +704,10 @@ To convert the default `RadialMenu` prefab to be independent of the controllers:
 
 The UpdateEventsManager method is used to update the events within the menu controller.
 
+### Example
+
+`VRTK/Examples/030_Controls_RadialTouchpadMenu` displays a radial menu for each controller. The left controller uses the `Hide On Release` variable, so it will only be visible if the left touchpad is being touched. It also uses the `Execute On Unclick` variable to delay execution until the touchpad button is unclicked. The example scene also contains a demonstration of anchoring the RadialMenu to an interactable cube instead of a controller.
+
 ---
 
 ## Destination Point (VRTK_DestinationPoint)
@@ -718,11 +715,12 @@ The UpdateEventsManager method is used to update the events within the menu cont
 
 ### Overview
 
-The Destination Point allows for a specific scene marker that can be teleported to.
+Allows for a specific scene marker or specific area within the scene that can be teleported to.
 
-The destination points can provide a useful way of having specific teleport locations in a scene.
-
-The destination points can also have a locked state if the `Enable Teleport` flag is disabled.
+**Prefab Usage:**
+* Place the `VRTK/Prefabs/DestinationPoint` prefab at the desired location within the scene.
+* Uncheck the `Enable Teleport` checkbox to lock the destination point and prevent teleporting to it.
+* Uncheck the `Snap To Point` checkbox to provide a destination area rather than a specific point to teleport to.
 
 ### Inspector Parameters
 
@@ -780,11 +778,13 @@ The ResetDestinationPoint resets the destination point back to the default state
 
 ### Overview
 
-The Pointer Direction Indicator is used to determine a given world rotation that can be used by a Destiantion Marker.
+Adds a Pointer Direction Indicator to a pointer renderer and determines a given world rotation that can be used by a Destiantion Marker.
 
-The Pointer Direction Indicator can be attached to a VRTK_BasePointerRenderer in the `Direction Indicator` parameter and will the be used to send rotation data when the destination marker events are emitted.
+**Prefab Usage:**
+* Place the `VRTK/Prefabs/PointerDirectionIndicator` prefab into the scene hierarchy.
+* Attach the `PointerDirectionIndicator` scene GameObejct to the `Direction Indicator` inspector parameter on a `VRTK_BasePointerRenderer` component.
 
-This can be useful for rotating the play area upon teleporting to face the user in a new direction without expecting them to physically turn in the play space.
+> This can be useful for rotating the play area upon teleporting to face the user in a new direction without expecting them to physically turn in the play space.
 
 ### Inspector Parameters
 
@@ -864,9 +864,12 @@ The SetMaterialColor method sets the current material colour on the direction in
 
 ### Overview
 
-This canvas adds the unity console log to a world game object. To use the prefab, it simply needs to be placed into the scene and it will be visible in world space. It's also possible to child it to other objects such as the controller so it can track where the user is.
+Adds an in-scene representation of the Unity console on a world space canvas.
 
-It's also recommended to use the Simple Pointer and UI Pointer on a controller to interact with the Console Viewer Canvas as it has a scrollable text area, a button to clear the log and a checkbox to toggle whether the log messages are collapsed.
+**Prefab Usage:**
+* Place the `VRTK/Prefabs/ConsoleViewerCanvas` prefab into the scene hierarchy.
+
+> It is also possible to interact with the `ConsoleViewerCanvas` with a `VRTK_UIPointer`.
 
 ### Inspector Parameters
 
@@ -907,14 +910,13 @@ The ClearLog method clears the current log view of all messages
 
 ### Overview
 
-Purpose: top-level controller class to handle the display of up to four child PanelMenuItemController items which are displayed as a canvas UI panel.
+Adds a top-level controller to handle the display of up to four child PanelMenuItemController items which are displayed as a canvas UI panel.
 
-This script should be attached to a VRTK_InteractableObject > first child GameObject [PanelMenuController].
-The [PanelMenuController] must have a child GameObject [panel items container].
-The [panel items container] must have a Canvas component.
-A [panel items container] can have up to four child GameObject, each of these contains the UI for a panel that can be displayed by [PanelMenuController].
-They also have the [PanelMenuItemController] script attached to them. The [PanelMenuItemController] script intercepts the controller events sent from this [PanelMenuController] and passes them onto additional custom event subscriber scripts, which then carry out the required custom UI actions.
-To show / hide a UI panel, you must first pick up the VRTK_InteractableObject and then by pressing the touchpad top/bottom/left/right you can open/close the child UI panel that has been assigned via the Unity Editor panel. Button type UI actions are handled by a trigger press when the panel is open.
+**Prefab Usage:**
+* Place the `VRTK/Prefabs/PanelMenu` prefab as a child of the `VRTK_InteractableObject` the panel menu is for.
+* Optionally remove the panel control menu item child GameObjects if they are not required, e.g. `PanelTopControls`.
+* Set the panel menu item controllers on the `VRTK_PanelMenuController` script to determine which panel control menu items are available.
+* The available panel control menu items can be activated by pressing the corresponding direction on the touchpad.
 
 ### Inspector Parameters
 
@@ -981,8 +983,9 @@ The HideMenuImmediate method is used to immediately hide the menu.
 
 ### Overview
 
-Purpose: panel item controller class that intercepts the controller events sent from a [PanelMenuController] and passes them onto additional custom event subscriber scripts, which then carry out the required custom UI actions.
+The panel item controller class that intercepts the controller events sent from a [PanelMenuController] and passes them onto additional custom event subscriber scripts, which then carry out the required custom UI actions.
 
+> This script is not directly part of a prefab but is a helper associated to the `PanelMenu` prefab.
 This script should be attached to a VRTK_InteractableObject > [PanelMenuController] > [panel items container] > child GameObject (See the [PanelMenuController] class for more details on setup structure.).
 To show / hide a UI panel, you must first pick up the VRTK_InteractableObject and then by pressing the touchpad top/bottom/left/right you can open/close the child UI panel that has been assigned via the Unity Editor panel.
 
