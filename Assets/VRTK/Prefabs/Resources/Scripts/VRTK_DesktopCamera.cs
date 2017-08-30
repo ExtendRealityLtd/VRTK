@@ -10,7 +10,8 @@ namespace VRTK
     /// Allows rendering a separate camera that is shown on the desktop only, without changing what's seen in VR headsets.
     /// </summary>
     /// <remarks>
-    /// To use the prefab, it simply needs to be placed into the scene.
+    /// **Prefab Usage:**
+    ///  * Place the `VRTK/Prefabs/DesktopCamera` prefab in the scene.
     /// </remarks>
     [AddComponentMenu("VRTK/Scripts/Prefabs/VRTK_DesktopCamera")]
     public class VRTK_DesktopCamera : MonoBehaviour

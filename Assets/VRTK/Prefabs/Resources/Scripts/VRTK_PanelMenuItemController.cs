@@ -20,9 +20,10 @@ namespace VRTK
     public delegate void PanelMenuItemControllerEventHandler(object sender, PanelMenuItemControllerEventArgs e);
 
     /// <summary>
-    /// Purpose: panel item controller class that intercepts the controller events sent from a [PanelMenuController] and passes them onto additional custom event subscriber scripts, which then carry out the required custom UI actions.
+    /// The panel item controller class that intercepts the controller events sent from a [PanelMenuController] and passes them onto additional custom event subscriber scripts, which then carry out the required custom UI actions.
     /// </summary>
     /// <remarks>
+    ///   > This script is not directly part of a prefab but is a helper associated to the `PanelMenu` prefab.
     /// This script should be attached to a VRTK_InteractableObject > [PanelMenuController] > [panel items container] > child GameObject (See the [PanelMenuController] class for more details on setup structure.).
     /// To show / hide a UI panel, you must first pick up the VRTK_InteractableObject and then by pressing the touchpad top/bottom/left/right you can open/close the child UI panel that has been assigned via the Unity Editor panel.
     /// </remarks>

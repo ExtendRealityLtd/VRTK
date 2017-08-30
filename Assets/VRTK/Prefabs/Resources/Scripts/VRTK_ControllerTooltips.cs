@@ -20,14 +20,15 @@ namespace VRTK
     public delegate void ControllerTooltipsEventHandler(object sender, ControllerTooltipsEventArgs e);
 
     /// <summary>
-    /// This adds a collection of Object Tooltips to the Controller that give information on what the main controller buttons may do. To add the prefab, it just needs to be added as a child of the relevant alias controller GameObject.
+    /// Adds a collection of Object Tooltips to the Controller providing information to what the controller buttons may do.
     /// </summary>
     /// <remarks>
-    /// If the transforms for the buttons are not provided, then the script will attempt to find the attach transforms on the default controller model.
+    /// **Prefab Usage:**
+    ///  * Place the `VRTK/Prefabs/ControllerTooltips` prefab as a child of the relevant controller script alias GameObject in the scene hierarchy.
+    ///  * If no `Button Transform Settings` are provided in the inspector at Edit time then the button transforms will attempt to be set to the transforms of the current SDK default controller model.
+    ///  * If one of the `Button Text Settings` text options are not provided, then the tooltip for that specific button will be hidden.
     ///
-    /// If no text is provided for one of the elements then the tooltip for that element will be set to disabled.
-    ///
-    /// There are a number of parameters that can be set on the Prefab which are provided by the `VRTK_ControllerTooltips` script which is applied to the prefab.
+    ///   > There are a number of parameters that can be set on the Prefab which are provided by the `VRTK_ControllerTooltips` script which is applied to the prefab.
     /// </remarks>
     /// <example>
     /// `VRTK/Examples/029_Controller_Tooltips` displays two cubes that have an object tooltip added to them along with tooltips that have been added to the controllers.
