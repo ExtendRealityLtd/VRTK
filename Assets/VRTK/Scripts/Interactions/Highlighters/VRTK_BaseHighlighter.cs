@@ -78,11 +78,13 @@ namespace VRTK.Highlighters
         public static VRTK_BaseHighlighter GetActiveHighlighter(GameObject obj)
         {
             VRTK_BaseHighlighter objectHighlighter = null;
-            foreach (var tmpHighlighter in obj.GetComponents<VRTK_BaseHighlighter>())
+            VRTK_BaseHighlighter[] foundHighlighters = obj.GetComponents<VRTK_BaseHighlighter>();
+            for (int i = 0; i < foundHighlighters.Length; i++)
             {
-                if (tmpHighlighter.active)
+                VRTK_BaseHighlighter foundHighlighter = foundHighlighters[i];
+                if (foundHighlighter.active)
                 {
-                    objectHighlighter = tmpHighlighter;
+                    objectHighlighter = foundHighlighter;
                     break;
                 }
             }

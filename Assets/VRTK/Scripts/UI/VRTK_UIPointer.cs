@@ -284,7 +284,7 @@ namespace VRTK
         /// <returns>A custom input module that is used to detect input from VR pointers.</returns>
         public virtual VRTK_VRInputModule SetEventSystem(EventSystem eventSystem)
         {
-            if (!eventSystem)
+            if (eventSystem == null)
             {
                 VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_SCENE, "VRTK_UIPointer", "EventSystem"));
                 return null;
@@ -303,9 +303,9 @@ namespace VRTK
         /// </summary>
         public virtual void RemoveEventSystem()
         {
-            var vrtkEventSystem = FindObjectOfType<VRTK_EventSystem>();
+            VRTK_EventSystem vrtkEventSystem = FindObjectOfType<VRTK_EventSystem>();
 
-            if (!vrtkEventSystem)
+            if (vrtkEventSystem == null)
             {
                 VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_SCENE, "VRTK_UIPointer", "EventSystem"));
                 return;
@@ -372,8 +372,8 @@ namespace VRTK
         /// <returns>Returns true if the UI Click button is in a valid state to action a click, returns false if it is not in a valid state.</returns>
         public virtual bool ValidClick(bool checkLastClick, bool lastClickState = false)
         {
-            var controllerClicked = (collisionClick ? collisionClick : IsSelectionButtonPressed());
-            var result = (checkLastClick ? controllerClicked && lastPointerClickState == lastClickState : controllerClicked);
+            bool controllerClicked = (collisionClick ? collisionClick : IsSelectionButtonPressed());
+            bool result = (checkLastClick ? controllerClicked && lastPointerClickState == lastClickState : controllerClicked);
             lastPointerClickState = controllerClicked;
             return result;
         }
@@ -483,17 +483,17 @@ namespace VRTK
 
         protected virtual void ConfigureEventSystem()
         {
-            if (!cachedEventSystem)
+            if (cachedEventSystem == null)
             {
                 cachedEventSystem = FindObjectOfType<EventSystem>();
             }
 
-            if (!cachedVRInputModule)
+            if (cachedVRInputModule == null)
             {
                 cachedVRInputModule = SetEventSystem(cachedEventSystem);
             }
 
-            if (cachedEventSystem && cachedVRInputModule)
+            if (cachedEventSystem != null && cachedVRInputModule != null)
             {
                 if (pointerEventData == null)
                 {

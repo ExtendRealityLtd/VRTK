@@ -30,7 +30,7 @@
                 return;
             }
 
-            var ray = new Ray(eventData.pointerCurrentRaycast.worldPosition, eventData.pointerCurrentRaycast.worldNormal);
+            Ray ray = new Ray(eventData.pointerCurrentRaycast.worldPosition, eventData.pointerCurrentRaycast.worldNormal);
             Raycast(canvas, eventCamera, ray, ref s_RaycastResults);
             SetNearestRaycast(ref eventData, ref resultAppendList, ref s_RaycastResults);
             s_RaycastResults.Clear();
@@ -40,7 +40,7 @@
         protected virtual void SetNearestRaycast(ref PointerEventData eventData, ref List<RaycastResult> resultAppendList, ref List<RaycastResult> raycastResults)
         {
             RaycastResult? nearestRaycast = null;
-            for (var index = 0; index < raycastResults.Count; index++)
+            for (int index = 0; index < raycastResults.Count; index++)
             {
                 RaycastResult castResult = raycastResults[index];
                 castResult.index = resultAppendList.Count;
@@ -63,11 +63,11 @@
         //[Pure]
         protected virtual float GetHitDistance(Ray ray)
         {
-            var hitDistance = float.MaxValue;
+            float hitDistance = float.MaxValue;
 
             if (canvas.renderMode != RenderMode.ScreenSpaceOverlay && blockingObjects != BlockingObjects.None)
             {
-                var maxDistance = Vector3.Distance(ray.origin, canvas.transform.position);
+                float maxDistance = Vector3.Distance(ray.origin, canvas.transform.position);
 
                 if (blockingObjects == BlockingObjects.ThreeD || blockingObjects == BlockingObjects.All)
                 {
@@ -95,18 +95,18 @@
         //[Pure]
         protected virtual void Raycast(Canvas canvas, Camera eventCamera, Ray ray, ref List<RaycastResult> results)
         {
-            var hitDistance = GetHitDistance(ray);
-            var canvasGraphics = GraphicRegistry.GetGraphicsForCanvas(canvas);
+            float hitDistance = GetHitDistance(ray);
+            IList<Graphic> canvasGraphics = GraphicRegistry.GetGraphicsForCanvas(canvas);
             for (int i = 0; i < canvasGraphics.Count; ++i)
             {
-                var graphic = canvasGraphics[i];
+                Graphic graphic = canvasGraphics[i];
 
                 if (graphic.depth == -1 || !graphic.raycastTarget)
                 {
                     continue;
                 }
 
-                var graphicTransform = graphic.transform;
+                Transform graphicTransform = graphic.transform;
                 Vector3 graphicForward = graphicTransform.forward;
                 float distance = Vector3.Dot(graphicForward, graphicTransform.position - ray.origin) / Vector3.Dot(graphicForward, ray.direction);
 
@@ -131,7 +131,7 @@
 
                 if (graphic.Raycast(pointerPosition, eventCamera))
                 {
-                    var result = new RaycastResult()
+                    RaycastResult result = new RaycastResult()
                     {
                         gameObject = graphic.gameObject,
                         module = this,

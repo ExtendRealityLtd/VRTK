@@ -30,7 +30,7 @@ namespace VRTK
         /// <param name="objType">The type of player object that is to be assigned.</param>
         public static void SetPlayerObject(GameObject obj, ObjectTypes objType)
         {
-            var currentPlayerObject = obj.GetComponent<VRTK_PlayerObject>();
+            VRTK_PlayerObject currentPlayerObject = obj.GetComponent<VRTK_PlayerObject>();
             if (currentPlayerObject == null)
             {
                 currentPlayerObject = obj.AddComponent<VRTK_PlayerObject>();
@@ -46,9 +46,10 @@ namespace VRTK
         /// <returns>Returns true if the object is a player object with the optional given type.</returns>
         public static bool IsPlayerObject(GameObject obj, ObjectTypes ofType = ObjectTypes.Null)
         {
-            foreach (var playerObject in obj.GetComponentsInParent<VRTK_PlayerObject>(true))
+            VRTK_PlayerObject[] playerObjects = obj.GetComponentsInParent<VRTK_PlayerObject>(true);
+            for (int i = 0; i < playerObjects.Length; i++)
             {
-                if (ofType == ObjectTypes.Null || ofType == playerObject.objectType)
+                if (ofType == ObjectTypes.Null || ofType == playerObjects[i].objectType)
                 {
                     return true;
                 }

@@ -194,9 +194,9 @@ namespace VRTK
         protected virtual void RayCastToController(GameObject controller, Transform customDestination, ref bool obscured, ref bool lastState)
         {
             obscured = false;
-            if (controller && controller.gameObject.activeInHierarchy)
+            if (controller != null && controller.gameObject.activeInHierarchy)
             {
-                var destination = (customDestination ? customDestination.position : controller.transform.position);
+                Vector3 destination = (customDestination ? customDestination.position : controller.transform.position);
                 RaycastHit hitInfo;
                 if (VRTK_CustomRaycast.Linecast(customRaycast, headset.position, destination, out hitInfo, Physics.IgnoreRaycastLayer, QueryTriggerInteraction.Ignore))
                 {
@@ -228,11 +228,11 @@ namespace VRTK
         protected virtual void CheckHeadsetView(GameObject controller, Transform customDestination, ref bool controllerGlance, ref bool controllerGlanceLastState)
         {
             controllerGlance = false;
-            if (controller && controller.gameObject.activeInHierarchy)
+            if (controller != null && controller.gameObject.activeInHierarchy)
             {
-                var controllerPosition = (customDestination ? customDestination.position : controller.transform.position);
-                var distanceFromHeadsetToController = Vector3.Distance(headset.position, controllerPosition);
-                var lookPoint = headset.position + (headset.forward * distanceFromHeadsetToController);
+                Vector3 controllerPosition = (customDestination ? customDestination.position : controller.transform.position);
+                float distanceFromHeadsetToController = Vector3.Distance(headset.position, controllerPosition);
+                Vector3 lookPoint = headset.position + (headset.forward * distanceFromHeadsetToController);
 
                 if (Vector3.Distance(controllerPosition, lookPoint) <= controllerGlanceRadius)
                 {

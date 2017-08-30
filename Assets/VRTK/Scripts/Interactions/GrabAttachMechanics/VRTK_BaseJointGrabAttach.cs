@@ -66,9 +66,9 @@ namespace VRTK.GrabAttachMechanics
 
         protected override Rigidbody ReleaseFromController(bool applyGrabbingObjectVelocity)
         {
-            if (controllerAttachJoint)
+            if (controllerAttachJoint != null)
             {
-                var jointRigidbody = controllerAttachJoint.GetComponent<Rigidbody>();
+                Rigidbody jointRigidbody = controllerAttachJoint.GetComponent<Rigidbody>();
                 DestroyJoint(destroyImmediatelyOnThrow, applyGrabbingObjectVelocity);
                 controllerAttachJoint = null;
 

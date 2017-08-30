@@ -27,7 +27,7 @@ namespace VRTK
         public static Bounds GetBounds(Transform transform, Transform excludeRotation = null, Transform excludeTransform = null)
         {
             Quaternion oldRotation = Quaternion.identity;
-            if (excludeRotation)
+            if (excludeRotation != null)
             {
                 oldRotation = excludeRotation.rotation;
                 excludeRotation.rotation = Quaternion.identity;
@@ -37,8 +37,9 @@ namespace VRTK
             Bounds bounds = new Bounds(transform.position, Vector3.zero);
 
             Renderer[] renderers = transform.GetComponentsInChildren<Renderer>();
-            foreach (Renderer renderer in renderers)
+            for (int i = 0; i < renderers.Length; i++)
             {
+                Renderer renderer = renderers[i];
                 if (excludeTransform != null && renderer.transform.IsChildOf(excludeTransform))
                 {
                     continue;
@@ -57,8 +58,9 @@ namespace VRTK
             {
                 // do second pass as there were no renderers, this time with colliders
                 BoxCollider[] colliders = transform.GetComponentsInChildren<BoxCollider>();
-                foreach (BoxCollider collider in colliders)
+                for (int i = 0; i < colliders.Length; i++)
                 {
+                    BoxCollider collider = colliders[i];
                     if (excludeTransform != null && collider.transform.IsChildOf(excludeTransform))
                     {
                         continue;
@@ -74,7 +76,7 @@ namespace VRTK
                 }
             }
 
-            if (excludeRotation)
+            if (excludeRotation != null)
             {
                 excludeRotation.rotation = oldRotation;
             }
@@ -90,9 +92,9 @@ namespace VRTK
         /// <returns>Returns true if the value is lower than all numbers in the given array, returns false if it is not the lowest.</returns>
         public static bool IsLowest(float value, float[] others)
         {
-            foreach (float o in others)
+            for (int i = 0; i < others.Length; i++)
             {
-                if (o <= value)
+                if (others[i] <= value)
                 {
                     return false;
                 }
@@ -106,7 +108,7 @@ namespace VRTK
         /// <returns>The transform of the headset camera.</returns>
         public static Transform AddCameraFade()
         {
-            var camera = VRTK_DeviceFinder.HeadsetCamera();
+            Transform camera = VRTK_DeviceFinder.HeadsetCamera();
             VRTK_SDK_Bridge.AddHeadsetFade(camera);
             return camera;
         }
@@ -118,9 +120,10 @@ namespace VRTK
         public static void CreateColliders(GameObject obj)
         {
             Renderer[] renderers = obj.GetComponentsInChildren<Renderer>();
-            foreach (Renderer renderer in renderers)
+            for (int i = 0; i < renderers.Length; i++)
             {
-                if (!renderer.gameObject.GetComponent<Collider>())
+                Renderer renderer = renderers[i];
+                if (renderer.gameObject.GetComponent<Collider>() == null)
                 {
                     renderer.gameObject.AddComponent<BoxCollider>();
                 }
@@ -139,18 +142,22 @@ namespace VRTK
             Component tmpComponent = destination.gameObject.AddComponent(source.GetType());
             if (copyProperties)
             {
-                foreach (PropertyInfo p in source.GetType().GetProperties())
+                PropertyInfo[] foundProperties = source.GetType().GetProperties();
+                for (int i = 0; i < foundProperties.Length; i++)
                 {
-                    if (p.CanWrite)
+                    PropertyInfo foundProperty = foundProperties[i];
+                    if (foundProperty.CanWrite)
                     {
-                        p.SetValue(tmpComponent, p.GetValue(source, null), null);
+                        foundProperty.SetValue(tmpComponent, foundProperty.GetValue(source, null), null);
                     }
                 }
             }
 
-            foreach (FieldInfo f in source.GetType().GetFields())
+            FieldInfo[] foundFields = source.GetType().GetFields();
+            for (int i = 0; i < foundFields.Length; i++)
             {
-                f.SetValue(tmpComponent, f.GetValue(source));
+                FieldInfo foundField = foundFields[i];
+                foundField.SetValue(tmpComponent, foundField.GetValue(source));
             }
             return tmpComponent;
         }
@@ -307,11 +314,7 @@ namespace VRTK
         {
 #if UNITY_5_6_OR_NEWER
             float gpuTimeLastFrame;
-            if (VRStats.TryGetGPUTimeLastFrame(out gpuTimeLastFrame))
-            {
-                return gpuTimeLastFrame;
-            }
-            return 0f;
+            return (VRStats.TryGetGPUTimeLastFrame(out gpuTimeLastFrame) ? gpuTimeLastFrame : 0f);
 #else
             return VRStats.gpuTimeLastFrame;
 #endif
@@ -326,7 +329,7 @@ namespace VRTK
         /// <returns>Returns true if the given Vector2 objects match based on the given fidelity.</returns>
         public static bool Vector2ShallowCompare(Vector2 vectorA, Vector2 vectorB, int compareFidelity)
         {
-            var distanceVector = vectorA - vectorB;
+            Vector2 distanceVector = vectorA - vectorB;
             return (Math.Round(Mathf.Abs(distanceVector.x), compareFidelity, MidpointRounding.AwayFromZero) < float.Epsilon &&
                     Math.Round(Mathf.Abs(distanceVector.y), compareFidelity, MidpointRounding.AwayFromZero) < float.Epsilon);
         }
@@ -366,9 +369,10 @@ namespace VRTK
             {
                 return type;
             }
-            foreach (Assembly a in AppDomain.CurrentDomain.GetAssemblies())
+            Assembly[] foundAssemblies = AppDomain.CurrentDomain.GetAssemblies();
+            for (int i = 0; i < foundAssemblies.Length; i++)
             {
-                type = a.GetType(typeName);
+                type = foundAssemblies[i].GetType(typeName);
                 if (type != null)
                 {
                     return type;

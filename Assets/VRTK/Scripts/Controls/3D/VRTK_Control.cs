@@ -239,9 +239,10 @@ namespace VRTK
             }
 
             // do not cache objects since otherwise they would still be made inactive once taken out of the content
-            foreach (var io in controlContent.GetComponentsInChildren<VRTK_InteractableObject>(true))
+            VRTK_InteractableObject[] foundInteractableObjects = controlContent.GetComponentsInChildren<VRTK_InteractableObject>(true);
+            for (int i = 0; i < foundInteractableObjects.Length; i++)
             {
-                io.enabled = value > MIN_OPENING_DISTANCE;
+                foundInteractableObjects[i].enabled = value > MIN_OPENING_DISTANCE;
             }
         }
     }

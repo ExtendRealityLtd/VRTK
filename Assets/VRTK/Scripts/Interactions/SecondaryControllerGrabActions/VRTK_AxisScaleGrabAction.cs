@@ -95,7 +95,7 @@ namespace VRTK.SecondaryControllerGrabActions
             float newScaleY = CalculateAxisScale(initialRotatedPosition.y, initialSecondGrabRotatedPosition.y, currentSecondGrabRotatedPosition.y);
             float newScaleZ = CalculateAxisScale(initialRotatedPosition.z, initialSecondGrabRotatedPosition.z, currentSecondGrabRotatedPosition.z);
 
-            var newScale = new Vector3(newScaleX, newScaleY, newScaleZ) + initialScale;
+            Vector3 newScale = new Vector3(newScaleX, newScaleY, newScaleZ) + initialScale;
             ApplyScale(newScale);
         }
 
@@ -104,7 +104,7 @@ namespace VRTK.SecondaryControllerGrabActions
             float adjustedLength = (grabbedObject.transform.position - secondaryGrabbingObject.transform.position).magnitude;
             float adjustedScale = initialScaleFactor * adjustedLength;
 
-            var newScale = new Vector3(adjustedScale, adjustedScale, adjustedScale);
+            Vector3 newScale = new Vector3(adjustedScale, adjustedScale, adjustedScale);
             ApplyScale(newScale);
         }
 

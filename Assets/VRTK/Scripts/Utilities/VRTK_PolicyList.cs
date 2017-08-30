@@ -125,7 +125,7 @@ namespace VRTK
 
         protected virtual bool TypeCheck(GameObject obj, bool returnState)
         {
-            var selection = 0;
+            int selection = 0;
 
             if (((int)checkType & (int)CheckTypes.Tag) != 0)
             {

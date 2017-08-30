@@ -30,13 +30,13 @@ namespace VRTK.GrabAttachMechanics
 
         protected override void CreateJoint(GameObject obj)
         {
-            if (!jointHolder)
+            if (jointHolder == null)
             {
                 VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_NOT_INJECTED, "VRTK_CustomJointGrabAttach", "Joint", "customJoint", "the same"));
                 return;
             }
-            var storedJoint = jointHolder.GetComponent<Joint>();
-            var storeName = gameObject.name;
+            Joint storedJoint = jointHolder.GetComponent<Joint>();
+            string storeName = gameObject.name;
             VRTK_SharedMethods.CloneComponent(storedJoint, obj, true);
             gameObject.name = storeName;
             givenJoint = obj.GetComponent(storedJoint.GetType()) as Joint;
@@ -51,7 +51,7 @@ namespace VRTK.GrabAttachMechanics
 
         protected virtual void CopyCustomJoint()
         {
-            if (customJoint)
+            if (customJoint != null)
             {
                 jointHolder = new GameObject();
                 jointHolder.transform.SetParent(transform);

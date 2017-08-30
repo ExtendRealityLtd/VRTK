@@ -52,7 +52,7 @@ namespace VRTK
             UIVertex[] vbo = new UIVertex[4];
             for (int i = 0; i < vertices.Length; i++)
             {
-                var vert = UIVertex.simpleVert;
+                UIVertex vert = UIVertex.simpleVert;
                 vert.color = color;
                 vert.position = vertices[i];
                 vert.uv0 = uvs[i];
