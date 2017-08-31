@@ -1,4 +1,4 @@
-![vrtk logo](https://raw.githubusercontent.com/thestonefox/VRTK/master/Assets/VRTK/Examples/ExampleResources/Images/logos/vrtk-capsule-clear.png)
+![vrtk logo](https://user-images.githubusercontent.com/1029673/29922542-f8ccb81c-8e4d-11e7-8fa3-b8607c550d77.png)
 > ### VRTK - Virtual Reality Toolkit
 > A productive VR Toolkit for rapidly building VR solutions in Unity3d.
 
@@ -84,7 +84,7 @@ It covers a number of common solutions such as:
 A collection of example scenes have been created to aid with
 understanding the different aspects of VRTK.
 
-A list of the examples can be viewed in [EXAMPLES.md] which includes
+A list of the examples can be viewed in [Examples/README.md] which includes
 an up to date list of examples showcasing the features of VRTK.
 
 The example scenes support all the VRTK supported VR SDKs. To make use
@@ -141,7 +141,7 @@ Any Third Party Licenses can be viewed in [THIRD_PARTY_NOTICES.md].
 [API.md]: /Assets/VRTK/Documentation/API.md
 [GETTING_STARTED.md]: /Assets/VRTK/Documentation/GETTING_STARTED.md
 [THANK_YOU_CREDITS.md]: /Assets/VRTK/Documentation/THANK_YOU_CREDITS.md
-[EXAMPLES.md]: /Assets/VRTK/Documentation/EXAMPLES.md
+[Examples/README.md]: /Assets/VRTK/Examples/README.md
 
 [Fork]: http://help.github.com/fork-a-repo/
 [Open a Pull Request]: https://help.github.com/articles/using-pull-requests/

@@ -34,7 +34,7 @@ namespace VRTK
     /// The script also has a public boolean pressed state for the buttons to allow the script to be queried by other scripts to check if a button is being held down.
     /// </remarks>
     /// <example>
-    /// `VRTK/Examples/002_Controller_Events` shows how the events are utilised and listened to. The accompanying example script can be viewed in `VRTK/Examples/Resources/Scripts/VRTK_ControllerEvents_ListenerExample.cs`.
+    /// `VRTK/Examples/002_Controller_Events` shows how the events are utilised and listened to. The accompanying example script can be viewed in `VRTK/Examples/ExampleResources/Scripts/VRTK_ControllerEvents_ListenerExample.cs`.
     /// </example>
     [AddComponentMenu("VRTK/Scripts/Interactions/VRTK_ControllerEvents")]
     public class VRTK_ControllerEvents : MonoBehaviour

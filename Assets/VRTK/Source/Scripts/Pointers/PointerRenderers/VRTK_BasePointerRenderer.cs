@@ -35,9 +35,6 @@ namespace VRTK
             AlwaysOff
         }
 
-        /// <summary>
-        /// Specifies the smoothing to be applied to the pointer.
-        /// </summary>
         [Serializable]
         public sealed class PointerOriginSmoothingSettings
         {

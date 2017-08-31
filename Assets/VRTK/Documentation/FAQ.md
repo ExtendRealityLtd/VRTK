@@ -34,10 +34,10 @@ Alternatively, if you have any general setup issues or other questions relating 
   > The [GitHub master version](https://github.com/thestonefox/VRTK) of VRTK is always the most up to date version with more features and bug fixes, however it is not as stable as the [GitHub releases](https://github.com/thestonefox/VRTK/releases) or the [Unity Asset Store version](https://www.assetstore.unity3d.com/en/#!/content/64131). It is recommended that to keep up to date with the latest features, the [GitHub master version](https://github.com/thestonefox/VRTK) is used.
 
 ### How can I use VRTK with the Unity SteamVR Plugin?
-  > Watch [Getting Started with SteamVR](https://www.youtube.com/watch?v=tyFV9oBReqg) or read the [SteamVR Getting Started Guide](/Assets/VRTK/SDK/SteamVR/README.md) guide.
+  > Watch [Getting Started with SteamVR](https://www.youtube.com/watch?v=tyFV9oBReqg) or read the [SteamVR Getting Started Guide](/Assets/VRTK/Source/SDK/SteamVR/README.md) guide.
 
 ### How can I use VRTK with the Oculus Utilities for Unity?
-  > Watch [Getting Started with Oculus SDK](https://www.youtube.com/watch?v=psPVNddjgGw) or read the [Oculus Getting Started Guide](/Assets/VRTK/SDK/Oculus/README.md) guide.
+  > Watch [Getting Started with Oculus SDK](https://www.youtube.com/watch?v=psPVNddjgGw) or read the [Oculus Getting Started Guide](/Assets/VRTK/Source/SDK/Oculus/README.md) guide.
 
 ### How can I implement Oculus Avatar Unity package with VRTK?
   > Watch [Getting Started with Oculus Avatar](https://www.youtube.com/watch?v=N7F0KqgNrAk)
@@ -52,7 +52,7 @@ Alternatively, if you have any general setup issues or other questions relating 
   > Yes, visit the [Official VRTK YouTube Channel](http://videos.vrtk.io)
 
 ### Does VRTK provide `x` feature?
-  > Check the [Example Scenes](https://github.com/thestonefox/VRTK/tree/master/Assets/VRTK/Examples) first and see if the feature you're after is demonstrated, if not then ask in [Slack](http://invite.vrtk.io) and finally raise a new [GitHub Issue](https://github.com/thestonefox/VRTK/issues).
+  > Check the [Example Scenes](/Assets/VRTK/Examples) first and see if the feature you're after is demonstrated, if not then ask in [Slack](http://invite.vrtk.io) and finally raise a new [GitHub Issue](https://github.com/thestonefox/VRTK/issues).
 
 ## Development
 
@@ -68,7 +68,7 @@ Alternatively, if you have any general setup issues or other questions relating 
 ## General
 
 ### Where can I get the VRTK logo to use in my game on a splash screen or elsewhere?
-  > There are a number of graphic assets containing the VRTK logo and pig icon in the [Image Resources](https://github.com/thestonefox/VRTK/tree/master/Assets/VRTK/Examples/Resources/Images/logos) directory.
+  > There are a number of graphic assets containing the VRTK logo and pig icon in the [Image Resources](/Assets/VRTK/Documentation/logos) directory.
 
 ### Where can I see which features are being worked on and when they are likely to be released?
   > You can check out the project roadmap at http://tracker.vrtk.io which shows the current issues being worked on and what's also in the pipeline for the future.
