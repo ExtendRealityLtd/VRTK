@@ -3,27 +3,27 @@
 This file describes all of the public methods, variables and events utilised by the VRTK prefabs and scripts.
 
  * [Prefabs](#prefabs-vrtkprefabs)
- * [Pointers](#pointers-vrtkscriptspointers)
-   * [Pointer Renderers](#pointer-renderers-vrtkscriptspointerspointerrenderers)
- * [Locomotion](#locomotion-vrtkscriptslocomotion)
-   * [Object Control Actions](#object-control-actions-vrtkscriptslocomotionobjectcontrolactions)
- * [Interactions](#interactions-vrtkscriptsinteractions)
-   * [Highlighters](#highlighters-vrtkscriptsinteractionshighlighters)
-   * [Grab Attach Mechanics](#grab-attach-mechanics-vrtkscriptsinteractionsgrabattachmechanics)
-   * [Secondary Controller Grab Actions](#secondary-controller-grab-actions-vrtkscriptsinteractionssecondarycontrollergrabactions)
- * [Presence](#presence-vrtkscriptspresence)
- * [UI](#ui-vrtkscriptsui)
- * [3D Controls](#3d-controls-vrtkscriptscontrols3d)
- * [Utilities](#utilities-vrtkscriptsutilities)
- * [Base SDK](#base-sdk-vrtksdkbase)
-   * [Fallback SDK](#fallback-sdk-vrtksdkfallback)
-   * [Unity SDK](#unity-sdk-vrtksdkunity)
-   * [Simulator SDK](#simulator-sdk-vrtksdksimulator)
-   * [SteamVR SDK](#steamvr-sdk-vrtksdksteamvr)
-   * [Oculus SDK](#oculus-sdk-vrtksdkoculus)
-   * [Daydream SDK](#daydream-sdk-vrtksdkdaydream)
-   * [Ximmerse SDK](#ximmerse-sdk-vrtksdkximmerse)
-   * [HyperealVR SDK](#hyperealvr-sdk-vrtksdkhyperealvr)
+ * [Pointers](#pointers-vrtksourcescriptspointers)
+   * [Pointer Renderers](#pointer-renderers-vrtksourcescriptspointerspointerrenderers)
+ * [Locomotion](#locomotion-vrtksourcescriptslocomotion)
+   * [Object Control Actions](#object-control-actions-vrtksourcescriptslocomotionobjectcontrolactions)
+ * [Interactions](#interactions-vrtksourcescriptsinteractions)
+   * [Highlighters](#highlighters-vrtksourcescriptsinteractionshighlighters)
+   * [Grab Attach Mechanics](#grab-attach-mechanics-vrtksourcescriptsinteractionsgrabattachmechanics)
+   * [Secondary Controller Grab Actions](#secondary-controller-grab-actions-vrtksourcescriptsinteractionssecondarycontrollergrabactions)
+ * [Presence](#presence-vrtksourcescriptspresence)
+ * [UI](#ui-vrtksourcescriptsui)
+ * [3D Controls](#3d-controls-vrtksourcescriptscontrols3d)
+ * [Utilities](#utilities-vrtksourcescriptsutilities)
+ * [Base SDK](#base-sdk-vrtksourcesdkbase)
+   * [Fallback SDK](#fallback-sdk-vrtksourcesdkfallback)
+   * [Unity SDK](#unity-sdk-vrtksourcesdkunity)
+   * [Simulator SDK](#simulator-sdk-vrtksourcesdksimulator)
+   * [SteamVR SDK](#steamvr-sdk-vrtksourcesdksteamvr)
+   * [Oculus SDK](#oculus-sdk-vrtksourcesdkoculus)
+   * [Daydream SDK](#daydream-sdk-vrtksourcesdkdaydream)
+   * [Ximmerse SDK](#ximmerse-sdk-vrtksourcesdkximmerse)
+   * [HyperealVR SDK](#hyperealvr-sdk-vrtksourcesdkhyperealvr)
 
 ---
 
@@ -1166,7 +1166,7 @@ Provides a custom controller hand model with psuedo finger functionality.
 
 ---
 
-# Pointers (VRTK/Scripts/Pointers)
+# Pointers (VRTK/Source/Scripts/Pointers)
 
 A collection of scripts that provide the ability to create pointers and set destination markers in the scene.
 
@@ -1564,21 +1564,23 @@ The ToggleVisibility method enables or disables the play area cursor renderers t
 
 ---
 
-# Pointer Renderers (VRTK/Scripts/Pointers/PointerRenderers)
+# Pointer Renderers (VRTK/Source/Scripts/Pointers/PointerRenderers)
 
 This directory contains scripts that are used to provide different renderers for the VRTK_Pointer.
 
- * [Base Pointer Renderer](#base-pointer-renderer-pointeroriginsmoothingsettings)
+ * [Base Pointer Renderer](#base-pointer-renderer-vrtk_basepointerrenderer)
  * [Straight Pointer Renderer](#straight-pointer-renderer-vrtk_straightpointerrenderer)
  * [Bezier Pointer Renderer](#bezier-pointer-renderer-vrtk_bezierpointerrenderer)
 
 ---
 
-## Base Pointer Renderer (PointerOriginSmoothingSettings)
+## Base Pointer Renderer (VRTK_BasePointerRenderer)
 
 ### Overview
 
-Specifies the smoothing to be applied to the pointer.
+The Base Pointer Renderer script is an abstract class that handles the set up and operation of how a pointer renderer works.
+
+As this is an abstract class, it cannot be applied directly to a game object and performs no logic.
 
 ### Inspector Parameters
 
@@ -1800,7 +1802,7 @@ The GetPointerObjects returns an array of the auto generated GameObjects associa
 
 ### Example
 
-`VRTK/Examples/003_Controller_SimplePointer` shows the simple pointer in action and code examples of how the events are utilised and listened to can be viewed in the script `VRTK/Examples/Resources/Scripts/VRTK_ControllerPointerEvents_ListenerExample.cs`
+`VRTK/Examples/003_Controller_SimplePointer` shows the simple pointer in action and code examples of how the events are utilised and listened to can be viewed in the script `VRTK/Examples/ExampleResources/Scripts/VRTK_ControllerPointerEvents_ListenerExample.cs`
 
 ---
 
@@ -1862,7 +1864,7 @@ The GetPointerObjects returns an array of the auto generated GameObjects associa
 
 ---
 
-# Locomotion (VRTK/Scripts/Locomotion)
+# Locomotion (VRTK/Source/Scripts/Locomotion)
 
 A collection of scripts that provide varying methods of moving the user around the scene.
 
@@ -2428,7 +2430,7 @@ There is an additional script `VRTK_RoomExtender_PlayAreaGizmo` which can be att
 
 ---
 
-# Object Control Actions (VRTK/Scripts/Locomotion/ObjectControlActions)
+# Object Control Actions (VRTK/Source/Scripts/Locomotion/ObjectControlActions)
 
 This directory contains scripts that are used to provide different actions when using Object Control.
 
@@ -2559,7 +2561,7 @@ To enable the Warp Object Control Action, ensure one of the `TouchpadControlOpti
 
 ---
 
-# Interactions (VRTK/Scripts/Interactions)
+# Interactions (VRTK/Source/Scripts/Interactions)
 
 A collection of scripts that provide the ability to interact with game objects with the controllers.
 
@@ -2947,7 +2949,7 @@ The UnsubscribeToAxisAliasEvent method makes it easier to unsubscribe from axis 
 
 ### Example
 
-`VRTK/Examples/002_Controller_Events` shows how the events are utilised and listened to. The accompanying example script can be viewed in `VRTK/Examples/Resources/Scripts/VRTK_ControllerEvents_ListenerExample.cs`.
+`VRTK/Examples/002_Controller_Events` shows how the events are utilised and listened to. The accompanying example script can be viewed in `VRTK/Examples/ExampleResources/Scripts/VRTK_ControllerEvents_ListenerExample.cs`.
 
 ---
 
@@ -4223,7 +4225,7 @@ The Object Touch Auto Interact script allows grab or use interactions on an obje
 
 ---
 
-# Highlighters (VRTK/Scripts/Interactions/Highlighters)
+# Highlighters (VRTK/Source/Scripts/Interactions/Highlighters)
 
 This directory contains scripts that are used to provide different object highlighting.
 
@@ -4526,7 +4528,7 @@ The Unhighlight method hides the outline object and removes the outline colour.
 
 ---
 
-# Grab Attach Mechanics (VRTK/Scripts/Interactions/GrabAttachMechanics)
+# Grab Attach Mechanics (VRTK/Source/Scripts/Interactions/GrabAttachMechanics)
 
 This directory contains scripts that are used to provide different mechanics to apply when grabbing an interactable object.
 
@@ -4967,7 +4969,7 @@ The Climbable Grab Attach script is used to mark the object as a climbable inter
 
 ---
 
-# Secondary Controller Grab Actions (VRTK/Scripts/Interactions/SecondaryControllerGrabActions)
+# Secondary Controller Grab Actions (VRTK/Source/Scripts/Interactions/SecondaryControllerGrabActions)
 
 This directory contains scripts that are used to provide different actions when a secondary controller grabs a grabbed object.
 
@@ -5228,7 +5230,7 @@ The ProcessFixedUpdate method runs in every FixedUpdate on the Interactable Obje
 
 ---
 
-# Presence (VRTK/Scripts/Presence)
+# Presence (VRTK/Source/Scripts/Presence)
 
 A collection of scripts that provide the ability to deal with tracking the world around the user in the scene.
 
@@ -5865,7 +5867,7 @@ The RewindPosition method resets the play area position to the last known good p
 
 ---
 
-# UI (VRTK/Scripts/UI)
+# UI (VRTK/Source/Scripts/UI)
 
 A collection of scripts that provide the ability to utilise and interact with Unity UI elements.
 
@@ -6106,7 +6108,7 @@ It's usually appropriate to use a Panel UI element as a drop zone with a layout 
 
 ---
 
-# 3D Controls (VRTK/Scripts/Controls/3D)
+# 3D Controls (VRTK/Source/Scripts/Controls/3D)
 
 In order to interact with the world beyond grabbing and throwing, controls can be used to mimic real-life objects.
 
@@ -6509,7 +6511,7 @@ The script will use the boundaries of the control to determine if it is in or ou
 
 ---
 
-# Utilities (VRTK/Scripts/Utilities)
+# Utilities (VRTK/Source/Scripts/Utilities)
 
 A collection of scripts that provide useful functionality to aid the creation process.
 
@@ -7829,7 +7831,7 @@ The GetAccelerationEstimate method returns the current acceleration estimate.
 
 ---
 
-# Base SDK (VRTK/SDK/Base)
+# Base SDK (VRTK/Source/SDK/Base)
 
 The base scripts used to determine the interface for interacting with a Unity VR SDK.
 
@@ -8659,7 +8661,7 @@ The SetDrawAtRuntime method sets whether the given play area drawn border should
 
 ---
 
-# Fallback SDK (VRTK/SDK/Fallback)
+# Fallback SDK (VRTK/Source/SDK/Fallback)
 
 The scripts used to provide a default/null fallback for any implemented SDK.
 
@@ -9280,7 +9282,7 @@ The SetDrawAtRuntime method sets whether the given play area drawn border should
 
 ---
 
-# Unity SDK (VRTK/SDK/Unity)
+# Unity SDK (VRTK/Source/SDK/Unity)
 
 The scripts used to utilise the built in UnityEngine.VR SDK.
 
@@ -9924,7 +9926,7 @@ The Unity Headset Tracker is attached to the `[UnityBase_CameraRig]` prefab on t
 
 ---
 
-# Simulator SDK (VRTK/SDK/Simulator)
+# Simulator SDK (VRTK/Source/SDK/Simulator)
 
 The scripts used to utilise the VR Simulator to build without VR Hardware.
 
@@ -10537,7 +10539,7 @@ The SetDrawAtRuntime method sets whether the given play area drawn border should
 
 ---
 
-# SteamVR SDK (VRTK/SDK/SteamVR)
+# SteamVR SDK (VRTK/Source/SDK/SteamVR)
 
 The scripts used to utilise the SteamVR Unity Plugin SDK.
 
@@ -11170,7 +11172,7 @@ The SetDrawAtRuntime method sets whether the given play area drawn border should
 
 ---
 
-# Oculus SDK (VRTK/SDK/Oculus)
+# Oculus SDK (VRTK/Source/SDK/Oculus)
 
 The scripts used to utilise the Oculus Utilities Unity Package SDK.
 
@@ -11815,7 +11817,7 @@ The GetAvatar method is used to retrieve the Oculus Avatar object if it exists i
 
 ---
 
-# Daydream SDK (VRTK/SDK/Daydream)
+# Daydream SDK (VRTK/Source/SDK/Daydream)
 
 The scripts used to utilise the Google VR SDK for Unity.
 
@@ -12437,7 +12439,7 @@ The SetDrawAtRuntime method sets whether the given play area drawn border should
 
 ---
 
-# Ximmerse SDK (VRTK/SDK/Ximmerse)
+# Ximmerse SDK (VRTK/Source/SDK/Ximmerse)
 
 The scripts used to utilise the Ximmerse SDK for Unity.
 
@@ -13059,7 +13061,7 @@ The SetDrawAtRuntime method sets whether the given play area drawn border should
 
 ---
 
-# HyperealVR SDK (VRTK/SDK/HyperealVR)
+# HyperealVR SDK (VRTK/Source/SDK/HyperealVR)
 
 The scripts used to utilise the HyperealVR SDK for Unity.
 

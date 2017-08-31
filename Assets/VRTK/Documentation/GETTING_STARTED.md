@@ -40,10 +40,10 @@ The SDK Manager allows switching the used SDK Setup at runtime. To add a simple 
 
 For further information on getting started with the supported SDKs, please refer to the specific documentation for the SDK listed below:
 
- * [Unity](/Assets/VRTK/SDK/Unity/README.md)
- * [Simulator](/Assets/VRTK/SDK/Simulator/README.md)
- * [SteamVR](/Assets/VRTK/SDK/SteamVR/README.md)
- * [Oculus](/Assets/VRTK/SDK/Oculus/README.md)
- * [Daydream](/Assets/VRTK/SDK/Daydream/README.md)
- * [HyperealVR](/Assets/VRTK/SDK/HyperealVR/README.md)
- * [Ximmerse](/Assets/VRTK/SDK/Ximmerse/README.md)
+ * [Unity](/Assets/VRTK/Source/SDK/Unity/README.md)
+ * [Simulator](/Assets/VRTK/Source/SDK/Simulator/README.md)
+ * [SteamVR](/Assets/VRTK/Source/SDK/SteamVR/README.md)
+ * [Oculus](/Assets/VRTK/Source/SDK/Oculus/README.md)
+ * [Daydream](/Assets/VRTK/Source/SDK/Daydream/README.md)
+ * [HyperealVR](/Assets/VRTK/Source/SDK/HyperealVR/README.md)
+ * [Ximmerse](/Assets/VRTK/Source/SDK/Ximmerse/README.md)
