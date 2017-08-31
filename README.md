@@ -28,7 +28,6 @@ A list of supports can be seen in [THANK_YOU_CREDITS.md].
 
 [![patreon_logo](https://user-images.githubusercontent.com/1029673/28471651-be40a2ea-6e35-11e7-9b01-e1b4a7d533b3.png)](https://www.patreon.com/vrtk)
 
-
 ### Sponsors
 
 An extra special thank you to our sponsors via [Patreon].
@@ -37,31 +36,34 @@ An extra special thank you to our sponsors via [Patreon].
 
 ## Documentation
 
-The documentation for the project can be found within this
-repository in [DOCUMENTATION.md] which includes the up to date
-documentation for this GitHub repository.
+The API documentation for the project can be found within this
+repository in [API.md] which includes the up to date documentation
+for this GitHub repository.
 
 Alternatively, the stable versions of the documentation can be viewed
 online at [http://docs.vrtk.io](http://docs.vrtk.io).
 
 ## Frequently Asked Questions
 
-If you have an issue or question then check the [FAQ.md] document to see
-if your query has already been answered.
+If you have an issue or question then check the [FAQ.md] document to
+see if your query has already been answered.
 
 ## Getting Started
 
-> *VRTK offers a VR Simulator that works without any third party SDK, but VR device support requires a supported VR SDK to be imported into the Unity project.*
+  > *VRTK offers a VR Simulator that works without any third party SDK,
+  >  but VR device support requires a supported VR SDK to be imported
+  >  into the Unity project.*
 
-* Download or clone this repository.
-* Open the folder in Unity to load the project.
-* Have a look at the included example scenes.
+ * Download or clone this repository.
+ * Open the folder in Unity to load the project.
+ * Have a look at the included example scenes.
 
-The example scenes support all the VRTK supported VR SDKs. To make use of VR devices (besides the included VR Simulator) import the needed third party VR SDK into the project.
+The example scenes support all the VRTK supported VR SDKs. To make use
+of VR devices (besides the included VR Simulator) import the needed
+third party VR SDK into the project.
 
-For further information about setting up a specific SDK and using VRTK in your own project, check out the
-[GETTING_STARTED.md] document.
-
+For further information about setting up a specific SDK and using VRTK
+in your own project, check out the [GETTING_STARTED.md] document.
 
 ## What's In The Box
 
@@ -85,7 +87,9 @@ understanding the different aspects of VRTK.
 A list of the examples can be viewed in [EXAMPLES.md] which includes
 an up to date list of examples showcasing the features of VRTK.
 
-The example scenes support all the VRTK supported VR SDKs. To make use of VR devices (besides the included VR Simulator) import the needed third party VR SDK into the project.
+The example scenes support all the VRTK supported VR SDKs. To make use
+of VR devices (besides the included VR Simulator) import the needed
+third party VR SDK into the project.
 
 ## Made With VRTK
 
@@ -93,7 +97,7 @@ The example scenes support all the VRTK supported VR SDKs. To make use of VR dev
 
 Many games and experiences have already been made with VRTK.
 
-Check out the [MADEWITHVRTK.md] document to see the full list.
+Check out the [MADE_WITH_VRTK.md] document to see the full list.
 
 ## Contributing
 
@@ -119,20 +123,26 @@ For the full contribution guidelines see the [CONTRIBUTING.md] document.
 
 Code released under the [MIT License].
 
+Any Third Party Licenses can be viewed in [THIRD_PARTY_NOTICES.md].
+
 [SteamVR Plugin]: https://www.assetstore.unity3d.com/en/#!/content/32647
 [SteamVR Plugin for Unity3d Github Repo]: https://github.com/ValveSoftware/openvr/tree/master/unity_package/Assets/SteamVR
 [Oculus Utilities]: https://developer.oculus.com/downloads/package/oculus-utilities-for-unity-5/
 [Ximmerse Unity SDK]: https://github.com/Ximmerse/SDK/tree/master/Unity
 [Google VR SDK for Unity]: https://developers.google.com/vr/unity/download
 [Hypereal VR Unity Plugin]: https://www.hypereal.com/#/developer/resource/download
-[MIT License]: https://github.com/thestonefox/SteamVR_Unity_Toolkit/blob/master/LICENSE
-[CONTRIBUTING.md]: https://github.com/thestonefox/SteamVR_Unity_Toolkit/blob/master/CONTRIBUTING.md
-[MADEWITHVRTK.md]: https://github.com/thestonefox/SteamVR_Unity_Toolkit/blob/master/MADEWITHVRTK.md
-[DOCUMENTATION.md]: https://github.com/thestonefox/SteamVR_Unity_Toolkit/blob/master/DOCUMENTATION.md
-[GETTING_STARTED.md]: https://github.com/thestonefox/SteamVR_Unity_Toolkit/blob/master/GETTING_STARTED.md
-[THANK_YOU_CREDITS.md]: https://github.com/thestonefox/SteamVR_Unity_Toolkit/blob/master/THANK_YOU_CREDITS.md
-[EXAMPLES.md]: https://github.com/thestonefox/SteamVR_Unity_Toolkit/blob/master/EXAMPLES.md
+
+[MIT License]: LICENSE.md
+[THIRD_PARTY_NOTICES.md]: THIRD_PARTY_NOTICES.md
+[CONTRIBUTING.md]: /.github/CONTRIBUTING.md
+
+[FAQ.md]: /Assets/VRTK/Documentation/FAQ.md
+[MADE_WITH_VRTK.md]: /Assets/VRTK/Documentation/MADE_WITH_VRTK.md
+[API.md]: /Assets/VRTK/Documentation/API.md
+[GETTING_STARTED.md]: /Assets/VRTK/Documentation/GETTING_STARTED.md
+[THANK_YOU_CREDITS.md]: /Assets/VRTK/Documentation/THANK_YOU_CREDITS.md
+[EXAMPLES.md]: /Assets/VRTK/Documentation/EXAMPLES.md
+
 [Fork]: http://help.github.com/fork-a-repo/
 [Open a Pull Request]: https://help.github.com/articles/using-pull-requests/
-[FAQ.md]: https://github.com/thestonefox/SteamVR_Unity_Toolkit/blob/master/FAQ.md
 [Patreon]: https://www.patreon.com/vrtk

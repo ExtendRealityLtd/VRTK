@@ -34,10 +34,10 @@ Alternatively, if you have any general setup issues or other questions relating 
   > The [GitHub master version](https://github.com/thestonefox/VRTK) of VRTK is always the most up to date version with more features and bug fixes, however it is not as stable as the [GitHub releases](https://github.com/thestonefox/VRTK/releases) or the [Unity Asset Store version](https://www.assetstore.unity3d.com/en/#!/content/64131). It is recommended that to keep up to date with the latest features, the [GitHub master version](https://github.com/thestonefox/VRTK) is used.
 
 ### How can I use VRTK with the Unity SteamVR Plugin?
-  > Watch [Getting Started with SteamVR](https://www.youtube.com/watch?v=tyFV9oBReqg) or read the [GETTING_STARTED.md](https://github.com/thestonefox/VRTK/blob/master/GETTING_STARTED.md) guide.
+  > Watch [Getting Started with SteamVR](https://www.youtube.com/watch?v=tyFV9oBReqg) or read the [SteamVR Getting Started Guide](/Assets/VRTK/SDK/SteamVR/README.md) guide.
 
 ### How can I use VRTK with the Oculus Utilities for Unity?
-  > Watch [Getting Started with Oculus SDK](https://www.youtube.com/watch?v=psPVNddjgGw) or read the [GETTING_STARTED.md](https://github.com/thestonefox/VRTK/blob/master/GETTING_STARTED.md) guide.
+  > Watch [Getting Started with Oculus SDK](https://www.youtube.com/watch?v=psPVNddjgGw) or read the [Oculus Getting Started Guide](/Assets/VRTK/SDK/Oculus/README.md) guide.
 
 ### How can I implement Oculus Avatar Unity package with VRTK?
   > Watch [Getting Started with Oculus Avatar](https://www.youtube.com/watch?v=N7F0KqgNrAk)
@@ -45,8 +45,8 @@ Alternatively, if you have any general setup issues or other questions relating 
 ### How do I upgrade from version 2.2.1 to version 3?
   > Watch [Road to Version 3.0](https://www.youtube.com/watch?v=tMz04CqAYjw)
 
-### Where can I find the documentation for VRTK?
-  > The documentation can be found online at http://docs.vrtk.io and are also included in the repository at [DOCUMENTATION.md](https://github.com/thestonefox/VRTK/blob/master/DOCUMENTATION.md) file and [Documentation PDF](https://github.com/thestonefox/VRTK/blob/master/Assets/VRTK/DOCUMENTATION.pdf) file.
+### Where can I find API documentation for VRTK?
+  > The API documentation can be found online at http://docs.vrtk.io and are also included in the repository at [API.md](/Assets/VRTK/Documentation/API.md) file.
 
 ### Are there any video tutorials to help get started?
   > Yes, visit the [Official VRTK YouTube Channel](http://videos.vrtk.io)
