@@ -194,7 +194,6 @@ namespace VRTK
             }
 
             buttonJoint.connectedBody = (connectedTo != null ? connectedTo.GetComponent<Rigidbody>() : buttonJoint.connectedBody);
-            buttonJoint.autoConfigureConnectedAnchor = false;
         }
 
         protected virtual void DetectJointLimitsSetup()
