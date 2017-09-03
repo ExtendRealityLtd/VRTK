@@ -14,6 +14,7 @@ namespace VRTK
     /// When the Velocity Estimator script is applied to any GameObject it will provide a best case estimation of what the object's velocity and angular velocity is based on a given number of position and rotation samples.
     /// The more samples used, the higher the precision but the script will be more demanding on processing time.
     /// </remarks>
+    [AddComponentMenu("VRTK/Scripts/Utilities/VRTK_VelocityEstimator")]
     public class VRTK_VelocityEstimator : MonoBehaviour
     {
         [Tooltip("Begin the sampling routine when the script is enabled.")]

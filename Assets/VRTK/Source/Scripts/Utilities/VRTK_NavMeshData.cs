@@ -6,6 +6,7 @@ namespace VRTK
     /// <summary>
     /// The Nav Mesh Data script allows custom nav mesh information to be provided to the teleporter script.
     /// </summary>
+    [AddComponentMenu("VRTK/Scripts/Utilities/VRTK_NavMeshData")]
     public class VRTK_NavMeshData : MonoBehaviour
     {
         [Tooltip("The max distance given point can be outside the nav mesh to be considered valid.")]

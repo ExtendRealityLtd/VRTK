@@ -6,6 +6,7 @@ namespace VRTK
     /// <summary>
     /// The GameObject that the SDK Object Alias script is applied to will become a child of the selected SDK Object.
     /// </summary>
+    [AddComponentMenu("VRTK/Scripts/Utilities/VRTK_SDKObjectAlias")]
     public class VRTK_SDKObjectAlias : MonoBehaviour
     {
         /// <summary>
