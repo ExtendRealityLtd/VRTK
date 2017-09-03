@@ -112,7 +112,8 @@ namespace VRTK
         protected Coroutine transitionInPlaceRoutine;
         protected Coroutine attemptTransitionAtEndOfFrameRoutine;
         protected bool originalJointCollisionState = false;
-        protected VRTK_InteractableObject cachedCheckObject;
+        protected VRTK_InteractableObject cachedCheckSnapObject;
+        protected VRTK_InteractableObject cachedCheckIoObject;
 
         protected const string HIGHLIGHT_CONTAINER_NAME = "HighlightContainer";
         protected const string HIGHLIGHT_OBJECT_NAME = "HighlightObject";
@@ -311,12 +312,13 @@ namespace VRTK
         protected virtual void OnTriggerExit(Collider collider)
         {
             //if the current valid snapped object is the collider leaving the trigger then attempt to turn off the highlighter
-            if (IsObjectHovering(collider.gameObject))
+            GameObject goCheck = checkForParentInteractableObject(collider.gameObject);
+            if (IsObjectHovering(goCheck))
             {
                 ToggleHighlight(collider, false);
             }
 
-            if (currentSnappedObject == collider.gameObject)
+            if (currentSnappedObject == goCheck)
             {
                 ForceUnsnap();
             }
@@ -325,13 +327,14 @@ namespace VRTK
         protected virtual void OnTriggerStay(Collider collider)
         {
             //Do sanity check to see if there should be a snappable object
+            GameObject goCheck = checkForParentInteractableObject(collider.gameObject);
             if (!isSnapped && ValidSnapObject(collider.gameObject, true))
             {
-                AddCurrentValidSnapObject(collider.gameObject);
+                AddCurrentValidSnapObject(goCheck);
             }
 
             //if the current colliding object is the valid snappable object then we can snap
-            if (IsObjectHovering(collider.gameObject))
+            if (IsObjectHovering(goCheck))
             {
                 //If it isn't snapped then force the highlighter back on
                 if (!isSnapped)
@@ -346,11 +349,20 @@ namespace VRTK
 
         protected virtual VRTK_InteractableObject ValidSnapObject(GameObject checkObject, bool grabState, bool checkGrabState = true)
         {
-            if (cachedCheckObject == null || checkObject != cachedCheckObject.gameObject)
+            if (cachedCheckSnapObject == null || checkObject != cachedCheckSnapObject.gameObject)
             {
-                cachedCheckObject = checkObject.GetComponentInParent<VRTK_InteractableObject>();
+                cachedCheckSnapObject = checkObject.GetComponentInParent<VRTK_InteractableObject>();
             }
-            return (cachedCheckObject != null && (!checkGrabState || cachedCheckObject.IsGrabbed() == grabState) && !VRTK_PolicyList.Check(cachedCheckObject.gameObject, validObjectListPolicy) ? cachedCheckObject : null);
+            return (cachedCheckSnapObject != null && (!checkGrabState || cachedCheckSnapObject.IsGrabbed() == grabState) && !VRTK_PolicyList.Check(cachedCheckSnapObject.gameObject, validObjectListPolicy) ? cachedCheckSnapObject : null);
+        }
+
+        protected virtual GameObject checkForParentInteractableObject(GameObject checkObject)
+        {
+            if (cachedCheckIoObject == null || checkObject != cachedCheckIoObject.gameObject)
+            {
+                cachedCheckIoObject = checkObject.GetComponentInParent<VRTK_InteractableObject>();
+            }
+            return (cachedCheckIoObject != null ? cachedCheckIoObject.gameObject : checkObject);
         }
 
         protected virtual string ObjectPath(string name)
@@ -760,16 +772,16 @@ namespace VRTK
 
                 if (state)
                 {
-                    if (!IsObjectHovering(collider.gameObject) || wasSnapped)
+                    if (!IsObjectHovering(ioCheck.gameObject) || wasSnapped)
                     {
-                        OnObjectEnteredSnapDropZone(SetSnapDropZoneEvent(collider.gameObject));
+                        OnObjectEnteredSnapDropZone(SetSnapDropZoneEvent(ioCheck.gameObject));
                     }
-                    AddCurrentValidSnapObject(collider.gameObject);
+                    AddCurrentValidSnapObject(ioCheck.gameObject);
                 }
                 else
                 {
-                    OnObjectExitedSnapDropZone(SetSnapDropZoneEvent(collider.gameObject));
-                    RemoveCurrentValidSnapObject(collider.gameObject);
+                    OnObjectExitedSnapDropZone(SetSnapDropZoneEvent(ioCheck.gameObject));
+                    RemoveCurrentValidSnapObject(ioCheck.gameObject);
                 }
             }
         }
