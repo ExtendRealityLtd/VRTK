@@ -200,6 +200,9 @@ namespace VRTK
         public ReadOnlyCollection<Behaviour> behavioursToToggleOnLoadedSetupChange { get; private set; }
         private List<Behaviour> _behavioursToToggleOnLoadedSetupChange = new List<Behaviour>();
         private Dictionary<Behaviour, bool> _behavioursInitialState = new Dictionary<Behaviour, bool>();
+        private Coroutine checkLeftControllerReadyRoutine = null;
+        private Coroutine checkRightControllerReadyRoutine = null;
+        private float checkControllerReadyDelay = 1f;
 
         /// <summary>
         /// The event invoked whenever the loaded SDK Setup changes.
@@ -642,6 +645,16 @@ namespace VRTK
 
         private void OnDisable()
         {
+            if (checkLeftControllerReadyRoutine != null)
+            {
+                StopCoroutine(checkLeftControllerReadyRoutine);
+            }
+
+            if (checkRightControllerReadyRoutine != null)
+            {
+                StopCoroutine(checkRightControllerReadyRoutine);
+            }
+
 #pragma warning disable 618
             if (_instance == this && !persistOnLoad)
 #pragma warning restore 618
@@ -737,7 +750,51 @@ namespace VRTK
             // A VR Device was correctly loaded, is working and matches an SDK Setup
             loadedSetup.OnLoaded(this);
             ToggleBehaviours(true);
+            CheckControllersReady();
             OnLoadedSetupChanged(new LoadedSetupChangeEventArgs(previousLoadedSetup, loadedSetup, null));
+        }
+
+        private void CheckControllersReady()
+        {
+            if (checkLeftControllerReadyRoutine != null)
+            {
+                StopCoroutine(checkLeftControllerReadyRoutine);
+            }
+            checkLeftControllerReadyRoutine = StartCoroutine(CheckLeftControllerReady());
+
+            if (checkRightControllerReadyRoutine != null)
+            {
+                StopCoroutine(checkRightControllerReadyRoutine);
+            }
+            checkRightControllerReadyRoutine = StartCoroutine(CheckRightControllerReady());
+        }
+
+        private IEnumerator CheckLeftControllerReady()
+        {
+            WaitForSeconds delayInstruction = new WaitForSeconds(checkControllerReadyDelay);
+            while (true)
+            {
+                if (loadedSetup != null && loadedSetup.actualLeftController != null && loadedSetup.actualLeftController.activeInHierarchy)
+                {
+                    break;
+                }
+                yield return delayInstruction;
+            }
+            loadedSetup.controllerSDK.OnControllerReady(SDK_BaseController.ControllerHand.Left);
+        }
+
+        private IEnumerator CheckRightControllerReady()
+        {
+            WaitForSeconds delayInstruction = new WaitForSeconds(checkControllerReadyDelay);
+            while (true)
+            {
+                if (loadedSetup != null && loadedSetup.actualRightController != null && loadedSetup.actualRightController.activeInHierarchy)
+                {
+                    break;
+                }
+                yield return delayInstruction;
+            }
+            loadedSetup.controllerSDK.OnControllerReady(SDK_BaseController.ControllerHand.Right);
         }
 
         private void ToggleBehaviours(bool state)

@@ -32,10 +32,6 @@ namespace VRTK
 
         protected VRTK_SDKManager sdkManager;
         protected Coroutine checkToggleRoutine;
-        //TODO: REPLACE WITH GENERIC CONTROLLER TYPE AVAILABLE EVENT
-        protected int findControllerAttempts = 100;
-        protected float findControllerAttemptsDelay = 0.1f;
-        protected Coroutine attemptFindControllerModel;
 
         /// <summary>
         /// The SetStateByControllerReference method sets the object state based on the controller type of the given controller reference.
@@ -59,6 +55,9 @@ namespace VRTK
             target = (target != null ? target : gameObject);
             sdkManager.LoadedSetupChanged += LoadedSetupChanged;
             checkToggleRoutine = StartCoroutine(CheckToggleAtEndOfFrame());
+
+            VRTK_SDK_Bridge.GetControllerSDK().LeftControllerReady += LeftControllerReady;
+            VRTK_SDK_Bridge.GetControllerSDK().RightControllerReady += RightControllerReady;
         }
 
         protected virtual void OnDisable()
@@ -68,10 +67,16 @@ namespace VRTK
             {
                 StopCoroutine(checkToggleRoutine);
             }
-            if (attemptFindControllerModel != null)
-            {
-                StopCoroutine(attemptFindControllerModel);
-            }
+        }
+
+        protected virtual void LeftControllerReady(object sender, VRTKSDKBaseControllerEventArgs e)
+        {
+            ToggleOnController(e.controllerReference);
+        }
+
+        protected virtual void RightControllerReady(object sender, VRTKSDKBaseControllerEventArgs e)
+        {
+            ToggleOnController(e.controllerReference);
         }
 
         protected virtual IEnumerator CheckToggleAtEndOfFrame()
@@ -89,7 +94,7 @@ namespace VRTK
         {
             ToggleOnSDK();
             ToggleOnHeadset();
-            ToggleOnController();
+            ToggleOnController(null);
         }
 
         protected virtual void ToggleOnSDK()
@@ -108,29 +113,15 @@ namespace VRTK
             }
         }
 
-        protected virtual void ToggleOnController()
+        protected virtual void ToggleOnController(VRTK_ControllerReference controllerReference)
         {
             if (controllerType != SDK_BaseController.ControllerType.Undefined)
             {
-                attemptFindControllerModel = StartCoroutine(AttemptFindController(findControllerAttempts, findControllerAttemptsDelay));
-            }
-        }
-
-        protected virtual IEnumerator AttemptFindController(int attempts, float delay)
-        {
-            WaitForSeconds delayInstruction = new WaitForSeconds(delay);
-            SDK_BaseController.ControllerType foundControllerType = VRTK_DeviceFinder.GetCurrentControllerType();
-
-            while (foundControllerType == SDK_BaseController.ControllerType.Undefined && attempts > 0)
-            {
-                foundControllerType = VRTK_DeviceFinder.GetCurrentControllerType();
-                attempts--;
-                yield return delayInstruction;
-            }
-
-            if (foundControllerType != SDK_BaseController.ControllerType.Undefined && controllerType == foundControllerType)
-            {
-                ToggleObject();
+                SDK_BaseController.ControllerType foundControllerType = VRTK_DeviceFinder.GetCurrentControllerType(controllerReference);
+                if (foundControllerType != SDK_BaseController.ControllerType.Undefined && controllerType == foundControllerType)
+                {
+                    ToggleObject();
+                }
             }
         }
 
