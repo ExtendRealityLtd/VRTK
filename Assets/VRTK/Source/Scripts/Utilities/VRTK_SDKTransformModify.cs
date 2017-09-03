@@ -38,7 +38,8 @@ namespace VRTK
         public List<VRTK_SDKTransformModifiers> sdkOverrides = new List<VRTK_SDKTransformModifiers>();
 
         protected VRTK_SDKManager sdkManager;
-        protected int findControllerAttempts = 25;
+        //TODO: REPLACE WITH GENERIC CONTROLLER TYPE AVAILABLE EVENT
+        protected int findControllerAttempts = 100;
         protected float findControllerAttemptsDelay = 0.1f;
         protected Coroutine attemptFindControllerModel;
 

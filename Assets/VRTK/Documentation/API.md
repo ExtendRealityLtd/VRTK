@@ -6530,6 +6530,7 @@ A collection of scripts that provide useful functionality to aid the creation pr
  * [Transform Follow](#transform-follow-vrtk_transformfollow)
  * [SDK Object Alias](#sdk-object-alias-vrtk_sdkobjectalias)
  * [SDK Transform Modify](#sdk-transform-modify-vrtk_sdktransformmodify)
+ * [SDK Object State](#sdk-object-state-vrtk_sdkobjectstate)
  * [Velocity Estimator](#velocity-estimator-vrtk_velocityestimator)
 
 ---
@@ -7765,6 +7766,40 @@ The SDK Transform Modify can be used to change a transform orientation at runtim
    * _none_
 
 The UpdateTransform method updates the Transform data on the current GameObject for the specified settings.
+
+---
+
+## SDK Object State (VRTK_SDKObjectState)
+
+### Overview
+
+The SDK Object State script can be used to set the enable/active state of a GameObject or Component based on SDK information.
+
+The state can be determined by:
+* The current loaded SDK setup.
+* The current attached Headset type.
+* The current attached Controller type.
+
+### Inspector Parameters
+
+ * **Target:** The GameObject or Component that is the target of the enable/disable action. If this is left blank then the GameObject that the script is attached to will be used as the `Target`.
+ * **Object State:** The state to set the `Target` to when this script is enabled. Checking this box will enable/activate the `Target`, unchecking will disable/deactivate the `Target`.
+ * **Loaded SDK Setup:** If the currently loaded SDK Setup matches the one provided here then the `Target` state will be set to the desired `Object State`.
+ * **Headset Type:** If the attached headset type matches the selected headset then the `Target` state will be set to the desired `Object State`.
+ * **Controller Type:** If the current controller type matches the selected controller type then the `Target` state will be set to the desired `Object State`.
+
+### Class Methods
+
+#### SetStateByControllerReference/1
+
+  > `public virtual void SetStateByControllerReference(VRTK_ControllerReference controllerReference)`
+
+ * Parameters
+   * `VRTK_ControllerReference controllerReference` - A controller reference to check for the controller type of.
+ * Returns
+   * _none_
+
+The SetStateByControllerReference method sets the object state based on the controller type of the given controller reference.
 
 ---
 
