@@ -6523,6 +6523,7 @@ A collection of scripts that provide useful functionality to aid the creation pr
  * [Shared Methods](#shared-methods-vrtk_sharedmethods)
  * [Policy List](#policy-list-vrtk_policylist)
  * [Custom Raycast](#custom-raycast-vrtk_customraycast)
+ * [Nav Mesh Data](#nav-mesh-data-vrtk_navmeshdata)
  * [Adaptive Quality](#adaptive-quality-vrtk_adaptivequality)
  * [Object Follow](#object-follow-vrtk_objectfollow)
  * [Rigidbody Follow](#rigidbody-follow-vrtk_rigidbodyfollow)
@@ -7515,6 +7516,19 @@ The CustomLinecast method is used to generate a linecast based on the options de
    * `bool` - Returns true if the capsule successfully collides with a valid object.
 
 The CustomCapsuleCast method is used to generate a capsulecast based on the options defined in the CustomRaycast object.
+
+---
+
+## Nav Mesh Data (VRTK_NavMeshData)
+
+### Overview
+
+The Nav Mesh Data script allows custom nav mesh information to be provided to the teleporter script.
+
+### Inspector Parameters
+
+ * **Distance Limit:** The max distance given point can be outside the nav mesh to be considered valid.
+ * **Valid Areas:** The parts of the navmesh that are considered valid
 
 ---
 
