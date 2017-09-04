@@ -207,7 +207,7 @@ namespace VRTK
                 circle.color = buttonColor;
 
                 //Final placement/rotation
-                float angle = ((360 / buttons.Count) * i) + offsetRotation;
+                float angle = ((360f / buttons.Count) * i) + offsetRotation;
                 newButton.transform.localEulerAngles = new Vector3(0, 0, angle);
                 newButton.layer = 4; //UI Layer
                 newButton.transform.localPosition = Vector3.zero;
