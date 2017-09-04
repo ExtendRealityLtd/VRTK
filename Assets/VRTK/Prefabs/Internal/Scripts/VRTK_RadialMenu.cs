@@ -193,7 +193,7 @@ namespace VRTK
 
                 //Setup button arc
                 UICircle circle = newButton.GetComponent<UICircle>();
-                if (buttonThickness == 1)
+                if (buttonThickness == 1f)
                 {
                     circle.fill = true;
                 }
@@ -206,7 +206,7 @@ namespace VRTK
                 circle.color = buttonColor;
 
                 //Final placement/rotation
-                float angle = ((360 / buttons.Count) * i) + offsetRotation;
+                float angle = ((360f / buttons.Count) * i) + offsetRotation;
                 newButton.transform.localEulerAngles = new Vector3(0, 0, angle);
                 newButton.layer = 4; //UI Layer
                 newButton.transform.localPosition = Vector3.zero;
@@ -229,9 +229,9 @@ namespace VRTK
                     buttonIcon.transform.localPosition = new Vector2(-1 * ((newButton.GetComponent<RectTransform>().rect.width / 2f) - (circle.thickness / 2f)), 0);
                     //Min icon size from thickness and arc
                     float scale1 = Mathf.Abs(circle.thickness);
-                    float R = Mathf.Abs(buttonIcon.transform.localPosition.x);
+                    float absButtonIconXPos = Mathf.Abs(buttonIcon.transform.localPosition.x);
                     float bAngle = (359f * circle.fillPercent * 0.01f * Mathf.PI) / 180f;
-                    float scale2 = (R * 2 * Mathf.Sin(bAngle / 2f));
+                    float scale2 = (absButtonIconXPos * 2f * Mathf.Sin(bAngle / 2f));
                     if (circle.fillPercent > 24) //Scale calc doesn't work for > 90 degrees
                     {
                         scale2 = float.MaxValue;
@@ -289,7 +289,7 @@ namespace VRTK
         {
             //Get button ID from angle
             float buttonAngle = 360f / buttons.Count; //Each button is an arc with this angle
-            angle = VRTK_SharedMethods.Mod((angle + -offsetRotation), 360); //Offset the touch coordinate with our offset
+            angle = VRTK_SharedMethods.Mod((angle + -offsetRotation), 360f); //Offset the touch coordinate with our offset
 
             int buttonID = (int)VRTK_SharedMethods.Mod(((angle + (buttonAngle / 2f)) / buttonAngle), buttons.Count); //Convert angle into ButtonID (This is the magic)
             PointerEventData pointer = new PointerEventData(EventSystem.current); //Create a new EventSystem (UI) Event
@@ -349,7 +349,7 @@ namespace VRTK
         //Simple tweening for menu, scales linearly from 0 to 1 and 1 to 0
         protected virtual IEnumerator TweenMenuScale(bool show)
         {
-            float targetScale = 0;
+            float targetScale = 0f;
             Vector3 Dir = -1 * Vector3.one;
             if (show)
             {
@@ -368,7 +368,7 @@ namespace VRTK
 
         protected virtual void AttempHapticPulse(float strength)
         {
-            if (strength > 0 && FireHapticPulse != null)
+            if (strength > 0f && FireHapticPulse != null)
             {
                 FireHapticPulse(strength);
             }
