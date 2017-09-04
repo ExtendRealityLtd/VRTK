@@ -10,66 +10,59 @@ A big thank you to the supporters of VRTK via the VRTK Patreon page at https://w
 
  * **realestate.co.au - Luke Chadwick** *[Professional Sponsor]*
  * **Alvios Game Studio - Blueteak** *[Sponsor]*
+ * Tuukka Takala
+ * BinaryLegend
  * Mark Bradley
  * TreeFortress Games
- * BinaryLegend 
- * Eric 
- * Tuukka Takala
- * Mcdoogleh 
  * Matt Ostgard
- * cognitiveVR 
  * Adam Salmi
- * Tanner Ochel
- * Agatha Yu
- * Aldis Sipolins
- * Michael Hurley
- * Don MacSween
- * Carl Wolsey
- * Stephen Eisenhauer
- * Daniel Shimmyo
- * Chris Ross
- * Jedrzej Jonasz
- * Jonathan Linowes
- * Tim Lobes
- * Chris Tuminello
- * Michael Angel
- * Thomas Kildren
- * Devon Grandahl
- * Victor Lew
- * Jeff Canavan
- * adam awesomeface
- * Eric Vander Wal
+ * Mcdoogleh
+ * cognitiveVR
+ * Kent Bowling
+ * Alex Vainberg
  * VR Game Development Mini-Degree by Zenva
- * Grayson Deitering
- * mori 
- * TigerLily 
- * Roland 
- * Hgulgen
- * Michal VRoblewski
- * Chris Kirby
- * Trevor Gibbons
- * ManBearPig 
- * Kenneth Lemieux
- * Joey Parr
- * Axel dabee
- * braden 
- * Andy Baker
+ * Michael Angel
+ * adam awesomeface
+ * Don MacSween
  * Tim Foster
- * Ben McNelly
- * Ian McNab
- * David Erosa
- * Juho Salonen
- * Casual Immersions Entertainment
- * Jarrell Norwood
- * Steve Weintraut
- * Stephen Elkins
- * David 
- * Matthew Boynton
+ * Chris Tuminello
+ * mori
+ * Tim Lobes
  * Bartek Tułodziecki
+ * Chris Ross
+ * Grayson Deitering
+ * Michal VRoblewski
+ * braden
+ * Ian McNab
+ * Joe Ferguson
+ * Balazs Faludi
+ * Andy Baker
+ * Joey Parr
  * Kyle Mausser
  * Niklas Dennerståhl
- * Luke Pierson
- * Balazs Faludi
+ * Michael Hurley
+ * Roland
+ * Steve Weintraut
+ * Thomas Kildren
+ * Jarrell Norwood
+ * Tanner Ochel
  * Will Lingard
- * Joe Ferguson
+ * TigerLily
+ * Stephen Elkins
  * Adam Tannir
+ * Casual Immersions Entertainment
+ * Jonathan Linowes
+ * Matthew Boynton
+ * Agatha Yu
+ * David
+ * Hgulgen
+ * Luke Pierson
+ * Eric Vander Wal
+ * Juho Salonen
+ * Jedrzej Jonasz
+ * Ben McNelly
+ * Devon Grandahl
+ * ManBearPig
+ * Kenneth Lemieux
+ * Trevor Gibbons
+ * Stephen Eisenhauer
