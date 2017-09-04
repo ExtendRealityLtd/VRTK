@@ -393,7 +393,7 @@ Provides a predefined zone where a valid interactable object can be dropped and 
  * **Highlight Always Active:** The highlight object will always be displayed when the snap drop zone is available even if a valid item isn't being hovered over.
  * **Valid Object List Policy:** A specified VRTK_PolicyList to use to determine which interactable objects will be snapped to the snap drop zone on release.
  * **Display Drop Zone In Editor:** If this is checked then the drop zone highlight section will be displayed in the scene editor window.
- * **Default Snapped Object:** The game object to snap into the dropzone when the drop zone is enabled. The game object must be valid in any given policy list to snap.
+ * **Default Snapped Interactable Object:** The Interactable Object to snap into the dropzone when the drop zone is enabled. The Interactable Object must be valid in any given policy list to snap.
 
 ### Class Variables
 
@@ -441,7 +441,7 @@ The InitaliseHighlightObject method sets up the highlight object based on the gi
  * Returns
    * _none_
 
-the ForceSnap method attempts to automatically attach a valid game object to the snap drop zone.
+the ForceSnap method attempts to automatically attach a valid GameObject to the snap drop zone.
 
 #### ForceUnsnap/0
 
@@ -476,6 +476,17 @@ The ValidSnappableObjectIsHovering method determines if any valid objects are cu
 
 The IsObjectHovering method determines if the given GameObject is currently howvering (but not snapped) in the snap drop zone area.
 
+#### IsInteractableObjectHovering/1
+
+  > `public virtual bool IsInteractableObjectHovering(VRTK_InteractableObject checkObject)`
+
+ * Parameters
+   * `VRTK_InteractableObject checkObject` - The Interactable Object script to check to see if it's hovering in the snap drop zone area.
+ * Returns
+   * `bool` - Returns true if the given Interactable Object script is hovering (but not snapped) in the snap drop zone area.
+
+The IsInteractableObjectHovering method determines if the given Interactable Object script is currently howvering (but not snapped) in the snap drop zone area.
+
 #### GetHoveringObjects/0
 
   > `public virtual List<GameObject> GetHoveringObjects()`
@@ -487,6 +498,17 @@ The IsObjectHovering method determines if the given GameObject is currently howv
 
 The GetHoveringObjects method returns a List of valid GameObjects that are currently hovering (but not snapped) in the snap drop zone area.
 
+#### GetHoveringInteractableObjects/0
+
+  > `public virtual List<VRTK_InteractableObject> GetHoveringInteractableObjects()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `List<VRTK_InteractableObject>` - The List of valid Interactable Object scripts that are hovering (but not snapped) in the snap drop zone area.
+
+The GetHoveringInteractableObjects method returns a List of valid Interactable Object scripts that are currently hovering (but not snapped) in the snap drop zone area.
+
 #### GetCurrentSnappedObject/0
 
   > `public virtual GameObject GetCurrentSnappedObject()`
@@ -497,6 +519,17 @@ The GetHoveringObjects method returns a List of valid GameObjects that are curre
    * `GameObject` - The GameObject that is currently snapped in the snap drop zone area.
 
 The GetCurrentSnappedObejct method returns the GameObject that is currently snapped in the snap drop zone area.
+
+#### GetCurrentSnappedInteractableObject/0
+
+  > `public virtual VRTK_InteractableObject GetCurrentSnappedInteractableObject()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `VRTK_InteractableObject` - The Interactable Object script that is currently snapped in the snap drop zone area.
+
+The GetCurrentSnappedInteractableObject method returns the Interactable Object script that is currently snapped in the snap drop zone area.
 
 ### Example
 
