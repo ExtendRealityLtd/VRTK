@@ -101,6 +101,7 @@
         protected virtual void OnDisable()
         {
             CancelCoroutines();
+            index = uint.MaxValue;
             ManageControllerModelListeners(false);
             OnControllerDisabled(SetEventPayload());
         }

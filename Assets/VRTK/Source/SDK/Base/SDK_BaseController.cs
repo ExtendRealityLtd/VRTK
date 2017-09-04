@@ -226,11 +226,35 @@ namespace VRTK
             Oculus_GearVRController
         }
 
+        public event VRTKSDKBaseControllerEventHandler LeftControllerReady;
+        public event VRTKSDKBaseControllerEventHandler RightControllerReady;
         public event VRTKSDKBaseControllerEventHandler LeftControllerModelReady;
         public event VRTKSDKBaseControllerEventHandler RightControllerModelReady;
 
         protected Transform defaultSDKLeftControllerModel = null;
         protected Transform defaultSDKRightControllerModel = null;
+
+        public virtual void OnControllerReady(ControllerHand hand)
+        {
+            VRTKSDKBaseControllerEventArgs e;
+            e.controllerReference = VRTK_ControllerReference.GetControllerReference(hand);
+
+            switch (hand)
+            {
+                case ControllerHand.Left:
+                    if (LeftControllerReady != null)
+                    {
+                        LeftControllerReady(this, e);
+                    }
+                    break;
+                case ControllerHand.Right:
+                    if (RightControllerReady != null)
+                    {
+                        RightControllerReady(this, e);
+                    }
+                    break;
+            }
+        }
 
         /// <summary>
         /// The ProcessUpdate method enables an SDK to run logic for every Unity Update

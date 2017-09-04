@@ -1,4 +1,4 @@
-﻿// SDK Transform Modify|Utilities|90064
+﻿// SDK Transform Modify|Utilities|90150
 namespace VRTK
 {
     using UnityEngine;
@@ -30,6 +30,7 @@ namespace VRTK
     /// <summary>
     /// The SDK Transform Modify can be used to change a transform orientation at runtime based on the currently used SDK or SDK controller.
     /// </summary>
+    [AddComponentMenu("VRTK/Scripts/Utilities/VRTK_SDKTransformModify")]
     public class VRTK_SDKTransformModify : MonoBehaviour
     {
         [Tooltip("The target transform to modify on enable. If this is left blank then the transform the script is attached to will be used.")]
@@ -38,9 +39,6 @@ namespace VRTK
         public List<VRTK_SDKTransformModifiers> sdkOverrides = new List<VRTK_SDKTransformModifiers>();
 
         protected VRTK_SDKManager sdkManager;
-        protected int findControllerAttempts = 25;
-        protected float findControllerAttemptsDelay = 0.1f;
-        protected Coroutine attemptFindControllerModel;
 
         /// <summary>
         /// The UpdateTransform method updates the Transform data on the current GameObject for the specified settings.
@@ -71,8 +69,11 @@ namespace VRTK
             if (sdkManager != null)
             {
                 sdkManager.LoadedSetupChanged += LoadedSetupChanged;
-                FindController();
+                FindController(null);
             }
+
+            VRTK_SDK_Bridge.GetControllerSDK().LeftControllerReady += LeftControllerReady;
+            VRTK_SDK_Bridge.GetControllerSDK().RightControllerReady += RightControllerReady;
         }
 
         protected virtual void OnDisable()
@@ -82,11 +83,8 @@ namespace VRTK
                 sdkManager.LoadedSetupChanged -= LoadedSetupChanged;
             }
 
-            if (attemptFindControllerModel != null)
-            {
-                StopCoroutine(attemptFindControllerModel);
-                attemptFindControllerModel = null;
-            }
+            VRTK_SDK_Bridge.GetControllerSDK().LeftControllerReady -= LeftControllerReady;
+            VRTK_SDK_Bridge.GetControllerSDK().RightControllerReady -= RightControllerReady;
         }
 
         protected virtual void OnDestroy()
@@ -97,31 +95,27 @@ namespace VRTK
             }
         }
 
-        protected virtual void LoadedSetupChanged(VRTK_SDKManager sender, VRTK_SDKManager.LoadedSetupChangeEventArgs e)
+        protected virtual void LeftControllerReady(object sender, VRTKSDKBaseControllerEventArgs e)
         {
-            FindController();
+            FindController(e.controllerReference);
         }
 
-        protected virtual void FindController()
+        protected virtual void RightControllerReady(object sender, VRTKSDKBaseControllerEventArgs e)
+        {
+            FindController(e.controllerReference);
+        }
+
+        protected virtual void LoadedSetupChanged(VRTK_SDKManager sender, VRTK_SDKManager.LoadedSetupChangeEventArgs e)
+        {
+            FindController(null);
+        }
+
+        protected virtual void FindController(VRTK_ControllerReference controllerReference)
         {
             if (sdkManager != null && sdkManager.loadedSetup != null && gameObject.activeInHierarchy)
             {
-                attemptFindControllerModel = StartCoroutine(AttemptFindController(findControllerAttempts, findControllerAttemptsDelay));
+                UpdateTransform(controllerReference);
             }
-        }
-
-        protected virtual IEnumerator AttemptFindController(int attempts, float delay)
-        {
-            WaitForSeconds delayInstruction = new WaitForSeconds(delay);
-            SDK_BaseController.ControllerType controllerType = VRTK_DeviceFinder.GetCurrentControllerType();
-
-            while (controllerType == SDK_BaseController.ControllerType.Undefined && attempts > 0)
-            {
-                controllerType = VRTK_DeviceFinder.GetCurrentControllerType();
-                attempts--;
-                yield return delayInstruction;
-            }
-            UpdateTransform();
         }
 
         protected virtual VRTK_SDKTransformModifiers GetSelectedModifier(VRTK_ControllerReference controllerReference)
@@ -132,8 +126,8 @@ namespace VRTK
             //If no sdk set up is found or it is null then try and find by the SDK controller
             if (selectedModifier == null)
             {
-                SDK_BaseController.ControllerType currentController = VRTK_DeviceFinder.GetCurrentControllerType(controllerReference);
-                selectedModifier = sdkOverrides.FirstOrDefault(item => item.controllerType == currentController);
+                SDK_BaseController.ControllerType currentControllerType = VRTK_DeviceFinder.GetCurrentControllerType(controllerReference);
+                selectedModifier = sdkOverrides.FirstOrDefault(item => item.controllerType == currentControllerType);
             }
             return selectedModifier;
         }
