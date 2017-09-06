@@ -2,7 +2,11 @@
 {
     using UnityEngine;
     using UnityEngine.SceneManagement;
-    using UnityEngine.VR;
+#if UNITY_2017_2_OR_NEWER
+    using UnityEngine.XR;
+#else
+    using XRSettings = UnityEngine.VR.VRSettings;
+#endif
     using UnityEditor;
     using UnityEditor.SceneManagement;
     using System;
@@ -342,7 +346,7 @@
                     VRTK_SDKManager.AvailableControllerSDKInfos
                 }
                 .SelectMany(infos => infos.Select(sdkInfo => sdkInfo.description.vrDeviceName))
-                .Concat(VRSettings.supportedDevices)
+                .Concat(XRSettings.supportedDevices)
                 .Concat(new[] { "None" })
                 .Distinct()
                 .Select(deviceName => GUI.skin.label.CalcSize(new GUIContent(deviceName)).x)

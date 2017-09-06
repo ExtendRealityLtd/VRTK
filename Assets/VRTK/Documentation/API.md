@@ -7381,6 +7381,28 @@ The SetGlobalScale method is used to set a transform scale based on a global sca
 
 The GetTypeUnknownAssembly method is used to find a Type without knowing the exact assembly it is in.
 
+#### GetEyeTextureResolutionScale/0
+
+  > `public static float GetEyeTextureResolutionScale()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `float` - Returns a float with the render scale for the resolution.
+
+The GetEyeTextureResolutionScale method returns the render scale for the resolution.
+
+#### SetEyeTextureResolutionScale/1
+
+  > `public static void SetEyeTextureResolutionScale(float value)`
+
+ * Parameters
+   * `float value` - The value to set the render scale to.
+ * Returns
+   * _none_
+
+The SetEyeTextureResolutionScale method sets the render scale for the resolution.
+
 ---
 
 ## Policy List (VRTK_PolicyList)

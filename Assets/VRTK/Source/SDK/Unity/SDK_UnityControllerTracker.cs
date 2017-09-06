@@ -2,7 +2,12 @@
 namespace VRTK
 {
     using UnityEngine;
+#if UNITY_2017_2_OR_NEWER
+    using UnityEngine.XR;
+#else
     using UnityEngine.VR;
+    using XRNode = UnityEngine.VR.VRNode;
+#endif
 
     /// <summary>
     /// The Controller Tracker enables the GameObject to track it's position/rotation to the available connected VR Controller via the `UnityEngine.VR` library.
@@ -13,7 +18,7 @@ namespace VRTK
     public class SDK_UnityControllerTracker : MonoBehaviour
     {
         [Tooltip("The Unity VRNode to track.")]
-        public VRNode nodeType;
+        public XRNode nodeType;
         [Tooltip("The unique index to assign to the controller.")]
         public uint index;
         [Tooltip("The Unity Input name for the trigger axis.")]

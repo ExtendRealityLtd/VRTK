@@ -10,7 +10,12 @@ namespace VRTK
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
-    using UnityEngine.VR;
+#if UNITY_2017_2_OR_NEWER
+    using UnityEngine.XR;
+#else
+    using XRSettings = UnityEngine.VR.VRSettings;
+    using XRStats = UnityEngine.VR.VRStats;
+#endif
 
     /// <summary>
     /// The Shared Methods script is a collection of reusable static methods that are used across a range of different scripts.
@@ -314,7 +319,7 @@ namespace VRTK
         {
 #if UNITY_5_6_OR_NEWER
             float gpuTimeLastFrame;
-            return (VRStats.TryGetGPUTimeLastFrame(out gpuTimeLastFrame) ? gpuTimeLastFrame : 0f);
+            return (XRStats.TryGetGPUTimeLastFrame(out gpuTimeLastFrame) ? gpuTimeLastFrame : 0f);
 #else
             return VRStats.gpuTimeLastFrame;
 #endif
@@ -379,6 +384,32 @@ namespace VRTK
                 }
             }
             return null;
+        }
+
+        /// <summary>
+        /// The GetEyeTextureResolutionScale method returns the render scale for the resolution.
+        /// </summary>
+        /// <returns>Returns a float with the render scale for the resolution.</returns>
+        public static float GetEyeTextureResolutionScale()
+        {
+#if UNITY_2017_2_OR_NEWER
+            return XRSettings.eyeTextureResolutionScale;
+#else
+            return XRSettings.renderScale;
+#endif
+        }
+
+        /// <summary>
+        /// The SetEyeTextureResolutionScale method sets the render scale for the resolution.
+        /// </summary>
+        /// <param name="value">The value to set the render scale to.</param>
+        public static void SetEyeTextureResolutionScale(float value)
+        {
+#if UNITY_2017_2_OR_NEWER
+            XRSettings.eyeTextureResolutionScale = value;
+#else
+            XRSettings.renderScale = value;
+#endif
         }
 
 #if UNITY_EDITOR
