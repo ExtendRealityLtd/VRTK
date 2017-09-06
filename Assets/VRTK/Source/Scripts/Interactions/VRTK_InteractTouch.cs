@@ -239,7 +239,7 @@ namespace VRTK
         /// <returns>An array of colliders that are associated with the controller.</returns>
         public virtual Collider[] ControllerColliders()
         {
-            return (controllerCollisionDetector != null && controllerCollisionDetector.GetComponents<Collider>().Length > 0 ? controllerCollisionDetector.GetComponents<Collider>() : controllerCollisionDetector.GetComponentsInChildren<Collider>());
+            return (controllerCollisionDetector != null ? controllerCollisionDetector.GetComponentsInChildren<Collider>() : new Collider[0]);
         }
 
         /// <summary>
