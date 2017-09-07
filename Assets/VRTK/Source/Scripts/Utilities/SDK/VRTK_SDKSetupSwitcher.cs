@@ -38,6 +38,8 @@ namespace VRTK
         private Button cancelButton;
         [SerializeField]
         private Button chooseButton;
+        [SerializeField]
+        private bool playareaSync = true;
 
         protected enum ViewingState
         {
@@ -47,6 +49,7 @@ namespace VRTK
 
         private VRTK_SDKManager sdkManager;
         private readonly List<GameObject> chooseButtonGameObjects = new List<GameObject>();
+        private Transform currentPlayarea;
 
         protected virtual void Awake()
         {
@@ -79,6 +82,14 @@ namespace VRTK
         protected virtual void OnLoadedSetupChanged(VRTK_SDKManager sender, VRTK_SDKManager.LoadedSetupChangeEventArgs e)
         {
             Show(ViewingState.Status);
+            if (playareaSync && currentPlayarea != null)
+            {
+                Transform newPlayarea = VRTK_DeviceFinder.PlayAreaTransform();
+                newPlayarea.transform.position = currentPlayarea.transform.position;
+                newPlayarea.transform.rotation = currentPlayarea.transform.rotation;
+                VRTK_SharedMethods.SetGlobalScale(newPlayarea, currentPlayarea.transform.lossyScale);
+            }
+            currentPlayarea = VRTK_DeviceFinder.PlayAreaTransform();
         }
 
         protected virtual void OnSwitchButtonClick()
@@ -130,7 +141,7 @@ namespace VRTK
             VRTK_SDKSetup loadedSetup = sdkManager.loadedSetup;
             if (loadedSetup != null)
             {
-                GameObject chooseNoneButton = (GameObject)Instantiate(chooseButton.gameObject, chooseButton.transform.parent);
+                GameObject chooseNoneButton = Instantiate(chooseButton.gameObject, chooseButton.transform.parent);
                 chooseNoneButton.GetComponentInChildren<Text>().text = "None";
                 chooseNoneButton.name = "ChooseNoneButton";
                 chooseNoneButton.SetActive(true);
@@ -151,7 +162,7 @@ namespace VRTK
                     continue;
                 }
 
-                GameObject chooseButtonCopy = (GameObject)Instantiate(chooseButton.gameObject, chooseButton.transform.parent);
+                GameObject chooseButtonCopy = Instantiate(chooseButton.gameObject, chooseButton.transform.parent);
                 chooseButtonCopy.GetComponentInChildren<Text>().text = setup.name;
                 chooseButtonCopy.name = string.Format("Choose{0}Button", setup.name);
                 chooseButtonCopy.SetActive(true);
