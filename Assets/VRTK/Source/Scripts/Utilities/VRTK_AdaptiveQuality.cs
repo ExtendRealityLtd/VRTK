@@ -14,7 +14,12 @@ namespace VRTK
     using System.Linq;
     using System.Text;
     using UnityEngine;
-    using UnityEngine.VR;
+#if UNITY_2017_2_OR_NEWER
+    using UnityEngine.XR;
+#else
+    using XRSettings = UnityEngine.VR.VRSettings;
+    using XRDevice = UnityEngine.VR.VRDevice;
+#endif
 
     /// <summary>
     /// Adaptive Quality dynamically changes rendering settings to maintain VR framerate while maximizing GPU utilization.
@@ -145,7 +150,7 @@ namespace VRTK
         /// </remarks>
         public static float CurrentRenderScale
         {
-            get { return VRSettings.renderScale * VRSettings.renderViewportScale; }
+            get { return VRTK_SharedMethods.GetEyeTextureResolutionScale() * XRSettings.renderViewportScale; }
         }
 
         /// <summary>
@@ -210,8 +215,8 @@ namespace VRTK
         /// </returns>
         public static Vector2 RenderTargetResolutionForRenderScale(float renderScale)
         {
-            return new Vector2((int)(VRSettings.eyeTextureWidth / VRSettings.renderScale * renderScale),
-                               (int)(VRSettings.eyeTextureHeight / VRSettings.renderScale * renderScale));
+            return new Vector2((int)(XRSettings.eyeTextureWidth / VRTK_SharedMethods.GetEyeTextureResolutionScale() * renderScale),
+                               (int)(XRSettings.eyeTextureHeight / VRTK_SharedMethods.GetEyeTextureResolutionScale() * renderScale));
         }
 
         /// <summary>
@@ -223,15 +228,15 @@ namespace VRTK
         /// </returns>
         public float BiggestAllowedMaximumRenderScale()
         {
-            if (VRSettings.eyeTextureWidth == 0 || VRSettings.eyeTextureHeight == 0)
+            if (XRSettings.eyeTextureWidth == 0 || XRSettings.eyeTextureHeight == 0)
             {
                 return maximumRenderScale;
             }
 
-            float maximumHorizontalRenderScale = maximumRenderTargetDimension * VRSettings.renderScale
-                                                 / VRSettings.eyeTextureWidth;
-            float maximumVerticalRenderScale = maximumRenderTargetDimension * VRSettings.renderScale
-                                               / VRSettings.eyeTextureHeight;
+            float maximumHorizontalRenderScale = maximumRenderTargetDimension * VRTK_SharedMethods.GetEyeTextureResolutionScale()
+                                                 / XRSettings.eyeTextureWidth;
+            float maximumVerticalRenderScale = maximumRenderTargetDimension * VRTK_SharedMethods.GetEyeTextureResolutionScale()
+                                               / XRSettings.eyeTextureHeight;
             return Mathf.Min(maximumHorizontalRenderScale, maximumVerticalRenderScale);
         }
 
@@ -300,8 +305,8 @@ namespace VRTK
             Camera.onPreCull += OnCameraPreCull;
 
             hmdDisplayIsOnDesktop = VRTK_SDK_Bridge.IsDisplayOnDesktop();
-            singleFrameDurationInMilliseconds = VRDevice.refreshRate > 0.0f
-                                                ? 1000.0f / VRDevice.refreshRate
+            singleFrameDurationInMilliseconds = XRDevice.refreshRate > 0.0f
+                                                ? 1000.0f / XRDevice.refreshRate
                                                 : DefaultFrameDurationInMilliseconds;
 
             HandleCommandLineArguments();
@@ -644,13 +649,13 @@ namespace VRTK
 
         private static void SetRenderScale(float renderScale, float renderViewportScale)
         {
-            if (Mathf.Abs(VRSettings.renderScale - renderScale) > float.Epsilon)
+            if (Mathf.Abs(VRTK_SharedMethods.GetEyeTextureResolutionScale() - renderScale) > float.Epsilon)
             {
-                VRSettings.renderScale = renderScale;
+                VRTK_SharedMethods.SetEyeTextureResolutionScale(renderScale);
             }
-            if (Mathf.Abs(VRSettings.renderViewportScale - renderViewportScale) > float.Epsilon)
+            if (Mathf.Abs(XRSettings.renderViewportScale - renderViewportScale) > float.Epsilon)
             {
-                VRSettings.renderViewportScale = renderViewportScale;
+                XRSettings.renderViewportScale = renderViewportScale;
             }
         }
 

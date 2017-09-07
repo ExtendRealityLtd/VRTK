@@ -2,7 +2,11 @@
 namespace VRTK
 {
     using UnityEngine;
-    using UnityEngine.VR;
+#if UNITY_2017_2_OR_NEWER
+    using UnityEngine.XR;
+#else
+    using XRDevice = UnityEngine.VR.VRDevice;
+#endif
 
     /// <summary>
     /// The `[UnityBase_CameraRig]` prefab is a default camera rig set up for use with the Unity SDK support.
@@ -19,7 +23,7 @@ namespace VRTK
         {
             if (lockPhysicsUpdateRateToRenderFrequency && Time.timeScale > 0.0f)
             {
-                Time.fixedDeltaTime = Time.timeScale / VRDevice.refreshRate;
+                Time.fixedDeltaTime = Time.timeScale / XRDevice.refreshRate;
             }
         }
     }
