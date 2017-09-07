@@ -47,3 +47,4 @@ For further information on getting started with the supported SDKs, please refer
  * [Daydream](/Assets/VRTK/Source/SDK/Daydream/README.md)
  * [HyperealVR](/Assets/VRTK/Source/SDK/HyperealVR/README.md)
  * [Ximmerse](/Assets/VRTK/Source/SDK/Ximmerse/README.md)
+ * [Windows Mixed Reality](/Assets/VRTK/Source/SDK/WindowsMR/README.md)
