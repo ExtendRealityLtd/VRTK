@@ -28,7 +28,7 @@ namespace VRTK
     /// <remarks>
     /// Colliders are created for the controller and by default the selected controller SDK will have a set of colliders for the given default controller of that SDK.
     ///
-    /// A custom collider can be provided by the Custom Rigidbody Object parameter.
+    /// A custom collider can be provided by the Custom Collider Container parameter.
     /// </remarks>
     /// <example>
     /// `VRTK/Examples/005_Controller/BasicObjectGrabbing` demonstrates the highlighting of objects that have the `VRTK_InteractableObject` script added to them to show the ability to highlight interactable objects when they are touched by the controllers.

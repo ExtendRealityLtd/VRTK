@@ -78,10 +78,17 @@ namespace VRTK
             DropValidSnapDropZone
         }
 
+        [Header("General Settings", order = 1)]
+
         [Tooltip("If this is checked then the interactable object script will be disabled when the object is not being interacted with. This will eliminate the potential number of calls the interactable objects make each frame.")]
         public bool disableWhenIdle = true;
 
-        [Header("Touch Options", order = 1)]
+        [Header("Near Touch Settings", order = 2)]
+
+        [Tooltip("Determines which controller can initiate a near touch action.")]
+        public AllowedController allowedNearTouchControllers = AllowedController.Both;
+
+        [Header("Touch Settings", order = 3)]
 
         [Tooltip("The colour to highlight the object when it is touched. This colour will override any globally set colour (for instance on the `VRTK_InteractTouch` script).")]
         public Color touchHighlightColor = Color.clear;
@@ -90,7 +97,7 @@ namespace VRTK
         [Tooltip("An array of colliders on the object to ignore when being touched.")]
         public Collider[] ignoredColliders;
 
-        [Header("Grab Options", order = 2)]
+        [Header("Grab Settings", order = 4)]
 
         [Tooltip("Determines if the object can be grabbed.")]
         public bool isGrabbable = false;
@@ -109,7 +116,7 @@ namespace VRTK
         [Tooltip("The script to utilise when processing the secondary controller action on a secondary grab attempt. If one isn't provided then the first Secondary Controller Grab Action script on the GameObject will be used, if one is not found then no action will be taken on secondary grab.")]
         public VRTK_BaseGrabAction secondaryGrabActionScript;
 
-        [Header("Use Options", order = 3)]
+        [Header("Use Settings", order = 5)]
 
         [Tooltip("Determines if the object can be used.")]
         public bool isUsable = false;
@@ -132,6 +139,14 @@ namespace VRTK
         /// Emitted when the object script is disabled;
         /// </summary>
         public event InteractableObjectEventHandler InteractableObjectDisabled;
+        /// <summary>
+        /// Emitted when another object near touches the current object.
+        /// </summary>
+        public event InteractableObjectEventHandler InteractableObjectNearTouched;
+        /// <summary>
+        /// Emitted when the other object stops near touching the current object.
+        /// </summary>
+        public event InteractableObjectEventHandler InteractableObjectNearUntouched;
         /// <summary>
         /// Emitted when another object touches the current object.
         /// </summary>
@@ -202,6 +217,7 @@ namespace VRTK
         }
 
         protected Rigidbody interactableRigidbody;
+        protected List<GameObject> nearTouchingObjects = new List<GameObject>();
         protected List<GameObject> touchingObjects = new List<GameObject>();
         protected List<GameObject> grabbingObjects = new List<GameObject>();
         protected List<GameObject> hoveredSnapObjects = new List<GameObject>();
@@ -237,6 +253,22 @@ namespace VRTK
             if (InteractableObjectDisabled != null)
             {
                 InteractableObjectDisabled(this, e);
+            }
+        }
+
+        public virtual void OnInteractableObjectNearTouched(InteractableObjectEventArgs e)
+        {
+            if (InteractableObjectNearTouched != null)
+            {
+                InteractableObjectNearTouched(this, e);
+            }
+        }
+
+        public virtual void OnInteractableObjectNearUntouched(InteractableObjectEventArgs e)
+        {
+            if (InteractableObjectNearUntouched != null)
+            {
+                InteractableObjectNearUntouched(this, e);
             }
         }
 
@@ -328,6 +360,15 @@ namespace VRTK
         }
 
         /// <summary>
+        /// The IsNearTouched method is used to determine if the object is currently being near touched.
+        /// </summary>
+        /// <returns>Returns `true` if the object is currently being near touched.</returns>
+        public virtual bool IsNearTouched()
+        {
+            return (!IsTouched() && nearTouchingObjects.Count > 0);
+        }
+
+        /// <summary>
         /// The IsTouched method is used to determine if the object is currently being touched.
         /// </summary>
         /// <returns>Returns `true` if the object is currently being touched.</returns>
@@ -365,7 +406,39 @@ namespace VRTK
         }
 
         /// <summary>
-        /// The StartTouching method is called automatically when the object is touched initially. It is also a virtual method to allow for overriding in inherited classes.
+        /// The StartNearTouching method is called automatically when the object is initially nearly touched.
+        /// </summary>
+        /// <param name="currentNearTouchingObject">The object that is currently nearly touching this object.</param>
+        public virtual void StartNearTouching(VRTK_InteractNearTouch currentNearTouchingObject = null)
+        {
+            GameObject currentNearTouchingGameObject = (currentNearTouchingObject != null ? currentNearTouchingObject.gameObject : null);
+            if (currentNearTouchingGameObject != null)
+            {
+                if (!nearTouchingObjects.Contains(currentNearTouchingGameObject))
+                {
+                    ToggleEnableState(true);
+                    nearTouchingObjects.Add(currentNearTouchingGameObject);
+                    OnInteractableObjectNearTouched(SetInteractableObjectEvent(currentNearTouchingGameObject));
+                }
+            }
+        }
+
+        /// <summary>
+        /// The StopNearTouching method is called automatically when the object has stopped being nearly touched.
+        /// </summary>
+        /// <param name="previousNearTouchingObject">The object that was previously nearly touching this object.</param>
+        public virtual void StopNearTouching(VRTK_InteractNearTouch previousNearTouchingObject = null)
+        {
+            GameObject previousNearTouchingGameObject = (previousNearTouchingObject != null ? previousNearTouchingObject.gameObject : null);
+            if (previousNearTouchingGameObject != null && nearTouchingObjects.Contains(previousNearTouchingGameObject))
+            {
+                OnInteractableObjectNearUntouched(SetInteractableObjectEvent(previousNearTouchingGameObject));
+                nearTouchingObjects.Remove(previousNearTouchingGameObject);
+            }
+        }
+
+        /// <summary>
+        /// The StartTouching method is called automatically when the object is touched initially.
         /// </summary>
         /// <param name="currentTouchingObject">The object that is currently touching this object.</param>
         public virtual void StartTouching(VRTK_InteractTouch currentTouchingObject = null)
@@ -384,7 +457,7 @@ namespace VRTK
         }
 
         /// <summary>
-        /// The StopTouching method is called automatically when the object has stopped being touched. It is also a virtual method to allow for overriding in inherited classes.
+        /// The StopTouching method is called automatically when the object has stopped being touched.
         /// </summary>
         /// <param name="previousTouchingObject">The object that was previously touching this object.</param>
         public virtual void StopTouching(VRTK_InteractTouch previousTouchingObject = null)
@@ -399,7 +472,7 @@ namespace VRTK
         }
 
         /// <summary>
-        /// The Grabbed method is called automatically when the object is grabbed initially. It is also a virtual method to allow for overriding in inherited classes.
+        /// The Grabbed method is called automatically when the object is grabbed initially.
         /// </summary>
         /// <param name="currentGrabbingObject">The object that is currently grabbing this object.</param>
         public virtual void Grabbed(VRTK_InteractGrab currentGrabbingObject = null)
@@ -418,7 +491,7 @@ namespace VRTK
         }
 
         /// <summary>
-        /// The Ungrabbed method is called automatically when the object has stopped being grabbed. It is also a virtual method to allow for overriding in inherited classes.
+        /// The Ungrabbed method is called automatically when the object has stopped being grabbed.
         /// </summary>
         /// <param name="previousGrabbingObject">The object that was previously grabbing this object.</param>
         public virtual void Ungrabbed(VRTK_InteractGrab previousGrabbingObject = null)
@@ -438,7 +511,7 @@ namespace VRTK
         }
 
         /// <summary>
-        /// The StartUsing method is called automatically when the object is used initially. It is also a virtual method to allow for overriding in inherited classes.
+        /// The StartUsing method is called automatically when the object is used initially.
         /// </summary>
         /// <param name="currentUsingObject">The object that is currently using this object.</param>
         public virtual void StartUsing(VRTK_InteractUse currentUsingObject = null)
@@ -454,7 +527,7 @@ namespace VRTK
         }
 
         /// <summary>
-        /// The StopUsing method is called automatically when the object has stopped being used. It is also a virtual method to allow for overriding in inherited classes.
+        /// The StopUsing method is called automatically when the object has stopped being used.
         /// </summary>
         /// <param name="previousUsingObject">The object that was previously using this object.</param>
         /// <param name="resetUsingObjectState">Resets the using object state to reset it's using action.</param>
@@ -549,6 +622,15 @@ namespace VRTK
                     previousKinematicState = interactableRigidbody.isKinematic;
                 }
             }
+        }
+
+        /// <summary>
+        /// The GetNearTouchingObjects method is used to return the collecetion of valid game objects that are currently nearly touching this object.
+        /// </summary>
+        /// <returns>A list of game object of that are currently nearly touching the current object.</returns>
+        public virtual List<GameObject> GetNearTouchingObjects()
+        {
+            return nearTouchingObjects;
         }
 
         /// <summary>
@@ -895,7 +977,7 @@ namespace VRTK
         /// <returns>whether or not the script is currently idle</returns>
         protected virtual bool IsIdle()
         {
-            return !IsTouched() && !IsGrabbed() && !IsUsing();
+            return !IsNearTouched() && !IsTouched() && !IsGrabbed() && !IsUsing();
         }
 
         protected virtual void LateUpdate()
