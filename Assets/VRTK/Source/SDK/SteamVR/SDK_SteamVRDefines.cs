@@ -83,6 +83,7 @@ namespace VRTK
         [SDK_ScriptingDefineSymbolPredicate(SDK_ScriptingDefineSymbolPredicateAttribute.RemovableSymbolPrefix + "STEAMVR_PLUGIN_1_1_1_OR_OLDER", BuildTargetGroupName)]
         private static bool IsPluginVersion111OrOlder()
         {
+#if !UNITY_WSA
             Type utilsClass = VRTK_SharedMethods.GetTypeUnknownAssembly("SteamVR_Utils");
             if (utilsClass == null)
             {
@@ -96,6 +97,10 @@ namespace VRTK
             }
 
             return eventClass.GetMethod("Listen", BindingFlags.Public | BindingFlags.Static) != null;
+#else
+            return false;
+#endif
+            
         }
     }
 }

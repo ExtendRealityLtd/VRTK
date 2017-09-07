@@ -2,6 +2,7 @@
 namespace VRTK
 {
     using UnityEngine;
+    using System.Reflection;
 #if UNITY_2017_2_OR_NEWER
     using UnityEngine.XR;
 #else
@@ -40,7 +41,11 @@ namespace VRTK
 
         protected virtual string GetVarName<T>(T item) where T : class
         {
+#if UNITY_WSA && !UNITY_EDITOR
+            return System.Reflection.TypeExtensions.GetProperties(typeof(T), BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static)[0].Name;
+#else
             return typeof(T).GetProperties()[0].Name;
+#endif
         }
 
         protected virtual void CheckAxisIsValid(string axisName, string varName)

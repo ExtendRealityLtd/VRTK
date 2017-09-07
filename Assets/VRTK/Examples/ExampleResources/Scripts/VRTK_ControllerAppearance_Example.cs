@@ -46,6 +46,8 @@
             events.GripReleased += DoGripReleased;
             events.TouchpadPressed += DoTouchpadPressed;
             events.TouchpadReleased += DoTouchpadReleased;
+            events.TouchpadTwoPressed += DoTouchpadTwoPressed;
+            events.TouchpadTwoReleased += DoTouchpadTwoReleased;
 
             tooltips.ToggleTips(false);
         }
@@ -64,6 +66,8 @@
             events.GripReleased -= DoGripReleased;
             events.TouchpadPressed -= DoTouchpadPressed;
             events.TouchpadReleased -= DoTouchpadReleased;
+            events.TouchpadTwoPressed -= DoTouchpadTwoPressed;
+            events.TouchpadTwoReleased -= DoTouchpadTwoReleased;
         }
 
         private void PulseTrigger()
@@ -178,6 +182,23 @@
         {
             tooltips.ToggleTips(false, VRTK_ControllerTooltips.TooltipButtons.TouchpadTooltip);
             highligher.UnhighlightElement(SDK_BaseController.ControllerElements.Touchpad);
+            if (!events.AnyButtonPressed())
+            {
+                VRTK_ObjectAppearance.SetOpacity(VRTK_DeviceFinder.GetModelAliasController(events.gameObject), defaultOpacity);
+            }
+        }
+
+        private void DoTouchpadTwoPressed(object sender, ControllerInteractionEventArgs e)
+        {
+            tooltips.ToggleTips(true, VRTK_ControllerTooltips.TooltipButtons.TouchpadTwoTooltip);
+            highligher.HighlightElement(SDK_BaseController.ControllerElements.TouchpadTwo, highlightColor, highlightTimer);
+            VRTK_ObjectAppearance.SetOpacity(VRTK_DeviceFinder.GetModelAliasController(events.gameObject), dimOpacity);
+        }
+
+        private void DoTouchpadTwoReleased(object sender, ControllerInteractionEventArgs e)
+        {
+            tooltips.ToggleTips(false, VRTK_ControllerTooltips.TooltipButtons.TouchpadTwoTooltip);
+            highligher.UnhighlightElement(SDK_BaseController.ControllerElements.TouchpadTwo);
             if (!events.AnyButtonPressed())
             {
                 VRTK_ObjectAppearance.SetOpacity(VRTK_DeviceFinder.GetModelAliasController(events.gameObject), defaultOpacity);

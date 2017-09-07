@@ -96,6 +96,10 @@ namespace VRTK
             /// </summary>
             TouchpadTwoTouch,
             /// <summary>
+            /// The touchpad two is pressed (to the point of hearing a click).
+            /// </summary>
+            TouchpadTwoPress,
+            /// <summary>
             /// The button one is touched.
             /// </summary>
             ButtonOneTouch,
@@ -288,6 +292,11 @@ namespace VRTK
         /// </summary>
         [HideInInspector]
         public bool touchpadSenseAxisChanged = false;
+        /// <summary>
+        /// This will be true if the touchpad two is held down.
+        /// </summary>
+        [HideInInspector]
+        public bool touchpadTwoPressed = false;
         /// <summary>
         /// This will be true if the touchpad two is being touched.
         /// </summary>
@@ -482,6 +491,15 @@ namespace VRTK
         public event ControllerInteractionEventHandler TouchpadSenseAxisChanged;
 
         /// <summary>
+        /// Emitted when the touchpad two is pressed (to the point of hearing a click).
+        /// </summary>
+        public event ControllerInteractionEventHandler TouchpadTwoPressed;
+        /// <summary>
+        /// Emitted when the touchpad two has been released after a pressed state.
+        /// </summary>
+        public event ControllerInteractionEventHandler TouchpadTwoReleased;
+
+        /// <summary>
         /// Emitted when the touchpad two is touched (without pressing down to click).
         /// </summary>
         public event ControllerInteractionEventHandler TouchpadTwoTouchStart;
@@ -495,6 +513,7 @@ namespace VRTK
         /// </summary>
         public event ControllerInteractionEventHandler TouchpadTwoAxisChanged;
         #endregion controller touchpad events
+
 
         #region controller button one events
         /// <summary>
@@ -809,6 +828,22 @@ namespace VRTK
             if (TouchpadSenseAxisChanged != null)
             {
                 TouchpadSenseAxisChanged(this, e);
+            }
+        }
+
+        public virtual void OnTouchpadTwoPressed(ControllerInteractionEventArgs e)
+        {
+            if (TouchpadPressed != null)
+            {
+                TouchpadTwoPressed(this, e);
+            }
+        }
+
+        public virtual void OnTouchpadTwoReleased(ControllerInteractionEventArgs e)
+        {
+            if (TouchpadReleased != null)
+            {
+                TouchpadTwoReleased(this, e);
             }
         }
 
@@ -1207,7 +1242,7 @@ namespace VRTK
         /// <returns>Returns `true` if any of the controller buttons are currently being pressed.</returns>
         public virtual bool AnyButtonPressed()
         {
-            return (triggerPressed || gripPressed || touchpadPressed || buttonOnePressed || buttonTwoPressed || startMenuPressed);
+            return (triggerPressed || gripPressed || touchpadPressed || touchpadTwoPressed || buttonOnePressed || buttonTwoPressed || startMenuPressed);
         }
 
         /// <summary>
@@ -1265,6 +1300,8 @@ namespace VRTK
                     return touchpadPressed;
                 case ButtonAlias.TouchpadTwoTouch:
                     return touchpadTwoTouched;
+                case ButtonAlias.TouchpadTwoPress:
+                    return touchpadTwoPressed;
                 case ButtonAlias.TouchpadSense:
                     return (touchpadSenseAxis >= senseAxisPressThreshold);
                 case ButtonAlias.ButtonOnePress:
@@ -1594,6 +1631,16 @@ namespace VRTK
             if (VRTK_SDK_Bridge.GetControllerButtonState(SDK_BaseController.ButtonTypes.TouchpadTwo, SDK_BaseController.ButtonPressTypes.TouchDown, controllerReference))
             {
                 OnTouchpadTwoTouchStart(SetControllerEvent(ref touchpadTwoTouched, true, 1f));
+            }
+
+            //Touchpad Two Pressed
+            if (VRTK_SDK_Bridge.GetControllerButtonState(SDK_BaseController.ButtonTypes.TouchpadTwo, SDK_BaseController.ButtonPressTypes.PressDown, controllerReference))
+            {
+                OnTouchpadTwoPressed(SetControllerEvent(ref touchpadTwoPressed, true, 1f));
+            }
+            else if (VRTK_SDK_Bridge.GetControllerButtonState(SDK_BaseController.ButtonTypes.TouchpadTwo, SDK_BaseController.ButtonPressTypes.PressUp, controllerReference))
+            {
+                OnTouchpadTwoReleased(SetControllerEvent(ref touchpadTwoPressed, false, 0f));
             }
 
             //Touchpad Two Untouched
@@ -1961,6 +2008,30 @@ namespace VRTK
                         else
                         {
                             TouchpadTouchEnd -= callbackMethod;
+                        }
+                    }
+                    break;
+                case ButtonAlias.TouchpadTwoPress:
+                    if (subscribe)
+                    {
+                        if (startEvent)
+                        {
+                            TouchpadTwoPressed += callbackMethod;
+                        }
+                        else
+                        {
+                            TouchpadTwoReleased += callbackMethod;
+                        }
+                    }
+                    else
+                    {
+                        if (startEvent)
+                        {
+                            TouchpadTwoPressed -= callbackMethod;
+                        }
+                        else
+                        {
+                            TouchpadTwoReleased -= callbackMethod;
                         }
                     }
                     break;
@@ -2337,6 +2408,11 @@ namespace VRTK
             if (touchpadTwoTouched)
             {
                 OnTouchpadTwoTouchEnd(SetControllerEvent(ref touchpadTwoTouched, false, 0f));
+            }
+
+            if (touchpadTwoPressed)
+            {
+                OnTouchpadReleased(SetControllerEvent(ref touchpadTwoPressed, false, 0f));
             }
 
             if (buttonOnePressed)

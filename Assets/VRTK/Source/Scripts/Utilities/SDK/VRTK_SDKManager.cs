@@ -474,6 +474,7 @@ namespace VRTK
             else
             {
                 // If '-vrmode none' was used try to load the respective SDK Setup
+#if !UNITY_WSA
                 string[] commandLineArgs = Environment.GetCommandLineArgs();
                 int commandLineArgIndex = Array.IndexOf(commandLineArgs, "-vrmode", 1);
                 if (XRSettings.loadedDeviceName == "None"
@@ -486,6 +487,7 @@ namespace VRTK
                         setup => setup.usedVRDeviceNames.All(vrDeviceName => vrDeviceName == "None")
                     );
                 }
+#endif
             }
 
             index = index == -1 ? 0 : index;
@@ -847,8 +849,11 @@ namespace VRTK
         private static void PopulateAvailableScriptingDefineSymbolPredicateInfos()
         {
             List<ScriptingDefineSymbolPredicateInfo> predicateInfos = new List<ScriptingDefineSymbolPredicateInfo>();
-
+#if UNITY_WSA && !UNITY_EDITOR         
+            foreach (Type type in typeof(VRTK_SDKManager).GetTypeInfo().Assembly.GetTypes())
+#else
             foreach (Type type in typeof(VRTK_SDKManager).Assembly.GetTypes())
+#endif
             {
                 for (int index = 0; index < type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static).Length; index++)
                 {
@@ -872,8 +877,8 @@ namespace VRTK
                 }
             }
 
-            predicateInfos.Sort((x, y) => string.Compare(x.attribute.symbol, y.attribute.symbol, StringComparison.Ordinal));
 
+            predicateInfos.Sort((x, y) => string.Compare(x.attribute.symbol, y.attribute.symbol, StringComparison.Ordinal));
             AvailableScriptingDefineSymbolPredicateInfos = predicateInfos.AsReadOnly();
         }
 
@@ -930,9 +935,15 @@ namespace VRTK
             Type fallbackType = SDKFallbackTypesByBaseType[baseType];
 
             availableSDKInfos.AddRange(VRTK_SDKInfo.Create<BaseType, FallbackType, FallbackType>());
+#if UNITY_WSA && !UNITY_EDITOR
+            availableSDKInfos.AddRange(baseType.GetTypeInfo().Assembly.GetExportedTypes()
+                                               .Where(type => type.GetTypeInfo().IsSubclassOf(baseType) && type != fallbackType && !type.GetTypeInfo().IsAbstract)
+                                               .SelectMany<Type, VRTK_SDKInfo>(VRTK_SDKInfo.Create<BaseType, FallbackType>));
+#else
             availableSDKInfos.AddRange(baseType.Assembly.GetExportedTypes()
                                                .Where(type => type.IsSubclassOf(baseType) && type != fallbackType && !type.IsAbstract)
                                                .SelectMany<Type, VRTK_SDKInfo>(VRTK_SDKInfo.Create<BaseType, FallbackType>));
+#endif
             availableSDKInfos.Sort((x, y) => x.description.describesFallbackSDK
                                                  ? -1 //the fallback SDK should always be the first SDK in the list
                                                  : string.Compare(x.description.prettyName, y.description.prettyName, StringComparison.Ordinal));
