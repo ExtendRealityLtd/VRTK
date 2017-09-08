@@ -41,6 +41,49 @@ namespace VRTK
     public class VRTK_InteractableObject : MonoBehaviour
     {
         /// <summary>
+        /// The interaction type.
+        /// </summary>
+        public enum InteractionType
+        {
+            /// <summary>
+            /// No interaction is affecting the object.
+            /// </summary>
+            None,
+            /// <summary>
+            /// The near touch interaction is affecting the object.
+            /// </summary>
+            NearTouch,
+            /// <summary>
+            /// The near untouch interaction stopped affecting the object
+            /// </summary>
+            NearUntouch,
+            /// <summary>
+            /// The touch interaction is affecting the object.
+            /// </summary>
+            Touch,
+            /// <summary>
+            /// The untouch interaction stopped affecting the object
+            /// </summary>
+            Untouch,
+            /// <summary>
+            /// The grab interaction is affecting the object.
+            /// </summary>
+            Grab,
+            /// <summary>
+            /// The ungrab interaction stopped affecting the object
+            /// </summary>
+            Ungrab,
+            /// <summary>
+            /// The use interaction is affecting the object.
+            /// </summary>
+            Use,
+            /// <summary>
+            /// The unuse interaction stopped affecting the object
+            /// </summary>
+            Unuse
+        }
+
+        /// <summary>
         /// Allowed controller type.
         /// </summary>
         public enum AllowedController
@@ -88,10 +131,13 @@ namespace VRTK
         [Tooltip("Determines which controller can initiate a near touch action.")]
         public AllowedController allowedNearTouchControllers = AllowedController.Both;
 
+        [Tooltip("The colour to highlight the object when it is touched. This colour will override any globally set colour (for instance on the `VRTK_InteractTouch` script).")]
+        [System.Obsolete("`VRTK_InteractableObject.touchHighlightColor` has been replaced with `VRTK_InteractObjectHighlighter.touchHighlight`. This parameter will be removed in a future version of VRTK.")]
+        [HideInInspector]
+        public Color touchHighlightColor = Color.clear;
+
         [Header("Touch Settings", order = 3)]
 
-        [Tooltip("The colour to highlight the object when it is touched. This colour will override any globally set colour (for instance on the `VRTK_InteractTouch` script).")]
-        public Color touchHighlightColor = Color.clear;
         [Tooltip("Determines which controller can initiate a touch action.")]
         public AllowedController allowedTouchControllers = AllowedController.Both;
         [Tooltip("An array of colliders on the object to ignore when being touched.")]
@@ -547,20 +593,41 @@ namespace VRTK
         /// The ToggleHighlight method is used to turn on or off the colour highlight of the object.
         /// </summary>
         /// <param name="toggle">The state to determine whether to activate or deactivate the highlight. `true` will enable the highlight and `false` will remove the highlight.</param>
-        public virtual void ToggleHighlight(bool toggle)
+        [System.Obsolete("`VRTK_InteractableObject.ToggleHighlight` has been replaced with `VRTK_InteractableObject.Highlight` and `VRTK_InteractableObject.Unhighlight`. This method will be removed in a future version of VRTK.")]
+        public virtual void ToggleHighlight(bool toggle, Color? highlightColor = null)
+        {
+            if (toggle)
+            {
+                Highlight((highlightColor != null ? (Color)highlightColor : Color.clear));
+            }
+            else
+            {
+                Unhighlight();
+            }
+        }
+
+        /// <summary>
+        /// The Highlight method turns on the highlighter attached to the Interactable Object with the given colour.
+        /// </summary>
+        /// <param name="highlightColor">The colour to apply to the highlighter.</param>
+        public virtual void Highlight(Color highlightColor)
+        {
+            InitialiseHighlighter(highlightColor);
+            if (objectHighlighter != null && highlightColor != Color.clear)
+            {
+                objectHighlighter.Highlight(highlightColor);
+            }
+        }
+
+        /// <summary>
+        /// The Unhighlight method turns off the highlighter attached to the Interactable Object.
+        /// </summary>
+        public virtual void Unhighlight()
         {
             InitialiseHighlighter();
-
-            if (touchHighlightColor != Color.clear && objectHighlighter)
+            if (objectHighlighter != null)
             {
-                if (toggle && !IsGrabbed())
-                {
-                    objectHighlighter.Highlight(touchHighlightColor);
-                }
-                else
-                {
-                    objectHighlighter.Unhighlight();
-                }
+                objectHighlighter.Unhighlight();
             }
         }
 
@@ -906,6 +973,15 @@ namespace VRTK
                 startDisabled = true;
                 enabled = false;
             }
+
+            ///[Obsolete]
+#pragma warning disable 0618
+            if (touchHighlightColor != Color.clear && !GetComponentInChildren<VRTK_InteractObjectHighlighter>())
+            {
+                VRTK_InteractObjectHighlighter autoGenInteractHighlighter = gameObject.AddComponent<VRTK_InteractObjectHighlighter>();
+                autoGenInteractHighlighter.touchHighlight = touchHighlightColor;
+            }
+#pragma warning restore 0618
         }
 
         protected virtual void OnEnable()
@@ -1005,9 +1081,9 @@ namespace VRTK
             }
         }
 
-        protected virtual void InitialiseHighlighter()
+        protected virtual void InitialiseHighlighter(Color? highlightColor = null)
         {
-            if (touchHighlightColor != Color.clear && objectHighlighter == null)
+            if (objectHighlighter == null)
             {
                 autoHighlighter = false;
                 objectHighlighter = VRTK_BaseHighlighter.GetActiveHighlighter(gameObject);
@@ -1016,7 +1092,7 @@ namespace VRTK
                     autoHighlighter = true;
                     objectHighlighter = gameObject.AddComponent<VRTK_MaterialColorSwapHighlighter>();
                 }
-                objectHighlighter.Initialise(touchHighlightColor);
+                objectHighlighter.Initialise((highlightColor != null ? highlightColor : Color.clear));
             }
         }
 

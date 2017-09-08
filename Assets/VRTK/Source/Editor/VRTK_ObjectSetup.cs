@@ -2,8 +2,8 @@
 {
     using UnityEngine;
     using UnityEditor;
-    using VRTK.GrabAttachMechanics;
-    using VRTK.SecondaryControllerGrabActions;
+    using GrabAttachMechanics;
+    using SecondaryControllerGrabActions;
 
     public class VRTK_ObjectSetup : EditorWindow
     {
@@ -39,10 +39,10 @@
         private static void Init()
         {
             VRTK_ObjectSetup window = (VRTK_ObjectSetup)EditorWindow.GetWindow(typeof(VRTK_ObjectSetup));
-            
-            window.minSize = new Vector2( 300f, 370f );
-            window.maxSize = new Vector2( 400f, 400f );
-            
+
+            window.minSize = new Vector2(300f, 370f);
+            window.maxSize = new Vector2(400f, 400f);
+
             window.autoRepaintOnSceneChange = true;
             window.titleContent.text = "Setup Object";
             window.Show();
@@ -75,7 +75,7 @@
             addHaptics = EditorGUILayout.Toggle("Add Haptics", addHaptics);
             EditorGUILayout.Space();
 
-            if(GUILayout.Button("Setup selected object(s)", GUILayout.Height(40)))
+            if (GUILayout.Button("Setup selected object(s)", GUILayout.Height(40)))
             {
                 SetupObject();
             }
@@ -84,91 +84,129 @@
         private void SetupObject()
         {
             Transform[] transforms = Selection.transforms;
-            foreach(Transform transform in transforms)
+            foreach (Transform currentTransform in transforms)
             {
-                GameObject go = transform.gameObject;
-                VRTK_InteractableObject intObj = go.GetComponent<VRTK_InteractableObject>();
-                if(intObj == null)
+                VRTK_InteractableObject interactableObject = SetupInteractableObject(currentTransform);
+                SetupPrimaryGrab(interactableObject);
+                SetupSecondaryGrab(interactableObject);
+                SetupRigidbody(interactableObject);
+                SetupHaptics(interactableObject);
+                SetupHighlighter(interactableObject);
+            }
+        }
+
+        private VRTK_InteractableObject SetupInteractableObject(Transform givenTransform)
+        {
+            VRTK_InteractableObject intObj = givenTransform.GetComponent<VRTK_InteractableObject>();
+            if (intObj == null)
+            {
+                intObj = givenTransform.gameObject.AddComponent<VRTK_InteractableObject>();
+            }
+            intObj.isGrabbable = useGrab;
+            intObj.holdButtonToGrab = holdGrab;
+            intObj.isUsable = useUse;
+            intObj.disableWhenIdle = disableIdle;
+            intObj.grabOverrideButton = VRTK_ControllerEvents.ButtonAlias.Undefined;
+            intObj.useOverrideButton = VRTK_ControllerEvents.ButtonAlias.Undefined;
+            return intObj;
+        }
+
+        private void SetupPrimaryGrab(VRTK_InteractableObject givenObject)
+        {
+            VRTK_BaseGrabAttach grab = givenObject.GetComponentInChildren<VRTK_BaseGrabAttach>();
+            if (grab != null)
+            {
+                DestroyImmediate(grab);
+            }
+            switch (primGrab)
+            {
+                case PrimaryGrab.ChildOfController:
+                    grab = givenObject.gameObject.AddComponent<VRTK_ChildOfControllerGrabAttach>();
+                    break;
+                case PrimaryGrab.FixedJoint:
+                    grab = givenObject.gameObject.AddComponent<VRTK_FixedJointGrabAttach>();
+                    break;
+                case PrimaryGrab.Climbable:
+                    grab = givenObject.gameObject.AddComponent<VRTK_ClimbableGrabAttach>();
+                    break;
+                case PrimaryGrab.CustomJoint:
+                    grab = givenObject.gameObject.AddComponent<VRTK_CustomJointGrabAttach>();
+                    break;
+                case PrimaryGrab.RotatorTrack:
+                    grab = givenObject.gameObject.AddComponent<VRTK_RotatorTrackGrabAttach>();
+                    break;
+                case PrimaryGrab.SpringJoint:
+                    grab = givenObject.gameObject.AddComponent<VRTK_SpringJointGrabAttach>();
+                    break;
+                case PrimaryGrab.TrackObject:
+                    grab = givenObject.gameObject.AddComponent<VRTK_TrackObjectGrabAttach>();
+                    break;
+                default:
+                    grab = givenObject.gameObject.AddComponent<VRTK_ChildOfControllerGrabAttach>();
+                    break;
+            }
+            givenObject.grabAttachMechanicScript = grab;
+        }
+
+        private void SetupSecondaryGrab(VRTK_InteractableObject givenObject)
+        {
+            VRTK_BaseGrabAction grab = givenObject.GetComponentInChildren<VRTK_BaseGrabAction>();
+            if (grab != null)
+            {
+                DestroyImmediate(grab);
+            }
+            switch (secGrab)
+            {
+                case SecondaryGrab.SwapControllers:
+                    grab = givenObject.gameObject.AddComponent<VRTK_SwapControllerGrabAction>();
+                    break;
+                case SecondaryGrab.ControlDirection:
+                    grab = givenObject.gameObject.AddComponent<VRTK_ControlDirectionGrabAction>();
+                    break;
+                case SecondaryGrab.AxisScale:
+                    grab = givenObject.gameObject.AddComponent<VRTK_AxisScaleGrabAction>();
+                    break;
+                default:
+                    grab = givenObject.gameObject.AddComponent<VRTK_SwapControllerGrabAction>();
+                    break;
+            }
+            givenObject.secondaryGrabActionScript = grab;
+        }
+
+        private void SetupRigidbody(VRTK_InteractableObject givenObject)
+        {
+            if (addrb)
+            {
+                Rigidbody rb = givenObject.GetComponent<Rigidbody>();
+                if (rb == null)
                 {
-                    intObj = go.AddComponent<VRTK_InteractableObject>();
+                    givenObject.gameObject.AddComponent<Rigidbody>();
                 }
-                intObj.touchHighlightColor = touchColor;
-                intObj.isGrabbable = useGrab;
-                intObj.holdButtonToGrab = holdGrab;
-                intObj.isUsable = useUse;
-                intObj.disableWhenIdle = disableIdle;
-                intObj.grabOverrideButton = VRTK_ControllerEvents.ButtonAlias.Undefined;
-                intObj.useOverrideButton = VRTK_ControllerEvents.ButtonAlias.Undefined;
-                VRTK_BaseGrabAttach grab = go.GetComponent<VRTK_BaseGrabAttach>();
-                if(grab != null)
+            }
+        }
+
+        private void SetupHaptics(VRTK_InteractableObject givenObject)
+        {
+            if (addHaptics)
+            {
+                VRTK_InteractHaptics haptics = givenObject.GetComponentInChildren<VRTK_InteractHaptics>();
+                if (haptics == null)
                 {
-                    DestroyImmediate(grab);
+                    givenObject.gameObject.AddComponent<VRTK_InteractHaptics>();
                 }
-                switch(primGrab)
+            }
+        }
+
+        private void SetupHighlighter(VRTK_InteractableObject givenObject)
+        {
+            if (touchColor != Color.clear)
+            {
+                VRTK_InteractObjectHighlighter highlighter = givenObject.GetComponentInChildren<VRTK_InteractObjectHighlighter>();
+                if (highlighter == null)
                 {
-                    case PrimaryGrab.ChildOfController:
-                        grab = go.AddComponent<VRTK_ChildOfControllerGrabAttach>();
-                        break;
-                    case PrimaryGrab.FixedJoint:
-                        grab = go.AddComponent<VRTK_FixedJointGrabAttach>();
-                        break;
-                    case PrimaryGrab.Climbable:
-                        grab = go.AddComponent<VRTK_ClimbableGrabAttach>();
-                        break;
-                    case PrimaryGrab.CustomJoint:
-                        grab = go.AddComponent<VRTK_CustomJointGrabAttach>();
-                        break;
-                    case PrimaryGrab.RotatorTrack:
-                        grab = go.AddComponent<VRTK_RotatorTrackGrabAttach>();
-                        break;
-                    case PrimaryGrab.SpringJoint:
-                        grab = go.AddComponent<VRTK_SpringJointGrabAttach>();
-                        break;
-                    case PrimaryGrab.TrackObject:
-                        grab = go.AddComponent<VRTK_TrackObjectGrabAttach>();
-                        break;
-                    default:
-                        grab = go.AddComponent<VRTK_ChildOfControllerGrabAttach>();
-                        break;
+                    highlighter = givenObject.gameObject.AddComponent<VRTK_InteractObjectHighlighter>();
                 }
-                intObj.grabAttachMechanicScript = grab;
-                VRTK_BaseGrabAction grab2 = go.GetComponent<VRTK_BaseGrabAction>();
-                if(grab2 != null)
-                {
-                    DestroyImmediate(grab2);
-                }
-                switch(secGrab)
-                {
-                    case SecondaryGrab.SwapControllers:
-                        grab2 = go.AddComponent<VRTK_SwapControllerGrabAction>();
-                        break;
-                    case SecondaryGrab.ControlDirection:
-                        grab2 = go.AddComponent<VRTK_ControlDirectionGrabAction>();
-                        break;
-                    case SecondaryGrab.AxisScale:
-                        grab2 = go.AddComponent<VRTK_AxisScaleGrabAction>();
-                        break;
-                    default:
-                        grab2 = go.AddComponent<VRTK_SwapControllerGrabAction>();
-                        break;
-                }
-                intObj.secondaryGrabActionScript = grab2;
-                if(addrb)
-                {
-                    Rigidbody rb = go.GetComponent<Rigidbody>();
-                    if(rb == null)
-                    {
-                        go.AddComponent<Rigidbody>();
-                    }
-                }
-                if(addHaptics)
-                {
-                    VRTK_InteractHaptics haptics = go.GetComponent<VRTK_InteractHaptics>();
-                    if(haptics == null)
-                    {
-                        go.AddComponent<VRTK_InteractHaptics>();
-                    }
-                }
+                highlighter.touchHighlight = touchColor;
             }
         }
     }

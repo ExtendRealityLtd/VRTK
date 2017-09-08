@@ -2603,6 +2603,7 @@ A collection of scripts that provide the ability to interact with game objects w
  * [Controller Highlighter](#controller-highlighter-vrtk_controllerhighlighter)
  * [Controller Haptics](#controller-haptics-vrtk_controllerhaptics)
  * [Interact Object Appearance](#interact-object-appearance-vrtk_interactobjectappearance)
+ * [Interact Object Highlighter](#interact-object-highlighter-vrtk_interactobjecthighlighter)
  * [Interact Touch](#interact-touch-vrtk_interacttouch)
  * [Interact Near Touch](#interact-near-touch-vrtk_interactneartouch)
  * [Interact Grab](#interact-grab-vrtk_interactgrab)
@@ -3220,6 +3221,51 @@ Adding the `VRTK_InteractObjectAppearance_UnityEvents` component to `VRTK_Intera
 
 ---
 
+## Interact Object Highlighter (VRTK_InteractObjectHighlighter)
+
+### Overview
+
+The Interact Object Hightlighter script is attached to an Interactable Object component to provide highlighting to the object on various interaction stages.
+
+### Inspector Parameters
+
+ * **Near Touch Highlight:** The colour to highlight the object on the near touch interaction.
+ * **Touch Highlight:** The colour to highlight the object on the touch interaction.
+ * **Grab Highlight:** The colour to highlight the object on the grab interaction.
+ * **Use Highlight:** The colour to highlight the object on the use interaction.
+ * **Object To Affect:** The Interactable Object to affect the highlighter of. If this is left blank, then the Interactable Object will need to be on the current or a parent GameObject.
+
+### Class Events
+
+ * `InteractObjectHighlighterHighlighted` - Emitted when the object is highlighted
+ * `InteractObjectHighlighterUnhighlighted` - Emitted when the object is unhighlighted
+
+### Unity Events
+
+Adding the `VRTK_InteractObjectHighlighter_UnityEvents` component to `VRTK_InteractObjectHighlighter` object allows access to `UnityEvents` that will react identically to the Class Events.
+
+ * All C# delegate events are mapped to a Unity Event with the `On` prefix. e.g. `MyEvent` -> `OnMyEvent`.
+
+### Event Payload
+
+ * `VRTK_InteractableObject affectedObject` - The GameObject that is being highlighted.
+ * `GameObject affectingObject` - The GameObject is initiating the highlight via an interaction.
+
+### Class Methods
+
+#### GetCurrentHighlightColor/0
+
+  > `public virtual Color GetCurrentHighlightColor()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `Color` - The Color that the Interactable Object is being highlighted to.
+
+The GetCurrentHighlightColor returns the colour that the object is currently being highlighted to.
+
+---
+
 ## Interact Touch (VRTK_InteractTouch)
 
 ### Overview
@@ -3671,6 +3717,16 @@ The highlighting of an Interactable Object is defaulted to use the `VRTK_Materia
 
 ### Class Variables
 
+ * `public enum InteractionType` - The interaction type.
+   * `None` - No interaction is affecting the object.
+   * `NearTouch` - The near touch interaction is affecting the object.
+   * `NearUntouch` - The near untouch interaction stopped affecting the object
+   * `Touch` - The touch interaction is affecting the object.
+   * `Untouch` - The untouch interaction stopped affecting the object
+   * `Grab` - The grab interaction is affecting the object.
+   * `Ungrab` - The ungrab interaction stopped affecting the object
+   * `Use` - The use interaction is affecting the object.
+   * `Unuse` - The unuse interaction stopped affecting the object
  * `public enum AllowedController` - Allowed controller type.
    * `Both` - Both controllers are allowed to interact.
    * `LeftOnly` - Only the left controller is allowed to interact.
@@ -3844,16 +3900,27 @@ The StartUsing method is called automatically when the object is used initially.
 
 The StopUsing method is called automatically when the object has stopped being used.
 
-#### ToggleHighlight/1
+#### Highlight/1
 
-  > `public virtual void ToggleHighlight(bool toggle)`
+  > `public virtual void Highlight(Color highlightColor)`
 
  * Parameters
-   * `bool toggle` - The state to determine whether to activate or deactivate the highlight. `true` will enable the highlight and `false` will remove the highlight.
+   * `Color highlightColor` - The colour to apply to the highlighter.
  * Returns
    * _none_
 
-The ToggleHighlight method is used to turn on or off the colour highlight of the object.
+The Highlight method turns on the highlighter attached to the Interactable Object with the given colour.
+
+#### Unhighlight/0
+
+  > `public virtual void Unhighlight()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * _none_
+
+The Unhighlight method turns off the highlighter attached to the Interactable Object.
 
 #### ResetHighlighter/0
 

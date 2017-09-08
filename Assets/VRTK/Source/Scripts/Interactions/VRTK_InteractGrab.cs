@@ -427,7 +427,6 @@ namespace VRTK
             currentGrabbedObject.SaveCurrentState();
             currentGrabbedObject.Grabbed(this);
             currentGrabbedObject.ZeroVelocity();
-            currentGrabbedObject.ToggleHighlight(false);
             currentGrabbedObject.isKinematic = false;
         }
 
@@ -460,7 +459,6 @@ namespace VRTK
                         grabbedObjectScript.grabAttachMechanicScript.StopGrab(applyGrabbingObjectVelocity);
                     }
                     grabbedObjectScript.Ungrabbed(this);
-                    grabbedObjectScript.ToggleHighlight(false);
                     ToggleControllerVisibility(true);
 
                     OnControllerUngrabInteractableObject(interactTouch.SetControllerInteractEvent(grabbedObject));
