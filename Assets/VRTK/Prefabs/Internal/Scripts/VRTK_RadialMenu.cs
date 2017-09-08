@@ -10,6 +10,18 @@ namespace VRTK
 
     public delegate void HapticPulseEventHandler(float strength);
 
+    public struct TouchAngleDeflection
+    {
+        public TouchAngleDeflection(float a, float d)
+        {
+            angle = a;
+            deflection = d;
+        }
+
+        public float angle;
+        public float deflection;
+    }
+
     /// <summary>
     /// Provides a UI element into the world space that can be dropped into a Controller GameObject and used to create and use Radial Menus from the touchpad.
     /// </summary>
@@ -70,6 +82,9 @@ namespace VRTK
         [Tooltip("The base strength of the haptic pulses when the selected button is changed, or a button is pressed. Set to zero to disable.")]
         [Range(0, 1)]
         public float baseHapticStrength;
+        [Tooltip("The dead zone in the middle of the dial where the menu does not consider a button is selected. Set to zero to disable.")]
+        [Range(0, 1)]
+        public float deadZone = 0;
 
         public event HapticPulseEventHandler FireHapticPulse;
 
@@ -85,27 +100,27 @@ namespace VRTK
         /// The HoverButton method is used to set the button hover at a given angle.
         /// </summary>
         /// <param name="angle">The angle on the radial menu.</param>
-        public virtual void HoverButton(float angle)
+        public virtual void HoverButton(TouchAngleDeflection tad)
         {
-            InteractButton(angle, ButtonEvent.hoverOn);
+            InteractButton(tad, ButtonEvent.hoverOn);
         }
 
         /// <summary>
         /// The ClickButton method is used to set the button click at a given angle.
         /// </summary>
         /// <param name="angle">The angle on the radial menu.</param>
-        public virtual void ClickButton(float angle)
+        public virtual void ClickButton(TouchAngleDeflection tad)
         {
-            InteractButton(angle, ButtonEvent.click);
+            InteractButton(tad, ButtonEvent.click);
         }
 
         /// <summary>
         /// The UnClickButton method is used to set the button unclick at a given angle.
         /// </summary>
         /// <param name="angle">The angle on the radial menu.</param>
-        public virtual void UnClickButton(float angle)
+        public virtual void UnClickButton(TouchAngleDeflection tad)
         {
-            InteractButton(angle, ButtonEvent.unclick);
+            InteractButton(tad, ButtonEvent.unclick);
         }
 
         /// <summary>
@@ -285,14 +300,21 @@ namespace VRTK
         }
 
         //Turns and Angle and Event type into a button action
-        protected virtual void InteractButton(float angle, ButtonEvent evt) //Can't pass ExecuteEvents as parameter? Unity gives error
+        protected virtual void InteractButton(TouchAngleDeflection tad, ButtonEvent evt) //Can't pass ExecuteEvents as parameter? Unity gives error
         {
             //Get button ID from angle
             float buttonAngle = 360f / buttons.Count; //Each button is an arc with this angle
-            angle = VRTK_SharedMethods.Mod((angle + -offsetRotation), 360f); //Offset the touch coordinate with our offset
+            tad.angle = VRTK_SharedMethods.Mod((tad.angle + -offsetRotation), 360f); //Offset the touch coordinate with our offset
 
-            int buttonID = (int)VRTK_SharedMethods.Mod(((angle + (buttonAngle / 2f)) / buttonAngle), buttons.Count); //Convert angle into ButtonID (This is the magic)
+            int buttonID = (int)VRTK_SharedMethods.Mod(((tad.angle + (buttonAngle / 2f)) / buttonAngle), buttons.Count); //Convert angle into ButtonID (This is the magic)
             PointerEventData pointer = new PointerEventData(EventSystem.current); //Create a new EventSystem (UI) Event
+
+            if (tad.deflection <= deadZone) {
+                //currentHover = -1;
+                //currentPress = -1;
+                //return;
+                buttonID = -1;
+            }
 
             //If we changed buttons while moving, un-hover and un-click the last button we were on
             if (currentHover != buttonID && currentHover != -1)
@@ -300,7 +322,7 @@ namespace VRTK
                 ExecuteEvents.Execute(menuButtons[currentHover], pointer, ExecuteEvents.pointerUpHandler);
                 ExecuteEvents.Execute(menuButtons[currentHover], pointer, ExecuteEvents.pointerExitHandler);
                 buttons[currentHover].OnHoverExit.Invoke();
-                if (executeOnUnclick && currentPress != -1)
+                if (executeOnUnclick && currentPress != -1 && buttonID != -1)
                 {
                     ExecuteEvents.Execute(menuButtons[buttonID], pointer, ExecuteEvents.pointerDownHandler);
                     AttempHapticPulse(baseHapticStrength * 1.666f);
@@ -308,26 +330,28 @@ namespace VRTK
             }
             if (evt == ButtonEvent.click) //Click button if click, and keep track of current press (executes button action)
             {
-                ExecuteEvents.Execute(menuButtons[buttonID], pointer, ExecuteEvents.pointerDownHandler);
-                currentPress = buttonID;
-                if (!executeOnUnclick)
-                {
-                    buttons[buttonID].OnClick.Invoke();
-                    AttempHapticPulse(baseHapticStrength * 2.5f);
+                if (buttonID != -1) {
+                    ExecuteEvents.Execute(menuButtons[buttonID], pointer, ExecuteEvents.pointerDownHandler);
+                    currentPress = buttonID;
+                    if (!executeOnUnclick) {
+                        buttons[buttonID].OnClick.Invoke();
+                        AttempHapticPulse(baseHapticStrength * 2.5f);
+                    }
                 }
             }
             else if (evt == ButtonEvent.unclick) //Clear press id to stop invoking OnHold method (hide menu)
             {
-                ExecuteEvents.Execute(menuButtons[buttonID], pointer, ExecuteEvents.pointerUpHandler);
-                currentPress = -1;
+                if (buttonID != -1) {
+                    ExecuteEvents.Execute(menuButtons[buttonID], pointer, ExecuteEvents.pointerUpHandler);
+                    currentPress = -1;
 
-                if (executeOnUnclick)
-                {
-                    AttempHapticPulse(baseHapticStrength * 2.5f);
-                    buttons[buttonID].OnClick.Invoke();
+                    if (executeOnUnclick) {
+                        AttempHapticPulse(baseHapticStrength * 2.5f);
+                        buttons[buttonID].OnClick.Invoke();
+                    }
                 }
             }
-            else if (evt == ButtonEvent.hoverOn && currentHover != buttonID) // Show hover UI event (darken button etc). Show menu
+            else if (evt == ButtonEvent.hoverOn && currentHover != buttonID && buttonID != -1) // Show hover UI event (darken button etc). Show menu
             {
                 ExecuteEvents.Execute(menuButtons[buttonID], pointer, ExecuteEvents.pointerEnterHandler);
                 buttons[buttonID].OnHoverEnter.Invoke();
