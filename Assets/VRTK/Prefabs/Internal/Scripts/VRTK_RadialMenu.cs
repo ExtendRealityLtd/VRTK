@@ -332,7 +332,8 @@ namespace VRTK
                 if (buttonID != -1) {
                     ExecuteEvents.Execute(menuButtons[buttonID], pointer, ExecuteEvents.pointerDownHandler);
                     currentPress = buttonID;
-                    if (!executeOnUnclick) {
+                    if (!executeOnUnclick)
+                    {
                         buttons[buttonID].OnClick.Invoke();
                         AttempHapticPulse(baseHapticStrength * 2.5f);
                     }
@@ -344,7 +345,8 @@ namespace VRTK
                     ExecuteEvents.Execute(menuButtons[buttonID], pointer, ExecuteEvents.pointerUpHandler);
                     currentPress = -1;
 
-                    if (executeOnUnclick) {
+                    if (executeOnUnclick)
+                    {
                         AttempHapticPulse(baseHapticStrength * 2.5f);
                         buttons[buttonID].OnClick.Invoke();
                     }
