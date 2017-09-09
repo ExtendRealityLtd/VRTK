@@ -10,12 +10,14 @@
         [Serializable]
         public sealed class InteractHapticsEvent : UnityEvent<object, InteractHapticsEventArgs> { }
 
+        public InteractHapticsEvent OnInteractHapticsNearTouched = new InteractHapticsEvent();
         public InteractHapticsEvent OnInteractHapticsTouched = new InteractHapticsEvent();
         public InteractHapticsEvent OnInteractHapticsGrabbed = new InteractHapticsEvent();
         public InteractHapticsEvent OnInteractHapticsUsed = new InteractHapticsEvent();
 
         protected override void AddListeners(VRTK_InteractHaptics component)
         {
+            component.InteractHapticsNearTouched += InteractHapticsNearTouched;
             component.InteractHapticsTouched += InteractHapticsTouched;
             component.InteractHapticsGrabbed += InteractHapticsGrabbed;
             component.InteractHapticsUsed += InteractHapticsUsed;
@@ -23,9 +25,15 @@
 
         protected override void RemoveListeners(VRTK_InteractHaptics component)
         {
+            component.InteractHapticsNearTouched -= InteractHapticsNearTouched;
             component.InteractHapticsTouched -= InteractHapticsTouched;
             component.InteractHapticsGrabbed -= InteractHapticsGrabbed;
             component.InteractHapticsUsed -= InteractHapticsUsed;
+        }
+
+        private void InteractHapticsNearTouched(object o, InteractHapticsEventArgs e)
+        {
+            OnInteractHapticsNearTouched.Invoke(o, e);
         }
 
         private void InteractHapticsTouched(object o, InteractHapticsEventArgs e)

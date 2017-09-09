@@ -4200,6 +4200,30 @@ The PerformSecondaryAction method returns whether the object has a secondary act
 
 The ResetIgnoredColliders method is used to clear any stored ignored colliders in case the `Ignored Colliders` array parameter is changed at runtime. This needs to be called manually if changes are made at runtime.
 
+#### SubscribeToInteractionEvent/2
+
+  > `public virtual void SubscribeToInteractionEvent(InteractionType givenType, InteractableObjectEventHandler methodCallback)`
+
+ * Parameters
+   * `InteractionType givenType` - The Interaction Type to register the events for.
+   * `InteractableObjectEventHandler methodCallback` - The method to execute when the Interaction Type is initiated.
+ * Returns
+   * _none_
+
+The SubscribeToInteractionEvent method subscribes a given method callback for the given Interaction Type.
+
+#### UnsubscribeFromInteractionEvent/2
+
+  > `public virtual void UnsubscribeFromInteractionEvent(InteractionType givenType, InteractableObjectEventHandler methodCallback)`
+
+ * Parameters
+   * `InteractionType givenType` - The Interaction Type that the previous event subscription was under.
+   * `InteractableObjectEventHandler methodCallback` - The method that was being executed when the Interaction Type was initiated.
+ * Returns
+   * _none_
+
+The UnsubscribeFromInteractionEvent method unsubscribes a previous event subscription for the given Interaction Type.
+
 ### Example
 
 `VRTK/Examples/005_Controller_BasicObjectGrabbing` uses the `VRTK_InteractTouch` and `VRTK_InteractGrab` scripts on the controllers to show how an interactable object can be grabbed and snapped to the controller and thrown around the game world.
@@ -4314,6 +4338,10 @@ The Interact Haptics script is attached on the same GameObject as an Interactabl
 
 ### Inspector Parameters
 
+ * **Clip On Near Touch:** Denotes the audio clip to use to rumble the controller on near touch.
+ * **Strength On Near Touch:** Denotes how strong the rumble in the controller will be on near touch.
+ * **Duration On Near Touch:** Denotes how long the rumble in the controller will last on near touch.
+ * **Interval On Near Touch:** Denotes interval betweens rumble in the controller on near touch.
  * **Clip On Touch:** Denotes the audio clip to use to rumble the controller on touch.
  * **Strength On Touch:** Denotes how strong the rumble in the controller will be on touch.
  * **Duration On Touch:** Denotes how long the rumble in the controller will last on touch.
@@ -4326,9 +4354,11 @@ The Interact Haptics script is attached on the same GameObject as an Interactabl
  * **Strength On Use:** Denotes how strong the rumble in the controller will be on use.
  * **Duration On Use:** Denotes how long the rumble in the controller will last on use.
  * **Interval On Use:** Denotes interval betweens rumble in the controller on use.
+ * **Object To Affect:** The Interactable Object to initiate the haptics from. If this is left blank, then the Interactable Object will need to be on the current or a parent GameObject.
 
 ### Class Events
 
+ * `InteractHapticsNearTouched` - Emitted when the haptics are from a near touch.
  * `InteractHapticsTouched` - Emitted when the haptics are from a touch.
  * `InteractHapticsGrabbed` - Emitted when the haptics are from a grab.
  * `InteractHapticsUsed` - Emitted when the haptics are from a use.
@@ -4344,6 +4374,28 @@ Adding the `VRTK_InteractHaptics_UnityEvents` component to `VRTK_InteractHaptics
  * `VRTK_ControllerReference controllerReference` - The reference to the controller to perform haptics on.
 
 ### Class Methods
+
+#### CancelHaptics/1
+
+  > `public virtual void CancelHaptics(VRTK_ControllerReference controllerReference)`
+
+ * Parameters
+   * `VRTK_ControllerReference controllerReference` -
+ * Returns
+   * _none_
+
+The CancelHaptics method cancels any existing haptic feedback on the given controller.
+
+#### HapticsOnNearTouch/1
+
+  > `public virtual void HapticsOnNearTouch(VRTK_ControllerReference controllerReference)`
+
+ * Parameters
+   * `VRTK_ControllerReference controllerReference` - The reference to the controller to activate the haptic feedback on.
+ * Returns
+   * _none_
+
+The HapticsOnNearTouch method triggers the haptic feedback on the given controller for the settings associated with near touch.
 
 #### HapticsOnTouch/1
 

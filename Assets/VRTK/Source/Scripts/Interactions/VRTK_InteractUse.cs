@@ -298,18 +298,6 @@ namespace VRTK
             }
         }
 
-        protected virtual void AttemptHaptics()
-        {
-            if (usingObject != null)
-            {
-                VRTK_InteractHaptics doHaptics = usingObject.GetComponentInParent<VRTK_InteractHaptics>();
-                if (doHaptics != null)
-                {
-                    doHaptics.HapticsOnUse(controllerReference);
-                }
-            }
-        }
-
         protected virtual void ToggleControllerVisibility(bool visible)
         {
             if (usingObject != null)
@@ -343,7 +331,6 @@ namespace VRTK
 
                     usingObjectScript.StartUsing(this);
                     ToggleControllerVisibility(false);
-                    AttemptHaptics();
                     OnControllerUseInteractableObject(interactTouch.SetControllerInteractEvent(usingObject));
                 }
             }

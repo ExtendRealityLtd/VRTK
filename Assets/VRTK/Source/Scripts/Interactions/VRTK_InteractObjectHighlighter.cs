@@ -85,18 +85,42 @@ namespace VRTK
         {
             objectToAffect = (objectToAffect != null ? objectToAffect : GetComponentInParent<VRTK_InteractableObject>());
 
-            ManageNearTouchSubscriptions(true);
-            ManageTouchSubscriptions(true);
-            ManageGrabSubscriptions(true);
-            ManageUseSubscriptions(true);
+            if (objectToAffect != null)
+            {
+                objectToAffect.SubscribeToInteractionEvent(VRTK_InteractableObject.InteractionType.NearTouch, NearTouchHighlightObject);
+                objectToAffect.SubscribeToInteractionEvent(VRTK_InteractableObject.InteractionType.NearUntouch, NearTouchUnHighlightObject);
+
+                objectToAffect.SubscribeToInteractionEvent(VRTK_InteractableObject.InteractionType.Touch, TouchHighlightObject);
+                objectToAffect.SubscribeToInteractionEvent(VRTK_InteractableObject.InteractionType.Untouch, TouchUnHighlightObject);
+
+                objectToAffect.SubscribeToInteractionEvent(VRTK_InteractableObject.InteractionType.Grab, GrabHighlightObject);
+                objectToAffect.SubscribeToInteractionEvent(VRTK_InteractableObject.InteractionType.Ungrab, GrabUnHighlightObject);
+
+                objectToAffect.SubscribeToInteractionEvent(VRTK_InteractableObject.InteractionType.Use, UseHighlightObject);
+                objectToAffect.SubscribeToInteractionEvent(VRTK_InteractableObject.InteractionType.Unuse, UseUnHighlightObject);
+            }
+            else
+            {
+                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, "VRTK_InteractObjectHighlighter", "VRTK_InteractableObject", "the same or parent"));
+            }
         }
 
         protected virtual void OnDisable()
         {
-            ManageNearTouchSubscriptions(false);
-            ManageTouchSubscriptions(false);
-            ManageGrabSubscriptions(false);
-            ManageUseSubscriptions(false);
+            if (objectToAffect != null)
+            {
+                objectToAffect.UnsubscribeFromInteractionEvent(VRTK_InteractableObject.InteractionType.NearTouch, NearTouchHighlightObject);
+                objectToAffect.UnsubscribeFromInteractionEvent(VRTK_InteractableObject.InteractionType.NearUntouch, NearTouchUnHighlightObject);
+
+                objectToAffect.UnsubscribeFromInteractionEvent(VRTK_InteractableObject.InteractionType.Touch, TouchHighlightObject);
+                objectToAffect.UnsubscribeFromInteractionEvent(VRTK_InteractableObject.InteractionType.Untouch, TouchUnHighlightObject);
+
+                objectToAffect.UnsubscribeFromInteractionEvent(VRTK_InteractableObject.InteractionType.Grab, GrabHighlightObject);
+                objectToAffect.UnsubscribeFromInteractionEvent(VRTK_InteractableObject.InteractionType.Ungrab, GrabUnHighlightObject);
+
+                objectToAffect.UnsubscribeFromInteractionEvent(VRTK_InteractableObject.InteractionType.Use, UseHighlightObject);
+                objectToAffect.UnsubscribeFromInteractionEvent(VRTK_InteractableObject.InteractionType.Unuse, UseUnHighlightObject);
+            }
         }
 
         protected virtual InteractObjectHighlighterEventArgs SetEventArgs(VRTK_InteractableObject.InteractionType interactionType, GameObject affectingObject)
@@ -107,66 +131,6 @@ namespace VRTK
             e.affectingObject = affectingObject;
             e.highlightColor = currentColour;
             return e;
-        }
-
-        protected virtual void ManageNearTouchSubscriptions(bool register)
-        {
-            if (!register)
-            {
-                objectToAffect.InteractableObjectNearTouched -= NearTouchHighlightObject;
-                objectToAffect.InteractableObjectNearUntouched -= NearTouchUnHighlightObject;
-            }
-
-            if (register)
-            {
-                objectToAffect.InteractableObjectNearTouched += NearTouchHighlightObject;
-                objectToAffect.InteractableObjectNearUntouched += NearTouchUnHighlightObject;
-            }
-        }
-
-        protected virtual void ManageTouchSubscriptions(bool register)
-        {
-            if (!register)
-            {
-                objectToAffect.InteractableObjectTouched -= TouchHighlightObject;
-                objectToAffect.InteractableObjectUntouched -= TouchUnHighlightObject;
-            }
-
-            if (register)
-            {
-                objectToAffect.InteractableObjectTouched += TouchHighlightObject;
-                objectToAffect.InteractableObjectUntouched += TouchUnHighlightObject;
-            }
-        }
-
-        protected virtual void ManageGrabSubscriptions(bool register)
-        {
-            if (!register)
-            {
-                objectToAffect.InteractableObjectGrabbed -= GrabHighlightObject;
-                objectToAffect.InteractableObjectUngrabbed -= GrabUnHighlightObject;
-            }
-
-            if (register)
-            {
-                objectToAffect.InteractableObjectGrabbed += GrabHighlightObject;
-                objectToAffect.InteractableObjectUngrabbed += GrabUnHighlightObject;
-            }
-        }
-
-        protected virtual void ManageUseSubscriptions(bool register)
-        {
-            if (!register)
-            {
-                objectToAffect.InteractableObjectUsed -= UseHighlightObject;
-                objectToAffect.InteractableObjectUnused -= UseUnHighlightObject;
-            }
-
-            if (register)
-            {
-                objectToAffect.InteractableObjectUsed += UseHighlightObject;
-                objectToAffect.InteractableObjectUnused += UseUnHighlightObject;
-            }
         }
 
         protected virtual void NearTouchHighlightObject(object sender, InteractableObjectEventArgs e)

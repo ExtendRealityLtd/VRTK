@@ -960,6 +960,26 @@ namespace VRTK
             currentIgnoredColliders.Clear();
         }
 
+        /// <summary>
+        /// The SubscribeToInteractionEvent method subscribes a given method callback for the given Interaction Type.
+        /// </summary>
+        /// <param name="givenType">The Interaction Type to register the events for.</param>
+        /// <param name="methodCallback">The method to execute when the Interaction Type is initiated.</param>
+        public virtual void SubscribeToInteractionEvent(InteractionType givenType, InteractableObjectEventHandler methodCallback)
+        {
+            ManageInteractionEvent(givenType, true, methodCallback);
+        }
+
+        /// <summary>
+        /// The UnsubscribeFromInteractionEvent method unsubscribes a previous event subscription for the given Interaction Type.
+        /// </summary>
+        /// <param name="givenType">The Interaction Type that the previous event subscription was under.</param>
+        /// <param name="methodCallback">The method that was being executed when the Interaction Type was initiated.</param>
+        public virtual void UnsubscribeFromInteractionEvent(InteractionType givenType, InteractableObjectEventHandler methodCallback)
+        {
+            ManageInteractionEvent(givenType, false, methodCallback);
+        }
+
         protected virtual void Awake()
         {
             interactableRigidbody = GetComponent<Rigidbody>();
@@ -1404,6 +1424,141 @@ namespace VRTK
                 {
                     usingObjectScript.ForceResetUsing();
                 }
+            }
+        }
+
+        protected virtual void ManageInteractionEvent(InteractionType givenType, bool state, InteractableObjectEventHandler methodCallback)
+        {
+            switch (givenType)
+            {
+                case InteractionType.NearTouch:
+                    ManageNearTouchSubscriptions(state, methodCallback);
+                    break;
+                case InteractionType.Touch:
+                    ManageTouchSubscriptions(state, methodCallback);
+                    break;
+                case InteractionType.Grab:
+                    ManageGrabSubscriptions(state, methodCallback);
+                    break;
+                case InteractionType.Use:
+                    ManageUseSubscriptions(state, methodCallback);
+                    break;
+                case InteractionType.NearUntouch:
+                    ManageNearUntouchSubscriptions(state, methodCallback);
+                    break;
+                case InteractionType.Untouch:
+                    ManageUntouchSubscriptions(state, methodCallback);
+                    break;
+                case InteractionType.Ungrab:
+                    ManageUngrabSubscriptions(state, methodCallback);
+                    break;
+                case InteractionType.Unuse:
+                    ManageUnuseSubscriptions(state, methodCallback);
+                    break;
+            }
+        }
+
+        protected virtual void ManageNearTouchSubscriptions(bool register, InteractableObjectEventHandler methodCallback)
+        {
+            if (!register)
+            {
+                InteractableObjectNearTouched -= methodCallback;
+            }
+
+            if (register)
+            {
+                InteractableObjectNearTouched += methodCallback;
+            }
+        }
+
+        protected virtual void ManageTouchSubscriptions(bool register, InteractableObjectEventHandler methodCallback)
+        {
+            if (!register)
+            {
+                InteractableObjectTouched -= methodCallback;
+            }
+
+            if (register)
+            {
+                InteractableObjectTouched += methodCallback;
+            }
+        }
+
+        protected virtual void ManageGrabSubscriptions(bool register, InteractableObjectEventHandler methodCallback)
+        {
+            if (!register)
+            {
+                InteractableObjectGrabbed -= methodCallback;
+            }
+
+            if (register)
+            {
+                InteractableObjectGrabbed += methodCallback;
+            }
+        }
+
+        protected virtual void ManageUseSubscriptions(bool register, InteractableObjectEventHandler methodCallback)
+        {
+            if (!register)
+            {
+                InteractableObjectUsed -= methodCallback;
+            }
+
+            if (register)
+            {
+                InteractableObjectUsed += methodCallback;
+            }
+        }
+
+        protected virtual void ManageNearUntouchSubscriptions(bool register, InteractableObjectEventHandler methodCallback)
+        {
+            if (!register)
+            {
+                InteractableObjectNearUntouched -= methodCallback;
+            }
+
+            if (register)
+            {
+                InteractableObjectNearUntouched += methodCallback;
+            }
+        }
+
+        protected virtual void ManageUntouchSubscriptions(bool register, InteractableObjectEventHandler methodCallback)
+        {
+            if (!register)
+            {
+                InteractableObjectUntouched -= methodCallback;
+            }
+
+            if (register)
+            {
+                InteractableObjectUntouched += methodCallback;
+            }
+        }
+
+        protected virtual void ManageUngrabSubscriptions(bool register, InteractableObjectEventHandler methodCallback)
+        {
+            if (!register)
+            {
+                InteractableObjectUngrabbed -= methodCallback;
+            }
+
+            if (register)
+            {
+                InteractableObjectUngrabbed += methodCallback;
+            }
+        }
+
+        protected virtual void ManageUnuseSubscriptions(bool register, InteractableObjectEventHandler methodCallback)
+        {
+            if (!register)
+            {
+                InteractableObjectUnused -= methodCallback;
+            }
+
+            if (register)
+            {
+                InteractableObjectUnused += methodCallback;
             }
         }
     }

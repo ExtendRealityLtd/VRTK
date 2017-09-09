@@ -499,18 +499,6 @@ namespace VRTK
             return null;
         }
 
-        protected virtual void AttemptHaptics(bool initialGrabAttempt)
-        {
-            if (grabbedObject != null && initialGrabAttempt)
-            {
-                VRTK_InteractHaptics doHaptics = grabbedObject.GetComponentInParent<VRTK_InteractHaptics>();
-                if (doHaptics != null)
-                {
-                    doHaptics.HapticsOnGrab(controllerReference);
-                }
-            }
-        }
-
         protected virtual void AttemptGrabObject()
         {
             GameObject objectToGrab = GetGrabbableObject();
@@ -529,7 +517,6 @@ namespace VRTK
             IncrementGrabState();
             bool initialGrabAttempt = IsValidGrabAttempt(objectToGrab);
             undroppableGrabbedObject = GetUndroppableObject();
-            AttemptHaptics(initialGrabAttempt);
         }
 
         protected virtual bool ScriptValidGrab(VRTK_InteractableObject objectToGrabScript)

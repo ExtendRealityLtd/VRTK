@@ -68,7 +68,6 @@ namespace VRTK
         protected List<Collider> touchedObjectColliders = new List<Collider>();
         protected List<Collider> touchedObjectActiveColliders = new List<Collider>();
         protected GameObject controllerCollisionDetector;
-        protected bool triggerRumble;
         protected bool destroyColliderOnDisable;
         protected bool triggerIsColliding = false;
         protected bool triggerWasColliding = false;
@@ -260,7 +259,6 @@ namespace VRTK
         {
             destroyColliderOnDisable = false;
             VRTK_PlayerObject.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.Controller);
-            triggerRumble = false;
             CreateTouchRigidBody();
             trackedController = GetComponentInParent<VRTK_TrackedController>();
             if (trackedController != null)
@@ -291,8 +289,6 @@ namespace VRTK
             //If the new collider is not part of the existing touched object (and the object isn't being grabbed) then start touching the new object
             if (touchedObject != null && colliderInteractableObject != null && touchedObject != colliderInteractableObject && touchedObjectScript != null && !touchedObjectScript.IsGrabbed())
             {
-                CancelInvoke("ResetTriggerRumble");
-                ResetTriggerRumble();
                 ForceStopTouching();
                 triggerIsColliding = true;
             }
@@ -330,7 +326,6 @@ namespace VRTK
                 StoreTouchedObjectColliders(collider);
 
                 ToggleControllerVisibility(false);
-                CheckRumbleController(touchedObjectScript);
                 touchedObjectScript.StartTouching(this);
 
                 OnControllerTouchInteractableObject(SetControllerInteractEvent(touchedObject));
@@ -406,20 +401,6 @@ namespace VRTK
             }
         }
 
-        protected virtual void CheckRumbleController(VRTK_InteractableObject touchedObjectScript)
-        {
-            if (!triggerRumble)
-            {
-                VRTK_InteractHaptics doHaptics = touchedObject.GetComponentInParent<VRTK_InteractHaptics>();
-                if (doHaptics != null)
-                {
-                    triggerRumble = true;
-                    doHaptics.HapticsOnTouch(controllerReference);
-                    Invoke("ResetTriggerRumble", doHaptics.durationOnTouch);
-                }
-            }
-        }
-
         protected virtual void CheckStopTouching()
         {
             if (touchedObject != null)
@@ -453,11 +434,6 @@ namespace VRTK
                 return true;
             }
             return false;
-        }
-
-        protected virtual void ResetTriggerRumble()
-        {
-            triggerRumble = false;
         }
 
         protected virtual void StopTouching(GameObject untouched)
