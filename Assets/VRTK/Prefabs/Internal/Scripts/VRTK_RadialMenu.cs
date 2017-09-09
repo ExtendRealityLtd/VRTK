@@ -329,27 +329,28 @@ namespace VRTK
             }
             if (evt == ButtonEvent.click) //Click button if click, and keep track of current press (executes button action)
             {
-                if (buttonID != -1) {
+                if (buttonID != -1)
+                {
                     ExecuteEvents.Execute(menuButtons[buttonID], pointer, ExecuteEvents.pointerDownHandler);
-                    currentPress = buttonID;
-                    if (!executeOnUnclick)
-                    {
-                        buttons[buttonID].OnClick.Invoke();
-                        AttempHapticPulse(baseHapticStrength * 2.5f);
-                    }
+                }
+                currentPress = buttonID;
+                if (!executeOnUnclick && buttonID != -1)
+                {
+                    buttons[buttonID].OnClick.Invoke();
+                    AttempHapticPulse(baseHapticStrength * 2.5f);
                 }
             }
             else if (evt == ButtonEvent.unclick) //Clear press id to stop invoking OnHold method (hide menu)
             {
-                if (buttonID != -1) {
+                if (buttonID != -1)
+                {
                     ExecuteEvents.Execute(menuButtons[buttonID], pointer, ExecuteEvents.pointerUpHandler);
-                    currentPress = -1;
-
-                    if (executeOnUnclick)
-                    {
-                        AttempHapticPulse(baseHapticStrength * 2.5f);
-                        buttons[buttonID].OnClick.Invoke();
-                    }
+                }
+                currentPress = -1;
+                if (executeOnUnclick && buttonID != -1)
+                {
+                    AttempHapticPulse(baseHapticStrength * 2.5f);
+                    buttons[buttonID].OnClick.Invoke();
                 }
             }
             else if (evt == ButtonEvent.hoverOn && currentHover != buttonID && buttonID != -1) // Show hover UI event (darken button etc). Show menu
