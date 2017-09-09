@@ -290,7 +290,7 @@ namespace VRTK
             }
         }
 
-        protected virtual float CalculateAngle(GameObject interactingObject)
+        protected virtual TouchAngleDeflection CalculateAngle(GameObject interactingObject)
         {
             Vector3 controllerPosition = interactingObject.transform.position;
 
@@ -306,7 +306,7 @@ namespace VRTK
                 angle += 360.0f;
             }
 
-            return angle;
+            return new TouchAngleDeflection(angle, 1);
         }
 
         protected virtual float AngleSigned(Vector3 v1, Vector3 v2, Vector3 n)
