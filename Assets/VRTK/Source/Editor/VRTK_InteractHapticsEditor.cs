@@ -10,21 +10,25 @@
         SerializedProperty strengthOnNearTouch;
         SerializedProperty durationOnNearTouch;
         SerializedProperty intervalOnNearTouch;
+        SerializedProperty cancelOnNearUntouch;
 
         SerializedProperty clipOnTouch;
         SerializedProperty strengthOnTouch;
         SerializedProperty durationOnTouch;
         SerializedProperty intervalOnTouch;
+        SerializedProperty cancelOnUntouch;
 
         SerializedProperty clipOnGrab;
         SerializedProperty strengthOnGrab;
         SerializedProperty durationOnGrab;
         SerializedProperty intervalOnGrab;
+        SerializedProperty cancelOnUngrab;
 
         SerializedProperty clipOnUse;
         SerializedProperty strengthOnUse;
         SerializedProperty durationOnUse;
         SerializedProperty intervalOnUse;
+        SerializedProperty cancelOnUnuse;
 
         SerializedProperty objectToAffect;
 
@@ -34,21 +38,25 @@
             strengthOnNearTouch = serializedObject.FindProperty("strengthOnNearTouch");
             durationOnNearTouch = serializedObject.FindProperty("durationOnNearTouch");
             intervalOnNearTouch = serializedObject.FindProperty("intervalOnNearTouch");
+            cancelOnNearUntouch = serializedObject.FindProperty("cancelOnNearUntouch");
 
             clipOnTouch = serializedObject.FindProperty("clipOnTouch");
             strengthOnTouch = serializedObject.FindProperty("strengthOnTouch");
             durationOnTouch = serializedObject.FindProperty("durationOnTouch");
             intervalOnTouch = serializedObject.FindProperty("intervalOnTouch");
+            cancelOnUntouch = serializedObject.FindProperty("cancelOnUntouch");
 
             clipOnGrab = serializedObject.FindProperty("clipOnGrab");
             strengthOnGrab = serializedObject.FindProperty("strengthOnGrab");
             durationOnGrab = serializedObject.FindProperty("durationOnGrab");
             intervalOnGrab = serializedObject.FindProperty("intervalOnGrab");
+            cancelOnUngrab = serializedObject.FindProperty("cancelOnUngrab");
 
             clipOnUse = serializedObject.FindProperty("clipOnUse");
             strengthOnUse = serializedObject.FindProperty("strengthOnUse");
             durationOnUse = serializedObject.FindProperty("durationOnUse");
             intervalOnUse = serializedObject.FindProperty("intervalOnUse");
+            cancelOnUnuse = serializedObject.FindProperty("cancelOnUnuse");
 
             objectToAffect = serializedObject.FindProperty("objectToAffect");
         }
@@ -67,6 +75,7 @@
                 EditorGUILayout.PropertyField(durationOnNearTouch);
                 EditorGUILayout.PropertyField(intervalOnNearTouch);
             }
+            EditorGUILayout.PropertyField(cancelOnNearUntouch);
 
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("Haptics On Touch Settings", EditorStyles.boldLabel);
@@ -78,6 +87,7 @@
                 EditorGUILayout.PropertyField(durationOnTouch);
                 EditorGUILayout.PropertyField(intervalOnTouch);
             }
+            EditorGUILayout.PropertyField(cancelOnUntouch);
 
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("Haptics On Grab Settings", EditorStyles.boldLabel);
@@ -89,6 +99,7 @@
                 EditorGUILayout.PropertyField(durationOnGrab);
                 EditorGUILayout.PropertyField(intervalOnGrab);
             }
+            EditorGUILayout.PropertyField(cancelOnUngrab);
 
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("Haptics On Use Settings", EditorStyles.boldLabel);
@@ -100,6 +111,7 @@
                 EditorGUILayout.PropertyField(durationOnUse);
                 EditorGUILayout.PropertyField(intervalOnUse);
             }
+            EditorGUILayout.PropertyField(cancelOnUnuse);
 
             EditorGUILayout.Space();
             EditorGUILayout.PropertyField(objectToAffect);

@@ -36,6 +36,8 @@ namespace VRTK
         public float durationOnNearTouch = 0f;
         [Tooltip("Denotes interval betweens rumble in the controller on near touch.")]
         public float intervalOnNearTouch = minInterval;
+        [Tooltip("If this is checked then the rumble will be cancelled when the controller is no longer near touching.")]
+        public bool cancelOnNearUntouch = true;
 
         [Header("Haptics On Touch Settings")]
 
@@ -48,6 +50,8 @@ namespace VRTK
         public float durationOnTouch = 0f;
         [Tooltip("Denotes interval betweens rumble in the controller on touch.")]
         public float intervalOnTouch = minInterval;
+        [Tooltip("If this is checked then the rumble will be cancelled when the controller is no longer touching.")]
+        public bool cancelOnUntouch = true;
 
         [Header("Haptics On Grab Settings")]
 
@@ -60,6 +64,8 @@ namespace VRTK
         public float durationOnGrab = 0f;
         [Tooltip("Denotes interval betweens rumble in the controller on grab.")]
         public float intervalOnGrab = minInterval;
+        [Tooltip("If this is checked then the rumble will be cancelled when the controller is no longer grabbing.")]
+        public bool cancelOnUngrab = true;
 
         [Header("Haptics On Use Settings")]
 
@@ -72,6 +78,8 @@ namespace VRTK
         public float durationOnUse = 0f;
         [Tooltip("Denotes interval betweens rumble in the controller on use.")]
         public float intervalOnUse = minInterval;
+        [Tooltip("If this is checked then the rumble will be cancelled when the controller is no longer using.")]
+        public bool cancelOnUnuse = true;
 
         [Header("Custom Settings")]
 
@@ -212,6 +220,11 @@ namespace VRTK
 
             if (objectToAffect != null)
             {
+                objectToAffect.SubscribeToInteractionEvent(VRTK_InteractableObject.InteractionType.NearUntouch, CancelNearTouchHaptics);
+                objectToAffect.SubscribeToInteractionEvent(VRTK_InteractableObject.InteractionType.Untouch, CancelTouchHaptics);
+                objectToAffect.SubscribeToInteractionEvent(VRTK_InteractableObject.InteractionType.Ungrab, CancelGrabHaptics);
+                objectToAffect.SubscribeToInteractionEvent(VRTK_InteractableObject.InteractionType.Unuse, CancelUseHaptics);
+
                 objectToAffect.SubscribeToInteractionEvent(VRTK_InteractableObject.InteractionType.NearTouch, NearTouchHaptics);
                 objectToAffect.SubscribeToInteractionEvent(VRTK_InteractableObject.InteractionType.Touch, TouchHaptics);
                 objectToAffect.SubscribeToInteractionEvent(VRTK_InteractableObject.InteractionType.Grab, GrabHaptics);
@@ -227,6 +240,11 @@ namespace VRTK
         {
             if (objectToAffect != null)
             {
+                objectToAffect.UnsubscribeFromInteractionEvent(VRTK_InteractableObject.InteractionType.NearUntouch, CancelNearTouchHaptics);
+                objectToAffect.UnsubscribeFromInteractionEvent(VRTK_InteractableObject.InteractionType.Untouch, CancelTouchHaptics);
+                objectToAffect.UnsubscribeFromInteractionEvent(VRTK_InteractableObject.InteractionType.Ungrab, CancelGrabHaptics);
+                objectToAffect.UnsubscribeFromInteractionEvent(VRTK_InteractableObject.InteractionType.Unuse, CancelUseHaptics);
+
                 objectToAffect.UnsubscribeFromInteractionEvent(VRTK_InteractableObject.InteractionType.NearTouch, NearTouchHaptics);
                 objectToAffect.UnsubscribeFromInteractionEvent(VRTK_InteractableObject.InteractionType.Touch, TouchHaptics);
                 objectToAffect.UnsubscribeFromInteractionEvent(VRTK_InteractableObject.InteractionType.Grab, GrabHaptics);
@@ -279,6 +297,47 @@ namespace VRTK
             if (VRTK_ControllerReference.IsValid(controllerReference))
             {
                 HapticsOnUse(controllerReference);
+            }
+        }
+
+        protected virtual void CancelOn(GameObject givenObject)
+        {
+            VRTK_ControllerReference controllerReference = VRTK_ControllerReference.GetControllerReference(givenObject);
+            if (VRTK_ControllerReference.IsValid(controllerReference))
+            {
+                CancelHaptics(controllerReference);
+            }
+        }
+
+        protected virtual void CancelNearTouchHaptics(object sender, InteractableObjectEventArgs e)
+        {
+            if (cancelOnNearUntouch)
+            {
+                CancelOn(e.interactingObject);
+            }
+        }
+
+        protected virtual void CancelTouchHaptics(object sender, InteractableObjectEventArgs e)
+        {
+            if (cancelOnUntouch)
+            {
+                CancelOn(e.interactingObject);
+            }
+        }
+
+        protected virtual void CancelGrabHaptics(object sender, InteractableObjectEventArgs e)
+        {
+            if (cancelOnUngrab)
+            {
+                CancelOn(e.interactingObject);
+            }
+        }
+
+        protected virtual void CancelUseHaptics(object sender, InteractableObjectEventArgs e)
+        {
+            if (cancelOnUnuse)
+            {
+                CancelOn(e.interactingObject);
             }
         }
     }

@@ -4342,18 +4342,22 @@ The Interact Haptics script is attached on the same GameObject as an Interactabl
  * **Strength On Near Touch:** Denotes how strong the rumble in the controller will be on near touch.
  * **Duration On Near Touch:** Denotes how long the rumble in the controller will last on near touch.
  * **Interval On Near Touch:** Denotes interval betweens rumble in the controller on near touch.
+ * **Cancel On Near Untouch:** If this is checked then the rumble will be cancelled when the controller is no longer near touching.
  * **Clip On Touch:** Denotes the audio clip to use to rumble the controller on touch.
  * **Strength On Touch:** Denotes how strong the rumble in the controller will be on touch.
  * **Duration On Touch:** Denotes how long the rumble in the controller will last on touch.
  * **Interval On Touch:** Denotes interval betweens rumble in the controller on touch.
+ * **Cancel On Untouch:** If this is checked then the rumble will be cancelled when the controller is no longer touching.
  * **Clip On Grab:** Denotes the audio clip to use to rumble the controller on grab.
  * **Strength On Grab:** Denotes how strong the rumble in the controller will be on grab.
  * **Duration On Grab:** Denotes how long the rumble in the controller will last on grab.
  * **Interval On Grab:** Denotes interval betweens rumble in the controller on grab.
+ * **Cancel On Ungrab:** If this is checked then the rumble will be cancelled when the controller is no longer grabbing.
  * **Clip On Use:** Denotes the audio clip to use to rumble the controller on use.
  * **Strength On Use:** Denotes how strong the rumble in the controller will be on use.
  * **Duration On Use:** Denotes how long the rumble in the controller will last on use.
  * **Interval On Use:** Denotes interval betweens rumble in the controller on use.
+ * **Cancel On Unuse:** If this is checked then the rumble will be cancelled when the controller is no longer using.
  * **Object To Affect:** The Interactable Object to initiate the haptics from. If this is left blank, then the Interactable Object will need to be on the current or a parent GameObject.
 
 ### Class Events

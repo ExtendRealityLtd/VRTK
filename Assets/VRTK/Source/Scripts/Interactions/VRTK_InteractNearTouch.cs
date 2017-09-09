@@ -113,7 +113,7 @@ namespace VRTK
             if (interactTouch != null)
             {
                 CreateNearTouchCollider();
-                interactTouch.ControllerTouchInteractableObject += ControllerTouchInteractableObject;
+                interactTouch.ControllerStartTouchInteractableObject += ControllerStartTouchInteractableObject;
                 interactTouch.ControllerUntouchInteractableObject += ControllerUntouchInteractableObject;
             }
         }
@@ -123,12 +123,12 @@ namespace VRTK
             Destroy(neartouchColliderContainer);
             if (interactTouch != null)
             {
-                interactTouch.ControllerTouchInteractableObject -= ControllerTouchInteractableObject;
+                interactTouch.ControllerStartTouchInteractableObject -= ControllerStartTouchInteractableObject;
                 interactTouch.ControllerUntouchInteractableObject -= ControllerUntouchInteractableObject;
             }
         }
 
-        protected virtual void ControllerTouchInteractableObject(object sender, ObjectInteractEventArgs e)
+        protected virtual void ControllerStartTouchInteractableObject(object sender, ObjectInteractEventArgs e)
         {
             ForceStopNearTouching(e.target);
         }
