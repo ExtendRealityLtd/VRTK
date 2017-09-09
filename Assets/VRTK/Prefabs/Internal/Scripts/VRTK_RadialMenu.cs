@@ -309,10 +309,9 @@ namespace VRTK
             int buttonID = (int)VRTK_SharedMethods.Mod(((tad.angle + (buttonAngle / 2f)) / buttonAngle), buttons.Count); //Convert angle into ButtonID (This is the magic)
             PointerEventData pointer = new PointerEventData(EventSystem.current); //Create a new EventSystem (UI) Event
 
-            if (tad.deflection <= deadZone) {
-                //currentHover = -1;
-                //currentPress = -1;
-                //return;
+            if (tad.deflection <= deadZone)
+            {
+                //No button selected. Use -1 to represent this
                 buttonID = -1;
             }
 
