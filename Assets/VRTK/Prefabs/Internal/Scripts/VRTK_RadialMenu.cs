@@ -100,6 +100,16 @@ namespace VRTK
         /// The HoverButton method is used to set the button hover at a given angle.
         /// </summary>
         /// <param name="angle">The angle on the radial menu.</param>
+        [System.Obsolete("`VRTK_RadialMenu.HoverButton(float)` has been deprecated, use VRTK_RadialMenu.HoverButton(TouchAngleDeflection) instead")]
+        public virtual void HoverButton(float angle)
+        {
+            HoverButton(new TouchAngleDeflection(angle, 1));
+        }
+
+        /// <summary>
+        /// The HoverButton method is used to set the button hover at a given angle and deflection.
+        /// </summary>
+        /// <param name="tad">The angle and deflection on the radial menu.</param>
         public virtual void HoverButton(TouchAngleDeflection tad)
         {
             InteractButton(tad, ButtonEvent.hoverOn);
@@ -109,6 +119,16 @@ namespace VRTK
         /// The ClickButton method is used to set the button click at a given angle.
         /// </summary>
         /// <param name="angle">The angle on the radial menu.</param>
+        [System.Obsolete("`VRTK_RadialMenu.ClickButton(float)` has been deprecated, use VRTK_RadialMenu.ClickButton(TouchAngleDeflection) instead")]
+        public virtual void ClickButton(float angle)
+        {
+            ClickButton(new TouchAngleDeflection(angle, 1));
+        }
+
+        /// <summary>
+        /// The ClickButton method is used to set the button click at a given angle and deflection.
+        /// </summary>
+        /// <param name="tad">The angle and deflection on the radial menu.</param>
         public virtual void ClickButton(TouchAngleDeflection tad)
         {
             InteractButton(tad, ButtonEvent.click);
@@ -118,6 +138,16 @@ namespace VRTK
         /// The UnClickButton method is used to set the button unclick at a given angle.
         /// </summary>
         /// <param name="angle">The angle on the radial menu.</param>
+        [System.Obsolete("`VRTK_RadialMenu.UnClickButton(float)` has been deprecated, use VRTK_RadialMenu.UnClickButton(TouchAngleDeflection) instead")]
+        public virtual void UnClickButton(float angle)
+        {
+            UnClickButton(new TouchAngleDeflection(angle, 1));
+        }
+
+        /// <summary>
+        /// The UnClickButton method is used to set the button unclick at a given angle and deflection.
+        /// </summary>
+        /// <param name="tad">The angle and deflection on the radial menu.</param>
         public virtual void UnClickButton(TouchAngleDeflection tad)
         {
             InteractButton(tad, ButtonEvent.unclick);
