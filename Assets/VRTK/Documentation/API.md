@@ -3163,6 +3163,11 @@ The `Object To Affect` can be the object that is causing the interaction (touch/
  * **Object To Affect:** The GameObject to affect the appearance of. If this is null then then the interacting object will be used (usually the controller).
  * **Game Object Active By Default:** If this is checked then the `Object To Affect` will be an active GameObject when the script is enabled. If it's unchecked then it will be disabled. This only takes effect if `Affect Interacting Object` is unticked.
  * **Renderer Visible By Default:** If this is checked then the `Object To Affect` will have visible renderers when the script is enabled. If it's unchecked then it will have it's renderers disabled. This only takes effect if `Affect Interacting Object` is unticked.
+ * **Game Object Active On Near Touch:** If this is checked then the `Object To Affect` will be an active GameObject when the `Object To Monitor` is near touched. If it's unchecked then it will be disabled on near touch.
+ * **Renderer Visible On Near Touch:** If this is checked then the `Object To Affect` will have visible renderers when the `Object To Monitor` is near touched. If it's unchecked then it will have it's renderers disabled on near touch.
+ * **Near Touch Appearance Delay:** The amount of time to wait before the near touch appearance settings are applied after the near touch event.
+ * **Near Untouch Appearance Delay:** The amount of time to wait before the previous appearance settings are applied after the near untouch event.
+ * **Valid Near Touch Interacting Object:** Determines what type of interacting object will affect the appearance of the `Object To Affect` after the near touch and near untouch event.
  * **Game Object Active On Touch:** If this is checked then the `Object To Affect` will be an active GameObject when the `Object To Monitor` is touched. If it's unchecked then it will be disabled on touch.
  * **Renderer Visible On Touch:** If this is checked then the `Object To Affect` will have visible renderers when the `Object To Monitor` is touched. If it's unchecked then it will have it's renderers disabled on touch.
  * **Touch Appearance Delay:** The amount of time to wait before the touch appearance settings are applied after the touch event.
@@ -3181,14 +3186,6 @@ The `Object To Affect` can be the object that is causing the interaction (touch/
 
 ### Class Variables
 
- * `public enum InteractionType` - The interaction type.
-   * `None` - No interaction has affected the object appearance.
-   * `Touch` - The touch interaction has affected the object appearance.
-   * `Untouch` - The untouch interaction has affected the object appearance.
-   * `Grab` - The grab interaction has affected the object appearance.
-   * `Ungrab` - The ungrab interaction has affected the object appearance.
-   * `Use` - The use interaction has affected the object appearance.
-   * `Unuse` - The unuse interaction has affected the object appearance.
  * `public enum ValidInteractingObject` - The valid interacting object.
    * `Anything` - Any GameObject is considered a valid interacting object.
    * `EitherController` - Only a game controller is considered a valid interacting objcet.
@@ -3213,7 +3210,7 @@ Adding the `VRTK_InteractObjectAppearance_UnityEvents` component to `VRTK_Intera
 
  * `GameObject affectingObject` - The object that is being affected.
  * `VRTK_InteractableObject monitoringObject` - The interactable object that is being monitored.
- * `VRTK_InteractObjectAppearance.InteractionType interactionType` - The type of interaction initiating the event.
+ * `VRTK_InteractableObject.InteractionType interactionType` - The type of interaction initiating the event.
 
 ### Example
 
