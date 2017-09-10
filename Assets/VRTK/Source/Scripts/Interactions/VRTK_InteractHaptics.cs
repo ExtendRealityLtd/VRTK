@@ -160,6 +160,10 @@ namespace VRTK
             {
                 TriggerHapticPulse(controllerReference, strengthOnNearTouch, durationOnNearTouch, intervalOnNearTouch);
             }
+            else
+            {
+                VRTK_ControllerHaptics.CancelHapticPulse(controllerReference);
+            }
             OnInteractHapticsNearTouched(SetEventPayload(controllerReference));
         }
 
@@ -176,6 +180,10 @@ namespace VRTK
             else if (strengthOnTouch > 0 && durationOnTouch > 0f)
             {
                 TriggerHapticPulse(controllerReference, strengthOnTouch, durationOnTouch, intervalOnTouch);
+            }
+            else
+            {
+                VRTK_ControllerHaptics.CancelHapticPulse(controllerReference);
             }
             OnInteractHapticsTouched(SetEventPayload(controllerReference));
         }
@@ -194,6 +202,10 @@ namespace VRTK
             {
                 TriggerHapticPulse(controllerReference, strengthOnGrab, durationOnGrab, intervalOnGrab);
             }
+            else
+            {
+                VRTK_ControllerHaptics.CancelHapticPulse(controllerReference);
+            }
             OnInteractHapticsGrabbed(SetEventPayload(controllerReference));
         }
 
@@ -210,6 +222,10 @@ namespace VRTK
             else if (strengthOnUse > 0 && durationOnUse > 0f)
             {
                 TriggerHapticPulse(controllerReference, strengthOnUse, durationOnUse, intervalOnUse);
+            }
+            else
+            {
+                VRTK_ControllerHaptics.CancelHapticPulse(controllerReference);
             }
             OnInteractHapticsUsed(SetEventPayload(controllerReference));
         }
