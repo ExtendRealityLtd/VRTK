@@ -1207,17 +1207,6 @@ namespace VRTK
         protected virtual void OnDisable()
         {
             Invoke("DisableEvents", 0f);
-            GameObject actualController = VRTK_DeviceFinder.GetActualController(gameObject);
-            if (actualController != null)
-            {
-                if (trackedController != null)
-                {
-                    trackedController.ControllerEnabled -= TrackedControllerEnabled;
-                    trackedController.ControllerDisabled -= TrackedControllerDisabled;
-                    trackedController.ControllerIndexChanged -= TrackedControllerIndexChanged;
-                    trackedController.ControllerModelAvailable -= TrackedControllerModelAvailable;
-                }
-            }
         }
 
         protected virtual void OnDestroy()
@@ -2066,6 +2055,18 @@ namespace VRTK
 
         protected virtual void DisableEvents()
         {
+            GameObject actualController = VRTK_DeviceFinder.GetActualController(gameObject);
+            if (actualController != null)
+            {
+                if (trackedController != null)
+                {
+                    trackedController.ControllerEnabled -= TrackedControllerEnabled;
+                    trackedController.ControllerDisabled -= TrackedControllerDisabled;
+                    trackedController.ControllerIndexChanged -= TrackedControllerIndexChanged;
+                    trackedController.ControllerModelAvailable -= TrackedControllerModelAvailable;
+                }
+            }
+
             if (triggerPressed)
             {
                 OnTriggerReleased(SetControllerEvent(ref triggerPressed, false, 0f));
