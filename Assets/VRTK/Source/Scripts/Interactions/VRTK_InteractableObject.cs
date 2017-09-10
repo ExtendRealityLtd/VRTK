@@ -617,6 +617,10 @@ namespace VRTK
             {
                 objectHighlighter.Highlight(highlightColor);
             }
+            else
+            {
+                Unhighlight();
+            }
         }
 
         /// <summary>
