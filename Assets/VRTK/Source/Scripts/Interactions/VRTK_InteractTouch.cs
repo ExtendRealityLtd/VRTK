@@ -28,7 +28,7 @@ namespace VRTK
     /// <remarks>
     /// Colliders are created for the controller and by default the selected controller SDK will have a set of colliders for the given default controller of that SDK.
     ///
-    /// A custom collider can be provided by the Custom Rigidbody Object parameter.
+    /// A custom collider can be provided by the Custom Collider Container parameter.
     /// </remarks>
     /// <example>
     /// `VRTK/Examples/005_Controller/BasicObjectGrabbing` demonstrates the highlighting of objects that have the `VRTK_InteractableObject` script added to them to show the ability to highlight interactable objects when they are touched by the controllers.
@@ -68,7 +68,6 @@ namespace VRTK
         protected List<Collider> touchedObjectColliders = new List<Collider>();
         protected List<Collider> touchedObjectActiveColliders = new List<Collider>();
         protected GameObject controllerCollisionDetector;
-        protected bool triggerRumble;
         protected bool destroyColliderOnDisable;
         protected bool triggerIsColliding = false;
         protected bool triggerWasColliding = false;
@@ -260,7 +259,6 @@ namespace VRTK
         {
             destroyColliderOnDisable = false;
             VRTK_PlayerObject.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.Controller);
-            triggerRumble = false;
             CreateTouchRigidBody();
             trackedController = GetComponentInParent<VRTK_TrackedController>();
             if (trackedController != null)
@@ -291,8 +289,6 @@ namespace VRTK
             //If the new collider is not part of the existing touched object (and the object isn't being grabbed) then start touching the new object
             if (touchedObject != null && colliderInteractableObject != null && touchedObject != colliderInteractableObject && touchedObjectScript != null && !touchedObjectScript.IsGrabbed())
             {
-                CancelInvoke("ResetTriggerRumble");
-                ResetTriggerRumble();
                 ForceStopTouching();
                 triggerIsColliding = true;
             }
@@ -329,9 +325,7 @@ namespace VRTK
                 OnControllerStartTouchInteractableObject(SetControllerInteractEvent(touchedObject));
                 StoreTouchedObjectColliders(collider);
 
-                touchedObjectScript.ToggleHighlight(true);
                 ToggleControllerVisibility(false);
-                CheckRumbleController(touchedObjectScript);
                 touchedObjectScript.StartTouching(this);
 
                 OnControllerTouchInteractableObject(SetControllerInteractEvent(touchedObject));
@@ -407,20 +401,6 @@ namespace VRTK
             }
         }
 
-        protected virtual void CheckRumbleController(VRTK_InteractableObject touchedObjectScript)
-        {
-            if (!triggerRumble)
-            {
-                VRTK_InteractHaptics doHaptics = touchedObject.GetComponentInParent<VRTK_InteractHaptics>();
-                if (doHaptics != null)
-                {
-                    triggerRumble = true;
-                    doHaptics.HapticsOnTouch(controllerReference);
-                    Invoke("ResetTriggerRumble", doHaptics.durationOnTouch);
-                }
-            }
-        }
-
         protected virtual void CheckStopTouching()
         {
             if (touchedObject != null)
@@ -456,11 +436,6 @@ namespace VRTK
             return false;
         }
 
-        protected virtual void ResetTriggerRumble()
-        {
-            triggerRumble = false;
-        }
-
         protected virtual void StopTouching(GameObject untouched)
         {
             OnControllerStartUntouchInteractableObject(SetControllerInteractEvent(untouched));
@@ -470,10 +445,6 @@ namespace VRTK
                 if (untouchedObjectScript != null)
                 {
                     untouchedObjectScript.StopTouching(this);
-                    if (!untouchedObjectScript.IsTouched())
-                    {
-                        untouchedObjectScript.ToggleHighlight(false);
-                    }
                 }
             }
 

@@ -13,6 +13,9 @@
         public InteractableObjectEvent OnObjectEnable = new InteractableObjectEvent();
         public InteractableObjectEvent OnObjectDisable = new InteractableObjectEvent();
 
+        public InteractableObjectEvent OnNearTouch = new InteractableObjectEvent();
+        public InteractableObjectEvent OnNearUntouch = new InteractableObjectEvent();
+
         public InteractableObjectEvent OnTouch = new InteractableObjectEvent();
         public InteractableObjectEvent OnUntouch = new InteractableObjectEvent();
 
@@ -31,6 +34,9 @@
         {
             component.InteractableObjectEnabled += Enable;
             component.InteractableObjectDisabled += Disable;
+
+            component.InteractableObjectNearTouched += NearTouch;
+            component.InteractableObjectNearUntouched += NearUnTouch;
 
             component.InteractableObjectTouched += Touch;
             component.InteractableObjectUntouched += UnTouch;
@@ -51,6 +57,9 @@
         {
             component.InteractableObjectEnabled -= Enable;
             component.InteractableObjectDisabled -= Disable;
+
+            component.InteractableObjectNearTouched -= NearTouch;
+            component.InteractableObjectNearUntouched -= NearUnTouch;
 
             component.InteractableObjectTouched -= Touch;
             component.InteractableObjectUntouched -= UnTouch;
@@ -75,6 +84,16 @@
         private void Disable(object o, InteractableObjectEventArgs e)
         {
             OnObjectDisable.Invoke(o, e);
+        }
+
+        private void NearTouch(object o, InteractableObjectEventArgs e)
+        {
+            OnNearTouch.Invoke(o, e);
+        }
+
+        private void NearUnTouch(object o, InteractableObjectEventArgs e)
+        {
+            OnNearUntouch.Invoke(o, e);
         }
 
         private void Touch(object o, InteractableObjectEventArgs e)

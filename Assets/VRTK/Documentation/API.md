@@ -1176,10 +1176,12 @@ Provides a custom controller hand model with psuedo finger functionality.
  * **Pinky Axis Button:** The button type to listen for axis changes to control the pinky finger.
  * **Three Finger Axis Button:** The button type to listen for axis changes to control the middle, ring and pinky finger.
  * **Thumb State:** The Axis Type to utilise when dealing with the thumb state. Not all controllers support all axis types on all of the available buttons.
+ * **Near Touch Overrides:** Finger axis overrides on an Interact NearTouch event.
  * **Touch Overrides:** Finger axis overrides on an Interact Touch event.
  * **Grab Overrides:** Finger axis overrides on an Interact Grab event.
  * **Use Overrides:** Finger axis overrides on an Interact Use event.
  * **Controller Events:** The controller to listen for the events on. If this is left blank as it will be auto populated by finding the Controller Events script on the parent GameObject.
+ * **Interact Near Touch:** An optional Interact NearTouch to listen for near touch events on. If this is left blank as it will attempt to be auto populated by finding the Interact NearTouch script on the parent GameObject.
  * **Interact Touch:** An optional Interact Touch to listen for touch events on. If this is left blank as it will attempt to be auto populated by finding the Interact Touch script on the parent GameObject.
  * **Interact Grab:** An optional Interact Grab to listen for grab events on. If this is left blank as it will attempt to be auto populated by finding the Interact Grab script on the parent GameObject.
  * **Interact Use:** An optional Interact Use to listen for use events on. If this is left blank as it will attempt to be auto populated by finding the Interact Use script on the parent GameObject.
@@ -2603,7 +2605,9 @@ A collection of scripts that provide the ability to interact with game objects w
  * [Controller Highlighter](#controller-highlighter-vrtk_controllerhighlighter)
  * [Controller Haptics](#controller-haptics-vrtk_controllerhaptics)
  * [Interact Object Appearance](#interact-object-appearance-vrtk_interactobjectappearance)
+ * [Interact Object Highlighter](#interact-object-highlighter-vrtk_interactobjecthighlighter)
  * [Interact Touch](#interact-touch-vrtk_interacttouch)
+ * [Interact Near Touch](#interact-near-touch-vrtk_interactneartouch)
  * [Interact Grab](#interact-grab-vrtk_interactgrab)
  * [Interact Use](#interact-use-vrtk_interactuse)
  * [Interactable Object](#interactable-object-vrtk_interactableobject)
@@ -3161,6 +3165,11 @@ The `Object To Affect` can be the object that is causing the interaction (touch/
  * **Object To Affect:** The GameObject to affect the appearance of. If this is null then then the interacting object will be used (usually the controller).
  * **Game Object Active By Default:** If this is checked then the `Object To Affect` will be an active GameObject when the script is enabled. If it's unchecked then it will be disabled. This only takes effect if `Affect Interacting Object` is unticked.
  * **Renderer Visible By Default:** If this is checked then the `Object To Affect` will have visible renderers when the script is enabled. If it's unchecked then it will have it's renderers disabled. This only takes effect if `Affect Interacting Object` is unticked.
+ * **Game Object Active On Near Touch:** If this is checked then the `Object To Affect` will be an active GameObject when the `Object To Monitor` is near touched. If it's unchecked then it will be disabled on near touch.
+ * **Renderer Visible On Near Touch:** If this is checked then the `Object To Affect` will have visible renderers when the `Object To Monitor` is near touched. If it's unchecked then it will have it's renderers disabled on near touch.
+ * **Near Touch Appearance Delay:** The amount of time to wait before the near touch appearance settings are applied after the near touch event.
+ * **Near Untouch Appearance Delay:** The amount of time to wait before the previous appearance settings are applied after the near untouch event.
+ * **Valid Near Touch Interacting Object:** Determines what type of interacting object will affect the appearance of the `Object To Affect` after the near touch and near untouch event.
  * **Game Object Active On Touch:** If this is checked then the `Object To Affect` will be an active GameObject when the `Object To Monitor` is touched. If it's unchecked then it will be disabled on touch.
  * **Renderer Visible On Touch:** If this is checked then the `Object To Affect` will have visible renderers when the `Object To Monitor` is touched. If it's unchecked then it will have it's renderers disabled on touch.
  * **Touch Appearance Delay:** The amount of time to wait before the touch appearance settings are applied after the touch event.
@@ -3179,14 +3188,6 @@ The `Object To Affect` can be the object that is causing the interaction (touch/
 
 ### Class Variables
 
- * `public enum InteractionType` - The interaction type.
-   * `None` - No interaction has affected the object appearance.
-   * `Touch` - The touch interaction has affected the object appearance.
-   * `Untouch` - The untouch interaction has affected the object appearance.
-   * `Grab` - The grab interaction has affected the object appearance.
-   * `Ungrab` - The ungrab interaction has affected the object appearance.
-   * `Use` - The use interaction has affected the object appearance.
-   * `Unuse` - The unuse interaction has affected the object appearance.
  * `public enum ValidInteractingObject` - The valid interacting object.
    * `Anything` - Any GameObject is considered a valid interacting object.
    * `EitherController` - Only a game controller is considered a valid interacting objcet.
@@ -3211,11 +3212,56 @@ Adding the `VRTK_InteractObjectAppearance_UnityEvents` component to `VRTK_Intera
 
  * `GameObject affectingObject` - The object that is being affected.
  * `VRTK_InteractableObject monitoringObject` - The interactable object that is being monitored.
- * `VRTK_InteractObjectAppearance.InteractionType interactionType` - The type of interaction initiating the event.
+ * `VRTK_InteractableObject.InteractionType interactionType` - The type of interaction initiating the event.
 
 ### Example
 
 `VRTK/Examples/008_Controller_UsingAGrabbedObject` shows that the controller can be hidden when touching, grabbing and using an object.
+
+---
+
+## Interact Object Highlighter (VRTK_InteractObjectHighlighter)
+
+### Overview
+
+The Interact Object Hightlighter script is attached to an Interactable Object component to provide highlighting to the object on various interaction stages.
+
+### Inspector Parameters
+
+ * **Near Touch Highlight:** The colour to highlight the object on the near touch interaction.
+ * **Touch Highlight:** The colour to highlight the object on the touch interaction.
+ * **Grab Highlight:** The colour to highlight the object on the grab interaction.
+ * **Use Highlight:** The colour to highlight the object on the use interaction.
+ * **Object To Affect:** The Interactable Object to affect the highlighter of. If this is left blank, then the Interactable Object will need to be on the current or a parent GameObject.
+
+### Class Events
+
+ * `InteractObjectHighlighterHighlighted` - Emitted when the object is highlighted
+ * `InteractObjectHighlighterUnhighlighted` - Emitted when the object is unhighlighted
+
+### Unity Events
+
+Adding the `VRTK_InteractObjectHighlighter_UnityEvents` component to `VRTK_InteractObjectHighlighter` object allows access to `UnityEvents` that will react identically to the Class Events.
+
+ * All C# delegate events are mapped to a Unity Event with the `On` prefix. e.g. `MyEvent` -> `OnMyEvent`.
+
+### Event Payload
+
+ * `VRTK_InteractableObject affectedObject` - The GameObject that is being highlighted.
+ * `GameObject affectingObject` - The GameObject is initiating the highlight via an interaction.
+
+### Class Methods
+
+#### GetCurrentHighlightColor/0
+
+  > `public virtual Color GetCurrentHighlightColor()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `Color` - The Color that the Interactable Object is being highlighted to.
+
+The GetCurrentHighlightColor returns the colour that the object is currently being highlighted to.
 
 ---
 
@@ -3227,7 +3273,7 @@ The Interact Touch script is usually applied to a Controller and provides a coll
 
 Colliders are created for the controller and by default the selected controller SDK will have a set of colliders for the given default controller of that SDK.
 
-A custom collider can be provided by the Custom Rigidbody Object parameter.
+A custom collider can be provided by the Custom Collider Container parameter.
 
 ### Inspector Parameters
 
@@ -3358,6 +3404,81 @@ The GetControllerType method is a shortcut to retrieve the current controller ty
 ### Example
 
 `VRTK/Examples/005_Controller/BasicObjectGrabbing` demonstrates the highlighting of objects that have the `VRTK_InteractableObject` script added to them to show the ability to highlight interactable objects when they are touched by the controllers.
+
+---
+
+## Interact Near Touch (VRTK_InteractNearTouch)
+
+### Overview
+
+The Interact Near Touch script is usually applied to a Controller and provides a collider to know when the controller is nearly touching something.
+
+Colliders are created for the controller and by default will be a sphere.
+
+A custom collider can be provided by the Custom Collider Container parameter.
+
+### Inspector Parameters
+
+ * **Collider Radius:** The radius of the auto generated collider if a `Custom Collider Container` is not supplied.
+ * **Custom Collider Container:** An optional GameObject that contains the compound colliders to represent the near touching object. If this is empty then the collider will be auto generated at runtime.
+ * **Interact Touch:** The Interact Touch script to associate the near touches with. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.
+
+### Class Events
+
+ * `ControllerNearTouchInteractableObject` - Emitted when a valid object is near touched.
+ * `ControllerNearUntouchInteractableObject` - Emitted when a valid object is no longer being near touched.
+
+### Unity Events
+
+Adding the `VRTK_InteractNearTouch_UnityEvents` component to `VRTK_InteractNearTouch` object allows access to `UnityEvents` that will react identically to the Class Events.
+
+ * All C# delegate events are mapped to a Unity Event with the `On` prefix. e.g. `MyEvent` -> `OnMyEvent`.
+
+### Class Methods
+
+#### GetNearTouchedObjects/0
+
+  > `public virtual List<GameObject> GetNearTouchedObjects()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `List<GameObject>` - A list of GameObjects that are being near touched.
+
+The GetNearTouchedObjects method returns all of the GameObjects that are currently being near touched.
+
+#### ForceNearTouch/1
+
+  > `public virtual void ForceNearTouch(GameObject obj)`
+
+ * Parameters
+   * `GameObject obj` - The GameObject to attempt to force near touch.
+ * Returns
+   * _none_
+
+The ForceNearTouch method will attempt to force the controller to near touch the given game object.
+
+#### ForceStopNearTouching/1
+
+  > `public virtual void ForceStopNearTouching(GameObject obj = null)`
+
+ * Parameters
+   * `GameObject obj` - An optional GameObject to only include in the force stop. If this is null then all near touched GameObjects will be force stopped.
+ * Returns
+   * _none_
+
+The ForceStopNearTouching method will stop the controller from near touching an object even if the controller is physically touching the object still.
+
+#### GetNearTouchedObjects/0
+
+  > `public virtual List<GameObject> GetNearTouchedObjects()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `List<GameObject>` - A list of GameObjects that are being near touched.
+
+The GetNearTouchedObjects method returns all of the GameObjects that are currently being near touched.
 
 ---
 
@@ -3574,6 +3695,7 @@ The highlighting of an Interactable Object is defaulted to use the `VRTK_Materia
 ### Inspector Parameters
 
  * **Disable When Idle:** If this is checked then the interactable object script will be disabled when the object is not being interacted with. This will eliminate the potential number of calls the interactable objects make each frame.
+ * **Allowed Near Touch Controllers:** Determines which controller can initiate a near touch action.
  * **Touch Highlight Color:** The colour to highlight the object when it is touched. This colour will override any globally set colour (for instance on the `VRTK_InteractTouch` script).
  * **Allowed Touch Controllers:** Determines which controller can initiate a touch action.
  * **Ignored Colliders:** An array of colliders on the object to ignore when being touched.
@@ -3594,6 +3716,16 @@ The highlighting of an Interactable Object is defaulted to use the `VRTK_Materia
 
 ### Class Variables
 
+ * `public enum InteractionType` - The interaction type.
+   * `None` - No interaction is affecting the object.
+   * `NearTouch` - The near touch interaction is affecting the object.
+   * `NearUntouch` - The near untouch interaction stopped affecting the object
+   * `Touch` - The touch interaction is affecting the object.
+   * `Untouch` - The untouch interaction stopped affecting the object
+   * `Grab` - The grab interaction is affecting the object.
+   * `Ungrab` - The ungrab interaction stopped affecting the object
+   * `Use` - The use interaction is affecting the object.
+   * `Unuse` - The unuse interaction stopped affecting the object
  * `public enum AllowedController` - Allowed controller type.
    * `Both` - Both controllers are allowed to interact.
    * `LeftOnly` - Only the left controller is allowed to interact.
@@ -3609,6 +3741,8 @@ The highlighting of an Interactable Object is defaulted to use the `VRTK_Materia
 
  * `InteractableObjectEnabled` - Emitted when the object script is enabled;
  * `InteractableObjectDisabled` - Emitted when the object script is disabled;
+ * `InteractableObjectNearTouched` - Emitted when another object near touches the current object.
+ * `InteractableObjectNearUntouched` - Emitted when the other object stops near touching the current object.
  * `InteractableObjectTouched` - Emitted when another object touches the current object.
  * `InteractableObjectUntouched` - Emitted when the other object stops touching the current object.
  * `InteractableObjectGrabbed` - Emitted when another object grabs the current object (e.g. a controller).
@@ -3631,6 +3765,17 @@ Adding the `VRTK_InteractableObject_UnityEvents` component to `VRTK_Interactable
  * `GameObject interactingObject` - The object that is initiating the interaction (e.g. a controller).
 
 ### Class Methods
+
+#### IsNearTouched/0
+
+  > `public virtual bool IsNearTouched()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `bool` - Returns `true` if the object is currently being near touched.
+
+The IsNearTouched method is used to determine if the object is currently being near touched.
 
 #### IsTouched/0
 
@@ -3665,6 +3810,28 @@ The IsGrabbed method is used to determine if the object is currently being grabb
 
 The IsUsing method is used to determine if the object is currently being used.
 
+#### StartNearTouching/1
+
+  > `public virtual void StartNearTouching(VRTK_InteractNearTouch currentNearTouchingObject = null)`
+
+ * Parameters
+   * `VRTK_InteractNearTouch currentNearTouchingObject` - The object that is currently nearly touching this object.
+ * Returns
+   * _none_
+
+The StartNearTouching method is called automatically when the object is initially nearly touched.
+
+#### StopNearTouching/1
+
+  > `public virtual void StopNearTouching(VRTK_InteractNearTouch previousNearTouchingObject = null)`
+
+ * Parameters
+   * `VRTK_InteractNearTouch previousNearTouchingObject` - The object that was previously nearly touching this object.
+ * Returns
+   * _none_
+
+The StopNearTouching method is called automatically when the object has stopped being nearly touched.
+
 #### StartTouching/1
 
   > `public virtual void StartTouching(VRTK_InteractTouch currentTouchingObject = null)`
@@ -3674,7 +3841,7 @@ The IsUsing method is used to determine if the object is currently being used.
  * Returns
    * _none_
 
-The StartTouching method is called automatically when the object is touched initially. It is also a virtual method to allow for overriding in inherited classes.
+The StartTouching method is called automatically when the object is touched initially.
 
 #### StopTouching/1
 
@@ -3685,7 +3852,7 @@ The StartTouching method is called automatically when the object is touched init
  * Returns
    * _none_
 
-The StopTouching method is called automatically when the object has stopped being touched. It is also a virtual method to allow for overriding in inherited classes.
+The StopTouching method is called automatically when the object has stopped being touched.
 
 #### Grabbed/1
 
@@ -3696,7 +3863,7 @@ The StopTouching method is called automatically when the object has stopped bein
  * Returns
    * _none_
 
-The Grabbed method is called automatically when the object is grabbed initially. It is also a virtual method to allow for overriding in inherited classes.
+The Grabbed method is called automatically when the object is grabbed initially.
 
 #### Ungrabbed/1
 
@@ -3707,7 +3874,7 @@ The Grabbed method is called automatically when the object is grabbed initially.
  * Returns
    * _none_
 
-The Ungrabbed method is called automatically when the object has stopped being grabbed. It is also a virtual method to allow for overriding in inherited classes.
+The Ungrabbed method is called automatically when the object has stopped being grabbed.
 
 #### StartUsing/1
 
@@ -3718,7 +3885,7 @@ The Ungrabbed method is called automatically when the object has stopped being g
  * Returns
    * _none_
 
-The StartUsing method is called automatically when the object is used initially. It is also a virtual method to allow for overriding in inherited classes.
+The StartUsing method is called automatically when the object is used initially.
 
 #### StopUsing/2
 
@@ -3730,18 +3897,29 @@ The StartUsing method is called automatically when the object is used initially.
  * Returns
    * _none_
 
-The StopUsing method is called automatically when the object has stopped being used. It is also a virtual method to allow for overriding in inherited classes.
+The StopUsing method is called automatically when the object has stopped being used.
 
-#### ToggleHighlight/1
+#### Highlight/1
 
-  > `public virtual void ToggleHighlight(bool toggle)`
+  > `public virtual void Highlight(Color highlightColor)`
 
  * Parameters
-   * `bool toggle` - The state to determine whether to activate or deactivate the highlight. `true` will enable the highlight and `false` will remove the highlight.
+   * `Color highlightColor` - The colour to apply to the highlighter.
  * Returns
    * _none_
 
-The ToggleHighlight method is used to turn on or off the colour highlight of the object.
+The Highlight method turns on the highlighter attached to the Interactable Object with the given colour.
+
+#### Unhighlight/0
+
+  > `public virtual void Unhighlight()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * _none_
+
+The Unhighlight method turns off the highlighter attached to the Interactable Object.
 
 #### ResetHighlighter/0
 
@@ -3786,6 +3964,17 @@ The ZeroVelocity method resets the velocity and angular velocity to zero on the 
    * _none_
 
 The SaveCurrentState method stores the existing object parent and the object's rigidbody kinematic setting.
+
+#### GetNearTouchingObjects/0
+
+  > `public virtual List<GameObject> GetNearTouchingObjects()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `List<GameObject>` - A list of game object of that are currently nearly touching the current object.
+
+The GetNearTouchingObjects method is used to return the collecetion of valid game objects that are currently nearly touching this object.
 
 #### GetTouchingObjects/0
 
@@ -4010,6 +4199,30 @@ The PerformSecondaryAction method returns whether the object has a secondary act
 
 The ResetIgnoredColliders method is used to clear any stored ignored colliders in case the `Ignored Colliders` array parameter is changed at runtime. This needs to be called manually if changes are made at runtime.
 
+#### SubscribeToInteractionEvent/2
+
+  > `public virtual void SubscribeToInteractionEvent(InteractionType givenType, InteractableObjectEventHandler methodCallback)`
+
+ * Parameters
+   * `InteractionType givenType` - The Interaction Type to register the events for.
+   * `InteractableObjectEventHandler methodCallback` - The method to execute when the Interaction Type is initiated.
+ * Returns
+   * _none_
+
+The SubscribeToInteractionEvent method subscribes a given method callback for the given Interaction Type.
+
+#### UnsubscribeFromInteractionEvent/2
+
+  > `public virtual void UnsubscribeFromInteractionEvent(InteractionType givenType, InteractableObjectEventHandler methodCallback)`
+
+ * Parameters
+   * `InteractionType givenType` - The Interaction Type that the previous event subscription was under.
+   * `InteractableObjectEventHandler methodCallback` - The method that was being executed when the Interaction Type was initiated.
+ * Returns
+   * _none_
+
+The UnsubscribeFromInteractionEvent method unsubscribes a previous event subscription for the given Interaction Type.
+
 ### Example
 
 `VRTK/Examples/005_Controller_BasicObjectGrabbing` uses the `VRTK_InteractTouch` and `VRTK_InteractGrab` scripts on the controllers to show how an interactable object can be grabbed and snapped to the controller and thrown around the game world.
@@ -4124,21 +4337,31 @@ The Interact Haptics script is attached on the same GameObject as an Interactabl
 
 ### Inspector Parameters
 
+ * **Clip On Near Touch:** Denotes the audio clip to use to rumble the controller on near touch.
+ * **Strength On Near Touch:** Denotes how strong the rumble in the controller will be on near touch.
+ * **Duration On Near Touch:** Denotes how long the rumble in the controller will last on near touch.
+ * **Interval On Near Touch:** Denotes interval betweens rumble in the controller on near touch.
+ * **Cancel On Near Untouch:** If this is checked then the rumble will be cancelled when the controller is no longer near touching.
  * **Clip On Touch:** Denotes the audio clip to use to rumble the controller on touch.
  * **Strength On Touch:** Denotes how strong the rumble in the controller will be on touch.
  * **Duration On Touch:** Denotes how long the rumble in the controller will last on touch.
  * **Interval On Touch:** Denotes interval betweens rumble in the controller on touch.
+ * **Cancel On Untouch:** If this is checked then the rumble will be cancelled when the controller is no longer touching.
  * **Clip On Grab:** Denotes the audio clip to use to rumble the controller on grab.
  * **Strength On Grab:** Denotes how strong the rumble in the controller will be on grab.
  * **Duration On Grab:** Denotes how long the rumble in the controller will last on grab.
  * **Interval On Grab:** Denotes interval betweens rumble in the controller on grab.
+ * **Cancel On Ungrab:** If this is checked then the rumble will be cancelled when the controller is no longer grabbing.
  * **Clip On Use:** Denotes the audio clip to use to rumble the controller on use.
  * **Strength On Use:** Denotes how strong the rumble in the controller will be on use.
  * **Duration On Use:** Denotes how long the rumble in the controller will last on use.
  * **Interval On Use:** Denotes interval betweens rumble in the controller on use.
+ * **Cancel On Unuse:** If this is checked then the rumble will be cancelled when the controller is no longer using.
+ * **Object To Affect:** The Interactable Object to initiate the haptics from. If this is left blank, then the Interactable Object will need to be on the current or a parent GameObject.
 
 ### Class Events
 
+ * `InteractHapticsNearTouched` - Emitted when the haptics are from a near touch.
  * `InteractHapticsTouched` - Emitted when the haptics are from a touch.
  * `InteractHapticsGrabbed` - Emitted when the haptics are from a grab.
  * `InteractHapticsUsed` - Emitted when the haptics are from a use.
@@ -4154,6 +4377,28 @@ Adding the `VRTK_InteractHaptics_UnityEvents` component to `VRTK_InteractHaptics
  * `VRTK_ControllerReference controllerReference` - The reference to the controller to perform haptics on.
 
 ### Class Methods
+
+#### CancelHaptics/1
+
+  > `public virtual void CancelHaptics(VRTK_ControllerReference controllerReference)`
+
+ * Parameters
+   * `VRTK_ControllerReference controllerReference` -
+ * Returns
+   * _none_
+
+The CancelHaptics method cancels any existing haptic feedback on the given controller.
+
+#### HapticsOnNearTouch/1
+
+  > `public virtual void HapticsOnNearTouch(VRTK_ControllerReference controllerReference)`
+
+ * Parameters
+   * `VRTK_ControllerReference controllerReference` - The reference to the controller to activate the haptic feedback on.
+ * Returns
+   * _none_
+
+The HapticsOnNearTouch method triggers the haptic feedback on the given controller for the settings associated with near touch.
 
 #### HapticsOnTouch/1
 

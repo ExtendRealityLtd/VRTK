@@ -427,7 +427,6 @@ namespace VRTK
             currentGrabbedObject.SaveCurrentState();
             currentGrabbedObject.Grabbed(this);
             currentGrabbedObject.ZeroVelocity();
-            currentGrabbedObject.ToggleHighlight(false);
             currentGrabbedObject.isKinematic = false;
         }
 
@@ -460,7 +459,6 @@ namespace VRTK
                         grabbedObjectScript.grabAttachMechanicScript.StopGrab(applyGrabbingObjectVelocity);
                     }
                     grabbedObjectScript.Ungrabbed(this);
-                    grabbedObjectScript.ToggleHighlight(false);
                     ToggleControllerVisibility(true);
 
                     OnControllerUngrabInteractableObject(interactTouch.SetControllerInteractEvent(grabbedObject));
@@ -501,18 +499,6 @@ namespace VRTK
             return null;
         }
 
-        protected virtual void AttemptHaptics(bool initialGrabAttempt)
-        {
-            if (grabbedObject != null && initialGrabAttempt)
-            {
-                VRTK_InteractHaptics doHaptics = grabbedObject.GetComponentInParent<VRTK_InteractHaptics>();
-                if (doHaptics != null)
-                {
-                    doHaptics.HapticsOnGrab(controllerReference);
-                }
-            }
-        }
-
         protected virtual void AttemptGrabObject()
         {
             GameObject objectToGrab = GetGrabbableObject();
@@ -531,7 +517,6 @@ namespace VRTK
             IncrementGrabState();
             bool initialGrabAttempt = IsValidGrabAttempt(objectToGrab);
             undroppableGrabbedObject = GetUndroppableObject();
-            AttemptHaptics(initialGrabAttempt);
         }
 
         protected virtual bool ScriptValidGrab(VRTK_InteractableObject objectToGrabScript)

@@ -41,6 +41,49 @@ namespace VRTK
     public class VRTK_InteractableObject : MonoBehaviour
     {
         /// <summary>
+        /// The interaction type.
+        /// </summary>
+        public enum InteractionType
+        {
+            /// <summary>
+            /// No interaction is affecting the object.
+            /// </summary>
+            None,
+            /// <summary>
+            /// The near touch interaction is affecting the object.
+            /// </summary>
+            NearTouch,
+            /// <summary>
+            /// The near untouch interaction stopped affecting the object
+            /// </summary>
+            NearUntouch,
+            /// <summary>
+            /// The touch interaction is affecting the object.
+            /// </summary>
+            Touch,
+            /// <summary>
+            /// The untouch interaction stopped affecting the object
+            /// </summary>
+            Untouch,
+            /// <summary>
+            /// The grab interaction is affecting the object.
+            /// </summary>
+            Grab,
+            /// <summary>
+            /// The ungrab interaction stopped affecting the object
+            /// </summary>
+            Ungrab,
+            /// <summary>
+            /// The use interaction is affecting the object.
+            /// </summary>
+            Use,
+            /// <summary>
+            /// The unuse interaction stopped affecting the object
+            /// </summary>
+            Unuse
+        }
+
+        /// <summary>
         /// Allowed controller type.
         /// </summary>
         public enum AllowedController
@@ -78,19 +121,29 @@ namespace VRTK
             DropValidSnapDropZone
         }
 
+        [Header("General Settings", order = 1)]
+
         [Tooltip("If this is checked then the interactable object script will be disabled when the object is not being interacted with. This will eliminate the potential number of calls the interactable objects make each frame.")]
         public bool disableWhenIdle = true;
 
-        [Header("Touch Options", order = 1)]
+        [Header("Near Touch Settings", order = 2)]
+
+        [Tooltip("Determines which controller can initiate a near touch action.")]
+        public AllowedController allowedNearTouchControllers = AllowedController.Both;
 
         [Tooltip("The colour to highlight the object when it is touched. This colour will override any globally set colour (for instance on the `VRTK_InteractTouch` script).")]
+        [System.Obsolete("`VRTK_InteractableObject.touchHighlightColor` has been replaced with `VRTK_InteractObjectHighlighter.touchHighlight`. This parameter will be removed in a future version of VRTK.")]
+        [HideInInspector]
         public Color touchHighlightColor = Color.clear;
+
+        [Header("Touch Settings", order = 3)]
+
         [Tooltip("Determines which controller can initiate a touch action.")]
         public AllowedController allowedTouchControllers = AllowedController.Both;
         [Tooltip("An array of colliders on the object to ignore when being touched.")]
         public Collider[] ignoredColliders;
 
-        [Header("Grab Options", order = 2)]
+        [Header("Grab Settings", order = 4)]
 
         [Tooltip("Determines if the object can be grabbed.")]
         public bool isGrabbable = false;
@@ -109,7 +162,7 @@ namespace VRTK
         [Tooltip("The script to utilise when processing the secondary controller action on a secondary grab attempt. If one isn't provided then the first Secondary Controller Grab Action script on the GameObject will be used, if one is not found then no action will be taken on secondary grab.")]
         public VRTK_BaseGrabAction secondaryGrabActionScript;
 
-        [Header("Use Options", order = 3)]
+        [Header("Use Settings", order = 5)]
 
         [Tooltip("Determines if the object can be used.")]
         public bool isUsable = false;
@@ -132,6 +185,14 @@ namespace VRTK
         /// Emitted when the object script is disabled;
         /// </summary>
         public event InteractableObjectEventHandler InteractableObjectDisabled;
+        /// <summary>
+        /// Emitted when another object near touches the current object.
+        /// </summary>
+        public event InteractableObjectEventHandler InteractableObjectNearTouched;
+        /// <summary>
+        /// Emitted when the other object stops near touching the current object.
+        /// </summary>
+        public event InteractableObjectEventHandler InteractableObjectNearUntouched;
         /// <summary>
         /// Emitted when another object touches the current object.
         /// </summary>
@@ -202,6 +263,7 @@ namespace VRTK
         }
 
         protected Rigidbody interactableRigidbody;
+        protected List<GameObject> nearTouchingObjects = new List<GameObject>();
         protected List<GameObject> touchingObjects = new List<GameObject>();
         protected List<GameObject> grabbingObjects = new List<GameObject>();
         protected List<GameObject> hoveredSnapObjects = new List<GameObject>();
@@ -237,6 +299,22 @@ namespace VRTK
             if (InteractableObjectDisabled != null)
             {
                 InteractableObjectDisabled(this, e);
+            }
+        }
+
+        public virtual void OnInteractableObjectNearTouched(InteractableObjectEventArgs e)
+        {
+            if (InteractableObjectNearTouched != null)
+            {
+                InteractableObjectNearTouched(this, e);
+            }
+        }
+
+        public virtual void OnInteractableObjectNearUntouched(InteractableObjectEventArgs e)
+        {
+            if (InteractableObjectNearUntouched != null)
+            {
+                InteractableObjectNearUntouched(this, e);
             }
         }
 
@@ -328,6 +406,15 @@ namespace VRTK
         }
 
         /// <summary>
+        /// The IsNearTouched method is used to determine if the object is currently being near touched.
+        /// </summary>
+        /// <returns>Returns `true` if the object is currently being near touched.</returns>
+        public virtual bool IsNearTouched()
+        {
+            return (!IsTouched() && nearTouchingObjects.Count > 0);
+        }
+
+        /// <summary>
         /// The IsTouched method is used to determine if the object is currently being touched.
         /// </summary>
         /// <returns>Returns `true` if the object is currently being touched.</returns>
@@ -365,7 +452,39 @@ namespace VRTK
         }
 
         /// <summary>
-        /// The StartTouching method is called automatically when the object is touched initially. It is also a virtual method to allow for overriding in inherited classes.
+        /// The StartNearTouching method is called automatically when the object is initially nearly touched.
+        /// </summary>
+        /// <param name="currentNearTouchingObject">The object that is currently nearly touching this object.</param>
+        public virtual void StartNearTouching(VRTK_InteractNearTouch currentNearTouchingObject = null)
+        {
+            GameObject currentNearTouchingGameObject = (currentNearTouchingObject != null ? currentNearTouchingObject.gameObject : null);
+            if (currentNearTouchingGameObject != null)
+            {
+                if (!nearTouchingObjects.Contains(currentNearTouchingGameObject))
+                {
+                    ToggleEnableState(true);
+                    nearTouchingObjects.Add(currentNearTouchingGameObject);
+                    OnInteractableObjectNearTouched(SetInteractableObjectEvent(currentNearTouchingGameObject));
+                }
+            }
+        }
+
+        /// <summary>
+        /// The StopNearTouching method is called automatically when the object has stopped being nearly touched.
+        /// </summary>
+        /// <param name="previousNearTouchingObject">The object that was previously nearly touching this object.</param>
+        public virtual void StopNearTouching(VRTK_InteractNearTouch previousNearTouchingObject = null)
+        {
+            GameObject previousNearTouchingGameObject = (previousNearTouchingObject != null ? previousNearTouchingObject.gameObject : null);
+            if (previousNearTouchingGameObject != null && nearTouchingObjects.Contains(previousNearTouchingGameObject))
+            {
+                OnInteractableObjectNearUntouched(SetInteractableObjectEvent(previousNearTouchingGameObject));
+                nearTouchingObjects.Remove(previousNearTouchingGameObject);
+            }
+        }
+
+        /// <summary>
+        /// The StartTouching method is called automatically when the object is touched initially.
         /// </summary>
         /// <param name="currentTouchingObject">The object that is currently touching this object.</param>
         public virtual void StartTouching(VRTK_InteractTouch currentTouchingObject = null)
@@ -384,7 +503,7 @@ namespace VRTK
         }
 
         /// <summary>
-        /// The StopTouching method is called automatically when the object has stopped being touched. It is also a virtual method to allow for overriding in inherited classes.
+        /// The StopTouching method is called automatically when the object has stopped being touched.
         /// </summary>
         /// <param name="previousTouchingObject">The object that was previously touching this object.</param>
         public virtual void StopTouching(VRTK_InteractTouch previousTouchingObject = null)
@@ -399,7 +518,7 @@ namespace VRTK
         }
 
         /// <summary>
-        /// The Grabbed method is called automatically when the object is grabbed initially. It is also a virtual method to allow for overriding in inherited classes.
+        /// The Grabbed method is called automatically when the object is grabbed initially.
         /// </summary>
         /// <param name="currentGrabbingObject">The object that is currently grabbing this object.</param>
         public virtual void Grabbed(VRTK_InteractGrab currentGrabbingObject = null)
@@ -418,7 +537,7 @@ namespace VRTK
         }
 
         /// <summary>
-        /// The Ungrabbed method is called automatically when the object has stopped being grabbed. It is also a virtual method to allow for overriding in inherited classes.
+        /// The Ungrabbed method is called automatically when the object has stopped being grabbed.
         /// </summary>
         /// <param name="previousGrabbingObject">The object that was previously grabbing this object.</param>
         public virtual void Ungrabbed(VRTK_InteractGrab previousGrabbingObject = null)
@@ -438,7 +557,7 @@ namespace VRTK
         }
 
         /// <summary>
-        /// The StartUsing method is called automatically when the object is used initially. It is also a virtual method to allow for overriding in inherited classes.
+        /// The StartUsing method is called automatically when the object is used initially.
         /// </summary>
         /// <param name="currentUsingObject">The object that is currently using this object.</param>
         public virtual void StartUsing(VRTK_InteractUse currentUsingObject = null)
@@ -454,7 +573,7 @@ namespace VRTK
         }
 
         /// <summary>
-        /// The StopUsing method is called automatically when the object has stopped being used. It is also a virtual method to allow for overriding in inherited classes.
+        /// The StopUsing method is called automatically when the object has stopped being used.
         /// </summary>
         /// <param name="previousUsingObject">The object that was previously using this object.</param>
         /// <param name="resetUsingObjectState">Resets the using object state to reset it's using action.</param>
@@ -474,20 +593,41 @@ namespace VRTK
         /// The ToggleHighlight method is used to turn on or off the colour highlight of the object.
         /// </summary>
         /// <param name="toggle">The state to determine whether to activate or deactivate the highlight. `true` will enable the highlight and `false` will remove the highlight.</param>
-        public virtual void ToggleHighlight(bool toggle)
+        [System.Obsolete("`VRTK_InteractableObject.ToggleHighlight` has been replaced with `VRTK_InteractableObject.Highlight` and `VRTK_InteractableObject.Unhighlight`. This method will be removed in a future version of VRTK.")]
+        public virtual void ToggleHighlight(bool toggle, Color? highlightColor = null)
+        {
+            if (toggle)
+            {
+                Highlight((highlightColor != null ? (Color)highlightColor : Color.clear));
+            }
+            else
+            {
+                Unhighlight();
+            }
+        }
+
+        /// <summary>
+        /// The Highlight method turns on the highlighter attached to the Interactable Object with the given colour.
+        /// </summary>
+        /// <param name="highlightColor">The colour to apply to the highlighter.</param>
+        public virtual void Highlight(Color highlightColor)
+        {
+            InitialiseHighlighter(highlightColor);
+            if (objectHighlighter != null && highlightColor != Color.clear)
+            {
+                objectHighlighter.Highlight(highlightColor);
+            }
+        }
+
+        /// <summary>
+        /// The Unhighlight method turns off the highlighter attached to the Interactable Object.
+        /// </summary>
+        public virtual void Unhighlight()
         {
             InitialiseHighlighter();
-
-            if (touchHighlightColor != Color.clear && objectHighlighter)
+            if (objectHighlighter != null)
             {
-                if (toggle && !IsGrabbed())
-                {
-                    objectHighlighter.Highlight(touchHighlightColor);
-                }
-                else
-                {
-                    objectHighlighter.Unhighlight();
-                }
+                objectHighlighter.Unhighlight();
             }
         }
 
@@ -549,6 +689,15 @@ namespace VRTK
                     previousKinematicState = interactableRigidbody.isKinematic;
                 }
             }
+        }
+
+        /// <summary>
+        /// The GetNearTouchingObjects method is used to return the collecetion of valid game objects that are currently nearly touching this object.
+        /// </summary>
+        /// <returns>A list of game object of that are currently nearly touching the current object.</returns>
+        public virtual List<GameObject> GetNearTouchingObjects()
+        {
+            return nearTouchingObjects;
         }
 
         /// <summary>
@@ -811,6 +960,26 @@ namespace VRTK
             currentIgnoredColliders.Clear();
         }
 
+        /// <summary>
+        /// The SubscribeToInteractionEvent method subscribes a given method callback for the given Interaction Type.
+        /// </summary>
+        /// <param name="givenType">The Interaction Type to register the events for.</param>
+        /// <param name="methodCallback">The method to execute when the Interaction Type is initiated.</param>
+        public virtual void SubscribeToInteractionEvent(InteractionType givenType, InteractableObjectEventHandler methodCallback)
+        {
+            ManageInteractionEvent(givenType, true, methodCallback);
+        }
+
+        /// <summary>
+        /// The UnsubscribeFromInteractionEvent method unsubscribes a previous event subscription for the given Interaction Type.
+        /// </summary>
+        /// <param name="givenType">The Interaction Type that the previous event subscription was under.</param>
+        /// <param name="methodCallback">The method that was being executed when the Interaction Type was initiated.</param>
+        public virtual void UnsubscribeFromInteractionEvent(InteractionType givenType, InteractableObjectEventHandler methodCallback)
+        {
+            ManageInteractionEvent(givenType, false, methodCallback);
+        }
+
         protected virtual void Awake()
         {
             interactableRigidbody = GetComponent<Rigidbody>();
@@ -824,6 +993,15 @@ namespace VRTK
                 startDisabled = true;
                 enabled = false;
             }
+
+            ///[Obsolete]
+#pragma warning disable 0618
+            if (touchHighlightColor != Color.clear && !GetComponentInChildren<VRTK_InteractObjectHighlighter>())
+            {
+                VRTK_InteractObjectHighlighter autoGenInteractHighlighter = gameObject.AddComponent<VRTK_InteractObjectHighlighter>();
+                autoGenInteractHighlighter.touchHighlight = touchHighlightColor;
+            }
+#pragma warning restore 0618
         }
 
         protected virtual void OnEnable()
@@ -895,7 +1073,7 @@ namespace VRTK
         /// <returns>whether or not the script is currently idle</returns>
         protected virtual bool IsIdle()
         {
-            return !IsTouched() && !IsGrabbed() && !IsUsing();
+            return !IsNearTouched() && !IsTouched() && !IsGrabbed() && !IsUsing();
         }
 
         protected virtual void LateUpdate()
@@ -923,9 +1101,9 @@ namespace VRTK
             }
         }
 
-        protected virtual void InitialiseHighlighter()
+        protected virtual void InitialiseHighlighter(Color? highlightColor = null)
         {
-            if (touchHighlightColor != Color.clear && objectHighlighter == null)
+            if (objectHighlighter == null)
             {
                 autoHighlighter = false;
                 objectHighlighter = VRTK_BaseHighlighter.GetActiveHighlighter(gameObject);
@@ -934,7 +1112,7 @@ namespace VRTK
                     autoHighlighter = true;
                     objectHighlighter = gameObject.AddComponent<VRTK_MaterialColorSwapHighlighter>();
                 }
-                objectHighlighter.Initialise(touchHighlightColor);
+                objectHighlighter.Initialise((highlightColor != null ? highlightColor : Color.clear));
             }
         }
 
@@ -1246,6 +1424,141 @@ namespace VRTK
                 {
                     usingObjectScript.ForceResetUsing();
                 }
+            }
+        }
+
+        protected virtual void ManageInteractionEvent(InteractionType givenType, bool state, InteractableObjectEventHandler methodCallback)
+        {
+            switch (givenType)
+            {
+                case InteractionType.NearTouch:
+                    ManageNearTouchSubscriptions(state, methodCallback);
+                    break;
+                case InteractionType.Touch:
+                    ManageTouchSubscriptions(state, methodCallback);
+                    break;
+                case InteractionType.Grab:
+                    ManageGrabSubscriptions(state, methodCallback);
+                    break;
+                case InteractionType.Use:
+                    ManageUseSubscriptions(state, methodCallback);
+                    break;
+                case InteractionType.NearUntouch:
+                    ManageNearUntouchSubscriptions(state, methodCallback);
+                    break;
+                case InteractionType.Untouch:
+                    ManageUntouchSubscriptions(state, methodCallback);
+                    break;
+                case InteractionType.Ungrab:
+                    ManageUngrabSubscriptions(state, methodCallback);
+                    break;
+                case InteractionType.Unuse:
+                    ManageUnuseSubscriptions(state, methodCallback);
+                    break;
+            }
+        }
+
+        protected virtual void ManageNearTouchSubscriptions(bool register, InteractableObjectEventHandler methodCallback)
+        {
+            if (!register)
+            {
+                InteractableObjectNearTouched -= methodCallback;
+            }
+
+            if (register)
+            {
+                InteractableObjectNearTouched += methodCallback;
+            }
+        }
+
+        protected virtual void ManageTouchSubscriptions(bool register, InteractableObjectEventHandler methodCallback)
+        {
+            if (!register)
+            {
+                InteractableObjectTouched -= methodCallback;
+            }
+
+            if (register)
+            {
+                InteractableObjectTouched += methodCallback;
+            }
+        }
+
+        protected virtual void ManageGrabSubscriptions(bool register, InteractableObjectEventHandler methodCallback)
+        {
+            if (!register)
+            {
+                InteractableObjectGrabbed -= methodCallback;
+            }
+
+            if (register)
+            {
+                InteractableObjectGrabbed += methodCallback;
+            }
+        }
+
+        protected virtual void ManageUseSubscriptions(bool register, InteractableObjectEventHandler methodCallback)
+        {
+            if (!register)
+            {
+                InteractableObjectUsed -= methodCallback;
+            }
+
+            if (register)
+            {
+                InteractableObjectUsed += methodCallback;
+            }
+        }
+
+        protected virtual void ManageNearUntouchSubscriptions(bool register, InteractableObjectEventHandler methodCallback)
+        {
+            if (!register)
+            {
+                InteractableObjectNearUntouched -= methodCallback;
+            }
+
+            if (register)
+            {
+                InteractableObjectNearUntouched += methodCallback;
+            }
+        }
+
+        protected virtual void ManageUntouchSubscriptions(bool register, InteractableObjectEventHandler methodCallback)
+        {
+            if (!register)
+            {
+                InteractableObjectUntouched -= methodCallback;
+            }
+
+            if (register)
+            {
+                InteractableObjectUntouched += methodCallback;
+            }
+        }
+
+        protected virtual void ManageUngrabSubscriptions(bool register, InteractableObjectEventHandler methodCallback)
+        {
+            if (!register)
+            {
+                InteractableObjectUngrabbed -= methodCallback;
+            }
+
+            if (register)
+            {
+                InteractableObjectUngrabbed += methodCallback;
+            }
+        }
+
+        protected virtual void ManageUnuseSubscriptions(bool register, InteractableObjectEventHandler methodCallback)
+        {
+            if (!register)
+            {
+                InteractableObjectUnused -= methodCallback;
+            }
+
+            if (register)
+            {
+                InteractableObjectUnused += methodCallback;
             }
         }
     }
