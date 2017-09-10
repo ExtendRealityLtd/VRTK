@@ -1176,10 +1176,12 @@ Provides a custom controller hand model with psuedo finger functionality.
  * **Pinky Axis Button:** The button type to listen for axis changes to control the pinky finger.
  * **Three Finger Axis Button:** The button type to listen for axis changes to control the middle, ring and pinky finger.
  * **Thumb State:** The Axis Type to utilise when dealing with the thumb state. Not all controllers support all axis types on all of the available buttons.
+ * **Near Touch Overrides:** Finger axis overrides on an Interact NearTouch event.
  * **Touch Overrides:** Finger axis overrides on an Interact Touch event.
  * **Grab Overrides:** Finger axis overrides on an Interact Grab event.
  * **Use Overrides:** Finger axis overrides on an Interact Use event.
  * **Controller Events:** The controller to listen for the events on. If this is left blank as it will be auto populated by finding the Controller Events script on the parent GameObject.
+ * **Interact Near Touch:** An optional Interact NearTouch to listen for near touch events on. If this is left blank as it will attempt to be auto populated by finding the Interact NearTouch script on the parent GameObject.
  * **Interact Touch:** An optional Interact Touch to listen for touch events on. If this is left blank as it will attempt to be auto populated by finding the Interact Touch script on the parent GameObject.
  * **Interact Grab:** An optional Interact Grab to listen for grab events on. If this is left blank as it will attempt to be auto populated by finding the Interact Grab script on the parent GameObject.
  * **Interact Use:** An optional Interact Use to listen for use events on. If this is left blank as it will attempt to be auto populated by finding the Interact Use script on the parent GameObject.

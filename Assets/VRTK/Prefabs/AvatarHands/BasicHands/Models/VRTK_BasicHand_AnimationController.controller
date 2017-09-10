@@ -8,6 +8,12 @@ AnimatorController:
   m_Name: VRTK_BasicHand_AnimationController
   serializedVersion: 5
   m_AnimatorParameters:
+  - m_Name: NearTouchState
+    m_Type: 1
+    m_DefaultFloat: -1
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 0}
   - m_Name: TouchState
     m_Type: 1
     m_DefaultFloat: -1

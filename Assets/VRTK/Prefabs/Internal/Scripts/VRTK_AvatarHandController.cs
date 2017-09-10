@@ -155,6 +155,8 @@ namespace VRTK
 
         [Header("Finger Axis Overrides")]
 
+        [Tooltip("Finger axis overrides on an Interact NearTouch event.")]
+        public AxisOverrides nearTouchOverrides;
         [Tooltip("Finger axis overrides on an Interact Touch event.")]
         public AxisOverrides touchOverrides;
         [Tooltip("Finger axis overrides on an Interact Grab event.")]
@@ -166,6 +168,8 @@ namespace VRTK
 
         [Tooltip("The controller to listen for the events on. If this is left blank as it will be auto populated by finding the Controller Events script on the parent GameObject.")]
         public VRTK_ControllerEvents controllerEvents;
+        [Tooltip("An optional Interact NearTouch to listen for near touch events on. If this is left blank as it will attempt to be auto populated by finding the Interact NearTouch script on the parent GameObject.")]
+        public VRTK_InteractNearTouch interactNearTouch;
         [Tooltip("An optional Interact Touch to listen for touch events on. If this is left blank as it will attempt to be auto populated by finding the Interact Touch script on the parent GameObject.")]
         public VRTK_InteractTouch interactTouch;
         [Tooltip("An optional Interact Grab to listen for grab events on. If this is left blank as it will attempt to be auto populated by finding the Interact Grab script on the parent GameObject.")]
@@ -220,6 +224,7 @@ namespace VRTK
         {
             animator = GetComponent<Animator>();
             controllerEvents = (controllerEvents != null ? controllerEvents : GetComponentInParent<VRTK_ControllerEvents>());
+            interactNearTouch = (interactNearTouch != null ? interactNearTouch : GetComponentInParent<VRTK_InteractNearTouch>());
             interactTouch = (interactTouch != null ? interactTouch : GetComponentInParent<VRTK_InteractTouch>());
             interactGrab = (interactGrab != null ? interactGrab : GetComponentInParent<VRTK_InteractGrab>());
             interactUse = (interactUse != null ? interactUse : GetComponentInParent<VRTK_InteractUse>());
@@ -308,6 +313,12 @@ namespace VRTK
                 SubscribeButtonAxisEvent(threeFingerAxisButton, ref savedThreeFingerAxisButtonState, threeFingerState, DoThreeFingerAxisEvent);
             }
 
+            if (interactNearTouch != null)
+            {
+                interactNearTouch.ControllerNearTouchInteractableObject += DoControllerNearTouch;
+                interactNearTouch.ControllerNearUntouchInteractableObject += DoControllerNearUntouch;
+            }
+
             if (interactTouch != null)
             {
                 interactTouch.ControllerTouchInteractableObject += DoControllerTouch;
@@ -344,6 +355,12 @@ namespace VRTK
                 UnsubscribeButtonAxisEvent(savedRingAxisButtonState, ringState, DoRingAxisEvent);
                 UnsubscribeButtonAxisEvent(savedPinkyAxisButtonState, pinkyState, DoPinkyAxisEvent);
                 UnsubscribeButtonAxisEvent(savedThreeFingerAxisButtonState, threeFingerState, DoThreeFingerAxisEvent);
+            }
+
+            if (interactNearTouch != null)
+            {
+                interactNearTouch.ControllerNearTouchInteractableObject -= DoControllerNearTouch;
+                interactNearTouch.ControllerNearUntouchInteractableObject -= DoControllerNearUntouch;
             }
 
             if (interactTouch != null)
@@ -550,6 +567,32 @@ namespace VRTK
             animator.SetFloat(state, -1f);
         }
 
+        protected virtual void DoControllerNearTouch(object sender, ObjectInteractEventArgs e)
+        {
+            if (interactTouch != null && interactTouch.GetTouchedObject() == null)
+            {
+                SetAnimatorStateOn("NearTouchState", nearTouchOverrides);
+                HandleOverrideOn(nearTouchOverrides.ignoreAllOverrides, fingerAxis, GetOverridePermissions(nearTouchOverrides), GetOverrideValues(nearTouchOverrides));
+            }
+        }
+
+        protected virtual void DoControllerNearUntouch(object sender, ObjectInteractEventArgs e)
+        {
+            if (interactNearTouch.GetNearTouchedObjects().Count == 0 && (interactTouch == null || interactTouch.GetTouchedObject() == null))
+            {
+                for (int i = 0; i < fingerUntouchedAxis.Length; i++)
+                {
+                    if (!IsButtonPressed(i))
+                    {
+                        SetOverrideValue(i, ref overrideAxisValues, OverrideState.WasOverring);
+                        fingerForceAxis[i] = fingerUntouchedAxis[i];
+                    }
+                }
+                SetAnimatorStateOff("NearTouchState");
+                HandleOverrideOff(nearTouchOverrides.ignoreAllOverrides, GetOverridePermissions(nearTouchOverrides), false);
+            }
+        }
+
         protected virtual void DoControllerTouch(object sender, ObjectInteractEventArgs e)
         {
             SetAnimatorStateOn("TouchState", touchOverrides);
@@ -558,12 +601,15 @@ namespace VRTK
 
         protected virtual void DoControllerUntouch(object sender, ObjectInteractEventArgs e)
         {
-            for (int i = 0; i < fingerUntouchedAxis.Length; i++)
+            if (interactNearTouch == null || nearTouchOverrides.ignoreAllOverrides)
             {
-                if (!IsButtonPressed(i))
+                for (int i = 0; i < fingerUntouchedAxis.Length; i++)
                 {
-                    SetOverrideValue(i, ref overrideAxisValues, OverrideState.WasOverring);
-                    fingerForceAxis[i] = fingerUntouchedAxis[i];
+                    if (!IsButtonPressed(i))
+                    {
+                        SetOverrideValue(i, ref overrideAxisValues, OverrideState.WasOverring);
+                        fingerForceAxis[i] = fingerUntouchedAxis[i];
+                    }
                 }
             }
             SetAnimatorStateOff("TouchState");
@@ -702,7 +748,7 @@ namespace VRTK
             }
 
             //Final sanity check, if you're not touching anything but the override is still set, then clear the override.
-            if ((interactTouch == null || interactTouch.GetTouchedObject() == null) && overrideAxisValues[arrayIndex] != OverrideState.NoOverride)
+            if (((interactTouch == null && interactNearTouch == null) || (interactNearTouch == null && interactTouch.GetTouchedObject() == null) || (interactNearTouch != null && interactNearTouch.GetNearTouchedObjects().Count == 0)) && overrideAxisValues[arrayIndex] != OverrideState.NoOverride)
             {
                 SetOverrideValue(arrayIndex, ref overrideAxisValues, OverrideState.NoOverride);
             }
