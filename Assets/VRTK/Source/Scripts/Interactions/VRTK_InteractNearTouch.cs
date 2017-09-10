@@ -153,7 +153,11 @@ namespace VRTK
             }
             else
             {
-                neartouchColliderContainer = Instantiate(customColliderContainer, Vector3.zero, Quaternion.identity, interactTouch.transform);
+                neartouchColliderContainer = Instantiate(customColliderContainer);
+                neartouchColliderContainer.transform.SetParent(interactTouch.transform);
+                neartouchColliderContainer.transform.localPosition = customColliderContainer.transform.localPosition;
+                neartouchColliderContainer.transform.localRotation = customColliderContainer.transform.localRotation;
+                neartouchColliderContainer.transform.localScale = customColliderContainer.transform.localScale;
             }
 
             neartouchColliderContainer.name = VRTK_SharedMethods.GenerateVRTKObjectName(true, "Controller", "NearTouch", "CollidersContainer");
