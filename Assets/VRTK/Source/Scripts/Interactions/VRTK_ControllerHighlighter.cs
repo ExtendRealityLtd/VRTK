@@ -2,7 +2,6 @@
 namespace VRTK
 {
     using UnityEngine;
-    using System.Collections;
     using System.Collections.Generic;
     using Highlighters;
 
@@ -53,7 +52,7 @@ namespace VRTK
         public VRTK_ControllerModelElementPaths modelElementPaths = new VRTK_ControllerModelElementPaths();
         [Tooltip("A collection of highlighter overrides for each controller model sub element. If no highlighter override is given then highlighter on the Controller game object is used.")]
         public VRTK_ControllerElementHighlighters elementHighlighterOverrides = new VRTK_ControllerElementHighlighters();
-        [Tooltip("An optional GameObject to specify which controller to apply the script methods to. If this is left blank then this script is required to be placed on a Controller Alias GameObject.")]
+        [Tooltip("An optional GameObject to specify which controller to apply the script methods to. If this is left blank then this script is required to be placed on a Controller Alias GameObject and it will use the Actual Controller object linked to the script alias.")]
         public GameObject controllerAlias;
         [Tooltip("An optional GameObject to specifiy where the controller models are. If this is left blank then the Model Alias object will be used.")]
         public GameObject modelContainer;
@@ -61,7 +60,6 @@ namespace VRTK
         protected bool controllerHighlighted = false;
         protected Dictionary<string, Transform> cachedElements;
         protected Dictionary<string, object> highlighterOptions;
-        protected GameObject originalControllerAlias;
 
         protected Color lastHighlightController;
         protected Color lastHighlightBody;
@@ -82,6 +80,9 @@ namespace VRTK
         protected SDK_BaseController.ControllerElements[] systemMenuElements = new SDK_BaseController.ControllerElements[] { SDK_BaseController.ControllerElements.SystemMenu };
         protected SDK_BaseController.ControllerElements[] startMenuElements = new SDK_BaseController.ControllerElements[] { SDK_BaseController.ControllerElements.StartMenu };
 
+        protected GameObject scriptControllerAlias;
+        protected GameObject actualController;
+        protected GameObject actualModelContainer;
         protected VRTK_TrackedController trackedController;
 
         /// <summary>
@@ -106,28 +107,32 @@ namespace VRTK
         /// </summary>
         public virtual void PopulateHighlighters()
         {
-            highlighterOptions = new Dictionary<string, object>();
-            highlighterOptions.Add("resetMainTexture", true);
-
-            SDK_BaseController.ControllerHand controllerHand = VRTK_DeviceFinder.GetControllerHand(controllerAlias);
-            VRTK_BaseHighlighter objectHighlighter = VRTK_BaseHighlighter.GetActiveHighlighter(controllerAlias);
-
-            if (objectHighlighter == null)
+            if (actualController != null)
             {
-                objectHighlighter = controllerAlias.AddComponent<VRTK_MaterialColorSwapHighlighter>();
+                highlighterOptions = new Dictionary<string, object>();
+                highlighterOptions.Add("resetMainTexture", true);
+
+                VRTK_BaseHighlighter objectHighlighter = VRTK_BaseHighlighter.GetActiveHighlighter(actualController);
+
+                if (objectHighlighter == null)
+                {
+                    objectHighlighter = actualController.AddComponent<VRTK_MaterialColorSwapHighlighter>();
+                }
+
+                SDK_BaseController.ControllerHand currentHand = VRTK_DeviceFinder.GetControllerHand(actualController);
+
+                objectHighlighter.Initialise(null, highlighterOptions);
+
+                AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.ButtonOne, currentHand)), objectHighlighter, elementHighlighterOverrides.buttonOne);
+                AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.ButtonTwo, currentHand)), objectHighlighter, elementHighlighterOverrides.buttonTwo);
+                AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.Body, currentHand)), objectHighlighter, elementHighlighterOverrides.body);
+                AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.GripLeft, currentHand)), objectHighlighter, elementHighlighterOverrides.gripLeft);
+                AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.GripRight, currentHand)), objectHighlighter, elementHighlighterOverrides.gripRight);
+                AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.StartMenu, currentHand)), objectHighlighter, elementHighlighterOverrides.startMenu);
+                AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.SystemMenu, currentHand)), objectHighlighter, elementHighlighterOverrides.systemMenu);
+                AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.Touchpad, currentHand)), objectHighlighter, elementHighlighterOverrides.touchpad);
+                AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.Trigger, currentHand)), objectHighlighter, elementHighlighterOverrides.trigger);
             }
-
-            objectHighlighter.Initialise(null, highlighterOptions);
-
-            AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.ButtonOne, controllerHand)), objectHighlighter, elementHighlighterOverrides.buttonOne);
-            AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.ButtonTwo, controllerHand)), objectHighlighter, elementHighlighterOverrides.buttonTwo);
-            AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.Body, controllerHand)), objectHighlighter, elementHighlighterOverrides.body);
-            AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.GripLeft, controllerHand)), objectHighlighter, elementHighlighterOverrides.gripLeft);
-            AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.GripRight, controllerHand)), objectHighlighter, elementHighlighterOverrides.gripRight);
-            AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.StartMenu, controllerHand)), objectHighlighter, elementHighlighterOverrides.startMenu);
-            AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.SystemMenu, controllerHand)), objectHighlighter, elementHighlighterOverrides.systemMenu);
-            AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.Touchpad, controllerHand)), objectHighlighter, elementHighlighterOverrides.touchpad);
-            AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.Trigger, controllerHand)), objectHighlighter, elementHighlighterOverrides.trigger);
         }
 
         /// <summary>
@@ -211,28 +216,24 @@ namespace VRTK
 
         protected virtual void Awake()
         {
-            originalControllerAlias = controllerAlias;
             VRTK_SDKManager.instance.AddBehaviourToToggleOnLoadedSetupChange(this);
         }
 
         protected virtual void OnEnable()
         {
-            controllerAlias = originalControllerAlias;
-            if (controllerAlias == null)
+            scriptControllerAlias = (controllerAlias != null ? controllerAlias : gameObject);
+            actualController = VRTK_DeviceFinder.GetActualController(scriptControllerAlias);
+            if (actualController != null)
             {
-                trackedController = GetComponentInParent<VRTK_TrackedController>();
-                controllerAlias = (trackedController != null ? trackedController.gameObject : null);
+                trackedController = actualController.GetComponent<VRTK_TrackedController>();
+                if (trackedController != null)
+                {
+                    trackedController.ControllerModelAvailable += DoControllerModelAvailable;
+                }
             }
-
-            if (controllerAlias == null)
+            else
             {
                 VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_NOT_INJECTED, "VRTK_ControllerHighlighter", "Controller Alias GameObject", "controllerAlias", "the same"));
-                return;
-            }
-
-            if (trackedController != null)
-            {
-                trackedController.ControllerModelAvailable += DoControllerModelAvailable;
             }
         }
 
@@ -242,6 +243,7 @@ namespace VRTK
             {
                 trackedController.ControllerModelAvailable -= DoControllerModelAvailable;
             }
+            actualController = null;
         }
 
         protected virtual void OnDestroy()
@@ -265,7 +267,7 @@ namespace VRTK
         protected virtual void DoControllerModelAvailable(object sender, VRTKTrackedControllerEventArgs e)
         {
             ConfigureControllerPaths();
-            modelContainer = (modelContainer != null ? modelContainer : VRTK_DeviceFinder.GetModelAliasController(controllerAlias));
+            actualModelContainer = (modelContainer != null ? modelContainer : VRTK_DeviceFinder.GetModelAliasController(actualController));
             PopulateHighlighters();
             ResetLastHighlights();
         }
@@ -400,8 +402,8 @@ namespace VRTK
 
         protected virtual string GetElementPath(string currentPath, SDK_BaseController.ControllerElements elementType)
         {
-            SDK_BaseController.ControllerHand controllerHand = VRTK_DeviceFinder.GetControllerHand(controllerAlias);
-            string foundElementPath = VRTK_SDK_Bridge.GetControllerElementPath(elementType, controllerHand);
+            SDK_BaseController.ControllerHand currentHand = VRTK_DeviceFinder.GetControllerHand(actualController);
+            string foundElementPath = VRTK_SDK_Bridge.GetControllerElementPath(elementType, currentHand);
             return (currentPath.Trim() == "" && foundElementPath != null ? foundElementPath : currentPath.Trim());
         }
 
@@ -440,13 +442,13 @@ namespace VRTK
 
             if (!cachedElements.ContainsKey(path) || cachedElements[path] == null)
             {
-                if (!modelContainer)
+                if (actualModelContainer == null)
                 {
                     VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.SDK_OBJECT_NOT_FOUND, "Controller Model", "Controller SDK"));
                     return null;
                 }
 
-                cachedElements[path] = modelContainer.transform.Find(path);
+                cachedElements[path] = actualModelContainer.transform.Find(path);
             }
             return cachedElements[path];
         }
