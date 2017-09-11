@@ -3013,7 +3013,7 @@ The highlighting of the controller is defaulted to use the `VRTK_MaterialColorSw
  * **Highlight Start Menu:** The colour to set the start menu highlight colour to.
  * **Model Element Paths:** A collection of strings that determine the path to the controller model sub elements for identifying the model parts at runtime. If the paths are left empty they will default to the model element paths of the selected SDK Bridge.
  * **Element Highlighter Overrides:** A collection of highlighter overrides for each controller model sub element. If no highlighter override is given then highlighter on the Controller game object is used.
- * **Controller Alias:** An optional GameObject to specify which controller to apply the script methods to. If this is left blank then this script is required to be placed on a Controller Alias GameObject.
+ * **Controller Alias:** An optional GameObject to specify which controller to apply the script methods to. If this is left blank then this script is required to be placed on a Controller Alias GameObject and it will use the Actual Controller object linked to the script alias.
  * **Model Container:** An optional GameObject to specifiy where the controller models are. If this is left blank then the Model Alias object will be used.
 
 ### Class Methods
