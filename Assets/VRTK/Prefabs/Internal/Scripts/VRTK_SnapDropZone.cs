@@ -350,6 +350,7 @@ namespace VRTK
             }
 #pragma warning restore 618
 
+            DisableHighlightShadows();
             if (!VRTK_SharedMethods.IsEditTime() && Application.isPlaying && defaultSnappedInteractableObject != null)
             {
                 ForceSnap(defaultSnappedInteractableObject);
@@ -583,6 +584,19 @@ namespace VRTK
                 highlightContainer.transform.localPosition = Vector3.zero;
                 highlightContainer.transform.localRotation = Quaternion.identity;
                 highlightContainer.transform.localScale = Vector3.one;
+            }
+        }
+
+        protected virtual void DisableHighlightShadows()
+        {
+            if (highlightObject != null)
+            {
+                Renderer[] foundRenderers = highlightObject.GetComponentsInChildren<Renderer>(true);
+                for (int i = 0; i < foundRenderers.Length; i++)
+                {
+                    foundRenderers[i].receiveShadows = false;
+                    foundRenderers[i].shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+                }
             }
         }
 
@@ -936,6 +950,7 @@ namespace VRTK
                 DeleteHighlightObject();
             }
 
+            DisableHighlightShadows();
             SetHighlightObjectActive(false);
             SetContainer();
         }
