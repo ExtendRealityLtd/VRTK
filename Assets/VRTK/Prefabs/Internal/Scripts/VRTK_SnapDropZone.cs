@@ -407,12 +407,12 @@ namespace VRTK
                 {
                     ToggleHighlight(interactableObjectCheck, true);
                     interactableObjectCheck.SetSnapDropZoneHover(this, true);
-                    ToggleHighlightColor();
                     if (!willSnap)
                     {
                         OnObjectEnteredSnapDropZone(SetSnapDropZoneEvent(interactableObjectCheck.gameObject));
                     }
                     willSnap = true;
+                    ToggleHighlightColor();
                 }
             }
         }
@@ -446,7 +446,7 @@ namespace VRTK
 
         protected virtual bool ValidUnsnap(VRTK_InteractableObject interactableObjectCheck)
         {
-            return ((snapType != SnapTypes.UseJoint || !float.IsInfinity(GetComponent<Joint>().breakForce)) && interactableObjectCheck.validDrop == VRTK_InteractableObject.ValidDropTypes.DropAnywhere);
+            return (interactableObjectCheck.IsGrabbed() || ((snapType != SnapTypes.UseJoint || !float.IsInfinity(GetComponent<Joint>().breakForce)) && interactableObjectCheck.validDrop == VRTK_InteractableObject.ValidDropTypes.DropAnywhere));
         }
 
         protected virtual void SnapObjectToZone(VRTK_InteractableObject objectToSnap)
