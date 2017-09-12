@@ -100,7 +100,7 @@ namespace VRTK
         /// The HoverButton method is used to set the button hover at a given angle.
         /// </summary>
         /// <param name="angle">The angle on the radial menu.</param>
-        [System.Obsolete("`VRTK_RadialMenu.HoverButton(float)` has been deprecated, use VRTK_RadialMenu.HoverButton(TouchAngleDeflection) instead")]
+        [System.Obsolete("`VRTK_RadialMenu.HoverButton(float)` has been replaced with `VRTK_RadialMenu.HoverButton(TouchAngleDeflection)`. This method will be removed in a future version of VRTK.")]
         public virtual void HoverButton(float angle)
         {
             HoverButton(new TouchAngleDeflection(angle, 1));
@@ -119,7 +119,7 @@ namespace VRTK
         /// The ClickButton method is used to set the button click at a given angle.
         /// </summary>
         /// <param name="angle">The angle on the radial menu.</param>
-        [System.Obsolete("`VRTK_RadialMenu.ClickButton(float)` has been deprecated, use VRTK_RadialMenu.ClickButton(TouchAngleDeflection) instead")]
+        [System.Obsolete("`VRTK_RadialMenu.ClickButton(float)` has been replaced with `VRTK_RadialMenu.ClickButton(TouchAngleDeflection)`. This method will be removed in a future version of VRTK.")]
         public virtual void ClickButton(float angle)
         {
             ClickButton(new TouchAngleDeflection(angle, 1));
@@ -138,7 +138,7 @@ namespace VRTK
         /// The UnClickButton method is used to set the button unclick at a given angle.
         /// </summary>
         /// <param name="angle">The angle on the radial menu.</param>
-        [System.Obsolete("`VRTK_RadialMenu.UnClickButton(float)` has been deprecated, use VRTK_RadialMenu.UnClickButton(TouchAngleDeflection) instead")]
+        [System.Obsolete("`VRTK_RadialMenu.UnClickButton(float)` has been replaced with `VRTK_RadialMenu.UnClickButton(TouchAngleDeflection)`. This method will be removed in a future version of VRTK.")]
         public virtual void UnClickButton(float angle)
         {
             UnClickButton(new TouchAngleDeflection(angle, 1));
