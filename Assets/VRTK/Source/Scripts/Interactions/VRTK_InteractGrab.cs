@@ -515,7 +515,6 @@ namespace VRTK
         protected virtual void PerformGrabAttempt(GameObject objectToGrab)
         {
             IncrementGrabState();
-            bool initialGrabAttempt = IsValidGrabAttempt(objectToGrab);
             undroppableGrabbedObject = GetUndroppableObject();
         }
 

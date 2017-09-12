@@ -341,15 +341,12 @@ namespace VRTK
             GameObject model = GetSDKManagerControllerModelForHand(hand);
             if (model == null)
             {
-                GameObject controller = null;
                 switch (hand)
                 {
                     case ControllerHand.Left:
-                        controller = GetControllerLeftHand(true);
                         model = (defaultSDKLeftControllerModel != null ? defaultSDKLeftControllerModel.gameObject : null);
                         break;
                     case ControllerHand.Right:
-                        controller = GetControllerRightHand(true);
                         model = (defaultSDKRightControllerModel != null ? defaultSDKRightControllerModel.gameObject : null);
                         break;
                 }

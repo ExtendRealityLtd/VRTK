@@ -370,7 +370,6 @@ namespace VRTK
 
         protected virtual void InitialiseTips()
         {
-            bool initComplete = false;
             VRTK_ObjectTooltip[] tooltips = GetComponentsInChildren<VRTK_ObjectTooltip>(true);
             for (int i = 0; i < tooltips.Length; i++)
             {
@@ -405,8 +404,6 @@ namespace VRTK
                         tipTransform = GetTransform(startMenu, SDK_BaseController.ControllerElements.StartMenu);
                         break;
                 }
-
-                initComplete = (tipTransform != null);
 
                 tooltip.displayText = tipText;
                 tooltip.drawLineTo = tipTransform;
