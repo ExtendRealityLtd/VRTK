@@ -18,13 +18,15 @@ namespace VRTK.Highlighters
         public bool unhighlightOnDisable = true;
 
         protected bool usesClonedObject = false;
+        protected GameObject objectToAffect;
 
         /// <summary>
         /// The Initalise method is used to set up the state of the highlighter.
         /// </summary>
         /// <param name="color">An optional colour may be passed through at point of initialisation in case the highlighter requires it.</param>
+        /// <param name="affectObject">An optional GameObject to specify which object to apply the highlighting to.</param>
         /// <param name="options">An optional dictionary of highlighter specific options that may be differ with highlighter implementations.</param>
-        public abstract void Initialise(Color? color = null, Dictionary<string, object> options = null);
+        public abstract void Initialise(Color? color = null, GameObject affectObject = null, Dictionary<string, object> options = null);
 
         /// <summary>
         /// The ResetHighlighter method is used to reset the highlighter if anything on the object has changed. It should be called by any scripts changing object materials or colours.

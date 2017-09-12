@@ -33,9 +33,11 @@ namespace VRTK.Highlighters
         /// The Initialise method sets up the highlighter for use.
         /// </summary>
         /// <param name="color">Not used.</param>
+        /// <param name="affectObject">An optional GameObject to specify which object to apply the highlighting to.</param>
         /// <param name="options">A dictionary array containing the highlighter options:\r     * `&lt;'thickness', float&gt;` - Same as `thickness` inspector parameter.\r     * `&lt;'customOutlineModels', GameObject[]&gt;` - Same as `customOutlineModels` inspector parameter.\r     * `&lt;'customOutlineModelPaths', string[]&gt;` - Same as `customOutlineModelPaths` inspector parameter.</param>
-        public override void Initialise(Color? color = null, Dictionary<string, object> options = null)
+        public override void Initialise(Color? color = null, GameObject affectObject = null, Dictionary<string, object> options = null)
         {
+            objectToAffect = (affectObject != null ? affectObject : gameObject);
             usesClonedObject = true;
 
             if (stencilOutline == null)
@@ -89,6 +91,11 @@ namespace VRTK.Highlighters
         /// <param name="duration">Not used.</param>
         public override void Unhighlight(Color? color = null, float duration = 0f)
         {
+            if (objectToAffect == null)
+            {
+                return;
+            }
+
             if (highlightModels != null)
             {
                 for (int i = 0; i < highlightModels.Length; i++)
@@ -185,7 +192,7 @@ namespace VRTK.Highlighters
 
         protected virtual void DeleteExistingHighlightModels()
         {
-            VRTK_PlayerObject[] existingHighlighterObjects = GetComponentsInChildren<VRTK_PlayerObject>(true);
+            VRTK_PlayerObject[] existingHighlighterObjects = objectToAffect.GetComponentsInChildren<VRTK_PlayerObject>(true);
             for (int i = 0; i < existingHighlighterObjects.Length; i++)
             {
                 if (existingHighlighterObjects[i].objectType == VRTK_PlayerObject.ObjectTypes.Highlighter)
@@ -193,6 +200,7 @@ namespace VRTK.Highlighters
                     Destroy(existingHighlighterObjects[i].gameObject);
                 }
             }
+            highlightModels = new GameObject[0];
         }
 
         protected virtual GameObject CreateHighlightModel(GameObject givenOutlineModel, string givenOutlineModelPath)
@@ -203,14 +211,15 @@ namespace VRTK.Highlighters
             }
             else if (givenOutlineModelPath != "")
             {
-                Transform getChildModel = transform.Find(givenOutlineModelPath);
+                Transform getChildModel = objectToAffect.transform.Find(givenOutlineModelPath);
                 givenOutlineModel = (getChildModel ? getChildModel.gameObject : null);
             }
 
             GameObject copyModel = givenOutlineModel;
             if (copyModel == null)
             {
-                copyModel = (GetComponent<Renderer>() ? gameObject : GetComponentInChildren<Renderer>().gameObject);
+                Renderer copyModelRenderer = objectToAffect.GetComponentInChildren<Renderer>();
+                copyModel = (copyModelRenderer != null ? copyModelRenderer.gameObject : null);
             }
 
             if (copyModel == null)
@@ -219,12 +228,12 @@ namespace VRTK.Highlighters
                 return null;
             }
 
-            GameObject highlightModel = new GameObject(name + "_HighlightModel");
+            GameObject highlightModel = new GameObject(objectToAffect.name + "_HighlightModel");
             highlightModel.transform.SetParent(copyModel.transform.parent, false);
             highlightModel.transform.localPosition = copyModel.transform.localPosition;
             highlightModel.transform.localRotation = copyModel.transform.localRotation;
             highlightModel.transform.localScale = copyModel.transform.localScale;
-            highlightModel.transform.SetParent(transform);
+            highlightModel.transform.SetParent(objectToAffect.transform);
 
             Component[] copyModelComponents = copyModel.GetComponents<Component>();
             for (int i = 0; i < copyModelComponents.Length; i++)

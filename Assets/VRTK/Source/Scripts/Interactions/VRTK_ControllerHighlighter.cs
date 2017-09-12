@@ -121,7 +121,7 @@ namespace VRTK
 
                 SDK_BaseController.ControllerHand currentHand = VRTK_DeviceFinder.GetControllerHand(actualController);
 
-                objectHighlighter.Initialise(null, highlighterOptions);
+                objectHighlighter.Initialise(null, null, highlighterOptions);
 
                 AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.ButtonOne, currentHand)), objectHighlighter, elementHighlighterOverrides.buttonOne);
                 AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.ButtonTwo, currentHand)), objectHighlighter, elementHighlighterOverrides.buttonTwo);
@@ -396,7 +396,7 @@ namespace VRTK
             {
                 VRTK_BaseHighlighter highlighter = (overrideHighlighter != null ? overrideHighlighter : parentHighlighter);
                 VRTK_BaseHighlighter clonedHighlighter = (VRTK_BaseHighlighter)VRTK_SharedMethods.CloneComponent(highlighter, element.gameObject);
-                clonedHighlighter.Initialise(null, highlighterOptions);
+                clonedHighlighter.Initialise(null, null, highlighterOptions);
             }
         }
 

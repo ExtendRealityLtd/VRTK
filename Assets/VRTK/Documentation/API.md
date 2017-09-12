@@ -3713,6 +3713,7 @@ The highlighting of an Interactable Object is defaulted to use the `VRTK_Materia
  * **Pointer Activates Use Action:** If this is checked then when a Base Pointer beam (projected from the controller) hits the interactable object, if the object has `Hold Button To Use` unchecked then whilst the pointer is over the object it will run it's `Using` method. If `Hold Button To Use` is unchecked then the `Using` method will be run when the pointer is deactivated. The world pointer will not throw the `Destination Set` event if it is affecting an interactable object with this setting checked as this prevents unwanted teleporting from happening when using an object with a pointer.
  * **Use Override Button:** If this is set to `Undefined` then the global use alias button will use the object, setting it to any other button will ensure the override button is used to use this specific interactable object.
  * **Allowed Use Controllers:** Determines which controller can initiate a use action.
+ * **Object Highlighter:** An optional Highlighter to use when highlighting this Interactable Object. If this is left blank, then the first active highlighter on the same GameObject will be used, if one isn't found then a Material Color Swap Highlighter will be created at runtime.
 
 ### Class Variables
 
@@ -4530,12 +4531,13 @@ As this is an abstract class, it cannot be applied directly to a game object and
 
 ### Class Methods
 
-#### Initialise/2
+#### Initialise/3
 
-  > `public abstract void Initialise(Color? color = null, Dictionary<string, object> options = null);`
+  > `public abstract void Initialise(Color? color = null, GameObject affectObject = null, Dictionary<string, object> options = null);`
 
  * Parameters
    * `Color? color` - An optional colour may be passed through at point of initialisation in case the highlighter requires it.
+   * `GameObject affectObject` - An optional GameObject to specify which object to apply the highlighting to.
    * `Dictionary<string, object> options` - An optional dictionary of highlighter specific options that may be differ with highlighter implementations.
  * Returns
    * _none_
@@ -4635,12 +4637,13 @@ This is the default highlighter that is applied to any script that requires a hi
 
 ### Class Methods
 
-#### Initialise/2
+#### Initialise/3
 
-  > `public override void Initialise(Color? color = null, Dictionary<string, object> options = null)`
+  > `public override void Initialise(Color? color = null, GameObject affectObject = null, Dictionary<string, object> options = null)`
 
  * Parameters
    * `Color? color` - Not used.
+   * `GameObject affectObject` - An optional GameObject to specify which object to apply the highlighting to.
    * `Dictionary<string, object> options` - A dictionary array containing the highlighter options:
      * `<'resetMainTexture', bool>` - Determines if the default main texture should be cleared on highlight. `true` to reset the main default texture, `false` to not reset it.
  * Returns
@@ -4706,12 +4709,13 @@ The Draw Call Batching will resume on the original material when the item is no 
 
 ### Class Methods
 
-#### Initialise/2
+#### Initialise/3
 
-  > `public override void Initialise(Color? color = null, Dictionary<string, object> options = null)`
+  > `public override void Initialise(Color? color = null, GameObject affectObject = null, Dictionary<string, object> options = null)`
 
  * Parameters
    * `Color? color` - Not used.
+   * `GameObject affectObject` - An optional GameObject to specify which object to apply the highlighting to.
    * `Dictionary<string, object> options` - A dictionary array containing the highlighter options:
      * `<'resetMainTexture', bool>` - Determines if the default main texture should be cleared on highlight. `true` to reset the main default texture, `false` to not reset it.
  * Returns
@@ -4749,12 +4753,13 @@ The Outline Object Copy Highlighter works by making a copy of a mesh and adding 
 
 ### Class Methods
 
-#### Initialise/2
+#### Initialise/3
 
-  > `public override void Initialise(Color? color = null, Dictionary<string, object> options = null)`
+  > `public override void Initialise(Color? color = null, GameObject affectObject = null, Dictionary<string, object> options = null)`
 
  * Parameters
    * `Color? color` - Not used.
+   * `GameObject affectObject` - An optional GameObject to specify which object to apply the highlighting to.
    * `Dictionary<string, object> options` - A dictionary array containing the highlighter options:
      * `<'thickness', float>` - Same as `thickness` inspector parameter.
      * `<'customOutlineModels', GameObject[]>` - Same as `customOutlineModels` inspector parameter.
