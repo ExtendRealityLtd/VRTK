@@ -25,13 +25,15 @@ namespace VRTK.Highlighters
         /// The Initialise method sets up the highlighter for use.
         /// </summary>
         /// <param name="color">Not used.</param>
+        /// <param name="affectObject">An optional GameObject to specify which object to apply the highlighting to.</param>
         /// <param name="options">A dictionary array containing the highlighter options:\r     * `&lt;'resetMainTexture', bool&gt;` - Determines if the default main texture should be cleared on highlight. `true` to reset the main default texture, `false` to not reset it.</param>
-        public override void Initialise(Color? color = null, Dictionary<string, object> options = null)
+        public override void Initialise(Color? color = null, GameObject affectObject = null, Dictionary<string, object> options = null)
         {
+            objectToAffect = (affectObject != null ? affectObject : gameObject);
             originalMaterialPropertyBlocks = new Dictionary<string, MaterialPropertyBlock>();
             highlightMaterialPropertyBlocks = new Dictionary<string, MaterialPropertyBlock>();
             // call to parent highlighter
-            base.Initialise(color, options);
+            base.Initialise(color, affectObject, options);
         }
 
         /// <summary>
@@ -41,7 +43,7 @@ namespace VRTK.Highlighters
         /// <param name="duration">Not used.</param>
         public override void Unhighlight(Color? color = null, float duration = 0f)
         {
-            if (originalMaterialPropertyBlocks == null)
+            if (originalMaterialPropertyBlocks == null || objectToAffect == null)
             {
                 return;
             }
@@ -55,7 +57,7 @@ namespace VRTK.Highlighters
                 faderRoutines.Clear();
             }
 
-            Renderer[] renderers = GetComponentsInChildren<Renderer>(true);
+            Renderer[] renderers = objectToAffect.GetComponentsInChildren<Renderer>(true);
             for (int i = 0; i < renderers.Length; i++)
             {
                 Renderer renderer = renderers[i];
@@ -73,7 +75,7 @@ namespace VRTK.Highlighters
         {
             originalMaterialPropertyBlocks.Clear();
             highlightMaterialPropertyBlocks.Clear();
-            Renderer[] renderers = GetComponentsInChildren<Renderer>(true);
+            Renderer[] renderers = objectToAffect.GetComponentsInChildren<Renderer>(true);
             for (int i = 0; i < renderers.Length; i++)
             {
                 Renderer renderer = renderers[i];
@@ -86,7 +88,7 @@ namespace VRTK.Highlighters
 
         protected override void ChangeToHighlightColor(Color color, float duration = 0f)
         {
-            Renderer[] renderers = GetComponentsInChildren<Renderer>(true);
+            Renderer[] renderers = objectToAffect.GetComponentsInChildren<Renderer>(true);
             for (int i = 0; i < renderers.Length; i++)
             {
                 Renderer renderer = renderers[i];
