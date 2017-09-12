@@ -419,7 +419,7 @@ namespace VRTK
 
         protected virtual void CheckCanUnsnap(VRTK_InteractableObject interactableObjectCheck)
         {
-            if (interactableObjectCheck != null && currentValidSnapInteractableObjects.Contains(interactableObjectCheck))
+            if (interactableObjectCheck != null && currentValidSnapInteractableObjects.Contains(interactableObjectCheck) && ValidUnsnap(interactableObjectCheck))
             {
                 if (isSnapped && currentSnappedObject == interactableObjectCheck)
                 {
@@ -442,6 +442,11 @@ namespace VRTK
                     OnObjectExitedSnapDropZone(SetSnapDropZoneEvent(interactableObjectCheck.gameObject));
                 }
             }
+        }
+
+        protected virtual bool ValidUnsnap(VRTK_InteractableObject interactableObjectCheck)
+        {
+            return ((snapType != SnapTypes.UseJoint || !float.IsInfinity(GetComponent<Joint>().breakForce)) && interactableObjectCheck.validDrop == VRTK_InteractableObject.ValidDropTypes.DropAnywhere);
         }
 
         protected virtual void SnapObjectToZone(VRTK_InteractableObject objectToSnap)
