@@ -102,6 +102,7 @@ namespace VRTK
         protected bool selectionButtonPressed;
         protected bool attemptControllerSetup;
         protected Transform originalCustomOrigin;
+        protected VRTK_StraightPointerRenderer autogenPointerRenderer;
 
         public virtual void OnActivationButtonPressed(ControllerInteractionEventArgs e)
         {
@@ -302,6 +303,10 @@ namespace VRTK
             base.OnDisable();
             UnsubscribeActivationButton();
             UnsubscribeSelectionButton();
+            if (autogenPointerRenderer != null)
+            {
+                Destroy(autogenPointerRenderer);
+            }
         }
 
         protected virtual void OnDestroy()
@@ -432,10 +437,25 @@ namespace VRTK
 
         protected virtual void SetupRenderer()
         {
+            if (pointerRenderer == null)
+            {
+                pointerRenderer = GeneratePointerRenderer();
+            }
             if (EnabledPointerRenderer())
             {
                 pointerRenderer.InitalizePointer(this, targetListPolicy, navmeshData, headsetPositionCompensation);
             }
+        }
+
+        protected virtual VRTK_BasePointerRenderer GeneratePointerRenderer()
+        {
+            VRTK_BasePointerRenderer returnRenderer = GetComponentInChildren<VRTK_BasePointerRenderer>();
+            if (returnRenderer == null)
+            {
+                returnRenderer = gameObject.AddComponent<VRTK_StraightPointerRenderer>();
+                autogenPointerRenderer = (VRTK_StraightPointerRenderer)returnRenderer;
+            }
+            return returnRenderer;
         }
 
         protected virtual bool ButtonMappingIsUndefined(VRTK_ControllerEvents.ButtonAlias givenButton, VRTK_ControllerEvents.ButtonAlias givenSubscribedButton)
