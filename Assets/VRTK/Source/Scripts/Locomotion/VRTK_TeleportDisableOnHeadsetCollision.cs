@@ -5,8 +5,16 @@ namespace VRTK
     using System.Collections;
 
     /// <summary>
-    /// The purpose of the Teleport Disable On Headset Collision script is to detect when the headset is colliding with a valid object and prevent teleportation from working. This is to ensure that if a user is clipping their head into a wall then they cannot teleport to an area beyond the wall.
+    /// Prevents teleportation when the HMD is colliding with valid geometry.
     /// </summary>
+    /// <remarks>
+    /// **Required Components:**
+    ///  * `VRTK_BasicTeleport` - A Teleport script to utilise for teleporting the play area.
+    ///  * `VRTK_HeadsetCollision` - A Headset Collision script for detecting when the headset has collided with valid geometry.
+    ///
+    /// **Script Usage:**
+    ///  * Place the `VRTK_TeleportDisableOnHeadsetCollision` script on the same GameObject as the active Teleport script.
+    /// </remarks>
     [AddComponentMenu("VRTK/Scripts/Locomotion/VRTK_TeleportDisableOnHeadsetCollision")]
     public class VRTK_TeleportDisableOnHeadsetCollision : MonoBehaviour
     {
@@ -26,7 +34,7 @@ namespace VRTK
                 return;
             }
 
-            if (headsetCollision)
+            if (headsetCollision != null)
             {
                 headsetCollision.HeadsetCollisionDetect -= new HeadsetCollisionEventHandler(DisableTeleport);
                 headsetCollision.HeadsetCollisionEnded -= new HeadsetCollisionEventHandler(EnableTeleport);
@@ -42,7 +50,7 @@ namespace VRTK
             yield return new WaitForEndOfFrame();
 
             headsetCollision = VRTK_ObjectCache.registeredHeadsetCollider;
-            if (headsetCollision)
+            if (headsetCollision != null)
             {
                 headsetCollision.HeadsetCollisionDetect += new HeadsetCollisionEventHandler(DisableTeleport);
                 headsetCollision.HeadsetCollisionEnded += new HeadsetCollisionEventHandler(EnableTeleport);

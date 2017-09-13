@@ -20,8 +20,19 @@ namespace VRTK
     public delegate void PlayAreaCursorEventHandler(object sender, PlayAreaCursorEventArgs e);
 
     /// <summary>
-    /// The Play Area Cursor is used in conjunction with a Pointer script and displays a representation of the play area where the pointer cursor hits.
+    /// Provides a visual representation of the play area boundaries that tracks to the cursor position of a pointer.
     /// </summary>
+    /// <remarks>
+    /// **Optional Components:**
+    ///  * `VRTK_PointerDirectionIndicator` - A Pointer Direction Indicator to set the cursor rotation to.
+    /// 
+    /// **Script Usage:**
+    ///  * Place the `VRTK_PlayAreaCursor` script on the same GameObject as the Pointer Renderer script it is linked to.
+    ///  * Link the required Play Area Cursor script to the `Playarea Cursor` parameter on the required Pointer Renderer script.
+    ///
+    /// **Script Dependencies:**
+    ///  * A Base Pointer Renderer script attached to a valid Pointer script is required so the PlayArea Cursor script can be linked to follow the valid Base Pointer Renderer cursor GameObject.
+    /// </remarks>
     /// <example>
     /// `VRTK/Examples/012_Controller_PointerWithAreaCollision` shows how a Bezier Pointer with the Play Area Cursor and Collision Detection enabled can be used to traverse a game area but not allow teleporting into areas where the walls or other objects would fall into the play area space enabling the user to enter walls.
     /// </example>
@@ -100,7 +111,7 @@ namespace VRTK
         /// <summary>
         /// The HasCollided method returns the state of whether the play area cursor has currently collided with another valid object.
         /// </summary>
-        /// <returns>A bool to determine the state of collision. `true` if the play area is colliding with a valid object and `false` if not.</returns>
+        /// <returns>Returns `true` if the play area is colliding with a valid object and `false` if not.</returns>
         public virtual bool HasCollided()
         {
             return (playAreaCursorCollided || headsetOutOfBounds);
@@ -206,16 +217,16 @@ namespace VRTK
         }
 
         /// <summary>
-        /// The IsActive method returns whether the play area cursor game object is active or not.
+        /// The IsActive method returns whether the play area cursor GameObject is active or not.
         /// </summary>
-        /// <returns>Returns true if the play area cursor GameObject is active.</returns>
+        /// <returns>Returns `true` if the play area cursor GameObject is active.</returns>
         public virtual bool IsActive()
         {
             return (playAreaCursor != null ? playAreaCursor.activeInHierarchy : false);
         }
 
         /// <summary>
-        /// The GetPlayAreaContainer method returns the created game object that holds the play area cursor representation.
+        /// The GetPlayAreaContainer method returns the created GameObject that holds the play area cursor representation.
         /// </summary>
         /// <returns>The GameObject that is the container of the play area cursor.</returns>
         public virtual GameObject GetPlayAreaContainer()

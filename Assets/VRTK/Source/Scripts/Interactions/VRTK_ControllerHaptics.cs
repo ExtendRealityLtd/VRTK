@@ -6,8 +6,12 @@ namespace VRTK
     using System.Collections.Generic;
 
     /// <summary>
-    /// The Controller Haptics scripts are a collection of static methods for calling haptic functions on a given controller.
+    /// A collection of static methods for calling haptic functions on a given controller.
     /// </summary>
+    /// <remarks>
+    /// **Script Usage:**
+    ///   > There is no requirement to add this script to a GameObject as all of the public methods are static and can be called directly e.g. `VRTK_ControllerHaptics.TriggerHapticPulse(ref, 1f)`.
+    /// </remarks>
     public class VRTK_ControllerHaptics : MonoBehaviour
     {
         protected static VRTK_ControllerHaptics instance;

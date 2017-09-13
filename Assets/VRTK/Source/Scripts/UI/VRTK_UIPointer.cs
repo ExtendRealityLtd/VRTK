@@ -29,12 +29,19 @@ namespace VRTK
     public delegate void UIPointerEventHandler(object sender, UIPointerEventArgs e);
 
     /// <summary>
-    /// The UI Pointer provides a mechanism for interacting with Unity UI elements on a world canvas. The UI Pointer can be attached to any game object the same way in which a Base Pointer can be and the UI Pointer also requires a controller to initiate the pointer activation and pointer click states.
+    /// Provides the ability to interact with UICanvas elements and the contained Unity UI elements within.
     /// </summary>
     /// <remarks>
-    /// The simplest way to use the UI Pointer is to attach the script to a game controller along with a Simple Pointer as this provides visual feedback as to where the UI ray is pointing.
+    /// **Optional Components:**
+    ///  * `VRTK_ControllerEvents` - The events component to listen for the button presses on. This must be applied on the same GameObject as this script if one is not provided via the `Controller` parameter.
     ///
-    /// The UI pointer is activated via the `Pointer` alias on the `Controller Events` and the UI pointer click state is triggered via the `UI Click` alias on the `Controller Events`.
+    /// **Script Usage:**
+    ///  * Place the `VRTK_UIPointer` script on either:
+    ///    * The controller script alias GameObject of the controller to emit the UIPointer from (e.g. Right Controller Script Alias).
+    ///    * Any other scene GameObject and provide a valid `Transform` component to the `Pointer Origin Transform` parameter of this script. This does not have to be a controller and can be any GameObject that will emit the UIPointer.
+    ///
+    /// **Script Dependencies:**
+    ///  * A UI Canvas attached to a Unity World UI Canvas.
     /// </remarks>
     /// <example>
     /// `VRTK/Examples/034_Controls_InteractingWithUnityUI` uses the `VRTK_UIPointer` script on the right Controller to allow for the interaction with Unity UI elements using a Simple Pointer beam. The left Controller controls a Simple Pointer on the headset to demonstrate gaze interaction with Unity UI elements.
@@ -327,7 +334,7 @@ namespace VRTK
         /// <summary>
         /// The PointerActive method determines if the ui pointer beam should be active based on whether the pointer alias is being held and whether the Hold Button To Use parameter is checked.
         /// </summary>
-        /// <returns>Returns true if the ui pointer should be currently active.</returns>
+        /// <returns>Returns `true` if the ui pointer should be currently active.</returns>
         public virtual bool PointerActive()
         {
             if (activationMode == ActivationMethods.AlwaysOn || autoActivatingCanvas != null)
@@ -359,7 +366,7 @@ namespace VRTK
         /// <summary>
         /// The IsActivationButtonPressed method is used to determine if the configured activation button is currently in the active state.
         /// </summary>
-        /// <returns>Returns true if the activation button is active.</returns>
+        /// <returns>Returns `true` if the activation button is active.</returns>
         public virtual bool IsActivationButtonPressed()
         {
             return (controller != null ? controller.IsButtonPressed(activationButton) : false);
@@ -368,7 +375,7 @@ namespace VRTK
         /// <summary>
         /// The IsSelectionButtonPressed method is used to determine if the configured selection button is currently in the active state.
         /// </summary>
-        /// <returns>Returns true if the selection button is active.</returns>
+        /// <returns>Returns `true` if the selection button is active.</returns>
         public virtual bool IsSelectionButtonPressed()
         {
             return (controller != null ? controller.IsButtonPressed(selectionButton) : false);
@@ -379,7 +386,7 @@ namespace VRTK
         /// </summary>
         /// <param name="checkLastClick">If this is true then the last frame's state of the UI Click button is also checked to see if a valid click has happened.</param>
         /// <param name="lastClickState">This determines what the last frame's state of the UI Click button should be in for it to be a valid click.</param>
-        /// <returns>Returns true if the UI Click button is in a valid state to action a click, returns false if it is not in a valid state.</returns>
+        /// <returns>Returns `true` if the UI Click button is in a valid state to action a click, returns `false` if it is not in a valid state.</returns>
         public virtual bool ValidClick(bool checkLastClick, bool lastClickState = false)
         {
             bool controllerClicked = (collisionClick ? collisionClick : IsSelectionButtonPressed());

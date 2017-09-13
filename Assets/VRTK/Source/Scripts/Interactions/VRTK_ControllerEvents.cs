@@ -6,7 +6,7 @@ namespace VRTK
     /// <summary>
     /// Event Payload
     /// </summary>
-    /// <param name="controllerReference">The reference for the controller that was used.</param>
+    /// <param name="controllerReference">The reference for the controller that initiated the event.</param>
     /// <param name="buttonPressure">The amount of pressure being applied to the button pressed. `0f` to `1f`.</param>
     /// <param name="touchpadAxis">The position the touchpad is touched at. `(0,0)` to `(1,1)`.</param>
     /// <param name="touchpadAngle">The rotational position the touchpad is being touched at, 0 being top, 180 being bottom and all other angles accordingly. `0f` to `360f`.</param>
@@ -26,12 +26,11 @@ namespace VRTK
     public delegate void ControllerInteractionEventHandler(object sender, ControllerInteractionEventArgs e);
 
     /// <summary>
-    /// The Controller Events script deals with events that the game controller is sending out.
+    /// A relationship to a physical VR controller and emits events based on the inputs of the controller.
     /// </summary>
     /// <remarks>
-    /// When a controller button is pressed, the script emits an event to denote that the button has been pressed which allows other scripts to listen for this event without needing to implement any controller logic. When a controller button is released, the script also emits an event denoting that the button has been released.
-    ///
-    /// The script also has a public boolean pressed state for the buttons to allow the script to be queried by other scripts to check if a button is being held down.
+    /// **Script Usage:**
+    ///  * Place the `VRTK_ControllerEvents` script on the controller script alias GameObject of the controller to track (e.g. Right Controller Script Alias).
     /// </remarks>
     /// <example>
     /// `VRTK/Examples/002_Controller_Events` shows how the events are utilised and listened to. The accompanying example script can be viewed in `VRTK/Examples/ExampleResources/Scripts/VRTK_ControllerEvents_ListenerExample.cs`.
@@ -149,7 +148,7 @@ namespace VRTK
             SenseAxis
         }
 
-        [Header("Axis Refinement")]
+        [Header("Axis Refinement Settings")]
 
         [Tooltip("The amount of fidelity in the changes on the axis, which is defaulted to 1. Any number higher than 2 will probably give too sensitive results.")]
         public int axisFidelity = 1;
@@ -160,7 +159,7 @@ namespace VRTK
         [Range(0f, 1f)]
         public float senseAxisPressThreshold = 0.95f;
 
-        [Header("Trigger Refinement")]
+        [Header("Trigger Refinement Settings")]
 
         [Tooltip("The level on the trigger axis to reach before a click is registered.")]
         public float triggerClickThreshold = 1f;
@@ -169,7 +168,7 @@ namespace VRTK
         [Tooltip("If this is checked then the trigger axis will be forced to 0f when the trigger button reports an untouch event.")]
         public bool triggerAxisZeroOnUntouch = false;
 
-        [Header("Grip Refinement")]
+        [Header("Grip Refinement Settings")]
 
         [Tooltip("The level on the grip axis to reach before a click is registered.")]
         public float gripClickThreshold = 1f;
@@ -943,7 +942,7 @@ namespace VRTK
         /// The SetControllerEvent/3 method is used to set the Controller Event payload.
         /// </summary>
         /// <param name="buttonBool">The state of the pressed button if required.</param>
-        /// <param name="value">The value to set the buttonBool reference to.</param>
+        /// <param name="value">The value to set the `buttonBool` reference to.</param>
         /// <param name="buttonPressure">The pressure of the button pressed if required.</param>
         /// <returns>The payload for a Controller Event.</returns>
         public virtual ControllerInteractionEventArgs SetControllerEvent(ref bool buttonBool, bool value = false, float buttonPressure = 0f)
@@ -959,9 +958,9 @@ namespace VRTK
         }
 
         /// <summary>
-        /// The GetControllerType method is a shortcut to retrieve the current controller type the controller events is attached to.
+        /// The GetControllerType method is a shortcut to retrieve the current controller type the Controller Events is attached to.
         /// </summary>
-        /// <returns>The type of controller that the controller events is attached to.</returns>
+        /// <returns>The type of controller that the Controller Events is attached to.</returns>
         public virtual SDK_BaseController.ControllerType GetControllerType()
         {
             return (trackedController != null ? trackedController.GetControllerType() : SDK_BaseController.ControllerType.Undefined);
@@ -971,14 +970,14 @@ namespace VRTK
         /// <summary>
         /// The GetTouchpadAxis method returns the coordinates of where the touchpad is being touched and can be used for directional input via the touchpad. The `x` value is the horizontal touch plane and the `y` value is the vertical touch plane.
         /// </summary>
-        /// <returns>A 2 dimensional vector containing the x and y position of where the touchpad is being touched. `(0,0)` to `(1,1)`.</returns>
+        /// <returns>A two dimensional vector containing the `x` and `y` position of where the touchpad is being touched. `(0,0)` to `(1,1)`.</returns>
         public virtual Vector2 GetTouchpadAxis()
         {
             return touchpadAxis;
         }
 
         /// <summary>
-        /// The GetTouchpadAxisAngle method returns the angle of where the touchpad is currently being touched with the top of the touchpad being 0 degrees and the bottom of the touchpad being 180 degrees.
+        /// The GetTouchpadAxisAngle method returns the angle of where the touchpad is currently being touched with the top of the touchpad being `0` degrees and the bottom of the touchpad being `180` degrees.
         /// </summary>
         /// <returns>A float representing the angle of where the touchpad is being touched. `0f` to `360f`.</returns>
         public virtual float GetTouchpadAxisAngle()
@@ -1076,7 +1075,7 @@ namespace VRTK
         /// <summary>
         /// The AnyButtonPressed method returns true if any of the controller buttons are being pressed and this can be useful to determine if an action can be taken whilst the user is using the controller.
         /// </summary>
-        /// <returns>Is true if any of the controller buttons are currently being pressed.</returns>
+        /// <returns>Returns `true` if any of the controller buttons are currently being pressed.</returns>
         public virtual bool AnyButtonPressed()
         {
             return (triggerPressed || gripPressed || touchpadPressed || buttonOnePressed || buttonTwoPressed || startMenuPressed);
@@ -1086,7 +1085,7 @@ namespace VRTK
         /// The IsButtonPressed method takes a given button alias and returns a boolean whether that given button is currently being pressed or not.
         /// </summary>
         /// <param name="button">The button to check if it's being pressed.</param>
-        /// <returns>Is true if the button is being pressed.</returns>
+        /// <returns>Returns `true` if the button is being pressed.</returns>
         public virtual bool IsButtonPressed(ButtonAlias button)
         {
             switch (button)
@@ -1140,8 +1139,8 @@ namespace VRTK
         /// <summary>
         /// The SubscribeToButtonAliasEvent method makes it easier to subscribe to a button event on either the start or end action. Upon the event firing, the given callback method is executed.
         /// </summary>
-        /// <param name="givenButton">The ButtonAlias to register the event on.</param>
-        /// <param name="startEvent">If this is `true` then the start event related to the button is used (e.g. OnPress). If this is `false` then the end event related to the button is used (e.g. OnRelease). </param>
+        /// <param name="givenButton">The Button Alias to register the event on.</param>
+        /// <param name="startEvent">If this is `true` then the start event related to the button is used (e.g. `OnPress`). If this is `false` then the end event related to the button is used (e.g. `OnRelease`). </param>
         /// <param name="callbackMethod">The method to subscribe to the event.</param>
         public virtual void SubscribeToButtonAliasEvent(ButtonAlias givenButton, bool startEvent, ControllerInteractionEventHandler callbackMethod)
         {
@@ -1151,8 +1150,8 @@ namespace VRTK
         /// <summary>
         /// The UnsubscribeToButtonAliasEvent method makes it easier to unsubscribe to from button event on either the start or end action.
         /// </summary>
-        /// <param name="givenButton">The ButtonAlias to unregister the event on.</param>
-        /// <param name="startEvent">If this is `true` then the start event related to the button is used (e.g. OnPress). If this is `false` then the end event related to the button is used (e.g. OnRelease). </param>
+        /// <param name="givenButton">The Button Alias to unregister the event on.</param>
+        /// <param name="startEvent">If this is `true` then the start event related to the button is used (e.g. `OnPress`). If this is `false` then the end event related to the button is used (e.g. `OnRelease`). </param>
         /// <param name="callbackMethod">The method to unsubscribe from the event.</param>
         public virtual void UnsubscribeToButtonAliasEvent(ButtonAlias givenButton, bool startEvent, ControllerInteractionEventHandler callbackMethod)
         {

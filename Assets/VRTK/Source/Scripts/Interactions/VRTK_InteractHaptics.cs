@@ -20,8 +20,17 @@ namespace VRTK
     public delegate void InteractHapticsEventHandler(object sender, InteractHapticsEventArgs e);
 
     /// <summary>
-    /// The Interact Haptics script is attached on the same GameObject as an Interactable Object script and provides controller haptics on touch, grab and use of the object.
+    /// Provides controller haptics upon interaction with the specified Interactable Object.
     /// </summary>
+    /// <remarks>
+    /// **Required Components:**
+    ///  * `VRTK_InteractableObject` - The Interactable Object component to detect interactions on. This must be applied on the same GameObject as this script if one is not provided via the `Object To Affect` parameter.
+    ///
+    /// **Script Usage:**
+    ///  * Place the `VRTK_InteractHaptics` script on either:
+    ///    * The GameObject of the Interactable Object to detect interactions on.
+    ///    * Any other scene GameObject and provide a valid `VRTK_InteractableObject` component to the `Object To Affect` parameter of this script.
+    /// </remarks>
     [AddComponentMenu("VRTK/Scripts/Interactions/VRTK_InteractHaptics")]
     public class VRTK_InteractHaptics : MonoBehaviour
     {

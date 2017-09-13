@@ -6,8 +6,17 @@ namespace VRTK.Highlighters
     using System.Collections.Generic;
 
     /// <summary>
-    /// The Outline Object Copy Highlighter works by making a copy of a mesh and adding an outline shader to it and toggling the appearance of the highlighted object.
+    /// Creates a mesh copy and applies an outline shader which is toggled on and off when highlighting the object.
     /// </summary>
+    /// <remarks>
+    ///   > A valid mesh must be found or provided for the clone mesh to be created.
+    ///
+    /// **Script Usage:**
+    ///  * Place the `VRTK_OutlineObjectCopyHighlighter` script on either:
+    ///    * The GameObject of the Interactable Object to highlight.
+    ///    * Any other scene GameObject and then link that GameObject to the Interactable Objects `Object Highlighter` parameter to denote use of the highlighter.
+    ///  * Ensure the `Active` parameter is checked.
+    /// </remarks>
     /// <example>
     /// `VRTK/Examples/005_Controller_BasicObjectGrabbing` demonstrates the outline highlighting on the green sphere when the controller touches it.
     ///

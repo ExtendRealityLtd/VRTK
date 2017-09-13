@@ -3,16 +3,22 @@ namespace VRTK
 {
     using UnityEngine;
     /// <summary>
-    /// The ability to control an object with the touchpad based on the position of the finger on the touchpad axis.
+    /// Provides the ability to control a GameObject's position based on the position of the controller touchpad axis.
     /// </summary>
     /// <remarks>
-    /// The Touchpad Control script forms the stub to allow for pre-defined actions to execute when the touchpad axis changes.
+    ///   > This script forms the stub of emitting the touchpad axis X and Y changes that are then digested by the corresponding Object Control Actions that are listening for the relevant event.
     ///
-    /// This is enabled by the Touchpad Control script emitting an event each time the X axis and Y Axis on the touchpad change and the corresponding Object Control Action registers with the appropriate axis event. This means that multiple Object Control Actions can be triggered per axis change.
+    /// **Required Components:**
+    ///  * `VRTK_ControllerEvents` - The Controller Events script to listen for the touchpad events on.
     ///
-    /// This script is placed on the Script Alias of the Controller that is required to be affected by changes in the touchpad.
+    /// **Optional Components:**
+    ///  * `VRTK_BodyPhysics` - The Body Physics script to utilise to determine if falling is occuring.
     ///
-    /// If the controlled object is the play area and `VRTK_BodyPhysics` is also available, then additional logic is processed when the user is falling such as preventing the touchpad control from affecting a falling user.
+    /// **Script Usage:**
+    ///  * Place the `VRTK_TouchpadControl` script on either:
+    ///    * The GameObject with the Controller Events script.
+    ///    * Any other scene GameObject and provide a valid `VRTK_ControllerEvents` component to the `Controller` parameter of this script.
+    ///  * Place a corresponding Object Control Action for the Touchpad Control script to notify of touchpad changes. Without a corresponding Object Control Action, the Touchpad Control script will do nothing.
     /// </remarks>
     /// <example>
     /// `VRTK/Examples/017_CameraRig_TouchpadWalking` has a collection of walls and slopes that can be traversed by the user with the touchpad. There is also an area that can only be traversed if the user is crouching.
@@ -26,7 +32,7 @@ namespace VRTK
         public VRTK_ControllerEvents.ButtonAlias primaryActivationButton = VRTK_ControllerEvents.ButtonAlias.TouchpadTouch;
         [Tooltip("An optional button that when engaged will activate the modifier on the touchpad control action.")]
         public VRTK_ControllerEvents.ButtonAlias actionModifierButton = VRTK_ControllerEvents.ButtonAlias.TouchpadPress;
-        [Tooltip("Any input on the axis will be ignored if it is within this deadzone threshold. Between `0f` and `1f`.")]
+        [Tooltip("A deadzone threshold on the touchpad that will ignore input if the touch position is within the specified deadzone. Between `0f` and `1f`.")]
         public Vector2 axisDeadzone = new Vector2(0.2f, 0.2f);
 
         protected bool touchpadFirstChange;

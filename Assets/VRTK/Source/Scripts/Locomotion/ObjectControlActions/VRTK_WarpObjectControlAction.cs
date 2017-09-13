@@ -4,10 +4,21 @@ namespace VRTK
     using UnityEngine;
 
     /// <summary>
-    /// The Warp Object Control Action script is used to warp the controlled GameObject a given distance when changing the axis.
+    /// Provides the ability to move a GameObject around by warping it across the `x/z` plane in the scene by updating the Transform position in defined steps when the corresponding Object Control axis changes.
     /// </summary>
     /// <remarks>
-    /// The effect is a immediate snap to a new position in the given direction.
+    ///   > The effect is a immediate snap to a new position in the given direction.
+    ///
+    /// **Required Components:**
+    ///  * `VRTK_ObjectControl` - The Object Control script to listen for the axis changes on.
+    ///
+    /// **Optional Components:**
+    ///  * `VRTK_BodyPhysics` - The Body Physics script to utilise when checking for potential collisions on movement.
+    ///
+    /// **Script Usage:**
+    ///  * Place the `VRTK_WarpObjectControlAction` script on any active scene GameObject.
+    ///  * Link the required Object Control script to the `Object Control Script` parameter of this script.
+    ///  * Set the `Listen On Axis Change` parameter on this script to the axis change to affect with this movement type.
     /// </remarks>
     /// <example>
     /// `VRTK/Examples/017_CameraRig_TouchpadWalking` has a collection of walls and slopes that can be traversed by the user with the touchpad. There is also an area that can only be traversed if the user is crouching.

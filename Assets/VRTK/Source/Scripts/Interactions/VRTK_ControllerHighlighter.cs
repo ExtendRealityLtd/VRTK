@@ -9,6 +9,9 @@ namespace VRTK
     /// Enables highlighting of controller elements.
     /// </summary>
     /// <remarks>
+    /// **Optional Components:**
+    ///  * `VRTK_BaseHighlighter` - The highlighter to use when highligting the controller. If one is not already injected in the `Controller Highlighter` parameter then the component on the same GameObject will be used.
+    ///
     /// **Script Usage:**
     ///  * Place the `VRTK_ControllerHighlighter` script on either:
     ///    * The controller script alias GameObject of the controller to affect (e.g. Right Controller Script Alias).

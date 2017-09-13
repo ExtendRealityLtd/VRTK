@@ -32,10 +32,11 @@ namespace VRTK
     public delegate void ObjectControlEventHandler(object sender, ObjectControlEventArgs e);
 
     /// <summary>
-    /// An abstract class to provide a mechanism to control an object based on controller input.
+    /// Provides a base that all object control locomotions can inherit from.
     /// </summary>
     /// <remarks>
-    /// As this is an abstract class, it cannot be applied directly to a game object and performs no logic.
+    /// **Script Usage:**
+    ///   > This is an abstract class that is to be inherited to a concrete class that provides object control locomotion functionality, therefore this script should not be directly used.
     /// </remarks>
     public abstract class VRTK_ObjectControl : MonoBehaviour
     {

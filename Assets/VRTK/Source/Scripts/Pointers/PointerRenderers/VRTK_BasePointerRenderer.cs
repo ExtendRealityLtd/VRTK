@@ -9,10 +9,11 @@ namespace VRTK
 #endif
 
     /// <summary>
-    /// The Base Pointer Renderer script is an abstract class that handles the set up and operation of how a pointer renderer works.
+    /// Provides a base that all pointer renderers can inherit from.
     /// </summary>
     /// <remarks>
-    /// As this is an abstract class, it cannot be applied directly to a game object and performs no logic.
+    /// **Script Usage:**
+    ///   > This is an abstract class that is to be inherited to a concrete class that provides pointer renderer functionality, therefore this script should not be directly used.
     /// </remarks>
     public abstract class VRTK_BasePointerRenderer : MonoBehaviour
     {

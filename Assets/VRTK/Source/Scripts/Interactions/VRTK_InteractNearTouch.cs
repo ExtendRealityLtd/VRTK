@@ -5,12 +5,16 @@ namespace VRTK
     using System.Collections.Generic;
 
     /// <summary>
-    /// The Interact Near Touch script is usually applied to a Controller and provides a collider to know when the controller is nearly touching something.
+    /// Determines if a GameObject can initiate a near touch with an Interactable Object.
     /// </summary>
     /// <remarks>
-    /// Colliders are created for the controller and by default will be a sphere.
+    /// **Required Components:**
+    ///  * `VRTK_InteractTouch` - The touch component to determine the actual interacting GameObject that will deal with the near touch interaction. This must be applied on the same GameObject as this script if one is not provided via the `Interact Touch` parameter.
     ///
-    /// A custom collider can be provided by the Custom Collider Container parameter.
+    /// **Script Usage:**
+    ///  * Place the `VRTK_InteractNearTouch` script on either:
+    ///    * The Interact Touch GameObject.
+    ///    * Any other scene GameObject and provide a valid `VRTK_InteractTouch` component to the `Interact Touch` parameter of this script.
     /// </remarks>
     [AddComponentMenu("VRTK/Scripts/Interactions/VRTK_InteractNearTouch")]
     public class VRTK_InteractNearTouch : MonoBehaviour
@@ -71,7 +75,7 @@ namespace VRTK
         }
 
         /// <summary>
-        /// The ForceNearTouch method will attempt to force the controller to near touch the given game object.
+        /// The ForceNearTouch method will attempt to force the controller to near touch the given GameObject.
         /// </summary>
         /// <param name="obj">The GameObject to attempt to force near touch.</param>
         public virtual void ForceNearTouch(GameObject obj)
@@ -84,7 +88,7 @@ namespace VRTK
         }
 
         /// <summary>
-        /// The ForceStopNearTouching method will stop the controller from near touching an object even if the controller is physically touching the object still.
+        /// The ForceStopNearTouching method will stop the Interact Touch GameObject from near touching an Interactable Object even if the Interact Touch GameObject is physically touching the Interactable Object still.
         /// </summary>
         /// <param name="obj">An optional GameObject to only include in the force stop. If this is null then all near touched GameObjects will be force stopped.</param>
         public virtual void ForceStopNearTouching(GameObject obj = null)

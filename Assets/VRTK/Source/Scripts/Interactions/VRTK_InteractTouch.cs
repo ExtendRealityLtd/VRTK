@@ -8,7 +8,7 @@ namespace VRTK
     /// Event Payload
     /// </summary>
     /// <param name="controllerReference">The reference to the controller doing the interaction.</param>
-    /// <param name="target">The GameObject of the interactable object that is being interacted with by the controller.</param>
+    /// <param name="target">The GameObject of the Interactable Object that is being interacted with.</param>
     public struct ObjectInteractEventArgs
     {
         public VRTK_ControllerReference controllerReference;
@@ -23,12 +23,14 @@ namespace VRTK
     public delegate void ObjectInteractEventHandler(object sender, ObjectInteractEventArgs e);
 
     /// <summary>
-    /// The Interact Touch script is usually applied to a Controller and provides a collider to know when the controller is touching something.
+    /// Determines if a GameObject can initiate a touch with an Interactable Object.
     /// </summary>
     /// <remarks>
-    /// Colliders are created for the controller and by default the selected controller SDK will have a set of colliders for the given default controller of that SDK.
+    /// **Required Components:**
+    ///  * `Rigidbody` - A Unity kinematic Rigidbody to determine when collisions happen between the Interact Touch GameObject and other valid colliders.
     ///
-    /// A custom collider can be provided by the Custom Collider Container parameter.
+    /// **Script Usage:**
+    ///  * Place the `VRTK_InteractTouch` script on the controller script alias GameObject of the controller to track (e.g. Right Controller Script Alias).
     /// </remarks>
     /// <example>
     /// `VRTK/Examples/005_Controller/BasicObjectGrabbing` demonstrates the highlighting of objects that have the `VRTK_InteractableObject` script added to them to show the ability to highlight interactable objects when they are touched by the controllers.
@@ -140,9 +142,9 @@ namespace VRTK
         }
 
         /// <summary>
-        /// The ForceTouch method will attempt to force the controller to touch the given game object. This is useful if an object that isn't being touched is required to be grabbed or used as the controller doesn't physically have to be touching it to be forced to interact with it.
+        /// The ForceTouch method will attempt to force the Interact Touch onto the given GameObject.
         /// </summary>
-        /// <param name="obj">The game object to attempt to force touch.</param>
+        /// <param name="obj">The GameObject to attempt to force touch.</param>
         public virtual void ForceTouch(GameObject obj)
         {
             Collider objCollider = (obj != null ? obj.GetComponentInChildren<Collider>() : null);
@@ -153,19 +155,19 @@ namespace VRTK
         }
 
         /// <summary>
-        /// The GetTouchedObject method returns the current object being touched by the controller.
+        /// The GetTouchedObject method returns the current GameObject being touched by the Interact Touch.
         /// </summary>
-        /// <returns>The game object of what is currently being touched by this controller.</returns>
+        /// <returns>The GameObject of what is currently being touched by this Interact Touch.</returns>
         public virtual GameObject GetTouchedObject()
         {
             return touchedObject;
         }
 
         /// <summary>
-        /// The IsObjectInteractable method is used to check if a given game object is of type `VRTK_InteractableObject` and whether the object is enabled.
+        /// The IsObjectInteractable method is used to check if a given GameObject is a valid Interactable Object.
         /// </summary>
-        /// <param name="obj">The game object to check to see if it's interactable.</param>
-        /// <returns>Is true if the given object is of type `VRTK_InteractableObject`.</returns>
+        /// <param name="obj">The GameObject to check to see if it's a valid Interactable Object.</param>
+        /// <returns>Returns `true` if the given GameObjectis a valid Interactable Object.</returns>
         public virtual bool IsObjectInteractable(GameObject obj)
         {
             if (obj != null)
@@ -184,7 +186,7 @@ namespace VRTK
         }
 
         /// <summary>
-        /// The ToggleControllerRigidBody method toggles the controller's rigidbody's ability to detect collisions. If it is true then the controller rigidbody will collide with other collidable game objects.
+        /// The ToggleControllerRigidBody method toggles the Interact Touch rigidbody's ability to detect collisions. If it is true then the controller rigidbody will collide with other collidable GameObjects.
         /// </summary>
         /// <param name="state">The state of whether the rigidbody is on or off. `true` toggles the rigidbody on and `false` turns it off.</param>
         /// <param name="forceToggle">Determines if the rigidbody has been forced into it's new state by another script. This can be used to override other non-force settings. Defaults to `false`</param>
@@ -204,25 +206,25 @@ namespace VRTK
         }
 
         /// <summary>
-        /// The IsRigidBodyActive method checks to see if the rigidbody on the controller object is active and can affect other rigidbodies in the scene.
+        /// The IsRigidBodyActive method checks to see if the rigidbody on the Interact Touch is active and can affect other rigidbodies in the scene.
         /// </summary>
-        /// <returns>Is true if the rigidbody on the controller is currently active and able to affect other scene rigidbodies.</returns>
+        /// <returns>Returns `true` if the rigidbody on the Interact TOuch is currently active and able to affect other scene rigidbodies.</returns>
         public virtual bool IsRigidBodyActive()
         {
             return !touchRigidBody.isKinematic;
         }
 
         /// <summary>
-        /// The IsRigidBodyForcedActive method checks to see if the rigidbody on the controller object has been forced into the active state.
+        /// The IsRigidBodyForcedActive method checks to see if the rigidbody on the Interact Touch has been forced into the active state.
         /// </summary>
-        /// <returns>Is true if the rigidbody is active and has been forced into the active state.</returns>
+        /// <returns>Returns `true` if the rigidbody is active and has been forced into the active state.</returns>
         public virtual bool IsRigidBodyForcedActive()
         {
             return (IsRigidBodyActive() && rigidBodyForcedActive);
         }
 
         /// <summary>
-        /// The ForceStopTouching method will stop the controller from touching an object even if the controller is physically touching the object still.
+        /// The ForceStopTouching method will stop the Interact Touch from touching an Interactable Object even if the Interact Touch is physically touching the Interactable Object.
         /// </summary>
         public virtual void ForceStopTouching()
         {
@@ -233,7 +235,7 @@ namespace VRTK
         }
 
         /// <summary>
-        /// The ControllerColliders method retrieves all of the associated colliders on the controller.
+        /// The ControllerColliders method retrieves all of the associated colliders on the Interact Touch.
         /// </summary>
         /// <returns>An array of colliders that are associated with the controller.</returns>
         public virtual Collider[] ControllerColliders()
@@ -242,9 +244,9 @@ namespace VRTK
         }
 
         /// <summary>
-        /// The GetControllerType method is a shortcut to retrieve the current controller type the interact touch is attached to.
+        /// The GetControllerType method is a shortcut to retrieve the current controller type the Interact Touch is attached to.
         /// </summary>
-        /// <returns>The type of controller that the interact touch is attached to.</returns>
+        /// <returns>The type of controller that the Interact Touch is attached to.</returns>
         public virtual SDK_BaseController.ControllerType GetControllerType()
         {
             return (trackedController != null ? trackedController.GetControllerType() : SDK_BaseController.ControllerType.Undefined);

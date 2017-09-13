@@ -4,10 +4,11 @@ namespace VRTK
     using UnityEngine;
 
     /// <summary>
-    /// The Base Object Control Action script is an abstract class that all object control action scripts inherit.
+    /// Provides a base that all object control actions can inherit from.
     /// </summary>
     /// <remarks>
-    /// As this is an abstract class, it cannot be applied directly to a game object and performs no logic.
+    /// **Script Usage:**
+    ///   > This is an abstract class that is to be inherited to a concrete class that provides object control action functionality, therefore this script should not be directly used.
     /// </remarks>
     public abstract class VRTK_BaseObjectControlAction : MonoBehaviour
     {

@@ -4,12 +4,12 @@ namespace VRTK
     using UnityEngine;
 
     /// <summary>
-    /// Hip Tracking attempts to reasonably track hip position in the absence of a hip position sensor.
+    /// Attempts to provide the relative position of a hip without the need for additional hardware sensors.
     /// </summary>
     /// <remarks>
-    /// The Hip Tracking script is placed on an empty GameObject which will be positioned at the estimated hip position.
+    /// **Script Usage:**
+    ///  * Place the `VRTK_HipTracking` script on any active scene GameObject and this GameObject will then track to the estimated hip position.
     /// </remarks>
-
     [AddComponentMenu("VRTK/Scripts/Presence/VRTK_HipTracking")]
     public class VRTK_HipTracking : MonoBehaviour
     {

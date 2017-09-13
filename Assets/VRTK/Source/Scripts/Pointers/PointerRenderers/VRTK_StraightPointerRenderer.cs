@@ -4,10 +4,19 @@ namespace VRTK
     using UnityEngine;
 
     /// <summary>
-    /// The Straight Pointer Renderer emits a coloured beam from the end of the object it is attached to and simulates a laser beam.
+    /// A visual pointer representation of a straight beam with an optional cursor at the end.
     /// </summary>
     /// <remarks>
-    /// It can be useful for pointing to objects within a scene and it can also determine the object it is pointing at and the distance the object is from the controller the beam is being emitted from.
+    /// **Optional Components:**
+    ///  * `VRTK_PlayAreaCursor` - A Play Area Cursor that will track the position of the pointer cursor.
+    ///  * `VRTK_PointerDirectionIndicator` - A Pointer Direction Indicator that will track the position of the pointer cursor.
+    /// 
+    /// **Script Usage:**
+    ///  * Place the `VRTK_StraightPointerRenderer` script on the same GameObject as the Pointer script it is linked to.
+    ///  * Link this Pointer Renderer script to the `Pointer Renderer` parameter on the required Pointer script.
+    ///
+    /// **Script Dependencies:**
+    ///  * A Pointer script to control the activation of this Pointer Renderer script.
     /// </remarks>
     /// <example>
     /// `VRTK/Examples/003_Controller_SimplePointer` shows the simple pointer in action and code examples of how the events are utilised and listened to can be viewed in the script `VRTK/Examples/ExampleResources/Scripts/VRTK_ControllerPointerEvents_ListenerExample.cs`

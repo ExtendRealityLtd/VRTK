@@ -5,10 +5,13 @@ namespace VRTK
     using UnityEngine.EventSystems;
 
     /// <summary>
-    /// A UI Drop Zone is applied to any UI element that is to be considered a valid parent for any UI Draggable element to be dropped into it.
+    /// Specifies a Unity UI Element as being a valid drop zone location for a UI Draggable element.
     /// </summary>
     /// <remarks>
-    /// It's usually appropriate to use a Panel UI element as a drop zone with a layout group applied so new children dropped into the drop zone automatically align.
+    ///   > It's appropriate to use a Panel UI element as a drop zone with a layout group applied so new children dropped into the drop zone automatically align.
+    ///
+    /// **Script Usage:**
+    ///  * Place the `VRTK_UIDropZone` script on the Unity UI element that is to become the drop zone.
     /// </remarks>
     /// <example>
     /// `VRTK/Examples/034_Controls_InteractingWithUnityUI` demonstrates a collection of UI Drop Zones.

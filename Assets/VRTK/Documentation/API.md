@@ -136,9 +136,9 @@ The FindInScene method is used to find the `[VRSimulator_CameraRig]` GameObject 
 Provides a frames per second text element to the HMD view. To use the prefab it must be placed into the scene then the headset camera needs attaching to the canvas:
 
 **Prefab Usage:**
-* Place the `VRTK/Prefabs/FramesPerSecondCanvas` prefab in the scene hierarchy.
+ * Place the `VRTK/Prefabs/FramesPerSecondCanvas` prefab in the scene hierarchy.
 
-> This script is largely based on the script at: http://talesfromtherift.com/vr-fps-counter/ So all credit to Peter Koch for his work. Twitter: @peterept
+  > This script is largely based on the script at: http://talesfromtherift.com/vr-fps-counter/ So all credit to Peter Koch for his work. Twitter: @peterept
 
 ### Inspector Parameters
 
@@ -163,7 +163,7 @@ Provides a frames per second text element to the HMD view. To use the prefab it 
 Allows rendering a separate camera that is shown on the desktop only, without changing what's seen in VR headsets.
 
 **Prefab Usage:**
-* Place the `VRTK/Prefabs/DesktopCamera` prefab in the scene.
+ * Place the `VRTK/Prefabs/DesktopCamera` prefab in the scene.
 
 ### Inspector Parameters
 
@@ -181,8 +181,8 @@ Allows rendering a separate camera that is shown on the desktop only, without ch
 Adds a World Space Canvas that can be used to provide additional information about an object by providing a piece of text with a line drawn to a destination point.
 
 **Prefab Usage:**
-* Place the `VRTK/Prefabs/ObjectTooltip` prefab into the scene hierarchy, preferably as a child of the GameObject it is associated with.
-* Set the `Draw Line To` option to the Transform component of the GameObject the Tooltip will be assoicated with.
+ * Place the `VRTK/Prefabs/ObjectTooltip` prefab into the scene hierarchy, preferably as a child of the GameObject it is associated with.
+ * Set the `Draw Line To` option to the Transform component of the GameObject the Tooltip will be assoicated with.
 
 ### Inspector Parameters
 
@@ -249,11 +249,11 @@ The UpdateText method allows the tooltip text to be updated at runtime.
 Adds a collection of Object Tooltips to the Controller providing information to what the controller buttons may do.
 
 **Prefab Usage:**
-* Place the `VRTK/Prefabs/ControllerTooltips` prefab as a child of the relevant controller script alias GameObject in the scene hierarchy.
-* If no `Button Transform Settings` are provided in the inspector at Edit time then the button transforms will attempt to be set to the transforms of the current SDK default controller model.
-* If one of the `Button Text Settings` text options are not provided, then the tooltip for that specific button will be hidden.
+ * Place the `VRTK/Prefabs/ControllerTooltips` prefab as a child of the relevant controller script alias GameObject in the scene hierarchy.
+ * If no `Button Transform Settings` are provided in the inspector at Edit time then the button transforms will attempt to be set to the transforms of the current SDK default controller model.
+ * If one of the `Button Text Settings` text options are not provided, then the tooltip for that specific button will be hidden.
 
-> There are a number of parameters that can be set on the Prefab which are provided by the `VRTK_ControllerTooltips` script which is applied to the prefab.
+  > There are a number of parameters that can be set on the Prefab which are provided by the `VRTK_ControllerTooltips` script which is applied to the prefab.
 
 ### Inspector Parameters
 
@@ -343,10 +343,10 @@ The ToggleTips method will display the controller tooltips if the state is `true
 Provides a simple trigger collider volume that when a controller enters will enable the rigidbody on the controller.
 
 **Prefab Usage:**
-* Place the `VRTK/Prefabs/ControllerRigidbodyActivator` prefab in the scene at the location where the controller rigidbody should be automatically activated.
-* The prefab contains a default sphere collider to determine ths collision, this collider component can be customised in the inspector or can be replaced with another collider component (set to `Is Trigger`).
+ * Place the `VRTK/Prefabs/ControllerRigidbodyActivator` prefab in the scene at the location where the controller rigidbody should be automatically activated.
+ * The prefab contains a default sphere collider to determine ths collision, this collider component can be customised in the inspector or can be replaced with another collider component (set to `Is Trigger`).
 
-> If the prefab is placed as a child of the target interactable game object then the collider volume on the prefab will trigger collisions on the interactable object.
+  > If the prefab is placed as a child of the target interactable game object then the collider volume on the prefab will trigger collisions on the interactable object.
 
 ### Inspector Parameters
 
@@ -376,11 +376,11 @@ Adding the `VRTK_ControllerRigidbodyActivator_UnityEvents` component to `VRTK_Co
 Provides a predefined zone where a valid interactable object can be dropped and upon dropping it snaps to the set snap drop zone transform position, rotation and scale.
 
 **Prefab Usage:**
-* Place the `VRTK/Prefabs/SnapDropZone` prefab into the scene hierarchy.
-* Provide the SnapDropZone with an optional `Highlight Object Prefab` to generate an object outline in the scene that determines the final position, rotation and scale of the snapped object.
-* If no `VRTK_BaseHighlighter` derivative is applied to the SnapDropZone then the default MaterialColorSwap Highlighter will be used.
-* The collision zone that activates the SnapDropZone is a `Sphere Collider` by default but can be amended or replaced on the SnapDropZone GameObject.
-* If the `Use Joint` Snap Type is selected then a custom Joint component is required to be added to the `SnapDropZone` Game Object and upon release the interactable object's rigidbody will be linked to this joint as the `Connected Body`.
+ * Place the `VRTK/Prefabs/SnapDropZone` prefab into the scene hierarchy.
+ * Provide the SnapDropZone with an optional `Highlight Object Prefab` to generate an object outline in the scene that determines the final position, rotation and scale of the snapped object.
+ * If no `VRTK_BaseHighlighter` derivative is applied to the SnapDropZone then the default MaterialColorSwap Highlighter will be used.
+ * The collision zone that activates the SnapDropZone is a `Sphere Collider` by default but can be amended or replaced on the SnapDropZone GameObject.
+ * If the `Use Joint` Snap Type is selected then a custom Joint component is required to be added to the `SnapDropZone` Game Object and upon release the interactable object's rigidbody will be linked to this joint as the `Connected Body`.
 
 ### Inspector Parameters
 
@@ -545,7 +545,7 @@ The GetCurrentSnappedInteractableObject method returns the Interactable Object s
 Provides a UI element into the world space that can be dropped into a Controller GameObject and used to create and use Radial Menus from the touchpad.
 
 **Prefab Usage:**
-* Place the `VRTK/Prefabs/RadialMenu` prefab as a child of a Controller script alias GameObject.
+ * Place the `VRTK/Prefabs/RadialMenu` prefab as a child of a Controller script alias GameObject.
 
 ### Inspector Parameters
 
@@ -688,8 +688,9 @@ The AddButton method is used to add a new button to the menu.
 
 Allows the RadialMenu to be anchored to controller object.
 
-* Place the `VRTK/Prefabs/RadialMenu` prefab as a child of a Controller script alias GameObject.
-* The Radial Menu should automatically find the `VRTK_ControllerEvents` component in the parent hierarchy, if one is not found but required then the `Events` parameter on the `VRTK_RadialMenuController` script can be populated.
+**Prefab Usage:**
+ * Place the `VRTK/Prefabs/RadialMenu` prefab as a child of a Controller script alias GameObject.
+ * The Radial Menu should automatically find the `VRTK_ControllerEvents` component in the parent hierarchy, if one is not found but required then the `Events` parameter on the `VRTK_RadialMenuController` script can be populated.
 
 ### Inspector Parameters
 
@@ -709,12 +710,12 @@ Allows the RadialMenu to be anchored to controller object.
 Allows the RadialMenu to be anchored to any object, not just a controller.
 
 **Prefab Usage:**
-* Place the `VRTK/Prefabs/RadialMenu` prefab as a child of the GameObject to associate the Radial Menu with.
-* Position and scale the menu by adjusting the transform of the `RadialMenu` empty.
-* Replace `VRTK_RadialMenuController` with `VRTK_IndependentRadialMenuController` that is located on the `RadialMenu/RadialMenuUI/Panel` GameObject.
-* Ensure the parent object has the `VRTK_InteractableObject` script.
-* Verify that `Is Usable` and `Hold Button to Use` are both checked on the `VRTK_InteractableObject`.
-* Attach `VRTK_InteractTouch` and `VRTK_InteractUse` scripts to the objects that will activate the Radial Menu (e.g. the Controllers).
+ * Place the `VRTK/Prefabs/RadialMenu` prefab as a child of the GameObject to associate the Radial Menu with.
+ * Position and scale the menu by adjusting the transform of the `RadialMenu` empty.
+ * Replace `VRTK_RadialMenuController` with `VRTK_IndependentRadialMenuController` that is located on the `RadialMenu/RadialMenuUI/Panel` GameObject.
+ * Ensure the parent object has the `VRTK_InteractableObject` script.
+ * Verify that `Is Usable` and `Hold Button to Use` are both checked on the `VRTK_InteractableObject`.
+ * Attach `VRTK_InteractTouch` and `VRTK_InteractUse` scripts to the objects that will activate the Radial Menu (e.g. the Controllers).
 
 ### Inspector Parameters
 
@@ -752,9 +753,9 @@ The UpdateEventsManager method is used to update the events within the menu cont
 Allows for a specific scene marker or specific area within the scene that can be teleported to.
 
 **Prefab Usage:**
-* Place the `VRTK/Prefabs/DestinationPoint` prefab at the desired location within the scene.
-* Uncheck the `Enable Teleport` checkbox to lock the destination point and prevent teleporting to it.
-* Uncheck the `Snap To Point` checkbox to provide a destination area rather than a specific point to teleport to.
+ * Place the `VRTK/Prefabs/DestinationPoint` prefab at the desired location within the scene.
+ * Uncheck the `Enable Teleport` checkbox to lock the destination point and prevent teleporting to it.
+ * Uncheck the `Snap To Point` checkbox to provide a destination area rather than a specific point to teleport to.
 
 ### Inspector Parameters
 
@@ -815,10 +816,10 @@ The ResetDestinationPoint resets the destination point back to the default state
 Adds a Pointer Direction Indicator to a pointer renderer and determines a given world rotation that can be used by a Destiantion Marker.
 
 **Prefab Usage:**
-* Place the `VRTK/Prefabs/PointerDirectionIndicator` prefab into the scene hierarchy.
-* Attach the `PointerDirectionIndicator` scene GameObejct to the `Direction Indicator` inspector parameter on a `VRTK_BasePointerRenderer` component.
+ * Place the `VRTK/Prefabs/PointerDirectionIndicator` prefab into the scene hierarchy.
+ * Attach the `PointerDirectionIndicator` scene GameObejct to the `Direction Indicator` inspector parameter on a `VRTK_BasePointerRenderer` component.
 
-> This can be useful for rotating the play area upon teleporting to face the user in a new direction without expecting them to physically turn in the play space.
+  > This can be useful for rotating the play area upon teleporting to face the user in a new direction without expecting them to physically turn in the play space.
 
 ### Inspector Parameters
 
@@ -901,9 +902,9 @@ The SetMaterialColor method sets the current material colour on the direction in
 Adds an in-scene representation of the Unity console on a world space canvas.
 
 **Prefab Usage:**
-* Place the `VRTK/Prefabs/ConsoleViewerCanvas` prefab into the scene hierarchy.
+ * Place the `VRTK/Prefabs/ConsoleViewerCanvas` prefab into the scene hierarchy.
 
-> It is also possible to interact with the `ConsoleViewerCanvas` with a `VRTK_UIPointer`.
+  > It is also possible to interact with the `ConsoleViewerCanvas` with a `VRTK_UIPointer`.
 
 ### Inspector Parameters
 
@@ -947,10 +948,10 @@ The ClearLog method clears the current log view of all messages
 Adds a top-level controller to handle the display of up to four child PanelMenuItemController items which are displayed as a canvas UI panel.
 
 **Prefab Usage:**
-* Place the `VRTK/Prefabs/PanelMenu` prefab as a child of the `VRTK_InteractableObject` the panel menu is for.
-* Optionally remove the panel control menu item child GameObjects if they are not required, e.g. `PanelTopControls`.
-* Set the panel menu item controllers on the `VRTK_PanelMenuController` script to determine which panel control menu items are available.
-* The available panel control menu items can be activated by pressing the corresponding direction on the touchpad.
+ * Place the `VRTK/Prefabs/PanelMenu` prefab as a child of the `VRTK_InteractableObject` the panel menu is for.
+ * Optionally remove the panel control menu item child GameObjects if they are not required, e.g. `PanelTopControls`.
+ * Set the panel menu item controllers on the `VRTK_PanelMenuController` script to determine which panel control menu items are available.
+ * The available panel control menu items can be activated by pressing the corresponding direction on the touchpad.
 
 ### Inspector Parameters
 
@@ -1019,7 +1020,7 @@ The HideMenuImmediate method is used to immediately hide the menu.
 
 The panel item controller class that intercepts the controller events sent from a [PanelMenuController] and passes them onto additional custom event subscriber scripts, which then carry out the required custom UI actions.
 
-> This script is not directly part of a prefab but is a helper associated to the `PanelMenu` prefab.
+  > This script is not directly part of a prefab but is a helper associated to the `PanelMenu` prefab.
 This script should be attached to a VRTK_InteractableObject > [PanelMenuController] > [panel items container] > child GameObject (See the [PanelMenuController] class for more details on setup structure.).
 To show / hide a UI panel, you must first pick up the VRTK_InteractableObject and then by pressing the touchpad top/bottom/left/right you can open/close the child UI panel that has been assigned via the Unity Editor panel.
 
@@ -1140,10 +1141,10 @@ The TriggerPressed method is used when the control action button is pressed.
 Provides a custom controller hand model with psuedo finger functionality.
 
 **Prefab Usage:**
-* Place the `VRTK/Prefabs/AvatarHands/VRTK_BasicHand` prefab as a child of either the left or right script alias.
-* If the prefab is being used in the left hand then check the `Mirror Model` parameter.
-* By default, the avatar hand controller will detect which controller is connected and represent it accordingly.
-* Optionally, use SDKTransformModify scripts to adjust the hand orientation based on different controller types.
+ * Place the `VRTK/Prefabs/AvatarHands/VRTK_BasicHand` prefab as a child of either the left or right script alias.
+ * If the prefab is being used in the left hand then check the `Mirror Model` parameter.
+ * By default, the avatar hand controller will detect which controller is connected and represent it accordingly.
+ * Optionally, use SDKTransformModify scripts to adjust the hand orientation based on different controller types.
 
 ### Inspector Parameters
 
@@ -1216,9 +1217,10 @@ A collection of scripts that provide the ability to create pointers and set dest
 
 ### Overview
 
-This abstract class provides the ability to emit events of destination markers within the game world. It can be useful for tagging locations for specific purposes such as teleporting.
+Provides a base that all destination markers can inherit from.
 
-It is utilised by the `VRTK_BasePointer` for dealing with pointer events when the pointer cursor touches areas within the game world.
+**Script Usage:**
+  > This is an abstract class that is to be inherited to a concrete class that provides object control action functionality, therefore this script should not be directly used.
 
 ### Inspector Parameters
 
@@ -1290,17 +1292,20 @@ The SetForceHoverOnRepeatedEnter method is used to set whether the Enter event w
 
 ### Overview
 
-The VRTK Pointer class forms the basis of being able to emit a pointer from a game object (e.g. controller).
+Provides a basis of being able to emit a pointer from a specified GameObject.
 
-The concept of the pointer is it can be activated and deactivated and used to select elements utilising different button combinations if required.
+**Required Components:**
+ * `VRTK_BasePointerRenderer` - The visual representation of the pointer when activated.
 
-The Pointer requires a Pointer Renderer which is the visualisation of the pointer in the scene.
+**Optional Components:**
+ * `VRTK_ControllerEvents` - The events component to listen for the button presses on. This must be applied on the same GameObject as this script if one is not provided via the `Controller` parameter.
+ * `VRTK_InteractUse` - The use component to utilise when the pointer is to activate the use action on an Interactable Object. This must be applied on the same GameObject as this script if one is not provided via the `Interact Use` parameter.
 
-A Pointer can also be used to extend the interactions of an interacting object such as a controller. This enables pointers to touch (and highlight), grab and use interactable objects.
-
-The Pointer script does not need to go on a controller game object, but if it's placed on another object then a controller must be provided to determine what activates the pointer.
-
-It extends the `VRTK_DestinationMarker` to allow for destination events to be emitted when the pointer cursor collides with objects.
+**Script Usage:**
+ * Place the `VRTK_Pointer` script on either:
+   * The controller script alias GameObject of the controller to emit the pointer from (e.g. Right Controller Script Alias).
+   * Any other scene GameObject and provide a valid `Transform` component to the `Custom Origin` parameter of this script. This does not have to be a controller and can be any GameObject that will emit the pointer.
+ * Link the required Base Pointer Renderer script to the `Pointer Renderer` parameter of this script.
 
 ### Inspector Parameters
 
@@ -1343,7 +1348,7 @@ Adding the `VRTK_Pointer_UnityEvents` component to `VRTK_Pointer` object allows 
  * Parameters
    * _none_
  * Returns
-   * `bool` - Returns true if the activationButton is being pressed.
+   * `bool` - Returns `true` if the activationButton is being pressed.
 
 The IsActivationButtonPressed method returns whether the configured activation button is being pressed.
 
@@ -1354,7 +1359,7 @@ The IsActivationButtonPressed method returns whether the configured activation b
  * Parameters
    * _none_
  * Returns
-   * `bool` - Returns true if the selectionButton is being pressed.
+   * `bool` - Returns `true` if the selectionButton is being pressed.
 
 The IsSelectionButtonPressed method returns whether the configured activation button is being pressed.
 
@@ -1387,7 +1392,7 @@ The PointerExit method emits a DestinationMarkerExit event when the pointer leav
  * Parameters
    * _none_
  * Returns
-   * `bool` - Returns true if the pointer can be activated.
+   * `bool` - Returns `true` if the pointer can be activated.
 
 The CanActivate method is used to determine if the pointer has passed the activation time limit.
 
@@ -1398,7 +1403,7 @@ The CanActivate method is used to determine if the pointer has passed the activa
  * Parameters
    * _none_
  * Returns
-   * `bool` - Returns true if the pointer can execute the select action.
+   * `bool` - Returns `true` if the pointer can execute the select action.
 
 The CanSelect method is used to determine if the pointer has passed the selection time limit.
 
@@ -1409,7 +1414,7 @@ The CanSelect method is used to determine if the pointer has passed the selectio
  * Parameters
    * _none_
  * Returns
-   * `bool` - Returns true if the pointer is currently active.
+   * `bool` - Returns `true` if the pointer is currently active.
 
 The IsPointerActive method is used to determine if the pointer's current state is active or not.
 
@@ -1418,7 +1423,7 @@ The IsPointerActive method is used to determine if the pointer's current state i
   > `public virtual void ResetActivationTimer(bool forceZero = false)`
 
  * Parameters
-   * `bool forceZero` - If this is true then the next activation time will be 0.
+   * `bool forceZero` - If this is `true` then the next activation time will be 0.
  * Returns
    * _none_
 
@@ -1429,7 +1434,7 @@ The ResetActivationTimer method is used to reset the pointer activation timer to
   > `public virtual void ResetSelectionTimer(bool forceZero = false)`
 
  * Parameters
-   * `bool forceZero` - If this is true then the next activation time will be 0.
+   * `bool forceZero` - If this is `true` then the next activation time will be 0.
  * Returns
    * _none_
 
@@ -1440,7 +1445,7 @@ The ResetSelectionTimer method is used to reset the pointer selection timer to t
   > `public virtual void Toggle(bool state)`
 
  * Parameters
-   * `bool state` - If true the pointer will be enabled if possible, if false the pointer will be disabled if possible.
+   * `bool state` - If `true` the pointer will be enabled if possible, if `false` the pointer will be disabled if possible.
  * Returns
    * _none_
 
@@ -1453,7 +1458,7 @@ The Toggle method is used to enable or disable the pointer.
  * Parameters
    * _none_
  * Returns
-   * `bool` - Returns true if the pointer is in the valid state (showing the valid colour), returns false if the pointer is in the invalid state (showing the invalid colour).
+   * `bool` - Returns `true` if the pointer is in the valid state (showing the valid colour), returns `false` if the pointer is in the invalid state (showing the invalid colour).
 
 The IsStateValid method is used to determine if the pointer is currently in a valid state (i.e. on it's valid colour).
 
@@ -1463,7 +1468,17 @@ The IsStateValid method is used to determine if the pointer is currently in a va
 
 ### Overview
 
-The Play Area Cursor is used in conjunction with a Pointer script and displays a representation of the play area where the pointer cursor hits.
+Provides a visual representation of the play area boundaries that tracks to the cursor position of a pointer.
+
+**Optional Components:**
+ * `VRTK_PointerDirectionIndicator` - A Pointer Direction Indicator to set the cursor rotation to.
+
+**Script Usage:**
+ * Place the `VRTK_PlayAreaCursor` script on the same GameObject as the Pointer Renderer script it is linked to.
+ * Link the required Play Area Cursor script to the `Playarea Cursor` parameter on the required Pointer Renderer script.
+
+**Script Dependencies:**
+ * A Base Pointer Renderer script attached to a valid Pointer script is required so the PlayArea Cursor script can be linked to follow the valid Base Pointer Renderer cursor GameObject.
 
 ### Inspector Parameters
 
@@ -1501,7 +1516,7 @@ Adding the `VRTK_PlayAreaCursor_UnityEvents` component to `VRTK_PlayAreaCursor` 
  * Parameters
    * _none_
  * Returns
-   * `bool` - A bool to determine the state of collision. `true` if the play area is colliding with a valid object and `false` if not.
+   * `bool` - Returns `true` if the play area is colliding with a valid object and `false` if not.
 
 The HasCollided method returns the state of whether the play area cursor has currently collided with another valid object.
 
@@ -1569,9 +1584,9 @@ The ToggleState method enables or disables the visibility of the play area curso
  * Parameters
    * _none_
  * Returns
-   * `bool` - Returns true if the play area cursor GameObject is active.
+   * `bool` - Returns `true` if the play area cursor GameObject is active.
 
-The IsActive method returns whether the play area cursor game object is active or not.
+The IsActive method returns whether the play area cursor GameObject is active or not.
 
 #### GetPlayAreaContainer/0
 
@@ -1582,7 +1597,7 @@ The IsActive method returns whether the play area cursor game object is active o
  * Returns
    * `GameObject` - The GameObject that is the container of the play area cursor.
 
-The GetPlayAreaContainer method returns the created game object that holds the play area cursor representation.
+The GetPlayAreaContainer method returns the created GameObject that holds the play area cursor representation.
 
 #### ToggleVisibility/1
 
@@ -1615,9 +1630,10 @@ This directory contains scripts that are used to provide different renderers for
 
 ### Overview
 
-The Base Pointer Renderer script is an abstract class that handles the set up and operation of how a pointer renderer works.
+Provides a base that all pointer renderers can inherit from.
 
-As this is an abstract class, it cannot be applied directly to a game object and performs no logic.
+**Script Usage:**
+  > This is an abstract class that is to be inherited to a concrete class that provides pointer renderer functionality, therefore this script should not be directly used.
 
 ### Inspector Parameters
 
@@ -1798,9 +1814,18 @@ The GetObjectInteractor method returns the auto generated GameObject that acts a
 
 ### Overview
 
-The Straight Pointer Renderer emits a coloured beam from the end of the object it is attached to and simulates a laser beam.
+A visual pointer representation of a straight beam with an optional cursor at the end.
 
-It can be useful for pointing to objects within a scene and it can also determine the object it is pointing at and the distance the object is from the controller the beam is being emitted from.
+**Optional Components:**
+ * `VRTK_PlayAreaCursor` - A Play Area Cursor that will track the position of the pointer cursor.
+ * `VRTK_PointerDirectionIndicator` - A Pointer Direction Indicator that will track the position of the pointer cursor.
+
+**Script Usage:**
+ * Place the `VRTK_StraightPointerRenderer` script on the same GameObject as the Pointer script it is linked to.
+ * Link this Pointer Renderer script to the `Pointer Renderer` parameter on the required Pointer script.
+
+**Script Dependencies:**
+ * A Pointer script to control the activation of this Pointer Renderer script.
 
 ### Inspector Parameters
 
@@ -1848,11 +1873,20 @@ The GetPointerObjects returns an array of the auto generated GameObjects associa
 
 ### Overview
 
-The Bezier Pointer Renderer emits a curved line (made out of game objects) from the end of the attached object to a point on a ground surface (at any height).
+A visual pointer representation of a curved beam made from multiple objects with an optional cursor at the end.
 
-It is more useful than the Simple Pointer Renderer for traversing objects of various heights as the end point can be curved on top of objects that are not visible to the user.
+  > The bezier curve generation code is in another script located at `VRTK/Source/Scripts/Internal/VRTK_CurveGenerator.cs` and was heavily inspired by the tutorial and code from [Catlike Coding](http://catlikecoding.com/unity/tutorials/curves-and-splines/).
 
-> The bezier curve generation code is in another script located at `VRTK/Scripts/Internal/VRTK_CurveGenerator.cs` and was heavily inspired by the tutorial and code from [Catlike Coding](http://catlikecoding.com/unity/tutorials/curves-and-splines/).
+**Optional Components:**
+ * `VRTK_PlayAreaCursor` - A Play Area Cursor that will track the position of the pointer cursor.
+ * `VRTK_PointerDirectionIndicator` - A Pointer Direction Indicator that will track the position of the pointer cursor.
+
+**Script Usage:**
+ * Place the `VRTK_BezierPointerRenderer` script on the same GameObject as the Pointer script it is linked to.
+ * Link this Pointer Renderer script to the `Pointer Renderer` parameter on the required Pointer script.
+
+**Script Dependencies:**
+ * A Pointer script to control the activation of this Pointer Renderer script.
 
 ### Inspector Parameters
 
@@ -1924,17 +1958,23 @@ A collection of scripts that provide varying methods of moving the user around t
 
 ### Overview
 
-The basic teleporter updates the user's x/z position in the game world to the position of a Base Pointer's tip location which is set via the `DestinationMarkerSet` event.
+Updates the `x/z` position of the SDK Camera Rig with an optional screen fade.
 
-The y position is never altered so the basic teleporter cannot be used to move up and down game objects as it only allows for travel across a flat plane.
+  > The `y` position is not altered by the Basic Teleport so it only allows for movement across a 2D plane.
+
+**Script Usage:**
+ * Place the `VRTK_BasicTeleport` script on any active scene GameObject.
+
+**Script Dependencies:**
+ * An optional Destination Marker (such as a Pointer) to set the destination of the teleport location.
 
 ### Inspector Parameters
 
- * **Blink To Color:** The colour to fade to when blinking on teleport.
- * **Blink Transition Speed:** The fade blink speed can be changed on the basic teleport script to provide a customised teleport experience. Setting the speed to 0 will mean no fade blink effect is present.
- * **Distance Blink Delay:** A range between 0 and 32 that determines how long the blink transition will stay blacked out depending on the distance being teleported. A value of 0 will not delay the teleport blink effect over any distance, a value of 32 will delay the teleport blink fade in even when the distance teleported is very close to the original position. This can be used to simulate time taking longer to pass the further a user teleports. A value of 16 provides a decent basis to simulate this to the user.
+ * **Blink To Color:** The colour to fade to when fading on teleport.
+ * **Blink Transition Speed:** The time taken to fade to the `Blink To Color`. Setting the speed to `0` will mean no fade effect is present.
+ * **Distance Blink Delay:** Determines how long the fade will stay present out depending on the distance being teleported. A value of `0` will not delay the teleport fade effect over any distance, a max value will delay the teleport fade in even when the distance teleported is very close to the original position.
  * **Headset Position Compensation:** If this is checked then the teleported location will be the position of the headset within the play area. If it is unchecked then the teleported location will always be the centre of the play area even if the headset position is not in the centre of the play area.
- * **Target List Policy:** A specified VRTK_PolicyList to use to determine whether destination targets will be acted upon by the Teleporter.
+ * **Target List Policy:** A specified VRTK_PolicyList to use to determine whether destination targets will be acted upon by the teleporter.
  * **Nav Mesh Data:** An optional NavMeshData object that will be utilised for limiting the teleport to within any scene NavMesh.
 
 ### Class Events
@@ -1992,7 +2032,7 @@ The ToggleTeleportEnabled method is used to determine whether the teleporter wil
    * `Transform target` - The Transform that the destination marker is touching.
    * `Vector3 destinationPosition` - The position in world space that is the destination.
  * Returns
-   * `bool` - Returns true if the target is a valid location.
+   * `bool` - Returns `true` if the target is a valid location.
 
 The ValidLocation method determines if the given target is a location that can be teleported to
 
@@ -2015,7 +2055,7 @@ The Teleport/1 method calls the teleport to update position without needing to l
    * `Transform target` - The Transform of the destination object.
    * `Vector3 destinationPosition` - The world position to teleport to.
    * `Quaternion? destinationRotation` - The world rotation to teleport to.
-   * `bool forceDestinationPosition` - If true then the given destination position should not be altered by anything consuming the payload.
+   * `bool forceDestinationPosition` - If `true` then the given destination position should not be altered by anything consuming the payload.
  * Returns
    * _none_
 
@@ -2058,7 +2098,7 @@ The ResetActualTeleportDestination method removes any previous forced destinatio
 
 ### Example
 
-`VRTK/Examples/004_CameraRig_BasicTeleport` uses the `VRTK_SimplePointer` script on the Controllers to initiate a laser pointer by pressing the `Touchpad` on the controller and when the laser pointer is deactivated (release the `Touchpad`) then the user is teleported to the location of the laser pointer tip as this is where the pointer destination marker position is set to.
+`VRTK/Examples/004_CameraRig_BasicTeleport` uses the `VRTK_Pointer` script on the Controllers to initiate a laser pointer by pressing the `Touchpad` on the controller and when the laser pointer is deactivated (release the `Touchpad`) then the user is teleported to the location of the laser pointer tip as this is where the pointer destination marker position is set to.
 
 ---
 
@@ -2067,7 +2107,15 @@ The ResetActualTeleportDestination method removes any previous forced destinatio
 
 ### Overview
 
-The height adjust teleporter extends the basic teleporter and allows for the y position of the user's position to be altered based on whether the teleport location is on top of another object.
+Updates the `x/y/z` position of the SDK Camera Rig with an optional screen fade.
+
+  > The Camera Rig can be automatically teleported to the nearest floor `y` position when utilising this teleporter.
+
+**Script Usage:**
+ * Place the `VRTK_HeightAdjustTeleport` script on any active scene GameObject.
+
+**Script Dependencies:**
+ * An optional Destination Marker (such as a Pointer) to set the destination of the teleport location.
 
 ### Inspector Parameters
 
@@ -2089,11 +2137,13 @@ The height adjust teleporter extends the basic teleporter and allows for the y p
 
 ### Overview
 
-The dash teleporter extends the height adjust teleporter and allows to have the user's position dashing to a new teleport location.
+Updates the `x/y/z` position of the SDK Camera Rig with a lerp to the new position creating a dash effect.
 
-The basic principle is to dash for a very short amount of time, to avoid sim sickness. The default value is 100 miliseconds. This value is fixed for all normal and longer distances. When the distances get very short the minimum speed is clamped to 50 mps, so the dash time becomes even shorter.
+**Script Usage:**
+ * Place the `VRTK_DashTeleport` script on any active scene GameObject.
 
-The minimum distance for the fixed time dash is determined by the minSpeed and normalLerpTime values, if you want to always lerp with a fixed mps speed instead, set the normalLerpTime to a high value. Right before the teleport a capsule is cast towards the target and registers all colliders blocking the way. These obstacles are then broadcast in an event so that for example their gameobjects or renderers can be turned off while the dash is in progress.
+**Script Dependencies:**
+ * An optional Destination Marker (such as a Pointer) to set the destination of the teleport location.
 
 ### Inspector Parameters
 
@@ -2116,11 +2166,11 @@ Adding the `VRTK_DashTeleport_UnityEvents` component to `VRTK_DashTeleport` obje
 
 ### Event Payload
 
- * `RaycastHit[] hits` - An array of objects that the CapsuleCast has collided with.
+ * `RaycastHit[] hits` - An array of RaycastHits that the CapsuleCast has collided with.
 
 ### Example
 
-`SteamVR_Unity_Toolkit/Examples/038_CameraRig_DashTeleport` shows how to turn off the mesh renderers of objects that are in the way during the dash.
+`VRTK/Examples/038_CameraRig_DashTeleport` shows how to turn off the mesh renderers of objects that are in the way during the dash.
 
 ---
 
@@ -2128,7 +2178,14 @@ Adding the `VRTK_DashTeleport_UnityEvents` component to `VRTK_DashTeleport` obje
 
 ### Overview
 
-The purpose of the Teleport Disable On Headset Collision script is to detect when the headset is colliding with a valid object and prevent teleportation from working. This is to ensure that if a user is clipping their head into a wall then they cannot teleport to an area beyond the wall.
+Prevents teleportation when the HMD is colliding with valid geometry.
+
+**Required Components:**
+ * `VRTK_BasicTeleport` - A Teleport script to utilise for teleporting the play area.
+ * `VRTK_HeadsetCollision` - A Headset Collision script for detecting when the headset has collided with valid geometry.
+
+**Script Usage:**
+ * Place the `VRTK_TeleportDisableOnHeadsetCollision` script on the same GameObject as the active Teleport script.
 
 ---
 
@@ -2136,7 +2193,14 @@ The purpose of the Teleport Disable On Headset Collision script is to detect whe
 
 ### Overview
 
-The purpose of the Teleport Disable On Controller Obscured script is to detect when the headset does not have a line of sight to the controllers and prevent teleportation from working. This is to ensure that if a user is clipping their controllers through a wall then they cannot teleport to an area beyond the wall.
+Prevents teleportation when the controllers are obscured from line of sight of the HMD.
+
+**Required Components:**
+ * `VRTK_BasicTeleport` - A Teleport script to utilise for teleporting the play area.
+ * `VRTK_HeadsetControllerAware` - A Headset Controller Aware script to determine when the HMD has line of sight to the controllers.
+
+**Script Usage:**
+ * Place the `VRTK_TeleportDisableOnControllerObscured` script on the same GameObject as the active Teleport script.
 
 ---
 
@@ -2144,9 +2208,10 @@ The purpose of the Teleport Disable On Controller Obscured script is to detect w
 
 ### Overview
 
-An abstract class to provide a mechanism to control an object based on controller input.
+Provides a base that all object control locomotions can inherit from.
 
-As this is an abstract class, it cannot be applied directly to a game object and performs no logic.
+**Script Usage:**
+  > This is an abstract class that is to be inherited to a concrete class that provides object control locomotion functionality, therefore this script should not be directly used.
 
 ### Inspector Parameters
 
@@ -2192,21 +2257,27 @@ Adding the `VRTK_ObjectControl_UnityEvents` component to `VRTK_ObjectControl` ob
 
 ### Overview
 
-The ability to control an object with the touchpad based on the position of the finger on the touchpad axis.
+Provides the ability to control a GameObject's position based on the position of the controller touchpad axis.
 
-The Touchpad Control script forms the stub to allow for pre-defined actions to execute when the touchpad axis changes.
+  > This script forms the stub of emitting the touchpad axis X and Y changes that are then digested by the corresponding Object Control Actions that are listening for the relevant event.
 
-This is enabled by the Touchpad Control script emitting an event each time the X axis and Y Axis on the touchpad change and the corresponding Object Control Action registers with the appropriate axis event. This means that multiple Object Control Actions can be triggered per axis change.
+**Required Components:**
+ * `VRTK_ControllerEvents` - The Controller Events script to listen for the touchpad events on.
 
-This script is placed on the Script Alias of the Controller that is required to be affected by changes in the touchpad.
+**Optional Components:**
+ * `VRTK_BodyPhysics` - The Body Physics script to utilise to determine if falling is occuring.
 
-If the controlled object is the play area and `VRTK_BodyPhysics` is also available, then additional logic is processed when the user is falling such as preventing the touchpad control from affecting a falling user.
+**Script Usage:**
+ * Place the `VRTK_TouchpadControl` script on either:
+   * The GameObject with the Controller Events script.
+   * Any other scene GameObject and provide a valid `VRTK_ControllerEvents` component to the `Controller` parameter of this script.
+ * Place a corresponding Object Control Action for the Touchpad Control script to notify of touchpad changes. Without a corresponding Object Control Action, the Touchpad Control script will do nothing.
 
 ### Inspector Parameters
 
  * **Primary Activation Button:** An optional button that has to be engaged to allow the touchpad control to activate.
  * **Action Modifier Button:** An optional button that when engaged will activate the modifier on the touchpad control action.
- * **Axis Deadzone:** Any input on the axis will be ignored if it is within this deadzone threshold. Between `0f` and `1f`.
+ * **Axis Deadzone:** A deadzone threshold on the touchpad that will ignore input if the touch position is within the specified deadzone. Between `0f` and `1f`.
 
 ### Example
 
@@ -2219,15 +2290,21 @@ If the controlled object is the play area and `VRTK_BodyPhysics` is also availab
 
 ### Overview
 
-The ability to control an object with a button press on a given button to control a specified direction.
+Provides the ability to control a GameObject's position based the press of a controller button linked to a specific axis direction.
 
-The Button Control script forms the stub to allow for pre-defined actions to execute when a button press affects a direction axis.
+  > This script forms the stub of emitting the axis X and Y changes that are then digested by the corresponding Object Control Actions that are listening for the relevant event.
 
-This is enabled by the Button Control script emitting an event each time the pseudo X axis and pseudo Y Axis are changed by a button press and the corresponding Object Control Action registers with the appropriate axis event. This means that multiple Object Control Actions can be triggered per axis change.
+**Required Components:**
+ * `VRTK_ControllerEvents` - The Controller Events script to listen for button presses events on.
 
-This script is placed on the Script Alias of the Controller that is required to be affected by button presses.
+**Optional Components:**
+ * `VRTK_BodyPhysics` - The Body Physics script to utilise to determine if falling is occuring.
 
-If the controlled object is the play area and `VRTK_BodyPhysics` is also available, then additional logic is processed when the user is falling such as preventing the button control from affecting a falling user.
+**Script Usage:**
+ * Place the `VRTK_ButtonControl` script on either:
+   * The GameObject with the Controller Events script.
+   * Any other scene GameObject and provide a valid `VRTK_ControllerEvents` component to the `Controller` parameter of this script.
+ * Place a corresponding Object Control Action for the Button Control script to notify of axis changes. Without a corresponding Object Control Action, the Button Control script will do nothing.
 
 ### Inspector Parameters
 
@@ -2242,39 +2319,48 @@ If the controlled object is the play area and `VRTK_BodyPhysics` is also availab
 
 ### Overview
 
-Move In Place allows the user to move the play area by calculating the y-movement of the user's headset and/or controllers. The user is propelled forward the more they are moving. This simulates moving in game by moving in real life.
+Moves the SDK Camera Rig based on the motion of the headset and/or the controllers. Attempts to recreate the concept of physically walking on the spot to create scene movement.
 
-> This locomotion method is based on Immersive Movement, originally created by Highsight. Thanks to KJack (author of Arm Swinger) for additional work.
+  > This locomotion method is based on Immersive Movement, originally created by Highsight. Thanks to KJack (author of Arm Swinger) for additional work.
+
+**Optional Components:**
+ * `VRTK_BodyPhysics` - A Body Physics script to help determine potential collisions in the moving direction and prevent collision tunnelling.
+
+**Script Usage:**
+ * Place the `VRTK_MoveInPlace` script on any active scene GameObject.
+
+**Script Dependencies:**
+ * The Controller Events script on the controller Script Alias to determine when the engage button is pressed.
 
 ### Inspector Parameters
 
- * **Left Controller:** If this is checked then the left controller touchpad will be enabled to move the play area.
- * **Right Controller:** If this is checked then the right controller touchpad will be enabled to move the play area.
- * **Engage Button:** Select which button to hold to engage Move In Place.
- * **Control Options:** Select which trackables are used to determine movement.
- * **Direction Method:** How the user's movement direction will be determined.  The Gaze method tends to lead to the least motion sickness.  Smart decoupling is still a Work In Progress.
- * **Speed Scale:** Lower to decrease speed, raise to increase.
- * **Max Speed:** The max speed the user can move in game units. (If 0 or less, max speed is uncapped)
- * **Deceleration:** The speed in which the play area slows down to a complete stop when the user is no longer pressing the engage button. This deceleration effect can ease any motion sickness that may be suffered.
- * **Falling Deceleration:** The speed in which the play area slows down to a complete stop when the user is falling.
+ * **Left Controller:** If this is checked then the left controller engage button will be enabled to move the play area.
+ * **Right Controller:** If this is checked then the right controller engage button will be enabled to move the play area.
+ * **Engage Button:** The button to press to activate the movement.
+ * **Control Options:** The device to determine the movement paramters from.
+ * **Direction Method:** The method in which to determine the direction of forward movement.
+ * **Speed Scale:** The speed in which to move the play area.
+ * **Max Speed:** The maximun speed in game units. (If 0 or less, max speed is uncapped)
+ * **Deceleration:** The speed in which the play area slows down to a complete stop when the engage button is released. This deceleration effect can ease any motion sickness that may be suffered.
+ * **Falling Deceleration:** The speed in which the play area slows down to a complete stop when falling is occuring.
  * **Smart Decouple Threshold:** The degree threshold that all tracked objects (controllers, headset) must be within to change direction when using the Smart Decoupling Direction Method.
  * **Sensitivity:** The maximum amount of movement required to register in the virtual world.  Decreasing this will increase acceleration, and vice versa.
  * **Body Physics:** An optional Body Physics script to check for potential collisions in the moving direction. If any potential collision is found then the move will not take place. This can help reduce collision tunnelling.
 
 ### Class Variables
 
- * `public enum ControlOptions` - Options for testing if a play space fall is valid.
+ * `public enum ControlOptions` - Valid control options
    * `HeadsetAndControllers` - Track both headset and controllers for movement calculations.
    * `ControllersOnly` - Track only the controllers for movement calculations.
    * `HeadsetOnly` - Track only headset for movement caluclations.
- * `public enum DirectionalMethod` - Options for which method is used to determine player direction while moving.
-   * `Gaze` - Player will always move in the direction they are currently looking.
-   * `ControllerRotation` - Player will move in the direction that the controllers are pointing (averaged).
-   * `DumbDecoupling` - Player will move in the direction they were first looking when they engaged Move In Place.
-   * `SmartDecoupling` - Player will move in the direction they are looking only if their headset point the same direction as their controllers.
-   * `EngageControllerRotationOnly` - Player will move in the direction that the controller with the engage button pressed is pointing.
-   * `LeftControllerRotationOnly` - Player will move in the direction that the left controller is pointing.
-   * `RightControllerRotationOnly` - Player will move in the direction that the right controller is pointing.
+ * `public enum DirectionalMethod` - Options for which method is used to determine direction while moving.
+   * `Gaze` - Will always move in the direction they are currently looking.
+   * `ControllerRotation` - Will move in the direction that the controllers are pointing (averaged).
+   * `DumbDecoupling` - Will move in the direction they were first looking when they engaged Move In Place.
+   * `SmartDecoupling` - Will move in the direction they are looking only if their headset point the same direction as their controllers.
+   * `EngageControllerRotationOnly` - Will move in the direction that the controller with the engage button pressed is pointing.
+   * `LeftControllerRotationOnly` - Will move in the direction that the left controller is pointing.
+   * `RightControllerRotationOnly` - Will move in the direction that the right controller is pointing.
 
 ### Class Methods
 
@@ -2296,9 +2382,9 @@ Set the control options and modify the trackables to match.
  * Parameters
    * _none_
  * Returns
-   * `Vector3` - Returns a vector representing the player's current movement direction.
+   * `Vector3` - Returns a Vector3 representing the current movement direction.
 
-The GetMovementDirection method will return the direction the player is moving.
+The GetMovementDirection method will return the direction the play area is currently moving in.
 
 #### GetSpeed/0
 
@@ -2307,9 +2393,9 @@ The GetMovementDirection method will return the direction the player is moving.
  * Parameters
    * _none_
  * Returns
-   * `float` - Returns a float representing the player's current movement speed.
+   * `float` - Returns a float representing the current movement speed.
 
-The GetSpeed method will return the current speed the player is moving at.
+The GetSpeed method will return the current speed the play area is moving at.
 
 ### Example
 
@@ -2321,15 +2407,30 @@ The GetSpeed method will return the current speed the player is moving at.
 
 ### Overview
 
-The Player Climb allows player movement based on grabbing of `VRTK_InteractableObject` objects that have a `Climbable` grab attach script. Because it works by grabbing, each controller should have a `VRTK_InteractGrab` and `VRTK_InteractTouch` component attached.
+Provides the ability for the SDK Camera Rig to be moved around based on whether an Interact Grab is interacting with a Climbable Interactable Object to simulate climbing.
+
+**Required Components:**
+ * `VRTK_BodyPhysics` - A Body Physics script to deal with the effects of physics and gravity on the play area.
+
+**Optional Components:**
+ * `VRTK_BasicTeleport` - A Teleporter script to use when snapping the play area to the nearest floor when releasing from grab.
+ * `VRTK_HeadsetCollision` - A Headset Collision script to determine when the headset is colliding with geometry to know when to reset to a valid location.
+ * `VRTK_PositionRewind` - A Position Rewind script to utilise when resetting to a valid location upon ungrabbing whilst colliding with geometry.
+
+**Script Usage:**
+ * Place the `VRTK_PlayerClimb` script on any active scene GameObject.
+
+**Script Dependencies:**
+ * The controller Script Alias GameObject requires the Interact Touch and Interact Grab scripts to allow for touching and grabbing of Interactable Objects.
+ * An Interactable Object in the scene that has the Climbable Grab Attach Mechanic.
 
 ### Inspector Parameters
 
  * **Use Player Scale:** Will scale movement up and down based on the player transform's scale.
- * **Body Physics:** The VRTK Body Physics script to use for dealing with climbing and falling. If this is left blank then the script will need to be applied to the same GameObject.
- * **Teleporter:** The VRTK Teleport script to use when snapping to nearest floor on release. If this is left blank then a Teleport script will need to be applied to the same GameObject.
- * **Headset Collision:** The VRTK Headset Collision script to use for determining if the user is climbing inside a collidable object. If this is left blank then the script will need to be applied to the same GameObject.
- * **Position Rewind:** The VRTK Position Rewind script to use for dealing resetting invalid positions. If this is left blank then the script will need to be applied to the same GameObject.
+ * **Body Physics:** The Body Physics script to use for dealing with climbing and falling. If this is left blank then the script will need to be applied to the same GameObject.
+ * **Teleporter:** The Teleport script to use when snapping to nearest floor on release. If this is left blank then a Teleport script will need to be applied to the same GameObject.
+ * **Headset Collision:** The Headset Collision script to use for determining if the user is climbing inside a collidable object. If this is left blank then the script will need to be applied to the same GameObject.
+ * **Position Rewind:** The Position Rewind script to use for dealing resetting invalid positions. If this is left blank then the script will need to be applied to the same GameObject.
 
 ### Class Events
 
@@ -2356,9 +2457,9 @@ Adding the `VRTK_PlayerClimb_UnityEvents` component to `VRTK_PlayerClimb` object
  * Parameters
    * _none_
  * Returns
-   * `bool` - Returns a bool representing if the player is climbing.
+   * `bool` - Returns `true` if climbing is currently taking place.
 
-The IsClimbing method will return if the player is currently climbing or not.
+The IsClimbing method will return if climbing is currently taking place or not.
 
 ### Example
 
@@ -2370,21 +2471,29 @@ The IsClimbing method will return if the player is currently climbing or not.
 
 ### Overview
 
-Slingshot Jump allows player jumping based on the direction and amount pulled back of each controller. This slingshots the player in defined direction and speed.
+Provides the ability for the SDK Camera Rig to be thrown around with a jumping motion by slingshotting based on the pull back of each valid controller.
+
+**Required Components:**
+ * `VRTK_PlayerClimb` - A Player Climb script for dealing with the physical throwing of the play area as if throwing off an invisible climbed object.
+ * `VRTK_BodyPhysics` - A Body Physics script to deal with the effects of physics and gravity on the play area.
+
+**Optional Components:**
+ * `VRTK_BasicTeleport` - A Teleporter script to use when snapping the play area to the nearest floor when releasing from grab.
+ * `VRTK_HeadsetCollision` - A Headset Collision script to determine when the headset is colliding with geometry to know when to reset to a valid location.
+ * `VRTK_PositionRewind` - A Position Rewind script to utilise when resetting to a valid location upon ungrabbing whilst colliding with geometry.
+
+**Script Usage:**
+ * Place the `VRTK_SlingshotJump` script on the same GameObject as the `VRTK_PlayerClimb` script.
 
 ### Inspector Parameters
 
- * **Release Window Time:** How close together the trigger releases have to be to initiate a jump.
+ * **Release Window Time:** How close together the button releases have to be to initiate a jump.
  * **Velocity Multiplier:** Multiplier that increases the jump strength.
  * **Velocity Max:** The maximum velocity a jump can be.
 
 ### Class Events
 
  * `SlingshotJumped` - Emitted when a slingshot jump occurs
-
-### Event Payload
-
- * `GameObject target` - The GameObject of the interactable object that is being interacted with by the controller.
 
 ### Class Methods
 
@@ -2442,17 +2551,21 @@ The SetCancelButton method sets the button used to cancel a slingshot jump.
 
 ### Overview
 
-This script allows the playArea to move with the user. The play area is only moved when at the edge of a defined circle.
+Multiplies each real world step within the play area to enable further distances to be travelled in the virtual world.
 
-There is an additional script `VRTK_RoomExtender_PlayAreaGizmo` which can be attached alongside to visualize the extended playArea within the Editor.
+**Script Usage:**
+ * Place the `VRTK_RoomExtender` script on any active scene GameObject.
+
+**Script Dependencies:**
+ * The Controller Events script on the controller Script Alias to determine when the touchpad is pressed.
 
 ### Inspector Parameters
 
  * **Movement Function:** This determines the type of movement used by the extender.
- * **Additional Movement Enabled:** This is the a public variable to enable the additional movement. This can be used in other scripts to toggle the play area movement.
- * **Additional Movement Enabled On Button Press:** This configures the controls of the RoomExtender. If this is true then the touchpad needs to be pressed to enable it. If this is false then it is disabled by pressing the touchpad.
- * **Additional Movement Multiplier:** This is the factor by which movement at the edge of the circle is amplified. 0 is no movement of the play area. Higher values simulate a bigger play area but may be too uncomfortable.
- * **Head Zone Radius:** This is the size of the circle in which the playArea is not moved and everything is normal. If it is to low it becomes uncomfortable when crouching.
+ * **Additional Movement Enabled:** Enables the additional movement.
+ * **Additional Movement Enabled On Button Press:** If this is checked then the touchpad needs to be pressed to enable it. If this is unchecked then it is disabled by pressing the touchpad.
+ * **Additional Movement Multiplier:** This is the factor by which movement at the edge of the circle is amplified. `0` is no movement of the play area. Higher values simulate a bigger play area but may be too uncomfortable.
+ * **Head Zone Radius:** This is the size of the circle in which the play area is not moved and everything is normal. If it is to low it becomes uncomfortable when crouching.
  * **Debug Transform:** This transform visualises the circle around the user where the play area is not moved. In the demo scene this is a cylinder at floor level. Remember to turn of collisions.
 
 ### Class Variables
@@ -2483,9 +2596,10 @@ This directory contains scripts that are used to provide different actions when 
 
 ### Overview
 
-The Base Object Control Action script is an abstract class that all object control action scripts inherit.
+Provides a base that all object control actions can inherit from.
 
-As this is an abstract class, it cannot be applied directly to a game object and performs no logic.
+**Script Usage:**
+  > This is an abstract class that is to be inherited to a concrete class that provides object control action functionality, therefore this script should not be directly used.
 
 ### Inspector Parameters
 
@@ -2505,9 +2619,20 @@ As this is an abstract class, it cannot be applied directly to a game object and
 
 ### Overview
 
-The Slide Object Control Action script is used to slide the controlled GameObject around the scene when changing the axis.
+Provides the ability to move a GameObject around by sliding it across the `x/z` plane in the scene by updating the Transform position when the corresponding Object Control axis changes.
 
-The effect is a smooth sliding motion in forward and sideways directions to simulate walking.
+  > The effect is a smooth sliding motion in forward and sideways directions to simulate walking.
+
+**Required Components:**
+ * `VRTK_ObjectControl` - The Object Control script to listen for the axis changes on.
+
+**Optional Components:**
+ * `VRTK_BodyPhysics` - The Body Physics script to utilise when checking for potential collisions on movement.
+
+**Script Usage:**
+ * Place the `VRTK_SlideObjectControlAction` script on any active scene GameObject.
+ * Link the required Object Control script to the `Object Control Script` parameter of this script.
+ * Set the `Listen On Axis Change` parameter on this script to the axis change to affect with this movement type.
 
 ### Inspector Parameters
 
@@ -2530,9 +2655,17 @@ To enable the Slide Object Control Action, ensure one of the `TouchpadControlOpt
 
 ### Overview
 
-The Rotate Object Control Action script is used to rotate the controlled GameObject around the up vector when changing the axis.
+Provides the ability to rotate a GameObject through the world `y` axis in the scene by updating the Transform rotation when the corresponding Object Control axis changes.
 
-The effect is a smooth rotation to simulate turning.
+  > The effect is a smooth rotation to simulate turning.
+
+**Required Components:**
+ * `VRTK_ObjectControl` - The Object Control script to listen for the axis changes on.
+
+**Script Usage:**
+ * Place the `VRTK_RotateObjectControlAction` script on any active scene GameObject.
+ * Link the required Object Control script to the `Object Control Script` parameter of this script.
+ * Set the `Listen On Axis Change` parameter on this script to the axis change to affect with this movement type.
 
 ### Inspector Parameters
 
@@ -2552,9 +2685,17 @@ To enable the Rotate Object Control Action, ensure one of the `TouchpadControlOp
 
 ### Overview
 
-The Snap Rotate Object Control Action script is used to snap rotate the controlled GameObject around the up vector when changing the axis.
+Provides the ability to snap rotate a GameObject through the world `y` axis in the scene by updating the Transform rotation in defined steps when the corresponding Object Control axis changes.
 
-The effect is a immediate snap rotation to quickly face in a new direction.
+  > The effect is a immediate snap rotation to quickly face in a new direction.
+
+**Required Components:**
+ * `VRTK_ObjectControl` - The Object Control script to listen for the axis changes on.
+
+**Script Usage:**
+ * Place the `VRTK_SnapRotateObjectControlAction` script on any active scene GameObject.
+ * Link the required Object Control script to the `Object Control Script` parameter of this script.
+ * Set the `Listen On Axis Change` parameter on this script to the axis change to affect with this movement type.
 
 ### Inspector Parameters
 
@@ -2577,9 +2718,20 @@ To enable the Snap Rotate Object Control Action, ensure one of the `TouchpadCont
 
 ### Overview
 
-The Warp Object Control Action script is used to warp the controlled GameObject a given distance when changing the axis.
+Provides the ability to move a GameObject around by warping it across the `x/z` plane in the scene by updating the Transform position in defined steps when the corresponding Object Control axis changes.
 
-The effect is a immediate snap to a new position in the given direction.
+  > The effect is a immediate snap to a new position in the given direction.
+
+**Required Components:**
+ * `VRTK_ObjectControl` - The Object Control script to listen for the axis changes on.
+
+**Optional Components:**
+ * `VRTK_BodyPhysics` - The Body Physics script to utilise when checking for potential collisions on movement.
+
+**Script Usage:**
+ * Place the `VRTK_WarpObjectControlAction` script on any active scene GameObject.
+ * Link the required Object Control script to the `Object Control Script` parameter of this script.
+ * Set the `Listen On Axis Change` parameter on this script to the axis change to affect with this movement type.
 
 ### Inspector Parameters
 
@@ -2623,11 +2775,10 @@ A collection of scripts that provide the ability to interact with game objects w
 
 ### Overview
 
-The Controller Events script deals with events that the game controller is sending out.
+A relationship to a physical VR controller and emits events based on the inputs of the controller.
 
-When a controller button is pressed, the script emits an event to denote that the button has been pressed which allows other scripts to listen for this event without needing to implement any controller logic. When a controller button is released, the script also emits an event denoting that the button has been released.
-
-The script also has a public boolean pressed state for the buttons to allow the script to be queried by other scripts to check if a button is being held down.
+**Script Usage:**
+ * Place the `VRTK_ControllerEvents` script on the controller script alias GameObject of the controller to track (e.g. Right Controller Script Alias).
 
 ### Inspector Parameters
 
@@ -2749,7 +2900,7 @@ Adding the `VRTK_ControllerEvents_UnityEvents` component to `VRTK_ControllerEven
 
 ### Event Payload
 
- * `VRTK_ControllerReference controllerReference` - The reference for the controller that was used.
+ * `VRTK_ControllerReference controllerReference` - The reference for the controller that initiated the event.
  * `float buttonPressure` - The amount of pressure being applied to the button pressed. `0f` to `1f`.
  * `Vector2 touchpadAxis` - The position the touchpad is touched at. `(0,0)` to `(1,1)`.
  * `float touchpadAngle` - The rotational position the touchpad is being touched at, 0 being top, 180 being bottom and all other angles accordingly. `0f` to `360f`.
@@ -2773,7 +2924,7 @@ The SetControllerEvent/0 method is used to set the Controller Event payload.
 
  * Parameters
    * `ref bool buttonBool` - The state of the pressed button if required.
-   * `bool value` - The value to set the buttonBool reference to.
+   * `bool value` - The value to set the `buttonBool` reference to.
    * `float buttonPressure` - The pressure of the button pressed if required.
  * Returns
    * `ControllerInteractionEventArgs` - The payload for a Controller Event.
@@ -2787,9 +2938,9 @@ The SetControllerEvent/3 method is used to set the Controller Event payload.
  * Parameters
    * _none_
  * Returns
-   * `SDK_BaseController.ControllerType` - The type of controller that the controller events is attached to.
+   * `SDK_BaseController.ControllerType` - The type of controller that the Controller Events is attached to.
 
-The GetControllerType method is a shortcut to retrieve the current controller type the controller events is attached to.
+The GetControllerType method is a shortcut to retrieve the current controller type the Controller Events is attached to.
 
 #### GetTouchpadAxis/0
 
@@ -2798,7 +2949,7 @@ The GetControllerType method is a shortcut to retrieve the current controller ty
  * Parameters
    * _none_
  * Returns
-   * `Vector2` - A 2 dimensional vector containing the x and y position of where the touchpad is being touched. `(0,0)` to `(1,1)`.
+   * `Vector2` - A two dimensional vector containing the `x` and `y` position of where the touchpad is being touched. `(0,0)` to `(1,1)`.
 
 The GetTouchpadAxis method returns the coordinates of where the touchpad is being touched and can be used for directional input via the touchpad. The `x` value is the horizontal touch plane and the `y` value is the vertical touch plane.
 
@@ -2811,7 +2962,7 @@ The GetTouchpadAxis method returns the coordinates of where the touchpad is bein
  * Returns
    * `float` - A float representing the angle of where the touchpad is being touched. `0f` to `360f`.
 
-The GetTouchpadAxisAngle method returns the angle of where the touchpad is currently being touched with the top of the touchpad being 0 degrees and the bottom of the touchpad being 180 degrees.
+The GetTouchpadAxisAngle method returns the angle of where the touchpad is currently being touched with the top of the touchpad being `0` degrees and the bottom of the touchpad being `180` degrees.
 
 #### GetTriggerAxis/0
 
@@ -2919,7 +3070,7 @@ The GetPinkyFingerSenseAxis method returns a float representing how much of the 
  * Parameters
    * _none_
  * Returns
-   * `bool` - Is true if any of the controller buttons are currently being pressed.
+   * `bool` - Returns `true` if any of the controller buttons are currently being pressed.
 
 The AnyButtonPressed method returns true if any of the controller buttons are being pressed and this can be useful to determine if an action can be taken whilst the user is using the controller.
 
@@ -2930,7 +3081,7 @@ The AnyButtonPressed method returns true if any of the controller buttons are be
  * Parameters
    * `ButtonAlias button` - The button to check if it's being pressed.
  * Returns
-   * `bool` - Is true if the button is being pressed.
+   * `bool` - Returns `true` if the button is being pressed.
 
 The IsButtonPressed method takes a given button alias and returns a boolean whether that given button is currently being pressed or not.
 
@@ -2939,8 +3090,8 @@ The IsButtonPressed method takes a given button alias and returns a boolean whet
   > `public virtual void SubscribeToButtonAliasEvent(ButtonAlias givenButton, bool startEvent, ControllerInteractionEventHandler callbackMethod)`
 
  * Parameters
-   * `ButtonAlias givenButton` - The ButtonAlias to register the event on.
-   * `bool startEvent` - If this is `true` then the start event related to the button is used (e.g. OnPress). If this is `false` then the end event related to the button is used (e.g. OnRelease).
+   * `ButtonAlias givenButton` - The Button Alias to register the event on.
+   * `bool startEvent` - If this is `true` then the start event related to the button is used (e.g. `OnPress`). If this is `false` then the end event related to the button is used (e.g. `OnRelease`).
    * `ControllerInteractionEventHandler callbackMethod` - The method to subscribe to the event.
  * Returns
    * _none_
@@ -2952,8 +3103,8 @@ The SubscribeToButtonAliasEvent method makes it easier to subscribe to a button 
   > `public virtual void UnsubscribeToButtonAliasEvent(ButtonAlias givenButton, bool startEvent, ControllerInteractionEventHandler callbackMethod)`
 
  * Parameters
-   * `ButtonAlias givenButton` - The ButtonAlias to unregister the event on.
-   * `bool startEvent` - If this is `true` then the start event related to the button is used (e.g. OnPress). If this is `false` then the end event related to the button is used (e.g. OnRelease).
+   * `ButtonAlias givenButton` - The Button Alias to unregister the event on.
+   * `bool startEvent` - If this is `true` then the start event related to the button is used (e.g. `OnPress`). If this is `false` then the end event related to the button is used (e.g. `OnRelease`).
    * `ControllerInteractionEventHandler callbackMethod` - The method to unsubscribe from the event.
  * Returns
    * _none_
@@ -2998,15 +3149,18 @@ The UnsubscribeToAxisAliasEvent method makes it easier to unsubscribe from axis 
 
 Enables highlighting of controller elements.
 
+**Optional Components:**
+ * `VRTK_BaseHighlighter` - The highlighter to use when highligting the controller. If one is not already injected in the `Controller Highlighter` parameter then the component on the same GameObject will be used.
+
 **Script Usage:**
-* Place the `VRTK_ControllerHighlighter` script on either:
-* The controller script alias GameObject of the controller to affect (e.g. Right Controller Script Alias).
-* Any other scene GameObject and provide the controller script alias GameObject to the `Controller Alias` parameter of this script.
-* The Model Element Paths will be auto populated at runtime based on the SDK Setup Model Alias being used (except if a custom Model Alias for the SDK Setup is provided).
-* The Highlighter used by the Controller Highlighter will be selected in the following order:
-* The provided Base Highlighter in the `Controller Highlighter` parameter.
-* If the above is not provided, then the first active Base Highlighter found on the actual controller GameObject will be used.
-* If the above is not found, then a Material Color Swap Highlighter will be created on the actual controller GameObject at runtime.
+ * Place the `VRTK_ControllerHighlighter` script on either:
+   * The controller script alias GameObject of the controller to affect (e.g. Right Controller Script Alias).
+   * Any other scene GameObject and provide the controller script alias GameObject to the `Controller Alias` parameter of this script.
+ * The Model Element Paths will be auto populated at runtime based on the SDK Setup Model Alias being used (except if a custom Model Alias for the SDK Setup is provided).
+ * The Highlighter used by the Controller Highlighter will be selected in the following order:
+   * The provided Base Highlighter in the `Controller Highlighter` parameter.
+   * If the above is not provided, then the first active Base Highlighter found on the actual controller GameObject will be used.
+   * If the above is not found, then a Material Color Swap Highlighter will be created on the actual controller GameObject at runtime.
 
 ### Inspector Parameters
 
@@ -3107,7 +3261,10 @@ The UnhighlightElement method attempts to remove the highlight from the specific
 
 ### Overview
 
-The Controller Haptics scripts are a collection of static methods for calling haptic functions on a given controller.
+A collection of static methods for calling haptic functions on a given controller.
+
+**Script Usage:**
+  > There is no requirement to add this script to a GameObject as all of the public methods are static and can be called directly e.g. `VRTK_ControllerHaptics.TriggerHapticPulse(ref, 1f)`.
 
 ### Class Methods
 
@@ -3166,9 +3323,16 @@ The CancelHapticPulse method cancels the existing running haptic pulse on the gi
 
 ### Overview
 
-The Interact Object Appearance script is used to determine whether the `Object To Affect` should be visible or hidden by default or on touch, grab or use.
+Determine whether the `Object To Affect` should be visible or hidden by default or on interaction (near touch, touch, grab, use).
 
-The `Object To Affect` can be the object that is causing the interaction (touch/grab/use) and is usually the controller. So this script can be used to hide the controller on interaction.
+**Required Components:**
+ * `VRTK_InteractableObject` - The Interactable Object component to detect interactions on. This must be applied on the same GameObject as this script if one is not provided via the `Object To Monitor` parameter.
+
+**Script Usage:**
+ * Place the `VRTK_InteractObjectAppearance` script on either:
+   * The GameObject of the Interactable Object to detect interactions on.
+   * Any other scene GameObject and provide a valid `VRTK_InteractableObject` component to the `Object To Monitor` parameter of this script.
+ * Optionally provide a GameObject to the `Object To Affect` parameter to determine which GameObject to affect the appearance of.
 
 ### Inspector Parameters
 
@@ -3220,8 +3384,8 @@ Adding the `VRTK_InteractObjectAppearance_UnityEvents` component to `VRTK_Intera
 
 ### Event Payload
 
- * `GameObject affectingObject` - The object that is being affected.
- * `VRTK_InteractableObject monitoringObject` - The interactable object that is being monitored.
+ * `GameObject affectingObject` - The GameObject that is being affected.
+ * `VRTK_InteractableObject monitoringObject` - The Interactable Object that is being monitored.
  * `VRTK_InteractableObject.InteractionType interactionType` - The type of interaction initiating the event.
 
 ### Example
@@ -3234,7 +3398,15 @@ Adding the `VRTK_InteractObjectAppearance_UnityEvents` component to `VRTK_Intera
 
 ### Overview
 
-The Interact Object Hightlighter script is attached to an Interactable Object component to provide highlighting to the object on various interaction stages.
+Enable highlighting of an Interactable Object base on interaction type.
+
+**Required Components:**
+ * `VRTK_InteractableObject` - The Interactable Object component to detect interactions on. This must be applied on the same GameObject as this script if one is not provided via the `Object To Affect` parameter.
+
+**Script Usage:**
+ * Place the `VRTK_InteractObjectHighlighter` script on either:
+   * The GameObject of the Interactable Object to detect interactions on.
+   * Any other scene GameObject and provide a valid `VRTK_InteractableObject` component to the `Object To Affect` parameter of this script.
 
 ### Inspector Parameters
 
@@ -3271,7 +3443,7 @@ Adding the `VRTK_InteractObjectHighlighter_UnityEvents` component to `VRTK_Inter
  * Returns
    * `Color` - The Color that the Interactable Object is being highlighted to.
 
-The GetCurrentHighlightColor returns the colour that the object is currently being highlighted to.
+The GetCurrentHighlightColor returns the colour that the Interactable Object is currently being highlighted to.
 
 ---
 
@@ -3279,11 +3451,13 @@ The GetCurrentHighlightColor returns the colour that the object is currently bei
 
 ### Overview
 
-The Interact Touch script is usually applied to a Controller and provides a collider to know when the controller is touching something.
+Determines if a GameObject can initiate a touch with an Interactable Object.
 
-Colliders are created for the controller and by default the selected controller SDK will have a set of colliders for the given default controller of that SDK.
+**Required Components:**
+ * `Rigidbody` - A Unity kinematic Rigidbody to determine when collisions happen between the Interact Touch GameObject and other valid colliders.
 
-A custom collider can be provided by the Custom Collider Container parameter.
+**Script Usage:**
+ * Place the `VRTK_InteractTouch` script on the controller script alias GameObject of the controller to track (e.g. Right Controller Script Alias).
 
 ### Inspector Parameters
 
@@ -3307,7 +3481,7 @@ Adding the `VRTK_InteractTouch_UnityEvents` component to `VRTK_InteractTouch` ob
 ### Event Payload
 
  * `VRTK_ControllerReference controllerReference` - The reference to the controller doing the interaction.
- * `GameObject target` - The GameObject of the interactable object that is being interacted with by the controller.
+ * `GameObject target` - The GameObject of the Interactable Object that is being interacted with.
 
 ### Class Methods
 
@@ -3316,11 +3490,11 @@ Adding the `VRTK_InteractTouch_UnityEvents` component to `VRTK_InteractTouch` ob
   > `public virtual void ForceTouch(GameObject obj)`
 
  * Parameters
-   * `GameObject obj` - The game object to attempt to force touch.
+   * `GameObject obj` - The GameObject to attempt to force touch.
  * Returns
    * _none_
 
-The ForceTouch method will attempt to force the controller to touch the given game object. This is useful if an object that isn't being touched is required to be grabbed or used as the controller doesn't physically have to be touching it to be forced to interact with it.
+The ForceTouch method will attempt to force the Interact Touch onto the given GameObject.
 
 #### GetTouchedObject/0
 
@@ -3329,20 +3503,20 @@ The ForceTouch method will attempt to force the controller to touch the given ga
  * Parameters
    * _none_
  * Returns
-   * `GameObject` - The game object of what is currently being touched by this controller.
+   * `GameObject` - The GameObject of what is currently being touched by this Interact Touch.
 
-The GetTouchedObject method returns the current object being touched by the controller.
+The GetTouchedObject method returns the current GameObject being touched by the Interact Touch.
 
 #### IsObjectInteractable/1
 
   > `public virtual bool IsObjectInteractable(GameObject obj)`
 
  * Parameters
-   * `GameObject obj` - The game object to check to see if it's interactable.
+   * `GameObject obj` - The GameObject to check to see if it's a valid Interactable Object.
  * Returns
-   * `bool` - Is true if the given object is of type `VRTK_InteractableObject`.
+   * `bool` - Returns `true` if the given GameObjectis a valid Interactable Object.
 
-The IsObjectInteractable method is used to check if a given game object is of type `VRTK_InteractableObject` and whether the object is enabled.
+The IsObjectInteractable method is used to check if a given GameObject is a valid Interactable Object.
 
 #### ToggleControllerRigidBody/2
 
@@ -3354,7 +3528,7 @@ The IsObjectInteractable method is used to check if a given game object is of ty
  * Returns
    * _none_
 
-The ToggleControllerRigidBody method toggles the controller's rigidbody's ability to detect collisions. If it is true then the controller rigidbody will collide with other collidable game objects.
+The ToggleControllerRigidBody method toggles the Interact Touch rigidbody's ability to detect collisions. If it is true then the controller rigidbody will collide with other collidable GameObjects.
 
 #### IsRigidBodyActive/0
 
@@ -3363,9 +3537,9 @@ The ToggleControllerRigidBody method toggles the controller's rigidbody's abilit
  * Parameters
    * _none_
  * Returns
-   * `bool` - Is true if the rigidbody on the controller is currently active and able to affect other scene rigidbodies.
+   * `bool` - Returns `true` if the rigidbody on the Interact TOuch is currently active and able to affect other scene rigidbodies.
 
-The IsRigidBodyActive method checks to see if the rigidbody on the controller object is active and can affect other rigidbodies in the scene.
+The IsRigidBodyActive method checks to see if the rigidbody on the Interact Touch is active and can affect other rigidbodies in the scene.
 
 #### IsRigidBodyForcedActive/0
 
@@ -3374,9 +3548,9 @@ The IsRigidBodyActive method checks to see if the rigidbody on the controller ob
  * Parameters
    * _none_
  * Returns
-   * `bool` - Is true if the rigidbody is active and has been forced into the active state.
+   * `bool` - Returns `true` if the rigidbody is active and has been forced into the active state.
 
-The IsRigidBodyForcedActive method checks to see if the rigidbody on the controller object has been forced into the active state.
+The IsRigidBodyForcedActive method checks to see if the rigidbody on the Interact Touch has been forced into the active state.
 
 #### ForceStopTouching/0
 
@@ -3387,7 +3561,7 @@ The IsRigidBodyForcedActive method checks to see if the rigidbody on the control
  * Returns
    * _none_
 
-The ForceStopTouching method will stop the controller from touching an object even if the controller is physically touching the object still.
+The ForceStopTouching method will stop the Interact Touch from touching an Interactable Object even if the Interact Touch is physically touching the Interactable Object.
 
 #### ControllerColliders/0
 
@@ -3398,7 +3572,7 @@ The ForceStopTouching method will stop the controller from touching an object ev
  * Returns
    * `Collider[]` - An array of colliders that are associated with the controller.
 
-The ControllerColliders method retrieves all of the associated colliders on the controller.
+The ControllerColliders method retrieves all of the associated colliders on the Interact Touch.
 
 #### GetControllerType/0
 
@@ -3407,9 +3581,9 @@ The ControllerColliders method retrieves all of the associated colliders on the 
  * Parameters
    * _none_
  * Returns
-   * `SDK_BaseController.ControllerType` - The type of controller that the interact touch is attached to.
+   * `SDK_BaseController.ControllerType` - The type of controller that the Interact Touch is attached to.
 
-The GetControllerType method is a shortcut to retrieve the current controller type the interact touch is attached to.
+The GetControllerType method is a shortcut to retrieve the current controller type the Interact Touch is attached to.
 
 ### Example
 
@@ -3421,11 +3595,15 @@ The GetControllerType method is a shortcut to retrieve the current controller ty
 
 ### Overview
 
-The Interact Near Touch script is usually applied to a Controller and provides a collider to know when the controller is nearly touching something.
+Determines if a GameObject can initiate a near touch with an Interactable Object.
 
-Colliders are created for the controller and by default will be a sphere.
+**Required Components:**
+ * `VRTK_InteractTouch` - The touch component to determine the actual interacting GameObject that will deal with the near touch interaction. This must be applied on the same GameObject as this script if one is not provided via the `Interact Touch` parameter.
 
-A custom collider can be provided by the Custom Collider Container parameter.
+**Script Usage:**
+ * Place the `VRTK_InteractNearTouch` script on either:
+   * The Interact Touch GameObject.
+   * Any other scene GameObject and provide a valid `VRTK_InteractTouch` component to the `Interact Touch` parameter of this script.
 
 ### Inspector Parameters
 
@@ -3466,7 +3644,7 @@ The GetNearTouchedObjects method returns all of the GameObjects that are current
  * Returns
    * _none_
 
-The ForceNearTouch method will attempt to force the controller to near touch the given game object.
+The ForceNearTouch method will attempt to force the controller to near touch the given GameObject.
 
 #### ForceStopNearTouching/1
 
@@ -3477,7 +3655,7 @@ The ForceNearTouch method will attempt to force the controller to near touch the
  * Returns
    * _none_
 
-The ForceStopNearTouching method will stop the controller from near touching an object even if the controller is physically touching the object still.
+The ForceStopNearTouching method will stop the Interact Touch GameObject from near touching an Interactable Object even if the Interact Touch GameObject is physically touching the Interactable Object still.
 
 #### GetNearTouchedObjects/0
 
@@ -3496,28 +3674,27 @@ The GetNearTouchedObjects method returns all of the GameObjects that are current
 
 ### Overview
 
-The Interact Grab script is attached to a Controller object and requires the `VRTK_ControllerEvents` script to be attached as it uses this for listening to the controller button events for grabbing and releasing interactable game objects.
+Determines if the Interact Touch can initiate a grab with the touched Interactable Object.
 
-It listens for the `AliasGrabOn` and `AliasGrabOff` events to determine when an object should be grabbed and should be released.
+**Required Components:**
+ * `VRTK_InteractTouch` - The touch component to determine when a valid touch has taken place to denote a grab can occur. This must be applied on the same GameObject as this script if one is not provided via the `Interact Touch` parameter.
 
-The Controller object also requires the `VRTK_InteractTouch` script to be attached to it as this is used to determine when an interactable object is being touched. Only valid touched objects can be grabbed.
+**Optional Components:**
+ * `VRTK_ControllerEvents` - The events component to listen for the button presses on. This must be applied on the same GameObject as this script if one is not provided via the `Controller Events` parameter.
 
-An object can be grabbed if the Controller touches a game object which contains the `VRTK_InteractableObject` script and has the flag `isGrabbable` set to `true`.
-
-If a valid interactable object is grabbable then pressing the set `Grab` button on the Controller (default is `Grip`) will grab and snap the object to the controller and will not release it until the `Grab` button is released.
-
-When the Controller `Grab` button is released, if the interactable game object is grabbable then it will be propelled in the direction and at the velocity the controller was at, which can simulate object throwing.
-
-The interactable objects require a collider to activate the trigger and a rigidbody to pick them up and move them around the game world.
+**Script Usage:**
+ * Place the `VRTK_InteractGrab` script on either:
+   * The GameObject with the Interact Touch and Controller Events scripts.
+   * Any other scene GameObject and provide a valid `VRTK_ControllerEvents` component to the `Controller Events` parameter and a valid `VRTK_InteractTouch` component to the `Interact Touch` parameter of this script.
 
 ### Inspector Parameters
 
- * **Grab Button:** The button used to grab/release a touched object.
- * **Grab Precognition:** An amount of time between when the grab button is pressed to when the controller is touching something to grab it. For example, if an object is falling at a fast rate, then it is very hard to press the grab button in time to catch the object due to human reaction times. A higher number here will mean the grab button can be pressed before the controller touches the object and when the collision takes place, if the grab button is still being held down then the grab action will be successful.
- * **Throw Multiplier:** An amount to multiply the velocity of any objects being thrown. This can be useful when scaling up the play area to simulate being able to throw items further.
- * **Create Rigid Body When Not Touching:** If this is checked and the controller is not touching an Interactable Object when the grab button is pressed then a rigid body is added to the controller to allow the controller to push other rigid body objects around.
- * **Controller Attach Point:** The rigidbody point on the controller model to snap the grabbed object to. If blank it will be set to the SDK default.
- * **Controller Events:** The controller to listen for the events on. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.
+ * **Grab Button:** The button used to grab/release a touched Interactable Object.
+ * **Grab Precognition:** An amount of time between when the grab button is pressed to when the controller is touching an Interactable Object to grab it.
+ * **Throw Multiplier:** An amount to multiply the velocity of any Interactable Object being thrown.
+ * **Create Rigid Body When Not Touching:** If this is checked and the Interact Touch is not touching an Interactable Object when the grab button is pressed then a rigid body is added to the interacting object to allow it to push other rigid body objects around.
+ * **Controller Attach Point:** The rigidbody point on the controller model to snap the grabbed Interactable Object to. If blank it will be set to the SDK default.
+ * **Controller Events:** The Controller Events to listen for the events on. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.
  * **Interact Touch:** The Interact Touch to listen for touches on. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.
 
 ### Class Events
@@ -3544,7 +3721,7 @@ Adding the `VRTK_InteractGrab_UnityEvents` component to `VRTK_InteractGrab` obje
  * Parameters
    * _none_
  * Returns
-   * `bool` - Returns true if the grab alias button is being held down.
+   * `bool` - Returns `true` if the grab alias button is being held down.
 
 The IsGrabButtonPressed method determines whether the current grab alias button is being pressed down.
 
@@ -3553,11 +3730,11 @@ The IsGrabButtonPressed method determines whether the current grab alias button 
   > `public virtual void ForceRelease(bool applyGrabbingObjectVelocity = false)`
 
  * Parameters
-   * `bool applyGrabbingObjectVelocity` - If this is true then upon releasing the object any velocity on the grabbing object will be applied to the object to essentiall throw it. Defaults to `false`.
+   * `bool applyGrabbingObjectVelocity` - If this is true then upon releasing the Interactable Object any velocity on the Interact Touch GameObject will be applied to the Interactable Object to essentiall throw it. Defaults to `false`.
  * Returns
    * _none_
 
-The ForceRelease method will force the controller to stop grabbing the currently grabbed object.
+The ForceRelease method will force the Interact Grab to stop grabbing the currently grabbed Interactable Object.
 
 #### AttemptGrab/0
 
@@ -3568,7 +3745,7 @@ The ForceRelease method will force the controller to stop grabbing the currently
  * Returns
    * _none_
 
-The AttemptGrab method will attempt to grab the currently touched object without needing to press the grab button on the controller.
+The AttemptGrab method will attempt to grab the currently touched Interactable Object without needing to press the grab button on the controller.
 
 #### GetGrabbedObject/0
 
@@ -3579,7 +3756,7 @@ The AttemptGrab method will attempt to grab the currently touched object without
  * Returns
    * `GameObject` - The game object of what is currently being grabbed by this controller.
 
-The GetGrabbedObject method returns the current object being grabbed by the controller.
+The GetGrabbedObject method returns the current Interactable Object being grabbed by the this Interact Grab.
 
 ### Example
 
@@ -3595,20 +3772,24 @@ The GetGrabbedObject method returns the current object being grabbed by the cont
 
 ### Overview
 
-The Interact Use script is attached to a Controller object and requires the `VRTK_ControllerEvents` script to be attached as it uses this for listening to the controller button events for using and stop using interactable game objects.
+Determines if the Interact Touch can initiate a use interaction with the touched Interactable Object.
 
-It listens for the `AliasUseOn` and `AliasUseOff` events to determine when an object should be used and should stop using.
+**Required Components:**
+ * `VRTK_InteractTouch` - The touch component to determine when a valid touch has taken place to denote a use interaction can occur. This must be applied on the same GameObject as this script if one is not provided via the `Interact Touch` parameter.
 
-The Controller object also requires the `VRTK_InteractTouch` script to be attached to it as this is used to determine when an interactable object is being touched. Only valid touched objects can be used.
+**Optional Components:**
+ * `VRTK_ControllerEvents` - The events component to listen for the button presses on. This must be applied on the same GameObject as this script if one is not provided via the `Controller Events` parameter.
+ * `VRTK_InteractGrab` - The grab component to determine when a valid grab has taken place. This must be applied on the same GameObject as this script if one is not provided via the `Interact Grab` parameter.
 
-An object can be used if the Controller touches a game object which contains the `VRTK_InteractableObject` script and has the flag `isUsable` set to `true`.
-
-If a valid interactable object is usable then pressing the set `Use` button on the Controller (default is `Trigger`) will call the `StartUsing` method on the touched interactable object.
+**Script Usage:**
+ * Place the `VRTK_InteractUse` script on either:
+   * The GameObject with the Interact Touch and Controller Events scripts.
+   * Any other scene GameObject and provide a valid `VRTK_ControllerEvents` component to the `Controller Events` parameter and a valid `VRTK_InteractTouch` component to the `Interact Touch` parameter of this script.
 
 ### Inspector Parameters
 
- * **Use Button:** The button used to use/unuse a touched object.
- * **Controller Events:** The controller to listen for the events on. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.
+ * **Use Button:** The button used to use/unuse a touched Interactable Object.
+ * **Controller Events:** The Controller Events to listen for the events on. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.
  * **Interact Touch:** The Interact Touch to listen for touches on. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.
  * **Interact Grab:** The Interact Grab to listen for grab actions on. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.
 
@@ -3636,7 +3817,7 @@ Adding the `VRTK_InteractUse_UnityEvents` component to `VRTK_InteractUse` object
  * Parameters
    * _none_
  * Returns
-   * `bool` - Returns true if the use alias button is being held down.
+   * `bool` - Returns `true` if the use alias button is being held down.
 
 The IsUsebuttonPressed method determines whether the current use alias button is being pressed down.
 
@@ -3647,9 +3828,9 @@ The IsUsebuttonPressed method determines whether the current use alias button is
  * Parameters
    * _none_
  * Returns
-   * `GameObject` - The game object of what is currently being used by this controller.
+   * `GameObject` - The GameObject of what is currently being used by this Interact Use.
 
-The GetUsingObject method returns the current object being used by the controller.
+The GetUsingObject method returns the current GameObject being used by the Interact Use.
 
 #### ForceStopUsing/0
 
@@ -3660,7 +3841,7 @@ The GetUsingObject method returns the current object being used by the controlle
  * Returns
    * _none_
 
-The ForceStopUsing method will force the controller to stop using the currently touched object and will also stop the object's using action.
+The ForceStopUsing method will force the Interact Use to stop using the currently touched Interactable Object and will also stop the Interactable Object's using action.
 
 #### ForceResetUsing/0
 
@@ -3671,7 +3852,7 @@ The ForceStopUsing method will force the controller to stop using the currently 
  * Returns
    * _none_
 
-The ForceResetUsing will force the controller to stop using the currently touched object but the object will continue with it's existing using action.
+The ForceResetUsing will force the Interact Use to stop using the currently touched Interactable Object but the Interactable Object will continue with it's existing using action.
 
 #### AttemptUse/0
 
@@ -3682,7 +3863,7 @@ The ForceResetUsing will force the controller to stop using the currently touche
  * Returns
    * _none_
 
-The AttemptUse method will attempt to use the currently touched object without needing to press the use button on the controller.
+The AttemptUse method will attempt to use the currently touched Interactable Object without needing to press the use button on the controller.
 
 ### Example
 
@@ -3696,32 +3877,56 @@ The AttemptUse method will attempt to use the currently touched object without n
 
 ### Overview
 
-The Interactable Object script is attached to any game object that is required to be interacted with (e.g. via the controllers).
+Determines if the GameObject can be interacted with.
 
-The basis of this script is to provide a simple mechanism for identifying objects in the game world that can be grabbed or used but it is expected that this script is the base to be inherited into a script with richer functionality.
+**Required Components:**
+ * `Collider` - A Unity Collider to determine when an interaction has occured. Can be a compound collider set in child GameObjects.
 
-The highlighting of an Interactable Object is defaulted to use the `VRTK_MaterialColorSwapHighlighter` if no other highlighter is applied to the Object.
+**Optional Components:**
+ * `Rigidbody` - A Unity Rigidbody to allow the GameObject to be affected by the Unity Physics System (not required for Climbable Grab Attach Types).
+ * `VRTK_BaseGrabAttach` - A Grab Attach mechanic for determining how the Interactable Object is grabbed by the primary interacting object.
+ * `VRTK_BaseGrabAction` - A Grab Action mechanic for determining how to manipulate the Interactable Object when grabbed by the secondary interacting object.
+ * `VRTK_BaseHighlighter` - The highlighter to use when highligting the Interactable Object. If one is not already injected in the `Object Highlighter` parameter then the component on the same GameObject will be used.
+
+**Script Usage:**
+ * Place the `VRTK_InteractableObject` script onto the GameObject that is to be interactable.
+ * Alternatively, select the GameObject and use the `Window->VRTK->Setup Interactable Object` panel to set up quickly.
+ * The Highlighter used by the Interactable Object will be selected in the following order:
+   * The provided Base Highlighter in the `Object Highlighter` parameter.
+   * If the above is not provided, then the first active Base Highlighter found on the Interactable Object GameObject will be used.
+   * If the above is not found, then a Material Color Swap Highlighter will be created on the Interactable Object GameObject at runtime.
+
+**Script Dependencies:**
+ * Interactions
+   * To near touch an Interactable Object the Interact NearTouch script is required on a controller Script Alias GameObject.
+   * To touch an Interactable Object the Interact NearTouch script is required on a controller Script Alias GameObject.
+   * To grab an Interactable Object the Interact Grab script is required on a controller Script Alias GameObject.
+   * To use an Interactable Object the Interact Use script is required on a controller Script Alias GameObject.
+ * Highlighting
+   * To highlight an Interactable Object on a given interaction then a valid Interact Object Highlighter script must be associated with the Interactable Object.
+ * Appearance
+   * To affect the appearance of an Interactable Object then a valid Interact Object Appearance script must be associated with the Interactable Object.
 
 ### Inspector Parameters
 
- * **Disable When Idle:** If this is checked then the interactable object script will be disabled when the object is not being interacted with. This will eliminate the potential number of calls the interactable objects make each frame.
+ * **Disable When Idle:** If this is checked then the Interactable Object component will be disabled when the Interactable Object is not being interacted with.
  * **Allowed Near Touch Controllers:** Determines which controller can initiate a near touch action.
- * **Touch Highlight Color:** The colour to highlight the object when it is touched. This colour will override any globally set colour (for instance on the `VRTK_InteractTouch` script).
+ * **Touch Highlight Color:** The Color to highlight the object when it is touched.
  * **Allowed Touch Controllers:** Determines which controller can initiate a touch action.
- * **Ignored Colliders:** An array of colliders on the object to ignore when being touched.
- * **Is Grabbable:** Determines if the object can be grabbed.
+ * **Ignored Colliders:** An array of colliders on the GameObject to ignore when being touched.
+ * **Is Grabbable:** Determines if the Interactable Object can be grabbed.
  * **Hold Button To Grab:** If this is checked then the grab button on the controller needs to be continually held down to keep grabbing. If this is unchecked the grab button toggles the grab action with one button press to grab and another to release.
- * **Stay Grabbed On Teleport:** If this is checked then the object will stay grabbed to the controller when a teleport occurs. If it is unchecked then the object will be released when a teleport occurs.
- * **Valid Drop:** Determines in what situation the object can be dropped by the controller grab button.
- * **Grab Override Button:** If this is set to `Undefined` then the global grab alias button will grab the object, setting it to any other button will ensure the override button is used to grab this specific interactable object.
+ * **Stay Grabbed On Teleport:** If this is checked then the Interactable Object will stay grabbed to the controller when a teleport occurs. If it is unchecked then the Interactable Object will be released when a teleport occurs.
+ * **Valid Drop:** Determines in what situation the Interactable Object can be dropped by the controller grab button.
+ * **Grab Override Button:** Setting to a button will ensure the override button is used to grab this specific Interactable Object. Setting to `Undefined` will mean the `Grab Button` on the Interact Grab script will grab the object.
  * **Allowed Grab Controllers:** Determines which controller can initiate a grab action.
- * **Grab Attach Mechanic Script:** This determines how the grabbed item will be attached to the controller when it is grabbed. If one isn't provided then the first Grab Attach script on the GameObject will be used, if one is not found and the object is grabbable then a Fixed Joint Grab Attach script will be created at runtime.
+ * **Grab Attach Mechanic Script:** This determines how the grabbed Interactable Object will be attached to the controller when it is grabbed. If one isn't provided then the first Grab Attach script on the GameObject will be used, if one is not found and the object is grabbable then a Fixed Joint Grab Attach script will be created at runtime.
  * **Secondary Grab Action Script:** The script to utilise when processing the secondary controller action on a secondary grab attempt. If one isn't provided then the first Secondary Controller Grab Action script on the GameObject will be used, if one is not found then no action will be taken on secondary grab.
- * **Is Usable:** Determines if the object can be used.
+ * **Is Usable:** Determines if the Interactable Object can be used.
  * **Hold Button To Use:** If this is checked then the use button on the controller needs to be continually held down to keep using. If this is unchecked the the use button toggles the use action with one button press to start using and another to stop using.
- * **Use Only If Grabbed:** If this is checked the object can be used only if it is currently being grabbed.
- * **Pointer Activates Use Action:** If this is checked then when a Base Pointer beam (projected from the controller) hits the interactable object, if the object has `Hold Button To Use` unchecked then whilst the pointer is over the object it will run it's `Using` method. If `Hold Button To Use` is unchecked then the `Using` method will be run when the pointer is deactivated. The world pointer will not throw the `Destination Set` event if it is affecting an interactable object with this setting checked as this prevents unwanted teleporting from happening when using an object with a pointer.
- * **Use Override Button:** If this is set to `Undefined` then the global use alias button will use the object, setting it to any other button will ensure the override button is used to use this specific interactable object.
+ * **Use Only If Grabbed:** If this is checked the Interactable Object can be used only if it is currently being grabbed.
+ * **Pointer Activates Use Action:** If this is checked then when a Pointer collides with the Interactable Object it will activate it's use action. If the the `Hold Button To Use` parameter is unchecked then whilst the Pointer is collising with the Interactable Object it will run the `Using` method. If `Hold Button To Use` is unchecked then the `Using` method will be run when the Pointer is deactivated. The Pointer will not emit the `Destination Set` event if it is affecting an Interactable Object with this setting checked as this prevents unwanted teleporting from happening when using an Interactable Object with a pointer.
+ * **Use Override Button:** Setting to a button will ensure the override button is used to use this specific Interactable Object. Setting to `Undefined` will mean the `Use Button` on the Interact Use script will use the object.
  * **Allowed Use Controllers:** Determines which controller can initiate a use action.
  * **Object Highlighter:** An optional Highlighter to use when highlighting this Interactable Object. If this is left blank, then the first active highlighter on the same GameObject will be used, if one isn't found then a Material Color Swap Highlighter will be created at runtime.
 
@@ -3745,25 +3950,25 @@ The highlighting of an Interactable Object is defaulted to use the `VRTK_Materia
    * `NoDrop` - The object cannot be dropped via the controller.
    * `DropAnywhere` - The object can be dropped anywhere in the scene via the controller.
    * `DropValidSnapDropZone` - The object can only be dropped when it is hovering over a valid snap drop zone.
- * `public int usingState` - The current using state of the object. `0` not being used, `1` being used. Default: `0`
- * `public bool isKinematic` - isKinematic is a pass through to the `isKinematic` getter/setter on the object's rigidbody component.
+ * `public int usingState` - The current using state of the Interactable Object. `0` not being used, `1` being used. Default: `0`
+ * `public bool isKinematic` - isKinematic is a pass through to the `isKinematic` getter/setter on the Interactable Object's Rigidbody component.
 
 ### Class Events
 
- * `InteractableObjectEnabled` - Emitted when the object script is enabled;
- * `InteractableObjectDisabled` - Emitted when the object script is disabled;
- * `InteractableObjectNearTouched` - Emitted when another object near touches the current object.
- * `InteractableObjectNearUntouched` - Emitted when the other object stops near touching the current object.
- * `InteractableObjectTouched` - Emitted when another object touches the current object.
- * `InteractableObjectUntouched` - Emitted when the other object stops touching the current object.
- * `InteractableObjectGrabbed` - Emitted when another object grabs the current object (e.g. a controller).
- * `InteractableObjectUngrabbed` - Emitted when the other object stops grabbing the current object.
- * `InteractableObjectUsed` - Emitted when another object uses the current object (e.g. a controller).
- * `InteractableObjectUnused` - Emitted when the other object stops using the current object.
- * `InteractableObjectEnteredSnapDropZone` - Emitted when the object enters a snap drop zone.
- * `InteractableObjectExitedSnapDropZone` - Emitted when the object exists a snap drop zone.
- * `InteractableObjectSnappedToDropZone` - Emitted when the object gets snapped to a drop zone.
- * `InteractableObjectUnsnappedFromDropZone` - Emitted when the object gets unsnapped from a drop zone.
+ * `InteractableObjectEnabled` - Emitted when the Interactable Object script is enabled;
+ * `InteractableObjectDisabled` - Emitted when the Interactable Object script is disabled;
+ * `InteractableObjectNearTouched` - Emitted when another interacting object near touches the current Interactable Object.
+ * `InteractableObjectNearUntouched` - Emitted when the other interacting object stops near touching the current Interactable Object.
+ * `InteractableObjectTouched` - Emitted when another interacting object touches the current Interactable Object.
+ * `InteractableObjectUntouched` - Emitted when the other interacting object stops touching the current Interactable Object.
+ * `InteractableObjectGrabbed` - Emitted when another interacting object grabs the current Interactable Object.
+ * `InteractableObjectUngrabbed` - Emitted when the other interacting object stops grabbing the current Interactable Object.
+ * `InteractableObjectUsed` - Emitted when another interacting object uses the current Interactable Object.
+ * `InteractableObjectUnused` - Emitted when the other interacting object stops using the current Interactable Object.
+ * `InteractableObjectEnteredSnapDropZone` - Emitted when the Interactable Object enters a Snap Drop Zone.
+ * `InteractableObjectExitedSnapDropZone` - Emitted when the Interactable Object exists a Snap Drop Zone.
+ * `InteractableObjectSnappedToDropZone` - Emitted when the Interactable Object gets snapped to a Snap Drop Zone.
+ * `InteractableObjectUnsnappedFromDropZone` - Emitted when the Interactable Object gets unsnapped from a Snap Drop Zone.
 
 ### Unity Events
 
@@ -3773,7 +3978,7 @@ Adding the `VRTK_InteractableObject_UnityEvents` component to `VRTK_Interactable
 
 ### Event Payload
 
- * `GameObject interactingObject` - The object that is initiating the interaction (e.g. a controller).
+ * `GameObject interactingObject` - The GameObject that is initiating the interaction (e.g. a controller).
 
 ### Class Methods
 
@@ -3784,9 +3989,9 @@ Adding the `VRTK_InteractableObject_UnityEvents` component to `VRTK_Interactable
  * Parameters
    * _none_
  * Returns
-   * `bool` - Returns `true` if the object is currently being near touched.
+   * `bool` - Returns `true` if the Interactable Object is currently being near touched.
 
-The IsNearTouched method is used to determine if the object is currently being near touched.
+The IsNearTouched method is used to determine if the Interactable Object is currently being near touched.
 
 #### IsTouched/0
 
@@ -3795,9 +4000,9 @@ The IsNearTouched method is used to determine if the object is currently being n
  * Parameters
    * _none_
  * Returns
-   * `bool` - Returns `true` if the object is currently being touched.
+   * `bool` - Returns `true` if the Interactable Object is currently being touched.
 
-The IsTouched method is used to determine if the object is currently being touched.
+The IsTouched method is used to determine if the Interactable Object is currently being touched.
 
 #### IsGrabbed/1
 
@@ -3806,9 +4011,9 @@ The IsTouched method is used to determine if the object is currently being touch
  * Parameters
    * `GameObject grabbedBy` - An optional GameObject to check if the Interactable Object is grabbed by that specific GameObject. Defaults to `null`
  * Returns
-   * `bool` - Returns `true` if the object is currently being grabbed.
+   * `bool` - Returns `true` if the Interactable Object is currently being grabbed.
 
-The IsGrabbed method is used to determine if the object is currently being grabbed.
+The IsGrabbed method is used to determine if the Interactable Object is currently being grabbed.
 
 #### IsUsing/1
 
@@ -3817,98 +4022,98 @@ The IsGrabbed method is used to determine if the object is currently being grabb
  * Parameters
    * `GameObject usedBy` - An optional GameObject to check if the Interactable Object is used by that specific GameObject. Defaults to `null`
  * Returns
-   * `bool` - Returns `true` if the object is currently being used.
+   * `bool` - Returns `true` if the Interactable Object is currently being used.
 
-The IsUsing method is used to determine if the object is currently being used.
+The IsUsing method is used to determine if the Interactable Object is currently being used.
 
 #### StartNearTouching/1
 
   > `public virtual void StartNearTouching(VRTK_InteractNearTouch currentNearTouchingObject = null)`
 
  * Parameters
-   * `VRTK_InteractNearTouch currentNearTouchingObject` - The object that is currently nearly touching this object.
+   * `VRTK_InteractNearTouch currentNearTouchingObject` - The interacting object that is currently nearly touching this Interactable Object.
  * Returns
    * _none_
 
-The StartNearTouching method is called automatically when the object is initially nearly touched.
+The StartNearTouching method is called automatically when the Interactable Object is initially nearly touched.
 
 #### StopNearTouching/1
 
   > `public virtual void StopNearTouching(VRTK_InteractNearTouch previousNearTouchingObject = null)`
 
  * Parameters
-   * `VRTK_InteractNearTouch previousNearTouchingObject` - The object that was previously nearly touching this object.
+   * `VRTK_InteractNearTouch previousNearTouchingObject` - The interacting object that was previously nearly touching this Interactable Object.
  * Returns
    * _none_
 
-The StopNearTouching method is called automatically when the object has stopped being nearly touched.
+The StopNearTouching method is called automatically when the Interactable Object has stopped being nearly touched.
 
 #### StartTouching/1
 
   > `public virtual void StartTouching(VRTK_InteractTouch currentTouchingObject = null)`
 
  * Parameters
-   * `VRTK_InteractTouch currentTouchingObject` - The object that is currently touching this object.
+   * `VRTK_InteractTouch currentTouchingObject` - The interacting object that is currently touching this Interactable Object.
  * Returns
    * _none_
 
-The StartTouching method is called automatically when the object is touched initially.
+The StartTouching method is called automatically when the Interactable Object is touched initially.
 
 #### StopTouching/1
 
   > `public virtual void StopTouching(VRTK_InteractTouch previousTouchingObject = null)`
 
  * Parameters
-   * `VRTK_InteractTouch previousTouchingObject` - The object that was previously touching this object.
+   * `VRTK_InteractTouch previousTouchingObject` - The interacting object that was previously touching this Interactable Object.
  * Returns
    * _none_
 
-The StopTouching method is called automatically when the object has stopped being touched.
+The StopTouching method is called automatically when the Interactable Object has stopped being touched.
 
 #### Grabbed/1
 
   > `public virtual void Grabbed(VRTK_InteractGrab currentGrabbingObject = null)`
 
  * Parameters
-   * `VRTK_InteractGrab currentGrabbingObject` - The object that is currently grabbing this object.
+   * `VRTK_InteractGrab currentGrabbingObject` - The interacting object that is currently grabbing this Interactable Object.
  * Returns
    * _none_
 
-The Grabbed method is called automatically when the object is grabbed initially.
+The Grabbed method is called automatically when the Interactable Object is grabbed initially.
 
 #### Ungrabbed/1
 
   > `public virtual void Ungrabbed(VRTK_InteractGrab previousGrabbingObject = null)`
 
  * Parameters
-   * `VRTK_InteractGrab previousGrabbingObject` - The object that was previously grabbing this object.
+   * `VRTK_InteractGrab previousGrabbingObject` - The interacting object that was previously grabbing this Interactable Object.
  * Returns
    * _none_
 
-The Ungrabbed method is called automatically when the object has stopped being grabbed.
+The Ungrabbed method is called automatically when the Interactable Object has stopped being grabbed.
 
 #### StartUsing/1
 
   > `public virtual void StartUsing(VRTK_InteractUse currentUsingObject = null)`
 
  * Parameters
-   * `VRTK_InteractUse currentUsingObject` - The object that is currently using this object.
+   * `VRTK_InteractUse currentUsingObject` - The interacting object that is currently using this Interactable Object.
  * Returns
    * _none_
 
-The StartUsing method is called automatically when the object is used initially.
+The StartUsing method is called automatically when the Interactable Object is used initially.
 
 #### StopUsing/2
 
   > `public virtual void StopUsing(VRTK_InteractUse previousUsingObject = null, bool resetUsingObjectState = true)`
 
  * Parameters
-   * `VRTK_InteractUse previousUsingObject` - The object that was previously using this object.
+   * `VRTK_InteractUse previousUsingObject` - The interacting object that was previously using this Interactable Object.
    * `bool resetUsingObjectState` - Resets the using object state to reset it's using action.
  * Returns
    * _none_
 
-The StopUsing method is called automatically when the object has stopped being used.
+The StopUsing method is called automatically when the Interactable Object has stopped being used.
 
 #### Highlight/1
 
@@ -3919,7 +4124,7 @@ The StopUsing method is called automatically when the object has stopped being u
  * Returns
    * _none_
 
-The Highlight method turns on the highlighter attached to the Interactable Object with the given colour.
+The Highlight method turns on the highlighter attached to the Interactable Object with the given Color.
 
 #### Unhighlight/0
 
@@ -3948,11 +4153,11 @@ The ResetHighlighter method is used to reset the currently attached highlighter.
   > `public virtual void PauseCollisions(float delay)`
 
  * Parameters
-   * `float delay` - The amount of time to pause the collisions for.
+   * `float delay` - The time in seconds to pause the collisions for.
  * Returns
    * _none_
 
-The PauseCollisions method temporarily pauses all collisions on the object at grab time by removing the object's rigidbody's ability to detect collisions. This can be useful for preventing clipping when initially grabbing an item.
+The PauseCollisions method temporarily pauses all collisions on the Interactable Object at grab time by removing the Interactable Object's Rigidbody's ability to detect collisions.
 
 #### ZeroVelocity/0
 
@@ -3963,7 +4168,7 @@ The PauseCollisions method temporarily pauses all collisions on the object at gr
  * Returns
    * _none_
 
-The ZeroVelocity method resets the velocity and angular velocity to zero on the rigidbody attached to the object.
+The ZeroVelocity method resets the velocity and angular velocity to zero on the Rigidbody attached to the Interactable Object.
 
 #### SaveCurrentState/0
 
@@ -3974,7 +4179,7 @@ The ZeroVelocity method resets the velocity and angular velocity to zero on the 
  * Returns
    * _none_
 
-The SaveCurrentState method stores the existing object parent and the object's rigidbody kinematic setting.
+The SaveCurrentState method stores the existing Interactable Object parent and the Rigidbody kinematic setting.
 
 #### GetNearTouchingObjects/0
 
@@ -3983,9 +4188,9 @@ The SaveCurrentState method stores the existing object parent and the object's r
  * Parameters
    * _none_
  * Returns
-   * `List<GameObject>` - A list of game object of that are currently nearly touching the current object.
+   * `List<GameObject>` - A list of GameObject of that are currently nearly touching the current Interactable Object.
 
-The GetNearTouchingObjects method is used to return the collecetion of valid game objects that are currently nearly touching this object.
+The GetNearTouchingObjects method is used to return the collecetion of valid GameObjects that are currently nearly touching this Interactable Object.
 
 #### GetTouchingObjects/0
 
@@ -3994,9 +4199,9 @@ The GetNearTouchingObjects method is used to return the collecetion of valid gam
  * Parameters
    * _none_
  * Returns
-   * `List<GameObject>` - A list of game object of that are currently touching the current object.
+   * `List<GameObject>` - A list of GameObject of that are currently touching the current Interactable Object.
 
-The GetTouchingObjects method is used to return the collecetion of valid game objects that are currently touching this object.
+The GetTouchingObjects method is used to return the collecetion of valid GameObjects that are currently touching this Interactable Object.
 
 #### GetGrabbingObject/0
 
@@ -4005,9 +4210,9 @@ The GetTouchingObjects method is used to return the collecetion of valid game ob
  * Parameters
    * _none_
  * Returns
-   * `GameObject` - The game object of what is grabbing the current object.
+   * `GameObject` - The GameObject of what is grabbing the current Interactable Object.
 
-The GetGrabbingObject method is used to return the game object that is currently grabbing this object.
+The GetGrabbingObject method is used to return the GameObject that is currently grabbing this Interactable Object.
 
 #### GetSecondaryGrabbingObject/0
 
@@ -4016,9 +4221,9 @@ The GetGrabbingObject method is used to return the game object that is currently
  * Parameters
    * _none_
  * Returns
-   * `GameObject` - The game object of the secondary controller influencing the current grabbed object.
+   * `GameObject` - The GameObject of the secondary influencing object of the current grabbed Interactable Object.
 
-The GetSecondaryGrabbingObject method is used to return the game object that is currently being used to influence this object whilst it is being grabbed by a secondary controller.
+The GetSecondaryGrabbingObject method is used to return the GameObject that is currently being used to influence this Interactable Object whilst it is being grabbed by a secondary influencing.
 
 #### GetUsingObject/0
 
@@ -4027,9 +4232,9 @@ The GetSecondaryGrabbingObject method is used to return the game object that is 
  * Parameters
    * _none_
  * Returns
-   * `GameObject` - The GameObject of what is using the current object.
+   * `GameObject` - The GameObject of what is using the current Interactable Object.
 
-The GetUsingObject method is used to return the GameObject that is currently using this object.
+The GetUsingObject method is used to return the GameObject that is currently using this Interactable Object.
 
 #### GetUsingScript/0
 
@@ -4038,21 +4243,21 @@ The GetUsingObject method is used to return the GameObject that is currently usi
  * Parameters
    * _none_
  * Returns
-   * `VRTK_InteractUse` - The InteractUse script of the object that is using the current object.
+   * `VRTK_InteractUse` - The Interact Use script of the interacting object that is using the current Interactable Object.
 
-The GetUsingScript method is used to return the InteractUse script that is currently using this object.
+The GetUsingScript method is used to return the Interact Use component that is currently using this Interactable Object.
 
 #### IsValidInteractableController/2
 
   > `public virtual bool IsValidInteractableController(GameObject actualController, AllowedController controllerCheck)`
 
  * Parameters
-   * `GameObject actualController` - The game object of the controller that is being checked.
+   * `GameObject actualController` - The GameObject of the controller that is being checked.
    * `AllowedController controllerCheck` - The value of which controller is allowed to interact with this object.
  * Returns
-   * `bool` - Is true if the interacting controller is allowed to grab the object.
+   * `bool` - Returns `true` if the interacting controller is allowed to grab the Interactable Object.
 
-The IsValidInteractableController method is used to check to see if a controller is allowed to perform an interaction with this object as sometimes controllers are prohibited from grabbing or using an object depedning on the use case.
+The IsValidInteractableController method is used to check to see if a controller is allowed to perform an interaction with this Interactable Object as sometimes controllers are prohibited from grabbing or using an Interactable Object depedning on the use case.
 
 #### ForceStopInteracting/0
 
@@ -4063,7 +4268,7 @@ The IsValidInteractableController method is used to check to see if a controller
  * Returns
    * _none_
 
-The ForceStopInteracting method forces the object to no longer be interacted with and will cause a controller to drop the object and stop touching it. This is useful if the controller is required to auto interact with another object.
+The ForceStopInteracting method forces the Interactable Object to no longer be interacted with and will cause an interacting object to drop the Interactable Object and stop touching it.
 
 #### ForceStopSecondaryGrabInteraction/0
 
@@ -4074,7 +4279,7 @@ The ForceStopInteracting method forces the object to no longer be interacted wit
  * Returns
    * _none_
 
-The ForceStopSecondaryGrabInteraction method forces the object to no longer be influenced by the second controller grabbing it.
+The ForceStopSecondaryGrabInteraction method forces the Interactable Object to no longer be influenced by the second controller grabbing it.
 
 #### RegisterTeleporters/0
 
@@ -4085,7 +4290,7 @@ The ForceStopSecondaryGrabInteraction method forces the object to no longer be i
  * Returns
    * _none_
 
-The RegisterTeleporters method is used to find all objects that have a teleporter script and register the object on the `OnTeleported` event. This is used internally by the object for keeping Tracked objects positions updated after teleporting.
+The RegisterTeleporters method is used to find all GameObjects that have a teleporter script and register the Interactable Object on the `OnTeleported` event.
 
 #### UnregisterTeleporters/0
 
@@ -4096,7 +4301,7 @@ The RegisterTeleporters method is used to find all objects that have a teleporte
  * Returns
    * _none_
 
-The UnregisterTeleporters method is used to unregister all teleporter events that are active on this object.
+The UnregisterTeleporters method is used to unregister all teleporter events that are active on this Interactable Object.
 
 #### StoreLocalScale/0
 
@@ -4115,11 +4320,11 @@ the StoreLocalScale method saves the current transform local scale values.
 
  * Parameters
    * `VRTK_SnapDropZone snapDropZone` - The Snap Drop Zone object that is being interacted with.
-   * `bool state` - The state of whether the interactable object is fixed in or removed from the Snap Drop Zone. True denotes the interactable object is fixed to the Snap Drop Zone and false denotes it has been removed from the Snap Drop Zone.
+   * `bool state` - The state of whether the Interactable Object is fixed in or removed from the Snap Drop Zone. `true` denotes the Interactable Object is snapped to the Snap Drop Zone and `false` denotes it has been removed from the Snap Drop Zone.
  * Returns
    * _none_
 
-The ToggleSnapDropZone method is used to set the state of whether the interactable object is in a Snap Drop Zone or not.
+The ToggleSnapDropZone method is used to set the state of whether the Interactable Object is in a Snap Drop Zone or not.
 
 #### IsInSnapDropZone/0
 
@@ -4128,21 +4333,21 @@ The ToggleSnapDropZone method is used to set the state of whether the interactab
  * Parameters
    * _none_
  * Returns
-   * `bool` - Returns true if the interactable object is currently snapped in a drop zone and returns false if it is not.
+   * `bool` - Returns `true` if the Interactable Object is currently snapped in a Snap Drop Zone, returns `false` if it is not.
 
-The IsInSnapDropZone method determines whether the interactable object is currently snapped to a drop zone.
+The IsInSnapDropZone method determines whether the Interactable Object is currently snapped to a Snap Drop Zone.
 
 #### SetSnapDropZoneHover/2
 
   > `public virtual void SetSnapDropZoneHover(VRTK_SnapDropZone snapDropZone, bool state)`
 
  * Parameters
-   * `VRTK_SnapDropZone snapDropZone` - The Snap Drop Zone object that is being interacted with.
-   * `bool state` - The state of whether the object is being hovered or not.
+   * `VRTK_SnapDropZone snapDropZone` - The Snap Drop Zone that is being interacted with.
+   * `bool state` - The state of whether the Interactable Object is being hovered or not.
  * Returns
    * _none_
 
-The SetSnapDropZoneHover method sets whether the interactable object is currently being hovered over a valid Snap Drop Zone.
+The SetSnapDropZoneHover method sets whether the Interactable Object is currently being hovered over a valid Snap Drop Zone.
 
 #### GetStoredSnapDropZone/0
 
@@ -4151,9 +4356,9 @@ The SetSnapDropZoneHover method sets whether the interactable object is currentl
  * Parameters
    * _none_
  * Returns
-   * `VRTK_SnapDropZone` - The SnapDropZone that the interactable object is currently snapped to.
+   * `VRTK_SnapDropZone` - The SnapDropZone that the Interactable Object is currently snapped to.
 
-The GetStoredSnapDropZone method returns the snap drop zone that the interactable object is currently snapped to.
+The GetStoredSnapDropZone method returns the Snap Drop Zone that the Interactable Object is currently snapped to.
 
 #### IsHoveredOverSnapDropZone/0
 
@@ -4162,9 +4367,9 @@ The GetStoredSnapDropZone method returns the snap drop zone that the interactabl
  * Parameters
    * _none_
  * Returns
-   * `bool` - Returns true if the interactable object is currently hovering over a snap drop zone.
+   * `bool` - Returns `true` if the Interactable Object is currently hovering over a Snap Drop Zone.
 
-The IsHoveredOverSnapDropZone method returns whether the interactable object is currently hovering over a snap drop zone.
+The IsHoveredOverSnapDropZone method returns whether the Interactable Object is currently hovering over a Snap Drop Zone.
 
 #### IsDroppable/0
 
@@ -4173,9 +4378,9 @@ The IsHoveredOverSnapDropZone method returns whether the interactable object is 
  * Parameters
    * _none_
  * Returns
-   * `bool` - Returns true if the object can currently be dropped and returns false if it is not currently possible to drop.
+   * `bool` - Returns `true` if the Interactable Object can currently be dropped, returns `false` if it is not currently possible to drop.
 
-The IsDroppable method returns whether the object can be dropped or not in it's current situation.
+The IsDroppable method returns whether the Interactable Object can be dropped or not in it's current situation.
 
 #### IsSwappable/0
 
@@ -4184,9 +4389,9 @@ The IsDroppable method returns whether the object can be dropped or not in it's 
  * Parameters
    * _none_
  * Returns
-   * `bool` - Returns true if the object can be grabbed by a secondary controller whilst already being grabbed and the object will swap controllers. Returns false if the object cannot be swapped.
+   * `bool` - Returns `true` if the Interactable Object can be grabbed by a secondary interacting object whilst already being grabbed and the Interactable Object will swap controllers. Returns `false` if the Interactable Object cannot be swapped.
 
-The IsSwappable method returns whether the object can be grabbed with one controller and then swapped to another controller by grabbing with the secondary controller.
+The IsSwappable method returns whether the Interactable Object can be grabbed with one interacting object and then swapped to another interacting object by grabbing with the secondary grab action.
 
 #### PerformSecondaryAction/0
 
@@ -4195,9 +4400,9 @@ The IsSwappable method returns whether the object can be grabbed with one contro
  * Parameters
    * _none_
  * Returns
-   * `bool` - Returns true if the object has a secondary action, returns false if it has no secondary action or is swappable.
+   * `bool` - Returns `true` if the Interactable Object has a Secondary Grab Action, returns `false` if it has no Secondary Grab Action or is swappable.
 
-The PerformSecondaryAction method returns whether the object has a secondary action that can be performed when grabbing the object with a secondary controller.
+The PerformSecondaryAction method returns whether the Interactable Object has a Secondary Grab Action that can be performed when grabbing the object with a secondary interacting object.
 
 #### ResetIgnoredColliders/0
 
@@ -4246,9 +4451,10 @@ The UnsubscribeFromInteractionEvent method unsubscribes a previous event subscri
 
 ### Overview
 
-The Object Appearance script provides a collection of static methods for controlling the appearance of a GameObject.
+A collection of static methods for calling controlling the appearance of GameObjects such as opacity, render state and highlighter state.
 
-The GameObject can have it's opacity changed, or it's renderers toggled, or highlighters toggled.
+**Script Usage:**
+  > There is no requirement to add this script to a GameObject as all of the public methods are static and can be called directly e.g. `VRTK_ObjectAppearance.SetOpacity(obj, 1f)`.
 
 ### Class Methods
 
@@ -4258,12 +4464,12 @@ The GameObject can have it's opacity changed, or it's renderers toggled, or high
 
  * Parameters
    * `GameObject model` - The GameObject to change the renderer opacity on.
-   * `float alpha` - The alpha level to apply to opacity of the controller object. `0f` to `1f`.
+   * `float alpha` - The colour alpha/opacity level. `0f` to `1f`.
    * `float transitionDuration` - The time to transition from the current opacity to the new opacity.
  * Returns
    * _none_
 
-The SetOpacity method allows the opacity of the given GameObject to be changed. A lower alpha value will make the object more transparent, such as `0.5f` will make the controller partially transparent where as `0f` will make the controller completely transparent.
+The SetOpacity method allows the opacity of the given GameObject to be changed. `0f` is full transparency, `1f` is full opacity.
 
 #### SetRendererVisible/2
 
@@ -4275,7 +4481,7 @@ The SetOpacity method allows the opacity of the given GameObject to be changed. 
  * Returns
    * _none_
 
-The SetRendererVisible method turns on renderers of a given GameObject. It can also be provided with an optional model to ignore the render toggle on.
+The SetRendererVisible method turns on renderers of a given GameObject. It can also be provided with an optional GameObject to ignore the render toggle on.
 
 #### SetRendererHidden/2
 
@@ -4287,7 +4493,7 @@ The SetRendererVisible method turns on renderers of a given GameObject. It can a
  * Returns
    * _none_
 
-The SetRendererHidden method turns off renderers of a given GameObject. It can also be provided with an optional model to ignore the render toggle on.
+The SetRendererHidden method turns off renderers of a given GameObject. It can also be provided with an optional GameObject to ignore the render toggle on.
 
 #### ToggleRenderer/3
 
@@ -4300,7 +4506,7 @@ The SetRendererHidden method turns off renderers of a given GameObject. It can a
  * Returns
    * _none_
 
-The ToggleRenderer method turns on or off the renderers of a given GameObject. It can also be provided with an optional model to ignore the render toggle of.
+The ToggleRenderer method turns on or off the renderers of a given GameObject. It can also be provided with an optional GameObject to ignore the render toggle of.
 
 #### IsRendererVisible/2
 
@@ -4320,7 +4526,7 @@ The IsRendererVisible method is used to check if a given GameObject is visible i
 
  * Parameters
    * `GameObject model` - The GameObject to attempt to call the Highlight on.
-   * `Color? highlightColor` - The colour to highlight to.
+   * `Color? highlightColor` - The Color to highlight to.
    * `float fadeDuration` - The duration in time to fade from the initial colour to the target colour.
  * Returns
    * _none_
@@ -4344,7 +4550,15 @@ The UnhighlightObject method calls the Unhighlight method on the highlighter att
 
 ### Overview
 
-The Interact Haptics script is attached on the same GameObject as an Interactable Object script and provides controller haptics on touch, grab and use of the object.
+Provides controller haptics upon interaction with the specified Interactable Object.
+
+**Required Components:**
+ * `VRTK_InteractableObject` - The Interactable Object component to detect interactions on. This must be applied on the same GameObject as this script if one is not provided via the `Object To Affect` parameter.
+
+**Script Usage:**
+ * Place the `VRTK_InteractHaptics` script on either:
+   * The GameObject of the Interactable Object to detect interactions on.
+   * Any other scene GameObject and provide a valid `VRTK_InteractableObject` component to the `Object To Affect` parameter of this script.
 
 ### Inspector Parameters
 
@@ -4450,14 +4664,25 @@ The HapticsOnUse method triggers the haptic feedback on the given controller for
 
 ### Overview
 
-It is possible to automatically grab an Interactable Object to a specific controller by applying the Object Auto Grab script to the controller that the object should be grabbed by default.
+Attempt to automatically grab a specified Interactable Object.
+
+**Required Components:**
+ * `VRTK_InteractTouch` - The touch component to determine when a valid touch has taken place to denote a use interaction can occur. This must be applied on the same GameObject as this script if one is not provided via the `Interact Touch` parameter.
+ * `VRTK_InteractGrab` - The grab component to determine when a valid grab has taken place. This must be applied on the same GameObject as this script if one is not provided via the `Interact Grab` parameter.
+
+**Script Usage:**
+ * Place the `VRTK_ObjectAutoGrab` script on either:
+   * The GameObject that contains the Interact Touch and Interact Grab scripts.
+   * Any other scene GameObject and provide a valid `VRTK_InteractTOuch` component to the `Interact Touch` parameter and a valid `VRTK_InteractGrab` component to the `Interact Grab` parameter of this script.
+* Assign the Interactable Object to auto grab to the `Object To Grab` parameter on this script.
+* If this Interactable Object is a prefab then the `Object Is Prefab` parameter on this script must be checked.
 
 ### Inspector Parameters
 
- * **Object To Grab:** A game object (either within the scene or a prefab) that will be grabbed by the controller on game start.
+ * **Object To Grab:** The Interactable Object that will be grabbed by the Interact Grab.
  * **Object Is Prefab:** If the `Object To Grab` is a prefab then this needs to be checked, if the `Object To Grab` already exists in the scene then this needs to be unchecked.
- * **Clone Grabbed Object:** If this is checked then the Object To Grab will be cloned into a new object and attached to the controller leaving the existing object in the scene. This is required if the same object is to be grabbed to both controllers as a single object cannot be grabbed by different controllers at the same time. It is also required to clone a grabbed object if it is a prefab as it needs to exist within the scene to be grabbed.
- * **Always Clone On Enable:** If `Clone Grabbed Object` is checked and this is checked, then whenever this script is disabled and re-enabled, it will always create a new clone of the object to grab. If this is false then the original cloned object will attempt to be grabbed again. If the original cloned object no longer exists then a new clone will be created.
+ * **Clone Grabbed Object:** If this is checked then the `Object To Grab` will be cloned into a new Interactable Object and grabbed by the Interact Grab leaving the existing Interactable Object in the scene. This is required if the same Interactable Object is to be grabbed to multiple instances of Interact Grab. It is also required to clone a grabbed Interactable Object if it is a prefab as it needs to exist within the scene to be grabbed.
+ * **Always Clone On Enable:** If `Clone Grabbed Object` is checked and this is checked, then whenever this script is disabled and re-enabled, it will always create a new clone of the Interactable Object to grab. If this is unchecked then the original cloned Interactable Object will attempt to be grabbed again. If the original cloned object no longer exists then a new clone will be created.
  * **Interact Touch:** The Interact Touch to listen for touches on. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.
  * **Interact Grab:** The Interact Grab to listen for grab actions on. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.
 
@@ -4482,7 +4707,7 @@ Adding the `VRTK_ObjectAutoGrab_UnityEvents` component to `VRTK_ObjectAutoGrab` 
  * Returns
    * _none_
 
-The ClearPreviousClone method resets the previous cloned object to null to ensure when the script is re-enabled that a new cloned object is created, rather than the original clone being grabbed again.
+The ClearPreviousClone method resets the previous cloned Interactable Object to null to ensure when the script is re-enabled that a new cloned Interactable Object is created, rather than the original clone being grabbed again.
 
 ### Example
 
@@ -4494,17 +4719,25 @@ The ClearPreviousClone method resets the previous cloned object to null to ensur
 
 ### Overview
 
-The Object Touch Auto Interact script allows grab or use interactions on an object to automatically happen upon touching the interactable object.
+Allows for Interact Grab or Interact Use interactions to automatically happen upon touching an Interactable Object.
+
+**Required Components:**
+ * `VRTK_InteractableObject` - The Interactable Object component to detect interactions on. This must be applied on the same GameObject as this script if one is not provided via the `Interactable Object` parameter.
+
+**Script Usage:**
+ * Place the `VRTK_ObjectTouchAutoInteract` script on either:
+   * The GameObject of the Interactable Object to detect interactions on.
+   * Any other scene GameObject and provide a valid `VRTK_InteractableObject` component to the `Interactable Object` parameter of this script.
 
 ### Inspector Parameters
 
  * **Grab On Touch When:** Determines when a grab on touch should occur.
  * **Regrab Delay:** After being ungrabbed, another auto grab on touch can only occur after this time.
- * **Continuous Grab Check:** If this is checked then the grab on touch check will happen every frame and not only on the first touch of the object.
+ * **Continuous Grab Check:** If this is checked then the grab on touch check will happen every frame and not only on the first touch of the Interactable Object.
  * **Use On Touch When:** Determines when a use on touch should occur.
  * **Reuse Delay:** After being unused, another auto use on touch can only occur after this time.
- * **Continuous Use Check:** If this is checked then the use on touch check will happen every frame and not only on the first touch of the object.
- * **Interactable Object:** The interactable object that the auto interaction will occur on. If this is blank then the script must be on the same GameObject as the Interactable Object script.
+ * **Continuous Use Check:** If this is checked then the use on touch check will happen every frame and not only on the first touch of the Interactable Object.
+ * **Interactable Object:** The Interactable Object that the auto interaction will occur on. If this is blank then the script must be on the same GameObject as the Interactable Object script.
 
 ### Class Variables
 
@@ -4530,13 +4763,14 @@ This directory contains scripts that are used to provide different object highli
 
 ### Overview
 
-The Base Highlighter is an abstract class that all other highlighters inherit and are required to implement the public methods.
+Provides a base that all highlighters can inherit from.
 
-As this is an abstract class, it cannot be applied directly to a game object and performs no logic.
+**Script Usage:**
+  > This is an abstract class that is to be inherited to a concrete class that provides highlight functionality, therefore this script should not be directly used.
 
 ### Inspector Parameters
 
- * **Active:** Determines if this highlighter is the active highlighter for the object the component is attached to. Only 1 active highlighter can be applied to a game object.
+ * **Active:** Determines if this highlighter is the active highlighter for the object the component is attached to. Only one active highlighter can be applied to a GameObject.
  * **Unhighlight On Disable:** Determines if the highlighted object should be unhighlighted when it is disabled.
 
 ### Class Methods
@@ -4610,7 +4844,7 @@ The GetOption method is used to return a value from the options array if the giv
  * Parameters
    * _none_
  * Returns
-   * `bool` - Returns true if the highlighter creates a cloned object to apply the highlighter on, returns false if no additional object is created.
+   * `bool` - Returns `true` if the highlighter creates a cloned object to apply the highlighter on, returns `false` if no additional object is created.
 
 The UsesClonedObject method is used to return whether the current highlighter creates a cloned object to do the highlighting with.
 
@@ -4619,11 +4853,11 @@ The UsesClonedObject method is used to return whether the current highlighter cr
   > `public static VRTK_BaseHighlighter GetActiveHighlighter(GameObject obj)`
 
  * Parameters
-   * `GameObject obj` - The game object to check for a highlighter on.
+   * `GameObject obj` - The GameObject to check for a highlighter on.
  * Returns
    * `VRTK_BaseHighlighter` - A valid and active highlighter.
 
-The GetActiveHighlighter method checks the given game object for a valid and active highlighter.
+The GetActiveHighlighter method checks the given GameObject for a valid and active highlighter.
 
 ---
 
@@ -4632,13 +4866,15 @@ The GetActiveHighlighter method checks the given game object for a valid and act
 
 ### Overview
 
-The Material Colour Swap Highlighter is a basic implementation that simply swaps the texture colour for the given highlight colour.
+Swaps the texture colour on the Renderers material for the given highlight colour.
 
-Due to the way the object material is interacted with, changing the material colour will break Draw Call Batching in Unity whilst the object is highlighted.
+  > Due to the way the object material is interacted with, changing the material colour will break Draw Call Batching in Unity whilst the object is highlighted. The Draw Call Batching will resume on the original material when the item is no longer highlighted.
 
-The Draw Call Batching will resume on the original material when the item is no longer highlighted.
-
-This is the default highlighter that is applied to any script that requires a highlighting component (e.g. `VRTK_Interactable_Object`).
+**Script Usage:**
+ * Place the `VRTK_MaterialColorSwapHighlighter` script on either:
+   * The GameObject of the Interactable Object to highlight.
+   * Any other scene GameObject and then link that GameObject to the Interactable Objects `Object Highlighter` parameter to denote use of the highlighter.
+ * Ensure the `Active` parameter is checked.
 
 ### Inspector Parameters
 
@@ -4709,13 +4945,15 @@ The Unhighlight method returns the object back to it's original colour.
 
 ### Overview
 
-This highlighter swaps the texture colour for the given highlight colour using MaterialPropertyBlocks.
-The effect of this highlighter is the same as of the VRTK_MaterialColorSwapHighlighter.cs but this highlighter
-can additionally handle objects which make use material instances.
+Swaps the texture colour on the Renderers material for the given highlight colour using property blocks.
 
-Due to the way the object material is interacted with, changing the material colour will break Draw Call Batching in Unity whilst the object is highlighted.
+  > Utilising the MaterialPropertyBlock means that Draw Call Batching in Unity is not compromised.
 
-The Draw Call Batching will resume on the original material when the item is no longer highlighted.
+**Script Usage:**
+ * Place the `VRTK_MaterialPropertyBlockColorSwapHighlighter` script on either:
+   * The GameObject of the Interactable Object to highlight.
+   * Any other scene GameObject and then link that GameObject to the Interactable Objects `Object Highlighter` parameter to denote use of the highlighter.
+ * Ensure the `Active` parameter is checked.
 
 ### Class Methods
 
@@ -4752,7 +4990,15 @@ The Unhighlight method returns the object back to it's original colour.
 
 ### Overview
 
-The Outline Object Copy Highlighter works by making a copy of a mesh and adding an outline shader to it and toggling the appearance of the highlighted object.
+Creates a mesh copy and applies an outline shader which is toggled on and off when highlighting the object.
+
+  > A valid mesh must be found or provided for the clone mesh to be created.
+
+**Script Usage:**
+ * Place the `VRTK_OutlineObjectCopyHighlighter` script on either:
+   * The GameObject of the Interactable Object to highlight.
+   * Any other scene GameObject and then link that GameObject to the Interactable Objects `Object Highlighter` parameter to denote use of the highlighter.
+ * Ensure the `Active` parameter is checked.
 
 ### Inspector Parameters
 
@@ -4842,18 +5088,19 @@ This directory contains scripts that are used to provide different mechanics to 
 
 ### Overview
 
-The Base Grab Attach script is an abstract class that all grab attach script inherit.
+Provides a base that all grab attach mechanics can inherit from.
 
-As this is an abstract class, it cannot be applied directly to a game object and performs no logic.
+**Script Usage:**
+  > This is an abstract class that is to be inherited to a concrete class that provides grab attach functionality, therefore this script should not be directly used.
 
 ### Inspector Parameters
 
- * **Precision Grab:** If this is checked then when the controller grabs the object, it will grab it with precision and pick it up at the particular point on the object the controller is touching.
- * **Right Snap Handle:** A Transform provided as an empty game object which must be the child of the item being grabbed and serves as an orientation point to rotate and position the grabbed item in relation to the right handed controller. If no Right Snap Handle is provided but a Left Snap Handle is provided, then the Left Snap Handle will be used in place. If no Snap Handle is provided then the object will be grabbed at its central point. Not required for `Precision Snap`.
- * **Left Snap Handle:** A Transform provided as an empty game object which must be the child of the item being grabbed and serves as an orientation point to rotate and position the grabbed item in relation to the left handed controller. If no Left Snap Handle is provided but a Right Snap Handle is provided, then the Right Snap Handle will be used in place. If no Snap Handle is provided then the object will be grabbed at its central point. Not required for `Precision Snap`.
- * **Throw Velocity With Attach Distance:** If checked then when the object is thrown, the distance between the object's attach point and the controller's attach point will be used to calculate a faster throwing velocity.
- * **Throw Multiplier:** An amount to multiply the velocity of the given object when it is thrown. This can also be used in conjunction with the Interact Grab Throw Multiplier to have certain objects be thrown even further than normal (or thrown a shorter distance if a number below 1 is entered).
- * **On Grab Collision Delay:** The amount of time to delay collisions affecting the object when it is first grabbed. This is useful if a game object may get stuck inside another object when it is being grabbed.
+ * **Precision Grab:** If this is checked then when the Interact Grab grabs the Interactable Object, it will grab it with precision and pick it up at the particular point on the Interactable Object that the Interact Touch is touching.
+ * **Right Snap Handle:** A Transform provided as an empty GameObject which must be the child of the Interactable Object being grabbed and serves as an orientation point to rotate and position the grabbed Interactable Object in relation to the right handed Interact Grab. If no Right Snap Handle is provided but a Left Snap Handle is provided, then the Left Snap Handle will be used in place. If no Snap Handle is provided then the Interactable Object will be grabbed at its central point. Not required for `Precision Grab`.
+ * **Left Snap Handle:** A Transform provided as an empty GameObject which must be the child of the Interactable Object being grabbed and serves as an orientation point to rotate and position the grabbed Interactable Object in relation to the left handed Interact Grab. If no Left Snap Handle is provided but a Right Snap Handle is provided, then the Right Snap Handle will be used in place. If no Snap Handle is provided then the Interactable Object will be grabbed at its central point. Not required for `Precision Grab`.
+ * **Throw Velocity With Attach Distance:** If checked then when the Interactable Object is thrown, the distance between the Interactable Object's attach point and the Interact Grab's attach point will be used to calculate a faster throwing velocity.
+ * **Throw Multiplier:** An amount to multiply the velocity of the given Interactable Object when it is thrown. This can also be used in conjunction with the Interact Grab Throw Multiplier to have certain Interactable Objects be thrown even further than normal (or thrown a shorter distance if a number below 1 is entered).
+ * **On Grab Collision Delay:** The amount of time to delay collisions affecting the Interactable Object when it is first grabbed. This is useful if the Interactable Object could get stuck inside another GameObject when it is being grabbed.
 
 ### Class Methods
 
@@ -4895,9 +5142,9 @@ The IsKinematic method determines if the grab attach mechanic is a kinematic obj
   > `public virtual bool ValidGrab(Rigidbody checkAttachPoint)`
 
  * Parameters
-   * `Rigidbody checkAttachPoint` -
+   * `Rigidbody checkAttachPoint` - The rigidbody attach point to check.
  * Returns
-   * `bool` - Always returns true for the base check.
+   * `bool` - Always returns `true` for the base check.
 
 The ValidGrab method determines if the grab attempt is valid.
 
@@ -4906,11 +5153,11 @@ The ValidGrab method determines if the grab attempt is valid.
   > `public virtual void SetTrackPoint(Transform givenTrackPoint)`
 
  * Parameters
-   * `Transform givenTrackPoint` - The track point to set on the grabbed object.
+   * `Transform givenTrackPoint` - The track point to set on the grabbed Interactable Object.
  * Returns
    * _none_
 
-The SetTrackPoint method sets the point on the grabbed object where the grab is happening.
+The SetTrackPoint method sets the point on the grabbed Interactable Object where the grab is happening.
 
 #### SetInitialAttachPoint/1
 
@@ -4921,31 +5168,31 @@ The SetTrackPoint method sets the point on the grabbed object where the grab is 
  * Returns
    * _none_
 
-The SetInitialAttachPoint method sets the point on the grabbed object where the initial grab happened.
+The SetInitialAttachPoint method sets the point on the grabbed Interactable Object where the initial grab happened.
 
 #### StartGrab/3
 
   > `public virtual bool StartGrab(GameObject grabbingObject, GameObject givenGrabbedObject, Rigidbody givenControllerAttachPoint)`
 
  * Parameters
-   * `GameObject grabbingObject` - The object that is doing the grabbing.
-   * `GameObject givenGrabbedObject` - The object that is being grabbed.
+   * `GameObject grabbingObject` - The GameObject that is doing the grabbing.
+   * `GameObject givenGrabbedObject` - The GameObject that is being grabbed.
    * `Rigidbody givenControllerAttachPoint` - The point on the grabbing object that the grabbed object should be attached to after grab occurs.
  * Returns
-   * `bool` - Is true if the grab is successful, false if the grab is unsuccessful.
+   * `bool` - Returns `true` if the grab is successful, `false` if the grab is unsuccessful.
 
-The StartGrab method sets up the grab attach mechanic as soon as an object is grabbed.
+The StartGrab method sets up the grab attach mechanic as soon as an Interactable Object is grabbed.
 
 #### StopGrab/1
 
   > `public virtual void StopGrab(bool applyGrabbingObjectVelocity)`
 
  * Parameters
-   * `bool applyGrabbingObjectVelocity` - If true will apply the current velocity of the grabbing object to the grabbed object on release.
+   * `bool applyGrabbingObjectVelocity` - If `true` will apply the current velocity of the grabbing object to the grabbed object on release.
  * Returns
    * _none_
 
-The StopGrab method ends the grab of the current object and cleans up the state.
+The StopGrab method ends the grab of the current Interactable Object and cleans up the state.
 
 #### CreateTrackPoint/4
 
@@ -4953,11 +5200,11 @@ The StopGrab method ends the grab of the current object and cleans up the state.
 
  * Parameters
    * `Transform controllerPoint` - The point on the controller where the grab was initiated.
-   * `GameObject currentGrabbedObject` - The object that is currently being grabbed.
-   * `GameObject currentGrabbingObject` - The object that is currently doing the grabbing.
+   * `GameObject currentGrabbedObject` - The GameObject that is currently being grabbed.
+   * `GameObject currentGrabbingObject` - The GameObject that is currently doing the grabbing.
    * `ref bool customTrackPoint` - A reference to whether the created track point is an auto generated custom object.
  * Returns
-   * `Transform` - The transform of the created track point.
+   * `Transform` - The Transform of the created track point.
 
 The CreateTrackPoint method sets up the point of grab to track on the grabbed object.
 
@@ -4970,7 +5217,7 @@ The CreateTrackPoint method sets up the point of grab to track on the grabbed ob
  * Returns
    * _none_
 
-The ProcessUpdate method is run in every Update method on the interactable object.
+The ProcessUpdate method is run in every Update method on the Interactable Object.
 
 #### ProcessFixedUpdate/0
 
@@ -4981,7 +5228,7 @@ The ProcessUpdate method is run in every Update method on the interactable objec
  * Returns
    * _none_
 
-The ProcessFixedUpdate method is run in every FixedUpdate method on the interactable object.
+The ProcessFixedUpdate method is run in every FixedUpdate method on the Interactable Object.
 
 ---
 
@@ -4990,9 +5237,10 @@ The ProcessFixedUpdate method is run in every FixedUpdate method on the interact
 
 ### Overview
 
-The Base Joint Grab Attach script is an abstract class that all joint grab attach types inherit.
+Provides a base that all joint based grab attach mechanics can inherit from.
 
-As this is an abstract class, it cannot be applied directly to a game object and performs no logic.
+**Script Usage:**
+  > This is an abstract class that is to be inherited to a concrete class that provides joint based grab attach functionality, therefore this script should not be directly used.
 
 ### Inspector Parameters
 
@@ -5005,9 +5253,9 @@ As this is an abstract class, it cannot be applied directly to a game object and
   > `public override bool ValidGrab(Rigidbody checkAttachPoint)`
 
  * Parameters
-   * `Rigidbody checkAttachPoint` -
+   * `Rigidbody checkAttachPoint` - The rigidbody attach point to check.
  * Returns
-   * `bool` - Returns true if there is no current grab happening, or the grab is initiated by another grabbing object.
+   * `bool` - Returns `true` if there is no current grab happening, or the grab is initiated by another grabbing object.
 
 The ValidGrab method determines if the grab attempt is valid.
 
@@ -5016,24 +5264,24 @@ The ValidGrab method determines if the grab attempt is valid.
   > `public override bool StartGrab(GameObject grabbingObject, GameObject givenGrabbedObject, Rigidbody givenControllerAttachPoint)`
 
  * Parameters
-   * `GameObject grabbingObject` - The object that is doing the grabbing.
-   * `GameObject givenGrabbedObject` - The object that is being grabbed.
+   * `GameObject grabbingObject` - The GameObject that is doing the grabbing.
+   * `GameObject givenGrabbedObject` - The GameObject that is being grabbed.
    * `Rigidbody givenControllerAttachPoint` - The point on the grabbing object that the grabbed object should be attached to after grab occurs.
  * Returns
-   * `bool` - Is true if the grab is successful, false if the grab is unsuccessful.
+   * `bool` - Returns `true` if the grab is successful, `false` if the grab is unsuccessful.
 
-The StartGrab method sets up the grab attach mechanic as soon as an object is grabbed. It is also responsible for creating the joint on the grabbed object.
+The StartGrab method sets up the grab attach mechanic as soon as an Interactable Object is grabbed. It is also responsible for creating the joint on the grabbed object.
 
 #### StopGrab/1
 
   > `public override void StopGrab(bool applyGrabbingObjectVelocity)`
 
  * Parameters
-   * `bool applyGrabbingObjectVelocity` - If true will apply the current velocity of the grabbing object to the grabbed object on release.
+   * `bool applyGrabbingObjectVelocity` - If `true` will apply the current velocity of the grabbing object to the grabbed object on release.
  * Returns
    * _none_
 
-The StopGrab method ends the grab of the current object and cleans up the state. It is also responsible for removing the joint from the grabbed object.
+The StopGrab method ends the grab of the current Interactable Object and cleans up the state. It is also responsible for removing the joint from the grabbed object.
 
 ---
 
@@ -5042,11 +5290,18 @@ The StopGrab method ends the grab of the current object and cleans up the state.
 
 ### Overview
 
-The Fixed Joint Grab Attach script is used to create a simple Fixed Joint connection between the object and the grabbing object.
+Attaches the grabbed Interactable Object to the grabbing object via a Fixed Joint.
+
+  > The Interactable Object will be attached to the grabbing object via a Fixed Joint and the Joint can be broken upon colliding the Interactable Object with other colliders.
+
+**Script Usage:**
+ * Place the `VRTK_FixedJointGrabAttach` script on either:
+   * The GameObject of the Interactable Object to detect interactions on.
+   * Any other scene GameObject and then link that GameObject to the Interactable Objects `Grab Attach Mechanic Script` parameter to denote use of the grab mechanic.
 
 ### Inspector Parameters
 
- * **Break Force:** Maximum force the joint can withstand before breaking. Infinity means unbreakable.
+ * **Break Force:** Maximum force the Joint can withstand before breaking. Setting to `infinity` ensures the Joint is unbreakable.
 
 ### Example
 
@@ -5059,11 +5314,18 @@ The Fixed Joint Grab Attach script is used to create a simple Fixed Joint connec
 
 ### Overview
 
-The Spring Joint Grab Attach script is used to create a simple Spring Joint connection between the object and the grabbing object.
+Attaches the grabbed Interactable Object to the grabbing object via a Spring Joint.
+
+  > The Interactable Object will be attached to the grabbing object via a Spring Joint and the Joint can be broken upon colliding the Interactable Object with other colliders.
+
+**Script Usage:**
+ * Place the `VRTK_SpringJointGrabAttach` script on either:
+   * The GameObject of the Interactable Object to detect interactions on.
+   * Any other scene GameObject and then link that GameObject to the Interactable Objects `Grab Attach Mechanic Script` parameter to denote use of the grab mechanic.
 
 ### Inspector Parameters
 
- * **Break Force:** Maximum force the joint can withstand before breaking. Infinity means unbreakable.
+ * **Break Force:** Maximum force the Joint can withstand before breaking. Setting to `infinity` ensures the Joint is unbreakable.
  * **Strength:** The strength of the spring.
  * **Damper:** The amount of dampening to apply to the spring.
 
@@ -5078,11 +5340,15 @@ The Spring Joint Grab Attach script is used to create a simple Spring Joint conn
 
 ### Overview
 
-The Custom Joint Grab Attach script allows a custom joint to be provided for the grab attach mechanic.
+Attaches the grabbed Interactable Object to the grabbing object via a custom Joint.
 
-The custom joint is placed on the interactable object and at runtime the joint is copied into a `JointHolder` game object that becomes a child of the interactable object.
+  > The Interactable Object will be attached to the grabbing object via a custom Joint and the Joint can be broken upon colliding the Interactable Object with other colliders.
 
-The custom joint is then copied from this `JointHolder` to the interactable object when a grab happens and is removed when a grab ends.
+**Script Usage:**
+ * Place the `VRTK_CustomJointGrabAttach` script on either:
+   * The GameObject of the Interactable Object to detect interactions on.
+   * Any other scene GameObject and then link that GameObject to the Interactable Objects `Grab Attach Mechanic Script` parameter to denote use of the grab mechanic.
+ * Create a `Joint` component suitable for attaching the grabbed Interactable Object to the grabbing object with and provide it to the `Custom Joint` parameter.
 
 ### Inspector Parameters
 
@@ -5099,11 +5365,14 @@ The custom joint is then copied from this `JointHolder` to the interactable obje
 
 ### Overview
 
-The Child Of Controller Grab Attach script is used to make the grabbed object a child of the grabbing object upon grab.
+Sets the grabbed Interactable Object to be a child of the grabbing object.
 
-The object upon grab will naturally track the position and rotation of the grabbing object as it is a child of the grabbing game object.
+  > The Interactable Object will have 1:1 tracking of the grabbing object, however it will also have reduced collision detection and will be able to pass through other colliders.
 
-The rigidbody of the object will be set to kinematic upon grab and returned to it's original state on release.
+**Script Usage:**
+ * Place the `VRTK_ChildOfControllerGrabAttach` script on either:
+   * The GameObject of the Interactable Object to detect interactions on.
+   * Any other scene GameObject and then link that GameObject to the Interactable Objects `Grab Attach Mechanic Script` parameter to denote use of the grab mechanic.
 
 ### Class Methods
 
@@ -5112,24 +5381,24 @@ The rigidbody of the object will be set to kinematic upon grab and returned to i
   > `public override bool StartGrab(GameObject grabbingObject, GameObject givenGrabbedObject, Rigidbody givenControllerAttachPoint)`
 
  * Parameters
-   * `GameObject grabbingObject` - The object that is doing the grabbing.
-   * `GameObject givenGrabbedObject` - The object that is being grabbed.
+   * `GameObject grabbingObject` - The GameObject that is doing the grabbing.
+   * `GameObject givenGrabbedObject` - The GameObject that is being grabbed.
    * `Rigidbody givenControllerAttachPoint` - The point on the grabbing object that the grabbed object should be attached to after grab occurs.
  * Returns
-   * `bool` - Is true if the grab is successful, false if the grab is unsuccessful.
+   * `bool` - Returns `true` if the grab is successful, `false` if the grab is unsuccessful.
 
-The StartGrab method sets up the grab attach mechanic as soon as an object is grabbed. It is also responsible for creating the joint on the grabbed object.
+The StartGrab method sets up the grab attach mechanic as soon as an Interactable Object is grabbed. It is also responsible for creating the joint on the grabbed object.
 
 #### StopGrab/1
 
   > `public override void StopGrab(bool applyGrabbingObjectVelocity)`
 
  * Parameters
-   * `bool applyGrabbingObjectVelocity` - If true will apply the current velocity of the grabbing object to the grabbed object on release.
+   * `bool applyGrabbingObjectVelocity` - If `true` will apply the current velocity of the grabbing object to the grabbed object on release.
  * Returns
    * _none_
 
-The StopGrab method ends the grab of the current object and cleans up the state.
+The StopGrab method ends the grab of the current Interactable Object and cleans up the state.
 
 ### Example
 
@@ -5142,15 +5411,20 @@ The StopGrab method ends the grab of the current object and cleans up the state.
 
 ### Overview
 
-The Track Object Grab Attach script doesn't attach the object to the controller via a joint, instead it ensures the object tracks the direction of the controller.
+Applies velocity to the grabbed Interactable Object to ensure it tracks the position of the grabbing object.
 
-This works well for items that are on hinged joints or objects that require to interact naturally with other scene rigidbodies.
+  > The Interactable Object follows the grabbing object based on velocity being applied and therefore fully interacts with all other scene Colliders but not at a true 1:1 tracking.
+
+**Script Usage:**
+ * Place the `VRTK_TrackObjectGrabAttach` script on either:
+   * The GameObject of the Interactable Object to detect interactions on.
+   * Any other scene GameObject and then link that GameObject to the Interactable Objects `Grab Attach Mechanic Script` parameter to denote use of the grab mechanic.
 
 ### Inspector Parameters
 
- * **Detach Distance:** The maximum distance the grabbing controller is away from the object before it is automatically dropped.
- * **Velocity Limit:** The maximum amount of velocity magnitude that can be applied to the object. Lowering this can prevent physics glitches if objects are moving too fast.
- * **Angular Velocity Limit:** The maximum amount of angular velocity magnitude that can be applied to the object. Lowering this can prevent physics glitches if objects are moving too fast.
+ * **Detach Distance:** The maximum distance the grabbing object is away from the Interactable Object before it is automatically dropped.
+ * **Velocity Limit:** The maximum amount of velocity magnitude that can be applied to the Interactable Object. Lowering this can prevent physics glitches if Interactable Objects are moving too fast.
+ * **Angular Velocity Limit:** The maximum amount of angular velocity magnitude that can be applied to the Interactable Object. Lowering this can prevent physics glitches if Interactable Objects are moving too fast.
 
 ### Class Methods
 
@@ -5159,11 +5433,11 @@ This works well for items that are on hinged joints or objects that require to i
   > `public override void StopGrab(bool applyGrabbingObjectVelocity)`
 
  * Parameters
-   * `bool applyGrabbingObjectVelocity` - If true will apply the current velocity of the grabbing object to the grabbed object on release.
+   * `bool applyGrabbingObjectVelocity` - If `true` will apply the current velocity of the grabbing object to the grabbed Interactable Object on release.
  * Returns
    * _none_
 
-The StopGrab method ends the grab of the current object and cleans up the state.
+The StopGrab method ends the grab of the current Interactable Object and cleans up the state.
 
 #### CreateTrackPoint/4
 
@@ -5171,11 +5445,11 @@ The StopGrab method ends the grab of the current object and cleans up the state.
 
  * Parameters
    * `Transform controllerPoint` - The point on the controller where the grab was initiated.
-   * `GameObject currentGrabbedObject` - The object that is currently being grabbed.
-   * `GameObject currentGrabbingObject` - The object that is currently doing the grabbing.
+   * `GameObject currentGrabbedObject` - The GameObject that is currently being grabbed.
+   * `GameObject currentGrabbingObject` - The GameObject that is currently doing the grabbing.
    * `ref bool customTrackPoint` - A reference to whether the created track point is an auto generated custom object.
  * Returns
-   * `Transform` - The transform of the created track point.
+   * `Transform` - The Transform of the created track point.
 
 The CreateTrackPoint method sets up the point of grab to track on the grabbed object.
 
@@ -5188,7 +5462,7 @@ The CreateTrackPoint method sets up the point of grab to track on the grabbed ob
  * Returns
    * _none_
 
-The ProcessUpdate method is run in every Update method on the interactable object. It is responsible for checking if the tracked object has exceeded it's detach distance.
+The ProcessUpdate method is run in every Update method on the Interactable Object. It is responsible for checking if the tracked object has exceeded it's detach distance.
 
 #### ProcessFixedUpdate/0
 
@@ -5199,7 +5473,7 @@ The ProcessUpdate method is run in every Update method on the interactable objec
  * Returns
    * _none_
 
-The ProcessFixedUpdate method is run in every FixedUpdate method on the interactable object. It applies velocity to the object to ensure it is tracking the grabbing object.
+The ProcessFixedUpdate method is run in every FixedUpdate method on the Interactable Object. It applies velocity to the object to ensure it is tracking the grabbing object.
 
 ### Example
 
@@ -5212,9 +5486,14 @@ The ProcessFixedUpdate method is run in every FixedUpdate method on the interact
 
 ### Overview
 
-The Rotator Track Grab Attach script is used to track the object but instead of the object tracking the direction of the controller, a force is applied to the object to cause it to rotate.
+Applies a rotational force to the grabbed Interactable Object.
 
-This is ideal for hinged joints on items such as wheels or doors.
+  > The Interactable Object is not attached to the grabbing object but rather has a rotational force applied based on the rotation of the grabbing object.
+
+**Script Usage:**
+ * Place the `VRTK_RotatorTrackGrabAttach` script on either:
+   * The GameObject of the Interactable Object to detect interactions on.
+   * Any other scene GameObject and then link that GameObject to the Interactable Objects `Grab Attach Mechanic Script` parameter to denote use of the grab mechanic.
 
 ### Class Methods
 
@@ -5223,11 +5502,11 @@ This is ideal for hinged joints on items such as wheels or doors.
   > `public override void StopGrab(bool applyGrabbingObjectVelocity)`
 
  * Parameters
-   * `bool applyGrabbingObjectVelocity` - If true will apply the current velocity of the grabbing object to the grabbed object on release.
+   * `bool applyGrabbingObjectVelocity` - If `true` will apply the current velocity of the grabbing object to the grabbed Interactable Object on release.
  * Returns
    * _none_
 
-The StopGrab method ends the grab of the current object and cleans up the state.
+The StopGrab method ends the grab of the current Interactable Object and cleans up the state.
 
 #### ProcessFixedUpdate/0
 
@@ -5238,7 +5517,7 @@ The StopGrab method ends the grab of the current object and cleans up the state.
  * Returns
    * _none_
 
-The ProcessFixedUpdate method is run in every FixedUpdate method on the interactable object. It applies a force to the grabbed object to move it in the direction of the grabbing object.
+The ProcessFixedUpdate method is run in every FixedUpdate method on the Interactable Object. It applies a force to the grabbed Interactable Object to move it in the direction of the grabbing object.
 
 ### Example
 
@@ -5251,7 +5530,14 @@ The ProcessFixedUpdate method is run in every FixedUpdate method on the interact
 
 ### Overview
 
-The Climbable Grab Attach script is used to mark the object as a climbable interactable object.
+Marks the Interactable Object as being climbable.
+
+  > The Interactable Object will not be grabbed to the controller, instead in conjunction with the `VRTK_PlayerClimb` script will enable the PlayArea to be moved around as if it was climbing.
+
+**Script Usage:**
+ * Place the `VRTK_ClimbableGrabAttach` script on either:
+   * The GameObject of the Interactable Object to detect interactions on.
+   * Any other scene GameObject and then link that GameObject to the Interactable Objects `Grab Attach Mechanic Script` parameter to denote use of the grab mechanic.
 
 ### Inspector Parameters
 
@@ -5278,9 +5564,10 @@ This directory contains scripts that are used to provide different actions when 
 
 ### Overview
 
-The Base Grab Action is an abstract class that all other secondary controller actions inherit and are required to implement the public abstract methods.
+Provides a base that all secondary controller grab attach can inherit from.
 
-As this is an abstract class, it cannot be applied directly to a game object and performs no logic.
+**Script Usage:**
+  > This is an abstract class that is to be inherited to a concrete class that provides secondary controller grab action functionality, therefore this script should not be directly used.
 
 ### Class Methods
 
@@ -5289,15 +5576,15 @@ As this is an abstract class, it cannot be applied directly to a game object and
   > `public virtual void Initialise(VRTK_InteractableObject currentGrabbdObject, VRTK_InteractGrab currentPrimaryGrabbingObject, VRTK_InteractGrab currentSecondaryGrabbingObject, Transform primaryGrabPoint, Transform secondaryGrabPoint)`
 
  * Parameters
-   * `VRTK_InteractableObject currentGrabbdObject` - The Interactable Object script for the object currently being grabbed by the primary controller.
-   * `VRTK_InteractGrab currentPrimaryGrabbingObject` - The Interact Grab script for the object that is associated with the primary controller.
-   * `VRTK_InteractGrab currentSecondaryGrabbingObject` - The Interact Grab script for the object that is associated with the secondary controller.
-   * `Transform primaryGrabPoint` - The point on the object where the primary controller initially grabbed the object.
-   * `Transform secondaryGrabPoint` - The point on the object where the secondary controller initially grabbed the object.
+   * `VRTK_InteractableObject currentGrabbdObject` - The Interactable Object script for the object currently being grabbed by the primary grabbing object.
+   * `VRTK_InteractGrab currentPrimaryGrabbingObject` - The Interact Grab script for the object that is associated with the primary grabbing object.
+   * `VRTK_InteractGrab currentSecondaryGrabbingObject` - The Interact Grab script for the object that is associated with the secondary grabbing object.
+   * `Transform primaryGrabPoint` - The point on the Interactable Object where the primary Interact Grab initially grabbed the Interactable Object.
+   * `Transform secondaryGrabPoint` - The point on the Interactable Object where the secondary Interact Grab initially grabbed the Interactable Object.
  * Returns
    * _none_
 
-The Initalise method is used to set up the state of the secondary action when the object is initially grabbed by a secondary controller.
+The Initalise method is used to set up the state of the secondary action when the Interactable Object is initially grabbed by a secondary Interact Grab.
 
 #### ResetAction/0
 
@@ -5308,7 +5595,7 @@ The Initalise method is used to set up the state of the secondary action when th
  * Returns
    * _none_
 
-The ResetAction method is used to reset the secondary action when the object is no longer grabbed by a secondary controller.
+The ResetAction method is used to reset the secondary action when the Interactable Object is no longer grabbed by a secondary Interact Grab.
 
 #### IsActionable/0
 
@@ -5317,7 +5604,7 @@ The ResetAction method is used to reset the secondary action when the object is 
  * Parameters
    * _none_
  * Returns
-   * `bool` - Is true if the secondary grab action does perform an action on secondary grab.
+   * `bool` - Returns `true` if the secondary grab action does perform an action on secondary grab.
 
 The IsActionable method is used to determine if the secondary grab action performs an action on grab.
 
@@ -5328,9 +5615,9 @@ The IsActionable method is used to determine if the secondary grab action perfor
  * Parameters
    * _none_
  * Returns
-   * `bool` - Is true if the grab action allows swapping to another grabbing object.
+   * `bool` - Returns `true` if the grab action allows swapping to another grabbing object.
 
-The IsSwappable method is used to determine if the secondary grab action allows to swab the grab state to another grabbing object.
+The IsSwappable method is used to determine if the secondary grab action allows to swab the grab state to another grabbing Interactable Object.
 
 #### ProcessUpdate/0
 
@@ -5341,7 +5628,7 @@ The IsSwappable method is used to determine if the secondary grab action allows 
  * Returns
    * _none_
 
-The ProcessUpdate method runs in every Update on the Interactable Object whilst it is being grabbed by a secondary controller.
+The ProcessUpdate method runs in every Update on the Interactable Object whilst it is being grabbed by a secondary Interact Grab.
 
 #### ProcessFixedUpdate/0
 
@@ -5352,7 +5639,7 @@ The ProcessUpdate method runs in every Update on the Interactable Object whilst 
  * Returns
    * _none_
 
-The ProcessFixedUpdate method runs in every FixedUpdate on the Interactable Object whilst it is being grabbed by a secondary controller.
+The ProcessFixedUpdate method runs in every FixedUpdate on the Interactable Object whilst it is being grabbed by a secondary Interact Grab.
 
 #### OnDropAction/0
 
@@ -5363,7 +5650,7 @@ The ProcessFixedUpdate method runs in every FixedUpdate on the Interactable Obje
  * Returns
    * _none_
 
-The OnDropAction method is executed when the current grabbed object is dropped and can be used up to clean up any secondary grab actions.
+The OnDropAction method is executed when the current grabbed Interactable Object is dropped and can be used up to clean up any secondary grab actions.
 
 ---
 
@@ -5372,7 +5659,12 @@ The OnDropAction method is executed when the current grabbed object is dropped a
 
 ### Overview
 
-The Swap Controller Grab Action provides a mechanism to allow grabbed objects to be swapped between controllers.
+Swaps the grabbed Interactable Object to the new grabbing object.
+
+**Script Usage:**
+ * Place the `VRTK_SwapControllerGrabAction` script on either:
+   * The GameObject of the Interactable Object to detect interactions on.
+   * Any other scene GameObject and then link that GameObject to the Interactable Objects `Secondary Grab Action Script` parameter to denote use of the secondary grab action.
 
 ### Example
 
@@ -5385,14 +5677,19 @@ The Swap Controller Grab Action provides a mechanism to allow grabbed objects to
 
 ### Overview
 
-The Axis Scale Grab Action provides a mechanism to scale objects when they are grabbed with a secondary controller.
+Scales the grabbed Interactable Object along the given axes based on the position of the secondary grabbing Interact Grab.
+
+**Script Usage:**
+ * Place the `VRTK_AxisScaleGrabAction` script on either:
+   * The GameObject of the Interactable Object to detect interactions on.
+   * Any other scene GameObject and then link that GameObject to the Interactable Objects `Secondary Grab Action Script` parameter to denote use of the secondary grab action.
 
 ### Inspector Parameters
 
- * **Ungrab Distance:** The distance the secondary controller must move away from the original grab position before the secondary controller auto ungrabs the object.
- * **Lock X Axis:** If checked the current X Axis of the object won't be scaled
- * **Lock Y Axis:** If checked the current Y Axis of the object won't be scaled
- * **Lock Z Axis:** If checked the current Z Axis of the object won't be scaled
+ * **Ungrab Distance:** The distance the secondary grabbing object must move away from the original grab position before the secondary grabbing object auto ungrabs the Interactable Object.
+ * **Lock X Axis:** If checked the current X Axis of the Interactable Object won't be scaled
+ * **Lock Y Axis:** If checked the current Y Axis of the Interactable Object won't be scaled
+ * **Lock Z Axis:** If checked the current Z Axis of the Interactable Object won't be scaled
  * **Uniform Scaling:** If checked all the axes will be scaled together (unless locked)
 
 ### Class Methods
@@ -5402,15 +5699,15 @@ The Axis Scale Grab Action provides a mechanism to scale objects when they are g
   > `public override void Initialise(VRTK_InteractableObject currentGrabbdObject, VRTK_InteractGrab currentPrimaryGrabbingObject, VRTK_InteractGrab currentSecondaryGrabbingObject, Transform primaryGrabPoint, Transform secondaryGrabPoint)`
 
  * Parameters
-   * `VRTK_InteractableObject currentGrabbdObject` - The Interactable Object script for the object currently being grabbed by the primary controller.
-   * `VRTK_InteractGrab currentPrimaryGrabbingObject` - The Interact Grab script for the object that is associated with the primary controller.
-   * `VRTK_InteractGrab currentSecondaryGrabbingObject` - The Interact Grab script for the object that is associated with the secondary controller.
-   * `Transform primaryGrabPoint` - The point on the object where the primary controller initially grabbed the object.
-   * `Transform secondaryGrabPoint` - The point on the object where the secondary controller initially grabbed the object.
+   * `VRTK_InteractableObject currentGrabbdObject` - The Interactable Object script for the object currently being grabbed by the primary grabbing object.
+   * `VRTK_InteractGrab currentPrimaryGrabbingObject` - The Interact Grab script for the object that is associated with the primary grabbing object.
+   * `VRTK_InteractGrab currentSecondaryGrabbingObject` - The Interact Grab script for the object that is associated with the secondary grabbing object.
+   * `Transform primaryGrabPoint` - The point on the Interactable Object where the primary Interact Grab initially grabbed the Interactable Object.
+   * `Transform secondaryGrabPoint` - The point on the Interactable Object where the secondary Interact Grab initially grabbed the Interactable Object.
  * Returns
    * _none_
 
-The Initalise method is used to set up the state of the secondary action when the object is initially grabbed by a secondary controller.
+The Initalise method is used to set up the state of the secondary action when the Interactable Object is initially grabbed by a secondary Interact Grab.
 
 #### ProcessUpdate/0
 
@@ -5421,7 +5718,7 @@ The Initalise method is used to set up the state of the secondary action when th
  * Returns
    * _none_
 
-The ProcessUpdate method runs in every Update on the Interactable Object whilst it is being grabbed by a secondary controller.
+The ProcessUpdate method runs in every Update on the Interactable Object whilst it is being grabbed by a secondary Interact Grab.
 
 #### ProcessFixedUpdate/0
 
@@ -5432,7 +5729,7 @@ The ProcessUpdate method runs in every Update on the Interactable Object whilst 
  * Returns
    * _none_
 
-The ProcessFixedUpdate method runs in every FixedUpdate on the Interactable Object whilst it is being grabbed by a secondary controller and performs the scaling action.
+The ProcessFixedUpdate method runs in every FixedUpdate on the Interactable Object whilst it is being grabbed by a secondary Interact Grab and performs the scaling action.
 
 ### Example
 
@@ -5445,11 +5742,14 @@ The ProcessFixedUpdate method runs in every FixedUpdate on the Interactable Obje
 
 ### Overview
 
-The Control Direction Grab Action provides a mechanism to control the facing direction of the object when they are grabbed with a secondary controller.
+Controls the facing direction of the grabbed Interactable Object to rotate in the direction of the secondary grabbing object.
 
-For an object to correctly be rotated it must be created with the front of the object pointing down the z-axis (forward) and the upwards of the object pointing up the y-axis (up).
+  > Rotation will only occur correctly if the Interactable Object `forward` is correctly aligned to the world `z-axis` and the `up` is correctly aligned to the world `y-axis`. It is also not possible to control the direction of an Interactable Object that uses the Joint based grab mechanics.
 
-It's not possible to control the direction of an interactable object with a `Fixed_Joint` as the joint fixes the rotation of the object.
+**Script Usage:**
+ * Place the `VRTK_ControlDirectionGrabAction` script on either:
+   * The GameObject of the Interactable Object to detect interactions on.
+   * Any other scene GameObject and then link that GameObject to the Interactable Objects `Secondary Grab Action Script` parameter to denote use of the secondary grab action.
 
 ### Inspector Parameters
 
@@ -5464,11 +5764,11 @@ It's not possible to control the direction of an interactable object with a `Fix
   > `public override void Initialise(VRTK_InteractableObject currentGrabbdObject, VRTK_InteractGrab currentPrimaryGrabbingObject, VRTK_InteractGrab currentSecondaryGrabbingObject, Transform primaryGrabPoint, Transform secondaryGrabPoint)`
 
  * Parameters
-   * `VRTK_InteractableObject currentGrabbdObject` - The Interactable Object script for the object currently being grabbed by the primary controller.
-   * `VRTK_InteractGrab currentPrimaryGrabbingObject` - The Interact Grab script for the object that is associated with the primary controller.
-   * `VRTK_InteractGrab currentSecondaryGrabbingObject` - The Interact Grab script for the object that is associated with the secondary controller.
-   * `Transform primaryGrabPoint` - The point on the object where the primary controller initially grabbed the object.
-   * `Transform secondaryGrabPoint` - The point on the object where the secondary controller initially grabbed the object.
+   * `VRTK_InteractableObject currentGrabbdObject` - The Interactable Object script for the object currently being grabbed by the primary grabbing object.
+   * `VRTK_InteractGrab currentPrimaryGrabbingObject` - The Interact Grab script for the object that is associated with the primary grabbing object.
+   * `VRTK_InteractGrab currentSecondaryGrabbingObject` - The Interact Grab script for the object that is associated with the secondary grabbing object.
+   * `Transform primaryGrabPoint` - The point on the Interactable Object where the primary Interact Grab initially grabbed the Interactable Object.
+   * `Transform secondaryGrabPoint` - The point on the Interactable Object where the secondary Interact Grab initially grabbed the Interactable Object.
  * Returns
    * _none_
 
@@ -5483,7 +5783,7 @@ The Initalise method is used to set up the state of the secondary action when th
  * Returns
    * _none_
 
-The ResetAction method is used to reset the secondary action when the object is no longer grabbed by a secondary controller.
+The ResetAction method is used to reset the secondary action when the Interactable Object is no longer grabbed by a secondary Interact Grab.
 
 #### OnDropAction/0
 
@@ -5494,7 +5794,7 @@ The ResetAction method is used to reset the secondary action when the object is 
  * Returns
    * _none_
 
-The OnDropAction method is executed when the current grabbed object is dropped and can be used up to clean up any secondary grab actions.
+The OnDropAction method is executed when the current grabbed Interactable Object is dropped and can be used up to clean up any secondary grab actions.
 
 #### ProcessUpdate/0
 
@@ -5505,7 +5805,7 @@ The OnDropAction method is executed when the current grabbed object is dropped a
  * Returns
    * _none_
 
-The ProcessUpdate method runs in every Update on the Interactable Object whilst it is being grabbed by a secondary controller.
+The ProcessUpdate method runs in every Update on the Interactable Object whilst it is being grabbed by a secondary Interact Grab.
 
 #### ProcessFixedUpdate/0
 
@@ -5516,7 +5816,7 @@ The ProcessUpdate method runs in every Update on the Interactable Object whilst 
  * Returns
    * _none_
 
-The ProcessFixedUpdate method runs in every FixedUpdate on the Interactable Object whilst it is being grabbed by a secondary controller and influences the rotation of the object.
+The ProcessFixedUpdate method runs in every FixedUpdate on the Interactable Object whilst it is being grabbed by a secondary Interact Grab and influences the rotation of the Interactable Object.
 
 ### Example
 
@@ -5542,9 +5842,10 @@ A collection of scripts that provide the ability to deal with tracking the world
 
 ### Overview
 
-The purpose of the Headset Collision is to detect when the user's VR headset collides with another game object.
+Denotes when the HMD is colliding with valid geometry.
 
-The Headset Collision script will automatically create a script on the headset to deal with the collision events.
+**Script Usage:**
+ * Place the `VRTK_HeadsetCollision` script on any active scene GameObject.
 
 ### Inspector Parameters
 
@@ -5582,7 +5883,7 @@ Adding the `VRTK_HeadsetCollision_UnityEvents` component to `VRTK_HeadsetCollisi
  * Parameters
    * _none_
  * Returns
-   * `bool` - Returns true if the headset is currently colliding with a valid game object.
+   * `bool` - Returns `true` if the headset is currently colliding with a valid game object.
 
 The IsColliding method is used to determine if the headset is currently colliding with a valid game object and returns true if it is and false if it is not colliding with anything or an invalid game object.
 
@@ -5607,9 +5908,10 @@ The GetHeadsetColliderContainer method returns the auto generated GameObject tha
 
 ### Overview
 
-The purpose of the Headset Fade is to change the colour of the headset view to a specified colour over a given duration and to also unfade it back to being transparent.
+Provides the ability to change the colour of the headset view to a specified colour over a given duration.
 
-The `Fade` and `Unfade` methods can only be called via another script and this Headset Fade script does not do anything on initialisation to fade or unfade the headset view.
+**Script Usage:**
+ * Place the `VRTK_HeadsetFade` script on any active scene GameObject.
 
 ### Class Events
 
@@ -5638,7 +5940,7 @@ Adding the `VRTK_HeadsetFade_UnityEvents` component to `VRTK_HeadsetFade` object
  * Parameters
    * _none_
  * Returns
-   * `bool` - Returns true if the headset is currently fading or faded.
+   * `bool` - Returns `true` if the headset is currently fading or faded.
 
 The IsFaded method returns true if the headset is currently fading or has completely faded and returns false if it is completely unfaded.
 
@@ -5649,7 +5951,7 @@ The IsFaded method returns true if the headset is currently fading or has comple
  * Parameters
    * _none_
  * Returns
-   * `bool` - Returns true if the headset is currently in the process of fading or unfading.
+   * `bool` - Returns `true` if the headset is currently in the process of fading or unfading.
 
 The IsTransitioning method returns true if the headset is currently fading or unfading and returns false if it is completely faded or unfaded.
 
@@ -5686,11 +5988,14 @@ The Unfade method initiates the headset to change colour back to a transparent c
 
 ### Overview
 
-The purpose of the Headset Collision Fade is to detect when the user's VR headset collides with another game object and fades the screen to a solid colour.
+Initiates a fade of the headset view when a headset collision event is detected.
 
-This is to deal with a user putting their head into a game object and seeing the inside of the object clipping, which is an undesired effect. The reasoning behind this is if the user puts their head where it shouldn't be, then fading to a colour (e.g. black) will make the user realise they've done something wrong and they'll probably naturally step backwards.
+**Required Components:**
+ * `VRTK_HeadsetCollision` - A Headset Collision script to determine when the HMD has collided with valid geometry.
+ * `VRTK_HeadsetFade` - A Headset Fade script to alter the visible colour on the HMD view.
 
-The Headset Collision Fade uses a composition of the Headset Collision and Headset Fade scripts to derive the desired behaviour.
+**Script Usage:**
+ * Place the `VRTK_HeadsetCollisionFade` script on any active scene GameObject.
 
 ### Inspector Parameters
 
@@ -5710,7 +6015,10 @@ The Headset Collision Fade uses a composition of the Headset Collision and Heads
 
 ### Overview
 
-The purpose of Headset Controller Aware is to allow the headset to know if something is blocking the path between the headset and controllers and to know if the headset is looking at a controller.
+Determines whether the HMD is in line of sight to the controllers or if the headset is directly looking at one of the controllers.
+
+**Script Usage:**
+ * Place the `VRTK_HeadsetControllerAware` script on any active scene GameObject.
 
 ### Inspector Parameters
 
@@ -5748,7 +6056,7 @@ Adding the `VRTK_HeadsetControllerAware_UnityEvents` component to `VRTK_HeadsetC
  * Parameters
    * _none_
  * Returns
-   * `bool` - Returns true if the path between the headset and the controller is obscured.
+   * `bool` - Returns `true` if the path between the headset and the controller is obscured.
 
 The LeftControllerObscured method returns the state of if the left controller is being obscured from the path of the headset.
 
@@ -5759,7 +6067,7 @@ The LeftControllerObscured method returns the state of if the left controller is
  * Parameters
    * _none_
  * Returns
-   * `bool` - Returns true if the path between the headset and the controller is obscured.
+   * `bool` - Returns `true` if the path between the headset and the controller is obscured.
 
 The RightControllerObscured method returns the state of if the right controller is being obscured from the path of the headset.
 
@@ -5770,7 +6078,7 @@ The RightControllerObscured method returns the state of if the right controller 
  * Parameters
    * _none_
  * Returns
-   * `bool` - Returns true if the headset can currently see the controller within the given radius threshold.
+   * `bool` - Returns `true` if the headset can currently see the controller within the given radius threshold.
 
 the LeftControllerGlanced method returns the state of if the headset is currently looking at the left controller or not.
 
@@ -5781,7 +6089,7 @@ the LeftControllerGlanced method returns the state of if the headset is currentl
  * Parameters
    * _none_
  * Returns
-   * `bool` - Returns true if the headset can currently see the controller within the given radius threshold.
+   * `bool` - Returns `true` if the headset can currently see the controller within the given radius threshold.
 
 the RightControllerGlanced method returns the state of if the headset is currently looking at the right controller or not.
 
@@ -5795,9 +6103,10 @@ the RightControllerGlanced method returns the state of if the headset is current
 
 ### Overview
 
-Hip Tracking attempts to reasonably track hip position in the absence of a hip position sensor.
+Attempts to provide the relative position of a hip without the need for additional hardware sensors.
 
-The Hip Tracking script is placed on an empty GameObject which will be positioned at the estimated hip position.
+**Script Usage:**
+ * Place the `VRTK_HipTracking` script on any active scene GameObject and this GameObject will then track to the estimated hip position.
 
 ### Inspector Parameters
 
@@ -5812,15 +6121,13 @@ The Hip Tracking script is placed on an empty GameObject which will be positione
 
 ### Overview
 
-The body physics script deals with how a user's body in the scene reacts to world physics and how to handle drops.
+Allows the play area to be affected by physics and detect collisions with other valid geometry.
 
-The body physics creates a rigidbody and collider for where the user is standing to allow physics interactions and prevent walking through walls.
+**Optional Components:**
+ * `VRTK_BasicTeleport` - A Teleporter script to use when snapping the play area to the nearest floor when releasing from grab.
 
-Upon actually moving in the play area, the rigidbody is set to kinematic to prevent the world from being pushed back in the user's view reducing sickness.
-
-The body physics script also deals with snapping a user to the nearest floor if they look over a ledge or walk up stairs then it will move the play area to simulate movement in the scene.
-
-To allow for peeking over a ledge and not falling, a fall restiction can happen by keeping a controller over the existing floor and the snap to the nearest floor will not happen until the controllers are also over the floor.
+**Script Usage:**
+ * Place the `VRTK_BodyPhysics` script on any active scene GameObject.
 
 ### Inspector Parameters
 
@@ -5877,7 +6184,7 @@ Adding the `VRTK_BodyPhysics_UnityEvents` component to `VRTK_BodyPhysics` object
 
 ### Event Payload
 
- * `GameObject target` - The target the event is dealing with.
+ * `GameObject target` - The target GameObject the event is dealing with.
  * `Collider collider` - An optional collider that the body physics is colliding with.
 
 ### Class Methods
@@ -5889,7 +6196,7 @@ Adding the `VRTK_BodyPhysics_UnityEvents` component to `VRTK_BodyPhysics` object
  * Parameters
    * _none_
  * Returns
-   * `bool` - Returns true if the body physics will interact with other scene physics objects and false if the body physics will ignore other scene physics objects.
+   * `bool` - Returns `true` if the body physics will interact with other scene physics objects and `false` if the body physics will ignore other scene physics objects.
 
 The ArePhysicsEnabled method determines whether the body physics are set to interact with other scene physics objects.
 
@@ -5899,8 +6206,8 @@ The ArePhysicsEnabled method determines whether the body physics are set to inte
 
  * Parameters
    * `Vector3 velocity` - The velocity to apply.
-   * `bool forcePhysicsOn` - If true will toggle the body collision physics back on if enable body collisions is true.
-   * `bool applyMomentum` - If true then the existing momentum of the play area will be applied as a force to the resulting velocity.
+   * `bool forcePhysicsOn` - If `true` will toggle the body collision physics back on if enable body collisions is true.
+   * `bool applyMomentum` - If `true` then the existing momentum of the play area will be applied as a force to the resulting velocity.
  * Returns
    * _none_
 
@@ -5911,7 +6218,7 @@ The ApplyBodyVelocity method applies a given velocity to the rigidbody attached 
   > `public virtual void ToggleOnGround(bool state)`
 
  * Parameters
-   * `bool state` - If true then body physics are set to being on the ground.
+   * `bool state` - If `true` then body physics are set to being on the ground.
  * Returns
    * _none_
 
@@ -5922,7 +6229,7 @@ The ToggleOnGround method sets whether the body is considered on the ground or n
   > `public virtual void TogglePreventSnapToFloor(bool state)`
 
  * Parameters
-   * `bool state` - If true the the snap to floor mechanic will not execute.
+   * `bool state` - If `true` the the snap to floor mechanic will not execute.
  * Returns
    * _none_
 
@@ -5946,7 +6253,7 @@ The ForceSnapToFloor method disables the prevent snap to floor and forces the sn
  * Parameters
    * _none_
  * Returns
-   * `bool` - Returns true if the body is currently falling via gravity or via teleport.
+   * `bool` - Returns `true` if the body is currently falling via gravity or via teleport.
 
 The IsFalling method returns the falling state of the body.
 
@@ -5968,7 +6275,7 @@ The IsMoving method returns the moving within play area state of the body.
  * Parameters
    * _none_
  * Returns
-   * `bool` - Returns true if the user is considered to be leaning over an object.
+   * `bool` - Returns `true` if the user is considered to be leaning over an object.
 
 The IsLeaning method returns the leaning state of the user.
 
@@ -5979,7 +6286,7 @@ The IsLeaning method returns the leaning state of the user.
  * Parameters
    * _none_
  * Returns
-   * `bool` - Returns true if the play area is on the ground and false if the play area is in the air.
+   * `bool` - Returns `true` if the play area is on the ground and false if the play area is in the air.
 
 The OnGround method returns whether the user is currently standing on the ground or not.
 
@@ -6081,7 +6388,7 @@ The ResetIgnoredCollisions method is used to clear any stored ignored colliders 
    * `Vector3 direction` - The direction to test for the potential collision.
    * `float maxDistance` - The maximum distance to check for a potential collision.
  * Returns
-   * `bool` - Returns true if a collision will occur on the given direction over the given maxium distance. Returns false if there is no collision about to happen.
+   * `bool` - Returns `true` if a collision will occur on the given direction over the given maxium distance. Returns `false` if there is no collision about to happen.
 
 The SweepCollision method tests to see if a collision will occur with the body collider in a given direction and distance.
 
@@ -6095,7 +6402,14 @@ The SweepCollision method tests to see if a collision will occur with the body c
 
 ### Overview
 
-The Position Rewind script is used to reset the user back to a good known standing position upon receiving a headset collision event.
+Attempts to rewind the position of the play area to a last know valid position upon the headset collision event.
+
+**Required Components:**
+ * `VRTK_BodyPhysics` - A Body Physics script to manage the collisions of the body presence within the scene.
+ * `VRTK_HeadsetCollision` - A Headset Collision script to determine when the headset is colliding with valid geometry.
+
+**Script Usage:**
+ * Place the `VRTK_PositionRewind` script on any active scene GameObject.
 
 ### Inspector Parameters
 
@@ -6176,9 +6490,13 @@ A collection of scripts that provide the ability to utilise and interact with Un
 
 ### Overview
 
-The UI Canvas is used to denote which World Canvases are interactable by a UI Pointer.
+Denotes a Unity World UI Canvas can be interacted with a UIPointer script.
 
-When the script is enabled it will disable the `Graphic Raycaster` on the canvas and create a custom `UI Graphics Raycaster` and the Blocking Objects and Blocking Mask settings are copied over from the `Graphic Raycaster`.
+**Script Usage:**
+ * Place the `VRTK_UICanvas` script on the Unity World UI Canvas to allow UIPointer interactions with.
+
+**Script Dependencies:**
+ * A UI Pointer attached to another GameObject (e.g. controller script alias) to interact with the UICanvas script.
 
 ### Inspector Parameters
 
@@ -6195,11 +6513,18 @@ When the script is enabled it will disable the `Graphic Raycaster` on the canvas
 
 ### Overview
 
-The UI Pointer provides a mechanism for interacting with Unity UI elements on a world canvas. The UI Pointer can be attached to any game object the same way in which a Base Pointer can be and the UI Pointer also requires a controller to initiate the pointer activation and pointer click states.
+Provides the ability to interact with UICanvas elements and the contained Unity UI elements within.
 
-The simplest way to use the UI Pointer is to attach the script to a game controller along with a Simple Pointer as this provides visual feedback as to where the UI ray is pointing.
+**Optional Components:**
+ * `VRTK_ControllerEvents` - The events component to listen for the button presses on. This must be applied on the same GameObject as this script if one is not provided via the `Controller` parameter.
 
-The UI pointer is activated via the `Pointer` alias on the `Controller Events` and the UI pointer click state is triggered via the `UI Click` alias on the `Controller Events`.
+**Script Usage:**
+ * Place the `VRTK_UIPointer` script on either:
+   * The controller script alias GameObject of the controller to emit the UIPointer from (e.g. Right Controller Script Alias).
+   * Any other scene GameObject and provide a valid `Transform` component to the `Pointer Origin Transform` parameter of this script. This does not have to be a controller and can be any GameObject that will emit the UIPointer.
+
+**Script Dependencies:**
+ * A UI Canvas attached to a Unity World UI Canvas.
 
 ### Inspector Parameters
 
@@ -6281,7 +6606,7 @@ The RemoveEventSystem resets the Unity EventSystem back to the original state be
  * Parameters
    * _none_
  * Returns
-   * `bool` - Returns true if the ui pointer should be currently active.
+   * `bool` - Returns `true` if the ui pointer should be currently active.
 
 The PointerActive method determines if the ui pointer beam should be active based on whether the pointer alias is being held and whether the Hold Button To Use parameter is checked.
 
@@ -6292,7 +6617,7 @@ The PointerActive method determines if the ui pointer beam should be active base
  * Parameters
    * _none_
  * Returns
-   * `bool` - Returns true if the activation button is active.
+   * `bool` - Returns `true` if the activation button is active.
 
 The IsActivationButtonPressed method is used to determine if the configured activation button is currently in the active state.
 
@@ -6303,7 +6628,7 @@ The IsActivationButtonPressed method is used to determine if the configured acti
  * Parameters
    * _none_
  * Returns
-   * `bool` - Returns true if the selection button is active.
+   * `bool` - Returns `true` if the selection button is active.
 
 The IsSelectionButtonPressed method is used to determine if the configured selection button is currently in the active state.
 
@@ -6315,7 +6640,7 @@ The IsSelectionButtonPressed method is used to determine if the configured selec
    * `bool checkLastClick` - If this is true then the last frame's state of the UI Click button is also checked to see if a valid click has happened.
    * `bool lastClickState` - This determines what the last frame's state of the UI Click button should be in for it to be a valid click.
  * Returns
-   * `bool` - Returns true if the UI Click button is in a valid state to action a click, returns false if it is not in a valid state.
+   * `bool` - Returns `true` if the UI Click button is in a valid state to action a click, returns `false` if it is not in a valid state.
 
 The ValidClick method determines if the UI Click button is in a valid state to register a click action.
 
@@ -6352,9 +6677,12 @@ The GetOriginPosition method returns the relevant transform forward for the poin
 
 ### Overview
 
-The UI Draggable item will make any UI element draggable on the canvas.
+Denotes a Unity UI Element as being draggable on the UI Canvas.
 
-If a UI Draggable item is set to `Restrict To Drop Zone = true` then the UI Draggable item must be a child of an element that has the VRTK_UIDropZone script applied to it to ensure it starts in a valid drop zone.
+  > If a UI Draggable item is set to `Restrict To Drop Zone = true` then the UI Draggable item must be a child of an element that has the VRTK_UIDropZone script applied to it to ensure it starts in a valid drop zone.
+
+**Script Usage:**
+ * Place the `VRTK_UIDraggableItem` script on the Unity UI element that is to be dragged.
 
 ### Inspector Parameters
 
@@ -6392,9 +6720,12 @@ Adding the `VRTK_UIDraggableItem_UnityEvents` component to `VRTK_UIDraggableItem
 
 ### Overview
 
-A UI Drop Zone is applied to any UI element that is to be considered a valid parent for any UI Draggable element to be dropped into it.
+Specifies a Unity UI Element as being a valid drop zone location for a UI Draggable element.
 
-It's usually appropriate to use a Panel UI element as a drop zone with a layout group applied so new children dropped into the drop zone automatically align.
+  > It's appropriate to use a Panel UI element as a drop zone with a layout group applied so new children dropped into the drop zone automatically align.
+
+**Script Usage:**
+ * Place the `VRTK_UIDropZone` script on the Unity UI element that is to become the drop zone.
 
 ### Example
 
@@ -7855,7 +8186,7 @@ The Nav Mesh Data script allows custom nav mesh information to be provided to th
 
 Adaptive Quality dynamically changes rendering settings to maintain VR framerate while maximizing GPU utilization.
 
-> **Only Compatible With Unity 5.4 and above**
+  > **Only Compatible With Unity 5.4 and above**
 
 There are two goals:
  * Reduce the chances of dropping frames and reprojecting
@@ -8092,9 +8423,9 @@ The UpdateTransform method updates the Transform data on the current GameObject 
 The SDK Object State script can be used to set the enable/active state of a GameObject or Component based on SDK information.
 
 The state can be determined by:
-* The current loaded SDK setup.
-* The current attached Headset type.
-* The current attached Controller type.
+ * The current loaded SDK setup.
+ * The current attached Headset type.
+ * The current attached Controller type.
 
 ### Inspector Parameters
 

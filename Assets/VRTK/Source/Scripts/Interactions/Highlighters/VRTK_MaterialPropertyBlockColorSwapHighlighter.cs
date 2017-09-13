@@ -6,14 +6,16 @@ namespace VRTK.Highlighters
     using System.Collections.Generic;
 
     /// <summary>
-    /// This highlighter swaps the texture colour for the given highlight colour using MaterialPropertyBlocks.
-    /// The effect of this highlighter is the same as of the VRTK_MaterialColorSwapHighlighter.cs but this highlighter
-    /// can additionally handle objects which make use material instances.
+    /// Swaps the texture colour on the Renderers material for the given highlight colour using property blocks.
     /// </summary>
     /// <remarks>
-    /// Due to the way the object material is interacted with, changing the material colour will break Draw Call Batching in Unity whilst the object is highlighted.
+    ///   > Utilising the MaterialPropertyBlock means that Draw Call Batching in Unity is not compromised.
     ///
-    /// The Draw Call Batching will resume on the original material when the item is no longer highlighted.
+    /// **Script Usage:**
+    ///  * Place the `VRTK_MaterialPropertyBlockColorSwapHighlighter` script on either:
+    ///    * The GameObject of the Interactable Object to highlight.
+    ///    * Any other scene GameObject and then link that GameObject to the Interactable Objects `Object Highlighter` parameter to denote use of the highlighter.
+    ///  * Ensure the `Active` parameter is checked.
     /// </remarks>
     [AddComponentMenu("VRTK/Scripts/Interactions/Highlighters/VRTK_MaterialPropertyBlockColorSwapHighlighter")]
     public class VRTK_MaterialPropertyBlockColorSwapHighlighter : VRTK_MaterialColorSwapHighlighter

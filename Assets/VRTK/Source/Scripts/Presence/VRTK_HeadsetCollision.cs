@@ -22,10 +22,11 @@ namespace VRTK
     public delegate void HeadsetCollisionEventHandler(object sender, HeadsetCollisionEventArgs e);
 
     /// <summary>
-    /// The purpose of the Headset Collision is to detect when the user's VR headset collides with another game object.
+    /// Denotes when the HMD is colliding with valid geometry.
     /// </summary>
     /// <remarks>
-    /// The Headset Collision script will automatically create a script on the headset to deal with the collision events.
+    /// **Script Usage:**
+    ///  * Place the `VRTK_HeadsetCollision` script on any active scene GameObject.
     /// </remarks>
     /// <example>
     /// `VRTK/Examples/011_Camera_HeadSetCollisionFading` has collidable walls around the play area and if the user puts their head into any of the walls then the headset will fade to black.
@@ -85,7 +86,7 @@ namespace VRTK
         /// <summary>
         /// The IsColliding method is used to determine if the headset is currently colliding with a valid game object and returns true if it is and false if it is not colliding with anything or an invalid game object.
         /// </summary>
-        /// <returns>Returns true if the headset is currently colliding with a valid game object.</returns>
+        /// <returns>Returns `true` if the headset is currently colliding with a valid game object.</returns>
         public virtual bool IsColliding()
         {
             return headsetColliding;

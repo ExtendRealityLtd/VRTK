@@ -6,14 +6,16 @@ namespace VRTK.Highlighters
     using System.Collections.Generic;
 
     /// <summary>
-    /// The Material Colour Swap Highlighter is a basic implementation that simply swaps the texture colour for the given highlight colour.
+    /// Swaps the texture colour on the Renderers material for the given highlight colour.
     /// </summary>
     /// <remarks>
-    /// Due to the way the object material is interacted with, changing the material colour will break Draw Call Batching in Unity whilst the object is highlighted.
+    ///   > Due to the way the object material is interacted with, changing the material colour will break Draw Call Batching in Unity whilst the object is highlighted. The Draw Call Batching will resume on the original material when the item is no longer highlighted.
     ///
-    /// The Draw Call Batching will resume on the original material when the item is no longer highlighted.
-    ///
-    /// This is the default highlighter that is applied to any script that requires a highlighting component (e.g. `VRTK_Interactable_Object`).
+    /// **Script Usage:**
+    ///  * Place the `VRTK_MaterialColorSwapHighlighter` script on either:
+    ///    * The GameObject of the Interactable Object to highlight.
+    ///    * Any other scene GameObject and then link that GameObject to the Interactable Objects `Object Highlighter` parameter to denote use of the highlighter.
+    ///  * Ensure the `Active` parameter is checked.
     /// </remarks>
     /// <example>
     /// `VRTK/Examples/005_Controller_BasicObjectGrabbing` demonstrates the solid highlighting on the green cube, red cube and flying saucer when the controller touches it.

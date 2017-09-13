@@ -4,16 +4,20 @@ namespace VRTK
     using UnityEngine;
 
     /// <summary>
-    /// The Interact Use script is attached to a Controller object and requires the `VRTK_ControllerEvents` script to be attached as it uses this for listening to the controller button events for using and stop using interactable game objects.
+    /// Determines if the Interact Touch can initiate a use interaction with the touched Interactable Object.
     /// </summary>
     /// <remarks>
-    /// It listens for the `AliasUseOn` and `AliasUseOff` events to determine when an object should be used and should stop using.
+    /// **Required Components:**
+    ///  * `VRTK_InteractTouch` - The touch component to determine when a valid touch has taken place to denote a use interaction can occur. This must be applied on the same GameObject as this script if one is not provided via the `Interact Touch` parameter.
     ///
-    /// The Controller object also requires the `VRTK_InteractTouch` script to be attached to it as this is used to determine when an interactable object is being touched. Only valid touched objects can be used.
+    /// **Optional Components:**
+    ///  * `VRTK_ControllerEvents` - The events component to listen for the button presses on. This must be applied on the same GameObject as this script if one is not provided via the `Controller Events` parameter.
+    ///  * `VRTK_InteractGrab` - The grab component to determine when a valid grab has taken place. This must be applied on the same GameObject as this script if one is not provided via the `Interact Grab` parameter.
     ///
-    /// An object can be used if the Controller touches a game object which contains the `VRTK_InteractableObject` script and has the flag `isUsable` set to `true`.
-    ///
-    /// If a valid interactable object is usable then pressing the set `Use` button on the Controller (default is `Trigger`) will call the `StartUsing` method on the touched interactable object.
+    /// **Script Usage:**
+    ///  * Place the `VRTK_InteractUse` script on either:
+    ///    * The GameObject with the Interact Touch and Controller Events scripts.
+    ///    * Any other scene GameObject and provide a valid `VRTK_ControllerEvents` component to the `Controller Events` parameter and a valid `VRTK_InteractTouch` component to the `Interact Touch` parameter of this script.
     /// </remarks>
     /// <example>
     /// `VRTK/Examples/006_Controller_UsingADoor` simulates using a door object to open and close it. It also has a cube on the floor that can be grabbed to show how interactable objects can be usable or grabbable.
@@ -25,12 +29,12 @@ namespace VRTK
     {
         [Header("Use Settings")]
 
-        [Tooltip("The button used to use/unuse a touched object.")]
+        [Tooltip("The button used to use/unuse a touched Interactable Object.")]
         public VRTK_ControllerEvents.ButtonAlias useButton = VRTK_ControllerEvents.ButtonAlias.TriggerPress;
 
         [Header("Custom Settings")]
 
-        [Tooltip("The controller to listen for the events on. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.")]
+        [Tooltip("The Controller Events to listen for the events on. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.")]
         public VRTK_ControllerEvents controllerEvents;
         [Tooltip("The Interact Touch to listen for touches on. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.")]
         public VRTK_InteractTouch interactTouch;
@@ -127,23 +131,23 @@ namespace VRTK
         /// <summary>
         /// The IsUsebuttonPressed method determines whether the current use alias button is being pressed down.
         /// </summary>
-        /// <returns>Returns true if the use alias button is being held down.</returns>
+        /// <returns>Returns `true` if the use alias button is being held down.</returns>
         public virtual bool IsUseButtonPressed()
         {
             return usePressed;
         }
 
         /// <summary>
-        /// The GetUsingObject method returns the current object being used by the controller.
+        /// The GetUsingObject method returns the current GameObject being used by the Interact Use.
         /// </summary>
-        /// <returns>The game object of what is currently being used by this controller.</returns>
+        /// <returns>The GameObject of what is currently being used by this Interact Use.</returns>
         public virtual GameObject GetUsingObject()
         {
             return usingObject;
         }
 
         /// <summary>
-        /// The ForceStopUsing method will force the controller to stop using the currently touched object and will also stop the object's using action.
+        /// The ForceStopUsing method will force the Interact Use to stop using the currently touched Interactable Object and will also stop the Interactable Object's using action.
         /// </summary>
         public virtual void ForceStopUsing()
         {
@@ -154,7 +158,7 @@ namespace VRTK
         }
 
         /// <summary>
-        /// The ForceResetUsing will force the controller to stop using the currently touched object but the object will continue with it's existing using action.
+        /// The ForceResetUsing will force the Interact Use to stop using the currently touched Interactable Object but the Interactable Object will continue with it's existing using action.
         /// </summary>
         public virtual void ForceResetUsing()
         {
@@ -165,7 +169,7 @@ namespace VRTK
         }
 
         /// <summary>
-        /// The AttemptUse method will attempt to use the currently touched object without needing to press the use button on the controller.
+        /// The AttemptUse method will attempt to use the currently touched Interactable Object without needing to press the use button on the controller.
         /// </summary>
         public virtual void AttemptUse()
         {

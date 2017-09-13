@@ -5,8 +5,17 @@ namespace VRTK
     using System.Collections.Generic;
 
     /// <summary>
-    /// The Object Touch Auto Interact script allows grab or use interactions on an object to automatically happen upon touching the interactable object.
+    /// Allows for Interact Grab or Interact Use interactions to automatically happen upon touching an Interactable Object.
     /// </summary>
+    /// <remarks>
+    /// **Required Components:**
+    ///  * `VRTK_InteractableObject` - The Interactable Object component to detect interactions on. This must be applied on the same GameObject as this script if one is not provided via the `Interactable Object` parameter.
+    ///
+    /// **Script Usage:**
+    ///  * Place the `VRTK_ObjectTouchAutoInteract` script on either:
+    ///    * The GameObject of the Interactable Object to detect interactions on.
+    ///    * Any other scene GameObject and provide a valid `VRTK_InteractableObject` component to the `Interactable Object` parameter of this script.
+    /// </remarks>
     [AddComponentMenu("VRTK/Scripts/Interactions/VRTK_ObjectTouchAutoInteract")]
     public class VRTK_ObjectTouchAutoInteract : MonoBehaviour
     {
@@ -35,7 +44,7 @@ namespace VRTK
         public AutoInteractions grabOnTouchWhen = AutoInteractions.Never;
         [Tooltip("After being ungrabbed, another auto grab on touch can only occur after this time.")]
         public float regrabDelay = 0.1f;
-        [Tooltip("If this is checked then the grab on touch check will happen every frame and not only on the first touch of the object.")]
+        [Tooltip("If this is checked then the grab on touch check will happen every frame and not only on the first touch of the Interactable Object.")]
         public bool continuousGrabCheck = false;
 
         [Header("Auto Use")]
@@ -44,12 +53,12 @@ namespace VRTK
         public AutoInteractions useOnTouchWhen = AutoInteractions.Never;
         [Tooltip("After being unused, another auto use on touch can only occur after this time.")]
         public float reuseDelay = 0.1f;
-        [Tooltip("If this is checked then the use on touch check will happen every frame and not only on the first touch of the object.")]
+        [Tooltip("If this is checked then the use on touch check will happen every frame and not only on the first touch of the Interactable Object.")]
         public bool continuousUseCheck = false;
 
         [Header("Custom Settings")]
 
-        [Tooltip("The interactable object that the auto interaction will occur on. If this is blank then the script must be on the same GameObject as the Interactable Object script.")]
+        [Tooltip("The Interactable Object that the auto interaction will occur on. If this is blank then the script must be on the same GameObject as the Interactable Object script.")]
         public VRTK_InteractableObject interactableObject;
 
         protected float regrabTimer;

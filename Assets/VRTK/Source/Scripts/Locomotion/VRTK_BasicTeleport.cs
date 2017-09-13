@@ -16,29 +16,35 @@ namespace VRTK
     public delegate void TeleportEventHandler(object sender, DestinationMarkerEventArgs e);
 
     /// <summary>
-    /// The basic teleporter updates the user's x/z position in the game world to the position of a Base Pointer's tip location which is set via the `DestinationMarkerSet` event.
+    /// Updates the `x/z` position of the SDK Camera Rig with an optional screen fade.
     /// </summary>
     /// <remarks>
-    /// The y position is never altered so the basic teleporter cannot be used to move up and down game objects as it only allows for travel across a flat plane.
+    ///   > The `y` position is not altered by the Basic Teleport so it only allows for movement across a 2D plane.
+    ///
+    /// **Script Usage:**
+    ///  * Place the `VRTK_BasicTeleport` script on any active scene GameObject.
+    ///
+    /// **Script Dependencies:**
+    ///  * An optional Destination Marker (such as a Pointer) to set the destination of the teleport location.
     /// </remarks>
     /// <example>
-    /// `VRTK/Examples/004_CameraRig_BasicTeleport` uses the `VRTK_SimplePointer` script on the Controllers to initiate a laser pointer by pressing the `Touchpad` on the controller and when the laser pointer is deactivated (release the `Touchpad`) then the user is teleported to the location of the laser pointer tip as this is where the pointer destination marker position is set to.
+    /// `VRTK/Examples/004_CameraRig_BasicTeleport` uses the `VRTK_Pointer` script on the Controllers to initiate a laser pointer by pressing the `Touchpad` on the controller and when the laser pointer is deactivated (release the `Touchpad`) then the user is teleported to the location of the laser pointer tip as this is where the pointer destination marker position is set to.
     /// </example>
     [AddComponentMenu("VRTK/Scripts/Locomotion/VRTK_BasicTeleport")]
     public class VRTK_BasicTeleport : MonoBehaviour
     {
         [Header("Base Settings")]
 
-        [Tooltip("The colour to fade to when blinking on teleport.")]
+        [Tooltip("The colour to fade to when fading on teleport.")]
         public Color blinkToColor = Color.black;
-        [Tooltip("The fade blink speed can be changed on the basic teleport script to provide a customised teleport experience. Setting the speed to 0 will mean no fade blink effect is present.")]
+        [Tooltip("The time taken to fade to the `Blink To Color`. Setting the speed to `0` will mean no fade effect is present.")]
         public float blinkTransitionSpeed = 0.6f;
-        [Tooltip("A range between 0 and 32 that determines how long the blink transition will stay blacked out depending on the distance being teleported. A value of 0 will not delay the teleport blink effect over any distance, a value of 32 will delay the teleport blink fade in even when the distance teleported is very close to the original position. This can be used to simulate time taking longer to pass the further a user teleports. A value of 16 provides a decent basis to simulate this to the user.")]
+        [Tooltip("Determines how long the fade will stay present out depending on the distance being teleported. A value of `0` will not delay the teleport fade effect over any distance, a max value will delay the teleport fade in even when the distance teleported is very close to the original position.")]
         [Range(0f, 32f)]
         public float distanceBlinkDelay = 0f;
         [Tooltip("If this is checked then the teleported location will be the position of the headset within the play area. If it is unchecked then the teleported location will always be the centre of the play area even if the headset position is not in the centre of the play area.")]
         public bool headsetPositionCompensation = true;
-        [Tooltip("A specified VRTK_PolicyList to use to determine whether destination targets will be acted upon by the Teleporter.")]
+        [Tooltip("A specified VRTK_PolicyList to use to determine whether destination targets will be acted upon by the teleporter.")]
         public VRTK_PolicyList targetListPolicy;
         [Tooltip("An optional NavMeshData object that will be utilised for limiting the teleport to within any scene NavMesh.")]
         public VRTK_NavMeshData navMeshData;
@@ -115,7 +121,7 @@ namespace VRTK
         /// </summary>
         /// <param name="target">The Transform that the destination marker is touching.</param>
         /// <param name="destinationPosition">The position in world space that is the destination.</param>
-        /// <returns>Returns true if the target is a valid location.</returns>
+        /// <returns>Returns `true` if the target is a valid location.</returns>
         public virtual bool ValidLocation(Transform target, Vector3 destinationPosition)
         {
             //If the target is one of the player objects or a UI Canvas then it's never a valid location
@@ -157,7 +163,7 @@ namespace VRTK
         /// <param name="target">The Transform of the destination object.</param>
         /// <param name="destinationPosition">The world position to teleport to.</param>
         /// <param name="destinationRotation">The world rotation to teleport to.</param>
-        /// <param name="forceDestinationPosition">If true then the given destination position should not be altered by anything consuming the payload.</param>
+        /// <param name="forceDestinationPosition">If `true` then the given destination position should not be altered by anything consuming the payload.</param>
         public virtual void Teleport(Transform target, Vector3 destinationPosition, Quaternion? destinationRotation = null, bool forceDestinationPosition = false)
         {
             DestinationMarkerEventArgs teleportArgs = BuildTeleportArgs(target, destinationPosition, destinationRotation, forceDestinationPosition);

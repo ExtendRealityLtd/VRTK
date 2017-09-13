@@ -6,22 +6,25 @@ namespace VRTK
     /// <summary>
     /// Event Payload
     /// </summary>
-    /// <param name="target">The GameObject of the interactable object that is being interacted with by the controller.</param>
-    public struct SlingshotJumpEventArgs
-    {
-        public GameObject target;
-    }
-
-    /// <summary>
-    /// Event Payload
-    /// </summary>
     /// <param name="sender">this object</param>
-    /// <param name="e"><see cref="SlingshotJumpEventArgs"/></param>
-    public delegate void SlingshotJumpEventHandler(object sender, SlingshotJumpEventArgs e);
+    public delegate void SlingshotJumpEventHandler(object sender);
 
     /// <summary>
-    /// Slingshot Jump allows player jumping based on the direction and amount pulled back of each controller. This slingshots the player in defined direction and speed.
+    /// Provides the ability for the SDK Camera Rig to be thrown around with a jumping motion by slingshotting based on the pull back of each valid controller.
     /// </summary>
+    /// <remarks>
+    /// **Required Components:**
+    ///  * `VRTK_PlayerClimb` - A Player Climb script for dealing with the physical throwing of the play area as if throwing off an invisible climbed object.
+    ///  * `VRTK_BodyPhysics` - A Body Physics script to deal with the effects of physics and gravity on the play area.
+    ///
+    /// **Optional Components:**
+    ///  * `VRTK_BasicTeleport` - A Teleporter script to use when snapping the play area to the nearest floor when releasing from grab.
+    ///  * `VRTK_HeadsetCollision` - A Headset Collision script to determine when the headset is colliding with geometry to know when to reset to a valid location.
+    ///  * `VRTK_PositionRewind` - A Position Rewind script to utilise when resetting to a valid location upon ungrabbing whilst colliding with geometry.
+    ///
+    /// **Script Usage:**
+    ///  * Place the `VRTK_SlingshotJump` script on the same GameObject as the `VRTK_PlayerClimb` script.
+    /// </remarks>
     /// <example>
     /// `VRTK/Examples/037_CameraRig_ClimbingFalling` shows how to set up a scene with slingshot jumping. This script just needs to be added to the PlayArea object and the requested forces and buttons set.
     /// </example>
@@ -30,20 +33,20 @@ namespace VRTK
     {
         [Header("SlingshotJump Settings")]
 
-        [Tooltip("How close together the trigger releases have to be to initiate a jump.")]
+        [Tooltip("How close together the button releases have to be to initiate a jump.")]
         public float releaseWindowTime = 0.5f;
         [Tooltip("Multiplier that increases the jump strength.")]
         public float velocityMultiplier = 5.0f;
         [Tooltip("The maximum velocity a jump can be.")]
         public float velocityMax = 8.0f;
 
-        [Tooltip("This button will cancel an already tensioned sling shot.")]
-        [SerializeField]
-        protected VRTK_ControllerEvents.ButtonAlias cancelButton = VRTK_ControllerEvents.ButtonAlias.Undefined;
-        [Tooltip("This button will start the sling shot move.")]
+        [Tooltip("The button that will initiate the slingshot move.")]
         [SerializeField]
         protected VRTK_ControllerEvents.ButtonAlias activationButton = VRTK_ControllerEvents.ButtonAlias.GripPress;
-        [Tooltip("The VRTK_BodyPhysics object used on the player. If the script is being applied onto an object that already has a VRTK_BodyPhysics component, this parameter can be left blank as it will be auto populated by the script at runtime.")]
+        [Tooltip("The button that will cancel an already tensioned sling shot.")]
+        [SerializeField]
+        protected VRTK_ControllerEvents.ButtonAlias cancelButton = VRTK_ControllerEvents.ButtonAlias.Undefined;
+        [Tooltip("The Body Physics script to deal with the physics and gravity of the play area. If the script is being applied onto an object that already has a VRTK_BodyPhysics component, this parameter can be left blank as it will be auto populated by the script at runtime.")]
         [SerializeField]
         protected VRTK_BodyPhysics bodyPhysics;
 
@@ -225,23 +228,16 @@ namespace VRTK
 
                 UnAim();
 
-                OnSlingshotJumped(SetPlayerClimbEvent(gameObject));
+                OnSlingshotJumped();
             }
         }
 
-        protected void OnSlingshotJumped(SlingshotJumpEventArgs e)
+        protected void OnSlingshotJumped()
         {
             if (SlingshotJumped != null)
             {
-                SlingshotJumped(this, e);
+                SlingshotJumped(this);
             }
-        }
-
-        protected SlingshotJumpEventArgs SetPlayerClimbEvent(GameObject target)
-        {
-            SlingshotJumpEventArgs e;
-            e.target = target;
-            return e;
         }
 
         protected void InitListeners(bool state)
