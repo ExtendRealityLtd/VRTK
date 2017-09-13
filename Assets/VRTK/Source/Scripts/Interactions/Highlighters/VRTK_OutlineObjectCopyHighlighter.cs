@@ -26,7 +26,7 @@ namespace VRTK.Highlighters
         public bool enableSubmeshHighlight = false;
 
         protected Material stencilOutline;
-        protected GameObject[] highlightModels;
+        protected Renderer[] highlightModels;
         protected string[] copyComponents = new string[] { "UnityEngine.MeshFilter", "UnityEngine.MeshRenderer" };
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace VRTK.Highlighters
         /// <param name="duration">Not used.</param>
         public override void Highlight(Color? color, float duration = 0f)
         {
-            if (highlightModels != null && highlightModels.Length > 0)
+            if (highlightModels != null && highlightModels.Length > 0 && stencilOutline != null)
             {
                 stencilOutline.SetFloat("_Thickness", thickness);
                 stencilOutline.SetColor("_OutlineColor", (Color)color);
@@ -78,7 +78,8 @@ namespace VRTK.Highlighters
                 {
                     if (highlightModels[i] != null)
                     {
-                        highlightModels[i].SetActive(true);
+                        highlightModels[i].gameObject.SetActive(true);
+                        highlightModels[i].material = stencilOutline;
                     }
                 }
             }
@@ -102,7 +103,7 @@ namespace VRTK.Highlighters
                 {
                     if (highlightModels[i] != null)
                     {
-                        highlightModels[i].SetActive(false);
+                        highlightModels[i].gameObject.SetActive(false);
                     }
                 }
             }
@@ -140,7 +141,7 @@ namespace VRTK.Highlighters
         {
             if (customOutlineModels != null && customOutlineModels.Length > 0)
             {
-                highlightModels = new GameObject[customOutlineModels.Length];
+                highlightModels = new Renderer[customOutlineModels.Length];
                 for (int i = 0; i < customOutlineModels.Length; i++)
                 {
                     highlightModels[i] = CreateHighlightModel(customOutlineModels[i], "");
@@ -152,7 +153,7 @@ namespace VRTK.Highlighters
         {
             if (customOutlineModelPaths != null && customOutlineModelPaths.Length > 0)
             {
-                highlightModels = new GameObject[customOutlineModels.Length];
+                highlightModels = new Renderer[customOutlineModels.Length];
                 for (int i = 0; i < customOutlineModelPaths.Length; i++)
                 {
                     highlightModels[i] = CreateHighlightModel(null, customOutlineModelPaths[i]);
@@ -164,7 +165,7 @@ namespace VRTK.Highlighters
         {
             if (highlightModels == null || highlightModels.Length == 0)
             {
-                highlightModels = new GameObject[1];
+                highlightModels = new Renderer[1];
                 highlightModels[0] = CreateHighlightModel(null, "");
             }
         }
@@ -200,10 +201,10 @@ namespace VRTK.Highlighters
                     Destroy(existingHighlighterObjects[i].gameObject);
                 }
             }
-            highlightModels = new GameObject[0];
+            highlightModels = new Renderer[0];
         }
 
-        protected virtual GameObject CreateHighlightModel(GameObject givenOutlineModel, string givenOutlineModelPath)
+        protected virtual Renderer CreateHighlightModel(GameObject givenOutlineModel, string givenOutlineModelPath)
         {
             if (givenOutlineModel != null)
             {
@@ -247,6 +248,7 @@ namespace VRTK.Highlighters
 
             MeshFilter copyMesh = copyModel.GetComponent<MeshFilter>();
             MeshFilter highlightMesh = highlightModel.GetComponent<MeshFilter>();
+            Renderer returnHighlightModel = highlightModel.GetComponent<Renderer>();
             if (highlightMesh != null)
             {
                 if (enableSubmeshHighlight)
@@ -269,14 +271,13 @@ namespace VRTK.Highlighters
                 {
                     highlightMesh.mesh = copyMesh.mesh;
                 }
-
-                highlightModel.GetComponent<Renderer>().material = stencilOutline;
+                returnHighlightModel.material = stencilOutline;
             }
             highlightModel.SetActive(false);
 
             VRTK_PlayerObject.SetPlayerObject(highlightModel, VRTK_PlayerObject.ObjectTypes.Highlighter);
 
-            return highlightModel;
+            return returnHighlightModel;
         }
     }
 }
