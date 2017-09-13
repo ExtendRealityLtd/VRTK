@@ -1473,6 +1473,7 @@ The Play Area Cursor is used in conjunction with a Pointer script and displays a
  * **Headset Out Of Bounds Is Collision:** If this is checked then if the user's headset is outside of the play area cursor bounds then it is considered a collision even if the play area isn't colliding with anything.
  * **Display On Invalid Location:** If this is checked then the play area cursor will be displayed when the location is invalid.
  * **Target List Policy:** A specified VRTK_PolicyList to use to determine whether the play area cursor collisions will be acted upon.
+ * **Direction Indicator:** A custom Pointer Direction Indicator to use to determine the rotation of the Play Area Cursor.
  * **Valid Location Object:** A custom GameObject to use for the play area cursor representation for when the location is valid.
  * **Invalid Location Object:** A custom GameObject to use for the play area cursor representation for when the location is invalid.
 
