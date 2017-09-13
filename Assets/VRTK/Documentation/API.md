@@ -2995,9 +2995,17 @@ The UnsubscribeToAxisAliasEvent method makes it easier to unsubscribe from axis 
 
 ### Overview
 
-The Controller Highlighter script provides methods to deal with highlighting controller elements.
+Enables highlighting of controller elements.
 
-The highlighting of the controller is defaulted to use the `VRTK_MaterialColorSwapHighlighter` if no other highlighter is applied to the Object.
+**Script Usage:**
+* Place the `VRTK_ControllerHighlighter` script on either:
+* The controller script alias GameObject of the controller to affect (e.g. Right Controller Script Alias).
+* Any other scene GameObject and provide the controller script alias GameObject to the `Controller Alias` parameter of this script.
+* The Model Element Paths will be auto populated at runtime based on the SDK Setup Model Alias being used (except if a custom Model Alias for the SDK Setup is provided).
+* The Highlighter used by the Controller Highlighter will be selected in the following order:
+* The provided Base Highlighter in the `Controller Highlighter` parameter.
+* If the above is not provided, then the first active Base Highlighter found on the actual controller GameObject will be used.
+* If the above is not found, then a Material Color Swap Highlighter will be created on the actual controller GameObject at runtime.
 
 ### Inspector Parameters
 
@@ -3013,8 +3021,9 @@ The highlighting of the controller is defaulted to use the `VRTK_MaterialColorSw
  * **Highlight Start Menu:** The colour to set the start menu highlight colour to.
  * **Model Element Paths:** A collection of strings that determine the path to the controller model sub elements for identifying the model parts at runtime. If the paths are left empty they will default to the model element paths of the selected SDK Bridge.
  * **Element Highlighter Overrides:** A collection of highlighter overrides for each controller model sub element. If no highlighter override is given then highlighter on the Controller game object is used.
- * **Controller Alias:** An optional GameObject to specify which controller to apply the script methods to. If this is left blank then this script is required to be placed on a Controller Alias GameObject and it will use the Actual Controller object linked to the script alias.
- * **Model Container:** An optional GameObject to specifiy where the controller models are. If this is left blank then the Model Alias object will be used.
+ * **Controller Alias:** An optional GameObject to specify which controller to apply the script methods to. If this is left blank then this script is required to be placed on a controller script alias GameObject and it will use the Actual Controller GameObject linked to the controller script alias.
+ * **Model Container:** An optional GameObject to specifiy where the controller models are. If this is left blank then the controller Model Alias object will be used.
+ * **Controller Highlighter:** An optional Highlighter to use when highlighting the controller element. If this is left blank, then the first active highlighter on the same GameObject will be used, if one isn't found then a Material Color Swap Highlighter will be created at runtime.
 
 ### Class Methods
 
@@ -3045,8 +3054,8 @@ The PopulateHighlighters method sets up the highlighters on the controller model
   > `public virtual void HighlightController(Color color, float fadeDuration = 0f)`
 
  * Parameters
-   * `Color color` - The colour to highlight the controller to.
-   * `float fadeDuration` - The duration in time to fade from the initial colour to the target colour.
+   * `Color color` - The Color to highlight the controller to.
+   * `float fadeDuration` - The duration in seconds to fade from the initial color to the target color.
  * Returns
    * _none_
 
@@ -3069,8 +3078,8 @@ The UnhighlightController method attempts to remove the highlight from all sub m
 
  * Parameters
    * `SDK_BaseController.ControllerElements elementType` - The element type on the controller.
-   * `Color color` - The colour to highlight the controller element to.
-   * `float fadeDuration` - The duration in time to fade from the initial colour to the target colour.
+   * `Color color` - The Color to highlight the controller element to.
+   * `float fadeDuration` - The duration in seconds to fade from the initial color to the target color.
  * Returns
    * _none_
 

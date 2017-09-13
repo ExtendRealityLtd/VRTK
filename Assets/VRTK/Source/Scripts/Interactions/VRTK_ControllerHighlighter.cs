@@ -6,10 +6,18 @@ namespace VRTK
     using Highlighters;
 
     /// <summary>
-    /// The Controller Highlighter script provides methods to deal with highlighting controller elements.
+    /// Enables highlighting of controller elements.
     /// </summary>
     /// <remarks>
-    /// The highlighting of the controller is defaulted to use the `VRTK_MaterialColorSwapHighlighter` if no other highlighter is applied to the Object.
+    /// **Script Usage:**
+    ///  * Place the `VRTK_ControllerHighlighter` script on either:
+    ///    * The controller script alias GameObject of the controller to affect (e.g. Right Controller Script Alias).
+    ///    * Any other scene GameObject and provide the controller script alias GameObject to the `Controller Alias` parameter of this script.
+    ///  * The Model Element Paths will be auto populated at runtime based on the SDK Setup Model Alias being used (except if a custom Model Alias for the SDK Setup is provided).
+    ///  * The Highlighter used by the Controller Highlighter will be selected in the following order:
+    ///    * The provided Base Highlighter in the `Controller Highlighter` parameter.
+    ///    * If the above is not provided, then the first active Base Highlighter found on the actual controller GameObject will be used.
+    ///    * If the above is not found, then a Material Color Swap Highlighter will be created on the actual controller GameObject at runtime.
     /// </remarks>
     /// <example>
     /// `VRTK/Examples/035_Controller_OpacityAndHighlighting` demonstrates the ability to change the opacity of a controller model and to highlight specific elements of a controller such as the buttons or even the entire controller model.
@@ -52,14 +60,19 @@ namespace VRTK
         public VRTK_ControllerModelElementPaths modelElementPaths = new VRTK_ControllerModelElementPaths();
         [Tooltip("A collection of highlighter overrides for each controller model sub element. If no highlighter override is given then highlighter on the Controller game object is used.")]
         public VRTK_ControllerElementHighlighters elementHighlighterOverrides = new VRTK_ControllerElementHighlighters();
-        [Tooltip("An optional GameObject to specify which controller to apply the script methods to. If this is left blank then this script is required to be placed on a Controller Alias GameObject and it will use the Actual Controller object linked to the script alias.")]
+        [Tooltip("An optional GameObject to specify which controller to apply the script methods to. If this is left blank then this script is required to be placed on a controller script alias GameObject and it will use the Actual Controller GameObject linked to the controller script alias.")]
         public GameObject controllerAlias;
-        [Tooltip("An optional GameObject to specifiy where the controller models are. If this is left blank then the Model Alias object will be used.")]
+        [Tooltip("An optional GameObject to specifiy where the controller models are. If this is left blank then the controller Model Alias object will be used.")]
         public GameObject modelContainer;
+        [Tooltip("An optional Highlighter to use when highlighting the controller element. If this is left blank, then the first active highlighter on the same GameObject will be used, if one isn't found then a Material Color Swap Highlighter will be created at runtime.")]
+        public VRTK_BaseHighlighter controllerHighlighter;
 
         protected bool controllerHighlighted = false;
         protected Dictionary<string, Transform> cachedElements;
         protected Dictionary<string, object> highlighterOptions;
+        protected VRTK_BaseHighlighter baseHighlighter;
+        protected bool autoHighlighter = false;
+        protected bool trackedControllerReady = false;
 
         protected Color lastHighlightController;
         protected Color lastHighlightBody;
@@ -112,34 +125,35 @@ namespace VRTK
                 highlighterOptions = new Dictionary<string, object>();
                 highlighterOptions.Add("resetMainTexture", true);
 
-                VRTK_BaseHighlighter objectHighlighter = VRTK_BaseHighlighter.GetActiveHighlighter(actualController);
-
-                if (objectHighlighter == null)
+                autoHighlighter = false;
+                baseHighlighter = GetValidHighlighter();
+                if (baseHighlighter == null)
                 {
-                    objectHighlighter = actualController.AddComponent<VRTK_MaterialColorSwapHighlighter>();
+                    autoHighlighter = true;
+                    baseHighlighter = actualController.AddComponent<VRTK_MaterialColorSwapHighlighter>();
                 }
 
                 SDK_BaseController.ControllerHand currentHand = VRTK_DeviceFinder.GetControllerHand(actualController);
 
-                objectHighlighter.Initialise(null, null, highlighterOptions);
+                baseHighlighter.Initialise(null, actualController, highlighterOptions);
 
-                AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.ButtonOne, currentHand)), objectHighlighter, elementHighlighterOverrides.buttonOne);
-                AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.ButtonTwo, currentHand)), objectHighlighter, elementHighlighterOverrides.buttonTwo);
-                AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.Body, currentHand)), objectHighlighter, elementHighlighterOverrides.body);
-                AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.GripLeft, currentHand)), objectHighlighter, elementHighlighterOverrides.gripLeft);
-                AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.GripRight, currentHand)), objectHighlighter, elementHighlighterOverrides.gripRight);
-                AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.StartMenu, currentHand)), objectHighlighter, elementHighlighterOverrides.startMenu);
-                AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.SystemMenu, currentHand)), objectHighlighter, elementHighlighterOverrides.systemMenu);
-                AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.Touchpad, currentHand)), objectHighlighter, elementHighlighterOverrides.touchpad);
-                AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.Trigger, currentHand)), objectHighlighter, elementHighlighterOverrides.trigger);
+                AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.ButtonOne, currentHand)), baseHighlighter, elementHighlighterOverrides.buttonOne);
+                AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.ButtonTwo, currentHand)), baseHighlighter, elementHighlighterOverrides.buttonTwo);
+                AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.Body, currentHand)), baseHighlighter, elementHighlighterOverrides.body);
+                AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.GripLeft, currentHand)), baseHighlighter, elementHighlighterOverrides.gripLeft);
+                AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.GripRight, currentHand)), baseHighlighter, elementHighlighterOverrides.gripRight);
+                AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.StartMenu, currentHand)), baseHighlighter, elementHighlighterOverrides.startMenu);
+                AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.SystemMenu, currentHand)), baseHighlighter, elementHighlighterOverrides.systemMenu);
+                AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.Touchpad, currentHand)), baseHighlighter, elementHighlighterOverrides.touchpad);
+                AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.Trigger, currentHand)), baseHighlighter, elementHighlighterOverrides.trigger);
             }
         }
 
         /// <summary>
         /// The HighlightController method attempts to highlight all sub models of the controller.
         /// </summary>
-        /// <param name="color">The colour to highlight the controller to.</param>
-        /// <param name="fadeDuration">The duration in time to fade from the initial colour to the target colour.</param>
+        /// <param name="color">The Color to highlight the controller to.</param>
+        /// <param name="fadeDuration">The duration in seconds to fade from the initial color to the target color.</param>
         public virtual void HighlightController(Color color, float fadeDuration = 0f)
         {
             HighlightElement(SDK_BaseController.ControllerElements.ButtonOne, color, fadeDuration);
@@ -181,8 +195,8 @@ namespace VRTK
         /// The HighlightElement method attempts to highlight a specific controller element.
         /// </summary>
         /// <param name="elementType">The element type on the controller.</param>
-        /// <param name="color">The colour to highlight the controller element to.</param>
-        /// <param name="fadeDuration">The duration in time to fade from the initial colour to the target colour.</param>
+        /// <param name="color">The Color to highlight the controller element to.</param>
+        /// <param name="fadeDuration">The duration in seconds to fade from the initial color to the target color.</param>
         public virtual void HighlightElement(SDK_BaseController.ControllerElements elementType, Color color, float fadeDuration = 0f)
         {
             Transform element = GetElementTransform(GetPathForControllerElement(elementType));
@@ -230,6 +244,10 @@ namespace VRTK
                 {
                     trackedController.ControllerModelAvailable += DoControllerModelAvailable;
                 }
+                if (trackedControllerReady)
+                {
+                    ControllerAvailable();
+                }
             }
             else
             {
@@ -242,6 +260,10 @@ namespace VRTK
             if (trackedController != null)
             {
                 trackedController.ControllerModelAvailable -= DoControllerModelAvailable;
+            }
+            if (autoHighlighter && baseHighlighter != null)
+            {
+                Destroy(baseHighlighter);
             }
             actualController = null;
         }
@@ -266,6 +288,16 @@ namespace VRTK
 
         protected virtual void DoControllerModelAvailable(object sender, VRTKTrackedControllerEventArgs e)
         {
+            trackedControllerReady = true;
+            ControllerAvailable();
+        }
+
+        protected virtual void ControllerAvailable()
+        {
+            if (GetValidHighlighter() != baseHighlighter)
+            {
+                baseHighlighter = null;
+            }
             ConfigureControllerPaths();
             actualModelContainer = (modelContainer != null ? modelContainer : VRTK_DeviceFinder.GetModelAliasController(actualController));
             PopulateHighlighters();
@@ -394,9 +426,14 @@ namespace VRTK
         {
             if (element != null)
             {
+                VRTK_BaseHighlighter exitingHighlighter = element.GetComponent<VRTK_BaseHighlighter>();
+                if (exitingHighlighter != null)
+                {
+                    Destroy(exitingHighlighter);
+                }
                 VRTK_BaseHighlighter highlighter = (overrideHighlighter != null ? overrideHighlighter : parentHighlighter);
                 VRTK_BaseHighlighter clonedHighlighter = (VRTK_BaseHighlighter)VRTK_SharedMethods.CloneComponent(highlighter, element.gameObject);
-                clonedHighlighter.Initialise(null, null, highlighterOptions);
+                clonedHighlighter.Initialise(null, element.gameObject, highlighterOptions);
             }
         }
 
@@ -467,6 +504,11 @@ namespace VRTK
                     VRTK_ObjectAppearance.UnhighlightObject(element.gameObject);
                 }
             }
+        }
+
+        protected virtual VRTK_BaseHighlighter GetValidHighlighter()
+        {
+            return (controllerHighlighter != null ? controllerHighlighter : VRTK_BaseHighlighter.GetActiveHighlighter(actualController));
         }
     }
 }
