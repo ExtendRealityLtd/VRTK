@@ -74,9 +74,10 @@ namespace VRTK
 
         public event HapticPulseEventHandler FireHapticPulse;
 
-        //Has to be public to keep state from editor -> play mode?
+        //Has to be serialized to keep state from editor -> play mode?
         [Tooltip("The actual GameObjects that make up the radial menu.")]
-        public List<GameObject> menuButtons;
+        [SerializeField]
+        private List<GameObject> menuButtons;
 
         protected int currentHover = -1;
         protected int currentPress = -1;
