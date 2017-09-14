@@ -8,19 +8,19 @@ namespace VRTK
     using UnityEngine.UI;
     using UnityEngine.EventSystems;
 
-    public delegate void HapticPulseEventHandler(float strength);
-
     public struct TouchAngleDeflection
     {
-        public TouchAngleDeflection(float a, float d)
+        public TouchAngleDeflection(float angle, float deflection)
         {
-            angle = a;
-            deflection = d;
+            this.angle = angle;
+            this.deflection = deflection;
         }
 
         public float angle;
         public float deflection;
     }
+
+    public delegate void HapticPulseEventHandler(float strength);
 
     /// <summary>
     /// Provides a UI element into the world space that can be dropped into a Controller GameObject and used to create and use Radial Menus from the touchpad.
@@ -109,10 +109,10 @@ namespace VRTK
         /// <summary>
         /// The HoverButton method is used to set the button hover at a given angle and deflection.
         /// </summary>
-        /// <param name="tad">The angle and deflection on the radial menu.</param>
-        public virtual void HoverButton(TouchAngleDeflection tad)
+        /// <param name="givenTouchAngleDeflection">The angle and deflection on the radial menu.</param>
+        public virtual void HoverButton(TouchAngleDeflection givenTouchAngleDeflection)
         {
-            InteractButton(tad, ButtonEvent.hoverOn);
+            InteractButton(givenTouchAngleDeflection, ButtonEvent.hoverOn);
         }
 
         /// <summary>
@@ -128,10 +128,10 @@ namespace VRTK
         /// <summary>
         /// The ClickButton method is used to set the button click at a given angle and deflection.
         /// </summary>
-        /// <param name="tad">The angle and deflection on the radial menu.</param>
-        public virtual void ClickButton(TouchAngleDeflection tad)
+        /// <param name="givenTouchAngleDeflection">The angle and deflection on the radial menu.</param>
+        public virtual void ClickButton(TouchAngleDeflection givenTouchAngleDeflection)
         {
-            InteractButton(tad, ButtonEvent.click);
+            InteractButton(givenTouchAngleDeflection, ButtonEvent.click);
         }
 
         /// <summary>
@@ -147,10 +147,10 @@ namespace VRTK
         /// <summary>
         /// The UnClickButton method is used to set the button unclick at a given angle and deflection.
         /// </summary>
-        /// <param name="tad">The angle and deflection on the radial menu.</param>
-        public virtual void UnClickButton(TouchAngleDeflection tad)
+        /// <param name="givenTouchAngleDeflection">The angle and deflection on the radial menu.</param>
+        public virtual void UnClickButton(TouchAngleDeflection givenTouchAngleDeflection)
         {
-            InteractButton(tad, ButtonEvent.unclick);
+            InteractButton(givenTouchAngleDeflection, ButtonEvent.unclick);
         }
 
         /// <summary>
@@ -330,16 +330,16 @@ namespace VRTK
         }
 
         //Turns and Angle and Event type into a button action
-        protected virtual void InteractButton(TouchAngleDeflection tad, ButtonEvent evt) //Can't pass ExecuteEvents as parameter? Unity gives error
+        protected virtual void InteractButton(TouchAngleDeflection givenTouchAngleDeflection, ButtonEvent evt) //Can't pass ExecuteEvents as parameter? Unity gives error
         {
             //Get button ID from angle
             float buttonAngle = 360f / buttons.Count; //Each button is an arc with this angle
-            tad.angle = VRTK_SharedMethods.Mod((tad.angle + -offsetRotation), 360f); //Offset the touch coordinate with our offset
+            givenTouchAngleDeflection.angle = VRTK_SharedMethods.Mod((givenTouchAngleDeflection.angle + -offsetRotation), 360f); //Offset the touch coordinate with our offset
 
-            int buttonID = (int)VRTK_SharedMethods.Mod(((tad.angle + (buttonAngle / 2f)) / buttonAngle), buttons.Count); //Convert angle into ButtonID (This is the magic)
+            int buttonID = (int)VRTK_SharedMethods.Mod(((givenTouchAngleDeflection.angle + (buttonAngle / 2f)) / buttonAngle), buttons.Count); //Convert angle into ButtonID (This is the magic)
             PointerEventData pointer = new PointerEventData(EventSystem.current); //Create a new EventSystem (UI) Event
 
-            if (tad.deflection <= deadZone)
+            if (givenTouchAngleDeflection.deflection <= deadZone)
             {
                 //No button selected. Use -1 to represent this
                 buttonID = -1;

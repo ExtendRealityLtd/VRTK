@@ -90,9 +90,9 @@ namespace VRTK
             menu.HideMenu(force);
         }
 
-        protected virtual void DoChangeAngle(TouchAngleDeflection tad, object sender = null)
+        protected virtual void DoChangeAngle(TouchAngleDeflection givenTouchAngleDeflection, object sender = null)
         {
-            currentTad = tad;
+            currentTad = givenTouchAngleDeflection;
 
             menu.HoverButton(currentTad);
         }
@@ -138,10 +138,10 @@ namespace VRTK
 
         protected virtual TouchAngleDeflection CalculateAngle(ControllerInteractionEventArgs e)
         {
-            TouchAngleDeflection tad = new TouchAngleDeflection();
-            tad.angle = 360 - e.touchpadAngle;
-            tad.deflection = e.touchpadAxis.magnitude;
-            return tad;
+            TouchAngleDeflection touchAngleDeflection = new TouchAngleDeflection();
+            touchAngleDeflection.angle = 360 - e.touchpadAngle;
+            touchAngleDeflection.deflection = e.touchpadAxis.magnitude;
+            return touchAngleDeflection;
         }
     }
 }
