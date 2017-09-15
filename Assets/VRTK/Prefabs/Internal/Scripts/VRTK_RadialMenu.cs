@@ -27,6 +27,18 @@ namespace VRTK
 
     public delegate void HapticPulseEventHandler(float strength);
 
+    public struct TouchAngleDeflection
+    {
+        public TouchAngleDeflection(float a, float d)
+        {
+            angle = a;
+            deflection = d;
+        }
+
+        public float angle;
+        public float deflection;
+    }
+
     /// <summary>
     /// Provides a UI element into the world space that can be dropped into a Controller GameObject and used to create and use Radial Menus from the touchpad.
     /// </summary>
