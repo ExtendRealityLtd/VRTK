@@ -412,5 +412,11 @@ namespace VRTK
                 }
             }
         }
+
+        protected virtual void OnDisable() {
+            if (tracerLineRenderer != null) {
+                Destroy(tracerLineRenderer);
+            }
+        }
     }
 }
