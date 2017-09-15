@@ -8,16 +8,21 @@ namespace VRTK
     using UnityEngine.UI;
     using UnityEngine.EventSystems;
 
+    /// <summary>
+    /// Angle and Deflection of the user's touch on the touchpad
+    /// </summary>
+    /// <param name="angle">The angle of the touch on the radial menu.</param>
+    /// <param name="deflection">Deflection of the touch, where 0 is the centre and 1 is the edge.</param>
     public struct TouchAngleDeflection
     {
+        public float angle;
+        public float deflection;
+
         public TouchAngleDeflection(float angle, float deflection)
         {
             this.angle = angle;
             this.deflection = deflection;
         }
-
-        public float angle;
-        public float deflection;
     }
 
     public delegate void HapticPulseEventHandler(float strength);
