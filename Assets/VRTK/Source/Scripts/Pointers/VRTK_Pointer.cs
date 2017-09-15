@@ -301,6 +301,11 @@ namespace VRTK
         protected override void OnDisable()
         {
             base.OnDisable();
+            Toggle(false);
+            if (pointerRenderer != null)
+            {
+                pointerRenderer.Toggle(false, false);
+            }
             UnsubscribeActivationButton();
             UnsubscribeSelectionButton();
             if (autogenPointerRenderer != null)
@@ -364,6 +369,11 @@ namespace VRTK
                     pointerRenderer.ToggleInteraction(currentPointerVisibility);
                 }
                 CheckHoverSelect();
+            }
+            else
+            {
+                Toggle(false);
+                currentActivationState = 0;
             }
         }
 
