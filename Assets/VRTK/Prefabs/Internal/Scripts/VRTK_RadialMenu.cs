@@ -18,6 +18,11 @@ namespace VRTK
         public float angle;
         public float deflection;
 
+        /// <summary>
+        /// Constructs an object to hold the angle and deflection of the user's touch on the touchpad
+        /// </summary>
+        /// <param name="angle">The angle of the touch on the radial menu.</param>
+        /// <param name="deflection">Deflection of the touch, where 0 is the centre and 1 is the edge.</param>
         public TouchAngleDeflection(float angle, float deflection)
         {
             this.angle = angle;
