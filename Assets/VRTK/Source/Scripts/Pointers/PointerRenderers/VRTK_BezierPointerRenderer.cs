@@ -65,7 +65,7 @@ namespace VRTK
         /// </summary>
         public override void UpdateRenderer()
         {
-            if ((controllingPointer && controllingPointer.IsPointerActive()) || IsVisible())
+            if ((controllingPointer != null && (controllingPointer.IsPointerActive()) || IsVisible()))
             {
                 Vector3 jointPosition = ProjectForwardBeam();
                 Vector3 downPosition = ProjectDownBeam(jointPosition);
@@ -104,7 +104,7 @@ namespace VRTK
             CreateTracer();
             CreateCursor();
             Toggle(false, false);
-            if (controllingPointer)
+            if (controllingPointer != null)
             {
                 controllingPointer.ResetActivationTimer(true);
                 controllingPointer.ResetSelectionTimer(true);
@@ -131,7 +131,7 @@ namespace VRTK
         {
             base.UpdateObjectInteractor();
             //if the object interactor is too far from the pointer tip then set it to the pointer tip position to prevent glitching.
-            if (objectInteractor && actualCursor && Vector3.Distance(objectInteractor.transform.position, actualCursor.transform.position) > 0f)
+            if (objectInteractor != null && actualCursor != null && Vector3.Distance(objectInteractor.transform.position, actualCursor.transform.position) > 0f)
             {
                 objectInteractor.transform.position = actualCursor.transform.position;
             }
@@ -187,7 +187,7 @@ namespace VRTK
 
         protected virtual void CreateCursor()
         {
-            actualCursor = (customCursor ? Instantiate(customCursor) : CreateCursorObject());
+            actualCursor = (customCursor != null ? Instantiate(customCursor) : CreateCursorObject());
             CreateCursorLocations();
             actualCursor.name = VRTK_SharedMethods.GenerateVRTKObjectName(true, gameObject.name, "BezierPointerRenderer_Cursor");
             VRTK_PlayerObject.SetPlayerObject(actualCursor, VRTK_PlayerObject.ObjectTypes.Pointer);
@@ -329,13 +329,13 @@ namespace VRTK
                 downPosition,
                 downPosition,
                 };
-                Material tracerMaterial = (customTracer ? null : defaultMaterial);
+                Material tracerMaterial = (customTracer != null ? null : defaultMaterial);
                 actualTracer.SetPoints(beamPoints, tracerMaterial, currentColor);
                 if (tracerVisibility == VisibilityStates.AlwaysOff)
                 {
                     TogglePointerTracer(false, false);
                 }
-                else if (controllingPointer)
+                else if (controllingPointer != null)
                 {
                     TogglePointerTracer(controllingPointer.IsPointerActive(), controllingPointer.IsPointerActive());
                 }
@@ -358,7 +358,7 @@ namespace VRTK
 
         protected virtual void SetPointerCursor()
         {
-            if (controllingPointer && destinationHit.transform)
+            if (controllingPointer != null && destinationHit.transform)
             {
                 TogglePointerCursor(controllingPointer.IsPointerActive(), controllingPointer.IsPointerActive());
                 actualCursor.transform.position = destinationHit.point;
@@ -369,11 +369,11 @@ namespace VRTK
                 base.UpdateDependencies(actualCursor.transform.position);
 
                 ChangeColor(validCollisionColor);
-                if (actualValidLocationObject)
+                if (actualValidLocationObject != null)
                 {
                     actualValidLocationObject.SetActive(ValidDestination() && IsValidCollision());
                 }
-                if (actualInvalidLocationObject)
+                if (actualInvalidLocationObject != null)
                 {
                     actualInvalidLocationObject.SetActive(!ValidDestination() || !IsValidCollision());
                 }

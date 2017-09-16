@@ -155,6 +155,14 @@ namespace VRTK
             }
         }
 
+        protected virtual void OnDisable()
+        {
+            if (tracerLineRenderer != null)
+            {
+                tracerLineRenderer.SetActive(false);
+            }
+        }
+
         protected virtual void PointsInit(Vector3[] controlPoints)
         {
             points = controlPoints;
