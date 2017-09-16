@@ -1,4 +1,4 @@
-// Independent Radial Menu Controller|Prefabs|0050
+﻿// Independent Radial Menu Controller|Prefabs|0050
 namespace VRTK
 {
     using UnityEngine;
