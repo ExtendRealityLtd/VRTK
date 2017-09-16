@@ -2,7 +2,6 @@
 namespace VRTK
 {
     using UnityEngine;
-    using System.Collections;
 
     /// <summary>
     /// The Interact Grab script is attached to a Controller object and requires the `VRTK_ControllerEvents` script to be attached as it uses this for listening to the controller button events for grabbing and releasing interactable game objects.

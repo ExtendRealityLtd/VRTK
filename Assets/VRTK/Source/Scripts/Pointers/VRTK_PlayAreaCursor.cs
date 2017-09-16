@@ -44,7 +44,8 @@ namespace VRTK
         public VRTK_PolicyList targetListPolicy;
 
         [Header("Custom Settings")]
-
+        [Tooltip("A custom Pointer Direction Indicator to use to determine the rotation of the Play Area Cursor.")]
+        public VRTK_PointerDirectionIndicator directionIndicator;
         [Tooltip("A custom GameObject to use for the play area cursor representation for when the location is valid.")]
         public GameObject validLocationObject;
         [Tooltip("A custom GameObject to use for the play area cursor representation for when the location is invalid.")]
@@ -186,7 +187,7 @@ namespace VRTK
                         headsetOutOfBounds = false;
                     }
                 }
-
+                playAreaCursor.transform.rotation = (directionIndicator != null ? directionIndicator.transform.rotation : playArea.rotation);
                 playAreaCursor.transform.position = location + offset;
             }
         }
