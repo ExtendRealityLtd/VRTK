@@ -386,6 +386,8 @@ namespace VRTK
             switch (cachedHeadsetType)
             {
                 case "oculusriftcv1":
+                case "oculusriftes07":
+                    // The ES07 model seems to be an obscure model and it's hard to find documentation about it. Treat it like a CV1.
                     returnValue = (summary ? Headsets.OculusRift : Headsets.OculusRiftCV1);
                     break;
                 case "vivemv":
