@@ -164,7 +164,7 @@ namespace VRTK
                 lastNormalizedValue = normalizedValue;
 
                 float pulseStrength = strength.Evaluate(normalizedValue);
-
+                
                 float pulseInterval = intervalMax + ((intervalMin - intervalMax) * interval.Evaluate(normalizedValue));
 
                 if(Time.time - lastPulseTime >= pulseInterval)

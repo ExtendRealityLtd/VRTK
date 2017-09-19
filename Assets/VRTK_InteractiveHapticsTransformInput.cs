@@ -26,8 +26,8 @@ namespace VRTK
 
         public Dimension dimension;
 
-        public float lowerValue;
-        public float upperValue;
+        public float startValue;
+        public float endValue;
 
         private Vector3 lastVector;
         
@@ -37,16 +37,18 @@ namespace VRTK
             {
                 lastVector = GetTransformVector();
                 
-                OnInputProvided(NormalizedTargetDimension(lastVector));
+                OnInputProvided(GetNormalizedTargetDimension(lastVector));
 
                 transform.hasChanged = false;
             }
         }        
 
-        protected virtual float NormalizedTargetDimension(Vector3 vector)
+        protected virtual float GetNormalizedTargetDimension(Vector3 vector)
         {
-           // Debug.Log("(" + lowerValue + " - " + GetTargetDimensionValue(vector) + ") / (" + upperValue + " - " + lowerValue + ") = " + Mathf.Abs((lowerValue - GetTargetDimensionValue(vector)) / (upperValue - lowerValue)));
-            return Mathf.Abs((lowerValue - GetTargetDimensionValue(vector)) / (upperValue - lowerValue));
+            float min = (startValue > endValue) ? endValue : startValue;
+            float max = (startValue > endValue) ? startValue : endValue;
+            
+            return Mathf.Abs((max - GetTargetDimensionValue(vector)) / (max - min));
         }
 
         private Vector3 GetTransformVector()
