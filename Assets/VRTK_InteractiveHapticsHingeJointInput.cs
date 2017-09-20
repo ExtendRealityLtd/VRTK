@@ -6,7 +6,7 @@ namespace VRTK
     /// <summary>
     /// The Interactive Haptics script is attached on the same GameObject as an Interactable Object script and provides customizable haptic feedback curves for more detailed interactions.
     /// </summary>
-    public class VRTK_HingeJointHapticsInput : VRTK_InteractiveHapticsInput
+    public class VRTK_InteractiveHapticsHingeJointInput : VRTK_InteractiveHapticsInput
     {
         /// <summary>
         /// An optional HingeJoint to use, will use HingeJoint on this game object if not specified.
@@ -45,10 +45,10 @@ namespace VRTK
             }
             else
             {
-                normalizedValue = angle / 360f;
+                normalizedValue = angle / 180f;
             }
             
-            return normalizedValue;
+            return Mathf.Abs(normalizedValue);
         }        
     }
 }

@@ -1,8 +1,10 @@
 ﻿// Interactive Haptics|Interactions|30101
 namespace VRTK
 {
+    using System;
     using UnityEngine;
-      
+    using UnityEngine.Events;
+    
     /// <summary>
     /// The Interactive Haptics script is attached on the same GameObject as an Interactable Object script and provides customizable haptic feedback curves for more detailed interactions.
     /// </summary>
@@ -14,11 +16,9 @@ namespace VRTK
         /// </summary>
         public enum InteractionType
         {
-            WhileNearTouching,
             WhileTouching,
             WhileGrabbing,
-            WhileUsing,
-            Custom
+            WhileUsing
         }
 
         [Header("Haptic Response")]
@@ -48,7 +48,7 @@ namespace VRTK
 
         [Tooltip("The Interactive Haptics Input object to get the input value from. If this is left blank, then the interactable object will need to be on the current GameObject.")]
         public VRTK_InteractiveHapticsInput interactiveHapticsInput;
-
+        
         private float lastPulseTime;
 
         private float lastNormalizedValue;
@@ -63,12 +63,7 @@ namespace VRTK
             {
                 VRTK_InteractableObject.InteractionType start, stop;
 
-                if (interactionType == InteractionType.WhileNearTouching)
-                {
-                    stop = VRTK_InteractableObject.InteractionType.NearUntouch;
-                    start = VRTK_InteractableObject.InteractionType.NearTouch;
-                }
-                else if (interactionType == InteractionType.WhileTouching)
+                if (interactionType == InteractionType.WhileTouching)
                 {
                     stop = VRTK_InteractableObject.InteractionType.Untouch;
                     start = VRTK_InteractableObject.InteractionType.Touch;
@@ -108,15 +103,9 @@ namespace VRTK
         {
             if (objectToAffect != null)
             {
-
                 VRTK_InteractableObject.InteractionType start, stop;
 
-                if (interactionType == InteractionType.WhileNearTouching)
-                {
-                    stop = VRTK_InteractableObject.InteractionType.NearUntouch;
-                    start = VRTK_InteractableObject.InteractionType.NearTouch;
-                }
-                else if (interactionType == InteractionType.WhileTouching)
+                if (interactionType == InteractionType.WhileTouching)
                 {
                     stop = VRTK_InteractableObject.InteractionType.Untouch;
                     start = VRTK_InteractableObject.InteractionType.Touch;
@@ -159,7 +148,8 @@ namespace VRTK
         public void Interact(float normalizedValue)
         {
             float normalizedValueDelta = Mathf.Abs(lastNormalizedValue - normalizedValue);
-            if(normalizedValueDelta > minValueDelta)
+
+            if(normalizedValueDelta >= minValueDelta)
             {
                 lastNormalizedValue = normalizedValue;
 
@@ -174,18 +164,5 @@ namespace VRTK
                 }
             }
         }
-
-        /// <summary>
-        /// The Pulse method will trigger a haptic pulse at the appropriate interval and strength as specified by the interval and strength curves at the normalizedValue position.
-        /// </summary>
-        /// <param name="normalizedValue">The position along the interval and strength that correspond to the appropriate haptic response.</param>
-        /// <param name="controller">The controller on which to apply the interaction. This is used when the interaction type is custom.</param>
-        public void Interact(float normalizedValue, VRTK_ControllerReference controller)
-        {
-            this.controller = controller;
-            Interact(normalizedValue);
-            this.controller = null;
-        }
-
     }
 }
