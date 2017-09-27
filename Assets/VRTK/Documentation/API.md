@@ -7477,6 +7477,7 @@ The Device Finder offers a collection of static methods that can be called to fi
    * `Vive` - A summary of all HTC Vive headset versions.
    * `ViveMV` - A specific version of the HTC Vive headset, the first consumer version.
    * `ViveDVT` - A specific version of the HTC Vive headset, the first consumer version.
+   * `OculusRiftES07` - A specific version of the Oculus Rift headset, the rare ES07.
 
 ### Class Methods
 
@@ -7740,7 +7741,7 @@ The ResetHeadsetTypeCache resets the cache holding the current headset type valu
   > `public static Headsets GetHeadsetType(bool summary = false)`
 
  * Parameters
-   * `bool summary` - If this is true, then the generic name for the headset is returned not including the version type (e.g. OculusRift will be returned for DK2 and CV1).
+   * `bool summary` - If this is `true`, then the generic name for the headset is returned not including the version type (e.g. OculusRift will be returned for DK2 and CV1).
  * Returns
    * `Headsets` - The Headset type that is connected.
 
