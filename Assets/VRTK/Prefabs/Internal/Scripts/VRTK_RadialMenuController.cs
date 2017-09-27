@@ -21,7 +21,7 @@ namespace VRTK
         public VRTK_ControllerEvents events;
 
         protected VRTK_RadialMenu menu;
-        protected float currentAngle; //Keep track of angle for when we click
+        protected TouchAngleDeflection currentTad; //Keep track of angle and deflection for when we click
         protected bool touchpadTouched;
 
         protected virtual void Awake()
@@ -71,18 +71,18 @@ namespace VRTK
 
         protected virtual void DoClickButton(object sender = null) // The optional argument reduces the need for middleman functions in subclasses whose events likely pass object sender
         {
-            menu.ClickButton(currentAngle);
+            menu.ClickButton(currentTad);
         }
 
         protected virtual void DoUnClickButton(object sender = null)
         {
-            menu.UnClickButton(currentAngle);
+            menu.UnClickButton(currentTad);
         }
 
-        protected virtual void DoShowMenu(float initialAngle, object sender = null)
+        protected virtual void DoShowMenu(TouchAngleDeflection initialTad, object sender = null)
         {
             menu.ShowMenu();
-            DoChangeAngle(initialAngle); // Needed to register initial touch position before the touchpad axis actually changes
+            DoChangeAngle(initialTad); // Needed to register initial touch position before the touchpad axis actually changes
         }
 
         protected virtual void DoHideMenu(bool force, object sender = null)
@@ -91,11 +91,11 @@ namespace VRTK
             menu.HideMenu(force);
         }
 
-        protected virtual void DoChangeAngle(float angle, object sender = null)
+        protected virtual void DoChangeAngle(TouchAngleDeflection givenTouchAngleDeflection, object sender = null)
         {
-            currentAngle = angle;
+            currentTad = givenTouchAngleDeflection;
 
-            menu.HoverButton(currentAngle);
+            menu.HoverButton(currentTad);
         }
 
         protected virtual void AttemptHapticPulse(float strength)
@@ -137,9 +137,12 @@ namespace VRTK
             }
         }
 
-        protected virtual float CalculateAngle(ControllerInteractionEventArgs e)
+        protected virtual TouchAngleDeflection CalculateAngle(ControllerInteractionEventArgs e)
         {
-            return 360 - e.touchpadAngle;
+            TouchAngleDeflection touchAngleDeflection = new TouchAngleDeflection();
+            touchAngleDeflection.angle = 360 - e.touchpadAngle;
+            touchAngleDeflection.deflection = e.touchpadAxis.magnitude;
+            return touchAngleDeflection;
         }
     }
 }
