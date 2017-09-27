@@ -60,7 +60,11 @@ namespace VRTK
             /// <summary>
             /// A specific version of the HTC Vive headset, the first consumer version.
             /// </summary>
-            ViveDVT
+            ViveDVT,
+            /// <summary>
+            /// A specific version of the Oculus Rift headset, the rare ES07.
+            /// </summary>
+            OculusRiftES07
         }
 
         private static string cachedHeadsetType = "";
@@ -368,7 +372,7 @@ namespace VRTK
         /// <summary>
         /// The GetHeadsetType method returns the type of headset connected to the computer.
         /// </summary>
-        /// <param name="summary">If this is true, then the generic name for the headset is returned not including the version type (e.g. OculusRift will be returned for DK2 and CV1).</param>
+        /// <param name="summary">If this is `true`, then the generic name for the headset is returned not including the version type (e.g. OculusRift will be returned for DK2 and CV1).</param>
         /// <returns>The Headset type that is connected.</returns>
         public static Headsets GetHeadsetType(bool summary = false)
         {
@@ -378,6 +382,9 @@ namespace VRTK
             {
                 case "oculusriftcv1":
                     returnValue = (summary ? Headsets.OculusRift : Headsets.OculusRiftCV1);
+                    break;
+                case "oculusriftes07":
+                    returnValue = (summary ? Headsets.OculusRift : Headsets.OculusRiftES07);
                     break;
                 case "vivemv":
                     returnValue = (summary ? Headsets.Vive : Headsets.ViveMV);
