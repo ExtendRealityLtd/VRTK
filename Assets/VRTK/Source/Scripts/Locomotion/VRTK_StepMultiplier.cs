@@ -1,4 +1,4 @@
-﻿// Room Extender|Locomotion|20130
+﻿// Step Multiplier|Locomotion|20130
 namespace VRTK
 {
     using UnityEngine;
@@ -7,18 +7,20 @@ namespace VRTK
     /// Multiplies each real world step within the play area to enable further distances to be travelled in the virtual world.
     /// </summary>
     /// <remarks>
-    /// **Script Usage:**
-    ///  * Place the `VRTK_RoomExtender` script on any active scene GameObject.
+    /// **Optional Components:**
+    ///  * `VRTK_ControllerEvents` - The events component to listen for the button presses on. This must be applied on the same GameObject as this script if one is not provided via the `Controller Events` parameter.
     ///
-    /// **Script Dependencies:**
-    ///  * The Controller Events script on the controller Script Alias to determine when the touchpad is pressed.
+    /// **Script Usage:**
+    ///  * Place the `VRTK_StepMultiplier` script on either:
+    ///    * Any GameObject in the scene if no activation button is required.
+    ///    * The GameObject with the Controller Events scripts if an activation button is required.
+    ///    * Any other scene GameObject and provide a valid `VRTK_ControllerEvents` component to the `Controller Events` parameter of this script if an activation button is required.
     /// </remarks>
     /// <example>
-    /// `VRTK/Examples/028_CameraRig_RoomExtender` shows how the RoomExtender script is controlled by a VRTK_RoomExtender_Controller Example script located at both controllers. Pressing the `Touchpad` on the controller activates the Room Extender. The Additional Movement Multiplier is changed based on the touch distance to the centre of the touchpad.
+    /// `VRTK/Examples/028_CameraRig_RoomExtender` shows how the Step Multiplier can be used to move around the scene with multiplied steps.
     /// </example>
-    [AddComponentMenu("VRTK/Scripts/Locomotion/VRTK_RoomExtender")]
-    [System.Obsolete("`VRTK_RoomExtender` has been replaced with `VRTK_StepMultiplier`. This script will be removed in a future version of VRTK.")]
-    public class VRTK_RoomExtender : MonoBehaviour
+    [AddComponentMenu("VRTK/Scripts/Locomotion/VRTK_StepMultiplier")]
+    public class VRTK_StepMultiplier : MonoBehaviour
     {
         /// <summary>
         /// Movement methods.
@@ -35,29 +37,33 @@ namespace VRTK
             LinearDirect
         }
 
+        [Header("Step Multiplier Settings")]
+
+        [Tooltip("The controller button to activate the step multiplier effect. If it is `Undefined` then the step multiplier will always be active.")]
+        public VRTK_ControllerEvents.ButtonAlias activationButton = VRTK_ControllerEvents.ButtonAlias.Undefined;
         [Tooltip("This determines the type of movement used by the extender.")]
         public MovementFunction movementFunction = MovementFunction.LinearDirect;
-        [Tooltip("Enables the additional movement.")]
-        public bool additionalMovementEnabled = true;
-        [Tooltip("If this is checked then the touchpad needs to be pressed to enable it. If this is unchecked then it is disabled by pressing the touchpad.")]
-        public bool additionalMovementEnabledOnButtonPress = true;
         [Tooltip("This is the factor by which movement at the edge of the circle is amplified. `0` is no movement of the play area. Higher values simulate a bigger play area but may be too uncomfortable.")]
         [Range(0, 10)]
         public float additionalMovementMultiplier = 1.0f;
         [Tooltip("This is the size of the circle in which the play area is not moved and everything is normal. If it is to low it becomes uncomfortable when crouching.")]
         [Range(0, 5)]
         public float headZoneRadius = 0.25f;
-        [Tooltip("This transform visualises the circle around the user where the play area is not moved. In the demo scene this is a cylinder at floor level. Remember to turn of collisions.")]
-        public Transform debugTransform;
 
-        [HideInInspector]
-        public Vector3 relativeMovementOfCameraRig = new Vector3();
+        [Header("Custom Settings")]
 
+        [Tooltip("The Controller Events to listen for the events on. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.")]
+        public VRTK_ControllerEvents controllerEvents;
+
+        protected Vector3 relativeMovementOfCameraRig = new Vector3();
         protected Transform movementTransform;
         protected Transform playArea;
         protected Vector3 headCirclePosition;
         protected Vector3 lastPosition;
         protected Vector3 lastMovement;
+        protected bool activationEnabled;
+        protected VRTK_ControllerEvents.ButtonAlias subscribedActivationButton = VRTK_ControllerEvents.ButtonAlias.Undefined;
+        protected bool buttonSubscribed;
 
         protected virtual void Awake()
         {
@@ -71,12 +77,9 @@ namespace VRTK
             {
                 VRTK_Logger.Warn(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_SCENE, "VRTK_RoomExtender", "Headset Transform"));
             }
+            activationEnabled = false;
+            buttonSubscribed = false;
             playArea = VRTK_DeviceFinder.PlayAreaTransform();
-            additionalMovementEnabled = !additionalMovementEnabledOnButtonPress;
-            if (debugTransform != null)
-            {
-                debugTransform.localScale = new Vector3(headZoneRadius * 2, 0.01f, headZoneRadius * 2);
-            }
             MoveHeadCircleNonLinearDrift();
             lastPosition = movementTransform.localPosition;
         }
@@ -88,6 +91,7 @@ namespace VRTK
 
         protected virtual void Update()
         {
+            ManageButtonSubscription();
             switch (movementFunction)
             {
                 case MovementFunction.Nonlinear:
@@ -101,14 +105,41 @@ namespace VRTK
             }
         }
 
+        protected virtual void ManageButtonSubscription()
+        {
+            controllerEvents = (controllerEvents != null ? controllerEvents : GetComponent<VRTK_ControllerEvents>());
+
+            if (controllerEvents != null && buttonSubscribed && subscribedActivationButton != VRTK_ControllerEvents.ButtonAlias.Undefined && activationButton != subscribedActivationButton)
+            {
+                buttonSubscribed = false;
+                controllerEvents.UnsubscribeToButtonAliasEvent(subscribedActivationButton, true, ActivationButtonPressed);
+                controllerEvents.UnsubscribeToButtonAliasEvent(subscribedActivationButton, false, ActivationButtonReleased);
+                subscribedActivationButton = VRTK_ControllerEvents.ButtonAlias.Undefined;
+            }
+
+            if (controllerEvents != null && !buttonSubscribed && activationButton != VRTK_ControllerEvents.ButtonAlias.Undefined)
+            {
+                controllerEvents.SubscribeToButtonAliasEvent(activationButton, true, ActivationButtonPressed);
+                controllerEvents.SubscribeToButtonAliasEvent(activationButton, false, ActivationButtonReleased);
+                buttonSubscribed = true;
+                subscribedActivationButton = activationButton;
+            }
+        }
+
+        protected virtual void ActivationButtonPressed(object sender, ControllerInteractionEventArgs e)
+        {
+            activationEnabled = true;
+        }
+
+        protected virtual void ActivationButtonReleased(object sender, ControllerInteractionEventArgs e)
+        {
+            activationEnabled = false;
+        }
+
         protected virtual void Move(Vector3 movement)
         {
             headCirclePosition += movement;
-            if (debugTransform != null)
-            {
-                debugTransform.localPosition = new Vector3(headCirclePosition.x, debugTransform.localPosition.y, headCirclePosition.z);
-            }
-            if (additionalMovementEnabled)
+            if (activationEnabled || activationButton == VRTK_ControllerEvents.ButtonAlias.Undefined)
             {
                 playArea.localPosition += movement * additionalMovementMultiplier;
                 relativeMovementOfCameraRig += movement * additionalMovementMultiplier;

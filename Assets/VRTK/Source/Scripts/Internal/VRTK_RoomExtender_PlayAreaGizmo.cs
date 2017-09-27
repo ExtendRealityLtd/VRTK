@@ -3,6 +3,7 @@
     using UnityEngine;
 
     [ExecuteInEditMode]
+    [System.Obsolete("`VRTK_RoomExtender_PlayAreaGizmo` will be removed in a future version of VRTK.")]
     public class VRTK_RoomExtender_PlayAreaGizmo : MonoBehaviour
     {
         public Color color = Color.red;

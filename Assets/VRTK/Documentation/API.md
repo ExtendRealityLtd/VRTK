@@ -1963,7 +1963,7 @@ A collection of scripts that provide varying methods of moving the user around t
  * [Move In Place](#move-in-place-vrtk_moveinplace)
  * [Player Climb](#player-climb-vrtk_playerclimb)
  * [Slingshot Jump](#slingshot-jump-vrtk_slingshotjump)
- * [Room Extender](#room-extender-vrtk_roomextender)
+ * [Step Multiplier](#step-multiplier-vrtk_stepmultiplier)
 
 ---
 
@@ -2560,26 +2560,28 @@ The SetCancelButton method sets the button used to cancel a slingshot jump.
 
 ---
 
-## Room Extender (VRTK_RoomExtender)
+## Step Multiplier (VRTK_StepMultiplier)
 
 ### Overview
 
 Multiplies each real world step within the play area to enable further distances to be travelled in the virtual world.
 
-**Script Usage:**
- * Place the `VRTK_RoomExtender` script on any active scene GameObject.
+**Optional Components:**
+ * `VRTK_ControllerEvents` - The events component to listen for the button presses on. This must be applied on the same GameObject as this script if one is not provided via the `Controller Events` parameter.
 
-**Script Dependencies:**
- * The Controller Events script on the controller Script Alias to determine when the touchpad is pressed.
+**Script Usage:**
+ * Place the `VRTK_StepMultiplier` script on either:
+   * Any GameObject in the scene if no activation button is required.
+   * The GameObject with the Controller Events scripts if an activation button is required.
+   * Any other scene GameObject and provide a valid `VRTK_ControllerEvents` component to the `Controller Events` parameter of this script if an activation button is required.
 
 ### Inspector Parameters
 
+ * **Activation Button:** The controller button to activate the step multiplier effect. If it is `Undefined` then the step multiplier will always be active.
  * **Movement Function:** This determines the type of movement used by the extender.
- * **Additional Movement Enabled:** Enables the additional movement.
- * **Additional Movement Enabled On Button Press:** If this is checked then the touchpad needs to be pressed to enable it. If this is unchecked then it is disabled by pressing the touchpad.
  * **Additional Movement Multiplier:** This is the factor by which movement at the edge of the circle is amplified. `0` is no movement of the play area. Higher values simulate a bigger play area but may be too uncomfortable.
  * **Head Zone Radius:** This is the size of the circle in which the play area is not moved and everything is normal. If it is to low it becomes uncomfortable when crouching.
- * **Debug Transform:** This transform visualises the circle around the user where the play area is not moved. In the demo scene this is a cylinder at floor level. Remember to turn of collisions.
+ * **Controller Events:** The Controller Events to listen for the events on. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.
 
 ### Class Variables
 
@@ -2589,7 +2591,7 @@ Multiplies each real world step within the play area to enable further distances
 
 ### Example
 
-`VRTK/Examples/028_CameraRig_RoomExtender` shows how the RoomExtender script is controlled by a VRTK_RoomExtender_Controller Example script located at both controllers. Pressing the `Touchpad` on the controller activates the Room Extender. The Additional Movement Multiplier is changed based on the touch distance to the centre of the touchpad.
+`VRTK/Examples/028_CameraRig_RoomExtender` shows how the Step Multiplier can be used to move around the scene with multiplied steps.
 
 ---
 
