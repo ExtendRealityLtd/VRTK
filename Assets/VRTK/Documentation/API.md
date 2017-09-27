@@ -562,42 +562,55 @@ Provides a UI element into the world space that can be dropped into a Controller
  * **Hide On Release:** Whether the buttons should be visible when not in use.
  * **Execute On Unclick:** Whether the button action should happen when the button is released, as opposed to happening immediately when the button is pressed.
  * **Base Haptic Strength:** The base strength of the haptic pulses when the selected button is changed, or a button is pressed. Set to zero to disable.
+ * **Dead Zone:** The dead zone in the middle of the dial where the menu does not consider a button is selected. Set to zero to disable.
  * **Menu Buttons:** The actual GameObjects that make up the radial menu.
 
 ### Class Methods
 
-#### HoverButton/1
+#### TouchAngleDeflection/2
 
-  > `public virtual void HoverButton(float angle)`
+  > `public TouchAngleDeflection(float angle, float deflection)`
 
  * Parameters
-   * `float angle` - The angle on the radial menu.
+   * `float angle` - The angle of the touch on the radial menu.
+   * `float deflection` - Deflection of the touch, where 0 is the centre and 1 is the edge.
  * Returns
    * _none_
 
-The HoverButton method is used to set the button hover at a given angle.
+Constructs an object to hold the angle and deflection of the user's touch on the touchpad
+
+#### HoverButton/1
+
+  > `public virtual void HoverButton(TouchAngleDeflection givenTouchAngleDeflection)`
+
+ * Parameters
+   * `TouchAngleDeflection givenTouchAngleDeflection` - The angle and deflection on the radial menu.
+ * Returns
+   * _none_
+
+The HoverButton method is used to set the button hover at a given angle and deflection.
 
 #### ClickButton/1
 
-  > `public virtual void ClickButton(float angle)`
+  > `public virtual void ClickButton(TouchAngleDeflection givenTouchAngleDeflection)`
 
  * Parameters
-   * `float angle` - The angle on the radial menu.
+   * `TouchAngleDeflection givenTouchAngleDeflection` - The angle and deflection on the radial menu.
  * Returns
    * _none_
 
-The ClickButton method is used to set the button click at a given angle.
+The ClickButton method is used to set the button click at a given angle and deflection.
 
 #### UnClickButton/1
 
-  > `public virtual void UnClickButton(float angle)`
+  > `public virtual void UnClickButton(TouchAngleDeflection givenTouchAngleDeflection)`
 
  * Parameters
-   * `float angle` - The angle on the radial menu.
+   * `TouchAngleDeflection givenTouchAngleDeflection` - The angle and deflection on the radial menu.
  * Returns
    * _none_
 
-The UnClickButton method is used to set the button unclick at a given angle.
+The UnClickButton method is used to set the button unclick at a given angle and deflection.
 
 #### ToggleMenu/0
 
