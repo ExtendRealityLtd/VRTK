@@ -22,8 +22,16 @@ namespace VRTK
     public delegate void PositionRewindEventHandler(object sender, PositionRewindEventArgs e);
 
     /// <summary>
-    /// The Position Rewind script is used to reset the user back to a good known standing position upon receiving a headset collision event.
+    /// Attempts to rewind the position of the play area to a last know valid position upon the headset collision event.
     /// </summary>
+    /// <remarks>
+    /// **Required Components:**
+    ///  * `VRTK_BodyPhysics` - A Body Physics script to manage the collisions of the body presence within the scene.
+    ///  * `VRTK_HeadsetCollision` - A Headset Collision script to determine when the headset is colliding with valid geometry.
+    ///
+    /// **Script Usage:**
+    ///  * Place the `VRTK_PositionRewind` script on any active scene GameObject.
+    /// </remarks>
     /// <example>
     /// `VRTK/Examples/017_CameraRig_TouchpadWalking` has the position rewind script to reset the user's position if they walk into objects.
     /// </example>

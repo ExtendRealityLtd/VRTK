@@ -4,10 +4,11 @@ namespace VRTK.GrabAttachMechanics
     using UnityEngine;
 
     /// <summary>
-    /// The Base Joint Grab Attach script is an abstract class that all joint grab attach types inherit.
+    /// Provides a base that all joint based grab attach mechanics can inherit from.
     /// </summary>
     /// <remarks>
-    /// As this is an abstract class, it cannot be applied directly to a game object and performs no logic.
+    /// **Script Usage:**
+    ///   > This is an abstract class that is to be inherited to a concrete class that provides joint based grab attach functionality, therefore this script should not be directly used.
     /// </remarks>
     public abstract class VRTK_BaseJointGrabAttach : VRTK_BaseGrabAttach
     {
@@ -22,20 +23,20 @@ namespace VRTK.GrabAttachMechanics
         /// <summary>
         /// The ValidGrab method determines if the grab attempt is valid.
         /// </summary>
-        /// <param name="checkAttachPoint"></param>
-        /// <returns>Returns true if there is no current grab happening, or the grab is initiated by another grabbing object.</returns>
+        /// <param name="checkAttachPoint">The rigidbody attach point to check.</param>
+        /// <returns>Returns `true` if there is no current grab happening, or the grab is initiated by another grabbing object.</returns>
         public override bool ValidGrab(Rigidbody checkAttachPoint)
         {
             return (controllerAttachJoint == null || controllerAttachJoint.connectedBody != checkAttachPoint);
         }
 
         /// <summary>
-        /// The StartGrab method sets up the grab attach mechanic as soon as an object is grabbed. It is also responsible for creating the joint on the grabbed object.
+        /// The StartGrab method sets up the grab attach mechanic as soon as an Interactable Object is grabbed. It is also responsible for creating the joint on the grabbed object.
         /// </summary>
-        /// <param name="grabbingObject">The object that is doing the grabbing.</param>
-        /// <param name="givenGrabbedObject">The object that is being grabbed.</param>
+        /// <param name="grabbingObject">The GameObject that is doing the grabbing.</param>
+        /// <param name="givenGrabbedObject">The GameObject that is being grabbed.</param>
         /// <param name="givenControllerAttachPoint">The point on the grabbing object that the grabbed object should be attached to after grab occurs.</param>
-        /// <returns>Is true if the grab is successful, false if the grab is unsuccessful.</returns>
+        /// <returns>Returns `true` if the grab is successful, `false` if the grab is unsuccessful.</returns>
         public override bool StartGrab(GameObject grabbingObject, GameObject givenGrabbedObject, Rigidbody givenControllerAttachPoint)
         {
             if (base.StartGrab(grabbingObject, givenGrabbedObject, givenControllerAttachPoint))
@@ -47,9 +48,9 @@ namespace VRTK.GrabAttachMechanics
         }
 
         /// <summary>
-        /// The StopGrab method ends the grab of the current object and cleans up the state. It is also responsible for removing the joint from the grabbed object.
+        /// The StopGrab method ends the grab of the current Interactable Object and cleans up the state. It is also responsible for removing the joint from the grabbed object.
         /// </summary>
-        /// <param name="applyGrabbingObjectVelocity">If true will apply the current velocity of the grabbing object to the grabbed object on release.</param>
+        /// <param name="applyGrabbingObjectVelocity">If `true` will apply the current velocity of the grabbing object to the grabbed object on release.</param>
         public override void StopGrab(bool applyGrabbingObjectVelocity)
         {
             ReleaseObject(applyGrabbingObjectVelocity);

@@ -4,10 +4,18 @@ namespace VRTK
     using UnityEngine;
 
     /// <summary>
-    /// The Snap Rotate Object Control Action script is used to snap rotate the controlled GameObject around the up vector when changing the axis.
+    /// Provides the ability to snap rotate a GameObject through the world `y` axis in the scene by updating the Transform rotation in defined steps when the corresponding Object Control axis changes.
     /// </summary>
     /// <remarks>
-    /// The effect is a immediate snap rotation to quickly face in a new direction.
+    ///   > The effect is a immediate snap rotation to quickly face in a new direction.
+    ///
+    /// **Required Components:**
+    ///  * `VRTK_ObjectControl` - The Object Control script to listen for the axis changes on.
+    ///
+    /// **Script Usage:**
+    ///  * Place the `VRTK_SnapRotateObjectControlAction` script on any active scene GameObject.
+    ///  * Link the required Object Control script to the `Object Control Script` parameter of this script.
+    ///  * Set the `Listen On Axis Change` parameter on this script to the axis change to affect with this movement type.
     /// </remarks>
     /// <example>
     /// `VRTK/Examples/017_CameraRig_TouchpadWalking` has a collection of walls and slopes that can be traversed by the user with the touchpad. There is also an area that can only be traversed if the user is crouching.

@@ -8,8 +8,8 @@ namespace VRTK
     /// <summary>
     /// Event Payload
     /// </summary>
-    /// <param name="affectingObject">The object that is being affected.</param>
-    /// <param name="monitoringObject">The interactable object that is being monitored.</param>
+    /// <param name="affectingObject">The GameObject that is being affected.</param>
+    /// <param name="monitoringObject">The Interactable Object that is being monitored.</param>
     /// <param name="interactionType">The type of interaction initiating the event.</param>
     public struct InteractObjectAppearanceEventArgs
     {
@@ -27,10 +27,17 @@ namespace VRTK
     public delegate void InteractObjectAppearanceEventHandler(object sender, InteractObjectAppearanceEventArgs e);
 
     /// <summary>
-    /// The Interact Object Appearance script is used to determine whether the `Object To Affect` should be visible or hidden by default or on touch, grab or use.
+    /// Determine whether the `Object To Affect` should be visible or hidden by default or on interaction (near touch, touch, grab, use).
     /// </summary>
     /// <remarks>
-    /// The `Object To Affect` can be the object that is causing the interaction (touch/grab/use) and is usually the controller. So this script can be used to hide the controller on interaction.
+    /// **Required Components:**
+    ///  * `VRTK_InteractableObject` - The Interactable Object component to detect interactions on. This must be applied on the same GameObject as this script if one is not provided via the `Object To Monitor` parameter.
+    ///
+    /// **Script Usage:**
+    ///  * Place the `VRTK_InteractObjectAppearance` script on either:
+    ///    * The GameObject of the Interactable Object to detect interactions on.
+    ///    * Any other scene GameObject and provide a valid `VRTK_InteractableObject` component to the `Object To Monitor` parameter of this script.
+    ///  * Optionally provide a GameObject to the `Object To Affect` parameter to determine which GameObject to affect the appearance of.
     /// </remarks>
     /// <example>
     /// `VRTK/Examples/008_Controller_UsingAGrabbedObject` shows that the controller can be hidden when touching, grabbing and using an object.
@@ -70,7 +77,7 @@ namespace VRTK
         [Tooltip("The GameObject to affect the appearance of. If this is null then then the interacting object will be used (usually the controller).")]
         public GameObject objectToAffect;
         [SerializeField]
-        [Tooltip("The Interactable Object to monitor for the touch/grab/use event.")]
+        [Tooltip("The Interactable Object to monitor for the interaction event (near touch/touch/grab/use).")]
         protected VRTK_InteractableObject objectToMonitor;
 
         [Header("Default Appearance Settings")]

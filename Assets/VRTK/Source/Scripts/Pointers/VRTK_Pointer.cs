@@ -4,18 +4,21 @@ namespace VRTK
     using UnityEngine;
 
     /// <summary>
-    /// The VRTK Pointer class forms the basis of being able to emit a pointer from a game object (e.g. controller).
+    /// Provides a basis of being able to emit a pointer from a specified GameObject.
     /// </summary>
     /// <remarks>
-    /// The concept of the pointer is it can be activated and deactivated and used to select elements utilising different button combinations if required.
+    /// **Required Components:**
+    ///  * `VRTK_BasePointerRenderer` - The visual representation of the pointer when activated.
     ///
-    /// The Pointer requires a Pointer Renderer which is the visualisation of the pointer in the scene.
-    ///
-    /// A Pointer can also be used to extend the interactions of an interacting object such as a controller. This enables pointers to touch (and highlight), grab and use interactable objects.
-    ///
-    /// The Pointer script does not need to go on a controller game object, but if it's placed on another object then a controller must be provided to determine what activates the pointer.
-    ///
-    /// It extends the `VRTK_DestinationMarker` to allow for destination events to be emitted when the pointer cursor collides with objects.
+    /// **Optional Components:**
+    ///  * `VRTK_ControllerEvents` - The events component to listen for the button presses on. This must be applied on the same GameObject as this script if one is not provided via the `Controller` parameter.
+    ///  * `VRTK_InteractUse` - The use component to utilise when the pointer is to activate the use action on an Interactable Object. This must be applied on the same GameObject as this script if one is not provided via the `Interact Use` parameter.
+    /// 
+    /// **Script Usage:**
+    ///  * Place the `VRTK_Pointer` script on either:
+    ///    * The controller script alias GameObject of the controller to emit the pointer from (e.g. Right Controller Script Alias).
+    ///    * Any other scene GameObject and provide a valid `Transform` component to the `Custom Origin` parameter of this script. This does not have to be a controller and can be any GameObject that will emit the pointer.
+    ///  * Link the required Base Pointer Renderer script to the `Pointer Renderer` parameter of this script.
     /// </remarks>
     [AddComponentMenu("VRTK/Scripts/Pointers/VRTK_Pointer")]
     public class VRTK_Pointer : VRTK_DestinationMarker
@@ -155,7 +158,7 @@ namespace VRTK
         /// <summary>
         /// The IsActivationButtonPressed method returns whether the configured activation button is being pressed.
         /// </summary>
-        /// <returns>Returns true if the activationButton is being pressed.</returns>
+        /// <returns>Returns `true` if the activationButton is being pressed.</returns>
         public virtual bool IsActivationButtonPressed()
         {
             return activationButtonPressed;
@@ -164,7 +167,7 @@ namespace VRTK
         /// <summary>
         /// The IsSelectionButtonPressed method returns whether the configured activation button is being pressed.
         /// </summary>
-        /// <returns>Returns true if the selectionButton is being pressed.</returns>
+        /// <returns>Returns `true` if the selectionButton is being pressed.</returns>
         public virtual bool IsSelectionButtonPressed()
         {
             return selectionButtonPressed;
@@ -209,7 +212,7 @@ namespace VRTK
         /// <summary>
         /// The CanActivate method is used to determine if the pointer has passed the activation time limit.
         /// </summary>
-        /// <returns>Returns true if the pointer can be activated.</returns>
+        /// <returns>Returns `true` if the pointer can be activated.</returns>
         public virtual bool CanActivate()
         {
             return (Time.time >= activateDelayTimer);
@@ -218,7 +221,7 @@ namespace VRTK
         /// <summary>
         /// The CanSelect method is used to determine if the pointer has passed the selection time limit.
         /// </summary>
-        /// <returns>Returns true if the pointer can execute the select action.</returns>
+        /// <returns>Returns `true` if the pointer can execute the select action.</returns>
         public virtual bool CanSelect()
         {
             return (Time.time >= selectDelayTimer);
@@ -227,7 +230,7 @@ namespace VRTK
         /// <summary>
         /// The IsPointerActive method is used to determine if the pointer's current state is active or not.
         /// </summary>
-        /// <returns>Returns true if the pointer is currently active.</returns>
+        /// <returns>Returns `true` if the pointer is currently active.</returns>
         public virtual bool IsPointerActive()
         {
             return (currentActivationState != 0);
@@ -236,7 +239,7 @@ namespace VRTK
         /// <summary>
         /// The ResetActivationTimer method is used to reset the pointer activation timer to the next valid activation time.
         /// </summary>
-        /// <param name="forceZero">If this is true then the next activation time will be 0.</param>
+        /// <param name="forceZero">If this is `true` then the next activation time will be 0.</param>
         public virtual void ResetActivationTimer(bool forceZero = false)
         {
             activateDelayTimer = (forceZero ? 0f : Time.time + activationDelay);
@@ -245,7 +248,7 @@ namespace VRTK
         /// <summary>
         /// The ResetSelectionTimer method is used to reset the pointer selection timer to the next valid activation time.
         /// </summary>
-        /// <param name="forceZero">If this is true then the next activation time will be 0.</param>
+        /// <param name="forceZero">If this is `true` then the next activation time will be 0.</param>
         public virtual void ResetSelectionTimer(bool forceZero = false)
         {
             selectDelayTimer = (forceZero ? 0f : Time.time + selectionDelay);
@@ -254,7 +257,7 @@ namespace VRTK
         /// <summary>
         /// The Toggle method is used to enable or disable the pointer.
         /// </summary>
-        /// <param name="state">If true the pointer will be enabled if possible, if false the pointer will be disabled if possible.</param>
+        /// <param name="state">If `true` the pointer will be enabled if possible, if `false` the pointer will be disabled if possible.</param>
         public virtual void Toggle(bool state)
         {
             if (!CanActivate() || NoPointerRenderer() || CanActivateOnToggleButton(state) || (state && IsPointerActive()) || (!state && !IsPointerActive()))
@@ -274,7 +277,7 @@ namespace VRTK
         /// <summary>
         /// The IsStateValid method is used to determine if the pointer is currently in a valid state (i.e. on it's valid colour).
         /// </summary>
-        /// <returns>Returns true if the pointer is in the valid state (showing the valid colour), returns false if the pointer is in the invalid state (showing the invalid colour).</returns>
+        /// <returns>Returns `true` if the pointer is in the valid state (showing the valid colour), returns `false` if the pointer is in the invalid state (showing the invalid colour).</returns>
         public virtual bool IsStateValid()
         {
             return (EnabledPointerRenderer() && pointerRenderer.IsValidCollision());

@@ -4,17 +4,19 @@ namespace VRTK
     using UnityEngine;
 
     /// <summary>
-    /// The purpose of the Headset Collision Fade is to detect when the user's VR headset collides with another game object and fades the screen to a solid colour.
+    /// Initiates a fade of the headset view when a headset collision event is detected.
     /// </summary>
     /// <remarks>
-    /// This is to deal with a user putting their head into a game object and seeing the inside of the object clipping, which is an undesired effect. The reasoning behind this is if the user puts their head where it shouldn't be, then fading to a colour (e.g. black) will make the user realise they've done something wrong and they'll probably naturally step backwards.
+    /// **Required Components:**
+    ///  * `VRTK_HeadsetCollision` - A Headset Collision script to determine when the HMD has collided with valid geometry.
+    ///  * `VRTK_HeadsetFade` - A Headset Fade script to alter the visible colour on the HMD view.
     ///
-    /// The Headset Collision Fade uses a composition of the Headset Collision and Headset Fade scripts to derive the desired behaviour.
+    /// **Script Usage:**
+    ///  * Place the `VRTK_HeadsetCollisionFade` script on any active scene GameObject.
     /// </remarks>
     /// <example>
     /// `VRTK/Examples/011_Camera_HeadSetCollisionFading` has collidable walls around the play area and if the user puts their head into any of the walls then the headset will fade to black.
     /// </example>
-    [RequireComponent(typeof(VRTK_HeadsetCollision)), RequireComponent(typeof(VRTK_HeadsetFade))]
     [AddComponentMenu("VRTK/Scripts/Presence/VRTK_HeadsetCollisionFade")]
     public class VRTK_HeadsetCollisionFade : MonoBehaviour
     {
@@ -39,14 +41,29 @@ namespace VRTK
             headsetFade = (headsetFade != null ? headsetFade : GetComponentInChildren<VRTK_HeadsetFade>());
             headsetCollision = (headsetCollision != null ? headsetCollision : GetComponentInChildren<VRTK_HeadsetCollision>());
 
+            if (headsetFade == null)
+            {
+                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, "VRTK_HeadsetCollisionFade", "VRTK_HeadsetFade", "the same or child"));
+                return;
+            }
+
+            if (headsetCollision == null)
+            {
+                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, "VRTK_HeadsetCollisionFade", "VRTK_HeadsetCollision", "the same or child"));
+                return;
+            }
+
             headsetCollision.HeadsetCollisionDetect += new HeadsetCollisionEventHandler(OnHeadsetCollisionDetect);
             headsetCollision.HeadsetCollisionEnded += new HeadsetCollisionEventHandler(OnHeadsetCollisionEnded);
         }
 
         protected virtual void OnDisable()
         {
-            headsetCollision.HeadsetCollisionDetect -= new HeadsetCollisionEventHandler(OnHeadsetCollisionDetect);
-            headsetCollision.HeadsetCollisionEnded -= new HeadsetCollisionEventHandler(OnHeadsetCollisionEnded);
+            if (headsetCollision != null)
+            {
+                headsetCollision.HeadsetCollisionDetect -= new HeadsetCollisionEventHandler(OnHeadsetCollisionDetect);
+                headsetCollision.HeadsetCollisionEnded -= new HeadsetCollisionEventHandler(OnHeadsetCollisionEnded);
+            }
         }
 
         protected virtual void OnHeadsetCollisionDetect(object sender, HeadsetCollisionEventArgs e)

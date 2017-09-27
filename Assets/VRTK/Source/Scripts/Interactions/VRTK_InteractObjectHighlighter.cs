@@ -24,8 +24,18 @@ namespace VRTK
     public delegate void InteractObjectHighlighterEventHandler(object sender, InteractObjectHighlighterEventArgs e);
 
     /// <summary>
-    /// The Interact Object Hightlighter script is attached to an Interactable Object component to provide highlighting to the object on various interaction stages.
+    /// Enable highlighting of an Interactable Object base on interaction type.
     /// </summary>
+    /// <remarks>
+    /// **Required Components:**
+    ///  * `VRTK_InteractableObject` - The Interactable Object component to detect interactions on. This must be applied on the same GameObject as this script if one is not provided via the `Object To Affect` parameter.
+    ///
+    /// **Script Usage:**
+    ///  * Place the `VRTK_InteractObjectHighlighter` script on either:
+    ///    * The GameObject of the Interactable Object to detect interactions on.
+    ///    * Any other scene GameObject and provide a valid `VRTK_InteractableObject` component to the `Object To Affect` parameter of this script.
+    /// </remarks>
+
     [AddComponentMenu("VRTK/Scripts/Interactions/VRTK_InteractObjectHighlighter")]
     public class VRTK_InteractObjectHighlighter : MonoBehaviour
     {
@@ -73,7 +83,7 @@ namespace VRTK
         }
 
         /// <summary>
-        /// The GetCurrentHighlightColor returns the colour that the object is currently being highlighted to.
+        /// The GetCurrentHighlightColor returns the colour that the Interactable Object is currently being highlighted to.
         /// </summary>
         /// <returns>The Color that the Interactable Object is being highlighted to.</returns>
         public virtual Color GetCurrentHighlightColor()

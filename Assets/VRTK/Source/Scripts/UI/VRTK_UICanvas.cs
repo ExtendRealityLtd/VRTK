@@ -7,10 +7,14 @@ namespace VRTK
     using System.Collections;
 
     /// <summary>
-    /// The UI Canvas is used to denote which World Canvases are interactable by a UI Pointer.
+    /// Denotes a Unity World UI Canvas can be interacted with a UIPointer script.
     /// </summary>
     /// <remarks>
-    /// When the script is enabled it will disable the `Graphic Raycaster` on the canvas and create a custom `UI Graphics Raycaster` and the Blocking Objects and Blocking Mask settings are copied over from the `Graphic Raycaster`.
+    /// **Script Usage:**
+    ///  * Place the `VRTK_UICanvas` script on the Unity World UI Canvas to allow UIPointer interactions with.
+    ///
+    /// **Script Dependencies:**
+    ///  * A UI Pointer attached to another GameObject (e.g. controller script alias) to interact with the UICanvas script.
     /// </remarks>
     /// <example>
     /// `VRTK/Examples/034_Controls_InteractingWithUnityUI` uses the `VRTK_UICanvas` script on two of the canvases to show how the UI Pointer can interact with them.

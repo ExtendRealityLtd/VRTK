@@ -21,10 +21,13 @@ namespace VRTK
     public delegate void UIDraggableItemEventHandler(object sender, UIDraggableItemEventArgs e);
 
     /// <summary>
-    /// The UI Draggable item will make any UI element draggable on the canvas.
+    /// Denotes a Unity UI Element as being draggable on the UI Canvas.
     /// </summary>
     /// <remarks>
-    /// If a UI Draggable item is set to `Restrict To Drop Zone = true` then the UI Draggable item must be a child of an element that has the VRTK_UIDropZone script applied to it to ensure it starts in a valid drop zone.
+    ///   > If a UI Draggable item is set to `Restrict To Drop Zone = true` then the UI Draggable item must be a child of an element that has the VRTK_UIDropZone script applied to it to ensure it starts in a valid drop zone.
+    ///
+    /// **Script Usage:**
+    ///  * Place the `VRTK_UIDraggableItem` script on the Unity UI element that is to be dragged.
     /// </remarks>
     /// <example>
     /// `VRTK/Examples/034_Controls_InteractingWithUnityUI` demonstrates a collection of UI elements that are draggable

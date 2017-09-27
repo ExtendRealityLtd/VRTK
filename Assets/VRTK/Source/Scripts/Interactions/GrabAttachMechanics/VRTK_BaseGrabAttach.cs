@@ -4,26 +4,27 @@ namespace VRTK.GrabAttachMechanics
     using UnityEngine;
 
     /// <summary>
-    /// The Base Grab Attach script is an abstract class that all grab attach script inherit.
+    /// Provides a base that all grab attach mechanics can inherit from.
     /// </summary>
     /// <remarks>
-    /// As this is an abstract class, it cannot be applied directly to a game object and performs no logic.
+    /// **Script Usage:**
+    ///   > This is an abstract class that is to be inherited to a concrete class that provides grab attach functionality, therefore this script should not be directly used.
     /// </remarks>
     public abstract class VRTK_BaseGrabAttach : MonoBehaviour
     {
         [Header("Base Options", order = 1)]
 
-        [Tooltip("If this is checked then when the controller grabs the object, it will grab it with precision and pick it up at the particular point on the object the controller is touching.")]
+        [Tooltip("If this is checked then when the Interact Grab grabs the Interactable Object, it will grab it with precision and pick it up at the particular point on the Interactable Object that the Interact Touch is touching.")]
         public bool precisionGrab;
-        [Tooltip("A Transform provided as an empty game object which must be the child of the item being grabbed and serves as an orientation point to rotate and position the grabbed item in relation to the right handed controller. If no Right Snap Handle is provided but a Left Snap Handle is provided, then the Left Snap Handle will be used in place. If no Snap Handle is provided then the object will be grabbed at its central point. Not required for `Precision Snap`.")]
+        [Tooltip("A Transform provided as an empty GameObject which must be the child of the Interactable Object being grabbed and serves as an orientation point to rotate and position the grabbed Interactable Object in relation to the right handed Interact Grab. If no Right Snap Handle is provided but a Left Snap Handle is provided, then the Left Snap Handle will be used in place. If no Snap Handle is provided then the Interactable Object will be grabbed at its central point. Not required for `Precision Grab`.")]
         public Transform rightSnapHandle;
-        [Tooltip("A Transform provided as an empty game object which must be the child of the item being grabbed and serves as an orientation point to rotate and position the grabbed item in relation to the left handed controller. If no Left Snap Handle is provided but a Right Snap Handle is provided, then the Right Snap Handle will be used in place. If no Snap Handle is provided then the object will be grabbed at its central point. Not required for `Precision Snap`.")]
+        [Tooltip("A Transform provided as an empty GameObject which must be the child of the Interactable Object being grabbed and serves as an orientation point to rotate and position the grabbed Interactable Object in relation to the left handed Interact Grab. If no Left Snap Handle is provided but a Right Snap Handle is provided, then the Right Snap Handle will be used in place. If no Snap Handle is provided then the Interactable Object will be grabbed at its central point. Not required for `Precision Grab`.")]
         public Transform leftSnapHandle;
-        [Tooltip("If checked then when the object is thrown, the distance between the object's attach point and the controller's attach point will be used to calculate a faster throwing velocity.")]
+        [Tooltip("If checked then when the Interactable Object is thrown, the distance between the Interactable Object's attach point and the Interact Grab's attach point will be used to calculate a faster throwing velocity.")]
         public bool throwVelocityWithAttachDistance = false;
-        [Tooltip("An amount to multiply the velocity of the given object when it is thrown. This can also be used in conjunction with the Interact Grab Throw Multiplier to have certain objects be thrown even further than normal (or thrown a shorter distance if a number below 1 is entered).")]
+        [Tooltip("An amount to multiply the velocity of the given Interactable Object when it is thrown. This can also be used in conjunction with the Interact Grab Throw Multiplier to have certain Interactable Objects be thrown even further than normal (or thrown a shorter distance if a number below 1 is entered).")]
         public float throwMultiplier = 1f;
-        [Tooltip("The amount of time to delay collisions affecting the object when it is first grabbed. This is useful if a game object may get stuck inside another object when it is being grabbed.")]
+        [Tooltip("The amount of time to delay collisions affecting the Interactable Object when it is first grabbed. This is useful if the Interactable Object could get stuck inside another GameObject when it is being grabbed.")]
         public float onGrabCollisionDelay = 0f;
 
         protected bool tracked;
@@ -67,24 +68,24 @@ namespace VRTK.GrabAttachMechanics
         /// <summary>
         /// The ValidGrab method determines if the grab attempt is valid.
         /// </summary>
-        /// <param name="checkAttachPoint"></param>
-        /// <returns>Always returns true for the base check.</returns>
+        /// <param name="checkAttachPoint">The rigidbody attach point to check.</param>
+        /// <returns>Always returns `true` for the base check.</returns>
         public virtual bool ValidGrab(Rigidbody checkAttachPoint)
         {
             return true;
         }
 
         /// <summary>
-        /// The SetTrackPoint method sets the point on the grabbed object where the grab is happening.
+        /// The SetTrackPoint method sets the point on the grabbed Interactable Object where the grab is happening.
         /// </summary>
-        /// <param name="givenTrackPoint">The track point to set on the grabbed object.</param>
+        /// <param name="givenTrackPoint">The track point to set on the grabbed Interactable Object.</param>
         public virtual void SetTrackPoint(Transform givenTrackPoint)
         {
             trackPoint = givenTrackPoint;
         }
 
         /// <summary>
-        /// The SetInitialAttachPoint method sets the point on the grabbed object where the initial grab happened.
+        /// The SetInitialAttachPoint method sets the point on the grabbed Interactable Object where the initial grab happened.
         /// </summary>
         /// <param name="givenInitialAttachPoint">The point where the initial grab took place.</param>
         public virtual void SetInitialAttachPoint(Transform givenInitialAttachPoint)
@@ -93,12 +94,12 @@ namespace VRTK.GrabAttachMechanics
         }
 
         /// <summary>
-        /// The StartGrab method sets up the grab attach mechanic as soon as an object is grabbed.
+        /// The StartGrab method sets up the grab attach mechanic as soon as an Interactable Object is grabbed.
         /// </summary>
-        /// <param name="grabbingObject">The object that is doing the grabbing.</param>
-        /// <param name="givenGrabbedObject">The object that is being grabbed.</param>
+        /// <param name="grabbingObject">The GameObject that is doing the grabbing.</param>
+        /// <param name="givenGrabbedObject">The GameObject that is being grabbed.</param>
         /// <param name="givenControllerAttachPoint">The point on the grabbing object that the grabbed object should be attached to after grab occurs.</param>
-        /// <returns>Is true if the grab is successful, false if the grab is unsuccessful.</returns>
+        /// <returns>Returns `true` if the grab is successful, `false` if the grab is unsuccessful.</returns>
         public virtual bool StartGrab(GameObject grabbingObject, GameObject givenGrabbedObject, Rigidbody givenControllerAttachPoint)
         {
             grabbedObject = givenGrabbedObject;
@@ -118,9 +119,9 @@ namespace VRTK.GrabAttachMechanics
         }
 
         /// <summary>
-        /// The StopGrab method ends the grab of the current object and cleans up the state.
+        /// The StopGrab method ends the grab of the current Interactable Object and cleans up the state.
         /// </summary>
-        /// <param name="applyGrabbingObjectVelocity">If true will apply the current velocity of the grabbing object to the grabbed object on release.</param>
+        /// <param name="applyGrabbingObjectVelocity">If `true` will apply the current velocity of the grabbing object to the grabbed object on release.</param>
         public virtual void StopGrab(bool applyGrabbingObjectVelocity)
         {
             grabbedObject = null;
@@ -135,10 +136,10 @@ namespace VRTK.GrabAttachMechanics
         /// The CreateTrackPoint method sets up the point of grab to track on the grabbed object.
         /// </summary>
         /// <param name="controllerPoint">The point on the controller where the grab was initiated.</param>
-        /// <param name="currentGrabbedObject">The object that is currently being grabbed.</param>
-        /// <param name="currentGrabbingObject">The object that is currently doing the grabbing.</param>
+        /// <param name="currentGrabbedObject">The GameObject that is currently being grabbed.</param>
+        /// <param name="currentGrabbingObject">The GameObject that is currently doing the grabbing.</param>
         /// <param name="customTrackPoint">A reference to whether the created track point is an auto generated custom object.</param>
-        /// <returns>The transform of the created track point.</returns>
+        /// <returns>The Transform of the created track point.</returns>
         public virtual Transform CreateTrackPoint(Transform controllerPoint, GameObject currentGrabbedObject, GameObject currentGrabbingObject, ref bool customTrackPoint)
         {
             customTrackPoint = false;
@@ -146,14 +147,14 @@ namespace VRTK.GrabAttachMechanics
         }
 
         /// <summary>
-        /// The ProcessUpdate method is run in every Update method on the interactable object.
+        /// The ProcessUpdate method is run in every Update method on the Interactable Object.
         /// </summary>
         public virtual void ProcessUpdate()
         {
         }
 
         /// <summary>
-        /// The ProcessFixedUpdate method is run in every FixedUpdate method on the interactable object.
+        /// The ProcessFixedUpdate method is run in every FixedUpdate method on the Interactable Object.
         /// </summary>
         public virtual void ProcessFixedUpdate()
         {

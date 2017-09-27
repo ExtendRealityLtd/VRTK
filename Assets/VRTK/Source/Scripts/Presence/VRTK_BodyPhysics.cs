@@ -2,14 +2,13 @@
 namespace VRTK
 {
     using UnityEngine;
-    using System;
     using System.Collections;
     using System.Collections.Generic;
 
     /// <summary>
     /// Event Payload
     /// </summary>
-    /// <param name="target">The target the event is dealing with.</param>
+    /// <param name="target">The target GameObject the event is dealing with.</param>
     /// <param name="collider">An optional collider that the body physics is colliding with.</param>
     public struct BodyPhysicsEventArgs
     {
@@ -25,16 +24,14 @@ namespace VRTK
     public delegate void BodyPhysicsEventHandler(object sender, BodyPhysicsEventArgs e);
 
     /// <summary>
-    /// The body physics script deals with how a user's body in the scene reacts to world physics and how to handle drops.
+    /// Allows the play area to be affected by physics and detect collisions with other valid geometry.
     /// </summary>
     /// <remarks>
-    /// The body physics creates a rigidbody and collider for where the user is standing to allow physics interactions and prevent walking through walls.
+    /// **Optional Components:**
+    ///  * `VRTK_BasicTeleport` - A Teleporter script to use when snapping the play area to the nearest floor when releasing from grab.
     ///
-    /// Upon actually moving in the play area, the rigidbody is set to kinematic to prevent the world from being pushed back in the user's view reducing sickness.
-    ///
-    /// The body physics script also deals with snapping a user to the nearest floor if they look over a ledge or walk up stairs then it will move the play area to simulate movement in the scene.
-    ///
-    /// To allow for peeking over a ledge and not falling, a fall restiction can happen by keeping a controller over the existing floor and the snap to the nearest floor will not happen until the controllers are also over the floor.
+    /// **Script Usage:**
+    ///  * Place the `VRTK_BodyPhysics` script on any active scene GameObject.
     /// </remarks>
     /// <example>
     /// `VRTK/Examples/017_CameraRig_TouchpadWalking` has a collection of walls and slopes that can be traversed by the user with the touchpad but the user cannot pass through the objects as they are collidable and the rigidbody physics won't allow the intersection to occur.
@@ -227,7 +224,7 @@ namespace VRTK
         /// <summary>
         /// The ArePhysicsEnabled method determines whether the body physics are set to interact with other scene physics objects.
         /// </summary>
-        /// <returns>Returns true if the body physics will interact with other scene physics objects and false if the body physics will ignore other scene physics objects.</returns>
+        /// <returns>Returns `true` if the body physics will interact with other scene physics objects and `false` if the body physics will ignore other scene physics objects.</returns>
         public virtual bool ArePhysicsEnabled()
         {
             return (bodyRigidbody != null ? !bodyRigidbody.isKinematic : false);
@@ -237,8 +234,8 @@ namespace VRTK
         /// The ApplyBodyVelocity method applies a given velocity to the rigidbody attached to the body physics.
         /// </summary>
         /// <param name="velocity">The velocity to apply.</param>
-        /// <param name="forcePhysicsOn">If true will toggle the body collision physics back on if enable body collisions is true.</param>
-        /// <param name="applyMomentum">If true then the existing momentum of the play area will be applied as a force to the resulting velocity.</param>
+        /// <param name="forcePhysicsOn">If `true` will toggle the body collision physics back on if enable body collisions is true.</param>
+        /// <param name="applyMomentum">If `true` then the existing momentum of the play area will be applied as a force to the resulting velocity.</param>
         public virtual void ApplyBodyVelocity(Vector3 velocity, bool forcePhysicsOn = false, bool applyMomentum = false)
         {
             if (enableBodyCollisions && forcePhysicsOn)
@@ -258,7 +255,7 @@ namespace VRTK
         /// <summary>
         /// The ToggleOnGround method sets whether the body is considered on the ground or not.
         /// </summary>
-        /// <param name="state">If true then body physics are set to being on the ground.</param>
+        /// <param name="state">If `true` then body physics are set to being on the ground.</param>
         public virtual void ToggleOnGround(bool state)
         {
             onGround = state;
@@ -275,7 +272,7 @@ namespace VRTK
         /// <summary>
         /// The PreventSnapToFloor method sets whether the snap to floor mechanic should be used.
         /// </summary>
-        /// <param name="state">If true the the snap to floor mechanic will not execute.</param>
+        /// <param name="state">If `true` the the snap to floor mechanic will not execute.</param>
         public virtual void TogglePreventSnapToFloor(bool state)
         {
             preventSnapToFloor = state;
@@ -293,7 +290,7 @@ namespace VRTK
         /// <summary>
         /// The IsFalling method returns the falling state of the body.
         /// </summary>
-        /// <returns>Returns true if the body is currently falling via gravity or via teleport.</returns>
+        /// <returns>Returns `true` if the body is currently falling via gravity or via teleport.</returns>
         public virtual bool IsFalling()
         {
             return isFalling;
@@ -311,7 +308,7 @@ namespace VRTK
         /// <summary>
         /// The IsLeaning method returns the leaning state of the user.
         /// </summary>
-        /// <returns>Returns true if the user is considered to be leaning over an object.</returns>
+        /// <returns>Returns `true` if the user is considered to be leaning over an object.</returns>
         public virtual bool IsLeaning()
         {
             return isLeaning;
@@ -320,7 +317,7 @@ namespace VRTK
         /// <summary>
         /// The OnGround method returns whether the user is currently standing on the ground or not.
         /// </summary>
-        /// <returns>Returns true if the play area is on the ground and false if the play area is in the air.</returns>
+        /// <returns>Returns `true` if the play area is on the ground and false if the play area is in the air.</returns>
         public virtual bool OnGround()
         {
             return onGround;
@@ -416,7 +413,7 @@ namespace VRTK
         /// </summary>
         /// <param name="direction">The direction to test for the potential collision.</param>
         /// <param name="maxDistance">The maximum distance to check for a potential collision.</param>
-        /// <returns>Returns true if a collision will occur on the given direction over the given maxium distance. Returns false if there is no collision about to happen.</returns>
+        /// <returns>Returns `true` if a collision will occur on the given direction over the given maxium distance. Returns `false` if there is no collision about to happen.</returns>
         public virtual bool SweepCollision(Vector3 direction, float maxDistance)
         {
             Vector3 point1 = bodyCollider.transform.parent.TransformPoint(bodyCollider.transform.localPosition + (bodyCollider.center)) + (Vector3.up * ((bodyCollider.height * 0.5f) - bodyCollider.radius));

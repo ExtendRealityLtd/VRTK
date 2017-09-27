@@ -5,14 +5,15 @@ namespace VRTK.Highlighters
     using System.Collections.Generic;
 
     /// <summary>
-    /// The Base Highlighter is an abstract class that all other highlighters inherit and are required to implement the public methods.
+    /// Provides a base that all highlighters can inherit from.
     /// </summary>
     /// <remarks>
-    /// As this is an abstract class, it cannot be applied directly to a game object and performs no logic.
+    /// **Script Usage:**
+    ///   > This is an abstract class that is to be inherited to a concrete class that provides highlight functionality, therefore this script should not be directly used.
     /// </remarks>
     public abstract class VRTK_BaseHighlighter : MonoBehaviour
     {
-        [Tooltip("Determines if this highlighter is the active highlighter for the object the component is attached to. Only 1 active highlighter can be applied to a game object.")]
+        [Tooltip("Determines if this highlighter is the active highlighter for the object the component is attached to. Only one active highlighter can be applied to a GameObject.")]
         public bool active = true;
         [Tooltip("Determines if the highlighted object should be unhighlighted when it is disabled.")]
         public bool unhighlightOnDisable = true;
@@ -66,16 +67,16 @@ namespace VRTK.Highlighters
         /// <summary>
         /// The UsesClonedObject method is used to return whether the current highlighter creates a cloned object to do the highlighting with.
         /// </summary>
-        /// <returns>Returns true if the highlighter creates a cloned object to apply the highlighter on, returns false if no additional object is created.</returns>
+        /// <returns>Returns `true` if the highlighter creates a cloned object to apply the highlighter on, returns `false` if no additional object is created.</returns>
         public virtual bool UsesClonedObject()
         {
             return usesClonedObject;
         }
 
         /// <summary>
-        /// The GetActiveHighlighter method checks the given game object for a valid and active highlighter.
+        /// The GetActiveHighlighter method checks the given GameObject for a valid and active highlighter.
         /// </summary>
-        /// <param name="obj">The game object to check for a highlighter on.</param>
+        /// <param name="obj">The GameObject to check for a highlighter on.</param>
         /// <returns>A valid and active highlighter.</returns>
         public static VRTK_BaseHighlighter GetActiveHighlighter(GameObject obj)
         {

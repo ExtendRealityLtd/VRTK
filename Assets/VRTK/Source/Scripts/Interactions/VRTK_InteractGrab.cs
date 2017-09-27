@@ -4,20 +4,19 @@ namespace VRTK
     using UnityEngine;
 
     /// <summary>
-    /// The Interact Grab script is attached to a Controller object and requires the `VRTK_ControllerEvents` script to be attached as it uses this for listening to the controller button events for grabbing and releasing interactable game objects.
+    /// Determines if the Interact Touch can initiate a grab with the touched Interactable Object.
     /// </summary>
     /// <remarks>
-    /// It listens for the `AliasGrabOn` and `AliasGrabOff` events to determine when an object should be grabbed and should be released.
+    /// **Required Components:**
+    ///  * `VRTK_InteractTouch` - The touch component to determine when a valid touch has taken place to denote a grab can occur. This must be applied on the same GameObject as this script if one is not provided via the `Interact Touch` parameter.
     ///
-    /// The Controller object also requires the `VRTK_InteractTouch` script to be attached to it as this is used to determine when an interactable object is being touched. Only valid touched objects can be grabbed.
+    /// **Optional Components:**
+    ///  * `VRTK_ControllerEvents` - The events component to listen for the button presses on. This must be applied on the same GameObject as this script if one is not provided via the `Controller Events` parameter.
     ///
-    /// An object can be grabbed if the Controller touches a game object which contains the `VRTK_InteractableObject` script and has the flag `isGrabbable` set to `true`.
-    ///
-    /// If a valid interactable object is grabbable then pressing the set `Grab` button on the Controller (default is `Grip`) will grab and snap the object to the controller and will not release it until the `Grab` button is released.
-    ///
-    /// When the Controller `Grab` button is released, if the interactable game object is grabbable then it will be propelled in the direction and at the velocity the controller was at, which can simulate object throwing.
-    ///
-    /// The interactable objects require a collider to activate the trigger and a rigidbody to pick them up and move them around the game world.
+    /// **Script Usage:**
+    ///  * Place the `VRTK_InteractGrab` script on either:
+    ///    * The GameObject with the Interact Touch and Controller Events scripts.
+    ///    * Any other scene GameObject and provide a valid `VRTK_ControllerEvents` component to the `Controller Events` parameter and a valid `VRTK_InteractTouch` component to the `Interact Touch` parameter of this script.
     /// </remarks>
     /// <example>
     /// `VRTK/Examples/005_Controller/BasicObjectGrabbing` demonstrates the grabbing of interactable objects that have the `VRTK_InteractableObject` script attached to them. The objects can be picked up and thrown around.
@@ -31,20 +30,20 @@ namespace VRTK
     {
         [Header("Grab Settings")]
 
-        [Tooltip("The button used to grab/release a touched object.")]
+        [Tooltip("The button used to grab/release a touched Interactable Object.")]
         public VRTK_ControllerEvents.ButtonAlias grabButton = VRTK_ControllerEvents.ButtonAlias.GripPress;
-        [Tooltip("An amount of time between when the grab button is pressed to when the controller is touching something to grab it. For example, if an object is falling at a fast rate, then it is very hard to press the grab button in time to catch the object due to human reaction times. A higher number here will mean the grab button can be pressed before the controller touches the object and when the collision takes place, if the grab button is still being held down then the grab action will be successful.")]
+        [Tooltip("An amount of time between when the grab button is pressed to when the controller is touching an Interactable Object to grab it.")]
         public float grabPrecognition = 0f;
-        [Tooltip("An amount to multiply the velocity of any objects being thrown. This can be useful when scaling up the play area to simulate being able to throw items further.")]
+        [Tooltip("An amount to multiply the velocity of any Interactable Object being thrown.")]
         public float throwMultiplier = 1f;
-        [Tooltip("If this is checked and the controller is not touching an Interactable Object when the grab button is pressed then a rigid body is added to the controller to allow the controller to push other rigid body objects around.")]
+        [Tooltip("If this is checked and the Interact Touch is not touching an Interactable Object when the grab button is pressed then a rigid body is added to the interacting object to allow it to push other rigid body objects around.")]
         public bool createRigidBodyWhenNotTouching = false;
 
         [Header("Custom Settings")]
 
-        [Tooltip("The rigidbody point on the controller model to snap the grabbed object to. If blank it will be set to the SDK default.")]
+        [Tooltip("The rigidbody point on the controller model to snap the grabbed Interactable Object to. If blank it will be set to the SDK default.")]
         public Rigidbody controllerAttachPoint = null;
-        [Tooltip("The controller to listen for the events on. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.")]
+        [Tooltip("The Controller Events to listen for the events on. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.")]
         public VRTK_ControllerEvents controllerEvents;
         [Tooltip("The Interact Touch to listen for touches on. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.")]
         public VRTK_InteractTouch interactTouch;
@@ -145,23 +144,23 @@ namespace VRTK
         /// <summary>
         /// The IsGrabButtonPressed method determines whether the current grab alias button is being pressed down.
         /// </summary>
-        /// <returns>Returns true if the grab alias button is being held down.</returns>
+        /// <returns>Returns `true` if the grab alias button is being held down.</returns>
         public virtual bool IsGrabButtonPressed()
         {
             return grabPressed;
         }
 
         /// <summary>
-        /// The ForceRelease method will force the controller to stop grabbing the currently grabbed object.
+        /// The ForceRelease method will force the Interact Grab to stop grabbing the currently grabbed Interactable Object.
         /// </summary>
-        /// <param name="applyGrabbingObjectVelocity">If this is true then upon releasing the object any velocity on the grabbing object will be applied to the object to essentiall throw it. Defaults to `false`.</param>
+        /// <param name="applyGrabbingObjectVelocity">If this is true then upon releasing the Interactable Object any velocity on the Interact Touch GameObject will be applied to the Interactable Object to essentiall throw it. Defaults to `false`.</param>
         public virtual void ForceRelease(bool applyGrabbingObjectVelocity = false)
         {
             InitUngrabbedObject(applyGrabbingObjectVelocity);
         }
 
         /// <summary>
-        /// The AttemptGrab method will attempt to grab the currently touched object without needing to press the grab button on the controller.
+        /// The AttemptGrab method will attempt to grab the currently touched Interactable Object without needing to press the grab button on the controller.
         /// </summary>
         public virtual void AttemptGrab()
         {
@@ -169,7 +168,7 @@ namespace VRTK
         }
 
         /// <summary>
-        /// The GetGrabbedObject method returns the current object being grabbed by the controller.
+        /// The GetGrabbedObject method returns the current Interactable Object being grabbed by the this Interact Grab.
         /// </summary>
         /// <returns>The game object of what is currently being grabbed by this controller.</returns>
         public virtual GameObject GetGrabbedObject()

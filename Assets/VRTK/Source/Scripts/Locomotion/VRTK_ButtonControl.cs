@@ -4,16 +4,22 @@ namespace VRTK
     using UnityEngine;
 
     /// <summary>
-    /// The ability to control an object with a button press on a given button to control a specified direction.
+    /// Provides the ability to control a GameObject's position based the press of a controller button linked to a specific axis direction.
     /// </summary>
     /// <remarks>
-    /// The Button Control script forms the stub to allow for pre-defined actions to execute when a button press affects a direction axis.
+    ///   > This script forms the stub of emitting the axis X and Y changes that are then digested by the corresponding Object Control Actions that are listening for the relevant event.
     ///
-    /// This is enabled by the Button Control script emitting an event each time the pseudo X axis and pseudo Y Axis are changed by a button press and the corresponding Object Control Action registers with the appropriate axis event. This means that multiple Object Control Actions can be triggered per axis change.
+    /// **Required Components:**
+    ///  * `VRTK_ControllerEvents` - The Controller Events script to listen for button presses events on.
     ///
-    /// This script is placed on the Script Alias of the Controller that is required to be affected by button presses.
+    /// **Optional Components:**
+    ///  * `VRTK_BodyPhysics` - The Body Physics script to utilise to determine if falling is occuring.
     ///
-    /// If the controlled object is the play area and `VRTK_BodyPhysics` is also available, then additional logic is processed when the user is falling such as preventing the button control from affecting a falling user.
+    /// **Script Usage:**
+    ///  * Place the `VRTK_ButtonControl` script on either:
+    ///    * The GameObject with the Controller Events script.
+    ///    * Any other scene GameObject and provide a valid `VRTK_ControllerEvents` component to the `Controller` parameter of this script.
+    ///  * Place a corresponding Object Control Action for the Button Control script to notify of axis changes. Without a corresponding Object Control Action, the Button Control script will do nothing.
     /// </remarks>
     [AddComponentMenu("VRTK/Scripts/Locomotion/VRTK_ButtonControl")]
     public class VRTK_ButtonControl : VRTK_ObjectControl

@@ -7,7 +7,7 @@ namespace VRTK
     /// <summary>
     /// Event Payload
     /// </summary>
-    /// <param name="hits">An array of objects that the CapsuleCast has collided with.</param>
+    /// <param name="hits">An array of RaycastHits that the CapsuleCast has collided with.</param>
     public struct DashTeleportEventArgs
     {
         public RaycastHit[] hits;
@@ -21,15 +21,17 @@ namespace VRTK
     public delegate void DashTeleportEventHandler(object sender, DashTeleportEventArgs e);
 
     /// <summary>
-    /// The dash teleporter extends the height adjust teleporter and allows to have the user's position dashing to a new teleport location. 
+    /// Updates the `x/y/z` position of the SDK Camera Rig with a lerp to the new position creating a dash effect.
     /// </summary>
     /// <remarks>
-    /// The basic principle is to dash for a very short amount of time, to avoid sim sickness. The default value is 100 miliseconds. This value is fixed for all normal and longer distances. When the distances get very short the minimum speed is clamped to 50 mps, so the dash time becomes even shorter.
+    /// **Script Usage:**
+    ///  * Place the `VRTK_DashTeleport` script on any active scene GameObject.
     ///
-    /// The minimum distance for the fixed time dash is determined by the minSpeed and normalLerpTime values, if you want to always lerp with a fixed mps speed instead, set the normalLerpTime to a high value. Right before the teleport a capsule is cast towards the target and registers all colliders blocking the way. These obstacles are then broadcast in an event so that for example their gameobjects or renderers can be turned off while the dash is in progress.
+    /// **Script Dependencies:**
+    ///  * An optional Destination Marker (such as a Pointer) to set the destination of the teleport location.
     /// </remarks>
     /// <example>
-    /// `SteamVR_Unity_Toolkit/Examples/038_CameraRig_DashTeleport` shows how to turn off the mesh renderers of objects that are in the way during the dash.
+    /// `VRTK/Examples/038_CameraRig_DashTeleport` shows how to turn off the mesh renderers of objects that are in the way during the dash.
     /// </example>
     [AddComponentMenu("VRTK/Scripts/Locomotion/VRTK_DashTeleport")]
     public class VRTK_DashTeleport : VRTK_HeightAdjustTeleport
@@ -37,9 +39,9 @@ namespace VRTK
         [Header("Dash Settings")]
 
         [Tooltip("The fixed time it takes to dash to a new position.")]
-        public float normalLerpTime = 0.1f; // 100ms for every dash above minDistanceForNormalLerp
+        public float normalLerpTime = 0.1f;
         [Tooltip("The minimum speed for dashing in meters per second.")]
-        public float minSpeedMps = 50.0f; // clamped to minimum speed 50m/s to avoid sickness
+        public float minSpeedMps = 50.0f;
         [Tooltip("The Offset of the CapsuleCast above the camera.")]
         public float capsuleTopOffset = 0.2f;
         [Tooltip("The Offset of the CapsuleCast below the camera.")]
@@ -56,8 +58,6 @@ namespace VRTK
         /// </summary>
         public event DashTeleportEventHandler DashedThruObjects;
 
-        // The minimum distance for fixed time lerp is determined by the minSpeed and the normalLerpTime
-        // If you want to always lerp with a fixed mps speed, set the normalLerpTime to a high value
         protected float minDistanceForNormalLerp;
         protected float lerpTime = 0.1f;
         protected Coroutine attemptLerpRoutine;

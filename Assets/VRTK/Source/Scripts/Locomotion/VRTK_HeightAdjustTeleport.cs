@@ -4,8 +4,17 @@ namespace VRTK
     using UnityEngine;
 
     /// <summary>
-    /// The height adjust teleporter extends the basic teleporter and allows for the y position of the user's position to be altered based on whether the teleport location is on top of another object.
+    /// Updates the `x/y/z` position of the SDK Camera Rig with an optional screen fade.
     /// </summary>
+    /// <remarks>
+    ///   > The Camera Rig can be automatically teleported to the nearest floor `y` position when utilising this teleporter.
+    ///
+    /// **Script Usage:**
+    ///  * Place the `VRTK_HeightAdjustTeleport` script on any active scene GameObject.
+    ///
+    /// **Script Dependencies:**
+    ///  * An optional Destination Marker (such as a Pointer) to set the destination of the teleport location.
+    /// </remarks>
     /// <example>
     /// `VRTK/Examples/007_CameraRig_HeightAdjustTeleport` has a collection of varying height objects that the user can either walk up and down or use the laser pointer to climb on top of them.
     ///

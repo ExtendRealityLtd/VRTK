@@ -22,8 +22,12 @@ namespace VRTK
     public delegate void HeadsetControllerAwareEventHandler(object sender, HeadsetControllerAwareEventArgs e);
 
     /// <summary>
-    /// The purpose of Headset Controller Aware is to allow the headset to know if something is blocking the path between the headset and controllers and to know if the headset is looking at a controller.
+    /// Determines whether the HMD is in line of sight to the controllers or if the headset is directly looking at one of the controllers.
     /// </summary>
+    /// <remarks>
+    /// **Script Usage:**
+    ///  * Place the `VRTK_HeadsetControllerAware` script on any active scene GameObject.
+    /// </remarks>
     /// <example>
     /// `VRTK/Examples/029_Controller_Tooltips` displays tooltips that have been added to the controllers and are only visible when the controller is being looked at.
     /// </example>
@@ -110,7 +114,7 @@ namespace VRTK
         /// <summary>
         /// The LeftControllerObscured method returns the state of if the left controller is being obscured from the path of the headset.
         /// </summary>
-        /// <returns>Returns true if the path between the headset and the controller is obscured.</returns>
+        /// <returns>Returns `true` if the path between the headset and the controller is obscured.</returns>
         public virtual bool LeftControllerObscured()
         {
             return leftControllerObscured;
@@ -119,7 +123,7 @@ namespace VRTK
         /// <summary>
         /// The RightControllerObscured method returns the state of if the right controller is being obscured from the path of the headset.
         /// </summary>
-        /// <returns>Returns true if the path between the headset and the controller is obscured.</returns>
+        /// <returns>Returns `true` if the path between the headset and the controller is obscured.</returns>
         public virtual bool RightControllerObscured()
         {
             return rightControllerObscured;
@@ -128,7 +132,7 @@ namespace VRTK
         /// <summary>
         /// the LeftControllerGlanced method returns the state of if the headset is currently looking at the left controller or not.
         /// </summary>
-        /// <returns>Returns true if the headset can currently see the controller within the given radius threshold.</returns>
+        /// <returns>Returns `true` if the headset can currently see the controller within the given radius threshold.</returns>
         public virtual bool LeftControllerGlanced()
         {
             return leftControllerGlance;
@@ -137,7 +141,7 @@ namespace VRTK
         /// <summary>
         /// the RightControllerGlanced method returns the state of if the headset is currently looking at the right controller or not.
         /// </summary>
-        /// <returns>Returns true if the headset can currently see the controller within the given radius threshold.</returns>
+        /// <returns>Returns `true` if the headset can currently see the controller within the given radius threshold.</returns>
         public virtual bool RightControllerGlanced()
         {
             return rightControllerGlance;

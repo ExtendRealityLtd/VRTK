@@ -35,10 +35,11 @@ namespace VRTK
     public delegate void DestinationMarkerEventHandler(object sender, DestinationMarkerEventArgs e);
 
     /// <summary>
-    /// This abstract class provides the ability to emit events of destination markers within the game world. It can be useful for tagging locations for specific purposes such as teleporting.
+    /// Provides a base that all destination markers can inherit from.
     /// </summary>
     /// <remarks>
-    /// It is utilised by the `VRTK_BasePointer` for dealing with pointer events when the pointer cursor touches areas within the game world.
+    /// **Script Usage:**
+    ///   > This is an abstract class that is to be inherited to a concrete class that provides object control action functionality, therefore this script should not be directly used.
     /// </remarks>
     public abstract class VRTK_DestinationMarker : MonoBehaviour
     {

@@ -4,12 +4,21 @@ namespace VRTK
     using UnityEngine;
 
     /// <summary>
-    /// The Bezier Pointer Renderer emits a curved line (made out of game objects) from the end of the attached object to a point on a ground surface (at any height).
+    /// A visual pointer representation of a curved beam made from multiple objects with an optional cursor at the end.
     /// </summary>
     /// <remarks>
-    /// It is more useful than the Simple Pointer Renderer for traversing objects of various heights as the end point can be curved on top of objects that are not visible to the user.
+    ///   > The bezier curve generation code is in another script located at `VRTK/Source/Scripts/Internal/VRTK_CurveGenerator.cs` and was heavily inspired by the tutorial and code from [Catlike Coding](http://catlikecoding.com/unity/tutorials/curves-and-splines/).
     ///
-    ///   > The bezier curve generation code is in another script located at `VRTK/Scripts/Internal/VRTK_CurveGenerator.cs` and was heavily inspired by the tutorial and code from [Catlike Coding](http://catlikecoding.com/unity/tutorials/curves-and-splines/).
+    /// **Optional Components:**
+    ///  * `VRTK_PlayAreaCursor` - A Play Area Cursor that will track the position of the pointer cursor.
+    ///  * `VRTK_PointerDirectionIndicator` - A Pointer Direction Indicator that will track the position of the pointer cursor.
+    /// 
+    /// **Script Usage:**
+    ///  * Place the `VRTK_BezierPointerRenderer` script on the same GameObject as the Pointer script it is linked to.
+    ///  * Link this Pointer Renderer script to the `Pointer Renderer` parameter on the required Pointer script.
+    ///
+    /// **Script Dependencies:**
+    ///  * A Pointer script to control the activation of this Pointer Renderer script.
     /// </remarks>
     /// <example>
     /// `VRTK/Examples/009_Controller_BezierPointer` is used in conjunction with the Height Adjust Teleporter shows how it is possible to traverse different height objects using the curved pointer without needing to see the top of the object.

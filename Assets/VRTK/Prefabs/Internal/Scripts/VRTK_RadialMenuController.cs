@@ -7,6 +7,7 @@ namespace VRTK
     /// Allows the RadialMenu to be anchored to controller object.
     /// </summary>
     /// <remarks>
+    /// **Prefab Usage:**
     ///  * Place the `VRTK/Prefabs/RadialMenu` prefab as a child of a Controller script alias GameObject.
     ///  * The Radial Menu should automatically find the `VRTK_ControllerEvents` component in the parent hierarchy, if one is not found but required then the `Events` parameter on the `VRTK_RadialMenuController` script can be populated.
     /// </remarks>

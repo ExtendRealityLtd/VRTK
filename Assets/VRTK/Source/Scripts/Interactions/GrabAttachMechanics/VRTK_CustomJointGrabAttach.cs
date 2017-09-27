@@ -4,12 +4,16 @@ namespace VRTK.GrabAttachMechanics
     using UnityEngine;
 
     /// <summary>
-    /// The Custom Joint Grab Attach script allows a custom joint to be provided for the grab attach mechanic.
+    /// Attaches the grabbed Interactable Object to the grabbing object via a custom Joint.
     /// </summary>
     /// <remarks>
-    /// The custom joint is placed on the interactable object and at runtime the joint is copied into a `JointHolder` game object that becomes a child of the interactable object.
+    ///   > The Interactable Object will be attached to the grabbing object via a custom Joint and the Joint can be broken upon colliding the Interactable Object with other colliders.
     ///
-    /// The custom joint is then copied from this `JointHolder` to the interactable object when a grab happens and is removed when a grab ends.
+    /// **Script Usage:**
+    ///  * Place the `VRTK_CustomJointGrabAttach` script on either:
+    ///    * The GameObject of the Interactable Object to detect interactions on.
+    ///    * Any other scene GameObject and then link that GameObject to the Interactable Objects `Grab Attach Mechanic Script` parameter to denote use of the grab mechanic.
+    ///  * Create a `Joint` component suitable for attaching the grabbed Interactable Object to the grabbing object with and provide it to the `Custom Joint` parameter.
     /// </remarks>
     /// <example>
     /// `VRTK/Examples/021_Controller_GrabbingObjectsWithJoints` demonstrates this grab attach mechanic on the Lamp object in the scene.

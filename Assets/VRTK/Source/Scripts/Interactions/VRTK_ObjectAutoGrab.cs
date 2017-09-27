@@ -11,21 +11,33 @@ namespace VRTK
     public delegate void ObjectAutoGrabEventHandler(object sender);
 
     /// <summary>
-    /// It is possible to automatically grab an Interactable Object to a specific controller by applying the Object Auto Grab script to the controller that the object should be grabbed by default.
+    /// Attempt to automatically grab a specified Interactable Object.
     /// </summary>
+    /// <remarks>
+    /// **Required Components:**
+    ///  * `VRTK_InteractTouch` - The touch component to determine when a valid touch has taken place to denote a use interaction can occur. This must be applied on the same GameObject as this script if one is not provided via the `Interact Touch` parameter.
+    ///  * `VRTK_InteractGrab` - The grab component to determine when a valid grab has taken place. This must be applied on the same GameObject as this script if one is not provided via the `Interact Grab` parameter.
+    ///
+    /// **Script Usage:**
+    ///  * Place the `VRTK_ObjectAutoGrab` script on either:
+    ///    * The GameObject that contains the Interact Touch and Interact Grab scripts.
+    ///    * Any other scene GameObject and provide a valid `VRTK_InteractTOuch` component to the `Interact Touch` parameter and a valid `VRTK_InteractGrab` component to the `Interact Grab` parameter of this script.
+    /// * Assign the Interactable Object to auto grab to the `Object To Grab` parameter on this script.
+    ///   * If this Interactable Object is a prefab then the `Object Is Prefab` parameter on this script must be checked.
+    /// </remarks>
     /// <example>
     /// `VRTK/Examples/026_Controller_ForceHoldObject` shows how to automatically grab a sword to each controller and also prevents the swords from being dropped so they are permanently attached to the user's controllers.
     /// </example>
     [AddComponentMenu("VRTK/Scripts/Interactions/VRTK_ObjectAutoGrab")]
     public class VRTK_ObjectAutoGrab : MonoBehaviour
     {
-        [Tooltip("A game object (either within the scene or a prefab) that will be grabbed by the controller on game start.")]
+        [Tooltip("The Interactable Object that will be grabbed by the Interact Grab.")]
         public VRTK_InteractableObject objectToGrab;
         [Tooltip("If the `Object To Grab` is a prefab then this needs to be checked, if the `Object To Grab` already exists in the scene then this needs to be unchecked.")]
         public bool objectIsPrefab;
-        [Tooltip("If this is checked then the Object To Grab will be cloned into a new object and attached to the controller leaving the existing object in the scene. This is required if the same object is to be grabbed to both controllers as a single object cannot be grabbed by different controllers at the same time. It is also required to clone a grabbed object if it is a prefab as it needs to exist within the scene to be grabbed.")]
+        [Tooltip("If this is checked then the `Object To Grab` will be cloned into a new Interactable Object and grabbed by the Interact Grab leaving the existing Interactable Object in the scene. This is required if the same Interactable Object is to be grabbed to multiple instances of Interact Grab. It is also required to clone a grabbed Interactable Object if it is a prefab as it needs to exist within the scene to be grabbed.")]
         public bool cloneGrabbedObject;
-        [Tooltip("If `Clone Grabbed Object` is checked and this is checked, then whenever this script is disabled and re-enabled, it will always create a new clone of the object to grab. If this is false then the original cloned object will attempt to be grabbed again. If the original cloned object no longer exists then a new clone will be created.")]
+        [Tooltip("If `Clone Grabbed Object` is checked and this is checked, then whenever this script is disabled and re-enabled, it will always create a new clone of the Interactable Object to grab. If this is unchecked then the original cloned Interactable Object will attempt to be grabbed again. If the original cloned object no longer exists then a new clone will be created.")]
         public bool alwaysCloneOnEnable;
 
         [Header("Custom Settings")]
@@ -52,7 +64,7 @@ namespace VRTK
         }
 
         /// <summary>
-        /// The ClearPreviousClone method resets the previous cloned object to null to ensure when the script is re-enabled that a new cloned object is created, rather than the original clone being grabbed again.
+        /// The ClearPreviousClone method resets the previous cloned Interactable Object to null to ensure when the script is re-enabled that a new cloned Interactable Object is created, rather than the original clone being grabbed again.
         /// </summary>
         public virtual void ClearPreviousClone()
         {
