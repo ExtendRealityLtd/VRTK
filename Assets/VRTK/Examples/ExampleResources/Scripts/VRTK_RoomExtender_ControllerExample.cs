@@ -2,6 +2,7 @@
 {
     using UnityEngine;
 
+    [System.Obsolete("`VRTK_RoomExtender_ControllerExample` will be removed in a future version of VRTK.")]
     public class VRTK_RoomExtender_ControllerExample : MonoBehaviour
     {
         protected VRTK_RoomExtender roomExtender;
