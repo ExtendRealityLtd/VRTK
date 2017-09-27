@@ -150,7 +150,7 @@ namespace VRTK
         {
             if (grabOnTouchWhen != AutoInteractions.Never && regrabTimer < Time.time)
             {
-                VRTK_InteractGrab interactGrabScript = interactingObject.GetComponent<VRTK_InteractGrab>();
+                VRTK_InteractGrab interactGrabScript = interactingObject.GetComponentInChildren<VRTK_InteractGrab>();
                 if (interactGrabScript != null && (grabOnTouchWhen == AutoInteractions.NoButtonHeld || (grabOnTouchWhen == AutoInteractions.ButtonHeld && interactGrabScript.IsGrabButtonPressed())))
                 {
                     interactGrabScript.AttemptGrab();
@@ -162,7 +162,7 @@ namespace VRTK
         {
             if (useOnTouchWhen != AutoInteractions.Never && reuseTimer < Time.time)
             {
-                VRTK_InteractUse interactUseScript = interactingObject.GetComponent<VRTK_InteractUse>();
+                VRTK_InteractUse interactUseScript = interactingObject.GetComponentInChildren<VRTK_InteractUse>();
                 if (interactUseScript != null && (useOnTouchWhen == AutoInteractions.NoButtonHeld || (useOnTouchWhen == AutoInteractions.ButtonHeld && interactUseScript.IsUseButtonPressed())))
                 {
                     if (!interactableObject.holdButtonToUse && interactableObject.IsUsing())

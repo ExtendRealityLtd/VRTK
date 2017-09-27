@@ -423,7 +423,7 @@ namespace VRTK
         {
             pointerOriginTransform = (originalPointerOriginTransform == null ? VRTK_SDK_Bridge.GenerateControllerPointerOrigin(gameObject) : originalPointerOriginTransform);
 
-            controller = (controller != null ? controller : GetComponent<VRTK_ControllerEvents>());
+            controller = (controller != null ? controller : GetComponentInParent<VRTK_ControllerEvents>());
             ConfigureEventSystem();
             pointerClicked = false;
             lastPointerPressState = false;

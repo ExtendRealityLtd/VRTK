@@ -154,7 +154,6 @@ namespace VRTK
 
         protected virtual void OnEnable()
         {
-            VRTK_ObjectCache.registeredHeadsetControllerAwareness = this;
             headset = VRTK_DeviceFinder.HeadsetTransform();
             leftController = VRTK_DeviceFinder.GetControllerLeftHand();
             rightController = VRTK_DeviceFinder.GetControllerRightHand();
@@ -162,7 +161,6 @@ namespace VRTK
 
         protected virtual void OnDisable()
         {
-            VRTK_ObjectCache.registeredHeadsetControllerAwareness = null;
             leftController = null;
             rightController = null;
         }

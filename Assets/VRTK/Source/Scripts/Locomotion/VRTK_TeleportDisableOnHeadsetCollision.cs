@@ -13,23 +13,35 @@ namespace VRTK
     ///  * `VRTK_HeadsetCollision` - A Headset Collision script for detecting when the headset has collided with valid geometry.
     ///
     /// **Script Usage:**
-    ///  * Place the `VRTK_TeleportDisableOnHeadsetCollision` script on the same GameObject as the active Teleport script.
+    ///  * Place the `VRTK_TeleportDisableOnHeadsetCollision` script on any active scene GameObject.
     /// </remarks>
     [AddComponentMenu("VRTK/Scripts/Locomotion/VRTK_TeleportDisableOnHeadsetCollision")]
     public class VRTK_TeleportDisableOnHeadsetCollision : MonoBehaviour
     {
-        protected VRTK_BasicTeleport basicTeleport;
-        protected VRTK_HeadsetCollision headsetCollision;
+        [Header("Custom Settings")]
+
+        [Tooltip("The Teleporter script to deal play area teleporting. If the script is being applied onto an object that already has a VRTK_BasicTeleport component, this parameter can be left blank as it will be auto populated by the script at runtime.")]
+        public VRTK_BasicTeleport teleporter;
+
+        [Tooltip("The VRTK Headset Collision script to use when determining headset collisions. If this is left blank then the script will need to be applied to the same GameObject.")]
+        public VRTK_HeadsetCollision headsetCollision;
+
+        protected Coroutine enableAtEndOfFrameRoutine;
 
         protected virtual void OnEnable()
         {
-            basicTeleport = GetComponent<VRTK_BasicTeleport>();
-            StartCoroutine(EnableAtEndOfFrame());
+            teleporter = (teleporter != null ? teleporter : FindObjectOfType<VRTK_BasicTeleport>());
+            enableAtEndOfFrameRoutine = StartCoroutine(EnableAtEndOfFrame());
         }
 
         protected virtual void OnDisable()
         {
-            if (basicTeleport == null)
+            if (enableAtEndOfFrameRoutine != null)
+            {
+                StopCoroutine(enableAtEndOfFrameRoutine);
+            }
+
+            if (teleporter == null)
             {
                 return;
             }
@@ -43,14 +55,18 @@ namespace VRTK
 
         protected virtual IEnumerator EnableAtEndOfFrame()
         {
-            if (basicTeleport == null)
+            if (teleporter == null)
             {
                 yield break;
             }
             yield return new WaitForEndOfFrame();
 
-            headsetCollision = VRTK_ObjectCache.registeredHeadsetCollider;
-            if (headsetCollision != null)
+            headsetCollision = (headsetCollision != null ? headsetCollision : FindObjectOfType<VRTK_HeadsetCollision>());
+            if (headsetCollision == null)
+            {
+                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_SCENE, "VRTK_TeleportDisableOnHeadsetCollision", "VRTK_HeadsetCollision"));
+            }
+            else
             {
                 headsetCollision.HeadsetCollisionDetect += new HeadsetCollisionEventHandler(DisableTeleport);
                 headsetCollision.HeadsetCollisionEnded += new HeadsetCollisionEventHandler(EnableTeleport);
@@ -59,12 +75,12 @@ namespace VRTK
 
         protected virtual void DisableTeleport(object sender, HeadsetCollisionEventArgs e)
         {
-            basicTeleport.ToggleTeleportEnabled(false);
+            teleporter.ToggleTeleportEnabled(false);
         }
 
         protected virtual void EnableTeleport(object sender, HeadsetCollisionEventArgs e)
         {
-            basicTeleport.ToggleTeleportEnabled(true);
+            teleporter.ToggleTeleportEnabled(true);
         }
     }
 }

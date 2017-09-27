@@ -112,6 +112,7 @@ namespace VRTK
         public float sensitivity = 0.02f;
 
         [Header("Custom Settings")]
+
         [Tooltip("An optional Body Physics script to check for potential collisions in the moving direction. If any potential collision is found then the move will not take place. This can help reduce collision tunnelling.")]
         public VRTK_BodyPhysics bodyPhysics;
 
@@ -194,7 +195,7 @@ namespace VRTK
             movementEngaged = false;
             previousEngageButton = engageButton;
 
-            bodyPhysics = (bodyPhysics != null ? bodyPhysics : GetComponentInChildren<VRTK_BodyPhysics>());
+            bodyPhysics = (bodyPhysics != null ? bodyPhysics : FindObjectOfType<VRTK_BodyPhysics>());
             controllerLeftHand = VRTK_DeviceFinder.GetControllerLeftHand();
             controllerRightHand = VRTK_DeviceFinder.GetControllerRightHand();
 
@@ -500,27 +501,27 @@ namespace VRTK
 
         protected virtual void ToggleControllerListeners(GameObject controller, bool toggle, ref bool subscribed)
         {
-            VRTK_ControllerEvents controllerEvent = controller.GetComponent<VRTK_ControllerEvents>();
-            if (controllerEvent != null)
+            VRTK_ControllerEvents controllerEvents = controller.GetComponentInChildren<VRTK_ControllerEvents>();
+            if (controllerEvents != null)
             {
                 //If engage button has changed, then unsubscribe the previous engage button from the events
                 if (engageButton != previousEngageButton && subscribed)
                 {
-                    controllerEvent.UnsubscribeToButtonAliasEvent(previousEngageButton, true, EngageButtonPressed);
-                    controllerEvent.UnsubscribeToButtonAliasEvent(previousEngageButton, false, EngageButtonReleased);
+                    controllerEvents.UnsubscribeToButtonAliasEvent(previousEngageButton, true, EngageButtonPressed);
+                    controllerEvents.UnsubscribeToButtonAliasEvent(previousEngageButton, false, EngageButtonReleased);
                     subscribed = false;
                 }
 
                 if (toggle && !subscribed)
                 {
-                    controllerEvent.SubscribeToButtonAliasEvent(engageButton, true, EngageButtonPressed);
-                    controllerEvent.SubscribeToButtonAliasEvent(engageButton, false, EngageButtonReleased);
+                    controllerEvents.SubscribeToButtonAliasEvent(engageButton, true, EngageButtonPressed);
+                    controllerEvents.SubscribeToButtonAliasEvent(engageButton, false, EngageButtonReleased);
                     subscribed = true;
                 }
                 else if (!toggle && subscribed)
                 {
-                    controllerEvent.UnsubscribeToButtonAliasEvent(engageButton, true, EngageButtonPressed);
-                    controllerEvent.UnsubscribeToButtonAliasEvent(engageButton, false, EngageButtonReleased);
+                    controllerEvents.UnsubscribeToButtonAliasEvent(engageButton, true, EngageButtonPressed);
+                    controllerEvents.UnsubscribeToButtonAliasEvent(engageButton, false, EngageButtonReleased);
                     subscribed = false;
                 }
             }

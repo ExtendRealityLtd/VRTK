@@ -874,7 +874,7 @@ namespace VRTK
         {
             initialFloorDrop = false;
             retogglePhysicsOnCanFall = false;
-            teleporter = (teleporter != null ? teleporter : GetComponentInChildren<VRTK_BasicTeleport>());
+            teleporter = (teleporter != null ? teleporter : FindObjectOfType<VRTK_BasicTeleport>());
             if (teleporter != null)
             {
                 teleporter.Teleported += Teleported;
@@ -1155,7 +1155,7 @@ namespace VRTK
             {
                 IgnoreCollisions(mappedController.GetComponentsInChildren<Collider>(), true);
 
-                VRTK_InteractGrab grabbingController = mappedController.GetComponent<VRTK_InteractGrab>();
+                VRTK_InteractGrab grabbingController = mappedController.GetComponentInChildren<VRTK_InteractGrab>();
                 if (grabbingController != null && ignoreGrabbedCollisions)
                 {
                     if (state)

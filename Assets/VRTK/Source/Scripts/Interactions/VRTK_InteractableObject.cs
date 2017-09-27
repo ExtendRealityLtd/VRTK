@@ -821,7 +821,7 @@ namespace VRTK
             GameObject grabbingObject = GetSecondaryGrabbingObject();
             if (grabbingObject != null)
             {
-                grabbingObject.GetComponent<VRTK_InteractGrab>().ForceRelease();
+                grabbingObject.GetComponentInChildren<VRTK_InteractGrab>().ForceRelease();
             }
         }
 
@@ -1191,7 +1191,7 @@ namespace VRTK
         {
             if (isGrabbable && grabAttachMechanicScript == null)
             {
-                VRTK_BaseGrabAttach setGrabMechanic = GetComponent<VRTK_BaseGrabAttach>();
+                VRTK_BaseGrabAttach setGrabMechanic = GetComponentInChildren<VRTK_BaseGrabAttach>();
                 if (setGrabMechanic == null)
                 {
                     setGrabMechanic = gameObject.AddComponent<VRTK_FixedJointGrabAttach>();
@@ -1204,7 +1204,7 @@ namespace VRTK
         {
             if (isGrabbable && secondaryGrabActionScript == null)
             {
-                secondaryGrabActionScript = GetComponent<VRTK_BaseGrabAction>();
+                secondaryGrabActionScript = GetComponentInChildren<VRTK_BaseGrabAction>();
             }
         }
 
@@ -1213,7 +1213,7 @@ namespace VRTK
             GameObject grabbingObject = GetGrabbingObject();
             if (grabbingObject != null)
             {
-                grabbingObject.GetComponent<VRTK_InteractGrab>().ForceRelease();
+                grabbingObject.GetComponentInChildren<VRTK_InteractGrab>().ForceRelease();
             }
         }
 
@@ -1243,7 +1243,7 @@ namespace VRTK
 
                 if (secondaryGrabActionScript != null)
                 {
-                    secondaryGrabActionScript.Initialise(this, GetGrabbingObject().GetComponent<VRTK_InteractGrab>(), GetSecondaryGrabbingObject().GetComponent<VRTK_InteractGrab>(), primaryControllerAttachPoint, secondaryControllerAttachPoint);
+                    secondaryGrabActionScript.Initialise(this, GetGrabbingObject().GetComponentInChildren<VRTK_InteractGrab>(), GetSecondaryGrabbingObject().GetComponentInChildren<VRTK_InteractGrab>(), primaryControllerAttachPoint, secondaryControllerAttachPoint);
                 }
             }
         }
@@ -1257,7 +1257,7 @@ namespace VRTK
             if (secondaryGrabActionScript != null && previousSecondaryGrabbingObject != null)
             {
                 secondaryGrabActionScript.OnDropAction();
-                previousSecondaryGrabbingObject.GetComponent<VRTK_InteractGrab>().ForceRelease();
+                previousSecondaryGrabbingObject.GetComponentInChildren<VRTK_InteractGrab>().ForceRelease();
             }
             LoadPreviousState();
         }
@@ -1308,7 +1308,7 @@ namespace VRTK
 
         protected virtual void AddTrackPoint(GameObject currentGrabbingObject)
         {
-            VRTK_InteractGrab grabScript = currentGrabbingObject.GetComponent<VRTK_InteractGrab>();
+            VRTK_InteractGrab grabScript = currentGrabbingObject.GetComponentInChildren<VRTK_InteractGrab>();
             Transform controllerPoint = ((grabScript && grabScript.controllerAttachPoint) ? grabScript.controllerAttachPoint.transform : currentGrabbingObject.transform);
 
             if (grabAttachMechanicScript != null)
@@ -1367,7 +1367,7 @@ namespace VRTK
         {
             if (checkObject != null)
             {
-                VRTK_InteractUse usingObjectCheck = checkObject.GetComponent<VRTK_InteractUse>();
+                VRTK_InteractUse usingObjectCheck = checkObject.GetComponentInChildren<VRTK_InteractUse>();
                 if (usingObjectCheck != null)
                 {
                     if (holdButtonToUse)
@@ -1404,7 +1404,7 @@ namespace VRTK
 
                 if (touchingObject.activeInHierarchy || forceDisabled)
                 {
-                    touchingObject.GetComponent<VRTK_InteractTouch>().ForceStopTouching();
+                    touchingObject.GetComponentInChildren<VRTK_InteractTouch>().ForceStopTouching();
                 }
             }
         }
@@ -1415,18 +1415,22 @@ namespace VRTK
 
             if (grabbingObject != null && (grabbingObject.activeInHierarchy || forceDisabled))
             {
-                grabbingObject.GetComponent<VRTK_InteractTouch>().ForceStopTouching();
-                grabbingObject.GetComponent<VRTK_InteractGrab>().ForceRelease();
-                forcedDropped = true;
+                VRTK_InteractGrab grabbingObjectScript = grabbingObject.GetComponentInChildren<VRTK_InteractGrab>();
+                if(grabbingObjectScript != null && grabbingObjectScript.interactTouch != null)
+                {
+                    grabbingObjectScript.interactTouch.ForceStopTouching();
+                    grabbingObjectScript.ForceRelease();
+                    forcedDropped = true;
+                }
             }
         }
 
         protected virtual void StopUsingInteractions()
         {
-            if (usingObject != null && (usingObject.gameObject.activeInHierarchy || forceDisabled))
+            if (usingObject != null && usingObject.interactTouch != null && (usingObject.gameObject.activeInHierarchy || forceDisabled))
             {
-                usingObject.GetComponent<VRTK_InteractTouch>().ForceStopTouching();
-                usingObject.GetComponent<VRTK_InteractUse>().ForceStopUsing();
+                usingObject.interactTouch.ForceStopTouching();
+                usingObject.ForceStopUsing();
             }
         }
 
@@ -1460,11 +1464,7 @@ namespace VRTK
         {
             if (usingObject != null)
             {
-                VRTK_InteractUse usingObjectScript = usingObject.GetComponent<VRTK_InteractUse>();
-                if (usingObjectScript != null)
-                {
-                    usingObjectScript.ForceResetUsing();
-                }
+                usingObject.ForceResetUsing();
             }
         }
 
