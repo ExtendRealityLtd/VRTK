@@ -998,7 +998,14 @@ namespace VRTK
             //determine components that shouldn't be deleted from highlight object
             string[] validComponents = new string[] { "Transform", "MeshFilter", "MeshRenderer", "SkinnedMeshRenderer", "VRTK_GameObjectLinker" };
 
-            //go through all of the components on the highlighted object and delete any components that aren't in the valid component list
+            //First clean out the joints cause RigidBodys depends on them.
+            Joint[] joints = objectToClean.GetComponentsInChildren<Joint>(true);
+            for (int i = 0; i < joints.Length; i++)
+            {
+                ChooseDestroyType(joints[i]);
+            }
+
+            //Go through all of the components on the highlighted object and delete any components that aren't in the valid component list
             Component[] components = objectToClean.GetComponentsInChildren<Component>(true);
             for (int i = 0; i < components.Length; i++)
             {
