@@ -139,7 +139,7 @@ namespace VRTK
 
             if (controllingPointer != null && controllingPointer.interactWithObjects && controllingPointer.controller != null && objectInteractor == null)
             {
-                controllerGrabScript = controllingPointer.controller.GetComponent<VRTK_InteractGrab>();
+                controllerGrabScript = controllingPointer.controller.GetComponentInChildren<VRTK_InteractGrab>();
                 CreateObjectInteractor();
             }
             SetupDirectionIndicator();

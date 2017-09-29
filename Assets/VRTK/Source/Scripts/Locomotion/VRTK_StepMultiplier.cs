@@ -107,7 +107,7 @@ namespace VRTK
 
         protected virtual void ManageButtonSubscription()
         {
-            controllerEvents = (controllerEvents != null ? controllerEvents : GetComponent<VRTK_ControllerEvents>());
+            controllerEvents = (controllerEvents != null ? controllerEvents : GetComponentInParent<VRTK_ControllerEvents>());
 
             if (controllerEvents != null && buttonSubscribed && subscribedActivationButton != VRTK_ControllerEvents.ButtonAlias.Undefined && activationButton != subscribedActivationButton)
             {

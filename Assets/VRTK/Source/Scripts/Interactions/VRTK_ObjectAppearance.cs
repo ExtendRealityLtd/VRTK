@@ -238,7 +238,7 @@ namespace VRTK
             //if it is then attempt to get the controller events script from the script alias
             if (controllerObject != null && controllerObject.activeInHierarchy)
             {
-                VRTK_ControllerEvents controllerEvents = controllerObject.GetComponent<VRTK_ControllerEvents>();
+                VRTK_ControllerEvents controllerEvents = controllerObject.GetComponentInChildren<VRTK_ControllerEvents>();
                 if (controllerEvents != null)
                 {
                     if (state)

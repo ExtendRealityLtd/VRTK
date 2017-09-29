@@ -2198,7 +2198,12 @@ Prevents teleportation when the HMD is colliding with valid geometry.
  * `VRTK_HeadsetCollision` - A Headset Collision script for detecting when the headset has collided with valid geometry.
 
 **Script Usage:**
- * Place the `VRTK_TeleportDisableOnHeadsetCollision` script on the same GameObject as the active Teleport script.
+ * Place the `VRTK_TeleportDisableOnHeadsetCollision` script on any active scene GameObject.
+
+### Inspector Parameters
+
+ * **Teleporter:** The Teleporter script to deal play area teleporting. If the script is being applied onto an object that already has a VRTK_BasicTeleport component, this parameter can be left blank as it will be auto populated by the script at runtime.
+ * **Headset Collision:** The VRTK Headset Collision script to use when determining headset collisions. If this is left blank then the script will need to be applied to the same GameObject.
 
 ---
 
@@ -2213,7 +2218,12 @@ Prevents teleportation when the controllers are obscured from line of sight of t
  * `VRTK_HeadsetControllerAware` - A Headset Controller Aware script to determine when the HMD has line of sight to the controllers.
 
 **Script Usage:**
- * Place the `VRTK_TeleportDisableOnControllerObscured` script on the same GameObject as the active Teleport script.
+ * Place the `VRTK_TeleportDisableOnControllerObscured` script on any active scene GameObject.
+
+### Inspector Parameters
+
+ * **Teleporter:** The Teleporter script to deal play area teleporting. If the script is being applied onto an object that already has a VRTK_BasicTeleport component, this parameter can be left blank as it will be auto populated by the script at runtime.
+ * **Headset Controller Aware:** The VRTK Headset Controller Aware script to use when dealing with the headset to controller awareness. If this is left blank then the script will need to be applied to the same GameObject.
 
 ---
 
@@ -2228,11 +2238,12 @@ Provides a base that all object control locomotions can inherit from.
 
 ### Inspector Parameters
 
- * **Controller:** The controller to read the controller events from. If this is blank then it will attempt to get a controller events script from the same GameObject.
  * **Device For Direction:** The direction that will be moved in is the direction of this device.
  * **Disable Other Controls On Active:** If this is checked then whenever the axis on the attached controller is being changed, all other object control scripts of the same type on other controllers will be disabled.
  * **Affect On Falling:** If a `VRTK_BodyPhysics` script is present and this is checked, then the object control will affect the play area whilst it is falling.
  * **Control Override Object:** An optional game object to apply the object control to. If this is blank then the PlayArea will be controlled.
+ * **Controller:** The controller to read the controller events from. If this is blank then it will attempt to get a controller events script from the same GameObject.
+ * **Body Physics:** An optional Body Physics script to check for potential collisions in the moving direction.
 
 ### Class Variables
 

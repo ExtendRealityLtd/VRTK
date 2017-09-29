@@ -174,7 +174,7 @@ namespace VRTK.GrabAttachMechanics
                 GameObject grabbingObject = grabbedObjectScript.GetGrabbingObject();
                 if (grabbingObject != null)
                 {
-                    VRTK_InteractGrab grabbingObjectScript = grabbingObject.GetComponent<VRTK_InteractGrab>();
+                    VRTK_InteractGrab grabbingObjectScript = grabbingObject.GetComponentInChildren<VRTK_InteractGrab>();
                     if (grabbingObjectScript != null)
                     {
                         grabbingObjectScript.ForceRelease();
@@ -204,7 +204,7 @@ namespace VRTK.GrabAttachMechanics
                 VRTK_ControllerReference controllerReference = VRTK_ControllerReference.GetControllerReference(grabbedObjectScript.GetGrabbingObject());
                 if (VRTK_ControllerReference.IsValid(controllerReference) && controllerReference.scriptAlias != null)
                 {
-                    VRTK_InteractGrab grabbingObjectScript = controllerReference.scriptAlias.GetComponent<VRTK_InteractGrab>();
+                    VRTK_InteractGrab grabbingObjectScript = controllerReference.scriptAlias.GetComponentInChildren<VRTK_InteractGrab>();
                     if (grabbingObjectScript != null)
                     {
                         Transform origin = VRTK_DeviceFinder.GetControllerOrigin(controllerReference);

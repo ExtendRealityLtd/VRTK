@@ -38,8 +38,8 @@ namespace VRTK
 
         protected virtual void OnEnable()
         {
-            headsetFade = (headsetFade != null ? headsetFade : GetComponentInChildren<VRTK_HeadsetFade>());
-            headsetCollision = (headsetCollision != null ? headsetCollision : GetComponentInChildren<VRTK_HeadsetCollision>());
+            headsetFade = (headsetFade != null ? headsetFade : FindObjectOfType<VRTK_HeadsetFade>());
+            headsetCollision = (headsetCollision != null ? headsetCollision : FindObjectOfType<VRTK_HeadsetCollision>());
 
             if (headsetFade == null)
             {

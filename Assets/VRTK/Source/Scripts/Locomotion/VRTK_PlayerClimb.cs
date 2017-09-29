@@ -44,7 +44,6 @@ namespace VRTK
     /// <example>
     /// `VRTK/Examples/037_CameraRig_ClimbingFalling` shows how to set up a scene with player climbing. There are many different examples showing how the same system can be used in unique ways.
     /// </example>
-    [RequireComponent(typeof(VRTK_BodyPhysics))]
     [AddComponentMenu("VRTK/Scripts/Locomotion/VRTK_PlayerClimb")]
     public class VRTK_PlayerClimb : MonoBehaviour
     {
@@ -94,10 +93,16 @@ namespace VRTK
 
         protected virtual void Awake()
         {
-            bodyPhysics = (bodyPhysics != null ? bodyPhysics : GetComponentInChildren<VRTK_BodyPhysics>());
-            teleporter = (teleporter != null ? teleporter : GetComponentInChildren<VRTK_BasicTeleport>());
-            headsetCollision = (headsetCollision != null ? headsetCollision : GetComponentInChildren<VRTK_HeadsetCollision>());
-            positionRewind = (positionRewind != null ? positionRewind : GetComponentInChildren<VRTK_PositionRewind>());
+            bodyPhysics = (bodyPhysics != null ? bodyPhysics : FindObjectOfType<VRTK_BodyPhysics>());
+
+            if (bodyPhysics == null)
+            {
+                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_SCENE, "VRTK_PlayerClimb", "VRTK_BodyPhysics"));
+            }
+
+            teleporter = (teleporter != null ? teleporter : FindObjectOfType<VRTK_BasicTeleport>());
+            headsetCollision = (headsetCollision != null ? headsetCollision : FindObjectOfType<VRTK_HeadsetCollision>());
+            positionRewind = (positionRewind != null ? positionRewind : FindObjectOfType<VRTK_PositionRewind>());
 
             VRTK_SDKManager.instance.AddBehaviourToToggleOnLoadedSetupChange(this);
         }
@@ -232,6 +237,11 @@ namespace VRTK
 
         protected virtual void Grab(GameObject currentGrabbingController, VRTK_ControllerReference controllerReference, GameObject target)
         {
+            if (bodyPhysics == null)
+            {
+                return;
+            }
+
             bodyPhysics.ResetFalling();
             bodyPhysics.TogglePreventSnapToFloor(true);
             bodyPhysics.enableBodyCollisions = false;
@@ -251,6 +261,11 @@ namespace VRTK
 
         protected virtual void Ungrab(bool carryMomentum, VRTK_ControllerReference controllerReference, GameObject target)
         {
+            if (bodyPhysics == null)
+            {
+                return;
+            }
+
             isClimbing = false;
             if (positionRewind != null && IsHeadsetColliding())
             {
@@ -304,7 +319,7 @@ namespace VRTK
         {
             if (controller != null)
             {
-                VRTK_InteractGrab grabScript = controller.GetComponent<VRTK_InteractGrab>();
+                VRTK_InteractGrab grabScript = controller.GetComponentInChildren<VRTK_InteractGrab>();
                 if (grabScript != null)
                 {
                     if (state)

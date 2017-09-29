@@ -108,7 +108,6 @@ namespace VRTK
 
         protected virtual void OnEnable()
         {
-            VRTK_ObjectCache.registeredHeadsetCollider = this;
             headset = VRTK_DeviceFinder.HeadsetTransform();
             if (headset != null)
             {
@@ -123,7 +122,6 @@ namespace VRTK
             if (headset != null && headsetColliderScript != null)
             {
                 headsetColliderScript.EndCollision(collidingWith);
-                VRTK_ObjectCache.registeredHeadsetCollider = null;
                 TearDownHeadset();
             }
         }

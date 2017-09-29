@@ -63,7 +63,7 @@ namespace VRTK
             GameObject foundController = (VRTK_DeviceFinder.IsControllerLeftHand(gameObject) ? VRTK_DeviceFinder.GetControllerRightHand(false) : VRTK_DeviceFinder.GetControllerLeftHand(false));
             if (foundController)
             {
-                return foundController.GetComponent<VRTK_TouchpadControl>();
+                return foundController.GetComponentInChildren<VRTK_TouchpadControl>();
             }
             return null;
         }

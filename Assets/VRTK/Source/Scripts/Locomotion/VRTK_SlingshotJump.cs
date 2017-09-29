@@ -49,6 +49,12 @@ namespace VRTK
         [Tooltip("The Body Physics script to deal with the physics and gravity of the play area. If the script is being applied onto an object that already has a VRTK_BodyPhysics component, this parameter can be left blank as it will be auto populated by the script at runtime.")]
         [SerializeField]
         protected VRTK_BodyPhysics bodyPhysics;
+        [Tooltip("The Player Climb script to deal ability to throw the play area. If the script is being applied onto an object that already has a VRTK_PlayerClimb component, this parameter can be left blank as it will be auto populated by the script at runtime.")]
+        [SerializeField]
+        protected VRTK_PlayerClimb playerClimb;
+        [Tooltip("The Teleporter script to deal play area teleporting. If the script is being applied onto an object that already has a VRTK_BasicTeleport component, this parameter can be left blank as it will be auto populated by the script at runtime.")]
+        [SerializeField]
+        protected VRTK_BasicTeleport teleporter;
 
         /// <summary>
         /// Emitted when a slingshot jump occurs
@@ -56,8 +62,6 @@ namespace VRTK
         public event SlingshotJumpEventHandler SlingshotJumped;
 
         protected Transform playArea;
-        protected VRTK_PlayerClimb playerClimb;
-
         protected Vector3 leftStartAimPosition;
         protected Vector3 leftReleasePosition;
         protected bool leftIsAiming;
@@ -118,9 +122,8 @@ namespace VRTK
 
         protected virtual void Awake()
         {
-            bodyPhysics = bodyPhysics != null ? bodyPhysics : GetComponentInParent<VRTK_BodyPhysics>();
-            playerClimb = GetComponent<VRTK_PlayerClimb>();
-
+            bodyPhysics = (bodyPhysics != null ? bodyPhysics : FindObjectOfType<VRTK_BodyPhysics>());
+            playerClimb = (playerClimb != null ? playerClimb : FindObjectOfType<VRTK_PlayerClimb>());
             VRTK_SDKManager.instance.AddBehaviourToToggleOnLoadedSetupChange(this);
         }
 
@@ -248,16 +251,16 @@ namespace VRTK
 
         protected void InitTeleportListener(bool state)
         {
-            VRTK_BasicTeleport teleportComponent = GetComponent<VRTK_BasicTeleport>();
-            if (teleportComponent != null)
+            teleporter = (teleporter != null ? teleporter : FindObjectOfType<VRTK_BasicTeleport>());
+            if (teleporter != null)
             {
                 if (state == true)
                 {
-                    teleportComponent.Teleporting += new TeleportEventHandler(OnTeleport);
+                    teleporter.Teleporting += new TeleportEventHandler(OnTeleport);
                 }
                 else
                 {
-                    teleportComponent.Teleporting -= new TeleportEventHandler(OnTeleport);
+                    teleporter.Teleporting -= new TeleportEventHandler(OnTeleport);
                 }
             }
         }
@@ -273,8 +276,8 @@ namespace VRTK
         {
             if (controller != null)
             {
-                events = controller.GetComponent<VRTK_ControllerEvents>();
-                grab = controller.GetComponent<VRTK_InteractGrab>();
+                events = controller.GetComponentInChildren<VRTK_ControllerEvents>();
+                grab = controller.GetComponentInChildren<VRTK_InteractGrab>();
 
                 if (events != null)
                 {
@@ -318,7 +321,7 @@ namespace VRTK
 
         protected bool IsClimbing()
         {
-            return playerClimb != null && playerClimb.IsClimbing();
+            return (playerClimb != null && playerClimb.IsClimbing());
         }
     }
 }
