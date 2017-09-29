@@ -2519,6 +2519,12 @@ Provides the ability for the SDK Camera Rig to be thrown around with a jumping m
 
  * `SlingshotJumped` - Emitted when a slingshot jump occurs
 
+### Unity Events
+
+Adding the `VRTK_SlingshotJump_UnityEvents` component to `VRTK_SlingshotJump` object allows access to `UnityEvents` that will react identically to the Class Events.
+
+ * All C# delegate events are mapped to a Unity Event with the `On` prefix. e.g. `MyEvent` -> `OnMyEvent`.
+
 ### Class Methods
 
 #### GetActivationButton/0
