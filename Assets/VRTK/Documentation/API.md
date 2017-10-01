@@ -5114,6 +5114,7 @@ This directory contains scripts that are used to provide different mechanics to 
  * [Track Object Grab Attach](#track-object-grab-attach-vrtk_trackobjectgrabattach)
  * [Rotator Track Grab Attach](#rotator-track-grab-attach-vrtk_rotatortrackgrabattach)
  * [Climbable Grab Attach](#climbable-grab-attach-vrtk_climbablegrabattach)
+ * [Control Animation Grab Attach](#control-animation-grab-attach-vrtk_controlanimationgrabattach)
 
 ---
 
@@ -5579,6 +5580,119 @@ Marks the Interactable Object as being climbable.
 ### Example
 
 `VRTK/Examples/037_CameraRig_ClimbingFalling` uses this grab attach mechanic for each item that is climbable in the scene.
+
+---
+
+## Control Animation Grab Attach (VRTK_ControlAnimationGrabAttach)
+ > extends [VRTK_BaseGrabAttach](#base-grab-attach-vrtk_basegrabattach)
+
+### Overview
+
+Scrubs through the given animation based on the distance from the grabbing object to the original grabbing point.
+
+**Script Usage:**
+ * Place the `VRTK_ControlAnimationGrabAttach` script on either:
+   * The GameObject of the Interactable Object to detect interactions on.
+   * Any other scene GameObject and then link that GameObject to the Interactable Objects `Grab Attach Mechanic Script` parameter to denote use of the grab mechanic.
+
+### Inspector Parameters
+
+ * **Detach Distance:** The maximum distance the grabbing object is away from the Interactable Object before it is automatically released.
+ * **Timeline:** The Animator with the timeline to scrub through on grab.
+ * **Max Frames:** The maximum amount of frames in the timeline.
+ * **Distance Multiplier:** An amount to multiply the distance by to determine the scrubbed frame to be on.
+ * **Rewind On Release:** If this is checked then the animation will rewind to the start on ungrab.
+ * **Rewind Speed Multplier:** The speed in which the animation rewind will be multiplied by.
+
+### Class Events
+
+ * `AnimationFrameAtStart` - Emitted when the Animation Frame is at the start.
+ * `AnimationFrameAtEnd` - Emitted when the Animation Frame is at the end.
+ * `AnimationFrameChanged` - Emitted when the Animation Frame has changed.
+
+### Unity Events
+
+Adding the `VRTK_ControlAnimationGrabAttach_UnityEvents` component to `VRTK_ControlAnimationGrabAttach` object allows access to `UnityEvents` that will react identically to the Class Events.
+
+ * All C# delegate events are mapped to a Unity Event with the `On` prefix. e.g. `MyEvent` -> `OnMyEvent`.
+
+### Event Payload
+
+ * `GameObject interactingObject` - The GameObject that is performing the interaction (e.g. a controller).
+ * `float currentFrame` - The current frame the animation is on.
+
+### Class Methods
+
+#### StartGrab/3
+
+  > `public override bool StartGrab(GameObject grabbingObject, GameObject givenGrabbedObject, Rigidbody givenControllerAttachPoint)`
+
+ * Parameters
+   * `GameObject grabbingObject` - The GameObject that is doing the grabbing.
+   * `GameObject givenGrabbedObject` - The GameObject that is being grabbed.
+   * `Rigidbody givenControllerAttachPoint` - The point on the grabbing object that the grabbed object should be attached to after grab occurs.
+ * Returns
+   * `bool` - Returns `true` if the grab is successful, `false` if the grab is unsuccessful.
+
+The StartGrab method sets up the grab attach mechanic as soon as an Interactable Object is grabbed.
+
+#### StopGrab/1
+
+  > `public override void StopGrab(bool applyGrabbingObjectVelocity)`
+
+ * Parameters
+   * `bool applyGrabbingObjectVelocity` - If `true` will apply the current velocity of the grabbing object to the grabbed object on release.
+ * Returns
+   * _none_
+
+The StopGrab method ends the grab of the current Interactable Object and cleans up the state.
+
+#### CreateTrackPoint/4
+
+  > `public override Transform CreateTrackPoint(Transform controllerPoint, GameObject currentGrabbedObject, GameObject currentGrabbingObject, ref bool customTrackPoint)`
+
+ * Parameters
+   * `Transform controllerPoint` - The point on the controller where the grab was initiated.
+   * `GameObject currentGrabbedObject` - The GameObject that is currently being grabbed.
+   * `GameObject currentGrabbingObject` - The GameObject that is currently doing the grabbing.
+   * `ref bool customTrackPoint` - A reference to whether the created track point is an auto generated custom object.
+ * Returns
+   * `Transform` - The Transform of the created track point.
+
+The CreateTrackPoint method sets up the point of grab to track on the grabbed object.
+
+#### ProcessUpdate/0
+
+  > `public override void ProcessUpdate()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * _none_
+
+The ProcessUpdate method is run in every Update method on the Interactable Object.
+
+#### SetFrame/1
+
+  > `public virtual void SetFrame(float frame)`
+
+ * Parameters
+   * `float frame` - The frame to scrub to.
+ * Returns
+   * _none_
+
+The SetFrame method scrubs to the specific frame of the Animator timeline.
+
+#### RewindAnimation/0
+
+  > `public virtual void RewindAnimation()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * _none_
+
+The RewindAnimation method will force the animation to rewind to the start frame.
 
 ---
 

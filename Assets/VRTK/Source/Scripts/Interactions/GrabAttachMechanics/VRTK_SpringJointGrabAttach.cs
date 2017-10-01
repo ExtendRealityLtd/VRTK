@@ -1,4 +1,4 @@
-﻿// Spring Joint Grab Attach|GrabAttachMechanics|50050
+﻿// Spring Joint Grab Attach|GrabAttachMechanics|50040
 namespace VRTK.GrabAttachMechanics
 {
     using UnityEngine;

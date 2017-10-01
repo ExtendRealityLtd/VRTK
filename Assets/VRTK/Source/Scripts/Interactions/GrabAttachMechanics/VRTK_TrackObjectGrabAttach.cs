@@ -1,4 +1,4 @@
-﻿// Track Object Grab Attach|GrabAttachMechanics|50080
+﻿// Track Object Grab Attach|GrabAttachMechanics|50070
 namespace VRTK.GrabAttachMechanics
 {
     using UnityEngine;
@@ -20,7 +20,7 @@ namespace VRTK.GrabAttachMechanics
     [AddComponentMenu("VRTK/Scripts/Interactions/Grab Attach Mechanics/VRTK_TrackObjectGrabAttach")]
     public class VRTK_TrackObjectGrabAttach : VRTK_BaseGrabAttach
     {
-        [Header("Track Options", order = 2)]
+        [Header("Track Settings", order = 2)]
 
         [Tooltip("The maximum distance the grabbing object is away from the Interactable Object before it is automatically dropped.")]
         public float detachDistance = 1f;
@@ -54,19 +54,19 @@ namespace VRTK.GrabAttachMechanics
         /// <returns>The Transform of the created track point.</returns>
         public override Transform CreateTrackPoint(Transform controllerPoint, GameObject currentGrabbedObject, GameObject currentGrabbingObject, ref bool customTrackPoint)
         {
-            Transform trackPoint = null;
+            Transform returnTrackpoint = null;
             if (precisionGrab)
             {
-                trackPoint = new GameObject(VRTK_SharedMethods.GenerateVRTKObjectName(true, currentGrabbedObject.name, "TrackObject", "PrecisionSnap", "AttachPoint")).transform;
-                trackPoint.parent = currentGrabbingObject.transform;
-                SetTrackPointOrientation(ref trackPoint, currentGrabbedObject.transform, controllerPoint);
+                returnTrackpoint = new GameObject(VRTK_SharedMethods.GenerateVRTKObjectName(true, currentGrabbedObject.name, "TrackObject", "PrecisionSnap", "AttachPoint")).transform;
+                returnTrackpoint.SetParent(currentGrabbingObject.transform);
+                returnTrackpoint = SetTrackPointOrientation(returnTrackpoint, currentGrabbedObject.transform, controllerPoint);
                 customTrackPoint = true;
             }
             else
             {
-                trackPoint = base.CreateTrackPoint(controllerPoint, currentGrabbedObject, currentGrabbingObject, ref customTrackPoint);
+                returnTrackpoint = base.CreateTrackPoint(controllerPoint, currentGrabbedObject, currentGrabbingObject, ref customTrackPoint);
             }
-            return trackPoint;
+            return returnTrackpoint;
         }
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace VRTK.GrabAttachMechanics
         /// </summary>
         public override void ProcessUpdate()
         {
-            if (trackPoint && grabbedObjectScript.IsDroppable())
+            if (trackPoint != null && grabbedObjectScript.IsDroppable())
             {
                 float distance = Vector3.Distance(trackPoint.position, initialAttachPoint.position);
                 if (distance > detachDistance)
@@ -89,7 +89,7 @@ namespace VRTK.GrabAttachMechanics
         /// </summary>
         public override void ProcessFixedUpdate()
         {
-            if (!grabbedObject)
+            if (grabbedObject == null)
             {
                 return;
             }
@@ -130,10 +130,11 @@ namespace VRTK.GrabAttachMechanics
             kinematic = false;
         }
 
-        protected virtual void SetTrackPointOrientation(ref Transform trackPoint, Transform currentGrabbedObject, Transform controllerPoint)
+        protected virtual Transform SetTrackPointOrientation(Transform givenTrackPoint, Transform currentGrabbedObject, Transform controllerPoint)
         {
-            trackPoint.position = currentGrabbedObject.position;
-            trackPoint.rotation = currentGrabbedObject.rotation;
+            givenTrackPoint.position = currentGrabbedObject.position;
+            givenTrackPoint.rotation = currentGrabbedObject.rotation;
+            return givenTrackPoint;
         }
     }
 }

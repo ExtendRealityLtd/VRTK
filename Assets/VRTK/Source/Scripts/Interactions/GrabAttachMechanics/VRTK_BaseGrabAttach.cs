@@ -12,7 +12,7 @@ namespace VRTK.GrabAttachMechanics
     /// </remarks>
     public abstract class VRTK_BaseGrabAttach : MonoBehaviour
     {
-        [Header("Base Options", order = 1)]
+        [Header("Base Settings", order = 1)]
 
         [Tooltip("If this is checked then when the Interact Grab grabs the Interactable Object, it will grab it with precision and pick it up at the particular point on the Interactable Object that the Interact Touch is touching.")]
         public bool precisionGrab;
@@ -160,6 +160,11 @@ namespace VRTK.GrabAttachMechanics
         {
         }
 
+        protected virtual void Awake()
+        {
+            Initialise();
+        }
+
         protected abstract void Initialise();
 
         protected virtual Rigidbody ReleaseFromController(bool applyGrabbingObjectVelocity)
@@ -190,11 +195,6 @@ namespace VRTK.GrabAttachMechanics
             {
                 ThrowReleasedObject(releasedObjectRigidBody);
             }
-        }
-
-        protected virtual void Awake()
-        {
-            Initialise();
         }
 
         protected virtual void ThrowReleasedObject(Rigidbody objectRigidbody)

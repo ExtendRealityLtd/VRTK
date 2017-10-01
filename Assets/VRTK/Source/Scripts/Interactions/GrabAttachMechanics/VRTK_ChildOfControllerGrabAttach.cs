@@ -1,4 +1,4 @@
-﻿// Child Of Controller Grab Attach|GrabAttachMechanics|50070
+﻿// Child Of Controller Grab Attach|GrabAttachMechanics|50060
 namespace VRTK.GrabAttachMechanics
 {
     using UnityEngine;

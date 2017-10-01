@@ -12,7 +12,7 @@ namespace VRTK.GrabAttachMechanics
     /// </remarks>
     public abstract class VRTK_BaseJointGrabAttach : VRTK_BaseGrabAttach
     {
-        [Header("Joint Options", order = 2)]
+        [Header("Joint Settings", order = 2)]
 
         [Tooltip("Determines whether the joint should be destroyed immediately on release or whether to wait till the end of the frame before being destroyed.")]
         public bool destroyImmediatelyOnThrow = true;
