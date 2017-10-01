@@ -4472,6 +4472,28 @@ The SubscribeToInteractionEvent method subscribes a given method callback for th
 
 The UnsubscribeFromInteractionEvent method unsubscribes a previous event subscription for the given Interaction Type.
 
+#### GetPrimaryAttachPoint/0
+
+  > `public virtual Transform GetPrimaryAttachPoint()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `Transform` - A Transform that denotes where the primary grabbing object is grabbing the Interactable Object at.
+
+The GetPrimaryAttachPoint returns the Transform that determines where the primary grabbing object is grabbing the Interactable Object at.
+
+#### GetSecondaryAttachPoint/0
+
+  > `public virtual Transform GetSecondaryAttachPoint()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `Transform` - A Transform that denotes where the secondary grabbing object is grabbing the Interactable Object at.
+
+The GetSecondaryAttachPoint returns the Transform that determines where the secondary grabbing object is grabbing the Interactable Object at.
+
 ### Example
 
 `VRTK/Examples/005_Controller_BasicObjectGrabbing` uses the `VRTK_InteractTouch` and `VRTK_InteractGrab` scripts on the controllers to show how an interactable object can be grabbed and snapped to the controller and thrown around the game world.
@@ -5115,6 +5137,7 @@ This directory contains scripts that are used to provide different mechanics to 
  * [Rotator Track Grab Attach](#rotator-track-grab-attach-vrtk_rotatortrackgrabattach)
  * [Climbable Grab Attach](#climbable-grab-attach-vrtk_climbablegrabattach)
  * [Control Animation Grab Attach](#control-animation-grab-attach-vrtk_controlanimationgrabattach)
+ * [Move Transform Grab Attach](#move-transform-grab-attach-vrtk_movetransformgrabattach)
 
 ---
 
@@ -5693,6 +5716,186 @@ The SetFrame method scrubs to the specific frame of the Animator timeline.
    * _none_
 
 The RewindAnimation method will force the animation to rewind to the start frame.
+
+---
+
+## Move Transform Grab Attach (VRTK_MoveTransformGrabAttach)
+ > extends [VRTK_BaseGrabAttach](#base-grab-attach-vrtk_basegrabattach)
+
+### Overview
+
+Moves the Transform of the Interactable Object towards the interacting object within specified limits.
+
+  > To allow unrestricted movement, set the axis limit minimum to `-infinity` and the axis limit maximum to `infinity`.
+
+**Script Usage:**
+ * Place the `VRTK_MoveTransformGrabAttach` script on either:
+   * The GameObject of the Interactable Object to detect interactions on.
+   * Any other scene GameObject and then link that GameObject to the Interactable Objects `Grab Attach Mechanic Script` parameter to denote use of the grab mechanic.
+
+### Inspector Parameters
+
+ * **Detach Distance:** The maximum distance the grabbing object is away from the Interactable Object before it is automatically released.
+ * **Tracking Speed:** The speed in which to track the grabbed Interactable Object to the interacting object.
+ * **Force Kinematic On Grab:** If this is checked then it will force the rigidbody on the Interactable Object to be `Kinematic` when the grab occurs.
+ * **Release Deceleration Damper:** The damper in which to slow the Interactable Object down when released to simulate continued momentum. The higher the number, the faster the Interactable Object will come to a complete stop on release.
+ * **Reset To Orign On Release Speed:** The speed in which the Interactable Object returns to it's origin position when released. If the `Reset To Orign On Release Speed` is `0f` then the position will not be reset.
+ * **X Axis Limits:** The minimum (`x`) and maximum (`y`) limits the Interactable Object can be moved along the x axis.
+ * **Y Axis Limits:** The minimum (`x`) and maximum (`y`) limits the Interactable Object can be moved along the y axis.
+ * **Z Axis Limits:** The minimum (`x`) and maximum (`y`) limits the Interactable Object can be moved along the z axis.
+ * **Min Max Threshold:** The threshold the position value needs to be within to register a min or max position value.
+ * **Min Max Normalized Threshold:** The threshold the normalized position value needs to be within to register a min or max normalized position value.
+
+### Class Variables
+
+ * `public Vector3 localOrigin` - The default local position of the Interactable Object in world space.
+
+### Class Events
+
+ * `TransformPositionChanged` - Emitted when the Transform position has changed.
+ * `XAxisMinLimitReached` - Emitted when the Transform position has reached the X Axis Min Limit.
+ * `XAxisMinLimitExited` - Emitted when the Transform position has exited the X Axis Min Limit.
+ * `XAxisMaxLimitReached` - Emitted when the Transform position has reached the X Axis Max Limit.
+ * `XAxisMaxLimitExited` - Emitted when the Transform position has exited the X Axis Max Limit.
+ * `YAxisMinLimitReached` - Emitted when the Transform position has reached the Y Axis Min Limit.
+ * `YAxisMinLimitExited` - Emitted when the Transform position has exited the Y Axis Min Limit.
+ * `YAxisMaxLimitReached` - Emitted when the Transform position has reached the Y Axis Max Limit.
+ * `YAxisMaxLimitExited` - Emitted when the Transform position has exited the Y Axis Max Limit.
+ * `ZAxisMinLimitReached` - Emitted when the Transform position has reached the Z Axis Min Limit.
+ * `ZAxisMinLimitExited` - Emitted when the Transform position has exited the Z Axis Min Limit.
+ * `ZAxisMaxLimitReached` - Emitted when the Transform position has reached the Z Axis Max Limit.
+ * `ZAxisMaxLimitExited` - Emitted when the Transform position has exited the Z Axis Max Limit.
+
+### Unity Events
+
+Adding the `VRTK_MoveTransformGrabAttach_UnityEvents` component to `VRTK_MoveTransformGrabAttach` object allows access to `UnityEvents` that will react identically to the Class Events.
+
+ * All C# delegate events are mapped to a Unity Event with the `On` prefix. e.g. `MyEvent` -> `OnMyEvent`.
+
+### Event Payload
+
+ * `GameObject interactingObject` - The GameObject that is performing the interaction (e.g. a controller).
+ * `Vector3 position` - The current position in relation to the axis limits from the origin position.
+ * `Vector3 normalizedPosition` - The normalized position (between `0f` and `1f`) of the Interactable Object in relation to the axis limits.
+ * `Vector3 currentDirection` - The direction vector that the Interactable Object is currently moving across the axes in.
+ * `Vector3 originDirection` - The direction vector that the Interactable Object is currently moving across the axes in in relation to the origin position.
+
+### Class Methods
+
+#### StartGrab/3
+
+  > `public override bool StartGrab(GameObject grabbingObject, GameObject givenGrabbedObject, Rigidbody givenControllerAttachPoint)`
+
+ * Parameters
+   * `GameObject grabbingObject` - The GameObject that is doing the grabbing.
+   * `GameObject givenGrabbedObject` - The GameObject that is being grabbed.
+   * `Rigidbody givenControllerAttachPoint` - The point on the grabbing object that the grabbed object should be attached to after grab occurs.
+ * Returns
+   * `bool` - Returns `true` if the grab is successful, `false` if the grab is unsuccessful.
+
+The StartGrab method sets up the grab attach mechanic as soon as an Interactable Object is grabbed.
+
+#### StopGrab/1
+
+  > `public override void StopGrab(bool applyGrabbingObjectVelocity)`
+
+ * Parameters
+   * `bool applyGrabbingObjectVelocity` - If `true` will apply the current velocity of the grabbing object to the grabbed object on release.
+ * Returns
+   * _none_
+
+The StopGrab method ends the grab of the current Interactable Object and cleans up the state.
+
+#### CreateTrackPoint/4
+
+  > `public override Transform CreateTrackPoint(Transform controllerPoint, GameObject currentGrabbedObject, GameObject currentGrabbingObject, ref bool customTrackPoint)`
+
+ * Parameters
+   * `Transform controllerPoint` - The point on the controller where the grab was initiated.
+   * `GameObject currentGrabbedObject` - The GameObject that is currently being grabbed.
+   * `GameObject currentGrabbingObject` - The GameObject that is currently doing the grabbing.
+   * `ref bool customTrackPoint` - A reference to whether the created track point is an auto generated custom object.
+ * Returns
+   * `Transform` - The Transform of the created track point.
+
+The CreateTrackPoint method sets up the point of grab to track on the grabbed object.
+
+#### ProcessUpdate/0
+
+  > `public override void ProcessUpdate()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * _none_
+
+The ProcessUpdate method is run in every Update method on the Interactable Object.
+
+#### GetPosition/0
+
+  > `public virtual Vector3 GetPosition()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `Vector3` - A Vector3 containing the current Transform position in relation to the axis limits.
+
+The GetPosition method returns a Vector3 of the Transform position in relation to the axis limits.
+
+#### GetNormalizedPosition/0
+
+  > `public virtual Vector3 GetNormalizedPosition()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `Vector3` - A normalized Vector3 of the Transform position in relation to the axis limits.
+
+The GetNormalizedPosition method returns a Vector3 of the Transform position normalized between `0f` and `1f` in relation to the axis limits.;
+
+#### GetCurrentDirection/0
+
+  > `public virtual Vector3 GetCurrentDirection()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `Vector3` - A Vector3 of the direction the Transform is moving across the relevant axis in.
+
+The GetCurrentDirection method returns a Vector3 of the current positive/negative axis direction that the Transform is moving in.
+
+#### GetDirectionFromOrigin/0
+
+  > `public virtual Vector3 GetDirectionFromOrigin()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `Vector3` - A Vector3 of the direction the Transform is moving across the relevant axis in relation to the original position.
+
+The GetDirectionFromOrigin method returns a Vector3 of the direction across the axis from the original position.
+
+#### ResetPosition/0
+
+  > `public virtual void ResetPosition()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * _none_
+
+The ResetPosition method will move the transform back to the origin position.
+
+#### GetWorldLimits/0
+
+  > `public virtual Vector2[] GetWorldLimits()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `Vector2[]` - An array of axis limits in world space.
+
+The GetWorldLimits method returns an array of minimum and maximum axis limits for the Interactable Object in world space.
 
 ---
 
@@ -8108,6 +8311,30 @@ The NumberPercent method is used to determine the percentage of a given value.
    * _none_
 
 The SetGlobalScale method is used to set a transform scale based on a global scale instead of a local scale.
+
+#### VectorHeading/2
+
+  > `public static Vector3 VectorHeading(Vector3 originPosition, Vector3 targetPosition)`
+
+ * Parameters
+   * `Vector3 originPosition` - The point to use as the originating position for the heading calculation.
+   * `Vector3 targetPosition` - The point to use as the target position for the heading calculation.
+ * Returns
+   * `Vector3` - A Vector3 containing the heading changes of the target position in relation to the origin position.
+
+The VectorHeading method calculates the current heading of the target position in relation to the origin position.
+
+#### VectorDirection/2
+
+  > `public static Vector3 VectorDirection(Vector3 originPosition, Vector3 targetPosition)`
+
+ * Parameters
+   * `Vector3 originPosition` - The point to use as the originating position for the direction calculation.
+   * `Vector3 targetPosition` - The point to use as the target position for the direction calculation.
+ * Returns
+   * `Vector3` - A Vector3 containing the direction of the target position in relation to the origin position.
+
+The VectorDirection method calculates the direction the target position is in relation to the origin position.
 
 #### GetTypeUnknownAssembly/1
 
