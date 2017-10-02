@@ -78,8 +78,8 @@ Use the mouse and keyboard to move around both play area and hands and interacti
  * **Show Control Hints:** Show control information in the upper left corner of the screen.
  * **Hide Hands At Switch:** Hide hands when disabling them.
  * **Reset Hands At Switch:** Reset hand position and rotation when enabling them.
- * **Mouse Movement Input:** Whether mouse movement always acts as input or requires a button press.
- * **Lock Mouse To View:** Lock the mouse cursor to the game window when the mouse movement key is pressed.
+ * **Lock Mouse To View:** Lock the mouse cursor to the game window.
+ * **Mouse Movement Input:** Whether the mouse movement always acts as input or requires a button press.
  * **Hand Move Multiplier:** Adjust hand movement speed.
  * **Hand Rotation Multiplier:** Adjust hand rotation speed.
  * **Player Move Multiplier:** Adjust player movement speed.
@@ -87,6 +87,7 @@ Use the mouse and keyboard to move around both play area and hands and interacti
  * **Player Sprint Multiplier:** Adjust player sprint speed.
  * **Mouse Movement Key:** Key used to enable mouse input if a button press is required.
  * **Toggle Control Hints:** Key used to toggle control hints on/off.
+ * **Toggle Mouse Lock:** Key used to toggle control hints on/off.
  * **Change Hands:** Key used to switch between left and righ hand.
  * **Hands On Off:** Key used to switch hands On/Off.
  * **Rotation Position:** Key used to switch between positional and rotational movement.
@@ -1964,6 +1965,7 @@ A collection of scripts that provide varying methods of moving the user around t
  * [Player Climb](#player-climb-vrtk_playerclimb)
  * [Slingshot Jump](#slingshot-jump-vrtk_slingshotjump)
  * [Step Multiplier](#step-multiplier-vrtk_stepmultiplier)
+ * [Tunnel Overlay](#tunnel-overlay-vrtk_tunneloverlay)
 
 ---
 
@@ -2609,6 +2611,31 @@ Multiplies each real world step within the play area to enable further distances
 ### Example
 
 `VRTK/Examples/028_CameraRig_RoomExtender` shows how the Step Multiplier can be used to move around the scene with multiplied steps.
+
+---
+
+## Tunnel Overlay (VRTK_TunnelOverlay)
+
+### Overview
+
+Applys a tunnel overlay effect to the active VR camera when the play area is moving or rotating to reduce potential nausea caused by simulation sickness.
+
+**Script Usage:**
+ * Place the `VRTK_TunnelOverlay` script on any active scene GameObject.
+
+  > This implementation is based on a project made by SixWays at https://github.com/SixWays/UnityVrTunnelling
+
+### Inspector Parameters
+
+ * **Minimum Rotation:** Minimum rotation speed for the effect to activate (degrees per second).
+ * **Maximum Rotation:** Maximum rotation speed for the effect have its max settings applied (degrees per second).
+ * **Minimum Speed:** Minimum movement speed for the effect to activate.
+ * **Maximum Speed:** Maximum movement speed where the effect will have its max settings applied.
+ * **Effect Color:** The color to use for the tunnel effect.
+ * **Initial Effect Size:** The initial amount of screen coverage the tunnel to consume without any movement.
+ * **Maximum Effect Size:** Screen coverage at the maximum tracked values.
+ * **Feather Size:** Feather effect size around the cut-off as fraction of screen.
+ * **Smoothing Time:** Smooth out radius over time.
 
 ---
 
@@ -7416,7 +7443,8 @@ Populates the object references by using the currently set SDKs.
  * Returns
    * `string[]` - An array of all the error descriptions. Returns an empty array if no errors are found.
 
-Checks the setup for errors and creates an array of error descriptions. The returned error descriptions handle the following cases for the current SDK infos:  * Its type doesn't exist anymore.  * It's a fallback SDK.  * It doesn't have its scripting define symbols added.  * It's missing its vendor SDK.Additionally the current SDK infos are checked whether they use multiple VR Devices.
+Checks the setup for errors and creates an array of error descriptions. The returned error descriptions handle the following cases for the current SDK infos: 
+ * Its type doesn't exist anymore.  * It's a fallback SDK.  * It doesn't have its scripting define symbols added.  * It's missing its vendor SDK.Additionally the current SDK infos are checked whether they use multiple VR Devices.
 
 ---
 
@@ -8222,14 +8250,17 @@ Adaptive Quality dynamically changes rendering settings to maintain VR framerate
   > **Only Compatible With Unity 5.4 and above**
 
 There are two goals:
- * Reduce the chances of dropping frames and reprojecting
+
+ * Reduce the chances of dropping frames and reprojecting
  * Increase quality when there are idle GPU cycles
 
 This script currently changes the following to reach these goals:
- * Rendering resolution and viewport size (aka Dynamic Resolution)
+
+ * Rendering resolution and viewport size (aka Dynamic Resolution)
 
 In the future it could be changed to also change the following:
- * MSAA level
+
+ * MSAA level
  * Fixed Foveated Rendering
  * Radial Density Masking
  * (Non-fixed) Foveated Rendering (once HMDs support eye tracking)
@@ -8239,7 +8270,8 @@ pass `1.0f / VRSettings.renderViewportScale` into the shader and scale all incom
 program. Do this by using `Material.SetFloat` to set the value in the script that configures the shader.
 
 In more detail:
- * In the `.shader` file: Add a new runtime-set property value `float _InverseOfRenderViewportScale` and add `vertexInput.texcoord *= _InverseOfRenderViewportScale` to the start of the vertex program
+
+ * In the `.shader` file: Add a new runtime-set property value `float _InverseOfRenderViewportScale` and add `vertexInput.texcoord *= _InverseOfRenderViewportScale` to the start of the vertex program
  * In the `.cs` file: Before using the material (eg. `Graphics.Blit`) add `material.SetFloat("_InverseOfRenderViewportScale", 1.0f / VRSettings.renderViewportScale)`
 
 ### Inspector Parameters
