@@ -78,8 +78,8 @@ Use the mouse and keyboard to move around both play area and hands and interacti
  * **Show Control Hints:** Show control information in the upper left corner of the screen.
  * **Hide Hands At Switch:** Hide hands when disabling them.
  * **Reset Hands At Switch:** Reset hand position and rotation when enabling them.
- * **Mouse Movement Input:** Whether mouse movement always acts as input or requires a button press.
- * **Lock Mouse To View:** Lock the mouse cursor to the game window when the mouse movement key is pressed.
+ * **Lock Mouse To View:** Lock the mouse cursor to the game window.
+ * **Mouse Movement Input:** Whether the mouse movement always acts as input or requires a button press.
  * **Hand Move Multiplier:** Adjust hand movement speed.
  * **Hand Rotation Multiplier:** Adjust hand rotation speed.
  * **Player Move Multiplier:** Adjust player movement speed.
@@ -87,6 +87,7 @@ Use the mouse and keyboard to move around both play area and hands and interacti
  * **Player Sprint Multiplier:** Adjust player sprint speed.
  * **Mouse Movement Key:** Key used to enable mouse input if a button press is required.
  * **Toggle Control Hints:** Key used to toggle control hints on/off.
+ * **Toggle Mouse Lock:** Key used to toggle control hints on/off.
  * **Change Hands:** Key used to switch between left and righ hand.
  * **Hands On Off:** Key used to switch hands On/Off.
  * **Rotation Position:** Key used to switch between positional and rotational movement.
