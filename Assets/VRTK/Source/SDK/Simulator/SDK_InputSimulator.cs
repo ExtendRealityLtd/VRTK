@@ -61,6 +61,8 @@ namespace VRTK
         public KeyCode mouseMovementKey = KeyCode.Mouse1;
         [Tooltip("Key used to toggle control hints on/off.")]
         public KeyCode toggleControlHints = KeyCode.F1;
+        [Tooltip("Key used to toggle control hints on/off.")]
+        public KeyCode toggleMouseLock = KeyCode.F4;
         [Tooltip("Key used to switch between left and righ hand.")]
         public KeyCode changeHands = KeyCode.Tab;
         [Tooltip("Key used to switch hands On/Off.")]
@@ -203,6 +205,11 @@ namespace VRTK
             {
                 showControlHints = !showControlHints;
                 hintCanvas.SetActive(showControlHints);
+            }
+
+            if (Input.GetKeyDown(toggleMouseLock))
+            {
+                lockMouseToView = !lockMouseToView;
             }
 
             if (mouseMovementInput == MouseInputMode.RequiresButtonPress)
