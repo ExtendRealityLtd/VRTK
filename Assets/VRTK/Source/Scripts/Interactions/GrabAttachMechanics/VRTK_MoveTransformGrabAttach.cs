@@ -67,10 +67,11 @@ namespace VRTK.GrabAttachMechanics
         [Tooltip("The threshold the position value needs to be within to register a min or max position value.")]
         public float minMaxThreshold = 0.01f;
         [Tooltip("The threshold the normalized position value needs to be within to register a min or max normalized position value.")]
+        [Range(0f, 0.99f)]
         public float minMaxNormalizedThreshold = 0.01f;
 
         /// <summary>
-        /// The default local position of the Interactable Object in world space.
+        /// The default local position of the Interactable Object.
         /// </summary>
         [HideInInspector]
         public Vector3 localOrigin;
@@ -430,18 +431,11 @@ namespace VRTK.GrabAttachMechanics
 
         protected virtual Vector3 NormalizePosition(Vector3 givenHeading)
         {
-            return new Vector3(NormalizeRange(givenHeading.x, xAxisLimits.x, xAxisLimits.y), NormalizeRange(givenHeading.y, yAxisLimits.x, yAxisLimits.y), NormalizeRange(givenHeading.z, zAxisLimits.x, zAxisLimits.y));
-        }
-
-        protected virtual float NormalizeRange(float currentValue, float rangeMin, float rangeMax)
-        {
-            float normalizedMax = rangeMax - rangeMin;
-            float normalizedValue = normalizedMax - (rangeMax - currentValue);
-            float multplier = (normalizedMax != 0 ? (1f / normalizedMax) : 1f);
-            float result = normalizedValue * multplier;
-            result = (result < minMaxNormalizedThreshold ? 0f : result);
-            result = (result > 1f - minMaxNormalizedThreshold ? 1f : result);
-            return Mathf.Clamp(result, 0f, 1f);
+            return new Vector3(
+                VRTK_SharedMethods.NormalizeValue(givenHeading.x, xAxisLimits.x, xAxisLimits.y, minMaxNormalizedThreshold),
+                VRTK_SharedMethods.NormalizeValue(givenHeading.y, yAxisLimits.x, yAxisLimits.y, minMaxNormalizedThreshold),
+                VRTK_SharedMethods.NormalizeValue(givenHeading.z, zAxisLimits.x, zAxisLimits.y, minMaxNormalizedThreshold)
+            );
         }
 
         protected virtual void CancelResetPosition()

@@ -5138,6 +5138,7 @@ This directory contains scripts that are used to provide different mechanics to 
  * [Climbable Grab Attach](#climbable-grab-attach-vrtk_climbablegrabattach)
  * [Control Animation Grab Attach](#control-animation-grab-attach-vrtk_controlanimationgrabattach)
  * [Move Transform Grab Attach](#move-transform-grab-attach-vrtk_movetransformgrabattach)
+ * [Rotate Transform Grab Attach](#rotate-transform-grab-attach-vrtk_rotatetransformgrabattach)
 
 ---
 
@@ -5748,7 +5749,7 @@ Moves the Transform of the Interactable Object towards the interacting object wi
 
 ### Class Variables
 
- * `public Vector3 localOrigin` - The default local position of the Interactable Object in world space.
+ * `public Vector3 localOrigin` - The default local position of the Interactable Object.
 
 ### Class Events
 
@@ -5896,6 +5897,144 @@ The ResetPosition method will move the transform back to the origin position.
    * `Vector2[]` - An array of axis limits in world space.
 
 The GetWorldLimits method returns an array of minimum and maximum axis limits for the Interactable Object in world space.
+
+---
+
+## Rotate Transform Grab Attach (VRTK_RotateTransformGrabAttach)
+ > extends [VRTK_BaseGrabAttach](#base-grab-attach-vrtk_basegrabattach)
+
+### Overview
+
+Rotates the Transform of the Interactable Object around a specified transform local axis within the given limits.
+
+  > To allow unrestricted movement, set the angle limits minimum to `-infinity` and the angle limits maximum to `infinity`.
+
+**Script Usage:**
+ * Place the `VRTK_RotateTransformGrabAttach` script on either:
+   * The GameObject of the Interactable Object to detect interactions on.
+   * Any other scene GameObject and then link that GameObject to the Interactable Objects `Grab Attach Mechanic Script` parameter to denote use of the grab mechanic.
+
+### Inspector Parameters
+
+ * **Detach Distance:** The maximum distance the grabbing object is away from the Interactable Object before it is automatically dropped.
+ * **Origin Deadzone:** The distance between grabbing object and the centre of Interactable Object that is considered to be non grabbable. If the grabbing object is within the `Origin Deadzone` distance then it will be automatically ungrabbed.
+ * **Rotate Around:** The local axis in which to rotate the object around.
+ * **Rotation Friction:** The amount of friction to apply when rotating, simulates a tougher rotation.
+ * **Release Deceleration Damper:** The damper in which to slow the Interactable Object's rotation down when released to simulate continued momentum. The higher the number, the faster the Interactable Object will come to a complete stop on release.
+ * **Reset To Orign On Release Speed:** The speed in which the Interactable Object returns to it's origin rotation when released. If the `Reset To Orign On Release Speed` is `0f` then the rotation will not be reset.
+ * **Angle Limits:** The negative `(x)` and positive `(y)` limits the axis can be rotated to.
+ * **Min Max Threshold:** The threshold the rotation value needs to be within to register a min or max rotation value.
+ * **Min Max Normalized Threshold:** The threshold the normalized rotation value needs to be within to register a min or max normalized rotation value.
+
+### Class Variables
+
+ * `public enum RotationAxis` - The local axis for rotation.
+   * `xAxis` - The local X Axis of the transform.
+   * `yAxis` - The local Y Axis of the transform.
+   * `zAxis` - The local Z Axis of the transform.
+ * `public Quaternion originRotation` - The default local rotation of the Interactable Object.
+
+### Class Events
+
+ * `AngleChanged` - Emitted when the angle changes.
+ * `MinAngleReached` - Emitted when the angle reaches the minimum angle.
+ * `MinAngleExited` - Emitted when the angle exits the minimum angle state.
+ * `MaxAngleReached` - Emitted when the angle reaches the maximum angle.
+ * `MaxAngleExited` - Emitted when the angle exits the maximum angle state.
+
+### Unity Events
+
+Adding the `VRTK_RotateTransformGrabAttach_UnityEvents` component to `VRTK_RotateTransformGrabAttach` object allows access to `UnityEvents` that will react identically to the Class Events.
+
+ * All C# delegate events are mapped to a Unity Event with the `On` prefix. e.g. `MyEvent` -> `OnMyEvent`.
+
+### Event Payload
+
+ * `GameObject interactingObject` - The GameObject that is performing the interaction (e.g. a controller).
+ * `float currentAngle` - The current angle the Interactable Object is rotated to.
+ * `float normalizedAngle` - The normalized angle (between `0f` and `1f`) the Interactable Object is rotated to.
+ * `Vector3 rotationSpeed` - The speed in which the rotation is occuring.
+
+### Class Methods
+
+#### StartGrab/3
+
+  > `public override bool StartGrab(GameObject grabbingObject, GameObject givenGrabbedObject, Rigidbody givenControllerAttachPoint)`
+
+ * Parameters
+   * `GameObject grabbingObject` - The GameObject that is doing the grabbing.
+   * `GameObject givenGrabbedObject` - The GameObject that is being grabbed.
+   * `Rigidbody givenControllerAttachPoint` - The point on the grabbing object that the grabbed object should be attached to after grab occurs.
+ * Returns
+   * `bool` - Returns `true` if the grab is successful, `false` if the grab is unsuccessful.
+
+The StartGrab method sets up the grab attach mechanic as soon as an Interactable Object is grabbed.
+
+#### StopGrab/1
+
+  > `public override void StopGrab(bool applyGrabbingObjectVelocity)`
+
+ * Parameters
+   * `bool applyGrabbingObjectVelocity` - If `true` will apply the current velocity of the grabbing object to the grabbed object on release.
+ * Returns
+   * _none_
+
+The StopGrab method ends the grab of the current Interactable Object and cleans up the state.
+
+#### ProcessUpdate/0
+
+  > `public override void ProcessUpdate()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * _none_
+
+The ProcessUpdate method is run in every Update method on the Interactable Object.
+
+#### ResetRotation/0
+
+  > `public virtual void ResetRotation()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * _none_
+
+The ResetRotation method will rotate the transform back to the origin rotation.
+
+#### GetAngle/0
+
+  > `public virtual float GetAngle()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `float` - The current rotated angle.
+
+The GetAngle method returns the current angle the Interactable Object is rotated to.
+
+#### GetNormalizedAngle/0
+
+  > `public virtual float GetNormalizedAngle()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `float` - The normalized rotated angle. Will return `0f` if either limit is set to `infinity`.
+
+The GetNormalizedAngle returns the normalized current angle between the minimum and maximum angle limits.
+
+#### GetRotationSpeed/0
+
+  > `public virtual Vector3 GetRotationSpeed()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `Vector3` - A Vector3 containing the speed each axis is rotating in.
+
+The GetRotationSpeed returns the current speed in which the Interactable Object is rotating.
 
 ---
 
@@ -8335,6 +8474,31 @@ The VectorHeading method calculates the current heading of the target position i
    * `Vector3` - A Vector3 containing the direction of the target position in relation to the origin position.
 
 The VectorDirection method calculates the direction the target position is in relation to the origin position.
+
+#### DividerToMultiplier/1
+
+  > `public static float DividerToMultiplier(float value)`
+
+ * Parameters
+   * `float value` - The number to convert into the multplier value.
+ * Returns
+   * `float` - The calculated number that can replace the divider number in a multiplication sum.
+
+The DividerToMultiplier method takes a number to be used in a division and converts it to be used for multiplication. (e.g. 2 / 2 becomes 2 * 0.5)
+
+#### NormalizeValue/4
+
+  > `public static float NormalizeValue(float value, float minValue, float maxValue, float threshold = 0f)`
+
+ * Parameters
+   * `float value` - The actual value to normalize.
+   * `float minValue` - The minimum value the actual value can be.
+   * `float maxValue` - The maximum value the actual value can be.
+   * `float threshold` - The threshold to force to the minimum or maximum value if the normalized value is within the threhold limits.
+ * Returns
+   * `float` -
+
+The NormalizeValue method takes a given value between a specified range and returns the normalized value between 0f and 1f.
 
 #### GetTypeUnknownAssembly/1
 

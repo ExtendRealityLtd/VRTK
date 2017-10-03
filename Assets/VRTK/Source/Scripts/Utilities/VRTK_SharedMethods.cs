@@ -382,8 +382,35 @@ namespace VRTK
         public static Vector3 VectorDirection(Vector3 originPosition, Vector3 targetPosition)
         {
             Vector3 heading = VectorHeading(originPosition, targetPosition);
-            float multiplier = (heading.magnitude != 0f ? 1f / heading.magnitude : 1f);
-            return heading * multiplier;
+            return heading * DividerToMultiplier(heading.magnitude);
+        }
+
+        /// <summary>
+        /// The DividerToMultiplier method takes a number to be used in a division and converts it to be used for multiplication. (e.g. 2 / 2 becomes 2 * 0.5)
+        /// </summary>
+        /// <param name="value">The number to convert into the multplier value.</param>
+        /// <returns>The calculated number that can replace the divider number in a multiplication sum.</returns>
+        public static float DividerToMultiplier(float value)
+        {
+            return (value != 0f ? 1f / value : 1f);
+        }
+
+        /// <summary>
+        /// The NormalizeValue method takes a given value between a specified range and returns the normalized value between 0f and 1f.
+        /// </summary>
+        /// <param name="value">The actual value to normalize.</param>
+        /// <param name="minValue">The minimum value the actual value can be.</param>
+        /// <param name="maxValue">The maximum value the actual value can be.</param>
+        /// <param name="threshold">The threshold to force to the minimum or maximum value if the normalized value is within the threhold limits.</param>
+        /// <returns></returns>
+        public static float NormalizeValue(float value, float minValue, float maxValue, float threshold = 0f)
+        {
+            float normalizedMax = maxValue - minValue;
+            float normalizedValue = normalizedMax - (maxValue - value);
+            float result = normalizedValue * DividerToMultiplier(normalizedMax); ;
+            result = (result < threshold ? 0f : result);
+            result = (result > 1f - threshold ? 1f : result);
+            return Mathf.Clamp(result, 0f, 1f);
         }
 
         /// <summary>

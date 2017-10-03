@@ -1,4 +1,4 @@
-// Dash Teleport|Locomotion|20030
+﻿// Dash Teleport|Locomotion|20030
 namespace VRTK
 {
     using UnityEngine;
@@ -165,7 +165,7 @@ namespace VRTK
                 OnWillDashThruObjects(SetDashTeleportEvent(allHits));
             }
 
-            lerpTime = (maxDistance >= minDistanceForNormalLerp ? normalLerpTime : (1f / minSpeedMps) * maxDistance);
+            lerpTime = (maxDistance >= minDistanceForNormalLerp ? normalLerpTime : VRTK_SharedMethods.DividerToMultiplier(minSpeedMps) * maxDistance);
 
             float elapsedTime = 0f;
             float currentLerpedTime = 0f;
