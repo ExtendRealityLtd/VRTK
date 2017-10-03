@@ -37,11 +37,13 @@ namespace VRTK
 
         protected bool touchpadFirstChange;
         protected bool otherTouchpadControlEnabledState;
+        protected bool otherTouchpadControlEnabledStateSet;
 
         protected override void OnEnable()
         {
             base.OnEnable();
             touchpadFirstChange = true;
+            otherTouchpadControlEnabledStateSet = false;
         }
 
         protected override void ControlFixedUpdate()
@@ -112,9 +114,10 @@ namespace VRTK
 
         protected virtual void TouchpadAxisChanged(object sender, ControllerInteractionEventArgs e)
         {
-            if (touchpadFirstChange && otherObjectControl && disableOtherControlsOnActive && e.touchpadAxis != Vector2.zero)
+            if (touchpadFirstChange && otherObjectControl != null && disableOtherControlsOnActive && e.touchpadAxis != Vector2.zero)
             {
                 otherTouchpadControlEnabledState = otherObjectControl.enabled;
+                otherTouchpadControlEnabledStateSet = true;
                 otherObjectControl.enabled = false;
             }
             currentAxis = (ValidPrimaryButton() ? e.touchpadAxis : Vector2.zero);
@@ -127,7 +130,7 @@ namespace VRTK
 
         protected virtual void TouchpadTouchEnd(object sender, ControllerInteractionEventArgs e)
         {
-            if (otherObjectControl && disableOtherControlsOnActive)
+            if (otherTouchpadControlEnabledStateSet && otherObjectControl != null && disableOtherControlsOnActive)
             {
                 otherObjectControl.enabled = otherTouchpadControlEnabledState;
             }
