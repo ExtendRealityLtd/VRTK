@@ -1,4 +1,4 @@
-﻿// Custom Joint Grab Attach|GrabAttachMechanics|50060
+﻿// Custom Joint Grab Attach|GrabAttachMechanics|50050
 namespace VRTK.GrabAttachMechanics
 {
     using UnityEngine;

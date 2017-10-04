@@ -1,4 +1,4 @@
-﻿// Rotator Track Grab Attach|GrabAttachMechanics|50090
+﻿// Rotator Track Grab Attach|GrabAttachMechanics|50080
 namespace VRTK.GrabAttachMechanics
 {
     using UnityEngine;
@@ -39,10 +39,11 @@ namespace VRTK.GrabAttachMechanics
             grabbedObjectRigidBody.AddForceAtPosition(rotateForce, initialAttachPoint.position, ForceMode.VelocityChange);
         }
 
-        protected override void SetTrackPointOrientation(ref Transform trackPoint, Transform currentGrabbedObject, Transform controllerPoint)
+        protected override Transform SetTrackPointOrientation(Transform givenTrackPoint, Transform currentGrabbedObject, Transform controllerPoint)
         {
-            trackPoint.position = controllerPoint.position;
-            trackPoint.rotation = controllerPoint.rotation;
+            givenTrackPoint.position = controllerPoint.position;
+            givenTrackPoint.rotation = controllerPoint.rotation;
+            return givenTrackPoint;
         }
     }
 }

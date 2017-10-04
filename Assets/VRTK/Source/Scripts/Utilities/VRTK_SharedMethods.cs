@@ -363,6 +363,57 @@ namespace VRTK
         }
 
         /// <summary>
+        /// The VectorHeading method calculates the current heading of the target position in relation to the origin position.
+        /// </summary>
+        /// <param name="originPosition">The point to use as the originating position for the heading calculation.</param>
+        /// <param name="targetPosition">The point to use as the target position for the heading calculation.</param>
+        /// <returns>A Vector3 containing the heading changes of the target position in relation to the origin position.</returns>
+        public static Vector3 VectorHeading(Vector3 originPosition, Vector3 targetPosition)
+        {
+            return targetPosition - originPosition;
+        }
+
+        /// <summary>
+        /// The VectorDirection method calculates the direction the target position is in relation to the origin position.
+        /// </summary>
+        /// <param name="originPosition">The point to use as the originating position for the direction calculation.</param>
+        /// <param name="targetPosition">The point to use as the target position for the direction calculation.</param>
+        /// <returns>A Vector3 containing the direction of the target position in relation to the origin position.</returns>
+        public static Vector3 VectorDirection(Vector3 originPosition, Vector3 targetPosition)
+        {
+            Vector3 heading = VectorHeading(originPosition, targetPosition);
+            return heading * DividerToMultiplier(heading.magnitude);
+        }
+
+        /// <summary>
+        /// The DividerToMultiplier method takes a number to be used in a division and converts it to be used for multiplication. (e.g. 2 / 2 becomes 2 * 0.5)
+        /// </summary>
+        /// <param name="value">The number to convert into the multplier value.</param>
+        /// <returns>The calculated number that can replace the divider number in a multiplication sum.</returns>
+        public static float DividerToMultiplier(float value)
+        {
+            return (value != 0f ? 1f / value : 1f);
+        }
+
+        /// <summary>
+        /// The NormalizeValue method takes a given value between a specified range and returns the normalized value between 0f and 1f.
+        /// </summary>
+        /// <param name="value">The actual value to normalize.</param>
+        /// <param name="minValue">The minimum value the actual value can be.</param>
+        /// <param name="maxValue">The maximum value the actual value can be.</param>
+        /// <param name="threshold">The threshold to force to the minimum or maximum value if the normalized value is within the threhold limits.</param>
+        /// <returns></returns>
+        public static float NormalizeValue(float value, float minValue, float maxValue, float threshold = 0f)
+        {
+            float normalizedMax = maxValue - minValue;
+            float normalizedValue = normalizedMax - (maxValue - value);
+            float result = normalizedValue * DividerToMultiplier(normalizedMax); ;
+            result = (result < threshold ? 0f : result);
+            result = (result > 1f - threshold ? 1f : result);
+            return Mathf.Clamp(result, 0f, 1f);
+        }
+
+        /// <summary>
         /// The GetTypeUnknownAssembly method is used to find a Type without knowing the exact assembly it is in.
         /// </summary>
         /// <param name="typeName">The name of the type to get.</param>

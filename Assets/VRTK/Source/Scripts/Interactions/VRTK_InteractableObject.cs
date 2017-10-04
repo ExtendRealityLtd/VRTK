@@ -1013,6 +1013,24 @@ namespace VRTK
             ManageInteractionEvent(givenType, false, methodCallback);
         }
 
+        /// <summary>
+        /// The GetPrimaryAttachPoint returns the Transform that determines where the primary grabbing object is grabbing the Interactable Object at.
+        /// </summary>
+        /// <returns>A Transform that denotes where the primary grabbing object is grabbing the Interactable Object at.</returns>
+        public virtual Transform GetPrimaryAttachPoint()
+        {
+            return primaryControllerAttachPoint;
+        }
+
+        /// <summary>
+        /// The GetSecondaryAttachPoint returns the Transform that determines where the secondary grabbing object is grabbing the Interactable Object at.
+        /// </summary>
+        /// <returns>A Transform that denotes where the secondary grabbing object is grabbing the Interactable Object at.</returns>
+        public virtual Transform GetSecondaryAttachPoint()
+        {
+            return secondaryControllerAttachPoint;
+        }
+
         protected virtual void Awake()
         {
             interactableRigidbody = GetComponent<Rigidbody>();
@@ -1300,9 +1318,10 @@ namespace VRTK
         protected virtual Transform CreateAttachPoint(string namePrefix, string nameSuffix, Transform origin)
         {
             Transform attachPoint = new GameObject(VRTK_SharedMethods.GenerateVRTKObjectName(true, namePrefix, nameSuffix, "Controller", "AttachPoint")).transform;
-            attachPoint.parent = transform;
+            attachPoint.SetParent(transform);
             attachPoint.position = origin.position;
             attachPoint.rotation = origin.rotation;
+            attachPoint.localScale = Vector3.one;
             return attachPoint;
         }
 

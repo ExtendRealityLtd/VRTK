@@ -132,11 +132,11 @@ namespace VRTK
             float stepSize = frequency * 1;
             if (Loop || stepSize == 1)
             {
-                stepSize = 1f / stepSize;
+                stepSize = VRTK_SharedMethods.DividerToMultiplier(stepSize);
             }
             else
             {
-                stepSize = 1f / (stepSize - 1);
+                stepSize = VRTK_SharedMethods.DividerToMultiplier((stepSize - 1));
             }
 
             for (int f = 0; f < frequency; f++)
@@ -334,11 +334,11 @@ namespace VRTK
             float stepSize = frequency * 1;
             if (Loop || stepSize == 1)
             {
-                stepSize = 1f / stepSize;
+                stepSize = VRTK_SharedMethods.DividerToMultiplier(stepSize );
             }
             else
             {
-                stepSize = 1f / (stepSize - 1);
+                stepSize = VRTK_SharedMethods.DividerToMultiplier((stepSize - 1));
             }
 
             SetPointData(material, color, stepSize);
