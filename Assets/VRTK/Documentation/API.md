@@ -1965,6 +1965,7 @@ A collection of scripts that provide varying methods of moving the user around t
  * [Player Climb](#player-climb-vrtk_playerclimb)
  * [Slingshot Jump](#slingshot-jump-vrtk_slingshotjump)
  * [Step Multiplier](#step-multiplier-vrtk_stepmultiplier)
+ * [Tunnel Overlay](#tunnel-overlay-vrtk_tunneloverlay)
 
 ---
 
@@ -2610,6 +2611,31 @@ Multiplies each real world step within the play area to enable further distances
 ### Example
 
 `VRTK/Examples/028_CameraRig_RoomExtender` shows how the Step Multiplier can be used to move around the scene with multiplied steps.
+
+---
+
+## Tunnel Overlay (VRTK_TunnelOverlay)
+
+### Overview
+
+Applys a tunnel overlay effect to the active VR camera when the play area is moving or rotating to reduce potential nausea caused by simulation sickness.
+
+**Script Usage:**
+ * Place the `VRTK_TunnelOverlay` script on any active scene GameObject.
+
+  > This implementation is based on a project made by SixWays at https://github.com/SixWays/UnityVrTunnelling
+
+### Inspector Parameters
+
+ * **Minimum Rotation:** Minimum rotation speed for the effect to activate (degrees per second).
+ * **Maximum Rotation:** Maximum rotation speed for the effect have its max settings applied (degrees per second).
+ * **Minimum Speed:** Minimum movement speed for the effect to activate.
+ * **Maximum Speed:** Maximum movement speed where the effect will have its max settings applied.
+ * **Effect Color:** The color to use for the tunnel effect.
+ * **Initial Effect Size:** The initial amount of screen coverage the tunnel to consume without any movement.
+ * **Maximum Effect Size:** Screen coverage at the maximum tracked values.
+ * **Feather Size:** Feather effect size around the cut-off as fraction of screen.
+ * **Smoothing Time:** Smooth out radius over time.
 
 ---
 
