@@ -223,6 +223,7 @@ namespace VRTK
                 {
                     savedUseButton = subscribedUseButton;
                     useButton = touchedObjectScript.useOverrideButton;
+                    ManageUseListener(true);
                 }
             }
         }
@@ -236,6 +237,7 @@ namespace VRTK
                 {
                     useButton = savedUseButton;
                     savedUseButton = VRTK_ControllerEvents.ButtonAlias.Undefined;
+                    ManageUseListener(true);
                 }
             }
         }

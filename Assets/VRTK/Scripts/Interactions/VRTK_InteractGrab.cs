@@ -262,6 +262,7 @@ namespace VRTK
                 {
                     savedGrabButton = subscribedGrabButton;
                     grabButton = touchedObjectScript.grabOverrideButton;
+                    ManageGrabListener(true);
                 }
             }
         }
@@ -275,6 +276,7 @@ namespace VRTK
                 {
                     grabButton = savedGrabButton;
                     savedGrabButton = VRTK_ControllerEvents.ButtonAlias.Undefined;
+                    ManageGrabListener(true);
                 }
             }
         }
