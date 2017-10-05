@@ -6024,16 +6024,28 @@ The StopGrab method ends the grab of the current Interactable Object and cleans 
 
 The ProcessUpdate method is run in every Update method on the Interactable Object.
 
-#### ResetRotation/0
+#### SetRotation/2
 
-  > `public virtual void ResetRotation()`
+  > `public virtual void SetRotation(float newAngle, float transitionTime = 0f)`
 
  * Parameters
-   * _none_
+   * `float newAngle` - The angle to rotate to through the current rotation axis.
+   * `float transitionTime` - The time in which the entire rotation operation will take place.
  * Returns
    * _none_
 
-The ResetRotation method will rotate the transform back to the origin rotation.
+The SetRotation method sets the rotation on the Interactable Object to the given angle over the desired time.
+
+#### ResetRotation/1
+
+  > `public virtual void ResetRotation(bool ignoreTransition = false)`
+
+ * Parameters
+   * `bool ignoreTransition` - If this is `true` then the `Reset To Origin On Release Speed` will be ignored and the reset will occur instantly.
+ * Returns
+   * _none_
+
+The ResetRotation method will rotate the Interactable Object back to the origin rotation.
 
 #### GetAngle/0
 
