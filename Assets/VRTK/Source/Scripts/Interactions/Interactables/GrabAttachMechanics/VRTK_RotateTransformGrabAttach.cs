@@ -37,7 +37,7 @@ namespace VRTK.GrabAttachMechanics
     ///    * The GameObject of the Interactable Object to detect interactions on.
     ///    * Any other scene GameObject and then link that GameObject to the Interactable Objects `Grab Attach Mechanic Script` parameter to denote use of the grab mechanic.
     /// </remarks>
-    [AddComponentMenu("VRTK/Scripts/Interactions/Grab Attach Mechanics/VRTK_RotateTransformGrabAttach")]
+    [AddComponentMenu("VRTK/Scripts/Interactions/Interactables/Grab Attach Mechanics/VRTK_RotateTransformGrabAttach")]
     public class VRTK_RotateTransformGrabAttach : VRTK_BaseGrabAttach
     {
         /// <summary>

@@ -1,4 +1,4 @@
-﻿// Controller Events|Interactions|30010
+﻿// Controller Events|Interactors|30010
 namespace VRTK
 {
     using UnityEngine;
@@ -35,7 +35,7 @@ namespace VRTK
     /// <example>
     /// `VRTK/Examples/002_Controller_Events` shows how the events are utilised and listened to. The accompanying example script can be viewed in `VRTK/Examples/ExampleResources/Scripts/VRTK_ControllerEvents_ListenerExample.cs`.
     /// </example>
-    [AddComponentMenu("VRTK/Scripts/Interactions/VRTK_ControllerEvents")]
+    [AddComponentMenu("VRTK/Scripts/Interactions/Interactors/VRTK_ControllerEvents")]
     public class VRTK_ControllerEvents : MonoBehaviour
     {
         /// <summary>

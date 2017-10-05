@@ -1,4 +1,4 @@
-﻿// Interact Object Highlighter|Interactions|30045
+﻿// Interact Object Highlighter|Interactables|35040
 namespace VRTK
 {
     using UnityEngine;
@@ -36,7 +36,7 @@ namespace VRTK
     ///    * Any other scene GameObject and provide a valid `VRTK_InteractableObject` component to the `Object To Affect` parameter of this script.
     /// </remarks>
 
-    [AddComponentMenu("VRTK/Scripts/Interactions/VRTK_InteractObjectHighlighter")]
+    [AddComponentMenu("VRTK/Scripts/Interactions/Interactables/VRTK_InteractObjectHighlighter")]
     public class VRTK_InteractObjectHighlighter : MonoBehaviour
     {
         [Header("Object Interaction Settings")]

@@ -1,4 +1,4 @@
-﻿// Interact Use|Interactions|30070
+﻿// Interact Use|Interactors|30050
 namespace VRTK
 {
     using UnityEngine;
@@ -24,7 +24,7 @@ namespace VRTK
     ///
     /// `VRTK/Examples/008_Controller_UsingAGrabbedObject` shows that objects can be grabbed with one button and used with another (e.g. firing a gun).
     /// </example>
-    [AddComponentMenu("VRTK/Scripts/Interactions/VRTK_InteractUse")]
+    [AddComponentMenu("VRTK/Scripts/Interactions/Interactors/VRTK_InteractUse")]
     public class VRTK_InteractUse : MonoBehaviour
     {
         [Header("Use Settings")]

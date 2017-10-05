@@ -1,4 +1,4 @@
-﻿// Interact Controller Appearance|Interactions|30040
+﻿// Interact Controller Appearance|Interactables|30040
 namespace VRTK
 {
     using UnityEngine;
@@ -31,7 +31,7 @@ namespace VRTK
     /// <example>
     /// `VRTK/Examples/008_Controller_UsingAGrabbedObject` shows that the controller can be hidden when touching, grabbing and using an object.
     /// </example>
-    [AddComponentMenu("VRTK/Scripts/Interactions/VRTK_InteractControllerAppearance")]
+    [AddComponentMenu("VRTK/Scripts/Interactions/Interactables/VRTK_InteractControllerAppearance")]
     [Obsolete("`VRTK_InteractControllerAppearance` has been replaced with `VRTK_InteractObjectAppearance`. This script will be removed in a future version of VRTK.")]
     public class VRTK_InteractControllerAppearance : MonoBehaviour
     {

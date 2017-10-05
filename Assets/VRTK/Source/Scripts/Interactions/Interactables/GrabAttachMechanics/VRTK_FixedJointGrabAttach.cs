@@ -17,7 +17,7 @@ namespace VRTK.GrabAttachMechanics
     /// <example>
     /// `VRTK/Examples/005_Controller_BasicObjectGrabbing` demonstrates this grab attach mechanic all of the grabbable objects in the scene.
     /// </example>
-    [AddComponentMenu("VRTK/Scripts/Interactions/Grab Attach Mechanics/VRTK_FixedJointGrabAttach")]
+    [AddComponentMenu("VRTK/Scripts/Interactions/Interactables/Grab Attach Mechanics/VRTK_FixedJointGrabAttach")]
     public class VRTK_FixedJointGrabAttach : VRTK_BaseJointGrabAttach
     {
         [Tooltip("Maximum force the Joint can withstand before breaking. Setting to `infinity` ensures the Joint is unbreakable.")]

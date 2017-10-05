@@ -18,7 +18,7 @@ namespace VRTK.GrabAttachMechanics
     /// <example>
     /// `VRTK/Examples/021_Controller_GrabbingObjectsWithJoints` demonstrates this grab attach mechanic on the Lamp object in the scene.
     /// </example>
-    [AddComponentMenu("VRTK/Scripts/Interactions/Grab Attach Mechanics/VRTK_CustomJointGrabAttach")]
+    [AddComponentMenu("VRTK/Scripts/Interactions/Interactables/Grab Attach Mechanics/VRTK_CustomJointGrabAttach")]
     public class VRTK_CustomJointGrabAttach : VRTK_BaseJointGrabAttach
     {
         [Tooltip("The joint to use for the grab attach joint.")]

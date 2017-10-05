@@ -7,8 +7,9 @@ This file describes all of the public methods, variables and events utilised by 
    * [Pointer Renderers](#pointer-renderers-vrtksourcescriptspointerspointerrenderers)
  * [Locomotion](#locomotion-vrtksourcescriptslocomotion)
    * [Object Control Actions](#object-control-actions-vrtksourcescriptslocomotionobjectcontrolactions)
- * [Interactions](#interactions-vrtksourcescriptsinteractions)
-   * [Highlighters](#highlighters-vrtksourcescriptsinteractionshighlighters)
+ * [Highlighters](#highlighters-vrtksourcescriptsinteractionshighlighters)
+ * [Interactors](#interactors-vrtksourcescriptsinteractionsinteractors)
+ * [Interactables](#interactables-vrtksourcescriptsinteractionsinteractables)
    * [Grab Attach Mechanics](#grab-attach-mechanics-vrtksourcescriptsinteractionsgrabattachmechanics)
    * [Secondary Controller Grab Actions](#secondary-controller-grab-actions-vrtksourcescriptsinteractionssecondarycontrollergrabactions)
  * [Presence](#presence-vrtksourcescriptspresence)
@@ -2720,24 +2721,337 @@ To enable the Warp Object Control Action, ensure one of the `TouchpadControlOpti
 
 ---
 
-# Interactions (VRTK/Source/Scripts/Interactions)
+# Highlighters (VRTK/Source/Scripts/Interactions/Highlighters)
 
-A collection of scripts that provide the ability to interact with game objects with the controllers.
+This directory contains scripts that are used to provide highlighting.
+
+ * [Base Highlighter](#base-highlighter-vrtk_basehighlighter)
+ * [Material Colour Swap](#material-colour-swap-vrtk_materialcolorswaphighlighter)
+ * [Material Property Block Colour Swap](#material-property-block-colour-swap-vrtk_materialpropertyblockcolorswaphighlighter)
+ * [Outline Object Copy](#outline-object-copy-vrtk_outlineobjectcopyhighlighter)
+
+---
+
+## Base Highlighter (VRTK_BaseHighlighter)
+
+### Overview
+
+Provides a base that all highlighters can inherit from.
+
+**Script Usage:**
+  > This is an abstract class that is to be inherited to a concrete class that provides highlight functionality, therefore this script should not be directly used.
+
+### Inspector Parameters
+
+ * **Active:** Determines if this highlighter is the active highlighter for the object the component is attached to. Only one active highlighter can be applied to a GameObject.
+ * **Unhighlight On Disable:** Determines if the highlighted object should be unhighlighted when it is disabled.
+
+### Class Methods
+
+#### Initialise/3
+
+  > `public abstract void Initialise(Color? color = null, GameObject affectObject = null, Dictionary<string, object> options = null);`
+
+ * Parameters
+   * `Color? color` - An optional colour may be passed through at point of initialisation in case the highlighter requires it.
+   * `GameObject affectObject` - An optional GameObject to specify which object to apply the highlighting to.
+   * `Dictionary<string, object> options` - An optional dictionary of highlighter specific options that may be differ with highlighter implementations.
+ * Returns
+   * _none_
+
+The Initalise method is used to set up the state of the highlighter.
+
+#### ResetHighlighter/0
+
+  > `public abstract void ResetHighlighter();`
+
+ * Parameters
+   * _none_
+ * Returns
+   * _none_
+
+The ResetHighlighter method is used to reset the highlighter if anything on the object has changed. It should be called by any scripts changing object materials or colours.
+
+#### Highlight/2
+
+  > `public abstract void Highlight(Color? color = null, float duration = 0f);`
+
+ * Parameters
+   * `Color? color` - An optional colour to highlight the game object to. The highlight colour may already have been set in the `Initialise` method so may not be required here.
+   * `float duration` - An optional duration of how long before the highlight has occured. It can be used by highlighters to fade the colour if possible.
+ * Returns
+   * _none_
+
+The Highlight method is used to initiate the highlighting logic to apply to an object.
+
+#### Unhighlight/2
+
+  > `public abstract void Unhighlight(Color? color = null, float duration = 0f);`
+
+ * Parameters
+   * `Color? color` - An optional colour that could be used during the unhighlight phase. Usually will be left as null.
+   * `float duration` - An optional duration of how long before the unhighlight has occured.
+ * Returns
+   * _none_
+
+The Unhighlight method is used to initiate the logic that returns an object back to it's original appearance.
+
+#### GetOption<T>/2
+
+  > `public virtual T GetOption<T>(Dictionary<string, object> options, string key)`
+
+ * Type Params
+   * `T` - The system type that is expected to be returned.
+ * Parameters
+   * `Dictionary<string, object> options` - The dictionary of options to check in.
+   * `string key` - The identifier key to look for.
+ * Returns
+   * `T` - The value in the options at the given key returned in the provided system type.
+
+The GetOption method is used to return a value from the options array if the given key exists.
+
+#### UsesClonedObject/0
+
+  > `public virtual bool UsesClonedObject()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `bool` - Returns `true` if the highlighter creates a cloned object to apply the highlighter on, returns `false` if no additional object is created.
+
+The UsesClonedObject method is used to return whether the current highlighter creates a cloned object to do the highlighting with.
+
+#### GetActiveHighlighter/1
+
+  > `public static VRTK_BaseHighlighter GetActiveHighlighter(GameObject obj)`
+
+ * Parameters
+   * `GameObject obj` - The GameObject to check for a highlighter on.
+ * Returns
+   * `VRTK_BaseHighlighter` - A valid and active highlighter.
+
+The GetActiveHighlighter method checks the given GameObject for a valid and active highlighter.
+
+---
+
+## Material Colour Swap (VRTK_MaterialColorSwapHighlighter)
+ > extends [VRTK_BaseHighlighter](#base-highlighter-vrtk_basehighlighter)
+
+### Overview
+
+Swaps the texture colour on the Renderers material for the given highlight colour.
+
+  > Due to the way the object material is interacted with, changing the material colour will break Draw Call Batching in Unity whilst the object is highlighted. The Draw Call Batching will resume on the original material when the item is no longer highlighted.
+
+**Script Usage:**
+ * Place the `VRTK_MaterialColorSwapHighlighter` script on either:
+   * The GameObject of the Interactable Object to highlight.
+   * Any other scene GameObject and then link that GameObject to the Interactable Objects `Object Highlighter` parameter to denote use of the highlighter.
+ * Ensure the `Active` parameter is checked.
+
+### Inspector Parameters
+
+ * **Emission Darken:** The emission colour of the texture will be the highlight colour but this percent darker.
+ * **Custom Material:** A custom material to use on the highlighted object.
+
+### Class Methods
+
+#### Initialise/3
+
+  > `public override void Initialise(Color? color = null, GameObject affectObject = null, Dictionary<string, object> options = null)`
+
+ * Parameters
+   * `Color? color` - Not used.
+   * `GameObject affectObject` - An optional GameObject to specify which object to apply the highlighting to.
+   * `Dictionary<string, object> options` - A dictionary array containing the highlighter options:
+     * `<'resetMainTexture', bool>` - Determines if the default main texture should be cleared on highlight. `true` to reset the main default texture, `false` to not reset it.
+ * Returns
+   * _none_
+
+The Initialise method sets up the highlighter for use.
+
+#### ResetHighlighter/0
+
+  > `public override void ResetHighlighter()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * _none_
+
+The ResetHighlighter method stores the object's materials and shared materials prior to highlighting.
+
+#### Highlight/2
+
+  > `public override void Highlight(Color? color, float duration = 0f)`
+
+ * Parameters
+   * `Color? color` - The colour to highlight to.
+   * `float duration` - The time taken to fade to the highlighted colour.
+ * Returns
+   * _none_
+
+The Highlight method initiates the change of colour on the object and will fade to that colour (from a base white colour) for the given duration.
+
+#### Unhighlight/2
+
+  > `public override void Unhighlight(Color? color = null, float duration = 0f)`
+
+ * Parameters
+   * `Color? color` - Not used.
+   * `float duration` - Not used.
+ * Returns
+   * _none_
+
+The Unhighlight method returns the object back to it's original colour.
+
+### Example
+
+`VRTK/Examples/005_Controller_BasicObjectGrabbing` demonstrates the solid highlighting on the green cube, red cube and flying saucer when the controller touches it.
+
+`VRTK/Examples/035_Controller_OpacityAndHighlighting` demonstrates the solid highlighting if the right controller collides with the green box or if any of the buttons are pressed.
+
+---
+
+## Material Property Block Colour Swap (VRTK_MaterialPropertyBlockColorSwapHighlighter)
+ > extends [VRTK_MaterialColorSwapHighlighter](#material-colour-swap-vrtk_materialcolorswaphighlighter)
+
+### Overview
+
+Swaps the texture colour on the Renderers material for the given highlight colour using property blocks.
+
+  > Utilising the MaterialPropertyBlock means that Draw Call Batching in Unity is not compromised.
+
+**Script Usage:**
+ * Place the `VRTK_MaterialPropertyBlockColorSwapHighlighter` script on either:
+   * The GameObject of the Interactable Object to highlight.
+   * Any other scene GameObject and then link that GameObject to the Interactable Objects `Object Highlighter` parameter to denote use of the highlighter.
+ * Ensure the `Active` parameter is checked.
+
+### Class Methods
+
+#### Initialise/3
+
+  > `public override void Initialise(Color? color = null, GameObject affectObject = null, Dictionary<string, object> options = null)`
+
+ * Parameters
+   * `Color? color` - Not used.
+   * `GameObject affectObject` - An optional GameObject to specify which object to apply the highlighting to.
+   * `Dictionary<string, object> options` - A dictionary array containing the highlighter options:
+     * `<'resetMainTexture', bool>` - Determines if the default main texture should be cleared on highlight. `true` to reset the main default texture, `false` to not reset it.
+ * Returns
+   * _none_
+
+The Initialise method sets up the highlighter for use.
+
+#### Unhighlight/2
+
+  > `public override void Unhighlight(Color? color = null, float duration = 0f)`
+
+ * Parameters
+   * `Color? color` - Not used.
+   * `float duration` - Not used.
+ * Returns
+   * _none_
+
+The Unhighlight method returns the object back to it's original colour.
+
+---
+
+## Outline Object Copy (VRTK_OutlineObjectCopyHighlighter)
+ > extends [VRTK_BaseHighlighter](#base-highlighter-vrtk_basehighlighter)
+
+### Overview
+
+Creates a mesh copy and applies an outline shader which is toggled on and off when highlighting the object.
+
+  > A valid mesh must be found or provided for the clone mesh to be created.
+
+**Script Usage:**
+ * Place the `VRTK_OutlineObjectCopyHighlighter` script on either:
+   * The GameObject of the Interactable Object to highlight.
+   * Any other scene GameObject and then link that GameObject to the Interactable Objects `Object Highlighter` parameter to denote use of the highlighter.
+ * Ensure the `Active` parameter is checked.
+
+### Inspector Parameters
+
+ * **Thickness:** The thickness of the outline effect
+ * **Custom Outline Models:** The GameObjects to use as the model to outline. If one isn't provided then the first GameObject with a valid Renderer in the current GameObject hierarchy will be used.
+ * **Custom Outline Model Paths:** A path to a GameObject to find at runtime, if the GameObject doesn't exist at edit time.
+ * **Enable Submesh Highlight:** If the mesh has multiple sub-meshes to highlight then this should be checked, otherwise only the first mesh will be highlighted.
+
+### Class Methods
+
+#### Initialise/3
+
+  > `public override void Initialise(Color? color = null, GameObject affectObject = null, Dictionary<string, object> options = null)`
+
+ * Parameters
+   * `Color? color` - Not used.
+   * `GameObject affectObject` - An optional GameObject to specify which object to apply the highlighting to.
+   * `Dictionary<string, object> options` - A dictionary array containing the highlighter options:
+     * `<'thickness', float>` - Same as `thickness` inspector parameter.
+     * `<'customOutlineModels', GameObject[]>` - Same as `customOutlineModels` inspector parameter.
+     * `<'customOutlineModelPaths', string[]>` - Same as `customOutlineModelPaths` inspector parameter.
+ * Returns
+   * _none_
+
+The Initialise method sets up the highlighter for use.
+
+#### ResetHighlighter/0
+
+  > `public override void ResetHighlighter()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * _none_
+
+The ResetHighlighter method creates the additional model to use as the outline highlighted object.
+
+#### Highlight/2
+
+  > `public override void Highlight(Color? color, float duration = 0f)`
+
+ * Parameters
+   * `Color? color` - The colour to outline with.
+   * `float duration` - Not used.
+ * Returns
+   * _none_
+
+The Highlight method initiates the outline object to be enabled and display the outline colour.
+
+#### Unhighlight/2
+
+  > `public override void Unhighlight(Color? color = null, float duration = 0f)`
+
+ * Parameters
+   * `Color? color` - Not used.
+   * `float duration` - Not used.
+ * Returns
+   * _none_
+
+The Unhighlight method hides the outline object and removes the outline colour.
+
+### Example
+
+`VRTK/Examples/005_Controller_BasicObjectGrabbing` demonstrates the outline highlighting on the green sphere when the controller touches it.
+
+`VRTK/Examples/035_Controller_OpacityAndHighlighting` demonstrates the outline highlighting if the left controller collides with the green box.
+
+---
+
+# Interactors (VRTK/Source/Scripts/Interactions/Interactors)
+
+A collection of scripts that provide the ability denote objects (such as controllers) as being able to interact with interactable objects.
 
  * [Controller Events](#controller-events-vrtk_controllerevents)
- * [Controller Highlighter](#controller-highlighter-vrtk_controllerhighlighter)
- * [Controller Haptics](#controller-haptics-vrtk_controllerhaptics)
- * [Interact Object Appearance](#interact-object-appearance-vrtk_interactobjectappearance)
- * [Interact Object Highlighter](#interact-object-highlighter-vrtk_interactobjecthighlighter)
  * [Interact Touch](#interact-touch-vrtk_interacttouch)
  * [Interact Near Touch](#interact-near-touch-vrtk_interactneartouch)
  * [Interact Grab](#interact-grab-vrtk_interactgrab)
  * [Interact Use](#interact-use-vrtk_interactuse)
- * [Interactable Object](#interactable-object-vrtk_interactableobject)
- * [Object Appearance](#object-appearance-vrtk_objectappearance)
- * [Interact Haptics](#interact-haptics-vrtk_interacthaptics)
+ * [Controller Highlighter](#controller-highlighter-vrtk_controllerhighlighter)
  * [Object Auto Grab](#object-auto-grab-vrtk_objectautograb)
- * [Object Touch Auto Interact](#object-touch-auto-interact-vrtk_objecttouchautointeract)
 
 ---
 
@@ -3110,310 +3424,6 @@ The UnsubscribeToAxisAliasEvent method makes it easier to unsubscribe from axis 
 ### Example
 
 `VRTK/Examples/002_Controller_Events` shows how the events are utilised and listened to. The accompanying example script can be viewed in `VRTK/Examples/ExampleResources/Scripts/VRTK_ControllerEvents_ListenerExample.cs`.
-
----
-
-## Controller Highlighter (VRTK_ControllerHighlighter)
-
-### Overview
-
-Enables highlighting of controller elements.
-
-**Optional Components:**
- * `VRTK_BaseHighlighter` - The highlighter to use when highligting the controller. If one is not already injected in the `Controller Highlighter` parameter then the component on the same GameObject will be used.
-
-**Script Usage:**
- * Place the `VRTK_ControllerHighlighter` script on either:
-   * The controller script alias GameObject of the controller to affect (e.g. Right Controller Script Alias).
-   * Any other scene GameObject and provide the controller script alias GameObject to the `Controller Alias` parameter of this script.
- * The Model Element Paths will be auto populated at runtime based on the SDK Setup Model Alias being used (except if a custom Model Alias for the SDK Setup is provided).
- * The Highlighter used by the Controller Highlighter will be selected in the following order:
-   * The provided Base Highlighter in the `Controller Highlighter` parameter.
-   * If the above is not provided, then the first active Base Highlighter found on the actual controller GameObject will be used.
-   * If the above is not found, then a Material Color Swap Highlighter will be created on the actual controller GameObject at runtime.
-
-### Inspector Parameters
-
- * **Transition Duration:** The amount of time to take to transition to the set highlight colour.
- * **Highlight Controller:** The colour to set the entire controller highlight colour to.
- * **Highlight Body:** The colour to set the body highlight colour to.
- * **Highlight Trigger:** The colour to set the trigger highlight colour to.
- * **Highlight Grip:** The colour to set the grip highlight colour to.
- * **Highlight Touchpad:** The colour to set the touchpad highlight colour to.
- * **Highlight Button One:** The colour to set the button one highlight colour to.
- * **Highlight Button Two:** The colour to set the button two highlight colour to.
- * **Highlight System Menu:** The colour to set the system menu highlight colour to.
- * **Highlight Start Menu:** The colour to set the start menu highlight colour to.
- * **Model Element Paths:** A collection of strings that determine the path to the controller model sub elements for identifying the model parts at runtime. If the paths are left empty they will default to the model element paths of the selected SDK Bridge.
- * **Element Highlighter Overrides:** A collection of highlighter overrides for each controller model sub element. If no highlighter override is given then highlighter on the Controller game object is used.
- * **Controller Alias:** An optional GameObject to specify which controller to apply the script methods to. If this is left blank then this script is required to be placed on a controller script alias GameObject and it will use the Actual Controller GameObject linked to the controller script alias.
- * **Model Container:** An optional GameObject to specifiy where the controller models are. If this is left blank then the controller Model Alias object will be used.
- * **Controller Highlighter:** An optional Highlighter to use when highlighting the controller element. If this is left blank, then the first active highlighter on the same GameObject will be used, if one isn't found then a Material Color Swap Highlighter will be created at runtime.
-
-### Class Methods
-
-#### ConfigureControllerPaths/0
-
-  > `public virtual void ConfigureControllerPaths()`
-
- * Parameters
-   * _none_
- * Returns
-   * _none_
-
-The ConfigureControllerPaths method is used to set up the model element paths.
-
-#### PopulateHighlighters/0
-
-  > `public virtual void PopulateHighlighters()`
-
- * Parameters
-   * _none_
- * Returns
-   * _none_
-
-The PopulateHighlighters method sets up the highlighters on the controller model.
-
-#### HighlightController/2
-
-  > `public virtual void HighlightController(Color color, float fadeDuration = 0f)`
-
- * Parameters
-   * `Color color` - The Color to highlight the controller to.
-   * `float fadeDuration` - The duration in seconds to fade from the initial color to the target color.
- * Returns
-   * _none_
-
-The HighlightController method attempts to highlight all sub models of the controller.
-
-#### UnhighlightController/0
-
-  > `public virtual void UnhighlightController()`
-
- * Parameters
-   * _none_
- * Returns
-   * _none_
-
-The UnhighlightController method attempts to remove the highlight from all sub models of the controller.
-
-#### HighlightElement/3
-
-  > `public virtual void HighlightElement(SDK_BaseController.ControllerElements elementType, Color color, float fadeDuration = 0f)`
-
- * Parameters
-   * `SDK_BaseController.ControllerElements elementType` - The element type on the controller.
-   * `Color color` - The Color to highlight the controller element to.
-   * `float fadeDuration` - The duration in seconds to fade from the initial color to the target color.
- * Returns
-   * _none_
-
-The HighlightElement method attempts to highlight a specific controller element.
-
-#### UnhighlightElement/1
-
-  > `public virtual void UnhighlightElement(SDK_BaseController.ControllerElements elementType)`
-
- * Parameters
-   * `SDK_BaseController.ControllerElements elementType` - The element type on the controller.
- * Returns
-   * _none_
-
-The UnhighlightElement method attempts to remove the highlight from the specific controller element.
-
-### Example
-
-`VRTK/Examples/035_Controller_OpacityAndHighlighting` demonstrates the ability to change the opacity of a controller model and to highlight specific elements of a controller such as the buttons or even the entire controller model.
-
----
-
-## Controller Haptics (VRTK_ControllerHaptics)
-
-### Overview
-
-A collection of static methods for calling haptic functions on a given controller.
-
-**Script Usage:**
-  > There is no requirement to add this script to a GameObject as all of the public methods are static and can be called directly e.g. `VRTK_ControllerHaptics.TriggerHapticPulse(ref, 1f)`.
-
-### Class Methods
-
-#### TriggerHapticPulse/2
-
-  > `public static void TriggerHapticPulse(VRTK_ControllerReference controllerReference, float strength)`
-
- * Parameters
-   * `VRTK_ControllerReference controllerReference` - The reference to the controller to activate the haptic feedback on.
-   * `float strength` - The intensity of the rumble of the controller motor. `0` to `1`.
- * Returns
-   * _none_
-
-The TriggerHapticPulse/2 method calls a single haptic pulse call on the controller for a single tick.
-
-#### TriggerHapticPulse/4
-
-  > `public static void TriggerHapticPulse(VRTK_ControllerReference controllerReference, float strength, float duration, float pulseInterval)`
-
- * Parameters
-   * `VRTK_ControllerReference controllerReference` - The reference to the controller to activate the haptic feedback on.
-   * `float strength` - The intensity of the rumble of the controller motor. `0` to `1`.
-   * `float duration` - The length of time the rumble should continue for.
-   * `float pulseInterval` - The interval to wait between each haptic pulse.
- * Returns
-   * _none_
-
-The TriggerHapticPulse/4 method calls a haptic pulse for a specified amount of time rather than just a single tick. Each pulse can be separated by providing a `pulseInterval` to pause between each haptic pulse.
-
-#### TriggerHapticPulse/2
-
-  > `public static void TriggerHapticPulse(VRTK_ControllerReference controllerReference, AudioClip clip)`
-
- * Parameters
-   * `VRTK_ControllerReference controllerReference` - The reference to the controller to activate the haptic feedback on.
-   * `AudioClip clip` - The audio clip to use for the haptic pattern.
- * Returns
-   * _none_
-
-The TriggerHapticPulse/2 method calls a haptic pulse based on a given audio clip.
-
-#### CancelHapticPulse/1
-
-  > `public static void CancelHapticPulse(VRTK_ControllerReference controllerReference)`
-
- * Parameters
-   * `VRTK_ControllerReference controllerReference` - The reference to the controller to cancel the haptic feedback on.
- * Returns
-   * _none_
-
-The CancelHapticPulse method cancels the existing running haptic pulse on the given controller index.
-
----
-
-## Interact Object Appearance (VRTK_InteractObjectAppearance)
-
-### Overview
-
-Determine whether the `Object To Affect` should be visible or hidden by default or on interaction (near touch, touch, grab, use).
-
-**Required Components:**
- * `VRTK_InteractableObject` - The Interactable Object component to detect interactions on. This must be applied on the same GameObject as this script if one is not provided via the `Object To Monitor` parameter.
-
-**Script Usage:**
- * Place the `VRTK_InteractObjectAppearance` script on either:
-   * The GameObject of the Interactable Object to detect interactions on.
-   * Any other scene GameObject and provide a valid `VRTK_InteractableObject` component to the `Object To Monitor` parameter of this script.
- * Optionally provide a GameObject to the `Object To Affect` parameter to determine which GameObject to affect the appearance of.
-
-### Inspector Parameters
-
- * **Object To Affect:** The GameObject to affect the appearance of. If this is null then then the interacting object will be used (usually the controller).
- * **Game Object Active By Default:** If this is checked then the `Object To Affect` will be an active GameObject when the script is enabled. If it's unchecked then it will be disabled. This only takes effect if `Affect Interacting Object` is unticked.
- * **Renderer Visible By Default:** If this is checked then the `Object To Affect` will have visible renderers when the script is enabled. If it's unchecked then it will have it's renderers disabled. This only takes effect if `Affect Interacting Object` is unticked.
- * **Game Object Active On Near Touch:** If this is checked then the `Object To Affect` will be an active GameObject when the `Object To Monitor` is near touched. If it's unchecked then it will be disabled on near touch.
- * **Renderer Visible On Near Touch:** If this is checked then the `Object To Affect` will have visible renderers when the `Object To Monitor` is near touched. If it's unchecked then it will have it's renderers disabled on near touch.
- * **Near Touch Appearance Delay:** The amount of time to wait before the near touch appearance settings are applied after the near touch event.
- * **Near Untouch Appearance Delay:** The amount of time to wait before the previous appearance settings are applied after the near untouch event.
- * **Valid Near Touch Interacting Object:** Determines what type of interacting object will affect the appearance of the `Object To Affect` after the near touch and near untouch event.
- * **Game Object Active On Touch:** If this is checked then the `Object To Affect` will be an active GameObject when the `Object To Monitor` is touched. If it's unchecked then it will be disabled on touch.
- * **Renderer Visible On Touch:** If this is checked then the `Object To Affect` will have visible renderers when the `Object To Monitor` is touched. If it's unchecked then it will have it's renderers disabled on touch.
- * **Touch Appearance Delay:** The amount of time to wait before the touch appearance settings are applied after the touch event.
- * **Untouch Appearance Delay:** The amount of time to wait before the previous appearance settings are applied after the untouch event.
- * **Valid Touch Interacting Object:** Determines what type of interacting object will affect the appearance of the `Object To Affect` after the touch/untouch event.
- * **Game Object Active On Grab:** If this is checked then the `Object To Affect` will be an active GameObject when the `Object To Monitor` is grabbed. If it's unchecked then it will be disabled on grab.
- * **Renderer Visible On Grab:** If this is checked then the `Object To Affect` will have visible renderers when the `Object To Monitor` is grabbed. If it's unchecked then it will have it's renderers disabled on grab.
- * **Grab Appearance Delay:** The amount of time to wait before the grab appearance settings are applied after the grab event.
- * **Ungrab Appearance Delay:** The amount of time to wait before the previous appearance settings are applied after the ungrab event.
- * **Valid Grab Interacting Object:** Determines what type of interacting object will affect the appearance of the `Object To Affect` after the grab/ungrab event.
- * **Game Object Active On Use:** If this is checked then the `Object To Affect` will be an active GameObject when the `Object To Monitor` is used. If it's unchecked then it will be disabled on use.
- * **Renderer Visible On Use:** If this is checked then the `Object To Affect` will have visible renderers when the `Object To Monitor` is used. If it's unchecked then it will have it's renderers disabled on use.
- * **Use Appearance Delay:** The amount of time to wait before the use appearance settings are applied after the use event.
- * **Unuse Appearance Delay:** The amount of time to wait before the previous appearance settings are applied after the unuse event.
- * **Valid Use Interacting Object:** Determines what type of interacting object will affect the appearance of the `Object To Affect` after the use/unuse event.
-
-### Class Variables
-
- * `public enum ValidInteractingObject` - The valid interacting object.
-   * `Anything` - Any GameObject is considered a valid interacting object.
-   * `EitherController` - Only a game controller is considered a valid interacting objcet.
-   * `NeitherController` - Any GameObject except a game controller is considered a valid interacting object.
-   * `LeftControllerOnly` - Only the left game controller is considered a valid interacting objcet.
-   * `RightControllerOnly` - Only the right game controller is considered a valid interacting objcet.
-
-### Class Events
-
- * `GameObjectEnabled` - Emitted when the GameObject on the `Object To Affect` is enabled.
- * `GameObjectDisabled` - Emitted when the GameObject on the `Object To Affect` is disabled.
- * `RenderersEnabled` - Emitted when the Renderers on the `Object To Affect` are enabled.
- * `RenderersDisabled` - Emitted when the Renderers on the `Object To Affect` are disabled.
-
-### Unity Events
-
-Adding the `VRTK_InteractObjectAppearance_UnityEvents` component to `VRTK_InteractObjectAppearance` object allows access to `UnityEvents` that will react identically to the Class Events.
-
- * All C# delegate events are mapped to a Unity Event with the `On` prefix. e.g. `MyEvent` -> `OnMyEvent`.
-
-### Event Payload
-
- * `GameObject affectingObject` - The GameObject that is being affected.
- * `VRTK_InteractableObject monitoringObject` - The Interactable Object that is being monitored.
- * `VRTK_InteractableObject.InteractionType interactionType` - The type of interaction initiating the event.
-
-### Example
-
-`VRTK/Examples/008_Controller_UsingAGrabbedObject` shows that the controller can be hidden when touching, grabbing and using an object.
-
----
-
-## Interact Object Highlighter (VRTK_InteractObjectHighlighter)
-
-### Overview
-
-Enable highlighting of an Interactable Object base on interaction type.
-
-**Required Components:**
- * `VRTK_InteractableObject` - The Interactable Object component to detect interactions on. This must be applied on the same GameObject as this script if one is not provided via the `Object To Affect` parameter.
-
-**Script Usage:**
- * Place the `VRTK_InteractObjectHighlighter` script on either:
-   * The GameObject of the Interactable Object to detect interactions on.
-   * Any other scene GameObject and provide a valid `VRTK_InteractableObject` component to the `Object To Affect` parameter of this script.
-
-### Inspector Parameters
-
- * **Near Touch Highlight:** The colour to highlight the object on the near touch interaction.
- * **Touch Highlight:** The colour to highlight the object on the touch interaction.
- * **Grab Highlight:** The colour to highlight the object on the grab interaction.
- * **Use Highlight:** The colour to highlight the object on the use interaction.
- * **Object To Affect:** The Interactable Object to affect the highlighter of. If this is left blank, then the Interactable Object will need to be on the current or a parent GameObject.
-
-### Class Events
-
- * `InteractObjectHighlighterHighlighted` - Emitted when the object is highlighted
- * `InteractObjectHighlighterUnhighlighted` - Emitted when the object is unhighlighted
-
-### Unity Events
-
-Adding the `VRTK_InteractObjectHighlighter_UnityEvents` component to `VRTK_InteractObjectHighlighter` object allows access to `UnityEvents` that will react identically to the Class Events.
-
- * All C# delegate events are mapped to a Unity Event with the `On` prefix. e.g. `MyEvent` -> `OnMyEvent`.
-
-### Event Payload
-
- * `VRTK_InteractableObject affectedObject` - The GameObject that is being highlighted.
- * `GameObject affectingObject` - The GameObject is initiating the highlight via an interaction.
-
-### Class Methods
-
-#### GetCurrentHighlightColor/0
-
-  > `public virtual Color GetCurrentHighlightColor()`
-
- * Parameters
-   * _none_
- * Returns
-   * `Color` - The Color that the Interactable Object is being highlighted to.
-
-The GetCurrentHighlightColor returns the colour that the Interactable Object is currently being highlighted to.
 
 ---
 
@@ -3840,6 +3850,187 @@ The AttemptUse method will attempt to use the currently touched Interactable Obj
 `VRTK/Examples/006_Controller_UsingADoor` simulates using a door object to open and close it. It also has a cube on the floor that can be grabbed to show how interactable objects can be usable or grabbable.
 
 `VRTK/Examples/008_Controller_UsingAGrabbedObject` shows that objects can be grabbed with one button and used with another (e.g. firing a gun).
+
+---
+
+## Controller Highlighter (VRTK_ControllerHighlighter)
+
+### Overview
+
+Enables highlighting of controller elements.
+
+**Optional Components:**
+ * `VRTK_BaseHighlighter` - The highlighter to use when highligting the controller. If one is not already injected in the `Controller Highlighter` parameter then the component on the same GameObject will be used.
+
+**Script Usage:**
+ * Place the `VRTK_ControllerHighlighter` script on either:
+   * The controller script alias GameObject of the controller to affect (e.g. Right Controller Script Alias).
+   * Any other scene GameObject and provide the controller script alias GameObject to the `Controller Alias` parameter of this script.
+ * The Model Element Paths will be auto populated at runtime based on the SDK Setup Model Alias being used (except if a custom Model Alias for the SDK Setup is provided).
+ * The Highlighter used by the Controller Highlighter will be selected in the following order:
+   * The provided Base Highlighter in the `Controller Highlighter` parameter.
+   * If the above is not provided, then the first active Base Highlighter found on the actual controller GameObject will be used.
+   * If the above is not found, then a Material Color Swap Highlighter will be created on the actual controller GameObject at runtime.
+
+### Inspector Parameters
+
+ * **Transition Duration:** The amount of time to take to transition to the set highlight colour.
+ * **Highlight Controller:** The colour to set the entire controller highlight colour to.
+ * **Highlight Body:** The colour to set the body highlight colour to.
+ * **Highlight Trigger:** The colour to set the trigger highlight colour to.
+ * **Highlight Grip:** The colour to set the grip highlight colour to.
+ * **Highlight Touchpad:** The colour to set the touchpad highlight colour to.
+ * **Highlight Button One:** The colour to set the button one highlight colour to.
+ * **Highlight Button Two:** The colour to set the button two highlight colour to.
+ * **Highlight System Menu:** The colour to set the system menu highlight colour to.
+ * **Highlight Start Menu:** The colour to set the start menu highlight colour to.
+ * **Model Element Paths:** A collection of strings that determine the path to the controller model sub elements for identifying the model parts at runtime. If the paths are left empty they will default to the model element paths of the selected SDK Bridge.
+ * **Element Highlighter Overrides:** A collection of highlighter overrides for each controller model sub element. If no highlighter override is given then highlighter on the Controller game object is used.
+ * **Controller Alias:** An optional GameObject to specify which controller to apply the script methods to. If this is left blank then this script is required to be placed on a controller script alias GameObject and it will use the Actual Controller GameObject linked to the controller script alias.
+ * **Model Container:** An optional GameObject to specifiy where the controller models are. If this is left blank then the controller Model Alias object will be used.
+ * **Controller Highlighter:** An optional Highlighter to use when highlighting the controller element. If this is left blank, then the first active highlighter on the same GameObject will be used, if one isn't found then a Material Color Swap Highlighter will be created at runtime.
+
+### Class Methods
+
+#### ConfigureControllerPaths/0
+
+  > `public virtual void ConfigureControllerPaths()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * _none_
+
+The ConfigureControllerPaths method is used to set up the model element paths.
+
+#### PopulateHighlighters/0
+
+  > `public virtual void PopulateHighlighters()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * _none_
+
+The PopulateHighlighters method sets up the highlighters on the controller model.
+
+#### HighlightController/2
+
+  > `public virtual void HighlightController(Color color, float fadeDuration = 0f)`
+
+ * Parameters
+   * `Color color` - The Color to highlight the controller to.
+   * `float fadeDuration` - The duration in seconds to fade from the initial color to the target color.
+ * Returns
+   * _none_
+
+The HighlightController method attempts to highlight all sub models of the controller.
+
+#### UnhighlightController/0
+
+  > `public virtual void UnhighlightController()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * _none_
+
+The UnhighlightController method attempts to remove the highlight from all sub models of the controller.
+
+#### HighlightElement/3
+
+  > `public virtual void HighlightElement(SDK_BaseController.ControllerElements elementType, Color color, float fadeDuration = 0f)`
+
+ * Parameters
+   * `SDK_BaseController.ControllerElements elementType` - The element type on the controller.
+   * `Color color` - The Color to highlight the controller element to.
+   * `float fadeDuration` - The duration in seconds to fade from the initial color to the target color.
+ * Returns
+   * _none_
+
+The HighlightElement method attempts to highlight a specific controller element.
+
+#### UnhighlightElement/1
+
+  > `public virtual void UnhighlightElement(SDK_BaseController.ControllerElements elementType)`
+
+ * Parameters
+   * `SDK_BaseController.ControllerElements elementType` - The element type on the controller.
+ * Returns
+   * _none_
+
+The UnhighlightElement method attempts to remove the highlight from the specific controller element.
+
+### Example
+
+`VRTK/Examples/035_Controller_OpacityAndHighlighting` demonstrates the ability to change the opacity of a controller model and to highlight specific elements of a controller such as the buttons or even the entire controller model.
+
+---
+
+## Object Auto Grab (VRTK_ObjectAutoGrab)
+
+### Overview
+
+Attempt to automatically grab a specified Interactable Object.
+
+**Required Components:**
+ * `VRTK_InteractTouch` - The touch component to determine when a valid touch has taken place to denote a use interaction can occur. This must be applied on the same GameObject as this script if one is not provided via the `Interact Touch` parameter.
+ * `VRTK_InteractGrab` - The grab component to determine when a valid grab has taken place. This must be applied on the same GameObject as this script if one is not provided via the `Interact Grab` parameter.
+
+**Script Usage:**
+ * Place the `VRTK_ObjectAutoGrab` script on either:
+   * The GameObject that contains the Interact Touch and Interact Grab scripts.
+   * Any other scene GameObject and provide a valid `VRTK_InteractTouch` component to the `Interact Touch` parameter and a valid `VRTK_InteractGrab` component to the `Interact Grab` parameter of this script.
+* Assign the Interactable Object to auto grab to the `Object To Grab` parameter on this script.
+* If this Interactable Object is a prefab then the `Object Is Prefab` parameter on this script must be checked.
+
+### Inspector Parameters
+
+ * **Object To Grab:** The Interactable Object that will be grabbed by the Interact Grab.
+ * **Object Is Prefab:** If the `Object To Grab` is a prefab then this needs to be checked, if the `Object To Grab` already exists in the scene then this needs to be unchecked.
+ * **Clone Grabbed Object:** If this is checked then the `Object To Grab` will be cloned into a new Interactable Object and grabbed by the Interact Grab leaving the existing Interactable Object in the scene. This is required if the same Interactable Object is to be grabbed to multiple instances of Interact Grab. It is also required to clone a grabbed Interactable Object if it is a prefab as it needs to exist within the scene to be grabbed.
+ * **Always Clone On Enable:** If `Clone Grabbed Object` is checked and this is checked, then whenever this script is disabled and re-enabled, it will always create a new clone of the Interactable Object to grab. If this is unchecked then the original cloned Interactable Object will attempt to be grabbed again. If the original cloned object no longer exists then a new clone will be created.
+ * **Interact Touch:** The Interact Touch to listen for touches on. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.
+ * **Interact Grab:** The Interact Grab to listen for grab actions on. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.
+
+### Class Events
+
+ * `ObjectAutoGrabCompleted` - Emitted when the object auto grab has completed successfully.
+
+### Unity Events
+
+Adding the `VRTK_ObjectAutoGrab_UnityEvents` component to `VRTK_ObjectAutoGrab` object allows access to `UnityEvents` that will react identically to the Class Events.
+
+ * All C# delegate events are mapped to a Unity Event with the `On` prefix. e.g. `MyEvent` -> `OnMyEvent`.
+
+### Class Methods
+
+#### ClearPreviousClone/0
+
+  > `public virtual void ClearPreviousClone()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * _none_
+
+The ClearPreviousClone method resets the previous cloned Interactable Object to null to ensure when the script is re-enabled that a new cloned Interactable Object is created, rather than the original clone being grabbed again.
+
+### Example
+
+`VRTK/Examples/026_Controller_ForceHoldObject` shows how to automatically grab a sword to each controller and also prevents the swords from being dropped so they are permanently attached to the user's controllers.
+
+---
+
+# Interactables (VRTK/Source/Scripts/Interactions/Interactables)
+
+A collection of scripts that provide the ability denote objects as being interactable and providing functionality when an object is interected with.
+
+ * [Interactable Object](#interactable-object-vrtk_interactableobject)
+ * [Interact Haptics](#interact-haptics-vrtk_interacthaptics)
+ * [Interact Object Appearance](#interact-object-appearance-vrtk_interactobjectappearance)
+ * [Interact Object Highlighter](#interact-object-highlighter-vrtk_interactobjecthighlighter)
+ * [Object Touch Auto Interact](#object-touch-auto-interact-vrtk_objecttouchautointeract)
 
 ---
 
@@ -4439,105 +4630,6 @@ The GetSecondaryAttachPoint returns the Transform that determines where the seco
 
 ---
 
-## Object Appearance (VRTK_ObjectAppearance)
-
-### Overview
-
-A collection of static methods for calling controlling the appearance of GameObjects such as opacity, render state and highlighter state.
-
-**Script Usage:**
-  > There is no requirement to add this script to a GameObject as all of the public methods are static and can be called directly e.g. `VRTK_ObjectAppearance.SetOpacity(obj, 1f)`.
-
-### Class Methods
-
-#### SetOpacity/3
-
-  > `public static void SetOpacity(GameObject model, float alpha, float transitionDuration = 0f)`
-
- * Parameters
-   * `GameObject model` - The GameObject to change the renderer opacity on.
-   * `float alpha` - The colour alpha/opacity level. `0f` to `1f`.
-   * `float transitionDuration` - The time to transition from the current opacity to the new opacity.
- * Returns
-   * _none_
-
-The SetOpacity method allows the opacity of the given GameObject to be changed. `0f` is full transparency, `1f` is full opacity.
-
-#### SetRendererVisible/2
-
-  > `public static void SetRendererVisible(GameObject model, GameObject ignoredModel = null)`
-
- * Parameters
-   * `GameObject model` - The GameObject to show the renderers for.
-   * `GameObject ignoredModel` - An optional GameObject to ignore the renderer toggle on.
- * Returns
-   * _none_
-
-The SetRendererVisible method turns on renderers of a given GameObject. It can also be provided with an optional GameObject to ignore the render toggle on.
-
-#### SetRendererHidden/2
-
-  > `public static void SetRendererHidden(GameObject model, GameObject ignoredModel = null)`
-
- * Parameters
-   * `GameObject model` - The GameObject to hide the renderers for.
-   * `GameObject ignoredModel` - An optional GameObject to ignore the renderer toggle on.
- * Returns
-   * _none_
-
-The SetRendererHidden method turns off renderers of a given GameObject. It can also be provided with an optional GameObject to ignore the render toggle on.
-
-#### ToggleRenderer/3
-
-  > `public static void ToggleRenderer(bool state, GameObject model, GameObject ignoredModel = null)`
-
- * Parameters
-   * `bool state` - If true then the renderers will be enabled, if false the renderers will be disabled.
-   * `GameObject model` - The GameObject to toggle the renderer states of.
-   * `GameObject ignoredModel` - An optional GameObject to ignore the renderer toggle on.
- * Returns
-   * _none_
-
-The ToggleRenderer method turns on or off the renderers of a given GameObject. It can also be provided with an optional GameObject to ignore the render toggle of.
-
-#### IsRendererVisible/2
-
-  > `public static bool IsRendererVisible(GameObject model, GameObject ignoredModel = null)`
-
- * Parameters
-   * `GameObject model` - The GameObject to check for visibility on.
-   * `GameObject ignoredModel` - A GameObject to ignore when doing the visibility check.
- * Returns
-   * `bool` - Returns true if any of the child renderers are enabled, returns false if all child renderers are disabled.
-
-The IsRendererVisible method is used to check if a given GameObject is visible in the scene by any of it's child renderers being enabled.
-
-#### HighlightObject/3
-
-  > `public static void HighlightObject(GameObject model, Color? highlightColor, float fadeDuration = 0f)`
-
- * Parameters
-   * `GameObject model` - The GameObject to attempt to call the Highlight on.
-   * `Color? highlightColor` - The Color to highlight to.
-   * `float fadeDuration` - The duration in time to fade from the initial colour to the target colour.
- * Returns
-   * _none_
-
-The HighlightObject method calls the Highlight method on the highlighter attached to the given GameObject with the provided colour.
-
-#### UnhighlightObject/1
-
-  > `public static void UnhighlightObject(GameObject model)`
-
- * Parameters
-   * `GameObject model` - The GameObject to attempt to call the Unhighlight on.
- * Returns
-   * _none_
-
-The UnhighlightObject method calls the Unhighlight method on the highlighter attached to the given GameObject.
-
----
-
 ## Interact Haptics (VRTK_InteractHaptics)
 
 ### Overview
@@ -4652,58 +4744,131 @@ The HapticsOnUse method triggers the haptic feedback on the given controller for
 
 ---
 
-## Object Auto Grab (VRTK_ObjectAutoGrab)
+## Interact Object Appearance (VRTK_InteractObjectAppearance)
 
 ### Overview
 
-Attempt to automatically grab a specified Interactable Object.
+Determine whether the `Object To Affect` should be visible or hidden by default or on interaction (near touch, touch, grab, use).
 
 **Required Components:**
- * `VRTK_InteractTouch` - The touch component to determine when a valid touch has taken place to denote a use interaction can occur. This must be applied on the same GameObject as this script if one is not provided via the `Interact Touch` parameter.
- * `VRTK_InteractGrab` - The grab component to determine when a valid grab has taken place. This must be applied on the same GameObject as this script if one is not provided via the `Interact Grab` parameter.
+ * `VRTK_InteractableObject` - The Interactable Object component to detect interactions on. This must be applied on the same GameObject as this script if one is not provided via the `Object To Monitor` parameter.
 
 **Script Usage:**
- * Place the `VRTK_ObjectAutoGrab` script on either:
-   * The GameObject that contains the Interact Touch and Interact Grab scripts.
-   * Any other scene GameObject and provide a valid `VRTK_InteractTouch` component to the `Interact Touch` parameter and a valid `VRTK_InteractGrab` component to the `Interact Grab` parameter of this script.
-* Assign the Interactable Object to auto grab to the `Object To Grab` parameter on this script.
-* If this Interactable Object is a prefab then the `Object Is Prefab` parameter on this script must be checked.
+ * Place the `VRTK_InteractObjectAppearance` script on either:
+   * The GameObject of the Interactable Object to detect interactions on.
+   * Any other scene GameObject and provide a valid `VRTK_InteractableObject` component to the `Object To Monitor` parameter of this script.
+ * Optionally provide a GameObject to the `Object To Affect` parameter to determine which GameObject to affect the appearance of.
 
 ### Inspector Parameters
 
- * **Object To Grab:** The Interactable Object that will be grabbed by the Interact Grab.
- * **Object Is Prefab:** If the `Object To Grab` is a prefab then this needs to be checked, if the `Object To Grab` already exists in the scene then this needs to be unchecked.
- * **Clone Grabbed Object:** If this is checked then the `Object To Grab` will be cloned into a new Interactable Object and grabbed by the Interact Grab leaving the existing Interactable Object in the scene. This is required if the same Interactable Object is to be grabbed to multiple instances of Interact Grab. It is also required to clone a grabbed Interactable Object if it is a prefab as it needs to exist within the scene to be grabbed.
- * **Always Clone On Enable:** If `Clone Grabbed Object` is checked and this is checked, then whenever this script is disabled and re-enabled, it will always create a new clone of the Interactable Object to grab. If this is unchecked then the original cloned Interactable Object will attempt to be grabbed again. If the original cloned object no longer exists then a new clone will be created.
- * **Interact Touch:** The Interact Touch to listen for touches on. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.
- * **Interact Grab:** The Interact Grab to listen for grab actions on. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.
+ * **Object To Affect:** The GameObject to affect the appearance of. If this is null then then the interacting object will be used (usually the controller).
+ * **Game Object Active By Default:** If this is checked then the `Object To Affect` will be an active GameObject when the script is enabled. If it's unchecked then it will be disabled. This only takes effect if `Affect Interacting Object` is unticked.
+ * **Renderer Visible By Default:** If this is checked then the `Object To Affect` will have visible renderers when the script is enabled. If it's unchecked then it will have it's renderers disabled. This only takes effect if `Affect Interacting Object` is unticked.
+ * **Game Object Active On Near Touch:** If this is checked then the `Object To Affect` will be an active GameObject when the `Object To Monitor` is near touched. If it's unchecked then it will be disabled on near touch.
+ * **Renderer Visible On Near Touch:** If this is checked then the `Object To Affect` will have visible renderers when the `Object To Monitor` is near touched. If it's unchecked then it will have it's renderers disabled on near touch.
+ * **Near Touch Appearance Delay:** The amount of time to wait before the near touch appearance settings are applied after the near touch event.
+ * **Near Untouch Appearance Delay:** The amount of time to wait before the previous appearance settings are applied after the near untouch event.
+ * **Valid Near Touch Interacting Object:** Determines what type of interacting object will affect the appearance of the `Object To Affect` after the near touch and near untouch event.
+ * **Game Object Active On Touch:** If this is checked then the `Object To Affect` will be an active GameObject when the `Object To Monitor` is touched. If it's unchecked then it will be disabled on touch.
+ * **Renderer Visible On Touch:** If this is checked then the `Object To Affect` will have visible renderers when the `Object To Monitor` is touched. If it's unchecked then it will have it's renderers disabled on touch.
+ * **Touch Appearance Delay:** The amount of time to wait before the touch appearance settings are applied after the touch event.
+ * **Untouch Appearance Delay:** The amount of time to wait before the previous appearance settings are applied after the untouch event.
+ * **Valid Touch Interacting Object:** Determines what type of interacting object will affect the appearance of the `Object To Affect` after the touch/untouch event.
+ * **Game Object Active On Grab:** If this is checked then the `Object To Affect` will be an active GameObject when the `Object To Monitor` is grabbed. If it's unchecked then it will be disabled on grab.
+ * **Renderer Visible On Grab:** If this is checked then the `Object To Affect` will have visible renderers when the `Object To Monitor` is grabbed. If it's unchecked then it will have it's renderers disabled on grab.
+ * **Grab Appearance Delay:** The amount of time to wait before the grab appearance settings are applied after the grab event.
+ * **Ungrab Appearance Delay:** The amount of time to wait before the previous appearance settings are applied after the ungrab event.
+ * **Valid Grab Interacting Object:** Determines what type of interacting object will affect the appearance of the `Object To Affect` after the grab/ungrab event.
+ * **Game Object Active On Use:** If this is checked then the `Object To Affect` will be an active GameObject when the `Object To Monitor` is used. If it's unchecked then it will be disabled on use.
+ * **Renderer Visible On Use:** If this is checked then the `Object To Affect` will have visible renderers when the `Object To Monitor` is used. If it's unchecked then it will have it's renderers disabled on use.
+ * **Use Appearance Delay:** The amount of time to wait before the use appearance settings are applied after the use event.
+ * **Unuse Appearance Delay:** The amount of time to wait before the previous appearance settings are applied after the unuse event.
+ * **Valid Use Interacting Object:** Determines what type of interacting object will affect the appearance of the `Object To Affect` after the use/unuse event.
+
+### Class Variables
+
+ * `public enum ValidInteractingObject` - The valid interacting object.
+   * `Anything` - Any GameObject is considered a valid interacting object.
+   * `EitherController` - Only a game controller is considered a valid interacting objcet.
+   * `NeitherController` - Any GameObject except a game controller is considered a valid interacting object.
+   * `LeftControllerOnly` - Only the left game controller is considered a valid interacting objcet.
+   * `RightControllerOnly` - Only the right game controller is considered a valid interacting objcet.
 
 ### Class Events
 
- * `ObjectAutoGrabCompleted` - Emitted when the object auto grab has completed successfully.
+ * `GameObjectEnabled` - Emitted when the GameObject on the `Object To Affect` is enabled.
+ * `GameObjectDisabled` - Emitted when the GameObject on the `Object To Affect` is disabled.
+ * `RenderersEnabled` - Emitted when the Renderers on the `Object To Affect` are enabled.
+ * `RenderersDisabled` - Emitted when the Renderers on the `Object To Affect` are disabled.
 
 ### Unity Events
 
-Adding the `VRTK_ObjectAutoGrab_UnityEvents` component to `VRTK_ObjectAutoGrab` object allows access to `UnityEvents` that will react identically to the Class Events.
+Adding the `VRTK_InteractObjectAppearance_UnityEvents` component to `VRTK_InteractObjectAppearance` object allows access to `UnityEvents` that will react identically to the Class Events.
 
  * All C# delegate events are mapped to a Unity Event with the `On` prefix. e.g. `MyEvent` -> `OnMyEvent`.
 
+### Event Payload
+
+ * `GameObject affectingObject` - The GameObject that is being affected.
+ * `VRTK_InteractableObject monitoringObject` - The Interactable Object that is being monitored.
+ * `VRTK_InteractableObject.InteractionType interactionType` - The type of interaction initiating the event.
+
+### Example
+
+`VRTK/Examples/008_Controller_UsingAGrabbedObject` shows that the controller can be hidden when touching, grabbing and using an object.
+
+---
+
+## Interact Object Highlighter (VRTK_InteractObjectHighlighter)
+
+### Overview
+
+Enable highlighting of an Interactable Object base on interaction type.
+
+**Required Components:**
+ * `VRTK_InteractableObject` - The Interactable Object component to detect interactions on. This must be applied on the same GameObject as this script if one is not provided via the `Object To Affect` parameter.
+
+**Script Usage:**
+ * Place the `VRTK_InteractObjectHighlighter` script on either:
+   * The GameObject of the Interactable Object to detect interactions on.
+   * Any other scene GameObject and provide a valid `VRTK_InteractableObject` component to the `Object To Affect` parameter of this script.
+
+### Inspector Parameters
+
+ * **Near Touch Highlight:** The colour to highlight the object on the near touch interaction.
+ * **Touch Highlight:** The colour to highlight the object on the touch interaction.
+ * **Grab Highlight:** The colour to highlight the object on the grab interaction.
+ * **Use Highlight:** The colour to highlight the object on the use interaction.
+ * **Object To Affect:** The Interactable Object to affect the highlighter of. If this is left blank, then the Interactable Object will need to be on the current or a parent GameObject.
+
+### Class Events
+
+ * `InteractObjectHighlighterHighlighted` - Emitted when the object is highlighted
+ * `InteractObjectHighlighterUnhighlighted` - Emitted when the object is unhighlighted
+
+### Unity Events
+
+Adding the `VRTK_InteractObjectHighlighter_UnityEvents` component to `VRTK_InteractObjectHighlighter` object allows access to `UnityEvents` that will react identically to the Class Events.
+
+ * All C# delegate events are mapped to a Unity Event with the `On` prefix. e.g. `MyEvent` -> `OnMyEvent`.
+
+### Event Payload
+
+ * `VRTK_InteractableObject affectedObject` - The GameObject that is being highlighted.
+ * `GameObject affectingObject` - The GameObject is initiating the highlight via an interaction.
+
 ### Class Methods
 
-#### ClearPreviousClone/0
+#### GetCurrentHighlightColor/0
 
-  > `public virtual void ClearPreviousClone()`
+  > `public virtual Color GetCurrentHighlightColor()`
 
  * Parameters
    * _none_
  * Returns
-   * _none_
+   * `Color` - The Color that the Interactable Object is being highlighted to.
 
-The ClearPreviousClone method resets the previous cloned Interactable Object to null to ensure when the script is re-enabled that a new cloned Interactable Object is created, rather than the original clone being grabbed again.
-
-### Example
-
-`VRTK/Examples/026_Controller_ForceHoldObject` shows how to automatically grab a sword to each controller and also prevents the swords from being dropped so they are permanently attached to the user's controllers.
+The GetCurrentHighlightColor returns the colour that the Interactable Object is currently being highlighted to.
 
 ---
 
@@ -4737,326 +4902,6 @@ Allows for Interact Grab or Interact Use interactions to automatically happen up
    * `Never` - Auto interaction can never occur on touch.
    * `NoButtonHeld` - Auto interaction will occur on touch even if the specified interaction button is not held down.
    * `ButtonHeld` - Auto interaction will only occur on touch if the specified interaction button is held down.
-
----
-
-# Highlighters (VRTK/Source/Scripts/Interactions/Highlighters)
-
-This directory contains scripts that are used to provide different object highlighting.
-
- * [Base Highlighter](#base-highlighter-vrtk_basehighlighter)
- * [Material Colour Swap](#material-colour-swap-vrtk_materialcolorswaphighlighter)
- * [Material Property Block Colour Swap](#material-property-block-colour-swap-vrtk_materialpropertyblockcolorswaphighlighter)
- * [Outline Object Copy](#outline-object-copy-vrtk_outlineobjectcopyhighlighter)
-
----
-
-## Base Highlighter (VRTK_BaseHighlighter)
-
-### Overview
-
-Provides a base that all highlighters can inherit from.
-
-**Script Usage:**
-  > This is an abstract class that is to be inherited to a concrete class that provides highlight functionality, therefore this script should not be directly used.
-
-### Inspector Parameters
-
- * **Active:** Determines if this highlighter is the active highlighter for the object the component is attached to. Only one active highlighter can be applied to a GameObject.
- * **Unhighlight On Disable:** Determines if the highlighted object should be unhighlighted when it is disabled.
-
-### Class Methods
-
-#### Initialise/3
-
-  > `public abstract void Initialise(Color? color = null, GameObject affectObject = null, Dictionary<string, object> options = null);`
-
- * Parameters
-   * `Color? color` - An optional colour may be passed through at point of initialisation in case the highlighter requires it.
-   * `GameObject affectObject` - An optional GameObject to specify which object to apply the highlighting to.
-   * `Dictionary<string, object> options` - An optional dictionary of highlighter specific options that may be differ with highlighter implementations.
- * Returns
-   * _none_
-
-The Initalise method is used to set up the state of the highlighter.
-
-#### ResetHighlighter/0
-
-  > `public abstract void ResetHighlighter();`
-
- * Parameters
-   * _none_
- * Returns
-   * _none_
-
-The ResetHighlighter method is used to reset the highlighter if anything on the object has changed. It should be called by any scripts changing object materials or colours.
-
-#### Highlight/2
-
-  > `public abstract void Highlight(Color? color = null, float duration = 0f);`
-
- * Parameters
-   * `Color? color` - An optional colour to highlight the game object to. The highlight colour may already have been set in the `Initialise` method so may not be required here.
-   * `float duration` - An optional duration of how long before the highlight has occured. It can be used by highlighters to fade the colour if possible.
- * Returns
-   * _none_
-
-The Highlight method is used to initiate the highlighting logic to apply to an object.
-
-#### Unhighlight/2
-
-  > `public abstract void Unhighlight(Color? color = null, float duration = 0f);`
-
- * Parameters
-   * `Color? color` - An optional colour that could be used during the unhighlight phase. Usually will be left as null.
-   * `float duration` - An optional duration of how long before the unhighlight has occured.
- * Returns
-   * _none_
-
-The Unhighlight method is used to initiate the logic that returns an object back to it's original appearance.
-
-#### GetOption<T>/2
-
-  > `public virtual T GetOption<T>(Dictionary<string, object> options, string key)`
-
- * Type Params
-   * `T` - The system type that is expected to be returned.
- * Parameters
-   * `Dictionary<string, object> options` - The dictionary of options to check in.
-   * `string key` - The identifier key to look for.
- * Returns
-   * `T` - The value in the options at the given key returned in the provided system type.
-
-The GetOption method is used to return a value from the options array if the given key exists.
-
-#### UsesClonedObject/0
-
-  > `public virtual bool UsesClonedObject()`
-
- * Parameters
-   * _none_
- * Returns
-   * `bool` - Returns `true` if the highlighter creates a cloned object to apply the highlighter on, returns `false` if no additional object is created.
-
-The UsesClonedObject method is used to return whether the current highlighter creates a cloned object to do the highlighting with.
-
-#### GetActiveHighlighter/1
-
-  > `public static VRTK_BaseHighlighter GetActiveHighlighter(GameObject obj)`
-
- * Parameters
-   * `GameObject obj` - The GameObject to check for a highlighter on.
- * Returns
-   * `VRTK_BaseHighlighter` - A valid and active highlighter.
-
-The GetActiveHighlighter method checks the given GameObject for a valid and active highlighter.
-
----
-
-## Material Colour Swap (VRTK_MaterialColorSwapHighlighter)
- > extends [VRTK_BaseHighlighter](#base-highlighter-vrtk_basehighlighter)
-
-### Overview
-
-Swaps the texture colour on the Renderers material for the given highlight colour.
-
-  > Due to the way the object material is interacted with, changing the material colour will break Draw Call Batching in Unity whilst the object is highlighted. The Draw Call Batching will resume on the original material when the item is no longer highlighted.
-
-**Script Usage:**
- * Place the `VRTK_MaterialColorSwapHighlighter` script on either:
-   * The GameObject of the Interactable Object to highlight.
-   * Any other scene GameObject and then link that GameObject to the Interactable Objects `Object Highlighter` parameter to denote use of the highlighter.
- * Ensure the `Active` parameter is checked.
-
-### Inspector Parameters
-
- * **Emission Darken:** The emission colour of the texture will be the highlight colour but this percent darker.
- * **Custom Material:** A custom material to use on the highlighted object.
-
-### Class Methods
-
-#### Initialise/3
-
-  > `public override void Initialise(Color? color = null, GameObject affectObject = null, Dictionary<string, object> options = null)`
-
- * Parameters
-   * `Color? color` - Not used.
-   * `GameObject affectObject` - An optional GameObject to specify which object to apply the highlighting to.
-   * `Dictionary<string, object> options` - A dictionary array containing the highlighter options:
-     * `<'resetMainTexture', bool>` - Determines if the default main texture should be cleared on highlight. `true` to reset the main default texture, `false` to not reset it.
- * Returns
-   * _none_
-
-The Initialise method sets up the highlighter for use.
-
-#### ResetHighlighter/0
-
-  > `public override void ResetHighlighter()`
-
- * Parameters
-   * _none_
- * Returns
-   * _none_
-
-The ResetHighlighter method stores the object's materials and shared materials prior to highlighting.
-
-#### Highlight/2
-
-  > `public override void Highlight(Color? color, float duration = 0f)`
-
- * Parameters
-   * `Color? color` - The colour to highlight to.
-   * `float duration` - The time taken to fade to the highlighted colour.
- * Returns
-   * _none_
-
-The Highlight method initiates the change of colour on the object and will fade to that colour (from a base white colour) for the given duration.
-
-#### Unhighlight/2
-
-  > `public override void Unhighlight(Color? color = null, float duration = 0f)`
-
- * Parameters
-   * `Color? color` - Not used.
-   * `float duration` - Not used.
- * Returns
-   * _none_
-
-The Unhighlight method returns the object back to it's original colour.
-
-### Example
-
-`VRTK/Examples/005_Controller_BasicObjectGrabbing` demonstrates the solid highlighting on the green cube, red cube and flying saucer when the controller touches it.
-
-`VRTK/Examples/035_Controller_OpacityAndHighlighting` demonstrates the solid highlighting if the right controller collides with the green box or if any of the buttons are pressed.
-
----
-
-## Material Property Block Colour Swap (VRTK_MaterialPropertyBlockColorSwapHighlighter)
- > extends [VRTK_MaterialColorSwapHighlighter](#material-colour-swap-vrtk_materialcolorswaphighlighter)
-
-### Overview
-
-Swaps the texture colour on the Renderers material for the given highlight colour using property blocks.
-
-  > Utilising the MaterialPropertyBlock means that Draw Call Batching in Unity is not compromised.
-
-**Script Usage:**
- * Place the `VRTK_MaterialPropertyBlockColorSwapHighlighter` script on either:
-   * The GameObject of the Interactable Object to highlight.
-   * Any other scene GameObject and then link that GameObject to the Interactable Objects `Object Highlighter` parameter to denote use of the highlighter.
- * Ensure the `Active` parameter is checked.
-
-### Class Methods
-
-#### Initialise/3
-
-  > `public override void Initialise(Color? color = null, GameObject affectObject = null, Dictionary<string, object> options = null)`
-
- * Parameters
-   * `Color? color` - Not used.
-   * `GameObject affectObject` - An optional GameObject to specify which object to apply the highlighting to.
-   * `Dictionary<string, object> options` - A dictionary array containing the highlighter options:
-     * `<'resetMainTexture', bool>` - Determines if the default main texture should be cleared on highlight. `true` to reset the main default texture, `false` to not reset it.
- * Returns
-   * _none_
-
-The Initialise method sets up the highlighter for use.
-
-#### Unhighlight/2
-
-  > `public override void Unhighlight(Color? color = null, float duration = 0f)`
-
- * Parameters
-   * `Color? color` - Not used.
-   * `float duration` - Not used.
- * Returns
-   * _none_
-
-The Unhighlight method returns the object back to it's original colour.
-
----
-
-## Outline Object Copy (VRTK_OutlineObjectCopyHighlighter)
- > extends [VRTK_BaseHighlighter](#base-highlighter-vrtk_basehighlighter)
-
-### Overview
-
-Creates a mesh copy and applies an outline shader which is toggled on and off when highlighting the object.
-
-  > A valid mesh must be found or provided for the clone mesh to be created.
-
-**Script Usage:**
- * Place the `VRTK_OutlineObjectCopyHighlighter` script on either:
-   * The GameObject of the Interactable Object to highlight.
-   * Any other scene GameObject and then link that GameObject to the Interactable Objects `Object Highlighter` parameter to denote use of the highlighter.
- * Ensure the `Active` parameter is checked.
-
-### Inspector Parameters
-
- * **Thickness:** The thickness of the outline effect
- * **Custom Outline Models:** The GameObjects to use as the model to outline. If one isn't provided then the first GameObject with a valid Renderer in the current GameObject hierarchy will be used.
- * **Custom Outline Model Paths:** A path to a GameObject to find at runtime, if the GameObject doesn't exist at edit time.
- * **Enable Submesh Highlight:** If the mesh has multiple sub-meshes to highlight then this should be checked, otherwise only the first mesh will be highlighted.
-
-### Class Methods
-
-#### Initialise/3
-
-  > `public override void Initialise(Color? color = null, GameObject affectObject = null, Dictionary<string, object> options = null)`
-
- * Parameters
-   * `Color? color` - Not used.
-   * `GameObject affectObject` - An optional GameObject to specify which object to apply the highlighting to.
-   * `Dictionary<string, object> options` - A dictionary array containing the highlighter options:
-     * `<'thickness', float>` - Same as `thickness` inspector parameter.
-     * `<'customOutlineModels', GameObject[]>` - Same as `customOutlineModels` inspector parameter.
-     * `<'customOutlineModelPaths', string[]>` - Same as `customOutlineModelPaths` inspector parameter.
- * Returns
-   * _none_
-
-The Initialise method sets up the highlighter for use.
-
-#### ResetHighlighter/0
-
-  > `public override void ResetHighlighter()`
-
- * Parameters
-   * _none_
- * Returns
-   * _none_
-
-The ResetHighlighter method creates the additional model to use as the outline highlighted object.
-
-#### Highlight/2
-
-  > `public override void Highlight(Color? color, float duration = 0f)`
-
- * Parameters
-   * `Color? color` - The colour to outline with.
-   * `float duration` - Not used.
- * Returns
-   * _none_
-
-The Highlight method initiates the outline object to be enabled and display the outline colour.
-
-#### Unhighlight/2
-
-  > `public override void Unhighlight(Color? color = null, float duration = 0f)`
-
- * Parameters
-   * `Color? color` - Not used.
-   * `float duration` - Not used.
- * Returns
-   * _none_
-
-The Unhighlight method hides the outline object and removes the outline colour.
-
-### Example
-
-`VRTK/Examples/005_Controller_BasicObjectGrabbing` demonstrates the outline highlighting on the green sphere when the controller touches it.
-
-`VRTK/Examples/035_Controller_OpacityAndHighlighting` demonstrates the outline highlighting if the left controller collides with the green box.
 
 ---
 

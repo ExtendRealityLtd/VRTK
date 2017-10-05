@@ -31,7 +31,7 @@ namespace VRTK.GrabAttachMechanics
     ///    * The GameObject of the Interactable Object to detect interactions on.
     ///    * Any other scene GameObject and then link that GameObject to the Interactable Objects `Grab Attach Mechanic Script` parameter to denote use of the grab mechanic.
     /// </remarks>
-    [AddComponentMenu("VRTK/Scripts/Interactions/Grab Attach Mechanics/VRTK_ControlAnimationGrabAttach")]
+    [AddComponentMenu("VRTK/Scripts/Interactions/Interactables/Grab Attach Mechanics/VRTK_ControlAnimationGrabAttach")]
     public class VRTK_ControlAnimationGrabAttach : VRTK_BaseGrabAttach
     {
         [Tooltip("The maximum distance the grabbing object is away from the Interactable Object before it is automatically released.")]

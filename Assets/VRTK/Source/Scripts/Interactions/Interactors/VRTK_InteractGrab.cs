@@ -1,4 +1,4 @@
-﻿// Interact Grab|Interactions|30060
+﻿// Interact Grab|Interactors|30040
 namespace VRTK
 {
     using UnityEngine;
@@ -25,7 +25,7 @@ namespace VRTK
     ///
     /// `VRTK/Examples/014_Controller_SnappingObjectsOnGrab` demonstrates the different mechanisms for snapping a grabbed object to the controller.
     /// </example>
-    [AddComponentMenu("VRTK/Scripts/Interactions/VRTK_InteractGrab")]
+    [AddComponentMenu("VRTK/Scripts/Interactions/Interactors/VRTK_InteractGrab")]
     public class VRTK_InteractGrab : MonoBehaviour
     {
         [Header("Grab Settings")]

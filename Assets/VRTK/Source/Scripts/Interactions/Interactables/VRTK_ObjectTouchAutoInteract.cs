@@ -1,4 +1,4 @@
-﻿// Object Touch Auto Interact|Interactions|30120
+﻿// Object Touch Auto Interact|Interactables|35050
 namespace VRTK
 {
     using UnityEngine;
@@ -16,7 +16,7 @@ namespace VRTK
     ///    * The GameObject of the Interactable Object to detect interactions on.
     ///    * Any other scene GameObject and provide a valid `VRTK_InteractableObject` component to the `Interactable Object` parameter of this script.
     /// </remarks>
-    [AddComponentMenu("VRTK/Scripts/Interactions/VRTK_ObjectTouchAutoInteract")]
+    [AddComponentMenu("VRTK/Scripts/Interactions/Interactables/VRTK_ObjectTouchAutoInteract")]
     public class VRTK_ObjectTouchAutoInteract : MonoBehaviour
     {
         /// <summary>

@@ -1,4 +1,4 @@
-﻿// Interact Near Touch|Interactions|30055
+﻿// Interact Near Touch|Interactors|30030
 namespace VRTK
 {
     using UnityEngine;
@@ -16,7 +16,7 @@ namespace VRTK
     ///    * The Interact Touch GameObject.
     ///    * Any other scene GameObject and provide a valid `VRTK_InteractTouch` component to the `Interact Touch` parameter of this script.
     /// </remarks>
-    [AddComponentMenu("VRTK/Scripts/Interactions/VRTK_InteractNearTouch")]
+    [AddComponentMenu("VRTK/Scripts/Interactions/Interactors/VRTK_InteractNearTouch")]
     public class VRTK_InteractNearTouch : MonoBehaviour
     {
         [Tooltip("The radius of the auto generated collider if a `Custom Collider Container` is not supplied.")]

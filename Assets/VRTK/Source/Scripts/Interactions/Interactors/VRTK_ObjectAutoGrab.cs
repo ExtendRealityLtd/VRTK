@@ -1,4 +1,4 @@
-﻿// Object Auto Grab|Interactions|30110
+﻿// Object Auto Grab|Interactors|30070
 namespace VRTK
 {
     using UnityEngine;
@@ -28,7 +28,7 @@ namespace VRTK
     /// <example>
     /// `VRTK/Examples/026_Controller_ForceHoldObject` shows how to automatically grab a sword to each controller and also prevents the swords from being dropped so they are permanently attached to the user's controllers.
     /// </example>
-    [AddComponentMenu("VRTK/Scripts/Interactions/VRTK_ObjectAutoGrab")]
+    [AddComponentMenu("VRTK/Scripts/Interactions/Interactors/VRTK_ObjectAutoGrab")]
     public class VRTK_ObjectAutoGrab : MonoBehaviour
     {
         [Tooltip("The Interactable Object that will be grabbed by the Interact Grab.")]

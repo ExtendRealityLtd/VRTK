@@ -1,4 +1,4 @@
-﻿// Interact Haptics|Interactions|30100
+﻿// Interact Haptics|Interactables|35020
 namespace VRTK
 {
     using UnityEngine;
@@ -31,7 +31,7 @@ namespace VRTK
     ///    * The GameObject of the Interactable Object to detect interactions on.
     ///    * Any other scene GameObject and provide a valid `VRTK_InteractableObject` component to the `Object To Affect` parameter of this script.
     /// </remarks>
-    [AddComponentMenu("VRTK/Scripts/Interactions/VRTK_InteractHaptics")]
+    [AddComponentMenu("VRTK/Scripts/Interactions/Interactables/VRTK_InteractHaptics")]
     public class VRTK_InteractHaptics : MonoBehaviour
     {
         [Header("Haptics On Near Touch Settings")]
