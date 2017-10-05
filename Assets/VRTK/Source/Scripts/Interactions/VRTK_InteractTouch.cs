@@ -208,7 +208,7 @@ namespace VRTK
         /// <summary>
         /// The IsRigidBodyActive method checks to see if the rigidbody on the Interact Touch is active and can affect other rigidbodies in the scene.
         /// </summary>
-        /// <returns>Returns `true` if the rigidbody on the Interact TOuch is currently active and able to affect other scene rigidbodies.</returns>
+        /// <returns>Returns `true` if the rigidbody on the Interact Touch is currently active and able to affect other scene rigidbodies.</returns>
         public virtual bool IsRigidBodyActive()
         {
             return !touchRigidBody.isKinematic;

@@ -31,102 +31,78 @@ This file describes all of the public methods, variables and events utilised by 
 
 A collection of pre-defined usable prefabs have been included to allow for each drag-and-drop set up of common elements.
 
- * [Unity SDK CameraRig](#unity-sdk-camerarig-sdk_unitycamerarig)
- * [VR Simulator CameraRig](#vr-simulator-camerarig-sdk_inputsimulator)
+ * [SDK Setup Switcher](#sdk-setup-switcher-vrtk_sdksetupswitcher)
+ * [Console Viewer Canvas](#console-viewer-canvas-vrtk_consoleviewer)
  * [Frames Per Second Canvas](#frames-per-second-canvas-vrtk_framespersecondviewer)
  * [Desktop Camera](#desktop-camera-vrtk_desktopcamera)
+ * [Controller Rigidbody Activator](#controller-rigidbody-activator-vrtk_controllerrigidbodyactivator)
  * [Object Tooltip](#object-tooltip-vrtk_objecttooltip)
  * [Controller Tooltips](#controller-tooltips-vrtk_controllertooltips)
- * [Controller Rigidbody Activator](#controller-rigidbody-activator-vrtk_controllerrigidbodyactivator)
  * [Snap Drop Zone](#snap-drop-zone-vrtk_snapdropzone)
- * [Radial Menu](#radial-menu-vrtk_radialmenu)
- * [Radial Menu Controller](#radial-menu-controller-vrtk_radialmenucontroller)
- * [Independent Radial Menu Controller](#independent-radial-menu-controller-vrtk_independentradialmenucontroller)
  * [Destination Point](#destination-point-vrtk_destinationpoint)
  * [Pointer Direction Indicator](#pointer-direction-indicator-vrtk_pointerdirectionindicator)
- * [Console Viewer Canvas](#console-viewer-canvas-vrtk_consoleviewer)
- * [Panel Menu Controller](#panel-menu-controller-vrtk_panelmenucontroller)
- * [Panel Menu Item Controller](#panel-menu-item-controller-vrtk_panelmenuitemcontroller)
- * [Avatar Hand Controller](#avatar-hand-controller-vrtk_avatarhandcontroller)
+ * [Radial Menu](#radial-menu-vrtk_radialmenu)
+ * [Independent Radial Menu](#independent-radial-menu-vrtk_independentradialmenucontroller)
+ * [Panel Menu](#panel-menu-vrtk_panelmenucontroller)
+ * [Panel Menu Item](#panel-menu-item-vrtk_panelmenuitemcontroller)
+ * [Avatar Hands](#avatar-hands-vrtk_avatarhandcontroller)
 
 ---
 
-## Unity SDK CameraRig (SDK_UnityCameraRig)
+## SDK Setup Switcher (VRTK_SDKSetupSwitcher)
 
 ### Overview
 
-The `[UnityBase_CameraRig]` prefab is a default camera rig set up for use with the Unity SDK support.
+Provides a GUI overlay to allow switching the loaded VRTK_SDKSetup of the the current VRTK_SDKManager.
 
-The Unity CameraRig also utilises the Unity Controller Tracker and Headset Tracker to enable GameObject tracking of it's position/rotation to the available connected VR device via the `UnityEngine.VR` library.
-
-### Inspector Parameters
-
- * **Lock Physics Update Rate To Render Frequency:** Automatically set the Unity Physics Fixed Timestep value based on the HMD render frequency.
+**Prefab Usage:**
+ * Place the `VRTK/Prefabs/SDKSetupSwitcher/SDKSetupSwitcher` prefab into the scene hierarchy.
 
 ---
 
-## VR Simulator CameraRig (SDK_InputSimulator)
+## Console Viewer Canvas (VRTK_ConsoleViewer)
 
 ### Overview
 
-The `[VRSimulator_CameraRig]` prefab is a mock Camera Rig set up that can be used to develop with VRTK without the need for VR Hardware.
+Adds an in-scene representation of the Unity console on a world space canvas.
 
-Use the mouse and keyboard to move around both play area and hands and interacting with objects without the need of a hmd or VR controls.
+**Prefab Usage:**
+ * Place the `VRTK/Prefabs/ConsoleViewerCanvas/ConsoleViewerCanvas` prefab into the scene hierarchy.
+
+  > It is also possible to interact with the `ConsoleViewerCanvas` with a `VRTK_UIPointer`.
 
 ### Inspector Parameters
 
- * **Show Control Hints:** Show control information in the upper left corner of the screen.
- * **Hide Hands At Switch:** Hide hands when disabling them.
- * **Reset Hands At Switch:** Reset hand position and rotation when enabling them.
- * **Lock Mouse To View:** Lock the mouse cursor to the game window.
- * **Mouse Movement Input:** Whether the mouse movement always acts as input or requires a button press.
- * **Hand Move Multiplier:** Adjust hand movement speed.
- * **Hand Rotation Multiplier:** Adjust hand rotation speed.
- * **Player Move Multiplier:** Adjust player movement speed.
- * **Player Rotation Multiplier:** Adjust player rotation speed.
- * **Player Sprint Multiplier:** Adjust player sprint speed.
- * **Mouse Movement Key:** Key used to enable mouse input if a button press is required.
- * **Toggle Control Hints:** Key used to toggle control hints on/off.
- * **Toggle Mouse Lock:** Key used to toggle control hints on/off.
- * **Change Hands:** Key used to switch between left and righ hand.
- * **Hands On Off:** Key used to switch hands On/Off.
- * **Rotation Position:** Key used to switch between positional and rotational movement.
- * **Change Axis:** Key used to switch between X/Y and X/Z axis.
- * **Distance Pickup Left:** Key used to distance pickup with left hand.
- * **Distance Pickup Right:** Key used to distance pickup with right hand.
- * **Distance Pickup Modifier:** Key used to enable distance pickup.
- * **Move Forward:** Key used to move forward.
- * **Move Left:** Key used to move to the left.
- * **Move Backward:** Key used to move backwards.
- * **Move Right:** Key used to move to the right.
- * **Sprint:** Key used to sprint.
- * **Trigger Alias:** Key used to simulate trigger button.
- * **Grip Alias:** Key used to simulate grip button.
- * **Touchpad Alias:** Key used to simulate touchpad button.
- * **Button One Alias:** Key used to simulate button one.
- * **Button Two Alias:** Key used to simulate button two.
- * **Start Menu Alias:** Key used to simulate start menu button.
- * **Touch Modifier:** Key used to switch between button touch and button press mode.
- * **Hair Touch Modifier:** Key used to switch between hair touch mode.
-
-### Class Variables
-
- * `public enum MouseInputMode` - Mouse input mode types
-   * `Always` - Mouse movement is always treated as mouse input.
-   * `RequiresButtonPress` - Mouse movement is only treated as movement when a button is pressed.
+ * **Font Size:** The size of the font the log text is displayed in.
+ * **Info Message:** The colour of the text for an info log message.
+ * **Assert Message:** The colour of the text for an assertion log message.
+ * **Warning Message:** The colour of the text for a warning log message.
+ * **Error Message:** The colour of the text for an error log message.
+ * **Exception Message:** The colour of the text for an exception log message.
 
 ### Class Methods
 
-#### FindInScene/0
+#### SetCollapse/1
 
-  > `public static GameObject FindInScene()`
+  > `public virtual void SetCollapse(bool state)`
+
+ * Parameters
+   * `bool state` - The state of whether to collapse the output messages, true will collapse and false will not collapse.
+ * Returns
+   * _none_
+
+The SetCollapse method determines whether the console will collapse same message output into the same line. A state of `true` will collapse messages and `false` will print the same message for each line.
+
+#### ClearLog/0
+
+  > `public virtual void ClearLog()`
 
  * Parameters
    * _none_
  * Returns
-   * `GameObject` - Returns the found `[VRSimulator_CameraRig]` GameObject if it is found. If it is not found then it prints a debug log error.
+   * _none_
 
-The FindInScene method is used to find the `[VRSimulator_CameraRig]` GameObject within the current scene.
+The ClearLog method clears the current log view of all messages
 
 ---
 
@@ -137,7 +113,7 @@ The FindInScene method is used to find the `[VRSimulator_CameraRig]` GameObject 
 Provides a frames per second text element to the HMD view. To use the prefab it must be placed into the scene then the headset camera needs attaching to the canvas:
 
 **Prefab Usage:**
- * Place the `VRTK/Prefabs/FramesPerSecondCanvas` prefab in the scene hierarchy.
+ * Place the `VRTK/Prefabs/FramesPerSecondCanvas/FramesPerSecondCanvas` prefab in the scene hierarchy.
 
   > This script is largely based on the script at: http://talesfromtherift.com/vr-fps-counter/ So all credit to Peter Koch for his work. Twitter: @peterept
 
@@ -164,7 +140,7 @@ Provides a frames per second text element to the HMD view. To use the prefab it 
 Allows rendering a separate camera that is shown on the desktop only, without changing what's seen in VR headsets.
 
 **Prefab Usage:**
- * Place the `VRTK/Prefabs/DesktopCamera` prefab in the scene.
+ * Place the `VRTK/Prefabs/DesktopCamera/DesktopCamera` prefab in the scene.
 
 ### Inspector Parameters
 
@@ -175,6 +151,39 @@ Allows rendering a separate camera that is shown on the desktop only, without ch
 
 ---
 
+## Controller Rigidbody Activator (VRTK_ControllerRigidbodyActivator)
+
+### Overview
+
+Provides a simple trigger collider volume that when a controller enters will enable the rigidbody on the controller.
+
+**Prefab Usage:**
+ * Place the `VRTK/Prefabs/ControllerRigidbodyActivator/ControllerRigidbodyActivator` prefab in the scene at the location where the controller rigidbody should be automatically activated.
+ * The prefab contains a default sphere collider to determine ths collision, this collider component can be customised in the inspector or can be replaced with another collider component (set to `Is Trigger`).
+
+  > If the prefab is placed as a child of the target interactable game object then the collider volume on the prefab will trigger collisions on the interactable object.
+
+### Inspector Parameters
+
+ * **Is Enabled:** If this is checked then the collider will have it's rigidbody toggled on and off during a collision.
+
+### Class Events
+
+ * `ControllerRigidbodyOn` - Emitted when the controller rigidbody is turned on.
+ * `ControllerRigidbodyOff` - Emitted when the controller rigidbody is turned off.
+
+### Unity Events
+
+Adding the `VRTK_ControllerRigidbodyActivator_UnityEvents` component to `VRTK_ControllerRigidbodyActivator` object allows access to `UnityEvents` that will react identically to the Class Events.
+
+ * All C# delegate events are mapped to a Unity Event with the `On` prefix. e.g. `MyEvent` -> `OnMyEvent`.
+
+### Event Payload
+
+ * ` interactingObject` - The object that touching the activator.
+
+---
+
 ## Object Tooltip (VRTK_ObjectTooltip)
 
 ### Overview
@@ -182,7 +191,7 @@ Allows rendering a separate camera that is shown on the desktop only, without ch
 Adds a World Space Canvas that can be used to provide additional information about an object by providing a piece of text with a line drawn to a destination point.
 
 **Prefab Usage:**
- * Place the `VRTK/Prefabs/ObjectTooltip` prefab into the scene hierarchy, preferably as a child of the GameObject it is associated with.
+ * Place the `VRTK/Prefabs/ObjectTooltip/ObjectTooltip` prefab into the scene hierarchy, preferably as a child of the GameObject it is associated with.
  * Set the `Draw Line To` option to the Transform component of the GameObject the Tooltip will be assoicated with.
 
 ### Inspector Parameters
@@ -250,7 +259,7 @@ The UpdateText method allows the tooltip text to be updated at runtime.
 Adds a collection of Object Tooltips to the Controller providing information to what the controller buttons may do.
 
 **Prefab Usage:**
- * Place the `VRTK/Prefabs/ControllerTooltips` prefab as a child of the relevant controller script alias GameObject in the scene hierarchy.
+ * Place the `VRTK/Prefabs/ControllerTooltips/ControllerTooltips` prefab as a child of the relevant controller script alias GameObject in the scene hierarchy.
  * If no `Button Transform Settings` are provided in the inspector at Edit time then the button transforms will attempt to be set to the transforms of the current SDK default controller model.
  * If one of the `Button Text Settings` text options are not provided, then the tooltip for that specific button will be hidden.
 
@@ -337,39 +346,6 @@ The ToggleTips method will display the controller tooltips if the state is `true
 
 ---
 
-## Controller Rigidbody Activator (VRTK_ControllerRigidbodyActivator)
-
-### Overview
-
-Provides a simple trigger collider volume that when a controller enters will enable the rigidbody on the controller.
-
-**Prefab Usage:**
- * Place the `VRTK/Prefabs/ControllerRigidbodyActivator` prefab in the scene at the location where the controller rigidbody should be automatically activated.
- * The prefab contains a default sphere collider to determine ths collision, this collider component can be customised in the inspector or can be replaced with another collider component (set to `Is Trigger`).
-
-  > If the prefab is placed as a child of the target interactable game object then the collider volume on the prefab will trigger collisions on the interactable object.
-
-### Inspector Parameters
-
- * **Is Enabled:** If this is checked then the collider will have it's rigidbody toggled on and off during a collision.
-
-### Class Events
-
- * `ControllerRigidbodyOn` - Emitted when the controller rigidbody is turned on.
- * `ControllerRigidbodyOff` - Emitted when the controller rigidbody is turned off.
-
-### Unity Events
-
-Adding the `VRTK_ControllerRigidbodyActivator_UnityEvents` component to `VRTK_ControllerRigidbodyActivator` object allows access to `UnityEvents` that will react identically to the Class Events.
-
- * All C# delegate events are mapped to a Unity Event with the `On` prefix. e.g. `MyEvent` -> `OnMyEvent`.
-
-### Event Payload
-
- * ` interactingObject` - The object that touching the activator.
-
----
-
 ## Snap Drop Zone (VRTK_SnapDropZone)
 
 ### Overview
@@ -377,7 +353,7 @@ Adding the `VRTK_ControllerRigidbodyActivator_UnityEvents` component to `VRTK_Co
 Provides a predefined zone where a valid interactable object can be dropped and upon dropping it snaps to the set snap drop zone transform position, rotation and scale.
 
 **Prefab Usage:**
- * Place the `VRTK/Prefabs/SnapDropZone` prefab into the scene hierarchy.
+ * Place the `VRTK/Prefabs/SnapDropZone/SnapDropZone` prefab into the scene hierarchy.
  * Provide the SnapDropZone with an optional `Highlight Object Prefab` to generate an object outline in the scene that determines the final position, rotation and scale of the snapped object.
  * If no `VRTK_BaseHighlighter` derivative is applied to the SnapDropZone then the default MaterialColorSwap Highlighter will be used.
  * The collision zone that activates the SnapDropZone is a `Sphere Collider` by default but can be amended or replaced on the SnapDropZone GameObject.
@@ -539,6 +515,156 @@ The GetCurrentSnappedInteractableObject method returns the Interactable Object s
 
 ---
 
+## Destination Point (VRTK_DestinationPoint)
+ > extends [VRTK_DestinationMarker](#destination-marker-vrtk_destinationmarker)
+
+### Overview
+
+Allows for a specific scene marker or specific area within the scene that can be teleported to.
+
+**Prefab Usage:**
+ * Place the `VRTK/Prefabs/DestinationPoint/DestinationPoint` prefab at the desired location within the scene.
+ * Uncheck the `Enable Teleport` checkbox to lock the destination point and prevent teleporting to it.
+ * Uncheck the `Snap To Point` checkbox to provide a destination area rather than a specific point to teleport to.
+
+### Inspector Parameters
+
+ * **Default Cursor Object:** The GameObject to use to represent the default cursor state.
+ * **Hover Cursor Object:** The GameObject to use to represent the hover cursor state.
+ * **Locked Cursor Object:** The GameObject to use to represent the locked cursor state.
+ * **Destination Location:** An optional transform to determine the destination location for the destination marker. This can be useful to offset the destination location from the destination point. If this is left empty then the destiantion point transform will be used.
+ * **Snap To Point:** If this is checked then after teleporting, the play area will be snapped to the origin of the destination point. If this is false then it's possible to teleport to anywhere within the destination point collider.
+ * **Hide Pointer Cursor On Hover:** If this is checked, then the pointer cursor will be hidden when a valid destination point is hovered over.
+ * **Hide Direction Indicator On Hover:** If this is checked, then the pointer direction indicator will be hidden when a valid destination point is hovered over. A pointer direction indicator will always be hidden if snap to rotation is set.
+ * **Snap To Rotation:** Determines if the play area will be rotated to the rotation of the destination point upon the destination marker being set.
+ * **Teleporter:** The scene teleporter that is used. If this is not specified then it will be auto looked up in the scene.
+
+### Class Variables
+
+ * `public enum RotationTypes` - Allowed snap to rotation types.
+   * `NoRotation` - No rotation information will be emitted in the destination set payload.
+   * `RotateWithNoHeadsetOffset` - The destination point's rotation will be emitted without taking into consideration the current headset rotation.
+   * `RotateWithHeadsetOffset` - The destination point's rotation will be emitted and will take into consideration the current headset rotation.
+
+### Class Events
+
+ * `DestinationPointEnabled` - Emitted when the destination point is enabled.
+ * `DestinationPointDisabled` - Emitted when the destination point is disabled.
+ * `DestinationPointLocked` - Emitted when the destination point is locked.
+ * `DestinationPointUnlocked` - Emitted when the destination point is unlocked.
+ * `DestinationPointReset` - Emitted when the destination point is reset.
+
+### Unity Events
+
+Adding the `VRTK_DestinationPoint_UnityEvents` component to `VRTK_DestinationPoint` object allows access to `UnityEvents` that will react identically to the Class Events.
+
+ * All C# delegate events are mapped to a Unity Event with the `On` prefix. e.g. `MyEvent` -> `OnMyEvent`.
+
+### Class Methods
+
+#### ResetDestinationPoint/0
+
+  > `public virtual void ResetDestinationPoint()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * _none_
+
+The ResetDestinationPoint resets the destination point back to the default state.
+
+### Example
+
+`044_CameraRig_RestrictedTeleportZones` uses the `VRTK_DestinationPoint` prefab to set up a collection of pre-defined teleport locations.
+
+---
+
+## Pointer Direction Indicator (VRTK_PointerDirectionIndicator)
+
+### Overview
+
+Adds a Pointer Direction Indicator to a pointer renderer and determines a given world rotation that can be used by a Destiantion Marker.
+
+**Prefab Usage:**
+ * Place the `VRTK/Prefabs/PointerDirectionIndicator/PointerDirectionIndicator` prefab into the scene hierarchy.
+ * Attach the `PointerDirectionIndicator` scene GameObejct to the `Direction Indicator` inspector parameter on a `VRTK_BasePointerRenderer` component.
+
+  > This can be useful for rotating the play area upon teleporting to face the user in a new direction without expecting them to physically turn in the play space.
+
+### Inspector Parameters
+
+ * **Touchpad Deadzone:** The touchpad axis needs to be above this deadzone for it to register as a valid touchpad angle.
+ * **Include Headset Offset:** If this is checked then the reported rotation will include the offset of the headset rotation in relation to the play area.
+ * **Display On Invalid Location:** If this is checked then the direction indicator will be displayed when the location is invalid.
+ * **Use Pointer Color:** If this is checked then the pointer valid/invalid colours will also be used to change the colour of the direction indicator.
+ * **Indicator Visibility:** Determines when the direction indicator will be visible.
+
+### Class Variables
+
+ * `public enum VisibilityState` - States of Direction Indicator Visibility.
+   * `OnWhenPointerActive` - Only shows the direction indicator when the pointer is active.
+   * `AlwaysOnWithPointerCursor` - Only shows the direction indicator when the pointer cursor is visible or if the cursor is hidden and the pointer is active.
+
+### Class Events
+
+ * `PointerDirectionIndicatorPositionSet` - Emitted when the object tooltip is reset.
+
+### Unity Events
+
+Adding the `VRTK_PointerDirectionIndicator_UnityEvents` component to `VRTK_PointerDirectionIndicator` object allows access to `UnityEvents` that will react identically to the Class Events.
+
+ * All C# delegate events are mapped to a Unity Event with the `On` prefix. e.g. `MyEvent` -> `OnMyEvent`.
+
+### Class Methods
+
+#### Initialize/1
+
+  > `public virtual void Initialize(VRTK_ControllerEvents events)`
+
+ * Parameters
+   * `VRTK_ControllerEvents events` - The Controller Events script that is used to control the direction indicator's rotation.
+ * Returns
+   * _none_
+
+The Initialize method is used to set up the direction indicator.
+
+#### SetPosition/2
+
+  > `public virtual void SetPosition(bool active, Vector3 position)`
+
+ * Parameters
+   * `bool active` - Determines if the direction indicator GameObject should be active or not.
+   * `Vector3 position` - The position to set the direction indicator to.
+ * Returns
+   * _none_
+
+The SetPosition method is used to set the world position of the direction indicator.
+
+#### GetRotation/0
+
+  > `public virtual Quaternion GetRotation()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `Quaternion` - The reported rotation of the direction indicator.
+
+The GetRotation method returns the current reported rotation of the direction indicator.
+
+#### SetMaterialColor/2
+
+  > `public virtual void SetMaterialColor(Color color, bool validity)`
+
+ * Parameters
+   * `Color color` - The colour to update the direction indicatormaterial to.
+   * `bool validity` - Determines if the colour being set is based from a valid location or invalid location.
+ * Returns
+   * _none_
+
+The SetMaterialColor method sets the current material colour on the direction indicator.
+
+---
+
 ## Radial Menu (VRTK_RadialMenu)
 
 ### Overview
@@ -546,7 +672,7 @@ The GetCurrentSnappedInteractableObject method returns the Interactable Object s
 Provides a UI element into the world space that can be dropped into a Controller GameObject and used to create and use Radial Menus from the touchpad.
 
 **Prefab Usage:**
- * Place the `VRTK/Prefabs/RadialMenu` prefab as a child of a Controller script alias GameObject.
+ * Place the `VRTK/Prefabs/RadialMenu/RadialMenu` prefab as a child of a Controller script alias GameObject.
 
 ### Inspector Parameters
 
@@ -696,35 +822,15 @@ The AddButton method is used to add a new button to the menu.
 
 ---
 
-## Radial Menu Controller (VRTK_RadialMenuController)
-
-### Overview
-
-Allows the RadialMenu to be anchored to controller object.
-
-**Prefab Usage:**
- * Place the `VRTK/Prefabs/RadialMenu` prefab as a child of a Controller script alias GameObject.
- * The Radial Menu should automatically find the `VRTK_ControllerEvents` component in the parent hierarchy, if one is not found but required then the `Events` parameter on the `VRTK_RadialMenuController` script can be populated.
-
-### Inspector Parameters
-
- * **Events:** The controller to listen to the controller events on.
-
-### Example
-
-`VRTK/Examples/030_Controls_RadialTouchpadMenu` displays a radial menu for each controller. The left controller uses the `Hide On Release` variable, so it will only be visible if the left touchpad is being touched. It also uses the `Execute On Unclick` variable to delay execution until the touchpad button is unclicked. The example scene also contains a demonstration of anchoring the RadialMenu to an interactable cube instead of a controller.
-
----
-
-## Independent Radial Menu Controller (VRTK_IndependentRadialMenuController)
- > extends [VRTK_RadialMenuController](#radial-menu-controller-vrtk_radialmenucontroller)
+## Independent Radial Menu (VRTK_IndependentRadialMenuController)
+ > extends VRTK_RadialMenuController
 
 ### Overview
 
 Allows the RadialMenu to be anchored to any object, not just a controller.
 
 **Prefab Usage:**
- * Place the `VRTK/Prefabs/RadialMenu` prefab as a child of the GameObject to associate the Radial Menu with.
+ * Place the `VRTK/Prefabs/RadialMenu/RadialMenu` prefab as a child of the GameObject to associate the Radial Menu with.
  * Position and scale the menu by adjusting the transform of the `RadialMenu` empty.
  * Replace `VRTK_RadialMenuController` with `VRTK_IndependentRadialMenuController` that is located on the `RadialMenu/RadialMenuUI/Panel` GameObject.
  * Ensure the parent object has the `VRTK_InteractableObject` script.
@@ -759,210 +865,14 @@ The UpdateEventsManager method is used to update the events within the menu cont
 
 ---
 
-## Destination Point (VRTK_DestinationPoint)
- > extends [VRTK_DestinationMarker](#destination-marker-vrtk_destinationmarker)
-
-### Overview
-
-Allows for a specific scene marker or specific area within the scene that can be teleported to.
-
-**Prefab Usage:**
- * Place the `VRTK/Prefabs/DestinationPoint` prefab at the desired location within the scene.
- * Uncheck the `Enable Teleport` checkbox to lock the destination point and prevent teleporting to it.
- * Uncheck the `Snap To Point` checkbox to provide a destination area rather than a specific point to teleport to.
-
-### Inspector Parameters
-
- * **Default Cursor Object:** The GameObject to use to represent the default cursor state.
- * **Hover Cursor Object:** The GameObject to use to represent the hover cursor state.
- * **Locked Cursor Object:** The GameObject to use to represent the locked cursor state.
- * **Destination Location:** An optional transform to determine the destination location for the destination marker. This can be useful to offset the destination location from the destination point. If this is left empty then the destiantion point transform will be used.
- * **Snap To Point:** If this is checked then after teleporting, the play area will be snapped to the origin of the destination point. If this is false then it's possible to teleport to anywhere within the destination point collider.
- * **Hide Pointer Cursor On Hover:** If this is checked, then the pointer cursor will be hidden when a valid destination point is hovered over.
- * **Hide Direction Indicator On Hover:** If this is checked, then the pointer direction indicator will be hidden when a valid destination point is hovered over. A pointer direction indicator will always be hidden if snap to rotation is set.
- * **Snap To Rotation:** Determines if the play area will be rotated to the rotation of the destination point upon the destination marker being set.
- * **Teleporter:** The scene teleporter that is used. If this is not specified then it will be auto looked up in the scene.
-
-### Class Variables
-
- * `public enum RotationTypes` - Allowed snap to rotation types.
-   * `NoRotation` - No rotation information will be emitted in the destination set payload.
-   * `RotateWithNoHeadsetOffset` - The destination point's rotation will be emitted without taking into consideration the current headset rotation.
-   * `RotateWithHeadsetOffset` - The destination point's rotation will be emitted and will take into consideration the current headset rotation.
-
-### Class Events
-
- * `DestinationPointEnabled` - Emitted when the destination point is enabled.
- * `DestinationPointDisabled` - Emitted when the destination point is disabled.
- * `DestinationPointLocked` - Emitted when the destination point is locked.
- * `DestinationPointUnlocked` - Emitted when the destination point is unlocked.
- * `DestinationPointReset` - Emitted when the destination point is reset.
-
-### Unity Events
-
-Adding the `VRTK_DestinationPoint_UnityEvents` component to `VRTK_DestinationPoint` object allows access to `UnityEvents` that will react identically to the Class Events.
-
- * All C# delegate events are mapped to a Unity Event with the `On` prefix. e.g. `MyEvent` -> `OnMyEvent`.
-
-### Class Methods
-
-#### ResetDestinationPoint/0
-
-  > `public virtual void ResetDestinationPoint()`
-
- * Parameters
-   * _none_
- * Returns
-   * _none_
-
-The ResetDestinationPoint resets the destination point back to the default state.
-
-### Example
-
-`044_CameraRig_RestrictedTeleportZones` uses the `VRTK_DestinationPoint` prefab to set up a collection of pre-defined teleport locations.
-
----
-
-## Pointer Direction Indicator (VRTK_PointerDirectionIndicator)
-
-### Overview
-
-Adds a Pointer Direction Indicator to a pointer renderer and determines a given world rotation that can be used by a Destiantion Marker.
-
-**Prefab Usage:**
- * Place the `VRTK/Prefabs/PointerDirectionIndicator` prefab into the scene hierarchy.
- * Attach the `PointerDirectionIndicator` scene GameObejct to the `Direction Indicator` inspector parameter on a `VRTK_BasePointerRenderer` component.
-
-  > This can be useful for rotating the play area upon teleporting to face the user in a new direction without expecting them to physically turn in the play space.
-
-### Inspector Parameters
-
- * **Touchpad Deadzone:** The touchpad axis needs to be above this deadzone for it to register as a valid touchpad angle.
- * **Include Headset Offset:** If this is checked then the reported rotation will include the offset of the headset rotation in relation to the play area.
- * **Display On Invalid Location:** If this is checked then the direction indicator will be displayed when the location is invalid.
- * **Use Pointer Color:** If this is checked then the pointer valid/invalid colours will also be used to change the colour of the direction indicator.
- * **Indicator Visibility:** Determines when the direction indicator will be visible.
-
-### Class Variables
-
- * `public enum VisibilityState` - States of Direction Indicator Visibility.
-   * `OnWhenPointerActive` - Only shows the direction indicator when the pointer is active.
-   * `AlwaysOnWithPointerCursor` - Only shows the direction indicator when the pointer cursor is visible or if the cursor is hidden and the pointer is active.
-
-### Class Events
-
- * `PointerDirectionIndicatorPositionSet` - Emitted when the object tooltip is reset.
-
-### Unity Events
-
-Adding the `VRTK_PointerDirectionIndicator_UnityEvents` component to `VRTK_PointerDirectionIndicator` object allows access to `UnityEvents` that will react identically to the Class Events.
-
- * All C# delegate events are mapped to a Unity Event with the `On` prefix. e.g. `MyEvent` -> `OnMyEvent`.
-
-### Class Methods
-
-#### Initialize/1
-
-  > `public virtual void Initialize(VRTK_ControllerEvents events)`
-
- * Parameters
-   * `VRTK_ControllerEvents events` - The Controller Events script that is used to control the direction indicator's rotation.
- * Returns
-   * _none_
-
-The Initialize method is used to set up the direction indicator.
-
-#### SetPosition/2
-
-  > `public virtual void SetPosition(bool active, Vector3 position)`
-
- * Parameters
-   * `bool active` - Determines if the direction indicator GameObject should be active or not.
-   * `Vector3 position` - The position to set the direction indicator to.
- * Returns
-   * _none_
-
-The SetPosition method is used to set the world position of the direction indicator.
-
-#### GetRotation/0
-
-  > `public virtual Quaternion GetRotation()`
-
- * Parameters
-   * _none_
- * Returns
-   * `Quaternion` - The reported rotation of the direction indicator.
-
-The GetRotation method returns the current reported rotation of the direction indicator.
-
-#### SetMaterialColor/2
-
-  > `public virtual void SetMaterialColor(Color color, bool validity)`
-
- * Parameters
-   * `Color color` - The colour to update the direction indicatormaterial to.
-   * `bool validity` - Determines if the colour being set is based from a valid location or invalid location.
- * Returns
-   * _none_
-
-The SetMaterialColor method sets the current material colour on the direction indicator.
-
----
-
-## Console Viewer Canvas (VRTK_ConsoleViewer)
-
-### Overview
-
-Adds an in-scene representation of the Unity console on a world space canvas.
-
-**Prefab Usage:**
- * Place the `VRTK/Prefabs/ConsoleViewerCanvas` prefab into the scene hierarchy.
-
-  > It is also possible to interact with the `ConsoleViewerCanvas` with a `VRTK_UIPointer`.
-
-### Inspector Parameters
-
- * **Font Size:** The size of the font the log text is displayed in.
- * **Info Message:** The colour of the text for an info log message.
- * **Assert Message:** The colour of the text for an assertion log message.
- * **Warning Message:** The colour of the text for a warning log message.
- * **Error Message:** The colour of the text for an error log message.
- * **Exception Message:** The colour of the text for an exception log message.
-
-### Class Methods
-
-#### SetCollapse/1
-
-  > `public virtual void SetCollapse(bool state)`
-
- * Parameters
-   * `bool state` - The state of whether to collapse the output messages, true will collapse and false will not collapse.
- * Returns
-   * _none_
-
-The SetCollapse method determines whether the console will collapse same message output into the same line. A state of `true` will collapse messages and `false` will print the same message for each line.
-
-#### ClearLog/0
-
-  > `public virtual void ClearLog()`
-
- * Parameters
-   * _none_
- * Returns
-   * _none_
-
-The ClearLog method clears the current log view of all messages
-
----
-
-## Panel Menu Controller (VRTK_PanelMenuController)
+## Panel Menu (VRTK_PanelMenuController)
 
 ### Overview
 
 Adds a top-level controller to handle the display of up to four child PanelMenuItemController items which are displayed as a canvas UI panel.
 
 **Prefab Usage:**
- * Place the `VRTK/Prefabs/PanelMenu` prefab as a child of the `VRTK_InteractableObject` the panel menu is for.
+ * Place the `VRTK/Prefabs/PanelMenu/PanelMenu` prefab as a child of the `VRTK_InteractableObject` the panel menu is for.
  * Optionally remove the panel control menu item child GameObjects if they are not required, e.g. `PanelTopControls`.
  * Set the panel menu item controllers on the `VRTK_PanelMenuController` script to determine which panel control menu items are available.
  * The available panel control menu items can be activated by pressing the corresponding direction on the touchpad.
@@ -1028,15 +938,16 @@ The HideMenuImmediate method is used to immediately hide the menu.
 
 ---
 
-## Panel Menu Item Controller (VRTK_PanelMenuItemController)
+## Panel Menu Item (VRTK_PanelMenuItemController)
 
 ### Overview
 
-The panel item controller class that intercepts the controller events sent from a [PanelMenuController] and passes them onto additional custom event subscriber scripts, which then carry out the required custom UI actions.
+Intercepts the controller events sent from a `VRTK_PanelMenuController` and passes them onto additional custom event subscriber scripts, which then carry out the required custom UI actions.
 
   > This script is not directly part of a prefab but is a helper associated to the `PanelMenu` prefab.
-This script should be attached to a VRTK_InteractableObject > [PanelMenuController] > [panel items container] > child GameObject (See the [PanelMenuController] class for more details on setup structure.).
-To show / hide a UI panel, you must first pick up the VRTK_InteractableObject and then by pressing the touchpad top/bottom/left/right you can open/close the child UI panel that has been assigned via the Unity Editor panel.
+
+* Place the `VRTK/Prefabs/PanelMenu/VRTK_PanelMenuItemController` script on the child GameObject of any Panel Item Container which is contained within the `PanelMenuController` prefab within the scene.
+* Pick up the VRTK_InteractableObject show/hide the panel menu by pressing the touchpad top/bottom/left/right you can open/close the child UI panel that has been assigned via the Unity Editor panel.
 
 ### Class Events
 
@@ -1148,14 +1059,14 @@ The TriggerPressed method is used when the control action button is pressed.
 
 ---
 
-## Avatar Hand Controller (VRTK_AvatarHandController)
+## Avatar Hands (VRTK_AvatarHandController)
 
 ### Overview
 
 Provides a custom controller hand model with psuedo finger functionality.
 
 **Prefab Usage:**
- * Place the `VRTK/Prefabs/AvatarHands/VRTK_BasicHand` prefab as a child of either the left or right script alias.
+ * Place the `VRTK/Prefabs/AvatarHands/BasicHands/VRTK_BasicHand` prefab as a child of either the left or right script alias.
  * If the prefab is being used in the left hand then check the `Mirror Model` parameter.
  * By default, the avatar hand controller will detect which controller is connected and represent it accordingly.
  * Optionally, use SDKTransformModify scripts to adjust the hand orientation based on different controller types.
@@ -3596,7 +3507,7 @@ The ToggleControllerRigidBody method toggles the Interact Touch rigidbody's abil
  * Parameters
    * _none_
  * Returns
-   * `bool` - Returns `true` if the rigidbody on the Interact TOuch is currently active and able to affect other scene rigidbodies.
+   * `bool` - Returns `true` if the rigidbody on the Interact Touch is currently active and able to affect other scene rigidbodies.
 
 The IsRigidBodyActive method checks to see if the rigidbody on the Interact Touch is active and can affect other rigidbodies in the scene.
 
@@ -4754,7 +4665,7 @@ Attempt to automatically grab a specified Interactable Object.
 **Script Usage:**
  * Place the `VRTK_ObjectAutoGrab` script on either:
    * The GameObject that contains the Interact Touch and Interact Grab scripts.
-   * Any other scene GameObject and provide a valid `VRTK_InteractTOuch` component to the `Interact Touch` parameter and a valid `VRTK_InteractGrab` component to the `Interact Grab` parameter of this script.
+   * Any other scene GameObject and provide a valid `VRTK_InteractTouch` component to the `Interact Touch` parameter and a valid `VRTK_InteractGrab` component to the `Interact Grab` parameter of this script.
 * Assign the Interactable Object to auto grab to the `Object To Grab` parameter on this script.
 * If this Interactable Object is a prefab then the `Object Is Prefab` parameter on this script must be checked.
 
@@ -7674,7 +7585,6 @@ The script will use the boundaries of the control to determine if it is in or ou
 A collection of scripts that provide useful functionality to aid the creation process.
 
  * [SDK Manager](#sdk-manager-scriptingdefinesymbolpredicateinfo)
- * [SDK Setup Switcher](#sdk-setup-switcher-vrtk_sdksetupswitcher)
  * [SDK Setup](#sdk-setup-vrtk_sdksetup)
  * [SDK Info](#sdk-info-vrtk_sdkinfo)
  * [Device Finder](#device-finder-vrtk_devicefinder)
@@ -7847,16 +7757,6 @@ Sets a given VRTK_SDKSetup as the loaded SDK Setup to be able to use it when pop
    * _none_
 
 Unloads the currently loaded VRTK_SDKSetup, if there is one.
-
----
-
-## SDK Setup Switcher (VRTK_SDKSetupSwitcher)
-
-### Overview
-
-The SDK Setup Switcher adds a GUI overlay to allow switching the loaded VRTK_SDKSetup of the the current VRTK_SDKManager.
-
-Use the `SDKSetupSwitcher` prefab to use this.
 
 ---
 

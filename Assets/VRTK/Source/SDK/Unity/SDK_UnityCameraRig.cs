@@ -1,5 +1,4 @@
-﻿// Unity SDK CameraRig|Prefabs|0001
-namespace VRTK
+﻿namespace VRTK
 {
     using UnityEngine;
 #if UNITY_2017_2_OR_NEWER

@@ -21,7 +21,7 @@ namespace VRTK
     /// **Script Usage:**
     ///  * Place the `VRTK_ObjectAutoGrab` script on either:
     ///    * The GameObject that contains the Interact Touch and Interact Grab scripts.
-    ///    * Any other scene GameObject and provide a valid `VRTK_InteractTOuch` component to the `Interact Touch` parameter and a valid `VRTK_InteractGrab` component to the `Interact Grab` parameter of this script.
+    ///    * Any other scene GameObject and provide a valid `VRTK_InteractTouch` component to the `Interact Touch` parameter and a valid `VRTK_InteractGrab` component to the `Interact Grab` parameter of this script.
     /// * Assign the Interactable Object to auto grab to the `Object To Grab` parameter on this script.
     ///   * If this Interactable Object is a prefab then the `Object Is Prefab` parameter on this script must be checked.
     /// </remarks>

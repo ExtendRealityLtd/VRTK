@@ -16,6 +16,6 @@
    * The `GvrControllerMain` prefab from `GoogleVR/Prefabs/Controller`.
    * The `GvrViewerMain` prefab from `GoogleVR/Prefabs` (enables the view in editor play mode).
  * Disable Daydream's native pointer tools by removing or disabling `DaydreamCameraRig/GvrControllerPointer/Laser`.
- * Follow the initial steps above by adding the `DaydreamCameraRig` object as a child of the SDK Setup game object.
+ * Follow the initial steps above by adding the `DaydreamCameraRig` object as a child of the SDK Setup GameObject.
 
   > Note: Daydream supports only one controller, the left scripting alias controller of VRTK will not be used.
