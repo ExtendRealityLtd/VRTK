@@ -1,5 +1,4 @@
-﻿// VR Simulator CameraRig|Prefabs|0005
-namespace VRTK
+﻿namespace VRTK
 {
     using UnityEngine;
     using UnityEngine.UI;

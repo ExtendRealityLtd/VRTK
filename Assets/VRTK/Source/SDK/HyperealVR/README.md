@@ -5,10 +5,10 @@
  * Download the [Hypereal VR Unity Plugin](https://www.hypereal.com/#/developer/resource/download) from Hypereal official website. 
  * Import the `.unitypackage`.
  * Drag `HyperealVRMain` prefab into the scene. OR
-   * Create an empty gameobject named `HyperealVRMain`.
-   * Create a gameobject named `Camera` under `HyperealVRMain`.
+   * Create an empty GameObject named `HyperealVRMain`.
+   * Create a GameObject named `Camera` under `HyperealVRMain`.
    * Attach `HyCamera` script onto `Camera` and click `Expand`.
-   * Create a gameobject named `HyTrackObjRig` under `Camera(origin)` and then create two gameobjects named `Left Controller` and `Right Controller` under it.
+   * Create a GameObject named `HyTrackObjRig` under `Camera(origin)` and then create two gameobjects named `Left Controller` and `Right Controller` under it.
    * Attach `HyTrackObjRig` to `HyTrackObjRig` and assign `Left/Right Controller` to corresponding field.
    * Attach `HyTrackObj` and `HyRenderModel` script to `Left/Right Controller`. For `Left/Right Controller`, set `Device` field on the two scripts to `Device_Controller 0/1`.
      > Names of gameobjects are placeholders, you can use your own.
