@@ -59,6 +59,29 @@ namespace VRTK.GrabAttachMechanics
             zAxis
         }
 
+        /// <summary>
+        /// The way in which rotation from the grabbing object is applied.
+        /// </summary>
+        public enum RotationType
+        {
+            /// <summary>
+            /// The angle between the Interactable Object origin and the grabbing object attach point.
+            /// </summary>
+            FollowAttachPoint,
+            /// <summary>
+            /// The angular velocity across the grabbing object's longitudinal axis (the roll axis).
+            /// </summary>
+            FollowLongitudinalAxis,
+            /// <summary>
+            /// The angular velocity across the grabbing object's lateral axis (the pitch axis).
+            /// </summary>
+            FollowLateralAxis,
+            /// <summary>
+            /// The angular velocity across the grabbing object's perpendicular axis (the yaw axis).
+            /// </summary>
+            FollowPerpendicularAxis
+        }
+
         [Header("Detach Settings")]
 
         [Tooltip("The maximum distance the grabbing object is away from the Interactable Object before it is automatically dropped.")]
@@ -70,6 +93,8 @@ namespace VRTK.GrabAttachMechanics
 
         [Tooltip("The local axis in which to rotate the object around.")]
         public RotationAxis rotateAround = RotationAxis.xAxis;
+        [Tooltip("Determines how the rotation of the object is calculated based on the action of the grabbing object.")]
+        public RotationType rotationAction = RotationType.FollowAttachPoint;
         [Tooltip("The amount of friction to apply when rotating, simulates a tougher rotation.")]
         [Range(1f, 32f)]
         public float rotationFriction = 1f;
@@ -119,9 +144,10 @@ namespace VRTK.GrabAttachMechanics
         protected Vector3 currentRotation;
         protected Bounds grabbedObjectBounds;
         protected Vector3 currentRotationSpeed;
-        protected Coroutine resetRotationRoutine;
+        protected Coroutine updateRotationRoutine;
         protected Coroutine decelerateRotationRoutine;
         protected bool[] limitsReached = new bool[2];
+        protected VRTK_ControllerReference grabbingObjectReference;
 
         public virtual void OnAngleChanged(RotateTransformGrabAttachEventArgs e)
         {
@@ -172,13 +198,14 @@ namespace VRTK.GrabAttachMechanics
         /// <returns>Returns `true` if the grab is successful, `false` if the grab is unsuccessful.</returns>
         public override bool StartGrab(GameObject grabbingObject, GameObject givenGrabbedObject, Rigidbody givenControllerAttachPoint)
         {
-            CancelResetRotation();
+            CancelUpdateRotation();
             CancelDecelerateRotation();
             bool grabResult = base.StartGrab(grabbingObject, givenGrabbedObject, givenControllerAttachPoint);
             previousAttachPointPosition = controllerAttachPoint.transform.position;
             grabbedObjectBounds = VRTK_SharedMethods.GetBounds(givenGrabbedObject.transform);
             limitsReached = new bool[2];
             CheckAngleLimits();
+            grabbingObjectReference = VRTK_ControllerReference.GetControllerReference(grabbingObject);
             return grabResult;
         }
 
@@ -210,7 +237,7 @@ namespace VRTK.GrabAttachMechanics
                 float distance = Vector3.Distance(transform.position, controllerAttachPoint.transform.position);
                 if (StillTouching() && distance >= originDeadzone)
                 {
-                    Vector3 newRotation = CalculateAngle(transform.position, previousAttachPointPosition, controllerAttachPoint.transform.position);
+                    Vector3 newRotation = GetNewRotation();
                     previousAttachPointPosition = controllerAttachPoint.transform.position;
                     currentRotationSpeed = newRotation;
                     UpdateRotation(newRotation, true, true);
@@ -223,15 +250,50 @@ namespace VRTK.GrabAttachMechanics
         }
 
         /// <summary>
-        /// The ResetRotation method will rotate the transform back to the origin rotation.
+        /// The SetRotation method sets the rotation on the Interactable Object to the given angle over the desired time.
         /// </summary>
-        public virtual void ResetRotation()
+        /// <param name="newAngle">The angle to rotate to through the current rotation axis.</param>
+        /// <param name="transitionTime">The time in which the entire rotation operation will take place.</param>
+        public virtual void SetRotation(float newAngle, float transitionTime = 0f)
         {
-            if (resetToOrignOnReleaseSpeed > 0)
+            newAngle = Mathf.Clamp(newAngle, angleLimits.x, angleLimits.y);
+            Vector3 newCurrentRotation = currentRotation;
+            switch (rotateAround)
+            {
+                case RotationAxis.xAxis:
+                    newCurrentRotation = new Vector3(currentRotation.x + newAngle, currentRotation.y, currentRotation.z);
+                    break;
+                case RotationAxis.yAxis:
+                    newCurrentRotation = new Vector3(currentRotation.x, currentRotation.y + newAngle, currentRotation.z);
+                    break;
+                case RotationAxis.zAxis:
+                    newCurrentRotation = new Vector3(currentRotation.x, currentRotation.y, currentRotation.z + newAngle);
+                    break;
+            }
+
+            if (transitionTime > 0f)
+            {
+                CancelUpdateRotation();
+                updateRotationRoutine = StartCoroutine(RotateToAngle(newCurrentRotation, VRTK_SharedMethods.DividerToMultiplier(transitionTime)));
+            }
+            else
+            {
+                UpdateRotation(transform.localEulerAngles + newCurrentRotation, false, false);
+                currentRotation = newCurrentRotation;
+            }
+        }
+
+        /// <summary>
+        /// The ResetRotation method will rotate the Interactable Object back to the origin rotation.
+        /// </summary>
+        /// <param name="ignoreTransition">If this is `true` then the `Reset To Origin On Release Speed` will be ignored and the reset will occur instantly.</param>
+        public virtual void ResetRotation(bool ignoreTransition = false)
+        {
+            if (resetToOrignOnReleaseSpeed > 0 && !ignoreTransition)
             {
 
-                CancelResetRotation();
-                resetRotationRoutine = StartCoroutine(RotateToOrigin());
+                CancelUpdateRotation();
+                updateRotationRoutine = StartCoroutine(RotateToAngle(Vector3.zero, resetToOrignOnReleaseSpeed));
             }
             else
             {
@@ -278,7 +340,7 @@ namespace VRTK.GrabAttachMechanics
 
         protected virtual void OnDisable()
         {
-            CancelResetRotation();
+            CancelUpdateRotation();
             CancelDecelerateRotation();
         }
 
@@ -290,6 +352,38 @@ namespace VRTK.GrabAttachMechanics
             precisionGrab = true;
             originRotation = transform.localRotation;
             currentRotation = Vector3.zero;
+        }
+
+        protected virtual Vector3 GetNewRotation()
+        {
+            Vector3 grabbingObjectAngularVelocity = Vector3.zero;
+            if (VRTK_ControllerReference.IsValid(grabbingObjectReference))
+            {
+                grabbingObjectAngularVelocity = VRTK_DeviceFinder.GetControllerAngularVelocity(grabbingObjectReference) * VRTK_SharedMethods.DividerToMultiplier(rotationFriction);
+            }
+
+            switch (rotationAction)
+            {
+                case RotationType.FollowAttachPoint:
+                    return CalculateAngle(transform.position, previousAttachPointPosition, controllerAttachPoint.transform.position);
+                case RotationType.FollowLongitudinalAxis:
+                    return BuildFollowAxisVector(grabbingObjectAngularVelocity.x);
+                case RotationType.FollowPerpendicularAxis:
+                    return BuildFollowAxisVector(grabbingObjectAngularVelocity.y);
+                case RotationType.FollowLateralAxis:
+                    return BuildFollowAxisVector(grabbingObjectAngularVelocity.z);
+            }
+
+            return Vector3.zero;
+        }
+
+        protected virtual Vector3 BuildFollowAxisVector(float givenAngle)
+        {
+            float xAngle = (rotateAround == RotationAxis.xAxis ? givenAngle : 0f);
+            float yAngle = (rotateAround == RotationAxis.yAxis ? givenAngle : 0f);
+            float zAngle = (rotateAround == RotationAxis.zAxis ? givenAngle : 0f);
+
+            return new Vector3(xAngle, yAngle, zAngle);
         }
 
         protected virtual Vector3 CalculateAngle(Vector3 originPoint, Vector3 originalGrabPoint, Vector3 currentGrabPoint)
@@ -347,11 +441,11 @@ namespace VRTK.GrabAttachMechanics
             return (grabbedObjectBounds.Contains(controllerAttachPoint.transform.position) || distance <= detachDistance);
         }
 
-        protected virtual void CancelResetRotation()
+        protected virtual void CancelUpdateRotation()
         {
-            if (resetRotationRoutine != null)
+            if (updateRotationRoutine != null)
             {
-                StopCoroutine(resetRotationRoutine);
+                StopCoroutine(updateRotationRoutine);
             }
         }
 
@@ -363,18 +457,18 @@ namespace VRTK.GrabAttachMechanics
             }
         }
 
-        protected virtual IEnumerator RotateToOrigin()
+        protected virtual IEnumerator RotateToAngle(Vector3 targetAngle, float rotationSpeed)
         {
             Vector3 previousRotation = currentRotation;
-            while (currentRotation != Vector3.zero)
+            while (currentRotation != targetAngle)
             {
-                currentRotation = Vector3.Lerp(currentRotation, Vector3.zero, resetToOrignOnReleaseSpeed * Time.deltaTime);
+                currentRotation = Vector3.Lerp(currentRotation, targetAngle, rotationSpeed * Time.deltaTime);
                 UpdateRotation(currentRotation - previousRotation, true, false);
                 previousRotation = currentRotation;
                 yield return null;
             }
             UpdateRotation(originRotation.eulerAngles, false, false);
-            currentRotation = Vector3.zero;
+            currentRotation = targetAngle;
         }
 
         protected virtual IEnumerator DecelerateRotation()

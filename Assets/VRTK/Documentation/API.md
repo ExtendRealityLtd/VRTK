@@ -5945,6 +5945,7 @@ Rotates the Transform of the Interactable Object around a specified transform lo
  * **Detach Distance:** The maximum distance the grabbing object is away from the Interactable Object before it is automatically dropped.
  * **Origin Deadzone:** The distance between grabbing object and the centre of Interactable Object that is considered to be non grabbable. If the grabbing object is within the `Origin Deadzone` distance then it will be automatically ungrabbed.
  * **Rotate Around:** The local axis in which to rotate the object around.
+ * **Rotation Action:** Determines how the rotation of the object is calculated based on the action of the grabbing object.
  * **Rotation Friction:** The amount of friction to apply when rotating, simulates a tougher rotation.
  * **Release Deceleration Damper:** The damper in which to slow the Interactable Object's rotation down when released to simulate continued momentum. The higher the number, the faster the Interactable Object will come to a complete stop on release.
  * **Reset To Orign On Release Speed:** The speed in which the Interactable Object returns to it's origin rotation when released. If the `Reset To Orign On Release Speed` is `0f` then the rotation will not be reset.
@@ -5958,6 +5959,11 @@ Rotates the Transform of the Interactable Object around a specified transform lo
    * `xAxis` - The local X Axis of the transform.
    * `yAxis` - The local Y Axis of the transform.
    * `zAxis` - The local Z Axis of the transform.
+ * `public enum RotationType` - The way in which rotation from the grabbing object is applied.
+   * `FollowAttachPoint` - The angle between the Interactable Object origin and the grabbing object attach point.
+   * `FollowLongitudinalAxis` - The angular velocity across the grabbing object's longitudinal axis (the roll axis).
+   * `FollowLateralAxis` - The angular velocity across the grabbing object's lateral axis (the pitch axis).
+   * `FollowPerpendicularAxis` - The angular velocity across the grabbing object's perpendicular axis (the yaw axis).
  * `public Quaternion originRotation` - The default local rotation of the Interactable Object.
 
 ### Class Events
@@ -6018,16 +6024,28 @@ The StopGrab method ends the grab of the current Interactable Object and cleans 
 
 The ProcessUpdate method is run in every Update method on the Interactable Object.
 
-#### ResetRotation/0
+#### SetRotation/2
 
-  > `public virtual void ResetRotation()`
+  > `public virtual void SetRotation(float newAngle, float transitionTime = 0f)`
 
  * Parameters
-   * _none_
+   * `float newAngle` - The angle to rotate to through the current rotation axis.
+   * `float transitionTime` - The time in which the entire rotation operation will take place.
  * Returns
    * _none_
 
-The ResetRotation method will rotate the transform back to the origin rotation.
+The SetRotation method sets the rotation on the Interactable Object to the given angle over the desired time.
+
+#### ResetRotation/1
+
+  > `public virtual void ResetRotation(bool ignoreTransition = false)`
+
+ * Parameters
+   * `bool ignoreTransition` - If this is `true` then the `Reset To Origin On Release Speed` will be ignored and the reset will occur instantly.
+ * Returns
+   * _none_
+
+The ResetRotation method will rotate the Interactable Object back to the origin rotation.
 
 #### GetAngle/0
 
