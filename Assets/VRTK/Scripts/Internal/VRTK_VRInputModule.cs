@@ -134,37 +134,36 @@
                         continue;
                     }
 
+                    // Try to execute the event on an element in the hierarchy of the result
+                    // i.e. a text element in a button will execute on the parent button element instead of the text element
                     var target = ExecuteEvents.ExecuteHierarchy(result.gameObject, pointer.pointerEventData, ExecuteEvents.pointerEnterHandler);
-                    if (target != null)
-                    {
-                        var selectable = target.GetComponent<Selectable>();
-                        if (selectable)
-                        {
-                            var noNavigation = new Navigation();
-                            noNavigation.mode = Navigation.Mode.None;
-                            selectable.navigation = noNavigation;
-                        }
 
-                        if (pointer.hoveringElement != null && pointer.hoveringElement != target)
-                        {
-                            pointer.OnUIPointerElementExit(pointer.SetUIPointerEvent(result, null, pointer.hoveringElement));
-                        }
-
-                        pointer.OnUIPointerElementEnter(pointer.SetUIPointerEvent(result, target, pointer.hoveringElement));
-                        pointer.hoveringElement = target;
-                        pointer.pointerEventData.pointerCurrentRaycast = result;
-                        pointer.pointerEventData.pointerEnter = target;
-                        pointer.pointerEventData.hovered.Add(pointer.pointerEventData.pointerEnter);
-                        break;
-                    }
-                    else
+                    // if it did not execute on an element in the result's hierarchy, the result is the target
+                    if (target == null)
                     {
-                        if (result.gameObject != pointer.hoveringElement)
-                        {
-                            pointer.OnUIPointerElementEnter(pointer.SetUIPointerEvent(result, result.gameObject, pointer.hoveringElement));
-                        }
-                        pointer.hoveringElement = result.gameObject;
+                        target = result.gameObject;
                     }
+
+                    var selectable = target.GetComponent<Selectable>();
+                    if (selectable)
+                    {
+                        var noNavigation = new Navigation();
+                        noNavigation.mode = Navigation.Mode.None;
+                        selectable.navigation = noNavigation;
+                    }
+
+                    // fire exit event if switching from the current element directly to another element
+                    if (pointer.hoveringElement != null && pointer.hoveringElement != target)
+                    {
+                        pointer.OnUIPointerElementExit(pointer.SetUIPointerEvent(result, null, pointer.hoveringElement));
+                    }
+
+                    pointer.OnUIPointerElementEnter(pointer.SetUIPointerEvent(result, target, pointer.hoveringElement));
+                    pointer.hoveringElement = target;
+                    pointer.pointerEventData.pointerCurrentRaycast = result;
+                    pointer.pointerEventData.pointerEnter = target;
+                    pointer.pointerEventData.hovered.Add(pointer.pointerEventData.pointerEnter);
+                    break;
                 }
 
                 if (pointer.hoveringElement && results.Count == 0)
