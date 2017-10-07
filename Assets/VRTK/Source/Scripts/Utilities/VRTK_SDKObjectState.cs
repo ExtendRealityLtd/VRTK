@@ -15,7 +15,7 @@ namespace VRTK
     ///  * The current attached Controller type.
     /// </remarks>
     [AddComponentMenu("VRTK/Scripts/Utilities/VRTK_SDKObjectState")]
-    public class VRTK_SDKObjectState : MonoBehaviour
+    public class VRTK_SDKObjectState : VRTK_SDKControllerReady
     {
         [Header("Target Settings")]
 
@@ -30,7 +30,6 @@ namespace VRTK
         [Tooltip("If the current controller type matches the selected controller type then the `Target` state will be set to the desired `Object State`.")]
         public SDK_BaseController.ControllerType controllerType = SDK_BaseController.ControllerType.Undefined;
 
-        protected VRTK_SDKManager sdkManager;
         protected Coroutine checkToggleRoutine;
 
         /// <summary>
@@ -49,34 +48,25 @@ namespace VRTK
             }
         }
 
-        protected virtual void OnEnable()
+        protected override void OnEnable()
         {
-            sdkManager = VRTK_SDKManager.instance;
             target = (target != null ? target : gameObject);
-            sdkManager.LoadedSetupChanged += LoadedSetupChanged;
+            base.OnEnable();
             checkToggleRoutine = StartCoroutine(CheckToggleAtEndOfFrame());
-
-            VRTK_SDK_Bridge.GetControllerSDK().LeftControllerReady += LeftControllerReady;
-            VRTK_SDK_Bridge.GetControllerSDK().RightControllerReady += RightControllerReady;
         }
 
-        protected virtual void OnDisable()
+        protected override void OnDisable()
         {
-            sdkManager.LoadedSetupChanged -= LoadedSetupChanged;
+            base.OnDisable();
             if (checkToggleRoutine != null)
             {
                 StopCoroutine(checkToggleRoutine);
             }
         }
 
-        protected virtual void LeftControllerReady(object sender, VRTKSDKBaseControllerEventArgs e)
+        protected override void ControllerReady(VRTK_ControllerReference controllerReference)
         {
-            ToggleOnController(e.controllerReference);
-        }
-
-        protected virtual void RightControllerReady(object sender, VRTKSDKBaseControllerEventArgs e)
-        {
-            ToggleOnController(e.controllerReference);
+            ToggleOnController(controllerReference);
         }
 
         protected virtual IEnumerator CheckToggleAtEndOfFrame()
@@ -85,16 +75,10 @@ namespace VRTK
             CheckToggle();
         }
 
-        protected virtual void LoadedSetupChanged(VRTK_SDKManager sender, VRTK_SDKManager.LoadedSetupChangeEventArgs e)
-        {
-            CheckToggle();
-        }
-
         protected virtual void CheckToggle()
         {
             ToggleOnSDK();
             ToggleOnHeadset();
-            ToggleOnController(null);
         }
 
         protected virtual void ToggleOnSDK()

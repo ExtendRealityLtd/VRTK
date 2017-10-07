@@ -3,7 +3,6 @@ namespace VRTK
 {
     using UnityEngine;
     using System;
-    using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -31,14 +30,18 @@ namespace VRTK
     /// The SDK Transform Modify can be used to change a transform orientation at runtime based on the currently used SDK or SDK controller.
     /// </summary>
     [AddComponentMenu("VRTK/Scripts/Utilities/VRTK_SDKTransformModify")]
-    public class VRTK_SDKTransformModify : MonoBehaviour
+    public class VRTK_SDKTransformModify : VRTK_SDKControllerReady
     {
-        [Tooltip("The target transform to modify on enable. If this is left blank then the transform the script is attached to will be used.")]
+        [Tooltip("The target Transform to modify on enable. If this is left blank then the Transform the script is attached to will be used.")]
         public Transform target;
-        [Tooltip("A collection of SDK Transform overrides to change the given target transform for each specified SDK.")]
+        [Tooltip("If this is checked then the target Transform will be reset to the original orientation when this script is disabled.")]
+        public bool resetOnDisable = true;
+        [Tooltip("A collection of SDK Transform overrides to change the given target Transform for each specified SDK.")]
         public List<VRTK_SDKTransformModifiers> sdkOverrides = new List<VRTK_SDKTransformModifiers>();
 
-        protected VRTK_SDKManager sdkManager;
+        protected Vector3 originalPosition;
+        protected Quaternion originalRotation;
+        protected Vector3 originalScale;
 
         /// <summary>
         /// The UpdateTransform method updates the Transform data on the current GameObject for the specified settings.
@@ -62,55 +65,38 @@ namespace VRTK
             }
         }
 
-        protected virtual void OnEnable()
+        /// <summary>
+        /// The SetOrigins method sets the original position, rotation, scale of the target Transform.
+        /// </summary>
+        public virtual void SetOrigins()
+        {
+            if (target != null)
+            {
+                originalPosition = target.position;
+                originalRotation = target.rotation;
+                originalScale = target.localScale;
+            }
+        }
+
+        protected override void OnEnable()
         {
             target = (target != null ? target : transform);
-            sdkManager = VRTK_SDKManager.instance;
-            if (sdkManager != null)
-            {
-                sdkManager.LoadedSetupChanged += LoadedSetupChanged;
-                FindController(null);
-            }
-
-            VRTK_SDK_Bridge.GetControllerSDK().LeftControllerReady += LeftControllerReady;
-            VRTK_SDK_Bridge.GetControllerSDK().RightControllerReady += RightControllerReady;
+            SetOrigins();
+            base.OnEnable();
         }
 
-        protected virtual void OnDisable()
+        protected override void OnDisable()
         {
-            if (sdkManager != null && !gameObject.activeSelf)
+            base.OnDisable();
+            if (resetOnDisable)
             {
-                sdkManager.LoadedSetupChanged -= LoadedSetupChanged;
-            }
-
-            VRTK_SDK_Bridge.GetControllerSDK().LeftControllerReady -= LeftControllerReady;
-            VRTK_SDK_Bridge.GetControllerSDK().RightControllerReady -= RightControllerReady;
-        }
-
-        protected virtual void OnDestroy()
-        {
-            if (sdkManager != null)
-            {
-                sdkManager.LoadedSetupChanged -= LoadedSetupChanged;
+                target.position = originalPosition;
+                target.rotation = originalRotation;
+                target.localScale = originalScale;
             }
         }
 
-        protected virtual void LeftControllerReady(object sender, VRTKSDKBaseControllerEventArgs e)
-        {
-            FindController(e.controllerReference);
-        }
-
-        protected virtual void RightControllerReady(object sender, VRTKSDKBaseControllerEventArgs e)
-        {
-            FindController(e.controllerReference);
-        }
-
-        protected virtual void LoadedSetupChanged(VRTK_SDKManager sender, VRTK_SDKManager.LoadedSetupChangeEventArgs e)
-        {
-            FindController(null);
-        }
-
-        protected virtual void FindController(VRTK_ControllerReference controllerReference)
+        protected override void ControllerReady(VRTK_ControllerReference controllerReference)
         {
             if (sdkManager != null && sdkManager.loadedSetup != null && gameObject.activeInHierarchy)
             {
