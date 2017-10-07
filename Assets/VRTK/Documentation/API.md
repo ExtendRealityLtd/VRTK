@@ -7846,6 +7846,39 @@ The GetControllerLeftHand method retrieves the game object for the left hand con
 
 The GetControllerRightHand method retrieves the game object for the right hand controller.
 
+#### GetControllerReferenceLeftHand/0
+
+  > `public static VRTK_ControllerReference GetControllerReferenceLeftHand()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `VRTK_ControllerReference` - The Controller Reference for the left hand controller.
+
+The GetControllerReferenceLeftHand returns a Controller Reference for the left hand controller.
+
+#### GetControllerReferenceRightHand/0
+
+  > `public static VRTK_ControllerReference GetControllerReferenceRightHand()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `VRTK_ControllerReference` - The Controller Reference for the right hand controller.
+
+The GetControllerReferenceRightHand returns a Controller Reference for the right hand controller.
+
+#### GetControllerReferenceForHand/1
+
+  > `public static VRTK_ControllerReference GetControllerReferenceForHand(SDK_BaseController.ControllerHand hand)`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `VRTK_ControllerReference` - The Controller Reference for the given hand controller.
+
+The GetControllerReferenceForHand returns a Controller Reference for the given hand controller.
+
 #### IsControllerOfHand/2
 
   > `public static bool IsControllerOfHand(GameObject checkController, SDK_BaseController.ControllerHand hand)`
@@ -8714,6 +8747,7 @@ The GameObject that the SDK Object Alias script is applied to will become a chil
 ---
 
 ## SDK Transform Modify (VRTK_SDKTransformModify)
+ > extends VRTK_SDKControllerReady
 
 ### Overview
 
@@ -8726,8 +8760,9 @@ The SDK Transform Modify can be used to change a transform orientation at runtim
  * **Position:** The new local position to change the transform to.
  * **Rotation:** The new local rotation in eular angles to change the transform to.
  * **Scale:** The new local scale to change the transform to.
- * **Target:** The target transform to modify on enable. If this is left blank then the transform the script is attached to will be used.
- * **Sdk Overrides:** A collection of SDK Transform overrides to change the given target transform for each specified SDK.
+ * **Target:** The target Transform to modify on enable. If this is left blank then the Transform the script is attached to will be used.
+ * **Reset On Disable:** If this is checked then the target Transform will be reset to the original orientation when this script is disabled.
+ * **Sdk Overrides:** A collection of SDK Transform overrides to change the given target Transform for each specified SDK.
 
 ### Class Methods
 
@@ -8742,9 +8777,21 @@ The SDK Transform Modify can be used to change a transform orientation at runtim
 
 The UpdateTransform method updates the Transform data on the current GameObject for the specified settings.
 
+#### SetOrigins/0
+
+  > `public virtual void SetOrigins()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * _none_
+
+The SetOrigins method sets the original position, rotation, scale of the target Transform.
+
 ---
 
 ## SDK Object State (VRTK_SDKObjectState)
+ > extends VRTK_SDKControllerReady
 
 ### Overview
 

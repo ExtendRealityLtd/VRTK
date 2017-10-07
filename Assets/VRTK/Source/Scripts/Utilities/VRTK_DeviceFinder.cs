@@ -189,6 +189,33 @@ namespace VRTK
         }
 
         /// <summary>
+        /// The GetControllerReferenceLeftHand returns a Controller Reference for the left hand controller.
+        /// </summary>
+        /// <returns>The Controller Reference for the left hand controller.</returns>
+        public static VRTK_ControllerReference GetControllerReferenceLeftHand()
+        {
+            return VRTK_ControllerReference.GetControllerReference(SDK_BaseController.ControllerHand.Left);
+        }
+
+        /// <summary>
+        /// The GetControllerReferenceRightHand returns a Controller Reference for the right hand controller.
+        /// </summary>
+        /// <returns>The Controller Reference for the right hand controller.</returns>
+        public static VRTK_ControllerReference GetControllerReferenceRightHand()
+        {
+            return VRTK_ControllerReference.GetControllerReference(SDK_BaseController.ControllerHand.Right);
+        }
+
+        /// <summary>
+        /// The GetControllerReferenceForHand returns a Controller Reference for the given hand controller.
+        /// </summary>
+        /// <returns>The Controller Reference for the given hand controller.</returns>
+        public static VRTK_ControllerReference GetControllerReferenceForHand(SDK_BaseController.ControllerHand hand)
+        {
+            return VRTK_ControllerReference.GetControllerReference(hand);
+        }
+
+        /// <summary>
         /// The IsControllerOfHand method is used to check if a given controller game object is of the hand type provided.
         /// </summary>
         /// <param name="checkController">The actual controller object that is being checked.</param>
