@@ -414,6 +414,18 @@ namespace VRTK
         }
 
         /// <summary>
+        /// The AxisDirection method returns the relevant direction Vector3 based on the axis index in relation to x,y,z.
+        /// </summary>
+        /// <param name="axisIndex">The axis index of the axis. `0 = x` `1 = y` `2 = z`</param>
+        /// <param name="givenTransform">An optional Transform to get the Axis Direction for. If this is `null` then the World directions will be used.</param>
+        /// <returns>The direction Vector3 based on the given axis index.</returns>
+        public static Vector3 AxisDirection(int axisIndex, Transform givenTransform = null)
+        {
+            Vector3[] worldDirections = (givenTransform != null ? new Vector3[] { givenTransform.right, givenTransform.up, givenTransform.forward } : new Vector3[] { Vector3.right, Vector3.up, Vector3.forward });
+            return worldDirections[(int)Mathf.Clamp(axisIndex, 0f, worldDirections.Length)];
+        }
+
+        /// <summary>
         /// The GetTypeUnknownAssembly method is used to find a Type without knowing the exact assembly it is in.
         /// </summary>
         /// <param name="typeName">The name of the type to get.</param>
