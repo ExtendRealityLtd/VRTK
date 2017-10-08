@@ -4051,8 +4051,8 @@ Determines if the GameObject can be interacted with.
 
 **Script Usage:**
  * Place the `VRTK_InteractableObject` script onto the GameObject that is to be interactable.
- * Alternatively, select the GameObject and use the `Window->VRTK->Setup Interactable Object` panel to set up quickly.
- * The Highlighter used by the Interactable Object will be selected in the following order:
+ * Alternatively, select the GameObject and use the `Window -> VRTK -> Setup Interactable Object` panel to set up quickly.
+ * The optional Highlighter used by the Interactable Object will be selected in the following order:
    * The provided Base Highlighter in the `Object Highlighter` parameter.
    * If the above is not provided, then the first active Base Highlighter found on the Interactable Object GameObject will be used.
    * If the above is not found, then a Material Color Swap Highlighter will be created on the Interactable Object GameObject at runtime.
