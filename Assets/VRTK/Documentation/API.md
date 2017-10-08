@@ -12,6 +12,8 @@ This file describes all of the public methods, variables and events utilised by 
  * [Interactables](#interactables-vrtksourcescriptsinteractionsinteractables)
    * [Grab Attach Mechanics](#grab-attach-mechanics-vrtksourcescriptsinteractionsgrabattachmechanics)
    * [Secondary Controller Grab Actions](#secondary-controller-grab-actions-vrtksourcescriptsinteractionssecondarycontrollergrabactions)
+   * [Controllables](#controllables-vrtksourcescriptsinteractionscontrollables)
+     * [Physics Controllables](#physics-controllables-vrtksourcescriptsinteractionscontrollablesphysics)
  * [Presence](#presence-vrtksourcescriptspresence)
  * [UI](#ui-vrtksourcescriptsui)
  * [3D Controls](#3d-controls-vrtksourcescriptscontrols3d)
@@ -1544,7 +1546,7 @@ The ToggleVisibility method enables or disables the play area cursor renderers t
 
 # Pointer Renderers (VRTK/Source/Scripts/Pointers/PointerRenderers)
 
-This directory contains scripts that are used to provide different renderers for the VRTK_Pointer.
+A collection of scripts that are used to provide different renderers for the VRTK_Pointer.
 
  * [Base Pointer Renderer](#base-pointer-renderer-vrtk_basepointerrenderer)
  * [Straight Pointer Renderer](#straight-pointer-renderer-vrtk_straightpointerrenderer)
@@ -2553,7 +2555,7 @@ Applys a tunnel overlay effect to the active VR camera when the play area is mov
 
 # Object Control Actions (VRTK/Source/Scripts/Locomotion/ObjectControlActions)
 
-This directory contains scripts that are used to provide different actions when using Object Control.
+A collection of scripts that are used to provide different actions when using Object Control.
 
  * [Base Object Control Action](#base-object-control-action-vrtk_baseobjectcontrolaction)
  * [Slide Object Control Action](#slide-object-control-action-vrtk_slideobjectcontrolaction)
@@ -2723,7 +2725,7 @@ To enable the Warp Object Control Action, ensure one of the `TouchpadControlOpti
 
 # Highlighters (VRTK/Source/Scripts/Interactions/Highlighters)
 
-This directory contains scripts that are used to provide highlighting.
+A collection of scripts that are used to provide highlighting.
 
  * [Base Highlighter](#base-highlighter-vrtk_basehighlighter)
  * [Material Colour Swap](#material-colour-swap-vrtk_materialcolorswaphighlighter)
@@ -4031,6 +4033,7 @@ A collection of scripts that provide the ability denote objects as being interac
  * [Interact Object Appearance](#interact-object-appearance-vrtk_interactobjectappearance)
  * [Interact Object Highlighter](#interact-object-highlighter-vrtk_interactobjecthighlighter)
  * [Object Touch Auto Interact](#object-touch-auto-interact-vrtk_objecttouchautointeract)
+ * [Ignore Interact Touch Colliders](#ignore-interact-touch-colliders-vrtk_ignoreinteracttouchcolliders)
 
 ---
 
@@ -4905,9 +4908,31 @@ Allows for Interact Grab or Interact Use interactions to automatically happen up
 
 ---
 
+## Ignore Interact Touch Colliders (VRTK_IgnoreInteractTouchColliders)
+ > extends VRTK_SDKControllerReady
+
+### Overview
+
+Ignores the collisions between the given Interact Touch colliders and the colliders on the GameObject this script is attached to.
+
+**Required Components:**
+ * `Collider` - Unity Colliders on the current GameObject or child GameObjects to ignore collisions from the given Interact Touch colliders.
+
+**Script Usage:**
+ * Place the `VRTK_IgnoreInteractTouchColliders` script on the GameObject with colliders to ignore collisions from the given Interact Touch colliders.
+ * Increase the size of the `Interact Touch To Ignore` element list.
+ * Add the appropriate GameObjects that have the `VRTK_InteractTouch` script attached to use when ignoring collisions with the colliders on GameObject the script is attached to.
+
+### Inspector Parameters
+
+ * **Interact Touch To Ignore:** The Interact Touch scripts to ignore collisions with.
+ * **Skip Ignore:** A collection of GameObjects to not include when ignoring collisions with the provided Interact Touch colliders.
+
+---
+
 # Grab Attach Mechanics (VRTK/Source/Scripts/Interactions/GrabAttachMechanics)
 
-This directory contains scripts that are used to provide different mechanics to apply when grabbing an interactable object.
+A collection of scripts that are used to provide different mechanics to apply when grabbing an interactable object.
 
  * [Base Grab Attach](#base-grab-attach-vrtk_basegrabattach)
  * [Base Joint Grab Attach](#base-joint-grab-attach-vrtk_basejointgrabattach)
@@ -5840,7 +5865,7 @@ The GetRotationSpeed returns the current speed in which the Interactable Object 
 
 # Secondary Controller Grab Actions (VRTK/Source/Scripts/Interactions/SecondaryControllerGrabActions)
 
-This directory contains scripts that are used to provide different actions when a secondary controller grabs a grabbed object.
+A collection of scripts that are used to provide different actions when a secondary controller grabs a grabbed object.
 
  * [Base Grab Action](#base-grab-action-vrtk_basegrabaction)
  * [Swap Controller Grab Action](#swap-controller-grab-action-vrtk_swapcontrollergrabaction)
@@ -6110,6 +6135,263 @@ The ProcessFixedUpdate method runs in every FixedUpdate on the Interactable Obje
 ### Example
 
 `VRTK/Examples/043_Controller_SecondaryControllerActions` demonstrates the ability to grab an object with one controller and control their direction with the second controller.
+
+---
+
+# Controllables (VRTK/Source/Scripts/Interactions/Controllables)
+
+Contains scripts that form the basis of interactable 3D controls that are either Physics based or artificially simulated.
+
+ * [Base Controllable](#base-controllable-vrtk_basecontrollable)
+
+---
+
+## Base Controllable (VRTK_BaseControllable)
+
+### Overview
+
+Provides a base that all Controllables can inherit from.
+
+**Script Usage:**
+  > This is an abstract class that is to be inherited to a concrete class that provides controllable functionality, therefore this script should not be directly used.
+
+### Inspector Parameters
+
+ * **Operate Axis:** The local axis in which the Controllable will operate through.
+ * **Ignore Collisions With:** A collection of GameObjects to ignore collision events with.
+
+### Class Variables
+
+ * `public enum OperatingAxis` - The local axis that the Controllable will be operated through.
+   * `xAxis` - The local x axis.
+   * `yAxis` - The local y axis.
+   * `zAxis` - The local z axis.
+
+### Class Events
+
+ * `ValueChanged` - Emitted when the Controllable value has changed.
+ * `RestingPointReached` - Emitted when the Controllable value has reached the resting point.
+ * `MinLimitReached` - Emitted when the Controllable value has reached the minimum limit.
+ * `MinLimitExited` - Emitted when the Controllable value has exited the minimum limit.
+ * `MaxLimitReached` - Emitted when the Controllable value has reached the maximum limit.
+ * `MaxLimitExited` - Emitted when the Controllable value has exited the maximum limit.
+
+### Unity Events
+
+Adding the `VRTK_BaseControllable_UnityEvents` component to `VRTK_BaseControllable` object allows access to `UnityEvents` that will react identically to the Class Events.
+
+ * All C# delegate events are mapped to a Unity Event with the `On` prefix. e.g. `MyEvent` -> `OnMyEvent`.
+
+### Event Payload
+
+ * `Collider interactingCollider` - The Collider that is initiating the interaction.
+ * `VRTK_InteractTouch interactingTouchScript` - The optional Interact Touch script that is initiating the interaction.
+ * `float value` - The current value being reported by the controllable.
+ * `float normalizedValue` - The normalized value being reported by the controllable.
+
+### Class Methods
+
+#### AtMinLimit/0
+
+  > `public virtual bool AtMinLimit()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `bool` - Returns `true` if the Controllable is at it's minimum limit.
+
+The AtMinLimit method returns whether the Controllable is currently at it's minimum limit.
+
+#### AtMaxLimit/0
+
+  > `public virtual bool AtMaxLimit()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `bool` - Returns `true` if the Controllable is at it's maximum limit.
+
+The AtMaxLimit method returns whether the Controllable is currently at it's maximum limit.
+
+#### GetOriginalPosition/1
+
+  > `public virtual Vector3 GetOriginalPosition(bool useLocal = false)`
+
+ * Parameters
+   * `bool useLocal` - If `true` the the original local position will be returned.
+ * Returns
+   * `Vector3` -
+
+The GetOriginalPosition method returns the original position of the control.
+
+#### GetOriginalRotation/1
+
+  > `public virtual Quaternion GetOriginalRotation(bool useLocal = false)`
+
+ * Parameters
+   * `bool useLocal` - If `true` the the original local rotation will be returned.
+ * Returns
+   * `Quaternion` -
+
+The GetOriginalRotation method returns the original rotation of the control.
+
+#### GetControlColliders/0
+
+  > `public virtual Collider[] GetControlColliders()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `Collider[]` - The Colliders array associated with the control.
+
+The GetControlColliders method returns the Colliders array associated with the control.
+
+#### GetInteractingCollider/0
+
+  > `public virtual Collider GetInteractingCollider()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `Collider` - The Collider currently interacting with the control.
+
+The GetInteractingCollider method returns the Collider of the GameObject currently interacting with the control.
+
+#### GetInteractingTouch/0
+
+  > `public virtual VRTK_InteractTouch GetInteractingTouch()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `VRTK_InteractTouch` - The Interact Touch script currently interacting with the control.
+
+The GetInteractingTouch method returns the Interact Touch script of the GameObject currently interacting with the control.
+
+---
+
+# Physics Controllables (VRTK/Source/Scripts/Interactions/Controllables/Physics)
+
+A collection of scripts that provide physics based controls that mimiic real life objects.
+
+ * [Base Physics Controllable](#base-physics-controllable-vrtk_basephysicscontrollable)
+ * [Physics Pusher](#physics-pusher-vrtk_physicspusher)
+
+---
+
+## Base Physics Controllable (VRTK_BasePhysicsControllable)
+ > extends [VRTK_BaseControllable](#base-controllable-vrtk_basecontrollable)
+
+### Overview
+
+Provides a base that all physics based Controllables can inherit from.
+
+**Script Usage:**
+  > This is an abstract class that is to be inherited to a concrete class that provides physics based controllable functionality, therefore this script should not be directly used.
+
+### Inspector Parameters
+
+ * **Auto Interaction:** If this is checked then a VRTK_ControllerRigidbodyActivator will automatically be added to the Controllable so the interacting object's rigidbody is enabled on touch.
+ * **Connected To:** The Rigidbody that the Controllable is connected to.
+
+### Class Methods
+
+#### GetControlRigidbody/0
+
+  > `public virtual Rigidbody GetControlRigidbody()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `Rigidbody` - The Rigidbody associated with the control.
+
+The GetControlRigidbody method returns the rigidbody associated with the control.
+
+#### GetControlActivatorContainer/0
+
+  > `public virtual GameObject GetControlActivatorContainer()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `GameObject` - The GameObject that contains the Controller Rigidbody Activator associated with the control.
+
+The GetControlActivatorContainer method returns the GameObject that contains the Controller Rigidbody Activator associated with the control.
+
+---
+
+## Physics Pusher (VRTK_PhysicsPusher)
+ > extends [VRTK_BasePhysicsControllable](#base-physics-controllable-vrtk_basephysicscontrollable)
+
+### Overview
+
+A physics based pushable pusher.
+
+**Required Components:**
+ * `Collider` - A Unity Collider to determine when an interaction has occured. Can be a compound collider set in child GameObjects. Will be automatically added at runtime.
+ * `Rigidbody` - A Unity Rigidbody to allow the GameObject to be affected by the Unity Physics System. Will be automatically added at runtime.
+
+**Optional Components:**
+ * `VRTK_ControllerRigidbodyActivator` - A Controller Rigidbody Activator to automatically enable the controller rigidbody upon touching the pusher. Will be automatically created if the `Auto Interaction` paramter is checked.
+
+**Script Usage:**
+ * Place the `VRTK_PhysicsPusher` script onto the GameObject that is to become the pusher.
+
+### Inspector Parameters
+
+ * **Pressed Distance:** The local space distance along the `Operate Axis` until the pusher reaches the pressed position.
+ * **Stay Pressed:** If this is checked then the pusher will stay in the pressed position when it reaches the maximum position.
+ * **Min Max Limit Threshold:** The threshold in which the pusher's current normalized position along the `Operate Axis` has to be within the minimum and maximum limits of the pusher.
+ * **Resting Position:** The normalized position of the pusher between the original position and the pressed position that will be considered as the resting position for the pusher.
+ * **Resting Position Threshold:** The normalized value that the pusher can be from the `Resting Position` before the pusher is considered to be resting when not being interacted with.
+ * **Position Target:** The normalized position of the pusher between the original position and the pressed position. `0f` will set the pusher position to the original position, `1f` will set the pusher position to the pressed position.
+ * **Target Force:** The amount of force to apply to push the pusher towards the intended target position.
+
+### Class Methods
+
+#### GetValue/0
+
+  > `public override float GetValue()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `float` - The actual position of the pusher.
+
+The GetValue method returns the current position value of the pusher.
+
+#### GetNormalizedValue/0
+
+  > `public override float GetNormalizedValue()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `float` - The normalized position of the pusher.
+
+The GetNormalizedValue method returns the current position value of the pusher normalized between `0f` and `1f`.
+
+#### IsResting/0
+
+  > `public override bool IsResting()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `bool` - Returns `true` if the pusher is currently at the resting position.
+
+The IsResting method returns whether the pusher is currently at it's resting position.
+
+#### GetControlJoint/0
+
+  > `public virtual ConfigurableJoint GetControlJoint()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `ConfigurableJoint` - The joint associated with the control.
+
+The GetControlJoint method returns the joint associated with the control.
 
 ---
 
@@ -7031,7 +7313,6 @@ A number of controls are available which partially support auto-configuration. S
 All 3D controls extend the `VRTK_Control` abstract class which provides common methods and events.
 
  * [Control](#control-vrtk_control)
- * [Button](#button-vrtk_button)
  * [Chest](#chest-vrtk_chest)
  * [Door](#door-vrtk_door)
  * [Drawer](#drawer-vrtk_drawer)
@@ -7123,55 +7404,6 @@ The SetContent method sets the given game object as the content of the control. 
    * `GameObject` - The currently stored content for the control.
 
 The GetContent method returns the current game object of the control's content.
-
----
-
-## Button (VRTK_Button)
- > extends [VRTK_Control](#control-vrtk_control)
-
-### Overview
-
-Attaching the script to a game object will allow the user to interact with it as if it were a push button. The direction into which the button should be pushable can be freely set and auto-detection is supported. Since this is physics-based there needs to be empty space in the push direction so that the button can move.
-
-The script will instantiate the required Rigidbody and ConstantForce components automatically in case they do not exist yet.
-
-### Inspector Parameters
-
- * **Connected To:** An optional game object to which the button will be connected. If the game object moves the button will follow along.
- * **Direction:** The axis on which the button should move. All other axis will be frozen.
- * **Activation Distance:** The local distance the button needs to be pushed until a push event is triggered.
- * **Button Strength:** The amount of force needed to push the button down as well as the speed with which it will go back into its original position.
-
-### Class Variables
-
- * `public enum ButtonDirection` - 3D Control Button Directions
-   * `autodetect` - Attempt to auto detect the axis.
-   * `x` - The world x direction.
-   * `y` - The world y direction.
-   * `z` - The world z direction.
-   * `negX` - The world negative x direction.
-   * `negY` - The world negative y direction.
-   * `negZ` - The world negative z direction.
-
-### Class Events
-
- * `Pushed` - Emitted when the 3D Button has reached its activation distance.
- * `Released` - Emitted when the 3D Button's position has become less than activation distance after being pressed.
-
-### Unity Events
-
-Adding the `VRTK_Button_UnityEvents` component to `VRTK_Button` object allows access to `UnityEvents` that will react identically to the Class Events.
-
- * All C# delegate events are mapped to a Unity Event with the `On` prefix. e.g. `MyEvent` -> `OnMyEvent`.
-
-### Event Payload
-
- * `float value` - The current value being reported by the control.
- * `float normalizedValue` - The normalized value being reported by the control.
-
-### Example
-
-`VRTK/Examples/025_Controls_Overview` shows a collection of pressable buttons that are interacted with by activating the rigidbody on the controller by pressing the grab button without grabbing an object.
 
 ---
 
@@ -8245,7 +8477,7 @@ The GetGPUTimeLastFrame retrieves the time spent by the GPU last frame, in secon
    * `Vector2 vectorB` - The Vector2 to compare with
    * `int compareFidelity` - The number of decimal places to use when doing the comparison on the float elements within the Vector2.
  * Returns
-   * `bool` - Returns true if the given Vector2 objects match based on the given fidelity.
+   * `bool` - Returns `true` if the given Vector2 objects match based on the given fidelity.
 
 The Vector2ShallowCompare method compares two given Vector2 objects based on the given fidelity, which is the equivalent of comparing rounded Vector2 elements to determine if the Vector2 elements are equal.
 
@@ -8321,6 +8553,18 @@ The DividerToMultiplier method takes a number to be used in a division and conve
    * `float` -
 
 The NormalizeValue method takes a given value between a specified range and returns the normalized value between 0f and 1f.
+
+#### AxisDirection/2
+
+  > `public static Vector3 AxisDirection(int axisIndex, Transform givenTransform = null)`
+
+ * Parameters
+   * `int axisIndex` - The axis index of the axis. `0 = x` `1 = y` `2 = z`
+   * `Transform givenTransform` - An optional Transform to get the Axis Direction for. If this is `null` then the World directions will be used.
+ * Returns
+   * `Vector3` - The direction Vector3 based on the given axis index.
+
+The AxisDirection method returns the relevant direction Vector3 based on the axis index in relation to x,y,z.
 
 #### GetTypeUnknownAssembly/1
 

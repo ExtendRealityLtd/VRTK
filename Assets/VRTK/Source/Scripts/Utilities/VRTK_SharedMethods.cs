@@ -331,7 +331,7 @@ namespace VRTK
         /// <param name="vectorA">The Vector2 to compare against.</param>
         /// <param name="vectorB">The Vector2 to compare with</param>
         /// <param name="compareFidelity">The number of decimal places to use when doing the comparison on the float elements within the Vector2.</param>
-        /// <returns>Returns true if the given Vector2 objects match based on the given fidelity.</returns>
+        /// <returns>Returns `true` if the given Vector2 objects match based on the given fidelity.</returns>
         public static bool Vector2ShallowCompare(Vector2 vectorA, Vector2 vectorB, int compareFidelity)
         {
             Vector2 distanceVector = vectorA - vectorB;
@@ -411,6 +411,18 @@ namespace VRTK
             result = (result < threshold ? 0f : result);
             result = (result > 1f - threshold ? 1f : result);
             return Mathf.Clamp(result, 0f, 1f);
+        }
+
+        /// <summary>
+        /// The AxisDirection method returns the relevant direction Vector3 based on the axis index in relation to x,y,z.
+        /// </summary>
+        /// <param name="axisIndex">The axis index of the axis. `0 = x` `1 = y` `2 = z`</param>
+        /// <param name="givenTransform">An optional Transform to get the Axis Direction for. If this is `null` then the World directions will be used.</param>
+        /// <returns>The direction Vector3 based on the given axis index.</returns>
+        public static Vector3 AxisDirection(int axisIndex, Transform givenTransform = null)
+        {
+            Vector3[] worldDirections = (givenTransform != null ? new Vector3[] { givenTransform.right, givenTransform.up, givenTransform.forward } : new Vector3[] { Vector3.right, Vector3.up, Vector3.forward });
+            return worldDirections[(int)Mathf.Clamp(axisIndex, 0f, worldDirections.Length)];
         }
 
         /// <summary>

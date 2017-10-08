@@ -20,6 +20,7 @@ namespace VRTK
     /// `VRTK/Examples/025_Controls_Overview` shows a collection of pressable buttons that are interacted with by activating the rigidbody on the controller by pressing the grab button without grabbing an object.
     /// </example>
     [AddComponentMenu("VRTK/Scripts/Controls/3D/VRTK_Button")]
+    [System.Obsolete("`VRTK.VRTK_Button` has been replaced with `VRTK.Controllables.PhysicsBased.VRTK_PhysicsPusher`. This script will be removed in a future version of VRTK.")]
     public class VRTK_Button : VRTK_Control
     {
         /// <summary>

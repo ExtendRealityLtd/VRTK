@@ -2,27 +2,74 @@
 {
     using UnityEngine;
     using UnityEventHelper;
+    using VRTK.Controllables;
 
     public class ControlReactor : MonoBehaviour
     {
         public TextMesh go;
 
-        private VRTK_Control_UnityEvents controlEvents;
+        protected VRTK_Control_UnityEvents controlEvents;
+        protected VRTK_BaseControllable controllableEvents;
 
-        private void Start()
+        protected virtual void OnEnable()
         {
-            controlEvents = GetComponent<VRTK_Control_UnityEvents>();
-            if (controlEvents == null)
+            if (GetComponent<VRTK_Control>() != null && GetComponent<VRTK_Control_UnityEvents>() == null)
             {
                 controlEvents = gameObject.AddComponent<VRTK_Control_UnityEvents>();
             }
+            controlEvents = GetComponent<VRTK_Control_UnityEvents>();
+            controllableEvents = GetComponent<VRTK_BaseControllable>();
 
-            controlEvents.OnValueChanged.AddListener(HandleChange);
+            ManageListeners(true);
         }
 
-        private void HandleChange(object sender, Control3DEventArgs e)
+        protected virtual void OnDisable()
         {
-            go.text = e.value.ToString() + "(" + e.normalizedValue.ToString() + "%)";
+            ManageListeners(false);
+        }
+
+        protected virtual void ManageListeners(bool state)
+        {
+            if (state)
+            {
+                if (controlEvents != null)
+                {
+                    controlEvents.OnValueChanged.AddListener(HandleChange);
+                }
+                if (controllableEvents != null)
+                {
+                    controllableEvents.ValueChanged += ValueChanged;
+                }
+            }
+            else
+            {
+                if (controlEvents != null)
+                {
+                    controlEvents.OnValueChanged.RemoveListener(HandleChange);
+                }
+                if (controllableEvents != null)
+                {
+                    controllableEvents.ValueChanged -= ValueChanged;
+                }
+            }
+        }
+
+        protected virtual void ValueChanged(object sender, ControllableEventArgs e)
+        {
+            UpdateText(e.value.ToString("F2"), (e.normalizedValue * 100f).ToString("F0"));
+        }
+
+        protected virtual void HandleChange(object sender, Control3DEventArgs e)
+        {
+            UpdateText(e.value.ToString("F2"), (e.normalizedValue * 100f).ToString("F0"));
+        }
+
+        protected virtual void UpdateText(string valueText, string normalizedValueText)
+        {
+            if (go != null)
+            {
+                go.text = valueText;
+            }
         }
     }
 }
