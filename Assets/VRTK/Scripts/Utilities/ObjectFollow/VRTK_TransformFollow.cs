@@ -93,6 +93,7 @@ namespace VRTK
         {
             transformToFollow = null;
             transformToChange = null;
+            positionToFollow = Vector3.zero;
             Camera.onPreRender -= OnCamPreRender;
             Camera.onPreCull -= OnCamPreCull;
         }
@@ -132,6 +133,11 @@ namespace VRTK
 
         protected override Vector3 GetPositionToFollow()
         {
+            if (positionToFollow != Vector3.zero)
+            {
+                return positionToFollow;
+            }
+
             return transformToFollow.position;
         }
 
@@ -155,11 +161,20 @@ namespace VRTK
             if (gameObjectToFollow == null || gameObjectToChange == null
                 || (transformToFollow != null && transformToChange != null))
             {
-                return;
+                if(positionToFollow == Vector3.zero)
+                {
+                    return;
+                }
+                else
+                {
+                    transformToChange = gameObjectToChange.transform;
+                }
             }
-
-            transformToFollow = gameObjectToFollow.transform;
-            transformToChange = gameObjectToChange.transform;
+            else
+            {
+                transformToFollow = gameObjectToFollow.transform;
+                transformToChange = gameObjectToChange.transform;
+            }
         }
     }
 }
