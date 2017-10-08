@@ -13,8 +13,15 @@ namespace VRTK
         [Tooltip("The game object to change the property values of. If left empty the game object this script is attached to will be changed.")]
         public GameObject gameObjectToChange;
 
+        [Tooltip("Whether to follow the position. CAUTION: This value overwrite gameObjectToFollow position! Set to Vector3.zero for use gameObject method")]
+        public Vector3 positionToFollow = Vector3.zero;
+
         [Tooltip("Whether to follow the position of the given game object.")]
         public bool followsPosition = true;
+        public bool followPosX = true;
+        public bool followPosY = true;
+        public bool followPosZ = true;
+        
         [Tooltip("Whether to smooth the position when following `gameObjectToFollow`.")]
         public bool smoothsPosition;
         [Tooltip("The maximum allowed distance between the unsmoothed source and the smoothed target per frame to use for smoothing.")]
@@ -51,7 +58,7 @@ namespace VRTK
         /// </summary>
         public virtual void Follow()
         {
-            if (gameObjectToFollow == null)
+            if (gameObjectToFollow == null && positionToFollow == Vector3.zero)
             {
                 return;
             }
@@ -104,12 +111,25 @@ namespace VRTK
 
         protected virtual void FollowPosition()
         {
-            var positionToFollow = GetPositionToFollow();
+            Vector3 positionToFollow = GetPositionToFollow();
             Vector3 newPosition;
+
+            if(followPosX == false)
+            {
+                positionToFollow.x = gameObjectToChange.transform.position.x;
+            }
+            if (followPosY == false)
+            {
+                positionToFollow.y = gameObjectToChange.transform.position.y;
+            }
+            if (followPosZ == false)
+            {
+                positionToFollow.z = gameObjectToChange.transform.position.z;
+            }
 
             if (smoothsPosition)
             {
-                var alpha = Mathf.Clamp01(Vector3.Distance(targetPosition, positionToFollow) / maxAllowedPerFrameDistanceDifference);
+                float alpha = Mathf.Clamp01(Vector3.Distance(targetPosition, positionToFollow) / maxAllowedPerFrameDistanceDifference);
                 newPosition = Vector3.Lerp(targetPosition, positionToFollow, alpha);
             }
             else
@@ -123,12 +143,12 @@ namespace VRTK
 
         protected virtual void FollowRotation()
         {
-            var rotationToFollow = GetRotationToFollow();
+            Quaternion rotationToFollow = GetRotationToFollow();
             Quaternion newRotation;
 
             if (smoothsRotation)
             {
-                var alpha = Mathf.Clamp01(Quaternion.Angle(targetRotation, rotationToFollow) / maxAllowedPerFrameAngleDifference);
+                float alpha = Mathf.Clamp01(Quaternion.Angle(targetRotation, rotationToFollow) / maxAllowedPerFrameAngleDifference);
                 newRotation = Quaternion.Lerp(targetRotation, rotationToFollow, alpha);
             }
             else
@@ -142,12 +162,12 @@ namespace VRTK
 
         protected virtual void FollowScale()
         {
-            var scaleToFollow = GetScaleToFollow();
+            Vector3 scaleToFollow = GetScaleToFollow();
             Vector3 newScale;
 
             if (smoothsScale)
             {
-                var alpha = Mathf.Clamp01(Vector3.Distance(targetScale, scaleToFollow) / maxAllowedPerFrameSizeDifference);
+                float alpha = Mathf.Clamp01(Vector3.Distance(targetScale, scaleToFollow) / maxAllowedPerFrameSizeDifference);
                 newScale = Vector3.Lerp(targetScale, scaleToFollow, alpha);
             }
             else
