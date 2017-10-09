@@ -1,11 +1,14 @@
 ﻿namespace VRTK.Examples
 {
     using UnityEngine;
+    using VRTK.Controllables;
     using VRTK.Controllables.PhysicsBased;
+    using VRTK.Controllables.ArtificialBased;
 
     public class ButtonReactor : MonoBehaviour
     {
         protected VRTK_PhysicsPusher buttonEvents;
+        protected VRTK_ArtificialPusher artbuttonEvents;
 
         protected virtual void OnEnable()
         {
@@ -13,6 +16,11 @@
             if (buttonEvents != null)
             {
                 buttonEvents.MaxLimitReached += MaxLimitReached;
+            }
+            artbuttonEvents = GetComponent<VRTK_ArtificialPusher>();
+            if (artbuttonEvents != null)
+            {
+                artbuttonEvents.MaxLimitReached += MaxLimitReached;
             }
         }
 
@@ -22,11 +30,15 @@
             {
                 buttonEvents.MaxLimitReached -= MaxLimitReached;
             }
+            if (artbuttonEvents != null)
+            {
+                artbuttonEvents.MaxLimitReached -= MaxLimitReached;
+            }
         }
 
-        private void MaxLimitReached(object sender, Controllables.ControllableEventArgs e)
+        protected virtual void MaxLimitReached(object sender, ControllableEventArgs e)
         {
-            VRTK_PhysicsPusher senderButton = sender as VRTK_PhysicsPusher;
+            VRTK_BaseControllable senderButton = sender as VRTK_BaseControllable;
             VRTK_Logger.Info(senderButton.name + " was pushed");
         }
     }
