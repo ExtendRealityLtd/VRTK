@@ -165,10 +165,6 @@ namespace VRTK
                 {
                     return;
                 }
-                else
-                {
-                    transformToChange = gameObjectToChange.transform;
-                }
             }
             else
             {
