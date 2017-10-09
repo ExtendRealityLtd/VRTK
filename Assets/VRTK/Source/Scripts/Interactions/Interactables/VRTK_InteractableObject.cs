@@ -39,8 +39,8 @@ namespace VRTK
     ///
     /// **Script Usage:**
     ///  * Place the `VRTK_InteractableObject` script onto the GameObject that is to be interactable.
-    ///  * Alternatively, select the GameObject and use the `Window->VRTK->Setup Interactable Object` panel to set up quickly.
-    ///  * The Highlighter used by the Interactable Object will be selected in the following order:
+    ///  * Alternatively, select the GameObject and use the `Window -> VRTK -> Setup Interactable Object` panel to set up quickly.
+    ///  * The optional Highlighter used by the Interactable Object will be selected in the following order:
     ///    * The provided Base Highlighter in the `Object Highlighter` parameter.
     ///    * If the above is not provided, then the first active Base Highlighter found on the Interactable Object GameObject will be used.
     ///    * If the above is not found, then a Material Color Swap Highlighter will be created on the Interactable Object GameObject at runtime.
@@ -657,7 +657,6 @@ namespace VRTK
         /// </summary>
         public virtual void Unhighlight()
         {
-            InitialiseHighlighter();
             if (baseHighlighter != null)
             {
                 baseHighlighter.Unhighlight();
@@ -1061,7 +1060,6 @@ namespace VRTK
             {
                 baseHighlighter = null;
             }
-            InitialiseHighlighter();
             RegisterTeleporters();
             forceDisabled = false;
             if (forcedDropped)
@@ -1155,9 +1153,9 @@ namespace VRTK
             }
         }
 
-        protected virtual void InitialiseHighlighter(Color? highlightColor = null)
+        protected virtual void InitialiseHighlighter(Color highlightColor)
         {
-            if (baseHighlighter == null)
+            if (baseHighlighter == null && highlightColor != Color.clear)
             {
                 autoHighlighter = false;
                 baseHighlighter = GetValidHighlighter();
@@ -1166,7 +1164,7 @@ namespace VRTK
                     autoHighlighter = true;
                     baseHighlighter = gameObject.AddComponent<VRTK_MaterialColorSwapHighlighter>();
                 }
-                baseHighlighter.Initialise((highlightColor != null ? highlightColor : Color.clear), gameObject);
+                baseHighlighter.Initialise(highlightColor, gameObject);
             }
         }
 
@@ -1435,7 +1433,7 @@ namespace VRTK
             if (grabbingObject != null && (grabbingObject.activeInHierarchy || forceDisabled))
             {
                 VRTK_InteractGrab grabbingObjectScript = grabbingObject.GetComponentInChildren<VRTK_InteractGrab>();
-                if(grabbingObjectScript != null && grabbingObjectScript.interactTouch != null)
+                if (grabbingObjectScript != null && grabbingObjectScript.interactTouch != null)
                 {
                     grabbingObjectScript.interactTouch.ForceStopTouching();
                     grabbingObjectScript.ForceRelease();
