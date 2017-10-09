@@ -93,7 +93,6 @@ namespace VRTK
         {
             transformToFollow = null;
             transformToChange = null;
-            positionToFollow = Vector3.zero;
             Camera.onPreRender -= OnCamPreRender;
             Camera.onPreCull -= OnCamPreCull;
         }
