@@ -15,6 +15,9 @@ namespace VRTK
     [AddComponentMenu("VRTK/Scripts/Locomotion/VRTK_TunnelOverlay")]
     public class VRTK_TunnelOverlay : MonoBehaviour
     {
+        [Tooltip("Disable the effect when the active SDK is the simulator.")]
+        public bool disableInSimulator = true;
+
         [Header("Movement Settings")]
 
         [Tooltip("Minimum rotation speed for the effect to activate (degrees per second).")]
@@ -69,6 +72,12 @@ namespace VRTK
 
         protected virtual void OnEnable()
         {
+            if (disableInSimulator && VRTK_SDKManager.instance.loadedSetup.headsetSDK.GetType() == typeof(SDK_SimHeadset))
+            {
+                enabled = false;
+                return;
+            }
+
             headset = VRTK_DeviceFinder.HeadsetCamera();
             playarea = VRTK_DeviceFinder.PlayAreaTransform();
             cameraEffect = headset.GetComponent<VRTK_TunnelEffect>();
