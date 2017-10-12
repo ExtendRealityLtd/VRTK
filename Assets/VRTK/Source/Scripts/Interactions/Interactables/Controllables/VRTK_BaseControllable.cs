@@ -60,6 +60,10 @@ namespace VRTK.Controllables
         public OperatingAxis operateAxis = OperatingAxis.yAxis;
         [Tooltip("A collection of GameObjects to ignore collision events with.")]
         public GameObject[] ignoreCollisionsWith = new GameObject[0];
+        [Tooltip("A collection of GameObjects to exclude when determining if a default collider should be created.")]
+        public GameObject[] excludeColliderCheckOn = new GameObject[0];
+        [Tooltip("The amount of fidelity when comparing the position of the control with the previous position. Determines if it's equal above a certain decimal place threshold.")]
+        public float equalityFidelity = 0.001f;
 
         /// <summary>
         /// Emitted when the Controllable value has changed.
@@ -95,7 +99,7 @@ namespace VRTK.Controllables
         protected bool atMaxLimit;
         protected Collider interactingCollider;
         protected VRTK_InteractTouch interactingTouchScript;
-        protected Collider[] controlColliders;
+        protected Collider[] controlColliders = new Collider[0];
         protected bool createCustomCollider;
         protected Coroutine processAtEndOfFrame;
 
@@ -286,7 +290,7 @@ namespace VRTK.Controllables
 
         protected virtual void SetupCollider()
         {
-            controlColliders = GetComponentsInChildren<Collider>();
+            controlColliders = VRTK_SharedMethods.ColliderExclude(GetComponentsInChildren<Collider>(), VRTK_SharedMethods.GetCollidersInGameObjects(excludeColliderCheckOn, true, true));
             createCustomCollider = false;
             if (controlColliders.Length == 0)
             {
@@ -312,6 +316,11 @@ namespace VRTK.Controllables
         {
             for (int ignoredGameObjectColliderIndex = 0; ignoredGameObjectColliderIndex < ignoreCollisionsWith.Length; ignoredGameObjectColliderIndex++)
             {
+                if (ignoreCollisionsWith[ignoredGameObjectColliderIndex] == null)
+                {
+                    continue;
+                }
+
                 Collider[] ignoredGameObjectColliders = ignoreCollisionsWith[ignoredGameObjectColliderIndex].GetComponentsInChildren<Collider>();
 
                 for (int ignoredColliderIndex = 0; ignoredColliderIndex < ignoredGameObjectColliders.Length; ignoredColliderIndex++)

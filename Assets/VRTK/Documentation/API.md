@@ -6160,6 +6160,8 @@ Provides a base that all Controllables can inherit from.
 
  * **Operate Axis:** The local axis in which the Controllable will operate through.
  * **Ignore Collisions With:** A collection of GameObjects to ignore collision events with.
+ * **Exclude Collider Check On:** A collection of GameObjects to exclude when determining if a default collider should be created.
+ * **Equality Fidelity:** The amount of fidelity when comparing the position of the control with the previous position. Determines if it's equal above a certain decimal place threshold.
 
 ### Class Variables
 
@@ -6277,6 +6279,7 @@ A collection of scripts that provide physics based controls that mimiic real lif
 
  * [Base Physics Controllable](#base-physics-controllable-vrtk_basephysicscontrollable)
  * [Physics Pusher](#physics-pusher-vrtk_physicspusher)
+ * [Physics Rotator](#physics-rotator-vrtk_physicsrotator)
 
 ---
 
@@ -6393,6 +6396,160 @@ The IsResting method returns whether the pusher is currently at it's resting pos
    * `ConfigurableJoint` - The joint associated with the control.
 
 The GetControlJoint method returns the joint associated with the control.
+
+---
+
+## Physics Rotator (VRTK_PhysicsRotator)
+ > extends [VRTK_BasePhysicsControllable](#base-physics-controllable-vrtk_basephysicscontrollable)
+
+### Overview
+
+A physics based rotatable object.
+
+**Required Components:**
+ * `Collider` - A Unity Collider to determine when an interaction has occured. Can be a compound collider set in child GameObjects. Will be automatically added at runtime.
+ * `Rigidbody` - A Unity Rigidbody to allow the GameObject to be affected by the Unity Physics System. Will be automatically added at runtime.
+
+**Optional Components:**
+ * `VRTK_ControllerRigidbodyActivator` - A Controller Rigidbody Activator to automatically enable the controller rigidbody when near the rotator. Will be automatically created if the `Auto Interaction` paramter is checked.
+
+**Script Usage:**
+ * Create a rotator container GameObject and set the GameObject that is to become the rotator as a child of the newly created container GameObject.
+ * Place the `VRTK_PhysicsRotator` script onto the GameObject that is to become the rotatable object and ensure the Transform rotation is `0, 0, 0`.
+ * Create a nested GameObject under the rotator GameObject and position it where the hinge should operate.
+ * Apply the nested hinge GameObject to the `Hinge Point` parameter on the Physics Rotator script.
+
+  > The rotator GameObject must not be at the root level and needs to have the Transform rotation set to `0,0,0`. This is the reason for the container GameObject requirement. Any positioning of the rotator must be set on the parent container GameObject.
+
+### Inspector Parameters
+
+ * **Hinge Point:** A Transform that denotes the position where the rotator hinge will be created.
+ * **Minimum Angle:** The minimum angle the rotator can rotate to.
+ * **Maximum Angle:** The maximum angle the rotator can rotate to.
+ * **Min Max Threshold Angle:** The angle at which the rotator rotation can be within the minimum or maximum angle before the minimum or maximum angles are considered reached.
+ * **Resting Angle:** The angle at which will be considered as the resting position of the rotator.
+ * **Force Resting Angle Threshold:** The threshold angle from the `Resting Angle` that the current angle of the rotator needs to be within to snap the rotator back to the `Resting Angle`.
+ * **Angle Target:** The target angle to rotate the rotator to.
+ * **Is Locked:** If this is checked then the rotator Rigidbody will have all rotations frozen.
+ * **Step Value Range:** The minimum `(x)` and the maximum `(y)` step values for the rotator to register along the `Operate Axis`.
+ * **Step Size:** The increments the rotator value will change in between the `Step Value Range`.
+ * **Use Step As Value:** If this is checked then the value for the rotator will be the step value and not the absolute rotation of the rotator Transform.
+ * **Snap To Step:** If this is checked then the rotator will snap to the angle of the nearest step along the value range.
+ * **Snap Force:** The speed in which the rotator will snap to the relevant angle along the `Operate Axis`
+ * **Grab Mechanic:** The type of Interactable Object grab mechanic to use when operating the rotator.
+ * **Precision Grab:** If this is checked then when the Interact Grab grabs the Interactable Object, it will grab it with precision and pick it up at the particular point on the Interactable Object that the Interact Touch is touching.
+ * **Detach Distance:** The maximum distance the grabbing object is away from the rotator before it is automatically released.
+ * **Use Friction Overrides:** If this is checked then the `Grabbed Friction` value will be used as the Rigidbody drag value when the rotator is grabbed and the `Released Friction` value will be used as the Rigidbody drag value when the door is released.
+ * **Grabbed Friction:** The Rigidbody drag value when the rotator is grabbed.
+ * **Released Friction:** The Rigidbody drag value when the rotator is released.
+ * **Only Interact With:** A collection of GameObjects that will be used as the valid collisions to determine if the rotator can be interacted with.
+
+### Class Variables
+
+ * `public enum GrabMechanic` - Type of Grab Mechanic
+   * `TrackObject` - The Track Object Grab Mechanic
+   * `RotatorTrack` - The Rotator Track Grab Mechanic
+
+### Class Methods
+
+#### GetValue/0
+
+  > `public override float GetValue()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `float` - The actual rotation of the rotator.
+
+The GetValue method returns the current rotation value of the rotator.
+
+#### GetNormalizedValue/0
+
+  > `public override float GetNormalizedValue()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `float` - The normalized rotation of the rotator.
+
+The GetNormalizedValue method returns the current rotation value of the rotator normalized between `0f` and `1f`.
+
+#### GetStepValue/1
+
+  > `public virtual float GetStepValue(float currentValue)`
+
+ * Parameters
+   * `float currentValue` - The current angle value of the rotator to get the Step Value for.
+ * Returns
+   * `float` - The current Step Value based on the rotator angle.
+
+The GetStepValue method returns the current angle of the rotator based on the step value range.
+
+#### SetAngleTargetWithStepValue/1
+
+  > `public virtual void SetAngleTargetWithStepValue(float givenStepValue)`
+
+ * Parameters
+   * `float givenStepValue` - The step value within the `Step Value Range` to set the `Angle Target` parameter to.
+ * Returns
+   * _none_
+
+The SetAngleTargetWithStepValue sets the `Angle Target` parameter but uses a value within the `Step Value Range`.
+
+#### SetRestingAngleWithStepValue/1
+
+  > `public virtual void SetRestingAngleWithStepValue(float givenStepValue)`
+
+ * Parameters
+   * `float givenStepValue` - The step value within the `Step Value Range` to set the `Resting Angle` parameter to.
+ * Returns
+   * _none_
+
+The SetRestingAngleWithStepValue sets the `Resting Angle` parameter but uses a value within the `Step Value Range`.
+
+#### GetAngleFromStepValue/1
+
+  > `public virtual float GetAngleFromStepValue(float givenStepValue)`
+
+ * Parameters
+   * `float givenStepValue` - The step value to check the angle for.
+ * Returns
+   * `float` - The angle the rotator would be at based on the given step value.
+
+The GetAngleFromStepValue returns the angle the rotator would be at based on the given step value.
+
+#### IsResting/0
+
+  > `public override bool IsResting()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `bool` - Returns `true` if the rotator is at the resting angle or within the resting angle threshold.
+
+The IsResting method returns whether the rotator is at the resting angle or within the resting angle threshold.
+
+#### GetControlJoint/0
+
+  > `public virtual HingeJoint GetControlJoint()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `HingeJoint` - The joint associated with the control.
+
+The GetControlJoint method returns the joint associated with the control.
+
+#### GetControlInteractableObject/0
+
+  > `public virtual VRTK_InteractableObject GetControlInteractableObject()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `VRTK_InteractableObject` - The Interactable Object associated with the control.
+
+The GetControlInteractableObject method returns the Interactable Object associated with the control.
 
 ---
 
@@ -7403,13 +7560,8 @@ A number of controls are available which partially support auto-configuration. S
 All 3D controls extend the `VRTK_Control` abstract class which provides common methods and events.
 
  * [Control](#control-vrtk_control)
- * [Chest](#chest-vrtk_chest)
- * [Door](#door-vrtk_door)
  * [Drawer](#drawer-vrtk_drawer)
- * [Knob](#knob-vrtk_knob)
  * [Wheel](#wheel-vrtk_wheel)
- * [Lever](#lever-vrtk_lever)
- * [Spring Lever](#spring-lever-vrtk_springlever)
  * [Slider](#slider-vrtk_slider)
  * [Content Handler](#content-handler-vrtk_contenthandler)
 
@@ -7497,64 +7649,6 @@ The GetContent method returns the current game object of the control's content.
 
 ---
 
-## Chest (VRTK_Chest)
- > extends [VRTK_Control](#control-vrtk_control)
-
-### Overview
-
-Transforms a game object into a chest with a lid. The direction can be auto-detected with very high reliability or set manually.
-
-The script will instantiate the required Rigidbody, Interactable and HingeJoint components automatically in case they do not exist yet. It will expect three distinct game objects: a body, a lid and a handle. These should be independent and not children of each other.
-
-### Inspector Parameters
-
- * **Direction:** The axis on which the chest should open. All other axis will be frozen.
- * **Lid:** The game object for the lid.
- * **Body:** The game object for the body.
- * **Handle:** The game object for the handle.
- * **Content:** The parent game object for the chest content elements.
- * **Hide Content:** Makes the content invisible while the chest is closed.
- * **Max Angle:** The maximum opening angle of the chest.
-
-### Example
-
-`VRTK/Examples/025_Controls_Overview` shows a chest that can be open and closed, it also displays the current opening angle of the chest.
-
----
-
-## Door (VRTK_Door)
- > extends [VRTK_Control](#control-vrtk_control)
-
-### Overview
-
-Transforms a game object into a door with an optional handle attached to an optional frame. The direction can be freely set and also very reliably auto-detected.
-
-There are situations when it can be very hard to automatically calculate the correct axis and anchor values for the hinge joint. If this situation is encountered then simply add the hinge joint manually and set these two values. All the rest will still be handled by the script.
-
-The script will instantiate the required Rigidbodies, Interactable and HingeJoint components automatically in case they do not exist yet. Gizmos will indicate the direction.
-
-### Inspector Parameters
-
- * **Direction:** The axis on which the door should open.
- * **Door:** The game object for the door. Can also be an empty parent or left empty if the script is put onto the actual door mesh. If no colliders exist yet a collider will tried to be automatically attached to all children that expose renderers.
- * **Handles:** The game object for the handles. Can also be an empty parent or left empty. If empty the door can only be moved using the rigidbody mode of the controller. If no collider exists yet a compound collider made up of all children will try to be calculated but this will fail if the door is rotated. In that case a manual collider will need to be assigned.
- * **Frame:** The game object for the frame to which the door is attached. Should only be set if the frame will move as well to ensure that the door moves along with the frame.
- * **Content:** The parent game object for the door content elements.
- * **Hide Content:** Makes the content invisible while the door is closed.
- * **Max Angle:** The maximum opening angle of the door.
- * **Open Inward:** Can the door be pulled to open.
- * **Open Outward:** Can the door be pushed to open.
- * **Min Snap Close:** The range at which the door must be to being closed before it snaps shut. Only works if either inward or outward is selected, not both.
- * **Released Friction:** The amount of friction the door will have whilst swinging when it is not grabbed.
- * **Grabbed Friction:** The amount of friction the door will have whilst swinging when it is grabbed.
- * **Handle Interactable Only:** If this is checked then only the door handle is grabbale to operate the door.
-
-### Example
-
-`VRTK/Examples/025_Controls_Overview` shows a selection of door types, from a normal door and trapdoor, to a door with a cat-flap in the middle.
-
----
-
 ## Drawer (VRTK_Drawer)
  > extends [VRTK_Control](#control-vrtk_control)
 
@@ -7582,36 +7676,6 @@ It is possible to supply a third game object which is the root of the contents i
 ### Example
 
 `VRTK/Examples/025_Controls_Overview` shows a drawer with contents that can be opened and closed freely and the contents can be removed from the drawer.
-
----
-
-## Knob (VRTK_Knob)
- > extends [VRTK_Control](#control-vrtk_control)
-
-### Overview
-
-Attaching the script to a game object will allow the user to interact with it as if it were a radial knob. The direction can be freely set.
-
-The script will instantiate the required Rigidbody and Interactable components automatically in case they do not exist yet.
-
-### Inspector Parameters
-
- * **Connected To:** An optional game object to which the knob will be connected. If the game object moves the knob will follow along.
- * **Direction:** The axis on which the knob should rotate. All other axis will be frozen.
- * **Min:** The minimum value of the knob.
- * **Max:** The maximum value of the knob.
- * **Step Size:** The increments in which knob values can change.
-
-### Class Variables
-
- * `public enum KnobDirection` - The direction of the knob.
-   * `x` - The world x direction.
-   * `y` - The world y direction.
-   * `z` - The world z direction.
-
-### Example
-
-`VRTK/Examples/025_Controls_Overview` has a couple of rotator knobs that can be rotated by grabbing with the controller and then rotating the controller in the desired direction.
 
 ---
 
@@ -7647,56 +7711,6 @@ The script will instantiate the required Rigidbody and Interactable components a
 ### Example
 
 `VRTK/Examples/025_Controls_Overview` has a collection of wheels that can be rotated by grabbing with the controller and then rotating the controller in the desired direction.
-
----
-
-## Lever (VRTK_Lever)
- > extends [VRTK_Control](#control-vrtk_control)
-
-### Overview
-
-Attaching the script to a game object will allow the user to interact with it as if it were a lever. The direction can be freely set.
-
-The script will instantiate the required Rigidbody, Interactable and HingeJoint components automatically in case they do not exist yet. The joint is very tricky to setup automatically though and will only work in straight forward cases. If there are any issues, then create the HingeJoint component manually and configure it as needed.
-
-### Inspector Parameters
-
- * **Connected To:** An optional game object to which the lever will be connected. If the game object moves the lever will follow along.
- * **Direction:** The axis on which the lever should rotate. All other axis will be frozen.
- * **Min Angle:** The minimum angle of the lever counted from its initial position.
- * **Max Angle:** The maximum angle of the lever counted from its initial position.
- * **Step Size:** The increments in which lever values can change.
- * **Released Friction:** The amount of friction the lever will have whilst swinging when it is not grabbed.
- * **Grabbed Friction:** The amount of friction the lever will have whilst swinging when it is grabbed.
-
-### Class Variables
-
- * `public enum LeverDirection` - The direction of the lever.
-   * `x` - The world x direction.
-   * `y` - The world y direction.
-   * `z` - The world z direction.
-
-### Example
-
-`VRTK/Examples/025_Controls_Overview` has a couple of levers that can be grabbed and moved. One lever is horizontal and the other is vertical.
-
----
-
-## Spring Lever (VRTK_SpringLever)
- > extends [VRTK_Lever](#lever-vrtk_lever)
-
-### Overview
-
-This script extends VRTK_Lever to add spring force toward whichever end of the lever's range it is closest to.
-
-The script will instantiate the required Rigidbody, Interactable and HingeJoint components automatically in case they do not exist yet. The joint is very tricky to setup automatically though and will only work in straight forward cases. If there are any issues, then create the HingeJoint component manually and configure it as needed.
-
-### Inspector Parameters
-
- * **Spring Strength:** The strength of the spring force that will be applied upon the lever.
- * **Spring Damper:** The damper of the spring force that will be applied upon the lever.
- * **Snap To Nearest Limit:** If this is checked then the spring will snap the lever to the nearest end point (either min or max angle). If it is unchecked, the lever will always snap to the min angle position.
- * **Always Active:** If this is checked then the spring will always be active even when grabbing the lever.
 
 ---
 
@@ -8434,6 +8448,31 @@ The AddCameraFade method finds the headset camera and adds a headset fade script
    * _none_
 
 The CreateColliders method attempts to add box colliders to all child objects in the given object that have a renderer but no collider.
+
+#### ColliderExclude/2
+
+  > `public static Collider[] ColliderExclude(Collider[] setA, Collider[] setB)`
+
+ * Parameters
+   * `Collider[] setA` - The array that contains all of the relevant colliders.
+   * `Collider[] setB` - The array that contains the colliders to remove from setA.
+ * Returns
+   * `Collider[]` - A Collider array that is a subset of setA that doesn't contain the colliders from setB.
+
+The ColliderExclude method reduces the colliders in the setA array by those matched in the setB array.
+
+#### GetCollidersInGameObjects/3
+
+  > `public static Collider[] GetCollidersInGameObjects(GameObject[] gameObjects, bool searchChildren, bool includeInactive)`
+
+ * Parameters
+   * `GameObject[] gameObjects` - An array of GameObjects to get the colliders for.
+   * `bool searchChildren` - If this is `true` then the given GameObjects will also have their child GameObjects searched for colliders.
+   * `bool includeInactive` - If this is `true` then the inactive GameObjects in the array will also be checked for Colliders. Only relevant if `searchChildren` is `true`.
+ * Returns
+   * `Collider[]` - An array of Colliders that are found in the given GameObject array.
+
+The GetCollidersInGameObjects method iterates through a GameObject array and returns all of the unique found colliders for all GameObejcts.
 
 #### CloneComponent/3
 

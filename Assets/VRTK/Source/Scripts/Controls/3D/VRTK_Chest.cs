@@ -13,6 +13,7 @@ namespace VRTK
     /// `VRTK/Examples/025_Controls_Overview` shows a chest that can be open and closed, it also displays the current opening angle of the chest.
     /// </example>
     [AddComponentMenu("VRTK/Scripts/Controls/3D/VRTK_Chest")]
+    [System.Obsolete("`VRTK.VRTK_Chest` has been deprecated and can be recreated with `VRTK.Controllables.PhysicsBased.VRTK_PhysicsRotator`. This script will be removed in a future version of VRTK.")]
     public class VRTK_Chest : VRTK_Control
     {
         [Tooltip("The axis on which the chest should open. All other axis will be frozen.")]

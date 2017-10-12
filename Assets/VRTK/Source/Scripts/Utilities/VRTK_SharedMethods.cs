@@ -136,6 +136,41 @@ namespace VRTK
         }
 
         /// <summary>
+        /// The ColliderExclude method reduces the colliders in the setA array by those matched in the setB array.
+        /// </summary>
+        /// <param name="setA">The array that contains all of the relevant colliders.</param>
+        /// <param name="setB">The array that contains the colliders to remove from setA.</param>
+        /// <returns>A Collider array that is a subset of setA that doesn't contain the colliders from setB.</returns>
+        public static Collider[] ColliderExclude(Collider[] setA, Collider[] setB)
+        {
+            return setA.Except(setB).ToArray<Collider>();
+        }
+
+        /// <summary>
+        /// The GetCollidersInGameObjects method iterates through a GameObject array and returns all of the unique found colliders for all GameObejcts.
+        /// </summary>
+        /// <param name="gameObjects">An array of GameObjects to get the colliders for.</param>
+        /// <param name="searchChildren">If this is `true` then the given GameObjects will also have their child GameObjects searched for colliders.</param>
+        /// <param name="includeInactive">If this is `true` then the inactive GameObjects in the array will also be checked for Colliders. Only relevant if `searchChildren` is `true`.</param>
+        /// <returns>An array of Colliders that are found in the given GameObject array.</returns>
+        public static Collider[] GetCollidersInGameObjects(GameObject[] gameObjects, bool searchChildren, bool includeInactive)
+        {
+            List<Collider> foundColliders = new List<Collider>();
+            for (int i = 0; i < gameObjects.Length; i++)
+            {
+                Collider[] gameObjectColliders = (searchChildren ? gameObjects[i].GetComponentsInChildren<Collider>(includeInactive) : gameObjects[i].GetComponents<Collider>());
+                for (int j = 0; j < gameObjectColliders.Length; j++)
+                {
+                    if (!foundColliders.Contains(gameObjectColliders[j]))
+                    {
+                        foundColliders.Add(gameObjectColliders[j]);
+                    }
+                }
+            }
+            return foundColliders.ToArray<Collider>();
+        }
+
+        /// <summary>
         /// The CloneComponent method takes a source component and copies it to the given destination game object.
         /// </summary>
         /// <param name="source">The component to copy.</param>

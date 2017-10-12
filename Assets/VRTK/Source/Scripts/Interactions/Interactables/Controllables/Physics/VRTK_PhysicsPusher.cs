@@ -85,42 +85,47 @@ namespace VRTK.Controllables.PhysicsBased
 
         protected override void EmitEvents()
         {
-            float currentPosition = GetNormalizedValue();
-            ControllableEventArgs payload = EventPayload();
-            OnValueChanged(payload);
-            float minThreshold = minMaxLimitThreshold;
-            float maxThreshold = 1f - minMaxLimitThreshold;
+            if (!VRTK_SharedMethods.Vector3ShallowCompare(transform.localPosition, previousLocalPosition, equalityFidelity))
+            {
+                float currentPosition = GetNormalizedValue();
+                ControllableEventArgs payload = EventPayload();
+                OnValueChanged(payload);
+                float minThreshold = minMaxLimitThreshold;
+                float maxThreshold = 1f - minMaxLimitThreshold;
 
-            if (currentPosition >= maxThreshold && !AtMaxLimit())
-            {
-                atMaxLimit = true;
-                OnMaxLimitReached(payload);
-                StayPressed();
-            }
-            else if (currentPosition <= minThreshold && !AtMinLimit())
-            {
-                atMinLimit = true;
-                OnMinLimitReached(payload);
-            }
-            else if (currentPosition > minThreshold && currentPosition < maxThreshold)
-            {
-                if (AtMinLimit())
+                if (currentPosition >= maxThreshold && !AtMaxLimit())
                 {
-                    OnMinLimitExited(payload);
+                    atMaxLimit = true;
+                    OnMaxLimitReached(payload);
+                    StayPressed();
                 }
-                if (AtMaxLimit())
+                else if (currentPosition <= minThreshold && !AtMinLimit())
                 {
-                    OnMaxLimitExited(payload);
+                    atMinLimit = true;
+                    OnMinLimitReached(payload);
                 }
+                else if (currentPosition > minThreshold && currentPosition < maxThreshold)
+                {
+                    if (AtMinLimit())
+                    {
+                        OnMinLimitExited(payload);
+                    }
+                    if (AtMaxLimit())
+                    {
+                        OnMaxLimitExited(payload);
+                    }
 
-                atMinLimit = false;
-                atMaxLimit = false;
+                    atMinLimit = false;
+                    atMaxLimit = false;
+                }
             }
 
             if (IsResting())
             {
-                OnRestingPointReached(payload);
+                OnRestingPointReached(EventPayload());
             }
+
+            previousLocalPosition = transform.localPosition;
         }
 
         protected override void OnEnable()
@@ -148,18 +153,9 @@ namespace VRTK.Controllables.PhysicsBased
 
         protected virtual void Update()
         {
-            if (transform.localPosition != previousLocalPosition)
-            {
-                EmitEvents();
-                previousLocalPosition = transform.localPosition;
-            }
-
-            if (!stayPressed && pressedDown)
-            {
-                SetRigidbodyConstraints(RigidbodyConstraints.FreezeRotation);
-            }
-
+            CheckUnpress();
             SetTargetPosition();
+            EmitEvents();
         }
 
         protected override void OnDrawGizmosSelected()
@@ -185,6 +181,14 @@ namespace VRTK.Controllables.PhysicsBased
             float yPos = (operateAxis == OperatingAxis.yAxis ? transform.localPosition.y : originalLocalPosition.y);
             float zPos = (operateAxis == OperatingAxis.zAxis ? transform.localPosition.z : originalLocalPosition.z);
             transform.localPosition = new Vector3(xPos, yPos, zPos);
+        }
+
+        protected virtual void CheckUnpress()
+        {
+            if (!stayPressed && pressedDown)
+            {
+                SetRigidbodyConstraints(RigidbodyConstraints.FreezeRotation);
+            }
         }
 
         protected virtual void SetTargetPosition()

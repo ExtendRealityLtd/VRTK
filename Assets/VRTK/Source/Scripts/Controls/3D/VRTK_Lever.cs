@@ -13,6 +13,7 @@ namespace VRTK
     /// `VRTK/Examples/025_Controls_Overview` has a couple of levers that can be grabbed and moved. One lever is horizontal and the other is vertical.
     /// </example>
     [AddComponentMenu("VRTK/Scripts/Controls/3D/VRTK_Lever")]
+    [System.Obsolete("`VRTK.VRTK_Lever` has been deprecated and can be recreated with `VRTK.Controllables.PhysicsBased.VRTK_PhysicsRotator`. This script will be removed in a future version of VRTK.")]
     public class VRTK_Lever : VRTK_Control
     {
         /// <summary>

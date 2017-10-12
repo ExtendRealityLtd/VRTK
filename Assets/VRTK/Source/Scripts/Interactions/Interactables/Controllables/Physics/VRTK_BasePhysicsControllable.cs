@@ -23,6 +23,7 @@ namespace VRTK.Controllables.PhysicsBased
         protected bool createCustomRigidbody;
         protected GameObject rigidbodyActivatorContainer;
         protected bool createCustomRigidbodyActivator;
+        protected Transform activatorParent;
 
         /// <summary>
         /// The GetControlRigidbody method returns the rigidbody associated with the control.
@@ -44,6 +45,7 @@ namespace VRTK.Controllables.PhysicsBased
 
         protected override void OnEnable()
         {
+            activatorParent = (activatorParent == null ? transform : activatorParent);
             base.OnEnable();
             SetupRigidbody();
             SetupRigidbodyActivator();
@@ -59,6 +61,7 @@ namespace VRTK.Controllables.PhysicsBased
             {
                 Destroy(controlRigidbody);
             }
+            activatorParent = null;
             base.OnDisable();
         }
 
@@ -68,7 +71,7 @@ namespace VRTK.Controllables.PhysicsBased
             if (GetComponentInChildren<VRTK_ControllerRigidbodyActivator>() == null && autoInteraction)
             {
                 rigidbodyActivatorContainer = new GameObject(VRTK_SharedMethods.GenerateVRTKObjectName(true, name, "Controllable", "PhysicsBased", "ControllerRigidbodyActivator"));
-                rigidbodyActivatorContainer.transform.SetParent(transform);
+                rigidbodyActivatorContainer.transform.SetParent(activatorParent);
                 rigidbodyActivatorContainer.transform.localPosition = Vector3.zero;
                 rigidbodyActivatorContainer.transform.localRotation = Quaternion.identity;
                 rigidbodyActivatorContainer.transform.localScale = Vector3.one;
@@ -77,7 +80,12 @@ namespace VRTK.Controllables.PhysicsBased
                 rigidbodyActivatorCollider.isTrigger = true;
                 rigidbodyActivatorCollider.size *= 1.2f;
                 createCustomRigidbodyActivator = true;
+                ConfigueRigidbodyActivator();
             }
+        }
+
+        protected virtual void ConfigueRigidbodyActivator()
+        {
         }
 
         protected virtual void SetupRigidbody()
