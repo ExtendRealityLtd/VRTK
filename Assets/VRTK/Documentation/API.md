@@ -6558,6 +6558,7 @@ The GetControlInteractableObject method returns the Interactable Object associat
 A collection of scripts that provide artificial simulated controls that mimiic real life objects.
 
  * [Artificial Pusher](#artificial-pusher-vrtk_artificialpusher)
+ * [Artificial Rotator](#artificial-rotator-vrtk_artificialrotator)
 
 ---
 
@@ -6639,6 +6640,160 @@ The SetStayPressed method sets the `Stay Pressed` parameter to the given state a
    * _none_
 
 The SetPositionTarget method sets the `Position Target` parameter to the given normalized value.
+
+---
+
+## Artificial Rotator (VRTK_ArtificialRotator)
+ > extends [VRTK_BaseControllable](#base-controllable-vrtk_basecontrollable)
+
+### Overview
+
+A artificially simulated openable rotator.
+
+**Required Components:**
+ * `Collider` - A Unity Collider to determine when an interaction has occured. Can be a compound collider set in child GameObjects. Will be automatically added at runtime.
+
+**Script Usage:**
+ * Create a rotator container GameObject and set the GameObject that is to become the rotator as a child of the newly created container GameObject.
+ * Place the `VRTK_ArtificialRotator` script onto the GameObject that is to become the rotatable object and ensure the Transform rotation is `0, 0, 0`.
+ * Create a nested GameObject under the rotator GameObject and position it where the hinge should operate.
+ * Apply the nested hinge GameObject to the `Hinge Point` parameter on the Artificial Rotator script.
+
+  > The rotator GameObject must not be at the root level and needs to have the Transform rotation set to `0,0,0`. This is the reason for the container GameObject requirement. Any positioning of the rotator must be set on the parent container GameObject.
+  > The Artificial Rotator script GameObject will become the child of a runtime created GameObject that determines the rotational offset for the rotator.
+
+### Inspector Parameters
+
+ * **Hinge Point:** A Transform that denotes the position where the rotator will rotate around.
+ * **Minimum Angle:** The minimum angle the rotator can rotate to.
+ * **Maximum Angle:** The maximum angle the rotator can rotate to.
+ * **Min Max Threshold Angle:** The angle at which the rotator rotation can be within the minimum or maximum angle before the minimum or maximum angles are considered reached.
+ * **Resting Angle:** The angle at which will be considered as the resting position of the rotator.
+ * **Force Resting Angle Threshold:** The threshold angle from the `Resting Angle` that the current angle of the rotator needs to be within to snap the rotator back to the `Resting Angle`.
+ * **Is Locked:** If this is checked then the rotator Rigidbody will have all rotations frozen.
+ * **Step Value Range:** The minimum `(x)` and the maximum `(y)` step values for the rotator to register along the `Operate Axis`.
+ * **Step Size:** The increments the rotator value will change in between the `Step Value Range`.
+ * **Use Step As Value:** If this is checked then the value for the rotator will be the step value and not the absolute rotation of the rotator Transform.
+ * **Snap To Step:** If this is checked then the rotator will snap to the angle of the nearest step along the value range.
+ * **Snap Force:** The speed in which the rotator will snap to the relevant angle along the `Operate Axis`
+ * **Precision Grab:** If this is checked then when the Interact Grab grabs the Interactable Object, it will grab it with precision and pick it up at the particular point on the Interactable Object that the Interact Touch is touching.
+ * **Detach Distance:** The maximum distance the grabbing object is away from the rotator before it is automatically released.
+ * **Rotation Action:** Determines how the rotation of the object is calculated based on the action of the grabbing object.
+ * **Grabbed Friction:** The simulated friction when the rotator is grabbed.
+ * **Released Friction:** The simulated friction when the rotator is released.
+ * **Only Interact With:** A collection of GameObjects that will be used as the valid collisions to determine if the rotator can be interacted with.
+
+### Class Methods
+
+#### GetValue/0
+
+  > `public override float GetValue()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `float` - The actual rotation of the rotator.
+
+The GetValue method returns the current rotation value of the rotator.
+
+#### GetNormalizedValue/0
+
+  > `public override float GetNormalizedValue()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `float` - The normalized rotation of the rotator.
+
+The GetNormalizedValue method returns the current rotation value of the rotator normalized between `0f` and `1f`.
+
+#### GetContainer/0
+
+  > `public virtual GameObject GetContainer()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `GameObject` - The GameObject container of the rotator control.
+
+The GetContainer method returns the GameObject that is generated to hold the rotator control.
+
+#### GetStepValue/1
+
+  > `public virtual float GetStepValue(float currentValue)`
+
+ * Parameters
+   * `float currentValue` - The current angle value of the rotator to get the Step Value for.
+ * Returns
+   * `float` - The current Step Value based on the rotator angle.
+
+The GetStepValue method returns the current angle of the rotator based on the step value range.
+
+#### SetAngleTargetWithStepValue/1
+
+  > `public virtual void SetAngleTargetWithStepValue(float givenStepValue)`
+
+ * Parameters
+   * `float givenStepValue` - The step value within the `Step Value Range` to set the `Angle Target` parameter to.
+ * Returns
+   * _none_
+
+The SetAngleTargetWithStepValue sets the `Angle Target` parameter but uses a value within the `Step Value Range`.
+
+#### SetRestingAngleWithStepValue/1
+
+  > `public virtual void SetRestingAngleWithStepValue(float givenStepValue)`
+
+ * Parameters
+   * `float givenStepValue` - The step value within the `Step Value Range` to set the `Resting Angle` parameter to.
+ * Returns
+   * _none_
+
+The SetRestingAngleWithStepValue sets the `Resting Angle` parameter but uses a value within the `Step Value Range`.
+
+#### GetAngleFromStepValue/1
+
+  > `public virtual float GetAngleFromStepValue(float givenStepValue)`
+
+ * Parameters
+   * `float givenStepValue` - The step value to check the angle for.
+ * Returns
+   * `float` - The angle the rotator would be at based on the given step value.
+
+The GetAngleFromStepValue returns the angle the rotator would be at based on the given step value.
+
+#### SetAngleTarget/1
+
+  > `public virtual void SetAngleTarget(float newAngle)`
+
+ * Parameters
+   * `float newAngle` - The angle in which to rotate the rotator to.
+ * Returns
+   * _none_
+
+The SetAngleTarget method sets a target angle to rotate the rotator to.
+
+#### IsResting/0
+
+  > `public override bool IsResting()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `bool` - Returns `true` if the rotator is at the resting angle or within the resting angle threshold.
+
+The IsResting method returns whether the rotator is at the resting angle or within the resting angle threshold.
+
+#### GetControlInteractableObject/0
+
+  > `public virtual VRTK_InteractableObject GetControlInteractableObject()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `VRTK_InteractableObject` - The Interactable Object associated with the control.
+
+The GetControlInteractableObject method returns the Interactable Object associated with the control.
 
 ---
 
@@ -7561,7 +7716,6 @@ All 3D controls extend the `VRTK_Control` abstract class which provides common m
 
  * [Control](#control-vrtk_control)
  * [Drawer](#drawer-vrtk_drawer)
- * [Wheel](#wheel-vrtk_wheel)
  * [Slider](#slider-vrtk_slider)
  * [Content Handler](#content-handler-vrtk_contenthandler)
 
@@ -7676,41 +7830,6 @@ It is possible to supply a third game object which is the root of the contents i
 ### Example
 
 `VRTK/Examples/025_Controls_Overview` shows a drawer with contents that can be opened and closed freely and the contents can be removed from the drawer.
-
----
-
-## Wheel (VRTK_Wheel)
- > extends [VRTK_Control](#control-vrtk_control)
-
-### Overview
-
-Attaching the script to a game object will allow the user to interact with it as if it were a spinnable wheel.
-
-The script will instantiate the required Rigidbody and Interactable components automatically in case they do not exist yet.
-
-### Inspector Parameters
-
- * **Connected To:** An optional game object to which the wheel will be connected. If the game object moves the wheel will follow along.
- * **Grab Type:** The grab attach mechanic to use. Track Object allows for rotations of the controller, Rotator Track allows for grabbing the wheel and spinning it.
- * **Detatch Distance:** The maximum distance the grabbing controller is away from the wheel before it is automatically released.
- * **Minimum Value:** The minimum value the wheel can be set to.
- * **Maximum Value:** The maximum value the wheel can be set to.
- * **Step Size:** The increments in which values can change.
- * **Snap To Step:** If this is checked then when the wheel is released, it will snap to the step rotation.
- * **Grabbed Friction:** The amount of friction the wheel will have when it is grabbed.
- * **Released Friction:** The amount of friction the wheel will have when it is released.
- * **Max Angle:** The maximum angle the wheel has to be turned to reach it's maximum value.
- * **Lock At Limits:** If this is checked then the wheel cannot be turned beyond the minimum and maximum value.
-
-### Class Variables
-
- * `public enum GrabTypes` - The grab attach mechanic to use.
-   * `TrackObject` - Utilise the track object grab mechanic.
-   * `RotatorTrack` - Utilise the rotator track grab mechanic.
-
-### Example
-
-`VRTK/Examples/025_Controls_Overview` has a collection of wheels that can be rotated by grabbing with the controller and then rotating the controller in the desired direction.
 
 ---
 
