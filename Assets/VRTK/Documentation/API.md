@@ -6280,6 +6280,7 @@ A collection of scripts that provide physics based controls that mimiic real lif
  * [Base Physics Controllable](#base-physics-controllable-vrtk_basephysicscontrollable)
  * [Physics Pusher](#physics-pusher-vrtk_physicspusher)
  * [Physics Rotator](#physics-rotator-vrtk_physicsrotator)
+ * [Physics Slider](#physics-slider-vrtk_physicsslider)
 
 ---
 
@@ -6537,6 +6538,146 @@ The IsResting method returns whether the rotator is at the resting angle or with
    * _none_
  * Returns
    * `HingeJoint` - The joint associated with the control.
+
+The GetControlJoint method returns the joint associated with the control.
+
+#### GetControlInteractableObject/0
+
+  > `public virtual VRTK_InteractableObject GetControlInteractableObject()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `VRTK_InteractableObject` - The Interactable Object associated with the control.
+
+The GetControlInteractableObject method returns the Interactable Object associated with the control.
+
+---
+
+## Physics Slider (VRTK_PhysicsSlider)
+ > extends [VRTK_BasePhysicsControllable](#base-physics-controllable-vrtk_basephysicscontrollable)
+
+### Overview
+
+A physics based slider.
+
+**Required Components:**
+ * `Collider` - A Unity Collider to determine when an interaction has occured. Can be a compound collider set in child GameObjects. Will be automatically added at runtime.
+ * `Rigidbody` - A Unity Rigidbody to allow the GameObject to be affected by the Unity Physics System. Will be automatically added at runtime.
+
+**Optional Components:**
+ * `VRTK_ControllerRigidbodyActivator` - A Controller Rigidbody Activator to automatically enable the controller rigidbody when near the slider. Will be automatically created if the `Auto Interaction` paramter is checked.
+
+**Script Usage:**
+ * Create a slider container GameObject and set the GameObject that is to become the slider as a child of the container.
+ * Place the `VRTK_PhysicsSlider` script onto the GameObject that is to become the slider.
+
+  > The slider GameObject must not be at the root level and needs to have it's Transform position set to `0,0,0`. This is the reason for the container GameObject requirement. Any positioning of the slider must be set on the parent GameObject.
+
+### Inspector Parameters
+
+ * **Maximum Length:** The maximum length that the slider can be moved from the origin position across the `Operate Axis`. A negative value will allow it to move the opposite way.
+ * **Min Max Threshold:** The normalized position the slider can be within the minimum or maximum slider positions before the minimum or maximum positions are considered reached.
+ * **Position Target:** The target position to move the slider towards given in a normalized value of `0f` (start point) to `1f` (end point).
+ * **Resting Position:** The position the slider when it is at the default resting point given in a normalized value of `0f` (start point) to `1f` (end point).
+ * **Force Resting Position Threshold:** The normalized threshold value the slider has to be within the `Resting Position` before the slider is forced back to the `Resting Position` if it is not grabbed.
+ * **Step Value Range:** The minimum `(x)` and the maximum `(y)` step values for the slider to register along the `Operate Axis`.
+ * **Step Size:** The increments the slider value will change in between the `Step Value Range`.
+ * **Use Step As Value:** If this is checked then the value for the slider will be the step value and not the absolute position of the slider Transform.
+ * **Snap To Step:** If this is checked then the slider will snap to the position of the nearest step along the value range.
+ * **Snap Force:** The speed in which the slider will snap to the relevant point along the `Operate Axis`
+ * **Precision Grab:** If this is checked then when the Interact Grab grabs the Interactable Object, it will grab it with precision and pick it up at the particular point on the Interactable Object that the Interact Touch is touching.
+ * **Detach Distance:** The maximum distance the grabbing object is away from the slider before it is automatically released.
+ * **Release Friction:** The amount of friction to the slider Rigidbody when it is released.
+ * **Only Interact With:** A collection of GameObjects that will be used as the valid collisions to determine if the door can be interacted with.
+
+### Class Methods
+
+#### GetValue/0
+
+  > `public override float GetValue()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `float` - The actual position of the button.
+
+The GetValue method returns the current position value of the slider.
+
+#### GetNormalizedValue/0
+
+  > `public override float GetNormalizedValue()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `float` - The normalized position of the button.
+
+The GetNormalizedValue method returns the current position value of the slider normalized between `0f` and `1f`.
+
+#### GetStepValue/1
+
+  > `public virtual float GetStepValue(float currentValue)`
+
+ * Parameters
+   * `float currentValue` - The current position value of the slider to get the Step Value for.
+ * Returns
+   * `float` - The current Step Value based on the slider position.
+
+The GetStepValue method returns the current position of the slider based on the step value range.
+
+#### SetPositionTargetWithStepValue/1
+
+  > `public virtual void SetPositionTargetWithStepValue(float givenStepValue)`
+
+ * Parameters
+   * `float givenStepValue` - The step value within the `Step Value Range` to set the `Position Target` parameter to.
+ * Returns
+   * _none_
+
+The SetTargetPositionWithStepValue sets the `Position Target` parameter but uses a value within the `Step Value Range`.
+
+#### SetRestingPositionWithStepValue/1
+
+  > `public virtual void SetRestingPositionWithStepValue(float givenStepValue)`
+
+ * Parameters
+   * `float givenStepValue` - The step value within the `Step Value Range` to set the `Resting Position` parameter to.
+ * Returns
+   * _none_
+
+The SetRestingPositionWithStepValue sets the `Resting Position` parameter but uses a value within the `Step Value Range`.
+
+#### GetPositionFromStepValue/1
+
+  > `public virtual float GetPositionFromStepValue(float givenStepValue)`
+
+ * Parameters
+   * `float givenStepValue` - The step value to check the position for.
+ * Returns
+   * `float` - The position the slider would be at based on the given step value.
+
+The GetPositionFromStepValue returns the position the slider would be at based on the given step value.
+
+#### IsResting/0
+
+  > `public override bool IsResting()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `bool` - Returns `true` if the slider is at the resting position or within the resting position threshold.
+
+The IsResting method returns whether the slider is currently in a resting state at the resting position or within the resting position threshold and not grabbed.
+
+#### GetControlJoint/0
+
+  > `public virtual ConfigurableJoint GetControlJoint()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `ConfigurableJoint` - The joint associated with the control.
 
 The GetControlJoint method returns the joint associated with the control.
 
@@ -7715,8 +7856,6 @@ A number of controls are available which partially support auto-configuration. S
 All 3D controls extend the `VRTK_Control` abstract class which provides common methods and events.
 
  * [Control](#control-vrtk_control)
- * [Drawer](#drawer-vrtk_drawer)
- * [Slider](#slider-vrtk_slider)
  * [Content Handler](#content-handler-vrtk_contenthandler)
 
 ---
@@ -7800,63 +7939,6 @@ The SetContent method sets the given game object as the content of the control. 
    * `GameObject` - The currently stored content for the control.
 
 The GetContent method returns the current game object of the control's content.
-
----
-
-## Drawer (VRTK_Drawer)
- > extends [VRTK_Control](#control-vrtk_control)
-
-### Overview
-
-Transforms a game object into a drawer. The direction can be freely set and also auto-detected with very high reliability.
-
-The script will instantiate the required Rigidbody, Interactable and Joint components automatically in case they do not exist yet. There are situations when it can be very hard to automatically calculate the correct axis for the joint. If this situation is encountered simply add the configurable joint manually and set the axis. All the rest will still be handled by the script.
-
-It will expect two distinct game objects: a body and a handle. These should be independent and not children of each other. The distance to which the drawer can be pulled out will automatically set depending on the length of it. If no body is specified the current object is assumed to be the body.
-
-It is possible to supply a third game object which is the root of the contents inside the drawer. When this is specified the VRTK_InteractableObject components will be automatically deactivated in case the drawer is closed or not yet far enough open. This eliminates the issue that a user could grab an object inside a drawer although it is closed.
-
-### Inspector Parameters
-
- * **Connected To:** An optional game object to which the drawer will be connected. If the game object moves the drawer will follow along.
- * **Direction:** The axis on which the drawer should open. All other axis will be frozen.
- * **Body:** The game object for the body.
- * **Handle:** The game object for the handle.
- * **Content:** The parent game object for the drawer content elements.
- * **Hide Content:** Makes the content invisible while the drawer is closed.
- * **Min Snap Close:** If the extension of the drawer is below this percentage then the drawer will snap shut.
- * **Max Extend:** The maximum percentage of the drawer's total length that the drawer will open to.
-
-### Example
-
-`VRTK/Examples/025_Controls_Overview` shows a drawer with contents that can be opened and closed freely and the contents can be removed from the drawer.
-
----
-
-## Slider (VRTK_Slider)
- > extends [VRTK_Control](#control-vrtk_control)
-
-### Overview
-
-Attaching the script to a game object will allow the user to interact with it as if it were a horizontal or vertical slider. The direction can be freely set and auto-detection is supported.
-
-The script will instantiate the required Rigidbody and Interactable components automatically in case they do not exist yet.
-
-### Inspector Parameters
-
- * **Connected To:** An optional game object to which the wheel will be connected. If the game object moves the wheel will follow along.
- * **Direction:** The axis on which the slider should move. All other axis will be frozen.
- * **Minimum Limit:** The collider to specify the minimum limit of the slider.
- * **Maximum Limit:** The collider to specify the maximum limit of the slider.
- * **Minimum Value:** The minimum value of the slider.
- * **Maximum Value:** The maximum value of the slider.
- * **Step Size:** The increments in which slider values can change.
- * **Snap To Step:** If this is checked then when the slider is released, it will snap to the nearest value position.
- * **Released Friction:** The amount of friction the slider will have when it is released.
-
-### Example
-
-`VRTK/Examples/025_Controls_Overview` has a selection of sliders at various angles with different step values to demonstrate their usage.
 
 ---
 
